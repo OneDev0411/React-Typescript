@@ -1,7 +1,5 @@
 // api/posts/signin.js
-import config from '../../../config/private'
-
-module.exports = app => {
+module.exports = (app, config) => {
   
   app.post('/api/signin',(req, res) => {
 
@@ -25,7 +23,6 @@ module.exports = app => {
       method: 'post',
       credentials: 'include',
       headers: {  
-        'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(request_object)

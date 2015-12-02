@@ -37,7 +37,7 @@ export default {
     })
     .then((response) => {
       return callback(false, response)
-    });
+    })
   },
 
   getRooms: (access_token, callback) => {
@@ -58,7 +58,7 @@ export default {
     })
     .then((response) => {
       return callback(false, response)
-    });
+    })
   },
 
   forgotPassword: (email, callback) => {
@@ -68,6 +68,7 @@ export default {
     const request_object = {
       email: email
     }
+    
     fetch(forgot_password_url,{
       method: 'post',
       headers: {  
@@ -87,6 +88,6 @@ export default {
     })
     .then((response) => {
       return callback(false, response)
-    });
+    })
   }
 }

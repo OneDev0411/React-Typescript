@@ -1,32 +1,16 @@
-// routes.js
+// React.js
 import React from 'react'
-import { match, RoutingContext, Route, IndexRoute } from 'react-router'
+import { match, RoutingContext } from 'react-router'
 import ReactDOMServer from 'react-dom/server'
 
 // Store
-import AppStore from './stores/AppStore'
+import AppStore from '../stores/AppStore'
 
 // Config
-import routes from './Routes.config'
+import routes from './React.config'
 
 module.exports = (app, config) => {
 
-  /* API routes first
-  ============================ */
-  // Gets
-  require('./api/gets/rooms')(app)
-
-  // Posts
-  require('./api/posts/signin')(app)
-  require('./api/posts/forgot-password')(app)
-  require('./api/posts/create-room')(app)
-
-  app.get('/signout',(req, res) => {
-    req.session.destroy()
-    return res.redirect('/')
-  })
-
-  // React routes
   app.get('*',(req, res) => {
 
     match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
@@ -62,4 +46,5 @@ module.exports = (app, config) => {
 
     })
   })
+  
 }

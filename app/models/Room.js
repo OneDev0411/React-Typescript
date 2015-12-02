@@ -37,6 +37,6 @@ export default {
     })
     .then((response) => {
       return callback(false, response)
-    });
+    })
   }
 }

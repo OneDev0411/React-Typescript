@@ -1,7 +1,5 @@
 // api/posts/forgot-password.js
-import config from '../../../config/private'
-
-module.exports = app => {
+module.exports = (app, config) => {
   
   app.post('/api/forgot-password',(req, res) => {
 

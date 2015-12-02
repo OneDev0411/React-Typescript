@@ -29,7 +29,8 @@
     "shorti": "^1.1.17",
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.7",
-    "validator": "^4.3.0"
+    "validator": "^4.3.0",
+    "webpack": "^1.12.9"
   },
   "scripts": {
     "test": "mocha --compilers js:babel/register",
@@ -51,7 +52,6 @@
     "sass-loader": "^3.1.2",
     "should": "^7.1.1",
     "testdom": "^2.0.0",
-    "webpack": "^1.12.9",
     "webpack-dev-server": "^1.12.1"
   }
 }
