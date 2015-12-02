@@ -3,14 +3,11 @@ import es6Promise from 'es6-promise'
 es6Promise.polyfill();
 import 'isomorphic-fetch'
 
-import config from '../../config/public'
-
 export default {
   
   create: (title, owner, access_token, callback) => {
     
-    const app_url = config.app.url
-    const create_room_url = app_url + '/api/create-room'
+    const create_room_url = '/api/create-room'
 
     const request_object = {
       title: title,

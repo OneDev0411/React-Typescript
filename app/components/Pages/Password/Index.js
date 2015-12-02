@@ -24,11 +24,22 @@ export default class Password extends Component {
 
   handleSubmit(action, form_data){
     
-    let email = form_data.email
+    // Forgot pass
     if(action === 'forgot-password'){
+      let email = form_data.email
       AppDispatcher.dispatch({
         action: 'forgot-password',
         email: email
+      })
+    }
+    // Reset pass
+    if(action === 'reset-password'){
+      let password = form_data.password
+      let token = form_data.token
+      AppDispatcher.dispatch({
+        action: 'reset-password',
+        password: password,
+        token: token
       })
     }
   }
