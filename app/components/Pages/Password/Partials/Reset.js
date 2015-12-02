@@ -15,14 +15,6 @@ export default class Reset extends Component {
     let confirm_password = this.refs.confirm_password.getInputDOMNode().value.trim()
     let token = helpers.getParameterByName('token')
 
-    if(password.length < 6){
-      return console.log('password must be over 6 chars long')
-    }
-    
-    if(password !== confirm_password){
-      return console.log('these do not match bruh')
-    }
-
     let form_data = {
       password: password,
       token: token

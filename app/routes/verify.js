@@ -78,6 +78,8 @@ module.exports = (app, config) => {
   app.get('/reset_password',(req, res) => {
     
     const token = req.query.token
+
+    // TODO: test token for validity then redirect to forgot password
     return res.redirect('/password/reset/?token=' + token)
 
   })
