@@ -4,6 +4,11 @@ import bodyParser from 'body-parser'
 import hogan from 'hogan-express'
 import compression from 'compression'
 import session from 'express-session'
+import es6Promise from 'es6-promise'
+es6Promise.polyfill();
+import 'isomorphic-fetch'
+
+import config from '../config/private'
 
 // Express
 const app = express()
@@ -24,17 +29,8 @@ app.use(session({
 }))
 app.use(bodyParser.json())
 
-// Redirects
-app.use((req, res, next) => {
-  let path = req.path
-  if(path.indexOf('dashboard') !== -1 && !req.session.user){
-    return res.redirect('/signin?redirect_to=' + path)
-  }
-  next()
-})
-
 // Routes
-require('./routes')(app)
+require('./routes/index')(app, config)
 
 // Start app
 app.listen(app.get('port'))

@@ -7,8 +7,12 @@ export default {
   },
   test: {
     user: {
-      email: 'tony@rechat.co',
-      password: 'testpass'
+      email: "tony@rechat.co",
+      password: "testpass"
     }
-  }
+  },
+  crypto: {
+    pw_reset_key: "Xu$JdnUn+!m,d6F3EfeqOp{?a~,FnP3.141592653...",
+    pw_reset_iv: "4231313091420373"
+  },
 }

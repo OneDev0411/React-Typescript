@@ -28,7 +28,7 @@ api: {
 Set `app.url` config/public.js:
 ```javascript
 app: {
-  url: "http://localhost:3078",
+  url: "http://localhost:3000",
 },
 ```
 #####Run webpack dev

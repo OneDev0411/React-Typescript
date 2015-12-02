@@ -1,7 +1,5 @@
 // api/posts/add-room.js
-import config from '../../../config/private'
-
-module.exports = app => {
+module.exports = (app, config) => {
   
   app.post('/api/create-room',(req, res) => {
 
@@ -24,7 +22,6 @@ module.exports = app => {
     fetch(create_room_url,{
       method: 'post',
       headers: {  
-        'Accept': 'application/json',
         'Content-Type': 'application/json',
         'authorization': 'Bearer ' + access_token,
       },

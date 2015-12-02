@@ -1,7 +1,5 @@
 // api/gets/rooms.js
-import config from '../../../config/private'
-
-module.exports = app => {
+module.exports = (app, config) => {
   
   app.get('/api/rooms',(req, res) => {
 
@@ -15,7 +13,6 @@ module.exports = app => {
     fetch(get_rooms_url,{
       method: 'get',
       headers: {  
-        'Accept': 'application/json',
         'Content-Type': 'application/json',
         'authorization': 'Bearer ' + access_token,
       }
