@@ -35,6 +35,7 @@ module.exports = (app, config) => {
       return response.json()
     })
     .then((response) => {
+      // redirect to success page
       return res.end(JSON.stringify(response))
     })
   })
@@ -69,8 +70,16 @@ module.exports = (app, config) => {
       return response.json()
     })
     .then((response) => {
+      // redirect to success page
       return res.end(JSON.stringify(response))
     })
+  })
+
+  app.get('/reset_password',(req, res) => {
+    
+    const token = req.query.token
+    return res.redirect('/password/reset/?token=' + token)
+
   })
 
 }
