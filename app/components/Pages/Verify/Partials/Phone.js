@@ -30,6 +30,7 @@ export default class Phone extends Component {
     // Errors
     if(errors){
       message_text = `This token or code is invalid.`
+      alert_style = 'danger'
     }
 
     if(data.show_message){
