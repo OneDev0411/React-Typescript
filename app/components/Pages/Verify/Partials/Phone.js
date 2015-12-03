@@ -62,7 +62,7 @@ export default class Phone extends Component {
       <div>
         <div style={ S('color-929292 mb-20') }>Confirm your phone</div>
         <form onSubmit={ this.handleSubmit.bind(this) }>
-          <Input bsStyle={ code_style } ref="code" placeholder="Enter 4 digit code" type="text" maxLength="4" />
+          <Input bsStyle={ code_style } ref="code" placeholder="Enter 5 digit code" type="text" maxLength="5" />
           { message }
           <Button type="submit" bsStyle="primary" style={ S('w-100p') }>Verify</Button>
         </form>
