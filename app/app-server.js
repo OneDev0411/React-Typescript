@@ -15,7 +15,7 @@ const app = express()
 const one_day = 86400000
 app.engine('html', hogan)
 app.set('views', __dirname + '/public')
-app.use('/dist', express.static(__dirname + '/public/dist', { maxAge: one_day }))
+app.use('/', express.static(__dirname + '/public/', { maxAge: one_day }))
 app.set('port', (process.env.PORT || 3000))
 app.use(compression())
 app.use(session({
