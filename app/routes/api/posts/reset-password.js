@@ -1,6 +1,6 @@
 // api/posts/reset-password.js
 
-import Crypto from '../../models/Crypto'
+import Crypto from '../../../models/Crypto'
 
 module.exports = (app, config) => {
   

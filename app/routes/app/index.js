@@ -1,4 +1,4 @@
-// app.js
+// index.js
 module.exports = (app, config) => {
 
   app.get('/dashboard', (req, res, next) => {

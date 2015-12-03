@@ -2,7 +2,7 @@
 import User from '../models/User'
 import AppStore from '../stores/AppStore'
 
-export default (password, token) => {
+export default (password, confirm_password, token) => {
   
   if(password.length < 6 || password !== confirm_password){
     
@@ -32,8 +32,6 @@ export default (password, token) => {
     // Success
     if(response.status == 'success'){
       
-      console.log('success')
-
       AppStore.data = {
         status: 'success',
         show_message: true
@@ -45,7 +43,7 @@ export default (password, token) => {
         submitting: false,
         errors: true,
         show_message: true,
-        email_not_found: true
+        request_error: true
       }
     }
     

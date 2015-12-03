@@ -1,13 +1,13 @@
-// React.js
+// index.js
 import React from 'react'
 import { match, RoutingContext } from 'react-router'
 import ReactDOMServer from 'react-dom/server'
 
 // Store
-import AppStore from '../stores/AppStore'
+import AppStore from '../../stores/AppStore'
 
 // Config
-import routes from './React.config'
+import routes from './Config'
 
 module.exports = (app, config) => {
 

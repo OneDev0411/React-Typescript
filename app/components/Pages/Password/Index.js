@@ -35,10 +35,12 @@ export default class Password extends Component {
     // Reset pass
     if(action === 'reset-password'){
       let password = form_data.password
+      let confirm_password = form_data.confirm_password
       let token = form_data.token
       AppDispatcher.dispatch({
         action: 'reset-password',
         password: password,
+        confirm_password: confirm_password,
         token: token
       })
     }

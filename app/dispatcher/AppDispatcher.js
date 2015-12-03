@@ -14,6 +14,7 @@ AppDispatcher.register(payload => {
   let action = payload.action
   let email
   let password
+  let confirm_password
   let redirect_to
   let token
   let access_token
@@ -34,8 +35,9 @@ AppDispatcher.register(payload => {
 
     case 'reset-password':
       password = payload.password
+      confirm_password = payload.confirm_password
       token = payload.token
-      resetPassword(password, token)
+      resetPassword(password, confirm_password, token)
       break
 
     case 'get-rooms':

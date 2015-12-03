@@ -50,9 +50,6 @@ export default class Forgot extends Component {
 
       // Success
       if(data.status === 'success'){
-        this.refs.email.getInputDOMNode().value = ''
-        this.refs.email.getInputDOMNode().blur()
-        email_style = null
         alert_style = 'success'
         message_text = `We've sent you an email with instructions on how to reset your password.  Please check your email.`
       }
