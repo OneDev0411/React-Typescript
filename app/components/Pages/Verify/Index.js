@@ -9,6 +9,10 @@ import BigHeading from '../../Partials/BigHeading'
 
 export default class Verify extends Component {
 
+  handleSubmit(code, token){
+    console.log(code, token)
+  }
+
   render(){
     
     // Data
@@ -25,7 +29,7 @@ export default class Verify extends Component {
 
     if(slug === 'phone'){
       main_content = (
-        <Phone data={ data }/>
+        <Phone data={ data } handleSubmit={ this.handleSubmit }/>
       )
     }
     

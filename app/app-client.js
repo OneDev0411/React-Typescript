@@ -6,13 +6,13 @@ import createBrowserHistory from 'history/lib/createBrowserHistory'
 const history = createBrowserHistory()
 
 // Routes config
-import routes_config from './routes/React/Config'
+import react_routes from './routes/React/Config'
 
-const routes = (
+const router = (
   <Router history={history}>
-    { routes_config }
+    { react_routes }
   </Router>
 )
 
 const app = document.getElementById('app')
-render(routes, app)
+render(router, app)

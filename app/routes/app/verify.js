@@ -43,36 +43,7 @@ module.exports = (app, config) => {
   app.get('/verify_phone',(req, res) => {
     
     const token = req.query.token
-    const decrypted_token = Crypto.decrypt(token).split(':')
-    const phone_number = decrypted_token[0]
-    const code = decrypted_token[1]
-    
-    const api_url = config.api.url
-    const verify_phone_url = api_url + '/users/phone_confirmed'
-    
-    const request_object = {
-      phone_number: phone_number,
-      code: code
-    }
-
-    fetch(verify_phone_url,{
-      method: 'patch',
-      headers: {  
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(request_object)
-    })
-    .then((response) => {
-      if (response.status >= 400) {
-        // redirect to error page
-        return res.redirect('/verify/phone?status=error')
-      }
-      return response.json()
-    })
-    .then((response) => {
-      // redirect to success page
-      return res.redirect('/verify/phone?status=success')
-    })
+    return res.redirect('/verify/phone?token=' + token)
   })
 
   app.get('/reset_password',(req, res) => {
