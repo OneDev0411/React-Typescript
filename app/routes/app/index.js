@@ -5,6 +5,11 @@ import AppStore from '../../stores/AppStore'
 
 module.exports = (app, config) => {
 
+  app.get('/signout',(req, res) => {
+    req.session.destroy()
+    return res.redirect('/')
+  })
+  
   // If signed in, render client side
   app.use((req, res, next) => {
     if(req.session.user){
@@ -35,11 +40,6 @@ module.exports = (app, config) => {
     }
     res.locals.AppStore = JSON.stringify(AppStore)
     return res.render('index.html')
-  })
-
-  app.get('/signout',(req, res) => {
-    req.session.destroy()
-    return res.redirect('/')
   })
   
 }
