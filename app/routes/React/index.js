@@ -15,12 +15,6 @@ module.exports = (app, config) => {
 
     match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
       
-      if(req.session.user){
-        AppStore.data.user = req.session.user
-        res.locals.AppStore = JSON.stringify(AppStore)
-        return res.status(200).render('index.html')
-      }
-
       let reactMarkup = ReactDOMServer.renderToStaticMarkup(<RoutingContext data={AppStore.data} {...renderProps} />)
       
       res.locals.reactMarkup = reactMarkup

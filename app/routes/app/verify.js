@@ -30,13 +30,13 @@ module.exports = (app, config) => {
     .then((response) => {
       if (response.status >= 400) {
         // redirect to error page
-        return res.end(JSON.stringify(response))
+        return res.redirect('/verify/email?status=error')
       }
       return response.json()
     })
     .then((response) => {
       // redirect to success page
-      return res.end(JSON.stringify(response))
+      return res.redirect('/verify/email?status=success')
     })
   })
 
@@ -48,14 +48,14 @@ module.exports = (app, config) => {
     const code = decrypted_token[1]
     
     const api_url = config.api.url
-    const verify_email_url = api_url + '/users/phone_confirmed'
+    const verify_phone_url = api_url + '/users/phone_confirmed'
     
     const request_object = {
       phone_number: phone_number,
       code: code
     }
 
-    fetch(verify_email_url,{
+    fetch(verify_phone_url,{
       method: 'patch',
       headers: {  
         'Content-type': 'application/json'
@@ -65,13 +65,13 @@ module.exports = (app, config) => {
     .then((response) => {
       if (response.status >= 400) {
         // redirect to error page
-        return res.end(JSON.stringify(response))
+        return res.redirect('/verify/phone?status=error')
       }
       return response.json()
     })
     .then((response) => {
       // redirect to success page
-      return res.end(JSON.stringify(response))
+      return res.redirect('/verify/phone?status=success')
     })
   })
 

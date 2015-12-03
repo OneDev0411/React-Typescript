@@ -1,7 +1,21 @@
 // index.js
+
+// Store
+import AppStore from '../../stores/AppStore'
+
 module.exports = (app, config) => {
 
-  app.get('/dashboard', (req, res, next) => {
+  // If signed in, render client side
+  app.use((req, res, next) => {
+    if(req.session.user){
+      AppStore.data.user = req.session.user
+      res.locals.AppStore = JSON.stringify(AppStore)
+      return res.status(200).render('index.html')
+    }
+    next()
+  })
+
+  app.get('/dashboard*', (req, res, next) => {
     const path = req.path
     if(!req.session.user){
       return res.redirect('/signin?redirect_to=' + path)
@@ -9,12 +23,18 @@ module.exports = (app, config) => {
     next()
   })
 
-  app.get('/dashboard/:slug', (req, res, next) => {
-    const path = req.path
-    if(!req.session.user){
-      return res.redirect('/signin?redirect_to=' + path)
+  app.get('/verify/email',(req, res) => {
+    let AppStore = {}
+    AppStore.data = {
+      status: 'success'
     }
-    next()
+    if(req.query.status == 'error'){
+      AppStore.data = {
+        status: 'error'
+      }
+    }
+    res.locals.AppStore = JSON.stringify(AppStore)
+    return res.render('index.html')
   })
 
   app.get('/signout',(req, res) => {

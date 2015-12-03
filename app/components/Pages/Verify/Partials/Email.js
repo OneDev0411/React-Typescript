@@ -9,10 +9,8 @@ export default class Email extends Component {
     
     return (
       <div className="center-block" style={ S('maxw-400') }>
-        <div style={ S('color-929292 mb-20') }>Confirm your email</div>
-        <form>
-          <Button>Resend</Button>
-        </form>
+        <img src="/images/verify/family-1.png"/>
+        <div style={ S('color-929292 mt-50 font-40') }>Email confirmed.</div>
       </div>
     )
   }
