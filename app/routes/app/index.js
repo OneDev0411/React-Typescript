@@ -6,18 +6,20 @@ module.exports = (app, config) => {
     return res.send('User-agent: *\nDisallow: /')
   })
 
-  app.get('/dashboard', (req, res) => {
+  app.get('/dashboard', (req, res, next) => {
     const path = req.path
     if(!req.session.user){
       return res.redirect('/signin?redirect_to=' + path)
     }
+    next()
   })
 
-  app.get('/dashboard/:slug', (req, res) => {
+  app.get('/dashboard/:slug', (req, res, next) => {
     const path = req.path
     if(!req.session.user){
       return res.redirect('/signin?redirect_to=' + path)
     }
+    next()
   })
 
   app.get('/signout',(req, res) => {
