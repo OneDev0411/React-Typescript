@@ -3,12 +3,19 @@ module.exports = (app, config) => {
 
   /* API routes first
   ============================ */
-  require('./api')(app, config)
+  // Gets
+  require('./api/gets/rooms')(app, config)
+
+  // Posts
+  require('./api/posts/signin')(app, config)
+  require('./api/posts/forgot-password')(app, config)
+  require('./api/posts/reset-password')(app, config)
+  require('./api/posts/create-room')(app, config)
 
   /* App routes
   ============================ */
   require('./app')(app, config)
-  require('./verify')(app, config)
+  require('./app/verify')(app, config)
 
   /* React routes
   ============================ */
