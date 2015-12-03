@@ -39,7 +39,7 @@
     "test": "mocha --compilers js:babel/register",
     "start": "npm run prod",
     "prod": "webpack -p && NODE_ENV=prod node app/app-deploy.js",
-    "dev": "webpack && webpack-dev-server --content-base app/public/ --hot --inline"
+    "dev": "webpack && webpack-dev-server --content-base app/views/ --hot --inline --devtool inline-source-map "
   },
   "author": "",
   "license": "ISC",

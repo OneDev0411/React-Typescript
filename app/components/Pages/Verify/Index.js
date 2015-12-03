@@ -7,10 +7,26 @@ import Email from './Partials/Email'
 import Phone from './Partials/Phone'
 import BigHeading from '../../Partials/BigHeading'
 
+// AppDispatcher
+import AppDispatcher from '../../../dispatcher/AppDispatcher'
+
+// AppStore
+import AppStore from '../../../stores/AppStore'
+
 export default class Verify extends Component {
 
+  componentDidMount(){
+    // Reset data store
+    AppStore.data = {}
+    AppStore.emitChange()
+  }
+
   handleSubmit(code, token){
-    console.log(code, token)
+    AppDispatcher.dispatch({
+      action: 'verify-phone',
+      code: code,
+      token: token
+    })
   }
 
   render(){

@@ -4,6 +4,7 @@ import AppStore from '../stores/AppStore'
 import signin from '../actions/signin'
 import forgotPassword from '../actions/forgot-password'
 import resetPassword from '../actions/reset-password'
+import verifyPhone from '../actions/verify-phone'
 import getRooms from '../actions/get-rooms'
 
 const AppDispatcher = new Dispatcher()
@@ -12,12 +13,15 @@ const AppDispatcher = new Dispatcher()
 AppDispatcher.register(payload => {
 
   let action = payload.action
+
+  // Vars
   let email
   let password
   let confirm_password
   let redirect_to
   let token
   let access_token
+  let code
 
   switch(action) {
 
@@ -38,6 +42,12 @@ AppDispatcher.register(payload => {
       confirm_password = payload.confirm_password
       token = payload.token
       resetPassword(password, confirm_password, token)
+      break
+
+    case 'verify-phone':
+      code = payload.code
+      token = payload.token
+      verifyPhone(code, token)
       break
 
     case 'get-rooms':

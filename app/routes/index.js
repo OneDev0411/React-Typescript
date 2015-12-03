@@ -10,6 +10,7 @@ module.exports = (app, config) => {
   require('./api/posts/signin')(app, config)
   require('./api/posts/forgot-password')(app, config)
   require('./api/posts/reset-password')(app, config)
+  require('./api/posts/verify-phone')(app, config)
   require('./api/posts/create-room')(app, config)
 
   /* App routes

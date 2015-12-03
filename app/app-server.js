@@ -14,7 +14,7 @@ import config from '../config/private'
 const app = express()
 const one_day = 86400000
 app.engine('html', hogan)
-app.set('views', __dirname + '/public')
+app.set('views', __dirname + '/views')
 app.use('/', express.static(__dirname + '/public/', { maxAge: one_day }))
 app.set('port', (process.env.PORT || 3000))
 app.use(compression())
@@ -30,7 +30,7 @@ app.use(session({
 app.use(bodyParser.json())
 
 // Routes
-require('./routes/index')(app, config)
+require('./routes')(app, config)
 
 // Start app
 app.listen(app.get('port'))

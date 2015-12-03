@@ -115,5 +115,36 @@ export default {
     .then((response) => {
       return callback(false, response)
     })
+  },
+
+  verifyPhone: (code, token, callback) => {
+    
+    const verify_phone_url = '/api/verify-phone'
+
+    const request_object = {
+      code: code,
+      token: token
+    }
+    
+    fetch(verify_phone_url,{
+      method: 'post',
+      headers: {  
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify(request_object)
+    })
+    .then((response) => {
+      if (response.status >= 400) {
+        let error = {
+          "status": "error",
+          "message": "There was an error with this request."
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then((response) => {
+      return callback(false, response)
+    })
   }
 }
