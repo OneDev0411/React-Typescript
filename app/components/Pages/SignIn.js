@@ -25,49 +25,24 @@ export default class SignIn extends Component {
 
     e.preventDefault()
     AppStore.data.submitting = true
+    AppStore.emitChange()
     
     let email = this.refs.email.refs.input.value
     let password = this.refs.password.refs.input.value
 
-    if(email && password){
-      
-      AppDispatcher.dispatch({
-        action: "sign-in",
-        email: email,
-        password: password,
-        redirect_to: "/dashboard/recents" // change to referrer
-      })
-
-    } else {
-      
-      let email_valid
-      let password_valid
-
-      if(!email){
-        email_valid = false
-      }
-      if(!password){
-        password_valid = false
-      }
-      
-      AppStore.data = {
-        submitting: false,
-        errors: true,
-        validation: {
-          email_valid: email_valid,
-          password_valid: password_valid
-        }
-      }
-    }
-    
-    AppStore.emitChange()
+    AppDispatcher.dispatch({
+      action: 'sign-in',
+      email: email,
+      password: password,
+      redirect_to: '/dashboard/recents' // change to referrer
+    })
 
   }
 
   componentDidUpdate(){
 
     // If sign in successful
-    let data = AppStore.data
+    let data = this.props.data
     if(data.user){
       this.props.history.pushState(null, '/dashboard/recents')
     }
@@ -76,10 +51,9 @@ export default class SignIn extends Component {
   render(){
     
     // Data
-    const data = AppStore.data
+    const data = this.props.data
     const btnStyle = S('w-200 mb-20')
     const lightWeight = S('fw-100')
-    const lightBtn = { ...btnStyle, ...lightWeight }
     
     // Validation
     let errors = data.errors
@@ -123,7 +97,6 @@ export default class SignIn extends Component {
               type="submit"
               ref="submit"
               className={ submitting_class + "btn btn-primary" }
-              style={ lightBtn } 
               disabled={ submitting }
               style={ S('w-100p mb-20') }
             >

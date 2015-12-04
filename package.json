@@ -32,15 +32,15 @@
     "validator": "^4.3.0",
     "webpack": "^1.12.9",
     "extract-text-webpack-plugin": "^0.9.1",
-    "react-hot-loader": "^1.3.0",
     "sass-loader": "^3.1.2",
     "node-sass": "^3.4.2"
   },
   "scripts": {
-    "test": "mocha --compilers js:babel/register",
+    "test": "NODE_ENV=dev mocha --compilers js:babel/register",
     "start": "npm run prod",
-    "prod": "webpack -p && NODE_ENV=prod node app/app-deploy.js",
-    "dev": "webpack && webpack-dev-server --content-base app/public/ --hot --inline"
+    "dev": "cp app/views/index.html app/public/index.html && webpack && NODE_ENV=dev webpack-dev-server --content-base app/public/ --hot --inline --devtool inline-source-map --history-api-fallback",
+    "stage": "rm -rf app/public/index.html && webpack -p && NODE_ENV=stage node app/app-deploy.js",
+    "prod": "rm -rf app/public/index.html && NODE_ENV=build webpack -p && NODE_ENV=prod node app/app-deploy.js"
   },
   "author": "",
   "license": "ISC",
@@ -50,6 +50,7 @@
     "mocha": "^2.3.4",
     "mocha-jsdom": "^1.0.0",
     "react-addons-test-utils": "^0.14.3",
+    "react-hot-loader": "^1.3.0",
     "should": "^7.1.1",
     "testdom": "^2.0.0",
     "webpack-dev-server": "^1.12.1"

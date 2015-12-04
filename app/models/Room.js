@@ -5,14 +5,17 @@ import 'isomorphic-fetch'
 
 export default {
   
-  create: (title, owner, access_token, callback) => {
+  create: (params, callback) => {
     
-    const create_room_url = '/api/create-room'
+    let api_host = params.api_host
+    if(!api_host) api_host = ''
+
+    const create_room_url = api_host + '/api/create-room'
 
     const request_object = {
-      title: title,
-      owner: owner,
-      access_token: access_token
+      title: params.title,
+      owner: params.owner,
+      access_token: params.access_token
     }
       
     fetch(create_room_url,{

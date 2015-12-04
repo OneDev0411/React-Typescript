@@ -20,7 +20,7 @@ export default class NoMatch extends Component {
           You look lost.  Need some help?
           <br/>
           <br/>
-          <img src="/dist/images/goats/tongue.gif"/>
+          <img src="/images/goats/tongue.gif"/>
           <br/>
           <br/>
           <Link to="/">Take me home</Link>

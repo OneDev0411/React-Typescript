@@ -18,7 +18,11 @@ export default (email) => {
   
   } else {
 
-    User.forgotPassword(email, (err, response) => {
+    const params = {
+      email: email
+    }
+
+    User.forgotPassword(params, (err, response) => {
       
       // Success
       if(response.status == 'success'){

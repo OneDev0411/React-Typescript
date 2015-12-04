@@ -8,14 +8,14 @@ import es6Promise from 'es6-promise'
 es6Promise.polyfill();
 import 'isomorphic-fetch'
 
-import config from '../config/private'
+import config from '../config'
 
 // Express
 const app = express()
 const one_day = 86400000
 app.engine('html', hogan)
-app.set('views', __dirname + '/public')
-app.use('/dist', express.static(__dirname + '/public/dist', { maxAge: one_day }))
+app.set('views', __dirname + '/views')
+app.use('/', express.static(__dirname + '/public/', { maxAge: one_day }))
 app.set('port', (process.env.PORT || 3000))
 app.use(compression())
 app.use(session({
@@ -30,7 +30,7 @@ app.use(session({
 app.use(bodyParser.json())
 
 // Routes
-require('./routes/index')(app, config)
+require('./routes')(app, config)
 
 // Start app
 app.listen(app.get('port'))

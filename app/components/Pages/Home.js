@@ -21,7 +21,7 @@ export default class Home extends Component {
       <div id="main-content" className="container">
         <div className="text-center col-sm-12">
           <div style={ S('m-20') }>
-            <img src="/dist/images/home/family-1.png"/>
+            <img src="/images/home/family-1.png"/>
           </div>
           <p className="tempo" style={tagStyle}>
             real estate moves fast<br className="hidden-xs"/>

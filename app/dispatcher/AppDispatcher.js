@@ -1,9 +1,11 @@
 // AppDispatcher.js
 import { Dispatcher } from 'flux'
 import AppStore from '../stores/AppStore'
+import signup from '../actions/signup'
 import signin from '../actions/signin'
 import forgotPassword from '../actions/forgot-password'
 import resetPassword from '../actions/reset-password'
+import verifyPhone from '../actions/verify-phone'
 import getRooms from '../actions/get-rooms'
 
 const AppDispatcher = new Dispatcher()
@@ -12,14 +14,26 @@ const AppDispatcher = new Dispatcher()
 AppDispatcher.register(payload => {
 
   let action = payload.action
+
+  // Vars
+  let user
   let email
   let password
   let confirm_password
   let redirect_to
   let token
   let access_token
+  let code
 
   switch(action) {
+
+    case 'sign-up':
+      user = payload.user
+      password = payload.password
+      confirm_password = payload.confirm_password
+      redirect_to = payload.redirect_to
+      signup(user, password, confirm_password, redirect_to)
+      break
 
     case 'sign-in':
       email = payload.email
@@ -38,6 +52,12 @@ AppDispatcher.register(payload => {
       confirm_password = payload.confirm_password
       token = payload.token
       resetPassword(password, confirm_password, token)
+      break
+
+    case 'verify-phone':
+      code = payload.code
+      token = payload.token
+      verifyPhone(code, token)
       break
 
     case 'get-rooms':

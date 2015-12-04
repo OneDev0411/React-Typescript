@@ -1,28 +1,45 @@
 // index.js
+
+// Store
+import AppStore from '../../stores/AppStore'
+
 module.exports = (app, config) => {
-
-  app.get('/robots.txt', (req, res, next) => {
-    res.type('text/plain')
-    return res.send('User-agent: *\nDisallow: /')
-  })
-
-  app.get('/dashboard', (req, res) => {
-    const path = req.path
-    if(!req.session.user){
-      return res.redirect('/signin?redirect_to=' + path)
-    }
-  })
-
-  app.get('/dashboard/:slug', (req, res) => {
-    const path = req.path
-    if(!req.session.user){
-      return res.redirect('/signin?redirect_to=' + path)
-    }
-  })
 
   app.get('/signout',(req, res) => {
     req.session.destroy()
     return res.redirect('/')
+  })
+  
+  // If signed in, render client side
+  app.use((req, res, next) => {
+    if(req.session.user){
+      AppStore.data.user = req.session.user
+      res.locals.AppStore = JSON.stringify(AppStore)
+      return res.status(200).render('index.html')
+    }
+    next()
+  })
+
+  app.get('/dashboard*', (req, res, next) => {
+    const path = req.path
+    if(!req.session.user){
+      return res.redirect('/signin?redirect_to=' + path)
+    }
+    next()
+  })
+
+  app.get('/verify/email',(req, res) => {
+    let AppStore = {}
+    AppStore.data = {
+      status: 'success'
+    }
+    if(req.query.status == 'error'){
+      AppStore.data = {
+        status: 'error'
+      }
+    }
+    res.locals.AppStore = JSON.stringify(AppStore)
+    return res.render('index.html')
   })
   
 }

@@ -1,37 +1,34 @@
-// actions/forgot-password.js
+// actions/verify-phone.js
 import User from '../models/User'
 import AppStore from '../stores/AppStore'
 
-export default (password, confirm_password, token) => {
+export default (code, token) => {
   
-  if(password.length < 6 || password !== confirm_password){
+  if(!code || !token){
     
     let error_type
-    if(password.length < 6){
-      error_type = 'too-short'
+    
+    if(!code){
+      error_type = 'invalid-code'
     }
 
-    if(password !== confirm_password){
-      error_type = 'no-match'
+    if(!token){
+      error_type = 'invalid-token'
     }
     
     AppStore.data = {
       submitting: false,
       errors: true,
       show_message: true,
-      password_error: error_type
+      error_type: error_type
     }
 
     return AppStore.emitChange()
   
   }
   
-  const params = {
-    password: password,
-    token: token
-  }
-
-  User.resetPassword(params, (err, response) => {
+  
+  User.verifyPhone(code, token, (err, response) => {
     
     // Success
     if(response.status == 'success'){
