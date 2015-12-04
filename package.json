@@ -36,11 +36,11 @@
     "node-sass": "^3.4.2"
   },
   "scripts": {
-    "test": "NODE_ENV=dev mocha --compilers js:babel/register",
-    "start": "npm run prod",
-    "dev": "cp app/views/index.html app/public/index.html && webpack && NODE_ENV=dev webpack-dev-server --content-base app/public/ --hot --inline --devtool inline-source-map --history-api-fallback",
+    "test": "NODE_ENV=development mocha --compilers js:babel/register",
+    "start": "npm run production",
+    "development": "cp app/views/index.html app/public/index.html && webpack && NODE_ENV=development webpack-dev-server --content-base app/public/ --hot --inline --devtool inline-source-map --history-api-fallback",
     "stage": "rm -rf app/public/index.html && webpack -p && NODE_ENV=stage node app/app-deploy.js",
-    "prod": "rm -rf app/public/index.html && NODE_ENV=build webpack -p && NODE_ENV=prod node app/app-deploy.js"
+    "production": "rm -rf app/public/index.html && NODE_ENV=build webpack -p && NODE_ENV=production node app/app-deploy.js"
   },
   "author": "",
   "license": "ISC",

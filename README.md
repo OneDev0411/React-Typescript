@@ -14,11 +14,11 @@ It uses the following:
 ```
 git clone https://bitbucket.org/rechat/web
 cd web
-npm i
+npm install
 ```
 #####Run webpack dev
 ```
-npm run dev
+npm run development
 ```
 Go to [http://localhost:8080/webpack-dev-server](http://localhost:8080/webpack-dev-server)
 #####Run staging
@@ -29,7 +29,7 @@ npm run stage
 Go to [http://localhost:3000](http://localhost:3000)
 #####Run production
 ```
-npm run prod
+npm run production
 ```
 Go to [http://localhost:3000](http://localhost:3000)
 #####Run tests
