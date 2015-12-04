@@ -1,7 +1,7 @@
 // App.js
 
 // Dependencies
-if(process.env.NODE_ENV !=='prod'){
+if(process.env.NODE_ENV == 'build'){
   // Fonts
   require('../src/fonts/sf.scss');
   require('../src/fonts/tempos-headline.scss');

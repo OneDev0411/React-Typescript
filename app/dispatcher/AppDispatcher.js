@@ -1,6 +1,7 @@
 // AppDispatcher.js
 import { Dispatcher } from 'flux'
 import AppStore from '../stores/AppStore'
+import signup from '../actions/signup'
 import signin from '../actions/signin'
 import forgotPassword from '../actions/forgot-password'
 import resetPassword from '../actions/reset-password'
@@ -15,6 +16,7 @@ AppDispatcher.register(payload => {
   let action = payload.action
 
   // Vars
+  let user
   let email
   let password
   let confirm_password
@@ -24,6 +26,14 @@ AppDispatcher.register(payload => {
   let code
 
   switch(action) {
+
+    case 'sign-up':
+      user = payload.user
+      password = payload.password
+      confirm_password = payload.confirm_password
+      redirect_to = payload.redirect_to
+      signup(user, password, confirm_password, redirect_to)
+      break
 
     case 'sign-in':
       email = payload.email

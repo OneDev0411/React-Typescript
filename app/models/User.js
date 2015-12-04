@@ -5,13 +5,47 @@ import 'isomorphic-fetch'
 
 export default {
   
-  signin: (email, password, callback) => {
+  create: (params, callback) => {
     
-    const signin_url = '/api/signin'
+    let api_host = params.api_host
+    if(!api_host) api_host = ''
+
+    const create_url = api_host + '/api/signup'
+
+    const request_object = params.user
+      
+    fetch(create_url,{
+      method: 'post',
+      headers: {  
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify(request_object)
+    })
+    .then((response) => {
+      if (response.status >= 400) {
+        let error = {
+          "status": "error",
+          "message": "There was an error with this request."
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then((response) => {
+      return callback(false, response)
+    })
+  },
+
+  signin: (params, callback) => {
+    
+    let api_host = params.api_host
+    if(!api_host) api_host = ''
+
+    const signin_url = api_host + '/api/signin'
 
     const request_object = {
-      email: email,
-      password: password
+      email: params.email,
+      password: params.password
     }
       
     fetch(signin_url,{
@@ -37,31 +71,14 @@ export default {
     })
   },
 
-  getRooms: (access_token, callback) => {
+  forgotPassword: (params, callback) => {
     
-    const get_rooms_url = '/api/rooms?access_token=' + access_token
-    
-    fetch(get_rooms_url)
-    .then((response) => {
-      if (response.status >= 400) {
-        let error = {
-          "status": "error",
-          "message": "There was an error with this request."
-        }
-        return callback(error, false)
-      }
-      return response.json()
-    })
-    .then((response) => {
-      return callback(false, response)
-    })
-  },
+    let api_host = params.api_host
+    if(!api_host) api_host = ''
 
-  forgotPassword: (email, callback) => {
-    
-    const forgot_password_url = '/api/forgot-password'
+    const forgot_password_url = api_host + '/api/forgot-password'
     const request_object = {
-      email: email
+      email: params.email
     }
     
     fetch(forgot_password_url,{
@@ -86,13 +103,16 @@ export default {
     })
   },
 
-  resetPassword: (password, token, callback) => {
+  resetPassword: (params, callback) => {
     
-    const reset_password_url = '/api/reset-password'
+    let api_host = params.api_host
+    if(!api_host) api_host = ''
+
+    const reset_password_url = api_host + '/api/reset-password'
 
     const request_object = {
-      token: token,
-      password: password
+      token: params.token,
+      password: params.password
     }
     
     fetch(reset_password_url,{
@@ -146,5 +166,29 @@ export default {
     .then((response) => {
       return callback(false, response)
     })
+  },
+
+  getRooms: (params, callback) => {
+    
+    let api_host = params.api_host
+    if(!api_host) api_host = ''
+
+    const get_rooms_url = api_host + '/api/rooms?access_token=' + params.access_token
+    
+    fetch(get_rooms_url)
+    .then((response) => {
+      if (response.status >= 400) {
+        let error = {
+          "status": "error",
+          "message": "There was an error with this request."
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then((response) => {
+      return callback(false, response)
+    })
   }
+
 }

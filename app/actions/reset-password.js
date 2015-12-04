@@ -26,8 +26,12 @@ export default (password, confirm_password, token) => {
   
   }
   
-  
-  User.resetPassword(password, token, (err, response) => {
+  const params = {
+    password: password,
+    token: token
+  }
+
+  User.resetPassword(params, (err, response) => {
     
     // Success
     if(response.status == 'success'){

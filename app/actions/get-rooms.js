@@ -4,7 +4,11 @@ import AppStore from '../stores/AppStore'
 
 export default (access_token) => {
   
-  User.getRooms(access_token, (err, response) => {
+  const params = {
+    access_token: access_token
+  }
+  
+  User.getRooms(params, (err, response) => {
     
     // Success
     if(response.status == 'success'){

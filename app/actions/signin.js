@@ -4,7 +4,44 @@ import AppStore from '../stores/AppStore'
 
 export default (email, password, redirect_to) => {
   
-  User.signin(email, password, (err, response) => {
+  if(email && password){
+    email = email.trim()
+    password = password.trim()
+  }
+
+  // Handle errors
+  if(!email || !password){
+    
+    let email_valid
+    let password_valid
+
+    if(!email){
+      email_valid = false
+    }
+    if(!password){
+      password_valid = false
+    }
+    
+    AppStore.data = {
+      submitting: false,
+      errors: true,
+      validation: {
+        email_valid: email_valid,
+        password_valid: password_valid
+      }
+    }
+
+    return AppStore.emitChange()
+  }
+  
+  // Process
+  const params = {
+    email: email,
+    password: password,
+    redirect_to: redirect_to
+  }
+
+  User.signin(params, (err, response) => {
     
     // Success
     if(response.status == 'success'){
@@ -13,7 +50,7 @@ export default (email, password, redirect_to) => {
       user.access_token = response.access_token
 
       AppStore.data = {
-        user: user,
+        user: user
       }
     
     } else {
