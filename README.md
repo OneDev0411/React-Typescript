@@ -16,26 +16,17 @@ git clone https://bitbucket.org/rechat/web
 cd web
 npm i
 ```
-#####Configure
-Set `api.url` in config/private.js:
-```javascript
-api: {
-  url: "http://localhost:3078",
-  client_id: "bf0da47e-7226-11e4-905b-0024d71b10fc",
-  client_secret: "secret"
-},
-```
-Set `app.url` config/public.js:
-```javascript
-app: {
-  url: "http://localhost:3000",
-},
-```
 #####Run webpack dev
 ```
 npm run dev
 ```
 Go to [http://localhost:8080/webpack-dev-server](http://localhost:8080/webpack-dev-server)
+#####Run staging
+This uses the dev config, renders server side and removes dev features like hot reloader.
+```
+npm run stage
+```
+Go to [http://localhost:3000](http://localhost:3000)
 #####Run production
 ```
 npm run prod

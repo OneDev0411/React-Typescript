@@ -1,4 +1,4 @@
-// config/private.js
+// config/prod.js
 export default {
   api: {
     url: process.env.RECHAT_API_URL,
