@@ -3,8 +3,8 @@ import config from '../../config'
 import crypto from 'crypto'
 
 const algorithm = 'aes-256-ctr'
-const key = crypto.createHash('sha256').update(config.crypto.pw_reset_key, 'ascii').digest()
-const iv = config.crypto.pw_reset_iv
+const key = crypto.createHash('sha256').update(config.crypto.key, 'ascii').digest()
+const iv = config.crypto.iv
 
 export default {
 
