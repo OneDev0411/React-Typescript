@@ -27,17 +27,28 @@ export default class Dashboard extends Component {
     })
   }
 
-  componentDidMount(){
+  componentWillMount(){
     this.getRooms()
+  }
+
+  showModal(modal_key){
+    AppDispatcher.dispatch({
+      action: 'show-modal',
+      modal_key: modal_key
+    })
+  }
+
+  hideModal(){
+    AppStore.data.showStartChatModal = false
+    AppStore.emitChange()
   }
 
   render(){
 
     // Data
     let data = this.props.data
-    if(AppStore.data.rooms){
-      data.rooms = AppStore.data.rooms
-    }
+    data.rooms = AppStore.data.rooms
+    data.showStartChatModal = AppStore.data.showStartChatModal
     
     if(this.props.route.path){
       data.path = this.props.route.path
@@ -50,7 +61,7 @@ export default class Dashboard extends Component {
     return (
       <div>
         <header>
-          <MainNav data={ data }/>
+          <MainNav showModal={ this.showModal } hideModal={ this.hideModal } data={ data }/>
         </header>
         <SideBar data={ data }/>
         <main style={ S('fw-100 l-250 absolute r-0 p-20') }>

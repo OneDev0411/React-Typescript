@@ -1,7 +1,7 @@
 // MainNav.js
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import { Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap'
+import { Nav, NavItem, NavDropdown, MenuItem, ButtonToolbar, Dropdown, Modal, Button, Input } from 'react-bootstrap'
 import S from 'shorti'
 
 export default class MainNav extends Component {
@@ -18,14 +18,28 @@ export default class MainNav extends Component {
     input.placeholder = 'Search'
   }
 
+  handleSelect(eventKey, href) {
+    this.props.showModal(href)
+  }
+
+  handleSubmit(e){
+    e.preventDefault()
+    console.log('start chat')
+  }
+
+  hideModal(e){
+    this.props.hideModal()
+  }
+
   render(){
     
     // Data
     const data = this.props.data
+    const first_name = data.user.first_name
+    const last_name = data.user.last_name
+
+    // Style
     const navBarStyle = S('mb-0 p-15')
-    
-    let first_name = data.user.first_name
-    let last_name = data.user.last_name
 
     return (
       <nav style={ navBarStyle } className="navbar bg-alabaster">
@@ -47,9 +61,34 @@ export default class MainNav extends Component {
           <ul className="nav navbar-nav navbar-right">
             <li>
               <input type="text" placeholder="Search" className="form-control" onFocus={ this.handleFocus } onBlur={ this.handleBlur } />
-              <button type="button" className="btn btn-default" style={ S('absolute r-0 t-0') }>
-                <i className="fa fa-plus" style={ S('t-2 relative') }></i>
-              </button>
+            </li>
+            <li>
+              <ButtonToolbar>
+                <Dropdown id="dropdown-custom-1">
+                  <Dropdown.Toggle noCaret>
+                    <i className="fa fa-plus"></i>
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu onSelect={ this.handleSelect.bind(this) }>
+                    <MenuItem eventKey="start-chat">Start a New Chat</MenuItem>
+                    <MenuItem eventKey="add-contact">Add Contact</MenuItem>
+                    <MenuItem eventKey="add-alert">Add an Alert</MenuItem>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </ButtonToolbar>
+              <Modal show={ data.showStartChatModal } onHide={ this.hideModal.bind(this) }>
+                <form onSubmit={ this.handleSubmit.bind(this) }>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Start a new chat</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <Input type="text" ref="title" placeholder="Title"/>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button onClick={ this.hideModal.bind(this) }>Close</Button>
+                    <Button type="submit" bsStyle="primary">Start chat</Button>
+                  </Modal.Footer>
+                </form>
+              </Modal>
             </li>
           </ul>
         </div>

@@ -7,6 +7,7 @@ import forgotPassword from '../actions/forgot-password'
 import resetPassword from '../actions/reset-password'
 import verifyPhone from '../actions/verify-phone'
 import getRooms from '../actions/get-rooms'
+import showModal from '../actions/show-modal'
 
 const AppDispatcher = new Dispatcher()
 
@@ -24,6 +25,7 @@ AppDispatcher.register(payload => {
   let token
   let access_token
   let code
+  let modal_key
 
   switch(action) {
 
@@ -63,6 +65,11 @@ AppDispatcher.register(payload => {
     case 'get-rooms':
       access_token = payload.access_token
       getRooms(access_token)
+      break
+
+    case 'show-modal':
+      modal_key = payload.modal_key
+      showModal(modal_key)
       break
 
     default:

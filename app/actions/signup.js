@@ -20,18 +20,20 @@ export default (user, password, confirm_password, redirect_to) => {
   // Password
   if(!validator.isEmail(email) || password.length < 6 || password !== confirm_password){
     
-    if(validator.isEmail(email)){
+    if(!validator.isEmail(email)){
       error_type = 'email'
     }
 
-    if(password.length < 6){
-      error_type = 'password'
-      password_error = 'too-short'
-    }
+    if(error_type !== 'email'){
+      if(password.length < 6){
+        error_type = 'password'
+        password_error = 'too-short'
+      }
 
-    if(password !== confirm_password){
-      error_type = 'password'
-      password_error = 'no-match'
+      if(password !== confirm_password){
+        error_type = 'password'
+        password_error = 'no-match'
+      }
     }
     
     AppStore.data = {

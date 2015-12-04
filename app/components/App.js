@@ -1,6 +1,6 @@
 // App.js
 
-// Dependencies
+// Build stlye sheeet
 if(process.env.NODE_ENV == 'build'){
   // Fonts
   require('../src/fonts/sf.scss');
