@@ -8,6 +8,8 @@ import resetPassword from '../actions/reset-password'
 import verifyPhone from '../actions/verify-phone'
 import getRooms from '../actions/get-rooms'
 import showModal from '../actions/show-modal'
+import createRoom from '../actions/create-room'
+import addUserToStore from '../actions/add-user-to-store'
 
 const AppDispatcher = new Dispatcher()
 
@@ -26,6 +28,7 @@ AppDispatcher.register(payload => {
   let access_token
   let code
   let modal_key
+  let title
 
   switch(action) {
 
@@ -62,9 +65,19 @@ AppDispatcher.register(payload => {
       verifyPhone(code, token)
       break
 
+    case 'add-user-to-store':
+      user = payload.user
+      addUserToStore(user)
+      break
+      
+    case 'create-room':
+      title = payload.title
+      createRoom(title)
+      break
+
     case 'get-rooms':
-      access_token = payload.access_token
-      getRooms(access_token)
+      user = payload.user
+      getRooms(user)
       break
 
     case 'show-modal':

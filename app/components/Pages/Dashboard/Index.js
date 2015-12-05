@@ -18,17 +18,24 @@ import SideBar from './Partials/SideBar'
 
 export default class Dashboard extends Component {
 
-  getRooms(){
+  init(){
+    
     const data = this.props.data
-    const access_token = data.user.access_token
+    const user = data.user
+    
+    AppDispatcher.dispatch({
+      action: 'add-user-to-store',
+      user: user
+    })
+
     AppDispatcher.dispatch({
       action: 'get-rooms',
-      access_token: access_token
+      user: user
     })
   }
 
   componentWillMount(){
-    this.getRooms()
+    this.init()
   }
 
   showModal(modal_key){
@@ -39,8 +46,15 @@ export default class Dashboard extends Component {
   }
 
   hideModal(){
-    AppStore.data.showStartChatModal = false
+    AppStore.data.showCreateChatModal = false
     AppStore.emitChange()
+  }
+
+  createRoom(title){
+    AppDispatcher.dispatch({
+      action: 'create-room',
+      title: title
+    }) 
   }
 
   render(){
@@ -48,8 +62,8 @@ export default class Dashboard extends Component {
     // Data
     let data = this.props.data
     data.rooms = AppStore.data.rooms
-    data.showStartChatModal = AppStore.data.showStartChatModal
-    
+    data.showCreateChatModal = AppStore.data.showCreateChatModal
+
     if(this.props.route.path){
       data.path = this.props.route.path
     } else {
@@ -61,7 +75,7 @@ export default class Dashboard extends Component {
     return (
       <div>
         <header>
-          <MainNav showModal={ this.showModal } hideModal={ this.hideModal } data={ data }/>
+          <MainNav showModal={ this.showModal } hideModal={ this.hideModal } createRoom={ this.createRoom } data={ data }/>
         </header>
         <SideBar data={ data }/>
         <main style={ S('fw-100 l-250 absolute r-0 p-20') }>

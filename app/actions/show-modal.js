@@ -4,9 +4,8 @@ import AppStore from '../stores/AppStore'
 
 export default (modal_key) => {
   
-  if(modal_key === 'start-chat'){
-    AppStore.data.showStartChatModal = true  
-  }
+  if(modal_key === 'create-chat')
+    AppStore.data.showCreateChatModal = true  
   
   AppStore.emitChange()
 

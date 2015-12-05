@@ -18,13 +18,18 @@ export default class MainNav extends Component {
     input.placeholder = 'Search'
   }
 
-  handleSelect(eventKey, href) {
+  showModal(eventKey, href) {
     this.props.showModal(href)
+    setTimeout(() => {
+      if(this.refs.title)
+        this.refs.title.getInputDOMNode().focus()
+    }, 300)
   }
 
   handleSubmit(e){
     e.preventDefault()
-    console.log('start chat')
+    const title = this.refs.title.getInputDOMNode().value
+    this.props.createRoom(title)
   }
 
   hideModal(e){
@@ -68,20 +73,20 @@ export default class MainNav extends Component {
                   <Dropdown.Toggle noCaret>
                     <i className="fa fa-plus"></i>
                   </Dropdown.Toggle>
-                  <Dropdown.Menu onSelect={ this.handleSelect.bind(this) }>
-                    <MenuItem eventKey="start-chat">Start a New Chat</MenuItem>
+                  <Dropdown.Menu onSelect={ this.showModal.bind(this) }>
+                    <MenuItem eventKey="create-chat">Start a New Chat</MenuItem>
                     <MenuItem eventKey="add-contact">Add Contact</MenuItem>
                     <MenuItem eventKey="add-alert">Add an Alert</MenuItem>
                   </Dropdown.Menu>
                 </Dropdown>
               </ButtonToolbar>
-              <Modal show={ data.showStartChatModal } onHide={ this.hideModal.bind(this) }>
+              <Modal show={ data.showCreateChatModal } onHide={ this.hideModal.bind(this) }>
                 <form onSubmit={ this.handleSubmit.bind(this) }>
                   <Modal.Header closeButton>
                     <Modal.Title>Start a new chat</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <Input type="text" ref="title" placeholder="Title"/>
+                    <Input type="text" ref="title" placeholder="Chat room title"/>
                   </Modal.Body>
                   <Modal.Footer>
                     <Button onClick={ this.hideModal.bind(this) }>Close</Button>

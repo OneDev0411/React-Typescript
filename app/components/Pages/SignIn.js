@@ -43,9 +43,8 @@ export default class SignIn extends Component {
 
     // If sign in successful
     let data = this.props.data
-    if(data.user){
+    if(data.user)
       this.props.history.pushState(null, '/dashboard/recents')
-    }
   }
 
   render(){
@@ -60,27 +59,23 @@ export default class SignIn extends Component {
     let validation = data.validation
     let email_style
     let password_style
-    if(errors && !validation.email){
+    if(errors && !validation.email)
       email_style = 'error'
-    }
-    if(errors && !validation.password){
+    if(errors && !validation.password)
       password_style = 'error'
-    }
 
     let submitting = data.submitting
     let submitting_class
-    if(submitting){
+    if(submitting)
       submitting_class = 'disabled'
-    }
     
     let message
-    if(data.show_message){
+    if(data.show_message)
       message = (
         <Alert bsStyle="danger">
           There was an error with this request.
         </Alert>
       )
-    }
 
     return (
       <div id="main-content" className="container">
