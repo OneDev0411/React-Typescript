@@ -1,12 +1,12 @@
 // App.js
 
-// Build stlye sheeet
-if(process.env.NODE_ENV == 'build'){
+// Build stlye sheet
+if(process.env.NODE_ENV === 'build'){
   // Fonts
-  require('../src/fonts/sf.scss');
-  require('../src/fonts/tempos-headline.scss');
+  require('../src/fonts/sf.scss')
+  require('../src/fonts/tempos-headline.scss')
   // Style
-  require('../src/sass/main.scss');
+  require('../src/sass/main.scss')
 }
 
 import React, { Component } from 'react'

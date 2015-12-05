@@ -44,7 +44,9 @@ export default class MainNav extends Component {
     const data = this.props.data
     const first_name = data.user.first_name
     const last_name = data.user.last_name
-    const profile_image_url = data.user.profile_image_url
+    let profile_image_url = data.user.profile_image_url
+    if(!profile_image_url)
+      profile_image_url = '/images/dashboard/profile-image-default.png'
 
     // Style
     const nav_bar_style = S('mb-0 p-15')

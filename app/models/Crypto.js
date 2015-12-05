@@ -16,6 +16,7 @@ export default {
   },
 
   decrypt: (data) => {
+    console.log(config.crypto.key, iv)
     var decipher = crypto.createDecipheriv(algorithm, key, iv)
     var dec = decipher.update(data, 'base64', 'utf8')
     dec += decipher.final('utf8')
