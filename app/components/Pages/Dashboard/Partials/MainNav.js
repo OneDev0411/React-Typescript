@@ -28,8 +28,10 @@ export default class MainNav extends Component {
 
   handleSubmit(e){
     e.preventDefault()
-    const title = this.refs.title.getInputDOMNode().value
-    this.props.createRoom(title)
+    let title = this.refs.title.getInputDOMNode().value
+    title = title.trim()
+    if(title)
+      this.props.createRoom(title)
   }
 
   hideModal(e){
@@ -89,7 +91,7 @@ export default class MainNav extends Component {
                     <Input type="text" ref="title" placeholder="Chat room title"/>
                   </Modal.Body>
                   <Modal.Footer>
-                    <Button onClick={ this.hideModal.bind(this) }>Close</Button>
+                    <Button onClick={ this.hideModal.bind(this) }>Cancel</Button>
                     <Button type="submit" bsStyle="primary">Start chat</Button>
                   </Modal.Footer>
                 </form>
