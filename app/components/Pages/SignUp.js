@@ -142,7 +142,7 @@ export default class SignUp extends Component {
     }
     return (
       <div id="main-content" className="container">
-        <div className="text-center center-block" style={ S('maxw-400') }>
+        <div className="text-center center-block" style={ S('maxw-300') }>
           <BigHeading />
           { main_content }
         </div>

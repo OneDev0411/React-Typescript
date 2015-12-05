@@ -80,7 +80,7 @@ export default class SignIn extends Component {
 
     return (
       <div id="main-content" className="container">
-        <div className="text-center center-block" style={ S('maxw-400') }>
+        <div className="text-center center-block" style={ S('maxw-300') }>
           <BigHeading />
           <h1 style={ lightWeight }>Sign in</h1>
           <form action="/signin" onSubmit={ this.handleSubmit.bind(this) }>
