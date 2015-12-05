@@ -85,7 +85,7 @@ export default class SignIn extends Component {
           <h1 style={ lightWeight }>Sign in</h1>
           <form action="/signin" onSubmit={ this.handleSubmit.bind(this) }>
             <Input bsStyle={ email_style } type="text" ref="email" placeholder="Email"/>
-            <Input bsStyle={ password_style } type="text" ref="password" placeholder="Password"/>
+            <Input bsStyle={ password_style } type="password" ref="password" placeholder="Password"/>
             <div style={ S('color-929292 font-13 mt-0 mb-10') } className="pull-right"><Link to="/password/forgot">Forgot Password</Link></div>
             <div className="clearfix"></div>
             { message }
