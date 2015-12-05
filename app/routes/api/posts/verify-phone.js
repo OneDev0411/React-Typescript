@@ -26,7 +26,7 @@ module.exports = (app, config) => {
 
     const request_object = {
       phone_number: phone_number,
-      code_submitted: code_submitted
+      code: code_submitted
     }
 
     res.setHeader('Content-Type', 'application/json')
