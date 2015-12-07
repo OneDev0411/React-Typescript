@@ -37,7 +37,7 @@
     "test": "NODE_ENV=development mocha --compilers js:babel/register",
     "start": "npm run production",
     "development": "cp app/views/index.html app/public/index.html && NODE_ENV=development webpack && NODE_ENV=development webpack-dev-server --content-base app/public/ --hot --inline --devtool inline-source-map --history-api-fallback",
-    "staging": "rm -rf app/public/index.html && webpack -p && NODE_ENV=staging node app/app-deploy.js",
+    "staging": "rm -rf app/public/index.html && NODE_ENV=build webpack -p && NODE_ENV=staging node app/app-deploy.js",
     "production": "rm -rf app/public/index.html && NODE_ENV=build webpack -p && NODE_ENV=production node app/app-deploy.js"
   },
   "author": "",

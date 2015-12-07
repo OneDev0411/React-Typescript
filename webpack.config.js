@@ -2,12 +2,12 @@
 var loaders = ['babel']
 if(process.env.NODE_ENV === 'development')
   loaders = ['react-hot','babel']
-
+var path = require('path')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 module.exports = {
   entry: './app/app-client.js',
   output: {
-    path: __dirname + 'app/public/dist',
+    path: path.join(__dirname, 'app/public/dist'),
     filename: 'bundle.js',
     publicPath: '/dist/'
   },
