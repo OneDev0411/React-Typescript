@@ -5,11 +5,16 @@ import { Input, Button, Alert } from 'react-bootstrap'
 import S from 'shorti'
 import helpers from '../../../../utils/helpers'
 
+// AppStore
+import AppStore from '../../../../stores/AppStore'
+
 export default class Reset extends Component {
 
   handleSubmit(e){
     
     e.preventDefault()
+    AppStore.data.submitting = true
+    AppStore.emitChange()
     
     // Get token
     let password = this.refs.password.getInputDOMNode().value.trim()
@@ -78,6 +83,11 @@ export default class Reset extends Component {
         </Alert>
       )
     }
+    
+    let submitting = data.submitting
+    let submitting_class = ''
+    if(submitting)
+      submitting_class = 'disabled'
 
     let main_content = (
       <div>
@@ -86,7 +96,15 @@ export default class Reset extends Component {
           <Input bsStyle={ password_style } placeholder="New Password" type="password" ref="password"/>
           <Input bsStyle={ password_style } placeholder="Confirm New Password" type="password" ref="confirm_password"/>
           { message }
-          <Button style={ S('w-100p') } type="submit" bsStyle="primary">Change Password</Button>
+          <Button 
+            type="submit"
+            ref="submit"
+            className={ submitting_class + "btn btn-primary" }
+            disabled={ submitting }
+            style={ S('w-100p') }
+          >
+            { submitting ? 'Submitting...' : 'Change Password' }
+          </Button>
           <div style={ S('mt-20 color-929292 font-13') }>Code not working? <Link to="/password/forgot">Try sending it again</Link></div>
         </form>
       </div>

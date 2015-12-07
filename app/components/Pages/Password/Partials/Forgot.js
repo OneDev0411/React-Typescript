@@ -4,11 +4,17 @@ import { Link } from 'react-router'
 import { Input, Button, Col, Alert } from 'react-bootstrap'
 import S from 'shorti'
 
+// AppStore
+import AppStore from '../../../../stores/AppStore'
+
 export default class Forgot extends Component {
 
   handleSubmit(e){
     
     e.preventDefault()
+    AppStore.data.submitting = true
+    AppStore.emitChange()
+
     let email = this.refs.email.getInputDOMNode().value
     let form_data = {
       email: email
@@ -64,6 +70,11 @@ export default class Forgot extends Component {
       
     }
 
+    let submitting = data.submitting
+    let submitting_class = ''
+    if(submitting)
+      submitting_class = 'disabled'
+
     let main_content = (
       <div>
         <div style={ S('color-929292 mb-20') }>Forgot your password?</div>
@@ -74,7 +85,15 @@ export default class Forgot extends Component {
             <Link className="btn btn-default" style={ S('w-100p') } to="/signin">Cancel</Link>
           </Col>
           <Col sm={8} style={ S('p-0') }>
-            <Button type="submit" style={ S('w-100p') } bsStyle="primary">Reset Password</Button>
+            <Button 
+              type="submit"
+              ref="submit"
+              className={ submitting_class + "btn btn-primary" }
+              disabled={ submitting }
+              style={ S('w-100p') }
+            >
+              { submitting ? 'Submitting...' : 'Reset Password' }
+            </Button>
           </Col>
           <div className="clearfix"></div>
           <div style={ S('mt-20 color-929292 font-13') }>Change your mind? <Link to="/signin">Sign in</Link></div>

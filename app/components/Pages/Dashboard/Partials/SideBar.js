@@ -7,7 +7,7 @@ import S from 'shorti'
 export default class SideBar extends Component {
   render(){
     
-    const sidebarStyle = S('w-250 fixed h-100p p-20 pt-0')
+    const sidebar_style = S('w-250 fixed h-100p p-20 pt-0')
     const data = this.props.data
     const path = data.path
 
@@ -29,7 +29,7 @@ export default class SideBar extends Component {
     }
 
     return (
-      <aside style={ sidebarStyle } className="bg-alabaster">
+      <aside style={ sidebar_style } className="bg-alabaster">
         <Nav bsStyle="pills" stacked activeKey={ active_key }>
           <LinkContainer to="/dashboard/recents">
             <NavItem eventKey={1}>Recents</NavItem>

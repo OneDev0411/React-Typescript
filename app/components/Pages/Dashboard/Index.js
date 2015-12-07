@@ -82,9 +82,26 @@ export default class Dashboard extends Component {
 
     AppDispatcher.dispatch({
       action: 'create-room',
-      title: title,
-      user: user
+      user: user,
+      title: title
     }) 
+  }
+
+  createMessage(e){
+    e.preventDefault()
+    const comment = this.refs.message_input.value
+    const user = this.props.data.user
+    const current_room = this.props.data.current_room
+
+    AppDispatcher.dispatch({
+      action: 'create-message',
+      user: user,
+      room: current_room,
+      comment: comment
+    }) 
+
+    this.refs.message_input.value = ''
+
   }
 
   componenentDidUpdate(){
@@ -114,7 +131,7 @@ export default class Dashboard extends Component {
     }
 
     // Style
-    const main_style = S('fixed l-250 r-0 p-20')
+    const main_style = S('absolute l-250 r-0 p-20')
     const footer_style = S('fixed b-0 l-250 r-0 p-20')
 
     return (
@@ -127,9 +144,9 @@ export default class Dashboard extends Component {
           <MainContent getMessages={ this.getMessages } data={ data }/>
         </main>
         <footer style={ footer_style }>
-          <form>
+          <form onSubmit={ this.createMessage.bind(this) }>
             <div className="form-group" style={ S('w-100p') }>
-              <input type="text" className="form-control" style={ S('w-100p pl-50') } />
+              <input ref="message_input" type="text" className="form-control" style={ S('w-100p pl-50') } placeholder="Type your message and press enter"/>
               <button type="button" className="btn btn-default" style={ S('absolute l-20 t-20') }>
                 <i className="fa fa-plus" style={ S('t-2 relative') }></i>
               </button>

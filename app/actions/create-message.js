@@ -1,8 +1,8 @@
 // actions/create-message.js
-import Room from '../models/Room'
+import Message from '../models/Message'
 import AppStore from '../stores/AppStore'
 
-export default (comment, room, user) => {
+export default (user, room, comment) => {
   
   const params = {
     room_id: room.id,
@@ -17,7 +17,8 @@ export default (comment, room, user) => {
     // Success
     if(response.status == 'success'){
       
-      AppStore.data.messages = response.data
+      const new_message = response.data
+      AppStore.data.messages.unshift(new_message)
     
     } else {
 

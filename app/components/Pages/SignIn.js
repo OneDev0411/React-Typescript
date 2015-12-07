@@ -66,7 +66,7 @@ export default class SignIn extends Component {
       password_style = 'error'
 
     let submitting = data.submitting
-    let submitting_class
+    let submitting_class = ''
     if(submitting)
       submitting_class = 'disabled'
     

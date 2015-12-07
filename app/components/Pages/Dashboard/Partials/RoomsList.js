@@ -15,6 +15,7 @@ export default class RoomsList extends Component {
   render(){
     
     const data = this.props.data
+    const current_room = data.current_room
 
     let rooms_list = <Loading />
 
@@ -25,8 +26,12 @@ export default class RoomsList extends Component {
         if(room.latest_message.author)
           profile_image_url = room.latest_message.author.profile_image_url
 
+        let list_style = S('pointer pt-10 pb-10 pl-10 pr-30')
+        if(current_room.id == room.id){
+          list_style = { ...list_style, ...S('bg-ededed') }
+        }
         return (
-          <li style={ S('pointer pt-10 pb-10 pr-30') } key={ room.id } onClick={ this.handleClick.bind(this, i) }>
+          <li style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, i) }>
             <div style={ S('relative') }>
               <ProfileImage data={ data } profile_image_url={ profile_image_url }/>
               <div className="pull-left" style={ S('ml-50') }>
