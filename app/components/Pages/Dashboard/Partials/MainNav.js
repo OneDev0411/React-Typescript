@@ -55,7 +55,9 @@ export default class MainNav extends Component {
         <div className="container-fluid">
           <ul className="nav navbar-nav navbar-left">
             <li className="dropdown">
-              <ProfileImage data={ data } profile_image_url={ profile_image_url } />
+              <div style={ S('absolute pt-7 pl-7') }>
+                <ProfileImage data={ data } profile_image_url={ profile_image_url } />
+              </div>
               <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style={ S('pl-55 z-1')}>
                 { first_name } { last_name } <span className="caret"></span>
               </a>
