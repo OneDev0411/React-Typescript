@@ -59,10 +59,10 @@ export default class SignIn extends Component {
     let validation = data.validation
     let email_style
     let password_style
-    if(errors && !validation.email)
+    if(errors && validation && !validation.email)
       email_style = 'error'
     
-    if(errors && !validation.password)
+    if(errors && validation && !validation.password)
       password_style = 'error'
 
     let submitting = data.submitting

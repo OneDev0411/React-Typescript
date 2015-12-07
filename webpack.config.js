@@ -1,17 +1,20 @@
 // webpack.config.js
-var path = require('path');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var loaders = ['babel']
+if(process.env.NODE_ENV === 'development')
+  loaders = ['react-hot','babel']
+
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
 module.exports = {
   entry: './app/app-client.js',
   output: {
-    path: path.join(__dirname, 'app/public/dist'),
+    path: __dirname + 'app/public/dist',
     filename: 'bundle.js',
     publicPath: '/dist/'
   },
   module: {
     loaders: [{
       test: /\.js$/,
-      loaders: ['react-hot','babel'],
+      loaders: loaders,
       exclude: /node_modules/
     },
     {
@@ -22,4 +25,4 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin('css/main.css')
  ]
-};
+}

@@ -40,7 +40,7 @@ export default {
     
     let api_host = params.api_host
     if(!api_host) api_host = ''
-
+    
     const signin_url = api_host + '/api/signin'
 
     const request_object = {
@@ -137,13 +137,16 @@ export default {
     })
   },
 
-  verifyPhone: (code, token, callback) => {
+  verifyPhone: (params, callback) => {
     
-    const verify_phone_url = '/api/verify-phone'
+    let api_host = params.api_host
+    if(!api_host) api_host = ''
+
+    const verify_phone_url = api_host + '/api/verify-phone'
 
     const request_object = {
-      code: code,
-      token: token
+      code: params.code,
+      token: params.token
     }
     
     fetch(verify_phone_url,{
