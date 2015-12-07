@@ -17,7 +17,12 @@ git clone https://bitbucket.org/rechat/web
 cd web
 npm install
 ```
+#####Start local api
+```
+npm run api
+```
 #####Run webpack dev
+In another terminal start the dev server.
 ```
 npm run development
 ```

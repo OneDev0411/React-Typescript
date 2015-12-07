@@ -14,6 +14,7 @@ export default (user) => {
     if(response.status == 'success'){
       
       AppStore.data.rooms = response.data
+      AppStore.data.current_room = AppStore.data.rooms[0]
     
     } else {
 

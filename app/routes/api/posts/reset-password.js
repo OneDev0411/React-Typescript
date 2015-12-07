@@ -6,9 +6,9 @@ module.exports = (app, config) => {
   
   app.post('/api/reset-password',(req, res) => {
 
-    let token = req.body.token
+    let token = decodeURIComponent(req.body.token).replace(' ', '+')
     const password = req.body.password
-
+    
     const decrypted_token = Crypto.decrypt(token).split(':')
     const email = decrypted_token[0]
     token = decrypted_token[1]

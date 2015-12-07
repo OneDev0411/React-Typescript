@@ -18,9 +18,24 @@ import SideBar from './Partials/SideBar'
 
 export default class Dashboard extends Component {
 
+  handleResize(){
+    const data = AppStore.data
+    AppStore.data.scroll_area_height = window.innerHeight - 182
+    AppStore.emitChange()
+  }
+
+  componentDidMount() {
+    window.addEventListener('resize', this.handleResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  }
+
   init(){
     
     const data = this.props.data
+    data.scroll_area_height = window.innerHeight - 182
     const user = data.user
     
     AppDispatcher.dispatch({
@@ -31,6 +46,17 @@ export default class Dashboard extends Component {
     AppDispatcher.dispatch({
       action: 'get-rooms',
       user: user
+    })
+  }
+
+  getMessages(current_room){
+    
+    const data = AppStore.data
+    
+    AppDispatcher.dispatch({
+      action: 'get-messages',
+      user: data.user,
+      room: current_room
     })
   }
 
@@ -51,18 +77,35 @@ export default class Dashboard extends Component {
   }
 
   createRoom(title){
+    
+    const user = AppStore.data.user
+
     AppDispatcher.dispatch({
       action: 'create-room',
-      title: title
+      title: title,
+      user: user
     }) 
+  }
+
+  componenentDidUpdate(){
+    this.getMessages()
   }
 
   render(){
 
     // Data
     let data = this.props.data
+    let current_room
     data.rooms = AppStore.data.rooms
     data.showCreateChatModal = AppStore.data.showCreateChatModal
+
+    // Get messages
+    if(data.rooms && !data.messages){
+      current_room = data.rooms[0]
+      if(data.current_room)
+        current_room = data.current_room
+      this.getMessages(current_room)
+    }
 
     if(this.props.route.path){
       data.path = this.props.route.path
@@ -70,7 +113,9 @@ export default class Dashboard extends Component {
       data.path = '/dashboard'
     }
 
-    const footerStyle = S('fixed b-0 l-250 r-0 p-20')
+    // Style
+    const main_style = S('fixed l-250 r-0 p-20')
+    const footer_style = S('fixed b-0 l-250 r-0 p-20')
 
     return (
       <div>
@@ -78,10 +123,10 @@ export default class Dashboard extends Component {
           <MainNav showModal={ this.showModal } hideModal={ this.hideModal } createRoom={ this.createRoom } data={ data }/>
         </header>
         <SideBar data={ data }/>
-        <main style={ S('fw-100 l-250 absolute r-0 p-20') }>
-          <MainContent data={ data }/>
+        <main style={ main_style }>
+          <MainContent getMessages={ this.getMessages } data={ data }/>
         </main>
-        <footer style={ footerStyle }>
+        <footer style={ footer_style }>
           <form>
             <div className="form-group" style={ S('w-100p') }>
               <input type="text" className="form-control" style={ S('w-100p pl-50') } />

@@ -7,7 +7,7 @@ module.exports = (app, config) => {
   app.post('/api/verify-phone',(req, res) => {
 
     const code_submitted = req.body.code
-    const token = req.body.token
+    let token = decodeURIComponent(req.body.token).replace(' ', '+')
 
     const decrypted_token = Crypto.decrypt(token).split(':')
     const phone_number = decrypted_token[0]

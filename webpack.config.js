@@ -5,6 +5,9 @@ if(process.env.NODE_ENV === 'development')
 var path = require('path')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 module.exports = {
+  devServer: {
+    port: process.env.DEV_PORT
+  },
   entry: './app/app-client.js',
   output: {
     path: path.join(__dirname, 'app/public/dist'),

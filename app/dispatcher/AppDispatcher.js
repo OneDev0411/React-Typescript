@@ -1,15 +1,26 @@
 // AppDispatcher.js
 import { Dispatcher } from 'flux'
+
+// AppStore
 import AppStore from '../stores/AppStore'
+
+// User
 import signup from '../actions/signup'
 import signin from '../actions/signin'
 import forgotPassword from '../actions/forgot-password'
 import resetPassword from '../actions/reset-password'
 import verifyPhone from '../actions/verify-phone'
-import getRooms from '../actions/get-rooms'
-import showModal from '../actions/show-modal'
-import createRoom from '../actions/create-room'
 import addUserToStore from '../actions/add-user-to-store'
+
+// Rooms
+import getRooms from '../actions/get-rooms'
+import createRoom from '../actions/create-room'
+
+import showModal from '../actions/show-modal'
+
+// Messages
+import createMessage from '../actions/create-message'
+import getMessages from '../actions/get-messages'
 
 const AppDispatcher = new Dispatcher()
 
@@ -20,6 +31,8 @@ AppDispatcher.register(payload => {
 
   // Vars
   let user
+  let room
+  let comment
   let email
   let password
   let confirm_password
@@ -72,12 +85,26 @@ AppDispatcher.register(payload => {
       
     case 'create-room':
       title = payload.title
-      createRoom(title)
+      user = payload.user
+      createRoom(user, title)
       break
 
     case 'get-rooms':
       user = payload.user
       getRooms(user)
+      break
+
+    case 'create-message':
+      user = payload.user
+      room = payload.room
+      comment = payload.comment
+      createMessage(user, room, comment)
+      break
+
+    case 'get-messages':
+      user = payload.user
+      room = payload.room
+      getMessages(user, room)
       break
 
     case 'show-modal':

@@ -2,10 +2,8 @@
 import Room from '../models/Room'
 import AppStore from '../stores/AppStore'
 
-export default (title) => {
+export default (user, title) => {
   
-  const user = AppStore.data.user
-
   const params = {
     title: title,
     owner: user.id,

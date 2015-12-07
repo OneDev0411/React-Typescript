@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { Nav, NavItem, NavDropdown, MenuItem, ButtonToolbar, Dropdown, Modal, Button, Input } from 'react-bootstrap'
 import S from 'shorti'
+import ProfileImage from './ProfileImage'
 
 export default class MainNav extends Component {
 
@@ -45,20 +46,16 @@ export default class MainNav extends Component {
     const first_name = data.user.first_name
     const last_name = data.user.last_name
     let profile_image_url = data.user.profile_image_url
-    if(!profile_image_url)
-      profile_image_url = '/images/dashboard/profile-image-default.png'
 
     // Style
     const nav_bar_style = S('mb-0 p-15')
-    const profile_image_style = S('bg-cover bg-center bg-url(' + profile_image_url + ') w-35 h-35 ml-7 mt-7 absolute z-2')
-
+    
     return (
       <nav style={ nav_bar_style } className="navbar bg-alabaster">
         <div className="container-fluid">
           <ul className="nav navbar-nav navbar-left">
             <li className="dropdown">
-              <div className="img-circle" style={ profile_image_style }>
-              </div>
+              <ProfileImage data={ data } profile_image_url={ profile_image_url } />
               <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style={ S('pl-55 z-1')}>
                 { first_name } { last_name } <span className="caret"></span>
               </a>

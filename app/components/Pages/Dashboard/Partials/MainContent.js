@@ -1,12 +1,13 @@
-// Dashboard.js
+// MainContent.js
 import React, { Component } from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Nav, NavItem } from 'react-bootstrap'
 import S from 'shorti'
-import Loading from '../../../Partials/Loading'
+import RoomsList from './RoomsList'
+import MessagesList from './MessagesList'
 
 export default class MainContent extends Component {
-  
+
   render(){
 
     // Data
@@ -14,36 +15,31 @@ export default class MainContent extends Component {
     const path = data.path
 
     // Styles
-    const lightWeight = S('fw-100')
-    const heading = { ...lightWeight, ...S('mt-0') }
+    const light_weight = S('fw-100')
+    const heading = { ...light_weight, ...S('mt-0') }
+    const scroll_area_style = {
+      overflow: 'scroll',
+      height: data.scroll_area_height
+    }
 
     // Dashboard default
     let main_content = (
       <div>
         <h1 style={ heading }>Hello and Welcome</h1>
-        <p style={ lightWeight }>This is your dashboard, enjoy doing lots of fun things here...</p>
+        <p style={ light_weight }>This is your dashboard, enjoy doing lots of fun things here...</p>
       </div>
     )
 
     if(path === '/dashboard/recents'){
 
-      let rooms_list = <Loading />
-
-      if(data.rooms){
-        let rooms = data.rooms
-        rooms_list = rooms.map((room)=>{
-          return (
-            <li key={ room.id }>
-              { room.title }
-            </li>
-          )
-        })
-      }
-
       main_content = (
         <div>
-          <h1 style={ heading }>Recents</h1>
-          { rooms_list }
+          <div style={ scroll_area_style } className="pull-left">
+            <RoomsList getMessages={ this.props.getMessages } data={ data }/>
+          </div>
+          <div style={ scroll_area_style } className="pull-left" style={ S('ml-40') }>
+            <MessagesList data={ data }/>
+          </div>
         </div>
       )
     }
@@ -52,7 +48,7 @@ export default class MainContent extends Component {
       main_content = (
         <div>
           <h1 style={ heading }>MLS</h1>
-          <p style={ lightWeight }>This is mls stuff</p>
+          <p style={ light_weight }>This is mls stuff</p>
         </div>
       )
     }
@@ -61,7 +57,7 @@ export default class MainContent extends Component {
       main_content = (
         <div>
           <h1 style={ heading }>Contacts</h1>
-          <p style={ lightWeight }>This is Contacts stuff</p>
+          <p style={ light_weight }>This is Contacts stuff</p>
         </div>
       )
     }
@@ -70,7 +66,7 @@ export default class MainContent extends Component {
       main_content = (
         <div>
           <h1 style={ heading }>Tasks</h1>
-          <p style={ lightWeight }>This is tasks stuff</p>
+          <p style={ light_weight }>This is tasks stuff</p>
         </div>
       )
     }
@@ -79,7 +75,7 @@ export default class MainContent extends Component {
       main_content = (
         <div>
           <h1 style={ heading }>Transactions</h1>
-          <p style={ lightWeight }>This is transactions stuff</p>
+          <p style={ light_weight }>This is transactions stuff</p>
         </div>
       )
     }
