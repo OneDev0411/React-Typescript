@@ -6,7 +6,7 @@ export default {
     client_secret: process.env.RECHAT_CLIENT_SECRET
   },
   crypto: {
-    key: process.env.RECHAT_CRYPTO_KEY,
-    iv: process.env.RECHAT_CRYPTO_IV
+    key: process.env.CRYPTO_KEY,
+    iv: process.env.CRYPTO_IV
   },
 }

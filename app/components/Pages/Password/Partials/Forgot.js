@@ -53,12 +53,15 @@ export default class Forgot extends Component {
         alert_style = 'success'
         message_text = `We've sent you an email with instructions on how to reset your password.  Please check your email.`
       }
-
-      message = (
-        <Alert bsStyle={ alert_style }>
-          { message_text }
-        </Alert>
-      )
+      
+      if(message_text){
+        message = (
+          <Alert bsStyle={ alert_style }>
+            { message_text }
+          </Alert>
+        )
+      }
+      
     }
 
     let main_content = (
@@ -89,7 +92,7 @@ export default class Forgot extends Component {
     }
 
     return (
-      <div className="center-block" style={ S('maxw-400') }>
+      <div className="center-block" style={ S('maxw-300') }>
         { main_content }
       </div>
     )

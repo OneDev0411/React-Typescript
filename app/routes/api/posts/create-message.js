@@ -1,25 +1,26 @@
-// api/posts/create-room.js
+// api/posts/create-message.js
 module.exports = (app, config) => {
   
-  app.post('/api/create-room',(req, res) => {
+  app.post('/api/create-message',(req, res) => {
 
     const api_url = config.api.url
-    const create_room_url = api_url + '/rooms'
+    const room_id = req.body.room_id
+    const create_message_url = api_url + '/rooms/' + room_id + '/messages'
 
-    const title = req.body.title
-    const owner = req.body.owner
+    const comment = req.body.comment
+    const message_type = req.body.message_type
+    const author = req.body.author
     const access_token = req.body.access_token
 
     const request_object = {
-      title: title,
-      client_type: 'Unknown',
-      room_type: 'Group',
-      owner: owner
+      comment: comment,
+      message_type: message_type,
+      author: author
     }
-
+    
     res.setHeader('Content-Type', 'application/json');
 
-    fetch(create_room_url,{
+    fetch(create_message_url,{
       method: 'post',
       headers: {  
         'Content-Type': 'application/json',

@@ -1,5 +1,6 @@
 // config/index.js
-var env = process.env.NODE_ENV
-if(env == 'stage') env = 'development'
-var config = require('./' + env + '.js')
+let env = process.env.NODE_ENV
+let env_file = env
+if(env === 'staging') env_file = 'development'
+const config = require('./' + env_file + '.js')
 module.exports = config

@@ -114,8 +114,8 @@ export default class SignUp extends Component {
         <h1 style={ lightWeight }>Sign up as { type }</h1>
         <form onSubmit={ this.handleSubmit.bind(this) }>
           <Input bsStyle={ email_style } type="text" ref="email" placeholder="Email"/>
-          <Input bsStyle={ password_style } type="text" ref="password" placeholder="Password"/>
-          <Input bsStyle={ password_style } type="text" ref="confirm_password" placeholder="Confirm Password"/>
+          <Input bsStyle={ password_style } type="password" ref="password" placeholder="Password"/>
+          <Input bsStyle={ password_style } type="password" ref="confirm_password" placeholder="Confirm Password"/>
           { message }
           <Button 
             type="submit"
@@ -142,7 +142,7 @@ export default class SignUp extends Component {
     }
     return (
       <div id="main-content" className="container">
-        <div className="text-center center-block" style={ S('maxw-400') }>
+        <div className="text-center center-block" style={ S('maxw-300') }>
           <BigHeading />
           { main_content }
         </div>

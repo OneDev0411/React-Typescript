@@ -38,6 +38,9 @@
   font-family: "Tempos Headline";
   src: url("/fonts/tempos-headline/TiemposHeadlineWeb-Regular.woff"); }
 @charset "UTF-8";
+ul li {
+  list-style: none; }
+
 .san-fran {
   font-family: "San Francisco"; }
 

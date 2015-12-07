@@ -1,4 +1,4 @@
-// actions/forgot-password.js
+// actions/reset-password.js
 import User from '../models/User'
 import AppStore from '../stores/AppStore'
 

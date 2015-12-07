@@ -2,10 +2,10 @@
 import User from '../models/User'
 import AppStore from '../stores/AppStore'
 
-export default (access_token) => {
+export default (user) => {
   
   const params = {
-    access_token: access_token
+    access_token: user.access_token
   }
   
   User.getRooms(params, (err, response) => {
@@ -14,6 +14,7 @@ export default (access_token) => {
     if(response.status == 'success'){
       
       AppStore.data.rooms = response.data
+      AppStore.data.current_room = AppStore.data.rooms[0]
     
     } else {
 

@@ -18,45 +18,115 @@ import SideBar from './Partials/SideBar'
 
 export default class Dashboard extends Component {
 
-  getRooms(){
+  handleResize(){
+    const data = AppStore.data
+    AppStore.data.scroll_area_height = window.innerHeight - 182
+    AppStore.emitChange()
+  }
+
+  componentDidMount() {
+    window.addEventListener('resize', this.handleResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  }
+
+  init(){
+    
     const data = this.props.data
-    const access_token = data.user.access_token
+    data.scroll_area_height = window.innerHeight - 182
+    const user = data.user
+    
+    AppDispatcher.dispatch({
+      action: 'add-user-to-store',
+      user: user
+    })
+
     AppDispatcher.dispatch({
       action: 'get-rooms',
-      access_token: access_token
+      user: user
     })
   }
 
-  componentDidMount(){
-    this.getRooms()
+  getMessages(current_room){
+    
+    const data = AppStore.data
+    
+    AppDispatcher.dispatch({
+      action: 'get-messages',
+      user: data.user,
+      room: current_room
+    })
+  }
+
+  componentWillMount(){
+    this.init()
+  }
+
+  showModal(modal_key){
+    AppDispatcher.dispatch({
+      action: 'show-modal',
+      modal_key: modal_key
+    })
+  }
+
+  hideModal(){
+    AppStore.data.showCreateChatModal = false
+    AppStore.emitChange()
+  }
+
+  createRoom(title){
+    
+    const user = AppStore.data.user
+
+    AppDispatcher.dispatch({
+      action: 'create-room',
+      title: title,
+      user: user
+    }) 
+  }
+
+  componenentDidUpdate(){
+    this.getMessages()
   }
 
   render(){
 
     // Data
     let data = this.props.data
-    if(AppStore.data.rooms){
-      data.rooms = AppStore.data.rooms
+    let current_room
+    data.rooms = AppStore.data.rooms
+    data.showCreateChatModal = AppStore.data.showCreateChatModal
+
+    // Get messages
+    if(data.rooms && !data.messages){
+      current_room = data.rooms[0]
+      if(data.current_room)
+        current_room = data.current_room
+      this.getMessages(current_room)
     }
-    
+
     if(this.props.route.path){
       data.path = this.props.route.path
     } else {
       data.path = '/dashboard'
     }
 
-    const footerStyle = S('fixed b-0 l-250 r-0 p-20')
+    // Style
+    const main_style = S('fixed l-250 r-0 p-20')
+    const footer_style = S('fixed b-0 l-250 r-0 p-20')
 
     return (
       <div>
         <header>
-          <MainNav data={ data }/>
+          <MainNav showModal={ this.showModal } hideModal={ this.hideModal } createRoom={ this.createRoom } data={ data }/>
         </header>
         <SideBar data={ data }/>
-        <main style={ S('fw-100 l-250 absolute r-0 p-20') }>
-          <MainContent data={ data }/>
+        <main style={ main_style }>
+          <MainContent getMessages={ this.getMessages } data={ data }/>
         </main>
-        <footer style={ footerStyle }>
+        <footer style={ footer_style }>
           <form>
             <div className="form-group" style={ S('w-100p') }>
               <input type="text" className="form-control" style={ S('w-100p pl-50') } />

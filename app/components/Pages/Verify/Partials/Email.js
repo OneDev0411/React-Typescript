@@ -34,7 +34,7 @@ export default class Email extends Component {
     }
     
     return (
-      <div className="center-block" style={ S('maxw-400') }>
+      <div className="center-block" style={ S('maxw-300') }>
         { main_content }
       </div>
     )

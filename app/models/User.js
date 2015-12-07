@@ -1,13 +1,17 @@
 // models/User.js
 import es6Promise from 'es6-promise'
-es6Promise.polyfill();
+es6Promise.polyfill()
 import 'isomorphic-fetch'
+if(!process.env.NODE_ENV || process.env.NODE_ENV === 'development')
+  var config = require('../../config/development')
 
 export default {
   
   create: (params, callback) => {
     
     let api_host = params.api_host
+    if(config.api_host)
+      api_host = config.api_host
     if(!api_host) api_host = ''
 
     const create_url = api_host + '/api/signup'
@@ -39,6 +43,8 @@ export default {
   signin: (params, callback) => {
     
     let api_host = params.api_host
+    if(config.api_host)
+      api_host = config.api_host
     if(!api_host) api_host = ''
 
     const signin_url = api_host + '/api/signin'
@@ -74,6 +80,8 @@ export default {
   forgotPassword: (params, callback) => {
     
     let api_host = params.api_host
+    if(config.api_host)
+      api_host = config.api_host
     if(!api_host) api_host = ''
 
     const forgot_password_url = api_host + '/api/forgot-password'
@@ -106,12 +114,13 @@ export default {
   resetPassword: (params, callback) => {
     
     let api_host = params.api_host
+    if(config.api_host)
+      api_host = config.api_host
     if(!api_host) api_host = ''
 
     const reset_password_url = api_host + '/api/reset-password'
-
     const request_object = {
-      token: params.token,
+      token: encodeURIComponent(params.token),
       password: params.password
     }
     
@@ -137,13 +146,18 @@ export default {
     })
   },
 
-  verifyPhone: (code, token, callback) => {
+  verifyPhone: (params, callback) => {
     
-    const verify_phone_url = '/api/verify-phone'
+    let api_host = params.api_host
+    if(config.api_host)
+      api_host = config.api_host
+    if(!api_host) api_host = ''
+
+    const verify_phone_url = api_host + '/api/verify-phone'
 
     const request_object = {
-      code: code,
-      token: token
+      code: params.code,
+      token: encodeURIComponent(params.token)
     }
     
     fetch(verify_phone_url,{
@@ -171,6 +185,8 @@ export default {
   getRooms: (params, callback) => {
     
     let api_host = params.api_host
+    if(config.api_host)
+      api_host = config.api_host
     if(!api_host) api_host = ''
 
     const get_rooms_url = api_host + '/api/rooms?access_token=' + params.access_token

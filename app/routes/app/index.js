@@ -21,8 +21,8 @@ module.exports = (app, config) => {
   })
 
   app.get('/dashboard*', (req, res, next) => {
-    const path = req.path
     if(!req.session.user){
+      const path = req.path
       return res.redirect('/signin?redirect_to=' + path)
     }
     next()

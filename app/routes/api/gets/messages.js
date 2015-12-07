@@ -1,35 +1,27 @@
-// api/posts/create-room.js
+// api/gets/messages.js
 module.exports = (app, config) => {
   
-  app.post('/api/create-room',(req, res) => {
+  app.get('/api/messages',(req, res) => {
 
     const api_url = config.api.url
-    const create_room_url = api_url + '/rooms'
+    
+    const access_token = req.query.access_token
+    const room_id = req.query.room_id
 
-    const title = req.body.title
-    const owner = req.body.owner
-    const access_token = req.body.access_token
-
-    const request_object = {
-      title: title,
-      client_type: 'Unknown',
-      room_type: 'Group',
-      owner: owner
-    }
+    const get_messages_url = api_url + '/rooms/' + room_id + '/messages'
 
     res.setHeader('Content-Type', 'application/json');
 
-    fetch(create_room_url,{
-      method: 'post',
+    fetch(get_messages_url,{
+      method: 'get',
       headers: {  
         'Content-Type': 'application/json',
         'authorization': 'Bearer ' + access_token,
-      },
-      body: JSON.stringify(request_object)
+      }
     })
     .then(response => {
       if (response.status >= 400) {
-        var error = {
+        let error = {
           "status": "error",
           "message": "There was an error with this request."
         }
