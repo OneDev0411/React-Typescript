@@ -2,15 +2,15 @@
 import es6Promise from 'es6-promise'
 es6Promise.polyfill()
 import 'isomorphic-fetch'
-if(!process.env.NODE_ENV || process.env.NODE_ENV === 'development')
-  var config = require('../../config/development')
+let config
+// config = require('../../config/development')
 
 export default {
   
   create: (params, callback) => {
     
     let api_host = params.api_host
-    if(config.api_host)
+    if(config && config.api_host)
       api_host = config.api_host
     if(!api_host) api_host = ''
 
