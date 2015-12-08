@@ -3,7 +3,8 @@ import es6Promise from 'es6-promise'
 es6Promise.polyfill()
 import 'isomorphic-fetch'
 let config
-// config = require('../../config/development')
+if(!process.env.NODE_ENV || process.env.NODE_ENV === 'development')
+  config = require('../../config/development')
 
 export default {
   

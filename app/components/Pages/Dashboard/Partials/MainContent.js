@@ -17,9 +17,13 @@ export default class MainContent extends Component {
     // Styles
     const light_weight = S('fw-100')
     const heading = { ...light_weight, ...S('mt-0') }
-    const scroll_area_style = {
+    const scroll_list_style = {
       overflow: 'scroll',
       height: data.scroll_area_height
+    }
+    const rooms_list_style = {
+      height: data.scroll_area_height + 100,
+      borderRight: '1px solid #ddd'
     }
 
     // Dashboard default
@@ -34,10 +38,10 @@ export default class MainContent extends Component {
 
       main_content = (
         <div>
-          <div style={ scroll_area_style } className="pull-left">
+          <div style={ { ...scroll_list_style, ...rooms_list_style } } className="pull-left">
             <RoomsList getMessages={ this.props.getMessages } data={ data }/>
           </div>
-          <div style={ { ...scroll_area_style, ...S('ml-40 maxw-560') } }>
+          <div style={ { ...scroll_list_style, ...S('ml-40 maxw-560 pt-20') } }>
             <MessagesList data={ data }/>
           </div>
         </div>
