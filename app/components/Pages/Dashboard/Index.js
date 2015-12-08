@@ -132,7 +132,7 @@ export default class Dashboard extends Component {
 
     // Style
     const main_style = S('absolute l-250 r-0')
-    const footer_style = S('fixed b-0 l-580 r-0 p-20')
+    const footer_style = S('fixed b-0 l-500 r-0 p-20')
 
     return (
       <div>
