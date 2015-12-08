@@ -23,7 +23,8 @@ export default class MainContent extends Component {
     }
     const rooms_list_style = {
       height: data.scroll_area_height + 100,
-      borderRight: '1px solid #ddd'
+      borderRight: '1px solid #ddd',
+      width: '250px'
     }
 
     // Dashboard default
