@@ -3,7 +3,7 @@ import es6Promise from 'es6-promise'
 es6Promise.polyfill()
 import 'isomorphic-fetch'
 let config
-if(!process.env.NODE_ENV || process.env.NODE_ENV === 'development')
+if(typeof window !== 'undefined' && window.location.hostname == 'localhost' && window.location.port == '8080')
   config = require('../../config/development')
 
 export default {
