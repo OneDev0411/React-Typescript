@@ -10,6 +10,11 @@ export default class MessagesList extends Component {
     
     const data = this.props.data
     const current_room = data.current_room
+
+    if(data.rooms && !data.rooms.length){
+      return <div style={ S('w-100p ml-40') }>No messages yet.</div>
+    }
+
     if(!data.messages){
       
       return (

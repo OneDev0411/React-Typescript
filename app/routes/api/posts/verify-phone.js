@@ -1,13 +1,13 @@
-// api/posts/reset-password.js
-
+// api/posts/verify-phone.js
 import Crypto from '../../../models/Crypto'
+import helpers from '../../../utils/helpers'
 
 module.exports = (app, config) => {
   
   app.post('/api/verify-phone',(req, res) => {
 
     const code_submitted = req.body.code
-    let token = decodeURIComponent(req.body.token).replace(' ', '+')
+    let token = helpers.prepareToken(req.body.token)
 
     const decrypted_token = Crypto.decrypt(token).split(':')
     const phone_number = decrypted_token[0]

@@ -17,6 +17,10 @@ export default class RoomsList extends Component {
     const data = this.props.data
     const current_room = data.current_room
 
+    if(data.rooms && !data.rooms.length){
+      return <div style={ S('w-100p ml-40 mt-20 minw-250') }>No rooms yet.</div>
+    }
+
     let rooms_list = <Loading />
 
     if(data.rooms){
@@ -27,7 +31,7 @@ export default class RoomsList extends Component {
           profile_image_url = room.latest_message.author.profile_image_url
 
         let list_style = S('pointer pt-10 pb-10 pl-10 pr-30')
-        if(current_room.id == room.id){
+        if(current_room && current_room.id == room.id){
           list_style = { ...list_style, ...S('bg-ededed') }
         }
         return (
