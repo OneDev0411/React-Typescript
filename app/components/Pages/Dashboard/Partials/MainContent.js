@@ -37,7 +37,7 @@ export default class MainContent extends Component {
           <div style={ scroll_area_style } className="pull-left">
             <RoomsList getMessages={ this.props.getMessages } data={ data }/>
           </div>
-          <div style={ { ...scroll_area_style, ...S('ml-40 w-630') } }>
+          <div style={ { ...scroll_area_style, ...S('ml-40 maxw-560') } }>
             <MessagesList data={ data }/>
           </div>
         </div>

@@ -14,6 +14,7 @@ module.exports = (app, config) => {
   app.use((req, res, next) => {
     if(req.session.user){
       AppStore.data.user = req.session.user
+      // Get rooms / messages etc
       res.locals.AppStore = JSON.stringify(AppStore)
       return res.status(200).render('index.html')
     }
