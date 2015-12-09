@@ -64,7 +64,7 @@ export default class Landing extends Component {
       video_src = 'couple'
       headline_text = (
         <div>
-          From Search to Close be<br/><p style={ second_tag_style }>be smarter, faster, more responsive, more knowledgable</p> 
+          From Search to Close be<br/><p style={ second_tag_style }>smarter, faster, more responsive, more knowledgable</p> 
         </div>
       )
     }
