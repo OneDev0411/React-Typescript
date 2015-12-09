@@ -9,6 +9,10 @@ module.exports = (app, config) => {
     req.session.destroy()
     return res.redirect('/')
   })
+
+  app.get('/terms/mls',(req, res) => {
+    return res.render('terms.html')
+  })
   
   // If signed in, render client side
   app.use((req, res, next) => {
