@@ -23,9 +23,8 @@ export default class Landing extends Component {
     let animated_text = ['superagent','superbadass','goat','caitlynjenner']
     const data = this.props.data
     let random_number = data.random_number
-    if(random_number){
+    if(random_number)
       animated_text = ['smarter','faster','more responsive','more knowledgable']
-    }
     let current_text = animated_text[animated_num]
     return current_text
   }
