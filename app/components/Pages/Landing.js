@@ -41,6 +41,7 @@ export default class Landing extends Component {
     let adding_text = setInterval(() => {
       partial_text = animated_text.slice(0, num)
       this.setText(partial_text)
+      console.log(partial_text)
       if(partial_text == animated_text){
           clearInterval(adding_text)
           setTimeout(() => {
@@ -48,8 +49,10 @@ export default class Landing extends Component {
           },1000)
           setTimeout(() => {
             let next_text = this.getText(animated_num+1)
-            if(next_text)
+            if(next_text){
+              console.log(next_text)
               this.removeText(animated_num)
+            }
           },3000)
         }
       num++
@@ -84,6 +87,11 @@ export default class Landing extends Component {
   }
 
   componentDidMount(){
+    
+    let current_text = this.getText(0)
+    this.setText(current_text)
+    this.startBlinking()
+
     // Effects
     setTimeout(() => {
       this.animateText()
@@ -95,6 +103,7 @@ export default class Landing extends Component {
     // Data
     const data = this.props.data
     
+    console.log(data)
     // Styles
     const page_style = {
       position: 'relative',

@@ -22,7 +22,7 @@ module.exports = (app, config) => {
         res.locals.AppStore = JSON.stringify(AppStore)
       }
 
-      let reactMarkup = ReactDOMServer.renderToString(<RoutingContext data={AppStore.data} {...renderProps} />)
+      let reactMarkup = ReactDOMServer.renderToStaticMarkup(<RoutingContext data={AppStore.data} {...renderProps} />)
       
       res.locals.reactMarkup = reactMarkup
 
