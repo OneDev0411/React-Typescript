@@ -1,9 +1,29 @@
 .landing-page{
   overflow: hidden;
+  .navbar-right{
+    position: relative;
+    top: -5px;
+  }
   .navbar-collapse{
+    right: 20px;
     @media(max-width: 768px){
+      right: 0;
       margin-top: 0 !important;
+      background-color: rgba(0, 0, 0, 0.4);
+      li:first{
+        padding-top: 10px !important;
+      }
+      li{
+        padding: 5px 0;
+      }
     }
+  }
+  .navbar-default .navbar-toggle .icon-bar{
+    background-color: #fff;
+  }
+  .navbar-toggle{
+    color: #fff;
+    background-color: transparent !important;
   }
   .navbar-header{
     @media(max-width: 768px){
@@ -61,6 +81,7 @@
   }
 }
 
+// Blinking cursor
 .blinking-cursor {
   -webkit-animation: 1s blink step-end infinite;
   -moz-animation: 1s blink step-end infinite;

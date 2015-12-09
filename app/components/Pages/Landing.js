@@ -29,7 +29,7 @@ export default class Landing extends Component {
       border: '2px solid #fff'
     }
     const collapse_style = { 
-      ...S('mt-20 absolute r-20 w-100p'), 
+      ...S('mt-20'), 
       border: 'none', 
       boxShadow: 'none'
     }
