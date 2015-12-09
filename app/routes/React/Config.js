@@ -7,6 +7,7 @@ import App from '../../components/App'
 
 // Pages
 import Home from '../../components/Pages/Home'
+import Landing from '../../components/Pages/Landing'
 import Dashboard from '../../components/Pages/Dashboard/Index'
 import SignUp from '../../components/Pages/SignUp'
 import SignIn from '../../components/Pages/SignIn'
@@ -18,7 +19,7 @@ import Notifications from '../../components/Pages/Account/Notifications'
 
 export default (
   <Route path="/" component={App}>
-    <IndexRoute component={Home}/>
+    <IndexRoute component={Landing}/>
     <Route path="/signup" component={SignUp}/>
     <Route path="/signin" component={SignIn}/>
     <Route path="/account/settings" component={Settings}/>

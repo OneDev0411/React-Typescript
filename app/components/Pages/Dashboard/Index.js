@@ -1,7 +1,6 @@
 // Dashboard/Index.js
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import { LinkContainer } from 'react-router-bootstrap'
 import { Nav, NavItem } from 'react-bootstrap'
 import S from 'shorti'
 

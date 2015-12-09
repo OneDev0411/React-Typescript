@@ -4,5 +4,9 @@
 @import 'components/buttons';
 @import 'components/loader';
 @import 'components/colors';
-@import 'components/layout';
+@import 'components/flexbox';
+@import 'components/global';
 @import 'vendor/bootstrap/stylesheets/_bootstrap.scss';
+
+// Pages
+@import 'components/pages/landing';

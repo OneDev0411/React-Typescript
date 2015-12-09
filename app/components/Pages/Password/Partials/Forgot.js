@@ -81,7 +81,7 @@ export default class Forgot extends Component {
         <form onSubmit={ this.handleSubmit.bind(this) }>
           <Input bsStyle={ email_style } ref="email" placeholder="Email address" type="text" />
           { message }
-          <Col sm={4} style={ S('p-0 pr-10') }>
+          <Col sm={4} className="forgot__password-btn--cancel" style={ S('p-0 pr-10') }>
             <Link className="btn btn-default" style={ S('w-100p') } to="/signin">Cancel</Link>
           </Col>
           <Col sm={8} style={ S('p-0') }>

@@ -1,6 +1,5 @@
 // MainContent.js
 import React, { Component } from 'react'
-import { LinkContainer } from 'react-router-bootstrap'
 import { Nav, NavItem } from 'react-bootstrap'
 import S from 'shorti'
 import RoomsList from './RoomsList'
