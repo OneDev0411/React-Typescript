@@ -1,4 +1,10 @@
 .landing-page{
+  .headline{
+    font-size: 64px;
+    @media(max-width: 768px){
+      font-size: 44px;
+    }
+  }
   overflow: hidden;
   .navbar-right{
     position: relative;

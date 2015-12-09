@@ -6,6 +6,62 @@ import S from 'shorti'
 
 export default class Landing extends Component {
 
+  getText(animated_num){
+    let animated_text = ['superagent','superbadass','goat','caitlynjenner']
+    return animated_text[animated_num]
+  }
+
+  addText(animated_num){
+    let animated_text = this.getText(animated_num)
+    let num = 0
+    let partial_text
+    let adding_text = setInterval(() => {
+      partial_text = animated_text.slice(0, num)
+      this.refs.animated_text.innerText = partial_text
+      if(partial_text == animated_text){
+          clearInterval(adding_text)
+          setTimeout(() => {
+            this.refs.cursor.className = 'blinking-cursor'
+          },1000)
+          setTimeout(() => {
+            let next_text = this.getText(animated_num+1)
+            if(next_text)
+              this.removeText(animated_num)
+          },3000)
+        }
+      num++
+    }, 200)
+  }
+
+  removeText(animated_num){
+    let animated_text = this.getText(animated_num)
+    if(this.refs.animated_text){
+      this.refs.cursor.className = ''
+      let removing_text = setInterval(() => {
+        animated_text = animated_text.slice(0, -1)
+        this.refs.animated_text.innerText = animated_text
+        if(!animated_text){
+          clearInterval(removing_text)
+          this.addText(animated_num+1)
+        }
+      }, 200)
+    }
+  }
+
+  animateText(){
+    if(this.refs.animated_text){
+      let animated_text = this.refs.animated_text.innerText
+      this.removeText(0)
+    }
+  }
+
+  componentDidMount(){
+    // Effects
+    setTimeout(() => {
+      this.animateText()
+    }, 3000)
+  }
+
   render(){
     
     // Data
@@ -33,10 +89,7 @@ export default class Landing extends Component {
       border: 'none', 
       boxShadow: 'none'
     }
-    const headline_style = {
-      ...S('font-64 mb-35'),
-      fontWeight: '100'
-    }
+    const headline_style = S('mb-35')
     const tag_style = S('font-22 mb-40')
     const form_wrap_style = {
       ...S('br-4 p-30 pb-20 maxw-650'),
@@ -51,7 +104,7 @@ export default class Landing extends Component {
     let video_src = 'young_agent'
     let headline_text = (
       <div>
-        Be a #superagent<span className="blinking-cursor">|</span>
+        Be a #<span ref="animated_text">superagent</span><span ref="cursor" className="blinking-cursor">|</span>
       </div>
     )
 
@@ -110,7 +163,7 @@ export default class Landing extends Component {
         <main className="container" style={ S('h-100p z-2 relative') }>
           <div className="landing-main text-center" style={ S('h-100p') }>
             <div className="center-block" style={ S('maxw-700 mt-50n') }>
-              <h1 className="tempo" style={ headline_style }>
+              <h1 className="tempo headline" style={ headline_style }>
                 { headline_text }
               </h1>
               <p style={ tag_style }>
