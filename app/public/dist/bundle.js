@@ -37889,6 +37889,74 @@
 	  }
 
 	  _createClass(Landing, [{
+	    key: 'getText',
+	    value: function getText(animated_num) {
+	      var animated_text = ['superagent', 'superbadass', 'goat', 'caitlynjenner'];
+	      return animated_text[animated_num];
+	    }
+	  }, {
+	    key: 'addText',
+	    value: function addText(animated_num) {
+	      var _this = this;
+
+	      var animated_text = this.getText(animated_num);
+	      var num = 0;
+	      var partial_text = undefined;
+	      var adding_text = setInterval(function () {
+	        partial_text = animated_text.slice(0, num);
+	        _this.refs.animated_text.innerText = partial_text;
+	        if (partial_text == animated_text) {
+	          clearInterval(adding_text);
+	          setTimeout(function () {
+	            _this.refs.cursor.className = 'blinking-cursor';
+	          }, 1000);
+	          setTimeout(function () {
+	            var next_text = _this.getText(animated_num + 1);
+	            if (next_text) _this.removeText(animated_num);
+	          }, 3000);
+	        }
+	        num++;
+	      }, 200);
+	    }
+	  }, {
+	    key: 'removeText',
+	    value: function removeText(animated_num) {
+	      var _this2 = this;
+
+	      var animated_text = this.getText(animated_num);
+	      if (this.refs.animated_text) {
+	        (function () {
+	          _this2.refs.cursor.className = '';
+	          var removing_text = setInterval(function () {
+	            animated_text = animated_text.slice(0, -1);
+	            _this2.refs.animated_text.innerText = animated_text;
+	            if (!animated_text) {
+	              clearInterval(removing_text);
+	              _this2.addText(animated_num + 1);
+	            }
+	          }, 200);
+	        })();
+	      }
+	    }
+	  }, {
+	    key: 'animateText',
+	    value: function animateText() {
+	      if (this.refs.animated_text) {
+	        var animated_text = this.refs.animated_text.innerText;
+	        this.removeText(0);
+	      }
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this3 = this;
+
+	      // Effects
+	      setTimeout(function () {
+	        _this3.animateText();
+	      }, 3000);
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 
@@ -37915,9 +37983,7 @@
 	        border: 'none',
 	        boxShadow: 'none'
 	      });
-	      var headline_style = _extends({}, (0, _shorti2['default'])('font-64 mb-35'), {
-	        fontWeight: '100'
-	      });
+	      var headline_style = (0, _shorti2['default'])('mb-35');
 	      var tag_style = (0, _shorti2['default'])('font-22 mb-40');
 	      var form_wrap_style = _extends({}, (0, _shorti2['default'])('br-4 p-30 pb-20 maxw-650'), {
 	        'backgroundColor': 'rgba(0, 0, 0, 0.5)'
@@ -37931,10 +37997,15 @@
 	      var headline_text = _react2['default'].createElement(
 	        'div',
 	        null,
-	        'Be a #superagent',
+	        'Be a #',
 	        _react2['default'].createElement(
 	          'span',
-	          { className: 'blinking-cursor' },
+	          { ref: 'animated_text' },
+	          'superagent'
+	        ),
+	        _react2['default'].createElement(
+	          'span',
+	          { ref: 'cursor', className: 'blinking-cursor' },
 	          '|'
 	        )
 	      );
@@ -38045,7 +38116,7 @@
 	              { className: 'center-block', style: (0, _shorti2['default'])('maxw-700 mt-50n') },
 	              _react2['default'].createElement(
 	                'h1',
-	                { className: 'tempo', style: headline_style },
+	                { className: 'tempo headline', style: headline_style },
 	                headline_text
 	              ),
 	              _react2['default'].createElement(

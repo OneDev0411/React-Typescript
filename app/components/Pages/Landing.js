@@ -79,11 +79,7 @@ export default class Landing extends Component {
       border: 'none',
       background: 'none'
     }
-    const signin_btn_style = {
-      ...S('color-fff w-130 p-10 pt-7 pb-7'),
-      backgroundColor: 'transparent',
-      border: '2px solid #fff'
-    }
+    const signin_btn_style = S('color-fff w-130 p-10 pt-7 pb-7')
     const collapse_style = { 
       ...S('mt-20'), 
       border: 'none', 
@@ -153,7 +149,7 @@ export default class Landing extends Component {
                     <a href="#" style={ S('color-fff relative t-6n') }>Contact Us</a>
                   </li>
                   <li>
-                    <a className="btn btn-default center-block" href="/signin" style={ signin_btn_style }>Sign in</a>
+                    <a className="btn btn-default center-block sign-in__button" href="/signin" style={ signin_btn_style }>Sign in</a>
                   </li>
                 </ul>
               </div>
@@ -171,9 +167,12 @@ export default class Landing extends Component {
                 Get on the waiting list! We will notifiy you when we launch.
               </p>
               <div className="form-wrap center-block" style={ form_wrap_style }>
-                <form>
+                <form onSubmit={ this.showThankYou } action="//brandhatchery.us5.list-manage.com/subscribe/post?u=15433aab34aefd5450c23fd94&amp;id=c08ce5e2f0" method="post" name="mc-embedded-subscribe-form" target="_blank">
                   <Col className="form-input--email" sm={8} style={ S('pl-0') }>
-                    <Input style={ S('w-100p') } bsSize="large" type="text" placeholder="Email Address"/>
+                    <Input style={ S('w-100p') } bsSize="large" type="email" name="EMAIL" placeholder="Email Address"/>
+                    <div style={ S('l-5000n absolute') } aria-hidden="true">
+                      <input type="text" name="b_15433aab34aefd5450c23fd94_c08ce5e2f0" tabIndex="-1" value="" />
+                    </div>
                   </Col>
                   <Col sm={4} style={ S('pl-0 pr-0') }>
                     <Button style={ S('w-100p') } bsStyle="primary" bsSize="large" type="submit">Notify Me!</Button>
@@ -184,13 +183,13 @@ export default class Landing extends Component {
             </div>
           </div>
         </main>
-        <footer style={ footer_style }>
+        <footer className="footer" style={ footer_style }>
           <div className="container">
             <Col className="footer-text footer-text--left" sm={6}>
-              Made with <img src="/images/landing/heart.png" /> by Rechat | <a style={ S('color-ededed') } href="/">Contact Us</a>
+              Made with <img src="/images/landing/heart.png" /> by Rechat | <a href="/">Contact Us</a>
             </Col>
             <Col className="footer-text footer-text--right" sm={6}>
-              Rechat Inc. &copy; 2015. All Rights Reserved. <a style={ S('color-ededed') } href="/terms/mls">MLS Terms</a>
+              Rechat Inc. &copy; 2015. All Rights Reserved. <a href="/terms/mls">MLS Terms</a>
             </Col>
           </div>
         </footer>

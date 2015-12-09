@@ -5227,6 +5227,11 @@ button.close {
 
 .landing-page {
   overflow: hidden; }
+  .landing-page .headline {
+    font-size: 64px; }
+    @media (max-width: 768px) {
+      .landing-page .headline {
+        font-size: 44px; } }
   .landing-page .navbar-right {
     position: relative;
     top: -5px; }

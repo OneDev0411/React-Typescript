@@ -1,11 +1,21 @@
 .landing-page{
+  overflow: hidden;
+  .sign-in__button{
+    -webkit-transition: all $transition-speed;
+    transition: all $transition-speed;
+    background-color: transparent;
+    border: 2px solid #fff;
+    &:hover{
+      border-color: $brand-primary;
+      color: $brand-primary;
+    }
+  }
   .headline{
     font-size: 64px;
     @media(max-width: 768px){
       font-size: 44px;
     }
   }
-  overflow: hidden;
   .navbar-right{
     position: relative;
     top: -5px;
@@ -84,6 +94,17 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+  .footer{
+    a{
+      color: #ededed;
+      text-decoration: none;
+      -webkit-transition: all $transition-speed;
+      transition: all $transition-speed;
+      &:hover{
+        color: #ccc;
+      }
+    }
   }
 }
 
