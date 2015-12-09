@@ -4,7 +4,20 @@ import { Link } from 'react-router'
 import { Col, Input, Button } from 'react-bootstrap'
 import S from 'shorti'
 
+// Store
+import AppStore from '../../stores/AppStore'
+
 export default class Landing extends Component {
+
+  startBlinking(){
+    AppStore.data.blinking_cursor = true
+    AppStore.emitChange()
+  }
+
+  stopBlinking(){
+    AppStore.data.blinking_cursor = false
+    AppStore.emitChange()
+  }
 
   getText(animated_num){
     let animated_text = ['superagent','superbadass','goat','caitlynjenner']
@@ -13,7 +26,13 @@ export default class Landing extends Component {
     if(random_number){
       animated_text = ['smarter','faster','more responsive','more knowledgable']
     }
-    return animated_text[animated_num]
+    let current_text = animated_text[animated_num]
+    return current_text
+  }
+
+  setText(current_text){
+    AppStore.data.current_text = current_text
+    AppStore.emitChange()
   }
 
   addText(animated_num){
@@ -22,11 +41,11 @@ export default class Landing extends Component {
     let partial_text
     let adding_text = setInterval(() => {
       partial_text = animated_text.slice(0, num)
-      this.refs.animated_text.innerText = partial_text
+      this.setText(partial_text)
       if(partial_text == animated_text){
           clearInterval(adding_text)
           setTimeout(() => {
-            this.refs.cursor.className = 'blinking-cursor'
+            this.startBlinking()
           },1000)
           setTimeout(() => {
             let next_text = this.getText(animated_num+1)
@@ -41,10 +60,10 @@ export default class Landing extends Component {
   removeText(animated_num){
     let animated_text = this.getText(animated_num)
     if(this.refs.animated_text){
-      this.refs.cursor.className = ''
+      this.stopBlinking()
       let removing_text = setInterval(() => {
         animated_text = animated_text.slice(0, -1)
-        this.refs.animated_text.innerText = animated_text
+        this.setText(animated_text)
         if(!animated_text){
           clearInterval(removing_text)
           this.addText(animated_num+1)
@@ -58,6 +77,11 @@ export default class Landing extends Component {
       let animated_text = this.refs.animated_text.innerText
       this.removeText(0)
     }
+  }
+  componentWillMount(){
+    let current_text = this.getText(0)
+    this.setText(current_text)
+    this.startBlinking()
   }
 
   componentDidMount(){
@@ -106,7 +130,7 @@ export default class Landing extends Component {
     let video_src = 'young_agent'
     let headline_text = (
       <div>
-        Be a #<span ref="animated_text">superagent</span><span ref="cursor" className="blinking-cursor">|</span>
+        Be a #<span ref="animated_text">{ data.current_text }</span><span className={ data.blinking_cursor ? 'blinking-cursor' : ''}>|</span>
       </div>
     )
 
@@ -114,7 +138,7 @@ export default class Landing extends Component {
       video_src = 'couple'
       headline_text = (
         <div>
-          From Search to Close be<br/><span ref="animated_text">smarter</span><span ref="cursor" className="blinking-cursor">|</span> 
+          From Search to Close be<br/>{ data.current_text }<span className={ data.blinking_cursor ? 'blinking-cursor' : ''}>|</span> 
         </div>
       )
     }
