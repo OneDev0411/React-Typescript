@@ -8,6 +8,11 @@ export default class Landing extends Component {
 
   getText(animated_num){
     let animated_text = ['superagent','superbadass','goat','caitlynjenner']
+    const data = this.props.data
+    let random_number = data.random_number
+    if(random_number){
+      animated_text = ['smarter','faster','more responsive','more knowledgable']
+    }
     return animated_text[animated_num]
   }
 
@@ -96,6 +101,7 @@ export default class Landing extends Component {
       borderTop: '1px solid rgba(168,168,168, 0.3)'
     }
 
+    // Get video and text from random number
     let random_number = data.random_number
     let video_src = 'young_agent'
     let headline_text = (
@@ -105,15 +111,10 @@ export default class Landing extends Component {
     )
 
     if(random_number){
-      const second_tag_style = {
-        ...S('font-22 mt-20'),
-        lineHeight: '28px',
-        fontStyle: 'italic'
-      }
       video_src = 'couple'
       headline_text = (
         <div>
-          From Search to Close be<br/><p style={ second_tag_style }>smarter, faster, more responsive, more knowledgable</p> 
+          From Search to Close be<br/><span ref="animated_text">smarter</span><span ref="cursor" className="blinking-cursor">|</span> 
         </div>
       )
     }
@@ -167,7 +168,7 @@ export default class Landing extends Component {
                 Get on the waiting list! We will notifiy you when we launch.
               </p>
               <div className="form-wrap center-block" style={ form_wrap_style }>
-                <form onSubmit={ this.showThankYou } action="//brandhatchery.us5.list-manage.com/subscribe/post?u=15433aab34aefd5450c23fd94&amp;id=c08ce5e2f0" method="post" name="mc-embedded-subscribe-form" target="_blank">
+                <form onSubmit={ this.showThankYou } action="" method="post" name="mc-embedded-subscribe-form" target="_blank">
                   <Col className="form-input--email" sm={8} style={ S('pl-0') }>
                     <Input style={ S('w-100p') } bsSize="large" type="email" name="EMAIL" placeholder="Email Address"/>
                     <div style={ S('l-5000n absolute') } aria-hidden="true">
