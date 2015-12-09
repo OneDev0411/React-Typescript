@@ -14,8 +14,15 @@ module.exports = (app, config) => {
   app.get('*',(req, res) => {
 
     match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
-      
-      let reactMarkup = ReactDOMServer.renderToStaticMarkup(<RoutingContext data={AppStore.data} {...renderProps} />)
+
+      // Landing page data
+      if(req.url === '/'){
+        let random_number = Math.round(Math.random())
+        AppStore.data.random_number = random_number
+        res.locals.AppStore = JSON.stringify(AppStore)
+      }
+
+      let reactMarkup = ReactDOMServer.renderToString(<RoutingContext data={AppStore.data} {...renderProps} />)
       
       res.locals.reactMarkup = reactMarkup
 

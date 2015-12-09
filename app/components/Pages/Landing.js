@@ -47,7 +47,7 @@ export default class Landing extends Component {
       borderTop: '1px solid rgba(168,168,168, 0.3)'
     }
 
-    let random_num = Math.round(Math.random())
+    let random_number = data.random_number
     let video_src = 'young_agent'
     let headline_text = (
       <div>
@@ -55,7 +55,7 @@ export default class Landing extends Component {
       </div>
     )
 
-    if(random_num === 1){
+    if(random_number){
       const second_tag_style = {
         ...S('font-22 mt-20'),
         lineHeight: '28px',
