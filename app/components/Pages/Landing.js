@@ -5,105 +5,39 @@ import { Col, Input, Button } from 'react-bootstrap'
 import S from 'shorti'
 
 // Store
+import AppDispatcher from '../../dispatcher/AppDispatcher'
+
+// Store
 import AppStore from '../../stores/AppStore'
 
 export default class Landing extends Component {
 
-  startBlinking(){
-    AppStore.data.blinking_cursor = true
-    AppStore.emitChange()
-  }
-
-  stopBlinking(){
-    AppStore.data.blinking_cursor = false
-    AppStore.emitChange()
-  }
-
-  getText(animated_num){
-    let animated_text = ['superagent','superbadass','goat','caitlynjenner']
-    const data = this.props.data
-    let random_number = data.random_number
-    if(random_number)
-      animated_text = ['smarter','faster','more responsive','more knowledgable']
-    let current_text = animated_text[animated_num]
-    return current_text
-  }
-
-  setText(current_text){
-    AppStore.data.current_text = current_text
-    AppStore.emitChange()
-  }
-
-  addText(animated_num){
-    let animated_text = this.getText(animated_num)
-    let num = 0
-    let partial_text
-    let adding_text = setInterval(() => {
-      partial_text = animated_text.slice(0, num)
-      this.setText(partial_text)
-      console.log(partial_text)
-      if(partial_text == animated_text){
-          clearInterval(adding_text)
-          setTimeout(() => {
-            this.startBlinking()
-          },1000)
-          setTimeout(() => {
-            let next_text = this.getText(animated_num+1)
-            if(next_text){
-              console.log(next_text)
-              this.removeText(animated_num)
-            }
-          },3000)
-        }
-      num++
-    }, 200)
-  }
-
-  removeText(animated_num){
-    let animated_text = this.getText(animated_num)
-    if(this.refs.animated_text){
-      this.stopBlinking()
-      let removing_text = setInterval(() => {
-        animated_text = animated_text.slice(0, -1)
-        this.setText(animated_text)
-        if(!animated_text){
-          clearInterval(removing_text)
-          this.addText(animated_num+1)
-        }
-      }, 200)
-    }
-  }
-
-  animateText(){
-    if(this.refs.animated_text){
-      let animated_text = this.refs.animated_text.innerText
-      this.removeText(0)
-    }
-  }
-  componentWillMount(){
-    let current_text = this.getText(0)
-    this.setText(current_text)
-    this.startBlinking()
-  }
-
   componentDidMount(){
     
-    let current_text = this.getText(0)
-    this.setText(current_text)
-    this.startBlinking()
+    let random_number = this.props.data.random_number
+    
+    AppDispatcher.dispatch({
+      action: 'init-landing',
+      random_number: random_number
+    })
 
-    // Effects
     setTimeout(() => {
-      this.animateText()
+      AppDispatcher.dispatch({
+        action: 'landing-text-animation',
+        random_number: random_number
+      })
     }, 3000)
   }
 
   render(){
     
     // Data
-    const data = this.props.data
+    let data = this.props.data
+    let animation_started = AppStore.data.animation_started
+    if(animation_started){
+      data = AppStore.data
+    }
     
-    console.log(data)
     // Styles
     const page_style = {
       position: 'relative',
@@ -138,7 +72,7 @@ export default class Landing extends Component {
     let video_src = 'young_agent'
     let headline_text = (
       <div>
-        Be a #<span ref="animated_text">{ data.current_text }</span><span className={ data.blinking_cursor ? 'blinking-cursor' : ''}>|</span>
+        Be a #<span ref="animated_text">{ data.current_text }</span><span className="blinking-cursor">|</span>
       </div>
     )
 
@@ -146,7 +80,7 @@ export default class Landing extends Component {
       video_src = 'couple'
       headline_text = (
         <div>
-          From Search to Close be<br/>{ data.current_text }<span className={ data.blinking_cursor ? 'blinking-cursor' : ''}>|</span> 
+          From Search to Close be<br/>{ data.current_text }<span className="blinking-cursor">|</span> 
         </div>
       )
     }
