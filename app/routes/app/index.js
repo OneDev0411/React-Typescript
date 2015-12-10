@@ -13,19 +13,13 @@ module.exports = (app, config) => {
   app.get('/terms/mls',(req, res) => {
     return res.render('terms.html')
   })
-  
-  // If signed in, render client side
-  app.use((req, res, next) => {
+
+  app.get('/dashboard*', (req, res, next) => {
     if(req.session.user){
       AppStore.data.user = req.session.user
       res.locals.AppStore = JSON.stringify(AppStore)
       return res.status(200).render('index.html')
-    }
-    next()
-  })
-
-  app.get('/dashboard*', (req, res, next) => {
-    if(!req.session.user){
+    } else {
       const path = req.path
       return res.redirect('/signin?redirect_to=' + path)
     }

@@ -53,5 +53,9 @@ export default class RoomsList extends Component {
       <ul style={ S('pl-0 minw-250') }>{ rooms_list }</ul>
     )
   }
+}
 
+// PropTypes
+RoomsList.propTypes = {
+  data: React.PropTypes.object.isRequired
 }

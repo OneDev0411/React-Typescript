@@ -18,6 +18,8 @@ module.exports = (app, config) => {
 
     match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
 
+      delete AppStore.user
+      
       // Landing page data
       if(req.url === '/'){
         let random_number = Math.round(Math.random())

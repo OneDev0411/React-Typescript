@@ -56,5 +56,9 @@ export default class MessagesList extends Component {
       )
     }
   }
+}
 
+// PropTypes
+MessagesList.propTypes = {
+  data: React.PropTypes.object.isRequired
 }

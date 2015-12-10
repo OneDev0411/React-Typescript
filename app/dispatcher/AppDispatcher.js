@@ -23,7 +23,7 @@ import createMessage from '../actions/create-message'
 import getMessages from '../actions/get-messages'
 
 // Landing page
-import landingActions from '../actions/pages/landing'
+import landingPage from '../actions/pages/landing'
 
 const AppDispatcher = new Dispatcher()
 
@@ -49,11 +49,11 @@ AppDispatcher.register(payload => {
   switch(action) {
 
     case 'init-landing':
-      landingActions.init(payload.random_number)
+      landingPage.init(payload.random_number)
       break
-      
+
     case 'landing-text-animation':
-      landingActions.animateText(payload.random_number)
+      landingPage.animateText()
       break
 
     case 'sign-up':

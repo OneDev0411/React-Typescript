@@ -24,6 +24,16 @@ export default class Dashboard extends Component {
   }
 
   componentDidMount() {
+    
+    const data = AppStore.data
+    // Get messages
+    if(data.rooms && !data.messages){
+      let current_room = data.rooms[0]
+      // Default to first room
+      if(data.current_room)
+        current_room = data.current_room
+      this.getMessages(current_room)
+    }
     window.addEventListener('resize', this.handleResize);
   }
 
@@ -49,9 +59,7 @@ export default class Dashboard extends Component {
   }
 
   getMessages(current_room){
-    
     const data = AppStore.data
-    
     AppDispatcher.dispatch({
       action: 'get-messages',
       user: data.user,
@@ -103,25 +111,26 @@ export default class Dashboard extends Component {
 
   }
 
-  componenentDidUpdate(){
-    this.getMessages()
+  componentDidUpdate(){
+    const data = AppStore.data
+    // Get messages
+    if(data.rooms && !data.messages){
+      let current_room = data.rooms[0]
+      // Default to first room
+      if(data.current_room)
+        current_room = data.current_room
+      this.getMessages(current_room)
+    }
   }
 
   render(){
 
     // Data
     let data = this.props.data
-    let current_room
     data.rooms = AppStore.data.rooms
+    data.current_room = AppStore.data.current_room
+    data.messages = AppStore.data.messages
     data.showCreateChatModal = AppStore.data.showCreateChatModal
-
-    // Get messages
-    if(data.rooms && !data.messages){
-      current_room = data.rooms[0]
-      if(data.current_room)
-        current_room = data.current_room
-      this.getMessages(current_room)
-    }
 
     if(this.props.route.path){
       data.path = this.props.route.path

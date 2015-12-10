@@ -59,13 +59,15 @@ export default {
       this.setText(animated_text)
       if(!animated_text){
         clearInterval(removing_text)
-        this.addText(animated_num+1)
+        setTimeout(() => {
+          this.addText(animated_num+1)
+        }, 1000)
       }
     }, 200)
   },
 
   // Start animation
-  animateText: function(random_number){
+  animateText: function(){
     this.removeText(0)
   },
 

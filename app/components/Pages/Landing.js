@@ -12,6 +12,11 @@ import AppStore from '../../stores/AppStore'
 
 export default class Landing extends Component {
 
+  showIntercom(e){
+    e.preventDefault()
+    Intercom('show')
+  }
+
   componentDidMount(){
     
     let random_number = this.props.data.random_number
@@ -34,9 +39,8 @@ export default class Landing extends Component {
     // Data
     let data = this.props.data
     let animation_started = AppStore.data.animation_started
-    if(animation_started){
+    if(animation_started)
       data = AppStore.data
-    }
     
     // Styles
     const page_style = {
@@ -45,7 +49,6 @@ export default class Landing extends Component {
       background: '#000',
       color: '#ffffff'
     }
-
     const navbar_style = {
       border: 'none',
       background: 'none'
@@ -113,7 +116,7 @@ export default class Landing extends Component {
               <div style={ collapse_style } className="collapse navbar-collapse text-center" id="main-link">
                 <ul className="nav navbar-nav navbar-right">
                   <li className="contact-us-btn" style={ S('mr-20') }>
-                    <a href="#" style={ S('color-fff relative t-6n') }>Contact Us</a>
+                    <a onClick={ this.showIntercom } href="#" style={ S('color-fff relative t-6n') }>Contact Us</a>
                   </li>
                   <li>
                     <a className="btn btn-default center-block sign-in__button" href="/signin" style={ signin_btn_style }>Sign in</a>
@@ -134,7 +137,7 @@ export default class Landing extends Component {
                 Get on the waiting list! We will notifiy you when we launch.
               </p>
               <div className="form-wrap center-block" style={ form_wrap_style }>
-                <form onSubmit={ this.showThankYou } action="" method="post" name="mc-embedded-subscribe-form" target="_blank">
+                <form onSubmit={ this.showThankYou } action="//rechat.us11.list-manage.com/subscribe/post?u=c21e4aeea43aececadaf53146&amp;id=4c276af8ae" method="post" name="mc-embedded-subscribe-form" target="_blank">
                   <Col className="form-input--email" sm={8} style={ S('pl-0') }>
                     <Input style={ S('w-100p') } bsSize="large" type="email" name="EMAIL" placeholder="Email Address"/>
                     <div style={ S('l-5000n absolute') } aria-hidden="true">
@@ -153,7 +156,7 @@ export default class Landing extends Component {
         <footer className="footer" style={ footer_style }>
           <div className="container">
             <Col className="footer-text footer-text--left" sm={6}>
-              Made with <img src="/images/landing/heart.png" /> by Rechat | <a href="/">Contact Us</a>
+              Made with <img src="/images/landing/heart.png" /> by Rechat | <a onClick={ this.showIntercom } href="/">Contact Us</a>
             </Col>
             <Col className="footer-text footer-text--right" sm={6}>
               Rechat Inc. &copy; 2015. All Rights Reserved. <a href="/terms/mls">MLS Terms</a>
@@ -161,7 +164,6 @@ export default class Landing extends Component {
           </div>
         </footer>
       </div>
-
     )
   }
 }
