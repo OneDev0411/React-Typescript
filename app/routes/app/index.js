@@ -5,6 +5,13 @@ import AppStore from '../../stores/AppStore'
 
 module.exports = (app, config) => {
 
+  app.use((req, res, next) => {
+    if(!req.session.user){
+      delete AppStore.data.user
+    }
+    next()
+  })
+
   app.get('/signout',(req, res) => {
     req.session.destroy()
     return res.redirect('/')

@@ -27,6 +27,7 @@ module.exports = (app, config) => {
           action: 'init-landing',
           random_number: random_number
         })
+        res.locals.page_slug = 'landing'
         res.locals.AppStore = JSON.stringify(AppStore)
       }
 

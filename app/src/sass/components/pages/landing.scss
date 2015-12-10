@@ -1,4 +1,7 @@
-.landing-page{
+.page-landing{
+  #app{
+    min-height: 850px;
+  }
   overflow: hidden;
   .sign-in__button{
     -webkit-transition: all $transition-speed;

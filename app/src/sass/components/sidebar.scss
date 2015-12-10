@@ -1,0 +1,14 @@
+// Sidebar
+.sidebar{
+  &--dashboard{
+    border-right: 1px solid #e7e4e3;
+    a{
+      color: #333;
+      &:hover{
+        color: #333;
+      }
+      border-top-left-radius: 0 !important;
+      border-bottom-left-radius: 0 !important;
+    }
+  }
+}

@@ -1,11 +1,25 @@
-.btn-default:hover, .btn-default:focus {
-  background-color: #5c8fd4;
-  border: 1px solid #5c8fd4;
-  color: #fff;
+.btn{
+  -webkit-transition: background-color 80ms;
+  transition: background-color 80ms;
 }
 .forgot__password-btn--cancel{
   @media(max-width: 768px){
     margin-bottom: 10px;
     padding-right: 0 !important;
+  }
+}
+.create-chat__btn{
+  &:hover{
+    background-color: $link-hover-color !important;
+  }
+}
+.create-message__btn{
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  &:hover{
+    background-color: $link-hover-color !important;
+    .plus{
+      color: #fff !important;
+    }
   }
 }

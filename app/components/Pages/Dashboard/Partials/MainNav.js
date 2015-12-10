@@ -7,38 +7,6 @@ import ProfileImage from './ProfileImage'
 
 export default class MainNav extends Component {
 
-  handleFocus(e){
-    const input = e.target
-    input.style.width = '300px'
-    input.placeholder = 'Start typing...'
-  }
-
-  handleBlur(e){
-    const input = e.target
-    input.style.width = '100%'
-    input.placeholder = 'Search'
-  }
-
-  showModal(eventKey, href) {
-    this.props.showModal(href)
-    setTimeout(() => {
-      if(this.refs.title)
-        this.refs.title.getInputDOMNode().focus()
-    }, 300)
-  }
-
-  handleSubmit(e){
-    e.preventDefault()
-    let title = this.refs.title.getInputDOMNode().value
-    title = title.trim()
-    if(title)
-      this.props.createRoom(title)
-  }
-
-  hideModal(e){
-    this.props.hideModal()
-  }
-
   render(){
     
     // Data
@@ -48,18 +16,18 @@ export default class MainNav extends Component {
     let profile_image_url = data.user.profile_image_url
 
     // Style
-    const nav_bar_style = S('mb-0 p-15')
+    const nav_bar_style = { ...S('mb-0 p-15 h-68 pt-7'), borderBottom: '1px solid #e7e4e3' }
     
     return (
-      <nav style={ nav_bar_style } className="navbar bg-alabaster">
+      <nav style={ nav_bar_style } className="navbar main-navbar bg-alabaster">
         <div className="container-fluid">
-          <ul className="nav navbar-nav navbar-left">
+          <ul style={ S('ml-20n') } className="nav navbar-nav navbar-left">
             <li className="dropdown">
               <div style={ S('absolute pt-7 pl-7') }>
                 <ProfileImage data={ data } profile_image_url={ profile_image_url } />
               </div>
-              <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style={ S('pl-55 z-1')}>
-                { first_name } { last_name } <span className="caret"></span>
+              <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style={ S('font-12 pl-55 z-1 color-333')}>
+                { first_name } { last_name } <span style={ S('color-c3c3c3') } className="caret"></span>
               </a>
               <ul className="dropdown-menu">
                 <li><Link to="/account/settings"><i className="fa fa-cog" style={ S('mr-15') }></i>Settings</Link></li>
@@ -67,39 +35,6 @@ export default class MainNav extends Component {
                 <li role="separator" className="divider"></li>
                 <li><a href="/signout"><i className="fa fa-power-off" style={ S('mr-15') }></i>Sign out</a></li>
               </ul>
-            </li>
-          </ul>
-          <ul className="nav navbar-nav navbar-right">
-            <li>
-              <input type="text" placeholder="Search" className="form-control" onFocus={ this.handleFocus } onBlur={ this.handleBlur } />
-            </li>
-            <li>
-              <ButtonToolbar>
-                <Dropdown id="dropdown-custom-1">
-                  <Dropdown.Toggle noCaret>
-                    <i className="fa fa-plus"></i>
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu onSelect={ this.showModal.bind(this) }>
-                    <MenuItem eventKey="create-chat">Start a New Chat</MenuItem>
-                    <MenuItem eventKey="add-contact">Add Contact</MenuItem>
-                    <MenuItem eventKey="add-alert">Add an Alert</MenuItem>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </ButtonToolbar>
-              <Modal show={ data.showCreateChatModal } onHide={ this.hideModal.bind(this) }>
-                <form onSubmit={ this.handleSubmit.bind(this) }>
-                  <Modal.Header closeButton>
-                    <Modal.Title>Start a new chat</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <Input type="text" ref="title" placeholder="Chat room title"/>
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button onClick={ this.hideModal.bind(this) }>Cancel</Button>
-                    <Button type="submit" bsStyle="primary">Start chat</Button>
-                  </Modal.Footer>
-                </form>
-              </Modal>
             </li>
           </ul>
         </div>

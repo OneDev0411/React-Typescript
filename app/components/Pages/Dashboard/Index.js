@@ -19,7 +19,7 @@ export default class Dashboard extends Component {
 
   handleResize(){
     const data = AppStore.data
-    AppStore.data.scroll_area_height = window.innerHeight - 182
+    AppStore.data.scroll_area_height = window.innerHeight - 172
     AppStore.emitChange()
   }
 
@@ -41,21 +41,29 @@ export default class Dashboard extends Component {
     window.removeEventListener('resize', this.handleResize);
   }
 
-  init(){
-    
+  addUserToStore(){
     const data = this.props.data
-    data.scroll_area_height = window.innerHeight - 182
     const user = data.user
-    
     AppDispatcher.dispatch({
       action: 'add-user-to-store',
       user: user
     })
+  }
 
+  getUserRooms(){
+    const data = this.props.data
+    const user = data.user
     AppDispatcher.dispatch({
       action: 'get-rooms',
       user: user
     })
+  }
+
+  init(){
+    let data = this.props.data
+    data.scroll_area_height = window.innerHeight - 172
+    this.addUserToStore()
+    this.getUserRooms()
   }
 
   getMessages(current_room){
@@ -131,6 +139,7 @@ export default class Dashboard extends Component {
     data.current_room = AppStore.data.current_room
     data.messages = AppStore.data.messages
     data.showCreateChatModal = AppStore.data.showCreateChatModal
+    data.scroll_area_height = AppStore.data.scroll_area_height
 
     if(this.props.route.path){
       data.path = this.props.route.path
@@ -139,28 +148,18 @@ export default class Dashboard extends Component {
     }
 
     // Style
-    const main_style = S('absolute l-250 r-0')
-    const footer_style = S('fixed b-0 l-500 r-0 p-20')
+    const main_style = S('absolute l-222 r-0')
+    
 
     return (
-      <div>
+      <div style={ S('minw-1000') }>
         <header>
-          <MainNav showModal={ this.showModal } hideModal={ this.hideModal } createRoom={ this.createRoom } data={ data }/>
+          <MainNav data={ data }/>
         </header>
         <SideBar data={ data }/>
         <main style={ main_style }>
-          <MainContent getMessages={ this.getMessages } data={ data }/>
+          <MainContent createMessage={ this.createMessage } showModal={ this.showModal } hideModal={ this.hideModal } createRoom={ this.createRoom } getMessages={ this.getMessages } data={ data }/>
         </main>
-        <footer style={ footer_style }>
-          <form onSubmit={ this.createMessage.bind(this) }>
-            <div className="form-group" style={ S('w-100p') }>
-              <input ref="message_input" type="text" className="form-control" style={ S('w-100p pl-50') } placeholder="Type your message and press enter"/>
-              <button type="button" className="btn btn-default" style={ S('absolute l-20 t-20') }>
-                <i className="fa fa-plus" style={ S('t-2 relative') }></i>
-              </button>
-            </div>
-          </form>
-        </footer>
       </div>
     )
   }

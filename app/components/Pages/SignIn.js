@@ -82,7 +82,7 @@ export default class SignIn extends Component {
       <div id="main-content" className="container">
         <div className="text-center center-block" style={ S('maxw-300') }>
           <BigHeading />
-          <h1 style={ lightWeight }>Sign in</h1>
+          <div style={ S('color-929292 mb-20') }>Sign in</div>
           <form action="/signin" onSubmit={ this.handleSubmit.bind(this) }>
             <Input bsStyle={ email_style } type="text" ref="email" placeholder="Email"/>
             <Input bsStyle={ password_style } type="password" ref="password" placeholder="Password"/>
