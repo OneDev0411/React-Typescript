@@ -61,7 +61,7 @@ export default {
         clearInterval(removing_text)
         setTimeout(() => {
           this.addText(animated_num+1)
-        }, 1000)
+        }, 1500)
       }
     }, 200)
   },

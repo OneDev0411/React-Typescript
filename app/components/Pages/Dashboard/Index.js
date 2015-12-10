@@ -165,3 +165,8 @@ export default class Dashboard extends Component {
     )
   }
 }
+
+// PropTypes
+Dashboard.proptypes = {
+  data: React.PropTypes.object.isRequired
+}
