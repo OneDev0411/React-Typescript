@@ -20,6 +20,8 @@ export default (user, title) => {
       AppStore.data.show_message = true
       AppStore.data.showCreateChatModal = false
       AppStore.data.rooms.unshift(new_room)
+      AppStore.data.current_room = new_room
+      AppStore.data.messages = [new_room.latest_message]
     
     } else {
       

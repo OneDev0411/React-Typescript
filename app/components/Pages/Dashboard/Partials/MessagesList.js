@@ -9,6 +9,7 @@ export default class MessagesList extends Component {
 
   render(){
     
+    // Data
     const data = this.props.data
     const current_room = data.current_room
 
@@ -16,10 +17,20 @@ export default class MessagesList extends Component {
       return <div style={ S('w-100p ml-40') }>No messages yet.</div>
     }
 
+    if(data.messages_loading){
+      return (
+        <div style={ S('relative') }>
+          <Loading />
+        </div>
+      )
+    }
+
     if(!data.messages){
       
       return (
-        <Loading />
+        <div style={ S('relative') }>
+          <Loading />
+        </div>
       )
 
     } else {
@@ -39,13 +50,11 @@ export default class MessagesList extends Component {
           <li style={ S('pb-12 pr-30') } key={ message.id }>
             <div style={ S('relative') }>
               <ProfileImage data={ data } profile_image_url={ profile_image_url }/>
-              <div className="pull-left" style={ S('ml-60') }>
-                <div>
-                  <b>{ first_name }</b>
-                  <span style={ S('color-ccc ml-20') } >
-                    { time_created.month } { time_created.date }, { time_created.time_friendly }
-                  </span>
-                </div>
+              <div className="pull-left" style={ S('ml-50') }>
+                <b>{ first_name || 'Rebot' }</b>
+                <span style={ S('color-ccc ml-20') } >
+                  { time_created.month } { time_created.date }, { time_created.time_friendly }
+                </span>
                 <div>{ message.comment }</div>
               </div>
               <div className="clearfix"></div>
@@ -53,17 +62,23 @@ export default class MessagesList extends Component {
           </li>
         )
       })
-
+  
+      // Styles
       const messages_scroll_area = {
         ...S('pl-20 pr-20'),
         overflow: 'scroll',
-        height: window.innerHeight - 168
+        height: window.innerHeight - 198
       }
 
       return (
-        <div style={ messages_scroll_area }>
-          <h3 style={ S('mt-0') }>{ current_room.title }</h3>
-          <ul style={ S('pl-10') }>{ messages }</ul>
+        <div>
+          <button type="button" className="btn btn-default invite-user__btn" style={ S('w-40 h-40 ml-6 pointer absolute p-0 t-20 r-8 br-100 bc-ddd bw-1 solid') } >
+            <img style={ S('ml-1n mt-1n') } onClick={ this.props.showModal.bind(this,'invite-user') } src="/images/svgs/invite-user.svg"/>
+          </button>
+          <h3 style={ S('mt-0 ml-20') }>{ current_room.title }</h3>
+          <div style={ messages_scroll_area }>
+            <ul style={ S('pl-0') }>{ messages }</ul>
+          </div>
         </div>
       )
     }

@@ -9,7 +9,7 @@ export default class SideBar extends Component {
     
     const data = this.props.data
     const sidebar_height = window.innerHeight - 68
-    const sidebar_style = S('w-222 absolute t-68 p-20 pl-0 pt-30 h-' + sidebar_height)
+    const sidebar_style = S('w-222 relative p-20 pl-0 pt-20 h-' + sidebar_height)
     const path = data.path
 
     let active_key
@@ -30,7 +30,7 @@ export default class SideBar extends Component {
     }
 
     return (
-      <aside style={ sidebar_style } className="bg-alabaster sidebar--dashboard">
+      <aside style={ sidebar_style } className="bg-alabaster sidebar--dashboard pull-left">
         <Nav bsStyle="pills" stacked activeKey={ active_key }>
           <LinkContainer to="/dashboard/recents">
             <NavItem style={ S('w-70p') } eventKey={1}>Recents</NavItem>

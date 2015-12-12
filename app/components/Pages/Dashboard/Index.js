@@ -18,13 +18,10 @@ import SideBar from './Partials/SideBar'
 export default class Dashboard extends Component {
 
   handleResize(){
-    const data = AppStore.data
-    AppStore.data.scroll_area_height = window.innerHeight - 172
     AppStore.emitChange()
   }
 
   componentDidMount() {
-    
     const data = AppStore.data
     // Get messages
     if(data.rooms && !data.messages){
@@ -61,12 +58,15 @@ export default class Dashboard extends Component {
 
   init(){
     let data = this.props.data
-    data.scroll_area_height = window.innerHeight - 172
     this.addUserToStore()
     this.getUserRooms()
   }
 
   getMessages(current_room){
+    
+    AppStore.data.messages_loading = true
+    AppStore.emitChange()
+    
     const data = AppStore.data
     AppDispatcher.dispatch({
       action: 'get-messages',
@@ -88,18 +88,21 @@ export default class Dashboard extends Component {
 
   hideModal(){
     AppStore.data.showCreateChatModal = false
+    AppStore.data.showInviteUserModal = false
     AppStore.emitChange()
   }
 
   createRoom(title){
-    
     const user = AppStore.data.user
-
     AppDispatcher.dispatch({
       action: 'create-room',
       user: user,
       title: title
     }) 
+  }
+
+  inviteUser(title){
+    console.log('invite user',title)
   }
 
   createMessage(e){
@@ -119,18 +122,6 @@ export default class Dashboard extends Component {
 
   }
 
-  componentDidUpdate(){
-    const data = AppStore.data
-    // Get messages
-    if(data.rooms && !data.messages){
-      let current_room = data.rooms[0]
-      // Default to first room
-      if(data.current_room)
-        current_room = data.current_room
-      this.getMessages(current_room)
-    }
-  }
-
   render(){
 
     // Data
@@ -139,7 +130,7 @@ export default class Dashboard extends Component {
     data.current_room = AppStore.data.current_room
     data.messages = AppStore.data.messages
     data.showCreateChatModal = AppStore.data.showCreateChatModal
-    data.scroll_area_height = AppStore.data.scroll_area_height
+    data.showInviteUserModal = AppStore.data.showInviteUserModal
 
     if(this.props.route.path){
       data.path = this.props.route.path
@@ -147,18 +138,21 @@ export default class Dashboard extends Component {
       data.path = '/dashboard'
     }
 
-    // Style
-    const main_style = S('absolute l-222 r-0')
-    
-
     return (
       <div style={ S('minw-1000') }>
         <header>
           <MainNav data={ data }/>
         </header>
-        <SideBar data={ data }/>
-        <main style={ main_style }>
-          <MainContent createMessage={ this.createMessage } showModal={ this.showModal } hideModal={ this.hideModal } createRoom={ this.createRoom } getMessages={ this.getMessages } data={ data }/>
+        <main>
+          <SideBar data={ data }/>
+          <MainContent 
+            createMessage={ this.createMessage } 
+            showModal={ this.showModal } 
+            hideModal={ this.hideModal } 
+            createRoom={ this.createRoom } 
+            inviteUser={ this.inviteUser } 
+            getMessages={ this.getMessages } 
+            data={ data }/>
         </main>
       </div>
     )

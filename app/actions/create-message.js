@@ -18,7 +18,7 @@ export default (user, room, comment) => {
     if(response.status == 'success'){
       
       const new_message = response.data
-      AppStore.data.messages.unshift(new_message)
+      AppStore.data.messages.push(new_message)
     
     } else {
 

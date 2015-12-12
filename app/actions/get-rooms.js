@@ -2,6 +2,9 @@
 import User from '../models/User'
 import AppStore from '../stores/AppStore'
 
+// Get messages
+import getMessages from './get-messages'
+
 export default (user) => {
   
   const params = {
@@ -13,9 +16,15 @@ export default (user) => {
     // Success
     if(response.status == 'success'){
       
-      AppStore.data.rooms = response.data
-      AppStore.data.current_room = AppStore.data.rooms[0]
-    
+      let rooms = response.data
+      AppStore.data.rooms = rooms
+      
+      // Get messages for current room
+      let current_room = rooms[0]
+      AppStore.data.current_room = current_room
+      let user = AppStore.data.user
+      getMessages(user, current_room)
+
     } else {
 
       AppStore.data.errors.push('rooms')
