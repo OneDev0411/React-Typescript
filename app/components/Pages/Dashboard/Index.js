@@ -18,6 +18,21 @@ import SideBar from './Partials/SideBar'
 
 export default class Dashboard extends Component {
 
+  filterRooms(search_text){
+    const data = AppStore.data
+    const rooms = data.rooms
+    const filtered_rooms = rooms.filter((room)=>{
+      return room.title.toLowerCase().indexOf(search_text.toLowerCase())!==-1
+    })
+    if(!search_text){
+      AppStore.data.is_filtering = false
+    } else {
+      AppStore.data.is_filtering = true
+    }
+    AppStore.data.filtered_rooms = filtered_rooms
+    AppStore.emitChange()
+  }
+
   handleResize(){
     AppStore.emitChange()
   }
@@ -142,6 +157,7 @@ export default class Dashboard extends Component {
     // Data
     let data = this.props.data
     data.rooms = AppStore.data.rooms
+    data.is_filtering = AppStore.data.is_filtering
     data.current_room = AppStore.data.current_room
     data.messages = AppStore.data.messages
     data.showCreateChatModal = AppStore.data.showCreateChatModal
@@ -160,7 +176,8 @@ export default class Dashboard extends Component {
         </header>
         <main>
           <SideBar data={ data }/>
-          <MainContent 
+          <MainContent
+            filterRooms={ this.filterRooms } 
             createMessage={ this.createMessage } 
             showModal={ this.showModal } 
             hideModal={ this.hideModal } 

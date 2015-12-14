@@ -100,7 +100,8 @@ describe('Testing Room model', function() {
       comment: 'Test message',
       message_type: 'TopLevel',
       author: test.user.id,
-      access_token: access_token
+      access_token: access_token,
+      api_host: test.api_host
     }
     Message.create(create_message_params, (err, response) => {
       expect(response.status).to.equal('success')

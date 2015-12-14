@@ -17,16 +17,19 @@ export default class RoomsList extends Component {
     
     // Data
     const data = this.props.data
+    let rooms = data.rooms
     const current_room = data.current_room
 
-    if(data.rooms && !data.rooms.length){
-      return <div style={ S('w-100p ml-40 mt-20') }>No rooms yet.</div>
+    if(rooms && !rooms.length){
+      return <div style={ S('ml-20 mt-20') }>No rooms yet.</div>
     }
 
     let rooms_list = <Loading />
 
-    if(data.rooms){
-      let rooms = data.rooms
+    if(data.is_filtering)
+      rooms = data.filtered_rooms
+    
+    if(rooms){
       rooms_list = rooms.map((room, i) => {
         let profile_image_url
         if(room.latest_message.author)

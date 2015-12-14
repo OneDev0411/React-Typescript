@@ -8,7 +8,7 @@ export default class SideBar extends Component {
   render(){
     
     const data = this.props.data
-    const sidebar_height = window.innerHeight - 68
+    const sidebar_height = window.innerHeight - 58
     const sidebar_style = S('w-222 relative p-20 pl-0 pt-20 h-' + sidebar_height)
     const path = data.path
 

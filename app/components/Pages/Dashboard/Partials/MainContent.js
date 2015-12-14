@@ -7,11 +7,18 @@ import MessagesList from './MessagesList'
 
 export default class MainContent extends Component {
 
+  handleKeyUp(){
+    const search_text = this.refs.search_text.value
+    this.props.filterRooms(search_text)
+  }
+
   showModal(modal_key) {
     this.props.showModal(modal_key)
     setTimeout(() => {
-      if(this.refs.title)
+      if(modal_key === 'create-chat' && this.refs.title)
         this.refs.title.getInputDOMNode().focus()
+      if(modal_key === 'invite-user' && this.refs.email)
+        this.refs.email.getInputDOMNode().focus()
     }, 300)
   }
 
@@ -47,7 +54,7 @@ export default class MainContent extends Component {
     // Rooms
     const rooms_column_style = {
       overflow: 'scroll',
-      height: window.innerHeight - 68,
+      height: window.innerHeight - 58,
       borderRight: '1px solid #e7e4e3',
       width: '320px'
     }
@@ -55,7 +62,7 @@ export default class MainContent extends Component {
     // Messages
     const messages_column_style = {
       ...S('absolute pt-25 l-320 minw-450'),
-      height: window.innerHeight - 68,
+      height: window.innerHeight - 58,
       width: window.innerWidth - 542
     }
 
@@ -94,9 +101,9 @@ export default class MainContent extends Component {
         <div style={ main_style }>
           <div className="dashboard__chat-rooms pull-left" style={ rooms_column_style }>
             <div style={ S('p-10 pt-20 h-60 relative') }>
-              <input style={ S('w-85p br-10') } type="text" placeholder="Search chats" className="form-control pull-left" />
-              <button type="button" className="btn btn-primary" style={ S('w-40 h-40 ml-6 pointer absolute p-0 t-20 r-8 br-100') } >
-                <img onClick={ this.showModal.bind(this,'create-chat') } src="/images/svgs/create-chat.svg"/>
+              <input ref="search_text" onKeyUp={ this.handleKeyUp.bind(this) } style={ S('w-85p br-10') } type="text" placeholder="Search chats" className="form-control pull-left" />
+              <button onClick={ this.showModal.bind(this,'create-chat') } type="button" className="btn btn-primary" style={ S('w-40 h-40 ml-6 pointer absolute p-0 t-20 r-8 br-100') } >
+                <img src="/images/svgs/create-chat.svg"/>
               </button>
               <div className="clearfix"></div>
             </div>

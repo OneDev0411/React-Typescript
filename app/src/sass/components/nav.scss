@@ -1,4 +1,8 @@
 // Nav
-.main-navbar{
-  border-bottom: 1px solid #e7e4e3;
+.main-nav-dropdown--account{
+  .dropdown-toggle{
+    font-size: 13px;
+    background: transparent !important;
+    padding-left: 55px !important;
+  }
 }
