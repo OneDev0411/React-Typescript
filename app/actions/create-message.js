@@ -19,7 +19,11 @@ export default (user, room, comment) => {
       
       const new_message = response.data
       AppStore.data.messages.push(new_message)
-    
+      let socket = io()
+      // Add room id to message
+      new_message.room_id = AppStore.data.current_room.id
+      socket.emit('chat message', new_message)
+
     } else {
 
       AppStore.data.errors.push('rooms')

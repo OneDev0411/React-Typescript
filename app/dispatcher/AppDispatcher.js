@@ -13,7 +13,7 @@ import verifyPhone from '../actions/verify-phone'
 import addUserToStore from '../actions/add-user-to-store'
 
 // Rooms
-import getRooms from '../actions/get-rooms'
+import getUserRooms from '../actions/get-user-rooms'
 import createRoom from '../actions/create-room'
 
 import showModal from '../actions/show-modal'
@@ -34,6 +34,7 @@ AppDispatcher.register(payload => {
 
   // Vars
   let user
+  let room_id
   let room
   let comment
   let email
@@ -100,9 +101,10 @@ AppDispatcher.register(payload => {
       createRoom(user, title)
       break
 
-    case 'get-rooms':
+    case 'get-user-rooms':
       user = payload.user
-      getRooms(user)
+      room_id = payload.room_id
+      getUserRooms(user, room_id)
       break
 
     case 'create-message':

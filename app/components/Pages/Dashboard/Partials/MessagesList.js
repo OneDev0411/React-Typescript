@@ -1,11 +1,18 @@
 // MessagesList.js
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
 import S from 'shorti'
 import Loading from '../../../Partials/Loading'
 import ProfileImage from './ProfileImage'
 import helpers from '../../../../utils/helpers'
 
 export default class MessagesList extends Component {
+
+  componentDidUpdate(){
+    var messages_scroll_area = ReactDOM.findDOMNode(this.refs.messages_scroll_area)
+    if(messages_scroll_area)
+      messages_scroll_area.scrollTop = messages_scroll_area.scrollHeight;
+  }
 
   render(){
     
@@ -46,6 +53,13 @@ export default class MessagesList extends Component {
           first_name = message.author.first_name
         const message_created = message.created_at.toString().split('.')
         const time_created = helpers.timeConverter(message_created[0])
+        let message_image
+        if(message.image_url)
+          message_image = (
+            <div>
+              <img src={ message.image_url } style={ S('maxw-400') }/>
+            </div>
+          )
         return (
           <li style={ S('pb-12 pr-30') } key={ message.id }>
             <div style={ S('relative') }>
@@ -56,6 +70,7 @@ export default class MessagesList extends Component {
                   { time_created.month } { time_created.date }, { time_created.time_friendly }
                 </span>
                 <div>{ message.comment }</div>
+                { message_image }
               </div>
               <div className="clearfix"></div>
             </div>
@@ -76,7 +91,7 @@ export default class MessagesList extends Component {
             <img style={ S('ml-1n mt-1n') } onClick={ this.props.showModal.bind(this,'invite-user') } src="/images/svgs/invite-user.svg"/>
           </button>
           <h3 style={ S('mt-0 ml-20') }>{ current_room.title }</h3>
-          <div style={ messages_scroll_area }>
+          <div ref="messages_scroll_area" style={ messages_scroll_area }>
             <ul style={ S('pl-0') }>{ messages }</ul>
           </div>
         </div>

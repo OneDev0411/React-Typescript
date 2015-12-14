@@ -21,8 +21,6 @@ module.exports = (app, config) => {
       token: token,
       password: password
     }
-
-    res.setHeader('Content-Type', 'application/json')
     
     fetch(signin_url,{
       method: 'patch',
@@ -37,14 +35,14 @@ module.exports = (app, config) => {
           "status": "error",
           "message": "There was an error with this request."
         }
-        return res.end(JSON.stringify(error))
+        return res.json(error)
       }
       return response
     })
     .then(response => {
       let response_object = {}
       response_object.status = 'success'
-      return res.end(JSON.stringify(response_object))
+      return res.json(response_object)
     });
   })
 

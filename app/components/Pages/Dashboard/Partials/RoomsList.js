@@ -39,6 +39,12 @@ export default class RoomsList extends Component {
         
         const latest_created = room.latest_message.created_at.toString().split('.')
         const time_created = helpers.timeConverter(latest_created[0])
+        let comment
+        if(room.latest_message.comment){
+          comment = (
+            <div style={ S('color-808080') }>{ room.latest_message.comment.substring(0, 50) }{ room.latest_message.comment.length > 50 ? '...': '' }</div>
+          )
+        }
         return (
           <li style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, i) }>
             <div style={ S('relative') }>
@@ -52,7 +58,7 @@ export default class RoomsList extends Component {
                 </div>
                 <div className="clearfix"></div>
                 <div style={ S('color-aaaaaa') }>{ room.latest_message.author ? room.latest_message.author.first_name: 'Robot' }</div>
-                <div style={ S('color-808080') }>{ room.latest_message.comment.substring(0, 50) }{ room.latest_message.comment.length > 50 ? '...': '' }</div>
+                { comment }
               </div>
               <div className="clearfix"></div>
             </div>

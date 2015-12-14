@@ -27,6 +27,8 @@ export default class SignUp extends Component {
     AppStore.data.submitting = true
     AppStore.emitChange()
     
+    let first_name = this.refs.first_name.refs.input.value
+    let last_name = this.refs.last_name.refs.input.value
     let email = this.refs.email.refs.input.value
     let password = this.refs.password.refs.input.value
     let confirm_password = this.refs.confirm_password.refs.input.value
@@ -35,8 +37,8 @@ export default class SignUp extends Component {
     const random_phone = Math.floor(Math.random() * 1000000000)
 
     const user = {
-      first_name: 'Test',
-      last_name: 'User',
+      first_name: first_name,
+      last_name: last_name,
       email: email,
       user_type: 'Client',
       phone_number: random_phone,
@@ -66,11 +68,25 @@ export default class SignUp extends Component {
     let message
     let email_style
     let password_style
+    let first_name_style
+    let last_name_style
 
     /* Handle erros
     ======================== */
     let errors = data.errors
     if(data.show_message && errors){
+      if(data.error_type == 'first_name'){
+        first_name_style = 'error'
+        message = (
+          <Alert bsStyle="danger">You must add a first name.</Alert>
+        )
+      }
+      if(data.error_type == 'last_name'){
+        last_name_style = 'error'
+        message = (
+          <Alert bsStyle="danger">You must add a last name.</Alert>
+        )
+      }
       if(data.error_type == 'email'){
         email_style = 'error'
         message = (
@@ -113,6 +129,8 @@ export default class SignUp extends Component {
       <div>
         <h1 style={ lightWeight }>Sign up as { type }</h1>
         <form onSubmit={ this.handleSubmit.bind(this) }>
+          <Input bsStyle={ first_name_style } type="text" ref="first_name" placeholder="First Name"/>
+          <Input bsStyle={ last_name_style } type="text" ref="last_name" placeholder="Last Name"/>
           <Input bsStyle={ email_style } type="text" ref="email" placeholder="Email"/>
           <Input bsStyle={ password_style } type="password" ref="password" placeholder="Password"/>
           <Input bsStyle={ password_style } type="password" ref="confirm_password" placeholder="Confirm Password"/>

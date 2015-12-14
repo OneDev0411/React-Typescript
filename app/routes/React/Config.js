@@ -26,6 +26,7 @@ export default (
     <Route path="/account/notifications" component={Notifications}/>
     <Route path="/dashboard" component={Dashboard}/>
     <Route path="/dashboard/recents" component={Dashboard}/>
+    <Route path="/dashboard/recents/:room_id" component={Dashboard}/>
     <Route path="/dashboard/mls" component={Dashboard}/>
     <Route path="/dashboard/contacts" component={Dashboard}/>
     <Route path="/dashboard/tasks" component={Dashboard}/>

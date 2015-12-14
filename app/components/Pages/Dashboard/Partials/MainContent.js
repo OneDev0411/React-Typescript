@@ -63,9 +63,11 @@ export default class MainContent extends Component {
 
     // Dashboard default
     let main_content = (
-      <div>
-        <h1>Hello and Welcome</h1>
-        <p>This is your dashboard, enjoy doing lots of fun things here...</p>
+      <div style={ main_style }>
+        <div style={ S('ml-20') }>
+          <h1>Hello and Welcome</h1>
+          <p>This is your dashboard, enjoy doing lots of fun things here...</p>
+        </div>    
       </div>
     )
 
@@ -85,8 +87,8 @@ export default class MainContent extends Component {
     if(!data.current_room){
       footer_form = ''
     }
-
-    if(path === '/dashboard/recents'){
+    
+    if(path === '/dashboard/recents' || path === '/dashboard/recents/:room_id'){
 
       main_content = (
         <div style={ main_style }>

@@ -28,8 +28,6 @@ module.exports = (app, config) => {
       phone_number: phone_number,
       code: code_submitted
     }
-
-    res.setHeader('Content-Type', 'application/json')
     
     fetch(verify_phone_url,{
       method: 'patch',
@@ -44,14 +42,14 @@ module.exports = (app, config) => {
           "status": "error",
           "message": "There was an error with this request."
         }
-        return res.end(JSON.stringify(error))
+        return res.json(error)
       }
       return response
     })
     .then(response => {
       let response_object = {}
       response_object.status = 'success'
-      return res.end(JSON.stringify(response_object))
+      return res.json(response_object)
     });
   })
 

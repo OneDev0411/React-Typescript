@@ -16,7 +16,6 @@ module.exports = (app, config) => {
       grant_type: 'password'
     }
 
-    res.setHeader('Content-Type', 'application/json')
     res.setHeader('Access-Control-Allow-Credentials', 'true')
 
     fetch(signin_url,{
@@ -33,7 +32,7 @@ module.exports = (app, config) => {
           "status": "error",
           "message": "There was an error with this request."
         }
-        return res.end(JSON.stringify(error))
+        return res.json(error)
       }
       return response.json()
     })
@@ -43,7 +42,7 @@ module.exports = (app, config) => {
       let user = response.data
       user.access_token = response.access_token
       req.session.user = user
-      return res.end(JSON.stringify(response_object))
+      return res.json(response_object)
     });
   })
 

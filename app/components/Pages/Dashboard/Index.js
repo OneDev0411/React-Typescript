@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { Nav, NavItem } from 'react-bootstrap'
 import S from 'shorti'
+import _ from 'lodash'
 
 // AppDispatcher
 import AppDispatcher from '../../../dispatcher/AppDispatcher'
@@ -21,21 +22,14 @@ export default class Dashboard extends Component {
     AppStore.emitChange()
   }
 
-  componentDidMount() {
-    const data = AppStore.data
-    // Get messages
-    if(data.rooms && !data.messages){
-      let current_room = data.rooms[0]
-      // Default to first room
-      if(data.current_room)
-        current_room = data.current_room
-      this.getMessages(current_room)
-    }
+  componentWillUpdate(){
+    this.handleResize
     window.addEventListener('resize', this.handleResize);
   }
 
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize);
+  componentDidMount() {
+    this.handleResize
+    window.addEventListener('resize', this.handleResize);
   }
 
   addUserToStore(){
@@ -50,9 +44,11 @@ export default class Dashboard extends Component {
   getUserRooms(){
     const data = this.props.data
     const user = data.user
+    const room_id = this.props.params.room_id
     AppDispatcher.dispatch({
-      action: 'get-rooms',
-      user: user
+      action: 'get-user-rooms',
+      user: user,
+      room_id: room_id
     })
   }
 
@@ -73,10 +69,29 @@ export default class Dashboard extends Component {
       user: data.user,
       room: current_room
     })
+    // Show room_id in url
+    history.pushState(null, null, '/dashboard/recents/' + current_room.id)
   }
 
   componentWillMount(){
     this.init()
+  }
+
+  componentDidMount(){
+    let socket = io()
+    socket.on('chat message', function(message){
+      // Add message if
+      const messages = AppStore.data.messages
+      const current_room = AppStore.data.current_room
+      // does not exist already
+      if(_.findWhere(messages, { id: message.id }))
+        return false
+      // in this room
+      if(message.room_id == current_room.id){
+        AppStore.data.messages.push(message)
+        AppStore.emitChange()
+      }
+    })
   }
 
   showModal(modal_key){

@@ -29,6 +29,15 @@ app.use(session({
 }))
 app.use(bodyParser.json())
 
+// Socket.io
+const http = require('http').Server(app)
+const io = require('socket.io')(http)
+io.on('connection', function(socket){
+  socket.on('chat message', function(message){
+    io.emit('chat message', message)
+  })
+})
+
 // For dev port access
 if(process.env.NODE_ENV === 'development'){
   app.use(function(req, res, next) {
@@ -43,6 +52,6 @@ if(process.env.NODE_ENV === 'development'){
 require('./routes')(app, config)
 
 // Start app
-app.listen(app.get('port'))
+http.listen(app.get('port'))
 console.info('==> ✅  Server is listening in ' + process.env.NODE_ENV + ' mode');
 console.info('==> 🌎  Go to http://localhost:%s', app.get('port'));

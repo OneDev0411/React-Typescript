@@ -11,14 +11,20 @@ export default (user, password, confirm_password, redirect_to) => {
     password = password.trim()
     confirm_password = confirm_password.trim()
   }
+  let first_name = user.first_name.trim()
+  let last_name = user.last_name.trim()
 
   /* Handle errors
   ==================== */
   let error_type
   let password_error
 
-  // Password
-  if(!validator.isEmail(email) || password.length < 6 || password !== confirm_password){
+  // Validattion
+  if(!validator.isEmail(email) || 
+    password.length < 6 ||
+    password !== confirm_password ||
+    !first_name || !last_name
+  ){
     
     if(!validator.isEmail(email)){
       error_type = 'email'
@@ -34,6 +40,14 @@ export default (user, password, confirm_password, redirect_to) => {
         error_type = 'password'
         password_error = 'no-match'
       }
+    }
+
+    if(!first_name){
+      error_type = 'first_name'
+    }
+
+    if(!last_name){
+      error_type = 'last_name'
     }
     
     AppStore.data = {
