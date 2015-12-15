@@ -35,26 +35,3 @@ export default class MainNav extends Component {
     )
   }
 }
-
-/*
-<nav style={ nav_bar_style } className="navbar main-navbar bg-alabaster">
-  <div className="container-fluid">
-    <ul style={ S('ml-20n') } className="nav navbar-nav navbar-left">
-      <li className="dropdown">
-        <div style={ S('absolute pt-7 pl-7') }>
-          <ProfileImage data={ data } profile_image_url={ profile_image_url } />
-        </div>
-        <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style={ S('font-12 pl-55 z-1 color-333')}>
-          { first_name } { last_name } <span style={ S('color-c3c3c3') } className="caret"></span>
-        </a>
-        <ul className="dropdown-menu">
-          <li><Link to="/account/settings"><i className="fa fa-cog" style={ S('mr-15') }></i>Settings</Link></li>
-          <li><Link to="/account/notifications"><i className="fa fa-envelope" style={ S('mr-15') }></i>Notifications</Link></li>
-          <li role="separator" className="divider"></li>
-          <li><a href="/signout"><i className="fa fa-power-off" style={ S('mr-15') }></i>Sign out</a></li>
-        </ul>
-      </li>
-    </ul>
-  </div>
-</nav>
-*/

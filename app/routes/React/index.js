@@ -18,6 +18,10 @@ module.exports = (app, config) => {
 
     match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
 
+      // timestamp bundle
+      const date = new Date
+      res.locals.time = date.getTime()
+
       delete AppStore.user
       
       // Landing page data

@@ -24,13 +24,14 @@ app.on('window-all-closed', function() {
 app.on('ready', function() {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 1000, height: 800, minWidth: 1000, minHeight: 800});
-
+  
   // and load the index.html of the app.
   mainWindow.loadURL(process.env.LOAD_URL || `http://chappar.d.rechat.co/signin`);
 
+  mainWindow.webContents.clearHistory();
+  
   // Open the DevTools.
-  if(process.env.NODE_ENV === 'development')
-    mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function() {

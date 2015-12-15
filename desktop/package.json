@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "electron index.js",
-    "development": "NODE_ENV=development LOAD_URL=http://localhost:3000/signin electron index.js",
+    "development": "NODE_ENV=development LOAD_URL=http://localhost:8080/signin electron index.js",
     "package": "electron-packager . Rechat --out ./builds --platform=darwin --arch=x64 --version=0.36.0 --icon images/logo.icns --overwrite"
   },
   "devDependencies": {
