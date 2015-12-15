@@ -28,10 +28,9 @@ app.on('ready', function() {
   // and load the index.html of the app.
   mainWindow.loadURL(process.env.LOAD_URL || `http://chappar.d.rechat.co/signin`);
 
-  mainWindow.webContents.clearHistory();
-  
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  if(process.env.NODE_ENV === 'development')
+    mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function() {
