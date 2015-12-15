@@ -2,49 +2,33 @@
 import { expect } from 'chai'
 import User from '../app/models/User'
 import Room from '../app/models/Room'
+import Message from '../app/models/Message'
 import config from '../config'
 
-describe('Testing models', function() {
-  
-  // Get access token
-  let access_token
-  let user_id
-  const test = config.test
-  
-  const signin_params = {
-    email: test.user.email,
-    password: test.user.password,
-    api_host: test.api_host
-  }
+// Get access token
+let access_token
+let room_id
+let test = config.test
+const random_email = randomString(9) + '@rechat.co'
+const random_phone = Math.floor(Math.random() * 1000000000)
 
-  before(function(done){
-    User.signin(signin_params, (err, response) => {
-      expect(response.status).to.equal('success')
-      access_token = response.access_token
-      test.user.id = response.data.id
-      done()
-    })
-  })
-
-  /* User
-  ======================== */
-  // Signup
-  const random_email = randomString(9) + '@rechat.co'
-  const random_phone = Math.floor(Math.random() * 1000000000)
-  const user = {
-    first_name: "Test",
-    last_name: "User",
-    email: random_email,
-    user_type: "Client",
-    password: test.user.password,
-    phone_number: random_phone,
-    grant_type: "password"
-  }
-  const create_params = {
-    user: user,
-    api_host: test.api_host
-  }
+describe('Testing User model', function() {
+  
+  // Create
   it('User.create should return access token from UN:' + random_email + ' PHONE: ' + random_phone + ' PW:' + test.user.password, function(done) {
+    const user = {
+      first_name: 'Test',
+      last_name: 'User',
+      email: random_email,
+      user_type: 'Client',
+      password: test.user.password,
+      phone_number: random_phone,
+      grant_type: 'password'
+    }
+    const create_params = {
+      user: user,
+      api_host: test.api_host
+    }
     User.create(create_params, (err, response) => {
       expect(response.status).to.equal('success')
       done()
@@ -53,7 +37,14 @@ describe('Testing models', function() {
 
   // Signin
   it('User.signin should return access token from UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
+    const signin_params = {
+      email: test.user.email,
+      password: test.user.password,
+      api_host: test.api_host
+    }
     User.signin(signin_params, (err, response) => {
+      access_token = response.access_token
+      test.user.id = response.data.id
       expect(response.status).to.equal('success')
       done()
     })
@@ -83,8 +74,10 @@ describe('Testing models', function() {
     })
   });
 
-  /* Rooms
-  ======================== */
+})
+
+describe('Testing Room model', function() {
+  
   // Create room
   it('Room.create should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
     const create_room_params = {
@@ -94,13 +87,28 @@ describe('Testing models', function() {
       api_host: test.api_host
     }
     Room.create(create_room_params, (err, response) => {
+      room_id = response.data.id
       expect(response.status).to.equal('success')
       done()
     })
-  
-  });
+  })
 
-});
+  // Create message
+  it('Message.create should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
+    const create_message_params = {
+      room_id: room_id,
+      comment: 'Test message',
+      message_type: 'TopLevel',
+      author: test.user.id,
+      access_token: access_token,
+      api_host: test.api_host
+    }
+    Message.create(create_message_params, (err, response) => {
+      expect(response.status).to.equal('success')
+      done()
+    })
+  })
+})
 
 function randomString(len, charSet) {
   charSet = charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';

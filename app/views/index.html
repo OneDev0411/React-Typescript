@@ -8,15 +8,36 @@
 -->
 <html lang="en">
 <head>
-  <script src="https://use.typekit.net/hcm6uba.js"></script>
+  <script src="https://use.typekit.net/cgf3dts.js"></script>
   <script>try{Typekit.load({ async: true });}catch(e){}</script>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
   <meta name="author" content="">
-  <title>Rechat Universal</title>
-  <link href="/dist/css/main.css" rel="stylesheet">
+  <title>Rechat</title>
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png" />
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-196x196.png" sizes="196x196" />
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16" />
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-128.png" sizes="128x128" />
+  <meta name="application-name" content="&nbsp;"/>
+  <meta name="msapplication-TileColor" content="#FFFFFF" />
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png" />
+  <meta name="msapplication-square70x70logo" content="/images/favicons/mstile-70x70.png" />
+  <meta name="msapplication-square150x150logo" content="/images/favicons/mstile-150x150.png" />
+  <meta name="msapplication-wide310x150logo" content="/images/favicons/mstile-310x150.png" />
+  <meta name="msapplication-square310x310logo" content="/images/favicons/mstile-310x310.png" />
+
+  <link href="/dist/css/main.css?v={{ time }}" rel="stylesheet">
   <!-- Custom Fonts -->
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -26,10 +47,8 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
   <![endif]-->
 </head>
-<body>
+<body class="page-{{ page_slug }}">
   <div id="app">{{{ reactMarkup }}}</div>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <div class="hidden">
     {{# AppStore }}
     <script id="AppStore" type="application/json">{{{ AppStore }}}</script>
@@ -40,6 +59,13 @@
     </script>
     {{/ AppStore }}
   </div>
-  <script src="/dist/bundle.js"></script>
+  <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+  <script src="/dist/bundle.js?v={{ time }}"></script>
+  <script>
+  window.intercomSettings = {
+    app_id: "pkzkvg9a"
+  };
+</script>
+<script>(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/pkzkvg9a';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()</script>
 </body>
 </html>

@@ -43,9 +43,8 @@ export default class SignIn extends Component {
 
     // If sign in successful
     let data = this.props.data
-    if(data.user){
+    if(data.user)
       this.props.history.pushState(null, '/dashboard/recents')
-    }
   }
 
   render(){
@@ -60,36 +59,33 @@ export default class SignIn extends Component {
     let validation = data.validation
     let email_style
     let password_style
-    if(errors && !validation.email){
+    if(errors && validation && !validation.email)
       email_style = 'error'
-    }
-    if(errors && !validation.password){
+    
+    if(errors && validation && !validation.password)
       password_style = 'error'
-    }
 
     let submitting = data.submitting
-    let submitting_class
-    if(submitting){
+    let submitting_class = ''
+    if(submitting)
       submitting_class = 'disabled'
-    }
     
     let message
-    if(data.show_message){
+    if(data.show_message)
       message = (
         <Alert bsStyle="danger">
           There was an error with this request.
         </Alert>
       )
-    }
 
     return (
       <div id="main-content" className="container">
-        <div className="text-center center-block" style={ S('maxw-400') }>
+        <div className="text-center center-block" style={ S('maxw-300') }>
           <BigHeading />
-          <h1 style={ lightWeight }>Sign in</h1>
+          <div style={ S('color-929292 mb-20') }>Sign in</div>
           <form action="/signin" onSubmit={ this.handleSubmit.bind(this) }>
             <Input bsStyle={ email_style } type="text" ref="email" placeholder="Email"/>
-            <Input bsStyle={ password_style } type="text" ref="password" placeholder="Password"/>
+            <Input bsStyle={ password_style } type="password" ref="password" placeholder="Password"/>
             <div style={ S('color-929292 font-13 mt-0 mb-10') } className="pull-right"><Link to="/password/forgot">Forgot Password</Link></div>
             <div className="clearfix"></div>
             { message }

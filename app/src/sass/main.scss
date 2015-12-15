@@ -1,7 +1,15 @@
 // main.scss
+@import 'vendor/bootstrap/stylesheets/_bootstrap.scss';
+@import 'components/resets';
 @import 'components/typography';
 @import 'components/buttons';
 @import 'components/loader';
 @import 'components/colors';
-@import 'components/layout';
-@import 'vendor/bootstrap/stylesheets/_bootstrap.scss';
+@import 'components/flexbox';
+@import 'components/global';
+@import 'components/nav';
+@import 'components/sidebar';
+
+// Pages
+@import 'components/pages/landing';
+@import 'components/pages/dashboard';

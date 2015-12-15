@@ -1,6 +1,7 @@
 node_modules
 .DS_Store
 npm-debug.log
-app/public/dist/bundle.js
+app/public/dist
 app/public/index.html
 config/development.js
+desktop/builds

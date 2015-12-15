@@ -11,14 +11,14 @@ export default class Home extends Component {
     const data = this.props.data
     
     // Styles
-    const btnStyle = S('font-18 w-400 mb-20 bc-3388ff color-3388ff')
+    const btnStyle = S('font-18 w-100p maxw-400 mb-20 bc-3388ff color-3388ff')
     const lightWeight = S('fw-100')
     const lightBtn = { ...btnStyle, ...lightWeight, ...S('p-10') }
     const tagStyle = S('font-46 mb-40')
     const bold = S('font-40 mb-20')
 
     return (
-      <div id="main-content" className="container">
+      <div id="main-content" className="container" style={ S('mb-40') }>
         <div className="text-center col-sm-12">
           <div style={ S('m-20') }>
             <img src="/images/home/family-1.png"/>

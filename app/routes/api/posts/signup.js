@@ -41,14 +41,14 @@ module.exports = (app, config) => {
           "status": "error",
           "message": "There was an error with this request."
         }
-        return res.end(JSON.stringify(error))
+        return res.json(error)
       }
       return response.json()
     })
     .then(response => {
       let response_object = response
       response_object.status = 'success'
-      return res.end(JSON.stringify(response_object))
+      return res.json(response_object)
     });
   })
 

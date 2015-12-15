@@ -4,11 +4,17 @@ import { Link } from 'react-router'
 import { Input, Button, Col, Alert } from 'react-bootstrap'
 import S from 'shorti'
 
+// AppStore
+import AppStore from '../../../../stores/AppStore'
+
 export default class Forgot extends Component {
 
   handleSubmit(e){
     
     e.preventDefault()
+    AppStore.data.submitting = true
+    AppStore.emitChange()
+
     let email = this.refs.email.getInputDOMNode().value
     let form_data = {
       email: email
@@ -53,13 +59,21 @@ export default class Forgot extends Component {
         alert_style = 'success'
         message_text = `We've sent you an email with instructions on how to reset your password.  Please check your email.`
       }
-
-      message = (
-        <Alert bsStyle={ alert_style }>
-          { message_text }
-        </Alert>
-      )
+      
+      if(message_text){
+        message = (
+          <Alert bsStyle={ alert_style }>
+            { message_text }
+          </Alert>
+        )
+      }
+      
     }
+
+    let submitting = data.submitting
+    let submitting_class = ''
+    if(submitting)
+      submitting_class = 'disabled'
 
     let main_content = (
       <div>
@@ -67,11 +81,19 @@ export default class Forgot extends Component {
         <form onSubmit={ this.handleSubmit.bind(this) }>
           <Input bsStyle={ email_style } ref="email" placeholder="Email address" type="text" />
           { message }
-          <Col sm={4} style={ S('p-0 pr-10') }>
+          <Col sm={4} className="forgot__password-btn--cancel" style={ S('p-0 pr-10') }>
             <Link className="btn btn-default" style={ S('w-100p') } to="/signin">Cancel</Link>
           </Col>
           <Col sm={8} style={ S('p-0') }>
-            <Button type="submit" style={ S('w-100p') } bsStyle="primary">Reset Password</Button>
+            <Button 
+              type="submit"
+              ref="submit"
+              className={ submitting_class + "btn btn-primary" }
+              disabled={ submitting }
+              style={ S('w-100p') }
+            >
+              { submitting ? 'Submitting...' : 'Reset Password' }
+            </Button>
           </Col>
           <div className="clearfix"></div>
           <div style={ S('mt-20 color-929292 font-13') }>Change your mind? <Link to="/signin">Sign in</Link></div>
@@ -89,7 +111,7 @@ export default class Forgot extends Component {
     }
 
     return (
-      <div className="center-block" style={ S('maxw-400') }>
+      <div className="center-block" style={ S('maxw-300') }>
         { main_content }
       </div>
     )

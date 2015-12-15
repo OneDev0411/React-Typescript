@@ -6,6 +6,9 @@ import ReactDOMServer from 'react-dom/server'
 // Store
 import AppStore from '../../stores/AppStore'
 
+// AppDispatcher
+import AppDispatcher from '../../dispatcher/AppDispatcher'
+
 // Config
 import routes from './Config'
 
@@ -14,8 +17,25 @@ module.exports = (app, config) => {
   app.get('*',(req, res) => {
 
     match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
+
+      // timestamp bundle
+      const date = new Date
+      res.locals.time = date.getTime()
+
+      delete AppStore.user
       
-      let reactMarkup = ReactDOMServer.renderToStaticMarkup(<RoutingContext data={AppStore.data} {...renderProps} />)
+      // Landing page data
+      if(req.url === '/'){
+        let random_number = Math.round(Math.random())
+        AppDispatcher.dispatch({
+          action: 'init-landing',
+          random_number: random_number
+        })
+        res.locals.page_slug = 'landing'
+        res.locals.AppStore = JSON.stringify(AppStore)
+      }
+
+      let reactMarkup = ReactDOMServer.renderToString(<RoutingContext data={AppStore.data} {...renderProps} />)
       
       res.locals.reactMarkup = reactMarkup
 

@@ -7,8 +7,9 @@ import S from 'shorti'
 export default class SideBar extends Component {
   render(){
     
-    const sidebarStyle = S('w-250 fixed h-100p p-20 pt-0')
     const data = this.props.data
+    const sidebar_height = window.innerHeight - 58
+    const sidebar_style = S('w-222 relative p-20 pl-0 pt-20 h-' + sidebar_height)
     const path = data.path
 
     let active_key
@@ -29,28 +30,23 @@ export default class SideBar extends Component {
     }
 
     return (
-      <aside style={ sidebarStyle } className="bg-alabaster">
+      <aside style={ sidebar_style } className="bg-alabaster sidebar--dashboard pull-left">
         <Nav bsStyle="pills" stacked activeKey={ active_key }>
           <LinkContainer to="/dashboard/recents">
-            <NavItem eventKey={1}>Recents</NavItem>
+            <NavItem style={ S('w-70p') } eventKey={1}>Recents</NavItem>
           </LinkContainer>
           <LinkContainer to="/dashboard/mls">
-            <NavItem eventKey={2}>MLS</NavItem>
+            <NavItem style={ S('w-70p') } eventKey={2}>MLS</NavItem>
           </LinkContainer>
           <LinkContainer to="/dashboard/contacts">
-            <NavItem eventKey={3}>Contacts</NavItem>
+            <NavItem style={ S('w-70p') } eventKey={3}>Contacts</NavItem>
           </LinkContainer>
           <LinkContainer to="/dashboard/tasks">
-            <NavItem eventKey={4}>Tasks</NavItem>
+            <NavItem style={ S('w-70p') } eventKey={4}>Tasks</NavItem>
           </LinkContainer>
           <LinkContainer to="/dashboard/transactions">
-            <NavItem eventKey={5}>Transactions</NavItem>
+            <NavItem style={ S('w-70p') } eventKey={5}>Transactions</NavItem>
           </LinkContainer>
-        </Nav>
-        <h6 style={ S('mt-20') }>Favorites</h6>
-        <Nav stacked>
-          <NavItem>Fave 1</NavItem>
-          <NavItem title="Item">Fave 2</NavItem>
         </Nav>
       </aside>
     )

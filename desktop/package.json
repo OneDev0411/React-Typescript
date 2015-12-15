@@ -1,0 +1,14 @@
+{
+  "name": "electron-quick-start",
+  "version": "1.0.0",
+  "description": "A minimal Electron application",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron index.js",
+    "development": "NODE_ENV=development LOAD_URL=http://localhost:8080/signin electron index.js",
+    "package": "electron-packager . Rechat --out ./builds --platform=darwin --arch=x64 --version=0.36.0 --icon images/logo.icns --overwrite"
+  },
+  "devDependencies": {
+    "electron-prebuilt": "^0.35.0"
+  }
+}

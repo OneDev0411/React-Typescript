@@ -1,13 +1,12 @@
 // verify.js
-
-// Crypto
 import Crypto from '../../models/Crypto'
+import helpers from '../../utils/helpers'
 
 module.exports = (app, config) => {
 
   app.get('/verify_email',(req, res) => {
     
-    const token = req.query.token
+    const token = helpers.prepareToken(req.query.token)
     const decrypted_token = Crypto.decrypt(token).split(':')
     const email = decrypted_token[0]
     const code = decrypted_token[1]
@@ -32,7 +31,7 @@ module.exports = (app, config) => {
         // redirect to error page
         return res.redirect('/verify/email?status=error')
       }
-      return response.json()
+      return response
     })
     .then((response) => {
       // redirect to success page

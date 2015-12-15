@@ -1,4 +1,4 @@
-// api/posts/add-room.js
+// api/posts/create-room.js
 module.exports = (app, config) => {
   
   app.post('/api/create-room',(req, res) => {
@@ -17,8 +17,6 @@ module.exports = (app, config) => {
       owner: owner
     }
 
-    res.setHeader('Content-Type', 'application/json');
-
     fetch(create_room_url,{
       method: 'post',
       headers: {  
@@ -33,14 +31,14 @@ module.exports = (app, config) => {
           "status": "error",
           "message": "There was an error with this request."
         }
-        return res.end(JSON.stringify(error))
+        return res.json(error)
       }
       return response.json()
     })
     .then(response => {
       let response_object = response
       response_object.status = 'success'
-      return res.end(JSON.stringify(response_object))
+      return res.json(response_object)
     });
   })
 

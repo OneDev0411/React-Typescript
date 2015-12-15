@@ -29,10 +29,29 @@ app.use(session({
 }))
 app.use(bodyParser.json())
 
+// Socket.io
+const http = require('http').Server(app)
+const io = require('socket.io')(http)
+io.on('connection', function(socket){
+  socket.on('chat message', function(message){
+    io.emit('chat message', message)
+  })
+})
+
+// For dev port access
+if(process.env.NODE_ENV === 'development'){
+  app.use(function(req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:' + process.env.DEV_PORT)
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+    res.setHeader('Access-Control-Allow-Credentials', 'true')
+    next()
+  })
+}
+
 // Routes
 require('./routes')(app, config)
 
 // Start app
-app.listen(app.get('port'))
-console.info("==> ✅  Server is listening in production mode");
-console.info("==> 🌎  Go to http://localhost:%s", app.get('port'));
+http.listen(app.get('port'))
+console.info('==> ✅  Server is listening in ' + process.env.NODE_ENV + ' mode');
+console.info('==> 🌎  Go to http://localhost:%s', app.get('port'));

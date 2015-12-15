@@ -1,7 +1,13 @@
 // webpack.config.js
-var path = require('path');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var loaders = ['babel']
+if(process.env.NODE_ENV === 'development')
+  loaders = ['react-hot','babel']
+var path = require('path')
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
 module.exports = {
+  devServer: {
+    port: process.env.DEV_PORT
+  },
   entry: './app/app-client.js',
   output: {
     path: path.join(__dirname, 'app/public/dist'),
@@ -11,7 +17,7 @@ module.exports = {
   module: {
     loaders: [{
       test: /\.js$/,
-      loaders: ['react-hot','babel'],
+      loaders: loaders,
       exclude: /node_modules/
     },
     {
@@ -22,4 +28,4 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin('css/main.css')
  ]
-};
+}

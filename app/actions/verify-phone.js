@@ -27,8 +27,12 @@ export default (code, token) => {
   
   }
   
+  const params = {
+    code: code,
+    token: token
+  }
   
-  User.verifyPhone(code, token, (err, response) => {
+  User.verifyPhone(params, (err, response) => {
     
     // Success
     if(response.status == 'success'){
