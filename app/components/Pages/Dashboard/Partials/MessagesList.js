@@ -7,7 +7,7 @@ import ProfileImage from './ProfileImage'
 import helpers from '../../../../utils/helpers'
 import emojify from 'emojify.js'
 import linkifyString from 'linkifyjs/string'
-import { Input, Tooltip, Overlay } from 'react-bootstrap'
+import { Input } from 'react-bootstrap'
 import config from '../../../../../config/public'
 
 emojify.setConfig({
