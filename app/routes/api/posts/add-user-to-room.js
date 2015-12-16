@@ -1,20 +1,22 @@
-// api/posts/forgot-password.js
+// api/posts/add-user-to-room.js
 module.exports = (app, config) => {
   
-  app.post('/api/forgot-password',(req, res) => {
-
-    const email = req.body.email
+  app.post('/api/add-user-to-room',(req, res) => {
     const api_url = config.api.url
-    const signin_url = api_url + '/users/reset_password'
+    const room_id = req.body.room_id
+    const add_user_to_room_url = api_url + '/rooms/' + room_id + '/users'
+    const users = req.body.users
+    const access_token = req.body.access_token
 
     const request_object = {
-      'email': email
+      users: users
     }
-
-    fetch(signin_url,{
+    
+    fetch(add_user_to_room_url,{
       method: 'post',
       headers: {  
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'authorization': 'Bearer ' + access_token,
       },
       body: JSON.stringify(request_object)
     })
@@ -26,13 +28,12 @@ module.exports = (app, config) => {
         }
         return res.json(error)
       }
-      return response
+      return response.json()
     })
     .then(response => {
-      let response_object = {}
+      let response_object = response
       response_object.status = 'success'
       return res.json(response_object)
     });
   })
-
 }

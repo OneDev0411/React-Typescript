@@ -12,6 +12,7 @@ module.exports = (app, config) => {
   require('./posts/reset-password')(app, config)
   require('./posts/verify-phone')(app, config)
   require('./posts/create-room')(app, config)
+  require('./posts/add-user-to-room')(app, config)
   require('./posts/create-message')(app, config)
 
 }

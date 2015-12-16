@@ -1,4 +1,8 @@
 // index.js
+import config from '../../../config'
+
+// Room
+import Room from '../../models/Room'
 
 // Store
 import AppStore from '../../stores/AppStore'
@@ -23,6 +27,9 @@ module.exports = (app, config) => {
 
   app.get('/dashboard*', (req, res, next) => {
     if(req.session.user){
+      // timestamp bundle
+      const date = new Date
+      res.locals.time = date.getTime()
       AppStore.data.user = req.session.user
       res.locals.AppStore = JSON.stringify(AppStore)
       return res.status(200).render('index.html')
@@ -46,5 +53,33 @@ module.exports = (app, config) => {
     res.locals.AppStore = JSON.stringify(AppStore)
     return res.render('index.html')
   })
-  
+
+  app.get('/invite',(req, res) => {
+    
+    const room_id = req.query.room_id
+    const invite_token = req.query.invite_token
+    
+    // If already signed in
+    if(req.session.user){
+      const user = req.session.user
+      const add_user_params = {
+        room_id: room_id,
+        users: [user.id],
+        access_token: invite_token,
+        api_host: config.api_host
+      }
+      Room.addUser(add_user_params, (err, response) => {
+        if(err){
+          return res.redirect('/?error=add-user-to-room')  
+        }
+        return res.redirect('/dashboard/recents/' + room_id)
+      })
+    } else {
+      req.session.invite = {
+        room_id: req.query.room_id,
+        invite_token: req.query.invite_token
+      }
+      return res.redirect('/signin?message=invite-room')
+    }
+  })
 }

@@ -1,5 +1,5 @@
 // models/iCloud.js
-import icloud = from 'icloud'
+import icloud from 'icloud'
 const instance = icloud()
 
 export default {

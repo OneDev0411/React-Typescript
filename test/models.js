@@ -108,6 +108,20 @@ describe('Testing Room model', function() {
       done()
     })
   })
+
+  // Add user
+  it('Room.addUser should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
+    const add_user_params = {
+      room_id: room_id,
+      users: [test.addUser.id],
+      access_token: access_token,
+      api_host: test.api_host
+    }
+    Room.addUser(add_user_params, (err, response) => {
+      expect(response.status).to.equal('success')
+      done()
+    })
+  })
 })
 
 function randomString(len, charSet) {

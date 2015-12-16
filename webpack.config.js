@@ -15,15 +15,22 @@ module.exports = {
     publicPath: '/dist/'
   },
   module: {
-    loaders: [{
-      test: /\.js$/,
-      loaders: loaders,
-      exclude: /node_modules/
-    },
-    {
-      test: /\.scss$/,
-      loader: ExtractTextPlugin.extract('style', 'css!sass')
-    }]
+    loaders: [
+      {
+        test: /\.js$/,
+        loaders: loaders,
+        exclude: /node_modules/
+      },
+      {
+        test: /\.scss$/,
+        loader: ExtractTextPlugin.extract('style', 'css!sass')
+      },
+      {
+        test: /\.js$/, 
+        loader: 'eslint-loader',
+        exclude: /node_modules/
+      }
+    ]
   },
   plugins: [
     new ExtractTextPlugin('css/main.css')

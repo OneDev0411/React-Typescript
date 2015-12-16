@@ -99,7 +99,7 @@ export default class Reset extends Component {
           <Button 
             type="submit"
             ref="submit"
-            className={ submitting_class + "btn btn-primary" }
+            className={ submitting_class + 'btn btn-primary' }
             disabled={ submitting }
             style={ S('w-100p') }
           >

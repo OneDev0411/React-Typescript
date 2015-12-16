@@ -1,4 +1,9 @@
 // api/posts/signin.js
+import config from '../../../../config'
+
+// Room
+import Room from '../../../models/Room'
+
 module.exports = (app, config) => {
   
   app.post('/api/signin',(req, res) => {
@@ -29,8 +34,8 @@ module.exports = (app, config) => {
     .then(response => {
       if (response.status >= 400) {
         var error = {
-          "status": "error",
-          "message": "There was an error with this request."
+          status: 'error',
+          message: 'There was an error with this request.'
         }
         return res.json(error)
       }
@@ -42,7 +47,26 @@ module.exports = (app, config) => {
       let user = response.data
       user.access_token = response.access_token
       req.session.user = user
-      return res.json(response_object)
+
+      // check for invite vars
+      const invite = req.session.invite
+      if(invite){
+        const add_user_params = {
+          room_id: invite.room_id,
+          users: [user.id],
+          access_token: invite.invite_token,
+          api_host: config.api_host
+        }
+        Room.addUser(add_user_params, (err, response) => {
+          delete req.session.invite
+          return res.json(response_object)
+        })
+        
+      } else {
+        
+        return res.json(response_object)
+
+      }
     });
   })
 

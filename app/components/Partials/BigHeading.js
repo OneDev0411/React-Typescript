@@ -11,7 +11,7 @@ export default class BigHeading extends Component {
     const headingStyle = S('font-60 color-3388ff')
     
     return (
-      <Link style={ { "textDecoration": "none" } } to="/">
+      <Link style={ { 'textDecoration': 'none' } } to="/">
         <h1 className="tk-calluna-sans" style={ headingStyle }>Rechat</h1>
       </Link>
     )

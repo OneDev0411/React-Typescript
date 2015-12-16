@@ -29,8 +29,8 @@ export default {
     .then((response) => {
       if (response.status >= 400) {
         let error = {
-          "status": "error",
-          "message": "There was an error with this request."
+          status: 'error',
+          message: 'There was an error with this request.'
         }
         return callback(error, false)
       }
@@ -66,8 +66,8 @@ export default {
     .then((response) => {
       if (response.status >= 400) {
         let error = {
-          "status": "error",
-          "message": "There was an error with this request."
+          status: 'error',
+          message: 'There was an error with this request.'
         }
         return callback(error, false)
       }
@@ -100,8 +100,8 @@ export default {
     .then((response) => {
       if (response.status >= 400) {
         let error = {
-          "status": "error",
-          "message": "There was an error with this request."
+          status: 'error',
+          message: 'There was an error with this request.'
         }
         return callback(error, false)
       }
@@ -135,8 +135,8 @@ export default {
     .then((response) => {
       if (response.status >= 400) {
         let error = {
-          "status": "error",
-          "message": "There was an error with this request."
+          'status': 'error',
+          'message': 'There was an error with this request.'
         }
         return callback(error, false)
       }
@@ -171,8 +171,8 @@ export default {
     .then((response) => {
       if (response.status >= 400) {
         let error = {
-          "status": "error",
-          "message": "There was an error with this request."
+          status: 'error',
+          message: 'There was an error with this request.'
         }
         return callback(error, false)
       }
@@ -196,8 +196,8 @@ export default {
     .then((response) => {
       if (response.status >= 400) {
         let error = {
-          "status": "error",
-          "message": "There was an error with this request."
+          status: 'error',
+          message: 'There was an error with this request.'
         }
         return callback(error, false)
       }
