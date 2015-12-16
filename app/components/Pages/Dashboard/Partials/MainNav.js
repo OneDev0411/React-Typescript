@@ -24,7 +24,7 @@ export default class MainNav extends Component {
           <div style={ S('absolute pt-7 pl-8 z-0') }>
             <ProfileImage data={ data } profile_image_url={ profile_image_url } />
           </div>
-          <NavDropdown className="main-nav-dropdown--account" style={ S('ml39n') } eventKey={3} title={ first_name + ' ' + last_name }>
+          <NavDropdown id="main-nav-dropdown" className="main-nav-dropdown--account" style={ S('ml39n') } eventKey={3} title={ first_name + ' ' + last_name }>
             <li><Link to="/account/settings"><i className="fa fa-cog" style={ S('mr-15') }></i>Settings</Link></li>
             <li><Link to="/account/notifications"><i className="fa fa-envelope" style={ S('mr-15') }></i>Notifications</Link></li>
             <li role="separator" className="divider"></li>

@@ -61,7 +61,7 @@ export default class MainContent extends Component {
 
     // Messages
     const messages_column_style = {
-      ...S('absolute pt-25 l-320 minw-450'),
+      ...S('absolute pt-15 l-320 minw-450'),
       height: window.innerHeight - 58,
       width: window.innerWidth - 542
     }
@@ -78,12 +78,22 @@ export default class MainContent extends Component {
       </div>
     )
 
+    let is_typing
+    if(data.is_typing && data.is_typing.id != data.user.id){
+      is_typing = (
+        <div style={ S('absolute l-20 t-0 font-12') }>
+          { data.is_typing.first_name } is typing
+        </div>
+      )
+    }
+
     // Create message form
     let footer_form = (
       <div style={ footer_style }>
+        { is_typing }
         <form onSubmit={ this.props.createMessage.bind(this) }>
           <div className="form-group" style={ S('w-100p') }>
-            <input ref="message_input" type="text" className="form-control" style={ S('w-100p pl-70 bw-2') } placeholder="Type your message and press enter"/>
+            <input onKeyDown={ this.props.handleMessageTyping.bind(this) } ref="message_input" type="text" className="form-control" style={ S('w-100p pl-70 bw-2') } placeholder="Type your message and press enter"/>
             <button type="button" className="btn btn-default create-message__btn" style={ S('absolute bw-2 p-0 w-56 h-38 l-20 t-20') }>
               <span className="plus" style={ S('font-22 relative t-1n color-ccc') }>+</span>
             </button>
@@ -100,9 +110,9 @@ export default class MainContent extends Component {
       main_content = (
         <div style={ main_style }>
           <div className="dashboard__chat-rooms pull-left" style={ rooms_column_style }>
-            <div style={ S('p-10 pt-20 h-60 relative') }>
+            <div style={ S('p-10 pt-15 h-60 relative') }>
               <input ref="search_text" onKeyUp={ this.handleKeyUp.bind(this) } style={ S('w-85p br-10') } type="text" placeholder="Search chats" className="form-control pull-left" />
-              <button onClick={ this.showModal.bind(this,'create-chat') } type="button" className="btn btn-primary" style={ S('w-40 h-40 ml-6 pointer absolute p-0 t-20 r-8 br-100') } >
+              <button onClick={ this.showModal.bind(this,'create-chat') } type="button" className="btn btn-primary" style={ S('w-40 h-40 ml-6 pointer absolute p-0 t-15 r-8 br-100') } >
                 <img src="/images/svgs/create-chat.svg"/>
               </button>
               <div className="clearfix"></div>

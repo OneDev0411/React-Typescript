@@ -28,7 +28,7 @@ export default class RoomsList extends Component {
 
     if(data.is_filtering)
       rooms = data.filtered_rooms
-    
+
     if(rooms){
       rooms_list = rooms.map((room, i) => {
         let profile_image_url
@@ -72,9 +72,9 @@ export default class RoomsList extends Component {
 
     // Styles
     const rooms_scroll_area = {
-      ...S('mt-15'),
+      ...S('mt-5'),
       overflow: 'scroll',
-      height: window.innerHeight - 148
+      height: window.innerHeight - 123
     }
 
     return (

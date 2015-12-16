@@ -5,6 +5,21 @@ import S from 'shorti'
 import Loading from '../../../Partials/Loading'
 import ProfileImage from './ProfileImage'
 import helpers from '../../../../utils/helpers'
+import emojify from 'emojify.js'
+import linkifyString from 'linkifyjs/string'
+
+emojify.setConfig({
+  emojify_tag_type : 'div',           // Only run emojify.js on this element
+  only_crawl_id    : null,            // Use to restrict where emojify.js applies
+  img_dir          : '/images/emoji',  // Directory for emoji images
+  ignored_tags     : {                // Ignore the following tags
+    'SCRIPT'  : 1,
+    'TEXTAREA': 1,
+    'A'       : 1,
+    'PRE'     : 1,
+    'CODE'    : 1
+  }
+})
 
 export default class MessagesList extends Component {
 
@@ -69,7 +84,7 @@ export default class MessagesList extends Component {
                 <span style={ S('color-ccc ml-20') } >
                   { time_created.month } { time_created.date }, { time_created.time_friendly }
                 </span>
-                <div>{ message.comment }</div>
+                <div dangerouslySetInnerHTML={ { __html: emojify.replace(linkifyString(message.comment)) } }></div>
                 { message_image }
               </div>
               <div className="clearfix"></div>
@@ -82,12 +97,12 @@ export default class MessagesList extends Component {
       const messages_scroll_area = {
         ...S('pl-20 pr-20'),
         overflow: 'scroll',
-        height: window.innerHeight - 198
+        height: window.innerHeight - 178
       }
 
       return (
         <div>
-          <button onClick={ this.props.showModal.bind(this,'invite-user') } type="button" className="btn btn-default invite-user__btn" style={ S('w-40 h-40 ml-6 pointer absolute p-0 t-20 r-8 br-100 bc-ddd bw-1 solid') } >
+          <button onClick={ this.props.showModal.bind(this,'invite-user') } type="button" className="btn btn-default invite-user__btn" style={ S('w-40 h-40 ml-6 pointer absolute p-0 t-15 r-8 br-100 bc-ddd bw-1 solid') } >
             <img style={ S('ml-1n mt-1n') } src="/images/svgs/invite-user.svg"/>
           </button>
           <h3 style={ S('mt-0 ml-20 mr-50') }>{ current_room.title }</h3>

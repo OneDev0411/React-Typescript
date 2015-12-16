@@ -4,6 +4,7 @@ import { Link } from 'react-router'
 import { Nav, NavItem } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
+import config from '../../../../config/public'
 
 // AppDispatcher
 import AppDispatcher from '../../../dispatcher/AppDispatcher'
@@ -18,10 +19,22 @@ import SideBar from './Partials/SideBar'
 
 export default class Dashboard extends Component {
 
+  handleMessageTyping(){
+    const socket = io(config.socket.server)
+    const data = AppStore.data
+    if(data.is_typing)
+      return false
+    socket.emit('authenticate', data.user.access_token)
+    socket.emit('typing')
+    setTimeout(() => {
+      socket.emit('typing ended')
+    }, 3000)
+  }
+
   filterRooms(search_text){
     const data = AppStore.data
     const rooms = data.rooms
-    const filtered_rooms = rooms.filter((room)=>{
+    const filtered_rooms = rooms.filter((room) => {
       return room.title.toLowerCase().indexOf(search_text.toLowerCase())!==-1
     })
     if(!search_text){
@@ -93,19 +106,32 @@ export default class Dashboard extends Component {
   }
 
   componentDidMount(){
-    let socket = io()
-    socket.on('chat message', function(message){
-      // Add message if
+    // Listen for new messages
+    const socket = io(config.socket.server)
+    const data = AppStore.data
+    socket.emit('authenticate', data.user.access_token)
+    socket.on('new message',(response) => {
+      const message = response.message
+      const room = response.room
       const messages = AppStore.data.messages
       const current_room = AppStore.data.current_room
-      // does not exist already
-      if(_.findWhere(messages, { id: message.id }))
-        return false
-      // in this room
-      if(message.room_id == current_room.id){
+      // If in this room
+      if(current_room.id == room.id){
         AppStore.data.messages.push(message)
+        const rooms = AppStore.data.rooms
+        let current_room_index = _.findIndex(rooms, { id: current_room.id })
+        AppStore.data.rooms[current_room_index].latest_message = message
         AppStore.emitChange()
       }
+    })
+    socket.on('typing',(response) => {
+      const author = response.author
+      AppStore.data.is_typing = author
+      AppStore.emitChange()
+    })
+    socket.on('typing ended',(response) => {
+      delete AppStore.data.is_typing
+      AppStore.emitChange()
     })
   }
 
@@ -177,6 +203,7 @@ export default class Dashboard extends Component {
         <main>
           <SideBar data={ data }/>
           <MainContent
+            handleMessageTyping={ this.handleMessageTyping } 
             filterRooms={ this.filterRooms } 
             createMessage={ this.createMessage } 
             showModal={ this.showModal } 
