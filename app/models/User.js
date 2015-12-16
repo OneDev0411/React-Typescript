@@ -2,17 +2,12 @@
 import es6Promise from 'es6-promise'
 es6Promise.polyfill()
 import 'isomorphic-fetch'
-let config
-if(typeof window !== 'undefined' && window.location.hostname == 'localhost' && window.location.port == '8080')
-  config = require('../../config/development')
 
 export default {
   
   create: (params, callback) => {
     
     let api_host = params.api_host
-    if(config && config.api_host)
-      api_host = config.api_host
     if(!api_host) api_host = ''
 
     const create_url = api_host + '/api/signup'
@@ -44,8 +39,6 @@ export default {
   signin: (params, callback) => {
     
     let api_host = params.api_host
-    if(config && config.api_host)
-      api_host = config.api_host
     if(!api_host) api_host = ''
 
     const signin_url = api_host + '/api/signin'
@@ -81,8 +74,6 @@ export default {
   forgotPassword: (params, callback) => {
     
     let api_host = params.api_host
-    if(config && config.api_host)
-      api_host = config.api_host
     if(!api_host) api_host = ''
 
     const forgot_password_url = api_host + '/api/forgot-password'
@@ -115,8 +106,6 @@ export default {
   resetPassword: (params, callback) => {
     
     let api_host = params.api_host
-    if(config && config.api_host)
-      api_host = config.api_host
     if(!api_host) api_host = ''
 
     const reset_password_url = api_host + '/api/reset-password'
@@ -150,8 +139,6 @@ export default {
   verifyPhone: (params, callback) => {
     
     let api_host = params.api_host
-    if(config && config.api_host)
-      api_host = config.api_host
     if(!api_host) api_host = ''
 
     const verify_phone_url = api_host + '/api/verify-phone'
@@ -186,8 +173,6 @@ export default {
   getRooms: (params, callback) => {
     
     let api_host = params.api_host
-    if(config && config.api_host)
-      api_host = config.api_host
     if(!api_host) api_host = ''
 
     const get_rooms_url = api_host + '/api/rooms?access_token=' + params.access_token

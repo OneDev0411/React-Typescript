@@ -2,17 +2,12 @@
 import es6Promise from 'es6-promise'
 es6Promise.polyfill()
 import 'isomorphic-fetch'
-let config
-if(typeof window !== 'undefined' && window.location.hostname == 'localhost' && window.location.port == '8080')
-  config = require('../../config/development')
 
 export default {
   
   create: (params, callback) => {
     
     let api_host = params.api_host
-    if(config && config.api_host)
-      api_host = config.api_host
     if(!api_host) api_host = ''
 
     const create_room_url = api_host + '/api/create-room'
@@ -48,8 +43,6 @@ export default {
   getMessages: (params, callback) => {
     
     let api_host = params.api_host
-    if(config && config.api_host)
-      api_host = config.api_host
     if(!api_host) api_host = ''
 
     const get_messages_url = api_host + '/api/messages/?room_id=' + params.room_id + '&access_token=' + params.access_token
@@ -73,8 +66,6 @@ export default {
   addUser: (params, callback) => {
     
     let api_host = params.api_host
-    if(config && config.api_host)
-      api_host = config.api_host
     if(!api_host) api_host = ''
 
     const add_user_to_room_url = api_host + '/api/add-user-to-room'
