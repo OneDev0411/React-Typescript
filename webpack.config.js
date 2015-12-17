@@ -1,7 +1,7 @@
 // webpack.config.js
 var loaders = ['babel']
 if(process.env.NODE_ENV === 'development')
-  loaders = ['react-hot','babel']
+  loaders = ['eslint-loader','react-hot','babel']
 var path = require('path')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 module.exports = {
@@ -24,11 +24,6 @@ module.exports = {
       {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract('style', 'css!sass')
-      },
-      {
-        test: /\.js$/, 
-        loader: 'eslint-loader',
-        exclude: /node_modules/
       }
     ]
   },
