@@ -33,11 +33,19 @@ export default class Dashboard extends Component {
   }
 
   filterRooms(search_text){
+    search_text = search_text.toLowerCase().trim()
     const data = AppStore.data
     const rooms = data.rooms
     const filtered_rooms = rooms.filter((room) => {
-      return room.title.toLowerCase().indexOf(search_text.toLowerCase())!==-1
+      let users_first_string = _.pluck(room.users, 'first_name').toString().toLowerCase()
+      let users_last_string = _.pluck(room.users, 'last_name').toString().toLowerCase()
+      if(users_first_string.indexOf(search_text)!==-1)
+        return true
+      if(users_last_string.indexOf(search_text)!==-1)
+        return true
+      return room.title.toLowerCase().indexOf(search_text)!==-1
     })
+
     if(!search_text){
       AppStore.data.is_filtering = false
     } else {

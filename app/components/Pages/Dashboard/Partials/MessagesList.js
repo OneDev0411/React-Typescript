@@ -7,7 +7,7 @@ import ProfileImage from './ProfileImage'
 import helpers from '../../../../utils/helpers'
 import emojify from 'emojify.js'
 import linkifyString from 'linkifyjs/string'
-import { Input } from 'react-bootstrap'
+import { Input, Tooltip, OverlayTrigger } from 'react-bootstrap'
 import config from '../../../../../config/public'
 
 emojify.setConfig({
@@ -64,13 +64,32 @@ export default class MessagesList extends Component {
       let profile_image_url
       let first_name = ''
       messages = messages.map((message) => {
-        profile_image_url = ''
-        if(message.author)
+        
+        // Profile image
+        let profile_image_url
+        let profile_image_div
+        if(message.author){
           profile_image_url = message.author.profile_image_url
+          profile_image_div = (
+            <ProfileImage data={ data } profile_image_url={ profile_image_url }/>
+          )
+        }
+        if(!message.author)
+          profile_image_div = (
+            <div style={ S('absolute') }>
+              <img src="/images/dashboard/rebot.png" style={ S('w-30') } />
+            </div>
+          )
+        
+        // First name
         if(message.author)
           first_name = message.author.first_name
+        
+        // Message time
         const message_created = message.created_at.toString().split('.')
         const time_created = helpers.timeConverter(message_created[0])
+        
+        // Message image
         let message_image
         if(message.image_url)
           message_image = (
@@ -84,7 +103,7 @@ export default class MessagesList extends Component {
         return (
           <li style={ S('pb-12 pr-30') } key={ message.id }>
             <div style={ S('relative') }>
-              <ProfileImage data={ data } profile_image_url={ profile_image_url }/>
+              { profile_image_div }
               <div className="pull-left" style={ S('ml-50') }>
                 <b>{ first_name || 'Rebot' }</b>
                 <span style={ S('color-ccc ml-20') } >
@@ -109,15 +128,22 @@ export default class MessagesList extends Component {
       const invite_user_style = S('w-40 h-40 ml-6 pointer absolute p-0 t-15 r-8 br-100 bc-ddd bw-1 solid')
       const invite_link = config.app.url + '/invite/?room_id=' + data.current_room.id + '&invite_token=' + data.user.access_token
 
+      const tooltip = (
+        <Tooltip id="copied-tooltip">
+          Copied
+        </Tooltip>
+      )
       return (
         <div>
           <div style={ S('absolute r-60 t-16') }>
             <div className="input-group">
               <input data-clipboard-text={ invite_link } readOnly onClick={ this.handleInviteLinkClick.bind(this) } className="copy-link form-control pull-right" ref="clipboard_target" id="invite-link" type="text" value={ invite_link } style={ S('h-37 w-150') } />
               <span className="input-group-btn">
-                <button className="copy-link btn btn-default" type="button" data-clipboard-target="#invite-link" style={ S('h-37') }>
-                  <img src="/images/svgs/clippy.svg" width="13" alt="Copy to clipboard" />
-                </button>
+                <OverlayTrigger rootClose trigger="click" placement="bottom" overlay={ tooltip }>
+                  <button className="copy-link btn btn-default" type="button" data-clipboard-target="#invite-link" style={ S('h-37') }>
+                    <img src="/images/svgs/clippy.svg" width="13" alt="Copy to clipboard" />
+                  </button>
+                </OverlayTrigger>
               </span>
             </div>
           </div>
