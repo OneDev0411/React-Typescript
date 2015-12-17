@@ -55,7 +55,7 @@ module.exports = (app, config) => {
           room_id: invite.room_id,
           users: [user.id],
           access_token: invite.invite_token,
-          api_host: config.api_host
+          api_host: config.app_url
         }
         Room.addUser(add_user_params, (err, response) => {
           return res.json(response_object)

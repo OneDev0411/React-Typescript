@@ -1,5 +1,6 @@
 // config/production.js
 export default {
+  app_url: process.env.APP_URL,
   api: {
     url: process.env.RECHAT_API_URL,
     client_id: process.env.RECHAT_CLIENT_ID,
