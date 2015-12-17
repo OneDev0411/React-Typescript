@@ -46,7 +46,9 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin('css/main.css'),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      'process.env.APP_URL': JSON.stringify(process.env.APP_URL),
+      'process.env.SOCKET_SERVER': JSON.stringify(process.env.SOCKET_SERVER)
     }),
  ]
 }
