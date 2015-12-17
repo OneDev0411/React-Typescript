@@ -86,7 +86,7 @@ export default class MainContent extends Component {
       if(author_typing)
         is_typing = (
           <div style={ S('absolute l-20 t-0 font-12') }>
-            { author_typing.first_name } is typing
+            { author_typing.first_name } is typing...
           </div>
         )
     }
