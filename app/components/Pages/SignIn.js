@@ -101,6 +101,14 @@ export default class SignIn extends Component {
       )
     }
 
+    // Signup link
+    let signup_link = '/signup'
+    const room_id = this.props.location.query.room_id
+    const invite_token = this.props.location.query.invite_token
+    if(room_id && invite_token){
+      signup_link += '?message=invite-room&room_id=' + room_id + '&invite_token=' + invite_token
+    }
+
     return (
       <div id="main-content" className="container">
         <div className="text-center center-block" style={ S('maxw-300') }>
@@ -122,7 +130,7 @@ export default class SignIn extends Component {
             >
               { submitting ? 'Signing in...' : 'Sign in' }
             </Button>
-            <div style={ S('color-929292 font-13') }>Don't have an account yet?  <Link to="/signup">Sign up</Link></div>
+            <div style={ S('color-929292 font-13') }>Don't have an account yet?  <Link to={ signup_link }>Sign up</Link></div>
           </form>
         </div>
       </div>

@@ -152,9 +152,16 @@ export default class SignUp extends Component {
     /* Handle success
     ======================== */
     if(data.show_message && data.status === 'success'){
+      // Signin link
+      let signin_link = '/signin'
+      const room_id = this.props.location.query.room_id
+      const invite_token = this.props.location.query.invite_token
+      if(room_id && invite_token){
+        signin_link += '?message=invite-room&room_id=' + room_id + '&invite_token=' + invite_token
+      }
       main_content = (
         <Alert bsStyle="success">
-          Success!  Your account was created.  You may now <Link to="signin">sign in</Link>.
+          Success!  Your account was created.  You may now <Link to={ signin_link }>sign in</Link>.
         </Alert>
       )
     }
