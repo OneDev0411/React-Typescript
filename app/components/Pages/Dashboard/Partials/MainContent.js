@@ -4,6 +4,7 @@ import { Nav, NavItem, NavDropdown, MenuItem, ButtonToolbar, Dropdown, Modal, Bu
 import S from 'shorti'
 import RoomsList from './RoomsList'
 import MessagesList from './MessagesList'
+import _ from 'lodash'
 
 export default class MainContent extends Component {
 
@@ -79,12 +80,15 @@ export default class MainContent extends Component {
     )
 
     let is_typing
-    if(data.is_typing && data.is_typing.id != data.user.id){
-      is_typing = (
-        <div style={ S('absolute l-20 t-0 font-12') }>
-          { data.is_typing.first_name } is typing
-        </div>
-      )
+    if(data.is_typing && data.is_typing.author_id !== data.user.id){
+      // Get user name
+      let author_typing = _.findWhere(data.current_room.users, { id: data.is_typing.author_id })
+      if(author_typing)
+        is_typing = (
+          <div style={ S('absolute l-20 t-0 font-12') }>
+            { author_typing.first_name } is typing
+          </div>
+        )
     }
 
     // Create message form

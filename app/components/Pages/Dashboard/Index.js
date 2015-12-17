@@ -24,10 +24,11 @@ export default class Dashboard extends Component {
     const data = AppStore.data
     if(data.is_typing)
       return false
-    socket.emit('authenticate', data.user.access_token)
-    socket.emit('typing')
+    AppStore.data.is_typing = data.user
+    AppStore.emitChange()
+    socket.emit('typing', AppStore.data.current_room.id)
     setTimeout(() => {
-      socket.emit('typing ended')
+      socket.emit('typing ended', AppStore.data.current_room.id)
     }, 3000)
   }
 
@@ -125,8 +126,12 @@ export default class Dashboard extends Component {
       }
     })
     socket.on('typing',(response) => {
-      const author = response.author
-      AppStore.data.is_typing = author
+      const author_id = response.user_id
+      const room_id = response.room_id
+      AppStore.data.is_typing = {
+        author_id: author_id,
+        room_id: room_id
+      }
       AppStore.emitChange()
     })
     socket.on('typing ended',(response) => {
