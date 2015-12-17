@@ -75,8 +75,7 @@ export default {
       users: params.users,
       access_token: params.access_token
     }
-    console.log(add_user_to_room_url)
-    console.log(request_object)
+
     fetch(add_user_to_room_url,{
       method: 'post',
       headers: {  

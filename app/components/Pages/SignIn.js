@@ -33,12 +33,19 @@ export default class SignIn extends Component {
     
     let email = this.refs.email.refs.input.value
     let password = this.refs.password.refs.input.value
-
+    let invite
+    if(this.props.location.query.message == 'invite-room'){
+      invite = {
+        room_id: this.props.location.query.room_id,
+        invite_token: this.props.location.query.invite_token
+      }
+    }
     AppDispatcher.dispatch({
       action: 'sign-in',
       email: email,
       password: password,
-      redirect_to: '/dashboard/recents' // change to referrer
+      redirect_to: '/dashboard/recents', // change to referrer
+      invite: invite
     })
 
   }

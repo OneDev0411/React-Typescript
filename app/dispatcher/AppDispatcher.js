@@ -34,6 +34,7 @@ AppDispatcher.register(payload => {
 
   // Vars
   let user
+  let invite
   let room_id
   let room
   let comment
@@ -69,7 +70,8 @@ AppDispatcher.register(payload => {
       email = payload.email
       password = payload.password
       redirect_to = payload.redirect_to
-      signin(email, password, redirect_to)
+      invite = payload.invite
+      signin(email, password, redirect_to, invite)
       break
 
     case 'forgot-password':

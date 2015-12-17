@@ -11,6 +11,7 @@ module.exports = (app, config) => {
     const email = req.body.email
     const password = req.body.password
     const api_url = config.api.url
+    const invite = req.body.invite
     const signin_url = api_url + '/oauth2/token'
 
     const request_object = {
@@ -49,15 +50,14 @@ module.exports = (app, config) => {
       req.session.user = user
 
       // check for invite vars
-      const invite = req.session.invite
       if(invite){
         const add_user_params = {
           room_id: invite.room_id,
           users: [user.id],
-          access_token: invite.invite_token
+          access_token: invite.invite_token,
+          api_host: config.api_host
         }
         Room.addUser(add_user_params, (err, response) => {
-          delete req.session.invite
           return res.json(response_object)
         })
         

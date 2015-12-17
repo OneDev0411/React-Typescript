@@ -1,6 +1,4 @@
 // index.js
-import config from '../../../config'
-
 // Room
 import Room from '../../models/Room'
 
@@ -68,18 +66,18 @@ module.exports = (app, config) => {
         access_token: invite_token,
         api_host: config.api_host
       }
+      
       Room.addUser(add_user_params, (err, response) => {
         if(err){
           return res.redirect('/?error=add-user-to-room')  
         }
         return res.redirect('/dashboard/recents/' + room_id)
       })
+    
     } else {
-      req.session.invite = {
-        room_id: req.query.room_id,
-        invite_token: req.query.invite_token
-      }
-      return res.redirect('/signin?message=invite-room')
+
+      return res.redirect('/signin?message=invite-room&room_id=' + req.query.room_id + '&invite_token=' + req.query.invite_token)
+    
     }
   })
 }

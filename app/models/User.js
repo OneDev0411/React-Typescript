@@ -45,7 +45,8 @@ export default {
 
     const request_object = {
       email: params.email,
-      password: params.password
+      password: params.password,
+      invite: params.invite
     }
       
     fetch(signin_url,{
