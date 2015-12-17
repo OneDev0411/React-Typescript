@@ -43,7 +43,9 @@ export default class Dashboard extends Component {
         return true
       if(users_last_string.indexOf(search_text)!==-1)
         return true
-      return room.title.toLowerCase().indexOf(search_text)!==-1
+      if(room.title.toLowerCase().indexOf(search_text)!==-1)
+        return true
+      return false
     })
 
     if(!search_text){
@@ -205,6 +207,7 @@ export default class Dashboard extends Component {
     let data = this.props.data
     data.rooms = AppStore.data.rooms
     data.is_filtering = AppStore.data.is_filtering
+    data.filtered_rooms = AppStore.data.filtered_rooms
     data.current_room = AppStore.data.current_room
     data.messages = AppStore.data.messages
     data.showCreateChatModal = AppStore.data.showCreateChatModal

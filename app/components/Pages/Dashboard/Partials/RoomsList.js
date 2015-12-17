@@ -7,7 +7,7 @@ import helpers from '../../../../utils/helpers'
 import _ from 'lodash'
 
 export default class RoomsList extends Component {
-  
+
   handleClick(i){
     const rooms = this.props.data.rooms
     const room = rooms[i]
@@ -31,6 +31,7 @@ export default class RoomsList extends Component {
       rooms = data.filtered_rooms
 
     if(rooms){
+
       rooms_list = rooms.map((room, i) => {
 
         // Profile image
@@ -92,7 +93,7 @@ export default class RoomsList extends Component {
           </li>
         )
       })
-    }
+    } // if rooms
 
     // Styles
     const rooms_scroll_area = {
