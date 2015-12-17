@@ -20,6 +20,12 @@ export default class MessagesList extends Component {
     e.target.select()
   }
 
+  componentDidMount(){
+    if(typeof window !=='undefined')
+      var clipboard = require('clipboard')
+      new clipboard('.copy-link')
+  }
+
   componentDidUpdate(){
     var messages_scroll_area = ReactDOM.findDOMNode(this.refs.messages_scroll_area)
     if(messages_scroll_area)
@@ -106,14 +112,14 @@ export default class MessagesList extends Component {
       return (
         <div>
           <div style={ S('absolute r-60 t-16') }>
-            <Input 
-              ref="target"
-              className="invite-link"
-              onClick={ this.handleInviteLinkClick }
-              style={ S('w-150') }
-              type="text"
-              readOnly
-              value={ invite_link } />
+            <div className="input-group">
+              <input data-clipboard-text={ invite_link } readOnly onClick={ this.handleInviteLinkClick.bind(this) } className="copy-link form-control pull-right" ref="clipboard_target" id="invite-link" type="text" value={ invite_link } style={ S('h-37 w-150') } />
+              <span className="input-group-btn">
+                <button className="copy-link btn btn-default" type="button" data-clipboard-target="#invite-link" style={ S('h-37') }>
+                  <img src="/images/svgs/clippy.svg" width="13" alt="Copy to clipboard" />
+                </button>
+              </span>
+            </div>
           </div>
           <button onClick={ this.props.showModal.bind(this,'invite-user') } type="button" className="btn btn-default invite-user__btn" style={ invite_user_style } >
             <img style={ S('ml-1n mt-1n') } src="/images/svgs/invite-user.svg"/>
