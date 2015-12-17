@@ -72,6 +72,9 @@ export default class MessagesList extends Component {
               <img src={ message.image_url } style={ S('maxw-400') }/>
             </div>
           )
+        let message_class_name
+        if(message.fade_in)
+          message_class_name = 'fade-in'
         return (
           <li style={ S('pb-12 pr-30') } key={ message.id }>
             <div style={ S('relative') }>
@@ -81,7 +84,7 @@ export default class MessagesList extends Component {
                 <span style={ S('color-ccc ml-20') } >
                   { time_created.month } { time_created.date }, { time_created.time_friendly }
                 </span>
-                <div dangerouslySetInnerHTML={ { __html: emojify.replace(linkifyString(message.comment)) } }></div>
+                <div className={ message_class_name } dangerouslySetInnerHTML={ { __html: emojify.replace(linkifyString(message.comment)) } }></div>
                 { message_image }
               </div>
               <div className="clearfix"></div>

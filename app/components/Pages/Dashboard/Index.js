@@ -111,6 +111,7 @@ export default class Dashboard extends Component {
     const socket = io(config.socket.server)
     const data = AppStore.data
     socket.emit('authenticate', data.user.access_token)
+    // Listen for new message
     socket.on('new message',(response) => {
       const message = response.message
       const room = response.room
@@ -118,6 +119,8 @@ export default class Dashboard extends Component {
       const current_room = AppStore.data.current_room
       // If in this room
       if(current_room.id == room.id){
+        if(data.user.id === message.author.id)
+          message.fade_in = true
         AppStore.data.messages.push(message)
         const rooms = AppStore.data.rooms
         let current_room_index = _.findIndex(rooms, { id: current_room.id })
@@ -125,6 +128,7 @@ export default class Dashboard extends Component {
         AppStore.emitChange()
       }
     })
+    // Listen for typing
     socket.on('typing',(response) => {
       const author_id = response.user_id
       const room_id = response.room_id
@@ -171,6 +175,10 @@ export default class Dashboard extends Component {
     const comment = this.refs.message_input.value
     const user = this.props.data.user
     const current_room = this.props.data.current_room
+
+    // If no comment
+    if(!comment.trim())
+      return false
 
     AppDispatcher.dispatch({
       action: 'create-message',

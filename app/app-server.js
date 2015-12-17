@@ -8,7 +8,7 @@ import es6Promise from 'es6-promise'
 es6Promise.polyfill();
 import 'isomorphic-fetch'
 
-import config from '../config'
+import config from '../config/private'
 
 // Express
 const app = express()

@@ -1,5 +1,5 @@
 // api/posts/signin.js
-import config from '../../../../config'
+import config from '../../../../config/private'
 
 // Room
 import Room from '../../../models/Room'

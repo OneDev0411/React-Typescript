@@ -1,7 +1,7 @@
 // App.js
 
 // Build stlye sheet
-if(process.env.NODE_ENV === 'build'){
+if(process.env.WEBPACK_PROCESS === 'build'){
   // Fonts
   require('../src/fonts/sf.scss')
   require('../src/fonts/tempos-headline.scss')

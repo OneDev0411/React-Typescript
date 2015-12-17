@@ -3,12 +3,18 @@ import es6Promise from 'es6-promise'
 es6Promise.polyfill()
 import 'isomorphic-fetch'
 
+import config from '../../config/public'
+
 export default {
   
   create: (params, callback) => {
     
     let api_host = params.api_host
-    if(!api_host) api_host = ''
+    if(!api_host) api_host = config.app.url
+
+    // If no comment
+    if(!params.comment.trim())
+      return false
 
     const create_room_url = api_host + '/api/create-message'
 
