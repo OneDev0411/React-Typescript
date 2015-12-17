@@ -54,8 +54,7 @@ module.exports = (app, config) => {
         const add_user_params = {
           room_id: invite.room_id,
           users: [user.id],
-          access_token: invite.invite_token,
-          api_host: config.api_host
+          access_token: invite.invite_token
         }
         Room.addUser(add_user_params, (err, response) => {
           delete req.session.invite
