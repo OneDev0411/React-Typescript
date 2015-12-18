@@ -118,15 +118,21 @@ export default class Dashboard extends Component {
   }
 
   sendNotification(message){
+    
+    if(document && document.hasFocus())
+      return false
+    
     const Notification = window.Notification || window.mozNotification || window.webkitNotification
     Notification.requestPermission()
-    let profile_image_url
-    profile_image_url = config.app.url + '/images/dashboard/rebot.png'
-    if(message.author)
-      profile_image_url = message.author.profile_image_url
-    console.log(profile_image_url)
+    let profile_image_url = config.app.url + '/images/dashboard/rebot.png'
+    let first_name = 'Rebot'
+    if(message.author){
+      first_name = message.author.first_name
+    }
+
+    let title = 'New message from ' + first_name
     const instance = new Notification(
-      'New Message on Rechat', {
+      title, {
         body: message.comment,
         icon: profile_image_url
       }
