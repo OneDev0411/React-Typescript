@@ -63,6 +63,8 @@ export default class MessagesList extends Component {
       let messages = data.messages
       let profile_image_url
       let first_name = ''
+      let last_user
+
       messages = messages.map((message) => {
         
         // Profile image
@@ -113,6 +115,26 @@ export default class MessagesList extends Component {
         if(message.fade_in)
           message_class_name = 'fade-in'
 
+        let message_text = message.comment
+        if(!message_image)
+          message_text = emojify.replace(linkifyString(message.comment))
+
+        // Get latest user and group
+        if(message.author){
+          if(last_user === message.author.id){
+            return (
+              <li style={ S('pb-12 pr-30') } key={ message.id }>
+                <div className="pull-left" style={ S('ml-50') }>
+                  <div className={ message_class_name } dangerouslySetInnerHTML={ { __html: message_text } }></div>
+                </div>
+                <div className="clearfix"></div>
+              </li>
+            )
+          }
+          
+          last_user = message.author.id
+        }
+
         return (
           <li style={ S('pb-12 pr-30') } key={ message.id }>
             <div style={ S('relative') }>
@@ -122,7 +144,7 @@ export default class MessagesList extends Component {
                 <span style={ S('color-ccc ml-20') } >
                   { time_created.month } { time_created.date }, { time_created.time_friendly }
                 </span>
-                <div className={ message_class_name } dangerouslySetInnerHTML={ { __html: emojify.replace(linkifyString(message.comment)) } }></div>
+                <div className={ message_class_name } dangerouslySetInnerHTML={ { __html: message_text } }></div>
                 { message_image }
               </div>
               <div className="clearfix"></div>

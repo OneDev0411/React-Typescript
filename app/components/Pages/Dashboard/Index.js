@@ -1,7 +1,5 @@
 // Dashboard/Index.js
 import React, { Component } from 'react'
-import { Link } from 'react-router'
-import { Nav, NavItem } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
 import config from '../../../../config/public'
@@ -17,20 +15,10 @@ import MainContent from './Partials/MainContent'
 import MainNav from './Partials/MainNav'
 import SideBar from './Partials/SideBar'
 
-export default class Dashboard extends Component {
+// Socket.io
+import io from 'socket.io-client'
 
-  handleMessageTyping(){
-    const socket = io(config.socket.server)
-    const data = AppStore.data
-    if(data.is_typing)
-      return false
-    AppStore.data.is_typing = data.user
-    AppStore.emitChange()
-    socket.emit('typing', AppStore.data.current_room.id)
-    setTimeout(() => {
-      socket.emit('typing ended', AppStore.data.current_room.id)
-    }, 3000)
-  }
+export default class Dashboard extends Component {
 
   filterRooms(search_text){
     search_text = search_text.toLowerCase().trim()
@@ -110,6 +98,19 @@ export default class Dashboard extends Component {
     })
     // Show room_id in url
     history.pushState(null, null, '/dashboard/recents/' + current_room.id)
+  }
+
+  handleMessageTyping(){
+    const socket = io(config.socket.server)
+    const data = AppStore.data
+    if(data.is_typing)
+      return false
+    AppStore.data.is_typing = data.user
+    AppStore.emitChange()
+    socket.emit('typing', AppStore.data.current_room.id)
+    setTimeout(() => {
+      socket.emit('typing ended', AppStore.data.current_room.id)
+    }, 3000)
   }
 
   componentWillMount(){

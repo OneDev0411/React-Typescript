@@ -1,3 +1,4 @@
+// "extends": "airbnb",
 {
   "parser": "babel-eslint",
   "env": {
@@ -8,6 +9,8 @@
     "react"
   ],
   "rules": {
+    "semi": 0,
+    "camelcase": 0,
     "new-cap": 0,
     "strict": 0,
     "no-underscore-dangle": 0,
