@@ -3,32 +3,40 @@ import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { Input, Button } from 'react-bootstrap'
 import S from 'shorti'
+import helpers from '../../../../utils/helpers'
 
 export default class Email extends Component {
-  
-  handleClick(){
-    // send new confirm
-  }
 
   render(){
     
     const data = this.props.data
+    const token = helpers.getParameterByName('token')
+    const status = helpers.getParameterByName('status')
+    
+    let main_content
 
-    let main_content = (
-      <div>
-        <img style={ S('w-186') } src="/images/verify/family-1@2x.png"/>
-        <div style={ S('color-929292 mt-10 font-36') }>Email confirmed.</div>  
-      </div>
-    )
-
-    if(data.status == 'error'){
+    if(!status){
       main_content = (
         <div>
-          <img style={ S('w-74') } src="/images/verify/sad-face@2x.png"/>
+          <a className="btn btn-primary" href={"/verify_email/submitted?token=" + token} >Confirm your email</a>
+        </div>
+      )
+    }
+
+    if(status == 'success'){
+      main_content = (
+        <div>
+          <img style={ S('w-186') } src="/images/verify/family-1@2x.png"/>
+          <div style={ S('color-929292 mt-10 font-36') }>Email confirmed.</div>  
+        </div>
+      )
+    }
+
+    if(status == 'error'){
+      main_content = (
+        <div>
+          <img style={ S('w-80') } src="/images/verify/sad-face@2x.png"/>
           <div style={ S('color-929292 mt-10 font-14') }>Your reset password link has expired.</div>  
-          <div style={ S('color-929292 mt-10') }>
-            <a href="#" onClick={ this.handleClick.bind(this) }>Send me a new one</a>
-          </div>
         </div>
       )
     }
