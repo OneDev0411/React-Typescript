@@ -117,6 +117,36 @@ export default class Dashboard extends Component {
     this.init()
   }
 
+  sendNotification(message){
+    const Notification = window.Notification || window.mozNotification || window.webkitNotification
+    Notification.requestPermission()
+    let profile_image_url
+    profile_image_url = config.app.url + '/images/dashboard/rebot.png'
+    if(message.author)
+      profile_image_url = message.author.profile_image_url
+    console.log(profile_image_url)
+    const instance = new Notification(
+      'New Message on Rechat', {
+        body: message.comment,
+        icon: profile_image_url
+      }
+    )
+
+    // Event Callbacks
+    // instance.onclick = function () {
+    //   // Something to do
+    // };
+    // instance.onerror = function () {
+    //   // Something to do
+    // };
+    // instance.onshow = function () {
+    //   // Something to do
+    // };
+    // instance.onclose = function () {
+    //   // Something to do
+    // };
+  }
+
   componentDidMount(){
     // Listen for new messages
     const socket = io(config.socket.server)
@@ -137,6 +167,8 @@ export default class Dashboard extends Component {
         let current_room_index = _.findIndex(rooms, { id: current_room.id })
         AppStore.data.rooms[current_room_index].latest_message = message
         AppStore.emitChange()
+        if(data.user.id !== message.author.id)
+          this.sendNotification(message)
       }
     })
     // Listen for typing
