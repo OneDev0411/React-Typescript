@@ -97,9 +97,22 @@ export default class MessagesList extends Component {
               <img src={ message.image_url } style={ S('maxw-400') }/>
             </div>
           )
+
+        // Listing
+        if(message.recommendation && message.recommendation.listing && message.recommendation.listing.cover_image_url){
+          let cover_image_url = message.recommendation.listing.cover_image_url
+          message_image = (
+            <div>
+              <img src={ cover_image_url } style={ S('maxw-400') }/>
+            </div>
+          )
+        }
+
+        // Fade in
         let message_class_name
         if(message.fade_in)
           message_class_name = 'fade-in'
+
         return (
           <li style={ S('pb-12 pr-30') } key={ message.id }>
             <div style={ S('relative') }>

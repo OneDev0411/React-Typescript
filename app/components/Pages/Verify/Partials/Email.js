@@ -16,18 +16,18 @@ export default class Email extends Component {
 
     let main_content = (
       <div>
-        <img src="/images/verify/family-1.png"/>
-        <div style={ S('color-929292 mt-50 font-36') }>Email confirmed.</div>  
+        <img style={ S('w-186') } src="/images/verify/family-1@2x.png"/>
+        <div style={ S('color-929292 mt-10 font-36') }>Email confirmed.</div>  
       </div>
     )
 
     if(data.status == 'error'){
       main_content = (
         <div>
-          <img src="/images/verify/sad-face.png"/>
+          <img style={ S('w-74') } src="/images/verify/sad-face@2x.png"/>
           <div style={ S('color-929292 mt-10 font-14') }>Your reset password link has expired.</div>  
           <div style={ S('color-929292 mt-10') }>
-            <Link onClick={ this.handleClick.bind(this) }>Send me a new one</Link>
+            <a href="#" onClick={ this.handleClick.bind(this) }>Send me a new one</a>
           </div>
         </div>
       )

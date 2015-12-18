@@ -5,10 +5,13 @@ module.exports = (app, config) => {
 
     const api_url = config.api.url
     
+    // Params
     const access_token = req.query.access_token
     const room_id = req.query.room_id
-
-    const get_messages_url = api_url + '/rooms/' + room_id + '/messages'
+    const limit = req.query.limit
+    const max_value = req.query.max_value
+    
+    const get_messages_url = api_url + '/rooms/' + room_id + '/messages?limit=' + limit + '&max_value=' + max_value
 
     res.setHeader('Content-Type', 'application/json');
 

@@ -47,7 +47,10 @@ export default {
     let api_host = params.api_host
     if(!api_host) api_host = config.app.url
 
-    const get_messages_url = api_host + '/api/messages/?room_id=' + params.room_id + '&access_token=' + params.access_token
+    const get_messages_url = `${api_host}/api/messages/?room_id=${params.room_id}` +
+      `&access_token=${params.access_token}` +
+      `&limit=${params.limit}` +
+      `&max_value=${params.max_value}`
 
     fetch(get_messages_url)
     .then((response) => {
