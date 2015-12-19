@@ -30,10 +30,11 @@ export default class MessageItem extends Component {
         <ProfileImage data={ data } profile_image_url={ profile_image_url }/>
       )
     }
+    // Rebot
     if(!message.author)
       profile_image_div = (
-        <div style={ S('absolute') }>
-          <img src="/images/dashboard/rebot.png" style={ S('w-30') } />
+        <div style={ S('absolute w-35') }>
+          <img className="center-block" src="/images/dashboard/rebot@2x.png" style={ S('w-30') } />
         </div>
       )
 

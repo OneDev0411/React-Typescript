@@ -54,7 +54,7 @@ export default class Dashboard extends Component {
     window.addEventListener('resize', this.handleResize);
   }
 
-  componentDidMount() {
+  componentDidMount(){
     this.handleResize
     window.addEventListener('resize', this.handleResize);
   }
@@ -118,39 +118,50 @@ export default class Dashboard extends Component {
   }
 
   sendNotification(message){
-    
-    if(document && document.hasFocus())
-      return false
-    
-    const Notification = window.Notification || window.mozNotification || window.webkitNotification
-    Notification.requestPermission()
-    let profile_image_url = config.app.url + '/images/dashboard/rebot.png'
+    let profile_image_url = config.app.url + '/images/dashboard/rebot@2x.png'
     let first_name = 'Rebot'
     if(message.author){
       first_name = message.author.first_name
     }
 
-    let title = 'New message from ' + first_name
-    const instance = new Notification(
+    const title = 'New message from ' + first_name
+    let instance = new Notification(
       title, {
         body: message.comment,
-        icon: profile_image_url
+        icon: profile_image_url,
+         sound: '/audio/goat.mp3'
       }
     )
+    instance.onclick = () => {
+      window.focus()
+    }
+    instance.onshow = () => {
+      this.refs.notif_sound.play()
+    }
+  }
 
-    // Event Callbacks
-    // instance.onclick = function () {
-    //   // Something to do
-    // };
-    // instance.onerror = function () {
-    //   // Something to do
-    // };
-    // instance.onshow = function () {
-    //   // Something to do
-    // };
-    // instance.onclose = function () {
-    //   // Something to do
-    // };
+  checkNotification(message){
+    
+    if(!('Notification' in window))
+      return false
+
+    if(document && document.hasFocus())
+      return false
+    
+    const Notification = window.Notification || window.mozNotification || window.webkitNotification
+
+    if(Notification.permission === 'granted'){
+      
+      this.sendNotification(message)
+
+    } else {
+      
+      Notification.requestPermission((permission) => {
+        if(permission === 'granted'){
+          this.sendNotification(message)
+        }
+      })
+    }
   }
 
   componentDidMount(){
@@ -174,7 +185,7 @@ export default class Dashboard extends Component {
         AppStore.data.rooms[current_room_index].latest_message = message
         AppStore.emitChange()
         if(data.user.id !== message.author.id)
-          this.sendNotification(message)
+          this.checkNotification(message)
       }
     })
     // Listen for typing
@@ -276,6 +287,9 @@ export default class Dashboard extends Component {
             getMessages={ this.getMessages } 
             data={ data }/>
         </main>
+        <audio ref="notif_sound" id="notif-sound">
+          <source src="/audio/goat.mp3" type="audio/mpeg" />
+        </audio>
       </div>
     )
   }
