@@ -2,18 +2,18 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import _ from 'lodash'
-import config from '../../../../config/public'
+import config from '../../../../../config/public'
 
 // AppDispatcher
-import AppDispatcher from '../../../dispatcher/AppDispatcher'
+import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 
 // AppStore
-import AppStore from '../../../stores/AppStore'
+import AppStore from '../../../../stores/AppStore'
 
 // Partials
 import MainContent from './Partials/MainContent'
-import MainNav from './Partials/MainNav'
-import SideBar from './Partials/SideBar'
+import MainNav from '../Partials/MainNav'
+import SideBar from '../Partials/SideBar'
 
 // Socket.io
 import io from 'socket.io-client'
@@ -107,9 +107,9 @@ export default class Dashboard extends Component {
       return false
     AppStore.data.is_typing = data.user
     AppStore.emitChange()
-    socket.emit('typing', AppStore.data.current_room.id)
+    socket.emit('User.Typing', AppStore.data.current_room.id)
     setTimeout(() => {
-      socket.emit('typing ended', AppStore.data.current_room.id)
+      socket.emit('User.TypingEnded', AppStore.data.current_room.id)
     }, 3000)
   }
 
@@ -168,10 +168,12 @@ export default class Dashboard extends Component {
     // Listen for new messages
     const socket = io(config.socket.server)
     const data = AppStore.data
-    socket.emit('authenticate', data.user.access_token)
+    socket.emit('Authenticate', data.user.access_token)
+
     // Listen for new message
-    socket.on('new message',(response) => {
-      const message = response.message
+    socket.on('Message.Sent',(response) => {
+      console.log(response)
+      const message = response.object.message
       const room = response.room
       const messages = AppStore.data.messages
       const current_room = AppStore.data.current_room
@@ -189,18 +191,23 @@ export default class Dashboard extends Component {
       }
     })
     // Listen for typing
-    socket.on('typing',(response) => {
+    socket.on('User.Typing',(response) => {
       const author_id = response.user_id
       const room_id = response.room_id
       AppStore.data.is_typing = {
         author_id: author_id,
         room_id: room_id
       }
+      delete AppStore.data.current_room.viewing_previous
       AppStore.emitChange()
     })
-    socket.on('typing ended',(response) => {
+    socket.on('User.TypingEnded',(response) => {
       delete AppStore.data.is_typing
       AppStore.emitChange()
+    })
+    socket.on('Room.OnlineUsers',(response) => {
+      // console.log(response)
+      // AppStore.emitChange()
     })
   }
 
@@ -251,6 +258,18 @@ export default class Dashboard extends Component {
 
   }
 
+  getPreviousMessages(scroll_height){
+    
+    const user = AppStore.data.user
+    const current_room = AppStore.data.current_room
+    AppDispatcher.dispatch({
+      action: 'get-previous-messages',
+      user: user,
+      room: current_room,
+      scroll_height: scroll_height
+    }) 
+  }
+
   render(){
 
     // Data
@@ -263,12 +282,6 @@ export default class Dashboard extends Component {
     data.showCreateChatModal = AppStore.data.showCreateChatModal
     data.showInviteUserModal = AppStore.data.showInviteUserModal
 
-    if(this.props.route.path){
-      data.path = this.props.route.path
-    } else {
-      data.path = '/dashboard'
-    }
-
     return (
       <div style={ S('minw-1000') }>
         <header>
@@ -277,6 +290,7 @@ export default class Dashboard extends Component {
         <main>
           <SideBar data={ data }/>
           <MainContent
+            getPreviousMessages={ this.getPreviousMessages }
             handleMessageTyping={ this.handleMessageTyping } 
             filterRooms={ this.filterRooms } 
             createMessage={ this.createMessage } 

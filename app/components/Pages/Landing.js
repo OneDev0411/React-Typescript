@@ -133,8 +133,8 @@ export default class Landing extends Component {
                 { headline_text }
               </h1>
               <p style={ tag_style }>
-                Rechat is a crossplatform service that connects you to a million goats.<br className="hidden-xs"/>
-                Get on the waiting list! We will notifiy you when we launch.
+                Rechat is an All in One Real Estate Sales Platform <br className="hidden-xs"/>with Search, CRM & Transaction Platform.
+                <br className="hidden-xs"/>Get on the waiting list! We will notifiy you when we launch.
               </p>
               <div className="form-wrap center-block" style={ form_wrap_style }>
                 <form onSubmit={ this.showThankYou } action="//rechat.us11.list-manage.com/subscribe/post?u=c21e4aeea43aececadaf53146&amp;id=4c276af8ae" method="post" name="mc-embedded-subscribe-form" target="_blank">

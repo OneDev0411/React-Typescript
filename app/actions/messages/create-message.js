@@ -1,6 +1,6 @@
 // actions/create-message.js
-import AppStore from '../stores/AppStore'
-import config from '../../config/public'
+import AppStore from '../../stores/AppStore'
+import config from '../../../config/public'
 
 // Socket.io
 import io from 'socket.io-client'
@@ -8,10 +8,9 @@ import io from 'socket.io-client'
 export default (user, room, comment) => {
   // Socket
   const socket = io(config.socket.server)
-  socket.emit('authenticate', user.access_token)
   let message = {
     comment: comment,
     message_type:'TopLevel'
   }
-  socket.emit('new message', room.id, message)
+  socket.emit('Message.Send', room.id, message)
 }

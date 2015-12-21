@@ -1,11 +1,11 @@
 // MessagesItem.js
 import React, { Component } from 'react'
-import ProfileImage from './ProfileImage'
+import ProfileImage from '../../Partials/ProfileImage'
 import S from 'shorti'
-import helpers from '../../../../utils/helpers'
+import helpers from '../../../../../utils/helpers'
 import emojify from 'emojify.js'
 import linkifyString from 'linkifyjs/string'
-import config from '../../../../../config/public'
+import config from '../../../../../../config/public'
 emojify.setConfig({
   img_dir: '/images/emoji'
 })

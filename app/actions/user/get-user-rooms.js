@@ -1,9 +1,10 @@
 // actions/get-user-rooms.js
-import User from '../models/User'
-import AppStore from '../stores/AppStore'
+import User from '../../models/User'
+import AppStore from '../../stores/AppStore'
 import _ from 'lodash'
+
 // Get messages
-import getMessages from './get-messages'
+import getMessages from '../messages/get-messages'
 
 export default (user, room_id) => {
   

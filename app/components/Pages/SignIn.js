@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { Link, History } from 'react-router'
 import { Button, Input, Alert } from 'react-bootstrap'
 import S from 'shorti'
+import config from '../../../config/public'
 
 // AppStore
 import AppStore from '../../stores/AppStore'
@@ -12,6 +13,9 @@ import AppDispatcher from '../../dispatcher/AppDispatcher'
 
 // Partials
 import BigHeading from '../Partials/BigHeading'
+
+// Socket.io
+import io from 'socket.io-client'
 
 export default class SignIn extends Component {
 
@@ -53,9 +57,13 @@ export default class SignIn extends Component {
   componentDidUpdate(){
 
     // If sign in successful, redirect
-    let data = this.props.data
-    if(data.user)
+    const data = this.props.data
+    const user = this.props.data.user
+    if(user){
+      const socket = io(config.socket.server)
+      socket.emit('Room.UserOnline', user.id)
       this.props.history.pushState(null, '/dashboard/recents')
+    }
   }
 
   render(){

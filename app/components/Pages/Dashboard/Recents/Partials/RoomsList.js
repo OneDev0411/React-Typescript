@@ -1,9 +1,9 @@
 // RoomsList.js
 import React, { Component } from 'react'
 import S from 'shorti'
-import Loading from '../../../Partials/Loading'
-import ProfileImage from './ProfileImage'
-import helpers from '../../../../utils/helpers'
+import Loading from '../../../../Partials/Loading'
+import ProfileImage from '../../Partials/ProfileImage'
+import helpers from '../../../../../utils/helpers'
 import _ from 'lodash'
 
 export default class RoomsList extends Component {

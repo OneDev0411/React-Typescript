@@ -1,6 +1,6 @@
 // actions/reset-password.js
-import User from '../models/User'
-import AppStore from '../stores/AppStore'
+import User from '../../models/User'
+import AppStore from '../../stores/AppStore'
 
 export default (password, confirm_password, token) => {
   

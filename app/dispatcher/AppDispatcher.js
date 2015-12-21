@@ -5,24 +5,24 @@ import { Dispatcher } from 'flux'
 import AppStore from '../stores/AppStore'
 
 // User
-import signup from '../actions/signup'
-import signin from '../actions/signin'
-import forgotPassword from '../actions/forgot-password'
-import resetPassword from '../actions/reset-password'
-import verifyPhone from '../actions/verify-phone'
-import addUserToStore from '../actions/add-user-to-store'
+import signup from '../actions/user/signup'
+import signin from '../actions/user/signin'
+import forgotPassword from '../actions/user/forgot-password'
+import resetPassword from '../actions/user/reset-password'
+import verifyPhone from '../actions/user/verify-phone'
+import addUserToStore from '../actions/user/add-user-to-store'
+import getUserRooms from '../actions/user/get-user-rooms'
 
 // Rooms
-import getUserRooms from '../actions/get-user-rooms'
-import createRoom from '../actions/create-room'
-
-import showModal from '../actions/show-modal'
+import createRoom from '../actions/rooms/create-room'
 
 // Messages
-import createMessage from '../actions/create-message'
-import getMessages from '../actions/get-messages'
+import createMessage from '../actions/messages/create-message'
+import getMessages from '../actions/messages/get-messages'
+import getPreviousMessages from '../actions/messages/get-previous-messages'
 
-// Landing page
+// Pages
+import showModal from '../actions/pages/show-modal'
 import landingPage from '../actions/pages/landing'
 
 const AppDispatcher = new Dispatcher()
@@ -47,7 +47,8 @@ AppDispatcher.register(payload => {
   let code
   let modal_key
   let title
-
+  let scroll_height
+  
   switch(action) {
 
     case 'init-landing':
@@ -120,6 +121,13 @@ AppDispatcher.register(payload => {
       user = payload.user
       room = payload.room
       getMessages(user, room)
+      break
+    
+    case 'get-previous-messages':
+      user = payload.user
+      room = payload.room
+      scroll_height = payload.scroll_height
+      getPreviousMessages(user, room, scroll_height)
       break
 
     case 'show-modal':

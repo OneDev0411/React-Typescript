@@ -68,6 +68,32 @@ export default {
     })
   },
 
+  getPrevious: (params, callback) => {
+    
+    let api_host = params.api_host
+    if(!api_host) api_host = config.app.url
+
+    const get_messages_url = `${api_host}/api/messages/?room_id=${params.room_id}` +
+      `&access_token=${params.access_token}` +
+      `&limit=${params.limit}` +
+      `&max_value=${params.max_value}`
+
+    fetch(get_messages_url)
+    .then((response) => {
+      if (response.status >= 400) {
+        let error = {
+          status: 'error',
+          message: 'There was an error with this request.'
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then((response) => {
+      return callback(false, response)
+    })
+  },
+
   addUser: (params, callback) => {
     
     let api_host = params.api_host

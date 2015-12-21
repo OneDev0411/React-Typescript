@@ -12,40 +12,40 @@ export default class SideBar extends Component {
     const sidebar_style = S('w-222 relative p-20 pl-0 pt-20 h-' + sidebar_height)
     const path = data.path
 
-    let active_key
+    let active = {}
     if(path === '/dashboard/recents'){
-      active_key = 1
+      active.recents = 'active'
     }
     if(path === '/dashboard/mls'){
-      active_key = 2
+      active.mls = 'active'
     }
     if(path === '/dashboard/contacts'){
-      active_key = 3
+      active.contacts = 'active'
     }
     if(path === '/dashboard/tasks'){
-      active_key = 4
+      active.tasks = 'active'
     }
-    if(path === '/dashboard/transactions'){
-      active_key = 5
+    if(path === '/dashboard/transactions' || path === '/dashboard/transactions/new'){
+      active.transactions = 'active'
     }
 
     return (
       <aside style={ sidebar_style } className="bg-alabaster sidebar--dashboard pull-left">
-        <Nav bsStyle="pills" stacked activeKey={ active_key }>
-          <LinkContainer to="/dashboard/recents">
-            <NavItem style={ S('w-70p') } eventKey={1}>Recents</NavItem>
+        <Nav bsStyle="pills" stacked>
+          <LinkContainer className={ active.recents } to="/dashboard/recents">
+            <NavItem style={ S('w-70p') }>Recents</NavItem>
           </LinkContainer>
-          <LinkContainer to="/dashboard/mls">
-            <NavItem style={ S('w-70p') } eventKey={2}>MLS</NavItem>
+          <LinkContainer className={ active.mls } to="/dashboard/mls">
+            <NavItem style={ S('w-70p') }>MLS</NavItem>
           </LinkContainer>
-          <LinkContainer to="/dashboard/contacts">
-            <NavItem style={ S('w-70p') } eventKey={3}>Contacts</NavItem>
+          <LinkContainer className={ active.contacts } to="/dashboard/contacts">
+            <NavItem style={ S('w-70p') }>Contacts</NavItem>
           </LinkContainer>
-          <LinkContainer to="/dashboard/tasks">
-            <NavItem style={ S('w-70p') } eventKey={4}>Tasks</NavItem>
+          <LinkContainer className={ active.tasks } to="/dashboard/tasks">
+            <NavItem style={ S('w-70p') }>Tasks</NavItem>
           </LinkContainer>
-          <LinkContainer to="/dashboard/transactions">
-            <NavItem style={ S('w-70p') } eventKey={5}>Transactions</NavItem>
+          <LinkContainer className={ active.transactions } to="/dashboard/transactions">
+            <NavItem style={ S('w-70p') }>Transactions</NavItem>
           </LinkContainer>
         </Nav>
       </aside>

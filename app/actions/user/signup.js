@@ -1,6 +1,6 @@
 // actions/signup.js
-import User from '../models/User'
-import AppStore from '../stores/AppStore'
+import User from '../../models/User'
+import AppStore from '../../stores/AppStore'
 import validator from 'validator'
 
 export default (user, password, confirm_password, redirect_to) => {

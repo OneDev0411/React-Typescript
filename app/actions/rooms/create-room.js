@@ -1,6 +1,6 @@
 // actions/create-room.js
-import Room from '../models/Room'
-import AppStore from '../stores/AppStore'
+import Room from '../../models/Room'
+import AppStore from '../../stores/AppStore'
 
 export default (user, title) => {
   

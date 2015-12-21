@@ -1,6 +1,6 @@
 // actions/forgot-password.js
-import User from '../models/User'
-import AppStore from '../stores/AppStore'
+import User from '../../models/User'
+import AppStore from '../../stores/AppStore'
 import validator from 'validator'
 
 export default (email) => {
