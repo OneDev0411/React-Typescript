@@ -29,8 +29,8 @@ module.exports = (app, config) => {
     .then(response => {
       if (response.status >= 400) {
         var error = {
-          "status": "error",
-          "message": "There was an error with this request."
+          status: 'error',
+          message: 'There was an error with this request.'
         }
         return res.json(error)
       }

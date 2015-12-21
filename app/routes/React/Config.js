@@ -6,7 +6,6 @@ import { Route, IndexRoute } from 'react-router'
 import App from '../../components/App'
 
 // Pages
-import Home from '../../components/Pages/Home'
 import Landing from '../../components/Pages/Landing'
 import Dashboard from '../../components/Pages/Dashboard/Index'
 import SignUp from '../../components/Pages/SignUp'

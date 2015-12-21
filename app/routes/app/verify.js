@@ -6,11 +6,17 @@ module.exports = (app, config) => {
 
   app.get('/verify_email',(req, res) => {
     
-    const token = helpers.prepareToken(req.query.token)
+    const token = req.query.token
+    return res.redirect('/verify/email?token=' + token)
+
+  })
+
+  app.get('/verify_email/submitted',(req, res) => {
+    
+    let token = decodeURIComponent(req.query.token).replace(' ', '+')
     const decrypted_token = Crypto.decrypt(token).split(':')
     const email = decrypted_token[0]
     const code = decrypted_token[1]
-    
     const api_url = config.api.url
     const verify_email_url = api_url + '/users/email_confirmed'
 

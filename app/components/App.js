@@ -1,7 +1,7 @@
 // App.js
 
 // Build stlye sheet
-if(process.env.NODE_ENV === 'build'){
+if(process.env.WEBPACK_PROCESS === 'build'){
   // Fonts
   require('../src/fonts/sf.scss')
   require('../src/fonts/tempos-headline.scss')
@@ -33,7 +33,7 @@ export default class App extends Component {
   render(){
     
     let data = AppStore.data
-
+    
     // Rehydrate store if coming from server
     if(typeof window !== 'undefined' && window.AppStore){
       data = window.AppStore.data

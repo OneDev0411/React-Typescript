@@ -16,7 +16,7 @@ module.exports = (app, config) => {
     // Validate submitted_code against token code
     if(code_submitted !== code_token){
       let response_object = {
-        status: "error"
+        status: 'error'
       }
       return res.end(JSON.stringify(response_object))
     }
@@ -39,8 +39,8 @@ module.exports = (app, config) => {
     .then(response => {
       if (response.status >= 400) {
         var error = {
-          "status": "error",
-          "message": "There was an error with this request."
+          status: 'error',
+          message: 'There was an error with this request.'
         }
         return res.json(error)
       }

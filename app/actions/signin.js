@@ -2,7 +2,7 @@
 import User from '../models/User'
 import AppStore from '../stores/AppStore'
 
-export default (email, password, redirect_to) => {
+export default (email, password, redirect_to, invite) => {
   
   if(email && password){
     email = email.trim()
@@ -38,7 +38,8 @@ export default (email, password, redirect_to) => {
   const params = {
     email: email,
     password: password,
-    redirect_to: redirect_to
+    redirect_to: redirect_to,
+    invite: invite
   }
 
   User.signin(params, (err, response) => {

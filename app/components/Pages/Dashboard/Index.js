@@ -1,9 +1,8 @@
 // Dashboard/Index.js
 import React, { Component } from 'react'
-import { Link } from 'react-router'
-import { Nav, NavItem } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
+import config from '../../../../config/public'
 
 // AppDispatcher
 import AppDispatcher from '../../../dispatcher/AppDispatcher'
@@ -16,14 +15,27 @@ import MainContent from './Partials/MainContent'
 import MainNav from './Partials/MainNav'
 import SideBar from './Partials/SideBar'
 
+// Socket.io
+import io from 'socket.io-client'
+
 export default class Dashboard extends Component {
 
   filterRooms(search_text){
+    search_text = search_text.toLowerCase().trim()
     const data = AppStore.data
     const rooms = data.rooms
-    const filtered_rooms = rooms.filter((room)=>{
-      return room.title.toLowerCase().indexOf(search_text.toLowerCase())!==-1
+    const filtered_rooms = rooms.filter((room) => {
+      let users_first_string = _.pluck(room.users, 'first_name').toString().toLowerCase()
+      let users_last_string = _.pluck(room.users, 'last_name').toString().toLowerCase()
+      if(users_first_string.indexOf(search_text)!==-1)
+        return true
+      if(users_last_string.indexOf(search_text)!==-1)
+        return true
+      if(room.title.toLowerCase().indexOf(search_text)!==-1)
+        return true
+      return false
     })
+
     if(!search_text){
       AppStore.data.is_filtering = false
     } else {
@@ -42,7 +54,7 @@ export default class Dashboard extends Component {
     window.addEventListener('resize', this.handleResize);
   }
 
-  componentDidMount() {
+  componentDidMount(){
     this.handleResize
     window.addEventListener('resize', this.handleResize);
   }
@@ -88,24 +100,107 @@ export default class Dashboard extends Component {
     history.pushState(null, null, '/dashboard/recents/' + current_room.id)
   }
 
+  handleMessageTyping(){
+    const socket = io(config.socket.server)
+    const data = AppStore.data
+    if(data.is_typing)
+      return false
+    AppStore.data.is_typing = data.user
+    AppStore.emitChange()
+    socket.emit('typing', AppStore.data.current_room.id)
+    setTimeout(() => {
+      socket.emit('typing ended', AppStore.data.current_room.id)
+    }, 3000)
+  }
+
   componentWillMount(){
     this.init()
   }
 
+  sendNotification(message){
+    let profile_image_url = config.app.url + '/images/dashboard/rebot@2x.png'
+    let first_name = 'Rebot'
+    if(message.author){
+      first_name = message.author.first_name
+    }
+
+    const title = 'New message from ' + first_name
+    let instance = new Notification(
+      title, {
+        body: message.comment,
+        icon: profile_image_url,
+         sound: '/audio/goat.mp3'
+      }
+    )
+    instance.onclick = () => {
+      window.focus()
+    }
+    instance.onshow = () => {
+      this.refs.notif_sound.play()
+    }
+  }
+
+  checkNotification(message){
+    
+    if(!('Notification' in window))
+      return false
+
+    if(document && document.hasFocus())
+      return false
+    
+    const Notification = window.Notification || window.mozNotification || window.webkitNotification
+
+    if(Notification.permission === 'granted'){
+      
+      this.sendNotification(message)
+
+    } else {
+      
+      Notification.requestPermission((permission) => {
+        if(permission === 'granted'){
+          this.sendNotification(message)
+        }
+      })
+    }
+  }
+
   componentDidMount(){
-    let socket = io()
-    socket.on('chat message', function(message){
-      // Add message if
+    // Listen for new messages
+    const socket = io(config.socket.server)
+    const data = AppStore.data
+    socket.emit('authenticate', data.user.access_token)
+    // Listen for new message
+    socket.on('new message',(response) => {
+      const message = response.message
+      const room = response.room
       const messages = AppStore.data.messages
       const current_room = AppStore.data.current_room
-      // does not exist already
-      if(_.findWhere(messages, { id: message.id }))
-        return false
-      // in this room
-      if(message.room_id == current_room.id){
+      // If in this room
+      if(current_room.id == room.id){
+        if(data.user.id === message.author.id)
+          message.fade_in = true
         AppStore.data.messages.push(message)
+        const rooms = AppStore.data.rooms
+        let current_room_index = _.findIndex(rooms, { id: current_room.id })
+        AppStore.data.rooms[current_room_index].latest_message = message
         AppStore.emitChange()
+        if(data.user.id !== message.author.id)
+          this.checkNotification(message)
       }
+    })
+    // Listen for typing
+    socket.on('typing',(response) => {
+      const author_id = response.user_id
+      const room_id = response.room_id
+      AppStore.data.is_typing = {
+        author_id: author_id,
+        room_id: room_id
+      }
+      AppStore.emitChange()
+    })
+    socket.on('typing ended',(response) => {
+      delete AppStore.data.is_typing
+      AppStore.emitChange()
     })
   }
 
@@ -141,6 +236,10 @@ export default class Dashboard extends Component {
     const user = this.props.data.user
     const current_room = this.props.data.current_room
 
+    // If no comment
+    if(!comment.trim())
+      return false
+
     AppDispatcher.dispatch({
       action: 'create-message',
       user: user,
@@ -158,6 +257,7 @@ export default class Dashboard extends Component {
     let data = this.props.data
     data.rooms = AppStore.data.rooms
     data.is_filtering = AppStore.data.is_filtering
+    data.filtered_rooms = AppStore.data.filtered_rooms
     data.current_room = AppStore.data.current_room
     data.messages = AppStore.data.messages
     data.showCreateChatModal = AppStore.data.showCreateChatModal
@@ -177,6 +277,7 @@ export default class Dashboard extends Component {
         <main>
           <SideBar data={ data }/>
           <MainContent
+            handleMessageTyping={ this.handleMessageTyping } 
             filterRooms={ this.filterRooms } 
             createMessage={ this.createMessage } 
             showModal={ this.showModal } 
@@ -186,6 +287,9 @@ export default class Dashboard extends Component {
             getMessages={ this.getMessages } 
             data={ data }/>
         </main>
+        <audio ref="notif_sound" id="notif-sound">
+          <source src="/audio/goat.mp3" type="audio/mpeg" />
+        </audio>
       </div>
     )
   }
