@@ -48,7 +48,9 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       'process.env.APP_URL': JSON.stringify(process.env.APP_URL),
-      'process.env.SOCKET_SERVER': JSON.stringify(process.env.SOCKET_SERVER)
+      'process.env.SOCKET_SERVER': JSON.stringify(process.env.SOCKET_SERVER),
+      'process.env.COSMIC_BUCKET': JSON.stringify(process.env.COSMIC_BUCKET),
+      'process.env.COSMIC_KEY': JSON.stringify(process.env.COSMIC_KEY)
     }),
  ]
 }
