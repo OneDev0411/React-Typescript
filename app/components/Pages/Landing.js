@@ -131,7 +131,7 @@ export default class Landing extends Component {
     const headline_style = S('mb-35')
     const tag_style = S('font-22 mb-40')
     const form_wrap_style = {
-      ...S('br-4 p-30 pb-20 maxw-650'),
+      ...S('br-4 p-30 pb-20 maxw-700'),
       'backgroundColor': 'rgba(0, 0, 0, 0.5)'
     }
     const footer_style = {
