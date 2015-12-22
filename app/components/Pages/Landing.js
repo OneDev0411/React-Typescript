@@ -135,7 +135,7 @@ export default class Landing extends Component {
     let random_number = data.random_number
     let headline_text = (
       <div>
-        from search to close be<br/><span style={ current_text_style }>{ data.current_text }</span><span className={ blinking_cursor }>|</span> 
+        From search to close be<br/><span style={ current_text_style }>{ data.current_text }</span><span className={ blinking_cursor }>|</span> 
       </div>
     )
 
