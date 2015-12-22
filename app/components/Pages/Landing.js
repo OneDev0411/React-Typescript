@@ -5,6 +5,10 @@ import { Col, Input, Button } from 'react-bootstrap'
 import S from 'shorti'
 import Cosmic from 'cosmicjs'
 import config from '../../../config/public'
+import emojify from 'emojify.js'
+emojify.setConfig({
+  img_dir: '/images/emoji'
+})
 
 // Store
 import AppDispatcher from '../../dispatcher/AppDispatcher'
@@ -156,8 +160,7 @@ export default class Landing extends Component {
     let call_to_action_text
     if(call_to_action)
       call_to_action_text = (
-        <p className="tempo" style={ S('pt-0 p-10 font-18') }>
-          { call_to_action }
+        <p style={ S('pt-0 p-10 font-17') } dangerouslySetInnerHTML={ { __html: emojify.replace(call_to_action) } } >
         </p>
       )
 
