@@ -153,6 +153,13 @@ export default class Landing extends Component {
         <source src={'/videos/landing/' + video_src + '.ogv'} type="video/ogg"/>
       </video>
     )
+    let call_to_action_text
+    if(call_to_action)
+      call_to_action_text = (
+        <p style={ S('pt-0 p-10 font-18') }>
+          { call_to_action }
+        </p>
+      )
 
     return (
       <div className="page-landing" style={ page_style }>
@@ -195,9 +202,7 @@ export default class Landing extends Component {
                 { subheadline }
               </p>
               <div className="form-wrap center-block" style={ form_wrap_style }>
-                <p style={ S('pt-0 p-10 font-16') }>
-                  { call_to_action }
-                </p>
+                { call_to_action_text }
                 <form onSubmit={ this.showThankYou } action="//rechat.us11.list-manage.com/subscribe/post?u=c21e4aeea43aececadaf53146&amp;id=4c276af8ae" method="post" name="mc-embedded-subscribe-form" target="_blank">
                   <Col className="form-input--email" sm={8} style={ S('pl-0') }>
                     <Input style={ S('w-100p') } bsSize="large" type="email" name="EMAIL" placeholder={ placeholder_text }/>
