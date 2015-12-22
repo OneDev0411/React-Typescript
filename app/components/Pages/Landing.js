@@ -32,11 +32,9 @@ export default class Landing extends Component {
     })
   }
 
-  componentWillMount(){
-    this.getContent()
-  }
-
   componentDidMount(){
+    
+    this.getContent()
     
     AppStore.data.blinking_cursor = true
     AppStore.emitChange()
