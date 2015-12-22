@@ -5,11 +5,5 @@ export default {
   },
   socket: {
     server: process.env.SOCKET_SERVER // this must match config.api.url
-  },
-  cosmicjs: {
-    bucket: {
-      slug: process.env.COSMIC_BUCKET,
-      read_key: process.env.COSMIC_KEY
-    }
   }
 }
