@@ -156,7 +156,7 @@ export default class Landing extends Component {
     let call_to_action_text
     if(call_to_action)
       call_to_action_text = (
-        <p style={ S('pt-0 p-10 font-18') }>
+        <p className="tempo" style={ S('pt-0 p-10 font-18') }>
           { call_to_action }
         </p>
       )
