@@ -20,22 +20,29 @@ export default class Landing extends Component {
   }
 
   getContent(){
-    Cosmic.getObjects(config.cosmicjs, (err, objects) => {
-      let metafields = objects.object['landing-page'].metafields
-      let subheadline = _.findWhere(metafields, { key: 'subheadline'}).value
-      let call_to_action = _.findWhere(metafields, { key: 'call-to-action'}).value
-      AppStore.data.content = {
-        subheadline: subheadline,
-        call_to_action: call_to_action
-      }
-      AppStore.emitChange()
-    })
+    // Cosmic.getObjects(config.cosmicjs, (err, objects) => {
+    //   let metafields = objects.object['landing-page'].metafields
+    //   let subheadline = _.findWhere(metafields, { key: 'subheadline'}).value
+    //   let call_to_action = _.findWhere(metafields, { key: 'call-to-action'}).value
+    //   AppStore.data.content = {
+    //     subheadline: subheadline,
+    //     call_to_action: call_to_action
+    //   }
+    //   AppStore.emitChange()
+    // })
+    let subheadline = 'Rechat is an All in One Real Estate Sales Platform with Search, CRM & Transaction Platform.'
+    let call_to_action = 'Add your email to the waiting list for private beta access.'
+    AppStore.data.content = {
+      subheadline: subheadline,
+      call_to_action: call_to_action
+    }
+    AppStore.emitChange()
   }
 
   componentDidMount(){
     
     this.getContent()
-    
+
     AppStore.data.blinking_cursor = true
     AppStore.emitChange()
 
