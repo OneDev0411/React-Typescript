@@ -131,17 +131,17 @@ export default class Landing extends Component {
     const headline_style = S('mb-35')
     const tag_style = S('font-22 mb-40')
     const form_wrap_style = {
-      ...S('br-4 p-30 pb-20 maxw-700'),
+      ...S('br-4 p-30 pb-20'),
       'backgroundColor': 'rgba(0, 0, 0, 0.5)'
     }
     const footer_style = {
       ...S('absolute b-0 w-100p mb-20 pt-20 color-ededed font-13  z-2'),
       borderTop: '1px solid rgba(168,168,168, 0.3)'
     }
-
     const current_text_style = {
       fontStyle: 'italic'
     }
+    
     // Get video and text from random number
     let random_number = data.random_number
     let headline_text = (
@@ -197,7 +197,7 @@ export default class Landing extends Component {
         </header>
         <main className="container" style={ S('h-100p z-2 relative') }>
           <div className="landing-main text-center" style={ S('h-100p') }>
-            <div className="center-block" style={ S('maxw-700 mt-50n') }>
+            <div className="center-block" style={ S('maxw-750 mt-50n') }>
               <h1 className="tempo headline" style={ headline_style }>
                 { headline_text }
               </h1>
