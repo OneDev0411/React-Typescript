@@ -79,7 +79,7 @@ export default class Landing extends Component {
       video_src = 'young_agent'
 
     // Blinking cursor
-    if(!AppStore.data.blinking_cursor)
+    if(typeof AppStore.data.blinking_cursor === 'undefined')
       blinking_cursor = true
     let animation_started = AppStore.data.animation_started
     if(animation_started)

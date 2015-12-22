@@ -53,7 +53,7 @@ export default {
           },3000)
         }
       num++
-    }, 200)
+    }, 150)
   },
 
   removeText: function(animated_num){
@@ -65,6 +65,9 @@ export default {
       if(!animated_text){
         clearInterval(removing_text)
         setTimeout(() => {
+          this.startBlinking()
+        },200)
+        setTimeout(() => {
           let next_text = this.getText(animated_num+1)
           if(next_text){
             this.addText(animated_num+1)
@@ -73,7 +76,7 @@ export default {
           }
         }, 1500)
       }
-    }, 200)
+    }, 150)
   },
 
   // Start animation
