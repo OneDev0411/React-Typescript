@@ -193,10 +193,11 @@ export default class Landing extends Component {
               </h1>
               <p style={ tag_style }>
                 { subheadline }
-                <br className="hidden-xs"/>
-                { call_to_action }
               </p>
               <div className="form-wrap center-block" style={ form_wrap_style }>
+                <p style={ S('pt-0 p-10 font-16') }>
+                  { call_to_action }
+                </p>
                 <form onSubmit={ this.showThankYou } action="//rechat.us11.list-manage.com/subscribe/post?u=c21e4aeea43aececadaf53146&amp;id=4c276af8ae" method="post" name="mc-embedded-subscribe-form" target="_blank">
                   <Col className="form-input--email" sm={8} style={ S('pl-0') }>
                     <Input style={ S('w-100p') } bsSize="large" type="email" name="EMAIL" placeholder={ placeholder_text }/>
