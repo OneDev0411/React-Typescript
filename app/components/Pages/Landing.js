@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { Col, Input, Button } from 'react-bootstrap'
 import S from 'shorti'
+import Cosmic from 'cosmicjs'
+import config from '../../../config/public'
 
 // Store
 import AppDispatcher from '../../dispatcher/AppDispatcher'
@@ -17,10 +19,32 @@ export default class Landing extends Component {
     Intercom('show')
   }
 
+  getContent(){
+    Cosmic.getObjects(config.cosmicjs, (err, objects) => {
+      let metafields = objects.object['landing-page'].metafields
+      let subheadline = _.findWhere(metafields, { key: 'subheadline'}).value
+      let call_to_action = _.findWhere(metafields, { key: 'call-to-action'}).value
+      AppStore.data.content = {
+        subheadline: subheadline,
+        call_to_action: call_to_action
+      }
+      AppStore.emitChange()
+    })
+  }
+
+  componentWillMount(){
+    this.getContent()
+  }
+
   componentDidMount(){
     
+    AppStore.data.blinking_cursor = true
+    AppStore.emitChange()
+
     let random_number = this.props.data.random_number
     
+    random_number = 0
+
     AppDispatcher.dispatch({
       action: 'init-landing',
       random_number: random_number
@@ -32,16 +56,50 @@ export default class Landing extends Component {
         random_number: random_number
       })
     }, 3000)
+
+    // setInterval(() => {
+    //   let video_src = AppStore.data.video_src
+    //   AppDispatcher.dispatch({
+    //     action: 'landing-swap-video',
+    //     video_src: video_src
+    //   })
+    // }, 5000)
+
   }
 
   render(){
     
     // Data
     let data = this.props.data
+    let blinking_cursor = AppStore.data.blinking_cursor
+    let video_src = AppStore.data.video_src
+    if(!video_src)
+      video_src = 'young_agent'
+
+    // Blinking cursor
+    if(!AppStore.data.blinking_cursor)
+      blinking_cursor = true
     let animation_started = AppStore.data.animation_started
     if(animation_started)
       data = AppStore.data
+
+    if(blinking_cursor){
+      blinking_cursor = 'blinking-cursor'
+    } else {
+      blinking_cursor = ''
+    }
+
+    // Content
+    // Subheadline
+    let subheadline
+    if(AppStore.data.content)
+      subheadline = AppStore.data.content.subheadline
     
+    // Call to action
+    let call_to_action
+    if(AppStore.data.content)
+      call_to_action = AppStore.data.content.call_to_action
+
     // Styles
     const page_style = {
       position: 'relative',
@@ -70,23 +128,16 @@ export default class Landing extends Component {
       borderTop: '1px solid rgba(168,168,168, 0.3)'
     }
 
+    const current_text_style = {
+      fontStyle: 'italic'
+    }
     // Get video and text from random number
     let random_number = data.random_number
-    let video_src = 'young_agent'
     let headline_text = (
       <div>
-        Be a #<span ref="animated_text">{ data.current_text }</span><span className="blinking-cursor">|</span>
+        from search to close be<br/><span style={ current_text_style }>{ data.current_text }</span><span className={ blinking_cursor }>|</span> 
       </div>
     )
-
-    if(random_number){
-      video_src = 'couple'
-      headline_text = (
-        <div>
-          From Search to Close be<br/>{ data.current_text }<span className="blinking-cursor">|</span> 
-        </div>
-      )
-    }
 
     let video = (
       <video style={ S('z-0 absolute') } autoPlay="true" loop="true" className="fullscreen-bg__video">
@@ -95,6 +146,7 @@ export default class Landing extends Component {
         <source src={'/videos/landing/' + video_src + '.ogv'} type="video/ogg"/>
       </video>
     )
+
     return (
       <div className="page-landing" style={ page_style }>
         <div className="overlay"></div>
@@ -133,8 +185,9 @@ export default class Landing extends Component {
                 { headline_text }
               </h1>
               <p style={ tag_style }>
-                Rechat is an All in One Real Estate Sales Platform <br className="hidden-xs"/>with Search, CRM & Transaction Platform.
-                <br className="hidden-xs"/>Get on the waiting list! We will notifiy you when we launch.
+                { subheadline }
+                <br className="hidden-xs"/>
+                { call_to_action }
               </p>
               <div className="form-wrap center-block" style={ form_wrap_style }>
                 <form onSubmit={ this.showThankYou } action="//rechat.us11.list-manage.com/subscribe/post?u=c21e4aeea43aececadaf53146&amp;id=4c276af8ae" method="post" name="mc-embedded-subscribe-form" target="_blank">

@@ -5,5 +5,11 @@ export default {
   },
   socket: {
     server: 'http://alpine.d.rechat.co:80' // this must match config.api.url
+  },
+  cosmicjs: {
+    bucket: {
+      slug: 'rechat',
+      read_key: '1ocTAAAu6vpgLGfHTtVRRj0cno0feyveTJgJrrB7kuw0KcxOhA'
+    }
   }
 }

@@ -28,8 +28,8 @@ export default class MessagesList extends Component {
     const messages_scroll_area = this.refs.messages_scroll_area
     if(messages_scroll_area){
       const fromBottom = messages_scroll_area.scrollHeight - messages_scroll_area.scrollTop - parseInt(messages_scroll_area.style.height, 10)
-      if(fromBottom <= 200 && !this.props.data.is_typing)
-        messages_scroll_area.scrollTop = messages_scroll_area.scrollHeight
+      // if(fromBottom <= 200 && !this.props.data.is_typing)
+      messages_scroll_area.scrollTop = messages_scroll_area.scrollHeight
     }
 
     // Previous messages loading

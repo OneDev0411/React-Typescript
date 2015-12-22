@@ -59,6 +59,10 @@ AppDispatcher.register(payload => {
       landingPage.animateText()
       break
 
+    case 'landing-swap-video':
+      landingPage.swapVideo(payload.video_src)
+      break
+
     case 'sign-up':
       user = payload.user
       password = payload.password

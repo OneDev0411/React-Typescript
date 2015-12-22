@@ -3,6 +3,16 @@ import AppStore from '../../stores/AppStore'
 
 export default {
 
+  swapVideo: function(video_src){
+    let new_video_src
+    if(!video_src)
+      new_video_src = 'couple'
+    if(video_src === 'young_agent')
+      new_video_src = 'couple'
+    AppStore.data.video_src = new_video_src
+    AppStore.emitChange()
+  },
+
   startBlinking: function(){
     AppStore.data.blinking_cursor = true
     AppStore.emitChange()
@@ -16,9 +26,7 @@ export default {
   getText: function(animated_num){
     const data = AppStore.data
     let random_number = data.random_number
-    let animated_text = ['superagent','superbadass','goat','caitlynjenner']
-    if(random_number)
-      animated_text = ['smarter','faster','more responsive','more knowledgable']
+    let animated_text = ['smarter','faster','more responsive','more knowledgable']
     let current_text = animated_text[animated_num]
     return current_text
   },
@@ -41,10 +49,7 @@ export default {
             this.startBlinking()
           },1000)
           setTimeout(() => {
-            let next_text = this.getText(animated_num+1)
-            if(next_text){
-              this.removeText(animated_num)
-            }
+            this.removeText(animated_num)
           },3000)
         }
       num++
@@ -60,7 +65,12 @@ export default {
       if(!animated_text){
         clearInterval(removing_text)
         setTimeout(() => {
-          this.addText(animated_num+1)
+          let next_text = this.getText(animated_num+1)
+          if(next_text){
+            this.addText(animated_num+1)
+          } else {
+            this.addText(0)
+          }
         }, 1500)
       }
     }, 200)

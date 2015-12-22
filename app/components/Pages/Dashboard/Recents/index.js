@@ -171,10 +171,7 @@ export default class Dashboard extends Component {
     socket.emit('Authenticate', data.user.access_token)
 
     // Listen for new message
-    socket.on('Message.Sent',(response) => {
-      console.log(response)
-      const message = response.object.message
-      const room = response.room
+    socket.on('Message.Sent',(room, message) => {
       const messages = AppStore.data.messages
       const current_room = AppStore.data.current_room
       // If in this room
