@@ -24,9 +24,11 @@ export default class Landing extends Component {
       let metafields = objects.object['landing-page'].metafields
       let subheadline = _.findWhere(metafields, { key: 'subheadline'}).value
       let call_to_action = _.findWhere(metafields, { key: 'call-to-action'}).value
+      let placeholder_text = _.findWhere(metafields, { key: 'placeholder-text'}).value
       AppStore.data.content = {
         subheadline: subheadline,
-        call_to_action: call_to_action
+        call_to_action: call_to_action,
+        placeholder_text: placeholder_text
       }
       AppStore.emitChange()
     })
@@ -99,6 +101,11 @@ export default class Landing extends Component {
     let call_to_action
     if(AppStore.data.content)
       call_to_action = AppStore.data.content.call_to_action
+
+    // Placeholder text
+    let placeholder_text
+    if(AppStore.data.content)
+      placeholder_text = AppStore.data.content.placeholder_text
 
     // Styles
     const page_style = {
@@ -192,7 +199,7 @@ export default class Landing extends Component {
               <div className="form-wrap center-block" style={ form_wrap_style }>
                 <form onSubmit={ this.showThankYou } action="//rechat.us11.list-manage.com/subscribe/post?u=c21e4aeea43aececadaf53146&amp;id=4c276af8ae" method="post" name="mc-embedded-subscribe-form" target="_blank">
                   <Col className="form-input--email" sm={8} style={ S('pl-0') }>
-                    <Input style={ S('w-100p') } bsSize="large" type="email" name="EMAIL" placeholder="Email Address"/>
+                    <Input style={ S('w-100p') } bsSize="large" type="email" name="EMAIL" placeholder={ placeholder_text }/>
                     <div style={ S('l-5000n absolute') } aria-hidden="true">
                       <input type="text" name="b_15433aab34aefd5450c23fd94_c08ce5e2f0" tabIndex="-1" value="" />
                     </div>
