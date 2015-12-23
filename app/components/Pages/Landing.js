@@ -30,9 +30,9 @@ export default class Landing extends Component {
       let call_to_action = _.findWhere(metafields, { key: 'call-to-action'}).value
       let placeholder_text = _.findWhere(metafields, { key: 'placeholder-text'}).value
       AppStore.data.content = {
-        subheadline: subheadline,
-        call_to_action: call_to_action,
-        placeholder_text: placeholder_text
+        subheadline,
+        call_to_action,
+        placeholder_text
       }
       AppStore.emitChange()
     })

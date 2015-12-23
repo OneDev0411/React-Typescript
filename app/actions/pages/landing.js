@@ -37,6 +37,7 @@ export default {
   },
 
   addText: function(animated_num){
+    this.stopBlinking()
     let animated_text = this.getText(animated_num)
     let num = 0
     let partial_text
@@ -57,8 +58,8 @@ export default {
   },
 
   removeText: function(animated_num){
-    let animated_text = this.getText(animated_num)
     this.stopBlinking()
+    let animated_text = this.getText(animated_num)
     let removing_text = setInterval(() => {
       animated_text = animated_text.slice(0, -1)
       this.setText(animated_text)

@@ -16,7 +16,7 @@ var loaders_module = [
   },
   {
     test: /\.scss$/,
-    loader: ExtractTextPlugin.extract('style', 'css!sass')
+    loader: ExtractTextPlugin.extract('style', 'css!autoprefixer!sass')
   }
 ]
 

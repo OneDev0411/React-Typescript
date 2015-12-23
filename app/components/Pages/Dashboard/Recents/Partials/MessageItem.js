@@ -5,7 +5,6 @@ import S from 'shorti'
 import helpers from '../../../../../utils/helpers'
 import emojify from 'emojify.js'
 import linkifyString from 'linkifyjs/string'
-import config from '../../../../../../config/public'
 emojify.setConfig({
   img_dir: '/images/emoji'
 })
