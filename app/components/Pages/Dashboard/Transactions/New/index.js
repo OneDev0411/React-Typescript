@@ -1,88 +1,175 @@
 // Dashboard/Transactions/New/index.js
 import React, { Component } from 'react'
-import { Link } from 'react-router'
-import { Button, Input, Col } from 'react-bootstrap'
+import { Button, Breadcrumb, BreadcrumbItem } from 'react-bootstrap'
 import S from 'shorti'
-import config from '../../../../../../config/public'
 
-// AppDispatcher
-import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
-
-// AppStore
-import AppStore from '../../../../../stores/AppStore'
+// TransactionDispatcher
+import TransactionDispatcher from '../../../../../dispatcher/TransactionDispatcher'
 
 // Partials
 import MainNav from '../../Partials/MainNav'
 import SideBar from '../../Partials/SideBar'
 
+// Steps
+import AddContacts from './Steps/AddContacts'
+import AddEntities from './Steps/AddEntities'
+import AddListing from './Steps/AddListing'
+import AddFinancials from './Steps/AddFinancials'
+import AddDates from './Steps/AddDates'
+
 export default class NewTransaction extends Component {
 
-  componentDidMount(){
-    AppStore.data.new_transaction = {
-      step: 0
-    }
-    AppStore.emitChange()
+  componentDidMount() {
+    TransactionDispatcher.dispatch({
+      action: 'init'
+    })
   }
 
-  handleSteps(direction,type){
-    
+  getBreadCrumbs(step) {
+    let contacts_active = false
+    let entries_active = false
+    let listing_active = false
+    let financials_active = false
+    let dates_active = false
+    if (step === 1)
+      contacts_active = true
+    if (step === 2)
+      entries_active = true
+    if (step === 3)
+      listing_active = true
+    if (step === 4)
+      financials_active = true
+    if (step === 5)
+      dates_active = true
+    const breadcrumb_items = [
+      <BreadcrumbItem onClick={ this.handleGoToStep.bind(this, 1) } active={ contacts_active }>Add contacts</BreadcrumbItem>,
+      <BreadcrumbItem onClick={ this.handleGoToStep.bind(this, 2) } active={ entries_active }>Add entities</BreadcrumbItem>,
+      <BreadcrumbItem onClick={ this.handleGoToStep.bind(this, 3) } active={ listing_active }>Add listing</BreadcrumbItem>,
+      <BreadcrumbItem onClick={ this.handleGoToStep.bind(this, 4) } active={ financials_active }>Add financials</BreadcrumbItem>,
+      <BreadcrumbItem onClick={ this.handleGoToStep.bind(this, 5) } active={ dates_active }>Add dates</BreadcrumbItem>
+    ]
+    return breadcrumb_items.filter((item, i) => {
+      return i < step
+    })
+  }
+
+  handleTypeClick(type) {
+    TransactionDispatcher.dispatch({
+      action: 'set-type',
+      type
+    })
+    this.handleGoToStep(1)
+  }
+
+  handlePrevNext(direction) {
     // Data
     const data = this.props.data
-
-    if(direction === 'forward'){
-      const step = data.new_transaction.step + 1
-      AppStore.data.new_transaction = {
-        step: step
-      }
-      AppStore.emitChange()
-    }
-
-    if(direction === 'back'){
-      const step = data.new_transaction.step - 1
-      AppStore.data.new_transaction = {
-        step: step
-      }
-      AppStore.emitChange()
-    }
-
+    const current_step = data.new_transaction.step
+    let step
+    if (direction === 'next')
+      step = current_step + 1
+    if (direction === 'prev')
+      step = current_step - 1
+    TransactionDispatcher.dispatch({
+      action: 'go-to-step',
+      step
+    })
   }
 
-  render(){
+  handleGoToStep(step) {
+    // Data
+    TransactionDispatcher.dispatch({
+      action: 'go-to-step',
+      step
+    })
+  }
 
+  render() {
     // Data
     const data = this.props.data
     const main_style = S('absolute l-222 r-0 ml-20 w-960 h-300')
-    const path = data.path
+    // New transaction data
+    let new_transaction
+    if (data.new_transaction)
+      new_transaction = data.new_transaction
 
     let main_content = (
       <div>
         <h1>Keep'em comin!  So are we...</h1>
         <div>
-          <Button onClick={ this.handleSteps.bind(this,'forward','buying') } className="btn btn-primary">Buying</Button>
-          <Button onClick={ this.handleSteps.bind(this,'forward','selling') } style={ S('ml-40') } className="btn btn-primary">Selling</Button>
-          <Button onClick={ this.handleSteps.bind(this,'forward','buying-selling') } style={ S('ml-40') } className="btn btn-primary">Buying & Selling</Button>
-          <Button onClick={ this.handleSteps.bind(this,'forward','lease') } style={ S('ml-40') } className="btn btn-primary">Lease</Button>
+          <Button onClick={ this.handleTypeClick.bind(this, 'buying') } className="btn btn-primary">Buying</Button>
+          <Button onClick={ this.handleTypeClick.bind(this, 'selling') } style={ S('ml-40') } className="btn btn-primary">Selling</Button>
+          <Button onClick={ this.handleTypeClick.bind(this, 'buying-selling') } style={ S('ml-40') } className="btn btn-primary">Buying & Selling</Button>
+          <Button onClick={ this.handleTypeClick.bind(this, 'lease') } style={ S('ml-40') } className="btn btn-primary">Lease</Button>
         </div>
       </div>
     )
+    // Set vars
+    let nav_buttons
+    let breadcrumbs
+    if (new_transaction) {
+      const step = new_transaction.step
+      // Main content
+      switch (new_transaction.step) {
+        case 1:
+          main_content = (
+            <AddContacts data={ data }/>
+          )
+          break
+        case 2:
+          main_content = (
+            <AddEntities data={ data }/>
+          )
+          break
+        case 3:
+          main_content = (
+            <AddListing data={ data }/>
+          )
+          break
+        case 4:
+          main_content = (
+            <AddFinancials data={ data }/>
+          )
+          break
+        case 5:
+          main_content = (
+            <AddDates data={ data }/>
+          )
+          break
+        default:
+          main_content = main_content
+      }
 
-    if(data.new_transaction && data.new_transaction.step === 1)
-      main_content = (
-        <div>
-          <h1>Very nice. Who are we creating this <br/>transaction for?</h1>
-          <div>
-            <form style={ S('maxw-820') }>
-              <Input className="pull-left" style={ S('w-640') } type="text" placeholder="Enter any name, email or phone number"/>
-              <Button className="pull-left" style={ S('w-160 ml-10') } bsStyle="primary" type="button">Add New Contact</Button>
-            </form>
-            <div className="clearfix"></div>
-          </div>
-          <div style={ S('absolute r-0 b-0') }>
-            <Button bsStyle="link" style={ S('mr-20') } onClick={ this.handleSteps.bind(this,'back','') }>Back</Button>
-            <Button onClick={ this.handleSteps.bind(this,'forward','') }>Next</Button>
-          </div>
+      // Breadcrumbs
+      if (step)
+        breadcrumbs = (
+          <Breadcrumb style={ S('mt-20') }>
+            { this.getBreadCrumbs(step) }
+          </Breadcrumb>
+        )
+
+      // Buttons
+      let previous_button
+      let next_button
+
+      // Back Button
+      if (step)
+        previous_button = (
+          <Button bsStyle="link" style={ S('mr-20') } onClick={ this.handlePrevNext.bind(this, 'prev') }>Back</Button>
+        )
+      // Next Button
+      if (step < new_transaction.total_steps)
+        next_button = (
+          <Button onClick={ this.handlePrevNext.bind(this, 'next') }>Next</Button>
+        )
+
+      nav_buttons = (
+        <div style={ S('absolute r-0 b-0') }>
+          { previous_button }
+          { next_button }
         </div>
       )
+    }
 
     return (
       <div style={ S('minw-1000') }>
@@ -92,7 +179,9 @@ export default class NewTransaction extends Component {
         <main>
           <SideBar data={ data }/>
           <div style={ main_style }>
+            { breadcrumbs }
             { main_content }
+            { nav_buttons }
           </div>
         </main>
       </div>
