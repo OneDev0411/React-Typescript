@@ -1,5 +1,6 @@
 // "extends": "airbnb",
 { 
+  "extends": "airbnb",
   "parser": "babel-eslint",
   "env": {
     "browser": true,
@@ -9,6 +10,7 @@
     "react"
   ],
   "rules": {
+    "no-new": 0,
     "curly": [2, "multi"],
     "comma-dangle": [2,"never"],
     "semi": 0,

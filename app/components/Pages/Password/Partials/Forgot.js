@@ -9,36 +9,31 @@ import AppStore from '../../../../stores/AppStore'
 
 export default class Forgot extends Component {
 
-  handleSubmit(e){
-    
+  handleSubmit(e) {
     e.preventDefault()
     AppStore.data.submitting = true
     AppStore.emitChange()
 
-    let email = this.refs.email.getInputDOMNode().value
-    let form_data = {
-      email: email
+    const email = this.refs.email.getInputDOMNode().value
+    const form_data = {
+      email
     }
-    
-    this.props.handleSubmit('forgot-password',form_data)
 
+    this.props.handleSubmit('forgot-password', form_data)
   }
 
-  render(){
-    
+  render() {
     const data = this.props.data
-    let errors = data.errors
-    
+    const errors = data.errors
+
     let email_style
     let message
     let message_text
     let alert_style
-    
-    if(data.show_message){
-      
+
+    if (data.show_message)
       // Errors
-      if(errors){
-        
+      if (errors)
         if(data.email_not_found){
           email_style = 'error'
           alert_style = 'warning'
@@ -47,28 +42,26 @@ export default class Forgot extends Component {
           )
         }
 
-        if(data.email_invalid){
+        if (data.email_invalid){
           email_style = 'error'
           alert_style = 'danger'
           message_text = 'Oops! That looks like an invalid email address!'
         }
-      }
+      // if(errors)
 
       // Success
-      if(data.status === 'success'){
+      if (data.status === 'success'){
         alert_style = 'success'
         message_text = `We've sent you an email with instructions on how to reset your password.  Please check your email.`
       }
       
-      if(message_text){
+      if (message_text)
         message = (
           <Alert bsStyle={ alert_style }>
             { message_text }
           </Alert>
         )
-      }
-      
-    }
+    // if(show_message)
 
     let submitting = data.submitting
     let submitting_class = ''
@@ -101,14 +94,13 @@ export default class Forgot extends Component {
       </div>
     )
 
-    if(data.status === 'success'){
+    if (data.status === 'success')
       main_content = (
         <div>
           { message }
           <Link style={ S('w-100p') } className="btn btn-primary" to="/">Done</Link>
         </div>
       )
-    }
 
     return (
       <div className="center-block" style={ S('maxw-300') }>
@@ -116,4 +108,10 @@ export default class Forgot extends Component {
       </div>
     )
   }
+}
+
+// PropTypes
+Forgot.propTypes = {
+  data: React.PropTypes.object.isRequired,
+  handleSubmit: React.PropTypes.func.isRequired
 }

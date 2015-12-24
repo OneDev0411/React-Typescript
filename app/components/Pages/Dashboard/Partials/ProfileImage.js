@@ -20,5 +20,5 @@ export default class ProfileImage extends Component {
 
 // PropTypes
 ProfileImage.propTypes = {
-  profile_image_url: React.PropTypes.object.isRequired
+  profile_image_url: React.PropTypes.string
 }

@@ -10,7 +10,7 @@ export default class MessagesList extends Component {
   componentDidMount() {
     if (typeof window !== 'undefined') {
       const clipboard = require('clipboard')
-      clipboard('.copy-link')
+      new clipboard('.copy-link')
     }
   }
 

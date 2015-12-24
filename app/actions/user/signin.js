@@ -41,7 +41,6 @@ export default (email, password, redirect_to, invite) => {
     invite
   }
   User.signin(params, (err, response) => {
-
     // Success
     if (response.status === 'success') {
       const user = response.data
