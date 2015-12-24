@@ -40,7 +40,6 @@ export default (email, password, redirect_to, invite) => {
     redirect_to,
     invite
   }
-  console.log('actions',params)
   User.signin(params, (err, response) => {
 
     // Success
