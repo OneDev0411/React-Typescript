@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 
 export default class Loading extends Component {
-  render(){
+  render() {
     return (
       <div className="sk-circle">
         <div className="sk-circle1 sk-child"></div>

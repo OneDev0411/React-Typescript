@@ -3,13 +3,11 @@ import React, { Component } from 'react'
 import S from 'shorti'
 
 export default class ProfileImage extends Component {
-
-  render(){
-    
-    const data = this.props.data
+  render() {
     let profile_image_url = this.props.profile_image_url
-    if(!profile_image_url)
+    if (!profile_image_url)
       profile_image_url = '/images/dashboard/profile-image-default.png'
+
     const profile_image_style = S('bg-cover bg-center bg-url(' + profile_image_url + ') w-35 h-35 absolute z-2')
 
     return (
@@ -18,5 +16,9 @@ export default class ProfileImage extends Component {
       </div>
     )
   }
+}
 
+// PropTypes
+ProfileImage.propTypes = {
+  profile_image_url: React.PropTypes.object.isRequired
 }

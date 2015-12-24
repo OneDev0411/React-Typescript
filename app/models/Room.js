@@ -6,11 +6,9 @@ import 'isomorphic-fetch'
 import config from '../../config/public'
 
 export default {
-  
   create: (params, callback) => {
-    
     let api_host = params.api_host
-    if(!api_host) api_host = config.app.url
+    if (!api_host) api_host = config.app.url
 
     const create_room_url = api_host + '/api/create-room'
 
@@ -19,17 +17,16 @@ export default {
       owner: params.owner,
       access_token: params.access_token
     }
-      
-    fetch(create_room_url,{
+    fetch(create_room_url, {
       method: 'post',
-      headers: {  
+      headers: {
         'Content-type': 'application/json'
       },
       body: JSON.stringify(request_object)
     })
     .then((response) => {
       if (response.status >= 400) {
-        let error = {
+        const error = {
           status: 'error',
           message: 'There was an error with this request.'
         }
@@ -41,11 +38,9 @@ export default {
       return callback(false, response)
     })
   },
-
   getMessages: (params, callback) => {
-    
     let api_host = params.api_host
-    if(!api_host) api_host = config.app.url
+    if (!api_host) api_host = config.app.url
 
     const get_messages_url = `${api_host}/api/messages/?room_id=${params.room_id}` +
       `&access_token=${params.access_token}` +
@@ -55,7 +50,7 @@ export default {
     fetch(get_messages_url)
     .then((response) => {
       if (response.status >= 400) {
-        let error = {
+        const error = {
           status: 'error',
           message: 'There was an error with this request.'
         }
@@ -69,9 +64,8 @@ export default {
   },
 
   getPrevious: (params, callback) => {
-    
     let api_host = params.api_host
-    if(!api_host) api_host = config.app.url
+    if (!api_host) api_host = config.app.url
 
     const get_messages_url = `${api_host}/api/messages/?room_id=${params.room_id}` +
       `&access_token=${params.access_token}` +
@@ -81,7 +75,7 @@ export default {
     fetch(get_messages_url)
     .then((response) => {
       if (response.status >= 400) {
-        let error = {
+        const error = {
           status: 'error',
           message: 'There was an error with this request.'
         }
@@ -95,9 +89,8 @@ export default {
   },
 
   addUser: (params, callback) => {
-    
     let api_host = params.api_host
-    if(!api_host) api_host = config.app.url
+    if (!api_host) api_host = config.app.url
 
     const add_user_to_room_url = api_host + '/api/add-user-to-room'
 
@@ -107,16 +100,16 @@ export default {
       access_token: params.access_token
     }
 
-    fetch(add_user_to_room_url,{
+    fetch(add_user_to_room_url, {
       method: 'post',
-      headers: {  
+      headers: {
         'Content-type': 'application/json'
       },
       body: JSON.stringify(request_object)
     })
     .then((response) => {
       if (response.status >= 400) {
-        let error = {
+        const error = {
           status: 'error',
           message: 'There was an error with this request.'
         }

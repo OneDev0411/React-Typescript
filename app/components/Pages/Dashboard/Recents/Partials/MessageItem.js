@@ -10,27 +10,25 @@ emojify.setConfig({
 })
 
 export default class MessageItem extends Component {
-  
-  render(){
-    
+  render() {
     // Data
     const data = this.props.data
     const messages = data.messages
     const message = this.props.message
-    let i = this.props.i
+    const i = this.props.i
     let first_name
 
     // Profile image
     let profile_image_url
     let profile_image_div
-    if(message.author){
+    if (message.author) {
       profile_image_url = message.author.profile_image_url
       profile_image_div = (
         <ProfileImage data={ data } profile_image_url={ profile_image_url }/>
       )
     }
     // Rebot
-    if(!message.author)
+    if (!message.author)
       profile_image_div = (
         <div style={ S('absolute w-35') }>
           <img className="center-block" src="/images/dashboard/rebot@2x.png" style={ S('w-30') } />
@@ -38,7 +36,7 @@ export default class MessageItem extends Component {
       )
 
     // First name
-    if(message.author)
+    if (message.author)
       first_name = message.author.first_name
 
     // Message time
@@ -47,7 +45,7 @@ export default class MessageItem extends Component {
 
     // Message image
     let message_image
-    if(message.image_url)
+    if (message.image_url)
       message_image = (
         <div>
           <img src={ message.image_url } style={ S('maxw-400') }/>
@@ -55,10 +53,8 @@ export default class MessageItem extends Component {
       )
 
     // Listing
-    if(message.recommendation && 
-    message.recommendation.listing && 
-    message.recommendation.listing.cover_image_url){
-      let cover_image_url = message.recommendation.listing.cover_image_url
+    if (message.recommendation && message.recommendation.listing && message.recommendation.listing.cover_image_url) {
+      const cover_image_url = message.recommendation.listing.cover_image_url
       message_image = (
         <div>
           <img src={ cover_image_url } style={ S('maxw-400') }/>
@@ -68,18 +64,16 @@ export default class MessageItem extends Component {
 
     // Fade in
     let message_class_name
-    if(message.fade_in)
+    if (message.fade_in)
       message_class_name = 'fade-in'
 
     let message_text = message.comment
-    if(!message_image)
+    if (!message_image)
       message_text = emojify.replace(linkifyString(message.comment))
 
     // Get latest author and group
-    if(message.author){
-      if(messages[i-1] && 
-      messages[i-1].author &&
-      messages[i-1].author.id === message.author.id){
+    if (message.author)
+      if (messages[i - 1] && messages[i - 1].author && messages[i - 1].author.id === message.author.id) {
         return (
           <div style={ S('relative') }>
             <div className="pull-left" style={ S('ml-50') }>
@@ -90,7 +84,6 @@ export default class MessageItem extends Component {
           </div>
         )
       }
-    }
 
     return (
       <div style={ S('relative') }>
@@ -107,4 +100,11 @@ export default class MessageItem extends Component {
       </div>
     )
   }
+}
+
+// PropTypes
+MessageItem.propTypes = {
+  data: React.PropTypes.object.isRequired,
+  message: React.PropTypes.object.isRequired,
+  i: React.PropTypes.number.isRequired
 }
