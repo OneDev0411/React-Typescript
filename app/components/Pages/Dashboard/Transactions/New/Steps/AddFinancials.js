@@ -25,5 +25,5 @@ export default class AddFinancials extends Component {
 
 // PropTypes
 AddFinancials.proptypes = {
-  data: React.PropTypes.object.isRequired
+  data: React.PropTypes.object
 }

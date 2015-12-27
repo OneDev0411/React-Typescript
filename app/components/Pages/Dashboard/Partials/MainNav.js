@@ -1,23 +1,21 @@
 // MainNav.js
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap'
+import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
 import S from 'shorti'
 import ProfileImage from './ProfileImage'
 
 export default class MainNav extends Component {
-
-  render(){
-    
+  render() {
     // Data
     const data = this.props.data
     const first_name = data.user.first_name
     const last_name = data.user.last_name
-    let profile_image_url = data.user.profile_image_url
+    const profile_image_url = data.user.profile_image_url
 
     // Style
     const nav_bar_style = { ...S('mb-0 p-0 h-58 pt-3'), borderBottom: '1px solid #e7e4e3' }
-    
+
     return (
       <Navbar style={ nav_bar_style } fluid>
         <Nav>
@@ -34,4 +32,9 @@ export default class MainNav extends Component {
       </Navbar>
     )
   }
+}
+
+// PropTypes
+MainNav.propTypes = {
+  data: React.PropTypes.object
 }

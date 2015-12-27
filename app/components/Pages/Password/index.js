@@ -1,7 +1,5 @@
 // Password/index.js
 import React, { Component } from 'react'
-import { Link } from 'react-router'
-import S from 'shorti'
 
 // AppDispatcher
 import AppDispatcher from '../../../dispatcher/AppDispatcher'
@@ -16,56 +14,53 @@ import Reset from './Partials/Reset'
 
 export default class Password extends Component {
 
-  componentDidMount(){
+  componentDidMount() {
     // Reset data store
     AppStore.data = {}
     AppStore.emitChange()
   }
 
-  handleSubmit(action, form_data){
-    
+  handleSubmit(action, form_data) {
     // Forgot pass
-    if(action === 'forgot-password'){
-      let email = form_data.email
+    if (action === 'forgot-password') {
+      const email = form_data.email
       AppDispatcher.dispatch({
         action: 'forgot-password',
-        email: email
+        email
       })
     }
     // Reset pass
-    if(action === 'reset-password'){
-      let password = form_data.password
-      let confirm_password = form_data.confirm_password
-      let token = form_data.token
+    if (action === 'reset-password') {
+      const password = form_data.password
+      const confirm_password = form_data.confirm_password
+      const token = form_data.token
       AppDispatcher.dispatch({
         action: 'reset-password',
-        password: password,
-        confirm_password: confirm_password,
-        token: token
+        password,
+        confirm_password,
+        token
       })
     }
   }
 
-  render(){
-    
+  render() {
     // Data
     const data = AppStore.data
-    const pathname = this.props.location.pathname
     const slug = this.props.params.slug
 
     let main_content
-    if(slug === 'forgot'){
+    if (slug === 'forgot') {
       main_content = (
         <Forgot handleSubmit={ this.handleSubmit } data={ data }/>
       )
     }
 
-    if(slug === 'reset'){
+    if (slug === 'reset') {
       main_content = (
         <Reset handleSubmit={ this.handleSubmit } data={ data }/>
       )
     }
-    
+
     return (
       <div id="main-content" className="container">
         <div className="text-center">
@@ -75,4 +70,10 @@ export default class Password extends Component {
       </div>
     )
   }
+}
+
+// PropTypes
+Password.propTypes = {
+  data: React.PropTypes.object,
+  params: React.PropTypes.object.isRequired
 }

@@ -1,9 +1,6 @@
 // AppDispatcher.js
 import { Dispatcher } from 'flux'
 
-// AppStore
-import AppStore from '../stores/AppStore'
-
 // User
 import signup from '../actions/user/signup'
 import signin from '../actions/user/signin'
@@ -29,8 +26,7 @@ const AppDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
 AppDispatcher.register(payload => {
-
-  let action = payload.action
+  const action = payload.action
 
   // Vars
   let user
@@ -43,13 +39,12 @@ AppDispatcher.register(payload => {
   let confirm_password
   let redirect_to
   let token
-  let access_token
   let code
   let modal_key
   let title
   let scroll_height
-  
-  switch(action) {
+
+  switch (action) {
 
     case 'init-landing':
       landingPage.init(payload.random_number)
@@ -101,7 +96,7 @@ AppDispatcher.register(payload => {
       user = payload.user
       addUserToStore(user)
       break
-      
+
     case 'create-room':
       title = payload.title
       user = payload.user
@@ -126,7 +121,7 @@ AppDispatcher.register(payload => {
       room = payload.room
       getMessages(user, room)
       break
-    
+
     case 'get-previous-messages':
       user = payload.user
       room = payload.room
@@ -145,7 +140,6 @@ AppDispatcher.register(payload => {
   }
 
   return true
-
 })
 
 export default AppDispatcher

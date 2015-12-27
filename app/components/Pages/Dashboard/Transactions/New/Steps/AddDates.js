@@ -25,5 +25,5 @@ export default class AddDates extends Component {
 
 // PropTypes
 AddDates.proptypes = {
-  data: React.PropTypes.object.isRequired
+  data: React.PropTypes.object
 }

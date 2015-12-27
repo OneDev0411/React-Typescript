@@ -64,13 +64,13 @@ export default (user, password, confirm_password, redirect_to) => {
 
   User.create(params, (err, response) => {
     // Success
-    if (response.status === 'success')
+    if (response.status === 'success') {
       AppStore.data = {
         status: 'success',
         show_message: true,
         redirect_to
       }
-    else
+    } else {
       AppStore.data = {
         submitting: false,
         errors: true,
@@ -78,6 +78,7 @@ export default (user, password, confirm_password, redirect_to) => {
         show_message: true,
         response: 'email-in-use'
       }
+    }
     AppStore.emitChange()
   })
 }

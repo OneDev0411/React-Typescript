@@ -49,7 +49,7 @@ export default (email, password, redirect_to, invite) => {
       AppStore.data = {
         user
       }
-    } else
+    } else {
       AppStore.data = {
         submitting: false,
         errors: true,
@@ -59,6 +59,7 @@ export default (email, password, redirect_to, invite) => {
           password_valid: false
         }
       }
+    }
     AppStore.emitChange()
   })
 }

@@ -12,7 +12,6 @@ export default class Transactions extends Component {
   render() {
     // Data
     const data = this.props.data
-    const path = data.path
 
     // Style
     const main_style = S('absolute l-222 r-0')
@@ -39,6 +38,6 @@ export default class Transactions extends Component {
 }
 
 // PropTypes
-Transactions.proptypes = {
-  data: React.PropTypes.object.isRequired
+Transactions.propTypes = {
+  data: React.PropTypes.object
 }

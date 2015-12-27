@@ -31,10 +31,10 @@ export default class Forgot extends Component {
     let message_text
     let alert_style
 
-    if (data.show_message)
+    if (data.show_message) {
       // Errors
-      if (errors)
-        if(data.email_not_found){
+      if (errors) {
+        if (data.email_not_found) {
           email_style = 'error'
           alert_style = 'warning'
           message_text = (
@@ -42,30 +42,31 @@ export default class Forgot extends Component {
           )
         }
 
-        if (data.email_invalid){
+        if (data.email_invalid) {
           email_style = 'error'
           alert_style = 'danger'
           message_text = 'Oops! That looks like an invalid email address!'
         }
-      // if(errors)
+      } // errors
 
       // Success
-      if (data.status === 'success'){
+      if (data.status === 'success') {
         alert_style = 'success'
         message_text = `We've sent you an email with instructions on how to reset your password.  Please check your email.`
       }
-      
-      if (message_text)
+
+      if (message_text) {
         message = (
           <Alert bsStyle={ alert_style }>
             { message_text }
           </Alert>
         )
-    // if(show_message)
+      }
+    }
 
-    let submitting = data.submitting
+    const submitting = data.submitting
     let submitting_class = ''
-    if(submitting)
+    if (submitting)
       submitting_class = 'disabled'
 
     let main_content = (
@@ -78,13 +79,7 @@ export default class Forgot extends Component {
             <Link className="btn btn-default" style={ S('w-100p') } to="/signin">Cancel</Link>
           </Col>
           <Col sm={8} style={ S('p-0') }>
-            <Button 
-              type="submit"
-              ref="submit"
-              className={ submitting_class + 'btn btn-primary' }
-              disabled={ submitting }
-              style={ S('w-100p') }
-            >
+            <Button type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p') }>
               { submitting ? 'Submitting...' : 'Reset Password' }
             </Button>
           </Col>
@@ -94,13 +89,14 @@ export default class Forgot extends Component {
       </div>
     )
 
-    if (data.status === 'success')
+    if (data.status === 'success') {
       main_content = (
         <div>
           { message }
           <Link style={ S('w-100p') } className="btn btn-primary" to="/">Done</Link>
         </div>
       )
+    }
 
     return (
       <div className="center-block" style={ S('maxw-300') }>
@@ -112,6 +108,6 @@ export default class Forgot extends Component {
 
 // PropTypes
 Forgot.propTypes = {
-  data: React.PropTypes.object.isRequired,
+  data: React.PropTypes.object,
   handleSubmit: React.PropTypes.func.isRequired
 }

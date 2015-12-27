@@ -20,38 +20,11 @@ import io from 'socket.io-client'
 
 export default class Dashboard extends Component {
 
-  filterRooms(search_text){
-    search_text = search_text.toLowerCase().trim()
-    const data = AppStore.data
-    const rooms = data.rooms
-    const filtered_rooms = rooms.filter((room) => {
-      let users_first_string = _.pluck(room.users, 'first_name').toString().toLowerCase()
-      let users_last_string = _.pluck(room.users, 'last_name').toString().toLowerCase()
-      if(users_first_string.indexOf(search_text)!==-1)
-        return true
-      if(users_last_string.indexOf(search_text)!==-1)
-        return true
-      if(room.title.toLowerCase().indexOf(search_text)!==-1)
-        return true
-      return false
-    })
-
-    if(!search_text){
-      AppStore.data.is_filtering = false
-    } else {
-      AppStore.data.is_filtering = true
-    }
-    AppStore.data.filtered_rooms = filtered_rooms
-    AppStore.emitChange()
+  componentWillMount() {
+    this.init()
   }
 
-  handleResize(){
-    AppStore.emitChange()
-  }
-
-  componentDidMount(){
-
-    this.handleResize
+  componentDidMount() {
     window.addEventListener('resize', this.handleResize)
 
     // Listen for new messages
@@ -60,79 +33,61 @@ export default class Dashboard extends Component {
     socket.emit('Authenticate', data.user.access_token)
 
     // Listen for new message
-    socket.on('Message.Sent',(room, message) => {
-      const messages = AppStore.data.messages
+    socket.on('Message.Sent', (room, message) => {
       const current_room = AppStore.data.current_room
       // If in this room
-      if(current_room.id == room.id){
-        if(data.user.id === message.author.id)
+      if (current_room.id === room.id) {
+        if (data.user.id === message.author.id)
           message.fade_in = true
         AppStore.data.messages.push(message)
         const rooms = AppStore.data.rooms
-        let current_room_index = _.findIndex(rooms, { id: current_room.id })
+        const current_room_index = _.findIndex(rooms, { id: current_room.id })
         AppStore.data.rooms[current_room_index].latest_message = message
         AppStore.emitChange()
-        if(data.user.id !== message.author.id)
+        if (data.user.id !== message.author.id)
           this.checkNotification(message)
       }
     })
     // Listen for typing
-    socket.on('User.Typing',(response) => {
+    socket.on('User.Typing', (response) => {
       const author_id = response.user_id
       const room_id = response.room_id
       AppStore.data.is_typing = {
-        author_id: author_id,
-        room_id: room_id
+        author_id,
+        room_id
       }
       delete AppStore.data.current_room.viewing_previous
       AppStore.emitChange()
     })
-    socket.on('User.TypingEnded',(response) => {
+    socket.on('User.TypingEnded', () => {
       delete AppStore.data.is_typing
       AppStore.emitChange()
     })
-    socket.on('Room.OnlineUsers',(response) => {
+    socket.on('Room.OnlineUsers', () => {
       // console.log(response)
       // AppStore.emitChange()
     })
   }
 
-  componentWillUpdate(){
-    this.handleResize
+  componentWillUpdate() {
     window.addEventListener('resize', this.handleResize)
   }
 
-  addUserToStore(){
-    const data = this.props.data
-    const user = data.user
+  getPreviousMessages(scroll_height) {
+    const user = AppStore.data.user
+    const current_room = AppStore.data.current_room
     AppDispatcher.dispatch({
-      action: 'add-user-to-store',
-      user: user
+      action: 'get-previous-messages',
+      user,
+      room: current_room,
+      scroll_height
     })
   }
 
-  getUserRooms(){
-    const data = this.props.data
-    const user = data.user
-    const room_id = this.props.params.room_id
-    AppDispatcher.dispatch({
-      action: 'get-user-rooms',
-      user: user,
-      room_id: room_id
-    })
-  }
-
-  init(){
-    let data = this.props.data
-    this.addUserToStore()
-    this.getUserRooms()
-  }
-
-  getMessages(current_room){
-    
+  getMessages(current_room) {
     AppStore.data.messages_loading = true
     AppStore.emitChange()
-    
+
     const data = AppStore.data
     AppDispatcher.dispatch({
       action: 'get-messages',
@@ -143,36 +98,95 @@ export default class Dashboard extends Component {
     history.pushState(null, null, '/dashboard/recents/' + current_room.id)
   }
 
-  handleMessageTyping(){
-    const socket = io(config.socket.server)
-    const data = AppStore.data
-    if(data.is_typing)
+  getUserRooms() {
+    const data = this.props.data
+    const user = data.user
+    const room_id = this.props.params.room_id
+    AppDispatcher.dispatch({
+      action: 'get-user-rooms',
+      user,
+      room_id
+    })
+  }
+
+  createMessage(e) {
+    e.preventDefault()
+    const comment = this.refs.message_input.value
+    const user = this.props.data.user
+    const current_room = this.props.data.current_room
+
+    // If no comment
+    if (!comment.trim())
       return false
-    AppStore.data.is_typing = data.user
+
+    AppDispatcher.dispatch({
+      action: 'create-message',
+      user,
+      room: current_room,
+      comment
+    })
+
+    this.refs.message_input.value = ''
+  }
+
+  inviteUser(title) {
+    return title
+    // console.log('invite user',title)
+  }
+
+  createRoom(title) {
+    const user = AppStore.data.user
+    AppDispatcher.dispatch({
+      action: 'create-room',
+      user,
+      title
+    })
+  }
+
+  showModal(modal_key) {
+    AppDispatcher.dispatch({
+      action: 'show-modal',
+      modal_key
+    })
+  }
+
+  hideModal() {
+    AppStore.data.showCreateChatModal = false
+    AppStore.data.showInviteUserModal = false
     AppStore.emitChange()
-    socket.emit('User.Typing', AppStore.data.current_room.id)
-    setTimeout(() => {
-      socket.emit('User.TypingEnded', AppStore.data.current_room.id)
-    }, 3000)
   }
 
-  componentWillMount(){
-    this.init()
-  }
+  checkNotification(message) {
+    if (!('Notification' in window))
+      return false
 
-  sendNotification(message){
-    let profile_image_url = config.app.url + '/images/dashboard/rebot@2x.png'
-    let first_name = 'Rebot'
-    if(message.author){
-      first_name = message.author.first_name
+    if (document && document.hasFocus())
+      return false
+
+    const Notification = window.Notification || window.mozNotification || window.webkitNotification
+
+    if (Notification.permission === 'granted')
+      this.sendNotification(message)
+    else {
+      Notification.requestPermission((permission) => {
+        if (permission === 'granted')
+          this.sendNotification(message)
+      })
     }
+  }
+
+  sendNotification(message) {
+    const profile_image_url = config.app.url + '/images/dashboard/rebot@2x.png'
+    let first_name = 'Rebot'
+    if (message.author)
+      first_name = message.author.first_name
 
     const title = 'New message from ' + first_name
-    let instance = new Notification(
+    const instance = new Notification(
       title, {
         body: message.comment,
         icon: profile_image_url,
-         sound: '/audio/goat.mp3'
+        sound: '/audio/goat.mp3'
       }
     )
     instance.onclick = () => {
@@ -183,93 +197,68 @@ export default class Dashboard extends Component {
     }
   }
 
-  checkNotification(message){
-    
-    if(!('Notification' in window))
+  handleMessageTyping() {
+    const socket = io(config.socket.server)
+    const data = AppStore.data
+    if (data.is_typing)
       return false
-
-    if(document && document.hasFocus())
-      return false
-    
-    const Notification = window.Notification || window.mozNotification || window.webkitNotification
-
-    if(Notification.permission === 'granted'){
-      
-      this.sendNotification(message)
-
-    } else {
-      
-      Notification.requestPermission((permission) => {
-        if(permission === 'granted'){
-          this.sendNotification(message)
-        }
-      })
-    }
+    AppStore.data.is_typing = data.user
+    AppStore.emitChange()
+    socket.emit('User.Typing', AppStore.data.current_room.id)
+    setTimeout(() => {
+      socket.emit('User.TypingEnded', AppStore.data.current_room.id)
+    }, 3000)
   }
 
-  showModal(modal_key){
+  addUserToStore() {
+    const data = this.props.data
+    const user = data.user
     AppDispatcher.dispatch({
-      action: 'show-modal',
-      modal_key: modal_key
+      action: 'add-user-to-store',
+      user
     })
   }
 
-  hideModal(){
-    AppStore.data.showCreateChatModal = false
-    AppStore.data.showInviteUserModal = false
+  handleResize() {
     AppStore.emitChange()
   }
 
-  createRoom(title){
-    const user = AppStore.data.user
-    AppDispatcher.dispatch({
-      action: 'create-room',
-      user: user,
-      title: title
-    }) 
-  }
+  filterRooms(search_text) {
+    const search_text_lower = search_text.toLowerCase().trim()
+    const data = AppStore.data
+    const rooms = data.rooms
+    const filtered_rooms = rooms.filter((room) => {
+      const users_first_string = _.pluck(room.users, 'first_name').toString().toLowerCase()
+      const users_last_string = _.pluck(room.users, 'last_name').toString().toLowerCase()
+      if (users_first_string.indexOf(search_text_lower) !== -1)
+        return true
 
-  inviteUser(title){
-    console.log('invite user',title)
-  }
+      if (users_last_string.indexOf(search_text_lower) !== -1)
+        return true
 
-  createMessage(e){
-    e.preventDefault()
-    const comment = this.refs.message_input.value
-    const user = this.props.data.user
-    const current_room = this.props.data.current_room
+      if (room.title.toLowerCase().indexOf(search_text_lower) !== -1)
+        return true
 
-    // If no comment
-    if(!comment.trim())
       return false
+    })
 
-    AppDispatcher.dispatch({
-      action: 'create-message',
-      user: user,
-      room: current_room,
-      comment: comment
-    }) 
+    if (!search_text_lower)
+      AppStore.data.is_filtering = false
+    else
+      AppStore.data.is_filtering = true
 
-    this.refs.message_input.value = ''
-
+    AppStore.data.filtered_rooms = filtered_rooms
+    AppStore.emitChange()
   }
 
-  getPreviousMessages(scroll_height){
-    
-    const user = AppStore.data.user
-    const current_room = AppStore.data.current_room
-    AppDispatcher.dispatch({
-      action: 'get-previous-messages',
-      user: user,
-      room: current_room,
-      scroll_height: scroll_height
-    }) 
+  init() {
+    this.addUserToStore()
+    this.getUserRooms()
   }
 
-  render(){
-    
+  render() {
     // Data
-    let data = this.props.data
+    const data = this.props.data
     data.rooms = AppStore.data.rooms
     data.is_filtering = AppStore.data.is_filtering
     data.filtered_rooms = AppStore.data.filtered_rooms
@@ -287,15 +276,16 @@ export default class Dashboard extends Component {
           <SideBar data={ data }/>
           <MainContent
             getPreviousMessages={ this.getPreviousMessages }
-            handleMessageTyping={ this.handleMessageTyping } 
-            filterRooms={ this.filterRooms } 
-            createMessage={ this.createMessage } 
-            showModal={ this.showModal } 
-            hideModal={ this.hideModal } 
-            createRoom={ this.createRoom } 
-            inviteUser={ this.inviteUser } 
-            getMessages={ this.getMessages } 
-            data={ data }/>
+            handleMessageTyping={ this.handleMessageTyping }
+            filterRooms={ this.filterRooms }
+            createMessage={ this.createMessage }
+            showModal={ this.showModal }
+            hideModal={ this.hideModal }
+            createRoom={ this.createRoom }
+            inviteUser={ this.inviteUser }
+            getMessages={ this.getMessages }
+            data={ data }
+          />
         </main>
         <audio ref="notif_sound" id="notif-sound">
           <source src="/audio/goat.mp3" type="audio/mpeg" />
@@ -306,6 +296,7 @@ export default class Dashboard extends Component {
 }
 
 // PropTypes
-Dashboard.proptypes = {
-  data: React.PropTypes.object.isRequired
+Dashboard.propTypes = {
+  data: React.PropTypes.object,
+  params: React.PropTypes.object.isRequired
 }

@@ -29,13 +29,13 @@ module.exports = (app, config) => {
         let random_number = Math.round(Math.random())
         AppDispatcher.dispatch({
           action: 'init-landing',
-          random_number: random_number
+          random_number
         })
         res.locals.page_slug = 'landing'
         res.locals.AppStore = JSON.stringify(AppStore)
       }
 
-      let reactMarkup = ReactDOMServer.renderToString(<RoutingContext data={AppStore.data} {...renderProps} />)
+      let reactMarkup = ReactDOMServer.renderToString(<RoutingContext data={ AppStore.data } {...renderProps} />)
       
       res.locals.reactMarkup = reactMarkup
 

@@ -40,7 +40,7 @@ export default class Reset extends Component {
     let alert_style
 
     // Errors
-    if (errors)
+    if (errors) {
       if (data.password_error) {
         password_error = data.password_error
         password_style = 'error'
@@ -51,7 +51,7 @@ export default class Reset extends Component {
         if (password_error === 'no-match')
           message_text = `Your passwords don't match`
       }
-
+    }
     if (data.show_message) {
       // Success
       if (data.status === 'success') {
@@ -96,14 +96,14 @@ export default class Reset extends Component {
       </div>
     )
 
-    if (data.status === 'success')
+    if (data.status === 'success') {
       main_content = (
         <div>
           { message }
           <Link style={ S('w-100p') } className="btn btn-primary" to="/signin">Sign in</Link>
         </div>
       )
-
+    }
     return (
       <div className="center-block" style={ S('maxw-300') }>
         { main_content }
@@ -114,6 +114,6 @@ export default class Reset extends Component {
 
 // PropTypes
 Reset.propTypes = {
-  data: React.PropTypes.object.isRequired,
+  data: React.PropTypes.object,
   handleSubmit: React.PropTypes.func.isRequired
 }

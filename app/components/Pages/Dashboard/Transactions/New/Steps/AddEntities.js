@@ -25,5 +25,5 @@ export default class AddEntities extends Component {
 
 // PropTypes
 AddEntities.proptypes = {
-  data: React.PropTypes.object.isRequired
+  data: React.PropTypes.object
 }

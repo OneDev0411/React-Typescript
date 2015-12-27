@@ -25,5 +25,5 @@ export default class AddListing extends Component {
 
 // PropTypes
 AddListing.proptypes = {
-  data: React.PropTypes.object.isRequired
+  data: React.PropTypes.object
 }

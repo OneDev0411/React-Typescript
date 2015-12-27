@@ -1,7 +1,7 @@
 // Landing.js
 import React, { Component } from 'react'
-import { Link } from 'react-router'
 import { Col, Input, Button } from 'react-bootstrap'
+import _ from 'lodash'
 import S from 'shorti'
 import Cosmic from 'cosmicjs'
 import config from '../../../config/public'
@@ -18,17 +18,44 @@ import AppStore from '../../stores/AppStore'
 
 export default class Landing extends Component {
 
-  showIntercom(e){
-    e.preventDefault()
-    Intercom('show')
+  componentWillMount() {
+    this.getContent()
   }
 
-  getContent(){
+  componentDidMount() {
+    AppStore.data.blinking_cursor = true
+    AppStore.emitChange()
+
+    let random_number = this.props.data.random_number
+
+    random_number = 0
+
+    AppDispatcher.dispatch({
+      action: 'init-landing',
+      random_number
+    })
+
+    setTimeout(() => {
+      AppDispatcher.dispatch({
+        action: 'landing-text-animation',
+        random_number
+      })
+    }, 3000)
+    // setInterval(() => {
+    //   let video_src = AppStore.data.video_src
+    //   AppDispatcher.dispatch({
+    //     action: 'landing-swap-video',
+    //     video_src: video_src
+    //   })
+    // }, 5000)
+  }
+
+  getContent() {
     Cosmic.getObjects(config.cosmicjs, (err, objects) => {
-      let metafields = objects.object['landing-page'].metafields
-      let subheadline = _.findWhere(metafields, { key: 'subheadline'}).value
-      let call_to_action = _.findWhere(metafields, { key: 'call-to-action'}).value
-      let placeholder_text = _.findWhere(metafields, { key: 'placeholder-text'}).value
+      const metafields = objects.object['landing-page'].metafields
+      const subheadline = _.findWhere(metafields, { key: 'subheadline' }).value
+      const call_to_action = _.findWhere(metafields, { key: 'call-to-action' }).value
+      const placeholder_text = _.findWhere(metafields, { key: 'placeholder-text' }).value
       AppStore.data.content = {
         subheadline,
         call_to_action,
@@ -38,77 +65,45 @@ export default class Landing extends Component {
     })
   }
 
-  componentWillMount(){
-    this.getContent()
+  showIntercom(e) {
+    e.preventDefault()
+    // Intercom('show')
   }
 
-  componentDidMount(){
-    
-    AppStore.data.blinking_cursor = true
-    AppStore.emitChange()
-
-    let random_number = this.props.data.random_number
-    
-    random_number = 0
-
-    AppDispatcher.dispatch({
-      action: 'init-landing',
-      random_number: random_number
-    })
-
-    setTimeout(() => {
-      AppDispatcher.dispatch({
-        action: 'landing-text-animation',
-        random_number: random_number
-      })
-    }, 3000)
-
-    // setInterval(() => {
-    //   let video_src = AppStore.data.video_src
-    //   AppDispatcher.dispatch({
-    //     action: 'landing-swap-video',
-    //     video_src: video_src
-    //   })
-    // }, 5000)
-
-  }
-
-  render(){
-    
+  render() {
     // Data
     let data = this.props.data
     let blinking_cursor = AppStore.data.blinking_cursor
     let video_src = AppStore.data.video_src
-    if(!video_src)
+    if (!video_src)
       video_src = 'young_agent'
 
     // Blinking cursor
-    if(typeof AppStore.data.blinking_cursor === 'undefined')
+    if (typeof AppStore.data.blinking_cursor === 'undefined')
       blinking_cursor = true
-    let animation_started = AppStore.data.animation_started
-    if(animation_started)
+    const animation_started = AppStore.data.animation_started
+    if (animation_started)
       data = AppStore.data
 
-    if(blinking_cursor){
+    if (blinking_cursor)
       blinking_cursor = 'blinking-cursor'
-    } else {
+    else
       blinking_cursor = ''
-    }
 
     // Content
     // Subheadline
     let subheadline
-    if(AppStore.data.content)
+    if (AppStore.data.content)
       subheadline = AppStore.data.content.subheadline
-    
+
     // Call to action
     let call_to_action
-    if(AppStore.data.content)
+    if (AppStore.data.content)
       call_to_action = AppStore.data.content.call_to_action
 
     // Placeholder text
     let placeholder_text
-    if(AppStore.data.content)
+    if (AppStore.data.content)
       placeholder_text = AppStore.data.content.placeholder_text
 
     // Styles
@@ -123,9 +118,9 @@ export default class Landing extends Component {
       background: 'none'
     }
     const signin_btn_style = S('color-fff w-130 p-10 pt-7 pb-7')
-    const collapse_style = { 
-      ...S('mt-20'), 
-      border: 'none', 
+    const collapse_style = {
+      ...S('mt-20'),
+      border: 'none',
       boxShadow: 'none'
     }
     const headline_style = S('mb-35')
@@ -141,28 +136,29 @@ export default class Landing extends Component {
     const current_text_style = {
       fontStyle: 'italic'
     }
-    
+
     // Get video and text from random number
-    let random_number = data.random_number
-    let headline_text = (
+    const headline_text = (
       <div>
-        From search to close be<br/><span style={ current_text_style }>{ data.current_text }</span><span className={ blinking_cursor }>|</span> 
+        From search to close be<br/><span style={ current_text_style }>{ data.current_text }</span><span className={ blinking_cursor }>|</span>
       </div>
     )
 
-    let video = (
+    const video = (
       <video style={ S('z-0 absolute') } autoPlay="true" loop="true" className="fullscreen-bg__video">
         <source src={'/videos/landing/' + video_src + '.webm'} type="video/webm"/>
         <source src={'/videos/landing/' + video_src + '.mp4'} type="video/mp4"/>
         <source src={'/videos/landing/' + video_src + '.ogv'} type="video/ogg"/>
       </video>
     )
+
     let call_to_action_text
-    if(call_to_action)
+    if (call_to_action) {
       call_to_action_text = (
         <p style={ S('pt-0 p-10 font-17') } dangerouslySetInnerHTML={ { __html: emojify.replace(call_to_action) } } >
         </p>
       )
+    }
 
     return (
       <div className="page-landing" style={ page_style }>
@@ -235,4 +231,9 @@ export default class Landing extends Component {
       </div>
     )
   }
+}
+
+// PropTypes
+Landing.propTypes = {
+  data: React.PropTypes.object
 }

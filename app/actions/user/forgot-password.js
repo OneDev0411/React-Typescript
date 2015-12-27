@@ -18,18 +18,19 @@ export default (email) => {
     }
     User.forgotPassword(params, (err, response) => {
       // Success
-      if (response.status === 'success')
+      if (response.status === 'success') {
         AppStore.data = {
           status: 'success',
           show_message: true
         }
-      else
+      } else {
         AppStore.data = {
           submitting: false,
           errors: true,
           show_message: true,
           email_not_found: true
         }
+      }
       AppStore.emitChange()
     })
   }

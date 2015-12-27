@@ -4,7 +4,6 @@ import { Button, Input } from 'react-bootstrap'
 import S from 'shorti'
 
 export default class AddContacts extends Component {
-
   render() {
     // Data
     const data = this.props.data
@@ -24,6 +23,6 @@ export default class AddContacts extends Component {
 }
 
 // PropTypes
-AddContacts.proptypes = {
-  data: React.PropTypes.object.isRequired
+AddContacts.propTypes = {
+  data: React.PropTypes.object
 }

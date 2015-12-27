@@ -25,10 +25,11 @@ export default class MessagesList extends Component {
 
     // Previous messages loading
     const current_room = this.props.data.current_room
-    if (current_room && current_room.loading_previous)
+    if (current_room && current_room.loading_previous) {
       setTimeout(() => {
         messages_scroll_area.scrollTop = 0
       }, 1)
+    }
 
     // Previous messages loaded
     if (current_room && current_room.viewing_previous)
@@ -63,19 +64,21 @@ export default class MessagesList extends Component {
     if (data.rooms && !data.rooms.length)
       return <div style={ S('ml-20') }>No messages yet.</div>
 
-    if (data.messages_loading)
+    if (data.messages_loading) {
       return (
         <div style={ S('relative') }>
           <Loading />
         </div>
       )
+    }
 
-    if (!data.messages)
+    if (!data.messages) {
       return (
         <div style={ S('relative') }>
           <Loading />
         </div>
       )
+    }
 
     // Messages
     const messages = data.messages
@@ -147,7 +150,7 @@ export default class MessagesList extends Component {
 
 // PropTypes
 MessagesList.propTypes = {
-  data: React.PropTypes.object.isRequired,
+  data: React.PropTypes.object,
   getPreviousMessages: React.PropTypes.func.isRequired,
   showModal: React.PropTypes.func.isRequired
 }

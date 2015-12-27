@@ -28,7 +28,7 @@ export default class RoomsList extends Component {
     if (data.is_filtering)
       rooms = data.filtered_rooms
 
-    if (rooms)
+    if (rooms) {
       rooms_list = rooms.map((room, i) => {
         // Profile image
         let profile_image_url
@@ -39,13 +39,13 @@ export default class RoomsList extends Component {
             <ProfileImage data={ data } profile_image_url={ profile_image_url }/>
           )
         }
-        if (!room.latest_message.author)
+        if (!room.latest_message.author) {
           profile_image_div = (
             <div style={ S('absolute w-35') }>
               <img className="center-block" src="/images/dashboard/rebot@2x.png" style={ S('w-30') } />
             </div>
           )
-
+        }
         let list_style = { ...S('pointer pt-10 pb-10 pl-10 pr-37'), borderBottom: '1px solid #e7e4e3' }
         if (current_room && current_room.id === room.id)
           list_style = { ...list_style, ...S('bg-f0f0f0') }
@@ -63,10 +63,11 @@ export default class RoomsList extends Component {
         const latest_created = room.latest_message.created_at.toString().split('.')
         const time_created = helpers.timeConverter(latest_created[0])
         let comment
-        if (room.latest_message.comment)
+        if (room.latest_message.comment) {
           comment = (
             <div style={ S('color-808080') }>{ room.latest_message.comment.substring(0, 50) }{ room.latest_message.comment.length > 50 ? '...' : '' }</div>
           )
+        }
 
         return (
           <li style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, i) }>
@@ -88,7 +89,7 @@ export default class RoomsList extends Component {
           </li>
         )
       })
-    // end if (rooms)
+    }
 
     // Styles
     const rooms_scroll_area = {
@@ -110,5 +111,5 @@ export default class RoomsList extends Component {
 // PropTypes
 RoomsList.propTypes = {
   getMessages: React.PropTypes.func.isRequired,
-  data: React.PropTypes.object.isRequired
+  data: React.PropTypes.object
 }

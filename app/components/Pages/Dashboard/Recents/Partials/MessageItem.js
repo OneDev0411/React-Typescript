@@ -28,12 +28,13 @@ export default class MessageItem extends Component {
       )
     }
     // Rebot
-    if (!message.author)
+    if (!message.author) {
       profile_image_div = (
         <div style={ S('absolute w-35') }>
           <img className="center-block" src="/images/dashboard/rebot@2x.png" style={ S('w-30') } />
         </div>
       )
+    }
 
     // First name
     if (message.author)
@@ -45,12 +46,13 @@ export default class MessageItem extends Component {
 
     // Message image
     let message_image
-    if (message.image_url)
+    if (message.image_url) {
       message_image = (
         <div>
           <img src={ message.image_url } style={ S('maxw-400') }/>
         </div>
       )
+    }
 
     // Listing
     if (message.recommendation && message.recommendation.listing && message.recommendation.listing.cover_image_url) {
@@ -72,7 +74,7 @@ export default class MessageItem extends Component {
       message_text = emojify.replace(linkifyString(message.comment))
 
     // Get latest author and group
-    if (message.author)
+    if (message.author) {
       if (messages[i - 1] && messages[i - 1].author && messages[i - 1].author.id === message.author.id) {
         return (
           <div style={ S('relative') }>
@@ -84,6 +86,7 @@ export default class MessageItem extends Component {
           </div>
         )
       }
+    }
 
     return (
       <div style={ S('relative') }>
@@ -104,7 +107,7 @@ export default class MessageItem extends Component {
 
 // PropTypes
 MessageItem.propTypes = {
-  data: React.PropTypes.object.isRequired,
+  data: React.PropTypes.object,
   message: React.PropTypes.object.isRequired,
   i: React.PropTypes.number.isRequired
 }

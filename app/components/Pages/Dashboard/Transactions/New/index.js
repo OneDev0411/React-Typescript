@@ -42,11 +42,11 @@ export default class NewTransaction extends Component {
     if (step === 5)
       dates_active = true
     const breadcrumb_items = [
-      <BreadcrumbItem onClick={ this.handleGoToStep.bind(this, 1) } active={ contacts_active }>Add contacts</BreadcrumbItem>,
-      <BreadcrumbItem onClick={ this.handleGoToStep.bind(this, 2) } active={ entries_active }>Add entities</BreadcrumbItem>,
-      <BreadcrumbItem onClick={ this.handleGoToStep.bind(this, 3) } active={ listing_active }>Add listing</BreadcrumbItem>,
-      <BreadcrumbItem onClick={ this.handleGoToStep.bind(this, 4) } active={ financials_active }>Add financials</BreadcrumbItem>,
-      <BreadcrumbItem onClick={ this.handleGoToStep.bind(this, 5) } active={ dates_active }>Add dates</BreadcrumbItem>
+      <BreadcrumbItem key={ 'breadcrumb-1' } onClick={ this.handleGoToStep.bind(this, 1) } active={ contacts_active }>Add contacts</BreadcrumbItem>,
+      <BreadcrumbItem key={ 'breadcrumb-2' } onClick={ this.handleGoToStep.bind(this, 2) } active={ entries_active }>Add entities</BreadcrumbItem>,
+      <BreadcrumbItem key={ 'breadcrumb-3' } onClick={ this.handleGoToStep.bind(this, 3) } active={ listing_active }>Add listing</BreadcrumbItem>,
+      <BreadcrumbItem key={ 'breadcrumb-4' } onClick={ this.handleGoToStep.bind(this, 4) } active={ financials_active }>Add financials</BreadcrumbItem>,
+      <BreadcrumbItem key={ 'breadcrumb-5' } onClick={ this.handleGoToStep.bind(this, 5) } active={ dates_active }>Add dates</BreadcrumbItem>
     ]
     return breadcrumb_items.filter((item, i) => {
       return i < step
@@ -141,27 +141,30 @@ export default class NewTransaction extends Component {
       }
 
       // Breadcrumbs
-      if (step)
+      if (step) {
         breadcrumbs = (
           <Breadcrumb style={ S('mt-20') }>
             { this.getBreadCrumbs(step) }
           </Breadcrumb>
         )
+      }
 
       // Buttons
       let previous_button
       let next_button
 
       // Back Button
-      if (step)
+      if (step) {
         previous_button = (
           <Button bsStyle="link" style={ S('mr-20') } onClick={ this.handlePrevNext.bind(this, 'prev') }>Back</Button>
         )
+      }
       // Next Button
-      if (step < new_transaction.total_steps)
+      if (step < new_transaction.total_steps) {
         next_button = (
           <Button onClick={ this.handlePrevNext.bind(this, 'next') }>Next</Button>
         )
+      }
 
       nav_buttons = (
         <div style={ S('absolute r-0 b-0') }>
@@ -190,6 +193,6 @@ export default class NewTransaction extends Component {
 }
 
 // PropTypes
-NewTransaction.proptypes = {
-  data: React.PropTypes.object.isRequired
+NewTransaction.propTypes = {
+  data: React.PropTypes.object
 }

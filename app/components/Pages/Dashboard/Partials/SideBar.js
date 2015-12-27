@@ -5,29 +5,27 @@ import { Nav, NavItem } from 'react-bootstrap'
 import S from 'shorti'
 
 export default class SideBar extends Component {
-  render(){
-    
+  render() {
     const data = this.props.data
     const sidebar_height = window.innerHeight - 58
     const sidebar_style = S('w-222 relative p-20 pl-0 pt-20 h-' + sidebar_height)
     const path = data.path
 
-    let active = {}
-    if(path === '/dashboard/recents'){
+    const active = {}
+    if (path === '/dashboard/recents')
       active.recents = 'active'
-    }
-    if(path === '/dashboard/mls'){
+
+    if (path === '/dashboard/mls')
       active.mls = 'active'
-    }
-    if(path === '/dashboard/contacts'){
+
+    if (path === '/dashboard/contacts')
       active.contacts = 'active'
-    }
-    if(path === '/dashboard/tasks'){
+
+    if (path === '/dashboard/tasks')
       active.tasks = 'active'
-    }
-    if(path === '/dashboard/transactions' || path === '/dashboard/transactions/new'){
+
+    if (path === '/dashboard/transactions' || path === '/dashboard/transactions/new')
       active.transactions = 'active'
-    }
 
     return (
       <aside style={ sidebar_style } className="bg-alabaster sidebar--dashboard pull-left">
@@ -51,4 +49,9 @@ export default class SideBar extends Component {
       </aside>
     )
   }
+}
+
+// PropTypes
+SideBar.propTypes = {
+  data: React.PropTypes.object
 }

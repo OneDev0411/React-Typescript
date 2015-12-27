@@ -1,6 +1,5 @@
 // Verify/index.js
 import React, { Component } from 'react'
-import S from 'shorti'
 
 // Partials
 import Email from './Partials/Email'
@@ -15,43 +14,38 @@ import AppStore from '../../../stores/AppStore'
 
 export default class Verify extends Component {
 
-  componentDidMount(){
+  componentDidMount() {
     // Reset data store
     AppStore.data = {}
     AppStore.emitChange()
   }
 
-  handleSubmit(code, token){
+  handleSubmit(code, token) {
     AppDispatcher.dispatch({
       action: 'verify-phone',
-      code: code,
-      token: token
+      code,
+      token
     })
   }
 
-  render(){
-    
+  render() {
     // Data
     const data = this.props.data
-    const pathname = this.props.location.pathname
     const slug = this.props.params.slug
 
     let main_content
-    if(slug === 'email'){
+    if (slug === 'email') {
       main_content = (
         <Email data={ data }/>
       )
     }
 
-    if(slug === 'phone'){
+    if (slug === 'phone') {
       main_content = (
         <Phone data={ data } handleSubmit={ this.handleSubmit }/>
       )
     }
-    
-    // Styles
-    const headingStyle = S('font-60 color-3388ff')
-    
+
     return (
       <div id="main-content" className="container">
         <div className="text-center">
@@ -61,4 +55,10 @@ export default class Verify extends Component {
       </div>
     )
   }
+}
+
+// PropTypes
+Verify.propTypes = {
+  data: React.PropTypes.object,
+  params: React.PropTypes.object.isRequired
 }

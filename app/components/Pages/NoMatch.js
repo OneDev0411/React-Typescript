@@ -5,11 +5,7 @@ import S from 'shorti'
 
 export default class NoMatch extends Component {
 
-  render(){
-    
-    // Data
-    let data = this.props.data
-
+  render() {
     // Styles
     const headingStyle = S('font-60 color-3388ff')
 
