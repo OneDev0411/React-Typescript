@@ -1,4 +1,4 @@
-// actions/get-user-rooms.js
+// actions/get-rooms.js
 import User from '../../models/User'
 import AppStore from '../../stores/AppStore'
 import _ from 'lodash'

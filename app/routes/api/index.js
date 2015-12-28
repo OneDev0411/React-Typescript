@@ -3,6 +3,7 @@ module.exports = (app, config) => {
   
   // Gets
   require('./gets/rooms')(app, config)
+  require('./gets/contacts')(app, config)
   require('./gets/messages')(app, config)
   require('./gets/transactions')(app, config)
 

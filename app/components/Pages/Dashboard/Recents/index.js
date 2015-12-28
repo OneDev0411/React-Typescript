@@ -103,7 +103,7 @@ export default class Dashboard extends Component {
     const user = data.user
     const room_id = this.props.params.room_id
     AppDispatcher.dispatch({
-      action: 'get-user-rooms',
+      action: 'get-rooms',
       user,
       room_id
     })

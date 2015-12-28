@@ -8,7 +8,8 @@ import forgotPassword from '../actions/user/forgot-password'
 import resetPassword from '../actions/user/reset-password'
 import verifyPhone from '../actions/user/verify-phone'
 import addUserToStore from '../actions/user/add-user-to-store'
-import getUserRooms from '../actions/user/get-user-rooms'
+import getRooms from '../actions/user/get-rooms'
+import getContacts from '../actions/user/get-contacts'
 
 // Rooms
 import createRoom from '../actions/rooms/create-room'
@@ -103,10 +104,15 @@ AppDispatcher.register(payload => {
       createRoom(user, title)
       break
 
-    case 'get-user-rooms':
+    case 'get-rooms':
       user = payload.user
       room_id = payload.room_id
-      getUserRooms(user, room_id)
+      getRooms(user, room_id)
+      break
+
+    case 'get-contacts':
+      user = payload.user
+      getContacts(user)
       break
 
     case 'create-message':

@@ -1,7 +1,14 @@
 // Dashboard/Transactions/New/index.js
 import React, { Component } from 'react'
+import { Link } from 'react-router'
 import { Button, Breadcrumb, BreadcrumbItem } from 'react-bootstrap'
 import S from 'shorti'
+
+// AppStore
+import AppStore from '../../../../../stores/AppStore'
+
+// AppDispatcher
+import AppDispatcher from '../../../../../dispatcher/TransactionDispatcher'
 
 // TransactionDispatcher
 import TransactionDispatcher from '../../../../../dispatcher/TransactionDispatcher'
@@ -23,14 +30,20 @@ export default class NewTransaction extends Component {
     TransactionDispatcher.dispatch({
       action: 'init'
     })
+    this.getContacts()
+    AppStore.data.active_contact = -1
+    AppStore.emitChange()
   }
 
   getBreadCrumbs(step) {
+    let type_active = false
     let contacts_active = false
     let entries_active = false
     let listing_active = false
     let financials_active = false
     let dates_active = false
+    if (step === 0)
+      type_active = true
     if (step === 1)
       contacts_active = true
     if (step === 2)
@@ -42,15 +55,39 @@ export default class NewTransaction extends Component {
     if (step === 5)
       dates_active = true
     const breadcrumb_items = [
-      <BreadcrumbItem key={ 'breadcrumb-1' } onClick={ this.handleGoToStep.bind(this, 1) } active={ contacts_active }>Add contacts</BreadcrumbItem>,
-      <BreadcrumbItem key={ 'breadcrumb-2' } onClick={ this.handleGoToStep.bind(this, 2) } active={ entries_active }>Add entities</BreadcrumbItem>,
-      <BreadcrumbItem key={ 'breadcrumb-3' } onClick={ this.handleGoToStep.bind(this, 3) } active={ listing_active }>Add listing</BreadcrumbItem>,
-      <BreadcrumbItem key={ 'breadcrumb-4' } onClick={ this.handleGoToStep.bind(this, 4) } active={ financials_active }>Add financials</BreadcrumbItem>,
-      <BreadcrumbItem key={ 'breadcrumb-5' } onClick={ this.handleGoToStep.bind(this, 5) } active={ dates_active }>Add dates</BreadcrumbItem>
+      <BreadcrumbItem key={ 'breadcrumb-1' } onClick={ this.handleGoToStep.bind(this, 0) } active={ type_active }>Type</BreadcrumbItem>,
+      <BreadcrumbItem key={ 'breadcrumb-2' } onClick={ this.handleGoToStep.bind(this, 1) } active={ contacts_active }>Add contacts</BreadcrumbItem>,
+      <BreadcrumbItem key={ 'breadcrumb-3' } onClick={ this.handleGoToStep.bind(this, 2) } active={ entries_active }>Add entities</BreadcrumbItem>,
+      <BreadcrumbItem key={ 'breadcrumb-4' } onClick={ this.handleGoToStep.bind(this, 3) } active={ listing_active }>Add listing</BreadcrumbItem>,
+      <BreadcrumbItem key={ 'breadcrumb-5' } onClick={ this.handleGoToStep.bind(this, 4) } active={ financials_active }>Add financials</BreadcrumbItem>,
+      <BreadcrumbItem key={ 'breadcrumb-6' } onClick={ this.handleGoToStep.bind(this, 5) } active={ dates_active }>Add dates</BreadcrumbItem>
     ]
     return breadcrumb_items.filter((item, i) => {
-      return i < step
+      return i <= step
     })
+  }
+
+  getContacts() {
+    const data = this.props.data
+    AppDispatcher.dispatch({
+      action: 'get-contacts',
+      user: data.user
+    })
+  }
+
+  setFilteredContacts(filtered_contacts) {
+    AppStore.data.filtered_contacts = filtered_contacts
+    AppStore.emitChange()
+  }
+
+  setContactActive(index) {
+    AppStore.data.active_contact = index
+    AppStore.emitChange()
+  }
+
+  hideContactsForm() {
+    AppStore.data.filtered_contacts = null
+    AppStore.emitChange()
   }
 
   handleTypeClick(type) {
@@ -74,6 +111,9 @@ export default class NewTransaction extends Component {
       action: 'go-to-step',
       step
     })
+    AppStore.data.filtered_contacts = null
+    AppStore.data.active_contact = null
+    AppStore.emitChange()
   }
 
   handleGoToStep(step) {
@@ -82,6 +122,9 @@ export default class NewTransaction extends Component {
       action: 'go-to-step',
       step
     })
+    AppStore.data.filtered_contacts = null
+    AppStore.data.active_contact = null
+    AppStore.emitChange()
   }
 
   render() {
@@ -93,14 +136,31 @@ export default class NewTransaction extends Component {
     if (data.new_transaction)
       new_transaction = data.new_transaction
 
+    let buying_class = 'btn'
+    let selling_class = 'btn'
+    let buysell_class = 'btn'
+    let lease_class = 'btn'
+
+    if (new_transaction && new_transaction.type === 'buying')
+      buying_class = 'btn btn-primary'
+
+    if (new_transaction && new_transaction.type === 'selling')
+      selling_class = 'btn btn-primary'
+
+    if (new_transaction && new_transaction.type === 'buying-selling')
+      buysell_class = 'btn btn-primary'
+
+    if (new_transaction && new_transaction.type === 'leasing')
+      lease_class = 'btn btn-primary'
+
     let main_content = (
       <div>
         <h1>Keep'em comin!  So are we...</h1>
         <div>
-          <Button onClick={ this.handleTypeClick.bind(this, 'buying') } className="btn btn-primary">Buying</Button>
-          <Button onClick={ this.handleTypeClick.bind(this, 'selling') } style={ S('ml-40') } className="btn btn-primary">Selling</Button>
-          <Button onClick={ this.handleTypeClick.bind(this, 'buying-selling') } style={ S('ml-40') } className="btn btn-primary">Buying & Selling</Button>
-          <Button onClick={ this.handleTypeClick.bind(this, 'lease') } style={ S('ml-40') } className="btn btn-primary">Lease</Button>
+          <Button onClick={ this.handleTypeClick.bind(this, 'buying') } className={ buying_class }>Buying</Button>
+          <Button onClick={ this.handleTypeClick.bind(this, 'selling') } style={ S('ml-40') } className={ selling_class }>Selling</Button>
+          <Button onClick={ this.handleTypeClick.bind(this, 'buying-selling') } style={ S('ml-40') } className={ buysell_class }>Buying & Selling</Button>
+          <Button onClick={ this.handleTypeClick.bind(this, 'leasing') } style={ S('ml-40') } className={ lease_class }>Leasing</Button>
         </div>
       </div>
     )
@@ -113,7 +173,12 @@ export default class NewTransaction extends Component {
       switch (new_transaction.step) {
         case 1:
           main_content = (
-            <AddContacts data={ data }/>
+            <AddContacts
+              data={ data }
+              setFilteredContacts={ this.setFilteredContacts.bind(this) }
+              setContactActive={ this.setContactActive.bind(this) }
+              hideContactsForm={ this.hideContactsForm }
+            />
           )
           break
         case 2:
@@ -141,17 +206,23 @@ export default class NewTransaction extends Component {
       }
 
       // Breadcrumbs
-      if (step) {
-        breadcrumbs = (
-          <Breadcrumb style={ S('mt-20') }>
-            { this.getBreadCrumbs(step) }
-          </Breadcrumb>
-        )
-      }
+      breadcrumbs = (
+        <Breadcrumb style={ S('mt-20') }>
+          { this.getBreadCrumbs(step) }
+        </Breadcrumb>
+      )
 
       // Buttons
       let previous_button
       let next_button
+      let cancel_button
+
+      // Cancel Button
+      if (!step) {
+        cancel_button = (
+          <Link className="btn btn-default" style={ S('mr-20') } to="/dashboard/transactions">Cancel</Link>
+        )
+      }
 
       // Back Button
       if (step) {
@@ -168,12 +239,12 @@ export default class NewTransaction extends Component {
 
       nav_buttons = (
         <div style={ S('absolute r-0 b-0') }>
+          { cancel_button }
           { previous_button }
           { next_button }
         </div>
       )
     }
-
     return (
       <div style={ S('minw-1000') }>
         <header>
