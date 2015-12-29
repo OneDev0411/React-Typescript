@@ -9,8 +9,12 @@ import _ from 'lodash'
 export default class RoomsList extends Component {
 
   handleClick(i) {
-    const rooms = this.props.data.rooms
-    const room = rooms[i]
+    const data = this.props.data
+    const rooms = data.rooms
+    const filtered_rooms = data.filtered_rooms
+    let room = rooms[i]
+    if (filtered_rooms)
+      room = filtered_rooms[i]
     this.props.getMessages(room)
   }
 
@@ -31,12 +35,12 @@ export default class RoomsList extends Component {
     if (rooms) {
       rooms_list = rooms.map((room, i) => {
         // Profile image
-        let profile_image_url
+        let author
         let profile_image_div
         if (room.latest_message.author) {
-          profile_image_url = room.latest_message.author.profile_image_url
+          author = room.latest_message.author
           profile_image_div = (
-            <ProfileImage data={ data } profile_image_url={ profile_image_url }/>
+            <ProfileImage user={ author }/>
           )
         }
         if (!room.latest_message.author) {

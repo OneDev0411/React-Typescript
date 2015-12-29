@@ -123,7 +123,7 @@ export default class MainContent extends Component {
           <MessagesList getPreviousMessages={ this.props.getPreviousMessages } showModal={ this.showModal.bind(this) } data={ data }/>
           { footer_form }
         </div>
-        <Modal show={ data.showCreateChatModal } onHide={ this.hideModal.bind(this) }>
+        <Modal show={ data.show_create_chat_modal } onHide={ this.hideModal.bind(this) }>
           <form onSubmit={ this.createRoom.bind(this) }>
             <Modal.Header closeButton>
               <Modal.Title>Start a new chat</Modal.Title>
@@ -137,7 +137,7 @@ export default class MainContent extends Component {
             </Modal.Footer>
           </form>
         </Modal>
-        <Modal show={ data.showInviteUserModal } onHide={ this.hideModal.bind(this) }>
+        <Modal show={ data.show_invite_user_modal } onHide={ this.hideModal.bind(this) }>
           <form onSubmit={ this.inviteUser.bind(this) }>
             <Modal.Header closeButton>
               <Modal.Title>Invite User</Modal.Title>

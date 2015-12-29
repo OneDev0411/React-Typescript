@@ -1,6 +1,6 @@
 // Dashboard/Transactions/New/Steps/AddDates.js
 import React, { Component } from 'react'
-import { Button, Input } from 'react-bootstrap'
+import { Col } from 'react-bootstrap'
 import S from 'shorti'
 
 export default class AddDates extends Component {
@@ -10,13 +10,25 @@ export default class AddDates extends Component {
     // const data = this.props.data
     return (
       <div>
-        <h1>Add Dates</h1>
+        <div style={ S('mb-40') }>
+          <h1>Important Dates</h1>
+        </div>
         <div>
-          <form style={ S('maxw-820') }>
-            <Input className="pull-left" style={ S('w-640') } type="text" placeholder="Enter any name, email or phone number"/>
-            <Button className="pull-left" style={ S('w-160 ml-10') } bsStyle="primary" type="button">Add New Contact</Button>
-          </form>
-          <div className="clearfix"></div>
+          <Col sm={4}>
+            Contract<br/>
+            FRIDAY<br/>
+            DECEMBER 18th
+          </Col>
+          <Col sm={4}>
+            Due Diligence<br/>
+            WEDNESDAY<br/>
+            DECEMBER 20th
+          </Col>
+          <Col sm={4}>
+            Closing<br/>
+            MONDAY<br/>
+            DECEMBER 21st
+          </Col>
         </div>
       </div>
     )

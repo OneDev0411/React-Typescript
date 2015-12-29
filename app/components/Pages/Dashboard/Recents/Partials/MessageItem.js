@@ -19,12 +19,12 @@ export default class MessageItem extends Component {
     let first_name
 
     // Profile image
-    let profile_image_url
+    let author
     let profile_image_div
     if (message.author) {
-      profile_image_url = message.author.profile_image_url
+      author = message.author
       profile_image_div = (
-        <ProfileImage data={ data } profile_image_url={ profile_image_url }/>
+        <ProfileImage user={ author }/>
       )
     }
     // Rebot

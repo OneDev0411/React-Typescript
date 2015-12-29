@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { Button, Breadcrumb, BreadcrumbItem } from 'react-bootstrap'
+import _ from 'lodash'
 import S from 'shorti'
 
 // AppStore
@@ -18,8 +19,8 @@ import MainNav from '../../Partials/MainNav'
 import SideBar from '../../Partials/SideBar'
 
 // Steps
+import AddClients from './Steps/AddClients'
 import AddContacts from './Steps/AddContacts'
-import AddEntities from './Steps/AddEntities'
 import AddListing from './Steps/AddListing'
 import AddFinancials from './Steps/AddFinancials'
 import AddDates from './Steps/AddDates'
@@ -32,6 +33,7 @@ export default class NewTransaction extends Component {
     })
     this.getContacts()
     AppStore.data.active_contact = -1
+    AppStore.data.added_contacts = null
     AppStore.emitChange()
   }
 
@@ -56,11 +58,11 @@ export default class NewTransaction extends Component {
       dates_active = true
     const breadcrumb_items = [
       <BreadcrumbItem key={ 'breadcrumb-1' } onClick={ this.handleGoToStep.bind(this, 0) } active={ type_active }>Type</BreadcrumbItem>,
-      <BreadcrumbItem key={ 'breadcrumb-2' } onClick={ this.handleGoToStep.bind(this, 1) } active={ contacts_active }>Add contacts</BreadcrumbItem>,
-      <BreadcrumbItem key={ 'breadcrumb-3' } onClick={ this.handleGoToStep.bind(this, 2) } active={ entries_active }>Add entities</BreadcrumbItem>,
-      <BreadcrumbItem key={ 'breadcrumb-4' } onClick={ this.handleGoToStep.bind(this, 3) } active={ listing_active }>Add listing</BreadcrumbItem>,
-      <BreadcrumbItem key={ 'breadcrumb-5' } onClick={ this.handleGoToStep.bind(this, 4) } active={ financials_active }>Add financials</BreadcrumbItem>,
-      <BreadcrumbItem key={ 'breadcrumb-6' } onClick={ this.handleGoToStep.bind(this, 5) } active={ dates_active }>Add dates</BreadcrumbItem>
+      <BreadcrumbItem key={ 'breadcrumb-2' } onClick={ this.handleGoToStep.bind(this, 1) } active={ contacts_active }>Clients</BreadcrumbItem>,
+      <BreadcrumbItem key={ 'breadcrumb-3' } onClick={ this.handleGoToStep.bind(this, 2) } active={ entries_active }>Other contacts</BreadcrumbItem>,
+      <BreadcrumbItem key={ 'breadcrumb-4' } onClick={ this.handleGoToStep.bind(this, 3) } active={ listing_active }>Listing</BreadcrumbItem>,
+      <BreadcrumbItem key={ 'breadcrumb-5' } onClick={ this.handleGoToStep.bind(this, 4) } active={ financials_active }>Financials</BreadcrumbItem>,
+      <BreadcrumbItem key={ 'breadcrumb-6' } onClick={ this.handleGoToStep.bind(this, 5) } active={ dates_active }>Important dates</BreadcrumbItem>
     ]
     return breadcrumb_items.filter((item, i) => {
       return i <= step
@@ -88,6 +90,59 @@ export default class NewTransaction extends Component {
   hideContactsForm() {
     AppStore.data.filtered_contacts = null
     AppStore.emitChange()
+  }
+
+  addContact(contact, contact_type) {
+    if (!AppStore.data.added_contacts) {
+      AppStore.data.added_contacts = {}
+      AppStore.data.added_contacts[contact_type] = []
+    } else {
+      if (!AppStore.data.added_contacts[contact_type])
+        AppStore.data.added_contacts[contact_type] = []
+    }
+    const added_contacts = AppStore.data.added_contacts[contact_type]
+    const filtered_contacts = AppStore.data.filtered_contacts
+    const in_array = _.findWhere(added_contacts, { id: contact.id })
+    const contact_index = _.findIndex(filtered_contacts, { id: contact.id })
+    contact.added = true
+    if (!in_array) {
+      AppStore.data.filtered_contacts[contact_index] = contact
+      AppStore.data.added_contacts[contact_type].push(contact)
+      AppStore.data.new_transaction.added_contacts = AppStore.data.added_contacts
+      AppStore.emitChange()
+    } else
+      this.removeContact(contact.id, contact_type)
+  }
+
+  removeContact(contact_id, contact_type) {
+    const added_contacts = AppStore.data.added_contacts[contact_type]
+    const filtered_contacts = AppStore.data.filtered_contacts
+    if (filtered_contacts) {
+      const contact = _.findWhere(added_contacts, { id: contact_id })
+      const contact_index = _.findIndex(filtered_contacts, { id: contact_id })
+      contact.added = false
+      AppStore.data.filtered_contacts[contact_index] = contact
+    }
+    const added_contacts_edited = added_contacts.filter((contact_loop) => {
+      return contact_loop.id !== contact_id
+    })
+    AppStore.data.added_contacts[contact_type] = added_contacts_edited
+    AppStore.data.new_transaction.added_contacts = AppStore.data.added_contacts
+    AppStore.emitChange()
+  }
+
+  showCreateContactModal() {
+    AppStore.data.show_create_contact_modal = true
+    AppStore.emitChange()
+  }
+
+  hideModal() {
+    delete AppStore.data.show_create_contact_modal
+    AppStore.emitChange()
+  }
+
+  createContact() {
+    // console.log('create')
   }
 
   handleTypeClick(type) {
@@ -173,17 +228,32 @@ export default class NewTransaction extends Component {
       switch (new_transaction.step) {
         case 1:
           main_content = (
-            <AddContacts
+            <AddClients
               data={ data }
               setFilteredContacts={ this.setFilteredContacts.bind(this) }
               setContactActive={ this.setContactActive.bind(this) }
               hideContactsForm={ this.hideContactsForm }
+              addContact={ this.addContact }
+              removeContact={ this.removeContact }
+              showCreateContactModal={ this.showCreateContactModal }
+              hideModal={ this.hideModal }
+              createContact={ this.createContact }
             />
           )
           break
         case 2:
           main_content = (
-            <AddEntities data={ data }/>
+            <AddContacts
+              data={ data }
+              setFilteredContacts={ this.setFilteredContacts.bind(this) }
+              setContactActive={ this.setContactActive.bind(this) }
+              hideContactsForm={ this.hideContactsForm }
+              addContact={ this.addContact }
+              removeContact={ this.removeContact }
+              showCreateContactModal={ this.showCreateContactModal }
+              hideModal={ this.hideModal }
+              createContact={ this.createContact }
+            />
           )
           break
         case 3:
@@ -238,7 +308,7 @@ export default class NewTransaction extends Component {
       }
 
       nav_buttons = (
-        <div style={ S('absolute r-0 b-0') }>
+        <div style={ S('absolute r-0 t-400') }>
           { cancel_button }
           { previous_button }
           { next_button }
@@ -254,7 +324,9 @@ export default class NewTransaction extends Component {
           <SideBar data={ data }/>
           <div style={ main_style }>
             { breadcrumbs }
-            { main_content }
+            <div style={ S('absolute w-100p') }>
+              { main_content }
+            </div>
             { nav_buttons }
           </div>
         </main>

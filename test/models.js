@@ -3,6 +3,7 @@ import { expect } from 'chai'
 import User from '../app/models/User'
 import Room from '../app/models/Room'
 import Message from '../app/models/Message'
+import Listing from '../app/models/Listing'
 import config from '../config/private'
 
 // Get access token
@@ -12,6 +13,8 @@ let test = config.test
 const random_email = randomString(9) + '@rechat.co'
 const random_phone = Math.floor(Math.random() * 1000000000)
 
+/* User
+==================== */
 describe('Testing User model', function() {
   // Create
   it('User.create should return access token from UN:' + random_email + ' PHONE: ' + random_phone + ' PW:' + test.user.password, function(done) {
@@ -86,6 +89,8 @@ describe('Testing User model', function() {
   })
 })
 
+/* Room
+==================== */
 describe('Testing Room model', function() { 
   // Create room
   it('Room.create should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
@@ -127,6 +132,24 @@ describe('Testing Room model', function() {
       api_host: test.api_host
     }
     Room.addUser(params, (err, response) => {
+      expect(response.status).to.equal('success')
+      done()
+    })
+  })
+})
+
+/* Listing
+==================== */
+describe('Testing Listing model', function() { 
+  // Search Listing
+  it('Listing.search should return successful for MLS number ' + test.mls_number, function(done) {
+    const params = {
+      mls_number: test.mls_number,
+      access_token: access_token,
+      api_host: test.api_host
+    }
+    Listing.search(params, (err, response) => {
+      console.log(response)
       expect(response.status).to.equal('success')
       done()
     })

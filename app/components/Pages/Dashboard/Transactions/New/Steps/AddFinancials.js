@@ -1,6 +1,6 @@
 // Dashboard/Transactions/New/Steps/AddFinancials.js
 import React, { Component } from 'react'
-import { Button, Input } from 'react-bootstrap'
+import { Col } from 'react-bootstrap'
 import S from 'shorti'
 
 export default class AddFinancials extends Component {
@@ -10,13 +10,36 @@ export default class AddFinancials extends Component {
     // const data = this.props.data
     return (
       <div>
-        <h1>Add Financials</h1>
+        <div style={ S('mb-40') }>
+          <h1>Financials</h1>
+        </div>
         <div>
-          <form style={ S('maxw-820') }>
-            <Input className="pull-left" style={ S('w-640') } type="text" placeholder="Enter any name, email or phone number"/>
-            <Button className="pull-left" style={ S('w-160 ml-10') } bsStyle="primary" type="button">Add New Contact</Button>
-          </form>
+          <Col sm={3}>
+            Listing price<br/>
+            $2,200,000
+          </Col>
+          <Col sm={3}>
+            Contract price<br/>
+            $2,640,000
+          </Col>
+          <Col sm={3}>
+            Agent Commission<br/>
+            3%
+          </Col>
+          <Col sm={3}>
+            Co-Agent Commission<br/>
+            1%
+          </Col>
           <div className="clearfix"></div>
+          <Col sm={6} />
+          <Col sm={3}>
+            est. payout<br/>
+            $79,200
+          </Col>
+          <Col sm={3}>
+            est. payout<br/>
+            $7,920
+          </Col>
         </div>
       </div>
     )

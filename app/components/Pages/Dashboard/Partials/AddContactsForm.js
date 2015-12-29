@@ -1,6 +1,6 @@
 // AddContactsForm.js
 import React, { Component } from 'react'
-import { Button, Input } from 'react-bootstrap'
+import { Button, Input, Modal, Col } from 'react-bootstrap'
 import S from 'shorti'
 
 // Partials
@@ -61,44 +61,56 @@ export default class AddContactsForm extends Component {
       this.setContactActive('up')
     if (e.which === 40)
       this.setContactActive('down')
+    if (e.which === 13) {
+      const active_contact = this.props.data.active_contact
+      const filtered_contacts = this.props.data.filtered_contacts
+      this.addContact(filtered_contacts[active_contact], this.props.contact_type)
+    }
   }
 
   hideContactsForm() {
     this.props.hideContactsForm()
   }
 
-  addContact(e) {
-    e.preventDefault()
-    // console.log('added contact!')
+  addContact(contact, contact_type) {
+    this.props.addContact(contact, contact_type)
+  }
+
+  removeContact(contact_id, contact_type) {
+    this.props.removeContact(contact_id, contact_type)
   }
 
   render() {
     const data = this.props.data
+    const contact_type = this.props.contact_type
     let filtered_contacts
     if (data.filtered_contacts)
       filtered_contacts = data.filtered_contacts
 
     // Style
     const filter_scroll_style = {
-      ...S('mt-10 p-5 bc-adadad bw-1 solid br-3'),
+      ...S('mt-10 p-5 bc-ccc bw-1 solid br-3'),
       maxHeight: 300,
       maxWidth: 600,
       overflow: 'scroll'
     }
 
-    let search_contacts
+    let filtered_contacts_markup
     if (filtered_contacts) {
-      search_contacts = (
-        <div style={ filter_scroll_style }>
+      filtered_contacts_markup = (
+        <div className="add-contact-form__contacts" style={ filter_scroll_style }>
           {
             filtered_contacts.map((contact, i) => {
               let active_contact_style = ''
+              let contact_added_style = ''
               const active_contact = data.active_contact
               if (active_contact === i)
                 active_contact_style = ' bg-EDF7FD'
+              if (contact.added)
+                contact_added_style = ' bg-dff0d8'
               return (
-                <div onClick={ this.addContact.bind(this) } key={ 'contact-' + contact.id } style={ S('relative h-60 pointer mb-5 p-10' + active_contact_style) }>
-                  <ProfileImage profile_image_url={ contact.profile_image_url }/>
+                <div className="add-contact-form__contact" onClick={ this.addContact.bind(this, contact, contact_type) } key={ 'contact-' + contact.id } style={ S('br-3 relative h-60 pointer mb-5 p-10' + active_contact_style + contact_added_style) }>
+                  <ProfileImage user={ contact }/>
                   <div style={ S('ml-50') }>
                     <span style={ S('fw-600') }>{ contact.first_name } { contact.last_name }</span><br />
                     <span style={ S('color-666') }>{ contact.contact_user.user_type }</span>
@@ -112,15 +124,70 @@ export default class AddContactsForm extends Component {
       )
     }
 
+    let added_contacts_markup
+    if (data.added_contacts && data.added_contacts[contact_type]) {
+      const added_contacts = data.added_contacts[contact_type]
+      added_contacts_markup = (
+        added_contacts.map((contact) => {
+          return (
+            <div style={ S('h-25 relative bg-3388ff br-100 color-fff p-3 pl-0 pr-10 mb-10 mr-10') } className="pull-left" key={ 'added-contact-' + contact.id }>
+              <div style={ S('l-0 t-0 absolute') }>
+                <ProfileImage top={3} size={25} user={ contact }/>
+              </div>
+              <div style={ S('ml-30') }>
+                <span>{ contact.first_name } { contact.last_name }</span>&nbsp;&nbsp;<span onClick={ this.removeContact.bind(this, contact.id, contact_type) } style={ S('pointer') }>x</span>
+              </div>
+            </div>
+          )
+        })
+      )
+    }
+
     return (
-      <div>
-        <form onSubmit={ this.addContact.bind(this) } style={ S('maxw-820') }>
-          <Input ref="search_contacts" onBlur={ this.hideContactsForm.bind(this) } onKeyDown={ this.navContactList.bind(this) } onKeyUp={ this.filterContacts.bind(this) } className="pull-left" style={ S('w-600') } type="text" placeholder="Enter any name, email or phone number"/>
-          <span className="pull-left" style={ S('w-30 ml-15 mt-8') }>OR</span>
-          <Button className="pull-left" style={ S('w-160') } bsStyle="primary" type="button">Add New Contact</Button>
-        </form>
+      <div className="add-contact-form" >
+        <div style={ S('maxw-620 minh-35') }>
+          { added_contacts_markup }
+          <div className="clearfix"></div>
+        </div>
+        <div style={ S('maxw-820') }>
+          <Input ref="search_contacts" onKeyDown={ this.navContactList.bind(this) } onKeyUp={ this.filterContacts.bind(this) } className="pull-left" style={ S('w-600') } type="text" placeholder="Enter any name, email or phone number"/>
+          <span className="pull-left" style={ S('w-30 ml-15 mt-8 color-666') }>OR</span>
+          <Button onClick={ this.props.showCreateContactModal }className="pull-left" style={ S('w-160') } bsStyle="primary" type="button">Add New Contact</Button>
+        </div>
         <div className="clearfix"></div>
-        { search_contacts }
+        { filtered_contacts_markup }
+        <Modal show={ data.show_create_contact_modal } onHide={ this.props.hideModal.bind(this) }>
+          <form onSubmit={ this.props.createContact.bind(this) }>
+            <Modal.Header closeButton>
+              <Modal.Title>Add New Contact</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Col xs={6}>
+                <Input type="text" ref="title" placeholder="FIRST NAME"/>
+              </Col>
+              <Col xs={6}>
+                <Input type="text" ref="title" placeholder="LAST NAME"/>
+              </Col>
+              <Col xs={6}>
+                <Input type="text" ref="title" placeholder="PHONE NUMBER"/>
+              </Col>
+              <Col xs={6}>
+                <Input type="text" ref="title" placeholder="EMAIL"/>
+              </Col>
+              <Col xs={6}>
+                <Input type="text" ref="title" placeholder="COMPANY"/>
+              </Col>
+              <Col xs={6}>
+                <Input type="text" ref="title" placeholder="ROLE"/>
+              </Col>
+              <div className="clearfix"></div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button onClick={ this.props.hideModal.bind(this) }>Cancel</Button>
+              <Button type="submit" bsStyle="primary">Add</Button>
+            </Modal.Footer>
+          </form>
+        </Modal>
       </div>
     )
   }
@@ -133,5 +200,11 @@ AddContactsForm.propTypes = {
   setContactActive: React.PropTypes.func,
   navContactList: React.PropTypes.func,
   setFilteredContacts: React.PropTypes.func,
-  hideContactsForm: React.PropTypes.func
+  hideContactsForm: React.PropTypes.func,
+  addContact: React.PropTypes.func,
+  removeContact: React.PropTypes.func,
+  showCreateContactModal: React.PropTypes.func,
+  hideModal: React.PropTypes.func,
+  createContact: React.PropTypes.func,
+  contact_type: React.PropTypes.string
 }

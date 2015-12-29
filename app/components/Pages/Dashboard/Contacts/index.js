@@ -7,6 +7,7 @@ import { Table } from 'react-bootstrap'
 import MainNav from '../Partials/MainNav'
 import SideBar from '../Partials/SideBar'
 import ProfileImage from '../Partials/ProfileImage'
+import Loading from '../../../Partials/Loading'
 
 // AppDispatcher
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
@@ -27,9 +28,36 @@ export default class Contacts extends Component {
 
   render() {
     const data = this.props.data
-    let contacts
-    if (data.contacts)
-      contacts = data.contacts
+    let contacts_table = <Loading />
+    if (data.contacts) {
+      const contacts = data.contacts
+      contacts_table = (
+        <Table striped bordered condensed hover>
+          <thead>
+            <tr>
+              <th>Profile Image</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              contacts.map((contact) => {
+                return (
+                  <tr key={ 'contact-' + contact.id }>
+                    <td><ProfileImage user={ contact }/></td>
+                    <td>{ contact.first_name } { contact.last_name }</td>
+                    <td>{ contact.email }</td>
+                    <td>{ contact.phone_number }</td>
+                  </tr>
+                )
+              })
+            }
+          </tbody>
+        </Table>
+      )
+    }
 
     // Style
     const main_style = S('absolute l-222 r-0')
@@ -44,30 +72,7 @@ export default class Contacts extends Component {
           <div style={ main_style }>
             <div style={ S('ml-20') }>
               <h1>Contacts</h1>
-              <Table striped bordered condensed hover>
-                <thead>
-                  <tr>
-                    <th>Profile Image</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {
-                    contacts.map((contact) => {
-                      return (
-                        <tr key={ 'contact-' + contact.id }>
-                          <td><ProfileImage profile_image_url={ contact.profile_image_url }/></td>
-                          <td>{ contact.first_name } { contact.last_name }</td>
-                          <td>{ contact.email }</td>
-                          <td>{ contact.phone_number }</td>
-                        </tr>
-                      )
-                    })
-                  }
-                </tbody>
-              </Table>
+              { contacts_table }
             </div>
           </div>
         </main>

@@ -10,12 +10,15 @@ export default class AddListing extends Component {
     // const data = this.props.data
     return (
       <div>
-        <h1>Add Listing</h1>
+        <img style={ S('h-121') } src="/images/dashboard/transactions/house.png" />
+        <div style={ S('mb-40') }>
+          <h1>We’re almost done! Do you have a property listing in mind?</h1>
+        </div>
         <div>
-          <form style={ S('maxw-820') }>
+          <div style={ S('maxw-820') }>
             <Input className="pull-left" style={ S('w-640') } type="text" placeholder="Enter any name, email or phone number"/>
-            <Button className="pull-left" style={ S('w-160 ml-10') } bsStyle="primary" type="button">Add New Contact</Button>
-          </form>
+            <Button className="pull-left" style={ S('w-160 ml-10') } bsStyle="primary" type="button">Add New Property</Button>
+          </div>
           <div className="clearfix"></div>
         </div>
       </div>

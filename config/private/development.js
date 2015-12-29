@@ -18,6 +18,7 @@ export default {
     },
     addUser: {
       id: '2678bdaa-a42c-11e5-8bb2-0242ac110006'
-    }
+    },
+    mls_number: 13146601
   }
 }

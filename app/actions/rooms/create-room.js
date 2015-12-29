@@ -14,7 +14,7 @@ export default (user, title) => {
       const new_room = response.data
       AppStore.data.status = 'success'
       AppStore.data.show_message = true
-      AppStore.data.showCreateChatModal = false
+      AppStore.data.show_create_chat_modal = false
       AppStore.data.rooms.unshift(new_room)
       AppStore.data.current_room = new_room
       AppStore.data.messages = [new_room.latest_message]

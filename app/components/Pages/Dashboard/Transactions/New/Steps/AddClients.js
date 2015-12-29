@@ -1,19 +1,19 @@
-// Dashboard/Transactions/New/Steps/AddContacts.js
+// Dashboard/Transactions/New/Steps/AddClients.js
 import React, { Component } from 'react'
 
 // Partials
 import AddContactsForm from '../../../Partials/AddContactsForm'
 
-export default class AddContacts extends Component {
+export default class AddClients extends Component {
 
   render() {
     // Data
     const data = this.props.data
     return (
       <div>
-        <h1>Invite your partner, vendors and even those on the other side of the negotiation!</h1>
+        <h1>Very nice. New { data.new_transaction.type }. Who are we creating this <br/>transaction for?</h1>
         <AddContactsForm
-          contact_type="contact"
+          contact_type="client"
           data={ data }
           setContactActive={ this.props.setContactActive }
           setFilteredContacts={ this.props.setFilteredContacts }
@@ -30,7 +30,7 @@ export default class AddContacts extends Component {
 }
 
 // PropTypes
-AddContacts.propTypes = {
+AddClients.propTypes = {
   data: React.PropTypes.object,
   setContactActive: React.PropTypes.func,
   setFilteredContacts: React.PropTypes.func,

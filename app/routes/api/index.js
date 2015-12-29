@@ -6,6 +6,7 @@ module.exports = (app, config) => {
   require('./gets/contacts')(app, config)
   require('./gets/messages')(app, config)
   require('./gets/transactions')(app, config)
+  require('./gets/listings')(app, config)
 
   // Posts
   require('./posts/signup')(app, config)

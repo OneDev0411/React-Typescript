@@ -151,8 +151,8 @@ export default class Dashboard extends Component {
   }
 
   hideModal() {
-    AppStore.data.showCreateChatModal = false
-    AppStore.data.showInviteUserModal = false
+    delete AppStore.data.show_create_chat_modal
+    delete AppStore.data.show_invite_user_modal
     AppStore.emitChange()
   }
 
@@ -264,9 +264,8 @@ export default class Dashboard extends Component {
     data.filtered_rooms = AppStore.data.filtered_rooms
     data.current_room = AppStore.data.current_room
     data.messages = AppStore.data.messages
-    data.showCreateChatModal = AppStore.data.showCreateChatModal
-    data.showInviteUserModal = AppStore.data.showInviteUserModal
-
+    data.show_create_chat_modal = AppStore.data.show_create_chat_modal
+    data.show_invite_user_modal = AppStore.data.show_invite_user_modal
     return (
       <div style={ S('minw-1000') }>
         <header>
