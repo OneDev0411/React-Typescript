@@ -2,6 +2,9 @@
 import React, { Component } from 'react'
 import { Col, Input, Button } from 'react-bootstrap'
 import S from 'shorti'
+import _ from 'lodash'
+import Cosmic from 'cosmicjs'
+import config from '../../../config/public'
 import emojify from 'emojify.js'
 emojify.setConfig({
   img_dir: '/images/emoji'
@@ -15,6 +18,11 @@ import AppStore from '../../stores/AppStore'
 
 export default class Landing extends Component {
 
+  componentWillMount() {
+    if (process.env.NODE_ENV === 'development')
+      this.getContent()
+  }
+
   componentDidMount() {
     AppStore.data.blinking_cursor = true
     AppStore.emitChange()
@@ -26,6 +34,21 @@ export default class Landing extends Component {
         action: 'landing-text-animation'
       })
     }, 3000)
+  }
+
+  getContent() {
+    Cosmic.getObject(config.cosmicjs, { slug: 'landing-page' }, (err, response) => {
+      const metafields = response.object.metafields
+      const subheadline = _.findWhere(metafields, { key: 'subheadline' }).value
+      const call_to_action = _.findWhere(metafields, { key: 'call-to-action' }).value
+      const placeholder_text = _.findWhere(metafields, { key: 'placeholder-text' }).value
+      AppStore.data.content = {
+        subheadline,
+        call_to_action,
+        placeholder_text
+      }
+      AppStore.emitChange()
+    })
   }
 
   showIntercom(e) {
