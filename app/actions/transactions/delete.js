@@ -13,6 +13,7 @@ export default (user, id) => {
       transactions = transactions.filter(transaction => {
         return transaction.id !== id
       })
+      delete AppStore.data.deleting_transaction
       AppStore.data.transactions = transactions
       AppStore.emitChange()
     }

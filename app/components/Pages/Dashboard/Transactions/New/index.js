@@ -199,8 +199,8 @@ export default class NewTransaction extends Component {
     let listing_added = new_transaction.listing_added
     if (!listing_added)
       listing_added = {}
-    listing_added.price = price
-    listing_added.contract_price = contract_price
+    listing_added.price = parseInt(price, 10)
+    listing_added.contract_price = parseInt(contract_price, 10)
     listing_added.agent_commission = agent_commission
     listing_added.co_agent_commission = co_agent_commission
     AppStore.data.new_transaction.listing_added = listing_added
@@ -345,7 +345,7 @@ export default class NewTransaction extends Component {
         )
       }
       // Next Button
-      if (step < new_transaction.total_steps) {
+      if (step < new_transaction.total_steps && new_transaction.type) {
         next_button = (
           <Button onClick={ this.handlePrevNext.bind(this, 'next') }>Next</Button>
         )
@@ -363,6 +363,14 @@ export default class NewTransaction extends Component {
     // Style
     const main_style = S('absolute l-222 r-0 ml-20 w-960 h-300')
 
+    let save_button
+    if (new_transaction && new_transaction.type) {
+      save_button = (
+        <Button onClick={ this.createTransaction.bind(this) } style={ S('absolute r-0 t-20') } className={ new_transaction && new_transaction.saving ? ' disabled' : '' } type="button" bsStyle="primary">
+          { new_transaction && new_transaction.saving ? 'Saving...' : 'Save and Quit' }
+        </Button>
+      )
+    }
     return (
       <div style={ S('minw-1000') }>
         <header>
@@ -372,9 +380,7 @@ export default class NewTransaction extends Component {
           <SideBar data={ data }/>
           <div style={ main_style }>
             <div style={ S('absolute w-100p') }>
-              <Button onClick={ this.createTransaction.bind(this) } style={ S('absolute r-0 t-20') } className={ new_transaction && new_transaction.saving ? ' disabled' : '' } type="button" bsStyle="primary">
-                { new_transaction && new_transaction.saving ? 'Saving...' : 'Save and Quit' }
-              </Button>
+              { save_button }
             </div>
             { breadcrumbs }
             <div style={ S('absolute w-100p') }>

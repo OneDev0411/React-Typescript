@@ -22,10 +22,18 @@ export default {
     let title = 'New Transaction w/Out Listing'
     if (new_transaction.listing_added)
       title = 'New Transaction w/Listing'
+    let contract_price
+    const listing_added = new_transaction.listing_added
+    if (listing_added) {
+      if (new_transaction.listing_added.contract_price)
+        contract_price = listing_added.contract_price
+      else
+        contract_price = listing_added.price
+    }
     const params = {
       transaction_type: new_transaction.type,
-      listing: new_transaction.listing_added,
-      contract_price: new_transaction.listing_added.price,
+      listing: listing_added,
+      contract_price,
       title,
       access_token: user.access_token
     }

@@ -18,6 +18,9 @@ import TransactionDispatcher from '../../../../dispatcher/TransactionDispatcher'
 import MainNav from '../Partials/MainNav'
 import SideBar from '../Partials/SideBar'
 
+// Helpers
+import helpers from '../../../../utils/helpers'
+
 export default class Transactions extends Component {
 
   componentDidMount() {
@@ -51,6 +54,8 @@ export default class Transactions extends Component {
   deleteTransaction(id) {
     const data = this.props.data
     const user = data.user
+    AppStore.data.deleting_transaction = id
+    AppStore.emitChange()
     TransactionDispatcher.dispatch({
       action: 'delete-transaction',
       user,
@@ -72,20 +77,26 @@ export default class Transactions extends Component {
       transactions_rows = transactions.map((transaction) => {
         let listing
         let list_agent_full_name
-        const contract_price = transaction.contract_price
+        let contract_price = transaction.contract_price
+        if (contract_price)
+          contract_price = helpers.numberWithCommas(contract_price.toFixed(2))
         const created_at = transaction.created_at
         if (transaction.listing) {
           listing = transaction.listing
           list_agent_full_name = listing.list_agent_full_name
         }
         return (
-          <tr>
+          <tr key={ transaction.id }>
             <td>{ transaction.title }</td>
             <td>{ list_agent_full_name }</td>
             <td>{ contract_price }</td>
-            <td>Tax Document</td>
+            <td>...</td>
             <td>{ created_at }</td>
-            <td><Button onClick={ this.deleteTransaction.bind(this, transaction.id) } type="button" bsStyle="danger">Delete</Button></td>
+            <td>
+              <Button className={ data.deleting_transaction && data.deleting_transaction === transaction.id ? 'disabled' : '' } onClick={ this.deleteTransaction.bind(this, transaction.id) } type="button" bsStyle="danger">
+                { data.deleting_transaction && data.deleting_transaction === transaction.id ? 'Deleting...' : 'Delete' }
+              </Button>
+            </td>
           </tr>
         )
       })
@@ -94,6 +105,31 @@ export default class Transactions extends Component {
     if (data.new_transaction && data.new_transaction.saved) {
       saved_message = (
         <Alert bsStyle="success">Transaction saved!</Alert>
+      )
+    }
+
+    let transactions_area
+    if (transactions_rows && transactions_rows.length) {
+      transactions_area = (
+        <Table striped bordered condensed hover>
+          <thead>
+            <tr>
+              <th>Property</th>
+              <th>Contact</th>
+              <th>Price</th>
+              <th>Next Task</th>
+              <th>Closing Date</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            { transactions_rows }
+          </tbody>
+        </Table>
+      )
+    } else {
+      transactions_area = (
+        <div>No transactions yet</div>
       )
     }
     const main_content = (
@@ -106,21 +142,7 @@ export default class Transactions extends Component {
         </div>
         <div>
           { saved_message }
-          <Table striped bordered condensed hover>
-            <thead>
-              <tr>
-                <th>Property</th>
-                <th>Contact</th>
-                <th>Price</th>
-                <th>Next Task</th>
-                <th>Closing Date</th>
-                <th>Delete</th>
-              </tr>
-            </thead>
-            <tbody>
-              { transactions_rows }
-            </tbody>
-          </Table>
+          { transactions_area }
         </div>
       </div>
     )

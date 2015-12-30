@@ -7,10 +7,12 @@ module.exports = (app, config) => {
     const transaction_type = req.body.transaction_type
     const title = req.body.title
     const listing = req.body.listing
+    const contract_price = req.body.contract_price
     const request_object = {
       transaction_type,
       title,
-      listing
+      listing,
+      contract_price
     }
     fetch(endpoint,{
       method: 'post',
