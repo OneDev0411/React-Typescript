@@ -23,7 +23,6 @@ export default class Contacts extends Component {
 
   getContacts() {
     const data = this.props.data
-    console.log(data)
     AppDispatcher.dispatch({
       action: 'get-contacts',
       user: data.user
