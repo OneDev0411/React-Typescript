@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import { Button, Input } from 'react-bootstrap'
 import S from 'shorti'
+import _ from 'lodash'
 
 export default class AddListing extends Component {
 
@@ -55,7 +56,13 @@ export default class AddListing extends Component {
   }
 
   addListing(listing) {
+    const listings_found = this.props.data.new_transaction.listings_found
     this.props.addListing(listing)
+    const listing_id = listing.id
+    const listing_index = _.findIndex(listings_found, { id: listing_id })
+    this.props.setListingActive(listing_index)
+    this.setListingActive(listing_index)
+    this.refs.q.refs.input.focus()
   }
 
   render() {
