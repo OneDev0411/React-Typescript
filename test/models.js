@@ -4,6 +4,7 @@ import User from '../app/models/User'
 import Room from '../app/models/Room'
 import Message from '../app/models/Message'
 import Listing from '../app/models/Listing'
+import Transaction from '../app/models/Transaction'
 import config from '../config/private'
 
 // Get access token
@@ -142,14 +143,42 @@ describe('Testing Room model', function() {
 ==================== */
 describe('Testing Listing model', function() { 
   // Search Listing
-  it('Listing.search should return successful for MLS number ' + test.mls_number, function(done) {
+  it('Listing.search should return successful for search query: ' + test.listing.search_q, function(done) {
     const params = {
-      mls_number: test.mls_number,
+      q: test.listing.search_q,
       access_token: access_token,
       api_host: test.api_host
     }
     Listing.search(params, (err, response) => {
-      console.log(response)
+      expect(response.status).to.equal('success')
+      done()
+    })
+  })
+})
+
+/* Transaction
+==================== */
+describe('Testing Transaction model', function() { 
+  // Create transaction
+  it('Transaction.create should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
+    const params = {
+      transaction_type: 'Buyer',
+      title: 'Test Title',
+      access_token: access_token,
+      api_host: test.api_host
+    }
+    Transaction.create(params, (err, response) => {
+      expect(response.status).to.equal('success')
+      done()
+    })
+  })
+  // Get all transactions
+  it('Transaction.getAll should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
+    const params = {
+      access_token: access_token,
+      api_host: test.api_host
+    }
+    Transaction.getAll(params, (err, response) => {
       expect(response.status).to.equal('success')
       done()
     })

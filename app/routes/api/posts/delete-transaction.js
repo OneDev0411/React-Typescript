@@ -1,11 +1,12 @@
-// api/gets/transactions.js
+// api/posts/delete-transaction.js
 module.exports = (app, config) => {
-  app.get('/api/transactions',(req, res) => {
+  app.post('/api/delete-transaction',(req, res) => {
     const api_url = config.api.url
-    const endpoint = api_url + '/transactions'
-    const access_token = req.query.access_token
+    const id = req.query.id
+    const endpoint = api_url + '/transactions/' + id
+    const access_token = req.body.access_token
     fetch(endpoint,{
-      method: 'get',
+      method: 'delete',
       headers: {  
         'Content-Type': 'application/json',
         'authorization': 'Bearer ' + access_token,
@@ -13,18 +14,17 @@ module.exports = (app, config) => {
     })
     .then(response => {
       if (response.status >= 400) {
-        let error = {
+        var error = {
           status: 'error',
           message: 'There was an error with this request.'
         }
-        return res.end(JSON.stringify(error))
+        return res.json(error)
       }
-      return response.json()
+      return response
     })
     .then(response => {
-      let response_object = response
-      response_object.status = 'success'
-      return res.end(JSON.stringify(response_object))
+      response.status = 'success'
+      return res.json(response)
     });
   })
 }

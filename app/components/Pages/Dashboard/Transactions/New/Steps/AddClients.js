@@ -13,7 +13,7 @@ export default class AddClients extends Component {
       <div>
         <h1>Very nice. New { data.new_transaction.type }. Who are we creating this <br/>transaction for?</h1>
         <AddContactsForm
-          contact_type="client"
+          module_type="client"
           data={ data }
           setContactActive={ this.props.setContactActive }
           setFilteredContacts={ this.props.setFilteredContacts }

@@ -13,7 +13,7 @@ export default class AddContacts extends Component {
       <div>
         <h1>Invite your partner, vendors and even those on the other side of the negotiation!</h1>
         <AddContactsForm
-          contact_type="contact"
+          module_type="contact"
           data={ data }
           setContactActive={ this.props.setContactActive }
           setFilteredContacts={ this.props.setFilteredContacts }

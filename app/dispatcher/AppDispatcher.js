@@ -23,6 +23,13 @@ import getPreviousMessages from '../actions/messages/get-previous-messages'
 import showModal from '../actions/pages/show-modal'
 import landingPage from '../actions/pages/landing'
 
+// Modules
+import addContact from '../actions/modules/add-contact'
+import removeContact from '../actions/modules/remove-contact'
+
+// Listings
+import searchListing from '../actions/listings/search'
+
 const AppDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
@@ -44,6 +51,14 @@ AppDispatcher.register(payload => {
   let modal_key
   let title
   let scroll_height
+
+  // Add Contact Module
+  let contact
+  let contact_id
+  let module_type
+
+  // Listing
+  let q
 
   switch (action) {
 
@@ -138,6 +153,24 @@ AppDispatcher.register(payload => {
     case 'show-modal':
       modal_key = payload.modal_key
       showModal(modal_key)
+      break
+
+    case 'add-contact':
+      contact = payload.contact
+      module_type = payload.module_type
+      addContact(contact, module_type)
+      break
+
+    case 'remove-contact':
+      contact_id = payload.contact_id
+      module_type = payload.module_type
+      removeContact(contact_id, module_type)
+      break
+
+    case 'search-listing':
+      user = payload.user
+      q = payload.q
+      searchListing(user, q)
       break
 
     default:

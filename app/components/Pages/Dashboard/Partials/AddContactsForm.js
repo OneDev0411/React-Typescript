@@ -64,7 +64,7 @@ export default class AddContactsForm extends Component {
     if (e.which === 13) {
       const active_contact = this.props.data.active_contact
       const filtered_contacts = this.props.data.filtered_contacts
-      this.addContact(filtered_contacts[active_contact], this.props.contact_type)
+      this.addContact(filtered_contacts[active_contact], this.props.module_type)
     }
   }
 
@@ -72,17 +72,17 @@ export default class AddContactsForm extends Component {
     this.props.hideContactsForm()
   }
 
-  addContact(contact, contact_type) {
-    this.props.addContact(contact, contact_type)
+  addContact(contact, module_type) {
+    this.props.addContact(contact, module_type)
   }
 
-  removeContact(contact_id, contact_type) {
-    this.props.removeContact(contact_id, contact_type)
+  removeContact(contact_id, module_type) {
+    this.props.removeContact(contact_id, module_type)
   }
 
   render() {
     const data = this.props.data
-    const contact_type = this.props.contact_type
+    const module_type = this.props.module_type
     let filtered_contacts
     if (data.filtered_contacts)
       filtered_contacts = data.filtered_contacts
@@ -109,7 +109,7 @@ export default class AddContactsForm extends Component {
               if (contact.added)
                 contact_added_style = ' bg-dff0d8'
               return (
-                <div className="add-contact-form__contact" onClick={ this.addContact.bind(this, contact, contact_type) } key={ 'contact-' + contact.id } style={ S('br-3 relative h-60 pointer mb-5 p-10' + active_contact_style + contact_added_style) }>
+                <div className="add-contact-form__contact" onClick={ this.addContact.bind(this, contact, module_type) } key={ 'contact-' + contact.id } style={ S('br-3 relative h-60 pointer mb-5 p-10' + active_contact_style + contact_added_style) }>
                   <ProfileImage user={ contact }/>
                   <div style={ S('ml-50') }>
                     <span style={ S('fw-600') }>{ contact.first_name } { contact.last_name }</span><br />
@@ -124,18 +124,18 @@ export default class AddContactsForm extends Component {
       )
     }
 
-    let added_contacts_markup
-    if (data.added_contacts && data.added_contacts[contact_type]) {
-      const added_contacts = data.added_contacts[contact_type]
-      added_contacts_markup = (
-        added_contacts.map((contact) => {
+    let contacts_added_markup
+    if (data.contacts_added && data.contacts_added[module_type]) {
+      const contacts_added = data.contacts_added[module_type]
+      contacts_added_markup = (
+        contacts_added.map((contact) => {
           return (
             <div style={ S('h-25 relative bg-3388ff br-100 color-fff p-3 pl-0 pr-10 mb-10 mr-10') } className="pull-left" key={ 'added-contact-' + contact.id }>
               <div style={ S('l-0 t-0 absolute') }>
                 <ProfileImage top={3} size={25} user={ contact }/>
               </div>
               <div style={ S('ml-30') }>
-                <span>{ contact.first_name } { contact.last_name }</span>&nbsp;&nbsp;<span onClick={ this.removeContact.bind(this, contact.id, contact_type) } style={ S('pointer') }>x</span>
+                <span>{ contact.first_name } { contact.last_name }</span>&nbsp;&nbsp;<span onClick={ this.removeContact.bind(this, contact.id, module_type) } style={ S('pointer') }>x</span>
               </div>
             </div>
           )
@@ -146,7 +146,7 @@ export default class AddContactsForm extends Component {
     return (
       <div className="add-contact-form" >
         <div style={ S('maxw-620 minh-35') }>
-          { added_contacts_markup }
+          { contacts_added_markup }
           <div className="clearfix"></div>
         </div>
         <div style={ S('maxw-820') }>
@@ -206,5 +206,5 @@ AddContactsForm.propTypes = {
   showCreateContactModal: React.PropTypes.func,
   hideModal: React.PropTypes.func,
   createContact: React.PropTypes.func,
-  contact_type: React.PropTypes.string
+  module_type: React.PropTypes.string
 }

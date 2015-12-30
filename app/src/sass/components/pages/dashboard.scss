@@ -43,11 +43,3 @@
     from { opacity: 0; }
     to   { opacity: 1; }
 }
-// Add Contacts
-.add-contact-form{
-  &__contact{
-    &:hover{
-      background-color: #efefef;
-    }
-  }
-}

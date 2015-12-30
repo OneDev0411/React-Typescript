@@ -38,5 +38,8 @@ export default {
     minutes = minutes < 10 ? '0'+minutes : minutes;
     var strTime = hours + ':' + minutes + ampm;
     return strTime;
+  },
+  numberWithCommas: (x) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 }

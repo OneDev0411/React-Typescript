@@ -2,14 +2,13 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { Button, Breadcrumb, BreadcrumbItem } from 'react-bootstrap'
-import _ from 'lodash'
 import S from 'shorti'
 
 // AppStore
 import AppStore from '../../../../../stores/AppStore'
 
 // AppDispatcher
-import AppDispatcher from '../../../../../dispatcher/TransactionDispatcher'
+import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
 
 // TransactionDispatcher
 import TransactionDispatcher from '../../../../../dispatcher/TransactionDispatcher'
@@ -33,8 +32,15 @@ export default class NewTransaction extends Component {
     })
     this.getContacts()
     AppStore.data.active_contact = -1
-    AppStore.data.added_contacts = null
+    AppStore.data.contacts_added = null
     AppStore.emitChange()
+  }
+
+  componentDidUpdate() {
+    if (AppStore.data.new_transaction && AppStore.data.new_transaction.redirect_to) {
+      const redirect_to = AppStore.data.new_transaction.redirect_to
+      this.props.history.pushState(null, redirect_to)
+    }
   }
 
   getBreadCrumbs(step) {
@@ -82,8 +88,14 @@ export default class NewTransaction extends Component {
     AppStore.emitChange()
   }
 
+  // Set list item active
   setContactActive(index) {
     AppStore.data.active_contact = index
+    AppStore.emitChange()
+  }
+
+  setListingActive(index) {
+    AppStore.data.new_transaction.active_listing = index
     AppStore.emitChange()
   }
 
@@ -92,42 +104,23 @@ export default class NewTransaction extends Component {
     AppStore.emitChange()
   }
 
-  addContact(contact, contact_type) {
-    if (!AppStore.data.added_contacts) {
-      AppStore.data.added_contacts = {}
-      AppStore.data.added_contacts[contact_type] = []
-    } else {
-      if (!AppStore.data.added_contacts[contact_type])
-        AppStore.data.added_contacts[contact_type] = []
-    }
-    const added_contacts = AppStore.data.added_contacts[contact_type]
-    const filtered_contacts = AppStore.data.filtered_contacts
-    const in_array = _.findWhere(added_contacts, { id: contact.id })
-    const contact_index = _.findIndex(filtered_contacts, { id: contact.id })
-    contact.added = true
-    if (!in_array) {
-      AppStore.data.filtered_contacts[contact_index] = contact
-      AppStore.data.added_contacts[contact_type].push(contact)
-      AppStore.data.new_transaction.added_contacts = AppStore.data.added_contacts
-      AppStore.emitChange()
-    } else
-      this.removeContact(contact.id, contact_type)
+  addContact(contact, module_type) {
+    AppDispatcher.dispatch({
+      action: 'add-contact',
+      contact,
+      module_type
+    })
+    AppStore.data.new_transaction.contacts_added = AppStore.data.contacts_added
+    AppStore.emitChange()
   }
 
-  removeContact(contact_id, contact_type) {
-    const added_contacts = AppStore.data.added_contacts[contact_type]
-    const filtered_contacts = AppStore.data.filtered_contacts
-    if (filtered_contacts) {
-      const contact = _.findWhere(added_contacts, { id: contact_id })
-      const contact_index = _.findIndex(filtered_contacts, { id: contact_id })
-      contact.added = false
-      AppStore.data.filtered_contacts[contact_index] = contact
-    }
-    const added_contacts_edited = added_contacts.filter((contact_loop) => {
-      return contact_loop.id !== contact_id
+  removeContact(contact_id, module_type) {
+    AppDispatcher.dispatch({
+      action: 'remove-contact',
+      contact_id,
+      module_type
     })
-    AppStore.data.added_contacts[contact_type] = added_contacts_edited
-    AppStore.data.new_transaction.added_contacts = AppStore.data.added_contacts
+    AppStore.data.new_transaction.contacts_added = AppStore.data.contacts_added
     AppStore.emitChange()
   }
 
@@ -182,10 +175,53 @@ export default class NewTransaction extends Component {
     AppStore.emitChange()
   }
 
+  // Listings
+  searchListings(q) {
+    delete AppStore.data.new_transaction.listing_added
+    AppStore.data.new_transaction.listing_searching = true
+    AppStore.emitChange()
+    const user = AppStore.data.user
+    AppDispatcher.dispatch({
+      action: 'search-listing',
+      user,
+      q
+    })
+  }
+
+  addListing(listing) {
+    AppStore.data.new_transaction.listing_added = listing
+    AppStore.emitChange()
+  }
+
+  calculateFinancials(price, contract_price, agent_commission, co_agent_commission) {
+    const data = this.props.data
+    const new_transaction = data.new_transaction
+    let listing_added = new_transaction.listing_added
+    if (!listing_added)
+      listing_added = {}
+    listing_added.price = price
+    listing_added.contract_price = contract_price
+    listing_added.agent_commission = agent_commission
+    listing_added.co_agent_commission = co_agent_commission
+    AppStore.data.new_transaction.listing_added = listing_added
+    AppStore.emitChange()
+  }
+
+  createTransaction() {
+    AppStore.data.new_transaction.saving = true
+    AppStore.emitChange()
+    const new_transaction = this.props.data.new_transaction
+    const user = AppStore.data.user
+    TransactionDispatcher.dispatch({
+      action: 'create',
+      user,
+      new_transaction
+    })
+  }
+
   render() {
     // Data
     const data = this.props.data
-    const main_style = S('absolute l-222 r-0 ml-20 w-960 h-300')
     // New transaction data
     let new_transaction
     if (data.new_transaction)
@@ -196,26 +232,26 @@ export default class NewTransaction extends Component {
     let buysell_class = 'btn'
     let lease_class = 'btn'
 
-    if (new_transaction && new_transaction.type === 'buying')
+    if (new_transaction && new_transaction.type === 'Buyer')
       buying_class = 'btn btn-primary'
 
-    if (new_transaction && new_transaction.type === 'selling')
+    if (new_transaction && new_transaction.type === 'Seller')
       selling_class = 'btn btn-primary'
 
-    if (new_transaction && new_transaction.type === 'buying-selling')
+    if (new_transaction && new_transaction.type === 'Buyer/Seller')
       buysell_class = 'btn btn-primary'
 
-    if (new_transaction && new_transaction.type === 'leasing')
+    if (new_transaction && new_transaction.type === 'Lease')
       lease_class = 'btn btn-primary'
 
     let main_content = (
       <div>
         <h1>Keep'em comin!  So are we...</h1>
         <div>
-          <Button onClick={ this.handleTypeClick.bind(this, 'buying') } className={ buying_class }>Buying</Button>
-          <Button onClick={ this.handleTypeClick.bind(this, 'selling') } style={ S('ml-40') } className={ selling_class }>Selling</Button>
-          <Button onClick={ this.handleTypeClick.bind(this, 'buying-selling') } style={ S('ml-40') } className={ buysell_class }>Buying & Selling</Button>
-          <Button onClick={ this.handleTypeClick.bind(this, 'leasing') } style={ S('ml-40') } className={ lease_class }>Leasing</Button>
+          <Button onClick={ this.handleTypeClick.bind(this, 'Buyer') } className={ buying_class }>Buying</Button>
+          <Button onClick={ this.handleTypeClick.bind(this, 'Seller') } style={ S('ml-40') } className={ selling_class }>Selling</Button>
+          <Button onClick={ this.handleTypeClick.bind(this, 'Buyer/Seller') } style={ S('ml-40') } className={ buysell_class }>Buying & Selling</Button>
+          <Button onClick={ this.handleTypeClick.bind(this, 'Lease') } style={ S('ml-40') } className={ lease_class }>Leasing</Button>
         </div>
       </div>
     )
@@ -258,12 +294,20 @@ export default class NewTransaction extends Component {
           break
         case 3:
           main_content = (
-            <AddListing data={ data }/>
+            <AddListing
+              data={ data }
+              searchListings={ this.searchListings }
+              setListingActive={ this.setListingActive }
+              addListing={ this.addListing }
+            />
           )
           break
         case 4:
           main_content = (
-            <AddFinancials data={ data }/>
+            <AddFinancials
+              data={ data }
+              calculateFinancials={ this.calculateFinancials.bind(this) }
+            />
           )
           break
         case 5:
@@ -315,6 +359,10 @@ export default class NewTransaction extends Component {
         </div>
       )
     }
+
+    // Style
+    const main_style = S('absolute l-222 r-0 ml-20 w-960 h-300')
+
     return (
       <div style={ S('minw-1000') }>
         <header>
@@ -323,6 +371,11 @@ export default class NewTransaction extends Component {
         <main>
           <SideBar data={ data }/>
           <div style={ main_style }>
+            <div style={ S('absolute w-100p') }>
+              <Button onClick={ this.createTransaction.bind(this) } style={ S('absolute r-0 t-20') } className={ new_transaction && new_transaction.saving ? ' disabled' : '' } type="button" bsStyle="primary">
+                { new_transaction && new_transaction.saving ? 'Saving...' : 'Save and Quit' }
+              </Button>
+            </div>
             { breadcrumbs }
             <div style={ S('absolute w-100p') }>
               { main_content }
@@ -337,5 +390,6 @@ export default class NewTransaction extends Component {
 
 // PropTypes
 NewTransaction.propTypes = {
-  data: React.PropTypes.object
+  data: React.PropTypes.object,
+  history: React.PropTypes.object
 }

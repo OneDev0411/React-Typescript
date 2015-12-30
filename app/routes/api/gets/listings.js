@@ -2,7 +2,7 @@
 module.exports = (app, config) => {
   app.get('/api/listings/search',(req, res) => {
     const api_url = config.api.url
-    const endpoint = api_url + '/listings/search?mls_number=' + req.query.mls_number
+    const endpoint = api_url + '/listings/search?q=' + req.query.q
     const access_token = req.query.access_token
     fetch(endpoint,{
       method: 'get',
@@ -17,7 +17,7 @@ module.exports = (app, config) => {
           status: 'error',
           message: 'There was an error with this request.'
         }
-        return res.end(JSON.stringify(error))
+        return res.json(error)
       }
       return response.json()
     })

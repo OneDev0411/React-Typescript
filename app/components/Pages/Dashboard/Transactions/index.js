@@ -2,20 +2,34 @@
 // Dashboard/Transactions/index.js
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import { Table } from 'react-bootstrap'
+import { Table, Button, Alert } from 'react-bootstrap'
 import S from 'shorti'
+
+// AppStore
+import AppStore from '../../../../stores/AppStore'
+
+// AppDispatcher
+import AppDispatcher from '../../../../dispatcher/AppDispatcher'
+
+// TransactionDispatcher
+import TransactionDispatcher from '../../../../dispatcher/TransactionDispatcher'
 
 // Partials
 import MainNav from '../Partials/MainNav'
 import SideBar from '../Partials/SideBar'
 
-// AppDispatcher
-import AppDispatcher from '../../../../dispatcher/AppDispatcher'
-
 export default class Transactions extends Component {
 
   componentDidMount() {
     this.getContacts()
+    this.getTransactions()
+    // If coming from redirect
+    if (AppStore.data.new_transaction && AppStore.data.new_transaction.redirect_to) {
+      setTimeout(() => {
+        delete AppStore.data.new_transaction.redirect_to
+        delete AppStore.data.new_transaction.saved
+      }, 3000)
+    }
   }
 
   getContacts() {
@@ -26,6 +40,24 @@ export default class Transactions extends Component {
     })
   }
 
+  getTransactions() {
+    const data = this.props.data
+    TransactionDispatcher.dispatch({
+      action: 'get-all',
+      user: data.user
+    })
+  }
+
+  deleteTransaction(id) {
+    const data = this.props.data
+    const user = data.user
+    TransactionDispatcher.dispatch({
+      action: 'delete-transaction',
+      user,
+      id
+    })
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -33,6 +65,37 @@ export default class Transactions extends Component {
     // Style
     const main_style = S('absolute l-222 r-0 pl-20 pr-20')
 
+    // Transactions
+    let transactions_rows
+    if (data.transactions) {
+      const transactions = data.transactions
+      transactions_rows = transactions.map((transaction) => {
+        let listing
+        let list_agent_full_name
+        const contract_price = transaction.contract_price
+        const created_at = transaction.created_at
+        if (transaction.listing) {
+          listing = transaction.listing
+          list_agent_full_name = listing.list_agent_full_name
+        }
+        return (
+          <tr>
+            <td>{ transaction.title }</td>
+            <td>{ list_agent_full_name }</td>
+            <td>{ contract_price }</td>
+            <td>Tax Document</td>
+            <td>{ created_at }</td>
+            <td><Button onClick={ this.deleteTransaction.bind(this, transaction.id) } type="button" bsStyle="danger">Delete</Button></td>
+          </tr>
+        )
+      })
+    }
+    let saved_message
+    if (data.new_transaction && data.new_transaction.saved) {
+      saved_message = (
+        <Alert bsStyle="success">Transaction saved!</Alert>
+      )
+    }
     const main_content = (
       <div>
         <div>
@@ -42,6 +105,7 @@ export default class Transactions extends Component {
           </h1>
         </div>
         <div>
+          { saved_message }
           <Table striped bordered condensed hover>
             <thead>
               <tr>
@@ -50,30 +114,11 @@ export default class Transactions extends Component {
                 <th>Price</th>
                 <th>Next Task</th>
                 <th>Closing Date</th>
+                <th>Delete</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Image</td>
-                <td>Name</td>
-                <td>$1,000,000</td>
-                <td>Tax Document</td>
-                <td>Wed, 12th, Jan 2016</td>
-              </tr>
-              <tr>
-                <td>Image</td>
-                <td>Name</td>
-                <td>$1,000,000</td>
-                <td>Tax Document</td>
-                <td>Wed, 12th, Jan 2016</td>
-              </tr>
-              <tr>
-                <td>Image</td>
-                <td>Name</td>
-                <td>$1,000,000</td>
-                <td>Tax Document</td>
-                <td>Wed, 12th, Jan 2016</td>
-              </tr>
+              { transactions_rows }
             </tbody>
           </Table>
         </div>

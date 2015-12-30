@@ -1,6 +1,5 @@
 // api/index.js
 module.exports = (app, config) => {
-  
   // Gets
   require('./gets/rooms')(app, config)
   require('./gets/contacts')(app, config)
@@ -18,4 +17,5 @@ module.exports = (app, config) => {
   require('./posts/add-user-to-room')(app, config)
   require('./posts/create-message')(app, config)
   require('./posts/create-transaction')(app, config)
+  require('./posts/delete-transaction')(app, config)
 }
