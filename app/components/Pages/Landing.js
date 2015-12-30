@@ -1,16 +1,13 @@
 // Landing.js
 import React, { Component } from 'react'
 import { Col, Input, Button } from 'react-bootstrap'
-import _ from 'lodash'
 import S from 'shorti'
-import Cosmic from 'cosmicjs'
-import config from '../../../config/public'
 import emojify from 'emojify.js'
 emojify.setConfig({
   img_dir: '/images/emoji'
 })
 
-// Store
+// AppDispatcher
 import AppDispatcher from '../../dispatcher/AppDispatcher'
 
 // Store
@@ -18,51 +15,17 @@ import AppStore from '../../stores/AppStore'
 
 export default class Landing extends Component {
 
-  componentWillMount() {
-    this.getContent()
-  }
-
   componentDidMount() {
     AppStore.data.blinking_cursor = true
     AppStore.emitChange()
-
-    let random_number = this.props.data.random_number
-
-    random_number = 0
-
     AppDispatcher.dispatch({
-      action: 'init-landing',
-      random_number
+      action: 'init-landing'
     })
-
     setTimeout(() => {
       AppDispatcher.dispatch({
-        action: 'landing-text-animation',
-        random_number
+        action: 'landing-text-animation'
       })
     }, 3000)
-    // setInterval(() => {
-    //   let video_src = AppStore.data.video_src
-    //   AppDispatcher.dispatch({
-    //     action: 'landing-swap-video',
-    //     video_src: video_src
-    //   })
-    // }, 5000)
-  }
-
-  getContent() {
-    Cosmic.getObjects(config.cosmicjs, (err, objects) => {
-      const metafields = objects.object['landing-page'].metafields
-      const subheadline = _.findWhere(metafields, { key: 'subheadline' }).value
-      const call_to_action = _.findWhere(metafields, { key: 'call-to-action' }).value
-      const placeholder_text = _.findWhere(metafields, { key: 'placeholder-text' }).value
-      AppStore.data.content = {
-        subheadline,
-        call_to_action,
-        placeholder_text
-      }
-      AppStore.emitChange()
-    })
   }
 
   showIntercom(e) {
@@ -72,39 +35,39 @@ export default class Landing extends Component {
 
   render() {
     // Data
-    let data = this.props.data
+    const data = this.props.data
     let blinking_cursor = AppStore.data.blinking_cursor
     let video_src = AppStore.data.video_src
     if (!video_src)
       video_src = 'young_agent'
-
-    // Blinking cursor
-    if (typeof AppStore.data.blinking_cursor === 'undefined')
-      blinking_cursor = true
+    let current_text = data.current_text
     const animation_started = AppStore.data.animation_started
     if (animation_started)
-      data = AppStore.data
+      current_text = AppStore.data.current_text
 
+    // Blinking cursor
+    if (typeof blinking_cursor === 'undefined')
+      blinking_cursor = true
     if (blinking_cursor)
       blinking_cursor = 'blinking-cursor'
     else
       blinking_cursor = ''
 
-    // Content
+    // Content from data props
     // Subheadline
     let subheadline
-    if (AppStore.data.content)
-      subheadline = AppStore.data.content.subheadline
+    if (data.content)
+      subheadline = data.content.subheadline
 
     // Call to action
     let call_to_action
-    if (AppStore.data.content)
-      call_to_action = AppStore.data.content.call_to_action
+    if (data.content)
+      call_to_action = data.content.call_to_action
 
     // Placeholder text
     let placeholder_text
-    if (AppStore.data.content)
-      placeholder_text = AppStore.data.content.placeholder_text
+    if (data.content)
+      placeholder_text = data.content.placeholder_text
 
     // Styles
     const page_style = {
@@ -140,7 +103,7 @@ export default class Landing extends Component {
     // Get video and text from random number
     const headline_text = (
       <div>
-        From search to close be<br/><span style={ current_text_style }>{ data.current_text }</span><span className={ blinking_cursor }>|</span>
+        From search to close be<br/><span style={ current_text_style }>{ current_text }</span><span className={ blinking_cursor }>|</span>
       </div>
     )
 

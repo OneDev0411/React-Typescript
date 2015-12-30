@@ -63,7 +63,7 @@ AppDispatcher.register(payload => {
   switch (action) {
 
     case 'init-landing':
-      landingPage.init(payload.random_number)
+      landingPage.init()
       break
 
     case 'landing-text-animation':

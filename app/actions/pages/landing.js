@@ -84,8 +84,7 @@ export default {
     this.removeText(0)
   },
 
-  init(random_number = 0) {
-    AppStore.data.random_number = random_number
+  init() {
     AppStore.data.current_text = this.getText(0)
     AppStore.data.animation_started = true
     AppStore.emitChange()

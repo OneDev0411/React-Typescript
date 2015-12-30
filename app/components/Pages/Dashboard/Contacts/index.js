@@ -12,6 +12,9 @@ import Loading from '../../../Partials/Loading'
 // AppDispatcher
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 
+// AppStore
+import AppStore from '../../../../stores/AppStore'
+
 export default class Contacts extends Component {
 
   componentDidMount() {
@@ -20,6 +23,7 @@ export default class Contacts extends Component {
 
   getContacts() {
     const data = this.props.data
+    console.log(data)
     AppDispatcher.dispatch({
       action: 'get-contacts',
       user: data.user
@@ -29,8 +33,8 @@ export default class Contacts extends Component {
   render() {
     const data = this.props.data
     let contacts_table = <Loading />
-    if (data.contacts) {
-      const contacts = data.contacts
+    const contacts = AppStore.data.contacts
+    if (contacts) {
       contacts_table = (
         <Table striped bordered condensed hover>
           <thead>

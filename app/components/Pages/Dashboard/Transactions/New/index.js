@@ -222,6 +222,10 @@ export default class NewTransaction extends Component {
   render() {
     // Data
     const data = this.props.data
+
+    // Set contacts
+    data.contacts = AppStore.data.contacts
+
     // New transaction data
     let new_transaction
     if (data.new_transaction)

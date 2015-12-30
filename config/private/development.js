@@ -22,5 +22,11 @@ export default {
     listing: {
       search_q: 'Dallas'
     }
+  },
+  cosmicjs: {
+    bucket: {
+      slug: 'rechat',
+      read_key: '1ocTAAAu6vpgLGfHTtVRRj0cno0feyveTJgJrrB7kuw0KcxOhA'
+    }
   }
 }
