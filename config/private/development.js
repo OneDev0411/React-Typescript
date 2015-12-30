@@ -1,4 +1,4 @@
-// config/development.js
+// config/private/development.js
 export default {
   app_url: 'http://localhost:3000',
   api: {

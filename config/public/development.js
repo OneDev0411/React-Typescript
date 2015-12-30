@@ -1,3 +1,4 @@
+// config/public/development.js
 export default {
   app: {
     url: 'http://localhost:3000'

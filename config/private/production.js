@@ -1,4 +1,4 @@
-// config/production.js
+// config/private/production.js
 export default {
   app_url: process.env.APP_URL,
   api: {
