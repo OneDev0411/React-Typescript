@@ -73,7 +73,9 @@ export default class AddListing extends Component {
     let bg_color
     // Check listing matches query (because there's no fetch abort yet)
     const listing_q = data.new_transaction.listing_q
-    const q = this.refs.q.refs.input.value
+    let q
+    if (this.refs.q)
+      q = this.refs.q.refs.input.value
     if (listing_q === q && new_transaction.listings_found && new_transaction.listings_found.length) {
       const listings_found = new_transaction.listings_found
       const listing_list = listings_found.map((listing, i) => {

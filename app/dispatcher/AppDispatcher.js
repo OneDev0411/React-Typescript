@@ -20,8 +20,8 @@ import getMessages from '../actions/messages/get-messages'
 import getPreviousMessages from '../actions/messages/get-previous-messages'
 
 // Pages
-import showModal from '../actions/pages/show-modal'
 import landingPage from '../actions/pages/landing'
+import getContent from '../actions/pages/get-content'
 
 // Modules
 import addContact from '../actions/modules/add-contact'
@@ -36,19 +36,20 @@ const AppDispatcher = new Dispatcher()
 AppDispatcher.register(payload => {
   const action = payload.action
 
-  // Vars
-  let user
-  let invite
-  let room_id
-  let room
-  let comment
+  // Sign in
   let email
   let password
   let confirm_password
   let redirect_to
   let token
   let code
-  let modal_key
+
+  // Recents
+  let user
+  let invite
+  let room_id
+  let room
+  let comment
   let title
   let scroll_height
 
@@ -61,6 +62,10 @@ AppDispatcher.register(payload => {
   let q
 
   switch (action) {
+
+    case 'get-content':
+      getContent(payload.slug, payload.rendered, payload.res, payload.callback)
+      break
 
     case 'init-landing':
       landingPage.init()
@@ -148,11 +153,6 @@ AppDispatcher.register(payload => {
       room = payload.room
       scroll_height = payload.scroll_height
       getPreviousMessages(user, room, scroll_height)
-      break
-
-    case 'show-modal':
-      modal_key = payload.modal_key
-      showModal(modal_key)
       break
 
     case 'add-contact':

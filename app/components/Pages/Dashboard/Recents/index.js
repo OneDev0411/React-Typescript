@@ -144,10 +144,12 @@ export default class Dashboard extends Component {
   }
 
   showModal(modal_key) {
-    AppDispatcher.dispatch({
-      action: 'show-modal',
-      modal_key
-    })
+    if (modal_key === 'create-chat')
+      AppStore.data.show_create_chat_modal = true
+
+    if (modal_key === 'invite-user')
+      AppStore.data.show_invite_user_modal = true
+    AppStore.emitChange()
   }
 
   hideModal() {
