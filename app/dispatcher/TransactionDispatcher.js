@@ -2,7 +2,7 @@
 import { Dispatcher } from 'flux'
 
 // Transaction actions
-import createTransaction from '../actions/transactions/create'
+import newTransaction from '../actions/transactions/new'
 import deleteTransaction from '../actions/transactions/delete'
 import getAllTransactions from '../actions/transactions/get'
 
@@ -13,19 +13,19 @@ TransactionDispatcher.register(payload => {
   const action = payload.action
   switch (action) {
     case 'init':
-      createTransaction.init()
+      newTransaction.init()
       break
 
     case 'go-to-step':
-      createTransaction.goToStep(payload.step)
+      newTransaction.goToStep(payload.step)
       break
 
     case 'set-type':
-      createTransaction.setType(payload.type)
+      newTransaction.setType(payload.type)
       break
 
     case 'create':
-      createTransaction.create(payload.user, payload.new_transaction)
+      newTransaction.create(payload.user, payload.new_transaction)
       break
 
     case 'get-all':

@@ -33,9 +33,6 @@ export default class AddListing extends Component {
   }
 
   searchListings(e) {
-    const new_transaction = this.props.data.new_transaction
-    if (new_transaction.listing_searching)
-      return false
     // alpha-num and delete / backspace
     if (e.keyCode >= 48 && e.keyCode <= 57 || e.keyCode >= 65 && e.keyCode <= 90 || e.keyCode === 46 || e.keyCode === 8) {
       const q = this.refs.q.refs.input.value
@@ -74,7 +71,10 @@ export default class AddListing extends Component {
     const listing_added = new_transaction.listing_added
     let listing_results
     let bg_color
-    if (new_transaction.listings_found && new_transaction.listings_found.length) {
+    // Check listing matches query (because there's no fetch abort yet)
+    const listing_q = data.new_transaction.listing_q
+    const q = this.refs.q.refs.input.value
+    if (listing_q === q && new_transaction.listings_found && new_transaction.listings_found.length) {
       const listings_found = new_transaction.listings_found
       const listing_list = listings_found.map((listing, i) => {
         bg_color = ''

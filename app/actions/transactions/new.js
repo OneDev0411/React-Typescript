@@ -1,4 +1,4 @@
-// actions/transactions/create.js
+// actions/transactions/new.js
 import Transaction from '../../models/Transaction'
 import AppStore from '../../stores/AppStore'
 import _ from 'lodash'
