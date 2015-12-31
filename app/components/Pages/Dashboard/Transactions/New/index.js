@@ -76,10 +76,10 @@ export default class NewTransaction extends Component {
   }
 
   getContacts() {
-    const data = this.props.data
+    const user = this.props.data.user
     AppDispatcher.dispatch({
       action: 'get-contacts',
-      user: data.user
+      user
     })
   }
 
@@ -180,7 +180,7 @@ export default class NewTransaction extends Component {
     delete AppStore.data.new_transaction.listing_added
     AppStore.data.new_transaction.listing_searching = true
     AppStore.emitChange()
-    const user = AppStore.data.user
+    const user = this.props.data.user
     AppDispatcher.dispatch({
       action: 'search-listing',
       user,
@@ -211,7 +211,7 @@ export default class NewTransaction extends Component {
     AppStore.data.new_transaction.saving = true
     AppStore.emitChange()
     const new_transaction = this.props.data.new_transaction
-    const user = AppStore.data.user
+    const user = this.props.data.user
     TransactionDispatcher.dispatch({
       action: 'create',
       user,
@@ -232,11 +232,9 @@ export default class NewTransaction extends Component {
 
     // Set contacts
     data.contacts = AppStore.data.contacts
-
-    // New transaction data
-    let new_transaction
-    if (data.new_transaction)
-      new_transaction = data.new_transaction
+    data.new_transaction = AppStore.data.new_transaction
+    // Set new_transaction
+    const new_transaction = data.new_transaction
 
     let buying_class = 'btn'
     let selling_class = 'btn'
@@ -307,7 +305,7 @@ export default class NewTransaction extends Component {
           main_content = (
             <AddListing
               data={ data }
-              searchListings={ this.searchListings }
+              searchListings={ this.searchListings.bind(this) }
               setListingActive={ this.setListingActive }
               addListing={ this.addListing }
             />
@@ -380,7 +378,7 @@ export default class NewTransaction extends Component {
     let save_button
     if (new_transaction && new_transaction.type) {
       save_button = (
-        <Button onClick={ this.createTransaction.bind(this) } style={ S('absolute r-0 t-20') } className={ new_transaction && new_transaction.saving ? ' disabled' : '' } type="button" bsStyle="primary">
+        <Button onClick={ this.createTransaction.bind(this) } style={ S('absolute r-0 t-19') } className={ new_transaction && new_transaction.saving ? ' disabled' : '' } type="button" bsStyle="primary">
           { new_transaction && new_transaction.saving ? 'Saving...' : 'Save and Quit' }
         </Button>
       )
