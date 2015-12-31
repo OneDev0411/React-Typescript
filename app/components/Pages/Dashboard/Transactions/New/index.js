@@ -219,6 +219,13 @@ export default class NewTransaction extends Component {
     })
   }
 
+  selectDay(date_type, day) {
+    if (!AppStore.data.new_transaction.selected_day)
+      AppStore.data.new_transaction.selected_day = {}
+    AppStore.data.new_transaction.selected_day[date_type] = day
+    AppStore.emitChange()
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -316,7 +323,10 @@ export default class NewTransaction extends Component {
           break
         case 5:
           main_content = (
-            <AddDates data={ data }/>
+            <AddDates
+              data={ data }
+              selectDay={ this.selectDay }
+            />
           )
           break
         default:
@@ -338,7 +348,7 @@ export default class NewTransaction extends Component {
       // Cancel Button
       if (!step) {
         cancel_button = (
-          <Link className="btn btn-default" style={ S('mr-20') } to="/dashboard/transactions">Cancel</Link>
+          <Link className="btn btn-danger pull-left" style={ S('mr-20') } to="/dashboard/transactions">Cancel</Link>
         )
       }
 
@@ -356,7 +366,7 @@ export default class NewTransaction extends Component {
       }
 
       nav_buttons = (
-        <div style={ S('absolute r-0 t-400') }>
+        <div style={ S('absolute r-0 t-500') }>
           { cancel_button }
           { previous_button }
           { next_button }

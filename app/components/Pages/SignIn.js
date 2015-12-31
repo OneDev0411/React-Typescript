@@ -123,7 +123,7 @@ export default class SignIn extends Component {
             <Button type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p mb-20') }>
               { submitting ? 'Signing in...' : 'Sign in' }
             </Button>
-            <div style={ S('color-929292 font-13') }>Don't have an account yet?<Link to={ signup_link }>Sign up</Link></div>
+            <div style={ S('color-929292 font-13') }>Don't have an account yet? <Link to={ signup_link }>Sign up</Link></div>
           </form>
         </div>
       </div>
