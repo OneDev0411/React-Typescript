@@ -152,7 +152,9 @@ export default class AddContactsForm extends Component {
         <div style={ S('maxw-820') }>
           <Input ref="search_contacts" onKeyDown={ this.navContactList.bind(this) } onKeyUp={ this.filterContacts.bind(this) } className="pull-left" style={ S('w-600') } type="text" placeholder="Enter any name, email or phone number"/>
           <span className="pull-left" style={ S('w-30 ml-15 mt-8 color-666') }>OR</span>
-          <Button onClick={ this.props.showCreateContactModal }className="pull-left" style={ S('w-160') } bsStyle="primary" type="button">Add New Contact</Button>
+          <Button onClick={ this.props.showCreateContactModal }className="pull-left" style={ S('w-160') } bsStyle="primary" type="button">
+            Add New Contact
+          </Button>
         </div>
         <div className="clearfix"></div>
         { filtered_contacts_markup }

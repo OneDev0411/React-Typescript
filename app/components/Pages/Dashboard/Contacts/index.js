@@ -48,7 +48,7 @@ export default class Contacts extends Component {
             {
               contacts.map((contact) => {
                 return (
-                  <tr key={ 'contact-' + contact.id }>
+                  <tr key={ 'contact-' + contact.id } style={ S('h-45') }>
                     <td><ProfileImage user={ contact }/></td>
                     <td>{ contact.first_name } { contact.last_name }</td>
                     <td>{ contact.email }</td>

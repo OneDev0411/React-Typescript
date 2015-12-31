@@ -1,7 +1,7 @@
 // Dashboard/Transactions/New/index.js
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import { Button, Breadcrumb, BreadcrumbItem } from 'react-bootstrap'
+import { Button, Breadcrumb, BreadcrumbItem, Alert } from 'react-bootstrap'
 import S from 'shorti'
 
 // AppStore
@@ -383,6 +383,14 @@ export default class NewTransaction extends Component {
         </Button>
       )
     }
+
+    let message
+    if (new_transaction && new_transaction.save_error) {
+      message = (
+        <Alert style={ S('mt-20') } bsStyle="danger">There was an error with this request.</Alert>
+      )
+    }
+
     return (
       <div style={ S('minw-1000') }>
         <header>
@@ -391,6 +399,7 @@ export default class NewTransaction extends Component {
         <main>
           <SideBar data={ data }/>
           <div style={ main_style }>
+            { message }
             <div style={ S('absolute w-100p') }>
               { save_button }
             </div>

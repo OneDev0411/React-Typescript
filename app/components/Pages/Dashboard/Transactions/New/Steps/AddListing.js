@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { Button, Input } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
+import helpers from '../../../../../../utils/helpers'
 
 export default class AddListing extends Component {
 
@@ -82,13 +83,20 @@ export default class AddListing extends Component {
         if (listing_added && listing_added.mls_number === listing.mls_number)
           bg_color = ' bg-dff0d8'
 
+        let cover_image = <div style={ S('bg-333 h-70 w-100 color-fff text-center pt-22') }>No Image</div>
+        if (listing.cover_image_url) {
+          cover_image = (
+            <img style={ S('w-100') } src={ listing.cover_image_url } />
+          )
+        }
         return (
           <div key={ listing.id } className="search-listings__listing" onClick={ this.addListing.bind(this, listing) } style={ S('br-3 relative pointer mb-5 p-10 ' + bg_color) }>
             <div>
+              <div className="pull-left" style={ S('mr-10 w-100 minh-70') }>{ cover_image }</div>
               <span style={ S('color-666') }>
-                Address: { listing.address.street_number } { listing.address.street_name } { listing.address.street_suffix } { listing.address.city }, { listing.address.state }<br/>
-                Price: { listing.price }<br/>
-                Type: { listing.status }<br/>
+                { listing.address.street_number } { listing.address.street_name } { listing.address.street_suffix } { listing.address.city }, { listing.address.state }<br/>
+                ${ helpers.numberWithCommas(listing.price) }<br/>
+                { listing.status }<br/>
                 MLS: { listing.mls_number }
               </span>
             </div>

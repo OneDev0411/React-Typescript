@@ -31,19 +31,34 @@ export default class SideBar extends Component {
       <aside style={ sidebar_style } className="bg-alabaster sidebar--dashboard pull-left">
         <Nav bsStyle="pills" stacked>
           <LinkContainer className={ active.recents } to="/dashboard/recents">
-            <NavItem style={ S('w-70p') }>Recents</NavItem>
+            <NavItem style={ S('w-70p') }>
+              <img src={ active.recents ? '/images/dashboard/icons/recents-active.svg' : '/images/dashboard/icons/recents.svg' } style={ S('w-20 h-20') }/>
+              &nbsp;&nbsp;&nbsp;Recents
+            </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.mls } to="/dashboard/mls">
-            <NavItem style={ S('w-70p') }>MLS</NavItem>
+            <NavItem style={ S('w-70p') }>
+              <img src={ active.mls ? '/images/dashboard/icons/listings-active.svg' : '/images/dashboard/icons/listings.svg' } style={ S('w-20 h-20') }/>
+              &nbsp;&nbsp;&nbsp;MLS
+            </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.contacts } to="/dashboard/contacts">
-            <NavItem style={ S('w-70p') }>Contacts</NavItem>
+            <NavItem style={ S('w-70p') }>
+              <img src={ active.contacts ? '/images/dashboard/icons/contacts-active.svg' : '/images/dashboard/icons/contacts.svg' } style={ S('w-20 h-20') }/>
+              &nbsp;&nbsp;&nbsp;Contacts
+            </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.tasks } to="/dashboard/tasks">
-            <NavItem style={ S('w-70p') }>Tasks</NavItem>
+            <NavItem style={ S('w-70p') }>
+              <img src={ active.tasks ? '/images/dashboard/icons/tasks-active.svg' : '/images/dashboard/icons/tasks.svg' } style={ S('w-20 h-20') }/>
+              &nbsp;&nbsp;&nbsp;Tasks
+            </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.transactions } to="/dashboard/transactions">
-            <NavItem style={ S('w-70p') }>Transactions</NavItem>
+            <NavItem style={ S('w-70p') }>
+              <img src={ active.transactions ? '/images/dashboard/icons/transactions-active.svg' : '/images/dashboard/icons/transactions.svg' } style={ S('w-20 h-20') }/>
+              &nbsp;&nbsp;&nbsp;Transactions
+            </NavItem>
           </LinkContainer>
         </Nav>
       </aside>

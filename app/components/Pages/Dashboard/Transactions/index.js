@@ -77,21 +77,51 @@ export default class Transactions extends Component {
       transactions_rows = transactions.map((transaction) => {
         let listing
         let list_agent_full_name
+        let address
         let contract_price = transaction.contract_price
         if (contract_price)
-          contract_price = helpers.numberWithCommas(contract_price.toFixed(2))
-        const created_at = transaction.created_at
+          contract_price = '$' + helpers.numberWithCommas(contract_price)
         if (transaction.listing) {
           listing = transaction.listing
           list_agent_full_name = listing.list_agent_full_name
+          address = listing.property.address.geo_source_formatted_address_google
         }
+        let cover_image = <div style={ S('bg-333 h-70 w-100 color-fff text-center pt-22') }>No Image</div>
+        if (listing && listing.cover_image_url) {
+          cover_image = (
+            <img style={ S('w-100') } src={ listing.cover_image_url } />
+          )
+        }
+        let contacts_num
+        if (transaction.contacts)
+          contacts_num = transaction.contacts.length
         return (
           <tr key={ transaction.id }>
-            <td>{ transaction.title }</td>
-            <td>{ list_agent_full_name }</td>
-            <td>{ contract_price }</td>
+            <td>
+              <div className="pull-left">{ cover_image }</div>
+              <div className="pull-left" style={ S('ml-20 mt-15 maxw-200') }>{ address }</div>
+            </td>
+            <td>
+              <div style={ S('ml-20 mt-20') }>
+                { list_agent_full_name }
+              </div>
+            </td>
+            <td>
+              <div style={ S('ml-20 mt-20') }>
+                { contract_price }
+              </div>
+            </td>
+            <td>
+              <div style={ S('ml-20 mt-20') }>
+                { contacts_num }
+              </div>
+            </td>
             <td>...</td>
-            <td>{ created_at }</td>
+            <td>
+              <div style={ S('ml-20 mt-20') }>
+                TBD
+              </div>
+            </td>
             <td>
               <Button className={ data.deleting_transaction && data.deleting_transaction === transaction.id ? 'disabled' : '' } onClick={ this.deleteTransaction.bind(this, transaction.id) } type="button" bsStyle="danger">
                 { data.deleting_transaction && data.deleting_transaction === transaction.id ? 'Deleting...' : 'Delete' }
@@ -117,6 +147,7 @@ export default class Transactions extends Component {
               <th>Property</th>
               <th>Contact</th>
               <th>Price</th>
+              <th>Contacts</th>
               <th>Next Task</th>
               <th>Closing Date</th>
               <th>Delete</th>
