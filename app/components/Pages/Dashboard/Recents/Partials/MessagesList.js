@@ -84,7 +84,7 @@ export default class MessagesList extends Component {
     const messages = data.messages
     const messages_list_items = messages.map((message, i) => {
       return (
-        <li key={ message.id } style={ S('pb-10') }>
+        <li key={ 'message-' + message.id + '-' + i } style={ S('pb-10') }>
           <MessageItem i={ i } data={ data } message={ message } />
         </li>
       )

@@ -74,8 +74,9 @@ export default class Dashboard extends Component {
   }
 
   getPreviousMessages(scroll_height) {
-    const user = AppStore.data.user
-    const current_room = AppStore.data.current_room
+    const data = this.props.data
+    const user = data.user
+    const current_room = data.current_room
     AppDispatcher.dispatch({
       action: 'get-previous-messages',
       user,
@@ -199,17 +200,36 @@ export default class Dashboard extends Component {
     }
   }
 
-  handleMessageTyping() {
-    const socket = io(config.socket.server)
+  sendTypingStarted() {
     const data = AppStore.data
-    if (data.is_typing)
-      return false
+    const socket = io(config.socket.server)
     AppStore.data.is_typing = data.user
     AppStore.emitChange()
     socket.emit('User.Typing', AppStore.data.current_room.id)
-    setTimeout(() => {
-      socket.emit('User.TypingEnded', AppStore.data.current_room.id)
+  }
+
+  sendTypingEnded() {
+    const socket = io(config.socket.server)
+    socket.emit('User.TypingEnded', AppStore.data.current_room.id)
+    delete AppStore.data.is_typing
+    AppStore.emitChange()
+  }
+
+  handleMessageTyping() {
+    const data = AppStore.data
+    if (!data.is_typing)
+      this.sendTypingStarted()
+
+    if (window.is_typing_timeout) {
+      clearTimeout(window.is_typing_timeout)
+      delete window.is_typing_timeout
+    }
+
+    // Send stopped typing event
+    window.is_typing_timeout = setTimeout(() => {
+      this.sendTypingEnded()
     }, 3000)
+    AppStore.emitChange()
   }
 
   addUserToStore() {
@@ -226,8 +246,8 @@ export default class Dashboard extends Component {
   }
 
   filterRooms(search_text) {
+    const data = this.props.data
     const search_text_lower = search_text.toLowerCase().trim()
-    const data = AppStore.data
     const rooms = data.rooms
     const filtered_rooms = rooms.filter((room) => {
       const users_first_string = _.pluck(room.users, 'first_name').toString().toLowerCase()
@@ -261,13 +281,6 @@ export default class Dashboard extends Component {
   render() {
     // Data
     const data = this.props.data
-    data.rooms = AppStore.data.rooms
-    data.is_filtering = AppStore.data.is_filtering
-    data.filtered_rooms = AppStore.data.filtered_rooms
-    data.current_room = AppStore.data.current_room
-    data.messages = AppStore.data.messages
-    data.show_create_chat_modal = AppStore.data.show_create_chat_modal
-    data.show_invite_user_modal = AppStore.data.show_invite_user_modal
     return (
       <div style={ S('minw-1000') }>
         <header>
@@ -276,16 +289,16 @@ export default class Dashboard extends Component {
         <main>
           <SideBar data={ data }/>
           <MainContent
-            getPreviousMessages={ this.getPreviousMessages }
-            handleMessageTyping={ this.handleMessageTyping }
-            filterRooms={ this.filterRooms }
+            data={ data }
+            getPreviousMessages={ this.getPreviousMessages.bind(this) }
+            handleMessageTyping={ this.handleMessageTyping.bind(this) }
+            filterRooms={ this.filterRooms.bind(this) }
             createMessage={ this.createMessage }
             showModal={ this.showModal }
             hideModal={ this.hideModal }
             createRoom={ this.createRoom }
             inviteUser={ this.inviteUser }
             getMessages={ this.getMessages }
-            data={ data }
           />
         </main>
         <audio ref="notif_sound" id="notif-sound">
