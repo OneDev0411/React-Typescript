@@ -1,7 +1,7 @@
 // Dashboard/Contacts/index.js
 import React, { Component } from 'react'
 import S from 'shorti'
-import { Table } from 'react-bootstrap'
+import { Table, Button } from 'react-bootstrap'
 
 // Partials
 import MainNav from '../Partials/MainNav'
@@ -29,6 +29,17 @@ export default class Contacts extends Component {
     })
   }
 
+  deleteContact(contact_id) {
+    AppStore.data.deleting_contact = contact_id
+    AppStore.emitChange()
+    const data = this.props.data
+    AppDispatcher.dispatch({
+      action: 'delete-contact',
+      user: data.user,
+      contact_id
+    })
+  }
+
   render() {
     const data = this.props.data
     let contacts_table = <Loading />
@@ -42,6 +53,7 @@ export default class Contacts extends Component {
               <th>Name</th>
               <th>Email</th>
               <th>Phone</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -53,6 +65,11 @@ export default class Contacts extends Component {
                     <td>{ contact.first_name } { contact.last_name }</td>
                     <td>{ contact.email }</td>
                     <td>{ contact.phone_number }</td>
+                    <td>
+                      <Button className={ data.deleting_contact === contact.id ? 'disabled' : '' } bsStyle="danger" onClick={ this.deleteContact.bind(this, contact.id) }>
+                        { data.deleting_contact === contact.id ? 'Deleting...' : 'Delete' }
+                      </Button>
+                    </td>
                   </tr>
                 )
               })

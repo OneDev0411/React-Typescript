@@ -134,8 +134,32 @@ export default class NewTransaction extends Component {
     AppStore.emitChange()
   }
 
-  createContact() {
-    // console.log('create')
+  createContact(e) {
+    e.preventDefault()
+    AppStore.data.creating_contacts = true
+    AppStore.emitChange()
+    const first_name = this.refs.first_name.refs.input.value
+    const last_name = this.refs.last_name.refs.input.value
+    const email = this.refs.email.refs.input.value
+    const phone_number = this.refs.phone_number.refs.input.value
+    const company = this.refs.company.refs.input.value
+    const role = this.refs.role.refs.input.value
+    const contact = {
+      first_name,
+      last_name,
+      email,
+      phone_number,
+      company,
+      role,
+      force_creation: true
+    }
+    const contacts = [contact]
+    const user = this.props.data.user
+    AppDispatcher.dispatch({
+      action: 'create-contacts',
+      contacts,
+      user
+    })
   }
 
   handleTypeClick(type) {

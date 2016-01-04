@@ -1,12 +1,24 @@
 // AddContactsForm.js
 import React, { Component } from 'react'
-import { Button, Input, Modal, Col } from 'react-bootstrap'
+import { Button, Input, Modal, Col, Alert } from 'react-bootstrap'
 import S from 'shorti'
 
 // Partials
 import ProfileImage from './ProfileImage'
 
 export default class AddContactsForm extends Component {
+
+  componentDidUpdate() {
+    const new_contact_created = this.props.data.new_contact_created
+    if (new_contact_created) {
+      this.refs.first_name.refs.input.value = ''
+      this.refs.last_name.refs.input.value = ''
+      this.refs.phone_number.refs.input.value = ''
+      this.refs.email.refs.input.value = ''
+      this.refs.company.refs.input.value = ''
+      this.refs.role.refs.input.value = ''
+    }
+  }
 
   setContactActive(direction) {
     const data = this.props.data
@@ -39,11 +51,11 @@ export default class AddContactsForm extends Component {
     const data = this.props.data
     const contacts = data.contacts
     let filtered_contacts = contacts.filter((contact) => {
-      if (contact.first_name.toLowerCase().indexOf(text_lower) !== -1)
+      if (contact.first_name && contact.first_name.toLowerCase().indexOf(text_lower) !== -1)
         return true
-      if (contact.last_name.toLowerCase().indexOf(text_lower) !== -1)
+      if (contact.last_name && contact.last_name.toLowerCase().indexOf(text_lower) !== -1)
         return true
-      if (contact.phone_number && contact.phone_number.indexOf(text_lower) !== -1)
+      if (contact.phone_number && contact.phone_number && contact.phone_number.indexOf(text_lower) !== -1)
         return false
       return false
     })
@@ -113,7 +125,7 @@ export default class AddContactsForm extends Component {
                   <ProfileImage user={ contact }/>
                   <div style={ S('ml-50') }>
                     <span style={ S('fw-600') }>{ contact.first_name } { contact.last_name }</span><br />
-                    <span style={ S('color-666') }>{ contact.contact_user.user_type }</span>
+                    <span style={ S('color-666') }>{ contact.contact_user ? contact.contact_user.user_type : '' }</span>
                   </div>
                   <div className="clearfix"></div>
                 </div>
@@ -142,7 +154,12 @@ export default class AddContactsForm extends Component {
         })
       )
     }
-
+    let message
+    if (data.new_contact_created) {
+      message = (
+        <Alert bsStyle="success">New contact created.</Alert>
+      )
+    }
     return (
       <div className="add-contact-form" >
         <div style={ S('maxw-620 minh-35') }>
@@ -164,29 +181,32 @@ export default class AddContactsForm extends Component {
               <Modal.Title>Add New Contact</Modal.Title>
             </Modal.Header>
             <Modal.Body>
+              { message }
               <Col xs={6}>
-                <Input type="text" ref="title" placeholder="FIRST NAME"/>
+                <Input type="text" ref="first_name" placeholder="FIRST NAME"/>
               </Col>
               <Col xs={6}>
-                <Input type="text" ref="title" placeholder="LAST NAME"/>
+                <Input type="text" ref="last_name" placeholder="LAST NAME"/>
               </Col>
               <Col xs={6}>
-                <Input type="text" ref="title" placeholder="PHONE NUMBER"/>
+                <Input type="text" ref="phone_number" placeholder="PHONE NUMBER"/>
               </Col>
               <Col xs={6}>
-                <Input type="text" ref="title" placeholder="EMAIL"/>
+                <Input type="text" ref="email" placeholder="EMAIL"/>
               </Col>
               <Col xs={6}>
-                <Input type="text" ref="title" placeholder="COMPANY"/>
+                <Input type="text" ref="company" placeholder="COMPANY"/>
               </Col>
               <Col xs={6}>
-                <Input type="text" ref="title" placeholder="ROLE"/>
+                <Input type="text" ref="role" placeholder="ROLE"/>
               </Col>
               <div className="clearfix"></div>
             </Modal.Body>
             <Modal.Footer>
               <Button onClick={ this.props.hideModal.bind(this) }>Cancel</Button>
-              <Button type="submit" bsStyle="primary">Add</Button>
+              <Button className={ data.creating_contacts ? 'disabled' : '' } type="submit" bsStyle="primary">
+                { data.creating_contacts ? 'Adding...' : 'Add' }
+              </Button>
             </Modal.Footer>
           </form>
         </Modal>

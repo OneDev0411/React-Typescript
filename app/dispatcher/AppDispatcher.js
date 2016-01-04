@@ -10,7 +10,8 @@ import verifyPhone from '../actions/user/verify-phone'
 import addUserToStore from '../actions/user/add-user-to-store'
 import getRooms from '../actions/user/get-rooms'
 import getContacts from '../actions/user/get-contacts'
-
+import createContacts from '../actions/user/create-contacts'
+import deleteContact from '../actions/user/delete-contact'
 // Rooms
 import createRoom from '../actions/rooms/create-room'
 
@@ -36,15 +37,16 @@ const AppDispatcher = new Dispatcher()
 AppDispatcher.register(payload => {
   const action = payload.action
 
-  // Sign in
+  // User
   let email
   let password
   let confirm_password
   let redirect_to
   let token
   let code
+  let contacts
 
-  // Recents
+  // Room
   let user
   let invite
   let room_id
@@ -153,6 +155,18 @@ AppDispatcher.register(payload => {
       room = payload.room
       scroll_height = payload.scroll_height
       getPreviousMessages(user, room, scroll_height)
+      break
+
+    case 'create-contacts':
+      user = payload.user
+      contacts = payload.contacts
+      createContacts(user, contacts)
+      break
+
+    case 'delete-contact':
+      user = payload.user
+      contact_id = payload.contact_id
+      deleteContact(user, contact_id)
       break
 
     case 'add-contact':

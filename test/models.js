@@ -77,6 +77,19 @@ describe('Testing User model', function() {
     })
   })
 
+  // Create contact
+  it('User.createContacts should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
+    const params = {
+      contacts: test.contacts,
+      access_token: access_token,
+      api_host: test.api_host
+    }
+    User.createContacts(params, (err, response) => {
+      expect(response.status).to.equal('success')
+      done()
+    })
+  })
+
   // Get contacts
   it('User.getContacts should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
     const params = {

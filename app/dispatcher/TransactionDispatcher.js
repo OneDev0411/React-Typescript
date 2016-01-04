@@ -3,6 +3,7 @@ import { Dispatcher } from 'flux'
 
 // Transaction actions
 import newTransaction from '../actions/transactions/new'
+import createTransaction from '../actions/transactions/create'
 import deleteTransaction from '../actions/transactions/delete'
 import getAllTransactions from '../actions/transactions/get'
 
@@ -25,7 +26,7 @@ TransactionDispatcher.register(payload => {
       break
 
     case 'create':
-      newTransaction.create(payload.user, payload.new_transaction)
+      createTransaction(payload.user, payload.new_transaction)
       break
 
     case 'get-all':

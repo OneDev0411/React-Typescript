@@ -26,7 +26,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then((response) => {
+    .then(response => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -36,7 +36,7 @@ export default {
       }
       return response.json()
     })
-    .then((response) => {
+    .then(response => {
       return callback(false, response)
     })
   },
@@ -45,7 +45,7 @@ export default {
     if (!api_host) api_host = config.app.url
     const endpoint = api_host + '/api/transactions?access_token=' + params.access_token
     fetch(endpoint)
-    .then((response) => {
+    .then(response => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -55,7 +55,7 @@ export default {
       }
       return response.json()
     })
-    .then((response) => {
+    .then(response => {
       return callback(false, response)
     })
   },
@@ -73,7 +73,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then((response) => {
+    .then(response => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -83,7 +83,7 @@ export default {
       }
       return response.json()
     })
-    .then((response) => {
+    .then(response => {
       return callback(false, response)
     })
   }
