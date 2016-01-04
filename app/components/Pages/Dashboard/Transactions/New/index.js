@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { Button, Breadcrumb, BreadcrumbItem, Alert } from 'react-bootstrap'
 import S from 'shorti'
+import _ from 'lodash'
 
 // AppStore
 import AppStore from '../../../../../stores/AppStore'
@@ -236,6 +237,18 @@ export default class NewTransaction extends Component {
     AppStore.emitChange()
     const new_transaction = this.props.data.new_transaction
     const user = this.props.data.user
+    // Get dates
+    if (new_transaction.selected_day) {
+      new_transaction.dates = []
+      let date_object
+      _.mapKeys(new_transaction.selected_day, (value, key) => {
+        date_object = {
+          title: key,
+          due_date: value.toISOString().substring(0, 10) + ' 00:00:00'
+        }
+        new_transaction.dates.push(date_object)
+      })
+    }
     TransactionDispatcher.dispatch({
       action: 'create',
       user,

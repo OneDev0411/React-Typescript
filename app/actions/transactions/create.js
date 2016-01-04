@@ -10,23 +10,32 @@ export default (user, new_transaction) => {
   let contract_price
   const listing_added = new_transaction.listing_added
   const contacts_added = new_transaction.contacts_added
-  let contacts
-  if (contacts_added)
-    contacts = [..._.pluck(contacts_added.client, 'id'), ..._.pluck(contacts_added.contact, 'id')]
+  const dates = new_transaction.dates
+  const contact_objects = []
+  // TODO: make this scalable
+  if (contacts_added) {
+    const client_ids = _.pluck(contacts_added.client, 'id')
+    client_ids.forEach(client_id => {
+      contact_objects.push({ id: client_id, role: 'Client' })
+    })
+    const contact_ids = _.pluck(contacts_added.contact, 'id')
+    contact_ids.forEach(contact_id => {
+      contact_objects.push({ id: contact_id, role: 'Contact' })
+    })
+  }
   if (listing_added) {
     if (new_transaction.listing_added.contract_price)
       contract_price = listing_added.contract_price
     else
       contract_price = listing_added.price
   }
-  const important_dates = []
   const params = {
     transaction_type: new_transaction.type,
     listing: listing_added,
     contract_price,
     title,
-    contacts,
-    important_dates,
+    contacts: contact_objects,
+    dates,
     access_token: user.access_token
   }
   Transaction.create(params, (err, response) => {

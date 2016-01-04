@@ -1,9 +1,9 @@
-
 // Dashboard/Transactions/index.js
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { Table, Button, Alert } from 'react-bootstrap'
 import S from 'shorti'
+import _ from 'lodash'
 
 // AppStore
 import AppStore from '../../../../stores/AppStore'
@@ -78,9 +78,18 @@ export default class Transactions extends Component {
         let listing
         let list_agent_full_name
         let address
+        // Price
         let contract_price = transaction.contract_price
         if (contract_price)
           contract_price = '$' + helpers.numberWithCommas(contract_price)
+        // Dates
+        const important_dates = transaction.important_dates
+        let closing_date
+        if (important_dates) {
+          closing_date = _.result(_.findWhere(important_dates, { title: 'closing' }), 'due_date')
+          closing_date = closing_date.toString()
+          closing_date = closing_date.replace('T00:00:00.000Z','')
+        }
         if (transaction.listing) {
           listing = transaction.listing
           list_agent_full_name = listing.list_agent_full_name
@@ -119,7 +128,7 @@ export default class Transactions extends Component {
             <td>...</td>
             <td>
               <div style={ S('ml-20 mt-20') }>
-                TBD
+                { closing_date ? closing_date : 'TBD' }
               </div>
             </td>
             <td>

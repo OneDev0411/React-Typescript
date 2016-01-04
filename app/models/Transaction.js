@@ -13,6 +13,7 @@ export default {
       title: params.title,
       contract_price: params.contract_price,
       contacts: params.contacts,
+      dates: params.dates,
       access_token: params.access_token
     }
     // Add listing if available
