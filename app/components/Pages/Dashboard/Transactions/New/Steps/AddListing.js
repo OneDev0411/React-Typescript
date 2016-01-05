@@ -176,56 +176,56 @@ export default class AddListing extends Component {
             Add New Property
           </Button>
           <Modal bsSize="large" show={ data.new_transaction.show_add_custom_listing_modal } onHide={ this.props.hideModal.bind(this) }>
-          <form onSubmit={ this.props.addCustomListingInfo.bind(this) }>
-            <Modal.Body style={ S('p-0') }>
-              <Col xs={5} style={ S('p-0') }>
-                { listing_image }
-              </Col>
-              <Col xs={7}>
-                <Modal.Title style={ S('mt-15 mb-15') }>
-                  Property Info
-                </Modal.Title>
-                <Col xs={8} style={ S('pl-0 pr-0') }>
-                  <Input type="text" ref="address" placeholder="ADDRESS" defaultValue={ listing_address }/>
+            <form onSubmit={ this.props.addCustomListingInfo.bind(this) }>
+              <Modal.Body style={ S('p-0') }>
+                <Col xs={5} style={ S('p-0') }>
+                  { listing_image }
                 </Col>
-                <Col xs={4} style={ S('pr-0') }>
-                  <Input type="text" ref="status" placeholder="STATUS" defaultValue={ listing_added ? listing_added.status : '' }/>
+                <Col xs={7}>
+                  <Modal.Title style={ S('mt-15 mb-15') }>
+                    Property Info
+                  </Modal.Title>
+                  <Col xs={8} style={ S('pl-0 pr-0') }>
+                    <Input type="text" ref="address" placeholder="ADDRESS" defaultValue={ listing_address }/>
+                  </Col>
+                  <Col xs={4} style={ S('pr-0') }>
+                    <Input type="text" ref="status" placeholder="STATUS" defaultValue={ listing_added ? listing_added.status : '' }/>
+                  </Col>
+                  <Col xs={6} style={ S('pl-0') }>
+                    <Input type="text" ref="city" placeholder="CITY" defaultValue={ listing_added ? listing_added.address.city : '' }/>
+                  </Col>
+                  <Col xs={3} style={ S('p-0') }>
+                    <Input type="text" ref="state" placeholder="STATE" defaultValue={ listing_added ? listing_added.address.state : '' }/>
+                  </Col>
+                  <Col xs={3} style={ S('pr-0') }>
+                    <Input type="text" ref="zip" placeholder="ZIP" defaultValue={ listing_added ? listing_added.address.postal_code : '' }/>
+                  </Col>
+                  <Col xs={6} style={ S('pl-0 pr-0') }>
+                    <Input type="text" ref="year_built" placeholder="YEAR BUILT"/>
+                  </Col>
+                  <Col xs={6} style={ S('pr-0') }>
+                    <Input type="text" ref="property_type" placeholder="PROPERTY TYPE"/>
+                  </Col>
+                  <Col xs={4} style={ S('pl-0') }>
+                    <Input type="text" ref="sqft" placeholder="SQFT"/>
+                  </Col>
+                  <Col xs={4} style={ S('p-0') }>
+                    <Input type="text" ref="beds" placeholder="BEDS"/>
+                  </Col>
+                  <Col xs={4} style={ S('pr-0') }>
+                    <Input type="text" ref="baths" placeholder="BATHS"/>
+                  </Col>
                 </Col>
-                <Col xs={6} style={ S('pl-0') }>
-                  <Input type="text" ref="city" placeholder="CITY" defaultValue={ listing_added ? listing_added.address.city : '' }/>
-                </Col>
-                <Col xs={3} style={ S('p-0') }>
-                  <Input type="text" ref="state" placeholder="STATE" defaultValue={ listing_added ? listing_added.address.state : '' }/>
-                </Col>
-                <Col xs={3} style={ S('pr-0') }>
-                  <Input type="text" ref="zip" placeholder="ZIP" defaultValue={ listing_added ? listing_added.address.postal_code : '' }/>
-                </Col>
-                <Col xs={6} style={ S('pl-0 pr-0') }>
-                  <Input type="text" ref="year_built" placeholder="YEAR BUILT"/>
-                </Col>
-                <Col xs={6} style={ S('pr-0') }>
-                  <Input type="text" ref="property_type" placeholder="PROPERTY TYPE"/>
-                </Col>
-                <Col xs={4} style={ S('pl-0') }>
-                  <Input type="text" ref="sqft" placeholder="SQFT"/>
-                </Col>
-                <Col xs={4} style={ S('p-0') }>
-                  <Input type="text" ref="beds" placeholder="BEDS"/>
-                </Col>
-                <Col xs={4} style={ S('pr-0') }>
-                  <Input type="text" ref="baths" placeholder="BATHS"/>
-                </Col>
-              </Col>
-              <div className="clearfix"></div>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button bsStyle="link" onClick={ this.props.hideModal.bind(this) }>Cancel</Button>
-              <Button className={ data.creating_contacts ? 'disabled' : '' } type="submit" bsStyle="primary">
-                { data.creating_contacts ? 'Adding...' : 'Add' }
-              </Button>
-            </Modal.Footer>
-          </form>
-        </Modal>
+                <div className="clearfix"></div>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button bsStyle="link" onClick={ this.props.hideModal.bind(this) }>Cancel</Button>
+                <Button className={ data.creating_contacts ? 'disabled' : '' } type="submit" bsStyle="primary">
+                  { data.creating_contacts ? 'Adding...' : 'Add' }
+                </Button>
+              </Modal.Footer>
+            </form>
+          </Modal>
         </div>
         <div className="clearfix"></div>
         { listing_results }

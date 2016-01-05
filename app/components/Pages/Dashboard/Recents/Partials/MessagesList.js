@@ -129,14 +129,14 @@ export default class MessagesList extends Component {
             <span className="input-group-btn">
               <OverlayTrigger rootClose trigger="click" placement="bottom" overlay={ tooltip }>
                 <button className="copy-link btn btn-default" type="button" data-clipboard-target="#invite-link" style={ S('h-37') }>
-                  <img src="/images/svgs/clippy.svg" width="13" alt="Copy to clipboard" />
+                  <img src="/images/dashboard/icons/clippy.svg" width="13" alt="Copy to clipboard" />
                 </button>
               </OverlayTrigger>
             </span>
           </div>
         </div>
         <button onClick={ this.props.showModal.bind(this, 'invite-user') } type="button" className="btn btn-default invite-user__btn" style={ invite_user_style } >
-          <img style={ S('ml-1n mt-1n') } src="/images/svgs/invite-user.svg"/>
+          <img style={ S('ml-1n mt-1n') } src="/images/dashboard/icons/invite-user.svg"/>
         </button>
         <h3 style={ S('mt-0 ml-20 mr-50') }>{ current_room.title }</h3>
         <div ref="messages_scroll_area" style={ messages_scroll_area } onScroll={ this.handleScroll.bind(this) }>

@@ -1,7 +1,7 @@
 // Dashboard/Transactions/New/index.js
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import { Button, Breadcrumb, BreadcrumbItem, Alert } from 'react-bootstrap'
+import { Button, Breadcrumb, BreadcrumbItem, Alert, Modal } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
 
@@ -16,7 +16,6 @@ import TransactionDispatcher from '../../../../../dispatcher/TransactionDispatch
 
 // Partials
 import MainNav from '../../Partials/MainNav'
-import SideBar from '../../Partials/SideBar'
 
 // Steps
 import AddClients from './Steps/AddClients'
@@ -35,6 +34,25 @@ export default class NewTransaction extends Component {
     AppStore.data.active_contact = -1
     AppStore.data.contacts_added = null
     AppStore.emitChange()
+    window.onkeyup = (e) => {
+      switch (e.which) {
+        case 27:
+          // If modal already showing
+          if (AppStore.data.new_transaction.show_cancel_confirm) {
+            delete AppStore.data.new_transaction.show_cancel_confirm
+            AppStore.emitChange()
+            this.props.history.pushState(null, '/dashboard/transactions')
+          } else
+            this.showCancelModal()
+          break
+        case 13:
+          if (AppStore.data.new_transaction.show_cancel_confirm)
+            this.props.history.pushState(null, '/dashboard/transactions')
+          break
+        default:
+          return
+      }
+    }
   }
 
   componentDidUpdate() {
@@ -136,6 +154,7 @@ export default class NewTransaction extends Component {
   hideModal() {
     delete AppStore.data.show_create_contact_modal
     delete AppStore.data.new_transaction.show_add_custom_listing_modal
+    delete AppStore.data.new_transaction.show_cancel_confirm
     AppStore.emitChange()
   }
 
@@ -309,6 +328,20 @@ export default class NewTransaction extends Component {
     // console.log(listing_added)
   }
 
+  showCancelModal() {
+    const new_transaction = AppStore.data.new_transaction
+    if (new_transaction && new_transaction.type) {
+      AppStore.data.new_transaction.show_cancel_confirm = true
+      AppStore.emitChange()
+    } else
+      this.props.history.pushState(null, '/dashboard/transactions')
+  }
+
+  handleCancelClick(e) {
+    e.preventDefault()
+    this.showCancelModal()
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -338,7 +371,9 @@ export default class NewTransaction extends Component {
 
     let main_content = (
       <div>
-        <h1>Keep'em comin!  So are we...</h1>
+        <div style={ S('mb-40') }>
+          <h1>Keep'em comin!  So are we...</h1>
+        </div>
         <div>
           <Button onClick={ this.handleTypeClick.bind(this, 'Buyer') } className={ buying_class }>Buying</Button>
           <Button onClick={ this.handleTypeClick.bind(this, 'Seller') } style={ S('ml-40') } className={ selling_class }>Selling</Button>
@@ -420,7 +455,7 @@ export default class NewTransaction extends Component {
 
       // Breadcrumbs
       breadcrumbs = (
-        <Breadcrumb style={ S('mt-20') }>
+        <Breadcrumb>
           { this.getBreadCrumbs(step) }
         </Breadcrumb>
       )
@@ -433,7 +468,7 @@ export default class NewTransaction extends Component {
       // Cancel Button
       if (!step) {
         cancel_button = (
-          <Link className="btn btn-danger pull-left" style={ S('mr-20') } to="/dashboard/transactions">Cancel</Link>
+          <a href="#" onClick={ this.handleCancelClick.bind(this) } className="btn btn-danger pull-left" style={ S('mr-20') }>Cancel</a>
         )
       }
 
@@ -460,16 +495,7 @@ export default class NewTransaction extends Component {
     }
 
     // Style
-    const main_style = S('absolute l-222 r-0 ml-20 w-960 h-300')
-
-    let save_button
-    if (new_transaction && new_transaction.type) {
-      save_button = (
-        <Button onClick={ this.createTransaction.bind(this) } style={ S('absolute r-0 t-19') } className={ new_transaction && new_transaction.saving ? ' disabled' : '' } type="button" bsStyle="primary">
-          { new_transaction && new_transaction.saving ? 'Saving...' : 'Save and Quit' }
-        </Button>
-      )
-    }
+    const main_style = S('absolute l-222 r-0 ml-20 w-960 h-300 pt-20')
 
     let message
     if (new_transaction && new_transaction.save_error) {
@@ -478,19 +504,51 @@ export default class NewTransaction extends Component {
       )
     }
 
+    const cancel_button = (
+      <div style={ S('absolute w-40 r-10 t-10n text-center') }>
+        <a href="#" onClick={ this.handleCancelClick.bind(this) } style={ { ...S('color-929292'), ...{ 'textDecoration': 'none' } } }>
+          <div style={ S('font-30 relative t-10') }>&times;</div>
+          <div style={ S('font-12') }>esc</div>
+        </a>
+      </div>
+    )
+
+    const save_button = (
+      <Button onClick={ this.createTransaction.bind(this) } style={ S('absolute r-10 t-10') } className={ new_transaction && new_transaction.saving ? ' disabled' : '' } type="button" bsStyle="primary">
+        { new_transaction && new_transaction.saving ? 'Saving...' : 'Save and Quit' }
+      </Button>
+    )
+
+    let action_button = cancel_button
+    if (new_transaction && new_transaction.type && new_transaction.contacts_added)
+      action_button = save_button
+
+    let show_cancel_confirm
+    if (new_transaction)
+      show_cancel_confirm = new_transaction.show_cancel_confirm
     return (
       <div style={ S('minw-1000') }>
         <header>
           <MainNav data={ data }/>
+          <div style={ S('absolute w-800 l-230 t-10') }>{ breadcrumbs }</div>
+          { action_button }
+          <Modal show={ show_cancel_confirm } onHide={ this.hideModal.bind(this) }>
+            <Modal.Header closeButton>
+              <Modal.Title>Confirm Cancel</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              Are you sure you want to cancel?  Any unsaved changes will be lost.
+            </Modal.Body>
+            <Modal.Footer>
+              <Link to="/dashboard/transactions" className="btn btn-danger">
+                Yes, cancel
+              </Link>
+            </Modal.Footer>
+          </Modal>
         </header>
         <main>
-          <SideBar data={ data }/>
           <div style={ main_style }>
             { message }
-            <div style={ S('absolute w-100p') }>
-              { save_button }
-            </div>
-            { breadcrumbs }
             <div style={ S('absolute w-100p') }>
               { main_content }
             </div>
