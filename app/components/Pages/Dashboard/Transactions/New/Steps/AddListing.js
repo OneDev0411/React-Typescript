@@ -36,7 +36,11 @@ export default class AddListing extends Component {
     // alpha-num and delete / backspace
     if (e.keyCode >= 48 && e.keyCode <= 57 || e.keyCode >= 65 && e.keyCode <= 90 || e.keyCode === 46 || e.keyCode === 8) {
       const q = this.refs.q.refs.input.value
-      this.props.searchListings(q)
+      clearTimeout(window.is_typing_timeout)
+      // Send stopped typing event
+      window.is_typing_timeout = setTimeout(() => {
+        if (q) this.props.searchListings(q)
+      }, 200)
     }
   }
 
@@ -162,7 +166,9 @@ export default class AddListing extends Component {
     }
     return (
       <div>
-        <img style={ S('h-121') } src="/images/dashboard/transactions/house.png" />
+        <div style={ S('absolute t-120n') }>
+          <img style={ S('h-121') } src="/images/dashboard/transactions/house.png" />
+        </div>
         <div style={ S('mb-20') }>
           <h1>We’re almost done! Do you have a property listing in mind?</h1>
         </div>

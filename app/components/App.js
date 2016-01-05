@@ -33,7 +33,7 @@ export default class App extends Component {
     let data = AppStore.data
     const path = this.props.location.pathname
     data.path = path
-    // Rehydrate store if coming from server
+    // Hydrate store if coming from server
     if (typeof window !== 'undefined' && window.AppStore) {
       const server_data = window.AppStore.data
       // merge into client

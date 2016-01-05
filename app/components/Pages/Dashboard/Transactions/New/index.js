@@ -352,33 +352,39 @@ export default class NewTransaction extends Component {
     // Set new_transaction
     const new_transaction = data.new_transaction
 
-    let buying_class = 'btn'
-    let selling_class = 'btn'
-    let buysell_class = 'btn'
-    let lease_class = 'btn'
+    let buying_class = 'dotted '
+    let selling_class = 'dotted '
+    let buysell_class = 'dotted '
+    let lease_class = 'dotted '
 
     if (new_transaction && new_transaction.type === 'Buyer')
-      buying_class = 'btn btn-primary'
+      buying_class = 'btn-primary'
 
     if (new_transaction && new_transaction.type === 'Seller')
-      selling_class = 'btn btn-primary'
+      selling_class = 'btn-primary'
 
     if (new_transaction && new_transaction.type === 'Buyer/Seller')
-      buysell_class = 'btn btn-primary'
+      buysell_class = 'btn-primary'
 
     if (new_transaction && new_transaction.type === 'Lease')
-      lease_class = 'btn btn-primary'
+      lease_class = 'btn-primary'
+
+    const btn_style_first = S('font-18 w-200')
+    const btn_style = S('font-18 ml-10 w-200')
 
     let main_content = (
       <div>
-        <div style={ S('mb-40') }>
-          <h1>Keep'em comin!  So are we...</h1>
-        </div>
+        <div style={ S('t-100n absolute color-d0d4d9') }>Never leave that till tomorrow which you can do today.</div>
         <div>
-          <Button onClick={ this.handleTypeClick.bind(this, 'Buyer') } className={ buying_class }>Buying</Button>
-          <Button onClick={ this.handleTypeClick.bind(this, 'Seller') } style={ S('ml-40') } className={ selling_class }>Selling</Button>
-          <Button onClick={ this.handleTypeClick.bind(this, 'Buyer/Seller') } style={ S('ml-40') } className={ buysell_class }>Buying & Selling</Button>
-          <Button onClick={ this.handleTypeClick.bind(this, 'Lease') } style={ S('ml-40') } className={ lease_class }>Leasing</Button>
+          <div style={ S('mb-20') }>
+            <h1>Keep'em comin!  So are we...</h1>
+          </div>
+          <div>
+            <Button bsStyle="default" onClick={ this.handleTypeClick.bind(this, 'Buyer') } style={ btn_style_first } className={ buying_class }>Buying</Button>
+            <Button bsStyle="default" onClick={ this.handleTypeClick.bind(this, 'Seller') } style={ btn_style } className={ selling_class }>Selling</Button>
+            <Button bsStyle="default" onClick={ this.handleTypeClick.bind(this, 'Buyer/Seller') } style={ btn_style } className={ buysell_class }>Buying & Selling</Button>
+            <Button bsStyle="default" onClick={ this.handleTypeClick.bind(this, 'Lease') } style={ btn_style } className={ lease_class }>Leasing</Button>
+          </div>
         </div>
       </div>
     )
@@ -495,7 +501,7 @@ export default class NewTransaction extends Component {
     }
 
     // Style
-    const main_style = S('absolute l-222 r-0 ml-20 w-960 h-300 pt-20')
+    const main_style = S('absolute l-222 r-0 ml-20 w-960 h-300 pt-20 mt-220')
 
     let message
     if (new_transaction && new_transaction.save_error) {
@@ -547,7 +553,7 @@ export default class NewTransaction extends Component {
           </Modal>
         </header>
         <main>
-          <div style={ main_style }>
+          <div style={ main_style } className="center-block">
             { message }
             <div style={ S('absolute w-100p') }>
               { main_content }

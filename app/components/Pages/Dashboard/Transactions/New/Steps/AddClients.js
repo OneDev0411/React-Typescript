@@ -1,5 +1,6 @@
 // Dashboard/Transactions/New/Steps/AddClients.js
 import React, { Component } from 'react'
+import S from 'shorti'
 
 // Partials
 import AddContactsForm from '../../../Partials/AddContactsForm'
@@ -11,6 +12,7 @@ export default class AddClients extends Component {
     const data = this.props.data
     return (
       <div>
+        <div style={ S('t-100n absolute color-d0d4d9') }>Lost time is never found again.</div>
         <h1>Very nice. New { data.new_transaction.type }. Who are we creating this <br/>transaction for?</h1>
         <AddContactsForm
           module_type="client"

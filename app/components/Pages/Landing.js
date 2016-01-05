@@ -22,10 +22,9 @@ export default class Landing extends Component {
 
   componentDidMount() {
     AppStore.data.blinking_cursor = true
+    AppStore.data.animation_started = true
+    AppStore.data.current_text = 'smarter'
     AppStore.emitChange()
-    AppDispatcher.dispatch({
-      action: 'init-landing'
-    })
     setTimeout(() => {
       AppDispatcher.dispatch({
         action: 'landing-text-animation'
@@ -53,11 +52,9 @@ export default class Landing extends Component {
     let video_src = AppStore.data.video_src
     if (!video_src)
       video_src = 'young_agent'
-    let current_text = data.current_text
-    const animation_started = AppStore.data.animation_started
-    if (animation_started)
+    let current_text = data.initial_text
+    if (AppStore.data.animation_started)
       current_text = AppStore.data.current_text
-
     // Blinking cursor
     if (typeof blinking_cursor === 'undefined')
       blinking_cursor = true

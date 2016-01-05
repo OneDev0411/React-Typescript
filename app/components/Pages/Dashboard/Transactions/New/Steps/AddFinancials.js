@@ -37,6 +37,7 @@ export default class AddFinancials extends Component {
 
     return (
       <div>
+        <div style={ S('t-100n absolute color-d0d4d9') }>Never leave that till tomorrow which you can do today.</div>
         <div style={ S('mb-40') }>
           <h1>Financials</h1>
         </div>

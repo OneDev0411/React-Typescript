@@ -69,10 +69,6 @@ AppDispatcher.register(payload => {
       getContent(payload.slug, payload.rendered, payload.res, payload.callback)
       break
 
-    case 'init-landing':
-      landingPage.init()
-      break
-
     case 'landing-text-animation':
       landingPage.animateText()
       break

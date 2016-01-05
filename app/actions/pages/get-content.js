@@ -1,11 +1,8 @@
-// actions/show-modal.js
+// actions/get-content.js
 import AppStore from '../../stores/AppStore'
 import Cosmic from 'cosmicjs'
 import _ from 'lodash'
 import config from '../../../config/public'
-
-// AppDispatcher
-import AppDispatcher from '../../dispatcher/AppDispatcher'
 
 export default (slug, rendered, res, callback) => {
   Cosmic.getObject(config.cosmicjs, { slug }, (err, response) => {
@@ -19,13 +16,11 @@ export default (slug, rendered, res, callback) => {
         call_to_action,
         placeholder_text
       }
+      AppStore.data.initial_text = 'smarter'
       if (rendered === 'server') {
         res.locals.page_slug = 'landing'
         res.locals.AppStore = JSON.stringify(AppStore)
       }
-      AppDispatcher.dispatch({
-        action: 'init-landing'
-      })
     }
     AppStore.emitChange()
     if (callback)

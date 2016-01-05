@@ -82,11 +82,5 @@ export default {
   // Start animation
   animateText() {
     this.removeText(0)
-  },
-
-  init() {
-    AppStore.data.current_text = this.getText(0)
-    AppStore.data.animation_started = true
-    AppStore.emitChange()
   }
 }
