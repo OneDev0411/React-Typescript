@@ -88,7 +88,7 @@ export default class Transactions extends Component {
         if (important_dates) {
           closing_date = _.result(_.findWhere(important_dates, { title: 'closing' }), 'due_date')
           closing_date = closing_date.toString()
-          closing_date = closing_date.replace('T00:00:00.000Z','')
+          closing_date = closing_date.replace('T00:00:00.000Z', '')
         }
         if (transaction.listing) {
           listing = transaction.listing

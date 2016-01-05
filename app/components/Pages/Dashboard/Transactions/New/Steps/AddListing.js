@@ -1,6 +1,6 @@
 // Dashboard/Transactions/New/Steps/AddListing.js
 import React, { Component } from 'react'
-import { Button, Input } from 'react-bootstrap'
+import { Button, Input, Modal, Col } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
 import helpers from '../../../../../../utils/helpers'
@@ -131,16 +131,101 @@ export default class AddListing extends Component {
         </div>
       )
     }
+    let listing_added_markup
+    let listing_address
+    if (listing_added) {
+      listing_address = listing_added.address.street_number + ' ' +
+      listing_added.address.street_name + ' ' + listing_added.address.street_suffix
+      const listing_full_address = listing_address + ' ' + listing_added.address.city + ', ' + listing_added.address.state + ' ' + listing_added.address.postal_code
 
+      listing_added_markup = (
+        <div style={ S('h-25 relative bg-3388ff br-100 color-fff p-3 pl-0 pr-10 mb-10 mr-10 pointer') } className="pull-left">
+          <div onClick={ this.props.showListingModal.bind(this) } style={ S('w-25 h-25 bg-cover bg-url(' + listing_added.cover_image_url + ') l-0 t-0 absolute br-100') }>
+          </div>
+          <div style={ S('ml-30') }>
+            <span onClick={ this.props.showListingModal.bind(this) }>{ listing_full_address }</span>&nbsp;&nbsp;<span onClick={ this.props.removeAddedListing.bind(this) } style={ S('pointer') }>x</span>
+          </div>
+        </div>
+      )
+    }
+    let listing_image
+    if (listing_added && listing_added.cover_image_url) {
+      listing_image = (
+        <div style={ S(`relative w-100p h-270 bg-center bg-cover bg-url(${listing_added.cover_image_url})`) }></div>
+      )
+    } else {
+      listing_image = (
+        <div style={ S('relative w-100p h-270 bg-center bg-cover bg-333 color-fff pt-110 font-26 text-center') }>
+          No image
+        </div>
+      )
+    }
     return (
       <div>
         <img style={ S('h-121') } src="/images/dashboard/transactions/house.png" />
-        <div style={ S('mb-40') }>
+        <div style={ S('mb-20') }>
           <h1>We’re almost done! Do you have a property listing in mind?</h1>
         </div>
+        <div style={ S('h-25') }>
+          { listing_added_markup }
+        </div>
         <div style={ S('maxw-820') }>
-          <Input ref="q" onKeyDown={ this.navListingList.bind(this) } onKeyUp={ this.searchListings.bind(this) } className="pull-left" style={ S('w-640') } type="text" placeholder="Enter an address or MLS number"/>
-          <Button className="pull-left" style={ S('w-160 ml-10') } bsStyle="primary" type="button">Add New Property</Button>
+          <Input ref="q" onKeyDown={ this.navListingList.bind(this) } onKeyUp={ this.searchListings.bind(this) } className="pull-left" style={ S('w-600') } type="text" placeholder="Enter an address or MLS number"/>
+          <span className="pull-left" style={ S('w-30 ml-15 mt-8 color-666') }>OR</span>
+          <Button onClick={ this.props.showListingModal.bind(this, 'new') } className="pull-left" style={ S('w-160') } bsStyle="primary" type="button">
+            Add New Property
+          </Button>
+          <Modal bsSize="large" show={ data.new_transaction.show_add_custom_listing_modal } onHide={ this.props.hideModal.bind(this) }>
+          <form onSubmit={ this.props.addCustomListingInfo.bind(this) }>
+            <Modal.Body style={ S('p-0') }>
+              <Col xs={5} style={ S('p-0') }>
+                { listing_image }
+              </Col>
+              <Col xs={7}>
+                <Modal.Title style={ S('mt-15 mb-15') }>
+                  Property Info
+                </Modal.Title>
+                <Col xs={8} style={ S('pl-0 pr-0') }>
+                  <Input type="text" ref="address" placeholder="ADDRESS" defaultValue={ listing_address }/>
+                </Col>
+                <Col xs={4} style={ S('pr-0') }>
+                  <Input type="text" ref="status" placeholder="STATUS" defaultValue={ listing_added ? listing_added.status : '' }/>
+                </Col>
+                <Col xs={6} style={ S('pl-0') }>
+                  <Input type="text" ref="city" placeholder="CITY" defaultValue={ listing_added ? listing_added.address.city : '' }/>
+                </Col>
+                <Col xs={3} style={ S('p-0') }>
+                  <Input type="text" ref="state" placeholder="STATE" defaultValue={ listing_added ? listing_added.address.state : '' }/>
+                </Col>
+                <Col xs={3} style={ S('pr-0') }>
+                  <Input type="text" ref="zip" placeholder="ZIP" defaultValue={ listing_added ? listing_added.address.postal_code : '' }/>
+                </Col>
+                <Col xs={6} style={ S('pl-0 pr-0') }>
+                  <Input type="text" ref="year_built" placeholder="YEAR BUILT"/>
+                </Col>
+                <Col xs={6} style={ S('pr-0') }>
+                  <Input type="text" ref="property_type" placeholder="PROPERTY TYPE"/>
+                </Col>
+                <Col xs={4} style={ S('pl-0') }>
+                  <Input type="text" ref="sqft" placeholder="SQFT"/>
+                </Col>
+                <Col xs={4} style={ S('p-0') }>
+                  <Input type="text" ref="beds" placeholder="BEDS"/>
+                </Col>
+                <Col xs={4} style={ S('pr-0') }>
+                  <Input type="text" ref="baths" placeholder="BATHS"/>
+                </Col>
+              </Col>
+              <div className="clearfix"></div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button bsStyle="link" onClick={ this.props.hideModal.bind(this) }>Cancel</Button>
+              <Button className={ data.creating_contacts ? 'disabled' : '' } type="submit" bsStyle="primary">
+                { data.creating_contacts ? 'Adding...' : 'Add' }
+              </Button>
+            </Modal.Footer>
+          </form>
+        </Modal>
         </div>
         <div className="clearfix"></div>
         { listing_results }
@@ -154,5 +239,9 @@ AddListing.propTypes = {
   data: React.PropTypes.object,
   searchListings: React.PropTypes.func,
   addListing: React.PropTypes.func,
-  setListingActive: React.PropTypes.func
+  setListingActive: React.PropTypes.func,
+  showListingModal: React.PropTypes.func,
+  hideModal: React.PropTypes.func,
+  addCustomListingInfo: React.PropTypes.func,
+  removeAddedListing: React.PropTypes.func
 }

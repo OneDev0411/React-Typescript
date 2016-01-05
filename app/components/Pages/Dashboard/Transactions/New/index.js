@@ -128,10 +128,14 @@ export default class NewTransaction extends Component {
   showCreateContactModal() {
     AppStore.data.show_create_contact_modal = true
     AppStore.emitChange()
+    setTimeout(() => {
+      this.refs.first_name.refs.input.focus()
+    }, 100)
   }
 
   hideModal() {
     delete AppStore.data.show_create_contact_modal
+    delete AppStore.data.new_transaction.show_add_custom_listing_modal
     AppStore.emitChange()
   }
 
@@ -263,6 +267,48 @@ export default class NewTransaction extends Component {
     AppStore.emitChange()
   }
 
+  // Add listing data
+  showListingModal(type) {
+    AppStore.data.new_transaction.show_add_custom_listing_modal = true
+    if (type === 'new') {
+      delete AppStore.data.new_transaction.listing_added
+      delete AppStore.data.new_transaction.listings_found
+      delete AppStore.data.new_transaction.listing_q
+      this.refs.q.refs.input.value = ''
+    }
+    AppStore.emitChange()
+    setTimeout(() => {
+      this.refs.address.refs.input.focus()
+    }, 100)
+  }
+
+  removeAddedListing(e) {
+    e.preventDefault()
+    delete AppStore.data.new_transaction.listing_added
+    AppStore.emitChange()
+    setTimeout(() => {
+      this.refs.q.refs.input.focus()
+    }, 100)
+  }
+
+  addCustomListingInfo(e) {
+    e.preventDefault()
+    // TODO
+    // const address = this.refs.address.refs.input.value
+    // const status = this.refs.status.refs.input.value
+    // const city = this.refs.city.refs.input.value
+    // const state = this.refs.state.refs.input.value
+    // const zip = this.refs.zip.refs.input.value
+    // const listing_added = {
+    //   address,
+    //   status,
+    //   city,
+    //   state,
+    //   zip
+    // }
+    // console.log(listing_added)
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -345,6 +391,10 @@ export default class NewTransaction extends Component {
               searchListings={ this.searchListings.bind(this) }
               setListingActive={ this.setListingActive }
               addListing={ this.addListing }
+              hideModal={ this.hideModal }
+              showListingModal={ this.showListingModal }
+              addCustomListingInfo={ this.addCustomListingInfo }
+              removeAddedListing={ this.removeAddedListing }
             />
           )
           break
@@ -424,7 +474,7 @@ export default class NewTransaction extends Component {
     let message
     if (new_transaction && new_transaction.save_error) {
       message = (
-        <Alert style={ S('mt-20') } bsStyle="danger">There was an error with this request.</Alert>
+        <Alert style={ S('mt-20') } bsStyle="danger">There was an error with this request.  Make sure that you have at least one contact added.</Alert>
       )
     }
 

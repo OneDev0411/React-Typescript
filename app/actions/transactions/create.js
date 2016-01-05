@@ -12,7 +12,7 @@ export default (user, new_transaction) => {
   const contacts_added = new_transaction.contacts_added
   const dates = new_transaction.dates
   const contact_objects = []
-  // TODO: make this scalable
+  // TODO: make this scalable for custom dates
   if (contacts_added) {
     const client_ids = _.pluck(contacts_added.client, 'id')
     client_ids.forEach(client_id => {
