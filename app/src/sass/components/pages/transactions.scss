@@ -1,0 +1,23 @@
+.transaction__tabs {
+  &>li a {
+    border-radius: 0 !important;
+  }
+  &>li.active a,
+  &>li.active a:hover,
+  &>li.active a:active,
+  &>li.active a:focus {
+    color: $brand-primary;
+  }
+}
+.transactions__table{
+  thead > tr > th{
+    border-bottom: 1px solid #ddd !important;
+    padding-bottom: 10px;
+  }
+  td{
+    border-top: none !important;
+    border-right: none !important;
+    border-left: none !important;
+    border-bottom: 1px solid #f5f7f7 !important;
+  }
+}

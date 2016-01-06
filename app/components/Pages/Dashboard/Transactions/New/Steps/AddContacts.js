@@ -13,7 +13,7 @@ export default class AddContacts extends Component {
     return (
       <div>
         <div style={ S('t-100n absolute color-d0d4d9') }>Never leave that till tomorrow which you can do today.</div>
-        <h1>Invite your partner, vendors and even those on the other side of the negotiation!</h1>
+        <h1>Invite your partner, vendors and even those on<br /> the other side of the negotiation!</h1>
         <AddContactsForm
           module_type="contact"
           data={ data }

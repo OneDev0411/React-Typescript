@@ -1,7 +1,7 @@
 // Dashboard/Transactions/New/index.js
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import { Button, Breadcrumb, BreadcrumbItem, Alert, Modal } from 'react-bootstrap'
+import { Button, Breadcrumb, BreadcrumbItem, Alert, Modal, Navbar, Nav } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
 
@@ -13,9 +13,6 @@ import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
 
 // TransactionDispatcher
 import TransactionDispatcher from '../../../../../dispatcher/TransactionDispatcher'
-
-// Partials
-import MainNav from '../../Partials/MainNav'
 
 // Steps
 import AddClients from './Steps/AddClients'
@@ -330,7 +327,7 @@ export default class NewTransaction extends Component {
 
   showCancelModal() {
     const new_transaction = AppStore.data.new_transaction
-    if (new_transaction && new_transaction.type) {
+    if (new_transaction && new_transaction.type && new_transaction.contacts_added && new_transaction.contacts_added.client && new_transaction.contacts_added.client.length) {
       AppStore.data.new_transaction.show_cancel_confirm = true
       AppStore.emitChange()
     } else
@@ -352,10 +349,10 @@ export default class NewTransaction extends Component {
     // Set new_transaction
     const new_transaction = data.new_transaction
 
-    let buying_class = 'dotted '
-    let selling_class = 'dotted '
-    let buysell_class = 'dotted '
-    let lease_class = 'dotted '
+    let buying_class = 'dashed '
+    let selling_class = 'dashed '
+    let buysell_class = 'dashed '
+    let lease_class = 'dashed '
 
     if (new_transaction && new_transaction.type === 'Buyer')
       buying_class = 'btn-primary'
@@ -472,7 +469,7 @@ export default class NewTransaction extends Component {
       let cancel_button
 
       // Cancel Button
-      if (!step) {
+      if (!step && new_transaction.type && new_transaction.contacts_added && new_transaction.contacts_added.client.length) {
         cancel_button = (
           <a href="#" onClick={ this.handleCancelClick.bind(this) } className="btn btn-danger pull-left" style={ S('mr-20') }>Cancel</a>
         )
@@ -485,7 +482,7 @@ export default class NewTransaction extends Component {
         )
       }
       // Next Button
-      if (step < new_transaction.total_steps && new_transaction.type) {
+      if (step < new_transaction.total_steps && new_transaction.type && new_transaction.contacts_added && new_transaction.contacts_added.client.length) {
         next_button = (
           <Button onClick={ this.handlePrevNext.bind(this, 'next') }>Next</Button>
         )
@@ -499,9 +496,6 @@ export default class NewTransaction extends Component {
         </div>
       )
     }
-
-    // Style
-    const main_style = S('absolute l-222 r-0 ml-20 w-960 h-300 pt-20 mt-220')
 
     let message
     if (new_transaction && new_transaction.save_error) {
@@ -526,17 +520,24 @@ export default class NewTransaction extends Component {
     )
 
     let action_button = cancel_button
-    if (new_transaction && new_transaction.type && new_transaction.contacts_added)
+    if (new_transaction && new_transaction.type && new_transaction.contacts_added && new_transaction.contacts_added.client.length)
       action_button = save_button
 
     let show_cancel_confirm
     if (new_transaction)
       show_cancel_confirm = new_transaction.show_cancel_confirm
+
+    // Style
+    const main_style = S('relative w-960 h-300 pt-20 mt-220')
+    const nav_bar_style = { ...S('mb-0 p-0 h-58 pt-3'), borderBottom: '1px solid #e7e4e3' }
+
     return (
       <div style={ S('minw-1000') }>
         <header>
-          <MainNav data={ data }/>
-          <div style={ S('absolute w-800 l-230 t-10') }>{ breadcrumbs }</div>
+          <Navbar className="bg-aqua" style={ nav_bar_style } fluid>
+            <Nav/>
+          </Navbar>
+          <div className="center-block" style={ S('relative h-0 l-15n t-48n w-960') }>{ breadcrumbs }</div>
           { action_button }
           <Modal show={ show_cancel_confirm } onHide={ this.hideModal.bind(this) }>
             <Modal.Header closeButton>
@@ -552,7 +553,7 @@ export default class NewTransaction extends Component {
             </Modal.Footer>
           </Modal>
         </header>
-        <main>
+        <main style={ S('w-100p') }>
           <div style={ main_style } className="center-block">
             { message }
             <div style={ S('absolute w-100p') }>

@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import S from 'shorti'
 
 // Partials
-import MainNav from '../Partials/MainNav'
+import Header from '../Partials/Header'
 import SideBar from '../Partials/SideBar'
 
 export default class Mls extends Component {
@@ -14,14 +14,11 @@ export default class Mls extends Component {
 
     return (
       <div style={ S('minw-1000') }>
-        <header>
-          <MainNav data={ data }/>
-        </header>
-        <main>
+        <Header data={ data } />
+        <main style={ S('pt-20') }>
           <SideBar data={ data }/>
           <div style={ main_style }>
             <div style={ S('ml-20') }>
-              <h1>Mls</h1>
               <p>This is mls stuff</p>
             </div>
           </div>

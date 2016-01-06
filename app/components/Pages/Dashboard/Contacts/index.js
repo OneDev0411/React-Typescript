@@ -4,7 +4,7 @@ import S from 'shorti'
 import { Table, Button } from 'react-bootstrap'
 
 // Partials
-import MainNav from '../Partials/MainNav'
+import Header from '../Partials/Header'
 import SideBar from '../Partials/SideBar'
 import ProfileImage from '../Partials/ProfileImage'
 import Loading from '../../../Partials/Loading'
@@ -84,14 +84,11 @@ export default class Contacts extends Component {
 
     return (
       <div style={ S('minw-1000') }>
-        <header>
-          <MainNav data={ data }/>
-        </header>
-        <main>
+        <Header data={ data } />
+        <main style={ S('pt-20') }>
           <SideBar data={ data }/>
           <div style={ main_style }>
             <div style={ S('ml-20') }>
-              <h1>Contacts</h1>
               { contacts_table }
             </div>
           </div>

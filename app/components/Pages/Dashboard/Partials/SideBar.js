@@ -1,14 +1,19 @@
 // Dashboard.js
 import React, { Component } from 'react'
+import { Link } from 'react-router'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Nav, NavItem } from 'react-bootstrap'
+import { Nav, NavItem, NavDropdown } from 'react-bootstrap'
 import S from 'shorti'
+
+// Partials
+import ProfileImage from './ProfileImage'
 
 export default class SideBar extends Component {
   render() {
+    // Data
     const data = this.props.data
-    const sidebar_height = window.innerHeight - 58
-    const sidebar_style = S('w-222 relative p-20 pl-0 pt-20 h-' + sidebar_height)
+    const sidebar_height = window.innerHeight
+    const sidebar_style = S('bg-fff w-222 absolute p-20 pl-0 pt-20 t-0 h-' + sidebar_height)
     const path = data.path
 
     const active = {}
@@ -27,8 +32,13 @@ export default class SideBar extends Component {
     if (path === '/dashboard/transactions' || path === '/dashboard/transactions/new')
       active.transactions = 'active'
 
+    // User info
+    const user = data.user
+    const first_name = user.first_name
+    const last_name = user.last_name
+
     return (
-      <aside style={ sidebar_style } className="bg-alabaster sidebar--dashboard pull-left">
+      <aside style={ sidebar_style } className="sidebar--dashboard pull-left">
         <Nav bsStyle="pills" stacked>
           <LinkContainer className={ active.recents } to="/dashboard/recents">
             <NavItem style={ S('w-70p') }>
@@ -61,6 +71,19 @@ export default class SideBar extends Component {
             </NavItem>
           </LinkContainer>
         </Nav>
+        <div style={ S('absolute b-20 l-20') }>
+          <Nav>
+            <div style={ S('absolute z-0') }>
+              <ProfileImage user={ user } />
+            </div>
+            <NavDropdown dropup id="main-nav-dropdown" className="main-nav-dropdown--account" style={ S('ml39n') } eventKey={3} title={ first_name + ' ' + last_name }>
+              <li><Link to="/account/settings"><i className="fa fa-cog" style={ S('mr-15') }></i>Settings</Link></li>
+              <li><Link to="/account/notifications"><i className="fa fa-envelope" style={ S('mr-15') }></i>Notifications</Link></li>
+              <li role="separator" className="divider"></li>
+              <li><a href="/signout"><i className="fa fa-power-off" style={ S('mr-15') }></i>Sign out</a></li>
+            </NavDropdown>
+          </Nav>
+        </div>
       </aside>
     )
   }

@@ -12,7 +12,6 @@ import AppStore from '../../../../stores/AppStore'
 
 // Partials
 import MainContent from './Partials/MainContent'
-import MainNav from '../Partials/MainNav'
 import SideBar from '../Partials/SideBar'
 
 // Socket.io
@@ -283,9 +282,6 @@ export default class Dashboard extends Component {
     const data = this.props.data
     return (
       <div style={ S('minw-1000') }>
-        <header>
-          <MainNav data={ data }/>
-        </header>
         <main>
           <SideBar data={ data }/>
           <MainContent
