@@ -99,7 +99,7 @@ export default class RoomsList extends Component {
     const rooms_scroll_area = {
       ...S('mt-5'),
       overflow: 'scroll',
-      height: window.innerHeight - 123
+      height: window.innerHeight - 70
     }
 
     return (

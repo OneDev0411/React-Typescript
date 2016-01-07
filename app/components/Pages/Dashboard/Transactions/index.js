@@ -91,12 +91,18 @@ export default class Transactions extends Component {
   }
 
   removeTransactionTab(id) {
-    const transaction_tabs = AppStore.data.transaction_tabs
-    const reduced_transaction_tabs = transaction_tabs.filter(transaction => {
-      return transaction.id !== id
-    })
-    AppStore.data.transaction_tabs = reduced_transaction_tabs
-    AppStore.emitChange()
+    // Go to all transaction tab (after other tab click event triggered)
+    setTimeout(() => {
+      const transaction_tabs = AppStore.data.transaction_tabs
+      const current_transaction = AppStore.data.current_transaction
+      const reduced_transaction_tabs = transaction_tabs.filter(transaction => {
+        return transaction.id !== id
+      })
+      AppStore.data.transaction_tabs = reduced_transaction_tabs
+      if (current_transaction.id === id)
+        delete AppStore.data.current_transaction
+      AppStore.emitChange()
+    }, 10)
   }
 
   render() {
@@ -200,13 +206,6 @@ export default class Transactions extends Component {
                 { closing_date ? closing_date : 'TBD' }
               </div>
             </td>
-            <td>
-              <div style={ S('mt-15') }>
-                <Button className={ data.deleting_transaction && data.deleting_transaction === transaction.id ? 'disabled' : '' } onClick={ this.deleteTransaction.bind(this, transaction.id) } type="button" bsStyle="danger">
-                  { data.deleting_transaction && data.deleting_transaction === transaction.id ? 'Deleting...' : 'Delete' }
-                </Button>
-              </div>
-            </td>
           </tr>
         )
       })
@@ -230,7 +229,6 @@ export default class Transactions extends Component {
               <th>Contacts</th>
               <th>Next Task</th>
               <th>Closing Date</th>
-              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -246,8 +244,16 @@ export default class Transactions extends Component {
 
     // Single view
     const current_transaction = data.current_transaction
-    if (current_transaction)
-      transactions_area = <div>Transaction detail view</div>
+    if (current_transaction) {
+      transactions_area = (
+        <div>
+          <Button style={ S('absolute r-20') } className={ data.deleting_transaction && data.deleting_transaction === current_transaction.id ? 'disabled' : '' } onClick={ this.deleteTransaction.bind(this, current_transaction.id) } type="button" bsStyle="danger">
+            { data.deleting_transaction && data.deleting_transaction === current_transaction.id ? 'Deleting...' : 'Delete' }
+          </Button>
+          <h4>Transaction detail view</h4>
+        </div>
+      )
+    }
 
     const main_content = (
       <div>

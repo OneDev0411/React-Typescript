@@ -14,7 +14,13 @@ export default (user, id) => {
         return transaction.id !== id
       })
       delete AppStore.data.deleting_transaction
+      delete AppStore.data.current_transaction
       AppStore.data.transactions = transactions
+      const transaction_tabs = AppStore.data.transaction_tabs
+      const reduced_transaction_tabs = transaction_tabs.filter(transaction => {
+        return transaction.id !== id
+      })
+      AppStore.data.transaction_tabs = reduced_transaction_tabs
       AppStore.emitChange()
     }
   })

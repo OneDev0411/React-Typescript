@@ -38,7 +38,9 @@ export default class Header extends Component {
           return (
             <NavItem onClick={ this.props.viewTransaction.bind(this, transaction) } key={ 'transaction-tab-' + transaction.id } eventKey={ transaction.id }>
               { tab_title }
-              <div onClick={ this.props.removeTransactionTab.bind(this, transaction.id) } style={ S('ml-10 relative t-2n pointer') } className="close">&times;</div>
+              <div onClick={ this.props.removeTransactionTab.bind(this, transaction.id) } style={ S('ml-10 relative t-2n pointer') } className="close">
+                &times;
+              </div>
             </NavItem>
           )
         })

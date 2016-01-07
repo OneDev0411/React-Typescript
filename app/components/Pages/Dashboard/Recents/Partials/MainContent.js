@@ -53,7 +53,7 @@ export default class MainContent extends Component {
     // Rooms
     const rooms_column_style = {
       overflow: 'scroll',
-      height: window.innerHeight - 58,
+      height: window.innerHeight,
       borderRight: '1px solid #e7e4e3',
       width: '320px'
     }
@@ -61,7 +61,7 @@ export default class MainContent extends Component {
     // Messages
     const messages_column_style = {
       ...S('absolute pt-15 l-320 minw-450'),
-      height: window.innerHeight - 58,
+      height: window.innerHeight,
       width: window.innerWidth - 542
     }
 
