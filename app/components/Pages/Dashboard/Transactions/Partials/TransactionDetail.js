@@ -113,11 +113,11 @@ export default class TransactionDetail extends Component {
               <div style={ S('mb-15 mr-20 pull-left') }><b>Sqft:</b> <span style={ S('color-929292') }>{ square_feet }</span></div>
               <div className="clearfix"></div>
             </div>
-            <div>
+            <div style={ S('mb-70') }>
               <Button style={ S('bc-929292 color-929292 pl-20 pr-20 mr-15') }><b>View More</b></Button>
               <Button style={ S('bc-3388ff color-3388ff pl-40 pr-40') }><b>Edit</b></Button>
             </div>
-            <div style={ S('absolute b-60') }>
+            <div>
               {
                 contacts.map(contact => {
                   return (
