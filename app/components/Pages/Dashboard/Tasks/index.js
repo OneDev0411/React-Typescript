@@ -10,7 +10,7 @@ export default class Tasks extends Component {
 
   render() {
     const data = this.props.data
-    const main_style = S('absolute l-222 r-0')
+    const main_style = S('absolute l-183 r-0')
 
     return (
       <div style={ S('minw-1000') }>

@@ -5,6 +5,11 @@ import { Nav, NavItem } from 'react-bootstrap'
 import S from 'shorti'
 
 export default class Header extends Component {
+
+  removeTransactionTab(id) {
+    this.props.removeTransactionTab(id)
+  }
+
   render() {
     const data = this.props.data
     const transactions = data.transactions
@@ -38,7 +43,7 @@ export default class Header extends Component {
           return (
             <NavItem onClick={ this.props.viewTransaction.bind(this, transaction) } key={ 'transaction-tab-' + transaction.id } eventKey={ transaction.id }>
               { tab_title }
-              <div onClick={ this.props.removeTransactionTab.bind(this, transaction.id) } style={ S('ml-10 relative t-2n pointer') } className="close">
+              <div onClick={ this.removeTransactionTab.bind(this, transaction.id) } style={ S('ml-10 relative t-2n pointer') } className="close">
                 &times;
               </div>
             </NavItem>
@@ -69,7 +74,7 @@ export default class Header extends Component {
       nav_bar_style = { ...nav_bar_style, ...S('h-70') }
 
     return (
-      <header style={ S('pl-222') }>
+      <header style={ S('pl-183') }>
         <div className="bg-aqua" style={ nav_bar_style } fluid>
           <div>
             <div style={ S('pl-15 w-100p') }>

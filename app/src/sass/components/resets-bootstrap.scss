@@ -25,3 +25,15 @@
 .breadcrumb {
   background-color: transparent;
 }
+.carousel-control{
+  padding-top: 22%;
+  font-size: 55px;
+  font-weight: 100;
+  transition: all 150ms;
+}
+.carousel-control.left{
+  background-image: linear-gradient(to left, rgba(0, 0, 0, 0.0001) 0%, rgba(0, 0, 0, 0.2) 100%) !important;
+}
+.carousel-control.right{
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.0001) 0%, rgba(0, 0, 0, 0.2) 100%) !important;
+}

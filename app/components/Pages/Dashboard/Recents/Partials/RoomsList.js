@@ -65,7 +65,7 @@ export default class RoomsList extends Component {
 
         // Time posted
         const latest_created = room.latest_message.created_at.toString().split('.')
-        const time_created = helpers.timeConverter(latest_created[0])
+        const time_created = helpers.friendlyDate(latest_created[0])
         let comment
         if (room.latest_message.comment) {
           comment = (

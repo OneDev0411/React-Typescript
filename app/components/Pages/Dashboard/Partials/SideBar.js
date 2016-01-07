@@ -13,7 +13,7 @@ export default class SideBar extends Component {
     // Data
     const data = this.props.data
     const sidebar_height = window.innerHeight
-    const sidebar_style = S('bg-fff w-222 absolute p-20 pl-0 pt-20 t-0 h-' + sidebar_height)
+    const sidebar_style = S('bg-fff w-183 absolute pl-0 t-0 h-' + sidebar_height)
     const path = data.path
 
     const active = {}
@@ -39,33 +39,36 @@ export default class SideBar extends Component {
 
     return (
       <aside style={ sidebar_style } className="sidebar--dashboard pull-left">
+        <div style={ S('mt-25 ml-10 mb-20 pointer') }>
+          <img src="/images/dashboard/icons/hamburger.svg"/>
+        </div>
         <Nav bsStyle="pills" stacked>
           <LinkContainer className={ active.recents } to="/dashboard/recents">
-            <NavItem style={ S('w-70p') }>
+            <NavItem style={ S('w-75p') }>
               <img src={ active.recents ? '/images/dashboard/icons/recents-active.svg' : '/images/dashboard/icons/recents.svg' } style={ S('w-20 h-20') }/>
               &nbsp;&nbsp;&nbsp;Recents
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.mls } to="/dashboard/mls">
-            <NavItem style={ S('w-70p') }>
+            <NavItem style={ S('w-75p') }>
               <img src={ active.mls ? '/images/dashboard/icons/listings-active.svg' : '/images/dashboard/icons/listings.svg' } style={ S('w-20 h-20') }/>
               &nbsp;&nbsp;&nbsp;MLS
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.contacts } to="/dashboard/contacts">
-            <NavItem style={ S('w-70p') }>
+            <NavItem style={ S('w-75p') }>
               <img src={ active.contacts ? '/images/dashboard/icons/contacts-active.svg' : '/images/dashboard/icons/contacts.svg' } style={ S('w-20 h-20') }/>
               &nbsp;&nbsp;&nbsp;Contacts
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.tasks } to="/dashboard/tasks">
-            <NavItem style={ S('w-70p') }>
+            <NavItem style={ S('w-75p') }>
               <img src={ active.tasks ? '/images/dashboard/icons/tasks-active.svg' : '/images/dashboard/icons/tasks.svg' } style={ S('w-20 h-20') }/>
               &nbsp;&nbsp;&nbsp;Tasks
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.transactions } to="/dashboard/transactions">
-            <NavItem style={ S('w-70p') }>
+            <NavItem style={ S('w-75p') }>
               <img src={ active.transactions ? '/images/dashboard/icons/transactions-active.svg' : '/images/dashboard/icons/transactions.svg' } style={ S('w-20 h-20') }/>
               &nbsp;&nbsp;&nbsp;Transactions
             </NavItem>
@@ -76,7 +79,7 @@ export default class SideBar extends Component {
             <div style={ S('absolute z-0') }>
               <ProfileImage user={ user } />
             </div>
-            <NavDropdown dropup id="main-nav-dropdown" className="main-nav-dropdown--account" style={ S('ml39n') } eventKey={3} title={ first_name + ' ' + last_name }>
+            <NavDropdown dropup id="main-nav-dropdown" className="main-nav-dropdown--account" eventKey={3} title={ first_name + ' ' + last_name }>
               <li><Link to="/account/settings"><i className="fa fa-cog" style={ S('mr-15') }></i>Settings</Link></li>
               <li><Link to="/account/notifications"><i className="fa fa-envelope" style={ S('mr-15') }></i>Notifications</Link></li>
               <li role="separator" className="divider"></li>

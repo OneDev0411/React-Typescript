@@ -1,6 +1,6 @@
 // Dashboard/Transactions/index.js
 import React, { Component } from 'react'
-import { Table, Button, Alert } from 'react-bootstrap'
+import { Table, Alert } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
 
@@ -16,9 +16,11 @@ import TransactionDispatcher from '../../../../dispatcher/TransactionDispatcher'
 // Partials
 import SideBar from '../Partials/SideBar'
 import Header from '../Partials/Header'
+import TransactionDetail from './Partials/TransactionDetail'
 
 // Helpers
 import helpers from '../../../../utils/helpers'
+import listing_util from '../../../../utils/listing'
 
 export default class Transactions extends Component {
 
@@ -91,7 +93,7 @@ export default class Transactions extends Component {
   }
 
   removeTransactionTab(id) {
-    // Go to all transaction tab (after other tab click event triggered)
+    // TODO Stay on current tab or go to all transaction tab (after other tab click event triggered)
     setTimeout(() => {
       const transaction_tabs = AppStore.data.transaction_tabs
       const current_transaction = AppStore.data.current_transaction
@@ -102,16 +104,13 @@ export default class Transactions extends Component {
       if (current_transaction.id === id)
         delete AppStore.data.current_transaction
       AppStore.emitChange()
-    }, 10)
+    }, 1)
   }
 
   render() {
     // Data
     const data = this.props.data
     const transactions = data.transactions
-
-    // Style
-    const main_style = S('absolute l-222 r-0 pl-20 pr-20')
 
     // Transactions
     let transactions_rows
@@ -137,39 +136,34 @@ export default class Transactions extends Component {
           listing = transaction.listing
           address = `${listing.property.address.street_number} ${listing.property.address.street_name}`
         }
-        let cover_image = <div style={ S('w-90 h-62 bg-333 color-fff text-center pt-20') }>No Image</div>
+        let cover_image = <div style={ S('w-90 h-62 bg-eff1f2 color-929292 text-center pt-20') }>No image</div>
         if (listing && listing.cover_image_url) {
           cover_image = (
             <div style={ S('w-90 h-62 bg-center bg-cover bg-url(' + listing.cover_image_url + ')') }></div>
           )
         }
-        let contacts_num
-        if (transaction.contacts)
-          contacts_num = transaction.contacts.length
-
-        let status_color = 'c3c3c3'
-        if (listing) {
-          if (listing.status === 'Active')
-            status_color = '35b863'
-          if (listing.status === 'Active Contingent')
-            status_color = 'f8b619'
-          if (listing.status === 'Expired' || listing.status === 'Sold')
-            status_color = 'db3821'
-        }
-
+        let listing_status
+        if (listing)
+          listing_status = listing.status
+        const status_color = listing_util.getStatusColor(listing_status)
         // Get client
         const clients = _.forEach(transaction.contacts, contact => {
           const roles = contact.roles
           if (roles.indexOf('Client') !== -1)
             return contact
         })
-        let listing_status
+        let listing_status_indicator
         if (listing) {
-          listing_status = (
+          listing_status_indicator = (
             <div style={ S('color-929394 relative t-10n') }>
               <span style={ S('font-26 relative t-3 color-' + status_color) }>&#8226;</span> { listing.status }
             </div>
           )
+        }
+        let friendly_date
+        if (closing_date) {
+          const transaction_time = helpers.convertDateToTime(closing_date)
+          friendly_date = helpers.friendlyDate(transaction_time)
         }
         return (
           <tr onClick={ this.handleClickTransaction.bind(this, transaction) } style={ S('pointer') } key={ transaction.id }>
@@ -177,13 +171,13 @@ export default class Transactions extends Component {
               <div className="pull-left" style={ S('mt-5 ml-5') }>{ cover_image }</div>
               <div className="pull-left" style={ S('ml-20 mt-15 maxw-200') }>
                 { address }
-                { listing_status }
+                { listing_status_indicator }
               </div>
             </td>
             <td>
               <div style={ S('mt-20') }>
                 { `${clients[0].first_name} ${clients[0].last_name}` }
-                <div style={ S('color-929394') }>Client</div>
+                <div style={ S('color-929394') }>{ transaction.transaction_type }</div>
               </div>
             </td>
             <td>
@@ -193,17 +187,12 @@ export default class Transactions extends Component {
             </td>
             <td>
               <div style={ S('mt-20') }>
-                { contacts_num }
-              </div>
-            </td>
-            <td>
-              <div style={ S('mt-20') }>
                 Tax Document
               </div>
             </td>
             <td>
               <div style={ S('mt-20') }>
-                { closing_date ? closing_date : 'TBD' }
+                { friendly_date ? `${friendly_date.month} ${friendly_date.date}, ${friendly_date.year}` : 'TBD' }
               </div>
             </td>
           </tr>
@@ -217,18 +206,17 @@ export default class Transactions extends Component {
       )
     }
 
-    let transactions_area
+    let main_content
     if (transactions_rows && transactions_rows.length) {
-      transactions_area = (
-        <Table style={ S('mt-10n') } className="transactions__table" condensed hover>
+      main_content = (
+        <Table style={ S('mt-10n minw-760') } className="transactions__table" condensed hover>
           <thead>
             <tr>
-              <th>Property</th>
-              <th>Contact</th>
-              <th>Price</th>
-              <th>Contacts</th>
-              <th>Next Task</th>
-              <th>Closing Date</th>
+              <th width="150">Property</th>
+              <th width="100">Contact</th>
+              <th width="100">Price</th>
+              <th width="100">Next Task</th>
+              <th width="100">Closing Date</th>
             </tr>
           </thead>
           <tbody>
@@ -237,39 +225,26 @@ export default class Transactions extends Component {
         </Table>
       )
     } else {
-      transactions_area = (
-        <div>No transactions yet.</div>
+      main_content = (
+        <div>No transactions yet.  Maybe this needs to say something snarky or clever.</div>
       )
     }
 
     // Single view
     const current_transaction = data.current_transaction
-    if (current_transaction) {
-      transactions_area = (
-        <div>
-          <Button style={ S('absolute r-20') } className={ data.deleting_transaction && data.deleting_transaction === current_transaction.id ? 'disabled' : '' } onClick={ this.deleteTransaction.bind(this, current_transaction.id) } type="button" bsStyle="danger">
-            { data.deleting_transaction && data.deleting_transaction === current_transaction.id ? 'Deleting...' : 'Delete' }
-          </Button>
-          <h4>Transaction detail view</h4>
-        </div>
-      )
-    }
+    if (current_transaction)
+      main_content = <TransactionDetail deleteTransaction={ this.deleteTransaction } data={ data }/>
 
-    const main_content = (
-      <div>
-        <div>
-          { saved_message }
-          { transactions_area }
-        </div>
-      </div>
-    )
+    // Style
+    const main_style = S('absolute l-183 r-0 pl-15 pr-20')
 
     return (
       <div style={ S('minw-1000') }>
-        <Header data={ data } viewTransaction={ this.viewTransaction.bind(this) } removeTransactionTab={ this.removeTransactionTab.bind(this) } />
+        <Header data={ data } viewTransaction={ this.viewTransaction.bind(this) } removeTransactionTab={ this.removeTransactionTab } />
         <main style={ S('pt-15') }>
           <SideBar data={ data }/>
           <div style={ main_style }>
+            { saved_message }
             { main_content }
           </div>
         </main>

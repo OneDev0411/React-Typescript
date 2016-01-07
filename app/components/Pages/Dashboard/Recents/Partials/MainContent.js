@@ -7,6 +7,7 @@ import MessagesList from './MessagesList'
 import _ from 'lodash'
 
 export default class MainContent extends Component {
+
   handleKeyUp() {
     const search_text = this.refs.search_text.value
     this.props.filterRooms(search_text)
@@ -48,7 +49,7 @@ export default class MainContent extends Component {
     const data = this.props.data
 
     // Styles
-    const main_style = S('absolute l-222 r-0')
+    const main_style = S('absolute l-183 r-0')
 
     // Rooms
     const rooms_column_style = {

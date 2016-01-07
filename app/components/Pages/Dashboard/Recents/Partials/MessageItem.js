@@ -42,7 +42,7 @@ export default class MessageItem extends Component {
 
     // Message time
     const message_created = message.created_at.toString().split('.')
-    const time_created = helpers.timeConverter(message_created[0])
+    const time_created = helpers.friendlyDate(message_created[0])
 
     // Message image
     let message_image
