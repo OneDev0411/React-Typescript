@@ -34,6 +34,9 @@ export default class NewTransaction extends Component {
     window.onkeyup = (e) => {
       switch (e.which) {
         case 27:
+          // If has contact
+          if (AppStore.data.new_transaction.contacts_added)
+            return
           // If modal already showing
           if (AppStore.data.new_transaction.show_cancel_confirm) {
             delete AppStore.data.new_transaction.show_cancel_confirm
@@ -120,13 +123,15 @@ export default class NewTransaction extends Component {
     AppStore.emitChange()
   }
 
-  addContact(contact, module_type) {
+  addContact(contact, module_type, input_field) {
     AppDispatcher.dispatch({
       action: 'add-contact',
       contact,
       module_type
     })
     AppStore.data.new_transaction.contacts_added = AppStore.data.contacts_added
+    input_field.value = ''
+    delete AppStore.data.filtered_contacts
     AppStore.emitChange()
   }
 
@@ -152,6 +157,8 @@ export default class NewTransaction extends Component {
     delete AppStore.data.show_create_contact_modal
     delete AppStore.data.new_transaction.show_add_custom_listing_modal
     delete AppStore.data.new_transaction.show_cancel_confirm
+    delete AppStore.data.new_transaction.show_date_picker
+    delete AppStore.data.new_transaction.date_type_key
     AppStore.emitChange()
   }
 
@@ -235,6 +242,9 @@ export default class NewTransaction extends Component {
 
   addListing(listing) {
     AppStore.data.new_transaction.listing_added = listing
+    delete AppStore.data.new_transaction.listings_found
+    delete AppStore.data.new_transaction.listing_searching
+    delete AppStore.data.new_transaction.listing_q
     AppStore.emitChange()
   }
 
@@ -280,6 +290,7 @@ export default class NewTransaction extends Component {
     if (!AppStore.data.new_transaction.selected_day)
       AppStore.data.new_transaction.selected_day = {}
     AppStore.data.new_transaction.selected_day[date_type] = day
+    this.hideModal()
     AppStore.emitChange()
   }
 
@@ -337,6 +348,12 @@ export default class NewTransaction extends Component {
   handleCancelClick(e) {
     e.preventDefault()
     this.showCancelModal()
+  }
+
+  showDatePickerModal(date_type_key) {
+    AppStore.data.new_transaction.show_date_picker = true
+    AppStore.data.new_transaction.date_type_key = date_type_key
+    AppStore.emitChange()
   }
 
   render() {
@@ -399,7 +416,7 @@ export default class NewTransaction extends Component {
               setFilteredContacts={ this.setFilteredContacts.bind(this) }
               setContactActive={ this.setContactActive.bind(this) }
               hideContactsForm={ this.hideContactsForm }
-              addContact={ this.addContact }
+              addContact={ this.addContact.bind(this) }
               removeContact={ this.removeContact }
               showCreateContactModal={ this.showCreateContactModal }
               hideModal={ this.hideModal }
@@ -414,7 +431,7 @@ export default class NewTransaction extends Component {
               setFilteredContacts={ this.setFilteredContacts.bind(this) }
               setContactActive={ this.setContactActive.bind(this) }
               hideContactsForm={ this.hideContactsForm }
-              addContact={ this.addContact }
+              addContact={ this.addContact.bind(this) }
               removeContact={ this.removeContact }
               showCreateContactModal={ this.showCreateContactModal }
               hideModal={ this.hideModal }
@@ -449,6 +466,8 @@ export default class NewTransaction extends Component {
             <AddDates
               data={ data }
               selectDay={ this.selectDay }
+              hideModal={ this.hideModal }
+              showDatePickerModal={ this.showDatePickerModal }
             />
           )
           break

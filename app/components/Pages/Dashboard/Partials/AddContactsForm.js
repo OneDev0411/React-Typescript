@@ -85,7 +85,7 @@ export default class AddContactsForm extends Component {
   }
 
   addContact(contact, module_type) {
-    this.props.addContact(contact, module_type)
+    this.props.addContact(contact, module_type, this.refs.search_contacts.refs.input)
   }
 
   removeContact(contact_id, module_type) {

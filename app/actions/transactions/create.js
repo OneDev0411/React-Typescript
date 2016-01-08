@@ -42,6 +42,11 @@ export default (user, new_transaction) => {
     if (response.status === 'success') {
       delete AppStore.data.new_transaction.saving
       AppStore.data.new_transaction.saved = true
+      const transaction = response.data
+      AppStore.data.current_transaction = transaction
+      if (!AppStore.data.transaction_tabs)
+        AppStore.data.transaction_tabs = []
+      AppStore.data.transaction_tabs.push(transaction)
       AppStore.data.new_transaction.redirect_to = '/dashboard/transactions'
       AppStore.emitChange()
     } else {

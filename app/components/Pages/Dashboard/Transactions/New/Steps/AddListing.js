@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { Button, Input, Modal, Col } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
-import helpers from '../../../../../../utils/helpers'
+import listing_util from '../../../../../../utils/listing'
 
 export default class AddListing extends Component {
 
@@ -59,6 +59,7 @@ export default class AddListing extends Component {
 
   addListing(listing) {
     const listings_found = this.props.data.new_transaction.listings_found
+    this.refs.q.refs.input.value = ''
     this.props.addListing(listing)
     const listing_id = listing.id
     const listing_index = _.findIndex(listings_found, { id: listing_id })
@@ -89,21 +90,24 @@ export default class AddListing extends Component {
         if (listing_added && listing_added.mls_number === listing.mls_number)
           bg_color = ' bg-dff0d8'
 
-        let cover_image = <div style={ S('bg-333 h-70 w-100 color-fff text-center pt-22') }>No Image</div>
+        let cover_image = <div style={ S('bg-929292 w-87 h-50 color-fff text-center pt-15') }>No Image</div>
         if (listing.cover_image_url) {
           cover_image = (
-            <img style={ S('w-100') } src={ listing.cover_image_url } />
+            <div style={ S(`w-87 h-50 bg-cover bg-center bg-url(${listing.cover_image_url})`) }></div>
           )
         }
         return (
-          <div key={ listing.id } className="search-listings__listing" onClick={ this.addListing.bind(this, listing) } style={ S('br-3 relative pointer mb-5 p-10 ' + bg_color) }>
-            <div>
-              <div className="pull-left" style={ S('mr-10 w-100 minh-70') }>{ cover_image }</div>
+          <div key={ listing.id } className="search-listings__listing" onClick={ this.addListing.bind(this, listing) } style={ S('br-3 h-62 relative pointer p-5 ' + bg_color) }>
+            <div className="pull-left" style={ S('mr-10') }>{ cover_image }</div>
+            <div style={ S('mt-5') } className="pull-left">
               <span style={ S('color-666') }>
-                { listing.address.street_number } { listing.address.street_name } { listing.address.street_suffix } { listing.address.city }, { listing.address.state }<br/>
-                ${ helpers.numberWithCommas(listing.price) }<br/>
-                { listing.status }<br/>
-                MLS: { listing.mls_number }
+                <span style={ S('mr-10') }><b>{ listing.address.street_number } { listing.address.street_name } { listing.address.street_suffix }</b></span>
+                <span style={ S('mr-10 font-12 color-929292') }>
+                  <span style={ S('font-20 t-5 absolute color-' + listing_util.getStatusColor(listing.status)) }>&#8226;</span>
+                  <span style={ S('ml-12') }>{ listing.status }</span>
+                </span>
+                <br/>
+                <span style={ S('color-929292 font-10') }>{ listing.address.city }, { listing.address.state }</span>
               </span>
             </div>
             <div className="clearfix"></div>
@@ -144,8 +148,7 @@ export default class AddListing extends Component {
 
       listing_added_markup = (
         <div style={ S('h-25 relative bg-3388ff br-100 color-fff p-3 pl-0 pr-10 mb-10 mr-10 pointer') } className="pull-left">
-          <div onClick={ this.props.showListingModal.bind(this) } style={ S('w-25 h-25 bg-cover bg-url(' + listing_added.cover_image_url + ') l-0 t-0 absolute br-100') }>
-          </div>
+          <div onClick={ this.props.showListingModal.bind(this) } style={ S('w-25 h-25 bg-cover bg-url(' + listing_added.cover_image_url + ') l-0 t-0 absolute br-100') }></div>
           <div style={ S('ml-30') }>
             <span onClick={ this.props.showListingModal.bind(this) }>{ listing_full_address }</span>&nbsp;&nbsp;<span onClick={ this.props.removeAddedListing.bind(this) } style={ S('pointer') }>x</span>
           </div>

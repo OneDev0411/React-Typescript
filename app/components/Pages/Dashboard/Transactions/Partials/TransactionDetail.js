@@ -113,7 +113,7 @@ export default class TransactionDetail extends Component {
               <div style={ S('mb-15 mr-20 pull-left') }><b>Sqft:</b> <span style={ S('color-929292') }>{ square_feet }</span></div>
               <div className="clearfix"></div>
             </div>
-            <div style={ S('mb-70') }>
+            <div style={ S('mb-100') }>
               <Button style={ S('bc-929292 color-929292 pl-20 pr-20 mr-15') }><b>View More</b></Button>
               <Button style={ S('bc-3388ff color-3388ff pl-40 pr-40') }><b>Edit</b></Button>
             </div>
@@ -123,7 +123,7 @@ export default class TransactionDetail extends Component {
                   const contact_style = S('mb-20 mr-15 w-200 h-80')
                   const info_style = {
                     overflow: 'hidden',
-                    textOverflow: 'ellipsis',
+                    textOverflow: 'ellipsis'
                   }
                   return (
                     <div className="pull-left" style={ contact_style } key={ 'contact-' + contact.id }>

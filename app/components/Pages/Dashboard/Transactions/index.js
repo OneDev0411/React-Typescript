@@ -17,6 +17,7 @@ import TransactionDispatcher from '../../../../dispatcher/TransactionDispatcher'
 import SideBar from '../Partials/SideBar'
 import Header from '../Partials/Header'
 import TransactionDetail from './Partials/TransactionDetail'
+import Loading from '../../../Partials/Loading'
 
 // Helpers
 import helpers from '../../../../utils/helpers'
@@ -227,6 +228,14 @@ export default class Transactions extends Component {
     } else {
       main_content = (
         <div>No transactions yet.  Maybe this needs to say something snarky or clever.</div>
+      )
+    }
+
+    if (data.getting_transactions) {
+      main_content = (
+        <div>
+          <Loading />
+        </div>
       )
     }
 
