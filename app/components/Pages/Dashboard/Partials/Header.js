@@ -30,7 +30,8 @@ export default class Header extends Component {
       title = `Tasks`
     // Transactions
     if (path === '/dashboard/transactions') {
-      title = `${transactions ? transactions.length : ''} Transaction${ transactions.length !== 1 ? 's' : ''}`
+      const has_s = !transactions || transactions.length !== 1 ? 's' : ''
+      title = `${transactions ? transactions.length : ''} Transaction${has_s}`
       const transaction_tabs = data.transaction_tabs
       const current_transaction = data.current_transaction
       let transaction_tabs_markup
