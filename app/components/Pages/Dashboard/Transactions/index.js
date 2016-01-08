@@ -47,10 +47,12 @@ export default class Transactions extends Component {
 
   getTransactions() {
     const data = this.props.data
-    TransactionDispatcher.dispatch({
-      action: 'get-all',
-      user: data.user
-    })
+    if (!data.transactions) {
+      TransactionDispatcher.dispatch({
+        action: 'get-all',
+        user: data.user
+      })
+    }
   }
 
   deleteTransaction(id) {
