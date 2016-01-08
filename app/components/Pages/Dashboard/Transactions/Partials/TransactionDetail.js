@@ -102,7 +102,7 @@ export default class TransactionDetail extends Component {
           <div style={ S('w-480 mr-15 mb-30') } className="pull-left">
             { listing_images }
           </div>
-          <div style={ S('w-380') } className="pull-left">
+          <div style={ S('w-500') } className="pull-left">
             <div style={ S('mb-20') }>
               <div style={ S('mb-15 mr-20 pull-left') }><b>MLS#:</b> <span style={ S('color-929292') }>{ mls_number }</span></div>
               <div style={ S('mb-15 mr-20 pull-left') }><b>Transaction Type:</b> <span style={ S('color-929292') }>{ transaction_type }</span></div>
@@ -120,15 +120,20 @@ export default class TransactionDetail extends Component {
             <div>
               {
                 contacts.map(contact => {
+                  const contact_style = S('mb-20 mr-15 w-200 h-80')
+                  const info_style = {
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }
                   return (
-                    <div className="pull-left" style={ S('mb-20') } key={ 'contact-' + contact.id }>
+                    <div className="pull-left" style={ contact_style } key={ 'contact-' + contact.id }>
                       <ProfileImage user={ contact }/>
                       <div style={ S('ml-50') }>
                         <div><b>{ contact.first_name } { contact.last_name }</b></div>
                         <div style={ S('color-929292') }>
-                          <div>{ contact.roles[0] }</div>
-                          <div>{ contact.phone_number }</div>
-                          <div>{ contact.email }</div>
+                          <div style={ info_style }>{ contact.roles[0] }</div>
+                          <div style={ info_style }>{ contact.phone_number }</div>
+                          <div style={ info_style }><a style={{ textDecoration: 'none' }} href={ 'mailto:' + contact.email}>{ contact.email }</a></div>
                         </div>
                       </div>
                     </div>
