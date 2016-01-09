@@ -92,6 +92,12 @@ export default class AddContactsForm extends Component {
     this.props.removeContact(contact_id, module_type)
   }
 
+  showNewContentInitials() {
+    const first_initial = this.refs.first_name.refs.input.value.charAt(0)
+    const last_initial = this.refs.last_name.refs.input.value.charAt(0)
+    this.props.showNewContentInitials(first_initial, last_initial)
+  }
+
   render() {
     const data = this.props.data
     const module_type = this.props.module_type
@@ -160,6 +166,34 @@ export default class AddContactsForm extends Component {
         <Alert bsStyle="success">New contact created.</Alert>
       )
     }
+    if (data.new_contact_modal && data.new_contact_modal.errors) {
+      message = (
+        <Alert bsStyle="danger">All fields are required.</Alert>
+      )
+    }
+    if (data.new_contact_modal && data.new_contact_modal.email_invalid) {
+      message = (
+        <Alert bsStyle="danger">Email is invalid.</Alert>
+      )
+    }
+
+    const input_style = {
+      border: 'none'
+    }
+    const row_style = {
+      borderBottom: '1px solid #f3f3f3',
+      marginLeft: '-15px',
+      marginRight: '-15px'
+    }
+    const column_style = {
+      paddingTop: '15px'
+    }
+    let first_initial
+    let last_initial
+    if (data.new_contact_modal && data.new_contact_modal.first_initial)
+      first_initial = data.new_contact_modal.first_initial.toUpperCase()
+    if (data.new_contact_modal && data.new_contact_modal.last_initial)
+      last_initial = data.new_contact_modal.last_initial.toUpperCase()
     return (
       <div className="add-contact-form" >
         <div style={ S('maxw-620 minh-35') }>
@@ -177,34 +211,50 @@ export default class AddContactsForm extends Component {
         { filtered_contacts_markup }
         <Modal show={ data.show_create_contact_modal } onHide={ this.props.hideModal.bind(this) }>
           <form onSubmit={ this.props.createContact.bind(this) }>
-            <Modal.Header closeButton>
-              <Modal.Title>Add New Contact</Modal.Title>
+            <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
+              <Modal.Title style={ S('font-14') }>Add New Contact</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               { message }
-              <Col xs={6}>
-                <Input type="text" ref="first_name" placeholder="FIRST NAME"/>
-              </Col>
-              <Col xs={6}>
-                <Input type="text" ref="last_name" placeholder="LAST NAME"/>
-              </Col>
-              <Col xs={6}>
-                <Input type="text" ref="phone_number" placeholder="PHONE NUMBER"/>
-              </Col>
-              <Col xs={6}>
-                <Input type="text" ref="email" placeholder="EMAIL"/>
-              </Col>
-              <Col xs={6}>
-                <Input type="text" ref="company" placeholder="COMPANY"/>
-              </Col>
-              <Col xs={6}>
-                <Input type="text" ref="role" placeholder="ROLE"/>
-              </Col>
+              <div style={ row_style }>
+                <Col xs={2}>
+                  <div style={ S('absolute br-100 bg-dae9fd w-60 t-5n h-60 font-24 color-fff p-13 text-center') }>
+                    <b>{ first_initial }{ last_initial }</b>
+                  </div>
+                </Col>
+                <Col xs={5} style={ column_style }>
+                  <Input style={ input_style } onKeyUp={ this.showNewContentInitials.bind(this) } type="text" ref="first_name" placeholder="FIRST NAME"/>
+                </Col>
+                <Col xs={5} style={ column_style }>
+                  <Input style={ input_style } onKeyUp={ this.showNewContentInitials.bind(this) } type="text" ref="last_name" placeholder="LAST NAME"/>
+                </Col>
+                <div className="clearfix"></div>
+              </div>
+              <div style={ row_style }>
+                <Col xs={2} style={ column_style }/>
+                <Col xs={5} style={ column_style }>
+                  <Input style={ input_style } type="text" ref="phone_number" placeholder="PHONE NUMBER"/>
+                </Col>
+                <Col xs={5} style={ column_style }>
+                  <Input style={ input_style } type="text" ref="email" placeholder="EMAIL"/>
+                </Col>
+                <div className="clearfix"></div>
+              </div>
+              <div style={ row_style }>
+                <Col xs={2} style={ column_style }/>
+                <Col xs={5} style={ column_style }>
+                  <Input style={ input_style } type="text" ref="company" placeholder="COMPANY"/>
+                </Col>
+                <Col xs={5} style={ column_style }>
+                  <Input style={ input_style } type="text" ref="role" placeholder="ROLE"/>
+                </Col>
+                <div className="clearfix"></div>
+              </div>
               <div className="clearfix"></div>
             </Modal.Body>
-            <Modal.Footer>
-              <Button onClick={ this.props.hideModal.bind(this) }>Cancel</Button>
-              <Button className={ data.creating_contacts ? 'disabled' : '' } type="submit" bsStyle="primary">
+            <Modal.Footer style={ { border: 'none' } }>
+              <Button bsStyle="link" onClick={ this.props.hideModal.bind(this) }>Cancel</Button>
+              <Button style={ S('h-30 pt-5 pl-30 pr-30') } className={ data.creating_contacts ? 'disabled' : '' } type="submit" bsStyle="primary">
                 { data.creating_contacts ? 'Adding...' : 'Add' }
               </Button>
             </Modal.Footer>
@@ -228,5 +278,6 @@ AddContactsForm.propTypes = {
   showCreateContactModal: React.PropTypes.func,
   hideModal: React.PropTypes.func,
   createContact: React.PropTypes.func,
-  module_type: React.PropTypes.string
+  module_type: React.PropTypes.string,
+  showNewContentInitials: React.PropTypes.func
 }

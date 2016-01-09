@@ -25,6 +25,7 @@ export default class AddContacts extends Component {
           showCreateContactModal={ this.props.showCreateContactModal }
           hideModal={ this.props.hideModal }
           createContact={ this.props.createContact }
+          showNewContentInitials={ this.props.showNewContentInitials }
         />
       </div>
     )
@@ -41,5 +42,6 @@ AddContacts.propTypes = {
   removeContact: React.PropTypes.func,
   showCreateContactModal: React.PropTypes.func,
   hideModal: React.PropTypes.func,
-  createContact: React.PropTypes.func
+  createContact: React.PropTypes.func,
+  showNewContentInitials: React.PropTypes.func
 }

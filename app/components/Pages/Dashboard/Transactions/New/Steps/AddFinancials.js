@@ -21,8 +21,8 @@ export default class AddFinancials extends Component {
     const listing_added = new_transaction.listing_added
     let price
     let contract_price
-    let agent_commission = 3
-    let co_agent_commission = 1
+    let agent_commission
+    let co_agent_commission
     if (listing_added) {
       price = listing_added.price
       contract_price = listing_added.contract_price

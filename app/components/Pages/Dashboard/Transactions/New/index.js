@@ -4,6 +4,7 @@ import { Link } from 'react-router'
 import { Button, Breadcrumb, BreadcrumbItem, Alert, Modal, Navbar, Nav } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
+import validator from 'validator'
 
 // AppStore
 import AppStore from '../../../../../stores/AppStore'
@@ -159,6 +160,8 @@ export default class NewTransaction extends Component {
     delete AppStore.data.new_transaction.show_cancel_confirm
     delete AppStore.data.new_transaction.show_date_picker
     delete AppStore.data.new_transaction.date_type_key
+    delete AppStore.data.new_contact_modal
+    delete AppStore.data.creating_contacts
     AppStore.emitChange()
   }
 
@@ -172,6 +175,31 @@ export default class NewTransaction extends Component {
     const phone_number = this.refs.phone_number.refs.input.value
     const company = this.refs.company.refs.input.value
     const role = this.refs.role.refs.input.value
+
+    // Reset errors
+    if (AppStore.data.new_contact_modal) {
+      delete AppStore.data.new_contact_modal.errors
+      delete AppStore.data.new_contact_modal.email_invalid
+    }
+
+    // Validations
+    if (!AppStore.data.new_contact_modal)
+      AppStore.data.new_contact_modal = {}
+
+    if (!first_name.trim() || !last_name.trim() || !email.trim()) {
+      AppStore.data.new_contact_modal.errors = true
+      AppStore.data.creating_contacts = false
+      AppStore.emitChange()
+      return
+    }
+
+    if (!validator.isEmail(email)) {
+      AppStore.data.new_contact_modal.email_invalid = true
+      AppStore.data.creating_contacts = false
+      AppStore.emitChange()
+      return
+    }
+
     const contact = {
       first_name,
       last_name,
@@ -356,6 +384,14 @@ export default class NewTransaction extends Component {
     AppStore.emitChange()
   }
 
+  showNewContentInitials(first_initial, last_initial) {
+    AppStore.data.new_contact_modal = {
+      first_initial,
+      last_initial
+    }
+    AppStore.emitChange()
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -421,6 +457,7 @@ export default class NewTransaction extends Component {
               showCreateContactModal={ this.showCreateContactModal }
               hideModal={ this.hideModal }
               createContact={ this.createContact }
+              showNewContentInitials={ this.showNewContentInitials }
             />
           )
           break
@@ -436,6 +473,7 @@ export default class NewTransaction extends Component {
               showCreateContactModal={ this.showCreateContactModal }
               hideModal={ this.hideModal }
               createContact={ this.createContact }
+              showNewContentInitials={ this.showNewContentInitials }
             />
           )
           break
