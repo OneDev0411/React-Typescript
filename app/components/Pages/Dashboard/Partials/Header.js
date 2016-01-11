@@ -76,7 +76,7 @@ export default class Header extends Component {
 
     return (
       <header style={ S('pl-183') }>
-        <div className="bg-aqua" style={ nav_bar_style } fluid>
+        <div style={ nav_bar_style } fluid>
           <div>
             <div style={ S('pl-15 w-100p') }>
               <h2 style={ S('font-22 mt-20') }>

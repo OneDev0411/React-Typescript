@@ -13,7 +13,7 @@ export default class SideBar extends Component {
     // Data
     const data = this.props.data
     const sidebar_height = window.innerHeight
-    const sidebar_style = S('bg-fff w-183 absolute pl-0 t-0 h-' + sidebar_height)
+    const sidebar_style = S('w-183 absolute pl-0 t-0 h-' + sidebar_height)
     const path = data.path
 
     const active = {}
@@ -38,7 +38,7 @@ export default class SideBar extends Component {
     const last_name = user.last_name
 
     return (
-      <aside style={ sidebar_style } className="sidebar--dashboard pull-left">
+      <aside style={ sidebar_style } className="sidebar--dashboard pull-left bg-aqua">
         <div style={ S('mt-25 ml-10 mb-20 pointer') }>
           <img src="/images/dashboard/icons/hamburger.svg"/>
         </div>

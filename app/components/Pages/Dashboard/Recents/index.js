@@ -19,53 +19,11 @@ import io from 'socket.io-client'
 
 export default class Dashboard extends Component {
 
-  componentWillMount() {
-    this.init()
-  }
-
   componentDidMount() {
-    window.addEventListener('resize', this.handleResize)
-
-    // Listen for new messages
-    const socket = io(config.socket.server)
-    const data = AppStore.data
-    socket.emit('Authenticate', data.user.access_token)
-
-    // Listen for new message
-    socket.on('Message.Sent', (room, message) => {
-      const current_room = AppStore.data.current_room
-      // If in this room
-      if (current_room.id === room.id) {
-        if (data.user.id === message.author.id)
-          message.fade_in = true
-        AppStore.data.messages.push(message)
-        const rooms = AppStore.data.rooms
-        const current_room_index = _.findIndex(rooms, { id: current_room.id })
-        AppStore.data.rooms[current_room_index].latest_message = message
-        AppStore.emitChange()
-        if (data.user.id !== message.author.id)
-          this.checkNotification(message)
-      }
-    })
-    // Listen for typing
-    socket.on('User.Typing', (response) => {
-      const author_id = response.user_id
-      const room_id = response.room_id
-      AppStore.data.is_typing = {
-        author_id,
-        room_id
-      }
-      delete AppStore.data.current_room.viewing_previous
-      AppStore.emitChange()
-    })
-    socket.on('User.TypingEnded', () => {
-      delete AppStore.data.is_typing
-      AppStore.emitChange()
-    })
-    socket.on('Room.OnlineUsers', () => {
-      // console.log(response)
-      // AppStore.emitChange()
-    })
+    // If already mounted
+    if (AppStore.data.mounted && AppStore.data.mounted.indexOf('recents') !== -1)
+      return
+    this.init()
   }
 
   componentWillUpdate() {
@@ -275,6 +233,52 @@ export default class Dashboard extends Component {
   init() {
     this.addUserToStore()
     this.getUserRooms()
+    window.addEventListener('resize', this.handleResize)
+
+    // Listen for new messages
+    const socket = io(config.socket.server)
+    const data = AppStore.data
+    socket.emit('Authenticate', data.user.access_token)
+
+    // Listen for new message
+    socket.on('Message.Sent', (room, message) => {
+      const current_room = AppStore.data.current_room
+      // If in this room
+      if (current_room.id === room.id) {
+        if (data.user.id === message.author.id)
+          message.fade_in = true
+        AppStore.data.messages.push(message)
+        const rooms = AppStore.data.rooms
+        const current_room_index = _.findIndex(rooms, { id: current_room.id })
+        AppStore.data.rooms[current_room_index].latest_message = message
+        AppStore.emitChange()
+        if (data.user.id !== message.author.id)
+          this.checkNotification(message)
+      }
+    })
+    // Listen for typing
+    socket.on('User.Typing', (response) => {
+      const author_id = response.user_id
+      const room_id = response.room_id
+      AppStore.data.is_typing = {
+        author_id,
+        room_id
+      }
+      delete AppStore.data.current_room.viewing_previous
+      AppStore.emitChange()
+    })
+    socket.on('User.TypingEnded', () => {
+      delete AppStore.data.is_typing
+      AppStore.emitChange()
+    })
+    socket.on('Room.OnlineUsers', () => {
+      // console.log(response)
+      // AppStore.emitChange()
+    })
+    // Add mounted recents to store
+    if (!AppStore.data.mounted)
+      AppStore.data.mounted = []
+    AppStore.data.mounted.push('recents')
   }
 
   render() {
