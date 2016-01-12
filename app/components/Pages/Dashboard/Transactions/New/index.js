@@ -64,6 +64,8 @@ export default class NewTransaction extends Component {
   }
 
   getBreadCrumbs(step) {
+    const data = this.props.data
+    const contacts_added = data.new_transaction.contacts_added
     let type_active = false
     let contacts_active = false
     let entries_active = false
@@ -91,7 +93,10 @@ export default class NewTransaction extends Component {
       <BreadcrumbItem key={ 'breadcrumb-6' } onClick={ this.handleGoToStep.bind(this, 5) } active={ dates_active }>Important dates</BreadcrumbItem>
     ]
     return breadcrumb_items.filter((item, i) => {
-      return i <= step
+      if (i <= step)
+        return item
+      if (contacts_added && contacts_added.client.length)
+        return item
     })
   }
 
@@ -355,16 +360,22 @@ export default class NewTransaction extends Component {
     e.preventDefault()
     // TODO
     const address = this.refs.address.value
-    const status = this.refs.status.value
     const city = this.refs.city.value
     const state = this.refs.state.value
     const zip = this.refs.zip.value
     AppStore.data.new_transaction.property_added = {
       address,
-      status,
       city,
       state,
-      zip
+      zip,
+      property: {
+        address: {
+          street_number: address,
+          city,
+          state,
+          postal_code: zip
+        }
+      }
     }
     AppStore.emitChange()
     this.hideModal()
@@ -410,7 +421,6 @@ export default class NewTransaction extends Component {
 
     let buying_class = 'dashed '
     let selling_class = 'dashed '
-    let buysell_class = 'dashed '
     let lease_class = 'dashed '
 
     if (new_transaction && new_transaction.type === 'Buyer')
@@ -418,9 +428,6 @@ export default class NewTransaction extends Component {
 
     if (new_transaction && new_transaction.type === 'Seller')
       selling_class = 'btn-primary'
-
-    if (new_transaction && new_transaction.type === 'Buyer/Seller')
-      buysell_class = 'btn-primary'
 
     if (new_transaction && new_transaction.type === 'Lease')
       lease_class = 'btn-primary'
@@ -438,7 +445,6 @@ export default class NewTransaction extends Component {
           <div>
             <Button bsStyle="default" onClick={ this.handleTypeClick.bind(this, 'Buyer') } style={ btn_style_first } className={ buying_class }>Buying</Button>
             <Button bsStyle="default" onClick={ this.handleTypeClick.bind(this, 'Seller') } style={ btn_style } className={ selling_class }>Selling</Button>
-            { /* <Button bsStyle="default" onClick={ this.handleTypeClick.bind(this, 'Buyer/Seller') } style={ btn_style } className={ buysell_class }>Buying & Selling</Button> */ }
             <Button bsStyle="default" onClick={ this.handleTypeClick.bind(this, 'Lease') } style={ btn_style } className={ lease_class }>Leasing</Button>
           </div>
         </div>
@@ -579,7 +585,7 @@ export default class NewTransaction extends Component {
 
     const save_button = (
       <Button onClick={ this.createTransaction.bind(this) } style={ S('absolute r-10 t-10') } className={ new_transaction && new_transaction.saving ? ' disabled' : '' } type="button" bsStyle="primary">
-        { new_transaction && new_transaction.saving ? 'Saving...' : 'Save and Quit' }
+        { new_transaction && new_transaction.saving ? 'Saving...' : 'Skip all' }
       </Button>
     )
 

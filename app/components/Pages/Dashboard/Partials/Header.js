@@ -44,7 +44,7 @@ export default class Header extends Component {
           return (
             <NavItem onClick={ this.props.viewTransaction.bind(this, transaction) } key={ 'transaction-tab-' + transaction.id } eventKey={ transaction.id }>
               { tab_title }
-              <div onClick={ this.removeTransactionTab.bind(this, transaction.id) } style={ S('ml-10 relative t-2n pointer') } className="close">
+              <div onClick={ this.removeTransactionTab.bind(this, transaction.id) } style={ S('relative l-8 w-23 h-25 bg-ccc text-center t-4n pointer') } className="close">
                 &times;
               </div>
             </NavItem>
@@ -57,7 +57,7 @@ export default class Header extends Component {
       transaction_nav_markup = (
         <div>
           <Nav className="table--tabbable__tabs" style={ S('b-1n absolute ml-15') } bsStyle="tabs" activeKey={ active_tab }>
-            <NavItem onClick={ this.props.viewTransaction.bind(this, 'all') } eventKey={'all'}>All transactions</NavItem>
+            <NavItem className="all-transactions-tab" onClick={ this.props.viewTransaction.bind(this, 'all') } eventKey={'all'}>All transactions</NavItem>
             { transaction_tabs_markup }
           </Nav>
           <Link style={ S('absolute r-15 t-15') } className="btn btn-primary" to="/dashboard/transactions/new">+ Add Transaction</Link>
