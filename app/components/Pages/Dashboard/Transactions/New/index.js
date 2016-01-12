@@ -333,7 +333,7 @@ export default class NewTransaction extends Component {
     }
     AppStore.emitChange()
     setTimeout(() => {
-      this.refs.address.refs.input.focus()
+      this.refs.address.focus()
     }, 100)
   }
 
@@ -346,22 +346,28 @@ export default class NewTransaction extends Component {
     }, 100)
   }
 
+  removeAddedProperty() {
+    delete AppStore.data.new_transaction.property_added
+    AppStore.emitChange()
+  }
+
   addCustomListingInfo(e) {
     e.preventDefault()
     // TODO
-    // const address = this.refs.address.refs.input.value
-    // const status = this.refs.status.refs.input.value
-    // const city = this.refs.city.refs.input.value
-    // const state = this.refs.state.refs.input.value
-    // const zip = this.refs.zip.refs.input.value
-    // const listing_added = {
-    //   address,
-    //   status,
-    //   city,
-    //   state,
-    //   zip
-    // }
-    // console.log(listing_added)
+    const address = this.refs.address.value
+    const status = this.refs.status.value
+    const city = this.refs.city.value
+    const state = this.refs.state.value
+    const zip = this.refs.zip.value
+    AppStore.data.new_transaction.property_added = {
+      address,
+      status,
+      city,
+      state,
+      zip
+    }
+    AppStore.emitChange()
+    this.hideModal()
   }
 
   showCancelModal() {
@@ -432,7 +438,7 @@ export default class NewTransaction extends Component {
           <div>
             <Button bsStyle="default" onClick={ this.handleTypeClick.bind(this, 'Buyer') } style={ btn_style_first } className={ buying_class }>Buying</Button>
             <Button bsStyle="default" onClick={ this.handleTypeClick.bind(this, 'Seller') } style={ btn_style } className={ selling_class }>Selling</Button>
-            <Button bsStyle="default" onClick={ this.handleTypeClick.bind(this, 'Buyer/Seller') } style={ btn_style } className={ buysell_class }>Buying & Selling</Button>
+            { /* <Button bsStyle="default" onClick={ this.handleTypeClick.bind(this, 'Buyer/Seller') } style={ btn_style } className={ buysell_class }>Buying & Selling</Button> */ }
             <Button bsStyle="default" onClick={ this.handleTypeClick.bind(this, 'Lease') } style={ btn_style } className={ lease_class }>Leasing</Button>
           </div>
         </div>
@@ -488,6 +494,7 @@ export default class NewTransaction extends Component {
               showListingModal={ this.showListingModal }
               addCustomListingInfo={ this.addCustomListingInfo }
               removeAddedListing={ this.removeAddedListing }
+              removeAddedProperty={ this.removeAddedProperty }
             />
           )
           break

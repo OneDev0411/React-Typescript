@@ -68,12 +68,17 @@ export default class AddListing extends Component {
     this.refs.q.refs.input.focus()
   }
 
+  hideModal() {
+    this.props.hideModal()
+  }
+
   render() {
     // Data
     const data = this.props.data
     const new_transaction = data.new_transaction
     const active_listing = new_transaction.active_listing
     const listing_added = new_transaction.listing_added
+    const property_added = new_transaction.property_added
     let listing_results
     let bg_color
     // Check listing matches query (because there's no fetch abort yet)
@@ -145,7 +150,6 @@ export default class AddListing extends Component {
       listing_address = listing_added.address.street_number + ' ' +
       listing_added.address.street_name + ' ' + listing_added.address.street_suffix
       const listing_full_address = listing_address + ' ' + listing_added.address.city + ', ' + listing_added.address.state + ' ' + listing_added.address.postal_code
-
       listing_added_markup = (
         <div style={ S('h-25 relative bg-3388ff br-100 color-fff p-3 pl-0 pr-10 mb-10 mr-10 pointer') } className="pull-left">
           <div onClick={ this.props.showListingModal.bind(this) } style={ S('w-25 h-25 bg-cover bg-url(' + listing_added.cover_image_url + ') l-0 t-0 absolute br-100') }></div>
@@ -155,17 +159,32 @@ export default class AddListing extends Component {
         </div>
       )
     }
+    if (property_added) {
+      listing_added_markup = (
+        <div style={ S('h-25 relative bg-3388ff br-100 color-fff p-3 pl-0 pr-10 mb-10 mr-10 pointer') } className="pull-left">
+          <div style={ S('ml-30') }>
+            <span onClick={ this.props.showListingModal.bind(this) }>{ property_added.address + ' ' + property_added.city + ' ' + property_added.state + ' ' + property_added.zip }</span>&nbsp;&nbsp;<span onClick={ this.props.removeAddedProperty.bind(this) } style={ S('pointer') }>x</span>
+          </div>
+        </div>
+      )
+    }
     let listing_image
     if (listing_added && listing_added.cover_image_url) {
       listing_image = (
-        <div style={ S(`relative w-100p h-270 bg-center bg-cover bg-url(${listing_added.cover_image_url})`) }></div>
+        <div style={ S(`absolute w-100p h-100p bg-center bg-cover bg-url(${listing_added.cover_image_url})`) }></div>
       )
     } else {
       listing_image = (
-        <div style={ S('relative w-100p h-270 bg-center bg-cover bg-333 color-fff pt-110 font-26 text-center') }>
+        <div style={ S('absolute w-100p h-100p bg-center bg-cover bg-eff1f2 color-929292 pt-170 font-26 text-center') }>
           No image
         </div>
       )
+    }
+    const input_style = {
+      border: 'none'
+    }
+    const row_style = {
+      borderBottom: '1px solid #f3f3f3'
     }
     return (
       <div>
@@ -184,55 +203,78 @@ export default class AddListing extends Component {
           <Button onClick={ this.props.showListingModal.bind(this, 'new') } className="pull-left" style={ S('w-160') } bsStyle="primary" type="button">
             Add New Property
           </Button>
-          <Modal bsSize="large" show={ data.new_transaction.show_add_custom_listing_modal } onHide={ this.props.hideModal.bind(this) }>
+          <Modal dialogClassName="property-modal" show={ data.new_transaction.show_add_custom_listing_modal } onHide={ this.props.hideModal.bind(this) }>
             <form onSubmit={ this.props.addCustomListingInfo.bind(this) }>
-              <Modal.Body style={ S('p-0') }>
-                <Col xs={5} style={ S('p-0') }>
+              <Modal.Body style={ S('p-0') } className="flexbox">
+                <Col xs={6} style={ S('p-0') }>
                   { listing_image }
                 </Col>
-                <Col xs={7}>
-                  <Modal.Title style={ S('mt-15 mb-15') }>
-                    Property Info
-                  </Modal.Title>
-                  <Col xs={8} style={ S('pl-0 pr-0') }>
-                    <Input type="text" ref="address" placeholder="ADDRESS" defaultValue={ listing_address }/>
-                  </Col>
-                  <Col xs={4} style={ S('pr-0') }>
-                    <Input type="text" ref="status" placeholder="STATUS" defaultValue={ listing_added ? listing_added.status : '' }/>
-                  </Col>
-                  <Col xs={6} style={ S('pl-0') }>
-                    <Input type="text" ref="city" placeholder="CITY" defaultValue={ listing_added ? listing_added.address.city : '' }/>
-                  </Col>
-                  <Col xs={3} style={ S('p-0') }>
-                    <Input type="text" ref="state" placeholder="STATE" defaultValue={ listing_added ? listing_added.address.state : '' }/>
-                  </Col>
-                  <Col xs={3} style={ S('pr-0') }>
-                    <Input type="text" ref="zip" placeholder="ZIP" defaultValue={ listing_added ? listing_added.address.postal_code : '' }/>
-                  </Col>
-                  <Col xs={6} style={ S('pl-0 pr-0') }>
-                    <Input type="text" ref="year_built" placeholder="YEAR BUILT"/>
-                  </Col>
-                  <Col xs={6} style={ S('pr-0') }>
-                    <Input type="text" ref="property_type" placeholder="PROPERTY TYPE"/>
-                  </Col>
-                  <Col xs={4} style={ S('pl-0') }>
-                    <Input type="text" ref="sqft" placeholder="SQFT"/>
-                  </Col>
-                  <Col xs={4} style={ S('p-0') }>
-                    <Input type="text" ref="beds" placeholder="BEDS"/>
-                  </Col>
-                  <Col xs={4} style={ S('pr-0') }>
-                    <Input type="text" ref="baths" placeholder="BATHS"/>
-                  </Col>
+                <Col xs={6} style={ S('p-0') }>
+                  <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
+                    <Modal.Title style={ S('font-14') }>Property Info</Modal.Title>
+                  </Modal.Header>
+                  <div style={ row_style }>
+                    <Col xs={8} style={ S('pl-0 pr-0') }>
+                      <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>ADDRESS</label>
+                      <input className="form-control" style={ input_style } type="text" ref="address" defaultValue={ listing_address }/>
+                    </Col>
+                    <Col xs={4} style={ S('pr-0') }>
+                      <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>STATUS</label>
+                      <input className="form-control" style={ input_style } type="text" ref="status" defaultValue={ listing_added ? listing_added.status : '' }/>
+                    </Col>
+                    <div className="clearfix"></div>
+                  </div>
+                  <div style={ row_style }>
+                    <Col xs={6} style={ S('pl-0') }>
+                      <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>CITY</label>
+                      <input className="form-control" style={ input_style } type="text" ref="city" defaultValue={ listing_added ? listing_added.address.city : '' }/>
+                    </Col>
+                    <Col xs={3} style={ S('p-0') }>
+                      <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>STATE</label>
+                      <input className="form-control" style={ input_style } type="text" ref="state" defaultValue={ listing_added ? listing_added.address.state : '' }/>
+                    </Col>
+                    <Col xs={3} style={ S('pr-0') }>
+                      <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>ZIP</label>
+                      <input className="form-control" style={ input_style } type="text" ref="zip" defaultValue={ listing_added ? listing_added.address.postal_code : '' }/>
+                    </Col>
+                    <div className="clearfix"></div>
+                  </div>
+                  <div style={ row_style }>
+                    <Col xs={6} style={ S('pl-0 pr-0') }>
+                      <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>YEAR BUILT</label>
+                      <input className="form-control" style={ input_style } type="text" ref="year_built"/>
+                    </Col>
+                    <Col xs={6} style={ S('pr-0') }>
+                      <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>PROPERTY TYPE</label>
+                      <input className="form-control" style={ input_style } type="text" ref="property_type"/>
+                    </Col>
+                    <div className="clearfix"></div>
+                  </div>
+                  <div style={ row_style }>
+                    <Col xs={4} style={ S('pl-0') }>
+                      <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>SQFT</label>
+                      <input className="form-control" style={ input_style } type="text" ref="sqft"/>
+                    </Col>
+                    <Col xs={4} style={ S('p-0') }>
+                      <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>BEDS</label>
+                      <input className="form-control" style={ input_style } type="text" ref="beds"/>
+                    </Col>
+                    <Col xs={4} style={ S('pr-0') }>
+                      <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>BATHS</label>
+                      <input className="form-control" style={ input_style } type="text" ref="baths"/>
+                    </Col>
+                    <div className="clearfix"></div>
+                  </div>
+                  <div className="pull-right" style={ S('p-15 pb-10') }>
+                    <Button bsStyle="link" onClick={ this.hideModal.bind(this) }>Cancel</Button>
+                    <Button style={ S('h-30 pt-5 pl-30 pr-30') } className={ data.creating_property ? 'disabled' : '' } type="submit" bsStyle="primary">
+                      { data.creating_property ? 'Adding...' : 'Add' }
+                    </Button>
+                  </div>
+                  <div className="clearfix"></div>
                 </Col>
                 <div className="clearfix"></div>
               </Modal.Body>
-              <Modal.Footer>
-                <Button bsStyle="link" onClick={ this.props.hideModal.bind(this) }>Cancel</Button>
-                <Button className={ data.creating_contacts ? 'disabled' : '' } type="submit" bsStyle="primary">
-                  { data.creating_contacts ? 'Adding...' : 'Add' }
-                </Button>
-              </Modal.Footer>
             </form>
           </Modal>
         </div>
@@ -252,5 +294,6 @@ AddListing.propTypes = {
   showListingModal: React.PropTypes.func,
   hideModal: React.PropTypes.func,
   addCustomListingInfo: React.PropTypes.func,
-  removeAddedListing: React.PropTypes.func
+  removeAddedListing: React.PropTypes.func,
+  removeAddedProperty: React.PropTypes.func
 }

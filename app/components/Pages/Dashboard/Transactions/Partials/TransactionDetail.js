@@ -60,6 +60,7 @@ export default class TransactionDetail extends Component {
       )
     }
     let mls_number
+    let price_area
     let transaction_type
     let property_type
     let year_built
@@ -74,29 +75,116 @@ export default class TransactionDetail extends Component {
       year_built = property.year_built
       bedroom_count = property.bedroom_count
       bathroom_count = property.bathroom_count
+      price_area = (
+        <span style={ S('color-929394 fw-400') }>${ helpers.numberWithCommas(transaction.contract_price) }</span>
+      )
     }
 
     let square_feet
     if (property)
       square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
 
+    let title_area
+    title_area = (
+      <div>
+        <span style={ S('mr-10') }>{ title }</span> { price_area }
+      </div>
+    )
+
+    let subtitle_area
+    if (mls_number) {
+      subtitle_area = (
+        <div className="pull-left">
+          { subtitle } | <a href="#">MLS#: { mls_number }</a>
+        </div>
+      )
+    }
     const contacts = transaction.contacts
+    const no_border = { border: 'none' }
+
+    // Drawer
+    const drawer = transaction.drawer
+    let drawer_content
+    const drawer_height = window.innerHeight - 153
+    const drawer_style = {
+      ...S('absolute h-' + drawer_height + ' z-100 bg-fff w-500 t-30'),
+      borderTop: '1px solid #edf1f3',
+      borderLeft: '1px solid #edf1f3'
+    }
+    let drawer_class
+    if (drawer) {
+      drawer_class = 'active'
+      const drawer_header_style = S('bg-f7f9fa p-12 font-18 color-4a4a4a')
+      if (drawer.content === 'docs') {
+        drawer_content = (
+          <div>
+            <div style={ drawer_header_style }>Documents</div>
+            <div className="text-center" style={ S('pt-100') }>
+              <div style={ S('mb-10') }>
+                <img src="/images/dashboard/transactions/drag-n-drop.png"/>
+              </div>
+              <div style={ S('color-929292') }>
+                <span style={ S('font-16') }>DRAG & DROP</span><br />
+                <span style={ S('font-14 color-bfc2c3') }>your files to upload, or <a href="#">browse</a></span>
+              </div>
+            </div>
+          </div>
+        )
+      }
+      if (drawer.content === 'contacts') {
+        drawer_content = (
+          <div>
+            <div style={ drawer_header_style }>Contacts</div>
+            <div>
+              {
+                contacts.map((contact) => {
+                  const contact_style = {
+                    ...S('pt-15 pb-15 pl-15'),
+                    borderBottom: '1px solid #f7f9fa'
+                  }
+                  return (
+                    <div style={ contact_style }>
+                      <ProfileImage user={ contact }/>
+                      <div style={ S('ml-50 ') }>
+                        <div><b>{ contact.first_name } { contact.last_name }</b>, <span style={ S('color-929292') }>{ contact.roles[0] }</span></div>
+                        <div style={ S('color-929292') }>
+                          <div>{ contact.phone_number }{ contact.phone_number ? ' ,' : '' } <a style={{ textDecoration: 'none' }} href={ 'mailto:' + contact.email}>{ contact.email }</a></div>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })
+              }
+            </div>
+          </div>
+        )
+      }
+    }
 
     return (
       <div style={ S('minw-800') }>
-        <Button style={ S('absolute r-20') } className={ data.deleting_transaction && data.deleting_transaction === transaction.id ? 'disabled' : '' } onClick={ this.props.deleteTransaction.bind(this, transaction.id) } type="button" bsStyle="danger">
-          { data.deleting_transaction && data.deleting_transaction === transaction.id ? 'Deleting...' : 'Delete' }
-        </Button>
+        <div style={ S('mt-10n mr-15n') } className="pull-right">
+          <Button style={ { ...no_border, ...S('br-100 w-35 h-35 p-2 mr-5') } } onClick={ this.props.setDrawerContent.bind(this, 'contacts') }>
+            <img style={ S('w-20 h-20') } src={ `/images/dashboard/icons/drawer/contacts${drawer && drawer.content === 'contacts' ? '-active' : ''}.svg`} />
+          </Button>
+          <Button style={ { ...no_border, ...S('border-none br-100 w-35 h-35 p-2') } } onClick={ this.props.setDrawerContent.bind(this, 'docs') }>
+            <img style={ S('w-15 h-15 mt-2n') } src={ `/images/dashboard/icons/drawer/docs${drawer && drawer.content === 'docs' ? '-active' : ''}.svg`} />
+          </Button>
+        </div>
+        <div style={ drawer_style } className={ 'transaction-detail__drawer ' + drawer_class }>
+          <div onClick={ this.props.closeDrawer } style={ S('mt-5 mr-15 fw-400 font-32') }className="close pull-right">&times;</div>
+          { drawer_content }
+        </div>
         <div className="transaction-detail__title" style={ S('h-80') }>
           <div className="pull-left">
-            <h4 style={ S('font-28') }>{ title }</h4>
+            <h4 style={ S('font-28') }>{ title_area }</h4>
           </div>
           { listing_status_indicator }
           <div className="pull-left text-center" style={ S('pointer bg-F7F9FA relative t-7 br-100 p-8 w-35 h-35') }>
             <img src="/images/dashboard/icons/link.svg"/>
           </div>
           <div className="clearfix"></div>
-          <div style={ S('color-929394 mb-20') }>{ subtitle }</div>
+          <div style={ S('color-929394 mb-20') }>{ subtitle_area }</div>
         </div>
         <div style={ S('minh-380') }>
           <div style={ S('w-480 mr-15 mb-30') } className="pull-left">
@@ -115,7 +203,10 @@ export default class TransactionDetail extends Component {
             </div>
             <div style={ S('mb-100') }>
               <Button style={ S('bc-929292 color-929292 pl-20 pr-20 mr-15') }><b>View More</b></Button>
-              <Button style={ S('bc-3388ff color-3388ff pl-40 pr-40') }><b>Edit</b></Button>
+              <Button style={ S('bc-3388ff color-3388ff pl-40 pr-40 mr-15') }><b>Edit</b></Button>
+              <Button style={ S('pl-40 pr-40') } className={ data.deleting_transaction && data.deleting_transaction === transaction.id ? 'disabled' : '' } onClick={ this.props.deleteTransaction.bind(this, transaction.id) } type="button" bsStyle="danger">
+                { data.deleting_transaction && data.deleting_transaction === transaction.id ? 'Deleting...' : 'Delete' }
+              </Button>
             </div>
             <div>
               {
@@ -151,5 +242,7 @@ export default class TransactionDetail extends Component {
 // PropTypes
 TransactionDetail.propTypes = {
   data: React.PropTypes.object,
-  deleteTransaction: React.PropTypes.func
+  deleteTransaction: React.PropTypes.func,
+  setDrawerContent: React.PropTypes.func,
+  closeDrawer: React.PropTypes.func
 }

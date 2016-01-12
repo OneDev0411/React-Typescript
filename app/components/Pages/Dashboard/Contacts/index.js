@@ -46,11 +46,11 @@ export default class Contacts extends Component {
     const contacts = AppStore.data.contacts
     if (contacts) {
       contacts_table = (
-        <Table striped bordered condensed hover>
+        <Table style={ S('mt-10n minw-760') } condensed hover>
           <thead>
             <tr>
-              <th>Profile Image</th>
               <th>Name</th>
+              <th></th>
               <th>Email</th>
               <th>Phone</th>
               <th></th>
@@ -60,11 +60,11 @@ export default class Contacts extends Component {
             {
               contacts.map((contact) => {
                 return (
-                  <tr key={ 'contact-' + contact.id } style={ S('h-45') }>
-                    <td><ProfileImage user={ contact }/></td>
-                    <td>{ contact.first_name } { contact.last_name }</td>
-                    <td>{ contact.email }</td>
-                    <td>{ contact.phone_number }</td>
+                  <tr key={ 'contact-' + contact.id } style={ S('h-45 pointer') }>
+                    <td width="50"><ProfileImage user={ contact }/></td>
+                    <td style={ S('pt-12') }>{ contact.first_name } { contact.last_name }</td>
+                    <td style={ S('pt-12') }>{ contact.email }</td>
+                    <td style={ S('pt-12') }>{ contact.phone_number }</td>
                     <td>
                       <Button className={ data.deleting_contact === contact.id ? 'disabled' : '' } bsStyle="danger" onClick={ this.deleteContact.bind(this, contact.id) }>
                         { data.deleting_contact === contact.id ? 'Deleting...' : 'Delete' }
@@ -80,7 +80,7 @@ export default class Contacts extends Component {
     }
 
     // Style
-    const main_style = S('absolute l-183 r-0')
+    const main_style = S('absolute l-183 r-0 pl-15 pr-20')
 
     return (
       <div style={ S('minw-1000') }>
@@ -88,9 +88,7 @@ export default class Contacts extends Component {
         <main style={ S('pt-20') }>
           <SideBar data={ data }/>
           <div style={ main_style }>
-            <div style={ S('ml-20') }>
-              { contacts_table }
-            </div>
+            { contacts_table }
           </div>
         </main>
       </div>

@@ -56,7 +56,7 @@ export default class Header extends Component {
         active_tab = current_transaction.id
       transaction_nav_markup = (
         <div>
-          <Nav className="transaction__tabs" style={ S('b-1n absolute ml-15') } bsStyle="tabs" activeKey={ active_tab }>
+          <Nav className="table--tabbable__tabs" style={ S('b-1n absolute ml-15') } bsStyle="tabs" activeKey={ active_tab }>
             <NavItem onClick={ this.props.viewTransaction.bind(this, 'all') } eventKey={'all'}>All transactions</NavItem>
             { transaction_tabs_markup }
           </Nav>

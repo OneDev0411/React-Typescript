@@ -1,4 +1,4 @@
-.transaction__tabs {
+.table--tabbable__tabs {
   &>li a {
     border-radius: 0 !important;
   }
@@ -9,18 +9,16 @@
     color: $brand-primary;
   }
 }
-.transactions__table{
-  thead > tr > th{
-    border-bottom: 1px solid #ddd !important;
-    padding-bottom: 10px;
-  }
-  td{
-    border-top: none !important;
-    border-right: none !important;
-    border-left: none !important;
-    border-bottom: 1px solid #f5f7f7 !important;
-  }
-}
-.DayPicker{
+.DayPicker {
   outline: none;
+}
+.property-modal {
+  width: 800px;
+}
+.transaction-detail__drawer {
+  transition: all 150ms ease-in-out;
+  right: -500px;
+  &.active{
+    right: 0;
+  }
 }

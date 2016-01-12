@@ -55,16 +55,17 @@ export default class Transactions extends Component {
     }
   }
 
-  deleteTransaction(id) {
-    const data = this.props.data
-    const user = data.user
-    AppStore.data.deleting_transaction = id
+  setDrawerContent(key) {
+    AppStore.data.current_transaction.drawer = {
+      open: true,
+      content: key
+    }
     AppStore.emitChange()
-    TransactionDispatcher.dispatch({
-      action: 'delete-transaction',
-      user,
-      id
-    })
+  }
+
+  closeDrawer() {
+    delete AppStore.data.current_transaction.drawer
+    AppStore.emitChange()
   }
 
   handleCloseSavedAlert() {
@@ -110,6 +111,17 @@ export default class Transactions extends Component {
     }, 1)
   }
 
+  deleteTransaction(id) {
+    const data = this.props.data
+    const user = data.user
+    AppStore.data.deleting_transaction = id
+    AppStore.emitChange()
+    TransactionDispatcher.dispatch({
+      action: 'delete-transaction',
+      user,
+      id
+    })
+  }
   render() {
     // Data
     const data = this.props.data
@@ -212,7 +224,7 @@ export default class Transactions extends Component {
     let main_content
     if (transactions_rows && transactions_rows.length) {
       main_content = (
-        <Table style={ S('mt-10n minw-760') } className="transactions__table" condensed hover>
+        <Table style={ S('mt-10n minw-760') } className="table--tabbable" condensed hover>
           <thead>
             <tr>
               <th width="150">Property</th>
@@ -243,8 +255,16 @@ export default class Transactions extends Component {
 
     // Single view
     const current_transaction = data.current_transaction
-    if (current_transaction)
-      main_content = <TransactionDetail deleteTransaction={ this.deleteTransaction } data={ data }/>
+    if (current_transaction) {
+      main_content = (
+        <TransactionDetail
+          data={ data }
+          setDrawerContent={ this.setDrawerContent }
+          closeDrawer={ this.closeDrawer }
+          deleteTransaction={ this.deleteTransaction }
+        />
+      )
+    }
 
     // Style
     const main_style = S('absolute l-183 r-0 pl-15 pr-20')

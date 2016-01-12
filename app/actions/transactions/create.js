@@ -2,13 +2,13 @@
 import Transaction from '../../models/Transaction'
 import AppStore from '../../stores/AppStore'
 import _ from 'lodash'
-
 export default (user, new_transaction) => {
   let title = 'Transaction w/Out Listing'
   if (new_transaction.listing_added)
     title = 'Transaction w/Listing'
   let contract_price
   const listing_added = new_transaction.listing_added
+  const property_added = new_transaction.property_added
   const contacts_added = new_transaction.contacts_added
   const dates = new_transaction.dates
   const contact_objects = []
@@ -32,6 +32,7 @@ export default (user, new_transaction) => {
   const params = {
     transaction_type: new_transaction.type,
     listing: listing_added,
+    listing_data: property_added,
     contract_price,
     title,
     contacts: contact_objects,
@@ -47,6 +48,7 @@ export default (user, new_transaction) => {
       if (!AppStore.data.transaction_tabs)
         AppStore.data.transaction_tabs = []
       AppStore.data.transaction_tabs.push(transaction)
+      AppStore.data.transactions.push(transaction)
       AppStore.data.new_transaction.redirect_to = '/dashboard/transactions'
       AppStore.emitChange()
     } else {
