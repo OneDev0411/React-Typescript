@@ -279,6 +279,11 @@ export default class Dashboard extends Component {
     if (!AppStore.data.mounted)
       AppStore.data.mounted = []
     AppStore.data.mounted.push('recents')
+    socket.on('disconnect', (res) => {
+      console.log('disconnect')
+      console.log(res)
+    })
+    window.socket = socket
   }
 
   render() {

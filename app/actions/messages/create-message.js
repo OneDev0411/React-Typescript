@@ -11,7 +11,5 @@ export default (user, room, comment) => {
     comment,
     message_type: 'TopLevel'
   }
-  socket.emit('Message.Send', room.id, message, (res) => {
-    console.log(res)
-  })
+  socket.emit('Message.Send', room.id, message)
 }
