@@ -7,7 +7,7 @@ export default (user, new_transaction) => {
     title = 'Transaction w/Listing'
   let contract_price
   const listing_added = new_transaction.listing_added
-  const property_added = new_transaction.property_added
+  const listing_data = new_transaction.listing_data
   const contacts_added = new_transaction.contacts_added
   const dates = new_transaction.dates
   const contact_objects = []
@@ -40,13 +40,14 @@ export default (user, new_transaction) => {
   const params = {
     transaction_type: new_transaction.type,
     listing: listing_added,
-    listing_data: property_added,
+    listing_data,
     contract_price,
     title,
     contacts: contact_objects,
     dates,
     access_token: user.access_token
   }
+  console.log(listing_data)
   Transaction.create(params, (err, response) => {
     if (response.status === 'success') {
       delete AppStore.data.new_transaction.saving

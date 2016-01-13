@@ -227,30 +227,32 @@ export default class Transactions extends Component {
     let main_content
     if (transactions_rows && transactions_rows.length) {
       main_content = (
-        <Table style={ S('mt-10n minw-760') } className="table--tabbable" condensed hover>
-          <thead>
-            <tr>
-              <th width="150">Property</th>
-              <th width="100">Contact</th>
-              <th width="100">Price</th>
-              <th width="100">Next Task</th>
-              <th width="100">Closing Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            { transactions_rows }
-          </tbody>
-        </Table>
+        <div style={ S('pl-15 pr-15') }>
+          <Table style={ S('mt-10n minw-760') } className="table--tabbable" condensed hover>
+            <thead>
+              <tr>
+                <th width="150">Property</th>
+                <th width="100">Contact</th>
+                <th width="100">Price</th>
+                <th width="100">Next Task</th>
+                <th width="100">Closing Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              { transactions_rows }
+            </tbody>
+          </Table>
+        </div>
       )
     } else {
       main_content = (
-        <div>No transactions yet.  Maybe this needs to say something snarky or clever.</div>
+        <div style={ S('pl-15 pr-15') }>No transactions yet.  Maybe this needs to say something snarky or clever.</div>
       )
     }
 
     if (data.getting_transactions) {
       main_content = (
-        <div>
+        <div style={ S('pl-15 pr-15') }>
           <Loading />
         </div>
       )
@@ -270,7 +272,7 @@ export default class Transactions extends Component {
     }
 
     // Style
-    const main_style = S('absolute l-183 r-0 pl-15 pr-20')
+    const main_style = S('absolute l-183 r-0')
 
     return (
       <div style={ S('minw-1000') }>

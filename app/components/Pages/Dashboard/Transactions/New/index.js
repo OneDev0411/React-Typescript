@@ -152,7 +152,7 @@ export default class NewTransaction extends Component {
   hideModal() {
     delete AppStore.data.show_contact_modal
     delete AppStore.data.contact_modal
-    delete AppStore.data.new_transaction.show_add_custom_listing_modal
+    delete AppStore.data.new_transaction.show_listing_modal
     delete AppStore.data.new_transaction.show_cancel_confirm
     delete AppStore.data.new_transaction.show_date_picker
     delete AppStore.data.new_transaction.date_type_key
@@ -311,6 +311,7 @@ export default class NewTransaction extends Component {
     delete AppStore.data.new_transaction.listings_found
     delete AppStore.data.new_transaction.listing_searching
     delete AppStore.data.new_transaction.listing_q
+    this.showListingModal('edit')
     AppStore.emitChange()
   }
 
@@ -362,31 +363,27 @@ export default class NewTransaction extends Component {
 
   // Add listing data
   showListingModal(type) {
-    AppStore.data.new_transaction.show_add_custom_listing_modal = true
+    AppStore.data.new_transaction.show_listing_modal = true
     if (type === 'new') {
       delete AppStore.data.new_transaction.listing_added
       delete AppStore.data.new_transaction.listings_found
       delete AppStore.data.new_transaction.listing_q
       this.refs.q.refs.input.value = ''
+      setTimeout(() => {
+        this.refs.address.focus()
+      }, 100)
     }
     AppStore.emitChange()
-    setTimeout(() => {
-      this.refs.address.focus()
-    }, 100)
   }
 
   removeAddedListing(e) {
     e.preventDefault()
     delete AppStore.data.new_transaction.listing_added
+    delete AppStore.data.new_transaction.listing_data
     AppStore.emitChange()
     setTimeout(() => {
       this.refs.q.refs.input.focus()
     }, 100)
-  }
-
-  removeAddedProperty() {
-    delete AppStore.data.new_transaction.property_added
-    AppStore.emitChange()
   }
 
   addCustomListingInfo(e) {
@@ -396,14 +393,10 @@ export default class NewTransaction extends Component {
     const city = this.refs.city.value
     const state = this.refs.state.value
     const zip = this.refs.zip.value
-    AppStore.data.new_transaction.property_added = {
-      address,
-      city,
-      state,
-      zip,
+    AppStore.data.new_transaction.listing_data = {
       property: {
         address: {
-          street_number: address,
+          street_full: address,
           city,
           state,
           postal_code: zip

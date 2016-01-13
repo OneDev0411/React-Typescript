@@ -20,6 +20,8 @@ export default {
     const listing = params.listing
     if (listing)
       request_object.listing = listing.id
+    const listing_data = params.listing_data
+    request_object.listing_data = listing_data
     fetch(endpoint, {
       method: 'post',
       headers: {

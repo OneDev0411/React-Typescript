@@ -278,6 +278,8 @@ export default class AddContactsForm extends Component {
                 <Col xs={5} style={ column_style }>
                   <Input type="select" ref="role">
                     <option value="">Select a role</option>
+                    <option value="Buyer">Buyer</option>
+                    <option value="Seller">Seller</option>
                     <option value="Lender">Lender</option>
                     <option value="Escrow">Escrow</option>
                     <option value="Attorney">Attorney</option>

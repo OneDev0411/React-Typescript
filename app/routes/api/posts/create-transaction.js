@@ -11,6 +11,7 @@ module.exports = (app, config) => {
     const contract_price = req.body.contract_price
     const contacts = req.body.contacts
     const dates = req.body.dates
+    console.log(listing_data)
     const request_object = {
       transaction_type,
       title,

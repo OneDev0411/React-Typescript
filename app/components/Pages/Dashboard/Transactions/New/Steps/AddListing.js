@@ -4,6 +4,7 @@ import { Button, Input, Modal, Col } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
 import listing_util from '../../../../../../utils/listing'
+import helpers from '../../../../../../utils/helpers'
 
 export default class AddListing extends Component {
 
@@ -78,7 +79,7 @@ export default class AddListing extends Component {
     const new_transaction = data.new_transaction
     const active_listing = new_transaction.active_listing
     const listing_added = new_transaction.listing_added
-    const property_added = new_transaction.property_added
+    const listing_data = new_transaction.listing_data
     let listing_results
     let bg_color
     // Check listing matches query (because there's no fetch abort yet)
@@ -146,24 +147,24 @@ export default class AddListing extends Component {
     }
     let listing_added_markup
     let listing_address
-    if (listing_added) {
-      listing_address = listing_added.address.street_number + ' ' +
-      listing_added.address.street_name + ' ' + listing_added.address.street_suffix
-      const listing_full_address = listing_address + ' ' + listing_added.address.city + ', ' + listing_added.address.state + ' ' + listing_added.address.postal_code
+    let cover_image_url
+    let listing_full_address
+    if (listing_added || listing_data) {
+      if (listing_added) {
+        listing_address = listing_added.address.street_number + ' ' +
+        listing_added.address.street_name + ' ' + listing_added.address.street_suffix
+        listing_full_address = listing_address + ' ' + listing_added.address.city + ', ' + listing_added.address.state + ' ' + listing_added.address.postal_code
+        cover_image_url = listing_added.cover_image_url
+      }
+      if (listing_data) {
+        const property = listing_data.property
+        listing_full_address = property.address.street_full + ' ' + property.address.city + ' ' + property.address.state + ' ' + property.address.postal_code
+      }
       listing_added_markup = (
         <div style={ S('h-25 relative bg-3388ff br-100 color-fff p-3 pl-0 pr-10 mb-10 mr-10 pointer') } className="pull-left">
-          <div onClick={ this.props.showListingModal.bind(this) } style={ S('w-25 h-25 bg-cover bg-url(' + listing_added.cover_image_url + ') l-0 t-0 absolute br-100') }></div>
+          <div onClick={ this.props.showListingModal.bind(this) } style={ S('w-25 h-25 bg-cover bg-url(' + cover_image_url + ') l-0 t-0 absolute br-100') }></div>
           <div style={ S('ml-30') }>
             <span onClick={ this.props.showListingModal.bind(this) }>{ listing_full_address }</span>&nbsp;&nbsp;<span onClick={ this.props.removeAddedListing.bind(this) } style={ S('pointer') }>x</span>
-          </div>
-        </div>
-      )
-    }
-    if (property_added) {
-      listing_added_markup = (
-        <div style={ S('h-25 relative bg-3388ff br-100 color-fff p-3 pl-0 pr-10 mb-10 mr-10 pointer') } className="pull-left">
-          <div style={ S('ml-30') }>
-            <span onClick={ this.props.showListingModal.bind(this) }>{ property_added.address + ' ' + property_added.city + ' ' + property_added.state + ' ' + property_added.zip }</span>&nbsp;&nbsp;<span onClick={ this.props.removeAddedProperty.bind(this) } style={ S('pointer') }>x</span>
           </div>
         </div>
       )
@@ -186,6 +187,9 @@ export default class AddListing extends Component {
     const row_style = {
       borderBottom: '1px solid #f3f3f3'
     }
+    let square_feet
+    if (listing_added)
+      square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(listing_added.compact_property.square_meters)))
     return (
       <div>
         <div style={ S('absolute t-120n') }>
@@ -203,7 +207,7 @@ export default class AddListing extends Component {
           <Button onClick={ this.props.showListingModal.bind(this, 'new') } className="pull-left" style={ S('w-160') } bsStyle="primary" type="button">
             Add New Property
           </Button>
-          <Modal dialogClassName="property-modal" show={ data.new_transaction.show_add_custom_listing_modal } onHide={ this.props.hideModal.bind(this) }>
+          <Modal dialogClassName="property-modal" show={ data.new_transaction.show_listing_modal } onHide={ this.props.hideModal.bind(this) }>
             <form onSubmit={ this.props.addCustomListingInfo.bind(this) }>
               <Modal.Body style={ S('p-0') } className="flexbox">
                 <Col xs={6} style={ S('p-0') }>
@@ -242,26 +246,26 @@ export default class AddListing extends Component {
                   <div style={ row_style }>
                     <Col xs={6} style={ S('pl-0 pr-0') }>
                       <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>YEAR BUILT</label>
-                      <input className="form-control" style={ input_style } type="text" ref="year_built"/>
+                      <input className="form-control" style={ input_style } type="text" ref="year_built" defaultValue={ listing_added ? listing_added.compact_property.year_built : '' }/>
                     </Col>
                     <Col xs={6} style={ S('pr-0') }>
                       <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>PROPERTY TYPE</label>
-                      <input className="form-control" style={ input_style } type="text" ref="property_type"/>
+                      <input className="form-control" style={ input_style } type="text" ref="property_type" defaultValue={ listing_added ? listing_added.compact_property.postal_code : '' }/>
                     </Col>
                     <div className="clearfix"></div>
                   </div>
                   <div style={ row_style }>
                     <Col xs={4} style={ S('pl-0') }>
                       <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>SQFT</label>
-                      <input className="form-control" style={ input_style } type="text" ref="sqft"/>
+                      <input className="form-control" style={ input_style } type="text" ref="sqft" defaultValue={ square_feet }/>
                     </Col>
                     <Col xs={4} style={ S('p-0') }>
                       <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>BEDS</label>
-                      <input className="form-control" style={ input_style } type="text" ref="beds"/>
+                      <input className="form-control" style={ input_style } type="text" ref="beds" defaultValue={ listing_added ? listing_added.compact_property.bedroom_count : '' }/>
                     </Col>
                     <Col xs={4} style={ S('pr-0') }>
                       <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>BATHS</label>
-                      <input className="form-control" style={ input_style } type="text" ref="baths"/>
+                      <input className="form-control" style={ input_style } type="text" ref="baths" defaultValue={ listing_added ? listing_added.compact_property.full_bathroom_count : '' }/>
                     </Col>
                     <div className="clearfix"></div>
                   </div>

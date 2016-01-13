@@ -13,7 +13,7 @@ export default class SideBar extends Component {
     // Data
     const data = this.props.data
     const sidebar_height = window.innerHeight
-    const sidebar_style = S('w-183 absolute pl-0 t-0 h-' + sidebar_height)
+    const sidebar_style = S('w-183 absolute pl-0 t-0 z-100 h-' + sidebar_height)
     const path = data.path
 
     const active = {}
