@@ -237,6 +237,7 @@ export default class Dashboard extends Component {
 
     // Listen for new messages
     window.socket = io(config.socket.server)
+    const socket = window.socket
     const data = AppStore.data
     socket.emit('Authenticate', data.user.access_token)
 

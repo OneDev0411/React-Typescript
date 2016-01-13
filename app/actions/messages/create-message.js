@@ -1,6 +1,4 @@
 // actions/create-message.js
-import config from '../../../config/public'
-
 export default (user, room, comment) => {
   // Socket
   const socket = window.socket
