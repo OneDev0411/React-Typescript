@@ -25,7 +25,7 @@ export default {
       author: params.author,
       access_token: params.access_token
     }
-      
+
     fetch(create_room_url,{
       method: 'post',
       headers: {  

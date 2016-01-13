@@ -15,31 +15,30 @@ import BigHeading from '../Partials/BigHeading'
 
 export default class SignUp extends Component {
 
-  componentWillMount(){
+  componentWillMount() {
     // Reset data store before mounting
     AppStore.data = {}
     AppStore.emitChange()
   }
 
-  handleSubmit(e){
-    
+  handleSubmit(e) {
     e.preventDefault()
     AppStore.data.submitting = true
     AppStore.emitChange()
-    
-    let first_name = this.refs.first_name.refs.input.value
-    let last_name = this.refs.last_name.refs.input.value
-    let email = this.refs.email.refs.input.value
-    let password = this.refs.password.refs.input.value
-    let confirm_password = this.refs.confirm_password.refs.input.value
+
+    const first_name = this.refs.first_name.refs.input.value
+    const last_name = this.refs.last_name.refs.input.value
+    const email = this.refs.email.refs.input.value
+    const password = this.refs.password.refs.input.value
+    const confirm_password = this.refs.confirm_password.refs.input.value
 
     // Random phone for now
     const random_phone = Math.floor(Math.random() * 1000000000)
 
     const user = {
-      first_name: first_name,
-      last_name: last_name,
-      email: email,
+      first_name,
+      last_name,
+      email,
       user_type: 'Client',
       phone_number: random_phone,
       grant_type: 'password'
@@ -47,22 +46,20 @@ export default class SignUp extends Component {
 
     AppDispatcher.dispatch({
       action: 'sign-up',
-      user: user,
-      password: password,
-      confirm_password: confirm_password,
+      user,
+      password,
+      confirm_password,
       redirect_to: ''
     })
   }
 
-  render(){
-    
+  render() {
     // Data
     const data = this.props.data
-    
+
     let type
-    if(this.props.location.query.type){
+    if (this.props.location.query.type)
       type = this.props.location.query.type
-    }
 
     // If show message
     let message
@@ -73,41 +70,41 @@ export default class SignUp extends Component {
 
     /* Handle erros
     ======================== */
-    let errors = data.errors
-    if(data.show_message && errors){
-      if(data.error_type == 'first_name'){
+    const errors = data.errors
+    if (data.show_message && errors) {
+      if (data.error_type === 'first_name') {
         first_name_style = 'error'
         message = (
           <Alert bsStyle="danger">You must add a first name.</Alert>
         )
       }
-      if(data.error_type == 'last_name'){
+      if (data.error_type === 'last_name') {
         last_name_style = 'error'
         message = (
           <Alert bsStyle="danger">You must add a last name.</Alert>
         )
       }
-      if(data.error_type == 'email'){
+      if (data.error_type === 'email') {
         email_style = 'error'
         message = (
           <Alert bsStyle="danger">This email is invalid.</Alert>
         )
       }
-      if(data.error_type == 'password'){
-        let password_error = data.password_error
+      if (data.error_type === 'password') {
+        const password_error = data.password_error
         password_style = 'error'
-        if(data.password_error == 'no-match'){
+        if (data.password_error === 'no-match') {
           message = (
             <Alert bsStyle="danger">Your password and confirm password must match.</Alert>
           )
         }
-        if(password_error == 'too-short'){
+        if (password_error === 'too-short') {
           message = (
             <Alert bsStyle="danger">Your password must be at least 6 characters long.</Alert>
           )
         }
       }
-      if(data.error_type == 'server' && data.response == 'email-in-use'){
+      if (data.error_type === 'server' && data.response === 'email-in-use') {
         email_style = 'error'
         message = (
           <Alert bsStyle="warning">This email is already in our system.  You may try to <Link to="/signin">sign in</Link>.</Alert>
@@ -116,18 +113,14 @@ export default class SignUp extends Component {
     }
 
     // Style
-    const signup_button_style = S('w-100p')
-    const lightWeight = S('fw-100')
-
-    let submitting = data.submitting
+    const submitting = data.submitting
     let submitting_class
-    if(submitting){
+    if (submitting)
       submitting_class = 'disabled'
-    }
 
     let main_content = (
       <div>
-        <h1 style={ lightWeight }>Sign up as { type }</h1>
+        <h1 className="tempo">Sign up as { type }</h1>
         <form onSubmit={ this.handleSubmit.bind(this) }>
           <Input bsStyle={ first_name_style } type="text" ref="first_name" placeholder="First Name"/>
           <Input bsStyle={ last_name_style } type="text" ref="last_name" placeholder="Last Name"/>
@@ -135,30 +128,24 @@ export default class SignUp extends Component {
           <Input bsStyle={ password_style } type="password" ref="password" placeholder="Password"/>
           <Input bsStyle={ password_style } type="password" ref="confirm_password" placeholder="Confirm Password"/>
           { message }
-          <Button 
-            type="submit"
-            ref="submit"
-            className={ submitting_class + 'btn btn-primary' }
-            disabled={ submitting }
-            style={ S('w-100p mb-20') }
-          >
+          <Button type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p mb-20') }>
             { submitting ? 'Signing up...' : 'Sign up' }
           </Button>
-          <div style={ S('color-929292 font-13 mt-20') }>Already have an account?  <Link to="signin">Sign in</Link></div>
+          <div style={ S('color-929292 font-13 mt-20') }>Already have an account? <Link to="signin">Sign in</Link></div>
         </form>
       </div>
     )
 
     /* Handle success
     ======================== */
-    if(data.show_message && data.status === 'success'){
+    if (data.show_message && data.status === 'success') {
       // Signin link
       let signin_link = '/signin'
       const room_id = this.props.location.query.room_id
       const invite_token = this.props.location.query.invite_token
-      if(room_id && invite_token){
+      if (room_id && invite_token)
         signin_link += '?message=invite-room&room_id=' + room_id + '&invite_token=' + invite_token
-      }
+
       main_content = (
         <Alert bsStyle="success">
           Success!  Your account was created.  You may now <Link to={ signin_link }>sign in</Link>.
@@ -174,4 +161,10 @@ export default class SignUp extends Component {
       </div>
     )
   }
+}
+
+// PropTypes
+SignUp.propTypes = {
+  data: React.PropTypes.object,
+  location: React.PropTypes.object.isRequired
 }

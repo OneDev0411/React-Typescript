@@ -1,0 +1,39 @@
+.table--tabbable__tabs {
+  &>li a {
+    padding-left: 30px;
+    border-radius: 0 !important;
+    .close {
+      visibility: hidden;
+      font-weight: 400;
+    }
+    &:hover {
+      .close {
+        visibility: visible;
+      } 
+    }
+  }
+  &>li.active a,
+  &>li.active a:hover,
+  &>li.active a:active,
+  &>li.active a:focus {
+    color: $brand-primary;
+  }
+}
+.all-transactions-tab {
+  a {
+    padding-left: 15px !important;
+  }
+}
+.DayPicker {
+  outline: none;
+}
+.property-modal {
+  width: 800px;
+}
+.transaction-detail__drawer {
+  transition: all 150ms ease-in-out;
+  right: -500px;
+  &.active{
+    right: 0;
+  }
+}

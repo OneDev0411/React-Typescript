@@ -1,20 +1,18 @@
 // api/gets/rooms.js
 module.exports = (app, config) => {
-  
   app.get('/api/rooms',(req, res) => {
-
     const api_url = config.api.url
     const get_rooms_url = api_url + '/rooms'
 
     const access_token = req.query.access_token
 
-    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Type', 'application/json')
 
     fetch(get_rooms_url,{
       method: 'get',
       headers: {  
         'Content-Type': 'application/json',
-        'authorization': 'Bearer ' + access_token,
+        'authorization': 'Bearer ' + access_token
       }
     })
     .then(response => {
@@ -31,7 +29,6 @@ module.exports = (app, config) => {
       let response_object = response
       response_object.status = 'success'
       return res.end(JSON.stringify(response_object))
-    });
+    })
   })
-
 }

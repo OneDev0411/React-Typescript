@@ -1,15 +1,8 @@
 // Notifications.js
 import React, { Component } from 'react'
-import { Link } from 'react-router'
-import S from 'shorti'
 
 export default class Notifications extends Component {
-
-  render(){
-    
-    // Data
-    const data = this.props.data
-    
+  render() {
     return (
       <div id="main-content" className="container">
         <div className="text-center col-sm-12">
@@ -18,4 +11,9 @@ export default class Notifications extends Component {
       </div>
     )
   }
+}
+
+// PropTypes
+Notifications.propTypes = {
+  data: React.PropTypes.object
 }

@@ -1,7 +1,15 @@
 // Variables
 $alabaster: #fafafc;
+$aqua: #F7F9FA;
 
+// Color
+.color-gray{
+  color: $gray-light;
+}
 // Bgs
-.bg-alabaster{
+.bg-alabaster {
   background-color: $alabaster;
+}
+.bg-aqua {
+  background-color: $aqua;
 }

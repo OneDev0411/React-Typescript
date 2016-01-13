@@ -1,7 +1,6 @@
 // App.js
-
 // Build stlye sheet
-if(process.env.WEBPACK_PROCESS === 'build'){
+if (process.env.WEBPACK_PROCESS === 'build') {
   // Fonts
   require('../src/fonts/sf.scss')
   require('../src/fonts/tempos-headline.scss')
@@ -15,10 +14,6 @@ import React, { Component } from 'react'
 import AppStore from '../stores/AppStore'
 
 export default class App extends Component {
-  
-  _onChange() {
-    this.setState(AppStore)
-  }
 
   // Add change listeners to stores
   componentDidMount() {
@@ -30,16 +25,27 @@ export default class App extends Component {
     AppStore.removeChangeListener(this._onChange.bind(this))
   }
 
-  render(){
-    
-    let data = AppStore.data
-    
-    // Rehydrate store if coming from server
-    if(typeof window !== 'undefined' && window.AppStore){
-      data = window.AppStore.data
-    }
+  _onChange() {
+    this.setState(AppStore)
+  }
 
-    let Routes = React.cloneElement(this.props.children, { data: data })
+  render() {
+    let data = AppStore.data
+    const path = this.props.location.pathname
+    data.path = path
+    // Hydrate store if coming from server
+    if (typeof window !== 'undefined' && window.AppStore) {
+      const server_data = window.AppStore.data
+      // merge into client
+      data = { ...data, ...server_data }
+    }
+    const Routes = React.cloneElement(this.props.children, { data })
     return Routes
   }
+}
+
+// PropTypes
+App.propTypes = {
+  children: React.PropTypes.object.isRequired,
+  location: React.PropTypes.object.isRequired
 }

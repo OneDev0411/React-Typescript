@@ -1,4 +1,4 @@
-// config/production.js
+// config/private/production.js
 export default {
   app_url: process.env.APP_URL,
   api: {
@@ -10,4 +10,10 @@ export default {
     key: process.env.CRYPTO_KEY,
     iv: process.env.CRYPTO_IV
   },
+  cosmicjs: {
+    bucket: {
+      slug: process.env.COSMIC_BUCKET,
+      read_key: process.env.COSMIC_KEY
+    }
+  }
 }

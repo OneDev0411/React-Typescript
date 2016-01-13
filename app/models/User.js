@@ -6,26 +6,24 @@ import 'isomorphic-fetch'
 import config from '../../config/public'
 
 export default {
-  
   create: (params, callback) => {
-    
     let api_host = params.api_host
-    if(!api_host) api_host = config.app.url
+    if (!api_host) api_host = config.app.url
 
-    const create_url = api_host + '/api/signup'
+    const endpoint = api_host + '/api/signup'
 
     const request_object = params.user
-      
-    fetch(create_url,{
+
+    fetch(endpoint, {
       method: 'post',
-      headers: {  
-        'Content-type': 'application/json',
+      headers: {
+        'Content-type': 'application/json'
       },
       body: JSON.stringify(request_object)
     })
     .then((response) => {
       if (response.status >= 400) {
-        let error = {
+        const error = {
           status: 'error',
           message: 'There was an error with this request.'
         }
@@ -37,31 +35,27 @@ export default {
       return callback(false, response)
     })
   },
-
   signin: (params, callback) => {
-    
     let api_host = params.api_host
-    if(!api_host) api_host = config.app.url
+    if (!api_host) api_host = config.app.url
 
-    const signin_url = api_host + '/api/signin'
-    
+    const endpoint = api_host + '/api/signin'
     const request_object = {
       email: params.email,
       password: params.password,
       invite: params.invite
     }
-      
-    fetch(signin_url,{
+    fetch(endpoint, {
       method: 'post',
       credentials: 'include',
-      headers: {  
-        'Content-type': 'application/json',
+      headers: {
+        'Content-type': 'application/json'
       },
       body: JSON.stringify(request_object)
     })
     .then((response) => {
       if (response.status >= 400) {
-        let error = {
+        const error = {
           status: 'error',
           message: 'There was an error with this request.'
         }
@@ -73,27 +67,25 @@ export default {
       return callback(false, response)
     })
   },
-
   forgotPassword: (params, callback) => {
-    
     let api_host = params.api_host
-    if(!api_host) api_host = config.app.url
+    if (!api_host) api_host = config.app.url
 
-    const forgot_password_url = api_host + '/api/forgot-password'
+    const endpoint = api_host + '/api/forgot-password'
     const request_object = {
       email: params.email
     }
-    
-    fetch(forgot_password_url,{
+
+    fetch(endpoint, {
       method: 'post',
-      headers: {  
-        'Content-type': 'application/json',
+      headers: {
+        'Content-type': 'application/json'
       },
       body: JSON.stringify(request_object)
     })
     .then((response) => {
       if (response.status >= 400) {
-        let error = {
+        const error = {
           status: 'error',
           message: 'There was an error with this request.'
         }
@@ -107,26 +99,25 @@ export default {
   },
 
   resetPassword: (params, callback) => {
-    
     let api_host = params.api_host
-    if(!api_host) api_host = config.app.url
+    if (!api_host) api_host = config.app.url
 
-    const reset_password_url = api_host + '/api/reset-password'
+    const endpoint = api_host + '/api/reset-password'
     const request_object = {
       token: encodeURIComponent(params.token),
       password: params.password
     }
-    
-    fetch(reset_password_url,{
+
+    fetch(endpoint, {
       method: 'post',
-      headers: {  
-        'Content-type': 'application/json',
+      headers: {
+        'Content-type': 'application/json'
       },
       body: JSON.stringify(request_object)
     })
     .then((response) => {
       if (response.status >= 400) {
-        let error = {
+        const error = {
           'status': 'error',
           'message': 'There was an error with this request.'
         }
@@ -138,29 +129,27 @@ export default {
       return callback(false, response)
     })
   },
-
   verifyPhone: (params, callback) => {
-    
     let api_host = params.api_host
-    if(!api_host) api_host = config.app.url
+    if (!api_host) api_host = config.app.url
 
-    const verify_phone_url = api_host + '/api/verify-phone'
+    const endpoint = api_host + '/api/verify-phone'
 
     const request_object = {
       code: params.code,
       token: encodeURIComponent(params.token)
     }
-    
-    fetch(verify_phone_url,{
+
+    fetch(endpoint, {
       method: 'post',
-      headers: {  
-        'Content-type': 'application/json',
+      headers: {
+        'Content-type': 'application/json'
       },
       body: JSON.stringify(request_object)
     })
     .then((response) => {
       if (response.status >= 400) {
-        let error = {
+        const error = {
           status: 'error',
           message: 'There was an error with this request.'
         }
@@ -172,18 +161,130 @@ export default {
       return callback(false, response)
     })
   },
-
   getRooms: (params, callback) => {
-    
     let api_host = params.api_host
-    if(!api_host) api_host = config.app.url
+    if (!api_host) api_host = config.app.url
 
-    const get_rooms_url = api_host + '/api/rooms?access_token=' + params.access_token
-    
-    fetch(get_rooms_url)
+    const endpoint = api_host + '/api/rooms?access_token=' + params.access_token
+
+    fetch(endpoint)
     .then((response) => {
       if (response.status >= 400) {
-        let error = {
+        const error = {
+          status: 'error',
+          message: 'There was an error with this request.'
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then((response) => {
+      return callback(false, response)
+    })
+  },
+  createContacts: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const endpoint = api_host + '/api/create-contacts'
+    const contacts = params.contacts
+    const access_token = params.access_token
+    const request_object = {
+      contacts,
+      access_token
+    }
+    fetch(endpoint, {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(request_object)
+    })
+    .then((response) => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          message: 'There was an error with this request.'
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then((response) => {
+      return callback(false, response)
+    })
+  },
+  editContact: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const endpoint = api_host + '/api/edit-contact'
+    const contact = params.contact
+    const access_token = params.access_token
+    const request_object = {
+      contact,
+      access_token
+    }
+    fetch(endpoint, {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(request_object)
+    })
+    .then((response) => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          message: 'There was an error with this request.'
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then((response) => {
+      return callback(false, response)
+    })
+  },
+  deleteContact: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const endpoint = api_host + '/api/delete-contact'
+    const contact_id = params.contact_id
+    const access_token = params.access_token
+    const request_object = {
+      contact_id,
+      access_token
+    }
+    fetch(endpoint, {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(request_object)
+    })
+    .then(response => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          message: 'There was an error with this request.'
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then(response => {
+      return callback(false, response)
+    })
+  },
+  getContacts: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+
+    const endpoint = api_host + '/api/contacts?access_token=' + params.access_token
+
+    fetch(endpoint)
+    .then((response) => {
+      if (response.status >= 400) {
+        const error = {
           status: 'error',
           message: 'There was an error with this request.'
         }
@@ -195,5 +296,4 @@ export default {
       return callback(false, response)
     })
   }
-
 }

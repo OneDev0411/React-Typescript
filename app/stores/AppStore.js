@@ -3,25 +3,23 @@ import { EventEmitter } from 'events'
 import _ from 'lodash'
 
 export default _.extend({}, EventEmitter.prototype, {
-
   // Initial data
   data: {
     ready: false
   },
 
   // Emit Change event
-  emitChange: function(){
+  emitChange() {
     this.emit('change')
   },
 
   // Add change listener
-  addChangeListener: function(callback){
+  addChangeListener(callback) {
     this.on('change', callback)
   },
 
   // Remove change listener
-  removeChangeListener: function(callback) {
+  removeChangeListener(callback) {
     this.removeListener('change', callback)
   }
-  
 })

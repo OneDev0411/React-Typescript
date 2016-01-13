@@ -1,6 +1,7 @@
 // main.scss
 @import 'vendor/bootstrap/stylesheets/_bootstrap.scss';
 @import 'components/resets';
+@import 'components/resets-bootstrap';
 @import 'components/typography';
 @import 'components/buttons';
 @import 'components/loader';
@@ -13,3 +14,11 @@
 // Pages
 @import 'components/pages/landing';
 @import 'components/pages/dashboard';
+@import 'components/pages/transactions';
+
+// Modules
+@import 'components/modules/add-contacts';
+@import 'components/modules/search-listings';
+
+// Vendor
+@import 'vendor/react-day-picker/style.scss';

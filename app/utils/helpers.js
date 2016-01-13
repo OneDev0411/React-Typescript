@@ -8,7 +8,12 @@ export default {
   prepareToken: (token) => {
     return decodeURIComponent(token).replace(' ', '+');
   },
-  timeConverter: function(UNIX_timestamp) {
+  convertDateToTime: function(date) {
+    var date_arr = date.split('-');
+    var time = new Date(date_arr[0],(date_arr[1] - 1),date_arr[2]).getTime()/1000
+    return time;
+  },
+  friendlyDate: function(UNIX_timestamp) {
     var a = new Date(UNIX_timestamp * 1000);
     var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     var year = a.getFullYear();
@@ -38,5 +43,8 @@ export default {
     minutes = minutes < 10 ? '0'+minutes : minutes;
     var strTime = hours + ':' + minutes + ampm;
     return strTime;
+  },
+  numberWithCommas: (x) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 }
