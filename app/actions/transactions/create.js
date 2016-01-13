@@ -47,7 +47,6 @@ export default (user, new_transaction) => {
     dates,
     access_token: user.access_token
   }
-  console.log(listing_data)
   Transaction.create(params, (err, response) => {
     if (response.status === 'success') {
       delete AppStore.data.new_transaction.saving
