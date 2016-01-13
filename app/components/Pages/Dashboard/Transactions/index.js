@@ -180,6 +180,9 @@ export default class Transactions extends Component {
           const transaction_time = helpers.convertDateToTime(closing_date)
           friendly_date = helpers.friendlyDate(transaction_time)
         }
+        let client_name
+        if (clients && clients[0])
+          client_name = clients[0].first_name + ' ' + clients[0].last_name
         return (
           <tr onClick={ this.handleClickTransaction.bind(this, transaction) } style={ S('pointer') } key={ transaction.id }>
             <td>
@@ -191,7 +194,7 @@ export default class Transactions extends Component {
             </td>
             <td>
               <div style={ S('mt-20') }>
-                { `${clients[0].first_name} ${clients[0].last_name}` }
+                { client_name }
                 <div style={ S('color-929394') }>{ transaction.transaction_type }</div>
               </div>
             </td>

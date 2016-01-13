@@ -11,7 +11,14 @@ export default (user, contact, module_type) => {
   User.editContact(params, (err, response) => {
     // Success
     if (response.status === 'success') {
-      const edited_contact = response.data
+      let edited_contact = response.data
+      // If creating transaction
+      if (contact.role) {
+        edited_contact = {
+          ...response.data,
+          role: contact.role
+        }
+      }
       AppDispatcher.dispatch({
         action: 'add-contact',
         contact: edited_contact,

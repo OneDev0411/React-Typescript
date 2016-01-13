@@ -111,7 +111,7 @@ export default class TransactionDetail extends Component {
       borderTop: '1px solid #edf1f3',
       borderLeft: '1px solid #edf1f3'
     }
-    let drawer_class
+    let drawer_class = 'hidden'
     if (drawer) {
       drawer_class = 'active'
       const drawer_header_style = S('bg-f7f9fa p-12 font-18 color-4a4a4a')
@@ -161,6 +161,29 @@ export default class TransactionDetail extends Component {
       }
     }
 
+    let contacts_markup
+    if (contacts) {
+      contacts_markup = contacts.map(contact => {
+        const contact_style = S('mb-20 mr-15 w-200 h-80')
+        const info_style = {
+          overflow: 'hidden',
+          textOverflow: 'ellipsis'
+        }
+        return (
+          <div className="pull-left" style={ contact_style } key={ 'contact-' + contact.id }>
+            <ProfileImage user={ contact }/>
+            <div style={ S('ml-50') }>
+              <div><b>{ contact.first_name } { contact.last_name }</b></div>
+              <div style={ S('color-929292') }>
+                <div style={ info_style }>{ contact.roles[0] }</div>
+                <div style={ info_style }>{ contact.phone_number }</div>
+                <div style={ info_style }><a style={{ textDecoration: 'none' }} href={ 'mailto:' + contact.email}>{ contact.email }</a></div>
+              </div>
+            </div>
+          </div>
+        )
+      })
+    }
     return (
       <div style={ S('minw-800') }>
         <div style={ S('mt-10n mr-15n') } className="pull-right">
@@ -209,28 +232,7 @@ export default class TransactionDetail extends Component {
               </Button>
             </div>
             <div>
-              {
-                contacts.map(contact => {
-                  const contact_style = S('mb-20 mr-15 w-200 h-80')
-                  const info_style = {
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis'
-                  }
-                  return (
-                    <div className="pull-left" style={ contact_style } key={ 'contact-' + contact.id }>
-                      <ProfileImage user={ contact }/>
-                      <div style={ S('ml-50') }>
-                        <div><b>{ contact.first_name } { contact.last_name }</b></div>
-                        <div style={ S('color-929292') }>
-                          <div style={ info_style }>{ contact.roles[0] }</div>
-                          <div style={ info_style }>{ contact.phone_number }</div>
-                          <div style={ info_style }><a style={{ textDecoration: 'none' }} href={ 'mailto:' + contact.email}>{ contact.email }</a></div>
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })
-              }
+              { contacts_markup }
             </div>
           </div>
         </div>
