@@ -22,7 +22,7 @@ export default class AddClients extends Component {
           hideContactsForm={ this.props.hideContactsForm }
           addContact={ this.props.addContact }
           removeContact={ this.props.removeContact }
-          showCreateContactModal={ this.props.showCreateContactModal }
+          showContactModal={ this.props.showContactModal }
           hideModal={ this.props.hideModal }
           createContact={ this.props.createContact }
           showNewContentInitials={ this.props.showNewContentInitials }
@@ -40,7 +40,7 @@ AddClients.propTypes = {
   hideContactsForm: React.PropTypes.func,
   addContact: React.PropTypes.func,
   removeContact: React.PropTypes.func,
-  showCreateContactModal: React.PropTypes.func,
+  showContactModal: React.PropTypes.func,
   hideModal: React.PropTypes.func,
   createContact: React.PropTypes.func,
   showNewContentInitials: React.PropTypes.func

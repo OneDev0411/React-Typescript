@@ -11,6 +11,7 @@ import addUserToStore from '../actions/user/add-user-to-store'
 import getRooms from '../actions/user/get-rooms'
 import getContacts from '../actions/user/get-contacts'
 import createContacts from '../actions/user/create-contacts'
+import editContact from '../actions/user/edit-contact'
 import deleteContact from '../actions/user/delete-contact'
 // Rooms
 import createRoom from '../actions/rooms/create-room'
@@ -156,7 +157,15 @@ AppDispatcher.register(payload => {
     case 'create-contacts':
       user = payload.user
       contacts = payload.contacts
-      createContacts(user, contacts)
+      module_type = payload.module_type
+      createContacts(user, contacts, module_type)
+      break
+
+    case 'edit-contact':
+      user = payload.user
+      contact = payload.contact
+      module_type = payload.module_type
+      editContact(user, contact, module_type)
       break
 
     case 'delete-contact':

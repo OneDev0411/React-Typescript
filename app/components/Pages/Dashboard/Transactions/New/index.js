@@ -129,18 +129,6 @@ export default class NewTransaction extends Component {
     AppStore.emitChange()
   }
 
-  addContact(contact, module_type, input_field) {
-    AppDispatcher.dispatch({
-      action: 'add-contact',
-      contact,
-      module_type
-    })
-    AppStore.data.new_transaction.contacts_added = AppStore.data.contacts_added
-    input_field.value = ''
-    delete AppStore.data.filtered_contacts
-    AppStore.emitChange()
-  }
-
   removeContact(contact_id, module_type) {
     AppDispatcher.dispatch({
       action: 'remove-contact',
@@ -151,16 +139,19 @@ export default class NewTransaction extends Component {
     AppStore.emitChange()
   }
 
-  showCreateContactModal() {
-    AppStore.data.show_create_contact_modal = true
+  showContactModal(contact) {
+    if (contact) {
+      AppStore.data.contact_modal = {
+        contact
+      }
+    }
+    AppStore.data.show_contact_modal = true
     AppStore.emitChange()
-    setTimeout(() => {
-      this.refs.first_name.refs.input.focus()
-    }, 100)
   }
 
   hideModal() {
-    delete AppStore.data.show_create_contact_modal
+    delete AppStore.data.show_contact_modal
+    delete AppStore.data.contact_modal
     delete AppStore.data.new_transaction.show_add_custom_listing_modal
     delete AppStore.data.new_transaction.show_cancel_confirm
     delete AppStore.data.new_transaction.show_date_picker
@@ -170,7 +161,7 @@ export default class NewTransaction extends Component {
     AppStore.emitChange()
   }
 
-  createContact(e) {
+  addContact(module_type, e) {
     e.preventDefault()
     AppStore.data.creating_contacts = true
     AppStore.emitChange()
@@ -180,6 +171,7 @@ export default class NewTransaction extends Component {
     const phone_number = this.refs.phone_number.refs.input.value
     const company = this.refs.company.refs.input.value
     const role = this.refs.role.refs.input.value
+    const action = this.refs.action.value
 
     // Reset errors
     if (AppStore.data.new_contact_modal) {
@@ -205,22 +197,40 @@ export default class NewTransaction extends Component {
       return
     }
 
-    const contact = {
-      first_name,
-      last_name,
-      email,
-      phone_number,
-      company,
-      role,
-      force_creation: true
-    }
-    const contacts = [contact]
     const user = this.props.data.user
-    AppDispatcher.dispatch({
-      action: 'create-contacts',
-      contacts,
-      user
-    })
+    if (action === 'create') {
+      const contact = {
+        first_name,
+        last_name,
+        email,
+        phone_number,
+        company,
+        role,
+        force_creation: true
+      }
+      const contacts = [contact]
+      AppDispatcher.dispatch({
+        action: 'create-contacts',
+        contacts,
+        user,
+        module_type
+      })
+    }
+    if (action === 'edit') {
+      const contact = AppStore.data.contact_modal.contact
+      contact.first_name = first_name
+      contact.last_name = last_name
+      contact.email = email
+      contact.phone_number = phone_number
+      contact.company = company
+      contact.role = role
+      AppDispatcher.dispatch({
+        action: 'edit-contact',
+        contact,
+        user,
+        module_type
+      })
+    }
   }
 
   handleTypeClick(type) {
@@ -464,11 +474,10 @@ export default class NewTransaction extends Component {
               setFilteredContacts={ this.setFilteredContacts.bind(this) }
               setContactActive={ this.setContactActive.bind(this) }
               hideContactsForm={ this.hideContactsForm }
-              addContact={ this.addContact.bind(this) }
               removeContact={ this.removeContact }
-              showCreateContactModal={ this.showCreateContactModal }
+              showContactModal={ this.showContactModal }
               hideModal={ this.hideModal }
-              createContact={ this.createContact }
+              addContact={ this.addContact }
               showNewContentInitials={ this.showNewContentInitials }
             />
           )
@@ -480,11 +489,10 @@ export default class NewTransaction extends Component {
               setFilteredContacts={ this.setFilteredContacts.bind(this) }
               setContactActive={ this.setContactActive.bind(this) }
               hideContactsForm={ this.hideContactsForm }
-              addContact={ this.addContact.bind(this) }
               removeContact={ this.removeContact }
-              showCreateContactModal={ this.showCreateContactModal }
+              showContactModal={ this.showContactModal }
               hideModal={ this.hideModal }
-              createContact={ this.createContact }
+              addContact={ this.addContact }
               showNewContentInitials={ this.showNewContentInitials }
             />
           )

@@ -8,12 +8,14 @@ export default (contact_id, module_type) => {
   if (filtered_contacts) {
     const contact = _.findWhere(contacts_added, { id: contact_id })
     const contact_index = _.findIndex(filtered_contacts, { id: contact_id })
-    contact.added = false
+    delete contact.added
     AppStore.data.filtered_contacts[contact_index] = contact
   }
   const contacts_added_edited = contacts_added.filter((contact_loop) => {
     return contact_loop.id !== contact_id
   })
   AppStore.data.contacts_added[module_type] = contacts_added_edited
+  if (AppStore.data.new_transaction)
+    AppStore.data.new_transaction.contacts_added = AppStore.data.contacts_added
   AppStore.emitChange()
 }

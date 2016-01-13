@@ -143,7 +143,7 @@ export default class TransactionDetail extends Component {
                     borderBottom: '1px solid #f7f9fa'
                   }
                   return (
-                    <div style={ contact_style }>
+                    <div key={ 'contact-' + contact.id } style={ contact_style }>
                       <ProfileImage user={ contact }/>
                       <div style={ S('ml-50 ') }>
                         <div><b>{ contact.first_name } { contact.last_name }</b>, <span style={ S('color-929292') }>{ contact.roles[0] }</span></div>

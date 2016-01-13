@@ -1,28 +1,22 @@
-// api/posts/create-transaction.js
+// api/posts/edit-contact.js
 module.exports = (app, config) => {
-  app.post('/api/create-transaction',(req, res) => {
+  app.post('/api/edit-contact',(req, res) => {
     const api_url = config.api.url
-    const endpoint = api_url + '/transactions'
+    const contact = req.body.contact
+    const endpoint = api_url + '/contacts/' + contact.id
     const access_token = req.body.access_token
-    const transaction_type = req.body.transaction_type
-    const title = req.body.title
-    const listing = req.body.listing
-    const listing_data = req.body.listing_data
-    const contract_price = req.body.contract_price
-    const contacts = req.body.contacts
-    const dates = req.body.dates
     const request_object = {
-      transaction_type,
-      title,
-      listing,
-      listing_data,
-      contract_price,
-      contacts,
-      dates
+      type: 'compact_user',
+      id: contact.id,
+      first_name: contact.first_name,
+      last_name: contact.last_name,
+      email: contact.email,
+      phone_number: contact.phone_number,
+      push_allowed: true
     }
     fetch(endpoint,{
-      method: 'post',
-      headers: {  
+      method: 'put',
+      headers: {
         'Content-Type': 'application/json',
         'authorization': 'Bearer ' + access_token,
       },

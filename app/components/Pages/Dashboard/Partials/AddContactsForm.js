@@ -45,6 +45,16 @@ export default class AddContactsForm extends Component {
     this.props.setContactActive(active_contact)
   }
 
+  setContactFields(contact) {
+    this.refs.first_name.refs.input.value = contact.first_name
+    this.refs.last_name.refs.input.value = contact.last_name
+    this.refs.phone_number.refs.input.value = contact.phone_number
+    this.refs.email.refs.input.value = contact.email
+    this.refs.company.refs.input.value = contact.company
+    this.refs.first_name.refs.input.focus()
+    this.showNewContentInitials()
+  }
+
   filterContacts(e) {
     const text = this.refs.search_contacts.refs.input.value.trim()
     const text_lower = text.toLowerCase()
@@ -68,6 +78,21 @@ export default class AddContactsForm extends Component {
       this.props.hideContactsForm()
   }
 
+  showContactModal() {
+    this.props.showContactModal()
+    setTimeout(() => {
+      this.refs.action.value = 'create'
+    }, 100)
+  }
+
+  showEditContactModal(contact) {
+    this.props.showContactModal(contact)
+    setTimeout(() => {
+      this.refs.action.value = 'edit'
+      this.setContactFields(contact)
+    }, 100)
+  }
+
   navContactList(e) {
     if (e.which === 38)
       this.setContactActive('up')
@@ -76,7 +101,8 @@ export default class AddContactsForm extends Component {
     if (e.which === 13) {
       const active_contact = this.props.data.active_contact
       const filtered_contacts = this.props.data.filtered_contacts
-      this.addContact(filtered_contacts[active_contact], this.props.module_type)
+      const contact = filtered_contacts[active_contact]
+      this.showEditContactModal(contact)
     }
   }
 
@@ -113,31 +139,36 @@ export default class AddContactsForm extends Component {
       overflow: 'scroll'
     }
 
-    let filtered_contacts_markup
+    let filtered_contacts_list
     if (filtered_contacts) {
+      filtered_contacts_list = filtered_contacts.map((contact, i) => {
+        let active_contact_style = ''
+        const contact_added_style = ''
+        const active_contact = data.active_contact
+        if (active_contact === i)
+          active_contact_style = ' bg-EDF7FD'
+        if (!contact.added) {
+          return (
+            <div className="add-contact-form__contact" onClick={ this.showEditContactModal.bind(this, contact) } key={ 'contact-' + contact.id } style={ S('br-3 relative h-60 pointer mb-5 p-10' + active_contact_style + contact_added_style) }>
+              <ProfileImage user={ contact }/>
+              <div style={ S('ml-50') }>
+                <span style={ S('fw-600') }>{ contact.first_name } { contact.last_name }</span><br />
+                <span style={ S('color-666') }>{ contact.contact_user ? contact.contact_user.user_type : '' }</span>
+              </div>
+              <div className="clearfix"></div>
+            </div>
+          )
+        }
+      })
+      filtered_contacts_list = filtered_contacts_list.filter((n) => {
+        return n !== undefined
+      })
+    }
+    let filtered_contacts_markup
+    if (filtered_contacts_list && filtered_contacts_list.length) {
       filtered_contacts_markup = (
         <div className="add-contact-form__contacts" style={ filter_scroll_style }>
-          {
-            filtered_contacts.map((contact, i) => {
-              let active_contact_style = ''
-              let contact_added_style = ''
-              const active_contact = data.active_contact
-              if (active_contact === i)
-                active_contact_style = ' bg-EDF7FD'
-              if (contact.added)
-                contact_added_style = ' bg-dff0d8'
-              return (
-                <div className="add-contact-form__contact" onClick={ this.addContact.bind(this, contact, module_type) } key={ 'contact-' + contact.id } style={ S('br-3 relative h-60 pointer mb-5 p-10' + active_contact_style + contact_added_style) }>
-                  <ProfileImage user={ contact }/>
-                  <div style={ S('ml-50') }>
-                    <span style={ S('fw-600') }>{ contact.first_name } { contact.last_name }</span><br />
-                    <span style={ S('color-666') }>{ contact.contact_user ? contact.contact_user.user_type : '' }</span>
-                  </div>
-                  <div className="clearfix"></div>
-                </div>
-              )
-            })
-          }
+          { filtered_contacts_list }
         </div>
       )
     }
@@ -203,14 +234,14 @@ export default class AddContactsForm extends Component {
         <div style={ S('maxw-820') }>
           <Input ref="search_contacts" onKeyDown={ this.navContactList.bind(this) } onKeyUp={ this.filterContacts.bind(this) } className="pull-left" style={ S('w-600') } type="text" placeholder="Enter any name, email or phone number"/>
           <span className="pull-left" style={ S('w-30 ml-15 mt-8 color-666') }>OR</span>
-          <Button onClick={ this.props.showCreateContactModal.bind(this) } className="pull-left" style={ S('w-160') } bsStyle="primary" type="button">
+          <Button onClick={ this.showContactModal.bind(this) } className="pull-left" style={ S('w-160') } bsStyle="primary" type="button">
             Add New Contact
           </Button>
         </div>
         <div className="clearfix"></div>
         { filtered_contacts_markup }
-        <Modal show={ data.show_create_contact_modal } onHide={ this.props.hideModal.bind(this) }>
-          <form onSubmit={ this.props.createContact.bind(this) }>
+        <Modal show={ data.show_contact_modal } onHide={ this.props.hideModal.bind(this) }>
+          <form onSubmit={ this.props.addContact.bind(this, module_type) }>
             <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
               <Modal.Title style={ S('font-14') }>Add New Contact</Modal.Title>
             </Modal.Header>
@@ -246,7 +277,11 @@ export default class AddContactsForm extends Component {
                   <Input style={ input_style } type="text" ref="company" placeholder="COMPANY"/>
                 </Col>
                 <Col xs={5} style={ column_style }>
-                  <Input style={ input_style } type="text" ref="role" placeholder="ROLE"/>
+                  <Input type="select" ref="role">
+                    <option>Select Role</option>
+                    <option value="Buyer">Buyer</option>
+                    <option value="Seller">Seller</option>
+                  </Input>
                 </Col>
                 <div className="clearfix"></div>
               </div>
@@ -258,6 +293,7 @@ export default class AddContactsForm extends Component {
                 { data.creating_contacts ? 'Adding...' : 'Add' }
               </Button>
             </Modal.Footer>
+            <input type="hidden" ref="action"/>
           </form>
         </Modal>
       </div>
@@ -270,14 +306,12 @@ AddContactsForm.propTypes = {
   data: React.PropTypes.object,
   filterContacts: React.PropTypes.func,
   setContactActive: React.PropTypes.func,
-  navContactList: React.PropTypes.func,
   setFilteredContacts: React.PropTypes.func,
   hideContactsForm: React.PropTypes.func,
-  addContact: React.PropTypes.func,
   removeContact: React.PropTypes.func,
-  showCreateContactModal: React.PropTypes.func,
+  showContactModal: React.PropTypes.func,
   hideModal: React.PropTypes.func,
-  createContact: React.PropTypes.func,
+  addContact: React.PropTypes.func,
   module_type: React.PropTypes.string,
   showNewContentInitials: React.PropTypes.func
 }
