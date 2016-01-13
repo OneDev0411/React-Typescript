@@ -20,7 +20,7 @@ export default (user, new_transaction) => {
       }
       contact_objects.push(contact_object)
     })
-    const others = contacts_added.contacts
+    const others = contacts_added.contact
     if (others) {
       others.forEach(contact => {
         const contact_object = {
