@@ -15,6 +15,7 @@ export default class TransactionDetail extends Component {
     const transaction = data.current_transaction
     const listing = transaction.listing
     const listing_data = transaction.listing_data
+    const drawer = transaction.drawer
     let property
     if (listing)
       property = listing.property
@@ -46,18 +47,30 @@ export default class TransactionDetail extends Component {
     let listing_images = (
       <div style={ S('bg-eff1f2 w-480 h-300 font-22 text-center pt-125 color-929292') }>No image</div>
     )
+    let divider_div
+    let carousel_wh = 'w-480 h-300'
+    if (drawer && window.innerWidth <= 1700) {
+      divider_div = (
+        <div className="clearfix"></div>
+      )
+      if (window.innerWidth >=1200) {
+        const carousel_width = window.innerWidth - 750
+        const carousel_height = carousel_width/1.75 
+        carousel_wh = 'w-' + carousel_width + ' h-' + carousel_height
+      }
+    }
     if (listing) {
       listing_images = (
         <Carousel interval={0} indicators={false} prevIcon={ prev_icon } nextIcon={ next_icon }>
           <CarouselItem>
-            <div style={ S('w-480 h-300 bg-cover bg-center bg-url(' + listing.cover_image_url + ')') }></div>
+            <div style={ S(carousel_wh + ' bg-cover bg-center bg-url(' + listing.cover_image_url + ')') }></div>
           </CarouselItem>
           {
             listing.gallery_image_urls.map(gallery_image_url => {
               return (
                 <CarouselItem key={ 'gallery-image-' + gallery_image_url }>
                   <img className="hidden" src={ gallery_image_url }/>
-                  <div style={ S('w-480 h-300 bg-cover bg-center bg-url(' + gallery_image_url + ')') }></div>
+                  <div style={ S(carousel_wh + ' bg-cover bg-center bg-url(' + gallery_image_url + ')') }></div>
                 </CarouselItem>
               )
             })
@@ -117,7 +130,6 @@ export default class TransactionDetail extends Component {
     const no_border = { border: 'none' }
 
     // Drawer
-    const drawer = transaction.drawer
     let drawer_content
     const drawer_height = window.innerHeight - 153
     let drawer_wrap_style = {
@@ -209,9 +221,6 @@ export default class TransactionDetail extends Component {
       ...S('h-80 mb-15 pl-15 pr-15'),
       borderBottom: '1px solid #edf1f3'
     }
-    let drawer_open = ''
-    if (drawer)
-      drawer_open = ' drawer-open'
     return (
       <div style={ S('minw-800 z-0') }>
         <div style={ S('mt-40 absolute r-10 z-100') }>
@@ -239,11 +248,12 @@ export default class TransactionDetail extends Component {
           <div className="clearfix"></div>
           <div style={ S('color-929394 mb-20') }>{ subtitle_area }</div>
         </div>
-        <div style={ S('relative') } className={ 'transaction-detail__main-content' + drawer_open }>
+        <div style={ S('relative') }>
           <div style={ S('minh-380 pl-15 pr-15') }>
-            <div style={ S('w-480 mr-15 mb-30') } className="pull-left">
+            <div style={ S(carousel_wh + ' mr-15 mb-30') } className="pull-left">
               { listing_images }
             </div>
+            { divider_div }
             <div style={ S('w-500') } className="pull-left">
               <div style={ S('mb-20') }>
                 <div style={ S('mb-15 mr-20 pull-left') }><b>MLS#:</b> <span style={ S('color-929292') }>{ mls_number }</span></div>

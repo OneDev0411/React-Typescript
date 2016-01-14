@@ -37,10 +37,3 @@
     right: 0;
   }
 }
-.transaction-detail__main-content {
-  transition: all 150ms ease-in-out;
-  left: 0;
-  &.drawer-open {
-    left: -500px;
-  }
-}
