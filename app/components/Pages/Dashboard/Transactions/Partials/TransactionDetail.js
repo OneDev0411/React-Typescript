@@ -53,9 +53,9 @@ export default class TransactionDetail extends Component {
       divider_div = (
         <div className="clearfix"></div>
       )
-      if (window.innerWidth >=1200) {
+      if (window.innerWidth >= 1200) {
         const carousel_width = window.innerWidth - 750
-        const carousel_height = carousel_width/1.75 
+        const carousel_height = carousel_width / 1.75
         carousel_wh = 'w-' + carousel_width + ' h-' + carousel_height
       }
     }
