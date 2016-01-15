@@ -56,16 +56,26 @@ export default class Transactions extends Component {
   }
 
   setDrawerContent(key) {
-    AppStore.data.current_transaction.drawer = {
-      open: true,
-      content: key
+    const drawer = AppStore.data.current_transaction.drawer
+    if (drawer && drawer.content && key === drawer.content) {
+      this.closeDrawer() 
+    } else {
+      AppStore.data.current_transaction.drawer = {
+        open: true,
+        content: key
+      }
+      AppStore.data.current_transaction.drawer_active = true
     }
     AppStore.emitChange()
   }
 
   closeDrawer() {
-    delete AppStore.data.current_transaction.drawer
+    delete AppStore.data.current_transaction.drawer_active
     AppStore.emitChange()
+    setTimeout(() => {
+      delete AppStore.data.current_transaction.drawer
+      AppStore.emitChange()
+    }, 200)
   }
 
   handleCloseSavedAlert() {
@@ -375,7 +385,7 @@ export default class Transactions extends Component {
       main_content = (
         <TransactionDetail
           data={ data }
-          setDrawerContent={ this.setDrawerContent }
+          setDrawerContent={ this.setDrawerContent.bind(this) }
           closeDrawer={ this.closeDrawer }
           deleteTransaction={ this.deleteTransaction }
           addDocs={ this.addDocs.bind(this) }

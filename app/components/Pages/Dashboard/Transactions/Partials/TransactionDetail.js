@@ -178,12 +178,13 @@ export default class TransactionDetail extends Component {
       borderLeft: '6px solid #edf1f3'
     }
     let drawer_class
+    if (transaction.drawer_active)
+      drawer_class = 'active'
     if (drawer) {
       drawer_wrap_style = {
         ...drawer_wrap_style,
         ...S('w-500')
       }
-      drawer_class = 'active'
       let attachments_markup
       let file_icon_short
       // console.log(attachments)
