@@ -170,7 +170,7 @@ export default class TransactionDetail extends Component {
     let drawer_content
     const drawer_height = window.innerHeight - 203
     let drawer_wrap_style = {
-      ...S('absolute h-' + drawer_height + ' r-0 w-0 t-80'),
+      ...S('absolute h-' + drawer_height + ' r-0 w-0 t-79'),
       overflow: 'hidden'
     }
     const drawer_style = {
