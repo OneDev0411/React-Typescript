@@ -55,7 +55,13 @@
   opacity: .3;
 }
 .transaction--file {
+  .delete {
+    display: none;
+  }
   &:hover {
     background-color: #F7F9FA;
+    .delete {
+      display: block;
+    }
   }
 }

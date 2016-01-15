@@ -221,7 +221,7 @@ export default class TransactionDetail extends Component {
           }
           return (
             <div className="transaction--file" key={ 'file-' + i } style={ file_style }>
-              <Button onClick={ this.props.deleteFile.bind(this, file) } style={ S('mt-10 mr-10') } bsStyle="danger" className="pull-right">Delete</Button>
+              <Button onClick={ this.props.deleteFile.bind(this, file) } style={ S('mt-10 mr-10') } bsStyle="danger" className="pull-right delete">Delete</Button>
               <div onClick={ this.openFile.bind(this, file) } className="pull-left">
                 { file_image }
               </div>
