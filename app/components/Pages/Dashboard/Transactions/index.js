@@ -313,7 +313,9 @@ export default class Transactions extends Component {
     let saved_message
     if (data.new_transaction && data.new_transaction.saved) {
       saved_message = (
-        <Alert bsStyle="success">Transaction saved!<button className="close" type="button" onClick={ this.handleCloseSavedAlert.bind(this) }>&times;</button></Alert>
+        <div style={ S('pl-15 pr-15') }>
+          <Alert bsStyle="success">Transaction saved!<button className="close" type="button" onClick={ this.handleCloseSavedAlert.bind(this) }>&times;</button></Alert>
+        </div>
       )
     }
 
