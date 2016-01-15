@@ -1,6 +1,6 @@
 // Dashboard/Transactions/TransactionDetail.js
 import React, { Component } from 'react'
-import { Carousel, CarouselItem, Modal, Button, Input } from 'react-bootstrap'
+import { Carousel, CarouselItem, Modal, Button, Input, Col } from 'react-bootstrap'
 import S from 'shorti'
 import listing_util from '../../../../../utils/listing'
 import helpers from '../../../../../utils/helpers'
@@ -46,6 +46,10 @@ export default class TransactionDetail extends Component {
     window.open(file.preview)
   }
 
+  handleViewMore() {
+    this.props.handleViewMore()
+  }
+
   render() {
     const data = this.props.data
     const transaction = data.current_transaction
@@ -84,18 +88,14 @@ export default class TransactionDetail extends Component {
     let listing_images = (
       <div style={ S('bg-eff1f2 w-480 h-300 font-22 text-center pt-125 color-929292') }>No image</div>
     )
-    let divider_div
-    let carousel_wh = 'w-480 h-300'
-    if (drawer && window.innerWidth <= 1700) {
-      divider_div = (
-        <div className="clearfix"></div>
-      )
-      if (window.innerWidth >= 1200) {
-        const carousel_width = window.innerWidth - 750
-        const carousel_height = carousel_width / 1.75
-        carousel_wh = 'w-' + carousel_width + ' h-' + carousel_height
-      }
-    }
+    const carousel_wh = 'w-480 h-300'
+    // if (drawer && window.innerWidth <= 1700) {
+    //   if (window.innerWidth >= 1200) {
+    //     const carousel_width = window.innerWidth - 750
+    //     const carousel_height = carousel_width / 1.75
+    //     carousel_wh = 'w-' + carousel_width + ' h-' + carousel_height
+    //   }
+    // }
     if (listing) {
       listing_images = (
         <Carousel interval={0} indicators={false} prevIcon={ prev_icon } nextIcon={ next_icon }>
@@ -350,6 +350,49 @@ export default class TransactionDetail extends Component {
       if (current_file.type === 'image/jpeg')
         current_file_image = <div style={ S('bg-url(' + current_file.preview + ') bg-cover bg-center w-100 h-100') } src={ current_file.preview } />
     }
+    // View more info
+    let view_more_info_markup
+    if (transaction.show_more_info) {
+      let contract_price_area
+      let association_fee_area
+      if (transaction.contract_price) {
+        contract_price_area = (
+          <div style={ S('mb-15 mr-20 pull-left') }><b>Contract Price:</b> <span style={ S('color-929292') }>${ helpers.numberWithCommas(transaction.contract_price) }</span></div>
+        )
+      }
+      if (transaction.listing.association_fee) {
+        association_fee_area = (
+          <div style={ S('mb-15 mr-20 pull-left') }><b>Association Fee:</b> <span style={ S('color-929292') }>${ helpers.numberWithCommas(transaction.listing.association_fee) }</span></div>
+        )
+      }
+      view_more_info_markup = (
+        <div>
+          { contract_price_area }
+          { association_fee_area }
+        </div>
+      )
+    }
+
+    // Edit transaction
+    let listing_image
+    if (listing && listing.cover_image_url) {
+      listing_image = (
+        <div style={ S(`absolute w-100p h-100p bg-center bg-cover bg-url(${listing.cover_image_url})`) }></div>
+      )
+    } else {
+      listing_image = (
+        <div style={ S('absolute w-100p h-100p bg-center bg-cover bg-eff1f2 color-929292 pt-170 font-26 text-center') }>
+          No image
+        </div>
+      )
+    }
+    const input_style = {
+      border: 'none'
+    }
+    const row_style = {
+      borderBottom: '1px solid #f3f3f3'
+    }
+    // console.log(listing)
     return (
       <div style={ S('minw-800 z-0') }>
         <Dropzone
@@ -389,9 +432,8 @@ export default class TransactionDetail extends Component {
               <div style={ S(carousel_wh + ' mr-15 mb-30') } className="pull-left">
                 { listing_images }
               </div>
-              { divider_div }
               <div style={ S('w-500') } className="pull-left">
-                <div style={ S('mb-20') }>
+                <div style={ S('mb-10') }>
                   <div style={ S('mb-15 mr-20 pull-left') }><b>MLS#:</b> <span style={ S('color-929292') }>{ mls_number }</span></div>
                   <div style={ S('mb-15 mr-20 pull-left') }><b>Transaction Type:</b> <span style={ S('color-929292') }>{ transaction_type }</span></div>
                   <div style={ S('mb-15 mr-20 pull-left') }><b>Property Type:</b> <span style={ S('color-929292') }>{ property_type }</span></div>
@@ -399,11 +441,12 @@ export default class TransactionDetail extends Component {
                   <div style={ S('mb-15 mr-20 pull-left') }><b>Beds:</b> <span style={ S('color-929292') }>{ bedroom_count }</span></div>
                   <div style={ S('mb-15 mr-20 pull-left') }><b>Baths:</b> <span style={ S('color-929292') }>{ bathroom_count }</span></div>
                   <div style={ S('mb-15 mr-20 pull-left') }><b>Sqft:</b> <span style={ S('color-929292') }>{ square_feet }</span></div>
+                  { view_more_info_markup }
                   <div className="clearfix"></div>
                 </div>
-                <div style={ S('mb-100') }>
-                  <Button style={ S('bc-929292 color-929292 pl-20 pr-20 mr-15') }><b>View More</b></Button>
-                  <Button style={ S('bc-3388ff color-3388ff pl-40 pr-40 mr-15') }><b>Edit</b></Button>
+                <div style={ S('mb-30') }>
+                  <Button onClick={ this.handleViewMore.bind(this) } style={ S('bc-929292 color-929292 pl-20 pr-20 mr-15') }><b>View More</b></Button>
+                  <Button onClick={ this.props.showEditModal.bind(this) } style={ S('bc-3388ff color-3388ff pl-40 pr-40 mr-15') }><b>Edit</b></Button>
                   <Button style={ S('pl-40 pr-40') } className={ data.deleting_transaction && data.deleting_transaction === transaction.id ? 'disabled' : '' } onClick={ this.props.deleteTransaction.bind(this, transaction.id) } type="button" bsStyle="danger">
                     { data.deleting_transaction && data.deleting_transaction === transaction.id ? 'Deleting...' : 'Delete' }
                   </Button>
@@ -448,6 +491,80 @@ export default class TransactionDetail extends Component {
             </Modal.Footer>
           </form>
         </Modal>
+        <Modal dialogClassName="property-modal" show={ transaction.show_edit_modal } onHide={ this.props.hideModal.bind(this) }>
+          <form onSubmit={ this.props.editTransaction.bind(this) }>
+            <Modal.Body style={ S('p-0') } className="flexbox">
+              <Col xs={6} style={ S('p-0') }>
+                { listing_image }
+              </Col>
+              <Col xs={6} style={ S('p-0') }>
+                <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
+                  <Modal.Title style={ S('font-14') }>Property Info</Modal.Title>
+                </Modal.Header>
+                <div style={ row_style }>
+                  <Col xs={8} style={ S('pl-0 pr-0') }>
+                    <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>ADDRESS</label>
+                    <input className="form-control" style={ input_style } type="text" ref="address" defaultValue={ listing ? listing.property.address.street_number : '' }/>
+                  </Col>
+                  <Col xs={4} style={ S('pr-0') }>
+                    <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>STATUS</label>
+                    <input className="form-control" style={ input_style } type="text" ref="status" defaultValue={ listing ? listing.property.address.street_number : '' }/>
+                  </Col>
+                  <div className="clearfix"></div>
+                </div>
+                <div style={ row_style }>
+                  <Col xs={6} style={ S('pl-0') }>
+                    <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>CITY</label>
+                    <input className="form-control" style={ input_style } type="text" ref="city" defaultValue={ listing ? listing.property.address.street_number : '' }/>
+                  </Col>
+                  <Col xs={3} style={ S('p-0') }>
+                    <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>STATE</label>
+                    <input className="form-control" style={ input_style } type="text" ref="state" defaultValue={ listing ? listing.property.address.street_number : '' }/>
+                  </Col>
+                  <Col xs={3} style={ S('pr-0') }>
+                    <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>ZIP</label>
+                    <input className="form-control" style={ input_style } type="text" ref="zip" defaultValue={ listing ? listing.property.address.street_number : '' }/>
+                  </Col>
+                  <div className="clearfix"></div>
+                </div>
+                <div style={ row_style }>
+                  <Col xs={6} style={ S('pl-0 pr-0') }>
+                    <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>YEAR BUILT</label>
+                    <input className="form-control" style={ input_style } type="text" ref="year_built" defaultValue={ listing ? listing.property.address.street_number : '' }/>
+                  </Col>
+                  <Col xs={6} style={ S('pr-0') }>
+                    <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>PROPERTY TYPE</label>
+                    <input className="form-control" style={ input_style } type="text" ref="property_type" defaultValue={ listing ? listing.property.address.street_number : '' }/>
+                  </Col>
+                  <div className="clearfix"></div>
+                </div>
+                <div style={ row_style }>
+                  <Col xs={4} style={ S('pl-0') }>
+                    <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>SQFT</label>
+                    <input className="form-control" style={ input_style } type="text" ref="sqft" defaultValue={ square_feet }/>
+                  </Col>
+                  <Col xs={4} style={ S('p-0') }>
+                    <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>BEDS</label>
+                    <input className="form-control" style={ input_style } type="text" ref="beds" defaultValue={ listing ? listing.property.address.street_number : '' }/>
+                  </Col>
+                  <Col xs={4} style={ S('pr-0') }>
+                    <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>BATHS</label>
+                    <input className="form-control" style={ input_style } type="text" ref="baths" defaultValue={ listing ? listing.property.address.street_number : '' }/>
+                  </Col>
+                  <div className="clearfix"></div>
+                </div>
+                <div className="pull-right" style={ S('p-15 pb-10') }>
+                  <Button bsStyle="link" onClick={ this.props.hideModal.bind(this) }>Cancel</Button>
+                  <Button style={ S('h-30 pt-5 pl-30 pr-30') } className={ transaction.editing ? 'disabled' : '' } type="submit" bsStyle="primary">
+                    { transaction.editing ? 'Editing...' : 'Edit' }
+                  </Button>
+                </div>
+                <div className="clearfix"></div>
+              </Col>
+              <div className="clearfix"></div>
+            </Modal.Body>
+          </form>
+        </Modal>
       </div>
     )
   }
@@ -465,5 +582,8 @@ TransactionDetail.propTypes = {
   hideModal: React.PropTypes.func,
   uploadFile: React.PropTypes.func,
   deleteFile: React.PropTypes.func,
-  handleNameChange: React.PropTypes.func
+  handleNameChange: React.PropTypes.func,
+  handleViewMore: React.PropTypes.func,
+  showEditModal: React.PropTypes.func,
+  editTransaction: React.PropTypes.func
 }

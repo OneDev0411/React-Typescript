@@ -146,6 +146,7 @@ export default class Transactions extends Component {
 
   hideModal() {
     delete AppStore.data.show_document_modal
+    delete AppStore.data.current_transaction.show_edit_modal
     // rekey attachments
     const files = AppStore.data.current_transaction.attachments
     if (files) {
@@ -213,6 +214,21 @@ export default class Transactions extends Component {
   dragLeave() {
     delete AppStore.data.current_transaction.drag_enter
     AppStore.emitChange()
+  }
+
+  handleViewMore() {
+    AppStore.data.current_transaction.show_more_info = true
+    AppStore.emitChange()
+  }
+
+  showEditModal() {
+    console.log('show edit modal')
+    AppStore.data.current_transaction.show_edit_modal = true
+    AppStore.emitChange()
+  }
+
+  editTransaction() {
+    console.log('editing')
   }
 
   render() {
@@ -369,6 +385,9 @@ export default class Transactions extends Component {
           uploadFile={ this.uploadFile }
           deleteFile={ this.deleteFile }
           handleNameChange={ this.handleNameChange }
+          handleViewMore={ this.handleViewMore }
+          showEditModal={ this.showEditModal }
+          editTransaction={ this.editTransaction }
         />
       )
     }
