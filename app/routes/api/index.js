@@ -13,12 +13,16 @@ module.exports = (app, config) => {
   require('./posts/forgot-password')(app, config)
   require('./posts/reset-password')(app, config)
   require('./posts/verify-phone')(app, config)
-  require('./posts/create-room')(app, config)
-  require('./posts/add-user-to-room')(app, config)
-  require('./posts/create-message')(app, config)
-  require('./posts/create-transaction')(app, config)
-  require('./posts/delete-transaction')(app, config)
-  require('./posts/create-contacts')(app, config)
-  require('./posts/edit-contact')(app, config)
-  require('./posts/delete-contact')(app, config)
+  // Rooms
+  require('./posts/rooms/create-room')(app, config)
+  require('./posts/rooms/add-user-to-room')(app, config)
+  require('./posts/rooms/create-message')(app, config)
+  // Transactions
+  require('./posts/transactions/create-transaction')(app, config)
+  require('./posts/transactions/delete-transaction')(app, config)
+  require('./posts/transactions/upload-files')(app, config)
+  // Contacts
+  require('./posts/contacts/create-contacts')(app, config)
+  require('./posts/contacts/edit-contact')(app, config)
+  require('./posts/contacts/delete-contact')(app, config)
 }

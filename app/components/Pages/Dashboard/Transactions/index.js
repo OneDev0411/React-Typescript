@@ -122,6 +122,95 @@ export default class Transactions extends Component {
       id
     })
   }
+
+  showDocModal(files) {
+    const indexed_files = files.map((file, i) => {
+      file.index = i
+      return file
+    })
+    AppStore.data.document_modal = {
+      files: indexed_files,
+      current_file: files[0]
+    }
+    AppStore.data.show_document_modal = true
+    this.setDrawerContent('docs')
+    this.dragLeave()
+    AppStore.emitChange()
+  }
+
+  hideModal() {
+    delete AppStore.data.show_document_modal
+    AppStore.emitChange()
+  }
+
+  uploadFile() {
+    const data = AppStore.data
+    const files = data.document_modal.files
+    const files_count = files.length
+    const current_file = data.document_modal.current_file
+    if (!AppStore.data.current_transaction.attachments)
+      AppStore.data.current_transaction.attachments = []
+    // const transaction = data.current_transaction
+    // const user = data.user
+    // console.log(current_file)
+    // TransactionDispatcher.dispatch({
+    //   action: 'upload-files',
+    //   user,
+    //   transaction,
+    //   file: current_file
+    // })
+    const attachments = data.current_transaction.attachments
+    AppStore.data.current_transaction.attachments = [
+      current_file,
+      ...attachments
+    ]
+    // Next file
+    if (current_file.index === files_count - 1)
+      this.hideModal()
+    else {
+      const next_file = files[current_file.index + 1]
+      // this.refs.file_name.refs.input.value = next_file.name
+      AppStore.data.document_modal.current_file = next_file
+    }
+    AppStore.emitChange()
+  }
+  // upoloadDocs(files) {
+  //   const data = this.props.data
+  //   if (!AppStore.data.current_transaction.attachments)
+  //     AppStore.data.current_transaction.attachments = []
+  //   const transaction = data.current_transaction
+  //   const user = data.user
+  //   TransactionDispatcher.dispatch({
+  //     action: 'upload-files',
+  //     user,
+  //     transaction,
+  //     files
+  //   })
+  //   const attachments = data.current_transaction.attachments
+  //   AppStore.data.current_transaction.attachments = [
+  //     ...files,
+  //     ...attachments
+  //   ]
+  //   this.setDrawerContent('docs')
+  //   this.dragLeave()
+  //   AppStore.emitChange()
+  // }
+
+  addDocs(files) {
+    this.showDocModal(files)
+    AppStore.emitChange()
+  }
+
+  dragEnter() {
+    AppStore.data.current_transaction.drag_enter = true
+    AppStore.emitChange()
+  }
+
+  dragLeave() {
+    delete AppStore.data.current_transaction.drag_enter
+    AppStore.emitChange()
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -130,7 +219,7 @@ export default class Transactions extends Component {
     // Transactions
     let transactions_rows
     if (transactions) {
-      transactions_rows = transactions.map((transaction) => {
+      transactions_rows = transactions.map(transaction => {
         let listing
         let address
         // Price
@@ -215,8 +304,8 @@ export default class Transactions extends Component {
             </td>
           </tr>
         )
-      })
-    }
+      }) // end trans loop
+    } // end if (transactions)
     let saved_message
     if (data.new_transaction && data.new_transaction.saved) {
       saved_message = (
@@ -267,6 +356,11 @@ export default class Transactions extends Component {
           setDrawerContent={ this.setDrawerContent }
           closeDrawer={ this.closeDrawer }
           deleteTransaction={ this.deleteTransaction }
+          addDocs={ this.addDocs.bind(this) }
+          dragEnter={ this.dragEnter }
+          dragLeave={ this.dragLeave }
+          hideModal={ this.hideModal }
+          uploadFile={ this.uploadFile }
         />
       )
     }

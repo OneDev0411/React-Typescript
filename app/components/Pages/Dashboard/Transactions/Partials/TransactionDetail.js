@@ -1,14 +1,46 @@
 // Dashboard/Transactions/TransactionDetail.js
 import React, { Component } from 'react'
-import { Carousel, CarouselItem, Button } from 'react-bootstrap'
+import { Carousel, CarouselItem, Modal, Button, Input } from 'react-bootstrap'
 import S from 'shorti'
 import listing_util from '../../../../../utils/listing'
 import helpers from '../../../../../utils/helpers'
+import Dropzone from 'react-dropzone'
 
 // Partials
 import ProfileImage from '../../Partials/ProfileImage'
 
 export default class TransactionDetail extends Component {
+
+  handleAddDocs(files) {
+    this.props.addDocs(files)
+  }
+
+  handleDragEnter() {
+    this.props.dragEnter()
+  }
+
+  handleDragLeave() {
+    this.props.dragLeave()
+  }
+
+  drawerDrop(files) {
+    // to prevent dupes
+    const data = this.props.data
+    if (data.current_transaction.drag_enter)
+      return false
+    this.handleAddDocs(files)
+  }
+
+  uploadFile(e) {
+    e.preventDefault()
+    const file_name = this.refs.file_name.refs.input.value
+    this.props.uploadFile(file_name)
+  }
+
+  handleNameChange() {
+    const file_name = this.refs.file_name.refs.input.value
+    this.refs.file_name.refs.input.value = file_name
+  }
 
   render() {
     const data = this.props.data
@@ -16,6 +48,7 @@ export default class TransactionDetail extends Component {
     const listing = transaction.listing
     const listing_data = transaction.listing_data
     const drawer = transaction.drawer
+    const attachments = transaction.attachments
     let property
     if (listing)
       property = listing.property
@@ -131,7 +164,7 @@ export default class TransactionDetail extends Component {
 
     // Drawer
     let drawer_content
-    const drawer_height = window.innerHeight - 153
+    const drawer_height = window.innerHeight - 203
     let drawer_wrap_style = {
       ...S('absolute h-' + drawer_height + ' r-0 w-0 t-80'),
       overflow: 'hidden'
@@ -148,17 +181,64 @@ export default class TransactionDetail extends Component {
       }
       drawer_class = 'active'
       const drawer_header_style = S('bg-f7f9fa p-12 font-18 color-4a4a4a')
+      let attachments_markup
+      // console.log(attachments)
+      if (attachments) {
+        attachments_markup = attachments.map((doc, i) => {
+          let doc_image = <a href={ doc.preview } target="_blank" className="pull-left" style={ S('w-100 h-100 p-15') }><i style={ S('font-60') } className="fa fa-file-o"></i></a>
+          if (doc.type === 'image/jpeg')
+            doc_image = <a href={ doc.preview } target="_blank" className="pull-left" style={ S('bg-url(' + doc.preview + ') bg-cover bg-center w-100 h-100') }></a>
+          const doc_style = {
+            ...S('mb-10 pb-10 color-929292'),
+            borderBottom: '1px solid #f7f9fa'
+          }
+          return (
+            <div key={ 'document-' + i } style={ doc_style }>
+              <Button style={ S('mt-10 mr-10') } bsStyle="danger" className="pull-right">Delete</Button>
+              <div className="pull-left">
+                { doc_image }
+              </div>
+              <div style={ S('w-200') } className="pull-left text-left">
+                <div style={ S('ml-20') }>{ doc.name }</div>
+                <div className="pull-left" style={ S('w-150 ml-20') }>{ doc.type }</div>
+                <div className="pull-left" style={ S('w-150 ml-20') }>{ Math.ceil(doc.size / 1000) }K</div>
+              </div>
+              <div className="clearfix"></div>
+            </div>
+          )
+        })
+      }
+      const dropzone_style = {
+        ...S('w-100p h-100p pb-15 mb-15'),
+        borderBottom: '1px solid #f7f9fa'
+      }
+      const doczone_style = {
+        ...S('absolute w-100p h-500'),
+        overflow: 'scroll'
+      }
       if (drawer.content === 'docs') {
+        let doc_count
+        if (attachments && attachments.length)
+          doc_count = '(' + attachments.length + ')'
         drawer_content = (
           <div>
-            <div style={ drawer_header_style }>Documents</div>
-            <div className="text-center" style={ S('pt-100') }>
-              <div style={ S('mb-10') }>
-                <img src="/images/dashboard/transactions/drag-n-drop.png"/>
-              </div>
-              <div style={ S('color-929292') }>
-                <span style={ S('font-16') }>DRAG & DROP</span><br />
-                <span style={ S('font-14 color-bfc2c3') }>your files to upload, or <a href="#">browse</a></span>
+            <div style={ drawer_header_style }>attachments { doc_count }</div>
+            <div className="text-center" style={ S('pt-30') }>
+              <Dropzone style={ dropzone_style }
+                onDragEnter={ this.handleDragEnter.bind(this) }
+                onDragLeave={ this.handleDragLeave.bind(this) }
+                onDrop={ this.drawerDrop.bind(this) }
+              >
+                <div style={ S('mb-10') }>
+                  <img src="/images/dashboard/transactions/drag-n-drop.png"/>
+                </div>
+                <div style={ S('color-929292') }>
+                  <span style={ S('font-16') }>DRAG & DROP</span><br />
+                  <span style={ S('font-14 color-bfc2c3') }>your files to upload, or <a href="#">browse</a></span>
+                </div>
+              </Dropzone>
+              <div style={ doczone_style }>
+                { attachments_markup }
               </div>
             </div>
           </div>
@@ -221,63 +301,112 @@ export default class TransactionDetail extends Component {
       ...S('h-80 mb-15 pl-15 pr-15'),
       borderBottom: '1px solid #edf1f3'
     }
+    let overlay_active = ' hidden'
+    if (transaction.drag_enter)
+      overlay_active = ' active'
+    const document_modal = data.document_modal
+    let current_file_name
+    let current_file_image
+    let current_file_num
+    let document_modal_file_count
+    if (data.show_document_modal) {
+      const current_file = document_modal.current_file
+      document_modal_file_count = document_modal.files.length
+      current_file_num = current_file.index + 1
+      current_file_name = current_file.name
+      current_file_image = <div style={ S('w-100 h-100 p-15') }><i style={ S('font-60') } className="fa fa-file-o"></i></div>
+      if (current_file.type === 'image/jpeg')
+        current_file_image = <div style={ S('bg-url(' + current_file.preview + ') bg-cover bg-center w-100 h-100') } src={ current_file.preview } />
+    }
     return (
       <div style={ S('minw-800 z-0') }>
-        <div style={ S('mt-40 absolute r-10 z-100') }>
-          <Button style={ { ...no_border, ...S('br-100 w-35 h-35 p-2 mr-5') } } onClick={ this.props.setDrawerContent.bind(this, 'contacts') }>
-            <img style={ S('w-20 h-20') } src={ `/images/dashboard/icons/drawer/contacts${drawer && drawer.content === 'contacts' ? '-active' : ''}.svg`} />
-          </Button>
-          <Button style={ { ...no_border, ...S('border-none br-100 w-35 h-35 p-2') } } onClick={ this.props.setDrawerContent.bind(this, 'docs') }>
-            <img style={ S('w-15 h-15 mt-2n') } src={ `/images/dashboard/icons/drawer/docs${drawer && drawer.content === 'docs' ? '-active' : ''}.svg`} />
-          </Button>
-        </div>
-        <div style={ drawer_wrap_style }>
-          <div style={ drawer_style } className={ 'transaction-detail__drawer ' + drawer_class }>
-            <div onClick={ this.props.closeDrawer } style={ S('mt-5 mr-15 fw-400 font-32') }className="close pull-right">&times;</div>
-            { drawer_content }
+        <Dropzone
+          style={ S('w-100p h-100p') }
+          disableClick
+          onDragEnter={ this.handleDragEnter.bind(this) }
+          onDragLeave={ this.handleDragLeave.bind(this) }
+          onDrop={ this.handleAddDocs.bind(this) }
+        >
+          <div style={ S('mt-40 absolute r-10 z-100') }>
+            <Button style={ { ...no_border, ...S('br-100 w-35 h-35 p-2 mr-5') } } onClick={ this.props.setDrawerContent.bind(this, 'contacts') }>
+              <img style={ S('w-20 h-20') } src={ `/images/dashboard/icons/drawer/contacts${drawer && drawer.content === 'contacts' ? '-active' : ''}.svg`} />
+            </Button>
+            <Button style={ { ...no_border, ...S('border-none br-100 w-35 h-35 p-2') } } onClick={ this.props.setDrawerContent.bind(this, 'docs') }>
+              <img style={ S('w-15 h-15 mt-2n') } src={ `/images/dashboard/icons/drawer/docs${drawer && drawer.content === 'docs' ? '-active' : ''}.svg`} />
+            </Button>
           </div>
-        </div>
-        <div className="transaction-detail__title" style={ title_header_style }>
-          <div className="pull-left">
-            <h4 style={ S('font-28') }>{ title_area }</h4>
-          </div>
-          { listing_status_indicator }
-          <div className="pull-left text-center" style={ S('pointer bg-F7F9FA relative t-7 br-100 p-8 w-35 h-35') }>
-            <img src="/images/dashboard/icons/link.svg"/>
-          </div>
-          <div className="clearfix"></div>
-          <div style={ S('color-929394 mb-20') }>{ subtitle_area }</div>
-        </div>
-        <div style={ S('relative') }>
-          <div style={ S('minh-380 pl-15 pr-15') }>
-            <div style={ S(carousel_wh + ' mr-15 mb-30') } className="pull-left">
-              { listing_images }
-            </div>
-            { divider_div }
-            <div style={ S('w-500') } className="pull-left">
-              <div style={ S('mb-20') }>
-                <div style={ S('mb-15 mr-20 pull-left') }><b>MLS#:</b> <span style={ S('color-929292') }>{ mls_number }</span></div>
-                <div style={ S('mb-15 mr-20 pull-left') }><b>Transaction Type:</b> <span style={ S('color-929292') }>{ transaction_type }</span></div>
-                <div style={ S('mb-15 mr-20 pull-left') }><b>Property Type:</b> <span style={ S('color-929292') }>{ property_type }</span></div>
-                <div style={ S('mb-15 mr-20 pull-left') }><b>Year Built:</b> <span style={ S('color-929292') }>{ year_built }</span></div>
-                <div style={ S('mb-15 mr-20 pull-left') }><b>Beds:</b> <span style={ S('color-929292') }>{ bedroom_count }</span></div>
-                <div style={ S('mb-15 mr-20 pull-left') }><b>Baths:</b> <span style={ S('color-929292') }>{ bathroom_count }</span></div>
-                <div style={ S('mb-15 mr-20 pull-left') }><b>Sqft:</b> <span style={ S('color-929292') }>{ square_feet }</span></div>
-                <div className="clearfix"></div>
-              </div>
-              <div style={ S('mb-100') }>
-                <Button style={ S('bc-929292 color-929292 pl-20 pr-20 mr-15') }><b>View More</b></Button>
-                <Button style={ S('bc-3388ff color-3388ff pl-40 pr-40 mr-15') }><b>Edit</b></Button>
-                <Button style={ S('pl-40 pr-40') } className={ data.deleting_transaction && data.deleting_transaction === transaction.id ? 'disabled' : '' } onClick={ this.props.deleteTransaction.bind(this, transaction.id) } type="button" bsStyle="danger">
-                  { data.deleting_transaction && data.deleting_transaction === transaction.id ? 'Deleting...' : 'Delete' }
-                </Button>
-              </div>
-              <div>
-                { contacts_markup }
-              </div>
+          <div style={ drawer_wrap_style }>
+            <div style={ drawer_style } className={ 'transaction-detail__drawer ' + drawer_class }>
+              <div onClick={ this.props.closeDrawer } style={ S('mt-5 mr-15 fw-400 font-32') }className="close pull-right">&times;</div>
+              { drawer_content }
             </div>
           </div>
+          <div className="transaction-detail__title" style={ title_header_style }>
+            <div className="pull-left">
+              <h4 style={ S('font-28') }>{ title_area }</h4>
+            </div>
+            { listing_status_indicator }
+            <div className="pull-left text-center" style={ S('pointer bg-F7F9FA relative t-7 br-100 p-8 w-35 h-35') }>
+              <img src="/images/dashboard/icons/link.svg"/>
+            </div>
+            <div className="clearfix"></div>
+            <div style={ S('color-929394 mb-20') }>{ subtitle_area }</div>
+          </div>
+          <div style={ S('relative') }>
+            <div style={ S('minh-380 pl-15 pr-15') }>
+              <div style={ S(carousel_wh + ' mr-15 mb-30') } className="pull-left">
+                { listing_images }
+              </div>
+              { divider_div }
+              <div style={ S('w-500') } className="pull-left">
+                <div style={ S('mb-20') }>
+                  <div style={ S('mb-15 mr-20 pull-left') }><b>MLS#:</b> <span style={ S('color-929292') }>{ mls_number }</span></div>
+                  <div style={ S('mb-15 mr-20 pull-left') }><b>Transaction Type:</b> <span style={ S('color-929292') }>{ transaction_type }</span></div>
+                  <div style={ S('mb-15 mr-20 pull-left') }><b>Property Type:</b> <span style={ S('color-929292') }>{ property_type }</span></div>
+                  <div style={ S('mb-15 mr-20 pull-left') }><b>Year Built:</b> <span style={ S('color-929292') }>{ year_built }</span></div>
+                  <div style={ S('mb-15 mr-20 pull-left') }><b>Beds:</b> <span style={ S('color-929292') }>{ bedroom_count }</span></div>
+                  <div style={ S('mb-15 mr-20 pull-left') }><b>Baths:</b> <span style={ S('color-929292') }>{ bathroom_count }</span></div>
+                  <div style={ S('mb-15 mr-20 pull-left') }><b>Sqft:</b> <span style={ S('color-929292') }>{ square_feet }</span></div>
+                  <div className="clearfix"></div>
+                </div>
+                <div style={ S('mb-100') }>
+                  <Button style={ S('bc-929292 color-929292 pl-20 pr-20 mr-15') }><b>View More</b></Button>
+                  <Button style={ S('bc-3388ff color-3388ff pl-40 pr-40 mr-15') }><b>Edit</b></Button>
+                  <Button style={ S('pl-40 pr-40') } className={ data.deleting_transaction && data.deleting_transaction === transaction.id ? 'disabled' : '' } onClick={ this.props.deleteTransaction.bind(this, transaction.id) } type="button" bsStyle="danger">
+                    { data.deleting_transaction && data.deleting_transaction === transaction.id ? 'Deleting...' : 'Delete' }
+                  </Button>
+                </div>
+                <div>
+                  { contacts_markup }
+                </div>
+              </div>
+            </div>
+          </div>
+        </Dropzone>
+        <div className={ 'dropzone__overlay' + overlay_active}>
+          <div style={ S('w-100p h-100p text-center fixed t-0 l-0 z-1') } className="dropzone__bg"></div>
+          <div style={ S('w-100p h-100p text-center fixed t-0 l-0 z-2') } className="flexbox dropzone--message">
+            <div style={ S('font-100 mt-20p w-100p') }>Drop'em Here</div>
+          </div>
         </div>
+        <Modal show={ data.show_document_modal } onHide={ this.props.hideModal.bind(this) }>
+          <form onSubmit={ this.uploadFile.bind(this) }>
+            <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
+              <Modal.Title style={ S('font-14') }>Document { current_file_num } of { document_modal_file_count }</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div style={ S('mb-10') }>{ current_file_image }</div>
+              <label>Document Title</label>
+              <Input ref="file_name" value={ current_file_name } type="text" />
+            </Modal.Body>
+            <Modal.Footer>
+              <Button bsStyle="link" onClick={ this.props.hideModal.bind(this) }>Cancel</Button>
+              <Button style={ S('h-30 pt-5 pl-30 pr-30') } className={ data.creating_contacts ? 'disabled' : '' } type="submit" bsStyle="primary">
+                { data.creating_contacts ? 'Uploading...' : 'Upload' }
+              </Button>
+            </Modal.Footer>
+          </form>
+        </Modal>
       </div>
     )
   }
@@ -288,5 +417,10 @@ TransactionDetail.propTypes = {
   data: React.PropTypes.object,
   deleteTransaction: React.PropTypes.func,
   setDrawerContent: React.PropTypes.func,
-  closeDrawer: React.PropTypes.func
+  closeDrawer: React.PropTypes.func,
+  addDocs: React.PropTypes.func,
+  dragEnter: React.PropTypes.func,
+  dragLeave: React.PropTypes.func,
+  hideModal: React.PropTypes.func,
+  uploadFile: React.PropTypes.func
 }

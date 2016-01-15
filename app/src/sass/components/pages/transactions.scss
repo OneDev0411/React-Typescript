@@ -37,3 +37,20 @@
     right: 0;
   }
 }
+.dropzone__overlay {
+  pointer-events: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 1000000;
+  left: 0;
+  top: 0;
+  transition: all 150ms ease-in-out;
+}
+.dropzone__bg {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  opacity: .9;
+}
