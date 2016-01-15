@@ -140,6 +140,13 @@ export default class Transactions extends Component {
 
   hideModal() {
     delete AppStore.data.show_document_modal
+    // rekey attachments
+    const files = AppStore.data.current_transaction.attachments
+    const indexed_files = files.map((file, i) => {
+      file.index = i
+      return file
+    })
+    AppStore.data.current_transaction.attachments = indexed_files
     AppStore.emitChange()
   }
 
@@ -174,27 +181,15 @@ export default class Transactions extends Component {
     }
     AppStore.emitChange()
   }
-  // upoloadDocs(files) {
-  //   const data = this.props.data
-  //   if (!AppStore.data.current_transaction.attachments)
-  //     AppStore.data.current_transaction.attachments = []
-  //   const transaction = data.current_transaction
-  //   const user = data.user
-  //   TransactionDispatcher.dispatch({
-  //     action: 'upload-files',
-  //     user,
-  //     transaction,
-  //     files
-  //   })
-  //   const attachments = data.current_transaction.attachments
-  //   AppStore.data.current_transaction.attachments = [
-  //     ...files,
-  //     ...attachments
-  //   ]
-  //   this.setDrawerContent('docs')
-  //   this.dragLeave()
-  //   AppStore.emitChange()
-  // }
+
+  deleteFile(file) {
+    const files = AppStore.data.current_transaction.attachments
+    const edited_files = files.filter(file_loop => {
+      return file_loop.index !== file.index
+    })
+    AppStore.data.current_transaction.attachments = edited_files
+    AppStore.emitChange()
+  }
 
   addDocs(files) {
     this.showDocModal(files)
@@ -361,6 +356,7 @@ export default class Transactions extends Component {
           dragLeave={ this.dragLeave }
           hideModal={ this.hideModal }
           uploadFile={ this.uploadFile }
+          deleteFile={ this.deleteFile }
         />
       )
     }

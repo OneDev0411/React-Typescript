@@ -184,24 +184,24 @@ export default class TransactionDetail extends Component {
       let attachments_markup
       // console.log(attachments)
       if (attachments) {
-        attachments_markup = attachments.map((doc, i) => {
-          let doc_image = <a href={ doc.preview } target="_blank" className="pull-left" style={ S('w-100 h-100 p-15') }><i style={ S('font-60') } className="fa fa-file-o"></i></a>
-          if (doc.type === 'image/jpeg')
-            doc_image = <a href={ doc.preview } target="_blank" className="pull-left" style={ S('bg-url(' + doc.preview + ') bg-cover bg-center w-100 h-100') }></a>
-          const doc_style = {
+        attachments_markup = attachments.map((file, i) => {
+          let file_image = <a href={ file.preview } target="_blank" className="pull-left" style={ S('w-100 h-100 p-15') }><i style={ S('font-60') } className="fa fa-file-o"></i></a>
+          if (file.type === 'image/jpeg')
+            file_image = <a href={ file.preview } target="_blank" className="pull-left" style={ S('bg-url(' + file.preview + ') bg-cover bg-center w-100 h-100') }></a>
+          const file_style = {
             ...S('mb-10 pb-10 color-929292'),
             borderBottom: '1px solid #f7f9fa'
           }
           return (
-            <div key={ 'document-' + i } style={ doc_style }>
-              <Button style={ S('mt-10 mr-10') } bsStyle="danger" className="pull-right">Delete</Button>
+            <div key={ 'fileument-' + i } style={ file_style }>
+              <Button onClick={ this.props.deleteFile.bind(this, file) } style={ S('mt-10 mr-10') } bsStyle="danger" className="pull-right">Delete</Button>
               <div className="pull-left">
-                { doc_image }
+                { file_image }
               </div>
               <div style={ S('w-200') } className="pull-left text-left">
-                <div style={ S('ml-20') }>{ doc.name }</div>
-                <div className="pull-left" style={ S('w-150 ml-20') }>{ doc.type }</div>
-                <div className="pull-left" style={ S('w-150 ml-20') }>{ Math.ceil(doc.size / 1000) }K</div>
+                <div style={ S('ml-20') }>{ file.name }</div>
+                <div className="pull-left" style={ S('w-150 ml-20') }>{ file.type }</div>
+                <div className="pull-left" style={ S('w-150 ml-20') }>{ Math.ceil(file.size / 1000) }K</div>
               </div>
               <div className="clearfix"></div>
             </div>
@@ -212,8 +212,9 @@ export default class TransactionDetail extends Component {
         ...S('w-100p h-100p pb-15 mb-15'),
         borderBottom: '1px solid #f7f9fa'
       }
+      const doczone_height = window.innerHeight - 470
       const doczone_style = {
-        ...S('absolute w-100p h-500'),
+        ...S('absolute w-100p h-' + doczone_height),
         overflow: 'scroll'
       }
       if (drawer.content === 'docs') {
@@ -422,5 +423,6 @@ TransactionDetail.propTypes = {
   dragEnter: React.PropTypes.func,
   dragLeave: React.PropTypes.func,
   hideModal: React.PropTypes.func,
-  uploadFile: React.PropTypes.func
+  uploadFile: React.PropTypes.func,
+  deleteFile: React.PropTypes.func
 }
