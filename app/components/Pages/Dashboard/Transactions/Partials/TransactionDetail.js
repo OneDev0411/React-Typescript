@@ -244,7 +244,7 @@ export default class TransactionDetail extends Component {
         ...S('absolute w-100p h-' + doczone_height),
         overflow: 'scroll'
       }
-      const drawer_header_style = S('bg-f7f9fa ml-5 br-3 mt-5 p-12 font-18 color-4a4a4a')
+      const drawer_header_style = S('bg-f7f9fa ml-5 br-3 p-12 font-18 color-4a4a4a')
       if (drawer.content === 'docs') {
         let doc_count
         if (attachments && attachments.length)
