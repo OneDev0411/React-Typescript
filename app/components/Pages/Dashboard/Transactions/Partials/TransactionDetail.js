@@ -223,7 +223,7 @@ export default class TransactionDetail extends Component {
           doc_count = '(' + attachments.length + ')'
         drawer_content = (
           <div>
-            <div style={ drawer_header_style }>attachments { doc_count }</div>
+            <div style={ drawer_header_style }>Documents { doc_count }</div>
             <div className="text-center" style={ S('pt-30') }>
               <Dropzone style={ dropzone_style }
                 onDragEnter={ this.handleDragEnter.bind(this) }
