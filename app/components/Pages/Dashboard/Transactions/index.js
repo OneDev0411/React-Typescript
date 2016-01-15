@@ -222,13 +222,13 @@ export default class Transactions extends Component {
   }
 
   showEditModal() {
-    console.log('show edit modal')
+    // console.log('show edit modal')
     AppStore.data.current_transaction.show_edit_modal = true
     AppStore.emitChange()
   }
 
   editTransaction() {
-    console.log('editing')
+    // console.log('editing')
   }
 
   render() {
