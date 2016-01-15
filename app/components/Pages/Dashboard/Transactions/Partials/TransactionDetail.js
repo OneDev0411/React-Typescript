@@ -186,13 +186,28 @@ export default class TransactionDetail extends Component {
       drawer_class = 'active'
       const drawer_header_style = S('bg-f7f9fa p-12 font-18 color-4a4a4a')
       let attachments_markup
+      let file_icon_short
       // console.log(attachments)
       if (attachments) {
         attachments_markup = attachments.map((file, i) => {
+          switch (file.type) {
+            case 'application/pdf':
+              file_icon_short = 'PDF'
+              break
+            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+              file_icon_short = 'DOC'
+              break
+            case 'text/plain':
+              file_icon_short = 'TXT'
+              break
+            default:
+              file_icon_short = 'FILE'
+          }
+
           let file_image = (
             <a href={ file.preview } target="_blank" className="pull-left" style={ S('ml-10 w-60 h-60 color-929292') }>
               <i style={ S('font-50') } className="fa fa-file-o"></i>
-              { file.type }
+              { file_icon_short }
             </a>
           )
           if (file.type === 'image/jpeg') {
