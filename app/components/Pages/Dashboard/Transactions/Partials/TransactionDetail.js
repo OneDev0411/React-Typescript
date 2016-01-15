@@ -175,7 +175,7 @@ export default class TransactionDetail extends Component {
     }
     const drawer_style = {
       ...S('absolute h-' + drawer_height + ' z-100 bg-fff w-500'),
-      borderLeft: '1px solid #edf1f3'
+      borderLeft: '6px solid #edf1f3'
     }
     let drawer_class
     if (drawer) {
@@ -184,7 +184,6 @@ export default class TransactionDetail extends Component {
         ...S('w-500')
       }
       drawer_class = 'active'
-      const drawer_header_style = S('bg-f7f9fa p-12 font-18 color-4a4a4a')
       let attachments_markup
       let file_icon_short
       // console.log(attachments)
@@ -221,7 +220,7 @@ export default class TransactionDetail extends Component {
           }
           return (
             <div className="transaction--file" key={ 'file-' + i } style={ file_style }>
-              <Button onClick={ this.props.deleteFile.bind(this, file) } style={ S('mt-10 mr-10') } bsStyle="danger" className="pull-right delete">Delete</Button>
+              <Button onClick={ this.props.deleteFile.bind(this, file) } style={ S('mt-10 mr-10 absolute r-0') } bsStyle="danger" className="pull-right delete">Delete</Button>
               <div onClick={ this.openFile.bind(this, file) } className="pull-left">
                 { file_image }
               </div>
@@ -244,6 +243,7 @@ export default class TransactionDetail extends Component {
         ...S('absolute w-100p h-' + doczone_height),
         overflow: 'scroll'
       }
+      const drawer_header_style = S('bg-f7f9fa ml-5 br-3 mt-5 p-12 font-18 color-4a4a4a')
       if (drawer.content === 'docs') {
         let doc_count
         if (attachments && attachments.length)
@@ -403,16 +403,16 @@ export default class TransactionDetail extends Component {
           onDrop={ this.handleAddDocs.bind(this) }
         >
           <div style={ S('mt-40 absolute r-10 z-100') }>
-            <Button style={ { ...no_border, ...S('br-100 w-35 h-35 p-2 mr-5') } } onClick={ this.props.setDrawerContent.bind(this, 'contacts') }>
+            <Button style={ { ...no_border, ...S('br-100 w-35 h-35 p-2 mr-0') } } onClick={ this.props.setDrawerContent.bind(this, 'contacts') }>
               <img style={ S('w-20 h-20') } src={ `/images/dashboard/icons/drawer/contacts${drawer && drawer.content === 'contacts' ? '-active' : ''}.svg`} />
             </Button>
             <Button style={ { ...no_border, ...S('border-none br-100 w-35 h-35 p-2') } } onClick={ this.props.setDrawerContent.bind(this, 'docs') }>
-              <img style={ S('w-15 h-15 mt-2n') } src={ `/images/dashboard/icons/drawer/docs${drawer && drawer.content === 'docs' ? '-active' : ''}.svg`} />
+              <img style={ S('w-14 h-20 mt-1n') } src={ `/images/dashboard/icons/drawer/docs${drawer && drawer.content === 'docs' ? '-active' : ''}.svg`} />
             </Button>
           </div>
           <div style={ drawer_wrap_style }>
             <div style={ drawer_style } className={ 'transaction-detail__drawer ' + drawer_class }>
-              <div onClick={ this.props.closeDrawer } style={ S('mt-5 mr-15 fw-400 font-32') }className="close pull-right">&times;</div>
+              <div onClick={ this.props.closeDrawer } style={ S('mt-10 mr-15 fw-400 font-32') }className="close pull-right">&times;</div>
               { drawer_content }
             </div>
           </div>
