@@ -226,9 +226,9 @@ export default class TransactionDetail extends Component {
                 { file_image }
               </div>
               <div onClick={ this.openFile.bind(this, file) } style={ S('w-350') } className="pull-left text-left">
-                <div style={ S('ml-10 color-444 font-15') }>{ file.new_name ? file.new_name : file.name }</div>
-                <div style={ S('w-150 ml-10 font-13') }>Jan 15, 8:17am - Mark</div>
-                <div style={ S('w-150 ml-10 font-13') }>Shared with Shayan</div>
+                <div style={ S('ml-10 color-444 font-14 mb-5') }>{ file.new_name ? file.new_name : file.name }</div>
+                <div style={ S('w-150 ml-10 font-12') }>Jan 15, 8:17am - Mark</div>
+                <div style={ S('w-150 ml-10 font-12') }>Shared with Shayan</div>
               </div>
               <div className="clearfix"></div>
             </div>
@@ -422,7 +422,7 @@ export default class TransactionDetail extends Component {
               <div style={ S('absolute t-90 r-130n') }>
                 <img src="/images/dashboard/transactions/drop-arrow.png"/>
               </div>
-              <div style={ S('h-100 relative t-60n') }>
+              <div style={ S('h-110 relative t-60n') }>
                 <img src="/images/dashboard/transactions/drop-here.png"/>
               </div>
               <div style={ S('font-36 mb-10') }>Drop to add to <br/><span className="text-primary">{ title }</span></div>
