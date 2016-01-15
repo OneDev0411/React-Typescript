@@ -404,12 +404,8 @@ export default class TransactionDetail extends Component {
           onDrop={ this.handleAddDocs.bind(this) }
         >
           <div style={ S('mt-40 absolute r-10 z-100') }>
-            <Button style={ { ...no_border, ...S('br-100 w-35 h-35 p-2 mr-2') } } onClick={ this.props.setDrawerContent.bind(this, 'contacts', false) }>
-              <img style={ S('w-20 h-20') } src={ `/images/dashboard/icons/drawer/contacts${drawer && drawer.content === 'contacts' ? '-active' : ''}.svg`} />
-            </Button>
-            <Button style={ { ...no_border, ...S('border-none br-100 w-35 h-35 p-2') } } onClick={ this.props.setDrawerContent.bind(this, 'docs', false) }>
-              <img style={ S('w-14 h-20 mt-1n') } src={ `/images/dashboard/icons/drawer/docs${drawer && drawer.content === 'docs' ? '-active' : ''}.svg`} />
-            </Button>
+            <img onClick={ this.props.setDrawerContent.bind(this, 'contacts', false) } style={ S('w-30 h-30 mr-10 pointer') } src={ `/images/dashboard/icons/drawer/contacts${drawer && drawer.content === 'contacts' ? '-active' : ''}.svg`} />
+            <img onClick={ this.props.setDrawerContent.bind(this, 'docs', false) } style={ S('w-30 h-30 mt-1n pointer') } src={ `/images/dashboard/icons/drawer/docs${drawer && drawer.content === 'docs' ? '-active' : ''}.svg`} />
           </div>
           <div style={ drawer_wrap_style }>
             <div style={ drawer_style } className={ 'transaction-detail__drawer ' + drawer_class }>

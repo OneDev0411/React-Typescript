@@ -57,9 +57,10 @@ export default class Transactions extends Component {
 
   setDrawerContent(key, keep_open) {
     const drawer = AppStore.data.current_transaction.drawer
-    if (drawer && drawer.content && key === drawer.content && !keep_open) {
-      this.closeDrawer() 
-    } else {
+    // If double click
+    if (drawer && drawer.content && key === drawer.content && !keep_open)
+      this.closeDrawer()
+    else {
       AppStore.data.current_transaction.drawer = {
         open: true,
         content: key
