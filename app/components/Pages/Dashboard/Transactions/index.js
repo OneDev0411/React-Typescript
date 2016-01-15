@@ -55,9 +55,9 @@ export default class Transactions extends Component {
     }
   }
 
-  setDrawerContent(key) {
+  setDrawerContent(key, keep_open) {
     const drawer = AppStore.data.current_transaction.drawer
-    if (drawer && drawer.content && key === drawer.content) {
+    if (drawer && drawer.content && key === drawer.content && !keep_open) {
       this.closeDrawer() 
     } else {
       AppStore.data.current_transaction.drawer = {
@@ -143,7 +143,7 @@ export default class Transactions extends Component {
       current_file: files[0]
     }
     AppStore.data.show_document_modal = true
-    this.setDrawerContent('docs')
+    this.setDrawerContent('docs', true)
     this.dragLeave()
     AppStore.emitChange()
   }
@@ -216,7 +216,7 @@ export default class Transactions extends Component {
   }
 
   dragEnter() {
-    this.setDrawerContent('docs')
+    this.setDrawerContent('docs', true)
     AppStore.data.current_transaction.drag_enter = true
     AppStore.emitChange()
   }
