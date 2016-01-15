@@ -42,6 +42,10 @@ export default class TransactionDetail extends Component {
     this.props.handleNameChange(file_name)
   }
 
+  openFile(file) {
+    window.open(file.preview)
+  }
+
   render() {
     const data = this.props.data
     const transaction = data.current_transaction
@@ -185,23 +189,31 @@ export default class TransactionDetail extends Component {
       // console.log(attachments)
       if (attachments) {
         attachments_markup = attachments.map((file, i) => {
-          let file_image = <a href={ file.preview } target="_blank" className="pull-left" style={ S('w-100 h-100 p-15') }><i style={ S('font-60') } className="fa fa-file-o"></i></a>
-          if (file.type === 'image/jpeg')
-            file_image = <a href={ file.preview } target="_blank" className="pull-left" style={ S('bg-url(' + file.preview + ') bg-cover bg-center w-100 h-100') }></a>
+          let file_image = (
+            <a href={ file.preview } target="_blank" className="pull-left" style={ S('ml-10 w-60 h-60 color-929292') }>
+              <i style={ S('font-50') } className="fa fa-file-o"></i>
+              { file.type }
+            </a>
+          )
+          if (file.type === 'image/jpeg') {
+            file_image = (
+              <a href={ file.preview } target="_blank" className="pull-left" style={ S('w-60 h-60 ml-10 bg-url(' + file.preview + ') bg-cover bg-center br-2') }></a>
+            )
+          }
           const file_style = {
-            ...S('mb-10 pb-10 color-929292'),
+            ...S('h-80 pb-10 pt-10 color-929292 pointer'),
             borderBottom: '1px solid #f7f9fa'
           }
           return (
-            <div key={ 'file-' + i } style={ file_style }>
+            <div className="transaction--file" key={ 'file-' + i } style={ file_style }>
               <Button onClick={ this.props.deleteFile.bind(this, file) } style={ S('mt-10 mr-10') } bsStyle="danger" className="pull-right">Delete</Button>
-              <div className="pull-left">
+              <div onClick={ this.openFile.bind(this, file) } className="pull-left">
                 { file_image }
               </div>
-              <div style={ S('w-200') } className="pull-left text-left">
-                <div style={ S('ml-20') }>{ file.new_name ? file.new_name : file.name }</div>
-                <div className="pull-left" style={ S('w-150 ml-20') }>{ file.type }</div>
-                <div className="pull-left" style={ S('w-150 ml-20') }>{ Math.ceil(file.size / 1000) }K</div>
+              <div onClick={ this.openFile.bind(this, file) } style={ S('w-350') } className="pull-left text-left">
+                <div style={ S('ml-20 color-444 font-15') }>{ file.new_name ? file.new_name : file.name }</div>
+                <div style={ S('w-150 ml-20 font-13') }>Jan 15, 8:17am - Mark</div>
+                <div style={ S('w-150 ml-20 font-13') }>Shared with Shayan</div>
               </div>
               <div className="clearfix"></div>
             </div>

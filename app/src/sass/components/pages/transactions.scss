@@ -54,3 +54,8 @@
   background: #000;
   opacity: .3;
 }
+.transaction--file {
+  &:hover {
+    background-color: #F7F9FA;
+  }
+}
