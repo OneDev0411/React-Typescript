@@ -1,6 +1,6 @@
-// api/posts/upload-file-to-transaction.js
+// api/posts/create-transaction.js
 module.exports = (app, config) => {
-  app.post('/api/upload-file-to-transaction',(req, res) => {
+  app.post('/api/create-transaction',(req, res) => {
     const api_url = config.api.url
     const endpoint = api_url + '/transactions'
     const access_token = req.body.access_token
