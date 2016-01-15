@@ -418,7 +418,10 @@ export default class TransactionDetail extends Component {
         <div className={ 'dropzone__overlay' + overlay_active}>
           <div style={ S('w-100p h-100p text-center fixed t-0 l-0 z-1') } className="dropzone__bg"></div>
           <div style={ S('w-100p h-100p text-center fixed t-0 l-0 z-2') } className="flexbox dropzone--message">
-            <div className="center-block" style={ S('p-20 mt-20p w-700 h-300 bg-fff br-2 color-929292') }>
+            <div className="center-block" style={ S('relative p-20 mt-20p w-700 h-300 bg-fff br-2 color-929292') }>
+              <div style={ S('absolute t-90 r-130n') }>
+                <img src="/images/dashboard/transactions/drop-arrow.png"/>
+              </div>
               <div style={ S('h-100 relative t-60n') }>
                 <img src="/images/dashboard/transactions/drop-here.png"/>
               </div>

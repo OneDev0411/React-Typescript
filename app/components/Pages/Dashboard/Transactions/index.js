@@ -205,6 +205,7 @@ export default class Transactions extends Component {
   }
 
   dragEnter() {
+    this.setDrawerContent('docs')
     AppStore.data.current_transaction.drag_enter = true
     AppStore.emitChange()
   }
