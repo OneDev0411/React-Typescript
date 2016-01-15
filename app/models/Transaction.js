@@ -3,6 +3,7 @@ import es6Promise from 'es6-promise'
 es6Promise.polyfill()
 import 'isomorphic-fetch'
 import config from '../../config/public'
+import superagent from 'superagent'
 
 export default {
   create: (params, callback) => {
@@ -92,33 +93,46 @@ export default {
     })
   },
   uploadFiles: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/transactions/upload-file?id=' + params.id
+    const api_url = config.api_url
+    const endpoint = api_url + '/transactions/' + params.id + '/attachments'
+    const request = superagent.post(endpoint)
     const files = params.files
-    const request_object = {
-      access_token: params.access_token,
-      files
-    }
-    fetch(endpoint, {
-      method: 'post',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(request_object)
+    // request.set('Authorization', 'Bearer ' + params.access_token)
+    files.forEach(file => {
+      request.attach(file.name, file)
     })
-    .then(response => {
-      if (response.status >= 400) {
-        const error = {
-          status: 'error',
-          message: 'There was an error with this request.'
-        }
-        return callback(error, false)
-      }
-      return response.json()
+    request.end((err, res) => {
+      if (err)
+        return callback(err, res)
+      return callback(err, res)
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    // let api_host = params.api_host
+    // if (!api_host) api_host = config.app.url
+    // const endpoint = api_host + '/api/transactions/upload-file?id=' + params.id
+    // const files = params.files
+    // const request_object = {
+    //   access_token: params.access_token,
+    //   files
+    // }
+    // fetch(endpoint, {
+    //   method: 'post',
+    //   headers: {
+    //     'Content-type': 'application/json'
+    //   },
+    //   body: JSON.stringify(request_object)
+    // })
+    // .then(response => {
+    //   if (response.status >= 400) {
+    //     const error = {
+    //       status: 'error',
+    //       message: 'There was an error with this request.'
+    //     }
+    //     return callback(error, false)
+    //   }
+    //   return response.json()
+    // })
+    // .then(response => {
+    //   return callback(false, response)
+    // })
   }
 }

@@ -39,7 +39,7 @@ export default class TransactionDetail extends Component {
 
   handleNameChange() {
     const file_name = this.refs.file_name.refs.input.value
-    this.refs.file_name.refs.input.value = file_name
+    this.props.handleNameChange(file_name)
   }
 
   render() {
@@ -193,13 +193,13 @@ export default class TransactionDetail extends Component {
             borderBottom: '1px solid #f7f9fa'
           }
           return (
-            <div key={ 'fileument-' + i } style={ file_style }>
+            <div key={ 'file-' + i } style={ file_style }>
               <Button onClick={ this.props.deleteFile.bind(this, file) } style={ S('mt-10 mr-10') } bsStyle="danger" className="pull-right">Delete</Button>
               <div className="pull-left">
                 { file_image }
               </div>
               <div style={ S('w-200') } className="pull-left text-left">
-                <div style={ S('ml-20') }>{ file.name }</div>
+                <div style={ S('ml-20') }>{ file.new_name ? file.new_name : file.name }</div>
                 <div className="pull-left" style={ S('w-150 ml-20') }>{ file.type }</div>
                 <div className="pull-left" style={ S('w-150 ml-20') }>{ Math.ceil(file.size / 1000) }K</div>
               </div>
@@ -307,14 +307,18 @@ export default class TransactionDetail extends Component {
       overlay_active = ' active'
     const document_modal = data.document_modal
     let current_file_name
+    let current_file_new_name
     let current_file_image
     let current_file_num
+    let editing_name
     let document_modal_file_count
     if (data.show_document_modal) {
       const current_file = document_modal.current_file
       document_modal_file_count = document_modal.files.length
+      editing_name = document_modal.editing_name
       current_file_num = current_file.index + 1
       current_file_name = current_file.name
+      current_file_new_name = current_file.new_name
       current_file_image = <div style={ S('w-100 h-100 p-15') }><i style={ S('font-60') } className="fa fa-file-o"></i></div>
       if (current_file.type === 'image/jpeg')
         current_file_image = <div style={ S('bg-url(' + current_file.preview + ') bg-cover bg-center w-100 h-100') } src={ current_file.preview } />
@@ -387,7 +391,13 @@ export default class TransactionDetail extends Component {
         <div className={ 'dropzone__overlay' + overlay_active}>
           <div style={ S('w-100p h-100p text-center fixed t-0 l-0 z-1') } className="dropzone__bg"></div>
           <div style={ S('w-100p h-100p text-center fixed t-0 l-0 z-2') } className="flexbox dropzone--message">
-            <div style={ S('font-100 mt-20p w-100p') }>Drop'em Here</div>
+            <div className="center-block" style={ S('p-20 mt-20p w-700 h-300 bg-fff br-2 color-929292') }>
+              <div style={ S('h-100 relative t-60n') }>
+                <img src="/images/dashboard/transactions/drop-here.png"/>
+              </div>
+              <div style={ S('font-36 mb-10') }>Drop to add to <br/><span className="text-primary">{ title }</span></div>
+              <div style={ S('font-20') }>Drop files like pdfs, word docs and images</div>
+            </div>
           </div>
         </div>
         <Modal show={ data.show_document_modal } onHide={ this.props.hideModal.bind(this) }>
@@ -398,7 +408,7 @@ export default class TransactionDetail extends Component {
             <Modal.Body>
               <div style={ S('mb-10') }>{ current_file_image }</div>
               <label>Document Title</label>
-              <Input ref="file_name" value={ current_file_name } type="text" />
+              <Input ref="file_name" onChange={ this.handleNameChange.bind(this) } value={ editing_name ? current_file_new_name : current_file_name } type="text" />
             </Modal.Body>
             <Modal.Footer>
               <Button bsStyle="link" onClick={ this.props.hideModal.bind(this) }>Cancel</Button>
@@ -424,5 +434,6 @@ TransactionDetail.propTypes = {
   dragLeave: React.PropTypes.func,
   hideModal: React.PropTypes.func,
   uploadFile: React.PropTypes.func,
-  deleteFile: React.PropTypes.func
+  deleteFile: React.PropTypes.func,
+  handleNameChange: React.PropTypes.func
 }

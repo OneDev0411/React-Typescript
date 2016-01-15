@@ -138,15 +138,23 @@ export default class Transactions extends Component {
     AppStore.emitChange()
   }
 
+  handleNameChange(new_name) {
+    AppStore.data.document_modal.editing_name = true
+    AppStore.data.document_modal.current_file.new_name = new_name
+    AppStore.emitChange()
+  }
+
   hideModal() {
     delete AppStore.data.show_document_modal
     // rekey attachments
     const files = AppStore.data.current_transaction.attachments
-    const indexed_files = files.map((file, i) => {
-      file.index = i
-      return file
-    })
-    AppStore.data.current_transaction.attachments = indexed_files
+    if (files) {
+      const indexed_files = files.map((file, i) => {
+        file.index = i
+        return file
+      })
+      AppStore.data.current_transaction.attachments = indexed_files
+    }
     AppStore.emitChange()
   }
 
@@ -157,15 +165,14 @@ export default class Transactions extends Component {
     const current_file = data.document_modal.current_file
     if (!AppStore.data.current_transaction.attachments)
       AppStore.data.current_transaction.attachments = []
-    // const transaction = data.current_transaction
-    // const user = data.user
-    // console.log(current_file)
-    // TransactionDispatcher.dispatch({
-    //   action: 'upload-files',
-    //   user,
-    //   transaction,
-    //   file: current_file
-    // })
+    const transaction = data.current_transaction
+    const user = data.user
+    TransactionDispatcher.dispatch({
+      action: 'upload-files',
+      user,
+      transaction,
+      files: [current_file]
+    })
     const attachments = data.current_transaction.attachments
     AppStore.data.current_transaction.attachments = [
       current_file,
@@ -179,6 +186,7 @@ export default class Transactions extends Component {
       // this.refs.file_name.refs.input.value = next_file.name
       AppStore.data.document_modal.current_file = next_file
     }
+    delete AppStore.data.document_modal.editing_name
     AppStore.emitChange()
   }
 
@@ -357,6 +365,7 @@ export default class Transactions extends Component {
           hideModal={ this.hideModal }
           uploadFile={ this.uploadFile }
           deleteFile={ this.deleteFile }
+          handleNameChange={ this.handleNameChange }
         />
       )
     }

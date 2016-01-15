@@ -8,12 +8,10 @@ export default (user, transaction, files) => {
     access_token: user.access_token
   }
   Transaction.uploadFiles(params, (err, response) => {
-    return response
-    // // console.log('model', response)
-    // if (response.status === 'success') {
-    //   console.log('success')
-    // } else {
-    //   console.log('fail')
-    // }
+    if (response.status === 'success') {
+      // console.log('success')
+    } else {
+      // console.log('fail')
+    }
   })
 }
