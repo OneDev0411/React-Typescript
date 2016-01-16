@@ -159,14 +159,14 @@ export default class Dashboard extends Component {
 
   sendTypingStarted() {
     const data = AppStore.data
-    const socket = io(config.socket.server)
+    const socket = window.socket
     AppStore.data.is_typing = data.user
     AppStore.emitChange()
     socket.emit('User.Typing', AppStore.data.current_room.id)
   }
 
   sendTypingEnded() {
-    const socket = io(config.socket.server)
+    const socket = window.socket
     socket.emit('User.TypingEnded', AppStore.data.current_room.id)
     delete AppStore.data.is_typing
     AppStore.emitChange()
@@ -236,7 +236,8 @@ export default class Dashboard extends Component {
     window.addEventListener('resize', this.handleResize)
 
     // Listen for new messages
-    const socket = io(config.socket.server)
+    window.socket = io(config.socket.server)
+    const socket = window.socket
     const data = AppStore.data
     socket.emit('Authenticate', data.user.access_token)
 

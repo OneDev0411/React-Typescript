@@ -130,7 +130,6 @@ export default class AddContactsForm extends Component {
     let filtered_contacts
     if (data.filtered_contacts)
       filtered_contacts = data.filtered_contacts
-
     // Style
     const filter_scroll_style = {
       ...S('mt-10 p-5 bc-ccc bw-1 solid br-3'),
@@ -264,7 +263,7 @@ export default class AddContactsForm extends Component {
               <div style={ row_style }>
                 <Col xs={2} style={ column_style }/>
                 <Col xs={5} style={ column_style }>
-                  <Input style={ input_style } type="text" ref="phone_number" placeholder="PHONE NUMBER"/>
+                  <Input style={ input_style } type="number" ref="phone_number" placeholder="PHONE NUMBER"/>
                 </Col>
                 <Col xs={5} style={ column_style }>
                   <Input style={ input_style } type="text" ref="email" placeholder="EMAIL"/>
@@ -278,9 +277,13 @@ export default class AddContactsForm extends Component {
                 </Col>
                 <Col xs={5} style={ column_style }>
                   <Input type="select" ref="role">
-                    <option>Select Role</option>
+                    <option value="">Select a role</option>
                     <option value="Buyer">Buyer</option>
                     <option value="Seller">Seller</option>
+                    <option value="Lender">Lender</option>
+                    <option value="Escrow">Escrow</option>
+                    <option value="Attorney">Attorney</option>
+                    <option value="Other">Other</option>
                   </Input>
                 </Col>
                 <div className="clearfix"></div>

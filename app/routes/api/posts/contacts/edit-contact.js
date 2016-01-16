@@ -5,15 +5,8 @@ module.exports = (app, config) => {
     const contact = req.body.contact
     const endpoint = api_url + '/contacts/' + contact.id
     const access_token = req.body.access_token
-    const request_object = {
-      type: 'compact_user',
-      id: contact.id,
-      first_name: contact.first_name,
-      last_name: contact.last_name,
-      email: contact.email,
-      phone_number: contact.phone_number,
-      push_allowed: true
-    }
+    contact.push_allowed = true
+    const request_object = contact
     fetch(endpoint,{
       method: 'put',
       headers: {

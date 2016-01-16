@@ -1,27 +1,35 @@
 // actions/transactions/new.js
 import Transaction from '../../models/Transaction'
 import AppStore from '../../stores/AppStore'
-import _ from 'lodash'
 export default (user, new_transaction) => {
   let title = 'Transaction w/Out Listing'
   if (new_transaction.listing_added)
     title = 'Transaction w/Listing'
   let contract_price
   const listing_added = new_transaction.listing_added
-  const property_added = new_transaction.property_added
+  const listing_data = new_transaction.listing_data
   const contacts_added = new_transaction.contacts_added
   const dates = new_transaction.dates
   const contact_objects = []
-  // TODO: make this scalable for custom dates
   if (contacts_added) {
-    const client_ids = _.pluck(contacts_added.client, 'id')
-    client_ids.forEach(client_id => {
-      contact_objects.push({ id: client_id, role: 'Client' })
+    const clients = contacts_added.client
+    clients.forEach(contact => {
+      const contact_object = {
+        id: contact.id,
+        role: contact.role || 'Other'
+      }
+      contact_objects.push(contact_object)
     })
-    const contact_ids = _.pluck(contacts_added.contact, 'id')
-    contact_ids.forEach(contact_id => {
-      contact_objects.push({ id: contact_id, role: 'Contact' })
-    })
+    const others = contacts_added.contact
+    if (others) {
+      others.forEach(contact => {
+        const contact_object = {
+          id: contact.id,
+          role: contact.role || 'Other'
+        }
+        contact_objects.push(contact_object)
+      })
+    }
   }
   if (listing_added) {
     if (new_transaction.listing_added.contract_price)
@@ -32,7 +40,7 @@ export default (user, new_transaction) => {
   const params = {
     transaction_type: new_transaction.type,
     listing: listing_added,
-    listing_data: property_added,
+    listing_data,
     contract_price,
     title,
     contacts: contact_objects,

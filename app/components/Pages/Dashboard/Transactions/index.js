@@ -55,17 +55,28 @@ export default class Transactions extends Component {
     }
   }
 
-  setDrawerContent(key) {
-    AppStore.data.current_transaction.drawer = {
-      open: true,
-      content: key
+  setDrawerContent(key, keep_open) {
+    const drawer = AppStore.data.current_transaction.drawer
+    // If double click
+    if (drawer && drawer.content && key === drawer.content && !keep_open)
+      this.closeDrawer()
+    else {
+      AppStore.data.current_transaction.drawer = {
+        open: true,
+        content: key
+      }
+      AppStore.data.current_transaction.drawer_active = true
     }
     AppStore.emitChange()
   }
 
   closeDrawer() {
-    delete AppStore.data.current_transaction.drawer
+    delete AppStore.data.current_transaction.drawer_active
     AppStore.emitChange()
+    setTimeout(() => {
+      delete AppStore.data.current_transaction.drawer
+      AppStore.emitChange()
+    }, 200)
   }
 
   handleCloseSavedAlert() {
@@ -122,6 +133,151 @@ export default class Transactions extends Component {
       id
     })
   }
+
+  showDocModal(files) {
+    const indexed_files = files.map((file, i) => {
+      file.index = i
+      return file
+    })
+    AppStore.data.document_modal = {
+      files: indexed_files,
+      current_file: files[0]
+    }
+    AppStore.data.show_document_modal = true
+    this.setDrawerContent('docs', true)
+    this.dragLeave()
+    AppStore.emitChange()
+  }
+
+  handleNameChange(new_name) {
+    AppStore.data.document_modal.editing_name = true
+    AppStore.data.document_modal.current_file.new_name = new_name
+    AppStore.emitChange()
+  }
+
+  hideModal() {
+    delete AppStore.data.show_document_modal
+    delete AppStore.data.current_transaction.show_edit_modal
+    // rekey attachments
+    const files = AppStore.data.current_transaction.attachments
+    if (files) {
+      const indexed_files = files.map((file, i) => {
+        file.index = i
+        return file
+      })
+      AppStore.data.current_transaction.attachments = indexed_files
+    }
+    AppStore.emitChange()
+  }
+
+  uploadFile() {
+    const data = AppStore.data
+    const files = data.document_modal.files
+    const files_count = files.length
+    const current_file = data.document_modal.current_file
+    if (!AppStore.data.current_transaction.attachments)
+      AppStore.data.current_transaction.attachments = []
+    const transaction = data.current_transaction
+    const user = data.user
+    TransactionDispatcher.dispatch({
+      action: 'upload-files',
+      user,
+      transaction,
+      files: [current_file]
+    })
+    const attachments = data.current_transaction.attachments
+    AppStore.data.current_transaction.attachments = [
+      current_file,
+      ...attachments
+    ]
+    // Next file
+    if (current_file.index === files_count - 1)
+      this.hideModal()
+    else {
+      const next_file = files[current_file.index + 1]
+      // this.refs.file_name.refs.input.value = next_file.name
+      AppStore.data.document_modal.current_file = next_file
+    }
+    delete AppStore.data.document_modal.editing_name
+    AppStore.emitChange()
+  }
+
+  deleteFile(file) {
+    const files = AppStore.data.current_transaction.attachments
+    const edited_files = files.filter(file_loop => {
+      return file_loop.index !== file.index
+    })
+    AppStore.data.current_transaction.attachments = edited_files
+    AppStore.emitChange()
+  }
+
+  addDocs(files) {
+    this.showDocModal(files)
+    AppStore.emitChange()
+  }
+
+  dragEnter() {
+    this.setDrawerContent('docs', true)
+    AppStore.data.current_transaction.drag_enter = true
+    AppStore.emitChange()
+  }
+
+  dragLeave() {
+    delete AppStore.data.current_transaction.drag_enter
+    AppStore.emitChange()
+  }
+
+  handleViewMore() {
+    AppStore.data.current_transaction.show_more_info = true
+    AppStore.emitChange()
+  }
+
+  showEditModal() {
+    AppStore.data.current_transaction.show_edit_modal = true
+    AppStore.emitChange()
+  }
+
+  editTransaction(e) {
+    e.preventDefault()
+    AppStore.data.current_transaction.editing = true
+    AppStore.emitChange()
+    const transaction = AppStore.data.current_transaction
+    const user = AppStore.data.user
+    const address = this.refs.address.value
+    const status = this.refs.status.value
+    const city = this.refs.city.value
+    const state = this.refs.state.value
+    const postal_code = this.refs.postal_code.value
+    const year_built = this.refs.year_built.value
+    const property_type = this.refs.property_type.value
+    const square_feet = this.refs.square_feet.value
+    const bedroom_count = this.refs.bedroom_count.value
+    const bathroom_count = this.refs.bathroom_count.value
+    const listing_data = {
+      status,
+      property: {
+        property_type,
+        year_built,
+        address: {
+          street_full: address,
+          city,
+          state,
+          postal_code,
+          square_feet,
+          bedroom_count,
+          bathroom_count
+        }
+      }
+    }
+    // console.log(user, transaction, listing_data)
+    TransactionDispatcher.dispatch({
+      action: 'edit-transaction',
+      user,
+      transaction,
+      listing_data
+    })
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -130,7 +286,7 @@ export default class Transactions extends Component {
     // Transactions
     let transactions_rows
     if (transactions) {
-      transactions_rows = transactions.map((transaction) => {
+      transactions_rows = transactions.map(transaction => {
         let listing
         let address
         // Price
@@ -180,6 +336,9 @@ export default class Transactions extends Component {
           const transaction_time = helpers.convertDateToTime(closing_date)
           friendly_date = helpers.friendlyDate(transaction_time)
         }
+        let client_name
+        if (clients && clients[0])
+          client_name = clients[0].first_name + ' ' + clients[0].last_name
         return (
           <tr onClick={ this.handleClickTransaction.bind(this, transaction) } style={ S('pointer') } key={ transaction.id }>
             <td>
@@ -191,7 +350,7 @@ export default class Transactions extends Component {
             </td>
             <td>
               <div style={ S('mt-20') }>
-                { `${clients[0].first_name} ${clients[0].last_name}` }
+                { client_name }
                 <div style={ S('color-929394') }>{ transaction.transaction_type }</div>
               </div>
             </td>
@@ -212,42 +371,46 @@ export default class Transactions extends Component {
             </td>
           </tr>
         )
-      })
-    }
+      }) // end trans loop
+    } // end if (transactions)
     let saved_message
     if (data.new_transaction && data.new_transaction.saved) {
       saved_message = (
-        <Alert bsStyle="success">Transaction saved!<button className="close" type="button" onClick={ this.handleCloseSavedAlert.bind(this) }>&times;</button></Alert>
+        <div style={ S('pl-15 pr-15') }>
+          <Alert bsStyle="success">Transaction saved!<button className="close" type="button" onClick={ this.handleCloseSavedAlert.bind(this) }>&times;</button></Alert>
+        </div>
       )
     }
 
     let main_content
     if (transactions_rows && transactions_rows.length) {
       main_content = (
-        <Table style={ S('mt-10n minw-760') } className="table--tabbable" condensed hover>
-          <thead>
-            <tr>
-              <th width="150">Property</th>
-              <th width="100">Contact</th>
-              <th width="100">Price</th>
-              <th width="100">Next Task</th>
-              <th width="100">Closing Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            { transactions_rows }
-          </tbody>
-        </Table>
+        <div style={ S('pl-15 pr-15') }>
+          <Table style={ S('mt-10n minw-760') } className="table--tabbable" condensed hover>
+            <thead>
+              <tr>
+                <th width="150">Property</th>
+                <th width="100">Contact</th>
+                <th width="100">Price</th>
+                <th width="100">Next Task</th>
+                <th width="100">Closing Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              { transactions_rows }
+            </tbody>
+          </Table>
+        </div>
       )
     } else {
       main_content = (
-        <div>No transactions yet.  Maybe this needs to say something snarky or clever.</div>
+        <div style={ S('pl-15 pr-15') }>No transactions yet.  Maybe this needs to say something snarky or clever.</div>
       )
     }
 
     if (data.getting_transactions) {
       main_content = (
-        <div>
+        <div style={ S('pl-15 pr-15') }>
           <Loading />
         </div>
       )
@@ -259,15 +422,25 @@ export default class Transactions extends Component {
       main_content = (
         <TransactionDetail
           data={ data }
-          setDrawerContent={ this.setDrawerContent }
+          setDrawerContent={ this.setDrawerContent.bind(this) }
           closeDrawer={ this.closeDrawer }
           deleteTransaction={ this.deleteTransaction }
+          addDocs={ this.addDocs.bind(this) }
+          dragEnter={ this.dragEnter }
+          dragLeave={ this.dragLeave }
+          hideModal={ this.hideModal }
+          uploadFile={ this.uploadFile }
+          deleteFile={ this.deleteFile }
+          handleNameChange={ this.handleNameChange }
+          handleViewMore={ this.handleViewMore }
+          showEditModal={ this.showEditModal }
+          editTransaction={ this.editTransaction }
         />
       )
     }
 
     // Style
-    const main_style = S('absolute l-183 r-0 pl-15 pr-20')
+    const main_style = S('absolute l-183 r-0')
 
     return (
       <div style={ S('minw-1000') }>
