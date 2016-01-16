@@ -233,13 +233,49 @@ export default class Transactions extends Component {
   }
 
   showEditModal() {
-    // console.log('show edit modal')
     AppStore.data.current_transaction.show_edit_modal = true
     AppStore.emitChange()
   }
 
-  editTransaction() {
-    // console.log('editing')
+  editTransaction(e) {
+    e.preventDefault()
+    AppStore.data.current_transaction.editing = true
+    AppStore.emitChange()
+    const transaction = AppStore.data.current_transaction
+    const user = AppStore.data.user
+    const address = this.refs.address.value
+    const status = this.refs.status.value
+    const city = this.refs.city.value
+    const state = this.refs.state.value
+    const postal_code = this.refs.postal_code.value
+    const year_built = this.refs.year_built.value
+    const property_type = this.refs.property_type.value
+    const square_feet = this.refs.square_feet.value
+    const bedroom_count = this.refs.bedroom_count.value
+    const bathroom_count = this.refs.bathroom_count.value
+    const listing_data = {
+      status,
+      property: {
+        property_type,
+        year_built,
+        address: {
+          street_full: address,
+          city,
+          state,
+          postal_code,
+          square_feet,
+          bedroom_count,
+          bathroom_count
+        }
+      }
+    }
+    // console.log(user, transaction, listing_data)
+    TransactionDispatcher.dispatch({
+      action: 'edit-transaction',
+      user,
+      transaction,
+      listing_data
+    })
   }
 
   render() {

@@ -19,6 +19,7 @@ module.exports = (app, config) => {
   require('./posts/rooms/create-message')(app, config)
   // Transactions
   require('./posts/transactions/create-transaction')(app, config)
+  require('./posts/transactions/edit-transaction')(app, config)
   require('./posts/transactions/delete-transaction')(app, config)
   require('./posts/transactions/upload-files')(app, config)
   // Contacts

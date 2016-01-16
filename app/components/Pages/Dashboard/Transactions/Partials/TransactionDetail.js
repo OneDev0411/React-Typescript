@@ -51,25 +51,61 @@ export default class TransactionDetail extends Component {
   }
 
   render() {
+    // Data
     const data = this.props.data
     const transaction = data.current_transaction
     const listing = transaction.listing
     const listing_data = transaction.listing_data
     const drawer = transaction.drawer
     const attachments = transaction.attachments
+    // Set transaction data
+    const transaction_type = transaction.transaction_type
+    const contacts = transaction.contacts
+    // Set transaction property data
     let property
-    if (listing)
-      property = listing.property
+    let address
+    let status
+    let city
+    let state
+    let postal_code
+    let year_built
+    let property_type
+    let bedroom_count
+    let bathroom_count
+    let mls_number
+    let square_feet
     let title = 'No address'
     let subtitle
-    if (property) {
-      title = `${property.address.street_number} ${property.address.street_name} ${property.address.street_suffix}`
-      subtitle = `${property.address.street_number} ${property.address.street_name} ${property.address.street_suffix} ${property.address.city}, ${property.address.state} ${property.address.postal_code}`
+
+    // If listing
+    if (listing) {
+      status = listing.status
+      property = listing.property
+      address = `${property.address.street_number} ${property.address.street_name} ${property.address.street_suffix}`
+      city = property.address.city
+      state = property.address.state
+      postal_code = property.address.postal_code
+      title = address
+      subtitle = `${address} ${city}, ${state} ${postal_code}`
+      mls_number = listing.mls_number
+      bedroom_count = property.bedroom_count
+      bathroom_count = property.bathroom_count
+      square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
     }
+    // If listing_data
     if (listing_data) {
+      status = listing_data.status
       property = listing_data.property
-      title = `${property.address.street_full}`
-      subtitle = `${property.address.street_full} ${property.address.city}, ${property.address.state} ${property.address.postal_code}`
+      address = property.address.street_full
+      city = property.address.city
+      state = property.address.state
+      postal_code = property.address.postal_code
+      title = address
+      subtitle = `${address} ${city}, ${state} ${postal_code}`
+      mls_number = listing_data.mls_number
+      bedroom_count = property.bedroom_count
+      bathroom_count = property.bathroom_count
+      square_feet = property.square_feet
     }
     let listing_status_indicator
     if (listing) {
@@ -89,13 +125,7 @@ export default class TransactionDetail extends Component {
       <div style={ S('bg-eff1f2 w-480 h-300 font-22 text-center pt-125 color-929292') }>No image</div>
     )
     const carousel_wh = 'w-480 h-300'
-    // if (drawer && window.innerWidth <= 1700) {
-    //   if (window.innerWidth >= 1200) {
-    //     const carousel_width = window.innerWidth - 750
-    //     const carousel_height = carousel_width / 1.75
-    //     carousel_wh = 'w-' + carousel_width + ' h-' + carousel_height
-    //   }
-    // }
+
     if (listing) {
       listing_images = (
         <Carousel interval={0} indicators={false} prevIcon={ prev_icon } nextIcon={ next_icon }>
@@ -115,21 +145,10 @@ export default class TransactionDetail extends Component {
         </Carousel>
       )
     }
-    let mls_number
     let price_area
-    let transaction_type
-    let property_type
-    let year_built
-    let bedroom_count
-    let bathroom_count
-    if (listing) {
-      mls_number = listing.mls_number
-      transaction_type = listing.transaction_type
-    }
     if (property) {
       property_type = property.property_type
       year_built = property.year_built
-      bedroom_count = property.bedroom_count
       bathroom_count = property.bathroom_count
       if (transaction.contract_price) {
         price_area = (
@@ -137,10 +156,6 @@ export default class TransactionDetail extends Component {
         )
       }
     }
-
-    let square_feet
-    if (property)
-      square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
 
     let title_area
     title_area = (
@@ -163,9 +178,6 @@ export default class TransactionDetail extends Component {
         </div>
       )
     }
-    const contacts = transaction.contacts
-    const no_border = { border: 'none' }
-
     // Drawer
     let drawer_content
     const drawer_height = window.innerHeight - 203
@@ -236,7 +248,7 @@ export default class TransactionDetail extends Component {
         })
       }
       const dropzone_style = {
-        ...S('w-100p h-100p pb-15 mb-15'),
+        ...S('w-100p h-100p pb-25'),
         borderBottom: '1px solid #f7f9fa'
       }
       const doczone_height = window.innerHeight - 470
@@ -393,7 +405,6 @@ export default class TransactionDetail extends Component {
     const row_style = {
       borderBottom: '1px solid #f3f3f3'
     }
-    // console.log(listing)
     return (
       <div style={ S('minw-800 z-0') }>
         <Dropzone
@@ -501,52 +512,52 @@ export default class TransactionDetail extends Component {
                 <div style={ row_style }>
                   <Col xs={8} style={ S('pl-0 pr-0') }>
                     <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>ADDRESS</label>
-                    <input className="form-control" style={ input_style } type="text" ref="address" defaultValue={ listing ? listing.property.address.street_number : '' }/>
+                    <input className="form-control" style={ input_style } type="text" ref="address" defaultValue={ address }/>
                   </Col>
                   <Col xs={4} style={ S('pr-0') }>
                     <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>STATUS</label>
-                    <input className="form-control" style={ input_style } type="text" ref="status" defaultValue={ listing ? listing.property.address.street_number : '' }/>
+                    <input className="form-control" style={ input_style } type="text" ref="status" defaultValue={ status }/>
                   </Col>
                   <div className="clearfix"></div>
                 </div>
                 <div style={ row_style }>
                   <Col xs={6} style={ S('pl-0') }>
                     <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>CITY</label>
-                    <input className="form-control" style={ input_style } type="text" ref="city" defaultValue={ listing ? listing.property.address.street_number : '' }/>
+                    <input className="form-control" style={ input_style } type="text" ref="city" defaultValue={ city }/>
                   </Col>
                   <Col xs={3} style={ S('p-0') }>
                     <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>STATE</label>
-                    <input className="form-control" style={ input_style } type="text" ref="state" defaultValue={ listing ? listing.property.address.street_number : '' }/>
+                    <input className="form-control" style={ input_style } type="text" ref="state" defaultValue={ state }/>
                   </Col>
                   <Col xs={3} style={ S('pr-0') }>
                     <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>ZIP</label>
-                    <input className="form-control" style={ input_style } type="text" ref="zip" defaultValue={ listing ? listing.property.address.street_number : '' }/>
+                    <input className="form-control" style={ input_style } type="text" ref="postal_code" defaultValue={ postal_code }/>
                   </Col>
                   <div className="clearfix"></div>
                 </div>
                 <div style={ row_style }>
                   <Col xs={6} style={ S('pl-0 pr-0') }>
                     <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>YEAR BUILT</label>
-                    <input className="form-control" style={ input_style } type="text" ref="year_built" defaultValue={ listing ? listing.property.address.street_number : '' }/>
+                    <input className="form-control" style={ input_style } type="text" ref="year_built" defaultValue={ year_built }/>
                   </Col>
                   <Col xs={6} style={ S('pr-0') }>
                     <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>PROPERTY TYPE</label>
-                    <input className="form-control" style={ input_style } type="text" ref="property_type" defaultValue={ listing ? listing.property.address.street_number : '' }/>
+                    <input className="form-control" style={ input_style } type="text" ref="property_type" defaultValue={ property_type }/>
                   </Col>
                   <div className="clearfix"></div>
                 </div>
                 <div style={ row_style }>
                   <Col xs={4} style={ S('pl-0') }>
                     <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>SQFT</label>
-                    <input className="form-control" style={ input_style } type="text" ref="sqft" defaultValue={ square_feet }/>
+                    <input className="form-control" style={ input_style } type="text" ref="square_feet" defaultValue={ square_feet }/>
                   </Col>
                   <Col xs={4} style={ S('p-0') }>
                     <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>BEDS</label>
-                    <input className="form-control" style={ input_style } type="text" ref="beds" defaultValue={ listing ? listing.property.address.street_number : '' }/>
+                    <input className="form-control" style={ input_style } type="text" ref="bedroom_count" defaultValue={ bedroom_count }/>
                   </Col>
                   <Col xs={4} style={ S('pr-0') }>
                     <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>BATHS</label>
-                    <input className="form-control" style={ input_style } type="text" ref="baths" defaultValue={ listing ? listing.property.address.street_number : '' }/>
+                    <input className="form-control" style={ input_style } type="text" ref="bathroom_count" defaultValue={ bathroom_count }/>
                   </Col>
                   <div className="clearfix"></div>
                 </div>
