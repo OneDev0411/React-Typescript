@@ -2,10 +2,14 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 
-// Partials
-import Loading from '../../../../Partials/Loading'
-
 export default class FileViewer extends Component {
+
+  componentDidMount() {
+    const data = this.props.data
+    const transaction = data.current_transaction
+    const attachment = transaction.viewer.attachment
+    history.pushState(null, null, '/dashboard/transactions/' + transaction.id + '/attachments/' + attachment.id)
+  }
 
   render() {
     // Data
@@ -25,9 +29,6 @@ export default class FileViewer extends Component {
         <div onClick={ this.props.closeFileViewer } style={ S('absolute r-20 t-5 font-40 fw-400') } className="close">&times;</div>
         <div className="bg-aqua" style={ nav_bar_style }>
           <div style={ S('mt-15 font-18') } className="text-center">{ title }</div>
-        </div>
-        <div style={ S('absolute w-100p') }>
-          <Loading />
         </div>
         <iframe frameBorder={ 0 } src={ file_url } style={ S('w-100p h-100p absolute') }></iframe>
       </div>

@@ -51,10 +51,6 @@ export default class TransactionDetail extends Component {
     this.props.handleNameChange(file_name)
   }
 
-  handleViewMore() {
-    this.props.handleViewMore()
-  }
-
   render() {
     // Data
     const data = this.props.data
@@ -242,28 +238,6 @@ export default class TransactionDetail extends Component {
       if (current_file.type === 'image/jpeg')
         current_file_image = <img className="center-block" src={ current_file.preview } style={ S(' w-100p h-100p maxw-200 maxh-200') } />
     }
-    // View more info
-    let view_more_info_markup
-    if (transaction.show_more_info) {
-      let contract_price_area
-      let association_fee_area
-      if (transaction.contract_price) {
-        contract_price_area = (
-          <div style={ S('mb-15 mr-20 pull-left') }><b>Contract Price:</b> <span style={ S('color-929292') }>${ helpers.numberWithCommas(transaction.contract_price) }</span></div>
-        )
-      }
-      if (transaction.listing.association_fee) {
-        association_fee_area = (
-          <div style={ S('mb-15 mr-20 pull-left') }><b>Association Fee:</b> <span style={ S('color-929292') }>${ helpers.numberWithCommas(transaction.listing.association_fee) }</span></div>
-        )
-      }
-      view_more_info_markup = (
-        <div>
-          { contract_price_area }
-          { association_fee_area }
-        </div>
-      )
-    }
 
     // Edit transaction
     let listing_image
@@ -302,6 +276,22 @@ export default class TransactionDetail extends Component {
           data={ data }
           closeFileViewer={ this.props.closeFileViewer }
         />
+      )
+    }
+    // Calculate dom and cdom
+    let dom_days
+    let cdom_days
+    if (listing) {
+      if (listing.dom)
+        dom_days = listing.dom
+      if (listing.cdom)
+        cdom_days = listing.cdom
+    }
+
+    let association_fee_area
+    if (listing && listing.association_fee) {
+      association_fee_area = (
+        <div style={ S('mb-15 mr-20 pull-left') }><b>Association Fee:</b> <span style={ S('color-929292') }>${ helpers.numberWithCommas(listing.association_fee) }</span></div>
       )
     }
     return (
@@ -356,11 +346,12 @@ export default class TransactionDetail extends Component {
                   <div style={ S('mb-15 mr-20 pull-left') }><b>Beds:</b> <span style={ S('color-929292') }>{ bedroom_count }</span></div>
                   <div style={ S('mb-15 mr-20 pull-left') }><b>Baths:</b> <span style={ S('color-929292') }>{ bathroom_count }</span></div>
                   <div style={ S('mb-15 mr-20 pull-left') }><b>Sqft:</b> <span style={ S('color-929292') }>{ square_feet }</span></div>
-                  { view_more_info_markup }
+                  <div style={ S('mb-15 mr-20 pull-left') }><b>Days on Market:</b> <span style={ S('color-929292') }>{ dom_days }</span></div>
+                  <div style={ S('mb-15 mr-20 pull-left') }><b>Current Days on Market:</b> <span style={ S('color-929292') }>{ cdom_days }</span></div>
+                  { association_fee_area }
                   <div className="clearfix"></div>
                 </div>
                 <div style={ S('mb-30') }>
-                  <Button onClick={ this.handleViewMore.bind(this) } style={ S('bc-929292 color-929292 pl-20 pr-20 mr-15') }><b>View More</b></Button>
                   <Button onClick={ this.props.showEditModal.bind(this) } style={ S('bc-3388ff color-3388ff pl-40 pr-40 mr-15') }><b>Edit</b></Button>
                   <Button style={ S('pl-40 pr-40') } className={ data.deleting_transaction && data.deleting_transaction === transaction.id ? 'disabled' : '' } onClick={ this.props.deleteTransaction.bind(this, transaction.id) } type="button" bsStyle="danger">
                     { data.deleting_transaction && data.deleting_transaction === transaction.id ? 'Deleting...' : 'Delete' }
@@ -510,7 +501,6 @@ TransactionDetail.propTypes = {
   uploadFile: React.PropTypes.func,
   deleteFile: React.PropTypes.func,
   handleNameChange: React.PropTypes.func,
-  handleViewMore: React.PropTypes.func,
   showEditModal: React.PropTypes.func,
   editTransaction: React.PropTypes.func,
   openFileViewer: React.PropTypes.func,

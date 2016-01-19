@@ -37,6 +37,25 @@ export default class Transactions extends Component {
     }
   }
 
+  componentDidUpdate() {
+    const data = this.props.data
+    const path = this.props.route.path
+    if (path === 'dashboard/transactions/:id' && data.transactions_loaded && !data.current_transaction && !data.current_transaction_loaded)
+      this.setPageLoadedView()
+  }
+
+  setPageLoadedView() {
+    const data = this.props.data
+    const transactions = data.transactions
+    const params = this.props.params
+    const id = params.id
+    const current_transaction = _.findWhere(transactions, id)
+    AppStore.data.current_transaction = current_transaction
+    AppStore.data.current_transaction_loaded = true
+    AppStore.emitChange()
+    this.addTransactionTab(current_transaction)
+  }
+
   getContacts() {
     const data = this.props.data
     AppDispatcher.dispatch({
@@ -99,11 +118,15 @@ export default class Transactions extends Component {
     AppStore.emitChange()
   }
 
+  viewAllTransactions() {
+    delete AppStore.data.current_transaction
+    history.pushState(null, null, '/dashboard/transactions')
+    AppStore.emitChange()
+  }
+
   viewTransaction(transaction) {
-    if (transaction === 'all')
-      delete AppStore.data.current_transaction
-    else
-      AppStore.data.current_transaction = transaction
+    AppStore.data.current_transaction = transaction
+    history.pushState(null, null, '/dashboard/transactions/' + transaction.id)
     AppStore.emitChange()
   }
 
@@ -118,6 +141,7 @@ export default class Transactions extends Component {
       AppStore.data.transaction_tabs = reduced_transaction_tabs
       if (current_transaction.id === id)
         delete AppStore.data.current_transaction
+      history.pushState(null, null, '/dashboard/transactions/')
       AppStore.emitChange()
     }, 1)
   }
@@ -228,11 +252,6 @@ export default class Transactions extends Component {
     AppStore.emitChange()
   }
 
-  handleViewMore() {
-    AppStore.data.current_transaction.show_more_info = true
-    AppStore.emitChange()
-  }
-
   showEditModal() {
     AppStore.data.current_transaction.show_edit_modal = true
     AppStore.emitChange()
@@ -288,6 +307,9 @@ export default class Transactions extends Component {
 
   closeFileViewer() {
     delete AppStore.data.current_transaction.viewer
+    const data = AppStore.data
+    const transaction = data.current_transaction
+    history.pushState(null, null, '/dashboard/transactions/' + transaction.id)
     AppStore.emitChange()
   }
 
@@ -445,7 +467,6 @@ export default class Transactions extends Component {
           uploadFile={ this.uploadFile }
           deleteFile={ this.deleteFile }
           handleNameChange={ this.handleNameChange }
-          handleViewMore={ this.handleViewMore }
           showEditModal={ this.showEditModal }
           editTransaction={ this.editTransaction }
           openFileViewer={ this.openFileViewer }
@@ -459,7 +480,7 @@ export default class Transactions extends Component {
 
     return (
       <div style={ S('minw-1000') }>
-        <Header data={ data } viewTransaction={ this.viewTransaction.bind(this) } removeTransactionTab={ this.removeTransactionTab } />
+        <Header data={ data } viewAllTransactions={ this.viewAllTransactions.bind(this) } viewTransaction={ this.viewTransaction.bind(this) } removeTransactionTab={ this.removeTransactionTab } />
         <main style={ S('pt-15') }>
           <SideBar data={ data }/>
           <div style={ main_style }>
@@ -474,5 +495,7 @@ export default class Transactions extends Component {
 
 // PropTypes
 Transactions.propTypes = {
-  data: React.PropTypes.object
+  data: React.PropTypes.object,
+  route: React.PropTypes.object,
+  params: React.PropTypes.object
 }
