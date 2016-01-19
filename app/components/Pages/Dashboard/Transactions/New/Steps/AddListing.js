@@ -207,7 +207,7 @@ export default class AddListing extends Component {
           <Button onClick={ this.props.showListingModal.bind(this, 'new') } className="pull-left" style={ S('w-160') } bsStyle="primary" type="button">
             Add New Property
           </Button>
-          <Modal dialogClassName="property-modal" show={ data.new_transaction.show_listing_modal } onHide={ this.props.hideModal.bind(this) }>
+          <Modal dialogClassName="modal-800" show={ data.new_transaction.show_listing_modal } onHide={ this.props.hideModal.bind(this) }>
             <form onSubmit={ this.props.addCustomListingInfo.bind(this) }>
               <Modal.Body style={ S('p-0') } className="flexbox">
                 <Col xs={6} style={ S('p-0') }>

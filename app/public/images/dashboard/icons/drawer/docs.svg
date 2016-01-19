@@ -1,18 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid" width="15" height="18" viewBox="0 0 15 18">
   <defs>
     <style>
       .cls-1 {
-        fill: #f9f9f9;
-        stroke: #e2e2e2;
-        stroke-width: 1px;
-      }
-
-      .cls-2 {
-        fill: #929292;
+        fill: #38f;
+        filter: url(#color-overlay-1);
         fill-rule: evenodd;
       }
     </style>
+
+    <filter id="color-overlay-1" filterUnits="userSpaceOnUse">
+      <feFlood flood-color="#929292"/>
+      <feComposite operator="in" in2="SourceGraphic"/>
+      <feBlend in2="SourceGraphic" result="solidFill"/>
+    </filter>
   </defs>
-  <circle class="cls-1" cx="19" cy="19" r="18"/>
-  <path id="docs" class="cls-2" d="M26,29H12a1.162,1.162,0,0,1-1-1V10a1.162,1.162,0,0,1,1-1h7.748a0.835,0.835,0,0,1,.209-0.047A0.959,0.959,0,0,1,20.193,9H21a0.955,0.955,0,0,1,.643.186l5.048,4.784A2.313,2.313,0,0,1,27,15V28A1.162,1.162,0,0,1,26,29ZM13,27H25V17H20a1,1,0,0,1-1-1V11H13V27Zm8-16H20.964L21,15h4Z"/>
+  <path d="M14.203,17.901 L1.582,17.901 C1.172,17.901 0.840,17.595 0.840,17.218 L0.840,1.500 C0.840,1.123 1.172,0.817 1.582,0.817 L9.749,0.817 C9.945,0.817 10.134,0.889 10.274,1.017 L14.728,5.117 C14.867,5.245 14.945,5.419 14.945,5.600 L14.945,17.218 C14.945,17.595 14.613,17.901 14.203,17.901 ZM2.603,16.193 L13.182,16.193 L13.182,7.644 L8.786,7.644 C8.300,7.644 7.906,7.262 7.906,6.790 L7.906,2.525 L2.603,2.525 L2.603,16.193 ZM9.666,2.535 L9.666,5.937 L13.177,5.937 L9.666,2.535 Z" class="cls-1"/>
 </svg>

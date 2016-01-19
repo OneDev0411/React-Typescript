@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #f9f9f9;
+        stroke: #e2e2e2;
+        stroke-width: 1px;
+      }
+
+      .cls-2 {
+        fill: #929292;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <circle class="cls-1" cx="19" cy="19" r="18"/>
+  <path id="docs" class="cls-2" d="M26,29H12a1.162,1.162,0,0,1-1-1V10a1.162,1.162,0,0,1,1-1h7.748a0.835,0.835,0,0,1,.209-0.047A0.959,0.959,0,0,1,20.193,9H21a0.955,0.955,0,0,1,.643.186l5.048,4.784A2.313,2.313,0,0,1,27,15V28A1.162,1.162,0,0,1,26,29ZM13,27H25V17H20a1,1,0,0,1-1-1V11H13V27Zm8-16H20.964L21,15h4Z"/>
+</svg>

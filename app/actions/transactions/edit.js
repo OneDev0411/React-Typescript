@@ -11,10 +11,11 @@ export default (user, transaction, listing_data) => {
   Transaction.edit(params, (err, response) => {
     // console.log(response)
     // TODO
-    // if (response.status === 'success') {
-    //   const edited_transaction = response.data
-    //   AppStore.data.current_transaction = current_transaction
-    // }
+    if (response.status === 'success') {
+      const edited_transaction = response.data
+      if (edited_transaction)
+        AppStore.data.current_transaction = edited_transaction
+    }
     delete AppStore.data.current_transaction.editing
     delete AppStore.data.current_transaction.show_edit_modal
     AppStore.emitChange()

@@ -124,44 +124,24 @@ export default {
   uploadFiles: (params, callback) => {
     const api_url = config.api_url
     const endpoint = api_url + '/transactions/' + params.id + '/attachments'
+    // const endpoint = 'http://5.34.213.159:3078/transactions/ecc2792c-b301-11e5-b176-238dfa401b4f/attachments'
     const request = superagent.post(endpoint)
     const files = params.files
-    // request.set('Authorization', 'Bearer ' + params.access_token)
+    request.set('authorization', 'Bearer ' + params.access_token)
+    // request.set('authorization', 'Bearer ZTdkZGU2MTAtYmRmMy0xMWU1LWFiYzAtM2IyNGZiZDY0ODYx')
     files.forEach(file => {
-      request.attach(file.name, file)
+      const info = {
+        name: file.name,
+        original_name: file.name,
+        title: file.new_name || file.name
+      }
+      request.attach('media', file)
+      request.field('info', JSON.stringify(info))
     })
     request.end((err, res) => {
       if (err)
         return callback(err, res)
       return callback(err, res)
     })
-    // let api_host = params.api_host
-    // if (!api_host) api_host = config.app.url
-    // const endpoint = api_host + '/api/transactions/upload-file?id=' + params.id
-    // const files = params.files
-    // const request_object = {
-    //   access_token: params.access_token,
-    //   files
-    // }
-    // fetch(endpoint, {
-    //   method: 'post',
-    //   headers: {
-    //     'Content-type': 'application/json'
-    //   },
-    //   body: JSON.stringify(request_object)
-    // })
-    // .then(response => {
-    //   if (response.status >= 400) {
-    //     const error = {
-    //       status: 'error',
-    //       message: 'There was an error with this request.'
-    //     }
-    //     return callback(error, false)
-    //   }
-    //   return response.json()
-    // })
-    // .then(response => {
-    //   return callback(false, response)
-    // })
   }
 }

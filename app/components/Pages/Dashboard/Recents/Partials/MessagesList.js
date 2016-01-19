@@ -90,7 +90,7 @@ export default class MessagesList extends Component {
       )
     })
 
-    const invite_user_style = S('w-40 h-40 ml-6 pointer absolute p-0 t-15 r-8 br-100 bc-ddd bw-1 solid')
+    const btn_action_style = S('w-40 h-40 ml-6 pointer absolute p-0 t-15 r-8 br-100 bc-ddd bw-1 solid')
     const invite_link = config.app.url + '/invite/?room_id=' + data.current_room.id + '&invite_token=' + data.user.access_token
 
     const tooltip = (
@@ -135,7 +135,7 @@ export default class MessagesList extends Component {
             </span>
           </div>
         </div>
-        <button onClick={ this.props.showModal.bind(this, 'invite-user') } type="button" className="btn btn-default invite-user__btn" style={ invite_user_style } >
+        <button onClick={ this.props.showModal.bind(this, 'invite-user') } type="button" className="btn btn-default invite-user__btn" style={ btn_action_style } >
           <img style={ S('ml-1n mt-1n') } src="/images/dashboard/icons/invite-user.svg"/>
         </button>
         <h3 style={ S('mt-0 ml-20 mr-50') }>{ current_room.title }</h3>

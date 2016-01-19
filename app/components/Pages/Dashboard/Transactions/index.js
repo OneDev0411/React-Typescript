@@ -186,6 +186,7 @@ export default class Transactions extends Component {
       files: [current_file]
     })
     const attachments = data.current_transaction.attachments
+    current_file.uploading = true
     AppStore.data.current_transaction.attachments = [
       current_file,
       ...attachments
@@ -205,7 +206,7 @@ export default class Transactions extends Component {
   deleteFile(file) {
     const files = AppStore.data.current_transaction.attachments
     const edited_files = files.filter(file_loop => {
-      return file_loop.index !== file.index
+      return file_loop.id !== file.id
     })
     AppStore.data.current_transaction.attachments = edited_files
     AppStore.emitChange()
@@ -276,6 +277,18 @@ export default class Transactions extends Component {
       transaction,
       listing_data
     })
+  }
+
+  openFileViewer(attachment) {
+    AppStore.data.current_transaction.viewer = {
+      attachment
+    }
+    AppStore.emitChange()
+  }
+
+  closeFileViewer() {
+    delete AppStore.data.current_transaction.viewer
+    AppStore.emitChange()
   }
 
   render() {
@@ -435,6 +448,8 @@ export default class Transactions extends Component {
           handleViewMore={ this.handleViewMore }
           showEditModal={ this.showEditModal }
           editTransaction={ this.editTransaction }
+          openFileViewer={ this.openFileViewer }
+          closeFileViewer={ this.closeFileViewer }
         />
       )
     }

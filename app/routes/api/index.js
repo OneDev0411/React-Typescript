@@ -21,7 +21,6 @@ module.exports = (app, config) => {
   require('./posts/transactions/create-transaction')(app, config)
   require('./posts/transactions/edit-transaction')(app, config)
   require('./posts/transactions/delete-transaction')(app, config)
-  require('./posts/transactions/upload-files')(app, config)
   // Contacts
   require('./posts/contacts/create-contacts')(app, config)
   require('./posts/contacts/edit-contact')(app, config)
