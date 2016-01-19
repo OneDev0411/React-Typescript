@@ -49,7 +49,7 @@ export default class Transactions extends Component {
     const transactions = data.transactions
     const params = this.props.params
     const id = params.id
-    const current_transaction = _.findWhere(transactions, id)
+    const current_transaction = _.findWhere(transactions, { id })
     AppStore.data.current_transaction = current_transaction
     AppStore.data.current_transaction_loaded = true
     AppStore.emitChange()
