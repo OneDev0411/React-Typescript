@@ -3,4 +3,6 @@ node_modules
 npm-debug.log
 app/public/dist
 app/public/index.html
-config/development.js
+config/public/development.js
+config/private/development.js
+desktop/builds

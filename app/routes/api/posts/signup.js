@@ -38,17 +38,17 @@ module.exports = (app, config) => {
     .then(response => {
       if (response.status >= 400) {
         var error = {
-          "status": "error",
-          "message": "There was an error with this request."
+          status: 'error',
+          message: 'There was an error with this request.'
         }
-        return res.end(JSON.stringify(error))
+        return res.json(error)
       }
       return response.json()
     })
     .then(response => {
       let response_object = response
       response_object.status = 'success'
-      return res.end(JSON.stringify(response_object))
+      return res.json(response_object)
     });
   })
 

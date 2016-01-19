@@ -1,8 +1,25 @@
 // main.scss
+@import 'vendor/bootstrap/stylesheets/_bootstrap.scss';
 @import 'components/resets';
+@import 'components/resets-bootstrap';
 @import 'components/typography';
 @import 'components/buttons';
 @import 'components/loader';
 @import 'components/colors';
-@import 'components/layout';
-@import 'vendor/bootstrap/stylesheets/_bootstrap.scss';
+@import 'components/flexbox';
+@import 'components/global';
+@import 'components/nav';
+@import 'components/sidebar';
+@import 'components/modals';
+
+// Pages
+@import 'components/pages/landing';
+@import 'components/pages/dashboard';
+@import 'components/pages/transactions';
+
+// Modules
+@import 'components/modules/add-contacts';
+@import 'components/modules/search-listings';
+
+// Vendor
+@import 'vendor/react-day-picker/style.scss';

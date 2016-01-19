@@ -1,0 +1,15 @@
+// Sidebar
+.sidebar{
+  &--dashboard{
+    border-right: 1px solid #e7e4e3;
+    a{
+      color: $gray-light;
+      &:hover{
+        color: $gray-light;
+      }
+      font-weight: 500;
+      border-top-left-radius: 0 !important;
+      border-bottom-left-radius: 0 !important;
+    }
+  }
+}

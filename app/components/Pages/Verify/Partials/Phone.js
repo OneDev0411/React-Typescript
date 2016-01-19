@@ -6,43 +6,38 @@ import S from 'shorti'
 import helpers from '../../../../utils/helpers'
 
 export default class Phone extends Component {
-
-  handleSubmit(e){
-
+  handleSubmit(e) {
     e.preventDefault()
     const code = this.refs.code.refs.input.value
     const token = helpers.getParameterByName('token')
     this.props.handleSubmit(code, token)
   }
 
-  render(){
-    
+  render() {
     // Data
     const data = this.props.data
+    const errors = data.errors
 
-    let errors = data.errors
     let code_style
     let message
     let message_text
     let alert_style
-    let request_error
 
     // Errors
-    if(errors){
+    if (errors) {
       message_text = `This token or code is invalid.`
       alert_style = 'danger'
     }
 
-    if(data.show_message){
-      
+    if (data.show_message) {
       // Success
-      if(data.status === 'success'){
+      if (data.status === 'success') {
         alert_style = 'success'
         message_text = `Your phone is now verified.`
       }
 
       // Error
-      if(data.request_error){
+      if (data.request_error) {
         alert_style = 'danger'
         message_text = (
           <div>
@@ -69,7 +64,7 @@ export default class Phone extends Component {
       </div>
     )
 
-    if(data.status === 'success'){
+    if (data.status === 'success') {
       main_content = (
         <div>
           { message }
@@ -84,4 +79,10 @@ export default class Phone extends Component {
       </div>
     )
   }
+}
+
+// PropTypes
+Phone.propTypes = {
+  data: React.PropTypes.object,
+  handleSubmit: React.PropTypes.func.isRequired
 }

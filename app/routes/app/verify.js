@@ -1,17 +1,22 @@
 // verify.js
-
-// Crypto
 import Crypto from '../../models/Crypto'
+import helpers from '../../utils/helpers'
 
 module.exports = (app, config) => {
 
   app.get('/verify_email',(req, res) => {
     
     const token = req.query.token
+    return res.redirect('/verify/email?token=' + token)
+
+  })
+
+  app.get('/verify_email/submitted',(req, res) => {
+    
+    let token = decodeURIComponent(req.query.token).replace(' ', '+')
     const decrypted_token = Crypto.decrypt(token).split(':')
     const email = decrypted_token[0]
     const code = decrypted_token[1]
-    
     const api_url = config.api.url
     const verify_email_url = api_url + '/users/email_confirmed'
 
@@ -32,7 +37,7 @@ module.exports = (app, config) => {
         // redirect to error page
         return res.redirect('/verify/email?status=error')
       }
-      return response.json()
+      return response
     })
     .then((response) => {
       // redirect to success page

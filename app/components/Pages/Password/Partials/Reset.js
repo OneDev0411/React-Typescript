@@ -5,65 +5,62 @@ import { Input, Button, Alert } from 'react-bootstrap'
 import S from 'shorti'
 import helpers from '../../../../utils/helpers'
 
+// AppStore
+import AppStore from '../../../../stores/AppStore'
+
 export default class Reset extends Component {
 
-  handleSubmit(e){
-    
+  handleSubmit(e) {
     e.preventDefault()
-    
-    // Get token
-    let password = this.refs.password.getInputDOMNode().value.trim()
-    let confirm_password = this.refs.confirm_password.getInputDOMNode().value.trim()
-    let token = helpers.getParameterByName('token')
+    AppStore.data.submitting = true
+    AppStore.emitChange()
 
-    let form_data = {
-      password: password,
-      confirm_password: confirm_password,
-      token: token
+    // Get token
+    const password = this.refs.password.getInputDOMNode().value.trim()
+    const confirm_password = this.refs.confirm_password.getInputDOMNode().value.trim()
+    const token = helpers.getParameterByName('token')
+
+    const form_data = {
+      password,
+      confirm_password,
+      token
     }
 
     this.props.handleSubmit('reset-password', form_data)
-
   }
 
-  render(){
-    
+  render() {
     const data = this.props.data
-    let errors = data.errors
-    
+    const errors = data.errors
+
     let password_style
     let password_error
     let message
     let message_text
     let alert_style
-    let request_error
 
     // Errors
-    if(errors){
-      
-      if(data.password_error){
+    if (errors) {
+      if (data.password_error) {
         password_error = data.password_error
         password_style = 'error'
         alert_style = 'danger'
-        if(password_error === 'too-short'){
+        if (password_error === 'too-short')
           message_text = 'Your password must be at least 6 characters long.'
-        }
-        if(password_error === 'no-match'){
+
+        if (password_error === 'no-match')
           message_text = `Your passwords don't match`
-        }
       }
     }
-
-    if(data.show_message){
-      
+    if (data.show_message) {
       // Success
-      if(data.status === 'success'){
+      if (data.status === 'success') {
         alert_style = 'success'
         message_text = `Your password is now changed.  You may now sign in.`
       }
 
       // Error
-      if(data.request_error){
+      if (data.request_error) {
         alert_style = 'danger'
         message_text = (
           <div>
@@ -79,6 +76,11 @@ export default class Reset extends Component {
       )
     }
 
+    const submitting = data.submitting
+    let submitting_class = ''
+    if (submitting)
+      submitting_class = 'disabled'
+
     let main_content = (
       <div>
         <div style={ S('color-929292 mb-20') }>Reset your password</div>
@@ -86,13 +88,15 @@ export default class Reset extends Component {
           <Input bsStyle={ password_style } placeholder="New Password" type="password" ref="password"/>
           <Input bsStyle={ password_style } placeholder="Confirm New Password" type="password" ref="confirm_password"/>
           { message }
-          <Button style={ S('w-100p') } type="submit" bsStyle="primary">Change Password</Button>
+          <Button type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p') }>
+            { submitting ? 'Submitting...' : 'Change Password' }
+          </Button>
           <div style={ S('mt-20 color-929292 font-13') }>Code not working? <Link to="/password/forgot">Try sending it again</Link></div>
         </form>
       </div>
     )
 
-    if(data.status === 'success'){
+    if (data.status === 'success') {
       main_content = (
         <div>
           { message }
@@ -100,11 +104,16 @@ export default class Reset extends Component {
         </div>
       )
     }
-
     return (
       <div className="center-block" style={ S('maxw-300') }>
         { main_content }
       </div>
     )
   }
+}
+
+// PropTypes
+Reset.propTypes = {
+  data: React.PropTypes.object,
+  handleSubmit: React.PropTypes.func.isRequired
 }

@@ -1,58 +1,98 @@
 // Dashboard.js
 import React, { Component } from 'react'
+import { Link } from 'react-router'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Nav, NavItem } from 'react-bootstrap'
+import { Nav, NavItem, NavDropdown } from 'react-bootstrap'
 import S from 'shorti'
 
+// Partials
+import ProfileImage from './ProfileImage'
+
 export default class SideBar extends Component {
-  render(){
-    
-    const sidebarStyle = S('w-250 fixed h-100p p-20 pt-0')
+  render() {
+    // Data
     const data = this.props.data
+    const sidebar_height = window.innerHeight
+    const sidebar_style = S('w-183 absolute pl-0 t-0 z-100 h-' + sidebar_height)
     const path = data.path
 
-    let active_key
-    if(path === '/dashboard/recents'){
-      active_key = 1
-    }
-    if(path === '/dashboard/mls'){
-      active_key = 2
-    }
-    if(path === '/dashboard/contacts'){
-      active_key = 3
-    }
-    if(path === '/dashboard/tasks'){
-      active_key = 4
-    }
-    if(path === '/dashboard/transactions'){
-      active_key = 5
-    }
+    const active = {}
+    if (path === '/dashboard/recents')
+      active.recents = 'active'
+
+    if (path === '/dashboard/mls')
+      active.mls = 'active'
+
+    if (path === '/dashboard/contacts')
+      active.contacts = 'active'
+
+    if (path === '/dashboard/tasks')
+      active.tasks = 'active'
+
+    if (path === '/dashboard/transactions' || path === '/dashboard/transactions/new')
+      active.transactions = 'active'
+
+    // User info
+    const user = data.user
+    const first_name = user.first_name
+    const last_name = user.last_name
 
     return (
-      <aside style={ sidebarStyle } className="bg-alabaster">
-        <Nav bsStyle="pills" stacked activeKey={ active_key }>
-          <LinkContainer to="/dashboard/recents">
-            <NavItem eventKey={1}>Recents</NavItem>
+      <aside style={ sidebar_style } className="sidebar--dashboard pull-left bg-aqua">
+        <div style={ S('mt-25 ml-10 mb-20 pointer') }>
+          <img src="/images/dashboard/icons/hamburger.svg"/>
+        </div>
+        <Nav bsStyle="pills" stacked>
+          <LinkContainer className={ active.recents } to="/dashboard/recents">
+            <NavItem style={ S('w-75p') }>
+              <img src={ active.recents ? '/images/dashboard/icons/recents-active.svg' : '/images/dashboard/icons/recents.svg' } style={ S('w-20 h-20') }/>
+              &nbsp;&nbsp;&nbsp;Recents
+            </NavItem>
           </LinkContainer>
-          <LinkContainer to="/dashboard/mls">
-            <NavItem eventKey={2}>MLS</NavItem>
+          <LinkContainer className={ active.mls } to="/dashboard/mls">
+            <NavItem style={ S('w-75p') }>
+              <img src={ active.mls ? '/images/dashboard/icons/listings-active.svg' : '/images/dashboard/icons/listings.svg' } style={ S('w-20 h-20') }/>
+              &nbsp;&nbsp;&nbsp;MLS
+            </NavItem>
           </LinkContainer>
-          <LinkContainer to="/dashboard/contacts">
-            <NavItem eventKey={3}>Contacts</NavItem>
+          <LinkContainer className={ active.contacts } to="/dashboard/contacts">
+            <NavItem style={ S('w-75p') }>
+              <img src={ active.contacts ? '/images/dashboard/icons/contacts-active.svg' : '/images/dashboard/icons/contacts.svg' } style={ S('w-20 h-20') }/>
+              &nbsp;&nbsp;&nbsp;Contacts
+            </NavItem>
           </LinkContainer>
-          <LinkContainer to="/dashboard/tasks">
-            <NavItem eventKey={4}>Tasks</NavItem>
+          <LinkContainer className={ active.tasks } to="/dashboard/tasks">
+            <NavItem style={ S('w-75p') }>
+              <img src={ active.tasks ? '/images/dashboard/icons/tasks-active.svg' : '/images/dashboard/icons/tasks.svg' } style={ S('w-20 h-20') }/>
+              &nbsp;&nbsp;&nbsp;Tasks
+            </NavItem>
           </LinkContainer>
-          <LinkContainer to="/dashboard/transactions">
-            <NavItem eventKey={5}>Transactions</NavItem>
+          <LinkContainer className={ active.transactions } to="/dashboard/transactions">
+            <NavItem style={ S('w-75p') }>
+              <img src={ active.transactions ? '/images/dashboard/icons/transactions-active.svg' : '/images/dashboard/icons/transactions.svg' } style={ S('w-20 h-20') }/>
+              &nbsp;&nbsp;&nbsp;Transactions
+            </NavItem>
           </LinkContainer>
         </Nav>
-        <h6 style={ S('mt-20') }>Favorites</h6>
-        <Nav stacked>
-          <NavItem>Fave 1</NavItem>
-          <NavItem title="Item">Fave 2</NavItem>
-        </Nav>
+        <div style={ S('absolute b-20 l-20') }>
+          <Nav>
+            <div style={ S('absolute z-0') }>
+              <ProfileImage user={ user } />
+            </div>
+            <NavDropdown dropup id="main-nav-dropdown" className="main-nav-dropdown--account" eventKey={3} title={ first_name + ' ' + last_name }>
+              <li><Link to="/account/settings"><i className="fa fa-cog" style={ S('mr-15') }></i>Settings</Link></li>
+              <li><Link to="/account/notifications"><i className="fa fa-envelope" style={ S('mr-15') }></i>Notifications</Link></li>
+              <li role="separator" className="divider"></li>
+              <li><a href="/signout"><i className="fa fa-power-off" style={ S('mr-15') }></i>Sign out</a></li>
+            </NavDropdown>
+          </Nav>
+        </div>
       </aside>
     )
   }
+}
+
+// PropTypes
+SideBar.propTypes = {
+  data: React.PropTypes.object
 }

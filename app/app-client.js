@@ -9,7 +9,7 @@ const history = createBrowserHistory()
 import react_routes from './routes/React/Config'
 
 const router = (
-  <Router history={history}>
+  <Router history={ history }>
     { react_routes }
   </Router>
 )

@@ -1,5 +1,5 @@
 // Crypto.js
-import config from '../../config'
+import config from '../../config/private'
 import crypto from 'crypto'
 
 const algorithm = 'aes-256-ctr'

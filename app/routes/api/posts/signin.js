@@ -1,4 +1,9 @@
 // api/posts/signin.js
+import config from '../../../../config/private'
+
+// Room
+import Room from '../../../models/Room'
+
 module.exports = (app, config) => {
   
   app.post('/api/signin',(req, res) => {
@@ -6,6 +11,7 @@ module.exports = (app, config) => {
     const email = req.body.email
     const password = req.body.password
     const api_url = config.api.url
+    const invite = req.body.invite
     const signin_url = api_url + '/oauth2/token'
 
     const request_object = {
@@ -16,7 +22,6 @@ module.exports = (app, config) => {
       grant_type: 'password'
     }
 
-    res.setHeader('Content-Type', 'application/json')
     res.setHeader('Access-Control-Allow-Credentials', 'true')
 
     fetch(signin_url,{
@@ -30,10 +35,10 @@ module.exports = (app, config) => {
     .then(response => {
       if (response.status >= 400) {
         var error = {
-          "status": "error",
-          "message": "There was an error with this request."
+          status: 'error',
+          message: 'There was an error with this request.'
         }
-        return res.end(JSON.stringify(error))
+        return res.json(error)
       }
       return response.json()
     })
@@ -43,7 +48,24 @@ module.exports = (app, config) => {
       let user = response.data
       user.access_token = response.access_token
       req.session.user = user
-      return res.end(JSON.stringify(response_object))
+
+      // check for invite vars
+      if(invite){
+        const add_user_params = {
+          room_id: invite.room_id,
+          users: [user.id],
+          access_token: invite.invite_token,
+          api_host: config.app_url
+        }
+        Room.addUser(add_user_params, (err, response) => {
+          return res.json(response_object)
+        })
+        
+      } else {
+        
+        return res.json(response_object)
+
+      }
     });
   })
 

@@ -1,5 +1,14 @@
-.btn-default:hover, .btn-default:focus {
-  background-color: #5c8fd4;
-  border: 1px solid #5c8fd4;
-  color: #fff;
+.btn {
+  -webkit-transition: background 90ms;
+  transition: background 90ms;
+}
+.forgot__password-btn--cancel {
+  @media(max-width: 768px){
+    margin-bottom: 10px;
+    padding-right: 0 !important;
+  }
+}
+.dashed {
+  border: 1px dashed $brand-primary !important;
+  color: $brand-primary !important;
 }

@@ -1,12 +1,12 @@
 // api/posts/reset-password.js
-
 import Crypto from '../../../models/Crypto'
+import helpers from '../../../utils/helpers'
 
 module.exports = (app, config) => {
   
   app.post('/api/reset-password',(req, res) => {
 
-    let token = decodeURIComponent(req.body.token).replace(' ', '+')
+    let token = helpers.prepareToken(req.body.token)
     const password = req.body.password
     
     const decrypted_token = Crypto.decrypt(token).split(':')
@@ -21,8 +21,6 @@ module.exports = (app, config) => {
       token: token,
       password: password
     }
-
-    res.setHeader('Content-Type', 'application/json')
     
     fetch(signin_url,{
       method: 'patch',
@@ -34,17 +32,17 @@ module.exports = (app, config) => {
     .then(response => {
       if (response.status >= 400) {
         var error = {
-          "status": "error",
-          "message": "There was an error with this request."
+          status: 'error',
+          message: 'There was an error with this request.'
         }
-        return res.end(JSON.stringify(error))
+        return res.json(error)
       }
       return response
     })
     .then(response => {
       let response_object = {}
       response_object.status = 'success'
-      return res.end(JSON.stringify(response_object))
+      return res.json(response_object)
     });
   })
 

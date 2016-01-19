@@ -4,36 +4,37 @@ import { Link } from 'react-router'
 import { Input, Button, Col, Alert } from 'react-bootstrap'
 import S from 'shorti'
 
+// AppStore
+import AppStore from '../../../../stores/AppStore'
+
 export default class Forgot extends Component {
 
-  handleSubmit(e){
-    
+  handleSubmit(e) {
     e.preventDefault()
-    let email = this.refs.email.getInputDOMNode().value
-    let form_data = {
-      email: email
-    }
-    
-    this.props.handleSubmit('forgot-password',form_data)
+    AppStore.data.submitting = true
+    AppStore.emitChange()
 
+    const email = this.refs.email.getInputDOMNode().value
+    const form_data = {
+      email
+    }
+
+    this.props.handleSubmit('forgot-password', form_data)
   }
 
-  render(){
-    
+  render() {
     const data = this.props.data
-    let errors = data.errors
-    
+    const errors = data.errors
+
     let email_style
     let message
     let message_text
     let alert_style
-    
-    if(data.show_message){
-      
+
+    if (data.show_message) {
       // Errors
-      if(errors){
-        
-        if(data.email_not_found){
+      if (errors) {
+        if (data.email_not_found) {
           email_style = 'error'
           alert_style = 'warning'
           message_text = (
@@ -41,28 +42,32 @@ export default class Forgot extends Component {
           )
         }
 
-        if(data.email_invalid){
+        if (data.email_invalid) {
           email_style = 'error'
           alert_style = 'danger'
           message_text = 'Oops! That looks like an invalid email address!'
         }
-      }
+      } // errors
 
       // Success
-      if(data.status === 'success'){
+      if (data.status === 'success') {
         alert_style = 'success'
         message_text = `We've sent you an email with instructions on how to reset your password.  Please check your email.`
       }
-      
-      if(message_text){
+
+      if (message_text) {
         message = (
           <Alert bsStyle={ alert_style }>
             { message_text }
           </Alert>
         )
       }
-      
     }
+
+    const submitting = data.submitting
+    let submitting_class = ''
+    if (submitting)
+      submitting_class = 'disabled'
 
     let main_content = (
       <div>
@@ -70,11 +75,13 @@ export default class Forgot extends Component {
         <form onSubmit={ this.handleSubmit.bind(this) }>
           <Input bsStyle={ email_style } ref="email" placeholder="Email address" type="text" />
           { message }
-          <Col sm={4} style={ S('p-0 pr-10') }>
+          <Col sm={4} className="forgot__password-btn--cancel" style={ S('p-0 pr-10') }>
             <Link className="btn btn-default" style={ S('w-100p') } to="/signin">Cancel</Link>
           </Col>
           <Col sm={8} style={ S('p-0') }>
-            <Button type="submit" style={ S('w-100p') } bsStyle="primary">Reset Password</Button>
+            <Button type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p') }>
+              { submitting ? 'Submitting...' : 'Reset Password' }
+            </Button>
           </Col>
           <div className="clearfix"></div>
           <div style={ S('mt-20 color-929292 font-13') }>Change your mind? <Link to="/signin">Sign in</Link></div>
@@ -82,7 +89,7 @@ export default class Forgot extends Component {
       </div>
     )
 
-    if(data.status === 'success'){
+    if (data.status === 'success') {
       main_content = (
         <div>
           { message }
@@ -97,4 +104,10 @@ export default class Forgot extends Component {
       </div>
     )
   }
+}
+
+// PropTypes
+Forgot.propTypes = {
+  data: React.PropTypes.object,
+  handleSubmit: React.PropTypes.func.isRequired
 }

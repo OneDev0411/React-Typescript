@@ -11,8 +11,6 @@ module.exports = (app, config) => {
       'email': email
     }
 
-    res.setHeader('Content-Type', 'application/json')
-    
     fetch(signin_url,{
       method: 'post',
       headers: {  
@@ -23,17 +21,17 @@ module.exports = (app, config) => {
     .then(response => {
       if (response.status >= 400) {
         var error = {
-          "status": "error",
-          "message": "There was an error with this request."
+          status: 'error',
+          message: 'There was an error with this request.'
         }
-        return res.end(JSON.stringify(error))
+        return res.json(error)
       }
       return response
     })
     .then(response => {
       let response_object = {}
       response_object.status = 'success'
-      return res.end(JSON.stringify(response_object))
+      return res.json(response_object)
     });
   })
 
