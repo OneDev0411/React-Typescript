@@ -125,6 +125,11 @@ export default class Transactions extends Component {
   }
 
   viewTransaction(transaction) {
+    const attachments = transaction.attachments
+    const attachments_sorted = _.sortBy(attachments, 'created', attachment => {
+      return - attachment.created
+    })
+    transaction.attachments = attachments_sorted
     AppStore.data.current_transaction = transaction
     history.pushState(null, null, '/dashboard/transactions/' + transaction.id)
     AppStore.emitChange()
@@ -195,7 +200,7 @@ export default class Transactions extends Component {
   }
 
   uploadFile() {
-    const data = AppStore.data
+    const data = this.props.data
     const files = data.document_modal.files
     const files_count = files.length
     const current_file = data.document_modal.current_file
@@ -464,7 +469,7 @@ export default class Transactions extends Component {
           dragEnter={ this.dragEnter }
           dragLeave={ this.dragLeave }
           hideModal={ this.hideModal }
-          uploadFile={ this.uploadFile }
+          uploadFile={ this.uploadFile.bind(this) }
           deleteFile={ this.deleteFile }
           handleNameChange={ this.handleNameChange }
           showEditModal={ this.showEditModal }
