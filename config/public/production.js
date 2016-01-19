@@ -3,6 +3,7 @@ export default {
   app: {
     url: process.env.APP_URL
   },
+  api_url: process.env.API_URL,
   socket: {
     server: process.env.SOCKET_SERVER
   },
