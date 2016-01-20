@@ -70,8 +70,10 @@ export default {
     const endpoint = api_host + '/api/edit-transaction?id=' + params.id
     const request_object = {
       access_token: params.access_token,
-      listing_data: params.listing_data
+      listing_data: params.listing_data,
+      contacts: params.contacts
     }
+    // console.log(request_object)
     fetch(endpoint, {
       method: 'post',
       headers: {

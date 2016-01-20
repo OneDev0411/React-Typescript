@@ -161,10 +161,10 @@ export default class AddListing extends Component {
         listing_full_address = property.address.street_full + ' ' + property.address.city + ' ' + property.address.state + ' ' + property.address.postal_code
       }
       listing_added_markup = (
-        <div style={ S('h-25 relative bg-3388ff br-100 color-fff p-3 pl-0 pr-10 mb-10 mr-10 pointer') } className="pull-left">
-          <div onClick={ this.props.showListingModal.bind(this) } style={ S('w-25 h-25 bg-cover bg-url(' + cover_image_url + ') l-0 t-0 absolute br-100') }></div>
+        <div style={ S('h-25 relative bg-3388ff br-100 color-fff p-3 pl-0 pr-10 mb-10 mr-10') } className="pull-left">
+          <div style={ S('w-25 h-25 bg-cover bg-url(' + cover_image_url + ') l-0 t-0 absolute br-100') }></div>
           <div style={ S('ml-30') }>
-            <span onClick={ this.props.showListingModal.bind(this) }>{ listing_full_address }</span>&nbsp;&nbsp;<span onClick={ this.props.removeAddedListing.bind(this) } style={ S('pointer') }>x</span>
+            <span>{ listing_full_address }</span>&nbsp;&nbsp;<span onClick={ this.props.removeAddedListing.bind(this) } style={ S('pointer') }>x</span>
           </div>
         </div>
       )
@@ -239,7 +239,7 @@ export default class AddListing extends Component {
                     </Col>
                     <Col xs={3} style={ S('pr-0') }>
                       <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>ZIP</label>
-                      <input className="form-control" style={ input_style } type="text" ref="zip" defaultValue={ listing_added ? listing_added.address.postal_code : '' }/>
+                      <input className="form-control" style={ input_style } type="text" ref="postal_code" defaultValue={ listing_added ? listing_added.address.postal_code : '' }/>
                     </Col>
                     <div className="clearfix"></div>
                   </div>
@@ -250,22 +250,22 @@ export default class AddListing extends Component {
                     </Col>
                     <Col xs={6} style={ S('pr-0') }>
                       <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>PROPERTY TYPE</label>
-                      <input className="form-control" style={ input_style } type="text" ref="property_type" defaultValue={ listing_added ? listing_added.compact_property.postal_code : '' }/>
+                      <input className="form-control" style={ input_style } type="text" ref="property_type" defaultValue={ listing_added ? listing_added.compact_property.property_type : '' }/>
                     </Col>
                     <div className="clearfix"></div>
                   </div>
                   <div style={ row_style }>
                     <Col xs={4} style={ S('pl-0') }>
                       <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>SQFT</label>
-                      <input className="form-control" style={ input_style } type="text" ref="sqft" defaultValue={ square_feet }/>
+                      <input className="form-control" style={ input_style } type="text" ref="square_feet" defaultValue={ square_feet }/>
                     </Col>
                     <Col xs={4} style={ S('p-0') }>
                       <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>BEDS</label>
-                      <input className="form-control" style={ input_style } type="text" ref="beds" defaultValue={ listing_added ? listing_added.compact_property.bedroom_count : '' }/>
+                      <input className="form-control" style={ input_style } type="text" ref="bedroom_count" defaultValue={ listing_added ? listing_added.compact_property.bedroom_count : '' }/>
                     </Col>
                     <Col xs={4} style={ S('pr-0') }>
                       <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>BATHS</label>
-                      <input className="form-control" style={ input_style } type="text" ref="baths" defaultValue={ listing_added ? listing_added.compact_property.full_bathroom_count : '' }/>
+                      <input className="form-control" style={ input_style } type="text" ref="bathroom_count" defaultValue={ listing_added ? listing_added.compact_property.bathroom_count : '' }/>
                     </Col>
                     <div className="clearfix"></div>
                   </div>

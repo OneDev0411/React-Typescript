@@ -107,6 +107,7 @@ export default class TransactionDetail extends Component {
       bathroom_count = property.bathroom_count
       square_feet = property.square_feet
     }
+
     let listing_status_indicator
     if (listing) {
       const status_color = listing_util.getStatusColor(listing.status)
@@ -204,7 +205,7 @@ export default class TransactionDetail extends Component {
             <div style={ S('ml-50') }>
               <div><b>{ contact.first_name } { contact.last_name }</b></div>
               <div style={ S('color-929292') }>
-                <div style={ info_style }>{ contact.roles[0] }</div>
+                <div style={ info_style }>{ contact.roles ? contact.roles[0] : '' }</div>
                 <div style={ info_style }>{ contact.phone_number }</div>
                 <div style={ info_style }><a style={{ textDecoration: 'none' }} href={ 'mailto:' + contact.email}>{ contact.email }</a></div>
               </div>
@@ -279,13 +280,25 @@ export default class TransactionDetail extends Component {
       )
     }
     // Calculate dom and cdom
-    let dom_days
-    let cdom_days
+    let dom_area
+    let cdom_area
     if (listing) {
-      if (listing.dom)
-        dom_days = listing.dom
-      if (listing.cdom)
-        cdom_days = listing.cdom
+      if (listing.dom) {
+        const dom_days_arr = listing.dom.toString().split('.')
+        const dom_miliseconds = dom_days_arr[0]
+        const dom_days = helpers.getDaysFromMiliseconds(dom_miliseconds) + ' days'
+        dom_area = (
+          <div style={ S('mb-15 mr-20 pull-left') }><b>Days on Market:</b> <span style={ S('color-929292') }>{ dom_days }</span></div>
+        )
+      }
+      if (listing.cdom) {
+        const cdom_days_arr = listing.cdom.toString().split('.')
+        const cdom_miliseconds = cdom_days_arr[0]
+        const cdom_days = helpers.getDaysFromMiliseconds(cdom_miliseconds) + ' days'
+        cdom_area = (
+          <div style={ S('mb-15 mr-20 pull-left') }><b>Current Days on Market:</b> <span style={ S('color-929292') }>{ cdom_days }</span></div>
+        )
+      }
     }
 
     let association_fee_area
@@ -320,6 +333,15 @@ export default class TransactionDetail extends Component {
             handleDragLeave={ this.handleDragLeave.bind(this) }
             drawerDrop={ this.drawerDrop.bind(this) }
             openFileViewer={ this.props.openFileViewer.bind(this) }
+            filterContacts={ this.props.filterContacts }
+            setContactActive={ this.props.setContactActive }
+            setFilteredContacts={ this.props.setFilteredContacts }
+            hideContactsForm={ this.props.hideContactsForm }
+            removeContact={ this.props.removeContact }
+            showContactModal={ this.props.showContactModal }
+            hideModal={ this.props.hideModal }
+            addContact={ this.props.addContact }
+            showNewContentInitials={ this.props.showNewContentInitials }
           />
           <div className="transaction-detail__title" style={ title_header_style }>
             <div className="pull-left">
@@ -346,8 +368,8 @@ export default class TransactionDetail extends Component {
                   <div style={ S('mb-15 mr-20 pull-left') }><b>Beds:</b> <span style={ S('color-929292') }>{ bedroom_count }</span></div>
                   <div style={ S('mb-15 mr-20 pull-left') }><b>Baths:</b> <span style={ S('color-929292') }>{ bathroom_count }</span></div>
                   <div style={ S('mb-15 mr-20 pull-left') }><b>Sqft:</b> <span style={ S('color-929292') }>{ square_feet }</span></div>
-                  <div style={ S('mb-15 mr-20 pull-left') }><b>Days on Market:</b> <span style={ S('color-929292') }>{ dom_days }</span></div>
-                  <div style={ S('mb-15 mr-20 pull-left') }><b>Current Days on Market:</b> <span style={ S('color-929292') }>{ cdom_days }</span></div>
+                  { dom_area }
+                  { cdom_area }
                   { association_fee_area }
                   <div className="clearfix"></div>
                 </div>
@@ -504,5 +526,13 @@ TransactionDetail.propTypes = {
   showEditModal: React.PropTypes.func,
   editTransaction: React.PropTypes.func,
   openFileViewer: React.PropTypes.func,
-  closeFileViewer: React.PropTypes.func
+  closeFileViewer: React.PropTypes.func,
+  filterContacts: React.PropTypes.func,
+  setContactActive: React.PropTypes.func,
+  setFilteredContacts: React.PropTypes.func,
+  hideContactsForm: React.PropTypes.func,
+  removeContact: React.PropTypes.func,
+  showContactModal: React.PropTypes.func,
+  addContact: React.PropTypes.func,
+  showNewContentInitials: React.PropTypes.func
 }

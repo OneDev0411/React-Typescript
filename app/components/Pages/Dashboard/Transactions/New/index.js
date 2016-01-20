@@ -100,6 +100,7 @@ export default class NewTransaction extends Component {
     })
   }
 
+  // Contacts
   getContacts() {
     const user = this.props.data.user
     AppDispatcher.dispatch({
@@ -146,6 +147,14 @@ export default class NewTransaction extends Component {
       }
     }
     AppStore.data.show_contact_modal = true
+    AppStore.emitChange()
+  }
+
+  showNewContentInitials(first_initial, last_initial) {
+    AppStore.data.new_contact_modal = {
+      first_initial,
+      last_initial
+    }
     AppStore.emitChange()
   }
 
@@ -390,17 +399,30 @@ export default class NewTransaction extends Component {
     e.preventDefault()
     // TODO
     const address = this.refs.address.value
+    const status = this.refs.status.value
     const city = this.refs.city.value
     const state = this.refs.state.value
-    const zip = this.refs.zip.value
+    const postal_code = this.refs.postal_code.value
+    const year_built = this.refs.year_built.value
+    const property_type = this.refs.property_type.value
+    const square_feet = this.refs.square_feet.value
+    const bedroom_count = this.refs.bedroom_count.value
+    const bathroom_count = this.refs.bathroom_count.value
+
     AppStore.data.new_transaction.listing_data = {
+      status,
       property: {
         address: {
           street_full: address,
           city,
           state,
-          postal_code: zip
-        }
+          postal_code
+        },
+        year_built,
+        property_type,
+        square_feet,
+        bedroom_count,
+        bathroom_count
       }
     }
     AppStore.emitChange()
@@ -424,14 +446,6 @@ export default class NewTransaction extends Component {
   showDatePickerModal(date_type_key) {
     AppStore.data.new_transaction.show_date_picker = true
     AppStore.data.new_transaction.date_type_key = date_type_key
-    AppStore.emitChange()
-  }
-
-  showNewContentInitials(first_initial, last_initial) {
-    AppStore.data.new_contact_modal = {
-      first_initial,
-      last_initial
-    }
     AppStore.emitChange()
   }
 

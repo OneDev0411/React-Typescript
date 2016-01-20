@@ -137,6 +137,14 @@ export default class AddContactsForm extends Component {
       maxWidth: 600,
       overflow: 'scroll'
     }
+    let module_style
+    let search_contact_input_style = S('w-600')
+    // If transaction
+    if (module_type === 'transaction') {
+      module_style = S('w-500 ml-10 mr-10')
+      search_contact_input_style = S('w-270')
+      filter_scroll_style.width = 475
+    }
 
     let filtered_contacts_list
     if (filtered_contacts) {
@@ -224,14 +232,20 @@ export default class AddContactsForm extends Component {
       first_initial = data.new_contact_modal.first_initial.toUpperCase()
     if (data.new_contact_modal && data.new_contact_modal.last_initial)
       last_initial = data.new_contact_modal.last_initial.toUpperCase()
-    return (
-      <div className="add-contact-form" >
+    let contacts_added_area
+    if (module_type !== 'transaction') {
+      contacts_added_area = (
         <div style={ S('maxw-620 minh-35') }>
           { contacts_added_markup }
           <div className="clearfix"></div>
         </div>
+      )
+    }
+    return (
+      <div style={ module_style } className="add-contact-form">
+        { contacts_added_area }
         <div style={ S('maxw-820') }>
-          <Input ref="search_contacts" onKeyDown={ this.navContactList.bind(this) } onKeyUp={ this.filterContacts.bind(this) } className="pull-left" style={ S('w-600') } type="text" placeholder="Enter any name, email or phone number"/>
+          <Input ref="search_contacts" onKeyDown={ this.navContactList.bind(this) } onKeyUp={ this.filterContacts.bind(this) } className="pull-left" style={ search_contact_input_style } type="text" placeholder="Enter any name, email or phone number"/>
           <span className="pull-left" style={ S('w-30 ml-15 mt-8 color-666') }>OR</span>
           <Button onClick={ this.showContactModal.bind(this) } className="pull-left" style={ S('w-160') } bsStyle="primary" type="button">
             Add New Contact

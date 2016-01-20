@@ -7,6 +7,7 @@ import Dropzone from 'react-dropzone'
 // Partials
 import Loading from '../../../../Partials/Loading'
 import ProfileImage from '../../Partials/ProfileImage'
+import AddContactsForm from '../../Partials/AddContactsForm'
 
 export default class Drawer extends Component {
 
@@ -160,7 +161,7 @@ export default class Drawer extends Component {
                     <div key={ 'contact-' + contact.id } style={ contact_style }>
                       <ProfileImage user={ contact }/>
                       <div style={ S('ml-50 ') }>
-                        <div><b>{ contact.first_name } { contact.last_name }</b>, <span style={ S('color-929292') }>{ contact.roles[0] }</span></div>
+                        <div><b>{ contact.first_name } { contact.last_name }</b>, <span style={ S('color-929292') }>{ contact.roles ? contact.roles[0] : '' }</span></div>
                         <div style={ S('color-929292') }>
                           <div>{ contact.phone_number }{ contact.phone_number ? ' ,' : '' } <a style={{ textDecoration: 'none' }} href={ 'mailto:' + contact.email}>{ contact.email }</a></div>
                         </div>
@@ -170,6 +171,19 @@ export default class Drawer extends Component {
                 })
               }
             </div>
+            <AddContactsForm
+              data={ data }
+              filterContacts={ this.props.filterContacts }
+              setContactActive={ this.props.setContactActive }
+              setFilteredContacts={ this.props.setFilteredContacts }
+              hideContactsForm={ this.props.hideContactsForm }
+              removeContact={ this.props.removeContact }
+              showContactModal={ this.props.showContactModal }
+              hideModal={ this.props.hideModal }
+              addContact={ this.props.addContact }
+              module_type="transaction"
+              showNewContentInitials={ this.props.showNewContentInitials }
+            />
           </div>
         )
       }
@@ -218,5 +232,14 @@ Drawer.propTypes = {
   handleDragEnter: React.PropTypes.func,
   handleDragLeave: React.PropTypes.func,
   drawerDrop: React.PropTypes.func,
-  openFileViewer: React.PropTypes.func
+  openFileViewer: React.PropTypes.func,
+  filterContacts: React.PropTypes.func,
+  setContactActive: React.PropTypes.func,
+  setFilteredContacts: React.PropTypes.func,
+  hideContactsForm: React.PropTypes.func,
+  removeContact: React.PropTypes.func,
+  showContactModal: React.PropTypes.func,
+  hideModal: React.PropTypes.func,
+  addContact: React.PropTypes.func,
+  showNewContentInitials: React.PropTypes.func
 }

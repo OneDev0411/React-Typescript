@@ -6,8 +6,10 @@ module.exports = (app, config) => {
     const endpoint = api_url + '/transactions/' + id
     const access_token = req.body.access_token
     const listing_data = req.body.listing_data
+    const contacts = req.body.contacts
     const request_object = {
-      listing_data
+      listing_data,
+      contacts
     }
     fetch(endpoint,{
       method: 'put',
@@ -18,6 +20,7 @@ module.exports = (app, config) => {
       body: JSON.stringify(request_object)
     })
     .then(response => {
+      // console.log(response)
       if (response.status >= 400) {
         var error = {
           status: 'error',

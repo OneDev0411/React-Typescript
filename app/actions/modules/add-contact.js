@@ -1,6 +1,7 @@
 // actions/modules/add-contact.js
 import _ from 'lodash'
 import AppStore from '../../stores/AppStore'
+import TransactionDispatcher from '../../dispatcher/TransactionDispatcher'
 
 export default (contact, module_type) => {
   if (!AppStore.data.contacts_added) {
@@ -21,5 +22,17 @@ export default (contact, module_type) => {
   AppStore.data.contacts_added[module_type].push(contact)
   if (AppStore.data.new_transaction)
     AppStore.data.new_transaction.contacts_added = AppStore.data.contacts_added
+  if (module_type === 'transaction') {
+    const user = AppStore.data.user
+    const transaction = AppStore.data.current_transaction
+    const contacts = transaction.contacts
+    contacts.push(contact)
+    TransactionDispatcher.dispatch({
+      user,
+      action: 'edit-contacts',
+      transaction,
+      contacts
+    })
+  }
   AppStore.emitChange()
 }
