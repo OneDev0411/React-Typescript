@@ -163,7 +163,7 @@ export default class Drawer extends Component {
                       <div style={ S('ml-50 ') }>
                         <div><b>{ contact.first_name } { contact.last_name }</b>, <span style={ S('color-929292') }>{ contact.roles ? contact.roles[0] : '' }</span></div>
                         <div style={ S('color-929292') }>
-                          <div>{ contact.phone_number }{ contact.phone_number ? ' ,' : '' } <a style={{ textDecoration: 'none' }} href={ 'mailto:' + contact.email}>{ contact.email }</a></div>
+                          <div>{ contact.phone_number }{ contact.phone_number ? ',' : '' } <a style={{ textDecoration: 'none' }} href={ 'mailto:' + contact.email}>{ contact.email }</a></div>
                         </div>
                       </div>
                     </div>
