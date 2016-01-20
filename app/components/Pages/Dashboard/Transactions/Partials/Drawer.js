@@ -216,7 +216,7 @@ export default class Drawer extends Component {
     return (
       <div style={ drawer_wrap_style }>
         <div style={ drawer_style } className={ 'transaction-detail__drawer ' + drawer_class }>
-          <div onClick={ this.props.closeDrawer } style={ S('mt-5 mr-15 fw-400 font-32') }className="close pull-right">&times;</div>
+          <div onClick={ this.props.closeDrawer } style={ S('mt-5 mr-15 fw-400 font-32 relative z-3') }className="close pull-right">&times;</div>
           { drawer_content }
         </div>
       </div>
