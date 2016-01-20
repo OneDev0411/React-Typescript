@@ -117,7 +117,7 @@ export default class Drawer extends Component {
         ...S('absolute w-100p h-' + doczone_height),
         overflow: 'scroll'
       }
-      const drawer_header_style = S('bg-f7f9fa ml-5 br-3 p-12 font-18 color-4a4a4a')
+      const drawer_header_style = S('relative z-2 bg-f7f9fa ml-5 br-3 p-12 font-18 color-4a4a4a')
       if (drawer.content === 'docs') {
         let doc_count
         if (attachments && attachments.length)
@@ -198,10 +198,10 @@ export default class Drawer extends Component {
               <div style={ S('absolute w-100p z-0') }>
                 <Loading />
               </div>
-              <div style={ S('absolute z-1') }>
+              <div style={ S('absolute z-1 t-50n') }>
                 <iframe
                   width="500"
-                  height="500"
+                  height="600"
                   frameBorder="0" style={ { border: 0 } }
                   src={ 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDagxNRLRIOsF8wxmuh1J3ysqnwdDB93-4&q=' + google_address }
                   allowFullScreen
