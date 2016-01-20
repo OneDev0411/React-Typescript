@@ -1,28 +1,28 @@
-// api/posts/create-transaction.js
+// api/posts/edit-transaction.js
 module.exports = (app, config) => {
-  app.post('/api/create-transaction',(req, res) => {
+  app.post('/api/edit-transaction',(req, res) => {
     const api_url = config.api.url
-    const endpoint = api_url + '/transactions'
+    const id = req.query.id
+    const endpoint = api_url + '/transactions/' + id
     const access_token = req.body.access_token
-    const transaction_type = req.body.transaction_type
-    const title = req.body.title
-    const listing = req.body.listing
     const listing_data = req.body.listing_data
-    const contract_price = req.body.contract_price
     const contacts = req.body.contacts
-    const dates = req.body.dates
+    const transaction_type = req.body.transaction_type
+    const user = req.body.user
     const request_object = {
       transaction_type,
-      title,
-      listing,
       listing_data,
-      contract_price,
       contacts,
-      dates
+      user
     }
+    if (!request_object.listing_data)
+      delete request_object.listing_data
+    if (!request_object.contacts)
+      delete request_object.contacts
+    console.log(contacts)
     fetch(endpoint,{
-      method: 'post',
-      headers: {  
+      method: 'put',
+      headers: {
         'Content-Type': 'application/json',
         'authorization': 'Bearer ' + access_token,
       },
@@ -39,9 +39,8 @@ module.exports = (app, config) => {
       return response.json()
     })
     .then(response => {
-      let response_object = response
-      response_object.status = 'success'
-      return res.json(response_object)
+      response.status = 'success'
+      return res.json(response)
     });
   })
 }

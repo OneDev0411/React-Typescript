@@ -1,13 +1,9 @@
-// api/gets/contacts.js
+// api/tasks/get-tasks.js
 module.exports = (app, config) => {
-  app.get('/api/contacts',(req, res) => {
+  app.get('/api/tasks',(req, res) => {
     const api_url = config.api.url
-    const endpoint = api_url + '/contacts'
-
+    const endpoint = api_url + '/tasks'
     const access_token = req.query.access_token
-
-    res.setHeader('Content-Type', 'application/json');
-
     fetch(endpoint,{
       method: 'get',
       headers: {  
@@ -28,7 +24,7 @@ module.exports = (app, config) => {
     .then(response => {
       let response_object = response
       response_object.status = 'success'
-      return res.end(JSON.stringify(response_object))
+      return res.json(response_object)
     })
   })
 }

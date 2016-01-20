@@ -22,8 +22,6 @@ module.exports = (app, config) => {
       grant_type: 'password'
     }
 
-    res.setHeader('Access-Control-Allow-Credentials', 'true')
-
     fetch(signin_url,{
       method: 'post',
       credentials: 'include',

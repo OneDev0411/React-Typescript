@@ -79,7 +79,7 @@ export default class Drawer extends Component {
           }
           let file_area = (
             <div>
-              <Button onClick={ this.props.deleteFile.bind(this, file) } style={ S('mt-10 mr-10 absolute r-0') } bsStyle="danger" className="pull-right delete">Delete</Button>
+              <Button onClick={ this.props.deleteFile.bind(this, file) } style={ S('mt-10 mr-10 absolute r-0') } bsStyle="danger" className="delete">Delete</Button>
               <div onClick={ this.openFileViewer.bind(this, file) } className="pull-left">
                 { file_image }
               </div>
@@ -101,7 +101,7 @@ export default class Drawer extends Component {
             )
           }
           return (
-            <div className="transaction--file" key={ 'file-' + i } style={ file_style }>
+            <div className="transaction-file" key={ 'file-' + i } style={ file_style }>
               { file_area }
               <div className="clearfix"></div>
             </div>
@@ -152,13 +152,28 @@ export default class Drawer extends Component {
             <div style={ drawer_header_style }>Contacts</div>
             <div>
               {
-                contacts.map((contact) => {
+                contacts.map(contact => {
                   const contact_style = {
                     ...S('pt-15 pb-15 pl-15'),
                     borderBottom: '1px solid #f7f9fa'
                   }
+                  let delete_text = 'Delete'
+                  let deleting_class = ''
+                  if (transaction.deleting_contact && transaction.deleting_contact.id === contact.id) {
+                    delete_text = 'Deleting...'
+                    deleting_class = ' disabled'
+                  }
+                  let delete_button
+                  if (contacts.length > 1) {
+                    delete_button = (
+                      <Button onClick={ this.props.deleteContact.bind(this, contact) } style={ S('mr-10 absolute r-0') } bsStyle="danger" className={ 'delete' + deleting_class }>
+                        { delete_text }
+                      </Button>
+                    )
+                  }
                   return (
-                    <div key={ 'contact-' + contact.id } style={ contact_style }>
+                    <div className="transaction-contact" key={ 'contact-' + contact.id } style={ contact_style }>
+                      { delete_button }
                       <ProfileImage user={ contact }/>
                       <div style={ S('ml-50 ') }>
                         <div><b>{ contact.first_name } { contact.last_name }</b>, <span style={ S('color-929292') }>{ contact.roles ? contact.roles[0] : '' }</span></div>
@@ -241,5 +256,6 @@ Drawer.propTypes = {
   showContactModal: React.PropTypes.func,
   hideModal: React.PropTypes.func,
   addContact: React.PropTypes.func,
+  deleteContact: React.PropTypes.func,
   showNewContentInitials: React.PropTypes.func
 }

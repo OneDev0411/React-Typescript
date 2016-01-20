@@ -291,11 +291,11 @@ export default class Transactions extends Component {
           street_full: address,
           city,
           state,
-          postal_code,
-          square_feet,
-          bedroom_count,
-          bathroom_count
-        }
+          postal_code
+        },
+        square_feet,
+        bedroom_count,
+        bathroom_count
       }
     }
     // console.log(user, transaction, listing_data)
@@ -470,6 +470,21 @@ export default class Transactions extends Component {
     }
   }
 
+  deleteContact(contact) {
+    const user = this.props.data.user
+    const transaction = this.props.data.current_transaction
+    AppStore.data.current_transaction.deleting_contact = {
+      id: contact.id
+    }
+    AppStore.emitChange()
+    TransactionDispatcher.dispatch({
+      action: 'delete-contact',
+      contact,
+      user,
+      transaction
+    })
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -634,6 +649,7 @@ export default class Transactions extends Component {
           removeContact={ this.removeContact }
           showContactModal={ this.showContactModal }
           addContact={ this.addContact }
+          deleteContact={ this.deleteContact }
           showNewContentInitials={ this.showNewContentInitials }
         />
       )

@@ -341,6 +341,7 @@ export default class TransactionDetail extends Component {
             showContactModal={ this.props.showContactModal }
             hideModal={ this.props.hideModal }
             addContact={ this.props.addContact }
+            deleteContact={ this.props.deleteContact }
             showNewContentInitials={ this.props.showNewContentInitials }
           />
           <div className="transaction-detail__title" style={ title_header_style }>
@@ -534,5 +535,6 @@ TransactionDetail.propTypes = {
   removeContact: React.PropTypes.func,
   showContactModal: React.PropTypes.func,
   addContact: React.PropTypes.func,
+  deleteContact: React.PropTypes.func,
   showNewContentInitials: React.PropTypes.func
 }

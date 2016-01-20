@@ -5,7 +5,7 @@ module.exports = (app, config) => {
     const contact_id = req.body.contact_id
     const endpoint = api_url + '/contacts/' + contact_id
     const access_token = req.body.access_token
-    fetch(endpoint,{
+    fetch(endpoint, {
       method: 'delete',
       headers: {  
         'Content-Type': 'application/json',

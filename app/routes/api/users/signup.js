@@ -26,8 +26,6 @@ module.exports = (app, config) => {
       grant_type: grant_type
     }
 
-    res.setHeader('Content-Type', 'application/json')
-
     fetch(signup_url,{
       method: 'post',
       headers: {  

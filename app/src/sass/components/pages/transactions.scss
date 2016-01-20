@@ -51,7 +51,8 @@
   background: #000;
   opacity: .3;
 }
-.transaction--file {
+.transaction-file,
+.transaction-contact {
   .delete {
     display: none;
   }

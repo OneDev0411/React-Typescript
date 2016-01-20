@@ -13,8 +13,6 @@ module.exports = (app, config) => {
     
     const get_messages_url = api_url + '/rooms/' + room_id + '/messages?limit=' + limit + '&max_value=' + max_value
 
-    res.setHeader('Content-Type', 'application/json');
-
     fetch(get_messages_url,{
       method: 'get',
       headers: {  
@@ -28,14 +26,14 @@ module.exports = (app, config) => {
           status: 'error',
           message: 'There was an error with this request'
         }
-        return res.end(JSON.stringify(error))
+        return res.json(error)
       }
       return response.json()
     })
     .then(response => {
       let response_object = response
       response_object.status = 'success'
-      return res.end(JSON.stringify(response_object))
+      return res.json(response_object)
     });
   })
 

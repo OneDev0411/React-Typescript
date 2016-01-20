@@ -67,13 +67,77 @@ export default {
   edit: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/edit-transaction?id=' + params.id
+    const transaction = params.transaction
+    const endpoint = api_host + '/api/edit-transaction?id=' + transaction.id
+    const user = params.user
     const request_object = {
       access_token: params.access_token,
       listing_data: params.listing_data,
-      contacts: params.contacts
+      transaction_type: transaction.transaction_type,
+      user: user.id
     }
-    // console.log(request_object)
+    fetch(endpoint, {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(request_object)
+    })
+    .then(response => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          message: 'There was an error with this request.'
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then(response => {
+      return callback(false, response)
+    })
+  },
+  addContacts: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const transaction = params.transaction
+    const endpoint = api_host + '/api/transactions/contacts?id=' + transaction.id
+    const contacts = params.contacts
+    const request_object = {
+      access_token: params.access_token,
+      contacts
+    }
+    fetch(endpoint, {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(request_object)
+    })
+    .then(response => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          message: 'There was an error with this request.'
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then(response => {
+      return callback(false, response)
+    })
+  },
+  deleteContact: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const transaction = params.transaction
+    const endpoint = api_host + '/api/transactions/delete-contact?id=' + transaction.id
+    const contact = params.contact
+    const request_object = {
+      access_token: params.access_token,
+      contact
+    }
     fetch(endpoint, {
       method: 'post',
       headers: {

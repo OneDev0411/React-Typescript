@@ -1,14 +1,12 @@
-// api/gets/rooms.js
+// api/gets/contacts.js
 module.exports = (app, config) => {
-  app.get('/api/rooms',(req, res) => {
+  app.get('/api/contacts',(req, res) => {
     const api_url = config.api.url
-    const get_rooms_url = api_url + '/rooms'
+    const endpoint = api_url + '/contacts'
 
     const access_token = req.query.access_token
 
-    res.setHeader('Content-Type', 'application/json')
-
-    fetch(get_rooms_url,{
+    fetch(endpoint,{
       method: 'get',
       headers: {  
         'Content-Type': 'application/json',
@@ -21,14 +19,14 @@ module.exports = (app, config) => {
           status: 'error',
           message: 'There was an error with this request.'
         }
-        return res.end(JSON.stringify(error))
+        return res.json(error)
       }
       return response.json()
     })
     .then(response => {
       let response_object = response
       response_object.status = 'success'
-      return res.end(JSON.stringify(response_object))
+      return res.json(response_object)
     })
   })
 }

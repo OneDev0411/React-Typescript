@@ -28,8 +28,8 @@ export default (contact, module_type) => {
     const contacts = transaction.contacts
     contacts.push(contact)
     TransactionDispatcher.dispatch({
+      action: 'add-contacts',
       user,
-      action: 'edit-contacts',
       transaction,
       contacts
     })

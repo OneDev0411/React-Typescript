@@ -1,30 +1,36 @@
-// api/gets/transactions.js
+// api/posts/create-transaction.js
 module.exports = (app, config) => {
-  app.get('/api/transactions',(req, res) => {
+  app.post('/api/tasks',(req, res) => {
     const api_url = config.api.url
-    const endpoint = api_url + '/transactions'
-    const access_token = req.query.access_token
+    const endpoint = api_url + '/tasks'
+    const access_token = req.body.access_token
+    const title = req.body.title
+    const request_object = {
+      title,
+      status: 'New'
+    }
     fetch(endpoint,{
-      method: 'get',
+      method: 'post',
       headers: {  
         'Content-Type': 'application/json',
         'authorization': 'Bearer ' + access_token,
-      }
+      },
+      body: JSON.stringify(request_object)
     })
     .then(response => {
       if (response.status >= 400) {
-        let error = {
+        var error = {
           status: 'error',
           message: 'There was an error with this request.'
         }
-        return res.end(JSON.stringify(error))
+        return res.json(error)
       }
       return response.json()
     })
     .then(response => {
       let response_object = response
       response_object.status = 'success'
-      return res.end(JSON.stringify(response_object))
+      return res.json(response_object)
     });
   })
 }

@@ -1,26 +1,19 @@
-// api/posts/edit-transaction.js
+// api/transactions/delete-contact.js
 module.exports = (app, config) => {
-  app.post('/api/edit-transaction',(req, res) => {
+  app.post('/api/transactions/delete-contact',(req, res) => {
     const api_url = config.api.url
     const id = req.query.id
-    const endpoint = api_url + '/transactions/' + id
+    const contact = req.body.contact
+    const endpoint = api_url + '/transactions/' + id + '/contacts/' + contact.id
     const access_token = req.body.access_token
-    const listing_data = req.body.listing_data
-    const contacts = req.body.contacts
-    const request_object = {
-      listing_data,
-      contacts
-    }
-    fetch(endpoint,{
-      method: 'put',
+    fetch(endpoint, {
+      method: 'delete',
       headers: {
         'Content-Type': 'application/json',
         'authorization': 'Bearer ' + access_token,
-      },
-      body: JSON.stringify(request_object)
+      }
     })
     .then(response => {
-      // console.log(response)
       if (response.status >= 400) {
         var error = {
           status: 'error',
@@ -28,7 +21,7 @@ module.exports = (app, config) => {
         }
         return res.json(error)
       }
-      return response
+      return response.json()
     })
     .then(response => {
       response.status = 'success'

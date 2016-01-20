@@ -4,12 +4,12 @@ import AppStore from '../../stores/AppStore'
 
 export default (user, transaction, listing_data) => {
   const params = {
-    id: transaction.id,
+    user,
     access_token: user.access_token,
+    transaction,
     listing_data
   }
   Transaction.edit(params, (err, response) => {
-    // console.log(response)
     // TODO
     if (response.status === 'success') {
       const edited_transaction = response.data

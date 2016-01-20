@@ -32,6 +32,9 @@ import removeContact from '../actions/modules/remove-contact'
 // Listings
 import searchListing from '../actions/listings/search'
 
+// Tasks
+import getTasks from '../actions/tasks/get'
+
 const AppDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
@@ -190,6 +193,11 @@ AppDispatcher.register(payload => {
       user = payload.user
       q = payload.q
       searchListing(user, q)
+      break
+
+    case 'get-tasks':
+      user = payload.user
+      getTasks(user)
       break
 
     default:
