@@ -13,8 +13,13 @@ export default (user, transaction, listing_data) => {
     // TODO
     if (response.status === 'success') {
       const edited_transaction = response.data
-      if (edited_transaction)
-        AppStore.data.current_transaction = edited_transaction
+      AppStore.data.current_transaction = edited_transaction
+      const transactions = AppStore.data.transactions
+      const new_transactions = transactions.filter(transaction_loop => {
+        return transaction_loop.id !== edited_transaction.id
+      })
+      new_transactions.push(edited_transaction)
+      AppStore.data.transactions = new_transactions
     }
     delete AppStore.data.current_transaction.editing
     delete AppStore.data.current_transaction.show_edit_modal
