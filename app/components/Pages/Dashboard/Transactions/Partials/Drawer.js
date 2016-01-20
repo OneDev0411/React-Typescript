@@ -68,7 +68,7 @@ export default class Drawer extends Component {
               { file_icon_short }
             </a>
           )
-          if (file.info && mime === 'image/jpeg') {
+          if (file.info && mime === 'image/jpeg' || file.info && mime === 'image/png' || file.info && mime === 'image/gif') {
             file_image = (
               <a href={ file.preview } target="_blank" className="pull-left" style={ S('w-60 h-60 ml-10 bg-url(' + file.url + ') bg-cover bg-center br-2') }></a>
             )

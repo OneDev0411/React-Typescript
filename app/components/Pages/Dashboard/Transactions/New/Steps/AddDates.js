@@ -69,7 +69,7 @@ export default class AddDates extends Component {
         <div>
           <Col sm={4} style={ S('pl-0') }>
             <div style={ S('color-bfc2c3 font-13 mb-10') }>
-              CONTRACT
+              EXECUTED DATE
             </div>
             <div>
               <div style={ S('font-28 color-a1bde4') }>{ contract_date_formatted ? contract_date_formatted.day.toUpperCase() : '' }</div>
@@ -83,7 +83,7 @@ export default class AddDates extends Component {
           </Col>
           <Col sm={4} style={ S('pl-0') }>
             <div style={ S('color-bfc2c3 font-13 mb-10') }>
-              DUE DILIGENCE
+              OPTION PERIOD ENDS
             </div>
             <div>
               <div style={ S('font-28 color-828c99') }>{ due_diligence_date_formatted ? due_diligence_date_formatted.day.toUpperCase() : '' }</div>
@@ -97,7 +97,7 @@ export default class AddDates extends Component {
           </Col>
           <Col sm={4} style={ S('pl-0') }>
             <div style={ S('color-bfc2c3 font-13 mb-10') }>
-              CLOSING
+              CLOSING DATE
             </div>
             <div>
               <div style={ S('font-28 color-db3821') }>{ closing_date_formatted ? closing_date_formatted.day.toUpperCase() : '' }</div>
