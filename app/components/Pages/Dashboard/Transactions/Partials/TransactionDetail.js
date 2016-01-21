@@ -161,7 +161,7 @@ export default class TransactionDetail extends Component {
     let title_area
     title_area = (
       <div>
-        <span style={ S('mr-10') }>{ title }</span> { price_area }
+        <span style={ S('mr-10 pointer') } onClick={ this.props.setDrawerContent.bind(this, 'map', false) }>{ title }</span> { price_area }
       </div>
     )
 

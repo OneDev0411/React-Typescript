@@ -216,7 +216,7 @@ export default class Drawer extends Component {
               <div style={ S('absolute z-1 t-50n') }>
                 <iframe
                   width="500"
-                  height={ window.innerHeight }
+                  height={ window.innerHeight - 145 }
                   frameBorder="0" style={ { border: 0 } }
                   src={ 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDagxNRLRIOsF8wxmuh1J3ysqnwdDB93-4&q=' + google_address }
                   allowFullScreen
