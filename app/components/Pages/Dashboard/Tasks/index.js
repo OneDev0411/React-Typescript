@@ -1,6 +1,7 @@
 // Dashboard/Tasks/index.js
 import React, { Component } from 'react'
 import S from 'shorti'
+import { Input } from 'react-bootstrap'
 
 // Partials
 import Header from '../Partials/Header'
@@ -20,6 +21,9 @@ export default class Tasks extends Component {
     const data = this.props.data
     if (!data.tasks)
       this.getTasks()
+    setTimeout(() => {
+      this.refs.task_title.refs.input.focus()
+    }, 100)
   }
 
   getTasks() {
@@ -33,6 +37,42 @@ export default class Tasks extends Component {
     })
   }
 
+  editTaskStatus(task, status) {
+    const data = this.props.data
+    const user = data.user
+    AppDispatcher.dispatch({
+      action: 'edit-task-status',
+      user,
+      task,
+      status
+    })
+  }
+
+  deleteTask(task) {
+    const data = this.props.data
+    const user = data.user
+    AppStore.data.deleting_task = task
+    AppStore.emitChange()
+    AppDispatcher.dispatch({
+      action: 'delete-task',
+      user,
+      task
+    })
+  }
+
+  handleSubmit(e) {
+    e.preventDefault()
+    const data = this.props.data
+    const user = data.user
+    const title = this.refs.task_title.refs.input.value.trim()
+    this.refs.task_title.refs.input.value = ''
+    AppDispatcher.dispatch({
+      action: 'create-task',
+      user,
+      title
+    })
+  }
+
   render() {
     const data = this.props.data
     const main_style = S('absolute l-183 r-0')
@@ -43,6 +83,8 @@ export default class Tasks extends Component {
       main_content = (
         <TasksList
           data={ data }
+          editTaskStatus={ this.editTaskStatus }
+          deleteTask={ this.deleteTask }
         />
       )
     }
@@ -52,7 +94,10 @@ export default class Tasks extends Component {
         <main style={ S('pt-20') }>
           <SideBar data={ data }/>
           <div style={ main_style }>
-            <div style={ S('ml-20') }>
+            <div style={ S('ml-15') }>
+              <form style={ S('mr-15') } onSubmit={ this.handleSubmit.bind(this) }>
+                <Input ref="task_title" type="text" placeholder="Type your task then press enter"/>
+              </form>
               { main_content }
             </div>
           </div>

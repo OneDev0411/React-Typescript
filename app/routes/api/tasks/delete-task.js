@@ -1,21 +1,16 @@
-// api/tasks/create-task.js
+// api/tasks/delete-task.js
 module.exports = (app, config) => {
-  app.post('/api/tasks',(req, res) => {
+  app.post('/api/tasks/delete-task',(req, res) => {
     const api_url = config.api.url
-    const endpoint = api_url + '/tasks'
     const access_token = req.body.access_token
-    const title = req.body.title
-    const request_object = {
-      title,
-      status: 'New'
-    }
+    const task = req.body.task
+    const endpoint = api_url + '/tasks/' + task.id
     fetch(endpoint,{
-      method: 'post',
+      method: 'delete',
       headers: {  
         'Content-Type': 'application/json',
         'authorization': 'Bearer ' + access_token,
-      },
-      body: JSON.stringify(request_object)
+      }
     })
     .then(response => {
       if (response.status >= 400) {
@@ -25,10 +20,10 @@ module.exports = (app, config) => {
         }
         return res.json(error)
       }
-      return response.json()
+      return response
     })
     .then(response => {
-      let response_object = response
+      let response_object = {}
       response_object.status = 'success'
       return res.json(response_object)
     });

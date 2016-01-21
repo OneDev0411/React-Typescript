@@ -1,16 +1,16 @@
-// api/tasks/create-task.js
+// api/tasks/edit-status.js
 module.exports = (app, config) => {
-  app.post('/api/tasks',(req, res) => {
+  app.post('/api/tasks/edit-status',(req, res) => {
     const api_url = config.api.url
-    const endpoint = api_url + '/tasks'
-    const access_token = req.body.access_token
-    const title = req.body.title
+    const access_token = req.query.access_token
+    const status = req.body.status
+    const task = req.body.task
+    const endpoint = api_url + '/tasks/' + task.id
     const request_object = {
-      title,
-      status: 'New'
+      status
     }
     fetch(endpoint,{
-      method: 'post',
+      method: 'put',
       headers: {  
         'Content-Type': 'application/json',
         'authorization': 'Bearer ' + access_token,

@@ -30,5 +30,7 @@ module.exports = (app, config) => {
   require('./contacts/delete-contact')(app, config)
   // Tasks
   require('./tasks/create-task')(app, config)
+  require('./tasks/delete-task')(app, config)
   require('./tasks/get-tasks')(app, config)
+  require('./tasks/edit-status')(app, config)
 }
