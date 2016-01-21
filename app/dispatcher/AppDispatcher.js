@@ -70,6 +70,7 @@ AppDispatcher.register(payload => {
   // Task
   let task
   let status
+  let due_date
 
   // Listing
   let q
@@ -217,7 +218,8 @@ AppDispatcher.register(payload => {
     case 'create-task':
       user = payload.user
       title = payload.title
-      createTask(user, title)
+      due_date = payload.due_date
+      createTask(user, title, due_date)
       break
 
     case 'delete-task':

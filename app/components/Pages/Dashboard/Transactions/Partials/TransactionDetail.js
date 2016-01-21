@@ -58,7 +58,7 @@ export default class TransactionDetail extends Component {
     const listing = transaction.listing
     const listing_data = transaction.listing_data
     const drawer = transaction.drawer
-    // console.log(transaction)
+    console.log(transaction)
     // Set transaction data
     const transaction_type = transaction.transaction_type
     const contacts = transaction.contacts

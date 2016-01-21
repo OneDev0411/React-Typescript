@@ -2,6 +2,10 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import { Input } from 'react-bootstrap'
+import DayPicker from 'react-day-picker'
+
+// Helpers
+import helpers from '../../../../utils/helpers'
 
 // Partials
 import Header from '../Partials/Header'
@@ -61,16 +65,43 @@ export default class Tasks extends Component {
   }
 
   handleSubmit(e) {
-    e.preventDefault()
-    const data = this.props.data
-    const user = data.user
-    const title = this.refs.task_title.refs.input.value.trim()
-    this.refs.task_title.refs.input.value = ''
-    AppDispatcher.dispatch({
-      action: 'create-task',
-      user,
-      title
-    })
+    const key = e.which
+    if (key === 13) {
+      const title = this.refs.task_title.refs.input.value.trim()
+      const date = new Date()
+      let due_date = date.getTime()
+      if (AppStore.data.new_task && AppStore.data.new_task.due_date)
+        due_date = AppStore.data.new_task.due_date.getTime()
+      e.preventDefault()
+      if (title) {
+        const data = this.props.data
+        const user = data.user
+        this.refs.task_title.refs.input.value = ''
+        this.refs.task_title.refs.input.focus()
+        AppDispatcher.dispatch({
+          action: 'create-task',
+          user,
+          title,
+          due_date
+        })
+      }
+    }
+  }
+
+  showDayPicker() {
+    if (AppStore.data.show_day_picker)
+      delete AppStore.data.show_day_picker
+    else
+      AppStore.data.show_day_picker = true
+    AppStore.emitChange()
+  }
+
+  setTaskDate(e, day) {
+    if (!AppStore.data.new_task)
+      AppStore.data.new_task = {}
+    AppStore.data.new_task.due_date = day
+    delete AppStore.data.show_day_picker
+    AppStore.emitChange()
   }
 
   render() {
@@ -88,6 +119,26 @@ export default class Tasks extends Component {
         />
       )
     }
+    let date = new Date()
+    const today = helpers.friendlyDate(date.getTime() / 1000)
+    let day_picker
+    if (data.show_day_picker) {
+      day_picker = (
+        <div style={ S('absolute bg-fff z-10 t-110 l-10n') }>
+          <DayPicker onDayClick={ this.setTaskDate.bind(this) } />
+        </div>
+      )
+    }
+    let due_date_area = (
+      <span>Today { `${today.day}, ${today.month} ${today.date}, ${today.year}` }</span>
+    )
+    if (data.new_task && data.new_task.due_date) {
+      date = new Date(data.new_task.due_date)
+      const due_date_obj = helpers.friendlyDate(date.getTime() / 1000)
+      due_date_area = (
+        <span>{ `${due_date_obj.day}, ${due_date_obj.month} ${due_date_obj.date}, ${due_date_obj.year}` }</span>
+      )
+    }
     return (
       <div style={ S('minw-1000') }>
         <Header data={ data }/>
@@ -95,9 +146,30 @@ export default class Tasks extends Component {
           <SideBar data={ data }/>
           <div style={ main_style }>
             <div style={ S('ml-15') }>
-              <form style={ S('mr-15') } onSubmit={ this.handleSubmit.bind(this) }>
-                <Input ref="task_title" type="text" placeholder="Type your task then press enter"/>
-              </form>
+              <div style={ S('mr-15 relative') }>
+                <form onKeyDown={ this.handleSubmit.bind(this) }>
+                  <Input style={ { ...S('h-110 pt-12 font-18'), resize: 'none' } } ref="task_title" type="textarea" placeholder="Type your task then press enter"/>
+                  <div style={ S('absolute b-0 pl-15 pb-15 pointer') }>
+                    <div className="pull-left" style={ S('color-3388ff') } onClick={ this.showDayPicker }>
+                      <span style={ S('mr-10') }>
+                        <img src="/images/dashboard/icons/calendar.svg"/>
+                      </span>
+                      <span style={ S('relative t-1 font-16') }>
+                        { due_date_area }
+                      </span>
+                    </div>
+                    <div style={ S('absolute l-230 t-5n w-300 color-929292 font-12') } className="pull-left">
+                      <span>
+                        <img style={ S('w-34 h-34') } src='/images/dashboard/icons/invite-user.svg'/>
+                      </span>
+                      <span>
+                        Share this task with others
+                      </span>
+                    </div>
+                  </div>
+                  { day_picker }
+                </form>
+              </div>
               { main_content }
             </div>
           </div>

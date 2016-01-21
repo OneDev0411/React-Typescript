@@ -6,6 +6,7 @@ module.exports = (app, config) => {
     const endpoint = api_url + '/transactions/' + id + '/contacts'
     const access_token = req.body.access_token
     const contacts = req.body.contacts
+    console.log(contacts)
     const request_object = {
       contacts
     }

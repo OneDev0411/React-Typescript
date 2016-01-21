@@ -6,20 +6,13 @@ module.exports = (app, config) => {
     const endpoint = api_url + '/transactions/' + id
     const access_token = req.body.access_token
     const listing_data = req.body.listing_data
-    const contacts = req.body.contacts
     const transaction_type = req.body.transaction_type
     const user = req.body.user
     const request_object = {
       transaction_type,
       listing_data,
-      contacts,
       user
     }
-    if (!request_object.listing_data)
-      delete request_object.listing_data
-    if (!request_object.contacts)
-      delete request_object.contacts
-    console.log(contacts)
     fetch(endpoint,{
       method: 'put',
       headers: {

@@ -5,9 +5,11 @@ module.exports = (app, config) => {
     const endpoint = api_url + '/tasks'
     const access_token = req.body.access_token
     const title = req.body.title
+    const due_date = req.body.due_date
     const request_object = {
       title,
-      status: 'New'
+      status: 'New',
+      due_date
     }
     fetch(endpoint,{
       method: 'post',

@@ -20,7 +20,6 @@ module.exports = (app, config) => {
       contacts,
       dates
     }
-    console.log(contacts)
     fetch(endpoint,{
       method: 'post',
       headers: {  

@@ -3,6 +3,9 @@ import React, { Component } from 'react'
 import S from 'shorti'
 import { Button } from 'react-bootstrap'
 
+// Helpers
+import helpers from '../../../../../utils/helpers'
+
 export default class Tasks extends Component {
 
   render() {
@@ -11,12 +14,13 @@ export default class Tasks extends Component {
     let tasks_list = 'You have no tasks yet'
     if (tasks) {
       tasks_list = tasks.map(task => {
+        const due_date = task.due_date
         let checkbox_style = {
           ...S('w-18 h-18 bc-bfc2c3 bw-1 solid mr-10 bg-fff relative')
         }
         let status_action = 'Done'
         let check_mark
-        let text_style = S('fw-500')
+        let text_style = S('fw-500 mr-15')
         // If Done
         if (task.status === 'Done') {
           check_mark = (
@@ -38,6 +42,13 @@ export default class Tasks extends Component {
           delete_class = ' disabled'
           delete_text = 'Deleting...'
         }
+        let due_date_area
+        if (due_date) {
+          const due_date_obj = helpers.friendlyDate(due_date / 1000)
+          due_date_area = (
+            <span>{ `${due_date_obj.day}, ${due_date_obj.month} ${due_date_obj.date}, ${due_date_obj.year}` }</span>
+          )
+        }
         return (
           <div className="task_row" style={ S('p-15 pointer h-50 relative') } key={ 'task-' + task.id }>
             <Button onClick={ this.props.deleteTask.bind(this, task) } style={ S('absolute r-5 t-5') } bsStyle="danger" className={ 'delete' + delete_class }>
@@ -49,6 +60,7 @@ export default class Tasks extends Component {
             <span style={ text_style }>
               { task.title }
             </span>
+            { due_date_area }
           </div>
         )
       })

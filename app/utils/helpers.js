@@ -16,14 +16,17 @@ export default {
   friendlyDate: function(UNIX_timestamp) {
     var a = new Date(UNIX_timestamp * 1000);
     var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var days = ['Sun','Mon','Tues','Wed','Thurs','Fri','Sat'];
     var year = a.getFullYear();
     var month = months[a.getMonth()];
+    var day = days[a.getDay()];
     var date = a.getDate();
     var hour = a.getHours();
     var min = a.getMinutes();
     var sec = a.getSeconds();
     var time_friendly = this.getTime(a);
     var time = {
+      day: day,
       date: date,
       month: month,
       year: year,
