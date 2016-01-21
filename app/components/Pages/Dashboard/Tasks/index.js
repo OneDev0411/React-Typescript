@@ -160,7 +160,7 @@ export default class Tasks extends Component {
                     </div>
                     <div style={ S('absolute l-230 t-5n w-300 color-929292 font-12') } className="pull-left">
                       <span>
-                        <img style={ S('w-34 h-34') } src='/images/dashboard/icons/invite-user.svg'/>
+                        <img style={ S('w-34 h-34') } src="/images/dashboard/icons/invite-user.svg"/>
                       </span>
                       <span>
                         Share this task with others

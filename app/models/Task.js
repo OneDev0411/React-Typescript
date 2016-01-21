@@ -17,7 +17,6 @@ export default {
       access_token: params.access_token,
       due_date: params.due_date
     }
-    console.log(request_object)
     fetch(endpoint, {
       method: 'post',
       headers: {
