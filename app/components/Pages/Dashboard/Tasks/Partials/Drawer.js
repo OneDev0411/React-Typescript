@@ -54,11 +54,19 @@ export default class Drawer extends Component {
       }
     }
     let due_date_area
+    let created_area
     if (current_task && current_task.due_date) {
       const due_date = current_task.due_date
       const due_date_obj = helpers.friendlyDate(due_date / 1000)
       due_date_area = (
         <span>{ `${due_date_obj.day}, ${due_date_obj.month} ${due_date_obj.date}, ${due_date_obj.year}` }</span>
+      )
+      const created_date = current_task.created_at
+      const created_date_obj = helpers.friendlyDate(created_date)
+      created_area = (
+        <span>
+          Created by { data.user.first_name } { data.user.last_name } on { created_date_obj.month } { created_date_obj.date }, { created_date_obj.year }
+        </span>
       )
     }
     return (
@@ -74,22 +82,32 @@ export default class Drawer extends Component {
             </div>
             <span style={ text_style }>{ task_title }</span>
           </div>
-          <div style={ { ...S('pt-20 p-15 h-90'), ...bottomLine } }>
+          <div style={ { ...S('pt-20 p-15 h-60 mb-30 bg-fff'), ...bottomLine } }>
             <span style={ S('mr-15') }>
               <img width="17" src="/images/dashboard/icons/calendar-red.svg"/>
             </span>
             <span style={ S('color-e0523e') }>Due on { due_date_area }</span>
           </div>
-          <div style={ { ...S('p-10 h-54 color-a3a9ac font-12 bg-fff mb-30'), ...bottomLine } }>
-            <div className="pull-left" style={ S('p-10') }>Share this task with others</div>
-            <Button style={ S('bg-fff color-006aff w-72') } className="pull-right" bsStyle="primary">Share</Button>
+          <div style={ { ...S('p-10 h-54 color-a3a9ac font-12 bg-fff mb-30'), ...bottomLine, ...topLine } }>
+            <div className="pull-left" style={ S('p-10') }>
+              <span style={ S('mr-15') }><img src="/images/dashboard/icons/tasks/contacts.svg"/></span>
+              Share this task with others
+            </div>
+            <Button style={ S('color-006aff w-72 h-30 p-5 mt-3 bc-3388ff') } className="pull-right" bsStyle="default">Share</Button>
           </div>
           <div style={ { ...S('p-10 h-54 color-a3a9ac font-12 bg-fff'), ...bottomLine, ...topLine } }>
-            <div className="pull-left" style={ S('p-10') }>Add a Transaction</div>
-            <Button style={ S('bg-fff color-006aff w-72') } className="pull-right" bsStyle="primary">Add</Button>
+            <div className="pull-left" style={ S('p-10') }>
+              <span style={ S('mr-15') }><img src="/images/dashboard/icons/tasks/transactions.svg"/></span>
+              Add a Transaction
+            </div>
+            <Button style={ S('color-006aff w-72 h-30 p-5 mt-3 bc-3388ff') } className="pull-right" bsStyle="default">Add</Button>
           </div>
           <div style={ { ...S('b-0 absolute p-20 color-cfd1d2 font-12 w-100p'), ...topLine } }>
-            Created by Mark Koepsell on Jan 26, 2015
+            { created_area }
+            <div style={ S('pull-right') }>
+              <span style={ S('pointer mr-20') }><img src="/images/dashboard/icons/clock.svg"/></span>
+              <span onClick={ this.props.deleteTask.bind(this, current_task) } style={ S('pointer') }><img src="/images/dashboard/icons/trash.svg"/></span>
+            </div>
           </div>
         </div>
       </div>
@@ -101,5 +119,6 @@ export default class Drawer extends Component {
 Drawer.propTypes = {
   data: React.PropTypes.object,
   closeDrawer: React.PropTypes.func,
-  editTaskStatus: React.PropTypes.func
+  editTaskStatus: React.PropTypes.func,
+  deleteTask: React.PropTypes.func
 }

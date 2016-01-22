@@ -222,6 +222,7 @@ export default class Tasks extends Component {
             data={ data }
             closeDrawer={ this.closeDrawer.bind(this) }
             editTaskStatus={ this.editTaskStatus.bind(this) }
+            deleteTask={ this.deleteTask.bind(this) }
           />
         </main>
       </div>
