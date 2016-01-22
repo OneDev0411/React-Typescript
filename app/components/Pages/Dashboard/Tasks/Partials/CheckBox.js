@@ -6,9 +6,7 @@ export default class Tasks extends Component {
 
   render() {
     const task = this.props.task
-    let checkbox_style = {
-      ...S('w-18 h-18 bc-bfc2c3 bw-1 solid mr-10 bg-fff relative pointer')
-    }
+    let checkbox_style = S('w-18 h-18 bc-bfc2c3 bw-1 solid mr-10 bg-fff relative pointer pull-left br-2')
     let status_action = 'Done'
     let check_mark
     // If Done
@@ -23,7 +21,7 @@ export default class Tasks extends Component {
       }
     }
     return (
-      <div className="pull-left" style={ checkbox_style } onClick={ this.props.editTaskStatus.bind(this, task, status_action) } >
+      <div style={ checkbox_style } onClick={ this.props.editTaskStatus.bind(this, task, status_action) } >
         { check_mark }
       </div>
     )

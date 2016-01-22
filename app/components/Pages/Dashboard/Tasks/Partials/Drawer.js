@@ -61,7 +61,6 @@ export default class Drawer extends Component {
         <span>{ `${due_date_obj.day}, ${due_date_obj.month} ${due_date_obj.date}, ${due_date_obj.year}` }</span>
       )
     }
-    console.log(current_task)
     return (
       <div style={ drawer_wrap_style }>
         <div style={ drawer_style } className={ 'drawer ' + drawer_class }>
