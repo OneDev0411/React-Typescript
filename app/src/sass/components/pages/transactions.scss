@@ -27,11 +27,9 @@
 .DayPicker {
   outline: none;
 }
-.transaction-detail__drawer {
-  transition: all 150ms ease-in-out;
-  right: -500px;
-  &.active{
-    right: 0;
+.transaction-detail__title {
+  &:hover {
+    text-decoration: underline;
   }
 }
 .dropzone__overlay {

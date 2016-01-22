@@ -12,6 +12,9 @@ export default (user, title, due_date) => {
     const new_task = response.data
     delete AppStore.data.new_task
     AppStore.data.tasks.unshift(new_task)
+    AppStore.data.current_task = new_task
+    AppStore.data.current_task.drawer = true
+    AppStore.data.current_task.drawer_active = true
     AppStore.emitChange()
   })
 }

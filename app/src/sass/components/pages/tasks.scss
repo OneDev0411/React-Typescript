@@ -1,4 +1,11 @@
-.task_row {
+// Drawer
+.task-list {
+  transition: all 150ms ease-in-out;
+  &.drawer-open{
+    margin-right: 500px;
+  }
+}
+.task-row {
   border: 1px solid #edf1f3;
   border-radius: 3px;
   margin-bottom: 5px;
@@ -8,7 +15,7 @@
   }
   &:hover {
     border: 1px solid #e4e4e4;
-    background-color: #e9f2fe;
+    background-color: #f5fafe;
     .delete {
       display: block;
     }

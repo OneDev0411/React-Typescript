@@ -13,6 +13,7 @@ export default (user, task) => {
       return task_loop.id !== task.id
     })
     delete AppStore.data.deleting_task
+    delete AppStore.data.current_task
     AppStore.data.tasks = edited_tasks
     AppStore.emitChange()
   })
