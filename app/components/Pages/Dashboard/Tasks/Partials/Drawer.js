@@ -5,6 +5,7 @@ import { Button } from 'react-bootstrap'
 
 // Partials
 import CheckBox from './CheckBox'
+import ProfileImage from '../../Partials/ProfileImage'
 
 // Helpers
 import helpers from '../../../../../utils/helpers'
@@ -14,6 +15,9 @@ export default class Drawer extends Component {
   render() {
     const data = this.props.data
     const current_task = data.current_task
+    let contacts
+    if (current_task)
+      contacts = current_task.contacts
     let drawer
     if (current_task)
       drawer = current_task.drawer
@@ -69,6 +73,26 @@ export default class Drawer extends Component {
         </span>
       )
     }
+    // Contacts
+    let contacts_markup
+    if (contacts) {
+      contacts_markup = (
+        contacts.map(contact => {
+          return (
+            <div style={ { ...S('relative p-15 w-100p bg-fff'), ...bottomLine } } className="pull-left" key={ 'added-contact-' + contact.id }>
+              <div style={ S('l-0 t-12 l-10 absolute') }>
+                <ProfileImage top={11} size={40} user={ contact }/>
+              </div>
+              <div style={ S('ml-50') }>
+                <div className="close pull-right" style={ S('pointer mt-5') }>&times;</div>
+                <div>{ contact.first_name } { contact.last_name }</div>
+                <div>{ contact.email }</div>
+              </div>
+            </div>
+          )
+        })
+      )
+    }
     return (
       <div style={ drawer_wrap_style }>
         <div style={ drawer_style } className={ 'drawer ' + drawer_class }>
@@ -88,13 +112,19 @@ export default class Drawer extends Component {
             </span>
             <span style={ S('color-e0523e') }>Due on { due_date_area }</span>
           </div>
-          <div style={ { ...S('p-10 h-54 color-a3a9ac font-12 bg-fff mb-30'), ...bottomLine, ...topLine } }>
-            <div className="pull-left" style={ S('p-10') }>
-              <span style={ S('mr-15') }><img src="/images/dashboard/icons/tasks/contacts.svg"/></span>
-              Share this task with others
+          <div style={ { ...S('color-a3a9ac font-12 mb-30'), ...topLine } }>
+            <div style={ { ...S('h-54 p-10 bg-fff'), ...bottomLine } }>
+              <div style={ S('p-10 pull-left') }>
+                <span style={ S('mr-15') }><img src="/images/dashboard/icons/tasks/contacts.svg"/></span>
+                Share this task with others
+              </div>
+              <Button onClick={ this.props.showShareContactsModal } style={ S('color-006aff w-72 h-30 p-5 mt-3 bc-3388ff') } className="pull-right" bsStyle="default">Share</Button>
+              <div className="clearfix"></div>
             </div>
-            <Button onClick={ this.props.showShareContactsModal } style={ S('color-006aff w-72 h-30 p-5 mt-3 bc-3388ff') } className="pull-right" bsStyle="default">Share</Button>
+            { contacts_markup }
+            <div className="clearfix"></div>
           </div>
+          <div className="clearfix"></div>
           <div style={ { ...S('p-10 h-54 color-a3a9ac font-12 bg-fff'), ...bottomLine, ...topLine } }>
             <div className="pull-left" style={ S('p-10') }>
               <span style={ S('mr-15') }><img src="/images/dashboard/icons/tasks/transactions.svg"/></span>

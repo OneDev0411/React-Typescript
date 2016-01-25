@@ -17,11 +17,19 @@ export default (contact, module_type) => {
   delete AppStore.data.show_contact_modal
   delete AppStore.data.creating_contacts
   delete AppStore.data.new_contact_modal
+
+  // Global add contacts
   if (AppStore.data.filtered_contacts)
     AppStore.data.filtered_contacts[contact_index] = contact
-  AppStore.data.contacts_added[module_type].push(contact)
+  const added_already = _.findWhere(AppStore.data.contacts_added[module_type], { id: contact.id })
+  if (!added_already)
+    AppStore.data.contacts_added[module_type].push(contact)
+
+  // New transaction
   if (AppStore.data.new_transaction)
     AppStore.data.new_transaction.contacts_added = AppStore.data.contacts_added
+
+  // Editing a transaction
   if (module_type === 'transaction') {
     const user = AppStore.data.user
     const transaction = AppStore.data.current_transaction
@@ -34,5 +42,6 @@ export default (contact, module_type) => {
       contacts
     })
   }
+  delete AppStore.data.filtered_contacts
   AppStore.emitChange()
 }

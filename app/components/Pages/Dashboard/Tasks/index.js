@@ -1,7 +1,8 @@
 // Dashboard/Tasks/index.js
 import React, { Component } from 'react'
 import S from 'shorti'
-import { Input, Modal } from 'react-bootstrap'
+import _ from 'lodash'
+import { Input, Modal, Button } from 'react-bootstrap'
 import DayPicker from 'react-day-picker'
 import validator from 'validator'
 
@@ -16,8 +17,9 @@ import TasksList from './Partials/TasksList'
 import Drawer from './Partials/Drawer'
 import AddContactsForm from '../Partials/AddContactsForm'
 
-// AppDispatcher
+// Dispatchers
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
+import TaskDispatcher from '../../../../dispatcher/TaskDispatcher'
 
 // AppStore
 import AppStore from '../../../../stores/AppStore'
@@ -35,7 +37,7 @@ export default class Tasks extends Component {
     }, 100)
     // Esc to close
     document.onkeydown = evt => {
-      if (evt.keyCode === 27 && data.current_task)
+      if (evt.keyCode === 27 && data.current_task && !data.show_contacts_modal)
         this.closeDrawer()
     }
   }
@@ -54,7 +56,7 @@ export default class Tasks extends Component {
     const user = data.user
     AppStore.data.getting_tasks = true
     AppStore.emitChange()
-    AppDispatcher.dispatch({
+    TaskDispatcher.dispatch({
       action: 'get-tasks',
       user
     })
@@ -63,7 +65,7 @@ export default class Tasks extends Component {
   editTaskStatus(task, status) {
     const data = this.props.data
     const user = data.user
-    AppDispatcher.dispatch({
+    TaskDispatcher.dispatch({
       action: 'edit-task-status',
       user,
       task,
@@ -76,7 +78,7 @@ export default class Tasks extends Component {
     const user = data.user
     AppStore.data.deleting_task = task
     AppStore.emitChange()
-    AppDispatcher.dispatch({
+    TaskDispatcher.dispatch({
       action: 'delete-task',
       user,
       task
@@ -102,7 +104,7 @@ export default class Tasks extends Component {
         const user = data.user
         this.refs.task_title.refs.input.value = ''
         this.refs.task_title.refs.input.focus()
-        AppDispatcher.dispatch({
+        TaskDispatcher.dispatch({
           action: 'create-task',
           user,
           title,
@@ -156,20 +158,22 @@ export default class Tasks extends Component {
     }, 200)
   }
 
-  // Share contacts Modal  
+  // Share contacts Modal
   showShareContactsModal() {
+    delete AppStore.data.adding_contacts
     AppStore.data.show_contacts_modal = true
     AppStore.emitChange()
   }
 
   hideModal() {
     delete AppStore.data.show_contacts_modal
+    delete AppStore.data.filtered_contacts
     AppStore.emitChange()
   }
 
   hideAddContactModal() {
     delete AppStore.data.show_contact_modal
-    AppStore.emitChange() 
+    AppStore.emitChange()
   }
 
   setFilteredContacts(filtered_contacts) {
@@ -180,11 +184,6 @@ export default class Tasks extends Component {
   // Set list item active
   setContactActive(index) {
     AppStore.data.active_contact = index
-    AppStore.emitChange()
-  }
-
-  setListingActive(index) {
-    AppStore.data.new_transaction.active_listing = index
     AppStore.emitChange()
   }
 
@@ -199,11 +198,12 @@ export default class Tasks extends Component {
       contact_id,
       module_type
     })
-    AppStore.data.new_transaction.contacts_added = AppStore.data.contacts_added
+    AppStore.data.current_task.contacts_added = AppStore.data.contacts_added
     AppStore.emitChange()
   }
 
   showContactModal(contact) {
+    delete AppStore.data.new_contact_modal
     if (contact) {
       AppStore.data.contact_modal = {
         contact
@@ -233,6 +233,9 @@ export default class Tasks extends Component {
     const role = this.refs.role.refs.input.value.trim()
     const action = this.refs.action.value.trim()
 
+    // Remove search input value
+    this.refs.search_contacts.refs.input.value = ''
+
     // Reset errors
     if (AppStore.data.new_contact_modal) {
       delete AppStore.data.new_contact_modal.errors
@@ -245,25 +248,24 @@ export default class Tasks extends Component {
 
     if (!first_name || !last_name) {
       AppStore.data.new_contact_modal.errors = true
-      AppStore.data.creating_contacts = false
+      delete AppStore.data.creating_contacts
       AppStore.emitChange()
       return
     }
 
     if (email && !validator.isEmail(email)) {
       AppStore.data.new_contact_modal.email_invalid = true
-      AppStore.data.creating_contacts = false
+      delete AppStore.data.creating_contacts
       AppStore.emitChange()
       return
     }
 
     if (!email && !phone_number) {
       AppStore.data.new_contact_modal.errors = true
-      AppStore.data.creating_contacts = false
+      delete AppStore.data.creating_contacts
       AppStore.emitChange()
       return
     }
-
     const user = this.props.data.user
     if (action === 'create') {
       const contact = {
@@ -314,6 +316,22 @@ export default class Tasks extends Component {
         module_type
       })
     }
+  }
+
+  addContactsToTask() {
+    AppStore.data.adding_contacts = true
+    AppStore.emitChange()
+    const data = this.props.data
+    const user = data.user
+    const task = data.current_task
+    const contacts = AppStore.data.contacts_added['share-task']
+    const contact_ids = _.pluck(contacts, 'id')
+    TaskDispatcher.dispatch({
+      action: 'add-contacts',
+      user,
+      task,
+      contacts: contact_ids
+    })
   }
 
   render() {
@@ -398,8 +416,8 @@ export default class Tasks extends Component {
             showShareContactsModal={ this.showShareContactsModal }
           />
           <Modal show={ data.show_contacts_modal } onHide={ this.hideModal.bind(this) }>
-            <Modal.Header closeButton>
-              <Modal.Title>Share Task <span>(use any email or any phone number)</span></Modal.Title>
+            <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
+             <Modal.Title style={ S('font-14') }>Share Task <span style={ S('color-929292 fw-400') }>(use any email or any phone number)</span></Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <AddContactsForm
@@ -416,6 +434,12 @@ export default class Tasks extends Component {
                 showNewContentInitials={ this.showNewContentInitials }
               />
             </Modal.Body>
+            <Modal.Footer style={ { border: 'none' } }>
+              <Button bsStyle="link" onClick={ this.hideModal.bind(this) }>Cancel</Button>
+              <Button onClick={ this.addContactsToTask.bind(this) } style={ S('h-30 pt-5 pl-30 pr-30') } className={ data.adding_contacts ? 'disabled' : '' } type="submit" bsStyle="primary">
+                { data.adding_contacts ? 'Saving...' : 'Save' }
+              </Button>
+            </Modal.Footer>
           </Modal>
         </main>
       </div>

@@ -33,4 +33,5 @@ module.exports = (app, config) => {
   require('./tasks/delete-task')(app, config)
   require('./tasks/get-tasks')(app, config)
   require('./tasks/edit-status')(app, config)
+  require('./tasks/add-contacts')(app, config)
 }

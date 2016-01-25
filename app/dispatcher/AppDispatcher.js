@@ -32,12 +32,6 @@ import removeContact from '../actions/modules/remove-contact'
 // Listings
 import searchListing from '../actions/listings/search'
 
-// Tasks
-import getTasks from '../actions/tasks/get'
-import editTaskStatus from '../actions/tasks/edit-status'
-import createTask from '../actions/tasks/create'
-import deleteTask from '../actions/tasks/delete'
-
 const AppDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
@@ -66,11 +60,6 @@ AppDispatcher.register(payload => {
   let contact
   let contact_id
   let module_type
-
-  // Task
-  let task
-  let status
-  let due_date
 
   // Listing
   let q
@@ -201,31 +190,6 @@ AppDispatcher.register(payload => {
       user = payload.user
       q = payload.q
       searchListing(user, q)
-      break
-
-    case 'get-tasks':
-      user = payload.user
-      getTasks(user)
-      break
-
-    case 'edit-task-status':
-      user = payload.user
-      task = payload.task
-      status = payload.status
-      editTaskStatus(user, task, status)
-      break
-
-    case 'create-task':
-      user = payload.user
-      title = payload.title
-      due_date = payload.due_date
-      createTask(user, title, due_date)
-      break
-
-    case 'delete-task':
-      user = payload.user
-      task = payload.task
-      deleteTask(user, task)
       break
 
     default:

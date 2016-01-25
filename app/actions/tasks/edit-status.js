@@ -1,4 +1,4 @@
-// actions/transactions/get.js
+// actions/tasks/get.js
 import Task from '../../models/Task'
 import AppStore from '../../stores/AppStore'
 
