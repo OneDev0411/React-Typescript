@@ -97,15 +97,15 @@ export default {
       return callback(false, response)
     })
   },
-  addContacts: (params, callback) => {
+  addRoles: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
     const transaction = params.transaction
-    const endpoint = api_host + '/api/transactions/contacts?id=' + transaction.id
-    const contacts = params.contacts
+    const endpoint = api_host + '/api/transactions/roles?id=' + transaction.id
+    const roles = params.roles
     const request_object = {
       access_token: params.access_token,
-      contacts
+      roles
     }
     fetch(endpoint, {
       method: 'post',

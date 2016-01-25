@@ -7,6 +7,7 @@ import editTaskStatus from '../actions/tasks/edit-status'
 import createTask from '../actions/tasks/create'
 import deleteTask from '../actions/tasks/delete'
 import addContacts from '../actions/tasks/add-contacts'
+import removeContact from '../actions/tasks/remove-contact'
 
 const TaskDispatcher = new Dispatcher()
 
@@ -20,6 +21,7 @@ TaskDispatcher.register(payload => {
   let status
   let due_date
   let contacts
+  let contact
 
   switch (action) {
     case 'get-tasks':
@@ -52,6 +54,13 @@ TaskDispatcher.register(payload => {
       task = payload.task
       contacts = payload.contacts
       addContacts(user, task, contacts)
+      break
+
+    case 'remove-contact':
+      user = payload.user
+      task = payload.task
+      contact = payload.contact
+      removeContact(user, task, contact)
       break
 
     default:

@@ -1,14 +1,13 @@
 // api/transactions/add-contacts.js
 module.exports = (app, config) => {
-  app.post('/api/transactions/contacts',(req, res) => {
+  app.post('/api/transactions/roles',(req, res) => {
     const api_url = config.api.url
     const id = req.query.id
-    const endpoint = api_url + '/transactions/' + id + '/contacts'
+    const endpoint = api_url + '/transactions/' + id + '/roles'
     const access_token = req.body.access_token
-    const contacts = req.body.contacts
-    console.log(contacts)
+    const roles = req.body.roles
     const request_object = {
-      contacts
+      roles
     }
     fetch(endpoint,{
       method: 'post',

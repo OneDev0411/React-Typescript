@@ -20,7 +20,7 @@ export default class Drawer extends Component {
     const data = this.props.data
     const transaction = data.current_transaction
     const drawer = transaction.drawer
-    const contacts = transaction.contacts
+    const roles = transaction.roles
     const attachments = transaction.attachments
     let drawer_content
     const drawer_height = window.innerHeight - 203
@@ -146,45 +146,48 @@ export default class Drawer extends Component {
           </div>
         )
       }
-      if (drawer.content === 'contacts') {
+      if (drawer.content === 'contacts' && roles) {
+        let roles_list
+        if (roles) {
+          roles.map(role => {
+            const contact = role.contact
+            const contact_style = {
+              ...S('pt-15 pb-15 pl-15'),
+              borderBottom: '1px solid #f7f9fa'
+            }
+            let delete_text = 'Delete'
+            let deleting_class = ''
+            if (transaction.deleting_contact && transaction.deleting_contact.id === contact.id) {
+              delete_text = 'Deleting...'
+              deleting_class = ' disabled'
+            }
+            let delete_button
+            if (roles.length > 1) {
+              delete_button = (
+                <Button onClick={ this.props.deleteContact.bind(this, contact) } style={ S('mr-10 absolute r-0') } bsStyle="danger" className={ 'delete' + deleting_class }>
+                  { delete_text }
+                </Button>
+              )
+            }
+            return (
+              <div className="transaction-contact" key={ 'contact-' + contact.id } style={ contact_style }>
+                { delete_button }
+                <ProfileImage user={ contact }/>
+                <div style={ S('ml-50 ') }>
+                  <div><b>{ contact.first_name } { contact.last_name }</b>, <span style={ S('color-929292') }>{ contact.roles ? contact.roles[0] : '' }</span></div>
+                  <div style={ S('color-929292') }>
+                    <div>{ contact.phone_number }{ contact.phone_number ? ',' : '' } <a style={{ textDecoration: 'none' }} href={ 'mailto:' + contact.email}>{ contact.email }</a></div>
+                  </div>
+                </div>
+              </div>
+            )
+          })
+        }
         drawer_content = (
           <div>
             <div style={ drawer_header_style }>Contacts</div>
             <div>
-              {
-                contacts.map(contact => {
-                  const contact_style = {
-                    ...S('pt-15 pb-15 pl-15'),
-                    borderBottom: '1px solid #f7f9fa'
-                  }
-                  let delete_text = 'Delete'
-                  let deleting_class = ''
-                  if (transaction.deleting_contact && transaction.deleting_contact.id === contact.id) {
-                    delete_text = 'Deleting...'
-                    deleting_class = ' disabled'
-                  }
-                  let delete_button
-                  if (contacts.length > 1) {
-                    delete_button = (
-                      <Button onClick={ this.props.deleteContact.bind(this, contact) } style={ S('mr-10 absolute r-0') } bsStyle="danger" className={ 'delete' + deleting_class }>
-                        { delete_text }
-                      </Button>
-                    )
-                  }
-                  return (
-                    <div className="transaction-contact" key={ 'contact-' + contact.id } style={ contact_style }>
-                      { delete_button }
-                      <ProfileImage user={ contact }/>
-                      <div style={ S('ml-50 ') }>
-                        <div><b>{ contact.first_name } { contact.last_name }</b>, <span style={ S('color-929292') }>{ contact.roles ? contact.roles[0] : '' }</span></div>
-                        <div style={ S('color-929292') }>
-                          <div>{ contact.phone_number }{ contact.phone_number ? ',' : '' } <a style={{ textDecoration: 'none' }} href={ 'mailto:' + contact.email}>{ contact.email }</a></div>
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })
-              }
+              { roles_list }
             </div>
             <AddContactsForm
               data={ data }

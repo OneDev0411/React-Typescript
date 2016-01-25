@@ -60,7 +60,7 @@ export default class TransactionDetail extends Component {
     const drawer = transaction.drawer
     // Set transaction data
     const transaction_type = transaction.transaction_type
-    const contacts = transaction.contacts
+    const roles = transaction.roles
     // Set transaction property data
     let property
     let address
@@ -191,8 +191,9 @@ export default class TransactionDetail extends Component {
     }
 
     let contacts_markup
-    if (contacts) {
-      contacts_markup = contacts.map(contact => {
+    if (roles) {
+      contacts_markup = roles.map(role => {
+        const contact = role.contact
         const contact_style = S('mb-20 mr-15 w-200 h-80')
         const info_style = {
           overflow: 'hidden',

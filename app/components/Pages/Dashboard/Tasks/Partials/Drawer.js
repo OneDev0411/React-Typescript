@@ -84,9 +84,9 @@ export default class Drawer extends Component {
                 <ProfileImage top={11} size={40} user={ contact }/>
               </div>
               <div style={ S('ml-50') }>
-                <div className="close pull-right" style={ S('pointer mt-5') }>&times;</div>
+                <div onClick={ this.props.removeContactFromTask.bind(this, contact) } className="close pull-right" style={ S('pointer mt-5') }>&times;</div>
                 <div>{ contact.first_name } { contact.last_name }</div>
-                <div>{ contact.email }</div>
+                <div style={ S('color-a3a9ac font-12') }>{ contact.email }</div>
               </div>
             </div>
           )
@@ -112,9 +112,9 @@ export default class Drawer extends Component {
             </span>
             <span style={ S('color-e0523e') }>Due on { due_date_area }</span>
           </div>
-          <div style={ { ...S('color-a3a9ac font-12 mb-30'), ...topLine } }>
+          <div style={ { ...S('mb-30'), ...topLine } }>
             <div style={ { ...S('h-54 p-10 bg-fff'), ...bottomLine } }>
-              <div style={ S('p-10 pull-left') }>
+              <div style={ S('p-10 pull-left color-a3a9ac font-12') }>
                 <span style={ S('mr-15') }><img src="/images/dashboard/icons/tasks/contacts.svg"/></span>
                 Share this task with others
               </div>
@@ -151,5 +151,6 @@ Drawer.propTypes = {
   closeDrawer: React.PropTypes.func,
   editTaskStatus: React.PropTypes.func,
   deleteTask: React.PropTypes.func,
-  showShareContactsModal: React.PropTypes.func
+  showShareContactsModal: React.PropTypes.func,
+  removeContactFromTask: React.PropTypes.func
 }

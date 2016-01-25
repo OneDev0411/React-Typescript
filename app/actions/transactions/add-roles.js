@@ -1,15 +1,15 @@
-// actions/transactions/add-contacts.js
+// actions/transactions/add-roles.js
 import Transaction from '../../models/Transaction'
 import AppStore from '../../stores/AppStore'
 
 export default (user, transaction, contacts) => {
   const contact_objects = []
   contacts.forEach(contact => {
-    // const contact_object = {
-    //   id: contact.id,
-    //   role: contact.role || 'Other'
-    // }
-    contact_objects.push(contact.id)
+    const contact_object = {
+      id: contact.id,
+      role_types: [contact.role]
+    }
+    contact_objects.push(contact_object)
   })
   const params = {
     user,
@@ -17,7 +17,7 @@ export default (user, transaction, contacts) => {
     transaction,
     contacts: contact_objects
   }
-  Transaction.addContacts(params, (err, response) => {
+  Transaction.addRoles(params, (err, response) => {
     if (response.status === 'success') {
       const edited_transaction = response.data
       if (edited_transaction) {

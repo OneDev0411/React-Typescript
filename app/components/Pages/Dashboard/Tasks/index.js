@@ -334,6 +334,18 @@ export default class Tasks extends Component {
     })
   }
 
+  removeContactFromTask(contact) {
+    const data = this.props.data
+    const user = data.user
+    const task = data.current_task
+    TaskDispatcher.dispatch({
+      action: 'remove-contact',
+      user,
+      task,
+      contact
+    })
+  }
+
   render() {
     const data = this.props.data
     const current_task = data.current_task
@@ -393,7 +405,7 @@ export default class Tasks extends Component {
                         { due_date_area }
                       </span>
                     </div>
-                    <div style={ S('absolute l-230 t-4n w-300 color-929292 font-12') } className="pull-left">
+                    <div onClick={ this.showShareContactsModal } style={ S('absolute l-230 t-4n w-300 color-929292 font-12') } className="pull-left">
                       <span>
                         <img style={ S('w-34 h-34') } src="/images/dashboard/icons/invite-user.svg"/>
                       </span>
@@ -414,6 +426,7 @@ export default class Tasks extends Component {
             editTaskStatus={ this.editTaskStatus.bind(this) }
             deleteTask={ this.deleteTask.bind(this) }
             showShareContactsModal={ this.showShareContactsModal }
+            removeContactFromTask={ this.removeContactFromTask }
           />
           <Modal show={ data.show_contacts_modal } onHide={ this.hideModal.bind(this) }>
             <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
