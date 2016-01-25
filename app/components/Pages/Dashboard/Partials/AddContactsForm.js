@@ -60,7 +60,7 @@ export default class AddContactsForm extends Component {
     const text_lower = text.toLowerCase()
     const data = this.props.data
     const contacts = data.contacts
-    let filtered_contacts = contacts.filter((contact) => {
+    let filtered_contacts = contacts.filter(contact => {
       if (contact.first_name && contact.first_name.toLowerCase().indexOf(text_lower) !== -1)
         return true
       if (contact.last_name && contact.last_name.toLowerCase().indexOf(text_lower) !== -1)
@@ -132,7 +132,7 @@ export default class AddContactsForm extends Component {
       filtered_contacts = data.filtered_contacts
     // Style
     const filter_scroll_style = {
-      ...S('mt-10 p-5 bc-ccc bw-1 solid br-3'),
+      ...S('mt-10 p-5 bc-ccc bw-1 solid br-3 absolute bg-fff'),
       maxHeight: 300,
       maxWidth: 600,
       overflow: 'scroll'
@@ -141,6 +141,12 @@ export default class AddContactsForm extends Component {
     let search_contact_input_style = S('w-600')
     // If transaction
     if (module_type === 'transaction') {
+      module_style = S('w-500 ml-10 mr-10')
+      search_contact_input_style = S('w-270')
+      filter_scroll_style.width = 475
+    }
+    // If task
+    if (module_type === 'share-task') {
       module_style = S('w-500 ml-10 mr-10')
       search_contact_input_style = S('w-270')
       filter_scroll_style.width = 475
@@ -184,7 +190,7 @@ export default class AddContactsForm extends Component {
     if (data.contacts_added && data.contacts_added[module_type]) {
       const contacts_added = data.contacts_added[module_type]
       contacts_added_markup = (
-        contacts_added.map((contact) => {
+        contacts_added.map(contact => {
           return (
             <div style={ S('h-25 relative bg-3388ff br-100 color-fff p-3 pl-0 pr-10 mb-10 mr-10') } className="pull-left" key={ 'added-contact-' + contact.id }>
               <div style={ S('l-0 t-0 absolute') }>

@@ -1,8 +1,9 @@
 // Dashboard/Tasks/index.js
 import React, { Component } from 'react'
 import S from 'shorti'
-import { Input } from 'react-bootstrap'
+import { Input, Modal } from 'react-bootstrap'
 import DayPicker from 'react-day-picker'
+import validator from 'validator'
 
 // Helpers
 import helpers from '../../../../utils/helpers'
@@ -13,6 +14,7 @@ import SideBar from '../Partials/SideBar'
 import Loading from '../../../Partials/Loading'
 import TasksList from './Partials/TasksList'
 import Drawer from './Partials/Drawer'
+import AddContactsForm from '../Partials/AddContactsForm'
 
 // AppDispatcher
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
@@ -24,6 +26,7 @@ export default class Tasks extends Component {
 
   componentDidMount() {
     const data = this.props.data
+    this.getContacts()
     if (!data.tasks)
       this.getTasks()
     AppStore.emitChange()
@@ -35,6 +38,15 @@ export default class Tasks extends Component {
       if (evt.keyCode === 27 && data.current_task)
         this.closeDrawer()
     }
+  }
+
+  // Contacts
+  getContacts() {
+    const user = this.props.data.user
+    AppDispatcher.dispatch({
+      action: 'get-contacts',
+      user
+    })
   }
 
   getTasks() {
@@ -144,6 +156,166 @@ export default class Tasks extends Component {
     }, 200)
   }
 
+  // Share contacts Modal  
+  showShareContactsModal() {
+    AppStore.data.show_contacts_modal = true
+    AppStore.emitChange()
+  }
+
+  hideModal() {
+    delete AppStore.data.show_contacts_modal
+    AppStore.emitChange()
+  }
+
+  hideAddContactModal() {
+    delete AppStore.data.show_contact_modal
+    AppStore.emitChange() 
+  }
+
+  setFilteredContacts(filtered_contacts) {
+    AppStore.data.filtered_contacts = filtered_contacts
+    AppStore.emitChange()
+  }
+
+  // Set list item active
+  setContactActive(index) {
+    AppStore.data.active_contact = index
+    AppStore.emitChange()
+  }
+
+  setListingActive(index) {
+    AppStore.data.new_transaction.active_listing = index
+    AppStore.emitChange()
+  }
+
+  hideContactsForm() {
+    AppStore.data.filtered_contacts = null
+    AppStore.emitChange()
+  }
+
+  removeContact(contact_id, module_type) {
+    AppDispatcher.dispatch({
+      action: 'remove-contact',
+      contact_id,
+      module_type
+    })
+    AppStore.data.new_transaction.contacts_added = AppStore.data.contacts_added
+    AppStore.emitChange()
+  }
+
+  showContactModal(contact) {
+    if (contact) {
+      AppStore.data.contact_modal = {
+        contact
+      }
+    }
+    AppStore.data.show_contact_modal = true
+    AppStore.emitChange()
+  }
+
+  showNewContentInitials(first_initial, last_initial) {
+    AppStore.data.new_contact_modal = {
+      first_initial,
+      last_initial
+    }
+    AppStore.emitChange()
+  }
+
+  addContact(module_type, e) {
+    e.preventDefault()
+    AppStore.data.creating_contacts = true
+    AppStore.emitChange()
+    const first_name = this.refs.first_name.refs.input.value.trim()
+    const last_name = this.refs.last_name.refs.input.value.trim()
+    const email = this.refs.email.refs.input.value.trim()
+    const phone_number = this.refs.phone_number.refs.input.value.trim()
+    const company = this.refs.company.refs.input.value.trim()
+    const role = this.refs.role.refs.input.value.trim()
+    const action = this.refs.action.value.trim()
+
+    // Reset errors
+    if (AppStore.data.new_contact_modal) {
+      delete AppStore.data.new_contact_modal.errors
+      delete AppStore.data.new_contact_modal.email_invalid
+    }
+
+    // Validations
+    if (!AppStore.data.new_contact_modal)
+      AppStore.data.new_contact_modal = {}
+
+    if (!first_name || !last_name) {
+      AppStore.data.new_contact_modal.errors = true
+      AppStore.data.creating_contacts = false
+      AppStore.emitChange()
+      return
+    }
+
+    if (email && !validator.isEmail(email)) {
+      AppStore.data.new_contact_modal.email_invalid = true
+      AppStore.data.creating_contacts = false
+      AppStore.emitChange()
+      return
+    }
+
+    if (!email && !phone_number) {
+      AppStore.data.new_contact_modal.errors = true
+      AppStore.data.creating_contacts = false
+      AppStore.emitChange()
+      return
+    }
+
+    const user = this.props.data.user
+    if (action === 'create') {
+      const contact = {
+        first_name,
+        last_name,
+        role,
+        force_creation: true
+      }
+      // Needs either email or phone
+      if (phone_number)
+        contact.phone_number = phone_number
+      if (email)
+        contact.email = email
+      if (company)
+        contact.company = company
+      if (!role.length)
+        delete contact.role
+      const contacts = [contact]
+      AppDispatcher.dispatch({
+        action: 'create-contacts',
+        contacts,
+        user,
+        module_type
+      })
+    }
+    if (action === 'edit') {
+      // Get default contact info
+      const contact = AppStore.data.contact_modal.contact
+      contact.first_name = first_name
+      contact.last_name = last_name
+      contact.email = email
+      contact.phone_number = phone_number
+      contact.company = company
+      contact.role = role
+      // Remove contact info (no undef)
+      if (!email)
+        delete contact.email
+      if (!phone_number)
+        delete contact.phone_number
+      if (!company)
+        delete contact.company
+      if (!role.length)
+        delete contact.role
+      AppDispatcher.dispatch({
+        action: 'edit-contact',
+        contact,
+        user,
+        module_type
+      })
+    }
+  }
+
   render() {
     const data = this.props.data
     const current_task = data.current_task
@@ -223,7 +395,28 @@ export default class Tasks extends Component {
             closeDrawer={ this.closeDrawer.bind(this) }
             editTaskStatus={ this.editTaskStatus.bind(this) }
             deleteTask={ this.deleteTask.bind(this) }
+            showShareContactsModal={ this.showShareContactsModal }
           />
+          <Modal show={ data.show_contacts_modal } onHide={ this.hideModal.bind(this) }>
+            <Modal.Header closeButton>
+              <Modal.Title>Share Task <span>(use any email or any phone number)</span></Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <AddContactsForm
+                module_type="share-task"
+                data={ data }
+                hideModal={ this.hideAddContactModal }
+                setContactActive={ this.setContactActive }
+                setFilteredContacts={ this.setFilteredContacts }
+                hideContactsForm={ this.hideContactsForm }
+                addContact={ this.addContact }
+                removeContact={ this.removeContact }
+                showContactModal={ this.showContactModal }
+                createContact={ this.createContact }
+                showNewContentInitials={ this.showNewContentInitials }
+              />
+            </Modal.Body>
+          </Modal>
         </main>
       </div>
     )
