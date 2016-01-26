@@ -118,7 +118,7 @@ export default class Drawer extends Component {
                 <span style={ S('mr-15') }><img src="/images/dashboard/icons/tasks/contacts.svg"/></span>
                 Share this task with others
               </div>
-              <Button onClick={ this.props.showShareContactsModal } style={ S('color-006aff w-72 h-30 p-5 mt-3 bc-3388ff') } className="pull-right" bsStyle="default">Share</Button>
+              <Button onClick={ this.props.showShareTaskModal.bind(this, 'edit') } style={ S('color-006aff w-72 h-30 p-5 mt-3 bc-3388ff') } className="pull-right" bsStyle="default">Share</Button>
               <div className="clearfix"></div>
             </div>
             { contacts_markup }
@@ -151,6 +151,6 @@ Drawer.propTypes = {
   closeDrawer: React.PropTypes.func,
   editTaskStatus: React.PropTypes.func,
   deleteTask: React.PropTypes.func,
-  showShareContactsModal: React.PropTypes.func,
+  showShareTaskModal: React.PropTypes.func,
   removeContactFromTask: React.PropTypes.func
 }

@@ -40,7 +40,8 @@ TaskDispatcher.register(payload => {
       user = payload.user
       title = payload.title
       due_date = payload.due_date
-      createTask(user, title, due_date)
+      contacts = payload.contacts
+      createTask(user, title, due_date, contacts)
       break
 
     case 'delete-task':

@@ -87,6 +87,8 @@ export default class Tasks extends Component {
 
   handleKeyDown(e) {
     const key = e.which
+    const data = this.props.data
+    const new_task = data.new_task
     // Tab pressed
     if (key === 9)
       this.showDayPicker()
@@ -100,7 +102,9 @@ export default class Tasks extends Component {
       e.preventDefault()
       if (title) {
         this.hideDayPicker()
-        const data = this.props.data
+        let contacts
+        if (new_task && new_task.contacts)
+          contacts = _.pluck(new_task.contacts, 'id')
         const user = data.user
         this.refs.task_title.refs.input.value = ''
         this.refs.task_title.refs.input.focus()
@@ -108,7 +112,8 @@ export default class Tasks extends Component {
           action: 'create-task',
           user,
           title,
-          due_date
+          due_date,
+          contacts
         })
       }
     }
@@ -159,15 +164,18 @@ export default class Tasks extends Component {
   }
 
   // Share contacts Modal
-  showShareContactsModal() {
+  showShareTaskModal(type) {
     delete AppStore.data.adding_contacts
     AppStore.data.show_contacts_modal = true
+    if (type === 'new')
+      AppStore.data.new_task = true
     AppStore.emitChange()
   }
 
   hideModal() {
     delete AppStore.data.show_contacts_modal
     delete AppStore.data.filtered_contacts
+    delete AppStore.data.new_task
     AppStore.emitChange()
   }
 
@@ -322,16 +330,28 @@ export default class Tasks extends Component {
     AppStore.data.adding_contacts = true
     AppStore.emitChange()
     const data = this.props.data
+    const new_task = data.new_task
     const user = data.user
     const task = data.current_task
     const contacts = AppStore.data.contacts_added['share-task']
     const contact_ids = _.pluck(contacts, 'id')
-    TaskDispatcher.dispatch({
-      action: 'add-contacts',
-      user,
-      task,
-      contacts: contact_ids
-    })
+    // New task
+    if (!new_task) {
+      TaskDispatcher.dispatch({
+        action: 'add-contacts',
+        user,
+        task,
+        contacts: contact_ids
+      })
+    // Editing task
+    } else {
+      delete AppStore.data.adding_contacts
+      delete AppStore.data.show_contacts_modal
+      AppStore.data.new_task = {
+        contacts
+      }
+      AppStore.emitChange()
+    }
   }
 
   removeContactFromTask(contact) {
@@ -348,6 +368,7 @@ export default class Tasks extends Component {
 
   render() {
     const data = this.props.data
+    const new_task = data.new_task
     const current_task = data.current_task
     const main_style = S('absolute l-183 r-0')
     let main_content = <Loading />
@@ -386,6 +407,22 @@ export default class Tasks extends Component {
     let open_class = ''
     if (current_task && current_task.drawer_active)
       open_class = ' drawer-open'
+
+    let share_new_task_area = (
+      <span>
+        Share this task with others
+      </span>
+    )
+    if (new_task && new_task.contacts) {
+      const new_task_contacts = new_task.contacts
+      share_new_task_area = new_task_contacts.map((contact, i) => {
+        return (
+          <span style={ S('mr-10') } key={ 'share-new-' + contact.id }>
+            { contact.first_name }{ i !== new_task_contacts.length - 1 ? ',' : ''}
+          </span>
+        )
+      })
+    }
     return (
       <div style={ S('minw-1000') }>
         <Header data={ data }/>
@@ -405,13 +442,11 @@ export default class Tasks extends Component {
                         { due_date_area }
                       </span>
                     </div>
-                    <div onClick={ this.showShareContactsModal } style={ S('absolute l-230 t-4n w-300 color-929292 font-12') } className="pull-left">
+                    <div onClick={ this.showShareTaskModal.bind(this, 'new') } style={ S('absolute l-230 t-4n w-300 color-929292 font-12') } className="pull-left">
                       <span>
                         <img style={ S('w-34 h-34') } src="/images/dashboard/icons/invite-user.svg"/>
                       </span>
-                      <span>
-                        Share this task with others
-                      </span>
+                      { share_new_task_area }
                     </div>
                   </div>
                   { day_picker }
@@ -425,7 +460,7 @@ export default class Tasks extends Component {
             closeDrawer={ this.closeDrawer.bind(this) }
             editTaskStatus={ this.editTaskStatus.bind(this) }
             deleteTask={ this.deleteTask.bind(this) }
-            showShareContactsModal={ this.showShareContactsModal }
+            showShareTaskModal={ this.showShareTaskModal }
             removeContactFromTask={ this.removeContactFromTask }
           />
           <Modal show={ data.show_contacts_modal } onHide={ this.hideModal.bind(this) }>

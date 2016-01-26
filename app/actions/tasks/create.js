@@ -2,7 +2,10 @@
 import Task from '../../models/Task'
 import AppStore from '../../stores/AppStore'
 
-export default (user, title, due_date) => {
+// Dispatcher
+import TaskDispatcher from '../../dispatcher/TaskDispatcher'
+
+export default (user, title, due_date, contacts) => {
   const params = {
     access_token: user.access_token,
     title,
@@ -16,5 +19,12 @@ export default (user, title, due_date) => {
     AppStore.data.current_task.drawer = true
     AppStore.data.current_task.drawer_active = true
     AppStore.emitChange()
+    // Then add contacts
+    TaskDispatcher.dispatch({
+      action: 'add-contacts',
+      user,
+      task: new_task,
+      contacts
+    })
   })
 }
