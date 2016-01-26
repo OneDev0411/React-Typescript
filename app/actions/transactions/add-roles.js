@@ -7,7 +7,7 @@ export default (user, transaction, contacts) => {
   contacts.forEach(contact => {
     const contact_object = {
       id: contact.id,
-      role_types: [contact.role]
+      roles: [contact.role] || ['Other']
     }
     contact_objects.push(contact_object)
   })
@@ -15,7 +15,7 @@ export default (user, transaction, contacts) => {
     user,
     access_token: user.access_token,
     transaction,
-    contacts: contact_objects
+    roles: contact_objects
   }
   Transaction.addRoles(params, (err, response) => {
     if (response.status === 'success') {

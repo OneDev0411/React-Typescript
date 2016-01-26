@@ -351,6 +351,9 @@ export default class Tasks extends Component {
         contacts
       }
       AppStore.emitChange()
+      setTimeout(() => {
+        this.refs.task_title.refs.input.focus()
+      }, 300)
     }
   }
 
