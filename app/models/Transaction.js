@@ -45,6 +45,25 @@ export default {
       return callback(false, response)
     })
   },
+  get: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const endpoint = api_host + '/api/get-transaction?access_token=' + params.access_token + '&id=' + params.id
+    fetch(endpoint)
+    .then(response => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          message: 'There was an error with this request.'
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then(response => {
+      return callback(false, response)
+    })
+  },
   getAll: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url

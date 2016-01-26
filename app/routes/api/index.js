@@ -20,6 +20,7 @@ module.exports = (app, config) => {
   // Transactions
   require('./transactions/create-transaction')(app, config)
   require('./transactions/get-transactions')(app, config)
+  require('./transactions/get-transaction')(app, config)
   require('./transactions/edit-transaction')(app, config)
   require('./transactions/add-roles')(app, config)
   require('./transactions/delete-contact')(app, config)
@@ -35,4 +36,5 @@ module.exports = (app, config) => {
   require('./tasks/edit-status')(app, config)
   require('./tasks/add-contacts')(app, config)
   require('./tasks/remove-contact')(app, config)
+  require('./tasks/add-transaction')(app, config)
 }

@@ -6,6 +6,8 @@ import { Button } from 'react-bootstrap'
 // Partials
 import CheckBox from './CheckBox'
 import ProfileImage from '../../Partials/ProfileImage'
+import Transaction from './Transaction'
+import Loading from '../../../../Partials/Loading'
 
 // Helpers
 import helpers from '../../../../../utils/helpers'
@@ -15,9 +17,13 @@ export default class Drawer extends Component {
   render() {
     const data = this.props.data
     const current_task = data.current_task
+    const transaction_loading = data.transaction_loading
     let contacts
     if (current_task)
       contacts = current_task.contacts
+    let transaction_data
+    if (current_task)
+      transaction_data = current_task.transaction_data
     let drawer
     if (current_task)
       drawer = current_task.drawer
@@ -93,6 +99,24 @@ export default class Drawer extends Component {
         })
       )
     }
+    // Transaction
+    let transaction_markup
+    if (transaction_loading) {
+      transaction_markup = (
+        <div style={ { ...S('relative p-15 w-100p bg-fff'), ...bottomLine } } className="pull-left">
+          <Loading />
+        </div>
+      )
+    }
+    if (transaction_data) {
+      transaction_markup = (
+        <div style={ { ...S('relative p-15 w-100p bg-fff'), ...bottomLine } } className="pull-left">
+          <Transaction
+            transaction={ transaction_data }
+          />
+        </div>
+      )
+    }
     return (
       <div style={ drawer_wrap_style }>
         <div style={ drawer_style } className={ 'drawer ' + drawer_class }>
@@ -125,12 +149,16 @@ export default class Drawer extends Component {
             <div className="clearfix"></div>
           </div>
           <div className="clearfix"></div>
-          <div style={ { ...S('p-10 h-54 color-a3a9ac font-12 bg-fff'), ...bottomLine, ...topLine } }>
-            <div className="pull-left" style={ S('p-10') }>
-              <span style={ S('mr-15') }><img src="/images/dashboard/icons/tasks/transactions.svg"/></span>
-              Add a Transaction
+          <div style={ { ...S('mb-30'), ...topLine } }>
+            <div style={ { ...S('h-54 p-10 bg-fff'), ...bottomLine } }>
+              <div style={ S('p-10 pull-left color-a3a9ac font-12') }>
+                <span style={ S('mr-15') }><img src="/images/dashboard/icons/tasks/contacts.svg"/></span>
+                Add a Transaction
+              </div>
+              <Button onClick={ this.props.showAddTransactionModal.bind(this) } style={ S('color-006aff w-72 h-30 p-5 mt-3 bc-3388ff') } className="pull-right" bsStyle="default">Add</Button>
             </div>
-            <Button onClick={ this.props.showAddTransactionModal.bind(this) } style={ S('color-006aff w-72 h-30 p-5 mt-3 bc-3388ff') } className="pull-right" bsStyle="default">Add</Button>
+            { transaction_markup }
+            <div className="clearfix"></div>
           </div>
           <div style={ { ...S('b-0 absolute p-20 color-cfd1d2 font-12 w-100p'), ...topLine } }>
             { created_area }

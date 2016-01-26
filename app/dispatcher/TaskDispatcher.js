@@ -8,6 +8,8 @@ import createTask from '../actions/tasks/create'
 import deleteTask from '../actions/tasks/delete'
 import addContacts from '../actions/tasks/add-contacts'
 import removeContact from '../actions/tasks/remove-contact'
+import addTransaction from '../actions/tasks/add-transaction'
+import getTransaction from '../actions/tasks/get-transaction'
 
 const TaskDispatcher = new Dispatcher()
 
@@ -15,6 +17,7 @@ const TaskDispatcher = new Dispatcher()
 TaskDispatcher.register(payload => {
   const action = payload.action
 
+  let id
   let title
   let user
   let task
@@ -22,6 +25,7 @@ TaskDispatcher.register(payload => {
   let due_date
   let contacts
   let contact
+  let transaction
 
   switch (action) {
     case 'get-tasks':
@@ -62,6 +66,19 @@ TaskDispatcher.register(payload => {
       task = payload.task
       contact = payload.contact
       removeContact(user, task, contact)
+      break
+
+    case 'add-transaction':
+      user = payload.user
+      task = payload.task
+      transaction = payload.transaction
+      addTransaction(user, task, transaction)
+      break
+
+    case 'get-transaction':
+      user = payload.user
+      id = payload.id
+      getTransaction(user, id)
       break
 
     default:

@@ -8,7 +8,6 @@ import validator from 'validator'
 
 // Helpers
 import helpers from '../../../../utils/helpers'
-import listing_util from '../../../../utils/listing'
 
 // Partials
 import Header from '../Partials/Header'
@@ -17,6 +16,7 @@ import Loading from '../../../Partials/Loading'
 import TasksList from './Partials/TasksList'
 import Drawer from './Partials/Drawer'
 import AddContactsForm from '../Partials/AddContactsForm'
+import Transaction from './Partials/Transaction'
 
 // Dispatchers
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
@@ -34,7 +34,7 @@ export default class Tasks extends Component {
     if (!data.tasks)
       this.getTasks()
     if (!data.tasks)
-      this.getTransactions()
+      this.getAllTransactions()
     AppStore.emitChange()
     setTimeout(() => {
       this.refs.task_title.refs.input.focus()
@@ -47,11 +47,20 @@ export default class Tasks extends Component {
   }
 
   // Transactions
-  getTransactions() {
+  getAllTransactions() {
     const user = this.props.data.user
     TransactionDispatcher.dispatch({
       action: 'get-all',
       user
+    })
+  }
+
+  getTransaction(id) {
+    const user = this.props.data.user
+    TaskDispatcher.dispatch({
+      action: 'get-transaction',
+      user,
+      id
     })
   }
 
@@ -98,7 +107,7 @@ export default class Tasks extends Component {
     })
   }
 
-  handleKeyDown(e) {
+  handleAddTaskKeyDown(e) {
     const key = e.which
     const data = this.props.data
     const new_task = data.new_task
@@ -156,6 +165,10 @@ export default class Tasks extends Component {
 
   handleTaskClick(task) {
     AppStore.data.current_task = task
+    if (task.transaction && !task.transaction_data) {
+      const id = task.transaction
+      this.getTransaction(id)
+    }
     AppStore.emitChange()
     this.openDrawer()
   }
@@ -386,6 +399,7 @@ export default class Tasks extends Component {
 
   // Transactions
   showAddTransactionModal() {
+    delete AppStore.data.transaction_results
     AppStore.data.show_transactions_modal = true
     AppStore.emitChange()
     setTimeout(() => {
@@ -456,10 +470,12 @@ export default class Tasks extends Component {
     // console.log(transaction)
     const data = this.props.data
     const user = data.user
+    const task = data.current_task
     TaskDispatcher.dispatch({
       action: 'add-transaction',
       user,
-      transaction
+      transaction,
+      task
     })
   }
 
@@ -527,16 +543,6 @@ export default class Tasks extends Component {
       let transaction_results_list
       const active_transaction = data.active_transaction
       transaction_results_list = transaction_results.map((transaction, i) => {
-        const listing_data = transaction.listing_data
-        const status_color = listing_util.getStatusColor(listing_data.status)
-        let transaction_image = (
-          <div style={ S(`w-92 h-62 bg-929292`) }></div>
-        )
-        if (transaction.listing) {
-          transaction_image = (
-            <div style={ S(`w-92 h-62 bg-cover bg-center bg-url(${transaction.listing.cover_image_url})`) }></div>
-          )
-        }
         let active_style = ''
         if (i === active_transaction)
           active_style = ' bg-f5fafe'
@@ -546,22 +552,9 @@ export default class Tasks extends Component {
         }
         return (
           <div onClick={ this.addTransactionToTask.bind(this, transaction) } className="search-transaction__list-item" style={ transaction_style } key={ 'transaction-' + transaction.id }>
-            <div style={ S('absolute r-10 top-0 color-a1bde4') }>
-              ${ helpers.numberWithCommas(transaction.contract_price) }
-            </div>
-            <div style={ S('pull-left mr-10') }>
-              { transaction_image }
-            </div>
-            <div style={ S('pull-left') }>
-              <div style={ S('mt-10 fw-500') }>
-                { transaction.title }
-              </div>
-              <div style={ S('mt-10 relative') }>
-                <span style={ S('mr-5 font-26 l-0 t-16n absolute color-' + status_color) }>&#8226;</span>
-                <span style={ S('font-12 color-929292 ml-16 relative t-7n') }>{ transaction.listing_data.status }</span>
-              </div>
-            </div>
-            <div className="clearfix"></div>
+            <Transaction
+              transaction={ transaction }
+            />
           </div>
         )
       })
@@ -585,7 +578,7 @@ export default class Tasks extends Component {
             <div style={ S('ml-15') }>
               <div style={ S('mr-15 relative') }>
                 <form>
-                  <Input onKeyDown={ this.handleKeyDown.bind(this) } style={ { ...S('h-110 pt-12 font-18'), resize: 'none' } } ref="task_title" type="textarea" placeholder="Type your task then press enter"/>
+                  <Input onKeyDown={ this.handleAddTaskKeyDown.bind(this) } style={ { ...S('h-110 pt-12 font-18'), resize: 'none' } } ref="task_title" type="textarea" placeholder="Type your task then press enter"/>
                   <div style={ S('absolute b-0 pl-15 pb-15 pointer') }>
                     <div className="pull-left" style={ S('color-3388ff') } onClick={ this.showDayPicker }>
                       <span style={ S('mr-10') }>
