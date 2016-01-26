@@ -10,6 +10,12 @@ import ProfileImage from './ProfileImage'
 
 export default class AddContactsForm extends Component {
 
+  componentDidMount() {
+    setTimeout(() => {
+      this.refs.search_contacts.refs.input.focus()
+    }, 300)
+  }
+
   componentDidUpdate() {
     const new_contact_created = this.props.data.new_contact_created
     if (new_contact_created) {
