@@ -130,7 +130,7 @@ export default class Drawer extends Component {
               <span style={ S('mr-15') }><img src="/images/dashboard/icons/tasks/transactions.svg"/></span>
               Add a Transaction
             </div>
-            <Button style={ S('color-006aff w-72 h-30 p-5 mt-3 bc-3388ff') } className="pull-right" bsStyle="default">Add</Button>
+            <Button onClick={ this.props.showAddTransactionModal.bind(this) } style={ S('color-006aff w-72 h-30 p-5 mt-3 bc-3388ff') } className="pull-right" bsStyle="default">Add</Button>
           </div>
           <div style={ { ...S('b-0 absolute p-20 color-cfd1d2 font-12 w-100p'), ...topLine } }>
             { created_area }
@@ -152,5 +152,6 @@ Drawer.propTypes = {
   editTaskStatus: React.PropTypes.func,
   deleteTask: React.PropTypes.func,
   showShareTaskModal: React.PropTypes.func,
-  removeContactFromTask: React.PropTypes.func
+  removeContactFromTask: React.PropTypes.func,
+  showAddTransactionModal: React.PropTypes.func
 }

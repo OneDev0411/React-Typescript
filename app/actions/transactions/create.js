@@ -3,8 +3,8 @@ import Transaction from '../../models/Transaction'
 import AppStore from '../../stores/AppStore'
 export default (user, new_transaction) => {
   let title = 'Transaction w/Out Listing'
-  if (new_transaction.listing_added)
-    title = 'Transaction w/Listing'
+  if (new_transaction.listing_data)
+    title = new_transaction.listing_data.property.address.street_full
   let contract_price
   const listing_added = new_transaction.listing_added
   const listing_data = new_transaction.listing_data

@@ -55,6 +55,7 @@ export default class TransactionDetail extends Component {
     // Data
     const data = this.props.data
     const transaction = data.current_transaction
+    // console.log(transaction)
     const listing = transaction.listing
     const listing_data = transaction.listing_data
     const drawer = transaction.drawer

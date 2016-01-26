@@ -8,6 +8,7 @@ import validator from 'validator'
 
 // Helpers
 import helpers from '../../../../utils/helpers'
+import listing_util from '../../../../utils/listing'
 
 // Partials
 import Header from '../Partials/Header'
@@ -19,6 +20,7 @@ import AddContactsForm from '../Partials/AddContactsForm'
 
 // Dispatchers
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
+import TransactionDispatcher from '../../../../dispatcher/TransactionDispatcher'
 import TaskDispatcher from '../../../../dispatcher/TaskDispatcher'
 
 // AppStore
@@ -31,6 +33,8 @@ export default class Tasks extends Component {
     this.getContacts()
     if (!data.tasks)
       this.getTasks()
+    if (!data.tasks)
+      this.getTransactions()
     AppStore.emitChange()
     setTimeout(() => {
       this.refs.task_title.refs.input.focus()
@@ -40,6 +44,15 @@ export default class Tasks extends Component {
       if (evt.keyCode === 27 && data.current_task && !data.show_contacts_modal)
         this.closeDrawer()
     }
+  }
+
+  // Transactions
+  getTransactions() {
+    const user = this.props.data.user
+    TransactionDispatcher.dispatch({
+      action: 'get-all',
+      user
+    })
   }
 
   // Contacts
@@ -176,6 +189,8 @@ export default class Tasks extends Component {
     delete AppStore.data.show_contacts_modal
     delete AppStore.data.filtered_contacts
     delete AppStore.data.new_task
+    delete AppStore.data.show_transactions_modal
+    delete AppStore.data.transaction_results
     AppStore.emitChange()
   }
 
@@ -369,6 +384,85 @@ export default class Tasks extends Component {
     })
   }
 
+  // Transactions
+  showAddTransactionModal() {
+    AppStore.data.show_transactions_modal = true
+    AppStore.emitChange()
+    setTimeout(() => {
+      this.refs.search_transactions.refs.input.focus()
+    }, 300)
+  }
+
+  searchTransactions() {
+    const data = this.props.data
+    const transactions = data.transactions
+    const search_text = this.refs.search_transactions.refs.input.value
+    if (!search_text.trim()) {
+      delete AppStore.data.transaction_results
+      AppStore.emitChange()
+      return
+    }
+    const transaction_results = transactions.filter(transaction => {
+      if (transaction.title.includes(search_text))
+        return true
+      if (transaction.listing_data)
+        return transaction.listing_data.property.address.street_full.includes(search_text)
+      return false
+    })
+    AppStore.data.transaction_results = transaction_results
+    AppStore.emitChange()
+  }
+
+  navTransactionsList(e) {
+    const transaction_results = this.props.data.transaction_results
+    if (e.which === 38)
+      this.setTransactionActive('up')
+    if (e.which === 40)
+      this.setTransactionActive('down')
+    if (e.which === 13 && transaction_results) {
+      const active_transaction = this.props.data.active_transaction
+      const transaction = transaction_results[active_transaction]
+      this.addTransactionToTask(transaction)
+    }
+  }
+
+  setTransactionActive(direction) {
+    const data = this.props.data
+    const transaction_results = data.transaction_results
+    let active_transaction = -1
+
+    // Prev active contact
+    if (data.active_transaction !== null)
+      active_transaction = data.active_transaction
+
+    if (direction === 'up') {
+      if (active_transaction > -1)
+        active_transaction = active_transaction - 1
+      else
+        active_transaction = transaction_results.length - 1
+    }
+
+    if (direction === 'down') {
+      if (active_transaction < transaction_results.length - 1)
+        active_transaction = active_transaction + 1
+      else
+        active_transaction = 0
+    }
+    AppStore.data.active_transaction = active_transaction
+    AppStore.emitChange()
+  }
+
+  addTransactionToTask(transaction) {
+    // console.log(transaction)
+    const data = this.props.data
+    const user = data.user
+    TaskDispatcher.dispatch({
+      action: 'add-transaction',
+      user,
+      transaction
+    })
+  }
+
   render() {
     const data = this.props.data
     const new_task = data.new_task
@@ -426,6 +520,62 @@ export default class Tasks extends Component {
         )
       })
     }
+    // Transactions
+    let transaction_results_area
+    if (data.transaction_results) {
+      const transaction_results = data.transaction_results
+      let transaction_results_list
+      const active_transaction = data.active_transaction
+      transaction_results_list = transaction_results.map((transaction, i) => {
+        const listing_data = transaction.listing_data
+        const status_color = listing_util.getStatusColor(listing_data.status)
+        let transaction_image = (
+          <div style={ S(`w-92 h-62 bg-929292`) }></div>
+        )
+        if (transaction.listing) {
+          transaction_image = (
+            <div style={ S(`w-92 h-62 bg-cover bg-center bg-url(${transaction.listing.cover_image_url})`) }></div>
+          )
+        }
+        let active_style = ''
+        if (i === active_transaction)
+          active_style = ' bg-f5fafe'
+        const transaction_style = {
+          ...S('h-80 p-10 w-100p pointer' + active_style),
+          borderBottom: '1px solid #edf1f3'
+        }
+        return (
+          <div onClick={ this.addTransactionToTask.bind(this, transaction) } className="search-transaction__list-item" style={ transaction_style } key={ 'transaction-' + transaction.id }>
+            <div style={ S('absolute r-10 top-0 color-a1bde4') }>
+              ${ helpers.numberWithCommas(transaction.contract_price) }
+            </div>
+            <div style={ S('pull-left mr-10') }>
+              { transaction_image }
+            </div>
+            <div style={ S('pull-left') }>
+              <div style={ S('mt-10 fw-500') }>
+                { transaction.title }
+              </div>
+              <div style={ S('mt-10 relative') }>
+                <span style={ S('mr-5 font-26 l-0 t-16n absolute color-' + status_color) }>&#8226;</span>
+                <span style={ S('font-12 color-929292 ml-16 relative t-7n') }>{ transaction.listing_data.status }</span>
+              </div>
+            </div>
+            <div className="clearfix"></div>
+          </div>
+        )
+      })
+      if (!transaction_results.length) {
+        transaction_results_list = (
+          <div style={ S('p-10') }>No results</div>
+        )
+      }
+      transaction_results_area = (
+        <div style={ { ...S('maxh-320 absolute bg-fff z-100 w-568 br-3 bw-1 bc-ccc solid'), overflow: 'scroll' } }>
+          { transaction_results_list }
+        </div>
+      )
+    }
     return (
       <div style={ S('minw-1000') }>
         <Header data={ data }/>
@@ -465,6 +615,7 @@ export default class Tasks extends Component {
             deleteTask={ this.deleteTask.bind(this) }
             showShareTaskModal={ this.showShareTaskModal }
             removeContactFromTask={ this.removeContactFromTask }
+            showAddTransactionModal={ this.showAddTransactionModal.bind(this) }
           />
           <Modal show={ data.show_contacts_modal } onHide={ this.hideModal.bind(this) }>
             <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
@@ -491,6 +642,15 @@ export default class Tasks extends Component {
                 { data.adding_contacts ? 'Saving...' : 'Save' }
               </Button>
             </Modal.Footer>
+          </Modal>
+          <Modal show={ data.show_transactions_modal } onHide={ this.hideModal.bind(this) }>
+            <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
+             <Modal.Title style={ S('font-14') }>Add a Transaction <span style={ S('color-929292 fw-400') }>(you can assign one transaction per task)</span></Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Input type="text" ref="search_transactions" placeholder="Search for a transaction" onKeyDown={ this.navTransactionsList.bind(this) } onKeyUp={ this.searchTransactions.bind(this) }/>
+              { transaction_results_area }
+            </Modal.Body>
           </Modal>
         </main>
       </div>

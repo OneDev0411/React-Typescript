@@ -16,8 +16,11 @@
   &:hover {
     border: 1px solid #e4e4e4;
     background-color: #f5fafe;
-    .delete {
-      display: block;
-    }
+  } 
+}
+// Search transaction
+.search-transaction__list-item {
+  &:hover {
+    background-color: #f5fafe;
   } 
 }
