@@ -110,7 +110,10 @@ export default class MainContent extends Component {
             </button>
             <div className="clearfix"></div>
           </div>
-          <RoomsList getMessages={ this.props.getMessages } data={ data }/>
+          <RoomsList 
+            getMessages={ this.props.getMessages }
+            data={ data }
+          />
         </div>
         <div className="dashboard__messages pull-left" style={ messages_column_style }>
           <MessagesList

@@ -32,10 +32,6 @@ export default class RoomsList extends Component {
       rooms = data.filtered_rooms
 
     if (rooms) {
-      // Sort by updates
-      rooms = _.sortBy(rooms, room => {
-        return -room.latest_message.updated_at
-      })
       rooms_list = rooms.map((room, i) => {
         // Profile image
         let author
