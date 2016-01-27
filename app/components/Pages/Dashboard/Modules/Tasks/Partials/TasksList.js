@@ -14,7 +14,10 @@ export default class Tasks extends Component {
 
   render() {
     const data = this.props.data
+    const module_type = this.props.module_type
     let tasks = data.tasks
+    if (module_type === 'transaction' && data.current_transaction)
+      tasks = data.current_transaction.tasks
     const current_task = data.current_task
     let tasks_list = 'You have no tasks yet'
     let prev_task_date
@@ -104,5 +107,6 @@ Tasks.propTypes = {
   data: React.PropTypes.object,
   editTaskStatus: React.PropTypes.func,
   deleteTask: React.PropTypes.func,
-  handleTaskClick: React.PropTypes.func
+  handleTaskClick: React.PropTypes.func,
+  module_type: React.PropTypes.string
 }

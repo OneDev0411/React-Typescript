@@ -5,18 +5,19 @@ import { Button } from 'react-bootstrap'
 
 // Partials
 import CheckBox from './CheckBox'
-import ProfileImage from '../../Partials/ProfileImage'
+import ProfileImage from '../../../Partials/ProfileImage'
 import Transaction from './Transaction'
-import Loading from '../../../../Partials/Loading'
+import Loading from '../../../../../Partials/Loading'
 
 // Helpers
-import helpers from '../../../../../utils/helpers'
+import helpers from '../../../../../../utils/helpers'
 
 export default class Drawer extends Component {
 
   render() {
     const data = this.props.data
     const current_task = data.current_task
+    const module_type = this.props.module_type
     const transaction_loading = data.transaction_loading
     let contacts
     if (current_task)
@@ -27,16 +28,28 @@ export default class Drawer extends Component {
     let drawer
     if (current_task)
       drawer = current_task.drawer
-    const drawer_height = window.innerHeight - 70
     const bottomLine = { borderBottom: '1px solid #edf1f3' }
     const topLine = { borderTop: '1px solid #edf1f3' }
+    let drawer_wrap_height = window.innerHeight - 70
+    if (module_type === 'transaction')
+      drawer_wrap_height = window.innerHeight - 290
     let drawer_wrap_style = {
-      ...S('absolute h-' + drawer_height + ' r-0 w-0 t-70'),
+      ...S('absolute h-' + drawer_wrap_height + ' r-0 w-0 t-70'),
       overflow: 'hidden'
     }
-    const drawer_style = {
+    let drawer_height = window.innerHeight - 70
+    if (module_type === 'transaction')
+      drawer_height = window.innerHeight - 600
+    let drawer_style = {
       ...S('absolute h-' + drawer_height + ' z-100 bg-fcfbf9 w-500'),
       borderLeft: '6px solid #edf1f3'
+    }
+    if (module_type === 'transaction') {
+      drawer_style = {
+        ...drawer_style,
+        ...S('t-311'),
+        overflow: 'scroll'
+      }
     }
     let drawer_class
     if (current_task && current_task.drawer_active)
@@ -117,6 +130,12 @@ export default class Drawer extends Component {
         </div>
       )
     }
+    const footer_style = {
+      ...S('b-0 absolute p-20 color-cfd1d2 font-12 w-100p'),
+      ...topLine
+    }
+    if (module_type === 'transaction')
+      delete footer_style.position
     return (
       <div style={ drawer_wrap_style }>
         <div style={ drawer_style } className={ 'drawer ' + drawer_class }>
@@ -160,7 +179,7 @@ export default class Drawer extends Component {
             { transaction_markup }
             <div className="clearfix"></div>
           </div>
-          <div style={ { ...S('b-0 absolute p-20 color-cfd1d2 font-12 w-100p'), ...topLine } }>
+          <div style={ footer_style }>
             { created_area }
             <div style={ S('pull-right') }>
               <span style={ S('pointer mr-20') }><img src="/images/dashboard/icons/clock.svg"/></span>
@@ -181,5 +200,6 @@ Drawer.propTypes = {
   deleteTask: React.PropTypes.func,
   showShareTaskModal: React.PropTypes.func,
   removeContactFromTask: React.PropTypes.func,
-  showAddTransactionModal: React.PropTypes.func
+  showAddTransactionModal: React.PropTypes.func,
+  module_type: React.PropTypes.string
 }

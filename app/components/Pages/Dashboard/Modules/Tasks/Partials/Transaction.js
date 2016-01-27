@@ -1,8 +1,8 @@
-// ./Partials/Transaction.js
+// Modules/Tasks/Partials/Transaction.js
 import React, { Component } from 'react'
 import S from 'shorti'
-import helpers from '../../../../../utils/helpers'
-import listing_util from '../../../../../utils/listing'
+import helpers from '../../../../../../utils/helpers'
+import listing_util from '../../../../../../utils/listing'
 
 export default class Transaction extends Component {
   render() {

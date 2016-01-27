@@ -10,6 +10,7 @@ import Dropzone from 'react-dropzone'
 import ProfileImage from '../../Partials/ProfileImage'
 import Drawer from './Drawer'
 import FileViewer from './FileViewer'
+import TasksModule from '../../Modules/Tasks'
 
 export default class TransactionDetail extends Component {
 
@@ -387,6 +388,10 @@ export default class TransactionDetail extends Component {
                 </div>
               </div>
             </div>
+            <TasksModule
+              data={ data }
+              module_type="transaction"
+            />
           </div>
         </Dropzone>
         <div className={ 'dropzone__overlay' + overlay_active}>

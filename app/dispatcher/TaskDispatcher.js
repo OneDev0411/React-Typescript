@@ -28,6 +28,16 @@ TaskDispatcher.register(payload => {
   let transaction
 
   switch (action) {
+
+    case 'create-task':
+      user = payload.user
+      title = payload.title
+      due_date = payload.due_date
+      contacts = payload.contacts
+      transaction = payload.transaction
+      createTask(user, title, due_date, contacts, transaction)
+      break
+
     case 'get-tasks':
       user = payload.user
       getTasks(user)
@@ -38,14 +48,6 @@ TaskDispatcher.register(payload => {
       task = payload.task
       status = payload.status
       editTaskStatus(user, task, status)
-      break
-
-    case 'create-task':
-      user = payload.user
-      title = payload.title
-      due_date = payload.due_date
-      contacts = payload.contacts
-      createTask(user, title, due_date, contacts)
       break
 
     case 'delete-task':

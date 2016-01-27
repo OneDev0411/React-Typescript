@@ -15,6 +15,7 @@ export default (user, id) => {
       AppStore.data.current_task.transaction_data = response.data
       delete AppStore.data.show_transactions_modal
       delete AppStore.data.transaction_loading
+      AppStore.data.current_transaction = response.data
       AppStore.emitChange()
     }
   })

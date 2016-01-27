@@ -5,7 +5,7 @@ import AppStore from '../../stores/AppStore'
 // Dispatcher
 import TaskDispatcher from '../../dispatcher/TaskDispatcher'
 
-export default (user, title, due_date, contacts) => {
+export default (user, title, due_date, contacts, transaction) => {
   const params = {
     access_token: user.access_token,
     title,
@@ -26,5 +26,14 @@ export default (user, title, due_date, contacts) => {
       task: new_task,
       contacts
     })
+    // Add transaction
+    if (transaction) {
+      TaskDispatcher.dispatch({
+        action: 'add-transaction',
+        user,
+        transaction,
+        task: new_task
+      })
+    }
   })
 }
