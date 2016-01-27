@@ -22,8 +22,8 @@ module.exports = (app, config) => {
   require('./transactions/get-transactions')(app, config)
   require('./transactions/get-transaction')(app, config)
   require('./transactions/edit-transaction')(app, config)
-  require('./transactions/add-roles')(app, config)
-  require('./transactions/delete-contact')(app, config)
+  require('./transactions/add-role')(app, config)
+  require('./transactions/delete-role')(app, config)
   require('./transactions/delete-transaction')(app, config)
   // Contacts
   require('./contacts/create-contacts')(app, config)

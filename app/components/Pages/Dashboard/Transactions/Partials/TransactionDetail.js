@@ -342,16 +342,8 @@ export default class TransactionDetail extends Component {
             handleDragLeave={ this.handleDragLeave.bind(this) }
             drawerDrop={ this.drawerDrop.bind(this) }
             openFileViewer={ this.props.openFileViewer.bind(this) }
-            filterContacts={ this.props.filterContacts }
-            setContactActive={ this.props.setContactActive }
-            setFilteredContacts={ this.props.setFilteredContacts }
-            hideContactsForm={ this.props.hideContactsForm }
-            removeContact={ this.props.removeContact }
-            showContactModal={ this.props.showContactModal }
             hideModal={ this.props.hideModal }
-            addContact={ this.props.addContact }
             deleteContact={ this.props.deleteContact }
-            showNewContentInitials={ this.props.showNewContentInitials }
           />
           <div className="transaction-detail__title" style={ title_header_style }>
             <div className="pull-left">
@@ -543,14 +535,6 @@ TransactionDetail.propTypes = {
   editTransaction: React.PropTypes.func,
   openFileViewer: React.PropTypes.func,
   closeFileViewer: React.PropTypes.func,
-  filterContacts: React.PropTypes.func,
-  setContactActive: React.PropTypes.func,
-  setFilteredContacts: React.PropTypes.func,
-  hideContactsForm: React.PropTypes.func,
-  removeContact: React.PropTypes.func,
-  showContactModal: React.PropTypes.func,
-  addContact: React.PropTypes.func,
   deleteContact: React.PropTypes.func,
-  showNewContentInitials: React.PropTypes.func,
   getTransaction: React.PropTypes.func
 }

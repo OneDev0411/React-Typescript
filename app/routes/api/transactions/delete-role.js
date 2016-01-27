@@ -1,22 +1,17 @@
-// api/transactions/add-contacts.js
+// api/transactions/delete-role.js
 module.exports = (app, config) => {
-  app.post('/api/transactions/roles',(req, res) => {
+  app.post('/api/transactions/delete-role',(req, res) => {
     const api_url = config.api.url
     const id = req.query.id
-    const endpoint = api_url + '/transactions/' + id
+    const role = req.body.role
+    const endpoint = api_url + '/transactions/' + id + '/roles/' + role.id
     const access_token = req.body.access_token
-    const roles = req.body.roles
-    const request_object = {
-      roles
-    }
-    // console.log(endpoint, request_object)
-    fetch(endpoint,{
-      method: 'put',
+    fetch(endpoint, {
+      method: 'delete',
       headers: {
         'Content-Type': 'application/json',
         'authorization': 'Bearer ' + access_token,
-      },
-      body: JSON.stringify(request_object)
+      }
     })
     .then(response => {
       if (response.status >= 400) {

@@ -116,15 +116,15 @@ export default {
       return callback(false, response)
     })
   },
-  addRoles: (params, callback) => {
+  addRole: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
     const transaction = params.transaction
-    const endpoint = api_host + '/api/transactions/roles?id=' + transaction.id
-    const roles = params.roles
+    const endpoint = api_host + '/api/transactions/role?id=' + transaction.id
+    const role = params.role
     const request_object = {
       access_token: params.access_token,
-      roles
+      role
     }
     fetch(endpoint, {
       method: 'post',
@@ -147,15 +147,15 @@ export default {
       return callback(false, response)
     })
   },
-  deleteContact: (params, callback) => {
+  deleteRole: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
     const transaction = params.transaction
-    const endpoint = api_host + '/api/transactions/delete-contact?id=' + transaction.id
-    const contact = params.contact
+    const endpoint = api_host + '/api/transactions/delete-role?id=' + transaction.id
+    const role = params.role
     const request_object = {
       access_token: params.access_token,
-      contact
+      role
     }
     fetch(endpoint, {
       method: 'post',

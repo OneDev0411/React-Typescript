@@ -2,18 +2,23 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import Loading from '../../../../Partials/Loading'
-import { Tooltip, OverlayTrigger } from 'react-bootstrap'
+import { Tooltip, OverlayTrigger, Modal, Button } from 'react-bootstrap'
 import config from '../../../../../../config/public'
+
+// Partials
 import MessageItem from './MessageItem'
 
+// Modules
+import AddContactsModule from '../../Modules/AddContacts'
+
 export default class MessagesList extends Component {
+
   componentDidMount() {
     if (typeof window !== 'undefined') {
       const clipboard = require('clipboard')
       new clipboard('.copy-link')
     }
   }
-
   componentDidUpdate() {
     // TODO: clean this up
     // Scroll to bottom if under 200 px from bottom and not User.Typing
@@ -143,6 +148,23 @@ export default class MessagesList extends Component {
           { loading_previous }
           <ul style={ S('pl-0') }>{ messages_list_items }</ul>
         </div>
+        <Modal show={ data.show_contacts_modal } onHide={ this.props.hideModal }>
+          <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
+           <Modal.Title style={ S('font-14') }>Share Task <span style={ S('color-929292 fw-400') }>(use any email or any phone number)</span></Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <AddContactsModule
+              data={ data }
+              module_type="invite-room"
+            />
+          </Modal.Body>
+          <Modal.Footer style={ { border: 'none' } }>
+            <Button bsStyle="link" onClick={ this.props.hideModal }>Cancel</Button>
+            <Button onClick={ this.props.addContactsToRoom.bind(this) } style={ S('h-30 pt-5 pl-30 pr-30') } className={ data.adding_contacts ? 'disabled' : '' } type="submit" bsStyle="primary">
+              { data.adding_contacts ? 'Saving...' : 'Save' }
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     )
   }
@@ -152,5 +174,7 @@ export default class MessagesList extends Component {
 MessagesList.propTypes = {
   data: React.PropTypes.object,
   getPreviousMessages: React.PropTypes.func.isRequired,
-  showModal: React.PropTypes.func.isRequired
+  showModal: React.PropTypes.func.isRequired,
+  addContactsToRoom: React.PropTypes.func,
+  hideModal: React.PropTypes.func
 }

@@ -87,9 +87,8 @@ export default class Dashboard extends Component {
     this.refs.message_input.value = ''
   }
 
-  inviteUser(title) {
-    return title
-    // console.log('invite user',title)
+  addContactsToRoom() {
+    console.log('added')
   }
 
   createRoom(title) {
@@ -106,13 +105,13 @@ export default class Dashboard extends Component {
       AppStore.data.show_create_chat_modal = true
 
     if (modal_key === 'invite-user')
-      AppStore.data.show_invite_user_modal = true
+      AppStore.data.show_contacts_modal = true
     AppStore.emitChange()
   }
 
   hideModal() {
     delete AppStore.data.show_create_chat_modal
-    delete AppStore.data.show_invite_user_modal
+    delete AppStore.data.show_contacts_modal
     AppStore.emitChange()
   }
 
@@ -128,7 +127,7 @@ export default class Dashboard extends Component {
     if (Notification.permission === 'granted')
       this.sendNotification(message)
     else {
-      Notification.requestPermission((permission) => {
+      Notification.requestPermission(permission => {
         if (permission === 'granted')
           this.sendNotification(message)
       })
@@ -298,8 +297,8 @@ export default class Dashboard extends Component {
             showModal={ this.showModal }
             hideModal={ this.hideModal }
             createRoom={ this.createRoom }
-            inviteUser={ this.inviteUser }
             getMessages={ this.getMessages }
+            addContactsToRoom={ this.addContactsToRoom }
           />
         </main>
         <audio ref="notif_sound" id="notif-sound">

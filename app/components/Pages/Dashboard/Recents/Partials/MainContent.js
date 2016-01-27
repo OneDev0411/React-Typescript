@@ -32,14 +32,6 @@ export default class MainContent extends Component {
       this.props.createRoom(title)
   }
 
-  inviteUser(e) {
-    e.preventDefault()
-    let email = this.refs.email.getInputDOMNode().value
-    email = email.trim()
-    if (email)
-      this.props.inviteUser(email)
-  }
-
   hideModal() {
     this.props.hideModal()
   }
@@ -48,7 +40,7 @@ export default class MainContent extends Component {
     // Data
     const data = this.props.data
 
-    // Styles
+    // Style
     const main_style = S('absolute l-183 r-0')
 
     // Rooms
@@ -121,7 +113,13 @@ export default class MainContent extends Component {
           <RoomsList getMessages={ this.props.getMessages } data={ data }/>
         </div>
         <div className="dashboard__messages pull-left" style={ messages_column_style }>
-          <MessagesList getPreviousMessages={ this.props.getPreviousMessages } showModal={ this.showModal.bind(this) } data={ data }/>
+          <MessagesList
+            data={ data }
+            getPreviousMessages={ this.props.getPreviousMessages }
+            showModal={ this.showModal.bind(this) }
+            addContactsToRoom={ this.props.addContactsToRoom }
+            hideModal={ this.hideModal.bind(this) }
+          />
           { footer_form }
         </div>
         <Modal show={ data.show_create_chat_modal } onHide={ this.hideModal.bind(this) }>
@@ -135,20 +133,6 @@ export default class MainContent extends Component {
             <Modal.Footer>
               <Button onClick={ this.hideModal.bind(this) }>Cancel</Button>
               <Button type="submit" bsStyle="primary">Start chat</Button>
-            </Modal.Footer>
-          </form>
-        </Modal>
-        <Modal show={ data.show_invite_user_modal } onHide={ this.hideModal.bind(this) }>
-          <form onSubmit={ this.inviteUser.bind(this) }>
-            <Modal.Header closeButton>
-              <Modal.Title>Invite User</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Input type="text" ref="email" placeholder="User email address"/>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button onClick={ this.hideModal.bind(this) }>Cancel</Button>
-              <Button type="submit" bsStyle="primary">Invite User</Button>
             </Modal.Footer>
           </form>
         </Modal>
@@ -166,9 +150,9 @@ MainContent.propTypes = {
   showModal: React.PropTypes.func.isRequired,
   hideModal: React.PropTypes.func.isRequired,
   createRoom: React.PropTypes.func.isRequired,
-  inviteUser: React.PropTypes.func.isRequired,
   createMessage: React.PropTypes.func.isRequired,
   handleMessageTyping: React.PropTypes.func.isRequired,
   getMessages: React.PropTypes.func.isRequired,
-  getPreviousMessages: React.PropTypes.func.isRequired
+  getPreviousMessages: React.PropTypes.func.isRequired,
+  addContactsToRoom: React.PropTypes.func.isRequired
 }
