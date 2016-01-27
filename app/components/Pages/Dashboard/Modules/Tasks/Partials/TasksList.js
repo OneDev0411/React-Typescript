@@ -8,7 +8,7 @@ import _ from 'lodash'
 import CheckBox from './CheckBox'
 
 // Helpers
-import helpers from '../../../../../utils/helpers'
+import helpers from '../../../../../../utils/helpers'
 
 export default class Tasks extends Component {
 

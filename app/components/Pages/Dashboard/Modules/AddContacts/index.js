@@ -1,12 +1,12 @@
-// AddContactsModule.js
+// AddContactsModule
 import React, { Component } from 'react'
 import { Button, Input, Modal, Col, Alert } from 'react-bootstrap'
 import S from 'shorti'
 import validator from 'validator'
-import helpers from '../../../../utils/helpers'
+import helpers from '../../../../../utils/helpers'
 
 // Partials
-import ProfileImage from './ProfileImage'
+import ProfileImage from '../../Partials/ProfileImage'
 
 export default class AddContactsModule extends Component {
 

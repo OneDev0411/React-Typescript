@@ -7,7 +7,7 @@ import Dropzone from 'react-dropzone'
 // Partials
 import Loading from '../../../../Partials/Loading'
 import ProfileImage from '../../Partials/ProfileImage'
-import AddContactsModule from '../../Partials/AddContactsModule'
+import AddContactsModule from '../../Modules/AddContacts'
 
 export default class Drawer extends Component {
 

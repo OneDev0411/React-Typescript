@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import S from 'shorti'
 
 // Partials
-import AddContactsModule from '../../../Partials/AddContactsModule'
+import AddContactsModule from '../../../Modules/AddContacts'
 
 export default class AddClients extends Component {
 
