@@ -443,7 +443,6 @@ export default class TasksModule extends Component {
       delete main_style.top
       delete main_style.right
       wrapper_style = {
-        borderTop: '1px solid #edf1f3',
         paddingTop: '15px'
       }
     }
