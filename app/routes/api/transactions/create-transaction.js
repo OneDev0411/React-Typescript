@@ -9,7 +9,7 @@ module.exports = (app, config) => {
     const listing = req.body.listing
     const listing_data = req.body.listing_data
     const contract_price = req.body.contract_price
-    const contacts = req.body.contacts
+    const roles = req.body.roles
     const dates = req.body.dates
     const request_object = {
       transaction_type,
@@ -17,7 +17,7 @@ module.exports = (app, config) => {
       listing,
       listing_data,
       contract_price,
-      contacts,
+      roles,
       dates
     }
     fetch(endpoint,{
@@ -29,6 +29,7 @@ module.exports = (app, config) => {
       body: JSON.stringify(request_object)
     })
     .then(response => {
+      console.log(response)
       if (response.status >= 400) {
         var error = {
           status: 'error',

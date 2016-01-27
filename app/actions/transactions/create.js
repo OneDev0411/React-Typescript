@@ -10,24 +10,30 @@ export default (user, new_transaction) => {
   const listing_data = new_transaction.listing_data
   const contacts_added = new_transaction.contacts_added
   const dates = new_transaction.dates
-  const contact_objects = []
+  const role_objects = []
   if (contacts_added) {
     const clients = contacts_added.client
     clients.forEach(contact => {
+      let role = 'Other'
+      if (contact.role)
+        role = contact.role
       const contact_object = {
-        id: contact.id,
-        role: contact.role || 'Other'
+        contact: contact.id,
+        role_types: [role]
       }
-      contact_objects.push(contact_object)
+      role_objects.push(contact_object)
     })
     const others = contacts_added.contact
     if (others) {
       others.forEach(contact => {
+        let role = 'Other'
+        if (contact.role)
+          role = contact.role
         const contact_object = {
-          id: contact.id,
-          role: contact.role || 'Other'
+          contact: contact.id,
+          role_types: [role]
         }
-        contact_objects.push(contact_object)
+        role_objects.push(contact_object)
       })
     }
   }
@@ -43,7 +49,7 @@ export default (user, new_transaction) => {
     listing_data,
     contract_price,
     title,
-    contacts: contact_objects,
+    roles: role_objects,
     dates,
     access_token: user.access_token
   }

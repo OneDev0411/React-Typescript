@@ -14,7 +14,7 @@ export default {
       transaction_type: params.transaction_type,
       title: params.title,
       contract_price: params.contract_price,
-      contacts: params.contacts,
+      roles: params.roles,
       dates: params.dates,
       access_token: params.access_token
     }

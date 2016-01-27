@@ -27,7 +27,7 @@ export default class Transaction extends Component {
         </div>
         <div style={ S('pull-left') }>
           <div style={ S('mt-10 fw-500') }>
-            { transaction.title }
+            { transaction.listing_data.property.address.street_full }
           </div>
           <div style={ S('mt-10 relative') }>
             <span style={ S('mr-5 font-26 l-0 t-16n absolute color-' + status_color) }>&#8226;</span>

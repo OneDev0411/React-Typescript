@@ -485,6 +485,16 @@ export default class Transactions extends Component {
     })
   }
 
+  getTransaction(transaction) {
+    const data = this.props.data
+    const user = data.user
+    TransactionDispatcher.dispatch({
+      action: 'get-transaction',
+      user,
+      id: transaction.id
+    })
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -651,6 +661,7 @@ export default class Transactions extends Component {
           addContact={ this.addContact }
           deleteContact={ this.deleteContact }
           showNewContentInitials={ this.showNewContentInitials }
+          getTransaction={ this.getTransaction.bind(this) }
         />
       )
     }

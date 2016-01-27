@@ -5,9 +5,12 @@ import AppStore from '../../stores/AppStore'
 export default (user, transaction, contacts) => {
   const contact_objects = []
   contacts.forEach(contact => {
+    let role = 'Other'
+    if (contact.role)
+      role = contact.role
     const contact_object = {
       id: contact.id,
-      roles: [contact.role] || ['Other']
+      role_types: [role]
     }
     contact_objects.push(contact_object)
   })
@@ -26,7 +29,6 @@ export default (user, transaction, contacts) => {
           open: true
         }
         edited_transaction.drawer_active = true
-        // console.log(edited_transaction.contacts)
         AppStore.data.current_transaction = edited_transaction
       }
     }

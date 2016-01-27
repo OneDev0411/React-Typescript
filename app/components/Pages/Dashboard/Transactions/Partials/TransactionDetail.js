@@ -14,6 +14,8 @@ import FileViewer from './FileViewer'
 export default class TransactionDetail extends Component {
 
   componentDidMount() {
+    const transaction = this.props.data.current_transaction
+    this.props.getTransaction(transaction)
     if (typeof window !== 'undefined') {
       const clipboard = require('clipboard')
       new clipboard('.copy-mls')
@@ -55,7 +57,6 @@ export default class TransactionDetail extends Component {
     // Data
     const data = this.props.data
     const transaction = data.current_transaction
-    // console.log(transaction)
     const listing = transaction.listing
     const listing_data = transaction.listing_data
     const drawer = transaction.drawer
@@ -206,7 +207,7 @@ export default class TransactionDetail extends Component {
             <div style={ S('ml-50') }>
               <div><b>{ contact.first_name } { contact.last_name }</b></div>
               <div style={ S('color-929292') }>
-                <div style={ info_style }>{ contact.roles ? contact.roles[0] : '' }</div>
+                <div style={ info_style }>{ role.role_types ? role.role_types[0] : '' }</div>
                 <div style={ info_style }>{ contact.phone_number }</div>
                 <div style={ info_style }><a style={{ textDecoration: 'none' }} href={ 'mailto:' + contact.email}>{ contact.email }</a></div>
               </div>
@@ -537,5 +538,6 @@ TransactionDetail.propTypes = {
   showContactModal: React.PropTypes.func,
   addContact: React.PropTypes.func,
   deleteContact: React.PropTypes.func,
-  showNewContentInitials: React.PropTypes.func
+  showNewContentInitials: React.PropTypes.func,
+  getTransaction: React.PropTypes.func
 }

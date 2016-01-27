@@ -33,14 +33,11 @@ export default (contact, module_type) => {
   if (module_type === 'transaction') {
     const user = AppStore.data.user
     const transaction = AppStore.data.current_transaction
-    const roles = transaction.roles
-    const contacts = _.pluck(roles, 'contact')
-    contacts.push(contact)
     TransactionDispatcher.dispatch({
-      action: 'add-roles',
+      action: 'add-role',
       user,
       transaction,
-      contacts
+      contact
     })
   }
   delete AppStore.data.filtered_contacts

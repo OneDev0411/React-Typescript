@@ -7,7 +7,7 @@ import Dropzone from 'react-dropzone'
 // Partials
 import Loading from '../../../../Partials/Loading'
 import ProfileImage from '../../Partials/ProfileImage'
-import AddContactsForm from '../../Partials/AddContactsForm'
+import AddContactsModule from '../../Partials/AddContactsModule'
 
 export default class Drawer extends Component {
 
@@ -147,9 +147,9 @@ export default class Drawer extends Component {
         )
       }
       if (drawer.content === 'contacts' && roles) {
-        let roles_list
+        let contacts_list
         if (roles) {
-          roles.map(role => {
+          contacts_list = roles.map(role => {
             const contact = role.contact
             const contact_style = {
               ...S('pt-15 pb-15 pl-15'),
@@ -187,9 +187,9 @@ export default class Drawer extends Component {
           <div>
             <div style={ drawer_header_style }>Contacts</div>
             <div>
-              { roles_list }
+              { contacts_list }
             </div>
-            <AddContactsForm
+            <AddContactsModule
               data={ data }
               filterContacts={ this.props.filterContacts }
               setContactActive={ this.props.setContactActive }

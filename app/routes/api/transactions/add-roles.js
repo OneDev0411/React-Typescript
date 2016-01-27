@@ -3,14 +3,15 @@ module.exports = (app, config) => {
   app.post('/api/transactions/roles',(req, res) => {
     const api_url = config.api.url
     const id = req.query.id
-    const endpoint = api_url + '/transactions/' + id + '/roles'
+    const endpoint = api_url + '/transactions/' + id
     const access_token = req.body.access_token
     const roles = req.body.roles
     const request_object = {
       roles
     }
+    // console.log(endpoint, request_object)
     fetch(endpoint,{
-      method: 'post',
+      method: 'put',
       headers: {
         'Content-Type': 'application/json',
         'authorization': 'Bearer ' + access_token,

@@ -10,6 +10,7 @@ import uploadFiles from '../actions/transactions/upload-files'
 import editTransaction from '../actions/transactions/edit'
 import addRoles from '../actions/transactions/add-roles'
 import deleteContact from '../actions/transactions/delete-contact'
+import getTransaction from '../actions/transactions/get-transaction'
 
 const TransactionDispatcher = new Dispatcher()
 
@@ -36,6 +37,11 @@ TransactionDispatcher.register(payload => {
     case 'get-all':
       getAllTransactions(payload.user)
       break
+
+    case 'get-transaction':
+      getTransaction(payload.user, payload.id)
+      break
+
     case 'edit-transaction':
       editTransaction(payload.user, payload.transaction, payload.listing_data)
       break

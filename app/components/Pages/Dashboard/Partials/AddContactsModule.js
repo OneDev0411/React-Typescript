@@ -1,4 +1,4 @@
-// AddContactsForm.js
+// AddContactsModule.js
 import React, { Component } from 'react'
 import { Button, Input, Modal, Col, Alert } from 'react-bootstrap'
 import S from 'shorti'
@@ -8,7 +8,7 @@ import helpers from '../../../../utils/helpers'
 // Partials
 import ProfileImage from './ProfileImage'
 
-export default class AddContactsForm extends Component {
+export default class AddContactsModule extends Component {
 
   componentDidMount() {
     setTimeout(() => {
@@ -363,7 +363,7 @@ export default class AddContactsForm extends Component {
 }
 
 // PropTypes
-AddContactsForm.propTypes = {
+AddContactsModule.propTypes = {
   data: React.PropTypes.object,
   filterContacts: React.PropTypes.func,
   setContactActive: React.PropTypes.func,

@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import S from 'shorti'
 
 // Partials
-import AddContactsForm from '../../../Partials/AddContactsForm'
+import AddContactsModule from '../../../Partials/AddContactsModule'
 
 export default class AddClients extends Component {
 
@@ -14,7 +14,7 @@ export default class AddClients extends Component {
       <div>
         <div style={ S('t-100n absolute color-d0d4d9') }>Lost time is never found again.</div>
         <h1>Very nice. New { data.new_transaction.type }. Who are we creating this <br/>transaction for?</h1>
-        <AddContactsForm
+        <AddContactsModule
           module_type="client"
           data={ data }
           setContactActive={ this.props.setContactActive }
