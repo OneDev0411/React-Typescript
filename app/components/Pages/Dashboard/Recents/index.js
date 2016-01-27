@@ -204,13 +204,7 @@ export default class Dashboard extends Component {
   filterRooms(search_text) {
     const data = this.props.data
     const search_text_lower = search_text.toLowerCase().trim()
-    let rooms = data.rooms
-    // Sort by updates
-    if (rooms) {
-      rooms = _.sortBy(rooms, room => {
-        return -room.latest_message.updated_at
-      })
-    }
+    const rooms = data.rooms
     const filtered_rooms = rooms.filter((room) => {
       const users_first_string = _.pluck(room.users, 'first_name').toString().toLowerCase()
       const users_last_string = _.pluck(room.users, 'last_name').toString().toLowerCase()

@@ -110,7 +110,7 @@ export default class MainContent extends Component {
             </button>
             <div className="clearfix"></div>
           </div>
-          <RoomsList 
+          <RoomsList
             getMessages={ this.props.getMessages }
             data={ data }
           />
