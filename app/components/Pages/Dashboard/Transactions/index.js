@@ -125,6 +125,9 @@ export default class Transactions extends Component {
   }
 
   viewTransaction(transaction) {
+    // Remove current task
+    delete AppStore.data.current_task
+    AppStore.emitChange()
     const attachments = transaction.attachments
     const attachments_sorted = _.sortBy(attachments, 'created', attachment => {
       return - attachment.created
