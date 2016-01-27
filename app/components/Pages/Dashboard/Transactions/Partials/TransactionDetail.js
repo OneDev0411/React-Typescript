@@ -80,6 +80,12 @@ export default class TransactionDetail extends Component {
     let title = 'No address'
     let subtitle
 
+    // Get main body height for drawers
+    const containing_body = this.refs.containing_body
+    let containing_body_height
+    if (containing_body)
+      containing_body_height = containing_body.clientHeight
+
     // If listing
     if (listing) {
       status = listing.status
@@ -358,8 +364,8 @@ export default class TransactionDetail extends Component {
             <div className="clearfix"></div>
             <div style={ S('color-929394 mb-20') }>{ subtitle_area }</div>
           </div>
-          <div style={ S('relative') }>
-            <div style={ S('minh-380 pl-15 pr-15') }>
+          <div ref="containing_body" style={ S('relative') }>
+            <div style={ S('pl-15 pr-15') }>
               <div style={ S(carousel_wh + ' mr-15 mb-30') } className="pull-left">
                 { listing_images }
               </div>
@@ -387,10 +393,12 @@ export default class TransactionDetail extends Component {
                   { contacts_markup }
                 </div>
               </div>
+              <div className="clearfix"></div>
             </div>
             <TasksModule
               data={ data }
               module_type="transaction"
+              containing_body_height={ containing_body_height }
             />
           </div>
         </Dropzone>

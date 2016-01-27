@@ -18,6 +18,7 @@ export default class Drawer extends Component {
     const data = this.props.data
     const current_task = data.current_task
     const module_type = this.props.module_type
+    const containing_body_height = this.props.containing_body_height + 30
     const transaction_loading = data.transaction_loading
     let contacts
     if (current_task)
@@ -30,25 +31,28 @@ export default class Drawer extends Component {
       drawer = current_task.drawer
     const bottomLine = { borderBottom: '1px solid #edf1f3' }
     const topLine = { borderTop: '1px solid #edf1f3' }
-    let drawer_wrap_height = window.innerHeight - 70
-    if (module_type === 'transaction')
-      drawer_wrap_height = window.innerHeight - 290
+    const drawer_wrap_height = window.innerHeight - 70
     let drawer_wrap_style = {
       ...S('absolute h-' + drawer_wrap_height + ' r-0 w-0 t-70'),
       overflow: 'hidden'
     }
-    let drawer_height = window.innerHeight - 70
-    if (module_type === 'transaction')
-      drawer_height = window.innerHeight - 600
     let drawer_style = {
-      ...S('absolute h-' + drawer_height + ' z-100 bg-fcfbf9 w-500'),
+      ...S('absolute h-' + drawer_wrap_height + ' z-100 bg-fcfbf9 w-500'),
       borderLeft: '6px solid #edf1f3'
     }
     if (module_type === 'transaction') {
+      let drawer_height = window.innerHeight - 205
+      if (containing_body_height > drawer_height)
+        drawer_height = containing_body_height
+      drawer_wrap_style = {
+        ...drawer_wrap_style,
+        ...S('t-15n'),
+        height: drawer_height
+      }
       drawer_style = {
         ...drawer_style,
-        ...S('t-311'),
-        overflow: 'scroll'
+        ...S('t-0'),
+        height: drawer_height
       }
     }
     let drawer_class
@@ -134,8 +138,6 @@ export default class Drawer extends Component {
       ...S('b-0 absolute p-20 color-cfd1d2 font-12 w-100p'),
       ...topLine
     }
-    if (module_type === 'transaction')
-      delete footer_style.position
     return (
       <div style={ drawer_wrap_style }>
         <div style={ drawer_style } className={ 'drawer ' + drawer_class }>
@@ -201,5 +203,6 @@ Drawer.propTypes = {
   showShareTaskModal: React.PropTypes.func,
   removeContactFromTask: React.PropTypes.func,
   showAddTransactionModal: React.PropTypes.func,
-  module_type: React.PropTypes.string
+  module_type: React.PropTypes.string,
+  containing_body_height: React.PropTypes.number
 }

@@ -633,6 +633,7 @@ export default class TasksModule extends Component {
           removeContactFromTask={ this.removeContactFromTask.bind(this) }
           showAddTransactionModal={ this.showAddTransactionModal.bind(this) }
           module_type={ module_type }
+          containing_body_height={ this.props.containing_body_height }
         />
         <Modal show={ data.show_contacts_modal } onHide={ this.hideModal }>
           <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
@@ -676,5 +677,6 @@ export default class TasksModule extends Component {
 // PropTypes
 TasksModule.propTypes = {
   data: React.PropTypes.object,
-  module_type: React.PropTypes.string
+  module_type: React.PropTypes.string,
+  containing_body_height: React.PropTypes.number
 }
