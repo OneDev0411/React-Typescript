@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { Table, Alert } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
+import validator from 'validator'
 
 // AppStore
 import AppStore from '../../../../stores/AppStore'
@@ -35,6 +36,25 @@ export default class Transactions extends Component {
         delete AppStore.data.new_transaction.saved
       }, 3000)
     }
+  }
+
+  componentDidUpdate() {
+    const data = this.props.data
+    const path = this.props.route.path
+    if (path === 'dashboard/transactions/:id' && data.transactions_loaded && !data.current_transaction && !data.current_transaction_loaded)
+      this.setPageLoadedView()
+  }
+
+  setPageLoadedView() {
+    const data = this.props.data
+    const transactions = data.transactions
+    const params = this.props.params
+    const id = params.id
+    const current_transaction = _.findWhere(transactions, { id })
+    AppStore.data.current_transaction = current_transaction
+    AppStore.data.current_transaction_loaded = true
+    AppStore.emitChange()
+    this.addTransactionTab(current_transaction)
   }
 
   getContacts() {
@@ -99,11 +119,20 @@ export default class Transactions extends Component {
     AppStore.emitChange()
   }
 
+  viewAllTransactions() {
+    delete AppStore.data.current_transaction
+    history.pushState(null, null, '/dashboard/transactions')
+    AppStore.emitChange()
+  }
+
   viewTransaction(transaction) {
-    if (transaction === 'all')
-      delete AppStore.data.current_transaction
-    else
-      AppStore.data.current_transaction = transaction
+    const attachments = transaction.attachments
+    const attachments_sorted = _.sortBy(attachments, 'created', attachment => {
+      return - attachment.created
+    })
+    transaction.attachments = attachments_sorted
+    AppStore.data.current_transaction = transaction
+    history.pushState(null, null, '/dashboard/transactions/' + transaction.id)
     AppStore.emitChange()
   }
 
@@ -118,6 +147,7 @@ export default class Transactions extends Component {
       AppStore.data.transaction_tabs = reduced_transaction_tabs
       if (current_transaction.id === id)
         delete AppStore.data.current_transaction
+      history.pushState(null, null, '/dashboard/transactions/')
       AppStore.emitChange()
     }, 1)
   }
@@ -156,6 +186,9 @@ export default class Transactions extends Component {
   }
 
   hideModal() {
+    delete AppStore.data.show_contact_modal
+    delete AppStore.data.contact_modal
+    delete AppStore.data.creating_contacts
     delete AppStore.data.show_document_modal
     delete AppStore.data.current_transaction.show_edit_modal
     // rekey attachments
@@ -171,7 +204,7 @@ export default class Transactions extends Component {
   }
 
   uploadFile() {
-    const data = AppStore.data
+    const data = this.props.data
     const files = data.document_modal.files
     const files_count = files.length
     const current_file = data.document_modal.current_file
@@ -186,6 +219,7 @@ export default class Transactions extends Component {
       files: [current_file]
     })
     const attachments = data.current_transaction.attachments
+    current_file.uploading = true
     AppStore.data.current_transaction.attachments = [
       current_file,
       ...attachments
@@ -205,7 +239,7 @@ export default class Transactions extends Component {
   deleteFile(file) {
     const files = AppStore.data.current_transaction.attachments
     const edited_files = files.filter(file_loop => {
-      return file_loop.index !== file.index
+      return file_loop.id !== file.id
     })
     AppStore.data.current_transaction.attachments = edited_files
     AppStore.emitChange()
@@ -224,11 +258,6 @@ export default class Transactions extends Component {
 
   dragLeave() {
     delete AppStore.data.current_transaction.drag_enter
-    AppStore.emitChange()
-  }
-
-  handleViewMore() {
-    AppStore.data.current_transaction.show_more_info = true
     AppStore.emitChange()
   }
 
@@ -262,11 +291,11 @@ export default class Transactions extends Component {
           street_full: address,
           city,
           state,
-          postal_code,
-          square_feet,
-          bedroom_count,
-          bathroom_count
-        }
+          postal_code
+        },
+        square_feet,
+        bedroom_count,
+        bathroom_count
       }
     }
     // console.log(user, transaction, listing_data)
@@ -275,6 +304,194 @@ export default class Transactions extends Component {
       user,
       transaction,
       listing_data
+    })
+  }
+
+  openFileViewer(attachment) {
+    AppStore.data.current_transaction.viewer = {
+      attachment
+    }
+    AppStore.emitChange()
+  }
+
+  closeFileViewer() {
+    delete AppStore.data.current_transaction.viewer
+    const data = AppStore.data
+    const transaction = data.current_transaction
+    history.pushState(null, null, '/dashboard/transactions/' + transaction.id)
+    AppStore.emitChange()
+  }
+
+  // Contacts
+  getContacts() {
+    const user = this.props.data.user
+    AppDispatcher.dispatch({
+      action: 'get-contacts',
+      user
+    })
+  }
+
+  setFilteredContacts(filtered_contacts) {
+    AppStore.data.filtered_contacts = filtered_contacts
+    AppStore.emitChange()
+  }
+
+  // Set list item active
+  setContactActive(index) {
+    AppStore.data.active_contact = index
+    AppStore.emitChange()
+  }
+
+  hideContactsForm() {
+    AppStore.data.filtered_contacts = null
+    AppStore.emitChange()
+  }
+
+  removeContact(contact_id, module_type) {
+    AppDispatcher.dispatch({
+      action: 'remove-contact',
+      contact_id,
+      module_type
+    })
+    AppStore.data.new_transaction.contacts_added = AppStore.data.contacts_added
+    AppStore.emitChange()
+  }
+
+  showContactModal(contact) {
+    if (contact) {
+      AppStore.data.contact_modal = {
+        contact
+      }
+    }
+    AppStore.data.show_contact_modal = true
+    AppStore.emitChange()
+  }
+
+  showNewContentInitials(first_initial, last_initial) {
+    AppStore.data.new_contact_modal = {
+      first_initial,
+      last_initial
+    }
+    AppStore.emitChange()
+  }
+
+  addContact(module_type, e) {
+    e.preventDefault()
+    AppStore.data.creating_contacts = true
+    AppStore.emitChange()
+    const first_name = this.refs.first_name.refs.input.value.trim()
+    const last_name = this.refs.last_name.refs.input.value.trim()
+    const email = this.refs.email.refs.input.value.trim()
+    const phone_number = this.refs.phone_number.refs.input.value.trim()
+    const company = this.refs.company.refs.input.value.trim()
+    const role = this.refs.role.refs.input.value.trim()
+    const action = this.refs.action.value.trim()
+
+    // Reset errors
+    if (AppStore.data.new_contact_modal) {
+      delete AppStore.data.new_contact_modal.errors
+      delete AppStore.data.new_contact_modal.email_invalid
+    }
+
+    // Validations
+    if (!AppStore.data.new_contact_modal)
+      AppStore.data.new_contact_modal = {}
+
+    if (!first_name || !last_name) {
+      AppStore.data.new_contact_modal.errors = true
+      AppStore.data.creating_contacts = false
+      AppStore.emitChange()
+      return
+    }
+
+    if (email && !validator.isEmail(email)) {
+      AppStore.data.new_contact_modal.email_invalid = true
+      AppStore.data.creating_contacts = false
+      AppStore.emitChange()
+      return
+    }
+
+    if (!email && !phone_number) {
+      AppStore.data.new_contact_modal.errors = true
+      AppStore.data.creating_contacts = false
+      AppStore.emitChange()
+      return
+    }
+
+    const user = this.props.data.user
+    if (action === 'create') {
+      const contact = {
+        first_name,
+        last_name,
+        role,
+        force_creation: true
+      }
+      // Needs either email or phone
+      if (phone_number)
+        contact.phone_number = phone_number
+      if (email)
+        contact.email = email
+      if (company)
+        contact.company = company
+      if (!role.length)
+        delete contact.role
+      const contacts = [contact]
+      AppDispatcher.dispatch({
+        action: 'create-contacts',
+        contacts,
+        user,
+        module_type
+      })
+    }
+    if (action === 'edit') {
+      // Get default contact info
+      const contact = AppStore.data.contact_modal.contact
+      contact.first_name = first_name
+      contact.last_name = last_name
+      contact.email = email
+      contact.phone_number = phone_number
+      contact.company = company
+      contact.role = role
+      // Remove contact info (no undef)
+      if (!email)
+        delete contact.email
+      if (!phone_number)
+        delete contact.phone_number
+      if (!company)
+        delete contact.company
+      if (!role.length)
+        delete contact.role
+      AppDispatcher.dispatch({
+        action: 'edit-contact',
+        contact,
+        user,
+        module_type
+      })
+    }
+  }
+
+  deleteContact(contact) {
+    const user = this.props.data.user
+    const transaction = this.props.data.current_transaction
+    AppStore.data.current_transaction.deleting_contact = {
+      id: contact.id
+    }
+    AppStore.emitChange()
+    TransactionDispatcher.dispatch({
+      action: 'delete-contact',
+      contact,
+      user,
+      transaction
+    })
+  }
+
+  getTransaction(transaction) {
+    const data = this.props.data
+    const user = data.user
+    TransactionDispatcher.dispatch({
+      action: 'get-transaction',
+      user,
+      id: transaction.id
     })
   }
 
@@ -320,7 +537,7 @@ export default class Transactions extends Component {
         // Get client
         const clients = _.forEach(transaction.contacts, contact => {
           const roles = contact.roles
-          if (roles.indexOf('Client') !== -1)
+          if (roles && roles.indexOf('Client') !== -1)
             return contact
         })
         let listing_status_indicator
@@ -429,12 +646,22 @@ export default class Transactions extends Component {
           dragEnter={ this.dragEnter }
           dragLeave={ this.dragLeave }
           hideModal={ this.hideModal }
-          uploadFile={ this.uploadFile }
+          uploadFile={ this.uploadFile.bind(this) }
           deleteFile={ this.deleteFile }
           handleNameChange={ this.handleNameChange }
-          handleViewMore={ this.handleViewMore }
           showEditModal={ this.showEditModal }
           editTransaction={ this.editTransaction }
+          openFileViewer={ this.openFileViewer }
+          closeFileViewer={ this.closeFileViewer }
+          setFilteredContacts={ this.setFilteredContacts.bind(this) }
+          setContactActive={ this.setContactActive.bind(this) }
+          hideContactsForm={ this.hideContactsForm }
+          removeContact={ this.removeContact }
+          showContactModal={ this.showContactModal }
+          addContact={ this.addContact }
+          deleteContact={ this.deleteContact }
+          showNewContentInitials={ this.showNewContentInitials }
+          getTransaction={ this.getTransaction.bind(this) }
         />
       )
     }
@@ -444,7 +671,7 @@ export default class Transactions extends Component {
 
     return (
       <div style={ S('minw-1000') }>
-        <Header data={ data } viewTransaction={ this.viewTransaction.bind(this) } removeTransactionTab={ this.removeTransactionTab } />
+        <Header data={ data } viewAllTransactions={ this.viewAllTransactions.bind(this) } viewTransaction={ this.viewTransaction.bind(this) } removeTransactionTab={ this.removeTransactionTab } />
         <main style={ S('pt-15') }>
           <SideBar data={ data }/>
           <div style={ main_style }>
@@ -459,5 +686,7 @@ export default class Transactions extends Component {
 
 // PropTypes
 Transactions.propTypes = {
-  data: React.PropTypes.object
+  data: React.PropTypes.object,
+  route: React.PropTypes.object,
+  params: React.PropTypes.object
 }

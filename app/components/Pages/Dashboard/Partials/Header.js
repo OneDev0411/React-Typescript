@@ -29,7 +29,7 @@ export default class Header extends Component {
     if (path === '/dashboard/tasks')
       title = `Tasks`
     // Transactions
-    if (path === '/dashboard/transactions') {
+    if (path.indexOf('/dashboard/transactions') !== -1) {
       const has_s = !transactions || transactions.length !== 1 ? 's' : ''
       title = `${transactions ? transactions.length : ''} Transaction${has_s}`
       const transaction_tabs = data.transaction_tabs
@@ -57,7 +57,9 @@ export default class Header extends Component {
       transaction_nav_markup = (
         <div>
           <Nav className="table--tabbable__tabs" style={ S('b-1n absolute ml-15') } bsStyle="tabs" activeKey={ active_tab }>
-            <NavItem className="all-transactions-tab" onClick={ this.props.viewTransaction.bind(this, 'all') } eventKey={'all'}>All transactions</NavItem>
+            <NavItem className="all-transactions-tab" onClick={ this.props.viewAllTransactions.bind(this) } eventKey={'all'}>
+              All transactions
+            </NavItem>
             { transaction_tabs_markup }
           </Nav>
           <Link style={ S('absolute r-15 t-15') } className="btn btn-primary" to="/dashboard/transactions/new">+ Add Transaction</Link>
@@ -69,7 +71,7 @@ export default class Header extends Component {
     let nav_bar_style = { ...S('mb-0 p-0 pt-3 relative'), borderBottom: '1px solid #e7e4e3' }
 
     // Taller header for transactions
-    if (path === '/dashboard/transactions')
+    if (path.indexOf('/dashboard/transactions') !== -1)
       nav_bar_style = { ...nav_bar_style, ...S('h-108') }
     else
       nav_bar_style = { ...nav_bar_style, ...S('h-70') }
@@ -95,5 +97,6 @@ export default class Header extends Component {
 Header.propTypes = {
   data: React.PropTypes.object,
   viewTransaction: React.PropTypes.func,
+  viewAllTransactions: React.PropTypes.func,
   removeTransactionTab: React.PropTypes.func
 }

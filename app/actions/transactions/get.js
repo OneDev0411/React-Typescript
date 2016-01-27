@@ -11,6 +11,7 @@ export default (user) => {
   Transaction.getAll(params, (err, response) => {
     AppStore.data.transactions = response.data
     delete AppStore.data.getting_transactions
+    AppStore.data.transactions_loaded = true
     AppStore.emitChange()
   })
 }

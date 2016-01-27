@@ -1,6 +1,6 @@
 // Dashboard/Transactions/TransactionDetail.js
 import React, { Component } from 'react'
-import { Carousel, CarouselItem, Modal, Button, Input, Col } from 'react-bootstrap'
+import { Carousel, CarouselItem, Modal, Button, Input, Col, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import S from 'shorti'
 import listing_util from '../../../../../utils/listing'
 import helpers from '../../../../../utils/helpers'
@@ -8,8 +8,20 @@ import Dropzone from 'react-dropzone'
 
 // Partials
 import ProfileImage from '../../Partials/ProfileImage'
+import Drawer from './Drawer'
+import FileViewer from './FileViewer'
+import TasksModule from '../../Modules/Tasks'
 
 export default class TransactionDetail extends Component {
+
+  componentDidMount() {
+    const transaction = this.props.data.current_transaction
+    this.props.getTransaction(transaction)
+    if (typeof window !== 'undefined') {
+      const clipboard = require('clipboard')
+      new clipboard('.copy-mls')
+    }
+  }
 
   handleAddDocs(files) {
     this.props.addDocs(files)
@@ -42,14 +54,6 @@ export default class TransactionDetail extends Component {
     this.props.handleNameChange(file_name)
   }
 
-  openFile(file) {
-    window.open(file.preview)
-  }
-
-  handleViewMore() {
-    this.props.handleViewMore()
-  }
-
   render() {
     // Data
     const data = this.props.data
@@ -57,10 +61,9 @@ export default class TransactionDetail extends Component {
     const listing = transaction.listing
     const listing_data = transaction.listing_data
     const drawer = transaction.drawer
-    const attachments = transaction.attachments
     // Set transaction data
     const transaction_type = transaction.transaction_type
-    const contacts = transaction.contacts
+    const roles = transaction.roles
     // Set transaction property data
     let property
     let address
@@ -76,6 +79,12 @@ export default class TransactionDetail extends Component {
     let square_feet
     let title = 'No address'
     let subtitle
+
+    // Get main body height for drawers
+    const containing_body = this.refs.containing_body
+    let containing_body_height
+    if (containing_body)
+      containing_body_height = containing_body.clientHeight
 
     // If listing
     if (listing) {
@@ -102,11 +111,11 @@ export default class TransactionDetail extends Component {
       postal_code = property.address.postal_code
       title = address
       subtitle = `${address} ${city}, ${state} ${postal_code}`
-      mls_number = listing_data.mls_number
       bedroom_count = property.bedroom_count
       bathroom_count = property.bathroom_count
       square_feet = property.square_feet
     }
+
     let listing_status_indicator
     if (listing) {
       const status_color = listing_util.getStatusColor(listing.status)
@@ -160,14 +169,25 @@ export default class TransactionDetail extends Component {
     let title_area
     title_area = (
       <div>
-        <span style={ S('mr-10') }>{ title }</span> { price_area }
+        <span className="transaction-detail__title" style={ S('mr-10 pointer') } onClick={ this.props.setDrawerContent.bind(this, 'map', false) }>{ title }</span> { price_area }
       </div>
+    )
+
+    const tooltip = (
+      <Tooltip id="copied-tooltip">
+        Copied
+      </Tooltip>
     )
 
     let mls_link
     if (mls_number) {
       mls_link = (
-        <span>| <a href="#">MLS#: { mls_number }</a></span>
+        <span>
+          | MLS#:&nbsp;
+          <OverlayTrigger rootClose trigger="click" placement="bottom" overlay={ tooltip }>
+            <a href="#" className="copy-mls" data-clipboard-text={ mls_number }>{ mls_number }</a>
+          </OverlayTrigger>
+        </span>
       )
     }
     let subtitle_area
@@ -178,146 +198,11 @@ export default class TransactionDetail extends Component {
         </div>
       )
     }
-    // Drawer
-    let drawer_content
-    const drawer_height = window.innerHeight - 203
-    let drawer_wrap_style = {
-      ...S('absolute h-' + drawer_height + ' r-0 w-0 t-79'),
-      overflow: 'hidden'
-    }
-    const drawer_style = {
-      ...S('absolute h-' + drawer_height + ' z-100 bg-fff w-500'),
-      borderLeft: '6px solid #edf1f3'
-    }
-    let drawer_class
-    if (transaction.drawer_active)
-      drawer_class = 'active'
-    if (drawer) {
-      drawer_wrap_style = {
-        ...drawer_wrap_style,
-        ...S('w-500')
-      }
-      let attachments_markup
-      let file_icon_short
-      // console.log(attachments)
-      if (attachments) {
-        attachments_markup = attachments.map((file, i) => {
-          switch (file.type) {
-            case 'application/pdf':
-              file_icon_short = 'PDF'
-              break
-            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-              file_icon_short = 'DOC'
-              break
-            case 'text/plain':
-              file_icon_short = 'TXT'
-              break
-            default:
-              file_icon_short = 'FILE'
-          }
-
-          let file_image = (
-            <a href={ file.preview } target="_blank" className="pull-left" style={ S('ml-10 w-60 h-60 color-929292') }>
-              <i style={ S('font-50') } className="fa fa-file-o"></i>
-              { file_icon_short }
-            </a>
-          )
-          if (file.type === 'image/jpeg') {
-            file_image = (
-              <a href={ file.preview } target="_blank" className="pull-left" style={ S('w-60 h-60 ml-10 bg-url(' + file.preview + ') bg-cover bg-center br-2') }></a>
-            )
-          }
-          const file_style = {
-            ...S('h-80 pb-10 pt-10 color-929292 pointer'),
-            borderBottom: '1px solid #f7f9fa'
-          }
-          return (
-            <div className="transaction--file" key={ 'file-' + i } style={ file_style }>
-              <Button onClick={ this.props.deleteFile.bind(this, file) } style={ S('mt-10 mr-10 absolute r-0') } bsStyle="danger" className="pull-right delete">Delete</Button>
-              <div onClick={ this.openFile.bind(this, file) } className="pull-left">
-                { file_image }
-              </div>
-              <div onClick={ this.openFile.bind(this, file) } style={ S('w-350') } className="pull-left text-left">
-                <div style={ S('ml-10 color-444 font-14 mb-5') }>{ file.new_name ? file.new_name : file.name }</div>
-                <div style={ S('w-150 ml-10 font-12') }>Jan 15, 8:17am - Mark</div>
-                <div style={ S('w-150 ml-10 font-12') }>Shared with Shayan</div>
-              </div>
-              <div className="clearfix"></div>
-            </div>
-          )
-        })
-      }
-      const dropzone_style = {
-        ...S('w-100p h-100p pb-25'),
-        borderBottom: '1px solid #f7f9fa'
-      }
-      const doczone_height = window.innerHeight - 470
-      const doczone_style = {
-        ...S('absolute w-100p h-' + doczone_height),
-        overflow: 'scroll'
-      }
-      const drawer_header_style = S('bg-f7f9fa ml-5 br-3 p-12 font-18 color-4a4a4a')
-      if (drawer.content === 'docs') {
-        let doc_count
-        if (attachments && attachments.length)
-          doc_count = '(' + attachments.length + ')'
-        drawer_content = (
-          <div>
-            <div style={ drawer_header_style }>Documents { doc_count }</div>
-            <div className="text-center" style={ S('pt-30') }>
-              <Dropzone style={ dropzone_style }
-                onDragEnter={ this.handleDragEnter.bind(this) }
-                onDragLeave={ this.handleDragLeave.bind(this) }
-                onDrop={ this.drawerDrop.bind(this) }
-              >
-                <div style={ S('mb-10') }>
-                  <img src="/images/dashboard/transactions/drag-n-drop.png"/>
-                </div>
-                <div style={ S('color-929292') }>
-                  <span style={ S('font-16') }>DRAG & DROP</span><br />
-                  <span style={ S('font-14 color-bfc2c3') }>your files to upload, or <a href="#">browse</a></span>
-                </div>
-              </Dropzone>
-              <div style={ doczone_style }>
-                { attachments_markup }
-              </div>
-            </div>
-          </div>
-        )
-      }
-      if (drawer.content === 'contacts') {
-        drawer_content = (
-          <div>
-            <div style={ drawer_header_style }>Contacts</div>
-            <div>
-              {
-                contacts.map((contact) => {
-                  const contact_style = {
-                    ...S('pt-15 pb-15 pl-15'),
-                    borderBottom: '1px solid #f7f9fa'
-                  }
-                  return (
-                    <div key={ 'contact-' + contact.id } style={ contact_style }>
-                      <ProfileImage user={ contact }/>
-                      <div style={ S('ml-50 ') }>
-                        <div><b>{ contact.first_name } { contact.last_name }</b>, <span style={ S('color-929292') }>{ contact.roles[0] }</span></div>
-                        <div style={ S('color-929292') }>
-                          <div>{ contact.phone_number }{ contact.phone_number ? ' ,' : '' } <a style={{ textDecoration: 'none' }} href={ 'mailto:' + contact.email}>{ contact.email }</a></div>
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })
-              }
-            </div>
-          </div>
-        )
-      }
-    }
 
     let contacts_markup
-    if (contacts) {
-      contacts_markup = contacts.map(contact => {
+    if (roles) {
+      contacts_markup = roles.map(role => {
+        const contact = role.contact
         const contact_style = S('mb-20 mr-15 w-200 h-80')
         const info_style = {
           overflow: 'hidden',
@@ -329,7 +214,7 @@ export default class TransactionDetail extends Component {
             <div style={ S('ml-50') }>
               <div><b>{ contact.first_name } { contact.last_name }</b></div>
               <div style={ S('color-929292') }>
-                <div style={ info_style }>{ contact.roles[0] }</div>
+                <div style={ info_style }>{ role.role_types ? role.role_types[0] : '' }</div>
                 <div style={ info_style }>{ contact.phone_number }</div>
                 <div style={ info_style }><a style={{ textDecoration: 'none' }} href={ 'mailto:' + contact.email}>{ contact.email }</a></div>
               </div>
@@ -359,31 +244,9 @@ export default class TransactionDetail extends Component {
       current_file_num = current_file.index + 1
       current_file_name = current_file.name
       current_file_new_name = current_file.new_name
-      current_file_image = <div style={ S('w-100 h-100 p-15') }><i style={ S('font-60') } className="fa fa-file-o"></i></div>
+      current_file_image = <div className="center-block" style={ S('w-100 h-100 p-15') }><i style={ S('font-60 color-929292') } className="fa fa-file-o"></i></div>
       if (current_file.type === 'image/jpeg')
-        current_file_image = <div style={ S('bg-url(' + current_file.preview + ') bg-cover bg-center w-100 h-100') } src={ current_file.preview } />
-    }
-    // View more info
-    let view_more_info_markup
-    if (transaction.show_more_info) {
-      let contract_price_area
-      let association_fee_area
-      if (transaction.contract_price) {
-        contract_price_area = (
-          <div style={ S('mb-15 mr-20 pull-left') }><b>Contract Price:</b> <span style={ S('color-929292') }>${ helpers.numberWithCommas(transaction.contract_price) }</span></div>
-        )
-      }
-      if (transaction.listing.association_fee) {
-        association_fee_area = (
-          <div style={ S('mb-15 mr-20 pull-left') }><b>Association Fee:</b> <span style={ S('color-929292') }>${ helpers.numberWithCommas(transaction.listing.association_fee) }</span></div>
-        )
-      }
-      view_more_info_markup = (
-        <div>
-          { contract_price_area }
-          { association_fee_area }
-        </div>
-      )
+        current_file_image = <img className="center-block" src={ current_file.preview } style={ S(' w-100p h-100p maxw-200 maxh-200') } />
     }
 
     // Edit transaction
@@ -405,6 +268,54 @@ export default class TransactionDetail extends Component {
     const row_style = {
       borderBottom: '1px solid #f3f3f3'
     }
+    const btn_action_style = { ...S('w-35 h-35 pointer p-0 br-100 bc-ddd bw-1 solid'), ...{ outline: 'none' } }
+
+    let map_btn
+    if (transaction.listing && transaction.listing.property) {
+      map_btn = (
+        <button onClick={ this.props.setDrawerContent.bind(this, 'map', false) } type="button" className="btn btn-default" style={ { ...btn_action_style, ...S('mr-10') } }>
+          <img style={ S('mt-1n') } src={ `/images/dashboard/icons/drawer/map${drawer && drawer.content === 'map' ? '-active' : ''}.svg`}/>
+        </button>
+      )
+    }
+    // File viewer
+    let file_viewer
+    if (transaction.viewer) {
+      file_viewer = (
+        <FileViewer
+          data={ data }
+          closeFileViewer={ this.props.closeFileViewer }
+        />
+      )
+    }
+    // Calculate dom and cdom
+    let dom_area
+    let cdom_area
+    if (listing) {
+      if (listing.dom) {
+        const dom_days_arr = listing.dom.toString().split('.')
+        const dom_miliseconds = dom_days_arr[0]
+        const dom_days = helpers.getDaysFromMiliseconds(dom_miliseconds) + ' days'
+        dom_area = (
+          <div style={ S('mb-15 mr-20 pull-left') }><b>Days on Market:</b> <span style={ S('color-929292') }>{ dom_days }</span></div>
+        )
+      }
+      if (listing.cdom) {
+        const cdom_days_arr = listing.cdom.toString().split('.')
+        const cdom_miliseconds = cdom_days_arr[0]
+        const cdom_days = helpers.getDaysFromMiliseconds(cdom_miliseconds) + ' days'
+        cdom_area = (
+          <div style={ S('mb-15 mr-20 pull-left') }><b>Current Days on Market:</b> <span style={ S('color-929292') }>{ cdom_days }</span></div>
+        )
+      }
+    }
+
+    let association_fee_area
+    if (listing && listing.association_fee) {
+      association_fee_area = (
+        <div style={ S('mb-15 mr-20 pull-left') }><b>Association Fee:</b> <span style={ S('color-929292') }>${ helpers.numberWithCommas(listing.association_fee) }</span></div>
+      )
+    }
     return (
       <div style={ S('minw-800 z-0') }>
         <Dropzone
@@ -414,16 +325,34 @@ export default class TransactionDetail extends Component {
           onDragLeave={ this.handleDragLeave.bind(this) }
           onDrop={ this.handleAddDocs.bind(this) }
         >
-          <div style={ S('mt-40 absolute r-10 z-100') }>
-            <img onClick={ this.props.setDrawerContent.bind(this, 'contacts', false) } style={ S('w-30 h-30 mr-10 pointer') } src={ `/images/dashboard/icons/drawer/contacts${drawer && drawer.content === 'contacts' ? '-active' : ''}.svg`} />
-            <img onClick={ this.props.setDrawerContent.bind(this, 'docs', false) } style={ S('w-30 h-30 mt-1n pointer') } src={ `/images/dashboard/icons/drawer/docs${drawer && drawer.content === 'docs' ? '-active' : ''}.svg`} />
+          <div style={ S('mt-8 absolute r-10 z-100') }>
+            { map_btn }
+            <button onClick={ this.props.setDrawerContent.bind(this, 'contacts', false) } type="button" className="btn btn-default" style={ { ...btn_action_style, ...S('mr-10') } }>
+              <img style={ S('mt-3n') } src={ `/images/dashboard/icons/drawer/contacts${drawer && drawer.content === 'contacts' ? '-active' : ''}.svg`}/>
+            </button>
+            <button onClick={ this.props.setDrawerContent.bind(this, 'docs', false) } type="button" className="btn btn-default" style={ btn_action_style }>
+              <img style={ S('mt-3n') } src={ `/images/dashboard/icons/drawer/docs${drawer && drawer.content === 'docs' ? '-active' : ''}.svg`}/>
+            </button>
           </div>
-          <div style={ drawer_wrap_style }>
-            <div style={ drawer_style } className={ 'transaction-detail__drawer ' + drawer_class }>
-              <div onClick={ this.props.closeDrawer } style={ S('mt-5 mr-15 fw-400 font-32') }className="close pull-right">&times;</div>
-              { drawer_content }
-            </div>
-          </div>
+          <Drawer
+            data={ data }
+            closeDrawer={ this.props.closeDrawer }
+            deleteFile={ this.props.deleteFile }
+            handleDragEnter={ this.handleDragEnter.bind(this) }
+            handleDragLeave={ this.handleDragLeave.bind(this) }
+            drawerDrop={ this.drawerDrop.bind(this) }
+            openFileViewer={ this.props.openFileViewer.bind(this) }
+            filterContacts={ this.props.filterContacts }
+            setContactActive={ this.props.setContactActive }
+            setFilteredContacts={ this.props.setFilteredContacts }
+            hideContactsForm={ this.props.hideContactsForm }
+            removeContact={ this.props.removeContact }
+            showContactModal={ this.props.showContactModal }
+            hideModal={ this.props.hideModal }
+            addContact={ this.props.addContact }
+            deleteContact={ this.props.deleteContact }
+            showNewContentInitials={ this.props.showNewContentInitials }
+          />
           <div className="transaction-detail__title" style={ title_header_style }>
             <div className="pull-left">
               <h4 style={ S('font-28') }>{ title_area }</h4>
@@ -435,8 +364,8 @@ export default class TransactionDetail extends Component {
             <div className="clearfix"></div>
             <div style={ S('color-929394 mb-20') }>{ subtitle_area }</div>
           </div>
-          <div style={ S('relative') }>
-            <div style={ S('minh-380 pl-15 pr-15') }>
+          <div ref="containing_body" style={ S('relative') }>
+            <div style={ S('pl-15 pr-15') }>
               <div style={ S(carousel_wh + ' mr-15 mb-30') } className="pull-left">
                 { listing_images }
               </div>
@@ -449,11 +378,12 @@ export default class TransactionDetail extends Component {
                   <div style={ S('mb-15 mr-20 pull-left') }><b>Beds:</b> <span style={ S('color-929292') }>{ bedroom_count }</span></div>
                   <div style={ S('mb-15 mr-20 pull-left') }><b>Baths:</b> <span style={ S('color-929292') }>{ bathroom_count }</span></div>
                   <div style={ S('mb-15 mr-20 pull-left') }><b>Sqft:</b> <span style={ S('color-929292') }>{ square_feet }</span></div>
-                  { view_more_info_markup }
+                  { dom_area }
+                  { cdom_area }
+                  { association_fee_area }
                   <div className="clearfix"></div>
                 </div>
                 <div style={ S('mb-30') }>
-                  <Button onClick={ this.handleViewMore.bind(this) } style={ S('bc-929292 color-929292 pl-20 pr-20 mr-15') }><b>View More</b></Button>
                   <Button onClick={ this.props.showEditModal.bind(this) } style={ S('bc-3388ff color-3388ff pl-40 pr-40 mr-15') }><b>Edit</b></Button>
                   <Button style={ S('pl-40 pr-40') } className={ data.deleting_transaction && data.deleting_transaction === transaction.id ? 'disabled' : '' } onClick={ this.props.deleteTransaction.bind(this, transaction.id) } type="button" bsStyle="danger">
                     { data.deleting_transaction && data.deleting_transaction === transaction.id ? 'Deleting...' : 'Delete' }
@@ -463,7 +393,13 @@ export default class TransactionDetail extends Component {
                   { contacts_markup }
                 </div>
               </div>
+              <div className="clearfix"></div>
             </div>
+            <TasksModule
+              data={ data }
+              module_type="transaction"
+              containing_body_height={ containing_body_height }
+            />
           </div>
         </Dropzone>
         <div className={ 'dropzone__overlay' + overlay_active}>
@@ -481,15 +417,26 @@ export default class TransactionDetail extends Component {
             </div>
           </div>
         </div>
-        <Modal show={ data.show_document_modal } onHide={ this.props.hideModal.bind(this) }>
+        <Modal dialogClassName="modal-800" show={ data.show_document_modal } onHide={ this.props.hideModal.bind(this) }>
           <form onSubmit={ this.uploadFile.bind(this) }>
             <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
-              <Modal.Title style={ S('font-14') }>Document { current_file_num } of { document_modal_file_count }</Modal.Title>
+              <Modal.Title style={ S('font-14') }>Upload { document_modal_file_count > 1 ? 'multiple files' : 'a file' } <div style={ S('absolute t-15 l-10p mr-20p w-80p z-0 text-center') }>{current_file_num} of { document_modal_file_count }</div></Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <div style={ S('mb-10') }>{ current_file_image }</div>
-              <label>Document Title</label>
-              <Input ref="file_name" onChange={ this.handleNameChange.bind(this) } value={ editing_name ? current_file_new_name : current_file_name } type="text" />
+              <div className="pull-left" style={ S('w-200 mr-10') }>
+                <div style={ S('mb-10 pl-10 pr-10') }>{ current_file_image }</div>
+              </div>
+              <div className="pull-left" style={ S('w-360') }>
+                <label>Title</label>
+                <Input ref="file_name" onChange={ this.handleNameChange.bind(this) } value={ editing_name ? current_file_new_name : current_file_name } type="text" />
+                <div style={ S('color-bcc3c6 font-13 mb-15') }>Titles are the easiest ways to search for files: it pays to be descriptive.</div>
+                <label>Make this file Private (coming soon)</label>
+                <div style={ S('color-bcc3c6 font-13') }>
+                  Files uploaded are by default Public and can be seen by
+                  your clients and whoever has access to this transaction.
+                </div>
+              </div>
+              <div className="clearfix"></div>
             </Modal.Body>
             <Modal.Footer>
               <Button bsStyle="link" onClick={ this.props.hideModal.bind(this) }>Cancel</Button>
@@ -499,7 +446,7 @@ export default class TransactionDetail extends Component {
             </Modal.Footer>
           </form>
         </Modal>
-        <Modal dialogClassName="property-modal" show={ transaction.show_edit_modal } onHide={ this.props.hideModal.bind(this) }>
+        <Modal dialogClassName="modal-800" show={ transaction.show_edit_modal } onHide={ this.props.hideModal.bind(this) }>
           <form onSubmit={ this.props.editTransaction.bind(this) }>
             <Modal.Body style={ S('p-0') } className="flexbox">
               <Col xs={6} style={ S('p-0') }>
@@ -573,6 +520,7 @@ export default class TransactionDetail extends Component {
             </Modal.Body>
           </form>
         </Modal>
+        { file_viewer }
       </div>
     )
   }
@@ -591,7 +539,18 @@ TransactionDetail.propTypes = {
   uploadFile: React.PropTypes.func,
   deleteFile: React.PropTypes.func,
   handleNameChange: React.PropTypes.func,
-  handleViewMore: React.PropTypes.func,
   showEditModal: React.PropTypes.func,
-  editTransaction: React.PropTypes.func
+  editTransaction: React.PropTypes.func,
+  openFileViewer: React.PropTypes.func,
+  closeFileViewer: React.PropTypes.func,
+  filterContacts: React.PropTypes.func,
+  setContactActive: React.PropTypes.func,
+  setFilteredContacts: React.PropTypes.func,
+  hideContactsForm: React.PropTypes.func,
+  removeContact: React.PropTypes.func,
+  showContactModal: React.PropTypes.func,
+  addContact: React.PropTypes.func,
+  deleteContact: React.PropTypes.func,
+  showNewContentInitials: React.PropTypes.func,
+  getTransaction: React.PropTypes.func
 }

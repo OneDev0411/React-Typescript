@@ -10,15 +10,18 @@
 @import 'components/global';
 @import 'components/nav';
 @import 'components/sidebar';
+@import 'components/modals';
 
 // Pages
 @import 'components/pages/landing';
 @import 'components/pages/dashboard';
 @import 'components/pages/transactions';
+@import 'components/pages/tasks';
 
 // Modules
 @import 'components/modules/add-contacts';
 @import 'components/modules/search-listings';
+@import 'components/modules/drawer';
 
 // Vendor
 @import 'vendor/react-day-picker/style.scss';

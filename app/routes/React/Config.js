@@ -36,6 +36,8 @@ export default (
     <Route path="dashboard/tasks" component={Tasks}/>
     <Route path="dashboard/transactions" component={Transactions}/>
     <Route path="dashboard/transactions/new" component={NewTransaction}/>
+    <Route path="dashboard/transactions/:id" component={Transactions}/>
+    <Route path="dashboard/transactions/:id/attachments/:id" component={Transactions}/>
     <Route path="verify/:slug" component={Verify}/>
     <Route path="password/:slug" component={Password}/>
     <Route path="*" component={NoMatch}/>
