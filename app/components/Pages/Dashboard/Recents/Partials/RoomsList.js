@@ -23,7 +23,6 @@ export default class RoomsList extends Component {
     const data = this.props.data
     let rooms = data.rooms
     const current_room = data.current_room
-
     if (rooms && !rooms.length)
       return <div style={ S('ml-20 mt-20') }>No rooms yet.</div>
 
@@ -33,6 +32,10 @@ export default class RoomsList extends Component {
       rooms = data.filtered_rooms
 
     if (rooms) {
+      // Sort by updates
+      rooms = _.sortBy(rooms, room => {
+        return -room.latest_message.updated_at
+      })
       rooms_list = rooms.map((room, i) => {
         // Profile image
         let author

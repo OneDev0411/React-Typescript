@@ -226,6 +226,11 @@ export default class NewTransaction extends Component {
     AppStore.emitChange()
   }
 
+  setListingActive(active_listing) {
+    AppStore.data.new_transaction.active_listing = active_listing
+    AppStore.emitChange()
+  }
+
   removeAddedListing(e) {
     e.preventDefault()
     delete AppStore.data.new_transaction.listing_added

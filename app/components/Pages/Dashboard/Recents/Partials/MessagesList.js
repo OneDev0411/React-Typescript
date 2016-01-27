@@ -150,7 +150,7 @@ export default class MessagesList extends Component {
         </div>
         <Modal show={ data.show_contacts_modal } onHide={ this.props.hideModal }>
           <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
-           <Modal.Title style={ S('font-14') }>Share Task <span style={ S('color-929292 fw-400') }>(use any email or any phone number)</span></Modal.Title>
+           <Modal.Title style={ S('font-14') }>Invite contact <span style={ S('color-929292 fw-400') }>(use any email or any phone number)</span></Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <AddContactsModule

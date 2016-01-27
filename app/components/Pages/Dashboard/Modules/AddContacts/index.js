@@ -49,12 +49,6 @@ export default class AddContactsModule extends Component {
     AppStore.emitChange()
   }
 
-  // Set list item active
-  setListingActive(index) {
-    AppStore.data.new_transaction.active_listing = index
-    AppStore.emitChange()
-  }
-
   hideContactsForm() {
     AppStore.data.filtered_contacts = null
     AppStore.emitChange()
@@ -305,28 +299,26 @@ export default class AddContactsModule extends Component {
       overflow: 'scroll'
     }
     let module_style = S('relative')
-    let search_contact_input_style = S('w-600')
-    // If transaction
+    let search_contact_input_style = S('w-600 mr-15')
+
+    // If transaction edit
     if (module_type === 'transaction') {
       module_style = {
         ...module_style,
         ...S('w-500 ml-10 mr-10')
       }
-      search_contact_input_style = S('w-270')
+      search_contact_input_style = S('w-270 mr-15')
       filter_scroll_style.width = 475
     }
-    // If task
-    if (module_type === 'share-task') {
+
+    // If sharing a task or inviting to a room
+    if (module_type === 'share-task' || module_type === 'invite-room') {
       module_style = {
         ...module_style,
         ...S('w-100p ml-10 mr-10')
       }
-      search_contact_input_style = S('w-425')
+      search_contact_input_style = S('w-425 mr-15')
       filter_scroll_style.width = 475
-    }
-    search_contact_input_style = {
-      ...search_contact_input_style,
-      ...S('mr-15')
     }
 
     let filtered_contacts_list
