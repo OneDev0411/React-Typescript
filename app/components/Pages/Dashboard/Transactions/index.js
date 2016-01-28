@@ -254,12 +254,12 @@ export default class Transactions extends Component {
 
   dragEnter() {
     this.setDrawerContent('docs', true)
-    AppStore.data.current_transaction.drag_enter = true
+    AppStore.data.current_transaction.overlay_active = true
     AppStore.emitChange()
   }
 
   dragLeave() {
-    delete AppStore.data.current_transaction.drag_enter
+    delete AppStore.data.current_transaction.overlay_active
     AppStore.emitChange()
   }
 

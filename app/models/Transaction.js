@@ -2,8 +2,8 @@
 import es6Promise from 'es6-promise'
 es6Promise.polyfill()
 import 'isomorphic-fetch'
-import config from '../../config/public'
 import superagent from 'superagent'
+import config from '../../config/public'
 
 export default {
   create: (params, callback) => {
@@ -209,11 +209,9 @@ export default {
   uploadFiles: (params, callback) => {
     const api_url = config.api_url
     const endpoint = api_url + '/transactions/' + params.id + '/attachments'
-    // const endpoint = 'http://5.34.213.159:3078/transactions/ecc2792c-b301-11e5-b176-238dfa401b4f/attachments'
     const request = superagent.post(endpoint)
     const files = params.files
     request.set('authorization', 'Bearer ' + params.access_token)
-    // request.set('authorization', 'Bearer ZTdkZGU2MTAtYmRmMy0xMWU1LWFiYzAtM2IyNGZiZDY0ODYx')
     files.forEach(file => {
       const info = {
         name: file.name,

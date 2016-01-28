@@ -294,6 +294,32 @@ export default class Dashboard extends Component {
     AppStore.data.mounted.push('recents')
   }
 
+  // Add file
+  handleDragEnter() {
+    AppStore.data.current_room.overlay_active = true
+    AppStore.emitChange()
+  }
+
+  handleDragLeave() {
+    delete AppStore.data.current_room.overlay_active
+    AppStore.emitChange()
+  }
+
+  uploadFiles(files) {
+    const data = this.props.data
+    const user = data.user
+    const room = data.current_room
+    delete AppStore.data.current_room.overlay_active
+    AppStore.data.current_room.uploading_files = true
+    AppStore.emitChange()
+    AppDispatcher.dispatch({
+      action: 'upload-files-to-room',
+      user,
+      room,
+      files
+    })
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -312,6 +338,9 @@ export default class Dashboard extends Component {
             createRoom={ this.createRoom }
             getMessages={ this.getMessages }
             addContactsToRoom={ this.addContactsToRoom }
+            handleDragEnter={ this.handleDragEnter }
+            handleDragLeave={ this.handleDragLeave }
+            uploadFiles={ this.uploadFiles.bind(this) }
           />
         </main>
         <audio ref="notif_sound" id="notif-sound">

@@ -23,10 +23,11 @@ export default (user, room, contacts) => {
   }
   Room.inviteContacts(params, (err, response) => {
     // Success
-    if (response.status === 'success')
+    if (response.status === 'success') {
       delete AppStore.data.contacts_added
       delete AppStore.data.adding_contacts
       delete AppStore.data.show_contacts_modal
       AppStore.emitChange()
+    }
   })
 }

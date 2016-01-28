@@ -8,6 +8,7 @@ import Dropzone from 'react-dropzone'
 
 // Partials
 import ProfileImage from '../../Partials/ProfileImage'
+import DropzoneOverlay from '../../Partials/DropzoneOverlay'
 import Drawer from './Drawer'
 import FileViewer from './FileViewer'
 import TasksModule from '../../Modules/Tasks'
@@ -23,10 +24,6 @@ export default class TransactionDetail extends Component {
     }
   }
 
-  handleAddDocs(files) {
-    this.props.addDocs(files)
-  }
-
   handleDragEnter() {
     this.props.dragEnter()
   }
@@ -35,10 +32,14 @@ export default class TransactionDetail extends Component {
     this.props.dragLeave()
   }
 
+  handleAddDocs(files) {
+    this.props.addDocs(files)
+  }
+
   drawerDrop(files) {
     // to prevent dupes
     const data = this.props.data
-    if (data.current_transaction.drag_enter)
+    if (data.current_transaction.overlay_active)
       return false
     this.handleAddDocs(files)
   }
@@ -227,9 +228,6 @@ export default class TransactionDetail extends Component {
       ...S('h-80 mb-15 pl-15 pr-15'),
       borderBottom: '1px solid #edf1f3'
     }
-    let overlay_active = ' hidden'
-    if (transaction.drag_enter)
-      overlay_active = ' active'
     const document_modal = data.document_modal
     let current_file_name
     let current_file_new_name
@@ -316,6 +314,8 @@ export default class TransactionDetail extends Component {
         <div style={ S('mb-15 mr-20 pull-left') }><b>Association Fee:</b> <span style={ S('color-929292') }>${ helpers.numberWithCommas(listing.association_fee) }</span></div>
       )
     }
+    // Dropzone overlay
+    const overlay_active = transaction.overlay_active
     return (
       <div style={ S('minw-800 z-0') }>
         <Dropzone
@@ -394,21 +394,11 @@ export default class TransactionDetail extends Component {
             />
           </div>
         </Dropzone>
-        <div className={ 'dropzone__overlay' + overlay_active}>
-          <div style={ S('w-100p h-100p text-center fixed t-0 l-0 z-1') } className="dropzone__bg"></div>
-          <div style={ S('w-100p h-100p text-center fixed t-0 l-0 z-2') } className="flexbox dropzone--message">
-            <div className="center-block" style={ S('relative p-20 mt-20p w-700 h-300 bg-fff br-2 color-929292') }>
-              <div style={ S('absolute t-90 r-130n') }>
-                <img src="/images/dashboard/transactions/drop-arrow.png"/>
-              </div>
-              <div style={ S('h-110 relative t-60n') }>
-                <img src="/images/dashboard/transactions/drop-here.png"/>
-              </div>
-              <div style={ S('font-36 mb-10') }>Drop to add to <br/><span className="text-primary">{ title }</span></div>
-              <div style={ S('font-20') }>Drop files like pdfs, word docs and images</div>
-            </div>
-          </div>
-        </div>
+        <DropzoneOverlay
+          overlay_active={ overlay_active }
+          title={ title }
+          context="transaction"
+        />
         <Modal dialogClassName="modal-800" show={ data.show_document_modal } onHide={ this.props.hideModal.bind(this) }>
           <form onSubmit={ this.uploadFile.bind(this) }>
             <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>

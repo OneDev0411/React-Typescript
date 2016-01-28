@@ -2,7 +2,7 @@
 import es6Promise from 'es6-promise'
 es6Promise.polyfill()
 import 'isomorphic-fetch'
-
+import superagent from 'superagent'
 import config from '../../config/public'
 
 export default {
@@ -147,6 +147,27 @@ export default {
     })
     .then(response => {
       return callback(false, response)
+    })
+  },
+  uploadFiles: (params, callback) => {
+    const api_url = config.api_url
+    const endpoint = api_url + '/media'
+    const request = superagent.post(endpoint)
+    const files = params.files
+    request.set('authorization', 'Bearer ' + params.access_token)
+    files.forEach(file => {
+      const info = {
+        name: file.name,
+        original_name: file.name,
+        title: file.name
+      }
+      request.attach('media', file)
+      request.field('info', JSON.stringify(info))
+    })
+    request.end((err, res) => {
+      if (err)
+        return callback(err, res)
+      return callback(err, res)
     })
   }
 }

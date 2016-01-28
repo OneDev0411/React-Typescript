@@ -16,6 +16,7 @@ import deleteContact from '../actions/user/delete-contact'
 // Rooms
 import createRoom from '../actions/rooms/create-room'
 import inviteContacts from '../actions/rooms/invite-contacts'
+import uploadFilesToRoom from '../actions/rooms/upload-files'
 
 // Messages
 import createMessage from '../actions/messages/create-message'
@@ -56,6 +57,7 @@ AppDispatcher.register(payload => {
   let comment
   let title
   let scroll_height
+  let image_url
 
   // Add Contact Module
   let contact
@@ -143,7 +145,8 @@ AppDispatcher.register(payload => {
       user = payload.user
       room = payload.room
       comment = payload.comment
-      createMessage(user, room, comment)
+      image_url = payload.image_url
+      createMessage(user, room, comment, image_url)
       break
 
     case 'get-messages':
@@ -195,6 +198,10 @@ AppDispatcher.register(payload => {
       user = payload.user
       q = payload.q
       searchListing(user, q)
+      break
+
+    case 'upload-files-to-room':
+      uploadFilesToRoom(payload.user, payload.room, payload.files)
       break
 
     default:
