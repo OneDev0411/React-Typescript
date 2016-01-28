@@ -103,8 +103,8 @@ export default class MainContent extends Component {
       overlay_title = data.current_room.title
     }
     let uploading_area
-    const is_uploading = data.current_room.uploading_files
-    if (is_uploading) {
+    if (data.current_room && data.current_room.uploading_files) {
+      const is_uploading = data.current_room.uploading_files
       uploading_area = (
         <div style={ S('p-20 w-100p relative t-35n')}>
           <ProgressBar active striped bsStyle="success" now={100} />
