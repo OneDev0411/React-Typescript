@@ -104,7 +104,6 @@ export default class MainContent extends Component {
     }
     let uploading_area
     if (data.current_room && data.current_room.uploading_files) {
-      const is_uploading = data.current_room.uploading_files
       uploading_area = (
         <div style={ S('p-20 w-100p relative t-35n')}>
           <ProgressBar active striped bsStyle="success" now={100} />
