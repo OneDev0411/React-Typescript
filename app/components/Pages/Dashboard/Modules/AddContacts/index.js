@@ -61,8 +61,6 @@ export default class AddContactsModule extends Component {
       contact_id,
       module_type
     })
-    AppStore.data.new_transaction.contacts_added = AppStore.data.contacts_added
-    AppStore.emitChange()
   }
 
   showNewContentInitials() {
@@ -312,7 +310,7 @@ export default class AddContactsModule extends Component {
     }
 
     // If sharing a task or inviting to a room
-    if (module_type === 'share-task' || module_type === 'invite-room') {
+    if (module_type === 'share-task' || module_type === 'room') {
       module_style = {
         ...module_style,
         ...S('w-100p ml-10 mr-10')

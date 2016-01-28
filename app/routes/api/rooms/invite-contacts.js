@@ -1,14 +1,13 @@
-// api/posts/add-user-to-room.js
+// api/posts/invite-contacts.js
 module.exports = (app, config) => {
-  
-  app.post('/api/add-user-to-room',(req, res) => {
+  app.post('/api/invite-contacts', (req, res) => {
     const api_url = config.api.url
     const room_id = req.body.room_id
-    const endpoint = api_url + '/rooms/' + room_id + '/users'
-    const users = req.body.users
+    const endpoint = api_url + '/invitations'
+    const invitations = req.body.invitations
     const access_token = req.body.access_token
     const request_object = {
-      users
+      invitations
     }
     fetch(endpoint,{
       method: 'post',
@@ -19,7 +18,6 @@ module.exports = (app, config) => {
       body: JSON.stringify(request_object)
     })
     .then(response => {
-      console.log(response)
       if (response.status >= 400) {
         var error = {
           status: 'error',

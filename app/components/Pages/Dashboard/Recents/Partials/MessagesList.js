@@ -155,7 +155,7 @@ export default class MessagesList extends Component {
           <Modal.Body>
             <AddContactsModule
               data={ data }
-              module_type="invite-room"
+              module_type="room"
             />
           </Modal.Body>
           <Modal.Footer style={ { border: 'none' } }>

@@ -88,7 +88,20 @@ export default class Dashboard extends Component {
   }
 
   addContactsToRoom() {
-    console.log('added')
+    const contacts_added = AppStore.data.contacts_added
+    const user = AppStore.data.user
+    const room = this.props.data.current_room
+    if (contacts_added && contacts_added.room) {
+      AppStore.data.adding_contacts = true
+      AppStore.emitChange()
+      const contacts = contacts_added.room
+      AppDispatcher.dispatch({
+        action: 'invite-contacts',
+        user,
+        room,
+        contacts
+      })
+    }
   }
 
   createRoom(title) {
@@ -245,14 +258,14 @@ export default class Dashboard extends Component {
       const current_room = AppStore.data.current_room
       // If in this room
       if (current_room.id === room.id) {
-        if (data.user.id === message.author.id)
+        if (message.author && data.user.id === message.author.id)
           message.fade_in = true
         AppStore.data.messages.push(message)
         const rooms = AppStore.data.rooms
         const current_room_index = _.findIndex(rooms, { id: current_room.id })
         AppStore.data.rooms[current_room_index].latest_message = message
         AppStore.emitChange()
-        if (data.user.id !== message.author.id)
+        if (message.author && data.user.id !== message.author.id)
           this.checkNotification(message)
       }
     })

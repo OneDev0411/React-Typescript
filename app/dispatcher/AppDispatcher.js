@@ -15,6 +15,7 @@ import editContact from '../actions/user/edit-contact'
 import deleteContact from '../actions/user/delete-contact'
 // Rooms
 import createRoom from '../actions/rooms/create-room'
+import inviteContacts from '../actions/rooms/invite-contacts'
 
 // Messages
 import createMessage from '../actions/messages/create-message'
@@ -132,6 +133,10 @@ AppDispatcher.register(payload => {
     case 'get-contacts':
       user = payload.user
       getContacts(user)
+      break
+
+    case 'invite-contacts':
+      inviteContacts(payload.user, payload.room, payload.contacts)
       break
 
     case 'create-message':
