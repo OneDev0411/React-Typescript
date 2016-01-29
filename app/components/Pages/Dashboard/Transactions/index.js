@@ -35,6 +35,9 @@ export default class Transactions extends Component {
         delete AppStore.data.new_transaction.saved
       }, 3000)
     }
+    // Delete current task
+    delete AppStore.data.current_task
+    AppStore.emitChange()
   }
 
   componentDidUpdate() {
@@ -367,12 +370,10 @@ export default class Transactions extends Component {
         // Dates
         const important_dates = transaction.important_dates
         let closing_date
+        let friendly_date
         if (important_dates) {
           closing_date = _.result(_.findWhere(important_dates, { title: 'closing' }), 'due_date')
-          if (closing_date) {
-            closing_date = closing_date.toString()
-            closing_date = closing_date.replace('T00:00:00.000Z', '')
-          }
+          friendly_date = helpers.friendlyDate(closing_date)
         }
         if (transaction.listing) {
           listing = transaction.listing
@@ -401,11 +402,6 @@ export default class Transactions extends Component {
               <span style={ S('font-26 relative t-3 color-' + status_color) }>&#8226;</span> { listing.status }
             </div>
           )
-        }
-        let friendly_date
-        if (closing_date) {
-          const transaction_time = helpers.convertDateToTime(closing_date)
-          friendly_date = helpers.friendlyDate(transaction_time)
         }
         let client_name
         if (clients && clients[0])
