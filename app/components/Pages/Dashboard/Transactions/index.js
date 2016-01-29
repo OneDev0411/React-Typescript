@@ -28,16 +28,24 @@ export default class Transactions extends Component {
   componentDidMount() {
     this.getContacts()
     this.getTransactions()
+    delete AppStore.data.current_task
+    AppStore.emitChange()
     // If coming from redirect
     if (AppStore.data.new_transaction && AppStore.data.new_transaction.redirect_to) {
       setTimeout(() => {
         delete AppStore.data.new_transaction.redirect_to
         delete AppStore.data.new_transaction.saved
+        AppStore.emitChange()
       }, 3000)
     }
-    // Delete current task
-    delete AppStore.data.current_task
-    AppStore.emitChange()
+    // From Link to single transaction
+    const params = this.props.params
+    const data = this.props.data
+    if (params && params.id) {
+      const transactions = data.transactions
+      const transaction = _.findWhere(transactions, { id: params.id })
+      this.handleClickTransaction(transaction)
+    }
   }
 
   componentDidUpdate() {
@@ -342,13 +350,13 @@ export default class Transactions extends Component {
     })
   }
 
-  getTransaction(transaction) {
+  getTransaction(id) {
     const data = this.props.data
     const user = data.user
     TransactionDispatcher.dispatch({
       action: 'get-transaction',
       user,
-      id: transaction.id
+      id
     })
   }
 
@@ -370,10 +378,12 @@ export default class Transactions extends Component {
         // Dates
         const important_dates = transaction.important_dates
         let closing_date
-        let friendly_date
         if (important_dates) {
           closing_date = _.result(_.findWhere(important_dates, { title: 'closing' }), 'due_date')
-          friendly_date = helpers.friendlyDate(closing_date)
+          if (closing_date) {
+            closing_date = closing_date.toString()
+            closing_date = closing_date.replace('T00:00:00.000Z', '')
+          }
         }
         if (transaction.listing) {
           listing = transaction.listing
@@ -402,6 +412,10 @@ export default class Transactions extends Component {
               <span style={ S('font-26 relative t-3 color-' + status_color) }>&#8226;</span> { listing.status }
             </div>
           )
+        }
+        let friendly_date
+        if (closing_date) {
+          friendly_date = helpers.friendlyDate(closing_date)
         }
         let client_name
         if (clients && clients[0])

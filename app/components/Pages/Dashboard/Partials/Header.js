@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { Nav, NavItem } from 'react-bootstrap'
 import S from 'shorti'
+import _ from 'lodash'
 
 export default class Header extends Component {
 
@@ -32,10 +33,14 @@ export default class Header extends Component {
     if (path.indexOf('/dashboard/transactions') !== -1) {
       const has_s = !transactions || transactions.length !== 1 ? 's' : ''
       title = `${transactions ? transactions.length : ''} Transaction${has_s}`
-      const transaction_tabs = data.transaction_tabs
+      let transaction_tabs = data.transaction_tabs
       const current_transaction = data.current_transaction
       let transaction_tabs_markup
       if (transaction_tabs) {
+        // Always unique
+        transaction_tabs = _.uniq(transaction_tabs, transaction => {
+          return transaction.id
+        })
         transaction_tabs_markup = transaction_tabs.map(transaction => {
           let tab_title = 'No Address'
           const listing = transaction.listing

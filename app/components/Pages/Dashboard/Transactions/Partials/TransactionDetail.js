@@ -17,7 +17,7 @@ export default class TransactionDetail extends Component {
 
   componentDidMount() {
     const transaction = this.props.data.current_transaction
-    this.props.getTransaction(transaction)
+    this.props.getTransaction(transaction.id)
     if (typeof window !== 'undefined') {
       const clipboard = require('clipboard')
       new clipboard('.copy-mls')

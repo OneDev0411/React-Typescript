@@ -161,10 +161,11 @@ export default class AddListing extends Component {
         listing_full_address = property.address.street_full + ' ' + property.address.city + ' ' + property.address.state + ' ' + property.address.postal_code
       }
       listing_added_markup = (
-        <div style={ S('h-25 relative bg-3388ff br-100 color-fff p-3 pl-0 pr-10 mb-10 mr-10') } className="pull-left">
+        <div style={ S('h-50 mt-30 relative br-100 p-3 pl-0 pr-10 mb-10 mr-10 w-500') } className="pull-left">
           <div style={ S('w-25 h-25 bg-cover bg-url(' + cover_image_url + ') l-0 t-0 absolute br-100') }></div>
-          <div style={ S('ml-30') }>
-            <span>{ listing_full_address }</span>&nbsp;&nbsp;<span onClick={ this.props.removeAddedListing.bind(this) } style={ S('pointer') }>x</span>
+          <div style={ S('ml-50') }>
+            <div className="close pull-right" onClick={ this.props.removeAddedListing.bind(this) } style={ S('pointer') }>&times;</div>
+            <div>{ listing_full_address }</div>
           </div>
         </div>
       )
@@ -198,15 +199,13 @@ export default class AddListing extends Component {
         <div style={ S('mb-20') }>
           <h1>We’re almost done! Do you have a property listing in mind?</h1>
         </div>
-        <div style={ S('h-25') }>
-          { listing_added_markup }
-        </div>
         <div style={ S('maxw-820') }>
           <Input ref="q" onKeyDown={ this.navListingList.bind(this) } onKeyUp={ this.searchListings.bind(this) } className="pull-left" style={ S('w-600') } type="text" placeholder="Enter an address or MLS number"/>
           <span className="pull-left" style={ S('w-30 ml-15 mt-8 color-666') }>OR</span>
           <Button onClick={ this.props.showListingModal.bind(this, 'new') } className="pull-left" style={ S('w-160') } bsStyle="primary" type="button">
             Add New Property
           </Button>
+          { listing_added_markup }
           <Modal dialogClassName="modal-800" show={ data.new_transaction.show_listing_modal } onHide={ this.props.hideModal.bind(this) }>
             <form onSubmit={ this.props.addCustomListingInfo.bind(this) }>
               <Modal.Body style={ S('p-0') } className="flexbox">
