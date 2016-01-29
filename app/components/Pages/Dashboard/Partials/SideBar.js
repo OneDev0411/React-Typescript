@@ -29,7 +29,7 @@ export default class SideBar extends Component {
     if (path === '/dashboard/tasks')
       active.tasks = 'active'
 
-    if (path === '/dashboard/transactions' || path === '/dashboard/transactions/new')
+    if (path.indexOf('/dashboard/transactions') !== -1)
       active.transactions = 'active'
 
     // User info
