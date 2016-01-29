@@ -1,5 +1,6 @@
 // Modules/Tasks/Partials/Transaction.js
 import React, { Component } from 'react'
+import { Link } from 'react-router'
 import S from 'shorti'
 import helpers from '../../../../../../utils/helpers'
 import listing_util from '../../../../../../utils/listing'
@@ -32,7 +33,7 @@ export default class Transaction extends Component {
     if (transaction.contract_price)
       contract_price = `$${helpers.numberWithCommas(transaction.contract_price)}`
     return (
-      <div>
+      <Link to={ '/dashboard/transactions/' + transaction.id }>
         <div style={ S('absolute r-10 mt-10 mr-10 color-a1bde4') }>
           { contract_price }
         </div>
@@ -46,7 +47,7 @@ export default class Transaction extends Component {
           { listing_status_area }
         </div>
         <div className="clearfix"></div>
-      </div>
+      </Link>
     )
   }
 }
