@@ -32,7 +32,9 @@ export default class App extends Component {
   render() {
     let data = AppStore.data
     const path = this.props.location.pathname
+    const location = this.props.location
     data.path = path
+    data.location = location
     // Hydrate store if coming from server
     if (typeof window !== 'undefined' && window.AppStore) {
       const server_data = window.AppStore.data

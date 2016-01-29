@@ -28,12 +28,23 @@ export default class Transactions extends Component {
   componentDidMount() {
     this.getContacts()
     this.getTransactions()
+    delete AppStore.data.current_task
+    AppStore.emitChange()
     // If coming from redirect
     if (AppStore.data.new_transaction && AppStore.data.new_transaction.redirect_to) {
       setTimeout(() => {
         delete AppStore.data.new_transaction.redirect_to
         delete AppStore.data.new_transaction.saved
+        AppStore.emitChange()
       }, 3000)
+    }
+    // From Link to single transaction
+    const params = this.props.params
+    const data = this.props.data
+    if (params && params.id) {
+      const transactions = data.transactions
+      const transaction = _.findWhere(transactions, { id: params.id })
+      this.viewTransaction(transaction)
     }
   }
 
@@ -339,13 +350,13 @@ export default class Transactions extends Component {
     })
   }
 
-  getTransaction(transaction) {
+  getTransaction(id) {
     const data = this.props.data
     const user = data.user
     TransactionDispatcher.dispatch({
       action: 'get-transaction',
       user,
-      id: transaction.id
+      id
     })
   }
 

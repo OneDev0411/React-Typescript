@@ -38,9 +38,11 @@ export default class TasksModule extends Component {
       if (evt.keyCode === 27 && data.current_task && !data.show_contacts_modal)
         this.closeDrawer()
     }
-    setTimeout(() => {
-      this.refs.task_title.refs.input.focus()
-    }, 100)
+    if (data.location.pathname === '/dashboard/tasks') {
+      setTimeout(() => {
+        this.refs.task_title.refs.input.focus()
+      }, 100)
+    }
   }
 
   // Transactions

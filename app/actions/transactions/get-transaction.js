@@ -10,7 +10,8 @@ export default (user, id) => {
   }
   Transaction.get(params, (err, response) => {
     if (response.status === 'success') {
-      AppStore.data.current_transaction = response.data
+      const current_transaction = response.data
+      AppStore.data.current_transaction = current_transaction
       AppStore.emitChange()
     }
   })
