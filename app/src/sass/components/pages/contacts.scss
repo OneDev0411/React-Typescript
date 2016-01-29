@@ -1,0 +1,12 @@
+.contacts-table{
+  .contact-row{
+    .delete {
+      visibility: hidden;
+    }
+    &:hover {
+      .delete {
+        visibility: visible;
+      }
+    }
+  }
+}

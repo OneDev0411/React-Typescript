@@ -87,9 +87,21 @@ export default class Dashboard extends Component {
     this.refs.message_input.value = ''
   }
 
-  inviteUser(title) {
-    return title
-    // console.log('invite user',title)
+  addContactsToRoom() {
+    const contacts_added = AppStore.data.contacts_added
+    const user = AppStore.data.user
+    const room = this.props.data.current_room
+    if (contacts_added && contacts_added.room) {
+      AppStore.data.adding_contacts = true
+      AppStore.emitChange()
+      const contacts = contacts_added.room
+      AppDispatcher.dispatch({
+        action: 'invite-contacts',
+        user,
+        room,
+        contacts
+      })
+    }
   }
 
   createRoom(title) {
@@ -106,13 +118,13 @@ export default class Dashboard extends Component {
       AppStore.data.show_create_chat_modal = true
 
     if (modal_key === 'invite-user')
-      AppStore.data.show_invite_user_modal = true
+      AppStore.data.show_contacts_modal = true
     AppStore.emitChange()
   }
 
   hideModal() {
     delete AppStore.data.show_create_chat_modal
-    delete AppStore.data.show_invite_user_modal
+    delete AppStore.data.show_contacts_modal
     AppStore.emitChange()
   }
 
@@ -128,7 +140,7 @@ export default class Dashboard extends Component {
     if (Notification.permission === 'granted')
       this.sendNotification(message)
     else {
-      Notification.requestPermission((permission) => {
+      Notification.requestPermission(permission => {
         if (permission === 'granted')
           this.sendNotification(message)
       })
@@ -246,14 +258,14 @@ export default class Dashboard extends Component {
       const current_room = AppStore.data.current_room
       // If in this room
       if (current_room.id === room.id) {
-        if (data.user.id === message.author.id)
+        if (message.author && data.user.id === message.author.id)
           message.fade_in = true
         AppStore.data.messages.push(message)
         const rooms = AppStore.data.rooms
         const current_room_index = _.findIndex(rooms, { id: current_room.id })
         AppStore.data.rooms[current_room_index].latest_message = message
         AppStore.emitChange()
-        if (data.user.id !== message.author.id)
+        if (message.author && data.user.id !== message.author.id)
           this.checkNotification(message)
       }
     })
@@ -282,6 +294,32 @@ export default class Dashboard extends Component {
     AppStore.data.mounted.push('recents')
   }
 
+  // Add file
+  handleDragEnter() {
+    AppStore.data.current_room.overlay_active = true
+    AppStore.emitChange()
+  }
+
+  handleDragLeave() {
+    delete AppStore.data.current_room.overlay_active
+    AppStore.emitChange()
+  }
+
+  uploadFiles(files) {
+    const data = this.props.data
+    const user = data.user
+    const room = data.current_room
+    delete AppStore.data.current_room.overlay_active
+    AppStore.data.current_room.uploading_files = true
+    AppStore.emitChange()
+    AppDispatcher.dispatch({
+      action: 'upload-files-to-room',
+      user,
+      room,
+      files
+    })
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -298,8 +336,11 @@ export default class Dashboard extends Component {
             showModal={ this.showModal }
             hideModal={ this.hideModal }
             createRoom={ this.createRoom }
-            inviteUser={ this.inviteUser }
             getMessages={ this.getMessages }
+            addContactsToRoom={ this.addContactsToRoom }
+            handleDragEnter={ this.handleDragEnter }
+            handleDragLeave={ this.handleDragLeave }
+            uploadFiles={ this.uploadFiles.bind(this) }
           />
         </main>
         <audio ref="notif_sound" id="notif-sound">

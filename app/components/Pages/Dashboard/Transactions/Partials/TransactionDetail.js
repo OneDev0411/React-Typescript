@@ -8,20 +8,20 @@ import Dropzone from 'react-dropzone'
 
 // Partials
 import ProfileImage from '../../Partials/ProfileImage'
+import DropzoneOverlay from '../../Partials/DropzoneOverlay'
 import Drawer from './Drawer'
 import FileViewer from './FileViewer'
+import TasksModule from '../../Modules/Tasks'
 
 export default class TransactionDetail extends Component {
 
   componentDidMount() {
+    const transaction = this.props.data.current_transaction
+    this.props.getTransaction(transaction)
     if (typeof window !== 'undefined') {
       const clipboard = require('clipboard')
       new clipboard('.copy-mls')
     }
-  }
-
-  handleAddDocs(files) {
-    this.props.addDocs(files)
   }
 
   handleDragEnter() {
@@ -32,10 +32,14 @@ export default class TransactionDetail extends Component {
     this.props.dragLeave()
   }
 
+  handleAddDocs(files) {
+    this.props.addDocs(files)
+  }
+
   drawerDrop(files) {
     // to prevent dupes
     const data = this.props.data
-    if (data.current_transaction.drag_enter)
+    if (data.current_transaction.overlay_active)
       return false
     this.handleAddDocs(files)
   }
@@ -58,10 +62,9 @@ export default class TransactionDetail extends Component {
     const listing = transaction.listing
     const listing_data = transaction.listing_data
     const drawer = transaction.drawer
-    // console.log(transaction)
     // Set transaction data
     const transaction_type = transaction.transaction_type
-    const contacts = transaction.contacts
+    const roles = transaction.roles
     // Set transaction property data
     let property
     let address
@@ -77,6 +80,12 @@ export default class TransactionDetail extends Component {
     let square_feet
     let title = 'No address'
     let subtitle
+
+    // Get main body height for drawers
+    const containing_body = this.refs.containing_body
+    let containing_body_height
+    if (containing_body)
+      containing_body_height = containing_body.clientHeight
 
     // If listing
     if (listing) {
@@ -107,6 +116,7 @@ export default class TransactionDetail extends Component {
       bathroom_count = property.bathroom_count
       square_feet = property.square_feet
     }
+
     let listing_status_indicator
     if (listing) {
       const status_color = listing_util.getStatusColor(listing.status)
@@ -160,7 +170,7 @@ export default class TransactionDetail extends Component {
     let title_area
     title_area = (
       <div>
-        <span style={ S('mr-10') }>{ title }</span> { price_area }
+        <span className="transaction-detail__title" style={ S('mr-10 pointer') } onClick={ this.props.setDrawerContent.bind(this, 'map', false) }>{ title }</span> { price_area }
       </div>
     )
 
@@ -191,8 +201,9 @@ export default class TransactionDetail extends Component {
     }
 
     let contacts_markup
-    if (contacts) {
-      contacts_markup = contacts.map(contact => {
+    if (roles) {
+      contacts_markup = roles.map(role => {
+        const contact = role.contact
         const contact_style = S('mb-20 mr-15 w-200 h-80')
         const info_style = {
           overflow: 'hidden',
@@ -204,7 +215,7 @@ export default class TransactionDetail extends Component {
             <div style={ S('ml-50') }>
               <div><b>{ contact.first_name } { contact.last_name }</b></div>
               <div style={ S('color-929292') }>
-                <div style={ info_style }>{ contact.roles[0] }</div>
+                <div style={ info_style }>{ role.role_types ? role.role_types[0] : '' }</div>
                 <div style={ info_style }>{ contact.phone_number }</div>
                 <div style={ info_style }><a style={{ textDecoration: 'none' }} href={ 'mailto:' + contact.email}>{ contact.email }</a></div>
               </div>
@@ -217,9 +228,6 @@ export default class TransactionDetail extends Component {
       ...S('h-80 mb-15 pl-15 pr-15'),
       borderBottom: '1px solid #edf1f3'
     }
-    let overlay_active = ' hidden'
-    if (transaction.drag_enter)
-      overlay_active = ' active'
     const document_modal = data.document_modal
     let current_file_name
     let current_file_new_name
@@ -279,13 +287,25 @@ export default class TransactionDetail extends Component {
       )
     }
     // Calculate dom and cdom
-    let dom_days
-    let cdom_days
+    let dom_area
+    let cdom_area
     if (listing) {
-      if (listing.dom)
-        dom_days = listing.dom
-      if (listing.cdom)
-        cdom_days = listing.cdom
+      if (listing.dom) {
+        const dom_days_arr = listing.dom.toString().split('.')
+        const dom_miliseconds = dom_days_arr[0]
+        const dom_days = helpers.getDaysFromMiliseconds(dom_miliseconds) + ' days'
+        dom_area = (
+          <div style={ S('mb-15 mr-20 pull-left') }><b>Days on Market:</b> <span style={ S('color-929292') }>{ dom_days }</span></div>
+        )
+      }
+      if (listing.cdom) {
+        const cdom_days_arr = listing.cdom.toString().split('.')
+        const cdom_miliseconds = cdom_days_arr[0]
+        const cdom_days = helpers.getDaysFromMiliseconds(cdom_miliseconds) + ' days'
+        cdom_area = (
+          <div style={ S('mb-15 mr-20 pull-left') }><b>Current Days on Market:</b> <span style={ S('color-929292') }>{ cdom_days }</span></div>
+        )
+      }
     }
 
     let association_fee_area
@@ -294,6 +314,8 @@ export default class TransactionDetail extends Component {
         <div style={ S('mb-15 mr-20 pull-left') }><b>Association Fee:</b> <span style={ S('color-929292') }>${ helpers.numberWithCommas(listing.association_fee) }</span></div>
       )
     }
+    // Dropzone overlay
+    const overlay_active = transaction.overlay_active
     return (
       <div style={ S('minw-800 z-0') }>
         <Dropzone
@@ -320,6 +342,8 @@ export default class TransactionDetail extends Component {
             handleDragLeave={ this.handleDragLeave.bind(this) }
             drawerDrop={ this.drawerDrop.bind(this) }
             openFileViewer={ this.props.openFileViewer.bind(this) }
+            hideModal={ this.props.hideModal }
+            deleteContact={ this.props.deleteContact }
           />
           <div className="transaction-detail__title" style={ title_header_style }>
             <div className="pull-left">
@@ -332,8 +356,8 @@ export default class TransactionDetail extends Component {
             <div className="clearfix"></div>
             <div style={ S('color-929394 mb-20') }>{ subtitle_area }</div>
           </div>
-          <div style={ S('relative') }>
-            <div style={ S('minh-380 pl-15 pr-15') }>
+          <div ref="containing_body" style={ S('relative') }>
+            <div style={ S('pl-15 pr-15') }>
               <div style={ S(carousel_wh + ' mr-15 mb-30') } className="pull-left">
                 { listing_images }
               </div>
@@ -346,8 +370,8 @@ export default class TransactionDetail extends Component {
                   <div style={ S('mb-15 mr-20 pull-left') }><b>Beds:</b> <span style={ S('color-929292') }>{ bedroom_count }</span></div>
                   <div style={ S('mb-15 mr-20 pull-left') }><b>Baths:</b> <span style={ S('color-929292') }>{ bathroom_count }</span></div>
                   <div style={ S('mb-15 mr-20 pull-left') }><b>Sqft:</b> <span style={ S('color-929292') }>{ square_feet }</span></div>
-                  <div style={ S('mb-15 mr-20 pull-left') }><b>Days on Market:</b> <span style={ S('color-929292') }>{ dom_days }</span></div>
-                  <div style={ S('mb-15 mr-20 pull-left') }><b>Current Days on Market:</b> <span style={ S('color-929292') }>{ cdom_days }</span></div>
+                  { dom_area }
+                  { cdom_area }
                   { association_fee_area }
                   <div className="clearfix"></div>
                 </div>
@@ -361,24 +385,20 @@ export default class TransactionDetail extends Component {
                   { contacts_markup }
                 </div>
               </div>
+              <div className="clearfix"></div>
             </div>
+            <TasksModule
+              data={ data }
+              module_type="transaction"
+              containing_body_height={ containing_body_height }
+            />
           </div>
         </Dropzone>
-        <div className={ 'dropzone__overlay' + overlay_active}>
-          <div style={ S('w-100p h-100p text-center fixed t-0 l-0 z-1') } className="dropzone__bg"></div>
-          <div style={ S('w-100p h-100p text-center fixed t-0 l-0 z-2') } className="flexbox dropzone--message">
-            <div className="center-block" style={ S('relative p-20 mt-20p w-700 h-300 bg-fff br-2 color-929292') }>
-              <div style={ S('absolute t-90 r-130n') }>
-                <img src="/images/dashboard/transactions/drop-arrow.png"/>
-              </div>
-              <div style={ S('h-110 relative t-60n') }>
-                <img src="/images/dashboard/transactions/drop-here.png"/>
-              </div>
-              <div style={ S('font-36 mb-10') }>Drop to add to <br/><span className="text-primary">{ title }</span></div>
-              <div style={ S('font-20') }>Drop files like pdfs, word docs and images</div>
-            </div>
-          </div>
-        </div>
+        <DropzoneOverlay
+          overlay_active={ overlay_active }
+          title={ title }
+          context="transaction"
+        />
         <Modal dialogClassName="modal-800" show={ data.show_document_modal } onHide={ this.props.hideModal.bind(this) }>
           <form onSubmit={ this.uploadFile.bind(this) }>
             <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
@@ -504,5 +524,7 @@ TransactionDetail.propTypes = {
   showEditModal: React.PropTypes.func,
   editTransaction: React.PropTypes.func,
   openFileViewer: React.PropTypes.func,
-  closeFileViewer: React.PropTypes.func
+  closeFileViewer: React.PropTypes.func,
+  deleteContact: React.PropTypes.func,
+  getTransaction: React.PropTypes.func
 }

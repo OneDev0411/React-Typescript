@@ -49,7 +49,7 @@ export default class Transactions extends Component {
     const transactions = data.transactions
     const params = this.props.params
     const id = params.id
-    const current_transaction = _.findWhere(transactions, id)
+    const current_transaction = _.findWhere(transactions, { id })
     AppStore.data.current_transaction = current_transaction
     AppStore.data.current_transaction_loaded = true
     AppStore.emitChange()
@@ -125,6 +125,14 @@ export default class Transactions extends Component {
   }
 
   viewTransaction(transaction) {
+    // Remove current task
+    delete AppStore.data.current_task
+    AppStore.emitChange()
+    const attachments = transaction.attachments
+    const attachments_sorted = _.sortBy(attachments, 'created', attachment => {
+      return - attachment.created
+    })
+    transaction.attachments = attachments_sorted
     AppStore.data.current_transaction = transaction
     history.pushState(null, null, '/dashboard/transactions/' + transaction.id)
     AppStore.emitChange()
@@ -180,6 +188,9 @@ export default class Transactions extends Component {
   }
 
   hideModal() {
+    delete AppStore.data.show_contact_modal
+    delete AppStore.data.contact_modal
+    delete AppStore.data.creating_contacts
     delete AppStore.data.show_document_modal
     delete AppStore.data.current_transaction.show_edit_modal
     // rekey attachments
@@ -195,7 +206,7 @@ export default class Transactions extends Component {
   }
 
   uploadFile() {
-    const data = AppStore.data
+    const data = this.props.data
     const files = data.document_modal.files
     const files_count = files.length
     const current_file = data.document_modal.current_file
@@ -243,12 +254,12 @@ export default class Transactions extends Component {
 
   dragEnter() {
     this.setDrawerContent('docs', true)
-    AppStore.data.current_transaction.drag_enter = true
+    AppStore.data.current_transaction.overlay_active = true
     AppStore.emitChange()
   }
 
   dragLeave() {
-    delete AppStore.data.current_transaction.drag_enter
+    delete AppStore.data.current_transaction.overlay_active
     AppStore.emitChange()
   }
 
@@ -282,11 +293,11 @@ export default class Transactions extends Component {
           street_full: address,
           city,
           state,
-          postal_code,
-          square_feet,
-          bedroom_count,
-          bathroom_count
-        }
+          postal_code
+        },
+        square_feet,
+        bedroom_count,
+        bathroom_count
       }
     }
     // console.log(user, transaction, listing_data)
@@ -311,6 +322,31 @@ export default class Transactions extends Component {
     const transaction = data.current_transaction
     history.pushState(null, null, '/dashboard/transactions/' + transaction.id)
     AppStore.emitChange()
+  }
+
+  deleteContact(contact) {
+    const user = this.props.data.user
+    const transaction = this.props.data.current_transaction
+    AppStore.data.current_transaction.deleting_contact = {
+      id: contact.id
+    }
+    AppStore.emitChange()
+    TransactionDispatcher.dispatch({
+      action: 'delete-role',
+      contact,
+      user,
+      transaction
+    })
+  }
+
+  getTransaction(transaction) {
+    const data = this.props.data
+    const user = data.user
+    TransactionDispatcher.dispatch({
+      action: 'get-transaction',
+      user,
+      id: transaction.id
+    })
   }
 
   render() {
@@ -355,7 +391,7 @@ export default class Transactions extends Component {
         // Get client
         const clients = _.forEach(transaction.contacts, contact => {
           const roles = contact.roles
-          if (roles.indexOf('Client') !== -1)
+          if (roles && roles.indexOf('Client') !== -1)
             return contact
         })
         let listing_status_indicator
@@ -464,13 +500,15 @@ export default class Transactions extends Component {
           dragEnter={ this.dragEnter }
           dragLeave={ this.dragLeave }
           hideModal={ this.hideModal }
-          uploadFile={ this.uploadFile }
+          uploadFile={ this.uploadFile.bind(this) }
           deleteFile={ this.deleteFile }
           handleNameChange={ this.handleNameChange }
           showEditModal={ this.showEditModal }
           editTransaction={ this.editTransaction }
           openFileViewer={ this.openFileViewer }
           closeFileViewer={ this.closeFileViewer }
+          deleteContact={ this.deleteContact }
+          getTransaction={ this.getTransaction.bind(this) }
         />
       )
     }

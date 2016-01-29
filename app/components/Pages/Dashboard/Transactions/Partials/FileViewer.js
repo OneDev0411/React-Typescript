@@ -5,6 +5,11 @@ import S from 'shorti'
 export default class FileViewer extends Component {
 
   componentDidMount() {
+    // Esc to close
+    document.onkeydown = evt => {
+      if (evt.keyCode === 27)
+        this.props.closeFileViewer()
+    }
     const data = this.props.data
     const transaction = data.current_transaction
     const attachment = transaction.viewer.attachment
@@ -28,7 +33,7 @@ export default class FileViewer extends Component {
       <div style={ viewer_wrap_style }>
         <div onClick={ this.props.closeFileViewer } style={ S('absolute r-20 t-5 font-40 fw-400') } className="close">&times;</div>
         <div className="bg-aqua" style={ nav_bar_style }>
-          <div style={ S('mt-15 font-18') } className="text-center">{ title }</div>
+          <div style={ S('mt-13 font-18') } className="text-center">{ title }</div>
         </div>
         <iframe frameBorder={ 0 } src={ file_url } style={ S('w-100p h-100p absolute') }></iframe>
       </div>

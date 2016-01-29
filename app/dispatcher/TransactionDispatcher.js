@@ -8,6 +8,9 @@ import deleteTransaction from '../actions/transactions/delete'
 import getAllTransactions from '../actions/transactions/get'
 import uploadFiles from '../actions/transactions/upload-files'
 import editTransaction from '../actions/transactions/edit'
+import addRole from '../actions/transactions/add-role'
+import deleteRole from '../actions/transactions/delete-role'
+import getTransaction from '../actions/transactions/get-transaction'
 
 const TransactionDispatcher = new Dispatcher()
 
@@ -34,6 +37,11 @@ TransactionDispatcher.register(payload => {
     case 'get-all':
       getAllTransactions(payload.user)
       break
+
+    case 'get-transaction':
+      getTransaction(payload.user, payload.id)
+      break
+
     case 'edit-transaction':
       editTransaction(payload.user, payload.transaction, payload.listing_data)
       break
@@ -44,6 +52,14 @@ TransactionDispatcher.register(payload => {
 
     case 'upload-files':
       uploadFiles(payload.user, payload.transaction, payload.files)
+      break
+
+    case 'add-role':
+      addRole(payload.user, payload.transaction, payload.contact)
+      break
+
+    case 'delete-role':
+      deleteRole(payload.user, payload.transaction, payload.contact)
       break
 
     default:
