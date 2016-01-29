@@ -70,7 +70,7 @@ export default class MessageItem extends Component {
       message_class_name = 'fade-in'
 
     let message_text = message.comment
-    if (!message_image)
+    if (!message_image && message.comment)
       message_text = emojify.replace(linkifyString(message.comment))
 
     // Get latest author and group

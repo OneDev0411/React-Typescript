@@ -2,7 +2,7 @@
 import es6Promise from 'es6-promise'
 es6Promise.polyfill()
 import 'isomorphic-fetch'
-
+import superagent from 'superagent'
 import config from '../../config/public'
 
 export default {
@@ -24,7 +24,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then((response) => {
+    .then(response => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -34,7 +34,7 @@ export default {
       }
       return response.json()
     })
-    .then((response) => {
+    .then(response => {
       return callback(false, response)
     })
   },
@@ -48,7 +48,7 @@ export default {
       `&max_value=${params.max_value}`
 
     fetch(get_messages_url)
-    .then((response) => {
+    .then(response => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -58,7 +58,7 @@ export default {
       }
       return response.json()
     })
-    .then((response) => {
+    .then(response => {
       return callback(false, response)
     })
   },
@@ -73,7 +73,7 @@ export default {
       `&max_value=${params.max_value}`
 
     fetch(get_messages_url)
-    .then((response) => {
+    .then(response => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -83,11 +83,10 @@ export default {
       }
       return response.json()
     })
-    .then((response) => {
+    .then(response => {
       return callback(false, response)
     })
   },
-
   addUser: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
@@ -107,7 +106,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then((response) => {
+    .then(response => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -117,8 +116,58 @@ export default {
       }
       return response.json()
     })
-    .then((response) => {
+    .then(response => {
       return callback(false, response)
+    })
+  },
+  inviteContacts: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const endpoint = api_host + '/api/invite-contacts'
+    const request_object = {
+      invitations: params.invitations,
+      access_token: params.access_token
+    }
+    fetch(endpoint, {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(request_object)
+    })
+    .then(response => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          message: 'There was an error with this request.'
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then(response => {
+      return callback(false, response)
+    })
+  },
+  uploadFiles: (params, callback) => {
+    const api_url = config.api_url
+    const endpoint = api_url + '/media'
+    const request = superagent.post(endpoint)
+    const files = params.files
+    request.set('authorization', 'Bearer ' + params.access_token)
+    files.forEach(file => {
+      const info = {
+        name: file.name,
+        original_name: file.name,
+        title: file.name
+      }
+      request.attach('media', file)
+      request.field('info', JSON.stringify(info))
+    })
+    request.end((err, res) => {
+      if (err)
+        return callback(err, res)
+      return callback(err, res)
     })
   }
 }

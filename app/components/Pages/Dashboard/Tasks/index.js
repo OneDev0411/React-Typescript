@@ -5,23 +5,21 @@ import S from 'shorti'
 // Partials
 import Header from '../Partials/Header'
 import SideBar from '../Partials/SideBar'
+import TasksModule from '../Modules/Tasks'
 
 export default class Tasks extends Component {
 
   render() {
     const data = this.props.data
-    const main_style = S('absolute l-183 r-0')
-
     return (
       <div style={ S('minw-1000') }>
         <Header data={ data }/>
-        <main style={ S('pt-20') }>
+        <main style={ S('pt-15') }>
           <SideBar data={ data }/>
-          <div style={ main_style }>
-            <div style={ S('ml-20') }>
-              <p>This is tasks stuff</p>
-            </div>
-          </div>
+          <TasksModule
+            data={ data }
+            module_type="tasks"
+          />
         </main>
       </div>
     )

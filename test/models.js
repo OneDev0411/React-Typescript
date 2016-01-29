@@ -5,6 +5,7 @@ import Room from '../app/models/Room'
 import Message from '../app/models/Message'
 import Listing from '../app/models/Listing'
 import Transaction from '../app/models/Transaction'
+import Task from '../app/models/Task'
 import config from '../config/private'
 
 // Get access token
@@ -192,6 +193,34 @@ describe('Testing Transaction model', function() {
       api_host: test.api_host
     }
     Transaction.getAll(params, (err, response) => {
+      expect(response.status).to.equal('success')
+      done()
+    })
+  })
+})
+
+/* Task
+==================== */
+describe('Testing Task model', function() { 
+  // Create transaction
+  it('Task.create should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
+    const params = {
+      title: 'Test Title',
+      access_token: access_token,
+      api_host: test.api_host
+    }
+    Task.create(params, (err, response) => {
+      expect(response.status).to.equal('success')
+      done()
+    })
+  })
+  // // Get all transactions
+  it('Task.getAll should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
+    const params = {
+      access_token: access_token,
+      api_host: test.api_host
+    }
+    Task.getAll(params, (err, response) => {
       expect(response.status).to.equal('success')
       done()
     })

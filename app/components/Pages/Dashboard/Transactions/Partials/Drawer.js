@@ -7,6 +7,7 @@ import Dropzone from 'react-dropzone'
 // Partials
 import Loading from '../../../../Partials/Loading'
 import ProfileImage from '../../Partials/ProfileImage'
+import AddContactsModule from '../../Modules/AddContacts'
 
 export default class Drawer extends Component {
 
@@ -19,7 +20,7 @@ export default class Drawer extends Component {
     const data = this.props.data
     const transaction = data.current_transaction
     const drawer = transaction.drawer
-    const contacts = transaction.contacts
+    const roles = transaction.roles
     const attachments = transaction.attachments
     let drawer_content
     const drawer_height = window.innerHeight - 203
@@ -67,7 +68,7 @@ export default class Drawer extends Component {
               { file_icon_short }
             </a>
           )
-          if (file.info && mime === 'image/jpeg') {
+          if (file.info && mime === 'image/jpeg' || file.info && mime === 'image/png' || file.info && mime === 'image/gif') {
             file_image = (
               <a href={ file.preview } target="_blank" className="pull-left" style={ S('w-60 h-60 ml-10 bg-url(' + file.url + ') bg-cover bg-center br-2') }></a>
             )
@@ -78,7 +79,7 @@ export default class Drawer extends Component {
           }
           let file_area = (
             <div>
-              <Button onClick={ this.props.deleteFile.bind(this, file) } style={ S('mt-10 mr-10 absolute r-0') } bsStyle="danger" className="pull-right delete">Delete</Button>
+              <Button onClick={ this.props.deleteFile.bind(this, file) } style={ S('mt-10 mr-10 absolute r-0') } bsStyle="danger" className="delete">Delete</Button>
               <div onClick={ this.openFileViewer.bind(this, file) } className="pull-left">
                 { file_image }
               </div>
@@ -100,7 +101,7 @@ export default class Drawer extends Component {
             )
           }
           return (
-            <div className="transaction--file" key={ 'file-' + i } style={ file_style }>
+            <div className="transaction-file" key={ 'file-' + i } style={ file_style }>
               { file_area }
               <div className="clearfix"></div>
             </div>
@@ -116,7 +117,7 @@ export default class Drawer extends Component {
         ...S('absolute w-100p h-' + doczone_height),
         overflow: 'scroll'
       }
-      const drawer_header_style = S('bg-f7f9fa ml-5 br-3 p-12 font-18 color-4a4a4a')
+      const drawer_header_style = S('relative z-2 bg-f7f9fa ml-5 br-3 p-12 font-18 color-4a4a4a')
       if (drawer.content === 'docs') {
         let doc_count
         if (attachments && attachments.length)
@@ -145,31 +146,62 @@ export default class Drawer extends Component {
           </div>
         )
       }
-      if (drawer.content === 'contacts') {
+      if (drawer.content === 'contacts' && roles) {
+        let contacts_list
+        if (roles) {
+          contacts_list = roles.map(role => {
+            const contact = role.contact
+            const contact_style = {
+              ...S('pt-15 pb-15 pl-15'),
+              borderBottom: '1px solid #f7f9fa'
+            }
+            let delete_text = 'Delete'
+            let deleting_class = ''
+            if (transaction.deleting_contact && transaction.deleting_contact.id === contact.id) {
+              delete_text = 'Deleting...'
+              deleting_class = ' disabled'
+            }
+            let delete_button
+            if (roles.length > 1) {
+              delete_button = (
+                <Button onClick={ this.props.deleteContact.bind(this, contact) } style={ S('mr-10 absolute r-0') } bsStyle="danger" className={ 'delete' + deleting_class }>
+                  { delete_text }
+                </Button>
+              )
+            }
+            return (
+              <div className="transaction-contact" key={ 'contact-' + contact.id } style={ contact_style }>
+                { delete_button }
+                <ProfileImage user={ contact }/>
+                <div style={ S('ml-50 ') }>
+                  <div><b>{ contact.first_name } { contact.last_name }</b>, <span style={ S('color-929292') }>{ contact.roles ? contact.roles[0] : '' }</span></div>
+                  <div style={ S('color-929292') }>
+                    <div>{ contact.phone_number }{ contact.phone_number ? ',' : '' } <a style={{ textDecoration: 'none' }} href={ 'mailto:' + contact.email}>{ contact.email }</a></div>
+                  </div>
+                </div>
+              </div>
+            )
+          })
+        }
         drawer_content = (
           <div>
             <div style={ drawer_header_style }>Contacts</div>
             <div>
-              {
-                contacts.map((contact) => {
-                  const contact_style = {
-                    ...S('pt-15 pb-15 pl-15'),
-                    borderBottom: '1px solid #f7f9fa'
-                  }
-                  return (
-                    <div key={ 'contact-' + contact.id } style={ contact_style }>
-                      <ProfileImage user={ contact }/>
-                      <div style={ S('ml-50 ') }>
-                        <div><b>{ contact.first_name } { contact.last_name }</b>, <span style={ S('color-929292') }>{ contact.roles[0] }</span></div>
-                        <div style={ S('color-929292') }>
-                          <div>{ contact.phone_number }{ contact.phone_number ? ' ,' : '' } <a style={{ textDecoration: 'none' }} href={ 'mailto:' + contact.email}>{ contact.email }</a></div>
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })
-              }
+              { contacts_list }
             </div>
+            <AddContactsModule
+              data={ data }
+              filterContacts={ this.props.filterContacts }
+              setContactActive={ this.props.setContactActive }
+              setFilteredContacts={ this.props.setFilteredContacts }
+              hideContactsForm={ this.props.hideContactsForm }
+              removeContact={ this.props.removeContact }
+              showContactModal={ this.props.showContactModal }
+              hideModal={ this.props.hideModal }
+              addContact={ this.props.addContact }
+              module_type="transaction"
+              showNewContentInitials={ this.props.showNewContentInitials }
+            />
           </div>
         )
       }
@@ -184,10 +216,10 @@ export default class Drawer extends Component {
               <div style={ S('absolute w-100p z-0') }>
                 <Loading />
               </div>
-              <div style={ S('absolute z-1') }>
+              <div style={ S('absolute z-1 t-50n') }>
                 <iframe
                   width="500"
-                  height="500"
+                  height={ window.innerHeight - 152 }
                   frameBorder="0" style={ { border: 0 } }
                   src={ 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDagxNRLRIOsF8wxmuh1J3ysqnwdDB93-4&q=' + google_address }
                   allowFullScreen
@@ -201,8 +233,8 @@ export default class Drawer extends Component {
     }
     return (
       <div style={ drawer_wrap_style }>
-        <div style={ drawer_style } className={ 'transaction-detail__drawer ' + drawer_class }>
-          <div onClick={ this.props.closeDrawer } style={ S('mt-5 mr-15 fw-400 font-32') }className="close pull-right">&times;</div>
+        <div style={ drawer_style } className={ 'drawer ' + drawer_class }>
+          <div onClick={ this.props.closeDrawer } style={ S('mt-5 mr-15 fw-400 font-32 relative z-3') }className="close pull-right">&times;</div>
           { drawer_content }
         </div>
       </div>
@@ -218,5 +250,15 @@ Drawer.propTypes = {
   handleDragEnter: React.PropTypes.func,
   handleDragLeave: React.PropTypes.func,
   drawerDrop: React.PropTypes.func,
-  openFileViewer: React.PropTypes.func
+  openFileViewer: React.PropTypes.func,
+  filterContacts: React.PropTypes.func,
+  setContactActive: React.PropTypes.func,
+  setFilteredContacts: React.PropTypes.func,
+  hideContactsForm: React.PropTypes.func,
+  removeContact: React.PropTypes.func,
+  showContactModal: React.PropTypes.func,
+  hideModal: React.PropTypes.func,
+  addContact: React.PropTypes.func,
+  deleteContact: React.PropTypes.func,
+  showNewContentInitials: React.PropTypes.func
 }
