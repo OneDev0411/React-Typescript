@@ -378,13 +378,8 @@ export default class Transactions extends Component {
         // Dates
         const important_dates = transaction.important_dates
         let closing_date
-        if (important_dates) {
+        if (important_dates)
           closing_date = _.result(_.findWhere(important_dates, { title: 'closing' }), 'due_date')
-          if (closing_date) {
-            closing_date = closing_date.toString()
-            closing_date = closing_date.replace('T00:00:00.000Z', '')
-          }
-        }
         if (transaction.listing) {
           listing = transaction.listing
           address = `${listing.property.address.street_number} ${listing.property.address.street_name}`
@@ -414,9 +409,8 @@ export default class Transactions extends Component {
           )
         }
         let friendly_date
-        if (closing_date) {
+        if (closing_date)
           friendly_date = helpers.friendlyDate(closing_date)
-        }
         let client_name
         if (clients && clients[0])
           client_name = clients[0].first_name + ' ' + clients[0].last_name
