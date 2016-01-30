@@ -9,9 +9,9 @@ export default class AddFinancials extends Component {
   calculateFinancials() {
     const price = this.refs.price.refs.input.value
     const contract_price = this.refs.contract_price.refs.input.value
-    const agent_commission = this.refs.agent_commission.refs.input.value
-    const co_agent_commission = this.refs.co_agent_commission.refs.input.value
-    this.props.calculateFinancials(price, contract_price, agent_commission, co_agent_commission)
+    const buyers_agency_commission = this.refs.buyers_agency_commission.refs.input.value
+    const sub_agency_commission = this.refs.sub_agency_commission.refs.input.value
+    this.props.calculateFinancials(price, contract_price, buyers_agency_commission, sub_agency_commission)
   }
 
   render() {
@@ -21,18 +21,18 @@ export default class AddFinancials extends Component {
     const listing_added = new_transaction.listing_added
     let price
     let contract_price
-    let agent_commission
-    let co_agent_commission
+    let buyers_agency_commission
+    let sub_agency_commission
     if (listing_added) {
       price = listing_added.price
       contract_price = listing_added.contract_price
       if (!contract_price)
         contract_price = price
 
-      if (listing_added.agent_commission)
-        agent_commission = listing_added.agent_commission
-      if (listing_added.co_agent_commission)
-        co_agent_commission = listing_added.co_agent_commission
+      if (listing_added.buyers_agency_commission)
+        buyers_agency_commission = listing_added.buyers_agency_commission
+      if (listing_added.sub_agency_commission)
+        sub_agency_commission = listing_added.sub_agency_commission
     }
     const label_style = {
       ...S('font-13 color-bfc2c3'),
@@ -66,6 +66,12 @@ export default class AddFinancials extends Component {
       fontSize: '18px',
       fontWeight: 'bold'
     }
+    let buyers_agency_commission_format = 0
+    if (buyers_agency_commission)
+      buyers_agency_commission_format = helpers.numberWithCommas((contract_price * buyers_agency_commission * '.01').toFixed(2))
+    let sub_agency_commission_format = 0
+    if (sub_agency_commission)
+      sub_agency_commission_format = helpers.numberWithCommas((contract_price * sub_agency_commission * '.01').toFixed(2))
     return (
       <div>
         <div style={ S('t-100n absolute color-d0d4d9') }>Never leave that till tomorrow which you can do today.</div>
@@ -84,25 +90,25 @@ export default class AddFinancials extends Component {
           <Col sm={3} style={ container_style }>
             <span style={ { ...label_style, ...move_left_small } }>Agent Commission</span><br/>
             <div style={ percent_style }>%</div>
-            <Input maxLength={3} style={ { ...input_style, ...S('w-100p') } } ref="agent_commission" onKeyUp={ this.calculateFinancials.bind(this) } type="number" defaultValue={ agent_commission }/>
+            <Input maxLength={3} style={ { ...input_style, ...S('w-100p') } } ref="buyers_agency_commission" onKeyUp={ this.calculateFinancials.bind(this) } type="number" defaultValue={ buyers_agency_commission }/>
           </Col>
           <Col sm={3} style={ container_style }>
             <span style={ { ...label_style, ...move_left_small } }>Co-Agent Commission</span><br/>
             <div style={ percent_style }>%</div>
-            <Input maxLength={3} style={ { ...input_style, ...S('w-100p') } } ref="co_agent_commission" onKeyUp={ this.calculateFinancials.bind(this) } type="number" defaultValue={ co_agent_commission }/>
+            <Input maxLength={3} style={ { ...input_style, ...S('w-100p') } } ref="sub_agency_commission" onKeyUp={ this.calculateFinancials.bind(this) } type="number" defaultValue={ sub_agency_commission }/>
           </Col>
           <div className="clearfix"></div>
           <Col sm={6} style={ { ...container_style, ...S('h-89') } }/>
           <Col sm={3} style={ { ...container_style, ...{ padding: 15 } } }>
             <span style={ label_style }>est. payout</span><br/>
             <div style={ S('font-28 color-35b863') }>
-              <b>${ helpers.numberWithCommas((contract_price * agent_commission * '.01').toFixed(2)) }</b>
+              <b>${ buyers_agency_commission_format }</b>
             </div>
           </Col>
           <Col sm={3} style={ { ...container_style, ...{ padding: 15 } } }>
             <span style={ label_style }>est. payout</span><br/>
             <div style={ S('font-28 color-82dd00') }>
-              <b>${ helpers.numberWithCommas((contract_price * co_agent_commission * '.01').toFixed(2)) }</b>
+              <b>${ sub_agency_commission_format }</b>
             </div>
           </Col>
         </div>
