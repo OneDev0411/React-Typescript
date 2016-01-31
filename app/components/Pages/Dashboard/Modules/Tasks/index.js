@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import { Button, Input, Modal } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
-import validator from 'validator'
 import helpers from '../../../../../utils/helpers'
 import DayPicker from 'react-day-picker'
 
@@ -39,9 +38,11 @@ export default class TasksModule extends Component {
       if (evt.keyCode === 27 && data.current_task && !data.show_contacts_modal)
         this.closeDrawer()
     }
-    setTimeout(() => {
-      this.refs.task_title.refs.input.focus()
-    }, 100)
+    if (data.location.pathname === '/dashboard/tasks') {
+      setTimeout(() => {
+        this.refs.task_title.refs.input.focus()
+      }, 100)
+    }
   }
 
   // Transactions
@@ -212,153 +213,6 @@ export default class TasksModule extends Component {
     delete AppStore.data.show_transactions_modal
     delete AppStore.data.transaction_results
     AppStore.emitChange()
-  }
-
-  hideAddContactModal() {
-    delete AppStore.data.show_contact_modal
-    AppStore.emitChange()
-  }
-
-  setFilteredContacts(filtered_contacts) {
-    AppStore.data.filtered_contacts = filtered_contacts
-    AppStore.emitChange()
-  }
-
-  // Set list item active
-  setContactActive(index) {
-    AppStore.data.active_contact = index
-    AppStore.emitChange()
-  }
-
-  hideContactsForm() {
-    AppStore.data.filtered_contacts = null
-    AppStore.emitChange()
-  }
-
-  removeContact(contact_id, module_type) {
-    AppDispatcher.dispatch({
-      action: 'remove-contact',
-      contact_id,
-      module_type
-    })
-    AppStore.data.current_task.contacts_added = AppStore.data.contacts_added
-    AppStore.emitChange()
-  }
-
-  showContactModal(contact) {
-    delete AppStore.data.new_contact_modal
-    if (contact) {
-      AppStore.data.contact_modal = {
-        contact
-      }
-    }
-    AppStore.data.show_contact_modal = true
-    AppStore.emitChange()
-  }
-
-  showNewContentInitials(first_initial, last_initial) {
-    AppStore.data.new_contact_modal = {
-      first_initial,
-      last_initial
-    }
-    AppStore.emitChange()
-  }
-
-  addContact(module_type, e) {
-    e.preventDefault()
-    AppStore.data.creating_contacts = true
-    AppStore.emitChange()
-    const first_name = this.refs.first_name.refs.input.value.trim()
-    const last_name = this.refs.last_name.refs.input.value.trim()
-    const email = this.refs.email.refs.input.value.trim()
-    const phone_number = this.refs.phone_number.refs.input.value.trim()
-    const company = this.refs.company.refs.input.value.trim()
-    const role = this.refs.role.refs.input.value.trim()
-    const action = this.refs.action.value.trim()
-
-    // Remove search input value
-    this.refs.search_contacts.refs.input.value = ''
-
-    // Reset errors
-    if (AppStore.data.new_contact_modal) {
-      delete AppStore.data.new_contact_modal.errors
-      delete AppStore.data.new_contact_modal.email_invalid
-    }
-
-    // Validations
-    if (!AppStore.data.new_contact_modal)
-      AppStore.data.new_contact_modal = {}
-
-    if (!first_name || !last_name) {
-      AppStore.data.new_contact_modal.errors = true
-      delete AppStore.data.creating_contacts
-      AppStore.emitChange()
-      return
-    }
-
-    if (email && !validator.isEmail(email)) {
-      AppStore.data.new_contact_modal.email_invalid = true
-      delete AppStore.data.creating_contacts
-      AppStore.emitChange()
-      return
-    }
-
-    if (!email && !phone_number) {
-      AppStore.data.new_contact_modal.errors = true
-      delete AppStore.data.creating_contacts
-      AppStore.emitChange()
-      return
-    }
-    const user = this.props.data.user
-    if (action === 'create') {
-      const contact = {
-        first_name,
-        last_name,
-        role,
-        force_creation: true
-      }
-      // Needs either email or phone
-      if (phone_number)
-        contact.phone_number = phone_number
-      if (email)
-        contact.email = email
-      if (company)
-        contact.company = company
-      if (!role.length)
-        delete contact.role
-      const contacts = [contact]
-      AppDispatcher.dispatch({
-        action: 'create-contacts',
-        contacts,
-        user,
-        module_type
-      })
-    }
-    if (action === 'edit') {
-      // Get default contact info
-      const contact = AppStore.data.contact_modal.contact
-      contact.first_name = first_name
-      contact.last_name = last_name
-      contact.email = email
-      contact.phone_number = phone_number
-      contact.company = company
-      contact.role = role
-      // Remove contact info (no undef)
-      if (!email)
-        delete contact.email
-      if (!phone_number)
-        delete contact.phone_number
-      if (!company)
-        delete contact.company
-      if (!role.length)
-        delete contact.role
-      AppDispatcher.dispatch({
-        action: 'edit-contact',
-        contact,
-        user,
-        module_type
-      })
-    }
   }
 
   addContactsToTask() {
@@ -591,7 +445,6 @@ export default class TasksModule extends Component {
       delete main_style.top
       delete main_style.right
       wrapper_style = {
-        borderTop: '1px solid #edf1f3',
         paddingTop: '15px'
       }
     }
@@ -641,16 +494,8 @@ export default class TasksModule extends Component {
           </Modal.Header>
           <Modal.Body>
             <AddContactsModule
-              module_type="share-task"
               data={ data }
-              hideModal={ this.hideAddContactModal.bind(this) }
-              setContactActive={ this.setContactActive.bind(this) }
-              setFilteredContacts={ this.setFilteredContacts.bind(this) }
-              hideContactsForm={ this.hideContactsForm.bind(this) }
-              addContact={ this.addContact }
-              removeContact={ this.removeContact.bind(this) }
-              showContactModal={ this.showContactModal.bind(this) }
-              showNewContentInitials={ this.showNewContentInitials.bind(this) }
+              module_type="share-task"
             />
           </Modal.Body>
           <Modal.Footer style={ { border: 'none' } }>

@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import { Table, Alert } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
-import validator from 'validator'
 
 // AppStore
 import AppStore from '../../../../stores/AppStore'
@@ -29,12 +28,23 @@ export default class Transactions extends Component {
   componentDidMount() {
     this.getContacts()
     this.getTransactions()
+    delete AppStore.data.current_task
+    AppStore.emitChange()
     // If coming from redirect
     if (AppStore.data.new_transaction && AppStore.data.new_transaction.redirect_to) {
       setTimeout(() => {
         delete AppStore.data.new_transaction.redirect_to
         delete AppStore.data.new_transaction.saved
+        AppStore.emitChange()
       }, 3000)
+    }
+    // From Link to single transaction
+    const params = this.props.params
+    const data = this.props.data
+    if (params && params.id) {
+      const transactions = data.transactions
+      const transaction = _.findWhere(transactions, { id: params.id })
+      this.handleClickTransaction(transaction)
     }
   }
 
@@ -126,6 +136,9 @@ export default class Transactions extends Component {
   }
 
   viewTransaction(transaction) {
+    // Remove current task
+    delete AppStore.data.current_task
+    AppStore.emitChange()
     const attachments = transaction.attachments
     const attachments_sorted = _.sortBy(attachments, 'created', attachment => {
       return - attachment.created
@@ -252,12 +265,12 @@ export default class Transactions extends Component {
 
   dragEnter() {
     this.setDrawerContent('docs', true)
-    AppStore.data.current_transaction.drag_enter = true
+    AppStore.data.current_transaction.overlay_active = true
     AppStore.emitChange()
   }
 
   dragLeave() {
-    delete AppStore.data.current_transaction.drag_enter
+    delete AppStore.data.current_transaction.overlay_active
     AppStore.emitChange()
   }
 
@@ -322,154 +335,6 @@ export default class Transactions extends Component {
     AppStore.emitChange()
   }
 
-  // Contacts
-  getContacts() {
-    const user = this.props.data.user
-    AppDispatcher.dispatch({
-      action: 'get-contacts',
-      user
-    })
-  }
-
-  setFilteredContacts(filtered_contacts) {
-    AppStore.data.filtered_contacts = filtered_contacts
-    AppStore.emitChange()
-  }
-
-  // Set list item active
-  setContactActive(index) {
-    AppStore.data.active_contact = index
-    AppStore.emitChange()
-  }
-
-  hideContactsForm() {
-    AppStore.data.filtered_contacts = null
-    AppStore.emitChange()
-  }
-
-  removeContact(contact_id, module_type) {
-    AppDispatcher.dispatch({
-      action: 'remove-contact',
-      contact_id,
-      module_type
-    })
-    AppStore.data.new_transaction.contacts_added = AppStore.data.contacts_added
-    AppStore.emitChange()
-  }
-
-  showContactModal(contact) {
-    if (contact) {
-      AppStore.data.contact_modal = {
-        contact
-      }
-    }
-    AppStore.data.show_contact_modal = true
-    AppStore.emitChange()
-  }
-
-  showNewContentInitials(first_initial, last_initial) {
-    AppStore.data.new_contact_modal = {
-      first_initial,
-      last_initial
-    }
-    AppStore.emitChange()
-  }
-
-  addContact(module_type, e) {
-    e.preventDefault()
-    AppStore.data.creating_contacts = true
-    AppStore.emitChange()
-    const first_name = this.refs.first_name.refs.input.value.trim()
-    const last_name = this.refs.last_name.refs.input.value.trim()
-    const email = this.refs.email.refs.input.value.trim()
-    const phone_number = this.refs.phone_number.refs.input.value.trim()
-    const company = this.refs.company.refs.input.value.trim()
-    const role = this.refs.role.refs.input.value.trim()
-    const action = this.refs.action.value.trim()
-
-    // Reset errors
-    if (AppStore.data.new_contact_modal) {
-      delete AppStore.data.new_contact_modal.errors
-      delete AppStore.data.new_contact_modal.email_invalid
-    }
-
-    // Validations
-    if (!AppStore.data.new_contact_modal)
-      AppStore.data.new_contact_modal = {}
-
-    if (!first_name || !last_name) {
-      AppStore.data.new_contact_modal.errors = true
-      AppStore.data.creating_contacts = false
-      AppStore.emitChange()
-      return
-    }
-
-    if (email && !validator.isEmail(email)) {
-      AppStore.data.new_contact_modal.email_invalid = true
-      AppStore.data.creating_contacts = false
-      AppStore.emitChange()
-      return
-    }
-
-    if (!email && !phone_number) {
-      AppStore.data.new_contact_modal.errors = true
-      AppStore.data.creating_contacts = false
-      AppStore.emitChange()
-      return
-    }
-
-    const user = this.props.data.user
-    if (action === 'create') {
-      const contact = {
-        first_name,
-        last_name,
-        role,
-        force_creation: true
-      }
-      // Needs either email or phone
-      if (phone_number)
-        contact.phone_number = phone_number
-      if (email)
-        contact.email = email
-      if (company)
-        contact.company = company
-      if (!role.length)
-        delete contact.role
-      const contacts = [contact]
-      AppDispatcher.dispatch({
-        action: 'create-contacts',
-        contacts,
-        user,
-        module_type
-      })
-    }
-    if (action === 'edit') {
-      // Get default contact info
-      const contact = AppStore.data.contact_modal.contact
-      contact.first_name = first_name
-      contact.last_name = last_name
-      contact.email = email
-      contact.phone_number = phone_number
-      contact.company = company
-      contact.role = role
-      // Remove contact info (no undef)
-      if (!email)
-        delete contact.email
-      if (!phone_number)
-        delete contact.phone_number
-      if (!company)
-        delete contact.company
-      if (!role.length)
-        delete contact.role
-      AppDispatcher.dispatch({
-        action: 'edit-contact',
-        contact,
-        user,
-        module_type
-      })
-    }
-  }
-
   deleteContact(contact) {
     const user = this.props.data.user
     const transaction = this.props.data.current_transaction
@@ -478,20 +343,20 @@ export default class Transactions extends Component {
     }
     AppStore.emitChange()
     TransactionDispatcher.dispatch({
-      action: 'delete-contact',
+      action: 'delete-role',
       contact,
       user,
       transaction
     })
   }
 
-  getTransaction(transaction) {
+  getTransaction(id) {
     const data = this.props.data
     const user = data.user
     TransactionDispatcher.dispatch({
       action: 'get-transaction',
       user,
-      id: transaction.id
+      id
     })
   }
 
@@ -513,13 +378,8 @@ export default class Transactions extends Component {
         // Dates
         const important_dates = transaction.important_dates
         let closing_date
-        if (important_dates) {
+        if (important_dates)
           closing_date = _.result(_.findWhere(important_dates, { title: 'closing' }), 'due_date')
-          if (closing_date) {
-            closing_date = closing_date.toString()
-            closing_date = closing_date.replace('T00:00:00.000Z', '')
-          }
-        }
         if (transaction.listing) {
           listing = transaction.listing
           address = `${listing.property.address.street_number} ${listing.property.address.street_name}`
@@ -549,10 +409,8 @@ export default class Transactions extends Component {
           )
         }
         let friendly_date
-        if (closing_date) {
-          const transaction_time = helpers.convertDateToTime(closing_date)
-          friendly_date = helpers.friendlyDate(transaction_time)
-        }
+        if (closing_date)
+          friendly_date = helpers.friendlyDate(closing_date)
         let client_name
         if (clients && clients[0])
           client_name = clients[0].first_name + ' ' + clients[0].last_name
@@ -653,14 +511,7 @@ export default class Transactions extends Component {
           editTransaction={ this.editTransaction }
           openFileViewer={ this.openFileViewer }
           closeFileViewer={ this.closeFileViewer }
-          setFilteredContacts={ this.setFilteredContacts.bind(this) }
-          setContactActive={ this.setContactActive.bind(this) }
-          hideContactsForm={ this.hideContactsForm }
-          removeContact={ this.removeContact }
-          showContactModal={ this.showContactModal }
-          addContact={ this.addContact }
           deleteContact={ this.deleteContact }
-          showNewContentInitials={ this.showNewContentInitials }
           getTransaction={ this.getTransaction.bind(this) }
         />
       )

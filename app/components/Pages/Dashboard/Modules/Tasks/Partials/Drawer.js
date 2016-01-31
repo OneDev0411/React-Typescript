@@ -129,6 +129,7 @@ export default class Drawer extends Component {
       transaction_markup = (
         <div style={ { ...S('relative p-15 w-100p bg-fff'), ...bottomLine } } className="pull-left">
           <Transaction
+            is_linked
             transaction={ transaction_data }
           />
         </div>

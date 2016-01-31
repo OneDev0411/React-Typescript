@@ -5,14 +5,22 @@ import S from 'shorti'
 import validator from 'validator'
 import helpers from '../../../../../utils/helpers'
 
+// AppStore
+import AppStore from '../../../../../stores/AppStore'
+
+// AppDispatcher
+import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
+
 // Partials
 import ProfileImage from '../../Partials/ProfileImage'
 
 export default class AddContactsModule extends Component {
 
   componentDidMount() {
+    this.getContacts()
     setTimeout(() => {
-      this.refs.search_contacts.refs.input.focus()
+      if (this.refs)
+        this.refs.search_contacts.refs.input.focus()
     }, 300)
   }
 
@@ -25,6 +33,146 @@ export default class AddContactsModule extends Component {
       this.refs.email.refs.input.value = ''
       this.refs.company.refs.input.value = ''
       this.refs.role.refs.input.value = ''
+    }
+  }
+
+  getContacts() {
+    const user = this.props.data.user
+    AppDispatcher.dispatch({
+      action: 'get-contacts',
+      user
+    })
+  }
+
+  setFilteredContacts(filtered_contacts) {
+    AppStore.data.filtered_contacts = filtered_contacts
+    AppStore.emitChange()
+  }
+
+  hideContactsForm() {
+    AppStore.data.filtered_contacts = null
+    AppStore.emitChange()
+  }
+
+  removeContact(contact_id) {
+    const module_type = this.props.module_type
+    AppDispatcher.dispatch({
+      action: 'remove-contact',
+      contact_id,
+      module_type
+    })
+  }
+
+  showNewContentInitials() {
+    const first_initial = this.refs.first_name.refs.input.value.charAt(0)
+    const last_initial = this.refs.last_name.refs.input.value.charAt(0)
+    AppStore.data.new_contact_modal = {
+      first_initial,
+      last_initial
+    }
+    AppStore.emitChange()
+  }
+
+  hideModal() {
+    delete AppStore.data.show_contact_modal
+    delete AppStore.data.contact_modal
+    delete AppStore.data.creating_contacts
+    AppStore.emitChange()
+  }
+
+  addContact(e) {
+    e.preventDefault()
+    const module_type = this.props.module_type
+    AppStore.data.creating_contacts = true
+    AppStore.emitChange()
+    const first_name = this.refs.first_name.refs.input.value.trim()
+    const last_name = this.refs.last_name.refs.input.value.trim()
+    const email = this.refs.email.refs.input.value.trim()
+    const phone_number = this.refs.phone_number.refs.input.value.trim()
+    const company = this.refs.company.refs.input.value.trim()
+    const role = this.refs.role.refs.input.value.trim()
+    const action = this.refs.action.value.trim()
+
+    // Reset errors
+    if (AppStore.data.new_contact_modal) {
+      delete AppStore.data.new_contact_modal.errors
+      delete AppStore.data.new_contact_modal.email_invalid
+    }
+
+    // Validations
+    if (!AppStore.data.new_contact_modal)
+      AppStore.data.new_contact_modal = {}
+
+    if (!first_name || !last_name) {
+      AppStore.data.new_contact_modal.errors = true
+      AppStore.data.creating_contacts = false
+      AppStore.emitChange()
+      return
+    }
+
+    if (email && !validator.isEmail(email)) {
+      AppStore.data.new_contact_modal.email_invalid = true
+      AppStore.data.creating_contacts = false
+      AppStore.emitChange()
+      return
+    }
+
+    if (!email && !phone_number) {
+      AppStore.data.new_contact_modal.errors = true
+      AppStore.data.creating_contacts = false
+      AppStore.emitChange()
+      return
+    }
+
+    const user = this.props.data.user
+    if (action === 'create') {
+      const contact = {
+        first_name,
+        last_name,
+        role,
+        force_creation: true
+      }
+      // Needs either email or phone
+      if (phone_number)
+        contact.phone_number = phone_number
+      if (email)
+        contact.email = email
+      if (company)
+        contact.company = company
+      if (!role.length)
+        delete contact.role
+      const contacts = [contact]
+      AppDispatcher.dispatch({
+        action: 'create-contacts',
+        contacts,
+        user,
+        module_type
+      })
+    }
+    if (action === 'edit') {
+      // Get default contact info
+      const contact = AppStore.data.contact_modal.contact
+      contact.first_name = first_name
+      contact.last_name = last_name
+      contact.email = email
+      contact.phone_number = phone_number
+      contact.company = company
+      contact.role = role
+      // Remove contact info (no undef)
+      if (!email)
+        delete contact.email
+      if (!phone_number)
+        delete contact.phone_number
+      if (!company)
+        delete contact.company
+      if (!role.length)
+        delete contact.role
+      AppDispatcher.dispatch({
+        action: 'edit-contact',
+        contact,
+        user,
+        module_type
+      })
     }
   }
 
@@ -50,7 +198,8 @@ export default class AddContactsModule extends Component {
       else
         active_contact = 0
     }
-    this.props.setContactActive(active_contact)
+    AppStore.data.active_contact = active_contact
+    AppStore.emitChange()
   }
 
   setContactFields(contact) {
@@ -84,32 +233,43 @@ export default class AddContactsModule extends Component {
     })
     if (!text_lower || !filtered_contacts.length)
       filtered_contacts = null
-    this.props.setFilteredContacts(filtered_contacts)
+    this.setFilteredContacts(filtered_contacts)
 
     // Esc
     if (e.which === 27)
-      this.props.hideContactsForm()
+      this.hideContactsForm()
   }
 
-  showContactModal(e) {
+  handleSubmitForm(contact, e) {
     e.preventDefault()
-    this.props.showContactModal()
-    setTimeout(() => {
-      const search_input = this.refs.search_contacts.refs.input.value
-      if (validator.isEmail(search_input))
-        this.refs.email.refs.input.value = search_input
-      if (helpers.isValidPhoneNumber(search_input))
-        this.refs.phone_number.refs.input.value = search_input
-      this.refs.action.value = 'create'
-    }, 100)
+    this.showContactModal(contact)
   }
 
-  showEditContactModal(contact) {
-    this.props.showContactModal(contact)
-    setTimeout(() => {
-      this.refs.action.value = 'edit'
-      this.setContactFields(contact)
-    }, 100)
+  showContactModal(contact) {
+    AppStore.data.show_contact_modal = true
+    AppStore.emitChange()
+    // Edit
+    if (contact) {
+      AppStore.data.contact_modal = {
+        contact
+      }
+      setTimeout(() => {
+        this.refs.action.value = 'edit'
+        this.setContactFields(contact)
+      }, 100)
+    // New
+    } else {
+      setTimeout(() => {
+        const search_input = this.refs.search_contacts.refs.input.value
+        if (search_input) {
+          if (validator.isEmail(search_input))
+            this.refs.email.refs.input.value = search_input
+          if (helpers.isValidPhoneNumber(search_input))
+            this.refs.phone_number.refs.input.value = search_input
+        }
+        this.refs.action.value = 'create'
+      }, 100)
+    }
   }
 
   navContactList(e) {
@@ -121,26 +281,8 @@ export default class AddContactsModule extends Component {
     if (e.which === 13 && filtered_contacts) {
       const active_contact = this.props.data.active_contact
       const contact = filtered_contacts[active_contact]
-      this.showEditContactModal(contact)
+      this.showContactModal(contact)
     }
-  }
-
-  hideContactsForm() {
-    this.props.hideContactsForm()
-  }
-
-  addContact(contact, module_type) {
-    this.props.addContact(contact, module_type, this.refs.search_contacts.refs.input)
-  }
-
-  removeContact(contact_id, module_type) {
-    this.props.removeContact(contact_id, module_type)
-  }
-
-  showNewContentInitials() {
-    const first_initial = this.refs.first_name.refs.input.value.charAt(0)
-    const last_initial = this.refs.last_name.refs.input.value.charAt(0)
-    this.props.showNewContentInitials(first_initial, last_initial)
   }
 
   render() {
@@ -155,28 +297,26 @@ export default class AddContactsModule extends Component {
       overflow: 'scroll'
     }
     let module_style = S('relative')
-    let search_contact_input_style = S('w-600')
-    // If transaction
+    let search_contact_input_style = S('w-600 mr-15')
+
+    // If transaction edit
     if (module_type === 'transaction') {
       module_style = {
         ...module_style,
         ...S('w-500 ml-10 mr-10')
       }
-      search_contact_input_style = S('w-270')
+      search_contact_input_style = S('w-270 mr-15')
       filter_scroll_style.width = 475
     }
-    // If task
-    if (module_type === 'share-task') {
+
+    // If sharing a task or inviting to a room
+    if (module_type === 'share-task' || module_type === 'room') {
       module_style = {
         ...module_style,
         ...S('w-100p ml-10 mr-10')
       }
-      search_contact_input_style = S('w-425')
+      search_contact_input_style = S('w-425 mr-15')
       filter_scroll_style.width = 475
-    }
-    search_contact_input_style = {
-      ...search_contact_input_style,
-      ...S('mr-15')
     }
 
     let filtered_contacts_list
@@ -189,7 +329,7 @@ export default class AddContactsModule extends Component {
           active_contact_style = ' bg-EDF7FD'
         if (!contact.added) {
           return (
-            <div className="add-contact-form__contact" onClick={ this.showEditContactModal.bind(this, contact) } key={ 'contact-' + contact.id } style={ S('br-3 relative h-60 pointer mb-5 p-10' + active_contact_style + contact_added_style) }>
+            <div className="add-contact-form__contact" onClick={ this.showContactModal.bind(this, contact) } key={ 'contact-' + contact.id } style={ S('br-3 relative h-60 pointer mb-5 p-10' + active_contact_style + contact_added_style) }>
               <ProfileImage user={ contact }/>
               <div style={ S('ml-50') }>
                 <span style={ S('fw-600') }>{ contact.first_name } { contact.last_name }</span><br />
@@ -224,7 +364,7 @@ export default class AddContactsModule extends Component {
                 <ProfileImage top={11} size={40} user={ contact }/>
               </div>
               <div style={ S('ml-50') }>
-                <div className="close pull-right" onClick={ this.removeContact.bind(this, contact.id, module_type) } style={ S('pointer') }>&times;</div>
+                <div className="close pull-right" onClick={ this.removeContact.bind(this, contact.id) } style={ S('pointer') }>&times;</div>
                 <div>{ contact.first_name } { contact.last_name }</div>
                 <div>{ contact.email }</div>
               </div>
@@ -279,7 +419,7 @@ export default class AddContactsModule extends Component {
     return (
       <div style={ module_style } className="add-contact-form">
         <div style={ S('maxw-820') }>
-          <form onSubmit={ this.showContactModal.bind(this) }>
+          <form onSubmit={ this.handleSubmitForm.bind(this, null) }>
             <Input ref="search_contacts" onKeyDown={ this.navContactList.bind(this) } onKeyUp={ this.filterContacts.bind(this) } className="pull-left" style={ search_contact_input_style } type="text" placeholder="Enter any name, email or phone number"/>
             <Button className="pull-left" style={ S('w-120') } bsStyle="primary" type="submit">
               Add
@@ -290,8 +430,8 @@ export default class AddContactsModule extends Component {
         { contacts_added_area }
         <div className="clearfix"></div>
         { filtered_contacts_markup }
-        <Modal show={ data.show_contact_modal } onHide={ this.props.hideModal.bind(this) }>
-          <form onSubmit={ this.props.addContact.bind(this, module_type) }>
+        <Modal show={ data.show_contact_modal } onHide={ this.hideModal.bind(this) }>
+          <form onSubmit={ this.addContact.bind(this) }>
             <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
               <Modal.Title style={ S('font-14') }>Add New Contact</Modal.Title>
             </Modal.Header>
@@ -349,7 +489,7 @@ export default class AddContactsModule extends Component {
               <div className="clearfix"></div>
             </Modal.Body>
             <Modal.Footer style={ { border: 'none' } }>
-              <Button bsStyle="link" onClick={ this.props.hideModal.bind(this) }>Cancel</Button>
+              <Button bsStyle="link" onClick={ this.hideModal.bind(this) }>Cancel</Button>
               <Button style={ S('h-30 pt-5 pl-30 pr-30') } className={ data.creating_contacts ? 'disabled' : '' } type="submit" bsStyle="primary">
                 { data.creating_contacts ? 'Adding...' : 'Add' }
               </Button>
@@ -365,14 +505,5 @@ export default class AddContactsModule extends Component {
 // PropTypes
 AddContactsModule.propTypes = {
   data: React.PropTypes.object,
-  filterContacts: React.PropTypes.func,
-  setContactActive: React.PropTypes.func,
-  setFilteredContacts: React.PropTypes.func,
-  hideContactsForm: React.PropTypes.func,
-  removeContact: React.PropTypes.func,
-  showContactModal: React.PropTypes.func,
-  hideModal: React.PropTypes.func,
-  addContact: React.PropTypes.func,
-  module_type: React.PropTypes.string,
-  showNewContentInitials: React.PropTypes.func
+  module_type: React.PropTypes.string
 }

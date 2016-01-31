@@ -46,7 +46,7 @@ export default class Contacts extends Component {
     const contacts = AppStore.data.contacts
     if (contacts) {
       contacts_table = (
-        <Table style={ S('mt-10n minw-760') } condensed hover>
+        <Table className="contacts-table" style={ S('mt-10n minw-760') } condensed hover>
           <thead>
             <tr>
               <th>Name</th>
@@ -60,13 +60,13 @@ export default class Contacts extends Component {
             {
               contacts.map((contact) => {
                 return (
-                  <tr key={ 'contact-' + contact.id } style={ S('h-45 pointer') }>
+                  <tr className="contact-row" key={ 'contact-' + contact.id } style={ S('h-45 pointer') }>
                     <td width="50"><ProfileImage user={ contact }/></td>
                     <td style={ S('pt-12') }>{ contact.first_name } { contact.last_name }</td>
                     <td style={ S('pt-12') }>{ contact.email }</td>
                     <td style={ S('pt-12') }>{ contact.phone_number }</td>
                     <td>
-                      <Button className={ data.deleting_contact === contact.id ? 'disabled' : '' } bsStyle="danger" onClick={ this.deleteContact.bind(this, contact.id) }>
+                      <Button className={ data.deleting_contact === contact.id ? 'disabled delete' : 'delete' } bsStyle="danger" onClick={ this.deleteContact.bind(this, contact.id) }>
                         { data.deleting_contact === contact.id ? 'Deleting...' : 'Delete' }
                       </Button>
                     </td>

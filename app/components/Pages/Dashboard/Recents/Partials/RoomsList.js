@@ -10,7 +10,13 @@ export default class RoomsList extends Component {
 
   handleClick(i) {
     const data = this.props.data
-    const rooms = data.rooms
+    let rooms = data.rooms
+    // Sort by updates
+    if (rooms) {
+      rooms = _.sortBy(rooms, room => {
+        return -room.latest_message.updated_at
+      })
+    }
     const filtered_rooms = data.filtered_rooms
     let room = rooms[i]
     if (filtered_rooms)
@@ -22,8 +28,13 @@ export default class RoomsList extends Component {
     // Data
     const data = this.props.data
     let rooms = data.rooms
+    // Sort by updates
+    if (rooms) {
+      rooms = _.sortBy(rooms, room => {
+        return -room.latest_message.updated_at
+      })
+    }
     const current_room = data.current_room
-
     if (rooms && !rooms.length)
       return <div style={ S('ml-20 mt-20') }>No rooms yet.</div>
 
