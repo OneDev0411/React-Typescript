@@ -44,7 +44,8 @@ export default class Transactions extends Component {
     if (params && params.id) {
       const transactions = data.transactions
       const transaction = _.findWhere(transactions, { id: params.id })
-      this.handleClickTransaction(transaction)
+      AppStore.data.current_transaction = transaction
+      AppStore.emitChange()
     }
   }
 

@@ -149,16 +149,25 @@ export default class TasksModule extends Component {
     }
   }
 
-  showDayPicker() {
-    if (AppStore.data.show_day_picker)
-      delete AppStore.data.show_day_picker
-    else
-      AppStore.data.show_day_picker = true
+  showDayPicker(action) {
+    if (action === 'create') {
+      if (AppStore.data.show_day_picker)
+        delete AppStore.data.show_day_picker
+      else
+        AppStore.data.show_day_picker = true
+    }
+    if (action === 'edit') {
+      if (AppStore.data.show_day_picker_edit)
+        delete AppStore.data.show_day_picker_edit
+      else
+        AppStore.data.show_day_picker_edit = true
+    }
     AppStore.emitChange()
   }
 
   hideDayPicker() {
     delete AppStore.data.show_day_picker
+    delete AppStore.data.show_day_picker_edit
     AppStore.emitChange()
   }
 
@@ -340,6 +349,38 @@ export default class TasksModule extends Component {
     })
   }
 
+  editTaskTitle(task, title) {
+    const data = this.props.data
+    const user = data.user
+    AppStore.data.current_task.title = title
+    AppStore.emitChange()
+    clearTimeout(window.edit_timer)
+    window.edit_timer = setTimeout(() => {
+      TaskDispatcher.dispatch({
+        action: 'edit-title',
+        user,
+        task,
+        title
+      })
+    }, 500)
+  }
+
+  editTaskDate(e, day) {
+    const data = this.props.data
+    const user = data.user
+    const due_date = day.getTime()
+    const task = AppStore.data.current_task
+    AppStore.data.current_task.due_date = due_date
+    delete AppStore.data.show_day_picker_edit
+    AppStore.emitChange()
+    TaskDispatcher.dispatch({
+      action: 'edit-date',
+      user,
+      task,
+      due_date
+    })
+  }
+
   render() {
     const data = this.props.data
     const new_task = data.new_task
@@ -456,7 +497,7 @@ export default class TasksModule extends Component {
               <form>
                 <Input onKeyDown={ this.handleAddTaskKeyDown.bind(this) } style={ { ...S('h-110 pt-12 font-18'), resize: 'none' } } ref="task_title" type="textarea" placeholder="Type your task then press enter"/>
                 <div style={ S('absolute b-0 pl-15 pb-15 pointer') }>
-                  <div className="pull-left" style={ S('color-3388ff') } onClick={ this.showDayPicker }>
+                  <div className="pull-left" style={ S('color-3388ff') } onClick={ this.showDayPicker.bind(this, 'create') }>
                     <span style={ S('mr-10') }>
                       <img width="17" src="/images/dashboard/icons/calendar-blue.svg"/>
                     </span>
@@ -487,6 +528,9 @@ export default class TasksModule extends Component {
           showAddTransactionModal={ this.showAddTransactionModal.bind(this) }
           module_type={ module_type }
           containing_body_height={ this.props.containing_body_height }
+          editTaskTitle={ this.editTaskTitle.bind(this) }
+          showDayPicker={ this.showDayPicker.bind(this, 'edit') }
+          editTaskDate={ this.editTaskDate.bind(this) }
         />
         <Modal show={ data.show_contacts_modal } onHide={ this.hideModal }>
           <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>

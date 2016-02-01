@@ -221,6 +221,9 @@ export default {
       request.attach('media', file)
       request.field('info', JSON.stringify(info))
     })
+    // request.on('progress', e => {
+    //   console.log('e', e)
+    // })
     request.end((err, res) => {
       if (err)
         return callback(err, res)
