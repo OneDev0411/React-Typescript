@@ -41,7 +41,8 @@ export default class Transactions extends Component {
     // From Link to single transaction
     const params = this.props.params
     const data = this.props.data
-    if (params && params.id) {
+    const transactions = data.transactions
+    if (transactions && params && params.id) {
       const transactions = data.transactions
       const transaction = _.findWhere(transactions, { id: params.id })
       AppStore.data.current_transaction = transaction
@@ -65,12 +66,14 @@ export default class Transactions extends Component {
     const data = this.props.data
     const transactions = data.transactions
     const params = this.props.params
-    const id = params.id
-    const current_transaction = _.findWhere(transactions, { id })
-    AppStore.data.current_transaction = current_transaction
-    AppStore.data.current_transaction_loaded = true
-    AppStore.emitChange()
-    this.addTransactionTab(current_transaction)
+    if (params && params.id) {
+      const id = params.id
+      const current_transaction = _.findWhere(transactions, { id })
+      AppStore.data.current_transaction = current_transaction
+      AppStore.data.current_transaction_loaded = true
+      AppStore.emitChange()
+      this.addTransactionTab(current_transaction)
+    }
   }
 
   getContacts() {
