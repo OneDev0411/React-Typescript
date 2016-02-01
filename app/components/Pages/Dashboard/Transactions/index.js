@@ -45,6 +45,11 @@ export default class Transactions extends Component {
       const transactions = data.transactions
       const transaction = _.findWhere(transactions, { id: params.id })
       AppStore.data.current_transaction = transaction
+      // Add to tabs
+      if (!AppStore.data.transaction_tabs)
+        AppStore.data.transaction_tabs = []
+      if (!_.findWhere(AppStore.data.transaction_tabs, { id: params.id }))
+        AppStore.data.transaction_tabs.push(transaction)
       AppStore.emitChange()
     }
   }
