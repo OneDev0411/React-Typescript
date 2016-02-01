@@ -23,6 +23,10 @@ export default class Tasks extends Component {
     let prev_task_date
     let task_date
     if (tasks) {
+      if (current_task) {
+        const current_index = _.indexOf(tasks, _.find(tasks, { id: current_task.id }))
+        tasks[current_index] = current_task
+      }
       tasks = _.sortBy(tasks, task => {
         return task.due_date
       })

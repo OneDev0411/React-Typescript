@@ -43,7 +43,6 @@ export default class Transactions extends Component {
     const data = this.props.data
     const transactions = data.transactions
     if (transactions && params && params.id) {
-      const transactions = data.transactions
       const transaction = _.findWhere(transactions, { id: params.id })
       AppStore.data.current_transaction = transaction
       // Add to tabs
