@@ -164,10 +164,6 @@ export default {
       request.attach('media', file)
       request.field('info', JSON.stringify(info))
     })
-    request.end((err, res) => {
-      if (err)
-        return callback(err, res)
-      return callback(err, res)
-    })
+    return callback(request)
   }
 }

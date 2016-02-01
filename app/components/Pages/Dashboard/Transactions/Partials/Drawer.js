@@ -91,11 +91,14 @@ export default class Drawer extends Component {
             </div>
           )
           if (file.uploading) {
+            let upload_percent = 0
+            if (file.upload_percent)
+              upload_percent = file.upload_percent
             file_area = (
               <div style={ S('ml-20 mr-20 mt-10') }>
                 <div style={ S('relative t-10n') }>Uploading { file.new_name || file.name }</div>
                 <div>
-                  <ProgressBar active striped bsStyle="success" now={100} />
+                  <ProgressBar active striped bsStyle="success" now={ upload_percent } />
                 </div>
               </div>
             )

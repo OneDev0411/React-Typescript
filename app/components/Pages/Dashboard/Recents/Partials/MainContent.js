@@ -104,9 +104,12 @@ export default class MainContent extends Component {
     }
     let uploading_area
     if (data.current_room && data.current_room.uploading_files) {
+      let upload_percent = 0
+      if (data.current_room.upload_percent)
+        upload_percent = data.current_room.upload_percent
       uploading_area = (
         <div style={ S('p-20 w-100p relative t-35n')}>
-          <ProgressBar active striped bsStyle="success" now={100} />
+          <ProgressBar active striped bsStyle="success" now={ upload_percent } />
         </div>
       )
     }
