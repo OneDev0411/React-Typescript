@@ -47,9 +47,21 @@ export default class MessageItem extends Component {
     // Message image
     let message_image
     if (message.image_url) {
+      const file_url = message.image_url
+      let message_thumb = <img src={ file_url } style={ S('maxw-400') }/>
+      if (file_url.toLowerCase().indexOf('.png') === -1 && file_url.toLowerCase().indexOf('.jpg') === -1 && file_url.toLowerCase().indexOf('.gif') === -1) {
+        const ext = file_url.split('.').pop().substr(0, 3)
+        message_thumb = (
+          <div style={ S('w-100 text-center') }>
+            <i style={ S('font-60') } className="text-primary fa fa-file-o"></i>
+            <br />
+            { ext }
+          </div>
+        )
+      }
       message_image = (
-        <div>
-          <img src={ message.image_url } style={ S('maxw-400') }/>
+        <div onClick={ this.props.showFileViewer.bind(this, file_url) } style={ S('pointer') }>
+          { message_thumb }
         </div>
       )
     }
@@ -109,5 +121,6 @@ export default class MessageItem extends Component {
 MessageItem.propTypes = {
   data: React.PropTypes.object,
   message: React.PropTypes.object.isRequired,
-  i: React.PropTypes.number.isRequired
+  i: React.PropTypes.number.isRequired,
+  showFileViewer: React.PropTypes.func
 }

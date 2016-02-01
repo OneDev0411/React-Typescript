@@ -11,8 +11,9 @@ import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import AppStore from '../../../../stores/AppStore'
 
 // Partials
-import MainContent from './Partials/MainContent'
 import SideBar from '../Partials/SideBar'
+import MainContent from './Partials/MainContent'
+import FileViewer from './Partials/FileViewer'
 
 // Socket.io
 import io from 'socket.io-client'
@@ -320,9 +321,33 @@ export default class Dashboard extends Component {
     })
   }
 
+  showFileViewer(file_url) {
+    AppStore.data.current_room.viewer = {
+      file: {
+        url: file_url
+      }
+    }
+    AppStore.emitChange()
+  }
+
+  closeFileViewer() {
+    delete AppStore.data.current_room.viewer
+    AppStore.emitChange()
+  }
+
   render() {
     // Data
     const data = this.props.data
+    const current_room = data.current_room
+    let file_viewer
+    if (current_room && current_room.viewer) {
+      file_viewer = (
+        <FileViewer
+          data={ data }
+          closeFileViewer={ this.closeFileViewer }
+        />
+      )
+    }
     return (
       <div style={ S('minw-1000') }>
         <main>
@@ -341,11 +366,13 @@ export default class Dashboard extends Component {
             handleDragEnter={ this.handleDragEnter }
             handleDragLeave={ this.handleDragLeave }
             uploadFiles={ this.uploadFiles.bind(this) }
+            showFileViewer={ this.showFileViewer }
           />
         </main>
         <audio ref="notif_sound" id="notif-sound">
           <source src="/audio/goat.mp3" type="audio/mpeg" />
         </audio>
+        { file_viewer }
       </div>
     )
   }

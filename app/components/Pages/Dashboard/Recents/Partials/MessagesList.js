@@ -90,7 +90,12 @@ export default class MessagesList extends Component {
     const messages_list_items = messages.map((message, i) => {
       return (
         <li key={ 'message-' + message.id + '-' + i } style={ S('pb-10') }>
-          <MessageItem i={ i } data={ data } message={ message } />
+          <MessageItem
+            i={ i }
+            data={ data }
+            message={ message }
+            showFileViewer={ this.props.showFileViewer }
+          />
         </li>
       )
     })
@@ -176,5 +181,6 @@ MessagesList.propTypes = {
   getPreviousMessages: React.PropTypes.func.isRequired,
   showModal: React.PropTypes.func.isRequired,
   addContactsToRoom: React.PropTypes.func,
-  hideModal: React.PropTypes.func
+  hideModal: React.PropTypes.func,
+  showFileViewer: React.PropTypes.func
 }
