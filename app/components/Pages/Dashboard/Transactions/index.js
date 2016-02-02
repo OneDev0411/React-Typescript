@@ -94,6 +94,7 @@ export default class Transactions extends Component {
   }
 
   setDrawerContent(key, keep_open) {
+    delete AppStore.data.current_task
     const drawer = AppStore.data.current_transaction.drawer
     // If double click
     if (drawer && drawer.content && key === drawer.content && !keep_open)
