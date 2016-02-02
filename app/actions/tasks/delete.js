@@ -5,7 +5,7 @@ import AppStore from '../../stores/AppStore'
 export default (user, task) => {
   const params = {
     access_token: user.access_token,
-    task
+    id: task.id
   }
   Task.delete(params, () => {
     const tasks = AppStore.data.tasks

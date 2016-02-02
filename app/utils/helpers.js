@@ -47,6 +47,12 @@ export default {
     var strTime = hours + ':' + minutes + ampm;
     return strTime;
   },
+  getYMD(timestamp){
+    let date = new Date()
+    if(timestamp)
+      date = new Date(timestamp)
+    return `${date.getFullYear()}-${ ('0' + (date.getMonth() + 1)).slice(-2) }-${('0' + date.getDate()).slice(-2)}`
+  },
   numberWithCommas: (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   },

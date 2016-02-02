@@ -43,7 +43,7 @@ export default {
     if (!api_host) api_host = config.app.url
     const endpoint = api_host + '/api/tasks/delete-task'
     const request_object = {
-      task: params.task,
+      id: params.id,
       access_token: params.access_token
     }
     fetch(endpoint, {

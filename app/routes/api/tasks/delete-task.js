@@ -3,8 +3,8 @@ module.exports = (app, config) => {
   app.post('/api/tasks/delete-task',(req, res) => {
     const api_url = config.api.url
     const access_token = req.body.access_token
-    const task = req.body.task
-    const endpoint = api_url + '/tasks/' + task.id
+    const id = req.body.id
+    const endpoint = api_url + '/tasks/' + id
     fetch(endpoint,{
       method: 'delete',
       headers: {  
