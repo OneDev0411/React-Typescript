@@ -97,7 +97,7 @@ export default class MessagesList extends Component {
       let new_date = false
       const created_at = message.created_at.toString().split('.')
       const message_date_obj = helpers.friendlyDate(created_at[0])
-      message_date = helpers.getYMD(created_at[0]*1000)
+      message_date = helpers.getYMD(created_at[0] * 1000)
       if (!prev_message_date || prev_message_date && prev_message_date !== message_date) {
         let heading_style = {
           ...S('bg-f9f9f9 p-5 pl-10 h-26 font-12 mb-5 br-3 color-acacac mb-10'),

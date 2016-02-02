@@ -14,6 +14,7 @@ import TasksList from './Partials/TasksList'
 import Drawer from './Partials/Drawer'
 import Loading from '../../../../Partials/Loading'
 import Transaction from './Partials/Transaction'
+import ProfileImage from '../../Partials/ProfileImage'
 
 // AppStore
 import AppStore from '../../../../../stores/AppStore'
@@ -139,13 +140,27 @@ export default class TasksModule extends Component {
 
   handleAddTaskKeyDown(e) {
     const key = e.which
+    const data = this.props.data
     // Tab pressed
     if (key === 9)
       this.showDayPicker()
     // Enter pressed
     if (key === 13) {
       e.preventDefault()
-      this.createTask()
+      // Select contact from search
+      if (data.search_contacts && data.search_contacts.list) {
+        const active_contact_index = data.active_contact
+        const active_contact = data.search_contacts.list[active_contact_index]
+        this.addContactFromSearch(active_contact)
+      } else
+        this.createTask()
+    }
+    // Up / down nav searched contacts
+    if (data.search_contacts && data.search_contacts.list) {
+      if (key === 38)
+        this.setContactActive('up')
+      if (key === 40)
+        this.setContactActive('down')
     }
   }
 
@@ -158,18 +173,36 @@ export default class TasksModule extends Component {
       const search_arr = task_title.split('@')
       const search_text = search_arr[1]
       this.searchContacts(text_input, search_text)
+    } else {
+      delete AppStore.data.search_contacts
+      AppStore.emitChange()
     }
   }
 
   searchContacts(text_input, search_text) {
+    if (!search_text.trim()) {
+      AppStore.data.search_contacts = {
+        list: [],
+        position: text_input.selectionEnd
+      }
+      AppStore.emitChange()
+      return
+    }
     const data = this.props.data
     const contacts = data.contacts
     const contacts_filtered = contacts.filter(contact => {
       const first_name = contact.first_name.toLowerCase()
-      return first_name.search(search_text.toLowerCase()) !== -1
+      const email = contact.email.toLowerCase()
+      if (first_name.search(search_text.toLowerCase()) !== -1)
+        return true
+      if (email.search(search_text.toLowerCase()) !== -1)
+        return true
+      return false
     })
-    console.log(text_input.selectionEnd)
-    console.log(contacts_filtered)
+    if (!AppStore.data.search_contacts)
+      AppStore.data.search_contact = {}
+    AppStore.data.search_contacts.list = contacts_filtered
+    AppStore.emitChange()
   }
 
   showDayPicker(action) {
@@ -404,6 +437,51 @@ export default class TasksModule extends Component {
     })
   }
 
+  addContactFromSearch(contact) {
+    if (!AppStore.data.contacts_added) {
+      AppStore.data.contacts_added = {
+        'share-task': []
+      }
+    }
+    const text_input = this.refs.task_title.refs.input
+    const task_title = text_input.value
+    const search_arr = task_title.split('@')
+    text_input.value = `${search_arr[0]}${contact.first_name} ${contact.last_name} `
+    delete AppStore.data.search_contacts
+    // prevent dupe
+    if (!_.find(AppStore.data.contacts_added['share-task'], { id: contact.id }))
+      AppStore.data.contacts_added['share-task'].push(contact)
+    AppStore.data.new_task = true
+    AppStore.emitChange()
+    this.addContactsToTask()
+  }
+
+  setContactActive(direction) {
+    const data = this.props.data
+    const search_contacts_list = data.search_contacts.list
+    let active_contact = -1
+
+    // Prev active contact
+    if (data.active_contact !== null)
+      active_contact = data.active_contact
+
+    if (direction === 'up') {
+      if (active_contact > -1)
+        active_contact = active_contact - 1
+      else
+        active_contact = search_contacts_list.length - 1
+    }
+
+    if (direction === 'down') {
+      if (active_contact < search_contacts_list.length - 1)
+        active_contact = active_contact + 1
+      else
+        active_contact = 0
+    }
+    AppStore.data.active_contact = active_contact
+    AppStore.emitChange()
+  }
+
   render() {
     const data = this.props.data
     const new_task = data.new_task
@@ -509,6 +587,41 @@ export default class TasksModule extends Component {
       delete main_style.top
       delete main_style.right
     }
+    // Search box
+    let search_contacts_area
+    if (data.search_contacts) {
+      const search_contacts_position = data.search_contacts.position
+      const active_contact = data.active_contact
+      const search_box_style = S('p-5 absolute bg-fff br-3 z-100 t-50 minw-200 bw-1 bc-ccc solid l-' + (search_contacts_position * 8))
+      let search_box_content = (
+        <div style={ S('p-10 color-929292') }>Mention someone by name or email</div>
+      )
+      if (data.search_contacts.list && data.search_contacts.list.length) {
+        const search_contacts_list = data.search_contacts.list
+        search_box_content = search_contacts_list.map((contact, i) => {
+          let active_contact_style = ''
+          if (active_contact === i)
+            active_contact_style = ' bg-EDF7FD'
+          return (
+            <div key={ 'contact-search-' + contact.id }>
+              <div onClick={ this.addContactFromSearch.bind(this, contact) } className="add-contact-form__contact" key={ 'contact-' + contact.id } style={ S('br-3 relative h-60 pointer mb-5 p-10' + active_contact_style) }>
+                <ProfileImage user={ contact }/>
+                <div style={ S('ml-50') }>
+                  <span style={ S('fw-600') }>{ contact.first_name } { contact.last_name }</span><br />
+                  <span style={ S('color-666') }>{ contact.email }</span>
+                </div>
+                <div className="clearfix"></div>
+              </div>
+            </div>
+          )
+        })
+      }
+      search_contacts_area = (
+        <div style={ search_box_style }>
+          { search_box_content }
+        </div>
+      )
+    }
     return (
       <div style={ wrapper_style }>
         <div className={ 'task-list' + open_class } style={ main_style }>
@@ -516,6 +629,7 @@ export default class TasksModule extends Component {
             <div style={ S('mr-15 relative') }>
               <form>
                 <Input onKeyUp={ this.handleAddTaskKeyUp.bind(this) } onKeyDown={ this.handleAddTaskKeyDown.bind(this) } style={ { ...S('h-110 pt-12 font-18'), resize: 'none' } } ref="task_title" type="textarea" placeholder="Type your task then press enter"/>
+                { search_contacts_area }
                 <div style={ S('absolute b-0 pl-15 pb-15 pointer') }>
                   <div className="pull-left" style={ S('color-3388ff') } onClick={ this.showDayPicker.bind(this, 'create') }>
                     <span style={ S('mr-10') }>

@@ -39,7 +39,8 @@ export default class Header extends Component {
       if (transaction_tabs) {
         // Always unique
         transaction_tabs = _.uniq(transaction_tabs, transaction => {
-          return transaction.id
+          if (transaction)
+            return transaction.id
         })
         transaction_tabs_markup = transaction_tabs.map(transaction => {
           let tab_title = 'No Address'
