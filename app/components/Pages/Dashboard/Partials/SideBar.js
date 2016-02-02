@@ -67,7 +67,7 @@ export default class SideBar extends Component {
               &nbsp;&nbsp;&nbsp;Calendar
             </NavItem>
           </LinkContainer>
-          <LinkContainer className={ active.transactions } to="/dashboard/transactions">
+          <LinkContainer className={ active.transactions } to="/dashboard/transactions" onClick={ this.props.viewAllTransactions }>
             <NavItem style={ S('w-75p') }>
               <img src={ active.transactions ? '/images/dashboard/icons/transactions-active.svg' : '/images/dashboard/icons/transactions.svg' } style={ S('w-20 h-20') }/>
               &nbsp;&nbsp;&nbsp;Transactions
@@ -94,5 +94,6 @@ export default class SideBar extends Component {
 
 // PropTypes
 SideBar.propTypes = {
-  data: React.PropTypes.object
+  data: React.PropTypes.object,
+  viewAllTransactions: React.PropTypes.func
 }

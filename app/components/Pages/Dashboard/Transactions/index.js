@@ -531,9 +531,17 @@ export default class Transactions extends Component {
 
     return (
       <div style={ S('minw-1000') }>
-        <Header data={ data } viewAllTransactions={ this.viewAllTransactions.bind(this) } viewTransaction={ this.viewTransaction.bind(this) } removeTransactionTab={ this.removeTransactionTab } />
+        <Header
+          data={ data }
+          viewAllTransactions={ this.viewAllTransactions.bind(this) }
+          viewTransaction={ this.viewTransaction.bind(this) }
+          removeTransactionTab={ this.removeTransactionTab }
+        />
         <main style={ S('pt-15') }>
-          <SideBar data={ data }/>
+          <SideBar
+            data={ data }
+            viewAllTransactions={ this.viewAllTransactions.bind(this) }
+          />
           <div style={ main_style }>
             { saved_message }
             { main_content }
