@@ -13,10 +13,12 @@ export default (user, transaction, files) => {
     request.on('progress', e => {
       const upload_percent = e.percent
       const uploading_file = _.find(AppStore.data.current_transaction.attachments, { name: files[0].name })
-      uploading_file.upload_percent = upload_percent
-      const uploading_file_index = _.indexOf(AppStore.data.current_transaction.attachments, uploading_file)
-      AppStore.data.current_transaction.attachments[uploading_file_index] = uploading_file
-      AppStore.emitChange()
+      if (uploading_file) {
+        uploading_file.upload_percent = upload_percent
+        const uploading_file_index = _.indexOf(AppStore.data.current_transaction.attachments, uploading_file)
+        AppStore.data.current_transaction.attachments[uploading_file_index] = uploading_file
+        AppStore.emitChange()
+      }
     })
     request.end((err, res) => {
       if (err)
