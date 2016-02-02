@@ -421,7 +421,7 @@ export default class TasksModule extends Component {
       )
     }
     let open_class = ''
-    if (current_task && current_task.drawer_active)
+    if (current_task && current_task.drawer_active && module_type === 'tasks')
       open_class = ' drawer-open'
 
     let share_new_task_area = (
@@ -485,9 +485,6 @@ export default class TasksModule extends Component {
       delete main_style.position
       delete main_style.top
       delete main_style.right
-      wrapper_style = {
-        paddingTop: '15px'
-      }
     }
     return (
       <div style={ wrapper_style }>
