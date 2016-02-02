@@ -4,6 +4,7 @@ import S from 'shorti'
 import Loading from '../../../../Partials/Loading'
 import { Tooltip, OverlayTrigger, Modal, Button } from 'react-bootstrap'
 import config from '../../../../../../config/public'
+import helpers from '../../../../../utils/helpers'
 
 // Partials
 import MessageItem from './MessageItem'
@@ -87,14 +88,45 @@ export default class MessagesList extends Component {
 
     // Messages
     const messages = data.messages
+    let message_date
+    let prev_message_date
     const messages_list_items = messages.map((message, i) => {
+      let heading
+      let heading_date_area
+      let new_date = false
+      const created_at = message.created_at.toString().split('.')
+      const message_date_obj = helpers.friendlyDate(created_at[0])
+      message_date = `${message_date_obj.year}-${message_date_obj.month}-${message_date_obj.date}`
+      if (!prev_message_date || prev_message_date && prev_message_date !== message_date) {
+        let heading_style = {
+          ...S('bg-f9f9f9 p-5 pl-10 h-26 font-12 mb-5 br-3 color-acacac mb-10'),
+          textTransform: 'uppercase'
+        }
+        // If not first heading add margin-top
+        if (i) {
+          heading_style = {
+            ...heading_style,
+            ...S('mt-15')
+          }
+        }
+        heading_date_area = (
+          <span>{ `${message_date_obj.day}, ${message_date_obj.month} ${message_date_obj.date}, ${message_date_obj.year}` }</span>
+        )
+        heading = (
+          <div style={ heading_style }>{ heading_date_area }</div>
+        )
+        new_date = true
+      }
+      prev_message_date = `${message_date_obj.year}-${message_date_obj.month}-${message_date_obj.date}`
       return (
         <li key={ 'message-' + message.id + '-' + i } style={ S('pb-10') }>
+          { heading }
           <MessageItem
             i={ i }
             data={ data }
             message={ message }
             showFileViewer={ this.props.showFileViewer }
+            new_date={ new_date }
           />
         </li>
       )
@@ -125,9 +157,9 @@ export default class MessagesList extends Component {
 
     // Styles
     const messages_scroll_area = {
-      ...S('pl-20 pr-20'),
+      ...S('pl-20 pr-20 mt-20'),
       overflow: messages_overflow,
-      height: window.innerHeight - 125,
+      height: window.innerHeight - 115,
       opacity: messages_opacity
     }
 

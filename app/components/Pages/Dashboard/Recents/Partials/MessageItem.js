@@ -52,15 +52,17 @@ export default class MessageItem extends Component {
       if (file_url.toLowerCase().indexOf('.png') === -1 && file_url.toLowerCase().indexOf('.jpg') === -1 && file_url.toLowerCase().indexOf('.gif') === -1) {
         const ext = file_url.split('.').pop().substr(0, 3)
         message_thumb = (
-          <div style={ S('w-100 text-center') }>
+          <div style={ S('w-60 mt-10') }>
             <i style={ S('font-60') } className="text-primary fa fa-file-o"></i>
             <br />
-            { ext }
+            <div style={ S('w-50 text-center') }>
+              { ext }
+            </div>
           </div>
         )
       }
       message_image = (
-        <div onClick={ this.props.showFileViewer.bind(this, file_url) } style={ S('pointer') }>
+        <div onClick={ this.props.showFileViewer.bind(this, file_url) } style={ S('pointer mt-10') }>
           { message_thumb }
         </div>
       )
@@ -86,10 +88,10 @@ export default class MessageItem extends Component {
       message_text = emojify.replace(linkifyString(message.comment))
 
     // Get latest author and group
-    if (message.author) {
+    if (message.author && !this.props.new_date) {
       if (messages[i - 1] && messages[i - 1].author && messages[i - 1].author.id === message.author.id) {
         return (
-          <div style={ S('relative') }>
+          <div style={ S('relative mb-5') }>
             <div className="pull-left" style={ S('ml-50') }>
               <div className={ message_class_name } dangerouslySetInnerHTML={ { __html: message_text } }></div>
               { message_image }
@@ -101,7 +103,7 @@ export default class MessageItem extends Component {
     }
 
     return (
-      <div style={ S('relative') }>
+      <div style={ S('relative mb-5') }>
         { profile_image_div }
         <div className="pull-left" style={ S('ml-50') }>
           <b>{ first_name || 'Rebot' }</b>
@@ -122,5 +124,6 @@ MessageItem.propTypes = {
   data: React.PropTypes.object,
   message: React.PropTypes.object.isRequired,
   i: React.PropTypes.number.isRequired,
-  showFileViewer: React.PropTypes.func
+  showFileViewer: React.PropTypes.func,
+  new_date: React.PropTypes.bool
 }
