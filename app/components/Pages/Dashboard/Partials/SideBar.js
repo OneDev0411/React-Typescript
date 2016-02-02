@@ -39,32 +39,32 @@ export default class SideBar extends Component {
 
     return (
       <aside style={ sidebar_style } className="sidebar--dashboard pull-left bg-aqua">
-        <div style={ S('mt-25 ml-10 mb-20 pointer') }>
-          <img src="/images/dashboard/icons/hamburger.svg"/>
+        <div style={ S('mt-18') }>
+          { /* <img src="/images/dashboard/icons/hamburger.svg"/> */ }
         </div>
         <Nav bsStyle="pills" stacked>
           <LinkContainer className={ active.recents } to="/dashboard/recents">
             <NavItem style={ S('w-75p') }>
               <img src={ active.recents ? '/images/dashboard/icons/recents-active.svg' : '/images/dashboard/icons/recents.svg' } style={ S('w-20 h-20') }/>
-              &nbsp;&nbsp;&nbsp;Recents
+              &nbsp;&nbsp;&nbsp;Conversations
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.mls } to="/dashboard/mls">
             <NavItem style={ S('w-75p') }>
               <img src={ active.mls ? '/images/dashboard/icons/listings-active.svg' : '/images/dashboard/icons/listings.svg' } style={ S('w-20 h-20') }/>
-              &nbsp;&nbsp;&nbsp;MLS
+              &nbsp;&nbsp;&nbsp;Search
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.contacts } to="/dashboard/contacts">
             <NavItem style={ S('w-75p') }>
               <img src={ active.contacts ? '/images/dashboard/icons/contacts-active.svg' : '/images/dashboard/icons/contacts.svg' } style={ S('w-20 h-20') }/>
-              &nbsp;&nbsp;&nbsp;Contacts
+              &nbsp;&nbsp;&nbsp;People
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.tasks } to="/dashboard/tasks">
             <NavItem style={ S('w-75p') }>
               <img src={ active.tasks ? '/images/dashboard/icons/tasks-active.svg' : '/images/dashboard/icons/tasks.svg' } style={ S('w-20 h-20') }/>
-              &nbsp;&nbsp;&nbsp;Tasks
+              &nbsp;&nbsp;&nbsp;Calendar
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.transactions } to="/dashboard/transactions">

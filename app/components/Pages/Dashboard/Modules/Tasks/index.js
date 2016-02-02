@@ -149,6 +149,29 @@ export default class TasksModule extends Component {
     }
   }
 
+  handleAddTaskKeyUp() {
+    // Check for @
+    const text_input = this.refs.task_title.refs.input
+    const task_title = text_input.value
+    if (task_title.indexOf('@') !== -1) {
+      // Split after @
+      const search_arr = task_title.split('@')
+      const search_text = search_arr[1]
+      this.searchContacts(text_input, search_text)
+    }
+  }
+
+  searchContacts(text_input, search_text) {
+    const data = this.props.data
+    const contacts = data.contacts
+    const contacts_filtered = contacts.filter(contact => {
+      const first_name = contact.first_name.toLowerCase()
+      return first_name.search(search_text.toLowerCase()) !== -1
+    })
+    console.log(text_input.selectionEnd)
+    console.log(contacts_filtered)
+  }
+
   showDayPicker(action) {
     if (action === 'create') {
       if (AppStore.data.show_day_picker)
@@ -492,7 +515,7 @@ export default class TasksModule extends Component {
           <div style={ S('ml-15') }>
             <div style={ S('mr-15 relative') }>
               <form>
-                <Input onKeyDown={ this.handleAddTaskKeyDown.bind(this) } style={ { ...S('h-110 pt-12 font-18'), resize: 'none' } } ref="task_title" type="textarea" placeholder="Type your task then press enter"/>
+                <Input onKeyUp={ this.handleAddTaskKeyUp.bind(this) } onKeyDown={ this.handleAddTaskKeyDown.bind(this) } style={ { ...S('h-110 pt-12 font-18'), resize: 'none' } } ref="task_title" type="textarea" placeholder="Type your task then press enter"/>
                 <div style={ S('absolute b-0 pl-15 pb-15 pointer') }>
                   <div className="pull-left" style={ S('color-3388ff') } onClick={ this.showDayPicker.bind(this, 'create') }>
                     <span style={ S('mr-10') }>

@@ -19,16 +19,16 @@ export default class Header extends Component {
     let transaction_nav_markup
     // Recents
     if (path === '/dashboard/recents')
-      title = `Recents`
+      title = `Conversations`
     // MLS
     if (path === '/dashboard/mls')
-      title = `MLS`
+      title = `Search`
     // Contacts
     if (path === '/dashboard/contacts')
-      title = `Contacts`
+      title = `People`
     // Tasks
     if (path === '/dashboard/tasks')
-      title = `Tasks`
+      title = `Calendar`
     // Transactions
     if (path.indexOf('/dashboard/transactions') !== -1) {
       const has_s = !transactions || transactions.length !== 1 ? 's' : ''

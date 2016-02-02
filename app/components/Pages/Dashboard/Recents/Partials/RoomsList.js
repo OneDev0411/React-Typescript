@@ -85,7 +85,7 @@ export default class RoomsList extends Component {
         }
 
         return (
-          <li style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, i) }>
+          <li className="room-list__item" style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, i) }>
             <div style={ S('relative') }>
               { profile_image_div }
               <div className="pull-left" style={ S('ml-50 w-90p') }>

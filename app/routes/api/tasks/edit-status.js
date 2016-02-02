@@ -4,8 +4,8 @@ module.exports = (app, config) => {
     const api_url = config.api.url
     const access_token = req.query.access_token
     const status = req.body.status
-    const task = req.body.task
-    const endpoint = api_url + '/tasks/' + task.id
+    const id = req.body.id
+    const endpoint = api_url + '/tasks/' + id
     const request_object = {
       status
     }

@@ -91,7 +91,7 @@ export default {
     if (!api_host) api_host = config.app.url
     const endpoint = api_host + '/api/tasks/edit-status?access_token=' + params.access_token
     const request_object = {
-      task: params.task,
+      id: params.task.id,
       status: params.status
     }
     fetch(endpoint, {
