@@ -47,10 +47,13 @@ export default class TasksModule extends Component {
   }
 
   componentWillUnmount() {
+    // Resets
     if (AppStore.data.contacts_added)
       delete AppStore.data.contacts_added
     if (AppStore.data.new_task)
       delete AppStore.data.new_task
+    if (AppStore.data.show_day_picker)
+      delete AppStore.data.show_day_picker
     AppStore.emitChange()
   }
 
@@ -516,7 +519,7 @@ export default class TasksModule extends Component {
     let day_picker
     if (data.show_day_picker) {
       day_picker = (
-        <div style={ S('absolute bg-fff z-10 t-110 l-10n') }>
+        <div className="daypicker--tasks" style={ S('absolute bg-fff z-100 t-105 l-12') }>
           <DayPicker onDayClick={ this.setTaskDate.bind(this) } />
         </div>
       )

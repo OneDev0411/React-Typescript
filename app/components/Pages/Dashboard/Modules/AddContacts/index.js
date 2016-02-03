@@ -246,6 +246,7 @@ export default class AddContactsModule extends Component {
   }
 
   showContactModal(contact) {
+    delete AppStore.data.filtered_contacts
     AppStore.data.show_contact_modal = true
     AppStore.emitChange()
     // Edit
