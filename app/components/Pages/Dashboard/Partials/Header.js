@@ -4,6 +4,7 @@ import { Link } from 'react-router'
 import { Nav, NavItem } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
+import helpers from '../../../../utils/helpers'
 
 export default class Header extends Component {
 
@@ -13,26 +14,68 @@ export default class Header extends Component {
 
   render() {
     const data = this.props.data
+    const user = data.user
     const transactions = data.transactions
     const path = data.path
     let title
+    let subtitle
     let transaction_nav_markup
     // Recents
-    if (path === '/dashboard/recents')
-      title = `Conversations`
+    if (path === '/dashboard/recents') {
+      title = (
+        <h2 style={ S('font-22 mt-20') }>Conversations</h2>
+      )
+    }
     // MLS
-    if (path === '/dashboard/mls')
-      title = `Search`
+    if (path === '/dashboard/mls') {
+      title = (
+        <h2 style={ S('font-22 mt-20') }>Search</h2>
+      )
+    }
     // Contacts
-    if (path === '/dashboard/contacts')
-      title = `People`
+    if (path === '/dashboard/contacts') {
+      title = (
+        <h2 style={ S('font-22 mt-20') }>People</h2>
+      )
+    }
     // Tasks
-    if (path === '/dashboard/tasks')
-      title = `Calendar`
+    if (path === '/dashboard/tasks') {
+      const tasks = data.tasks
+      const date = new Date()
+      const hour = date.getHours()
+      let greeting = 'Good morning'
+      if (hour > 11)
+        greeting = 'Good afternoon'
+      if (hour > 16)
+        greeting = 'Good evening'
+      if (user.first_name)
+        greeting += `, ${user.first_name}`
+      title = (
+        <div>
+          <h2 style={ S('font-22 mt-10') }>
+            <span style={ S('color-a1bde4') }>{ greeting }</span>
+          </h2>
+        </div>
+      )
+      let tasks_due
+      let todays_tasks
+      if (tasks) {
+        const today = helpers.getYMD()
+        todays_tasks = tasks.filter(task => {
+          const due_date = helpers.getYMD(task.due_date)
+          return due_date === today
+        })
+      }
+      subtitle = (
+        <span style={ S('color-acacac relative t-7n font-12') }>You have { todays_tasks.length } task{ todays_tasks.length !== 1 ? 's' : '' } due today</span>
+      )
+    }
     // Transactions
     if (path.indexOf('/dashboard/transactions') !== -1) {
       const has_s = !transactions || transactions.length !== 1 ? 's' : ''
-      title = `${transactions ? transactions.length : ''} Transaction${has_s}`
+      title = (
+        <h2 style={ S('font-22 mt-20') }>{transactions ? transactions.length : ''} Transaction{has_s}</h2>
+      )
       let transaction_tabs = data.transaction_tabs
       const current_transaction = data.current_transaction
       let transaction_tabs_markup
@@ -87,9 +130,8 @@ export default class Header extends Component {
         <div style={ nav_bar_style } fluid>
           <div>
             <div style={ S('pl-15 w-100p') }>
-              <h2 style={ S('font-22 mt-20') }>
-                { title }
-              </h2>
+              { title }
+              { subtitle }
             </div>
           </div>
           { transaction_nav_markup }
