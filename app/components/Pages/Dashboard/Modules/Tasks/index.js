@@ -46,6 +46,14 @@ export default class TasksModule extends Component {
     }
   }
 
+  componentWillUnmount() {
+    if (AppStore.data.contacts_added)
+      delete AppStore.data.contacts_added
+    if (AppStore.data.new_task)
+      delete AppStore.data.new_task
+    AppStore.emitChange()
+  }
+
   // Transactions
   getAllTransactions() {
     const user = this.props.data.user
@@ -449,6 +457,8 @@ export default class TasksModule extends Component {
     text_input.value = `${search_arr[0]}${contact.first_name} ${contact.last_name} `
     delete AppStore.data.search_contacts
     // prevent dupe
+    if (!AppStore.data.contacts_added['share-task'])
+      AppStore.data.contacts_added['share-task'] = []
     if (!_.find(AppStore.data.contacts_added['share-task'], { id: contact.id }))
       AppStore.data.contacts_added['share-task'].push(contact)
     AppStore.data.new_task = true
