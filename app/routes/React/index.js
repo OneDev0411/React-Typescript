@@ -1,6 +1,6 @@
 // index.js
 import React from 'react'
-import { match, RoutingContext } from 'react-router'
+import { match, RouterContext } from 'react-router'
 import ReactDOMServer from 'react-dom/server'
 import async from 'async'
 
@@ -23,7 +23,7 @@ module.exports = (app, config) => {
           // timestamp bundle
           const date = new Date
           res.locals.time = date.getTime()
-          let reactMarkup = ReactDOMServer.renderToString(<RoutingContext data={ AppStore.data } {...renderProps} />)
+          let reactMarkup = ReactDOMServer.renderToString(<RouterContext data={ AppStore.data } {...renderProps} />)
           res.locals.reactMarkup = reactMarkup
           if (error) {
             res.status(500).send(error.message)
