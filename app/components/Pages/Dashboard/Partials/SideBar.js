@@ -45,31 +45,31 @@ export default class SideBar extends Component {
         <Nav bsStyle="pills" stacked>
           <LinkContainer className={ active.recents } to="/dashboard/recents">
             <NavItem style={ S('w-78p') }>
-              <img src={ active.recents ? '/images/dashboard/icons/sidenav/chat-active.svg' : '/images/dashboard/icons/sidenav/chat.svg' } style={ S('w-20 h-20') }/>
+              <img src={ active.recents ? '/images/dashboard/icons/sidenav/chat-active.svg' : '/images/dashboard/icons/sidenav/chat.svg' } style={ S('w-19 h-19') }/>
               &nbsp;&nbsp;&nbsp;&nbsp;Conversations
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.mls } to="/dashboard/mls">
             <NavItem style={ S('w-75p') }>
-              <img src={ active.mls ? '/images/dashboard/icons/sidenav/map-active.svg' : '/images/dashboard/icons/sidenav/map.svg' } style={ S('w-20 h-20') }/>
+              <img src={ active.mls ? '/images/dashboard/icons/sidenav/map-active.svg' : '/images/dashboard/icons/sidenav/map.svg' } style={ S('w-19 h-19') }/>
               &nbsp;&nbsp;&nbsp;&nbsp;Search
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.contacts } to="/dashboard/contacts">
             <NavItem style={ S('w-75p') }>
-              <img src={ active.contacts ? '/images/dashboard/icons/sidenav/people-active.svg' : '/images/dashboard/icons/sidenav/people.svg' } style={ S('w-20 h-20') }/>
+              <img src={ active.contacts ? '/images/dashboard/icons/sidenav/people-active.svg' : '/images/dashboard/icons/sidenav/people.svg' } style={ S('w-19 h-19') }/>
               &nbsp;&nbsp;&nbsp;&nbsp;People
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.tasks } to="/dashboard/tasks">
             <NavItem style={ S('w-75p') }>
-              <img src={ active.tasks ? '/images/dashboard/icons/sidenav/calendar-active.svg' : '/images/dashboard/icons/sidenav/calendar.svg' } style={ S('w-20 h-20') }/>
+              <img src={ active.tasks ? '/images/dashboard/icons/sidenav/calendar-active.svg' : '/images/dashboard/icons/sidenav/calendar.svg' } style={ S('w-19 h-19') }/>
               &nbsp;&nbsp;&nbsp;&nbsp;Calendar
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.transactions } to="/dashboard/transactions" onClick={ this.props.viewAllTransactions }>
             <NavItem style={ S('w-75p') }>
-              <img src={ active.transactions ? '/images/dashboard/icons/sidenav/transactions-active.svg' : '/images/dashboard/icons/sidenav/transactions.svg' } style={ S('w-20 h-20') }/>
+              <img src={ active.transactions ? '/images/dashboard/icons/sidenav/transactions-active.svg' : '/images/dashboard/icons/sidenav/transactions.svg' } style={ S('w-19 h-19') }/>
               &nbsp;&nbsp;&nbsp;&nbsp;Transactions
             </NavItem>
           </LinkContainer>
