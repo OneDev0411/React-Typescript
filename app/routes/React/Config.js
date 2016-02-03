@@ -12,6 +12,7 @@ import Mls from '../../components/Pages/Dashboard/Mls'
 import Contacts from '../../components/Pages/Dashboard/Contacts'
 import Tasks from '../../components/Pages/Dashboard/Tasks'
 import Transactions from '../../components/Pages/Dashboard/Transactions'
+import SingleTransaction from '../../components/Pages/Dashboard/Transactions/Single'
 import NewTransaction from '../../components/Pages/Dashboard/Transactions/New'
 import SignUp from '../../components/Pages/SignUp'
 import SignIn from '../../components/Pages/SignIn'
@@ -36,8 +37,8 @@ export default (
     <Route path="dashboard/tasks" component={Tasks}/>
     <Route path="dashboard/transactions" component={Transactions}/>
     <Route path="dashboard/transactions/new" component={NewTransaction}/>
-    <Route path="dashboard/transactions/:id" component={Transactions}/>
-    <Route path="dashboard/transactions/:id/attachments/:id" component={Transactions}/>
+    <Route path="dashboard/transactions/:id" component={SingleTransaction}/>
+    <Route path="dashboard/transactions/:id/attachments/:id" component={SingleTransaction}/>
     <Route path="verify/:slug" component={Verify}/>
     <Route path="password/:slug" component={Password}/>
     <Route path="*" component={NoMatch}/>

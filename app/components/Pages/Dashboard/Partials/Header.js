@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { Nav, NavItem } from 'react-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
 import helpers from '../../../../utils/helpers'
@@ -109,9 +110,11 @@ export default class Header extends Component {
       transaction_nav_markup = (
         <div>
           <Nav className="table--tabbable__tabs" style={ S('b-1n absolute ml-15') } bsStyle="tabs" activeKey={ active_tab }>
-            <NavItem className="all-transactions-tab" onClick={ this.props.viewAllTransactions.bind(this) } eventKey={'all'}>
-              All transactions
-            </NavItem>
+            <LinkContainer to="/dashboard/transactions">
+              <NavItem className="all-transactions-tab">
+                All transactions
+              </NavItem>
+            </LinkContainer>
             { transaction_tabs_markup }
           </Nav>
           <Link style={ S('absolute r-15 t-15') } className="btn btn-primary" to="/dashboard/transactions/new">+ Add Transaction</Link>
@@ -148,6 +151,5 @@ export default class Header extends Component {
 Header.propTypes = {
   data: React.PropTypes.object,
   viewTransaction: React.PropTypes.func,
-  viewAllTransactions: React.PropTypes.func,
   removeTransactionTab: React.PropTypes.func
 }
