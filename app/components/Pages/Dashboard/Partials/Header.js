@@ -66,14 +66,14 @@ export default class Header extends Component {
         })
       }
       subtitle = (
-        <span style={ S('color-acacac relative t-7n font-12') }>You have { todays_tasks.length } task{ todays_tasks.length !== 1 ? 's' : '' } due today</span>
+        <span style={ S('color-acacac relative t-7n font-12') }>You have { todays_tasks && todays_tasks.length ? todays_tasks.length : 0 } task{ todays_tasks && todays_tasks.length !== 1 ? 's' : '' } due today</span>
       )
     }
     // Transactions
     if (path.indexOf('/dashboard/transactions') !== -1) {
       const has_s = !transactions || transactions.length !== 1 ? 's' : ''
       title = (
-        <h2 style={ S('font-22 mt-20') }>{transactions ? transactions.length : ''} Transaction{has_s}</h2>
+        <h2 style={ S('font-22 mt-20') }>{ transactions ? transactions.length : ''} Transaction{has_s}</h2>
       )
       let transaction_tabs = data.transaction_tabs
       const current_transaction = data.current_transaction
