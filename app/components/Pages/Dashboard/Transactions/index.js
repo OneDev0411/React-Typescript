@@ -31,6 +31,8 @@ export default class Transactions extends Component {
 
   getTransactions() {
     const data = this.props.data
+    AppStore.data.getting_transactions = true
+    AppStore.emitChange()
     TransactionDispatcher.dispatch({
       action: 'get-all',
       user: data.user
@@ -183,38 +185,36 @@ export default class Transactions extends Component {
       )
     }
 
-    let main_content
-    if (transactions_rows && transactions_rows.length) {
-      main_content = (
-        <div style={ S('pl-15 pr-15') }>
-          <Table style={ S('mt-10n minw-760') } className="table--tabbable" condensed hover>
-            <thead>
-              <tr>
-                <th width="150">Property</th>
-                <th width="100">Contact</th>
-                <th width="100">Price</th>
-                <th width="100">Next Task</th>
-                <th width="100">Closing Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              { transactions_rows }
-            </tbody>
-          </Table>
-        </div>
-      )
-    } else {
-      main_content = (
-        <div style={ S('pl-15 pr-15') }>No transactions yet.  Maybe this needs to say something snarky or clever.</div>
-      )
-    }
-
-    if (data.getting_transactions) {
-      main_content = (
+    let main_content = (
         <div style={ S('pl-15 pr-15') }>
           <Loading />
         </div>
       )
+    if (transactions_rows) {
+      if (transactions_rows.length) {
+        main_content = (
+          <div style={ S('pl-15 pr-15') }>
+            <Table style={ S('mt-10n minw-760') } className="table--tabbable" condensed hover>
+              <thead>
+                <tr>
+                  <th width="150">Property</th>
+                  <th width="100">Contact</th>
+                  <th width="100">Price</th>
+                  <th width="100">Next Task</th>
+                  <th width="100">Closing Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                { transactions_rows }
+              </tbody>
+            </Table>
+          </div>
+        )
+      } else {
+        main_content = (
+          <div style={ S('pl-15 pr-15') }>No transactions yet.  Maybe this needs to say something snarky or clever.</div>
+        )
+      }
     }
 
     // Style
