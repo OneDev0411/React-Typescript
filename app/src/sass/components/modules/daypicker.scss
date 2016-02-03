@@ -10,6 +10,11 @@
     &:hover {
       background-color: #eeeeee;
     }
+    &--outside {
+      &:hover {
+        background-color: #fff;
+      } 
+    }
   }
   .DayPicker-Caption {
     height: 3rem;
