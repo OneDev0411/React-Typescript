@@ -34,16 +34,8 @@ export default class Transactions extends Component {
     // From Link to single transaction
     const data = this.props.data
     const params = this.props.params
-    const transactions = data.transactions
-    if (transactions && params && params.id) {
-      const transaction = _.find(transactions, { id: params.id })
-      this.getTransactions()
-      this.getTransaction(transaction.id)
-      // Add to tabs
-      if (!AppStore.data.transaction_tabs)
-        AppStore.data.transaction_tabs = []
-      if (!_.findWhere(AppStore.data.transaction_tabs, { id: params.id }))
-        AppStore.data.transaction_tabs.push(transaction)
+    if (params && params.id) {
+      this.getTransaction(params.id)
     }
     AppStore.emitChange()
   }
@@ -52,14 +44,6 @@ export default class Transactions extends Component {
     const data = this.props.data
     AppDispatcher.dispatch({
       action: 'get-contacts',
-      user: data.user
-    })
-  }
-
-  getTransactions() {
-    const data = this.props.data
-    TransactionDispatcher.dispatch({
-      action: 'get-all',
       user: data.user
     })
   }
