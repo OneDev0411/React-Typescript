@@ -89,7 +89,7 @@ export default class MainContent extends Component {
             <div className="form-group" style={ S('w-100p') }>
               <input onKeyDown={ this.props.handleMessageTyping.bind(this) } ref="message_input" type="text" className="form-control" style={ S('w-100p pl-70 bw-2') } placeholder="Type your message and press enter"/>
               <Dropzone onDrop={ this.props.uploadFiles } type="button" className="btn btn-default create-message__btn" style={ S('absolute bw-2 p-0 w-56 h-38 l-20 t-20') }>
-                <span className="plus" style={ S('font-22 relative t-1n color-ccc') }>+</span>
+                <span className="plus" style={ S('font-22 relative t-1n') }>+</span>
               </Dropzone>
             </div>
           </form>

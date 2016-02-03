@@ -3,3 +3,12 @@
     background-color: #f5f5f5;
   }
 }
+.create-message__btn {
+  color: #ccc;
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: #3388ff !important;
+    color: #fff !important;
+  } 
+}
