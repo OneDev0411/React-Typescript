@@ -150,7 +150,7 @@ export default class Drawer extends Component {
     let day_picker
     if (data.show_day_picker_edit) {
       day_picker = (
-        <div style={ S('absolute bg-fff z-100 t-140 l-0') }>
+        <div className="daypicker--tasks" style={ S('absolute bg-fff z-100 t-145 l-10') }>
           <DayPicker onDayClick={ this.props.editTaskDate.bind(this) } />
         </div>
       )
