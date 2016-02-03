@@ -57,7 +57,6 @@ export default class Header extends Component {
           </h2>
         </div>
       )
-      let tasks_due
       let todays_tasks
       if (tasks) {
         const today = helpers.getYMD()
