@@ -17,7 +17,7 @@ export default class SideBar extends Component {
     const path = data.path
 
     const active = {}
-    if (path === '/dashboard/recents')
+    if (path.indexOf('/dashboard/recents') !== -1)
       active.recents = 'active'
 
     if (path === '/dashboard/mls')
