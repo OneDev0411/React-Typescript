@@ -32,11 +32,9 @@ export default class Transactions extends Component {
       }, 3000)
     }
     // From Link to single transaction
-    const data = this.props.data
     const params = this.props.params
-    if (params && params.id) {
+    if (params && params.id)
       this.getTransaction(params.id)
-    }
     AppStore.emitChange()
   }
 
