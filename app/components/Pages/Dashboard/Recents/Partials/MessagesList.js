@@ -199,7 +199,7 @@ export default class MessagesList extends Component {
     // Styles
     const messages_scroll_area = {
       ...S('pl-20 pr-20 mt-20 relative'),
-      overflow: messages_overflow,
+      overflowY: messages_overflow,
       height: window.innerHeight - 115,
       opacity: messages_opacity
     }

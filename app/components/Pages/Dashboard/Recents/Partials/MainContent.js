@@ -49,7 +49,6 @@ export default class MainContent extends Component {
 
     // Rooms
     const rooms_column_style = {
-      overflow: 'scroll',
       height: window.innerHeight,
       borderRight: '1px solid #e7e4e3',
       width: '320px'
