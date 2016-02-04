@@ -19,27 +19,60 @@ export default class MessagesList extends Component {
       const clipboard = require('clipboard')
       new clipboard('.copy-link')
     }
+    this.scrollBottom()
   }
+
   componentDidUpdate() {
-    // TODO: clean this up
-    // Scroll to bottom if under 200 px from bottom and not User.Typing
-    const messages_scroll_area = this.refs.messages_scroll_area
-    if (messages_scroll_area)
-      messages_scroll_area.scrollTop = messages_scroll_area.scrollHeight
-      // const fromBottom = messages_scroll_area.scrollHeight - messages_scroll_area.scrollTop - parseInt(messages_scroll_area.style.height, 10)
-      // if(fromBottom <= 200 && !this.props.data.is_typing)
-
-    // Previous messages loading
-    const current_room = this.props.data.current_room
-    if (current_room && current_room.loading_previous) {
-      setTimeout(() => {
-        messages_scroll_area.scrollTop = 0
-      }, 1)
+    const data = this.props.data
+    if (data.scroll_bottom) {
+      this.scrollBottom()
+      this.props.removeScrollBottom()
     }
+  }
 
-    // Previous messages loaded
-    if (current_room && current_room.viewing_previous)
-      this.resetScrollAfterLoad()
+  scrollBottom() {
+    const messages_scroll_area = this.refs.messages_scroll_area
+    if (messages_scroll_area) {
+      setTimeout(() => {
+        messages_scroll_area.scrollTop = messages_scroll_area.scrollHeight
+      }, 100)
+    }
+  }
+
+  getMessagePositions() {
+    const data = this.props.data
+    const messages = data.messages
+    if (!messages)
+      return false
+    const heading_objects = []
+    messages.forEach((message, i) => {
+      const message_element = this.refs['message-' + i]
+      const message_created = message.created_at.toString().split('.')
+      const rect = message_element.getBoundingClientRect()
+      const heading_object = {
+        top: rect.top,
+        date: message_created[0]
+      }
+      heading_objects.push(heading_object)
+    })
+    return heading_objects
+  }
+
+  getLockedHeadingDate() {
+    const heading_objects = this.getMessagePositions()
+    const arr_sorted = heading_objects.sort((a, b) => {
+      return a.top - b.top
+    })
+    const sorted_under_zero = arr_sorted.filter(message => {
+      return message.top < 60
+    })
+    if (!sorted_under_zero || !sorted_under_zero[sorted_under_zero.length - 1])
+      return false
+    const locked_heading_date = sorted_under_zero[sorted_under_zero.length - 1].date
+    // Testing
+    // const time_created = helpers.friendlyDate(locked_heading_date)
+    // const fixed_heading_date = `${ time_created.month } ${ time_created.date }, ${ time_created.year }`
+    this.props.setHeadingDate(locked_heading_date)
   }
 
   handleInviteLinkClick(e) {
@@ -55,6 +88,7 @@ export default class MessagesList extends Component {
   }
 
   handleScroll() {
+    this.getLockedHeadingDate()
     if (this.props.data.current_room.showing_all)
       return false
     const messages_scroll_area = this.refs.messages_scroll_area
@@ -91,6 +125,10 @@ export default class MessagesList extends Component {
     let message_date
     const todays_date = helpers.getYMD()
     let prev_message_date
+    let heading_style = {
+      ...S('bg-f9f9f9 p-5 pl-10 h-26 font-12 mb-5 br-3 color-acacac mb-10'),
+      textTransform: 'uppercase'
+    }
     const messages_list_items = messages.map((message, i) => {
       let heading
       let heading_date_area
@@ -99,10 +137,6 @@ export default class MessagesList extends Component {
       const message_date_obj = helpers.friendlyDate(created_at[0])
       message_date = helpers.getYMD(created_at[0] * 1000)
       if (!prev_message_date || prev_message_date && prev_message_date !== message_date) {
-        let heading_style = {
-          ...S('bg-f9f9f9 p-5 pl-10 h-26 font-12 mb-5 br-3 color-acacac mb-10'),
-          textTransform: 'uppercase'
-        }
         // If not first heading add margin-top
         if (i) {
           heading_style = {
@@ -120,13 +154,13 @@ export default class MessagesList extends Component {
         }
 
         heading = (
-          <div style={ heading_style }>{ heading_date_area }</div>
+          <div className="message-heading" style={ heading_style }>{ heading_date_area }</div>
         )
         new_date = true
       }
       prev_message_date = message_date
       return (
-        <li key={ 'message-' + message.id + '-' + i } style={ S('pb-10') }>
+        <li ref={ 'message-' + i} key={ 'message-' + message.id + '-' + i } style={ S('pb-10') }>
           { heading }
           <MessageItem
             i={ i }
@@ -156,7 +190,7 @@ export default class MessagesList extends Component {
       messages_overflow = 'hidden'
       messages_opacity = '.7'
       loading_previous = (
-        <div className="text-center" style={ S('relative h-60 pt-20') }>
+        <div className="text-center" style={ S('relative h-80 pt-40') }>
           Loading previous messages...
         </div>
       )
@@ -164,12 +198,13 @@ export default class MessagesList extends Component {
 
     // Styles
     const messages_scroll_area = {
-      ...S('pl-20 pr-20 mt-20'),
+      ...S('pl-20 pr-20 mt-20 relative'),
       overflow: messages_overflow,
       height: window.innerHeight - 115,
       opacity: messages_opacity
     }
-
+    const fixed_date_obj = helpers.friendlyDate(data.heading_date)
+    const fixed_heading_date = `${fixed_date_obj.day}, ${fixed_date_obj.month} ${fixed_date_obj.date}, ${fixed_date_obj.year}`
     return (
       <div>
         <div style={ S('absolute r-60 t-16') }>
@@ -188,6 +223,9 @@ export default class MessagesList extends Component {
           <img style={ S('ml-1n mt-1n') } src="/images/dashboard/icons/invite-user.svg"/>
         </button>
         <h3 style={ S('mt-0 ml-20 mr-50') }>{ current_room.title }</h3>
+        <div className="heading-fixed" style={ S('absolute w-98p z-100 t-60 pl-20 pr-5 pb-0 bg-fff') }>
+          <div className="message-heading" style={ { ...heading_style, ...S('m-0') } }>{ fixed_heading_date }</div>
+        </div>
         <div ref="messages_scroll_area" style={ messages_scroll_area } onScroll={ this.handleScroll.bind(this) }>
           { loading_previous }
           <ul style={ S('pl-0') }>{ messages_list_items }</ul>
@@ -221,5 +259,7 @@ MessagesList.propTypes = {
   showModal: React.PropTypes.func.isRequired,
   addContactsToRoom: React.PropTypes.func,
   hideModal: React.PropTypes.func,
-  showFileViewer: React.PropTypes.func
+  showFileViewer: React.PropTypes.func,
+  setHeadingDate: React.PropTypes.func,
+  removeScrollBottom: React.PropTypes.func
 }

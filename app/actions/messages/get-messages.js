@@ -14,7 +14,9 @@ export default (user, room) => {
     // Success
     if (response.status === 'success') {
       // Reverse order to latest first...
-      AppStore.data.messages = response.data.reverse()
+      const messages = response.data.reverse()
+      AppStore.data.heading_date = messages[0].created_at
+      AppStore.data.messages = messages
       AppStore.data.current_room = room
     }
 
@@ -22,6 +24,7 @@ export default (user, room) => {
     AppStore.data.current_room.showing_all = false
     AppStore.data.current_room.message_count = 20
     AppStore.data.messages_loading = false
+    AppStore.data.scroll_bottom = true
     AppStore.emitChange()
   })
 }

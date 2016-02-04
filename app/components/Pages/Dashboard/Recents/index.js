@@ -46,7 +46,6 @@ export default class Dashboard extends Component {
   getMessages(current_room) {
     AppStore.data.messages_loading = true
     AppStore.emitChange()
-
     const data = AppStore.data
     AppDispatcher.dispatch({
       action: 'get-messages',
@@ -55,6 +54,11 @@ export default class Dashboard extends Component {
     })
     // Show room_id in url
     history.pushState(null, null, '/dashboard/recents/' + current_room.id)
+  }
+
+  removeScrollBottom() {
+    delete AppStore.data.scroll_bottom
+    AppStore.emitChange()
   }
 
   getUserRooms() {
@@ -335,6 +339,11 @@ export default class Dashboard extends Component {
     AppStore.emitChange()
   }
 
+  setHeadingDate(date) {
+    AppStore.data.heading_date = date
+    AppStore.emitChange()
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -361,12 +370,14 @@ export default class Dashboard extends Component {
             showModal={ this.showModal }
             hideModal={ this.hideModal }
             createRoom={ this.createRoom }
-            getMessages={ this.getMessages }
+            getMessages={ this.getMessages.bind(this) }
             addContactsToRoom={ this.addContactsToRoom }
             handleDragEnter={ this.handleDragEnter }
             handleDragLeave={ this.handleDragLeave }
             uploadFiles={ this.uploadFiles.bind(this) }
             showFileViewer={ this.showFileViewer }
+            setHeadingDate={ this.setHeadingDate }
+            removeScrollBottom={ this.removeScrollBottom }
           />
         </main>
         <audio ref="notif_sound" id="notif-sound">

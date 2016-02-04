@@ -101,9 +101,8 @@ export default class MessageItem extends Component {
         )
       }
     }
-
     return (
-      <div style={ S('relative mb-5') }>
+      <div className="message-item" style={ S('relative mb-5') }>
         { profile_image_div }
         <div className="pull-left" style={ S('ml-50') }>
           <b>{ first_name || 'Rebot' }</b>

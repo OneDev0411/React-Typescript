@@ -144,6 +144,8 @@ export default class MainContent extends Component {
                 addContactsToRoom={ this.props.addContactsToRoom }
                 hideModal={ this.hideModal.bind(this) }
                 showFileViewer={ this.props.showFileViewer }
+                setHeadingDate={ this.props.setHeadingDate }
+                removeScrollBottom={ this.props.removeScrollBottom }
               />
               { uploading_area }
               { create_message_area }
@@ -189,5 +191,7 @@ MainContent.propTypes = {
   handleDragEnter: React.PropTypes.func.isRequired,
   handleDragLeave: React.PropTypes.func.isRequired,
   uploadFiles: React.PropTypes.func.isRequired,
-  showFileViewer: React.PropTypes.func
+  showFileViewer: React.PropTypes.func,
+  setHeadingDate: React.PropTypes.func,
+  removeScrollBottom: React.PropTypes.func
 }

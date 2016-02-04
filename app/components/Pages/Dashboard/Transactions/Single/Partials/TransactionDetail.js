@@ -2,15 +2,15 @@
 import React, { Component } from 'react'
 import { Carousel, CarouselItem, Modal, Button, Input, Col, OverlayTrigger, Tooltip, Dropdown, MenuItem } from 'react-bootstrap'
 import S from 'shorti'
-import listing_util from '../../../../../utils/listing'
-import helpers from '../../../../../utils/helpers'
+import listing_util from '../../../../../../utils/listing'
+import helpers from '../../../../../../utils/helpers'
 import Dropzone from 'react-dropzone'
 
 // Partials
-import DropzoneOverlay from '../../Partials/DropzoneOverlay'
+import DropzoneOverlay from '../../../Partials/DropzoneOverlay'
 import Drawer from './Drawer'
 import FileViewer from './FileViewer'
-import TasksModule from '../../Modules/Tasks'
+import TasksModule from '../../../Modules/Tasks'
 
 export default class TransactionDetail extends Component {
 
@@ -333,9 +333,9 @@ export default class TransactionDetail extends Component {
                   <i style={ S('color-929292') } className="fa fa-cog"></i>
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="super-colors">
-                  <MenuItem onClick={ this.props.showEditModal.bind(this) }>Edit</MenuItem>
+                  <MenuItem onClick={ this.props.showEditModal.bind(this) }><i className="fa fa-edit" style={ S('mr-10') }></i>Edit</MenuItem>
                   <MenuItem divider />
-                  <MenuItem onClick={ this.props.deleteTransaction.bind(this, transaction.id) }>{ data.deleting_transaction && data.deleting_transaction === transaction.id ? 'Deleting...' : 'Delete' }</MenuItem>
+                  <MenuItem onClick={ this.props.deleteTransaction.bind(this, transaction.id) }><i className="fa fa-trash-o" style={ S('mr-10') }></i>{ data.deleting_transaction && data.deleting_transaction === transaction.id ? 'Deleting...' : 'Delete' }</MenuItem>
                 </Dropdown.Menu>
               </Dropdown>
             </div>

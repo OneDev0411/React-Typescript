@@ -16,7 +16,7 @@ import TransactionDispatcher from '../../../../../dispatcher/TransactionDispatch
 // Partials
 import SideBar from '../../Partials/SideBar'
 import Header from '../../Partials/Header'
-import TransactionDetail from '../Partials/TransactionDetail'
+import TransactionDetail from './Partials/TransactionDetail'
 
 export default class Transactions extends Component {
 

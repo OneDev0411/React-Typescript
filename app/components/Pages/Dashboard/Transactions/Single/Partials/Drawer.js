@@ -5,9 +5,9 @@ import S from 'shorti'
 import Dropzone from 'react-dropzone'
 
 // Partials
-import Loading from '../../../../Partials/Loading'
-import ProfileImage from '../../Partials/ProfileImage'
-import AddContactsModule from '../../Modules/AddContacts'
+import Loading from '../../../../../Partials/Loading'
+import ProfileImage from '../../../Partials/ProfileImage'
+import AddContactsModule from '../../../Modules/AddContacts'
 
 export default class Drawer extends Component {
 
