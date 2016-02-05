@@ -5,6 +5,7 @@ import S from 'shorti'
 export default class ProfileImage extends Component {
   render() {
     const user = this.props.user
+    const data = this.props.data
     const profile_image_url = user.profile_image_url
     let background = `bg-url(${profile_image_url})`
     let initials
@@ -34,10 +35,17 @@ export default class ProfileImage extends Component {
       width_height = `w-${this.props.size} h-${this.props.size}`
 
     const profile_image_style = S(`bg-cover bg-center ${background} ${width_height} absolute z-2`)
-
+    let online_indicator
+    if (data.users_online) {
+      let bg_color = 'dddfe0'
+      if (data.users_online.includes(user.id))
+        bg_color = '35b863'
+      online_indicator = <div style={ S('br-100 bg-' + bg_color + ' w-13 h-13 bw-2 solid bc-fff absolute z-100 t-3n r-1') }></div>
+    }
     return (
       <div style={ S('inline') }>
         <div className="img-circle" style={ profile_image_style }>
+          { online_indicator }
           { initials }
         </div>
       </div>
@@ -49,5 +57,6 @@ export default class ProfileImage extends Component {
 ProfileImage.propTypes = {
   size: React.PropTypes.number,
   top: React.PropTypes.number,
-  user: React.PropTypes.object
+  user: React.PropTypes.object,
+  data: React.PropTypes.object.isRequired
 }

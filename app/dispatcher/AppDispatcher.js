@@ -58,6 +58,7 @@ AppDispatcher.register(payload => {
   let title
   let scroll_height
   let image_url
+  let attachment
 
   // Add Contact Module
   let contact
@@ -146,7 +147,8 @@ AppDispatcher.register(payload => {
       room = payload.room
       comment = payload.comment
       image_url = payload.image_url
-      createMessage(user, room, comment, image_url)
+      attachment = payload.attachment
+      createMessage(user, room, comment, image_url, attachment)
       break
 
     case 'get-messages':

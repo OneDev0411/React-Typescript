@@ -175,7 +175,7 @@ export default class Drawer extends Component {
             return (
               <div className="transaction-contact" key={ 'contact-' + contact.id } style={ contact_style }>
                 { delete_button }
-                <ProfileImage user={ contact }/>
+                <ProfileImage data={ data } user={ contact }/>
                 <div style={ S('ml-50 ') }>
                   <div><b>{ contact.first_name } { contact.last_name }</b>, <span style={ S('color-929292') }>{ contact.roles ? contact.roles[0] : '' }</span></div>
                   <div style={ S('color-929292') }>

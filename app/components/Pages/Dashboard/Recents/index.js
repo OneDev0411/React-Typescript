@@ -258,6 +258,7 @@ export default class Dashboard extends Component {
     const data = AppStore.data
     socket.emit('Authenticate', data.user.access_token)
 
+    // TODO move these to main component
     // Listen for new message
     socket.on('Message.Sent', (room, message) => {
       const current_room = AppStore.data.current_room
@@ -276,7 +277,7 @@ export default class Dashboard extends Component {
       }
     })
     // Listen for typing
-    socket.on('User.Typing', (response) => {
+    socket.on('User.Typing', response => {
       const author_id = response.user_id
       const room_id = response.room_id
       AppStore.data.is_typing = {
@@ -290,9 +291,9 @@ export default class Dashboard extends Component {
       delete AppStore.data.is_typing
       AppStore.emitChange()
     })
-    socket.on('Room.OnlineUsers', () => {
-      // console.log(response)
-      // AppStore.emitChange()
+    socket.on('Users.Online', response => {
+      AppStore.data.users_online = response
+      AppStore.emitChange()
     })
     // Add mounted recents to store
     if (!AppStore.data.mounted)

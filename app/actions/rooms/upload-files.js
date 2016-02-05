@@ -20,8 +20,8 @@ export default (user, room, files) => {
       request.end((err, res) => {
         if (err)
           return err
-        const data = res.body.data
-        const image_url = data.url
+        const image_url = res.body.url
+        const attachment = res.body.attachment
         delete AppStore.data.current_room.upload_percent
         delete AppStore.data.current_room.uploading_files
         AppStore.emitChange()
@@ -29,7 +29,8 @@ export default (user, room, files) => {
           action: 'create-message',
           user,
           room,
-          image_url
+          image_url,
+          attachment
         })
         callback()
       })

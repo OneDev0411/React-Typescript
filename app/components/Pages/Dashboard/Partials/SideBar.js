@@ -77,7 +77,7 @@ export default class SideBar extends Component {
         <div style={ S('absolute b-20 l-20') }>
           <Nav>
             <div style={ S('absolute z-0') }>
-              <ProfileImage user={ user } />
+              <ProfileImage data={ data } user={ user } />
             </div>
             <NavDropdown dropup id="main-nav-dropdown" className="main-nav-dropdown--account" eventKey={3} title={ first_name + ' ' + last_name }>
               <li><Link to="/account/settings"><i className="fa fa-cog" style={ S('mr-15') }></i>Settings</Link></li>

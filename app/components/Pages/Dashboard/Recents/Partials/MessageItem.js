@@ -24,7 +24,7 @@ export default class MessageItem extends Component {
     if (message.author) {
       author = message.author
       profile_image_div = (
-        <ProfileImage user={ author }/>
+        <ProfileImage data={ data } user={ author }/>
       )
     }
     // Rebot
@@ -47,6 +47,7 @@ export default class MessageItem extends Component {
     // Message image
     let message_image
     if (message.image_url) {
+      // console.log(message)
       const file_url = message.image_url
       let message_thumb = <img src={ file_url } style={ S('maxw-400') }/>
       if (file_url.toLowerCase().indexOf('.png') === -1 && file_url.toLowerCase().indexOf('.jpg') === -1 && file_url.toLowerCase().indexOf('.gif') === -1) {

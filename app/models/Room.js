@@ -151,7 +151,7 @@ export default {
   },
   uploadFiles: (params, callback) => {
     const api_url = config.api_url
-    const endpoint = api_url + '/media'
+    const endpoint = api_url + '/attachments'
     const request = superagent.post(endpoint)
     const files = params.files
     request.set('authorization', 'Bearer ' + params.access_token)

@@ -51,7 +51,7 @@ export default class RoomsList extends Component {
         if (room.latest_message.author) {
           author = room.latest_message.author
           profile_image_div = (
-            <ProfileImage user={ author }/>
+            <ProfileImage data={ data } user={ author }/>
           )
         }
         if (!room.latest_message.author) {

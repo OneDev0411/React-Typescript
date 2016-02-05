@@ -112,7 +112,7 @@ export default class Drawer extends Component {
           return (
             <div style={ { ...S('relative p-15 w-100p bg-fff'), ...bottomLine } } className="pull-left" key={ 'added-contact-' + contact.id }>
               <div style={ S('l-0 t-12 l-10 absolute') }>
-                <ProfileImage top={11} size={40} user={ contact }/>
+                <ProfileImage data={ data } top={11} size={40} user={ contact }/>
               </div>
               <div style={ S('ml-50') }>
                 <div onClick={ this.props.removeContactFromTask.bind(this, contact) } className="close pull-right" style={ S('pointer mt-5') }>&times;</div>
