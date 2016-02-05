@@ -63,5 +63,10 @@ export default {
     var phoneRe = /^[1-9]\d{2}[1-9]\d{2}\d{4}$/
     var digits = value.replace(/\D/g, '')
     return digits.match(phoneRe)
+  },
+  imageExists: (url) => {
+    var img = new Image();
+    img.src = url;
+    return img.height != 0;
   }
 }

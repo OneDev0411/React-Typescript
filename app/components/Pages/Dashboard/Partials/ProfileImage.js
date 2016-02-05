@@ -1,6 +1,7 @@
 // ProfileImage.js
 import React, { Component } from 'react'
 import S from 'shorti'
+import helpers from '../../../../utils/helpers'
 
 export default class ProfileImage extends Component {
   render() {
@@ -14,7 +15,7 @@ export default class ProfileImage extends Component {
     if (this.props.top)
       top = this.props.top
 
-    if (!profile_image_url) {
+    if (!profile_image_url || profile_image_url && !helpers.imageExists(profile_image_url)) {
       background = 'bg-dddfe0'
       let first_initial
       if (user.first_name)
@@ -37,6 +38,7 @@ export default class ProfileImage extends Component {
 
     const profile_image_style = S(`bg-cover bg-center ${background} ${width_height} absolute z-2`)
     let online_indicator
+    console.log(data.users_online)
     if (data.users_online && user.id !== me.id) {
       let bg_color = 'dddfe0'
       if (data.users_online.includes(user.id))
