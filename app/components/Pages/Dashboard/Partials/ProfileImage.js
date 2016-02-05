@@ -38,7 +38,6 @@ export default class ProfileImage extends Component {
 
     const profile_image_style = S(`bg-cover bg-center ${background} ${width_height} absolute z-2`)
     let online_indicator
-    console.log(data.users_online)
     if (data.users_online && user.id !== me.id) {
       let bg_color = 'dddfe0'
       if (data.users_online.includes(user.id))
