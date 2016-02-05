@@ -21,7 +21,7 @@ export default class RoomsList extends Component {
     let room = rooms[i]
     if (filtered_rooms)
       room = filtered_rooms[i]
-    this.props.getMessages(room)
+    this.props.setCurrentRoom(room)
   }
 
   render() {
@@ -84,6 +84,12 @@ export default class RoomsList extends Component {
           )
         }
 
+        if (room.latest_message.image_url) {
+          comment = (
+            <div style={ S('color-808080') }>Uploaded a file</div>
+          )
+        }
+
         return (
           <li className="room-list__item" style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, i) }>
             <div style={ S('relative') }>
@@ -125,6 +131,6 @@ export default class RoomsList extends Component {
 
 // PropTypes
 RoomsList.propTypes = {
-  getMessages: React.PropTypes.func.isRequired,
+  setCurrentRoom: React.PropTypes.func.isRequired,
   data: React.PropTypes.object
 }

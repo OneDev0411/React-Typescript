@@ -32,9 +32,8 @@ export default class MessagesList extends Component {
 
   scrollBottom() {
     const messages_scroll_area = this.refs.messages_scroll_area
-    if (messages_scroll_area) {
+    if (messages_scroll_area)
       messages_scroll_area.scrollTop = messages_scroll_area.scrollHeight
-    }
   }
 
   getMessagePositions() {
@@ -123,7 +122,7 @@ export default class MessagesList extends Component {
     let message_date
     const todays_date = helpers.getYMD()
     let prev_message_date
-    let heading_style = {
+    const heading_style = {
       ...S('bg-f9f9f9 p-5 pl-10 h-26 font-12 mb-5 br-3 color-acacac mb-10'),
       textTransform: 'uppercase'
     }
@@ -135,13 +134,6 @@ export default class MessagesList extends Component {
       const message_date_obj = helpers.friendlyDate(created_at[0])
       message_date = helpers.getYMD(created_at[0] * 1000)
       if (!prev_message_date || prev_message_date && prev_message_date !== message_date) {
-        // If not first heading add margin-top
-        if (i) {
-          heading_style = {
-            ...heading_style,
-            ...S('mt-15')
-          }
-        }
         heading_date_area = (
           <span>{ `${message_date_obj.day}, ${message_date_obj.month} ${message_date_obj.date}, ${message_date_obj.year}` }</span>
         )

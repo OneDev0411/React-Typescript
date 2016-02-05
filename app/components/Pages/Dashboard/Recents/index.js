@@ -43,16 +43,11 @@ export default class Dashboard extends Component {
     })
   }
 
-  getMessages(current_room) {
-    AppStore.data.messages_loading = true
+  setCurrentRoom(current_room) {
+    AppStore.data.current_room = current_room
+    AppStore.data.messages = current_room.messages
+    AppStore.data.scroll_bottom = true
     AppStore.emitChange()
-    const data = AppStore.data
-    AppDispatcher.dispatch({
-      action: 'get-messages',
-      user: data.user,
-      room: current_room
-    })
-    // Show room_id in url
     history.pushState(null, null, '/dashboard/recents/' + current_room.id)
   }
 
@@ -250,8 +245,10 @@ export default class Dashboard extends Component {
   init() {
     this.addUserToStore()
     this.getUserRooms()
-    window.addEventListener('resize', this.handleResize)
+    AppStore.data.messages_loading = true
+    AppStore.emitChange()
 
+    window.addEventListener('resize', this.handleResize)
     // Listen for new messages
     window.socket = io(config.socket.server)
     const socket = window.socket
@@ -372,7 +369,7 @@ export default class Dashboard extends Component {
             showModal={ this.showModal }
             hideModal={ this.hideModal }
             createRoom={ this.createRoom }
-            getMessages={ this.getMessages.bind(this) }
+            setCurrentRoom={ this.setCurrentRoom.bind(this) }
             addContactsToRoom={ this.addContactsToRoom }
             handleDragEnter={ this.handleDragEnter }
             handleDragLeave={ this.handleDragLeave }

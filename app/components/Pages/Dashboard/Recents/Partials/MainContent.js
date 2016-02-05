@@ -12,6 +12,11 @@ import DropzoneOverlay from '../../Partials/DropzoneOverlay'
 
 export default class MainContent extends Component {
 
+  componentDidUpdate() {
+    if (this.refs.message_input)
+      this.refs.message_input.focus()
+  }
+
   handleKeyUp() {
     const search_text = this.refs.search_text.value
     this.props.filterRooms(search_text)
@@ -131,7 +136,7 @@ export default class MainContent extends Component {
                 <div className="clearfix"></div>
               </div>
               <RoomsList
-                getMessages={ this.props.getMessages }
+                setCurrentRoom={ this.props.setCurrentRoom }
                 data={ data }
               />
             </div>
@@ -184,7 +189,7 @@ MainContent.propTypes = {
   createRoom: React.PropTypes.func.isRequired,
   createMessage: React.PropTypes.func.isRequired,
   handleMessageTyping: React.PropTypes.func.isRequired,
-  getMessages: React.PropTypes.func.isRequired,
+  setCurrentRoom: React.PropTypes.func.isRequired,
   getPreviousMessages: React.PropTypes.func.isRequired,
   addContactsToRoom: React.PropTypes.func.isRequired,
   handleDragEnter: React.PropTypes.func.isRequired,

@@ -21,6 +21,7 @@ import uploadFilesToRoom from '../actions/rooms/upload-files'
 // Messages
 import createMessage from '../actions/messages/create-message'
 import getMessages from '../actions/messages/get-messages'
+import getAllMessages from '../actions/messages/get-all-messages'
 import getPreviousMessages from '../actions/messages/get-previous-messages'
 
 // Pages
@@ -53,6 +54,7 @@ AppDispatcher.register(payload => {
   let user
   let invite
   let room_id
+  let rooms
   let room
   let comment
   let title
@@ -155,6 +157,12 @@ AppDispatcher.register(payload => {
       user = payload.user
       room = payload.room
       getMessages(user, room)
+      break
+
+    case 'get-all-messages':
+      user = payload.user
+      rooms = payload.rooms
+      getAllMessages(user, rooms)
       break
 
     case 'get-previous-messages':

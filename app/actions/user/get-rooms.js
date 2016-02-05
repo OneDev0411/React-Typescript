@@ -1,10 +1,10 @@
 // actions/get-rooms.js
 import User from '../../models/User'
-import AppStore from '../../stores/AppStore'
 import _ from 'lodash'
+import AppStore from '../../stores/AppStore'
 
-// Get messages
-import getMessages from '../messages/get-messages'
+// Get all messages
+import getAllMessages from '../messages/get-all-messages'
 
 export default (user, room_id) => {
   const params = {
@@ -20,9 +20,8 @@ export default (user, room_id) => {
       // If current room id
       if (room_id)
         current_room = _.findWhere(rooms, { id: room_id })
-
       AppStore.data.current_room = current_room
-      getMessages(user, current_room)
+      getAllMessages(user, rooms)
     }
     AppStore.emitChange()
   })
