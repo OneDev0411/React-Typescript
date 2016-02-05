@@ -49,7 +49,9 @@ export default class MessageItem extends Component {
     if (message.image_url) {
       // console.log(message)
       const file_url = message.image_url
-      let message_thumb = <img src={ file_url } style={ S('maxw-400 br-3') }/>
+      let message_thumb = (
+        <div style={ S('w-400 h-300 br-3 bg-url(' + file_url + ') bg-cover bg-center') }></div>
+      )
       if (file_url.toLowerCase().indexOf('.png') === -1 && file_url.toLowerCase().indexOf('.jpg') === -1 && file_url.toLowerCase().indexOf('.gif') === -1) {
         const ext = file_url.split('.').pop().substr(0, 3)
         message_thumb = (
@@ -73,9 +75,7 @@ export default class MessageItem extends Component {
     if (message.recommendation && message.recommendation.listing && message.recommendation.listing.cover_image_url) {
       const cover_image_url = message.recommendation.listing.cover_image_url
       message_image = (
-        <div>
-          <img src={ cover_image_url } style={ S('maxw-400 br-3') }/>
-        </div>
+        <div style={ S('w-400 h-300 br-3 bg-url(' + cover_image_url + ') bg-cover bg-center') }></div>
       )
     }
 
