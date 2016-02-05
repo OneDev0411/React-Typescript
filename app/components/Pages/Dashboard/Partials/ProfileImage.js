@@ -5,6 +5,7 @@ import S from 'shorti'
 export default class ProfileImage extends Component {
   render() {
     const user = this.props.user
+    const me = this.props.data.user
     const data = this.props.data
     const profile_image_url = user.profile_image_url
     let background = `bg-url(${profile_image_url})`
@@ -36,7 +37,7 @@ export default class ProfileImage extends Component {
 
     const profile_image_style = S(`bg-cover bg-center ${background} ${width_height} absolute z-2`)
     let online_indicator
-    if (data.users_online) {
+    if (data.users_online && user.id !== me.id) {
       let bg_color = 'dddfe0'
       if (data.users_online.includes(user.id))
         bg_color = '35b863'
