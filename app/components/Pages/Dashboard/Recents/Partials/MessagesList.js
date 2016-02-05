@@ -33,9 +33,7 @@ export default class MessagesList extends Component {
   scrollBottom() {
     const messages_scroll_area = this.refs.messages_scroll_area
     if (messages_scroll_area) {
-      setTimeout(() => {
-        messages_scroll_area.scrollTop = messages_scroll_area.scrollHeight
-      }, 100)
+      messages_scroll_area.scrollTop = messages_scroll_area.scrollHeight
     }
   }
 
