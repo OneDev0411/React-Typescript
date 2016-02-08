@@ -688,6 +688,9 @@ export default class TasksModule extends Component {
               data={ data }
               module_type="share-task"
             />
+            <div className="text-center">
+              <img style={ S('w-200') } src="/images/dashboard/add-contacts/people.png" />
+            </div>
           </Modal.Body>
           <Modal.Footer style={ { border: 'none' } }>
             <Button bsStyle="link" onClick={ this.hideModal }>Cancel</Button>
@@ -703,6 +706,9 @@ export default class TasksModule extends Component {
           <Modal.Body>
             <Input type="text" ref="search_transactions" placeholder="Search for a transaction" onKeyDown={ this.navTransactionsList.bind(this) } onKeyUp={ this.searchTransactions.bind(this) }/>
             { transaction_results_area }
+            <div className="text-center">
+              <img style={ S('w-126 mt-20 mb-20') } src="/images/dashboard/tasks/transaction.png" />
+            </div>
           </Modal.Body>
         </Modal>
       </div>
