@@ -153,7 +153,7 @@ export default class MainContent extends Component {
     const carousel_wh = 'w-480 h-300'
     if (current_listing) {
       property = current_listing.property
-      price = current_listing.price
+      price = helpers.numberWithCommas(current_listing.price)
       property_type = property.property_type
       year_built = property.year_built
       address = `${property.address.street_number} ${property.address.street_name} ${property.address.street_suffix}`
@@ -251,7 +251,7 @@ export default class MainContent extends Component {
                 </Col>
                 <Col xs={6} style={ S('p-15') }>
                   <div style={ S('mb-10 mr-20 pull-left') }><b>Address:</b> <span style={ S('color-929292') }>{ full_address }</span></div>
-                  <div style={ S('mb-10 mr-20 pull-left') }><b>Price:</b> <span style={ S('color-929292') }>${ helpers.numberWithCommas(price) }</span></div>
+                  <div style={ S('mb-10 mr-20 pull-left') }><b>Price:</b> <span style={ S('color-929292') }>${ price }</span></div>
                   <div style={ S('mb-10 mr-20 pull-left') }><b>MLS#:</b> <span style={ S('color-929292') }>{ mls_number }</span></div>
                   <div style={ S('mb-10 mr-20 pull-left') }><b>Property Type:</b> <span style={ S('color-929292') }>{ property_type }</span></div>
                   <div style={ S('mb-10 mr-20 pull-left') }><b>Year Built:</b> <span style={ S('color-929292') }>{ year_built }</span></div>
