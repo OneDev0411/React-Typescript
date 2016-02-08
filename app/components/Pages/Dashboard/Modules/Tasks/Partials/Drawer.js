@@ -92,7 +92,7 @@ export default class Drawer extends Component {
     let created_area
     if (current_task && current_task.due_date) {
       const due_date = current_task.due_date
-      const due_date_obj = helpers.friendlyDate(due_date / 1000)
+      const due_date_obj = helpers.friendlyDate(due_date)
       due_date_area = (
         <span>{ `${due_date_obj.day}, ${due_date_obj.month} ${due_date_obj.date}, ${due_date_obj.year}` }</span>
       )

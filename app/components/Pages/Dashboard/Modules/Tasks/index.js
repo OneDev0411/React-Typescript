@@ -129,7 +129,7 @@ export default class TasksModule extends Component {
     if (module_type === 'transaction')
       transaction = data.current_transaction
     if (AppStore.data.new_task && AppStore.data.new_task.due_date)
-      due_date = AppStore.data.new_task.due_date.getTime()
+      due_date = AppStore.data.new_task.due_date.getTime() / 1000 // in seconds
     if (title) {
       this.hideDayPicker()
       let contacts
@@ -435,7 +435,7 @@ export default class TasksModule extends Component {
   editTaskDate(e, day) {
     const data = this.props.data
     const user = data.user
-    const due_date = day.getTime()
+    const due_date = day.getTime() / 1000 // in seconds
     const task = AppStore.data.current_task
     AppStore.data.current_task.due_date = due_date
     delete AppStore.data.show_day_picker_edit

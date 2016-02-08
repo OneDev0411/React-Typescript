@@ -52,6 +52,7 @@ export default class MessageItem extends Component {
       let message_thumb = (
         <div style={ S('w-400 h-300 br-3 bg-url(' + file_url + ') bg-cover bg-center') }></div>
       )
+      // console.log(message.attachment)
       if (file_url.toLowerCase().indexOf('.png') === -1 && file_url.toLowerCase().indexOf('.jpg') === -1 && file_url.toLowerCase().indexOf('.gif') === -1) {
         const ext = file_url.split('.').pop().substr(0, 3)
         message_thumb = (

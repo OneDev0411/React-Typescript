@@ -83,6 +83,14 @@ export default class MainContent extends Component {
 
     // Create message form
     let create_message_area = ''
+    const btn_style = {
+      ...S('absolute bw-2 p-0 w-56 h-34 l-22 t-22'),
+      borderTop: 'none',
+      borderLeft: 'none',
+      borderBottom: 'none',
+      borderTopLeftRadius: 0,
+      borderBottomLeftRadius: 0
+    }
     if (data.current_room) {
       create_message_area = (
         <div style={ footer_style }>
@@ -91,8 +99,8 @@ export default class MainContent extends Component {
           </div>
           <form onSubmit={ this.props.createMessage.bind(this) }>
             <div className="form-group" style={ S('w-100p') }>
-              <input onKeyDown={ this.props.handleMessageTyping.bind(this) } ref="message_input" type="text" className="form-control" style={ S('w-100p pl-70 bw-2') } placeholder="Type your message and press enter"/>
-              <Dropzone onDrop={ this.props.uploadFiles } type="button" className="btn btn-default create-message__btn" style={ S('absolute bw-2 p-0 w-56 h-38 l-20 t-20') }>
+              <input onKeyDown={ this.props.handleMessageTyping.bind(this) } ref="message_input" type="text" className="form-control chat-message-input" style={ S('w-100p pl-70 bw-2') } placeholder="Type your message and press enter"/>
+              <Dropzone onDrop={ this.props.uploadFiles } type="button" className="btn btn-default create-message__btn" style={ btn_style }>
                 <span className="plus" style={ S('font-22 relative t-1n') }>+</span>
               </Dropzone>
             </div>

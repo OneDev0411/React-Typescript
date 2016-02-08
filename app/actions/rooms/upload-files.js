@@ -21,7 +21,7 @@ export default (user, room, files) => {
         if (err)
           return err
         const image_url = res.body.url
-        const attachment = res.body.attachment
+        const attachment = res.body.id
         delete AppStore.data.current_room.upload_percent
         delete AppStore.data.current_room.uploading_files
         AppStore.emitChange()

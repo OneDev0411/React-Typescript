@@ -50,11 +50,11 @@ export default class Tasks extends Component {
         let due_date_area
         let heading
         if (due_date) {
-          const due_date_obj = helpers.friendlyDate(due_date / 1000)
+          const due_date_obj = helpers.friendlyDate(due_date)
           due_date_area = (
             <span>{ `${due_date_obj.day}, ${due_date_obj.month} ${due_date_obj.date}, ${due_date_obj.year}` }</span>
           )
-          task_date = helpers.getYMD(due_date)
+          task_date = helpers.getYMD(due_date * 1000)
           if (!prev_task_date || prev_task_date && prev_task_date !== task_date) {
             let heading_style = {
               ...S('bg-f9f9f9 p-5 pl-10 h-26 font-12 mb-5 br-3 color-acacac'),
