@@ -54,7 +54,7 @@ export default class MessageItem extends Component {
       if (file_url.toLowerCase().indexOf('.png') === -1 && file_url.toLowerCase().indexOf('.jpg') === -1 && file_url.toLowerCase().indexOf('.gif') === -1) {
         // TODO: Depracated
         let ext = file_url.split('.').pop().substr(0, 3)
-        if (message.attachments.length) {
+        if (message.attachments && message.attachments.length) {
           const attachment = message.attachments
           if (attachment.info)
             ext = attachment.info.mime['mime-extension']
