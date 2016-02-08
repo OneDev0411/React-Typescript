@@ -216,7 +216,7 @@ export default {
       const info = {
         name: file.name,
         original_name: file.name,
-        title: file.name
+        title: file.new_name
       }
       request.attach('media', file)
       request.field('info', JSON.stringify(info))

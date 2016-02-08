@@ -2,8 +2,9 @@
 import React, { Component } from 'react'
 import { Button, ProgressBar } from 'react-bootstrap'
 import S from 'shorti'
+import _ from 'lodash'
 import Dropzone from 'react-dropzone'
-
+import helpers from '../../../../../../utils/helpers'
 // Partials
 import Loading from '../../../../../Partials/Loading'
 import ProfileImage from '../../../Partials/ProfileImage'
@@ -18,6 +19,8 @@ export default class Drawer extends Component {
   render() {
     // Data
     const data = this.props.data
+    const user = data.user
+    const contacts = data.contacts
     const transaction = data.current_transaction
     const drawer = transaction.drawer
     const roles = transaction.roles
@@ -45,6 +48,7 @@ export default class Drawer extends Component {
       // console.log(attachments)
       if (attachments) {
         attachments_markup = attachments.map((file, i) => {
+          // console.log(file)
           let mime
           if (file.info)
             mime = file.info.mime
@@ -77,6 +81,16 @@ export default class Drawer extends Component {
             ...S('h-80 pb-10 pt-10 color-929292 pointer'),
             borderBottom: '1px solid #f7f9fa'
           }
+          const created = helpers.friendlyDate(file.created_at)
+          const created_string = `${created.day}, ${created.month} ${created.date}, ${created.year}`
+          const added_by = file.user
+          let user_string
+          if (added_by === user.id)
+            user_string = user.first_name
+          else {
+            const user_object = _.find(contacts, { id: added_by })
+            user_string = user_object.first_name
+          }
           let file_area = (
             <div>
               <Button onClick={ this.props.deleteFile.bind(this, file) } style={ S('mt-10 mr-10 absolute r-0') } bsStyle="danger" className="delete">Delete</Button>
@@ -85,7 +99,7 @@ export default class Drawer extends Component {
               </div>
               <div onClick={ this.openFileViewer.bind(this, file) } style={ S('w-350') } className="pull-left text-left">
                 <div style={ S('ml-10 color-444 font-14 mb-5') }>{ file.info ? file.info.title : '' }</div>
-                <div style={ S('w-150 ml-10 font-12') }>Jan 15, 8:17am - Mark</div>
+                <div style={ S('w-150 ml-10 font-12') }>{ created_string } - { user_string }</div>
                 <div style={ S('w-150 ml-10 font-12') }>Shared with Shayan</div>
               </div>
             </div>

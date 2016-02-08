@@ -1,5 +1,6 @@
 // Dashboard/Recents/FileViewer.js
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
 import S from 'shorti'
 
 export default class FileViewer extends Component {
@@ -14,6 +15,17 @@ export default class FileViewer extends Component {
     const current_room = data.current_room
     const file = current_room.viewer.file
     history.pushState(null, null, '/dashboard/recents/' + current_room.id + '/file/' + file.url)
+    // fade in component
+    this.fadeIn()
+  }
+
+  fadeIn() {
+    const elem = ReactDOM.findDOMNode(this)
+    elem.style.opacity = 0
+    window.requestAnimationFrame(() => {
+      elem.style.transition = 'opacity 250ms'
+      elem.style.opacity = 1
+    })
   }
 
   render() {
