@@ -193,8 +193,16 @@ export default class MessagesList extends Component {
       height: window.innerHeight - 115,
       opacity: messages_opacity
     }
-    const fixed_date_obj = helpers.friendlyDate(data.heading_date)
-    const fixed_heading_date = `${fixed_date_obj.day}, ${fixed_date_obj.month} ${fixed_date_obj.date}, ${fixed_date_obj.year}`
+    let fixed_heading_date_area
+    if (data.heading_date) {
+      const fixed_date_obj = helpers.friendlyDate(data.heading_date)
+      const fixed_heading_date = `${fixed_date_obj.day}, ${fixed_date_obj.month} ${fixed_date_obj.date}, ${fixed_date_obj.year}`
+      fixed_heading_date_area = (
+        <div className="heading-fixed" style={ S('absolute w-98p z-100 t-60 pl-20 pr-5 pb-0 bg-fff') }>
+          <div className="message-heading" style={ { ...heading_style, ...S('m-0') } }>{ fixed_heading_date }</div>
+        </div>
+      )
+    }
     return (
       <div>
         <div style={ S('absolute r-60 t-16') }>
@@ -213,9 +221,7 @@ export default class MessagesList extends Component {
           <img style={ S('ml-1n mt-1n') } src="/images/dashboard/icons/invite-user.svg"/>
         </button>
         <h3 style={ S('mt-0 ml-20 mr-50') }>{ current_room.title }</h3>
-        <div className="heading-fixed" style={ S('absolute w-98p z-100 t-60 pl-20 pr-5 pb-0 bg-fff') }>
-          <div className="message-heading" style={ { ...heading_style, ...S('m-0') } }>{ fixed_heading_date }</div>
-        </div>
+        { fixed_heading_date_area }
         <div ref="messages_scroll_area" style={ messages_scroll_area } onScroll={ this.handleScroll.bind(this) }>
           { loading_previous }
           <ul style={ S('pl-0') }>{ messages_list_items }</ul>
@@ -229,6 +235,9 @@ export default class MessagesList extends Component {
               data={ data }
               module_type="room"
             />
+            <div className="text-center">
+              <img style={ S('w-200') } src="/images/dashboard/add-contacts/people.png" />
+            </div>
           </Modal.Body>
           <Modal.Footer style={ { border: 'none' } }>
             <Button bsStyle="link" onClick={ this.props.hideModal }>Cancel</Button>

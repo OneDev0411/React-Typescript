@@ -5,10 +5,10 @@ module.exports = (app, config) => {
     const api_url = config.api.url
     const room_id = req.body.room_id
     const endpoint = api_url + '/rooms/' + room_id + '/users'
-    const users = req.body.users
+    const user = req.body.user
     const access_token = req.body.access_token
     const request_object = {
-      users
+      user: [user]
     }
     fetch(endpoint,{
       method: 'post',
@@ -19,7 +19,6 @@ module.exports = (app, config) => {
       body: JSON.stringify(request_object)
     })
     .then(response => {
-      console.log(response)
       if (response.status >= 400) {
         var error = {
           status: 'error',

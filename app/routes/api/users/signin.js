@@ -51,7 +51,7 @@ module.exports = (app, config) => {
       if(invite){
         const add_user_params = {
           room_id: invite.room_id,
-          users: [user.id],
+          user: user.id,
           access_token: invite.invite_token,
           api_host: config.app_url
         }

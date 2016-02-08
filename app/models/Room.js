@@ -95,7 +95,7 @@ export default {
 
     const request_object = {
       room_id: params.room_id,
-      users: params.users,
+      user: params.user,
       access_token: params.access_token
     }
 
