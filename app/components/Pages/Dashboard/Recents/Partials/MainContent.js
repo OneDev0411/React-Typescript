@@ -63,7 +63,7 @@ export default class MainContent extends Component {
     const messages_column_style = {
       ...S('absolute pt-15 l-320 minw-450'),
       height: window.innerHeight,
-      width: window.innerWidth - 500
+      width: window.innerWidth - 504
     }
 
     const footer_style = S('absolute w-100p l-0 b-0 r-0 p-20 pb-10')

@@ -247,7 +247,7 @@ export default class MessagesList extends Component {
               </div>
             </div>
             <div className="text-center">
-              <img style={ S('w-200') } src="/images/dashboard/add-contacts/people.png" />
+              <img style={ S('w-200 h-103') } src="/images/dashboard/add-contacts/people.png" />
             </div>
           </Modal.Body>
           <Modal.Footer style={ { border: 'none' } }>
