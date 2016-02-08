@@ -163,7 +163,7 @@ export default class MessagesList extends Component {
       )
     })
 
-    const btn_action_style = S('w-40 h-40 ml-6 pointer absolute p-0 t-15 r-8 br-100 bc-ddd bw-1 solid')
+    const btn_action_style = S('w-40 h-40 pointer absolute p-0 t-10 r-20 br-100 bc-ddd bw-1 solid')
     const invite_link = config.app.url + '/invite/?room_id=' + data.current_room.id + '&invite_token=' + data.user.access_token
 
     const tooltip = (
@@ -205,18 +205,6 @@ export default class MessagesList extends Component {
     }
     return (
       <div>
-        <div style={ S('absolute r-60 t-16') }>
-          <div className="input-group">
-            <input data-clipboard-text={ invite_link } readOnly onClick={ this.handleInviteLinkClick.bind(this) } className="copy-link form-control pull-right" ref="clipboard_target" id="invite-link" type="text" value={ invite_link } style={ S('h-37 w-150') } />
-            <span className="input-group-btn">
-              <OverlayTrigger rootClose trigger="click" placement="bottom" overlay={ tooltip }>
-                <button className="copy-link btn btn-default" type="button" data-clipboard-target="#invite-link" style={ S('h-37') }>
-                  <img src="/images/dashboard/icons/clippy.svg" width="13" alt="Copy to clipboard" />
-                </button>
-              </OverlayTrigger>
-            </span>
-          </div>
-        </div>
         <button onClick={ this.props.showModal.bind(this, 'invite-user') } type="button" className="btn btn-default invite-user__btn" style={ btn_action_style } >
           <img style={ S('ml-1n mt-1n') } src="/images/dashboard/icons/invite-user.svg"/>
         </button>
@@ -228,20 +216,43 @@ export default class MessagesList extends Component {
         </div>
         <Modal show={ data.show_contacts_modal } onHide={ this.props.hideModal }>
           <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
-           <Modal.Title style={ S('font-14') }>Invite contact <span style={ S('color-929292 fw-400') }>(use any email or any phone number)</span></Modal.Title>
+           <Modal.Title style={ S('font-14') }>Invite contacts <span style={ S('color-929292 fw-400') }>(use any email or any phone number)</span></Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <AddContactsModule
-              data={ data }
-              module_type="room"
-            />
+            <div style={ S('mb-15') }>
+              <div style={ S('font-14 fw-500 mb-5') }>Share link</div>
+              <div style={ S('r-10 t-16 w-100p mr-15') }>
+                <div className="input-group">
+                  <OverlayTrigger rootClose trigger="click" placement="bottom" overlay={ tooltip }>
+                    <input data-clipboard-text={ invite_link } readOnly onClick={ this.handleInviteLinkClick.bind(this) } className="copy-link form-control pull-right" ref="clipboard_target" id="invite-link" type="text" value={ invite_link } style={ S('h-37 w-100p') } />
+                  </OverlayTrigger>
+                  <span className="input-group-btn">
+                    <OverlayTrigger rootClose trigger="click" placement="bottom" overlay={ tooltip }>
+                      <button className="copy-link btn btn-default" type="button" data-clipboard-target="#invite-link" style={ S('h-37') }>
+                        <img src="/images/dashboard/icons/clippy.svg" width="13" alt="Copy to clipboard" />
+                      </button>
+                    </OverlayTrigger>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <hr />
+            <div style={ S('mt-10n pt-5') }>
+              <div style={ S('font-14 fw-500') }>Add contacts</div>
+              <div style={ S('ml-10n') }>
+                <AddContactsModule
+                  data={ data }
+                  module_type="room"
+                />
+              </div>
+            </div>
             <div className="text-center">
               <img style={ S('w-200') } src="/images/dashboard/add-contacts/people.png" />
             </div>
           </Modal.Body>
           <Modal.Footer style={ { border: 'none' } }>
             <Button bsStyle="link" onClick={ this.props.hideModal }>Cancel</Button>
-            <Button onClick={ this.props.addContactsToRoom.bind(this) } style={ S('h-30 pt-5 pl-30 pr-30') } className={ data.adding_contacts ? 'disabled' : '' } type="submit" bsStyle="primary">
+            <Button onClick={ this.props.addContactsToRoom.bind(this) } style={ S('pl-30 pr-30') } className={ data.adding_contacts ? 'disabled' : '' } type="submit" bsStyle="primary">
               { data.adding_contacts ? 'Saving...' : 'Save' }
             </Button>
           </Modal.Footer>

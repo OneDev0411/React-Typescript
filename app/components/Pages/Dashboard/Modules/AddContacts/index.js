@@ -34,6 +34,7 @@ export default class AddContactsModule extends Component {
       this.refs.company.refs.input.value = ''
       this.refs.role.refs.input.value = ''
     }
+    this.refs.search_contacts.refs.input.focus()
   }
 
   getContacts() {
@@ -316,7 +317,7 @@ export default class AddContactsModule extends Component {
         ...module_style,
         ...S('w-100p ml-10 mr-10')
       }
-      search_contact_input_style = S('w-425 mr-15')
+      search_contact_input_style = S('w-430 mr-15')
       filter_scroll_style.width = 475
     }
 

@@ -694,7 +694,7 @@ export default class TasksModule extends Component {
           </Modal.Body>
           <Modal.Footer style={ { border: 'none' } }>
             <Button bsStyle="link" onClick={ this.hideModal }>Cancel</Button>
-            <Button onClick={ this.addContactsToTask.bind(this) } style={ S('h-30 pt-5 pl-30 pr-30') } className={ data.adding_contacts ? 'disabled' : '' } type="submit" bsStyle="primary">
+            <Button onClick={ this.addContactsToTask.bind(this) } style={ S('pl-30 pr-30') } className={ data.adding_contacts ? 'disabled' : '' } type="submit" bsStyle="primary">
               { data.adding_contacts ? 'Saving...' : 'Save' }
             </Button>
           </Modal.Footer>

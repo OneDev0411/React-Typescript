@@ -5,7 +5,7 @@ export default (user, room, comment, image_url, attachment) => {
   const message = {
     comment,
     image_url,
-    attachment,
+    attachments: [attachment],
     message_type: 'TopLevel'
   }
   socket.emit('Message.Send', room.id, message)
