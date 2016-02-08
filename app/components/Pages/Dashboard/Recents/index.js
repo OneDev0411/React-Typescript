@@ -123,6 +123,7 @@ export default class Dashboard extends Component {
   }
 
   hideModal() {
+    delete AppStore.data.show_listing_modal
     delete AppStore.data.show_create_chat_modal
     delete AppStore.data.show_contacts_modal
     AppStore.emitChange()
@@ -343,6 +344,12 @@ export default class Dashboard extends Component {
     AppStore.emitChange()
   }
 
+  showListingModal(listing) {
+    AppStore.data.show_listing_modal = true
+    AppStore.data.current_listing = listing
+    AppStore.emitChange()
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -377,6 +384,7 @@ export default class Dashboard extends Component {
             showFileViewer={ this.showFileViewer }
             setHeadingDate={ this.setHeadingDate }
             removeScrollBottom={ this.removeScrollBottom }
+            showListingModal={ this.showListingModal }
           />
         </main>
         <audio ref="notif_sound" id="notif-sound">
