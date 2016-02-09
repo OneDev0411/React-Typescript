@@ -209,9 +209,11 @@ export default {
   uploadFiles: (params, callback) => {
     const api_url = config.api_url
     const endpoint = api_url + '/transactions/' + params.id + '/attachments'
+    // const endpoint = 'http://5.34.214.120:3078/transactions/e8d9e5ce-c47d-11e5-bd78-7b3ccf621e11/attachments'
     const request = superagent.post(endpoint)
     const files = params.files
     request.set('authorization', 'Bearer ' + params.access_token)
+    // request.set('authorization', 'Bearer MGFkZjE0ZjAtY2Y1NS0xMWU1LWEwYmMtYzE0YzAzNGQ2NjZj')
     files.forEach(file => {
       const info = {
         name: file.name,

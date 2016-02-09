@@ -21,6 +21,7 @@ import TransactionDetail from './Partials/TransactionDetail'
 export default class Transactions extends Component {
 
   componentDidMount() {
+    const data = this.props.data
     this.getContacts()
     delete AppStore.data.current_task
     // If coming from redirect
@@ -35,6 +36,14 @@ export default class Transactions extends Component {
     const params = this.props.params
     if (params && params.id)
       this.getTransaction(params.id)
+    // Reorder attachments
+    let attachments = data.attachments
+    if (attachments) {
+      attachments = _.sortBy(attachments, attachment => {
+        return attachment.created_at * -1
+      })
+      AppStore.data.attachments = attachments
+    }
     AppStore.emitChange()
   }
 

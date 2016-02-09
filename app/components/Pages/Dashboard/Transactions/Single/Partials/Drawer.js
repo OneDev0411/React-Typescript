@@ -24,10 +24,7 @@ export default class Drawer extends Component {
     const transaction = data.current_transaction
     const drawer = transaction.drawer
     const roles = transaction.roles
-    let attachments = transaction.attachments
-    attachments = _.sortBy(attachments, attachment => {
-      return attachment.created_at * -1
-    })
+    const attachments = transaction.attachments
     let drawer_content
     const drawer_height = window.innerHeight - 203
     let drawer_wrap_style = {
