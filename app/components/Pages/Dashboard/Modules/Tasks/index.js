@@ -4,7 +4,7 @@ import { Button, Input, Modal } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
 import helpers from '../../../../../utils/helpers'
-import DayPicker from 'react-day-picker'
+import DayPicker, { DateUtils } from 'react-day-picker'
 
 // Modules
 import AddContactsModule from '../AddContacts'
@@ -129,7 +129,7 @@ export default class TasksModule extends Component {
     if (module_type === 'transaction')
       transaction = data.current_transaction
     if (AppStore.data.new_task && AppStore.data.new_task.due_date)
-      due_date = AppStore.data.new_task.due_date.getTime() / 1000 // in seconds
+      due_date = AppStore.data.new_task.due_date / 1000
     if (title) {
       this.hideDayPicker()
       let contacts
@@ -242,6 +242,40 @@ export default class TasksModule extends Component {
     if (!AppStore.data.new_task)
       AppStore.data.new_task = {}
     AppStore.data.new_task.due_date = day
+    // delete AppStore.data.show_day_picker
+    // this.refs.task_title.refs.input.focus()
+    AppStore.emitChange()
+  }
+
+  setEditTaskDate(e, day) {
+    if (!AppStore.data.current_task)
+      AppStore.data.current_task = {}
+    const seconds = day.getTime() / 1000
+    AppStore.data.current_task.due_date = seconds
+    // delete AppStore.data.show_day_picker
+    // this.refs.task_title.refs.input.focus()
+    AppStore.emitChange()
+  }
+
+  setTaskDateTime() {
+    if (!AppStore.data.new_task)
+      AppStore.data.new_task = {}
+    let hours = this.refs.hours.refs.input.value
+    const minutes = this.refs.minutes.refs.input.value
+    const suffix = this.refs.suffix.refs.input.value
+    let due_date
+    if (AppStore.data.new_task && AppStore.data.new_task.due_date) {
+      const due_date_object = new Date(AppStore.data.new_task.due_date)
+      due_date = due_date_object.getTime() // in seconds
+      // Get time
+      if (suffix === 'PM')
+        hours = parseInt(hours, 10) + 12
+      // Convert to seconds
+      const due_seconds = ((hours * 60) + parseInt(minutes, 10)) * 60
+      const due_seconds_added = due_seconds - 43200 // minus 12 hours of seconds
+      due_date = due_date + (due_seconds_added * 1000)
+    }
+    AppStore.data.new_task.due_date = due_date
     delete AppStore.data.show_day_picker
     this.refs.task_title.refs.input.focus()
     AppStore.emitChange()
@@ -432,18 +466,30 @@ export default class TasksModule extends Component {
     }, 500)
   }
 
-  editTaskDate(e, day) {
+  editTaskDate() {
     const data = this.props.data
     const user = data.user
-    const due_date = day.getTime() / 1000 // in seconds
-    const task = AppStore.data.current_task
-    AppStore.data.current_task.due_date = due_date
+    const current_task = data.current_task
+    let hours = this.refs.hours.refs.input.value
+    const minutes = this.refs.minutes.refs.input.value
+    const suffix = this.refs.suffix.refs.input.value
+    let due_date
+    if (current_task && AppStore.data.current_task.due_date) {
+      due_date = AppStore.data.current_task.due_date
+      // Get time
+      if (suffix === 'PM')
+        hours = parseInt(hours, 10) + 12
+      // Convert to seconds
+      const due_seconds = ((hours * 60) + parseInt(minutes, 10)) * 60
+      const due_seconds_added = due_seconds - 43200 // minus 12 hours of seconds
+      due_date = due_date + due_seconds_added
+    }
     delete AppStore.data.show_day_picker_edit
     AppStore.emitChange()
     TaskDispatcher.dispatch({
       action: 'edit-date',
       user,
-      task,
+      task: current_task,
       due_date
     })
   }
@@ -515,12 +561,53 @@ export default class TasksModule extends Component {
       )
     }
     let date = new Date()
+    let task_due_date
+    if (data.new_task)
+      task_due_date = new Date(data.new_task.due_date)
     const today = helpers.friendlyDate(date.getTime() / 1000)
     let day_picker
+    const hours = []
+    const minutes = []
+    for (let i = 1; i <= 11; i++)
+      hours.push(<option key={ 'hour-' + i }>{ i }</option>)
+    for (let i = 0; i <= 50; i += 10)
+      minutes.push(<option key={ 'minute-' + i }>{ i === 0 ? '0' + i : i }</option>)
     if (data.show_day_picker) {
       day_picker = (
         <div className="daypicker--tasks" style={ S('absolute bg-fff z-100 t-105 l-12') }>
-          <DayPicker onDayClick={ this.setTaskDate.bind(this) } />
+          <DayPicker
+            modifiers={{
+              selected: day => DateUtils.isSameDay(task_due_date, day)
+            }}
+            onDayClick={ this.setTaskDate.bind(this) }
+          />
+          <div style={ S('w-200 pl-10 pb-10 font-12') }>
+            TIME
+            <div className="clearfix"></div>
+            <div style={ S('w-60 pull-left') }>
+              <Input ref="hours" type="select">
+                <option>12</option>
+                { hours }
+              </Input>
+            </div>
+            <div style={ S('w-60 pull-left') }>
+              <Input ref="minutes" type="select">
+                { minutes }
+              </Input>
+            </div>
+            <div style={ S('w-60 pull-left') }>
+              <Input ref="suffix" type="select">
+                <option>AM</option>
+                <option>PM</option>
+              </Input>
+            </div>
+          </div>
+          <div style={ S('p-10') }>
+            <a onClick={ this.hideDayPicker.bind(this) } href="#" className="pull-left" style={ S('mt-10') }>Cancel</a>
+            <Button onClick={ this.setTaskDateTime.bind(this) } className="pull-right" bsStyle="primary" type="button">Select</Button>
+            <div className="clearfix"></div>
+          </div>
+          <div className="clearfix"></div>
         </div>
       )
     }
@@ -530,8 +617,14 @@ export default class TasksModule extends Component {
     if (data.new_task && data.new_task.due_date) {
       date = new Date(data.new_task.due_date)
       const due_date_obj = helpers.friendlyDate(date.getTime() / 1000)
+      let ampm = 'AM'
+      let hour = due_date_obj.hour
+      if (hour > 12) {
+        ampm = 'PM'
+        hour = parseInt(hour, 10) - 12
+      }
       due_date_area = (
-        <span>{ `${due_date_obj.day}, ${due_date_obj.month} ${due_date_obj.date}, ${due_date_obj.year}` }</span>
+        <span>{ `${due_date_obj.day}, ${due_date_obj.month} ${due_date_obj.date}, ${due_date_obj.year}, ${hour}:${due_date_obj.min < 10 ? '0' + due_date_obj.min : due_date_obj.min}${ampm}` }</span>
       )
     }
     let open_class = ''
@@ -677,7 +770,9 @@ export default class TasksModule extends Component {
           containing_body_height={ this.props.containing_body_height }
           editTaskTitle={ this.editTaskTitle.bind(this) }
           showDayPicker={ this.showDayPicker.bind(this, 'edit') }
-          editTaskDate={ this.editTaskDate.bind(this) }
+          editTaskDate={ this.editTaskDate }
+          setEditTaskDate={ this.setEditTaskDate.bind(this) }
+          hideDayPicker={ this.hideDayPicker.bind(this) }
         />
         <Modal show={ data.show_contacts_modal } onHide={ this.hideModal }>
           <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
