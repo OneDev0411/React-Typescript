@@ -20,6 +20,8 @@ export default (user, id) => {
       const reduced_transaction_tabs = transaction_tabs.filter(transaction => {
         return transaction.id !== id
       })
+      const history = require('../../utils/history')
+      history.replaceState(null, '/dashboard/transactions')
       AppStore.data.transaction_tabs = reduced_transaction_tabs
       AppStore.emitChange()
     }

@@ -14,6 +14,7 @@ import TasksList from './Partials/TasksList'
 import Drawer from './Partials/Drawer'
 import Loading from '../../../../Partials/Loading'
 import Transaction from './Partials/Transaction'
+import ProfileImage from '../../Partials/ProfileImage'
 
 // AppStore
 import AppStore from '../../../../../stores/AppStore'
@@ -43,6 +44,17 @@ export default class TasksModule extends Component {
         this.refs.task_title.refs.input.focus()
       }, 100)
     }
+  }
+
+  componentWillUnmount() {
+    // Resets
+    if (AppStore.data.contacts_added)
+      delete AppStore.data.contacts_added
+    if (AppStore.data.new_task)
+      delete AppStore.data.new_task
+    if (AppStore.data.show_day_picker)
+      delete AppStore.data.show_day_picker
+    AppStore.emitChange()
   }
 
   // Transactions
@@ -117,7 +129,7 @@ export default class TasksModule extends Component {
     if (module_type === 'transaction')
       transaction = data.current_transaction
     if (AppStore.data.new_task && AppStore.data.new_task.due_date)
-      due_date = AppStore.data.new_task.due_date.getTime()
+      due_date = AppStore.data.new_task.due_date.getTime() / 1000 // in seconds
     if (title) {
       this.hideDayPicker()
       let contacts
@@ -139,26 +151,90 @@ export default class TasksModule extends Component {
 
   handleAddTaskKeyDown(e) {
     const key = e.which
+    const data = this.props.data
     // Tab pressed
     if (key === 9)
       this.showDayPicker()
     // Enter pressed
     if (key === 13) {
       e.preventDefault()
-      this.createTask()
+      // Select contact from search
+      if (data.search_contacts && data.search_contacts.list) {
+        const active_contact_index = data.active_contact
+        const active_contact = data.search_contacts.list[active_contact_index]
+        this.addContactFromSearch(active_contact)
+      } else
+        this.createTask()
+    }
+    // Up / down nav searched contacts
+    if (data.search_contacts && data.search_contacts.list) {
+      if (key === 38)
+        this.setContactActive('up')
+      if (key === 40)
+        this.setContactActive('down')
     }
   }
 
-  showDayPicker() {
-    if (AppStore.data.show_day_picker)
-      delete AppStore.data.show_day_picker
-    else
-      AppStore.data.show_day_picker = true
+  handleAddTaskKeyUp() {
+    // Check for @
+    const text_input = this.refs.task_title.refs.input
+    const task_title = text_input.value
+    if (task_title.indexOf('@') !== -1) {
+      // Split after @
+      const search_arr = task_title.split('@')
+      const search_text = search_arr[1]
+      this.searchContacts(text_input, search_text)
+    } else {
+      delete AppStore.data.search_contacts
+      AppStore.emitChange()
+    }
+  }
+
+  searchContacts(text_input, search_text) {
+    if (!search_text.trim()) {
+      AppStore.data.search_contacts = {
+        list: [],
+        position: text_input.selectionEnd
+      }
+      AppStore.emitChange()
+      return
+    }
+    const data = this.props.data
+    const contacts = data.contacts
+    const contacts_filtered = contacts.filter(contact => {
+      const first_name = contact.first_name.toLowerCase()
+      const email = contact.email.toLowerCase()
+      if (first_name.search(search_text.toLowerCase()) !== -1)
+        return true
+      if (email.search(search_text.toLowerCase()) !== -1)
+        return true
+      return false
+    })
+    if (!AppStore.data.search_contacts)
+      AppStore.data.search_contact = {}
+    AppStore.data.search_contacts.list = contacts_filtered
+    AppStore.emitChange()
+  }
+
+  showDayPicker(action) {
+    if (action === 'create') {
+      if (AppStore.data.show_day_picker)
+        delete AppStore.data.show_day_picker
+      else
+        AppStore.data.show_day_picker = true
+    }
+    if (action === 'edit') {
+      if (AppStore.data.show_day_picker_edit)
+        delete AppStore.data.show_day_picker_edit
+      else
+        AppStore.data.show_day_picker_edit = true
+    }
     AppStore.emitChange()
   }
 
   hideDayPicker() {
     delete AppStore.data.show_day_picker
+    delete AppStore.data.show_day_picker_edit
     AppStore.emitChange()
   }
 
@@ -340,6 +416,85 @@ export default class TasksModule extends Component {
     })
   }
 
+  editTaskTitle(task, title) {
+    const data = this.props.data
+    const user = data.user
+    AppStore.data.current_task.title = title
+    AppStore.emitChange()
+    clearTimeout(window.edit_timer)
+    window.edit_timer = setTimeout(() => {
+      TaskDispatcher.dispatch({
+        action: 'edit-title',
+        user,
+        task,
+        title
+      })
+    }, 500)
+  }
+
+  editTaskDate(e, day) {
+    const data = this.props.data
+    const user = data.user
+    const due_date = day.getTime() / 1000 // in seconds
+    const task = AppStore.data.current_task
+    AppStore.data.current_task.due_date = due_date
+    delete AppStore.data.show_day_picker_edit
+    AppStore.emitChange()
+    TaskDispatcher.dispatch({
+      action: 'edit-date',
+      user,
+      task,
+      due_date
+    })
+  }
+
+  addContactFromSearch(contact) {
+    if (!AppStore.data.contacts_added) {
+      AppStore.data.contacts_added = {
+        'share-task': []
+      }
+    }
+    const text_input = this.refs.task_title.refs.input
+    const task_title = text_input.value
+    const search_arr = task_title.split('@')
+    text_input.value = `${search_arr[0]}${contact.first_name} ${contact.last_name} `
+    delete AppStore.data.search_contacts
+    // prevent dupe
+    if (!AppStore.data.contacts_added['share-task'])
+      AppStore.data.contacts_added['share-task'] = []
+    if (!_.find(AppStore.data.contacts_added['share-task'], { id: contact.id }))
+      AppStore.data.contacts_added['share-task'].push(contact)
+    AppStore.data.new_task = true
+    AppStore.emitChange()
+    this.addContactsToTask()
+  }
+
+  setContactActive(direction) {
+    const data = this.props.data
+    const search_contacts_list = data.search_contacts.list
+    let active_contact = -1
+
+    // Prev active contact
+    if (data.active_contact !== null)
+      active_contact = data.active_contact
+
+    if (direction === 'up') {
+      if (active_contact > -1)
+        active_contact = active_contact - 1
+      else
+        active_contact = search_contacts_list.length - 1
+    }
+
+    if (direction === 'down') {
+      if (active_contact < search_contacts_list.length - 1)
+        active_contact = active_contact + 1
+      else
+        active_contact = 0
+    }
+    AppStore.data.active_contact = active_contact
+    AppStore.emitChange()
+  }
+
   render() {
     const data = this.props.data
     const new_task = data.new_task
@@ -364,7 +519,7 @@ export default class TasksModule extends Component {
     let day_picker
     if (data.show_day_picker) {
       day_picker = (
-        <div style={ S('absolute bg-fff z-10 t-110 l-10n') }>
+        <div className="daypicker--tasks" style={ S('absolute bg-fff z-100 t-105 l-12') }>
           <DayPicker onDayClick={ this.setTaskDate.bind(this) } />
         </div>
       )
@@ -380,7 +535,7 @@ export default class TasksModule extends Component {
       )
     }
     let open_class = ''
-    if (current_task && current_task.drawer_active)
+    if (current_task && current_task.drawer_active && module_type === 'tasks')
       open_class = ' drawer-open'
 
     let share_new_task_area = (
@@ -444,9 +599,41 @@ export default class TasksModule extends Component {
       delete main_style.position
       delete main_style.top
       delete main_style.right
-      wrapper_style = {
-        paddingTop: '15px'
+    }
+    // Search box
+    let search_contacts_area
+    if (data.search_contacts) {
+      const search_contacts_position = data.search_contacts.position
+      const active_contact = data.active_contact
+      const search_box_style = S('p-5 absolute bg-fff br-3 z-100 t-50 minw-200 bw-1 bc-ccc solid l-' + (search_contacts_position * 8))
+      let search_box_content = (
+        <div style={ S('p-10 color-929292') }>Mention someone by name or email</div>
+      )
+      if (data.search_contacts.list && data.search_contacts.list.length) {
+        const search_contacts_list = data.search_contacts.list
+        search_box_content = search_contacts_list.map((contact, i) => {
+          let active_contact_style = ''
+          if (active_contact === i)
+            active_contact_style = ' bg-EDF7FD'
+          return (
+            <div key={ 'contact-search-' + contact.id }>
+              <div onClick={ this.addContactFromSearch.bind(this, contact) } className="add-contact-form__contact" key={ 'contact-' + contact.id } style={ S('br-3 relative h-60 pointer mb-5 p-10' + active_contact_style) }>
+                <ProfileImage data={ data } user={ contact }/>
+                <div style={ S('ml-50') }>
+                  <span style={ S('fw-600') }>{ contact.first_name } { contact.last_name }</span><br />
+                  <span style={ S('color-666') }>{ contact.email }</span>
+                </div>
+                <div className="clearfix"></div>
+              </div>
+            </div>
+          )
+        })
       }
+      search_contacts_area = (
+        <div style={ search_box_style }>
+          { search_box_content }
+        </div>
+      )
     }
     return (
       <div style={ wrapper_style }>
@@ -454,9 +641,10 @@ export default class TasksModule extends Component {
           <div style={ S('ml-15') }>
             <div style={ S('mr-15 relative') }>
               <form>
-                <Input onKeyDown={ this.handleAddTaskKeyDown.bind(this) } style={ { ...S('h-110 pt-12 font-18'), resize: 'none' } } ref="task_title" type="textarea" placeholder="Type your task then press enter"/>
+                <Input onKeyUp={ this.handleAddTaskKeyUp.bind(this) } onKeyDown={ this.handleAddTaskKeyDown.bind(this) } style={ { ...S('h-110 pt-12 font-18'), resize: 'none' } } ref="task_title" type="textarea" placeholder="Type your task then press enter"/>
+                { search_contacts_area }
                 <div style={ S('absolute b-0 pl-15 pb-15 pointer') }>
-                  <div className="pull-left" style={ S('color-3388ff') } onClick={ this.showDayPicker }>
+                  <div className="pull-left" style={ S('color-3388ff') } onClick={ this.showDayPicker.bind(this, 'create') }>
                     <span style={ S('mr-10') }>
                       <img width="17" src="/images/dashboard/icons/calendar-blue.svg"/>
                     </span>
@@ -487,6 +675,9 @@ export default class TasksModule extends Component {
           showAddTransactionModal={ this.showAddTransactionModal.bind(this) }
           module_type={ module_type }
           containing_body_height={ this.props.containing_body_height }
+          editTaskTitle={ this.editTaskTitle.bind(this) }
+          showDayPicker={ this.showDayPicker.bind(this, 'edit') }
+          editTaskDate={ this.editTaskDate.bind(this) }
         />
         <Modal show={ data.show_contacts_modal } onHide={ this.hideModal }>
           <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
@@ -497,10 +688,13 @@ export default class TasksModule extends Component {
               data={ data }
               module_type="share-task"
             />
+            <div className="text-center">
+              <img style={ S('w-200') } src="/images/dashboard/add-contacts/people.png" />
+            </div>
           </Modal.Body>
           <Modal.Footer style={ { border: 'none' } }>
             <Button bsStyle="link" onClick={ this.hideModal }>Cancel</Button>
-            <Button onClick={ this.addContactsToTask.bind(this) } style={ S('h-30 pt-5 pl-30 pr-30') } className={ data.adding_contacts ? 'disabled' : '' } type="submit" bsStyle="primary">
+            <Button onClick={ this.addContactsToTask.bind(this) } style={ S('pl-30 pr-30') } className={ data.adding_contacts ? 'disabled' : '' } type="submit" bsStyle="primary">
               { data.adding_contacts ? 'Saving...' : 'Save' }
             </Button>
           </Modal.Footer>
@@ -512,6 +706,9 @@ export default class TasksModule extends Component {
           <Modal.Body>
             <Input type="text" ref="search_transactions" placeholder="Search for a transaction" onKeyDown={ this.navTransactionsList.bind(this) } onKeyUp={ this.searchTransactions.bind(this) }/>
             { transaction_results_area }
+            <div className="text-center">
+              <img style={ S('w-126 mt-20 mb-20') } src="/images/dashboard/tasks/transaction.png" />
+            </div>
           </Modal.Body>
         </Modal>
       </div>

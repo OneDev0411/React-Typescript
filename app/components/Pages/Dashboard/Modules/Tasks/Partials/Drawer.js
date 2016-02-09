@@ -1,7 +1,8 @@
 // Dashboard/Tasks/Drawer.js
 import React, { Component } from 'react'
 import S from 'shorti'
-import { Button } from 'react-bootstrap'
+import { Button, Input } from 'react-bootstrap'
+import DayPicker from 'react-day-picker'
 
 // Partials
 import CheckBox from './CheckBox'
@@ -13,6 +14,13 @@ import Loading from '../../../../../Partials/Loading'
 import helpers from '../../../../../../utils/helpers'
 
 export default class Drawer extends Component {
+
+  editTaskTitle() {
+    const data = this.props.data
+    const current_task = data.current_task
+    const task_title = this.refs.task_title.refs.input.value
+    this.props.editTaskTitle(current_task, task_title)
+  }
 
   render() {
     const data = this.props.data
@@ -84,7 +92,7 @@ export default class Drawer extends Component {
     let created_area
     if (current_task && current_task.due_date) {
       const due_date = current_task.due_date
-      const due_date_obj = helpers.friendlyDate(due_date / 1000)
+      const due_date_obj = helpers.friendlyDate(due_date)
       due_date_area = (
         <span>{ `${due_date_obj.day}, ${due_date_obj.month} ${due_date_obj.date}, ${due_date_obj.year}` }</span>
       )
@@ -104,7 +112,7 @@ export default class Drawer extends Component {
           return (
             <div style={ { ...S('relative p-15 w-100p bg-fff'), ...bottomLine } } className="pull-left" key={ 'added-contact-' + contact.id }>
               <div style={ S('l-0 t-12 l-10 absolute') }>
-                <ProfileImage top={11} size={40} user={ contact }/>
+                <ProfileImage data={ data } top={11} size={40} user={ contact }/>
               </div>
               <div style={ S('ml-50') }>
                 <div onClick={ this.props.removeContactFromTask.bind(this, contact) } className="close pull-right" style={ S('pointer mt-5') }>&times;</div>
@@ -139,6 +147,14 @@ export default class Drawer extends Component {
       ...S('b-0 absolute p-20 color-cfd1d2 font-12 w-100p'),
       ...topLine
     }
+    let day_picker
+    if (data.show_day_picker_edit) {
+      day_picker = (
+        <div className="daypicker--tasks" style={ S('absolute bg-fff z-100 t-145 l-10') }>
+          <DayPicker onDayClick={ this.props.editTaskDate.bind(this) } />
+        </div>
+      )
+    }
     return (
       <div style={ drawer_wrap_style }>
         <div style={ drawer_style } className={ 'drawer ' + drawer_class }>
@@ -150,14 +166,17 @@ export default class Drawer extends Component {
                 editTaskStatus= { this.props.editTaskStatus }
               />
             </div>
-            <span style={ text_style }>{ task_title }</span>
+            <span style={ text_style }>
+              <Input ref="task_title" onChange={ this.editTaskTitle.bind(this) } style={ S('bw-0 absolute l-50 t-10 bg w-400 bg-f5fafe') } type="text" value={ task_title } />
+            </span>
           </div>
-          <div style={ { ...S('pt-20 p-15 h-60 mb-30 bg-fff'), ...bottomLine } }>
+          <div onClick={ this.props.showDayPicker } style={ { ...S('pointer pt-20 p-15 h-60 mb-30 bg-fff'), ...bottomLine } }>
             <span style={ S('mr-15') }>
               <img width="17" src="/images/dashboard/icons/calendar-red.svg"/>
             </span>
             <span style={ S('color-e0523e') }>Due on { due_date_area }</span>
           </div>
+          { day_picker }
           <div style={ { ...S('mb-30'), ...topLine } }>
             <div style={ { ...S('h-54 p-10 bg-fff'), ...bottomLine } }>
               <div style={ S('p-10 pull-left color-a3a9ac font-12') }>
@@ -205,5 +224,8 @@ Drawer.propTypes = {
   removeContactFromTask: React.PropTypes.func,
   showAddTransactionModal: React.PropTypes.func,
   module_type: React.PropTypes.string,
-  containing_body_height: React.PropTypes.number
+  containing_body_height: React.PropTypes.number,
+  editTaskTitle: React.PropTypes.func,
+  showDayPicker: React.PropTypes.func,
+  editTaskDate: React.PropTypes.func
 }

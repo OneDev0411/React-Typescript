@@ -24,7 +24,7 @@ export default class MessageItem extends Component {
     if (message.author) {
       author = message.author
       profile_image_div = (
-        <ProfileImage user={ author }/>
+        <ProfileImage data={ data } user={ author }/>
       )
     }
     // Rebot
@@ -47,9 +47,31 @@ export default class MessageItem extends Component {
     // Message image
     let message_image
     if (message.image_url) {
+      const file_url = message.image_url
+      let message_thumb = (
+        <div style={ S('w-400 h-300 br-3 bg-url(' + file_url + ') bg-cover bg-center') }></div>
+      )
+      if (file_url.toLowerCase().indexOf('.png') === -1 && file_url.toLowerCase().indexOf('.jpg') === -1 && file_url.toLowerCase().indexOf('.gif') === -1) {
+        // TODO: Depracated
+        let ext = file_url.split('.').pop().substr(0, 3)
+        if (message.attachments.length) {
+          const attachment = message.attachments
+          if (attachment.info)
+            ext = attachment.info.mime['mime-extension']
+        }
+        message_thumb = (
+          <div style={ S('w-60 mt-10') }>
+            <i style={ S('font-60') } className="text-primary fa fa-file-o"></i>
+            <br />
+            <div style={ S('w-50 text-center relative t-35n font-12 fw-700 color-e0523e') }>
+              { ext }
+            </div>
+          </div>
+        )
+      }
       message_image = (
-        <div>
-          <img src={ message.image_url } style={ S('maxw-400') }/>
+        <div onClick={ this.props.showFileViewer.bind(this, file_url) } style={ S('pointer mt-10') }>
+          { message_thumb }
         </div>
       )
     }
@@ -58,9 +80,7 @@ export default class MessageItem extends Component {
     if (message.recommendation && message.recommendation.listing && message.recommendation.listing.cover_image_url) {
       const cover_image_url = message.recommendation.listing.cover_image_url
       message_image = (
-        <div>
-          <img src={ cover_image_url } style={ S('maxw-400') }/>
-        </div>
+        <div style={ S('w-400 h-300 br-3 bg-url(' + cover_image_url + ') bg-cover bg-center') }></div>
       )
     }
 
@@ -74,10 +94,10 @@ export default class MessageItem extends Component {
       message_text = emojify.replace(linkifyString(message.comment))
 
     // Get latest author and group
-    if (message.author) {
+    if (message.author && !this.props.new_date) {
       if (messages[i - 1] && messages[i - 1].author && messages[i - 1].author.id === message.author.id) {
         return (
-          <div style={ S('relative') }>
+          <div style={ S('relative mb-5') }>
             <div className="pull-left" style={ S('ml-50') }>
               <div className={ message_class_name } dangerouslySetInnerHTML={ { __html: message_text } }></div>
               { message_image }
@@ -87,9 +107,8 @@ export default class MessageItem extends Component {
         )
       }
     }
-
     return (
-      <div style={ S('relative') }>
+      <div className="message-item" style={ S('relative mb-5') }>
         { profile_image_div }
         <div className="pull-left" style={ S('ml-50') }>
           <b>{ first_name || 'Rebot' }</b>
@@ -109,5 +128,7 @@ export default class MessageItem extends Component {
 MessageItem.propTypes = {
   data: React.PropTypes.object,
   message: React.PropTypes.object.isRequired,
-  i: React.PropTypes.number.isRequired
+  i: React.PropTypes.number.isRequired,
+  showFileViewer: React.PropTypes.func,
+  new_date: React.PropTypes.bool
 }

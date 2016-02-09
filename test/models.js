@@ -11,6 +11,7 @@ import config from '../config/private'
 // Get access token
 let access_token
 let room_id
+let contact_id
 let test = config.test
 const random_email = randomString(9) + '@rechat.co'
 const random_phone = Math.floor(Math.random() * 1000000000)
@@ -86,6 +87,7 @@ describe('Testing User model', function() {
       api_host: test.api_host
     }
     User.createContacts(params, (err, response) => {
+      contact_id = response.data[0].id
       expect(response.status).to.equal('success')
       done()
     })
@@ -142,7 +144,7 @@ describe('Testing Room model', function() {
   it('Room.addUser should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
     const params = {
       room_id: room_id,
-      users: [test.addUser.id],
+      user: contact_id,
       access_token: access_token,
       api_host: test.api_host
     }

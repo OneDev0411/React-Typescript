@@ -1,5 +1,6 @@
 // Dashboard/Transactions/FileViewer.js
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
 import S from 'shorti'
 
 export default class FileViewer extends Component {
@@ -14,6 +15,17 @@ export default class FileViewer extends Component {
     const transaction = data.current_transaction
     const attachment = transaction.viewer.attachment
     history.pushState(null, null, '/dashboard/transactions/' + transaction.id + '/attachments/' + attachment.id)
+    // fade in component
+    this.fadeIn()
+  }
+
+  fadeIn() {
+    const elem = ReactDOM.findDOMNode(this)
+    elem.style.opacity = 0
+    window.requestAnimationFrame(() => {
+      elem.style.transition = 'opacity 250ms'
+      elem.style.opacity = 1
+    })
   }
 
   render() {

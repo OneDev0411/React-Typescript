@@ -216,15 +216,15 @@ export default {
       const info = {
         name: file.name,
         original_name: file.name,
-        title: file.new_name || file.name
+        title: file.new_name
       }
       request.attach('media', file)
       request.field('info', JSON.stringify(info))
     })
-    request.end((err, res) => {
-      if (err)
-        return callback(err, res)
-      return callback(err, res)
-    })
+    return callback(request)
+    // request.end((err, res) => {
+    //   // console.log(res)
+    //   return callback(res)
+    // })
   }
 }

@@ -52,6 +52,6 @@ module.exports = {
       'process.env.SOCKET_SERVER': JSON.stringify(process.env.SOCKET_SERVER),
       'process.env.COSMIC_BUCKET': JSON.stringify(process.env.COSMIC_BUCKET),
       'process.env.COSMIC_KEY': JSON.stringify(process.env.COSMIC_KEY)
-    }),
+    })
  ]
 }

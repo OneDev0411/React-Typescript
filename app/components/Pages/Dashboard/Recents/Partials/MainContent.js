@@ -12,6 +12,11 @@ import DropzoneOverlay from '../../Partials/DropzoneOverlay'
 
 export default class MainContent extends Component {
 
+  componentDidUpdate() {
+    if (this.refs.message_input)
+      this.refs.message_input.focus()
+  }
+
   handleKeyUp() {
     const search_text = this.refs.search_text.value
     this.props.filterRooms(search_text)
@@ -49,7 +54,6 @@ export default class MainContent extends Component {
 
     // Rooms
     const rooms_column_style = {
-      overflow: 'scroll',
       height: window.innerHeight,
       borderRight: '1px solid #e7e4e3',
       width: '320px'
@@ -59,7 +63,7 @@ export default class MainContent extends Component {
     const messages_column_style = {
       ...S('absolute pt-15 l-320 minw-450'),
       height: window.innerHeight,
-      width: window.innerWidth - 542
+      width: window.innerWidth - 500
     }
 
     const footer_style = S('absolute w-100p l-0 b-0 r-0 p-20 pb-10')
@@ -79,6 +83,14 @@ export default class MainContent extends Component {
 
     // Create message form
     let create_message_area = ''
+    const btn_style = {
+      ...S('absolute bw-2 p-0 w-56 h-34 l-22 t-22'),
+      borderTop: 'none',
+      borderLeft: 'none',
+      borderBottom: 'none',
+      borderTopLeftRadius: 0,
+      borderBottomLeftRadius: 0
+    }
     if (data.current_room) {
       create_message_area = (
         <div style={ footer_style }>
@@ -87,9 +99,9 @@ export default class MainContent extends Component {
           </div>
           <form onSubmit={ this.props.createMessage.bind(this) }>
             <div className="form-group" style={ S('w-100p') }>
-              <input onKeyDown={ this.props.handleMessageTyping.bind(this) } ref="message_input" type="text" className="form-control" style={ S('w-100p pl-70 bw-2') } placeholder="Type your message and press enter"/>
-              <Dropzone onDrop={ this.props.uploadFiles } type="button" className="btn btn-default create-message__btn" style={ S('absolute bw-2 p-0 w-56 h-38 l-20 t-20') }>
-                <span className="plus" style={ S('font-22 relative t-1n color-ccc') }>+</span>
+              <input onKeyDown={ this.props.handleMessageTyping.bind(this) } ref="message_input" type="text" className="form-control chat-message-input" style={ S('w-100p pl-70 bw-2') } placeholder="Type your message and press enter"/>
+              <Dropzone onDrop={ this.props.uploadFiles } type="button" className="btn btn-default create-message__btn" style={ btn_style }>
+                <span className="plus" style={ S('font-22 relative t-1n') }>+</span>
               </Dropzone>
             </div>
           </form>
@@ -104,9 +116,12 @@ export default class MainContent extends Component {
     }
     let uploading_area
     if (data.current_room && data.current_room.uploading_files) {
+      let upload_percent = 0
+      if (data.current_room.upload_percent)
+        upload_percent = data.current_room.upload_percent
       uploading_area = (
         <div style={ S('p-20 w-100p relative t-35n')}>
-          <ProgressBar active striped bsStyle="success" now={100} />
+          <ProgressBar active striped bsStyle="success" now={ upload_percent } />
         </div>
       )
     }
@@ -129,7 +144,7 @@ export default class MainContent extends Component {
                 <div className="clearfix"></div>
               </div>
               <RoomsList
-                getMessages={ this.props.getMessages }
+                setCurrentRoom={ this.props.setCurrentRoom }
                 data={ data }
               />
             </div>
@@ -140,6 +155,9 @@ export default class MainContent extends Component {
                 showModal={ this.showModal.bind(this) }
                 addContactsToRoom={ this.props.addContactsToRoom }
                 hideModal={ this.hideModal.bind(this) }
+                showFileViewer={ this.props.showFileViewer }
+                setHeadingDate={ this.props.setHeadingDate }
+                removeScrollBottom={ this.props.removeScrollBottom }
               />
               { uploading_area }
               { create_message_area }
@@ -179,10 +197,13 @@ MainContent.propTypes = {
   createRoom: React.PropTypes.func.isRequired,
   createMessage: React.PropTypes.func.isRequired,
   handleMessageTyping: React.PropTypes.func.isRequired,
-  getMessages: React.PropTypes.func.isRequired,
+  setCurrentRoom: React.PropTypes.func.isRequired,
   getPreviousMessages: React.PropTypes.func.isRequired,
   addContactsToRoom: React.PropTypes.func.isRequired,
   handleDragEnter: React.PropTypes.func.isRequired,
   handleDragLeave: React.PropTypes.func.isRequired,
-  uploadFiles: React.PropTypes.func.isRequired
+  uploadFiles: React.PropTypes.func.isRequired,
+  showFileViewer: React.PropTypes.func,
+  setHeadingDate: React.PropTypes.func,
+  removeScrollBottom: React.PropTypes.func
 }

@@ -11,8 +11,9 @@ import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import AppStore from '../../../../stores/AppStore'
 
 // Partials
-import MainContent from './Partials/MainContent'
 import SideBar from '../Partials/SideBar'
+import MainContent from './Partials/MainContent'
+import FileViewer from './Partials/FileViewer'
 
 // Socket.io
 import io from 'socket.io-client'
@@ -42,18 +43,17 @@ export default class Dashboard extends Component {
     })
   }
 
-  getMessages(current_room) {
-    AppStore.data.messages_loading = true
+  setCurrentRoom(current_room) {
+    AppStore.data.current_room = current_room
+    AppStore.data.messages = current_room.messages
+    AppStore.data.scroll_bottom = true
     AppStore.emitChange()
-
-    const data = AppStore.data
-    AppDispatcher.dispatch({
-      action: 'get-messages',
-      user: data.user,
-      room: current_room
-    })
-    // Show room_id in url
     history.pushState(null, null, '/dashboard/recents/' + current_room.id)
+  }
+
+  removeScrollBottom() {
+    delete AppStore.data.scroll_bottom
+    AppStore.emitChange()
   }
 
   getUserRooms() {
@@ -245,14 +245,17 @@ export default class Dashboard extends Component {
   init() {
     this.addUserToStore()
     this.getUserRooms()
-    window.addEventListener('resize', this.handleResize)
+    AppStore.data.messages_loading = true
+    AppStore.emitChange()
 
+    window.addEventListener('resize', this.handleResize)
     // Listen for new messages
     window.socket = io(config.socket.server)
     const socket = window.socket
     const data = AppStore.data
     socket.emit('Authenticate', data.user.access_token)
 
+    // TODO move these to main component
     // Listen for new message
     socket.on('Message.Sent', (room, message) => {
       const current_room = AppStore.data.current_room
@@ -264,13 +267,14 @@ export default class Dashboard extends Component {
         const rooms = AppStore.data.rooms
         const current_room_index = _.findIndex(rooms, { id: current_room.id })
         AppStore.data.rooms[current_room_index].latest_message = message
+        AppStore.data.scroll_bottom = true
         AppStore.emitChange()
         if (message.author && data.user.id !== message.author.id)
           this.checkNotification(message)
       }
     })
     // Listen for typing
-    socket.on('User.Typing', (response) => {
+    socket.on('User.Typing', response => {
       const author_id = response.user_id
       const room_id = response.room_id
       AppStore.data.is_typing = {
@@ -284,9 +288,9 @@ export default class Dashboard extends Component {
       delete AppStore.data.is_typing
       AppStore.emitChange()
     })
-    socket.on('Room.OnlineUsers', () => {
-      // console.log(response)
-      // AppStore.emitChange()
+    socket.on('Users.Online', response => {
+      AppStore.data.users_online = response
+      AppStore.emitChange()
     })
     // Add mounted recents to store
     if (!AppStore.data.mounted)
@@ -320,9 +324,38 @@ export default class Dashboard extends Component {
     })
   }
 
+  showFileViewer(file_url) {
+    AppStore.data.current_room.viewer = {
+      file: {
+        url: file_url
+      }
+    }
+    AppStore.emitChange()
+  }
+
+  closeFileViewer() {
+    delete AppStore.data.current_room.viewer
+    AppStore.emitChange()
+  }
+
+  setHeadingDate(date) {
+    AppStore.data.heading_date = date
+    AppStore.emitChange()
+  }
+
   render() {
     // Data
     const data = this.props.data
+    const current_room = data.current_room
+    let file_viewer
+    if (current_room && current_room.viewer) {
+      file_viewer = (
+        <FileViewer
+          data={ data }
+          closeFileViewer={ this.closeFileViewer }
+        />
+      )
+    }
     return (
       <div style={ S('minw-1000') }>
         <main>
@@ -336,16 +369,20 @@ export default class Dashboard extends Component {
             showModal={ this.showModal }
             hideModal={ this.hideModal }
             createRoom={ this.createRoom }
-            getMessages={ this.getMessages }
+            setCurrentRoom={ this.setCurrentRoom.bind(this) }
             addContactsToRoom={ this.addContactsToRoom }
             handleDragEnter={ this.handleDragEnter }
             handleDragLeave={ this.handleDragLeave }
             uploadFiles={ this.uploadFiles.bind(this) }
+            showFileViewer={ this.showFileViewer }
+            setHeadingDate={ this.setHeadingDate }
+            removeScrollBottom={ this.removeScrollBottom }
           />
         </main>
         <audio ref="notif_sound" id="notif-sound">
           <source src="/audio/goat.mp3" type="audio/mpeg" />
         </audio>
+        { file_viewer }
       </div>
     )
   }

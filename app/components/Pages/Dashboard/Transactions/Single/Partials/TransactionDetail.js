@@ -1,23 +1,20 @@
 // Dashboard/Transactions/TransactionDetail.js
 import React, { Component } from 'react'
-import { Carousel, CarouselItem, Modal, Button, Input, Col, OverlayTrigger, Tooltip } from 'react-bootstrap'
+import { Carousel, CarouselItem, Modal, Button, Input, Col, OverlayTrigger, Tooltip, Dropdown, MenuItem } from 'react-bootstrap'
 import S from 'shorti'
-import listing_util from '../../../../../utils/listing'
-import helpers from '../../../../../utils/helpers'
+import listing_util from '../../../../../../utils/listing'
+import helpers from '../../../../../../utils/helpers'
 import Dropzone from 'react-dropzone'
 
 // Partials
-import ProfileImage from '../../Partials/ProfileImage'
-import DropzoneOverlay from '../../Partials/DropzoneOverlay'
+import DropzoneOverlay from '../../../Partials/DropzoneOverlay'
 import Drawer from './Drawer'
 import FileViewer from './FileViewer'
-import TasksModule from '../../Modules/Tasks'
+import TasksModule from '../../../Modules/Tasks'
 
 export default class TransactionDetail extends Component {
 
   componentDidMount() {
-    const transaction = this.props.data.current_transaction
-    this.props.getTransaction(transaction.id)
     if (typeof window !== 'undefined') {
       const clipboard = require('clipboard')
       new clipboard('.copy-mls')
@@ -64,7 +61,6 @@ export default class TransactionDetail extends Component {
     const drawer = transaction.drawer
     // Set transaction data
     const transaction_type = transaction.transaction_type
-    const roles = transaction.roles
     // Set transaction property data
     let property
     let address
@@ -121,7 +117,7 @@ export default class TransactionDetail extends Component {
     if (listing) {
       const status_color = listing_util.getStatusColor(listing.status)
       listing_status_indicator = (
-        <div className="pull-left" style={ S('pointer bg-F7F9FA relative t-7 br-100 ml-15 pt-12 h-35 pl-36 pr-15 mr-15') }>
+        <div className="pull-left" style={ S('bg-F7F9FA relative t-7 br-100 ml-15 pt-12 h-35 pl-36 pr-15 mr-15') }>
           <span style={ S('mr-5 font-46 l-10 t-16n absolute color-' + status_color) }>&#8226;</span>
           <span style={ S('font-14 relative t-3n') }>
             <b>{ listing.status }</b>
@@ -198,31 +194,6 @@ export default class TransactionDetail extends Component {
           { subtitle } { mls_link }
         </div>
       )
-    }
-
-    let contacts_markup
-    if (roles) {
-      contacts_markup = roles.map(role => {
-        const contact = role.contact
-        const contact_style = S('mb-20 mr-15 w-200 h-80')
-        const info_style = {
-          overflow: 'hidden',
-          textOverflow: 'ellipsis'
-        }
-        return (
-          <div className="pull-left" style={ contact_style } key={ 'contact-' + contact.id }>
-            <ProfileImage user={ contact }/>
-            <div style={ S('ml-50') }>
-              <div><b>{ contact.first_name } { contact.last_name }</b></div>
-              <div style={ S('color-929292') }>
-                <div style={ info_style }>{ role.role_types ? role.role_types[0] : '' }</div>
-                <div style={ info_style }>{ contact.phone_number }</div>
-                <div style={ info_style }><a style={{ textDecoration: 'none' }} href={ 'mailto:' + contact.email}>{ contact.email }</a></div>
-              </div>
-            </div>
-          </div>
-        )
-      })
     }
     const title_header_style = {
       ...S('h-80 mb-15 pl-15 pr-15'),
@@ -316,6 +287,9 @@ export default class TransactionDetail extends Component {
     }
     // Dropzone overlay
     const overlay_active = transaction.overlay_active
+    let tasks_width = 500
+    if (window.innerWidth > 1200)
+      tasks_width = window.innerWidth - 685
     return (
       <div style={ S('minw-800 z-0') }>
         <Dropzone
@@ -350,18 +324,30 @@ export default class TransactionDetail extends Component {
               <h4 style={ S('font-28') }>{ title_area }</h4>
             </div>
             { listing_status_indicator }
-            <div className="pull-left text-center" style={ S('pointer bg-F7F9FA relative t-7 br-100 p-8 w-35 h-35') }>
+            <div className="pull-left text-center" style={ S('bg-F7F9FA relative t-7 br-100 p-8 w-35 h-35 mr-15') }>
               <img src="/images/dashboard/icons/link.svg"/>
+            </div>
+            <div className="pull-left text-center">
+              <Dropdown id="settings-dropdown">
+                <Dropdown.Toggle noCaret style={ S('pointer bg-F7F9FA relative t-7 br-100 p-8 w-35 h-35 bw-0') }>
+                  <i style={ S('color-929292') } className="fa fa-cog"></i>
+                </Dropdown.Toggle>
+                <Dropdown.Menu className="super-colors">
+                  <MenuItem onClick={ this.props.showEditModal.bind(this) }><i className="fa fa-edit" style={ S('mr-10') }></i>Edit</MenuItem>
+                  <MenuItem divider />
+                  <MenuItem onClick={ this.props.deleteTransaction.bind(this, transaction.id) }><i className="fa fa-trash-o" style={ S('mr-10') }></i>{ data.deleting_transaction && data.deleting_transaction === transaction.id ? 'Deleting...' : 'Delete' }</MenuItem>
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
             <div className="clearfix"></div>
             <div style={ S('color-929394 mb-20') }>{ subtitle_area }</div>
           </div>
           <div ref="containing_body" style={ S('relative') }>
-            <div style={ S('pl-15 pr-15') }>
-              <div style={ S(carousel_wh + ' mr-15 mb-30') } className="pull-left">
+            <div style={ S('pl-15 pr-15 w-500') } className="pull-left">
+              <div style={ S(carousel_wh + ' mr-15 mb-20') }>
                 { listing_images }
               </div>
-              <div style={ S('w-500') } className="pull-left">
+              <div style={ S('w-500') }>
                 <div style={ S('mb-10') }>
                   <div style={ S('mb-15 mr-20 pull-left') }><b>MLS#:</b> <span style={ S('color-929292') }>{ mls_number }</span></div>
                   <div style={ S('mb-15 mr-20 pull-left') }><b>Transaction Type:</b> <span style={ S('color-929292') }>{ transaction_type }</span></div>
@@ -375,23 +361,16 @@ export default class TransactionDetail extends Component {
                   { association_fee_area }
                   <div className="clearfix"></div>
                 </div>
-                <div style={ S('mb-30') }>
-                  <Button onClick={ this.props.showEditModal.bind(this) } style={ S('bc-3388ff color-3388ff pl-40 pr-40 mr-15') }><b>Edit</b></Button>
-                  <Button style={ S('pl-40 pr-40') } className={ data.deleting_transaction && data.deleting_transaction === transaction.id ? 'disabled' : '' } onClick={ this.props.deleteTransaction.bind(this, transaction.id) } type="button" bsStyle="danger">
-                    { data.deleting_transaction && data.deleting_transaction === transaction.id ? 'Deleting...' : 'Delete' }
-                  </Button>
-                </div>
-                <div>
-                  { contacts_markup }
-                </div>
               </div>
-              <div className="clearfix"></div>
             </div>
-            <TasksModule
-              data={ data }
-              module_type="transaction"
-              containing_body_height={ containing_body_height }
-            />
+             <div style={ S('w-' + tasks_width) } className="pull-left">
+                <TasksModule
+                  data={ data }
+                  module_type="transaction"
+                  containing_body_height={ containing_body_height }
+                />
+              </div>
+            <div className="clearfix"></div>
           </div>
         </Dropzone>
         <DropzoneOverlay

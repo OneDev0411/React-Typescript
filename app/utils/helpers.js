@@ -47,6 +47,12 @@ export default {
     var strTime = hours + ':' + minutes + ampm;
     return strTime;
   },
+  getYMD(timestamp){
+    let date = new Date()
+    if(timestamp)
+      date = new Date(timestamp)
+    return `${date.getFullYear()}-${ ('0' + (date.getMonth() + 1)).slice(-2) }-${('0' + date.getDate()).slice(-2)}`
+  },
   numberWithCommas: (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   },
@@ -57,5 +63,10 @@ export default {
     var phoneRe = /^[1-9]\d{2}[1-9]\d{2}\d{4}$/
     var digits = value.replace(/\D/g, '')
     return digits.match(phoneRe)
+  },
+  imageExists: (url) => {
+    var img = new Image();
+    img.src = url;
+    return img.height != 0;
   }
 }

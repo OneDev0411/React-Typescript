@@ -95,7 +95,7 @@ export default {
 
     const request_object = {
       room_id: params.room_id,
-      users: params.users,
+      user: params.user,
       access_token: params.access_token
     }
 
@@ -151,7 +151,7 @@ export default {
   },
   uploadFiles: (params, callback) => {
     const api_url = config.api_url
-    const endpoint = api_url + '/media'
+    const endpoint = api_url + '/attachments'
     const request = superagent.post(endpoint)
     const files = params.files
     request.set('authorization', 'Bearer ' + params.access_token)
@@ -164,10 +164,6 @@ export default {
       request.attach('media', file)
       request.field('info', JSON.stringify(info))
     })
-    request.end((err, res) => {
-      if (err)
-        return callback(err, res)
-      return callback(err, res)
-    })
+    return callback(request)
   }
 }
