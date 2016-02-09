@@ -5,6 +5,7 @@ import S from 'shorti'
 import listing_util from '../../../../../../utils/listing'
 import helpers from '../../../../../../utils/helpers'
 import Dropzone from 'react-dropzone'
+import Switch from 'react-ios-switch'
 
 // Partials
 import DropzoneOverlay from '../../../Partials/DropzoneOverlay'
@@ -391,15 +392,22 @@ export default class TransactionDetail extends Component {
                 <label>Title</label>
                 <Input ref="file_name" onChange={ this.handleNameChange.bind(this) } value={ editing_name ? current_file_new_name : current_file_name } type="text" />
                 <div style={ S('color-bcc3c6 font-13 mb-15') }>Titles are the easiest ways to search for files: it pays to be descriptive.</div>
-                <label>Make this file Private (coming soon)</label>
-                <div style={ S('color-bcc3c6 font-13') }>
-                  Files uploaded are by default Public and can be seen by
-                  your clients and whoever has access to this transaction.
-                </div>
+                <Col xs={ 10 } style={ S('p-0') }>
+                  <label>Make this file Private</label>
+                  <div style={ S('color-bcc3c6 font-13') }>
+                    Files uploaded are by default Public and can be seen by
+                    your clients and whoever has access to this transaction.
+                  </div>
+                </Col>
+                <Col xs={ 2 } style={ S('p-0') }>
+                  <div className="pull-right">
+                    <Switch checked={ data.doc_switch_checked } onChange={ this.props.uploadFilePermission } />
+                  </div>
+                </Col>
               </div>
               <div className="clearfix"></div>
             </Modal.Body>
-            <Modal.Footer>
+            <Modal.Footer style={ { border: 0 } }>
               <Button bsStyle="link" onClick={ this.props.hideModal.bind(this) }>Cancel</Button>
               <Button style={ S('h-30 pt-5 pl-30 pr-30') } className={ data.creating_contacts ? 'disabled' : '' } type="submit" bsStyle="primary">
                 { data.creating_contacts ? 'Uploading...' : 'Upload' }
@@ -505,5 +513,6 @@ TransactionDetail.propTypes = {
   openFileViewer: React.PropTypes.func,
   closeFileViewer: React.PropTypes.func,
   deleteContact: React.PropTypes.func,
-  getTransaction: React.PropTypes.func
+  getTransaction: React.PropTypes.func,
+  uploadFilePermission: React.PropTypes.func
 }

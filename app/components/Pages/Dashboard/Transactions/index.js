@@ -64,8 +64,6 @@ export default class Transactions extends Component {
     })
     transaction.attachments = attachments_sorted
     AppStore.data.current_transaction = transaction
-    // history.pushState(null, null, '/dashboard/transactions/' + transaction.id)
-    // this.router.transitionTo('/dashboard/transactions/' + transaction.id)
     const history = require('../../../../utils/history')
     history.replaceState(null, '/dashboard/transactions/' + transaction.id)
     AppStore.emitChange()

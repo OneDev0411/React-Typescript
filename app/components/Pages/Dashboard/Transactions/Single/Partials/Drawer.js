@@ -24,7 +24,10 @@ export default class Drawer extends Component {
     const transaction = data.current_transaction
     const drawer = transaction.drawer
     const roles = transaction.roles
-    const attachments = transaction.attachments
+    let attachments = transaction.attachments
+    attachments = _.sortBy(attachments, attachment => {
+      return attachment.created_at * -1
+    })
     let drawer_content
     const drawer_height = window.innerHeight - 203
     let drawer_wrap_style = {
@@ -65,7 +68,6 @@ export default class Drawer extends Component {
             default:
               file_icon_short = 'FILE'
           }
-
           let file_image = (
             <a href={ file.preview } target="_blank" className="pull-left" style={ S('ml-10 w-60 h-60 color-929292') }>
               <i style={ S('font-50') } className="fa fa-file-o"></i>
@@ -89,7 +91,8 @@ export default class Drawer extends Component {
             user_string = user.first_name
           else {
             const user_object = _.find(contacts, { id: added_by })
-            user_string = user_object.first_name
+            if (user_object)
+              user_string = user_object.first_name
           }
           let file_area = (
             <div>
@@ -135,6 +138,7 @@ export default class Drawer extends Component {
         overflow: 'scroll'
       }
       const drawer_header_style = S('relative z-2 bg-f7f9fa ml-5 br-3 p-12 font-18 color-4a4a4a')
+      // Docs
       if (drawer.content === 'docs') {
         let doc_count
         if (attachments && attachments.length)
@@ -163,6 +167,7 @@ export default class Drawer extends Component {
           </div>
         )
       }
+      // Contacts
       if (drawer.content === 'contacts' && roles) {
         let contacts_list
         if (roles) {
@@ -213,6 +218,7 @@ export default class Drawer extends Component {
           </div>
         )
       }
+      // Map
       if (drawer.content === 'map') {
         let google_address
         if (transaction.listing && transaction.listing.property)
