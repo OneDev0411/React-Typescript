@@ -223,6 +223,7 @@ export default class MainContent extends Component {
                 setHeadingDate={ this.props.setHeadingDate }
                 removeScrollBottom={ this.props.removeScrollBottom }
                 showListingModal={ this.props.showListingModal }
+                changeListingNotification={ this.props.changeListingNotification }
               />
               { uploading_area }
               { create_message_area }
@@ -294,5 +295,6 @@ MainContent.propTypes = {
   showFileViewer: React.PropTypes.func,
   setHeadingDate: React.PropTypes.func,
   removeScrollBottom: React.PropTypes.func,
-  showListingModal: React.PropTypes.func
+  showListingModal: React.PropTypes.func,
+  changeListingNotification: React.PropTypes.func
 }

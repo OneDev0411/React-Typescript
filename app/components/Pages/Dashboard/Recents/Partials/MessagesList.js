@@ -5,9 +5,11 @@ import Loading from '../../../../Partials/Loading'
 import { Tooltip, OverlayTrigger, Modal, Button } from 'react-bootstrap'
 import config from '../../../../../../config/public'
 import helpers from '../../../../../utils/helpers'
+import Switch from 'react-ios-switch'
 
 // Partials
 import MessageItem from './MessageItem'
+import ProfileImage from '../../Partials/ProfileImage'
 
 // Modules
 import AddContactsModule from '../../Modules/AddContacts'
@@ -97,6 +99,9 @@ export default class MessagesList extends Component {
     // Data
     const data = this.props.data
     const current_room = data.current_room
+    let listing_switch_checked
+    if (current_room)
+      listing_switch_checked = current_room.notification_settings[data.user.id].system_generated
 
     if (data.rooms && !data.rooms.length)
       return <div style={ S('ml-20') }>No messages yet.</div>
@@ -164,7 +169,6 @@ export default class MessagesList extends Component {
       )
     })
 
-    const btn_action_style = S('w-40 h-40 pointer absolute p-0 t-10 r-20 br-100 bc-ddd bw-1 solid')
     const invite_link = config.app.url + '/invite/?room_id=' + data.current_room.id + '&invite_token=' + data.user.access_token
 
     const tooltip = (
@@ -204,10 +208,15 @@ export default class MessagesList extends Component {
         </div>
       )
     }
+    const btn_invite_style = S('w-40 h-40 pointer absolute p-0 t-10 r-20 br-100 bc-ddd bw-1 solid')
+    const btn_settings_style = S('w-40 h-40 pointer absolute p-0 t-10 r-70 br-100 bc-ddd bw-1 solid color-929292')
     return (
       <div>
-        <button onClick={ this.props.showModal.bind(this, 'invite-user') } type="button" className="btn btn-default invite-user__btn" style={ btn_action_style } >
+        <button onClick={ this.props.showModal.bind(this, 'invite-user') } type="button" className="btn btn-default" style={ btn_invite_style } >
           <img style={ S('ml-1n mt-1n') } src="/images/dashboard/icons/invite-user.svg"/>
+        </button>
+        <button onClick={ this.props.showModal.bind(this, 'settings') } type="button" className="btn btn-default" style={ btn_settings_style } >
+          <i className="fa fa-bell-o"></i>
         </button>
         <h3 style={ S('mt-0 ml-20 mr-50') }>{ current_room.title }</h3>
         { fixed_heading_date_area }
@@ -258,6 +267,38 @@ export default class MessagesList extends Component {
             </Button>
           </Modal.Footer>
         </Modal>
+        <Modal show={ data.show_settings_modal } onHide={ this.props.hideModal }>
+          <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
+           <Modal.Title style={ S('font-14') }>Room settings</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div style={ S('mb-20') }>
+              <label>Listing notifications</label>
+              <div className="clearfix"></div>
+              <div className="pull-left">
+                <Switch checked={ listing_switch_checked } onChange={ this.props.changeListingNotification.bind(this, listing_switch_checked) } />
+              </div>
+              <div className="clearfix"></div>
+            </div>
+            <label>Team</label>
+            {
+              current_room.users.map(contact => {
+                return (
+                  <div style={ S('h-50 relative br-100 p-3 pl-0 pr-10 mb-10 mr-10 w-100p') } className="pull-left" key={ 'added-contact-' + contact.id }>
+                    <div style={ S('l-0 t-0 absolute') }>
+                      <ProfileImage data={ data } top={11} size={40} user={ contact }/>
+                    </div>
+                    <div style={ S('ml-50') }>
+                      <div>{ contact.first_name } { contact.last_name }</div>
+                      <div>{ contact.email }</div>
+                    </div>
+                  </div>
+                )
+              })
+            }
+            <div className="clearfix"></div>
+          </Modal.Body>
+        </Modal>
       </div>
     )
   }
@@ -273,5 +314,6 @@ MessagesList.propTypes = {
   showFileViewer: React.PropTypes.func,
   setHeadingDate: React.PropTypes.func,
   removeScrollBottom: React.PropTypes.func,
-  showListingModal: React.PropTypes.func
+  showListingModal: React.PropTypes.func,
+  changeListingNotification: React.PropTypes.func
 }
