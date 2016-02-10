@@ -1,6 +1,6 @@
 // actions/notifications.js
 import Room from '../../models/Room'
-import AppStore from '../../stores/AppStore'
+// import AppStore from '../../stores/AppStore'
 
 export default (user, id, notification) => {
   const params = {
