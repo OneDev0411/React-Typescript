@@ -55,6 +55,12 @@ export default class SideBar extends Component {
               &nbsp;&nbsp;&nbsp;&nbsp;Search
             </NavItem>
           </LinkContainer>
+          <LinkContainer className={ active.mls } to="/dashboard/mls/listing/recommend">
+            <NavItem style={ S('w-75p') }>
+              <img src={ active.mls ? '/images/dashboard/icons/sidenav/map-active.svg' : '/images/dashboard/icons/sidenav/map.svg' } style={ S('w-19 h-19') }/>
+              &nbsp;&nbsp;&nbsp;&nbsp;Recommend
+            </NavItem>
+          </LinkContainer>
           <LinkContainer className={ active.contacts } to="/dashboard/contacts">
             <NavItem style={ S('w-75p') }>
               <img src={ active.contacts ? '/images/dashboard/icons/sidenav/people-active.svg' : '/images/dashboard/icons/sidenav/people.svg' } style={ S('w-19 h-19') }/>
