@@ -1,6 +1,7 @@
 // actions/create-room.js
 import Room from '../../models/Room'
 import AppStore from '../../stores/AppStore'
+import getMessages from '../messages/get-messages'
 
 export default (user, title) => {
   const params = {
@@ -18,6 +19,7 @@ export default (user, title) => {
       AppStore.data.rooms.unshift(new_room)
       AppStore.data.current_room = new_room
       AppStore.data.messages = [new_room.latest_message]
+      getMessages(user, new_room)
     } else {
       AppStore.data.status = 'error'
       AppStore.data.submitting = false

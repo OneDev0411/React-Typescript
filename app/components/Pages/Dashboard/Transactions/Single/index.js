@@ -25,7 +25,7 @@ export default class Transactions extends Component {
     this.getContacts()
     delete AppStore.data.current_task
     // If coming from redirect
-    if (AppStore.data.new_transaction && AppStore.data.new_transaction.redirect_to) {
+    if (AppStore.data.new_transaction && AppStore.data.new_transaction.saved) {
       setTimeout(() => {
         delete AppStore.data.new_transaction.redirect_to
         delete AppStore.data.new_transaction.saved

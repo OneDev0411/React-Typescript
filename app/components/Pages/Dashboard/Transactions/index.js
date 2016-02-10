@@ -1,6 +1,6 @@
 // Dashboard/Transactions/index.js
 import React, { Component } from 'react'
-import { Table, Alert } from 'react-bootstrap'
+import { Table } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
 
@@ -174,14 +174,6 @@ export default class Transactions extends Component {
         )
       }) // end trans loop
     } // end if (transactions)
-    let saved_message
-    if (data.new_transaction && data.new_transaction.saved) {
-      saved_message = (
-        <div style={ S('pl-15 pr-15') }>
-          <Alert bsStyle="success">Transaction saved!<button className="close" type="button" onClick={ this.handleCloseSavedAlert.bind(this) }>&times;</button></Alert>
-        </div>
-      )
-    }
 
     let main_content = (
         <div style={ S('pl-15 pr-15') }>
@@ -230,7 +222,6 @@ export default class Transactions extends Component {
             data={ data }
           />
           <div style={ main_style }>
-            { saved_message }
             { main_content }
           </div>
         </main>

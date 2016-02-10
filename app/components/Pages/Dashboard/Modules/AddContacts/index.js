@@ -34,7 +34,6 @@ export default class AddContactsModule extends Component {
       this.refs.company.refs.input.value = ''
       this.refs.role.refs.input.value = ''
     }
-    this.refs.search_contacts.refs.input.focus()
   }
 
   getContacts() {
@@ -78,6 +77,7 @@ export default class AddContactsModule extends Component {
     delete AppStore.data.show_contact_modal
     delete AppStore.data.contact_modal
     delete AppStore.data.creating_contacts
+    delete AppStore.data.new_contact_modal
     AppStore.emitChange()
   }
 
