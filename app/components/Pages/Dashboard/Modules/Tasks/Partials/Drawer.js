@@ -249,7 +249,7 @@ export default class Drawer extends Component {
           <div style={ footer_style }>
             { created_area }
             <div style={ S('pull-right') }>
-              <span style={ S('pointer mr-20') }><img src="/images/dashboard/icons/clock.svg"/></span>
+              <span onClick={ this.props.showSnoozeModal.bind(this, current_task) } style={ S('pointer mr-20') }><img src="/images/dashboard/icons/clock.svg"/></span>
               <span onClick={ this.props.deleteTask.bind(this, current_task) } style={ S('pointer') }><img src="/images/dashboard/icons/trash.svg"/></span>
             </div>
           </div>
@@ -274,5 +274,6 @@ Drawer.propTypes = {
   showDayPicker: React.PropTypes.func,
   editTaskDate: React.PropTypes.func,
   setEditTaskDate: React.PropTypes.func,
-  hideDayPicker: React.PropTypes.func
+  hideDayPicker: React.PropTypes.func,
+  showSnoozeModal: React.PropTypes.func
 }
