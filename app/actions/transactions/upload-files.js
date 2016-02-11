@@ -24,8 +24,11 @@ export default (user, transaction, files) => {
       if (err)
         return err
       const data = res.body.data
-      const attachments = data.attachments
-      AppStore.data.current_transaction.attachments = attachments.reverse()
+      let attachments = data.attachments
+      attachments = _.sortBy(attachments, attachment => {
+        return attachment.created_at * -1
+      })
+      AppStore.data.current_transaction.attachments = attachments
       AppStore.emitChange()
     })
   })

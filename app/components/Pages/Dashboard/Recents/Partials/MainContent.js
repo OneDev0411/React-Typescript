@@ -1,11 +1,13 @@
 // MainContent.js
 import React, { Component } from 'react'
-import { Modal, Button, Input, ProgressBar } from 'react-bootstrap'
+import { Modal, Button, Input, ProgressBar, Carousel, CarouselItem, Col } from 'react-bootstrap'
 import S from 'shorti'
 import RoomsList from './RoomsList'
 import MessagesList from './MessagesList'
 import _ from 'lodash'
 import Dropzone from 'react-dropzone'
+import helpers from '../../../../../utils/helpers'
+import listing_util from '../../../../../utils/listing'
 
 // Partials
 import DropzoneOverlay from '../../Partials/DropzoneOverlay'
@@ -63,7 +65,7 @@ export default class MainContent extends Component {
     const messages_column_style = {
       ...S('absolute pt-15 l-320 minw-450'),
       height: window.innerHeight,
-      width: window.innerWidth - 500
+      width: window.innerWidth - 504
     }
 
     const footer_style = S('absolute w-100p l-0 b-0 r-0 p-20 pb-10')
@@ -125,6 +127,68 @@ export default class MainContent extends Component {
         </div>
       )
     }
+
+    // Listing modal
+    const current_listing = data.current_listing
+    let property
+    let property_type
+    let year_built
+    let address
+    let city
+    let state
+    let postal_code
+    let full_address
+    let listing_title
+    let mls_number
+    let bedroom_count
+    let bathroom_count
+    let square_feet
+    let prev_icon
+    let next_icon
+    let description
+    let price
+    let listing_images = (
+      <div style={ S('bg-eff1f2 w-480 h-300 font-22 text-center pt-125 color-929292') }>No image</div>
+    )
+    const carousel_wh = 'w-480 h-300'
+    if (current_listing) {
+      property = current_listing.property
+      price = helpers.numberWithCommas(current_listing.price)
+      property_type = property.property_type
+      year_built = property.year_built
+      address = `${property.address.street_number} ${property.address.street_name} ${property.address.street_suffix}`
+      city = property.address.city
+      state = property.address.state
+      postal_code = property.address.postal_code
+      full_address = `${address} ${city}, ${state}, ${postal_code}`
+      listing_title = address
+      mls_number = current_listing.mls_number
+      bedroom_count = property.bedroom_count
+      bathroom_count = property.bathroom_count
+      square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
+      prev_icon = '<'
+      next_icon = '>'
+      description = property.description
+      listing_images = (
+        <Carousel interval={0} indicators={false} prevIcon={ prev_icon } nextIcon={ next_icon }>
+          <CarouselItem>
+            <div style={ S(carousel_wh + ' bg-cover bg-center bg-url(' + current_listing.cover_image_url + ')') }></div>
+          </CarouselItem>
+          {
+            current_listing.gallery_image_urls.map(gallery_image_url => {
+              return (
+                <CarouselItem key={ 'gallery-image-' + gallery_image_url }>
+                  <img className="hidden" src={ gallery_image_url }/>
+                  <div style={ S(carousel_wh + ' bg-cover bg-center bg-url(' + gallery_image_url + ')') }></div>
+                </CarouselItem>
+              )
+            })
+          }
+        </Carousel>
+      )
+    }
+    if (current_listing)
+      listing_title = `${current_listing.property.address.street_number} ${current_listing.property.address.street_name} ${current_listing.property.address.street_suffix}`
     return (
       <div>
         <Dropzone
@@ -158,6 +222,8 @@ export default class MainContent extends Component {
                 showFileViewer={ this.props.showFileViewer }
                 setHeadingDate={ this.props.setHeadingDate }
                 removeScrollBottom={ this.props.removeScrollBottom }
+                showListingModal={ this.props.showListingModal }
+                changeListingNotification={ this.props.changeListingNotification }
               />
               { uploading_area }
               { create_message_area }
@@ -175,6 +241,29 @@ export default class MainContent extends Component {
                   <Button type="submit" bsStyle="primary">Start chat</Button>
                 </Modal.Footer>
               </form>
+            </Modal>
+            <Modal dialogClassName="modal-800" show={ data.show_listing_modal } onHide={ this.hideModal.bind(this) }>
+              <Modal.Header closeButton>
+                <Modal.Title>{ listing_title }</Modal.Title>
+              </Modal.Header>
+              <Modal.Body style={ S('p-0') } className="flexbox">
+                <Col xs={6} style={ S('p-0') }>
+                  { listing_images }
+                </Col>
+                <Col xs={6} style={ S('p-15') }>
+                  <div style={ S('mb-10 mr-20 pull-left') }><b>Address:</b> <span style={ S('color-929292') }>{ full_address }</span></div>
+                  <div style={ S('mb-10 mr-20 pull-left') }><b>Price:</b> <span style={ S('color-929292') }>${ price }</span></div>
+                  <div style={ S('mb-10 mr-20 pull-left') }><b>MLS#:</b> <span style={ S('color-929292') }>{ mls_number }</span></div>
+                  <div style={ S('mb-10 mr-20 pull-left') }><b>Property Type:</b> <span style={ S('color-929292') }>{ property_type }</span></div>
+                  <div style={ S('mb-10 mr-20 pull-left') }><b>Year Built:</b> <span style={ S('color-929292') }>{ year_built }</span></div>
+                  <div style={ S('mb-10 mr-20 pull-left') }><b>Beds:</b> <span style={ S('color-929292') }>{ bedroom_count }</span></div>
+                  <div style={ S('mb-10 mr-20 pull-left') }><b>Baths:</b> <span style={ S('color-929292') }>{ bathroom_count }</span></div>
+                  <div style={ S('mb-10 mr-20 pull-left') }><b>Sqft:</b> <span style={ S('color-929292') }>{ square_feet }</span></div>
+                  <div className="clearfix"></div>
+                  <div>{ description }</div>
+                </Col>
+                <div className="clearfix"></div>
+              </Modal.Body>
             </Modal>
           </div>
         </Dropzone>
@@ -205,5 +294,7 @@ MainContent.propTypes = {
   uploadFiles: React.PropTypes.func.isRequired,
   showFileViewer: React.PropTypes.func,
   setHeadingDate: React.PropTypes.func,
-  removeScrollBottom: React.PropTypes.func
+  removeScrollBottom: React.PropTypes.func,
+  showListingModal: React.PropTypes.func,
+  changeListingNotification: React.PropTypes.func
 }

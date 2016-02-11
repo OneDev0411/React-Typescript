@@ -19,6 +19,7 @@ module.exports = (app, config) => {
   require('./rooms/add-user-to-room')(app, config)
   require('./rooms/create-message')(app, config)
   require('./rooms/invite-contacts')(app, config)
+  require('./rooms/notifications')(app, config)
   // Transactions
   require('./transactions/create-transaction')(app, config)
   require('./transactions/get-transactions')(app, config)

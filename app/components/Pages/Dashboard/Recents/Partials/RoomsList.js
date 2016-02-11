@@ -63,7 +63,7 @@ export default class RoomsList extends Component {
         }
         let list_style = { ...S('pointer pt-10 pb-10 pl-10 pr-37'), borderBottom: '1px solid #e7e4e3' }
         if (current_room && current_room.id === room.id)
-          list_style = { ...list_style, ...S('bg-f0f0f0') }
+          list_style = { ...list_style, ...S('bg-f5fafe') }
 
         // List users
         const users = room.users

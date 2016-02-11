@@ -65,7 +65,6 @@ export default class Drawer extends Component {
             default:
               file_icon_short = 'FILE'
           }
-
           let file_image = (
             <a href={ file.preview } target="_blank" className="pull-left" style={ S('ml-10 w-60 h-60 color-929292') }>
               <i style={ S('font-50') } className="fa fa-file-o"></i>
@@ -89,7 +88,8 @@ export default class Drawer extends Component {
             user_string = user.first_name
           else {
             const user_object = _.find(contacts, { id: added_by })
-            user_string = user_object.first_name
+            if (user_object)
+              user_string = user_object.first_name
           }
           let file_area = (
             <div>
@@ -135,6 +135,7 @@ export default class Drawer extends Component {
         overflow: 'scroll'
       }
       const drawer_header_style = S('relative z-2 bg-f7f9fa ml-5 br-3 p-12 font-18 color-4a4a4a')
+      // Docs
       if (drawer.content === 'docs') {
         let doc_count
         if (attachments && attachments.length)
@@ -163,6 +164,7 @@ export default class Drawer extends Component {
           </div>
         )
       }
+      // Contacts
       if (drawer.content === 'contacts' && roles) {
         let contacts_list
         if (roles) {
@@ -213,6 +215,7 @@ export default class Drawer extends Component {
           </div>
         )
       }
+      // Map
       if (drawer.content === 'map') {
         let google_address
         if (transaction.listing && transaction.listing.property)

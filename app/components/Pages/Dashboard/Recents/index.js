@@ -116,15 +116,18 @@ export default class Dashboard extends Component {
   showModal(modal_key) {
     if (modal_key === 'create-chat')
       AppStore.data.show_create_chat_modal = true
-
     if (modal_key === 'invite-user')
       AppStore.data.show_contacts_modal = true
+    if (modal_key === 'settings')
+      AppStore.data.show_settings_modal = true
     AppStore.emitChange()
   }
 
   hideModal() {
+    delete AppStore.data.show_listing_modal
     delete AppStore.data.show_create_chat_modal
     delete AppStore.data.show_contacts_modal
+    delete AppStore.data.show_settings_modal
     AppStore.emitChange()
   }
 
@@ -343,6 +346,29 @@ export default class Dashboard extends Component {
     AppStore.emitChange()
   }
 
+  showListingModal(listing) {
+    AppStore.data.show_listing_modal = true
+    AppStore.data.current_listing = listing
+    AppStore.emitChange()
+  }
+
+  changeListingNotification(listing_switch_checked) {
+    const data = this.props.data
+    const user = data.user
+    if (listing_switch_checked)
+      AppStore.data.current_room.notification_settings[data.user.id].system_generated = false
+    else
+      AppStore.data.current_room.notification_settings[data.user.id].system_generated = true
+    const notification = AppStore.data.current_room.notification_settings[data.user.id].system_generated
+    AppDispatcher.dispatch({
+      action: 'room-notifications',
+      user,
+      id: data.current_room.id,
+      notification
+    })
+    AppStore.emitChange()
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -377,6 +403,8 @@ export default class Dashboard extends Component {
             showFileViewer={ this.showFileViewer }
             setHeadingDate={ this.setHeadingDate }
             removeScrollBottom={ this.removeScrollBottom }
+            showListingModal={ this.showListingModal }
+            changeListingNotification={ this.changeListingNotification }
           />
         </main>
         <audio ref="notif_sound" id="notif-sound">

@@ -54,7 +54,7 @@ export default class MessageItem extends Component {
       if (file_url.toLowerCase().indexOf('.png') === -1 && file_url.toLowerCase().indexOf('.jpg') === -1 && file_url.toLowerCase().indexOf('.gif') === -1) {
         // TODO: Depracated
         let ext = file_url.split('.').pop().substr(0, 3)
-        if (message.attachments.length) {
+        if (message.attachments && message.attachments.length) {
           const attachment = message.attachments
           if (attachment.info)
             ext = attachment.info.mime['mime-extension']
@@ -80,7 +80,7 @@ export default class MessageItem extends Component {
     if (message.recommendation && message.recommendation.listing && message.recommendation.listing.cover_image_url) {
       const cover_image_url = message.recommendation.listing.cover_image_url
       message_image = (
-        <div style={ S('w-400 h-300 br-3 bg-url(' + cover_image_url + ') bg-cover bg-center') }></div>
+        <div onClick={ this.props.showListingModal.bind(this, message.recommendation.listing) } style={ S('pointer w-400 h-300 br-3 bg-url(' + cover_image_url + ') bg-cover bg-center') }></div>
       )
     }
 
@@ -130,5 +130,6 @@ MessageItem.propTypes = {
   message: React.PropTypes.object.isRequired,
   i: React.PropTypes.number.isRequired,
   showFileViewer: React.PropTypes.func,
-  new_date: React.PropTypes.bool
+  new_date: React.PropTypes.bool,
+  showListingModal: React.PropTypes.func
 }

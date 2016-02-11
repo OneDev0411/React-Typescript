@@ -21,10 +21,11 @@ import TransactionDetail from './Partials/TransactionDetail'
 export default class Transactions extends Component {
 
   componentDidMount() {
+    const data = this.props.data
     this.getContacts()
     delete AppStore.data.current_task
     // If coming from redirect
-    if (AppStore.data.new_transaction && AppStore.data.new_transaction.redirect_to) {
+    if (AppStore.data.new_transaction && AppStore.data.new_transaction.saved) {
       setTimeout(() => {
         delete AppStore.data.new_transaction.redirect_to
         delete AppStore.data.new_transaction.saved
@@ -35,6 +36,14 @@ export default class Transactions extends Component {
     const params = this.props.params
     if (params && params.id)
       this.getTransaction(params.id)
+    // Reorder attachments
+    let attachments = data.attachments
+    if (attachments) {
+      attachments = _.sortBy(attachments, attachment => {
+        return attachment.created_at * -1
+      })
+      AppStore.data.attachments = attachments
+    }
     AppStore.emitChange()
   }
 
@@ -146,6 +155,7 @@ export default class Transactions extends Component {
     AppStore.data.show_document_modal = true
     this.setDrawerContent('docs', true)
     this.dragLeave()
+    delete AppStore.data.doc_switch_checked
     AppStore.emitChange()
   }
 
@@ -182,6 +192,9 @@ export default class Transactions extends Component {
       AppStore.data.current_transaction.attachments = []
     const transaction = data.current_transaction
     const user = data.user
+    // Check for private
+    if (data.doc_switch_checked)
+      current_file.private = data.doc_switch_checked
     TransactionDispatcher.dispatch({
       action: 'upload-files',
       user,
@@ -317,6 +330,14 @@ export default class Transactions extends Component {
     })
   }
 
+  uploadFilePermission(check) {
+    if (check)
+      AppStore.data.doc_switch_checked = true
+    else
+      delete AppStore.data.doc_switch_checked
+    AppStore.emitChange()
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -352,6 +373,7 @@ export default class Transactions extends Component {
           closeFileViewer={ this.closeFileViewer }
           deleteContact={ this.deleteContact }
           getTransaction={ this.getTransaction.bind(this) }
+          uploadFilePermission={ this.uploadFilePermission }
         />
       )
     }
@@ -384,5 +406,6 @@ export default class Transactions extends Component {
 Transactions.propTypes = {
   data: React.PropTypes.object,
   route: React.PropTypes.object,
-  params: React.PropTypes.object
+  params: React.PropTypes.object,
+  uploadFilePermission: React.PropTypes.func
 }

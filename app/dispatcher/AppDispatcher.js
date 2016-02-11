@@ -17,6 +17,7 @@ import deleteContact from '../actions/user/delete-contact'
 import createRoom from '../actions/rooms/create-room'
 import inviteContacts from '../actions/rooms/invite-contacts'
 import uploadFilesToRoom from '../actions/rooms/upload-files'
+import setNotification from '../actions/rooms/notifications'
 
 // Messages
 import createMessage from '../actions/messages/create-message'
@@ -62,6 +63,8 @@ AppDispatcher.register(payload => {
   let scroll_height
   let image_url
   let attachment
+  let id
+  let notification
 
   // Add Contact Module
   let contact
@@ -209,6 +212,13 @@ AppDispatcher.register(payload => {
       user = payload.user
       q = payload.q
       searchListing(user, q)
+      break
+
+    case 'room-notifications':
+      user = payload.user
+      id = payload.id
+      notification = payload.notification
+      setNotification(user, id, notification)
       break
 
     case 'upload-files-to-room':
