@@ -5,8 +5,13 @@ import S from 'shorti'
 // Partials
 import SideBar from '../../../Partials/SideBar'
 
+import Loading from '../../../../../Partials/Loading'
+
 import AppDispatcher from '../../../../../../dispatcher/AppDispatcher'
 import AppStore from '../../../../../../stores/AppStore'
+
+import listingHelpers from '../../../../../../utils/listing'
+import helpers from '../../../../../../utils/helpers'
 
 export default class Recommend extends Component {
 
@@ -21,108 +26,144 @@ export default class Recommend extends Component {
     })
   }
 
-  priceRow(listings) {
+  createRow(listings, formatter) {
     return listings.map(listing => {
       return (
         <td>
-          {listing.last_price}
-        </td>
-      )
-    });
-  }
-
-  photoRow(listings) {
-    return listings.map(listing => {
-      return (
-        <td>
-          <img src={listing.cover_image_url} width="100" />
-        </td>
-      )
-    });
-  }
-
-  dateRow(listings) {
-    return listings.map(listing => {
-      var date = new Date();
-      return (
-        <td>
-          Foo
-        </td>
-      )
-    });
-  }
-
-  priceRow(listings) {
-    return listings.map(listing => {
-      return (
-        <td>
-          {listing.list_price}
-        </td>
-      )
-    });
-  }
-
-  statusRow(listings) {
-    return listings.map(listing => {
-      return (
-        <td>
-          {listing.last_status}
-        </td>
-      )
-    });
-  }
-
-  availableDateRow(listings) {
-    return listings.map(listing => {
-      return (
-        <td>
-
+          {formatter(listing)}
         </td>
       )
     });
   }
 
   createTable(listings) {
-    const photo_row   = this.photoRow(listings);
-    const price_row   = this.priceRow(listings);
-    const date_row    = this.dateRow(listings);
-    const status_row  = this.statusRow(listings);
-    const available_date_row  = this.availableDateRow(listings);
+    const row = this.createRow.bind(null, listings);
+
+    const photo = l => {
+      return (
+        <img src={l.cover_image_url} width="100" />
+      )
+    }
+
+    const date = (time) => {
+      if (!time)
+        return '';
+
+      const d = helpers.friendlyDate(time);
+      return d.month + ' ' + d.date + ', ' + d.year;
+    }
 
     return (
-      <table border="1" width="100%">
+      <table width="100%">
         <tbody>
           <tr>
             <th></th>
-            { photo_row }
+            { row(photo) }
           </tr>
 
           <tr>
-            <th>
-              Price
-            </th>
-            { price_row }
+            <th></th>
+            {row(l => listingHelpers.localAddress(l.property.address))}
           </tr>
 
           <tr>
-            <th>
-              List Date
-            </th>
-            { date_row }
+            <th>MLS#</th>
+            {row(l => l.mls_number)}
           </tr>
 
           <tr>
-            <th>
-              Status
-            </th>
-            { status_row }
+            <th>List Price</th>
+            {row(l => '$' + helpers.numberWithCommas(l.price))}
           </tr>
 
           <tr>
-            <th>
-              Avilable Date
-            </th>
-            { available_date_row }
+            <th>List Date</th>
+            {row(l => date(l.list_date))}
+          </tr>
+
+          <tr>
+            <th>Status</th>
+            {row(l => l.last_status)}
+          </tr>
+
+          <tr>
+            <th>Date Available</th>
+            {row(l => date(l.date_available))}
+          </tr>
+
+          <tr>
+            <th>DOM</th>
+            {row(l => Math.round(l.dom / 86400))}
+          </tr>
+
+          <tr>
+            <th>Subdivision</th>
+            {row(l => l.property.subdivision_name)}
+          </tr>
+
+          <tr>
+            <th>Prop Type</th>
+            {row(l => l.property.property_type)}
+          </tr>
+
+          <tr>
+            <th>Year Build</th>
+            {row(l => l.property.year_built)}
+          </tr>
+
+          <tr>
+            <th>HOA Free</th>
+            {row(l => '$' + (l.association_fee))}
+          </tr>
+
+          <tr>
+            <th>Sqft Total</th>
+            {row(l => helpers.numberWithCommas(listingHelpers.metersToFeet(l.property.square_meters)))}
+          </tr>
+
+          <tr>
+            <th>Sqft Building</th>
+            {row(l => helpers.numberWithCommas(listingHelpers.metersToFeet(l.property.building_square_meters)))}
+          </tr>
+
+          <tr>
+            <th>Beds</th>
+            {row(l => l.property.bedroom_count)}
+          </tr>
+
+          <tr>
+            <th>Total baths</th>
+            {row(l => l.property.bathroom_count)}
+          </tr>
+
+          <tr>
+            <th># Units</th>
+            {row(l => l.property.number_of_units)}
+          </tr>
+
+          <tr>
+            <th># Stories</th>
+            {row(l => l.property.number_of_stories)}
+          </tr>
+
+          <tr>
+            <th># Living areas</th>
+            {row(l => l.property.number_of_living_areas)}
+          </tr>
+
+          <tr>
+            <th>Pool on prop</th>
+            {row(l => l.property.pool_yn ? '✔' : '✖')}
+          </tr>
+
+          <tr>
+            <th>$/Sqft</th>
+            {row(l => '$' + (l.price / (listingHelpers.metersToFeet(l.property.square_meters))).toFixed(2))}
+          </tr>
+
+          <tr>
+            <th>Score</th>
+            {row(l => l.similarity)}
           </tr>
         </tbody>
       </table>
@@ -133,9 +174,15 @@ export default class Recommend extends Component {
     const data = this.props.data
     const main_style = S('absolute l-183 r-0 pl-15 pr-20')
 
-    let table;
-    if(AppStore.data.similar_listings)
-      table = this.createTable(AppStore.data.similar_listings.listings);
+    let content;
+
+    if (AppStore.data.similar_listings) {
+      if (AppStore.data.similar_listings.searching)
+        content = <Loading />
+
+      if (AppStore.data.similar_listings.listings)
+        content = this.createTable(AppStore.data.similar_listings.listings);
+    }
 
     return (
       <main style={ S('pt-20') }>
@@ -145,7 +192,7 @@ export default class Recommend extends Component {
             <input type="number" placeholder="MLS Number" onKeyUp={ this.handleMLSNumberChange.bind(this) }></input>
           </form>
           <div>
-            {table}
+            {content}
           </div>
         </div>
       </main>
