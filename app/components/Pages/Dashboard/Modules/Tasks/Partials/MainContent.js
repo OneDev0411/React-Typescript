@@ -40,7 +40,7 @@ export default class MainContent extends Component {
       if (data.search_contacts && data.search_contacts.list) {
         const active_contact_index = data.active_contact
         const active_contact = data.search_contacts.list[active_contact_index]
-        this.props.addContactFromSearch(active_contact)
+        this.addContactFromSearch(active_contact)
       } else {
         const title = this.refs.task_title.refs.input.value.trim()
         if (title) {
@@ -57,6 +57,17 @@ export default class MainContent extends Component {
       if (key === 40)
         this.props.setContactActive('down')
     }
+  }
+
+  addContactFromSearch(active_contact) {
+    const text_input = this.refs.task_title.refs.input
+    const task_title = text_input.value
+    const search_arr = task_title.split('@')
+    text_input.value = `${search_arr[0]}${active_contact.first_name} ${active_contact.last_name} `
+    this.props.addContactFromSearch(active_contact)
+    setTimeout(() => {
+      this.refs.task_title.refs.input.focus()
+    }, 300)
   }
 
   handleAddTaskKeyUp() {

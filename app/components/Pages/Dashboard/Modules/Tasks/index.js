@@ -297,9 +297,6 @@ export default class TasksModule extends Component {
         contacts
       }
       AppStore.emitChange()
-      setTimeout(() => {
-        this.refs.task_title.refs.input.focus()
-      }, 300)
     }
   }
 
@@ -447,10 +444,6 @@ export default class TasksModule extends Component {
         'share-task': []
       }
     }
-    const text_input = this.refs.task_title.refs.input
-    const task_title = text_input.value
-    const search_arr = task_title.split('@')
-    text_input.value = `${search_arr[0]}${contact.first_name} ${contact.last_name} `
     delete AppStore.data.search_contacts
     // prevent dupe
     if (!AppStore.data.contacts_added['share-task'])
@@ -567,13 +560,13 @@ export default class TasksModule extends Component {
         searchTransactions={ this.searchTransactions }
         showSnoozeModal={ this.showSnoozeModal }
         snoozeTaskSave={ this.snoozeTaskSave }
-        searchContacts={ this.searchContacts }
+        searchContacts={ this.searchContacts.bind(this) }
         hideModal={ this.hideModal.bind(this) }
         setTaskDate={ this.setTaskDate }
         setTaskDateTime={ this.setTaskDateTime }
-        setContactActive={ this.setContactActive }
+        setContactActive={ this.setContactActive.bind(this) }
         createTask={ this.createTask.bind(this) }
-        addContactFromSearch={ this.addContactFromSearch }
+        addContactFromSearch={ this.addContactFromSearch.bind(this) }
         removeSearchContacts={ this.removeSearchContacts }
         setSnoozeOption={ this.setSnoozeOption }
         setSnoozeDate={ this.setSnoozeDate }
