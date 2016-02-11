@@ -556,7 +556,7 @@ export default class TasksModule extends Component {
         setEditTaskDate={ this.setEditTaskDate }
         hideDayPicker={ this.hideDayPicker }
         addContactsToTask={ this.addContactsToTask }
-        navTransactionsList={ this.navTransactionsList }
+        navTransactionsList={ this.navTransactionsList.bind(this) }
         searchTransactions={ this.searchTransactions }
         showSnoozeModal={ this.showSnoozeModal }
         snoozeTaskSave={ this.snoozeTaskSave }
