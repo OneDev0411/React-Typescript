@@ -1,5 +1,6 @@
 // Dashboard/Mls/Listing/Recommend.js
 import React, { Component } from 'react'
+import { Input } from 'react-bootstrap'
 import S from 'shorti'
 
 // Partials
@@ -14,6 +15,14 @@ import listingHelpers from '../../../../../../utils/listing'
 import helpers from '../../../../../../utils/helpers'
 
 export default class Recommend extends Component {
+
+  componentDidMount() {
+    this.refs.mls_number.refs.input.focus()
+  }
+
+  handleSubmit(e) {
+    e.preventDefault()
+  }
 
   handleMLSNumberChange(e) {
     const user = this.props.data.user
@@ -188,9 +197,11 @@ export default class Recommend extends Component {
       <main style={ S('pt-20') }>
         <SideBar data={ data }/>
         <div style={ main_style }>
-          <form>
-            <input type="number" placeholder="MLS Number" onKeyUp={ this.handleMLSNumberChange.bind(this) }></input>
-          </form>
+          <div style={ S('mb-30') }>
+            <form onSubmit={ this.handleSubmit }>
+              <Input style={ S('w-300') } ref="mls_number" type="number" placeholder="MLS Number" onKeyUp={ this.handleMLSNumberChange.bind(this) } />
+            </form>
+          </div>
           <div>
             {content}
           </div>
