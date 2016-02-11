@@ -194,7 +194,7 @@ export default class AddContactsModule extends Component {
     }
 
     if (direction === 'down') {
-      if (active_contact < filtered_contacts.length - 1)
+      if (filtered_contacts && active_contact < filtered_contacts.length - 1)
         active_contact = active_contact + 1
       else
         active_contact = 0
@@ -227,6 +227,8 @@ export default class AddContactsModule extends Component {
       if (contact.first_name && contact.first_name.toLowerCase().indexOf(text_lower) !== -1)
         return true
       if (contact.last_name && contact.last_name.toLowerCase().indexOf(text_lower) !== -1)
+        return true
+      if (contact.email && contact.email.toLowerCase().indexOf(text_lower) !== -1)
         return true
       if (contact.phone_number && contact.phone_number && contact.phone_number.indexOf(text_lower) !== -1)
         return false
@@ -335,6 +337,7 @@ export default class AddContactsModule extends Component {
               <ProfileImage data={ data } user={ contact }/>
               <div style={ S('ml-50') }>
                 <span style={ S('fw-600') }>{ contact.first_name } { contact.last_name }</span><br />
+                <span style={ S('color-666 font-13') }>{ contact.email }</span><br />
                 <span style={ S('color-666') }>{ contact.contact_user ? contact.contact_user.user_type : '' }</span>
               </div>
               <div className="clearfix"></div>

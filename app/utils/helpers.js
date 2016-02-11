@@ -68,5 +68,18 @@ export default {
     var img = new Image();
     img.src = url;
     return img.height != 0;
+  },
+  addTimeToDate(date_object, hours, minutes, suffix) {
+    let date_miliseconds = date_object.getTime() // in miliseconds
+    // Get time
+    if (hours === 0)
+      hours = 12
+    if (suffix === 'PM' && hours !== 12)
+      hours = hours + 12
+    if (suffix === 'AM' && hours === 12)
+      hours = 0
+    const seconds_after_midnight = (hours * 60 * 60) + (minutes * 60)
+    const miliseconds = date_miliseconds + (seconds_after_midnight * 1000)
+    return miliseconds
   }
 }

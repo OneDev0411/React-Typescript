@@ -10,6 +10,7 @@ import Drawer from './Drawer'
 import Loading from '../../../../../Partials/Loading'
 import Transaction from './Transaction'
 import ProfileImage from '../../../Partials/ProfileImage'
+import DayTimePicker from './DayTimePicker'
 
 // Modules
 import AddContactsModule from '../../AddContacts'
@@ -103,70 +104,46 @@ export default class MainContent extends Component {
       )
     }
     let date = new Date()
-    let task_due_date
-    if (data.new_task)
-      task_due_date = new Date(data.new_task.due_date)
-    const today = helpers.friendlyDate(date.getTime() / 1000)
     let day_picker
-    const hours = []
-    const minutes = []
-    for (let i = 1; i <= 11; i++)
-      hours.push(<option key={ 'hour-' + i }>{ i }</option>)
-    for (let i = 0; i <= 50; i += 10)
-      minutes.push(<option key={ 'minute-' + i }>{ i === 0 ? '0' + i : i }</option>)
     if (data.show_day_picker) {
+      let date_seconds = date.getTime() / 1000
+      if (new_task) {
+        if (new_task.due_date && typeof new_task.due_date.getTime === 'function')
+          date_seconds = new_task.due_date.getTime() / 1000
+        else
+          date_seconds = new_task.due_date / 1000
+      }
       day_picker = (
-        <div className="daypicker--tasks" style={ S('absolute bg-fff z-100 t-105 l-12') }>
-          <DayPicker
-            modifiers={{
-              selected: day => DateUtils.isSameDay(task_due_date, day)
-            }}
-            onDayClick={ this.props.setTaskDate.bind(this) }
-          />
-          <div style={ S('w-200 pl-10 pb-10 font-12') }>
-            TIME
-            <div className="clearfix"></div>
-            <div style={ S('w-60 pull-left') }>
-              <Input ref="hours" type="select">
-                <option>12</option>
-                { hours }
-              </Input>
-            </div>
-            <div style={ S('w-60 pull-left') }>
-              <Input ref="minutes" type="select">
-                { minutes }
-              </Input>
-            </div>
-            <div style={ S('w-60 pull-left') }>
-              <Input ref="suffix" type="select">
-                <option>AM</option>
-                <option>PM</option>
-              </Input>
-            </div>
-          </div>
-          <div style={ S('p-10') }>
-            <a onClick={ this.props.hideDayPicker.bind(this) } href="#" className="pull-left" style={ S('mt-10') }>Cancel</a>
-            <Button onClick={ this.props.setTaskDateTime.bind(this) } className="pull-right" bsStyle="primary" type="button">Select</Button>
-            <div className="clearfix"></div>
-          </div>
-          <div className="clearfix"></div>
-        </div>
+        <DayTimePicker
+          date_seconds={ date_seconds }
+          hideDayPicker={ this.props.hideDayPicker }
+          handleSetDate={ this.props.setTaskDate }
+          handleSaveDateTime={ this.props.setTaskDateTime }
+        />
       )
     }
+    const today = helpers.friendlyDate(date.getTime() / 1000)
     let due_date_area = (
       <span>Today { `${today.day}, ${today.month} ${today.date}, ${today.year}` }</span>
     )
     if (data.new_task && data.new_task.due_date) {
       date = new Date(data.new_task.due_date)
       const due_date_obj = helpers.friendlyDate(date.getTime() / 1000)
-      let ampm = 'AM'
-      let hour = due_date_obj.hour
-      if (hour > 12) {
-        ampm = 'PM'
-        hour = parseInt(hour, 10) - 12
+      const hour = due_date_obj.hour
+      let current_suffix = 'AM'
+      let current_hour = hour
+      if (hour === 0) {
+        current_hour = 12
+        current_suffix = 'AM'
       }
+      if (hour > 12) {
+        current_hour = parseInt(current_hour, 10) - 12
+        current_suffix = 'PM'
+      }
+      if (hour === 12)
+        current_suffix = 'PM'
       due_date_area = (
-        <span>{ `${due_date_obj.day}, ${due_date_obj.month} ${due_date_obj.date}, ${due_date_obj.year}, ${hour}:${due_date_obj.min < 10 ? '0' + due_date_obj.min : due_date_obj.min}${ampm}` }</span>
+        <span>{ `${due_date_obj.day}, ${due_date_obj.month} ${due_date_obj.date}, ${due_date_obj.year}, ${current_hour}:${due_date_obj.min < 10 ? '0' + due_date_obj.min : due_date_obj.min}${current_suffix}` }</span>
       )
     }
     let open_class = ''

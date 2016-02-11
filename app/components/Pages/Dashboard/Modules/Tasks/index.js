@@ -1,6 +1,7 @@
 // Modules/Tasks/index.js
 import React, { Component } from 'react'
 import _ from 'lodash'
+import helpers from '../../../../../utils/helpers'
 
 // Partials
 import MainContent from './Partials/MainContent'
@@ -106,7 +107,8 @@ export default class TasksModule extends Component {
     const data = this.props.data
     const new_task = data.new_task
     const date = new Date()
-    let due_date = date.getTime()
+    // Default due_date to today
+    let due_date = date.getTime() / 1000
     const module_type = this.props.module_type
     let transaction
     if (module_type === 'transaction')
@@ -202,27 +204,15 @@ export default class TasksModule extends Component {
     AppStore.emitChange()
   }
 
-  setTaskDateTime() {
+  setTaskDateTime(hours, minutes, suffix) {
     if (!AppStore.data.new_task)
       AppStore.data.new_task = {}
-    let hours = this.refs.hours.refs.input.value
-    const minutes = this.refs.minutes.refs.input.value
-    const suffix = this.refs.suffix.refs.input.value
-    let due_date
-    if (AppStore.data.new_task && AppStore.data.new_task.due_date) {
-      const due_date_object = new Date(AppStore.data.new_task.due_date)
-      due_date = due_date_object.getTime() // in seconds
-      // Get time
-      if (suffix === 'PM')
-        hours = parseInt(hours, 10) + 12
-      // Convert to seconds
-      const due_seconds = ((hours * 60) + parseInt(minutes, 10)) * 60
-      const due_seconds_added = due_seconds - 43200 // minus 12 hours of seconds
-      due_date = due_date + (due_seconds_added * 1000)
-    }
-    AppStore.data.new_task.due_date = due_date
+    const due_date = AppStore.data.new_task.due_date
+    const due_date_object = new Date(due_date)
+    const midnight_date = new Date(due_date_object.setHours(0, 0, 0, 0))
+    const due_date_miliseconds = helpers.addTimeToDate(midnight_date, parseInt(hours, 10), parseInt(minutes, 10), suffix)
+    AppStore.data.new_task.due_date = due_date_miliseconds
     delete AppStore.data.show_day_picker
-    this.refs.task_title.refs.input.focus()
     AppStore.emitChange()
   }
 
@@ -382,7 +372,6 @@ export default class TasksModule extends Component {
   }
 
   addTransactionToTask(transaction) {
-    // console.log(transaction)
     const data = this.props.data
     const user = data.user
     const task = data.current_task
@@ -410,31 +399,20 @@ export default class TasksModule extends Component {
     }, 500)
   }
 
-  editTaskDate() {
+  editTaskDate(due_date_miliseconds) {
+    const due_date_seconds = due_date_miliseconds / 1000
     const data = this.props.data
     const user = data.user
     const current_task = data.current_task
-    let hours = this.refs.hours.refs.input.value
-    const minutes = this.refs.minutes.refs.input.value
-    const suffix = this.refs.suffix.refs.input.value
-    let due_date
-    if (current_task && AppStore.data.current_task.due_date) {
-      due_date = AppStore.data.current_task.due_date
-      // Get time
-      if (suffix === 'PM')
-        hours = parseInt(hours, 10) + 12
-      // Convert to seconds
-      const due_seconds = ((hours * 60) + parseInt(minutes, 10)) * 60
-      const due_seconds_added = due_seconds - 43200 // minus 12 hours of seconds
-      due_date = due_date + due_seconds_added
-    }
     delete AppStore.data.show_day_picker_edit
+    // Show immediately
+    AppStore.data.current_task.due_date = due_date_seconds
     AppStore.emitChange()
     TaskDispatcher.dispatch({
       action: 'edit-date',
       user,
       task: current_task,
-      due_date
+      due_date: due_date_seconds
     })
   }
 
@@ -504,7 +482,9 @@ export default class TasksModule extends Component {
         due_date_seconds = seconds + 3600
         break
       case 'tomorrow':
-        due_date_seconds = seconds + 86400
+        const tommorows_date = new Date(date.setHours(24, 0, 0, 0))
+        const tomorrow_morning_seconds = (tommorows_date.getTime() / 1000) + 32400
+        due_date_seconds = tomorrow_morning_seconds
         break
       case 'date':
         const date_selected = AppStore.data.current_task.snooze.date_selected
@@ -552,7 +532,7 @@ export default class TasksModule extends Component {
         removeContactFromTask={ this.removeContactFromTask }
         showAddTransactionModal={ this.showAddTransactionModal }
         editTaskTitle={ this.editTaskTitle }
-        editTaskDate={ this.editTaskDate }
+        editTaskDate={ this.editTaskDate.bind(this) }
         setEditTaskDate={ this.setEditTaskDate }
         hideDayPicker={ this.hideDayPicker }
         addContactsToTask={ this.addContactsToTask }

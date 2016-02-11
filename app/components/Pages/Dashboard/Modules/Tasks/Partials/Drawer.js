@@ -2,13 +2,13 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import { Button, Input } from 'react-bootstrap'
-import DayPicker, { DateUtils } from 'react-day-picker'
 
 // Partials
 import CheckBox from './CheckBox'
 import ProfileImage from '../../../Partials/ProfileImage'
 import Transaction from './Transaction'
 import Loading from '../../../../../Partials/Loading'
+import DayTimePicker from './DayTimePicker'
 
 // Helpers
 import helpers from '../../../../../../utils/helpers'
@@ -20,6 +20,15 @@ export default class Drawer extends Component {
     const current_task = data.current_task
     const task_title = this.refs.task_title.refs.input.value
     this.props.editTaskTitle(current_task, task_title)
+  }
+
+  editTaskDate(hours, minutes, suffix) {
+    const data = this.props.data
+    const current_task = data.current_task
+    const midnight_date = (new Date(current_task.due_date * 1000)).setHours(0, 0, 0, 0)
+    const due_date_object = new Date(midnight_date)
+    const due_date_miliseconds = helpers.addTimeToDate(due_date_object, parseInt(hours, 10), parseInt(minutes, 10), suffix)
+    this.props.editTaskDate(due_date_miliseconds)
   }
 
   render() {
@@ -93,14 +102,21 @@ export default class Drawer extends Component {
     if (current_task && current_task.due_date) {
       const due_date = current_task.due_date
       const due_date_obj = helpers.friendlyDate(due_date)
-      let ampm = 'AM'
-      let hour = due_date_obj.hour
-      if (hour > 12) {
-        ampm = 'PM'
-        hour = parseInt(hour, 10) - 12
+      let current_suffix = 'AM'
+      const hour = due_date_obj.hour
+      let current_hour = hour
+      if (hour === 0) {
+        current_hour = 12
+        current_suffix = 'AM'
       }
+      if (hour > 12) {
+        current_hour = parseInt(current_hour, 10) - 12
+        current_suffix = 'PM'
+      }
+      if (hour === 12)
+        current_suffix = 'PM'
       due_date_area = (
-        <span>{ `${due_date_obj.day}, ${due_date_obj.month} ${due_date_obj.date}, ${due_date_obj.year} ${hour}:${due_date_obj.min < 10 ? '0' + due_date_obj.min : due_date_obj.min}${ampm}` }</span>
+        <span>{ `${due_date_obj.day}, ${due_date_obj.month} ${due_date_obj.date}, ${due_date_obj.year} ${current_hour}:${due_date_obj.min < 10 ? '0' + due_date_obj.min : due_date_obj.min}${current_suffix}` }</span>
       )
       const created_date = current_task.created_at
       const created_date_obj = helpers.friendlyDate(created_date)
@@ -153,51 +169,24 @@ export default class Drawer extends Component {
       ...S('b-0 absolute p-20 color-cfd1d2 font-12 w-100p'),
       ...topLine
     }
+    const date = new Date()
     let day_picker
     if (data.show_day_picker_edit) {
-      const task_due_date_obj = new Date(current_task.due_date * 1000)
-      const hours = []
-      const minutes = []
-      for (let i = 1; i <= 11; i++)
-        hours.push(<option key={ 'hour-' + i }>{ i }</option>)
-      for (let i = 0; i <= 50; i += 10)
-        minutes.push(<option key={ 'minute-' + i }>{ i === 0 ? '0' + i : i }</option>)
+      let date_seconds = date.getTime() / 1000
+      if (current_task) {
+        if (current_task.due_date && typeof current_task.due_date.getTime === 'function')
+          date_seconds = current_task.due_date.getTime() / 1000
+        else
+          date_seconds = current_task.due_date
+      }
       day_picker = (
-        <div className="daypicker--tasks" style={ S('absolute bg-fff z-100 t-145 l-10') }>
-          <DayPicker
-            modifiers={{
-              selected: day => DateUtils.isSameDay(task_due_date_obj, day)
-            }}
-            onDayClick={ this.props.setEditTaskDate.bind(this) }
-          />
-          <div style={ S('w-200 pl-10 pb-10 font-12') }>
-            TIME
-            <div className="clearfix"></div>
-            <div style={ S('w-60 pull-left') }>
-              <Input ref="hours" type="select">
-                <option>12</option>
-                { hours }
-              </Input>
-            </div>
-            <div style={ S('w-60 pull-left') }>
-              <Input ref="minutes" type="select">
-                { minutes }
-              </Input>
-            </div>
-            <div style={ S('w-60 pull-left') }>
-              <Input ref="suffix" type="select">
-                <option>AM</option>
-                <option>PM</option>
-              </Input>
-            </div>
-          </div>
-          <div style={ S('p-10') }>
-            <a onClick={ this.props.hideDayPicker.bind(this) } href="#" className="pull-left" style={ S('mt-10') }>Cancel</a>
-            <Button onClick={ this.props.editTaskDate.bind(this) } className="pull-right" bsStyle="primary" type="button">Select</Button>
-            <div className="clearfix"></div>
-          </div>
-          <div className="clearfix"></div>
-        </div>
+        <DayTimePicker
+          data={ data }
+          date_seconds={ date_seconds }
+          hideDayPicker={ this.props.hideDayPicker }
+          handleSetDate={ this.props.setEditTaskDate }
+          handleSaveDateTime={ this.editTaskDate.bind(this) }
+        />
       )
     }
     return (
