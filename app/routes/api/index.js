@@ -6,6 +6,7 @@ module.exports = (app, config) => {
   require('./messages/get-messages')(app, config)
   // Listings
   require('./listings/get-listings')(app, config)
+  require('./listings/get-similars')(app, config)
   // Users
   require('./users/signup')(app, config)
   require('./users/signin')(app, config)

@@ -35,6 +35,7 @@ import removeContact from '../actions/modules/remove-contact'
 
 // Listings
 import searchListing from '../actions/listings/search'
+import getSimilarListings from '../actions/listings/get-similars'
 
 const AppDispatcher = new Dispatcher()
 
@@ -222,6 +223,10 @@ AppDispatcher.register(payload => {
 
     case 'upload-files-to-room':
       uploadFilesToRoom(payload.user, payload.room, payload.files)
+      break
+
+    case 'get-similar-listings':
+      getSimilarListings(payload.user, payload.mls_number)
       break
 
     default:
