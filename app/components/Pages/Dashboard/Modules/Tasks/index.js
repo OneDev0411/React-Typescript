@@ -258,7 +258,8 @@ export default class TasksModule extends Component {
     delete AppStore.data.show_transactions_modal
     delete AppStore.data.transaction_results
     delete AppStore.data.show_snooze_modal
-    delete AppStore.data.current_task.snooze
+    if (AppStore.data.current_task)
+      delete AppStore.data.current_task.snooze
     AppStore.emitChange()
   }
 

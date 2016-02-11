@@ -336,9 +336,9 @@ export default class AddContactsModule extends Component {
             <div className="add-contact-form__contact" onClick={ this.showContactModal.bind(this, contact) } key={ 'contact-' + contact.id } style={ S('br-3 relative h-60 pointer mb-5 p-10' + active_contact_style + contact_added_style) }>
               <ProfileImage data={ data } user={ contact }/>
               <div style={ S('ml-50') }>
-                <span style={ S('fw-600') }>{ contact.first_name } { contact.last_name }</span><br />
+                <span style={ S('fw-600') }>{ contact.first_name } { contact.last_name }</span>{ contact.contact_user ? ',' : '' }&nbsp;
+                <span style={ S('color-666') }>{ contact.contact_user ? contact.contact_user.user_type : '' }</span><br />
                 <span style={ S('color-666 font-13') }>{ contact.email }</span><br />
-                <span style={ S('color-666') }>{ contact.contact_user ? contact.contact_user.user_type : '' }</span>
               </div>
               <div className="clearfix"></div>
             </div>

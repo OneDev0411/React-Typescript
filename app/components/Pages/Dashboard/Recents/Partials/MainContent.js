@@ -15,7 +15,8 @@ import DropzoneOverlay from '../../Partials/DropzoneOverlay'
 export default class MainContent extends Component {
 
   componentDidUpdate() {
-    if (this.refs.message_input)
+    const data = this.props.data
+    if (this.refs.message_input && !data.show_contacts_modal)
       this.refs.message_input.focus()
   }
 
