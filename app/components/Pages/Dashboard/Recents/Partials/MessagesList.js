@@ -216,7 +216,7 @@ export default class MessagesList extends Component {
           <img style={ S('ml-1n mt-1n') } src="/images/dashboard/icons/invite-user.svg"/>
         </button>
         <button onClick={ this.props.showModal.bind(this, 'settings') } type="button" className="btn btn-default" style={ btn_settings_style } >
-          <i className="fa fa-bell-o"></i>
+          <i style={ S('font-16 relative t-1') } className="fa fa-cog"></i>
         </button>
         <h3 style={ S('mt-0 ml-20 mr-50') }>{ current_room.title }</h3>
         { fixed_heading_date_area }
