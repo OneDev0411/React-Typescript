@@ -175,7 +175,7 @@ export default class SideBar extends Component {
                 </Col>
                 <Col xs={ 6 } style={ S('p-0') }>
                   <label>Phone number</label>
-                  <Input ref="phone_number" type="text" defaultValue={ user.phone_number.replace('+', '') }/>
+                  <Input ref="phone_number" type="text" defaultValue={ user.phone_number ? user.phone_number.replace('+', '') : '' }/>
                 </Col>
               </Col>
             </Modal.Body>
