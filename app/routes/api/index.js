@@ -9,6 +9,7 @@ module.exports = (app, config) => {
   require('./listings/get-similars')(app, config)
   // Users
   require('./users/signup')(app, config)
+  require('./users/edit-user')(app, config)
   require('./users/signin')(app, config)
   require('./users/forgot-password')(app, config)
   require('./users/reset-password')(app, config)

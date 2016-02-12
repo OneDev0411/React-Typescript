@@ -1,14 +1,54 @@
 // Dashboard.js
 import React, { Component } from 'react'
-import { Link } from 'react-router'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Nav, NavItem, NavDropdown } from 'react-bootstrap'
+import { Nav, NavItem, NavDropdown, Modal, Col, Input, Button } from 'react-bootstrap'
 import S from 'shorti'
+
+// AppDispatcher
+import AppDispatcher from '../../../../dispatcher/AppDispatcher'
+
+// AppStore
+import AppStore from '../../../../stores/AppStore'
 
 // Partials
 import ProfileImage from './ProfileImage'
 
 export default class SideBar extends Component {
+
+  showSettingsModal(e) {
+    e.preventDefault()
+    AppStore.data.show_account_settings_modal = true
+    AppStore.emitChange()
+  }
+
+  handleSubmit(e) {
+    e.preventDefault()
+    const data = this.props.data
+    const first_name = this.refs.first_name.refs.input.value.trim()
+    const last_name = this.refs.last_name.refs.input.value.trim()
+    const email = this.refs.email.refs.input.value.trim()
+    const phone_number = this.refs.phone_number.refs.input.value.trim()
+    const user = data.user
+    const user_info = {
+      first_name,
+      last_name,
+      email,
+      phone_number
+    }
+    AppStore.data.saving_account_settings = true
+    AppStore.emitChange()
+    AppDispatcher.dispatch({
+      action: 'edit-user',
+      user,
+      user_info
+    })
+  }
+
+  hideModal() {
+    delete AppStore.data.show_account_settings_modal
+    AppStore.emitChange()
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -40,7 +80,7 @@ export default class SideBar extends Component {
     const first_name = user.first_name
     const last_name = user.last_name
 
-    let recommend;
+    let recommend
     if (data.user.user_type === 'Brokerage') {
       recommend = (
         <LinkContainer className={ active.recommend } to="/dashboard/mls/listing/recommend">
@@ -71,7 +111,7 @@ export default class SideBar extends Component {
               &nbsp;&nbsp;&nbsp;&nbsp;Search
             </NavItem>
           </LinkContainer>
-          {recommend}
+          { recommend }
           <LinkContainer className={ active.contacts } to="/dashboard/contacts">
             <NavItem style={ S('w-75p') }>
               <img src={ active.contacts ? '/images/dashboard/icons/sidenav/people-active.svg' : '/images/dashboard/icons/sidenav/people.svg' } style={ S('w-19 h-19') }/>
@@ -97,13 +137,56 @@ export default class SideBar extends Component {
               <ProfileImage data={ data } user={ user } />
             </div>
             <NavDropdown dropup id="main-nav-dropdown" className="main-nav-dropdown--account" eventKey={3} title={ first_name + ' ' + last_name }>
-              <li><Link to="/account/settings"><i className="fa fa-cog" style={ S('mr-15') }></i>Settings</Link></li>
-              <li><Link to="/account/notifications"><i className="fa fa-envelope" style={ S('mr-15') }></i>Notifications</Link></li>
+              <li><a href="#" style={ S('pointer') } onClick={ this.showSettingsModal }><i className="fa fa-cog" style={ S('mr-15') }></i>Settings</a></li>
               <li role="separator" className="divider"></li>
               <li><a href="/signout"><i className="fa fa-power-off" style={ S('mr-15') }></i>Sign out</a></li>
             </NavDropdown>
           </Nav>
         </div>
+        <Modal show={ data.show_account_settings_modal } onHide={ this.hideModal.bind(this) }>
+          <form onSubmit={ this.handleSubmit.bind(this) }>
+            <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
+              <Modal.Title style={ S('font-14') }>Edit Account Settings</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Col xs={ 3 }>
+                <div className="pull-left">
+                  <ProfileImage
+                    size={ 100 }
+                    data={ data }
+                    user={ user }
+                    font={ 50 }
+                    top={ 15 }
+                  />
+                </div>
+              </Col>
+              <Col xs={ 9 } style={ S('p-0') }>
+                <Col xs={ 6 }>
+                  <label>First name</label>
+                  <Input ref="first_name" type="text" defaultValue={ user.first_name }/>
+                </Col>
+                <Col xs={ 6 } style={ S('p-0') }>
+                  <label>Last name</label>
+                  <Input ref="last_name" type="text" defaultValue={ user.last_name }/>
+                </Col>
+                <Col xs={ 6 }>
+                  <label>Email</label>
+                  <Input ref="email" type="text" defaultValue={ user.email }/>
+                </Col>
+                <Col xs={ 6 } style={ S('p-0') }>
+                  <label>Phone number</label>
+                  <Input ref="phone_number" type="text" defaultValue={ user.phone_number.replace('+', '') }/>
+                </Col>
+              </Col>
+            </Modal.Body>
+            <Modal.Footer style={ { border: 'none' } }>
+              <Button bsStyle="link" onClick={ this.hideModal.bind(this) }>Cancel</Button>
+              <Button style={ S('h-30 pt-5 pl-30 pr-30') } className={ data.saving_account_settings ? 'disabled' : '' } type="submit" bsStyle="primary">
+                { data.saving_account_settings ? 'Saving...' : 'Save' }
+              </Button>
+            </Modal.Footer>
+          </form>
+        </Modal>
       </aside>
     )
   }

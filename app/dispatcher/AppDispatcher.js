@@ -4,6 +4,7 @@ import { Dispatcher } from 'flux'
 // User
 import signup from '../actions/user/signup'
 import signin from '../actions/user/signin'
+import editUser from '../actions/user/edit-user'
 import forgotPassword from '../actions/user/forgot-password'
 import resetPassword from '../actions/user/reset-password'
 import verifyPhone from '../actions/user/verify-phone'
@@ -51,6 +52,7 @@ AppDispatcher.register(payload => {
   let token
   let code
   let contacts
+  let user_info
 
   // Room
   let user
@@ -102,6 +104,12 @@ AppDispatcher.register(payload => {
       redirect_to = payload.redirect_to
       invite = payload.invite
       signin(email, password, redirect_to, invite)
+      break
+
+    case 'edit-user':
+      user = payload.user
+      user_info = payload.user_info
+      editUser(user, user_info)
       break
 
     case 'forgot-password':

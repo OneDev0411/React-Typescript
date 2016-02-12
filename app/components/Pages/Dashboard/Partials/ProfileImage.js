@@ -8,6 +8,7 @@ export default class ProfileImage extends Component {
     const user = this.props.user
     const me = this.props.data.user
     const data = this.props.data
+    const font = this.props.font
     const profile_image_url = user.profile_image_url
     let background = `bg-url(${profile_image_url})`
     let initials
@@ -24,7 +25,7 @@ export default class ProfileImage extends Component {
       if (user.last_name)
         last_initial = user.last_name.substring(0, 1).toUpperCase()
       initials = (
-        <div className="text-center" style={ S(`w-100p t-${top} absolute color-fff`) }>
+        <div className="text-center" style={ S(`w-100p t-${top} absolute color-fff ${font ? 'font-' + font : ''}`) }>
           { first_initial + last_initial }
         </div>
       )
@@ -59,6 +60,7 @@ export default class ProfileImage extends Component {
 ProfileImage.propTypes = {
   size: React.PropTypes.number,
   top: React.PropTypes.number,
+  font: React.PropTypes.number,
   user: React.PropTypes.object,
   data: React.PropTypes.object.isRequired
 }
