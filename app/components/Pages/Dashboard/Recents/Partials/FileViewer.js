@@ -45,7 +45,7 @@ export default class FileViewer extends Component {
     let viewing_area = <iframe frameBorder={ 0 } src={ file_url } style={ S('w-100p h-100p absolute') }></iframe>
     if (file && file.info.mime.indexOf('image') !== -1) {
       viewing_area = (
-        <div style={ S('w-100p text-center') }><img src={ file_url } /></div>
+        <div onClick={ this.props.closeFileViewer } style={ { ...S('w-100p text-center'), cursor: 'zoom-out' } }><img src={ file_url } /></div>
       )
     }
     return (

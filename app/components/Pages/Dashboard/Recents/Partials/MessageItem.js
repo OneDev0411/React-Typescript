@@ -69,7 +69,7 @@ export default class MessageItem extends Component {
         )
       }
       message_image = (
-        <div onClick={ this.props.showFileViewer.bind(this, attachment) } style={ S('pointer mt-10') }>
+        <div onClick={ this.props.showFileViewer.bind(this, attachment) } style={ { ...S('mt-10'), cursor: 'zoom-in' } }>
           { message_thumb }
         </div>
       )
