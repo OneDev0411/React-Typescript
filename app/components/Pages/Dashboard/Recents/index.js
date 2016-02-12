@@ -327,11 +327,9 @@ export default class Dashboard extends Component {
     })
   }
 
-  showFileViewer(file_url) {
+  showFileViewer(attachment) {
     AppStore.data.current_room.viewer = {
-      file: {
-        url: file_url
-      }
+      file: attachment
     }
     AppStore.emitChange()
   }
