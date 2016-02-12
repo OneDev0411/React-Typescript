@@ -281,6 +281,7 @@ export default class MessagesList extends Component {
               <div className="clearfix"></div>
             </div>
             <label>Team</label>
+            <div style={ { ...S('maxh-200 pt-10'), overflow: 'scroll' } }>
             {
               current_room.users.map(contact => {
                 return (
@@ -296,6 +297,7 @@ export default class MessagesList extends Component {
                 )
               })
             }
+            </div>
             <div className="clearfix"></div>
           </Modal.Body>
         </Modal>
