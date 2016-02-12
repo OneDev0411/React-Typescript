@@ -46,19 +46,18 @@ export default class MessageItem extends Component {
 
     // Message image
     let message_image
-    if (message.image_url) {
-      const file_url = message.image_url
-      let message_thumb = (
-        <div style={ S('w-400 h-300 br-3 bg-url(' + file_url + ') bg-cover bg-center') }></div>
-      )
-      if (file_url.toLowerCase().indexOf('.png') === -1 && file_url.toLowerCase().indexOf('.jpg') === -1 && file_url.toLowerCase().indexOf('.gif') === -1) {
-        // TODO: Depracated
-        let ext = file_url.split('.').pop().substr(0, 3)
-        if (message.attachments && message.attachments.length) {
-          const attachment = message.attachments
-          if (attachment.info)
-            ext = attachment.info.mime['mime-extension']
-        }
+    if (message.attachments.length) {
+      const attachments = message.attachments
+      const attachment = attachments[0]
+      const file_url = attachment.url
+      const ext = attachment.info['mime-extension']
+      let message_thumb
+      // If image
+      if (ext.indexOf('png') !== -1 || ext.indexOf('jpg') !== -1 || ext.indexOf('gif') !== -1) {
+        message_thumb = (
+          <div style={ S('w-400 h-300 br-3 bg-url(' + file_url + ') bg-cover bg-center') }></div>
+        )
+      } else {
         message_thumb = (
           <div style={ S('w-60 mt-10') }>
             <i style={ S('font-60') } className="text-primary fa fa-file-o"></i>
