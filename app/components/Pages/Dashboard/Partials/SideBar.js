@@ -116,7 +116,7 @@ export default class SideBar extends Component {
         </div>
         <Nav bsStyle="pills" stacked>
           <LinkContainer className={ active.recents } to="/dashboard/recents">
-            <NavItem style={ S('w-78p') }>
+            <NavItem style={ S('w-85p') }>
               <img src={ active.recents ? '/images/dashboard/icons/sidenav/chat-active.svg' : '/images/dashboard/icons/sidenav/chat.svg' } style={ S('w-19 h-19') }/>
               &nbsp;&nbsp;&nbsp;&nbsp;Conversations
               {this.notificationIcon('room_notification_count')}
