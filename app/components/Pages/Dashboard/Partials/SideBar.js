@@ -56,6 +56,16 @@ export default class SideBar extends Component {
     AppStore.emitChange()
   }
 
+  notificationIcon(name) {
+    let icon;
+    if (AppStore.data.notifications.summary[name] > 0) {
+      icon = (
+        <i className="fa fa-circle" style={ S('pl-10 font-8 color-3388FF') }></i>
+      )
+    }
+    return icon;
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -99,13 +109,6 @@ export default class SideBar extends Component {
       )
     }
 
-    let new_transaction_icon;
-    if (AppStore.data.notifications.summary.transaction_notification_count > 0) {
-      new_transaction_icon = (
-        <i className="fa fa-circle" style={ S('pl-10 font-8 color-3388FF') }></i>
-      )
-    }
-
     return (
       <aside style={ sidebar_style } className="sidebar--dashboard pull-left bg-aqua">
         <div style={ S('mt-18') }>
@@ -135,13 +138,14 @@ export default class SideBar extends Component {
             <NavItem style={ S('w-75p') }>
               <img src={ active.tasks ? '/images/dashboard/icons/sidenav/calendar-active.svg' : '/images/dashboard/icons/sidenav/calendar.svg' } style={ S('w-19 h-19') }/>
               &nbsp;&nbsp;&nbsp;&nbsp;Calendar
+              {this.notificationIcon('task_notification_count')}
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.transactions } to="/dashboard/transactions" onClick={ this.props.viewAllTransactions }>
             <NavItem style={ S('w-80p') }>
               <img src={ active.transactions ? '/images/dashboard/icons/sidenav/transactions-active.svg' : '/images/dashboard/icons/sidenav/transactions.svg' } style={ S('w-19 h-19') }/>
               &nbsp;&nbsp;&nbsp;&nbsp;Transactions
-              {new_transaction_icon}
+              {this.notificationIcon('transaction_notification_count')}
             </NavItem>
           </LinkContainer>
         </Nav>
