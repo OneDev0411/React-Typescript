@@ -92,9 +92,8 @@ export default class SideBar extends Component {
       recommend = (
         <LinkContainer className={ active.recommend } to="/dashboard/mls/listing/recommend">
           <NavItem style={ S('w-75p') }>
-            <i className="fa fa-tasks">
-              &nbsp;&nbsp;&nbsp;&nbsp;Recommend
-            </i>
+            <i className="fa fa-tasks"> </i>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recommend
           </NavItem>
         </LinkContainer>
       )
