@@ -119,6 +119,7 @@ export default class SideBar extends Component {
             <NavItem style={ S('w-78p') }>
               <img src={ active.recents ? '/images/dashboard/icons/sidenav/chat-active.svg' : '/images/dashboard/icons/sidenav/chat.svg' } style={ S('w-19 h-19') }/>
               &nbsp;&nbsp;&nbsp;&nbsp;Conversations
+              {this.notificationIcon('room_notification_count')}
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.mls } to="/dashboard/mls">
