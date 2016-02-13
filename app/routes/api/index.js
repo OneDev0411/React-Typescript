@@ -43,4 +43,6 @@ module.exports = (app, config) => {
   require('./tasks/add-contacts')(app, config)
   require('./tasks/remove-contact')(app, config)
   require('./tasks/add-transaction')(app, config)
+  // Notification
+  require('./notifications/get-summary')(app, config)
 }

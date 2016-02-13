@@ -15,6 +15,13 @@ import ProfileImage from './ProfileImage'
 
 export default class SideBar extends Component {
 
+  componentWillMount() {
+    AppDispatcher.dispatch({
+      action: 'get-notification-summary',
+      user: this.props.data.user
+    })
+  }
+
   showSettingsModal(e) {
     e.preventDefault()
     AppStore.data.show_account_settings_modal = true
@@ -93,6 +100,13 @@ export default class SideBar extends Component {
       )
     }
 
+    let new_transaction_icon;
+    if (AppStore.data.notifications.summary.transaction_notification_count > 0) {
+      new_transaction_icon = (
+        <i className="fa fa-circle" style={ S('pl-10 font-8 color-3388FF') }></i>
+      )
+    }
+
     return (
       <aside style={ sidebar_style } className="sidebar--dashboard pull-left bg-aqua">
         <div style={ S('mt-18') }>
@@ -125,9 +139,10 @@ export default class SideBar extends Component {
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.transactions } to="/dashboard/transactions" onClick={ this.props.viewAllTransactions }>
-            <NavItem style={ S('w-75p') }>
+            <NavItem style={ S('w-80p') }>
               <img src={ active.transactions ? '/images/dashboard/icons/sidenav/transactions-active.svg' : '/images/dashboard/icons/sidenav/transactions.svg' } style={ S('w-19 h-19') }/>
               &nbsp;&nbsp;&nbsp;&nbsp;Transactions
+              {new_transaction_icon}
             </NavItem>
           </LinkContainer>
         </Nav>

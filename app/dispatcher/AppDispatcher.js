@@ -38,6 +38,9 @@ import removeContact from '../actions/modules/remove-contact'
 import searchListing from '../actions/listings/search'
 import getSimilarListings from '../actions/listings/get-similars'
 
+// Notifications
+import getNotificationSummery from '../actions/notifications/get-summary'
+
 const AppDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
@@ -236,6 +239,11 @@ AppDispatcher.register(payload => {
     case 'get-similar-listings':
       getSimilarListings(payload.user, payload.mls_number)
       break
+
+    case 'get-notification-summary':
+      getNotificationSummery(payload.user)
+      break
+
 
     default:
       return true
