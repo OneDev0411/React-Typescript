@@ -22,6 +22,7 @@ export default class SignUp extends Component {
   }
 
   componentDidMount() {
+    // Default to client
     AppStore.data.signup = {
       user_type: 'Client'
     }
