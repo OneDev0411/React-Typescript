@@ -15,13 +15,6 @@ import ProfileImage from './ProfileImage'
 
 export default class SideBar extends Component {
 
-  componentWillMount() {
-    AppDispatcher.dispatch({
-      action: 'get-notification-summary',
-      user: this.props.data.user
-    })
-  }
-
   showSettingsModal(e) {
     e.preventDefault()
     AppStore.data.show_account_settings_modal = true
@@ -57,13 +50,14 @@ export default class SideBar extends Component {
   }
 
   notificationIcon(name) {
-    let icon;
-    if (AppStore.data.notifications.summary[name] > 0) {
+    const data = this.props.data
+    let icon
+    if (data.notifications && data.notifications.summary[name] > 0) {
       icon = (
         <i className="fa fa-circle" style={ S('pl-10 font-8 color-3388FF') }></i>
       )
     }
-    return icon;
+    return icon
   }
 
   render() {

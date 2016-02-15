@@ -5,7 +5,6 @@ import AppStore from '../../stores/AppStore'
 export default (user) => {
   AppStore.data.notifications = {}
   AppStore.data.notifications.summary = {}
-
   const params = {
     access_token: user.access_token
   }

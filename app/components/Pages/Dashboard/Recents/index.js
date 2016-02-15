@@ -15,9 +15,6 @@ import SideBar from '../Partials/SideBar'
 import MainContent from './Partials/MainContent'
 import FileViewer from './Partials/FileViewer'
 
-// Socket.io
-import io from 'socket.io-client'
-
 export default class Dashboard extends Component {
 
   componentDidMount() {
@@ -29,6 +26,12 @@ export default class Dashboard extends Component {
 
   componentWillUpdate() {
     window.addEventListener('resize', this.handleResize)
+    const data = this.props.data
+    if (data.play_sound) {
+      this.refs.notif_sound.play()
+      delete AppStore.data.play_sound
+      AppStore.emitChange()
+    }
   }
 
   getPreviousMessages(scroll_height) {
@@ -131,47 +134,6 @@ export default class Dashboard extends Component {
     AppStore.emitChange()
   }
 
-  checkNotification(message) {
-    if (!('Notification' in window))
-      return false
-
-    if (document && document.hasFocus())
-      return false
-
-    const Notification = window.Notification || window.mozNotification || window.webkitNotification
-
-    if (Notification.permission === 'granted')
-      this.sendNotification(message)
-    else {
-      Notification.requestPermission(permission => {
-        if (permission === 'granted')
-          this.sendNotification(message)
-      })
-    }
-  }
-
-  sendNotification(message) {
-    const profile_image_url = config.app.url + '/images/dashboard/rebot@2x.png'
-    let first_name = 'Rebot'
-    if (message.author)
-      first_name = message.author.first_name
-
-    const title = 'New message from ' + first_name
-    const instance = new Notification(
-      title, {
-        body: message.comment,
-        icon: profile_image_url,
-        sound: '/audio/goat.mp3'
-      }
-    )
-    instance.onclick = () => {
-      window.focus()
-    }
-    instance.onshow = () => {
-      this.refs.notif_sound.play()
-    }
-  }
-
   sendTypingStarted() {
     const data = AppStore.data
     const socket = window.socket
@@ -252,49 +214,6 @@ export default class Dashboard extends Component {
     AppStore.emitChange()
 
     window.addEventListener('resize', this.handleResize)
-    // Listen for new messages
-    window.socket = io(config.socket.server)
-    const socket = window.socket
-    const data = AppStore.data
-    socket.emit('Authenticate', data.user.access_token)
-
-    // TODO move these to main component
-    // Listen for new message
-    socket.on('Message.Sent', (room, message) => {
-      const current_room = AppStore.data.current_room
-      // If in this room
-      if (current_room.id === room.id) {
-        if (message.author && data.user.id === message.author.id)
-          message.fade_in = true
-        AppStore.data.messages.push(message)
-        const rooms = AppStore.data.rooms
-        const current_room_index = _.findIndex(rooms, { id: current_room.id })
-        AppStore.data.rooms[current_room_index].latest_message = message
-        AppStore.data.scroll_bottom = true
-        AppStore.emitChange()
-        if (message.author && data.user.id !== message.author.id)
-          this.checkNotification(message)
-      }
-    })
-    // Listen for typing
-    socket.on('User.Typing', response => {
-      const author_id = response.user_id
-      const room_id = response.room_id
-      AppStore.data.is_typing = {
-        author_id,
-        room_id
-      }
-      delete AppStore.data.current_room.viewing_previous
-      AppStore.emitChange()
-    })
-    socket.on('User.TypingEnded', () => {
-      delete AppStore.data.is_typing
-      AppStore.emitChange()
-    })
-    socket.on('Users.Online', response => {
-      AppStore.data.users_online = response
-      AppStore.emitChange()
-    })
     // Add mounted recents to store
     if (!AppStore.data.mounted)
       AppStore.data.mounted = []
