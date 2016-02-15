@@ -10,6 +10,7 @@ import uploadFiles from '../actions/transactions/upload-files'
 import editTransaction from '../actions/transactions/edit'
 import addRole from '../actions/transactions/add-role'
 import deleteRole from '../actions/transactions/delete-role'
+import deleteFile from '../actions/transactions/delete-file'
 import getTransaction from '../actions/transactions/get-transaction'
 
 const TransactionDispatcher = new Dispatcher()
@@ -60,6 +61,10 @@ TransactionDispatcher.register(payload => {
 
     case 'delete-role':
       deleteRole(payload.user, payload.transaction, payload.contact)
+      break
+
+    case 'delete-file':
+      deleteFile(payload.user, payload.transaction, payload.file)
       break
 
     default:

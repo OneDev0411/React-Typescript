@@ -220,12 +220,23 @@ export default class Transactions extends Component {
   }
 
   deleteFile(file) {
-    const files = AppStore.data.current_transaction.attachments
-    const edited_files = files.filter(file_loop => {
-      return file_loop.id !== file.id
+    const data = this.props.data
+    const user = data.user
+    const transaction = data.current_transaction
+    let attachments = transaction.attachments
+    attachments = attachments.map(attachment => {
+      if (file.id === attachment.id)
+        attachment.is_deleting = true
+      return attachment
     })
-    AppStore.data.current_transaction.attachments = edited_files
+    AppStore.data.current_transaction.attachments = attachments
     AppStore.emitChange()
+    TransactionDispatcher.dispatch({
+      action: 'delete-file',
+      user,
+      transaction: transaction.id,
+      file: file.id
+    })
   }
 
   addDocs(files) {

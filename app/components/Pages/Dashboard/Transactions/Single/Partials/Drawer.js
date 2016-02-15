@@ -93,7 +93,9 @@ export default class Drawer extends Component {
           }
           let file_area = (
             <div>
-              <Button onClick={ this.props.deleteFile.bind(this, file) } style={ S('mt-10 mr-10 absolute r-0') } bsStyle="danger" className="delete">Delete</Button>
+              <Button onClick={ this.props.deleteFile.bind(this, file) } style={ S('mt-10 mr-10 absolute r-0') } bsStyle="danger" className={ file.is_deleting ? 'delete disabled' : 'delete' }>
+                { file.is_deleting ? 'Deleting...' : 'Delete' }
+              </Button>
               <div onClick={ this.openFileViewer.bind(this, file) } className="pull-left">
                 { file_image }
               </div>
