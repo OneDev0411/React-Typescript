@@ -11,19 +11,29 @@ export default (user, room, files) => {
       id: room.id,
       files: [file]
     }
-    Room.uploadFiles(params, (err, response) => {
-      if (response.status === 200) {
-        const data = response.body.data
-        const image_url = data.url
+    Room.uploadFiles(params, request => {
+      request.on('progress', e => {
+        const upload_percent = e.percent
+        AppStore.data.current_room.upload_percent = upload_percent
+        AppStore.emitChange()
+      })
+      request.end((err, res) => {
+        if (err)
+          return err
+        const image_url = res.body.url
+        const attachment = res.body.id
+        delete AppStore.data.current_room.upload_percent
+        delete AppStore.data.current_room.uploading_files
+        AppStore.emitChange()
         AppDispatcher.dispatch({
           action: 'create-message',
           user,
           room,
-          image_url
+          image_url,
+          attachment
         })
-      }
-      // console.log('fail', response)
-      callback()
+        callback()
+      })
     })
   }, () => {
     delete AppStore.data.current_room.uploading_files

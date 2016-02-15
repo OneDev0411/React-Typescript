@@ -12,6 +12,9 @@ export default {
     return status_color
   },
   metersToFeet: (meters) => {
-    return meters * '10.7639'
+    return Math.round(meters * '10.7639');
+  },
+  localAddress: (address) => {
+    return address.street_number + ' ' + address.street_name + ' ST ' + address.unit_number;
   }
 }

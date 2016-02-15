@@ -1,18 +1,35 @@
 // Dashboard/Tasks/Drawer.js
 import React, { Component } from 'react'
 import S from 'shorti'
-import { Button } from 'react-bootstrap'
+import { Button, Input } from 'react-bootstrap'
 
 // Partials
 import CheckBox from './CheckBox'
 import ProfileImage from '../../../Partials/ProfileImage'
 import Transaction from './Transaction'
 import Loading from '../../../../../Partials/Loading'
+import DayTimePicker from './DayTimePicker'
 
 // Helpers
 import helpers from '../../../../../../utils/helpers'
 
 export default class Drawer extends Component {
+
+  editTaskTitle() {
+    const data = this.props.data
+    const current_task = data.current_task
+    const task_title = this.refs.task_title.refs.input.value
+    this.props.editTaskTitle(current_task, task_title)
+  }
+
+  editTaskDate(hours, minutes, suffix) {
+    const data = this.props.data
+    const current_task = data.current_task
+    const midnight_date = (new Date(current_task.due_date * 1000)).setHours(0, 0, 0, 0)
+    const due_date_object = new Date(midnight_date)
+    const due_date_miliseconds = helpers.addTimeToDate(due_date_object, parseInt(hours, 10), parseInt(minutes, 10), suffix)
+    this.props.editTaskDate(due_date_miliseconds)
+  }
 
   render() {
     const data = this.props.data
@@ -84,9 +101,22 @@ export default class Drawer extends Component {
     let created_area
     if (current_task && current_task.due_date) {
       const due_date = current_task.due_date
-      const due_date_obj = helpers.friendlyDate(due_date / 1000)
+      const due_date_obj = helpers.friendlyDate(due_date)
+      let current_suffix = 'AM'
+      const hour = due_date_obj.hour
+      let current_hour = hour
+      if (hour === 0) {
+        current_hour = 12
+        current_suffix = 'AM'
+      }
+      if (hour > 12) {
+        current_hour = parseInt(current_hour, 10) - 12
+        current_suffix = 'PM'
+      }
+      if (hour === 12)
+        current_suffix = 'PM'
       due_date_area = (
-        <span>{ `${due_date_obj.day}, ${due_date_obj.month} ${due_date_obj.date}, ${due_date_obj.year}` }</span>
+        <span>{ `${due_date_obj.day}, ${due_date_obj.month} ${due_date_obj.date}, ${due_date_obj.year} ${current_hour}:${due_date_obj.min < 10 ? '0' + due_date_obj.min : due_date_obj.min}${current_suffix}` }</span>
       )
       const created_date = current_task.created_at
       const created_date_obj = helpers.friendlyDate(created_date)
@@ -104,7 +134,7 @@ export default class Drawer extends Component {
           return (
             <div style={ { ...S('relative p-15 w-100p bg-fff'), ...bottomLine } } className="pull-left" key={ 'added-contact-' + contact.id }>
               <div style={ S('l-0 t-12 l-10 absolute') }>
-                <ProfileImage top={11} size={40} user={ contact }/>
+                <ProfileImage data={ data } top={11} size={40} user={ contact }/>
               </div>
               <div style={ S('ml-50') }>
                 <div onClick={ this.props.removeContactFromTask.bind(this, contact) } className="close pull-right" style={ S('pointer mt-5') }>&times;</div>
@@ -129,6 +159,7 @@ export default class Drawer extends Component {
       transaction_markup = (
         <div style={ { ...S('relative p-15 w-100p bg-fff'), ...bottomLine } } className="pull-left">
           <Transaction
+            is_linked
             transaction={ transaction_data }
           />
         </div>
@@ -137,6 +168,26 @@ export default class Drawer extends Component {
     const footer_style = {
       ...S('b-0 absolute p-20 color-cfd1d2 font-12 w-100p'),
       ...topLine
+    }
+    const date = new Date()
+    let day_picker
+    if (data.show_day_picker_edit) {
+      let date_seconds = date.getTime() / 1000
+      if (current_task) {
+        if (current_task.due_date && typeof current_task.due_date.getTime === 'function')
+          date_seconds = current_task.due_date.getTime() / 1000
+        else
+          date_seconds = current_task.due_date
+      }
+      day_picker = (
+        <DayTimePicker
+          data={ data }
+          date_seconds={ date_seconds }
+          hideDayPicker={ this.props.hideDayPicker }
+          handleSetDate={ this.props.setEditTaskDate }
+          handleSaveDateTime={ this.editTaskDate.bind(this) }
+        />
+      )
     }
     return (
       <div style={ drawer_wrap_style }>
@@ -149,14 +200,17 @@ export default class Drawer extends Component {
                 editTaskStatus= { this.props.editTaskStatus }
               />
             </div>
-            <span style={ text_style }>{ task_title }</span>
+            <span style={ text_style }>
+              <Input ref="task_title" onChange={ this.editTaskTitle.bind(this) } style={ S('bw-0 absolute l-50 t-10 bg w-400 bg-f5fafe') } type="text" value={ task_title } />
+            </span>
           </div>
-          <div style={ { ...S('pt-20 p-15 h-60 mb-30 bg-fff'), ...bottomLine } }>
+          <div onClick={ this.props.showDayPicker } style={ { ...S('pointer pt-20 p-15 h-60 mb-30 bg-fff'), ...bottomLine } }>
             <span style={ S('mr-15') }>
               <img width="17" src="/images/dashboard/icons/calendar-red.svg"/>
             </span>
             <span style={ S('color-e0523e') }>Due on { due_date_area }</span>
           </div>
+          { day_picker }
           <div style={ { ...S('mb-30'), ...topLine } }>
             <div style={ { ...S('h-54 p-10 bg-fff'), ...bottomLine } }>
               <div style={ S('p-10 pull-left color-a3a9ac font-12') }>
@@ -184,7 +238,7 @@ export default class Drawer extends Component {
           <div style={ footer_style }>
             { created_area }
             <div style={ S('pull-right') }>
-              <span style={ S('pointer mr-20') }><img src="/images/dashboard/icons/clock.svg"/></span>
+              <span onClick={ this.props.showSnoozeModal.bind(this, current_task) } style={ S('pointer mr-20') }><img src="/images/dashboard/icons/clock.svg"/></span>
               <span onClick={ this.props.deleteTask.bind(this, current_task) } style={ S('pointer') }><img src="/images/dashboard/icons/trash.svg"/></span>
             </div>
           </div>
@@ -204,5 +258,11 @@ Drawer.propTypes = {
   removeContactFromTask: React.PropTypes.func,
   showAddTransactionModal: React.PropTypes.func,
   module_type: React.PropTypes.string,
-  containing_body_height: React.PropTypes.number
+  containing_body_height: React.PropTypes.number,
+  editTaskTitle: React.PropTypes.func,
+  showDayPicker: React.PropTypes.func,
+  editTaskDate: React.PropTypes.func,
+  setEditTaskDate: React.PropTypes.func,
+  hideDayPicker: React.PropTypes.func,
+  showSnoozeModal: React.PropTypes.func
 }

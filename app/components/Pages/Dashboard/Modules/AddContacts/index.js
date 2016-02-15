@@ -77,6 +77,7 @@ export default class AddContactsModule extends Component {
     delete AppStore.data.show_contact_modal
     delete AppStore.data.contact_modal
     delete AppStore.data.creating_contacts
+    delete AppStore.data.new_contact_modal
     AppStore.emitChange()
   }
 
@@ -193,7 +194,7 @@ export default class AddContactsModule extends Component {
     }
 
     if (direction === 'down') {
-      if (active_contact < filtered_contacts.length - 1)
+      if (filtered_contacts && active_contact < filtered_contacts.length - 1)
         active_contact = active_contact + 1
       else
         active_contact = 0
@@ -227,6 +228,8 @@ export default class AddContactsModule extends Component {
         return true
       if (contact.last_name && contact.last_name.toLowerCase().indexOf(text_lower) !== -1)
         return true
+      if (contact.email && contact.email.toLowerCase().indexOf(text_lower) !== -1)
+        return true
       if (contact.phone_number && contact.phone_number && contact.phone_number.indexOf(text_lower) !== -1)
         return false
       return false
@@ -246,6 +249,7 @@ export default class AddContactsModule extends Component {
   }
 
   showContactModal(contact) {
+    delete AppStore.data.filtered_contacts
     AppStore.data.show_contact_modal = true
     AppStore.emitChange()
     // Edit
@@ -315,7 +319,7 @@ export default class AddContactsModule extends Component {
         ...module_style,
         ...S('w-100p ml-10 mr-10')
       }
-      search_contact_input_style = S('w-425 mr-15')
+      search_contact_input_style = S('w-430 mr-15')
       filter_scroll_style.width = 475
     }
 
@@ -330,10 +334,11 @@ export default class AddContactsModule extends Component {
         if (!contact.added) {
           return (
             <div className="add-contact-form__contact" onClick={ this.showContactModal.bind(this, contact) } key={ 'contact-' + contact.id } style={ S('br-3 relative h-60 pointer mb-5 p-10' + active_contact_style + contact_added_style) }>
-              <ProfileImage user={ contact }/>
+              <ProfileImage data={ data } user={ contact }/>
               <div style={ S('ml-50') }>
-                <span style={ S('fw-600') }>{ contact.first_name } { contact.last_name }</span><br />
-                <span style={ S('color-666') }>{ contact.contact_user ? contact.contact_user.user_type : '' }</span>
+                <span style={ S('fw-600') }>{ contact.first_name } { contact.last_name }</span>{ contact.contact_user ? ',' : '' }&nbsp;
+                <span style={ S('color-666') }>{ contact.contact_user ? contact.contact_user.user_type : '' }</span><br />
+                <span style={ S('color-666 font-13') }>{ contact.email }</span><br />
               </div>
               <div className="clearfix"></div>
             </div>
@@ -361,7 +366,7 @@ export default class AddContactsModule extends Component {
           return (
             <div style={ S('h-50 relative br-100 p-3 pl-0 pr-10 mb-10 mr-10 w-100p') } className="pull-left" key={ 'added-contact-' + contact.id }>
               <div style={ S('l-0 t-0 absolute') }>
-                <ProfileImage top={11} size={40} user={ contact }/>
+                <ProfileImage data={ data } top={11} size={40} user={ contact }/>
               </div>
               <div style={ S('ml-50') }>
                 <div className="close pull-right" onClick={ this.removeContact.bind(this, contact.id) } style={ S('pointer') }>&times;</div>

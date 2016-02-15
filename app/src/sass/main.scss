@@ -18,11 +18,14 @@
 @import 'components/pages/transactions';
 @import 'components/pages/tasks';
 @import 'components/pages/contacts';
+@import 'components/pages/recents';
 
 // Modules
 @import 'components/modules/add-contacts';
 @import 'components/modules/search-listings';
 @import 'components/modules/drawer';
+@import 'components/modules/daypicker';
 
 // Vendor
 @import 'vendor/react-day-picker/style.scss';
+@import 'vendor/react-ios-switch/index.scss';

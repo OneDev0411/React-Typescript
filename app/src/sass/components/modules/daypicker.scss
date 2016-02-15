@@ -1,0 +1,33 @@
+.DayPicker {
+  outline: none;
+}
+.DayPicker {
+  abbr[title], abbr[data-original-title] {
+    border-bottom: none;
+  }
+  .DayPicker-Day {
+    border: none;
+    &:hover {
+      background-color: #eeeeee;
+    }
+    &--outside {
+      &:hover {
+        background-color: #fff;
+      } 
+    }
+  }
+  .DayPicker-Caption {
+    height: 3rem;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    font-weight: 500;
+  }
+  .DayPicker-NavBar {
+    padding: 2px .5rem;
+  }
+}
+.daypicker--tasks {
+  box-shadow: 0px 1px 5px #ccc;
+  border-radius: 3px;
+  background: #fff;
+}

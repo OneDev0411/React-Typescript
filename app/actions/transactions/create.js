@@ -63,7 +63,8 @@ export default (user, new_transaction) => {
         AppStore.data.transaction_tabs = []
       AppStore.data.transaction_tabs.push(transaction)
       AppStore.data.transactions.push(transaction)
-      AppStore.data.new_transaction.redirect_to = '/dashboard/transactions'
+      const history = require('../../utils/history')
+      history.replaceState(null, '/dashboard/transactions/' + transaction.id)
       AppStore.emitChange()
     } else {
       delete AppStore.data.new_transaction.saving

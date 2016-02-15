@@ -11,6 +11,7 @@ import config from '../config/private'
 // Get access token
 let access_token
 let room_id
+let contact_id
 let test = config.test
 const random_email = randomString(9) + '@rechat.co'
 const random_phone = Math.floor(Math.random() * 1000000000)
@@ -30,7 +31,7 @@ describe('Testing User model', function() {
       grant_type: 'password'
     }
     const params = {
-      user: user,
+      user,
       api_host: test.api_host
     }
     User.create(params, (err, response) => {
@@ -54,6 +55,25 @@ describe('Testing User model', function() {
     })
   })
 
+  // Edit
+  it('User.edit should return successful for user UN:' + random_email + ' PHONE: ' + random_phone + ' PW:' + test.user.password, function(done) {
+    const user = {
+      first_name: 'New Test First',
+      last_name: 'New User Last',
+      email: randomString(9) + '@rechat.co',
+      phone_number: random_phone
+    }
+    const params = {
+      user,
+      access_token,
+      api_host: test.api_host
+    }
+    User.edit(params, (err, response) => {
+      expect(response.status).to.equal('success')
+      done()
+    })
+  })
+
   // Forgot password
   it('User.forgotPassword should return successful for user email:' + test.user.email, function(done) {
     const params = {
@@ -69,7 +89,7 @@ describe('Testing User model', function() {
   // Get rooms
   it('User.getRooms should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
     const params = {
-      access_token: access_token,
+      access_token,
       api_host: test.api_host
     }
     User.getRooms(params, (err, response) => {
@@ -82,10 +102,11 @@ describe('Testing User model', function() {
   it('User.createContacts should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
     const params = {
       contacts: test.contacts,
-      access_token: access_token,
+      access_token,
       api_host: test.api_host
     }
     User.createContacts(params, (err, response) => {
+      contact_id = response.data[0].id
       expect(response.status).to.equal('success')
       done()
     })
@@ -94,7 +115,7 @@ describe('Testing User model', function() {
   // Get contacts
   it('User.getContacts should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
     const params = {
-      access_token: access_token,
+      access_token,
       api_host: test.api_host
     }
     User.getContacts(params, (err, response) => {
@@ -112,7 +133,7 @@ describe('Testing Room model', function() {
     const params = {
       title: 'test title',
       owner: test.user.id,
-      access_token: access_token,
+      access_token,
       api_host: test.api_host
     }
     Room.create(params, (err, response) => {
@@ -129,7 +150,7 @@ describe('Testing Room model', function() {
       comment: 'Test message',
       message_type: 'TopLevel',
       author: test.user.id,
-      access_token: access_token,
+      access_token,
       api_host: test.api_host
     }
     Message.create(params, (err, response) => {
@@ -142,8 +163,8 @@ describe('Testing Room model', function() {
   it('Room.addUser should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
     const params = {
       room_id: room_id,
-      users: [test.addUser.id],
-      access_token: access_token,
+      user: contact_id,
+      access_token,
       api_host: test.api_host
     }
     Room.addUser(params, (err, response) => {
@@ -160,7 +181,7 @@ describe('Testing Listing model', function() {
   it('Listing.search should return successful for search query: ' + test.listing.search_q, function(done) {
     const params = {
       q: test.listing.search_q,
-      access_token: access_token,
+      access_token,
       api_host: test.api_host
     }
     Listing.search(params, (err, response) => {
@@ -178,7 +199,7 @@ describe('Testing Transaction model', function() {
     const params = {
       transaction_type: 'Buyer',
       title: 'Test Title',
-      access_token: access_token,
+      access_token,
       api_host: test.api_host
     }
     Transaction.create(params, (err, response) => {
@@ -189,7 +210,7 @@ describe('Testing Transaction model', function() {
   // Get all transactions
   it('Transaction.getAll should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
     const params = {
-      access_token: access_token,
+      access_token,
       api_host: test.api_host
     }
     Transaction.getAll(params, (err, response) => {
@@ -206,7 +227,7 @@ describe('Testing Task model', function() {
   it('Task.create should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
     const params = {
       title: 'Test Title',
-      access_token: access_token,
+      access_token,
       api_host: test.api_host
     }
     Task.create(params, (err, response) => {
@@ -217,7 +238,7 @@ describe('Testing Task model', function() {
   // // Get all transactions
   it('Task.getAll should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
     const params = {
-      access_token: access_token,
+      access_token,
       api_host: test.api_host
     }
     Task.getAll(params, (err, response) => {

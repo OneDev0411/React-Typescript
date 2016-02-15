@@ -95,7 +95,7 @@ export default {
 
     const request_object = {
       room_id: params.room_id,
-      users: params.users,
+      user: params.user,
       access_token: params.access_token
     }
 
@@ -151,7 +151,7 @@ export default {
   },
   uploadFiles: (params, callback) => {
     const api_url = config.api_url
-    const endpoint = api_url + '/media'
+    const endpoint = api_url + '/attachments'
     const request = superagent.post(endpoint)
     const files = params.files
     request.set('authorization', 'Bearer ' + params.access_token)
@@ -164,10 +164,38 @@ export default {
       request.attach('media', file)
       request.field('info', JSON.stringify(info))
     })
-    request.end((err, res) => {
-      if (err)
-        return callback(err, res)
-      return callback(err, res)
+    return callback(request)
+  },
+  setNotifications: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const id = params.id
+    const notification = params.notification
+    const endpoint = api_host + '/api/notifications'
+    const request_object = {
+      id,
+      notification,
+      access_token: params.access_token
+    }
+    fetch(endpoint, {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(request_object)
+    })
+    .then(response => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          message: 'There was an error with this request.'
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then(response => {
+      return callback(false, response)
     })
   }
 }

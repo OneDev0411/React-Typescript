@@ -2,12 +2,13 @@
 import React, { Component } from 'react'
 import { Button, ProgressBar } from 'react-bootstrap'
 import S from 'shorti'
+import _ from 'lodash'
 import Dropzone from 'react-dropzone'
-
+import helpers from '../../../../../../utils/helpers'
 // Partials
-import Loading from '../../../../Partials/Loading'
-import ProfileImage from '../../Partials/ProfileImage'
-import AddContactsModule from '../../Modules/AddContacts'
+import Loading from '../../../../../Partials/Loading'
+import ProfileImage from '../../../Partials/ProfileImage'
+import AddContactsModule from '../../../Modules/AddContacts'
 
 export default class Drawer extends Component {
 
@@ -18,6 +19,8 @@ export default class Drawer extends Component {
   render() {
     // Data
     const data = this.props.data
+    const user = data.user
+    const contacts = data.contacts
     const transaction = data.current_transaction
     const drawer = transaction.drawer
     const roles = transaction.roles
@@ -45,6 +48,7 @@ export default class Drawer extends Component {
       // console.log(attachments)
       if (attachments) {
         attachments_markup = attachments.map((file, i) => {
+          // console.log(file)
           let mime
           if (file.info)
             mime = file.info.mime
@@ -61,7 +65,6 @@ export default class Drawer extends Component {
             default:
               file_icon_short = 'FILE'
           }
-
           let file_image = (
             <a href={ file.preview } target="_blank" className="pull-left" style={ S('ml-10 w-60 h-60 color-929292') }>
               <i style={ S('font-50') } className="fa fa-file-o"></i>
@@ -77,6 +80,17 @@ export default class Drawer extends Component {
             ...S('h-80 pb-10 pt-10 color-929292 pointer'),
             borderBottom: '1px solid #f7f9fa'
           }
+          const created = helpers.friendlyDate(file.created_at)
+          const created_string = `${created.day}, ${created.month} ${created.date}, ${created.year}`
+          const added_by = file.user
+          let user_string
+          if (added_by === user.id)
+            user_string = user.first_name
+          else {
+            const user_object = _.find(contacts, { id: added_by })
+            if (user_object)
+              user_string = user_object.first_name
+          }
           let file_area = (
             <div>
               <Button onClick={ this.props.deleteFile.bind(this, file) } style={ S('mt-10 mr-10 absolute r-0') } bsStyle="danger" className="delete">Delete</Button>
@@ -85,17 +99,20 @@ export default class Drawer extends Component {
               </div>
               <div onClick={ this.openFileViewer.bind(this, file) } style={ S('w-350') } className="pull-left text-left">
                 <div style={ S('ml-10 color-444 font-14 mb-5') }>{ file.info ? file.info.title : '' }</div>
-                <div style={ S('w-150 ml-10 font-12') }>Jan 15, 8:17am - Mark</div>
+                <div style={ S('w-150 ml-10 font-12') }>{ created_string } - { user_string }</div>
                 <div style={ S('w-150 ml-10 font-12') }>Shared with Shayan</div>
               </div>
             </div>
           )
           if (file.uploading) {
+            let upload_percent = 0
+            if (file.upload_percent)
+              upload_percent = file.upload_percent
             file_area = (
               <div style={ S('ml-20 mr-20 mt-10') }>
                 <div style={ S('relative t-10n') }>Uploading { file.new_name || file.name }</div>
                 <div>
-                  <ProgressBar active striped bsStyle="success" now={100} />
+                  <ProgressBar active striped bsStyle="success" now={ upload_percent } />
                 </div>
               </div>
             )
@@ -118,6 +135,7 @@ export default class Drawer extends Component {
         overflow: 'scroll'
       }
       const drawer_header_style = S('relative z-2 bg-f7f9fa ml-5 br-3 p-12 font-18 color-4a4a4a')
+      // Docs
       if (drawer.content === 'docs') {
         let doc_count
         if (attachments && attachments.length)
@@ -146,6 +164,7 @@ export default class Drawer extends Component {
           </div>
         )
       }
+      // Contacts
       if (drawer.content === 'contacts' && roles) {
         let contacts_list
         if (roles) {
@@ -172,7 +191,7 @@ export default class Drawer extends Component {
             return (
               <div className="transaction-contact" key={ 'contact-' + contact.id } style={ contact_style }>
                 { delete_button }
-                <ProfileImage user={ contact }/>
+                <ProfileImage data={ data } user={ contact }/>
                 <div style={ S('ml-50 ') }>
                   <div><b>{ contact.first_name } { contact.last_name }</b>, <span style={ S('color-929292') }>{ contact.roles ? contact.roles[0] : '' }</span></div>
                   <div style={ S('color-929292') }>
@@ -191,20 +210,12 @@ export default class Drawer extends Component {
             </div>
             <AddContactsModule
               data={ data }
-              filterContacts={ this.props.filterContacts }
-              setContactActive={ this.props.setContactActive }
-              setFilteredContacts={ this.props.setFilteredContacts }
-              hideContactsForm={ this.props.hideContactsForm }
-              removeContact={ this.props.removeContact }
-              showContactModal={ this.props.showContactModal }
-              hideModal={ this.props.hideModal }
-              addContact={ this.props.addContact }
               module_type="transaction"
-              showNewContentInitials={ this.props.showNewContentInitials }
             />
           </div>
         )
       }
+      // Map
       if (drawer.content === 'map') {
         let google_address
         if (transaction.listing && transaction.listing.property)
@@ -251,14 +262,5 @@ Drawer.propTypes = {
   handleDragLeave: React.PropTypes.func,
   drawerDrop: React.PropTypes.func,
   openFileViewer: React.PropTypes.func,
-  filterContacts: React.PropTypes.func,
-  setContactActive: React.PropTypes.func,
-  setFilteredContacts: React.PropTypes.func,
-  hideContactsForm: React.PropTypes.func,
-  removeContact: React.PropTypes.func,
-  showContactModal: React.PropTypes.func,
-  hideModal: React.PropTypes.func,
-  addContact: React.PropTypes.func,
-  deleteContact: React.PropTypes.func,
-  showNewContentInitials: React.PropTypes.func
+  deleteContact: React.PropTypes.func
 }

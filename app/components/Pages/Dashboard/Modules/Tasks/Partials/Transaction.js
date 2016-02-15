@@ -1,5 +1,6 @@
 // Modules/Tasks/Partials/Transaction.js
 import React, { Component } from 'react'
+import { Link } from 'react-router'
 import S from 'shorti'
 import helpers from '../../../../../../utils/helpers'
 import listing_util from '../../../../../../utils/listing'
@@ -31,7 +32,9 @@ export default class Transaction extends Component {
     let contract_price
     if (transaction.contract_price)
       contract_price = `$${helpers.numberWithCommas(transaction.contract_price)}`
-    return (
+
+    let transaction_area
+    const transaction_markup = (
       <div>
         <div style={ S('absolute r-10 mt-10 mr-10 color-a1bde4') }>
           { contract_price }
@@ -48,10 +51,21 @@ export default class Transaction extends Component {
         <div className="clearfix"></div>
       </div>
     )
+    if (!this.props.is_linked)
+      transaction_area = transaction_markup
+    else {
+      transaction_area = (
+        <Link to={ '/dashboard/transactions/' + transaction.id }>
+          { transaction_markup }
+        </Link>
+      )
+    }
+    return transaction_area
   }
 }
 
 // PropTypes
 Transaction.propTypes = {
-  transaction: React.PropTypes.object
+  transaction: React.PropTypes.object,
+  is_linked: React.PropTypes.bool
 }

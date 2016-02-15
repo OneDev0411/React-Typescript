@@ -6,7 +6,6 @@ import Room from '../../models/Room'
 import AppStore from '../../stores/AppStore'
 
 module.exports = (app, config) => {
-
   app.use((req, res, next) => {
     if(!req.session.user){
       delete AppStore.data.user
@@ -53,31 +52,25 @@ module.exports = (app, config) => {
   })
 
   app.get('/invite',(req, res) => {
-    
     const room_id = req.query.room_id
     const invite_token = req.query.invite_token
-    
     // If already signed in
     if(req.session.user){
       const user = req.session.user
       const add_user_params = {
         room_id: room_id,
-        users: [user.id],
+        user: user.id,
         access_token: invite_token,
         api_host: config.app_url
       }
-      
       Room.addUser(add_user_params, (err, response) => {
         if(err){
           return res.redirect('/?error=add-user-to-room')  
         }
         return res.redirect('/dashboard/recents/' + room_id)
       })
-    
     } else {
-
       return res.redirect('/signin?message=invite-room&room_id=' + req.query.room_id + '&invite_token=' + req.query.invite_token)
-    
     }
   })
 }

@@ -6,8 +6,6 @@ export default (user) => {
   const params = {
     access_token: user.access_token
   }
-  AppStore.data.getting_transactions = true
-  AppStore.emitChange()
   Transaction.getAll(params, (err, response) => {
     AppStore.data.transactions = response.data
     delete AppStore.data.getting_transactions

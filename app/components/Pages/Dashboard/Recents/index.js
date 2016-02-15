@@ -11,11 +11,9 @@ import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import AppStore from '../../../../stores/AppStore'
 
 // Partials
-import MainContent from './Partials/MainContent'
 import SideBar from '../Partials/SideBar'
-
-// Socket.io
-import io from 'socket.io-client'
+import MainContent from './Partials/MainContent'
+import FileViewer from './Partials/FileViewer'
 
 export default class Dashboard extends Component {
 
@@ -28,6 +26,12 @@ export default class Dashboard extends Component {
 
   componentWillUpdate() {
     window.addEventListener('resize', this.handleResize)
+    const data = this.props.data
+    if (data.play_sound) {
+      this.refs.notif_sound.play()
+      delete AppStore.data.play_sound
+      AppStore.emitChange()
+    }
   }
 
   getPreviousMessages(scroll_height) {
@@ -42,18 +46,17 @@ export default class Dashboard extends Component {
     })
   }
 
-  getMessages(current_room) {
-    AppStore.data.messages_loading = true
+  setCurrentRoom(current_room) {
+    AppStore.data.current_room = current_room
+    AppStore.data.messages = current_room.messages
+    AppStore.data.scroll_bottom = true
     AppStore.emitChange()
-
-    const data = AppStore.data
-    AppDispatcher.dispatch({
-      action: 'get-messages',
-      user: data.user,
-      room: current_room
-    })
-    // Show room_id in url
     history.pushState(null, null, '/dashboard/recents/' + current_room.id)
+  }
+
+  removeScrollBottom() {
+    delete AppStore.data.scroll_bottom
+    AppStore.emitChange()
   }
 
   getUserRooms() {
@@ -116,57 +119,19 @@ export default class Dashboard extends Component {
   showModal(modal_key) {
     if (modal_key === 'create-chat')
       AppStore.data.show_create_chat_modal = true
-
     if (modal_key === 'invite-user')
       AppStore.data.show_contacts_modal = true
+    if (modal_key === 'settings')
+      AppStore.data.show_settings_modal = true
     AppStore.emitChange()
   }
 
   hideModal() {
+    delete AppStore.data.show_listing_modal
     delete AppStore.data.show_create_chat_modal
     delete AppStore.data.show_contacts_modal
+    delete AppStore.data.show_settings_modal
     AppStore.emitChange()
-  }
-
-  checkNotification(message) {
-    if (!('Notification' in window))
-      return false
-
-    if (document && document.hasFocus())
-      return false
-
-    const Notification = window.Notification || window.mozNotification || window.webkitNotification
-
-    if (Notification.permission === 'granted')
-      this.sendNotification(message)
-    else {
-      Notification.requestPermission(permission => {
-        if (permission === 'granted')
-          this.sendNotification(message)
-      })
-    }
-  }
-
-  sendNotification(message) {
-    const profile_image_url = config.app.url + '/images/dashboard/rebot@2x.png'
-    let first_name = 'Rebot'
-    if (message.author)
-      first_name = message.author.first_name
-
-    const title = 'New message from ' + first_name
-    const instance = new Notification(
-      title, {
-        body: message.comment,
-        icon: profile_image_url,
-        sound: '/audio/goat.mp3'
-      }
-    )
-    instance.onclick = () => {
-      window.focus()
-    }
-    instance.onshow = () => {
-      this.refs.notif_sound.play()
-    }
   }
 
   sendTypingStarted() {
@@ -245,49 +210,10 @@ export default class Dashboard extends Component {
   init() {
     this.addUserToStore()
     this.getUserRooms()
+    AppStore.data.messages_loading = true
+    AppStore.emitChange()
+
     window.addEventListener('resize', this.handleResize)
-
-    // Listen for new messages
-    window.socket = io(config.socket.server)
-    const socket = window.socket
-    const data = AppStore.data
-    socket.emit('Authenticate', data.user.access_token)
-
-    // Listen for new message
-    socket.on('Message.Sent', (room, message) => {
-      const current_room = AppStore.data.current_room
-      // If in this room
-      if (current_room.id === room.id) {
-        if (message.author && data.user.id === message.author.id)
-          message.fade_in = true
-        AppStore.data.messages.push(message)
-        const rooms = AppStore.data.rooms
-        const current_room_index = _.findIndex(rooms, { id: current_room.id })
-        AppStore.data.rooms[current_room_index].latest_message = message
-        AppStore.emitChange()
-        if (message.author && data.user.id !== message.author.id)
-          this.checkNotification(message)
-      }
-    })
-    // Listen for typing
-    socket.on('User.Typing', (response) => {
-      const author_id = response.user_id
-      const room_id = response.room_id
-      AppStore.data.is_typing = {
-        author_id,
-        room_id
-      }
-      delete AppStore.data.current_room.viewing_previous
-      AppStore.emitChange()
-    })
-    socket.on('User.TypingEnded', () => {
-      delete AppStore.data.is_typing
-      AppStore.emitChange()
-    })
-    socket.on('Room.OnlineUsers', () => {
-      // console.log(response)
-      // AppStore.emitChange()
-    })
     // Add mounted recents to store
     if (!AppStore.data.mounted)
       AppStore.data.mounted = []
@@ -320,9 +246,59 @@ export default class Dashboard extends Component {
     })
   }
 
+  showFileViewer(attachment) {
+    AppStore.data.current_room.viewer = {
+      file: attachment
+    }
+    AppStore.emitChange()
+  }
+
+  closeFileViewer() {
+    delete AppStore.data.current_room.viewer
+    AppStore.emitChange()
+  }
+
+  setHeadingDate(date) {
+    AppStore.data.heading_date = date
+    AppStore.emitChange()
+  }
+
+  showListingModal(listing) {
+    AppStore.data.show_listing_modal = true
+    AppStore.data.current_listing = listing
+    AppStore.emitChange()
+  }
+
+  changeListingNotification(listing_switch_checked) {
+    const data = this.props.data
+    const user = data.user
+    if (listing_switch_checked)
+      AppStore.data.current_room.notification_settings[data.user.id].system_generated = false
+    else
+      AppStore.data.current_room.notification_settings[data.user.id].system_generated = true
+    const notification = AppStore.data.current_room.notification_settings[data.user.id].system_generated
+    AppDispatcher.dispatch({
+      action: 'room-notifications',
+      user,
+      id: data.current_room.id,
+      notification
+    })
+    AppStore.emitChange()
+  }
+
   render() {
     // Data
     const data = this.props.data
+    const current_room = data.current_room
+    let file_viewer
+    if (current_room && current_room.viewer) {
+      file_viewer = (
+        <FileViewer
+          data={ data }
+          closeFileViewer={ this.closeFileViewer }
+        />
+      )
+    }
     return (
       <div style={ S('minw-1000') }>
         <main>
@@ -336,16 +312,22 @@ export default class Dashboard extends Component {
             showModal={ this.showModal }
             hideModal={ this.hideModal }
             createRoom={ this.createRoom }
-            getMessages={ this.getMessages }
+            setCurrentRoom={ this.setCurrentRoom.bind(this) }
             addContactsToRoom={ this.addContactsToRoom }
             handleDragEnter={ this.handleDragEnter }
             handleDragLeave={ this.handleDragLeave }
             uploadFiles={ this.uploadFiles.bind(this) }
+            showFileViewer={ this.showFileViewer }
+            setHeadingDate={ this.setHeadingDate }
+            removeScrollBottom={ this.removeScrollBottom }
+            showListingModal={ this.showListingModal }
+            changeListingNotification={ this.changeListingNotification }
           />
         </main>
         <audio ref="notif_sound" id="notif-sound">
           <source src="/audio/goat.mp3" type="audio/mpeg" />
         </audio>
+        { file_viewer }
       </div>
     )
   }

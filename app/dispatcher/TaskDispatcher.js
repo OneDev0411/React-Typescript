@@ -4,6 +4,8 @@ import { Dispatcher } from 'flux'
 // Tasks
 import getTasks from '../actions/tasks/get'
 import editTaskStatus from '../actions/tasks/edit-status'
+import editTaskTitle from '../actions/tasks/edit-title'
+import editTaskDate from '../actions/tasks/edit-date'
 import createTask from '../actions/tasks/create'
 import deleteTask from '../actions/tasks/delete'
 import addContacts from '../actions/tasks/add-contacts'
@@ -48,6 +50,20 @@ TaskDispatcher.register(payload => {
       task = payload.task
       status = payload.status
       editTaskStatus(user, task, status)
+      break
+
+    case 'edit-title':
+      user = payload.user
+      task = payload.task
+      title = payload.title
+      editTaskTitle(user, task, title)
+      break
+
+    case 'edit-date':
+      user = payload.user
+      task = payload.task
+      due_date = payload.due_date
+      editTaskDate(user, task, due_date)
       break
 
     case 'delete-task':

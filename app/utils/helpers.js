@@ -47,6 +47,12 @@ export default {
     var strTime = hours + ':' + minutes + ampm;
     return strTime;
   },
+  getYMD(timestamp){
+    let date = new Date()
+    if(timestamp)
+      date = new Date(timestamp)
+    return `${date.getFullYear()}-${ ('0' + (date.getMonth() + 1)).slice(-2) }-${('0' + date.getDate()).slice(-2)}`
+  },
   numberWithCommas: (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   },
@@ -57,5 +63,23 @@ export default {
     var phoneRe = /^[1-9]\d{2}[1-9]\d{2}\d{4}$/
     var digits = value.replace(/\D/g, '')
     return digits.match(phoneRe)
+  },
+  imageExists: (url) => {
+    var img = new Image();
+    img.src = url;
+    return img.height != 0;
+  },
+  addTimeToDate(date_object, hours, minutes, suffix) {
+    let date_miliseconds = date_object.getTime() // in miliseconds
+    // Get time
+    if (hours === 0)
+      hours = 12
+    if (suffix === 'PM' && hours !== 12)
+      hours = hours + 12
+    if (suffix === 'AM' && hours === 12)
+      hours = 0
+    const seconds_after_midnight = (hours * 60 * 60) + (minutes * 60)
+    const miliseconds = date_miliseconds + (seconds_after_midnight * 1000)
+    return miliseconds
   }
 }

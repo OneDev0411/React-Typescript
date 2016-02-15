@@ -4,6 +4,7 @@ import { Dispatcher } from 'flux'
 // User
 import signup from '../actions/user/signup'
 import signin from '../actions/user/signin'
+import editUser from '../actions/user/edit-user'
 import forgotPassword from '../actions/user/forgot-password'
 import resetPassword from '../actions/user/reset-password'
 import verifyPhone from '../actions/user/verify-phone'
@@ -17,10 +18,12 @@ import deleteContact from '../actions/user/delete-contact'
 import createRoom from '../actions/rooms/create-room'
 import inviteContacts from '../actions/rooms/invite-contacts'
 import uploadFilesToRoom from '../actions/rooms/upload-files'
+import setNotification from '../actions/rooms/notifications'
 
 // Messages
 import createMessage from '../actions/messages/create-message'
 import getMessages from '../actions/messages/get-messages'
+import getAllMessages from '../actions/messages/get-all-messages'
 import getPreviousMessages from '../actions/messages/get-previous-messages'
 
 // Pages
@@ -33,6 +36,10 @@ import removeContact from '../actions/modules/remove-contact'
 
 // Listings
 import searchListing from '../actions/listings/search'
+import getSimilarListings from '../actions/listings/get-similars'
+
+// Notifications
+import getNotificationSummery from '../actions/notifications/get-summary'
 
 const AppDispatcher = new Dispatcher()
 
@@ -48,16 +55,21 @@ AppDispatcher.register(payload => {
   let token
   let code
   let contacts
+  let user_info
 
   // Room
   let user
   let invite
   let room_id
+  let rooms
   let room
   let comment
   let title
   let scroll_height
   let image_url
+  let attachment
+  let id
+  let notification
 
   // Add Contact Module
   let contact
@@ -95,6 +107,12 @@ AppDispatcher.register(payload => {
       redirect_to = payload.redirect_to
       invite = payload.invite
       signin(email, password, redirect_to, invite)
+      break
+
+    case 'edit-user':
+      user = payload.user
+      user_info = payload.user_info
+      editUser(user, user_info)
       break
 
     case 'forgot-password':
@@ -146,13 +164,20 @@ AppDispatcher.register(payload => {
       room = payload.room
       comment = payload.comment
       image_url = payload.image_url
-      createMessage(user, room, comment, image_url)
+      attachment = payload.attachment
+      createMessage(user, room, comment, image_url, attachment)
       break
 
     case 'get-messages':
       user = payload.user
       room = payload.room
       getMessages(user, room)
+      break
+
+    case 'get-all-messages':
+      user = payload.user
+      rooms = payload.rooms
+      getAllMessages(user, rooms)
       break
 
     case 'get-previous-messages':
@@ -200,9 +225,25 @@ AppDispatcher.register(payload => {
       searchListing(user, q)
       break
 
+    case 'room-notifications':
+      user = payload.user
+      id = payload.id
+      notification = payload.notification
+      setNotification(user, id, notification)
+      break
+
     case 'upload-files-to-room':
       uploadFilesToRoom(payload.user, payload.room, payload.files)
       break
+
+    case 'get-similar-listings':
+      getSimilarListings(payload.user, payload.mls_number)
+      break
+
+    case 'get-notification-summary':
+      getNotificationSummery(payload.user)
+      break
+
 
     default:
       return true
