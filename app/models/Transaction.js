@@ -178,6 +178,37 @@ export default {
       return callback(false, response)
     })
   },
+  deleteFile: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const transaction = params.transaction
+    const endpoint = api_host + '/api/transactions/delete-file?id=' + transaction
+    const file = params.file
+    const request_object = {
+      access_token: params.access_token,
+      file
+    }
+    fetch(endpoint, {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(request_object)
+    })
+    .then(response => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          message: 'There was an error with this request.'
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then(response => {
+      return callback(false, response)
+    })
+  },
   delete: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url

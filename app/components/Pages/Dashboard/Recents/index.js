@@ -2,7 +2,6 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import _ from 'lodash'
-import config from '../../../../../config/public'
 
 // AppDispatcher
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
