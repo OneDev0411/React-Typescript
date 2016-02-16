@@ -1,7 +1,8 @@
 // ProfileImage.js
 import React, { Component } from 'react'
 import S from 'shorti'
-import helpers from '../../../../utils/helpers'
+// import helpers from '../../../../utils/helpers'
+// helpers.imageExists(profile_image_url)
 
 export default class ProfileImage extends Component {
   render() {
@@ -15,8 +16,7 @@ export default class ProfileImage extends Component {
     let top = 8
     if (this.props.top)
       top = this.props.top
-
-    if (!profile_image_url || profile_image_url && !helpers.imageExists(profile_image_url)) {
+    if (!profile_image_url) {
       background = 'bg-dddfe0'
       let first_initial
       if (user.first_name)

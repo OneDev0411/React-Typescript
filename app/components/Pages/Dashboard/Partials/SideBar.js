@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Nav, NavItem, NavDropdown, Modal, Col, Input, Button } from 'react-bootstrap'
 import S from 'shorti'
+import Dropzone from 'react-dropzone'
+import Loading from '../../../Partials/Loading'
 
 // AppDispatcher
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
@@ -46,6 +48,7 @@ export default class SideBar extends Component {
 
   hideModal() {
     delete AppStore.data.show_account_settings_modal
+    delete AppStore.data.uploading_profile_pic
     AppStore.emitChange()
   }
 
@@ -58,6 +61,28 @@ export default class SideBar extends Component {
       )
     }
     return icon
+  }
+
+  uploadProfilePic(files) {
+    const data = this.props.data
+    const user = data.user
+    AppStore.data.uploading_profile_pic = true
+    AppStore.emitChange()
+    AppDispatcher.dispatch({
+      action: 'edit-profile-pic',
+      user,
+      files
+    })
+  }
+
+  showPicOverlay() {
+    AppStore.data.show_pic_overlay = true
+    AppStore.emitChange()
+  }
+
+  hidePicOverlay() {
+    delete AppStore.data.show_pic_overlay
+    AppStore.emitChange()
   }
 
   render() {
@@ -90,7 +115,6 @@ export default class SideBar extends Component {
     const user = data.user
     const first_name = user.first_name
     const last_name = user.last_name
-
     let recommend
     if (data.user.user_type === 'Brokerage') {
       recommend = (
@@ -102,7 +126,36 @@ export default class SideBar extends Component {
         </LinkContainer>
       )
     }
-
+    const dropzone_style = {
+      ...S('w-100 h-100')
+    }
+    let overlay_class = 'hidden'
+    if (data.show_pic_overlay)
+      overlay_class = ''
+    let profile_image_area = (
+      <Dropzone onMouseLeave={ this.hidePicOverlay.bind(this) } onMouseEnter={ this.showPicOverlay.bind(this) } multiple={ false } onDrop={ this.uploadProfilePic.bind(this) } type="button" style={ dropzone_style }>
+        <div className={ overlay_class } style={ S('pointer') }>
+          <div style={ { ...S('absolute z-101 color-fff text-center t-40 w-100') } }>
+            Edit picture
+          </div>
+          <div style={ { ...S('bg-100 br-100 absolute w-100 h-100 z-100 color-fff'), opacity: '.3' } }></div>
+        </div>
+        <ProfileImage
+          size={ 100 }
+          data={ data }
+          user={ user }
+          font={ 50 }
+          top={ 15 }
+        />
+      </Dropzone>
+    )
+    if (data.uploading_profile_pic) {
+      profile_image_area = (
+        <div style={ S('absolute t-60n l-42') }>
+          <Loading />
+        </div>
+      )
+    }
     return (
       <aside style={ sidebar_style } className="sidebar--dashboard pull-left bg-aqua">
         <div style={ S('mt-18') }>
@@ -164,13 +217,7 @@ export default class SideBar extends Component {
             <Modal.Body>
               <Col xs={ 3 }>
                 <div className="pull-left">
-                  <ProfileImage
-                    size={ 100 }
-                    data={ data }
-                    user={ user }
-                    font={ 50 }
-                    top={ 15 }
-                  />
+                  { profile_image_area }
                 </div>
               </Col>
               <Col xs={ 9 } style={ S('p-0') }>

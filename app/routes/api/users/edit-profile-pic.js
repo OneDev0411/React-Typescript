@@ -1,18 +1,16 @@
-// api/posts/edit-user.js
+// api/posts/edit-profile-pic.js
 module.exports = (app, config) => {
-  app.post('/api/edit-user',(req, res) => {
+  app.post('/api/edit-profile-pic',(req, res) => {
     const user = req.body.user
     const api_url = config.api.url
-    const endpoint = api_url + '/users/self'
+    const endpoint = api_url + '/users/self/profile_image_url'
     const access_token = req.body.access_token
+    const profile_image_url = req.body.profile_image_url
     const request_object = {
-      first_name: user.first_name,
-      last_name: user.last_name,
-      email: user.email,
-      phone_number: user.phone_number
+      profile_image_url
     }
     fetch(endpoint,{
-      method: 'put',
+      method: 'patch',
       headers: {
         'Content-Type': 'application/json',
         'authorization': 'Bearer ' + access_token,
@@ -20,7 +18,6 @@ module.exports = (app, config) => {
       body: JSON.stringify(request_object)
     })
     .then(response => {
-      // console.log(response.body)
       if (response.status >= 400) {
         var error = {
           status: 'error',

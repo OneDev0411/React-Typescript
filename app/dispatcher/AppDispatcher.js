@@ -14,6 +14,8 @@ import getContacts from '../actions/user/get-contacts'
 import createContacts from '../actions/user/create-contacts'
 import editContact from '../actions/user/edit-contact'
 import deleteContact from '../actions/user/delete-contact'
+import editProfilePic from '../actions/user/edit-profile-pic'
+
 // Rooms
 import createRoom from '../actions/rooms/create-room'
 import inviteContacts from '../actions/rooms/invite-contacts'
@@ -46,39 +48,6 @@ const AppDispatcher = new Dispatcher()
 // Register callback with AppDispatcher
 AppDispatcher.register(payload => {
   const action = payload.action
-
-  // User
-  let email
-  let password
-  let confirm_password
-  let redirect_to
-  let token
-  let code
-  let contacts
-  let user_info
-
-  // Room
-  let user
-  let invite
-  let room_id
-  let rooms
-  let room
-  let comment
-  let title
-  let scroll_height
-  let image_url
-  let attachment
-  let id
-  let notification
-
-  // Add Contact Module
-  let contact
-  let contact_id
-  let module_type
-
-  // Listing
-  let q
-
   switch (action) {
 
     case 'get-content':
@@ -94,65 +63,43 @@ AppDispatcher.register(payload => {
       break
 
     case 'sign-up':
-      user = payload.user
-      password = payload.password
-      confirm_password = payload.confirm_password
-      redirect_to = payload.redirect_to
-      signup(user, password, confirm_password, redirect_to)
+      signup(payload.user, payload.password, payload.confirm_password, payload.redirect_to)
       break
 
     case 'sign-in':
-      email = payload.email
-      password = payload.password
-      redirect_to = payload.redirect_to
-      invite = payload.invite
-      signin(email, password, redirect_to, invite)
+      signin(payload.email, payload.password, payload.redirect_to, payload.invite)
       break
 
     case 'edit-user':
-      user = payload.user
-      user_info = payload.user_info
-      editUser(user, user_info)
+      editUser(payload.user, payload.user_info)
       break
 
     case 'forgot-password':
-      email = payload.email
-      forgotPassword(email)
+      forgotPassword(payload.email)
       break
 
     case 'reset-password':
-      password = payload.password
-      confirm_password = payload.confirm_password
-      token = payload.token
-      resetPassword(password, confirm_password, token)
+      resetPassword(payload.password, payload.confirm_password, payload.token)
       break
 
     case 'verify-phone':
-      code = payload.code
-      token = payload.token
-      verifyPhone(code, token)
+      verifyPhone(payload.code, payload.token)
       break
 
     case 'add-user-to-store':
-      user = payload.user
-      addUserToStore(user)
+      addUserToStore(payload.user)
       break
 
     case 'create-room':
-      title = payload.title
-      user = payload.user
-      createRoom(user, title)
+      createRoom(payload.user, payload.title)
       break
 
     case 'get-rooms':
-      user = payload.user
-      room_id = payload.room_id
-      getRooms(user, room_id)
+      getRooms(payload.user, payload.room_id)
       break
 
     case 'get-contacts':
-      user = payload.user
-      getContacts(user)
+      getContacts(payload.user)
       break
 
     case 'invite-contacts':
@@ -160,76 +107,47 @@ AppDispatcher.register(payload => {
       break
 
     case 'create-message':
-      user = payload.user
-      room = payload.room
-      comment = payload.comment
-      image_url = payload.image_url
-      attachment = payload.attachment
-      createMessage(user, room, comment, image_url, attachment)
+      createMessage(payload.user, payload.room, payload.comment, payload.image_url, payload.attachment)
       break
 
     case 'get-messages':
-      user = payload.user
-      room = payload.room
-      getMessages(user, room)
+      getMessages(payload.user, payload.room)
       break
 
     case 'get-all-messages':
-      user = payload.user
-      rooms = payload.rooms
-      getAllMessages(user, rooms)
+      getAllMessages(payload.user, payload.rooms)
       break
 
     case 'get-previous-messages':
-      user = payload.user
-      room = payload.room
-      scroll_height = payload.scroll_height
-      getPreviousMessages(user, room, scroll_height)
+      getPreviousMessages(payload.user, payload.room, payload.scroll_height)
       break
 
     case 'create-contacts':
-      user = payload.user
-      contacts = payload.contacts
-      module_type = payload.module_type
-      createContacts(user, contacts, module_type)
+      createContacts(payload.user, payload.contacts, payload.module_type)
       break
 
     case 'edit-contact':
-      user = payload.user
-      contact = payload.contact
-      module_type = payload.module_type
-      editContact(user, contact, module_type)
+      editContact(payload.user, payload.contact, payload.module_type)
       break
 
     case 'delete-contact':
-      user = payload.user
-      contact_id = payload.contact_id
-      deleteContact(user, contact_id)
+      deleteContact(payload.user, payload.contact_id)
       break
 
     case 'add-contact':
-      contact = payload.contact
-      module_type = payload.module_type
-      addContact(contact, module_type)
+      addContact(payload.contact, payload.module_type)
       break
 
     case 'remove-contact':
-      contact_id = payload.contact_id
-      module_type = payload.module_type
-      removeContact(contact_id, module_type)
+      removeContact(payload.contact_id, payload.module_type)
       break
 
     case 'search-listing':
-      user = payload.user
-      q = payload.q
-      searchListing(user, q)
+      searchListing(payload.user, payload.q)
       break
 
     case 'room-notifications':
-      user = payload.user
-      id = payload.id
-      notification = payload.notification
-      setNotification(user, id, notification)
+      setNotification(payload.user, payload.id, payload.notification)
       break
 
     case 'upload-files-to-room':
@@ -244,12 +162,14 @@ AppDispatcher.register(payload => {
       getNotificationSummery(payload.user)
       break
 
+    case 'edit-profile-pic':
+      editProfilePic(payload.user, payload.files)
+      break
+
 
     default:
       return true
-
   }
-
   return true
 })
 

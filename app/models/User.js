@@ -2,7 +2,7 @@
 import es6Promise from 'es6-promise'
 es6Promise.polyfill()
 import 'isomorphic-fetch'
-
+import superagent from 'superagent'
 import config from '../../config/public'
 
 export default {
@@ -299,9 +299,49 @@ export default {
   edit: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/edit-user?access_token=' + params.access_token
+    const endpoint = api_host + '/api/edit-user'
     const request_object = {
       user: params.user,
+      access_token: params.access_token
+    }
+    fetch(endpoint, {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(request_object)
+    })
+    .then(response => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          body: response.body
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then(response => {
+      return callback(false, response)
+    })
+  },
+  uploadImage: (params, callback) => {
+    const api_url = config.api_url
+    const endpoint = api_url + '/attachments'
+    const request = superagent.post(endpoint)
+    const file = params.files[0]
+    request.set('authorization', 'Bearer ' + params.access_token)
+    request.attach('media', file)
+    request.end((err, response) => {
+      return callback(false, response)
+    })
+  },
+  editProfilePic: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const endpoint = api_host + '/api/edit-profile-pic'
+    const request_object = {
+      profile_image_url: params.profile_image_url,
       access_token: params.access_token
     }
     fetch(endpoint, {
