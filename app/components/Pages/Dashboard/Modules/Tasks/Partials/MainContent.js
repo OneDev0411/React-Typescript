@@ -19,6 +19,7 @@ import AddContactsModule from '../../AddContacts'
 import helpers from '../../../../../../utils/helpers'
 
 export default class MainContent extends Component {
+
   componentDidMount() {
     const data = this.props.data
     if (data.location.pathname === '/dashboard/tasks') {
@@ -114,12 +115,14 @@ export default class MainContent extends Component {
           date_seconds = new_task.due_date / 1000
       }
       day_picker = (
-        <DayTimePicker
-          date_seconds={ date_seconds }
-          hideDayPicker={ this.props.hideDayPicker }
-          handleSetDate={ this.props.setTaskDate }
-          handleSaveDateTime={ this.props.setTaskDateTime }
-        />
+        <div style={ S('absolute t-105') }>
+          <DayTimePicker
+            date_seconds={ date_seconds }
+            hideDayPicker={ this.props.hideDayPicker }
+            handleSetDate={ this.props.setTaskDate }
+            handleSaveDateTime={ this.props.setTaskDateTime }
+          />
+        </div>
       )
     }
     const today = helpers.friendlyDate(date.getTime() / 1000)

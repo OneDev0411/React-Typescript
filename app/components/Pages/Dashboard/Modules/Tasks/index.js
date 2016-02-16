@@ -175,12 +175,14 @@ export default class TasksModule extends Component {
 
   showDayPicker(action) {
     if (action === 'create') {
+      delete AppStore.data.show_day_picker_edit
       if (AppStore.data.show_day_picker)
         delete AppStore.data.show_day_picker
       else
         AppStore.data.show_day_picker = true
     }
     if (action === 'edit') {
+      delete AppStore.data.show_day_picker
       if (AppStore.data.show_day_picker_edit)
         delete AppStore.data.show_day_picker_edit
       else
@@ -254,10 +256,11 @@ export default class TasksModule extends Component {
 
   // Share contacts Modal
   showShareTaskModal(type) {
+    const data = this.props.data
+    if (type === 'new' && !data.new_task)
+      AppStore.data.new_task = {}
     delete AppStore.data.adding_contacts
     AppStore.data.show_contacts_modal = true
-    if (type === 'new')
-      AppStore.data.new_task = true
     AppStore.emitChange()
   }
 
@@ -294,9 +297,7 @@ export default class TasksModule extends Component {
     } else {
       delete AppStore.data.adding_contacts
       delete AppStore.data.show_contacts_modal
-      AppStore.data.new_task = {
-        contacts
-      }
+      AppStore.data.new_task.contacts = contacts
       AppStore.emitChange()
     }
   }

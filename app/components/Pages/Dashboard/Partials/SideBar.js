@@ -95,7 +95,7 @@ export default class SideBar extends Component {
     if (data.user.user_type === 'Brokerage') {
       recommend = (
         <LinkContainer className={ active.recommend } to="/dashboard/mls/listing/recommend">
-          <NavItem style={ S('w-75p') }>
+          <NavItem style={ S('w-85p') }>
             <i className="fa fa-tasks"> </i>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recommend
           </NavItem>
@@ -117,27 +117,27 @@ export default class SideBar extends Component {
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.mls } to="/dashboard/mls">
-            <NavItem style={ S('w-75p') }>
+            <NavItem style={ S('w-85p') }>
               <img src={ active.mls ? '/images/dashboard/icons/sidenav/map-active.svg' : '/images/dashboard/icons/sidenav/map.svg' } style={ S('w-19 h-19') }/>
               &nbsp;&nbsp;&nbsp;&nbsp;Search
             </NavItem>
           </LinkContainer>
           { recommend }
           <LinkContainer className={ active.contacts } to="/dashboard/contacts">
-            <NavItem style={ S('w-75p') }>
+            <NavItem style={ S('w-85p') }>
               <img src={ active.contacts ? '/images/dashboard/icons/sidenav/people-active.svg' : '/images/dashboard/icons/sidenav/people.svg' } style={ S('w-19 h-19') }/>
               &nbsp;&nbsp;&nbsp;&nbsp;People
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.tasks } to="/dashboard/tasks">
-            <NavItem style={ S('w-75p') }>
+            <NavItem style={ S('w-85p') }>
               <img src={ active.tasks ? '/images/dashboard/icons/sidenav/calendar-active.svg' : '/images/dashboard/icons/sidenav/calendar.svg' } style={ S('w-19 h-19') }/>
               &nbsp;&nbsp;&nbsp;&nbsp;Calendar
               {this.notificationIcon('task_notification_count')}
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.transactions } to="/dashboard/transactions" onClick={ this.props.viewAllTransactions }>
-            <NavItem style={ S('w-80p') }>
+            <NavItem style={ S('w-85p') }>
               <img src={ active.transactions ? '/images/dashboard/icons/sidenav/transactions-active.svg' : '/images/dashboard/icons/sidenav/transactions.svg' } style={ S('w-19 h-19') }/>
               &nbsp;&nbsp;&nbsp;&nbsp;Transactions
               {this.notificationIcon('transaction_notification_count')}

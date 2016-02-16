@@ -180,13 +180,15 @@ export default class Drawer extends Component {
           date_seconds = current_task.due_date
       }
       day_picker = (
-        <DayTimePicker
-          data={ data }
-          date_seconds={ date_seconds }
-          hideDayPicker={ this.props.hideDayPicker }
-          handleSetDate={ this.props.setEditTaskDate }
-          handleSaveDateTime={ this.editTaskDate.bind(this) }
-        />
+        <div style={ S('absolute t-145') }>
+          <DayTimePicker
+            data={ data }
+            date_seconds={ date_seconds }
+            hideDayPicker={ this.props.hideDayPicker }
+            handleSetDate={ this.props.setEditTaskDate }
+            handleSaveDateTime={ this.editTaskDate.bind(this) }
+          />
+        </div>
       )
     }
     return (

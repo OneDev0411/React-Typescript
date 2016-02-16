@@ -1,7 +1,7 @@
 // SignUp.js
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import { Button, Input, Alert } from 'react-bootstrap'
+import { Button, Input, Alert, Col } from 'react-bootstrap'
 import S from 'shorti'
 
 // AppDispatcher
@@ -21,6 +21,24 @@ export default class SignUp extends Component {
     AppStore.emitChange()
   }
 
+  componentDidMount() {
+    // Default to client
+    AppStore.data.signup = {
+      user_type: 'Client'
+    }
+    // Delay ?
+    setTimeout(() => {
+      AppStore.emitChange()
+    }, 100)
+  }
+
+  handleUserTypeClick(user_type) {
+    AppStore.data.signup = {
+      user_type
+    }
+    AppStore.emitChange()
+  }
+
   handleSubmit(e) {
     e.preventDefault()
     AppStore.data.submitting = true
@@ -32,6 +50,9 @@ export default class SignUp extends Component {
     const password = this.refs.password.refs.input.value
     const confirm_password = this.refs.confirm_password.refs.input.value
 
+    const data = this.props.data
+    const user_type = data.signup.user_type
+
     // Random phone for now
     const random_phone = Math.floor(Math.random() * 1000000000)
 
@@ -39,7 +60,7 @@ export default class SignUp extends Component {
       first_name,
       last_name,
       email,
-      user_type: 'Client',
+      user_type,
       phone_number: random_phone,
       grant_type: 'password'
     }
@@ -56,10 +77,6 @@ export default class SignUp extends Component {
   render() {
     // Data
     const data = this.props.data
-
-    let type
-    if (this.props.location.query.type)
-      type = this.props.location.query.type
 
     // If show message
     let message
@@ -117,21 +134,36 @@ export default class SignUp extends Component {
     let submitting_class
     if (submitting)
       submitting_class = 'disabled'
-
     let main_content = (
       <div>
-        <h1 className="tempo">Sign up as { type }</h1>
+        <h1 className="tempo">Sign up</h1>
         <form onSubmit={ this.handleSubmit.bind(this) }>
           <Input bsStyle={ first_name_style } type="text" ref="first_name" placeholder="First Name"/>
           <Input bsStyle={ last_name_style } type="text" ref="last_name" placeholder="Last Name"/>
           <Input bsStyle={ email_style } type="text" ref="email" placeholder="Email"/>
           <Input bsStyle={ password_style } type="password" ref="password" placeholder="Password"/>
           <Input bsStyle={ password_style } type="password" ref="confirm_password" placeholder="Confirm Password"/>
+          <div style={ S('mb-30 mt-20') }>
+            <div>
+              <h4>I am a</h4>
+            </div>
+            <Col xs={ 6 } style={ S('pl-0') }>
+              <Button onClick={ this.handleUserTypeClick.bind(this, 'Client') } bsStyle={ data.signup && data.signup.user_type === 'Client' ? 'primary' : 'default' } style={ S('w-100p') }>
+                Client
+              </Button>
+            </Col>
+            <Col xs={ 6 } style={ S('pr-0') }>
+              <Button onClick={ this.handleUserTypeClick.bind(this, 'Agent') }bsStyle={ data.signup && data.signup.user_type === 'Agent' ? 'primary' : 'default' } style={ S('w-100p') }>
+                Agent
+              </Button>
+            </Col>
+            <div className="clearfix"></div>
+          </div>
           { message }
           <Button type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p mb-20') }>
             { submitting ? 'Signing up...' : 'Sign up' }
           </Button>
-          <div style={ S('color-929292 font-13 mt-20') }>Already have an account? <Link to="signin">Sign in</Link></div>
+          <div style={ S('color-929292 font-13 mt-20') }>Already have an account? <Link to="/signin">Sign in</Link></div>
         </form>
       </div>
     )

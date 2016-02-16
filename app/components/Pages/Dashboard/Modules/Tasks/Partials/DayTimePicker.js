@@ -30,15 +30,8 @@ export default class DayTimePicker extends Component {
     }
     if (hour === 12)
       current_suffix = 'PM'
-    const hours = []
-    const minutes = []
-    // Check for default
-    for (let i = 1; i <= 11; i++)
-      hours.push(<option value={ i } key={ 'hour-' + i }>{ i }</option>)
-    for (let i = 0; i <= 50; i += 10)
-      minutes.push(<option value={ i } key={ 'minute-' + i }>{ i === 0 ? '0' + i : i }</option>)
     return (
-      <div className="daypicker--tasks" style={ S('absolute bg-fff z-100 t-145 l-10') }>
+      <div className="daypicker--tasks" style={ S('absolute bg-fff z-100 l-10') }>
         <DayPicker
           modifiers={{
             selected: day => DateUtils.isSameDay(date_obj, day)
@@ -49,15 +42,10 @@ export default class DayTimePicker extends Component {
           TIME
           <div className="clearfix"></div>
           <div style={ S('w-60 pull-left') }>
-            <Input defaultValue={ current_hour } ref="hours" type="select">
-              <option value={ 0 }>12</option>
-              { hours }
-            </Input>
+            <Input defaultValue={ current_hour } ref="hours" type="number" max={ 12 } min={ 1 }/>
           </div>
           <div style={ S('w-60 pull-left') }>
-            <Input defaultValue={ current_minutes } ref="minutes" type="select">
-              { minutes }
-            </Input>
+            <Input defaultValue={ current_minutes } ref="minutes" type="number" max={ 59 } min={ 1 }/>
           </div>
           <div style={ S('w-60 pull-left') }>
             <Input defaultValue={ current_suffix } ref="suffix" type="select">
