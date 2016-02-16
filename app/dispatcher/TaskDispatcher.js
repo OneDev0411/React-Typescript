@@ -12,6 +12,7 @@ import addContacts from '../actions/tasks/add-contacts'
 import removeContact from '../actions/tasks/remove-contact'
 import addTransaction from '../actions/tasks/add-transaction'
 import getTransaction from '../actions/tasks/get-transaction'
+import acknowledgeNotifications from '../actions/tasks/acknowledge-notifications'
 
 const TaskDispatcher = new Dispatcher()
 
@@ -97,6 +98,11 @@ TaskDispatcher.register(payload => {
       user = payload.user
       id = payload.id
       getTransaction(user, id)
+      break
+
+    case 'acknowledge-notifications':
+      user = payload.user
+      acknowledgeNotifications(user)
       break
 
     default:

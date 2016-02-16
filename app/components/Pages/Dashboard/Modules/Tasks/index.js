@@ -29,6 +29,8 @@ export default class TasksModule extends Component {
       if (evt.keyCode === 27 && data.current_task && !data.show_contacts_modal)
         this.closeDrawer()
     }
+
+    this.discardNotifications()
   }
 
   componentWillUnmount() {
@@ -40,6 +42,14 @@ export default class TasksModule extends Component {
     if (AppStore.data.show_day_picker)
       delete AppStore.data.show_day_picker
     AppStore.emitChange()
+  }
+
+  discardNotifications() {
+    const user = this.props.data.user
+    TaskDispatcher.dispatch({
+      action: 'acknowledge-notifications',
+      user
+    })
   }
 
   // Transactions
