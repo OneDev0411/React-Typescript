@@ -1,20 +1,18 @@
-// api/posts/edit-transaction.js
+// api/posts/edit-password.js
 module.exports = (app, config) => {
-  app.post('/api/edit-transaction',(req, res) => {
-    const api_url = config.api.url
-    const id = req.query.id
-    const endpoint = api_url + '/transactions/' + id
-    const access_token = req.body.access_token
-    const listing_data = req.body.listing_data
-    const transaction_type = req.body.transaction_type
+  app.post('/api/edit-password',(req, res) => {
     const user = req.body.user
+    const api_url = config.api.url
+    const endpoint = api_url + '/users/self/password'
+    const access_token = req.body.access_token
+    const old_password = req.body.old_password
+    const new_password = req.body.new_password
     const request_object = {
-      transaction_type,
-      listing_data,
-      user
+      old_password,
+      new_password
     }
     fetch(endpoint,{
-      method: 'put',
+      method: 'patch',
       headers: {
         'Content-Type': 'application/json',
         'authorization': 'Bearer ' + access_token,
@@ -29,11 +27,12 @@ module.exports = (app, config) => {
         }
         return res.json(error)
       }
-      return response.json()
+      return response
     })
     .then(response => {
-      response.status = 'success'
-      return res.json(response)
+      let response_object = response
+      response_object.status = 'success'
+      return res.json(response_object)
     });
   })
 }

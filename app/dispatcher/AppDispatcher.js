@@ -15,6 +15,7 @@ import createContacts from '../actions/user/create-contacts'
 import editContact from '../actions/user/edit-contact'
 import deleteContact from '../actions/user/delete-contact'
 import editProfilePic from '../actions/user/edit-profile-pic'
+import editPassword from '../actions/user/edit-password'
 
 // Rooms
 import createRoom from '../actions/rooms/create-room'
@@ -164,6 +165,10 @@ AppDispatcher.register(payload => {
 
     case 'edit-profile-pic':
       editProfilePic(payload.user, payload.files)
+      break
+
+    case 'edit-password':
+      editPassword(payload.user, payload.old_password, payload.new_password)
       break
 
 

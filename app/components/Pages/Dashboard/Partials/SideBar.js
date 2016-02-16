@@ -1,7 +1,7 @@
 // Dashboard.js
 import React, { Component } from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Nav, NavItem, NavDropdown, Modal, Col, Input, Button } from 'react-bootstrap'
+import { Nav, NavItem, NavDropdown, Modal, Col, Input, Button, Alert } from 'react-bootstrap'
 import S from 'shorti'
 import Dropzone from 'react-dropzone'
 import Loading from '../../../Partials/Loading'
@@ -19,6 +19,7 @@ export default class SideBar extends Component {
 
   showSettingsModal(e) {
     e.preventDefault()
+    delete AppStore.data.error
     AppStore.data.show_account_settings_modal = true
     AppStore.emitChange()
   }
@@ -26,11 +27,20 @@ export default class SideBar extends Component {
   handleSubmit(e) {
     e.preventDefault()
     const data = this.props.data
+    if (data.show_change_password) {
+      this.changePassword()
+      return
+    }
+    this.editAccountInfo()
+  }
+
+  editAccountInfo() {
+    const data = this.props.data
+    const user = data.user
     const first_name = this.refs.first_name.refs.input.value.trim()
     const last_name = this.refs.last_name.refs.input.value.trim()
     const email = this.refs.email.refs.input.value.trim()
     const phone_number = this.refs.phone_number.refs.input.value.trim()
-    const user = data.user
     const user_info = {
       first_name,
       last_name,
@@ -46,9 +56,56 @@ export default class SideBar extends Component {
     })
   }
 
+  changePassword() {
+    const data = this.props.data
+    const user = data.user
+    const old_password = this.refs.old_password.refs.input.value.trim()
+    const new_password = this.refs.new_password.refs.input.value.trim()
+    const new_password_confirm = this.refs.new_password_confirm.refs.input.value.trim()
+    AppStore.data.saving_account_settings = true
+    delete AppStore.data.error
+    delete AppStore.data.password_changed
+    AppStore.emitChange()
+    // Check for values
+    if (!old_password) {
+      AppStore.data.error = {
+        message: `You must add a password`
+      }
+      delete AppStore.data.saving_account_settings
+      AppStore.emitChange()
+      return
+    }
+    if (!new_password) {
+      AppStore.data.error = {
+        message: `You must add a new password`
+      }
+      delete AppStore.data.saving_account_settings
+      AppStore.emitChange()
+      return
+    }
+    // Check values match
+    if (new_password !== new_password_confirm) {
+      AppStore.data.error = {
+        message: `Your passwords don't match`
+      }
+      delete AppStore.data.saving_account_settings
+      AppStore.emitChange()
+      return
+    }
+    AppDispatcher.dispatch({
+      action: 'edit-password',
+      user,
+      old_password,
+      new_password
+    })
+  }
+
   hideModal() {
     delete AppStore.data.show_account_settings_modal
     delete AppStore.data.uploading_profile_pic
+    delete AppStore.data.show_change_password
+    delete AppStore.data.saving_account_settings
+    delete AppStore.data.password_changed
     AppStore.emitChange()
   }
 
@@ -82,6 +139,16 @@ export default class SideBar extends Component {
 
   hidePicOverlay() {
     delete AppStore.data.show_pic_overlay
+    AppStore.emitChange()
+  }
+
+  showChangePassword() {
+    AppStore.data.show_change_password = true
+    AppStore.emitChange()
+  }
+
+  hideChangePassword() {
+    delete AppStore.data.show_change_password
     AppStore.emitChange()
   }
 
@@ -156,6 +223,66 @@ export default class SideBar extends Component {
         </div>
       )
     }
+    let change_password_area = (
+      <a style={ S('mt-7') } className="pull-left" href="#" onClick={ this.showChangePassword.bind(this) }>Change password</a>
+    )
+    let form_fields = (
+      <Col xs={ 9 } style={ S('p-0') }>
+        <Col xs={ 6 }>
+          <label>First name</label>
+          <Input ref="first_name" type="text" defaultValue={ user.first_name }/>
+        </Col>
+        <Col xs={ 6 } style={ S('p-0') }>
+          <label>Last name</label>
+          <Input ref="last_name" type="text" defaultValue={ user.last_name }/>
+        </Col>
+        <Col xs={ 6 }>
+          <label>Email</label>
+          <Input ref="email" type="text" defaultValue={ user.email }/>
+        </Col>
+        <Col xs={ 6 } style={ S('p-0') }>
+          <label>Phone number</label>
+          <Input ref="phone_number" type="text" defaultValue={ user.phone_number ? user.phone_number.replace('+', '') : '' }/>
+        </Col>
+      </Col>
+    )
+    let message
+    if (data.error) {
+      message = (
+        <Alert bsStyle="danger">
+          { data.error.message }
+        </Alert>
+      )
+    }
+    if (data.password_changed) {
+      message = (
+        <Alert bsStyle="success">
+          Success. Password changed.
+        </Alert>
+      )
+    }
+    if (data.show_change_password) {
+      form_fields = (
+        <Col xs={ 9 } style={ S('p-0') }>
+          <Col xs={ 12 } style={ S('pr-0') }>
+            <label>Current password</label>
+            <Input key={'password'} ref="old_password" type="password" defaultValue=""/>
+          </Col>
+          <Col xs={ 12 } style={ S('pr-0') }>
+            <label>New password</label>
+            <Input key={'new_password'} ref="new_password" type="password" defaultValue=""/>
+          </Col>
+          <Col xs={ 12 } style={ S('pr-0') }>
+            <label>Confirm new password</label>
+            <Input key={'new_password_confirm'} ref="new_password_confirm" type="password" defaultValue=""/>
+            { message }
+          </Col>
+        </Col>
+      )
+      change_password_area = (
+        <a style={ S('mt-7') } className="pull-left" href="#" onClick={ this.hideChangePassword.bind(this) }>Cancel change password</a>
+      )
+    }
     return (
       <aside style={ sidebar_style } className="sidebar--dashboard pull-left bg-aqua">
         <div style={ S('mt-18') }>
@@ -220,30 +347,16 @@ export default class SideBar extends Component {
                   { profile_image_area }
                 </div>
               </Col>
-              <Col xs={ 9 } style={ S('p-0') }>
-                <Col xs={ 6 }>
-                  <label>First name</label>
-                  <Input ref="first_name" type="text" defaultValue={ user.first_name }/>
-                </Col>
-                <Col xs={ 6 } style={ S('p-0') }>
-                  <label>Last name</label>
-                  <Input ref="last_name" type="text" defaultValue={ user.last_name }/>
-                </Col>
-                <Col xs={ 6 }>
-                  <label>Email</label>
-                  <Input ref="email" type="text" defaultValue={ user.email }/>
-                </Col>
-                <Col xs={ 6 } style={ S('p-0') }>
-                  <label>Phone number</label>
-                  <Input ref="phone_number" type="text" defaultValue={ user.phone_number ? user.phone_number.replace('+', '') : '' }/>
-                </Col>
-              </Col>
+              { form_fields }
             </Modal.Body>
             <Modal.Footer style={ { border: 'none' } }>
-              <Button bsStyle="link" onClick={ this.hideModal.bind(this) }>Cancel</Button>
-              <Button style={ S('h-30 pt-5 pl-30 pr-30') } className={ data.saving_account_settings ? 'disabled' : '' } type="submit" bsStyle="primary">
-                { data.saving_account_settings ? 'Saving...' : 'Save' }
-              </Button>
+              <Col xs={ 9 } style={ S('pr-0 pull-right') }>
+                { change_password_area }
+                <Button bsStyle="link" onClick={ this.hideModal.bind(this) }>Cancel</Button>
+                <Button style={ S('h-30 pt-5 pl-30 pr-30') } className={ data.saving_account_settings ? 'disabled' : '' } type="submit" bsStyle="primary">
+                  { data.saving_account_settings ? 'Saving...' : 'Save' }
+                </Button>
+              </Col>
             </Modal.Footer>
           </form>
         </Modal>

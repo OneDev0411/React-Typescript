@@ -355,7 +355,37 @@ export default {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          body: response.body
+          response
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then(response => {
+      return callback(false, response)
+    })
+  },
+  editPassword: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const endpoint = api_host + '/api/edit-password'
+    const request_object = {
+      old_password: params.old_password,
+      new_password: params.new_password,
+      access_token: params.access_token
+    }
+    fetch(endpoint, {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(request_object)
+    })
+    .then(response => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          response
         }
         return callback(error, false)
       }
