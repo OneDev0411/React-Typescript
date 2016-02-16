@@ -7,6 +7,10 @@ import config from '../../../../../../config/public'
 import helpers from '../../../../../utils/helpers'
 import Switch from 'react-ios-switch'
 
+// AppDispatcher
+import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
+
+
 // Partials
 import MessageItem from './MessageItem'
 import ProfileImage from '../../Partials/ProfileImage'
@@ -30,6 +34,35 @@ export default class MessagesList extends Component {
       this.scrollBottom()
       this.props.removeScrollBottom()
     }
+    this.acknowledgeNotifications();
+  }
+
+  acknowledgeNotifications() {
+    const room = this.props.data.current_room;
+    if (!room)
+      return;
+
+    if (!this.roomHasNotifications(room.id))
+      return;
+    const data = this.props.data
+    const user = data.user
+    AppDispatcher.dispatch({
+      action: 'acknowledge-room-notifications',
+      user,
+      room: room.id
+    })
+  }
+
+  roomHasNotifications(room_id) {
+    let result = false;
+    const summaries = this.props.data.notifications.summary.room_notification_summaries
+    if (!summaries)
+      return false;
+    summaries.forEach(summary => {
+      if (summary.room_id === room_id)
+        result = true
+    })
+    return result
   }
 
   scrollBottom() {

@@ -21,6 +21,7 @@ module.exports = (app, config) => {
   require('./rooms/create-message')(app, config)
   require('./rooms/invite-contacts')(app, config)
   require('./rooms/notifications')(app, config)
+  require('./rooms/acknowledge-room-notifications')(app, config)
   // Transactions
   require('./transactions/create-transaction')(app, config)
   require('./transactions/get-transactions')(app, config)

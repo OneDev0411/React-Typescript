@@ -24,6 +24,18 @@ export default class RoomsList extends Component {
     this.props.setCurrentRoom(room)
   }
 
+  roomHasNotifications(room_id) {
+    let result = false;
+    const summaries = this.props.data.notifications.summary.room_notification_summaries
+    if (!summaries)
+      return false;
+    summaries.forEach(summary => {
+      if (summary.room_id === room_id)
+        result = true
+    })
+    return result
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -89,6 +101,10 @@ export default class RoomsList extends Component {
             <div style={ S('color-808080') }>Uploaded a file</div>
           )
         }
+
+        const hasNotification = this.roomHasNotifications(room.id)
+        if (hasNotification)
+          list_style = { ...list_style, ...S('bg-00ff00') }
 
         return (
           <li className="room-list__item" style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, i) }>
