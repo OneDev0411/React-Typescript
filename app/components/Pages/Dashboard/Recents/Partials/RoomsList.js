@@ -103,8 +103,12 @@ export default class RoomsList extends Component {
         }
 
         const hasNotification = this.roomHasNotifications(room.id)
-        if (hasNotification)
-          list_style = { ...list_style, ...S('bg-00ff00') }
+        let notification
+        if (hasNotification) {
+          notification = (
+            <i className="fa fa-circle" style={ S('font-8 color-3388FF pull-right') }></i>
+          )
+        }
 
         return (
           <li className="room-list__item" style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, i) }>
@@ -116,6 +120,8 @@ export default class RoomsList extends Component {
                 </div>
                 <div className="pull-right text-right" style={ S('color-ccc w-40p') } >
                   { time_created.month } { time_created.date }, { time_created.time_friendly }
+                  &nbsp;
+                  { notification }
                 </div>
                 <div className="clearfix"></div>
                 <div style={ S('color-aaaaaa') }>{ first_name_list }</div>
