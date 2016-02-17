@@ -84,7 +84,7 @@ export default class SideBar extends Component {
       active.transactions = 'active'
 
     if (path.indexOf('/dashboard/mls/listings/recommend') !== -1)
-      active.recommend = 'active';
+      active.recommend = 'active'
 
     // User info
     const user = data.user

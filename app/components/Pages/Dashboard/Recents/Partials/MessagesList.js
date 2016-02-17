@@ -34,16 +34,16 @@ export default class MessagesList extends Component {
       this.scrollBottom()
       this.props.removeScrollBottom()
     }
-    this.acknowledgeNotifications();
+    this.acknowledgeNotifications()
   }
 
   acknowledgeNotifications() {
-    const room = this.props.data.current_room;
+    const room = this.props.data.current_room
     if (!room)
-      return;
+      return
 
     if (!this.roomHasNotifications(room.id))
-      return;
+      return
     const data = this.props.data
     const user = data.user
     AppDispatcher.dispatch({
@@ -54,10 +54,10 @@ export default class MessagesList extends Component {
   }
 
   roomHasNotifications(room_id) {
-    let result = false;
+    let result = false
     const summaries = this.props.data.notifications.summary.room_notification_summaries
     if (!summaries)
-      return false;
+      return false
     summaries.forEach(summary => {
       if (summary.room_id === room_id)
         result = true

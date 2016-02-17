@@ -25,10 +25,10 @@ export default class RoomsList extends Component {
   }
 
   roomHasNotifications(room_id) {
-    let result = false;
+    let result = false
     const summaries = this.props.data.notifications.summary.room_notification_summaries
     if (!summaries)
-      return false;
+      return false
     summaries.forEach(summary => {
       if (summary.room_id === room_id)
         result = true
@@ -106,7 +106,7 @@ export default class RoomsList extends Component {
         let notification
         if (hasNotification) {
           notification = (
-            <i className="fa fa-circle" style={ S('font-8 color-3388FF pull-right') }></i>
+            <i className="fa fa-circle" style={ S('font-8 color-3388FF absolute r-15n') }></i>
           )
         }
 
@@ -118,8 +118,8 @@ export default class RoomsList extends Component {
                 <div className="pull-left" style={ S('w-60p') }>
                   <b>{ room.title.substring(0, 50) }{ room.title.length > 50 ? '...' : '' }</b>
                 </div>
-                <div className="pull-right text-right" style={ S('color-ccc w-40p') } >
-                  { time_created.month } { time_created.date }, { time_created.time_friendly }
+                <div className="text-right" style={ S('color-ccc w-50p absolute r-10n font-13') } >
+                  { time_created.month } { time_created.date },<br /> { time_created.time_friendly }
                   &nbsp;
                   { notification }
                 </div>

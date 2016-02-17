@@ -26,7 +26,7 @@ export default class Recommend extends Component {
 
   handleMLSNumberChange(e) {
     const user = this.props.data.user
-    const mls_number = e.target.value;
+    const mls_number = e.target.value
 
     AppDispatcher.dispatch({
       action: 'get-similar-listings',
@@ -42,11 +42,11 @@ export default class Recommend extends Component {
           {formatter(listing)}
         </td>
       )
-    });
+    })
   }
 
   createTable(listings) {
-    const row = this.createRow.bind(null, listings);
+    const row = this.createRow.bind(null, listings)
 
     const photo = l => {
       return (
@@ -56,10 +56,10 @@ export default class Recommend extends Component {
 
     const date = (time) => {
       if (!time)
-        return '';
+        return ''
 
-      const d = helpers.friendlyDate(time);
-      return d.month + ' ' + d.date + ', ' + d.year;
+      const d = helpers.friendlyDate(time)
+      return d.month + ' ' + d.date + ', ' + d.year
     }
 
     return (
@@ -183,14 +183,14 @@ export default class Recommend extends Component {
     const data = this.props.data
     const main_style = S('absolute l-183 r-0 pl-15 pr-20')
 
-    let content;
+    let content
 
     if (AppStore.data.similar_listings) {
       if (AppStore.data.similar_listings.searching)
         content = <Loading />
 
       if (AppStore.data.similar_listings.listings)
-        content = this.createTable(AppStore.data.similar_listings.listings);
+        content = this.createTable(AppStore.data.similar_listings.listings)
     }
 
     return (
