@@ -45,6 +45,7 @@ export default class Transactions extends Component {
       AppStore.data.attachments = attachments
     }
     AppStore.emitChange()
+    this.acknowledge(params.id)
   }
 
   getContacts() {
@@ -112,6 +113,15 @@ export default class Transactions extends Component {
     AppStore.data.current_transaction = transaction
     history.pushState(null, null, '/dashboard/transactions/' + transaction.id)
     AppStore.emitChange()
+  }
+
+  acknowledge(transaction) {
+    const user = this.props.data.user
+    TransactionDispatcher.dispatch({
+      action: 'acknowledge-transaction',
+      user,
+      transaction
+    })
   }
 
   removeTransactionTab(id) {

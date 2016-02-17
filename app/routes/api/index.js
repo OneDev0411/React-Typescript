@@ -31,6 +31,7 @@ module.exports = (app, config) => {
   require('./transactions/delete-role')(app, config)
   require('./transactions/delete-file')(app, config)
   require('./transactions/delete-transaction')(app, config)
+  require('./transactions/acknowledge-transaction-notifications')(app, config)
   // Contacts
   require('./contacts/create-contacts')(app, config)
   require('./contacts/edit-contact')(app, config)

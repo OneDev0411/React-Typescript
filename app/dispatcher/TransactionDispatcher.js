@@ -12,6 +12,7 @@ import addRole from '../actions/transactions/add-role'
 import deleteRole from '../actions/transactions/delete-role'
 import deleteFile from '../actions/transactions/delete-file'
 import getTransaction from '../actions/transactions/get-transaction'
+import acknowledgeTransaction from '../actions/transactions/acknowledge-transaction'
 
 const TransactionDispatcher = new Dispatcher()
 
@@ -49,6 +50,10 @@ TransactionDispatcher.register(payload => {
 
     case 'delete-transaction':
       deleteTransaction(payload.user, payload.id)
+      break
+
+    case 'acknowledge-transaction':
+      acknowledgeTransaction(payload.user, payload.transaction)
       break
 
     case 'upload-files':
