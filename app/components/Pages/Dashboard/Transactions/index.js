@@ -86,6 +86,11 @@ export default class Transactions extends Component {
     }, 1)
   }
 
+  hasNotification(transaction_id) {
+    const summary = this.props.data.notifications.summary
+    return summary.transaction_ids.indexOf(transaction_id) > -1
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -140,8 +145,19 @@ export default class Transactions extends Component {
         let client_name
         if (clients && clients[0])
           client_name = clients[0].first_name + ' ' + clients[0].last_name
+
+        let notification_icon
+        if (this.hasNotification(transaction.id)) {
+          notification_icon = (
+            <i className="fa fa-circle" style={ S('font-8 color-3388FF pt-30') }></i>
+          )
+        }
+
         return (
           <tr onClick={ this.handleClickTransaction.bind(this, transaction) } style={ S('pointer') } key={ transaction.id }>
+            <td>
+              { notification_icon }
+            </td>
             <td>
               <div className="pull-left" style={ S('mt-5 ml-5') }>{ cover_image }</div>
               <div className="pull-left" style={ S('ml-20 mt-15 maxw-200') }>
@@ -187,6 +203,7 @@ export default class Transactions extends Component {
             <Table style={ S('mt-10n minw-760') } className="table--tabbable" condensed hover>
               <thead>
                 <tr>
+                  <th width="5"></th>
                   <th width="150">Property</th>
                   <th width="100">Contact</th>
                   <th width="100">Price</th>

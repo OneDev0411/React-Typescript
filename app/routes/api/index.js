@@ -23,6 +23,7 @@ module.exports = (app, config) => {
   require('./rooms/create-message')(app, config)
   require('./rooms/invite-contacts')(app, config)
   require('./rooms/notifications')(app, config)
+  require('./rooms/acknowledge-room-notifications')(app, config)
   // Transactions
   require('./transactions/create-transaction')(app, config)
   require('./transactions/get-transactions')(app, config)
@@ -32,6 +33,7 @@ module.exports = (app, config) => {
   require('./transactions/delete-role')(app, config)
   require('./transactions/delete-file')(app, config)
   require('./transactions/delete-transaction')(app, config)
+  require('./transactions/acknowledge-transaction-notifications')(app, config)
   // Contacts
   require('./contacts/create-contacts')(app, config)
   require('./contacts/edit-contact')(app, config)
@@ -46,6 +48,7 @@ module.exports = (app, config) => {
   require('./tasks/add-contacts')(app, config)
   require('./tasks/remove-contact')(app, config)
   require('./tasks/add-transaction')(app, config)
+  require('./tasks/acknowledge-notifications')(app, config)
   // Notification
   require('./notifications/get-summary')(app, config)
 }

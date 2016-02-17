@@ -15,13 +15,13 @@ export default (user, mls_number) => {
   AppStore.emitChange()
 
   Listing.getSimilars(params, (err, response) => {
-    delete AppStore.data.similar_listings.searching;
+    delete AppStore.data.similar_listings.searching
 
     // Success
     if (response.status === 'success')
       AppStore.data.similar_listings.listings = response.data
     else
-      delete AppStore.data.similar_listings.listings;
+      delete AppStore.data.similar_listings.listings
 
     AppStore.emitChange()
   })

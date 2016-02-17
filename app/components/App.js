@@ -89,7 +89,7 @@ export default class App extends Component {
       AppStore.data.users_online = response
       AppStore.emitChange()
     })
-    socket.on('Notification', this.getNotifications);
+    socket.on('Notification', this.getNotifications)
   }
 
   checkNotification(message) {

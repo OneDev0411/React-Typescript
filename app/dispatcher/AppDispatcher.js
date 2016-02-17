@@ -22,6 +22,7 @@ import createRoom from '../actions/rooms/create-room'
 import inviteContacts from '../actions/rooms/invite-contacts'
 import uploadFilesToRoom from '../actions/rooms/upload-files'
 import setNotification from '../actions/rooms/notifications'
+import acknowledgeRoomNotifications from '../actions/rooms/acknowledge-notifications'
 
 // Messages
 import createMessage from '../actions/messages/create-message'
@@ -171,6 +172,9 @@ AppDispatcher.register(payload => {
       editPassword(payload.user, payload.old_password, payload.new_password)
       break
 
+    case 'acknowledge-room-notifications':
+      acknowledgeRoomNotifications(payload.user, payload.room)
+      break
 
     default:
       return true
