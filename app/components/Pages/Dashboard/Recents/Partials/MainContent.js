@@ -184,7 +184,7 @@ export default class MainContent extends Component {
             <ListingModal
               data={ data }
               listing={ data.current_listing }
-              hideModal={ this.hideModal }
+              hideModal={ this.hideModal.bind(this) }
             />
           </div>
         </Dropzone>
