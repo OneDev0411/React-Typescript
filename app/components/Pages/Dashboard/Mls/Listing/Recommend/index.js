@@ -8,7 +8,7 @@ import SideBar from '../../../Partials/SideBar'
 
 import Loading from '../../../../../Partials/Loading'
 
-import AppDispatcher from '../../../../../../dispatcher/AppDispatcher'
+import ListingDispatcher from '../../../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../../../stores/AppStore'
 
 import listingHelpers from '../../../../../../utils/listing'
@@ -28,7 +28,7 @@ export default class Recommend extends Component {
     const user = this.props.data.user
     const mls_number = e.target.value
 
-    AppDispatcher.dispatch({
+    ListingDispatcher.dispatch({
       action: 'get-similar-listings',
       user,
       mls_number
