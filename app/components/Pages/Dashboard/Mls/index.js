@@ -10,12 +10,12 @@ import AppStore from '../../../../stores/AppStore'
 
 // Partials
 import SideBar from '../Partials/SideBar'
-import Loading from '../../../Partials/Loading'
+// import Loading from '../../../Partials/Loading'
 import ListingModal from '../Partials/ListingModal'
 
 
 export default class Mls extends Component {
-  componentDidMount() {
+  componentWillMount() {
     const options = {
       'maximum_price': 9.223372036854776e+18,
       'limit': '75',
@@ -136,7 +136,6 @@ export default class Mls extends Component {
       lng: -96.7970
     }
     let map_listing_markers
-    let map_style
     let loading
     if (listing_map && listing_map.listings) {
       const listings = listing_map.listings
@@ -157,16 +156,13 @@ export default class Mls extends Component {
           </div>
         )
       })
-      if (listing_map.is_loading) {
-        map_style = {
-          opacity: '.7'
-        }
-        loading = (
-          <div style={ S('z-1000 absolute w-100p t-100') }>
-            <Loading />
-          </div>
-        )
-      }
+    }
+    if (listing_map.is_loading) {
+      loading = (
+        <div style={ S('z-1000 absolute w-100p t-30') }>
+          <div style={ S('bg-3388ff br-20 color-fff w-190 h-29 pt-5 center-block text-center') }>Loading MLS&reg; Listings...</div>
+        </div>
+      )
     }
     return (
       <div style={ S('minw-1000') }>
@@ -175,7 +171,6 @@ export default class Mls extends Component {
           <div style={ main_style }>
             { loading }
             <GoogleMap
-              style={ map_style }
               defaultCenter={ center }
               defaultZoom={ 13 }
               onBoundsChange={ this.handleBoundsChange.bind(this) }
