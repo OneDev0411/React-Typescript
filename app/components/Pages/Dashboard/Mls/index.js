@@ -15,7 +15,14 @@ import ListingModal from '../Partials/ListingModal'
 
 
 export default class Mls extends Component {
-  componentWillMount() {
+
+  componentDidMount() {
+    if (typeof window !== 'undefined') {
+      this.initMap()
+    }
+  }
+
+  initMap() {
     const options = {
       'maximum_price': 9.223372036854776e+18,
       'limit': '75',
@@ -56,17 +63,18 @@ export default class Mls extends Component {
       'open_house': false,
       'property_subtypes': ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse']
     }
-    AppStore.data.listing_map = {
+    const listing_map = {
       options,
       is_loading: true
     }
+    AppStore.data.listing_map = listing_map
     AppStore.emitChange()
     const data = this.props.data
     const user = data.user
     ListingDispatcher.dispatch({
       action: 'get-valerts',
       user,
-      options: data.listing_map.options
+      options
     })
   }
 
@@ -93,6 +101,8 @@ export default class Mls extends Component {
     let data = this.props.data
     const user = data.user
     const listing_map = data.listing_map
+    if (!listing_map)
+      return
     const options = listing_map.options
     options.points = [
       {
@@ -157,12 +167,15 @@ export default class Mls extends Component {
         )
       })
     }
-    if (listing_map.is_loading) {
+    if (listing_map && listing_map.is_loading) {
       loading = (
         <div style={ S('z-1000 absolute w-100p t-30') }>
           <div style={ S('bg-3388ff br-20 color-fff w-190 h-29 pt-5 center-block text-center') }>Loading MLS&reg; Listings...</div>
         </div>
       )
+    }
+    const map_options = {
+      mapTypeControl: true
     }
     return (
       <div style={ S('minw-1000') }>
@@ -174,6 +187,7 @@ export default class Mls extends Component {
               defaultCenter={ center }
               defaultZoom={ 13 }
               onBoundsChange={ this.handleBoundsChange.bind(this) }
+              options={ map_options }
             >
             { map_listing_markers }
             </GoogleMap>
