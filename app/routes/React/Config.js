@@ -22,6 +22,7 @@ import NoMatch from '../../components/Pages/NoMatch'
 import Settings from '../../components/Pages/Account/Settings'
 import Notifications from '../../components/Pages/Account/Notifications'
 import Recommend from '../../components/Pages/Dashboard/Mls/Listing/Recommend'
+import Agents from '../../components/Pages/Dashboard/Mls/Agents'
 
 export default (
   <Route path="/" component={App}>
@@ -34,6 +35,7 @@ export default (
     <Route path="dashboard/recents" component={Recents}/>
     <Route path="dashboard/recents/:room_id" component={Recents}/>
     <Route path="dashboard/mls" component={Mls}/>
+    <Route path="dashboard/mls/agents" component={Agents}/>
     <Route path="dashboard/mls/listing/recommend" component={Recommend}/>
     <Route path="dashboard/contacts" component={Contacts}/>
     <Route path="dashboard/tasks" component={Tasks}/>

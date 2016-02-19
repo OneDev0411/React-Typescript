@@ -45,6 +45,9 @@ import getSimilarListings from '../actions/listings/get-similars'
 // Notifications
 import getNotificationSummery from '../actions/notifications/get-summary'
 
+// Agents
+import getAgentReport from '../actions/agents/get-report'
+
 const AppDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
@@ -174,6 +177,10 @@ AppDispatcher.register(payload => {
 
     case 'acknowledge-room-notifications':
       acknowledgeRoomNotifications(payload.user, payload.room)
+      break
+
+    case 'get-agent-report':
+      getAgentReport(payload.user, payload.criteria)
       break
 
     default:

@@ -1,0 +1,16 @@
+#agents {
+  overflow: scroll;
+  overflow-wrap: inherit;
+  height: 800px;
+
+  table {
+    width: 2000px;
+    
+    th {
+      padding:30px;
+      color: #929292;
+      font-size: 14px;
+      font-family: "San Francisco";
+    }
+  }
+}

@@ -178,6 +178,9 @@ export default class SideBar extends Component {
     if (path.indexOf('/dashboard/mls/listings/recommend') !== -1)
       active.recommend = 'active'
 
+    if (path.indexOf('/dashboard/mls/agents') !== -1)
+      active.agents = 'active'
+
     // User info
     const user = data.user
     const first_name = user.first_name
@@ -189,6 +192,18 @@ export default class SideBar extends Component {
           <NavItem style={ S('w-85p') }>
             <i className="fa fa-tasks"> </i>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recommend
+          </NavItem>
+        </LinkContainer>
+      )
+    }
+
+    let agents
+    if (data.user.user_type === 'Brokerage') {
+      agents = (
+        <LinkContainer className={ active.agents } to="/dashboard/mls/agents">
+          <NavItem style={ S('w-85p') }>
+            <i className="fa fa-tasks"> </i>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Agents
           </NavItem>
         </LinkContainer>
       )
@@ -303,6 +318,7 @@ export default class SideBar extends Component {
             </NavItem>
           </LinkContainer>
           { recommend }
+          { agents }
           <LinkContainer className={ active.contacts } to="/dashboard/contacts">
             <NavItem style={ S('w-85p') }>
               <img src={ active.contacts ? '/images/dashboard/icons/sidenav/people-active.svg' : '/images/dashboard/icons/sidenav/people.svg' } style={ S('w-19 h-19') }/>

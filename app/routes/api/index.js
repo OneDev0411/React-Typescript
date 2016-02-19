@@ -51,4 +51,6 @@ module.exports = (app, config) => {
   require('./tasks/acknowledge-notifications')(app, config)
   // Notification
   require('./notifications/get-summary')(app, config)
+  // Agents
+  require('./agents/get-report')(app, config)
 }
