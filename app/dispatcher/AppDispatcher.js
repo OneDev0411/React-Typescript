@@ -38,10 +38,6 @@ import getContent from '../actions/pages/get-content'
 import addContact from '../actions/modules/add-contact'
 import removeContact from '../actions/modules/remove-contact'
 
-// Listings
-import searchListing from '../actions/listings/search'
-import getSimilarListings from '../actions/listings/get-similars'
-
 // Notifications
 import getNotificationSummery from '../actions/notifications/get-summary'
 
@@ -147,20 +143,12 @@ AppDispatcher.register(payload => {
       removeContact(payload.contact_id, payload.module_type)
       break
 
-    case 'search-listing':
-      searchListing(payload.user, payload.q)
-      break
-
     case 'room-notifications':
       setNotification(payload.user, payload.id, payload.notification)
       break
 
     case 'upload-files-to-room':
       uploadFilesToRoom(payload.user, payload.room, payload.files)
-      break
-
-    case 'get-similar-listings':
-      getSimilarListings(payload.user, payload.mls_number)
       break
 
     case 'get-notification-summary':

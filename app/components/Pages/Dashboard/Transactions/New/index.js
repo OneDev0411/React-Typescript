@@ -8,8 +8,8 @@ import _ from 'lodash'
 // AppStore
 import AppStore from '../../../../../stores/AppStore'
 
-// AppDispatcher
-import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
+// ListingDispatcher
+import ListingDispatcher from '../../../../../dispatcher/ListingDispatcher'
 
 // TransactionDispatcher
 import TransactionDispatcher from '../../../../../dispatcher/TransactionDispatcher'
@@ -149,7 +149,7 @@ export default class NewTransaction extends Component {
     AppStore.data.new_transaction.listing_searching = true
     AppStore.emitChange()
     const user = this.props.data.user
-    AppDispatcher.dispatch({
+    ListingDispatcher.dispatch({
       action: 'search-listing',
       user,
       q

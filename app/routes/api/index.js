@@ -5,8 +5,10 @@ module.exports = (app, config) => {
   // Messages
   require('./messages/get-messages')(app, config)
   // Listings
-  require('./listings/get-listings')(app, config)
+  require('./listings/search-listings')(app, config)
+  require('./listings/get-listing')(app, config)
   require('./listings/get-similars')(app, config)
+  require('./listings/get-valerts')(app, config)
   // Users
   require('./users/signup')(app, config)
   require('./users/edit-user')(app, config)

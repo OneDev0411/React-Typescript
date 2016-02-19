@@ -124,7 +124,7 @@ export default class RoomsList extends Component {
                   { notification }
                 </div>
                 <div className="clearfix"></div>
-                <div style={ S('color-aaaaaa') }>{ first_name_list }</div>
+                <div style={ S('color-aaaaaa w-74p') }>{ first_name_list }</div>
                 { comment }
               </div>
               <div className="clearfix"></div>
