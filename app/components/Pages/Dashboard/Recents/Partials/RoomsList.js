@@ -26,7 +26,10 @@ export default class RoomsList extends Component {
 
   roomHasNotifications(room_id) {
     let result = false
-    const summaries = this.props.data.notifications.summary.room_notification_summaries
+    const data = this.props.data
+    if (!data.notifications)
+      return false
+    const summaries = data.notifications.summary.room_notification_summaries
     if (!summaries)
       return false
     summaries.forEach(summary => {
@@ -105,12 +108,15 @@ export default class RoomsList extends Component {
           )
         }
 
-        const hasNotification = this.roomHasNotifications(room.id)
+        // Notifications
         let notification
-        if (hasNotification) {
-          notification = (
-            <i className="fa fa-circle" style={ S('font-8 color-3388FF absolute r-15n') }></i>
-          )
+        if (data.notifications) {
+          const hasNotification = this.roomHasNotifications(room.id)
+          if (hasNotification) {
+            notification = (
+              <i className="fa fa-circle" style={ S('font-8 color-3388FF absolute r-15n') }></i>
+            )
+          }
         }
 
         return (

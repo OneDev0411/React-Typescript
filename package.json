@@ -63,7 +63,7 @@
     "api": "NODE_ENV=development DEV_PORT=8080 nodemon app/app.js",
     "webpack-dev-server": "WEBPACK_PROCESS=build NODE_ENV=development PORT=8080 webpack-dev-server --content-base app/public/ --hot --inline --devtool inline-source-map --history-api-fallback",
     "development": "cp app/views/index.html app/public/index.html && WEBPACK_PROCESS=build NODE_ENV=development webpack && npm run webpack-dev-server",
-    "staging": "rm -rf app/public/index.html && WEBPACK_PROCESS=build NODE_ENV=staging webpack -p && NODE_ENV=staging node app/app.js",
+    "staging": "rm -rf app/public/index.html && WEBPACK_PROCESS=build NODE_ENV=staging webpack -p --devtool inline-source-map && NODE_ENV=staging node app/app.js",
     "production": "rm -rf app/public/index.html && WEBPACK_PROCESS=build NODE_ENV=production webpack -p && NODE_ENV=production node app/app.js"
   },
   "author": "",
