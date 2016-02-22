@@ -36,6 +36,7 @@ export default (
     <Route path="dashboard/mls" component={Mls}/>
     <Route path="dashboard/mls/listing/recommend" component={Recommend}/>
     <Route path="dashboard/contacts" component={Contacts}/>
+    <Route path="dashboard/contacts/:id" component={Contacts}/>
     <Route path="dashboard/tasks" component={Tasks}/>
     <Route path="dashboard/transactions" component={Transactions}/>
     <Route path="dashboard/transactions/new" component={NewTransaction}/>

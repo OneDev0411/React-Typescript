@@ -207,11 +207,10 @@ export default class Dashboard extends Component {
   }
 
   init() {
-    this.addUserToStore()
-    this.getUserRooms()
     AppStore.data.messages_loading = true
     AppStore.emitChange()
-
+    this.addUserToStore()
+    this.getUserRooms()
     window.addEventListener('resize', this.handleResize)
     // Add mounted recents to store
     if (!AppStore.data.mounted)

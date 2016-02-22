@@ -9,18 +9,15 @@ import helpers from '../../../../utils/helpers'
 
 export default class Header extends Component {
 
-  removeTransactionTab(id) {
-    this.props.removeTransactionTab(id)
-  }
-
   render() {
     const data = this.props.data
     const user = data.user
     const transactions = data.transactions
+    const contacts = data.contacts
     const path = data.path
     let title
     let subtitle
-    let transaction_nav_markup
+    let nav_tabs
     // Recents
     if (path === '/dashboard/recents') {
       title = (
@@ -74,11 +71,55 @@ export default class Header extends Component {
         </span>
       )
     }
+    // People
+    if (path.indexOf('/dashboard/contacts') !== -1) {
+      const has_s = !contacts || contacts.length !== 1 ? 's' : ''
+      title = (
+        <h2 style={ S('font-22 mt-20') }>{ contacts ? contacts.length : '' } contact{ has_s }</h2>
+      )
+      let contact_tabs = data.contact_tabs
+      const current_contact = data.current_contact
+      let contact_tabs_markup
+      if (contact_tabs) {
+        // Always unique
+        contact_tabs = _.uniq(contact_tabs, contact => {
+          if (contact)
+            return contact.id
+        })
+        contact_tabs_markup = contact_tabs.map(contact => {
+          const tab_title = contact.first_name + ' ' + contact.last_name
+          return (
+            <NavItem onClick={ this.props.viewContact.bind(this, contact) } key={ 'contact-tab-' + contact.id } eventKey={ contact.id }>
+              { tab_title }
+              <div onClick={ this.props.removeContactTab.bind(this, contact.id) } style={ S('relative l-8 w-23 h-25 bg-ccc text-center t-4n pointer') } className="close">
+                &times;
+              </div>
+            </NavItem>
+          )
+        })
+      }
+      let active_tab = 'all'
+      if (current_contact)
+        active_tab = current_contact.id
+      nav_tabs = (
+        <div>
+          <Nav className="table--tabbable__tabs" style={ S('b-1n absolute ml-15') } bsStyle="tabs" activeKey={ active_tab }>
+            <LinkContainer to="/dashboard/contacts">
+              <NavItem className="all-contacts-tab">
+                <div style={ S('ml-15n pl-10 pr-10') }>All people</div>
+              </NavItem>
+            </LinkContainer>
+            { contact_tabs_markup }
+          </Nav>
+        </div>
+      )
+    }
+
     // Transactions
     if (path.indexOf('/dashboard/transactions') !== -1) {
       const has_s = !transactions || transactions.length !== 1 ? 's' : ''
       title = (
-        <h2 style={ S('font-22 mt-20') }>{ transactions ? transactions.length : ''} Transaction{has_s}</h2>
+        <h2 style={ S('font-22 mt-20') }>{ transactions ? transactions.length : '' } Transaction{ has_s }</h2>
       )
       let transaction_tabs = data.transaction_tabs
       const current_transaction = data.current_transaction
@@ -97,7 +138,7 @@ export default class Header extends Component {
           return (
             <NavItem onClick={ this.props.viewTransaction.bind(this, transaction) } key={ 'transaction-tab-' + transaction.id } eventKey={ transaction.id }>
               { tab_title }
-              <div onClick={ this.removeTransactionTab.bind(this, transaction.id) } style={ S('relative l-8 w-23 h-25 bg-ccc text-center t-4n pointer') } className="close">
+              <div onClick={ this.props.removeTransactionTab.bind(this, transaction.id) } style={ S('relative l-8 w-23 h-25 bg-ccc text-center t-4n pointer') } className="close">
                 &times;
               </div>
             </NavItem>
@@ -107,7 +148,7 @@ export default class Header extends Component {
       let active_tab = 'all'
       if (current_transaction)
         active_tab = current_transaction.id
-      transaction_nav_markup = (
+      nav_tabs = (
         <div>
           <Nav className="table--tabbable__tabs" style={ S('b-1n absolute ml-15') } bsStyle="tabs" activeKey={ active_tab }>
             <LinkContainer to="/dashboard/transactions">
@@ -126,7 +167,7 @@ export default class Header extends Component {
     let nav_bar_style = { ...S('mb-0 p-0 pt-3 relative'), borderBottom: '1px solid #e7e4e3' }
 
     // Taller header for transactions
-    if (path.indexOf('/dashboard/transactions') !== -1)
+    if (path.indexOf('/dashboard/transactions') !== -1 || path.indexOf('/dashboard/contacts') !== -1)
       nav_bar_style = { ...nav_bar_style, ...S('h-108') }
     else
       nav_bar_style = { ...nav_bar_style, ...S('h-70') }
@@ -140,7 +181,7 @@ export default class Header extends Component {
               { subtitle }
             </div>
           </div>
-          { transaction_nav_markup }
+          { nav_tabs }
         </div>
       </header>
     )
@@ -151,5 +192,7 @@ export default class Header extends Component {
 Header.propTypes = {
   data: React.PropTypes.object,
   viewTransaction: React.PropTypes.func,
-  removeTransactionTab: React.PropTypes.func
+  removeTransactionTab: React.PropTypes.func,
+  viewContact: React.PropTypes.func,
+  removeContactTab: React.PropTypes.func
 }

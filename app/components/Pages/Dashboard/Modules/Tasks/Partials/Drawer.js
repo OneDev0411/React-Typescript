@@ -49,8 +49,11 @@ export default class Drawer extends Component {
     const bottomLine = { borderBottom: '1px solid #edf1f3' }
     const topLine = { borderTop: '1px solid #edf1f3' }
     const drawer_wrap_height = window.innerHeight - 70
+    let position = 'absolute'
+    if (module_type === 'tasks')
+      position = 'fixed'
     let drawer_wrap_style = {
-      ...S('absolute h-' + drawer_wrap_height + ' r-0 w-0 t-70'),
+      ...S('z-101 h-' + drawer_wrap_height + ' r-0 w-0 t-70 ' + position),
       overflow: 'hidden'
     }
     let drawer_style = {

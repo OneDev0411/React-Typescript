@@ -1,7 +1,7 @@
 // Dashboard/Contacts/index.js
 import React, { Component } from 'react'
 import S from 'shorti'
-import { Table, Button } from 'react-bootstrap'
+import { Table, Button, Input } from 'react-bootstrap'
 
 // Partials
 import Header from '../Partials/Header'
@@ -19,6 +19,14 @@ export default class Contacts extends Component {
 
   componentDidMount() {
     this.getContacts()
+  }
+
+  componentDidUpdate() {
+    const data = this.props.data
+    if (data.current_contact && this.props.location.pathname === '/dashboard/contacts') {
+      delete AppStore.data.current_contact
+      AppStore.emitChange()
+    }
   }
 
   getContacts() {
@@ -40,13 +48,50 @@ export default class Contacts extends Component {
     })
   }
 
+  handeContactClick(contact) {
+    this.viewContact(contact)
+  }
+
+  addContactTab(contact) {
+    const contact_tabs = AppStore.data.contact_tabs
+    if (!contact_tabs)
+      AppStore.data.contact_tabs = []
+    AppStore.data.contact_tabs.push(contact)
+    AppStore.emitChange()
+  }
+
+  viewContact(contact) {
+    AppStore.data.current_contact = contact
+    this.addContactTab(contact)
+    const history = require('../../../../utils/history')
+    history.replaceState(null, '/dashboard/contacts/' + contact.id)
+    AppStore.emitChange()
+  }
+
+  removeContactTab(id) {
+    // TODO Stay on current tab or go to all contact tab (after other tab click event triggered)
+    setTimeout(() => {
+      const contact_tabs = AppStore.data.contact_tabs
+      const current_contact = AppStore.data.current_contact
+      const reduced_contact_tabs = contact_tabs.filter(contact => {
+        return contact.id !== id
+      })
+      AppStore.data.contact_tabs = reduced_contact_tabs
+      if (current_contact.id === id)
+        delete AppStore.data.current_contact
+      const history = require('../../../../utils/history')
+      history.replaceState(null, '/dashboard/contacts')
+      AppStore.emitChange()
+    }, 1)
+  }
+
   render() {
     const data = this.props.data
-    let contacts_table = <Loading />
+    let main_content = <Loading />
     const contacts = AppStore.data.contacts
     if (contacts) {
-      contacts_table = (
-        <Table className="contacts-table" style={ S('mt-10n minw-760') } condensed hover>
+      main_content = (
+        <Table className="contacts-table" style={ S('minw-760') } condensed hover>
           <thead>
             <tr>
               <th>Name</th>
@@ -60,7 +105,7 @@ export default class Contacts extends Component {
             {
               contacts.map((contact) => {
                 return (
-                  <tr className="contact-row" key={ 'contact-' + contact.id } style={ S('h-45 pointer') }>
+                  <tr onClick={ this.handeContactClick.bind(this, contact) } className="contact-row" key={ 'contact-' + contact.id } style={ S('h-45 pointer') }>
                     <td width="50"><ProfileImage data={ data } user={ contact }/></td>
                     <td style={ S('pt-12') }>{ contact.first_name } { contact.last_name }</td>
                     <td style={ S('pt-12') }>{ contact.email }</td>
@@ -79,16 +124,45 @@ export default class Contacts extends Component {
       )
     }
 
+    if (data.current_contact) {
+      const contact = data.current_contact
+      main_content = (
+        <div style={ S('ml-20') }>
+          <ProfileImage
+            size={ 50 }
+            font={ 24 }
+            data={ data }
+            user={ contact }
+          />
+          <div style={ S('ml-80 relative w-300') }>
+            <label>First name</label>
+            <Input type="text" value={ contact.first_name }/>
+            <label>Last name</label>
+            <Input type="text" value={ contact.last_name }/>
+            <label>Email</label>
+            <Input type="text" value={ contact.email }/>
+            <label>Phone number</label>
+            <Input type="text" value={ contact.phone_number }/>
+            <Button bsStyle="primary" type="submit" style={ S('pl-30 pr-30 pull-right') }>Save</Button>
+          </div>
+        </div>
+      )
+    }
+
     // Style
-    const main_style = S('absolute l-183 r-0 pl-15 pr-20')
+    const main_style = S('absolute l-183 r-0')
 
     return (
       <div style={ S('minw-1000') }>
-        <Header data={ data } />
+        <Header
+          data={ data }
+          viewContact={ this.viewContact.bind(this) }
+          removeContactTab={ this.removeContactTab }
+        />
         <main style={ S('pt-20') }>
           <SideBar data={ data }/>
           <div style={ main_style }>
-            { contacts_table }
+            { main_content }
           </div>
         </main>
       </div>
@@ -98,5 +172,6 @@ export default class Contacts extends Component {
 
 // PropTypes
 Contacts.propTypes = {
-  data: React.PropTypes.object
+  data: React.PropTypes.object,
+  location: React.PropTypes.object
 }

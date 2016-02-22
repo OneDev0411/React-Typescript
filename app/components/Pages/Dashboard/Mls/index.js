@@ -17,7 +17,9 @@ import ListingModal from '../Partials/ListingModal'
 export default class Mls extends Component {
 
   componentDidMount() {
-    if (typeof window !== 'undefined')
+    const data = this.props.data
+    const listing_map = data.listing_map
+    if (!listing_map && typeof window !== 'undefined')
       this.initMap()
   }
 
