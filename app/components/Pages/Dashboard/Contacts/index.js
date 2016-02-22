@@ -85,6 +85,31 @@ export default class Contacts extends Component {
     }, 1)
   }
 
+  handleContactSubmit(e) {
+    e.preventDefault()
+    const data = this.props.data
+    const user = data.user
+    AppStore.data.saving_contact = true
+    AppStore.emitChange()
+    const first_name = this.refs.first_name.refs.input.value
+    const last_name = this.refs.last_name.refs.input.value
+    const email = this.refs.email.refs.input.value
+    const phone_number = this.refs.phone_number.refs.input.value
+    const contact = {
+      id: data.current_contact.id,
+      first_name,
+      last_name,
+      email,
+      phone_number
+    }
+    AppDispatcher.dispatch({
+      action: 'edit-contact',
+      user,
+      contact,
+      module_type: 'contacts'
+    })
+  }
+
   render() {
     const data = this.props.data
     let main_content = <Loading />
@@ -135,15 +160,19 @@ export default class Contacts extends Component {
             user={ contact }
           />
           <div style={ S('ml-80 relative w-300') }>
-            <label>First name</label>
-            <Input type="text" value={ contact.first_name }/>
-            <label>Last name</label>
-            <Input type="text" value={ contact.last_name }/>
-            <label>Email</label>
-            <Input type="text" value={ contact.email }/>
-            <label>Phone number</label>
-            <Input type="text" value={ contact.phone_number }/>
-            <Button bsStyle="primary" type="submit" style={ S('pl-30 pr-30 pull-right') }>Save</Button>
+            <form onSubmit={ this.handleContactSubmit.bind(this) }>
+              <label>First name</label>
+              <Input ref="first_name" type="text" defaultValue={ contact.first_name }/>
+              <label>Last name</label>
+              <Input ref="last_name" type="text" defaultValue={ contact.last_name }/>
+              <label>Email</label>
+              <Input ref="email" type="text" defaultValue={ contact.email }/>
+              <label>Phone number</label>
+              <Input ref="phone_number" type="text" defaultValue={ contact.phone_number }/>
+              <Button style={ S('pl-30 pr-30 pull-right') } type="submit" className={ data.saving_contact ? 'disabled' : '' } bsStyle="primary">
+                { data.saving_contact ? 'Saving...' : 'Save' }
+              </Button>
+            </form>
           </div>
         </div>
       )

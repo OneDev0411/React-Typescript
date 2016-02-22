@@ -12,6 +12,14 @@ export default (user, contact, module_type) => {
     // Success
     if (response.status === 'success') {
       let edited_contact = response.data
+      // If on contacts page
+      if (module_type === 'contacts') {
+        AppStore.data.current_contact = edited_contact
+        delete AppStore.data.saving_contact
+        AppStore.emitChange()
+        return
+      }
+      // Else add contact to other object
       // If creating transaction
       if (contact.role) {
         edited_contact = {
