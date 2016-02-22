@@ -87,7 +87,10 @@ export default class Transactions extends Component {
   }
 
   hasNotification(transaction_id) {
-    const summary = this.props.data.notifications.summary
+    const data = this.props.data
+    if (!data.notifications)
+      return false
+    const summary = data.notifications.summary
     return summary.transaction_ids.indexOf(transaction_id) > -1
   }
 

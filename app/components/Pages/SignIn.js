@@ -31,11 +31,15 @@ export default class SignIn extends Component {
 
   componentDidUpdate() {
     // If sign in successful, redirect
-    const user = this.props.data.user
+    const data = this.props.data
+    const user = data.user
     if (user) {
       const socket = io(config.socket.server)
       socket.emit('Room.UserOnline', user.id)
-      this.props.history.pushState(null, '/dashboard/recents')
+      let redirect_to = '/dashboard/recents'
+      if (data.location.query && data.location.query.redirect_to)
+        redirect_to = data.location.query.redirect_to
+      this.props.history.pushState(null, redirect_to)
     }
   }
 

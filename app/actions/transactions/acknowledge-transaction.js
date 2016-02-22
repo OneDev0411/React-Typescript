@@ -3,6 +3,8 @@ import Transaction from '../../models/Transaction'
 import AppStore from '../../stores/AppStore'
 
 export default (user, transaction) => {
+  if (!AppStore.data.notifications)
+    return false
   const summary = AppStore.data.notifications.summary
   summary.transaction_notification_count--
   summary.transactions_ids = summary.transaction_ids.splice(transaction, 1)
