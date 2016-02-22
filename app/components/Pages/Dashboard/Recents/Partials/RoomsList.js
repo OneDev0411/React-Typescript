@@ -89,16 +89,19 @@ export default class RoomsList extends Component {
         // Time posted
         const latest_created = room.latest_message.created_at.toString().split('.')
         const time_created = helpers.friendlyDate(latest_created[0])
+        let author_name
+        if (room.latest_message.author)
+          author_name = `${room.latest_message.author.first_name} ${room.latest_message.author.last_name}: `
         let comment
         if (room.latest_message.comment) {
           comment = (
-            <div style={ S('color-808080') }>{ room.latest_message.comment.substring(0, 50) }{ room.latest_message.comment.length > 50 ? '...' : '' }</div>
+            <div style={ S('color-808080') }>{ author_name }{ room.latest_message.comment.substring(0, 50) }{ room.latest_message.comment.length > 50 ? '...' : '' }</div>
           )
         }
 
         if (room.latest_message.image_url) {
           comment = (
-            <div style={ S('color-808080') }>Uploaded a file</div>
+            <div style={ S('color-808080') }>{ author_name }Uploaded a file</div>
           )
         }
 
