@@ -15,7 +15,7 @@ export default class MainContent extends Component {
 
   componentDidUpdate() {
     const data = this.props.data
-    if (this.refs.message_input && !data.show_contacts_modal)
+    if (this.refs.message_input && !data.show_contacts_modal && !data.is_filtering)
       this.refs.message_input.focus()
   }
 
