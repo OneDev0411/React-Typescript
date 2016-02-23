@@ -1,7 +1,9 @@
 // Dashboard/Index.js
 import React, { Component } from 'react'
 import Avatar from 'react-avatar'
+import S from 'shorti'
 import helpers from '../../../../../../utils/helpers'
+import Loading from '../../../../../Partials/Loading'
 
 if (process.env.WEBPACK_PROCESS === 'build')
   require('../../../../../../src/sass/components/pages/agent-report.scss')
@@ -11,6 +13,7 @@ export default class Dashboard extends Component {
     super(props)
 
     this.state = {
+      searching:false,
       rows: [],
       sort: {
         column: 'name',
@@ -20,7 +23,8 @@ export default class Dashboard extends Component {
   }
 
   componentWillReceiveProps(props) {
-    this.setRows(props.data.agent_report || [])
+    this.state.searching = props.data.agent_report.searching
+    this.setRows(props.data.agent_report.agents)
   }
 
   setRows(rows) {
@@ -59,6 +63,10 @@ export default class Dashboard extends Component {
   }
 
   sort(column) {
+    if (this.state.rows.length < 1)
+      return ; //Dont even bother when there is nothing to sort.
+
+    this.setState({searching: true})
     const direction = this.state.sort.direction === 'ASC' ? 'DESC' : 'ASC'
 
     const comparer = (a, b) => {
@@ -70,6 +78,7 @@ export default class Dashboard extends Component {
 
     this.setState({
       rows: this.state.rows.sort(comparer),
+      searching: false,
       sort: {
         column,
         direction
@@ -93,6 +102,20 @@ export default class Dashboard extends Component {
   }
 
   render() {
+    if (this.state.searching) {
+      const s = {
+        ...S('pl-25p m-0'),
+        ...{
+          display: 'inline-block'
+        }
+      }
+      return (
+        <div style={ s }>
+          <Loading />
+        </div>
+      )
+    }
+
     const rows = this.state.rows
 
     const headerStyle = {
@@ -104,16 +127,12 @@ export default class Dashboard extends Component {
       background: '#F5F5F6'
     }
 
-    const containerStyle = {
-      overflow: 'scroll',
-      height: '100vh'
-    }
 
     return (
-      <div style={ containerStyle }>
+      <div>
         <div id="header" style={ headerStyle }>
           <div id="arrow"></div>
-          &nbsp; { rows.length } Agent Matches
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { rows.length } Agent Matches
         </div>
         <table>
           <thead>

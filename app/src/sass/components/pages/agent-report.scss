@@ -1,4 +1,7 @@
 #agents {
+  overflow-x: scroll;
+  min-width:1800px;
+
   #header {
     min-width: 1200px;
     max-width: 2000px;
@@ -23,7 +26,7 @@
     height: 30px;
     transform: rotate(45deg);
     position: absolute;
-    margin-left: -35px;
+    margin-left: 455px;
     background: #F5F5F6;
     z-index: 1;
   }
