@@ -91,6 +91,17 @@ export default class Contacts extends Component {
     const user = data.user
     AppStore.data.saving_contact = true
     AppStore.emitChange()
+    const contact = data.current_contact
+    AppDispatcher.dispatch({
+      action: 'edit-contact',
+      user,
+      contact,
+      module_type: 'contacts'
+    })
+  }
+
+  handleInputChange() {
+    const data = this.props.data
     const first_name = this.refs.first_name.refs.input.value
     const last_name = this.refs.last_name.refs.input.value
     const email = this.refs.email.refs.input.value
@@ -102,12 +113,12 @@ export default class Contacts extends Component {
       email,
       phone_number
     }
-    AppDispatcher.dispatch({
-      action: 'edit-contact',
-      user,
-      contact,
-      module_type: 'contacts'
-    })
+    const current_contact = {
+      ...data.current_contact,
+      ...contact
+    }
+    AppStore.data.current_contact = current_contact
+    AppStore.emitChange()
   }
 
   render() {
@@ -162,13 +173,13 @@ export default class Contacts extends Component {
           <div style={ S('ml-80 relative w-300') }>
             <form onSubmit={ this.handleContactSubmit.bind(this) }>
               <label>First name</label>
-              <Input ref="first_name" type="text" defaultValue={ contact.first_name }/>
+              <Input ref="first_name" type="text" value={ contact.first_name } onChange={ this.handleInputChange.bind(this) }/>
               <label>Last name</label>
-              <Input ref="last_name" type="text" defaultValue={ contact.last_name }/>
+              <Input ref="last_name" type="text" value={ contact.last_name } onChange={ this.handleInputChange.bind(this) }/>
               <label>Email</label>
-              <Input ref="email" type="text" defaultValue={ contact.email }/>
+              <Input ref="email" type="text" value={ contact.email } onChange={ this.handleInputChange.bind(this) }/>
               <label>Phone number</label>
-              <Input ref="phone_number" type="text" defaultValue={ contact.phone_number }/>
+              <Input ref="phone_number" type="text" value={ contact.phone_number } onChange={ this.handleInputChange.bind(this) }/>
               <Button style={ S('pl-30 pr-30 pull-right') } type="submit" className={ data.saving_contact ? 'disabled' : '' } bsStyle="primary">
                 { data.saving_contact ? 'Saving...' : 'Save' }
               </Button>
