@@ -33,17 +33,17 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then((response) => {
+    .then(response => {
       if (response.status >= 400) {
         let error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
       return response.json()
     })
-    .then((response) => {
+    .then(response => {
       return callback(false, response)
     })
   }

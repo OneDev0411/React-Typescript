@@ -24,17 +24,17 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then((response) => {
+    .then(response => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
       return response.json()
     })
-    .then((response) => {
+    .then(response => {
       return callback(false, response)
     })
   },
@@ -53,17 +53,17 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then((response) => {
+    .then(response => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
       return response.json()
     })
-    .then((response) => {
+    .then(response => {
       return callback(false, response)
     })
   },
@@ -76,7 +76,7 @@ export default {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
@@ -105,7 +105,7 @@ export default {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
@@ -134,7 +134,7 @@ export default {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
@@ -163,7 +163,7 @@ export default {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
@@ -192,7 +192,7 @@ export default {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
@@ -221,7 +221,7 @@ export default {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
@@ -250,7 +250,7 @@ export default {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
@@ -278,7 +278,7 @@ export default {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }

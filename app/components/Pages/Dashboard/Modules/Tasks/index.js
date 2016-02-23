@@ -440,7 +440,7 @@ export default class TasksModule extends Component {
       AppStore.data.contacts_added['share-task'] = []
     if (!_.find(AppStore.data.contacts_added['share-task'], { id: contact.id }))
       AppStore.data.contacts_added['share-task'].push(contact)
-    AppStore.data.new_task = true
+    AppStore.data.new_task = {}
     AppStore.emitChange()
     this.addContactsToTask()
   }
