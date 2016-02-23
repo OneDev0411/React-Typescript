@@ -1,6 +1,5 @@
 // Dashboard/Index.js
 import React, { Component } from 'react'
-import S from 'shorti'
 
 // Partials
 import SideBar from '../../Partials/SideBar'
@@ -12,8 +11,9 @@ export default class Dashboard extends Component {
   render() {
     // Data
     const data = this.props.data
+
     return (
-      <div style={ S('minw-1000') }>
+      <div id="agents">
         <main>
           <SideBar data={ data }/>
           <FilterBar data={ data }/>

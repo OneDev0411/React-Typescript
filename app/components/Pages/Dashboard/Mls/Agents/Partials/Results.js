@@ -1,6 +1,7 @@
 // Dashboard/Index.js
 import React, { Component } from 'react'
 import Avatar from 'react-avatar'
+import helpers from '../../../../../../utils/helpers'
 
 if (process.env.WEBPACK_PROCESS === 'build')
   require('../../../../../../src/sass/components/pages/agent-report.scss')
@@ -12,8 +13,8 @@ export default class Dashboard extends Component {
     this.state = {
       rows: [],
       sort: {
-        column: null,
-        direction: null
+        column: 'name',
+        direction: 'DESC'
       }
     }
   }
@@ -53,7 +54,8 @@ export default class Dashboard extends Component {
     }
 
     const transformed = rows.map(transform)
-    this.setState({ rows: transformed })
+    this.state.rows = transformed
+    this.sort(this.state.sort.column)
   }
 
   sort(column) {
@@ -93,13 +95,31 @@ export default class Dashboard extends Component {
   render() {
     const rows = this.state.rows
 
+    const headerStyle = {
+      backgroundColor: '#F5F5F6',
+      padding: '20px',
+      fontSize: '20px',
+      fontWeight: 'bold',
+      borderBottom: '1px solid #e7e4e3',
+      background: '#F5F5F6'
+    }
+
+    const containerStyle = {
+      overflow: 'scroll',
+      height: '100vh'
+    }
+
     return (
-      <div>
-        <table id="agents" border="1" width="70%">
+      <div style={ containerStyle }>
+        <div id="header" style={ headerStyle }>
+          <div id="arrow"></div>
+          &nbsp; { rows.length } Agent Matches
+        </div>
+        <table>
           <thead>
             <tr>
-              <th>
-                Agent
+              <th onClick={this.sort.bind(this, 'name')}>
+                Agent {this.sortIcon('name')}
               </th>
 
               <th onClick={this.sort.bind(this, 'listed_volume')}>
@@ -140,40 +160,41 @@ export default class Dashboard extends Component {
               <tr>
                 <td>
                     <Avatar name={agent.name} email={agent.email} size={28} round color="#DDDFE0" fgCol="#ffffff" />
-                    &nbsp;
-                    {agent.name}
+                    <span>
+                      {agent.name}
+                    </span>
                 </td>
 
                 <td>
-                  {agent.listed_volume}
+                  {helpers.numberWithCommas(agent.listed_volume)}
                 </td>
 
                 <td>
-                  {agent.listed_value}
+                  ${helpers.numberWithCommas(agent.listed_value)}
                 </td>
 
                 <td>
-                  {agent.selling_volume}
+                  {helpers.numberWithCommas(agent.selling_volume)}
                 </td>
 
                 <td>
-                  {agent.selling_value}
+                  ${helpers.numberWithCommas(agent.selling_value)}
                 </td>
 
                 <td>
-                  {agent.active_volume}
+                  {helpers.numberWithCommas(agent.active_volume)}
                 </td>
 
                 <td>
-                  {agent.active_value}
+                  ${helpers.numberWithCommas(agent.active_value)}
                 </td>
 
                 <td>
-                  {agent.total_active_volume}
+                  {helpers.numberWithCommas(agent.total_active_volume)}
                 </td>
 
                 <td>
-                  {agent.total_active_value}
+                  ${helpers.numberWithCommas(agent.total_active_value)}
                 </td>
               </tr>
             ))}

@@ -60,7 +60,8 @@ export default class InputField extends React.Component {
       backgroundColor: 'white',
       border: '1px solid #eee',
       marginTop: '-50px',
-      marginLeft: '100px'
+      marginLeft: '100px',
+      zIndex: 2
     }
 
     return (
@@ -70,7 +71,7 @@ export default class InputField extends React.Component {
           ref="input"
           type="text"
           value={ this.state.value }
-          placeholder="like 'Sep 4, 2013'"
+          placeholder={ this.props.placeholder }
           onChange={ this.handleInputChange.bind(this) }
           onFocus={ this.handleFocus.bind(this) }
           onBlur={ this.handleBlur.bind(this) }
@@ -89,5 +90,4 @@ export default class InputField extends React.Component {
       </div>
     )
   }
-
 }

@@ -1,16 +1,67 @@
 #agents {
-  overflow: scroll;
-  overflow-wrap: inherit;
-  height: 800px;
+  #header {
+    min-width: 1200px;
+    max-width: 2000px;
+  }
+
+  #filters {
+    border-right: 1px solid #e7e4e3;
+    label {
+      font-size: 13px;
+    }
+  }
 
   table {
-    width: 2000px;
-    
-    th {
-      padding:30px;
-      color: #929292;
-      font-size: 14px;
-      font-family: "San Francisco";
+    min-width: 1200px;
+    max-width: 2000px;
+  }
+
+  #arrow {
+    border-top: 1px solid #e7e4e3;
+    border-right: 1px solid #e7e4e3;
+    width: 30px;
+    height: 30px;
+    transform: rotate(45deg);
+    position: absolute;
+    margin-left: -35px;
+    background: #F5F5F6;
+    z-index: 1;
+  }
+
+  th {
+    padding:15px;
+    color: #929292;
+    font-size: 14px;
+    font-family: "San Francisco";
+    cursor:pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:first-child {
+      border-left: none; /* FilterBar has a border already. Avoid two borders. */
+    }
+  }
+
+  td {
+    &:first-child { /* Agent name column needs to be bigger */
+      border-left: none; /* FilterBar has a border already. Avoid two borders. */
+      padding-left: 10px;
+      span {
+        padding-left: 10px;
+      }
+    }
+
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 30px;
+    border: 1px solid #e7e4e3;
+  }
+
+  tbody {
+    tr:hover {
+      background: #F5F5F6;
     }
   }
 }
