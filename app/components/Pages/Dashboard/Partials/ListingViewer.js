@@ -21,7 +21,7 @@ export default class ListingViewer extends Component {
     }
     this.fadeIn()
   }
-
+  // TODO
   // navCarousel(direction) {
   //   const data = this.props.data
   //   const current_listing = data.current_listing
@@ -86,7 +86,7 @@ export default class ListingViewer extends Component {
       price = helpers.numberWithCommas(listing.price)
       // property_type = property.property_type
       year_built = property.year_built
-      address = `${property.address.street_number} ${property.address.street_name} ${property.address.street_suffix}`
+      address = listing_util.addressTitle(property.address)
       // city = property.address.city
       // state = property.address.state
       // postal_code = property.address.postal_code
@@ -99,16 +99,20 @@ export default class ListingViewer extends Component {
       prev_icon = '<'
       next_icon = '>'
       description = property.description
-      const gallery_chunks = _.chunk(listing.gallery_image_urls, 3)
+      const gallery_image_urls = [
+        listing.cover_image_url,
+        ...listing.gallery_image_urls
+      ]
+      const gallery_chunks = _.chunk(gallery_image_urls, 3)
       listing_images = (
         <Carousel className="listing-viewer__carousel" interval={0} indicators={false} prevIcon={ prev_icon } nextIcon={ next_icon }>
           {
-            gallery_chunks.map(gallery_image_url => {
+            gallery_chunks.map((gallery_image_url, i) => {
               return (
-                <CarouselItem key={ 'gallery-image-' + gallery_image_url[0] }>
-                  <div style={ S('w-' + (window.innerWidth / 3) + ' h-400 pull-left bg-cover bg-center bg-url(' + gallery_image_url[0] + ')') }></div>
-                  <div style={ S('w-' + (window.innerWidth / 3) + ' h-400 pull-left bg-cover bg-center bg-url(' + gallery_image_url[1] + ')') }></div>
-                  <div style={ S('w-' + (window.innerWidth / 3) + ' h-400 pull-left bg-cover bg-center bg-url(' + gallery_image_url[2] + ')') }></div>
+                <CarouselItem key={ 'gallery-image-' + gallery_image_url[0] + i }>
+                  <div style={ S('w-' + (window.innerWidth / 3) + ' h-400 pull-left text-center bg-efefef') }><img src={ gallery_image_url[0] } style={ S('h-100p center-block') } /></div>
+                  <div style={ S('w-' + (window.innerWidth / 3) + ' h-400 pull-left text-center bg-efefef') }><img src={ gallery_image_url[1] } style={ S('h-100p center-block') } /></div>
+                  <div style={ S('w-' + (window.innerWidth / 3) + ' h-400 pull-left text-center bg-efefef') }><img src={ gallery_image_url[2] } style={ S('h-100p center-block') } /></div>
                 </CarouselItem>
               )
             })

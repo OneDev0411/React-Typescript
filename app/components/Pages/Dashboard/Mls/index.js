@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import S from 'shorti'
 import GoogleMap from 'google-map-react'
 import listing_util from '../../../../utils/listing'
-
+import { Button } from 'react-bootstrap'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 
 import AppStore from '../../../../stores/AppStore'
@@ -12,7 +12,6 @@ import AppStore from '../../../../stores/AppStore'
 import SideBar from '../Partials/SideBar'
 // import Loading from '../../../Partials/Loading'
 import ListingViewer from '../Partials/ListingViewer'
-
 
 export default class Mls extends Component {
 
@@ -138,6 +137,14 @@ export default class Mls extends Component {
     })
   }
 
+  toggleListingPanel() {
+    if (!AppStore.data.show_listing_panel)
+      AppStore.data.show_listing_panel = true
+    else
+      delete AppStore.data.show_listing_panel
+    AppStore.emitChange()
+  }
+
   render() {
     const data = this.props.data
     const listing_map = data.listing_map
@@ -148,6 +155,7 @@ export default class Mls extends Component {
     }
     let map_listing_markers
     let loading
+    let listing_panel
     if (listing_map && listing_map.listings) {
       const listings = listing_map.listings
       map_listing_markers = listings.map(listing => {
@@ -167,6 +175,59 @@ export default class Mls extends Component {
           </div>
         )
       })
+      // Listing panel
+      const listing_panel_items = listings.map(listing => {
+        const status_color = listing_util.getStatusColor(listing.status)
+        let price_small = Math.floor(listing.price / 1000).toFixed(2).replace(/[.,]00$/, '')
+        let letter = 'K'
+        if (price_small > 1000) {
+          price_small = (price_small / 1000).toFixed(2).replace(/[.,]00$/, '')
+          letter = 'M'
+        }
+        let listing_image = <div style={ S('w-200 bg-efefef h-100') }/>
+        if (listing.cover_image_url)
+          listing_image = <div style={ S('w-200 h-130 bg-url(' + listing.cover_image_url + ') bg-cover bg-center') } />
+        return (
+          <li key={ 'panel-listing-' + listing.id } onClick={ this.showListingViewer.bind(this, listing) } style={ S('pointer w-400 h-200 bg-fff') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
+            <div>
+              { listing_image }
+            </div>
+            <div style={ S('p-10') }>
+              <div style={ S('bg-' + status_color) }></div>
+              <div>{ listing_util.addressTitle(listing.address) }</div>
+              <div>${ price_small }{ letter }</div>
+            </div>
+          </li>
+        )
+      })
+      // Listing panel
+      const listing_panel_wrap_style = S('absolute t-0 r-0 w-200 h-' + window.innerHeight)
+      const listing_panel_style = {
+        ...S('absolute t-0 w-200 h-' + window.innerHeight),
+        overflowY: 'scroll'
+      }
+      let panel_class = 'listing-panel'
+      let button_class = 'listing-panel__button'
+      let listing_panel_icon = <i className="fa fa-list"></i>
+      if (data.show_listing_panel) {
+        panel_class = panel_class + ' active'
+        button_class = button_class + ' active'
+        listing_panel_icon = (
+          <i className="fa fa-times"></i>
+        )
+      }
+      listing_panel = (
+        <div style={ listing_panel_wrap_style }>
+          <Button onClick={ this.toggleListingPanel.bind(this) } className={ button_class } bsStyle="primary" style={ S('absolute br-100 z-100') }>
+            { listing_panel_icon }
+          </Button>
+          <div style={ listing_panel_style } className={ panel_class }>
+            <ul style={ S('m-0 p-0') }>
+              { listing_panel_items }
+            </ul>
+          </div>
+        </div>
+      )
     }
     if (listing_map && listing_map.is_loading) {
       loading = (
@@ -174,9 +235,6 @@ export default class Mls extends Component {
           <div style={ S('bg-3388ff br-20 color-fff w-190 h-29 pt-5 center-block text-center') }>Loading MLS&reg; Listings...</div>
         </div>
       )
-    }
-    const map_options = {
-      mapTypeControl: true
     }
     let listing_viewer
     if (data.show_listing_viewer) {
@@ -198,12 +256,13 @@ export default class Mls extends Component {
               defaultCenter={ center }
               defaultZoom={ 13 }
               onBoundsChange={ this.handleBoundsChange.bind(this) }
-              options={ map_options }
+              options={ { mapTypeControl: true } }
             >
             { map_listing_markers }
             </GoogleMap>
           </div>
           { listing_viewer }
+          { listing_panel }
         </main>
       </div>
     )
