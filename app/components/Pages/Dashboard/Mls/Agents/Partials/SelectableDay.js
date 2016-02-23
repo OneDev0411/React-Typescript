@@ -91,3 +91,8 @@ export default class InputField extends React.Component {
     )
   }
 }
+
+// PropTypes
+InputField.propTypes = {
+  placeholder: React.PropTypes.string
+}

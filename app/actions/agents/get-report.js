@@ -5,10 +5,10 @@ import AppStore from '../../stores/AppStore'
 export default (user, criteria) => {
   AppStore.data.agent_report = {
     searching: true,
-    agents:[]
+    agents: []
   }
   AppStore.emitChange()
-  
+
   const params = {
     access_token: user.access_token,
     criteria

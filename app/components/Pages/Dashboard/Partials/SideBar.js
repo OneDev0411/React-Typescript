@@ -202,8 +202,8 @@ export default class SideBar extends Component {
       agents = (
         <LinkContainer className={ active.agents } to="/dashboard/mls/agents">
           <NavItem style={ S('w-85p') }>
-            <i className="fa fa-tasks"> </i>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Agents
+            <i className="fa fa-group"> </i>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recruitment
           </NavItem>
         </LinkContainer>
       )
@@ -317,8 +317,6 @@ export default class SideBar extends Component {
               &nbsp;&nbsp;&nbsp;&nbsp;Search
             </NavItem>
           </LinkContainer>
-          { recommend }
-          { agents }
           <LinkContainer className={ active.contacts } to="/dashboard/contacts">
             <NavItem style={ S('w-85p') }>
               <img src={ active.contacts ? '/images/dashboard/icons/sidenav/people-active.svg' : '/images/dashboard/icons/sidenav/people.svg' } style={ S('w-19 h-19') }/>
@@ -339,6 +337,8 @@ export default class SideBar extends Component {
               {this.notificationIcon('transaction_notification_count')}
             </NavItem>
           </LinkContainer>
+          { recommend }
+          { agents }
         </Nav>
         <div style={ S('absolute b-20 l-20') }>
           <Nav>

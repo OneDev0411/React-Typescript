@@ -13,7 +13,7 @@ export default class Dashboard extends Component {
     super(props)
 
     this.state = {
-      searching:false,
+      searching: false,
       rows: [],
       sort: {
         column: 'name',
@@ -63,10 +63,6 @@ export default class Dashboard extends Component {
   }
 
   sort(column) {
-    if (this.state.rows.length < 1)
-      return ; //Dont even bother when there is nothing to sort.
-
-    this.setState({searching: true})
     const direction = this.state.sort.direction === 'ASC' ? 'DESC' : 'ASC'
 
     const comparer = (a, b) => {
