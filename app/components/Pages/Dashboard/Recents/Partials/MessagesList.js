@@ -199,7 +199,7 @@ export default class MessagesList extends Component {
             message={ message }
             showFileViewer={ this.props.showFileViewer }
             new_date={ new_date }
-            showListingModal={ this.props.showListingModal }
+            showListingViewer={ this.props.showListingViewer }
           />
         </li>
       )
@@ -352,6 +352,6 @@ MessagesList.propTypes = {
   showFileViewer: React.PropTypes.func,
   setHeadingDate: React.PropTypes.func,
   removeScrollBottom: React.PropTypes.func,
-  showListingModal: React.PropTypes.func,
+  showListingViewer: React.PropTypes.func,
   changeListingNotification: React.PropTypes.func
 }

@@ -11,7 +11,7 @@ export default (user, id) => {
     // Success
     if (response.status === 'success') {
       AppStore.data.current_listing = response.data
-      AppStore.data.show_listing_modal = true
+      AppStore.data.show_listing_viewer = true
     }
     AppStore.emitChange()
   })

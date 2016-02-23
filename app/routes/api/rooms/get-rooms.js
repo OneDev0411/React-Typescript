@@ -4,9 +4,7 @@ module.exports = (app, config) => {
     const api_url = config.api.url
     const limit = 100
     const get_rooms_url = api_url + '/rooms?limit=' + limit
-
     const access_token = req.query.access_token
-
     fetch(get_rooms_url,{
       method: 'get',
       headers: {

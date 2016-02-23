@@ -16,7 +16,7 @@ module.exports = (app, config) => {
       if (response.status >= 400) {
         let error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return res.json(error)
       }

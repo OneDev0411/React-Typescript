@@ -11,7 +11,7 @@ import AppStore from '../../../../stores/AppStore'
 // Partials
 import SideBar from '../Partials/SideBar'
 // import Loading from '../../../Partials/Loading'
-import ListingModal from '../Partials/ListingModal'
+import ListingViewer from '../Partials/ListingViewer'
 
 
 export default class Mls extends Component {
@@ -79,10 +79,10 @@ export default class Mls extends Component {
     })
   }
 
-  showListingModal(listing) {
+  showListingViewer(listing) {
     const data = this.props.data
     const user = data.user
-    AppStore.data.show_listing_modal = true
+    AppStore.data.show_listing_viewer = true
     AppStore.data.current_listing = listing
     AppStore.emitChange()
     ListingDispatcher.dispatch({
@@ -93,7 +93,7 @@ export default class Mls extends Component {
   }
 
   hideModal() {
-    delete AppStore.data.show_listing_modal
+    delete AppStore.data.show_listing_viewer
     delete AppStore.data.current_listing
     AppStore.emitChange()
   }
@@ -159,7 +159,7 @@ export default class Mls extends Component {
           letter = 'M'
         }
         return (
-          <div key={ 'map-listing-' + listing.id } onClick={ this.showListingModal.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
+          <div key={ 'map-listing-' + listing.id } onClick={ this.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
             <div className="map__listing-marker" style={ S('relative bg-fff w-70 h-25') }>
               <div style={ S('absolute l-6 t-8 w-10 h-10 br-100 bg-' + status_color) }></div>
               <div style={ S('absolute r-10 t-6') }>${ price_small }{ letter }</div>
@@ -178,6 +178,16 @@ export default class Mls extends Component {
     const map_options = {
       mapTypeControl: true
     }
+    let listing_viewer
+    if (data.show_listing_viewer) {
+      listing_viewer = (
+        <ListingViewer
+          data={ data }
+          listing={ data.current_listing }
+          hideModal={ this.hideModal }
+        />
+      )
+    }
     return (
       <div style={ S('minw-1000') }>
         <main>
@@ -193,11 +203,7 @@ export default class Mls extends Component {
             { map_listing_markers }
             </GoogleMap>
           </div>
-          <ListingModal
-            data={ data }
-            listing={ data.current_listing }
-            hideModal={ this.hideModal }
-          />
+          { listing_viewer }
         </main>
       </div>
     )
