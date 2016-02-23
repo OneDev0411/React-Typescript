@@ -55,7 +55,10 @@ export default class MessagesList extends Component {
 
   roomHasNotifications(room_id) {
     let result = false
-    const summaries = this.props.data.notifications.summary.room_notification_summaries
+    const data = this.props.data
+    if (!data.notifications)
+      return false
+    const summaries = data.notifications.summary.room_notification_summaries
     if (!summaries)
       return false
     summaries.forEach(summary => {

@@ -26,7 +26,10 @@ export default class RoomsList extends Component {
 
   roomHasNotifications(room_id) {
     let result = false
-    const summaries = this.props.data.notifications.summary.room_notification_summaries
+    const data = this.props.data
+    if (!data.notifications)
+      return false
+    const summaries = data.notifications.summary.room_notification_summaries
     if (!summaries)
       return false
     summaries.forEach(summary => {
@@ -89,25 +92,31 @@ export default class RoomsList extends Component {
         // Time posted
         const latest_created = room.latest_message.created_at.toString().split('.')
         const time_created = helpers.friendlyDate(latest_created[0])
+        let author_name
+        if (room.latest_message.author)
+          author_name = `${room.latest_message.author.first_name} ${room.latest_message.author.last_name}: `
         let comment
         if (room.latest_message.comment) {
           comment = (
-            <div style={ S('color-808080') }>{ room.latest_message.comment.substring(0, 50) }{ room.latest_message.comment.length > 50 ? '...' : '' }</div>
+            <div style={ S('color-808080') }>{ author_name }{ room.latest_message.comment.substring(0, 50) }{ room.latest_message.comment.length > 50 ? '...' : '' }</div>
           )
         }
 
         if (room.latest_message.image_url) {
           comment = (
-            <div style={ S('color-808080') }>Uploaded a file</div>
+            <div style={ S('color-808080') }>{ author_name }Uploaded a file</div>
           )
         }
 
-        const hasNotification = this.roomHasNotifications(room.id)
+        // Notifications
         let notification
-        if (hasNotification) {
-          notification = (
-            <i className="fa fa-circle" style={ S('font-8 color-3388FF absolute r-15n') }></i>
-          )
+        if (data.notifications) {
+          const hasNotification = this.roomHasNotifications(room.id)
+          if (hasNotification) {
+            notification = (
+              <i className="fa fa-circle" style={ S('font-8 color-3388FF absolute r-15n') }></i>
+            )
+          }
         }
 
         return (

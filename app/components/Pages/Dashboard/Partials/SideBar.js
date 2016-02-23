@@ -166,7 +166,7 @@ export default class SideBar extends Component {
     if (path === '/dashboard/mls')
       active.mls = 'active'
 
-    if (path === '/dashboard/contacts')
+    if (path.indexOf('/dashboard/contacts') !== -1)
       active.contacts = 'active'
 
     if (path === '/dashboard/tasks')

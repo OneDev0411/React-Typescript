@@ -1,4 +1,4 @@
-// Dashboard/Tasks/index.js
+// Dashboard/TasksList/index.js
 import React, { Component } from 'react'
 import S from 'shorti'
 import { Button } from 'react-bootstrap'
@@ -10,7 +10,7 @@ import CheckBox from './CheckBox'
 // Helpers
 import helpers from '../../../../../../utils/helpers'
 
-export default class Tasks extends Component {
+export default class TasksList extends Component {
 
   render() {
     const data = this.props.data
@@ -108,8 +108,18 @@ export default class Tasks extends Component {
         )
       })
     }
+    let list_wrap_style = {
+      ...S('pr-15'),
+      overflowY: 'scroll'
+    }
+    if (module_type === 'tasks') {
+      list_wrap_style = {
+        ...list_wrap_style,
+        height: window.innerHeight - 210
+      }
+    }
     return (
-      <div style={ S('pr-15') }>
+      <div style={ list_wrap_style }>
        { tasks_list }
       </div>
     )
@@ -117,7 +127,7 @@ export default class Tasks extends Component {
 }
 
 // PropTypes
-Tasks.propTypes = {
+TasksList.propTypes = {
   data: React.PropTypes.object,
   editTaskStatus: React.PropTypes.func,
   deleteTask: React.PropTypes.func,
