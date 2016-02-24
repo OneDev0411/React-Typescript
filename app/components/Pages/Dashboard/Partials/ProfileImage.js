@@ -18,10 +18,10 @@ export default class ProfileImage extends Component {
       top = this.props.top
     if (!profile_image_url) {
       background = 'bg-dddfe0'
-      let first_initial
+      let first_initial = ''
       if (user.first_name)
         first_initial = user.first_name.substring(0, 1).toUpperCase()
-      let last_initial
+      let last_initial = ''
       if (user.last_name)
         last_initial = user.last_name.substring(0, 1).toUpperCase()
       initials = (

@@ -97,7 +97,7 @@ export default class Mls extends Component {
     delete AppStore.data.show_listing_viewer
     delete AppStore.data.current_listing
     const history = require('../../../../utils/history')
-    history.replaceState(null, '/dashboard/mls/')
+    history.replaceState(null, '/dashboard/mls')
     AppStore.emitChange()
   }
 
