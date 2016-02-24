@@ -152,7 +152,7 @@ export default class Mls extends Component {
   render() {
     const data = this.props.data
     const listing_map = data.listing_map
-    const main_style = S('absolute h-100p l-183 r-0')
+    const main_style = S('absolute h-100p l-183')
     const center = {
       lat: 32.7767,
       lng: -96.7970
@@ -188,11 +188,11 @@ export default class Mls extends Component {
           price_small = (price_small / 1000).toFixed(2).replace(/[.,]00$/, '')
           letter = 'M'
         }
-        let listing_image = <div style={ S('w-200 bg-efefef h-100') }/>
+        let listing_image = <div style={ S('w-500 bg-efefef h-200') }/>
         if (listing.cover_image_url)
-          listing_image = <div style={ S('w-200 h-130 bg-url(' + listing.cover_image_url + ') bg-cover bg-center') } />
+          listing_image = <div style={ S('w-500 h-200 bg-url(' + listing.cover_image_url + ') bg-cover bg-center') } />
         return (
-          <li key={ 'panel-listing-' + listing.id } onClick={ this.showListingViewer.bind(this, listing) } style={ S('pointer w-400 h-200 bg-fff') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
+          <li key={ 'panel-listing-' + listing.id } onClick={ this.showListingViewer.bind(this, listing) } style={ S('pointer w-400 h-300 bg-fff') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
             <div>
               { listing_image }
             </div>
@@ -212,8 +212,11 @@ export default class Mls extends Component {
       })
       // Listing panel
       const listing_panel_wrap_style = S('absolute t-0 r-0 w-0 h-0')
-      const listing_panel_style = {
-        ...S('absolute t-0 w-200 h-' + window.innerHeight),
+      const listing_panel_style = S('absolute t-0 w-500 h-' + window.innerHeight)
+      const listing_scroll_style = {
+        ...listing_panel_style,
+        top: '100px',
+        height: window.innerHeight - 100,
         overflowY: 'scroll'
       }
       let panel_class = 'listing-panel'
@@ -232,9 +235,14 @@ export default class Mls extends Component {
             { listing_panel_icon }
           </Button>
           <div style={ listing_panel_style } className={ panel_class }>
-            <ul style={ S('m-0 p-0') }>
-              { listing_panel_items }
-            </ul>
+            <div style={ S('p-15') }>
+              <div style={ S('color-444 font-24') }>{ listings.length } Homes Found</div>
+            </div>
+            <div style={ listing_scroll_style }>
+              <ul style={ S('m-0 p-0') }>
+                { listing_panel_items }
+              </ul>
+            </div>
           </div>
         </div>
       )
@@ -256,11 +264,14 @@ export default class Mls extends Component {
         />
       )
     }
+    let main_class = 'listing-map'
+    if (data.show_listing_panel)
+      main_class = main_class + ' active'
     return (
       <div style={ S('minw-1000') }>
         <main>
           <SideBar data={ data }/>
-          <div style={ main_style }>
+          <div className={ main_class } style={ main_style }>
             { loading }
             <GoogleMap
               defaultCenter={ center }
