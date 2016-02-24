@@ -65,7 +65,14 @@ export default class MainContent extends Component {
     const text_input = this.refs.task_title.refs.input
     const task_title = text_input.value
     const search_arr = task_title.split('@')
-    text_input.value = `${search_arr[0]}${contact.first_name} ${contact.last_name} `
+    let contact_name = `${contact.email}`
+    if (contact.first_name && !contact.last_name)
+      contact_name = `${contact.first_name}`
+    if (!contact.first_name && contact.last_name)
+      contact_name = `${contact.last_name}`
+    if (contact.first_name && contact.last_name)
+      contact_name = `${contact.first_name} ${contact.last_name}`
+    text_input.value = `${search_arr[0]}${contact_name} `
     this.props.addContactFromSearch(contact)
     setTimeout(() => {
       this.refs.task_title.refs.input.focus()
@@ -163,7 +170,7 @@ export default class MainContent extends Component {
       share_new_task_area = new_task_contacts.map((contact, i) => {
         return (
           <span style={ S('mr-10') } key={ 'share-new-' + contact.id }>
-            { contact.first_name }{ i !== new_task_contacts.length - 1 ? ',' : ''}
+            { contact.first_name ? contact.first_name : contact.email }{ i !== new_task_contacts.length - 1 ? ',' : ''}
           </span>
         )
       })

@@ -159,12 +159,18 @@ export default class TasksModule extends Component {
     const data = this.props.data
     const contacts = data.contacts
     const contacts_filtered = contacts.filter(contact => {
-      const first_name = contact.first_name.toLowerCase()
-      const email = contact.email.toLowerCase()
-      if (first_name.search(search_text.toLowerCase()) !== -1)
-        return true
-      if (email.search(search_text.toLowerCase()) !== -1)
-        return true
+      let first_name
+      let email
+      if (contact.first_name) {
+        first_name = contact.first_name.toLowerCase()
+        if (first_name.search(search_text.toLowerCase()) !== -1)
+          return true
+      }
+      if (contact.email) {
+        email = contact.email.toLowerCase()
+        if (email.search(search_text.toLowerCase()) !== -1)
+          return true
+      }
       return false
     })
     if (!AppStore.data.search_contacts)
