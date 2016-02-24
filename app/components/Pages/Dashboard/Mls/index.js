@@ -211,7 +211,7 @@ export default class Mls extends Component {
         )
       })
       // Listing panel
-      const listing_panel_wrap_style = S('absolute t-0 r-0 w-200 h-' + window.innerHeight)
+      const listing_panel_wrap_style = S('absolute t-0 r-0 w-0 h-0')
       const listing_panel_style = {
         ...S('absolute t-0 w-200 h-' + window.innerHeight),
         overflowY: 'scroll'
