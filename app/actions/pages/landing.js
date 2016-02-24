@@ -26,7 +26,7 @@ export default {
   },
 
   getText(animated_num) {
-    const animated_text = ['smarter', 'faster', 'more responsive', 'more knowledegable']
+    const animated_text = ['smarter', 'faster', 'more responsive', 'more knowledgeable']
     const current_text = animated_text[animated_num]
     return current_text
   },
