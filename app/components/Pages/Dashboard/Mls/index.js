@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import S from 'shorti'
 import GoogleMap from 'google-map-react'
 import listing_util from '../../../../utils/listing'
-import { Button } from 'react-bootstrap'
+import { ButtonGroup, Button } from 'react-bootstrap'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 
 import AppStore from '../../../../stores/AppStore'
@@ -236,7 +236,15 @@ export default class Mls extends Component {
           </Button>
           <div style={ listing_panel_style } className={ panel_class }>
             <div style={ S('p-15') }>
-              <div style={ S('color-444 font-24') }>{ listings.length } Homes Found</div>
+              <div className="tempo" style={ S('color-444 fw-100 font-24') }>{ listings.length } Homes Found</div>
+              <div>Sorting by <a href="#">Most Relevant</a></div>
+              <div>
+                <ButtonGroup>
+                  <Button>List</Button>
+                  <Button>Photos</Button>
+                  <Button>Map</Button>
+                </ButtonGroup>
+              </div>
             </div>
             <div style={ listing_scroll_style }>
               <ul style={ S('m-0 p-0') }>
