@@ -34,6 +34,7 @@ export default (
     <Route path="dashboard/recents" component={Recents}/>
     <Route path="dashboard/recents/:room_id" component={Recents}/>
     <Route path="dashboard/mls" component={Mls}/>
+    <Route path="dashboard/mls/:id" component={Mls}/>
     <Route path="dashboard/mls/listing/recommend" component={Recommend}/>
     <Route path="dashboard/contacts" component={Contacts}/>
     <Route path="dashboard/contacts/:id" component={Contacts}/>

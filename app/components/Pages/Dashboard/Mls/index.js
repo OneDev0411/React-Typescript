@@ -79,6 +79,8 @@ export default class Mls extends Component {
   }
 
   showListingViewer(listing) {
+    const history = require('../../../../utils/history')
+    history.replaceState(null, '/dashboard/mls/' + listing.id)
     const data = this.props.data
     const user = data.user
     AppStore.data.show_listing_viewer = true
@@ -94,6 +96,8 @@ export default class Mls extends Component {
   hideModal() {
     delete AppStore.data.show_listing_viewer
     delete AppStore.data.current_listing
+    const history = require('../../../../utils/history')
+    history.replaceState(null, '/dashboard/mls/')
     AppStore.emitChange()
   }
 
@@ -193,7 +197,13 @@ export default class Mls extends Component {
               { listing_image }
             </div>
             <div style={ S('p-10') }>
-              <div style={ S('bg-' + status_color) }></div>
+              <div>
+                <div className="pull-left" style={ S('w-10 h-10 br-100 mr-8 bg-' + status_color) }></div>
+                <div className="pull-left" style={ S('mt-4n') }>
+                  { listing.status }
+                </div>
+                <div className="clearfix"></div>
+              </div>
               <div>{ listing_util.addressTitle(listing.address) }</div>
               <div>${ price_small }{ letter }</div>
             </div>
@@ -218,7 +228,7 @@ export default class Mls extends Component {
       }
       listing_panel = (
         <div style={ listing_panel_wrap_style }>
-          <Button onClick={ this.toggleListingPanel.bind(this) } className={ button_class } bsStyle="primary" style={ S('absolute br-100 z-100') }>
+          <Button onClick={ this.toggleListingPanel.bind(this) } className={ button_class } bsStyle="primary" style={ S('absolute br-100 z-100 pt-8 pb-8 h-40 w-40') }>
             { listing_panel_icon }
           </Button>
           <div style={ listing_panel_style } className={ panel_class }>
