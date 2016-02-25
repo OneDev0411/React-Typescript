@@ -34,9 +34,9 @@ export default class Dashboard extends Component {
           email: agent.email
         },
         name: agent.first_name + ' ' + agent.last_name,
-        mlsid:agent.mlsid,
+        mlsid: agent.mlsid,
         office_name: agent.data.office_name,
-        experience:agent.data.agent_experience || agent.mlsid,
+        experience: agent.data.agent_experience || agent.mlsid,
         total_volume: normalize(agent.data.selling_volume) + normalize(agent.data.listed_volume),
         total_value: normalize(agent.data.selling_value) + normalize(agent.data.listed_value),
         listed_volume: normalize(agent.data.listed_volume),

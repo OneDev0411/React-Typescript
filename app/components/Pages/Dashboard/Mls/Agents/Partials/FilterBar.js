@@ -10,8 +10,6 @@ import AppDispatcher from '../../../../../../dispatcher/AppDispatcher'
 // AppStore
 import AppStore from '../../../../../../stores/AppStore'
 
-import SelectableDay from './SelectableDay'
-
 export default class Dashboard extends Component {
 
   handleSubmit(e) {
@@ -111,7 +109,7 @@ export default class Dashboard extends Component {
       criteria.total_active_value.max = this.refs.total_active_value_max.refs.input.value
     }
 
-    criteria.agent_experience = null;
+    criteria.agent_experience = null
     if (this.filterEnabled('total_active_value'))
       criteria.agent_experience = this.refs.agent_experience.refs.input.value
 
@@ -141,6 +139,37 @@ export default class Dashboard extends Component {
     AppStore.emitChange()
   }
 
+  years() {
+    const options = []
+    for (let i = 2008; i <= (new Date()).getFullYear(); i++) {
+      options.push((
+        <option>{i}</option>
+      ))
+    }
+
+    return options
+  }
+
+  months() {
+    const options = []
+    for (let i = 0; i <= 11; i++) {
+      options.push((
+        <option>{i}</option>
+      ))
+    }
+    return options
+  }
+
+  days() {
+    const options = []
+    for (let i = 1; i <= 31; i++) {
+      options.push((
+        <option>{i}</option>
+      ))
+    }
+    return options
+  }
+
   render() {
     const s = S('w-49p pull-left pl-5')
     return (
@@ -151,12 +180,17 @@ export default class Dashboard extends Component {
               Date range
             </label>
             <div>
-              <div style={ s }>
-                <SelectableDay ref="from" placeholder="From, like 'Sep 23, 2015'" />
-              </div>
-              <div style={ s }>
-                <SelectableDay ref="to" placeholder="To, like 'Jan 1, 2016'" />
-              </div>
+              <Input type="select" ref="from_year">
+                { this.years() }
+              </Input>
+
+              <Input type="select" ref="from_day">
+                { this.days() }
+              </Input>
+
+              <Input type="select" ref="from_month">
+                { this.months() }
+              </Input>
             </div>
           </div>
 
