@@ -189,7 +189,6 @@ export default class SideBar extends Component {
         <LinkContainer className={ active.recommend } to="/dashboard/mls/listing/recommend">
           <NavItem style={ S('w-85p') }>
             <i className="fa fa-tasks"> </i>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recommend
           </NavItem>
         </LinkContainer>
       )
@@ -201,7 +200,6 @@ export default class SideBar extends Component {
         <LinkContainer className={ active.agents } to="/dashboard/mls/agents">
           <NavItem style={ S('w-85p') }>
             <i className="fa fa-group"> </i>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recruit
           </NavItem>
         </LinkContainer>
       )

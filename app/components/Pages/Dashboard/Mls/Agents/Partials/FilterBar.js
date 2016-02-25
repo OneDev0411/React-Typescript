@@ -4,6 +4,8 @@ import S from 'shorti'
 import moment from 'moment'
 import { Input } from 'react-bootstrap'
 
+import SelectableDay from './SelectableDay'
+
 // AppDispatcher
 import AppDispatcher from '../../../../../../dispatcher/AppDispatcher'
 
@@ -173,24 +175,19 @@ export default class Dashboard extends Component {
   render() {
     const s = S('w-49p pull-left pl-5')
     return (
-      <div id="filters" style={ S('w-490 pl-190 pt-10 pull-left bg-F5F5F6 p-5') }>
+      <div id="filters" style={ S('w-370 pl-80 pt-10 pull-left bg-F5F5F6 p-5') }>
         <form onSubmit={this.handleSubmit.bind(this)}>
           <div>
             <label>
-              Date range
+              Date Range
             </label>
             <div>
-              <Input type="select" ref="from_year">
-                { this.years() }
-              </Input>
-
-              <Input type="select" ref="from_day">
-                { this.days() }
-              </Input>
-
-              <Input type="select" ref="from_month">
-                { this.months() }
-              </Input>
+              <div style={ s }>
+                <SelectableDay ref="from" placeholder="From, like 'Sep 23, 2015'" />
+              </div>
+              <div style={ s }>
+                <SelectableDay ref="to" placeholder="To, like 'Jan 1, 2016'" />
+              </div>
             </div>
           </div>
 
