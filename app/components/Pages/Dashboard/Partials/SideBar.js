@@ -317,7 +317,7 @@ export default class SideBar extends Component {
             </NavItem>
           </LinkContainer>
         </Nav>
-        <div style={ S('absolute b-20 l-20') }>
+        <div style={ S('absolute b-30 l-15') }>
           <Nav className="sidebar__account">
             <div style={ S('absolute z-0') }>
               <ProfileImage data={ data } user={ user } />
