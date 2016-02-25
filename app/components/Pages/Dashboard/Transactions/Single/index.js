@@ -400,7 +400,7 @@ export default class Transactions extends Component {
     }
 
     // Style
-    const main_style = S('absolute l-183 r-0')
+    const main_style = S('absolute l-70 r-0')
 
     return (
       <div style={ S('minw-1000') }>

@@ -152,7 +152,7 @@ export default class Mls extends Component {
   render() {
     const data = this.props.data
     const listing_map = data.listing_map
-    const main_style = S('absolute h-100p l-183')
+    const main_style = S('absolute h-100p l-70')
     const center = {
       lat: 32.7767,
       lng: -96.7970

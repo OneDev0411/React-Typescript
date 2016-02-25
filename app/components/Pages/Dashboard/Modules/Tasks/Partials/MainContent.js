@@ -214,7 +214,7 @@ export default class MainContent extends Component {
     if (module_type === 'tasks') {
       main_style = {
         ...main_style,
-        ...S('l-183')
+        ...S('l-70')
       }
     }
     if (module_type === 'transaction') {
