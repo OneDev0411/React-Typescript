@@ -69,6 +69,7 @@ export default class ListingViewer extends Component {
     // let postal_code
     // let full_address
     let listing_title
+    let listing_subtitle
     // let mls_number
     let bedroom_count
     let bathroom_count
@@ -110,26 +111,33 @@ export default class ListingViewer extends Component {
             gallery_chunks.map((gallery_image_url, i) => {
               return (
                 <CarouselItem key={ 'gallery-image-' + gallery_image_url[0] + i }>
-                  <div style={ S('w-' + (window.innerWidth / 3) + ' h-400 pull-left text-center bg-efefef') }><img src={ gallery_image_url[0] } style={ S('h-100p center-block') } /></div>
-                  <div style={ S('w-' + (window.innerWidth / 3) + ' h-400 pull-left text-center bg-efefef') }><img src={ gallery_image_url[1] } style={ S('h-100p center-block') } /></div>
-                  <div style={ S('w-' + (window.innerWidth / 3) + ' h-400 pull-left text-center bg-efefef') }><img src={ gallery_image_url[2] } style={ S('h-100p center-block') } /></div>
+                  <div style={ S('w-' + ((window.innerWidth - 70) / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[0] + ')') }/>
+                  <div style={ S('w-' + ((window.innerWidth - 70) / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[1] + ')') }/>
+                  <div style={ S('w-' + ((window.innerWidth - 70) / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[2] + ')') }/>
                 </CarouselItem>
               )
             })
           }
         </Carousel>
       )
+      // Cache images for uninteruted scroll
+      const listing_images_cached = gallery_image_urls.map(image_url => {
+        return <img src={ image_url } style={ S('w-0 h-0') }/>
+      })
       listing_title = `${listing.property.address.street_number} ${listing.property.address.street_name} ${listing.property.address.street_suffix}`
+      listing_subtitle = `${listing.property.address.city}, ${listing.property.address.state} ${listing.property.address.postal_code}`
       main_content = (
         <div>
           <div style={ S('p-0 relative') }>
             { listing_images }
+            { listing_images_cached }
             <div className="clearfix"></div>
           </div>
           <div style={ S('p-15') }>
-            <div style={ S('fw-400 font-30 mb-10') }>${ price }</div>
-            <div style={ S('font-20 mb-10') }>{ listing_title }</div>
-            <div style={ S('font-16') }>
+            <div style={ S('fw-700 font-70 mb-10n') }>${ price }</div>
+            <div className="tempo" style={ S('font-32 fw-100 color-7d8288 mb-10') }>{ listing_title }</div>
+            <div style={ S('font-18 color-b7bfc7 mb-30') }>{ listing_subtitle }</div>
+            <div style={ S('font-24 color-4a4a4a') }>
               <span>{ bedroom_count } Beds</span>
               &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
               <span>{ bathroom_count } Baths</span>
@@ -140,17 +148,17 @@ export default class ListingViewer extends Component {
             </div>
             <hr />
             <div className="clearfix"></div>
-            <div>{ description }</div>
+            <div style={ S('color-000 font-18') }>{ description }</div>
           </div>
         </div>
       )
     }
-    const viewer_wrap_style = S('fixed w-100p h-100p bg-fff t-0 l-0 z-1000')
-    const nav_bar_style = { ...S('mb-0 p-0 h-58 pt-3 w-100p'), borderBottom: '1px solid #e7e4e3' }
+    const viewer_wrap_style = S('absolute h-100p bg-fff t-0 l-0 z-1000 ml-70 w-' + (window.innerWidth - 70))
+    const nav_bar_style = S('mb-0 p-0 h-65 pt-7 w-100p')
     return (
       <div style={ viewer_wrap_style }>
-        <div onClick={ this.props.hideModal } style={ S('absolute r-20 t-5 font-40 fw-400') } className="close">&times;</div>
-        <div className="bg-aqua" style={ nav_bar_style }>
+        <div onClick={ this.props.hideModal } style={ S('absolute r-20 t-8 font-40 fw-400') } className="close">&times;</div>
+        <div style={ nav_bar_style }>
           <div style={ S('mt-13 font-18') } className="text-center">{ listing_title }</div>
         </div>
         { main_content }

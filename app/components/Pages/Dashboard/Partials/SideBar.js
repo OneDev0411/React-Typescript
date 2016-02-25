@@ -114,7 +114,7 @@ export default class SideBar extends Component {
     let icon
     if (data.notifications && data.notifications.summary[name] > 0) {
       icon = (
-        <i className="fa fa-circle" style={ S('pl-10 font-8 color-3388FF') }></i>
+        <i className="fa fa-circle" style={ S('pl-10 font-8 color-3388FF absolute') }></i>
       )
     }
     return icon
@@ -162,8 +162,7 @@ export default class SideBar extends Component {
     const active = {}
     if (path.indexOf('/dashboard/recents') !== -1)
       active.recents = 'active'
-
-    if (path === '/dashboard/mls')
+    if (path.indexOf('/dashboard/mls') !== -1)
       active.mls = 'active'
 
     if (path.indexOf('/dashboard/contacts') !== -1)
