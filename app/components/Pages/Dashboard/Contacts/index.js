@@ -190,7 +190,7 @@ export default class Contacts extends Component {
     }
 
     // Style
-    const main_style = S('absolute l-70 r-0')
+    const main_style = S('absolute l-70 r-0 pl-15 pr-15')
 
     return (
       <div style={ S('minw-1000') }>
