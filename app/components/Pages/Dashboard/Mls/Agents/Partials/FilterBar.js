@@ -111,6 +111,10 @@ export default class Dashboard extends Component {
       criteria.total_active_value.max = this.refs.total_active_value_max.refs.input.value
     }
 
+    criteria.agent_experience = null;
+    if (this.filterEnabled('total_active_value'))
+      criteria.agent_experience = this.refs.agent_experience.refs.input.value
+
     const user = this.props.data.user
     AppDispatcher.dispatch({
       action: 'get-agent-report',
@@ -350,23 +354,8 @@ export default class Dashboard extends Component {
 
           <div>
             <label>
-              <input type="checkbox" onChange={ this.toggle.bind(this, 'list_volume') } />
-              &nbsp; List Volume
-            </label>
-            <div style={ this.filterEnabled('list_volume') }>
-              <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="list_volume_min"/>
-              </div>
-              <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="list_volume_max"/>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <label>
               <input type="checkbox" onChange={ this.toggle.bind(this, 'list_value') } />
-              &nbsp; List Value
+              &nbsp; Listing-side $
             </label>
             <div style={ this.filterEnabled('list_value') }>
               <div style={ s }>
@@ -380,9 +369,24 @@ export default class Dashboard extends Component {
 
           <div>
             <label>
+              <input type="checkbox" onChange={ this.toggle.bind(this, 'list_volume') } />
+              &nbsp; Listing-side Volume
+            </label>
+            <div style={ this.filterEnabled('list_volume') }>
+              <div style={ s }>
+                <Input type="text" bsSize="small" placeholder="Min" ref="list_volume_min"/>
+              </div>
+              <div style={ s }>
+                <Input type="text" bsSize="small" placeholder="Max" ref="list_volume_max"/>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label>
               <input type="checkbox" onChange={ this.toggle.bind(this, 'sell_volume') } />
               &nbsp;
-              Sell Volume
+              Buying-side Volume
             </label>
             <div style={ this.filterEnabled('sell_volume') }>
               <div style={ s }>
@@ -397,7 +401,7 @@ export default class Dashboard extends Component {
           <div>
             <label>
               <input type="checkbox" onChange={ this.toggle.bind(this, 'sell_value') } />
-              &nbsp; Sell Value
+              &nbsp; Buying-side $
             </label>
             <div style={ this.filterEnabled('sell_value') }>
               <div style={ s }>
@@ -410,27 +414,9 @@ export default class Dashboard extends Component {
           </div>
 
           <div>
-            <label title="Number of active listings this agent currently has (In the area you searched for)">
-              <input type="checkbox" onChange={ this.toggle.bind(this, 'active_volume') } />
-              &nbsp; Active volume
-              <span className="tip">
-                Limited to searched area
-              </span>
-            </label>
-            <div style={ this.filterEnabled('active_volume') }>
-              <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="active_volume_min"/>
-              </div>
-              <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="active_volume_max"/>
-              </div>
-            </div>
-          </div>
-
-          <div>
             <label title="Sum of value of active listings this agent currently has (In the area you searched for)">
               <input type="checkbox" onChange={ this.toggle.bind(this, 'active_value') } />
-              &nbsp; Active value
+              &nbsp; Active listings $
               <span className="tip">
                 Limited to searched area
               </span>
@@ -446,19 +432,19 @@ export default class Dashboard extends Component {
           </div>
 
           <div>
-            <label title="Number of active listings this agent currently has (Not limited to current area)">
-              <input type="checkbox" onChange={ this.toggle.bind(this, 'total_active_volume') } />
-              &nbsp; Total Active volume
+            <label title="Number of active listings this agent currently has (In the area you searched for)">
+              <input type="checkbox" onChange={ this.toggle.bind(this, 'active_volume') } />
+              &nbsp; Active listings volume
               <span className="tip">
-                Not limited to searched area
+                Limited to searched area
               </span>
             </label>
-            <div style={ this.filterEnabled('total_active_volume') }>
+            <div style={ this.filterEnabled('active_volume') }>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="total_active_volume_min"/>
+                <Input type="text" bsSize="small" placeholder="Min" ref="active_volume_min"/>
               </div>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="total_active_volume_max"/>
+                <Input type="text" bsSize="small" placeholder="Max" ref="active_volume_max"/>
               </div>
             </div>
           </div>
@@ -478,6 +464,45 @@ export default class Dashboard extends Component {
               <div style={ s }>
                 <Input type="text" bsSize="small" placeholder="Max" ref="total_active_value_max"/>
               </div>
+            </div>
+          </div>
+
+          <div>
+            <label title="Number of active listings this agent currently has (Not limited to current area)">
+              <input type="checkbox" onChange={ this.toggle.bind(this, 'total_active_volume') } />
+              &nbsp; Total Active $
+              <span className="tip">
+                Not limited to searched area
+              </span>
+            </label>
+            <div style={ this.filterEnabled('total_active_volume') }>
+              <div style={ s }>
+                <Input type="text" bsSize="small" placeholder="Min" ref="total_active_volume_min"/>
+              </div>
+              <div style={ s }>
+                <Input type="text" bsSize="small" placeholder="Max" ref="total_active_volume_max"/>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label>
+              <input type="checkbox" onChange={ this.toggle.bind(this, 'agent_experience') } />
+              &nbsp; Agent Experience
+              <span className="tip">
+                Guessed based on MLSID
+              </span>
+            </label>
+            <div style={ this.filterEnabled('agent_experience') }>
+              <Input type="select" ref="agent_experience">
+                <option value="">---</option>
+                <option value="0-5">0-5 Years</option>
+                <option value="5-10">5-10 Years</option>
+                <option value="10-15">10-15 Years</option>
+                <option value="15-25">15-25 Years</option>
+                <option value="25-40">25-40 Years</option>
+                <option value="20+">20+</option>
+              </Input>
             </div>
           </div>
 

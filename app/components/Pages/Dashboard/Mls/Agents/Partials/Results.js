@@ -34,6 +34,9 @@ export default class Dashboard extends Component {
           email: agent.email
         },
         name: agent.first_name + ' ' + agent.last_name,
+        mlsid:agent.mlsid,
+        office_name: agent.data.office_name,
+        experience:agent.data.agent_experience || agent.mlsid,
         total_volume: normalize(agent.data.selling_volume) + normalize(agent.data.listed_volume),
         total_value: normalize(agent.data.selling_value) + normalize(agent.data.listed_value),
         listed_volume: normalize(agent.data.listed_volume),
@@ -120,28 +123,48 @@ export default class Dashboard extends Component {
                 Agent {this.sortIcon('name')}
               </th>
 
+              <th>
+                MLS ID
+              </th>
+
+              <th onClick={this.setSort.bind(this, 'office_name')}>
+                Brokerage {this.sortIcon('office_name')}
+              </th>
+
+              <th onClick={this.setSort.bind(this, 'experience')}>
+                Years of experience {this.sortIcon('experience')}
+              </th>
+
+              <th onClick={this.setSort.bind(this, 'total_volume')}>
+                Total Volume {this.sortIcon('total_volume')}
+              </th>
+
+              <th onClick={this.setSort.bind(this, 'total_value')}>
+                Total $ {this.sortIcon('total_value')}
+              </th>
+
               <th onClick={this.setSort.bind(this, 'listed_volume')}>
-                List Volume {this.sortIcon('listed_volume')}
+                Listint-side Volume {this.sortIcon('listed_volume')}
               </th>
 
               <th onClick={this.setSort.bind(this, 'listed_value')}>
-                List Value {this.sortIcon('listed_value')}
+                Listing-side $ {this.sortIcon('listed_value')}
               </th>
 
               <th onClick={this.setSort.bind(this, 'selling_volume')}>
-                Sell Volume {this.sortIcon('selling_volume')}
+                Buying-side Volume {this.sortIcon('selling_volume')}
               </th>
 
               <th onClick={this.setSort.bind(this, 'selling_value')}>
-                Sell Value {this.sortIcon('selling_value')}
+                Buying-side $ {this.sortIcon('selling_value')}
               </th>
 
               <th onClick={this.setSort.bind(this, 'active_volume')}>
-                Active Volume {this.sortIcon('active_volume')}
+                Active listings volume {this.sortIcon('active_volume')}
               </th>
 
               <th onClick={this.setSort.bind(this, 'active_value')}>
-                Active Value {this.sortIcon('active_value')}
+                Active listings $ {this.sortIcon('active_value')}
               </th>
 
               <th onClick={this.setSort.bind(this, 'total_active_volume')}>
@@ -149,7 +172,7 @@ export default class Dashboard extends Component {
               </th>
 
               <th onClick={this.setSort.bind(this, 'total_active_value')}>
-                Total Active Value {this.sortIcon('total_active_value')}
+                Total Active $ {this.sortIcon('total_active_value')}
               </th>
             </tr>
           </thead>
@@ -161,6 +184,26 @@ export default class Dashboard extends Component {
                     <span>
                       {agent.name}
                     </span>
+                </td>
+
+                <td>
+                  {agent.mlsid}
+                </td>
+
+                <td>
+                  {agent.office_name}
+                </td>
+
+                <td>
+                  {agent.experience}
+                </td>
+
+                <td>
+                  {helpers.numberWithCommas(agent.total_volume)}
+                </td>
+
+                <td>
+                  ${helpers.numberWithCommas(agent.total_value)}
                 </td>
 
                 <td>
