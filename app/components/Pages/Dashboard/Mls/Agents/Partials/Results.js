@@ -135,43 +135,43 @@ export default class Dashboard extends Component {
                 Years of experience {this.sortIcon('experience')}
               </th>
 
-              <th onClick={this.setSort.bind(this, 'total_volume')}>
-                Total Volume {this.sortIcon('total_volume')}
+              <th onClick={this.setSort.bind(this, 'total_volume')} className="listing-side">
+                Total # {this.sortIcon('total_volume')}
               </th>
 
-              <th onClick={this.setSort.bind(this, 'total_value')}>
+              <th onClick={this.setSort.bind(this, 'total_value')} className="listing-side">
                 Total $ {this.sortIcon('total_value')}
               </th>
 
-              <th onClick={this.setSort.bind(this, 'listed_volume')}>
-                Listint-side Volume {this.sortIcon('listed_volume')}
+              <th onClick={this.setSort.bind(this, 'listed_volume')} className="listing-side">
+                Listing-side # {this.sortIcon('listed_volume')}
               </th>
 
-              <th onClick={this.setSort.bind(this, 'listed_value')}>
+              <th onClick={this.setSort.bind(this, 'listed_value')} className="listing-side">
                 Listing-side $ {this.sortIcon('listed_value')}
               </th>
 
-              <th onClick={this.setSort.bind(this, 'selling_volume')}>
-                Buying-side Volume {this.sortIcon('selling_volume')}
+              <th onClick={this.setSort.bind(this, 'selling_volume')} className="buying-side">
+                Buying-side # {this.sortIcon('selling_volume')}
               </th>
 
-              <th onClick={this.setSort.bind(this, 'selling_value')}>
+              <th onClick={this.setSort.bind(this, 'selling_value')} className="buying-side">
                 Buying-side $ {this.sortIcon('selling_value')}
               </th>
 
-              <th onClick={this.setSort.bind(this, 'active_volume')}>
-                Active listings volume {this.sortIcon('active_volume')}
+              <th onClick={this.setSort.bind(this, 'active_volume')} className="listing-side">
+                Active Listings # {this.sortIcon('active_volume')}
               </th>
 
-              <th onClick={this.setSort.bind(this, 'active_value')}>
-                Active listings $ {this.sortIcon('active_value')}
+              <th onClick={this.setSort.bind(this, 'active_value')} className="listing-side">
+                Active Listings $ {this.sortIcon('active_value')}
               </th>
 
-              <th onClick={this.setSort.bind(this, 'total_active_volume')}>
-                Total Active Volume {this.sortIcon('total_active_volume')}
+              <th onClick={this.setSort.bind(this, 'total_active_volume')} className="listing-side">
+                Total Active # {this.sortIcon('total_active_volume')}
               </th>
 
-              <th onClick={this.setSort.bind(this, 'total_active_value')}>
+              <th onClick={this.setSort.bind(this, 'total_active_value')} className="listing-side">
                 Total Active $ {this.sortIcon('total_active_value')}
               </th>
             </tr>

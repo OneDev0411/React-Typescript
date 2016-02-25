@@ -355,7 +355,7 @@ export default class Dashboard extends Component {
           <div>
             <label>
               <input type="checkbox" onChange={ this.toggle.bind(this, 'list_value') } />
-              &nbsp; Listing-side $
+              &nbsp; <span className="listing-side">Listing-side $</span>
             </label>
             <div style={ this.filterEnabled('list_value') }>
               <div style={ s }>
@@ -370,7 +370,7 @@ export default class Dashboard extends Component {
           <div>
             <label>
               <input type="checkbox" onChange={ this.toggle.bind(this, 'list_volume') } />
-              &nbsp; Listing-side Volume
+              &nbsp; <span className="listing-side">Listing-side #</span>
             </label>
             <div style={ this.filterEnabled('list_volume') }>
               <div style={ s }>
@@ -384,24 +384,8 @@ export default class Dashboard extends Component {
 
           <div>
             <label>
-              <input type="checkbox" onChange={ this.toggle.bind(this, 'sell_volume') } />
-              &nbsp;
-              Buying-side Volume
-            </label>
-            <div style={ this.filterEnabled('sell_volume') }>
-              <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="sell_volume_min"/>
-              </div>
-              <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="sell_volume_max"/>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <label>
               <input type="checkbox" onChange={ this.toggle.bind(this, 'sell_value') } />
-              &nbsp; Buying-side $
+              &nbsp; <span className="buying-side">Buying-side $</span>
             </label>
             <div style={ this.filterEnabled('sell_value') }>
               <div style={ s }>
@@ -414,9 +398,24 @@ export default class Dashboard extends Component {
           </div>
 
           <div>
+            <label>
+              <input type="checkbox" onChange={ this.toggle.bind(this, 'sell_volume') } />
+              &nbsp; <span className="buying-side">Buying-side #</span>
+            </label>
+            <div style={ this.filterEnabled('sell_volume') }>
+              <div style={ s }>
+                <Input type="text" bsSize="small" placeholder="Min" ref="sell_volume_min"/>
+              </div>
+              <div style={ s }>
+                <Input type="text" bsSize="small" placeholder="Max" ref="sell_volume_max"/>
+              </div>
+            </div>
+          </div>
+
+          <div>
             <label title="Sum of value of active listings this agent currently has (In the area you searched for)">
               <input type="checkbox" onChange={ this.toggle.bind(this, 'active_value') } />
-              &nbsp; Active listings $
+              &nbsp; <span className="listing-side">Active listings $</span>
               <span className="tip">
                 Limited to searched area
               </span>
@@ -434,7 +433,7 @@ export default class Dashboard extends Component {
           <div>
             <label title="Number of active listings this agent currently has (In the area you searched for)">
               <input type="checkbox" onChange={ this.toggle.bind(this, 'active_volume') } />
-              &nbsp; Active listings volume
+              &nbsp; <span className="listing-side">Active Listings #</span>
               <span className="tip">
                 Limited to searched area
               </span>
@@ -452,7 +451,7 @@ export default class Dashboard extends Component {
           <div>
             <label title="Sum of value of active listings this agent currently has (Not limited to current area)">
               <input type="checkbox" onChange={ this.toggle.bind(this, 'total_active_value') } />
-              &nbsp; Total Active value
+              &nbsp; <span className="listing-side">Total Active $</span>
               <span className="tip">
                 Not limited to searched area
               </span>
@@ -470,7 +469,7 @@ export default class Dashboard extends Component {
           <div>
             <label title="Number of active listings this agent currently has (Not limited to current area)">
               <input type="checkbox" onChange={ this.toggle.bind(this, 'total_active_volume') } />
-              &nbsp; Total Active $
+              &nbsp; <span className="listing-side">Total Active #</span>
               <span className="tip">
                 Not limited to searched area
               </span>
