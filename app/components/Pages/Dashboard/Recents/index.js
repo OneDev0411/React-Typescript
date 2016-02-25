@@ -126,7 +126,7 @@ export default class Dashboard extends Component {
   }
 
   hideModal() {
-    delete AppStore.data.show_listing_modal
+    delete AppStore.data.show_listing_viewer
     delete AppStore.data.show_create_chat_modal
     delete AppStore.data.show_contacts_modal
     delete AppStore.data.show_settings_modal
@@ -182,7 +182,7 @@ export default class Dashboard extends Component {
     const data = this.props.data
     const search_text_lower = search_text.toLowerCase().trim()
     const rooms = data.rooms
-    const filtered_rooms = rooms.filter((room) => {
+    const filtered_rooms = rooms.filter(room => {
       const users_first_string = _.pluck(room.users, 'first_name').toString().toLowerCase()
       const users_last_string = _.pluck(room.users, 'last_name').toString().toLowerCase()
       if (users_first_string.indexOf(search_text_lower) !== -1)
@@ -261,8 +261,8 @@ export default class Dashboard extends Component {
     AppStore.emitChange()
   }
 
-  showListingModal(listing) {
-    AppStore.data.show_listing_modal = true
+  showListingViewer(listing) {
+    AppStore.data.show_listing_viewer = true
     AppStore.data.current_listing = listing
     AppStore.emitChange()
   }
@@ -281,6 +281,12 @@ export default class Dashboard extends Component {
       id: data.current_room.id,
       notification
     })
+    AppStore.emitChange()
+  }
+
+  // TODO: Fix This for Arrow Keys
+  navListingCarousel(index) {
+    AppStore.data.current_listing.current_slide = index
     AppStore.emitChange()
   }
 
@@ -318,8 +324,9 @@ export default class Dashboard extends Component {
             showFileViewer={ this.showFileViewer }
             setHeadingDate={ this.setHeadingDate }
             removeScrollBottom={ this.removeScrollBottom }
-            showListingModal={ this.showListingModal }
+            showListingViewer={ this.showListingViewer }
             changeListingNotification={ this.changeListingNotification }
+            navListingCarousel={ this.navListingCarousel }
           />
         </main>
         <audio ref="notif_sound" id="notif-sound">

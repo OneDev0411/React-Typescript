@@ -28,7 +28,7 @@ export default {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
@@ -52,7 +52,7 @@ export default {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
@@ -77,7 +77,7 @@ export default {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
@@ -110,7 +110,7 @@ export default {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
@@ -139,7 +139,7 @@ export default {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
@@ -188,7 +188,7 @@ export default {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
@@ -218,7 +218,7 @@ export default {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }

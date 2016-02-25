@@ -7,8 +7,8 @@ export default class FileViewer extends Component {
 
   componentDidMount() {
     // Esc to close
-    document.onkeydown = evt => {
-      if (evt.keyCode === 27)
+    document.onkeydown = e => {
+      if (e.keyCode === 27)
         this.props.closeFileViewer()
     }
     const data = this.props.data

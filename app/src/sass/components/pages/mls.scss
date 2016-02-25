@@ -7,16 +7,38 @@
   margin-left: -35px;
   margin-top: -35px;
 }
-
 .map__listing-marker:after {
   content: "";
   position: absolute;
   box-shadow: rgba(0, 0, 0, 0.3) 2px 2px 2px;
-  -moz-transform: rotate(45deg);
-  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
   bottom: -5px;
   left: 30px;
   border-width: 5px;
   border-style: solid;
   border-color: transparent #FFF #FFF transparent;
+}
+.listing-map {
+  transition: 150ms;
+  right: 0;
+  &.active {
+    right: 500px;
+  }
+}
+.listing-panel {
+  transition: 150ms;
+  right: -500px;
+  &.active {
+    right: 0;
+  }
+}
+.listing-panel__button {
+  outline: none !important;
+  margin-top: 10px;
+  margin-right: 10px;
+  transition: 150ms;
+  right: 0px;
+  &.active {
+    right: 510px;
+  }
 }

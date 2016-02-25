@@ -21,17 +21,17 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then((response) => {
+    .then(response => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
       return response.json()
     })
-    .then((response) => {
+    .then(response => {
       return callback(false, response)
     })
   },
@@ -53,17 +53,17 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then((response) => {
+    .then(response => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
       return response.json()
     })
-    .then((response) => {
+    .then(response => {
       return callback(false, response)
     })
   },
@@ -83,17 +83,17 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then((response) => {
+    .then(response => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
       return response.json()
     })
-    .then((response) => {
+    .then(response => {
       return callback(false, response)
     })
   },
@@ -115,17 +115,17 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then((response) => {
+    .then(response => {
       if (response.status >= 400) {
         const error = {
           'status': 'error',
-          'message': 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
       return response.json()
     })
-    .then((response) => {
+    .then(response => {
       return callback(false, response)
     })
   },
@@ -147,17 +147,17 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then((response) => {
+    .then(response => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
       return response.json()
     })
-    .then((response) => {
+    .then(response => {
       return callback(false, response)
     })
   },
@@ -168,7 +168,7 @@ export default {
     const endpoint = api_host + '/api/rooms?access_token=' + params.access_token
 
     fetch(endpoint)
-    .then((response) => {
+    .then(response => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -178,7 +178,7 @@ export default {
       }
       return response.json()
     })
-    .then((response) => {
+    .then(response => {
       return callback(false, response)
     })
   },
@@ -199,17 +199,17 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then((response) => {
+    .then(response => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
       return response.json()
     })
-    .then((response) => {
+    .then(response => {
       return callback(false, response)
     })
   },
@@ -230,17 +230,17 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then((response) => {
+    .then(response => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
       return response.json()
     })
-    .then((response) => {
+    .then(response => {
       return callback(false, response)
     })
   },
@@ -265,7 +265,7 @@ export default {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
@@ -282,17 +282,17 @@ export default {
     const endpoint = api_host + '/api/contacts?access_token=' + params.access_token
 
     fetch(endpoint)
-    .then((response) => {
+    .then(response => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
       return response.json()
     })
-    .then((response) => {
+    .then(response => {
       return callback(false, response)
     })
   },

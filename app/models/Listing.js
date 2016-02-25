@@ -11,7 +11,7 @@ export default {
     if (!api_host) api_host = config.app.url
     const endpoint = api_host + '/api/listings/' + params.id + '?access_token=' + params.access_token
     fetch(endpoint)
-    .then((response) => {
+    .then(response => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -21,7 +21,7 @@ export default {
       }
       return response.json()
     })
-    .then((response) => {
+    .then(response => {
       return callback(false, response)
     })
   },
@@ -30,17 +30,17 @@ export default {
     if (!api_host) api_host = config.app.url
     const endpoint = api_host + '/api/listings/search?q=' + params.q + '&access_token=' + params.access_token
     fetch(endpoint)
-    .then((response) => {
+    .then(response => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
       return response.json()
     })
-    .then((response) => {
+    .then(response => {
       return callback(false, response)
     })
   },
@@ -49,17 +49,17 @@ export default {
     if (!api_host) api_host = config.app.url
     const endpoint = api_host + '/api/listings/similars?mls_number=' + params.mls_number + '&access_token=' + params.access_token
     fetch(endpoint)
-    .then((response) => {
+    .then(response => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return callback(error, false)
       }
       return response.json()
     })
-    .then((response) => {
+    .then(response => {
       return callback(false, response)
     })
   },
@@ -78,7 +78,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then((response) => {
+    .then(response => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -88,7 +88,7 @@ export default {
       }
       return response.json()
     })
-    .then((response) => {
+    .then(response => {
       return callback(false, response)
     })
   }

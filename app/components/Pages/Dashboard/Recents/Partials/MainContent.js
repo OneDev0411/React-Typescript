@@ -9,13 +9,13 @@ import Dropzone from 'react-dropzone'
 
 // Partials
 import DropzoneOverlay from '../../Partials/DropzoneOverlay'
-import ListingModal from '../../Partials/ListingModal'
+import ListingViewer from '../../Partials/ListingViewer'
 
 export default class MainContent extends Component {
 
   componentDidUpdate() {
     const data = this.props.data
-    if (this.refs.message_input && !data.show_contacts_modal)
+    if (this.refs.message_input && !data.show_contacts_modal && !data.is_filtering)
       this.refs.message_input.focus()
   }
 
@@ -127,7 +127,17 @@ export default class MainContent extends Component {
         </div>
       )
     }
-
+    let listing_viewer
+    if (data.show_listing_viewer) {
+      listing_viewer = (
+        <ListingViewer
+          data={ data }
+          listing={ data.current_listing }
+          hideModal={ this.hideModal.bind(this) }
+          navListingCarousel={ this.props.navListingCarousel }
+        />
+      )
+    }
     return (
       <div>
         <Dropzone
@@ -161,7 +171,7 @@ export default class MainContent extends Component {
                 showFileViewer={ this.props.showFileViewer }
                 setHeadingDate={ this.props.setHeadingDate }
                 removeScrollBottom={ this.props.removeScrollBottom }
-                showListingModal={ this.props.showListingModal }
+                showListingViewer={ this.props.showListingViewer }
                 changeListingNotification={ this.props.changeListingNotification }
               />
               { uploading_area }
@@ -181,11 +191,7 @@ export default class MainContent extends Component {
                 </Modal.Footer>
               </form>
             </Modal>
-            <ListingModal
-              data={ data }
-              listing={ data.current_listing }
-              hideModal={ this.hideModal.bind(this) }
-            />
+            { listing_viewer }
           </div>
         </Dropzone>
         <DropzoneOverlay
@@ -216,6 +222,7 @@ MainContent.propTypes = {
   showFileViewer: React.PropTypes.func,
   setHeadingDate: React.PropTypes.func,
   removeScrollBottom: React.PropTypes.func,
-  showListingModal: React.PropTypes.func,
-  changeListingNotification: React.PropTypes.func
+  showListingViewer: React.PropTypes.func,
+  changeListingNotification: React.PropTypes.func,
+  navListingCarousel: React.PropTypes.func
 }

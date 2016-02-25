@@ -79,7 +79,7 @@ export default class MessageItem extends Component {
     if (message.recommendation && message.recommendation.listing && message.recommendation.listing.cover_image_url) {
       const cover_image_url = message.recommendation.listing.cover_image_url
       message_image = (
-        <div onClick={ this.props.showListingModal.bind(this, message.recommendation.listing) } style={ S('pointer w-400 h-300 br-3 bg-url(' + cover_image_url + ') bg-cover bg-center') }></div>
+        <div onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ S('pointer w-400 h-300 br-3 bg-url(' + cover_image_url + ') bg-cover bg-center') }></div>
       )
     }
 
@@ -130,5 +130,5 @@ MessageItem.propTypes = {
   i: React.PropTypes.number.isRequired,
   showFileViewer: React.PropTypes.func,
   new_date: React.PropTypes.bool,
-  showListingModal: React.PropTypes.func
+  showListingViewer: React.PropTypes.func
 }

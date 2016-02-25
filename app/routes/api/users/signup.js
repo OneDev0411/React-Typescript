@@ -1,8 +1,6 @@
 // api/posts/signup.js
 module.exports = (app, config) => {
-  
   app.post('/api/signup',(req, res) => {
-
     const first_name = req.body.first_name
     const last_name = req.body.last_name
     const email = req.body.email
@@ -10,10 +8,8 @@ module.exports = (app, config) => {
     const password = req.body.password
     const phone_number = req.body.phone_number
     const grant_type = req.body.grant_type
-
     const api_url = config.api.url
     const signup_url = api_url + '/users'
-
     const request_object = {
       client_id: config.api.client_id,
       client_secret: config.api.client_secret,
@@ -25,7 +21,6 @@ module.exports = (app, config) => {
       phone_number: phone_number,
       grant_type: grant_type
     }
-
     fetch(signup_url,{
       method: 'post',
       headers: {  
@@ -37,7 +32,7 @@ module.exports = (app, config) => {
       if (response.status >= 400) {
         var error = {
           status: 'error',
-          message: 'There was an error with this request.'
+          response
         }
         return res.json(error)
       }
@@ -49,5 +44,4 @@ module.exports = (app, config) => {
       return res.json(response_object)
     });
   })
-
 }

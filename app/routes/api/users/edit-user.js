@@ -20,11 +20,10 @@ module.exports = (app, config) => {
       body: JSON.stringify(request_object)
     })
     .then(response => {
-      // console.log(response.body)
       if (response.status >= 400) {
         var error = {
           status: 'error',
-          body: response.body
+          response
         }
         return res.json(error)
       }
