@@ -283,7 +283,7 @@ export default class SideBar extends Component {
     }
     return (
       <aside style={ sidebar_style } className="sidebar__nav-list pull-left">
-        <div style={ S('mt-18') }>
+        <div style={ S('mt-12') }>
           { /* <img src="/images/dashboard/icons/hamburger.svg"/> */ }
         </div>
         <Nav bsStyle="pills" stacked>
@@ -322,7 +322,7 @@ export default class SideBar extends Component {
             <div style={ S('absolute z-0') }>
               <ProfileImage data={ data } user={ user } />
             </div>
-            <NavDropdown dropup id="account-dropdown" className="account-dropdown" eventKey={3} noCaret>
+            <NavDropdown title="" dropup id="account-dropdown" className="account-dropdown" eventKey={3} noCaret>
               <li><a href="#" style={ S('pointer') } onClick={ this.showSettingsModal }><i className="fa fa-cog" style={ S('mr-15') }></i>Settings</a></li>
               <li role="separator" className="divider"></li>
               <li><a href="/signout"><i className="fa fa-power-off" style={ S('mr-15') }></i>Sign out</a></li>
