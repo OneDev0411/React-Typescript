@@ -52,7 +52,7 @@ export default class MainContent extends Component {
     const data = this.props.data
 
     // Style
-    const main_style = S('absolute l-183 r-0')
+    const main_style = S('absolute l-70 r-0')
 
     // Rooms
     const rooms_column_style = {
@@ -65,7 +65,7 @@ export default class MainContent extends Component {
     const messages_column_style = {
       ...S('absolute pt-15 l-320 minw-450'),
       height: window.innerHeight,
-      width: window.innerWidth - 504
+      width: window.innerWidth - 391
     }
 
     const footer_style = S('absolute w-100p l-0 b-0 r-0 p-20 pb-10')

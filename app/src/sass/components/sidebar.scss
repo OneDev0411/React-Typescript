@@ -1,7 +1,6 @@
 // Sidebar
 .sidebar{
-  &--dashboard{
-    border-right: 1px solid #e7e4e3;
+  &__nav-list{
     a{
       color: $gray-light;
       &:hover{
@@ -10,6 +9,15 @@
       font-weight: 400;
       border-top-left-radius: 0 !important;
       border-bottom-left-radius: 0 !important;
+    }
+    .nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+      background-color: #263445 !important;
+    }
+    .nav > li > a:hover, .nav > li > a:focus {
+      background-color: #263445 !important;
+    }
+    #account-dropdown {
+      background: none !important;
     }
   }
 }

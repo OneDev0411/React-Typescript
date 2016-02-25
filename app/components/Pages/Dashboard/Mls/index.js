@@ -152,7 +152,7 @@ export default class Mls extends Component {
   render() {
     const data = this.props.data
     const listing_map = data.listing_map
-    const main_style = S('absolute h-100p l-183')
+    const main_style = S('absolute h-100p l-70')
     const center = {
       lat: 32.7767,
       lng: -96.7970
@@ -211,12 +211,13 @@ export default class Mls extends Component {
         )
       })
       // Listing panel
+      const heading_height = 130
       const listing_panel_wrap_style = S('absolute t-0 r-0 w-0 h-0')
       const listing_panel_style = S('absolute t-0 w-500 h-' + window.innerHeight)
       const listing_scroll_style = {
         ...listing_panel_style,
-        top: '100px',
-        height: window.innerHeight - 100,
+        top: heading_height + 'px',
+        height: window.innerHeight - heading_height,
         overflowY: 'scroll'
       }
       let panel_class = 'listing-panel'
@@ -237,7 +238,7 @@ export default class Mls extends Component {
           <div style={ listing_panel_style } className={ panel_class }>
             <div style={ S('p-15') }>
               <div className="tempo" style={ S('color-444 fw-100 font-24') }>{ listings.length } Homes Found</div>
-              <div>Sorting by <a href="#">Most Relevant</a></div>
+              <div style={ S('mb-10') }>Sorting by <a href="#">Most Relevant</a></div>
               <div>
                 <ButtonGroup>
                   <Button>List</Button>

@@ -181,7 +181,7 @@ export default class Recommend extends Component {
 
   render() {
     const data = this.props.data
-    const main_style = S('absolute l-183 r-0 pl-15 pr-20')
+    const main_style = S('absolute l-70 r-0 pl-15 pr-20')
 
     let content
 

@@ -156,7 +156,7 @@ export default class SideBar extends Component {
     // Data
     const data = this.props.data
     const sidebar_height = window.innerHeight
-    const sidebar_style = S('w-183 fixed pl-0 t-0 z-100 h-' + sidebar_height)
+    const sidebar_style = S('w-70 fixed pl-8 t-0 z-100 bg-263445 h-' + sidebar_height)
     const path = data.path
 
     const active = {}
@@ -183,8 +183,6 @@ export default class SideBar extends Component {
 
     // User info
     const user = data.user
-    const first_name = user.first_name
-    const last_name = user.last_name
     let recommend
     if (data.user.user_type === 'Brokerage') {
       recommend = (
@@ -299,41 +297,36 @@ export default class SideBar extends Component {
       )
     }
     return (
-      <aside style={ sidebar_style } className="sidebar--dashboard pull-left bg-aqua">
-        <div style={ S('mt-18') }>
+      <aside style={ sidebar_style } className="sidebar__nav-list pull-left">
+        <div style={ S('mt-12') }>
           { /* <img src="/images/dashboard/icons/hamburger.svg"/> */ }
         </div>
         <Nav bsStyle="pills" stacked>
           <LinkContainer className={ active.recents } to="/dashboard/recents">
             <NavItem style={ S('w-85p') }>
-              <img src={ active.recents ? '/images/dashboard/icons/sidenav/chat-active.svg' : '/images/dashboard/icons/sidenav/chat.svg' } style={ S('w-19 h-19') }/>
-              &nbsp;&nbsp;&nbsp;&nbsp;Conversations
+              <img src={ active.recents ? '/images/dashboard/sidenav/chat-active.svg' : '/images/dashboard/sidenav/chat.svg' } style={ S('w-19 h-19') }/>
               {this.notificationIcon('room_notification_count')}
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.mls } to="/dashboard/mls">
             <NavItem style={ S('w-85p') }>
-              <img src={ active.mls ? '/images/dashboard/icons/sidenav/map-active.svg' : '/images/dashboard/icons/sidenav/map.svg' } style={ S('w-19 h-19') }/>
-              &nbsp;&nbsp;&nbsp;&nbsp;Search
+              <img src={ active.mls ? '/images/dashboard/sidenav/map-active.svg' : '/images/dashboard/sidenav/map.svg' } style={ S('w-19 h-19') }/>
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.contacts } to="/dashboard/contacts">
             <NavItem style={ S('w-85p') }>
-              <img src={ active.contacts ? '/images/dashboard/icons/sidenav/people-active.svg' : '/images/dashboard/icons/sidenav/people.svg' } style={ S('w-19 h-19') }/>
-              &nbsp;&nbsp;&nbsp;&nbsp;People
+              <img src={ active.contacts ? '/images/dashboard/sidenav/people-active.svg' : '/images/dashboard/sidenav/people.svg' } style={ S('w-19 h-19') }/>
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.tasks } to="/dashboard/tasks">
             <NavItem style={ S('w-85p') }>
-              <img src={ active.tasks ? '/images/dashboard/icons/sidenav/calendar-active.svg' : '/images/dashboard/icons/sidenav/calendar.svg' } style={ S('w-19 h-19') }/>
-              &nbsp;&nbsp;&nbsp;&nbsp;Calendar
+              <img src={ active.tasks ? '/images/dashboard/sidenav/task-active.svg' : '/images/dashboard/sidenav/task.svg' } style={ S('w-19 h-19') }/>
               {this.notificationIcon('task_notification_count')}
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ active.transactions } to="/dashboard/transactions" onClick={ this.props.viewAllTransactions }>
             <NavItem style={ S('w-85p') }>
-              <img src={ active.transactions ? '/images/dashboard/icons/sidenav/transactions-active.svg' : '/images/dashboard/icons/sidenav/transactions.svg' } style={ S('w-19 h-19') }/>
-              &nbsp;&nbsp;&nbsp;&nbsp;Transactions
+              <img src={ active.transactions ? '/images/dashboard/sidenav/transactions-active.svg' : '/images/dashboard/sidenav/transactions.svg' } style={ S('w-19 h-19') }/>
               {this.notificationIcon('transaction_notification_count')}
             </NavItem>
           </LinkContainer>
@@ -341,11 +334,11 @@ export default class SideBar extends Component {
           { agents }
         </Nav>
         <div style={ S('absolute b-20 l-20') }>
-          <Nav>
+          <Nav className="sidebar__account">
             <div style={ S('absolute z-0') }>
               <ProfileImage data={ data } user={ user } />
             </div>
-            <NavDropdown dropup id="main-nav-dropdown" className="main-nav-dropdown--account" eventKey={3} title={ first_name + ' ' + last_name }>
+            <NavDropdown title="" dropup id="account-dropdown" className="account-dropdown" eventKey={3} noCaret>
               <li><a href="#" style={ S('pointer') } onClick={ this.showSettingsModal }><i className="fa fa-cog" style={ S('mr-15') }></i>Settings</a></li>
               <li role="separator" className="divider"></li>
               <li><a href="/signout"><i className="fa fa-power-off" style={ S('mr-15') }></i>Sign out</a></li>

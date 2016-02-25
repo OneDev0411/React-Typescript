@@ -173,7 +173,7 @@ export default class Header extends Component {
       nav_bar_style = { ...nav_bar_style, ...S('h-70') }
 
     return (
-      <header style={ S('pl-183') }>
+      <header style={ S('pl-70') }>
         <div style={ nav_bar_style } fluid>
           <div>
             <div style={ S('pl-15 w-100p') }>
