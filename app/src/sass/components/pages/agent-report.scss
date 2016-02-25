@@ -1,16 +1,27 @@
 #agents {
-  overflow-x: scroll;
-  min-width:1800px;
-
-  #header {
-    min-width: 1200px;
-    max-width: 2000px;
+  #results {
+    overflow: scroll;
+    height: 90vh;
+    border-top: 1px solid #e7e4e3;
   }
 
   #filters {
     border-right: 1px solid #e7e4e3;
     label {
       font-size: 13px;
+    }
+
+    overflow-y: scroll;
+    height: 90vh;
+
+    label {
+      width:100%;
+
+      .tip {
+        font-size: 11px;
+        color: #AAAAAB;
+        float: right;
+      }
     }
   }
 
@@ -19,16 +30,39 @@
     max-width: 2000px;
   }
 
-  #arrow {
-    border-top: 1px solid #e7e4e3;
-    border-right: 1px solid #e7e4e3;
-    width: 30px;
-    height: 30px;
-    transform: rotate(45deg);
-    position: absolute;
-    margin-left: 455px;
+  #header {
+    font-size: 20px;
+    font-weight: bold;
     background: #F5F5F6;
-    z-index: 1;
+    display: table;
+    width: 100%;
+
+    #separator {
+      border-right: 1px solid #e7e4e3;
+      color: #AAAAAB;
+      font-size: 13px;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      padding-left:200px;
+      float:left;
+      width:490px
+    }
+
+    #info {
+      padding-top: 15px;
+      float:left;
+    }
+
+    #arrow {
+      border-top: 1px solid #e7e4e3;
+      border-right: 1px solid #e7e4e3;
+      width: 30px;
+      height: 30px;
+      transform: rotate(45deg);
+      background: #F5F5F6;
+      float: left;
+      margin-left: -15px;
+    }
   }
 
   th {

@@ -1,12 +1,31 @@
-// Dashboard/Index.js
+// Agents/Index.js
 import React, { Component } from 'react'
 
 // Partials
 import SideBar from '../../Partials/SideBar'
 import FilterBar from './Partials/FilterBar'
 import Results from './Partials/Results'
+import Header from './Partials/Header'
 
-export default class Dashboard extends Component {
+// AppStore
+import AppStore from '../../../../../stores/AppStore'
+
+export default class Agents extends Component {
+
+  componentWillMount() {
+    const data = AppStore.data
+
+    data.agents = {
+      filters: new Set,
+      agents: undefined,
+      rows: undefined,
+      searching: false,
+      sort: {
+        column: 'name',
+        direction: 'ASC'
+      }
+    }
+  }
 
   render() {
     // Data
@@ -15,6 +34,7 @@ export default class Dashboard extends Component {
     return (
       <div id="agents">
         <main>
+          <Header data={ data }/>
           <SideBar data={ data }/>
           <FilterBar data={ data }/>
           <Results data={ data }/>
@@ -25,7 +45,7 @@ export default class Dashboard extends Component {
 }
 
 // PropTypes
-Dashboard.propTypes = {
+Agents.propTypes = {
   data: React.PropTypes.object,
   params: React.PropTypes.object.isRequired
 }

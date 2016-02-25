@@ -5,26 +5,18 @@ import S from 'shorti'
 import helpers from '../../../../../../utils/helpers'
 import Loading from '../../../../../Partials/Loading'
 
+// AppStore
+import AppStore from '../../../../../../stores/AppStore'
+
 if (process.env.WEBPACK_PROCESS === 'build')
   require('../../../../../../src/sass/components/pages/agent-report.scss')
 
 export default class Dashboard extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      searching: false,
-      rows: [],
-      sort: {
-        column: 'name',
-        direction: 'DESC'
-      }
+  componentWillReceiveProps(next) {
+    if (!AppStore.data.agents.rows && next.data.agents.agents) {
+      this.setRows(next.data.agents.agents)
+      this.sort()
     }
-  }
-
-  componentWillReceiveProps(props) {
-    this.state.searching = props.data.agent_report.searching
-    this.setRows(props.data.agent_report.agents)
   }
 
   setRows(rows) {
@@ -58,12 +50,19 @@ export default class Dashboard extends Component {
     }
 
     const transformed = rows.map(transform)
-    this.state.rows = transformed
-    this.sort(this.state.sort.column)
+    AppStore.data.agents.rows = transformed
   }
 
-  sort(column) {
-    const direction = this.state.sort.direction === 'ASC' ? 'DESC' : 'ASC'
+  setSort(column) {
+    AppStore.data.agents.sort.column = column
+    AppStore.data.agents.sort.direction = AppStore.data.agents.sort.direction === 'ASC' ? 'DESC' : 'ASC'
+    this.sort()
+    AppStore.emitChange()
+  }
+
+  sort() {
+    const direction = this.props.data.agents.sort.direction
+    const column = this.props.data.agents.sort.column
 
     const comparer = (a, b) => {
       if (direction === 'ASC')
@@ -72,21 +71,14 @@ export default class Dashboard extends Component {
         return (a[column] < b[column]) ? 1 : -1
     }
 
-    this.setState({
-      rows: this.state.rows.sort(comparer),
-      searching: false,
-      sort: {
-        column,
-        direction
-      }
-    })
+    AppStore.data.agents.rows.sort(comparer)
   }
 
   sortIcon(column) {
-    if (this.state.sort.column !== column)
+    if (this.props.data.agents.sort.column !== column)
       return ''
 
-    if (this.state.sort.direction === 'ASC') {
+    if (this.props.data.agents.sort.direction === 'ASC') {
       return (
         <i className="fa fa-sort-asc" />
       )
@@ -98,7 +90,7 @@ export default class Dashboard extends Component {
   }
 
   render() {
-    if (this.state.searching) {
+    if (this.props.data.agents.searching) {
       const s = {
         ...S('pl-25p m-0'),
         ...{
@@ -112,60 +104,51 @@ export default class Dashboard extends Component {
       )
     }
 
-    const rows = this.state.rows
-
-    const headerStyle = {
-      backgroundColor: '#F5F5F6',
-      padding: '20px',
-      fontSize: '20px',
-      fontWeight: 'bold',
-      borderBottom: '1px solid #e7e4e3',
-      background: '#F5F5F6'
+    const rows = this.props.data.agents.rows
+    if (!rows) {
+      return (
+        <div></div>
+      )
     }
 
-
     return (
-      <div>
-        <div id="header" style={ headerStyle }>
-          <div id="arrow"></div>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { rows.length } Agent Matches
-        </div>
+      <div id="results">
         <table>
           <thead>
             <tr>
-              <th onClick={this.sort.bind(this, 'name')}>
+              <th onClick={this.setSort.bind(this, 'name')}>
                 Agent {this.sortIcon('name')}
               </th>
 
-              <th onClick={this.sort.bind(this, 'listed_volume')}>
+              <th onClick={this.setSort.bind(this, 'listed_volume')}>
                 List Volume {this.sortIcon('listed_volume')}
               </th>
 
-              <th onClick={this.sort.bind(this, 'listed_value')}>
+              <th onClick={this.setSort.bind(this, 'listed_value')}>
                 List Value {this.sortIcon('listed_value')}
               </th>
 
-              <th onClick={this.sort.bind(this, 'selling_volume')}>
+              <th onClick={this.setSort.bind(this, 'selling_volume')}>
                 Sell Volume {this.sortIcon('selling_volume')}
               </th>
 
-              <th onClick={this.sort.bind(this, 'selling_value')}>
+              <th onClick={this.setSort.bind(this, 'selling_value')}>
                 Sell Value {this.sortIcon('selling_value')}
               </th>
 
-              <th onClick={this.sort.bind(this, 'active_volume')}>
+              <th onClick={this.setSort.bind(this, 'active_volume')}>
                 Active Volume {this.sortIcon('active_volume')}
               </th>
 
-              <th onClick={this.sort.bind(this, 'active_value')}>
+              <th onClick={this.setSort.bind(this, 'active_value')}>
                 Active Value {this.sortIcon('active_value')}
               </th>
 
-              <th onClick={this.sort.bind(this, 'total_active_volume')}>
+              <th onClick={this.setSort.bind(this, 'total_active_volume')}>
                 Total Active Volume {this.sortIcon('total_active_volume')}
               </th>
 
-              <th onClick={this.sort.bind(this, 'total_active_value')}>
+              <th onClick={this.setSort.bind(this, 'total_active_value')}>
                 Total Active Value {this.sortIcon('total_active_value')}
               </th>
             </tr>

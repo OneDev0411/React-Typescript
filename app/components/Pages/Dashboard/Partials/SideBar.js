@@ -203,7 +203,7 @@ export default class SideBar extends Component {
         <LinkContainer className={ active.agents } to="/dashboard/mls/agents">
           <NavItem style={ S('w-85p') }>
             <i className="fa fa-group"> </i>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recruitment
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recruit
           </NavItem>
         </LinkContainer>
       )

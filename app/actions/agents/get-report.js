@@ -3,10 +3,9 @@ import Agent from '../../models/Agent'
 import AppStore from '../../stores/AppStore'
 
 export default (user, criteria) => {
-  AppStore.data.agent_report = {
-    searching: true,
-    agents: []
-  }
+  AppStore.data.agents.searching = true
+  delete AppStore.data.agents.agents
+  delete AppStore.data.agents.rows
   AppStore.emitChange()
 
   const params = {
@@ -14,8 +13,8 @@ export default (user, criteria) => {
     criteria
   }
   Agent.getReport(params, (err, response) => {
-    delete AppStore.data.agent_report.searching
-    AppStore.data.agent_report.agents = response.data
+    AppStore.data.agents.searching = false
+    AppStore.data.agents.agents = response.data
     AppStore.emitChange()
   })
 }
