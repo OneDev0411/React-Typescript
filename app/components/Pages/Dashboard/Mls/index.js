@@ -33,6 +33,7 @@ export default class Mls extends Component {
       lat: 32.7767,
       lng: -96.7970
     }
+    let zoom = 13
     const options = {
       'maximum_price': 9.223372036854776e+18,
       'limit': '75',
@@ -73,12 +74,15 @@ export default class Mls extends Component {
       'open_house': false,
       'property_subtypes': ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse']
     }
-    if (data.listing_map && data.listing_map.center)
+    if (data.listing_map && data.listing_map.center) {
       center = data.listing_map.center
+      zoom = data.listing_map.center
+    }
     const listing_map = {
       options,
       is_loading: true,
-      center
+      center,
+      zoom
     }
     AppStore.data.listing_map = listing_map
     AppStore.emitChange()
@@ -140,6 +144,7 @@ export default class Mls extends Component {
       }
     ]
     AppStore.data.listing_map.center = center
+    AppStore.data.listing_map.zoom = zoom
     AppStore.data.listing_map.options = options
     AppStore.data.listing_map.is_loading = true
     AppStore.emitChange()
@@ -286,6 +291,7 @@ export default class Mls extends Component {
       lat: 32.7767,
       lng: -96.7970
     }
+    const default_zoom = 13
     return (
       <div style={ S('minw-1000') }>
         <main>
@@ -294,7 +300,7 @@ export default class Mls extends Component {
             { loading }
             <GoogleMap
               defaultCenter={ data.listing_map ? data.listing_map.center : default_center }
-              defaultZoom={ 13 }
+              defaultZoom={ data.listing_map ? data.listing_map.zoom : default_zoom }
               onBoundsChange={ this.handleBoundsChange.bind(this) }
               options={ { mapTypeControl: true } }
             >
