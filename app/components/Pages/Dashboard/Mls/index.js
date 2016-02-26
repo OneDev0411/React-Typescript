@@ -15,7 +15,7 @@ import ListingViewer from '../Partials/ListingViewer'
 
 export default class Mls extends Component {
 
-  componentDidMount() {
+  componentWillMount() {
     const data = this.props.data
     const listing_map = data.listing_map
     if (!listing_map && typeof window !== 'undefined')
@@ -27,6 +27,12 @@ export default class Mls extends Component {
   }
 
   initMap() {
+    const data = this.props.data
+    const user = data.user
+    let center = {
+      lat: 32.7767,
+      lng: -96.7970
+    }
     const options = {
       'maximum_price': 9.223372036854776e+18,
       'limit': '75',
@@ -67,14 +73,15 @@ export default class Mls extends Component {
       'open_house': false,
       'property_subtypes': ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse']
     }
+    if (data.listing_map && data.listing_map.center)
+      center = data.listing_map.center
     const listing_map = {
       options,
-      is_loading: true
+      is_loading: true,
+      center
     }
     AppStore.data.listing_map = listing_map
     AppStore.emitChange()
-    const data = this.props.data
-    const user = data.user
     ListingDispatcher.dispatch({
       action: 'get-valerts',
       user,
@@ -132,6 +139,7 @@ export default class Mls extends Component {
         longitude: bounds[1]
       }
     ]
+    AppStore.data.listing_map.center = center
     AppStore.data.listing_map.options = options
     AppStore.data.listing_map.is_loading = true
     AppStore.emitChange()
@@ -155,10 +163,6 @@ export default class Mls extends Component {
     const data = this.props.data
     const listing_map = data.listing_map
     const main_style = S('absolute h-100p l-70')
-    const center = {
-      lat: 32.7767,
-      lng: -96.7970
-    }
     let map_listing_markers
     let loading
     let listing_panel
@@ -278,6 +282,10 @@ export default class Mls extends Component {
     let main_class = 'listing-map'
     if (data.show_listing_panel)
       main_class = main_class + ' active'
+    const default_center = {
+      lat: 32.7767,
+      lng: -96.7970
+    }
     return (
       <div style={ S('minw-1000') }>
         <main>
@@ -285,7 +293,7 @@ export default class Mls extends Component {
           <div className={ main_class } style={ main_style }>
             { loading }
             <GoogleMap
-              defaultCenter={ center }
+              defaultCenter={ data.listing_map ? data.listing_map.center : default_center }
               defaultZoom={ 13 }
               onBoundsChange={ this.handleBoundsChange.bind(this) }
               options={ { mapTypeControl: true } }
