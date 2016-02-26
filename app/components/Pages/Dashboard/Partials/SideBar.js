@@ -310,7 +310,7 @@ export default class SideBar extends Component {
           { /* <img src="/images/dashboard/icons/hamburger.svg"/> */ }
         </div>
         <Nav bsStyle="pills" stacked>
-          <OverlayTrigger className="test" placement="right" overlay={ popover.conversation } delayShow={ 100 } delayHide={ 0 }>
+          <OverlayTrigger className="test" placement="right" overlay={ popover.conversation } delayShow={ 200 } delayHide={ 0 }>
             <LinkContainer className={ active.recents } to="/dashboard/recents">
               <NavItem style={ S('w-85p') }>
                 <img src={ active.recents ? '/images/dashboard/sidenav/chat-active.svg' : '/images/dashboard/sidenav/chat.svg' } style={ S('w-19 h-19') }/>
@@ -318,21 +318,21 @@ export default class SideBar extends Component {
               </NavItem>
             </LinkContainer>
           </OverlayTrigger>
-          <OverlayTrigger placement="right" overlay={ popover.map } delayShow={ 100 } delayHide={ 0 }>
+          <OverlayTrigger placement="right" overlay={ popover.map } delayShow={ 200 } delayHide={ 0 }>
             <LinkContainer className={ active.mls } to="/dashboard/mls">
               <NavItem style={ S('w-85p') }>
                 <img src={ active.mls ? '/images/dashboard/sidenav/map-active.svg' : '/images/dashboard/sidenav/map.svg' } style={ S('w-19 h-19') }/>
               </NavItem>
             </LinkContainer>
           </OverlayTrigger>
-          <OverlayTrigger placement="right" overlay={ popover.people } delayShow={ 100 } delayHide={ 0 }>
+          <OverlayTrigger placement="right" overlay={ popover.people } delayShow={ 200 } delayHide={ 0 }>
             <LinkContainer className={ active.contacts } to="/dashboard/contacts">
               <NavItem style={ S('w-85p') }>
                 <img src={ active.contacts ? '/images/dashboard/sidenav/people-active.svg' : '/images/dashboard/sidenav/people.svg' } style={ S('w-19 h-19') }/>
               </NavItem>
             </LinkContainer>
           </OverlayTrigger>
-          <OverlayTrigger placement="right" overlay={ popover.tasks } delayShow={ 100 } delayHide={ 0 }>
+          <OverlayTrigger placement="right" overlay={ popover.tasks } delayShow={ 200 } delayHide={ 0 }>
             <LinkContainer className={ active.tasks } to="/dashboard/tasks">
               <NavItem style={ S('w-85p') }>
                 <img src={ active.tasks ? '/images/dashboard/sidenav/task-active.svg' : '/images/dashboard/sidenav/task.svg' } style={ S('w-19 h-19') }/>
@@ -340,7 +340,7 @@ export default class SideBar extends Component {
               </NavItem>
             </LinkContainer>
           </OverlayTrigger>
-          <OverlayTrigger placement="right" overlay={ popover.transactions } delayShow={ 100 } delayHide={ 0 }>
+          <OverlayTrigger placement="right" overlay={ popover.transactions } delayShow={ 200 } delayHide={ 0 }>
             <LinkContainer className={ active.transactions } to="/dashboard/transactions" onClick={ this.props.viewAllTransactions }>
               <NavItem style={ S('w-85p') }>
                 <img src={ active.transactions ? '/images/dashboard/sidenav/transactions-active.svg' : '/images/dashboard/sidenav/transactions.svg' } style={ S('w-19 h-19') }/>
