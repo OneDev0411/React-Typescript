@@ -4,8 +4,6 @@ import S from 'shorti'
 import moment from 'moment'
 import { Input } from 'react-bootstrap'
 
-import SelectableDay from './SelectableDay'
-
 // AppDispatcher
 import AppDispatcher from '../../../../../../dispatcher/AppDispatcher'
 
