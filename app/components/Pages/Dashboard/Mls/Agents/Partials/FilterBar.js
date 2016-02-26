@@ -1,4 +1,4 @@
-// Dashboard/Index.js
+// Agents/FilterBar.js
 import React, { Component } from 'react'
 import S from 'shorti'
 import moment from 'moment'
@@ -12,7 +12,7 @@ import AppDispatcher from '../../../../../../dispatcher/AppDispatcher'
 // AppStore
 import AppStore from '../../../../../../stores/AppStore'
 
-export default class Dashboard extends Component {
+export default class FilterBar extends Component {
 
   handleSubmit(e) {
     e.preventDefault()
@@ -179,17 +179,42 @@ export default class Dashboard extends Component {
         <form onSubmit={this.handleSubmit.bind(this)}>
           <div>
             <label>
-              Date Range
+              From
             </label>
             <div>
-              <div style={ s }>
-                <SelectableDay ref="from" placeholder="From, like 'Sep 23, 2015'" />
-              </div>
-              <div style={ s }>
-                <SelectableDay ref="to" placeholder="To, like 'Jan 1, 2016'" />
-              </div>
+              <Input type="select" ref="from_year" style={ S('w-32p pull-left') }>
+                { this.years() }
+              </Input>
+              <Input type="select" ref="from_day" style={ S('w-32p pull-left ml-1p') }>
+                { this.days() }
+              </Input>
+              <Input type="select" ref="from_month" style={ S('w-32p pull-left ml-1p') }>
+                { this.months() }
+              </Input>
             </div>
           </div>
+
+          <br/><br/>
+
+          <div>
+            <label>
+              To
+            </label>
+            <div>
+              <Input type="select" ref="to_year" style={ S('w-32p pull-left') }>
+                { this.years() }
+              </Input>
+              <Input type="select" ref="to_day" style={ S('w-32p pull-left ml-1p') }>
+                { this.days() }
+              </Input>
+              <Input type="select" ref="to_month" style={ S('w-32p pull-left ml-1p') }>
+                { this.months() }
+              </Input>
+            </div>
+          </div>
+
+          <br/><br/>
+
 
           <div>
             <label>
@@ -546,7 +571,6 @@ export default class Dashboard extends Component {
 }
 
 // PropTypes
-Dashboard.propTypes = {
-  data: React.PropTypes.object,
-  params: React.PropTypes.object.isRequired
+FilterBar.propTypes = {
+  data: React.PropTypes.object.isRequired
 }
