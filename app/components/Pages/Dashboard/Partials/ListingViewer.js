@@ -121,8 +121,8 @@ export default class ListingViewer extends Component {
         </Carousel>
       )
       // Cache images for uninteruted scroll
-      const listing_images_cached = gallery_image_urls.map(image_url => {
-        return <img src={ image_url } style={ S('w-0 h-0') }/>
+      const listing_images_cached = gallery_image_urls.map((image_url, i) => {
+        return <img key={ 'image-' + i } src={ image_url } style={ S('w-0 h-0') }/>
       })
       listing_title = `${listing.property.address.street_number} ${listing.property.address.street_name} ${listing.property.address.street_suffix}`
       listing_subtitle = `${listing.property.address.city}, ${listing.property.address.state} ${listing.property.address.postal_code}`

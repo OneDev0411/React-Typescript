@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import { Table, Button, Input } from 'react-bootstrap'
+import MaskedInput from 'react-input-mask'
 
 // Partials
 import Header from '../Partials/Header'
@@ -179,7 +180,9 @@ export default class Contacts extends Component {
               <label>Email</label>
               <Input ref="email" type="text" value={ contact.email } onChange={ this.handleInputChange.bind(this) }/>
               <label>Phone number</label>
-              <Input ref="phone_number" type="text" value={ contact.phone_number } onChange={ this.handleInputChange.bind(this) }/>
+              <div className="form-group">
+                <MaskedInput className="form-control" ref="phone_number" type="text" value={ contact.phone_number } onChange={ this.handleInputChange.bind(this) } mask="(999)-999-9999" maskChar="_"/>
+              </div>
               <Button style={ S('pl-30 pr-30 pull-right') } type="submit" className={ data.saving_contact ? 'disabled' : '' } bsStyle="primary">
                 { data.saving_contact ? 'Saving...' : 'Save' }
               </Button>

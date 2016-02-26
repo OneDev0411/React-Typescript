@@ -5,6 +5,7 @@ import { Nav, NavItem, NavDropdown, Modal, Col, Input, Button, Alert } from 'rea
 import S from 'shorti'
 import Dropzone from 'react-dropzone'
 import Loading from '../../../Partials/Loading'
+import MaskedInput from 'react-input-mask'
 
 // AppDispatcher
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
@@ -252,7 +253,7 @@ export default class SideBar extends Component {
         </Col>
         <Col xs={ 6 } style={ S('p-0') }>
           <label>Phone number</label>
-          <Input ref="phone_number" type="text" defaultValue={ user.phone_number ? user.phone_number.replace('+', '') : '' }/>
+          <MaskedInput className="form-control" ref="phone_number" type="text" defaultValue={ user.phone_number ? user.phone_number.replace('+', '') : '' } mask="(999)-999-9999" maskChar="_"/>
         </Col>
       </Col>
     )
@@ -293,6 +294,9 @@ export default class SideBar extends Component {
         <a style={ S('mt-7') } className="pull-left" href="#" onClick={ this.hideChangePassword.bind(this) }>Cancel change password</a>
       )
     }
+    const title_area = (
+      <div>&nbsp;</div>
+    )
     return (
       <aside style={ sidebar_style } className="sidebar__nav-list pull-left">
         <div style={ S('mt-12') }>
@@ -330,12 +334,12 @@ export default class SideBar extends Component {
           { recommend }
           { agents }
         </Nav>
-        <div style={ S('absolute b-30 l-15') }>
+        <div style={ S('absolute b-10 l-15') }>
           <Nav className="sidebar__account">
             <div style={ S('absolute z-0') }>
               <ProfileImage data={ data } user={ user } />
             </div>
-            <NavDropdown title="" dropup id="account-dropdown" className="account-dropdown" eventKey={3} noCaret>
+            <NavDropdown title={ title_area } dropup id="account-dropdown" className="account-dropdown" eventKey={3} noCaret>
               <li><a href="#" style={ S('pointer') } onClick={ this.showSettingsModal }><i className="fa fa-cog" style={ S('mr-15') }></i>Settings</a></li>
               <li role="separator" className="divider"></li>
               <li><a href="/signout"><i className="fa fa-power-off" style={ S('mr-15') }></i>Sign out</a></li>

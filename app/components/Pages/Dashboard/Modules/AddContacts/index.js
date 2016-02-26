@@ -4,6 +4,7 @@ import { Button, Input, Modal, Col, Alert } from 'react-bootstrap'
 import S from 'shorti'
 import validator from 'validator'
 import helpers from '../../../../../utils/helpers'
+import MaskedInput from 'react-input-mask'
 
 // AppStore
 import AppStore from '../../../../../stores/AppStore'
@@ -459,7 +460,7 @@ export default class AddContactsModule extends Component {
               <div style={ row_style }>
                 <Col xs={2} style={ column_style }/>
                 <Col xs={5} style={ column_style }>
-                  <Input style={ input_style } type="text" ref="phone_number" placeholder="PHONE NUMBER"/>
+                  <MaskedInput className="form-control" style={ input_style } type="text" ref="phone_number" placeholder="PHONE NUMBER" mask="(999)-999-9999" maskChar="_"/>
                 </Col>
                 <Col xs={5} style={ column_style }>
                   <Input style={ input_style } type="text" ref="email" placeholder="EMAIL"/>
