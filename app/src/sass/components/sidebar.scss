@@ -21,3 +21,13 @@
     }
   }
 }
+.sidenav__popover {
+  background-color: #465a71;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  border-color: #465a71;
+  .arrow:after{
+    border-right-color: #465a71 !important;
+  }
+}

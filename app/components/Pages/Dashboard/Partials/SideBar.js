@@ -1,7 +1,7 @@
 // Dashboard.js
 import React, { Component } from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Nav, NavItem, NavDropdown, Modal, Col, Input, Button, Alert } from 'react-bootstrap'
+import { Nav, NavItem, NavDropdown, Modal, Col, Input, Button, Alert, OverlayTrigger, Popover } from 'react-bootstrap'
 import S from 'shorti'
 import Dropzone from 'react-dropzone'
 import Loading from '../../../Partials/Loading'
@@ -297,40 +297,57 @@ export default class SideBar extends Component {
     const title_area = (
       <div>&nbsp;</div>
     )
+    const popover = {
+      conversation: <Popover className="sidenav__popover" id="popover-conversations">Conversations</Popover>,
+      map: <Popover className="sidenav__popover" id="popover-listing">Listings</Popover>,
+      people: <Popover className="sidenav__popover" id="popover-people">People</Popover>,
+      tasks: <Popover className="sidenav__popover" id="popover-tasks">Tasks</Popover>,
+      transactions: <Popover className="sidenav__popover" id="popover-transactions">Transactions</Popover>
+    }
     return (
       <aside style={ sidebar_style } className="sidebar__nav-list pull-left">
         <div style={ S('mt-12') }>
           { /* <img src="/images/dashboard/icons/hamburger.svg"/> */ }
         </div>
         <Nav bsStyle="pills" stacked>
-          <LinkContainer className={ active.recents } to="/dashboard/recents">
-            <NavItem style={ S('w-85p') }>
-              <img src={ active.recents ? '/images/dashboard/sidenav/chat-active.svg' : '/images/dashboard/sidenav/chat.svg' } style={ S('w-19 h-19') }/>
-              {this.notificationIcon('room_notification_count')}
-            </NavItem>
-          </LinkContainer>
-          <LinkContainer className={ active.mls } to="/dashboard/mls">
-            <NavItem style={ S('w-85p') }>
-              <img src={ active.mls ? '/images/dashboard/sidenav/map-active.svg' : '/images/dashboard/sidenav/map.svg' } style={ S('w-19 h-19') }/>
-            </NavItem>
-          </LinkContainer>
-          <LinkContainer className={ active.contacts } to="/dashboard/contacts">
-            <NavItem style={ S('w-85p') }>
-              <img src={ active.contacts ? '/images/dashboard/sidenav/people-active.svg' : '/images/dashboard/sidenav/people.svg' } style={ S('w-19 h-19') }/>
-            </NavItem>
-          </LinkContainer>
-          <LinkContainer className={ active.tasks } to="/dashboard/tasks">
-            <NavItem style={ S('w-85p') }>
-              <img src={ active.tasks ? '/images/dashboard/sidenav/task-active.svg' : '/images/dashboard/sidenav/task.svg' } style={ S('w-19 h-19') }/>
-              {this.notificationIcon('task_notification_count')}
-            </NavItem>
-          </LinkContainer>
-          <LinkContainer className={ active.transactions } to="/dashboard/transactions" onClick={ this.props.viewAllTransactions }>
-            <NavItem style={ S('w-85p') }>
-              <img src={ active.transactions ? '/images/dashboard/sidenav/transactions-active.svg' : '/images/dashboard/sidenav/transactions.svg' } style={ S('w-19 h-19') }/>
-              {this.notificationIcon('transaction_notification_count')}
-            </NavItem>
-          </LinkContainer>
+          <OverlayTrigger className="test" placement="right" overlay={ popover.conversation } delayShow={ 100 } delayHide={ 0 }>
+            <LinkContainer className={ active.recents } to="/dashboard/recents">
+              <NavItem style={ S('w-85p') }>
+                <img src={ active.recents ? '/images/dashboard/sidenav/chat-active.svg' : '/images/dashboard/sidenav/chat.svg' } style={ S('w-19 h-19') }/>
+                {this.notificationIcon('room_notification_count')}
+              </NavItem>
+            </LinkContainer>
+          </OverlayTrigger>
+          <OverlayTrigger placement="right" overlay={ popover.map } delayShow={ 100 } delayHide={ 0 }>
+            <LinkContainer className={ active.mls } to="/dashboard/mls">
+              <NavItem style={ S('w-85p') }>
+                <img src={ active.mls ? '/images/dashboard/sidenav/map-active.svg' : '/images/dashboard/sidenav/map.svg' } style={ S('w-19 h-19') }/>
+              </NavItem>
+            </LinkContainer>
+          </OverlayTrigger>
+          <OverlayTrigger placement="right" overlay={ popover.people } delayShow={ 100 } delayHide={ 0 }>
+            <LinkContainer className={ active.contacts } to="/dashboard/contacts">
+              <NavItem style={ S('w-85p') }>
+                <img src={ active.contacts ? '/images/dashboard/sidenav/people-active.svg' : '/images/dashboard/sidenav/people.svg' } style={ S('w-19 h-19') }/>
+              </NavItem>
+            </LinkContainer>
+          </OverlayTrigger>
+          <OverlayTrigger placement="right" overlay={ popover.tasks } delayShow={ 100 } delayHide={ 0 }>
+            <LinkContainer className={ active.tasks } to="/dashboard/tasks">
+              <NavItem style={ S('w-85p') }>
+                <img src={ active.tasks ? '/images/dashboard/sidenav/task-active.svg' : '/images/dashboard/sidenav/task.svg' } style={ S('w-19 h-19') }/>
+                {this.notificationIcon('task_notification_count')}
+              </NavItem>
+            </LinkContainer>
+          </OverlayTrigger>
+          <OverlayTrigger placement="right" overlay={ popover.transactions } delayShow={ 100 } delayHide={ 0 }>
+            <LinkContainer className={ active.transactions } to="/dashboard/transactions" onClick={ this.props.viewAllTransactions }>
+              <NavItem style={ S('w-85p') }>
+                <img src={ active.transactions ? '/images/dashboard/sidenav/transactions-active.svg' : '/images/dashboard/sidenav/transactions.svg' } style={ S('w-19 h-19') }/>
+                {this.notificationIcon('transaction_notification_count')}
+              </NavItem>
+            </LinkContainer>
+          </OverlayTrigger>
           { recommend }
           { agents }
         </Nav>
