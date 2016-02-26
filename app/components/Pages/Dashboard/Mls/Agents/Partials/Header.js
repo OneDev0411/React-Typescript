@@ -4,7 +4,8 @@ import helpers from '../../../../../../utils/helpers'
 
 export default class Header extends Component {
   render() {
-    const count = this.props.data.agents.agents ? this.props.data.agents.agents.length : 0
+    const data = this.props.data
+    const count = data.agents.agents ? data.agents.agents.length : 0
 
     return (
       <div id="header">
