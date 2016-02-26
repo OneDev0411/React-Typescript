@@ -1,12 +1,8 @@
 // App.js
 // Build stlye sheet
-if (process.env.WEBPACK_PROCESS === 'build') {
-  // Fonts
-  require('../src/fonts/sf.scss')
-  require('../src/fonts/tempos-headline.scss')
+if (process.env.WEBPACK_PROCESS === 'build')
   // Style
   require('../src/sass/main.scss')
-}
 
 import React, { Component } from 'react'
 import _ from 'lodash'

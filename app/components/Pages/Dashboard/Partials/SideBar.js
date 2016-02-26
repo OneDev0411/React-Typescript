@@ -177,6 +177,9 @@ export default class SideBar extends Component {
     if (path.indexOf('/dashboard/mls/listings/recommend') !== -1)
       active.recommend = 'active'
 
+    if (path.indexOf('/dashboard/mls/agents') !== -1)
+      active.agents = 'active'
+
     // User info
     const user = data.user
     let recommend
@@ -185,7 +188,17 @@ export default class SideBar extends Component {
         <LinkContainer className={ active.recommend } to="/dashboard/mls/listing/recommend">
           <NavItem style={ S('w-85p') }>
             <i className="fa fa-tasks"> </i>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recommend
+          </NavItem>
+        </LinkContainer>
+      )
+    }
+
+    let agents
+    if (data.user.user_type === 'Brokerage') {
+      agents = (
+        <LinkContainer className={ active.agents } to="/dashboard/mls/agents">
+          <NavItem style={ S('w-85p') }>
+            <i className="fa fa-group"> </i>
           </NavItem>
         </LinkContainer>
       )
@@ -297,7 +310,6 @@ export default class SideBar extends Component {
               <img src={ active.mls ? '/images/dashboard/sidenav/map-active.svg' : '/images/dashboard/sidenav/map.svg' } style={ S('w-19 h-19') }/>
             </NavItem>
           </LinkContainer>
-          { recommend }
           <LinkContainer className={ active.contacts } to="/dashboard/contacts">
             <NavItem style={ S('w-85p') }>
               <img src={ active.contacts ? '/images/dashboard/sidenav/people-active.svg' : '/images/dashboard/sidenav/people.svg' } style={ S('w-19 h-19') }/>
@@ -315,6 +327,8 @@ export default class SideBar extends Component {
               {this.notificationIcon('transaction_notification_count')}
             </NavItem>
           </LinkContainer>
+          { recommend }
+          { agents }
         </Nav>
         <div style={ S('absolute b-30 l-15') }>
           <Nav className="sidebar__account">
