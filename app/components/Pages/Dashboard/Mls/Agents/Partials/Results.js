@@ -8,9 +8,6 @@ import Loading from '../../../../../Partials/Loading'
 // AppStore
 import AppStore from '../../../../../../stores/AppStore'
 
-if (process.env.WEBPACK_PROCESS === 'build')
-  require('../../../../../../src/sass/components/pages/agent-report.scss')
-
 export default class Results extends Component {
   componentWillReceiveProps(next) {
     if (!AppStore.data.agents.rows && next.data.agents.agents) {
