@@ -22,5 +22,5 @@ export default class Header extends Component {
 
 // PropTypes
 Header.propTypes = {
-  data: React.PropTypes.object
+  data: React.PropTypes.object.isRequired
 }

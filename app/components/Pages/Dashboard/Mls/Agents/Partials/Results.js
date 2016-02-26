@@ -1,4 +1,4 @@
-// Dashboard/Index.js
+// Agents/Results.js
 import React, { Component } from 'react'
 import Avatar from 'react-avatar'
 import S from 'shorti'
@@ -11,7 +11,7 @@ import AppStore from '../../../../../../stores/AppStore'
 if (process.env.WEBPACK_PROCESS === 'build')
   require('../../../../../../src/sass/components/pages/agent-report.scss')
 
-export default class Dashboard extends Component {
+export default class Results extends Component {
   componentWillReceiveProps(next) {
     if (!AppStore.data.agents.rows && next.data.agents.agents) {
       this.setRows(next.data.agents.agents)
@@ -247,7 +247,6 @@ export default class Dashboard extends Component {
 }
 
 // PropTypes
-Dashboard.propTypes = {
-  data: React.PropTypes.object,
-  params: React.PropTypes.object.isRequired
+Results.propTypes = {
+  data: React.PropTypes.object.isRequired
 }

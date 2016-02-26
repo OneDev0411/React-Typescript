@@ -46,6 +46,5 @@ export default class Agents extends Component {
 
 // PropTypes
 Agents.propTypes = {
-  data: React.PropTypes.object,
-  params: React.PropTypes.object.isRequired
+  data: React.PropTypes.object
 }
