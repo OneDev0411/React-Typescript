@@ -290,7 +290,7 @@ export default class TransactionDetail extends Component {
     const overlay_active = transaction.overlay_active
     let tasks_width = 500
     if (window.innerWidth > 1200)
-      tasks_width = window.innerWidth - 685
+      tasks_width = window.innerWidth - 575
     return (
       <div style={ S('minw-800 z-0') }>
         <Dropzone
