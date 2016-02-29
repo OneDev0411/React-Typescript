@@ -22,10 +22,6 @@ export default class Mls extends Component {
       this.initMap()
   }
 
-  componentWillUnmount() {
-    this.hideModal()
-  }
-
   componentDidUpdate() {
     const data = this.props.data
     if (!data.current_listing && data.path !== '/dashboard/mls') {
@@ -34,6 +30,10 @@ export default class Mls extends Component {
       delete AppStore.data.current_listing
       AppStore.emitChange()
     }
+  }
+
+  componentWillUnmount() {
+    this.hideModal()
   }
 
   initMap() {
