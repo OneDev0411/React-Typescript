@@ -166,6 +166,7 @@ export default class ListingViewer extends Component {
           </span>
         )
       }
+      console.log(listing)
       main_content = (
         <div>
           <div style={ S('p-0 relative') }>
@@ -199,7 +200,32 @@ export default class ListingViewer extends Component {
             </div>
             <hr />
             <div className="clearfix"></div>
-            <div style={ S('color-000 font-18') }>{ description }</div>
+            <div style={ S('color-000 font-18 mb-20') }>{ description }</div>
+            <div style={ S('font-24 mb-20') }>Key Details</div>
+            <div style={ S('mb-10') }>
+              <span style={ S('fw-600') }>Property Type:</span>&nbsp;&nbsp;
+              <span style={ S('color-c0c0c0') }>{ listing.property.property_subtype }</span>
+            </div>
+            <div style={ S('mb-10') }>
+              <span style={ S('fw-600') }>Price Per Square Foot:</span>&nbsp;&nbsp;
+              <span style={ S('color-c0c0c0') }>$100</span>
+            </div>
+            <div style={ S('mb-10') }>
+              <span style={ S('fw-600') }>Built:</span>&nbsp;&nbsp;
+              <span style={ S('color-c0c0c0') }>{ listing.property.year_built }</span>
+            </div>
+            <div style={ S('mb-10') }>
+              <span style={ S('fw-600') }>HOA:</span>&nbsp;&nbsp;
+              <span style={ S('color-c0c0c0') }>{ listing.property_association_fees }</span>
+            </div>
+            <div style={ S('mb-10') }>
+              <span style={ S('fw-600') }>County:</span>&nbsp;&nbsp;
+              <span style={ S('color-c0c0c0') }>{ listing.property.address.county_or_parish }</span>
+            </div>
+            <div style={ S('mb-10') }>
+              <span style={ S('fw-600') }>Community:</span>&nbsp;&nbsp;
+              <span style={ S('color-c0c0c0') }>{ listing.property.subdivision_name }</span>
+            </div>
           </div>
         </div>
       )
