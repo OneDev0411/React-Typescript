@@ -139,7 +139,7 @@ export default class ListingViewer extends Component {
           </span>
         </div>
       )
-      const days_on_market = Math.floor((((new Date()).getTime() / 1000) - listing.dom) / 86400)
+      const days_on_market = Math.floor((((new Date()).getTime() / 1000) - listing.list_date) / 86400)
       const number_days_indicator = (
         <div className="pull-left" style={ S('bg-ebeef1 relative t-7 br-100 pt-11 h-35 pl-15 pr-15 mr-15') }>
           <span style={ S('font-14 relative t-3n') }>
