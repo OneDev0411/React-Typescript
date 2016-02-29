@@ -1,10 +1,12 @@
 // AddContactsModule
 import React, { Component } from 'react'
-import { Button, Input, Modal, Col, Alert } from 'react-bootstrap'
+import { Button, Input, Modal, Col, Alert, DropdownButton, MenuItem } from 'react-bootstrap'
 import S from 'shorti'
+import _ from 'lodash'
 import validator from 'validator'
 import helpers from '../../../../../utils/helpers'
 import MaskedInput from 'react-input-mask'
+import { all_countries } from '../../../../../utils/country-data'
 
 // AppStore
 import AppStore from '../../../../../stores/AppStore'
@@ -290,6 +292,14 @@ export default class AddContactsModule extends Component {
     }
   }
 
+  handleCountryCodeSelect(country) {
+    AppStore.data.phone_country = {
+      iso2: country.iso2,
+      dialCode: country.dialCode
+    }
+    AppStore.emitChange()
+  }
+
   render() {
     const data = this.props.data
     const module_type = this.props.module_type
@@ -422,6 +432,20 @@ export default class AddContactsModule extends Component {
         </div>
       )
     }
+    let phone_country = 'US +1'
+    if (data.phone_country)
+      phone_country = `${data.phone_country.iso2.toUpperCase()} +${data.phone_country.dialCode}`
+    const country_codes = (
+      <DropdownButton title={ phone_country } id="input-dropdown-country-codes" style={ S('pb-9') }>
+        <MenuItem key={ 1 } onClick={ this.handleCountryCodeSelect.bind(this, _.find(all_countries, { iso2: 'us' })) }>United States +1</MenuItem>
+        {
+          all_countries.map((country, i) => {
+            if (country.dialCode !== 1)
+              return <MenuItem onClick={ this.handleCountryCodeSelect.bind(this, country) } key={ country.iso2 + country.dialCode + i }>{ country.name } +{ country.dialCode }</MenuItem>
+          })
+        }
+      </DropdownButton>
+    )
     return (
       <div style={ module_style } className="add-contact-form">
         <div style={ S('maxw-820') }>
@@ -460,7 +484,12 @@ export default class AddContactsModule extends Component {
               <div style={ row_style }>
                 <Col xs={2} style={ column_style }/>
                 <Col xs={5} style={ column_style }>
-                  <MaskedInput className="form-control" style={ input_style } type="text" ref="phone_number" placeholder="PHONE NUMBER" mask="(999)-999-9999" maskChar="_"/>
+                  <div className="input-group">
+                    <div className="input-group-btn input-dropdown--country-codes">
+                      { country_codes }
+                    </div>
+                    <MaskedInput className="form-control" style={ input_style } type="text" ref="phone_number" placeholder="PHONE NUMBER" mask="(999)-999-9999" maskChar="_"/>
+                  </div>
                 </Col>
                 <Col xs={5} style={ column_style }>
                   <Input style={ input_style } type="text" ref="email" placeholder="EMAIL"/>

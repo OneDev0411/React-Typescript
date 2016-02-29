@@ -1,11 +1,13 @@
 // Dashboard.js
 import React, { Component } from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Nav, NavItem, NavDropdown, Modal, Col, Input, Button, Alert, OverlayTrigger, Popover } from 'react-bootstrap'
+import { Nav, NavItem, NavDropdown, Modal, Col, Input, Button, Alert, OverlayTrigger, Popover, DropdownButton, MenuItem } from 'react-bootstrap'
 import S from 'shorti'
+import _ from 'lodash'
 import Dropzone from 'react-dropzone'
 import Loading from '../../../Partials/Loading'
 import MaskedInput from 'react-input-mask'
+import { all_countries } from '../../../../utils/country-data'
 
 // AppDispatcher
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
@@ -153,6 +155,14 @@ export default class SideBar extends Component {
     AppStore.emitChange()
   }
 
+  handleCountryCodeSelect(country) {
+    AppStore.data.phone_country = {
+      iso2: country.iso2,
+      dialCode: country.dialCode
+    }
+    AppStore.emitChange()
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -237,6 +247,20 @@ export default class SideBar extends Component {
     let change_password_area = (
       <a style={ S('mt-7') } className="pull-left" href="#" onClick={ this.showChangePassword.bind(this) }>Change password</a>
     )
+    let phone_country = 'US +1'
+    if (data.phone_country)
+      phone_country = `${data.phone_country.iso2.toUpperCase()} +${data.phone_country.dialCode}`
+    const country_codes = (
+      <DropdownButton title={ phone_country } id="input-dropdown-country-codes" style={ S('pb-9') }>
+        <MenuItem key={ 1 } onClick={ this.handleCountryCodeSelect.bind(this, _.find(all_countries, { iso2: 'us' })) }>United States +1</MenuItem>
+        {
+          all_countries.map((country, i) => {
+            if (country.dialCode !== 1)
+              return <MenuItem onClick={ this.handleCountryCodeSelect.bind(this, country) } key={ country.iso2 + country.dialCode + i }>{ country.name } +{ country.dialCode }</MenuItem>
+          })
+        }
+      </DropdownButton>
+    )
     let form_fields = (
       <Col xs={ 9 } style={ S('p-0') }>
         <Col xs={ 6 }>
@@ -253,7 +277,12 @@ export default class SideBar extends Component {
         </Col>
         <Col xs={ 6 } style={ S('p-0') }>
           <label>Phone number</label>
-          <MaskedInput className="form-control" ref="phone_number" type="text" defaultValue={ user.phone_number ? user.phone_number.replace('+', '') : '' } mask="(999)-999-9999" maskChar="_"/>
+          <div className="input-group">
+            <div className="input-group-btn input-dropdown--country-codes">
+              { country_codes }
+            </div>
+            <MaskedInput className="form-control" ref="phone_number" type="text" defaultValue={ user.phone_number ? user.phone_number.replace('+', '') : '' } mask="(999)-999-9999" maskChar="_"/>
+          </div>
         </Col>
       </Col>
     )
