@@ -1,8 +1,10 @@
 // Dashboard/Contacts/index.js
 import React, { Component } from 'react'
 import S from 'shorti'
-import { Table, Button, Input } from 'react-bootstrap'
+import _ from 'lodash'
+import { Table, Button, Input, DropdownButton, MenuItem } from 'react-bootstrap'
 import MaskedInput from 'react-input-mask'
+import { all_countries } from '../../../../utils/country-data'
 
 // Partials
 import Header from '../Partials/Header'
@@ -93,6 +95,13 @@ export default class Contacts extends Component {
     AppStore.data.saving_contact = true
     AppStore.emitChange()
     const contact = data.current_contact
+    // TODO switch to different fields for country code
+    let phone_number = contact.phone_number
+    phone_number = phone_number.replace(/\D/g, '').slice(-10)
+    let country_code = 1
+    if (data.phone_country)
+      country_code = data.phone_country.dialCode
+    contact.phone_number = '+' + country_code + phone_number
     AppDispatcher.dispatch({
       action: 'edit-contact',
       user,
@@ -106,7 +115,8 @@ export default class Contacts extends Component {
     const first_name = this.refs.first_name.refs.input.value
     const last_name = this.refs.last_name.refs.input.value
     const email = this.refs.email.refs.input.value
-    const phone_number = this.refs.phone_number.refs.input.value
+    let phone_number = this.refs.phone_number.refs.input.value.trim()
+    phone_number = phone_number.replace(/\D/g, '')
     const contact = {
       id: data.current_contact.id,
       first_name,
@@ -119,6 +129,14 @@ export default class Contacts extends Component {
       ...contact
     }
     AppStore.data.current_contact = current_contact
+    AppStore.emitChange()
+  }
+
+  handleCountryCodeSelect(country) {
+    AppStore.data.phone_country = {
+      iso2: country.iso2,
+      dialCode: country.dialCode
+    }
     AppStore.emitChange()
   }
 
@@ -163,6 +181,20 @@ export default class Contacts extends Component {
 
     if (data.current_contact) {
       const contact = data.current_contact
+      let phone_country = 'US +1'
+      if (data.phone_country)
+        phone_country = `${data.phone_country.iso2.toUpperCase()} +${data.phone_country.dialCode}`
+      const country_codes = (
+        <DropdownButton title={ phone_country } id="input-dropdown-country-codes" style={ S('pb-9') }>
+          <MenuItem key={ 1 } onClick={ this.handleCountryCodeSelect.bind(this, _.find(all_countries, { iso2: 'us' })) }>United States +1</MenuItem>
+          {
+            all_countries.map((country, i) => {
+              if (country.dialCode !== 1)
+                return <MenuItem onClick={ this.handleCountryCodeSelect.bind(this, country) } key={ country.iso2 + country.dialCode + i }>{ country.name } +{ country.dialCode }</MenuItem>
+            })
+          }
+        </DropdownButton>
+      )
       main_content = (
         <div style={ S('ml-20') }>
           <ProfileImage
@@ -181,7 +213,12 @@ export default class Contacts extends Component {
               <Input ref="email" type="text" value={ contact.email } onChange={ this.handleInputChange.bind(this) }/>
               <label>Phone number</label>
               <div className="form-group">
-                <MaskedInput className="form-control" ref="phone_number" type="text" value={ contact.phone_number } onChange={ this.handleInputChange.bind(this) } mask="(999)-999-9999" maskChar="_"/>
+                <div className="input-group">
+                  <div className="input-group-btn input-dropdown--country-codes">
+                    { country_codes }
+                  </div>
+                  <MaskedInput className="form-control" ref="phone_number" type="text" value={ contact.phone_number.replace('+', '').slice(-10) } onChange={ this.handleInputChange.bind(this) } mask="(999)-999-9999" maskChar="_"/>
+                </div>
               </div>
               <Button style={ S('pl-30 pr-30 pull-right') } type="submit" className={ data.saving_contact ? 'disabled' : '' } bsStyle="primary">
                 { data.saving_contact ? 'Saving...' : 'Save' }

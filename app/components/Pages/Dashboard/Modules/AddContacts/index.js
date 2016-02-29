@@ -25,6 +25,8 @@ export default class AddContactsModule extends Component {
       if (this.refs)
         this.refs.search_contacts.refs.input.focus()
     }, 300)
+    delete AppStore.data.phone_country
+    AppStore.emitChange()
   }
 
   componentDidUpdate() {
@@ -86,13 +88,20 @@ export default class AddContactsModule extends Component {
 
   addContact(e) {
     e.preventDefault()
+    const data = this.props.data
     const module_type = this.props.module_type
     AppStore.data.creating_contacts = true
     AppStore.emitChange()
     const first_name = this.refs.first_name.refs.input.value.trim()
     const last_name = this.refs.last_name.refs.input.value.trim()
     const email = this.refs.email.refs.input.value.trim()
-    const phone_number = this.refs.phone_number.refs.input.value.trim()
+    // TODO switch to different fields for country code
+    let phone_number = this.refs.phone_number.refs.input.value.trim()
+    phone_number = phone_number.replace(/\D/g, '')
+    let country_code = 1
+    if (data.phone_country)
+      country_code = data.phone_country.dialCode
+    phone_number = '+' + country_code + phone_number
     const company = this.refs.company.refs.input.value.trim()
     const role = this.refs.role.refs.input.value.trim()
     const action = this.refs.action.value.trim()

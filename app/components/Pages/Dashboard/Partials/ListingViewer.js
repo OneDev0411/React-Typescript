@@ -1,7 +1,7 @@
 // ListingViewer.js
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import { Carousel, CarouselItem } from 'react-bootstrap'
+import { Carousel, CarouselItem, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import _ from 'lodash'
 import S from 'shorti'
 import helpers from '../../../../utils/helpers'
@@ -18,6 +18,10 @@ export default class ListingViewer extends Component {
       //   this.navCarousel('prev')
       // if (e.keyCode === 39)
       //   this.navCarousel('next')
+    }
+    if (typeof window !== 'undefined') {
+      const clipboard = require('clipboard')
+      new clipboard('.copy-mls')
     }
     this.fadeIn()
   }
@@ -70,7 +74,7 @@ export default class ListingViewer extends Component {
     // let full_address
     let listing_title
     let listing_subtitle
-    // let mls_number
+    let mls_number
     let bedroom_count
     let bathroom_count
     let square_feet
@@ -93,7 +97,7 @@ export default class ListingViewer extends Component {
       // postal_code = property.address.postal_code
       // full_address = `${address} ${city}, ${state}, ${postal_code}`
       listing_title = address
-      // mls_number = listing.mls_number
+      mls_number = listing.mls_number
       bedroom_count = property.bedroom_count
       bathroom_count = property.bathroom_count
       square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
@@ -126,6 +130,39 @@ export default class ListingViewer extends Component {
       })
       listing_title = `${listing.property.address.street_number} ${listing.property.address.street_name} ${listing.property.address.street_suffix}`
       listing_subtitle = `${listing.property.address.city}, ${listing.property.address.state} ${listing.property.address.postal_code}`
+      const status_color = listing_util.getStatusColor(listing.status)
+      const listing_status_indicator = (
+        <div className="pull-left" style={ S('bg-ebeef1 relative t-7 br-100 ml-15 pt-11 h-35 pl-36 pr-15 mr-15') }>
+          <span style={ S('mr-5 font-46 l-10 t-17n absolute color-' + status_color) }>&#8226;</span>
+          <span style={ S('font-14 relative t-3n') }>
+            <b>{ listing.status }</b>
+          </span>
+        </div>
+      )
+      const days_on_market = Math.floor((((new Date()).getTime() / 1000) - listing.dom) / 86400)
+      const number_days_indicator = (
+        <div className="pull-left" style={ S('bg-ebeef1 relative t-7 br-100 pt-11 h-35 pl-15 pr-15 mr-15') }>
+          <span style={ S('font-14 relative t-3n') }>
+            <b>{ days_on_market } days ago</b>
+          </span>
+        </div>
+      )
+      const tooltip = (
+        <Tooltip id="copied-tooltip">
+          Copied
+        </Tooltip>
+      )
+      let mls_link
+      if (mls_number) {
+        mls_link = (
+          <span>
+            | MLS#:&nbsp;
+            <OverlayTrigger rootClose trigger="click" placement="bottom" overlay={ tooltip }>
+              <span style={ S('color-8ba8d1 pointer') } className="copy-mls" data-clipboard-text={ mls_number }>{ mls_number }</span>
+            </OverlayTrigger>
+          </span>
+        )
+      }
       main_content = (
         <div>
           <div style={ S('p-0 relative') }>
@@ -135,8 +172,19 @@ export default class ListingViewer extends Component {
           </div>
           <div style={ S('p-15') }>
             <div style={ S('fw-700 font-70 mb-10n') }>${ price }</div>
-            <div className="tempo" style={ S('font-32 fw-100 color-7d8288 mb-10') }>{ listing_title }</div>
-            <div style={ S('font-18 color-b7bfc7 mb-30') }>{ listing_subtitle }</div>
+            <div>
+              <div className="tempo pull-left" style={ S('font-32 fw-100 color-7d8288 mb-10 mr-20') }>
+                { listing_title }
+              </div>
+              <div className="pull-left">
+                { listing_status_indicator }
+              </div>
+              <div className="pull-left">
+                { number_days_indicator }
+              </div>
+            </div>
+            <div className="clearfix"></div>
+            <div style={ S('font-18 color-b7bfc7 mb-30') }>{ listing_subtitle } { mls_link }</div>
             <div style={ S('font-24 color-4a4a4a') }>
               <span>{ bedroom_count } Beds</span>
               &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;

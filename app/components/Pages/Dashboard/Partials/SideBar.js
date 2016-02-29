@@ -24,6 +24,7 @@ export default class SideBar extends Component {
     e.preventDefault()
     delete AppStore.data.error
     AppStore.data.show_account_settings_modal = true
+    delete AppStore.data.phone_country
     AppStore.emitChange()
   }
 
@@ -43,7 +44,13 @@ export default class SideBar extends Component {
     const first_name = this.refs.first_name.refs.input.value.trim()
     const last_name = this.refs.last_name.refs.input.value.trim()
     const email = this.refs.email.refs.input.value.trim()
-    const phone_number = this.refs.phone_number.refs.input.value.trim()
+    // TODO switch to different fields for country code
+    let phone_number = this.refs.phone_number.refs.input.value.trim()
+    phone_number = phone_number.replace(/\D/g, '')
+    let country_code = 1
+    if (data.phone_country)
+      country_code = data.phone_country.dialCode
+    phone_number = '+' + country_code + phone_number
     const user_info = {
       first_name,
       last_name,
@@ -281,7 +288,7 @@ export default class SideBar extends Component {
             <div className="input-group-btn input-dropdown--country-codes">
               { country_codes }
             </div>
-            <MaskedInput className="form-control" ref="phone_number" type="text" defaultValue={ user.phone_number ? user.phone_number.replace('+', '') : '' } mask="(999)-999-9999" maskChar="_"/>
+            <MaskedInput className="form-control" ref="phone_number" type="text" defaultValue={ user.phone_number ? user.phone_number.replace('+', '').slice(-10) : '' } mask="(999)-999-9999" maskChar="_"/>
           </div>
         </Col>
       </Col>

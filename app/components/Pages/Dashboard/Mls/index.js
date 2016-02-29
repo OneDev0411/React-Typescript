@@ -26,6 +26,16 @@ export default class Mls extends Component {
     this.hideModal()
   }
 
+  componentDidUpdate() {
+    const data = this.props.data
+    if (!data.current_listing && data.path !== '/dashboard/mls') {
+      const history = require('../../../../utils/history')
+      history.replaceState(null, '/dashboard/mls')
+      delete AppStore.data.current_listing
+      AppStore.emitChange()
+    }
+  }
+
   initMap() {
     const data = this.props.data
     const user = data.user
