@@ -166,7 +166,6 @@ export default class ListingViewer extends Component {
           </span>
         )
       }
-      console.log(listing)
       main_content = (
         <div>
           <div style={ S('p-0 relative') }>
