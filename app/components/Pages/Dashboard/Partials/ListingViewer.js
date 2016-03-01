@@ -166,7 +166,6 @@ export default class ListingViewer extends Component {
           </span>
         )
       }
-      console.log(listing)
       let pool
       if (listing.property.pool_yn) {
         pool = (
