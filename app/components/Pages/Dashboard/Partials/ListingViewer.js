@@ -166,6 +166,25 @@ export default class ListingViewer extends Component {
           </span>
         )
       }
+      console.log(listing)
+      let pool
+      if (listing.property.pool_yn) {
+        pool = (
+          <div style={ S('mb-10') }>
+            <span style={ S('fw-600') }>Pool:</span>&nbsp;&nbsp;
+            <span style={ S('color-c0c0c0') }>Yes</span>
+          </div>
+        )
+      }
+      let hoa
+      if (listing.property_association_fees) {
+        hoa = (
+          <div style={ S('mb-10') }>
+            <span style={ S('fw-600') }>HOA:</span>&nbsp;&nbsp;
+            <span style={ S('color-c0c0c0') }>{ listing.property_association_fees }</span>
+          </div>
+        )
+      }
       main_content = (
         <div>
           <div style={ S('p-0 relative') }>
@@ -206,17 +225,11 @@ export default class ListingViewer extends Component {
               <span style={ S('color-c0c0c0') }>{ listing.property.property_subtype }</span>
             </div>
             <div style={ S('mb-10') }>
-              <span style={ S('fw-600') }>Price Per Square Foot:</span>&nbsp;&nbsp;
-              <span style={ S('color-c0c0c0') }>$100</span>
-            </div>
-            <div style={ S('mb-10') }>
               <span style={ S('fw-600') }>Built:</span>&nbsp;&nbsp;
               <span style={ S('color-c0c0c0') }>{ listing.property.year_built }</span>
             </div>
-            <div style={ S('mb-10') }>
-              <span style={ S('fw-600') }>HOA:</span>&nbsp;&nbsp;
-              <span style={ S('color-c0c0c0') }>{ listing.property_association_fees }</span>
-            </div>
+            { pool }
+            { hoa }
             <div style={ S('mb-10') }>
               <span style={ S('fw-600') }>County:</span>&nbsp;&nbsp;
               <span style={ S('color-c0c0c0') }>{ listing.property.address.county_or_parish }</span>
