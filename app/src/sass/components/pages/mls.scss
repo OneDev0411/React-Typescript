@@ -21,13 +21,10 @@
 .listing-map {
   transition: 150ms;
   right: 0;
-  &.active {
-    right: 500px;
-  }
 }
 .listing-panel {
   transition: 150ms;
-  right: -500px;
+  right: -850px;
   &.active {
     right: 0;
   }
@@ -38,7 +35,11 @@
   margin-right: 10px;
   transition: 150ms;
   right: 0px;
+  border: none !important;
+  background: #fff !important;
+  box-shadow: none !important;
+  border-radius: 0;
   &.active {
-    right: 510px;
+    right: 850px;
   }
 }

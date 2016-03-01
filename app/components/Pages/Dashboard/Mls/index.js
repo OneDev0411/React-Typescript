@@ -12,6 +12,7 @@ import AppStore from '../../../../stores/AppStore'
 import SideBar from '../Partials/SideBar'
 // import Loading from '../../../Partials/Loading'
 import ListingViewer from '../Partials/ListingViewer'
+import ListingPanel from './Partials/ListingPanel'
 
 export default class Mls extends Component {
 
@@ -167,10 +168,30 @@ export default class Mls extends Component {
   }
 
   toggleListingPanel() {
+    if (!AppStore.data.show_listing_panel) {
+      AppStore.data.show_listing_panel = true
+      AppStore.data.listing_panel = {
+        view: 'photos'
+      }
+    } else {
+      delete AppStore.data.show_listing_panel
+      delete AppStore.data.listing_panel
+    }
+    AppStore.emitChange()
+  }
+
+  showPanelView(view) {
+    if (AppStore.data.show_listing_panel && AppStore.data.listing_panel && AppStore.data.listing_panel.view === view) {
+      delete AppStore.data.listing_panel
+      delete AppStore.data.show_listing_panel
+      AppStore.emitChange()
+      return
+    }
+    AppStore.data.listing_panel = {
+      view
+    }
     if (!AppStore.data.show_listing_panel)
       AppStore.data.show_listing_panel = true
-    else
-      delete AppStore.data.show_listing_panel
     AppStore.emitChange()
   }
 
@@ -180,7 +201,6 @@ export default class Mls extends Component {
     const main_style = S('absolute h-100p l-70')
     let map_listing_markers
     let loading
-    let listing_panel
     if (listing_map && listing_map.listings) {
       const listings = listing_map.listings
       map_listing_markers = listings.map(listing => {
@@ -200,86 +220,10 @@ export default class Mls extends Component {
           </div>
         )
       })
-      // Listing panel
-      const listing_panel_items = listings.map(listing => {
-        const status_color = listing_util.getStatusColor(listing.status)
-        let price_small = Math.floor(listing.price / 1000).toFixed(2).replace(/[.,]00$/, '')
-        let letter = 'K'
-        if (price_small > 1000) {
-          price_small = (price_small / 1000).toFixed(2).replace(/[.,]00$/, '')
-          letter = 'M'
-        }
-        let listing_image = <div style={ S('w-500 bg-efefef h-200') }/>
-        if (listing.cover_image_url)
-          listing_image = <div style={ S('w-500 h-200 bg-url(' + listing.cover_image_url + ') bg-cover bg-center') } />
-        return (
-          <li key={ 'panel-listing-' + listing.id } onClick={ this.showListingViewer.bind(this, listing) } style={ S('pointer w-400 h-300 bg-fff') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
-            <div>
-              { listing_image }
-            </div>
-            <div style={ S('p-10') }>
-              <div>
-                <div className="pull-left" style={ S('w-10 h-10 br-100 mr-8 bg-' + status_color) }></div>
-                <div className="pull-left" style={ S('mt-4n') }>
-                  { listing.status }
-                </div>
-                <div className="clearfix"></div>
-              </div>
-              <div>{ listing_util.addressTitle(listing.address) }</div>
-              <div>${ price_small }{ letter }</div>
-            </div>
-          </li>
-        )
-      })
-      // Listing panel
-      const heading_height = 130
-      const listing_panel_wrap_style = S('fixed t-0 r-0 w-0 h-0')
-      const listing_panel_style = S('absolute t-0 w-500 h-' + window.innerHeight)
-      const listing_scroll_style = {
-        ...listing_panel_style,
-        top: heading_height + 'px',
-        height: window.innerHeight - heading_height,
-        overflowY: 'scroll'
-      }
-      let panel_class = 'listing-panel'
-      let button_class = 'listing-panel__button'
-      let listing_panel_icon = <i className="fa fa-list"></i>
-      if (data.show_listing_panel) {
-        panel_class = panel_class + ' active'
-        button_class = button_class + ' active'
-        listing_panel_icon = (
-          <i className="fa fa-times"></i>
-        )
-      }
-      listing_panel = (
-        <div style={ listing_panel_wrap_style }>
-          <Button onClick={ this.toggleListingPanel.bind(this) } className={ button_class } bsStyle="primary" style={ S('absolute br-100 z-100 pt-8 pb-8 h-40 w-40') }>
-            { listing_panel_icon }
-          </Button>
-          <div style={ listing_panel_style } className={ panel_class }>
-            <div style={ S('p-15') }>
-              <div className="tempo" style={ S('color-444 fw-100 font-24') }>{ listings.length } Homes Found</div>
-              <div style={ S('mb-10') }>Sorting by <a href="#">Most Relevant</a></div>
-              <div>
-                <ButtonGroup>
-                  <Button>List</Button>
-                  <Button>Photos</Button>
-                  <Button>Map</Button>
-                </ButtonGroup>
-              </div>
-            </div>
-            <div style={ listing_scroll_style }>
-              <ul style={ S('m-0 p-0') }>
-                { listing_panel_items }
-              </ul>
-            </div>
-          </div>
-        </div>
-      )
     }
     if (listing_map && listing_map.is_loading) {
       loading = (
-        <div style={ S('z-1000 absolute w-100p t-30') }>
+        <div style={ S('z-1 center-block relative h-0 w-400 t-20') }>
           <div style={ S('bg-3388ff br-20 color-fff w-190 h-29 pt-5 center-block text-center') }>Loading MLS&reg; Listings...</div>
         </div>
       )
@@ -302,23 +246,58 @@ export default class Mls extends Component {
       lng: -96.7970
     }
     const default_zoom = 13
+    const toolbar_style = {
+      ...S('h-62 p-10'),
+      borderBottom: '1px solid #dcd9d9'
+    }
     return (
       <div style={ S('minw-1000') }>
         <main>
           <SideBar data={ data }/>
           <div className={ main_class } style={ main_style }>
+            <nav style={ toolbar_style }>
+              <div style={ S('pull-left mr-10') }>
+                <input className="form-control" type="text" style={ S('bg-dfe3e8 w-400 pull-left') } placeholder="Search location or MLS#" />
+              </div>
+              <div style={ S('pull-left') }>
+                <Button style={ { ...S('mr-10'), outline: 'none' } }>
+                  <img src="/images/dashboard/mls/filters.svg" style={ S('w-20 mr-10') }/>
+                  Filters
+                </Button>
+                <Button style={ { ...S('mr-10'), outline: 'none' } }>
+                  <img src="/images/dashboard/mls/draw.svg" style={ S('w-20 mr-10') }/>
+                  Draw
+                </Button>
+                <ButtonGroup style={ S('mr-10') }>
+                  <Button style={ { outline: 'none' } } onClick={ this.showPanelView.bind(this, 'list') } bsStyle={ data.listing_panel && data.listing_panel.view === 'list' ? 'primary' : 'default'}>
+                    <img src={ `/images/dashboard/mls/list${data.listing_panel && data.listing_panel.view === 'list' ? '-active' : ''}.svg` } style={ S('w-20 mr-10') }/>
+                    List
+                  </Button>
+                  <Button style={ { outline: 'none' } } onClick={ this.showPanelView.bind(this, 'photos') } bsStyle={ data.listing_panel && data.listing_panel.view === 'photos' ? 'primary' : 'default'}>
+                    <img src={ `/images/dashboard/mls/photos${data.listing_panel && data.listing_panel.view === 'photos' ? '-active' : ''}.svg` } style={ S('w-18 mr-10') }/>
+                    Photos
+                  </Button>
+                </ButtonGroup>
+              </div>
+            </nav>
             { loading }
-            <GoogleMap
-              defaultCenter={ data.listing_map ? data.listing_map.center : default_center }
-              defaultZoom={ data.listing_map ? data.listing_map.zoom : default_zoom }
-              onBoundsChange={ this.handleBoundsChange.bind(this) }
-              options={ { mapTypeControl: true } }
-            >
-            { map_listing_markers }
-            </GoogleMap>
+            <div style={ S('h-' + (window.innerHeight - 62)) }>
+              <GoogleMap
+                defaultCenter={ data.listing_map ? data.listing_map.center : default_center }
+                defaultZoom={ data.listing_map ? data.listing_map.zoom : default_zoom }
+                onBoundsChange={ this.handleBoundsChange.bind(this) }
+                options={ { mapTypeControl: true } }
+              >
+              { map_listing_markers }
+              </GoogleMap>
+            </div>
           </div>
           { listing_viewer }
-          { listing_panel }
+          <ListingPanel
+            data={ data }
+            toggleListingPanel={ this.toggleListingPanel }
+            showListingViewer={ this.showListingViewer }
+          />
         </main>
       </div>
     )

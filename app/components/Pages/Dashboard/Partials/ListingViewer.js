@@ -185,7 +185,7 @@ export default class ListingViewer extends Component {
         )
       }
       main_content = (
-        <div>
+        <div style={ S('bg-fff') }>
           <div style={ S('p-0 relative') }>
             { listing_images }
             { listing_images_cached }
