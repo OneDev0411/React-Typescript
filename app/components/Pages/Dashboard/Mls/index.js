@@ -1,6 +1,7 @@
 // Dashboard/Mls/index.js
 import React, { Component } from 'react'
 import S from 'shorti'
+import _ from 'lodash'
 import GoogleMap from 'google-map-react'
 import listing_util from '../../../../utils/listing'
 import { ButtonGroup, Button } from 'react-bootstrap'
@@ -195,6 +196,31 @@ export default class Mls extends Component {
     AppStore.emitChange()
   }
 
+  sortListings(sort_by) {
+    const data = this.props.data
+    const listings = data.listing_map.listings
+    let sorting_direction = 1
+    if (AppStore.data.listing_map.sorting_direction)
+      sorting_direction = AppStore.data.listing_map.sorting_direction * -1
+    const listings_sorted = _.sortBy(listings, (listing) => {
+      if (sort_by === 'area')
+        return listing.address.postal_code * sorting_direction
+      if (sort_by === 'price')
+        return listing.price * sorting_direction
+      if (sort_by === 'bedroom_count')
+        return listing.compact_property.bedroom_count * sorting_direction
+      if (sort_by === 'bathroom_count')
+        return listing.compact_property.bathroom_count * sorting_direction
+      if (sort_by === 'square_meters')
+        return listing.compact_property.square_meters * sorting_direction
+      if (sort_by === 'year_built')
+        return listing.compact_property.year_built * sorting_direction
+    })
+    AppStore.data.listing_map.listings = listings_sorted
+    AppStore.data.listing_map.sorting_direction = sorting_direction
+    AppStore.emitChange()
+  }
+
   render() {
     const data = this.props.data
     const listing_map = data.listing_map
@@ -297,6 +323,7 @@ export default class Mls extends Component {
             data={ data }
             toggleListingPanel={ this.toggleListingPanel }
             showListingViewer={ this.showListingViewer }
+            sortListings={ this.sortListings }
           />
         </main>
       </div>

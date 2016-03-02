@@ -43,3 +43,8 @@
     right: 850px;
   }
 }
+.listing-panel__list-item {
+  &:hover {
+    background-color: #f3f8ff
+  }
+}

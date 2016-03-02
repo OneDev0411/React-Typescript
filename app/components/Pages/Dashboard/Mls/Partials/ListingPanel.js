@@ -20,9 +20,14 @@ export default class ListingPanel extends Component {
       if (listing.cover_image_url)
         listing_image = <div style={ S('w-405 h-300 bg-url(' + listing.cover_image_url + ') bg-cover bg-center') } />
       const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
+      const image_overlay = {
+        ...S('bg-000 absolute w-100p h-100p'),
+        opacity: '.2'
+      }
       return (
-        <div key={ 'panel-listing-' + listing.id } onClick={ this.props.showListingViewer.bind(this, listing) } style={ S('pointer w-415 h-350 pb-10 pl-10 bg-fff pull-left') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
+        <div key={ 'panel-listing-' + listing.id } onClick={ this.props.showListingViewer.bind(this, listing) } style={ S('pointer w-415 h-350 pb-10 pl-10 bg-fff pull-left') }>
           <div style={ S('relative') }>
+            <div style={ image_overlay } />
             { listing_image }
             <div style={ S('absolute color-fff l-15 b-15') }>
               <div style={ S('font-18 fw-600') }>
@@ -55,33 +60,44 @@ export default class ListingPanel extends Component {
     // Listing list
     const listing_panel_list = listings.map(listing => {
       const status_color = listing_util.getStatusColor(listing.status)
-      let price_small = Math.floor(listing.price / 1000).toFixed(2).replace(/[.,]00$/, '')
-      let letter = 'K'
-      if (price_small > 1000) {
-        price_small = (price_small / 1000).toFixed(2).replace(/[.,]00$/, '')
-        letter = 'M'
-      }
-      let listing_image = <div style={ S('w-80 h-80 bg-efefef') }/>
+      const property = listing.compact_property
+      let listing_image = <div style={ S('w-40 h-40 bg-efefef') }/>
       if (listing.cover_image_url)
-        listing_image = <div style={ S('w-80 h-80 br-3 bg-url(' + listing.cover_image_url + ') bg-cover bg-center') } />
-      const listing_style = {
-        ...S('pointer w-400 pl-10 h-90 bg-fff mb-10 mt-10'),
-        borderBottom: '1px solid #f5fafe'
-      }
+        listing_image = <div style={ S('w-40 h-40 br-3 bg-url(' + listing.cover_image_url + ') bg-cover bg-center') } />
+      const listing_style = S('pointer pl-10 h-60 pt-10 border-bottom-1-solid-f5fafe')
+      const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
       return (
-        <div key={ 'panel-listing-' + listing.id } onClick={ this.props.showListingViewer.bind(this, listing) } style={ listing_style } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
+        <div className="listing-panel__list-item" key={ 'panel-listing-' + listing.id } onClick={ this.props.showListingViewer.bind(this, listing) } style={ listing_style }>
           <div style={ S('pull-left') }>
             { listing_image }
           </div>
-          <div style={ S('p-10 pull-left w-200') }>
-            <div style={ S('mb-10') }>{ listing_util.addressTitle(listing.address) }</div>
+          <div style={ S('ml-10 pull-left w-220') }>
+            <div style={ S('mb-5') }>{ listing_util.addressTitle(listing.address) }</div>
             <div className="pull-left" style={ S('w-10 h-10 br-100 mr-8 bg-' + status_color) }></div>
-            <div className="pull-left" style={ S('mt-4n') }>
+            <div className="pull-left" style={ S('mt-4n font-12') }>
               { listing.status }
             </div>
           </div>
+          <div className="pull-left" style={ S('mt-10 w-80') }>
+            <div>{ listing.address.postal_code }</div>
+          </div>
           <div className="pull-left" style={ S('mt-10 w-100') }>
-            <div>${ price_small }{ letter }</div>
+            <div>${ helpers.numberWithCommas(Math.floor(listing.price)) }</div>
+          </div>
+          <div className="pull-left" style={ S('mt-10 w-60') }>
+            <div>{ property.bedroom_count }</div>
+          </div>
+          <div className="pull-left" style={ S('mt-10 w-60') }>
+            <div>{ property.bathroom_count }</div>
+          </div>
+          <div className="pull-left" style={ S('mt-10 w-60') }>
+            <div>{ square_feet }</div>
+          </div>
+          <div className="pull-left" style={ S('mt-10 w-60') }>
+            <div>{ property.year_built }</div>
+          </div>
+          <div className="pull-left" style={ S('mt-10 w-100') }>
+            <div>(Coming soon)</div>
           </div>
         </div>
       )
@@ -90,7 +106,7 @@ export default class ListingPanel extends Component {
     let heading_height = 150
     let panel_top = 80
     if (data.listing_panel && data.listing_panel.view === 'list') {
-      panel_top = 105
+      panel_top = 103
       heading_height = 180
     }
     const listing_panel_wrap_style = S('fixed t-62 r-0 w-0 h-0 z-100')
@@ -98,7 +114,7 @@ export default class ListingPanel extends Component {
     const listing_scroll_style = {
       ...listing_panel_style,
       top: panel_top + 'px',
-      height: window.innerHeight - heading_height,
+      height: window.innerHeight - heading_height + 10,
       overflowY: 'scroll'
     }
     let panel_class = 'listing-panel'
@@ -116,10 +132,38 @@ export default class ListingPanel extends Component {
     if (!data.listing_panel || data.listing_panel && data.listing_panel.view === 'list') {
       panel_content_items = listing_panel_list
       items_heading = (
-        <div style={ { borderBottom: '1px solid #e9eced' } }>
-          <div style={ S('pl-15 pr-15 mb-5') }>
+        <div style={ S('border-bottom-1-solid-e9eced pb-10 pl-10 fw-600 color-4a4a4a') }>
+          <div style={ S('w-270 pull-left') }>
             Address
           </div>
+          <div onClick={ this.props.sortListings.bind(this, 'area') } style={ S('w-80 pull-left pointer') }>
+            Area&nbsp;&nbsp;
+            <i style={ S('color-c3c3c3') } className="fa fa-caret-down"></i>
+          </div>
+          <div onClick={ this.props.sortListings.bind(this, 'price') } style={ S('w-100 pull-left pointer') }>
+            Price&nbsp;&nbsp;
+            <i style={ S('color-c3c3c3') } className="fa fa-caret-down"></i>
+          </div>
+          <div onClick={ this.props.sortListings.bind(this, 'bedroom_count') } style={ S('w-60 pull-left pointer') }>
+            Beds&nbsp;&nbsp;
+            <i style={ S('color-c3c3c3') } className="fa fa-caret-down"></i>
+          </div>
+          <div onClick={ this.props.sortListings.bind(this, 'bathroom_count') } style={ S('w-60 pull-left pointer') }>
+            Baths&nbsp;&nbsp;
+            <i style={ S('color-c3c3c3') } className="fa fa-caret-down"></i>
+          </div>
+          <div onClick={ this.props.sortListings.bind(this, 'square_meters') } style={ S('w-60 pull-left pointer') }>
+            Sqft&nbsp;&nbsp;
+            <i style={ S('color-c3c3c3') } className="fa fa-caret-down"></i>
+          </div>
+          <div onClick={ this.props.sortListings.bind(this, 'year_built') } style={ S('w-60 pull-left pointer') }>
+            Built&nbsp;&nbsp;
+            <i style={ S('color-c3c3c3') } className="fa fa-caret-down"></i>
+          </div>
+          <div onClick={ this.props.sortListings.bind(this, 'dom') } style={ S('w-60 pull-left pointer') }>
+            DOM
+          </div>
+          <div className="clearfix"></div>
         </div>
       )
     }
@@ -152,5 +196,6 @@ export default class ListingPanel extends Component {
 ListingPanel.propTypes = {
   data: React.PropTypes.object,
   toggleListingPanel: React.PropTypes.func,
-  showListingViewer: React.PropTypes.func
+  showListingViewer: React.PropTypes.func,
+  sortListings: React.PropTypes.func
 }
