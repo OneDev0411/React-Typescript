@@ -14,7 +14,7 @@ import SideBar from '../Partials/SideBar'
 // import Loading from '../../../Partials/Loading'
 import ListingViewer from '../Partials/ListingViewer'
 import ListingPanel from './Partials/ListingPanel'
-
+import FilterForm from './Partials/FilterForm'
 export default class Mls extends Component {
 
   componentWillMount() {
@@ -222,6 +222,16 @@ export default class Mls extends Component {
     AppStore.emitChange()
   }
 
+  showFilterForm() {
+    delete AppStore.data.listing_panel
+    delete AppStore.data.show_listing_panel
+    if (AppStore.data.show_filter_form)
+      delete AppStore.data.show_filter_form
+    else
+      AppStore.data.show_filter_form = true
+    AppStore.emitChange()
+  }
+
   render() {
     const data = this.props.data
     const listing_map = data.listing_map
@@ -287,22 +297,22 @@ export default class Mls extends Component {
                 <input className="form-control" type="text" style={ S('bg-dfe3e8 w-400 pull-left') } placeholder="Search location or MLS#" />
               </div>
               <div style={ S('pull-left') }>
-                <Button style={ { ...S('mr-10'), outline: 'none' } }>
-                  <img src="/images/dashboard/mls/filters.svg" style={ S('w-20 mr-10') }/>
-                  Filters
+                <Button onClick={ this.showFilterForm.bind(this, 'photos') } style={ { ...S('mr-10'), outline: 'none' } }>
+                  <img src={ `/images/dashboard/mls/filters${data.show_filter_form ? '-active' : ''}.svg` } style={ S('w-20 mr-10') }/>
+                  <span className={ data.show_filter_form ? 'text-primary' : '' }>Filters</span>
                 </Button>
                 <Button style={ { ...S('mr-10'), outline: 'none' } }>
                   <img src="/images/dashboard/mls/draw.svg" style={ S('w-20 mr-10') }/>
                   Draw
                 </Button>
                 <ButtonGroup style={ S('mr-10') }>
-                  <Button style={ { outline: 'none' } } onClick={ this.showPanelView.bind(this, 'list') } bsStyle={ data.listing_panel && data.listing_panel.view === 'list' ? 'primary' : 'default'}>
+                  <Button style={ { outline: 'none' } } onClick={ this.showPanelView.bind(this, 'list') }>
                     <img src={ `/images/dashboard/mls/list${data.listing_panel && data.listing_panel.view === 'list' ? '-active' : ''}.svg` } style={ S('w-20 mr-10') }/>
-                    List
+                    <span className={ data.listing_panel && data.listing_panel.view === 'list' ? 'text-primary' : 'default'}>List</span>
                   </Button>
-                  <Button style={ { outline: 'none' } } onClick={ this.showPanelView.bind(this, 'photos') } bsStyle={ data.listing_panel && data.listing_panel.view === 'photos' ? 'primary' : 'default'}>
+                  <Button style={ { outline: 'none' } } onClick={ this.showPanelView.bind(this, 'photos') }>
                     <img src={ `/images/dashboard/mls/photos${data.listing_panel && data.listing_panel.view === 'photos' ? '-active' : ''}.svg` } style={ S('w-18 mr-10') }/>
-                    Photos
+                    <span className={ data.listing_panel && data.listing_panel.view === 'photos' ? 'text-primary' : 'default'}>Photos</span>
                   </Button>
                 </ButtonGroup>
               </div>
@@ -325,6 +335,9 @@ export default class Mls extends Component {
             toggleListingPanel={ this.toggleListingPanel }
             showListingViewer={ this.showListingViewer }
             sortListings={ this.sortListings }
+          />
+          <FilterForm
+            data={ data }
           />
         </main>
       </div>
