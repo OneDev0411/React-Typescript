@@ -218,6 +218,7 @@ export default class Mls extends Component {
     })
     AppStore.data.listing_map.listings = listings_sorted
     AppStore.data.listing_map.sorting_direction = sorting_direction
+    AppStore.data.listing_map.sorting_by = sort_by
     AppStore.emitChange()
   }
 

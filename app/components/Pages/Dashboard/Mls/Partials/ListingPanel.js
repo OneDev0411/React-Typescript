@@ -1,11 +1,45 @@
 // Partials/ListingPanel.js
 import React, { Component } from 'react'
-import { Button } from 'react-bootstrap'
+import { Button, DropdownButton, MenuItem } from 'react-bootstrap'
 import S from 'shorti'
 import helpers from '../../../../../utils/helpers'
 import listing_util from '../../../../../utils/listing'
 
 export default class ListingPanel extends Component {
+  getSortingTitle() {
+    const data = this.props.data
+    const listing_map = data.listing_map
+    let sortby_title = 'Best results'
+    if (listing_map.sorting_by) {
+      switch (listing_map.sorting_by) {
+        case 'area':
+          sortby_title = 'Area'
+          break
+        case 'price':
+          sortby_title = 'Price'
+          break
+        case 'bedroom_count':
+          sortby_title = 'Beds'
+          break
+        case 'bathroom_count':
+          sortby_title = 'Baths'
+          break
+        case 'square_meters':
+          sortby_title = 'Sqft'
+          break
+        case 'year_built':
+          sortby_title = 'Built'
+          break
+        default:
+          return true
+      }
+      if (listing_map.sorting_direction === -1)
+        sortby_title += ' high to low'
+      else
+        sortby_title += ' low to high'
+    }
+    return sortby_title
+  }
   render() {
     // Listing cards
     const data = this.props.data
@@ -104,9 +138,9 @@ export default class ListingPanel extends Component {
     })
     // Listing panel
     let heading_height = 150
-    let panel_top = 80
+    let panel_top = 90
     if (data.listing_panel && data.listing_panel.view === 'list') {
-      panel_top = 103
+      panel_top = 123
       heading_height = 180
     }
     const listing_panel_wrap_style = S('fixed t-62 r-0 w-0 h-0 z-100')
@@ -167,6 +201,7 @@ export default class ListingPanel extends Component {
         </div>
       )
     }
+    const sortby_title = this.getSortingTitle()
     return (
       <div style={ listing_panel_wrap_style }>
         <Button onClick={ this.props.toggleListingPanel.bind(this) } className={ button_class } style={ S('absolute z-100 pt-8 pb-8 h-40 w-40 mr-0') }>
@@ -176,7 +211,17 @@ export default class ListingPanel extends Component {
           <div>
             <div style={ S('pt-10 pl-15 pr-15 mb-10') }>
               <div className="tempo" style={ S('color-444 fw-100 font-24') }>{ listings.length } Homes Found</div>
-              <div>Sorting by <a href="#">Most Relevant</a></div>
+              <div>
+                Sorting by
+                <DropdownButton bsStyle="link" title={ sortby_title } id="dropdown-size-large">
+                  <MenuItem onClick={ this.props.sortListings.bind(this, 'area') } >Area</MenuItem>
+                  <MenuItem onClick={ this.props.sortListings.bind(this, 'price') } >Price</MenuItem>
+                  <MenuItem onClick={ this.props.sortListings.bind(this, 'bedroom_count') } >Beds</MenuItem>
+                  <MenuItem onClick={ this.props.sortListings.bind(this, 'bathroom_count') } >Baths</MenuItem>
+                  <MenuItem onClick={ this.props.sortListings.bind(this, 'square_meters') } >Sqft</MenuItem>
+                  <MenuItem onClick={ this.props.sortListings.bind(this, 'year_built') } >Built</MenuItem>
+                </DropdownButton>
+              </div>
             </div>
             { items_heading }
           </div>
