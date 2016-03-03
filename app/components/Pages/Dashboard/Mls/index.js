@@ -232,6 +232,16 @@ export default class Mls extends Component {
     AppStore.emitChange()
   }
 
+  handleFilterSwitch(key) {
+    if (!AppStore.data.listing_map.filtering)
+      AppStore.data.listing_map.filtering = {}
+    if (!AppStore.data.listing_map.filtering[key])
+      AppStore.data.listing_map.filtering[key] = true
+    else
+      delete AppStore.data.listing_map.filtering[key]
+    AppStore.emitChange()
+  }
+
   render() {
     const data = this.props.data
     const listing_map = data.listing_map
@@ -338,6 +348,7 @@ export default class Mls extends Component {
           />
           <FilterForm
             data={ data }
+            handleFilterSwitch={ this.handleFilterSwitch }
           />
         </main>
       </div>
