@@ -1,3 +1,6 @@
+import { PhoneNumberUtil } from 'google-libphonenumber'
+const phoneUtil = PhoneNumberUtil.getInstance()
+
 export default {
   getParameterByName: (name) => {
     name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
@@ -81,5 +84,12 @@ export default {
     const seconds_after_midnight = (hours * 60 * 60) + (minutes * 60)
     const miliseconds = date_miliseconds + (seconds_after_midnight * 1000)
     return miliseconds
+  },
+  parsePhoneNumber(phone_number) {
+    const values = phoneUtil.parse(phone_number).values_
+    return {
+      country_code: values[1],
+      phone_number: values[2]
+    }
   }
 }

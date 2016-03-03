@@ -5,6 +5,7 @@ import _ from 'lodash'
 import { Table, Button, Input, DropdownButton, MenuItem } from 'react-bootstrap'
 import MaskedInput from 'react-input-mask'
 import { all_countries } from '../../../../utils/country-data'
+import helpers from '../../../../utils/helpers'
 
 // Partials
 import Header from '../Partials/Header'
@@ -68,6 +69,8 @@ export default class Contacts extends Component {
     this.addContactTab(contact)
     const history = require('../../../../utils/history')
     history.replaceState(null, '/dashboard/contacts/' + contact.id)
+    delete AppStore.data.phone_country
+    delete AppStore.data.current_contact.temp_phone
     AppStore.emitChange()
   }
 
@@ -91,17 +94,26 @@ export default class Contacts extends Component {
   handleContactSubmit(e) {
     e.preventDefault()
     const data = this.props.data
+    const current_contact = data.current_contact
     const user = data.user
     AppStore.data.saving_contact = true
     AppStore.emitChange()
-    const contact = data.current_contact
-    // TODO switch to different fields for country code
-    let phone_number = contact.phone_number
-    phone_number = phone_number.replace(/\D/g, '').slice(-10)
-    let country_code = 1
+    const first_name = this.refs.first_name.refs.input.value
+    const last_name = this.refs.last_name.refs.input.value
+    const email = this.refs.email.refs.input.value
+    let phone_number = this.refs.phone_number.refs.input.value.trim().replace(/\D/g, '')
+    let country_code = helpers.parsePhoneNumber(current_contact.phone_number).country_code
+    // If changing the country code
     if (data.phone_country)
       country_code = data.phone_country.dialCode
-    contact.phone_number = '+' + country_code + phone_number
+    phone_number = '+' + country_code + phone_number
+    const contact = {
+      id: current_contact.id,
+      first_name,
+      last_name,
+      email,
+      phone_number
+    }
     AppDispatcher.dispatch({
       action: 'edit-contact',
       user,
@@ -110,32 +122,20 @@ export default class Contacts extends Component {
     })
   }
 
-  handleInputChange() {
-    const data = this.props.data
-    const first_name = this.refs.first_name.refs.input.value
-    const last_name = this.refs.last_name.refs.input.value
-    const email = this.refs.email.refs.input.value
-    let phone_number = this.refs.phone_number.refs.input.value.trim()
-    phone_number = phone_number.replace(/\D/g, '')
-    const contact = {
-      id: data.current_contact.id,
-      first_name,
-      last_name,
-      email,
-      phone_number
-    }
-    const current_contact = {
-      ...data.current_contact,
-      ...contact
-    }
-    AppStore.data.current_contact = current_contact
-    AppStore.emitChange()
-  }
-
   handleCountryCodeSelect(country) {
     AppStore.data.phone_country = {
       iso2: country.iso2,
       dialCode: country.dialCode
+    }
+    AppStore.emitChange()
+  }
+
+  handleInputChange(ref) {
+    if (ref !== 'phone_number')
+      AppStore.data.current_contact[ref] = this.refs[ref].refs.input.value
+    else {
+      const temp_phone = this.refs[ref].refs.input.value
+      AppStore.data.current_contact.temp_phone = temp_phone
     }
     AppStore.emitChange()
   }
@@ -181,9 +181,10 @@ export default class Contacts extends Component {
 
     if (data.current_contact) {
       const contact = data.current_contact
-      let phone_country = 'US +1'
+      const phone_number_parsed = helpers.parsePhoneNumber(contact.phone_number)
+      let phone_country = '+' + phone_number_parsed.country_code
       if (data.phone_country)
-        phone_country = `${data.phone_country.iso2.toUpperCase()} +${data.phone_country.dialCode}`
+        phone_country = `+${data.phone_country.dialCode}`
       const country_codes = (
         <DropdownButton title={ phone_country } id="input-dropdown-country-codes" style={ S('pb-9') }>
           <MenuItem key={ 1 } onClick={ this.handleCountryCodeSelect.bind(this, _.find(all_countries, { iso2: 'us' })) }>United States +1</MenuItem>
@@ -206,18 +207,18 @@ export default class Contacts extends Component {
           <div style={ S('ml-80 relative w-300') }>
             <form onSubmit={ this.handleContactSubmit.bind(this) }>
               <label>First name</label>
-              <Input ref="first_name" type="text" value={ contact.first_name } onChange={ this.handleInputChange.bind(this) }/>
+              <Input ref="first_name" type="text" value={ contact.first_name } onChange={ this.handleInputChange.bind(this, 'first_name') } />
               <label>Last name</label>
-              <Input ref="last_name" type="text" value={ contact.last_name } onChange={ this.handleInputChange.bind(this) }/>
+              <Input ref="last_name" type="text" value={ contact.last_name } onChange={ this.handleInputChange.bind(this, 'last_name') } />
               <label>Email</label>
-              <Input ref="email" type="text" value={ contact.email } onChange={ this.handleInputChange.bind(this) }/>
+              <Input ref="email" type="text" value={ contact.email } onChange={ this.handleInputChange.bind(this, 'email') } />
               <label>Phone number</label>
               <div className="form-group">
                 <div className="input-group">
                   <div className="input-group-btn input-dropdown--country-codes">
                     { country_codes }
                   </div>
-                  <MaskedInput className="form-control" ref="phone_number" type="text" value={ contact.phone_number.replace('+', '').slice(-10) } onChange={ this.handleInputChange.bind(this) } mask="(999)-999-9999" maskChar="_"/>
+                  <MaskedInput className="form-control" ref="phone_number" type="text" value={ contact.temp_phone ? contact.temp_phone : phone_number_parsed.phone_number } mask="(999)-999-9999" maskChar="_" onChange={ this.handleInputChange.bind(this, 'phone_number') }/>
                 </div>
               </div>
               <Button style={ S('pl-30 pr-30 pull-right') } type="submit" className={ data.saving_contact ? 'disabled' : '' } bsStyle="primary">

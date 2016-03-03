@@ -8,6 +8,7 @@ import Dropzone from 'react-dropzone'
 import Loading from '../../../Partials/Loading'
 import MaskedInput from 'react-input-mask'
 import { all_countries } from '../../../../utils/country-data'
+import helpers from '../../../../utils/helpers'
 
 // AppDispatcher
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
@@ -254,9 +255,11 @@ export default class SideBar extends Component {
     let change_password_area = (
       <a style={ S('mt-7') } className="pull-left" href="#" onClick={ this.showChangePassword.bind(this) }>Change password</a>
     )
-    let phone_country = 'US +1'
+    const phone_number_parsed = helpers.parsePhoneNumber(user.phone_number)
+    const current_country_code = phone_number_parsed.country_code
+    let phone_country = '+' + current_country_code
     if (data.phone_country)
-      phone_country = `${data.phone_country.iso2.toUpperCase()} +${data.phone_country.dialCode}`
+      phone_country = `+${data.phone_country.dialCode}`
     const country_codes = (
       <DropdownButton title={ phone_country } id="input-dropdown-country-codes" style={ S('pb-9') }>
         <MenuItem key={ 1 } onClick={ this.handleCountryCodeSelect.bind(this, _.find(all_countries, { iso2: 'us' })) }>United States +1</MenuItem>
@@ -288,7 +291,7 @@ export default class SideBar extends Component {
             <div className="input-group-btn input-dropdown--country-codes">
               { country_codes }
             </div>
-            <MaskedInput className="form-control" ref="phone_number" type="text" defaultValue={ user.phone_number ? user.phone_number.replace('+', '').slice(-10) : '' } mask="(999)-999-9999" maskChar="_"/>
+            <MaskedInput className="form-control" ref="phone_number" type="text" defaultValue={ user.phone_number ? phone_number_parsed.phone_number : '' } mask="(999)-999-9999" maskChar="_"/>
           </div>
         </Col>
       </Col>
