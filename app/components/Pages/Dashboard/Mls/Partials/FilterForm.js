@@ -55,19 +55,19 @@ export default class FilterForm extends Component {
             <img src={`/images/dashboard/mls/listing-types/townhouse.svg`}/>
           </Button>
         </div>
-        <div>
+        <div style={ S('p-15') }>
           Price Range
         </div>
-        <div>
+        <div style={ S('p-15') }>
           Bedrooms
         </div>
-        <div>
+        <div style={ S('p-15') }>
           Bathrooms
         </div>
-        <div>
+        <div style={ S('p-15') }>
           Square Footage
         </div>
-        <div>
+        <div style={ S('p-15') }>
           Pool
         </div>
       </div>
