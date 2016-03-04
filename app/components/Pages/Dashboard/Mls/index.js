@@ -259,7 +259,6 @@ export default class Mls extends Component {
         listing_types = _.pull(listing_types, value)
       else
         listing_types.push(value)
-      console.log(listing_types)
       AppStore.data.listing_map.filtering_options.listing_types = listing_types
     }
     AppStore.emitChange()

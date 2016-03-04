@@ -61,25 +61,25 @@ export default class FilterForm extends Component {
             </div>
             <div style={ S('pl-15 pt-15') }>
               <div>Listing Types</div>
-              <Button bsStyle={ this.buttonIsActive('listing_types', 'any') ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'any' }) } style={ S('color-929292') }>
+              <Button bsStyle={ this.buttonIsActive('listing_types', 'any') ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'any' }) }>
                 <div style={ S('mb-10') }>
                   <img src={`/images/dashboard/mls/listing-types/any${this.buttonIsActive('listing_types', 'any') ? '-active' : ''}.svg`}/>
                 </div>
                 <span style={ S(`color-${this.buttonIsActive('listing_types', 'any') ? 'fff' : '929292'}`) }>Any</span>
               </Button>
-              <Button bsStyle={ this.buttonIsActive('listing_types', 'house') ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'house' }) } style={ S('color-929292') }>
+              <Button bsStyle={ this.buttonIsActive('listing_types', 'house') ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'house' }) }>
                 <div style={ S('mb-10') }>
                   <img src={`/images/dashboard/mls/listing-types/house${this.buttonIsActive('listing_types', 'house') ? '-active' : ''}.svg`}/>
                 </div>
                 <span style={ S(`color-${this.buttonIsActive('listing_types', 'house') ? 'fff' : '929292'}`) }>House</span>
               </Button>
-              <Button bsStyle={ this.buttonIsActive('listing_types', 'condo') ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'condo' }) } style={ S('color-929292') }>
+              <Button bsStyle={ this.buttonIsActive('listing_types', 'condo') ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'condo' }) }>
                 <div style={ S('mb-10') }>
                   <img src={`/images/dashboard/mls/listing-types/condo${this.buttonIsActive('listing_types', 'condo') ? '-active' : ''}.svg`}/>
                 </div>
                 <span style={ S(`color-${this.buttonIsActive('listing_types', 'condo') ? 'fff' : '929292'}`) }>Condo</span>
               </Button>
-              <Button bsStyle={ this.buttonIsActive('listing_types', 'townhouse') ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'townhouse' }) } style={ S('color-929292') }>
+              <Button bsStyle={ this.buttonIsActive('listing_types', 'townhouse') ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'townhouse' }) }>
                 <div style={ S('mb-10') }>
                   <img src={`/images/dashboard/mls/listing-types/townhouse${this.buttonIsActive('listing_types', 'townhouse') ? '-active' : ''}.svg`}/>
                 </div>
