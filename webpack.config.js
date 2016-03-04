@@ -41,7 +41,8 @@ module.exports = {
     publicPath: '/dist/'
   },
   module: {
-    loaders: loaders_module
+    loaders: loaders_module,
+    noParse: /node_modules\/google-libphonenumber\/dist/
   },
   plugins: [
     new ExtractTextPlugin('css/main.css'),

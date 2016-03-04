@@ -29,7 +29,7 @@ export default class FilterForm extends Component {
     if (data.show_filter_form)
       filter_form_class += ' active'
     let filtering_options
-    if (data.listing_map.filtering_options)
+    if (data.listing_map && data.listing_map.filtering_options)
       filtering_options = data.listing_map.filtering_options
     return (
       <div className={ filter_form_class } style={ filter_form_style }>

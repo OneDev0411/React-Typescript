@@ -181,7 +181,11 @@ export default class Contacts extends Component {
 
     if (data.current_contact) {
       const contact = data.current_contact
-      const phone_number_parsed = helpers.parsePhoneNumber(contact.phone_number)
+      let phone_number_parsed = {
+        country_code: 1
+      }
+      if (contact.phone_number)
+        phone_number_parsed = helpers.parsePhoneNumber(contact.phone_number)
       let phone_country = '+' + phone_number_parsed.country_code
       if (data.phone_country)
         phone_country = `+${data.phone_country.dialCode}`
