@@ -91,6 +91,7 @@ export default class Mls extends Component {
       zoom = data.listing_map.center
     }
     const listing_map = {
+      default_options: options,
       options,
       is_loading: true,
       center,
@@ -193,6 +194,7 @@ export default class Mls extends Component {
     }
     if (!AppStore.data.show_listing_panel)
       AppStore.data.show_listing_panel = true
+    delete AppStore.data.show_filter_form
     AppStore.emitChange()
   }
 
@@ -233,13 +235,62 @@ export default class Mls extends Component {
   }
 
   handleFilterSwitch(key) {
-    if (!AppStore.data.listing_map.filtering)
-      AppStore.data.listing_map.filtering = {}
-    if (!AppStore.data.listing_map.filtering[key])
-      AppStore.data.listing_map.filtering[key] = true
+    if (!AppStore.data.listing_map.filtering_options)
+      AppStore.data.listing_map.filtering_options = {}
+    if (!AppStore.data.listing_map.filtering_options[key])
+      AppStore.data.listing_map.filtering_options[key] = true
     else
-      delete AppStore.data.listing_map.filtering[key]
+      delete AppStore.data.listing_map.filtering_options[key]
     AppStore.emitChange()
+  }
+
+  handleFilterButton(payload) {
+    const key = payload.key
+    const value = payload.value
+    const filtering_options = AppStore.data.listing_map.filtering_options
+    if (!filtering_options)
+      AppStore.data.listing_map.filtering_options = {}
+    if (key === 'listing_types') {
+      let listing_types = []
+      if (filtering_options && filtering_options.listing_types)
+        listing_types = filtering_options.listing_types
+      // If has already, remove
+      if (listing_types.indexOf(value) !== -1)
+        listing_types = _.pull(listing_types, value)
+      else
+        listing_types.push(value)
+      console.log(listing_types)
+      AppStore.data.listing_map.filtering_options.listing_types = listing_types
+    }
+    AppStore.emitChange()
+  }
+
+  resetFilterOptions() {
+    const data = this.props.data
+    const listing_map = data.listing_map
+    AppStore.data.listing_map.options = listing_map.default_options
+    AppStore.emitChange()
+  }
+
+  setFilterOptions(e) {
+    e.preventDefault()
+    const data = this.props.data
+    const user = data.user
+    const listing_map = data.listing_map
+    const options = listing_map.options
+    const minimum_price = Number(this.refs.minimum_price.refs.input.value.trim())
+    if (minimum_price)
+      options.minimum_price = minimum_price
+    const maximum_price = Number(this.refs.maximum_price.refs.input.value.trim())
+    if (maximum_price)
+      options.maximum_price = maximum_price
+    AppStore.data.listing_map.is_loading = true
+    AppStore.emitChange()
+    ListingDispatcher.dispatch({
+      action: 'get-valerts',
+      user,
+      options
+    })
   }
 
   render() {
@@ -349,6 +400,9 @@ export default class Mls extends Component {
           <FilterForm
             data={ data }
             handleFilterSwitch={ this.handleFilterSwitch }
+            handleFilterButton={ this.handleFilterButton }
+            resetFilterOptions={ this.resetFilterOptions }
+            setFilterOptions={ this.setFilterOptions }
           />
         </main>
       </div>
