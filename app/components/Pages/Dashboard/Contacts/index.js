@@ -2,10 +2,12 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import _ from 'lodash'
-import { Table, Button, Input, DropdownButton, MenuItem } from 'react-bootstrap'
+import { Table, Button, Input, DropdownButton, MenuItem, Alert } from 'react-bootstrap'
 import MaskedInput from 'react-input-mask'
 import { all_countries } from '../../../../utils/country-data'
 import helpers from '../../../../utils/helpers'
+import { PhoneNumberUtil } from 'google-libphonenumber'
+const phoneUtil = PhoneNumberUtil.getInstance()
 
 // Partials
 import Header from '../Partials/Header'
@@ -71,6 +73,7 @@ export default class Contacts extends Component {
     history.replaceState(null, '/dashboard/contacts/' + contact.id)
     delete AppStore.data.phone_country
     delete AppStore.data.current_contact.temp_phone
+    delete AppStore.data.error
     AppStore.emitChange()
   }
 
@@ -93,11 +96,12 @@ export default class Contacts extends Component {
 
   handleContactSubmit(e) {
     e.preventDefault()
+    delete AppStore.data.error
+    AppStore.data.saving_contact = true
+    AppStore.emitChange()
     const data = this.props.data
     const current_contact = data.current_contact
     const user = data.user
-    AppStore.data.saving_contact = true
-    AppStore.emitChange()
     const first_name = this.refs.first_name.refs.input.value
     const last_name = this.refs.last_name.refs.input.value
     const email = this.refs.email.refs.input.value
@@ -107,6 +111,14 @@ export default class Contacts extends Component {
     if (data.phone_country)
       country_code = data.phone_country.dialCode
     phone_number = '+' + country_code + phone_number
+    if (!phoneUtil.isPossibleNumberString(phone_number)) {
+      AppStore.data.error = {
+        message: 'You must use a valid phone number'
+      }
+      delete AppStore.data.saving_contact
+      AppStore.emitChange()
+      return
+    }
     const contact = {
       id: current_contact.id,
       first_name,
@@ -200,6 +212,14 @@ export default class Contacts extends Component {
           }
         </DropdownButton>
       )
+      let message
+      if (data.error) {
+        message = (
+          <Alert bsStyle="danger">
+            { data.error.message }
+          </Alert>
+        )
+      }
       main_content = (
         <div style={ S('ml-20') }>
           <ProfileImage
@@ -225,6 +245,7 @@ export default class Contacts extends Component {
                   <MaskedInput className="form-control" ref="phone_number" type="text" value={ contact.temp_phone ? contact.temp_phone : phone_number_parsed.phone_number } mask="(999)-999-9999" maskChar="_" onChange={ this.handleInputChange.bind(this, 'phone_number') }/>
                 </div>
               </div>
+              { message }
               <Button style={ S('pl-30 pr-30 pull-right') } type="submit" className={ data.saving_contact ? 'disabled' : '' } bsStyle="primary">
                 { data.saving_contact ? 'Saving...' : 'Save' }
               </Button>

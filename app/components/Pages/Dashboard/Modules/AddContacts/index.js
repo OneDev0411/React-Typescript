@@ -7,6 +7,8 @@ import validator from 'validator'
 import helpers from '../../../../../utils/helpers'
 import MaskedInput from 'react-input-mask'
 import { all_countries } from '../../../../../utils/country-data'
+import { PhoneNumberUtil } from 'google-libphonenumber'
+const phoneUtil = PhoneNumberUtil.getInstance()
 
 // AppStore
 import AppStore from '../../../../../stores/AppStore'
@@ -26,6 +28,7 @@ export default class AddContactsModule extends Component {
         this.refs.search_contacts.refs.input.focus()
     }, 300)
     delete AppStore.data.phone_country
+    delete AppStore.data.error
     AppStore.emitChange()
   }
 
@@ -91,6 +94,7 @@ export default class AddContactsModule extends Component {
     const data = this.props.data
     const module_type = this.props.module_type
     AppStore.data.creating_contacts = true
+    delete AppStore.data.error
     AppStore.emitChange()
     const first_name = this.refs.first_name.refs.input.value.trim()
     const last_name = this.refs.last_name.refs.input.value.trim()
@@ -102,6 +106,14 @@ export default class AddContactsModule extends Component {
     if (data.phone_country)
       country_code = data.phone_country.dialCode
     phone_number = '+' + country_code + phone_number
+    if (!phoneUtil.isPossibleNumberString(phone_number)) {
+      AppStore.data.error = {
+        message: 'You must use a valid phone number'
+      }
+      delete AppStore.data.creating_contacts
+      AppStore.emitChange()
+      return
+    }
     const company = this.refs.company.refs.input.value.trim()
     const role = this.refs.role.refs.input.value.trim()
     const action = this.refs.action.value.trim()
@@ -414,6 +426,13 @@ export default class AddContactsModule extends Component {
         <Alert bsStyle="danger">Email is invalid.</Alert>
       )
     }
+    if (data.error) {
+      message = (
+        <Alert bsStyle="danger">
+          { data.error.message }
+        </Alert>
+      )
+    }
 
     const input_style = {
       border: 'none'
@@ -475,7 +494,6 @@ export default class AddContactsModule extends Component {
               <Modal.Title style={ S('font-14') }>Add New Contact</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              { message }
               <div style={ row_style }>
                 <Col xs={2}>
                   <div style={ S('absolute br-100 bg-dae9fd w-60 t-5n h-60 font-24 color-fff p-13 text-center') }>
@@ -533,6 +551,9 @@ export default class AddContactsModule extends Component {
               <div className="clearfix"></div>
             </Modal.Body>
             <Modal.Footer style={ { border: 'none' } }>
+              <div className="text-left">
+                { message }
+              </div>
               <Button bsStyle="link" onClick={ this.hideModal.bind(this) }>Cancel</Button>
               <Button style={ S('h-30 pt-5 pl-30 pr-30') } className={ data.creating_contacts ? 'disabled' : '' } type="submit" bsStyle="primary">
                 { data.creating_contacts ? 'Adding...' : 'Add' }

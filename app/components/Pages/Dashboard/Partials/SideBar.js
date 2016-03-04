@@ -9,6 +9,8 @@ import Loading from '../../../Partials/Loading'
 import MaskedInput from 'react-input-mask'
 import { all_countries } from '../../../../utils/country-data'
 import helpers from '../../../../utils/helpers'
+import { PhoneNumberUtil } from 'google-libphonenumber'
+const phoneUtil = PhoneNumberUtil.getInstance()
 
 // AppDispatcher
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
@@ -40,6 +42,8 @@ export default class SideBar extends Component {
   }
 
   editAccountInfo() {
+    delete AppStore.data.error
+    AppStore.emitChange()
     const data = this.props.data
     const user = data.user
     const first_name = this.refs.first_name.refs.input.value.trim()
@@ -52,6 +56,13 @@ export default class SideBar extends Component {
     if (data.phone_country)
       country_code = data.phone_country.dialCode
     phone_number = '+' + country_code + phone_number
+    if (!phoneUtil.isPossibleNumberString(phone_number)) {
+      AppStore.data.error = {
+        message: 'You must use a valid phone number'
+      }
+      AppStore.emitChange()
+      return
+    }
     const user_info = {
       first_name,
       last_name,
@@ -271,6 +282,14 @@ export default class SideBar extends Component {
         }
       </DropdownButton>
     )
+    let message
+    if (data.error) {
+      message = (
+        <Alert bsStyle="danger">
+          { data.error.message }
+        </Alert>
+      )
+    }
     let form_fields = (
       <Col xs={ 9 } style={ S('p-0') }>
         <Col xs={ 6 }>
@@ -294,16 +313,10 @@ export default class SideBar extends Component {
             <MaskedInput className="form-control" ref="phone_number" type="text" defaultValue={ user.phone_number ? phone_number_parsed.phone_number : '' } mask="(999)-999-9999" maskChar="_"/>
           </div>
         </Col>
+        <div className="clearfix"></div>
+        <Col style={ S('pr-0') } xs={ 12 }>{ message }</Col>
       </Col>
     )
-    let message
-    if (data.error) {
-      message = (
-        <Alert bsStyle="danger">
-          { data.error.message }
-        </Alert>
-      )
-    }
     if (data.password_changed) {
       message = (
         <Alert bsStyle="success">

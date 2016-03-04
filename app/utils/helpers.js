@@ -86,7 +86,7 @@ export default {
     return miliseconds
   },
   parsePhoneNumber(phone_number) {
-    if(phone_number && phone_number.length > 10) {
+    if(phone_number && phoneUtil.isPossibleNumberString(phone_number)) {
       const values = phoneUtil.parse(phone_number).values_
       return {
         country_code: values[1],
