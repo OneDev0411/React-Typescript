@@ -23,6 +23,16 @@ export default class Mls extends Component {
     if (!listing_map && typeof window !== 'undefined')
       this.initMap()
     delete AppStore.data.current_listing
+    // Set switch states
+    if (!AppStore.data.listing_map.filtering_options) {
+      AppStore.data.listing_map.filtering_options = {
+        sold: false,
+        active: true,
+        other: false,
+        open_houses: false,
+        listing_types: ['house']
+      }
+    }
     AppStore.emitChange()
   }
 
@@ -49,7 +59,7 @@ export default class Mls extends Component {
     }
     let zoom = 13
     const options = {
-      'maximum_price': 9.223372036854776e+18,
+      'maximum_price': 5000000,
       'limit': '75',
       'maximum_lot_square_meters': 8.568721699047544e+17,
       'minimum_bathrooms': 1,
@@ -257,16 +267,26 @@ export default class Mls extends Component {
       if (filtering_options && filtering_options.listing_types)
         listing_types = filtering_options.listing_types
       // If has already, remove
-      if (listing_types.indexOf(value) !== -1)
-        listing_types = _.pull(listing_types, value)
-      else
-        listing_types.push(value)
+      if (value === 'any') {
+        if (listing_types.indexOf(value) === -1)
+          listing_types = ['any', 'house', 'condo', 'townhouse']
+        else
+          listing_types = []
+      } else {
+        if (listing_types.indexOf(value) !== -1)
+          _.pull(listing_types, value)
+        else
+          listing_types.push(value)
+        _.pull(listing_types, 'any')
+        if (listing_types.length === 3)
+          listing_types.push('any')
+      }
       AppStore.data.listing_map.filtering_options.listing_types = listing_types
     }
-    if (key === 'bedroom_count' || key === 'bathroom_count')
+    if (key === 'minimum_bedrooms' || key === 'minimum_bathrooms')
       AppStore.data.listing_map.filtering_options[key] = Number(value)
     if (key === 'pool')
-      AppStore.data.listing_map.filtering_options[key] = Boolean(value)
+      AppStore.data.listing_map.filtering_options[key] = value
     AppStore.emitChange()
   }
 
@@ -289,6 +309,45 @@ export default class Mls extends Component {
     const maximum_price = Number(this.refs.maximum_price.refs.input.value.trim())
     if (maximum_price)
       options.maximum_price = maximum_price
+    // Get filter options
+    if (listing_map.filtering_options) {
+      const filtering_options = listing_map.filtering_options
+      // Statuses
+      const listing_statuses = []
+      if (filtering_options.sold)
+        listing_statuses.push('Sold')
+      if (filtering_options.active)
+        listing_statuses.push('Active')
+      if (filtering_options.other)
+        listing_statuses.push('Active Contingent', 'Active Kick Out', 'Active Option Contract')
+      options.listing_statuses = listing_statuses
+      // Bed / bath
+      const minimum_bedrooms = filtering_options.minimum_bedrooms
+      if (minimum_bedrooms)
+        options.minimum_bedrooms = minimum_bedrooms
+      const minimum_bathrooms = filtering_options.minimum_bathrooms
+      if (minimum_bathrooms)
+        options.minimum_bathrooms = minimum_bathrooms
+      // Pool
+      const pool = filtering_options.pool
+      if (pool === 'either')
+        delete options.pool
+      else
+        options.pool = pool
+      // Property types
+      if (filtering_options.listing_types) {
+        let property_subtypes = []
+        if (filtering_options.listing_types.includes('house'))
+          property_subtypes.push('RES-Single Family')
+        if (filtering_options.listing_types.includes('condo'))
+          property_subtypes.push('RES-Condo')
+        if (filtering_options.listing_types.includes('townhouse'))
+          property_subtypes.push('RES-Townhouse')
+        if (filtering_options.listing_types.includes('any'))
+          property_subtypes = ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse']
+        options.property_subtypes = property_subtypes
+      }
+    }
     AppStore.data.listing_map.is_loading = true
     AppStore.emitChange()
     ListingDispatcher.dispatch({

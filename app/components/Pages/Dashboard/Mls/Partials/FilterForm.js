@@ -16,7 +16,7 @@ export default class FilterForm extends Component {
       if (filtering_options.listing_types && filtering_options.listing_types.indexOf(value) !== -1)
         return true
     }
-    if (filtering_options && filtering_options[key] && filtering_options[key] === value)
+    if (filtering_options && filtering_options[key] === value)
       return true
     return false
   }
@@ -31,16 +31,21 @@ export default class FilterForm extends Component {
     if (data.show_filter_form)
       filter_form_class += ' active'
     let filtering_options
-    if (data.listing_map && data.listing_map.filtering_options)
-      filtering_options = data.listing_map.filtering_options
+    let options
+    if (data.listing_map) {
+      const listing_map = data.listing_map
+      if (listing_map.filtering_options)
+        filtering_options = data.listing_map.filtering_options
+      options = listing_map.options
+    }
     return (
       <div className={ filter_form_class } style={ filter_form_style }>
         <form onSubmit={ this.props.setFilterOptions.bind(this) }>
           <div style={ filter_scroll_area_style }>
             <div style={ S('border-bottom-1-solid-f3f6f7 h-50 p-15') }>
-              Solds
+              Sold
               <div style={ S('pull-right') }>
-                <Switch checked={ filtering_options ? filtering_options.solds : false } onChange={ this.props.handleFilterSwitch.bind(this, 'solds') } />
+                <Switch checked={ filtering_options ? filtering_options.sold : false } onChange={ this.props.handleFilterSwitch.bind(this, 'sold') } />
               </div>
             </div>
             <div style={ S('border-bottom-1-solid-f3f6f7 h-50 p-15') }>
@@ -92,10 +97,10 @@ export default class FilterForm extends Component {
               <div>Price Range</div>
               <div>
                 <div style={ S('w-50p pull-left') }>
-                  <Input ref="minimum_price" type="text" placeholder="Min"/>
+                  <Input defaultValue={ options && options.minimum_price ? options.minimum_price : '' } ref="minimum_price" type="text" placeholder="Min"/>
                 </div>
                 <div style={ S('w-50p pull-left') }>
-                  <Input ref="maximum_price" type="text" placeholder="Max"/>
+                  <Input defaultValue={ options && options.maximum_price ? options.maximum_price : '' } ref="maximum_price" type="text" placeholder="Max"/>
                 </div>
               </div>
             </div>
@@ -103,17 +108,17 @@ export default class FilterForm extends Component {
               <div>
                 Bedrooms
               </div>
-              <Button bsStyle={ this.buttonIsActive('bedroom_count', 1) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'bedroom_count', value: '1' }) }>+1</Button>
-              <Button bsStyle={ this.buttonIsActive('bedroom_count', 2) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'bedroom_count', value: '2' }) }>+2</Button>
-              <Button bsStyle={ this.buttonIsActive('bedroom_count', 3) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'bedroom_count', value: '3' }) }>+3</Button>
+              <Button style={ S('mr-10') } bsStyle={ this.buttonIsActive('minimum_bedrooms', 1) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '1' }) }>+1</Button>
+              <Button style={ S('mr-10') } bsStyle={ this.buttonIsActive('minimum_bedrooms', 2) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '2' }) }>+2</Button>
+              <Button style={ S('mr-10') } bsStyle={ this.buttonIsActive('minimum_bedrooms', 3) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '3' }) }>+3</Button>
             </div>
             <div style={ S('p-15') }>
               <div>
                 Bathrooms
               </div>
-              <Button bsStyle={ this.buttonIsActive('bathroom_count', 1) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'bathroom_count', value: '1' }) }>+1</Button>
-              <Button bsStyle={ this.buttonIsActive('bathroom_count', 2) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'bathroom_count', value: '2' }) }>+2</Button>
-              <Button bsStyle={ this.buttonIsActive('bathroom_count', 3) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'bathroom_count', value: '3' }) }>+3</Button>
+              <Button style={ S('mr-10') } bsStyle={ this.buttonIsActive('minimum_bathrooms', 1) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '1' }) }>+1</Button>
+              <Button style={ S('mr-10') } bsStyle={ this.buttonIsActive('minimum_bathrooms', 2) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '2' }) }>+2</Button>
+              <Button style={ S('mr-10') } bsStyle={ this.buttonIsActive('minimum_bathrooms', 3) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '3' }) }>+3</Button>
             </div>
             <div style={ S('p-15') }>
               <div>Square Footage</div>
@@ -130,9 +135,9 @@ export default class FilterForm extends Component {
               <div>
                 Pool
               </div>
-              <Button onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: 'yes' }) }>Yes</Button>
-              <Button onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: 'no' }) }>No</Button>
-              <Button onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: 'either' }) }>Either</Button>
+              <Button style={ S('mr-10') } bsStyle={ this.buttonIsActive('pool', true) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: true }) }>Yes</Button>
+              <Button style={ S('mr-10') } bsStyle={ this.buttonIsActive('pool', false) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: false }) }>No</Button>
+              <Button style={ S('mr-10') } bsStyle={ this.buttonIsActive('pool', 'either') ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: 'either' }) }>Either</Button>
             </div>
           </div>
           <div style={ S('absolute b-0 w-300') }>
