@@ -10,6 +10,8 @@ export default class FilterForm extends Component {
   buttonIsActive(key, value) {
     const data = this.props.data
     let filtering_options
+    if (!data.listing_map)
+      return false
     if (data.listing_map.filtering_options)
       filtering_options = data.listing_map.filtering_options
     if (filtering_options && key === 'listing_types') {
