@@ -16,6 +16,8 @@ export default class FilterForm extends Component {
       if (filtering_options.listing_types && filtering_options.listing_types.indexOf(value) !== -1)
         return true
     }
+    if (filtering_options && filtering_options[key] && filtering_options[key] === value)
+      return true
     return false
   }
   render() {
@@ -101,17 +103,17 @@ export default class FilterForm extends Component {
               <div>
                 Bedrooms
               </div>
-              <Button onClick={ this.props.handleFilterButton.bind(this, { key: 'bedroom_count', value: '1' }) }>+1</Button>
-              <Button onClick={ this.props.handleFilterButton.bind(this, { key: 'bedroom_count', value: '2' }) }>+2</Button>
-              <Button onClick={ this.props.handleFilterButton.bind(this, { key: 'bedroom_count', value: '3' }) }>+3</Button>
+              <Button bsStyle={ this.buttonIsActive('bedroom_count', 1) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'bedroom_count', value: '1' }) }>+1</Button>
+              <Button bsStyle={ this.buttonIsActive('bedroom_count', 2) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'bedroom_count', value: '2' }) }>+2</Button>
+              <Button bsStyle={ this.buttonIsActive('bedroom_count', 3) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'bedroom_count', value: '3' }) }>+3</Button>
             </div>
             <div style={ S('p-15') }>
               <div>
                 Bathrooms
               </div>
-              <Button onClick={ this.props.handleFilterButton.bind(this, { key: 'bathroom_count', value: '1' }) }>+1</Button>
-              <Button onClick={ this.props.handleFilterButton.bind(this, { key: 'bathroom_count', value: '2' }) }>+2</Button>
-              <Button onClick={ this.props.handleFilterButton.bind(this, { key: 'bathroom_count', value: '3' }) }>+3</Button>
+              <Button bsStyle={ this.buttonIsActive('bathroom_count', 1) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'bathroom_count', value: '1' }) }>+1</Button>
+              <Button bsStyle={ this.buttonIsActive('bathroom_count', 2) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'bathroom_count', value: '2' }) }>+2</Button>
+              <Button bsStyle={ this.buttonIsActive('bathroom_count', 3) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'bathroom_count', value: '3' }) }>+3</Button>
             </div>
             <div style={ S('p-15') }>
               <div>Square Footage</div>

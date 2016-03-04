@@ -22,6 +22,8 @@ export default class Mls extends Component {
     const listing_map = data.listing_map
     if (!listing_map && typeof window !== 'undefined')
       this.initMap()
+    delete AppStore.data.current_listing
+    AppStore.emitChange()
   }
 
   componentDidUpdate() {
@@ -204,7 +206,7 @@ export default class Mls extends Component {
     let sorting_direction = 1
     if (AppStore.data.listing_map.sorting_direction)
       sorting_direction = AppStore.data.listing_map.sorting_direction * -1
-    const listings_sorted = _.sortBy(listings, (listing) => {
+    const listings_sorted = _.sortBy(listings, listing => {
       if (sort_by === 'area')
         return listing.address.postal_code * sorting_direction
       if (sort_by === 'price')
@@ -261,6 +263,10 @@ export default class Mls extends Component {
         listing_types.push(value)
       AppStore.data.listing_map.filtering_options.listing_types = listing_types
     }
+    if (key === 'bedroom_count' || key === 'bathroom_count')
+      AppStore.data.listing_map.filtering_options[key] = Number(value)
+    if (key === 'pool')
+      AppStore.data.listing_map.filtering_options[key] = Boolean(value)
     AppStore.emitChange()
   }
 

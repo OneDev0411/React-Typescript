@@ -182,6 +182,12 @@ export default class SideBar extends Component {
     AppStore.emitChange()
   }
 
+  hideListingViewer() {
+    delete AppStore.data.show_listing_viewer
+    delete AppStore.data.current_listing
+    AppStore.emitChange()
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -371,7 +377,7 @@ export default class SideBar extends Component {
             </LinkContainer>
           </OverlayTrigger>
           <OverlayTrigger placement="right" overlay={ popover.map } delayShow={ 200 } delayHide={ 0 }>
-            <LinkContainer className={ active.mls } to="/dashboard/mls">
+            <LinkContainer onClick={ this.hideListingViewer.bind(this) } className={ active.mls } to="/dashboard/mls">
               <NavItem style={ S('w-85p') }>
                 <img src={ active.mls ? '/images/dashboard/sidenav/map-active.svg' : '/images/dashboard/sidenav/map.svg' } style={ S('w-19 h-19') }/>
               </NavItem>

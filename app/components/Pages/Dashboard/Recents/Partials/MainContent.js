@@ -191,7 +191,6 @@ export default class MainContent extends Component {
                 </Modal.Footer>
               </form>
             </Modal>
-            { listing_viewer }
           </div>
         </Dropzone>
         <DropzoneOverlay
@@ -199,6 +198,7 @@ export default class MainContent extends Component {
           title={ overlay_title }
           context="room"
         />
+        { listing_viewer }
       </div>
     )
   }
