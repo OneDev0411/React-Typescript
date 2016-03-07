@@ -126,10 +126,10 @@ export default class FilterForm extends Component {
               <div>Square Footage</div>
               <div>
                 <div style={ S('w-50p pull-left') }>
-                  <Input type="text" placeholder="Min"/>
+                  <Input defaultValue={ options && options.minimum_square_feet ? options.minimum_square_feet : '' } ref="minimum_square_feet" type="text" placeholder="Min"/>
                 </div>
                 <div style={ S('w-50p pull-left') }>
-                  <Input type="text" placeholder="Max"/>
+                  <Input defaultValue={ options && options.maximum_square_feet ? options.maximum_square_feet : '' } ref="maximum_square_feet" type="text" placeholder="Max"/>
                 </div>
               </div>
             </div>

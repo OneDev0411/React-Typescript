@@ -302,17 +302,30 @@ export default class Mls extends Component {
     const data = this.props.data
     const user = data.user
     const listing_map = data.listing_map
+    /* Options
+    ==================== */
     const options = listing_map.options
+    // Price
     const minimum_price = Number(this.refs.minimum_price.refs.input.value.trim())
     if (minimum_price)
       options.minimum_price = minimum_price
     const maximum_price = Number(this.refs.maximum_price.refs.input.value.trim())
     if (maximum_price)
       options.maximum_price = maximum_price
+    // Size
+    // defaults
+    options.minimum_square_meters = 0
+    options.maximum_square_meters = 8.568721699047544e+17
+    const minimum_square_feet = Number(this.refs.minimum_square_feet.refs.input.value.trim())
+    if (minimum_square_feet)
+      options.minimum_square_meters = listing_util.feetToMeters(minimum_square_feet)
+    const maximum_square_feet = Number(this.refs.maximum_square_feet.refs.input.value.trim())
+    if (maximum_square_feet)
+      options.maximum_square_meters = listing_util.feetToMeters(maximum_square_feet)
     // Get filter options
     if (listing_map.filtering_options) {
       const filtering_options = listing_map.filtering_options
-      // Statuses
+      // Status
       const listing_statuses = []
       if (filtering_options.sold)
         listing_statuses.push('Sold')

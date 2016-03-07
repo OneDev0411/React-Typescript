@@ -1,5 +1,5 @@
 export default {
-  getStatusColor: (status) => {
+  getStatusColor: status => {
     let status_color = 'c3c3c3'
     if (status) {
       if (status === 'Active')
@@ -11,13 +11,16 @@ export default {
     }
     return status_color
   },
-  metersToFeet: (meters) => {
+  metersToFeet: meters => {
     return Math.round(meters * '10.7639')
   },
-  localAddress: (address) => {
+  feetToMeters: feet => {
+    return Math.round(feet / '10.7639')
+  },
+  localAddress: address => {
     return address.street_number + ' ' + address.street_name + ' ST ' + address.unit_number
   },
-  addressTitle: (address) => {
+  addressTitle: address => {
     return `${address.street_number} ${address.street_name} ${address.street_suffix}`
   },
 }
