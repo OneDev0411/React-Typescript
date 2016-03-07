@@ -530,6 +530,9 @@ export default class Mls extends Component {
       key: 'AIzaSyDagxNRLRIOsF8wxmuh1J3ysqnwdDB93-4',
       libraries: ['drawing'].join(',')
     }
+    let map_id
+    if (listing_map && listing_map.map_id)
+      map_id = listing_map.map_id
     return (
       <div style={ S('minw-1000') }>
         <main>
@@ -545,7 +548,7 @@ export default class Mls extends Component {
                   <span className={ data.show_filter_form ? 'text-primary' : '' }>Filters</span>
                 </Button>
                 <Button onClick={ this.toggleDrawable.bind(this) } style={ { ...S('mr-10'), outline: 'none' } }>
-                  <img src={ `/images/dashboard/mls/draw${data.listing_map.drawable ? '-active' : ''}.svg` } style={ S('w-20') }/>
+                  <img src={ `/images/dashboard/mls/draw${data.listing_map && data.listing_map.drawable ? '-active' : ''}.svg` } style={ S('w-20') }/>
                 </Button>
                 <ButtonGroup style={ S('mr-10') }>
                   <Button style={ { outline: 'none' } } onClick={ this.showPanelView.bind(this, 'list') }>
@@ -560,12 +563,12 @@ export default class Mls extends Component {
             { loading }
             <div style={ S('h-' + (window.innerHeight - 62)) }>
               <GoogleMap
-                key={ 'map-' + data.listing_map.map_id }
+                key={ 'map-' + map_id }
                 bootstrapURLKeys={ bootstrap_url_keys }
-                center={ data.listing_map ? data.listing_map.center : default_center }
-                zoom={ data.listing_map ? data.listing_map.zoom : default_zoom }
+                center={ listing_map ? listing_map.center : default_center }
+                zoom={ listing_map ? listing_map.zoom : default_zoom }
                 onBoundsChange={ this.handleBoundsChange.bind(this) }
-                options={ data.listing_map.google_options }
+                options={ listing_map ? listing_map.google_options : '' }
                 yesIWantToUseGoogleMapApiInternals
                 onGoogleApiLoaded={ this.handleGoogleMapApi.bind(this) }
               >
