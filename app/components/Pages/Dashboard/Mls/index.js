@@ -24,8 +24,8 @@ export default class Mls extends Component {
       this.initMap()
     delete AppStore.data.current_listing
     // Set switch states
-    if (!AppStore.data.listing_map.filtering_options) {
-      AppStore.data.listing_map.filtering_options = {
+    if (!AppStore.data.listing_map.filter_options) {
+      AppStore.data.listing_map.filter_options = {
         sold: false,
         active: true,
         other: false,
@@ -59,25 +59,25 @@ export default class Mls extends Component {
     }
     let zoom = 13
     const options = {
-      'maximum_price': 5000000,
-      'limit': '75',
-      'maximum_lot_square_meters': 8.568721699047544e+17,
-      'minimum_bathrooms': 1,
-      'maximum_square_meters': 8.568721699047544e+17,
-      'location': {
-        'longitude': -96.79698789999998,
-        'latitude': 32.7766642
+      maximum_price: 5000000,
+      limit: '75',
+      maximum_lot_square_meters: 8.568721699047544e+17,
+      minimum_bathrooms: 1,
+      maximum_square_meters: 8.568721699047544e+17,
+      location: {
+        longitude: -96.79698789999998,
+        latitude: 32.7766642
       },
-      'horizontal_distance': 2830,
-      'property_type': 'Residential',
-      'vertical_distance': 2830,
-      'minimum_square_meters': 0,
-      'listing_statuses': ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract'],
-      'minimum_lot_square_meters': 0,
-      'currency': 'USD',
-      'maximum_year_built': 2016,
-      'minimum_year_built': 0,
-      'points': [{
+      horizontal_distance: 2830,
+      property_type: 'Residential',
+      vertical_distance: 2830,
+      minimum_square_meters: 0,
+      listing_statuses: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract'],
+      minimum_lot_square_meters: 0,
+      currency: 'USD',
+      maximum_year_built: 2016,
+      minimum_year_built: 0,
+      points: [{
         latitude: 32.83938955111425,
         longitude: -96.89115626525879
       }, {
@@ -93,21 +93,26 @@ export default class Mls extends Component {
         latitude: 32.83938955111425,
         longitude: -96.89115626525879
       }],
-      'minimum_bedrooms': 0,
-      'minimum_price': 0,
-      'open_house': false,
-      'property_subtypes': ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse']
+      minimum_bedrooms: 0,
+      minimum_price: 0,
+      open_house: false,
+      property_subtypes: ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse']
     }
     if (data.listing_map && data.listing_map.center) {
       center = data.listing_map.center
       zoom = data.listing_map.center
     }
     const listing_map = {
+      map_id: new Date().getTime(),
       default_options: options,
       options,
       is_loading: true,
       center,
-      zoom
+      zoom,
+      google_options: {
+        mapTypeControl: true,
+        draggable: true
+      }
     }
     AppStore.data.listing_map = listing_map
     AppStore.emitChange()
@@ -249,25 +254,25 @@ export default class Mls extends Component {
   }
 
   handleFilterSwitch(key) {
-    if (!AppStore.data.listing_map.filtering_options)
-      AppStore.data.listing_map.filtering_options = {}
-    if (!AppStore.data.listing_map.filtering_options[key])
-      AppStore.data.listing_map.filtering_options[key] = true
+    if (!AppStore.data.listing_map.filter_options)
+      AppStore.data.listing_map.filter_options = {}
+    if (!AppStore.data.listing_map.filter_options[key])
+      AppStore.data.listing_map.filter_options[key] = true
     else
-      delete AppStore.data.listing_map.filtering_options[key]
+      delete AppStore.data.listing_map.filter_options[key]
     AppStore.emitChange()
   }
 
   handleFilterButton(payload) {
     const key = payload.key
     const value = payload.value
-    const filtering_options = AppStore.data.listing_map.filtering_options
-    if (!filtering_options)
-      AppStore.data.listing_map.filtering_options = {}
+    const filter_options = AppStore.data.listing_map.filter_options
+    if (!filter_options)
+      AppStore.data.listing_map.filter_options = {}
     if (key === 'listing_types') {
       let listing_types = []
-      if (filtering_options && filtering_options.listing_types)
-        listing_types = filtering_options.listing_types
+      if (filter_options && filter_options.listing_types)
+        listing_types = filter_options.listing_types
       // If has already, remove
       if (value === 'any') {
         if (listing_types.indexOf(value) === -1)
@@ -283,19 +288,37 @@ export default class Mls extends Component {
         if (listing_types.length === 3)
           listing_types.push('any')
       }
-      AppStore.data.listing_map.filtering_options.listing_types = listing_types
+      AppStore.data.listing_map.filter_options.listing_types = listing_types
     }
     if (key === 'minimum_bedrooms' || key === 'minimum_bathrooms')
-      AppStore.data.listing_map.filtering_options[key] = Number(value)
+      AppStore.data.listing_map.filter_options[key] = Number(value)
     if (key === 'pool')
-      AppStore.data.listing_map.filtering_options[key] = value
+      AppStore.data.listing_map.filter_options[key] = value
     AppStore.emitChange()
   }
 
   resetFilterOptions() {
     const data = this.props.data
+    const user = data.user
     const listing_map = data.listing_map
-    AppStore.data.listing_map.options = listing_map.default_options
+    const default_options = listing_map.default_options
+    AppStore.data.listing_map.filter_options = {
+      maximum_price: 5000000,
+      active: true,
+      listing_types: ['house']
+    }
+    AppStore.emitChange()
+    ListingDispatcher.dispatch({
+      action: 'get-valerts',
+      user,
+      default_options
+    })
+  }
+
+  handleOptionChange(key, value) {
+    if (!AppStore.data.listing_map.filter_options)
+      AppStore.data.listing_map.filter_options = {}
+    AppStore.data.listing_map.filter_options[key] = value
     AppStore.emitChange()
   }
 
@@ -307,7 +330,11 @@ export default class Mls extends Component {
     /* Options
     ==================== */
     const options = listing_map.options
+    const default_options = listing_map.default_options
     // Price
+    // defaults
+    options.minimum_price = default_options.minimum_price
+    options.maximum_price = default_options.maximum_price
     const minimum_price = Number(this.refs.minimum_price.refs.input.value.trim())
     if (minimum_price)
       options.minimum_price = minimum_price
@@ -325,40 +352,42 @@ export default class Mls extends Component {
     if (maximum_square_feet)
       options.maximum_square_meters = listing_util.feetToMeters(maximum_square_feet)
     // Get filter options
-    if (listing_map.filtering_options) {
-      const filtering_options = listing_map.filtering_options
+    if (listing_map.filter_options) {
+      const filter_options = listing_map.filter_options
       // Status
       const listing_statuses = []
-      if (filtering_options.sold)
+      if (filter_options.sold)
         listing_statuses.push('Sold')
-      if (filtering_options.active)
+      if (filter_options.active)
         listing_statuses.push('Active')
-      if (filtering_options.other)
+      if (filter_options.other)
         listing_statuses.push('Active Contingent', 'Active Kick Out', 'Active Option Contract')
       options.listing_statuses = listing_statuses
       // Bed / bath
-      const minimum_bedrooms = filtering_options.minimum_bedrooms
+      options.minimum_bedrooms = default_options.minimum_bedrooms
+      options.minimum_bathrooms = default_options.minimum_bathrooms
+      const minimum_bedrooms = filter_options.minimum_bedrooms
       if (minimum_bedrooms)
         options.minimum_bedrooms = minimum_bedrooms
-      const minimum_bathrooms = filtering_options.minimum_bathrooms
+      const minimum_bathrooms = filter_options.minimum_bathrooms
       if (minimum_bathrooms)
         options.minimum_bathrooms = minimum_bathrooms
       // Pool
-      const pool = filtering_options.pool
+      const pool = filter_options.pool
       if (pool === 'either')
         delete options.pool
       else
         options.pool = pool
       // Property types
-      if (filtering_options.listing_types) {
+      if (filter_options.listing_types) {
         let property_subtypes = []
-        if (filtering_options.listing_types.includes('house'))
+        if (filter_options.listing_types.includes('house'))
           property_subtypes.push('RES-Single Family')
-        if (filtering_options.listing_types.includes('condo'))
+        if (filter_options.listing_types.includes('condo'))
           property_subtypes.push('RES-Condo')
-        if (filtering_options.listing_types.includes('townhouse'))
+        if (filter_options.listing_types.includes('townhouse'))
           property_subtypes.push('RES-Townhouse')
-        if (filtering_options.listing_types.includes('any'))
+        if (filter_options.listing_types.includes('any'))
           property_subtypes = ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse']
         options.property_subtypes = property_subtypes
       }
@@ -370,6 +399,76 @@ export default class Mls extends Component {
       user,
       options
     })
+  }
+
+  getPolygonBounds(google, polygon) {
+    const data = this.props.data
+    const user = data.user
+    const polygon_bounds = polygon.getPath()
+    const coordinates = []
+    let lat_lng
+    for (let i = 0; i < polygon_bounds.length; i++) {
+      lat_lng = {
+        latitude: polygon_bounds.getAt(i).lat(),
+        longitude: polygon_bounds.getAt(i).lng()
+      }
+      coordinates.push(lat_lng)
+    }
+    const options = AppStore.data.listing_map.options
+    options.points = [
+      ...coordinates,
+      coordinates[0]
+    ]
+    AppStore.data.listing_map.google_options.draggable = true
+    AppStore.data.listing_map.is_loading = true
+    AppStore.emitChange()
+    ListingDispatcher.dispatch({
+      action: 'get-valerts',
+      user,
+      options
+    })
+  }
+
+  handleGoogleMapApi(google) {
+    const map = google.map
+    google.maps.event.addDomListener(map.getDiv(), 'mousedown', () => {
+      if (window.poly)
+        window.poly.setMap(null)
+      window.poly = new google.maps.Polyline({
+        map,
+        clickable: false,
+        strokeColor: '#3388ff',
+        strokeWeight: 10
+      })
+      const move = google.maps.event.addListener(map, 'mousemove', e => {
+        window.poly.getPath().push(e.latLng)
+        return false
+      })
+      google.maps.event.addListenerOnce(map, 'mouseup', () => {
+        google.maps.event.removeListener(move)
+        const path = window.poly.getPath()
+        window.poly.setMap(null)
+        window.poly = new google.maps.Polygon({
+          map,
+          path,
+          strokeColor: '#3388ff',
+          strokeWeight: 10
+        })
+        this.getPolygonBounds(google, window.poly)
+      })
+    })
+  }
+
+  toggleDrawable() {
+    if (AppStore.data.listing_map.drawable) {
+      AppStore.data.listing_map.google_options.draggable = true
+      delete AppStore.data.listing_map.drawable
+    } else {
+      AppStore.data.listing_map.google_options.draggable = false
+      AppStore.data.listing_map.drawable = true
+    }
+    AppStore.data.listing_map.map_id = new Date().getTime()
+    AppStore.emitChange()
   }
 
   render() {
@@ -427,6 +526,10 @@ export default class Mls extends Component {
       ...S('h-62 p-10'),
       borderBottom: '1px solid #dcd9d9'
     }
+    const bootstrap_url_keys = {
+      key: 'AIzaSyDagxNRLRIOsF8wxmuh1J3ysqnwdDB93-4',
+      libraries: ['drawing'].join(',')
+    }
     return (
       <div style={ S('minw-1000') }>
         <main>
@@ -441,8 +544,8 @@ export default class Mls extends Component {
                   <img src={ `/images/dashboard/mls/filters${data.show_filter_form ? '-active' : ''}.svg` } style={ S('w-20 mr-10') }/>
                   <span className={ data.show_filter_form ? 'text-primary' : '' }>Filters</span>
                 </Button>
-                <Button style={ { ...S('mr-10'), outline: 'none' } }>
-                  <img src="/images/dashboard/mls/draw.svg" style={ S('w-20') }/>
+                <Button onClick={ this.toggleDrawable.bind(this) } style={ { ...S('mr-10'), outline: 'none' } }>
+                  <img src={ `/images/dashboard/mls/draw${data.listing_map.drawable ? '-active' : ''}.svg` } style={ S('w-20') }/>
                 </Button>
                 <ButtonGroup style={ S('mr-10') }>
                   <Button style={ { outline: 'none' } } onClick={ this.showPanelView.bind(this, 'list') }>
@@ -457,10 +560,14 @@ export default class Mls extends Component {
             { loading }
             <div style={ S('h-' + (window.innerHeight - 62)) }>
               <GoogleMap
-                defaultCenter={ data.listing_map ? data.listing_map.center : default_center }
-                defaultZoom={ data.listing_map ? data.listing_map.zoom : default_zoom }
+                key={ 'map-' + data.listing_map.map_id }
+                bootstrapURLKeys={ bootstrap_url_keys }
+                center={ data.listing_map ? data.listing_map.center : default_center }
+                zoom={ data.listing_map ? data.listing_map.zoom : default_zoom }
                 onBoundsChange={ this.handleBoundsChange.bind(this) }
-                options={ { mapTypeControl: true } }
+                options={ data.listing_map.google_options }
+                yesIWantToUseGoogleMapApiInternals
+                onGoogleApiLoaded={ this.handleGoogleMapApi.bind(this) }
               >
               { map_listing_markers }
               </GoogleMap>
@@ -479,6 +586,7 @@ export default class Mls extends Component {
             handleFilterButton={ this.handleFilterButton }
             resetFilterOptions={ this.resetFilterOptions }
             setFilterOptions={ this.setFilterOptions }
+            handleOptionChange={ this.handleOptionChange }
           />
         </main>
       </div>

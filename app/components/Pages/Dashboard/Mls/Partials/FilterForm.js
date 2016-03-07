@@ -9,18 +9,22 @@ import Switch from 'react-ios-switch'
 export default class FilterForm extends Component {
   buttonIsActive(key, value) {
     const data = this.props.data
-    let filtering_options
+    let filter_options
     if (!data.listing_map)
       return false
-    if (data.listing_map.filtering_options)
-      filtering_options = data.listing_map.filtering_options
-    if (filtering_options && key === 'listing_types') {
-      if (filtering_options.listing_types && filtering_options.listing_types.indexOf(value) !== -1)
+    if (data.listing_map.filter_options)
+      filter_options = data.listing_map.filter_options
+    if (filter_options && key === 'listing_types') {
+      if (filter_options.listing_types && filter_options.listing_types.indexOf(value) !== -1)
         return true
     }
-    if (filtering_options && filtering_options[key] === value)
+    if (filter_options && filter_options[key] === value)
       return true
     return false
+  }
+  handleOptionChange(key) {
+    const value = this.refs[key].refs.input.value
+    this.props.handleOptionChange(key, value)
   }
   render() {
     const data = this.props.data
@@ -32,13 +36,11 @@ export default class FilterForm extends Component {
     let filter_form_class = 'listing-map__filter-form'
     if (data.show_filter_form)
       filter_form_class += ' active'
-    let filtering_options
-    let options
+    let filter_options
     if (data.listing_map) {
       const listing_map = data.listing_map
-      if (listing_map.filtering_options)
-        filtering_options = data.listing_map.filtering_options
-      options = listing_map.options
+      if (listing_map.filter_options)
+        filter_options = data.listing_map.filter_options
     }
     return (
       <div className={ filter_form_class } style={ filter_form_style }>
@@ -47,25 +49,25 @@ export default class FilterForm extends Component {
             <div style={ S('border-bottom-1-solid-f3f6f7 h-50 p-15') }>
               Sold
               <div style={ S('pull-right') }>
-                <Switch checked={ filtering_options ? filtering_options.sold : false } onChange={ this.props.handleFilterSwitch.bind(this, 'sold') } />
+                <Switch checked={ filter_options ? filter_options.sold : false } onChange={ this.props.handleFilterSwitch.bind(this, 'sold') } />
               </div>
             </div>
             <div style={ S('border-bottom-1-solid-f3f6f7 h-50 p-15') }>
               Active
               <div style={ S('pull-right') }>
-                <Switch checked={ filtering_options ? filtering_options.active : false } onChange={ this.props.handleFilterSwitch.bind(this, 'active') } />
+                <Switch checked={ filter_options ? filter_options.active : false } onChange={ this.props.handleFilterSwitch.bind(this, 'active') } />
               </div>
             </div>
             <div style={ S('border-bottom-1-solid-f3f6f7 h-50 p-15') }>
               Other Listing Status
               <div style={ S('pull-right') }>
-                <Switch checked={ filtering_options ? filtering_options.other : false } onChange={ this.props.handleFilterSwitch.bind(this, 'other') } />
+                <Switch checked={ filter_options ? filter_options.other : false } onChange={ this.props.handleFilterSwitch.bind(this, 'other') } />
               </div>
             </div>
             <div style={ S('border-bottom-1-solid-f3f6f7 h-50 p-15') }>
               Open Houses Only
               <div style={ S('pull-right') }>
-                <Switch checked={ filtering_options ? filtering_options.open_houses : false } onChange={ this.props.handleFilterSwitch.bind(this, 'open_houses') } />
+                <Switch checked={ filter_options ? filter_options.open_houses : false } onChange={ this.props.handleFilterSwitch.bind(this, 'open_houses') } />
               </div>
             </div>
             <div style={ S('pl-15 pt-15') }>
@@ -99,10 +101,10 @@ export default class FilterForm extends Component {
               <div>Price Range</div>
               <div>
                 <div style={ S('w-50p pull-left') }>
-                  <Input defaultValue={ options && options.minimum_price ? options.minimum_price : '' } ref="minimum_price" type="text" placeholder="Min"/>
+                  <Input onChange={ this.handleOptionChange.bind(this, 'minimum_price') } value={ filter_options && filter_options.minimum_price ? filter_options.minimum_price : '' } ref="minimum_price" type="text" placeholder="Min"/>
                 </div>
                 <div style={ S('w-50p pull-left') }>
-                  <Input defaultValue={ options && options.maximum_price ? options.maximum_price : '' } ref="maximum_price" type="text" placeholder="Max"/>
+                  <Input onChange={ this.handleOptionChange.bind(this, 'maximum_price') } value={ filter_options && filter_options.maximum_price ? filter_options.maximum_price : '' } ref="maximum_price" type="text" placeholder="Max"/>
                 </div>
               </div>
             </div>
@@ -126,10 +128,10 @@ export default class FilterForm extends Component {
               <div>Square Footage</div>
               <div>
                 <div style={ S('w-50p pull-left') }>
-                  <Input defaultValue={ options && options.minimum_square_feet ? options.minimum_square_feet : '' } ref="minimum_square_feet" type="text" placeholder="Min"/>
+                  <Input onChange={ this.handleOptionChange.bind(this, 'minimum_square_feet') } value={ filter_options && filter_options.minimum_square_feet ? filter_options.minimum_square_feet : '' } ref="minimum_square_feet" type="text" placeholder="Min"/>
                 </div>
                 <div style={ S('w-50p pull-left') }>
-                  <Input defaultValue={ options && options.maximum_square_feet ? options.maximum_square_feet : '' } ref="maximum_square_feet" type="text" placeholder="Max"/>
+                  <Input onChange={ this.handleOptionChange.bind(this, 'maximum_square_feet') } value={ filter_options && filter_options.maximum_square_feet ? filter_options.maximum_square_feet : '' } ref="maximum_square_feet" type="text" placeholder="Max"/>
                 </div>
               </div>
             </div>
@@ -158,5 +160,6 @@ FilterForm.propTypes = {
   handleFilterSwitch: React.PropTypes.func,
   handleFilterButton: React.PropTypes.func,
   resetFilterOptions: React.PropTypes.func,
-  setFilterOptions: React.PropTypes.func
+  setFilterOptions: React.PropTypes.func,
+  handleOptionChange: React.PropTypes.func
 }
