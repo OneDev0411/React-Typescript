@@ -30,6 +30,9 @@ export default class ListingPanel extends Component {
         case 'year_built':
           sortby_title = 'Built'
           break
+        case 'dom':
+          sortby_title = 'Days on market'
+          break
         default:
           return true
       }
@@ -131,7 +134,7 @@ export default class ListingPanel extends Component {
             <div>{ property.year_built }</div>
           </div>
           <div className="pull-left" style={ S('mt-10 w-100') }>
-            <div>(Coming soon)</div>
+            <div>{ listing_util.getDOM(listing.dom) }</div>
           </div>
         </div>
       )
@@ -195,7 +198,8 @@ export default class ListingPanel extends Component {
             <i style={ S('color-c3c3c3') } className="fa fa-caret-down"></i>
           </div>
           <div onClick={ this.props.sortListings.bind(this, 'dom') } style={ S('w-60 pull-left pointer') }>
-            DOM
+            DOM&nbsp;&nbsp;
+            <i style={ S('color-c3c3c3') } className="fa fa-caret-down"></i>
           </div>
           <div className="clearfix"></div>
         </div>
@@ -220,6 +224,7 @@ export default class ListingPanel extends Component {
                   <MenuItem onClick={ this.props.sortListings.bind(this, 'bathroom_count') } >Baths</MenuItem>
                   <MenuItem onClick={ this.props.sortListings.bind(this, 'square_meters') } >Sqft</MenuItem>
                   <MenuItem onClick={ this.props.sortListings.bind(this, 'year_built') } >Built</MenuItem>
+                  <MenuItem onClick={ this.props.sortListings.bind(this, 'dom') } >Dom</MenuItem>
                 </DropdownButton>
               </div>
             </div>

@@ -229,6 +229,8 @@ export default class Mls extends Component {
         return listing.compact_property.square_meters * sorting_direction
       if (sort_by === 'year_built')
         return listing.compact_property.year_built * sorting_direction
+      if (sort_by === 'dom')
+        return listing_util.getDOM(listing.dom) * sorting_direction
     })
     AppStore.data.listing_map.listings = listings_sorted
     AppStore.data.listing_map.sorting_direction = sorting_direction
@@ -440,17 +442,14 @@ export default class Mls extends Component {
                   <span className={ data.show_filter_form ? 'text-primary' : '' }>Filters</span>
                 </Button>
                 <Button style={ { ...S('mr-10'), outline: 'none' } }>
-                  <img src="/images/dashboard/mls/draw.svg" style={ S('w-20 mr-10') }/>
-                  Draw
+                  <img src="/images/dashboard/mls/draw.svg" style={ S('w-20') }/>
                 </Button>
                 <ButtonGroup style={ S('mr-10') }>
                   <Button style={ { outline: 'none' } } onClick={ this.showPanelView.bind(this, 'list') }>
-                    <img src={ `/images/dashboard/mls/list${data.listing_panel && data.listing_panel.view === 'list' ? '-active' : ''}.svg` } style={ S('w-20 mr-10') }/>
-                    <span className={ data.listing_panel && data.listing_panel.view === 'list' ? 'text-primary' : 'default'}>List</span>
+                    <img src={ `/images/dashboard/mls/list${data.listing_panel && data.listing_panel.view === 'list' ? '-active' : ''}.svg` } style={ S('w-20') }/>
                   </Button>
                   <Button style={ { outline: 'none' } } onClick={ this.showPanelView.bind(this, 'photos') }>
-                    <img src={ `/images/dashboard/mls/photos${data.listing_panel && data.listing_panel.view === 'photos' ? '-active' : ''}.svg` } style={ S('w-18 mr-10') }/>
-                    <span className={ data.listing_panel && data.listing_panel.view === 'photos' ? 'text-primary' : 'default'}>Photos</span>
+                    <img src={ `/images/dashboard/mls/photos${data.listing_panel && data.listing_panel.view === 'photos' ? '-active' : ''}.svg` } style={ S('w-18') }/>
                   </Button>
                 </ButtonGroup>
               </div>

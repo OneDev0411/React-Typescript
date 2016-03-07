@@ -23,4 +23,7 @@ export default {
   addressTitle: address => {
     return `${address.street_number} ${address.street_name} ${address.street_suffix}`
   },
+  getDOM: dom_seconds => {
+    return Math.floor((((new Date()).getTime() / 1000) - dom_seconds) / 86400)
+  }
 }
