@@ -145,7 +145,7 @@ export default class Mls extends Component {
   }
 
   handleBoundsChange(center, zoom, bounds) {
-    let data = this.props.data
+    const data = this.props.data
     const user = data.user
     const listing_map = data.listing_map
     if (!listing_map)
@@ -176,13 +176,16 @@ export default class Mls extends Component {
     AppStore.data.listing_map.center = center
     AppStore.data.listing_map.zoom = zoom
     AppStore.data.listing_map.options = options
-    AppStore.data.listing_map.is_loading = true
+    if (!listing_map.drawable)
+      AppStore.data.listing_map.is_loading = true
     AppStore.emitChange()
-    data = this.props.data
+    // Don't get more results if polygon on map
+    if (listing_map.drawable)
+      return
     ListingDispatcher.dispatch({
       action: 'get-valerts',
       user,
-      options: data.listing_map.options
+      options: listing_map.options
     })
   }
 
@@ -344,7 +347,7 @@ export default class Mls extends Component {
     // Size
     // defaults
     options.minimum_square_meters = 0
-    options.maximum_square_meters = 8.568721699047544e+17
+    options.maximum_square_meters = default_options.maximum_square_meters
     const minimum_square_feet = Number(this.refs.minimum_square_feet.refs.input.value.trim())
     if (minimum_square_feet)
       options.minimum_square_meters = listing_util.feetToMeters(minimum_square_feet)
@@ -421,7 +424,6 @@ export default class Mls extends Component {
     ]
     AppStore.data.listing_map.google_options.draggable = true
     AppStore.data.listing_map.is_loading = true
-    AppStore.emitChange()
     ListingDispatcher.dispatch({
       action: 'get-valerts',
       user,
@@ -431,22 +433,12 @@ export default class Mls extends Component {
 
   handleGoogleMapApi(google) {
     const map = google.map
+    window.map = map
     const data = this.props.data
     const listing_map = data.listing_map
-    map.addListener('zoom_changed', () => {
-      if (!listing_map.drawable)
-        return
-      delete AppStore.data.listing_map.drawable
-      AppStore.emitChange()
-      setTimeout(() => {
-        AppStore.data.listing_map.drawable = true
-        AppStore.emitChange()
-      }, 2000)
-      // console.log('zoom changed')
-    })
     google.maps.event.addDomListener(map.getDiv(), 'mousedown', () => {
-      if (window.poly)
-        window.poly.setMap(null)
+      if (!listing_map.drawable || listing_map.drawable && window.poly)
+        return
       window.poly = new google.maps.Polyline({
         map,
         clickable: false,
@@ -462,10 +454,14 @@ export default class Mls extends Component {
         return false
       })
       google.maps.event.addListenerOnce(map, 'mouseup', () => {
+        if (!listing_map.drawable)
+          return
+        map.set('draggable', true)
         google.maps.event.removeListener(move)
         const path = window.poly.getPath()
         window.poly.setMap(null)
         window.poly = new google.maps.Polygon({
+          clickable: false,
           map,
           path,
           strokeColor: '#3388ff',
@@ -478,14 +474,39 @@ export default class Mls extends Component {
 
   toggleDrawable() {
     if (AppStore.data.listing_map.drawable) {
-      AppStore.data.listing_map.google_options.draggable = true
+      // console.log(bounds.getNorthEast().lat())
+      // console.log(bounds.getSouthWest().lng())
       delete AppStore.data.listing_map.drawable
+      window.map.set('draggable', true)
+      this.removeDrawing()
     } else {
-      AppStore.data.listing_map.google_options.draggable = false
       AppStore.data.listing_map.drawable = true
+      window.map.set('draggable', false)
     }
-    AppStore.data.listing_map.map_id = new Date().getTime()
     AppStore.emitChange()
+  }
+
+  removeDrawing() {
+    if (!window.poly)
+      return
+    window.poly.setMap(null)
+    delete AppStore.data.listing_map.drawable
+    AppStore.emitChange()
+    let center = window.map.getCenter()
+    center = {
+      lat: center.lat(),
+      lng: center.lng()
+    }
+    const zoom = window.map.getZoom()
+    let bounds = window.map.getBounds()
+    bounds = [
+      bounds.getNorthEast().lat(),
+      bounds.getSouthWest().lng(),
+      bounds.getSouthWest().lat(),
+      bounds.getNorthEast().lng()
+    ]
+    this.handleBoundsChange(center, zoom, bounds)
+    delete window.poly
   }
 
   render() {
@@ -543,6 +564,7 @@ export default class Mls extends Component {
       ...S('h-62 p-10'),
       borderBottom: '1px solid #dcd9d9'
     }
+    // TODO move to ENV_VAR
     const bootstrap_url_keys = {
       key: 'AIzaSyDagxNRLRIOsF8wxmuh1J3ysqnwdDB93-4',
       libraries: ['drawing'].join(',')
@@ -550,6 +572,18 @@ export default class Mls extends Component {
     let map_id
     if (listing_map && listing_map.map_id)
       map_id = listing_map.map_id
+    let remove_drawing_button
+    if (window.poly) {
+      remove_drawing_button = (
+        <Button
+          onClick={ this.removeDrawing.bind(this) }
+          bsStyle="danger"
+          style={ S('absolute z-1000 t-80 r-80 br-100 w-50 h-50 color-fff pt-2 font-30 text-center') }
+        >
+          &times;
+        </Button>
+      )
+    }
     return (
       <div style={ S('minw-1000') }>
         <main>
@@ -579,6 +613,7 @@ export default class Mls extends Component {
             </nav>
             { loading }
             <div style={ S('h-' + (window.innerHeight - 62)) }>
+              { remove_drawing_button }
               <GoogleMap
                 key={ 'map-' + map_id }
                 bootstrapURLKeys={ bootstrap_url_keys }
