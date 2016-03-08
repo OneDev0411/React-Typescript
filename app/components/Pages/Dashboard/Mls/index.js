@@ -431,6 +431,19 @@ export default class Mls extends Component {
 
   handleGoogleMapApi(google) {
     const map = google.map
+    const data = this.props.data
+    const listing_map = data.listing_map
+    map.addListener('zoom_changed', () => {
+      if (!listing_map.drawable)
+        return
+      delete AppStore.data.listing_map.drawable
+      AppStore.emitChange()
+      setTimeout(() => {
+        AppStore.data.listing_map.drawable = true
+        AppStore.emitChange()
+      }, 2000)
+      // console.log('zoom changed')
+    })
     google.maps.event.addDomListener(map.getDiv(), 'mousedown', () => {
       if (window.poly)
         window.poly.setMap(null)
@@ -441,6 +454,10 @@ export default class Mls extends Component {
         strokeWeight: 10
       })
       const move = google.maps.event.addListener(map, 'mousemove', e => {
+        if (!listing_map.drawable) {
+          window.poly.setMap(null)
+          return false
+        }
         window.poly.getPath().push(e.latLng)
         return false
       })
