@@ -509,6 +509,20 @@ export default class Mls extends Component {
     delete window.poly
   }
 
+  handleSearchSubmit(e) {
+    e.preventDefault()
+    const data = this.props.data
+    const user = data.user
+    const q = this.refs.search_input.value.trim()
+    AppStore.data.listing_map.is_loading = true
+    AppStore.emitChange()
+    ListingDispatcher.dispatch({
+      action: 'search-listing',
+      user,
+      q
+    })
+  }
+
   render() {
     const data = this.props.data
     const listing_map = data.listing_map
@@ -591,7 +605,10 @@ export default class Mls extends Component {
           <div className={ main_class } style={ main_style }>
             <nav style={ toolbar_style }>
               <div style={ S('pull-left mr-10') }>
-                <input className="form-control" type="text" style={ S('bg-dfe3e8 w-400 pull-left') } placeholder="Search location or MLS#" />
+                <form onSubmit={ this.handleSearchSubmit.bind(this) }>
+                  <img src="/images/dashboard/mls/search.svg" style={ S('w-22 h-22 absolute l-18 t-18') } />
+                  <input ref="search_input" className="form-control" type="text" style={ S('font-18 bg-dfe3e8 w-400 pull-left pl-40') } placeholder="Search location or MLS#" />
+                </form>
               </div>
               <div style={ S('pull-left') }>
                 <Button onClick={ this.showFilterForm.bind(this, 'photos') } style={ { ...S('mr-10'), outline: 'none' } }>

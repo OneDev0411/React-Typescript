@@ -10,12 +10,21 @@ export default (user, q) => {
   }
   Listing.search(params, (err, response) => {
     // Success
-    if (response.status === 'success')
-      AppStore.data.new_transaction.listings_found = response.data
-    else
-      delete AppStore.data.new_transaction.listings_found
-    delete AppStore.data.new_transaction.listing_searching
-    AppStore.data.new_transaction.listing_q = q
+    // New transaction
+    if (AppStore.data.new_transaction) {
+      if (response.status === 'success')
+        AppStore.data.new_transaction.listings_found = response.data
+      else
+        delete AppStore.data.new_transaction.listings_found
+      delete AppStore.data.new_transaction.listing_searching
+      AppStore.data.new_transaction.listing_q = q
+    }
+    // Listing map
+    if (AppStore.data.listing_map && AppStore.data.listing_map.is_loading) {
+      const listings = response.data
+      delete AppStore.data.listing_map.is_loading
+      AppStore.data.listing_map.listings = listings
+    }
     AppStore.emitChange()
   })
 }
