@@ -72,25 +72,25 @@ export default class FilterForm extends Component {
             </div>
             <div style={ S('pl-15 pt-15') }>
               <div>Listing Types</div>
-              <Button bsStyle={ this.buttonIsActive('listing_types', 'any') ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'any' }) }>
+              <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'any') ? S('bg-667688 bc-667688') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'any' }) }>
                 <div style={ S('mb-10') }>
                   <img src={`/images/dashboard/mls/listing-types/any${this.buttonIsActive('listing_types', 'any') ? '-active' : ''}.svg`}/>
                 </div>
                 <span style={ S(`color-${this.buttonIsActive('listing_types', 'any') ? 'fff' : '929292'}`) }>Any</span>
               </Button>
-              <Button bsStyle={ this.buttonIsActive('listing_types', 'house') ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'house' }) }>
+              <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'house') ? S('bg-667688 bc-667688') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'house' }) }>
                 <div style={ S('mb-10') }>
                   <img src={`/images/dashboard/mls/listing-types/house${this.buttonIsActive('listing_types', 'house') ? '-active' : ''}.svg`}/>
                 </div>
                 <span style={ S(`color-${this.buttonIsActive('listing_types', 'house') ? 'fff' : '929292'}`) }>House</span>
               </Button>
-              <Button bsStyle={ this.buttonIsActive('listing_types', 'condo') ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'condo' }) }>
+              <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'condo') ? S('bg-667688 bc-667688') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'condo' }) }>
                 <div style={ S('mb-10') }>
                   <img src={`/images/dashboard/mls/listing-types/condo${this.buttonIsActive('listing_types', 'condo') ? '-active' : ''}.svg`}/>
                 </div>
                 <span style={ S(`color-${this.buttonIsActive('listing_types', 'condo') ? 'fff' : '929292'}`) }>Condo</span>
               </Button>
-              <Button bsStyle={ this.buttonIsActive('listing_types', 'townhouse') ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'townhouse' }) }>
+              <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'townhouse') ? S('bg-667688 bc-667688') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'townhouse' }) }>
                 <div style={ S('mb-10') }>
                   <img src={`/images/dashboard/mls/listing-types/townhouse${this.buttonIsActive('listing_types', 'townhouse') ? '-active' : ''}.svg`}/>
                 </div>
@@ -112,17 +112,17 @@ export default class FilterForm extends Component {
               <div>
                 Bedrooms
               </div>
-              <Button style={ S('mr-10') } bsStyle={ this.buttonIsActive('minimum_bedrooms', 1) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '1' }) }>+1</Button>
-              <Button style={ S('mr-10') } bsStyle={ this.buttonIsActive('minimum_bedrooms', 2) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '2' }) }>+2</Button>
-              <Button style={ S('mr-10') } bsStyle={ this.buttonIsActive('minimum_bedrooms', 3) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '3' }) }>+3</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 1) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '1' }) }>+1</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 2) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '2' }) }>+2</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 3) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '3' }) }>+3</Button>
             </div>
             <div style={ S('p-15') }>
               <div>
                 Bathrooms
               </div>
-              <Button style={ S('mr-10') } bsStyle={ this.buttonIsActive('minimum_bathrooms', 1) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '1' }) }>+1</Button>
-              <Button style={ S('mr-10') } bsStyle={ this.buttonIsActive('minimum_bathrooms', 2) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '2' }) }>+2</Button>
-              <Button style={ S('mr-10') } bsStyle={ this.buttonIsActive('minimum_bathrooms', 3) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '3' }) }>+3</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 1) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '1' }) }>+1</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 2) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '2' }) }>+2</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 3) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '3' }) }>+3</Button>
             </div>
             <div style={ S('p-15') }>
               <div>Square Footage</div>
@@ -139,9 +139,9 @@ export default class FilterForm extends Component {
               <div>
                 Pool
               </div>
-              <Button style={ S('mr-10') } bsStyle={ this.buttonIsActive('pool', true) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: true }) }>Yes</Button>
-              <Button style={ S('mr-10') } bsStyle={ this.buttonIsActive('pool', false) ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: false }) }>No</Button>
-              <Button style={ S('mr-10') } bsStyle={ this.buttonIsActive('pool', 'either') ? 'primary' : 'default' } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: 'either' }) }>Either</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('pool', true) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: true }) }>Yes</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('pool', false) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: false }) }>No</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('pool', 'either') ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: 'either' }) }>Either</Button>
             </div>
           </div>
           <div style={ S('absolute b-0 w-300') }>
