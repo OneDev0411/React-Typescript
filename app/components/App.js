@@ -53,6 +53,7 @@ export default class App extends Component {
     const data = AppStore.data
     socket.emit('Authenticate', data.user.access_token)
     socket.on('Message.Sent', (room, message) => {
+      // console.log('listen', message)
       const current_room = AppStore.data.current_room
       if (current_room.id === room.id) {
         if (message.author && data.user.id === message.author.id)

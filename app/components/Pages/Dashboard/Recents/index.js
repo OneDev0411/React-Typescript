@@ -78,7 +78,6 @@ export default class Dashboard extends Component {
     // If no comment
     if (!comment.trim())
       return false
-
     AppDispatcher.dispatch({
       action: 'create-message',
       user,
