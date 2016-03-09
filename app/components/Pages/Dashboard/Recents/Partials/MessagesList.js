@@ -168,6 +168,11 @@ export default class MessagesList extends Component {
       textTransform: 'uppercase'
     }
     const messages_list_items = messages.map((message, i) => {
+      if (!message) {
+        return (
+          <li key={ 'message-' + i }></li>
+        )
+      }
       let heading
       let heading_date_area
       let new_date = false

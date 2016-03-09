@@ -14,7 +14,10 @@ export default class RoomsList extends Component {
     // Sort by updates
     if (rooms) {
       rooms = _.sortBy(rooms, room => {
-        return -room.latest_message.updated_at
+        if (!room.latest_message && room.messages)
+          room.latest_message = room.messages[0]
+        if (room.latest_message)
+          return -room.latest_message.updated_at
       })
     }
     const filtered_rooms = data.filtered_rooms
@@ -46,7 +49,10 @@ export default class RoomsList extends Component {
     // Sort by updates
     if (rooms) {
       rooms = _.sortBy(rooms, room => {
-        return -room.latest_message.updated_at
+        if (!room.latest_message && room.messages)
+          room.latest_message = room.messages[0]
+        if (room.latest_message)
+          return -room.latest_message.updated_at
       })
     }
     const current_room = data.current_room
@@ -63,6 +69,15 @@ export default class RoomsList extends Component {
         // Profile image
         let author
         let profile_image_div
+        if (!room.latest_message) {
+          return (
+            <li className="room-list__item" style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, i) }>
+              <div style={ S('relative') }>
+                Loading...
+              </div>
+            </li>
+          )
+        }
         if (room.latest_message.author) {
           author = room.latest_message.author
           profile_image_div = (
