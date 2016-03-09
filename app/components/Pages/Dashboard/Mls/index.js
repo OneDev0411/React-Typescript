@@ -50,6 +50,25 @@ export default class Mls extends Component {
     this.hideModal()
   }
 
+  createMapOptions() {
+    const data = this.props.data
+    const listing_map = data.listing_map
+    if (!listing_map) {
+      return {
+        mapTypeControl: true,
+        draggable: true
+      }
+    }
+    const google_options = {
+      disableDefaultUI: true,
+      mapTypeControl: true,
+      draggable: true
+    }
+    AppStore.data.listing_map.google_options = google_options
+    AppStore.emitChange()
+    return google_options
+  }
+
   initMap() {
     const data = this.props.data
     const user = data.user
@@ -527,6 +546,15 @@ export default class Mls extends Component {
     })
   }
 
+  handleZoomClick(type) {
+    const current_zoom = AppStore.data.listing_map.zoom
+    if (type === 'in')
+      AppStore.data.listing_map.zoom = current_zoom + 1
+    if (type === 'out')
+      AppStore.data.listing_map.zoom = current_zoom - 1
+    AppStore.emitChange()
+  }
+
   render() {
     const data = this.props.data
     const listing_map = data.listing_map
@@ -606,6 +634,12 @@ export default class Mls extends Component {
         </Button>
       )
     }
+    const zoom_controls = (
+      <ButtonGroup vertical style={ S('absolute b-25 r-20') }>
+        <Button bsSize="large" onClick={ this.handleZoomClick.bind(this, 'in') }><i style={ S('color-929292') } className="fa fa-plus"></i></Button>
+        <Button bsSize="large" onClick={ this.handleZoomClick.bind(this, 'out') }><i style={ S('color-929292') } className="fa fa-minus"></i></Button>
+      </ButtonGroup>
+    )
     return (
       <div style={ S('minw-1000') }>
         <main>
@@ -645,7 +679,7 @@ export default class Mls extends Component {
                 center={ listing_map ? listing_map.center : default_center }
                 zoom={ listing_map ? listing_map.zoom : default_zoom }
                 onBoundsChange={ this.handleBoundsChange.bind(this) }
-                options={ listing_map ? listing_map.google_options : '' }
+                options={ this.createMapOptions.bind(this) }
                 yesIWantToUseGoogleMapApiInternals
                 onGoogleApiLoaded={ this.handleGoogleMapApi.bind(this) }
               >
@@ -668,6 +702,7 @@ export default class Mls extends Component {
             setFilterOptions={ this.setFilterOptions }
             handleOptionChange={ this.handleOptionChange }
           />
+          { zoom_controls }
         </main>
       </div>
     )
