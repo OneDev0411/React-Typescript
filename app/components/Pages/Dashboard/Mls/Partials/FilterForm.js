@@ -70,7 +70,7 @@ export default class FilterForm extends Component {
                 <Switch checked={ filter_options ? filter_options.open_houses : false } onChange={ this.props.handleFilterSwitch.bind(this, 'open_houses') } />
               </div>
             </div>
-            <div style={ S('pl-15 pt-15') }>
+            <div style={ S('pl-15 pt-15 pb-15') }>
               <div>Listing Types</div>
               <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'any') ? S('mr-10 bg-667688 bc-667688') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'any' }) }>
                 <div style={ S('mb-10') }>
@@ -97,7 +97,7 @@ export default class FilterForm extends Component {
                 <span style={ S(`font-10 color-${this.buttonIsActive('listing_types', 'townhouse') ? 'fff' : '929292'}`) }>Townhouse</span>
               </Button>
             </div>
-            <div style={ S('p-15') }>
+            <div style={ S('p-15 mb-40') }>
               <div>Price Range</div>
               <div>
                 <div style={ S('w-50p pull-left') }>

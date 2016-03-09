@@ -150,8 +150,7 @@ export default class Mls extends Component {
     const listing_map = data.listing_map
     if (!listing_map)
       return
-    const options = listing_map.options
-    options.points = [
+    const points = [
       {
         latitude: bounds[0],
         longitude: bounds[1]
@@ -175,13 +174,12 @@ export default class Mls extends Component {
     ]
     AppStore.data.listing_map.center = center
     AppStore.data.listing_map.zoom = zoom
-    AppStore.data.listing_map.options = options
-    if (!listing_map.drawable)
-      AppStore.data.listing_map.is_loading = true
-    AppStore.emitChange()
     // Don't get more results if polygon on map
-    if (listing_map.drawable)
-      return
+    if (!window.poly) {
+      AppStore.data.listing_map.is_loading = true
+      AppStore.data.listing_map.options.points = points
+    }
+    AppStore.emitChange()
     ListingDispatcher.dispatch({
       action: 'get-valerts',
       user,
@@ -405,8 +403,6 @@ export default class Mls extends Component {
   }
 
   getPolygonBounds(google, polygon) {
-    const data = this.props.data
-    const user = data.user
     const polygon_bounds = polygon.getPath()
     const coordinates = []
     let lat_lng
@@ -417,11 +413,18 @@ export default class Mls extends Component {
       }
       coordinates.push(lat_lng)
     }
-    const options = AppStore.data.listing_map.options
-    options.points = [
+    const points = [
       ...coordinates,
       coordinates[0]
     ]
+    return points
+  }
+
+  getValertsInArea(points) {
+    const data = this.props.data
+    const user = data.user
+    const options = AppStore.data.listing_map.options
+    options.points = points
     AppStore.data.listing_map.google_options.draggable = true
     AppStore.data.listing_map.is_loading = true
     ListingDispatcher.dispatch({
@@ -467,7 +470,8 @@ export default class Mls extends Component {
           strokeColor: '#3388ff',
           strokeWeight: 10
         })
-        this.getPolygonBounds(google, window.poly)
+        const points = this.getPolygonBounds(google, window.poly)
+        this.getValertsInArea(points)
       })
     })
   }
@@ -505,8 +509,8 @@ export default class Mls extends Component {
       bounds.getSouthWest().lat(),
       bounds.getNorthEast().lng()
     ]
-    this.handleBoundsChange(center, zoom, bounds)
     delete window.poly
+    this.handleBoundsChange(center, zoom, bounds)
   }
 
   handleSearchSubmit(e) {
