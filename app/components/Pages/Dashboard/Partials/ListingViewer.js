@@ -184,6 +184,7 @@ export default class ListingViewer extends Component {
           </div>
         )
       }
+      const google_address = listing.property.address.geo_source_formatted_address_google
       main_content = (
         <div style={ S('bg-fff') }>
           <div style={ S('p-0 relative') }>
@@ -233,9 +234,20 @@ export default class ListingViewer extends Component {
               <span style={ S('fw-600') }>County:</span>&nbsp;&nbsp;
               <span style={ S('color-c0c0c0') }>{ listing.property.address.county_or_parish }</span>
             </div>
-            <div style={ S('mb-10') }>
+            <div style={ S('mb-30') }>
               <span style={ S('fw-600') }>Community:</span>&nbsp;&nbsp;
               <span style={ S('color-c0c0c0') }>{ listing.property.subdivision_name }</span>
+            </div>
+            <div style={ S('relative mb-100') }>
+              <div style={ S('font-24 mb-20') }>Location</div>
+              <iframe
+                width={ window.innerWidth - 100 }
+                height="250"
+                frameBorder="0" style={ { border: 0 } }
+                src={ 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDagxNRLRIOsF8wxmuh1J3ysqnwdDB93-4&q=' + google_address }
+                allowFullScreen
+              >
+              </iframe>
             </div>
           </div>
         </div>
