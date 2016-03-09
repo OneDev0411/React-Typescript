@@ -588,11 +588,15 @@ export default class Mls extends Component {
       map_id = listing_map.map_id
     let remove_drawing_button
     if (window.poly) {
+      let right_value = 80
+      if (data.listing_panel)
+        right_value = 910
       remove_drawing_button = (
         <Button
           onClick={ this.removeDrawing.bind(this) }
           bsStyle="danger"
-          style={ S('absolute z-1000 t-80 r-80 br-100 w-50 h-50 color-fff pt-2 font-30 text-center') }
+          className="transition"
+          style={ S('absolute z-1000 t-80 br-100 w-50 h-50 color-fff pt-1 font-30 text-center r-' + right_value) }
         >
           &times;
         </Button>
