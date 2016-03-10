@@ -453,11 +453,27 @@ export default class Mls extends Component {
     })
   }
 
+  makePolygon() {
+    const google = window.google
+    const map = window.map
+    const path = window.poly.getPath()
+    window.poly.setMap(null)
+    window.poly = new google.maps.Polygon({
+      clickable: false,
+      map,
+      path,
+      strokeColor: '#3388ff',
+      strokeWeight: 10
+    })
+  }
+
   handleGoogleMapApi(google) {
     const map = google.map
     window.map = map
     const data = this.props.data
     const listing_map = data.listing_map
+    if (listing_map.drawable)
+      this.makePolygon()
     google.maps.event.addDomListener(map.getDiv(), 'mousedown', () => {
       if (!listing_map.drawable || listing_map.drawable && window.poly)
         return
@@ -480,15 +496,7 @@ export default class Mls extends Component {
           return
         map.set('draggable', true)
         google.maps.event.removeListener(move)
-        const path = window.poly.getPath()
-        window.poly.setMap(null)
-        window.poly = new google.maps.Polygon({
-          clickable: false,
-          map,
-          path,
-          strokeColor: '#3388ff',
-          strokeWeight: 10
-        })
+        this.makePolygon()
         const points = this.getPolygonBounds(google, window.poly)
         this.getValertsInArea(points)
       })
