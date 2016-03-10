@@ -472,7 +472,7 @@ export default class Mls extends Component {
     window.map = map
     const data = this.props.data
     const listing_map = data.listing_map
-    if (listing_map.drawable)
+    if (listing_map.drawable && window.poly)
       this.makePolygon()
     google.maps.event.addDomListener(map.getDiv(), 'mousedown', () => {
       if (!listing_map.drawable || listing_map.drawable && window.poly)
