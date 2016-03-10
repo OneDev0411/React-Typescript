@@ -17,10 +17,15 @@ import FileViewer from './Partials/FileViewer'
 export default class Dashboard extends Component {
 
   componentDidMount() {
+    this.getContacts()
+  }
+
+  componentDidMount() {
     // If already mounted
     if (AppStore.data.mounted && AppStore.data.mounted.indexOf('recents') !== -1)
       return
     this.init()
+    this.getContacts()
   }
 
   componentWillUpdate() {
@@ -31,6 +36,14 @@ export default class Dashboard extends Component {
       delete AppStore.data.play_sound
       AppStore.emitChange()
     }
+  }
+
+  getContacts() {
+    const data = this.props.data
+    AppDispatcher.dispatch({
+      action: 'get-contacts',
+      user: data.user
+    })
   }
 
   getPreviousMessages(scroll_height) {
@@ -69,23 +82,16 @@ export default class Dashboard extends Component {
     })
   }
 
-  createMessage(e) {
-    e.preventDefault()
-    const comment = this.refs.message_input.value
-    const user = this.props.data.user
-    const current_room = this.props.data.current_room
-
-    // If no comment
-    if (!comment.trim())
-      return false
+  createMessage(comment) {
+    const data = this.props.data
+    const user = data.user
+    const current_room = data.current_room
     AppDispatcher.dispatch({
       action: 'create-message',
       user,
       room: current_room,
       comment
     })
-
-    this.refs.message_input.value = ''
   }
 
   addContactsToRoom() {
@@ -151,17 +157,73 @@ export default class Dashboard extends Component {
     const data = AppStore.data
     if (!data.is_typing)
       this.sendTypingStarted()
-
     if (window.is_typing_timeout) {
       clearTimeout(window.is_typing_timeout)
       delete window.is_typing_timeout
     }
-
     // Send stopped typing event
     window.is_typing_timeout = setTimeout(() => {
       this.sendTypingEnded()
     }, 3000)
     AppStore.emitChange()
+  }
+
+  handleContactFilterNav(direction) {
+    this.setContactActive(direction)
+  }
+
+  setContactActive(direction) {
+    const data = this.props.data
+    const filtered_contacts = data.filtered_contacts
+    let active_contact = -1
+    // Prev active contact
+    if (data.active_contact !== null)
+      active_contact = data.active_contact
+    if (direction === 'up') {
+      if (active_contact > -1)
+        active_contact = active_contact - 1
+      else
+        active_contact = filtered_contacts.length - 1
+    }
+    if (direction === 'down') {
+      if (filtered_contacts && active_contact < filtered_contacts.length - 1)
+        active_contact = active_contact + 1
+      else
+        active_contact = 0
+    }
+    AppStore.data.active_contact = active_contact
+    AppStore.emitChange()
+  }
+
+  handleContactFilter(message_input, type) {
+    if (type === 'show') {
+      const data = this.props.data
+      const contacts = data.contacts
+      const message_arr = message_input.split('@')
+      const filtered_contacts = contacts.filter(contact => {
+        if (contact.first_name && contact.first_name.toLowerCase().includes(message_arr[1].toLowerCase()))
+          return contact
+        if (contact.last_name && contact.last_name.toLowerCase().includes(message_arr[1].toLowerCase()))
+          return contact
+        if (contact.email && contact.email.toLowerCase().includes(message_arr[1].toLowerCase()))
+          return contact
+        return false
+      })
+      AppStore.data.active_contact = filtered_contacts.length - 1
+      AppStore.data.show_filtered_contacts = true
+      AppStore.data.filtered_contacts = filtered_contacts
+      AppStore.data.message_input = message_input
+    } else {
+      delete AppStore.data.active_contact
+      delete AppStore.data.filtered_contacts
+      delete AppStore.data.show_filtered_contacts
+      delete AppStore.data.message_input
+    }
+    AppStore.emitChange()
+  }
+
+  addContactToMessage() {
+    this.handleContactFilter('', 'hide')
   }
 
   addUserToStore() {
@@ -310,8 +372,10 @@ export default class Dashboard extends Component {
             data={ data }
             getPreviousMessages={ this.getPreviousMessages.bind(this) }
             handleMessageTyping={ this.handleMessageTyping.bind(this) }
+            handleContactFilter={ this.handleContactFilter.bind(this) }
+            handleContactFilterNav={ this.handleContactFilterNav.bind(this) }
             filterRooms={ this.filterRooms.bind(this) }
-            createMessage={ this.createMessage }
+            createMessage={ this.createMessage.bind(this) }
             showModal={ this.showModal }
             hideModal={ this.hideModal }
             createRoom={ this.createRoom }
@@ -326,6 +390,7 @@ export default class Dashboard extends Component {
             showListingViewer={ this.showListingViewer }
             changeListingNotification={ this.changeListingNotification }
             navListingCarousel={ this.navListingCarousel }
+            addContactToMessage={ this.addContactToMessage }
           />
         </main>
         <audio ref="notif_sound" id="notif-sound">
