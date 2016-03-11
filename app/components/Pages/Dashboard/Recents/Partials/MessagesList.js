@@ -290,12 +290,10 @@ export default class MessagesList extends Component {
             <hr />
             <div style={ S('mt-10n pt-5') }>
               <div style={ S('font-14 fw-500') }>Add contacts</div>
-              <div style={ S('ml-10n') }>
-                <AddContactsModule
-                  data={ data }
-                  module_type="room"
-                />
-              </div>
+              <AddContactsModule
+                data={ data }
+                module_type="room"
+              />
             </div>
             <div className="text-center">
               <img style={ S('w-200 h-103') } src="/images/dashboard/add-contacts/people.png" />

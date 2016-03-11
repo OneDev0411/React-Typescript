@@ -1,4 +1,4 @@
-// Dashboard/Index.js
+// Recents/Index.js
 import React, { Component } from 'react'
 import S from 'shorti'
 import _ from 'lodash'

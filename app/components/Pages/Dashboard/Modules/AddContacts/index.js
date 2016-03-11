@@ -24,7 +24,7 @@ export default class AddContactsModule extends Component {
   componentDidMount() {
     this.getContacts()
     setTimeout(() => {
-      if (this.refs)
+      if (this.refs && this.props.module_type !== 'share-alert')
         this.refs.search_contacts.refs.input.focus()
     }, 300)
     delete AppStore.data.phone_country
@@ -346,10 +346,10 @@ export default class AddContactsModule extends Component {
     }
 
     // If sharing a task or inviting to a room
-    if (module_type === 'share-task' || module_type === 'room') {
+    if (module_type === 'share-task' || module_type === 'room' || module_type === 'share-alert') {
       module_style = {
         ...module_style,
-        ...S('w-100p ml-10 mr-10')
+        ...S('w-100p')
       }
       search_contact_input_style = S('w-430 mr-15')
       filter_scroll_style.width = 475

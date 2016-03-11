@@ -4,7 +4,7 @@ import S from 'shorti'
 import _ from 'lodash'
 import GoogleMap from 'google-map-react'
 import listing_util from '../../../../utils/listing'
-import { ButtonGroup, Button } from 'react-bootstrap'
+import { ButtonGroup, Button, Modal, Input } from 'react-bootstrap'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 
 import AppStore from '../../../../stores/AppStore'
@@ -15,8 +15,9 @@ import SideBar from '../Partials/SideBar'
 import ListingViewer from '../Partials/ListingViewer'
 import ListingPanel from './Partials/ListingPanel'
 import FilterForm from './Partials/FilterForm'
-export default class Mls extends Component {
+import AddContactsModule from '../Modules/AddContacts'
 
+export default class Mls extends Component {
   componentWillMount() {
     const data = this.props.data
     const listing_map = data.listing_map
@@ -160,6 +161,7 @@ export default class Mls extends Component {
   hideModal() {
     delete AppStore.data.show_listing_viewer
     delete AppStore.data.current_listing
+    delete AppStore.data.listing_map.show_share_modal
     AppStore.emitChange()
   }
 
@@ -563,6 +565,33 @@ export default class Mls extends Component {
     AppStore.emitChange()
   }
 
+  handleRemoveListings() {
+    delete AppStore.data.listing_map.listings
+    AppStore.emitChange()
+    this.removeDrawing()
+  }
+
+  showShareModal() {
+    AppStore.data.listing_map.show_share_modal = true
+    AppStore.emitChange()
+    setTimeout(() => {
+      this.refs.alert_title.refs.input.focus()
+    }, 100)
+  }
+
+  shareAlert() {
+    const data = this.props.data
+    const user = data.user
+    const contacts_added = data.contacts_added
+    if (contacts_added && contacts_added['share-alert']) {
+      ListingDispatcher.dispatch({
+        action: 'share-alert',
+        user,
+        contacts: contacts_added['share-alert']
+      })
+    }
+  }
+
   render() {
     const data = this.props.data
     const listing_map = data.listing_map
@@ -648,6 +677,21 @@ export default class Mls extends Component {
         <Button bsSize="large" onClick={ this.handleZoomClick.bind(this, 'out') }><i style={ S('color-929292') } className="fa fa-minus"></i></Button>
       </ButtonGroup>
     )
+    let results_actions
+    if (listing_map && listing_map.listings) {
+      results_actions = (
+        <div style={ S('absolute r-10 mt-2') }>
+          <span style={ S('bg-a5c0e5 br-3 p-10 color-fff mr-10 relative t-1') }>
+            { listing_map.listings.length } Matches
+            &nbsp;&nbsp;&nbsp;<span style={ S('pointer') } onClick={ this.handleRemoveListings.bind(this) }>&times;</span>&nbsp;
+          </span>
+          <Button bsStyle="primary" type="button" onClick={ this.showShareModal.bind(this) }>
+            Share ({ listing_map.listings.length })
+            &nbsp;&nbsp;<i className="fa fa-share"></i>
+          </Button>
+        </div>
+      )
+    }
     return (
       <div style={ S('minw-1000') }>
         <main>
@@ -677,6 +721,7 @@ export default class Mls extends Component {
                   </Button>
                 </ButtonGroup>
               </div>
+              { results_actions }
             </nav>
             { loading }
             <div style={ S('h-' + (window.innerHeight - 62)) }>
@@ -711,6 +756,33 @@ export default class Mls extends Component {
             handleOptionChange={ this.handleOptionChange }
           />
           { zoom_controls }
+          <Modal show={ listing_map && listing_map.show_share_modal } onHide={ this.hideModal }>
+            <Modal.Header>
+              <Modal.Title>Share Alert</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Input style={ S('mb-20') } ref="alert_title" type="text" placeholder="Name this alert" />
+              <div style={ S('mb-20') }>
+                <div style={ S('pull-left mr-10') }>
+                  <img style={ S('w-100 h-100 br-3') } src="/images/dashboard/mls/map-tile.jpg" />
+                </div>
+                <div style={ S('pull-left w-50p') }>
+                  <div style={ S('color-929292 font-18') }>Alert</div>
+                  <div style={ S('color-000 font-20') }>{ listing_map && listing_map.listings ? listing_map.listings.length : '' } Results</div>
+                  <div style={ S('color-929292 font-14') }>We’ll keep you updated with any new listings and price drops for the selected area</div>
+                </div>
+                <div className="clearfix"></div>
+              </div>
+              <AddContactsModule
+                data={ data }
+                module_type="share-alert"
+              />
+            </Modal.Body>
+            <Modal.Footer>
+              <Button onClick={ this.hideModal } bsStyle="link">Cancel</Button>
+              <Button bsStyle="primary" onClick={ this.shareAlert.bind(this) }>Share Alert&nbsp;&nbsp;<i className="fa fa-share"></i></Button>
+            </Modal.Footer>
+          </Modal>
         </main>
       </div>
     )
