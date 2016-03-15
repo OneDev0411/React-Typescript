@@ -85,7 +85,7 @@ export default class ShareAlertModal extends Component {
           )
         }
         return (
-          <div onClick={ controller.addToShareList.bind(this, 'rooms', room.id) } style={ S('relative h-60 pointer p-10' + (selected ? ' bg-EDF7FD' : '')) } className="share-item">
+          <div onClick={ controller.addToShareList.bind(this, 'rooms', room.id) } style={ S('relative h-60 pointer p-10' + (selected ? ' bg-EDF7FD' : '')) } className="share-item" key={ 'share-alert__room-' + room.id }>
             { profile_image_div }
             <div className="pull-left" style={ S('ml-50 w-90p') }>
               <div className="pull-left">
@@ -112,7 +112,7 @@ export default class ShareAlertModal extends Component {
           )
         }
         return (
-          <div onClick={ controller.addToShareList.bind(this, 'contacts', contact.id) } style={ S('h-60 relative p-3 pl-0 pr-10 mr-10 w-100p pointer p-10' + (selected ? ' bg-EDF7FD' : '')) } className="share-item" key={ 'added-contact-' + contact.id }>
+          <div onClick={ controller.addToShareList.bind(this, 'contacts', contact.id) } style={ S('h-60 relative p-3 pl-0 pr-10 mr-10 w-100p pointer p-10' + (selected ? ' bg-EDF7FD' : '')) } className="share-item" key={ 'share-alert__contact-' + contact.id }>
             <div style={ S('l-10 t-10 absolute') }>
               <ProfileImage data={ data } top={11} size={40} user={ contact }/>
             </div>
