@@ -62,7 +62,7 @@ export default class ListingPanel extends Component {
         opacity: '.2'
       }
       return (
-        <div key={ 'panel-listing-' + listing.id } onClick={ this.props.showListingViewer.bind(this, listing) } style={ S('pointer w-415 h-350 pb-10 pl-10 bg-fff pull-left') }>
+        <div onMouseOut={ this.props.removeActiveListing.bind(this) } onMouseOver={ this.props.setActiveListing.bind(this, listing) } key={ 'panel-listing-' + listing.id } onClick={ this.props.showListingViewer.bind(this, listing) } style={ S('pointer w-415 h-350 pb-10 pl-10 bg-fff pull-left') }>
           <div style={ S('relative') }>
             <div style={ image_overlay } />
             { listing_image }
@@ -104,7 +104,7 @@ export default class ListingPanel extends Component {
       const listing_style = S('pointer pl-10 h-60 pt-10 border-bottom-1-solid-f5fafe')
       const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
       return (
-        <div className="listing-panel__list-item" key={ 'panel-listing-' + listing.id } onClick={ this.props.showListingViewer.bind(this, listing) } style={ listing_style }>
+        <div onMouseOut={ this.props.removeActiveListing.bind(this) } onMouseOver={ this.props.setActiveListing.bind(this, listing) } className="listing-panel__list-item" key={ 'panel-listing-' + listing.id } onClick={ this.props.showListingViewer.bind(this, listing) } style={ listing_style }>
           <div style={ S('pull-left') }>
             { listing_image }
           </div>
@@ -247,5 +247,7 @@ ListingPanel.propTypes = {
   data: React.PropTypes.object,
   toggleListingPanel: React.PropTypes.func,
   showListingViewer: React.PropTypes.func,
-  sortListings: React.PropTypes.func
+  sortListings: React.PropTypes.func,
+  setActiveListing: React.PropTypes.func,
+  removeActiveListing: React.PropTypes.func
 }

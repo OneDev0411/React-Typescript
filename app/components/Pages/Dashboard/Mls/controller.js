@@ -590,6 +590,16 @@ const controller = {
       contacts: share_list.contacts,
       alert
     })
+  },
+
+  setActiveListing(listing) {
+    AppStore.data.listing_map.active_listing = listing.id
+    AppStore.emitChange()
+  },
+
+  removeActiveListing() {
+    delete AppStore.data.listing_map.active_listing
+    AppStore.emitChange()
   }
 }
 

@@ -78,6 +78,7 @@ export default class ListingViewer extends Component {
     let bedroom_count
     let bathroom_count
     let square_feet
+    let lot_size
     let prev_icon
     let next_icon
     let description
@@ -101,6 +102,8 @@ export default class ListingViewer extends Component {
       bedroom_count = property.bedroom_count
       bathroom_count = property.bathroom_count
       square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
+      if (property.lot_size)
+        lot_size = property.lot_size
       prev_icon = '<'
       next_icon = '>'
       description = property.description
@@ -185,6 +188,15 @@ export default class ListingViewer extends Component {
         )
       }
       const google_address = listing.property.address.geo_source_formatted_address_google
+      let lot_size_area
+      if (lot_size) {
+        lot_size_area = (
+          <span>
+            &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+            <span>{ lot_size ? 'Lot size ' + lot_size : '' }</span>
+          </span>
+        )
+      }
       main_content = (
         <div style={ S('bg-fff') }>
           <div style={ S('p-0 relative') }>
@@ -215,6 +227,7 @@ export default class ListingViewer extends Component {
               <span>{ square_feet } Sqft</span>
               &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
               <span>{ year_built ? 'Built in ' + year_built : '' }</span>
+              { lot_size_area }
             </div>
             <hr />
             <div className="clearfix"></div>

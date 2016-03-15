@@ -82,9 +82,12 @@ export default class Mls extends Component {
           price_small = (price_small / 1000).toFixed(2).replace(/[.,]00$/, '')
           letter = 'M'
         }
+        let active_class = ''
+        if (listing.id === data.listing_map.active_listing)
+          active_class = ' active'
         return (
           <div key={ 'map-listing-' + listing.id } onClick={ controller.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
-            <div className="map__listing-marker" style={ S('relative bg-fff w-70 h-25') }>
+            <div className={ 'map__listing-marker' + active_class } style={ S('relative w-70 h-25') }>
               <div style={ S('absolute l-6 t-8 w-10 h-10 br-100 bg-' + status_color) }></div>
               <div style={ S('absolute r-10 t-6') }>${ price_small }{ letter }</div>
             </div>
@@ -220,6 +223,8 @@ export default class Mls extends Component {
             toggleListingPanel={ controller.toggleListingPanel }
             showListingViewer={ controller.showListingViewer }
             sortListings={ controller.sortListings }
+            setActiveListing={ controller.setActiveListing }
+            removeActiveListing={ controller.removeActiveListing }
           />
           <FilterForm
             data={ data }
