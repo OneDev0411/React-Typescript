@@ -6,7 +6,7 @@ import searchListing from '../actions/listings/search'
 import getSimilarListings from '../actions/listings/get-similars'
 import getValerts from '../actions/listings/get-valerts'
 import getListing from '../actions/listings/get-listing'
-import shareAlert from '../actions/listings/share-alert'
+import shareAlert from '../actions/alerts/share-alert'
 
 const ListingDispatcher = new Dispatcher()
 

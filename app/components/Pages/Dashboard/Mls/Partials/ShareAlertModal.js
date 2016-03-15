@@ -90,13 +90,13 @@ export default class ShareAlertModal extends Component {
                   })
                   let author
                   let profile_image_div
-                  if (room.latest_message.author) {
+                  if (room.latest_message && room.latest_message.author) {
                     author = room.latest_message.author
                     profile_image_div = (
                       <ProfileImage data={ data } user={ author }/>
                     )
                   }
-                  if (!room.latest_message.author) {
+                  if (!room.latest_message || !room.latest_message.author) {
                     profile_image_div = (
                       <div style={ S('absolute w-35') }>
                         <img className="center-block" src="/images/dashboard/rebot@2x.png" style={ S('w-30') } />
@@ -159,7 +159,7 @@ export default class ShareAlertModal extends Component {
         <Modal.Footer>
           { message }
           <Button onClick={ controller.hideModal } bsStyle="link">Cancel</Button>
-          <Button bsStyle="primary" onClick={ this.shareAlert.bind(this) }>Share Alert&nbsp;&nbsp;<i className="fa fa-share"></i></Button>
+          <Button className={ listing_map.saving_alert ? 'disabled' : '' } bsStyle="primary" onClick={ this.shareAlert.bind(this) }>{ !listing_map.saving_alert ? 'Share Alert' : 'Saving...' }&nbsp;&nbsp;<i className="fa fa-share"></i></Button>
         </Modal.Footer>
       </Modal>
     )

@@ -6,7 +6,6 @@ import listing_util from '../../../../utils/listing'
 import { ButtonGroup, Button } from 'react-bootstrap'
 
 // View controller managers
-import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import controller from './controller'
 
@@ -24,6 +23,8 @@ export default class Mls extends Component {
     if (!listing_map && typeof window !== 'undefined')
       controller.initMap()
     delete AppStore.data.current_listing
+    delete AppStore.data.share_list
+    delete AppStore.data.listing_map.saving_alert
     // Set switch states
     if (!AppStore.data.listing_map.filter_options) {
       AppStore.data.listing_map.filter_options = {
@@ -51,123 +52,6 @@ export default class Mls extends Component {
     controller.hideModal()
   }
 
-  showListingViewer(listing) {
-    const history = require('../../../../utils/history')
-    history.replaceState(null, '/dashboard/mls/' + listing.id)
-    const data = this.props.data
-    const user = data.user
-    AppStore.data.show_listing_viewer = true
-    AppStore.data.current_listing = listing
-    AppStore.emitChange()
-    ListingDispatcher.dispatch({
-      action: 'get-listing',
-      user,
-      id: listing.id
-    })
-  }
-
-  getValertsInArea(points) {
-    const data = AppStore.data
-    const user = data.user
-    const options = AppStore.data.listing_map.options
-    options.points = points
-    AppStore.data.listing_map.google_options.draggable = true
-    AppStore.data.listing_map.is_loading = true
-    ListingDispatcher.dispatch({
-      action: 'get-valerts',
-      user,
-      options
-    })
-  }
-
-  makePolygon() {
-    const google = window.google
-    const map = window.map
-    const path = window.poly.getPath()
-    window.poly.setMap(null)
-    window.poly = new google.maps.Polygon({
-      clickable: false,
-      map,
-      path,
-      strokeColor: '#3388ff',
-      strokeWeight: 10
-    })
-  }
-
-  getPolygonBounds(google, polygon) {
-    const polygon_bounds = polygon.getPath()
-    const coordinates = []
-    let lat_lng
-    for (let i = 0; i < polygon_bounds.length; i++) {
-      lat_lng = {
-        latitude: polygon_bounds.getAt(i).lat(),
-        longitude: polygon_bounds.getAt(i).lng()
-      }
-      coordinates.push(lat_lng)
-    }
-    const points = [
-      ...coordinates,
-      coordinates[0]
-    ]
-    return points
-  }
-
-  removeDrawing() {
-    if (!window.poly)
-      return
-    window.poly.setMap(null)
-    delete AppStore.data.listing_map.drawable
-    AppStore.emitChange()
-    let center = window.map.getCenter()
-    center = {
-      lat: center.lat(),
-      lng: center.lng()
-    }
-    const zoom = window.map.getZoom()
-    let bounds = window.map.getBounds()
-    bounds = [
-      bounds.getNorthEast().lat(),
-      bounds.getSouthWest().lng(),
-      bounds.getSouthWest().lat(),
-      bounds.getNorthEast().lng()
-    ]
-    delete window.poly
-    controller.handleBoundsChange(center, zoom, bounds)
-  }
-
-  shareAlert(title) {
-    delete AppStore.data.error
-    AppStore.emitChange()
-    const data = AppStore.data
-    const listing_map = data.listing_map
-    const alert = listing_map.options
-    const user = data.user
-    const share_list = data.share_list
-    if (!share_list)
-      return
-    if (!title) {
-      AppStore.data.error = {
-        message: 'You must name this alert'
-      }
-      AppStore.emitChange()
-      return
-    }
-    if (!share_list.rooms.length && !share_list.contacts.length) {
-      AppStore.data.error = {
-        message: 'You must choose at least one room or one contact.'
-      }
-      AppStore.emitChange()
-      return
-    }
-    ListingDispatcher.dispatch({
-      action: 'share-alert',
-      user,
-      rooms: share_list.rooms,
-      contacts: share_list.contacts,
-      alert
-    })
-  }
-
   render() {
     const data = this.props.data
     const listing_map = data.listing_map
@@ -185,7 +69,7 @@ export default class Mls extends Component {
           letter = 'M'
         }
         return (
-          <div key={ 'map-listing-' + listing.id } onClick={ this.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
+          <div key={ 'map-listing-' + listing.id } onClick={ controller.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
             <div className="map__listing-marker" style={ S('relative bg-fff w-70 h-25') }>
               <div style={ S('absolute l-6 t-8 w-10 h-10 br-100 bg-' + status_color) }></div>
               <div style={ S('absolute r-10 t-6') }>${ price_small }{ letter }</div>
@@ -238,7 +122,7 @@ export default class Mls extends Component {
         right_value = 910
       remove_drawing_button = (
         <Button
-          onClick={ this.removeDrawing.bind(this) }
+          onClick={ controller.removeDrawing.bind(this) }
           bsStyle="danger"
           className="transition"
           style={ S('absolute z-1000 t-80 br-100 w-50 h-50 color-fff pt-1 font-30 text-center r-' + right_value) }
@@ -320,7 +204,7 @@ export default class Mls extends Component {
           <ListingPanel
             data={ data }
             toggleListingPanel={ controller.toggleListingPanel }
-            showListingViewer={ this.showListingViewer }
+            showListingViewer={ controller.showListingViewer }
             sortListings={ controller.sortListings }
           />
           <FilterForm
@@ -334,7 +218,7 @@ export default class Mls extends Component {
           { zoom_controls }
           <ShareAlertModal
             data={ data }
-            shareAlert={ this.shareAlert }
+            shareAlert={ controller.shareAlert }
           />
         </main>
       </div>

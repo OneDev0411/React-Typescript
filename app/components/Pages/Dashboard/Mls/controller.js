@@ -4,7 +4,7 @@ import AppStore from '../../../../stores/AppStore'
 import listing_util from '../../../../utils/listing'
 import _ from 'lodash'
 
-export default {
+const controller = {
   initMap() {
     const data = AppStore.data
     const user = data.user
@@ -362,49 +362,13 @@ export default {
     AppStore.emitChange()
   },
 
-  handleGoogleMapApi(google) {
-    const map = google.map
-    window.map = map
-    const data = AppStore.data
-    const listing_map = data.listing_map
-    if (listing_map.drawable && window.poly)
-      this.makePolygon()
-    google.maps.event.addDomListener(map.getDiv(), 'mousedown', () => {
-      if (!listing_map.drawable || listing_map.drawable && window.poly)
-        return
-      window.poly = new google.maps.Polyline({
-        map,
-        clickable: false,
-        strokeColor: '#3388ff',
-        strokeWeight: 10
-      })
-      const move = google.maps.event.addListener(map, 'mousemove', e => {
-        if (!listing_map.drawable) {
-          window.poly.setMap(null)
-          return false
-        }
-        window.poly.getPath().push(e.latLng)
-        return false
-      })
-      google.maps.event.addListenerOnce(map, 'mouseup', () => {
-        if (!listing_map.drawable)
-          return
-        map.set('draggable', true)
-        google.maps.event.removeListener(move)
-        this.makePolygon()
-        const points = this.getPolygonBounds(google, window.poly)
-        this.getValertsInArea(points)
-      })
-    })
-  },
-
   toggleDrawable() {
     if (AppStore.data.listing_map.drawable) {
       // console.log(bounds.getNorthEast().lat())
       // console.log(bounds.getSouthWest().lng())
       delete AppStore.data.listing_map.drawable
       window.map.set('draggable', true)
-      this.removeDrawing()
+      controller.removeDrawing()
     } else {
       AppStore.data.listing_map.drawable = true
       window.map.set('draggable', false)
@@ -438,7 +402,7 @@ export default {
   handleRemoveListings() {
     delete AppStore.data.listing_map.listings
     AppStore.emitChange()
-    this.removeDrawing()
+    controller.removeDrawing()
   },
 
   showShareModal() {
@@ -475,5 +439,158 @@ export default {
     }
     AppStore.data.share_list = share_list
     AppStore.emitChange()
+  },
+
+  getValertsInArea(points) {
+    const data = AppStore.data
+    const user = data.user
+    const options = AppStore.data.listing_map.options
+    options.points = points
+    AppStore.data.listing_map.google_options.draggable = true
+    AppStore.data.listing_map.is_loading = true
+    ListingDispatcher.dispatch({
+      action: 'get-valerts',
+      user,
+      options
+    })
+  },
+
+  makePolygon() {
+    const google = window.google
+    const map = window.map
+    const path = window.poly.getPath()
+    window.poly.setMap(null)
+    window.poly = new google.maps.Polygon({
+      clickable: false,
+      map,
+      path,
+      strokeColor: '#3388ff',
+      strokeWeight: 10
+    })
+  },
+  getPolygonBounds(google, polygon) {
+    const polygon_bounds = polygon.getPath()
+    const coordinates = []
+    let lat_lng
+    for (let i = 0; i < polygon_bounds.length; i++) {
+      lat_lng = {
+        latitude: polygon_bounds.getAt(i).lat(),
+        longitude: polygon_bounds.getAt(i).lng()
+      }
+      coordinates.push(lat_lng)
+    }
+    const points = [
+      ...coordinates,
+      coordinates[0]
+    ]
+    return points
+  },
+
+  removeDrawing() {
+    if (!window.poly)
+      return
+    window.poly.setMap(null)
+    delete AppStore.data.listing_map.drawable
+    AppStore.emitChange()
+    let center = window.map.getCenter()
+    center = {
+      lat: center.lat(),
+      lng: center.lng()
+    }
+    const zoom = window.map.getZoom()
+    let bounds = window.map.getBounds()
+    bounds = [
+      bounds.getNorthEast().lat(),
+      bounds.getSouthWest().lng(),
+      bounds.getSouthWest().lat(),
+      bounds.getNorthEast().lng()
+    ]
+    delete window.poly
+    controller.handleBoundsChange(center, zoom, bounds)
+  },
+
+  handleGoogleMapApi(google) {
+    const map = google.map
+    window.map = map
+    const data = AppStore.data
+    const listing_map = data.listing_map
+    if (listing_map.drawable && window.poly)
+      controller.makePolygon()
+    google.maps.event.addDomListener(map.getDiv(), 'mousedown', () => {
+      if (!listing_map.drawable || listing_map.drawable && window.poly)
+        return
+      window.poly = new google.maps.Polyline({
+        map,
+        clickable: false,
+        strokeColor: '#3388ff',
+        strokeWeight: 10
+      })
+      const move = google.maps.event.addListener(map, 'mousemove', e => {
+        if (!listing_map.drawable) {
+          window.poly.setMap(null)
+          return false
+        }
+        window.poly.getPath().push(e.latLng)
+        return false
+      })
+      google.maps.event.addListenerOnce(map, 'mouseup', () => {
+        if (!listing_map.drawable)
+          return
+        map.set('draggable', true)
+        google.maps.event.removeListener(move)
+        controller.makePolygon()
+        const points = controller.getPolygonBounds(google, window.poly)
+        controller.getValertsInArea(points)
+      })
+    })
+  },
+
+  showListingViewer(listing) {
+    const history = require('../../../../utils/history')
+    history.replaceState(null, '/dashboard/mls/' + listing.id)
+    const data = AppStore.data
+    const user = data.user
+    AppStore.data.show_listing_viewer = true
+    AppStore.data.current_listing = listing
+    AppStore.emitChange()
+    ListingDispatcher.dispatch({
+      action: 'get-listing',
+      user,
+      id: listing.id
+    })
+  },
+
+  shareAlert(title) {
+    delete AppStore.data.error
+    AppStore.emitChange()
+    const data = AppStore.data
+    const listing_map = data.listing_map
+    const alert = listing_map.options
+    const user = data.user
+    const share_list = data.share_list
+    if (!title) {
+      AppStore.data.error = {
+        message: 'You must name this alert'
+      }
+      AppStore.emitChange()
+      return
+    }
+    if (!share_list || share_list && !share_list.rooms.length && !share_list.contacts.length) {
+      AppStore.data.error = {
+        message: 'You must choose at least one room or one contact.'
+      }
+      AppStore.emitChange()
+      return
+    }
+    alert.title = title
+    ListingDispatcher.dispatch({
+      action: 'share-alert',
+      user,
+      rooms: share_list.rooms,
+      contacts: share_list.contacts,
+      alert
+    })
   }
 }
+
+export default controller
