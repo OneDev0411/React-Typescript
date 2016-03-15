@@ -6,7 +6,6 @@ module.exports = (app, config) => {
     const email = req.body.email
     const user_type = req.body.user_type
     const password = req.body.password
-    const phone_number = req.body.phone_number
     const grant_type = req.body.grant_type
     const api_url = config.api.url
     const signup_url = api_url + '/users'
@@ -18,7 +17,6 @@ module.exports = (app, config) => {
       email: email,
       user_type: user_type,
       password: password,
-      phone_number: phone_number,
       grant_type: grant_type
     }
     fetch(signup_url,{

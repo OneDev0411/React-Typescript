@@ -9,11 +9,8 @@ export default {
   create: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-
     const endpoint = api_host + '/api/signup'
-
     const request_object = params.user
-
     fetch(endpoint, {
       method: 'post',
       headers: {
