@@ -444,40 +444,6 @@ export default {
   showShareModal() {
     AppStore.data.listing_map.show_share_modal = true
     AppStore.emitChange()
-    setTimeout(() => {
-      this.refs.alert_title.refs.input.focus()
-    }, 100)
-  },
-
-  shareAlert() {
-    delete AppStore.data.error
-    AppStore.emitChange()
-    const data = AppStore.data
-    const user = data.user
-    const share_list = data.share_list
-    if (!share_list)
-      return
-    const title = this.refs.alert_title.refs.input.value
-    if (!title) {
-      AppStore.data.error = {
-        message: 'You must name this alert'
-      }
-      AppStore.emitChange()
-      return
-    }
-    if (!share_list.rooms.length || !share_list.contacts.length) {
-      AppStore.data.error = {
-        message: 'You must choose at least one room or one contact.'
-      }
-      AppStore.emitChange()
-      return
-    }
-    ListingDispatcher.dispatch({
-      action: 'share-alert',
-      user,
-      rooms: share_list.rooms,
-      contacts: share_list.contacts
-    })
   },
 
   addToShareList(type, id) {
