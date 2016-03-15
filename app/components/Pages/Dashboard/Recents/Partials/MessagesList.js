@@ -81,7 +81,7 @@ export default class MessagesList extends Component {
       return false
     const heading_objects = []
     messages.forEach((message, i) => {
-      if (!message)
+      if (!message || !message.created_at)
         return
       const message_element = this.refs['message-' + i]
       const message_created = message.created_at.toString().split('.')
