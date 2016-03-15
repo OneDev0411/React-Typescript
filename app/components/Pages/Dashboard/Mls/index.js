@@ -5,6 +5,9 @@ import GoogleMap from 'google-map-react'
 import listing_util from '../../../../utils/listing'
 import { ButtonGroup, Button } from 'react-bootstrap'
 
+// AppDispatcher
+import AppDispatcher from '../../../../dispatcher/AppDispatcher'
+
 // View controller managers
 import AppStore from '../../../../stores/AppStore'
 import controller from './controller'
@@ -19,6 +22,9 @@ import FilterForm from './Partials/FilterForm'
 export default class Mls extends Component {
   componentWillMount() {
     const data = this.props.data
+    const user = data.user
+    AppStore.data.user = user
+    AppStore.emitChange()
     const listing_map = data.listing_map
     if (!listing_map && typeof window !== 'undefined')
       controller.initMap()
@@ -36,6 +42,14 @@ export default class Mls extends Component {
       }
     }
     AppStore.emitChange()
+    AppDispatcher.dispatch({
+      action: 'get-rooms',
+      user
+    })
+    AppDispatcher.dispatch({
+      action: 'get-contacts',
+      user
+    })
   }
 
   componentDidUpdate() {
