@@ -4,10 +4,12 @@ import S from 'shorti'
 import _ from 'lodash'
 import GoogleMap from 'google-map-react'
 import listing_util from '../../../../utils/listing'
-import { ButtonGroup, Button, Modal, Input } from 'react-bootstrap'
-import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
+import { ButtonGroup, Button, Modal, Input, Alert } from 'react-bootstrap'
 
+// View controller managers
+import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
+import controller from './controller'
 
 // Partials
 import SideBar from '../Partials/SideBar'
@@ -15,14 +17,15 @@ import SideBar from '../Partials/SideBar'
 import ListingViewer from '../Partials/ListingViewer'
 import ListingPanel from './Partials/ListingPanel'
 import FilterForm from './Partials/FilterForm'
-import AddContactsModule from '../Modules/AddContacts'
+// import AddContactsModule from '../Modules/AddContacts'
+import ProfileImage from '../Partials/ProfileImage'
 
 export default class Mls extends Component {
   componentWillMount() {
     const data = this.props.data
     const listing_map = data.listing_map
     if (!listing_map && typeof window !== 'undefined')
-      this.initMap()
+      controller.initMap()
     delete AppStore.data.current_listing
     // Set switch states
     if (!AppStore.data.listing_map.filter_options) {
@@ -48,99 +51,7 @@ export default class Mls extends Component {
   }
 
   componentWillUnmount() {
-    this.hideModal()
-  }
-
-  createMapOptions() {
-    const data = this.props.data
-    const listing_map = data.listing_map
-    if (!listing_map) {
-      return {
-        mapTypeControl: true,
-        draggable: true
-      }
-    }
-    const google_options = {
-      disableDefaultUI: true,
-      mapTypeControl: true,
-      draggable: true
-    }
-    AppStore.data.listing_map.google_options = google_options
-    AppStore.emitChange()
-    return google_options
-  }
-
-  initMap() {
-    const data = this.props.data
-    const user = data.user
-    let center = {
-      lat: 32.7767,
-      lng: -96.7970
-    }
-    let zoom = 13
-    const options = {
-      maximum_price: 5000000,
-      limit: '75',
-      maximum_lot_square_meters: 8.568721699047544e+17,
-      minimum_bathrooms: 1,
-      maximum_square_meters: 8.568721699047544e+17,
-      location: {
-        longitude: -96.79698789999998,
-        latitude: 32.7766642
-      },
-      horizontal_distance: 2830,
-      property_type: 'Residential',
-      vertical_distance: 2830,
-      minimum_square_meters: 0,
-      listing_statuses: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract'],
-      minimum_lot_square_meters: 0,
-      currency: 'USD',
-      maximum_year_built: 2016,
-      minimum_year_built: 0,
-      points: [{
-        latitude: 32.83938955111425,
-        longitude: -96.89115626525879
-      }, {
-        latitude: 32.83938955111425,
-        longitude: -96.70284373474121
-      }, {
-        latitude: 32.71396625328302,
-        longitude: -96.70284373474121
-      }, {
-        latitude: 32.71396625328302,
-        longitude: -96.89115626525879
-      }, {
-        latitude: 32.83938955111425,
-        longitude: -96.89115626525879
-      }],
-      minimum_bedrooms: 0,
-      minimum_price: 0,
-      open_house: false,
-      property_subtypes: ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse']
-    }
-    if (data.listing_map && data.listing_map.center) {
-      center = data.listing_map.center
-      zoom = data.listing_map.center
-    }
-    const listing_map = {
-      map_id: new Date().getTime(),
-      default_options: options,
-      options,
-      is_loading: true,
-      center,
-      zoom,
-      google_options: {
-        mapTypeControl: true,
-        draggable: true
-      }
-    }
-    AppStore.data.listing_map = listing_map
-    AppStore.emitChange()
-    ListingDispatcher.dispatch({
-      action: 'get-valerts',
-      user,
-      options
-    })
+    controller.hideModal()
   }
 
   showListingViewer(listing) {
@@ -158,291 +69,8 @@ export default class Mls extends Component {
     })
   }
 
-  hideModal() {
-    delete AppStore.data.show_listing_viewer
-    delete AppStore.data.current_listing
-    delete AppStore.data.listing_map.show_share_modal
-    AppStore.emitChange()
-  }
-
-  handleBoundsChange(center, zoom, bounds) {
-    const data = this.props.data
-    const user = data.user
-    const listing_map = data.listing_map
-    if (!listing_map)
-      return
-    const points = [
-      {
-        latitude: bounds[0],
-        longitude: bounds[1]
-      },
-      {
-        latitude: bounds[0],
-        longitude: bounds[3]
-      },
-      {
-        latitude: bounds[2],
-        longitude: bounds[3]
-      },
-      {
-        latitude: bounds[2],
-        longitude: bounds[1]
-      },
-      {
-        latitude: bounds[0],
-        longitude: bounds[1]
-      }
-    ]
-    AppStore.data.listing_map.center = center
-    AppStore.data.listing_map.zoom = zoom
-    // Don't get more results if polygon on map
-    if (!window.poly) {
-      AppStore.data.listing_map.is_loading = true
-      AppStore.data.listing_map.options.points = points
-    }
-    AppStore.emitChange()
-    ListingDispatcher.dispatch({
-      action: 'get-valerts',
-      user,
-      options: listing_map.options
-    })
-  }
-
-  toggleListingPanel() {
-    if (!AppStore.data.show_listing_panel) {
-      AppStore.data.show_listing_panel = true
-      AppStore.data.listing_panel = {
-        view: 'photos'
-      }
-    } else {
-      delete AppStore.data.show_listing_panel
-      delete AppStore.data.listing_panel
-    }
-    AppStore.emitChange()
-  }
-
-  showPanelView(view) {
-    if (AppStore.data.show_listing_panel && AppStore.data.listing_panel && AppStore.data.listing_panel.view === view) {
-      delete AppStore.data.listing_panel
-      delete AppStore.data.show_listing_panel
-      AppStore.emitChange()
-      return
-    }
-    AppStore.data.listing_panel = {
-      view
-    }
-    if (!AppStore.data.show_listing_panel)
-      AppStore.data.show_listing_panel = true
-    delete AppStore.data.show_filter_form
-    AppStore.emitChange()
-  }
-
-  sortListings(sort_by) {
-    const data = this.props.data
-    const listings = data.listing_map.listings
-    let sorting_direction = 1
-    if (AppStore.data.listing_map.sorting_direction)
-      sorting_direction = AppStore.data.listing_map.sorting_direction * -1
-    const listings_sorted = _.sortBy(listings, listing => {
-      if (sort_by === 'area')
-        return listing.address.postal_code * sorting_direction
-      if (sort_by === 'price')
-        return listing.price * sorting_direction
-      if (sort_by === 'bedroom_count')
-        return listing.compact_property.bedroom_count * sorting_direction
-      if (sort_by === 'bathroom_count')
-        return listing.compact_property.bathroom_count * sorting_direction
-      if (sort_by === 'square_meters')
-        return listing.compact_property.square_meters * sorting_direction
-      if (sort_by === 'year_built')
-        return listing.compact_property.year_built * sorting_direction
-      if (sort_by === 'dom')
-        return listing_util.getDOM(listing.dom) * sorting_direction
-    })
-    AppStore.data.listing_map.listings = listings_sorted
-    AppStore.data.listing_map.sorting_direction = sorting_direction
-    AppStore.data.listing_map.sorting_by = sort_by
-    AppStore.emitChange()
-  }
-
-  showFilterForm() {
-    delete AppStore.data.listing_panel
-    delete AppStore.data.show_listing_panel
-    if (AppStore.data.show_filter_form)
-      delete AppStore.data.show_filter_form
-    else
-      AppStore.data.show_filter_form = true
-    AppStore.emitChange()
-  }
-
-  handleFilterSwitch(key) {
-    if (!AppStore.data.listing_map.filter_options)
-      AppStore.data.listing_map.filter_options = {}
-    if (!AppStore.data.listing_map.filter_options[key])
-      AppStore.data.listing_map.filter_options[key] = true
-    else
-      delete AppStore.data.listing_map.filter_options[key]
-    AppStore.emitChange()
-  }
-
-  handleFilterButton(payload) {
-    const key = payload.key
-    const value = payload.value
-    const filter_options = AppStore.data.listing_map.filter_options
-    if (!filter_options)
-      AppStore.data.listing_map.filter_options = {}
-    if (key === 'listing_types') {
-      let listing_types = []
-      if (filter_options && filter_options.listing_types)
-        listing_types = filter_options.listing_types
-      // If has already, remove
-      if (value === 'any') {
-        if (listing_types.indexOf(value) === -1)
-          listing_types = ['any', 'house', 'condo', 'townhouse']
-        else
-          listing_types = []
-      } else {
-        if (listing_types.indexOf(value) !== -1)
-          _.pull(listing_types, value)
-        else
-          listing_types.push(value)
-        _.pull(listing_types, 'any')
-        if (listing_types.length === 3)
-          listing_types.push('any')
-      }
-      AppStore.data.listing_map.filter_options.listing_types = listing_types
-    }
-    if (key === 'minimum_bedrooms' || key === 'minimum_bathrooms')
-      AppStore.data.listing_map.filter_options[key] = Number(value)
-    if (key === 'pool')
-      AppStore.data.listing_map.filter_options[key] = value
-    AppStore.emitChange()
-  }
-
-  resetFilterOptions() {
-    const data = this.props.data
-    const user = data.user
-    const listing_map = data.listing_map
-    const default_options = listing_map.default_options
-    AppStore.data.listing_map.filter_options = {
-      maximum_price: 5000000,
-      active: true,
-      listing_types: ['house']
-    }
-    AppStore.emitChange()
-    ListingDispatcher.dispatch({
-      action: 'get-valerts',
-      user,
-      default_options
-    })
-  }
-
-  handleOptionChange(key, value) {
-    if (!AppStore.data.listing_map.filter_options)
-      AppStore.data.listing_map.filter_options = {}
-    AppStore.data.listing_map.filter_options[key] = value
-    AppStore.emitChange()
-  }
-
-  setFilterOptions(e) {
-    e.preventDefault()
-    const data = this.props.data
-    const user = data.user
-    const listing_map = data.listing_map
-    /* Options
-    ==================== */
-    const options = listing_map.options
-    const default_options = listing_map.default_options
-    // Price
-    // defaults
-    options.minimum_price = default_options.minimum_price
-    options.maximum_price = default_options.maximum_price
-    const minimum_price = Number(this.refs.minimum_price.refs.input.value.trim())
-    if (minimum_price)
-      options.minimum_price = minimum_price
-    const maximum_price = Number(this.refs.maximum_price.refs.input.value.trim())
-    if (maximum_price)
-      options.maximum_price = maximum_price
-    // Size
-    // defaults
-    options.minimum_square_meters = 0
-    options.maximum_square_meters = default_options.maximum_square_meters
-    const minimum_square_feet = Number(this.refs.minimum_square_feet.refs.input.value.trim())
-    if (minimum_square_feet)
-      options.minimum_square_meters = listing_util.feetToMeters(minimum_square_feet)
-    const maximum_square_feet = Number(this.refs.maximum_square_feet.refs.input.value.trim())
-    if (maximum_square_feet)
-      options.maximum_square_meters = listing_util.feetToMeters(maximum_square_feet)
-    // Get filter options
-    if (listing_map.filter_options) {
-      const filter_options = listing_map.filter_options
-      // Status
-      const listing_statuses = []
-      if (filter_options.sold)
-        listing_statuses.push('Sold')
-      if (filter_options.active)
-        listing_statuses.push('Active')
-      if (filter_options.other)
-        listing_statuses.push('Active Contingent', 'Active Kick Out', 'Active Option Contract')
-      options.listing_statuses = listing_statuses
-      // Bed / bath
-      options.minimum_bedrooms = default_options.minimum_bedrooms
-      options.minimum_bathrooms = default_options.minimum_bathrooms
-      const minimum_bedrooms = filter_options.minimum_bedrooms
-      if (minimum_bedrooms)
-        options.minimum_bedrooms = minimum_bedrooms
-      const minimum_bathrooms = filter_options.minimum_bathrooms
-      if (minimum_bathrooms)
-        options.minimum_bathrooms = minimum_bathrooms
-      // Pool
-      const pool = filter_options.pool
-      if (pool === 'either')
-        delete options.pool
-      else
-        options.pool = pool
-      // Property types
-      if (filter_options.listing_types) {
-        let property_subtypes = []
-        if (filter_options.listing_types.includes('house'))
-          property_subtypes.push('RES-Single Family')
-        if (filter_options.listing_types.includes('condo'))
-          property_subtypes.push('RES-Condo')
-        if (filter_options.listing_types.includes('townhouse'))
-          property_subtypes.push('RES-Townhouse')
-        if (filter_options.listing_types.includes('any'))
-          property_subtypes = ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse']
-        options.property_subtypes = property_subtypes
-      }
-    }
-    AppStore.data.listing_map.is_loading = true
-    AppStore.emitChange()
-    ListingDispatcher.dispatch({
-      action: 'get-valerts',
-      user,
-      options
-    })
-  }
-
-  getPolygonBounds(google, polygon) {
-    const polygon_bounds = polygon.getPath()
-    const coordinates = []
-    let lat_lng
-    for (let i = 0; i < polygon_bounds.length; i++) {
-      lat_lng = {
-        latitude: polygon_bounds.getAt(i).lat(),
-        longitude: polygon_bounds.getAt(i).lng()
-      }
-      coordinates.push(lat_lng)
-    }
-    const points = [
-      ...coordinates,
-      coordinates[0]
-    ]
-    return points
-  }
-
   getValertsInArea(points) {
-    const data = this.props.data
+    const data = AppStore.data
     const user = data.user
     const options = AppStore.data.listing_map.options
     options.points = points
@@ -469,54 +97,22 @@ export default class Mls extends Component {
     })
   }
 
-  handleGoogleMapApi(google) {
-    const map = google.map
-    window.map = map
-    const data = this.props.data
-    const listing_map = data.listing_map
-    if (listing_map.drawable && window.poly)
-      this.makePolygon()
-    google.maps.event.addDomListener(map.getDiv(), 'mousedown', () => {
-      if (!listing_map.drawable || listing_map.drawable && window.poly)
-        return
-      window.poly = new google.maps.Polyline({
-        map,
-        clickable: false,
-        strokeColor: '#3388ff',
-        strokeWeight: 10
-      })
-      const move = google.maps.event.addListener(map, 'mousemove', e => {
-        if (!listing_map.drawable) {
-          window.poly.setMap(null)
-          return false
-        }
-        window.poly.getPath().push(e.latLng)
-        return false
-      })
-      google.maps.event.addListenerOnce(map, 'mouseup', () => {
-        if (!listing_map.drawable)
-          return
-        map.set('draggable', true)
-        google.maps.event.removeListener(move)
-        this.makePolygon()
-        const points = this.getPolygonBounds(google, window.poly)
-        this.getValertsInArea(points)
-      })
-    })
-  }
-
-  toggleDrawable() {
-    if (AppStore.data.listing_map.drawable) {
-      // console.log(bounds.getNorthEast().lat())
-      // console.log(bounds.getSouthWest().lng())
-      delete AppStore.data.listing_map.drawable
-      window.map.set('draggable', true)
-      this.removeDrawing()
-    } else {
-      AppStore.data.listing_map.drawable = true
-      window.map.set('draggable', false)
+  getPolygonBounds(google, polygon) {
+    const polygon_bounds = polygon.getPath()
+    const coordinates = []
+    let lat_lng
+    for (let i = 0; i < polygon_bounds.length; i++) {
+      lat_lng = {
+        latitude: polygon_bounds.getAt(i).lat(),
+        longitude: polygon_bounds.getAt(i).lng()
+      }
+      coordinates.push(lat_lng)
     }
-    AppStore.emitChange()
+    const points = [
+      ...coordinates,
+      coordinates[0]
+    ]
+    return points
   }
 
   removeDrawing() {
@@ -539,61 +135,14 @@ export default class Mls extends Component {
       bounds.getNorthEast().lng()
     ]
     delete window.poly
-    this.handleBoundsChange(center, zoom, bounds)
-  }
-
-  handleSearchSubmit(e) {
-    e.preventDefault()
-    const data = this.props.data
-    const user = data.user
-    const q = this.refs.search_input.value.trim()
-    AppStore.data.listing_map.is_loading = true
-    AppStore.emitChange()
-    ListingDispatcher.dispatch({
-      action: 'search-listing',
-      user,
-      q
-    })
-  }
-
-  handleZoomClick(type) {
-    const current_zoom = AppStore.data.listing_map.zoom
-    if (type === 'in')
-      AppStore.data.listing_map.zoom = current_zoom + 1
-    if (type === 'out')
-      AppStore.data.listing_map.zoom = current_zoom - 1
-    AppStore.emitChange()
-  }
-
-  handleRemoveListings() {
-    delete AppStore.data.listing_map.listings
-    AppStore.emitChange()
-    this.removeDrawing()
-  }
-
-  showShareModal() {
-    AppStore.data.listing_map.show_share_modal = true
-    AppStore.emitChange()
-    setTimeout(() => {
-      this.refs.alert_title.refs.input.focus()
-    }, 100)
-  }
-
-  shareAlert() {
-    const data = this.props.data
-    const user = data.user
-    const contacts_added = data.contacts_added
-    if (contacts_added && contacts_added['share-alert']) {
-      ListingDispatcher.dispatch({
-        action: 'share-alert',
-        user,
-        contacts: contacts_added['share-alert']
-      })
-    }
+    controller.handleBoundsChange(center, zoom, bounds)
   }
 
   render() {
     const data = this.props.data
+    const contacts = data.contacts
+    const rooms = data.rooms
+    const share_list = data.share_list
     const listing_map = data.listing_map
     const main_style = S('absolute h-100p l-70')
     let map_listing_markers
@@ -631,7 +180,7 @@ export default class Mls extends Component {
         <ListingViewer
           data={ data }
           listing={ data.current_listing }
-          hideModal={ this.hideModal }
+          hideModal={ controller.hideModal }
         />
       )
     }
@@ -673,8 +222,8 @@ export default class Mls extends Component {
     }
     const zoom_controls = (
       <ButtonGroup vertical style={ S('absolute b-25 r-20') }>
-        <Button bsSize="large" onClick={ this.handleZoomClick.bind(this, 'in') }><i style={ S('color-929292') } className="fa fa-plus"></i></Button>
-        <Button bsSize="large" onClick={ this.handleZoomClick.bind(this, 'out') }><i style={ S('color-929292') } className="fa fa-minus"></i></Button>
+        <Button bsSize="large" onClick={ controller.handleZoomClick.bind(this, 'in') }><i style={ S('color-929292') } className="fa fa-plus"></i></Button>
+        <Button bsSize="large" onClick={ controller.handleZoomClick.bind(this, 'out') }><i style={ S('color-929292') } className="fa fa-minus"></i></Button>
       </ButtonGroup>
     )
     let results_actions
@@ -683,12 +232,39 @@ export default class Mls extends Component {
         <div style={ S('absolute r-10 mt-2') }>
           <span style={ S('bg-a5c0e5 br-3 p-10 color-fff mr-10 relative t-1') }>
             { listing_map.listings.length } Matches
-            &nbsp;&nbsp;&nbsp;<span style={ S('pointer') } onClick={ this.handleRemoveListings.bind(this) }>&times;</span>&nbsp;
+            &nbsp;&nbsp;&nbsp;<span style={ S('pointer') } onClick={ controller.handleRemoveListings.bind(this) }>&times;</span>&nbsp;
           </span>
-          <Button bsStyle="primary" type="button" onClick={ this.showShareModal.bind(this) }>
+          <Button bsStyle="primary" type="button" onClick={ controller.showShareModal.bind(this) }>
             Share ({ listing_map.listings.length })
             &nbsp;&nbsp;<i className="fa fa-share"></i>
           </Button>
+        </div>
+      )
+    }
+    let message
+    if (data.error) {
+      message = (
+        <Alert bsStyle="danger" closeButton className="text-left">{ data.error.message }</Alert>
+      )
+    }
+    const contacts_rooms_scroll = {
+      overflowY: 'scroll',
+      ...S('w-100p maxh-200 relative border-1-solid-ccc br-3')
+    }
+    let share_stats
+    if (share_list && share_list.rooms.length || share_list && share_list.contacts.length) {
+      let space
+      if (share_list.rooms.length && share_list.contacts.length) {
+        space = (
+          <span>&nbsp;and&nbsp;</span>
+        )
+      }
+      share_stats = (
+        <div style={ S('font-14 pull-right mt-10 color-006aff') }>
+          { share_list.rooms.length ? share_list.rooms.length + ' rooms' : '' }
+          { space }
+          { share_list.contacts.length ? share_list.contacts.length + ' contacts' : '' }
+          &nbsp;&nbsp;selected
         </div>
       )
     }
@@ -699,24 +275,24 @@ export default class Mls extends Component {
           <div className={ main_class } style={ main_style }>
             <nav style={ toolbar_style }>
               <div style={ S('pull-left mr-10') }>
-                <form onSubmit={ this.handleSearchSubmit.bind(this) }>
+                <form onSubmit={ controller.handleSearchSubmit.bind(this) }>
                   <img src="/images/dashboard/mls/search.svg" style={ S('w-22 h-22 absolute l-18 t-18') } />
                   <input ref="search_input" className="form-control" type="text" style={ S('font-18 bg-dfe3e8 w-400 pull-left pl-40') } placeholder="Search location or MLS#" />
                 </form>
               </div>
               <div style={ S('pull-left') }>
-                <Button onClick={ this.showFilterForm.bind(this, 'photos') } style={ { ...S('mr-10'), outline: 'none' } }>
+                <Button onClick={ controller.showFilterForm.bind(this, 'photos') } style={ { ...S('mr-10'), outline: 'none' } }>
                   <img src={ `/images/dashboard/mls/filters${data.show_filter_form ? '-active' : ''}.svg` } style={ S('w-20 mr-10') }/>
                   <span className={ data.show_filter_form ? 'text-primary' : '' }>Filters</span>
                 </Button>
-                <Button onClick={ this.toggleDrawable.bind(this) } style={ { ...S('mr-10'), outline: 'none' } }>
+                <Button onClick={ controller.toggleDrawable.bind(this) } style={ { ...S('mr-10'), outline: 'none' } }>
                   <img src={ `/images/dashboard/mls/draw${data.listing_map && data.listing_map.drawable ? '-active' : ''}.svg` } style={ S('w-20') }/>
                 </Button>
                 <ButtonGroup style={ S('mr-10') }>
-                  <Button style={ { outline: 'none' } } onClick={ this.showPanelView.bind(this, 'list') }>
+                  <Button style={ { outline: 'none' } } onClick={ controller.showPanelView.bind(this, 'list') }>
                     <img src={ `/images/dashboard/mls/list${data.listing_panel && data.listing_panel.view === 'list' ? '-active' : ''}.svg` } style={ S('w-20') }/>
                   </Button>
-                  <Button style={ { outline: 'none' } } onClick={ this.showPanelView.bind(this, 'photos') }>
+                  <Button style={ { outline: 'none' } } onClick={ controller.showPanelView.bind(this, 'photos') }>
                     <img src={ `/images/dashboard/mls/photos${data.listing_panel && data.listing_panel.view === 'photos' ? '-active' : ''}.svg` } style={ S('w-18') }/>
                   </Button>
                 </ButtonGroup>
@@ -731,10 +307,10 @@ export default class Mls extends Component {
                 bootstrapURLKeys={ bootstrap_url_keys }
                 center={ listing_map ? listing_map.center : default_center }
                 zoom={ listing_map ? listing_map.zoom : default_zoom }
-                onBoundsChange={ this.handleBoundsChange.bind(this) }
-                options={ this.createMapOptions.bind(this) }
+                onBoundsChange={ controller.handleBoundsChange.bind(this) }
+                options={ controller.createMapOptions.bind(this) }
                 yesIWantToUseGoogleMapApiInternals
-                onGoogleApiLoaded={ this.handleGoogleMapApi.bind(this) }
+                onGoogleApiLoaded={ controller.handleGoogleMapApi.bind(this) }
               >
               { map_listing_markers }
               </GoogleMap>
@@ -743,20 +319,20 @@ export default class Mls extends Component {
           { listing_viewer }
           <ListingPanel
             data={ data }
-            toggleListingPanel={ this.toggleListingPanel }
+            toggleListingPanel={ controller.toggleListingPanel }
             showListingViewer={ this.showListingViewer }
-            sortListings={ this.sortListings }
+            sortListings={ controller.sortListings }
           />
           <FilterForm
             data={ data }
-            handleFilterSwitch={ this.handleFilterSwitch }
-            handleFilterButton={ this.handleFilterButton }
-            resetFilterOptions={ this.resetFilterOptions }
-            setFilterOptions={ this.setFilterOptions }
-            handleOptionChange={ this.handleOptionChange }
+            handleFilterSwitch={ controller.handleFilterSwitch }
+            handleFilterButton={ controller.handleFilterButton }
+            resetFilterOptions={ controller.resetFilterOptions }
+            setFilterOptions={ controller.setFilterOptions }
+            handleOptionChange={ controller.handleOptionChange }
           />
           { zoom_controls }
-          <Modal show={ listing_map && listing_map.show_share_modal } onHide={ this.hideModal }>
+          <Modal show={ listing_map && listing_map.show_share_modal } onHide={ controller.hideModal }>
             <Modal.Header>
               <Modal.Title>Share Alert</Modal.Title>
             </Modal.Header>
@@ -773,14 +349,98 @@ export default class Mls extends Component {
                 </div>
                 <div className="clearfix"></div>
               </div>
-              <AddContactsModule
-                data={ data }
-                module_type="share-alert"
-              />
+              <div style={ S('mb-10') }>
+                <div style={ S('font-20 pull-left') }>
+                  Choose rooms or contacts
+                </div>
+                { share_stats }
+                <div className="clearfix"></div>
+              </div>
+              <div style={ contacts_rooms_scroll }>
+                <div style={ S('w-100p') }>
+                  <div style={ S('font-16 bg-efefef p-5') }>Rooms</div>
+                  {
+                    rooms.map(room => {
+                      // List users
+                      const users = room.users
+                      const first_names = _.pluck(users, 'first_name')
+                      let first_name_list = ''
+                      first_names.forEach((first_name, _i) => {
+                        first_name_list += first_name
+                        if (_i < first_names.length - 1) first_name_list += ', '
+                      })
+                      let author
+                      let profile_image_div
+                      if (room.latest_message.author) {
+                        author = room.latest_message.author
+                        profile_image_div = (
+                          <ProfileImage data={ data } user={ author }/>
+                        )
+                      }
+                      if (!room.latest_message.author) {
+                        profile_image_div = (
+                          <div style={ S('absolute w-35') }>
+                            <img className="center-block" src="/images/dashboard/rebot@2x.png" style={ S('w-30') } />
+                          </div>
+                        )
+                      }
+                      let selected
+                      if (share_list && share_list.rooms && share_list.rooms.includes(room.id)) {
+                        selected = (
+                          <div style={ S('absolute t-18 r-10') }>
+                            <div style={ S('br-100 bg-006aff w-25 h-25 pt-3 text-center') }><i style={ S('color-fff') } className="fa fa-check"></i></div>
+                          </div>
+                        )
+                      }
+                      return (
+                        <div onClick={ controller.addToShareList.bind(this, 'rooms', room.id) } style={ S('relative h-60 pointer p-5') } className="share-item">
+                          { profile_image_div }
+                          <div className="pull-left" style={ S('ml-50 w-90p') }>
+                            <div className="pull-left">
+                              <b>{ room.title.substring(0, 50) }{ room.title.length > 50 ? '...' : '' }</b>
+                            </div>
+                            <div className="clearfix"></div>
+                            <div style={ S('color-aaaaaa w-74p') }>{ first_name_list }</div>
+                          </div>
+                          { selected }
+                          <div className="clearfix"></div>
+                        </div>
+                      )
+                    })
+                  }
+                  <div className="clearfix"></div>
+                  <div style={ S('font-16 bg-efefef p-5') }>Contacts</div>
+                  {
+                    contacts.map(contact => {
+                      let selected
+                      if (share_list && share_list.contacts && share_list.contacts.includes(contact.id)) {
+                        selected = (
+                          <div style={ S('absolute t-18 r-10') }>
+                            <div style={ S('br-100 bg-006aff w-25 h-25 pt-3 text-center') }><i style={ S('color-fff') } className="fa fa-check"></i></div>
+                          </div>
+                        )
+                      }
+                      return (
+                        <div onClick={ controller.addToShareList.bind(this, 'contacts', contact.id) } style={ S('h-60 relative p-3 pl-0 pr-10 mr-10 w-100p pointer p-10') } className="share-item" key={ 'added-contact-' + contact.id }>
+                          <div style={ S('l-10 t-10 absolute') }>
+                            <ProfileImage data={ data } top={11} size={40} user={ contact }/>
+                          </div>
+                          <div style={ S('ml-65') }>
+                            <div>{ contact.first_name } { contact.last_name }</div>
+                            <div>{ contact.email }</div>
+                          </div>
+                          { selected }
+                        </div>
+                      )
+                    })
+                  }
+                </div>
+              </div>
             </Modal.Body>
             <Modal.Footer>
-              <Button onClick={ this.hideModal } bsStyle="link">Cancel</Button>
-              <Button bsStyle="primary" onClick={ this.shareAlert.bind(this) }>Share Alert&nbsp;&nbsp;<i className="fa fa-share"></i></Button>
+              { message }
+              <Button onClick={ controller.hideModal } bsStyle="link">Cancel</Button>
+              <Button bsStyle="primary" onClick={ controller.shareAlert.bind(this) }>Share Alert&nbsp;&nbsp;<i className="fa fa-share"></i></Button>
             </Modal.Footer>
           </Modal>
         </main>

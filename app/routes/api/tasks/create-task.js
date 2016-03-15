@@ -6,10 +6,12 @@ module.exports = (app, config) => {
     const access_token = req.body.access_token
     const title = req.body.title
     const due_date = req.body.due_date
+    const private_ = req.body.private
     const request_object = {
       title,
       status: 'New',
-      due_date
+      private: private_,
+
     }
     fetch(endpoint,{
       method: 'post',

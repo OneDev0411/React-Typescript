@@ -9,7 +9,8 @@ export default (user, title, due_date, contacts, transaction) => {
   const params = {
     access_token: user.access_token,
     title,
-    due_date
+    due_date,
+    private: false
   }
   Task.create(params, (err, response) => {
     const new_task = response.data

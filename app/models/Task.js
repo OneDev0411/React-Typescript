@@ -15,7 +15,8 @@ export default {
     const request_object = {
       title: params.title,
       access_token: params.access_token,
-      due_date: params.due_date
+      due_date: params.due_date,
+      private: params.private
     }
     fetch(endpoint, {
       method: 'post',
