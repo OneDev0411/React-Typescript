@@ -139,6 +139,8 @@ export default class Mls extends Component {
     delete AppStore.data.error
     AppStore.emitChange()
     const data = AppStore.data
+    const listing_map = data.listing_map
+    const alert = listing_map.options
     const user = data.user
     const share_list = data.share_list
     if (!share_list)
@@ -161,7 +163,8 @@ export default class Mls extends Component {
       action: 'share-alert',
       user,
       rooms: share_list.rooms,
-      contacts: share_list.contacts
+      contacts: share_list.contacts,
+      alert
     })
   }
 

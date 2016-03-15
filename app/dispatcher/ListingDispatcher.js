@@ -32,7 +32,7 @@ ListingDispatcher.register(payload => {
       break
 
     case 'share-alert':
-      shareAlert(payload.user, payload.id, payload.alert)
+      shareAlert(payload.user, payload.rooms, payload.contacts, payload.alert)
       break
 
     default:
