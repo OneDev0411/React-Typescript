@@ -113,7 +113,7 @@ export default class RoomsList extends Component {
         let comment
         if (room.latest_message.comment) {
           comment = (
-            <div style={ S('color-808080') }>{ author_name }{ room.latest_message.comment.substring(0, 50) }{ room.latest_message.comment.length > 50 ? '...' : '' }</div>
+            <div className="room-list__item__message" style={ S('w-90p color-808080') }>{ author_name }{ room.latest_message.comment.substring(0, 50) }{ room.latest_message.comment.length > 50 ? '...' : '' }</div>
           )
         }
 
@@ -139,8 +139,8 @@ export default class RoomsList extends Component {
             <div style={ S('relative') }>
               { profile_image_div }
               <div className="pull-left" style={ S('ml-50 w-90p') }>
-                <div className="pull-left" style={ S('w-60p') }>
-                  <b>{ room.title.substring(0, 50) }{ room.title.length > 50 ? '...' : '' }</b>
+                <div className="room-list__item__title pull-left" style={ S('w-70p') }>
+                  <b>{ room.title }</b>
                 </div>
                 <div className="text-right" style={ S('color-ccc w-50p absolute r-10n font-13') } >
                   { time_created.month } { time_created.date },<br /> { time_created.time_friendly }
@@ -148,7 +148,9 @@ export default class RoomsList extends Component {
                   { notification }
                 </div>
                 <div className="clearfix"></div>
-                <div style={ S('color-aaaaaa w-74p') }>{ first_name_list }</div>
+                <div className="room-list__item__names" style={ S('color-aaaaaa w-74p') }>
+                  { first_name_list }
+                </div>
                 { comment }
               </div>
               <div className="clearfix"></div>
