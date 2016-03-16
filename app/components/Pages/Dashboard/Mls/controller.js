@@ -626,6 +626,8 @@ const controller = {
   },
 
   showModalGallery(image_url) {
+    if (!image_url)
+      return
     const data = AppStore.data
     const gallery_image_urls = data.current_listing.gallery_image_urls
     const image_index = gallery_image_urls.indexOf(image_url)
