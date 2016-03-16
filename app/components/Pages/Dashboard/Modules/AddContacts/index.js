@@ -232,14 +232,17 @@ export default class AddContactsModule extends Component {
       this.refs.first_name.refs.input.value = contact.first_name
     if (contact.last_name)
       this.refs.last_name.refs.input.value = contact.last_name
-    if (contact.phone_number)
-      this.refs.phone_number.refs.input.value = contact.phone_number
     if (contact.email)
       this.refs.email.refs.input.value = contact.email
     if (contact.company)
       this.refs.company.refs.input.value = contact.company
     this.refs.first_name.refs.input.focus()
     this.showNewContentInitials()
+    if (contact.phone_number) {
+      const phone_number = helpers.parsePhoneNumber(contact.phone_number).phone_number
+      AppStore.data.new_contact_modal.phone_number = phone_number
+      AppStore.emitChange()
+    }
   }
 
   filterContacts(e) {
@@ -515,7 +518,7 @@ export default class AddContactsModule extends Component {
                     <div className="input-group-btn input-dropdown--country-codes">
                       { country_codes }
                     </div>
-                    <MaskedInput className="form-control" style={ input_style } type="text" ref="phone_number" placeholder="PHONE NUMBER" mask="(999)-999-9999" maskChar="_"/>
+                    <MaskedInput value={ data.new_contact_modal && data.new_contact_modal.phone_number ? data.new_contact_modal.phone_number : '' } className="form-control" style={ input_style } type="text" ref="phone_number" placeholder="PHONE NUMBER" mask="(999)-999-9999" maskChar="_"/>
                   </div>
                 </Col>
                 <Col xs={5} style={ column_style }>
