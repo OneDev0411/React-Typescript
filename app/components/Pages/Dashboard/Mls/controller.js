@@ -600,6 +600,18 @@ const controller = {
   removeActiveListing() {
     delete AppStore.data.listing_map.active_listing
     AppStore.emitChange()
+  },
+
+  showListingPopup(listing) {
+    controller.setActiveListing(listing)
+    AppStore.data.listing_map.listing_popup = listing.id
+    AppStore.emitChange()
+  },
+
+  hideListingPopup(listing) {
+    controller.removeActiveListing()
+    delete AppStore.data.listing_map.listing_popup
+    AppStore.emitChange()
   }
 }
 

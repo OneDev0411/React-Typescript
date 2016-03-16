@@ -85,8 +85,17 @@ export default class Mls extends Component {
         let active_class = ''
         if (listing.id === data.listing_map.active_listing)
           active_class = ' active'
+        let popup_class = 'hidden'
+        if (listing.id === data.listing_map.listing_popup)
+          popup_class = ''
+        const listing_popup = (
+          <div className={ popup_class } style={ S('absolute t-125n l-50n z-1000') }>
+            <div style={ S(`w-100 bg-url(${listing.cover_image_url}) bg-cover bg-center w-100 h-100`) }/>
+          </div>
+        )
         return (
-          <div key={ 'map-listing-' + listing.id } onClick={ controller.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
+          <div onMouseOver={ controller.showListingPopup.bind(this, listing) } onMouseOut={ controller.hideListingPopup.bind(this) } key={ 'map-listing-' + listing.id } onClick={ controller.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
+            { listing_popup }
             <div className={ 'map__listing-marker' + active_class } style={ S('relative w-70 h-25') }>
               <div style={ S('absolute l-6 t-8 w-10 h-10 br-100 bg-' + status_color) }></div>
               <div style={ S('absolute r-10 t-6') }>${ price_small }{ letter }</div>
