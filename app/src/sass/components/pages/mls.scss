@@ -26,6 +26,12 @@
     }
   }
 }
+.listing-map__marker__popup__title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: bold;
+}
 .listing-map {
   transition: 150ms;
   right: 0;

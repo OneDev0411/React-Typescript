@@ -91,15 +91,16 @@ export default class Mls extends Component {
           popup_class = ''
         const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(listing.compact_property.square_meters)))
         const listing_popup = (
-          <div className={ popup_class } style={ S('absolute t-131n w-180 l-90n z-1000 p-3 bg-fff') }>
+          <div className={ popup_class } style={ S('absolute w-240 t-110n l-35n z-1000 bg-fff border-1-solid-929292') }>
             <div style={ S('pull-left mr-10') }>
-              <div style={ S(`w-100 bg-url(${listing.cover_image_url}) bg-cover bg-center w-100 h-100`) }/>
+              <div style={ S(`w-80 h-80 bg-url(${listing.cover_image_url}) bg-cover bg-center`) }/>
             </div>
-            <div style={ S('pull-left pt-15') }>
-              <div style={ S('font-15') }><b>${ price_small }{ letter }</b></div>
-              <div style={ S('font-12') }>{ listing.compact_property.bedroom_count } Beds</div>
-              <div style={ S('font-12') }>{ listing.compact_property.bathroom_count } Baths</div>
-              <div style={ S('font-12') }>{ square_feet } Sqft</div>
+            <div style={ S('pull-left pt-10') }>
+              <div className="listing-map__marker__popup__title" style={ S('font-12 w-140') }>{ listing_util.addressTitle(listing.address) }</div>
+              <div style={ S('font-11') }>{ listing.compact_property.bedroom_count } Beds,&nbsp;
+              { listing.compact_property.bathroom_count } Baths,&nbsp;
+              { square_feet } Sqft</div>
+              <div style={ S('font-11 color-' + listing_util.getStatusColor(listing.status)) }>{ listing.status }</div>
             </div>
           </div>
         )
