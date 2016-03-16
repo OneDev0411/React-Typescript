@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import S from 'shorti'
 import GoogleMap from 'google-map-react'
 import listing_util from '../../../../utils/listing'
+import helpers from '../../../../utils/helpers'
 import { ButtonGroup, Button } from 'react-bootstrap'
 
 // AppDispatcher
@@ -88,9 +89,18 @@ export default class Mls extends Component {
         let popup_class = 'hidden'
         if (listing.id === data.listing_map.listing_popup)
           popup_class = ''
+        const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(listing.compact_property.square_meters)))
         const listing_popup = (
-          <div className={ popup_class } style={ S('absolute t-125n l-50n z-1000') }>
-            <div style={ S(`w-100 bg-url(${listing.cover_image_url}) bg-cover bg-center w-100 h-100`) }/>
+          <div className={ popup_class } style={ S('absolute t-131n w-180 l-90n z-1000 p-3 bg-fff') }>
+            <div style={ S('pull-left mr-10') }>
+              <div style={ S(`w-100 bg-url(${listing.cover_image_url}) bg-cover bg-center w-100 h-100`) }/>
+            </div>
+            <div style={ S('pull-left pt-15') }>
+              <div style={ S('font-15') }><b>${ price_small }{ letter }</b></div>
+              <div style={ S('font-12') }>{ listing.compact_property.bedroom_count } Beds</div>
+              <div style={ S('font-12') }>{ listing.compact_property.bathroom_count } Baths</div>
+              <div style={ S('font-12') }>{ square_feet } Sqft</div>
+            </div>
           </div>
         )
         return (
