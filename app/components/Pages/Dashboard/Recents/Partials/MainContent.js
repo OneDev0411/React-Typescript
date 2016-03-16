@@ -208,6 +208,7 @@ export default class MainContent extends Component {
           listing={ data.current_listing }
           hideModal={ this.hideModal.bind(this) }
           navListingCarousel={ this.props.navListingCarousel }
+          hideListingViewer={ this.props.hideListingViewer }
         />
       )
     }
@@ -300,5 +301,6 @@ MainContent.propTypes = {
   showListingViewer: React.PropTypes.func,
   changeListingNotification: React.PropTypes.func,
   navListingCarousel: React.PropTypes.func,
-  addContactToMessage: React.PropTypes.func
+  addContactToMessage: React.PropTypes.func,
+  hideListingViewer: React.PropTypes.func
 }

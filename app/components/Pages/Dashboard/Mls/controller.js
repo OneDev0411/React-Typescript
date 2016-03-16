@@ -233,9 +233,14 @@ const controller = {
   },
 
   hideModal() {
+    delete AppStore.data.listing_map.show_share_modal
+    delete AppStore.data.show_modal_gallery
+    AppStore.emitChange()
+  },
+
+  hideListingViewer() {
     delete AppStore.data.show_listing_viewer
     delete AppStore.data.current_listing
-    delete AppStore.data.listing_map.show_share_modal
     AppStore.emitChange()
   },
 
@@ -617,6 +622,34 @@ const controller = {
   hideListingPopup() {
     controller.removeActiveListing()
     delete AppStore.data.listing_map.listing_popup
+    AppStore.emitChange()
+  },
+
+  showModalGallery(image_url) {
+    const data = AppStore.data
+    const gallery_image_urls = data.current_listing.gallery_image_urls
+    const image_index = gallery_image_urls.indexOf(image_url)
+    AppStore.data.show_modal_gallery = true
+    AppStore.data.modal_gallery = {
+      current_index: image_index,
+      gallery_image_urls
+    }
+    AppStore.emitChange()
+  },
+
+  handleModalGalleryNav(selectedIndex, selectedDirection) {
+    const data = AppStore.data
+    const gallery_image_urls = data.current_listing.gallery_image_urls
+    const current_index = AppStore.data.modal_gallery.current_index
+    if (selectedDirection === 'prev')
+      AppStore.data.modal_gallery.current_index = current_index - 1
+    if (selectedDirection === 'next')
+      AppStore.data.modal_gallery.current_index = current_index + 1
+    if (AppStore.data.modal_gallery.current_index === -1)
+      AppStore.data.modal_gallery.current_index = gallery_image_urls.length - 1
+    if (AppStore.data.modal_gallery.current_index === gallery_image_urls.length)
+      AppStore.data.modal_gallery.current_index = 0
+    AppStore.data.modal_gallery.direction = selectedDirection
     AppStore.emitChange()
   }
 }

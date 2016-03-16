@@ -1,7 +1,7 @@
 // ListingViewer.js
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import { Carousel, CarouselItem, OverlayTrigger, Tooltip } from 'react-bootstrap'
+import { Carousel, CarouselItem, OverlayTrigger, Tooltip, Modal } from 'react-bootstrap'
 import _ from 'lodash'
 import S from 'shorti'
 import helpers from '../../../../utils/helpers'
@@ -60,6 +60,7 @@ export default class ListingViewer extends Component {
 
   render() {
     // Listing modal
+    const data = this.props.data
     const listing = this.props.listing
     let current_slide = listing.current_slide
     if (!current_slide)
@@ -117,10 +118,10 @@ export default class ListingViewer extends Component {
           {
             gallery_chunks.map((gallery_image_url, i) => {
               return (
-                <CarouselItem key={ 'gallery-image-' + gallery_image_url[0] + i }>
-                  <div style={ S('w-' + ((window.innerWidth - 70) / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[0] + ')') }/>
-                  <div style={ S('w-' + ((window.innerWidth - 70) / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[1] + ')') }/>
-                  <div style={ S('w-' + ((window.innerWidth - 70) / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[2] + ')') }/>
+                <CarouselItem className="listing-carousel__item" key={ 'gallery-image-' + gallery_image_url[0] + i }>
+                  <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[0]) } style={ S('border-right-1-solid-fff w-' + ((window.innerWidth - 70) / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[0] + ')') }/>
+                  <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[1]) } style={ S('border-right-1-solid-fff w-' + ((window.innerWidth - 70) / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[1] + ')') }/>
+                  <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[2]) } style={ S('w-' + ((window.innerWidth - 70) / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[2] + ')') }/>
                 </CarouselItem>
               )
             })
@@ -268,13 +269,45 @@ export default class ListingViewer extends Component {
     }
     const viewer_wrap_style = S('absolute h-100p bg-fff t-0 l-0 z-1000 ml-70 w-' + (window.innerWidth - 70))
     const nav_bar_style = S('mb-0 p-0 h-65 pt-7 w-100p')
+    let modal_gallery_area
+    if (data.show_modal_gallery) {
+      const modal_gallery = data.modal_gallery
+      const gallery_image_urls = modal_gallery.gallery_image_urls
+      modal_gallery_area = (
+        <Carousel
+          activeIndex={ modal_gallery.current_index }
+          interval={0}
+          indicators={false}
+          prevIcon={ prev_icon }
+          nextIcon={ next_icon }
+          onSelect={ this.props.handleModalGalleryNav }
+          direction={ modal_gallery.direction }
+        >
+          {
+            gallery_image_urls.map((gallery_image_url, i) => {
+              return (
+                <CarouselItem key={ 'gallery-image-' + gallery_image_url[0] + i }>
+                  <div style={ S('w-100p h-500 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url + ')') }/>
+                </CarouselItem>
+              )
+            })
+          }
+        </Carousel>
+      )
+    }
     return (
       <div style={ viewer_wrap_style }>
-        <div onClick={ this.props.hideModal } style={ S('absolute r-20 t-8 font-40 fw-400') } className="close">&times;</div>
+        <div onClick={ this.props.hideListingViewer } style={ S('absolute r-20 t-8 font-40 fw-400') } className="close">&times;</div>
         <div style={ nav_bar_style }>
           <div style={ S('mt-13 font-18') } className="text-center">{ listing_title }</div>
         </div>
         { main_content }
+        <Modal bsSize="large" show={ data.show_modal_gallery } onHide={ this.props.hideModal }>
+          <div style={ S('relative') }>
+            <div style={ S('absolute r-0 t-60n font-60 z-1000 fw-100') } className="close" onClick={ this.props.hideModal }>&times;</div>
+          </div>
+          { modal_gallery_area }
+        </Modal>
       </div>
     )
   }
@@ -285,5 +318,8 @@ ListingViewer.propTypes = {
   data: React.PropTypes.object,
   listing: React.PropTypes.object,
   hideModal: React.PropTypes.func,
-  navListingCarousel: React.PropTypes.func
+  navListingCarousel: React.PropTypes.func,
+  showModalGallery: React.PropTypes.func,
+  handleModalGalleryNav: React.PropTypes.func,
+  hideListingViewer: React.PropTypes.func
 }

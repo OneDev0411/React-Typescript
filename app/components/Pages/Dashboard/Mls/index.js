@@ -129,6 +129,9 @@ export default class Mls extends Component {
           data={ data }
           listing={ data.current_listing }
           hideModal={ controller.hideModal }
+          hideListingViewer={ controller.hideListingViewer }
+          showModalGallery={ controller.showModalGallery }
+          handleModalGalleryNav={ controller.handleModalGalleryNav }
         />
       )
     }

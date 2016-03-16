@@ -131,7 +131,6 @@ export default class Dashboard extends Component {
   }
 
   hideModal() {
-    delete AppStore.data.show_listing_viewer
     delete AppStore.data.show_create_chat_modal
     delete AppStore.data.show_contacts_modal
     delete AppStore.data.show_settings_modal
@@ -328,6 +327,11 @@ export default class Dashboard extends Component {
     AppStore.emitChange()
   }
 
+  hideListingViewer() {
+    delete AppStore.data.show_listing_viewer
+    AppStore.emitChange()
+  }
+
   changeListingNotification(listing_switch_checked) {
     const data = this.props.data
     const user = data.user
@@ -391,6 +395,7 @@ export default class Dashboard extends Component {
             changeListingNotification={ this.changeListingNotification }
             navListingCarousel={ this.navListingCarousel }
             addContactToMessage={ this.addContactToMessage }
+            hideListingViewer={ this.hideListingViewer }
           />
         </main>
         <audio ref="notif_sound" id="notif-sound">
