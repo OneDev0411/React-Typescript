@@ -614,7 +614,7 @@ const controller = {
     AppStore.emitChange()
   },
 
-  hideListingPopup(listing) {
+  hideListingPopup() {
     controller.removeActiveListing()
     delete AppStore.data.listing_map.listing_popup
     AppStore.emitChange()
