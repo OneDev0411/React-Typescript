@@ -377,6 +377,12 @@ const controller = {
   },
 
   handleSearchSubmit(e) {
+    if (window.poly) {
+      window.poly.setMap(null)
+      delete window.poly
+      delete AppStore.data.listing_map.drawable
+      AppStore.emitChange()
+    }
     e.preventDefault()
     const data = AppStore.data
     const user = data.user
