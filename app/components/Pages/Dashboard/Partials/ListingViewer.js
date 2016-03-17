@@ -14,10 +14,14 @@ export default class ListingViewer extends Component {
     document.onkeydown = e => {
       if (e.keyCode === 27)
         this.props.hideModal()
-      // if (e.keyCode === 37)
-      //   this.navCarousel('prev')
-      // if (e.keyCode === 39)
-      //   this.navCarousel('next')
+      const data = this.props.data
+      const modal_gallery = data.modal_gallery
+      if (modal_gallery) {
+        if (e.keyCode === 37)
+          this.props.handleModalGalleryNav(null, 'prev')
+        if (e.keyCode === 39)
+          this.props.handleModalGalleryNav(null, 'next')
+      }
     }
     if (typeof window !== 'undefined') {
       const clipboard = require('clipboard')
@@ -25,29 +29,6 @@ export default class ListingViewer extends Component {
     }
     this.fadeIn()
   }
-  // TODO
-  // navCarousel(direction) {
-  //   const data = this.props.data
-  //   const current_listing = data.current_listing
-  //   let current_slide = current_listing.current_slide
-  //   console.log(current_slide)
-  //   const gallery_chunks = _.chunk(current_listing.gallery_image_urls, 3)
-  //   const number_slides = gallery_chunks.length
-  //   let next_slide
-  //   if (!current_slide)
-  //     current_slide = 0
-  //   if (direction === 'prev') {
-  //     next_slide = current_slide - 1
-  //     if (current_slide === 0)
-  //       next_slide = number_slides - 1
-  //   }
-  //   if (direction === 'next') {
-  //     next_slide = current_slide + 1
-  //     if (current_slide === number_slides - 1)
-  //       next_slide = 0
-  //   }
-  //   this.props.navListingCarousel(next_slide)
-  // }
 
   fadeIn() {
     const elem = ReactDOM.findDOMNode(this)
