@@ -197,7 +197,7 @@ export default class Landing extends Component {
               Made with <img src="/images/landing/heart.png" /> by Rechat | <a onClick={ this.showIntercom } href="/">Contact Us</a>
             </Col>
             <Col className="footer-text footer-text--right" sm={6}>
-              Rechat Inc. &copy; 2016. All Rights Reserved. <a href="/terms/mls">MLS Terms</a>
+              Rechat Inc. &copy; { new Date().getFullYear() }. All Rights Reserved. <a href="/terms">Terms of Service</a> | <a href="/terms/mls">MLS Terms</a> | <a href="/privacy">Privacy Policy</a>
             </Col>
           </div>
         </footer>

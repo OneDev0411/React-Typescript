@@ -1,9 +1,11 @@
 // index.js
+import config from '../../../config/private'
 // Room
 import Room from '../../models/Room'
 
 // Store
 import AppStore from '../../stores/AppStore'
+import Cosmic from 'cosmicjs'
 
 module.exports = (app, config) => {
   app.use((req, res, next) => {
@@ -18,8 +20,28 @@ module.exports = (app, config) => {
     return res.redirect('/')
   })
 
+  app.get('/terms',(req, res) => {
+    Cosmic.getObject(config.cosmicjs, { slug: 'terms-of-service' }, (err, response) => {
+      res.locals.title = response.object.title
+      res.locals.content = response.object.content
+      return res.render('templates/legal.html')
+    })
+  })
+
   app.get('/terms/mls',(req, res) => {
-    return res.render('terms.html')
+    Cosmic.getObject(config.cosmicjs, { slug: 'mls-terms' }, (err, response) => {
+      res.locals.title = response.object.title
+      res.locals.content = response.object.content
+      return res.render('templates/legal.html')
+    })
+  })
+
+  app.get('/privacy',(req, res) => {
+    Cosmic.getObject(config.cosmicjs, { slug: 'privacy' }, (err, response) => {
+      res.locals.title = response.object.title
+      res.locals.content = response.object.content
+      return res.render('templates/legal.html')
+    })
   })
 
   app.get('/dashboard*', (req, res, next) => {
