@@ -118,22 +118,22 @@ export default class ListingPanel extends Component {
           <div className="pull-left" style={ S('mt-10 w-80') }>
             <div>{ listing.address.postal_code }</div>
           </div>
-          <div className="pull-left" style={ S('mt-10 w-100') }>
+          <div className="pull-left" style={ S('mt-10 w-105') }>
             <div>${ helpers.numberWithCommas(Math.floor(listing.price)) }</div>
           </div>
-          <div className="pull-left" style={ S('mt-10 w-60') }>
+          <div className="pull-left" style={ S('mt-10 w-75') }>
             <div>{ property.bedroom_count }</div>
           </div>
-          <div className="pull-left" style={ S('mt-10 w-60') }>
+          <div className="pull-left" style={ S('mt-10 w-75') }>
             <div>{ property.bathroom_count }</div>
           </div>
-          <div className="pull-left" style={ S('mt-10 w-60') }>
+          <div className="pull-left" style={ S('mt-10 w-80') }>
             <div>{ square_feet }</div>
           </div>
-          <div className="pull-left" style={ S('mt-10 w-60') }>
+          <div className="pull-left" style={ S('mt-10 w-80') }>
             <div>{ property.year_built }</div>
           </div>
-          <div className="pull-left" style={ S('mt-10 w-100') }>
+          <div className="pull-left" style={ S('mt-10 w-75') }>
             <div>{ listing_util.getDOM(listing.dom) }</div>
           </div>
         </div>
@@ -177,27 +177,27 @@ export default class ListingPanel extends Component {
             Area&nbsp;&nbsp;
             <i style={ S('color-c3c3c3') } className="fa fa-caret-down"></i>
           </div>
-          <div onClick={ this.props.sortListings.bind(this, 'price') } style={ S('w-100 pull-left pointer') }>
+          <div onClick={ this.props.sortListings.bind(this, 'price') } style={ S('w-105 pull-left pointer') }>
             Price&nbsp;&nbsp;
             <i style={ S('color-c3c3c3') } className="fa fa-caret-down"></i>
           </div>
-          <div onClick={ this.props.sortListings.bind(this, 'bedroom_count') } style={ S('w-60 pull-left pointer') }>
+          <div onClick={ this.props.sortListings.bind(this, 'bedroom_count') } style={ S('w-75 pull-left pointer') }>
             Beds&nbsp;&nbsp;
             <i style={ S('color-c3c3c3') } className="fa fa-caret-down"></i>
           </div>
-          <div onClick={ this.props.sortListings.bind(this, 'bathroom_count') } style={ S('w-60 pull-left pointer') }>
+          <div onClick={ this.props.sortListings.bind(this, 'bathroom_count') } style={ S('w-75 pull-left pointer') }>
             Baths&nbsp;&nbsp;
             <i style={ S('color-c3c3c3') } className="fa fa-caret-down"></i>
           </div>
-          <div onClick={ this.props.sortListings.bind(this, 'square_meters') } style={ S('w-60 pull-left pointer') }>
+          <div onClick={ this.props.sortListings.bind(this, 'square_meters') } style={ S('w-80 pull-left pointer') }>
             Sqft&nbsp;&nbsp;
             <i style={ S('color-c3c3c3') } className="fa fa-caret-down"></i>
           </div>
-          <div onClick={ this.props.sortListings.bind(this, 'year_built') } style={ S('w-60 pull-left pointer') }>
+          <div onClick={ this.props.sortListings.bind(this, 'year_built') } style={ S('w-80 pull-left pointer') }>
             Built&nbsp;&nbsp;
             <i style={ S('color-c3c3c3') } className="fa fa-caret-down"></i>
           </div>
-          <div onClick={ this.props.sortListings.bind(this, 'dom') } style={ S('w-60 pull-left pointer') }>
+          <div onClick={ this.props.sortListings.bind(this, 'dom') } style={ S('w-75 pull-left pointer') }>
             DOM&nbsp;&nbsp;
             <i style={ S('color-c3c3c3') } className="fa fa-caret-down"></i>
           </div>
