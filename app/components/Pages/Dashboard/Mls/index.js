@@ -171,8 +171,11 @@ export default class Mls extends Component {
         </Button>
       )
     }
+    let zoom_right = 'r-20'
+    if (data.show_listing_panel)
+      zoom_right = 'r-860'
     const zoom_controls = (
-      <ButtonGroup vertical style={ S('absolute b-25 r-20') }>
+      <ButtonGroup className="transition" vertical style={ S('absolute b-25 ' + zoom_right) }>
         <Button bsSize="large" onClick={ controller.handleZoomClick.bind(this, 'in') }><i style={ S('color-929292') } className="fa fa-plus"></i></Button>
         <Button bsSize="large" onClick={ controller.handleZoomClick.bind(this, 'out') }><i style={ S('color-929292') } className="fa fa-minus"></i></Button>
       </ButtonGroup>
