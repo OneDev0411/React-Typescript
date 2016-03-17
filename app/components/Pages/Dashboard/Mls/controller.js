@@ -281,6 +281,8 @@ const controller = {
         return listing.compact_property.year_built * sorting_direction
       if (sort_by === 'dom')
         return listing_util.getDOM(listing.dom) * sorting_direction
+      if (sort_by === 'price_per_square_foot')
+        return (Math.floor(listing.price / listing_util.metersToFeet(listing.compact_property.square_meters))) * sorting_direction
     })
     AppStore.data.listing_map.listings = listings_sorted
     AppStore.data.listing_map.sorting_direction = sorting_direction
