@@ -528,6 +528,8 @@ const controller = {
     if (listing_map.drawable && window.poly)
       controller.makePolygon()
     google.maps.event.addDomListener(map.getDiv(), 'mousedown', () => {
+      AppStore.data.listing_map.no_popup = true
+      AppStore.emitChange()
       if (!listing_map.drawable || listing_map.drawable && window.poly)
         return
       window.poly = new google.maps.Polyline({
@@ -545,6 +547,8 @@ const controller = {
         return false
       })
       google.maps.event.addListenerOnce(map, 'mouseup', () => {
+        delete AppStore.data.listing_map.no_popup
+        AppStore.emitChange()
         if (!listing_map.drawable)
           return
         map.set('draggable', true)
@@ -614,6 +618,10 @@ const controller = {
   },
 
   showListingPopup(listing) {
+    const data = AppStore.data
+    const listing_map = data.listing_map
+    if (listing_map.no_popup)
+      return
     controller.setActiveListing(listing)
     AppStore.data.listing_map.listing_popup = listing.id
     AppStore.emitChange()
