@@ -34,7 +34,7 @@ export default class ListingPanel extends Component {
           sortby_title = 'Days on market'
           break
         case 'price_per_square_foot':
-          sortby_title = 'Price Per Square Foot'
+          sortby_title = '$/Sqft'
           break
         default:
           return true
