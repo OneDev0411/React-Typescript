@@ -1,5 +1,4 @@
 // index.js
-import config from '../../../config/private'
 // Room
 import Room from '../../models/Room'
 
