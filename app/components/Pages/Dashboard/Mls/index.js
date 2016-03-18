@@ -264,6 +264,7 @@ export default class Mls extends Component {
           <ShareAlertModal
             data={ data }
             shareAlert={ controller.shareAlert }
+            handleShareFilter={ controller.handleShareFilter }
           />
         </main>
       </div>

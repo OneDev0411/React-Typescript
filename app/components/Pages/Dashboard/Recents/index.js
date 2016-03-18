@@ -134,6 +134,7 @@ export default class Dashboard extends Component {
     delete AppStore.data.show_create_chat_modal
     delete AppStore.data.show_contacts_modal
     delete AppStore.data.show_settings_modal
+    delete AppStore.data.show_modal_gallery
     AppStore.emitChange()
   }
 
@@ -355,6 +356,36 @@ export default class Dashboard extends Component {
     AppStore.emitChange()
   }
 
+  showModalGallery(image_url) {
+    if (!image_url)
+      return
+    const data = AppStore.data
+    const gallery_image_urls = data.current_listing.gallery_image_urls
+    const image_index = gallery_image_urls.indexOf(image_url)
+    AppStore.data.show_modal_gallery = true
+    AppStore.data.modal_gallery = {
+      current_index: image_index,
+      gallery_image_urls
+    }
+    AppStore.emitChange()
+  }
+
+  handleModalGalleryNav(selectedIndex, selectedDirection) {
+    const data = AppStore.data
+    const gallery_image_urls = data.current_listing.gallery_image_urls
+    const current_index = AppStore.data.modal_gallery.current_index
+    if (selectedDirection === 'prev')
+      AppStore.data.modal_gallery.current_index = current_index - 1
+    if (selectedDirection === 'next')
+      AppStore.data.modal_gallery.current_index = current_index + 1
+    if (AppStore.data.modal_gallery.current_index === -1)
+      AppStore.data.modal_gallery.current_index = gallery_image_urls.length - 1
+    if (AppStore.data.modal_gallery.current_index === gallery_image_urls.length)
+      AppStore.data.modal_gallery.current_index = 0
+    AppStore.data.modal_gallery.direction = selectedDirection
+    AppStore.emitChange()
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -396,6 +427,8 @@ export default class Dashboard extends Component {
             navListingCarousel={ this.navListingCarousel }
             addContactToMessage={ this.addContactToMessage }
             hideListingViewer={ this.hideListingViewer }
+            showModalGallery={ this.showModalGallery }
+            handleModalGalleryNav={ this.handleModalGalleryNav }
           />
         </main>
         <audio ref="notif_sound" id="notif-sound">
