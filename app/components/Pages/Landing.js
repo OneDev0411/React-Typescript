@@ -141,26 +141,33 @@ export default class Landing extends Component {
           <nav className="navbar navbar-default" style={ navbar_style }>
             <div className="container-fluid">
               <div className="navbar-header">
-                <button style={ S('mt-15') } type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-link" aria-expanded="false">
-                  <span className="sr-only">Toggle navigation</span>
-                  <span className="icon-bar"></span>
-                  <span className="icon-bar"></span>
-                  <span className="icon-bar"></span>
-                </button>
+                {
+                  /*
+                  <button style={ S('mt-15') } type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-link" aria-expanded="false">
+                    <span className="sr-only">Toggle navigation</span>
+                    <span className="icon-bar"></span>
+                    <span className="icon-bar"></span>
+                    <span className="icon-bar"></span>
+                  </button>
+                  */
+                }
                 <div className="pull-left" style={ S('mt-20 ml-0') }><img style={ S('w-24') } src="images/landing/logo@2x.png" /></div>
                 <div className="tk-calluna-sans pull-left" style={ S('font-28 ml-10 mt-12 color-fff') }>Rechat</div>
               </div>
-
-              <div style={ collapse_style } className="collapse navbar-collapse text-center" id="main-link">
-                <ul className="nav navbar-nav navbar-right">
-                  <li className="contact-us-btn" style={ S('mr-20') }>
-                    <a onClick={ this.showIntercom } href="#" style={ S('color-fff relative t-6n') }>Contact Us</a>
-                  </li>
-                  <li>
-                    <a className="btn btn-default center-block sign-in__button" href="/signin" style={ signin_btn_style }>Sign in</a>
-                  </li>
-                </ul>
-              </div>
+              {
+                /*
+                <div style={ collapse_style } className="collapse navbar-collapse text-center" id="main-link">
+                  <ul className="nav navbar-nav navbar-right">
+                    <li className="contact-us-btn" style={ S('mr-20') }>
+                      <a onClick={ this.showIntercom } href="#" style={ S('color-fff relative t-6n') }>Contact Us</a>
+                    </li>
+                    <li>
+                      <a className="btn btn-default center-block sign-in__button" href="/signin" style={ signin_btn_style }>Sign in</a>
+                    </li>
+                  </ul>
+                </div>
+              */
+              }
             </div>
           </nav>
         </header>
