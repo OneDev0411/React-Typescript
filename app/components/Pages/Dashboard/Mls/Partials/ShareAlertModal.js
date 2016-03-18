@@ -23,6 +23,12 @@ export default class ShareAlertModal extends Component {
     const data = this.props.data
     const listing_map = data.listing_map
     const share_modal = data.share_modal
+    let rooms_added
+    if (share_modal)
+      rooms_added = share_modal.rooms_added
+    let contacts_added
+    if (share_modal)
+      contacts_added = share_modal.contacts_added
     let rooms_filtered
     let contacts_filtered
     if (share_modal) {
@@ -66,7 +72,7 @@ export default class ShareAlertModal extends Component {
           )
         }
         return (
-          <div onClick={ controller.addToShareList.bind(this, 'rooms', room.id) } style={ S('relative h-60 pointer p-10') } className="share-item" key={ 'share-alert__room-' + room.id }>
+          <div onClick={ controller.addToShareList.bind(this, 'rooms', room) } style={ S('relative h-60 pointer p-10') } className="share-item" key={ 'share-alert__room-' + room.id }>
             { profile_image_div }
             <div className="pull-left" style={ S('ml-50 w-90p') }>
               <div className="pull-left">
@@ -84,7 +90,7 @@ export default class ShareAlertModal extends Component {
     if (contacts_filtered) {
       contacts_list = contacts_filtered.map(contact => {
         return (
-          <div onClick={ controller.addToShareList.bind(this, 'contacts', contact.id) } style={ S('h-60 relative p-3 pl-0 pr-10 mr-10 w-100p pointer p-10') } className="share-item" key={ 'share-alert__contact-' + contact.id }>
+          <div onClick={ controller.addToShareList.bind(this, 'contacts', contact) } style={ S('h-60 relative p-3 pl-0 pr-10 mr-10 w-100p pointer p-10') } className="share-item" key={ 'share-alert__contact-' + contact.id }>
             <div style={ S('l-10 t-10 absolute') }>
               <ProfileImage data={ data } top={11} size={40} user={ contact }/>
             </div>
@@ -97,7 +103,7 @@ export default class ShareAlertModal extends Component {
       })
     }
     let rooms_list_area
-    if (rooms_list) {
+    if (rooms_list && rooms_list.length) {
       rooms_list_area = (
         <div>
           <div style={ S('bg-f8f8f8 color-929292 p-10') }>Rooms ({ rooms_list.length })</div>
@@ -106,7 +112,7 @@ export default class ShareAlertModal extends Component {
       )
     }
     let contacts_list_area
-    if (contacts_list) {
+    if (contacts_list && contacts_list.length) {
       contacts_list_area = (
         <div>
           <div style={ S('bg-f8f8f8 color-929292 p-10') }>Contacts ({ contacts_list.length })</div>
@@ -126,6 +132,34 @@ export default class ShareAlertModal extends Component {
     const filter_text_style = {
       ...S('p-0 mb-5 border-1-solid-fff font-28 h-40'),
       outline: 'none'
+    }
+    const items_added_pills = []
+    let rooms_added_pills = []
+    if (rooms_added) {
+      rooms_added_pills = rooms_added.map(room => {
+        return (
+          <div style={ S('bg-dadada color-4c7dbf p-5 br-3 pull-left mr-5') }>{ room.title }</div>
+        )
+      })
+      items_added_pills.push(rooms_added_pills)
+    }
+    let contacts_added_pills = []
+    if (contacts_added) {
+      contacts_added_pills = contacts_added.map(contact => {
+        return (
+          <div style={ S('bg-dadada color-4c7dbf p-5 br-3 pull-left mr-5') }>{ contact.first_name } { contact.last_name }</div>
+        )
+      })
+      items_added_pills.push(contacts_added_pills)
+    }
+    let items_added_area
+    if (items_added_pills && items_added_pills.length) {
+      items_added_area = (
+        <div style={ S('p-20 pull-left') }>
+          { rooms_added_pills }
+          { contacts_added_pills }
+        </div>
+      )
     }
     return (
       <Modal dialogClassName="modal-800" show={ listing_map && listing_map.show_share_modal } onHide={ controller.hideModal } onShow={ this.onShow.bind(this) }>
@@ -147,25 +181,29 @@ export default class ShareAlertModal extends Component {
           <div style={ S('mb-10') }>
             <div className="form-group" style={ S('relative') }>
               <img style={ S('absolute t-14 l-20') } src={ `/images/dashboard/mls/share-alert/chat.svg`} />
-              <input ref="rooms_contacts_input" onKeyUp={ this.handleShareFilter.bind(this) } style={ S('pl-62') } className="form-control input-lg" type="text" placeholder="Send to chatrooms and contacts"/>
-              <Button type="text">Add</Button>
+              <input style={ S('pl-62 w-600 pull-left mr-10') } ref="rooms_contacts_input" onKeyUp={ this.handleShareFilter.bind(this) } className="form-control input-lg" type="text" placeholder="Send to chatrooms and contacts"/>
+              <Button bsSize="large" style={ S('w-120 h-46 bg-d3d7d9 color-fff font-13 pull-left') } type="text">Add</Button>
               { results }
+              <div className="clearfix"></div>
             </div>
             <div className="form-group" style={ S('relative') }>
               <img style={ S('absolute t-18 l-15') } src={ `/images/dashboard/mls/share-alert/email.svg`} />
-              <input style={ S('pl-62') } className="form-control input-lg" type="text" placeholder="Send as an email"/>
-              <Button type="text">Add Email</Button>
+              <input style={ S('pl-62 w-600 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send as an email"/>
+              <Button bsSize="large" style={ S('w-120 h-46 bg-d3d7d9 color-fff font-13 pull-left') } type="text">Add Email</Button>
+              <div className="clearfix"></div>
             </div>
             <div className="form-group" style={ S('relative') }>
               <img style={ S('absolute t-10 l-20') } src={ `/images/dashboard/mls/share-alert/sms.svg`} />
-              <input style={ S('pl-62') } className="form-control input-lg" type="text" placeholder="Send an SMS"/>
-              <Button type="text">Add Number</Button>
+              <input style={ S('pl-62 w-600 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send an SMS"/>
+              <Button bsSize="large" style={ S('w-120 h-46 bg-d3d7d9 color-fff font-13 pull-left') } type="text">Add Number</Button>
+              <div className="clearfix"></div>
             </div>
             <div className="clearfix"></div>
           </div>
         </Modal.Body>
         <Modal.Footer>
           { message }
+          { items_added_area }
           <Button onClick={ controller.hideModal } bsStyle="link">Cancel</Button>
           <Button className={ listing_map && listing_map.saving_alert ? 'disabled' : '' } bsStyle="primary" onClick={ this.shareAlert.bind(this) }>{ listing_map && !listing_map.saving_alert ? 'Share Alert' : 'Saving...' }&nbsp;&nbsp;<i className="fa fa-share"></i></Button>
         </Modal.Footer>

@@ -417,38 +417,8 @@ const controller = {
   },
 
   showShareModal() {
+    delete AppStore.data.share_modal
     AppStore.data.listing_map.show_share_modal = true
-    AppStore.emitChange()
-  },
-
-  addToShareList(type, id) {
-    const data = AppStore.data
-    let share_list = data.share_list
-    if (!share_list) {
-      share_list = {
-        rooms: [],
-        contacts: []
-      }
-    }
-    // Rooms
-    if (type === 'rooms') {
-      if (share_list.rooms.includes(id)) {
-        share_list.rooms = _.filter(share_list.rooms, id_loop => {
-          return id_loop !== id
-        })
-      } else
-        share_list.rooms.push(id)
-    }
-    // Contacts
-    if (type === 'contacts') {
-      if (share_list.contacts.includes(id)) {
-        share_list.contacts = _.filter(share_list.contacts, id_loop => {
-          return id_loop !== id
-        })
-      } else
-        share_list.contacts.push(id)
-    }
-    AppStore.data.share_list = share_list
     AppStore.emitChange()
   },
 
@@ -663,10 +633,21 @@ const controller = {
     AppStore.emitChange()
   },
 
+  itemAdded(type, item) {
+    const data = AppStore.data
+    if (!data.share_modal)
+      return false
+    const share_modal = data.share_modal
+    if (type === 'room')
+      return _.find(share_modal.rooms_added, { id: item.id })
+    if (type === 'contact')
+      return _.find(share_modal.contacts_added, { id: item.id })
+    return false
+  },
+
   handleShareFilter(text) {
     if (!text) {
-      delete AppStore.data.share_modal
-      AppStore.emitChange()
+      controller.removeShareFilter()
       return
     }
     const data = AppStore.data
@@ -674,11 +655,15 @@ const controller = {
     const contacts = data.contacts
     const text_lower = text.toLowerCase()
     const rooms_filtered = rooms.filter(room => {
+      if (controller.itemAdded('room', room))
+        return false
       if (room.title && room.title.toLowerCase().indexOf(text_lower) !== -1)
         return true
       return false
     })
     const contacts_filtered = contacts.filter(contact => {
+      if (controller.itemAdded('contact', contact))
+        return false
       if (contact.first_name && contact.first_name.toLowerCase().indexOf(text_lower) !== -1)
         return true
       if (contact.last_name && contact.last_name.toLowerCase().indexOf(text_lower) !== -1)
@@ -689,10 +674,44 @@ const controller = {
         return false
       return false
     })
-    AppStore.data.share_modal = {
-      rooms_filtered,
-      contacts_filtered
+    if (!AppStore.data.share_modal)
+      AppStore.data.share_modal = {}
+    AppStore.data.share_modal.rooms_filtered = rooms_filtered
+    AppStore.data.share_modal.contacts_filtered = contacts_filtered
+    AppStore.emitChange()
+  },
+
+  removeShareFilter() {
+    if (!AppStore.data.share_modal)
+      return
+    delete AppStore.data.share_modal.rooms_filtered
+    delete AppStore.data.share_modal.contacts_filtered
+    AppStore.emitChange()
+  },
+
+  addToShareList(type, item) {
+    const data = AppStore.data
+    const share_modal = data.share_modal
+    if (!share_modal.rooms_added)
+      share_modal.rooms_added = []
+    if (!share_modal.contacts_added)
+      share_modal.contacts_added = []
+    // Rooms
+    if (type === 'rooms') {
+      // Test if already added
+      if (_.find(share_modal.rooms_added, { id: item.id }))
+        return
+      share_modal.rooms_added.push(item)
     }
+    // Contacts
+    if (type === 'contacts') {
+      // Test if already added
+      if (_.find(share_modal.contacts_added, { id: item.id }))
+        return
+      share_modal.contacts_added.push(item)
+    }
+    AppStore.data.share_modal = share_modal
+    controller.removeShareFilter()
     AppStore.emitChange()
   }
 }
