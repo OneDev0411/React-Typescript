@@ -104,13 +104,30 @@ export default class Mls extends Component {
             </div>
           </div>
         )
+        let listing_marker = (
+          <div className={ 'map__listing-marker' + active_class } style={ S('relative w-70 h-25 br-3') }>
+            <div style={ S('absolute l-6 t-8 w-10 h-10 br-100 bg-' + status_color) }></div>
+            <div style={ S('absolute r-10 t-6') }>${ price_small }{ letter }</div>
+          </div>
+        )
+        if (listing.open_houses) {
+          // Open house marker
+          const open_style = {
+            ...S('bg-35b863 w-15 h-100p color-fff font-5 pt-3'),
+            lineHeight: '5px'
+          }
+          listing_marker = (
+            <div className={ 'map__listing-marker' + active_class } style={ S('relative w-80 h-25 br-3') }>
+              <div style={ open_style }>O<br />P<br />E<br />N</div>
+              <div style={ S('absolute l-20 t-8 w-10 h-10 br-100 bg-' + status_color) }></div>
+              <div style={ S('absolute r-10 t-6') }>${ price_small }{ letter }</div>
+            </div>
+          )
+        }
         return (
           <div onMouseOver={ controller.showListingPopup.bind(this, listing) } onMouseOut={ controller.hideListingPopup.bind(this) } key={ 'map-listing-' + listing.id } onClick={ controller.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
             { listing_popup }
-            <div className={ 'map__listing-marker' + active_class } style={ S('relative w-70 h-25') }>
-              <div style={ S('absolute l-6 t-8 w-10 h-10 br-100 bg-' + status_color) }></div>
-              <div style={ S('absolute r-10 t-6') }>${ price_small }{ letter }</div>
-            </div>
+            { listing_marker }
           </div>
         )
       })
