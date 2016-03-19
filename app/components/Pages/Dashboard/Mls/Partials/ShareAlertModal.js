@@ -15,8 +15,9 @@ export default class ShareAlertModal extends Component {
     const title = this.refs.alert_title.value
     this.props.shareAlert(title)
   }
-  handleShareFilter() {
-    const filter_text = this.refs.rooms_contacts_input.value
+  handleFilterChange(e) {
+    const filter_text = e.target.value
+    console.log(1, filter_text)
     this.props.handleShareFilter(filter_text)
   }
   render() {
@@ -133,12 +134,13 @@ export default class ShareAlertModal extends Component {
       ...S('p-0 mb-5 border-1-solid-fff font-28 h-40'),
       outline: 'none'
     }
+    const pill_style = S('bg-dadada color-4c7dbf pr-10 pl-10 pt-5 pb-5 br-3 pull-left mr-5 mb-5')
     const items_added_pills = []
     let rooms_added_pills = []
     if (rooms_added) {
       rooms_added_pills = rooms_added.map(room => {
         return (
-          <div style={ S('bg-dadada color-4c7dbf p-5 br-3 pull-left mr-5') }>{ room.title }</div>
+          <div style={ pill_style }><span className="close">&times;</span> { room.title }</div>
         )
       })
       items_added_pills.push(rooms_added_pills)
@@ -147,7 +149,7 @@ export default class ShareAlertModal extends Component {
     if (contacts_added) {
       contacts_added_pills = contacts_added.map(contact => {
         return (
-          <div style={ S('bg-dadada color-4c7dbf p-5 br-3 pull-left mr-5') }>{ contact.first_name } { contact.last_name }</div>
+          <div style={ pill_style }><span className="close">&times;</span> { contact.first_name } { contact.last_name }</div>
         )
       })
       items_added_pills.push(contacts_added_pills)
@@ -155,12 +157,15 @@ export default class ShareAlertModal extends Component {
     let items_added_area
     if (items_added_pills && items_added_pills.length) {
       items_added_area = (
-        <div style={ S('p-20 pull-left') }>
+        <div style={ S('w-550 pull-left') }>
           { rooms_added_pills }
           { contacts_added_pills }
         </div>
       )
     }
+    let filter_text
+    if (share_modal)
+      filter_text = share_modal.filter_text
     return (
       <Modal dialogClassName="modal-800" show={ listing_map && listing_map.show_share_modal } onHide={ controller.hideModal } onShow={ this.onShow.bind(this) }>
         <Modal.Header closeButton style={ S('border-bottom-1-solid-f8f8f8') }>
@@ -181,7 +186,7 @@ export default class ShareAlertModal extends Component {
           <div style={ S('mb-10') }>
             <div className="form-group" style={ S('relative') }>
               <img style={ S('absolute t-14 l-20') } src={ `/images/dashboard/mls/share-alert/chat.svg`} />
-              <input style={ S('pl-62 w-600 pull-left mr-10') } ref="rooms_contacts_input" onKeyUp={ this.handleShareFilter.bind(this) } className="form-control input-lg" type="text" placeholder="Send to chatrooms and contacts"/>
+              <input onChange={ this.handleFilterChange.bind(this) } value={ filter_text } style={ S('pl-62 w-600 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send to chatrooms and contacts"/>
               <Button bsSize="large" style={ S('w-120 h-46 bg-d3d7d9 color-fff font-13 pull-left') } type="text">Add</Button>
               { results }
               <div className="clearfix"></div>

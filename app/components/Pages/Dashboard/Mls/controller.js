@@ -650,6 +650,10 @@ const controller = {
       controller.removeShareFilter()
       return
     }
+    if (!AppStore.data.share_modal)
+      AppStore.data.share_modal = {}
+    AppStore.data.share_modal.filter_text = text
+    AppStore.emitChange()
     const data = AppStore.data
     const rooms = data.rooms
     const contacts = data.contacts
@@ -674,8 +678,6 @@ const controller = {
         return false
       return false
     })
-    if (!AppStore.data.share_modal)
-      AppStore.data.share_modal = {}
     AppStore.data.share_modal.rooms_filtered = rooms_filtered
     AppStore.data.share_modal.contacts_filtered = contacts_filtered
     AppStore.emitChange()
@@ -684,6 +686,7 @@ const controller = {
   removeShareFilter() {
     if (!AppStore.data.share_modal)
       return
+    delete AppStore.data.share_modal.filter_text
     delete AppStore.data.share_modal.rooms_filtered
     delete AppStore.data.share_modal.contacts_filtered
     AppStore.emitChange()
@@ -712,6 +715,7 @@ const controller = {
     }
     AppStore.data.share_modal = share_modal
     controller.removeShareFilter()
+    delete AppStore.data.share_modal.filter_text
     AppStore.emitChange()
   }
 }

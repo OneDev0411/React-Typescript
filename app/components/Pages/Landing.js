@@ -90,12 +90,12 @@ export default class Landing extends Component {
       border: 'none',
       background: 'none'
     }
-    const signin_btn_style = S('color-fff w-130 p-10 pt-7 pb-7')
-    const collapse_style = {
-      ...S('mt-20'),
-      border: 'none',
-      boxShadow: 'none'
-    }
+    // const signin_btn_style = S('color-fff w-130 p-10 pt-7 pb-7')
+    // const collapse_style = {
+    //   ...S('mt-20'),
+    //   border: 'none',
+    //   boxShadow: 'none'
+    // }
     const headline_style = S('mb-35')
     const tag_style = S('font-22 mb-40')
     const form_wrap_style = {
