@@ -1,1 +1,5 @@
+WAIT=5
+TIMEOUT=5
+ATTEMPTS=60
+
 /   Rechat
