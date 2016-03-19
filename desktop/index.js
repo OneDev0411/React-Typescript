@@ -23,10 +23,10 @@ app.on('window-all-closed', function() {
 // initialization and is ready to create browser windows.
 app.on('ready', function() {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 1000, height: 800, minWidth: 1000, minHeight: 800});
+  mainWindow = new BrowserWindow({width: 1200, height: 760, minWidth: 1000, minHeight: 760});
   
   // and load the index.html of the app.
-  mainWindow.loadURL(process.env.LOAD_URL || `http://irish.d.rechat.co/signin`);
+  mainWindow.loadURL(process.env.LOAD_URL || `http://irish.d.rechat.com/signin`);
 
   // Open the DevTools.
   if(process.env.NODE_ENV === 'development')

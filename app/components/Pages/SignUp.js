@@ -185,8 +185,8 @@ export default class SignUp extends Component {
       )
     }
     return (
-      <div id="main-content" className="container">
-        <div className="text-center center-block" style={ S('maxw-300') }>
+      <div id="main-content" className="flex-center-wrap" style={ S('absolute h-100p w-100p mt-20n') }>
+        <div className="text-center center-block " style={ S('w-300') }>
           <BigHeading />
           { main_content }
         </div>

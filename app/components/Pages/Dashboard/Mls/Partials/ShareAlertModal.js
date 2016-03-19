@@ -17,7 +17,6 @@ export default class ShareAlertModal extends Component {
   }
   handleFilterChange(e) {
     const filter_text = e.target.value
-    console.log(1, filter_text)
     this.props.handleShareFilter(filter_text)
   }
   render() {
@@ -140,7 +139,7 @@ export default class ShareAlertModal extends Component {
     if (rooms_added) {
       rooms_added_pills = rooms_added.map(room => {
         return (
-          <div style={ pill_style }><span className="close">&times;</span> { room.title }</div>
+          <div key={ 'pill-room-' + room.id } style={ pill_style }><span className="close">&times;</span> { room.title }</div>
         )
       })
       items_added_pills.push(rooms_added_pills)
@@ -149,7 +148,7 @@ export default class ShareAlertModal extends Component {
     if (contacts_added) {
       contacts_added_pills = contacts_added.map(contact => {
         return (
-          <div style={ pill_style }><span className="close">&times;</span> { contact.first_name } { contact.last_name }</div>
+          <div key={ 'pill-contact-' + contact.id } style={ pill_style }><span className="close">&times;</span> { contact.first_name } { contact.last_name }</div>
         )
       })
       items_added_pills.push(contacts_added_pills)

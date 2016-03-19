@@ -4,7 +4,6 @@ import { Button, DropdownButton, MenuItem } from 'react-bootstrap'
 import S from 'shorti'
 import helpers from '../../../../../utils/helpers'
 import listing_util from '../../../../../utils/listing'
-
 export default class ListingPanel extends Component {
   getSortingTitle() {
     const data = this.props.data
@@ -47,7 +46,6 @@ export default class ListingPanel extends Component {
     return sortby_title
   }
   render() {
-    // Listing cards
     const data = this.props.data
     const listing_map = this.props.data.listing_map
     if (!listing_map || listing_map && !listing_map.listings)
@@ -63,6 +61,15 @@ export default class ListingPanel extends Component {
       const image_overlay = {
         ...S('bg-000 absolute w-100p h-100p'),
         opacity: '.2'
+      }
+      let open_houses
+      if (listing.open_houses) {
+        const num_open_houses = listing.open_houses.length
+        open_houses = (
+          <div>
+          &nbsp;|&nbsp;<span className="text-success">{ num_open_houses } Open Houses</span>
+          </div>
+        )
       }
       return (
         <div onMouseOut={ this.props.removeActiveListing.bind(this) } onMouseOver={ this.props.setActiveListing.bind(this, listing) } key={ 'panel-listing-' + listing.id } onClick={ this.props.showListingViewer.bind(this, listing) } style={ S('pointer w-415 h-350 pb-10 pl-10 bg-fff pull-left') }>
@@ -88,8 +95,11 @@ export default class ListingPanel extends Component {
           <div style={ { borderRight: '1px solid #e7e8e9', borderBottom: '1px solid #e7e8e9', borderLeft: '1px solid #e7e8e9', ...S('p-10 pt-14 w-100p') } }>
             <div>
               <div className="pull-left" style={ S('w-10 h-10 br-100 mr-8 bg-' + status_color) }></div>
+              <div className="pull-left" style={ S('mt-4n mr-10') }>
+                <b>{ listing.status }</b>
+              </div>
               <div className="pull-left" style={ S('mt-4n') }>
-                { listing.status }
+                { open_houses }
               </div>
               <div className="clearfix"></div>
             </div>
@@ -253,8 +263,6 @@ export default class ListingPanel extends Component {
     )
   }
 }
-
-// PropTypes
 ListingPanel.propTypes = {
   data: React.PropTypes.object,
   toggleListingPanel: React.PropTypes.func,

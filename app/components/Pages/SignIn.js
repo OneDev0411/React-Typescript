@@ -113,8 +113,8 @@ export default class SignIn extends Component {
       signup_link += '?message=invite-room&room_id=' + room_id + '&invite_token=' + invite_token
 
     return (
-      <div id="main-content" className="container">
-        <div className="text-center center-block" style={ S('maxw-300') }>
+      <div id="main-content" className="flex-center-wrap" style={ S('absolute h-100p w-100p mt-60n') }>
+        <div className="text-center center-block" style={ S('w-300') }>
           <BigHeading />
           <div style={ S('color-929292 mb-20') }>Sign in</div>
           { invite_message }
