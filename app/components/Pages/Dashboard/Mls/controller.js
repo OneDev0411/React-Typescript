@@ -12,7 +12,7 @@ const controller = {
       lat: 32.7767,
       lng: -96.7970
     }
-    let zoom = 13
+    let zoom = 15
     const options = {
       maximum_price: 5000000,
       limit: '75',
