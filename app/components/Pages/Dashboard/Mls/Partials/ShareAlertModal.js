@@ -27,14 +27,14 @@ export default class ShareAlertModal extends Component {
     const phone_number = e.target.value
     this.props.handlePhoneNumberChange(phone_number)
   }
-  handleAddEmail(e) {
+  handleAddEmail() {
     const email = this.refs.email.value
     if (!email.trim())
       return
     this.props.handleAddEmail(email)
     this.refs.email.value = ''
   }
-  handleAddPhoneNumber(e) {
+  handleAddPhoneNumber() {
     const phone_number = this.refs.phone_number.value
     if (!phone_number.trim())
       return

@@ -586,7 +586,7 @@ const controller = {
       rooms: rooms_added,
       contacts: contacts_added,
       emails: emails_added,
-      contacts: contacts_added,
+      phone_numbers: phone_numbers_added,
       alert
     })
   },
