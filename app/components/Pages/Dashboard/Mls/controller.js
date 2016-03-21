@@ -535,14 +535,16 @@ const controller = {
     let contacts_added = []
     let emails_added = []
     let phone_numbers_added = []
-    if (share_modal.rooms_added)
-      rooms_added = share_modal.rooms_added
-    if (share_modal.contacts_added)
-      contacts_added = share_modal.contacts_added
-    if (share_modal.emails_added)
-      emails_added = share_modal.emails_added
-    if (share_modal.phone_numbers_added)
-      phone_numbers_added = share_modal.phone_numbers_added
+    if (share_modal) {
+      if (share_modal.rooms_added)
+        rooms_added = share_modal.rooms_added
+      if (share_modal.contacts_added)
+        contacts_added = share_modal.contacts_added
+      if (share_modal.emails_added)
+        emails_added = share_modal.emails_added
+      if (share_modal.phone_numbers_added)
+        phone_numbers_added = share_modal.phone_numbers_added
+    }
     if (!title) {
       AppStore.data.error = {
         message: 'You must name this alert'
@@ -550,9 +552,9 @@ const controller = {
       AppStore.emitChange()
       return
     }
-    if (!share_modal || share_modal && !rooms_added.length && !contacts_added.length && !emails_added.length && !phone_numbers_added.length) {
+    if (!rooms_added.length && !contacts_added.length && !emails_added.length && !phone_numbers_added.length) {
       AppStore.data.error = {
-        message: 'You must choose at least one room or one contact.'
+        message: 'You must add at least one room or one contact.'
       }
       AppStore.emitChange()
       return
