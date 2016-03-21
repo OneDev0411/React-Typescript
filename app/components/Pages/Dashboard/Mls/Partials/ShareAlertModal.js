@@ -20,10 +20,26 @@ export default class ShareAlertModal extends Component {
     this.props.handleShareFilter(filter_text)
   }
   handleEmailChange(e) {
-
+    const email = e.target.value
+    this.props.handleEmailChange(email)
   }
   handlePhoneNumberChange(e) {
-    
+    const phone_number = e.target.value
+    this.props.handlePhoneNumberChange(phone_number)
+  }
+  handleAddEmail(e) {
+    const email = this.refs.email.value
+    if (!email.trim())
+      return
+    this.props.handleAddEmail(email)
+    this.refs.email.value = ''
+  }
+  handleAddPhoneNumber(e) {
+    const phone_number = this.refs.phone_number.value
+    if (!phone_number.trim())
+      return
+    this.props.handleAddPhoneNumber(phone_number)
+    this.refs.phone_number.value = ''
   }
   render() {
     const data = this.props.data
@@ -35,6 +51,12 @@ export default class ShareAlertModal extends Component {
     let contacts_added
     if (share_modal)
       contacts_added = share_modal.contacts_added
+    let emails_added
+    if (share_modal)
+      emails_added = share_modal.emails_added
+    let phone_numbers_added
+    if (share_modal)
+      phone_numbers_added = share_modal.phone_numbers_added
     let rooms_filtered
     let contacts_filtered
     if (share_modal) {
@@ -145,7 +167,10 @@ export default class ShareAlertModal extends Component {
     if (rooms_added) {
       rooms_added_pills = rooms_added.map(room => {
         return (
-          <div key={ 'pill-room-' + room.id } style={ pill_style }><span className="close">&times;</span> { room.title }</div>
+          <div key={ 'pill-room-' + room.id } style={ pill_style }>
+            <span style={ S('mr-10') }>{ room.title }</span>
+            <span onClick={ this.props.handleRemoveShareItem.bind(this, 'room', room) } className="close">&times;</span>
+          </div>
         )
       })
       items_added_pills.push(rooms_added_pills)
@@ -154,17 +179,43 @@ export default class ShareAlertModal extends Component {
     if (contacts_added) {
       contacts_added_pills = contacts_added.map(contact => {
         return (
-          <div key={ 'pill-contact-' + contact.id } style={ pill_style }><span className="close">&times;</span> { contact.first_name } { contact.last_name }</div>
+          <div key={ 'pill-contact-' + contact.id } style={ pill_style }>
+            <span style={ S('mr-10') }>{ contact.first_name } { contact.last_name }</span>
+            <span onClick={ this.props.handleRemoveShareItem.bind(this, 'contact', contact) } className="close">&times;</span>
+          </div>
         )
       })
       items_added_pills.push(contacts_added_pills)
+    }
+    let emails_added_pills = []
+    if (emails_added) {
+      emails_added_pills = emails_added.map(email => {
+        return (
+          <div key={ 'pill-contact-' + email } style={ pill_style }>
+            <span style={ S('mr-10') }>{ email }</span>
+            <span onClick={ this.props.handleRemoveShareItem.bind(this, 'email', email) } className="close">&times;</span>
+          </div>
+        )
+      })
+      items_added_pills.push(emails_added_pills)
+    }
+    let phone_numbers_added_pills = []
+    if (phone_numbers_added) {
+      phone_numbers_added_pills = phone_numbers_added.map(phone_number => {
+        return (
+          <div key={ 'pill-contact-' + phone_number } style={ pill_style }>
+            <span style={ S('mr-10') }>{ phone_number }</span>
+            <span onClick={ this.props.handleRemoveShareItem.bind(this, 'phone_number', phone_number) } className="close">&times;</span>
+          </div>
+        )
+      })
+      items_added_pills.push(phone_numbers_added_pills)
     }
     let items_added_area
     if (items_added_pills && items_added_pills.length) {
       items_added_area = (
         <div style={ S('w-550 pull-left') }>
-          { rooms_added_pills }
-          { contacts_added_pills }
+          { items_added_pills }
         </div>
       )
     }
@@ -197,27 +248,27 @@ export default class ShareAlertModal extends Component {
           </div>
           <div style={ S('mb-10') }>
             <div className="form-group" style={ S('relative') }>
-              <img style={ S('absolute t-14 l-20') } src={ `/images/dashboard/mls/share-alert/chat.svg`} />
+              <img style={ S('absolute t-14 l-20') } src={`/images/dashboard/mls/share-alert/chat${share_modal && share_modal.chat_valid ? '-active' : ''}.svg`} />
               <input onChange={ this.handleFilterChange.bind(this) } value={ filter_text } style={ S('pl-62 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send to chatrooms and contacts"/>
               { results }
               <div className="clearfix"></div>
             </div>
             <div className="form-group" style={ S('relative') }>
-              <img style={ S('absolute t-18 l-15') } src={ `/images/dashboard/mls/share-alert/email.svg`} />
-              <input onChange={ this.handleEmailChange.bind(this) } style={ S('pl-62 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send as an email"/>
-              <div style={ S('absolute font-18 r-15 t-11 color-' + email_btn_color) }>Add Email</div>
+              <img style={ S('absolute t-18 l-15') } src={`/images/dashboard/mls/share-alert/email${share_modal && share_modal.email_valid ? '-active' : ''}.svg`} />
+              <input ref="email" onChange={ this.handleEmailChange.bind(this) } style={ S('pl-62 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send as an email"/>
+              <div onClick={ this.handleAddEmail.bind(this) } style={ S('pointer absolute font-18 r-15 t-11 color-' + email_btn_color) }>Add Email</div>
               <div className="clearfix"></div>
             </div>
             <div className="form-group" style={ S('relative') }>
-              <img style={ S('absolute t-10 l-20') } src={ `/images/dashboard/mls/share-alert/sms.svg`} />
-              <input onChange={ this.handlePhoneNumberChange.bind(this) } style={ S('pl-62 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send an SMS"/>
-              <div style={ S('absolute font-18 r-15 t-11 color-' + phone_number_btn_color) }>Add Number</div>
+              <img style={ S('absolute t-10 l-20') } src={`/images/dashboard/mls/share-alert/sms${share_modal && share_modal.phone_number_valid ? '-active' : ''}.svg`} />
+              <input ref="phone_number" onChange={ this.handlePhoneNumberChange.bind(this) } style={ S('pl-62 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send an SMS"/>
+              <div onClick={ this.handleAddPhoneNumber.bind(this) } style={ S('pointer absolute font-18 r-15 t-11 color-' + phone_number_btn_color) }>Add Number</div>
               <div className="clearfix"></div>
             </div>
             <div className="clearfix"></div>
           </div>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer style={ S('bg-f8f8f8') }>
           { message }
           { items_added_area }
           <Button onClick={ controller.hideModal } bsStyle="link">Cancel</Button>
@@ -227,10 +278,13 @@ export default class ShareAlertModal extends Component {
     )
   }
 }
-
-// PropTypes
 ShareAlertModal.propTypes = {
   data: React.PropTypes.object,
   shareAlert: React.PropTypes.func,
-  handleShareFilter: React.PropTypes.func
+  handleShareFilter: React.PropTypes.func,
+  handleEmailChange: React.PropTypes.func,
+  handlePhoneNumberChange: React.PropTypes.func,
+  handleAddEmail: React.PropTypes.func,
+  handleAddPhoneNumber: React.PropTypes.func,
+  handleRemoveShareItem: React.PropTypes.func
 }

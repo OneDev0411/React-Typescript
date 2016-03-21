@@ -282,6 +282,11 @@ export default class Mls extends Component {
             data={ data }
             shareAlert={ controller.shareAlert }
             handleShareFilter={ controller.handleShareFilter }
+            handleEmailChange={ controller.handleEmailChange }
+            handlePhoneNumberChange={ controller.handlePhoneNumberChange }
+            handleAddEmail={ controller.handleAddEmail }
+            handleAddPhoneNumber={ controller.handleAddPhoneNumber }
+            handleRemoveShareItem={ controller.handleRemoveShareItem }
           />
         </main>
       </div>

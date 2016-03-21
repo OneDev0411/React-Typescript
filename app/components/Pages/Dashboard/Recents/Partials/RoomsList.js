@@ -133,7 +133,6 @@ export default class RoomsList extends Component {
             )
           }
         }
-
         return (
           <li className="room-list__item" style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, i) }>
             <div style={ S('relative') }>

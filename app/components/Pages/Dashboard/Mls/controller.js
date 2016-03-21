@@ -552,7 +552,19 @@ const controller = {
     const listing_map = data.listing_map
     const alert = listing_map.options
     const user = data.user
-    const share_list = data.share_list
+    const share_modal = data.share_modal
+    let rooms_added = []
+    let contacts_added = []
+    let emails_added = []
+    let phone_numbers_added = []
+    if (share_modal.rooms_added)
+      rooms_added = share_modal.rooms_added
+    if (share_modal.contacts_added)
+      contacts_added = share_modal.contacts_added
+    if (share_modal.emails_added)
+      emails_added = share_modal.emails_added
+    if (share_modal.phone_numbers_added)
+      phone_numbers_added = share_modal.phone_numbers_added
     if (!title) {
       AppStore.data.error = {
         message: 'You must name this alert'
@@ -560,7 +572,7 @@ const controller = {
       AppStore.emitChange()
       return
     }
-    if (!share_list || share_list && !share_list.rooms.length && !share_list.contacts.length) {
+    if (!share_modal || share_modal && !rooms_added.length && !contacts_added.length && !emails_added.length && !phone_numbers_added.length) {
       AppStore.data.error = {
         message: 'You must choose at least one room or one contact.'
       }
@@ -571,8 +583,10 @@ const controller = {
     ListingDispatcher.dispatch({
       action: 'share-alert',
       user,
-      rooms: share_list.rooms,
-      contacts: share_list.contacts,
+      rooms: rooms_added,
+      contacts: contacts_added,
+      emails: emails_added,
+      contacts: contacts_added,
       alert
     })
   },
@@ -652,6 +666,7 @@ const controller = {
     }
     if (!AppStore.data.share_modal)
       AppStore.data.share_modal = {}
+    AppStore.data.share_modal.chat_valid = true
     AppStore.data.share_modal.filter_text = text
     AppStore.emitChange()
     const data = AppStore.data
@@ -689,17 +704,16 @@ const controller = {
     delete AppStore.data.share_modal.filter_text
     delete AppStore.data.share_modal.rooms_filtered
     delete AppStore.data.share_modal.contacts_filtered
+    delete AppStore.data.share_modal.chat_valid
     AppStore.emitChange()
   },
 
   addToShareList(type, item) {
     const data = AppStore.data
     const share_modal = data.share_modal
+    // Rooms
     if (!share_modal.rooms_added)
       share_modal.rooms_added = []
-    if (!share_modal.contacts_added)
-      share_modal.contacts_added = []
-    // Rooms
     if (type === 'rooms') {
       // Test if already added
       if (_.find(share_modal.rooms_added, { id: item.id }))
@@ -707,15 +721,91 @@ const controller = {
       share_modal.rooms_added.push(item)
     }
     // Contacts
+    if (!share_modal.contacts_added)
+      share_modal.contacts_added = []
     if (type === 'contacts') {
       // Test if already added
       if (_.find(share_modal.contacts_added, { id: item.id }))
         return
       share_modal.contacts_added.push(item)
     }
+    // Email
+    if (!share_modal.emails_added)
+      share_modal.emails_added = []
+    if (type === 'email') {
+      // Test if already added
+      if (share_modal.emails_added.includes(item))
+        return
+      share_modal.emails_added.push(item)
+    }
+    // Phone number
+    if (type === 'phone_number') {
+      if (!share_modal.phone_numbers_added)
+        share_modal.phone_numbers_added = []
+      // Test if already added
+      if (share_modal.phone_numbers_added.includes(item))
+        return
+      share_modal.phone_numbers_added.push(item)
+    }
     AppStore.data.share_modal = share_modal
     controller.removeShareFilter()
     delete AppStore.data.share_modal.filter_text
+    AppStore.emitChange()
+  },
+  handleEmailChange(email) {
+    if (!AppStore.data.share_modal)
+      AppStore.data.share_modal = {}
+    delete AppStore.data.share_modal.email_valid
+    if (email.trim())
+      AppStore.data.share_modal.email_valid = true
+    AppStore.emitChange()
+  },
+  handlePhoneNumberChange(phone_number) {
+    if (!AppStore.data.share_modal)
+      AppStore.data.share_modal = {}
+    delete AppStore.data.share_modal.phone_number_valid
+    if (phone_number.trim())
+      AppStore.data.share_modal.phone_number_valid = true
+    AppStore.emitChange()
+  },
+  handleAddEmail(email) {
+    controller.addToShareList('email', email)
+    delete AppStore.data.share_modal.email_valid
+    AppStore.emitChange()
+  },
+  handleAddPhoneNumber(phone_number) {
+    controller.addToShareList('phone_number', phone_number)
+    delete AppStore.data.share_modal.phone_number_valid
+    AppStore.emitChange()
+  },
+  handleRemoveShareItem(type, item) {
+    const data = AppStore.data
+    const share_modal = data.share_modal
+    let index
+    switch (type) {
+      case 'room':
+        index = _.findIndex(share_modal.rooms_added, { id: item.id })
+        _.pullAt(share_modal.rooms_added, index)
+        AppStore.data.share_modal.rooms_added = share_modal.rooms_added
+        break
+      case 'contact':
+        index = _.findIndex(share_modal.contacts_added, { id: item.id })
+        _.pullAt(share_modal.contacts_added, index)
+        AppStore.data.share_modal.contacts_added = share_modal.contacts_added
+        break
+      case 'email':
+        index = share_modal.emails_added.indexOf(item)
+        _.pullAt(share_modal.emails_added, index)
+        AppStore.data.share_modal.emails_added = share_modal.emails_added
+        break
+      case 'phone_number':
+        index = share_modal.phone_numbers_added.indexOf(item)
+        _.pullAt(share_modal.phone_numbers_added, index)
+        AppStore.data.share_modal.phone_numbers_added = share_modal.phone_numbers_added
+        break
+      default:
+        return false
+    }
     AppStore.emitChange()
   }
 }
