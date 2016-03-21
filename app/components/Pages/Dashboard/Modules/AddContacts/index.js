@@ -99,20 +99,21 @@ export default class AddContactsModule extends Component {
     const first_name = this.refs.first_name.refs.input.value.trim()
     const last_name = this.refs.last_name.refs.input.value.trim()
     const email = this.refs.email.refs.input.value.trim()
-    // TODO switch to different fields for country code
     let phone_number = this.refs.phone_number.refs.input.value.trim()
-    phone_number = phone_number.replace(/\D/g, '')
-    let country_code = 1
-    if (data.phone_country)
-      country_code = data.phone_country.dialCode
-    phone_number = '+' + country_code + phone_number
-    if (!phoneUtil.isPossibleNumberString(phone_number)) {
-      AppStore.data.error = {
-        message: 'You must use a valid phone number'
+    if (phone_number) {
+      phone_number = phone_number.replace(/\D/g, '')
+      let country_code = 1
+      if (data.phone_country)
+        country_code = data.phone_country.dialCode
+      phone_number = '+' + country_code + phone_number
+      if (!phoneUtil.isPossibleNumberString(phone_number)) {
+        AppStore.data.error = {
+          message: 'You must use a valid phone number'
+        }
+        delete AppStore.data.creating_contacts
+        AppStore.emitChange()
+        return
       }
-      delete AppStore.data.creating_contacts
-      AppStore.emitChange()
-      return
     }
     const company = this.refs.company.refs.input.value.trim()
     const role = this.refs.role.refs.input.value.trim()

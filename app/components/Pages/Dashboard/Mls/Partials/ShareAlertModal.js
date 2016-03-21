@@ -19,6 +19,12 @@ export default class ShareAlertModal extends Component {
     const filter_text = e.target.value
     this.props.handleShareFilter(filter_text)
   }
+  handleEmailChange(e) {
+
+  }
+  handlePhoneNumberChange(e) {
+    
+  }
   render() {
     const data = this.props.data
     const listing_map = data.listing_map
@@ -163,8 +169,15 @@ export default class ShareAlertModal extends Component {
       )
     }
     let filter_text
-    if (share_modal)
+    let email_btn_color = 'e5e5e5'
+    let phone_number_btn_color = 'e5e5e5'
+    if (share_modal) {
       filter_text = share_modal.filter_text
+      if (share_modal.email_valid)
+        email_btn_color = '006aff'
+      if (share_modal.phone_number_valid)
+        phone_number_btn_color = '006aff'
+    }
     return (
       <Modal dialogClassName="modal-800" show={ listing_map && listing_map.show_share_modal } onHide={ controller.hideModal } onShow={ this.onShow.bind(this) }>
         <Modal.Header closeButton style={ S('border-bottom-1-solid-f8f8f8') }>
@@ -185,21 +198,20 @@ export default class ShareAlertModal extends Component {
           <div style={ S('mb-10') }>
             <div className="form-group" style={ S('relative') }>
               <img style={ S('absolute t-14 l-20') } src={ `/images/dashboard/mls/share-alert/chat.svg`} />
-              <input onChange={ this.handleFilterChange.bind(this) } value={ filter_text } style={ S('pl-62 w-600 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send to chatrooms and contacts"/>
-              <Button bsSize="large" style={ S('w-120 h-46 bg-d3d7d9 color-fff font-13 pull-left') } type="text">Add</Button>
+              <input onChange={ this.handleFilterChange.bind(this) } value={ filter_text } style={ S('pl-62 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send to chatrooms and contacts"/>
               { results }
               <div className="clearfix"></div>
             </div>
             <div className="form-group" style={ S('relative') }>
               <img style={ S('absolute t-18 l-15') } src={ `/images/dashboard/mls/share-alert/email.svg`} />
-              <input style={ S('pl-62 w-600 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send as an email"/>
-              <Button bsSize="large" style={ S('w-120 h-46 bg-d3d7d9 color-fff font-13 pull-left') } type="text">Add Email</Button>
+              <input onChange={ this.handleEmailChange.bind(this) } style={ S('pl-62 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send as an email"/>
+              <div style={ S('absolute font-18 r-15 t-11 color-' + email_btn_color) }>Add Email</div>
               <div className="clearfix"></div>
             </div>
             <div className="form-group" style={ S('relative') }>
               <img style={ S('absolute t-10 l-20') } src={ `/images/dashboard/mls/share-alert/sms.svg`} />
-              <input style={ S('pl-62 w-600 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send an SMS"/>
-              <Button bsSize="large" style={ S('w-120 h-46 bg-d3d7d9 color-fff font-13 pull-left') } type="text">Add Number</Button>
+              <input onChange={ this.handlePhoneNumberChange.bind(this) } style={ S('pl-62 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send an SMS"/>
+              <div style={ S('absolute font-18 r-15 t-11 color-' + phone_number_btn_color) }>Add Number</div>
               <div className="clearfix"></div>
             </div>
             <div className="clearfix"></div>
