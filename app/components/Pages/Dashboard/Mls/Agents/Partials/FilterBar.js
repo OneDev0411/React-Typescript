@@ -11,20 +11,33 @@ import AppDispatcher from '../../../../../../dispatcher/AppDispatcher'
 import AppStore from '../../../../../../stores/AppStore'
 
 export default class FilterBar extends Component {
+  doubleDigit(str) {
+    return ('00' + str).slice(-2)
+  }
+
+  getTime(year, month, day) {
+    return moment(year + '-' + this.doubleDigit(month) + '-' + this.doubleDigit(day)).toISOString()
+  }
+
+  getFromTime() {
+    return this.getTime(this.refs.from_year.refs.input.value,
+                   this.refs.from_month.refs.input.value,
+                   this.refs.from_day.refs.input.value)
+  }
+
+  getToTime() {
+    return this.getTime(this.refs.to_year.refs.input.value,
+                   this.refs.to_month.refs.input.value,
+                   this.refs.to_day.refs.input.value)
+  }
 
   handleSubmit(e) {
     e.preventDefault()
 
     const criteria = {}
 
-    const from = this.refs.from.refs.input.refs.input.value
-    const to = this.refs.to.refs.input.refs.input.value
-
-    if (from)
-      criteria.from = moment(from).toISOString()
-
-    if (to)
-      criteria.to = moment(to).toISOString()
+    criteria.from = this.getFromTime()
+    criteria.to = this.getToTime()
 
     criteria.area = this.refs.area.refs.input.value
 //     criteria.subarea = this.refs.subarea.refs.input.value
@@ -152,9 +165,24 @@ export default class FilterBar extends Component {
 
   months() {
     const options = []
-    for (let i = 0; i <= 11; i++) {
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ]
+
+    for (let i = 1; i <= 12; i++) {
       options.push((
-        <option>{i}</option>
+        <option value={i}>{months[i - 1]}</option>
       ))
     }
     return options
