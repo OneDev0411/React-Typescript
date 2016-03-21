@@ -5,6 +5,8 @@ import _ from 'lodash'
 import { Button, Modal, Alert } from 'react-bootstrap'
 import controller from '../controller'
 import ProfileImage from '../../Partials/ProfileImage'
+import helpers from '../../../../../utils/helpers'
+import validator from 'validator'
 export default class ShareAlertModal extends Component {
   onShow() {
     setTimeout(() => {
@@ -20,10 +22,14 @@ export default class ShareAlertModal extends Component {
     this.props.handleShareFilter(filter_text)
   }
   handleEmailChange(e) {
+    if (e.which === 13)
+      return this.handleAddEmail()
     const email = e.target.value
     this.props.handleEmailChange(email)
   }
   handlePhoneNumberChange(e) {
+    if (e.which === 13)
+      return this.handleAddPhoneNumber()
     const phone_number = e.target.value
     this.props.handlePhoneNumberChange(phone_number)
   }
@@ -32,36 +38,34 @@ export default class ShareAlertModal extends Component {
     if (!email.trim())
       return
     this.props.handleAddEmail(email)
-    this.refs.email.value = ''
+    if (validator.isEmail(email))
+      this.refs.email.value = ''
   }
   handleAddPhoneNumber() {
     const phone_number = this.refs.phone_number.value
     if (!phone_number.trim())
       return
     this.props.handleAddPhoneNumber(phone_number)
-    this.refs.phone_number.value = ''
+    if (helpers.isValidPhoneNumber(phone_number))
+      this.refs.phone_number.value = ''
   }
   render() {
     const data = this.props.data
     const listing_map = data.listing_map
     const share_modal = data.share_modal
     let rooms_added
-    if (share_modal)
-      rooms_added = share_modal.rooms_added
     let contacts_added
-    if (share_modal)
-      contacts_added = share_modal.contacts_added
     let emails_added
-    if (share_modal)
-      emails_added = share_modal.emails_added
     let phone_numbers_added
-    if (share_modal)
-      phone_numbers_added = share_modal.phone_numbers_added
     let rooms_filtered
     let contacts_filtered
     if (share_modal) {
       rooms_filtered = share_modal.rooms_filtered
       contacts_filtered = share_modal.contacts_filtered
+      rooms_added = share_modal.rooms_added
+      contacts_added = share_modal.contacts_added
+      emails_added = share_modal.emails_added
+      phone_numbers_added = share_modal.phone_numbers_added
     }
     let message
     if (data.error) {
@@ -255,13 +259,13 @@ export default class ShareAlertModal extends Component {
             </div>
             <div className="form-group" style={ S('relative') }>
               <img style={ S('absolute t-18 l-15') } src={`/images/dashboard/mls/share-alert/email${share_modal && share_modal.email_valid ? '-active' : ''}.svg`} />
-              <input ref="email" onChange={ this.handleEmailChange.bind(this) } style={ S('pl-62 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send as an email"/>
+              <input ref="email" onKeyUp={ this.handleEmailChange.bind(this) } style={ S('pl-62 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send as an email"/>
               <div onClick={ this.handleAddEmail.bind(this) } style={ S('pointer absolute font-18 r-15 t-11 color-' + email_btn_color) }>Add Email</div>
               <div className="clearfix"></div>
             </div>
             <div className="form-group" style={ S('relative') }>
               <img style={ S('absolute t-10 l-20') } src={`/images/dashboard/mls/share-alert/sms${share_modal && share_modal.phone_number_valid ? '-active' : ''}.svg`} />
-              <input ref="phone_number" onChange={ this.handlePhoneNumberChange.bind(this) } style={ S('pl-62 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send an SMS"/>
+              <input ref="phone_number" onKeyUp={ this.handlePhoneNumberChange.bind(this) } style={ S('pl-62 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send an SMS"/>
               <div onClick={ this.handleAddPhoneNumber.bind(this) } style={ S('pointer absolute font-18 r-15 t-11 color-' + phone_number_btn_color) }>Add Number</div>
               <div className="clearfix"></div>
             </div>

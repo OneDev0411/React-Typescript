@@ -1,9 +1,10 @@
 // controller.js
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
+import helpers from '../../../../utils/helpers'
 import listing_util from '../../../../utils/listing'
 import _ from 'lodash'
-
+import validator from 'validator'
 const controller = {
   initMap() {
     const data = AppStore.data
@@ -77,7 +78,6 @@ const controller = {
       options
     })
   },
-
   createMapOptions() {
     const data = AppStore.data
     const listing_map = data.listing_map
@@ -96,7 +96,6 @@ const controller = {
     AppStore.emitChange()
     return google_options
   },
-
   handleBoundsChange(center, zoom, bounds) {
     const data = AppStore.data
     const user = data.user
@@ -139,7 +138,6 @@ const controller = {
       options: listing_map.options
     })
   },
-
   setFilterOptions(e) {
     e.preventDefault()
     const data = AppStore.data
@@ -218,7 +216,6 @@ const controller = {
       options
     })
   },
-
   toggleListingPanel() {
     if (!AppStore.data.show_listing_panel) {
       AppStore.data.show_listing_panel = true
@@ -231,19 +228,16 @@ const controller = {
     }
     AppStore.emitChange()
   },
-
   hideModal() {
     delete AppStore.data.listing_map.show_share_modal
     delete AppStore.data.show_modal_gallery
     AppStore.emitChange()
   },
-
   hideListingViewer() {
     delete AppStore.data.show_listing_viewer
     delete AppStore.data.current_listing
     AppStore.emitChange()
   },
-
   showPanelView(view) {
     if (AppStore.data.show_listing_panel && AppStore.data.listing_panel && AppStore.data.listing_panel.view === view) {
       delete AppStore.data.listing_panel
@@ -259,7 +253,6 @@ const controller = {
     delete AppStore.data.show_filter_form
     AppStore.emitChange()
   },
-
   sortListings(sort_by) {
     const data = AppStore.data
     const listings = data.listing_map.listings
@@ -289,7 +282,6 @@ const controller = {
     AppStore.data.listing_map.sorting_by = sort_by
     AppStore.emitChange()
   },
-// Start
   showFilterForm() {
     delete AppStore.data.listing_panel
     delete AppStore.data.show_listing_panel
@@ -299,7 +291,6 @@ const controller = {
       AppStore.data.show_filter_form = true
     AppStore.emitChange()
   },
-
   handleFilterSwitch(key) {
     if (!AppStore.data.listing_map.filter_options)
       AppStore.data.listing_map.filter_options = {}
@@ -309,7 +300,6 @@ const controller = {
       delete AppStore.data.listing_map.filter_options[key]
     AppStore.emitChange()
   },
-
   handleFilterButton(payload) {
     const key = payload.key
     const value = payload.value
@@ -343,7 +333,6 @@ const controller = {
       AppStore.data.listing_map.filter_options[key] = value
     AppStore.emitChange()
   },
-
   resetFilterOptions() {
     const data = AppStore.data
     const user = data.user
@@ -361,14 +350,12 @@ const controller = {
       default_options
     })
   },
-
   handleOptionChange(key, value) {
     if (!AppStore.data.listing_map.filter_options)
       AppStore.data.listing_map.filter_options = {}
     AppStore.data.listing_map.filter_options[key] = value
     AppStore.emitChange()
   },
-
   toggleDrawable() {
     if (AppStore.data.listing_map.drawable) {
       delete AppStore.data.listing_map.drawable
@@ -380,7 +367,6 @@ const controller = {
     }
     AppStore.emitChange()
   },
-
   handleSearchSubmit(e) {
     if (window.poly) {
       window.poly.setMap(null)
@@ -400,7 +386,6 @@ const controller = {
       q
     })
   },
-
   handleZoomClick(type) {
     const current_zoom = AppStore.data.listing_map.zoom
     if (type === 'in')
@@ -409,19 +394,17 @@ const controller = {
       AppStore.data.listing_map.zoom = current_zoom - 1
     AppStore.emitChange()
   },
-
   handleRemoveListings() {
     delete AppStore.data.listing_map.listings
     AppStore.emitChange()
     controller.removeDrawing()
   },
-
   showShareModal() {
     delete AppStore.data.share_modal
+    delete AppStore.data.error
     AppStore.data.listing_map.show_share_modal = true
     AppStore.emitChange()
   },
-
   getValertsInArea(points) {
     const data = AppStore.data
     const user = data.user
@@ -435,7 +418,6 @@ const controller = {
       options
     })
   },
-
   makePolygon() {
     const google = window.google
     const map = window.map
@@ -466,7 +448,6 @@ const controller = {
     ]
     return points
   },
-
   removeDrawing() {
     if (!window.poly)
       return
@@ -489,7 +470,6 @@ const controller = {
     delete window.poly
     controller.handleBoundsChange(center, zoom, bounds)
   },
-
   handleGoogleMapApi(google) {
     const map = google.map
     window.map = map
@@ -529,7 +509,6 @@ const controller = {
       })
     })
   },
-
   showListingViewer(listing) {
     const history = require('../../../../utils/history')
     history.replaceState(null, '/dashboard/mls/' + listing.id)
@@ -544,7 +523,6 @@ const controller = {
       id: listing.id
     })
   },
-
   shareAlert(title) {
     delete AppStore.data.error
     AppStore.emitChange()
@@ -610,13 +588,11 @@ const controller = {
     AppStore.data.listing_map.listing_popup = listing.id
     AppStore.emitChange()
   },
-
   hideListingPopup() {
     controller.removeActiveListing()
     delete AppStore.data.listing_map.listing_popup
     AppStore.emitChange()
   },
-
   showModalGallery(image_url) {
     if (!image_url)
       return
@@ -630,7 +606,6 @@ const controller = {
     }
     AppStore.emitChange()
   },
-
   handleModalGalleryNav(selectedIndex, selectedDirection) {
     const data = AppStore.data
     const gallery_image_urls = data.current_listing.gallery_image_urls
@@ -646,7 +621,6 @@ const controller = {
     AppStore.data.modal_gallery.direction = selectedDirection
     AppStore.emitChange()
   },
-
   itemAdded(type, item) {
     const data = AppStore.data
     if (!data.share_modal)
@@ -658,7 +632,6 @@ const controller = {
       return _.find(share_modal.contacts_added, { id: item.id })
     return false
   },
-
   handleShareFilter(text) {
     if (!text) {
       controller.removeShareFilter()
@@ -697,7 +670,6 @@ const controller = {
     AppStore.data.share_modal.contacts_filtered = contacts_filtered
     AppStore.emitChange()
   },
-
   removeShareFilter() {
     if (!AppStore.data.share_modal)
       return
@@ -707,7 +679,6 @@ const controller = {
     delete AppStore.data.share_modal.chat_valid
     AppStore.emitChange()
   },
-
   addToShareList(type, item) {
     const data = AppStore.data
     const share_modal = data.share_modal
@@ -749,6 +720,7 @@ const controller = {
     }
     AppStore.data.share_modal = share_modal
     controller.removeShareFilter()
+    delete AppStore.data.error
     delete AppStore.data.share_modal.filter_text
     AppStore.emitChange()
   },
@@ -769,11 +741,25 @@ const controller = {
     AppStore.emitChange()
   },
   handleAddEmail(email) {
+    if (!validator.isEmail(email)) {
+      AppStore.data.error = {
+        message: 'Invalid email'
+      }
+      AppStore.emitChange()
+      return
+    }
     controller.addToShareList('email', email)
     delete AppStore.data.share_modal.email_valid
     AppStore.emitChange()
   },
   handleAddPhoneNumber(phone_number) {
+    if (!helpers.isValidPhoneNumber(phone_number)) {
+      AppStore.data.error = {
+        message: 'Invalid phone number'
+      }
+      AppStore.emitChange()
+      return
+    }
     controller.addToShareList('phone_number', phone_number)
     delete AppStore.data.share_modal.phone_number_valid
     AppStore.emitChange()
