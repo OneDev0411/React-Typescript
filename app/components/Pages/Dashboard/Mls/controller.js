@@ -174,6 +174,7 @@ const controller = {
     if (listing_map.filter_options) {
       const filter_options = listing_map.filter_options
       // Status
+      // Active,Sold,Pending,"Temp Off Market",Leased,"Active Option Contract","Active Contingent","Active Kick Out",Withdrawn,Expired,Cancelled,"Withdrawn Sublisting",Incomplete,Unknown,"Out Of Sync",Incoming
       const listing_statuses = []
       if (filter_options.sold)
         listing_statuses.push('Sold')

@@ -46,10 +46,23 @@ export default class FilterForm extends Component {
       <div className={ filter_form_class } style={ filter_form_style }>
         <form onSubmit={ this.props.setFilterOptions.bind(this) }>
           <div style={ filter_scroll_area_style }>
-            <div style={ S('border-bottom-1-solid-f3f6f7 h-50 p-15') }>
-              Sold
-              <div style={ S('pull-right') }>
-                <Switch checked={ filter_options ? filter_options.sold : false } onChange={ this.props.handleFilterSwitch.bind(this, 'sold') } />
+            <div style={ S('border-bottom-1-solid-f3f6f7 h-50 p-15 pointer') }>
+              <span style={ S('color-db3821 font-30 mr-12 relative t-12n') }>&#8226;</span>
+              <span style={ S('relative t-15n') }>Sold</span>
+              <div style={ S('pull-right w-95') }>
+                <div style={ S('pull-left') }>
+                  <i style={ S('mr-20 font-20') } className="fa fa-caret-down"></i>
+                  <span style={ S('color-dcdedf relative t-2n') }>|</span>
+                </div>
+                <div style={ S('pull-right') }>
+                  <Switch checked={ filter_options ? filter_options.sold : false } onChange={ this.props.handleFilterSwitch.bind(this, 'sold') } />
+                </div>
+                <div className="hidden">
+                  <Button>3 Months</Button>
+                  <Button>6 Months</Button>
+                  <Button>12 Months</Button>
+                  <Button>Pick a date</Button>
+                </div>
               </div>
             </div>
             <div style={ S('border-bottom-1-solid-f3f6f7 h-50 p-15') }>
@@ -57,11 +70,25 @@ export default class FilterForm extends Component {
               <div style={ S('pull-right') }>
                 <Switch checked={ filter_options ? filter_options.active : false } onChange={ this.props.handleFilterSwitch.bind(this, 'active') } />
               </div>
+              <div className="hidden">
+                <div>Active</div>
+                <div>Active Contingent</div>
+                <div>Active Kick Out</div>
+                <div>Active Option Contract</div>
+              </div>
             </div>
             <div style={ S('border-bottom-1-solid-f3f6f7 h-50 p-15') }>
               Other Listing Status
               <div style={ S('pull-right') }>
                 <Switch checked={ filter_options ? filter_options.other : false } onChange={ this.props.handleFilterSwitch.bind(this, 'other') } />
+              </div>
+              <div className="hidden">
+                <div>Cancelled</div>
+                <div>Expired</div>
+                <div>Pending</div>
+                <div>Temp Off Market</div>
+                <div>Withdrawn</div>
+                <div>Withdrawn Sublisting</div>
               </div>
             </div>
             <div style={ S('border-bottom-1-solid-f3f6f7 h-50 p-15') }>
