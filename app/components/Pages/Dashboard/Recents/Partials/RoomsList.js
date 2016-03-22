@@ -1,7 +1,7 @@
 // RoomsList.js
 import React, { Component } from 'react'
 import S from 'shorti'
-import Loading from '../../../../Partials/Loading'
+// import Loading from '../../../../Partials/Loading'
 import ProfileImage from '../../Partials/ProfileImage'
 import helpers from '../../../../../utils/helpers'
 import _ from 'lodash'
@@ -59,7 +59,11 @@ export default class RoomsList extends Component {
     if (rooms && !rooms.length)
       return <div style={ S('ml-20 mt-20') }>No rooms yet.</div>
 
-    let rooms_list = <Loading />
+    const loading_style = {
+      ...S('absolute w-100p h-100p bg-url(/images/loading-states/rooms.svg)'),
+      backgroundRepeat: 'repeat-y'
+    }
+    let rooms_list = <div style={ loading_style } />
 
     if (data.is_filtering)
       rooms = data.filtered_rooms

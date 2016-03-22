@@ -1,6 +1,6 @@
 // MainContent.js
 import React, { Component } from 'react'
-import { Modal, Button, Input, ProgressBar } from 'react-bootstrap'
+import { ProgressBar } from 'react-bootstrap'
 import S from 'shorti'
 import RoomsList from './RoomsList'
 import MessagesList from './MessagesList'
@@ -23,25 +23,6 @@ export default class MainContent extends Component {
   handleSearchRoomKeyUp() {
     const search_text = this.refs.search_text.value
     this.props.filterRooms(search_text)
-  }
-
-  showModal(modal_key) {
-    this.props.showModal(modal_key)
-    setTimeout(() => {
-      if (modal_key === 'create-chat' && this.refs.title)
-        this.refs.title.getInputDOMNode().focus()
-
-      if (modal_key === 'invite-user' && this.refs.email)
-        this.refs.email.getInputDOMNode().focus()
-    }, 300)
-  }
-
-  createRoom(e) {
-    e.preventDefault()
-    let title = this.refs.title.getInputDOMNode().value
-    title = title.trim()
-    if (title)
-      this.props.createRoom(title)
   }
 
   hideModal() {
@@ -227,7 +208,7 @@ export default class MainContent extends Component {
             <div className="dashboard__chat-rooms pull-left" style={ rooms_column_style }>
               <div style={ S('p-10 pt-15 h-60 relative') }>
                 <input ref="search_text" onKeyUp={ this.handleSearchRoomKeyUp.bind(this) } style={ S('w-82p br-100') } type="text" placeholder="Search chats" className="form-control pull-left" />
-                <button onClick={ this.showModal.bind(this, 'create-chat') } type="button" className="btn btn-primary" style={ S('w-40 h-40 ml-6 pointer absolute p-0 t-15 r-8 br-100') }>
+                <button onClick={ this.props.showModal.bind(this, 'create-chat') } type="button" className="btn btn-primary" style={ S('w-40 h-40 ml-6 pointer absolute p-0 t-15 r-8 br-100') }>
                   <img src="/images/dashboard/icons/create-chat.svg"/>
                 </button>
                 <div className="clearfix"></div>
@@ -241,7 +222,7 @@ export default class MainContent extends Component {
               <MessagesList
                 data={ data }
                 getPreviousMessages={ this.props.getPreviousMessages }
-                showModal={ this.showModal.bind(this) }
+                showModal={ this.props.showModal.bind(this) }
                 addContactsToRoom={ this.props.addContactsToRoom }
                 hideModal={ this.hideModal.bind(this) }
                 showFileViewer={ this.props.showFileViewer }
@@ -253,20 +234,6 @@ export default class MainContent extends Component {
               { uploading_area }
               { create_message_area }
             </div>
-            <Modal show={ data.show_create_chat_modal } onHide={ this.hideModal.bind(this) }>
-              <form onSubmit={ this.createRoom.bind(this) }>
-                <Modal.Header closeButton>
-                  <Modal.Title>Start a new chat</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <Input type="text" ref="title" placeholder="Chat room title"/>
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button onClick={ this.hideModal.bind(this) }>Cancel</Button>
-                  <Button type="submit" bsStyle="primary">Start chat</Button>
-                </Modal.Footer>
-              </form>
-            </Modal>
           </div>
         </Dropzone>
         <DropzoneOverlay
@@ -286,7 +253,6 @@ MainContent.propTypes = {
   filterRooms: React.PropTypes.func.isRequired,
   showModal: React.PropTypes.func.isRequired,
   hideModal: React.PropTypes.func.isRequired,
-  createRoom: React.PropTypes.func.isRequired,
   createMessage: React.PropTypes.func.isRequired,
   handleMessageTyping: React.PropTypes.func.isRequired,
   handleContactFilter: React.PropTypes.func.isRequired,

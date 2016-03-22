@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import _ from 'lodash'
+import { Modal, Input, Button } from 'react-bootstrap'
 
 // AppDispatcher
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
@@ -16,8 +17,9 @@ import FileViewer from './Partials/FileViewer'
 
 export default class Dashboard extends Component {
 
-  componentDidMount() {
-    this.getContacts()
+  componentWillMount() {
+    AppStore.data.loading = true
+    AppStore.emitChange()
   }
 
   componentDidMount() {
@@ -111,7 +113,11 @@ export default class Dashboard extends Component {
     }
   }
 
-  createRoom(title) {
+  createRoom(e) {
+    e.preventDefault()
+    const title = this.refs.title.getInputDOMNode().value.trim()
+    if (!title)
+      return
     const user = AppStore.data.user
     AppDispatcher.dispatch({
       action: 'create-room',
@@ -128,6 +134,12 @@ export default class Dashboard extends Component {
     if (modal_key === 'settings')
       AppStore.data.show_settings_modal = true
     AppStore.emitChange()
+  }
+
+  onModalShow() {
+    setTimeout(() => {
+      this.refs.title.getInputDOMNode().focus()
+    }, 300)
   }
 
   hideModal() {
@@ -389,6 +401,8 @@ export default class Dashboard extends Component {
   render() {
     // Data
     const data = this.props.data
+    const loading = data.loading
+    const rooms = data.rooms
     const current_room = data.current_room
     let file_viewer
     if (current_room && current_room.viewer) {
@@ -399,42 +413,78 @@ export default class Dashboard extends Component {
         />
       )
     }
+    let main_content = (
+      <MainContent
+        data={ data }
+        getPreviousMessages={ this.getPreviousMessages.bind(this) }
+        handleMessageTyping={ this.handleMessageTyping.bind(this) }
+        handleContactFilter={ this.handleContactFilter.bind(this) }
+        handleContactFilterNav={ this.handleContactFilterNav.bind(this) }
+        filterRooms={ this.filterRooms.bind(this) }
+        createMessage={ this.createMessage.bind(this) }
+        showModal={ this.showModal }
+        hideModal={ this.hideModal }
+        createRoom={ this.createRoom }
+        setCurrentRoom={ this.setCurrentRoom.bind(this) }
+        addContactsToRoom={ this.addContactsToRoom }
+        handleDragEnter={ this.handleDragEnter }
+        handleDragLeave={ this.handleDragLeave }
+        uploadFiles={ this.uploadFiles.bind(this) }
+        showFileViewer={ this.showFileViewer }
+        setHeadingDate={ this.setHeadingDate }
+        removeScrollBottom={ this.removeScrollBottom }
+        showListingViewer={ this.showListingViewer }
+        changeListingNotification={ this.changeListingNotification }
+        navListingCarousel={ this.navListingCarousel }
+        addContactToMessage={ this.addContactToMessage }
+        hideListingViewer={ this.hideListingViewer }
+        showModalGallery={ this.showModalGallery }
+        handleModalGalleryNav={ this.handleModalGalleryNav }
+      />
+    )
+    if (!loading && !rooms) {
+      // Empty state
+      main_content = (
+        <div style={ S('absolute h-100p w-100p') }>
+          <div style={ S('h-220 w-360 relative center-block t-30p br-5 text-center') }>
+            <div className="empty-state" style={ S('w-360 h-220 mb-25 relative br-5 p-25 border-1-solid-e2e2e2') }>
+              <img src="/images/empty-states/chats.jpg" />
+            </div>
+            <div style={ S('mb-25') }>
+              <div style={ S('color-929292 font-18') }>Start a Conversation</div>
+              <div style={ S('color-bebebe font-14') }>Conversations are awesome. Placeholder.</div>
+            </div>
+            <Button onClick={ this.showModal.bind(this, 'create-chat') } style={ S('w-200 p-0') } bsStyle="primary">
+              <img src="/images/dashboard/icons/create-chat.svg" />
+            </Button>
+          </div>
+        </div>
+      )
+    }
     return (
       <div style={ S('minw-1000') }>
         <main>
           <SideBar data={ data }/>
-          <MainContent
-            data={ data }
-            getPreviousMessages={ this.getPreviousMessages.bind(this) }
-            handleMessageTyping={ this.handleMessageTyping.bind(this) }
-            handleContactFilter={ this.handleContactFilter.bind(this) }
-            handleContactFilterNav={ this.handleContactFilterNav.bind(this) }
-            filterRooms={ this.filterRooms.bind(this) }
-            createMessage={ this.createMessage.bind(this) }
-            showModal={ this.showModal }
-            hideModal={ this.hideModal }
-            createRoom={ this.createRoom }
-            setCurrentRoom={ this.setCurrentRoom.bind(this) }
-            addContactsToRoom={ this.addContactsToRoom }
-            handleDragEnter={ this.handleDragEnter }
-            handleDragLeave={ this.handleDragLeave }
-            uploadFiles={ this.uploadFiles.bind(this) }
-            showFileViewer={ this.showFileViewer }
-            setHeadingDate={ this.setHeadingDate }
-            removeScrollBottom={ this.removeScrollBottom }
-            showListingViewer={ this.showListingViewer }
-            changeListingNotification={ this.changeListingNotification }
-            navListingCarousel={ this.navListingCarousel }
-            addContactToMessage={ this.addContactToMessage }
-            hideListingViewer={ this.hideListingViewer }
-            showModalGallery={ this.showModalGallery }
-            handleModalGalleryNav={ this.handleModalGalleryNav }
-          />
+          { main_content }
         </main>
         <audio ref="notif_sound" id="notif-sound">
           <source src="/audio/goat.mp3" type="audio/mpeg" />
         </audio>
         { file_viewer }
+        <Modal show={ data.show_create_chat_modal } onHide={ this.hideModal.bind(this) } onShow={ this.onModalShow.bind(this) }>
+          <form onSubmit={ this.createRoom.bind(this) }>
+            <Modal.Header closeButton>
+              <Modal.Title>Start a new chat</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Input type="text" ref="title" placeholder="Chat room title"/>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button onClick={ this.hideModal.bind(this) }>Cancel</Button>
+              <Button type="submit" bsStyle="primary">Start chat</Button>
+            </Modal.Footer>
+          </form>
+        </Modal>
       </div>
     )
   }

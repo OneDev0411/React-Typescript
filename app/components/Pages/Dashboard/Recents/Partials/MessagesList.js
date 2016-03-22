@@ -1,7 +1,7 @@
 // MessagesList.js
 import React, { Component } from 'react'
 import S from 'shorti'
-import Loading from '../../../../Partials/Loading'
+// import Loading from '../../../../Partials/Loading'
 import { Tooltip, OverlayTrigger, Modal, Button } from 'react-bootstrap'
 import config from '../../../../../../config/public'
 import helpers from '../../../../../utils/helpers'
@@ -144,18 +144,13 @@ export default class MessagesList extends Component {
     if (data.rooms && !data.rooms.length)
       return <div style={ S('ml-20') }>No messages yet.</div>
 
-    if (data.messages_loading) {
-      return (
-        <div style={ S('relative') }>
-          <Loading />
-        </div>
-      )
+    const loading_style = {
+      ...S('absolute ml-20 w-100p h-100p bg-url(/images/loading-states/messages.svg)'),
+      backgroundRepeat: 'repeat-y'
     }
-
-    if (!data.messages) {
+    if (data.messages_loading || !data.messages) {
       return (
-        <div style={ S('relative') }>
-          <Loading />
+        <div style={ loading_style }>
         </div>
       )
     }

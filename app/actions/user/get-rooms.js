@@ -15,14 +15,17 @@ export default user => {
     if (response.status === 'success') {
       let rooms = response.data
       // sort my latest message
-      rooms = _.sortBy(rooms, room => {
-        return -room.latest_message.updated_at
-      })
-      AppStore.data.rooms = rooms
-      AppStore.data.current_room = rooms[0]
+      if (rooms.length) {
+        rooms = _.sortBy(rooms, room => {
+          return -room.latest_message.updated_at
+        })
+        AppStore.data.rooms = rooms
+        AppStore.data.current_room = rooms[0]
+      }
       // Get messages for current room
       getAllMessages(user, rooms)
     }
+    delete AppStore.data.loading
     AppStore.emitChange()
   })
 }

@@ -547,7 +547,7 @@ const controller = {
     }
     if (!title) {
       AppStore.data.error = {
-        message: 'You must name this alert'
+        message: 'You must name this alert.'
       }
       AppStore.emitChange()
       return
