@@ -147,7 +147,6 @@ export default class AddContactsModule extends Component {
   }
   navContactList(e) {
     const filtered_contacts = this.props.data.filtered_contacts
-    const search_input = this.refs.search_contacts.refs.input.value
     if (e.which === 38)
       this.setContactActive('up')
     if (e.which === 40)
@@ -157,9 +156,8 @@ export default class AddContactsModule extends Component {
       const contact = filtered_contacts[active_contact]
       this.addContact(contact)
     }
-    if (e.which === 13 && !filtered_contacts) {
+    if (e.which === 13 && !filtered_contacts)
       this.createContactFromInput()
-    }
   }
   createContactFromInput() {
     const search_input = this.refs.search_contacts.refs.input.value
