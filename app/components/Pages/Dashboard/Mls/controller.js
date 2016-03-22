@@ -17,9 +17,9 @@ const controller = {
     const options = {
       maximum_price: 5000000,
       limit: '75',
-      maximum_lot_square_meters: 1000000,
+      maximum_lot_square_meters: 100000000,
       minimum_bathrooms: 1,
-      maximum_square_meters: 10000,
+      maximum_square_meters: 10000000,
       location: {
         longitude: -96.79698789999998,
         latitude: 32.7766642
@@ -101,6 +101,9 @@ const controller = {
     const user = data.user
     const listing_map = data.listing_map
     if (!listing_map)
+      return
+    const auto_move = listing_map.auto_move
+    if (auto_move)
       return
     const points = [
       {

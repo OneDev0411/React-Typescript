@@ -87,7 +87,7 @@ export default class Mls extends Component {
         if (listing.id === data.listing_map.active_listing)
           active_class = ' active'
         let popup_class = 'hidden'
-        if (listing.id === data.listing_map.listing_popup)
+        if (listing.id === data.listing_map.listing_popup || listing.id === data.listing_map.active_listing)
           popup_class = ''
         const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(listing.compact_property.square_meters)))
         const listing_popup = (
