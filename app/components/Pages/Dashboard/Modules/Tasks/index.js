@@ -290,14 +290,29 @@ export default class TasksModule extends Component {
     const user = data.user
     const task = data.current_task
     const contacts = AppStore.data.contacts_added['share-task']
-    const contact_ids = _.pluck(contacts, 'id')
+    const current_contacts = contacts.filter(contact => {
+      return contact.type === 'contact'
+    })
+    const new_contacts = contacts.filter(contact => {
+      return contact.type !== 'contact'
+    })
+    if (new_contacts) {
+      // Create contacts if email or phone
+      AppDispatcher.dispatch({
+        action: 'create-contacts',
+        user,
+        contacts: new_contacts,
+        module_type: 'share-task'
+      })
+    }
+    const current_contacts_ids = _.pluck(current_contacts, 'id')
     // New task
     if (!new_task) {
       TaskDispatcher.dispatch({
         action: 'add-contacts',
         user,
         task,
-        contacts: contact_ids
+        contacts: current_contacts_ids
       })
     // Editing task
     } else {
