@@ -13,11 +13,12 @@ export default (user, contacts, module_type) => {
     if (response.status === 'success') {
       const new_contacts = [...AppStore.data.contacts, ...response.data]
       AppStore.data.contacts = new_contacts
-      const contact = response.data[0]
+      const add_contacts = response.data
+      // Send to add-contact action
       if (module_type) {
         AppDispatcher.dispatch({
-          action: 'add-contact',
-          contact,
+          action: 'add-contacts',
+          contacts: add_contacts,
           module_type
         })
       }

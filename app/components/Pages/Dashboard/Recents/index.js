@@ -114,11 +114,13 @@ export default class Dashboard extends Component {
       const new_contacts = contacts_added.room.filter(contact => {
         return contact.type !== 'contact'
       })
-      AppDispatcher.dispatch({
-        action: 'create-contacts',
-        user,
-        contacts: new_contacts
-      })
+      if (new_contacts) {
+        AppDispatcher.dispatch({
+          action: 'create-contacts',
+          user,
+          contacts: new_contacts
+        })
+      }
     }
   }
 

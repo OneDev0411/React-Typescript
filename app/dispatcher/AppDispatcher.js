@@ -35,7 +35,7 @@ import landingPage from '../actions/pages/landing'
 import getContent from '../actions/pages/get-content'
 
 // Modules
-import addContact from '../actions/modules/add-contact'
+import addContacts from '../actions/modules/add-contacts'
 import removeContact from '../actions/modules/remove-contact'
 
 // Notifications
@@ -135,8 +135,8 @@ AppDispatcher.register(payload => {
       deleteContact(payload.user, payload.contact_id)
       break
 
-    case 'add-contact':
-      addContact(payload.contact, payload.module_type)
+    case 'add-contacts':
+      addContacts(payload.contacts, payload.module_type)
       break
 
     case 'remove-contact':
