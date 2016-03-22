@@ -158,27 +158,33 @@ export default class AddContactsModule extends Component {
       this.addContact(contact)
     }
     if (e.which === 13 && !filtered_contacts) {
-      // Check if contact phone or email
-      let contact
-      if (validator.isEmail(search_input)) {
-        contact = {
-          id: new Date().getTime(),
-          type: 'email',
-          email: search_input
-        }
-        this.addContact(contact)
-      }
-      if (helpers.isValidPhoneNumber(search_input)) {
-        contact = {
-          id: new Date().getTime(),
-          type: 'phone_number',
-          phone_number: search_input
-        }
-        this.addContact(contact)
-      }
+      this.createContactFromInput()
     }
   }
-
+  createContactFromInput() {
+    const search_input = this.refs.search_contacts.refs.input.value
+    // Check if contact phone or email
+    let contact
+    if (validator.isEmail(search_input)) {
+      contact = {
+        id: new Date().getTime(),
+        type: 'email',
+        email: search_input
+      }
+      this.addContact(contact)
+    }
+    if (helpers.isValidPhoneNumber(search_input)) {
+      contact = {
+        id: new Date().getTime(),
+        type: 'phone_number',
+        phone_number: search_input
+      }
+      this.addContact(contact)
+    }
+  }
+  handleButtonClick() {
+    this.createContactFromInput()
+  }
   handleCountryCodeSelect(country) {
     AppStore.data.phone_country = {
       iso2: country.iso2,
@@ -186,7 +192,6 @@ export default class AddContactsModule extends Component {
     }
     AppStore.emitChange()
   }
-
   render() {
     const data = this.props.data
     const module_type = this.props.module_type
@@ -347,7 +352,7 @@ export default class AddContactsModule extends Component {
       <div style={ module_style } className="add-contact-form">
         <div style={ S('maxw-820') }>
           <Input ref="search_contacts" onKeyDown={ this.navContactList.bind(this) } onKeyUp={ this.filterContacts.bind(this) } className="pull-left" style={ search_contact_input_style } type="text" placeholder="Enter any name, email or phone number"/>
-          <Button className="pull-left" style={ S('w-120') } bsStyle="primary" type="submit">
+          <Button className="pull-left" style={ S('w-120') } bsStyle="primary" onClick={ this.handleButtonClick.bind(this) }>
             Add
           </Button>
         </div>
