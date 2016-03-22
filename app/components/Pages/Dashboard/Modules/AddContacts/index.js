@@ -1,26 +1,13 @@
-// AddContactsModule
+// AddContactsModule/index.js
 import React, { Component } from 'react'
-import { Button, Input, Modal, Col, Alert, DropdownButton, MenuItem } from 'react-bootstrap'
+import { Button, Input, Alert } from 'react-bootstrap'
 import S from 'shorti'
-import _ from 'lodash'
 import validator from 'validator'
 import helpers from '../../../../../utils/helpers'
-import MaskedInput from 'react-input-mask'
-import { all_countries } from '../../../../../utils/country-data'
-import { PhoneNumberUtil } from 'google-libphonenumber'
-const phoneUtil = PhoneNumberUtil.getInstance()
-
-// AppStore
 import AppStore from '../../../../../stores/AppStore'
-
-// AppDispatcher
 import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
-
-// Partials
 import ProfileImage from '../../Partials/ProfileImage'
-
 export default class AddContactsModule extends Component {
-
   componentDidMount() {
     this.getContacts()
     setTimeout(() => {
@@ -31,7 +18,6 @@ export default class AddContactsModule extends Component {
     delete AppStore.data.error
     AppStore.emitChange()
   }
-
   componentDidUpdate() {
     const new_contact_created = this.props.data.new_contact_created
     if (new_contact_created) {
@@ -43,7 +29,6 @@ export default class AddContactsModule extends Component {
       this.refs.role.refs.input.value = ''
     }
   }
-
   getContacts() {
     const user = this.props.data.user
     AppDispatcher.dispatch({
@@ -51,17 +36,14 @@ export default class AddContactsModule extends Component {
       user
     })
   }
-
   setFilteredContacts(filtered_contacts) {
     AppStore.data.filtered_contacts = filtered_contacts
     AppStore.emitChange()
   }
-
   hideContactsForm() {
     AppStore.data.filtered_contacts = null
     AppStore.emitChange()
   }
-
   removeContact(contact_id) {
     const module_type = this.props.module_type
     AppDispatcher.dispatch({
@@ -70,7 +52,6 @@ export default class AddContactsModule extends Component {
       module_type
     })
   }
-
   showNewContentInitials() {
     const first_initial = this.refs.first_name.refs.input.value.charAt(0)
     const last_initial = this.refs.last_name.refs.input.value.charAt(0)
@@ -80,7 +61,6 @@ export default class AddContactsModule extends Component {
     }
     AppStore.emitChange()
   }
-
   hideModal() {
     delete AppStore.data.show_contact_modal
     delete AppStore.data.contact_modal
@@ -88,120 +68,17 @@ export default class AddContactsModule extends Component {
     delete AppStore.data.new_contact_modal
     AppStore.emitChange()
   }
-
-  addContact(e) {
-    e.preventDefault()
-    const data = this.props.data
+  addContact(contact) {
     const module_type = this.props.module_type
-    AppStore.data.creating_contacts = true
-    delete AppStore.data.error
+    if (!AppStore.data.contacts_added)
+      AppStore.data.contacts_added = {}
+    if (!AppStore.data.contacts_added[module_type])
+      AppStore.data.contacts_added[module_type] = []
+    AppStore.data.contacts_added[module_type].push(contact)
+    delete AppStore.data.filtered_contacts
+    this.refs.search_contacts.refs.input.value = ''
     AppStore.emitChange()
-    const first_name = this.refs.first_name.refs.input.value.trim()
-    const last_name = this.refs.last_name.refs.input.value.trim()
-    const email = this.refs.email.refs.input.value.trim()
-    let phone_number = this.refs.phone_number.refs.input.value.trim()
-    if (phone_number) {
-      phone_number = phone_number.replace(/\D/g, '')
-      let country_code = 1
-      if (data.phone_country)
-        country_code = data.phone_country.dialCode
-      phone_number = '+' + country_code + phone_number
-      if (!phoneUtil.isPossibleNumberString(phone_number)) {
-        AppStore.data.error = {
-          message: 'You must use a valid phone number'
-        }
-        delete AppStore.data.creating_contacts
-        AppStore.emitChange()
-        return
-      }
-    }
-    const company = this.refs.company.refs.input.value.trim()
-    const role = this.refs.role.refs.input.value.trim()
-    const action = this.refs.action.value.trim()
-
-    // Reset errors
-    if (AppStore.data.new_contact_modal) {
-      delete AppStore.data.new_contact_modal.errors
-      delete AppStore.data.new_contact_modal.email_invalid
-    }
-
-    // Validations
-    if (!AppStore.data.new_contact_modal)
-      AppStore.data.new_contact_modal = {}
-
-    if (!first_name || !last_name) {
-      AppStore.data.new_contact_modal.errors = true
-      AppStore.data.creating_contacts = false
-      AppStore.emitChange()
-      return
-    }
-
-    if (email && !validator.isEmail(email)) {
-      AppStore.data.new_contact_modal.email_invalid = true
-      AppStore.data.creating_contacts = false
-      AppStore.emitChange()
-      return
-    }
-
-    if (!email && !phone_number) {
-      AppStore.data.new_contact_modal.errors = true
-      AppStore.data.creating_contacts = false
-      AppStore.emitChange()
-      return
-    }
-
-    const user = this.props.data.user
-    if (action === 'create') {
-      const contact = {
-        first_name,
-        last_name,
-        role,
-        force_creation: true
-      }
-      // Needs either email or phone
-      if (phone_number)
-        contact.phone_number = phone_number
-      if (email)
-        contact.email = email
-      if (company)
-        contact.company = company
-      if (!role.length)
-        delete contact.role
-      const contacts = [contact]
-      AppDispatcher.dispatch({
-        action: 'create-contacts',
-        contacts,
-        user,
-        module_type
-      })
-    }
-    if (action === 'edit') {
-      // Get default contact info
-      const contact = AppStore.data.contact_modal.contact
-      contact.first_name = first_name
-      contact.last_name = last_name
-      contact.email = email
-      contact.phone_number = phone_number
-      contact.company = company
-      contact.role = role
-      // Remove contact info (no undef)
-      if (!email)
-        delete contact.email
-      if (!phone_number)
-        delete contact.phone_number
-      if (!company)
-        delete contact.company
-      if (!role.length)
-        delete contact.role
-      AppDispatcher.dispatch({
-        action: 'edit-contact',
-        contact,
-        user,
-        module_type
-      })
-    }
   }
-
   setContactActive(direction) {
     const data = this.props.data
     const filtered_contacts = data.filtered_contacts
@@ -227,7 +104,6 @@ export default class AddContactsModule extends Component {
     AppStore.data.active_contact = active_contact
     AppStore.emitChange()
   }
-
   setContactFields(contact) {
     if (contact.first_name)
       this.refs.first_name.refs.input.value = contact.first_name
@@ -245,7 +121,6 @@ export default class AddContactsModule extends Component {
       AppStore.emitChange()
     }
   }
-
   filterContacts(e) {
     const text = this.refs.search_contacts.refs.input.value.trim()
     const text_lower = text.toLowerCase()
@@ -270,42 +145,9 @@ export default class AddContactsModule extends Component {
     if (e.which === 27)
       this.hideContactsForm()
   }
-
-  handleSubmitForm(contact, e) {
-    e.preventDefault()
-    this.showContactModal(contact)
-  }
-
-  showContactModal(contact) {
-    delete AppStore.data.filtered_contacts
-    AppStore.data.show_contact_modal = true
-    AppStore.emitChange()
-    // Edit
-    if (contact) {
-      AppStore.data.contact_modal = {
-        contact
-      }
-      setTimeout(() => {
-        this.refs.action.value = 'edit'
-        this.setContactFields(contact)
-      }, 100)
-    // New
-    } else {
-      setTimeout(() => {
-        const search_input = this.refs.search_contacts.refs.input.value
-        if (search_input) {
-          if (validator.isEmail(search_input))
-            this.refs.email.refs.input.value = search_input
-          if (helpers.isValidPhoneNumber(search_input))
-            this.refs.phone_number.refs.input.value = search_input
-        }
-        this.refs.action.value = 'create'
-      }, 100)
-    }
-  }
-
   navContactList(e) {
     const filtered_contacts = this.props.data.filtered_contacts
+    const search_input = this.refs.search_contacts.refs.input.value
     if (e.which === 38)
       this.setContactActive('up')
     if (e.which === 40)
@@ -313,7 +155,27 @@ export default class AddContactsModule extends Component {
     if (e.which === 13 && filtered_contacts) {
       const active_contact = this.props.data.active_contact
       const contact = filtered_contacts[active_contact]
-      this.showContactModal(contact)
+      this.addContact(contact)
+    }
+    if (e.which === 13 && !filtered_contacts) {
+      // Check if contact phone or email
+      let contact
+      if (validator.isEmail(search_input)) {
+        contact = {
+          id: new Date().getTime(),
+          type: 'email',
+          email: search_input
+        }
+        this.addContact(contact)
+      }
+      if (helpers.isValidPhoneNumber(search_input)) {
+        contact = {
+          id: new Date().getTime(),
+          type: 'phone_number',
+          phone_number: search_input
+        }
+        this.addContact(contact)
+      }
     }
   }
 
@@ -369,7 +231,7 @@ export default class AddContactsModule extends Component {
           active_contact_style = ' bg-EDF7FD'
         if (!contact.added) {
           return (
-            <div className="add-contact-form__contact" onClick={ this.showContactModal.bind(this, contact) } key={ 'contact-' + contact.id } style={ S('br-3 relative h-60 pointer mb-5 p-10' + active_contact_style + contact_added_style) }>
+            <div className="add-contact-form__contact" onClick={ this.addContact.bind(this, contact) } key={ 'contact-' + contact.id } style={ S('br-3 relative h-60 pointer mb-5 p-10' + active_contact_style + contact_added_style) }>
               <ProfileImage data={ data } user={ contact }/>
               <div style={ S('ml-50') }>
                 <span style={ S('fw-600') }>{ contact.first_name } { contact.last_name }</span>{ contact.contact_user ? ',' : '' }&nbsp;
@@ -393,22 +255,57 @@ export default class AddContactsModule extends Component {
         </div>
       )
     }
-
     let contacts_added_markup
     if (data.contacts_added && data.contacts_added[module_type]) {
       const contacts_added = data.contacts_added[module_type]
       contacts_added_markup = (
         contacts_added.map(contact => {
+          let contact_info
+          if (!contact)
+            return ''
+          if (contact.type === 'contact') {
+            contact_info = (
+              <div>
+                <div style={ S('l-0 t-0 absolute') }>
+                  <ProfileImage data={ data } top={11} size={40} user={ contact }/>
+                </div>
+                <div style={ S('ml-50') }>
+                  <div className="close pull-right" onClick={ this.removeContact.bind(this, contact.id) } style={ S('pointer') }>&times;</div>
+                  <div>
+                    <div>{ contact.first_name } { contact.last_name }</div>
+                    <div>{ contact.email }</div>
+                  </div>
+                </div>
+              </div>
+            )
+          }
+          if (contact.type === 'email') {
+            contact_info = (
+              <div>
+                <div>
+                  <div className="close pull-right" onClick={ this.removeContact.bind(this, contact.id) } style={ S('pointer') }>&times;</div>
+                  <div>
+                    <div>{ contact.email }</div>
+                  </div>
+                </div>
+              </div>
+            )
+          }
+          if (contact.type === 'phone_number') {
+            contact_info = (
+              <div>
+                <div>
+                  <div className="close pull-right" onClick={ this.removeContact.bind(this, contact.id) } style={ S('pointer') }>&times;</div>
+                  <div>
+                    <div>{ contact.phone_number }</div>
+                  </div>
+                </div>
+              </div>
+            )
+          }
           return (
-            <div style={ S('h-50 relative br-100 p-3 pl-0 pr-10 mb-10 mr-10 w-100p') } className="pull-left" key={ 'added-contact-' + contact.id }>
-              <div style={ S('l-0 t-0 absolute') }>
-                <ProfileImage data={ data } top={11} size={40} user={ contact }/>
-              </div>
-              <div style={ S('ml-50') }>
-                <div className="close pull-right" onClick={ this.removeContact.bind(this, contact.id) } style={ S('pointer') }>&times;</div>
-                <div>{ contact.first_name } { contact.last_name }</div>
-                <div>{ contact.email }</div>
-              </div>
+            <div style={ S('h-50 relative p-3 pl-0 pr-10 mb-10 mr-10 w-100p') } className="pull-left" key={ 'added-contact-' + contact.id }>
+              { contact_info }
             </div>
           )
         })
@@ -437,24 +334,6 @@ export default class AddContactsModule extends Component {
         </Alert>
       )
     }
-
-    const input_style = {
-      border: 'none'
-    }
-    const row_style = {
-      borderBottom: '1px solid #f3f3f3',
-      marginLeft: '-15px',
-      marginRight: '-15px'
-    }
-    const column_style = {
-      paddingTop: '15px'
-    }
-    let first_initial
-    let last_initial
-    if (data.new_contact_modal && data.new_contact_modal.first_initial)
-      first_initial = data.new_contact_modal.first_initial.toUpperCase()
-    if (data.new_contact_modal && data.new_contact_modal.last_initial)
-      last_initial = data.new_contact_modal.last_initial.toUpperCase()
     let contacts_added_area
     if (module_type !== 'transaction') {
       contacts_added_area = (
@@ -464,114 +343,23 @@ export default class AddContactsModule extends Component {
         </div>
       )
     }
-    let phone_country = 'US +1'
-    if (data.phone_country)
-      phone_country = `${data.phone_country.iso2.toUpperCase()} +${data.phone_country.dialCode}`
-    const country_codes = (
-      <DropdownButton title={ phone_country } id="input-dropdown-country-codes" style={ S('pb-9') }>
-        <MenuItem key={ 1 } onClick={ this.handleCountryCodeSelect.bind(this, _.find(all_countries, { iso2: 'us' })) }>United States +1</MenuItem>
-        {
-          all_countries.map((country, i) => {
-            if (country.dialCode !== 1)
-              return <MenuItem onClick={ this.handleCountryCodeSelect.bind(this, country) } key={ country.iso2 + country.dialCode + i }>{ country.name } +{ country.dialCode }</MenuItem>
-          })
-        }
-      </DropdownButton>
-    )
     return (
       <div style={ module_style } className="add-contact-form">
         <div style={ S('maxw-820') }>
-          <form onSubmit={ this.handleSubmitForm.bind(this, null) }>
-            <Input ref="search_contacts" onKeyDown={ this.navContactList.bind(this) } onKeyUp={ this.filterContacts.bind(this) } className="pull-left" style={ search_contact_input_style } type="text" placeholder="Enter any name, email or phone number"/>
-            <Button className="pull-left" style={ S('w-120') } bsStyle="primary" type="submit">
-              Add
-            </Button>
-          </form>
+          <Input ref="search_contacts" onKeyDown={ this.navContactList.bind(this) } onKeyUp={ this.filterContacts.bind(this) } className="pull-left" style={ search_contact_input_style } type="text" placeholder="Enter any name, email or phone number"/>
+          <Button className="pull-left" style={ S('w-120') } bsStyle="primary" type="submit">
+            Add
+          </Button>
         </div>
         <div className="clearfix"></div>
+        { message }
         { contacts_added_area }
         <div className="clearfix"></div>
         { filtered_contacts_markup }
-        <Modal show={ data.show_contact_modal } onHide={ this.hideModal.bind(this) }>
-          <form onSubmit={ this.addContact.bind(this) }>
-            <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
-              <Modal.Title style={ S('font-14') }>Add New Contact</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <div style={ row_style }>
-                <Col xs={2}>
-                  <div style={ S('absolute br-100 bg-dae9fd w-60 t-5n h-60 font-24 color-fff p-13 text-center') }>
-                    <b>{ first_initial }{ last_initial }</b>
-                  </div>
-                </Col>
-                <Col xs={5} style={ column_style }>
-                  <Input style={ input_style } onKeyUp={ this.showNewContentInitials.bind(this) } type="text" ref="first_name" placeholder="FIRST NAME"/>
-                </Col>
-                <Col xs={5} style={ column_style }>
-                  <Input style={ input_style } onKeyUp={ this.showNewContentInitials.bind(this) } type="text" ref="last_name" placeholder="LAST NAME"/>
-                </Col>
-                <div className="clearfix"></div>
-              </div>
-              <div style={ row_style }>
-                <Col xs={2} style={ column_style }/>
-                <Col xs={5} style={ column_style }>
-                  <div className="input-group">
-                    <div className="input-group-btn input-dropdown--country-codes">
-                      { country_codes }
-                    </div>
-                    <MaskedInput value={ data.new_contact_modal && data.new_contact_modal.phone_number ? data.new_contact_modal.phone_number : '' } className="form-control" style={ input_style } type="text" ref="phone_number" placeholder="PHONE NUMBER" mask="(999)-999-9999" maskChar="_"/>
-                  </div>
-                </Col>
-                <Col xs={5} style={ column_style }>
-                  <Input style={ input_style } type="text" ref="email" placeholder="EMAIL"/>
-                </Col>
-                <div className="clearfix"></div>
-              </div>
-              <div style={ row_style }>
-                <Col xs={2} style={ column_style }/>
-                <Col xs={5} style={ column_style }>
-                  <Input style={ input_style } type="text" ref="company" placeholder="COMPANY"/>
-                </Col>
-                <Col xs={5} style={ column_style }>
-                  <Input type="select" ref="role">
-                    <option value="">Select a role</option>
-                    <option value="Buyer agent">Buyer agent</option>
-                    <option value="Co-buyer agent">Co-buyer agent</option>
-                    <option value="Seller agent">Seller agent</option>
-                    <option value="Buyer">Buyer</option>
-                    <option value="Seller">Seller</option>
-                    <option value="Title">Title</option>
-                    <option value="Lawyer">Lawyer</option>
-                    <option value="Lender">Lender</option>
-                    <option value="Broker">Broker</option>
-                    <option value="Team Lead">Team Lead</option>
-                    <option value="Appraiser">Appraiser</option>
-                    <option value="Inspector">Inspector</option>
-                    <option value="Other">Other</option>
-                  </Input>
-                </Col>
-                <div className="clearfix"></div>
-              </div>
-              <div className="clearfix"></div>
-            </Modal.Body>
-            <Modal.Footer style={ { border: 'none' } }>
-              <div className="text-left">
-                { message }
-              </div>
-              <Button bsStyle="link" onClick={ this.hideModal.bind(this) }>Cancel</Button>
-              <Button style={ S('h-30 pt-5 pl-30 pr-30') } className={ data.creating_contacts ? 'disabled' : '' } type="submit" bsStyle="primary">
-                { data.creating_contacts ? 'Adding...' : 'Add' }
-              </Button>
-            </Modal.Footer>
-            <input type="hidden" ref="action"/>
-          </form>
-        </Modal>
       </div>
     )
   }
 }
-
-// PropTypes
 AddContactsModule.propTypes = {
   data: React.PropTypes.object,
   module_type: React.PropTypes.string
