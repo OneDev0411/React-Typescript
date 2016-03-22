@@ -17,9 +17,9 @@ const controller = {
     const options = {
       maximum_price: 5000000,
       limit: '75',
-      maximum_lot_square_meters: 8.568721699047544e+17,
+      maximum_lot_square_meters: 1000000,
       minimum_bathrooms: 1,
-      maximum_square_meters: 8.568721699047544e+17,
+      maximum_square_meters: 10000,
       location: {
         longitude: -96.79698789999998,
         latitude: 32.7766642
