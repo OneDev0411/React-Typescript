@@ -81,8 +81,22 @@
       text-align: center;
     }
   }
+  .footer{
+    a{
+      color: #ededed;
+      text-decoration: none;
+      -webkit-transition: all $transition-speed;
+      transition: all $transition-speed;
+      &:hover{
+        color: #ccc;
+      }
+    }
+  }
+}
+
+.page-bg-video {
   .overlay{
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -97,17 +111,6 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-  .footer{
-    a{
-      color: #ededed;
-      text-decoration: none;
-      -webkit-transition: all $transition-speed;
-      transition: all $transition-speed;
-      &:hover{
-        color: #ccc;
-      }
-    }
   }
 }
 

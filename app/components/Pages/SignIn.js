@@ -4,17 +4,8 @@ import { Link } from 'react-router'
 import { Button, Input, Alert } from 'react-bootstrap'
 import S from 'shorti'
 import config from '../../../config/public'
-
-// AppStore
 import AppStore from '../../stores/AppStore'
-
-// AppDispatcher
 import AppDispatcher from '../../dispatcher/AppDispatcher'
-
-// Partials
-import BigHeading from '../Partials/BigHeading'
-
-// Socket.io
 import io from 'socket.io-client'
 
 export default class SignIn extends Component {
@@ -104,6 +95,10 @@ export default class SignIn extends Component {
         </Alert>
       )
     }
+    const input_style = {
+      border: 'none',
+      ...S('border-bottom-1-solid-929292 br-0')
+    }
 
     // Signup link
     let signup_link = '/signup'
@@ -111,16 +106,24 @@ export default class SignIn extends Component {
     const invite_token = this.props.location.query.invite_token
     if (room_id && invite_token)
       signup_link += '?message=invite-room&room_id=' + room_id + '&invite_token=' + invite_token
-
+    const video = (
+      <video style={ S('z-0 fixed w-100p h-100p') } autoPlay="true" loop="true" className="fullscreen-bg__video">
+        <source src={'/videos/landing/young_agent.webm'} type="video/webm"/>
+        <source src={'/videos/landing/young_agent.mp4'} type="video/mp4"/>
+        <source src={'/videos/landing/young_agent.ogv'} type="video/ogg"/>
+      </video>
+    )
     return (
-      <div id="main-content" className="flex-center-wrap" style={ S('absolute h-100p w-100p mt-60n') }>
-        <div className="text-center center-block" style={ S('w-300') }>
-          <BigHeading />
-          <div style={ S('color-929292 mb-20') }>Sign in</div>
+      <div id="main-content" className="flex-center-wrap page-bg-video" style={ S('absolute h-100p w-100p mt-60n') }>
+        <div className="overlay"></div>
+        { video }
+        <div className="text-center center-block" style={ S('w-300 z-100') }>
+          <h1 className="tempo" style={ S('mb-20') }>Log in</h1>
+          <div style={ S('color-929292 mb-20') }>Let the good times roll</div>
           { invite_message }
           <form action="/signin" onSubmit={ this.handleSubmit.bind(this) }>
-            <Input bsStyle={ email_style } type="text" ref="email" placeholder="Email"/>
-            <Input bsStyle={ password_style } type="password" ref="password" placeholder="Password"/>
+            <Input style={ input_style } bsStyle={ email_style } type="text" ref="email" placeholder="Email"/>
+            <Input style={ input_style } bsStyle={ password_style } type="password" ref="password" placeholder="Password"/>
             <div style={ S('color-929292 font-13 mt-0 mb-10') } className="pull-right"><Link to="/password/forgot">Forgot Password</Link></div>
             <div className="clearfix"></div>
             { message }

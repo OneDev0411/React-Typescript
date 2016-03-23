@@ -70,6 +70,7 @@ export default class ListingViewer extends Component {
     )
     let main_content = <Loading />
     if (listing && listing.property) {
+      console.log(listing)
       property = listing.property
       price = helpers.numberWithCommas(listing.price)
       // property_type = property.property_type
@@ -169,6 +170,33 @@ export default class ListingViewer extends Component {
           </div>
         )
       }
+      let elementary_school_name_area
+      if (property.elementary_school_name) {
+        elementary_school_name_area = (
+          <div style={ S('mb-10') }>
+            <span style={ S('fw-600') }>Elementary School:</span>&nbsp;&nbsp;
+            <span style={ S('color-c0c0c0') }>{ property.elementary_school_name }</span>
+          </div>
+        )
+      }
+      let middle_school_name_area
+      if (property.middle_school_name) {
+        middle_school_name_area = (
+          <div style={ S('mb-10') }>
+            <span style={ S('fw-600') }>Middle School:</span>&nbsp;&nbsp;
+            <span style={ S('color-c0c0c0') }>{ property.middle_school_name }</span>
+          </div>
+        )
+      }
+      let high_school_name_area
+      if (property.high_school_name) {
+        high_school_name_area = (
+          <div style={ S('mb-10') }>
+            <span style={ S('fw-600') }>High School:</span>&nbsp;&nbsp;
+            <span style={ S('color-c0c0c0') }>{ property.high_school_name }</span>
+          </div>
+        )
+      }
       const google_address = listing.property.address.geo_source_formatted_address_google
       let lot_size_area
       if (lot_size) {
@@ -213,30 +241,36 @@ export default class ListingViewer extends Component {
             </div>
             <hr />
             <div className="clearfix"></div>
-            <div style={ S('color-000 font-18 mb-20') }>{ description }</div>
-            <div style={ S('font-24 mb-20') }>Key Details</div>
-            <div style={ S('mb-10') }>
-              <span style={ S('fw-600') }>Property Type:</span>&nbsp;&nbsp;
-              <span style={ S('color-c0c0c0') }>{ listing.property.property_subtype }</span>
+            <div style={ S('w-50p pull-left') }>
+              <div style={ S('color-000 font-18 mb-20 pr-30') }>{ description }</div>
+              <div className="clearfix"></div>
+              <div style={ S('font-24 mb-20') }>Key Details</div>
+              <div style={ S('mb-10') }>
+                <span style={ S('fw-600') }>Property Type:</span>&nbsp;&nbsp;
+                <span style={ S('color-c0c0c0') }>{ listing.property.property_subtype }</span>
+              </div>
+              <div style={ S('mb-10') }>
+                <span style={ S('fw-600') }>Built:</span>&nbsp;&nbsp;
+                <span style={ S('color-c0c0c0') }>{ listing.property.year_built }</span>
+              </div>
+              { pool }
+              { hoa }
+              { elementary_school_name_area }
+              { middle_school_name_area }
+              { high_school_name_area }
+              <div style={ S('mb-10') }>
+                <span style={ S('fw-600') }>County:</span>&nbsp;&nbsp;
+                <span style={ S('color-c0c0c0') }>{ listing.property.address.county_or_parish }</span>
+              </div>
+              <div style={ S('mb-30') }>
+                <span style={ S('fw-600') }>Community:</span>&nbsp;&nbsp;
+                <span style={ S('color-c0c0c0') }>{ listing.property.subdivision_name }</span>
+              </div>
             </div>
-            <div style={ S('mb-10') }>
-              <span style={ S('fw-600') }>Built:</span>&nbsp;&nbsp;
-              <span style={ S('color-c0c0c0') }>{ listing.property.year_built }</span>
-            </div>
-            { pool }
-            { hoa }
-            <div style={ S('mb-10') }>
-              <span style={ S('fw-600') }>County:</span>&nbsp;&nbsp;
-              <span style={ S('color-c0c0c0') }>{ listing.property.address.county_or_parish }</span>
-            </div>
-            <div style={ S('mb-30') }>
-              <span style={ S('fw-600') }>Community:</span>&nbsp;&nbsp;
-              <span style={ S('color-c0c0c0') }>{ listing.property.subdivision_name }</span>
-            </div>
-            <div style={ S('relative mb-100') }>
+            <div style={ S('relative mb-100 w-50p pull-left') }>
               <div style={ S('font-24 mb-20') }>Location</div>
               <iframe
-                width={ window.innerWidth - 100 }
+                width={ (window.innerWidth / 2) - 100 }
                 height="250"
                 frameBorder="0" style={ { border: 0 } }
                 src={ 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDagxNRLRIOsF8wxmuh1J3ysqnwdDB93-4&q=' + google_address }

@@ -134,7 +134,7 @@ export default class Landing extends Component {
     }
 
     return (
-      <div className="page-landing" style={ page_style }>
+      <div className="page-landing page-bg-video" style={ page_style }>
         <div className="overlay"></div>
         { video }
         <header style={ S('absolute w-100p z-3') }>
