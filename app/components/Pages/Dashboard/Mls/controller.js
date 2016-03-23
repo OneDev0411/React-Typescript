@@ -150,6 +150,7 @@ const controller = {
     ==================== */
     const options = listing_map.options
     const default_options = listing_map.default_options
+
     // Price
     // defaults
     options.minimum_price = default_options.minimum_price
@@ -160,6 +161,7 @@ const controller = {
     const maximum_price = Number(this.refs.maximum_price.refs.input.value.trim())
     if (maximum_price)
       options.maximum_price = maximum_price
+
     // Size
     // defaults
     options.minimum_square_meters = 0
@@ -170,6 +172,16 @@ const controller = {
     const maximum_square_feet = Number(this.refs.maximum_square_feet.refs.input.value.trim())
     if (maximum_square_feet)
       options.maximum_square_meters = listing_util.feetToMeters(maximum_square_feet)
+    // Lot
+    options.minimum_lot_square_meters = 0
+    options.maximum_lot_square_meters = default_options.maximum_lot_square_meters
+    const minimum_lot_square_feet = Number(this.refs.minimum_lot_square_feet.refs.input.value.trim())
+    if (minimum_lot_square_feet)
+      options.minimum_lot_square_meters = listing_util.feetToMeters(minimum_lot_square_feet)
+    const maximum_lot_square_feet = Number(this.refs.maximum_lot_square_feet.refs.input.value.trim())
+    if (maximum_lot_square_feet)
+      options.maximum_lot_square_meters = listing_util.feetToMeters(maximum_lot_square_feet)
+
     // Get filter options
     if (listing_map.filter_options) {
       const filter_options = listing_map.filter_options
@@ -211,6 +223,11 @@ const controller = {
           property_subtypes = ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse']
         options.property_subtypes = property_subtypes
       }
+      // Year built
+      if (filter_options.minimum_year_built)
+        options.minimum_year_built = Number(filter_options.minimum_year_built)
+      if (filter_options.maximum_year_built)
+        options.maximum_year_built = Number(filter_options.maximum_year_built)
     }
     AppStore.data.listing_map.is_loading = true
     AppStore.emitChange()

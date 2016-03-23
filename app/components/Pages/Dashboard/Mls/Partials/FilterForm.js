@@ -42,61 +42,76 @@ export default class FilterForm extends Component {
       if (listing_map.filter_options)
         filter_options = data.listing_map.filter_options
     }
+    const status_style = {
+      ...S('border-bottom-1-solid-f3f6f7'),
+      overflow: 'hidden'
+    }
     return (
       <div className={ filter_form_class } style={ filter_form_style }>
         <form onSubmit={ this.props.setFilterOptions.bind(this) }>
           <div style={ filter_scroll_area_style }>
-            <div style={ S('border-bottom-1-solid-f3f6f7 h-50 p-15 pointer') }>
-              <span style={ S('color-db3821 font-30 mr-12 relative t-12n') }>&#8226;</span>
-              <span style={ S('relative t-15n') }>Sold</span>
-              <div style={ S('pull-right w-95') }>
+            <div style={ status_style }>
+              <div style={ S('pull-left w-200 pt-15 pl-15 pb-15 pointer h-50') }>
+                <span style={ S('color-db3821 font-30 mr-12 relative t-12n') }>&#8226;</span>
+                <span style={ S('relative t-15n') }>Sold</span>
+                <i style={ S('pull-right font-20') } className="fa fa-caret-down"></i>
+              </div>
+              <div style={ S('pull-right w-95 pt-15 pr-15 pb-15') }>
                 <div style={ S('pull-left') }>
-                  <i style={ S('mr-20 font-20') } className="fa fa-caret-down"></i>
-                  <span style={ S('color-dcdedf relative t-2n') }>|</span>
+                  <span style={ S('color-dcdedf relative ml-15') }>|</span>
                 </div>
                 <div style={ S('pull-right') }>
                   <Switch checked={ filter_options ? filter_options.sold : false } onChange={ this.props.handleFilterSwitch.bind(this, 'sold') } />
                 </div>
-                <div className="hidden">
-                  <Button>3 Months</Button>
-                  <Button>6 Months</Button>
-                  <Button>12 Months</Button>
-                  <Button>Pick a date</Button>
-                </div>
               </div>
+              <div className="clearfix"></div>
+              <div className="hidden" style={ S('p-15') }>
+                <Button>3 Mo</Button>
+                <Button>6 Mo</Button>
+                <Button>12 Mo</Button>
+                <Button>Pick a date</Button>
+              </div>
+              <div className="clearfix"></div>
             </div>
-            <div style={ S('border-bottom-1-solid-f3f6f7 h-50 p-15 pointer') }>
-              <span style={ S('color-82dd00 font-30 mr-12 relative t-12n') }>&#8226;</span>
-              <span style={ S('relative t-15n') }>Active</span>
-              <div style={ S('pull-right w-95') }>
+            <div style={ status_style }>
+              <div style={ S('pull-left w-200 pt-15 pl-15 pb-15 pointer h-50') }>
+                <span style={ S('color-82dd00 font-30 mr-12 relative t-12n') }>&#8226;</span>
+                <span style={ S('relative t-15n') }>Active</span>
+                <i style={ S('pull-right font-20') } className="fa fa-caret-down"></i>
+              </div>
+              <div style={ S('pull-right w-95 pt-15 pr-15 pb-15') }>
                 <div style={ S('pull-left') }>
-                  <i style={ S('mr-20 font-20') } className="fa fa-caret-down"></i>
-                  <span style={ S('color-dcdedf relative t-2n') }>|</span>
+                  <span style={ S('color-dcdedf relative ml-15') }>|</span>
                 </div>
                 <div style={ S('pull-right') }>
                   <Switch checked={ filter_options ? filter_options.active : false } onChange={ this.props.handleFilterSwitch.bind(this, 'active') } />
                 </div>
               </div>
-              <div className="hidden">
+              <div className="clearfix"></div>
+              <div className="hidden" style={ S('p-15') }>
                 <div>Active</div>
                 <div>Active Contingent</div>
                 <div>Active Kick Out</div>
                 <div>Active Option Contract</div>
               </div>
+              <div className="clearfix"></div>
             </div>
-            <div style={ S('border-bottom-1-solid-f3f6f7 h-50 p-15 pointer') }>
-              <span style={ S('color-f8b619 font-30 mr-12 relative t-12n') }>&#8226;</span>
-              <span style={ S('relative t-15n') }>Other Listing Status</span>
-              <div style={ S('pull-right w-95') }>
+            <div style={ status_style }>
+              <div style={ S('pull-left w-200 pt-15 pl-15 pb-15 pointer h-50') }>
+                <span style={ S('color-f8b619 font-30 mr-12 relative t-12n') }>&#8226;</span>
+                <span style={ S('relative t-15n') }>Other Listing Status</span>
+                <i style={ S('pull-right font-20') } className="fa fa-caret-down"></i>
+              </div>
+              <div style={ S('pull-right w-95 pt-15 pr-15 pb-15') }>
                 <div style={ S('pull-left') }>
-                  <i style={ S('mr-20 font-20') } className="fa fa-caret-down"></i>
-                  <span style={ S('color-dcdedf relative t-2n') }>|</span>
+                  <span style={ S('color-dcdedf relative ml-15') }>|</span>
                 </div>
                 <div style={ S('pull-right') }>
                   <Switch checked={ filter_options ? filter_options.other : false } onChange={ this.props.handleFilterSwitch.bind(this, 'other') } />
                 </div>
               </div>
-              <div className="hidden">
+              <div className="clearfix"></div>
+              <div className="hidden" style={ S('p-15') }>
                 <div>Cancelled</div>
                 <div>Expired</div>
                 <div>Pending</div>
@@ -104,15 +119,22 @@ export default class FilterForm extends Component {
                 <div>Withdrawn</div>
                 <div>Withdrawn Sublisting</div>
               </div>
+              <div className="clearfix"></div>
             </div>
-            <div style={ S('border-bottom-1-solid-f3f6f7 h-50 p-15 pointer') }>
-              <span style={ S('color-35b863 font-30 mr-12 relative t-12n') }>&#8226;</span>
-              <span style={ S('relative t-15n') }>Open Houses Only</span>
-              <div style={ S('pull-right w-95') }>
+            <div style={ status_style }>
+              <div style={ S('pull-left w-200 pt-15 pl-15 pb-15 h-50') }>
+                <span style={ S('color-35b863 font-30 mr-12 relative t-12n') }>&#8226;</span>
+                <span style={ S('relative t-15n') }>Open Houses Only</span>
+              </div>
+              <div style={ S('pull-right w-95 pt-15 pr-15 pb-15') }>
+                <div style={ S('pull-left') }>
+                  <span style={ S('color-dcdedf relative ml-15') }>|</span>
+                </div>
                 <div style={ S('pull-right') }>
                   <Switch checked={ filter_options ? filter_options.open_houses : false } onChange={ this.props.handleFilterSwitch.bind(this, 'open_houses') } />
                 </div>
               </div>
+              <div className="clearfix"></div>
             </div>
             <div style={ S('pl-15 pt-15 pb-15') }>
               <div>Listing Types</div>
@@ -156,9 +178,11 @@ export default class FilterForm extends Component {
               <div>
                 Bedrooms
               </div>
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 1) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '1' }) }>+1</Button>
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 2) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '2' }) }>+2</Button>
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 3) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '3' }) }>+3</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 'any') ? S('mr-5 bg-667688 bc-667688 color-fff') : S('mr-5 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: 'any' }) }>Any</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 'Studio') ? S('mr-5 bg-667688 bc-667688 color-fff') : S('mr-5 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: 'studio' }) }>Studio</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 1) ? S('mr-5 bg-667688 bc-667688 color-fff') : S('mr-5 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '1' }) }>+1</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 2) ? S('mr-5 bg-667688 bc-667688 color-fff') : S('mr-5 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '2' }) }>+2</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 3) ? S('mr-5 bg-667688 bc-667688 color-fff') : S('mr-5 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '3' }) }>+3</Button>
             </div>
             <div style={ S('p-15') }>
               <div>
@@ -167,6 +191,7 @@ export default class FilterForm extends Component {
               <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 1) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '1' }) }>+1</Button>
               <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 2) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '2' }) }>+2</Button>
               <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 3) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '3' }) }>+3</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 4) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '4' }) }>+4</Button>
             </div>
             <div style={ S('p-15') }>
               <div>Square Footage</div>
@@ -187,6 +212,29 @@ export default class FilterForm extends Component {
               <Button bsStyle="default" style={ this.buttonIsActive('pool', false) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: false }) }>No</Button>
               <Button bsStyle="default" style={ this.buttonIsActive('pool', 'either') ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: 'either' }) }>Either</Button>
             </div>
+            <div style={ S('p-15') }>
+              <div>Lot Square Footage</div>
+              <div>
+                <div style={ S('w-50p pull-left') }>
+                  <Input onChange={ this.handleOptionChange.bind(this, 'minimum_lot_square_feet') } value={ filter_options && filter_options.minimum_lot_square_feet ? filter_options.minimum_lot_square_feet : '' } ref="minimum_lot_square_feet" type="text" placeholder="Min"/>
+                </div>
+                <div style={ S('w-50p pull-left') }>
+                  <Input onChange={ this.handleOptionChange.bind(this, 'maximum_lot_square_feet') } value={ filter_options && filter_options.maximum_lot_square_feet ? filter_options.maximum_lot_square_feet : '' } ref="maximum_lot_square_feet" type="text" placeholder="Max"/>
+                </div>
+              </div>
+            </div>
+            <div style={ S('p-15') }>
+              <div>Year Built</div>
+              <div>
+                <div style={ S('w-50p pull-left') }>
+                  <Input onChange={ this.handleOptionChange.bind(this, 'minimum_year_built') } value={ filter_options && filter_options.minimum_year_built ? filter_options.minimum_year_built : '' } ref="minimum_year_built" type="text" placeholder="Min"/>
+                </div>
+                <div style={ S('w-50p pull-left') }>
+                  <Input onChange={ this.handleOptionChange.bind(this, 'maximum_year_built') } value={ filter_options && filter_options.maximum_year_built ? filter_options.maximum_year_built : '' } ref="maximum_year_built" type="text" placeholder="Max"/>
+                </div>
+              </div>
+            </div>
+            <div style={ S('h-100') }></div>
           </div>
           <div style={ S('absolute b-0 w-300') }>
             <Button onClick={ this.props.resetFilterOptions.bind(this) } style={ { ...S('color-fff bg-c5cdd8 w-50p br-0'), border: 'none' } }>Reset Filter</Button>
