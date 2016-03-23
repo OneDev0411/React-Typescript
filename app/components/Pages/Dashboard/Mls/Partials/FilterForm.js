@@ -65,10 +65,17 @@ export default class FilterForm extends Component {
                 </div>
               </div>
             </div>
-            <div style={ S('border-bottom-1-solid-f3f6f7 h-50 p-15') }>
-              Active
-              <div style={ S('pull-right') }>
-                <Switch checked={ filter_options ? filter_options.active : false } onChange={ this.props.handleFilterSwitch.bind(this, 'active') } />
+            <div style={ S('border-bottom-1-solid-f3f6f7 h-50 p-15 pointer') }>
+              <span style={ S('color-82dd00 font-30 mr-12 relative t-12n') }>&#8226;</span>
+              <span style={ S('relative t-15n') }>Active</span>
+              <div style={ S('pull-right w-95') }>
+                <div style={ S('pull-left') }>
+                  <i style={ S('mr-20 font-20') } className="fa fa-caret-down"></i>
+                  <span style={ S('color-dcdedf relative t-2n') }>|</span>
+                </div>
+                <div style={ S('pull-right') }>
+                  <Switch checked={ filter_options ? filter_options.active : false } onChange={ this.props.handleFilterSwitch.bind(this, 'active') } />
+                </div>
               </div>
               <div className="hidden">
                 <div>Active</div>
@@ -77,10 +84,17 @@ export default class FilterForm extends Component {
                 <div>Active Option Contract</div>
               </div>
             </div>
-            <div style={ S('border-bottom-1-solid-f3f6f7 h-50 p-15') }>
-              Other Listing Status
-              <div style={ S('pull-right') }>
-                <Switch checked={ filter_options ? filter_options.other : false } onChange={ this.props.handleFilterSwitch.bind(this, 'other') } />
+            <div style={ S('border-bottom-1-solid-f3f6f7 h-50 p-15 pointer') }>
+              <span style={ S('color-f8b619 font-30 mr-12 relative t-12n') }>&#8226;</span>
+              <span style={ S('relative t-15n') }>Other Listing Status</span>
+              <div style={ S('pull-right w-95') }>
+                <div style={ S('pull-left') }>
+                  <i style={ S('mr-20 font-20') } className="fa fa-caret-down"></i>
+                  <span style={ S('color-dcdedf relative t-2n') }>|</span>
+                </div>
+                <div style={ S('pull-right') }>
+                  <Switch checked={ filter_options ? filter_options.other : false } onChange={ this.props.handleFilterSwitch.bind(this, 'other') } />
+                </div>
               </div>
               <div className="hidden">
                 <div>Cancelled</div>
@@ -91,10 +105,13 @@ export default class FilterForm extends Component {
                 <div>Withdrawn Sublisting</div>
               </div>
             </div>
-            <div style={ S('border-bottom-1-solid-f3f6f7 h-50 p-15') }>
-              Open Houses Only
-              <div style={ S('pull-right') }>
-                <Switch checked={ filter_options ? filter_options.open_houses : false } onChange={ this.props.handleFilterSwitch.bind(this, 'open_houses') } />
+            <div style={ S('border-bottom-1-solid-f3f6f7 h-50 p-15 pointer') }>
+              <span style={ S('color-35b863 font-30 mr-12 relative t-12n') }>&#8226;</span>
+              <span style={ S('relative t-15n') }>Open Houses Only</span>
+              <div style={ S('pull-right w-95') }>
+                <div style={ S('pull-right') }>
+                  <Switch checked={ filter_options ? filter_options.open_houses : false } onChange={ this.props.handleFilterSwitch.bind(this, 'open_houses') } />
+                </div>
               </div>
             </div>
             <div style={ S('pl-15 pt-15 pb-15') }>
