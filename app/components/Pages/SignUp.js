@@ -238,28 +238,30 @@ export default class SignUp extends Component {
     if (data.signup && data.signup.user_type === 'Agent' && data.signup.agent) {
       const agent = data.signup.agent
       main_content = (
-        <div style={ S('p-50') }>
+        <div style={ S('pt-50') }>
           <h1 style={ S('fw-100 mb-20') } className="tempo">Set Up Your Agent Profile</h1>
-          <div style={ S('color-555555 mb-20 font-18 mb-20') }>Almost there. Just one more quick step.</div>
-          <form onSubmit={ this.handleSubmit.bind(this) }>
-            <div>
-              <div style={ S('w-50p pull-left relative') }>
-                <Input value={ agent.first_name } onChange={ this.handleAgentChange.bind(this, 'first_name') } style={ input_style } bsSize="large" bsStyle={ first_name_style } type="text" ref="first_name" placeholder="First Name"/>
-                <div style={ S('absolute r-10 t-12 h-20 w-1 bg-ccc') }></div>
+          <div style={ S('pl-50 pb-50 pr-50') }>
+            <div style={ S('color-555555 mb-20 font-18 mb-20') }>Almost there. Just one more quick step.</div>
+            <form onSubmit={ this.handleSubmit.bind(this) }>
+              <div>
+                <div style={ S('w-50p pull-left relative') }>
+                  <Input value={ agent.first_name } onChange={ this.handleAgentChange.bind(this, 'first_name') } style={ input_style } bsSize="large" bsStyle={ first_name_style } type="text" ref="first_name" placeholder="First Name"/>
+                  <div style={ S('absolute r-10 t-12 h-20 w-1 bg-ccc') }></div>
+                </div>
+                <div style={ S('w-50p pull-left') }>
+                  <Input value={ agent.last_name } onChange={ this.handleAgentChange.bind(this, 'last_name') } style={ input_style } bsSize="large" bsStyle={ last_name_style } type="text" ref="last_name" placeholder="Last Name"/>
+                </div>
               </div>
-              <div style={ S('w-50p pull-left') }>
-                <Input value={ agent.last_name } onChange={ this.handleAgentChange.bind(this, 'last_name') } style={ input_style } bsSize="large" bsStyle={ last_name_style } type="text" ref="last_name" placeholder="Last Name"/>
-              </div>
-            </div>
-            <Input readOnly style={ input_style } bsSize="large" bsStyle={ email_style } type="text" ref="email" placeholder="Email" value={ agent.email }/>
-            <Input style={ input_style } bsSize="large" bsStyle={ password_style } type="password" ref="password" placeholder="Password"/>
-            <Input style={ input_style } bsSize="large" bsStyle={ password_style } type="password" ref="confirm_password" placeholder="Confirm Password"/>
-            { message }
-            <Button bsSize="large" type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p mb-20 mt-20') }>
-              { submitting ? 'Signing up...' : 'Sign up' }
-            </Button>
-            <div style={ S('color-929292 font-13 mt-20') }>Already have an account? <Link to="/signin">Log in</Link></div>
-          </form>
+              <Input readOnly style={ input_style } bsSize="large" bsStyle={ email_style } type="text" ref="email" placeholder="Email" value={ agent.email }/>
+              <Input style={ input_style } bsSize="large" bsStyle={ password_style } type="password" ref="password" placeholder="Password"/>
+              <Input style={ input_style } bsSize="large" bsStyle={ password_style } type="password" ref="confirm_password" placeholder="Confirm Password"/>
+              { message }
+              <Button bsSize="large" type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p mb-20 mt-20') }>
+                { submitting ? 'Signing up...' : 'Sign up' }
+              </Button>
+              <div style={ S('color-929292 font-13 mt-20') }>Already have an account? <Link to="/signin">Log in</Link></div>
+            </form>
+          </div>
         </div>
       )
     }
