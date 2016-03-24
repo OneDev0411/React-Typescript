@@ -22,13 +22,49 @@ export default class SignUp extends Component {
     e.preventDefault()
     AppStore.data.submitting = true
     AppStore.emitChange()
-    const first_name = this.refs.first_name.refs.input.value
-    const last_name = this.refs.last_name.refs.input.value
-    const email = this.refs.email.refs.input.value
-    const password = this.refs.password.refs.input.value
-    const confirm_password = this.refs.confirm_password.refs.input.value
+    const first_name = this.refs.first_name.refs.input.value.trim()
+    const last_name = this.refs.last_name.refs.input.value.trim()
+    const email = this.refs.email.refs.input.value.trim()
+    const password = this.refs.password.refs.input.value.trim()
+    const confirm_password = this.refs.confirm_password.refs.input.value.trim()
     const data = this.props.data
     const user_type = data.signup.user_type
+    if (!first_name) {
+      AppStore.data.error_type = 'first_name'
+      this.refs.first_name.refs.input.focus()
+      AppStore.data.errors = true
+      AppStore.data.show_message = true
+      delete AppStore.data.submitting
+      AppStore.emitChange()
+      return
+    }
+    if (!last_name) {
+      AppStore.data.error_type = 'last_name'
+      this.refs.last_name.refs.input.focus()
+      AppStore.data.errors = true
+      AppStore.data.show_message = true
+      delete AppStore.data.submitting
+      AppStore.emitChange()
+      return
+    }
+    if (!email) {
+      AppStore.data.error_type = 'email'
+      this.refs.email.refs.input.focus()
+      AppStore.data.errors = true
+      AppStore.data.show_message = true
+      delete AppStore.data.submitting
+      AppStore.emitChange()
+      return
+    }
+    if (!password) {
+      AppStore.data.error_type = 'password'
+      AppStore.data.errors = true
+      AppStore.data.show_message = true
+      this.refs.password.refs.input.focus()
+      delete AppStore.data.submitting
+      AppStore.emitChange()
+      return
+    }
     const user = {
       first_name,
       last_name,
