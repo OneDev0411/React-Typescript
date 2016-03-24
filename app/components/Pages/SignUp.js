@@ -239,7 +239,8 @@ export default class SignUp extends Component {
       const agent = data.signup.agent
       main_content = (
         <div style={ S('p-50') }>
-          <h1 style={ S('fw-100 mb-20') } className="tempo">Set Up Client Profile</h1>
+          <h1 style={ S('fw-100 mb-20') } className="tempo">Set Up Your Agent Profile</h1>
+          <div style={ S('color-555555 mb-20 font-18 mb-20') }>Almost there. Just one more quick step.</div>
           <form onSubmit={ this.handleSubmit.bind(this) }>
             <div>
               <div style={ S('w-50p pull-left relative') }>

@@ -21,8 +21,7 @@ module.exports = (app, config) => {
       grant_type: grant_type
     }
     if (connect)
-      request_object.connect = connect
-    console.log(request_object)
+      request_object.connect = Number(connect)
     fetch(signup_url,{
       method: 'post',
       headers: {  
