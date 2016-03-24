@@ -18,6 +18,7 @@ module.exports = (app, config) => {
   require('./users/forgot-password')(app, config)
   require('./users/reset-password')(app, config)
   require('./users/verify-phone')(app, config)
+  require('./users/email-verifications')(app, config)
   // Rooms
   require('./rooms/create-room')(app, config)
   require('./rooms/get-rooms')(app, config)

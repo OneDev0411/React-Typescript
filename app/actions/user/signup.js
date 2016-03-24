@@ -2,7 +2,6 @@
 import User from '../../models/User'
 import AppStore from '../../stores/AppStore'
 import validator from 'validator'
-
 export default (user, password, confirm_password, redirect_to) => {
   let email_trim
   let password_trim
@@ -15,12 +14,10 @@ export default (user, password, confirm_password, redirect_to) => {
   }
   const first_name = user.first_name.trim()
   const last_name = user.last_name.trim()
-
   /* Handle errors
   ==================== */
   let error_type
   let password_error
-
   // Validation
   if (!validator.isEmail(email_trim) || password_trim.length < 6 || password_trim !== confirm_password_trim || !first_name || !last_name) {
     if (!validator.isEmail(email_trim))
@@ -31,19 +28,15 @@ export default (user, password, confirm_password, redirect_to) => {
         error_type = 'password'
         password_error = 'too-short'
       }
-
       if (password_trim !== confirm_password_trim) {
         error_type = 'password'
         password_error = 'no-match'
       }
     }
-
     if (!first_name)
       error_type = 'first_name'
-
     if (!last_name)
       error_type = 'last_name'
-
     AppStore.data = {
       submitting: false,
       errors: true,
@@ -53,26 +46,23 @@ export default (user, password, confirm_password, redirect_to) => {
     }
     return AppStore.emitChange()
   }
-
   // Set trimmed data
   user.email = email_trim
   user.password = password_trim
-
   // Check for connect
   if (AppStore.data.signup.connect)
     user.connect = AppStore.data.signup.connect
-
   const params = {
     user
   }
-
   User.create(params, (err, response) => {
     // Success
     if (response.status === 'success') {
+      const new_user = response.data
       AppStore.data = {
         status: 'success',
         show_message: true,
-        new_user: response.data,
+        new_user,
         redirect_to
       }
     } else {

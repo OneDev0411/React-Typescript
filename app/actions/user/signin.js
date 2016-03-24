@@ -46,8 +46,17 @@ export default (email, password, redirect_to, invite) => {
       const user = response.data
       user.access_token = response.access_token
 
-      AppStore.data = {
-        user
+      if (user.email_confirmed) {
+        AppStore.data = {
+          user
+        }
+      } else {
+        AppStore.data = {
+          submitting: false,
+          errors: true,
+          show_message: true,
+          email_not_confirmed: true
+        }
       }
     } else {
       AppStore.data = {

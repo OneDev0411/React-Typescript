@@ -86,6 +86,13 @@ export default class SignIn extends Component {
           There was an error with this request.
         </Alert>
       )
+      if (data.email_not_confirmed) {
+        message = (
+          <Alert bsStyle="danger">
+            This email has not been verified yet.
+          </Alert>
+        )
+      }
     }
 
     let invite_message
