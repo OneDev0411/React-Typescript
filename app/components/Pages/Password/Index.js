@@ -1,16 +1,11 @@
 // Password/index.js
 import React, { Component } from 'react'
-
-// AppDispatcher
 import AppDispatcher from '../../../dispatcher/AppDispatcher'
-
-// AppStore
 import AppStore from '../../../stores/AppStore'
-
-// Partials
-import BigHeading from '../../Partials/BigHeading'
+import MapBackground from '../../Partials/MapBackground'
 import Forgot from './Partials/Forgot'
 import Reset from './Partials/Reset'
+import S from 'shorti'
 
 export default class Password extends Component {
 
@@ -62,9 +57,9 @@ export default class Password extends Component {
     }
 
     return (
-      <div id="main-content" className="container">
-        <div className="text-center">
-          <BigHeading />
+      <div id="main-content" className="flex-center-wrap" style={ S('absolute h-100p w-100p') }>
+        <MapBackground />
+        <div className="text-center center-block modal-shadow" style={ S('w-460 z-100 relative mt-60n bg-fff br-6 p-50') }>
           { main_content }
         </div>
       </div>

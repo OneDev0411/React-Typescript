@@ -1,17 +1,9 @@
 // Verify/index.js
 import React, { Component } from 'react'
-
-// Partials
 import Email from './Partials/Email'
 import Phone from './Partials/Phone'
-import BigHeading from '../../Partials/BigHeading'
-
-// AppDispatcher
 import AppDispatcher from '../../../dispatcher/AppDispatcher'
-
-// AppStore
 import AppStore from '../../../stores/AppStore'
-
 export default class Verify extends Component {
 
   componentDidMount() {
@@ -49,7 +41,7 @@ export default class Verify extends Component {
     return (
       <div id="main-content" className="container">
         <div className="text-center">
-          <BigHeading />
+          <h1 className="tempo">Verify</h1>
           { main_content }
         </div>
       </div>

@@ -7,6 +7,7 @@ import config from '../../../config/public'
 import AppStore from '../../stores/AppStore'
 import AppDispatcher from '../../dispatcher/AppDispatcher'
 import io from 'socket.io-client'
+import MapBackground from '../Partials/MapBackground'
 
 export default class SignIn extends Component {
 
@@ -97,40 +98,31 @@ export default class SignIn extends Component {
     }
     const input_style = {
       border: 'none',
-      ...S('border-bottom-1-solid-929292 br-0')
+      ...S('border-bottom-1-solid-ccc br-0 p-0')
     }
-
     // Signup link
     let signup_link = '/signup'
     const room_id = this.props.location.query.room_id
     const invite_token = this.props.location.query.invite_token
     if (room_id && invite_token)
       signup_link += '?message=invite-room&room_id=' + room_id + '&invite_token=' + invite_token
-    const video = (
-      <video style={ S('z-0 fixed w-100p h-100p') } autoPlay="true" loop="true" className="fullscreen-bg__video">
-        <source src={'/videos/landing/young_agent.webm'} type="video/webm"/>
-        <source src={'/videos/landing/young_agent.mp4'} type="video/mp4"/>
-        <source src={'/videos/landing/young_agent.ogv'} type="video/ogg"/>
-      </video>
-    )
     return (
-      <div id="main-content" className="flex-center-wrap page-bg-video" style={ S('absolute h-100p w-100p mt-60n') }>
-        <div className="overlay"></div>
-        { video }
-        <div className="text-center center-block" style={ S('w-300 z-100') }>
-          <h1 className="tempo" style={ S('mb-20') }>Log in</h1>
-          <div style={ S('color-929292 mb-20') }>Let the good times roll</div>
+      <div id="main-content" className="flex-center-wrap page-bg-video" style={ S('absolute h-100p w-100p') }>
+        <MapBackground />
+        <div className="text-center center-block modal-shadow" style={ S('w-460 z-100 relative mt-60n bg-fff br-6 p-50') }>
+          <h1 className="tempo" style={ S('mb-20') }>Log in to Rechat</h1>
+          <div style={ S('color-555555 mb-20 font-18 mb-20') }>It’s nice to have you back!</div>
           { invite_message }
           <form action="/signin" onSubmit={ this.handleSubmit.bind(this) }>
-            <Input style={ input_style } bsStyle={ email_style } type="text" ref="email" placeholder="Email"/>
-            <Input style={ input_style } bsStyle={ password_style } type="password" ref="password" placeholder="Password"/>
+            <Input bsSize="large" style={ input_style } bsStyle={ email_style } type="text" ref="email" placeholder="Email"/>
+            <Input bsSize="large" style={ input_style } bsStyle={ password_style } type="password" ref="password" placeholder="Password"/>
             <div style={ S('color-929292 font-13 mt-0 mb-10') } className="pull-right"><Link to="/password/forgot">Forgot Password</Link></div>
             <div className="clearfix"></div>
             { message }
-            <Button type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p mb-20') }>
+            <Button bsSize="large" type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p mb-20') }>
               { submitting ? 'Signing in...' : 'Sign in' }
             </Button>
-            <div style={ S('color-929292 font-13') }>Don't have an account yet? <Link to={ signup_link }>Sign up</Link></div>
+            <div style={ S('color-929292 font-13') }>Don’t have a Rechat account?&nbsp;&nbsp;<Link to={ signup_link }>Try it free</Link></div>
           </form>
         </div>
       </div>

@@ -68,12 +68,15 @@ export default class Forgot extends Component {
     let submitting_class = ''
     if (submitting)
       submitting_class = 'disabled'
-
+    const input_style = {
+      border: 'none',
+      ...S('border-bottom-1-solid-ccc br-0 p-0')
+    }
     let main_content = (
       <div>
         <div style={ S('color-929292 mb-20') }>Forgot your password?</div>
         <form onSubmit={ this.handleSubmit.bind(this) }>
-          <Input bsStyle={ email_style } ref="email" placeholder="Email address" type="text" />
+          <Input style={ input_style } bsStyle={ email_style } ref="email" placeholder="Email address" type="text" />
           { message }
           <Col sm={4} className="forgot__password-btn--cancel" style={ S('p-0 pr-10') }>
             <Link className="btn btn-default" style={ S('w-100p') } to="/signin">Cancel</Link>
@@ -100,6 +103,7 @@ export default class Forgot extends Component {
 
     return (
       <div className="center-block" style={ S('maxw-300') }>
+        <h1 className="tempo">Rechat</h1>
         { main_content }
       </div>
     )

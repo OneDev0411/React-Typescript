@@ -70,7 +70,6 @@ export default class ListingViewer extends Component {
     )
     let main_content = <Loading />
     if (listing && listing.property) {
-      console.log(listing)
       property = listing.property
       price = helpers.numberWithCommas(listing.price)
       // property_type = property.property_type
