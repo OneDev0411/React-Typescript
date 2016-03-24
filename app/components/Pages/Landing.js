@@ -90,12 +90,11 @@ export default class Landing extends Component {
       border: 'none',
       background: 'none'
     }
-    // const signin_btn_style = S('color-fff w-130 p-10 pt-7 pb-7')
-    // const collapse_style = {
-    //   ...S('mt-20'),
-    //   border: 'none',
-    //   boxShadow: 'none'
-    // }
+    const collapse_style = {
+      ...S('mt-20'),
+      border: 'none',
+      boxShadow: 'none'
+    }
     const headline_style = S('mb-35')
     const tag_style = S('font-22 mb-40')
     const form_wrap_style = {
@@ -109,14 +108,12 @@ export default class Landing extends Component {
     const current_text_style = {
       fontStyle: 'italic'
     }
-
     // Get video and text from random number
     const headline_text = (
       <div>
         From search to close be<br/><span style={ current_text_style }>{ current_text }</span><span className={ blinking_cursor }>|</span>
       </div>
     )
-
     const video = (
       <video style={ S('z-0 absolute') } autoPlay="true" loop="true" className="fullscreen-bg__video">
         <source src={'/videos/landing/' + video_src + '.webm'} type="video/webm"/>
@@ -124,7 +121,6 @@ export default class Landing extends Component {
         <source src={'/videos/landing/' + video_src + '.ogv'} type="video/ogg"/>
       </video>
     )
-
     let call_to_action_text
     if (call_to_action) {
       call_to_action_text = (
@@ -132,7 +128,6 @@ export default class Landing extends Component {
         </p>
       )
     }
-
     return (
       <div className="page-landing page-bg-video" style={ page_style }>
         <div className="overlay"></div>
@@ -142,31 +137,30 @@ export default class Landing extends Component {
             <div className="container-fluid">
               <div className="navbar-header">
                 {
-                  /*
                   <button style={ S('mt-15') } type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-link" aria-expanded="false">
                     <span className="sr-only">Toggle navigation</span>
                     <span className="icon-bar"></span>
                     <span className="icon-bar"></span>
                     <span className="icon-bar"></span>
                   </button>
-                  */
                 }
                 <div className="pull-left" style={ S('mt-20 ml-0') }><img style={ S('w-24') } src="images/landing/logo@2x.png" /></div>
                 <div className="tk-calluna-sans pull-left" style={ S('font-28 ml-10 mt-12 color-fff') }>Rechat</div>
               </div>
               {
-                /*
                 <div style={ collapse_style } className="collapse navbar-collapse text-center" id="main-link">
                   <ul className="nav navbar-nav navbar-right">
                     <li className="contact-us-btn" style={ S('mr-20') }>
                       <a onClick={ this.showIntercom } href="#" style={ S('color-fff relative t-6n') }>Contact Us</a>
                     </li>
                     <li>
-                      <a className="btn btn-default center-block sign-in__button" href="/signin" style={ signin_btn_style }>Sign in</a>
+                      <a className="btn btn-default" href="/signin" style={ S('color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 mr-15') }>Log in</a>
+                    </li>
+                    <li>
+                      <a className="sign-up__button btn btn-primary" href="/signup" style={ S('color-fff w-80 p-7') }>Sign up</a>
                     </li>
                   </ul>
                 </div>
-              */
               }
             </div>
           </nav>

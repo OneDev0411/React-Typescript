@@ -43,6 +43,7 @@ import getNotificationSummery from '../actions/notifications/get-summary'
 
 // Agents
 import getAgentReport from '../actions/agents/get-report'
+import searchAgent from '../actions/agents/search-agent'
 
 const AppDispatcher = new Dispatcher()
 
@@ -169,6 +170,10 @@ AppDispatcher.register(payload => {
 
     case 'get-agent-report':
       getAgentReport(payload.user, payload.criteria)
+      break
+
+    case 'search-agent':
+      searchAgent(payload.mlsid)
       break
 
     default:

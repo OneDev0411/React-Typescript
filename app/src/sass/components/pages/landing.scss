@@ -3,14 +3,11 @@
     min-height: 850px;
   }
   overflow: hidden;
-  .sign-in__button{
-    -webkit-transition: all $transition-speed;
-    transition: all $transition-speed;
-    background-color: transparent;
-    border: 2px solid #fff;
+  .sign-up__button{
+    background-color: $brand-primary;
     &:hover{
-      border-color: $brand-primary;
-      color: $brand-primary;
+      background-color: $brand-primary !important;
+      border: 1px solid $btn-primary-border;
     }
   }
   .headline{

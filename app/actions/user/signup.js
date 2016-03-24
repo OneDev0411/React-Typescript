@@ -58,6 +58,10 @@ export default (user, password, confirm_password, redirect_to) => {
   user.email = email_trim
   user.password = password_trim
 
+  // Check for connect
+  if (AppStore.data.signup.connect)
+    user.connect = AppStore.data.signup.connect
+
   const params = {
     user
   }
@@ -68,6 +72,7 @@ export default (user, password, confirm_password, redirect_to) => {
       AppStore.data = {
         status: 'success',
         show_message: true,
+        new_user: response.data,
         redirect_to
       }
     } else {
