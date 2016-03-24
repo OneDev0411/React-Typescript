@@ -8,7 +8,6 @@ import validator from 'validator'
 const controller = {
   initMap() {
     const data = AppStore.data
-    const user = data.user
     let center = {
       lat: 32.7767,
       lng: -96.7970
@@ -72,11 +71,6 @@ const controller = {
     }
     AppStore.data.listing_map = listing_map
     AppStore.emitChange()
-    ListingDispatcher.dispatch({
-      action: 'get-valerts',
-      user,
-      options
-    })
   },
   createMapOptions() {
     const data = AppStore.data
