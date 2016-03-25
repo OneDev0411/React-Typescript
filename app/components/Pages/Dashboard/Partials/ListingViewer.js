@@ -272,7 +272,7 @@ export default class ListingViewer extends Component {
                     Price/sqt <div style={ S('pull-right') }>${ price_sq_foot }</div>
                   </div>
                   <div style={ S('color-c0c0c0') }>
-                    Unexempt Taxes <div style={ S('pull-right') }>${ listing.unexempt_taxes }</div>
+                    Unexempt Taxes <div style={ S('pull-right') }>${ helpers.numberWithCommas(listing.unexempt_taxes) }</div>
                   </div>
                   <div style={ S('color-c0c0c0') }>
                     HOA Fees <div style={ S('pull-right') }>${ listing.association_fee }</div>
