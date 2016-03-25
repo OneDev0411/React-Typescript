@@ -251,7 +251,7 @@ export default class ListingViewer extends Component {
                 </div>
                 <div className="clearfix"></div>
               </div>
-              <div style={ S('relative mb-100 w-50p pull-left') }>
+              <div style={ S('relative w-50p pull-left') }>
                 <div style={ S('font-24 mb-20') }>Location</div>
                 <iframe
                   width={ (window.innerWidth / 2) - 100 }
