@@ -252,7 +252,6 @@ export default class ListingViewer extends Component {
                 <div className="clearfix"></div>
               </div>
               <div style={ S('relative w-50p pull-left') }>
-                <div style={ S('font-24 mb-20') }>Location</div>
                 <iframe
                   width={ (window.innerWidth / 2) - 100 }
                   height="250"
@@ -312,10 +311,10 @@ export default class ListingViewer extends Component {
                     Possession <div style={ S('pull-right') }>{ listing.possession }</div>
                   </div>
                   <div style={ S('color-c0c0c0') }>
-                    Days On Market <div style={ S('pull-right') }>{ listing.dom }</div>
+                    Days On Market <div style={ S('pull-right') }>{ listing_util.getDOM(listing.dom) }</div>
                   </div>
                   <div style={ S('color-c0c0c0') }>
-                    Current Days On Market <div style={ S('pull-right') }>{ listing.cdom }</div>
+                    Current Days On Market <div style={ S('pull-right') }>{ listing_util.getDOM(listing.cdom) }</div>
                   </div>
                 </div>
                 <div style={ S('mb-30 w-300 pull-left mr-20') }>
