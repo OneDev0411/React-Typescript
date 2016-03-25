@@ -213,7 +213,7 @@ export default class ListingViewer extends Component {
               <span>{ year_built ? 'Built in ' + year_built : '' }</span>
               { lot_size_area }
             </div>
-            <div style={ S('absolute r-20 t-20 w-300') }>
+            <div style={ S('absolute r-20 t-40 w-300') }>
               <div style={ S('font-18 mb-5') }><span style={ S('fw-400') }>{ listing.list_agent_full_name }, Seller Agent</span></div>
               <div style={ S('font-16 color-929292 mb-10') }>{ listing.list_office_name }</div>
               <div style={ S('font-14 color-a5c8f8 mb-10') }>{ listing.list_office_phone }</div>
@@ -265,8 +265,8 @@ export default class ListingViewer extends Component {
             </div>
             <div>
               <div style={ S('font-24 mb-20') }>Details</div>
-              <div>
-                <div style={ S('mb-30 w-300 pull-left mr-20') }>
+              <div style={ S('w-300 pull-left mr-20') }>
+                <div style={ S('mb-30') }>
                   <div style={ S('fw-600') }>Cost Breakdown:</div>
                   <div style={ S('color-c0c0c0') }>
                     Price/sqt <div style={ S('pull-right') }>${ price_sq_foot }</div>
@@ -287,7 +287,7 @@ export default class ListingViewer extends Component {
                     Proposed Financing <div style={ S('pull-right') }>{ listing.financing_proposed }</div>
                   </div>
                 </div>
-                <div style={ S('mb-30 w-300 pull-left mr-20') }>
+                <div style={ S('mb-30') }>
                   <div style={ S('fw-600') }>Facts:</div>
                   <div style={ S('color-c0c0c0') }>
                     Year Built <div style={ S('pull-right') }>{ listing.year_built }</div>
@@ -317,7 +317,7 @@ export default class ListingViewer extends Component {
                     Current Days On Market <div style={ S('pull-right') }>{ listing_util.getDOM(listing.cdom) }</div>
                   </div>
                 </div>
-                <div style={ S('mb-30 w-300 pull-left mr-20') }>
+                <div style={ S('mb-30') }>
                   <div style={ S('fw-600') }>Parking:</div>
                   <div style={ S('color-c0c0c0') }>
                     Garage Spaces <div style={ S('pull-right') }>{ property.parking_spaces_garage }</div>
@@ -328,8 +328,8 @@ export default class ListingViewer extends Component {
                 </div>
                 <div className="clearfix"></div>
               </div>
-              <div>
-                <div style={ S('mb-30 w-300 pull-left mr-20') }>
+              <div style={ S('w-300 pull-left mr-20') }>
+                <div style={ S('mb-30') }>
                   <div style={ S('fw-600') }>Interior Features:</div>
                   <div style={ S('color-c0c0c0') }>
                     Interior Features
@@ -407,8 +407,8 @@ export default class ListingViewer extends Component {
                 </div>
                 <div className="clearfix"></div>
               </div>
-              <div>
-                <div style={ S('mb-30 w-300 pull-left mr-20') }>
+              <div style={ S('w-300 pull-left mr-20') }>
+                <div style={ S('mb-30') }>
                   <div style={ S('fw-600') }>Exterior Features:</div>
                   <div style={ S('color-c0c0c0') }>
                     Lot Size
