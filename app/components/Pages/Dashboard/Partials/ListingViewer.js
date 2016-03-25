@@ -265,7 +265,7 @@ export default class ListingViewer extends Component {
             </div>
             <div>
               <div style={ S('font-24 mb-20') }>Details</div>
-              <div style={ S('w-300 pull-left mr-20') }>
+              <div style={ S('w-300 pull-left mr-60') }>
                 <div style={ S('mb-30') }>
                   <div style={ S('fw-600') }>Cost Breakdown:</div>
                   <div style={ S('color-c0c0c0') }>
@@ -328,7 +328,7 @@ export default class ListingViewer extends Component {
                 </div>
                 <div className="clearfix"></div>
               </div>
-              <div style={ S('w-300 pull-left mr-20') }>
+              <div style={ S('w-300 pull-left mr-60') }>
                 <div style={ S('mb-30') }>
                   <div style={ S('fw-600') }>Interior Features:</div>
                   <div style={ S('color-c0c0c0') }>
@@ -407,7 +407,7 @@ export default class ListingViewer extends Component {
                 </div>
                 <div className="clearfix"></div>
               </div>
-              <div style={ S('w-300 pull-left mr-20') }>
+              <div style={ S('w-300 pull-left mr-60') }>
                 <div style={ S('mb-30') }>
                   <div style={ S('fw-600') }>Exterior Features:</div>
                   <div style={ S('color-c0c0c0') }>
