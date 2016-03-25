@@ -86,8 +86,8 @@ export default class ListingViewer extends Component {
       square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
       price_sq_foot = (Number(price.replace(/,/g, '')) / Number(square_feet.replace(/,/g, ''))).toFixed(2)
       lot_size_square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.lot_square_meters)))
-      if (property.lot_size)
-        lot_size = property.lot_size
+      if (property.lot_size_area)
+        lot_size = property.lot_size_area
       prev_icon = '<'
       next_icon = '>'
       description = property.description
