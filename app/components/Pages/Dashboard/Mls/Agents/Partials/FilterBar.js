@@ -42,6 +42,26 @@ export default class FilterBar extends Component {
     criteria.area = this.refs.area.refs.input.value
 //     criteria.subarea = this.refs.subarea.refs.input.value
 
+    criteria.total_volume = {
+      min: null,
+      max: null
+    }
+
+    if (this.filterEnabled('total_volume')) {
+      criteria.total_volume.min = this.refs.total_volume_min.refs.input.value
+      criteria.total_volume.max = this.refs.total_volume_max.refs.input.value
+    }
+
+    criteria.total_value = {
+      min: null,
+      max: null
+    }
+
+    if (this.filterEnabled('total_value')) {
+      criteria.total_value.min = this.refs.total_value_min.refs.input.value
+      criteria.total_value.max = this.refs.total_value_max.refs.input.value
+    }
+
     criteria.list_volume = {
       min: null,
       max: null
@@ -431,6 +451,36 @@ export default class FilterBar extends Component {
                 <option>OUTSIDE OF THE U.S. (1000)</option>
                 <option>NTREIS TEST ONLY</option>
               </Input>
+            </div>
+          </div>
+
+          <div>
+            <label>
+              <input type="checkbox" onChange={ this.toggle.bind(this, 'total_value') } />
+              &nbsp; <span>Total $</span>
+            </label>
+            <div style={ this.filterEnabled('total_value') }>
+              <div style={ s }>
+                <Input type="text" bsSize="small" placeholder="Min" ref="total_value_min"/>
+              </div>
+              <div style={ s }>
+                <Input type="text" bsSize="small" placeholder="Max" ref="total_value_max"/>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label>
+              <input type="checkbox" onChange={ this.toggle.bind(this, 'total_volume') } />
+              &nbsp; <span>Total #</span>
+            </label>
+            <div style={ this.filterEnabled('total_volume') }>
+              <div style={ s }>
+                <Input type="text" bsSize="small" placeholder="Min" ref="total_volume_min"/>
+              </div>
+              <div style={ s }>
+                <Input type="text" bsSize="small" placeholder="Max" ref="total_volume_max"/>
+              </div>
             </div>
           </div>
 
