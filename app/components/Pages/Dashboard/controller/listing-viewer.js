@@ -57,28 +57,6 @@ const controller = {
   hideShareListingModal() {
     delete AppStore.data.show_share_listing_modal
     AppStore.emitChange()
-  },
-  shareListing() {
-    AppStore.data.share_modal.sending_share = true
-    const current_listing = AppStore.data.current_listing
-    const share_modal = AppStore.data.share_modal
-    const rooms_added = share_modal.rooms_added
-    const contacts_added = share_modal.contacts_added
-    const emails_added = share_modal.emails_added
-    AppStore.emitChange()
-    // TODO connect to DB
-    ListingDispatcher.dispatch({
-      action: 'share-listing',
-      id: current_listing.id,
-      rooms_added,
-      contacts_added,
-      emails_added
-    })
-    setTimeout(() => {
-      delete AppStore.data.share_modal.sending_share
-      delete AppStore.data.show_share_listing_modal
-      AppStore.emitChange()
-    }, 3000)
   }
 }
 export default controller
