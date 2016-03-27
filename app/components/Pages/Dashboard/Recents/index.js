@@ -409,6 +409,11 @@ export default class Dashboard extends Component {
     AppStore.emitChange()
   }
 
+  showShareListingModal() {
+    AppStore.data.show_share_listing = true
+    AppStore.emitChange()
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -451,6 +456,7 @@ export default class Dashboard extends Component {
         hideListingViewer={ this.hideListingViewer }
         showModalGallery={ this.showModalGallery }
         handleModalGalleryNav={ this.handleModalGalleryNav }
+        showShareListingModal={ this.showShareListingModal }
       />
     )
     if (!loading && !rooms) {

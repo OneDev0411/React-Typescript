@@ -192,6 +192,7 @@ export default class MainContent extends Component {
           hideListingViewer={ this.props.hideListingViewer }
           showModalGallery={ this.props.showModalGallery }
           handleModalGalleryNav={ this.props.handleModalGalleryNav }
+          showShareListingModal={ this.props.showShareListingModal }
         />
       )
     }
@@ -272,5 +273,6 @@ MainContent.propTypes = {
   addContactToMessage: React.PropTypes.func,
   hideListingViewer: React.PropTypes.func,
   showModalGallery: React.PropTypes.func,
-  handleModalGalleryNav: React.PropTypes.func
+  handleModalGalleryNav: React.PropTypes.func,
+  showShareListingModal: React.PropTypes.func
 }

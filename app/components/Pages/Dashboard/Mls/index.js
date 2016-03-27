@@ -11,7 +11,7 @@ import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 
 // View controller managers
 import AppStore from '../../../../stores/AppStore'
-import controller from './controller'
+import controller from '../controller'
 
 // Partials
 import SideBar from '../Partials/SideBar'
@@ -65,6 +65,7 @@ export default class Mls extends Component {
 
   componentWillUnmount() {
     controller.hideModal()
+    controller.hideListingViewer()
   }
 
   render() {
@@ -149,6 +150,7 @@ export default class Mls extends Component {
           hideListingViewer={ controller.hideListingViewer }
           showModalGallery={ controller.showModalGallery }
           handleModalGalleryNav={ controller.handleModalGalleryNav }
+          showShareListingModal={ controller.showShareListingModal }
         />
       )
     }

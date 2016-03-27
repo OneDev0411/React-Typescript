@@ -60,14 +60,29 @@ describe('Testing Room model', () => {
   })
 
   // Add user
-  it('Room.addUser should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
+  // it('Room.addUser should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
+  //   const params = {
+  //     room_id: room_id,
+  //     user: contact_id,
+  //     access_token,
+  //     api_host: test.api_host
+  //   }
+  //   Room.addUser(params, (err, response) => {
+  //     expect(response.status).to.equal('success')
+  //     done()
+  //   })
+  // })
+
+  // Add user
+  it('Room.createRec should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
     const params = {
-      room_id: room_id,
-      user: contact_id,
+      mls_number: '13315964',
+      id: '64ee70d2-f1ef-11e5-bc3e-0242ac110006',
       access_token,
       api_host: test.api_host
     }
-    Room.addUser(params, (err, response) => {
+    Room.createRec(params, (err, response) => {
+      console.log(err)
       expect(response.status).to.equal('success')
       done()
     })

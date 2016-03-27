@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import S from 'shorti'
 import _ from 'lodash'
 import { Button, Modal, Alert } from 'react-bootstrap'
-import controller from '../controller'
+import controller from '../../controller'
 import ProfileImage from '../../Partials/ProfileImage'
 import helpers from '../../../../../utils/helpers'
 import validator from 'validator'
@@ -276,7 +276,7 @@ export default class ShareAlertModal extends Component {
           { message }
           { items_added_area }
           <Button onClick={ controller.hideModal } bsStyle="link">Cancel</Button>
-          <Button className={ listing_map && listing_map.saving_alert ? 'disabled' : '' } bsStyle="primary" onClick={ this.shareAlert.bind(this) }>{ listing_map && !listing_map.saving_alert ? 'Share Alert' : 'Saving...' }&nbsp;&nbsp;<i className="fa fa-share"></i></Button>
+          <Button className={ listing_map && listing_map.saving_alert ? 'disabled' : '' } bsStyle="primary" onClick={ this.shareAlert.bind(this) }>{ listing_map && !listing_map.saving_alert ? 'Share Alert' : 'Sending...' }&nbsp;&nbsp;<i className="fa fa-share"></i></Button>
         </Modal.Footer>
       </Modal>
     )

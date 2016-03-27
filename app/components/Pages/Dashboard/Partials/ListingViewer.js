@@ -7,6 +7,8 @@ import S from 'shorti'
 import helpers from '../../../../utils/helpers'
 import listing_util from '../../../../utils/listing'
 import Loading from '../../../Partials/Loading'
+import ShareListingModal from './ShareListingModal'
+import controller from '../controller'
 
 export default class ListingViewer extends Component {
 
@@ -500,7 +502,7 @@ export default class ListingViewer extends Component {
       <div style={ viewer_wrap_style }>
         <div onClick={ this.props.hideListingViewer } style={ S('pointer absolute l-20 t-20 font-18 fw-400') }>&lt;&nbsp;&nbsp;Back</div>
         <div style={ nav_bar_style }>
-          <Button style={ S('absolute r-20 t-15') } bsStyle="primary" type="button">
+          <Button onClick={ this.props.showShareListingModal.bind(this) } style={ S('absolute r-20 t-15') } bsStyle="primary" type="button">
             Share
             &nbsp;&nbsp;<i className="fa fa-share"></i>
           </Button>
@@ -512,12 +514,20 @@ export default class ListingViewer extends Component {
           </div>
           { modal_gallery_area }
         </Modal>
+        <ShareListingModal
+          data={ data }
+          shareAlert={ controller.shareAlert }
+          handleShareFilter={ controller.handleShareFilter }
+          handleEmailChange={ controller.handleEmailChange }
+          handlePhoneNumberChange={ controller.handlePhoneNumberChange }
+          handleAddEmail={ controller.handleAddEmail }
+          handleAddPhoneNumber={ controller.handleAddPhoneNumber }
+          handleRemoveShareItem={ controller.handleRemoveShareItem }
+        />
       </div>
     )
   }
 }
-
-// PropTypes
 ListingViewer.propTypes = {
   data: React.PropTypes.object,
   listing: React.PropTypes.object,
@@ -525,5 +535,6 @@ ListingViewer.propTypes = {
   navListingCarousel: React.PropTypes.func,
   showModalGallery: React.PropTypes.func,
   handleModalGalleryNav: React.PropTypes.func,
-  hideListingViewer: React.PropTypes.func
+  hideListingViewer: React.PropTypes.func,
+  showShareListingModal: React.PropTypes.func
 }

@@ -4,8 +4,8 @@ import S from 'shorti'
 import _ from 'lodash'
 import { Button, Modal, Alert } from 'react-bootstrap'
 import controller from '../controller'
-import ProfileImage from '../../Partials/ProfileImage'
-import helpers from '../../../../../utils/helpers'
+import ProfileImage from './ProfileImage'
+import helpers from '../../../../utils/helpers'
 import validator from 'validator'
 export default class ShareAlertModal extends Component {
   onShow() {
@@ -51,7 +51,7 @@ export default class ShareAlertModal extends Component {
   }
   render() {
     const data = this.props.data
-    const listing_map = data.listing_map
+    const current_listing = data.current_listing
     const share_modal = data.share_modal
     let rooms_added
     let contacts_added
@@ -234,19 +234,18 @@ export default class ShareAlertModal extends Component {
         phone_number_btn_color = '006aff'
     }
     return (
-      <Modal dialogClassName="modal-800" show={ listing_map && listing_map.show_share_modal } onHide={ controller.hideModal } onShow={ this.onShow.bind(this) }>
+      <Modal dialogClassName="modal-800" show={ data.show_share_listing_modal } onHide={ controller.hideShareListingModal } onShow={ this.onShow.bind(this) }>
         <Modal.Header closeButton style={ S('border-bottom-1-solid-f8f8f8') }>
-          <Modal.Title className="tempo" style={ S('font-36') }>Share Alert</Modal.Title>
+          <Modal.Title className="tempo" style={ S('font-36') }>Share Listing</Modal.Title>
         </Modal.Header>
         <Modal.Body style={ S('p-30') }>
           <div style={ S('mb-20') }>
             <div style={ S('pull-left mr-15') }>
-              <img style={ S('w-100 h-100 br-3') } src="/images/dashboard/mls/map-tile.jpg" />
+              <div style={ S(`w-100 h-100 bg-cover bg-center bg-url(${current_listing.cover_image_url})`) }/>
             </div>
             <div style={ S('pull-left w-70p') }>
-              <input style={ filter_text_style } ref="alert_title" type="text" placeholder="Name this alert..." />
-              <div style={ S('color-929292 font-20') }>{ listing_map && listing_map.listings ? listing_map.listings.length : '' } Results</div>
-              <div style={ S('color-929292 font-16') }>We’ll keep you updated with any new listings.</div>
+              <input style={ filter_text_style } ref="alert_title" type="text" placeholder="Share message..." />
+              <div style={ S('color-929292 font-16') }>Share listing</div>
             </div>
             <div className="clearfix"></div>
           </div>
@@ -275,8 +274,8 @@ export default class ShareAlertModal extends Component {
         <Modal.Footer style={ S('bg-f8f8f8') }>
           { message }
           { items_added_area }
-          <Button onClick={ controller.hideModal } bsStyle="link">Cancel</Button>
-          <Button className={ listing_map && listing_map.saving_alert ? 'disabled' : '' } bsStyle="primary" onClick={ this.shareAlert.bind(this) }>{ listing_map && !listing_map.saving_alert ? 'Share Alert' : 'Saving...' }&nbsp;&nbsp;<i className="fa fa-share"></i></Button>
+          <Button onClick={ controller.hideShareListingModal } bsStyle="link">Cancel</Button>
+          <Button className={ share_modal && share_modal.sending_share ? 'disabled' : '' } bsStyle="primary" onClick={ controller.shareListing.bind(this) }>{ share_modal && !share_modal.sending_share ? 'Share Listing' : 'Sending...' }&nbsp;&nbsp;<i className="fa fa-share"></i></Button>
         </Modal.Footer>
       </Modal>
     )
