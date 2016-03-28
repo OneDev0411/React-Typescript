@@ -4,6 +4,10 @@ import _ from 'lodash'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 const controller = {
+  getSoldDate(minimum_sold_value) {
+    const date = new Date()
+    return (date.setMonth(date.getMonth() - minimum_sold_value)) / 1000
+  },
   setFilterOptions(e) {
     e.preventDefault()
     const data = AppStore.data
@@ -50,13 +54,17 @@ const controller = {
       const filter_options = listing_map.filter_options
       // Status
       // Active,Sold,Pending,"Temp Off Market",Leased,"Active Option Contract","Active Contingent","Active Kick Out",Withdrawn,Expired,Cancelled,"Withdrawn Sublisting",Incomplete,Unknown,"Out Of Sync",Incoming
-      const listing_statuses = []
-      if (filter_options.sold)
+      delete options.minimum_sold_date
+      let listing_statuses = []
+      if (filter_options.sold) {
         listing_statuses.push('Sold')
-      if (filter_options.active)
-        listing_statuses.push('Active')
-      if (filter_options.other)
-        listing_statuses.push('Active Contingent', 'Active Kick Out', 'Active Option Contract')
+        const minimum_sold_value = filter_options.status_options.sold
+        options.minimum_sold_date = controller.getSoldDate(minimum_sold_value)
+      }
+      if (filter_options.status_options.active && filter_options.status_options.active.length)
+        listing_statuses = [...listing_statuses, ...filter_options.status_options.active]
+      if (filter_options.status_options.other && filter_options.status_options.other.length)
+        listing_statuses = [...listing_statuses, ...filter_options.status_options.other]
       options.listing_statuses = listing_statuses
       // Bed / bath
       options.minimum_bedrooms = default_options.minimum_bedrooms
@@ -112,10 +120,18 @@ const controller = {
   handleFilterSwitch(key) {
     if (!AppStore.data.listing_map.filter_options)
       AppStore.data.listing_map.filter_options = {}
-    if (!AppStore.data.listing_map.filter_options[key])
+    if (!AppStore.data.listing_map.filter_options[key]) {
       AppStore.data.listing_map.filter_options[key] = true
-    else
+      if (key === 'sold')
+        AppStore.data.listing_map.filter_options.status_options[key] = [3]
+      if (key === 'active')
+        AppStore.data.listing_map.filter_options.status_options[key] = ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract']
+      if (key === 'other')
+        AppStore.data.listing_map.filter_options.status_options[key] = ['Cancelled', 'Expired', 'Pending', 'Temp Off Market', 'Withdrawn', 'Withdrawn Sublisting']
+    } else {
       delete AppStore.data.listing_map.filter_options[key]
+      AppStore.data.listing_map.filter_options.status_options[key] = []
+    }
     AppStore.emitChange()
   },
   handleFilterButton(payload) {
@@ -190,9 +206,11 @@ const controller = {
       AppStore.data.listing_map.filter_options.status_options[key] = []
     // Check for already added
     const options = AppStore.data.listing_map.filter_options.status_options[key]
-    if (options.indexOf(value) === -1)
+    if (options.indexOf(value) === -1) {
       AppStore.data.listing_map.filter_options.status_options[key].push(value)
-    else {
+      if (key === 'sold')
+        AppStore.data.listing_map.filter_options.status_options[key] = [value]
+    } else {
       AppStore.data.listing_map.filter_options.status_options[key] = options.filter(new_option => {
         return new_option !== value
       })

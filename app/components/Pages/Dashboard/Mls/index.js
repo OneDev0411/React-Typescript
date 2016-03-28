@@ -33,7 +33,10 @@ export default class Mls extends Component {
         active: true,
         other: false,
         open_houses: false,
-        listing_types: ['house']
+        listing_types: ['house'],
+        status_options: {
+          active: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract']
+        }
       }
     }
     AppStore.emitChange()

@@ -2,8 +2,6 @@
 import React, { Component } from 'react'
 import { Button, Input } from 'react-bootstrap'
 import S from 'shorti'
-// import helpers from '../../../../../utils/helpers'
-// import listing_util from '../../../../../utils/listing'
 import Switch from 'react-ios-switch'
 
 export default class FilterForm extends Component {
@@ -81,7 +79,7 @@ export default class FilterForm extends Component {
                 <Button style={ S(`${sold_options.indexOf(3) !== -1 ? 'color-fff bg-667688 border-1-solid-667688' : ''}`) } onClick={ this.props.handleFilterStatusOptionSelect.bind(this, 'sold', 3) }>3 Mo</Button>
                 <Button style={ S(`${sold_options.indexOf(6) !== -1 ? 'color-fff bg-667688 border-1-solid-667688' : ''}`) } onClick={ this.props.handleFilterStatusOptionSelect.bind(this, 'sold', 6) }>6 Mo</Button>
                 <Button style={ S(`${sold_options.indexOf(12) !== -1 ? 'color-fff bg-667688 border-1-solid-667688' : ''}`) } onClick={ this.props.handleFilterStatusOptionSelect.bind(this, 'sold', 12) }>12 Mo</Button>
-                <Button style={ S(`${sold_options.indexOf('pick') !== -1 ? 'color-fff bg-667688 border-1-solid-667688' : ''}`) } onClick={ this.props.handleFilterStatusOptionSelect.bind(this, 'sold', 'pick') }>Pick a date</Button>
+                <Button disabled style={ S(`${sold_options.indexOf('pick') !== -1 ? 'color-fff bg-667688 border-1-solid-667688' : ''}`) } onClick={ this.props.handleFilterStatusOptionSelect.bind(this, 'sold', 'pick') }>Pick a date</Button>
               </div>
               <div className="clearfix"></div>
             </div>
