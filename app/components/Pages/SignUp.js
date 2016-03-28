@@ -30,10 +30,11 @@ export default class SignUp extends Component {
     delete AppStore.data.error_type
     delete AppStore.data.show_message
     AppStore.data.submitting = true
+    AppStore.data.signup.searching = true
     AppStore.emitChange()
     if (mlsid) {
       AppDispatcher.dispatch({
-        action: 'search-agent',
+        action: 'search-agent-signup',
         mlsid
       })
     }
