@@ -16,6 +16,8 @@ export default (user, title) => {
       AppStore.data.status = 'success'
       AppStore.data.show_message = true
       AppStore.data.show_create_chat_modal = false
+      if (!AppStore.data.rooms)
+        AppStore.data.rooms = []
       AppStore.data.rooms.unshift(new_room)
       AppStore.data.current_room = new_room
       AppStore.data.messages = [new_room.latest_message]
@@ -26,6 +28,7 @@ export default (user, title) => {
       AppStore.data.show_message = true
       AppStore.data.request_error = true
     }
+    delete AppStore.data.loading
     AppStore.emitChange()
   })
 }
