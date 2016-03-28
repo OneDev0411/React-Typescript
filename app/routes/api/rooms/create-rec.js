@@ -2,15 +2,28 @@
 module.exports = (app, config) => {
   app.post('/api/create-rec',(req, res) => {
     const api_url = config.api.url
-    const room_id = req.body.room_id
+    const rooms = req.body.rooms
+    const users = req.body.users
     const mls_number = req.body.mls_number
+    const message = req.body.message
     const notification = req.body.notification
-    const endpoint = api_url + '/rooms/' + room_id + '/recs'
+    const endpoint = api_url + '/recs'
     const access_token = req.body.access_token
     const request_object = {
       mls_number,
       notification
     }
+    if (message) {
+      request_object.message = {
+        message_type: 'SubLevel',
+        comment: message,
+        recommendation: 'SubLevel'
+      }
+    }
+    if (rooms && rooms.length)
+      request_object.rooms = rooms
+    if (users && rooms.users)
+      request_object.users = users
     fetch(endpoint, {
       method: 'post',
       headers: {  

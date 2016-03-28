@@ -1,6 +1,7 @@
 // controller/listing-share.js
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
+import _ from 'lodash'
 const controller = {
   shareAlert(title) {
     delete AppStore.data.error
@@ -55,17 +56,19 @@ const controller = {
     AppStore.data.share_modal.sending_share = true
     const current_listing = AppStore.data.current_listing
     const share_modal = AppStore.data.share_modal
-    const rooms_added = share_modal.rooms_added
-    const contacts_added = share_modal.contacts_added
-    const emails_added = share_modal.emails_added
+    const rooms = _.pluck(share_modal.rooms_added, 'id')
+    const users = _.pluck(share_modal.contacts_added, 'id')
+    const emails = share_modal.emails_added
+    const message = this.refs.message.value.trim()
     AppStore.emitChange()
     ListingDispatcher.dispatch({
       action: 'share-listing',
       user,
       mls_number: current_listing.mls_number,
-      rooms_added,
-      contacts_added,
-      emails_added,
+      message,
+      rooms,
+      users,
+      emails,
       notification: true
     })
   }

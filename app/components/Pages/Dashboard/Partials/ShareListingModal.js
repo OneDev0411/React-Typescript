@@ -1,4 +1,4 @@
-// Dashboard/Mls/index.js
+// Dashboard/Partials/ShareListingModal.js
 import React, { Component } from 'react'
 import S from 'shorti'
 import _ from 'lodash'
@@ -7,15 +7,11 @@ import controller from '../controller'
 import ProfileImage from './ProfileImage'
 import helpers from '../../../../utils/helpers'
 import validator from 'validator'
-export default class ShareAlertModal extends Component {
+export default class ShareListingModal extends Component {
   onShow() {
     setTimeout(() => {
-      this.refs.alert_title.focus()
+      this.refs.message.focus()
     }, 100)
-  }
-  shareAlert() {
-    const title = this.refs.alert_title.value
-    this.props.shareAlert(title)
   }
   handleFilterChange(e) {
     const filter_text = e.target.value
@@ -244,7 +240,7 @@ export default class ShareAlertModal extends Component {
               <div style={ S(`w-100 h-100 bg-cover bg-center bg-url(${current_listing.cover_image_url})`) }/>
             </div>
             <div style={ S('pull-left w-70p') }>
-              <input style={ filter_text_style } ref="alert_title" type="text" placeholder="Share message..." />
+              <input style={ filter_text_style } ref="message" type="text" placeholder="Share message..." />
               <div style={ S('color-929292 font-16') }>Share listing</div>
             </div>
             <div className="clearfix"></div>
@@ -281,9 +277,8 @@ export default class ShareAlertModal extends Component {
     )
   }
 }
-ShareAlertModal.propTypes = {
+ShareListingModal.propTypes = {
   data: React.PropTypes.object,
-  shareAlert: React.PropTypes.func,
   handleShareFilter: React.PropTypes.func,
   handleEmailChange: React.PropTypes.func,
   handlePhoneNumberChange: React.PropTypes.func,

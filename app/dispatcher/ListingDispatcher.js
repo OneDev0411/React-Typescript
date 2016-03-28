@@ -37,7 +37,7 @@ ListingDispatcher.register(payload => {
       break
 
     case 'share-listing':
-      shareListing(payload.user, payload.mls_number, payload.rooms_added, payload.contacts_added, payload.emails_added, payload.notification)
+      shareListing(payload.user, payload.mls_number, payload.message, payload.rooms, payload.users, payload.emails, payload.notification)
       break
 
     default:

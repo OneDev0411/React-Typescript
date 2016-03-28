@@ -232,13 +232,16 @@ export default {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
     const endpoint = api_host + '/api/create-rec'
-    const room_id = params.room_id
+    const rooms = params.rooms
+    const users = params.users
     const mls_number = params.mls_number
     const request_object = {
-      room_id,
+      access_token: params.access_token,
+      rooms,
+      users,
       mls_number,
       notification: params.notification,
-      access_token: params.access_token
+      message: params.message
     }
     fetch(endpoint, {
       method: 'post',
