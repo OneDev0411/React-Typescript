@@ -6,20 +6,13 @@ import emojify from 'emojify.js'
 emojify.setConfig({
   img_dir: '/images/emoji'
 })
-
-// AppDispatcher
 import AppDispatcher from '../../dispatcher/AppDispatcher'
-
-// Store
 import AppStore from '../../stores/AppStore'
-
 export default class Landing extends Component {
-
   componentWillMount() {
     if (process.env.NODE_ENV === 'development')
       this.getContent()
   }
-
   componentDidMount() {
     AppStore.data.blinking_cursor = true
     AppStore.data.animation_started = true
@@ -31,7 +24,6 @@ export default class Landing extends Component {
       })
     }, 3000)
   }
-
   getContent() {
     AppDispatcher.dispatch({
       action: 'get-content',
@@ -39,12 +31,10 @@ export default class Landing extends Component {
       rendered: 'client'
     })
   }
-
   showIntercom(e) {
     e.preventDefault()
-    // Intercom('show')
+    window.Intercom('show')
   }
-
   render() {
     // Data
     const data = this.props.data

@@ -9,9 +9,7 @@ import listing_util from '../../../../utils/listing'
 import Loading from '../../../Partials/Loading'
 import ShareListingModal from './ShareListingModal'
 import controller from '../controller'
-
 export default class ListingViewer extends Component {
-
   componentDidMount() {
     document.onkeydown = e => {
       if (e.keyCode === 27)

@@ -5,15 +5,9 @@ import GoogleMap from 'google-map-react'
 import listing_util from '../../../../utils/listing'
 import helpers from '../../../../utils/helpers'
 import { ButtonGroup, Button } from 'react-bootstrap'
-
-// AppDispatcher
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
-
-// View controller managers
 import AppStore from '../../../../stores/AppStore'
 import controller from '../controller'
-
-// Partials
 import SideBar from '../Partials/SideBar'
 import ShareAlertModal from './Partials/ShareAlertModal'
 import ListingViewer from '../Partials/ListingViewer'
