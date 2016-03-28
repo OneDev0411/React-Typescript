@@ -272,6 +272,7 @@ export default class Mls extends Component {
             resetFilterOptions={ controller.resetFilterOptions }
             setFilterOptions={ controller.setFilterOptions }
             handleOptionChange={ controller.handleOptionChange }
+            toggleListingStatusDropdown={ controller.toggleListingStatusDropdown }
           />
           { zoom_controls }
           <ShareAlertModal

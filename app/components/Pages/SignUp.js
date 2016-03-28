@@ -12,10 +12,10 @@ export default class SignUp extends Component {
     AppStore.data = {}
     AppStore.data.signup = {}
     AppStore.emitChange()
-    // Grab connect code
-    if (this.props.location.query.connect) {
-      const connect = this.props.location.query.connect
-      AppStore.data.signup.connect = connect
+    // Grab inviting_user code
+    if (this.props.location.query.inviting_user) {
+      const inviting_user = this.props.location.query.inviting_user
+      AppStore.data.signup.inviting_user = inviting_user
       AppStore.emitChange()
     }
   }

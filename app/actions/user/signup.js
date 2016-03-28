@@ -49,9 +49,9 @@ export default (user, password, confirm_password, redirect_to) => {
   // Set trimmed data
   user.email = email_trim
   user.password = password_trim
-  // Check for connect
-  if (AppStore.data.signup.connect)
-    user.connect = AppStore.data.signup.connect
+  // Check for inviting_user
+  if (AppStore.data.signup.inviting_user)
+    user.inviting_user = AppStore.data.signup.inviting_user
   const params = {
     user
   }

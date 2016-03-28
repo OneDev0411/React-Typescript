@@ -173,6 +173,15 @@ const controller = {
       AppStore.data.listing_map.filter_options = {}
     AppStore.data.listing_map.filter_options[key] = value
     AppStore.emitChange()
+  },
+  toggleListingStatusDropdown(key) {
+    if (!AppStore.data.listing_map.filter_options.status_dropdowns)
+      AppStore.data.listing_map.filter_options.status_dropdowns = {}
+    if (key && AppStore.data.listing_map.filter_options.status_dropdowns[key])
+      delete AppStore.data.listing_map.filter_options.status_dropdowns[key]
+    else
+      AppStore.data.listing_map.filter_options.status_dropdowns[key] = true
+    AppStore.emitChange()
   }
 }
 export default controller

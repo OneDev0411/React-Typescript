@@ -51,10 +51,13 @@ export default class FilterForm extends Component {
         <form onSubmit={ this.props.setFilterOptions.bind(this) }>
           <div style={ filter_scroll_area_style }>
             <div style={ status_style }>
-              <div style={ S('pull-left w-200 pt-15 pl-15 pb-15 pointer h-50') }>
+              <div
+                onClick={ this.props.toggleListingStatusDropdown.bind(this, 'sold') }
+                style={ S('pull-left w-200 pt-15 pl-15 pb-15 pointer h-50') }
+              >
                 <span style={ S('color-db3821 font-30 mr-12 relative t-12n') }>&#8226;</span>
                 <span style={ S('relative t-15n') }>Sold</span>
-                <i style={ S('pull-right font-20') } className="fa fa-caret-down"></i>
+                <i style={ S('pull-right font-20') } className={ `fa fa-caret-${filter_options.status_dropdowns && filter_options.status_dropdowns.sold ? `up` : 'down'}` }></i>
               </div>
               <div style={ S('pull-right w-95 pt-15 pr-15 pb-15') }>
                 <div style={ S('pull-left') }>
@@ -65,7 +68,7 @@ export default class FilterForm extends Component {
                 </div>
               </div>
               <div className="clearfix"></div>
-              <div className="hidden" style={ S('p-15') }>
+              <div style={ S(`${filter_options.status_dropdowns && filter_options.status_dropdowns.sold ? `p-15` : 'h-0'}`) }>
                 <Button>3 Mo</Button>
                 <Button>6 Mo</Button>
                 <Button>12 Mo</Button>
@@ -74,10 +77,13 @@ export default class FilterForm extends Component {
               <div className="clearfix"></div>
             </div>
             <div style={ status_style }>
-              <div style={ S('pull-left w-200 pt-15 pl-15 pb-15 pointer h-50') }>
+              <div
+                onClick={ this.props.toggleListingStatusDropdown.bind(this, 'active') }
+                style={ S('pull-left w-200 pt-15 pl-15 pb-15 pointer h-50') }
+              >
                 <span style={ S('color-82dd00 font-30 mr-12 relative t-12n') }>&#8226;</span>
                 <span style={ S('relative t-15n') }>Active</span>
-                <i style={ S('pull-right font-20') } className="fa fa-caret-down"></i>
+                <i style={ S('pull-right font-20') } className={ `fa fa-caret-${filter_options.status_dropdowns && filter_options.status_dropdowns.active ? `up` : 'down'}` }></i>
               </div>
               <div style={ S('pull-right w-95 pt-15 pr-15 pb-15') }>
                 <div style={ S('pull-left') }>
@@ -88,7 +94,7 @@ export default class FilterForm extends Component {
                 </div>
               </div>
               <div className="clearfix"></div>
-              <div className="hidden" style={ S('p-15') }>
+              <div style={ S(`${filter_options.status_dropdowns && filter_options.status_dropdowns.active ? `p-15` : 'h-0'}`) }>
                 <div>Active</div>
                 <div>Active Contingent</div>
                 <div>Active Kick Out</div>
@@ -97,10 +103,13 @@ export default class FilterForm extends Component {
               <div className="clearfix"></div>
             </div>
             <div style={ status_style }>
-              <div style={ S('pull-left w-200 pt-15 pl-15 pb-15 pointer h-50') }>
+              <div
+                onClick={ this.props.toggleListingStatusDropdown.bind(this, 'other') }
+                style={ S('pull-left w-200 pt-15 pl-15 pb-15 pointer h-50') }
+              >
                 <span style={ S('color-f8b619 font-30 mr-12 relative t-12n') }>&#8226;</span>
                 <span style={ S('relative t-15n') }>Other Listing Status</span>
-                <i style={ S('pull-right font-20') } className="fa fa-caret-down"></i>
+                <i style={ S('pull-right font-20') } className={ `fa fa-caret-${filter_options.status_dropdowns && filter_options.status_dropdowns.other ? `up` : 'down'}` }></i>
               </div>
               <div style={ S('pull-right w-95 pt-15 pr-15 pb-15') }>
                 <div style={ S('pull-left') }>
@@ -111,7 +120,7 @@ export default class FilterForm extends Component {
                 </div>
               </div>
               <div className="clearfix"></div>
-              <div className="hidden" style={ S('p-15') }>
+              <div style={ S(`${filter_options.status_dropdowns && filter_options.status_dropdowns.other ? `p-15` : 'h-0'}`) }>
                 <div>Cancelled</div>
                 <div>Expired</div>
                 <div>Pending</div>
@@ -253,5 +262,6 @@ FilterForm.propTypes = {
   handleFilterButton: React.PropTypes.func,
   resetFilterOptions: React.PropTypes.func,
   setFilterOptions: React.PropTypes.func,
-  handleOptionChange: React.PropTypes.func
+  handleOptionChange: React.PropTypes.func,
+  toggleListingStatusDropdown: React.PropTypes.func
 }
