@@ -51,7 +51,7 @@ export default (user, password, confirm_password, redirect_to) => {
   user.password = password_trim
   // Check for inviting_user
   if (AppStore.data.signup.inviting_user)
-    user.inviting_user = AppStore.data.signup.inviting_user
+    user.user_connect = AppStore.data.signup.inviting_user
   const params = {
     user
   }
