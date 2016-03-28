@@ -2,14 +2,15 @@
 module.exports = (app, config) => {
   app.post('/api/create-rec',(req, res) => {
     const api_url = config.api.url
-    const id = req.body.id
+    const room_id = req.body.room_id
     const mls_number = req.body.mls_number
-    const endpoint = api_url + '/rooms/' + id + '/recs'
+    const notification = req.body.notification
+    const endpoint = api_url + '/rooms/' + room_id + '/recs'
     const access_token = req.body.access_token
     const request_object = {
-      mls_number
+      mls_number,
+      notification
     }
-    console.log(endpoint, request_object)
     fetch(endpoint, {
       method: 'post',
       headers: {  

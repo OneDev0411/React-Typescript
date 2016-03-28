@@ -50,6 +50,8 @@ const controller = {
     })
   },
   shareListing() {
+    const data = AppStore.data
+    const user = data.user
     AppStore.data.share_modal.sending_share = true
     const current_listing = AppStore.data.current_listing
     const share_modal = AppStore.data.share_modal
@@ -57,19 +59,15 @@ const controller = {
     const contacts_added = share_modal.contacts_added
     const emails_added = share_modal.emails_added
     AppStore.emitChange()
-    // TODO connect to DB
     ListingDispatcher.dispatch({
       action: 'share-listing',
-      id: current_listing.id,
+      user,
+      mls_number: current_listing.mls_number,
       rooms_added,
       contacts_added,
-      emails_added
+      emails_added,
+      notification: true
     })
-    setTimeout(() => {
-      delete AppStore.data.share_modal.sending_share
-      delete AppStore.data.show_share_listing_modal
-      AppStore.emitChange()
-    }, 3000)
   }
 }
 export default controller

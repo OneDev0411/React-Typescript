@@ -3,14 +3,9 @@ import React, { Component } from 'react'
 import S from 'shorti'
 import _ from 'lodash'
 import { Modal, Input, Button } from 'react-bootstrap'
-
-// AppDispatcher
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
-
-// AppStore
 import AppStore from '../../../../stores/AppStore'
-
-// Partials
+import controller from '../controller'
 import SideBar from '../Partials/SideBar'
 import MainContent from './Partials/MainContent'
 import FileViewer from './Partials/FileViewer'
@@ -409,11 +404,6 @@ export default class Dashboard extends Component {
     AppStore.emitChange()
   }
 
-  showShareListingModal() {
-    AppStore.data.show_share_listing = true
-    AppStore.emitChange()
-  }
-
   render() {
     // Data
     const data = this.props.data
@@ -456,7 +446,7 @@ export default class Dashboard extends Component {
         hideListingViewer={ this.hideListingViewer }
         showModalGallery={ this.showModalGallery }
         handleModalGalleryNav={ this.handleModalGalleryNav }
-        showShareListingModal={ this.showShareListingModal }
+        showShareListingModal={ controller.showShareListingModal }
       />
     )
     if (!loading && !rooms) {
