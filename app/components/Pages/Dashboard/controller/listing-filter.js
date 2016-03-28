@@ -182,6 +182,22 @@ const controller = {
     else
       AppStore.data.listing_map.filter_options.status_dropdowns[key] = true
     AppStore.emitChange()
+  },
+  handleFilterStatusOptionSelect(key, value) {
+    if (!AppStore.data.listing_map.filter_options.status_options)
+      AppStore.data.listing_map.filter_options.status_options = {}
+    if (!AppStore.data.listing_map.filter_options.status_options[key])
+      AppStore.data.listing_map.filter_options.status_options[key] = []
+    // Check for already added
+    const options = AppStore.data.listing_map.filter_options.status_options[key]
+    if (options.indexOf(value) === -1)
+      AppStore.data.listing_map.filter_options.status_options[key].push(value)
+    else {
+      AppStore.data.listing_map.filter_options.status_options[key] = options.filter(new_option => {
+        return new_option !== value
+      })
+    }
+    AppStore.emitChange()
   }
 }
 export default controller

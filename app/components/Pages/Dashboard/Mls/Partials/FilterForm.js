@@ -46,6 +46,15 @@ export default class FilterForm extends Component {
       ...S('border-bottom-1-solid-f3f6f7'),
       overflow: 'hidden'
     }
+    let sold_options = []
+    let active_options = []
+    let other_options = []
+    if (filter_options.status_options && filter_options.status_options.sold)
+      sold_options = filter_options.status_options.sold
+    if (filter_options.status_options && filter_options.status_options.active)
+      active_options = filter_options.status_options.active
+    if (filter_options.status_options && filter_options.status_options.other)
+      other_options = filter_options.status_options.other
     return (
       <div className={ filter_form_class } style={ filter_form_style }>
         <form onSubmit={ this.props.setFilterOptions.bind(this) }>
@@ -68,11 +77,11 @@ export default class FilterForm extends Component {
                 </div>
               </div>
               <div className="clearfix"></div>
-              <div style={ S(`${filter_options.status_dropdowns && filter_options.status_dropdowns.sold ? `p-15` : 'h-0'}`) }>
-                <Button>3 Mo</Button>
-                <Button>6 Mo</Button>
-                <Button>12 Mo</Button>
-                <Button>Pick a date</Button>
+              <div style={ S(`bg-f8fafb ${filter_options.status_dropdowns && filter_options.status_dropdowns.sold ? `p-15 border-top-1-solid-f3f6f7` : 'h-0'}`) }>
+                <Button style={ S(`${sold_options.indexOf(3) !== -1 ? 'color-fff bg-667688 border-1-solid-667688' : ''}`) } onClick={ this.props.handleFilterStatusOptionSelect.bind(this, 'sold', 3) }>3 Mo</Button>
+                <Button style={ S(`${sold_options.indexOf(6) !== -1 ? 'color-fff bg-667688 border-1-solid-667688' : ''}`) } onClick={ this.props.handleFilterStatusOptionSelect.bind(this, 'sold', 6) }>6 Mo</Button>
+                <Button style={ S(`${sold_options.indexOf(12) !== -1 ? 'color-fff bg-667688 border-1-solid-667688' : ''}`) } onClick={ this.props.handleFilterStatusOptionSelect.bind(this, 'sold', 12) }>12 Mo</Button>
+                <Button style={ S(`${sold_options.indexOf('pick') !== -1 ? 'color-fff bg-667688 border-1-solid-667688' : ''}`) } onClick={ this.props.handleFilterStatusOptionSelect.bind(this, 'sold', 'pick') }>Pick a date</Button>
               </div>
               <div className="clearfix"></div>
             </div>
@@ -94,11 +103,23 @@ export default class FilterForm extends Component {
                 </div>
               </div>
               <div className="clearfix"></div>
-              <div style={ S(`${filter_options.status_dropdowns && filter_options.status_dropdowns.active ? `p-15` : 'h-0'}`) }>
-                <div>Active</div>
-                <div>Active Contingent</div>
-                <div>Active Kick Out</div>
-                <div>Active Option Contract</div>
+              <div style={ S(`bg-f8fafb ${filter_options.status_dropdowns && filter_options.status_dropdowns.active ? `border-top-1-solid-f3f6f7 p-15` : 'h-0'}`) }>
+                <div style={ S('pointer relative') } onClick={ this.props.handleFilterStatusOptionSelect.bind(this, 'active', 'Active') }>
+                  <div style={ S('absolute') }><i className={ `fa fa-check ${active_options.indexOf('Active') !== -1 ? 'text-primary' : 'hidden'}`}></i></div>
+                    <div style={ S('ml-20') }>Active</div>
+                </div>
+                <div style={ S('pointer relative') } onClick={ this.props.handleFilterStatusOptionSelect.bind(this, 'active', 'Active Contingent') }>
+                  <div style={ S('absolute') }><i className={ `fa fa-check ${active_options.indexOf('Active Contingent') !== -1 ? 'text-primary' : 'hidden'}`}></i></div>
+                    <div style={ S('ml-20') }>Active Contingent</div>
+                </div>
+                <div style={ S('pointer relative') } onClick={ this.props.handleFilterStatusOptionSelect.bind(this, 'active', 'Active Kick Out') }>
+                  <div style={ S('absolute') }><i className={ `fa fa-check ${active_options.indexOf('Active Kick Out') !== -1 ? 'text-primary' : 'hidden'}`}></i></div>
+                    <div style={ S('ml-20') }>Active Kick Out</div>
+                </div>
+                <div style={ S('pointer relative') } onClick={ this.props.handleFilterStatusOptionSelect.bind(this, 'active', 'Active Option Contract') }>
+                  <div style={ S('absolute') }><i className={ `fa fa-check ${active_options.indexOf('Active Option Contract') !== -1 ? 'text-primary' : 'hidden'}`}></i></div>
+                    <div style={ S('ml-20') }>Active Option Contract</div>
+                </div>
               </div>
               <div className="clearfix"></div>
             </div>
@@ -120,13 +141,31 @@ export default class FilterForm extends Component {
                 </div>
               </div>
               <div className="clearfix"></div>
-              <div style={ S(`${filter_options.status_dropdowns && filter_options.status_dropdowns.other ? `p-15` : 'h-0'}`) }>
-                <div>Cancelled</div>
-                <div>Expired</div>
-                <div>Pending</div>
-                <div>Temp Off Market</div>
-                <div>Withdrawn</div>
-                <div>Withdrawn Sublisting</div>
+              <div style={ S(`bg-f8fafb ${filter_options.status_dropdowns && filter_options.status_dropdowns.other ? `border-top-1-solid-f3f6f7 p-15` : 'h-0'}`) }>
+                <div style={ S('pointer relative') } onClick={ this.props.handleFilterStatusOptionSelect.bind(this, 'other', 'Cancelled') }>
+                  <div style={ S('absolute') }><i className={ `fa fa-check ${other_options.indexOf('Cancelled') !== -1 ? 'text-primary' : 'hidden'}`}></i></div>
+                    <div style={ S('ml-20') }>Cancelled</div>
+                </div>
+                <div style={ S('pointer relative') } onClick={ this.props.handleFilterStatusOptionSelect.bind(this, 'other', 'Expired') }>
+                  <div style={ S('absolute') }><i className={ `fa fa-check ${other_options.indexOf('Expired') !== -1 ? 'text-primary' : 'hidden'}`}></i></div>
+                    <div style={ S('ml-20') }>Expired</div>
+                </div>
+                <div style={ S('pointer relative') } onClick={ this.props.handleFilterStatusOptionSelect.bind(this, 'other', 'Pending') }>
+                  <div style={ S('absolute') }><i className={ `fa fa-check ${other_options.indexOf('Pending') !== -1 ? 'text-primary' : 'hidden'}`}></i></div>
+                    <div style={ S('ml-20') }>Pending</div>
+                </div>
+                <div style={ S('pointer relative') } onClick={ this.props.handleFilterStatusOptionSelect.bind(this, 'other', 'Temp Off Market') }>
+                  <div style={ S('absolute') }><i className={ `fa fa-check ${other_options.indexOf('Temp Off Market') !== -1 ? 'text-primary' : 'hidden'}`}></i></div>
+                    <div style={ S('ml-20') }>Temp Off Market</div>
+                </div>
+                <div style={ S('pointer relative') } onClick={ this.props.handleFilterStatusOptionSelect.bind(this, 'other', 'Withdrawn') }>
+                  <div style={ S('absolute') }><i className={ `fa fa-check ${other_options.indexOf('Withdrawn') !== -1 ? 'text-primary' : 'hidden'}`}></i></div>
+                    <div style={ S('ml-20') }>Withdrawn</div>
+                </div>
+                <div style={ S('pointer relative') } onClick={ this.props.handleFilterStatusOptionSelect.bind(this, 'other', 'Withdrawn Sublisting') }>
+                  <div style={ S('absolute') }><i className={ `fa fa-check ${other_options.indexOf('Withdrawn Sublisting') !== -1 ? 'text-primary' : 'hidden'}`}></i></div>
+                    <div style={ S('ml-20') }>Withdrawn Sublisting</div>
+                </div>
               </div>
               <div className="clearfix"></div>
             </div>
@@ -263,5 +302,6 @@ FilterForm.propTypes = {
   resetFilterOptions: React.PropTypes.func,
   setFilterOptions: React.PropTypes.func,
   handleOptionChange: React.PropTypes.func,
-  toggleListingStatusDropdown: React.PropTypes.func
+  toggleListingStatusDropdown: React.PropTypes.func,
+  handleFilterStatusOptionSelect: React.PropTypes.func
 }
