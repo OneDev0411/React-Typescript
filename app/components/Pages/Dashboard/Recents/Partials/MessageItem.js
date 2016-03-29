@@ -97,7 +97,7 @@ export default class MessageItem extends Component {
       message_text = emojify.replace(linkifyString(message.comment))
 
     // Get latest author and group (No profile image)
-    if (message.author && !this.props.new_date) {
+    if (message.author && !this.props.new_date && !message.recommendation) {
       if (messages[i - 1] && messages[i - 1].author && messages[i - 1].author.id === message.author.id) {
         return (
           <div style={ S('relative mb-5') }>
