@@ -157,8 +157,8 @@ export default class ShareListingModal extends Component {
         </div>
       )
     }
-    const filter_text_style = {
-      ...S('p-0 mb-5 border-1-solid-fff font-28 h-40'),
+    const message_style = {
+      ...S('p-0 mb-5 border-1-solid-fff font-28 h-40 w-100p'),
       outline: 'none'
     }
     const pill_style = S('bg-dadada color-4c7dbf pr-10 pl-10 pt-5 pb-5 br-3 pull-left mr-5 mb-5')
@@ -235,12 +235,12 @@ export default class ShareListingModal extends Component {
           <Modal.Title className="tempo" style={ S('font-36') }>Share Listing</Modal.Title>
         </Modal.Header>
         <Modal.Body style={ S('p-30') }>
-          <div style={ S('mb-20') }>
-            <div style={ S('pull-left mr-15') }>
+          <div style={ S('mb-20 h-100') }>
+            <div style={ S('absolute mr-15') }>
               <div style={ S(`w-100 h-100 bg-cover bg-center bg-url(${current_listing.cover_image_url})`) }/>
             </div>
-            <div style={ S('pull-left w-70p') }>
-              <input style={ filter_text_style } ref="message" type="text" placeholder="Share message..." />
+            <div style={ S('ml-115 w-100p') }>
+              <input style={ message_style } ref="message" type="text" placeholder="Share message..." />
               <div style={ S('color-929292 font-16') }>Share listing</div>
             </div>
             <div className="clearfix"></div>
