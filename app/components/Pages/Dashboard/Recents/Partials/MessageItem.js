@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import ProfileImage from '../../Partials/ProfileImage'
 import S from 'shorti'
 import helpers from '../../../../../utils/helpers'
+import listing_util from '../../../../../utils/listing'
 import emojify from 'emojify.js'
 import linkifyString from 'linkifyjs/string'
 emojify.setConfig({
@@ -15,6 +16,9 @@ export default class MessageItem extends Component {
     const data = this.props.data
     const messages = data.messages
     const message = this.props.message
+    let recommendation
+    if (message.recommendation)
+      recommendation = message.recommendation
     const i = this.props.i
     let first_name
 
@@ -69,7 +73,7 @@ export default class MessageItem extends Component {
         )
       }
       message_image = (
-        <div onClick={ this.props.showFileViewer.bind(this, attachment) } style={ { ...S('mt-10'), cursor: 'zoom-in' } }>
+        <div className="box-shadow" onClick={ this.props.showFileViewer.bind(this, attachment) } style={ { ...S('mt-10'), cursor: 'zoom-in' } }>
           { message_thumb }
         </div>
       )
@@ -79,7 +83,7 @@ export default class MessageItem extends Component {
     if (message.recommendation && message.recommendation.listing && message.recommendation.listing.cover_image_url) {
       const cover_image_url = message.recommendation.listing.cover_image_url
       message_image = (
-        <div onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ S('pointer w-400 h-300 br-3 bg-url(' + cover_image_url + ') bg-cover bg-center') }></div>
+        <div className="box-shadow" onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ S('pointer w-400 h-300 br-3 bg-url(' + cover_image_url + ') bg-cover bg-center') }></div>
       )
     }
 
@@ -92,7 +96,7 @@ export default class MessageItem extends Component {
     if (!message_image && message.comment)
       message_text = emojify.replace(linkifyString(message.comment))
 
-    // Get latest author and group
+    // Get latest author and group (No profile image)
     if (message.author && !this.props.new_date) {
       if (messages[i - 1] && messages[i - 1].author && messages[i - 1].author.id === message.author.id) {
         return (
@@ -106,6 +110,33 @@ export default class MessageItem extends Component {
         )
       }
     }
+    if (recommendation) {
+      const listing = recommendation.listing
+      return (
+        <div className="message-item" style={ S('relative mb-5') }>
+          { profile_image_div }
+          <div className="pull-left" style={ S('ml-50') }>
+            <b>{ first_name || 'Rebot' }</b>
+            <span style={ S('color-ccc ml-20') } >
+              { time_created.month } { time_created.date }, { time_created.time_friendly }
+            </span>
+            <div className={ message_class_name } dangerouslySetInnerHTML={ { __html: message_text } }></div>
+            <div style={ S('mt-10 mb-10') }>{ message_image }</div>
+            <div style={ S('pointer mb-10') } onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) }>
+              <div style={ S('font-20 fw-700 mt-10') }>${ helpers.numberWithCommas(listing.price) }</div>
+              <div style={ S('font-16 fw-700') }>{ listing_util.addressTitle(listing.property.address) }</div>
+              <div style={ S('font-14 color-929292') }>
+                { listing.property.bedroom_count } Beds&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
+                { listing.property.bathroom_count } Bath&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
+                { listing_util.metersToFeet(listing.property.square_meters) } Sqft
+              </div>
+            </div>
+          </div>
+          <div className="clearfix"></div>
+        </div>
+      )
+    }
+    // Default
     return (
       <div className="message-item" style={ S('relative mb-5') }>
         { profile_image_div }

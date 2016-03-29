@@ -296,7 +296,7 @@ export default class SignUp extends Component {
     return (
       <div id="main-content" className="flex-center-wrap" style={ S('absolute h-100p w-100p') }>
         <MapBackground />
-        <div className="text-center center-block modal-shadow" style={ S('w-460 z-100 relative mt-60n bg-fff br-6') }>
+        <div className="text-center center-block box-shadow" style={ S('w-460 z-100 relative mt-60n bg-fff br-6') }>
           { main_content }
         </div>
       </div>

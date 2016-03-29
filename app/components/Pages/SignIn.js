@@ -116,7 +116,7 @@ export default class SignIn extends Component {
     return (
       <div id="main-content" className="flex-center-wrap page-bg-video" style={ S('absolute h-100p w-100p') }>
         <MapBackground />
-        <div className="text-center center-block modal-shadow" style={ S('w-460 z-100 relative mt-60n bg-fff br-6 p-50') }>
+        <div className="text-center center-block box-shadow" style={ S('w-460 z-100 relative mt-60n bg-fff br-6 p-50') }>
           <h1 className="tempo" style={ S('mb-20') }>Log in to Rechat</h1>
           <div style={ S('color-555555 mb-20 font-18 mb-20') }>It’s nice to have you back!</div>
           { invite_message }
