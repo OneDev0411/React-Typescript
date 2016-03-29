@@ -134,7 +134,7 @@ export default class MessageItem extends Component {
               <div style={ S('font-14 color-929292') }>
                 { listing.property.bedroom_count } Beds&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
                 { listing.property.bathroom_count } Bath&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
-                { listing_util.metersToFeet(listing.property.square_meters) } Sqft
+                { helpers.numberWithCommas(listing_util.metersToFeet(listing.property.square_meters)) } Sqft
               </div>
             </div>
           </div>
