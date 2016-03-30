@@ -12,9 +12,12 @@ import controller from '../controller'
 export default class ListingViewer extends Component {
   componentDidMount() {
     document.onkeydown = e => {
-      if (e.keyCode === 27)
-        this.props.hideModal()
       const data = this.props.data
+      if (e.keyCode === 27) {
+        if (!data.show_modal_gallery)
+          this.props.hideListingViewer()
+        this.props.hideModal()
+      }
       const modal_gallery = data.modal_gallery
       if (modal_gallery) {
         if (e.keyCode === 37)
@@ -514,13 +517,13 @@ export default class ListingViewer extends Component {
         </Modal>
         <ShareListingModal
           data={ data }
-          shareAlert={ controller.shareAlert }
-          handleShareFilter={ controller.handleShareFilter }
-          handleEmailChange={ controller.handleEmailChange }
-          handlePhoneNumberChange={ controller.handlePhoneNumberChange }
-          handleAddEmail={ controller.handleAddEmail }
-          handleAddPhoneNumber={ controller.handleAddPhoneNumber }
-          handleRemoveShareItem={ controller.handleRemoveShareItem }
+          shareAlert={ controller.listing_share.shareAlert }
+          handleShareFilter={ controller.share_modal.handleShareFilter }
+          handleEmailChange={ controller.share_modal.handleEmailChange }
+          handlePhoneNumberChange={ controller.share_modal.handlePhoneNumberChange }
+          handleAddEmail={ controller.share_modal.handleAddEmail }
+          handleAddPhoneNumber={ controller.share_modal.handleAddPhoneNumber }
+          handleRemoveShareItem={ controller.share_modal.handleRemoveShareItem }
         />
       </div>
     )

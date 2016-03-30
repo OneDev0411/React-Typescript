@@ -212,12 +212,10 @@ const controller = {
         AppStore.data.listing_map.filter_options.status_options[key] = [value]
         AppStore.data.listing_map.filter_options.sold = true
       }
-      if (key === 'active') {
+      if (key === 'active')
         AppStore.data.listing_map.filter_options.active = true
-      }
-      if (key === 'other') {
+      if (key === 'other')
         AppStore.data.listing_map.filter_options.other = true
-      }
     } else {
       AppStore.data.listing_map.filter_options.status_options[key] = options.filter(new_option => {
         return new_option !== value

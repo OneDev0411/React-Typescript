@@ -100,7 +100,7 @@ export default class ShareListingModal extends Component {
           )
         }
         return (
-          <div onClick={ controller.addToShareList.bind(this, 'rooms', room) } style={ S('relative h-60 pointer p-10') } className="share-item" key={ 'share-alert__room-' + room.id }>
+          <div onClick={ controller.share_modal.addToShareList.bind(this, 'rooms', room) } style={ S('relative h-60 pointer p-10') } className="share-item" key={ 'share-alert__room-' + room.id }>
             { profile_image_div }
             <div className="pull-left" style={ S('ml-50 w-90p') }>
               <div className="pull-left">
@@ -118,7 +118,7 @@ export default class ShareListingModal extends Component {
     if (contacts_filtered) {
       contacts_list = contacts_filtered.map(contact => {
         return (
-          <div onClick={ controller.addToShareList.bind(this, 'contacts', contact) } style={ S('h-60 relative p-3 pl-0 pr-10 mr-10 w-100p pointer p-10') } className="share-item" key={ 'share-alert__contact-' + contact.id }>
+          <div onClick={ controller.share_modal.addToShareList.bind(this, 'contacts', contact) } style={ S('h-60 relative p-3 pl-0 pr-10 mr-10 w-100p pointer p-10') } className="share-item" key={ 'share-alert__contact-' + contact.id }>
             <div style={ S('l-10 t-10 absolute') }>
               <ProfileImage data={ data } top={11} size={40} user={ contact }/>
             </div>
@@ -230,7 +230,7 @@ export default class ShareListingModal extends Component {
         phone_number_btn_color = '006aff'
     }
     return (
-      <Modal dialogClassName="modal-800" show={ data.show_share_listing_modal } onHide={ controller.hideShareListingModal } onShow={ this.onShow.bind(this) }>
+      <Modal dialogClassName="modal-800" show={ data.show_share_listing_modal } onHide={ controller.listing_map.hideShareListingModal } onShow={ this.onShow.bind(this) }>
         <Modal.Header closeButton style={ S('border-bottom-1-solid-f8f8f8') }>
           <Modal.Title className="tempo" style={ S('font-36') }>Share Listing</Modal.Title>
         </Modal.Header>
@@ -270,8 +270,8 @@ export default class ShareListingModal extends Component {
         <Modal.Footer style={ S('bg-f8f8f8') }>
           { message }
           { items_added_area }
-          <Button onClick={ controller.hideShareListingModal } bsStyle="link">Cancel</Button>
-          <Button className={ share_modal && share_modal.sending_share ? 'disabled' : '' } bsStyle="primary" onClick={ controller.shareListing.bind(this) }>{ share_modal && !share_modal.sending_share ? 'Share Listing' : 'Sending...' }&nbsp;&nbsp;<i className="fa fa-share"></i></Button>
+          <Button onClick={ controller.listing_viewer.hideShareListingModal } bsStyle="link">Cancel</Button>
+          <Button className={ share_modal && share_modal.sending_share ? 'disabled' : '' } bsStyle="primary" onClick={ controller.listing_share.shareListing.bind(this) }>{ share_modal && !share_modal.sending_share ? 'Share Listing' : 'Sending...' }&nbsp;&nbsp;<i className="fa fa-share"></i></Button>
         </Modal.Footer>
       </Modal>
     )

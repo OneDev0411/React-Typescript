@@ -446,7 +446,7 @@ export default class Dashboard extends Component {
         hideListingViewer={ this.hideListingViewer }
         showModalGallery={ this.showModalGallery }
         handleModalGalleryNav={ this.handleModalGalleryNav }
-        showShareListingModal={ controller.showShareListingModal }
+        showShareListingModal={ controller.listing_viewer.showShareListingModal }
       />
     )
     if (!loading && !rooms) {

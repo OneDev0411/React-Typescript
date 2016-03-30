@@ -104,7 +104,7 @@ export default class ShareAlertModal extends Component {
           )
         }
         return (
-          <div onClick={ controller.addToShareList.bind(this, 'rooms', room) } style={ S('relative h-60 pointer p-10') } className="share-item" key={ 'share-alert__room-' + room.id }>
+          <div onClick={ controller.share_modal.addToShareList.bind(this, 'rooms', room) } style={ S('relative h-60 pointer p-10') } className="share-item" key={ 'share-alert__room-' + room.id }>
             { profile_image_div }
             <div className="pull-left" style={ S('ml-50 w-90p') }>
               <div className="pull-left">
@@ -122,7 +122,7 @@ export default class ShareAlertModal extends Component {
     if (contacts_filtered) {
       contacts_list = contacts_filtered.map(contact => {
         return (
-          <div onClick={ controller.addToShareList.bind(this, 'contacts', contact) } style={ S('h-60 relative p-3 pl-0 pr-10 mr-10 w-100p pointer p-10') } className="share-item" key={ 'share-alert__contact-' + contact.id }>
+          <div onClick={ controller.share_modal.addToShareList.bind(this, 'contacts', contact) } style={ S('h-60 relative p-3 pl-0 pr-10 mr-10 w-100p pointer p-10') } className="share-item" key={ 'share-alert__contact-' + contact.id }>
             <div style={ S('l-10 t-10 absolute') }>
               <ProfileImage data={ data } top={11} size={40} user={ contact }/>
             </div>
@@ -234,7 +234,7 @@ export default class ShareAlertModal extends Component {
         phone_number_btn_color = '006aff'
     }
     return (
-      <Modal dialogClassName="modal-800" show={ listing_map && listing_map.show_share_modal } onHide={ controller.hideModal } onShow={ this.onShow.bind(this) }>
+      <Modal dialogClassName="modal-800" show={ listing_map && listing_map.show_share_modal } onHide={ controller.listing_map.hideModal } onShow={ this.onShow.bind(this) }>
         <Modal.Header closeButton style={ S('border-bottom-1-solid-f8f8f8') }>
           <Modal.Title className="tempo" style={ S('font-36') }>Share Alert</Modal.Title>
         </Modal.Header>

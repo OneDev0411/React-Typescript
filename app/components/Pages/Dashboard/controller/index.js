@@ -9,11 +9,11 @@ import listing_filter from './listing-filter'
 import share_modal from './share-modal'
 // combine controllers
 const controller = {
-  ...listing_map,
-  ...listing_share,
-  ...listing_viewer,
-  ...listing_panel,
-  ...listing_filter,
-  ...share_modal
+  listing_map,
+  listing_share,
+  listing_viewer,
+  listing_panel,
+  listing_filter,
+  share_modal
 }
 export default controller
