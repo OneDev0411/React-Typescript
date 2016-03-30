@@ -153,6 +153,7 @@ export default class Dashboard extends Component {
     delete AppStore.data.show_contacts_modal
     delete AppStore.data.show_settings_modal
     delete AppStore.data.show_modal_gallery
+    delete AppStore.data.show_alert_viewer
     AppStore.emitChange()
   }
 
@@ -447,6 +448,7 @@ export default class Dashboard extends Component {
         showModalGallery={ this.showModalGallery }
         handleModalGalleryNav={ this.handleModalGalleryNav }
         showShareListingModal={ controller.listing_viewer.showShareListingModal }
+        showAlertViewer={ controller.alert_viewer.showAlertViewer }
       />
     )
     if (!loading && !rooms) {

@@ -8,6 +8,7 @@ import getSimilarListings from '../actions/listings/get-similars'
 import getValerts from '../actions/listings/get-valerts'
 import getListing from '../actions/listings/get-listing'
 import shareAlert from '../actions/alerts/share-alert'
+import getAlert from '../actions/alerts/get-alert'
 import shareListing from '../actions/listings/share-listing'
 
 const ListingDispatcher = new Dispatcher()
@@ -39,6 +40,10 @@ ListingDispatcher.register(payload => {
 
     case 'share-alert':
       shareAlert(payload.user, payload.rooms, payload.contacts, payload.alert)
+      break
+
+    case 'get-alert':
+      getAlert(payload.user, payload.room_id, payload.alert_id)
       break
 
     case 'share-listing':

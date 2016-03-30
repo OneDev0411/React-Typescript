@@ -7,6 +7,8 @@ import listing_panel from './listing-panel'
 import listing_filter from './listing-filter'
 // Share modal
 import share_modal from './share-modal'
+// Alert
+import alert_viewer from './alert-viewer'
 // combine controllers
 const controller = {
   listing_map,
@@ -14,6 +16,7 @@ const controller = {
   listing_viewer,
   listing_panel,
   listing_filter,
-  share_modal
+  share_modal,
+  alert_viewer
 }
 export default controller

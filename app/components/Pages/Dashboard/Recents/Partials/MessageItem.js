@@ -1,5 +1,6 @@
 // MessagesItem.js
 import React, { Component } from 'react'
+import { Button } from 'react-bootstrap'
 import ProfileImage from '../../Partials/ProfileImage'
 import S from 'shorti'
 import helpers from '../../../../../utils/helpers'
@@ -19,6 +20,9 @@ export default class MessageItem extends Component {
     let recommendation
     if (message.recommendation)
       recommendation = message.recommendation
+    let alert
+    if (message.notification && message.notification.object_class === 'Alert')
+      alert = message.notification
     const i = this.props.i
     let first_name
 
@@ -112,11 +116,11 @@ export default class MessageItem extends Component {
     }
     if (recommendation) {
       // Hide recommendation notification message
-      if (!message.author) {
-        return (
-          <div></div>
-        )
-      }
+      // if (!message.author) {
+      //   return (
+      //     <div></div>
+      //   )
+      // }
       const listing = recommendation.listing
       return (
         <div className="message-item" style={ S('relative mb-5') }>
@@ -142,6 +146,15 @@ export default class MessageItem extends Component {
         </div>
       )
     }
+    // Show alert button
+    let alert_area
+    if (alert) {
+      alert_area = (
+        <div style={ S('mt-10') }>
+          <Button onClick={ this.props.showAlertViewer.bind(this, alert.id) } style={ S('border-1-solid-006aff color-006aff br-3 pl-20 pr-20') }>Show Homes</Button>
+        </div>
+      )
+    }
     // Default
     return (
       <div className="message-item" style={ S('relative mb-5') }>
@@ -153,6 +166,7 @@ export default class MessageItem extends Component {
           </span>
           <div className={ message_class_name } dangerouslySetInnerHTML={ { __html: message_text } }></div>
           { message_image }
+          { alert_area }
         </div>
         <div className="clearfix"></div>
       </div>
@@ -167,5 +181,6 @@ MessageItem.propTypes = {
   i: React.PropTypes.number.isRequired,
   showFileViewer: React.PropTypes.func,
   new_date: React.PropTypes.bool,
-  showListingViewer: React.PropTypes.func
+  showListingViewer: React.PropTypes.func,
+  showAlertViewer: React.PropTypes.func
 }

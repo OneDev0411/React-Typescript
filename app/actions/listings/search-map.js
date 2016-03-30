@@ -4,7 +4,6 @@ import AppStore from '../../stores/AppStore'
 
 export default (user, q) => {
   const q_commas = q.replace(/\s+/g, ',')
-  console.log(q_commas)
   const params = {
     q: q_commas,
     access_token: user.access_token
@@ -13,7 +12,6 @@ export default (user, q) => {
     // Listing map
     if (AppStore.data.listing_map && AppStore.data.listing_map.is_loading) {
       const listings = response.data
-      console.log(listings)
       delete AppStore.data.listing_map.is_loading
       AppStore.data.listing_map.listings = listings
       // Center and zoom map on single listing

@@ -1,7 +1,7 @@
 // MessagesList.js
 import React, { Component } from 'react'
 import S from 'shorti'
-// import Loading from '../../../../Partials/Loading'
+import Loading from '../../../../Partials/Loading'
 import { Tooltip, OverlayTrigger, Modal, Button } from 'react-bootstrap'
 import config from '../../../../../../config/public'
 import helpers from '../../../../../utils/helpers'
@@ -202,6 +202,7 @@ export default class MessagesList extends Component {
             showFileViewer={ this.props.showFileViewer }
             new_date={ new_date }
             showListingViewer={ this.props.showListingViewer }
+            showAlertViewer={ this.props.showAlertViewer }
           />
         </li>
       )
@@ -248,6 +249,16 @@ export default class MessagesList extends Component {
     }
     const btn_invite_style = S('w-40 h-40 pointer absolute p-0 t-10 r-20 br-100 bc-ddd bw-1 solid')
     const btn_settings_style = S('w-40 h-40 pointer absolute p-0 t-10 r-70 br-100 bc-ddd bw-1 solid color-929292')
+    let alert_viewer_area = (
+      <Loading />
+    )
+    if (data.listing_alerts) {
+      alert_viewer_area = (
+        <div>
+        Coming soon...
+        </div>
+      )
+    }
     return (
       <div>
         <button onClick={ this.props.showModal.bind(this, 'invite-user') } type="button" className="btn btn-default" style={ btn_invite_style } >
@@ -337,6 +348,15 @@ export default class MessagesList extends Component {
             <div className="clearfix"></div>
           </Modal.Body>
         </Modal>
+        <Modal show={ data.show_alert_viewer } onHide={ this.props.hideModal }>
+          <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
+           <Modal.Title style={ S('font-14') }>Alert</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            { alert_viewer_area }
+            <div className="clearfix"></div>
+          </Modal.Body>
+        </Modal>
       </div>
     )
   }
@@ -353,5 +373,6 @@ MessagesList.propTypes = {
   setHeadingDate: React.PropTypes.func,
   removeScrollBottom: React.PropTypes.func,
   showListingViewer: React.PropTypes.func,
-  changeListingNotification: React.PropTypes.func
+  changeListingNotification: React.PropTypes.func,
+  showAlertViewer: React.PropTypes.func
 }

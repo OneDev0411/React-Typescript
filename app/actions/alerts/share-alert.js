@@ -3,7 +3,6 @@ import Room from '../../models/Room'
 import Alert from '../../models/Alert'
 import AppStore from '../../stores/AppStore'
 import async from 'async'
-import _ from 'lodash'
 import getMessages from '../messages/get-messages'
 
 export default (user, rooms, contacts, alert) => {
@@ -11,14 +10,13 @@ export default (user, rooms, contacts, alert) => {
   AppStore.emitChange()
   if (rooms && rooms.length) {
     async.eachSeries(rooms, (room, callback) => {
-      alert.room = room
+      alert.room = room.id
       const params = {
         access_token: user.access_token,
         alert
       }
       Alert.create(params, () => {
-        const room_object = _.find(AppStore.data.rooms, { id: room })
-        getMessages(user, room_object)
+        getMessages(user, room)
         callback()
       })
     }, () => {
