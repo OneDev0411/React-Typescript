@@ -487,7 +487,7 @@ export default class Dashboard extends Component {
               <Input type="text" ref="title" placeholder="Chat room title"/>
             </Modal.Body>
             <Modal.Footer>
-              <Button onClick={ this.hideModal.bind(this) }>Cancel</Button>
+              <Button bsStyle="link" onClick={ this.hideModal.bind(this) }>Cancel</Button>
               <Button type="submit" bsStyle="primary">Start chat</Button>
             </Modal.Footer>
           </form>
