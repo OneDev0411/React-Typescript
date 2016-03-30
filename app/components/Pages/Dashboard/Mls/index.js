@@ -16,7 +16,6 @@ import FilterForm from './Partials/FilterForm'
 
 export default class Mls extends Component {
   componentWillMount() {
-    controller.consoleSomething()
     const data = this.props.data
     const user = data.user
     AppStore.data.user = user
