@@ -27,7 +27,7 @@ app.use(session({
     maxAge: null
   }
 }))
-app.use(bodyParser.json())
+app.use(bodyParser.json({limit: '5mb'}))
 
 // Socket.io
 const http = require('http').Server(app)
@@ -41,9 +41,9 @@ io.on('connection', function(socket){
 // For dev port access
 if(process.env.NODE_ENV === 'development'){
   app.use(function(req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:' + process.env.DEV_PORT)
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-    res.setHeader('Access-Control-Allow-Credentials', 'true')
+    res.header('Access-Control-Allow-Origin', 'http://localhost:' + process.env.DEV_PORT)
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+    res.header('Access-Control-Allow-Credentials', 'true')
     next()
   })
 }

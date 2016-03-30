@@ -183,7 +183,7 @@ export default class FilterForm extends Component {
               <div className="clearfix"></div>
             </div>
             <div style={ S('pl-15 pt-15 pb-15') }>
-              <div>Listing Types</div>
+              <div style={ S('mb-10') }>Listing Types</div>
               <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'any') ? S('mr-10 bg-667688 bc-667688') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'any' }) }>
                 <div style={ S('mb-10') }>
                   <img src={`/images/dashboard/mls/listing-types/any${this.buttonIsActive('listing_types', 'any') ? '-active' : ''}.svg`}/>
@@ -210,7 +210,7 @@ export default class FilterForm extends Component {
               </Button>
             </div>
             <div style={ S('p-15 mb-40') }>
-              <div>Price Range</div>
+              <div style={ S('mb-10') }>Price Range</div>
               <div>
                 <div style={ S('w-50p pull-left') }>
                   <Input onChange={ this.handleOptionChange.bind(this, 'minimum_price') } value={ filter_options && filter_options.minimum_price ? filter_options.minimum_price : '' } ref="minimum_price" type="text" placeholder="Min"/>
@@ -221,7 +221,7 @@ export default class FilterForm extends Component {
               </div>
             </div>
             <div style={ S('p-15') }>
-              <div>
+              <div style={ S('mb-10') }>
                 Bedrooms
               </div>
               <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 'any') ? S('mr-5 bg-667688 bc-667688 color-fff') : S('mr-5 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: 'any' }) }>Any</Button>
@@ -231,7 +231,7 @@ export default class FilterForm extends Component {
               <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 3) ? S('mr-5 bg-667688 bc-667688 color-fff') : S('mr-5 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '3' }) }>+3</Button>
             </div>
             <div style={ S('p-15') }>
-              <div>
+              <div style={ S('mb-10') }>
                 Bathrooms
               </div>
               <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 1) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '1' }) }>+1</Button>
@@ -240,7 +240,7 @@ export default class FilterForm extends Component {
               <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 4) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '4' }) }>+4</Button>
             </div>
             <div style={ S('p-15') }>
-              <div>Square Footage</div>
+              <div style={ S('mb-10') }>Square Footage</div>
               <div>
                 <div style={ S('w-50p pull-left') }>
                   <Input onChange={ this.handleOptionChange.bind(this, 'minimum_square_feet') } value={ filter_options && filter_options.minimum_square_feet ? filter_options.minimum_square_feet : '' } ref="minimum_square_feet" type="text" placeholder="Min"/>
@@ -251,7 +251,7 @@ export default class FilterForm extends Component {
               </div>
             </div>
             <div style={ S('p-15') }>
-              <div>
+              <div style={ S('mb-10') }>
                 Pool
               </div>
               <Button bsStyle="default" style={ this.buttonIsActive('pool', true) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: true }) }>Yes</Button>
@@ -259,7 +259,7 @@ export default class FilterForm extends Component {
               <Button bsStyle="default" style={ this.buttonIsActive('pool', 'either') ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: 'either' }) }>Either</Button>
             </div>
             <div style={ S('p-15') }>
-              <div>Lot Square Footage</div>
+              <div style={ S('mb-10') }>Lot Square Footage</div>
               <div>
                 <div style={ S('w-50p pull-left') }>
                   <Input onChange={ this.handleOptionChange.bind(this, 'minimum_lot_square_feet') } value={ filter_options && filter_options.minimum_lot_square_feet ? filter_options.minimum_lot_square_feet : '' } ref="minimum_lot_square_feet" type="text" placeholder="Min"/>
@@ -270,7 +270,7 @@ export default class FilterForm extends Component {
               </div>
             </div>
             <div style={ S('p-15') }>
-              <div>Year Built</div>
+              <div style={ S('mb-10') }>Year Built</div>
               <div>
                 <div style={ S('w-50p pull-left') }>
                   <Input onChange={ this.handleOptionChange.bind(this, 'minimum_year_built') } value={ filter_options && filter_options.minimum_year_built ? filter_options.minimum_year_built : '' } ref="minimum_year_built" type="text" placeholder="Min"/>

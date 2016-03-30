@@ -16,6 +16,7 @@ import FilterForm from './Partials/FilterForm'
 
 export default class Mls extends Component {
   componentWillMount() {
+    controller.consoleSomething()
     const data = this.props.data
     const user = data.user
     AppStore.data.user = user
@@ -122,12 +123,14 @@ export default class Mls extends Component {
             </div>
           )
         }
-        return (
-          <div onMouseOver={ controller.showListingPopup.bind(this, listing) } onMouseOut={ controller.hideListingPopup.bind(this) } key={ 'map-listing-' + listing.id } onClick={ controller.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
-            { listing_popup }
-            { listing_marker }
-          </div>
-        )
+        if (listing.location) {
+          return (
+            <div onMouseOver={ controller.showListingPopup.bind(this, listing) } onMouseOut={ controller.hideListingPopup.bind(this) } key={ 'map-listing-' + listing.id } onClick={ controller.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
+              { listing_popup }
+              { listing_marker }
+            </div>
+          )
+        }
       })
     }
     if (listing_map && listing_map.is_loading) {
