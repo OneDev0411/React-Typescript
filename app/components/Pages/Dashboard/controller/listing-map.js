@@ -162,7 +162,7 @@ const controller = {
     AppStore.data.listing_map.is_loading = true
     AppStore.emitChange()
     ListingDispatcher.dispatch({
-      action: 'search-listing',
+      action: 'search-listing-map',
       user,
       q
     })

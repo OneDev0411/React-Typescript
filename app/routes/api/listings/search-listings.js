@@ -4,7 +4,7 @@ module.exports = (app, config) => {
     const api_url = config.api.url
     const endpoint = api_url + '/listings/search?q=' + req.query.q
     const access_token = req.query.access_token
-    fetch(endpoint,{
+    fetch(endpoint, {
       method: 'get',
       headers: {  
         'Content-Type': 'application/json',

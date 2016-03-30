@@ -2,7 +2,8 @@
 import { Dispatcher } from 'flux'
 
 // Listings
-import searchListing from '../actions/listings/search'
+import searchListingTransaction from '../actions/listings/search-transaction'
+import searchListingMap from '../actions/listings/search-map'
 import getSimilarListings from '../actions/listings/get-similars'
 import getValerts from '../actions/listings/get-valerts'
 import getListing from '../actions/listings/get-listing'
@@ -16,8 +17,12 @@ ListingDispatcher.register(payload => {
   const action = payload.action
   switch (action) {
 
-    case 'search-listing':
-      searchListing(payload.user, payload.q)
+    case 'search-listing-transaction':
+      searchListingTransaction(payload.user, payload.q)
+      break
+
+    case 'search-listing-map':
+      searchListingMap(payload.user, payload.q)
       break
 
     case 'get-similar-listings':

@@ -7,7 +7,7 @@ module.exports = (app, config) => {
     const user_type = req.body.user_type
     const password = req.body.password
     const grant_type = req.body.grant_type
-    const connect = req.body.connect
+    const user_connect = req.body.user_connect
     const api_url = config.api.url
     const signup_url = api_url + '/users'
     const request_object = {
@@ -20,8 +20,8 @@ module.exports = (app, config) => {
       password: password,
       grant_type: grant_type
     }
-    if (connect)
-      request_object.connect = Number(connect)
+    if (user_connect)
+      request_object.user_connect = user_connect
     fetch(signup_url,{
       method: 'post',
       headers: {  
