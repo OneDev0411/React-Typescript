@@ -367,6 +367,14 @@ export default class SideBar extends Component {
         <div style={ S('mt-12') }>
           { /* <img src="/images/dashboard/icons/hamburger.svg"/> */ }
         </div>
+        { /* cache images */ }
+        <div style={ S('w-0 h-0 absolute l-1000n t-1000n') }>
+          <img src="/images/dashboard/sidenav/chat-active.svg"/>
+          <img src="/images/dashboard/sidenav/map-active.svg"/>
+          <img src="/images/dashboard/sidenav/people-active.svg"/>
+          <img src="/images/dashboard/sidenav/task-active.svg"/>
+          <img src="/images/dashboard/sidenav/transactions-active.svg"/>
+        </div>
         <Nav bsStyle="pills" stacked>
           <OverlayTrigger className="test" placement="right" overlay={ popover.conversation } delayShow={ 200 } delayHide={ 0 }>
             <LinkContainer className={ active.recents } to="/dashboard/recents">
