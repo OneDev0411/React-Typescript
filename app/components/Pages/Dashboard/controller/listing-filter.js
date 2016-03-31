@@ -61,9 +61,9 @@ const controller = {
         const minimum_sold_value = filter_options.status_options.sold
         options.minimum_sold_date = controller.getSoldDate(minimum_sold_value)
       }
-      if (filter_options.status_options.active && filter_options.status_options.active.length)
+      if (filter_options.status_options && filter_options.status_options.active && filter_options.status_options.active.length)
         listing_statuses = [...listing_statuses, ...filter_options.status_options.active]
-      if (filter_options.status_options.other && filter_options.status_options.other.length)
+      if (filter_options.status_options && filter_options.status_options.other && filter_options.status_options.other.length)
         listing_statuses = [...listing_statuses, ...filter_options.status_options.other]
       options.listing_statuses = listing_statuses
       // Bed / bath
@@ -175,7 +175,7 @@ const controller = {
     AppStore.data.listing_map.filter_options = {
       maximum_price: 5000000,
       active: true,
-      listing_types: ['house']
+      listing_types: ['any', 'house', 'condo', 'townhouse']
     }
     AppStore.emitChange()
     ListingDispatcher.dispatch({
