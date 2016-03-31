@@ -15,7 +15,7 @@ export default (user, q) => {
     const map = window.map
     delete AppStore.data.listing_map.is_loading
     AppStore.data.listing_map.listings = listings
-    const zoom = 10
+    const zoom = 13
     // Center and zoom map on single listing MLS
     if (listings.length === 1) {
       const listing = listings[0]

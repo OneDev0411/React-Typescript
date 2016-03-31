@@ -21,20 +21,17 @@ export default (user, title, due_date, contacts, transaction) => {
     AppStore.data.current_task.drawer_active = true
     AppStore.emitChange()
     // Then add contacts
-    TaskDispatcher.dispatch({
-      action: 'add-contacts',
-      user,
-      task: new_task,
-      contacts
-    })
-    // Add transaction
-    if (transaction) {
-      TaskDispatcher.dispatch({
-        action: 'add-transaction',
+    if (contacts) {
+      const payload = {
+        action: 'add-contacts',
         user,
-        transaction,
-        task: new_task
-      })
+        task: new_task,
+        contacts
+      }
+      // Add transaction
+      if (transaction)
+        payload.transaction = transaction
+      TaskDispatcher.dispatch(payload)
     }
   })
 }

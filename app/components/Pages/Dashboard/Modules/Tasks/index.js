@@ -123,13 +123,13 @@ export default class TasksModule extends Component {
     let transaction
     if (module_type === 'transaction')
       transaction = data.current_transaction
-    if (AppStore.data.new_task && AppStore.data.new_task.due_date)
-      due_date = AppStore.data.new_task.due_date / 1000
+    if (new_task && new_task.due_date)
+      due_date = new_task.due_date / 1000
+    let contacts
+    if (new_task)
+      contacts = new_task.contacts
     if (title) {
       this.hideDayPicker()
-      let contacts
-      if (new_task && new_task.contacts)
-        contacts = _.pluck(new_task.contacts, 'id')
       const user = data.user
       TaskDispatcher.dispatch({
         action: 'create-task',

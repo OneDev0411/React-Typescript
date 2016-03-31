@@ -1,12 +1,24 @@
-// actions/tasks/get.js
+// actions/tasks/add-contacts.js
 import Task from '../../models/Task'
 import AppStore from '../../stores/AppStore'
+import _ from 'lodash'
+import createContacts from './create-contacts'
 
 export default (user, task, contacts) => {
+  let contact_ids
+  let new_contacts
+  contact_ids = _.pluck(contacts, 'id')
+  // Remove placeholder ids
+  contact_ids = contact_ids.filter(contact_id => {
+    return typeof contact_id === 'string'
+  })
+  new_contacts = contacts.filter(contact => {
+    return contact.type === 'email' || contact.type === 'phone_number'
+  })
   const params = {
     access_token: user.access_token,
     task,
-    contacts
+    contacts: contact_ids
   }
   Task.addContacts(params, (err, response) => {
     if (response.status === 'success') {
@@ -17,4 +29,7 @@ export default (user, task, contacts) => {
     }
     AppStore.emitChange()
   })
+  // Create contacts then add
+  if (new_contacts && new_contacts.length)
+    createContacts(user, task, new_contacts)
 }
