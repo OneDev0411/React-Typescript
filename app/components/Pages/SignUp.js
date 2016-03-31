@@ -5,7 +5,7 @@ import { Button, Input, Alert } from 'react-bootstrap'
 import S from 'shorti'
 import AppDispatcher from '../../dispatcher/AppDispatcher'
 import AppStore from '../../stores/AppStore'
-import MapBackground from '../Partials/MapBackground'
+// import MapBackground from '../Partials/MapBackground'
 export default class SignUp extends Component {
   componentWillMount() {
     // Reset data store before mounting
@@ -295,7 +295,6 @@ export default class SignUp extends Component {
     }
     return (
       <div id="main-content" className="flex-center-wrap" style={ S('absolute h-100p w-100p') }>
-        <MapBackground />
         <div className="text-center center-block box-shadow" style={ S('w-460 z-100 relative mt-60n bg-fff br-6') }>
           { main_content }
         </div>

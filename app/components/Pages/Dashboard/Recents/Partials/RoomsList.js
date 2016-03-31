@@ -73,11 +73,14 @@ export default class RoomsList extends Component {
         // Profile image
         let author
         let profile_image_div
+        let list_style = { ...S('pointer pt-10 pb-10 pl-10 pr-37'), borderBottom: '1px solid #e7e4e3' }
+        if (current_room && current_room.id === room.id)
+          list_style = { ...list_style, ...S('bg-f5fafe') }
         if (!room.latest_message) {
           return (
             <li className="room-list__item" style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, i) }>
               <div style={ S('relative') }>
-                Loading...
+                New Room
               </div>
             </li>
           )
@@ -95,10 +98,6 @@ export default class RoomsList extends Component {
             </div>
           )
         }
-        let list_style = { ...S('pointer pt-10 pb-10 pl-10 pr-37'), borderBottom: '1px solid #e7e4e3' }
-        if (current_room && current_room.id === room.id)
-          list_style = { ...list_style, ...S('bg-f5fafe') }
-
         // List users
         const users = room.users
         const first_names = _.pluck(users, 'first_name')

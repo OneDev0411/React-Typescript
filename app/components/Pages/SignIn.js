@@ -7,7 +7,7 @@ import config from '../../../config/public'
 import AppStore from '../../stores/AppStore'
 import AppDispatcher from '../../dispatcher/AppDispatcher'
 import io from 'socket.io-client'
-import MapBackground from '../Partials/MapBackground'
+// import MapBackground from '../Partials/MapBackground'
 
 export default class SignIn extends Component {
 
@@ -115,7 +115,6 @@ export default class SignIn extends Component {
       signup_link += '?message=invite-room&room_id=' + room_id + '&invite_token=' + invite_token
     return (
       <div id="main-content" className="flex-center-wrap page-bg-video" style={ S('absolute h-100p w-100p') }>
-        <MapBackground />
         <div className="text-center center-block box-shadow" style={ S('w-460 z-100 relative mt-60n bg-fff br-6 p-50') }>
           <h1 className="tempo" style={ S('mb-20') }>Log in to Rechat</h1>
           <div style={ S('color-555555 mb-20 font-18 mb-20') }>It’s nice to have you back!</div>

@@ -17,7 +17,7 @@ export default user => {
       // sort my latest message
       if (rooms.length) {
         rooms = _.sortBy(rooms, room => {
-          return -room.latest_message.updated_at
+          return -room.updated_at
         })
         AppStore.data.rooms = rooms
         AppStore.data.current_room = rooms[0]
