@@ -2,8 +2,6 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import GoogleMap from 'google-map-react'
-import listing_util from '../../../../utils/listing'
-import helpers from '../../../../utils/helpers'
 import { ButtonGroup, Button } from 'react-bootstrap'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import AppStore from '../../../../stores/AppStore'
@@ -13,7 +11,7 @@ import ShareAlertModal from './Partials/ShareAlertModal'
 import ListingViewer from '../Partials/ListingViewer'
 import ListingPanel from './Partials/ListingPanel'
 import FilterForm from './Partials/FilterForm'
-
+import ListingMarker from '../Partials/ListingMarker'
 export default class Mls extends Component {
   componentWillMount() {
     const data = this.props.data
@@ -49,7 +47,6 @@ export default class Mls extends Component {
       user
     })
   }
-
   componentDidUpdate() {
     const data = this.props.data
     if (!data.current_listing && data.path !== '/dashboard/mls') {
@@ -59,12 +56,10 @@ export default class Mls extends Component {
       AppStore.emitChange()
     }
   }
-
   componentWillUnmount() {
     controller.listing_map.hideModal()
     controller.listing_viewer.hideListingViewer()
   }
-
   render() {
     const data = this.props.data
     const listing_map = data.listing_map
@@ -74,62 +69,18 @@ export default class Mls extends Component {
     if (listing_map && listing_map.listings) {
       const listings = listing_map.listings
       map_listing_markers = listings.map(listing => {
-        const status_color = listing_util.getStatusColor(listing.status)
-        let price_small = Math.floor(listing.price / 1000).toFixed(2).replace(/[.,]00$/, '')
-        let letter = 'K'
-        if (price_small > 1000) {
-          price_small = (price_small / 1000).toFixed(2).replace(/[.,]00$/, '')
-          letter = 'M'
-        }
-        let active_class = ''
-        if (listing.id === data.listing_map.active_listing)
-          active_class = ' active'
-        let popup_class = 'hidden'
-        if (listing.id === data.listing_map.listing_popup || listing.id === data.listing_map.active_listing)
-          popup_class = ''
-        const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(listing.compact_property.square_meters)))
-        const listing_popup = (
-          <div className={ popup_class } style={ S('absolute w-240 t-110n l-35n z-1000 bg-fff border-1-solid-929292') }>
-            <div style={ S('pull-left mr-10') }>
-              <div style={ S(`w-80 h-80 bg-url(${listing.cover_image_url}) bg-cover bg-center`) }/>
-            </div>
-            <div style={ S('pull-left pt-10') }>
-              <div className="listing-map__marker__popup__title" style={ S('font-12 w-140') }>{ listing_util.addressTitle(listing.address) }</div>
-              <div style={ S('font-11') }>{ listing.compact_property.bedroom_count } Beds,&nbsp;
-              { listing.compact_property.bathroom_count } Baths,&nbsp;
-              { square_feet } Sqft</div>
-              <div style={ S('font-11 color-' + listing_util.getStatusColor(listing.status)) }>{ listing.status }</div>
-            </div>
+        return (
+          <div onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) } onMouseOut={ controller.listing_map.hideListingPopup.bind(this) } key={ 'map-listing-' + listing.id } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
+            <ListingMarker
+              key={ 'listing-marker' + listing.id }
+              data={ data }
+              listing={ listing }
+              property={ listing.compact_property }
+              address={ listing.address }
+              context={ 'map' }
+            />
           </div>
         )
-        let listing_marker = (
-          <div className={ 'map__listing-marker' + active_class } style={ S('relative w-70 h-25 br-3') }>
-            <div style={ S('absolute l-6 t-8 w-10 h-10 br-100 bg-' + status_color) }></div>
-            <div style={ S('absolute r-10 t-6') }>${ price_small }{ letter }</div>
-          </div>
-        )
-        if (listing.open_houses) {
-          // Open house marker
-          const open_style = {
-            ...S('bg-35b863 w-15 h-100p color-fff font-5 pt-3'),
-            lineHeight: '5px'
-          }
-          listing_marker = (
-            <div className={ 'map__listing-marker' + active_class } style={ S('relative w-80 h-25 br-3') }>
-              <div style={ open_style }>O<br />P<br />E<br />N</div>
-              <div style={ S('absolute l-20 t-8 w-10 h-10 br-100 bg-' + status_color) }></div>
-              <div style={ S('absolute r-10 t-6') }>${ price_small }{ letter }</div>
-            </div>
-          )
-        }
-        if (listing.location) {
-          return (
-            <div onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) } onMouseOut={ controller.listing_map.hideListingPopup.bind(this) } key={ 'map-listing-' + listing.id } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
-              { listing_popup }
-              { listing_marker }
-            </div>
-          )
-        }
       })
     }
     if (listing_map && listing_map.is_loading) {
@@ -296,7 +247,6 @@ export default class Mls extends Component {
     )
   }
 }
-
 Mls.propTypes = {
   data: React.PropTypes.object
 }

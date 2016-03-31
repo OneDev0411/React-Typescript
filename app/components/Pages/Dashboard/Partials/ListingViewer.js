@@ -8,7 +8,9 @@ import helpers from '../../../../utils/helpers'
 import listing_util from '../../../../utils/listing'
 import Loading from '../../../Partials/Loading'
 import ShareListingModal from './ShareListingModal'
+import ListingMarker from './ListingMarker'
 import controller from '../controller'
+import GoogleMap from 'google-map-react'
 export default class ListingViewer extends Component {
   componentDidMount() {
     document.onkeydown = e => {
@@ -174,7 +176,6 @@ export default class ListingViewer extends Component {
           </div>
         )
       }
-      const google_address = listing.property.address.geo_source_formatted_address_google
       let lot_size_area
       if (lot_size) {
         lot_size_area = (
@@ -255,14 +256,31 @@ export default class ListingViewer extends Component {
                 <div className="clearfix"></div>
               </div>
               <div style={ S('relative w-50p pull-left') }>
-                <iframe
-                  width={ (window.innerWidth / 2) - 100 }
-                  height="250"
-                  frameBorder="0" style={ { border: 0 } }
-                  src={ 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDagxNRLRIOsF8wxmuh1J3ysqnwdDB93-4&q=' + google_address }
-                  allowFullScreen
+                <GoogleMap
+                  style={ S('w-100p h-250') }
+                  key={ 'map' }
+                  center={ { lat: listing.property.address.location.latitude, lng: listing.property.address.location.longitude } }
+                  zoom={ 12 }
+                  options={ { scrollwheel: false } }
                 >
-                </iframe>
+                  <div
+                    onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) }
+                    onMouseOut={ controller.listing_map.hideListingPopup.bind(this) }
+                    onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }
+                    style={ S('pointer mt-10') } lat={ listing.property.address.location.latitude }
+                    lng={ listing.property.address.location.longitude }
+                    text={'A'}
+                  >
+                    <ListingMarker
+                      key={ 'listing-marker' + listing.id }
+                      data={ data }
+                      listing={ listing }
+                      property={ listing.property }
+                      address={ listing.property.address }
+                      context={ 'single' }
+                    />
+                  </div>
+                </GoogleMap>
               </div>
               <div className="clearfix"></div>
             </div>

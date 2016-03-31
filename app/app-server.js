@@ -4,10 +4,6 @@ import bodyParser from 'body-parser'
 import hogan from 'hogan-express'
 import compression from 'compression'
 import session from 'express-session'
-import es6Promise from 'es6-promise'
-es6Promise.polyfill();
-import 'isomorphic-fetch'
-
 import config from '../config/private'
 
 // Express
