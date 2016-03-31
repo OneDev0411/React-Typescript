@@ -67,7 +67,11 @@ export default class Mls extends Component {
     let map_listing_markers
     let loading
     if (listing_map && listing_map.listings) {
-      const listings = listing_map.listings
+      let listings = listing_map.listings
+      // Filter out non location
+      listings = listings.filter(listing => {
+        return listing.location
+      })
       map_listing_markers = listings.map(listing => {
         return (
           <div onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) } onMouseOut={ controller.listing_map.hideListingPopup.bind(this) } key={ 'map-listing-' + listing.id } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
