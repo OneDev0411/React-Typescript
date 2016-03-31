@@ -257,7 +257,7 @@ export default class ListingViewer extends Component {
               </div>
               <div style={ S('relative w-50p pull-left') }>
                 <GoogleMap
-                  style={ S('w-100p h-250') }
+                  style={ S('w-100p h-350') }
                   key={ 'map' }
                   center={ { lat: listing.property.address.location.latitude, lng: listing.property.address.location.longitude } }
                   zoom={ 12 }
