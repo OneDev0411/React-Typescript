@@ -378,7 +378,7 @@ export default class MessagesList extends Component {
         </Modal>
         <Modal show={ data.show_alert_viewer } onHide={ this.props.hideAlertViewer }>
           <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
-           <Modal.Title>Alert</Modal.Title>
+           <Modal.Title>Alert { data.listing_alerts ? `(${data.listing_alerts.length} Homes)` : '' } </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             { alert_viewer_area }

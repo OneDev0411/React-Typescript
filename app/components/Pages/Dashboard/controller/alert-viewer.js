@@ -17,6 +17,7 @@ const controller = {
   },
   hideAlertViewer() {
     delete AppStore.data.show_alert_viewer
+    delete AppStore.data.listing_alerts
     AppStore.emitChange()
   }
 }

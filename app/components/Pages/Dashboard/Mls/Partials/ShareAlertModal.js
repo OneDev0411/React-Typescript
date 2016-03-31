@@ -162,7 +162,7 @@ export default class ShareAlertModal extends Component {
       )
     }
     const filter_text_style = {
-      ...S('p-0 mb-5 border-1-solid-fff font-28 h-40'),
+      ...S('p-0 mb-5 border-1-solid-fff font-28 h-40 w-100p'),
       outline: 'none'
     }
     const pill_style = S('bg-dadada color-4c7dbf pr-10 pl-10 pt-5 pb-5 br-3 pull-left mr-5 mb-5')
@@ -243,7 +243,7 @@ export default class ShareAlertModal extends Component {
             <div style={ S('pull-left mr-15') }>
               <img style={ S('w-100 h-100 br-3') } src="/images/dashboard/mls/map-tile.jpg" />
             </div>
-            <div style={ S('pull-left w-70p') }>
+            <div style={ S('pull-left w-82p') }>
               <input style={ filter_text_style } ref="alert_title" type="text" placeholder="Name this alert..." />
               <div style={ S('color-929292 font-20') }>{ listing_map && listing_map.listings ? listing_map.listings.length : '' } Results</div>
               <div style={ S('color-929292 font-16') }>We’ll keep you updated with any new listings.</div>

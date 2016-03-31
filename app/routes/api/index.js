@@ -59,6 +59,7 @@ module.exports = (app, config) => {
   require('./agents/get-report')(app, config)
   require('./agents/search-agent')(app, config)
   // Alerts
+  require('./alerts/create-room-alert')(app, config)
   require('./alerts/create-alert')(app, config)
   require('./alerts/get-alert')(app, config)
 }

@@ -1,19 +1,11 @@
-// api/alerts/create-alert.js
+// api/alerts/create-room-alert.js
 module.exports = (app, config) => {
-  app.post('/api/alerts/create-alert',(req, res) => {
+  app.post('/api/alerts/create-room-alert',(req, res) => {
     const api_url = config.api.url
     const alert = req.body.alert
-    const emails = req.body.emails
-    const phone_numbers = req.body.phone_numbers
-    const request_object = {
-      alert
-    }
-    if (emails)
-      request_object.emails = emails
-    if (phone_numbers)
-      request_object.emails = phone_numbers
+    const request_object = alert
     const access_token = req.body.access_token
-    const endpoint = api_url + '/alerts'
+    const endpoint = api_url + '/rooms/' + alert.room + '/alerts'
     fetch(endpoint,{
       method: 'post',
       headers: {

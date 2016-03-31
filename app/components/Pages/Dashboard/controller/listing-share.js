@@ -11,10 +11,10 @@ const controller = {
     const alert = listing_map.options
     const user = data.user
     const share_modal = data.share_modal
-    let rooms_added = []
-    let contacts_added = []
-    let emails_added = []
-    let phone_numbers_added = []
+    let rooms_added
+    let contacts_added
+    let emails_added
+    let phone_numbers_added
     if (share_modal) {
       if (share_modal.rooms_added)
         rooms_added = share_modal.rooms_added
@@ -32,9 +32,9 @@ const controller = {
       AppStore.emitChange()
       return
     }
-    if (!rooms_added.length && !contacts_added.length && !emails_added.length && !phone_numbers_added.length) {
+    if (!rooms_added && !contacts_added && !emails_added && !phone_numbers_added) {
       AppStore.data.error = {
-        message: 'You must add at least one room or one contact.'
+        message: 'You must add at least one room, contact, email or phone number.'
       }
       AppStore.emitChange()
       return

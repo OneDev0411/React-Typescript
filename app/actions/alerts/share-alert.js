@@ -5,9 +5,38 @@ import AppStore from '../../stores/AppStore'
 import async from 'async'
 import getMessages from '../messages/get-messages'
 
-export default (user, rooms, contacts, alert) => {
+export default (user, rooms, contacts, emails, phone_numbers, alert) => {
   AppStore.data.listing_map.saving_alert = true
   AppStore.emitChange()
+  // Share w/ emails
+  if (emails && emails.length) {
+    alert.emails = emails
+    const params = {
+      access_token: user.access_token,
+      alert
+    }
+    Alert.create(params, () => {
+      delete AppStore.data.listing_map.saving_alert
+      delete AppStore.data.listing_map.show_share_modal
+      delete AppStore.data.share_list
+      AppStore.emitChange()
+    })
+  }
+  // Share w/ phone_numbers
+  if (phone_numbers && phone_numbers.length) {
+    alert.phone_numbers = phone_numbers
+    const params = {
+      access_token: user.access_token,
+      alert
+    }
+    Alert.create(params, () => {
+      delete AppStore.data.listing_map.saving_alert
+      delete AppStore.data.listing_map.show_share_modal
+      delete AppStore.data.share_list
+      AppStore.emitChange()
+    })
+  }
+  // Share w/ room
   if (rooms && rooms.length) {
     async.eachSeries(rooms, (room, callback) => {
       alert.room = room.id
@@ -15,7 +44,7 @@ export default (user, rooms, contacts, alert) => {
         access_token: user.access_token,
         alert
       }
-      Alert.create(params, () => {
+      Alert.createRoomAlert(params, () => {
         getMessages(user, room)
         callback()
       })
@@ -26,8 +55,9 @@ export default (user, rooms, contacts, alert) => {
       AppStore.emitChange()
     })
   }
+  // Share w/ contacts
   if (contacts && contacts.length) {
-    const data = {}
+    const locals = {}
     async.series([
       callback => {
         // Create room
@@ -42,7 +72,7 @@ export default (user, rooms, contacts, alert) => {
           AppStore.data.current_room = new_room
           AppStore.data.messages = [new_room.latest_message]
           getMessages(user, new_room)
-          data.room_id = data.id
+          locals.room_id = new_room.id
           callback()
         })
       },
@@ -50,7 +80,7 @@ export default (user, rooms, contacts, alert) => {
         // Invite contacts
         const invitations = contacts.map(contact => {
           const invitation = {
-            room: data.room_id
+            room: locals.room_id
           }
           if (contact.first_name)
             invitation.invitee_first_name = contact.first_name
@@ -72,12 +102,12 @@ export default (user, rooms, contacts, alert) => {
       },
       callback => {
         // Create alert
-        alert.room = data.room_id
+        alert.room = locals.room_id
         const params = {
           access_token: user.access_token,
           alert
         }
-        Alert.create(params, () => {
+        Alert.createRoomAlert(params, () => {
           callback()
         })
       }
