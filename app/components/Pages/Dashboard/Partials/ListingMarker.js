@@ -18,10 +18,10 @@ export default class ListingMarker extends Component {
       letter = 'M'
     }
     let active_class = ''
-    if (listing.id === data.listing_map.active_listing || context === 'single')
+    if (data.listing_map && listing.id === data.listing_map.active_listing || context === 'single')
       active_class = ' active'
     let popup_class = 'hidden'
-    if (data.listing_map && listing.id === data.listing_map.listing_popup || listing.id === data.listing_map.active_listing || context === 'single')
+    if (data.listing_map && listing.id === data.listing_map.listing_popup || data.listing_map && listing.id === data.listing_map.active_listing || context === 'single')
       popup_class = ''
     const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
     const listing_popup = (
@@ -71,5 +71,5 @@ ListingMarker.propTypes = {
   listing: React.PropTypes.object,
   property: React.PropTypes.object,
   address: React.PropTypes.object,
-  context: React.PropTypes.bool
+  context: React.PropTypes.string
 }
