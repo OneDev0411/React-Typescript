@@ -29,5 +29,4 @@ module.exports = (app, config) => {
       return res.json(response_object)
     });
   })
-
 }

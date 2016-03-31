@@ -344,6 +344,7 @@ export default class Dashboard extends Component {
   showListingViewer(listing) {
     AppStore.data.show_listing_viewer = true
     AppStore.data.current_listing = listing
+    delete AppStore.data.show_alert_viewer
     AppStore.emitChange()
   }
 
@@ -449,6 +450,7 @@ export default class Dashboard extends Component {
         handleModalGalleryNav={ this.handleModalGalleryNav }
         showShareListingModal={ controller.listing_viewer.showShareListingModal }
         showAlertViewer={ controller.alert_viewer.showAlertViewer }
+        hideAlertViewer={ controller.alert_viewer.hideAlertViewer }
       />
     )
     if (!loading && !rooms) {

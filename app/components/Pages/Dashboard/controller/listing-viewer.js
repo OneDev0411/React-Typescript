@@ -1,4 +1,4 @@
-// controller/share-alert.js
+// controller/listing-viewer.js
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 const controller = {
@@ -9,6 +9,7 @@ const controller = {
     const user = data.user
     AppStore.data.show_listing_viewer = true
     AppStore.data.current_listing = listing
+    delete AppStore.data.show_alert_viewer
     AppStore.emitChange()
     ListingDispatcher.dispatch({
       action: 'get-listing',

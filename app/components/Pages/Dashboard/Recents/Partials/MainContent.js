@@ -232,6 +232,7 @@ export default class MainContent extends Component {
                 showListingViewer={ this.props.showListingViewer }
                 changeListingNotification={ this.props.changeListingNotification }
                 showAlertViewer={ this.props.showAlertViewer }
+                hideAlertViewer={ this.props.hideAlertViewer }
               />
               { uploading_area }
               { create_message_area }
@@ -276,5 +277,6 @@ MainContent.propTypes = {
   showModalGallery: React.PropTypes.func,
   handleModalGalleryNav: React.PropTypes.func,
   showShareListingModal: React.PropTypes.func,
-  showAlertViewer: React.PropTypes.func
+  showAlertViewer: React.PropTypes.func,
+  hideAlertViewer: React.PropTypes.func
 }

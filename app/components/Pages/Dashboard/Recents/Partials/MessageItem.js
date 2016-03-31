@@ -22,7 +22,7 @@ export default class MessageItem extends Component {
       recommendation = message.recommendation
     let alert
     if (message.notification && message.notification.object_class === 'Alert')
-      alert = message.notification
+      alert = message.notification.objects[0]
     const i = this.props.i
     let first_name
 

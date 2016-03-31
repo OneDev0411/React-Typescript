@@ -2,9 +2,10 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import Loading from '../../../../Partials/Loading'
-import { Tooltip, OverlayTrigger, Modal, Button } from 'react-bootstrap'
+import { Carousel, CarouselItem, Tooltip, OverlayTrigger, Modal, Button } from 'react-bootstrap'
 import config from '../../../../../../config/public'
 import helpers from '../../../../../utils/helpers'
+import listing_util from '../../../../../utils/listing'
 import Switch from 'react-ios-switch'
 
 // AppDispatcher
@@ -252,10 +253,37 @@ export default class MessagesList extends Component {
     let alert_viewer_area = (
       <Loading />
     )
+    const prev_icon = '<'
+    const next_icon = '>'
     if (data.listing_alerts) {
+      const img_cache = data.listing_alerts.map(listing_alert => {
+        const listing = listing_alert.listing
+        return <img key={ `img-cache-${listing.id}`} src={ listing.cover_image_url } style={ S('absolute w-0 h-0 l-1000n r-1000n') }/>
+      })
       alert_viewer_area = (
         <div>
-        Coming soon...
+          { img_cache }
+          <Carousel className="listing-viewer__carousel carousel--alert" interval={0} indicators={false} prevIcon={ prev_icon } nextIcon={ next_icon }>
+            {
+              data.listing_alerts.map(listing_alert => {
+                const listing = listing_alert.listing
+                return (
+                  <CarouselItem key={ 'gallery-image-' + listing.id }>
+                    <div onClick={ this.props.showListingViewer.bind(this, listing) } style={ S('pointer w-100p h-300 text-center bg-efefef bg-cover bg-center bg-url(' + listing.cover_image_url + ')') }/>
+                    <div style={ S('pointer mb-10') } onClick={ this.props.showListingViewer.bind(this, listing) }>
+                      <div style={ S('font-20 fw-700 mt-10') }>${ helpers.numberWithCommas(listing.price) }</div>
+                      <div style={ S('font-16 fw-700') }>{ listing_util.addressTitle(listing.property.address) }</div>
+                      <div style={ S('font-14 color-929292') }>
+                        { listing.property.bedroom_count } Beds&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
+                        { listing.property.bathroom_count } Bath&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
+                        { helpers.numberWithCommas(listing_util.metersToFeet(listing.property.square_meters)) } Sqft
+                      </div>
+                    </div>
+                  </CarouselItem>
+                )
+              })
+            }
+          </Carousel>
         </div>
       )
     }
@@ -348,9 +376,9 @@ export default class MessagesList extends Component {
             <div className="clearfix"></div>
           </Modal.Body>
         </Modal>
-        <Modal show={ data.show_alert_viewer } onHide={ this.props.hideModal }>
+        <Modal show={ data.show_alert_viewer } onHide={ this.props.hideAlertViewer }>
           <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
-           <Modal.Title style={ S('font-14') }>Alert</Modal.Title>
+           <Modal.Title>Alert</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             { alert_viewer_area }
@@ -374,5 +402,6 @@ MessagesList.propTypes = {
   removeScrollBottom: React.PropTypes.func,
   showListingViewer: React.PropTypes.func,
   changeListingNotification: React.PropTypes.func,
-  showAlertViewer: React.PropTypes.func
+  showAlertViewer: React.PropTypes.func,
+  hideAlertViewer: React.PropTypes.func
 }
