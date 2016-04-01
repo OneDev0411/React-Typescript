@@ -2,6 +2,7 @@
 import User from '../../models/User'
 import AppStore from '../../stores/AppStore'
 import validator from 'validator'
+import async from 'async'
 export default (user, password, confirm_password, redirect_to) => {
   let email_trim
   let password_trim
@@ -52,28 +53,51 @@ export default (user, password, confirm_password, redirect_to) => {
   // Check for inviting_user
   if (AppStore.data.signup.inviting_user)
     user.user_connect = AppStore.data.signup.inviting_user
-  const params = {
+  let params = {
     user
   }
-  User.create(params, (err, response) => {
-    // Success
-    if (response.status === 'success') {
-      const new_user = response.data
-      AppStore.data = {
-        status: 'success',
-        show_message: true,
-        new_user,
-        redirect_to
+  const locals = {}
+  async.series([
+    callback => {
+      User.create(params, (err, response) => {
+        // Success
+        if (response.status === 'success') {
+          const new_user = response.data
+          AppStore.data = {
+            status: 'success',
+            show_message: true,
+            new_user,
+            redirect_to
+          }
+          callback()
+        } else {
+          AppStore.data = {
+            submitting: false,
+            errors: true,
+            error_type: 'server',
+            show_message: true,
+            response: 'email-in-use'
+          }
+        }
+        AppStore.emitChange()
+      })
+    },
+    callback => {
+      params = {
+        email: user.email,
+        password: user.password
       }
-    } else {
-      AppStore.data = {
-        submitting: false,
-        errors: true,
-        error_type: 'server',
-        show_message: true,
-        response: 'email-in-use'
+      User.signin(params, (err, response) => {
+        const data = response.data
+        locals.access_token = data.access_token
+        callback()
+      })
+    },
+    () => {
+      params = {
+        access_token: locals.access_token
       }
+      User.sendVerifyEmail(params, () => {})
     }
-    AppStore.emitChange()
-  })
+  ])
 }

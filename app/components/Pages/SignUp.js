@@ -20,6 +20,8 @@ export default class SignUp extends Component {
     }
   }
   handleUserTypeClick(user_type) {
+    if (!AppStore.data.signup)
+      AppStore.data.signup = {}
     AppStore.data.signup.user_type = user_type
     AppStore.emitChange()
   }

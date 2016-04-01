@@ -9,8 +9,7 @@ module.exports = (app, config) => {
       headers: {
         'Content-Type': 'application/json',
         'authorization': 'Bearer ' + access_token,
-      },
-      body: JSON.stringify(request_object)
+      }
     })
     .then(response => {
       if (response.status >= 400) {
