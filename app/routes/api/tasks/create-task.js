@@ -11,7 +11,7 @@ module.exports = (app, config) => {
       title,
       status: 'New',
       private: private_,
-
+      due_date
     }
     fetch(endpoint,{
       method: 'post',

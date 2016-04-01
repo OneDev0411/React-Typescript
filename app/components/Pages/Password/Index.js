@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import AppDispatcher from '../../../dispatcher/AppDispatcher'
 import AppStore from '../../../stores/AppStore'
-import MapBackground from '../../Partials/MapBackground'
+// import MapBackground from '../../Partials/MapBackground'
 import Forgot from './Partials/Forgot'
 import Reset from './Partials/Reset'
 import S from 'shorti'
@@ -58,7 +58,6 @@ export default class Password extends Component {
 
     return (
       <div id="main-content" className="flex-center-wrap" style={ S('absolute h-100p w-100p') }>
-        <MapBackground />
         <div className="text-center center-block box-shadow" style={ S('w-460 z-100 relative mt-60n bg-fff br-6 p-50') }>
           { main_content }
         </div>
