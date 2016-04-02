@@ -224,15 +224,15 @@ export default class ShareAlertModal extends Component {
       )
     }
     let filter_text
-    let email_btn_color = 'e5e5e5'
-    let phone_number_btn_color = 'e5e5e5'
-    if (share_modal) {
-      filter_text = share_modal.filter_text
-      if (share_modal.email_valid)
-        email_btn_color = '006aff'
-      if (share_modal.phone_number_valid)
-        phone_number_btn_color = '006aff'
-    }
+    // let email_btn_color = 'e5e5e5'
+    // let phone_number_btn_color = 'e5e5e5'
+    // if (share_modal) {
+    //   filter_text = share_modal.filter_text
+    //   if (share_modal.email_valid)
+    //     email_btn_color = '006aff'
+    //   if (share_modal.phone_number_valid)
+    //     phone_number_btn_color = '006aff'
+    // }
     return (
       <Modal dialogClassName="modal-800" show={ listing_map && listing_map.show_share_modal } onHide={ controller.listing_map.hideModal } onShow={ this.onShow.bind(this) }>
         <Modal.Header closeButton style={ S('border-bottom-1-solid-f8f8f8') }>
