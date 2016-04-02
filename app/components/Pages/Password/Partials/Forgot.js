@@ -82,7 +82,7 @@ export default class Forgot extends Component {
           <Input style={ input_style } bsStyle={ email_style } ref="email" placeholder="Email address" type="text" />
           { message }
           <Col sm={4} className="forgot__password-btn--cancel" style={ S('p-0 pr-10') }>
-            <Link className="btn btn-default" style={ S('w-100p') } to="/signin">Cancel</Link>
+            <Link className="btn btn-link" style={ S('w-100p') } to="/signin">Cancel</Link>
           </Col>
           <Col sm={8} style={ S('p-0') }>
             <Button type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p') }>
