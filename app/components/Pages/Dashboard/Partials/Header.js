@@ -87,7 +87,13 @@ export default class Header extends Component {
             return contact.id
         })
         contact_tabs_markup = contact_tabs.map(contact => {
-          const tab_title = contact.first_name + ' ' + contact.last_name
+          let tab_title
+          if (contact.phone_number)
+            tab_title = contact.phone_number
+          if (contact.email)
+            tab_title = contact.email
+          if (contact.first_name && contact.last_name)
+            tab_title = contact.first_name + ' ' + contact.last_name
           return (
             <NavItem onClick={ this.props.viewContact.bind(this, contact) } key={ 'contact-tab-' + contact.id } eventKey={ contact.id }>
               { tab_title }
