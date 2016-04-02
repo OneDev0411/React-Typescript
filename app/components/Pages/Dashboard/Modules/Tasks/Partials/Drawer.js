@@ -6,8 +6,8 @@ import { Button, Input } from 'react-bootstrap'
 // Partials
 import CheckBox from './CheckBox'
 import ProfileImage from '../../../Partials/ProfileImage'
-import Transaction from './Transaction'
-import Loading from '../../../../../Partials/Loading'
+// import Transaction from './Transaction'
+// import Loading from '../../../../../Partials/Loading'
 import DayTimePicker from './DayTimePicker'
 
 // Helpers
@@ -36,13 +36,13 @@ export default class Drawer extends Component {
     const current_task = data.current_task
     const module_type = this.props.module_type
     const containing_body_height = this.props.containing_body_height + 30
-    const transaction_loading = data.transaction_loading
+    // const transaction_loading = data.transaction_loading
     let contacts
     if (current_task)
       contacts = current_task.contacts
-    let transaction_data
-    if (current_task)
-      transaction_data = current_task.transaction_data
+    // let transaction_data
+    // if (current_task)
+    //   transaction_data = current_task.transaction_data
     let drawer
     if (current_task)
       drawer = current_task.drawer
@@ -150,6 +150,7 @@ export default class Drawer extends Component {
       )
     }
     // Transaction
+    /*
     let transaction_markup
     if (transaction_loading) {
       transaction_markup = (
@@ -168,6 +169,7 @@ export default class Drawer extends Component {
         </div>
       )
     }
+    */
     const footer_style = {
       ...S('b-0 absolute p-20 color-cfd1d2 font-12 w-100p'),
       ...topLine
@@ -229,6 +231,7 @@ export default class Drawer extends Component {
             <div className="clearfix"></div>
           </div>
           <div className="clearfix"></div>
+          { /*
           <div style={ { ...S('mb-30'), ...topLine } }>
             <div style={ { ...S('h-54 p-10 bg-fff'), ...bottomLine } }>
               <div style={ S('p-10 pull-left color-a3a9ac font-12') }>
@@ -240,6 +243,7 @@ export default class Drawer extends Component {
             { transaction_markup }
             <div className="clearfix"></div>
           </div>
+          */ }
           <div style={ footer_style }>
             { created_area }
             <div style={ S('pull-right') }>

@@ -406,14 +406,17 @@ export default class SideBar extends Component {
               </NavItem>
             </LinkContainer>
           </OverlayTrigger>
-          <OverlayTrigger placement="right" overlay={ popover.transactions } delayShow={ 200 } delayHide={ 0 }>
-            <LinkContainer className={ active.transactions } to="/dashboard/transactions" onClick={ this.props.viewAllTransactions }>
-              <NavItem style={ S('w-85p') }>
-                <img src={ active.transactions ? '/images/dashboard/sidenav/transactions-active.svg' : '/images/dashboard/sidenav/transactions.svg' } style={ S('w-19 h-19') }/>
-                {this.notificationIcon('transaction_notification_count')}
-              </NavItem>
-            </LinkContainer>
-          </OverlayTrigger>
+          { /*
+            <OverlayTrigger placement="right" overlay={ popover.transactions } delayShow={ 200 } delayHide={ 0 }>
+              <LinkContainer className={ active.transactions } to="/dashboard/transactions" onClick={ this.props.viewAllTransactions }>
+                <NavItem style={ S('w-85p') }>
+                  <img src={ active.transactions ? '/images/dashboard/sidenav/transactions-active.svg' : '/images/dashboard/sidenav/transactions.svg' } style={ S('w-19 h-19') }/>
+                  {this.notificationIcon('transaction_notification_count')}
+                </NavItem>
+              </LinkContainer>
+            </OverlayTrigger>
+            */
+          }
           { recommend }
           { agents }
         </Nav>
