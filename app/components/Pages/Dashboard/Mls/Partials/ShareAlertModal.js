@@ -257,25 +257,29 @@ export default class ShareAlertModal extends Component {
               { results }
               <div className="clearfix"></div>
             </div>
-            <div className="form-group" style={ S('relative') }>
-              <img style={ S('absolute t-18 l-15') } src={`/images/dashboard/mls/share-alert/email${share_modal && share_modal.email_valid ? '-active' : ''}.svg`} />
-              <input ref="email" onKeyUp={ this.handleEmailChange.bind(this) } style={ S('pl-62 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send as an email"/>
-              <div onClick={ this.handleAddEmail.bind(this) } style={ S('pointer absolute font-18 r-15 t-11 color-' + email_btn_color) }>Add Email</div>
-              <div className="clearfix"></div>
-            </div>
-            <div className="form-group" style={ S('relative') }>
-              <img style={ S('absolute t-10 l-20') } src={`/images/dashboard/mls/share-alert/sms${share_modal && share_modal.phone_number_valid ? '-active' : ''}.svg`} />
-              <input ref="phone_number" onKeyUp={ this.handlePhoneNumberChange.bind(this) } style={ S('pl-62 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send an SMS"/>
-              <div onClick={ this.handleAddPhoneNumber.bind(this) } style={ S('pointer absolute font-18 r-15 t-11 color-' + phone_number_btn_color) }>Add Number</div>
-              <div className="clearfix"></div>
-            </div>
+            {
+              /*
+              <div className="form-group" style={ S('relative') }>
+                <img style={ S('absolute t-18 l-15') } src={`/images/dashboard/mls/share-alert/email${share_modal && share_modal.email_valid ? '-active' : ''}.svg`} />
+                <input ref="email" onKeyUp={ this.handleEmailChange.bind(this) } style={ S('pl-62 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send as an email"/>
+                <div onClick={ this.handleAddEmail.bind(this) } style={ S('pointer absolute font-18 r-15 t-11 color-' + email_btn_color) }>Add Email</div>
+                <div className="clearfix"></div>
+              </div>
+              <div className="form-group" style={ S('relative') }>
+                <img style={ S('absolute t-10 l-20') } src={`/images/dashboard/mls/share-alert/sms${share_modal && share_modal.phone_number_valid ? '-active' : ''}.svg`} />
+                <input ref="phone_number" onKeyUp={ this.handlePhoneNumberChange.bind(this) } style={ S('pl-62 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send an SMS"/>
+                <div onClick={ this.handleAddPhoneNumber.bind(this) } style={ S('pointer absolute font-18 r-15 t-11 color-' + phone_number_btn_color) }>Add Number</div>
+                <div className="clearfix"></div>
+              </div>
+              */
+            }
             <div className="clearfix"></div>
           </div>
         </Modal.Body>
         <Modal.Footer style={ S('bg-f8f8f8') }>
           { message }
           { items_added_area }
-          <Button onClick={ controller.hideModal } bsStyle="link">Cancel</Button>
+          <Button onClick={ controller.listing_map.hideModal } bsStyle="link">Cancel</Button>
           <Button className={ listing_map && listing_map.saving_alert ? 'disabled' : '' } bsStyle="primary" onClick={ this.shareAlert.bind(this) }>{ listing_map && !listing_map.saving_alert ? 'Share Alert' : 'Sending...' }&nbsp;&nbsp;<i className="fa fa-share"></i></Button>
         </Modal.Footer>
       </Modal>
