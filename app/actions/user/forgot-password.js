@@ -21,7 +21,10 @@ export default (email) => {
       if (response.status === 'success') {
         AppStore.data = {
           status: 'success',
-          show_message: true
+          show_message: true,
+          forgot_password: {
+            email
+          }
         }
       } else {
         AppStore.data = {

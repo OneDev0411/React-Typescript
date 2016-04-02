@@ -52,7 +52,10 @@ export default class Forgot extends Component {
       // Success
       if (data.status === 'success') {
         alert_style = 'success'
-        message_text = `We've sent you an email with instructions on how to reset your password.  Please check your email.`
+        const forgot_password = data.forgot_password
+        message_text = (
+          <div>We've sent you an email with instructions on how to reset your password.  Please check <span className="text-primary">{ forgot_password.email }</span>.</div>
+        )
       }
 
       if (message_text) {
