@@ -38,13 +38,11 @@ export default (user, password, confirm_password, redirect_to) => {
       error_type = 'first_name'
     if (!last_name)
       error_type = 'last_name'
-    AppStore.data = {
-      submitting: false,
-      errors: true,
-      show_message: true,
-      error_type,
-      password_error
-    }
+    delete AppStore.data.submitting
+    AppStore.data.errors = true
+    AppStore.data.show_message = true
+    AppStore.data.error_type = error_type
+    AppStore.data.password_error = password_error
     return AppStore.emitChange()
   }
   // Set trimmed data

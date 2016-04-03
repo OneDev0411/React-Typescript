@@ -123,7 +123,6 @@ export default {
       return callback(false, response)
     })
   },
-
   resetPassword: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
