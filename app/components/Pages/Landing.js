@@ -134,8 +134,7 @@ export default class Landing extends Component {
                     <span className="icon-bar"></span>
                   </button>
                 }
-                <div className="pull-left" style={ S('mt-20 ml-0') }><img style={ S('w-24') } src="images/landing/logo@2x.png" /></div>
-                <div className="tk-calluna-sans pull-left" style={ S('font-28 ml-10 mt-12 color-fff') }>Rechat</div>
+                <div className="tk-calluna-sans pull-left" style={ S('font-28 mt-12 color-fff') }>Rechat</div>
               </div>
               {
                 <div style={ collapse_style } className="collapse navbar-collapse text-center" id="main-link">
