@@ -1,4 +1,4 @@
-// Dashboard.js
+// Sidebar.js
 import React, { Component } from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Nav, NavItem, NavDropdown, Modal, Col, Input, Button, Alert, OverlayTrigger, Popover, DropdownButton, MenuItem } from 'react-bootstrap'
@@ -11,16 +11,9 @@ import { all_countries } from '../../../../utils/country-data'
 import helpers from '../../../../utils/helpers'
 import { PhoneNumberUtil } from 'google-libphonenumber'
 const phoneUtil = PhoneNumberUtil.getInstance()
-
-// AppDispatcher
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
-
-// AppStore
 import AppStore from '../../../../stores/AppStore'
-
-// Partials
 import ProfileImage from './ProfileImage'
-
 export default class SideBar extends Component {
 
   showSettingsModal(e) {
@@ -49,14 +42,12 @@ export default class SideBar extends Component {
     const first_name = this.refs.first_name.refs.input.value.trim()
     const last_name = this.refs.last_name.refs.input.value.trim()
     const email = this.refs.email.refs.input.value.trim()
-    // TODO switch to different fields for country code
-    let phone_number = this.refs.phone_number.refs.input.value.trim()
-    phone_number = phone_number.replace(/\D/g, '')
+    const phone_number_input = this.refs.phone_number.refs.input.value.replace(/\D/g, '').trim()
     let country_code = 1
     if (data.phone_country)
       country_code = data.phone_country.dialCode
-    phone_number = '+' + country_code + phone_number
-    if (!phoneUtil.isPossibleNumberString(phone_number)) {
+    const phone_number = '+' + country_code + phone_number_input
+    if (phone_number_input && !phoneUtil.isPossibleNumberString(phone_number)) {
       AppStore.data.error = {
         message: 'You must use a valid phone number'
       }
@@ -66,9 +57,10 @@ export default class SideBar extends Component {
     const user_info = {
       first_name,
       last_name,
-      email,
-      phone_number
+      email
     }
+    if (phone_number_input && phoneUtil.isPossibleNumberString(phone_number))
+      user_info.phone_number = phone_number
     AppStore.data.saving_account_settings = true
     AppStore.emitChange()
     AppDispatcher.dispatch({
@@ -460,8 +452,6 @@ export default class SideBar extends Component {
     )
   }
 }
-
-// PropTypes
 SideBar.propTypes = {
   data: React.PropTypes.object,
   viewAllTransactions: React.PropTypes.func
