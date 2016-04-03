@@ -105,13 +105,12 @@ export default class Contacts extends Component {
     const first_name = this.refs.first_name.refs.input.value
     const last_name = this.refs.last_name.refs.input.value
     const email = this.refs.email.refs.input.value
-    let phone_number = this.refs.phone_number.refs.input.value.trim().replace(/\D/g, '')
-    let country_code = helpers.parsePhoneNumber(current_contact.phone_number).country_code
-    // If changing the country code
+    const phone_number_input = this.refs.phone_number.refs.input.value.replace(/\D/g, '').trim()
+    let country_code = 1
     if (data.phone_country)
       country_code = data.phone_country.dialCode
-    phone_number = '+' + country_code + phone_number
-    if (!phoneUtil.isPossibleNumberString(phone_number)) {
+    const phone_number = '+' + country_code + phone_number_input
+    if (phone_number_input && !phoneUtil.isPossibleNumberString(phone_number)) {
       AppStore.data.error = {
         message: 'You must use a valid phone number'
       }
@@ -123,9 +122,10 @@ export default class Contacts extends Component {
       id: current_contact.id,
       first_name,
       last_name,
-      email,
-      phone_number
+      email
     }
+    if (phone_number_input && phoneUtil.isPossibleNumberString(phone_number))
+      contact.phone_number = phone_number
     AppDispatcher.dispatch({
       action: 'edit-contact',
       user,
