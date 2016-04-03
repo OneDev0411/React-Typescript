@@ -38,7 +38,7 @@ export default class Forgot extends Component {
           email_style = 'error'
           alert_style = 'warning'
           message_text = (
-            <div>Sorry, that email address is not registered with us.<br/> <Link to="/">Please try again or register for a new account</Link>.</div>
+            <div>Sorry, that email address is not registered with us.<br/> Please try again or <Link to="/signup">register for a new account</Link>.</div>
           )
         }
 
