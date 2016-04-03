@@ -240,6 +240,14 @@ export default class SignUp extends Component {
     // Signup as agent
     if (data.signup && data.signup.user_type === 'Agent' && data.signup.agent) {
       const agent = data.signup.agent
+      let agent_email_input = (
+        <Input readOnly style={ input_style } bsSize="large" bsStyle={ email_style } type="text" ref="email" placeholder="Email" value={ agent.email }/>
+      )
+      if (!agent.email) {
+        agent_email_input = (
+          <Input style={ input_style } bsSize="large" bsStyle={ email_style } type="text" ref="email" placeholder="Email" />
+        )
+      }
       main_content = (
         <div style={ S('pt-50') }>
           <h1 style={ S('fw-100 mb-20') } className="tempo">Set Up Your Agent Profile</h1>
@@ -255,7 +263,7 @@ export default class SignUp extends Component {
                   <Input value={ agent.last_name } onChange={ this.handleAgentChange.bind(this, 'last_name') } style={ input_style } bsSize="large" bsStyle={ last_name_style } type="text" ref="last_name" placeholder="Last Name"/>
                 </div>
               </div>
-              <Input readOnly style={ input_style } bsSize="large" bsStyle={ email_style } type="text" ref="email" placeholder="Email" value={ agent.email }/>
+              { agent_email_input }
               <Input style={ input_style } bsSize="large" bsStyle={ password_style } type="password" ref="password" placeholder="Password"/>
               <Input style={ input_style } bsSize="large" bsStyle={ password_style } type="password" ref="confirm_password" placeholder="Confirm Password"/>
               { message }
