@@ -24,6 +24,10 @@ export default class SideBar extends Component {
     AppStore.emitChange()
   }
 
+  showIntercom() {
+    window.Intercom('show')
+  }
+
   handleSubmit(e) {
     e.preventDefault()
     const data = this.props.data
@@ -414,6 +418,10 @@ export default class SideBar extends Component {
         </Nav>
         <div style={ S('absolute b-10 l-15') }>
           <Nav className="sidebar__account">
+            <div style={ S('pointer relative t-10n') } onClick={ this.showIntercom }>
+              <i className="fa fa-question" style={ S('font-20 color-263445 relative t-5n l-13 z-100') }></i>
+              <i className="fa fa-comment" style={ S('font-35 relative l-10n color-4D5C6C') }></i>
+            </div>
             <div style={ S('absolute z-0') }>
               <ProfileImage data={ data } user={ user } />
             </div>
