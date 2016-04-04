@@ -69,6 +69,8 @@ export default class AddContactsModule extends Component {
     AppStore.emitChange()
   }
   addContact(contact) {
+    delete AppStore.data.error
+    AppStore.emitChange()
     const module_type = this.props.module_type
     if (!AppStore.data.contacts_added)
       AppStore.data.contacts_added = {}
@@ -83,7 +85,6 @@ export default class AddContactsModule extends Component {
     const data = this.props.data
     const filtered_contacts = data.filtered_contacts
     let active_contact = -1
-
     // Prev active contact
     if (data.active_contact !== null)
       active_contact = data.active_contact
@@ -160,6 +161,8 @@ export default class AddContactsModule extends Component {
       this.createContactFromInput()
   }
   createContactFromInput() {
+    delete AppStore.data.error
+    AppStore.emitChange()
     const search_input = this.refs.search_contacts.refs.input.value
     // Check if contact phone or email
     let contact
@@ -178,6 +181,13 @@ export default class AddContactsModule extends Component {
         phone_number: search_input
       }
       this.addContact(contact)
+    }
+    if (!validator.isEmail(search_input) && !helpers.isValidPhoneNumber(search_input)) {
+      AppStore.data.error = {
+        message: 'You must add either a valid email address or valid phone number.'
+      }
+      AppStore.emitChange()
+      console.log('not valid')
     }
   }
   handleButtonClick() {
@@ -332,7 +342,7 @@ export default class AddContactsModule extends Component {
     }
     if (data.error) {
       message = (
-        <Alert bsStyle="danger">
+        <Alert style={ S('mt-15') } bsStyle="danger">
           { data.error.message }
         </Alert>
       )
