@@ -115,9 +115,12 @@ export default class App extends Component {
       first_name = message.author.first_name
 
     const title = 'New message from ' + first_name
+    let comment = message.comment
+    if (!comment)
+      comment = 'File uploaded'
     const instance = new Notification(
       title, {
-        body: message.comment,
+        body: comment,
         icon: profile_image_url,
         sound: '/audio/goat.mp3'
       }
