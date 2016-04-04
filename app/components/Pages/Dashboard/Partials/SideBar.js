@@ -373,7 +373,7 @@ export default class SideBar extends Component {
           <img src="/images/dashboard/sidenav/transactions-active.svg"/>
         </div>
         <Nav bsStyle="pills" stacked>
-          <OverlayTrigger className="test" placement="right" overlay={ popover.conversation } delayShow={ 200 } delayHide={ 0 }>
+          <OverlayTrigger placement="right" overlay={ popover.conversation } delayShow={ 200 } delayHide={ 0 }>
             <LinkContainer className={ active.recents } to="/dashboard/recents">
               <NavItem style={ S('w-85p') }>
                 <img src={ active.recents ? '/images/dashboard/sidenav/chat-active.svg' : '/images/dashboard/sidenav/chat.svg' } style={ S('w-19 h-19') }/>
@@ -419,8 +419,8 @@ export default class SideBar extends Component {
         </Nav>
         <div style={ S('absolute b-10 l-15') }>
           <Nav className="sidebar__account">
-            <OverlayTrigger className="test" placement="right" overlay={ popover.support } delayShow={ 200 } delayHide={ 0 }>
-              <div style={ S('pointer relative t-10n') } onClick={ this.showIntercom }>
+            <OverlayTrigger placement="right" overlay={ popover.support } delayShow={ 200 } delayHide={ 0 }>
+              <div style={ S('pointer relative t-15n') } onClick={ this.showIntercom }>
                 <i className="fa fa-question" style={ S('font-20 color-263445 relative t-5n l-13 z-100') }></i>
                 <i className="fa fa-comment" style={ S('font-35 relative l-10n color-4D5C6C') }></i>
               </div>
