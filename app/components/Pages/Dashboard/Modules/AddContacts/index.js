@@ -145,6 +145,11 @@ export default class AddContactsModule extends Component {
     // Esc
     if (e.which === 27)
       this.hideContactsForm()
+    // Test for last item
+    if (filtered_contacts && filtered_contacts.length === 1) {
+      AppStore.data.active_contact = 0
+      AppStore.emitChange()
+    }
   }
   navContactList(e) {
     const filtered_contacts = this.props.data.filtered_contacts
@@ -187,7 +192,6 @@ export default class AddContactsModule extends Component {
         message: 'You must add either a valid email address or valid phone number.'
       }
       AppStore.emitChange()
-      console.log('not valid')
     }
   }
   handleButtonClick() {
