@@ -290,9 +290,6 @@ export default class TasksModule extends Component {
     const user = data.user
     const task = data.current_task
     const contacts = AppStore.data.contacts_added['share-task']
-    const current_contacts = contacts.filter(contact => {
-      return contact.type === 'contact'
-    })
     const new_contacts = contacts.filter(contact => {
       return contact.type !== 'contact'
     })
@@ -305,14 +302,13 @@ export default class TasksModule extends Component {
         module_type: 'share-task'
       })
     }
-    const current_contacts_ids = _.pluck(current_contacts, 'id')
     // New task
     if (!new_task) {
       TaskDispatcher.dispatch({
         action: 'add-contacts',
         user,
         task,
-        contacts: current_contacts_ids
+        contacts
       })
     // Editing task
     } else {
