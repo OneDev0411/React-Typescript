@@ -12,7 +12,8 @@ export default (contact_id, module_type) => {
     AppStore.data.filtered_contacts[contact_index] = contact
   }
   const contacts_added_edited = contacts_added.filter(contact_loop => {
-    return contact_loop.id !== contact_id
+    if (contact_loop)
+      return contact_loop.id !== contact_id
   })
   AppStore.data.contacts_added[module_type] = contacts_added_edited
   if (AppStore.data.new_transaction)

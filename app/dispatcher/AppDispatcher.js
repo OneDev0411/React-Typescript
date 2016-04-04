@@ -6,6 +6,7 @@ import signup from '../actions/user/signup'
 import signin from '../actions/user/signin'
 import editUser from '../actions/user/edit-user'
 import forgotPassword from '../actions/user/forgot-password'
+import forgotPasswordResend from '../actions/user/forgot-password-resend'
 import resetPassword from '../actions/user/reset-password'
 import verifyPhone from '../actions/user/verify-phone'
 import addUserToStore from '../actions/user/add-user-to-store'
@@ -78,6 +79,10 @@ AppDispatcher.register(payload => {
 
     case 'forgot-password':
       forgotPassword(payload.email)
+      break
+
+    case 'forgot-password-resend':
+      forgotPasswordResend(payload.email)
       break
 
     case 'reset-password':

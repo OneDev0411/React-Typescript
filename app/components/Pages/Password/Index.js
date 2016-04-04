@@ -38,6 +38,15 @@ export default class Password extends Component {
     }
   }
 
+  handleSendVerificationAgain() {
+    const data = this.props.data
+    const email = data.forgot_password.email
+    AppDispatcher.dispatch({
+      action: 'forgot-password-resend',
+      email
+    })
+  }
+
   render() {
     // Data
     const data = AppStore.data
@@ -46,7 +55,7 @@ export default class Password extends Component {
     let main_content
     if (slug === 'forgot') {
       main_content = (
-        <Forgot handleSubmit={ this.handleSubmit } data={ data }/>
+        <Forgot handleSendVerificationAgain={ this.handleSendVerificationAgain.bind(this) } handleSubmit={ this.handleSubmit } data={ data }/>
       )
     }
 

@@ -22,6 +22,10 @@ export default class Forgot extends Component {
     this.props.handleSubmit('forgot-password', form_data)
   }
 
+  handleSendVerificationAgain() {
+    this.props.handleSendVerificationAgain()
+  }
+
   render() {
     const data = this.props.data
     const errors = data.errors
@@ -53,8 +57,21 @@ export default class Forgot extends Component {
       if (data.status === 'success') {
         alert_style = 'success'
         const forgot_password = data.forgot_password
+        let resend
+        if (forgot_password)
+          resend = forgot_password.resend
+        let resend_message
+        if (resend) {
+          resend_message = (
+            <div>We've sent you instructions again.</div>
+          )
+        }
         message_text = (
-          <div>We've sent you an email with instructions on how to reset your password.  Please check <span className="text-primary">{ forgot_password.email }</span>.</div>
+          <div>
+            We've sent you an email with instructions on how to reset your password.  Please check <span className="text-primary">{ forgot_password.email }</span>.<br />
+            <a href="#" onClick={ this.handleSendVerificationAgain.bind(this) }>Send email verification again</a>.
+            { resend_message }
+          </div>
         )
       }
 
@@ -116,5 +133,6 @@ export default class Forgot extends Component {
 // PropTypes
 Forgot.propTypes = {
   data: React.PropTypes.object,
-  handleSubmit: React.PropTypes.func.isRequired
+  handleSubmit: React.PropTypes.func.isRequired,
+  handleSendVerificationAgain: React.PropTypes.func
 }
