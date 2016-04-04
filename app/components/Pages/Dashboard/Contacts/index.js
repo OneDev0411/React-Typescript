@@ -8,25 +8,16 @@ import { all_countries } from '../../../../utils/country-data'
 import helpers from '../../../../utils/helpers'
 import { PhoneNumberUtil } from 'google-libphonenumber'
 const phoneUtil = PhoneNumberUtil.getInstance()
-
-// Partials
 import Header from '../Partials/Header'
 import SideBar from '../Partials/SideBar'
 import ProfileImage from '../Partials/ProfileImage'
 import Loading from '../../../Partials/Loading'
-
-// AppDispatcher
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
-
-// AppStore
 import AppStore from '../../../../stores/AppStore'
-
 export default class Contacts extends Component {
-
   componentDidMount() {
     this.getContacts()
   }
-
   componentDidUpdate() {
     const data = this.props.data
     if (data.current_contact && this.props.location.pathname === '/dashboard/contacts') {
@@ -34,7 +25,6 @@ export default class Contacts extends Component {
       AppStore.emitChange()
     }
   }
-
   getContacts() {
     const data = this.props.data
     AppDispatcher.dispatch({
@@ -42,7 +32,6 @@ export default class Contacts extends Component {
       user: data.user
     })
   }
-
   deleteContact(contact_id) {
     AppStore.data.deleting_contact = contact_id
     AppStore.emitChange()
@@ -53,11 +42,9 @@ export default class Contacts extends Component {
       contact_id
     })
   }
-
   handeContactClick(contact) {
     this.viewContact(contact)
   }
-
   addContactTab(contact) {
     const contact_tabs = AppStore.data.contact_tabs
     if (!contact_tabs)
@@ -65,7 +52,6 @@ export default class Contacts extends Component {
     AppStore.data.contact_tabs.push(contact)
     AppStore.emitChange()
   }
-
   viewContact(contact) {
     AppStore.data.current_contact = contact
     this.addContactTab(contact)
@@ -76,7 +62,6 @@ export default class Contacts extends Component {
     delete AppStore.data.error
     AppStore.emitChange()
   }
-
   removeContactTab(id) {
     // TODO Stay on current tab or go to all contact tab (after other tab click event triggered)
     setTimeout(() => {
@@ -93,7 +78,6 @@ export default class Contacts extends Component {
       AppStore.emitChange()
     }, 1)
   }
-
   handleContactSubmit(e) {
     e.preventDefault()
     delete AppStore.data.error
@@ -133,7 +117,6 @@ export default class Contacts extends Component {
       module_type: 'contacts'
     })
   }
-
   handleCountryCodeSelect(country) {
     AppStore.data.phone_country = {
       iso2: country.iso2,
@@ -141,7 +124,6 @@ export default class Contacts extends Component {
     }
     AppStore.emitChange()
   }
-
   handleInputChange(ref) {
     if (ref !== 'phone_number')
       AppStore.data.current_contact[ref] = this.refs[ref].refs.input.value
@@ -151,7 +133,6 @@ export default class Contacts extends Component {
     }
     AppStore.emitChange()
   }
-
   render() {
     const data = this.props.data
     let main_content = <Loading />
@@ -254,10 +235,7 @@ export default class Contacts extends Component {
         </div>
       )
     }
-
-    // Style
     const main_style = S('absolute l-70 r-0 pl-15 pr-15')
-
     return (
       <div style={ S('minw-1000') }>
         <Header
@@ -275,8 +253,6 @@ export default class Contacts extends Component {
     )
   }
 }
-
-// PropTypes
 Contacts.propTypes = {
   data: React.PropTypes.object,
   location: React.PropTypes.object

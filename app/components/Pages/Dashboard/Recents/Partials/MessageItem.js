@@ -116,11 +116,6 @@ export default class MessageItem extends Component {
     }
     if (recommendation) {
       // Hide recommendation notification message
-      // if (!message.author) {
-      //   return (
-      //     <div></div>
-      //   )
-      // }
       const listing = recommendation.listing
       return (
         <div className="message-item" style={ S('relative mb-5') }>

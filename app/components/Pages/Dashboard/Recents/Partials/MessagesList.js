@@ -85,6 +85,8 @@ export default class MessagesList extends Component {
       if (!message || !message.created_at)
         return
       const message_element = this.refs['message-' + i]
+      if (!message_element)
+        return
       const message_created = message.created_at.toString().split('.')
       const rect = message_element.getBoundingClientRect()
       const heading_object = {
@@ -165,8 +167,11 @@ export default class MessagesList extends Component {
       ...S('bg-f9f9f9 p-5 pl-10 h-26 font-12 mb-5 br-3 color-acacac mb-10'),
       textTransform: 'uppercase'
     }
+    let prev_recommendation
     const messages_list_items = messages.map((message, i) => {
-      if (!message) {
+      const recommendation = message.recommendation
+      // Hide if no message or is the automatted message after a comment
+      if (!message || prev_recommendation && recommendation && recommendation.id === prev_recommendation.id && !message.author) {
         return (
           <li key={ 'message-' + i }></li>
         )
@@ -193,6 +198,7 @@ export default class MessagesList extends Component {
         new_date = true
       }
       prev_message_date = message_date
+      prev_recommendation = message.recommendation
       return (
         <li ref={ 'message-' + i} key={ 'message-' + message.id + '-' + i } style={ S('pb-10') }>
           { heading }
