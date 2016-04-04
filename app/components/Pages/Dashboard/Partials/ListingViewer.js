@@ -519,7 +519,12 @@ export default class ListingViewer extends Component {
     }
     return (
       <div style={ viewer_wrap_style }>
-        <div onClick={ this.props.hideListingViewer } style={ S('pointer absolute l-20 t-20 font-18 fw-400') }>&lt;&nbsp;&nbsp;Back</div>
+        <div onClick={ this.props.hideListingViewer } style={ S('pointer absolute l-20 t-20 font-18 fw-400') }>
+          <a href="#" style={ S('relative pull-left font-30 mr-10 t-5n') } className="close">
+            &times;
+          </a>
+          <div style={ S('relative pull-left') }>Close</div>
+        </div>
         <div style={ nav_bar_style }>
           <Button onClick={ this.props.showShareListingModal.bind(this) } style={ S('absolute r-20 t-15') } bsStyle="primary" type="button">
             Share

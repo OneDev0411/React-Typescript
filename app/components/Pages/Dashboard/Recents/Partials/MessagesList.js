@@ -169,9 +169,14 @@ export default class MessagesList extends Component {
     }
     let prev_recommendation
     const messages_list_items = messages.map((message, i) => {
-      const recommendation = message.recommendation
       // Hide if no message or is the automatted message after a comment
-      if (!message || prev_recommendation && recommendation && recommendation.id === prev_recommendation.id && !message.author) {
+      if (!message) {
+        return (
+          <li key={ 'message-' + i }></li>
+        )
+      }
+      const recommendation = message.recommendation
+      if (prev_recommendation && recommendation && recommendation.id === prev_recommendation.id && !message.author) {
         return (
           <li key={ 'message-' + i }></li>
         )
