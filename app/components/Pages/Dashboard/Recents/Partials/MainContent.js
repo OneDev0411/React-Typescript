@@ -45,7 +45,7 @@ export default class MainContent extends Component {
           this.addContactToMessage(contact)
         else
           this.createMessage(e)
-        return
+        return ''
       }
       this.props.handleContactFilter(message_input, 'show')
     } else

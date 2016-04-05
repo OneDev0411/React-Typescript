@@ -357,7 +357,7 @@ export default class SideBar extends Component {
       people: <Popover className="sidenav__popover" id="popover-people">People</Popover>,
       tasks: <Popover className="sidenav__popover" id="popover-tasks">Tasks</Popover>,
       transactions: <Popover className="sidenav__popover" id="popover-transactions">Transactions</Popover>,
-      support: <Popover className="sidenav__popover" id="popover-transactions">Contact Support</Popover>
+      support: <Popover className="sidenav__popover" id="popover-transactions">Need Help?</Popover>
     }
     return (
       <aside style={ sidebar_style } className="sidebar__nav-list pull-left">

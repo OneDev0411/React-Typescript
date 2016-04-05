@@ -164,7 +164,7 @@ export default class MessagesList extends Component {
     const todays_date = helpers.getYMD()
     let prev_message_date
     const heading_style = {
-      ...S('bg-f9f9f9 p-5 pl-10 h-26 font-12 mb-5 br-3 color-acacac mb-10'),
+      ...S('bg-f9f9f9 p-5 pl-10 h-26 font-12 br-3 color-acacac mb-10'),
       textTransform: 'uppercase'
     }
     let prev_recommendation
