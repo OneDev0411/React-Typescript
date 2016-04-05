@@ -22,7 +22,20 @@ export default class App extends Component {
   // Add change listeners to stores
   componentDidMount() {
     AppStore.addChangeListener(this._onChange.bind(this))
-    window.socket = io(config.socket.server)
+    window.socket = io(config.socket.server, { 'reconnect': true, 'reconnectionDelay': 1000 })
+    window.socket.on('reconnecting', () => {
+      AppStore.data.socket_reconnecting = true
+      AppStore.emitChange()
+    })
+    window.socket.on('reconnected', () => {
+      delete AppStore.data.socket_reconnecting
+      AppStore.data.socket_reconnected = true
+      AppStore.emitChange()
+      setTimeout(() => {
+        delete AppStore.data.socket_reconnected
+        AppStore.emitChange()
+      }, 3000)
+    })
   }
 
   componentDidUpdate() {

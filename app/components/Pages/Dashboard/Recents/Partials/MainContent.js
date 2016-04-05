@@ -105,6 +105,23 @@ export default class MainContent extends Component {
         )
       }
     }
+    // Reconnect message
+    let is_reconnecting
+    if (data.socket_reconnecting) {
+      is_reconnecting = (
+        <div style={ S('absolute l-20 t-0 font-12') }>
+          Lost connection.  Reconnecting...
+        </div>
+      )
+    }
+    if (data.socket_reconnected) {
+      is_reconnecting = (
+        <div style={ S('absolute l-20 t-0 font-12') }>
+          Reconnected!
+        </div>
+      )
+    }
+
     // Create message form
     let create_message_area = ''
     const btn_style = {
@@ -152,7 +169,7 @@ export default class MainContent extends Component {
       create_message_area = (
         <div style={ footer_style }>
           <div>
-            { is_typing }
+            { is_reconnecting } { is_typing }
           </div>
           <div style={ S('relative') }>
             { filtered_contacts_area }

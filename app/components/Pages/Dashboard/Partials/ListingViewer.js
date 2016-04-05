@@ -387,7 +387,7 @@ export default class ListingViewer extends Component {
                   </div>
                 </div>
                 <div style={ S('w-30p pull-left pr-20') }>
-                  <div style={ S('h-40') }></div>
+                  <div style={ S('h-35') }></div>
                   <div style={ S('color-aaaaaa mb-10') }>
                     Exterior Features:&nbsp;
                     <span style={ S('color-777') }>
