@@ -425,7 +425,7 @@ export default class SideBar extends Component {
                 <i className="fa fa-comment" style={ S('font-35 relative l-10n color-4D5C6C') }></i>
               </div>
             </OverlayTrigger>
-            <div style={ S('absolute z-0') }>
+            <div style={ S('absolute z-0 l-3n') }>
               <ProfileImage data={ data } user={ user } />
             </div>
             <NavDropdown style={ S('z-1000') } title={ title_area } dropup id="account-dropdown" className="account-dropdown" eventKey={3} noCaret>
