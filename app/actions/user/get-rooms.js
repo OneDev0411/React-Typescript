@@ -6,7 +6,7 @@ import AppStore from '../../stores/AppStore'
 // Get all messages
 import getAllMessages from '../messages/get-all-messages'
 
-export default user => {
+export default (user, room_id) => {
   const params = {
     access_token: user.access_token
   }
@@ -19,8 +19,9 @@ export default user => {
         rooms = _.sortBy(rooms, room => {
           return -room.updated_at
         })
+        const current_room = _.find(rooms, { id: room_id })
         AppStore.data.rooms = rooms
-        AppStore.data.current_room = rooms[0]
+        AppStore.data.current_room = current_room
       }
       // Get messages for current room
       getAllMessages(user, rooms)
