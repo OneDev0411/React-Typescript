@@ -107,6 +107,17 @@ export default class App extends Component {
       AppStore.data.users_online = response
       AppStore.emitChange()
     })
+    socket.on('User.Online', response => {
+      AppStore.data.users_online.push(response)
+      AppStore.emitChange()
+    })
+    socket.on('User.Offline', response => {
+      const users_online_edited = AppStore.data.users_online.filter(user_id => {
+        return user_id !== response
+      })
+      AppStore.data.users_online = users_online_edited
+      AppStore.emitChange()
+    })
     socket.on('Notification', this.getNotifications)
   }
 
