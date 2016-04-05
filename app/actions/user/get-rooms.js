@@ -17,9 +17,12 @@ export default (user, room_id) => {
       // sort my latest message
       if (rooms.length) {
         rooms = _.sortBy(rooms, room => {
-          return -room.updated_at
+          if (room.latest_message)
+            return -room.latest_message.created_at
         })
-        const current_room = _.find(rooms, { id: room_id })
+        let current_room = rooms[0]
+        if (room_id)
+          current_room = _.find(rooms, { id: room_id })
         AppStore.data.rooms = rooms
         AppStore.data.current_room = current_room
       }
