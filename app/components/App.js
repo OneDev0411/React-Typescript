@@ -29,17 +29,16 @@ export default class App extends Component {
       reconnectionAttempts: 99999
     }
     window.socket = io(config.socket.server, reconnect_vars)
-    window.socket.on('disconnect', () => {
-      window.socket = io(config.socket.server, reconnect_vars)
-    })
     window.socket.on('reconnecting', () => {
       AppStore.data.socket_reconnecting = true
       AppStore.emitChange()
     })
-    window.socket.on('reconnected', () => {
+    window.socket.on('reconnect', () => {
+      socket.emit('Authenticate', data.user.access_token)
       delete AppStore.data.socket_reconnecting
       AppStore.data.socket_reconnected = true
       AppStore.emitChange()
+      // Remove reconnected message after 3 seconds
       setTimeout(() => {
         delete AppStore.data.socket_reconnected
         AppStore.emitChange()
