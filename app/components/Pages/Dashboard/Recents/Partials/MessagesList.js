@@ -254,7 +254,7 @@ export default class MessagesList extends Component {
       const fixed_date_obj = helpers.friendlyDate(data.heading_date)
       const fixed_heading_date = `${fixed_date_obj.day}, ${fixed_date_obj.month} ${fixed_date_obj.date}, ${fixed_date_obj.year}`
       fixed_heading_date_area = (
-        <div className="heading-fixed" style={ S('absolute w-98p z-100 t-60 pl-20 pr-5 pb-0 bg-fff') }>
+        <div className="heading-fixed" style={ S('absolute w-98p z-3 t-60 pl-20 pr-5 pb-0 bg-fff') }>
           <div className="message-heading" style={ { ...heading_style, ...S('m-0') } }>{ fixed_heading_date }</div>
         </div>
       )

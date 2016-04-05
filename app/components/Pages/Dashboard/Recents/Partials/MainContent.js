@@ -176,7 +176,7 @@ export default class MainContent extends Component {
           </div>
           <form onSubmit={ this.createMessage.bind(this) }>
             <div className="form-group" style={ S('w-100p') }>
-              <input onKeyUp={ this.handleMessageKeyUp.bind(this) } onKeyDown={ this.props.handleMessageTyping.bind(this) } ref="message_input" type="text" className="form-control chat-message-input" style={ S('w-100p pl-70 bw-2 z-100 relative') } placeholder="Type your message and press enter"/>
+              <input onKeyUp={ this.handleMessageKeyUp.bind(this) } onKeyDown={ this.props.handleMessageTyping.bind(this) } ref="message_input" type="text" className="form-control chat-message-input" style={ S('w-100p pl-70 bw-2 z-3 relative') } placeholder="Type your message and press enter"/>
               <Dropzone onDrop={ this.props.uploadFiles } type="button" className="btn btn-default create-message__btn" style={ btn_style }>
                 <span className="plus" style={ S('font-22 relative t-1n') }>+</span>
               </Dropzone>
