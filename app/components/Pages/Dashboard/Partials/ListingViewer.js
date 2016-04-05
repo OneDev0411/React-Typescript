@@ -73,7 +73,7 @@ export default class ListingViewer extends Component {
     let description
     let price
     let price_sq_foot
-    let lot_size_square_feet
+    // let lot_size_square_feet
     let listing_images = (
       <div style={ S('bg-eff1f2 w-100p h-300 font-22 text-center pt-125 color-929292') }>No image</div>
     )
@@ -94,7 +94,7 @@ export default class ListingViewer extends Component {
       bathroom_count = property.bathroom_count
       square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
       price_sq_foot = (Number(price.replace(/,/g, '')) / Number(square_feet.replace(/,/g, ''))).toFixed(2)
-      lot_size_square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.lot_square_meters)))
+      // lot_size_square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.lot_square_meters)))
       if (property.lot_size_area)
         lot_size = property.lot_size_area
       prev_icon = '<'
@@ -162,24 +162,6 @@ export default class ListingViewer extends Component {
           </span>
         )
       }
-      let pool
-      if (listing.property.pool_yn) {
-        pool = (
-          <div style={ S('mb-10') }>
-            <span style={ S('fw-600') }>Pool:</span>&nbsp;&nbsp;
-            <span style={ S('color-c0c0c0') }>Yes</span>
-          </div>
-        )
-      }
-      let hoa
-      if (listing.property_association_fees) {
-        hoa = (
-          <div style={ S('mb-10') }>
-            <span style={ S('fw-600') }>HOA:</span>&nbsp;&nbsp;
-            <span style={ S('color-c0c0c0') }>{ listing.property_association_fees }</span>
-          </div>
-        )
-      }
       let lot_size_area
       if (lot_size) {
         lot_size_area = (
@@ -196,7 +178,7 @@ export default class ListingViewer extends Component {
             { listing_images_cached }
             <div className="clearfix"></div>
           </div>
-          <div style={ S('pt-20 pl-50 pr-50 relative') }>
+          <div style={ S('pl-40 pr-40 relative') }>
             <div style={ S('fw-700 font-70 mb-10n') }>${ price }</div>
             <div>
               <div className="tempo pull-left" style={ S('font-32 fw-100 color-7d8288 mb-10 mr-20') }>
@@ -211,7 +193,7 @@ export default class ListingViewer extends Component {
             </div>
             <div className="clearfix"></div>
             <div style={ S('font-18 color-b7bfc7 mb-30') }>{ listing_subtitle } { mls_link }</div>
-            <div style={ S('font-24 color-4a4a4a') }>
+            <div style={ S('font-30 color-4a4a4a mb-30') }>
               <span>{ bedroom_count } Beds</span>
               &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
               <span>{ bathroom_count } Baths</span>
@@ -228,40 +210,14 @@ export default class ListingViewer extends Component {
               <div style={ S('font-14 mb-20') }><a href={ `mailto:${ listing.list_agent_email }?subject=Your listing on Rechat.com&body=I saw your listing (${ listing_title }) on Rechat.com and I'm interested in getting more information.` } style={ S('color-a5c8f8') }>{ listing.list_agent_email }</a></div>
               <div style={ S('border-bottom-1-solid-efeceb w-180') }></div>
             </div>
-            <hr />
             <div className="clearfix"></div>
             <div>
-              <div style={ S('w-50p pull-left') }>
-                <div style={ S('color-000 font-18 mb-20 pr-30') }>{ description }</div>
-                <div className="clearfix"></div>
-                <div style={ S('font-24 mb-20') }>Key Details</div>
-                <div style={ S('mb-10') }>
-                  <span style={ S('fw-600') }>Property Type:</span>&nbsp;&nbsp;
-                  <span style={ S('color-c0c0c0') }>{ listing.property.property_subtype }</span>
-                </div>
-                <div style={ S('mb-10') }>
-                  <span style={ S('fw-600') }>Price Per Square Foot:</span>&nbsp;&nbsp;
-                  <span style={ S('color-c0c0c0') }>${ price_sq_foot }</span>
-                </div>
-                <div style={ S('mb-10') }>
-                  <span style={ S('fw-600') }>Built:</span>&nbsp;&nbsp;
-                  <span style={ S('color-c0c0c0') }>{ listing.property.year_built }</span>
-                </div>
-                { pool }
-                { hoa }
-                <div style={ S('mb-10') }>
-                  <span style={ S('fw-600') }>County:</span>&nbsp;&nbsp;
-                  <span style={ S('color-c0c0c0') }>{ listing.property.address.county_or_parish }</span>
-                </div>
-                <div style={ S('mb-30') }>
-                  <span style={ S('fw-600') }>Community:</span>&nbsp;&nbsp;
-                  <span style={ S('color-c0c0c0') }>{ listing.property.subdivision_name }</span>
-                </div>
-                <div className="clearfix"></div>
+              <div style={ S('w-70p pull-left') }>
+                <div style={ S('color-4a4a4a font-24 mb-20 pr-30') }>{ description }</div>
               </div>
-              <div style={ S('relative w-50p pull-left') }>
+              <div style={ S('relative w-280 pull-left') }>
                 <GoogleMap
-                  style={ S('w-100p h-350') }
+                  style={ S('w-280 h-280') }
                   key={ 'map' }
                   center={ { lat: listing.property.address.location.latitude, lng: listing.property.address.location.longitude } }
                   zoom={ 12 }
@@ -281,19 +237,18 @@ export default class ListingViewer extends Component {
                       listing={ listing }
                       property={ listing.property }
                       address={ listing.property.address }
-                      context={ 'single' }
                     />
                   </div>
                 </GoogleMap>
               </div>
               <div className="clearfix"></div>
             </div>
+            <hr style={ S('mt-40 mb-30') }/>
             <div>
-              <div style={ S('font-24 mb-20') }>Details</div>
-              <div style={ S('mb-30') }>
+              <div style={ S('mb-30 font-15') }>
                 <div style={ S('w-30p pull-left pr-20') }>
                   <div style={ S('mb-30') }>
-                    <div style={ S('fw-600 mb-10') }>Cost Breakdown:</div>
+                    <div style={ S('fw-600 mb-10 font-18') }>Cost Breakdown</div>
                     <div style={ S('color-aaaaaa mb-10') }>
                       Price/sqt: <span style={ S('color-777') }>${ price_sq_foot }</span>
                     </div>
@@ -309,188 +264,182 @@ export default class ListingViewer extends Component {
                     <div style={ S('color-aaaaaa mb-10') }>
                       HOA Includes: <span style={ S('color-777') }>{ listing.association_fee_includes }</span>
                     </div>
-                    <div style={ S('color-aaaaaa mb-10') }>
-                      Proposed Financing: <span style={ S('color-777') }>{ listing.financing_proposed }</span>
-                    </div>
                   </div>
                 </div>
                 <div style={ S('w-30p pull-left pr-20') }>
-                  <div style={ S('fw-600') }>Facts:</div>
+                  <div style={ S('fw-600 mb-10 font-18') }>Key Facts</div>
                   <div style={ S('color-aaaaaa mb-10') }>
-                    Year Built <span style={ S('color-777') }>{ listing.year_built }</span>
+                    Year Built: <span style={ S('color-777') }>{ property.year_built }</span>
                   </div>
                   <div style={ S('color-aaaaaa mb-10') }>
-                    Style of House <div style={ S('pull-right') }>{ property.architectural_style }</div>
+                    Style of House: <span style={ S('color-777') }>{ property.architectural_style }</span>
                   </div>
                   <div style={ S('color-aaaaaa mb-10') }>
-                    Subdivision <div style={ S('pull-right') }>{ property.subdivision_name }</div>
+                    Subdivision: <span style={ S('color-777') }>{ property.subdivision_name }</span>
                   </div>
                   <div style={ S('color-aaaaaa mb-10') }>
-                    Acres <div style={ S('pull-right') }>{ property.lot_size_area }</div>
+                    Acres: <span style={ S('color-777') }>{ property.lot_size_area }</span>
                   </div>
                   <div style={ S('color-aaaaaa mb-10') }>
-                    Stories <div style={ S('pull-right') }>{ property.number_of_stories }</div>
+                    Stories: <span style={ S('color-777') }>{ property.number_of_stories }</span>
                   </div>
                   <div style={ S('color-aaaaaa mb-10') }>
-                    MLS# <div style={ S('pull-right') }>{ listing.mls_number }</div>
+                    MLS#: <span style={ S('color-777') }>{ listing.mls_number }</span>
                   </div>
                   <div style={ S('color-aaaaaa mb-10') }>
-                    Possession <div style={ S('pull-right') }>{ listing.possession }</div>
+                    Possession: <span style={ S('color-777') }>{ listing.possession }</span>
                   </div>
                   <div style={ S('color-aaaaaa mb-10') }>
-                    Days On Market <div style={ S('pull-right') }>{ listing_util.getDOM(listing.dom) }</div>
+                    Days On Market: <span style={ S('color-777') }>{ listing_util.getDOM(listing.dom) }</span>
                   </div>
                   <div style={ S('color-aaaaaa') }>
-                    Current Days On Market <div style={ S('pull-right') }>{ listing_util.getDOM(listing.cdom) }</div>
+                    Current Days On Market: <span style={ S('color-777') }>{ listing_util.getDOM(listing.cdom) }</span>
                   </div>
                 </div>
                 <div style={ S('w-30p pull-left pr-20') }>
-                  <div style={ S('mb-30') }>
-                    <div style={ S('fw-600') }>Interior Features:</div>
-                    <div style={ S('color-aaaaaa') }>
-                      Interior Features
-                      <div style={ S('pull-right text-right') }>
-                        {
-                          property.interior_features.map(item => {
-                            return <div key={ item }>{ item }</div>
-                          })
-                        }
-                      </div>
-                      <div className="clearfix"></div>
-                    </div>
-                    <div style={ S('color-aaaaaa') }>
-                      Alarm/Security
-                      <div style={ S('pull-right text-right') }>
-                        {
-                          property.security_features.map(item => {
-                            return <div key={ item }>{ item }</div>
-                          })
-                        }
-                      </div>
-                      <div className="clearfix"></div>
-                    </div>
-                    <div style={ S('color-aaaaaa') }>
-                      Flooring
-                      <div style={ S('pull-right text-right') }>
-                        {
-                          property.flooring.map(item => {
-                            return <div key={ item }>{ item }</div>
-                          })
-                        }
-                      </div>
-                      <div className="clearfix"></div>
-                    </div>
+                  <div style={ S('fw-600 font-18 mb-10') }>Amenities & Utilities</div>
+                  <div style={ S('color-aaaaaa mb-10') }>
+                    Pool: <span style={ S('color-777') }>{ property.pool_yn ? 'Yes' : 'No' }</span>
+                  </div>
+                  <div style={ S('color-aaaaaa mb-10') }>
+                    Pool Features:&nbsp;
+                    <span style={ S('color-777') }>
+                      {
+                        property.pool_features.map(item => {
+                          return <span key={ item }>{ item }, </span>
+                        })
+                      }
+                    </span>
+                  </div>
+                  <div style={ S('color-aaaaaa mb-10') }>
+                    Handicap Amenities: <span style={ S('color-777') }>{ property.handicap_yn ? 'Yes' : 'No' }</span>
+                  </div>
+                  <div style={ S('color-aaaaaa mb-10') }>
+                    Heating/Cooling:&nbsp;
+                    <span style={ S('color-777') }>
+                      {
+                        property.heating.map(item => {
+                          return <span key={ item }>{ item }, </span>
+                        })
+                      }
+                    </span>
+                  </div>
+                  <div style={ S('color-aaaaaa mb-10') }>
+                    Other:&nbsp;
+                    <span style={ S('color-777') }>
+                      {
+                        property.utilities.map(item => {
+                          return <span key={ item }>{ item }, </span>
+                        })
+                      }
+                    </span>
                   </div>
                 </div>
                 <div className="clearfix"></div>
               </div>
               <div className="clearfix"></div>
-              <div style={ S('mb-30') }>
-                <div style={ S('w-30p pull-left pr-20') }>
-                  <div style={ S('fw-600') }>Schools:</div>
-                  <div style={ S('color-aaaaaa') }>
-                    School District <div style={ S('pull-right') }>{ property.school_district }</div>
-                  </div>
-                  <div style={ S('color-aaaaaa') }>
-                    Elementary School <div style={ S('pull-right') }>{ property.elementary_school_name }</div>
-                  </div>
-                  <div style={ S('color-aaaaaa') }>
-                    Middle School <div style={ S('pull-right') }>{ property.middle_school_name }</div>
-                  </div>
-                  <div style={ S('color-aaaaaa') }>
-                    High School <div style={ S('pull-right') }>{ property.high_school_name }</div>
-                  </div>
-                </div>
-                <div style={ S('w-30p pull-left pr-20') }>
-                  <div style={ S('fw-600') }>Utilities:</div>
-                  <div style={ S('color-aaaaaa') }>
-                    Heating/Cooling
-                    <div style={ S('pull-right text-right') }>
-                      {
-                        property.heating.map(item => {
-                          return <div key={ item }>{ item }</div>
-                        })
-                      }
-                    </div>
-                    <div className="clearfix"></div>
-                  </div>
-                  <div style={ S('color-aaaaaa') }>
-                    Other
-                    <div style={ S('pull-right text-right') }>
-                      {
-                        property.utilities.map(item => {
-                          return <div key={ item }>{ item }</div>
-                        })
-                      }
-                    </div>
-                    <div className="clearfix"></div>
-                  </div>
-                </div>
+              <div style={ S('mb-30 font-15') }>
                 <div style={ S('w-30p pull-left pr-20') }>
                   <div style={ S('mb-30') }>
-                    <div style={ S('fw-600') }>Exterior Features:</div>
-                    <div style={ S('color-aaaaaa') }>
-                      Lot Size
-                      <div style={ S('pull-right') }>{ lot_size_square_feet } Sqft</div>
+                    <div style={ S('fw-600 font-18 mb-10') }>All Features</div>
+                    <div style={ S('color-aaaaaa mb-10') }>
+                      Garage Spaces:&nbsp;
+                      <span style={ S('color-777') }>
+                        { property.parking_spaces_garage }
+                      </span>
                     </div>
-                    <div style={ S('color-aaaaaa') }>
-                      Exterior Features
-                      <div style={ S('pull-right text-right') }>
+                    <div style={ S('color-aaaaaa mb-10') }>
+                      Parking/Garage:&nbsp;
+                      <span style={ S('color-777') }>
+                        { property.parking_spaces_garage ? 'Yes' : 'No' }
+                      </span>
+                    </div>
+                    <div style={ S('color-aaaaaa mb-10') }>
+                      Interior Features:&nbsp;
+                      <span style={ S('color-777') }>
                         {
-                          property.exterior_features.map(item => {
-                            return <div key={ item }>{ item }</div>
+                          property.interior_features.map(item => {
+                            return <span key={ item }>{ item }, </span>
                           })
                         }
-                      </div>
-                      <div className="clearfix"></div>
+                      </span>
                     </div>
-                    <div style={ S('color-aaaaaa') }>
-                      Construction
-                      <div style={ S('pull-right') }>{ property.construction_materials }</div>
+                    <div style={ S('color-aaaaaa mb-10') }>
+                      Alarm/Security:&nbsp;
+                      <span style={ S('color-777') }>
+                        {
+                          property.security_features.map(item => {
+                            return <span key={ item }>{ item }, </span>
+                          })
+                        }
+                      </span>
                     </div>
-                    <div style={ S('color-aaaaaa') }>
-                      Foundation
-                      <div style={ S('pull-right') }>{ property.foundation_details }</div>
+                    <div style={ S('color-aaaaaa mb-10') }>
+                      Flooring:&nbsp;
+                      <span style={ S('color-777') }>
+                        {
+                          property.flooring.map(item => {
+                            return <span key={ item }>{ item }, </span>
+                          })
+                        }
+                      </span>
                     </div>
-                    <div style={ S('color-aaaaaa') }>
-                      Roof
-                      <div style={ S('pull-right') }>{ property.roof }</div>
-                    </div>
+                  </div>
+                </div>
+                <div style={ S('w-30p pull-left pr-20') }>
+                  <div style={ S('h-40') }></div>
+                  <div style={ S('color-aaaaaa mb-10') }>
+                    Exterior Features:&nbsp;
+                    <span style={ S('color-777') }>
+                      {
+                        property.exterior_features.map(item => {
+                          return <span key={ item }>{ item }, </span>
+                        })
+                      }
+                    </span>
+                  </div>
+                  <div style={ S('color-aaaaaa mb-10') }>
+                    Construction:&nbsp;
+                    <span style={ S('color-777') }>
+                      { property.construction_materials }
+                    </span>
+                  </div>
+                  <div style={ S('color-aaaaaa mb-10') }>
+                    Foundation:&nbsp;
+                    <span style={ S('color-777') }>
+                      { property.foundation_details }
+                    </span>
+                  </div>
+                  <div style={ S('color-aaaaaa mb-10') }>
+                    Roof:&nbsp;
+                    <span style={ S('color-777') }>
+                      { property.roof }
+                    </span>
+                  </div>
+                </div>
+                <div style={ S('w-30p pull-left pr-20') }>
+                  <div style={ S('fw-600 font-18 mb-10') }>Schools</div>
+                  <div style={ S('color-aaaaaa') }>
+                    School District: <span style={ S('color-777') }>{ property.school_district }</span>
+                  </div>
+                  <div style={ S('color-aaaaaa') }>
+                    Elementary School: <span style={ S('color-777') }>{ property.elementary_school_name }</span>
+                  </div>
+                  <div style={ S('color-aaaaaa') }>
+                    Middle School: <span style={ S('color-777') }>{ property.middle_school_name }</span>
+                  </div>
+                  <div style={ S('color-aaaaaa') }>
+                    High School: <span style={ S('color-777') }>{ property.high_school_name }</span>
                   </div>
                 </div>
                 <div className="clearfix"></div>
-              </div>
-              <div className="clearfix"></div>  
-              <div style={ S('w-30p pull-left pr-20') }>
-                <div style={ S('mb-30 pull-left mr-20') }>
-                  <div style={ S('fw-600') }>Amenities:</div>
-                  <div style={ S('color-aaaaaa') }>
-                    Pool
-                    <div style={ S('pull-right') }>{ property.pool_yn ? 'Yes' : 'No' }</div>
-                  </div>
-                  <div style={ S('color-aaaaaa') }>
-                    Pool Features
-                    <div style={ S('pull-right text-right') }>
-                      {
-                        property.pool_features.map(item => {
-                          return <div key={ item }>{ item }</div>
-                        })
-                      }
-                    </div>
-                    <div className="clearfix"></div>
-                  </div>
-                  <div style={ S('color-aaaaaa') }>
-                    Handicap Amenities
-                    <div style={ S('pull-right') }>{ property.handicap_yn ? 'Yes' : 'No' }</div>
-                  </div>
-                </div>
               </div>
             </div>
             <div className="clearfix"></div>
             <h2>Location</h2>
             <div style={ S('relative w-100p pull-left') }>
               <GoogleMap
-                style={ S('w-100p h-350') }
+                style={ S('w-100p h-300') }
                 key={ 'map' }
                 center={ { lat: listing.property.address.location.latitude, lng: listing.property.address.location.longitude } }
                 zoom={ 12 }
@@ -523,11 +472,12 @@ export default class ListingViewer extends Component {
       )
     }
     let viewer_wrap_style = S('absolute h-100p bg-fff t-0 l-0 z-1000 ml-70 w-' + viewer_width)
-    if (!user)
+    if (!user) {
       viewer_wrap_style = {
         ...viewer_wrap_style,
         ...S('ml-0')
       }
+    }
     const nav_bar_style = S('mb-0 p-0 h-65 pt-7 w-100p')
     let modal_gallery_area
     if (data.show_modal_gallery) {
@@ -582,14 +532,14 @@ export default class ListingViewer extends Component {
       join_area = (
         <div style={ S('h-70') }>
           <div style={ S('pull-left p-16') }>
-            <a href="/">
-              <img style={ S('w-35 h-35') } src="/images/landing/logo@2x.png" />
+            <a style={ S('font-28') } href="/" className="tk-calluna-sans text-primary">
+              Rechat
             </a>
           </div>
           <div style={ S('pull-right p-16') }>
             <a style={ S('mr-15 bg-a1bde4 border-1-solid-a1bde4') } className="btn btn-primary" href="/signin">Log in</a>
             <a className="btn btn-primary" href="/signup">Sign up</a>
-          </div>  
+          </div>
         </div>
       )
     }

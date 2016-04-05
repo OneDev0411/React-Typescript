@@ -250,9 +250,8 @@ export default class Mls extends Component {
         />
       </main>
     )
-    if (!user) {
+    if (!user)
       main_content = listing_viewer
-    }
     return (
       <div style={ S('minw-1000') }>
         <main>
@@ -263,5 +262,6 @@ export default class Mls extends Component {
   }
 }
 Mls.propTypes = {
-  data: React.PropTypes.object
+  data: React.PropTypes.object,
+  params: React.PropTypes.object
 }

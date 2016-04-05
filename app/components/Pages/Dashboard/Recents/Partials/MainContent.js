@@ -139,7 +139,7 @@ export default class MainContent extends Component {
         return n !== undefined
       })
       filtered_contacts_area = (
-        <div ref="filter_contacts_scroll_area" style={ { overflowY: 'scroll', ...S('absolute b-5 maxh-300 w-100p br-3 border-1-solid-ccc p-5 bg-fff') } }>
+        <div ref="filter_contacts_scroll_area" style={ { overflowY: 'scroll', ...S('z-1000 absolute b-5 maxh-300 w-100p br-3 border-1-solid-ccc p-5 bg-fff') } }>
           { filtered_contacts_list_items }
         </div>
       )
