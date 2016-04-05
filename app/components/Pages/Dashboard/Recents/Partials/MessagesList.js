@@ -204,7 +204,6 @@ export default class MessagesList extends Component {
       }
       prev_message_date = message_date
       prev_recommendation = message.recommendation
-      console.log(message)
       return (
         <li ref={ 'message-' + i} key={ 'message-' + message.id + '-' + i }>
           { heading }

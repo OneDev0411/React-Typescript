@@ -34,7 +34,7 @@ export default class App extends Component {
       AppStore.emitChange()
     })
     window.socket.on('reconnect', () => {
-      socket.emit('Authenticate', data.user.access_token)
+      window.socket.emit('Authenticate', AppStore.data.user.access_token)
       delete AppStore.data.socket_reconnecting
       AppStore.data.socket_reconnected = true
       AppStore.emitChange()
