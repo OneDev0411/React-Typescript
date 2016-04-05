@@ -163,7 +163,7 @@ export default class ListingPanel extends Component {
       panel_top = 123
       heading_height = 180
     }
-    const listing_panel_wrap_style = S('fixed t-62 r-0 w-0 h-0 z-100')
+    const listing_panel_wrap_style = S('fixed t-62 r-0 w-0 h-0 z-5')
     const listing_panel_style = S('absolute t-0 w-850 bg-fff h-' + window.innerHeight)
     const listing_scroll_style = {
       ...listing_panel_style,
@@ -229,7 +229,7 @@ export default class ListingPanel extends Component {
     const sortby_title = this.getSortingTitle()
     return (
       <div style={ listing_panel_wrap_style }>
-        <Button onClick={ this.props.toggleListingPanel.bind(this) } className={ button_class } style={ S('absolute z-100 pt-8 pb-8 h-40 w-40 mr-0') }>
+        <Button onClick={ this.props.toggleListingPanel.bind(this) } className={ button_class } style={ S('absolute z-1 pt-8 pb-8 h-40 w-40 mr-0') }>
           { listing_panel_icon }
         </Button>
         <div style={ listing_panel_style } className={ panel_class }>

@@ -471,7 +471,7 @@ export default class ListingViewer extends Component {
         </div>
       )
     }
-    let viewer_wrap_style = S('absolute h-100p bg-fff t-0 l-0 z-1000 ml-70 w-' + viewer_width)
+    let viewer_wrap_style = S('absolute h-100p bg-fff t-0 l-0 z-10 ml-70 w-' + viewer_width)
     if (!user) {
       viewer_wrap_style = {
         ...viewer_wrap_style,
