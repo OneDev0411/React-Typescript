@@ -29,6 +29,9 @@ export default class App extends Component {
       reconnectionAttempts: 99999
     }
     window.socket = io(config.socket.server, reconnect_vars)
+    window.socket.on('disconnect', () => {
+      window.socket = io(config.socket.server, reconnect_vars)
+    })
     window.socket.on('reconnecting', () => {
       AppStore.data.socket_reconnecting = true
       AppStore.emitChange()
