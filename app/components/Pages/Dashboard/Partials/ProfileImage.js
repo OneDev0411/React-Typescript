@@ -33,7 +33,7 @@ export default class ProfileImage extends Component {
 
     let width_height
     if (!this.props.size)
-      width_height = 'w-35 h-35'
+      width_height = 'w-40 h-40'
     else
       width_height = `w-${this.props.size} h-${this.props.size}`
 

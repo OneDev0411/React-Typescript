@@ -38,7 +38,7 @@ export default class MessageItem extends Component {
     // Rebot
     if (!message.author) {
       profile_image_div = (
-        <div style={ S('absolute w-35') }>
+        <div style={ S('absolute w-35 t-5') }>
           <img className="center-block" src="/images/dashboard/rebot@2x.png" style={ S('w-30') } />
         </div>
       )
@@ -63,11 +63,11 @@ export default class MessageItem extends Component {
       // If image
       if (ext.indexOf('png') !== -1 || ext.indexOf('jpg') !== -1 || ext.indexOf('gif') !== -1) {
         message_thumb = (
-          <div style={ S('w-400 h-300 br-3 bg-url(' + file_url + ') bg-cover bg-center') }></div>
+          <div style={ S('w-400 h-300 br-3 bg-url(' + file_url + ') bg-cover bg-center mb-10') }></div>
         )
       } else {
         message_thumb = (
-          <div style={ S('w-60 mt-10') }>
+          <div style={ S('w-60 mt-10 mb-10') }>
             <i style={ S('font-60') } className="text-primary fa fa-file-o"></i>
             <br />
             <div style={ S('w-50 text-center relative t-35n font-12 fw-700 color-e0523e') }>
@@ -105,7 +105,7 @@ export default class MessageItem extends Component {
       if (messages[i - 1] && messages[i - 1].author && messages[i - 1].author.id === message.author.id) {
         return (
           <div style={ S('relative mb-5') }>
-            <div className="pull-left" style={ S('ml-50') }>
+            <div className="pull-left" style={ S('ml-55') }>
               <div className={ message_class_name } dangerouslySetInnerHTML={ { __html: message_text } }></div>
               { message_image }
             </div>
@@ -118,9 +118,9 @@ export default class MessageItem extends Component {
       // Hide recommendation notification message
       const listing = recommendation.listing
       return (
-        <div className="message-item" style={ S('relative mb-5') }>
-          { profile_image_div }
-          <div className="pull-left" style={ S('ml-50') }>
+        <div className="message-item" style={ S('relative mb-5 pt-5') }>
+          <div style={ S('mt-5 pull-left') }>{ profile_image_div }</div>
+          <div className="pull-left" style={ S('ml-55') }>
             <b>{ first_name || 'Rebot' }</b>
             <span style={ S('color-ccc ml-20') } >
               { time_created.month } { time_created.date }, { time_created.time_friendly }
@@ -153,8 +153,8 @@ export default class MessageItem extends Component {
     // Default
     return (
       <div className="message-item" style={ S('relative mb-5') }>
-        { profile_image_div }
-        <div className="pull-left" style={ S('ml-50') }>
+        <div style={ S('mt-5 pull-left') }>{ profile_image_div }</div>
+        <div className="pull-left" style={ S('ml-55 pt-6') }>
           <b>{ first_name || 'Rebot' }</b>
           <span style={ S('color-ccc ml-20') } >
             { time_created.month } { time_created.date }, { time_created.time_friendly }
