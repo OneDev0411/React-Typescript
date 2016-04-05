@@ -205,7 +205,7 @@ export default class MessagesList extends Component {
       prev_message_date = message_date
       prev_recommendation = message.recommendation
       return (
-        <li ref={ 'message-' + i} key={ 'message-' + message.id + '-' + i } style={ S('pb-10') }>
+        <li ref={ 'message-' + i} key={ 'message-' + message.id + '-' + i }>
           { heading }
           <MessageItem
             i={ i }
