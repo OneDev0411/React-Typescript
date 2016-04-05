@@ -310,7 +310,7 @@ export default class MessagesList extends Component {
         { fixed_heading_date_area }
         <div ref="messages_scroll_area" style={ messages_scroll_area } onScroll={ this.handleScroll.bind(this) }>
           { loading_previous }
-          <ul style={ S('pl-0') }>{ messages_list_items }</ul>
+          <ul style={ S('pl-0 mb-40') }>{ messages_list_items }</ul>
         </div>
         <Modal show={ data.show_contacts_modal } onHide={ this.props.hideModal }>
           <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
