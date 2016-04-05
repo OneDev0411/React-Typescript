@@ -25,7 +25,7 @@ export default class App extends Component {
     const reconnect_vars = {
       reconnection: true,
       reconnectionDelay: 1000,
-      reconnectionDelayMax : 5000,
+      reconnectionDelayMax: 5000,
       reconnectionAttempts: 99999
     }
     window.socket = io(config.socket.server, reconnect_vars)

@@ -141,7 +141,7 @@ export default class Mls extends Component {
           onClick={ controller.listing_map.removeDrawing.bind(this) }
           bsStyle="danger"
           className="transition"
-          style={ S('absolute z-1000 t-80 br-100 w-50 h-50 color-fff pt-1 font-30 text-center r-' + right_value) }
+          style={ S('absolute z-10 t-80 br-100 w-50 h-50 color-fff pt-1 font-30 text-center r-' + right_value) }
         >
           &times;
         </Button>
