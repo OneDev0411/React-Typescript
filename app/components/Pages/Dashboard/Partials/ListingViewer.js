@@ -419,16 +419,16 @@ export default class ListingViewer extends Component {
                 </div>
                 <div style={ S('w-30p pull-left pr-20') }>
                   <div style={ S('fw-600 font-18 mb-10') }>Schools</div>
-                  <div style={ S('color-aaaaaa') }>
+                  <div style={ S('color-aaaaaa mb-10') }>
                     School District: <span style={ S('color-777') }>{ property.school_district }</span>
                   </div>
-                  <div style={ S('color-aaaaaa') }>
+                  <div style={ S('color-aaaaaa mb-10') }>
                     Elementary School: <span style={ S('color-777') }>{ property.elementary_school_name }</span>
                   </div>
-                  <div style={ S('color-aaaaaa') }>
+                  <div style={ S('color-aaaaaa mb-10') }>
                     Middle School: <span style={ S('color-777') }>{ property.middle_school_name }</span>
                   </div>
-                  <div style={ S('color-aaaaaa') }>
+                  <div style={ S('color-aaaaaa mb-10') }>
                     High School: <span style={ S('color-777') }>{ property.high_school_name }</span>
                   </div>
                 </div>

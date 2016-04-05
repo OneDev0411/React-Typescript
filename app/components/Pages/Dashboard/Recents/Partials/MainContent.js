@@ -41,7 +41,11 @@ export default class MainContent extends Component {
         return this.props.handleContactFilterNav('down')
       if (e.which === 13) { // enter
         const contact = data.filtered_contacts[active_contact]
-        return this.addContactToMessage(contact)
+        if (contact)
+          this.addContactToMessage(contact)
+        else
+          this.createMessage(e)
+        return
       }
       this.props.handleContactFilter(message_input, 'show')
     } else
@@ -68,7 +72,7 @@ export default class MainContent extends Component {
     // If no comment
     if (!comment.trim())
       return false
-    if (data.active_contact === undefined) {
+    if (data.active_contact === undefined || data.active_contact === -1) {
       this.props.createMessage(comment)
       this.refs.message_input.value = ''
     }
