@@ -45,6 +45,10 @@ export default class ListingViewer extends Component {
   render() {
     // Listing modal
     const data = this.props.data
+    const user = data.user
+    let viewer_width = window.innerWidth - 70
+    if (!user)
+      viewer_width = window.innerWidth
     const listing = this.props.listing
     let current_slide = listing.current_slide
     if (!current_slide)
@@ -107,9 +111,9 @@ export default class ListingViewer extends Component {
             gallery_chunks.map((gallery_image_url, i) => {
               return (
                 <CarouselItem className="listing-carousel__item" key={ 'gallery-image-' + gallery_image_url[0] + i }>
-                  <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[0]) } style={ S('border-right-1-solid-fff w-' + ((window.innerWidth - 70) / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[0] + ')') }/>
-                  <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[1]) } style={ S('border-right-1-solid-fff w-' + ((window.innerWidth - 70) / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[1] + ')') }/>
-                  <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[2]) } style={ S('w-' + ((window.innerWidth - 70) / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[2] + ')') }/>
+                  <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[0]) } style={ S('border-right-1-solid-fff w-' + (viewer_width / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[0] + ')') }/>
+                  <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[1]) } style={ S('border-right-1-solid-fff w-' + (viewer_width / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[1] + ')') }/>
+                  <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[2]) } style={ S('w-' + (viewer_width / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[2] + ')') }/>
                 </CarouselItem>
               )
             })
@@ -286,73 +290,63 @@ export default class ListingViewer extends Component {
             </div>
             <div>
               <div style={ S('font-24 mb-20') }>Details</div>
-              <div style={ S('w-300 pull-left mr-60') }>
+              <div style={ S('w-30p pull-left pr-20') }>
                 <div style={ S('mb-30') }>
-                  <div style={ S('fw-600') }>Cost Breakdown:</div>
-                  <div style={ S('color-c0c0c0') }>
-                    Price/sqt <div style={ S('pull-right') }>${ price_sq_foot }</div>
+                  <div style={ S('fw-600 mb-10') }>Cost Breakdown:</div>
+                  <div style={ S('color-aaaaaa mb-10') }>
+                    Price/sqt: <span style={ S('color-777') }>${ price_sq_foot }</span>
                   </div>
-                  <div style={ S('color-c0c0c0') }>
-                    Unexempt Taxes <div style={ S('pull-right') }>${ listing.unexempt_taxes ? helpers.numberWithCommas(listing.unexempt_taxes) : 0 }</div>
+                  <div style={ S('color-aaaaaa mb-10') }>
+                    Unexempt Taxes: <span style={ S('color-777') }>${ listing.unexempt_taxes ? helpers.numberWithCommas(listing.unexempt_taxes) : 0 }</span>
                   </div>
-                  <div style={ S('color-c0c0c0') }>
-                    HOA Fees <div style={ S('pull-right') }>${ listing.association_fee ? listing.association_fee : 0 }</div>
+                  <div style={ S('color-aaaaaa mb-10') }>
+                    HOA Fees: <span style={ S('color-777') }>${ listing.association_fee ? listing.association_fee : 0 }</span>
                   </div>
-                  <div style={ S('color-c0c0c0') }>
-                    HOA Frequency <div style={ S('pull-right') }>{ listing.association_fee_frequency }</div>
+                  <div style={ S('color-aaaaaa mb-10') }>
+                    HOA Frequency: <span style={ S('color-777') }>{ listing.association_fee_frequency }</span>
                   </div>
-                  <div style={ S('color-c0c0c0') }>
-                    HOA Includes <div style={ S('pull-right') }>{ listing.association_fee_includes }</div>
+                  <div style={ S('color-aaaaaa mb-10') }>
+                    HOA Includes: <span style={ S('color-777') }>{ listing.association_fee_includes }</span>
                   </div>
-                  <div style={ S('color-c0c0c0') }>
-                    Proposed Financing <div style={ S('pull-right') }>{ listing.financing_proposed }</div>
+                  <div style={ S('color-aaaaaa mb-10') }>
+                    Proposed Financing: <span style={ S('color-777') }>{ listing.financing_proposed }</span>
                   </div>
                 </div>
-                <div style={ S('mb-30') }>
-                  <div style={ S('fw-600') }>Facts:</div>
-                  <div style={ S('color-c0c0c0') }>
-                    Year Built <div style={ S('pull-right') }>{ listing.year_built }</div>
-                  </div>
-                  <div style={ S('color-c0c0c0') }>
-                    Style of House <div style={ S('pull-right') }>{ property.architectural_style }</div>
-                  </div>
-                  <div style={ S('color-c0c0c0') }>
-                    Subdivision <div style={ S('pull-right') }>{ property.subdivision_name }</div>
-                  </div>
-                  <div style={ S('color-c0c0c0') }>
-                    Acres <div style={ S('pull-right') }>{ property.lot_size_area }</div>
-                  </div>
-                  <div style={ S('color-c0c0c0') }>
-                    Stories <div style={ S('pull-right') }>{ property.number_of_stories }</div>
-                  </div>
-                  <div style={ S('color-c0c0c0') }>
-                    MLS# <div style={ S('pull-right') }>{ listing.mls_number }</div>
-                  </div>
-                  <div style={ S('color-c0c0c0') }>
-                    Possession <div style={ S('pull-right') }>{ listing.possession }</div>
-                  </div>
-                  <div style={ S('color-c0c0c0') }>
-                    Days On Market <div style={ S('pull-right') }>{ listing_util.getDOM(listing.dom) }</div>
-                  </div>
-                  <div style={ S('color-c0c0c0') }>
-                    Current Days On Market <div style={ S('pull-right') }>{ listing_util.getDOM(listing.cdom) }</div>
-                  </div>
-                </div>
-                <div style={ S('mb-30') }>
-                  <div style={ S('fw-600') }>Parking:</div>
-                  <div style={ S('color-c0c0c0') }>
-                    Garage Spaces <div style={ S('pull-right') }>{ property.parking_spaces_garage }</div>
-                  </div>
-                  <div style={ S('color-c0c0c0') }>
-                    Garage Size <div style={ S('pull-right') }>{ property.garage_width } X { property.garage_length }</div>
-                  </div>
-                </div>
-                <div className="clearfix"></div>
               </div>
-              <div style={ S('w-300 pull-left mr-60') }>
+              <div style={ S('w-30p pull-left pr-20') }>
+                <div style={ S('fw-600') }>Facts:</div>
+                <div style={ S('color-aaaaaa mb-10') }>
+                  Year Built <span style={ S('color-777') }>{ listing.year_built }</span>
+                </div>
+                <div style={ S('color-aaaaaa mb-10') }>
+                  Style of House <div style={ S('pull-right') }>{ property.architectural_style }</div>
+                </div>
+                <div style={ S('color-aaaaaa mb-10') }>
+                  Subdivision <div style={ S('pull-right') }>{ property.subdivision_name }</div>
+                </div>
+                <div style={ S('color-aaaaaa mb-10') }>
+                  Acres <div style={ S('pull-right') }>{ property.lot_size_area }</div>
+                </div>
+                <div style={ S('color-aaaaaa mb-10') }>
+                  Stories <div style={ S('pull-right') }>{ property.number_of_stories }</div>
+                </div>
+                <div style={ S('color-aaaaaa mb-10') }>
+                  MLS# <div style={ S('pull-right') }>{ listing.mls_number }</div>
+                </div>
+                <div style={ S('color-aaaaaa mb-10') }>
+                  Possession <div style={ S('pull-right') }>{ listing.possession }</div>
+                </div>
+                <div style={ S('color-aaaaaa mb-10') }>
+                  Days On Market <div style={ S('pull-right') }>{ listing_util.getDOM(listing.dom) }</div>
+                </div>
+                <div style={ S('color-aaaaaa') }>
+                  Current Days On Market <div style={ S('pull-right') }>{ listing_util.getDOM(listing.cdom) }</div>
+                </div>
+              </div>
+              <div style={ S('w-30p pull-left pr-20') }>
                 <div style={ S('mb-30') }>
                   <div style={ S('fw-600') }>Interior Features:</div>
-                  <div style={ S('color-c0c0c0') }>
+                  <div style={ S('color-aaaaaa') }>
                     Interior Features
                     <div style={ S('pull-right text-right') }>
                       {
@@ -363,7 +357,7 @@ export default class ListingViewer extends Component {
                     </div>
                     <div className="clearfix"></div>
                   </div>
-                  <div style={ S('color-c0c0c0') }>
+                  <div style={ S('color-aaaaaa') }>
                     Alarm/Security
                     <div style={ S('pull-right text-right') }>
                       {
@@ -374,7 +368,7 @@ export default class ListingViewer extends Component {
                     </div>
                     <div className="clearfix"></div>
                   </div>
-                  <div style={ S('color-c0c0c0') }>
+                  <div style={ S('color-aaaaaa') }>
                     Flooring
                     <div style={ S('pull-right text-right') }>
                       {
@@ -386,56 +380,56 @@ export default class ListingViewer extends Component {
                     <div className="clearfix"></div>
                   </div>
                 </div>
-                <div style={ S('mb-30 w-300 pull-left mr-20') }>
-                  <div style={ S('fw-600') }>Schools:</div>
-                  <div style={ S('color-c0c0c0') }>
-                    School District <div style={ S('pull-right') }>{ property.school_district }</div>
-                  </div>
-                  <div style={ S('color-c0c0c0') }>
-                    Elementary School <div style={ S('pull-right') }>{ property.elementary_school_name }</div>
-                  </div>
-                  <div style={ S('color-c0c0c0') }>
-                    Middle School <div style={ S('pull-right') }>{ property.middle_school_name }</div>
-                  </div>
-                  <div style={ S('color-c0c0c0') }>
-                    High School <div style={ S('pull-right') }>{ property.high_school_name }</div>
-                  </div>
-                </div>
-                <div style={ S('mb-30 w-300 pull-left mr-20') }>
-                  <div style={ S('fw-600') }>Utilities:</div>
-                  <div style={ S('color-c0c0c0') }>
-                    Heating/Cooling
-                    <div style={ S('pull-right text-right') }>
-                      {
-                        property.heating.map(item => {
-                          return <div key={ item }>{ item }</div>
-                        })
-                      }
-                    </div>
-                    <div className="clearfix"></div>
-                  </div>
-                  <div style={ S('color-c0c0c0') }>
-                    Other
-                    <div style={ S('pull-right text-right') }>
-                      {
-                        property.utilities.map(item => {
-                          return <div key={ item }>{ item }</div>
-                        })
-                      }
-                    </div>
-                    <div className="clearfix"></div>
-                  </div>
-                </div>
-                <div className="clearfix"></div>
               </div>
-              <div style={ S('w-300 pull-left mr-60') }>
+              <div className="clearfix"></div>
+              <div style={ S('w-30p pull-left pr-20') }>
+                <div style={ S('fw-600') }>Schools:</div>
+                <div style={ S('color-aaaaaa') }>
+                  School District <div style={ S('pull-right') }>{ property.school_district }</div>
+                </div>
+                <div style={ S('color-aaaaaa') }>
+                  Elementary School <div style={ S('pull-right') }>{ property.elementary_school_name }</div>
+                </div>
+                <div style={ S('color-aaaaaa') }>
+                  Middle School <div style={ S('pull-right') }>{ property.middle_school_name }</div>
+                </div>
+                <div style={ S('color-aaaaaa') }>
+                  High School <div style={ S('pull-right') }>{ property.high_school_name }</div>
+                </div>
+              </div>
+              <div style={ S('w-30p pull-left pr-20') }>
+                <div style={ S('fw-600') }>Utilities:</div>
+                <div style={ S('color-aaaaaa') }>
+                  Heating/Cooling
+                  <div style={ S('pull-right text-right') }>
+                    {
+                      property.heating.map(item => {
+                        return <div key={ item }>{ item }</div>
+                      })
+                    }
+                  </div>
+                  <div className="clearfix"></div>
+                </div>
+                <div style={ S('color-aaaaaa') }>
+                  Other
+                  <div style={ S('pull-right text-right') }>
+                    {
+                      property.utilities.map(item => {
+                        return <div key={ item }>{ item }</div>
+                      })
+                    }
+                  </div>
+                  <div className="clearfix"></div>
+                </div>
+              </div>
+              <div style={ S('w-30p pull-left pr-20') }>
                 <div style={ S('mb-30') }>
                   <div style={ S('fw-600') }>Exterior Features:</div>
-                  <div style={ S('color-c0c0c0') }>
+                  <div style={ S('color-aaaaaa') }>
                     Lot Size
                     <div style={ S('pull-right') }>{ lot_size_square_feet } Sqft</div>
                   </div>
-                  <div style={ S('color-c0c0c0') }>
+                  <div style={ S('color-aaaaaa') }>
                     Exterior Features
                     <div style={ S('pull-right text-right') }>
                       {
@@ -446,26 +440,29 @@ export default class ListingViewer extends Component {
                     </div>
                     <div className="clearfix"></div>
                   </div>
-                  <div style={ S('color-c0c0c0') }>
+                  <div style={ S('color-aaaaaa') }>
                     Construction
                     <div style={ S('pull-right') }>{ property.construction_materials }</div>
                   </div>
-                  <div style={ S('color-c0c0c0') }>
+                  <div style={ S('color-aaaaaa') }>
                     Foundation
                     <div style={ S('pull-right') }>{ property.foundation_details }</div>
                   </div>
-                  <div style={ S('color-c0c0c0') }>
+                  <div style={ S('color-aaaaaa') }>
                     Roof
                     <div style={ S('pull-right') }>{ property.roof }</div>
                   </div>
                 </div>
-                <div style={ S('mb-30 w-300 pull-left mr-20') }>
+              </div>
+              <div className="clearfix"></div>  
+              <div style={ S('w-30p pull-left pr-20') }>
+                <div style={ S('mb-30 pull-left mr-20') }>
                   <div style={ S('fw-600') }>Amenities:</div>
-                  <div style={ S('color-c0c0c0') }>
+                  <div style={ S('color-aaaaaa') }>
                     Pool
                     <div style={ S('pull-right') }>{ property.pool_yn ? 'Yes' : 'No' }</div>
                   </div>
-                  <div style={ S('color-c0c0c0') }>
+                  <div style={ S('color-aaaaaa') }>
                     Pool Features
                     <div style={ S('pull-right text-right') }>
                       {
@@ -476,20 +473,55 @@ export default class ListingViewer extends Component {
                     </div>
                     <div className="clearfix"></div>
                   </div>
-                  <div style={ S('color-c0c0c0') }>
+                  <div style={ S('color-aaaaaa') }>
                     Handicap Amenities
                     <div style={ S('pull-right') }>{ property.handicap_yn ? 'Yes' : 'No' }</div>
                   </div>
                 </div>
-                <div className="clearfix"></div>
               </div>
             </div>
+            <div className="clearfix"></div>
+            <h2>Location</h2>
+            <div style={ S('relative w-100p pull-left') }>
+              <GoogleMap
+                style={ S('w-100p h-350') }
+                key={ 'map' }
+                center={ { lat: listing.property.address.location.latitude, lng: listing.property.address.location.longitude } }
+                zoom={ 12 }
+                options={ { scrollwheel: false } }
+              >
+                <div
+                  onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) }
+                  onMouseOut={ controller.listing_map.hideListingPopup.bind(this) }
+                  onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }
+                  style={ S('pointer mt-10') } lat={ listing.property.address.location.latitude }
+                  lng={ listing.property.address.location.longitude }
+                  text={'A'}
+                >
+                  <ListingMarker
+                    key={ 'listing-marker' + listing.id }
+                    data={ data }
+                    listing={ listing }
+                    property={ listing.property }
+                    address={ listing.property.address }
+                    context={ 'single' }
+                  />
+                </div>
+              </GoogleMap>
+            </div>
+            <div className="clearfix"></div>
+            <div style={ S('h-100 w-100p') }></div>
             <div className="clearfix"></div>
           </div>
         </div>
       )
     }
-    const viewer_wrap_style = S('absolute h-100p bg-fff t-0 l-0 z-1000 ml-70 w-' + (window.innerWidth - 70))
+    let viewer_wrap_style = S('absolute h-100p bg-fff t-0 l-0 z-1000 ml-70 w-' + viewer_width)
+    if (!user)
+      viewer_wrap_style = {
+        ...viewer_wrap_style,
+        ...S('ml-0')
+      }
     const nav_bar_style = S('mb-0 p-0 h-65 pt-7 w-100p')
     let modal_gallery_area
     if (data.show_modal_gallery) {
@@ -517,20 +549,49 @@ export default class ListingViewer extends Component {
         </Carousel>
       )
     }
-    return (
-      <div style={ viewer_wrap_style }>
+    let left_area
+    if (user) {
+      left_area = (
         <div onClick={ this.props.hideListingViewer } style={ S('pointer absolute l-20 t-20 font-18 fw-400') }>
           <a href="#" style={ S('relative pull-left font-30 mr-10 t-5n') } className="close">
             &times;
           </a>
           <div style={ S('relative pull-left') }>Close</div>
         </div>
+      )
+    }
+    let right_area
+    if (user) {
+      right_area = (
         <div style={ nav_bar_style }>
           <Button onClick={ this.props.showShareListingModal.bind(this) } style={ S('absolute r-20 t-15') } bsStyle="primary" type="button">
             Share
             &nbsp;&nbsp;<i className="fa fa-share"></i>
           </Button>
         </div>
+      )
+    }
+    let join_area
+    if (!user) {
+      join_area = (
+        <div style={ S('h-70') }>
+          <div style={ S('pull-left p-16') }>
+            <a href="/">
+              <img style={ S('w-35 h-35') } src="/images/landing/logo@2x.png" />
+            </a>
+          </div>
+          <div style={ S('pull-right p-16') }>
+            <a style={ S('mr-15 bg-a1bde4 border-1-solid-a1bde4') } className="btn btn-primary" href="/signin">Log in</a>
+            <a className="btn btn-primary" href="/signup">Sign up</a>
+          </div>  
+        </div>
+      )
+    }
+    return (
+      <div style={ viewer_wrap_style }>
+        { join_area }
+        { left_area }
+        { right_area }
         { main_content }
         <Modal bsSize="large" show={ data.show_modal_gallery } onHide={ this.props.hideModal }>
           <div style={ S('relative') }>

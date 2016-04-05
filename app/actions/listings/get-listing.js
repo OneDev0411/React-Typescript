@@ -4,9 +4,10 @@ import AppStore from '../../stores/AppStore'
 
 export default (user, id) => {
   const params = {
-    id,
-    access_token: user.access_token
+    id
   }
+  if (user)
+    params.user = user.access_token
   Listing.get(params, (err, response) => {
     // Success
     if (response.status === 'success') {

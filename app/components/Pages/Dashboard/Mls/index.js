@@ -4,6 +4,7 @@ import S from 'shorti'
 import GoogleMap from 'google-map-react'
 import { ButtonGroup, Button } from 'react-bootstrap'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
+import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import controller from '../controller'
 import SideBar from '../Partials/SideBar'
@@ -16,6 +17,15 @@ export default class Mls extends Component {
   componentWillMount() {
     const data = this.props.data
     const user = data.user
+    if (this.props.params.id) {
+      ListingDispatcher.dispatch({
+        action: 'get-listing',
+        user,
+        id: this.props.params.id
+      })
+    }
+    if (!user)
+      return
     AppStore.data.user = user
     AppStore.emitChange()
     const listing_map = data.listing_map
@@ -38,6 +48,7 @@ export default class Mls extends Component {
       }
     }
     AppStore.emitChange()
+    // Allow for seamless
     AppDispatcher.dispatch({
       action: 'get-rooms',
       user
@@ -47,21 +58,13 @@ export default class Mls extends Component {
       user
     })
   }
-  componentDidUpdate() {
-    const data = this.props.data
-    if (!data.current_listing && data.path !== '/dashboard/mls') {
-      const history = require('../../../../utils/history')
-      history.replaceState(null, '/dashboard/mls')
-      delete AppStore.data.current_listing
-      AppStore.emitChange()
-    }
-  }
   componentWillUnmount() {
     controller.listing_map.hideModal()
     controller.listing_viewer.hideListingViewer()
   }
   render() {
     const data = this.props.data
+    const user = data.user
     const listing_map = data.listing_map
     const main_style = S('absolute h-100p l-70')
     let map_listing_markers
@@ -168,84 +171,92 @@ export default class Mls extends Component {
         </div>
       )
     }
+    let main_content = (
+      <main>
+        <SideBar data={ data }/>
+        <div className={ main_class } style={ main_style }>
+          <nav style={ toolbar_style }>
+            <div style={ S('pull-left mr-10') }>
+              <form onSubmit={ controller.listing_map.handleSearchSubmit.bind(this) }>
+                <img src="/images/dashboard/mls/search.svg" style={ S('w-22 h-22 absolute l-18 t-18') } />
+                <input ref="search_input" className="form-control" type="text" style={ S('font-18 bg-dfe3e8 w-400 pull-left pl-40') } placeholder="Search location or MLS#" />
+              </form>
+            </div>
+            <div style={ S('pull-left') }>
+              <Button onClick={ controller.listing_filter.showFilterForm.bind(this, 'photos') } style={ { ...S('mr-10'), outline: 'none' } }>
+                <img src={ `/images/dashboard/mls/filters${data.show_filter_form ? '-active' : ''}.svg` } style={ S('w-20 mr-10') }/>
+                <span className={ data.show_filter_form ? 'text-primary' : '' }>Filters</span>
+              </Button>
+              <Button onClick={ controller.listing_map.toggleDrawable.bind(this) } style={ { ...S('mr-10'), outline: 'none' } }>
+                <img src={ `/images/dashboard/mls/draw${data.listing_map && data.listing_map.drawable ? '-active' : ''}.svg` } style={ S('w-20') }/>
+              </Button>
+              <ButtonGroup style={ S('mr-10') }>
+                <Button style={ { outline: 'none' } } onClick={ controller.listing_panel.showPanelView.bind(this, 'list') }>
+                  <img src={ `/images/dashboard/mls/list${data.listing_panel && data.listing_panel.view === 'list' ? '-active' : ''}.svg` } style={ S('w-20') }/>
+                </Button>
+                <Button style={ { outline: 'none' } } onClick={ controller.listing_panel.showPanelView.bind(this, 'photos') }>
+                  <img src={ `/images/dashboard/mls/photos${data.listing_panel && data.listing_panel.view === 'photos' ? '-active' : ''}.svg` } style={ S('w-18') }/>
+                </Button>
+              </ButtonGroup>
+            </div>
+            { results_actions }
+          </nav>
+          { loading }
+          <div style={ S('h-' + (window.innerHeight - 62)) }>
+            { remove_drawing_button }
+            <GoogleMap
+              key={ 'map-' + map_id }
+              bootstrapURLKeys={ bootstrap_url_keys }
+              center={ listing_map ? listing_map.center : default_center }
+              zoom={ listing_map ? listing_map.zoom : default_zoom }
+              onBoundsChange={ controller.listing_map.handleBoundsChange.bind(this) }
+              options={ controller.listing_map.createMapOptions.bind(this) }
+              yesIWantToUseGoogleMapApiInternals
+              onGoogleApiLoaded={ controller.listing_map.handleGoogleMapApi.bind(this) }
+            >
+            { map_listing_markers }
+            </GoogleMap>
+          </div>
+        </div>
+        { listing_viewer }
+        <ListingPanel
+          data={ data }
+          toggleListingPanel={ controller.listing_panel.toggleListingPanel }
+          showListingViewer={ controller.listing_viewer.showListingViewer }
+          sortListings={ controller.listing_panel.sortListings }
+          setActiveListing={ controller.listing_map.setActiveListing }
+          removeActiveListing={ controller.listing_map.removeActiveListing }
+        />
+        <FilterForm
+          data={ data }
+          handleFilterSwitch={ controller.listing_filter.handleFilterSwitch }
+          handleFilterButton={ controller.listing_filter.handleFilterButton }
+          resetFilterOptions={ controller.listing_filter.resetFilterOptions }
+          setFilterOptions={ controller.listing_filter.setFilterOptions }
+          handleOptionChange={ controller.listing_filter.handleOptionChange }
+          toggleListingStatusDropdown={ controller.listing_filter.toggleListingStatusDropdown }
+          handleFilterStatusOptionSelect={ controller.listing_filter.handleFilterStatusOptionSelect }
+        />
+        { zoom_controls }
+        <ShareAlertModal
+          data={ data }
+          shareAlert={ controller.listing_share.shareAlert }
+          handleShareFilter={ controller.share_modal.handleShareFilter }
+          handleEmailChange={ controller.share_modal.handleEmailChange }
+          handlePhoneNumberChange={ controller.share_modal.handlePhoneNumberChange }
+          handleAddEmail={ controller.share_modal.handleAddEmail }
+          handleAddPhoneNumber={ controller.share_modal.handleAddPhoneNumber }
+          handleRemoveShareItem={ controller.share_modal.handleRemoveShareItem }
+        />
+      </main>
+    )
+    if (!user) {
+      main_content = listing_viewer
+    }
     return (
       <div style={ S('minw-1000') }>
         <main>
-          <SideBar data={ data }/>
-          <div className={ main_class } style={ main_style }>
-            <nav style={ toolbar_style }>
-              <div style={ S('pull-left mr-10') }>
-                <form onSubmit={ controller.listing_map.handleSearchSubmit.bind(this) }>
-                  <img src="/images/dashboard/mls/search.svg" style={ S('w-22 h-22 absolute l-18 t-18') } />
-                  <input ref="search_input" className="form-control" type="text" style={ S('font-18 bg-dfe3e8 w-400 pull-left pl-40') } placeholder="Search location or MLS#" />
-                </form>
-              </div>
-              <div style={ S('pull-left') }>
-                <Button onClick={ controller.listing_filter.showFilterForm.bind(this, 'photos') } style={ { ...S('mr-10'), outline: 'none' } }>
-                  <img src={ `/images/dashboard/mls/filters${data.show_filter_form ? '-active' : ''}.svg` } style={ S('w-20 mr-10') }/>
-                  <span className={ data.show_filter_form ? 'text-primary' : '' }>Filters</span>
-                </Button>
-                <Button onClick={ controller.listing_map.toggleDrawable.bind(this) } style={ { ...S('mr-10'), outline: 'none' } }>
-                  <img src={ `/images/dashboard/mls/draw${data.listing_map && data.listing_map.drawable ? '-active' : ''}.svg` } style={ S('w-20') }/>
-                </Button>
-                <ButtonGroup style={ S('mr-10') }>
-                  <Button style={ { outline: 'none' } } onClick={ controller.listing_panel.showPanelView.bind(this, 'list') }>
-                    <img src={ `/images/dashboard/mls/list${data.listing_panel && data.listing_panel.view === 'list' ? '-active' : ''}.svg` } style={ S('w-20') }/>
-                  </Button>
-                  <Button style={ { outline: 'none' } } onClick={ controller.listing_panel.showPanelView.bind(this, 'photos') }>
-                    <img src={ `/images/dashboard/mls/photos${data.listing_panel && data.listing_panel.view === 'photos' ? '-active' : ''}.svg` } style={ S('w-18') }/>
-                  </Button>
-                </ButtonGroup>
-              </div>
-              { results_actions }
-            </nav>
-            { loading }
-            <div style={ S('h-' + (window.innerHeight - 62)) }>
-              { remove_drawing_button }
-              <GoogleMap
-                key={ 'map-' + map_id }
-                bootstrapURLKeys={ bootstrap_url_keys }
-                center={ listing_map ? listing_map.center : default_center }
-                zoom={ listing_map ? listing_map.zoom : default_zoom }
-                onBoundsChange={ controller.listing_map.handleBoundsChange.bind(this) }
-                options={ controller.listing_map.createMapOptions.bind(this) }
-                yesIWantToUseGoogleMapApiInternals
-                onGoogleApiLoaded={ controller.listing_map.handleGoogleMapApi.bind(this) }
-              >
-              { map_listing_markers }
-              </GoogleMap>
-            </div>
-          </div>
-          { listing_viewer }
-          <ListingPanel
-            data={ data }
-            toggleListingPanel={ controller.listing_panel.toggleListingPanel }
-            showListingViewer={ controller.listing_viewer.showListingViewer }
-            sortListings={ controller.listing_panel.sortListings }
-            setActiveListing={ controller.listing_map.setActiveListing }
-            removeActiveListing={ controller.listing_map.removeActiveListing }
-          />
-          <FilterForm
-            data={ data }
-            handleFilterSwitch={ controller.listing_filter.handleFilterSwitch }
-            handleFilterButton={ controller.listing_filter.handleFilterButton }
-            resetFilterOptions={ controller.listing_filter.resetFilterOptions }
-            setFilterOptions={ controller.listing_filter.setFilterOptions }
-            handleOptionChange={ controller.listing_filter.handleOptionChange }
-            toggleListingStatusDropdown={ controller.listing_filter.toggleListingStatusDropdown }
-            handleFilterStatusOptionSelect={ controller.listing_filter.handleFilterStatusOptionSelect }
-          />
-          { zoom_controls }
-          <ShareAlertModal
-            data={ data }
-            shareAlert={ controller.listing_share.shareAlert }
-            handleShareFilter={ controller.share_modal.handleShareFilter }
-            handleEmailChange={ controller.share_modal.handleEmailChange }
-            handlePhoneNumberChange={ controller.share_modal.handlePhoneNumberChange }
-            handleAddEmail={ controller.share_modal.handleAddEmail }
-            handleAddPhoneNumber={ controller.share_modal.handleAddPhoneNumber }
-            handleRemoveShareItem={ controller.share_modal.handleRemoveShareItem }
-          />
+          { main_content }
         </main>
       </div>
     )

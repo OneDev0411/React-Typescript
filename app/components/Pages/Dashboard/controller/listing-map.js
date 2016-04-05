@@ -133,7 +133,8 @@ const controller = {
   },
   hideModal() {
     delete AppStore.data.show_share_listing_modal
-    delete AppStore.data.listing_map.show_share_modal
+    if (AppStore.data.listing_map)
+      delete AppStore.data.listing_map.show_share_modal
     delete AppStore.data.show_modal_gallery
     AppStore.emitChange()
   },

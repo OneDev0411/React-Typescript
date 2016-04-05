@@ -43,6 +43,17 @@ module.exports = (app, config) => {
     })
   })
 
+  app.get('/dashboard/mls/:id', (req, res, next) => {
+    /// http://localhost:3000/dashboard/mls/a99808ac-d33f-11e5-b3aa-f23c91c841bd
+    // timestamp bundle
+    const date = new Date
+    res.locals.time = date.getTime()
+    AppStore.data.user = req.session.user
+    res.locals.AppStore = JSON.stringify(AppStore)
+    return res.status(200).render('index.html')
+    res.end()
+  })
+
   app.get('/dashboard*', (req, res, next) => {
     if(req.session.user){
       // timestamp bundle
