@@ -108,10 +108,14 @@ export default class App extends Component {
       AppStore.emitChange()
     })
     socket.on('User.Online', response => {
+      if (!AppStore.data.users_online)
+        AppStore.data.users_online = []
       AppStore.data.users_online.push(response)
       AppStore.emitChange()
     })
     socket.on('User.Offline', response => {
+      if (!AppStore.data.users_online)
+        AppStore.data.users_online = []
       const users_online_edited = AppStore.data.users_online.filter(user_id => {
         return user_id !== response
       })

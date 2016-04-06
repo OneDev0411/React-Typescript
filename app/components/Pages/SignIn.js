@@ -3,10 +3,8 @@ import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { Button, Input, Alert } from 'react-bootstrap'
 import S from 'shorti'
-import config from '../../../config/public'
 import AppStore from '../../stores/AppStore'
 import AppDispatcher from '../../dispatcher/AppDispatcher'
-import io from 'socket.io-client'
 // import MapBackground from '../Partials/MapBackground'
 
 export default class SignIn extends Component {
@@ -26,8 +24,6 @@ export default class SignIn extends Component {
     const data = this.props.data
     const user = data.user
     if (user) {
-      const socket = io(config.socket.server)
-      socket.emit('Room.UserOnline', user.id)
       let redirect_to = '/dashboard/mls'
       if (data.location.query && data.location.query.redirect_to)
         redirect_to = data.location.query.redirect_to
