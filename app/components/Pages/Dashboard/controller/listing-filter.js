@@ -66,6 +66,10 @@ const controller = {
       if (filter_options.status_options && filter_options.status_options.other && filter_options.status_options.other.length)
         listing_statuses = [...listing_statuses, ...filter_options.status_options.other]
       options.listing_statuses = listing_statuses
+      // Open houses
+      options.open_house = listing_map.filter_options.open_house
+      if (!options.open_house)
+        options.open_house = false
       // Bed / bath
       options.minimum_bedrooms = default_options.minimum_bedrooms
       options.minimum_bathrooms = default_options.minimum_bathrooms
@@ -128,6 +132,11 @@ const controller = {
         AppStore.data.listing_map.filter_options.status_options[key] = ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract']
       if (key === 'other')
         AppStore.data.listing_map.filter_options.status_options[key] = ['Cancelled', 'Expired', 'Pending', 'Temp Off Market', 'Withdrawn', 'Withdrawn Sublisting']
+      if (key === 'open_house') {
+        AppStore.data.listing_map.filter_options[key] = true
+        AppStore.data.listing_map.filter_options.active = true
+        AppStore.data.listing_map.filter_options.status_options.active = ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract']
+      }
     } else {
       delete AppStore.data.listing_map.filter_options[key]
       AppStore.data.listing_map.filter_options.status_options[key] = []

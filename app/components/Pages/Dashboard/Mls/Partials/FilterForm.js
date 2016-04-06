@@ -177,7 +177,7 @@ export default class FilterForm extends Component {
                   <span style={ S('color-dcdedf relative ml-15') }>|</span>
                 </div>
                 <div style={ S('pull-right') }>
-                  <Switch checked={ filter_options ? filter_options.open_houses : false } onChange={ this.props.handleFilterSwitch.bind(this, 'open_houses') } />
+                  <Switch checked={ filter_options ? filter_options.open_house : false } onChange={ this.props.handleFilterSwitch.bind(this, 'open_house') } />
                 </div>
               </div>
               <div className="clearfix"></div>
