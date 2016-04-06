@@ -318,6 +318,11 @@ const controller = {
     controller.removeActiveListing()
     delete AppStore.data.listing_map.listing_popup
     AppStore.emitChange()
+  },
+  handleSearchInputChange() {
+    const search_input_text = this.refs.search_input.value
+    AppStore.data.listing_map.search_input_text = search_input_text
+    AppStore.emitChange()
   }
 }
 export default controller

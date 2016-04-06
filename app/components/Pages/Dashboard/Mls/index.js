@@ -171,6 +171,9 @@ export default class Mls extends Component {
         </div>
       )
     }
+    let search_input_text
+    if (data.listing_map && data.listing_map.search_input_text)
+      search_input_text = data.listing_map.search_input_text
     let main_content = (
       <main>
         <SideBar data={ data }/>
@@ -179,7 +182,7 @@ export default class Mls extends Component {
             <div style={ S('pull-left mr-10') }>
               <form onSubmit={ controller.listing_map.handleSearchSubmit.bind(this) }>
                 <img src="/images/dashboard/mls/search.svg" style={ S('w-22 h-22 absolute l-18 t-18') } />
-                <input ref="search_input" className="form-control" type="text" style={ S('font-18 bg-dfe3e8 w-400 pull-left pl-40') } placeholder="Search location or MLS#" />
+                <input onChange={ controller.listing_map.handleSearchInputChange.bind(this) } value={ search_input_text } ref="search_input" className="form-control" type="text" style={ S('font-18 bg-dfe3e8 w-400 pull-left pl-40') } placeholder="Search location or MLS#" />
               </form>
             </div>
             <div style={ S('pull-left') }>

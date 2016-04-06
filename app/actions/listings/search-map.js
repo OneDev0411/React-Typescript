@@ -40,23 +40,6 @@ export default (user, q) => {
         }
       })
       map.fitBounds(bounds)
-      // const geocoder = new google.maps.Geocoder
-      // geocoder.geocode({ 'address': q_commas }, (results, status) => {
-      //   if (status === google.maps.GeocoderStatus.OK) {
-      //     const lat = results[0].geometry.location.lat()
-      //     const lng = results[0].geometry.location.lng()
-      //     AppStore.data.listing_map.center = {
-      //       lat,
-      //       lng
-      //     }
-      //     AppStore.data.listing_map.zoom = zoom
-      //     AppStore.data.listing_map.auto_move = true
-      //     map.setZoom(zoom)
-      //     window.map.setCenter(results[0].geometry.location)
-      //     AppStore.emitChange()
-      //   } // else
-      //   // console.log('Geocode was not successful for the following reason: ' + status)
-      // })
     }
     setTimeout(() => {
       delete AppStore.data.listing_map.auto_move
