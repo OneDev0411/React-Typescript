@@ -184,7 +184,8 @@ const controller = {
     AppStore.data.listing_map.filter_options = {
       maximum_price: 5000000,
       active: true,
-      listing_types: ['any', 'house', 'condo', 'townhouse']
+      listing_types: ['any', 'house', 'condo', 'townhouse'],
+      status_options: {}
     }
     AppStore.emitChange()
     ListingDispatcher.dispatch({
