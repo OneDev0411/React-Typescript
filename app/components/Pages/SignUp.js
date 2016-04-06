@@ -19,7 +19,11 @@ export default class SignUp extends Component {
       AppStore.emitChange()
     }
   }
+  contactSupport() {
+    window.Intercom('show')
+  }
   handleUserTypeClick(user_type) {
+    delete AppStore.data.error_type
     if (!AppStore.data.signup)
       AppStore.data.signup = {}
     AppStore.data.signup.user_type = user_type
@@ -186,7 +190,7 @@ export default class SignUp extends Component {
         <div style={ S('mb-10 pl-30 pr-30') }>
           { message }
         </div>
-        <div style={ S('color-929292 font-13 mt-20') }>Already have an account? <Link to="/signin">Log in</Link></div>
+        <div style={ S('color-929292 font-13 mt-20') }>Already have an account? <Link to="/signin">Log in</Link>.</div>
       </div>
     )
     // Search agent
@@ -204,7 +208,8 @@ export default class SignUp extends Component {
               { submitting ? 'Searching...' : 'Find Me' }
             </Button>
             { message }
-            <div style={ S('color-929292 font-13 mt-20') }>Actually I'm a <a href="#" onClick={ this.handleUserTypeClick.bind(this, 'Client') }>Client</a></div>
+            <div style={ S('color-929292 font-13 mt-20 mb-10') }>Actually I'm a <a href="#" onClick={ this.handleUserTypeClick.bind(this, 'Client') }>Client</a>.</div>
+            <div style={ S('color-929292 font-13') }>Need help? <a href="#" onClick={ this.contactSupport.bind(this) }>Contact support</a>.</div>
           </form>
         </div>
       )
@@ -232,7 +237,9 @@ export default class SignUp extends Component {
             <Button bsSize="large" type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p mb-20 mt-20') }>
               { submitting ? 'Signing up...' : 'Sign up' }
             </Button>
-            <div style={ S('color-929292 font-13 mt-20') }>Already have an account? <Link to="/signin">Log in</Link></div>
+            <div style={ S('color-929292 font-13 mt-20 mb-10') }>Actually I'm an <a href="#" onClick={ this.handleUserTypeClick.bind(this, 'Agent') }>Agent</a>.</div>
+            <div style={ S('color-929292 font-13 mb-10') }>Already have an account? <Link to="/signin">Log in</Link>.</div>
+            <div style={ S('color-929292 font-13') }>Need help? <a href="#" onClick={ this.contactSupport.bind(this) }>Contact support</a>.</div>
           </form>
         </div>
       )
@@ -270,7 +277,8 @@ export default class SignUp extends Component {
               <Button bsSize="large" type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p mb-20 mt-20') }>
                 { submitting ? 'Signing up...' : 'Sign up' }
               </Button>
-              <div style={ S('color-929292 font-13 mt-20') }>Already have an account? <Link to="/signin">Log in</Link></div>
+              <div style={ S('color-929292 font-13 mt-20 mb-10') }>Already have an account? <Link to="/signin">Log in</Link>.</div>
+              <div style={ S('color-929292 font-13') }>Need help?  <a href="#" onClick={ this.contactSupport.bind(this) }>Contact support</a>.</div>
             </form>
           </div>
         </div>
@@ -280,7 +288,7 @@ export default class SignUp extends Component {
     if (data.signup && data.signup.email_verify_message) {
       main_content = (
         <div style={ S('p-50') }>
-          <div style={ S('font-20') }>All set, Sam! We’ll need to verify your email to make sure it’s you.</div>
+          <div style={ S('font-20') }>All set, { data.new_user.first_name }! We’ll need to verify your email to make sure it’s you.</div>
         </div>
       )
     }
