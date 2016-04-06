@@ -29,6 +29,8 @@ export default (user, title) => {
       AppStore.data.request_error = true
     }
     delete AppStore.data.loading
+    // reauth socket
+    window.socket.emit('Authenticate', user.access_token)
     AppStore.emitChange()
   })
 }

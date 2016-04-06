@@ -1,13 +1,10 @@
 // RoomsList.js
 import React, { Component } from 'react'
 import S from 'shorti'
-// import Loading from '../../../../Partials/Loading'
 import ProfileImage from '../../Partials/ProfileImage'
 import helpers from '../../../../../utils/helpers'
 import _ from 'lodash'
-
 export default class RoomsList extends Component {
-
   handleClick(i) {
     const data = this.props.data
     let rooms = data.rooms
@@ -26,7 +23,6 @@ export default class RoomsList extends Component {
       room = filtered_rooms[i]
     this.props.setCurrentRoom(room)
   }
-
   roomHasNotifications(room_id) {
     let result = false
     const data = this.props.data
@@ -41,9 +37,7 @@ export default class RoomsList extends Component {
     })
     return result
   }
-
   render() {
-    // Data
     const data = this.props.data
     let rooms = data.rooms
     // Sort by updates
@@ -64,10 +58,8 @@ export default class RoomsList extends Component {
       backgroundRepeat: 'repeat-y'
     }
     let rooms_list = <div style={ loading_style } />
-
     if (data.is_filtering)
       rooms = data.filtered_rooms
-
     if (rooms) {
       rooms_list = rooms.map((room, i) => {
         // Profile image
@@ -106,7 +98,6 @@ export default class RoomsList extends Component {
           first_name_list += first_name
           if (_i < first_names.length - 1) first_name_list += ', '
         })
-
         // Time posted
         const latest_created = room.latest_message.created_at.toString().split('.')
         const time_created = helpers.friendlyDate(latest_created[0])
@@ -161,14 +152,11 @@ export default class RoomsList extends Component {
         )
       })
     }
-
-    // Styles
     const rooms_scroll_area = {
       ...S('mt-5'),
       overflow: 'scroll',
       height: window.innerHeight - 70
     }
-
     return (
       <div>
         <div style={ rooms_scroll_area }>
@@ -178,8 +166,6 @@ export default class RoomsList extends Component {
     )
   }
 }
-
-// PropTypes
 RoomsList.propTypes = {
   setCurrentRoom: React.PropTypes.func.isRequired,
   data: React.PropTypes.object

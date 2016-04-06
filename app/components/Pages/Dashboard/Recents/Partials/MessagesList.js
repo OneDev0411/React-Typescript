@@ -151,7 +151,7 @@ export default class MessagesList extends Component {
       ...S('absolute ml-20 w-100p h-100p bg-url(/images/loading-states/messages.svg)'),
       backgroundRepeat: 'repeat-y'
     }
-    if (data.messages_loading || !data.messages) {
+    if (data.messages_loading) {
       return (
         <div style={ loading_style }>
         </div>

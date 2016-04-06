@@ -409,7 +409,6 @@ export default class Dashboard extends Component {
   render() {
     // Data
     const data = this.props.data
-    const loading = data.loading
     const rooms = data.rooms
     const current_room = data.current_room
     let file_viewer
@@ -453,7 +452,7 @@ export default class Dashboard extends Component {
         hideAlertViewer={ controller.alert_viewer.hideAlertViewer }
       />
     )
-    if (!loading && !rooms) {
+    if (!rooms) {
       // Empty state
       main_content = (
         <div style={ S('absolute h-100p w-100p') }>
@@ -463,7 +462,7 @@ export default class Dashboard extends Component {
             </div>
             <div style={ S('mb-25') }>
               <div style={ S('color-929292 font-18') }>Start a Conversation</div>
-              <div style={ S('color-bebebe font-14') }>Conversations are awesome. Placeholder.</div>
+              <div style={ S('color-bebebe font-14') }>Conversations are awesome. Start one now.</div>
             </div>
             <Button onClick={ this.showModal.bind(this, 'create-chat') } style={ S('w-200 p-0') } bsStyle="primary">
               <img src="/images/dashboard/icons/create-chat.svg" />
