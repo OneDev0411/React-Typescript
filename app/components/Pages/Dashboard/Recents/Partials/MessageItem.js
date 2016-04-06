@@ -60,8 +60,10 @@ export default class MessageItem extends Component {
       const file_url = attachment.url
       const ext = attachment.info['mime-extension']
       let message_thumb
+      let is_image
       // If image
       if (ext.indexOf('png') !== -1 || ext.indexOf('jpg') !== -1 || ext.indexOf('gif') !== -1) {
+        is_image = true
         message_thumb = (
           <div style={ S('w-400 h-300 br-3 bg-url(' + file_url + ') bg-cover bg-center mb-10') }></div>
         )
@@ -77,7 +79,7 @@ export default class MessageItem extends Component {
         )
       }
       message_image = (
-        <div className="box-shadow" onClick={ this.props.showFileViewer.bind(this, attachment) } style={ { ...S('mt-10'), cursor: 'zoom-in' } }>
+        <div className={ is_image ? 'box-shadow' : ''} onClick={ this.props.showFileViewer.bind(this, attachment) } style={ { ...S('mt-10'), cursor: 'zoom-in' } }>
           { message_thumb }
         </div>
       )
