@@ -16,6 +16,7 @@ export default (user, q) => {
     delete AppStore.data.listing_map.is_loading
     AppStore.data.listing_map.listings = listings
     const zoom = 13
+    AppStore.data.listing_map.auto_move = true
     // Center and zoom map on single listing MLS
     if (listings.length === 1) {
       const listing = listings[0]
@@ -26,7 +27,6 @@ export default (user, q) => {
         lng
       }
       AppStore.data.listing_map.zoom = zoom
-      AppStore.data.listing_map.auto_move = true
       AppStore.data.listing_map.active_listing = listing.id
       map.setCenter(new google.maps.LatLng(lat, lng))
       map.setZoom(zoom)
@@ -40,6 +40,11 @@ export default (user, q) => {
         }
       })
       map.fitBounds(bounds)
+      const center = {
+        lat: map.center.lat(),
+        lng: map.center.lng()
+      }
+      AppStore.data.listing_map.center = center
     }
     setTimeout(() => {
       delete AppStore.data.listing_map.auto_move
