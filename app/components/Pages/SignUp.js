@@ -278,7 +278,7 @@ export default class SignUp extends Component {
                 { submitting ? 'Signing up...' : 'Sign up' }
               </Button>
               <div style={ S('color-929292 font-13 mt-20 mb-10') }>Already have an account? <Link to="/signin">Log in</Link>.</div>
-              <div style={ S('color-929292 font-13') }>Need help?  <a href="#" onClick={ this.contactSupport.bind(this) }>Contact support</a>.</div>
+              <div style={ S('color-929292 font-13') }>Need help? <a href="#" onClick={ this.contactSupport.bind(this) }>Contact support</a>.</div>
             </form>
           </div>
         </div>
