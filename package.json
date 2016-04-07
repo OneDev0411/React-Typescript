@@ -13,6 +13,7 @@
     "branch-sdk": "^2.1.1",
     "clipboard": "^1.5.5",
     "compression": "^1.6.0",
+    "connect-redis": "^3.0.2",
     "cosmicjs": "^2.0.2",
     "css-loader": "^0.23.0",
     "emojify.js": "^1.1.0",

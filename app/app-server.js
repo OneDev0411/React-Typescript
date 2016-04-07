@@ -5,6 +5,8 @@ import hogan from 'hogan-express'
 import compression from 'compression'
 import session from 'express-session'
 import config from '../config/private'
+import Redis from 'connect-redis'
+const RedisStore = Redis(session)
 
 // Express
 const app = express()
@@ -15,13 +17,14 @@ app.use('/', express.static(__dirname + '/public/', { maxAge: one_day }))
 app.set('port', (process.env.PORT || 3000))
 app.use(compression())
 app.use(session({
-  secret: 'rechat and react rock!',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { 
-    httpOnly: false,
-    maxAge: null
-  }
+    store: new RedisStore(),
+    secret: 'rechat and react rock!',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { 
+      httpOnly: false,
+      maxAge: null
+    }
 }))
 app.use(bodyParser.json({limit: '5mb'}))
 
