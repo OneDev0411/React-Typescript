@@ -130,7 +130,7 @@ export default class ListingViewer extends Component {
       let sold_date
       if (listing.close_date) {
         const sold_date_obj = helpers.friendlyDate(listing.close_date)
-        sold_date = `${sold_date_obj.month} ${sold_date_obj.date}, ${sold_date_obj.year}`  
+        sold_date = `${sold_date_obj.month} ${sold_date_obj.date}, ${sold_date_obj.year}`
       }
       const listing_status_indicator = (
         <div className="pull-left" style={ S('bg-ebeef1 relative t-7 br-100 ml-15 pt-11 h-35 pl-36 pr-15 mr-15') }>
