@@ -162,20 +162,14 @@ const controller = {
       if (filter_options && filter_options.listing_types)
         listing_types = filter_options.listing_types
       // If has already, remove
-      if (value === 'any') {
-        if (listing_types.indexOf(value) === -1)
-          listing_types = ['any', 'house', 'condo', 'townhouse']
-        else
-          listing_types = []
-      } else {
-        if (listing_types.indexOf(value) !== -1)
-          _.pull(listing_types, value)
-        else
-          listing_types.push(value)
+      if (listing_types.indexOf(value) !== -1)
+        _.pull(listing_types, value)
+      else
+        listing_types.push(value)
+      if (value !== 'any')
         _.pull(listing_types, 'any')
-        if (listing_types.length === 3)
-          listing_types.push('any')
-      }
+      if (value === 'any')
+        listing_types = ['any']
       AppStore.data.listing_map.filter_options.listing_types = listing_types
     }
     if (key === 'minimum_bedrooms' || key === 'minimum_bathrooms')
@@ -191,8 +185,11 @@ const controller = {
     const default_options = listing_map.default_options
     AppStore.data.listing_map.filter_options = {
       active: true,
-      listing_types: ['any', 'house', 'condo', 'townhouse'],
-      status_options: {}
+      listing_types: ['any'],
+      status_options: {},
+      minimum_bedrooms: 0,
+      minimum_bathrooms: 1,
+      pool: 'either'
     }
     AppStore.emitChange()
     ListingDispatcher.dispatch({

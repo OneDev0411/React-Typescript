@@ -41,11 +41,11 @@ export default class Mls extends Component {
         active: true,
         other: false,
         open_houses: false,
-        listing_types: ['any', 'house', 'condo', 'townhouse'],
+        listing_types: ['any'],
         status_options: {
           active: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract']
         },
-        minimum_bedrooms: 'any',
+        minimum_bedrooms: 0,
         minimum_bathrooms: 1,
         pool: 'either'
       }
