@@ -190,7 +190,6 @@ const controller = {
     const listing_map = data.listing_map
     const default_options = listing_map.default_options
     AppStore.data.listing_map.filter_options = {
-      maximum_price: 5000000,
       active: true,
       listing_types: ['any', 'house', 'condo', 'townhouse'],
       status_options: {}

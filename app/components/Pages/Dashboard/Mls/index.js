@@ -44,7 +44,10 @@ export default class Mls extends Component {
         listing_types: ['any', 'house', 'condo', 'townhouse'],
         status_options: {
           active: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract']
-        }
+        },
+        minimum_bedrooms: 'any',
+        minimum_bathrooms: 1,
+        pool: 'either'
       }
     }
     AppStore.emitChange()
