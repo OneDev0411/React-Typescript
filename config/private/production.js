@@ -7,7 +7,7 @@ export default {
     client_secret: process.env.RECHAT_CLIENT_SECRET
   },
   redis: {
-    client: process.env.REDIS_URL
+    url: process.env.REDIS_URL
   },
   crypto: {
     key: process.env.CRYPTO_KEY,

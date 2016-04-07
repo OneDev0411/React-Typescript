@@ -16,10 +16,9 @@ app.set('views', __dirname + '/views')
 app.use('/', express.static(__dirname + '/public/', { maxAge: one_day }))
 app.set('port', (process.env.PORT || 3000))
 app.use(compression())
+console.log(config.redis.url)
 app.use(session({
-  store: new RedisStore({
-    client: config.redis.client
-  }),
+  store: new RedisStore(),
   secret: 'rechat and react rock!',
   resave: false,
   saveUninitialized: false,
