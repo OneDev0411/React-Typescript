@@ -60,6 +60,8 @@ const controller = {
         listing_statuses.push('Sold')
         const minimum_sold_value = filter_options.status_options.sold
         options.minimum_sold_date = controller.getSoldDate(minimum_sold_value)
+        if (filter_options.sold_date)
+          options.minimum_sold_date = filter_options.sold_date
       }
       if (filter_options.status_options && filter_options.status_options.active && filter_options.status_options.active.length)
         listing_statuses = [...listing_statuses, ...filter_options.status_options.active]
@@ -133,11 +135,17 @@ const controller = {
       if (key === 'other')
         AppStore.data.listing_map.filter_options.status_options[key] = ['Cancelled', 'Expired', 'Pending', 'Temp Off Market', 'Withdrawn', 'Withdrawn Sublisting']
       if (key === 'open_house') {
+        delete AppStore.data.listing_map.filter_options.sold
+        delete AppStore.data.listing_map.filter_options.other
         AppStore.data.listing_map.filter_options[key] = true
         AppStore.data.listing_map.filter_options.active = true
         AppStore.data.listing_map.filter_options.status_options.active = ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract']
       }
     } else {
+      if (key === 'sold') {
+        delete AppStore.data.listing_map.filter_options.show_sold_date_picker
+        delete AppStore.data.listing_map.filter_options.sold_date
+      }
       delete AppStore.data.listing_map.filter_options[key]
       AppStore.data.listing_map.filter_options.status_options[key] = []
     }
@@ -219,6 +227,8 @@ const controller = {
     if (options.indexOf(value) === -1) {
       AppStore.data.listing_map.filter_options.status_options[key].push(value)
       if (key === 'sold') {
+        delete AppStore.data.listing_map.filter_options.show_sold_date_picker
+        delete AppStore.data.listing_map.filter_options.sold_date
         AppStore.data.listing_map.filter_options.status_options[key] = [value]
         AppStore.data.listing_map.filter_options.sold = true
       }
@@ -231,6 +241,19 @@ const controller = {
         return new_option !== value
       })
     }
+    AppStore.emitChange()
+  },
+  showSoldDatePicker() {
+    if (AppStore.data.listing_map.filter_options.show_sold_date_picker)
+      delete AppStore.data.listing_map.filter_options.show_sold_date_picker
+    else
+      AppStore.data.listing_map.filter_options.show_sold_date_picker = true
+    delete AppStore.data.listing_map.filter_options.status_options.sold
+    AppStore.emitChange()
+  },
+  handleSetSoldDate(day) {
+    AppStore.data.listing_map.filter_options.sold_date = (day.getTime() / 1000)
+    delete AppStore.data.listing_map.filter_options.show_sold_date_picker
     AppStore.emitChange()
   }
 }

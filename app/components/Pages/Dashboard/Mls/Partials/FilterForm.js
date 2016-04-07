@@ -3,7 +3,8 @@ import React, { Component } from 'react'
 import { Button, Input } from 'react-bootstrap'
 import S from 'shorti'
 import Switch from 'react-ios-switch'
-
+import helpers from '../../../../../utils/helpers'
+import DayPicker, { DateUtils } from 'react-day-picker'
 export default class FilterForm extends Component {
   buttonIsActive(key, value) {
     const data = this.props.data
@@ -23,6 +24,10 @@ export default class FilterForm extends Component {
   handleOptionChange(key) {
     const value = this.refs[key].refs.input.value
     this.props.handleOptionChange(key, value)
+  }
+  handleSetSoldDate(e, day) {
+    if (DateUtils.isPastDay(day))
+      this.props.handleSetSoldDate(day)
   }
   render() {
     const data = this.props.data
@@ -53,6 +58,27 @@ export default class FilterForm extends Component {
       active_options = filter_options.status_options.active
     if (filter_options.status_options && filter_options.status_options.other)
       other_options = filter_options.status_options.other
+    const sold_date = filter_options.sold_date
+    const date_obj = new Date(sold_date * 1000)
+    let sold_date_picker
+    if (filter_options.show_sold_date_picker) {
+      sold_date_picker = (
+        <div style={ S('absolute z-100 l-105 t-110 border-1-solid-ccc bg-fff br-3') }>
+          <DayPicker
+            modifiers={{
+              selected: day => DateUtils.isSameDay(date_obj, day),
+              disabled: day => { return !DateUtils.isPastDay(day) }
+            }}
+            onDayClick={ this.handleSetSoldDate.bind(this) }
+          />
+        </div>
+      )
+    }
+    let sold_date_picker_text = 'Pick a date'
+    if (filter_options.sold_date) {
+      const friendly_sold_date = helpers.friendlyDate(filter_options.sold_date)
+      sold_date_picker_text = `${friendly_sold_date.date} ${friendly_sold_date.month}`
+    }
     return (
       <div className={ filter_form_class } style={ filter_form_style }>
         <form onSubmit={ this.props.setFilterOptions.bind(this) }>
@@ -79,7 +105,8 @@ export default class FilterForm extends Component {
                 <Button style={ S(`${sold_options.indexOf(3) !== -1 ? 'color-fff bg-667688 border-1-solid-667688' : ''}`) } onClick={ this.props.handleFilterStatusOptionSelect.bind(this, 'sold', 3) }>3 Mo</Button>
                 <Button style={ S(`${sold_options.indexOf(6) !== -1 ? 'color-fff bg-667688 border-1-solid-667688' : ''}`) } onClick={ this.props.handleFilterStatusOptionSelect.bind(this, 'sold', 6) }>6 Mo</Button>
                 <Button style={ S(`${sold_options.indexOf(12) !== -1 ? 'color-fff bg-667688 border-1-solid-667688' : ''}`) } onClick={ this.props.handleFilterStatusOptionSelect.bind(this, 'sold', 12) }>12 Mo</Button>
-                <Button disabled style={ S(`${sold_options.indexOf('pick') !== -1 ? 'color-fff bg-667688 border-1-solid-667688' : ''}`) } onClick={ this.props.handleFilterStatusOptionSelect.bind(this, 'sold', 'pick') }>Pick a date</Button>
+                <Button style={ S(`${filter_options.show_sold_date_picker || filter_options.sold_date ? 'color-fff bg-667688 border-1-solid-667688' : ''}`) } onClick={ this.props.showSoldDatePicker.bind(this) }>{ sold_date_picker_text }</Button>
+                { sold_date_picker }
               </div>
               <div className="clearfix"></div>
             </div>
@@ -291,8 +318,6 @@ export default class FilterForm extends Component {
     )
   }
 }
-
-// PropTypes
 FilterForm.propTypes = {
   data: React.PropTypes.object,
   handleFilterSwitch: React.PropTypes.func,
@@ -301,5 +326,7 @@ FilterForm.propTypes = {
   setFilterOptions: React.PropTypes.func,
   handleOptionChange: React.PropTypes.func,
   toggleListingStatusDropdown: React.PropTypes.func,
-  handleFilterStatusOptionSelect: React.PropTypes.func
+  handleFilterStatusOptionSelect: React.PropTypes.func,
+  showSoldDatePicker: React.PropTypes.func,
+  handleSetSoldDate: React.PropTypes.func
 }

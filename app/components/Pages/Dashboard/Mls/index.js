@@ -239,6 +239,8 @@ export default class Mls extends Component {
           handleOptionChange={ controller.listing_filter.handleOptionChange }
           toggleListingStatusDropdown={ controller.listing_filter.toggleListingStatusDropdown }
           handleFilterStatusOptionSelect={ controller.listing_filter.handleFilterStatusOptionSelect }
+          showSoldDatePicker={ controller.listing_filter.showSoldDatePicker }
+          handleSetSoldDate={ controller.listing_filter.handleSetSoldDate }
         />
         { zoom_controls }
         <ShareAlertModal
