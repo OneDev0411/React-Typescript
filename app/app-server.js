@@ -16,19 +16,17 @@ app.set('views', __dirname + '/views')
 app.use('/', express.static(__dirname + '/public/', { maxAge: one_day }))
 app.set('port', (process.env.PORT || 3000))
 app.use(compression())
-const REDIS_URL = config.redis.url.match(new Regexp(/^redis:\/\/(.*):(\d*)$/))
 app.use(session({
-    store: new RedisStore({
-      host: REDIS_URL[1],
-      port: REDIS_URL[2]
-    }),
-    secret: 'rechat and react rock!',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { 
-      httpOnly: false,
-      maxAge: null
-    }
+  store: new RedisStore({
+    client: config.redis.client
+  }),
+  secret: 'rechat and react rock!',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { 
+    httpOnly: false,
+    maxAge: null
+  }
 }))
 app.use(bodyParser.json({limit: '5mb'}))
 
