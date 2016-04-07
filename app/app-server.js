@@ -17,7 +17,7 @@ app.use('/', express.static(__dirname + '/public/', { maxAge: one_day }))
 app.set('port', (process.env.PORT || 3000))
 app.use(compression())
 app.use(session({
-    store: new RedisStore(),
+    store: new RedisStore(config.redis.url),
     secret: 'rechat and react rock!',
     resave: false,
     saveUninitialized: false,
