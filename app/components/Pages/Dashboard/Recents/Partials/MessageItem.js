@@ -25,18 +25,19 @@ export default class MessageItem extends Component {
       alert = message.notification.objects[0]
     const i = this.props.i
     let first_name
-
     // Profile image
     let author
     let profile_image_div
-    if (message.author) {
+    if (message.author || alert) {
       author = message.author
+      if (alert)
+        author = alert.created_by
       profile_image_div = (
         <ProfileImage data={ data } user={ author }/>
       )
     }
     // Rebot
-    if (!message.author) {
+    if (!author) {
       profile_image_div = (
         <div style={ S('absolute w-35 t-5') }>
           <img className="center-block" src="/images/dashboard/rebot@2x.png" style={ S('w-30') } />
@@ -45,8 +46,8 @@ export default class MessageItem extends Component {
     }
 
     // First name
-    if (message.author)
-      first_name = message.author.first_name
+    if (author)
+      first_name = author.first_name
 
     // Message time
     const message_created = message.created_at.toString().split('.')
