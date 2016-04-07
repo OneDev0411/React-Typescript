@@ -166,11 +166,15 @@ const controller = {
     const user = data.user
     const q = this.refs.search_input.value.trim()
     AppStore.data.listing_map.is_loading = true
+    const listing_map = data.listing_map
+    const options = listing_map.options
+    const status = options.listing_statuses.join(',')
     AppStore.emitChange()
     ListingDispatcher.dispatch({
       action: 'search-listing-map',
       user,
-      q
+      q,
+      status
     })
   },
   handleZoomClick(type) {

@@ -23,7 +23,7 @@ ListingDispatcher.register(payload => {
       break
 
     case 'search-listing-map':
-      searchListingMap(payload.user, payload.q)
+      searchListingMap(payload.user, payload.q, payload.status)
       break
 
     case 'get-similar-listings':
