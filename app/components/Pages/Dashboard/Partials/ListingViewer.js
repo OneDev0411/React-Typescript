@@ -127,11 +127,16 @@ export default class ListingViewer extends Component {
       listing_title = `${listing.property.address.street_number} ${listing.property.address.street_name} ${listing.property.address.street_suffix}`
       listing_subtitle = `${listing.property.address.city}, ${listing.property.address.state} ${listing.property.address.postal_code}`
       const status_color = listing_util.getStatusColor(listing.status)
+      let sold_date
+      if (listing.close_date) {
+        const sold_date_obj = helpers.friendlyDate(listing.close_date)
+        sold_date = `${sold_date_obj.month} ${sold_date_obj.date}, ${sold_date_obj.year}`  
+      }
       const listing_status_indicator = (
         <div className="pull-left" style={ S('bg-ebeef1 relative t-7 br-100 ml-15 pt-11 h-35 pl-36 pr-15 mr-15') }>
           <span style={ S('mr-5 font-46 l-10 t-17n absolute color-' + status_color) }>&#8226;</span>
           <span style={ S('font-14 relative t-3n') }>
-            <b>{ listing.status }</b>
+            <b>{ listing.status } { sold_date }</b>
           </span>
         </div>
       )

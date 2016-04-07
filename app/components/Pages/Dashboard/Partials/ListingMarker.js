@@ -24,6 +24,11 @@ export default class ListingMarker extends Component {
     if (data.listing_map && listing.id === data.listing_map.listing_popup || data.listing_map && listing.id === data.listing_map.active_listing || context === 'single')
       popup_class = ''
     const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
+    let sold_date
+    if (listing.close_date) {
+      const sold_date_obj = helpers.friendlyDate(listing.close_date)
+      sold_date = `${sold_date_obj.month} ${sold_date_obj.date}, ${sold_date_obj.year}`
+    }
     const listing_popup = (
       <div className={ popup_class } style={ S('absolute w-240 t-110n l-35n z-1000 bg-fff border-1-solid-929292') }>
         <div style={ S('pull-left mr-10') }>
@@ -34,7 +39,7 @@ export default class ListingMarker extends Component {
           <div style={ S('font-11') }>{ property.bedroom_count } Beds,&nbsp;
           { property.bathroom_count } Baths,&nbsp;
           { square_feet } Sqft</div>
-          <div style={ S('font-11 color-' + listing_util.getStatusColor(listing.status)) }>{ listing.status }</div>
+          <div style={ S('font-11 color-' + listing_util.getStatusColor(listing.status)) }>{ listing.status } { sold_date }</div>
         </div>
       </div>
     )

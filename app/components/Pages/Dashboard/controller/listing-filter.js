@@ -254,6 +254,7 @@ const controller = {
   handleSetSoldDate(day) {
     AppStore.data.listing_map.filter_options.sold_date = (day.getTime() / 1000)
     delete AppStore.data.listing_map.filter_options.show_sold_date_picker
+    AppStore.data.listing_map.filter_options.sold = true
     AppStore.emitChange()
   }
 }
