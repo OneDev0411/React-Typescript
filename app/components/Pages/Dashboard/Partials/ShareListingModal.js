@@ -15,7 +15,7 @@ export default class ShareListingModal extends Component {
   }
   handleFilterChange(e) {
     const filter_text = e.target.value
-    this.props.handleShareFilter(filter_text)
+    this.props.handleFilterChange(filter_text)
   }
   handleEmailChange(e) {
     if (e.which === 13)
@@ -220,6 +220,8 @@ export default class ShareListingModal extends Component {
       )
     }
     let filter_text
+    if (share_modal && share_modal.filter_text)
+      filter_text = share_modal.filter_text
     // let email_btn_color = 'e5e5e5'
     // let phone_number_btn_color = 'e5e5e5'
     // if (share_modal) {
@@ -232,7 +234,7 @@ export default class ShareListingModal extends Component {
     return (
       <Modal dialogClassName="modal-800" show={ data.show_share_listing_modal } onHide={ controller.listing_viewer.hideShareListingModal } onShow={ this.onShow.bind(this) }>
         <Modal.Header closeButton style={ S('border-bottom-1-solid-f8f8f8') }>
-          <Modal.Title className="tempo" style={ S('font-36') }>Share Listing</Modal.Title>
+          <Modal.Title className="tempo" style={ S('font-36 ml-15') }>Share Listing</Modal.Title>
         </Modal.Header>
         <Modal.Body style={ S('p-30') }>
           <div style={ S('mb-20 h-100') }>
@@ -283,7 +285,7 @@ export default class ShareListingModal extends Component {
 }
 ShareListingModal.propTypes = {
   data: React.PropTypes.object,
-  handleShareFilter: React.PropTypes.func,
+  handleFilterChange: React.PropTypes.func,
   handleEmailChange: React.PropTypes.func,
   handlePhoneNumberChange: React.PropTypes.func,
   handleAddEmail: React.PropTypes.func,

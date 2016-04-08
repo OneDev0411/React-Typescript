@@ -291,7 +291,7 @@ export default class ShareAlertModal extends Component {
 ShareAlertModal.propTypes = {
   data: React.PropTypes.object,
   shareAlert: React.PropTypes.func,
-  handleShareFilter: React.PropTypes.func,
+  handleFilterChange: React.PropTypes.func,
   handleEmailChange: React.PropTypes.func,
   handlePhoneNumberChange: React.PropTypes.func,
   handleAddEmail: React.PropTypes.func,
