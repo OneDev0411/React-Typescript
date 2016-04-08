@@ -186,10 +186,13 @@ const controller = {
     AppStore.data.listing_map.filter_options = {
       active: true,
       listing_types: ['any'],
-      status_options: {},
+      status_options: {
+        active: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract']
+      },
       minimum_bedrooms: 0,
       minimum_bathrooms: 1,
-      pool: 'either'
+      pool: 'either',
+      open_house: false
     }
     AppStore.emitChange()
     ListingDispatcher.dispatch({

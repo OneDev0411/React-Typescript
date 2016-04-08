@@ -176,6 +176,18 @@ export default class ListingViewer extends Component {
           </span>
         )
       }
+      let agent_area
+      if (user.user_type === 'Agent') {
+        agent_area = (
+          <div style={ S('absolute r-20 t-40 w-300') }>
+            <div style={ S('font-18 mb-5') }><span style={ S('fw-400') }>{ listing.list_agent_full_name }, Seller Agent</span></div>
+            <div style={ S('font-16 color-929292 mb-10') }>{ listing.list_office_name }</div>
+            <div style={ S('font-14 color-a5c8f8 mb-10') }>{ listing.list_agent_direct_work_phone }</div>
+            <div style={ S('font-14 mb-20') }><a href={ `mailto:${ listing.list_agent_email }?subject=Your listing on Rechat.com&body=I saw your listing (${ listing_title }) on Rechat.com and I'm interested in getting more information.` } style={ S('color-a5c8f8') }>{ listing.list_agent_email }</a></div>
+            <div style={ S('border-bottom-1-solid-efeceb w-180') }></div>
+          </div>
+        )
+      }
       main_content = (
         <div style={ S('bg-fff') }>
           <div style={ S('p-0 relative') }>
@@ -208,13 +220,7 @@ export default class ListingViewer extends Component {
               <span>{ year_built ? 'Built in ' + year_built : '' }</span>
               { lot_size_area }
             </div>
-            <div style={ S('absolute r-20 t-40 w-300') }>
-              <div style={ S('font-18 mb-5') }><span style={ S('fw-400') }>{ listing.list_agent_full_name }, Seller Agent</span></div>
-              <div style={ S('font-16 color-929292 mb-10') }>{ listing.list_office_name }</div>
-              <div style={ S('font-14 color-a5c8f8 mb-10') }>{ listing.list_agent_direct_work_phone }</div>
-              <div style={ S('font-14 mb-20') }><a href={ `mailto:${ listing.list_agent_email }?subject=Your listing on Rechat.com&body=I saw your listing (${ listing_title }) on Rechat.com and I'm interested in getting more information.` } style={ S('color-a5c8f8') }>{ listing.list_agent_email }</a></div>
-              <div style={ S('border-bottom-1-solid-efeceb w-180') }></div>
-            </div>
+            { agent_area }
             <div className="clearfix"></div>
             <div>
               <div style={ S('w-70p pull-left') }>
