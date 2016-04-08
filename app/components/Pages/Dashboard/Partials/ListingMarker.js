@@ -11,7 +11,10 @@ export default class ListingMarker extends Component {
     const address = this.props.address
     const context = this.props.context
     const status_color = listing_util.getStatusColor(listing.status)
-    let price_small = Math.floor(listing.price / 1000).toFixed(2).replace(/[.,]00$/, '')
+    let price = listing.price
+    if (listing.close_price)
+      price = listing.close_price
+    let price_small = Math.floor(price / 1000).toFixed(2).replace(/[.,]00$/, '')
     let letter = 'K'
     if (price_small > 1000) {
       price_small = (price_small / 1000).toFixed(2).replace(/[.,]00$/, '')

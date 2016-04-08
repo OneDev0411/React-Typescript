@@ -71,6 +71,9 @@ export default class ListingPanel extends Component {
           </div>
         )
       }
+      let price = listing.price
+      if (listing.close_price)
+        price = listing.close_price
       return (
         <div onMouseOut={ this.props.removeActiveListing.bind(this) } onMouseOver={ this.props.setActiveListing.bind(this, listing) } key={ 'panel-listing-' + listing.id } onClick={ this.props.showListingViewer.bind(this, listing) } style={ S('pointer w-415 h-350 pb-10 pl-10 bg-fff pull-left') }>
           <div style={ S('relative') }>
@@ -78,7 +81,7 @@ export default class ListingPanel extends Component {
             { listing_image }
             <div style={ S('absolute color-fff l-15 b-15') }>
               <div style={ S('font-18 fw-600') }>
-                ${ helpers.numberWithCommas(Math.floor(listing.price)) }
+                ${ helpers.numberWithCommas(Math.floor(price)) }
               </div>
               <div style={ S('font-14') }>
                 { listing_util.addressTitle(listing.address) } | { listing.address.city } { listing.address.state }
@@ -116,7 +119,10 @@ export default class ListingPanel extends Component {
         listing_image = <div style={ S('w-40 h-40 br-3 bg-url(' + listing.cover_image_url + ') bg-cover bg-center') } />
       const listing_style = S('pointer pl-10 h-60 pt-10 border-bottom-1-solid-f5fafe')
       const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
-      const price_per_square_foot = Math.floor(listing.price / listing_util.metersToFeet(property.square_meters))
+      let price = listing.price
+      if (listing.close_price)
+        price = listing.close_price
+      const price_per_square_foot = Math.floor(price / listing_util.metersToFeet(property.square_meters))
       return (
         <div onMouseOut={ this.props.removeActiveListing.bind(this) } onMouseOver={ this.props.setActiveListing.bind(this, listing) } className="listing-panel__list-item" key={ 'panel-listing-' + listing.id } onClick={ this.props.showListingViewer.bind(this, listing) } style={ listing_style }>
           <div style={ S('pull-left') }>
@@ -133,7 +139,7 @@ export default class ListingPanel extends Component {
             <div>{ listing.address.postal_code }</div>
           </div>
           <div className="pull-left" style={ S('mt-10 w-100') }>
-            <div>${ helpers.numberWithCommas(Math.floor(listing.price)) }</div>
+            <div>${ helpers.numberWithCommas(Math.floor(price)) }</div>
           </div>
           <div className="pull-left" style={ S('mt-10 w-60') }>
             <div>{ property.bedroom_count }</div>

@@ -80,7 +80,10 @@ export default class ListingViewer extends Component {
     let main_content = <Loading />
     if (listing && listing.property) {
       property = listing.property
-      price = helpers.numberWithCommas(listing.price)
+      price = listing.price
+      if (listing.close_price)
+        price = listing.close_price
+      price = helpers.numberWithCommas(price)
       // property_type = property.property_type
       year_built = property.year_built
       address = listing_util.addressTitle(property.address)

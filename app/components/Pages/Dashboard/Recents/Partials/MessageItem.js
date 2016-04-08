@@ -123,6 +123,9 @@ export default class MessageItem extends Component {
     if (recommendation) {
       // Hide recommendation notification message
       const listing = recommendation.listing
+      let price = listing.price
+      if (listing.close_price)
+        price = listing.close_price
       return (
         <div className="message-item" style={ S('relative mb-5 pt-5') }>
           <div style={ S('mt-5 pull-left') }>{ profile_image_div }</div>
@@ -134,7 +137,7 @@ export default class MessageItem extends Component {
             <div className={ message_class_name } dangerouslySetInnerHTML={ { __html: message_text } }></div>
             <div style={ S('mt-10 mb-10') }>{ message_image }</div>
             <div style={ S('pointer mb-10') } onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) }>
-              <div style={ S('font-20 fw-700 mt-10') }>${ helpers.numberWithCommas(listing.price) }</div>
+              <div style={ S('font-20 fw-700 mt-10') }>${ helpers.numberWithCommas(price) }</div>
               <div style={ S('font-16 fw-700') }>{ listing_util.addressTitle(listing.property.address) }</div>
               <div style={ S('font-14 color-929292') }>
                 { listing.property.bedroom_count } Beds&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
