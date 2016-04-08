@@ -23,6 +23,28 @@ export default class Dashboard extends Component {
       return
     this.init()
     this.getContacts()
+
+    const socket = window.socket
+    socket.on('Notification', notification => {
+      if (notification.action !== 'Joined')
+        return null
+
+      if (notification.subject_class !== 'User')
+        return null
+
+      if (notification.object_class !== 'Room')
+        return null
+
+      const data = this.props.data
+      const user = data.user
+      const room_id = data.current_room.id
+
+      AppDispatcher.dispatch({
+        action: 'get-rooms',
+        user,
+        room_id
+      })
+    })
   }
 
   componentWillUpdate() {
@@ -72,6 +94,7 @@ export default class Dashboard extends Component {
     const data = this.props.data
     const user = data.user
     const room_id = this.props.params.room_id
+
     AppDispatcher.dispatch({
       action: 'get-rooms',
       user,
