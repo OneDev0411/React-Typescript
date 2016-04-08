@@ -195,6 +195,77 @@ export default class ListingViewer extends Component {
           </div>
         )
       }
+      let latitude
+      let longitude
+      let center
+      let listing_map_small
+      let location_area
+      if (listing.property.address.location) {
+        latitude = listing.property.address.location.latitude
+        longitude = listing.property.address.location.longitude
+        center = {
+          lat: latitude,
+          lng: longitude
+        }
+        location_area = (
+          <div>
+            <h2>Location</h2>
+            <div style={ S('relative w-100p pull-left') }>
+              <GoogleMap
+                style={ S('w-100p h-300') }
+                key={ 'map' }
+                center={ { lat: latitude, lng: longitude } }
+                zoom={ 12 }
+                options={ { scrollwheel: false } }
+              >
+                <div
+                  onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) }
+                  onMouseOut={ controller.listing_map.hideListingPopup.bind(this) }
+                  onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }
+                  style={ S('pointer mt-10') } lat={ latitude }
+                  lng={ longitude }
+                  text={'A'}
+                >
+                  <ListingMarker
+                    key={ 'listing-marker' + listing.id }
+                    data={ data }
+                    listing={ listing }
+                    property={ listing.property }
+                    address={ listing.property.address }
+                    context={ 'single' }
+                  />
+                </div>
+              </GoogleMap>
+            </div>
+          </div>
+        )
+        listing_map_small = (
+          <GoogleMap
+            style={ S('w-280 h-280') }
+            key={ 'map' }
+            center={ center }
+            zoom={ 12 }
+            options={ { scrollwheel: false } }
+          >
+            <div
+              onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) }
+              onMouseOut={ controller.listing_map.hideListingPopup.bind(this) }
+              onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }
+              style={ S('pointer mt-10') } lat={ latitude }
+              lng={ longitude }
+              text={'A'}
+            >
+              <ListingMarker
+                key={ 'listing-marker' + listing.id }
+                data={ data }
+                listing={ listing }
+                property={ listing.property }
+                address={ listing.property.address }
+              />
+            </div>
+          </GoogleMap>
+        )
+      }
       main_content = (
         <div style={ S('bg-fff') }>
           <div style={ S('p-0 relative') }>
@@ -238,30 +309,7 @@ export default class ListingViewer extends Component {
                 <div style={ S('color-4a4a4a font-24 mb-20 pr-30') }>{ description }</div>
               </Col>
               <Col xs={3}>
-                <GoogleMap
-                  style={ S('w-280 h-280') }
-                  key={ 'map' }
-                  center={ { lat: listing.property.address.location.latitude, lng: listing.property.address.location.longitude } }
-                  zoom={ 12 }
-                  options={ { scrollwheel: false } }
-                >
-                  <div
-                    onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) }
-                    onMouseOut={ controller.listing_map.hideListingPopup.bind(this) }
-                    onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }
-                    style={ S('pointer mt-10') } lat={ listing.property.address.location.latitude }
-                    lng={ listing.property.address.location.longitude }
-                    text={'A'}
-                  >
-                    <ListingMarker
-                      key={ 'listing-marker' + listing.id }
-                      data={ data }
-                      listing={ listing }
-                      property={ listing.property }
-                      address={ listing.property.address }
-                    />
-                  </div>
-                </GoogleMap>
+                { listing_map_small }
               </Col>
               <div className="clearfix"></div>
             </div>
@@ -458,34 +506,7 @@ export default class ListingViewer extends Component {
               </div>
             </div>
             <div className="clearfix"></div>
-            <h2>Location</h2>
-            <div style={ S('relative w-100p pull-left') }>
-              <GoogleMap
-                style={ S('w-100p h-300') }
-                key={ 'map' }
-                center={ { lat: listing.property.address.location.latitude, lng: listing.property.address.location.longitude } }
-                zoom={ 12 }
-                options={ { scrollwheel: false } }
-              >
-                <div
-                  onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) }
-                  onMouseOut={ controller.listing_map.hideListingPopup.bind(this) }
-                  onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }
-                  style={ S('pointer mt-10') } lat={ listing.property.address.location.latitude }
-                  lng={ listing.property.address.location.longitude }
-                  text={'A'}
-                >
-                  <ListingMarker
-                    key={ 'listing-marker' + listing.id }
-                    data={ data }
-                    listing={ listing }
-                    property={ listing.property }
-                    address={ listing.property.address }
-                    context={ 'single' }
-                  />
-                </div>
-              </GoogleMap>
-            </div>
+            { location_area }
             <div className="clearfix"></div>
             <div style={ S('h-100 w-100p') }></div>
             <div className="clearfix"></div>
