@@ -19,7 +19,7 @@ export default class ShareAlertModal extends Component {
   }
   handleFilterChange(e) {
     const filter_text = e.target.value
-    this.props.handleShareFilter(filter_text)
+    this.props.handleFilterChange(filter_text)
   }
   handleEmailChange(e) {
     if (e.which === 13)
@@ -224,6 +224,8 @@ export default class ShareAlertModal extends Component {
       )
     }
     let filter_text
+    if (share_modal && share_modal.filter_text)
+      filter_text = share_modal.filter_text
     // let email_btn_color = 'e5e5e5'
     // let phone_number_btn_color = 'e5e5e5'
     // if (share_modal) {
@@ -236,7 +238,7 @@ export default class ShareAlertModal extends Component {
     return (
       <Modal dialogClassName="modal-800" show={ listing_map && listing_map.show_share_modal } onHide={ controller.listing_map.hideModal } onShow={ this.onShow.bind(this) }>
         <Modal.Header closeButton style={ S('border-bottom-1-solid-f8f8f8') }>
-          <Modal.Title className="tempo" style={ S('font-36') }>Share Alert</Modal.Title>
+          <Modal.Title className="tempo" style={ S('font-36 ml-15') }>Share Alert</Modal.Title>
         </Modal.Header>
         <Modal.Body style={ S('p-30') }>
           <div style={ S('mb-20') }>

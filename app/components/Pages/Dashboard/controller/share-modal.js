@@ -15,7 +15,7 @@ const controller = {
       return _.find(share_modal.contacts_added, { id: item.id })
     return false
   },
-  handleShareFilter(text) {
+  handleFilterChange(text) {
     if (!text) {
       controller.removeShareFilter()
       return

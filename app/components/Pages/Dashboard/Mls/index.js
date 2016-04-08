@@ -249,7 +249,7 @@ export default class Mls extends Component {
         <ShareAlertModal
           data={ data }
           shareAlert={ controller.listing_share.shareAlert }
-          handleShareFilter={ controller.share_modal.handleShareFilter }
+          handleFilterChange={ controller.share_modal.handleFilterChange }
           handleEmailChange={ controller.share_modal.handleEmailChange }
           handlePhoneNumberChange={ controller.share_modal.handlePhoneNumberChange }
           handleAddEmail={ controller.share_modal.handleAddEmail }
