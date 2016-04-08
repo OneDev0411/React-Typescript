@@ -1,6 +1,6 @@
 // Landing.js
 import React, { Component } from 'react'
-import { Col, Input, Button } from 'react-bootstrap'
+import { Col } from 'react-bootstrap'
 import S from 'shorti'
 import emojify from 'emojify.js'
 emojify.setConfig({
@@ -65,9 +65,9 @@ export default class Landing extends Component {
       call_to_action = data.content.call_to_action
 
     // Placeholder text
-    let placeholder_text
-    if (data.content)
-      placeholder_text = data.content.placeholder_text
+    // let placeholder_text
+    // if (data.content)
+    //   placeholder_text = data.content.placeholder_text
 
     // Styles
     const page_style = {
@@ -114,7 +114,7 @@ export default class Landing extends Component {
     let call_to_action_text
     if (call_to_action) {
       call_to_action_text = (
-        <p style={ S('pt-0 p-10 font-17') } dangerouslySetInnerHTML={ { __html: emojify.replace(call_to_action) } } >
+        <p style={ S('pt-10 font-17') } dangerouslySetInnerHTML={ { __html: emojify.replace(call_to_action) } } >
         </p>
       )
     }
@@ -165,17 +165,21 @@ export default class Landing extends Component {
               </p>
               <div className="form-wrap center-block" style={ form_wrap_style }>
                 { call_to_action_text }
-                <form onSubmit={ this.showThankYou } action="//rechat.us11.list-manage.com/subscribe/post?u=c21e4aeea43aececadaf53146&amp;id=7f1ad19560" method="post" name="mc-embedded-subscribe-form" target="_blank">
-                  <Col className="form-input--email" sm={8} style={ S('pl-0') }>
-                    <Input style={ S('w-100p') } bsSize="large" type="email" name="EMAIL" placeholder={ placeholder_text }/>
-                    <div style={ S('l-5000n absolute') } aria-hidden="true">
-                      <input type="text" name="b_c21e4aeea43aececadaf53146_7f1ad19560" tabIndex="-1" value="" />
-                    </div>
-                  </Col>
-                  <Col sm={4} style={ S('pl-0 pr-0') }>
-                    <Button style={ S('w-100p') } bsStyle="primary" bsSize="large" type="submit">Notify Me!</Button>
-                  </Col>
-                </form>
+                {
+                  /*
+                  <form onSubmit={ this.showThankYou } action="//rechat.us11.list-manage.com/subscribe/post?u=c21e4aeea43aececadaf53146&amp;id=7f1ad19560" method="post" name="mc-embedded-subscribe-form" target="_blank">
+                    <Col className="form-input--email" sm={8} style={ S('pl-0') }>
+                      <Input style={ S('w-100p') } bsSize="large" type="email" name="EMAIL" placeholder={ placeholder_text }/>
+                      <div style={ S('l-5000n absolute') } aria-hidden="true">
+                        <input type="text" name="b_c21e4aeea43aececadaf53146_7f1ad19560" tabIndex="-1" value="" />
+                      </div>
+                    </Col>
+                    <Col sm={4} style={ S('pl-0 pr-0') }>
+                      <Button style={ S('w-100p') } bsStyle="primary" bsSize="large" type="submit">Notify Me!</Button>
+                    </Col>
+                  </form>
+                  */
+                }
                 <div className="clearfix"></div>
               </div>
             </div>
