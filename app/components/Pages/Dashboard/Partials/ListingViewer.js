@@ -177,7 +177,7 @@ export default class ListingViewer extends Component {
         )
       }
       let agent_area
-      if (user.user_type === 'Agent') {
+      if (user && user.user_type === 'Agent') {
         const email_style = {
           ...S('font-15 mb-20'),
           wordWrap: 'break-word'
