@@ -125,7 +125,7 @@ export default class MainContent extends Component {
     // Create message form
     let create_message_area = ''
     const btn_style = {
-      ...S('absolute bw-2 p-0 w-56 h-34 l-22 t-22 z-101'),
+      ...S('absolute bw-2 p-0 w-56 h-34 l-22 t-22 z-4'),
       borderTop: 'none',
       borderLeft: 'none',
       borderBottom: 'none',

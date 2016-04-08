@@ -1,7 +1,7 @@
 // ListingViewer.js
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import { Carousel, CarouselItem, OverlayTrigger, Tooltip, Modal, Button } from 'react-bootstrap'
+import { Col, Carousel, CarouselItem, OverlayTrigger, Tooltip, Modal, Button } from 'react-bootstrap'
 import _ from 'lodash'
 import S from 'shorti'
 import helpers from '../../../../utils/helpers'
@@ -179,12 +179,12 @@ export default class ListingViewer extends Component {
       let agent_area
       if (user.user_type === 'Agent') {
         agent_area = (
-          <div style={ S('absolute r-20 t-40 w-300') }>
-            <div style={ S('font-18 mb-5') }><span style={ S('fw-400') }>{ listing.list_agent_full_name }, Seller Agent</span></div>
-            <div style={ S('font-16 color-929292 mb-10') }>{ listing.list_office_name }</div>
-            <div style={ S('font-14 color-a5c8f8 mb-10') }>{ listing.list_agent_direct_work_phone }</div>
-            <div style={ S('font-14 mb-20') }><a href={ `mailto:${ listing.list_agent_email }?subject=Your listing on Rechat.com&body=I saw your listing (${ listing_title }) on Rechat.com and I'm interested in getting more information.` } style={ S('color-a5c8f8') }>{ listing.list_agent_email }</a></div>
-            <div style={ S('border-bottom-1-solid-efeceb w-180') }></div>
+          <div style={ S('mt-20 color-748090 w-100p border-1-solid-ededed br-3 p-20 text-center') }>
+            <div style={ S('font-18 mb-5 color-3388ff') }><span style={ S('fw-400') }>{ listing.list_agent_full_name }, Seller Agent</span></div>
+            <div style={ S('font-15 mb-5') }>{ listing.list_agent_direct_work_phone }</div>
+            <div style={ S('font-15 mb-5') }>{ listing.list_office_name }</div>
+            <div style={ S('font-15 mb-20') }><a href={ `mailto:${ listing.list_agent_email }?subject=Your listing on Rechat.com&body=I saw your listing (${ listing_title }) on Rechat.com and I'm interested in getting more information.` } style={ S('color-748090') }>{ listing.list_agent_email }</a></div>
+            <div style={ S('border-bottom-2-solid-e4e4e4 w-40 center-block mb-5') }></div>
           </div>
         )
       }
@@ -196,37 +196,41 @@ export default class ListingViewer extends Component {
             <div className="clearfix"></div>
           </div>
           <div style={ S('pl-40 pr-40 relative') }>
-            <div style={ S('fw-700 font-70 mb-10n') }>${ price }</div>
-            <div>
-              <div className="tempo pull-left" style={ S('font-32 fw-100 color-7d8288 mb-10 mr-20') }>
-                { listing_title }
+            <Col xs={9}>
+              <div style={ S('fw-700 font-70 mb-10n') }>${ price }</div>
+              <div>
+                <div className="tempo pull-left" style={ S('font-32 fw-100 color-7d8288 mb-10 mr-20') }>
+                  { listing_title }
+                </div>
+                <div className="pull-left">
+                  { listing_status_indicator }
+                </div>
+                <div className="pull-left">
+                  { number_days_indicator }
+                </div>
               </div>
-              <div className="pull-left">
-                { listing_status_indicator }
+              <div className="clearfix"></div>
+              <div style={ S('font-18 color-b7bfc7 mb-30') }>{ listing_subtitle } { mls_link }</div>
+              <div style={ S('font-30 color-4a4a4a mb-30') }>
+                <span>{ bedroom_count } Beds</span>
+                &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+                <span>{ bathroom_count } Baths</span>
+                &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+                <span>{ square_feet } Sqft</span>
+                &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+                <span>{ year_built ? 'Built in ' + year_built : '' }</span>
+                { lot_size_area }
               </div>
-              <div className="pull-left">
-                { number_days_indicator }
-              </div>
-            </div>
+            </Col>
+            <Col xs={3}>
+              { agent_area }
+            </Col>
             <div className="clearfix"></div>
-            <div style={ S('font-18 color-b7bfc7 mb-30') }>{ listing_subtitle } { mls_link }</div>
-            <div style={ S('font-30 color-4a4a4a mb-30') }>
-              <span>{ bedroom_count } Beds</span>
-              &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-              <span>{ bathroom_count } Baths</span>
-              &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-              <span>{ square_feet } Sqft</span>
-              &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-              <span>{ year_built ? 'Built in ' + year_built : '' }</span>
-              { lot_size_area }
-            </div>
-            { agent_area }
-            <div className="clearfix"></div>
             <div>
-              <div style={ S('w-70p pull-left') }>
+              <Col xs={9}>
                 <div style={ S('color-4a4a4a font-24 mb-20 pr-30') }>{ description }</div>
-              </div>
-              <div style={ S('relative w-280 pull-left') }>
+              </Col>
+              <Col xs={3}>
                 <GoogleMap
                   style={ S('w-280 h-280') }
                   key={ 'map' }
@@ -251,7 +255,7 @@ export default class ListingViewer extends Component {
                     />
                   </div>
                 </GoogleMap>
-              </div>
+              </Col>
               <div className="clearfix"></div>
             </div>
             <hr style={ S('mt-40 mb-30') }/>
