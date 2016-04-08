@@ -114,7 +114,7 @@ export default class Landing extends Component {
     let call_to_action_text
     if (call_to_action) {
       call_to_action_text = (
-        <p style={ S('pt-10 font-17') } dangerouslySetInnerHTML={ { __html: emojify.replace(call_to_action) } } >
+        <p style={ S('font-17') } dangerouslySetInnerHTML={ { __html: emojify.replace(call_to_action) } } >
         </p>
       )
     }
