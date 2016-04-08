@@ -81,7 +81,7 @@ export default class MessageItem extends Component {
       }
       message_image = (
         <div>
-          <div>{ author.first_name } { author.last_name } uploaded a file:</div>
+          <div>Uploaded a file:</div>
           <div className={ is_image ? 'box-shadow' : ''} onClick={ this.props.showFileViewer.bind(this, attachment) } style={ { ...S('mt-10'), cursor: 'zoom-in' } }>
             { message_thumb }
           </div>
