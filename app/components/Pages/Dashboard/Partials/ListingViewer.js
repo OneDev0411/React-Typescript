@@ -178,12 +178,16 @@ export default class ListingViewer extends Component {
       }
       let agent_area
       if (user.user_type === 'Agent') {
+        const email_style = {
+          ...S('font-15 mb-20'),
+          wordWrap: 'break-word'
+        }
         agent_area = (
           <div style={ S('mt-20 color-748090 w-100p border-1-solid-ededed br-3 p-20 text-center') }>
             <div style={ S('font-18 mb-5 color-3388ff') }><span style={ S('fw-400') }>{ listing.list_agent_full_name }, Seller Agent</span></div>
             <div style={ S('font-15 mb-5') }>{ listing.list_agent_direct_work_phone }</div>
             <div style={ S('font-15 mb-5') }>{ listing.list_office_name }</div>
-            <div style={ S('font-15 mb-20') }><a href={ `mailto:${ listing.list_agent_email }?subject=Your listing on Rechat.com&body=I saw your listing (${ listing_title }) on Rechat.com and I'm interested in getting more information.` } style={ S('color-748090') }>{ listing.list_agent_email }</a></div>
+            <div style={ email_style }><a href={ `mailto:${ listing.list_agent_email }?subject=Your listing on Rechat.com&body=I saw your listing (${ listing_title }) on Rechat.com and I'm interested in getting more information.` } style={ S('color-748090') }>{ listing.list_agent_email }</a></div>
             <div style={ S('border-bottom-2-solid-e4e4e4 w-40 center-block mb-5') }></div>
           </div>
         )
