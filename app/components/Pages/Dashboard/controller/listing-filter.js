@@ -106,6 +106,12 @@ const controller = {
       if (filter_options.maximum_year_built)
         options.maximum_year_built = Number(filter_options.maximum_year_built)
     }
+    // Remove all listings
+    if (!options.listing_statuses.length) {
+      AppStore.data.listing_map.listings = []
+      AppStore.emitChange()
+      return
+    }
     AppStore.data.listing_map.is_loading = true
     AppStore.emitChange()
     ListingDispatcher.dispatch({
