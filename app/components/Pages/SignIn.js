@@ -62,6 +62,17 @@ export default class SignIn extends Component {
     })
   }
 
+  sendEmailVerification() {
+    const data = this.props.data
+    if (!data.email_not_confirmed)
+      return
+    const user = data.email_not_confirmed.user
+    AppDispatcher.dispatch({
+      action: 'send-verify-email',
+      access_token: user.access_token
+    })
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -94,6 +105,10 @@ export default class SignIn extends Component {
         message = (
           <Alert bsStyle="danger">
             This email has not been verified yet.
+            <div>
+              <a href="#" onClick={ this.sendEmailVerification.bind(this) }>Send email verification again</a>.
+              <div>{ data.verify_email_sent ? 'Email resent' : ''}</div>
+            </div>
           </Alert>
         )
       }

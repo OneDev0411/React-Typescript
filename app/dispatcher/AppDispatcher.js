@@ -9,6 +9,7 @@ import forgotPassword from '../actions/user/forgot-password'
 import forgotPasswordResend from '../actions/user/forgot-password-resend'
 import resetPassword from '../actions/user/reset-password'
 import verifyPhone from '../actions/user/verify-phone'
+import sendVerifyEmail from '../actions/user/send-verify-email'
 import addUserToStore from '../actions/user/add-user-to-store'
 import getRooms from '../actions/user/get-rooms'
 import getContacts from '../actions/user/get-contacts'
@@ -89,6 +90,9 @@ AppDispatcher.register(payload => {
       resetPassword(payload.password, payload.confirm_password, payload.token)
       break
 
+    case 'send-verify-email':
+      sendVerifyEmail(payload.access_token)
+      break
     case 'verify-phone':
       verifyPhone(payload.code, payload.token)
       break

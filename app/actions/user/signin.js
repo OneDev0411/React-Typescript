@@ -55,7 +55,9 @@ export default (email, password, redirect_to, invite) => {
           submitting: false,
           errors: true,
           show_message: true,
-          email_not_confirmed: true
+          email_not_confirmed: {
+            user
+          }
         }
       }
     } else {
