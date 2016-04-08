@@ -388,13 +388,16 @@ export default class SideBar extends Component {
               </NavItem>
             </LinkContainer>
           </OverlayTrigger>
-          <OverlayTrigger placement="right" overlay={ popover.people } delayShow={ 200 } delayHide={ 0 }>
-            <LinkContainer className={ active.contacts } to="/dashboard/contacts">
-              <NavItem style={ S('w-85p') }>
-                <img src={ active.contacts ? '/images/dashboard/sidenav/people-active.svg' : '/images/dashboard/sidenav/people.svg' } style={ S('w-19 h-19') }/>
-              </NavItem>
-            </LinkContainer>
-          </OverlayTrigger>
+          { /*
+            <OverlayTrigger placement="right" overlay={ popover.people } delayShow={ 200 } delayHide={ 0 }>
+              <LinkContainer className={ active.contacts } to="/dashboard/contacts">
+                <NavItem style={ S('w-85p') }>
+                  <img src={ active.contacts ? '/images/dashboard/sidenav/people-active.svg' : '/images/dashboard/sidenav/people.svg' } style={ S('w-19 h-19') }/>
+                </NavItem>
+              </LinkContainer>
+            </OverlayTrigger>
+            */
+          }
           { /*
             <OverlayTrigger placement="right" overlay={ popover.tasks } delayShow={ 200 } delayHide={ 0 }>
               <LinkContainer className={ active.tasks } to="/dashboard/tasks">
