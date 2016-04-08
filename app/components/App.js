@@ -158,7 +158,7 @@ export default class App extends Component {
       title, {
         body: comment,
         icon: profile_image_url,
-        sound: '/audio/goat.mp3'
+        sound: '/audio/ding.mp3'
       }
     )
     instance.onclick = () => {

@@ -501,7 +501,7 @@ export default class Dashboard extends Component {
           { main_content }
         </main>
         <audio ref="notif_sound" id="notif-sound">
-          <source src="/audio/goat.mp3" type="audio/mpeg" />
+          <source src="/audio/ding.mp3" type="audio/mpeg" />
         </audio>
         { file_viewer }
         <Modal show={ data.show_create_chat_modal } onHide={ this.hideModal.bind(this) } onShow={ this.onModalShow.bind(this) }>
