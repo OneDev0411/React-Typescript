@@ -93,6 +93,7 @@ AppDispatcher.register(payload => {
     case 'send-verify-email':
       sendVerifyEmail(payload.access_token)
       break
+
     case 'verify-phone':
       verifyPhone(payload.code, payload.token)
       break
