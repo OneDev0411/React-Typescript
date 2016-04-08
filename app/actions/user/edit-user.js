@@ -3,7 +3,7 @@ import User from '../../models/User'
 import AppStore from '../../stores/AppStore'
 
 export default (user, user_info) => {
-  const params = {
+  let params = {
     access_token: user.access_token,
     user: user_info
   }
@@ -21,6 +21,13 @@ export default (user, user_info) => {
     } else {
       delete AppStore.data.saving_account_settings
       AppStore.emitChange()
+    }
+    // Check if email and new email are different
+    if (user.email !== user_info.email) {
+      params = {
+        access_token: user.access_token
+      }
+      User.sendVerifyEmail(params, () => {})
     }
   })
 }
