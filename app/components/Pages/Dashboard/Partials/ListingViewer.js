@@ -557,7 +557,7 @@ export default class ListingViewer extends Component {
           </div>
           <div style={ S('pull-right p-16') }>
             <a style={ S('mr-15 bg-a1bde4 border-1-solid-a1bde4') } className="btn btn-primary" href="/signin">Log in</a>
-            <a className="btn btn-primary" href="/signup">Sign up</a>
+            { /* <a className="btn btn-primary" href="/signup">Sign up</a> */ }
           </div>
         </div>
       )
