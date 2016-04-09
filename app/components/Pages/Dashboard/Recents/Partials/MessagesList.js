@@ -100,6 +100,8 @@ export default class MessagesList extends Component {
 
   getLockedHeadingDate() {
     const heading_objects = this.getMessagePositions()
+    if (!heading_objects)
+      return
     const arr_sorted = heading_objects.sort((a, b) => {
       return a.top - b.top
     })
@@ -168,57 +170,62 @@ export default class MessagesList extends Component {
       textTransform: 'uppercase'
     }
     let prev_recommendation
-    const messages_list_items = messages.map((message, i) => {
-      // Hide if no message or is the automatted message after a comment
-      if (!message) {
-        return (
-          <li key={ 'message-' + i }></li>
-        )
-      }
-      const recommendation = message.recommendation
-      if (prev_recommendation && recommendation && recommendation.id === prev_recommendation.id && !message.author) {
-        return (
-          <li key={ 'message-' + i }></li>
-        )
-      }
-      let heading
-      let heading_date_area
-      let new_date = false
-      const created_at = message.created_at.toString().split('.')
-      const message_date_obj = helpers.friendlyDate(created_at[0])
-      message_date = helpers.getYMD(created_at[0] * 1000)
-      if (!prev_message_date || prev_message_date && prev_message_date !== message_date) {
-        heading_date_area = (
-          <span>{ `${message_date_obj.day}, ${message_date_obj.month} ${message_date_obj.date}, ${message_date_obj.year}` }</span>
-        )
-        if (todays_date === message_date) {
-          heading_date_area = (
-            <span>{ 'Today' }</span>
+    let messages_list_items = (
+      <div style={ loading_style }></div>
+    )
+    if (messages) {
+      messages_list_items = messages.map((message, i) => {
+        // Hide if no message or is the automatted message after a comment
+        if (!message) {
+          return (
+            <li key={ 'message-' + i }></li>
           )
         }
+        const recommendation = message.recommendation
+        if (prev_recommendation && recommendation && recommendation.id === prev_recommendation.id && !message.author) {
+          return (
+            <li key={ 'message-' + i }></li>
+          )
+        }
+        let heading
+        let heading_date_area
+        let new_date = false
+        const created_at = message.created_at.toString().split('.')
+        const message_date_obj = helpers.friendlyDate(created_at[0])
+        message_date = helpers.getYMD(created_at[0] * 1000)
+        if (!prev_message_date || prev_message_date && prev_message_date !== message_date) {
+          heading_date_area = (
+            <span>{ `${message_date_obj.day}, ${message_date_obj.month} ${message_date_obj.date}, ${message_date_obj.year}` }</span>
+          )
+          if (todays_date === message_date) {
+            heading_date_area = (
+              <span>{ 'Today' }</span>
+            )
+          }
 
-        heading = (
-          <div className="message-heading" style={ heading_style }>{ heading_date_area }</div>
+          heading = (
+            <div className="message-heading" style={ heading_style }>{ heading_date_area }</div>
+          )
+          new_date = true
+        }
+        prev_message_date = message_date
+        prev_recommendation = message.recommendation
+        return (
+          <li ref={ 'message-' + i} key={ 'message-' + message.id + '-' + i }>
+            { heading }
+            <MessageItem
+              i={ i }
+              data={ data }
+              message={ message }
+              showFileViewer={ this.props.showFileViewer }
+              new_date={ new_date }
+              showListingViewer={ this.props.showListingViewer }
+              showAlertViewer={ this.props.showAlertViewer }
+            />
+          </li>
         )
-        new_date = true
-      }
-      prev_message_date = message_date
-      prev_recommendation = message.recommendation
-      return (
-        <li ref={ 'message-' + i} key={ 'message-' + message.id + '-' + i }>
-          { heading }
-          <MessageItem
-            i={ i }
-            data={ data }
-            message={ message }
-            showFileViewer={ this.props.showFileViewer }
-            new_date={ new_date }
-            showListingViewer={ this.props.showListingViewer }
-            showAlertViewer={ this.props.showAlertViewer }
-          />
-        </li>
-      )
-    })
+      })
+    }
 
     const invite_link = config.app.url + '/invite/?room_id=' + data.current_room.id + '&invite_token=' + data.user.access_token
 
