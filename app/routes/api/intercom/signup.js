@@ -5,11 +5,14 @@ module.exports = (app, config) => {
   app.post('/api/intercom/signup', (req, res) => {
     const user = req.body.user
     const intercom_user = {
+      user_id:user.id,
       email: user.email,
-      name: user.first_name + ' ' + user.last_name
+      name: user.first_name + ' ' + user.last_name,
+      update_last_request_at:true,
+      created_at:user.created_at,
+      updated_at:user.update_at,
+      last_seen_ip:req.headers['x-forwarded-for'] || req.connection.remoteAddress
     }
-    client.users.create(intercom_user, r => {
-      // console.log(r.headers.status)
-    })
+    client.users.create(intercom_user, r => {})
   })
 }
