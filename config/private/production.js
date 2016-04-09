@@ -18,5 +18,9 @@ export default {
       slug: process.env.COSMIC_BUCKET,
       read_key: process.env.COSMIC_KEY
     }
+  },
+  intercom: {
+    app_id: process.env.INTERCOM_APP_ID,
+    secret_key: process.env.INTERCOM_SECRET_KEY
   }
 }
