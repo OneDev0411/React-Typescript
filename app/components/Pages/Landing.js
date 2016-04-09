@@ -128,7 +128,7 @@ export default class Landing extends Component {
     let login_btn_li_style
     let login_btn_style
     let is_mobile = false
-    if (window.innerWidth <= 768) {
+    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
       is_mobile = true
       login_btn_style = ' w-100p'
       login_btn_li_style = S('pl-15 pr-15')
