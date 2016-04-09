@@ -2,7 +2,6 @@
 module.exports = (app, config) => {
   const Intercom = require('intercom-client')
   const client = new Intercom.Client({appId:config.intercom.app_id, appApiKey:config.intercom.secret_key})
-  console.log(config.intercom.app_id, config.intercom.secret_key)
   const inspect = require('util').inspect
 
   app.post('/api/intercom/signin', (req, res) => {
