@@ -109,7 +109,7 @@ export default class MessagesList extends Component {
       return message.top < 60
     })
     if (!sorted_under_zero || !sorted_under_zero[sorted_under_zero.length - 1])
-      return false
+      return
     const locked_heading_date = sorted_under_zero[sorted_under_zero.length - 1].date
     // Testing
     // const time_created = helpers.friendlyDate(locked_heading_date)

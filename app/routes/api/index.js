@@ -62,4 +62,7 @@ module.exports = (app, config) => {
   require('./alerts/create-room-alert')(app, config)
   require('./alerts/create-alert')(app, config)
   require('./alerts/get-alert')(app, config)
+  // Intercom
+  require('./intercom/signup')(app, config)
+  require('./intercom/signin')(app, config)
 }

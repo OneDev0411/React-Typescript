@@ -1,5 +1,6 @@
 // actions/signin.js
 import User from '../../models/User'
+import Intercom from '../../models/Intercom'
 import AppStore from '../../stores/AppStore'
 
 export default (email, password, redirect_to, invite) => {
@@ -45,11 +46,12 @@ export default (email, password, redirect_to, invite) => {
     if (response.status === 'success') {
       const user = response.data
       user.access_token = response.access_token
-
       if (user.email_confirmed) {
         AppStore.data = {
           user
         }
+        // Intercom
+        Intercom.signin({ user }, () => {})
       } else {
         AppStore.data = {
           submitting: false,
