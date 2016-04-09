@@ -35,6 +35,13 @@ export default class Landing extends Component {
     e.preventDefault()
     window.Intercom('show')
   }
+  toggleNavBarLinks() {
+    if (AppStore.data.navbar_in)
+      delete AppStore.data.navbar_in
+    else
+      AppStore.data.navbar_in = true
+    AppStore.emitChange()
+  }
   render() {
     // Data
     const data = this.props.data
@@ -118,6 +125,14 @@ export default class Landing extends Component {
         </p>
       )
     }
+    let login_btn_li_style
+    let login_btn_style
+    let is_mobile = false
+    if (window.innerWidth <= 768) {
+      is_mobile = true
+      login_btn_style = ' w-100p'
+      login_btn_li_style = S('pl-15 pr-15')
+    }
     return (
       <div className="page-landing page-bg-video" style={ page_style }>
         <div className="overlay"></div>
@@ -126,35 +141,31 @@ export default class Landing extends Component {
           <nav className="navbar navbar-default" style={ navbar_style }>
             <div className="container-fluid">
               <div className="navbar-header">
-                {
-                  <button style={ S('mt-15') } type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-link" aria-expanded="false">
-                    <span className="sr-only">Toggle navigation</span>
-                    <span className="icon-bar"></span>
-                    <span className="icon-bar"></span>
-                    <span className="icon-bar"></span>
-                  </button>
-                }
+                <button onClick={ this.toggleNavBarLinks.bind(this) } style={ S('mt-15') } type="button" className="navbar-toggle collapsed" data-toggle="collapse" aria-expanded={ data.navbar_in ? 'true' : 'false' }>
+                  <span className="sr-only">Toggle navigation</span>
+                  <span className="icon-bar"></span>
+                  <span className="icon-bar"></span>
+                  <span className="icon-bar"></span>
+                </button>
                 <div className="tk-calluna-sans pull-left" style={ S('font-28 mt-12 color-fff') }>Rechat</div>
               </div>
-              {
-                <div style={ collapse_style } className="collapse navbar-collapse text-center" id="main-link">
-                  <ul className="nav navbar-nav navbar-right">
-                    <li className="contact-us-btn" style={ S('mr-20') }>
-                      <a onClick={ this.showIntercom } href="#" style={ S('color-fff relative t-6n') }>Contact Us</a>
-                    </li>
+              <div style={ collapse_style } className={ `collapse navbar-collapse text-center${data.navbar_in ? ' in' : ''}` }>
+                <ul className="nav navbar-nav navbar-right">
+                  <li className="contact-us-btn" style={ S(`mr-20${is_mobile ? ' pt-15' : ''}`) }>
+                    <a onClick={ this.showIntercom } href="#" style={ S('color-fff relative t-6n') }>Contact Us</a>
+                  </li>
+                  <li style={ login_btn_li_style }>
+                    <a className="btn btn-default" href="/signin" style={ S('color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 mr-15' + login_btn_style) }>Log in</a>
+                  </li>
+                  {
+                    /*
                     <li>
-                      <a className="btn btn-default" href="/signin" style={ S('color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 mr-15') }>Log in</a>
+                      <a className="sign-up__button btn btn-primary" href="/signup" style={ S('color-fff w-80 p-7') }>Sign up</a>
                     </li>
-                    {
-                      /*
-                      <li>
-                        <a className="sign-up__button btn btn-primary" href="/signup" style={ S('color-fff w-80 p-7') }>Sign up</a>
-                      </li>
-                      */
-                    }
-                  </ul>
-                </div>
-              }
+                    */
+                  }
+                </ul>
+              </div>
             </div>
           </nav>
         </header>
