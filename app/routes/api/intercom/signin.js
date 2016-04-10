@@ -16,6 +16,6 @@ module.exports = (app, config) => {
       last_seen_ip:req.headers['x-forwarded-for'] || req.connection.remoteAddress
     }
     client.users.create(intercom_user, r => {})
-    res.end()
+    res.end(true)
   })
 }
