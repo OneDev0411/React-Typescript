@@ -200,7 +200,6 @@ export default class MessageItem extends Component {
     // Alert
     let alert_area
     if (alert) {
-      console.log(message)
       message_area = (
         <div style={ S('mt-5') }>
           <div style={ S('mb-10 color-b0b0b0') }>I created an alert: <span onClick={ this.props.showAlertViewer.bind(this, alert.id) } style={ S('fw-600 pointer') } className="text-primary">{ alert.title }</span></div>
@@ -209,7 +208,7 @@ export default class MessageItem extends Component {
               <img style={ S('br-3 w-75 h-75') } src="/images/dashboard/mls/map-tile.jpg"/>
             </div>
             <div style={ S('pull-left') }>
-              <span onClick={ this.props.showAlertViewer.bind(this, alert.id) } style={ S('pointer fw-600') } className="text-primary">{ alert.title }</span>
+              <span onClick={ this.props.showAlertViewer.bind(this, alert.id) } style={ S('pointer fw-600 font-18') }>{ alert.title }</span>
               <div style={ S('color-b0b0b0') }>We'll keep you updated with new listings</div>
             </div>
             <div className="clearfix"></div>
