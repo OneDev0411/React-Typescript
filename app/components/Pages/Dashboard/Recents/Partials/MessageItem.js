@@ -101,7 +101,7 @@ export default class MessageItem extends Component {
     if (message.author && !this.props.new_date && !message.recommendation) {
       if (messages[i - 1] && messages[i - 1].author && messages[i - 1].author.id === message.author.id) {
         return (
-          <div style={ S('relative mb-5') }>
+          <div style={ S('relative mb-5 font-16') }>
             <div className="pull-left" style={ S('ml-55') }>
               <div className={ message_class_name } dangerouslySetInnerHTML={ { __html: message_text } }></div>
               { message_image }
@@ -158,7 +158,7 @@ export default class MessageItem extends Component {
         </div>
       )
       return (
-        <div className="message-item" style={ S('relative mb-15 pt-5') }>
+        <div className="message-item" style={ S('relative mb-15 pt-5 font-16') }>
           <div style={ S('mt-5 pull-left') }>{ profile_image_div }</div>
           <div className="pull-left" style={ S('ml-55') }>
             <b>{ first_name || 'Rebot' }</b>
@@ -218,7 +218,7 @@ export default class MessageItem extends Component {
     }
     // Default
     return (
-      <div className="message-item" style={ S('relative mb-5') }>
+      <div className="message-item" style={ S('relative mb-5 font-16') }>
         <div style={ S('mt-5 pull-left') }>{ profile_image_div }</div>
         <div className="pull-left" style={ S('ml-55 pt-6') }>
           <b>{ first_name || 'Rebot' }</b>
