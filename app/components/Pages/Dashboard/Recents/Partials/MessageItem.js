@@ -144,14 +144,14 @@ export default class MessageItem extends Component {
           <div className="pull-left" style={ underlay_style }>
             <div style={ { opacity: '0' } }>
               <span style={ S('mr-5 font-46 l-10 t-17n absolute color-' + status_color) }>&#8226;</span>
-              <span style={ S('font-14 relative t-3n color-fff') }>
+              <span style={ S('font-14 relative t-5n color-fff') }>
                 <b>{ listing.status } { sold_date }</b>
               </span>
             </div>
           </div>
           <div className="pull-left" style={ S('absolute t-7 br-100 ml-5 pt-11 h-35 pl-36 pr-15 mr-15') }>
             <span style={ S('mr-5 font-46 l-10 t-17n absolute color-' + status_color) }>&#8226;</span>
-            <span style={ S('font-14 relative t-3n color-fff') }>
+            <span style={ S('font-14 relative t-5n color-fff') }>
               <b>{ listing.status } { sold_date }</b>
             </span>
           </div>
