@@ -112,6 +112,7 @@ export default class MessageItem extends Component {
         )
       }
     }
+    // Sharing a listing
     if (recommendation) {
       const listing = recommendation.listing
       if (listing && listing.cover_image_url) {
@@ -158,15 +159,15 @@ export default class MessageItem extends Component {
         </div>
       )
       return (
-        <div className="message-item" style={ S('relative mb-5 pt-5') }>
+        <div className="message-item" style={ S('relative mb-15 pt-5') }>
           <div style={ S('mt-5 pull-left') }>{ profile_image_div }</div>
           <div className="pull-left" style={ S('ml-55') }>
             <b>{ first_name || 'Rebot' }</b>
             <span style={ S('color-ccc ml-20') } >
               { time_created.month } { time_created.date }, { time_created.time_friendly }
             </span>
-            <div>
-              <span style={ S('color-b0b0b0') }>Shared a Home:</span>&nbsp;
+            <div style={ S('mt-5') }>
+              <span style={ S('color-b0b0b0 fw-600') }>Shared a Home:</span>&nbsp;
               <span onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ S('fw-600') } className="text-primary">{ listing_util.addressTitle(listing.property.address) }</span>
             </div>
             <div className="box-shadow" onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ card_style }>
