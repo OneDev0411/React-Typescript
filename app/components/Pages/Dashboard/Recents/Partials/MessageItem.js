@@ -81,7 +81,7 @@ export default class MessageItem extends Component {
       message_image = (
         <div>
           <div style={ S('color-b0b0b0 fw-600') }>Uploaded a file:</div>
-          <div className={ is_image ? 'box-shadow' : ''} onClick={ this.props.showFileViewer.bind(this, attachment) } style={ { ...S('mt-10'), cursor: 'zoom-in' } }>
+          <div onClick={ this.props.showFileViewer.bind(this, attachment) } style={ { ...S('mt-10'), cursor: 'zoom-in' } }>
             { message_thumb }
           </div>
         </div>
@@ -125,7 +125,7 @@ export default class MessageItem extends Component {
       if (listing.close_price)
         price = listing.close_price
       const card_style = {
-        ...S('w-500 br-3 mt-10 pointer'),
+        ...S('w-500 br-3 mt-10 pointer border-1-solid-e7e4e3'),
         overflow: 'hidden'
       }
       // Listing status
@@ -169,7 +169,7 @@ export default class MessageItem extends Component {
               <span style={ S('color-b0b0b0 fw-600') }>Shared a Home:</span>&nbsp;
               <span onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ S('fw-600 pointer') } className="text-primary">{ listing_util.addressTitle(listing.property.address) }</span>
             </div>
-            <div className="box-shadow" onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ card_style }>
+            <div onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ card_style }>
               <div>{ listing_status_indicator }</div>
               <div>{ message_image }</div>
               <div style={ S('pointer p-15') }>
