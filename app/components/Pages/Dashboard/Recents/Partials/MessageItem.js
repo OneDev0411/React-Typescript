@@ -117,7 +117,7 @@ export default class MessageItem extends Component {
       if (listing && listing.cover_image_url) {
         const cover_image_url = message.recommendation.listing.cover_image_url
         message_image = (
-          <div style={ S('w-400 h-250 bg-url(' + cover_image_url + ') bg-cover bg-center') }></div>
+          <div style={ S('w-500 h-200 bg-url(' + cover_image_url + ') bg-cover bg-center') }></div>
         )
       }
       // Hide recommendation notification message
@@ -125,7 +125,7 @@ export default class MessageItem extends Component {
       if (listing.close_price)
         price = listing.close_price
       const card_style = {
-        ...S('w-400 br-3 mt-10 pointer'),
+        ...S('w-500 br-3 mt-10 pointer'),
         overflow: 'hidden'
       }
       // Listing status
