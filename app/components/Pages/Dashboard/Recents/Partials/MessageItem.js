@@ -1,6 +1,5 @@
 // MessagesItem.js
 import React, { Component } from 'react'
-import { Button } from 'react-bootstrap'
 import ProfileImage from '../../Partials/ProfileImage'
 import S from 'shorti'
 import helpers from '../../../../../utils/helpers'
@@ -81,7 +80,7 @@ export default class MessageItem extends Component {
       }
       message_image = (
         <div>
-          <div>Uploaded a file:</div>
+          <div style={ S('color-b0b0b0 fw-600') }>Uploaded a file:</div>
           <div className={ is_image ? 'box-shadow' : ''} onClick={ this.props.showFileViewer.bind(this, attachment) } style={ { ...S('mt-10'), cursor: 'zoom-in' } }>
             { message_thumb }
           </div>
@@ -194,12 +193,27 @@ export default class MessageItem extends Component {
         </div>
       )
     }
-    // Show alert button
+    // Default message area
+    let message_area = (
+      <div className={ message_class_name } dangerouslySetInnerHTML={ { __html: message_text } }></div>
+    )
+    // Alert
     let alert_area
     if (alert) {
-      alert_area = (
-        <div style={ S('mt-10') }>
-          <Button onClick={ this.props.showAlertViewer.bind(this, alert.id) } style={ S('border-1-solid-006aff color-006aff br-3 pl-20 pr-20') }>Show Homes</Button>
+      console.log(message)
+      message_area = (
+        <div style={ S('mt-5') }>
+          <div style={ S('mb-10 color-b0b0b0') }>I created an alert: <span onClick={ this.props.showAlertViewer.bind(this, alert.id) } style={ S('fw-600 pointer') } className="text-primary">{ alert.title }</span></div>
+          <div>
+            <div onClick={ this.props.showAlertViewer.bind(this, alert.id) } style={ S('pointer pull-left mr-10') }>
+              <img style={ S('br-3 w-75 h-75') } src="/images/dashboard/mls/map-tile.jpg"/>
+            </div>
+            <div style={ S('pull-left') }>
+              <span onClick={ this.props.showAlertViewer.bind(this, alert.id) } style={ S('pointer fw-600') } className="text-primary">{ alert.title }</span>
+              <div style={ S('color-b0b0b0') }>We'll keep you updated with new listings</div>
+            </div>
+            <div className="clearfix"></div>
+          </div>
         </div>
       )
     }
@@ -212,7 +226,7 @@ export default class MessageItem extends Component {
           <span style={ S('color-ccc ml-20') } >
             { time_created.month } { time_created.date }, { time_created.time_friendly }
           </span>
-          <div className={ message_class_name } dangerouslySetInnerHTML={ { __html: message_text } }></div>
+          { message_area }
           { message_image }
           { alert_area }
         </div>
