@@ -89,14 +89,6 @@ export default class MessageItem extends Component {
       )
     }
 
-    // Listing
-    if (message.recommendation && message.recommendation.listing && message.recommendation.listing.cover_image_url) {
-      const cover_image_url = message.recommendation.listing.cover_image_url
-      message_image = (
-        <div className="box-shadow" onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ S('pointer w-400 h-300 br-3 bg-url(' + cover_image_url + ') bg-cover bg-center') }></div>
-      )
-    }
-
     // Fade in
     let message_class_name
     if (message.fade_in)
@@ -121,11 +113,50 @@ export default class MessageItem extends Component {
       }
     }
     if (recommendation) {
-      // Hide recommendation notification message
       const listing = recommendation.listing
+      if (listing && listing.cover_image_url) {
+        const cover_image_url = message.recommendation.listing.cover_image_url
+        message_image = (
+          <div style={ S('w-400 h-250 bg-url(' + cover_image_url + ') bg-cover bg-center') }></div>
+        )
+      }
+      // Hide recommendation notification message
       let price = listing.price
       if (listing.close_price)
         price = listing.close_price
+      const card_style = {
+        ...S('w-400 br-3 mt-10 pointer'),
+        overflow: 'hidden'
+      }
+      // Listing status
+      const status_color = listing_util.getStatusColor(listing.status)
+      let sold_date
+      if (listing.close_date) {
+        const sold_date_obj = helpers.friendlyDate(listing.close_date)
+        sold_date = `${sold_date_obj.month} ${sold_date_obj.date}, ${sold_date_obj.year}`
+      }
+      const underlay_style = {
+        opacity: '.6',
+        ...S('bg-000 relative t-7 br-100 ml-5 pt-11 h-35 pl-36 pr-15 mr-15')
+      }
+      const listing_status_indicator = (
+        <div style={ S('relative') }>
+          <div className="pull-left" style={ underlay_style }>
+            <div style={ { opacity: '0' } }>
+              <span style={ S('mr-5 font-46 l-10 t-17n absolute color-' + status_color) }>&#8226;</span>
+              <span style={ S('font-14 relative t-3n color-fff') }>
+                <b>{ listing.status } { sold_date }</b>
+              </span>
+            </div>
+          </div>
+          <div className="pull-left" style={ S('absolute t-7 br-100 ml-5 pt-11 h-35 pl-36 pr-15 mr-15') }>
+            <span style={ S('mr-5 font-46 l-10 t-17n absolute color-' + status_color) }>&#8226;</span>
+            <span style={ S('font-14 relative t-3n color-fff') }>
+              <b>{ listing.status } { sold_date }</b>
+            </span>
+          </div>
+        </div>
+      )
       return (
         <div className="message-item" style={ S('relative mb-5 pt-5') }>
           <div style={ S('mt-5 pull-left') }>{ profile_image_div }</div>
@@ -134,15 +165,27 @@ export default class MessageItem extends Component {
             <span style={ S('color-ccc ml-20') } >
               { time_created.month } { time_created.date }, { time_created.time_friendly }
             </span>
-            <div className={ message_class_name } dangerouslySetInnerHTML={ { __html: message_text } }></div>
-            <div style={ S('mt-10 mb-10') }>{ message_image }</div>
-            <div style={ S('pointer mb-10') } onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) }>
-              <div style={ S('font-20 fw-700 mt-10') }>${ helpers.numberWithCommas(price) }</div>
-              <div style={ S('font-16 fw-700') }>{ listing_util.addressTitle(listing.property.address) }</div>
-              <div style={ S('font-14 color-929292') }>
-                { listing.property.bedroom_count } Beds&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
-                { listing.property.bathroom_count } Bath&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
-                { helpers.numberWithCommas(listing_util.metersToFeet(listing.property.square_meters)) } Sqft
+            <div>
+              <span style={ S('color-b0b0b0') }>Shared a Home:</span>&nbsp;
+              <span onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ S('fw-600') } className="text-primary">{ listing_util.addressTitle(listing.property.address) }</span>
+            </div>
+            <div className="box-shadow" onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ card_style }>
+              <div>{ listing_status_indicator }</div>
+              <div>{ message_image }</div>
+              <div style={ S('pointer p-15') }>
+                <div style={ S('font-20 fw-700') }>${ helpers.numberWithCommas(price) }</div>
+                <div style={ S('font-14 color-929292') }>
+                  { listing.property.bedroom_count } Beds&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
+                  { listing.property.bathroom_count } Bath&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
+                  { helpers.numberWithCommas(listing_util.metersToFeet(listing.property.square_meters)) } Sqft&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
+                  Built in { listing.property.year_built }&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
+                  { listing.property.address.postal_code }
+                </div>
+                <div style={ S('mt-10 relative') }>
+                  <div style={ S('mt-5 pull-left w-40 h-40') }>{ profile_image_div }</div>
+                  <div style={ S('mt-5 pull-left ml-10 w-310 mt-10') } className={ message_class_name } dangerouslySetInnerHTML={ { __html: '"' + message_text + '"' } }></div>
+                  <div className="clearfix"></div>
+                </div>
               </div>
             </div>
           </div>

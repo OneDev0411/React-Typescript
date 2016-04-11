@@ -26,7 +26,7 @@ app.on('ready', function() {
   mainWindow = new BrowserWindow({width: 1200, height: 760, minWidth: 1000, minHeight: 760});
   
   // and load the index.html of the app.
-  mainWindow.loadURL(process.env.LOAD_URL || `http://irish.d.rechat.com/signin`);
+  mainWindow.loadURL(process.env.LOAD_URL || `https://rechat.com/signin`);
 
   // Open the DevTools.
   if(process.env.NODE_ENV === 'development')
