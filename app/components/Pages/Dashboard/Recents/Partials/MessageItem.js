@@ -167,7 +167,7 @@ export default class MessageItem extends Component {
             </span>
             <div style={ S('mt-5') }>
               <span style={ S('color-b0b0b0 fw-600') }>Shared a Home:</span>&nbsp;
-              <span onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ S('fw-600') } className="text-primary">{ listing_util.addressTitle(listing.property.address) }</span>
+              <span onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ S('fw-600 pointer') } className="text-primary">{ listing_util.addressTitle(listing.property.address) }</span>
             </div>
             <div className="box-shadow" onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ card_style }>
               <div>{ listing_status_indicator }</div>
