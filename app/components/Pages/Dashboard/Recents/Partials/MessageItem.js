@@ -125,7 +125,9 @@ export default class MessageItem extends Component {
       if (listing.close_price)
         price = listing.close_price
       const card_style = {
-        ...S('w-500 br-3 mt-10 pointer border-1-solid-e7e4e3'),
+        ...S('w-500 mt-10 pointer'),
+        borderTopLeftRadius: '3px',
+        borderTopRightRadius: '3px',
         overflow: 'hidden'
       }
       // Listing status
@@ -157,6 +159,14 @@ export default class MessageItem extends Component {
           </div>
         </div>
       )
+      const share_info_style = {
+        ...S('pointer p-15 pt-10'),
+        borderLeft: '1px solid #e7e4e3',
+        borderRight: '1px solid #e7e4e3',
+        borderBottom: '1px solid #e7e4e3',
+        borderBottomLeftRadius: '3px',
+        borderBottomRightRadius: '3px'
+      }
       return (
         <div className="message-item" style={ S('relative mb-15 pt-5 font-16') }>
           <div style={ S('mt-5 pull-left') }>{ profile_image_div }</div>
@@ -172,7 +182,7 @@ export default class MessageItem extends Component {
             <div onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ card_style }>
               <div>{ listing_status_indicator }</div>
               <div>{ message_image }</div>
-              <div style={ S('pointer p-15') }>
+              <div style={ share_info_style }>
                 <div style={ S('font-20 fw-700') }>${ helpers.numberWithCommas(price) }</div>
                 <div style={ S('font-14 color-929292') }>
                   { listing.property.bedroom_count } Beds&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
@@ -202,7 +212,7 @@ export default class MessageItem extends Component {
     if (alert) {
       message_area = (
         <div style={ S('mt-5') }>
-          <div style={ S('mb-10 color-b0b0b0') }>I created an alert: <span onClick={ this.props.showAlertViewer.bind(this, alert.id) } style={ S('fw-600 pointer') } className="text-primary">{ alert.title }</span></div>
+          <div style={ S('mb-10 color-b0b0b0') }>Created an alert: <span onClick={ this.props.showAlertViewer.bind(this, alert.id) } style={ S('fw-600 pointer') } className="text-primary">{ alert.title }</span></div>
           <div>
             <div onClick={ this.props.showAlertViewer.bind(this, alert.id) } style={ S('pointer pull-left mr-10') }>
               <img style={ S('br-3 w-75 h-75') } src="/images/dashboard/mls/map-tile.jpg"/>
