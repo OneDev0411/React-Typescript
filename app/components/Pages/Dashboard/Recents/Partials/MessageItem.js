@@ -137,7 +137,7 @@ export default class MessageItem extends Component {
       }
       const underlay_style = {
         opacity: '.6',
-        ...S('bg-000 relative t-7 br-100 ml-5 pt-11 h-35 pl-36 pr-15 mr-15')
+        ...S('bg-000 relative t-7 br-100 ml-5 pt-11 h-30 pl-36 pr-10 mr-15')
       }
       const listing_status_indicator = (
         <div style={ S('relative') }>
@@ -149,9 +149,9 @@ export default class MessageItem extends Component {
               </span>
             </div>
           </div>
-          <div className="pull-left" style={ S('absolute t-7 br-100 ml-5 pt-11 h-30 pl-36 pr-15 mr-15') }>
-            <span style={ S('mr-5 font-46 l-10 t-17n absolute color-' + status_color) }>&#8226;</span>
-            <span style={ S('font-14 relative t-5n color-fff') }>
+          <div className="pull-left" style={ S('absolute t-7 br-100 ml-5 pt-11 h-35 pl-36 pr-15 mr-15') }>
+            <span style={ S('font-40 l-8 t-15n absolute color-' + status_color) }>&#8226;</span>
+            <span style={ S('font-14 relative t-7n l-5n color-fff') }>
               <b>{ listing.status } { sold_date }</b>
             </span>
           </div>
@@ -178,7 +178,7 @@ export default class MessageItem extends Component {
               <span onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ S('fw-600 pointer') } className="text-primary">{ listing_util.addressTitle(listing.property.address) }</span>
             </div>
             <div onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ card_style }>
-              <div>{ listing_status_indicator }</div>
+              <div style={ S('relative t-5 l-5') }>{ listing_status_indicator }</div>
               <div>{ message_image }</div>
               <div style={ share_info_style }>
                 <div style={ S('font-20 fw-700') }>${ helpers.numberWithCommas(price) }</div>
