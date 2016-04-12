@@ -175,7 +175,9 @@ export default class MessageItem extends Component {
             </span>
             <div>
               <span style={ S('color-b0b0b0 fw-600') }>Shared a Home:</span>&nbsp;
-              <span onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ S('fw-600 pointer') } className="text-primary">{ listing_util.addressTitle(listing.property.address) }</span>
+              <span onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ S('fw-600 pointer') } className="text-primary">
+                { listing_util.addressTitle(listing.property.address) }, { listing.property.address.postal_code }
+              </span>
             </div>
             <div onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ card_style }>
               <div style={ S('relative t-5 l-5') }>{ listing_status_indicator }</div>
@@ -186,8 +188,7 @@ export default class MessageItem extends Component {
                   { listing.property.bedroom_count } Beds&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
                   { listing.property.bathroom_count } Bath&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
                   { helpers.numberWithCommas(listing_util.metersToFeet(listing.property.square_meters)) } Sqft&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
-                  Built in { listing.property.year_built }&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
-                  { listing.property.address.postal_code }
+                  Built in { listing.property.year_built }
                 </div>
                 <div style={ S('mt-10 relative') }>
                   <div style={ S('mt-5 pull-left w-40 h-40') }>{ profile_image_div }</div>
