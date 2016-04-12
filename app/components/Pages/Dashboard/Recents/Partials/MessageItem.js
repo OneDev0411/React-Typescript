@@ -173,7 +173,7 @@ export default class MessageItem extends Component {
             <span style={ S('color-ccc ml-20') } >
               { time_created.month } { time_created.date }, { time_created.time_friendly }
             </span>
-            <div style={ S('mt-5') }>
+            <div>
               <span style={ S('color-b0b0b0 fw-600') }>Shared a Home:</span>&nbsp;
               <span onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ S('fw-600 pointer') } className="text-primary">{ listing_util.addressTitle(listing.property.address) }</span>
             </div>

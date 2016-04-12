@@ -1,7 +1,7 @@
 // SignUp.js
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import { Button, Input, Alert } from 'react-bootstrap'
+import { Button, Input, Alert, Popover, OverlayTrigger } from 'react-bootstrap'
 import S from 'shorti'
 import AppDispatcher from '../../dispatcher/AppDispatcher'
 import AppStore from '../../stores/AppStore'
@@ -247,8 +247,16 @@ export default class SignUp extends Component {
     // Signup as agent
     if (data.signup && data.signup.user_type === 'Agent' && data.signup.agent) {
       const agent = data.signup.agent
+      const email_tooltip = (
+        <Popover id="popover-email">This is the email NTREIS has associated with the license number, once verified you can change this later”</Popover>
+      )
       let agent_email_input = (
-        <Input readOnly style={ input_style } bsSize="large" bsStyle={ email_style } type="text" ref="email" placeholder="Email" value={ agent.email }/>
+        <div>
+          <OverlayTrigger placement="right" overlay={ email_tooltip } delayShow={ 200 } delayHide={ 0 }>
+            <div>{ agent.email }</div>
+          </OverlayTrigger>
+          <Input style={ input_style } bsSize="large" bsStyle={ email_style } type="hidden" ref="email" placeholder="Email" value={ agent.email }/>
+        </div>
       )
       if (!agent.email) {
         agent_email_input = (
