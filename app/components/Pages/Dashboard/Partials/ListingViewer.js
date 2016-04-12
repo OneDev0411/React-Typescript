@@ -50,7 +50,9 @@ export default class ListingViewer extends Component {
     if (!user)
       viewer_width = window.innerWidth
     const listing = this.props.listing
-    let current_slide = listing.current_slide
+    let current_slide
+    if (listing)
+      current_slide = listing.current_slide
     if (!current_slide)
       current_slide = 0
     let property

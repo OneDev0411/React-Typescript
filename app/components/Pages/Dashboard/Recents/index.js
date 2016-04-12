@@ -392,9 +392,9 @@ export default class Dashboard extends Component {
     })
     AppStore.emitChange()
   }
-
-  // TODO: Fix This for Arrow Keys
   navListingCarousel(index) {
+    if (!AppStore.data.current_listing)
+      return
     AppStore.data.current_listing.current_slide = index
     AppStore.emitChange()
   }
