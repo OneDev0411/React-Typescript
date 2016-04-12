@@ -210,7 +210,7 @@ export default class MessageItem extends Component {
     let alert_area
     if (alert) {
       message_area = (
-        <div style={ S('mt-5') }>
+        <div>
           <div style={ S('mb-10 color-b0b0b0') }>Created an alert: <span onClick={ this.props.showAlertViewer.bind(this, alert.id) } style={ S('fw-600 pointer') } className="text-primary">{ alert.title }</span></div>
           <div>
             <div onClick={ this.props.showAlertViewer.bind(this, alert.id) } style={ S('pointer pull-left mr-10') }>
