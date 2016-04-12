@@ -169,7 +169,7 @@ export default class SignUp extends Component {
     }
     // Style
     const submitting = data.submitting
-    let submitting_class
+    let submitting_class = ''
     if (submitting)
       submitting_class = 'disabled'
     const input_style = {
@@ -248,14 +248,14 @@ export default class SignUp extends Component {
     if (data.signup && data.signup.user_type === 'Agent' && data.signup.agent) {
       const agent = data.signup.agent
       const email_tooltip = (
-        <Popover id="popover-email">This is the email NTREIS has associated with the license number, once verified you can change this later”</Popover>
+        <Popover id="popover-email">This is the email NTREIS has associated with the license number, once verified you can change this later.</Popover>
       )
       let agent_email_input = (
         <div>
-          <OverlayTrigger placement="right" overlay={ email_tooltip } delayShow={ 200 } delayHide={ 0 }>
-            <div>{ agent.email }</div>
+          <OverlayTrigger style={ S('mb-30n') } placement="bottom" overlay={ email_tooltip } delayShow={ 200 } delayHide={ 0 }>
+            <Input readOnly type="text" style={ input_style } bsSize="large" bsStyle={ email_style } value={ agent.email } />
           </OverlayTrigger>
-          <Input style={ input_style } bsSize="large" bsStyle={ email_style } type="hidden" ref="email" placeholder="Email" value={ agent.email }/>
+          <Input type="hidden" ref="email" placeholder="Email" value={ agent.email }/>
         </div>
       )
       if (!agent.email) {
