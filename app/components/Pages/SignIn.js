@@ -24,7 +24,7 @@ export default class SignIn extends Component {
     const data = this.props.data
     const user = data.user
     if (user) {
-      // this.initFullStory(user)
+      this.initFullStory(user)
       let redirect_to = '/dashboard/mls'
       if (data.location.query && data.location.query.redirect_to)
         redirect_to = data.location.query.redirect_to
@@ -32,12 +32,12 @@ export default class SignIn extends Component {
     }
   }
 
-  // initFullStory(user) {
-  //   FS.identify(user.id, {
-  //     displayName: user.first_name + ' ' + user.last_name,
-  //     email: user.email
-  //   })
-  // }
+  initFullStory(user) {
+    window.FS.identify(user.id, {
+      displayName: user.first_name + ' ' + user.last_name,
+      email: user.email
+    })
+  }
 
   handleSubmit(e) {
     e.preventDefault()

@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { Button, Input, Alert, Popover, OverlayTrigger } from 'react-bootstrap'
 import S from 'shorti'
+// import validator from 'validator'
 import AppDispatcher from '../../dispatcher/AppDispatcher'
 import AppStore from '../../stores/AppStore'
 // import MapBackground from '../Partials/MapBackground'
@@ -111,6 +112,40 @@ export default class SignUp extends Component {
       redirect_to: ''
     })
   }
+  // showChangeEmailInput() {
+  //   if (!AppStore.data.signup)
+  //     AppStore.data.signup = {}
+  //   AppStore.data.signup.show_new_email_input = true
+  //   AppStore.emitChange()
+  //   setTimeout(() => {
+  //     this.refs.new_email.refs.input.focus()
+  //   }, 10)
+  // }
+  // hideChangeEmailInput() {
+  //   delete AppStore.data.submitting
+  //   delete AppStore.data.signup.show_new_email_input
+  //   AppStore.emitChange()
+  // }
+  // handleChangeEmailSubmit(e) {
+  //   e.preventDefault()
+  //   const new_email = this.refs.new_email.refs.input.value.trim()
+  //   if (!validator.isEmail(new_email)) {
+  //     AppStore.data.signup.error = 'invalid-email'
+  //     AppStore.emitChange()
+  //     return
+  //   }
+  //   AppStore.data.submitting = true
+  //   const new_user = AppStore.data.new_user
+  //   AppDispatcher.dispatch({
+  //     action: 'edit-user',
+  //     user: new_user,
+  //     user_info: {
+  //       id: new_user.id,
+  //       email: new_email
+  //     }
+  //   })
+  //   AppStore.emitChange()
+  // }
   render() {
     // Data
     const data = this.props.data
@@ -209,7 +244,7 @@ export default class SignUp extends Component {
             verify you’re a real agent.
           </div>
           <form onSubmit={ this.searchAgent.bind(this) }>
-            <Input style={ input_style } bsSize="large" type="text" ref="mlsid" placeholder="Enter your agent license number"/>
+            <Input style={ input_style } bsSize="large" type="number" ref="mlsid" placeholder="Enter your agent license number"/>
             <Button className={ submitting_class } type="submit" bsSize="large" style={ S('w-100p bg-4c7dbf color-fff border-0-solid-fff') }>
               { submitting ? 'Searching...' : 'Find Me' }
             </Button>
@@ -309,19 +344,34 @@ export default class SignUp extends Component {
     /* Handle success
     ======================== */
     if (data.show_message && data.status === 'success') {
-      // Old deep link
-      // let signin_link = '/signin'
-      // const room_id = this.props.location.query.room_id
-      // const invite_token = this.props.location.query.invite_token
-      // if (room_id && invite_token)
-      //   signin_link += '?message=invite-room&room_id=' + room_id + '&invite_token=' + invite_token
+      // let new_email_area
+      // if (data.signup && data.signup.show_new_email_input) {
+      //   new_email_area = (
+      //     <div style={ S('mt-20') }>
+      //       <form onSubmit={ this.handleChangeEmailSubmit.bind(this) }>
+      //         <Input ref="new_email" type="text" style={ input_style } bsSize="large" bsStyle={ email_style } placeholder="Enter new email" />
+      //         <Button onClick={ this.hideChangeEmailInput.bind(this) } bsSize="large" type="submit" ref="submit" className={ 'btn btn-link' } style={ S('w-50p mb-20 mt-20') }>
+      //           Cancel
+      //         </Button>
+      //         <Button bsSize="large" type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-50p mb-20 mt-20') }>
+      //           { submitting ? 'Sending new link...' : 'Send new link' }
+      //         </Button>
+      //       </form>
+      //       <Alert bsStyle="danger">
+      //         * Previous verification link will no longer work
+      //       </Alert>
+      //     </div>
+      //   )
+      // }
       main_content = (
         <div style={ S('p-50') }>
           <div style={ S('mb-30') }>
             <img style={ S('w-105 h-101') } src="/images/signup/mail.png" />
           </div>
           <div style={ S('font-20 mb-20') }>All set, { data.new_user ? data.new_user.first_name : '' }! We’ll need to verify your<br /> email to make sure it’s you.</div>
-          <div style={ S('font-14') }>We sent you an email with your verification link. Please check your email: <span className="text-primary">{ data.new_user ? data.new_user.email : '' }</span></div>
+          <div style={ S('font-14 mb-10') }>We sent you an email with your verification link. Please check your email: <span className="text-primary">{ data.new_user ? data.new_user.email : '' }</span>.</div>
+          <div>Wrong email? <a href="#" onClick={ this.showChangeEmailInput.bind(this) }>Change email</a>.</div>
+          { /* new_email_area */ }
         </div>
       )
     }
