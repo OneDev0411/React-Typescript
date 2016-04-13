@@ -34,7 +34,7 @@ export default class MainContent extends Component {
     const data = this.props.data
     const active_contact = data.active_contact
     // Check for @
-    if (message_input.includes('@')) {
+    if (message_input.indexOf('@') !== -1) {
       if (e.which === 38) // up
         return this.props.handleContactFilterNav('up')
       if (e.which === 40) // down

@@ -88,7 +88,7 @@ const controller = {
       share_modal.emails_added = []
     if (type === 'email') {
       // Test if already added
-      if (share_modal.emails_added.includes(item))
+      if (share_modal.emails_added.indexOf(item) !== -1)
         return
       share_modal.emails_added.push(item)
     }
@@ -97,7 +97,7 @@ const controller = {
       if (!share_modal.phone_numbers_added)
         share_modal.phone_numbers_added = []
       // Test if already added
-      if (share_modal.phone_numbers_added.includes(item))
+      if (share_modal.phone_numbers_added.indexOf(item) !== -1)
         return
       share_modal.phone_numbers_added.push(item)
     }

@@ -351,10 +351,10 @@ export default class TasksModule extends Component {
       return
     }
     const transaction_results = transactions.filter(transaction => {
-      if (transaction.title.includes(search_text))
+      if (transaction.title.indexOf(search_text) !== -1)
         return true
       if (transaction.listing_data)
-        return transaction.listing_data.property.address.street_full.includes(search_text)
+        return transaction.listing_data.property.address.street_full.indexOf(search_text) !== -1
       return false
     })
     AppStore.data.transaction_results = transaction_results
