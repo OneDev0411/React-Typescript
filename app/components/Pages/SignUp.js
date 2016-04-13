@@ -161,6 +161,12 @@ export default class SignUp extends Component {
           <Alert bsStyle="warning">This email is already in our system.<br />You may try to <Link to="/signin">log in</Link>.</Alert>
         )
       }
+      if (data.error_type === 'server' && data.response === 'bad-request') {
+        email_style = 'error'
+        message = (
+          <Alert bsStyle="danger">Bad request.</Alert>
+        )
+      }
       if (data.error_type === 'agent-not-found') {
         message = (
           <Alert bsStyle="danger" style={ S('mt-20') }>Agent not found.</Alert>
