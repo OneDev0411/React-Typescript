@@ -65,7 +65,7 @@ export default class RoomsList extends Component {
         // Profile image
         let author
         let profile_image_div
-        let list_style = { ...S('pointer pt-10 pb-10 pl-10 pr-37'), borderBottom: '1px solid #e7e4e3' }
+        let list_style = { ...S('pointer pt-10 pb-10 pl-10 pr-17'), borderBottom: '1px solid #e7e4e3' }
         if (current_room && current_room.id === room.id)
           list_style = { ...list_style, ...S('bg-f5fafe') }
         if (!room.latest_message) {
@@ -132,11 +132,11 @@ export default class RoomsList extends Component {
             <div style={ S('relative') }>
               { profile_image_div }
               <div className="pull-left" style={ S('ml-50 w-90p') }>
-                <div className="room-list__item__title pull-left" style={ S('w-70p') }>
+                <div className="room-list__item__title pull-left" style={ S('w-60p') }>
                   <b>{ room.title }</b>
                 </div>
                 <div className="text-right" style={ S('color-ccc w-50p absolute r-10n font-13') } >
-                  { time_created.month } { time_created.date },<br /> { time_created.time_friendly }
+                  { time_created.month } { time_created.date }, { time_created.time_friendly }
                   &nbsp;
                   { notification }
                 </div>
