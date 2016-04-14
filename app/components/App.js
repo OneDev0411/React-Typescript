@@ -87,7 +87,7 @@ export default class App extends Component {
         const rooms = AppStore.data.rooms
         const current_room_index = _.findIndex(rooms, { id: current_room.id })
         AppStore.data.rooms[current_room_index].latest_message = message
-        if (!_.find(AppStore.data.rooms[current_room_index].messages, { id: message.id }))
+        if (AppStore.data.rooms[current_room_index].messages && !_.find(AppStore.data.rooms[current_room_index].messages, { id: message.id }))
           AppStore.data.rooms[current_room_index].messages.push(message)
         AppStore.data.scroll_bottom = true
         AppStore.emitChange()

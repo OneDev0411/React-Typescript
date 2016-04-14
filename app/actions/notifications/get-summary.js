@@ -1,6 +1,7 @@
 // actions/notifications/get.js
 import Notification from '../../models/Notification'
 import AppStore from '../../stores/AppStore'
+import AppDispatcher from '../../dispatcher/AppDispatcher'
 
 export default (user) => {
   AppStore.data.notifications = {}
@@ -9,7 +10,17 @@ export default (user) => {
     access_token: user.access_token
   }
   Notification.getSummary(params, (err, response) => {
-    AppStore.data.notifications.summary = response.data
+    const summary = response.data
+    // If user added to room
+    if (summary.room_notification_summaries && summary.room_notification_summaries.length) {
+      const room_id = AppStore.data.current_room.id
+      AppDispatcher.dispatch({
+        action: 'get-rooms',
+        user,
+        room_id
+      })
+    }
+    AppStore.data.notifications.summary = summary
     AppStore.emitChange()
   })
 }
