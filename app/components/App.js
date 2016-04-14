@@ -50,7 +50,8 @@ export default class App extends Component {
       }, 3000)
     })
     window.socket.on('ping', (cb) => {
-      cb(null, new Date)
+      if (cb)
+        cb(null, new Date)
     })
   }
 
