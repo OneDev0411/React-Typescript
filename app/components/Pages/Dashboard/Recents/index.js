@@ -476,6 +476,9 @@ export default class Dashboard extends Component {
         showShareListingModal={ controller.listing_viewer.showShareListingModal }
         showAlertViewer={ controller.alert_viewer.showAlertViewer }
         hideAlertViewer={ controller.alert_viewer.hideAlertViewer }
+        showDeleteRoomModal={ controller.recents.showDeleteRoomModal }
+        hideDeleteRoomModal={ controller.recents.hideDeleteRoomModal }
+        confirmDeleteRoom={ controller.recents.confirmDeleteRoom }
       />
     )
     if (!rooms) {

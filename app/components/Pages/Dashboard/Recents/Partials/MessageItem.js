@@ -112,6 +112,18 @@ export default class MessageItem extends Component {
     // Sharing a listing
     if (recommendation) {
       const listing = recommendation.listing
+      const placeholder_style = {
+        ...S('w-400 h-100 w-500 bg-efefef color-ccc font-40 relative z-0'),
+        borderTopLeftRadius: '3px',
+        borderTopRightRadius: '3px'
+      }
+      message_image = (
+        <div style={ placeholder_style }>
+          <div style={ S('text-center w-100p absolute t-22') }>
+            <i className="fa fa-picture-o"></i>
+          </div>
+        </div>
+      )
       if (listing && listing.cover_image_url) {
         const cover_image_url = message.recommendation.listing.cover_image_url
         message_image = (
@@ -140,7 +152,7 @@ export default class MessageItem extends Component {
         ...S('bg-000 relative t-7 br-100 ml-5 pt-11 h-30 pl-36 pr-10 mr-15')
       }
       const listing_status_indicator = (
-        <div style={ S('relative') }>
+        <div style={ S('relative z-1') }>
           <div className="pull-left" style={ underlay_style }>
             <div style={ { opacity: '0' } }>
               <span style={ S('mr-5 font-46 l-10 t-17n absolute color-' + status_color) }>&#8226;</span>

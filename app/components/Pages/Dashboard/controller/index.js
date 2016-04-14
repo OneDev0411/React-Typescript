@@ -9,6 +9,8 @@ import listing_filter from './listing-filter'
 import share_modal from './share-modal'
 // Alert
 import alert_viewer from './alert-viewer'
+// Rooms
+import recents from './recents'
 // combine controllers
 const controller = {
   listing_map,
@@ -17,6 +19,7 @@ const controller = {
   listing_panel,
   listing_filter,
   share_modal,
-  alert_viewer
+  alert_viewer,
+  recents
 }
 export default controller
