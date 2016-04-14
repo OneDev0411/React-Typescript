@@ -21,6 +21,7 @@ module.exports = (app, config) => {
   require('./users/email-verifications')(app, config)
   // Rooms
   require('./rooms/create-room')(app, config)
+  require('./rooms/delete-room')(app, config)
   require('./rooms/get-rooms')(app, config)
   require('./rooms/add-user-to-room')(app, config)
   require('./rooms/create-message')(app, config)

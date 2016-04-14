@@ -141,6 +141,7 @@ export default class MessagesList extends Component {
   render() {
     // Data
     const data = this.props.data
+    const user = data.user
     const current_room = data.current_room
     let listing_switch_checked
     if (current_room)
@@ -305,6 +306,19 @@ export default class MessagesList extends Component {
         </div>
       )
     }
+    let delete_area
+    if (user.id === current_room.owner.id) {
+      delete_area = (
+        <div>
+          <div>
+            <label>Delete</label>
+          </div>
+          <div>
+            <Button bsStyle="danger" onClick={ this.props.showDeleteRoomModal.bind(this) }>Delete room</Button>
+          </div>
+        </div>
+      )
+    }
     return (
       <div>
         <button onClick={ this.props.showModal.bind(this, 'invite-user') } type="button" className="btn btn-default" style={ btn_invite_style } >
@@ -391,6 +405,7 @@ export default class MessagesList extends Component {
               })
             }
             </div>
+            { delete_area }
             <div className="clearfix"></div>
           </Modal.Body>
         </Modal>
@@ -402,6 +417,20 @@ export default class MessagesList extends Component {
             { alert_viewer_area }
             <div className="clearfix"></div>
           </Modal.Body>
+        </Modal>
+        <Modal show={ data.show_delete_room_modal } onHide={ this.props.hideDeleteRoomModal }>
+          <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
+           <Modal.Title>Delete Room</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Are you sure you want to delete this room?  This can not be undone.
+          </Modal.Body>
+          <Modal.Footer>
+            <Button bsStyle="link" onClick={ this.props.hideDeleteRoomModal }>Cancel</Button>
+            <Button bsStyle="danger" onClick={ this.props.confirmDeleteRoom } className={ data.deleting_room ? 'disabled' : '' }>
+              { data.deleting_room ? 'Deleting...' : 'Yes, delete' }
+            </Button>
+          </Modal.Footer>
         </Modal>
       </div>
     )
@@ -421,5 +450,8 @@ MessagesList.propTypes = {
   showListingViewer: React.PropTypes.func,
   changeListingNotification: React.PropTypes.func,
   showAlertViewer: React.PropTypes.func,
-  hideAlertViewer: React.PropTypes.func
+  hideAlertViewer: React.PropTypes.func,
+  showDeleteRoomModal: React.PropTypes.func,
+  hideDeleteRoomModal: React.PropTypes.func,
+  confirmDeleteRoom: React.PropTypes.func
 }

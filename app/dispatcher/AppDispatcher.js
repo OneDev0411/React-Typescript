@@ -21,6 +21,7 @@ import editPassword from '../actions/user/edit-password'
 
 // Rooms
 import createRoom from '../actions/rooms/create-room'
+import deleteRoom from '../actions/rooms/delete-room'
 import inviteContacts from '../actions/rooms/invite-contacts'
 import uploadFilesToRoom from '../actions/rooms/upload-files'
 import setNotification from '../actions/rooms/notifications'
@@ -108,6 +109,10 @@ AppDispatcher.register(payload => {
 
     case 'get-rooms':
       getRooms(payload.user, payload.room_id)
+      break
+
+    case 'delete-room':
+      deleteRoom(payload.user, payload.id)
       break
 
     case 'get-contacts':
