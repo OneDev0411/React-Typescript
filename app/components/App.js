@@ -49,6 +49,9 @@ export default class App extends Component {
         AppStore.emitChange()
       }, 3000)
     })
+    window.socket.on('ping', (cb) => {
+      cb(null, new Date)
+    })
   }
 
   componentDidUpdate() {
