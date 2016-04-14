@@ -1,6 +1,5 @@
 // MessagesItem.js
 import React, { Component } from 'react'
-import { Button } from 'react-bootstrap'
 import ProfileImage from '../../Partials/ProfileImage'
 import S from 'shorti'
 import helpers from '../../../../../utils/helpers'
@@ -61,10 +60,8 @@ export default class MessageItem extends Component {
       const file_url = attachment.url
       const ext = attachment.info['mime-extension']
       let message_thumb
-      let is_image
       // If image
       if (ext.indexOf('png') !== -1 || ext.indexOf('jpg') !== -1 || ext.indexOf('gif') !== -1) {
-        is_image = true
         message_thumb = (
           <div style={ S('w-400 h-300 br-3 bg-url(' + file_url + ') bg-cover bg-center mb-10') }></div>
         )
@@ -81,19 +78,11 @@ export default class MessageItem extends Component {
       }
       message_image = (
         <div>
-          <div>Uploaded a file:</div>
-          <div className={ is_image ? 'box-shadow' : ''} onClick={ this.props.showFileViewer.bind(this, attachment) } style={ { ...S('mt-10'), cursor: 'zoom-in' } }>
+          <div style={ S('color-b0b0b0 fw-600') }>Uploaded a file:</div>
+          <div onClick={ this.props.showFileViewer.bind(this, attachment) } style={ { ...S('mt-10'), cursor: 'zoom-in' } }>
             { message_thumb }
           </div>
         </div>
-      )
-    }
-
-    // Listing
-    if (message.recommendation && message.recommendation.listing && message.recommendation.listing.cover_image_url) {
-      const cover_image_url = message.recommendation.listing.cover_image_url
-      message_image = (
-        <div className="box-shadow" onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ S('pointer w-400 h-300 br-3 bg-url(' + cover_image_url + ') bg-cover bg-center') }></div>
       )
     }
 
@@ -110,7 +99,7 @@ export default class MessageItem extends Component {
     if (message.author && !this.props.new_date && !message.recommendation) {
       if (messages[i - 1] && messages[i - 1].author && messages[i - 1].author.id === message.author.id) {
         return (
-          <div style={ S('relative mb-5') }>
+          <div style={ S('relative mb-5 font-15') }>
             <div className="pull-left" style={ S('ml-55') }>
               <div className={ message_class_name } dangerouslySetInnerHTML={ { __html: message_text } }></div>
               { message_image }
@@ -120,29 +109,92 @@ export default class MessageItem extends Component {
         )
       }
     }
+    // Sharing a listing
     if (recommendation) {
-      // Hide recommendation notification message
       const listing = recommendation.listing
+      if (listing && listing.cover_image_url) {
+        const cover_image_url = message.recommendation.listing.cover_image_url
+        message_image = (
+          <div style={ S('w-500 h-200 bg-url(' + cover_image_url + ') bg-cover bg-center') }></div>
+        )
+      }
+      // Hide recommendation notification message
       let price = listing.price
       if (listing.close_price)
         price = listing.close_price
+      const card_style = {
+        ...S('w-500 mt-10 pointer'),
+        borderTopLeftRadius: '3px',
+        borderTopRightRadius: '3px',
+        overflow: 'hidden'
+      }
+      // Listing status
+      const status_color = listing_util.getStatusColor(listing.status)
+      let sold_date
+      if (listing.close_date) {
+        const sold_date_obj = helpers.friendlyDate(listing.close_date)
+        sold_date = `${sold_date_obj.month} ${sold_date_obj.date}, ${sold_date_obj.year}`
+      }
+      const underlay_style = {
+        opacity: '.6',
+        ...S('bg-000 relative t-7 br-100 ml-5 pt-11 h-30 pl-36 pr-10 mr-15')
+      }
+      const listing_status_indicator = (
+        <div style={ S('relative') }>
+          <div className="pull-left" style={ underlay_style }>
+            <div style={ { opacity: '0' } }>
+              <span style={ S('mr-5 font-46 l-10 t-17n absolute color-' + status_color) }>&#8226;</span>
+              <span style={ S('font-14 relative t-5n color-fff') }>
+                <b>{ listing.status } { sold_date }</b>
+              </span>
+            </div>
+          </div>
+          <div className="pull-left" style={ S('absolute t-7 br-100 ml-5 pt-11 h-35 pl-36 pr-15 mr-15') }>
+            <span style={ S('font-40 l-8 t-15n absolute color-' + status_color) }>&#8226;</span>
+            <span style={ S('font-14 relative t-7n l-5n color-fff') }>
+              <b>{ listing.status } { sold_date }</b>
+            </span>
+          </div>
+        </div>
+      )
+      const share_info_style = {
+        ...S('pointer p-15 pt-10'),
+        borderLeft: '1px solid #e7e4e3',
+        borderRight: '1px solid #e7e4e3',
+        borderBottom: '1px solid #e7e4e3',
+        borderBottomLeftRadius: '3px',
+        borderBottomRightRadius: '3px'
+      }
       return (
-        <div className="message-item" style={ S('relative mb-5 pt-5') }>
+        <div className="message-item" style={ S('relative mb-15 pt-5 font-15') }>
           <div style={ S('mt-5 pull-left') }>{ profile_image_div }</div>
           <div className="pull-left" style={ S('ml-55') }>
             <b>{ first_name || 'Rebot' }</b>
             <span style={ S('color-ccc ml-20') } >
               { time_created.month } { time_created.date }, { time_created.time_friendly }
             </span>
-            <div className={ message_class_name } dangerouslySetInnerHTML={ { __html: message_text } }></div>
-            <div style={ S('mt-10 mb-10') }>{ message_image }</div>
-            <div style={ S('pointer mb-10') } onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) }>
-              <div style={ S('font-20 fw-700 mt-10') }>${ helpers.numberWithCommas(price) }</div>
-              <div style={ S('font-16 fw-700') }>{ listing_util.addressTitle(listing.property.address) }</div>
-              <div style={ S('font-14 color-929292') }>
-                { listing.property.bedroom_count } Beds&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
-                { listing.property.bathroom_count } Bath&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
-                { helpers.numberWithCommas(listing_util.metersToFeet(listing.property.square_meters)) } Sqft
+            <div>
+              <span style={ S('color-b0b0b0 fw-600') }>Shared a Home:</span>&nbsp;
+              <span onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ S('fw-600 pointer') } className="text-primary">
+                { listing_util.addressTitle(listing.property.address) }, { listing.property.address.postal_code }
+              </span>
+            </div>
+            <div onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ card_style }>
+              <div style={ S('relative t-5 l-5') }>{ listing_status_indicator }</div>
+              <div>{ message_image }</div>
+              <div style={ share_info_style }>
+                <div style={ S('font-20 fw-700') }>${ helpers.numberWithCommas(price) }</div>
+                <div style={ S('font-14 color-929292') }>
+                  { listing.property.bedroom_count } Beds&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
+                  { listing.property.bathroom_count } Bath&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
+                  { helpers.numberWithCommas(listing_util.metersToFeet(listing.property.square_meters)) } Sqft&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
+                  Built in { listing.property.year_built }
+                </div>
+                <div style={ S('mt-10 relative') }>
+                  <div style={ S('mt-5 pull-left w-40 h-40') }>{ profile_image_div }</div>
+                  <div style={ S('mt-5 pull-left ml-10 w-310 mt-10 font-14') } className={ message_class_name } dangerouslySetInnerHTML={ { __html: '"' + message_text + '"' } }></div>
+                  <div className="clearfix"></div>
+                </div>
               </div>
             </div>
           </div>
@@ -150,25 +202,39 @@ export default class MessageItem extends Component {
         </div>
       )
     }
-    // Show alert button
+    // Default message area
+    let message_area = (
+      <div className={ message_class_name } dangerouslySetInnerHTML={ { __html: message_text } }></div>
+    )
+    // Alert
     let alert_area
     if (alert) {
-      alert_area = (
-        <div style={ S('mt-10') }>
-          <Button onClick={ this.props.showAlertViewer.bind(this, alert.id) } style={ S('border-1-solid-006aff color-006aff br-3 pl-20 pr-20') }>Show Homes</Button>
+      message_area = (
+        <div>
+          <div style={ S('mb-10 color-b0b0b0') }>Created an alert: <span onClick={ this.props.showAlertViewer.bind(this, alert.id) } style={ S('fw-600 pointer') } className="text-primary">{ alert.title }</span></div>
+          <div>
+            <div onClick={ this.props.showAlertViewer.bind(this, alert.id) } style={ S('pointer pull-left mr-10') }>
+              <img style={ S('br-3 w-75 h-75') } src="/images/dashboard/mls/map-tile.jpg"/>
+            </div>
+            <div style={ S('pull-left') }>
+              <span onClick={ this.props.showAlertViewer.bind(this, alert.id) } style={ S('pointer fw-600 font-18') }>{ alert.title }</span>
+              <div style={ S('color-b0b0b0') }>We'll keep you updated with new listings</div>
+            </div>
+            <div className="clearfix"></div>
+          </div>
         </div>
       )
     }
     // Default
     return (
-      <div className="message-item" style={ S('relative mb-5') }>
+      <div className="message-item" style={ S('relative mb-5 font-15') }>
         <div style={ S('mt-5 pull-left') }>{ profile_image_div }</div>
         <div className="pull-left" style={ S('ml-55 pt-6') }>
           <b>{ first_name || 'Rebot' }</b>
           <span style={ S('color-ccc ml-20') } >
             { time_created.month } { time_created.date }, { time_created.time_friendly }
           </span>
-          <div className={ message_class_name } dangerouslySetInnerHTML={ { __html: message_text } }></div>
+          { message_area }
           { message_image }
           { alert_area }
         </div>

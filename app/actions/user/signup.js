@@ -59,8 +59,31 @@ export default (user, password, confirm_password, redirect_to) => {
   async.series([
     callback => {
       User.create(params, (err, response) => {
+        if (err) {
+          // Bad request
+          if (err.response.status === 400) {
+            AppStore.data = {
+              submitting: false,
+              errors: true,
+              error_type: 'server',
+              show_message: true,
+              response: 'bad-request'
+            }
+          }
+          // Conflict
+          if (err.response.status === 409) {
+            AppStore.data = {
+              submitting: false,
+              errors: true,
+              error_type: 'server',
+              show_message: true,
+              response: 'email-in-use'
+            }
+          }
+          AppStore.emitChange()
+        }
         // Success
-        if (response.status === 'success') {
+        if (response && response.status === 'success') {
           const new_user = response.data
           AppStore.data = {
             status: 'success',
@@ -70,17 +93,9 @@ export default (user, password, confirm_password, redirect_to) => {
           }
           // Intercom
           Intercom.signup({ user: new_user }, () => {})
+          AppStore.emitChange()
           callback()
-        } else {
-          AppStore.data = {
-            submitting: false,
-            errors: true,
-            error_type: 'server',
-            show_message: true,
-            response: 'email-in-use'
-          }
         }
-        AppStore.emitChange()
       })
     },
     callback => {

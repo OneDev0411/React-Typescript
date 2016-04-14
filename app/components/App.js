@@ -82,7 +82,6 @@ export default class App extends Component {
     const data = AppStore.data
     socket.emit('Authenticate', data.user.access_token)
     socket.on('Message.Sent', (room, message) => {
-      // console.log('listen', message)
       const current_room = AppStore.data.current_room
       if (current_room.id === room.id) {
         if (message.author && data.user.id === message.author.id)
@@ -91,6 +90,8 @@ export default class App extends Component {
         const rooms = AppStore.data.rooms
         const current_room_index = _.findIndex(rooms, { id: current_room.id })
         AppStore.data.rooms[current_room_index].latest_message = message
+        if (!_.find(AppStore.data.rooms[current_room_index].messages, { id: message.id }))
+          AppStore.data.rooms[current_room_index].messages.push(message)
         AppStore.data.scroll_bottom = true
         AppStore.emitChange()
         if (message.author && data.user.id !== message.author.id)

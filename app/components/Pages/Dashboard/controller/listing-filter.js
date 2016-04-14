@@ -90,13 +90,13 @@ const controller = {
       // Property types
       if (filter_options.listing_types) {
         let property_subtypes = []
-        if (filter_options.listing_types.includes('house'))
+        if (filter_options.listing_types.indexOf('house') !== -1)
           property_subtypes.push('RES-Single Family')
-        if (filter_options.listing_types.includes('condo'))
+        if (filter_options.listing_types.indexOf('condo') !== -1)
           property_subtypes.push('RES-Condo')
-        if (filter_options.listing_types.includes('townhouse'))
+        if (filter_options.listing_types.indexOf('townhouse') !== -1)
           property_subtypes.push('RES-Townhouse')
-        if (filter_options.listing_types.includes('any'))
+        if (filter_options.listing_types.indexOf('any') !== -1)
           property_subtypes = ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse']
         options.property_subtypes = property_subtypes
       }

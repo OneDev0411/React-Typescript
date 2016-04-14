@@ -240,14 +240,17 @@ export default class Dashboard extends Component {
   handleContactFilter(message_input, type) {
     if (type === 'show') {
       const data = this.props.data
-      const contacts = data.contacts
+      const current_room = data.current_room
+      if (!current_room)
+        return
+      const contacts = current_room.users
       const message_arr = message_input.split('@')
       const filtered_contacts = contacts.filter(contact => {
-        if (contact.first_name && contact.first_name.toLowerCase().includes(message_arr[1].toLowerCase()))
+        if (contact.first_name && contact.first_name.toLowerCase().indexOf(message_arr[1].toLowerCase()) !== -1)
           return contact
-        if (contact.last_name && contact.last_name.toLowerCase().includes(message_arr[1].toLowerCase()))
+        if (contact.last_name && contact.last_name.toLowerCase().indexOf(message_arr[1].toLowerCase()) !== -1)
           return contact
-        if (contact.email && contact.email.toLowerCase().includes(message_arr[1].toLowerCase()))
+        if (contact.email && contact.email.toLowerCase().indexOf(message_arr[1].toLowerCase()) !== -1)
           return contact
         return false
       })
@@ -392,9 +395,9 @@ export default class Dashboard extends Component {
     })
     AppStore.emitChange()
   }
-
-  // TODO: Fix This for Arrow Keys
   navListingCarousel(index) {
+    if (!AppStore.data.current_listing)
+      return
     AppStore.data.current_listing.current_slide = index
     AppStore.emitChange()
   }

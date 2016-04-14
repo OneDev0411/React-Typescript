@@ -43,7 +43,7 @@ export default class ProfileImage extends Component {
     let online_indicator
     if (data.users_online && user.id !== me.id) {
       let bg_color = 'dddfe0'
-      if (data.users_online.includes(user.id))
+      if (data.users_online.indexOf(user.id) !== -1)
         bg_color = '35b863'
       online_indicator = <div style={ S('br-100 bg-' + bg_color + ' w-13 h-13 bw-2 solid bc-fff absolute z-100 t-3n r-1') }></div>
     }

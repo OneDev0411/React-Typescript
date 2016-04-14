@@ -35,7 +35,7 @@ module.exports = (app, config) => {
           status: 'error',
           response
         }
-        return res.json(error)
+        return res.status(response.status).json(error)
       }
       return response.json()
     })
