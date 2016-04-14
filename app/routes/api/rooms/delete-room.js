@@ -5,7 +5,7 @@ module.exports = (app, config) => {
     const endpoint = api_url + '/rooms/' + req.query.id
     fetch(endpoint,{
       method: 'delete',
-      headers: {  
+      headers: {
         'authorization': 'Bearer ' + req.query.access_token,
       }
     })
