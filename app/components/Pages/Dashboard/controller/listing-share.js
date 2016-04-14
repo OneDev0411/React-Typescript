@@ -40,6 +40,11 @@ const controller = {
       return
     }
     alert.title = title
+    const center = data.listing_map.center
+    alert.location = {
+      latitude: center.lat,
+      longitude: center.lng
+    }
     ListingDispatcher.dispatch({
       action: 'share-alert',
       user,
