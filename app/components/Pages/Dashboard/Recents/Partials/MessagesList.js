@@ -286,11 +286,44 @@ export default class MessagesList extends Component {
             {
               data.listing_alerts.map(listing_alert => {
                 const listing = listing_alert.listing
+                // Listing status
+                const status_color = listing_util.getStatusColor(listing.status)
+                let sold_date
+                if (listing.close_date) {
+                  const sold_date_obj = helpers.friendlyDate(listing.close_date)
+                  sold_date = `${sold_date_obj.month} ${sold_date_obj.date}, ${sold_date_obj.year}`
+                }
+                const underlay_style = {
+                  opacity: '.6',
+                  ...S('bg-000 relative t-11 br-100 ml-5 pt-11 h-25 pl-36 pr-10 mr-15')
+                }
+                const listing_status_indicator = (
+                  <div style={ S('relative z-1 t-10n') }>
+                    <div className="pull-left" style={ underlay_style }>
+                      <div style={ { opacity: '0' } }>
+                        <span style={ S('mr-5 font-46 l-10 t-10 absolute color-' + status_color) }>&#8226;</span>
+                        <span style={ S('font-14 relative t-5n color-fff') }>
+                          <b>{ listing.status } { sold_date }</b>
+                        </span>
+                      </div>
+                    </div>
+                    <div className="pull-left" style={ S('absolute t-8 br-100 ml-5 pt-11 h-25 pl-36 mr-15') }>
+                      <span style={ S('font-35 l-8 t-10n absolute color-' + status_color) }>&#8226;</span>
+                      <span style={ S('font-14 relative t-11n l-5n color-fff') }>
+                        <b>{ listing.status } { sold_date }</b>
+                      </span>
+                    </div>
+                  </div>
+                )
                 return (
                   <CarouselItem key={ 'gallery-image-' + listing.id }>
                     <div onClick={ this.props.showListingViewer.bind(this, listing) } style={ S('pointer w-100p h-300 text-center bg-efefef bg-cover bg-center bg-url(' + listing.cover_image_url + ')') }/>
                     <div style={ S('pointer mb-10') } onClick={ this.props.showListingViewer.bind(this, listing) }>
-                      <div style={ S('font-20 fw-700 mt-10') }>${ helpers.numberWithCommas(listing.price) }</div>
+                      <div style={ S('font-20 fw-700 mt-10') }>
+                        <div className="pull-left" style={ S('mr-5') }>${ helpers.numberWithCommas(listing.price) }</div>
+                        <div className="pull-left">{ listing_status_indicator }</div>
+                        <div className="clearfix"></div>
+                      </div>
                       <div style={ S('font-16 fw-700') }>{ listing_util.addressTitle(listing.property.address) }</div>
                       <div style={ S('font-14 color-929292') }>
                         { listing.property.bedroom_count } Beds&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
