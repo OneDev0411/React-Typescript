@@ -309,14 +309,10 @@ export default class MessagesList extends Component {
     let delete_area
     if (user.id === current_room.owner.id) {
       delete_area = (
-        <div>
-          <div>
-            <label>Delete</label>
-          </div>
-          <div>
-            <Button bsStyle="danger" onClick={ this.props.showDeleteRoomModal.bind(this) }>Delete room</Button>
-          </div>
-        </div>
+        <Modal.Footer>
+          <Button bsStyle="link" onClick={ this.props.hideModal }>Cancel</Button>
+          <Button bsStyle="danger" onClick={ this.props.showDeleteRoomModal.bind(this) }>Delete room</Button>
+        </Modal.Footer>
       )
     }
     return (
@@ -405,9 +401,8 @@ export default class MessagesList extends Component {
               })
             }
             </div>
-            { delete_area }
-            <div className="clearfix"></div>
           </Modal.Body>
+          { delete_area }
         </Modal>
         <Modal show={ data.show_alert_viewer } onHide={ this.props.hideAlertViewer }>
           <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
