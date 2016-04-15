@@ -7,7 +7,6 @@ const controller = {
     const current_room = data.current_room
     const user = data.user
     AppStore.data.show_alert_viewer = true
-    AppStore.emitChange()
     ListingDispatcher.dispatch({
       action: 'get-alert',
       user,
@@ -17,7 +16,14 @@ const controller = {
   },
   hideAlertViewer() {
     delete AppStore.data.show_alert_viewer
+    delete AppStore.data.alert_viewer
     delete AppStore.data.listing_alerts
+    AppStore.emitChange()
+  },
+  setAlertGalleryActiveIndex(active_index) {
+    if (!AppStore.data.alert_viewer)
+      AppStore.data.alert_viewer = {}
+    AppStore.data.alert_viewer.active_index = active_index
     AppStore.emitChange()
   }
 }

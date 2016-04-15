@@ -258,6 +258,7 @@ export default class MainContent extends Component {
                 showDeleteRoomModal={ this.props.showDeleteRoomModal }
                 hideDeleteRoomModal={ this.props.hideDeleteRoomModal }
                 confirmDeleteRoom={ this.props.confirmDeleteRoom }
+                setAlertGalleryActiveIndex={ this.props.setAlertGalleryActiveIndex }
               />
               { uploading_area }
               { create_message_area }
@@ -306,5 +307,6 @@ MainContent.propTypes = {
   hideAlertViewer: React.PropTypes.func,
   showDeleteRoomModal: React.PropTypes.func,
   hideDeleteRoomModal: React.PropTypes.func,
-  confirmDeleteRoom: React.PropTypes.func
+  confirmDeleteRoom: React.PropTypes.func,
+  setAlertGalleryActiveIndex: React.PropTypes.func
 }

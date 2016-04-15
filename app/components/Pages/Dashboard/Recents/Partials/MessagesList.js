@@ -20,7 +20,6 @@ import ProfileImage from '../../Partials/ProfileImage'
 import AddContactsModule from '../../Modules/AddContacts'
 
 export default class MessagesList extends Component {
-
   componentDidMount() {
     if (typeof window !== 'undefined') {
       const clipboard = require('clipboard')
@@ -136,6 +135,10 @@ export default class MessagesList extends Component {
     const messages_scroll_area = this.refs.messages_scroll_area
     if (messages_scroll_area.scrollTop === 0)
       this.props.getPreviousMessages(messages_scroll_area.scrollHeight)
+  }
+
+  handleAlertListingSelect(index) {
+    this.props.setAlertGalleryActiveIndex(index)
   }
 
   render() {
@@ -282,7 +285,7 @@ export default class MessagesList extends Component {
       alert_viewer_area = (
         <div>
           { img_cache }
-          <Carousel className="listing-viewer__carousel carousel--alert" interval={0} indicators={false} prevIcon={ prev_icon } nextIcon={ next_icon }>
+          <Carousel onSelect={ this.handleAlertListingSelect.bind(this) } className="listing-viewer__carousel carousel--alert" interval={0} indicators={false} prevIcon={ prev_icon } nextIcon={ next_icon }>
             {
               data.listing_alerts.map(listing_alert => {
                 const listing = listing_alert.listing
@@ -439,7 +442,7 @@ export default class MessagesList extends Component {
         </Modal>
         <Modal show={ data.show_alert_viewer } onHide={ this.props.hideAlertViewer }>
           <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
-           <Modal.Title>Alert { data.listing_alerts ? `(${data.listing_alerts.length} Homes)` : '' } </Modal.Title>
+           <Modal.Title>Alert { data.listing_alerts ? `(${ data.alert_viewer && data.alert_viewer.active_index ? data.alert_viewer.active_index + 1 : '1' } of ${data.listing_alerts.length} Homes)` : '' } </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             { alert_viewer_area }
@@ -481,5 +484,6 @@ MessagesList.propTypes = {
   hideAlertViewer: React.PropTypes.func,
   showDeleteRoomModal: React.PropTypes.func,
   hideDeleteRoomModal: React.PropTypes.func,
-  confirmDeleteRoom: React.PropTypes.func
+  confirmDeleteRoom: React.PropTypes.func,
+  setAlertGalleryActiveIndex: React.PropTypes.func
 }
