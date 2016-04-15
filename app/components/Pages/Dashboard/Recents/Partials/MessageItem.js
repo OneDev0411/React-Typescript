@@ -135,9 +135,7 @@ export default class MessageItem extends Component {
       if (listing.close_price)
         price = listing.close_price
       const card_style = {
-        ...S('w-500 mt-10 pointer'),
-        borderTopLeftRadius: '3px',
-        borderTopRightRadius: '3px',
+        ...S('w-500 mt-10 pointer border-1-solid-e7e4e3 br-3'),
         overflow: 'hidden'
       }
       // Listing status
@@ -171,9 +169,6 @@ export default class MessageItem extends Component {
       )
       const share_info_style = {
         ...S('pointer p-15 pt-10'),
-        borderLeft: '1px solid #e7e4e3',
-        borderRight: '1px solid #e7e4e3',
-        borderBottom: '1px solid #e7e4e3',
         borderBottomLeftRadius: '3px',
         borderBottomRightRadius: '3px'
       }
