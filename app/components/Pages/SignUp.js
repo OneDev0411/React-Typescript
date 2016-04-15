@@ -370,7 +370,7 @@ export default class SignUp extends Component {
           </div>
           <div style={ S('font-20 mb-20') }>All set, { data.new_user ? data.new_user.first_name : '' }! We’ll need to verify your<br /> email to make sure it’s you.</div>
           <div style={ S('font-14 mb-10') }>We sent you an email with your verification link. Please check your email: <span className="text-primary">{ data.new_user ? data.new_user.email : '' }</span>.</div>
-          <div>Wrong email? <a href="#" onClick={ this.showChangeEmailInput.bind(this) }>Change email</a>.</div>
+          { /* <div>Wrong email? <a href="#" onClick={ this.showChangeEmailInput.bind(this) }>Change email</a>.</div> */ }
           { /* new_email_area */ }
         </div>
       )

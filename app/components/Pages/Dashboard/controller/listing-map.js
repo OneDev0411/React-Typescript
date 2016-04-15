@@ -325,7 +325,10 @@ const controller = {
   },
   handleSearchInputChange() {
     const search_input_text = this.refs.search_input.value
-    AppStore.data.listing_map.search_input_text = search_input_text
+    if (!search_input_text.length)
+      delete AppStore.data.listing_map.has_search_input
+    else
+      AppStore.data.listing_map.search_input_text = search_input_text
     AppStore.emitChange()
   }
 }
