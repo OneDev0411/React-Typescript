@@ -27,10 +27,15 @@ export default class MessageItem extends Component {
     // Profile image
     let author
     let profile_image_div
-    if (message.author || alert) {
+    // Get author
+    if (message.author)
       author = message.author
-      if (alert)
-        author = alert.created_by
+    if (alert)
+      author = alert.created_by
+    // Test for listing without message
+    if (message.notification && message.notification.subjects && message.notification.subjects[0].type === 'user')
+      author = message.notification.subjects[0]
+    if (author) {
       profile_image_div = (
         <ProfileImage data={ data } user={ author }/>
       )

@@ -226,15 +226,15 @@ export default class ShareAlertModal extends Component {
     let filter_text
     if (share_modal && share_modal.filter_text)
       filter_text = share_modal.filter_text
-    // let email_btn_color = 'e5e5e5'
-    // let phone_number_btn_color = 'e5e5e5'
-    // if (share_modal) {
-    //   filter_text = share_modal.filter_text
-    //   if (share_modal.email_valid)
-    //     email_btn_color = '006aff'
-    //   if (share_modal.phone_number_valid)
-    //     phone_number_btn_color = '006aff'
-    // }
+    let email_btn_color = 'e5e5e5'
+    let phone_number_btn_color = 'e5e5e5'
+    if (share_modal) {
+      filter_text = share_modal.filter_text
+      if (share_modal.email_valid)
+        email_btn_color = '006aff'
+      if (share_modal.phone_number_valid)
+        phone_number_btn_color = '006aff'
+    }
     return (
       <Modal dialogClassName="modal-800" show={ listing_map && listing_map.show_share_modal } onHide={ controller.listing_map.hideModal } onShow={ this.onShow.bind(this) }>
         <Modal.Header closeButton style={ S('border-bottom-1-solid-f8f8f8') }>
@@ -259,22 +259,18 @@ export default class ShareAlertModal extends Component {
               { results }
               <div className="clearfix"></div>
             </div>
-            {
-              /*
-              <div className="form-group" style={ S('relative') }>
-                <img style={ S('absolute t-18 l-15') } src={`/images/dashboard/mls/share-alert/email${share_modal && share_modal.email_valid ? '-active' : ''}.svg`} />
-                <input ref="email" onKeyUp={ this.handleEmailChange.bind(this) } style={ S('pl-62 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send as an email"/>
-                <div onClick={ this.handleAddEmail.bind(this) } style={ S('pointer absolute font-18 r-15 t-11 color-' + email_btn_color) }>Add Email</div>
-                <div className="clearfix"></div>
-              </div>
-              <div className="form-group" style={ S('relative') }>
-                <img style={ S('absolute t-10 l-20') } src={`/images/dashboard/mls/share-alert/sms${share_modal && share_modal.phone_number_valid ? '-active' : ''}.svg`} />
-                <input ref="phone_number" onKeyUp={ this.handlePhoneNumberChange.bind(this) } style={ S('pl-62 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send an SMS"/>
-                <div onClick={ this.handleAddPhoneNumber.bind(this) } style={ S('pointer absolute font-18 r-15 t-11 color-' + phone_number_btn_color) }>Add Number</div>
-                <div className="clearfix"></div>
-              </div>
-              */
-            }
+            <div className="form-group" style={ S('relative') }>
+              <img style={ S('absolute t-18 l-15') } src={`/images/dashboard/mls/share-alert/email${share_modal && share_modal.email_valid ? '-active' : ''}.svg`} />
+              <input ref="email" onKeyUp={ this.handleEmailChange.bind(this) } style={ S('pl-62 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send as an email"/>
+              <div onClick={ this.handleAddEmail.bind(this) } style={ S('pointer absolute font-18 r-15 t-11 color-' + email_btn_color) }>Add Email</div>
+              <div className="clearfix"></div>
+            </div>
+            <div className="form-group" style={ S('relative') }>
+              <img style={ S('absolute t-10 l-20') } src={`/images/dashboard/mls/share-alert/sms${share_modal && share_modal.phone_number_valid ? '-active' : ''}.svg`} />
+              <input ref="phone_number" onKeyUp={ this.handlePhoneNumberChange.bind(this) } style={ S('pl-62 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send an SMS"/>
+              <div onClick={ this.handleAddPhoneNumber.bind(this) } style={ S('pointer absolute font-18 r-15 t-11 color-' + phone_number_btn_color) }>Add Number</div>
+              <div className="clearfix"></div>
+            </div>
             <div className="clearfix"></div>
           </div>
         </Modal.Body>
