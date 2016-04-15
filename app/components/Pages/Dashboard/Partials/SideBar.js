@@ -183,7 +183,16 @@ export default class SideBar extends Component {
     delete AppStore.data.current_listing
     AppStore.emitChange()
   }
-
+  handleChatNavClick() {
+    const data = this.props.data
+    const current_room = data.current_room
+    if (data.current_listing)
+      this.hideListingViewer()
+    if (current_room)
+      history.pushState(null, null, '/recents/' + current_room.id)
+    else
+      history.pushState(null, null, '/recents/')
+  }
   render() {
     // Data
     const data = this.props.data
@@ -381,7 +390,7 @@ export default class SideBar extends Component {
             </LinkContainer>
           </OverlayTrigger>
           <OverlayTrigger placement="right" overlay={ popover.conversation } delayShow={ 200 } delayHide={ 0 }>
-            <LinkContainer className={ active.recents } to="/dashboard/recents">
+            <LinkContainer onClick={ this.handleChatNavClick.bind(this) } className={ active.recents } to="/dashboard/recents">
               <NavItem style={ S('w-85p') }>
                 <img src={ active.recents ? '/images/dashboard/sidenav/chat-active.svg' : '/images/dashboard/sidenav/chat.svg' } style={ S('w-19 h-19') }/>
                 {this.notificationIcon('room_notification_count')}

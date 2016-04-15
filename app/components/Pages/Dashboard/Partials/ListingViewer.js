@@ -34,6 +34,7 @@ export default class ListingViewer extends Component {
     }
     this.fadeIn()
   }
+
   fadeIn() {
     const elem = ReactDOM.findDOMNode(this)
     elem.style.opacity = 0

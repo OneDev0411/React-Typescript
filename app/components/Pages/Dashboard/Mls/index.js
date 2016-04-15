@@ -63,7 +63,6 @@ export default class Mls extends Component {
   }
   componentWillUnmount() {
     controller.listing_map.hideModal()
-    controller.listing_viewer.hideListingViewer()
   }
   render() {
     const data = this.props.data

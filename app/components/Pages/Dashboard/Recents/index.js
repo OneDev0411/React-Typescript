@@ -371,11 +371,15 @@ export default class Dashboard extends Component {
     AppStore.data.show_listing_viewer = true
     AppStore.data.current_listing = listing
     delete AppStore.data.show_alert_viewer
+    history.pushState(null, null, '/dashboard/mls/' + listing.id)
     AppStore.emitChange()
   }
 
   hideListingViewer() {
+    const data = AppStore.data
+    const current_room = data.current_room
     delete AppStore.data.show_listing_viewer
+    history.pushState(null, null, '/dashboard/recents/' + current_room.id)
     AppStore.emitChange()
   }
 

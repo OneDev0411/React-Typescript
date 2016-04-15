@@ -20,6 +20,7 @@ const controller = {
   hideListingViewer() {
     delete AppStore.data.show_listing_viewer
     delete AppStore.data.current_listing
+    history.pushState(null, null, '/dashboard/mls')
     AppStore.emitChange()
   },
   showModalGallery(image_url) {
