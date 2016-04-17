@@ -13,6 +13,7 @@ import ListingViewer from '../Partials/ListingViewer'
 import ListingPanel from './Partials/ListingPanel'
 import FilterForm from './Partials/FilterForm'
 import ListingMarker from '../Partials/ListingMarker'
+import listing_util from '../../../../utils/listing'
 export default class Mls extends Component {
   componentWillMount() {
     const data = this.props.data
@@ -63,6 +64,24 @@ export default class Mls extends Component {
   }
   componentWillUnmount() {
     controller.listing_map.hideModal()
+  }
+  cacheImages() {
+    const data = this.props.data
+    const listing_map = data.listing_map
+    if (!listing_map)
+      return <div />
+    const listings = listing_map.listings
+    if (!listings)
+      return <div />
+    const cache_images = listings.map(listing => {
+      let resize_url
+      if (listing.cover_image_url)
+        resize_url = listing_util.getResizeUrl(listing.cover_image_url)
+      return (
+        <img key={ 'cache-image-' + listing.id } style={ S('absolute w-0 h-0 l-1000n') } src={ resize_url + '?w=160'} />
+      )
+    })
+    return cache_images
   }
   render() {
     const data = this.props.data
@@ -180,6 +199,7 @@ export default class Mls extends Component {
       <main>
         <SideBar data={ data }/>
         <div className={ main_class } style={ main_style }>
+          { this.cacheImages() }
           <nav style={ toolbar_style }>
             <div style={ S('pull-left mr-10') }>
               <form onSubmit={ controller.listing_map.handleSearchSubmit.bind(this) }>

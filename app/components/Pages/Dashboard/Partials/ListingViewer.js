@@ -117,9 +117,9 @@ export default class ListingViewer extends Component {
             gallery_chunks.map((gallery_image_url, i) => {
               return (
                 <CarouselItem className="listing-carousel__item" key={ 'gallery-image-' + gallery_image_url[0] + i }>
-                  <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[0]) } style={ S('border-right-1-solid-fff w-' + (viewer_width / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[0] + ')') }/>
-                  <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[1]) } style={ S('border-right-1-solid-fff w-' + (viewer_width / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[1] + ')') }/>
-                  <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[2]) } style={ S('w-' + (viewer_width / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[2] + ')') }/>
+                  <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[0]) } style={ S('border-right-1-solid-fff w-' + (viewer_width / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + listing_util.getResizeUrl(gallery_image_url[0]) + '?w=800)') }/>
+                  <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[1]) } style={ S('border-right-1-solid-fff w-' + (viewer_width / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + listing_util.getResizeUrl(gallery_image_url[1]) + '?w=800)') }/>
+                  <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[2]) } style={ S('w-' + (viewer_width / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + listing_util.getResizeUrl(gallery_image_url[2]) + '?w=800)') }/>
                 </CarouselItem>
               )
             })
@@ -128,7 +128,7 @@ export default class ListingViewer extends Component {
       )
       // Cache images for uninteruted scroll
       const listing_images_cached = gallery_image_urls.map((image_url, i) => {
-        return <img key={ 'image-' + i } src={ image_url } style={ S('w-0 h-0') }/>
+        return <img key={ 'image-' + i } src={ listing_util.getResizeUrl(image_url) + '?w=800' } style={ S('w-0 h-0') }/>
       })
       listing_title = `${listing.property.address.street_number} ${listing.property.address.street_name} ${listing.property.address.street_suffix}`
       listing_subtitle = `${listing.property.address.city}, ${listing.property.address.state} ${listing.property.address.postal_code}`

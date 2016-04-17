@@ -25,5 +25,14 @@ export default {
   },
   getDOM: dom_seconds => {
     return Math.floor((((new Date()).getTime() / 1000) - dom_seconds) / 86400)
+  },
+  getResizeUrl(full_size_url) {
+    if (!full_size_url)
+      return ''
+    let image_replace = full_size_url.replace('http://cdn.rechat.co/','')
+    image_replace = image_replace.replace('http://cdn.rechat.co/','')
+    image_replace = image_replace.replace('https://cdn.rechat.co/','')
+    image_replace = image_replace.replace('https://cdn.rechat.com/','')
+    return 'https://rechat.imgix.net/' + image_replace
   }
 }

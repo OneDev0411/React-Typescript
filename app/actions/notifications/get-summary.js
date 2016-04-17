@@ -13,7 +13,9 @@ export default (user) => {
     const summary = response.data
     // If user added to room
     if (summary.room_notification_summaries && summary.room_notification_summaries.length) {
-      const room_id = AppStore.data.current_room.id
+      let room_id
+      if (AppStore.data.current_room)
+        room_id = AppStore.data.current_room.id
       AppDispatcher.dispatch({
         action: 'get-rooms',
         user,

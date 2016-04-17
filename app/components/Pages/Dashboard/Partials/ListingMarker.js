@@ -32,10 +32,13 @@ export default class ListingMarker extends Component {
       const sold_date_obj = helpers.friendlyDate(listing.close_date)
       sold_date = `${sold_date_obj.month} ${sold_date_obj.date}, ${sold_date_obj.year}`
     }
+    let resize_url
+    if (listing.cover_image_url)
+      resize_url = listing_util.getResizeUrl(listing.cover_image_url)
     const listing_popup = (
       <div className={ popup_class } style={ S('absolute w-240 t-110n l-35n z-1000 bg-fff border-1-solid-929292') }>
         <div style={ S('pull-left mr-10') }>
-          <div style={ S(`w-80 h-80 bg-url(${listing.cover_image_url}) bg-cover bg-center`) }/>
+          <div style={ S(`w-80 h-80 bg-url(${ resize_url + '?w=160' }) bg-cover bg-center`) }/>
         </div>
         <div style={ S('pull-left pt-10') }>
           <div className="listing-map__marker__popup__title" style={ S('font-12 w-140') }>{ listing_util.addressTitle(address) }</div>
