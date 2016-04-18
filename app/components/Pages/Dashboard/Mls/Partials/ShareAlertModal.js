@@ -247,7 +247,7 @@ export default class ShareAlertModal extends Component {
             Too many matches!  Please zoom in or set more filters.
           </Modal.Body>
           <Modal.Footer style={ S('bg-f8f8f8') }>
-            <Button onClick={ controller.listing_map.hideModal } bsStyle="link">Cancel</Button>
+            <Button onClick={ controller.listing_map.hideModal } bsStyle="default">Ok</Button>
           </Modal.Footer>
         </Modal>
       )
