@@ -174,7 +174,10 @@ export default class ListingViewer extends Component {
         location_area = (
           <div>
             <Col xs={12}>
-              <h2>Location</h2>
+              <div style={ S('fw-600 font-18 mb-10') }>
+                Location
+                <div className="clearfix"></div>
+              </div>
             </Col>
             <div style={ S('relative w-100p pull-left') }>
               <GoogleMap
@@ -182,7 +185,7 @@ export default class ListingViewer extends Component {
                 key={ 'map' }
                 center={ { lat: latitude, lng: longitude } }
                 zoom={ 12 }
-                options={ { scrollwheel: false } }
+                options={ { scrollwheel: false, draggable: false } }
               >
                 <div
                   onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) }
@@ -198,7 +201,6 @@ export default class ListingViewer extends Component {
                     listing={ listing }
                     property={ listing.property }
                     address={ listing.property.address }
-                    context={ 'single' }
                   />
                 </div>
               </GoogleMap>
@@ -243,8 +245,13 @@ export default class ListingViewer extends Component {
               { agent_area }
             </Col>
             <div className="clearfix"></div>
+            <div style={ S('mb-20') }>
+              { location_area }
+              <div className="clearfix"></div>
+            </div>
             <div>
               <Col xs={12}>
+                <div style={ S('fw-600 font-18 mb-10') }>Description</div>
                 <div style={ S('color-4a4a4a font-18 mb-20 pr-30') }>{ description }</div>
               </Col>
               <div className="clearfix"></div>
@@ -253,7 +260,7 @@ export default class ListingViewer extends Component {
               <div style={ S('mb-15 font-15') }>
                 <div style={ S('pr-20') }>
                   <div style={ S('mb-20') }>
-                    <div style={ S('fw-600 font-18') }>Cost Breakdown</div>
+                    <div style={ S('fw-600 font-18 mb-10') }>Cost Breakdown</div>
                     <div style={ S('color-aaaaaa mb-10') }>
                       Price/sqt: <span style={ S('color-777') }>${ price_sq_foot }</span>
                     </div>
@@ -419,7 +426,7 @@ export default class ListingViewer extends Component {
                     </span>
                   </div>
                 </div>
-                <div style={ S('pr-20') }>
+                <div style={ S('pr-20 mb-20') }>
                   <div style={ S('fw-600 font-18 mb-10') }>Schools</div>
                   <div style={ S('color-aaaaaa mb-10') }>
                     School District: <span style={ S('color-777') }>{ property.school_district }</span>
@@ -437,8 +444,6 @@ export default class ListingViewer extends Component {
                 <div className="clearfix"></div>
               </div>
             </Col>
-            <div className="clearfix"></div>
-            { location_area }
             <div className="clearfix"></div>
           </div>
         </div>

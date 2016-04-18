@@ -157,8 +157,11 @@ export default class ShareListingModal extends Component {
         </div>
       )
     }
+    let message_input_width = ' w-100p'
+    if (data.is_mobile)
+      message_input_width = ' w-79p'
     const message_style = {
-      ...S('p-0 mb-5 border-1-solid-fff font-28 h-40 w-100p'),
+      ...S('p-0 mb-5 border-1-solid-fff font-28 h-40 w-100p' + message_input_width),
       outline: 'none'
     }
     const pill_style = S('bg-dadada color-4c7dbf pr-10 pl-10 pt-5 pb-5 br-3 pull-left mr-5 mb-5')
@@ -213,8 +216,11 @@ export default class ShareListingModal extends Component {
     }
     let items_added_area
     if (items_added_pills && items_added_pills.length) {
+      let items_area_width = ' w-550'
+      if (data.is_mobile)
+        items_area_width = ' w-100p'
       items_added_area = (
-        <div style={ S('w-550 pull-left') }>
+        <div style={ S('pull-left' + items_area_width) }>
           { items_added_pills }
         </div>
       )
@@ -231,8 +237,12 @@ export default class ShareListingModal extends Component {
       if (share_modal.phone_number_valid)
         phone_number_btn_color = '006aff'
     }
+    let dialog_class_name = 'modal-800'
+    // Check if mobile
+    if (data.is_mobile)
+      dialog_class_name = 'modal-mobile'
     return (
-      <Modal dialogClassName="modal-800" show={ data.show_share_listing_modal } onHide={ controller.listing_viewer.hideShareListingModal } onShow={ this.onShow.bind(this) }>
+      <Modal dialogClassName={ dialog_class_name } show={ data.show_share_listing_modal } onHide={ controller.listing_viewer.hideShareListingModal } onShow={ this.onShow.bind(this) }>
         <Modal.Header closeButton style={ S('border-bottom-1-solid-f8f8f8') }>
           <Modal.Title className="tempo" style={ S('font-36 ml-15') }>Share Listing</Modal.Title>
         </Modal.Header>
