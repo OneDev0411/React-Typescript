@@ -239,7 +239,7 @@ export default class ShareListingModal extends Component {
         <Modal.Body style={ S('p-30') }>
           <div style={ S('mb-20 h-100') }>
             <div style={ S('absolute mr-15') }>
-              <div style={ S(`w-100 h-100 bg-cover bg-center bg-url(${current_listing.cover_image_url})`) }/>
+              <div style={ S(`w-100 h-100 bg-cover bg-center bg-url(${ current_listing ? current_listing.cover_image_url : '' })`) }/>
             </div>
             <div style={ S('ml-115 w-85p') }>
               <input style={ message_style } ref="message" type="text" placeholder="Share message..." />

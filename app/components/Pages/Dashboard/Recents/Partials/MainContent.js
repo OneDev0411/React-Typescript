@@ -13,6 +13,9 @@ import DropzoneOverlay from '../../Partials/DropzoneOverlay'
 import ListingViewer from '../../Partials/ListingViewer'
 
 export default class MainContent extends Component {
+  componentDidMount() {
+    this.props.checkForMobile()
+  }
 
   componentDidUpdate() {
     const data = this.props.data
@@ -216,6 +219,21 @@ export default class MainContent extends Component {
           showShareListingModal={ this.props.showShareListingModal }
         />
       )
+      // Check for mobile
+      if (data.is_mobile) {
+        listing_viewer = (
+          <ListingViewerMobile
+            data={ data }
+            listing={ data.current_listing }
+            hideModal={ this.hideModal.bind(this) }
+            navListingCarousel={ this.props.navListingCarousel }
+            hideListingViewer={ this.props.hideListingViewer }
+            showModalGallery={ this.props.showModalGallery }
+            handleModalGalleryNav={ this.props.handleModalGalleryNav }
+            showShareListingModal={ this.props.showShareListingModal }
+          />
+        )
+      }
     }
     return (
       <div>
@@ -308,5 +326,6 @@ MainContent.propTypes = {
   showDeleteRoomModal: React.PropTypes.func,
   hideDeleteRoomModal: React.PropTypes.func,
   confirmDeleteRoom: React.PropTypes.func,
-  setAlertGalleryActiveIndex: React.PropTypes.func
+  setAlertGalleryActiveIndex: React.PropTypes.func,
+  checkForMobile: React.PropTypes.func
 }

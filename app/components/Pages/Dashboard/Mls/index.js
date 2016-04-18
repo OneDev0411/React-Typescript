@@ -10,6 +10,7 @@ import controller from '../controller'
 import SideBar from '../Partials/SideBar'
 import ShareAlertModal from './Partials/ShareAlertModal'
 import ListingViewer from '../Partials/ListingViewer'
+import ListingViewerMobile from '../Partials/ListingViewerMobile'
 import ListingPanel from './Partials/ListingPanel'
 import FilterForm from './Partials/FilterForm'
 import ListingMarker from '../Partials/ListingMarker'
@@ -61,6 +62,9 @@ export default class Mls extends Component {
       action: 'get-contacts',
       user
     })
+  }
+  componentDidMount() {
+    controller.mobile.checkForMobile()
   }
   componentWillUnmount() {
     controller.listing_map.hideModal()
@@ -131,7 +135,22 @@ export default class Mls extends Component {
           showShareListingModal={ controller.listing_viewer.showShareListingModal }
         />
       )
+      // Check for mobile
+      if (data.is_mobile) {
+        listing_viewer = (
+          <ListingViewerMobile
+            data={ data }
+            listing={ data.current_listing }
+            hideModal={ controller.listing_map.hideModal }
+            hideListingViewer={ controller.listing_viewer.hideListingViewer }
+            showModalGallery={ controller.listing_viewer.showModalGallery }
+            handleModalGalleryNav={ controller.listing_viewer.handleModalGalleryNav }
+            showShareListingModal={ controller.listing_viewer.showShareListingModal }
+          />
+        )
+      }
     }
+
     let main_class = 'listing-map'
     if (data.show_listing_panel)
       main_class = main_class + ' active'
@@ -195,6 +214,14 @@ export default class Mls extends Component {
     let search_input_text
     if (data.listing_map && data.listing_map.search_input_text)
       search_input_text = data.listing_map.search_input_text
+    let search_area = (
+      <form onSubmit={ controller.listing_map.handleSearchSubmit.bind(this) }>
+        <img src="/images/dashboard/mls/search.svg" style={ S('w-22 h-22 absolute l-18 t-18') } />
+        <input onChange={ controller.listing_map.handleSearchInputChange.bind(this) } value={ search_input_text } ref="search_input" className="form-control" type="text" style={ S('font-18 bg-dfe3e8 w-400 pull-left pl-40') } placeholder="Search location or MLS#" />
+      </form>
+    )
+    if (data.is_mobile)
+      search_area = ''
     let main_content = (
       <main>
         <SideBar data={ data }/>
@@ -202,10 +229,7 @@ export default class Mls extends Component {
           { this.cacheImages() }
           <nav style={ toolbar_style }>
             <div style={ S('pull-left mr-10') }>
-              <form onSubmit={ controller.listing_map.handleSearchSubmit.bind(this) }>
-                <img src="/images/dashboard/mls/search.svg" style={ S('w-22 h-22 absolute l-18 t-18') } />
-                <input onChange={ controller.listing_map.handleSearchInputChange.bind(this) } value={ search_input_text } ref="search_input" className="form-control" type="text" style={ S('font-18 bg-dfe3e8 w-400 pull-left pl-40') } placeholder="Search location or MLS#" />
-              </form>
+              { search_area }
             </div>
             <div style={ S('pull-left') }>
               <Button onClick={ controller.listing_filter.showFilterForm.bind(this, 'photos') } style={ { ...S('mr-10'), outline: 'none' } }>
