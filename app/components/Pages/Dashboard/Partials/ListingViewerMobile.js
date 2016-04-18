@@ -89,7 +89,7 @@ export default class ListingViewerMobile extends Component {
           {
             gallery_image_urls.map((gallery_image_url, i) => {
               return (
-                <div className="listing-carousel__item" key={ 'gallery-image-' + gallery_image_url + i }>
+                <div key={ 'gallery-image-' + gallery_image_url + i }>
                   <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url) } style={ S('w-100p h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + listing_util.getResizeUrl(gallery_image_url) + '?w=500)') }/>
                 </div>
               )
@@ -208,6 +208,7 @@ export default class ListingViewerMobile extends Component {
       main_content = (
         <div style={ S('bg-fff relative z-1000') }>
           <div style={ S('p-0 relative') }>
+            <div className="clearfix"></div>
             { listing_images }
             { listing_images_cached }
             <div className="clearfix"></div>

@@ -91,7 +91,10 @@ export default class Mls extends Component {
     const data = this.props.data
     const user = data.user
     const listing_map = data.listing_map
-    const main_style = S('absolute h-100p l-70')
+    let map_left
+    if (!data.is_mobile)
+      map_left = ' l-70'
+    const main_style = S('absolute h-100p' + map_left)
     let map_listing_markers
     let loading
     if (listing_map && listing_map.listings) {
@@ -222,9 +225,14 @@ export default class Mls extends Component {
     )
     if (data.current_listing)
       search_area = ''
+    let sidebar = (
+      <SideBar data={ data }/>
+    )
+    if (data.is_mobile)
+      sidebar = ''
     let main_content = (
       <main>
-        <SideBar data={ data }/>
+        { sidebar }
         <div className={ main_class } style={ main_style }>
           { this.cacheImages() }
           <nav style={ toolbar_style }>

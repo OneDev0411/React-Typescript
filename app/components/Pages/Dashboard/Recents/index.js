@@ -45,6 +45,7 @@ export default class Dashboard extends Component {
         room_id
       })
     })
+    controller.mobile.checkForMobile()
   }
 
   componentWillUpdate() {
