@@ -102,7 +102,7 @@ export default class ListingViewer extends Component {
       )
       // Cache images for uninteruted scroll
       const listing_images_cached = gallery_image_urls.map((image_url, i) => {
-        return <img key={ 'image-' + i } src={ listing_util.getResizeUrl(image_url) + '?w=800' } style={ S('w-0 h-0') }/>
+        return <img key={ 'image-' + i } src={ listing_util.getResizeUrl(image_url) + '?w=500' } style={ S('w-0 h-0') }/>
       })
       listing_title = `${listing.property.address.street_number} ${listing.property.address.street_name} ${listing.property.address.street_suffix}`
       listing_subtitle = `${listing.property.address.city}, ${listing.property.address.state} ${listing.property.address.postal_code}`
@@ -167,16 +167,10 @@ export default class ListingViewer extends Component {
       }
       let latitude
       let longitude
-      let center
-      let listing_map_small
       let location_area
       if (listing.property.address.location) {
         latitude = listing.property.address.location.latitude
         longitude = listing.property.address.location.longitude
-        center = {
-          lat: latitude,
-          lng: longitude
-        }
         location_area = (
           <div>
             <Col xs={12}>
@@ -210,32 +204,6 @@ export default class ListingViewer extends Component {
               </GoogleMap>
             </div>
           </div>
-        )
-        listing_map_small = (
-          <GoogleMap
-            style={ S('w-100p h-280') }
-            key={ 'map' }
-            center={ center }
-            zoom={ 12 }
-            options={ { scrollwheel: false } }
-          >
-            <div
-              onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) }
-              onMouseOut={ controller.listing_map.hideListingPopup.bind(this) }
-              onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }
-              style={ S('pointer mt-10') } lat={ latitude }
-              lng={ longitude }
-              text={'A'}
-            >
-              <ListingMarker
-                key={ 'listing-marker' + listing.id }
-                data={ data }
-                listing={ listing }
-                property={ listing.property }
-                address={ listing.property.address }
-              />
-            </div>
-          </GoogleMap>
         )
       }
       main_content = (
@@ -279,16 +247,13 @@ export default class ListingViewer extends Component {
               <Col xs={12}>
                 <div style={ S('color-4a4a4a font-18 mb-20 pr-30') }>{ description }</div>
               </Col>
-              <Col xs={12}>
-                { listing_map_small }
-              </Col>
               <div className="clearfix"></div>
             </div>
-            <Col style={ S('mt-20') } xs={12}>
-              <div style={ S('mb-30 font-15') }>
+            <Col xs={12}>
+              <div style={ S('mb-15 font-15') }>
                 <div style={ S('pr-20') }>
-                  <div style={ S('mb-30') }>
-                    <div style={ S('fw-600 mb-10 font-18') }>Cost Breakdown</div>
+                  <div style={ S('mb-20') }>
+                    <div style={ S('fw-600 font-18') }>Cost Breakdown</div>
                     <div style={ S('color-aaaaaa mb-10') }>
                       Price/sqt: <span style={ S('color-777') }>${ price_sq_foot }</span>
                     </div>
@@ -380,53 +345,51 @@ export default class ListingViewer extends Component {
               <div className="clearfix"></div>
               <div style={ S('font-15') }>
                 <div style={ S('pr-20') }>
-                  <div style={ S('mb-30') }>
-                    <div style={ S('fw-600 font-18 mb-10') }>All Features</div>
-                    <div style={ S('color-aaaaaa mb-10') }>
-                      Garage Spaces:&nbsp;
-                      <span style={ S('color-777') }>
-                        { property.parking_spaces_garage }
-                      </span>
-                    </div>
-                    <div style={ S('color-aaaaaa mb-10') }>
-                      Parking/Garage:&nbsp;
-                      <span style={ S('color-777') }>
-                        { property.parking_spaces_garage ? 'Yes' : 'No' }
-                      </span>
-                    </div>
-                    <div style={ S('color-aaaaaa mb-10') }>
-                      Interior Features:&nbsp;
-                      <span style={ S('color-777') }>
-                        {
-                          property.interior_features.map(item => {
-                            return <span key={ item }>{ item }, </span>
-                          })
-                        }
-                      </span>
-                    </div>
-                    <div style={ S('color-aaaaaa mb-10') }>
-                      Alarm/Security:&nbsp;
-                      <span style={ S('color-777') }>
-                        {
-                          property.security_features.map(item => {
-                            return <span key={ item }>{ item }, </span>
-                          })
-                        }
-                      </span>
-                    </div>
-                    <div style={ S('color-aaaaaa mb-10') }>
-                      Flooring:&nbsp;
-                      <span style={ S('color-777') }>
-                        {
-                          property.flooring.map(item => {
-                            return <span key={ item }>{ item }, </span>
-                          })
-                        }
-                      </span>
-                    </div>
+                  <div style={ S('fw-600 font-18 mb-10') }>All Features</div>
+                  <div style={ S('color-aaaaaa mb-10') }>
+                    Garage Spaces:&nbsp;
+                    <span style={ S('color-777') }>
+                      { property.parking_spaces_garage }
+                    </span>
+                  </div>
+                  <div style={ S('color-aaaaaa mb-10') }>
+                    Parking/Garage:&nbsp;
+                    <span style={ S('color-777') }>
+                      { property.parking_spaces_garage ? 'Yes' : 'No' }
+                    </span>
+                  </div>
+                  <div style={ S('color-aaaaaa mb-10') }>
+                    Interior Features:&nbsp;
+                    <span style={ S('color-777') }>
+                      {
+                        property.interior_features.map(item => {
+                          return <span key={ item }>{ item }, </span>
+                        })
+                      }
+                    </span>
+                  </div>
+                  <div style={ S('color-aaaaaa mb-10') }>
+                    Alarm/Security:&nbsp;
+                    <span style={ S('color-777') }>
+                      {
+                        property.security_features.map(item => {
+                          return <span key={ item }>{ item }, </span>
+                        })
+                      }
+                    </span>
+                  </div>
+                  <div style={ S('color-aaaaaa mb-10') }>
+                    Flooring:&nbsp;
+                    <span style={ S('color-777') }>
+                      {
+                        property.flooring.map(item => {
+                          return <span key={ item }>{ item }, </span>
+                        })
+                      }
+                    </span>
                   </div>
                 </div>
-                <div style={ S('pr-20') }>
+                <div style={ S('pr-20 mb-20') }>
                   <div style={ S('color-aaaaaa mb-10') }>
                     Exterior Features:&nbsp;
                     <span style={ S('color-777') }>
