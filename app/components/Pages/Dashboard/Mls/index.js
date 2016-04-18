@@ -220,7 +220,7 @@ export default class Mls extends Component {
         <input onChange={ controller.listing_map.handleSearchInputChange.bind(this) } value={ search_input_text } ref="search_input" className="form-control" type="text" style={ S('font-18 bg-dfe3e8 w-400 pull-left pl-40') } placeholder="Search location or MLS#" />
       </form>
     )
-    if (data.is_mobile)
+    if (data.current_listing)
       search_area = ''
     let main_content = (
       <main>

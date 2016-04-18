@@ -1,7 +1,7 @@
 // ListingViewer.js
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import { Col, Carousel, CarouselItem, Button } from 'react-bootstrap'
+import { Col, Button } from 'react-bootstrap'
 import S from 'shorti'
 import helpers from '../../../../utils/helpers'
 import listing_util from '../../../../utils/listing'
@@ -10,7 +10,8 @@ import ShareListingModal from './ShareListingModal'
 import ListingMarker from './ListingMarker'
 import controller from '../controller'
 import GoogleMap from 'google-map-react'
-export default class ListingViewer extends Component {
+import ReactSwipe from 'react-swipe'
+export default class ListingViewerMobile extends Component {
   componentDidMount() {
     this.fadeIn()
   }
@@ -48,8 +49,6 @@ export default class ListingViewer extends Component {
     let bathroom_count
     let square_feet
     let lot_size
-    let prev_icon
-    let next_icon
     let description
     let price
     let price_sq_foot
@@ -80,25 +79,23 @@ export default class ListingViewer extends Component {
       // lot_size_square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.lot_square_meters)))
       if (property.lot_size_area)
         lot_size = property.lot_size_area
-      prev_icon = '<'
-      next_icon = '>'
       description = property.description
       const gallery_image_urls = [
         listing.cover_image_url,
         ...listing.gallery_image_urls
       ]
       listing_images = (
-        <Carousel className="listing-viewer__carousel" interval={0} indicators={false} prevIcon={ prev_icon } nextIcon={ next_icon }>
+        <ReactSwipe className="carousel" swipeOptions={{ continuous: false }}>
           {
             gallery_image_urls.map((gallery_image_url, i) => {
               return (
-                <CarouselItem className="listing-carousel__item" key={ 'gallery-image-' + gallery_image_url + i }>
+                <div className="listing-carousel__item" key={ 'gallery-image-' + gallery_image_url + i }>
                   <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url) } style={ S('w-100p h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + listing_util.getResizeUrl(gallery_image_url) + '?w=500)') }/>
-                </CarouselItem>
+                </div>
               )
             })
           }
-        </Carousel>
+        </ReactSwipe>
       )
       // Cache images for uninteruted scroll
       const listing_images_cached = gallery_image_urls.map((image_url, i) => {
@@ -509,7 +506,7 @@ export default class ListingViewer extends Component {
     )
   }
 }
-ListingViewer.propTypes = {
+ListingViewerMobile.propTypes = {
   data: React.PropTypes.object,
   listing: React.PropTypes.object,
   hideModal: React.PropTypes.func,

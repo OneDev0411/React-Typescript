@@ -11,6 +11,7 @@ import Dropzone from 'react-dropzone'
 import ProfileImage from '../../Partials/ProfileImage'
 import DropzoneOverlay from '../../Partials/DropzoneOverlay'
 import ListingViewer from '../../Partials/ListingViewer'
+import ListingViewerMobile from '../../Partials/ListingViewerMobile'
 
 export default class MainContent extends Component {
   componentDidMount() {

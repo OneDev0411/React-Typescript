@@ -506,10 +506,15 @@ export default class Dashboard extends Component {
         </div>
       )
     }
+    let sidebar = (
+      <SideBar data={ data }/>
+    )
+    if (data.is_mobile)
+      sidebar = ''
     return (
       <div style={ S('minw-1000') }>
         <main>
-          <SideBar data={ data }/>
+          { sidebar }
           { main_content }
         </main>
         <audio ref="notif_sound" id="notif-sound">
