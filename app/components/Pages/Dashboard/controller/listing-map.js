@@ -141,6 +141,9 @@ const controller = {
     if (AppStore.data.listing_map)
       delete AppStore.data.listing_map.show_share_modal
     delete AppStore.data.show_modal_gallery
+    setTimeout(() => {
+      delete AppStore.data.share_modal
+    }, 500)
     AppStore.emitChange()
   },
   toggleDrawable() {
@@ -194,7 +197,13 @@ const controller = {
   showShareModal() {
     delete AppStore.data.share_modal
     delete AppStore.data.error
+    const total = AppStore.data.listing_map.listings_info.total
     AppStore.data.listing_map.show_share_modal = true
+    if (total >= 400) {
+      AppStore.data.share_modal = {
+        error: true
+      }
+    }
     AppStore.emitChange()
   },
   getValertsInArea(points) {

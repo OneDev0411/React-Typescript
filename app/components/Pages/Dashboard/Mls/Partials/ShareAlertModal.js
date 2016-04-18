@@ -10,7 +10,8 @@ import validator from 'validator'
 export default class ShareAlertModal extends Component {
   onShow() {
     setTimeout(() => {
-      this.refs.alert_title.focus()
+      if (this.refs.alert_title)
+        this.refs.alert_title.focus()
     }, 100)
   }
   shareAlert() {
@@ -234,6 +235,22 @@ export default class ShareAlertModal extends Component {
         email_btn_color = '006aff'
       if (share_modal.phone_number_valid)
         phone_number_btn_color = '006aff'
+    }
+    // If trying to share too many
+    if (share_modal && share_modal.error) {
+      return (
+        <Modal dialogClassName="modal-800" show={ listing_map && listing_map.show_share_modal } onHide={ controller.listing_map.hideModal } onShow={ this.onShow.bind(this) }>
+          <Modal.Header closeButton style={ S('border-bottom-1-solid-f8f8f8') }>
+            <Modal.Title className="tempo" style={ S('font-36 ml-15') }>Share Alert</Modal.Title>
+          </Modal.Header>
+          <Modal.Body style={ S('p-30') }>
+            Too many matches!  Please zoom in or set more filters.
+          </Modal.Body>
+          <Modal.Footer style={ S('bg-f8f8f8') }>
+            <Button onClick={ controller.listing_map.hideModal } bsStyle="link">Cancel</Button>
+          </Modal.Footer>
+        </Modal>
+      )
     }
     return (
       <Modal dialogClassName="modal-800" show={ listing_map && listing_map.show_share_modal } onHide={ controller.listing_map.hideModal } onShow={ this.onShow.bind(this) }>

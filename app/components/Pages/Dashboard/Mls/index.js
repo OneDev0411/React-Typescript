@@ -186,7 +186,7 @@ export default class Mls extends Component {
             &nbsp;&nbsp;&nbsp;<span style={ S('pointer') } onClick={ controller.listing_map.handleRemoveListings.bind(this) }>&times;</span>&nbsp;
           </span>
           <Button bsStyle="primary" type="button" onClick={ controller.listing_map.showShareModal.bind(this) }>
-            Share ({ listing_map.listings.length })
+            Share ({ listing_map.listings.length } of { listing_map.listings_info ? listing_map.listings_info.total : '' } results)
             &nbsp;&nbsp;<i className="fa fa-share"></i>
           </Button>
         </div>
