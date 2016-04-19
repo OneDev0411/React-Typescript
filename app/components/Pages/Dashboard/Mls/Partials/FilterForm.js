@@ -31,7 +31,6 @@ export default class FilterForm extends Component {
   }
   render() {
     const data = this.props.data
-    const filter_form_style = S('w-300 absolute bg-fff t-62 font-15 pb-100 h-' + (window.innerHeight - 62))
     const filter_scroll_area_style = {
       ...S('h-' + (window.innerHeight - 97)),
       overflowY: 'scroll'
@@ -79,6 +78,16 @@ export default class FilterForm extends Component {
       const friendly_sold_date = helpers.friendlyDate(filter_options.sold_date)
       sold_date_picker_text = `${friendly_sold_date.date} ${friendly_sold_date.month}`
     }
+    let filter_form_style = S('w-300 absolute bg-fff t-62 font-15 pb-100 h-' + (window.innerHeight - 62))
+    if (data.is_mobile) {
+      filter_form_style = {
+        ...filter_form_style,
+        ...S('t-49 r-0 z-100 h-' + (window.innerHeight - 49))
+      }
+      if (data.show_filter_form)
+        filter_form_class = ''
+    }
+    console.log(filter_form_style)
     return (
       <div className={ filter_form_class } style={ filter_form_style }>
         <form onSubmit={ this.props.setFilterOptions.bind(this) }>

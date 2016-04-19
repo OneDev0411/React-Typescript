@@ -233,11 +233,16 @@ export default class ListingPanel extends Component {
       )
     }
     const sortby_title = this.getSortingTitle()
+    let listing_panel_btn = (
+      <Button onClick={ this.props.toggleListingPanel.bind(this) } className={ button_class } style={ S('absolute z-1 pt-8 pb-8 h-40 w-40 mr-0') }>
+        { listing_panel_icon }
+      </Button>
+    )
+    if (data.is_mobile)
+      listing_panel_btn = null
     return (
       <div style={ listing_panel_wrap_style }>
-        <Button onClick={ this.props.toggleListingPanel.bind(this) } className={ button_class } style={ S('absolute z-1 pt-8 pb-8 h-40 w-40 mr-0') }>
-          { listing_panel_icon }
-        </Button>
+        { listing_panel_btn }
         <div style={ listing_panel_style } className={ panel_class }>
           <div>
             <div style={ S('pt-10 pl-15 pr-15 mb-10') }>

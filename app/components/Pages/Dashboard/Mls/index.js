@@ -91,10 +91,13 @@ export default class Mls extends Component {
     const data = this.props.data
     const user = data.user
     const listing_map = data.listing_map
-    let map_left
-    if (!data.is_mobile)
-      map_left = ' l-70'
-    const main_style = S('absolute h-100p' + map_left)
+    let main_style = S('absolute h-100p l-70')
+    if (data.is_mobile) {
+      main_style = {
+        ...main_style,
+        ...S('l-0 w-100p')
+      }
+    }
     let map_listing_markers
     let loading
     if (listing_map && listing_map.listings) {
@@ -208,7 +211,7 @@ export default class Mls extends Component {
             &nbsp;&nbsp;&nbsp;<span style={ S('pointer') } onClick={ controller.listing_map.handleRemoveListings.bind(this) }>&times;</span>&nbsp;
           </span>
           <Button bsStyle="primary" type="button" onClick={ controller.listing_map.showShareModal.bind(this) }>
-            Share ({ listing_map.listings.length } of { listing_map.listings_info ? listing_map.listings_info.total : '' } results)
+            Share ({ listing_map.listings_info ? listing_map.listings_info.total : '' } results)
             &nbsp;&nbsp;<i className="fa fa-share"></i>
           </Button>
         </div>
@@ -219,7 +222,7 @@ export default class Mls extends Component {
       search_input_text = data.listing_map.search_input_text
     let search_area = (
       <form onSubmit={ controller.listing_map.handleSearchSubmit.bind(this) }>
-        <img src="/images/dashboard/mls/search.svg" style={ S('w-22 h-22 absolute l-18 t-18') } />
+        <img onClick={ controller.listing_map.handleSearchSubmit.bind(this) } src="/images/dashboard/mls/search.svg" style={ S('pointer w-22 h-22 absolute l-18 t-18') } />
         <input onChange={ controller.listing_map.handleSearchInputChange.bind(this) } value={ search_input_text } ref="search_input" className="form-control" type="text" style={ S('font-18 bg-dfe3e8 w-400 pull-left pl-40') } placeholder="Search location or MLS#" />
       </form>
     )
@@ -230,36 +233,67 @@ export default class Mls extends Component {
     )
     if (data.is_mobile)
       sidebar = ''
+    let toolbar = (
+      <nav style={ toolbar_style }>
+        <div style={ S('pull-left mr-10') }>
+          { search_area }
+        </div>
+        <div style={ S('pull-left') }>
+          <Button onClick={ controller.listing_filter.showFilterForm.bind(this, 'photos') } style={ { ...S('mr-10'), outline: 'none' } }>
+            <img src={ `/images/dashboard/mls/filters${data.show_filter_form ? '-active' : ''}.svg` } style={ S('w-20 mr-10') }/>
+            <span className={ data.show_filter_form ? 'text-primary' : '' }>Filters</span>
+          </Button>
+          <Button onClick={ controller.listing_map.toggleDrawable.bind(this) } style={ { ...S('mr-10'), outline: 'none' } }>
+            <img src={ `/images/dashboard/mls/draw${data.listing_map && data.listing_map.drawable ? '-active' : ''}.svg` } style={ S('w-20') }/>
+          </Button>
+          <ButtonGroup style={ S('mr-10') }>
+            <Button style={ { outline: 'none' } } onClick={ controller.listing_panel.showPanelView.bind(this, 'list') }>
+              <img src={ `/images/dashboard/mls/list${data.listing_panel && data.listing_panel.view === 'list' ? '-active' : ''}.svg` } style={ S('w-20') }/>
+            </Button>
+            <Button style={ { outline: 'none' } } onClick={ controller.listing_panel.showPanelView.bind(this, 'photos') }>
+              <img src={ `/images/dashboard/mls/photos${data.listing_panel && data.listing_panel.view === 'photos' ? '-active' : ''}.svg` } style={ S('w-18') }/>
+            </Button>
+          </ButtonGroup>
+        </div>
+        { results_actions }
+      </nav>
+    )
+    if (data.is_mobile) {
+      search_area = (
+        <form onSubmit={ controller.listing_map.handleSearchSubmit.bind(this) }>
+          <img onClick={ controller.listing_map.handleSearchSubmit.bind(this) } src="/images/dashboard/mls/search.svg" style={ S('pointer w-22 h-22 absolute l-13 t-14') } />
+          <input onChange={ controller.listing_map.handleSearchInputChange.bind(this) } value={ search_input_text } ref="search_input" className="form-control" type="text" style={ S('font-18 bg-dfe3e8 w-200 pull-left pl-40') } placeholder="Search or MLS#" />
+        </form>
+      )
+      toolbar = (
+        <nav style={ S('border-bottom-1-solid-ccc p-5 absolute t-0 w-100p z-10 bg-fff') }>
+          <div style={ S('w-150 pull-left') }>
+            { search_area }
+          </div>
+          <div style={ S('pull-right') }>
+            <Button onClick={ controller.listing_map.toggleDrawable.bind(this) } style={ { ...S('mr-10'), outline: 'none' } }>
+              <img src={ `/images/dashboard/mls/draw${data.listing_map && data.listing_map.drawable ? '-active' : ''}.svg` } style={ S('w-20') }/>
+            </Button>
+            <Button onClick={ controller.listing_filter.showFilterForm.bind(this, 'photos') } style={ { outline: 'none' } }>
+              <img src={ `/images/dashboard/mls/filters${data.show_filter_form ? '-active' : ''}.svg` } style={ S('w-20 mr-10') }/>
+              <span className={ data.show_filter_form ? 'text-primary' : '' }>Filters</span>
+            </Button>
+          </div>
+          <div className="clearfix"></div>
+        </nav>
+      )
+    }
+    let map_wrapper_style = S('h-' + (window.innerHeight - 62))
+    if (data.is_mobile)
+      map_wrapper_style = S('h-100p')
     let main_content = (
       <main>
         { sidebar }
         <div className={ main_class } style={ main_style }>
           { this.cacheImages() }
-          <nav style={ toolbar_style }>
-            <div style={ S('pull-left mr-10') }>
-              { search_area }
-            </div>
-            <div style={ S('pull-left') }>
-              <Button onClick={ controller.listing_filter.showFilterForm.bind(this, 'photos') } style={ { ...S('mr-10'), outline: 'none' } }>
-                <img src={ `/images/dashboard/mls/filters${data.show_filter_form ? '-active' : ''}.svg` } style={ S('w-20 mr-10') }/>
-                <span className={ data.show_filter_form ? 'text-primary' : '' }>Filters</span>
-              </Button>
-              <Button onClick={ controller.listing_map.toggleDrawable.bind(this) } style={ { ...S('mr-10'), outline: 'none' } }>
-                <img src={ `/images/dashboard/mls/draw${data.listing_map && data.listing_map.drawable ? '-active' : ''}.svg` } style={ S('w-20') }/>
-              </Button>
-              <ButtonGroup style={ S('mr-10') }>
-                <Button style={ { outline: 'none' } } onClick={ controller.listing_panel.showPanelView.bind(this, 'list') }>
-                  <img src={ `/images/dashboard/mls/list${data.listing_panel && data.listing_panel.view === 'list' ? '-active' : ''}.svg` } style={ S('w-20') }/>
-                </Button>
-                <Button style={ { outline: 'none' } } onClick={ controller.listing_panel.showPanelView.bind(this, 'photos') }>
-                  <img src={ `/images/dashboard/mls/photos${data.listing_panel && data.listing_panel.view === 'photos' ? '-active' : ''}.svg` } style={ S('w-18') }/>
-                </Button>
-              </ButtonGroup>
-            </div>
-            { results_actions }
-          </nav>
+          { toolbar }
           { loading }
-          <div style={ S('h-' + (window.innerHeight - 62)) }>
+          <div style={ map_wrapper_style }>
             { remove_drawing_button }
             <GoogleMap
               key={ 'map-' + map_id }
