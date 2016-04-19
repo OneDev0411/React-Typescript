@@ -123,7 +123,7 @@ export default class Mls extends Component {
     }
     if (listing_map && listing_map.is_loading) {
       loading = (
-        <div style={ S('z-1 center-block relative h-0 w-400 t-20') }>
+        <div style={ S('z-1 center-block absolute h-0 w-400 t-60 z-1000') }>
           <div style={ S('bg-3388ff br-20 color-fff w-190 h-29 pt-5 center-block text-center') }>Loading MLS&reg; Listings...</div>
         </div>
       )
@@ -197,7 +197,7 @@ export default class Mls extends Component {
     if (data.show_listing_panel)
       zoom_right = 'r-860'
     const zoom_controls = (
-      <ButtonGroup className="transition" vertical style={ S('absolute b-25 ' + zoom_right) }>
+      <ButtonGroup className="transition" vertical style={ S('fixed b-25 ' + zoom_right) }>
         <Button bsSize="large" onClick={ controller.listing_map.handleZoomClick.bind(this, 'in') }><i style={ S('color-929292') } className="fa fa-plus"></i></Button>
         <Button bsSize="large" onClick={ controller.listing_map.handleZoomClick.bind(this, 'out') }><i style={ S('color-929292') } className="fa fa-minus"></i></Button>
       </ButtonGroup>
@@ -266,7 +266,7 @@ export default class Mls extends Component {
         </form>
       )
       toolbar = (
-        <nav style={ S('border-bottom-1-solid-ccc p-5 absolute t-0 w-100p z-10 bg-fff') }>
+        <nav style={ S('border-bottom-1-solid-ccc p-5 fixed t-0 w-100p z-10 bg-fff') }>
           <div style={ S('w-150 pull-left') }>
             { search_area }
           </div>
@@ -285,7 +285,7 @@ export default class Mls extends Component {
     }
     let map_wrapper_style = S('h-' + (window.innerHeight - 62))
     if (data.is_mobile)
-      map_wrapper_style = S('h-100p')
+      map_wrapper_style = S('fixed w-100p h-100p')
     let main_content = (
       <main>
         { sidebar }
