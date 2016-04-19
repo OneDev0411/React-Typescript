@@ -122,8 +122,15 @@ export default class Mls extends Component {
       })
     }
     if (listing_map && listing_map.is_loading) {
+      let loading_style = S('z-1 center-block relative h-0 w-400 t-20 z-1000')
+      if (data.is_mobile) {
+        loading_style = {
+          ...loading_style,
+          ...S('absolute t-60 z-1000')
+        }
+      }
       loading = (
-        <div style={ S('z-1 center-block absolute h-0 w-400 t-60 z-1000') }>
+        <div style={ loading_style }>
           <div style={ S('bg-3388ff br-20 color-fff w-190 h-29 pt-5 center-block text-center') }>Loading MLS&reg; Listings...</div>
         </div>
       )
