@@ -87,7 +87,6 @@ export default class FilterForm extends Component {
       if (data.show_filter_form)
         filter_form_class = ''
     }
-    console.log(filter_form_style)
     return (
       <div className={ filter_form_class } style={ filter_form_style }>
         <form onSubmit={ this.props.setFilterOptions.bind(this) }>
