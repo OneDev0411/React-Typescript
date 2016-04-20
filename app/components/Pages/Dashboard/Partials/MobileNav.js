@@ -257,7 +257,7 @@ export default class SideBar extends Component {
           size={ 80 }
           data={ data }
           user={ user }
-          font={ 50 }
+          font={ 40 }
           top={ 15 }
         />
       </Dropzone>
