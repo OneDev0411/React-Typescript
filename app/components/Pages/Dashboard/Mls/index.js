@@ -8,6 +8,7 @@ import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import controller from '../controller'
 import SideBar from '../Partials/SideBar'
+import MobileNav from '../Partials/MobileNav'
 import ShareAlertModal from './Partials/ShareAlertModal'
 import ListingViewer from '../Partials/ListingViewer'
 import ListingViewerMobile from '../Partials/ListingViewerMobile'
@@ -203,8 +204,11 @@ export default class Mls extends Component {
     let zoom_right = 'r-20'
     if (data.show_listing_panel)
       zoom_right = 'r-860'
+    let zoom_bottom = ' b-25'
+    if (data.is_mobile)
+      zoom_bottom = ' b-75'
     const zoom_controls = (
-      <ButtonGroup className="transition" vertical style={ S('fixed b-25 ' + zoom_right) }>
+      <ButtonGroup className="transition" vertical style={ S('fixed ' + zoom_right + zoom_bottom) }>
         <Button bsSize="large" onClick={ controller.listing_map.handleZoomClick.bind(this, 'in') }><i style={ S('color-929292') } className="fa fa-plus"></i></Button>
         <Button bsSize="large" onClick={ controller.listing_map.handleZoomClick.bind(this, 'out') }><i style={ S('color-929292') } className="fa fa-minus"></i></Button>
       </ButtonGroup>
@@ -235,11 +239,14 @@ export default class Mls extends Component {
     )
     if (data.current_listing)
       search_area = ''
-    let sidebar = (
+    let nav_area = (
       <SideBar data={ data }/>
     )
-    if (data.is_mobile)
-      sidebar = ''
+    if (data.is_mobile && user) {
+      nav_area = (
+        <MobileNav data={ data }/>
+      )
+    }
     let toolbar = (
       <nav style={ toolbar_style }>
         <div style={ S('pull-left mr-10') }>
@@ -295,7 +302,7 @@ export default class Mls extends Component {
       map_wrapper_style = S('fixed w-100p h-100p')
     let main_content = (
       <main>
-        { sidebar }
+        { nav_area }
         <div className={ main_class } style={ main_style }>
           { this.cacheImages() }
           { toolbar }
