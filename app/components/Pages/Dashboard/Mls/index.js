@@ -126,7 +126,7 @@ export default class Mls extends Component {
       if (data.is_mobile) {
         loading_style = {
           ...loading_style,
-          ...S('absolute t-60 z-1000')
+          ...S('fixed t-60 z-1000')
         }
       }
       loading = (
