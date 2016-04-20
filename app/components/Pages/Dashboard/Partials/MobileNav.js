@@ -248,13 +248,13 @@ export default class SideBar extends Component {
     let profile_image_area = (
       <Dropzone onMouseLeave={ this.hidePicOverlay.bind(this) } onMouseEnter={ this.showPicOverlay.bind(this) } multiple={ false } onDrop={ this.uploadProfilePic.bind(this) } type="button" style={ dropzone_style }>
         <div className={ overlay_class } style={ S('pointer') }>
-          <div style={ { ...S('absolute z-101 color-fff text-center t-20 w-70') } }>
+          <div style={ { ...S('absolute z-101 color-fff text-center t-20 w-80') } }>
             Edit<br />picture
           </div>
-          <div style={ { ...S('bg-100 br-100 absolute w-70 h-70 z-100 color-fff'), opacity: '.3' } }></div>
+          <div style={ { ...S('bg-100 br-100 absolute w-80 h-80 z-100 color-fff'), opacity: '.3' } }></div>
         </div>
         <ProfileImage
-          size={ 70 }
+          size={ 80 }
           data={ data }
           user={ user }
           font={ 50 }
@@ -298,19 +298,19 @@ export default class SideBar extends Component {
     }
     let form_fields = (
       <Col xs={ 9 }>
-        <Col xs={ 12 }>
+        <div>
           <label>First name</label>
           <Input ref="first_name" type="text" defaultValue={ user.first_name }/>
-        </Col>
-        <Col xs={ 12 }>
+        </div>
+        <div>
           <label>Last name</label>
           <Input ref="last_name" type="text" defaultValue={ user.last_name }/>
-        </Col>
-        <Col xs={ 12 }>
+        </div>
+        <div>
           <label>Email</label>
           <Input ref="email" type="text" defaultValue={ user.email }/>
-        </Col>
-        <Col xs={ 12 }>
+        </div>
+        <div>
           <label>Phone number</label>
           <div className="input-group">
             <div className="input-group-btn input-dropdown--country-codes">
@@ -318,7 +318,7 @@ export default class SideBar extends Component {
             </div>
             <MaskedInput className="form-control" ref="phone_number" type="text" defaultValue={ user.phone_number ? phone_number_parsed.phone_number : '' } mask="(999)-999-9999" maskChar="_"/>
           </div>
-        </Col>
+        </div>
         <div className="clearfix"></div>
         <Col style={ S('pr-0') } xs={ 12 }>{ message }</Col>
       </Col>
@@ -367,14 +367,14 @@ export default class SideBar extends Component {
           <img src="/images/dashboard/sidenav/transactions-active.svg"/>
         </div>
         <Nav bsStyle="tabs" justified>
-          <NavItem style={ S('w-60 pull-left') } onClick={ this.handleChatNavClick.bind(this) } className={ active.recents } to="/dashboard/recents">
+          <NavItem style={ S('w-60 pull-left') } onClick={ this.handleChatNavClick.bind(this) } className={ 'main-nav ' + active.recents } to="/dashboard/recents">
             <img src={ active.recents ? '/images/dashboard/sidenav/chat-active.svg' : '/images/dashboard/sidenav/chat.svg' } style={ S('w-19 h-19') }/>
             {this.notificationIcon('room_notification_count')}
           </NavItem>
-          <NavItem style={ S('w-60 pull-left') } className={ active.mls } to="/dashboard/mls">
+          <NavItem style={ S('w-60 pull-left') } className={ 'main-nav ' + active.mls } to="/dashboard/mls">
             <img src={ active.mls ? '/images/dashboard/sidenav/map-active.svg' : '/images/dashboard/sidenav/map.svg' } style={ S('w-19 h-19') }/>
           </NavItem>
-          <NavItem style={ S('w-60 t-5n absolute r-60') } onClick={ this.showIntercom }>
+          <NavItem class="main-nav" style={ S('w-60 t-5n absolute r-60') } onClick={ this.showIntercom }>
             <i className="fa fa-question" style={ S('font-20 color-263445 absolute t-22 l-26 z-100') }></i>
             <i className="fa fa-comment" style={ S('font-35 relative t-5 color-4D5C6C') }></i>
           </NavItem>
@@ -424,7 +424,7 @@ export default class SideBar extends Component {
               <Modal.Title style={ S('font-14') }>Edit Account Settings</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <Col xs={ 3 }>
+              <Col xs={ 3 } style={ S('pl-0') }>
                 <div className="pull-left">
                   { profile_image_area }
                 </div>

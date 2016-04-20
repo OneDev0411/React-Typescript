@@ -1,5 +1,9 @@
 // Mobile nav
 .mobile-nav {
+  .nav > li.main-nav > a:hover, .nav > li.main-nav > a:focus {
+    background-color: #263445 !important;
+    border: none !important;
+  }
   .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
     background-color: #263445 !important;
     border: none !important;
