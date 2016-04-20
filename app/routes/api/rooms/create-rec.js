@@ -4,6 +4,8 @@ module.exports = (app, config) => {
     const api_url = config.api.url
     const rooms = req.body.rooms
     const users = req.body.users
+    const emails = req.body.emails
+    const phone_numbers = req.body.phone_numbers
     const mls_number = req.body.mls_number
     const message = req.body.message
     const notification = req.body.notification
@@ -24,6 +26,10 @@ module.exports = (app, config) => {
       request_object.rooms = rooms
     if (users && rooms.users)
       request_object.users = users
+    if (emails)
+      request_object.emails = emails
+    if (phone_numbers)
+      request_object.phone_numbers = phone_numbers
     fetch(endpoint, {
       method: 'post',
       headers: {  

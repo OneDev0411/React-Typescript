@@ -259,11 +259,15 @@ export default {
     const endpoint = api_host + '/api/create-rec'
     const rooms = params.rooms
     const users = params.users
+    const emails = params.emails
+    const phone_numbers = params.phone_numbers
     const mls_number = params.mls_number
     const request_object = {
       access_token: params.access_token,
       rooms,
       users,
+      emails,
+      phone_numbers,
       mls_number,
       notification: params.notification,
       message: params.message

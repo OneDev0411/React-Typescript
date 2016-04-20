@@ -1,13 +1,15 @@
 // actions/listings/share-listing.js
 import Room from '../../models/Room'
 import AppStore from '../../stores/AppStore'
-export default (user, mls_number, message, rooms, users, emails_added, notification) => {
+export default (user, mls_number, message, rooms, users, emails, phone_numbers, notification) => {
   const params = {
     access_token: user.access_token,
     message,
     rooms,
     users,
     mls_number,
+    emails,
+    phone_numbers,
     notification
   }
   Room.createRec(params, () => {

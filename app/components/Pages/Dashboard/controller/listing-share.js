@@ -64,6 +64,7 @@ const controller = {
     const rooms = _.pluck(share_modal.rooms_added, 'id')
     const users = _.pluck(share_modal.contacts_added, 'id')
     const emails = share_modal.emails_added
+    const phone_numbers = share_modal.phone_numbers_added
     const message = this.refs.message.value.trim()
     AppStore.emitChange()
     ListingDispatcher.dispatch({
@@ -74,6 +75,7 @@ const controller = {
       rooms,
       users,
       emails,
+      phone_numbers,
       notification: true
     })
   }
