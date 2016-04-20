@@ -10,10 +10,10 @@ export default (user, rooms, contacts, emails, phone_numbers, alert) => {
   AppStore.emitChange()
   // Share w/ emails
   if (emails && emails.length) {
-    alert.emails = emails
     const params = {
       access_token: user.access_token,
-      alert
+      alert,
+      emails
     }
     Alert.create(params, () => {
       delete AppStore.data.listing_map.saving_alert
@@ -24,10 +24,10 @@ export default (user, rooms, contacts, emails, phone_numbers, alert) => {
   }
   // Share w/ phone_numbers
   if (phone_numbers && phone_numbers.length) {
-    alert.phone_numbers = phone_numbers
     const params = {
       access_token: user.access_token,
-      alert
+      alert,
+      phone_numbers
     }
     Alert.create(params, () => {
       delete AppStore.data.listing_map.saving_alert
