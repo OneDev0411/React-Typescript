@@ -2,7 +2,9 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import _ from 'lodash'
-import { Button, Modal, Alert } from 'react-bootstrap'
+import { Button, Modal, Alert, DropdownButton, MenuItem } from 'react-bootstrap'
+import { all_countries } from '../../../../../utils/country-data'
+import MaskedInput from 'react-input-mask'
 import controller from '../../controller'
 import ProfileImage from '../../Partials/ProfileImage'
 import helpers from '../../../../../utils/helpers'
@@ -43,12 +45,15 @@ export default class ShareAlertModal extends Component {
       this.refs.email.value = ''
   }
   handleAddPhoneNumber() {
-    const phone_number = this.refs.phone_number.value
+    const phone_number = this.refs.phone_number.refs.input.value
     if (!phone_number.trim())
       return
     this.props.handleAddPhoneNumber(phone_number)
     if (helpers.isValidPhoneNumber(phone_number))
-      this.refs.phone_number.value = ''
+      this.refs.phone_number.refs.input.value = ''
+  }
+  handleCountryCodeSelect(country) {
+    controller.share_modal.handleCountryCodeSelect(country)
   }
   render() {
     const data = this.props.data
@@ -252,6 +257,20 @@ export default class ShareAlertModal extends Component {
         </Modal>
       )
     }
+    let phone_country = `+1`
+    if (data.phone_country)
+      phone_country = `+${data.phone_country.dialCode}`
+    const country_codes = (
+      <DropdownButton title={ phone_country } id="input-dropdown-country-codes" style={ S('pt-12 pb-13') }>
+        <MenuItem key={ 1 } onClick={ this.handleCountryCodeSelect.bind(this, _.find(all_countries, { iso2: 'us' })) }>United States +1</MenuItem>
+        {
+          all_countries.map((country, i) => {
+            if (country.dialCode !== 1)
+              return <MenuItem onClick={ this.handleCountryCodeSelect.bind(this, country) } key={ country.iso2 + country.dialCode + i }>{ country.name } +{ country.dialCode }</MenuItem>
+          })
+        }
+      </DropdownButton>
+    )
     return (
       <Modal dialogClassName="modal-800" show={ listing_map && listing_map.show_share_modal } onHide={ controller.listing_map.hideModal } onShow={ this.onShow.bind(this) }>
         <Modal.Header closeButton style={ S('border-bottom-1-solid-f8f8f8') }>
@@ -283,9 +302,13 @@ export default class ShareAlertModal extends Component {
               <div className="clearfix"></div>
             </div>
             <div className="form-group" style={ S('relative') }>
-              <img style={ S('absolute t-10 l-20') } src={`/images/dashboard/mls/share-alert/sms${share_modal && share_modal.phone_number_valid ? '-active' : ''}.svg`} />
-              <input ref="phone_number" onKeyUp={ this.handlePhoneNumberChange.bind(this) } style={ S('pl-62 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send an SMS"/>
-              <div onClick={ this.handleAddPhoneNumber.bind(this) } style={ S('pointer absolute font-18 r-15 t-11 color-' + phone_number_btn_color) }>Add Number</div>
+              <div onClick={ this.handleAddPhoneNumber.bind(this) } style={ S('pointer z-100 absolute font-18 r-15 t-11 color-' + phone_number_btn_color) }>Add Number</div>
+              <div className="input-group input-group-lg">
+                <div className="input-group-btn input-dropdown--country-codes">
+                  { country_codes }
+                </div>
+                <MaskedInput ref="phone_number" placeholder="Add phone number" onKeyUp={ this.handlePhoneNumberChange.bind(this) } className="form-control" type="text" mask="(999)-999-9999" maskChar="_"/>
+              </div>
               <div className="clearfix"></div>
             </div>
             <div className="clearfix"></div>
