@@ -26,9 +26,9 @@ module.exports = (app, config) => {
       request_object.rooms = rooms
     if (users && rooms.users)
       request_object.users = users
-    if (emails)
+    if (emails && emails.length)
       request_object.emails = emails
-    if (phone_numbers)
+    if (phone_numbers && phone_numbers.length)
       request_object.phone_numbers = phone_numbers
     fetch(endpoint, {
       method: 'post',

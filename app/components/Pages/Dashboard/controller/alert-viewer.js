@@ -3,6 +3,8 @@ import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 const controller = {
   showAlertViewer(alert_id) {
+    delete AppStore.data.error
+    AppStore.emitChange()
     const data = AppStore.data
     const current_room = data.current_room
     const user = data.user

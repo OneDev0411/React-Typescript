@@ -143,8 +143,19 @@ const controller = {
       AppStore.emitChange()
       return
     }
-    controller.addToShareList('phone_number', phone_number)
+    let country_code = '+1'
+    if (AppStore.data.phone_country)
+      country_code = '+' + AppStore.data.phone_country.dialCode
+    controller.addToShareList('phone_number', country_code + phone_number)
     delete AppStore.data.share_modal.phone_number_valid
+    delete AppStore.data.phone_country
+    AppStore.emitChange()
+  },
+  handleCountryCodeSelect(country) {
+    AppStore.data.phone_country = {
+      iso2: country.iso2,
+      dialCode: country.dialCode
+    }
     AppStore.emitChange()
   },
   handleRemoveShareItem(type, item) {

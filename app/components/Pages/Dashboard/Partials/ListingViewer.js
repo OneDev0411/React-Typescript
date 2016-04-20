@@ -543,7 +543,7 @@ export default class ListingViewer extends Component {
             gallery_image_urls.map((gallery_image_url, i) => {
               return (
                 <CarouselItem key={ 'gallery-image-' + gallery_image_url[0] + i }>
-                  <div style={ S('w-100p h-500 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url + ')') }/>
+                  <div style={ S('w-100p h-500 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + listing_util.getResizeUrl(gallery_image_url) + '?w=800)') }/>
                 </CarouselItem>
               )
             })
