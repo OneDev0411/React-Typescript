@@ -157,10 +157,17 @@ export default class RoomsList extends Component {
       overflow: 'scroll',
       height: window.innerHeight - 70
     }
+    let list_style = S('pl-0')
+    if (data.is_mobile) {
+      list_style = {
+        ...list_style,
+        ...S('mb-70')
+      }
+    }
     return (
       <div>
         <div style={ rooms_scroll_area }>
-          <ul style={ S('pl-0') }>{ rooms_list }</ul>
+          <ul style={ list_style }>{ rooms_list }</ul>
         </div>
       </div>
     )
