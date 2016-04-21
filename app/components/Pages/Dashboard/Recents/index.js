@@ -516,8 +516,11 @@ export default class Dashboard extends Component {
         <MobileNav data={ data }/>
       )
     }
+    let main_style = S('minw-1000')
+    if (data.is_mobile)
+      main_style = S('w-' + window.innerWidth)
     return (
-      <div style={ S('minw-1000') }>
+      <div style={ main_style }>
         <main>
           { nav_area }
           { main_content }
@@ -526,7 +529,7 @@ export default class Dashboard extends Component {
           <source src="/audio/ding.mp3" type="audio/mpeg" />
         </audio>
         { file_viewer }
-        <Modal show={ data.show_create_chat_modal } onHide={ this.hideModal.bind(this) } onShow={ this.onModalShow.bind(this) }>
+        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_create_chat_modal } onHide={ this.hideModal.bind(this) } onShow={ this.onModalShow.bind(this) }>
           <form onSubmit={ this.createRoom.bind(this) }>
             <Modal.Header closeButton>
               <Modal.Title>Start a new chat</Modal.Title>
