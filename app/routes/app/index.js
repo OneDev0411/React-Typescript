@@ -60,6 +60,10 @@ module.exports = (app, config) => {
       const date = new Date
       res.locals.time = date.getTime()
       AppStore.data.user = req.session.user
+      AppStore.data.path = req.url
+      AppStore.data.location = {
+        pathname: req.url
+      }
       res.locals.AppStore = JSON.stringify(AppStore)
       return res.status(200).render('index.html')
     } else {

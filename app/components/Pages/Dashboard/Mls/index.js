@@ -123,11 +123,11 @@ export default class Mls extends Component {
       })
     }
     if (listing_map && listing_map.is_loading) {
-      let loading_style = S('z-1 center-block relative h-0 w-400 t-20 z-1000')
+      let loading_style = S('z-1 center-block relative h-0 w-400 t-20 z-2')
       if (data.is_mobile) {
         loading_style = {
           ...loading_style,
-          ...S('fixed t-60 z-1000')
+          ...S('fixed t-60')
         }
       }
       loading = (

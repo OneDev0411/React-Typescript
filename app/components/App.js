@@ -194,7 +194,7 @@ export default class App extends Component {
     if (typeof window !== 'undefined' && window.AppStore) {
       const server_data = window.AppStore.data
       // merge into client
-      data = { ...data, ...server_data }
+      data = { ...server_data, ...data }
     }
     const Routes = React.cloneElement(this.props.children, { data })
     return Routes
