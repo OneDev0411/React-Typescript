@@ -374,7 +374,7 @@ export default class SideBar extends Component {
           <NavItem style={ S('w-60 pull-left') } className={ 'main-nav ' + active.mls } to="/dashboard/mls">
             <img src={ active.mls ? '/images/dashboard/sidenav/map-active.svg' : '/images/dashboard/sidenav/map.svg' } style={ S('w-19 h-19') }/>
           </NavItem>
-          <NavItem class="main-nav" style={ S('w-60 t-5n absolute r-80') } onClick={ this.showIntercom }>
+          <NavItem className="main-nav" style={ S('w-60 t-5n absolute r-80') } onClick={ this.showIntercom }>
             <i className="fa fa-question" style={ S('font-20 color-263445 absolute t-22 l-26 z-100') }></i>
             <i className="fa fa-comment" style={ S('font-35 relative t-5 color-4D5C6C') }></i>
           </NavItem>
