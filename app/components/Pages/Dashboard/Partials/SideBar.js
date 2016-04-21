@@ -189,9 +189,9 @@ export default class SideBar extends Component {
     if (data.current_listing)
       this.hideListingViewer()
     if (current_room)
-      history.pushState(null, null, '/recents/' + current_room.id)
+      history.pushState(null, null, '/dashboard/recents/' + current_room.id)
     else
-      history.pushState(null, null, '/recents/')
+      history.pushState(null, null, '/dashboard/recents/')
   }
   render() {
     // Data

@@ -236,6 +236,26 @@ export default class MainContent extends Component {
         )
       }
     }
+    // Mobile
+    if (data.is_mobile) {
+      const main_style_mobile = S('w-' + window.innerWidth)
+      return (
+        <div style={ main_style_mobile }>
+          <div style={ S('p-10 pt-15 h-60 relative') }>
+            <img style={ S('w-12 h-12 absolute l-20 t-28') } src="/images/dashboard/chats/search.svg" />
+            <input ref="search_text" onKeyUp={ this.handleSearchRoomKeyUp.bind(this) } style={ S('w-82p br-100 pl-30') } type="text" placeholder="Search chats" className="form-control pull-left" />
+            <button onClick={ this.props.showModal.bind(this, 'create-chat') } type="button" className="btn btn-primary" style={ S('w-40 h-40 pointer absolute p-0 t-14 r-10 br-100') }>
+              <img src="/images/dashboard/icons/create-chat.svg"/>
+            </button>
+            <div className="clearfix"></div>
+          </div>
+          <RoomsList
+            setCurrentRoom={ this.props.setCurrentRoom }
+            data={ data }
+          />
+        </div>
+      )
+    }
     return (
       <div>
         <Dropzone

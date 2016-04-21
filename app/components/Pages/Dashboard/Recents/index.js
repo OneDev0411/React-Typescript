@@ -7,6 +7,7 @@ import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import controller from '../controller'
 import SideBar from '../Partials/SideBar'
+import MobileNav from '../Partials/MobileNav'
 import MainContent from './Partials/MainContent'
 import FileViewer from './Partials/FileViewer'
 
@@ -507,15 +508,18 @@ export default class Dashboard extends Component {
         </div>
       )
     }
-    let sidebar = (
+    let nav_area = (
       <SideBar data={ data }/>
     )
-    if (data.is_mobile)
-      sidebar = ''
+    if (data.is_mobile && data.user) {
+      nav_area = (
+        <MobileNav data={ data }/>
+      )
+    }
     return (
       <div style={ S('minw-1000') }>
         <main>
-          { sidebar }
+          { nav_area }
           { main_content }
         </main>
         <audio ref="notif_sound" id="notif-sound">

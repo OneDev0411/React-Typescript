@@ -189,9 +189,9 @@ export default class SideBar extends Component {
     if (data.current_listing)
       this.hideListingViewer()
     if (current_room)
-      history.pushState(null, null, '/recents/' + current_room.id)
+      history.pushState(null, null, '/dashboard/recents/' + current_room.id)
     else
-      history.pushState(null, null, '/recents/')
+      history.pushState(null, null, '/dashboard/recents/')
   }
   render() {
     // Data
@@ -367,13 +367,17 @@ export default class SideBar extends Component {
           <img src="/images/dashboard/sidenav/transactions-active.svg"/>
         </div>
         <Nav bsStyle="tabs" justified>
-          <NavItem style={ S('w-60 pull-left') } onClick={ this.handleChatNavClick.bind(this) } className={ 'main-nav ' + active.recents } to="/dashboard/recents">
-            <img src={ active.recents ? '/images/dashboard/sidenav/chat-active.svg' : '/images/dashboard/sidenav/chat.svg' } style={ S('w-19 h-19') }/>
-            {this.notificationIcon('room_notification_count')}
-          </NavItem>
-          <NavItem style={ S('w-60 pull-left') } className={ 'main-nav ' + active.mls } to="/dashboard/mls">
-            <img src={ active.mls ? '/images/dashboard/sidenav/map-active.svg' : '/images/dashboard/sidenav/map.svg' } style={ S('w-19 h-19') }/>
-          </NavItem>
+          <LinkContainer className={ 'main-nav ' + active.recents } to="/dashboard/recents">
+            <NavItem style={ S('w-60 pull-left') } onClick={ this.handleChatNavClick.bind(this) }>
+              <img src={ active.recents ? '/images/dashboard/sidenav/chat-active.svg' : '/images/dashboard/sidenav/chat.svg' } style={ S('w-19 h-19') }/>
+              {this.notificationIcon('room_notification_count')}
+            </NavItem>
+          </LinkContainer>
+          <LinkContainer className={ 'main-nav ' + active.mls } to="/dashboard/mls">
+            <NavItem style={ S('w-60 pull-left') }>
+              <img src={ active.mls ? '/images/dashboard/sidenav/map-active.svg' : '/images/dashboard/sidenav/map.svg' } style={ S('w-19 h-19') }/>
+            </NavItem>
+          </LinkContainer>
           <NavItem className="main-nav" style={ S('w-60 t-5n absolute r-80') } onClick={ this.showIntercom }>
             <i className="fa fa-question" style={ S('font-20 color-263445 absolute t-22 l-26 z-100') }></i>
             <i className="fa fa-comment" style={ S('font-35 relative t-5 color-4D5C6C') }></i>
