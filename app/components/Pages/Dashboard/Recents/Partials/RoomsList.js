@@ -119,11 +119,13 @@ export default class RoomsList extends Component {
 
         // Notifications
         let notification
-        if (data.notifications) {
+        if (!data.notifications) {
           const hasNotification = this.roomHasNotifications(room.id)
           if (hasNotification) {
             notification = (
-              <i className="fa fa-circle" style={ S('font-8 color-3388FF absolute r-15n') }></i>
+              <div style={ S('absolute r-15 w-0 h-0') }>
+                <i className="fa fa-circle" style={ S('font-8 color-3388FF z-10') }></i>
+              </div>
             )
           }
         }
@@ -154,7 +156,8 @@ export default class RoomsList extends Component {
     }
     const rooms_scroll_area = {
       ...S('mt-5'),
-      overflow: 'scroll',
+      overflowY: 'scroll',
+      overflowX: 'hidden',
       height: window.innerHeight - 70
     }
     let list_style = S('pl-0')
