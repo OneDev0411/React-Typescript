@@ -133,8 +133,8 @@ export default class SideBar extends Component {
     if (data.notifications && data.notifications.summary[name] > 0) {
       icon = (
         <div style={ S('pl-10 absolute t-0 r-0') }>
-          <div style={ S('font-15 bg-db3821 br-100 p-5 w-16 h-16 text-center') }>
-            <span style={ S('color-fff font-8 relative t-10n') }>
+          <div style={ S('font-15 bg-db3821 br-100 p-5 h-15 text-center') }>
+            <span style={ S('color-fff font-10 relative t-9n') }>
               { data.notifications.summary.room_notification_count }
             </span>
           </div>
