@@ -119,7 +119,7 @@ export default class RoomsList extends Component {
 
         // Notifications
         let notification
-        if (!data.notifications) {
+        if (data.notifications) {
           const hasNotification = this.roomHasNotifications(room.id)
           if (hasNotification) {
             notification = (
