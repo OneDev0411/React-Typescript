@@ -132,7 +132,13 @@ export default class SideBar extends Component {
     let icon
     if (data.notifications && data.notifications.summary[name] > 0) {
       icon = (
-        <i className="fa fa-circle" style={ S('pl-10 font-8 color-3388FF absolute') }></i>
+        <div style={ S('pl-10 absolute t-0 r-0') }>
+          <div style={ S('font-15 bg-db3821 br-100 p-5 w-17 h-17 text-center') }>
+            <span style={ S('color-fff font-8 relative t-10n') }>
+              { data.notifications.summary.room_notification_count }
+            </span>
+          </div>
+        </div>
       )
     }
     return icon
