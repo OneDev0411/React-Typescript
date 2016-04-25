@@ -264,8 +264,11 @@ export default class MessagesList extends Component {
     if (data.heading_date) {
       const fixed_date_obj = helpers.friendlyDate(data.heading_date)
       const fixed_heading_date = `${fixed_date_obj.day}, ${fixed_date_obj.month} ${fixed_date_obj.date}, ${fixed_date_obj.year}`
+      let heading_top = 't-60'
+      if (data.is_mobile)
+        heading_top = 't-55'
       fixed_heading_date_area = (
-        <div className="heading-fixed" style={ S('absolute w-98p z-3 t-60 pl-20 pr-5 pb-0 bg-fff') }>
+        <div className="heading-fixed" style={ S('absolute w-98p z-3 pl-20 pr-5 pb-0 bg-fff ' + heading_top) }>
           <div className="message-heading" style={ { ...heading_style, ...S('m-0') } }>{ fixed_heading_date }</div>
         </div>
       )
@@ -352,8 +355,11 @@ export default class MessagesList extends Component {
       )
     }
     let messages_mb = 'mb-40'
-    if (data.is_mobile)
+    let heading_pt = 'pt-0'
+    if (data.is_mobile) {
       messages_mb = 'mb-80'
+      heading_pt = 'pt-15'
+    }
     return (
       <div>
         <button onClick={ this.props.showModal.bind(this, 'invite-user') } type="button" className="btn btn-default" style={ btn_invite_style } >
@@ -362,7 +368,7 @@ export default class MessagesList extends Component {
         <button onClick={ this.props.showModal.bind(this, 'settings') } type="button" className="btn btn-default" style={ btn_settings_style } >
           <i style={ S('font-16 relative t-1') } className="fa fa-cog"></i>
         </button>
-        <h3 style={ S('mt-0 ml-20 mr-50') }>{ current_room.title }</h3>
+        <h3 style={ S('mt-0 ml-20 mr-50 ' + heading_pt) }>{ current_room.title }</h3>
         { fixed_heading_date_area }
         <div ref="messages_scroll_area" style={ messages_scroll_area } onScroll={ this.handleScroll.bind(this) }>
           { loading_previous }
