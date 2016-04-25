@@ -186,6 +186,8 @@ export default class SideBar extends Component {
   handleChatNavClick() {
     const data = this.props.data
     const current_room = data.current_room
+    delete AppStore.data.current_room_mobile
+    AppStore.emitChange()
     if (data.current_listing)
       this.hideListingViewer()
     if (current_room)

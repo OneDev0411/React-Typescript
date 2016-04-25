@@ -117,8 +117,11 @@ export default class MessageItem extends Component {
     // Sharing a listing
     if (recommendation) {
       const listing = recommendation.listing
+      let card_width = 'w-500'
+      if (data.is_mobile)
+        card_width = 'w-280'
       const placeholder_style = {
-        ...S('w-400 h-100 w-500 bg-efefef color-ccc font-40 relative z-0'),
+        ...S('w-400 h-100 bg-efefef color-ccc font-40 relative z-0 ' + card_width),
         borderTopLeftRadius: '3px',
         borderTopRightRadius: '3px'
       }
@@ -132,7 +135,7 @@ export default class MessageItem extends Component {
       if (listing && listing.cover_image_url) {
         const cover_image_url = message.recommendation.listing.cover_image_url
         message_image = (
-          <div style={ S('w-500 h-200 bg-url(' + cover_image_url + ') bg-cover bg-center') }></div>
+          <div style={ S('h-200 bg-url(' + cover_image_url + ') bg-cover bg-center ' + card_width) }></div>
         )
       }
       // Hide recommendation notification message
@@ -140,7 +143,7 @@ export default class MessageItem extends Component {
       if (listing.close_price)
         price = listing.close_price
       const card_style = {
-        ...S('w-500 mt-10 pointer border-1-solid-e7e4e3 br-3'),
+        ...S('mt-10 pointer border-1-solid-e7e4e3 br-3' + card_width),
         overflow: 'hidden'
       }
       // Listing status
@@ -180,7 +183,7 @@ export default class MessageItem extends Component {
       return (
         <div className="message-item" style={ S('relative mb-15 pt-5 font-15') }>
           <div style={ S('mt-5 pull-left') }>{ profile_image_div }</div>
-          <div className="pull-left" style={ S('ml-55') }>
+          <div className="pull-left" style={ S('ml-55 ' + card_width) }>
             <b>{ first_name || 'Rebot' }</b>
             <span style={ S('color-ccc ml-20') } >
               { time_created.month } { time_created.date }, { time_created.time_friendly }

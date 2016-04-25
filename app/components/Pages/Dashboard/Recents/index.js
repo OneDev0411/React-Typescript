@@ -83,6 +83,8 @@ export default class Dashboard extends Component {
     AppStore.data.current_room = current_room
     AppStore.data.messages = current_room.messages
     AppStore.data.scroll_bottom = true
+    if (AppStore.data.is_mobile)
+      AppStore.data.current_room_mobile = current_room
     AppStore.emitChange()
     history.pushState(null, null, '/dashboard/recents/' + current_room.id)
   }

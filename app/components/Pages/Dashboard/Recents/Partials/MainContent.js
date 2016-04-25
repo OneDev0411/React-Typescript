@@ -6,6 +6,7 @@ import RoomsList from './RoomsList'
 import MessagesList from './MessagesList'
 import _ from 'lodash'
 import Dropzone from 'react-dropzone'
+import controller from '../../controller'
 
 // Partials
 import ProfileImage from '../../Partials/ProfileImage'
@@ -96,7 +97,14 @@ export default class MainContent extends Component {
       height: window.innerHeight,
       width: window.innerWidth - 391
     }
-    const footer_style = S('absolute w-100p l-0 b-0 r-0 p-20 pb-10')
+    let footer_style = S('absolute w-100p l-0 b-0 r-0 p-20 pb-10')
+    // Mobile footer
+    if (data.is_mobile) {
+      footer_style = {
+        ...footer_style,
+        ...S('b-50')
+      }
+    }
     let is_typing
     if (data.is_typing && data.is_typing.author_id !== data.user.id && data.is_typing.room_id === data.current_room.id) {
       // Get user name
@@ -238,24 +246,64 @@ export default class MainContent extends Component {
     }
     // Mobile
     if (data.is_mobile) {
+      if (data.show_listing_viewer) {
+        return (
+          <ListingViewerMobile
+            data={ data }
+            listing={ data.current_listing }
+            hideModal={ controller.listing_map.hideModal }
+            hideListingViewer={ controller.listing_viewer.hideListingViewer }
+            showModalGallery={ controller.listing_viewer.showModalGallery }
+            handleModalGalleryNav={ controller.listing_viewer.handleModalGalleryNav }
+            showShareListingModal={ controller.listing_viewer.showShareListingModal }
+          />
+        )
+      }
+      if (!data.current_room_mobile) {
+        const main_style_mobile = S('w-' + window.innerWidth)
+        return (
+          <div style={ main_style_mobile }>
+            <div style={ S('p-10 pt-15 h-60 relative') }>
+              <img style={ S('w-12 h-12 absolute l-20 t-28') } src="/images/dashboard/chats/search.svg" />
+              <input ref="search_text" onKeyUp={ this.handleSearchRoomKeyUp.bind(this) } style={ S('w-82p br-100 pl-30') } type="text" placeholder="Search chats" className="form-control pull-left" />
+              <button onClick={ this.props.showModal.bind(this, 'create-chat') } type="button" className="btn btn-primary" style={ S('w-40 h-40 pointer absolute p-0 t-14 r-10 br-100') }>
+                <img src="/images/dashboard/icons/create-chat.svg"/>
+              </button>
+              <div className="clearfix"></div>
+            </div>
+            <RoomsList
+              setCurrentRoom={ this.props.setCurrentRoom }
+              data={ data }
+            />
+          </div>
+        )
+      }
+      // Messages
       const main_style_mobile = S('w-' + window.innerWidth)
       return (
         <div style={ main_style_mobile }>
-          <div style={ S('p-10 pt-15 h-60 relative') }>
-            <img style={ S('w-12 h-12 absolute l-20 t-28') } src="/images/dashboard/chats/search.svg" />
-            <input ref="search_text" onKeyUp={ this.handleSearchRoomKeyUp.bind(this) } style={ S('w-82p br-100 pl-30') } type="text" placeholder="Search chats" className="form-control pull-left" />
-            <button onClick={ this.props.showModal.bind(this, 'create-chat') } type="button" className="btn btn-primary" style={ S('w-40 h-40 pointer absolute p-0 t-14 r-10 br-100') }>
-              <img src="/images/dashboard/icons/create-chat.svg"/>
-            </button>
-            <div className="clearfix"></div>
-          </div>
-          <RoomsList
-            setCurrentRoom={ this.props.setCurrentRoom }
+          <MessagesList
             data={ data }
+            getPreviousMessages={ this.props.getPreviousMessages }
+            showModal={ this.props.showModal.bind(this) }
+            addContactsToRoom={ this.props.addContactsToRoom }
+            hideModal={ this.hideModal.bind(this) }
+            showFileViewer={ this.props.showFileViewer }
+            setHeadingDate={ this.props.setHeadingDate }
+            removeScrollBottom={ this.props.removeScrollBottom }
+            showListingViewer={ this.props.showListingViewer }
+            changeListingNotification={ this.props.changeListingNotification }
+            showAlertViewer={ this.props.showAlertViewer }
+            hideAlertViewer={ this.props.hideAlertViewer }
+            showDeleteRoomModal={ this.props.showDeleteRoomModal }
+            hideDeleteRoomModal={ this.props.hideDeleteRoomModal }
+            confirmDeleteRoom={ this.props.confirmDeleteRoom }
+            setAlertGalleryActiveIndex={ this.props.setAlertGalleryActiveIndex }
           />
+          { create_message_area }
         </div>
       )
-    }
+    } // end mobile
     return (
       <div>
         <Dropzone
