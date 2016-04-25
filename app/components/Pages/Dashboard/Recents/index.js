@@ -209,7 +209,6 @@ export default class Dashboard extends Component {
     window.is_typing_timeout = setTimeout(() => {
       this.sendTypingEnded()
     }, 3000)
-    AppStore.emitChange()
   }
 
   handleContactFilterNav(direction) {
