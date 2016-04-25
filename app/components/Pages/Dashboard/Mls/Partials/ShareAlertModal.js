@@ -55,6 +55,27 @@ export default class ShareAlertModal extends Component {
   handleCountryCodeSelect(country) {
     controller.share_modal.handleCountryCodeSelect(country)
   }
+  isSharable() {
+    const data = this.props.data
+    const share_modal = data.share_modal
+    if (share_modal) {
+      const rooms_added = share_modal.rooms_added
+      const contacts_added = share_modal.contacts_added
+      const emails_added = share_modal.emails_added
+      const phone_numbers_added = share_modal.phone_numbers_added
+      if (rooms_added && rooms_added.length)
+        return true
+      if (contacts_added && contacts_added.length)
+        return true
+      if (rooms_added && rooms_added.length)
+        return true
+      if (emails_added && emails_added.length)
+        return true
+      if (phone_numbers_added && phone_numbers_added.length)
+        return true
+    }
+    return false
+  }
   render() {
     const data = this.props.data
     const listing_map = data.listing_map
@@ -318,7 +339,7 @@ export default class ShareAlertModal extends Component {
           { message }
           { items_added_area }
           <Button onClick={ controller.listing_map.hideModal } bsStyle="link">Cancel</Button>
-          <Button className={ listing_map && listing_map.saving_alert ? 'disabled' : '' } bsStyle="primary" onClick={ this.shareAlert.bind(this) }>{ listing_map && !listing_map.saving_alert ? 'Share Alert' : 'Sending...' }&nbsp;&nbsp;<i className="fa fa-share"></i></Button>
+          <Button className={ listing_map && listing_map.saving_alert || !this.isSharable() ? 'disabled' : '' } bsStyle="primary" onClick={ this.shareAlert.bind(this) }>{ listing_map && !listing_map.saving_alert ? 'Share Alert' : 'Sending...' }&nbsp;&nbsp;<i className="fa fa-share"></i></Button>
         </Modal.Footer>
       </Modal>
     )

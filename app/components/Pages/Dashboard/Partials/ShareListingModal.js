@@ -50,6 +50,27 @@ export default class ShareListingModal extends Component {
   handleCountryCodeSelect(country) {
     controller.share_modal.handleCountryCodeSelect(country)
   }
+  isSharable() {
+    const data = this.props.data
+    const share_modal = data.share_modal
+    if (share_modal) {
+      const rooms_added = share_modal.rooms_added
+      const contacts_added = share_modal.contacts_added
+      const emails_added = share_modal.emails_added
+      const phone_numbers_added = share_modal.phone_numbers_added
+      if (rooms_added && rooms_added.length)
+        return true
+      if (contacts_added && contacts_added.length)
+        return true
+      if (rooms_added && rooms_added.length)
+        return true
+      if (emails_added && emails_added.length)
+        return true
+      if (phone_numbers_added && phone_numbers_added.length)
+        return true
+    }
+    return false
+  }
   render() {
     const data = this.props.data
     const current_listing = data.current_listing
@@ -306,7 +327,7 @@ export default class ShareListingModal extends Component {
           { message }
           { items_added_area }
           <Button onClick={ controller.listing_viewer.hideShareListingModal } bsStyle="link">Cancel</Button>
-          <Button className={ share_modal && share_modal.sending_share ? 'disabled' : '' } bsStyle="primary" onClick={ controller.listing_share.shareListing.bind(this) }>{ share_modal && !share_modal.sending_share ? 'Share Listing' : 'Sending...' }&nbsp;&nbsp;<i className="fa fa-share"></i></Button>
+          <Button className={ share_modal && share_modal.sending_share || !this.isSharable() ? 'disabled' : '' } bsStyle="primary" onClick={ controller.listing_share.shareListing.bind(this) }>{ share_modal && !share_modal.sending_share ? 'Share Listing' : 'Sending...' }&nbsp;&nbsp;<i className="fa fa-share"></i></Button>
         </Modal.Footer>
       </Modal>
     )

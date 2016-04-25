@@ -16,15 +16,17 @@ const controller = {
     let emails_added
     let phone_numbers_added
     if (share_modal) {
-      if (share_modal.rooms_added)
+      if (share_modal.rooms_added && share_modal.rooms_added.length)
         rooms_added = share_modal.rooms_added
-      if (share_modal.contacts_added)
+      if (share_modal.contacts_added && share_modal.contacts_added.length)
         contacts_added = share_modal.contacts_added
-      if (share_modal.emails_added)
+      if (share_modal.emails_added && share_modal.emails_added.length)
         emails_added = share_modal.emails_added
-      if (share_modal.phone_numbers_added)
+      if (share_modal.phone_numbers_added && share_modal.phone_numbers_added.length)
         phone_numbers_added = share_modal.phone_numbers_added
     }
+    if (!rooms_added && !contacts_added && !emails_added && !phone_numbers_added)
+      return
     if (!title) {
       AppStore.data.error = {
         message: 'You must name this alert.'
@@ -58,14 +60,16 @@ const controller = {
   shareListing() {
     const data = AppStore.data
     const user = data.user
-    AppStore.data.share_modal.sending_share = true
     const current_listing = AppStore.data.current_listing
     const share_modal = AppStore.data.share_modal
     const rooms = _.pluck(share_modal.rooms_added, 'id')
     const users = _.pluck(share_modal.contacts_added, 'id')
     const emails = share_modal.emails_added
     const phone_numbers = share_modal.phone_numbers_added
+    if (!rooms || !rooms.length && !users || !users.length && !emails || !emails.length && !phone_numbers || !phone_numbers.length)
+      return
     const message = this.refs.message.value.trim()
+    AppStore.data.share_modal.sending_share = true
     AppStore.emitChange()
     ListingDispatcher.dispatch({
       action: 'share-listing',
