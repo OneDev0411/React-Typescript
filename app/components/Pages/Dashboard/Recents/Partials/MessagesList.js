@@ -415,7 +415,7 @@ export default class MessagesList extends Component {
             </Button>
           </Modal.Footer>
         </Modal>
-        <Modal show={ data.show_settings_modal } onHide={ this.props.hideModal }>
+        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_settings_modal } onHide={ this.props.hideModal }>
           <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
            <Modal.Title style={ S('font-14') }>Room settings</Modal.Title>
           </Modal.Header>
