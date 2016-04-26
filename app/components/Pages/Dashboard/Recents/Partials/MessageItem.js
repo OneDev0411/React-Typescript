@@ -59,6 +59,9 @@ export default class MessageItem extends Component {
 
     // Message image
     let message_image
+    let message_thumb_size = 'w-400 h-300'
+    if (data.is_mobile)
+      message_thumb_size = 'w-250 h-200'
     if (message.attachments.length) {
       const attachments = message.attachments
       const attachment = attachments[0]
@@ -68,7 +71,7 @@ export default class MessageItem extends Component {
       // If image
       if (ext.indexOf('png') !== -1 || ext.indexOf('jpg') !== -1 || ext.indexOf('gif') !== -1) {
         message_thumb = (
-          <div style={ S('w-400 h-300 br-3 bg-url(' + file_url + ') bg-cover bg-center mb-10') }></div>
+          <div style={ S(message_thumb_size + ' br-3 bg-url(' + file_url + ') bg-cover bg-center mb-10') }></div>
         )
       } else {
         message_thumb = (
@@ -121,7 +124,7 @@ export default class MessageItem extends Component {
       if (data.is_mobile)
         card_width = 'w-280'
       const placeholder_style = {
-        ...S('w-400 h-100 bg-efefef color-ccc font-40 relative z-0 ' + card_width),
+        ...S(message_thumb_size + ' bg-efefef color-ccc font-40 relative z-0 ' + card_width),
         borderTopLeftRadius: '3px',
         borderTopRightRadius: '3px'
       }
