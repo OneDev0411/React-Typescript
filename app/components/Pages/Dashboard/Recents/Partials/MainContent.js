@@ -208,8 +208,11 @@ export default class MainContent extends Component {
       let upload_percent = 0
       if (data.current_room.upload_percent)
         upload_percent = data.current_room.upload_percent
+      let progress_bar_style = S('p-20 w-100p relative t-35n')
+      if (data.is_mobile)
+        progress_bar_style = S('p-20 w-100p absolute b-78 z-10')
       uploading_area = (
-        <div style={ S('p-20 w-100p relative t-35n')}>
+        <div style={ progress_bar_style }>
           <ProgressBar active striped bsStyle="success" now={ upload_percent } />
         </div>
       )
@@ -300,6 +303,7 @@ export default class MainContent extends Component {
             confirmDeleteRoom={ this.props.confirmDeleteRoom }
             setAlertGalleryActiveIndex={ this.props.setAlertGalleryActiveIndex }
           />
+          { uploading_area }
           { create_message_area }
         </div>
       )
