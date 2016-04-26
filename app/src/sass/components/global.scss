@@ -7,3 +7,6 @@ body,
 .intercom-launcher {
   display: none !important;
 }
+.touch-scroll {
+  -webkit-overflow-scrolling: touch;
+}

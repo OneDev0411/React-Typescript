@@ -169,7 +169,7 @@ export default class RoomsList extends Component {
     }
     return (
       <div>
-        <div style={ rooms_scroll_area }>
+        <div className="touch-scroll" style={ rooms_scroll_area }>
           <ul style={ list_style }>{ rooms_list }</ul>
         </div>
       </div>

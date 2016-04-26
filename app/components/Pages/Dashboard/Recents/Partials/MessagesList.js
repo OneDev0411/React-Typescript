@@ -370,7 +370,7 @@ export default class MessagesList extends Component {
         </button>
         <h3 style={ S('mt-0 ml-20 mr-50 ' + heading_pt) }>{ current_room.title }</h3>
         { fixed_heading_date_area }
-        <div ref="messages_scroll_area" style={ messages_scroll_area } onScroll={ this.handleScroll.bind(this) }>
+        <div className="touch-scroll" ref="messages_scroll_area" style={ messages_scroll_area } onScroll={ this.handleScroll.bind(this) }>
           { loading_previous }
           <ul style={ S('pl-0 ' + messages_mb) }>{ messages_list_items }</ul>
         </div>
