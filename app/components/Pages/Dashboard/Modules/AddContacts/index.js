@@ -364,11 +364,14 @@ export default class AddContactsModule extends Component {
         </div>
       )
     }
+    let add_button_style = S('w-120')
+    if (data.is_mobile)
+      add_button_style = S('w-100p mt-10')
     return (
       <div style={ module_style } className="add-contact-form">
         <div style={ S('maxw-820') }>
           <Input ref="search_contacts" onKeyDown={ this.navContactList.bind(this) } onKeyUp={ this.filterContacts.bind(this) } className="pull-left" style={ search_contact_input_style } type="text" placeholder="Enter any name, email or phone number"/>
-          <Button className="pull-left" style={ S('w-120') } bsStyle="primary" onClick={ this.handleButtonClick.bind(this) }>
+          <Button className="pull-left" style={ add_button_style } bsStyle="primary" onClick={ this.handleButtonClick.bind(this) }>
             Add
           </Button>
         </div>
