@@ -62,11 +62,21 @@ const controller = {
     const user = data.user
     const current_listing = AppStore.data.current_listing
     const share_modal = AppStore.data.share_modal
-    const rooms = _.pluck(share_modal.rooms_added, 'id')
-    const users = _.pluck(share_modal.contacts_added, 'id')
-    const emails = share_modal.emails_added
-    const phone_numbers = share_modal.phone_numbers_added
-    if (!rooms || !rooms.length && !users || !users.length && !emails || !emails.length && !phone_numbers || !phone_numbers.length)
+    let rooms_added
+    let contacts_added
+    let emails_added
+    let phone_numbers_added
+    if (share_modal) {
+      if (share_modal.rooms_added && share_modal.rooms_added.length)
+        rooms_added = _.pluck(share_modal.rooms_added, 'id')
+      if (share_modal.contacts_added && share_modal.contacts_added.length)
+        contacts_added = _.pluck(share_modal.contacts_added, 'id')
+      if (share_modal.emails_added && share_modal.emails_added.length)
+        emails_added = share_modal.emails_added
+      if (share_modal.phone_numbers_added && share_modal.phone_numbers_added.length)
+        phone_numbers_added = share_modal.phone_numbers_added
+    }
+    if (!rooms_added && !contacts_added && !emails_added && !phone_numbers_added)
       return
     const message = this.refs.message.value.trim()
     AppStore.data.share_modal.sending_share = true
@@ -76,10 +86,10 @@ const controller = {
       user,
       mls_number: current_listing.mls_number,
       message,
-      rooms,
-      users,
-      emails,
-      phone_numbers,
+      rooms: rooms_added,
+      users: contacts_added,
+      emails: emails_added,
+      phone_numbers: phone_numbers_added,
       notification: true
     })
   }
