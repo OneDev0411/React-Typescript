@@ -216,7 +216,10 @@ export default class AddContactsModule extends Component {
       overflow: 'scroll'
     }
     let module_style = S('relative')
-    let search_contact_input_style = S('w-600 mr-15')
+    let search_input_width = 'w-600'
+    if (data.is_mobile)
+      search_input_width = 'w-100p'
+    let search_contact_input_style = S(search_input_width + ' mr-15')
 
     // If transaction edit
     if (module_type === 'transaction') {
@@ -234,10 +237,11 @@ export default class AddContactsModule extends Component {
         ...module_style,
         ...S('w-100p')
       }
-      search_contact_input_style = S('w-430 mr-15')
+      search_contact_input_style = S(search_input_width + ' mr-15')
       filter_scroll_style.width = 475
     }
-
+    if (data.is_mobile)
+      filter_scroll_style.width = window.innerWidth - 50
     let filtered_contacts_list
     if (filtered_contacts) {
       filtered_contacts_list = filtered_contacts.map((contact, i) => {

@@ -374,7 +374,7 @@ export default class MessagesList extends Component {
           { loading_previous }
           <ul style={ S('pl-0 ' + messages_mb) }>{ messages_list_items }</ul>
         </div>
-        <Modal show={ data.show_contacts_modal } onHide={ this.props.hideModal }>
+        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_contacts_modal } onHide={ this.props.hideModal }>
           <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
            <Modal.Title style={ S('font-14') }>Invite contacts <span style={ S('color-929292 fw-400') }>(use any email or any phone number)</span></Modal.Title>
           </Modal.Header>
@@ -449,7 +449,7 @@ export default class MessagesList extends Component {
           </Modal.Body>
           { delete_area }
         </Modal>
-        <Modal show={ data.show_alert_viewer } onHide={ this.props.hideAlertViewer }>
+        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_alert_viewer } onHide={ this.props.hideAlertViewer }>
           <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
            <Modal.Title>Alert { data.listing_alerts ? `(${ data.alert_viewer && data.alert_viewer.active_index ? data.alert_viewer.active_index + 1 : '1' } of ${data.listing_alerts.length} Homes)` : '' } </Modal.Title>
           </Modal.Header>
