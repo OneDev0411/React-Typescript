@@ -11,6 +11,18 @@ emojify.setConfig({
 })
 
 export default class MessageItem extends Component {
+  makeMentionBlue(text) {
+    const data = this.props.data
+    const current_room = data.current_room
+    const users = current_room.users
+    let filterd_text = text
+    users.forEach(user => {
+      const full_name = user.first_name + ' ' + user.last_name
+      if (text.trim().indexOf(full_name.trim()) !== -1)
+        filterd_text = text.replace(new RegExp(full_name, 'g'), '<span class="text-primary">' + full_name + '</span>')
+    })
+    return filterd_text
+  }
   render() {
     // Data
     const data = this.props.data
@@ -100,8 +112,10 @@ export default class MessageItem extends Component {
       message_class_name = 'fade-in'
 
     let message_text = message.comment
-    if (!message_image && message.comment)
+    if (!message_image && message.comment) {
       message_text = emojify.replace(linkifyString(message.comment))
+      message_text = this.makeMentionBlue(message_text)
+    }
 
     // Get latest author and group (No profile image)
     if (message.author && !this.props.new_date && !message.recommendation) {
