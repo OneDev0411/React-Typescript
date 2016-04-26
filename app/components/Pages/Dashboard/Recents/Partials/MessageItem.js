@@ -207,7 +207,7 @@ export default class MessageItem extends Component {
                 </div>
                 <div style={ S('mt-10 relative') }>
                   <div style={ S('mt-5 pull-left w-40 h-40') }>{ profile_image_div }</div>
-                  <div style={ S('mt-5 pull-left ml-10 w-310 mt-10 font-14') } className={ message_class_name } dangerouslySetInnerHTML={ { __html: '"' + message_text + '"' } }></div>
+                  <div style={ S('mt-5 pull-left ml-10 w-100p mt-10 font-14') } className={ message_class_name } dangerouslySetInnerHTML={ { __html: '"' + message_text + '"' } }></div>
                   <div className="clearfix"></div>
                 </div>
               </div>

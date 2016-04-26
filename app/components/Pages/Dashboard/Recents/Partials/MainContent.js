@@ -102,7 +102,7 @@ export default class MainContent extends Component {
     if (data.is_mobile) {
       footer_style = {
         ...footer_style,
-        ...S('b-50')
+        ...S('b-55 z-3 bg-fff')
       }
     }
     let is_typing
