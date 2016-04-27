@@ -70,8 +70,12 @@ export default class MainContent extends Component {
     this.refs.message_input.value = message_arr[0] + contact.first_name + ' ' + contact.last_name + ' '
   }
 
-  createMessage(e) {
+  handleSubmit(e) {
     e.preventDefault()
+    this.createMessage()
+  }
+
+  createMessage() {
     const data = this.props.data
     const comment = this.refs.message_input.value
     // If no comment
@@ -81,6 +85,13 @@ export default class MainContent extends Component {
       this.props.createMessage(comment)
       this.refs.message_input.value = ''
     }
+  }
+
+  handleBlur() {
+    // Send message on mobile
+    const data = this.props.data
+    if (data.is_mobile)
+      this.createMessage()
   }
 
   render() {
@@ -186,9 +197,9 @@ export default class MainContent extends Component {
           <div style={ S('relative') }>
             { filtered_contacts_area }
           </div>
-          <form onSubmit={ this.createMessage.bind(this) }>
+          <form onSubmit={ this.handleSubmit.bind(this) }>
             <div className="form-group" style={ S('w-100p') }>
-              <input onKeyUp={ this.handleMessageKeyUp.bind(this) } onKeyDown={ this.props.handleMessageTyping.bind(this) } ref="message_input" type="text" className="form-control chat-message-input" style={ S('w-100p pl-70 bw-2 z-3 relative') } placeholder="Type your message and press enter"/>
+              <input onBlur={ this.handleBlur.bind(this) } onKeyUp={ this.handleMessageKeyUp.bind(this) } onKeyDown={ this.props.handleMessageTyping.bind(this) } ref="message_input" type="text" className="form-control chat-message-input" style={ S('w-100p pl-70 bw-2 z-3 relative') } placeholder="Type your message and press enter"/>
               <Dropzone onDrop={ this.props.uploadFiles } type="button" className="btn btn-default create-message__btn" style={ btn_style }>
                 <span className="plus" style={ S('font-22 relative t-1n') }>+</span>
               </Dropzone>
