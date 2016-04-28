@@ -70,6 +70,7 @@
     "test:models-transaction": "NODE_ENV=development mocha test/models-transaction --compilers js:babel/register",
     "test:models-user": "NODE_ENV=development mocha test/models-user --compilers js:babel/register",
     "test:models-branch": "NODE_ENV=development mocha test/models-branch --compilers js:babel/register",
+    "test:models-user-shadow": "NODE_ENV=development mocha test/models-user-shadow --compilers js:babel/register",
     "start": "npm run production",
     "api": "NODE_ENV=development DEV_PORT=8080 nodemon app/app.js",
     "webpack-dev-server": "WEBPACK_PROCESS=build NODE_ENV=development PORT=8080 webpack-dev-server --content-base app/public/ --hot --inline --devtool inline-source-map --history-api-fallback",

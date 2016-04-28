@@ -11,6 +11,7 @@ module.exports = (app, config) => {
   require('./listings/get-valerts')(app, config)
   // Users
   require('./users/signup')(app, config)
+  require('./users/signup-shadow')(app, config)
   require('./users/edit-user')(app, config)
   require('./users/edit-profile-pic')(app, config)
   require('./users/edit-password')(app, config)

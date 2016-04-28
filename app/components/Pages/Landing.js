@@ -1,7 +1,9 @@
 // Landing.js
 import React, { Component } from 'react'
-import { Col, Input, Button } from 'react-bootstrap'
+import { Col, Input, Button, OverlayTrigger, Popover } from 'react-bootstrap'
 import S from 'shorti'
+import validator from 'validator'
+import { randomString } from '../../utils/helpers'
 import emojify from 'emojify.js'
 emojify.setConfig({
   img_dir: '/images/emoji'
@@ -41,6 +43,36 @@ export default class Landing extends Component {
     else
       AppStore.data.navbar_in = true
     AppStore.emitChange()
+  }
+  handleEmailSubmit(e) {
+    e.preventDefault()
+    const email = this.refs.email.refs.input.value
+    const random_password = randomString(9)
+    if (!email.trim())
+      return
+    if (!validator.isEmail(email)) {
+      AppStore.data.errors = {
+        type: 'email-invalid'
+      }
+      AppStore.emitChange()
+      setTimeout(() => {
+        delete AppStore.data.errors
+        AppStore.emitChange()
+      }, 3000)
+      return
+    }
+    const user = {
+      first_name: email,
+      email,
+      user_type: 'Client',
+      password: random_password,
+      grant_type: 'password'
+    }
+    AppDispatcher.dispatch({
+      action: 'sign-up-shadow',
+      user,
+      redirect_to: ''
+    })
   }
   render() {
     // Data
@@ -133,6 +165,38 @@ export default class Landing extends Component {
       login_btn_style = ' w-100p'
       login_btn_li_style = S('pl-15 pr-15')
     }
+    const signup_input_style = {
+      ...S('h-37'),
+      borderTopRightRadius: 0,
+      borderBottomRightRadius: 0
+    }
+    const signup_btn_style = {
+      borderTopLeftRadius: 0,
+      borderBottomLeftRadius: 0
+    }
+    let popover = <Popover id="popover" className="hidden" />
+    if (data.errors) {
+      if (data.errors.type === 'email-invalid') {
+        popover = (
+          <Popover id="popover" title="">You must enter a valid email</Popover>
+        )
+      }
+      if (data.errors.type === 'email-in-use') {
+        popover = (
+          <Popover id="popover" title="">This email is already in use.</Popover>
+        )
+      }
+      if (data.errors.type === 'bad-request') {
+        popover = (
+          <Popover id="popover" title="">Bad request.</Popover>
+        )
+      }
+    }
+    if (data.signup && data.signup.status === 'success') {
+      popover = (
+        <Popover id="popover" title="">Success!  Check your email for a confirmation link.</Popover>
+      )
+    }
     return (
       <div className="page-landing page-bg-video" style={ page_style }>
         <div className="overlay"></div>
@@ -157,13 +221,20 @@ export default class Landing extends Component {
                   <li style={ login_btn_li_style }>
                     <a className="btn btn-default" href="/signin" style={ S('color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 mr-15' + login_btn_style) }>Log in</a>
                   </li>
-                  {
-                    /*
-                    <li>
-                      <a className="sign-up__button btn btn-primary" href="/signup" style={ S('color-fff w-80 p-7') }>Sign up</a>
-                    </li>
-                    */
-                  }
+                  <li>
+                    <div style={ S('ml-15') }>
+                      <form onSubmit={ this.handleEmailSubmit.bind(this) }>
+                        <div style={ S('pull-left') }>
+                          <OverlayTrigger trigger="click" placement="bottom" overlay={ popover }>
+                            <Input ref="email" style={ signup_input_style } type="text" placeholder="Enter email address" />
+                          </OverlayTrigger>
+                        </div>
+                        <div style={ S('pull-left') }>
+                          <Button bsStyle="primary" style={ signup_btn_style } type="submit">Get started</Button>
+                        </div>
+                      </form>
+                    </div>
+                  </li>
                 </ul>
               </div>
             </div>
