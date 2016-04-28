@@ -43,7 +43,6 @@ module.exports = (app, config) => {
       return response.json()
     })
     .then(response => {
-      console.log(response)
       // redirect to success page
       return res.redirect('/verify/email?status=success')
     })
