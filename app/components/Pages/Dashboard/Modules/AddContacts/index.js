@@ -215,12 +215,19 @@ export default class AddContactsModule extends Component {
     const data = this.props.data
     const contacts = data.contacts
     const module_type = this.props.module_type
-    const contacts_added = data.contacts_added[module_type]
-    const contacts_added_ids = _.pluck(contacts_added, 'id')
+    let contacts_added
+    let contacts_added_ids
+    if (data.contacts_added) {
+      contacts_added = data.contacts_added[module_type]
+      contacts_added_ids = _.pluck(contacts_added, 'id')
+    }
+    let filtered_contacts = contacts
     if (contacts) {
-      const filtered_contacts = contacts.filter(contact => {
-        return contacts_added_ids.indexOf(contact.id) === -1
-      })
+      if (contacts_added_ids) {
+        filtered_contacts = contacts.filter(contact => {
+          return contacts_added_ids.indexOf(contact.id) === -1
+        })
+      }
       this.setFilteredContacts(filtered_contacts)
     }
   }

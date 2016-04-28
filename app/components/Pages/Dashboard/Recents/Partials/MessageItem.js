@@ -19,7 +19,7 @@ export default class MessageItem extends Component {
     users.forEach(user => {
       const full_name = user.first_name + ' ' + user.last_name
       if (text.trim().indexOf(full_name.trim()) !== -1)
-        filterd_text = text.replace(new RegExp(full_name, 'g'), '<span class="text-primary">' + full_name + '</span>')
+        filterd_text = text.replace(new RegExp(full_name, 'g'), '<span class="text-primary">' + user.first_name + '</span>')
     })
     return filterd_text
   }
