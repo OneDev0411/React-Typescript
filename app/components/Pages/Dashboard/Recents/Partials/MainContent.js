@@ -19,12 +19,6 @@ export default class MainContent extends Component {
     this.props.checkForMobile()
   }
 
-  componentDidUpdate() {
-    const data = this.props.data
-    if (this.refs.message_input && !data.show_contacts_modal && !data.is_filtering && !data.is_mobile)
-      this.refs.message_input.focus()
-  }
-
   handleSearchRoomKeyUp() {
     const search_text = this.refs.search_text.value
     this.props.filterRooms(search_text)

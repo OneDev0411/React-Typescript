@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import { Button, Input, Alert } from 'react-bootstrap'
 import S from 'shorti'
+import _ from 'lodash'
 import validator from 'validator'
 import helpers from '../../../../../utils/helpers'
 import AppStore from '../../../../../stores/AppStore'
@@ -76,7 +77,7 @@ export default class AddContactsModule extends Component {
       AppStore.data.contacts_added = {}
     if (!AppStore.data.contacts_added[module_type])
       AppStore.data.contacts_added[module_type] = []
-    AppStore.data.contacts_added[module_type].push(contact)
+    AppStore.data.contacts_added[module_type].unshift(contact)
     delete AppStore.data.filtered_contacts
     this.refs.search_contacts.refs.input.value = ''
     AppStore.emitChange()
@@ -123,6 +124,9 @@ export default class AddContactsModule extends Component {
     }
   }
   filterContacts(e) {
+    // No arrow keys
+    if (e.which === 38 || e.which === 40)
+      return
     const text = this.refs.search_contacts.refs.input.value.trim()
     const text_lower = text.toLowerCase()
     const data = this.props.data
@@ -204,6 +208,29 @@ export default class AddContactsModule extends Component {
     }
     AppStore.emitChange()
   }
+  handleInputClick() {
+    this.handleInputFocus()
+  }
+  handleInputFocus() {
+    const data = this.props.data
+    const contacts = data.contacts
+    const module_type = this.props.module_type
+    const contacts_added = data.contacts_added[module_type]
+    const contacts_added_ids = _.pluck(contacts_added, 'id')
+    if (contacts) {
+      const filtered_contacts = contacts.filter(contact => {
+        return contacts_added_ids.indexOf(contact.id) === -1
+      })
+      this.setFilteredContacts(filtered_contacts)
+    }
+  }
+  handleInputBlur() {
+    // Wait for contact click
+    setTimeout(() => {
+      delete AppStore.data.filtered_contacts
+      AppStore.emitChange()
+    }, 100)
+  }
   render() {
     const data = this.props.data
     const module_type = this.props.module_type
@@ -213,7 +240,7 @@ export default class AddContactsModule extends Component {
     // Style
     const filter_scroll_style = {
       ...S('mt-10 p-5 bc-ccc bw-1 solid br-3 absolute t-35 z-100 bg-fff maxw-600 w-100p maxh-300'),
-      overflow: 'scroll'
+      overflowY: 'scroll'
     }
     let module_style = S('relative')
     let search_input_width = 'w-430'
@@ -271,7 +298,7 @@ export default class AddContactsModule extends Component {
     let filtered_contacts_markup
     if (filtered_contacts_list && filtered_contacts_list.length) {
       filtered_contacts_markup = (
-        <div className="add-contact-form__contacts" style={ filter_scroll_style }>
+        <div className="add-contact-form__contacts touch-scroll" style={ filter_scroll_style }>
           { filtered_contacts_list }
         </div>
       )
@@ -370,7 +397,7 @@ export default class AddContactsModule extends Component {
     return (
       <div style={ module_style } className="add-contact-form">
         <div style={ S('maxw-820') }>
-          <Input ref="search_contacts" onKeyDown={ this.navContactList.bind(this) } onKeyUp={ this.filterContacts.bind(this) } className="pull-left" style={ search_contact_input_style } type="text" placeholder="Enter any name, email or phone number"/>
+          <Input onClick={ this.handleInputClick.bind(this) } onFocus={ this.handleInputFocus.bind(this) } onBlur={ this.handleInputBlur.bind(this) } ref="search_contacts" onKeyDown={ this.navContactList.bind(this) } onKeyUp={ this.filterContacts.bind(this) } className="pull-left" style={ search_contact_input_style } type="text" placeholder="Enter any name, email or phone number"/>
           <Button className="pull-left" style={ add_button_style } bsStyle="primary" onClick={ this.handleButtonClick.bind(this) }>
             Add
           </Button>
