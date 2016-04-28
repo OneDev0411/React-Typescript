@@ -216,7 +216,7 @@ export default class AddContactsModule extends Component {
       overflow: 'scroll'
     }
     let module_style = S('relative')
-    let search_input_width = 'w-600'
+    let search_input_width = 'w-430'
     if (data.is_mobile)
       search_input_width = 'w-100p'
     let search_contact_input_style = S(search_input_width + ' mr-15')
