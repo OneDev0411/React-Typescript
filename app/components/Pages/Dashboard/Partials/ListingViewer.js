@@ -126,9 +126,14 @@ export default class ListingViewer extends Component {
           }
         </Carousel>
       )
-      // Cache images for uninteruted scroll
+      // Cache images for uninteruted 3-pic and single scroll
       const listing_images_cached = gallery_image_urls.map((image_url, i) => {
-        return <img key={ 'image-' + i } src={ listing_util.getResizeUrl(image_url) + '?w=800' } style={ S('w-0 h-0') }/>
+        return (
+          <div style={ S('w-0 h-0') }>
+            <img key={ 'image-800-' + i } src={ listing_util.getResizeUrl(image_url) + '?w=800' } style={ S('w-0 h-0') }/>
+            <img key={ 'image-1200-' + i } src={ listing_util.getResizeUrl(image_url) + '?w=1200' } style={ S('w-0 h-0') }/>
+          </div>
+        )
       })
       listing_title = `${listing.property.address.street_number} ${listing.property.address.street_name} ${listing.property.address.street_suffix}`
       listing_subtitle = `${listing.property.address.city}, ${listing.property.address.state} ${listing.property.address.postal_code}`
@@ -543,7 +548,7 @@ export default class ListingViewer extends Component {
             gallery_image_urls.map((gallery_image_url, i) => {
               return (
                 <CarouselItem key={ 'gallery-image-' + gallery_image_url[0] + i }>
-                  <div style={ S('w-100p h-500 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + listing_util.getResizeUrl(gallery_image_url) + '?w=800)') }/>
+                  <div style={ S('w-100p h-500 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + listing_util.getResizeUrl(gallery_image_url) + '?w=1200)') }/>
                 </CarouselItem>
               )
             })
