@@ -44,11 +44,18 @@ export default class Landing extends Component {
       AppStore.data.navbar_in = true
     AppStore.emitChange()
   }
-  handleEmailSubmit(e) {
-    delete AppStore.data.resent_email_confirmation
+  setSignupEmail(e) {
+    const email = e.target.value
+    AppStore.data.signup_email = email
     AppStore.emitChange()
+  }
+  handleEmailSubmit(e) {
     e.preventDefault()
-    const email = this.refs.email.refs.input.value
+    const data = this.props.data
+    const email = data.signup_email
+    // If no email or double submit
+    if (!email || data.submitting)
+      return
     const random_password = randomString(9)
     if (!email.trim())
       return
@@ -63,7 +70,8 @@ export default class Landing extends Component {
       }, 3000)
       return
     }
-    this.refs.email.refs.input.value = ''
+    AppStore.data.submitting = true
+    AppStore.emitChange()
     const user = {
       first_name: email,
       email,
@@ -252,11 +260,11 @@ export default class Landing extends Component {
                       <form onSubmit={ this.handleEmailSubmit.bind(this) }>
                         <div style={ S('pull-left') }>
                           <OverlayTrigger trigger="click" placement="bottom" overlay={ popover }>
-                            <Input ref="email" style={ signup_input_style } type="text" placeholder="Enter email address" />
+                            <Input onChange={ this.setSignupEmail } style={ signup_input_style } type="text" placeholder="Enter email address" value={ data.signup_email } />
                           </OverlayTrigger>
                         </div>
                         <div style={ S('pull-left') }>
-                          <Button bsStyle="primary" style={ signup_btn_style } type="submit">Get started</Button>
+                          <Button className={ data.submitting ? 'disabled' : '' } bsStyle="primary" style={ signup_btn_style } type="submit">{ data.submitting ? 'Submitting...' : 'Get started' }</Button>
                         </div>
                       </form>
                     </div>

@@ -28,6 +28,8 @@ export default (user, redirect_to) => {
           AppStore.data.signup = {
             status: 'success'
           }
+          delete AppStore.data.signup_email
+          delete AppStore.data.submitting
           AppStore.data.new_user = new_user
           AppStore.data.show_signup_confirm_modal = true
           AppStore.data.redirect_to = redirect_to
