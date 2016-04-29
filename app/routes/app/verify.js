@@ -46,7 +46,7 @@ module.exports = (app, config) => {
     })
     .then(response => {
       // redirect to success page
-      return res.redirect('/verify/email?status=success&token=' + token)
+      return res.redirect('/verify/email?status=success&token=' + token + '&email=' + encodeURIComponent(email))
     })
   })
 

@@ -17,6 +17,7 @@ module.exports = (app, config) => {
   require('./users/edit-password')(app, config)
   require('./users/signin')(app, config)
   require('./users/forgot-password')(app, config)
+  require('./users/create-password')(app, config)
   require('./users/reset-password')(app, config)
   require('./users/verify-phone')(app, config)
   require('./users/email-verifications')(app, config)

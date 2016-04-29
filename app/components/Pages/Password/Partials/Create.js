@@ -14,26 +14,23 @@ export default class Reset extends Component {
     e.preventDefault()
     AppStore.data.submitting = true
     AppStore.emitChange()
-
     // Get token
     const password = this.refs.password.getInputDOMNode().value.trim()
     const confirm_password = this.refs.confirm_password.getInputDOMNode().value.trim()
-    const decoded_token = decodeURIComponent(helpers.getParameterByName('token'))
-    const encoded_token = encodeURIComponent(decoded_token)
-
+    const token = decodeURIComponent(helpers.getParameterByName('token'))
+    const email = decodeURIComponent(helpers.getParameterByName('email'))
     const form_data = {
       password,
       confirm_password,
-      token: encoded_token
+      token,
+      email
     }
-
-    this.props.handleSubmit('reset-password', form_data)
+    this.props.handleSubmit('create-password', form_data)
   }
 
   render() {
     const data = this.props.data
     const errors = data.errors
-
     let password_style
     let password_error
     let message
@@ -84,13 +81,13 @@ export default class Reset extends Component {
 
     let main_content = (
       <div>
-        <div style={ S('color-929292 mb-20') }>Reset your password</div>
+        <div style={ S('color-929292 mb-20') }>Create your password</div>
         <form onSubmit={ this.handleSubmit.bind(this) }>
           <Input bsStyle={ password_style } placeholder="New Password" type="password" ref="password"/>
           <Input bsStyle={ password_style } placeholder="Confirm New Password" type="password" ref="confirm_password"/>
           { message }
           <Button type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p') }>
-            { submitting ? 'Submitting...' : 'Change Password' }
+            { submitting ? 'Submitting...' : 'Create Password' }
           </Button>
           <div style={ S('mt-20 color-929292 font-13') }>Code not working? <Link to="/password/forgot">Try sending it again</Link></div>
         </form>

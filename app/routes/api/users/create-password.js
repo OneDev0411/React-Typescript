@@ -1,21 +1,19 @@
-// api/posts/reset-password.js
+// api/posts/create-password.js
 import Crypto from '../../../models/Crypto'
 import helpers from '../../../utils/helpers'
 module.exports = (app, config) => {
-  app.post('/api/reset-password',(req, res) => {
-    const decoded_token = decodeURIComponent(req.body.token)
+  app.post('/api/create-password',(req, res) => {
+    const email = req.body.email
+    const token = req.body.token
     const password = req.body.password
-    const decrypted_obj = JSON.parse(Crypto.decrypt(decoded_token))
-    const email = decrypted_obj.email
-    const token = decrypted_obj.token
     const api_url = config.api.url
-    const signin_url = api_url + '/users/password'
+    const endpoint = api_url + '/users/password'
     const request_object = {
       email,
-      token,
+      shadow_token: token,
       password
     }
-    fetch(signin_url,{
+    fetch(endpoint,{
       method: 'patch',
       headers: {  
         'Content-Type': 'application/json'

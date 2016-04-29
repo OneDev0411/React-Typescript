@@ -8,6 +8,7 @@ export default class Email extends Component {
     const decoded_token = decodeURIComponent(helpers.getParameterByName('token'))
     const encoded_token = encodeURIComponent(decoded_token)
     const status = helpers.getParameterByName('status')
+    const email = encodeURIComponent(helpers.getParameterByName('email'))
     let main_content
     if (!status) {
       main_content = (
@@ -22,7 +23,7 @@ export default class Email extends Component {
         <div>
           <img style={ S('w-186 h-188') } src="/images/verify/family-1@2x.png"/>
           <div style={ S('color-929292 mt-10 font-36') }>Email confirmed.</div>
-          <a href="/signin">Sign in</a>
+          <a className="btn btn-primary" href={ '/password/create?token=' + encoded_token + '&email=' + email }>Create your password</a>
         </div>
       )
     }

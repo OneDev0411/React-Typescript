@@ -1,7 +1,7 @@
-// actions/reset-password.js
+// actions/create-password.js
 import User from '../../models/User'
 import AppStore from '../../stores/AppStore'
-export default (password, confirm_password, token) => {
+export default (email, password, confirm_password, token) => {
   if (password.length < 6 || password !== confirm_password) {
     let error_type
     if (password.length < 6)
@@ -19,10 +19,11 @@ export default (password, confirm_password, token) => {
     return AppStore.emitChange()
   }
   const params = {
+    email,
     password,
     token
   }
-  User.resetPassword(params, (err, response) => {
+  User.createPassword(params, (err, response) => {
     // Success
     if (response.status === 'success') {
       AppStore.data = {

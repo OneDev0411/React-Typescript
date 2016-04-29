@@ -5,6 +5,7 @@ import AppStore from '../../../stores/AppStore'
 // import MapBackground from '../../Partials/MapBackground'
 import Forgot from './Partials/Forgot'
 import Reset from './Partials/Reset'
+import Create from './Partials/Create'
 import S from 'shorti'
 
 export default class Password extends Component {
@@ -36,6 +37,20 @@ export default class Password extends Component {
         token
       })
     }
+    // Reset pass
+    if (action === 'create-password') {
+      const password = form_data.password
+      const confirm_password = form_data.confirm_password
+      const token = form_data.token
+      const email = form_data.email
+      AppDispatcher.dispatch({
+        action: 'create-password',
+        password,
+        confirm_password,
+        token,
+        email
+      })
+    }
   }
 
   handleSendVerificationAgain() {
@@ -62,6 +77,12 @@ export default class Password extends Component {
     if (slug === 'reset') {
       main_content = (
         <Reset handleSubmit={ this.handleSubmit } data={ data }/>
+      )
+    }
+
+    if (slug === 'create') {
+      main_content = (
+        <Create handleSubmit={ this.handleSubmit } data={ data }/>
       )
     }
 
