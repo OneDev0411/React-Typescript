@@ -3,14 +3,14 @@ import Crypto from '../../models/Crypto'
 import helpers from '../../utils/helpers'
 module.exports = (app, config) => {
   app.get('/verify_email',(req, res) => {
-    let token = decodeURIComponent(req.query.token)
-    token = encodeURIComponent(req.query.token)
-    return res.redirect('/verify/email?token=' + token)
+    const decoded_token = decodeURIComponent(req.query.token)
+    const encoded_token = encodeURIComponent(decoded_token)
+    return res.redirect('/verify/email?token=' + encoded_token)
   })
   app.get('/activate',(req, res) => {
-    let token = decodeURIComponent(req.query.token)
-    token = encodeURIComponent(req.query.token)
-    return res.redirect('/verify/email?token=' + token)
+    const decoded_token = decodeURIComponent(req.query.token)
+    const encoded_token = encodeURIComponent(decoded_token)
+    return res.redirect('/verify/email?token=' + encoded_token)
   })
   app.get('/verify_email/submitted',(req, res) => {
     let token = decodeURIComponent(req.query.token)
@@ -51,13 +51,15 @@ module.exports = (app, config) => {
   })
 
   app.get('/verify_phone',(req, res) => {
-    const token = decodeURIComponent(req.query.token)
-    return res.redirect('/verify/phone?token=' + token)
+    const decoded_token = decodeURIComponent(req.query.token)
+    const encoded_token = encodeURIComponent(decoded_token)
+    return res.redirect('/verify/phone?token=' + encoded_token)
   })
 
   app.get('/reset_password',(req, res) => {    
-    const token = decodeURIComponent(req.query.token)
+    const decoded_token = decodeURIComponent(req.query.token)
+    const encoded_token = encodeURIComponent(decoded_token)
     // TODO: test token for validity then redirect to forgot password
-    return res.redirect('/password/reset/?token=' + token)
+    return res.redirect('/password/reset/?token=' + encoded_token)
   })
 }
