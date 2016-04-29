@@ -380,9 +380,9 @@ export default class SideBar extends Component {
               <img src={ active.mls ? '/images/dashboard/sidenav/map-active.svg' : '/images/dashboard/sidenav/map.svg' } style={ S('w-19 h-19') }/>
             </NavItem>
           </LinkContainer>
-          <NavItem className="main-nav" style={ S('w-60 t-5n absolute r-80') } onClick={ this.showIntercom }>
-            <i className="fa fa-question" style={ S('font-20 color-263445 absolute t-22 l-26 z-100') }></i>
-            <i className="fa fa-comment" style={ S('font-35 relative t-5 color-4D5C6C') }></i>
+          <NavItem className="main-nav" style={ S('w-60 absolute t-5 r-80') } onClick={ this.showIntercom }>
+            <i className="fa fa-question" style={ S('font-20 color-263445 absolute t-12 l-26 z-100') }></i>
+            <i className="fa fa-comment" style={ S('font-35 relative t-5n color-4D5C6C') }></i>
           </NavItem>
           <div style={ S('w-20p absolute t-10 r-20n z-1') }>
             <ProfileImage data={ data } user={ user } />
