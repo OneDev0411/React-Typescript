@@ -62,6 +62,7 @@ export default class MainContent extends Component {
     const message_input = this.refs.message_input.value
     const message_arr = message_input.split('@')
     this.refs.message_input.value = message_arr[0] + contact.first_name + ' ' + contact.last_name + ' '
+    this.refs.message_input.focus()
   }
 
   handleSubmit(e) {
