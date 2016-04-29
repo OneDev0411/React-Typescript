@@ -13,8 +13,8 @@ module.exports = (app, config) => {
     return res.redirect('/verify/email?token=' + encoded_token)
   })
   app.get('/verify_email/submitted',(req, res) => {
-    let token = decodeURIComponent(req.query.token)
-    const decrypted_obj = JSON.parse(Crypto.decrypt(token))
+    const decoded_token = decodeURIComponent(req.query.token)
+    const decrypted_obj = JSON.parse(Crypto.decrypt(decoded_token))
     const email = decrypted_obj.email
     const email_code = decrypted_obj.email_code
     token = decrypted_obj.token

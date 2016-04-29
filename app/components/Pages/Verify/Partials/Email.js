@@ -5,15 +5,14 @@ import helpers from '../../../../utils/helpers'
 
 export default class Email extends Component {
   render() {
-    const token = helpers.getParameterByName('token')
+    const decoded_token = decodeURIComponent(helpers.getParameterByName('token'))
+    const encoded_token = encodeURIComponent(decoded_token)
     const status = helpers.getParameterByName('status')
-
     let main_content
-
     if (!status) {
       main_content = (
         <div>
-          <a className="btn btn-primary" href={'/verify_email/submitted?token=' + token} >Confirm your email</a>
+          <a className="btn btn-primary" href={'/verify_email/submitted?token=' + encoded_token} >Confirm your email</a>
         </div>
       )
     }
