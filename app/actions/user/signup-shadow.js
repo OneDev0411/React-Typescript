@@ -29,6 +29,7 @@ export default (user, redirect_to) => {
             status: 'success'
           }
           AppStore.data.new_user = new_user
+          AppStore.data.show_signup_confirm_modal = true
           AppStore.data.redirect_to = redirect_to
           // Intercom
           Intercom.signup({ user: new_user }, () => {})

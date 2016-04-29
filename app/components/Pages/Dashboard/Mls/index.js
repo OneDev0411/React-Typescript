@@ -73,7 +73,7 @@ export default class Mls extends Component {
   cacheImages() {
     const data = this.props.data
     const listing_map = data.listing_map
-    if (!listing_map)
+    if (!listing_map || data.is_mobile)
       return <div />
     const listings = listing_map.listings
     if (!listings)

@@ -1,6 +1,6 @@
 // Landing.js
 import React, { Component } from 'react'
-import { Col, Input, Button, OverlayTrigger, Popover } from 'react-bootstrap'
+import { Col, Input, Button, OverlayTrigger, Popover, Modal } from 'react-bootstrap'
 import S from 'shorti'
 import validator from 'validator'
 import { randomString } from '../../utils/helpers'
@@ -45,6 +45,8 @@ export default class Landing extends Component {
     AppStore.emitChange()
   }
   handleEmailSubmit(e) {
+    delete AppStore.data.resent_email_confirmation
+    AppStore.emitChange()
     e.preventDefault()
     const email = this.refs.email.refs.input.value
     const random_password = randomString(9)
@@ -61,6 +63,7 @@ export default class Landing extends Component {
       }, 3000)
       return
     }
+    this.refs.email.refs.input.value = ''
     const user = {
       first_name: email,
       email,
@@ -74,6 +77,28 @@ export default class Landing extends Component {
       user,
       redirect_to: ''
     })
+  }
+  resend() {
+    const data = this.props.data
+    const new_user = data.new_user
+    const user = {
+      first_name: new_user.email,
+      email: new_user.email,
+      user_type: 'Client',
+      password: new_user.random_password,
+      grant_type: 'password',
+      is_shadow: true
+    }
+    AppStore.data.resent_email_confirmation = true
+    AppDispatcher.dispatch({
+      action: 'sign-up-shadow',
+      user,
+      redirect_to: ''
+    })
+  }
+  hideModal() {
+    delete AppStore.data.show_signup_confirm_modal
+    AppStore.emitChange()
   }
   render() {
     // Data
@@ -195,9 +220,10 @@ export default class Landing extends Component {
         )
       }
     }
-    if (data.signup && data.signup.status === 'success') {
-      popover = (
-        <Popover id="popover" title="">Success!  Check your email for a confirmation link.</Popover>
+    let resent_message_area
+    if (data.resent_email_confirmation) {
+      resent_message_area = (
+        <div style={ S('mt-20 mb-20') }>Confirmation email resent.</div>
       )
     }
     return (
@@ -270,13 +296,33 @@ export default class Landing extends Component {
         <footer className="footer" style={ footer_style }>
           <div className="container">
             <Col className="footer-text footer-text--left" sm={6}>
-              Made with <img src="/images/landing/heart.png" /> by Rechat | <a onClick={ this.showIntercom } href="/">Contact Us</a>
+              Made with <img src="/images/landing/heart.png" /> by Rechat | <a onClick={ this.showIntercom } href="#">Contact Us</a>
             </Col>
             <Col className="footer-text footer-text--right" sm={6}>
               Rechat Inc. &copy; { new Date().getFullYear() }. All Rights Reserved. <a href="/terms">Terms of Service</a> | <a href="/terms/mls">MLS Terms</a> | <a href="/privacy">Privacy Policy</a>
             </Col>
           </div>
         </footer>
+        <Modal show={ data.show_signup_confirm_modal } onHide={ this.hideModal }>
+          <Modal.Body className="text-center">
+            <div style={ S('mb-20 mt-20') }>
+              <div style={ S('br-100 w-90 h-90 center-block bg-3388ff text-center') }>
+                <i style={ S('color-fff font-40 mt-25') } className="fa fa-check"></i>
+              </div>
+            </div>
+            <div style={ S('font-24 mb-20') }>Check Your Inbox</div>
+            <div style={ S('color-9b9b9b font-15 mb-20') }>
+              For a secure experience, confirm your email address to continue.
+            </div>
+            <div style={ S('color-9b9b9b font-15 mb-20') }>
+              <span className="text-primary">{ data.new_user ? data.new_user.email : '' }</span>
+            </div>
+            <div style={ S('color-9b9b9b font-13 mb-20') }>
+              Didn’t get the email? <a onClick={ this.resend.bind(this) } href="#">Resend</a> or <a onClick={ this.showIntercom } href="#">contact support</a>.
+            </div>
+            { resent_message_area }
+          </Modal.Body>
+        </Modal>
       </div>
     )
   }
