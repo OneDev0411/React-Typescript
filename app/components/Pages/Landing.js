@@ -66,7 +66,8 @@ export default class Landing extends Component {
       email,
       user_type: 'Client',
       password: random_password,
-      grant_type: 'password'
+      grant_type: 'password',
+      is_shadow: true
     }
     AppDispatcher.dispatch({
       action: 'sign-up-shadow',
@@ -159,13 +160,7 @@ export default class Landing extends Component {
     }
     let login_btn_li_style
     let login_btn_style
-    let is_mobile = false
-    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
-      is_mobile = true
-      login_btn_style = ' w-100p'
-      login_btn_li_style = S('pl-15 pr-15')
-    }
-    const signup_input_style = {
+    let signup_input_style = {
       ...S('h-37'),
       borderTopRightRadius: 0,
       borderBottomRightRadius: 0
@@ -173,6 +168,14 @@ export default class Landing extends Component {
     const signup_btn_style = {
       borderTopLeftRadius: 0,
       borderBottomLeftRadius: 0
+    }
+    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+      login_btn_style = ' w-100p'
+      login_btn_li_style = S('pl-15 pr-15')
+      signup_input_style = {
+        ...signup_input_style,
+        width: window.innerWidth - 125
+      }
     }
     let popover = <Popover id="popover" className="hidden" />
     if (data.errors) {
@@ -215,9 +218,6 @@ export default class Landing extends Component {
               </div>
               <div style={ collapse_style } className={ `collapse navbar-collapse text-center${data.navbar_in ? ' in' : ''}` }>
                 <ul className="nav navbar-nav navbar-right">
-                  <li className="contact-us-btn" style={ S(`mr-20${is_mobile ? ' pt-15' : ''}`) }>
-                    <a onClick={ this.showIntercom } href="#" style={ S('color-fff relative t-6n') }>Contact Us</a>
-                  </li>
                   <li style={ login_btn_li_style }>
                     <a className="btn btn-default" href="/signin" style={ S('color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 mr-15' + login_btn_style) }>Log in</a>
                   </li>

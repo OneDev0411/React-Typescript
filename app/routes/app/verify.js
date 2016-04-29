@@ -3,15 +3,15 @@ import Crypto from '../../models/Crypto'
 import helpers from '../../utils/helpers'
 module.exports = (app, config) => {
   app.get('/verify_email',(req, res) => {
-    const token = req.query.token
+    const token = decodeURIComponent(req.query.token)
     return res.redirect('/verify/email?token=' + token)
   })
   app.get('/activate',(req, res) => {
-    const token = req.query.token
+    const token = decodeURIComponent(req.query.token)
     return res.redirect('/verify/email?token=' + token)
   })
   app.get('/verify_email/submitted',(req, res) => {
-    let token = decodeURIComponent(req.query.token).replace(/\s/g, '+')
+    let token = decodeURIComponent(req.query.token)
     const decrypted_obj = JSON.parse(Crypto.decrypt(token))
     const email = decrypted_obj.email
     const email_code = decrypted_obj.email_code
@@ -44,7 +44,7 @@ module.exports = (app, config) => {
     })
     .then(response => {
       // redirect to success page
-      return res.redirect('/verify/email?status=success')
+      return res.redirect('/verify/email?status=success&token=' + token)
     })
   })
 

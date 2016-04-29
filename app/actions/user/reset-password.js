@@ -23,7 +23,6 @@ export default (password, confirm_password, token) => {
     password,
     token
   }
-
   User.resetPassword(params, (err, response) => {
     // Success
     if (response.status === 'success') {
