@@ -17,7 +17,7 @@ module.exports = (app, config) => {
     const decrypted_obj = JSON.parse(Crypto.decrypt(decoded_token))
     const email = decrypted_obj.email
     const email_code = decrypted_obj.email_code
-    token = decrypted_obj.token
+    const token = decrypted_obj.token
     const agent = decrypted_obj.agent
     const api_url = config.api.url
     const verify_email_url = api_url + '/users/email_confirmed'
