@@ -3,11 +3,11 @@ import Crypto from '../../models/Crypto'
 import helpers from '../../utils/helpers'
 module.exports = (app, config) => {
   app.get('/verify_email',(req, res) => {
-    const token = decodeURIComponent(req.query.token)
+    const token = req.query.token
     return res.redirect('/verify/email?token=' + token)
   })
   app.get('/activate',(req, res) => {
-    const token = decodeURIComponent(req.query.token)
+    const token = req.query.token
     return res.redirect('/verify/email?token=' + token)
   })
   app.get('/verify_email/submitted',(req, res) => {
@@ -55,7 +55,6 @@ module.exports = (app, config) => {
 
   app.get('/reset_password',(req, res) => {    
     const token = req.query.token
-    // TODO: test token for validity then redirect to forgot password
     return res.redirect('/password/reset/?token=' + token)
   })
 }
