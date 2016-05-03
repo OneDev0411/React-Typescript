@@ -134,7 +134,7 @@ export default class Create extends Component {
     }
     let main_content = (
       <div>
-        <Col sm={ 6 }>
+        <Col sm={ 6 } className={ data.is_mobile ? 'hidden' : '' }>
           <img style={ S('w-100p') } src="/images/signup/house.png" />
         </Col>
         <Col sm={ 6 }>
@@ -145,7 +145,7 @@ export default class Create extends Component {
             <Input bsStyle={ password_style } placeholder="Confirm New Password" type="password" ref="confirm_password"/>
             { message }
             <div style={ S('w-100p mb-10') }>
-              <Col style={ S('p-0 pr-5') } sm={ 6 }>
+              <Col style={ S(data.is_mobile ? 'mb-10 p-0' : 'p-0 pr-5') } sm={ 6 }>
                 <Button onClick={ this.handleTypeClick.bind(this, 'agent') } style={ agent_button_style } type="button" className="btn btn-default">
                   { agent_button_text }
                 </Button>
@@ -173,8 +173,11 @@ export default class Create extends Component {
         </div>
       )
     }
+    let module_width = ' w-750'
+    if (data.is_mobile)
+      module_width = ''
     return (
-      <div>
+      <div style={ S(module_width) }>
         { main_content }
       </div>
     )

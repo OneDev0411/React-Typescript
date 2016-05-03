@@ -1,6 +1,5 @@
 // Reset.js
 import React, { Component } from 'react'
-import { Link } from 'react-router'
 import { Input, Button, Col, Alert } from 'react-bootstrap'
 import S from 'shorti'
 // AppStore
@@ -12,7 +11,7 @@ export default class ConfirmAgent extends Component {
     const signup = data.signup
     // Redirect after agent confirmation
     if (signup && signup.is_agent)
-      this.props.history.pushState(null, '/dashboard/mls?message=welcome')
+      window.location.href = '/dashboard/mls?message=welcome'
   }
   showIntercom(e) {
     e.preventDefault()
@@ -69,7 +68,7 @@ export default class ConfirmAgent extends Component {
     // Search agent
     let main_content = (
       <div>
-        <Col sm={ 5 }>
+        <Col sm={ 5 } className={ data.is_mobile ? 'hidden' : '' }>
           <img style={ S('w-100p maxw-300') } src="/images/signup/ntreis-logo.png" />
         </Col>
         <Col sm={ 7 }>
@@ -85,7 +84,7 @@ export default class ConfirmAgent extends Component {
               { submitting ? 'Submitting...' : 'Continue to Final Step' }
             </Button>
             <div style={ S('text-center mt-20') }>
-              <Link to="/dashboard/mls">I'll do this later</Link>
+              <a href="/dashboard/mls">I'll do this later</a>
             </div>
             <div style={ S('text-center mt-20') }>
               Having trouble? <a href="#" onClick={ this.showIntercom }>Contact support</a>.
@@ -98,7 +97,7 @@ export default class ConfirmAgent extends Component {
     if (agent) {
       main_content = (
         <div>
-          <Col sm={ 5 }>
+          <Col sm={ 5 } className={ data.is_mobile ? 'hidden' : '' }>
             <img style={ S('w-100p maxw-300') } src="/images/signup/agent-face.png" />
           </Col>
           <Col sm={ 7 }>
@@ -125,7 +124,7 @@ export default class ConfirmAgent extends Component {
                 { submitting ? 'Submitting...' : 'Confirm I\'m an agent' }
               </Button>
               <div style={ S('text-center mt-20') }>
-                <Link to="/dashboard/mls">I'll do this later</Link>
+                <a href="/dashboard/mls">I'll do this later</a>
               </div>
               <div style={ S('text-center mt-20') }>
                 Having trouble? <a href="#" onClick={ this.showIntercom }>Contact support</a>.
@@ -135,9 +134,12 @@ export default class ConfirmAgent extends Component {
         </div>
       )
     }
+    let module_width = ' w-750'
+    if (data.is_mobile)
+      module_width = ''
     return (
       <div id="main-content" className="flex-center-wrap" style={ S('absolute h-100p w-100p') }>
-        <div style={ S('z-100 relative mt-60n bg-fff br-6') }>
+        <div style={ S('z-100 relative mt-60n bg-fff br-6' + module_width) }>
           { main_content }
         </div>
       </div>
