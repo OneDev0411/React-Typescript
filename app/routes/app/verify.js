@@ -9,8 +9,10 @@ module.exports = (app, config) => {
   })
   app.get('/activate',(req, res) => {
     const decoded_token = decodeURIComponent(req.query.token)
-    const encoded_token = encodeURIComponent(decoded_token)
-    return res.redirect('/verify/email?token=' + encoded_token)
+    const decrypted_obj = JSON.parse(Crypto.decrypt(decoded_token))
+    const email = decrypted_obj.email
+    const token = decrypted_obj.token
+    return res.redirect('/password/create?token=' + encodeURIComponent(token) + '&email=' + encodeURIComponent(email))
   })
   app.get('/verify_email/submitted',(req, res) => {
     const decoded_token = decodeURIComponent(req.query.token)

@@ -16,6 +16,19 @@ export default class Password extends Component {
     AppStore.emitChange()
   }
 
+  componentDidUpdate() {
+    const data = this.props.data
+    const signup = data.signup
+    const user = data.user
+    // Redirect after Password creation
+    if (user) {
+      if (signup.type === 'client')
+        this.props.history.pushState(null, '/dashboard/mls?welcome=true')
+      if (signup.type === 'agent')
+        this.props.history.pushState(null, '/signup/agent')
+    }
+  }
+
   handleSubmit(action, form_data) {
     // Forgot pass
     if (action === 'forgot-password') {
@@ -88,7 +101,7 @@ export default class Password extends Component {
 
     return (
       <div id="main-content" className="flex-center-wrap" style={ S('absolute h-100p w-100p') }>
-        <div className="text-center center-block box-shadow" style={ S('w-460 z-100 relative mt-60n bg-fff br-6 p-50') }>
+        <div style={ S('z-100 relative mt-60n bg-fff br-6') }>
           { main_content }
         </div>
       </div>
@@ -99,5 +112,6 @@ export default class Password extends Component {
 // PropTypes
 Password.propTypes = {
   data: React.PropTypes.object,
-  params: React.PropTypes.object.isRequired
+  params: React.PropTypes.object.isRequired,
+  history: React.PropTypes.object.isRequired
 }

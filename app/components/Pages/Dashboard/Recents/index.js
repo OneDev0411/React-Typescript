@@ -46,7 +46,6 @@ export default class Dashboard extends Component {
         room_id
       })
     })
-    controller.mobile.checkForMobile()
   }
 
   componentWillUpdate() {
@@ -487,7 +486,6 @@ export default class Dashboard extends Component {
         showDeleteRoomModal={ controller.recents.showDeleteRoomModal }
         hideDeleteRoomModal={ controller.recents.hideDeleteRoomModal }
         confirmDeleteRoom={ controller.recents.confirmDeleteRoom }
-        checkForMobile={ controller.mobile.checkForMobile }
       />
     )
     if (!rooms) {

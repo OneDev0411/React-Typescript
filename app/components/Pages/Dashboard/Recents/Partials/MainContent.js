@@ -15,9 +15,6 @@ import ListingViewer from '../../Partials/ListingViewer'
 import ListingViewerMobile from '../../Partials/ListingViewerMobile'
 
 export default class MainContent extends Component {
-  componentDidMount() {
-    this.props.checkForMobile()
-  }
 
   handleSearchRoomKeyUp() {
     const search_text = this.refs.search_text.value
@@ -405,6 +402,5 @@ MainContent.propTypes = {
   showDeleteRoomModal: React.PropTypes.func,
   hideDeleteRoomModal: React.PropTypes.func,
   confirmDeleteRoom: React.PropTypes.func,
-  setAlertGalleryActiveIndex: React.PropTypes.func,
-  checkForMobile: React.PropTypes.func
+  setAlertGalleryActiveIndex: React.PropTypes.func
 }

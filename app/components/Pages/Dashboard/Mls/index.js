@@ -65,10 +65,15 @@ export default class Mls extends Component {
     })
   }
   componentDidMount() {
-    controller.mobile.checkForMobile()
+    this.checkForMobile()
   }
   componentWillUnmount() {
     controller.listing_map.hideModal()
+  }
+  checkForMobile() {
+    AppDispatcher.dispatch({
+      action: 'check-for-mobile'
+    })
   }
   cacheImages() {
     const data = this.props.data

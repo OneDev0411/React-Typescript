@@ -26,10 +26,19 @@ export default (email, password, confirm_password, token) => {
   User.createPassword(params, (err, response) => {
     // Success
     if (response.status === 'success') {
-      AppStore.data = {
-        status: 'success',
-        show_message: true
+      // Sign in
+      const params_signin = {
+        email,
+        password
       }
+      User.signin(params_signin, (err_signin, response_signin) => {
+        const user = response_signin.data
+        const access_token = response_signin.access_token
+        user.access_token = access_token
+        AppStore.data.user = user
+        delete AppStore.data.submitting
+        AppStore.emitChange()
+      })
     } else {
       AppStore.data = {
         submitting: false,

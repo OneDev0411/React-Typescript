@@ -53,6 +53,8 @@ export default class App extends Component {
       if (cb)
         cb(null, new Date)
     })
+    // Check for mobile
+    this.checkForMobile()
   }
 
   componentDidUpdate() {
@@ -68,6 +70,13 @@ export default class App extends Component {
   // Remove change listeners from stores
   componentWillUnmount() {
     AppStore.removeChangeListener(this._onChange.bind(this))
+  }
+
+  checkForMobile() {
+    // Check for mobile
+    AppDispatcher.dispatch({
+      action: 'check-for-mobile'
+    })
   }
 
   getNotifications() {

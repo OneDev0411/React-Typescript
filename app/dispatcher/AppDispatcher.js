@@ -20,6 +20,7 @@ import editContact from '../actions/user/edit-contact'
 import deleteContact from '../actions/user/delete-contact'
 import editProfilePic from '../actions/user/edit-profile-pic'
 import editPassword from '../actions/user/edit-password'
+import upgradeAccount from '../actions/user/upgrade-account'
 
 // Rooms
 import createRoom from '../actions/rooms/create-room'
@@ -49,6 +50,9 @@ import getNotificationSummery from '../actions/notifications/get-summary'
 // Agents
 import getAgentReport from '../actions/agents/get-report'
 import searchAgentSignup from '../actions/agents/search-agent-signup'
+
+// Device
+import checkForMobile from '../actions/device/check-for-mobile'
 
 const AppDispatcher = new Dispatcher()
 
@@ -199,6 +203,14 @@ AppDispatcher.register(payload => {
 
     case 'search-agent-signup':
       searchAgentSignup(payload.mlsid)
+      break
+
+    case 'check-for-mobile':
+      checkForMobile()
+      break
+
+    case 'upgrade-account':
+      upgradeAccount(payload.user, payload.agent, payload.secret)
       break
 
     default:

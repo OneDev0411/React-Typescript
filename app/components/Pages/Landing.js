@@ -311,7 +311,7 @@ export default class Landing extends Component {
             </Col>
           </div>
         </footer>
-        <Modal show={ data.show_signup_confirm_modal } onHide={ this.hideModal }>
+        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_signup_confirm_modal } onHide={ this.hideModal }>
           <Modal.Body className="text-center">
             <div style={ S('mb-20 mt-20') }>
               <div style={ S('br-100 w-90 h-90 center-block bg-3388ff text-center') }>

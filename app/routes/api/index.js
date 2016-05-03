@@ -21,6 +21,7 @@ module.exports = (app, config) => {
   require('./users/reset-password')(app, config)
   require('./users/verify-phone')(app, config)
   require('./users/email-verifications')(app, config)
+  require('./users/upgrade-account')(app, config)
   // Rooms
   require('./rooms/create-room')(app, config)
   require('./rooms/delete-room')(app, config)

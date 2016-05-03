@@ -15,6 +15,7 @@ import Transactions from '../../components/Pages/Dashboard/Transactions'
 import SingleTransaction from '../../components/Pages/Dashboard/Transactions/Single'
 import NewTransaction from '../../components/Pages/Dashboard/Transactions/New'
 import SignUp from '../../components/Pages/SignUp'
+import ConfirmAgent from '../../components/Pages/SignUp/ConfirmAgent'
 import SignIn from '../../components/Pages/SignIn'
 import Verify from '../../components/Pages/Verify'
 import Password from '../../components/Pages/Password'
@@ -28,6 +29,7 @@ export default (
   <Route path="/" component={App}>
     <IndexRoute component={Landing}/>
     <Route path="signup" component={SignUp}/>
+    <Route path="signup/agent" component={ConfirmAgent}/>
     <Route path="signin" component={SignIn}/>
     <Route path="account/settings" component={Settings}/>
     <Route path="account/notifications" component={Notifications}/>

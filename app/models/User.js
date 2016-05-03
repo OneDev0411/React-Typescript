@@ -90,13 +90,13 @@ export default {
   signin: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-
     const endpoint = api_host + '/api/signin'
     const request_object = {
       email: params.email,
-      password: params.password,
-      invite: params.invite
+      password: params.password
     }
+    if (params.invite)
+      request_object.invite = params.invite
     fetch(endpoint, {
       method: 'post',
       credentials: 'include',
@@ -453,6 +453,36 @@ export default {
     const request_object = {
       old_password: params.old_password,
       new_password: params.new_password,
+      access_token: params.access_token
+    }
+    fetch(endpoint, {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(request_object)
+    })
+    .then(response => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          response
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then(response => {
+      return callback(false, response)
+    })
+  },
+  upgradeAccount: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const endpoint = api_host + '/api/upgrade-account'
+    const request_object = {
+      agent: params.agent,
+      secret: params.secret,
       access_token: params.access_token
     }
     fetch(endpoint, {
