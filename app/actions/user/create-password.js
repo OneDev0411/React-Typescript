@@ -35,8 +35,8 @@ export default (email, password, first_name, last_name, token) => {
             show_message: true,
             request_error: true
           }
+          AppStore.emitChange()
         }
-        AppStore.emitChange()
       })
     },
     callback => {
