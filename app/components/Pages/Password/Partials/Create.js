@@ -9,6 +9,7 @@ import helpers from '../../../../utils/helpers'
 import AppStore from '../../../../stores/AppStore'
 
 export default class Create extends Component {
+
   handleSubmit(e) {
     e.preventDefault()
     const data = this.props.data
@@ -26,15 +27,17 @@ export default class Create extends Component {
     AppStore.emitChange()
     // Get token
     const password = this.refs.password.getInputDOMNode().value.trim()
-    const confirm_password = this.refs.confirm_password.getInputDOMNode().value.trim()
     const token = decodeURIComponent(helpers.getParameterByName('token'))
     const email = decodeURIComponent(helpers.getParameterByName('email'))
+    const first_name = this.refs.first_name.refs.input.value.trim()
+    const last_name = this.refs.last_name.refs.input.value.trim()
     const type = data.signup.type
     const form_data = {
       password,
-      confirm_password,
       token,
       email,
+      first_name,
+      last_name,
       type
     }
     this.props.handleSubmit('create-password', form_data)
@@ -45,6 +48,23 @@ export default class Create extends Component {
       type
     }
     AppStore.emitChange()
+    this.testForDisabled()
+  }
+
+  testForDisabled() {
+    const data = this.props.data
+    if (data.signup)
+      delete AppStore.data.signup.can_submit
+    const password = this.refs.password.refs.input.value.trim()
+    const first_name = this.refs.first_name.refs.input.value.trim()
+    const last_name = this.refs.last_name.refs.input.value.trim()
+    if (data.signup && data.signup.type && password && first_name && last_name)
+      AppStore.data.signup.can_submit = true
+    AppStore.emitChange()
+  }
+
+  handleKeyUp() {
+    this.testForDisabled()
   }
 
   render() {
@@ -132,6 +152,15 @@ export default class Create extends Component {
         ...button_active_style
       }
     }
+    // Disabled
+    let is_disabled = true
+    let disabled_class = ' disabled'
+    if (data.signup && data.signup.can_submit) {
+      disabled_class = ''
+      is_disabled = false
+    }
+    if (submitting)
+      is_disabled = true
     let main_content = (
       <div>
         <Col sm={ 6 } className={ data.is_mobile ? 'hidden' : '' }>
@@ -139,25 +168,31 @@ export default class Create extends Component {
         </Col>
         <Col sm={ 6 }>
           <div className="tk-calluna-sans" style={ S('color-cecdcd mb-20 font-26 text-left') }>Rechat</div>
-          <div style={ S('color-000 mb-20 text-left font-26') }>Thanks!  You're almost there...</div>
+          <div style={ S('color-000 mb-0 text-left font-26') }>Thanks!  You're almost there...</div>
+          <div style={ S('color-9b9b9b mb-20 text-left font-15') }>Please fill out the details below to set up your profile.</div>
           <form onSubmit={ this.handleSubmit.bind(this) }>
-            <Input bsStyle={ password_style } placeholder="New Password" type="password" ref="password"/>
-            <Input bsStyle={ password_style } placeholder="Confirm New Password" type="password" ref="confirm_password"/>
-            { message }
+            <Input onKeyUp={ this.handleKeyUp.bind(this) } bsStyle={ password_style } placeholder="New Password" type="password" ref="password"/>
+            <Col sm={ 6 } style={ S(data.is_mobile ? 'mb-10 p-0 mr-0 pr-0' : 'p-0 pr-10') }>
+              <Input onKeyUp={ this.handleKeyUp.bind(this) } placeholder="First Name" type="text" ref="first_name"/>
+            </Col>
+            <Col sm={ 6 } style={ S('p-0') }>
+              <Input onKeyUp={ this.handleKeyUp.bind(this) } placeholder="Last Name" type="text" ref="last_name"/>
+            </Col>
             <div style={ S('w-100p mb-10') }>
-              <Col style={ S(data.is_mobile ? 'mb-10 p-0' : 'p-0 pr-5') } sm={ 6 }>
+              <Col style={ S(data.is_mobile ? 'mb-10 p-0 mr-0 pr-0' : 'p-0 pr-10') } sm={ 6 }>
                 <Button onClick={ this.handleTypeClick.bind(this, 'agent') } style={ agent_button_style } type="button" className="btn btn-default">
                   { agent_button_text }
                 </Button>
               </Col>
-              <Col style={ S('p-0 pl-5 pr-0') } sm={ 6 }>
+              <Col style={ S('p-0') } sm={ 6 }>
                 <Button onClick={ this.handleTypeClick.bind(this, 'client') } style={ client_button_style } type="button" className="btn btn-default">
                   { client_button_text }
                 </Button>
               </Col>
               <div className="clearfix"></div>
             </div>
-            <Button type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p') }>
+            { message }
+            <Button type="submit" ref="submit" className={ disabled_class + submitting_class + 'btn btn-primary' } disabled={ is_disabled ? 'true' : '' } style={ S('w-100p') }>
               { submitting ? 'Submitting...' : 'Continue' }
             </Button>
             <div style={ S('mt-20 color-929292 font-13') }>Code not working? <Link to="/password/forgot">Try sending it again</Link></div>

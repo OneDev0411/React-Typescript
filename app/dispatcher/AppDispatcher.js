@@ -102,7 +102,7 @@ AppDispatcher.register(payload => {
       break
 
     case 'create-password':
-      createPassword(payload.email, payload.password, payload.confirm_password, payload.token)
+      createPassword(payload.email, payload.password, payload.first_name, payload.last_name, payload.token)
       break
 
     case 'send-verify-email':

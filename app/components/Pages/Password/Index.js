@@ -53,15 +53,17 @@ export default class Password extends Component {
     // Reset pass
     if (action === 'create-password') {
       const password = form_data.password
-      const confirm_password = form_data.confirm_password
       const token = form_data.token
       const email = form_data.email
+      const first_name = form_data.first_name
+      const last_name = form_data.last_name
       AppDispatcher.dispatch({
         action: 'create-password',
         password,
-        confirm_password,
         token,
-        email
+        email,
+        first_name,
+        last_name
       })
     }
   }
