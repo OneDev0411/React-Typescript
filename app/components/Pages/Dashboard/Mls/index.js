@@ -377,11 +377,11 @@ export default class Mls extends Component {
         <main>
           { main_content }
         </main>
-        <Modal show={ data.show_welcome_modal } onHide={ this.hideWelcomeModal }>
+        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_welcome_modal } onHide={ this.hideWelcomeModal }>
           <Modal.Body style={ S('text-center p-50') }>
             <div style={ S('font-42') }>Welcome to Rechat!</div>
             <div style={ S('font-22 color-9b9b9b') }>The Real Estate app that Elevates Your Game</div>
-            <div style={ S('mt-20 mb-20') }>
+            <div style={ S('mt-20 mb-20 h-156') }>
               <img style={ S('w-100p') } src="/images/signup/value-faces.png" />
             </div>
             <Button bsStyle="primary" style={ S('w-100p') } onClick={ this.hideWelcomeModal }>Start Using Rechat</Button>
