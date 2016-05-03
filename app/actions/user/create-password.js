@@ -53,7 +53,7 @@ export default (email, password, first_name, last_name, token) => {
         callback()
       })
     },
-    () => {
+    callback => {
       // Edit first / last name
       const local_user = locals.user
       const user_info = {
@@ -65,6 +65,16 @@ export default (email, password, first_name, last_name, token) => {
         user: user_info
       }
       User.edit(params_edit, (err, response) => {
+        callback()
+      })
+    },
+    () => {
+      // Signin with new edited info
+      const params_signin_again = {
+        email,
+        password
+      }
+      User.signin(params_signin_again, (err, response) => {
         const user = response.data
         AppStore.data.user = user
         AppStore.emitChange()
