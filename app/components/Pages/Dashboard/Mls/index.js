@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import GoogleMap from 'google-map-react'
-import { ButtonGroup, Button } from 'react-bootstrap'
+import { ButtonGroup, Button, Modal } from 'react-bootstrap'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
@@ -63,6 +63,10 @@ export default class Mls extends Component {
       action: 'get-contacts',
       user
     })
+    if (this.props.location && this.props.location.query.message && this.props.location.query.message === 'welcome') {
+      AppStore.data.show_welcome_modal = true
+      AppStore.ematChange()
+    }
   }
   componentDidMount() {
     this.checkForMobile()
@@ -92,6 +96,10 @@ export default class Mls extends Component {
       )
     })
     return cache_images
+  }
+  hideWelcomeModal() {
+    delete AppStore.data.show_welcome_modal
+    AppStore.emitChange()
   }
   render() {
     const data = this.props.data
@@ -369,11 +377,22 @@ export default class Mls extends Component {
         <main>
           { main_content }
         </main>
+        <Modal show={ data.show_welcome_modal } onHide={ this.hideWelcomeModal }>
+          <Modal.Body style={ S('text-center p-50') }>
+            <div style={ S('font-42') }>Welcome to Rechat!</div>
+            <div style={ S('font-22 color-9b9b9b') }>The Real Estate app that Elevates Your Game</div>
+            <div style={ S('mt-20 mb-20') }>
+              <img style={ S('w-100p') } src="/images/signup/value-faces.png" />
+            </div>
+            <Button bsStyle="primary" style={ S('w-100p') } onClick={ this.hideWelcomeModal }>Start Using Rechat</Button>
+          </Modal.Body>
+        </Modal>
       </div>
     )
   }
 }
 Mls.propTypes = {
   data: React.PropTypes.object,
-  params: React.PropTypes.object
+  params: React.PropTypes.object,
+  location: React.PropTypes.object
 }

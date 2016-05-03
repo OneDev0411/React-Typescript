@@ -12,7 +12,7 @@ export default class ConfirmAgent extends Component {
     const signup = data.signup
     // Redirect after agent confirmation
     if (signup && signup.is_agent)
-      this.props.history.pushState(null, '/dashboard/mls?welcome=true')
+      this.props.history.pushState(null, '/dashboard/mls?message=welcome')
   }
   showIntercom(e) {
     e.preventDefault()

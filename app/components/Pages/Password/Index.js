@@ -23,7 +23,7 @@ export default class Password extends Component {
     // Redirect after Password creation
     if (user) {
       if (signup.type === 'client')
-        this.props.history.pushState(null, '/dashboard/mls?welcome=true')
+        this.props.history.pushState(null, '/dashboard/mls?message=welcome')
       if (signup.type === 'agent')
         this.props.history.pushState(null, '/signup/agent')
     }
