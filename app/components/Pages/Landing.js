@@ -219,7 +219,7 @@ export default class Landing extends Component {
       }
       if (data.errors.type === 'email-in-use') {
         popover = (
-          <Popover id="popover" title="">This email is already in use.</Popover>
+          <Popover id="popover" title="">This email is already in use.  Follow the <a href="/password/forgot">forgot password process</a> or <a href="#" onClick={ this.showIntercom }>contact support</a>.</Popover>
         )
       }
       if (data.errors.type === 'bad-request') {

@@ -20,6 +20,13 @@ export default (user, redirect_to) => {
               type: 'bad-request'
             }
           }
+          // Bad request
+          if (err.response.status === 409) {
+            AppStore.data.errors = {
+              type: 'email-in-use'
+            }
+          }
+          delete AppStore.data.submitting
           AppStore.emitChange()
         }
         // Success
