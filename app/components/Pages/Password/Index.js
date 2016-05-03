@@ -24,8 +24,11 @@ export default class Password extends Component {
     if (user) {
       if (signup.type === 'client')
         window.location.href = '/dashboard/mls?message=welcome'
-      if (signup.type === 'agent')
+      if (signup.type === 'agent') {
+        delete AppStore.data.submitting
+        AppStore.emitChange()
         this.props.history.pushState(null, '/signup/agent')
+      }
     }
   }
 

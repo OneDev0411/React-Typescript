@@ -64,7 +64,7 @@ export default (email, password, first_name, last_name, token) => {
         access_token: local_user.access_token,
         user: user_info
       }
-      User.edit(params_edit, (err, response) => {
+      User.edit(params_edit, () => {
         callback()
       })
     },
