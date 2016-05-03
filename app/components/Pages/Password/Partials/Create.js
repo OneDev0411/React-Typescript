@@ -171,13 +171,13 @@ export default class Create extends Component {
           <div style={ S('color-000 mb-0 text-left font-26') }>Thanks!  You're almost there...</div>
           <div style={ S('color-9b9b9b mb-20 text-left font-15') }>Please fill out the details below to set up your profile.</div>
           <form onSubmit={ this.handleSubmit.bind(this) }>
-            <Input onKeyUp={ this.handleKeyUp.bind(this) } bsStyle={ password_style } placeholder="New Password" type="password" ref="password"/>
             <Col sm={ 6 } style={ S(data.is_mobile ? 'mb-10 p-0 mr-0 pr-0' : 'p-0 pr-10') }>
               <Input onKeyUp={ this.handleKeyUp.bind(this) } placeholder="First Name" type="text" ref="first_name"/>
             </Col>
             <Col sm={ 6 } style={ S('p-0') }>
               <Input onKeyUp={ this.handleKeyUp.bind(this) } placeholder="Last Name" type="text" ref="last_name"/>
             </Col>
+            <Input onKeyUp={ this.handleKeyUp.bind(this) } bsStyle={ password_style } placeholder="New Password" type="password" ref="password"/>
             <div style={ S('w-100p mb-10') }>
               <Col style={ S(data.is_mobile ? 'mb-10 p-0 mr-0 pr-0' : 'p-0 pr-10') } sm={ 6 }>
                 <Button onClick={ this.handleTypeClick.bind(this, 'agent') } style={ agent_button_style } type="button" className="btn btn-default">
