@@ -13,9 +13,9 @@ export default mlsid => {
         AppStore.data.settings = {}
       AppStore.data.settings.agent = agent
     } else {
-      AppStore.data.error_type = 'agent-not-found'
-      AppStore.data.show_message = true
-      AppStore.data.errors = true
+      AppStore.data.errors = {
+        type: 'agent-not-found'
+      }
     }
     delete AppStore.data.submitting
     AppStore.emitChange()

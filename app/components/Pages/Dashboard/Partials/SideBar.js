@@ -58,6 +58,7 @@ export default class SideBar extends Component {
   }
 
   searchAgent() {
+    delete AppStore.data.errors
     AppStore.data.submitting = true
     AppStore.emitChange()
     const mlsid = this.refs.mlsid.refs.input.value.trim()
@@ -68,6 +69,7 @@ export default class SideBar extends Component {
   }
 
   confirmAgent() {
+    delete AppStore.data.errors
     AppStore.data.submitting = true
     AppStore.emitChange()
     const data = this.props.data
@@ -436,6 +438,13 @@ export default class SideBar extends Component {
       transactions: <Popover className="sidenav__popover" id="popover-transactions">Transactions</Popover>,
       support: <Popover className="sidenav__popover" id="popover-transactions">Need Help?</Popover>
     }
+    if (data.errors && data.errors.type && data.errors.type === 'agent-not-found') {
+      message = (
+        <Alert bsStyle="danger">
+          Agent not found.
+        </Alert>
+      )
+    }
     let upgrade_account_area = (
       <div>
         <form onSubmit={ this.handleSubmit.bind(this, 'search-agent') }>
@@ -443,6 +452,8 @@ export default class SideBar extends Component {
             <Col xs={ 12 }>
               <label>Enter your agent license # to unlock MLS features.</label>
               <Input key={'password'} ref="mlsid" type="text" defaultValue=""/>
+              { message }
+              <div className="clearfix"></div>
             </Col>
             <div style={ S('text-center mt-20') }>
               Having trouble? <a href="#" onClick={ this.showIntercom }>Contact support</a>.
@@ -470,21 +481,21 @@ export default class SideBar extends Component {
       const agent = data.settings.agent
       upgrade_account_area = (
         <div>
-          <Modal.Body>
-            <div className="tk-calluna-sans" style={ S('color-cecdcd mb-20 font-26 text-left') }>Rechat</div>
-            <div style={ S('color-000 mb-20 text-left font-26') }>Confirm agent status</div>
-            <div style={ S('mb-20 color-9b9b9b') }>We found the following contact details associated with agent license <strong>#{ data.settings.agent.mlsid }</strong></div>
-            <div style={ S('mb-10 color-9b9b9b') }>Confirm this is you by entering your email or phone number # below</div>
-            <div style={ S('mb-20 color-4a4a4a') }>
-              {
-                agent.secret_questions.map((question, i) => {
-                  return (
-                    <div key={ 'question-' + i } style={ S('fw-600') }>{ question }</div>
-                  )
-                })
-              }
-            </div>
-            <form onSubmit={ this.handleSubmit.bind(this, 'confirm-agent') }>
+          <form onSubmit={ this.handleSubmit.bind(this, 'confirm-agent') }>
+            <Modal.Body>
+              <div className="tk-calluna-sans" style={ S('color-cecdcd mb-20 font-26 text-left') }>Rechat</div>
+              <div style={ S('color-000 mb-20 text-left font-26') }>Confirm agent status</div>
+              <div style={ S('mb-20 color-9b9b9b') }>We found the following contact details associated with agent license <strong>#{ data.settings.agent.mlsid }</strong></div>
+              <div style={ S('mb-10 color-9b9b9b') }>Confirm this is you by entering your email or phone number # below</div>
+              <div style={ S('mb-20 color-4a4a4a') }>
+                {
+                  agent.secret_questions.map((question, i) => {
+                    return (
+                      <div key={ 'question-' + i } style={ S('fw-600') }>{ question }</div>
+                    )
+                  })
+                }
+              </div>
               <div style={ S('w-100p mb-10') }>
                 <Input type="text" ref="secret" placeholder="Your email or phone #"/>
                 <div className="clearfix"></div>
@@ -493,16 +504,16 @@ export default class SideBar extends Component {
               <div style={ S('text-center mt-20') }>
                 Having trouble? <a href="#" onClick={ this.showIntercom }>Contact support</a>.
               </div>
-            </form>
-          </Modal.Body>
-          <Modal.Footer style={ { border: 'none' } }>
-            <Col xs={ 9 } style={ S('pr-0 pull-right') }>
-              <Button bsStyle="link" onClick={ this.hideModal.bind(this) }>Cancel</Button>
-              <Button style={ S('h-30 pt-5 pl-30 pr-30') } className={ data.submitting ? 'disabled' : '' } type="submit" bsStyle="primary">
-                { data.submitting ? 'Confirming...' : 'Confirm I\'m an agent' }
-              </Button>
-            </Col>
-          </Modal.Footer>
+            </Modal.Body>
+            <Modal.Footer style={ { border: 'none' } }>
+              <Col xs={ 9 } style={ S('pr-0 pull-right') }>
+                <Button bsStyle="link" onClick={ this.hideModal.bind(this) }>Cancel</Button>
+                <Button style={ S('h-30 pt-5 pl-30 pr-30') } className={ data.submitting ? 'disabled' : '' } type="submit" bsStyle="primary">
+                  { data.submitting ? 'Confirming...' : 'Confirm I\'m an agent' }
+                </Button>
+              </Col>
+            </Modal.Footer>
+          </form>
         </div>
       )
     }
