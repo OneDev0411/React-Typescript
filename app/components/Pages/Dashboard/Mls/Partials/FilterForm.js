@@ -94,7 +94,7 @@ export default class FilterForm extends Component {
             <div style={ status_style }>
               <div
                 onClick={ this.props.toggleListingStatusDropdown.bind(this, 'sold') }
-                style={ S('pull-left w-200 pt-15 pl-15 pb-15 pointer h-50') }
+                style={ S('pull-left w-180 pt-15 pl-15 pb-15 pointer h-50') }
               >
                 <span style={ S('color-db3821 font-30 mr-12 relative t-12n') }>&#8226;</span>
                 <span style={ S('relative t-15n') }>Sold</span>
@@ -121,7 +121,7 @@ export default class FilterForm extends Component {
             <div style={ status_style }>
               <div
                 onClick={ this.props.toggleListingStatusDropdown.bind(this, 'active') }
-                style={ S('pull-left w-200 pt-15 pl-15 pb-15 pointer h-50') }
+                style={ S('pull-left w-180 pt-15 pl-15 pb-15 pointer h-50') }
               >
                 <span style={ S('color-82dd00 font-30 mr-12 relative t-12n') }>&#8226;</span>
                 <span style={ S('relative t-15n') }>Active</span>
@@ -159,10 +159,10 @@ export default class FilterForm extends Component {
             <div style={ status_style }>
               <div
                 onClick={ this.props.toggleListingStatusDropdown.bind(this, 'other') }
-                style={ S('pull-left w-200 pt-15 pl-15 pb-15 pointer h-50') }
+                style={ S('pull-left w-180 pt-15 pl-15 pb-15 pointer h-50') }
               >
                 <span style={ S('color-f8b619 font-30 mr-12 relative t-12n') }>&#8226;</span>
-                <span style={ S('relative t-15n') }>Other Listing Status</span>
+                <span style={ S('relative t-15n') }>Other Status</span>
                 <i style={ S('pull-right font-20') } className={ `fa fa-caret-${filter_options.status_dropdowns && filter_options.status_dropdowns.other ? `up` : 'down'}` }></i>
               </div>
               <div style={ S('pull-right w-95 pt-15 pr-15 pb-15') }>
@@ -203,7 +203,7 @@ export default class FilterForm extends Component {
               <div className="clearfix"></div>
             </div>
             <div style={ status_style }>
-              <div style={ S('pull-left w-200 pt-15 pl-15 pb-15 h-50') }>
+              <div style={ S('pull-left w-180 pt-15 pl-15 pb-15 h-50') }>
                 <span style={ S('color-35b863 font-30 mr-12 relative t-12n') }>&#8226;</span>
                 <span style={ S('relative t-15n') }>Open Houses Only</span>
               </div>
