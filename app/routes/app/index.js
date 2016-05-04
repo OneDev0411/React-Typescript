@@ -97,20 +97,6 @@ module.exports = (app, config) => {
     next()
   })
 
-  app.get('/verify/email',(req, res) => {
-    let AppStore = {}
-    AppStore.data = {
-      status: 'success'
-    }
-    if(req.query.status == 'error'){
-      AppStore.data = {
-        status: 'error'
-      }
-    }
-    res.locals.AppStore = JSON.stringify(AppStore)
-    return res.render('index.html')
-  })
-
   app.get('/invite',(req, res) => {
     const room_id = req.query.room_id
     const invite_token = req.query.invite_token

@@ -21,6 +21,19 @@ module.exports = (app, config) => {
     const token = decrypted_obj.token
     return res.redirect('/password/create?token=' + encodeURIComponent(token) + '&email=' + encodeURIComponent(email))
   })
+  app.get('/verify/email',(req, res) => {
+    let AppStore = {}
+    AppStore.data = {
+      status: 'success'
+    }
+    if(req.query.status == 'error'){
+      AppStore.data = {
+        status: 'error'
+      }
+    }
+    res.locals.AppStore = JSON.stringify(AppStore)
+    return res.render('index.html')
+  })
   app.get('/verify_email/submitted',(req, res) => {
     const decoded_token = decodeURIComponent(req.query.token)
     const decrypted_obj = JSON.parse(Crypto.decrypt(decoded_token))
@@ -58,13 +71,11 @@ module.exports = (app, config) => {
       return res.redirect('/verify/email?status=success&token=' + token + '&email=' + encodeURIComponent(email))
     })
   })
-
   app.get('/verify_phone',(req, res) => {
     const decoded_token = decodeURIComponent(req.query.token)
     const encoded_token = encodeURIComponent(decoded_token)
     return res.redirect('/verify/phone?token=' + encoded_token)
   })
-
   app.get('/reset_password',(req, res) => {    
     const decoded_token = decodeURIComponent(req.query.token)
     const encoded_token = encodeURIComponent(decoded_token)
