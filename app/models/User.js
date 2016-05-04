@@ -6,6 +6,30 @@ import superagent from 'superagent'
 import config from '../../config/public'
 
 export default {
+  get: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const endpoint = api_host + '/api/users/' + params.id + '?access_token=' + params.access_token
+    fetch(endpoint, {
+      method: 'get',
+      headers: {
+        'Content-type': 'application/json'
+      }
+    })
+    .then(response => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          response
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then(response => {
+      return callback(false, response)
+    })
+  },
   create: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url

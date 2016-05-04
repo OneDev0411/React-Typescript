@@ -1,10 +1,10 @@
 // index.js
-// Room
 import Room from '../../models/Room'
-
-// Store
+import Crypto from '../../models/Crypto'
+import User from '../../models/User'
 import AppStore from '../../stores/AppStore'
 import Cosmic from 'cosmicjs'
+import async from 'async'
 
 module.exports = (app, config) => {
   app.use((req, res, next) => {
@@ -43,22 +43,46 @@ module.exports = (app, config) => {
     })
   })
 
+  // Seamless listing
   app.get('/dashboard/mls/:id', (req, res, next) => {
-    /// http://localhost:3000/dashboard/mls/a99808ac-d33f-11e5-b3aa-f23c91c841bd
-    // timestamp bundle
-    const date = new Date
-    res.locals.time = date.getTime()
     AppStore.data.user = req.session.user
     res.locals.AppStore = JSON.stringify(AppStore)
     return res.status(200).render('index.html')
     res.end()
   })
 
+  // Seamless chat
+  app.get('/dashboard/recents/:id', (req, res, next) => {
+    if (!req.query.token)
+      return next()
+    const decoded_token = decodeURIComponent(req.query.token)
+    const decrypted_obj = JSON.parse(Crypto.decrypt(decoded_token))
+    const id = decrypted_obj.id
+    const tokens = decrypted_obj.tokens
+    const access_token = tokens.access
+    async.series([
+      callback => {
+        const params = {
+          id,
+          access_token
+        }
+        // Create user session
+        User.get(params, (error, response) => {
+          const user = response.data
+          user.access_token = access_token
+          req.session.user = user
+          callback()
+        })
+      },
+      callback => {
+        return res.redirect('/dashboard/recents/' + req.params.id)
+        res.end()
+      }
+    ])
+  })
+
   app.get('/dashboard*', (req, res, next) => {
     if(req.session.user){
-      // timestamp bundle
-      const date = new Date
-      res.locals.time = date.getTime()
       AppStore.data.user = req.session.user
       AppStore.data.path = req.url
       AppStore.data.location = {
