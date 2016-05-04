@@ -50,6 +50,7 @@ import getNotificationSummery from '../actions/notifications/get-summary'
 // Agents
 import getAgentReport from '../actions/agents/get-report'
 import searchAgentSignup from '../actions/agents/search-agent-signup'
+import searchAgentSettings from '../actions/agents/search-agent-settings'
 
 // Device
 import checkForMobile from '../actions/device/check-for-mobile'
@@ -203,6 +204,10 @@ AppDispatcher.register(payload => {
 
     case 'search-agent-signup':
       searchAgentSignup(payload.mlsid)
+      break
+
+    case 'search-agent-settings':
+      searchAgentSettings(payload.mlsid)
       break
 
     case 'check-for-mobile':

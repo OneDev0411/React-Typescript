@@ -30,12 +30,10 @@ export default (user, user_info) => {
       const status = res.status
       delete AppStore.data.saving_account_settings
       AppStore.data.error = {}
-      if (status === 400) {
+      if (status === 400)
         AppStore.data.error.message = 'First name, last name and email are required.'
-      }
-      if (status === 409) {
+      if (status === 409)
         AppStore.data.error.message = 'Email already exisits.'
-      }
       AppStore.emitChange()
     }
   })

@@ -12,7 +12,10 @@ export default (user, agent, secret) => {
     secret
   }
   User.upgradeAccount(params, (err, response) => {
-    delete AppStore.data.signup.is_agent
+    if (AppStore.data.signup)
+      delete AppStore.data.signup.is_agent
+    if (AppStore.data.settings)
+      delete AppStore.data.settings.is_agent
     // Success
     if (response.status === 'success') {
       const new_user = {
@@ -20,7 +23,10 @@ export default (user, agent, secret) => {
         access_token: user.access_token
       }
       AppStore.data.user = new_user
-      AppStore.data.signup.is_agent = true
+      if (AppStore.data.settings)
+        AppStore.data.settings.is_agent = true
+      if (AppStore.data.signup)
+        AppStore.data.signup.is_agent = true
     } else {
       AppStore.data.errors = {
         update_error: true
