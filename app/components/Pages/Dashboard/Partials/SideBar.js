@@ -508,6 +508,12 @@ export default class SideBar extends Component {
         </div>
       )
     }
+    let upgrade_account_button
+    if (data.user && data.user.user_type === 'Client') {
+      upgrade_account_button = (
+        <li><a href="#" style={ S('pointer') } onClick={ this.showUpgradeAccountModal }><i className="fa fa-arrow-up" style={ S('mr-15') }></i>Upgrade Account</a></li>
+      )
+    }
     return (
       <aside style={ sidebar_style } className="sidebar__nav-list pull-left">
         <div style={ S('mt-12') }>
@@ -581,7 +587,7 @@ export default class SideBar extends Component {
               <ProfileImage data={ data } user={ user } />
             </div>
             <NavDropdown style={ S('z-1000') } title={ title_area } dropup id="account-dropdown" className="account-dropdown" eventKey={3} noCaret>
-              <li><a href="#" style={ S('pointer') } onClick={ this.showUpgradeAccountModal }><i className="fa fa-arrow-up" style={ S('mr-15') }></i>Upgrade Account</a></li>
+              { upgrade_account_button }
               <li><a href="#" style={ S('pointer') } onClick={ this.showSettingsModal }><i className="fa fa-cog" style={ S('mr-15') }></i>Settings</a></li>
               <li role="separator" className="divider"></li>
               <li><a href="/signout"><i className="fa fa-power-off" style={ S('mr-15') }></i>Sign out</a></li>
