@@ -11,7 +11,7 @@ export default class ConfirmAgent extends Component {
     const signup = data.signup
     // Redirect after agent confirmation
     if (signup && signup.is_agent)
-      window.location.href = '/dashboard/mls?message=welcome'
+      window.location.href = '/signin?message=account-upgraded'
   }
   showIntercom(e) {
     e.preventDefault()
