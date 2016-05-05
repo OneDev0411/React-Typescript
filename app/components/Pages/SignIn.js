@@ -21,7 +21,6 @@ export default class SignIn extends Component {
 
   componentDidMount() {
     const message = helpers.getParameterByName('message')
-    console.log(message)
     if (message && message === 'account-upgraded') {
       setTimeout(() => {
         AppStore.data.show_upgrade_confirm_modal = true

@@ -51,7 +51,7 @@ module.exports = (app, config) => {
     res.end()
   })
 
-  // Seamless chat
+  // Seamless chatroom / alert
   app.get('/dashboard/recents/:id', (req, res, next) => {
     if (!req.query.token)
       return next()
@@ -60,6 +60,7 @@ module.exports = (app, config) => {
     const id = decrypted_obj.id
     const tokens = decrypted_obj.tokens
     const access_token = tokens.access
+    const alert = req.query.alert
     async.series([
       callback => {
         const params = {
@@ -75,7 +76,10 @@ module.exports = (app, config) => {
         })
       },
       callback => {
-        return res.redirect('/dashboard/recents/' + req.params.id)
+        let redirect_url = '/dashboard/recents/' + req.params.id
+        if (alert)
+          redirect_url = '/dashboard/recents/' + req.params.id + '?alert=' + alert
+        return res.redirect(redirect_url)
         res.end()
       }
     ])

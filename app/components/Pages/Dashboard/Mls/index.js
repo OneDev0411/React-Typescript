@@ -15,7 +15,7 @@ import ListingViewerMobile from '../Partials/ListingViewerMobile'
 import ListingPanel from './Partials/ListingPanel'
 import FilterForm from './Partials/FilterForm'
 import ListingMarker from '../Partials/ListingMarker'
-import listing_util from '../../../../utils/listing'
+// import listing_util from '../../../../utils/listing'
 export default class Mls extends Component {
   componentWillMount() {
     const data = this.props.data
