@@ -66,21 +66,25 @@ export default class ConfirmAgent extends Component {
     if (data.signup && data.signup.agent)
       agent = data.signup.agent
     // Search agent
+    const brand_style = {
+      ...S('color-cecdcd mb-20 font-26 text-left'),
+      letterSpacing: '1.5px'
+    }
     let main_content = (
       <div>
         <Col sm={ 5 } className={ data.is_mobile ? 'hidden' : '' }>
           <img style={ S('w-100p maxw-300') } src="/images/signup/ntreis-logo.png" />
         </Col>
         <Col sm={ 7 }>
-          <div className="tk-calluna-sans" style={ S('color-cecdcd mb-20 font-26 text-left') }>Rechat</div>
-          <div style={ S('color-000 mb-20 text-left font-26') }>Thanks!  You're almost there...</div>
+          <div className="tk-calluna-sans" style={ brand_style }>Rechat</div>
+          <div style={ S('color-000 mb-20 text-left font-36') }>Confirm agent status</div>
           <div style={ S('mb-20 color-9b9b9b') }>Enter your agent license # to unlock MLS features.</div>
           <form onSubmit={ this.handleSubmit.bind(this, 'search-agent') }>
             <div style={ S('w-100p mb-10') }>
-              <Input type="text" ref="mlsid" placeholder="Your agent number"/>
+              <Input bsSize="large" type="text" ref="mlsid" placeholder="Your agent number"/>
               <div className="clearfix"></div>
             </div>
-            <Button type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p') }>
+            <Button bsSize="large" type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p') }>
               { submitting ? 'Submitting...' : 'Continue to Final Step' }
             </Button>
             <div style={ S('text-center mt-20') }>
@@ -134,12 +138,12 @@ export default class ConfirmAgent extends Component {
         </div>
       )
     }
-    let module_width = ' w-750'
+    let module_style = S('w-100p maxw-950')
     if (data.is_mobile)
-      module_width = ''
+      module_style = S('w-100p')
     return (
       <div id="main-content" className="flex-center-wrap" style={ S('absolute h-100p w-100p') }>
-        <div style={ S('z-100 relative mt-60n bg-fff br-6' + module_width) }>
+        <div style={ module_style }>
           { main_content }
         </div>
       </div>

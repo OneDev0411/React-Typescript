@@ -128,13 +128,13 @@ export default class Create extends Component {
     if (submitting)
       submitting_class = 'disabled'
     // Type buttons
-    const type_button_style = S('w-100p mr-5 border-1-solid-ddd bg-f0f0f0 color-9b9b9b')
-    const button_active_style = S('border-1-solid-35b863 color-000 bg-fff')
+    const type_button_style = S('w-100p mr-5 color-9b9b9b font-15 h-46')
+    const button_active_style = S('border-1-solid-35b863 color-35b863 bg-fff')
     let agent_button_style = type_button_style
     let agent_button_text = 'I\'m an agent'
     if (data.signup && data.signup.type === 'agent') {
       agent_button_text = (
-        <span><i className="fa fa-check text-success"></i>&nbsp;&nbsp;I'm an agent</span>
+        <span><i className="fa fa-check-circle" style={ S('color-35b863') }></i>&nbsp;&nbsp;I'm an agent</span>
       )
       agent_button_style = {
         ...agent_button_style,
@@ -145,7 +145,7 @@ export default class Create extends Component {
     let client_button_style = type_button_style
     if (data.signup && data.signup.type === 'client') {
       client_button_text = (
-        <span><i className="fa fa-check text-success"></i>&nbsp;&nbsp;I'm a client</span>
+        <span><i className="fa fa-check-circle" style={ S('color-35b863') }></i>&nbsp;&nbsp;I'm a client</span>
       )
       client_button_style = {
         ...client_button_style,
@@ -161,41 +161,44 @@ export default class Create extends Component {
     }
     if (submitting)
       is_disabled = true
+    const brand_style = {
+      ...S('color-cecdcd mb-20 font-26 text-left'),
+      letterSpacing: '1.5px'
+    }
     let main_content = (
       <div>
-        <Col sm={ 6 } className={ data.is_mobile ? 'hidden' : '' }>
+        <Col sm={ 5 } className={ data.is_mobile ? 'hidden' : '' }>
           <img style={ S('w-100p') } src="/images/signup/house.png" />
         </Col>
-        <Col sm={ 6 }>
-          <div className="tk-calluna-sans" style={ S('color-cecdcd mb-20 font-26 text-left') }>Rechat</div>
-          <div style={ S('color-000 mb-0 text-left font-26') }>Thanks!  You're almost there...</div>
+        <Col sm={ 7 }>
+          <div className="tk-calluna-sans" style={ brand_style }>Rechat</div>
+          <div style={ S('color-000 mb-0 text-left font-36') }>Thanks!  You're almost there...</div>
           <div style={ S('color-9b9b9b mb-20 text-left font-15') }>Please fill out the details below to set up your profile.</div>
           <form onSubmit={ this.handleSubmit.bind(this) }>
             <Col sm={ 6 } style={ S(data.is_mobile ? 'mb-10 p-0 mr-0 pr-0' : 'p-0 pr-10') }>
-              <Input onKeyUp={ this.handleKeyUp.bind(this) } placeholder="First Name" type="text" ref="first_name"/>
+              <Input style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="First Name" type="text" ref="first_name"/>
             </Col>
             <Col sm={ 6 } style={ S('p-0') }>
-              <Input onKeyUp={ this.handleKeyUp.bind(this) } placeholder="Last Name" type="text" ref="last_name"/>
+              <Input style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="Last Name" type="text" ref="last_name"/>
             </Col>
-            <Input onKeyUp={ this.handleKeyUp.bind(this) } bsStyle={ password_style } placeholder="New Password" type="password" ref="password"/>
+            <Input style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } bsStyle={ password_style } placeholder="New Password" type="password" ref="password"/>
             <div style={ S('w-100p mb-10') }>
               <Col style={ S(data.is_mobile ? 'mb-10 p-0 mr-0 pr-0' : 'p-0 pr-10') } sm={ 6 }>
-                <Button onClick={ this.handleTypeClick.bind(this, 'agent') } style={ agent_button_style } type="button" className="btn btn-default">
+                <Button bsSize="large" onClick={ this.handleTypeClick.bind(this, 'agent') } style={ agent_button_style } type="button" className="btn btn-default">
                   { agent_button_text }
                 </Button>
               </Col>
               <Col style={ S('p-0') } sm={ 6 }>
-                <Button onClick={ this.handleTypeClick.bind(this, 'client') } style={ client_button_style } type="button" className="btn btn-default">
+                <Button bsSize="large" onClick={ this.handleTypeClick.bind(this, 'client') } style={ client_button_style } type="button" className="btn btn-default">
                   { client_button_text }
                 </Button>
               </Col>
               <div className="clearfix"></div>
             </div>
             { message }
-            <Button type="submit" ref="submit" className={ disabled_class + submitting_class + 'btn btn-primary' } disabled={ is_disabled ? 'true' : '' } style={ S('w-100p') }>
+            <Button bsSize="large" type="submit" ref="submit" className={ disabled_class + submitting_class + 'btn btn-primary' } disabled={ is_disabled ? 'true' : '' } style={ S('w-100p') }>
               { submitting ? 'Submitting...' : 'Continue' }
             </Button>
-            <div style={ S('mt-20 color-929292 font-13') }>Code not working? <Link to="/password/forgot">Try sending it again</Link></div>
           </form>
         </Col>
       </div>
@@ -208,11 +211,11 @@ export default class Create extends Component {
         </div>
       )
     }
-    let module_width = ' w-750'
+    let module_style = S('w-100p maxw-950')
     if (data.is_mobile)
-      module_width = ''
+      module_style = S('w-100p')
     return (
-      <div style={ S(module_width) }>
+      <div style={ module_style }>
         { main_content }
       </div>
     )
