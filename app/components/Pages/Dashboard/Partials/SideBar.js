@@ -16,19 +16,11 @@ import AppStore from '../../../../stores/AppStore'
 import ProfileImage from './ProfileImage'
 export default class SideBar extends Component {
 
-  componentDidMount() {
-    const message = helpers.getParameterByName('message')
-    if (message && message === 'account-upgraded') {
-      AppStore.data.show_upgrade_confirm_modal = true
-      AppStore.emitChange()
-    }
-  }
-
   componentDidUpdate() {
     // Refresh page on agent update
     const data = this.props.data
     if (data.settings && data.settings.is_agent)
-      window.location.href = '/dashboard/mls?message=account-upgraded'
+      window.location.href = '/signin?message=account-upgraded'
   }
   showSettingsModal(e) {
     e.preventDefault()
@@ -182,7 +174,6 @@ export default class SideBar extends Component {
     delete AppStore.data.saving_account_settings
     delete AppStore.data.password_changed
     delete AppStore.data.show_upgrade_account_modal
-    delete AppStore.data.show_upgrade_confirm_modal
     AppStore.emitChange()
     setTimeout(() => {
       delete AppStore.data.settings
@@ -626,20 +617,6 @@ export default class SideBar extends Component {
             <Modal.Title style={ S('font-14') }>Upgrade Account</Modal.Title>
           </Modal.Header>
           { upgrade_account_area }
-        </Modal>
-        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_upgrade_confirm_modal } onHide={ this.hideModal }>
-          <Modal.Body className="text-center">
-            <div style={ S('mb-20 mt-20') }>
-              <div style={ S('br-100 w-90 h-90 center-block bg-3388ff text-center') }>
-                <i style={ S('color-fff font-40 mt-25') } className="fa fa-check"></i>
-              </div>
-            </div>
-            <div style={ S('font-24 mb-20') }>Acccount Upgraded</div>
-            <div style={ S('color-9b9b9b font-15 mb-20') }>
-              <span className="text-primary">{ data.new_user ? data.new_user.email : '' }</span>
-            </div>
-            <Button style={ S('mb-20') } bsStyle="primary" onClick={ this.hideModal.bind(this) }>Ok</Button>
-          </Modal.Body>
         </Modal>
       </aside>
     )

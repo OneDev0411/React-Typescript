@@ -26,11 +26,16 @@ module.exports = (app, config) => {
         }
         return res.json(error)
       }
-      return response
+      return response.json()
     })
     .then(response => {
       let response_object = response
       response_object.status = 'success'
+      // Reset user session
+      req.session.user = {
+        ...response.data,
+        access_token
+      }
       return res.json(response_object)
     });
   })
