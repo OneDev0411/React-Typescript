@@ -120,11 +120,11 @@ export default class ConfirmAgent extends Component {
             </div>
             <form onSubmit={ this.handleSubmit.bind(this, 'confirm-agent') }>
               <div style={ S('w-100p mb-10') }>
-                <Input type="text" ref="secret" placeholder="Your email or phone #"/>
+                <Input bsSize="large" type="text" ref="secret" placeholder="Your email or phone #"/>
                 <div className="clearfix"></div>
                 { message }
               </div>
-              <Button type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p') }>
+              <Button bsSize="large" type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p') }>
                 { submitting ? 'Submitting...' : 'Confirm I\'m an agent' }
               </Button>
               <div style={ S('text-center mt-20') }>
