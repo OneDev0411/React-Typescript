@@ -176,7 +176,7 @@ export default class SignIn extends Component {
                 <i style={ S('color-fff font-40 mt-25') } className="fa fa-check"></i>
               </div>
             </div>
-            <div style={ S('font-24 mb-20') }>Acccount Upgraded</div>
+            <div style={ S('font-24 mb-20') }>Account Upgraded</div>
             <div style={ S('font-18 mb-20') }>You may now log in and use enhanced features.</div>
             <Button style={ S('mb-20') } bsStyle="primary" onClick={ this.hideModal.bind(this) }>Ok</Button>
           </Modal.Body>
