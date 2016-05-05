@@ -137,7 +137,7 @@ export default class SignUp extends Component {
       <div style={ S('pt-50') }>
         <Col xs={ 12 }>
           <div style={ S('text-center') }>
-            <div style={ S('font-30 color-263445 mb-10') }>Hello, lets get started.</div>
+            <div className="din" style={ S('font-30 color-263445 mb-10') }>Hello, lets get started.</div>
             <div style={ S('border-bottom-2-solid-d8d8d8 mb-20 w-50 center-block') }></div>
             <form onSubmit={ this.handleEmailSubmit.bind(this) }>
               <div style={ S('pull-left') }>
