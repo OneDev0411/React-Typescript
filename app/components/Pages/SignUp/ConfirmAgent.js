@@ -105,7 +105,7 @@ export default class ConfirmAgent extends Component {
             <img style={ S('w-100p maxw-300') } src="/images/signup/agent-face.png" />
           </Col>
           <Col sm={ 7 }>
-            <div className="tk-calluna-sans" style={ S('color-cecdcd mb-20 font-26 text-left') }>Rechat</div>
+            <div className="tk-calluna-sans" style={ brand_style }>Rechat</div>
             <div style={ S('color-000 mb-20 text-left font-26') }>Confirm agent status</div>
             <div style={ S('mb-20 color-9b9b9b') }>We found the following contact details associated with agent license <strong>#{ data.signup.agent.mlsid }</strong></div>
             <div style={ S('mb-10 color-9b9b9b') }>Confirm this is you by entering your email or phone number # below</div>
