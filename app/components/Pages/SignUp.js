@@ -20,7 +20,10 @@ export default class SignUp extends Component {
       AppStore.emitChange()
     }
   }
-  contactSupport() {
+  componentDidMount() {
+    this.refs.email.refs.input.focus()
+  }
+  showIntercom() {
     window.Intercom('show')
   }
   setSignupEmail(e) {
@@ -139,7 +142,7 @@ export default class SignUp extends Component {
             <form onSubmit={ this.handleEmailSubmit.bind(this) }>
               <div style={ S('pull-left') }>
                 <OverlayTrigger trigger="click" placement="bottom" overlay={ popover }>
-                  <Input onChange={ this.setSignupEmail } style={ signup_input_style } type="text" placeholder="Enter email address" value={ data.signup_email } />
+                  <Input ref="email" onChange={ this.setSignupEmail } style={ signup_input_style } type="text" placeholder="Enter email address" value={ data.signup_email } />
                 </OverlayTrigger>
               </div>
               <div style={ S('pull-left') }>
