@@ -79,24 +79,24 @@ export default class Mls extends Component {
       action: 'check-for-mobile'
     })
   }
-  cacheImages() {
-    const data = this.props.data
-    const listing_map = data.listing_map
-    if (!listing_map || data.is_mobile)
-      return <div />
-    const listings = listing_map.listings
-    if (!listings)
-      return <div />
-    const cache_images = listings.map(listing => {
-      let resize_url
-      if (listing.cover_image_url)
-        resize_url = listing_util.getResizeUrl(listing.cover_image_url)
-      return (
-        <img key={ 'cache-image-' + listing.id } style={ S('absolute w-0 h-0 l-1000n') } src={ resize_url + '?w=160'} />
-      )
-    })
-    return cache_images
-  }
+  // cacheImages() {
+  //   const data = this.props.data
+  //   const listing_map = data.listing_map
+  //   if (!listing_map || data.is_mobile)
+  //     return <div />
+  //   const listings = listing_map.listings
+  //   if (!listings)
+  //     return <div />
+  //   const cache_images = listings.map(listing => {
+  //     let resize_url
+  //     if (listing.cover_image_url)
+  //       resize_url = listing_util.getResizeUrl(listing.cover_image_url)
+  //     return (
+  //       <img key={ 'cache-image-' + listing.id } style={ S('absolute w-0 h-0 l-1000n') } src={ resize_url + '?w=160'} />
+  //     )
+  //   })
+  //   return cache_images
+  // }
   hideWelcomeModal() {
     delete AppStore.data.show_welcome_modal
     AppStore.emitChange()
@@ -317,7 +317,7 @@ export default class Mls extends Component {
       <main>
         { nav_area }
         <div className={ main_class } style={ main_style }>
-          { this.cacheImages() }
+          { /* this.cacheImages() */ }
           { toolbar }
           { loading }
           <div style={ map_wrapper_style }>
