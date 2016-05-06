@@ -9,6 +9,18 @@ import helpers from '../../../../utils/helpers'
 import AppStore from '../../../../stores/AppStore'
 
 export default class Create extends Component {
+  componentWillMount() {
+    const first_name = decodeURIComponent(helpers.getParameterByName('first_name'))
+    const last_name = decodeURIComponent(helpers.getParameterByName('last_name'))
+    if (first_name || last_name) {
+      if (!AppStore.data.signup)
+        AppStore.data.signup = {}
+      AppStore.data.signup.first_name = first_name
+      AppStore.data.signup.last_name = last_name
+      AppStore.data.signup.type = 'agent'
+      AppStore.emitChange()
+    }
+  }
 
   handleSubmit(e) {
     e.preventDefault()
@@ -65,6 +77,17 @@ export default class Create extends Component {
 
   handleKeyUp() {
     this.testForDisabled()
+  }
+
+  handleNameChange(type, e) {
+    const value = e.target.value
+    if (!AppStore.data.signup)
+      AppStore.data.signup = {}
+    if (type === 'first')
+      AppStore.data.signup.first_name = value
+    if (type === 'last')
+      AppStore.data.signup.first_name = value
+    AppStore.emitChange()
   }
 
   render() {
@@ -165,6 +188,12 @@ export default class Create extends Component {
       ...S('color-cecdcd mb-20 font-26 text-left'),
       letterSpacing: '1.5px'
     }
+    let first_name
+    if (data.signup && data.signup.first_name)
+      first_name = data.signup.first_name
+    let last_name
+    if (data.signup && data.signup.last_name)
+      last_name = data.signup.last_name
     let main_content = (
       <div>
         <Col sm={ 5 } className={ data.is_mobile ? 'hidden' : '' }>
@@ -176,10 +205,10 @@ export default class Create extends Component {
           <div style={ S('color-9b9b9b mb-20 text-left font-15') }>Please fill out the details below to set up your profile.</div>
           <form onSubmit={ this.handleSubmit.bind(this) }>
             <Col sm={ 6 } style={ S(data.is_mobile ? 'mb-10 p-0 mr-0 pr-0' : 'p-0 pr-10') }>
-              <Input style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="First Name" type="text" ref="first_name"/>
+              <Input onChange={ this.handleNameChange.bind(this, 'first') } value={ first_name } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="First Name" type="text" ref="first_name"/>
             </Col>
             <Col sm={ 6 } style={ S('p-0') }>
-              <Input style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="Last Name" type="text" ref="last_name"/>
+              <Input onChange={ this.handleNameChange.bind(this, 'last') } value={ last_name } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="Last Name" type="text" ref="last_name"/>
             </Col>
             <Input style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } bsStyle={ password_style } placeholder="New Password" type="password" ref="password"/>
             <div style={ S('w-100p mb-10') }>
