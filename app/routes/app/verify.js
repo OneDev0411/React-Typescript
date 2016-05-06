@@ -19,6 +19,12 @@ module.exports = (app, config) => {
     const decrypted_obj = JSON.parse(Crypto.decrypt(decoded_token))
     const email = decrypted_obj.email
     const token = decrypted_obj.token
+    const agent = decrypted_obj.agent
+    if (agent) {
+      const first_name = agent.first_name
+      const last_name = agent.last_name
+      return res.redirect('/password/create?token=' + encodeURIComponent(token) + '&email=' + encodeURIComponent(email) + '&first_name=' + encodeURIComponent(first_name) + '&last_name=' + encodeURIComponent(last_name))
+    }
     return res.redirect('/password/create?token=' + encodeURIComponent(token) + '&email=' + encodeURIComponent(email))
   })
   app.get('/verify/email',(req, res) => {
