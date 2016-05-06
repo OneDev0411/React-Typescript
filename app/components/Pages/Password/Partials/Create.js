@@ -10,6 +10,8 @@ import AppStore from '../../../../stores/AppStore'
 
 export default class Create extends Component {
   componentWillMount() {
+    if (typeof window === 'undefined')
+      return
     const first_name = decodeURIComponent(helpers.getParameterByName('first_name'))
     const last_name = decodeURIComponent(helpers.getParameterByName('last_name'))
     if (first_name || last_name) {
