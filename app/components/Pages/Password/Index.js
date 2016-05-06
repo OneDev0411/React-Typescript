@@ -10,12 +10,6 @@ import S from 'shorti'
 
 export default class Password extends Component {
 
-  componentDidMount() {
-    // Reset data store
-    AppStore.data = {}
-    AppStore.emitChange()
-  }
-
   componentDidUpdate() {
     const data = this.props.data
     const signup = data.signup

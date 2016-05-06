@@ -56,9 +56,7 @@ export default class Create extends Component {
   }
 
   handleTypeClick(type) {
-    AppStore.data.signup = {
-      type
-    }
+    AppStore.data.signup.type = type
     AppStore.emitChange()
     this.testForDisabled()
   }
