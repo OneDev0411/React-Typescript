@@ -103,7 +103,7 @@ export default class Create extends Component {
     if (type === 'first')
       AppStore.data.signup.first_name = value
     if (type === 'last')
-      AppStore.data.signup.first_name = value
+      AppStore.data.signup.last_name = value
     AppStore.emitChange()
   }
 
