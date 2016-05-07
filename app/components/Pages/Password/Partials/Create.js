@@ -241,7 +241,7 @@ export default class Create extends Component {
         <div className="clearfix"></div>
       </div>
     )
-    if (first_name && last_name) {
+    if (data.signup && data.signup.is_agent) {
       name_area = <div/>
       type_area = <div/>
     }
