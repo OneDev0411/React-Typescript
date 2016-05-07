@@ -20,6 +20,7 @@ export default class Create extends Component {
       AppStore.data.signup.first_name = first_name
       AppStore.data.signup.last_name = last_name
       AppStore.data.signup.type = 'agent'
+      AppStore.data.signup.is_agent = true
       AppStore.emitChange()
     }
   }
@@ -43,8 +44,16 @@ export default class Create extends Component {
     const password = this.refs.password.getInputDOMNode().value.trim()
     const token = decodeURIComponent(helpers.getParameterByName('token'))
     const email = decodeURIComponent(helpers.getParameterByName('email'))
-    const first_name = this.refs.first_name.refs.input.value.trim()
-    const last_name = this.refs.last_name.refs.input.value.trim()
+    let first_name
+    let last_name
+    if (data.signup && data.signup.first_name)
+      first_name = data.signup.first_name
+    if (data.signup && data.signup.last_name)
+      last_name = data.signup.last_name
+    if (this.refs.first_name)
+      first_name = this.refs.first_name.refs.input.value.trim()
+    if (this.refs.last_name)
+      last_name = this.refs.last_name.refs.input.value.trim()
     const type = data.signup.type
     const form_data = {
       password,
@@ -68,8 +77,16 @@ export default class Create extends Component {
     if (data.signup)
       delete AppStore.data.signup.can_submit
     const password = this.refs.password.refs.input.value.trim()
-    const first_name = this.refs.first_name.refs.input.value.trim()
-    const last_name = this.refs.last_name.refs.input.value.trim()
+    let first_name
+    let last_name
+    if (data.signup && data.signup.first_name)
+      first_name = data.signup.first_name
+    if (data.signup && data.signup.last_name)
+      last_name = data.signup.last_name
+    if (this.refs.first_name)
+      first_name = this.refs.first_name.refs.input.value.trim()
+    if (this.refs.last_name)
+      last_name = this.refs.last_name.refs.input.value.trim()
     if (data.signup && data.signup.type && password && first_name && last_name)
       AppStore.data.signup.can_submit = true
     AppStore.emitChange()
@@ -194,6 +211,35 @@ export default class Create extends Component {
     let last_name
     if (data.signup && data.signup.last_name)
       last_name = data.signup.last_name
+    let name_area = (
+      <div>
+        <Col sm={ 6 } style={ S(data.is_mobile ? 'mb-10 p-0 mr-0 pr-0' : 'p-0 pr-10') }>
+          <Input autoComplete={ false } onChange={ this.handleNameChange.bind(this, 'first') } value={ first_name } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="First Name" type="text" ref="first_name"/>
+        </Col>
+        <Col sm={ 6 } style={ S('p-0') }>
+          <Input autoComplete={ false } onChange={ this.handleNameChange.bind(this, 'last') } value={ last_name } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="Last Name" type="text" ref="last_name"/>
+        </Col>
+      </div>
+    )
+    let type_area = (
+      <div style={ S('w-100p mb-10') }>
+        <Col style={ S(data.is_mobile ? 'mb-10 p-0 mr-0 pr-0' : 'p-0 pr-10') } sm={ 6 }>
+          <Button bsSize="large" onClick={ this.handleTypeClick.bind(this, 'agent') } style={ agent_button_style } type="button" className="btn btn-default">
+            { agent_button_text }
+          </Button>
+        </Col>
+        <Col style={ S('p-0') } sm={ 6 }>
+          <Button bsSize="large" onClick={ this.handleTypeClick.bind(this, 'client') } style={ client_button_style } type="button" className="btn btn-default">
+            { client_button_text }
+          </Button>
+        </Col>
+        <div className="clearfix"></div>
+      </div>
+    )
+    if (first_name && last_name) {
+      name_area = <div/>
+      type_area = <div/>
+    }
     let main_content = (
       <div>
         <Col sm={ 5 } className={ data.is_mobile ? 'hidden' : '' }>
@@ -201,29 +247,12 @@ export default class Create extends Component {
         </Col>
         <Col sm={ 7 }>
           <div className="tk-calluna-sans" style={ brand_style }>Rechat</div>
-          <div style={ S('color-000 mb-0 text-left font-36') }>Thanks!  You're almost there...</div>
+          <div style={ S('color-000 mb-0 text-left font-36') }>Thanks{ data.signup && data.signup.is_agent && first_name ? ' ' + first_name : ''}!  You're almost there...</div>
           <div style={ S('color-9b9b9b mb-20 text-left font-15') }>Please fill out the details below to set up your profile.</div>
           <form onSubmit={ this.handleSubmit.bind(this) }>
-            <Col sm={ 6 } style={ S(data.is_mobile ? 'mb-10 p-0 mr-0 pr-0' : 'p-0 pr-10') }>
-              <Input onChange={ this.handleNameChange.bind(this, 'first') } value={ first_name } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="First Name" type="text" ref="first_name"/>
-            </Col>
-            <Col sm={ 6 } style={ S('p-0') }>
-              <Input onChange={ this.handleNameChange.bind(this, 'last') } value={ last_name } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="Last Name" type="text" ref="last_name"/>
-            </Col>
-            <Input style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } bsStyle={ password_style } placeholder="New Password" type="password" ref="password"/>
-            <div style={ S('w-100p mb-10') }>
-              <Col style={ S(data.is_mobile ? 'mb-10 p-0 mr-0 pr-0' : 'p-0 pr-10') } sm={ 6 }>
-                <Button bsSize="large" onClick={ this.handleTypeClick.bind(this, 'agent') } style={ agent_button_style } type="button" className="btn btn-default">
-                  { agent_button_text }
-                </Button>
-              </Col>
-              <Col style={ S('p-0') } sm={ 6 }>
-                <Button bsSize="large" onClick={ this.handleTypeClick.bind(this, 'client') } style={ client_button_style } type="button" className="btn btn-default">
-                  { client_button_text }
-                </Button>
-              </Col>
-              <div className="clearfix"></div>
-            </div>
+            { name_area }
+            <Input autoComplete={ false } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } bsStyle={ password_style } placeholder="New Password" type="password" ref="password"/>
+            { type_area }
             { message }
             <Button bsSize="large" type="submit" ref="submit" className={ disabled_class + submitting_class + 'btn btn-primary' } disabled={ is_disabled ? 'true' : '' } style={ S('w-100p') }>
               { submitting ? 'Submitting...' : 'Continue' }

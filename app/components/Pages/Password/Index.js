@@ -25,6 +25,7 @@ export default class Password extends Component {
         }
         delete AppStore.data.submitting
         AppStore.emitChange()
+        // Go to confirm agent
         this.props.history.pushState(null, '/signup/agent')
       }
     }
