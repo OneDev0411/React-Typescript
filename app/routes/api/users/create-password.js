@@ -6,6 +6,7 @@ module.exports = (app, config) => {
     const email = req.body.email
     const token = req.body.token
     const password = req.body.password
+    const agent = req.body.agent
     const api_url = config.api.url
     const endpoint = api_url + '/users/password'
     const request_object = {
@@ -13,6 +14,8 @@ module.exports = (app, config) => {
       shadow_token: token,
       password
     }
+    if (agent)
+      request_object.agent = agent
     fetch(endpoint,{
       method: 'patch',
       headers: {  

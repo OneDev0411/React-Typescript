@@ -14,11 +14,13 @@ export default class Create extends Component {
       return
     const first_name = decodeURIComponent(helpers.getParameterByName('first_name'))
     const last_name = decodeURIComponent(helpers.getParameterByName('last_name'))
-    if (first_name || last_name) {
+    const agent = decodeURIComponent(helpers.getParameterByName('agent'))
+    if (agent) {
       if (!AppStore.data.signup)
         AppStore.data.signup = {}
       AppStore.data.signup.first_name = first_name
       AppStore.data.signup.last_name = last_name
+      AppStore.data.signup.agent = agent
       AppStore.data.signup.type = 'agent'
       AppStore.data.signup.is_agent = true
       AppStore.emitChange()
@@ -63,6 +65,9 @@ export default class Create extends Component {
       last_name,
       type
     }
+    // Set agent
+    if (data.signup && data.signup.agent)
+      form_data.agent = data.signup.agent
     this.props.handleSubmit('create-password', form_data)
   }
 

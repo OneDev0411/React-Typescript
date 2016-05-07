@@ -23,7 +23,8 @@ module.exports = (app, config) => {
     if (agent) {
       const first_name = agent.first_name
       const last_name = agent.last_name
-      return res.redirect('/password/create?token=' + encodeURIComponent(token) + '&email=' + encodeURIComponent(email) + '&first_name=' + encodeURIComponent(first_name) + '&last_name=' + encodeURIComponent(last_name))
+      const id = agent.id
+      return res.redirect('/password/create?token=' + encodeURIComponent(token) + '&email=' + encodeURIComponent(email) + '&first_name=' + encodeURIComponent(first_name) + '&last_name=' + encodeURIComponent(last_name) + '&agent=' + id)
     }
     return res.redirect('/password/create?token=' + encodeURIComponent(token) + '&email=' + encodeURIComponent(email))
   })

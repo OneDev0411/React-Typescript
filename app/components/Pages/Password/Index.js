@@ -59,13 +59,15 @@ export default class Password extends Component {
       const email = form_data.email
       const first_name = form_data.first_name
       const last_name = form_data.last_name
+      const agent = form_data.agent
       AppDispatcher.dispatch({
         action: 'create-password',
         password,
         token,
         email,
         first_name,
-        last_name
+        last_name,
+        agent
       })
     }
   }

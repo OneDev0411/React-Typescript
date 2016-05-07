@@ -2,7 +2,7 @@
 import User from '../../models/User'
 import AppStore from '../../stores/AppStore'
 import async from 'async'
-export default (email, password, first_name, last_name, token) => {
+export default (email, password, first_name, last_name, token, agent) => {
   if (password.length < 6) {
     let error_type
     if (password.length < 6)
@@ -18,7 +18,8 @@ export default (email, password, first_name, last_name, token) => {
   const params = {
     email,
     password,
-    token
+    token,
+    agent
   }
   const locals = {}
   async.series([

@@ -211,7 +211,8 @@ export default {
     const request_object = {
       email: params.email,
       token: params.token, // already decoded
-      password: params.password
+      password: params.password,
+      agent: params.agent
     }
     fetch(endpoint, {
       method: 'post',
