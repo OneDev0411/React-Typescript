@@ -19,7 +19,8 @@ export default class Password extends Component {
       if (signup.type === 'client')
         window.location.href = '/dashboard/mls?message=welcome'
       if (signup.type === 'agent') {
-        if (signup.first_name) {
+        // If verified agent
+        if (signup.is_agent) {
           window.location.href = '/dashboard/mls?message=welcome'
           return
         }
