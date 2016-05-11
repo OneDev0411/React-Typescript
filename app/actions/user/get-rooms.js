@@ -38,9 +38,14 @@ export default (user, room_id) => {
             alert_id: alert
           })
         }
+        // Get messages for current room
+        getAllMessages(user, rooms)
+      } else {
+        // Delete last room
+        delete AppStore.data.rooms
+        delete AppStore.data.current_room
+        delete AppStore.data.messages
       }
-      // Get messages for current room
-      getAllMessages(user, rooms)
     }
     delete AppStore.data.loading
     AppStore.emitChange()
