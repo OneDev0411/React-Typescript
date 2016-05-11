@@ -104,7 +104,6 @@ export default class SideBar extends Component {
       user_info.phone_number = phone_number
     AppStore.data.saving_account_settings = true
     AppStore.emitChange()
-    console.log(user, user_info)
     AppDispatcher.dispatch({
       action: 'edit-user',
       user,
