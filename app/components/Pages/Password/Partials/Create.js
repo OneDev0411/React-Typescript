@@ -122,6 +122,16 @@ export default class Create extends Component {
     AppStore.emitChange()
   }
 
+  toggleShowPassword() {
+    if (!AppStore.data.signup)
+      AppStore.data.signup = {}
+    if (!AppStore.data.signup.show_password)
+      AppStore.data.signup.show_password = true
+    else
+      delete AppStore.data.signup.show_password
+    AppStore.emitChange()
+  }
+
   render() {
     const data = this.props.data
     const errors = data.errors
@@ -266,7 +276,11 @@ export default class Create extends Component {
           <div style={ S('color-9b9b9b mb-20 text-left font-15') }>Please fill out the details below to set up your profile.</div>
           <form onSubmit={ this.handleSubmit.bind(this) }>
             { name_area }
-            <Input autoComplete={ false } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } bsStyle={ password_style } placeholder="New Password" type={ data.signup && data.signup.show_password ? 'text' : 'password' } ref="password"/>
+            <div className="clearfix"></div>
+            <div style={ S('relative') }>
+              <Input autoComplete={ false } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } bsStyle={ password_style } placeholder="New Password" type={ data.signup && data.signup.show_password ? 'text' : 'password' } ref="password"/>
+              <i onClick={ this.toggleShowPassword } style={ S('absolute t-15 r-15 z-100 pointer color-666') } className={ `fa fa-eye${ data.signup && data.signup.show_password ? '-slash' : '' }` }></i>
+            </div>
             { type_area }
             { message }
             <Button bsSize="large" type="submit" ref="submit" className={ disabled_class + submitting_class + 'btn btn-primary' } disabled={ is_disabled ? 'true' : '' } style={ S('w-100p') }>
