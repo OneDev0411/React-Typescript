@@ -283,7 +283,7 @@ export default class Create extends Component {
     if (data.is_mobile)
       module_style = S('w-100p')
     return (
-      <div style={ module_style } className={ data.signup && data.signup.is_agent && !data.signup.show_form ? 'hidden' : '' }>
+      <div style={ module_style } className={ data.signup && data.signup.show_form ? '' : 'hidden' }>
         { main_content }
       </div>
     )
