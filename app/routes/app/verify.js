@@ -90,7 +90,7 @@ module.exports = (app, config) => {
     return res.redirect('/password/reset/?token=' + encoded_token)
   })
   // Signup redirect (if has token)
-  app.get('/signup',(req, res) => {
+  app.get('/signup',(req, res, next) => {
     const token = req.query.token
     if (token) {
       const decoded_token = decodeURIComponent(req.query.token)
