@@ -24,6 +24,13 @@ export default (user, user_info) => {
         }
         User.sendVerifyEmail(params, () => {})
       }
+      // Check if phone and new phone are different
+      if (user.phone_number !== user_info.phone_number) {
+        params = {
+          access_token: user.access_token
+        }
+        User.sendVerifyPhone(params, () => {})
+      }
       AppStore.emitChange()
     } else {
       const res = response.response

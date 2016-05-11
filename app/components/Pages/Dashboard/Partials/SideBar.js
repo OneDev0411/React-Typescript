@@ -78,7 +78,6 @@ export default class SideBar extends Component {
 
   editAccountInfo() {
     delete AppStore.data.error
-    AppStore.emitChange()
     const data = this.props.data
     const user = data.user
     const first_name = this.refs.first_name.refs.input.value.trim()
@@ -105,6 +104,7 @@ export default class SideBar extends Component {
       user_info.phone_number = phone_number
     AppStore.data.saving_account_settings = true
     AppStore.emitChange()
+    console.log(user, user_info)
     AppDispatcher.dispatch({
       action: 'edit-user',
       user,
