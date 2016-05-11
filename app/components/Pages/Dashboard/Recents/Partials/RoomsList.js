@@ -68,7 +68,7 @@ export default class RoomsList extends Component {
         let list_style = S('pointer pt-10 pb-10 pl-10 pr-17 relative border-bottom-1-solid-e7e4e3')
         if (current_room && current_room.id === room.id)
           list_style = { ...list_style, ...S('bg-f5fafe') }
-        if (room.latest_message) {
+        if (!room.latest_message) {
           const time_updated = helpers.friendlyDate(room.updated_at)
           return (
             <li className="room-list__item" style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, i) }>
