@@ -97,5 +97,6 @@ module.exports = (app, config) => {
       const encoded_token = encodeURIComponent(decoded_token)
       return res.redirect('/activate?token=' + encoded_token)
     }
+    return next()
   })
 }
