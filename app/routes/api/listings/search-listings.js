@@ -2,7 +2,7 @@
 module.exports = (app, config) => {
   app.get('/api/listings/search',(req, res) => {
     const api_url = config.api.url
-    const endpoint = api_url + '/listings/search?q=' + req.query.q + '&status=' + req.query.status
+    const endpoint = api_url + '/listings/search?q=' + req.query.q
     const access_token = req.query.access_token
     fetch(endpoint, {
       method: 'get',
