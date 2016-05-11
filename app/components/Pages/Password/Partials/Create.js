@@ -24,12 +24,17 @@ export default class Create extends Component {
       AppStore.data.signup.type = 'agent'
       AppStore.data.signup.is_agent = true
       AppStore.emitChange()
-      // So we don't get flash extra fields
-      setTimeout(() => {
-        AppStore.data.signup.show_form = true
-        AppStore.emitChange()
-      }, 300)
     }
+  }
+
+  componentDidMount() {
+    // So we don't get flash extra fields
+    setTimeout(() => {
+      if (!AppStore.data.signup)
+        AppStore.data.signup = {}
+      AppStore.data.signup.show_form = true
+      AppStore.emitChange()
+    }, 300)
   }
 
   handleSubmit(e) {
@@ -261,7 +266,7 @@ export default class Create extends Component {
           <div style={ S('color-9b9b9b mb-20 text-left font-15') }>Please fill out the details below to set up your profile.</div>
           <form onSubmit={ this.handleSubmit.bind(this) }>
             { name_area }
-            <Input autoComplete={ false } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } bsStyle={ password_style } placeholder="New Password" type="password" ref="password"/>
+            <Input autoComplete={ false } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } bsStyle={ password_style } placeholder="New Password" type={ data.signup && data.signup.show_password ? 'text' : 'password' } ref="password"/>
             { type_area }
             { message }
             <Button bsSize="large" type="submit" ref="submit" className={ disabled_class + submitting_class + 'btn btn-primary' } disabled={ is_disabled ? 'true' : '' } style={ S('w-100p') }>
