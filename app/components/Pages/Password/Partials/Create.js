@@ -24,6 +24,11 @@ export default class Create extends Component {
       AppStore.data.signup.type = 'agent'
       AppStore.data.signup.is_agent = true
       AppStore.emitChange()
+      // So we don't get flash extra fields
+      setTimeout(() => {
+        AppStore.data.signup.show_form = true
+        AppStore.emitChange()
+      }, 300)
     }
   }
 
@@ -278,7 +283,7 @@ export default class Create extends Component {
     if (data.is_mobile)
       module_style = S('w-100p')
     return (
-      <div style={ module_style }>
+      <div style={ module_style } className={ data.signup && data.signup.is_agent && !data.signup.show_form ? 'hidden' : '' }>
         { main_content }
       </div>
     )

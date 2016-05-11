@@ -9,7 +9,6 @@ import Create from './Partials/Create'
 import S from 'shorti'
 
 export default class Password extends Component {
-
   componentDidUpdate() {
     const data = this.props.data
     const signup = data.signup
