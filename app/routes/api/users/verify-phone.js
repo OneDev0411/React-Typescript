@@ -4,12 +4,12 @@ import helpers from '../../../utils/helpers'
 module.exports = (app, config) => {
   app.post('/api/verify-phone',(req, res) => {
     const code_submitted = req.body.code
-    let token = helpers.prepareToken(req.body.token)
-    const decrypted_token = Crypto.decrypt(token).split(':')
-    const phone_number = decrypted_token[0]
-    const code_token = decrypted_token[1]
+    const decoded_token = decodeURIComponent(req.body.token)
+    const decrypted_obj = JSON.parse(Crypto.decrypt(decoded_token))
+    const phone_number = decrypted_obj.phone_number
+    const phone_code = decrypted_obj.phone_code
     // Validate submitted_code against token code
-    if(code_submitted !== code_token){
+    if(code_submitted !== phone_code){
       let response_object = {
         status: 'error'
       }
@@ -19,7 +19,7 @@ module.exports = (app, config) => {
     const verify_phone_url = api_url + '/users/phone_confirmed'
     const request_object = {
       phone_number: phone_number,
-      code: code_submitted
+      code: phone_code
     }
     fetch(verify_phone_url,{
       method: 'patch',
