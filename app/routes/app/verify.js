@@ -21,16 +21,22 @@ module.exports = (app, config) => {
     const token = decrypted_obj.token
     const agent = decrypted_obj.agent
     const phone_number = decrypted_obj.phone_number
+    const inviting_user = decrypted_obj.inviting_user
+    const room = decrypted_obj.room
+    // Agent
     if (agent) {
       const first_name = agent.first_name
       const last_name = agent.last_name
       const id = agent.id
       return res.redirect('/password/create?token=' + encodeURIComponent(token) + '&email=' + encodeURIComponent(email) + '&first_name=' + encodeURIComponent(first_name) + '&last_name=' + encodeURIComponent(last_name) + '&agent=' + id)
     }
+    // Client
     if (token && email)
       return res.redirect('/password/create?token=' + encodeURIComponent(token) + '&email=' + encodeURIComponent(email))
-    if (phone_number)
-      return res.redirect('/signup?phone_number=' + encodeURIComponent(phone_number))
+    // Invite SMS
+    if (phone_number && inviting_user && room)
+      return res.redirect('/signup?phone_number=' + encodeURIComponent(phone_number) + '&inviting_user=' + encodeURIComponent(inviting_user) + '&room=' + encodeURIComponent(room))
+    return res.redirect('/?message=error')
   })
   app.get('/verify/email',(req, res) => {
     let AppStore = {}

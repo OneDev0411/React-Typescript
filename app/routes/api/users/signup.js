@@ -8,6 +8,8 @@ module.exports = (app, config) => {
     const password = req.body.password
     const grant_type = req.body.grant_type
     const user_connect = req.body.user_connect
+    const room_connect = req.body.room_connect
+    const phone_number = req.body.phone_number
     const api_url = config.api.url
     const signup_url = api_url + '/users'
     const request_object = {
@@ -22,6 +24,10 @@ module.exports = (app, config) => {
     }
     if (user_connect)
       request_object.user_connect = user_connect
+    if (room_connect)
+      request_object.room_connect = room_connect
+    if (phone_number)
+      request_object.phone_number = phone_number
     fetch(signup_url,{
       method: 'post',
       headers: {  

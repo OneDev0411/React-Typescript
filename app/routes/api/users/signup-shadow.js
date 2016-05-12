@@ -4,6 +4,9 @@ module.exports = (app, config) => {
     const api_url = config.api.url
     const email = req.body.email
     const password = req.body.password
+    const user_connect = req.body.user_connect
+    const room_connect = req.body.room_connect
+    const phone_number = req.body.phone_number
     const request_object = {
       client_id: config.api.client_id,
       client_secret: config.api.client_secret,
@@ -15,6 +18,12 @@ module.exports = (app, config) => {
       grant_type: 'password',
       is_shadow: true
     }
+    if (user_connect)
+      request_object.user_connect = user_connect
+    if (room_connect)
+      request_object.room_connect = room_connect
+    if (phone_number)
+      request_object.phone_number = phone_number
     const endpoint = api_url + '/users'
     fetch(endpoint,{
       method: 'post',

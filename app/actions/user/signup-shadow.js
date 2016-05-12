@@ -5,8 +5,13 @@ import AppStore from '../../stores/AppStore'
 import async from 'async'
 export default (user, redirect_to) => {
   // Check for inviting_user
-  if (AppStore.data.signup && AppStore.data.signup.inviting_user)
+  const signup = AppStore.data.signup
+  if (signup && signup.inviting_user)
     user.user_connect = AppStore.data.signup.inviting_user
+  if (signup && signup.phone_number)
+    user.phone_number = AppStore.data.signup.phone_number
+  if (signup && signup.room)
+    user.room_connect = AppStore.data.signup.room
   const params = {
     user
   }

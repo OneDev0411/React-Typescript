@@ -12,13 +12,20 @@ export default class SignUp extends Component {
     // Reset data store before mounting
     AppStore.data = {}
     AppStore.data.signup = {}
-    AppStore.emitChange()
     // Grab inviting_user code
     if (this.props.location.query.inviting_user) {
       const inviting_user = this.props.location.query.inviting_user
       AppStore.data.signup.inviting_user = inviting_user
-      AppStore.emitChange()
     }
+    if (this.props.location.query.phone_number) {
+      const phone_number = this.props.location.query.phone_number
+      AppStore.data.signup.phone_number = phone_number
+    }
+    if (this.props.location.query.room) {
+      const room = this.props.location.query.room
+      AppStore.data.signup.room = room
+    }
+    AppStore.emitChange()
   }
   componentDidMount() {
     this.refs.email.refs.input.focus()
@@ -28,13 +35,14 @@ export default class SignUp extends Component {
   }
   setSignupEmail(e) {
     const email = e.target.value
-    AppStore.data.signup_email = email
+    AppStore.data.signup.email = email
     AppStore.emitChange()
   }
   handleEmailSubmit(e) {
     e.preventDefault()
     const data = this.props.data
-    const email = data.signup_email
+    const signup = data.signup
+    const email = signup.email
     // If no email or double submit
     if (!email || data.submitting)
       return
