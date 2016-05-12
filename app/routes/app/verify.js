@@ -20,13 +20,17 @@ module.exports = (app, config) => {
     const email = decrypted_obj.email
     const token = decrypted_obj.token
     const agent = decrypted_obj.agent
+    const phone_number = decrypted_obj.phone_number
     if (agent) {
       const first_name = agent.first_name
       const last_name = agent.last_name
       const id = agent.id
       return res.redirect('/password/create?token=' + encodeURIComponent(token) + '&email=' + encodeURIComponent(email) + '&first_name=' + encodeURIComponent(first_name) + '&last_name=' + encodeURIComponent(last_name) + '&agent=' + id)
     }
-    return res.redirect('/password/create?token=' + encodeURIComponent(token) + '&email=' + encodeURIComponent(email))
+    if (token && email)
+      return res.redirect('/password/create?token=' + encodeURIComponent(token) + '&email=' + encodeURIComponent(email))
+    if (phone_number)
+      return res.redirect('/signup?phone_number=' + encodeURIComponent(phone_number))
   })
   app.get('/verify/email',(req, res) => {
     let AppStore = {}
