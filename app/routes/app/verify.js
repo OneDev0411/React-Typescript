@@ -7,13 +7,6 @@ module.exports = (app, config) => {
     const encoded_token = encodeURIComponent(decoded_token)
     return res.redirect('/verify/email?token=' + encoded_token)
   })
-  // For testing purposes only
-  app.get('/decrypt',(req, res) => {
-    const decoded_token = decodeURIComponent(req.query.token)
-    const decrypted_obj = JSON.parse(Crypto.decrypt(decoded_token))
-    console.log(decrypted_obj)
-    return res.end()
-  })
   app.get('/activate',(req, res) => {
     const decoded_token = decodeURIComponent(req.query.token)
     const decrypted_obj = JSON.parse(Crypto.decrypt(decoded_token))
