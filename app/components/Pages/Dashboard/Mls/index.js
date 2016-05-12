@@ -106,12 +106,8 @@ export default class Mls extends Component {
     const user = data.user
     const listing_map = data.listing_map
     let main_style = S('absolute h-100p l-70')
-    if (data.is_mobile) {
-      main_style = {
-        ...main_style,
-        ...S('l-0 w-100p')
-      }
-    }
+    if (data.is_mobile)
+      main_style = S('fixed w-100p h-100p')
     let map_listing_markers
     let loading
     if (listing_map && listing_map.listings) {
@@ -312,7 +308,7 @@ export default class Mls extends Component {
     }
     let map_wrapper_style = S('h-' + (window.innerHeight - 62))
     if (data.is_mobile)
-      map_wrapper_style = S('fixed w-100p h-100p')
+      map_wrapper_style = S('absolute w-100p h-100p')
     let main_content = (
       <main>
         { nav_area }
