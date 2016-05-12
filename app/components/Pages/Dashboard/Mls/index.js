@@ -307,16 +307,19 @@ export default class Mls extends Component {
       )
     }
     let map_wrapper_style = S('h-' + (window.innerHeight - 62))
-    if (data.is_mobile)
-      map_wrapper_style = S('absolute w-100p h-100p')
+    let mobile_fixed = {}
+    if (data.is_mobile) {
+      map_wrapper_style = S('fixed w-100p h-100p')
+      mobile_fixed = S('fixed')
+    }
     let main_content = (
-      <main>
+      <main style={ mobile_fixed }>
         { nav_area }
-        <div className={ main_class } style={ main_style }>
+        <div className={ main_class } style={ { ...main_style, ...mobile_fixed } }>
           { /* this.cacheImages() */ }
           { toolbar }
           { loading }
-          <div style={ map_wrapper_style }>
+          <div style={ { ...map_wrapper_style, ...mobile_fixed } }>
             { remove_drawing_button }
             <GoogleMap
               key={ 'map-' + map_id }
