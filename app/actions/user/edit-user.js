@@ -40,7 +40,7 @@ export default (user, user_info) => {
       if (status === 400)
         AppStore.data.error.message = 'First name, last name and email are required.'
       if (status === 409)
-        AppStore.data.error.message = 'Email already exisits.'
+        AppStore.data.error.message = 'Email or phone number already exisits.'
       AppStore.emitChange()
     }
   })
