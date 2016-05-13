@@ -38,8 +38,10 @@ export default class Dashboard extends Component {
 
       const data = this.props.data
       const user = data.user
-      const room_id = data.current_room.id
-
+      const current_room = data.current_room
+      let room_id
+      if (current_room)
+        room_id = data.current_room.id
       AppDispatcher.dispatch({
         action: 'get-rooms',
         user,

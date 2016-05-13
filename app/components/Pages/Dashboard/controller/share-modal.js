@@ -29,26 +29,32 @@ const controller = {
     const rooms = data.rooms
     const contacts = data.contacts
     const text_lower = text.toLowerCase()
-    const rooms_filtered = rooms.filter(room => {
-      if (controller.itemAdded('room', room))
+    let rooms_filtered
+    if (rooms) {
+      rooms_filtered = rooms.filter(room => {
+        if (controller.itemAdded('room', room))
+          return false
+        if (room.title && room.title.toLowerCase().indexOf(text_lower) !== -1)
+          return true
         return false
-      if (room.title && room.title.toLowerCase().indexOf(text_lower) !== -1)
-        return true
-      return false
-    })
-    const contacts_filtered = contacts.filter(contact => {
-      if (controller.itemAdded('contact', contact))
+      })
+    }
+    let contacts_filtered
+    if (contacts) {
+      contacts_filtered = contacts.filter(contact => {
+        if (controller.itemAdded('contact', contact))
+          return false
+        if (contact.first_name && contact.first_name.toLowerCase().indexOf(text_lower) !== -1)
+          return true
+        if (contact.last_name && contact.last_name.toLowerCase().indexOf(text_lower) !== -1)
+          return true
+        if (contact.email && contact.email.toLowerCase().indexOf(text_lower) !== -1)
+          return true
+        if (contact.phone_number && contact.phone_number && contact.phone_number.indexOf(text_lower) !== -1)
+          return false
         return false
-      if (contact.first_name && contact.first_name.toLowerCase().indexOf(text_lower) !== -1)
-        return true
-      if (contact.last_name && contact.last_name.toLowerCase().indexOf(text_lower) !== -1)
-        return true
-      if (contact.email && contact.email.toLowerCase().indexOf(text_lower) !== -1)
-        return true
-      if (contact.phone_number && contact.phone_number && contact.phone_number.indexOf(text_lower) !== -1)
-        return false
-      return false
-    })
+      })
+    }
     AppStore.data.share_modal.rooms_filtered = rooms_filtered
     AppStore.data.share_modal.contacts_filtered = contacts_filtered
     AppStore.emitChange()

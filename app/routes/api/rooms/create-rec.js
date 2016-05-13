@@ -24,7 +24,7 @@ module.exports = (app, config) => {
     }
     if (rooms && rooms.length)
       request_object.rooms = rooms
-    if (users && rooms.users)
+    if (users && users.length)
       request_object.users = users
     if (emails && emails.length)
       request_object.emails = emails
