@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import Loading from '../../../../Partials/Loading'
-import { Carousel, CarouselItem, Tooltip, OverlayTrigger, Modal, Button } from 'react-bootstrap'
+import { Carousel, CarouselItem, Tooltip, OverlayTrigger, Modal, Button, Alert } from 'react-bootstrap'
 import config from '../../../../../../config/public'
 import helpers from '../../../../../utils/helpers'
 import listing_util from '../../../../../utils/listing'
@@ -360,6 +360,14 @@ export default class MessagesList extends Component {
       messages_mb = 'mb-80'
       heading_pt = 'pt-15'
     }
+    let message
+    if (data.add_contacts_error) {
+      message = (
+        <div style={ S('mt-10 text-left') }>
+          <Alert bsStyle="danger">There was an error with this request.</Alert>
+        </div>
+      )
+    }
     return (
       <div>
         <button onClick={ this.props.showModal.bind(this, 'invite-user') } type="button" className="btn btn-default" style={ btn_invite_style } >
@@ -413,6 +421,7 @@ export default class MessagesList extends Component {
             <Button onClick={ this.props.addContactsToRoom.bind(this) } style={ S('pl-30 pr-30') } className={ data.adding_contacts ? 'disabled' : '' } type="submit" bsStyle="primary">
               { data.adding_contacts ? 'Saving...' : 'Save' }
             </Button>
+            { message }
           </Modal.Footer>
         </Modal>
         <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_settings_modal } onHide={ this.props.hideModal }>

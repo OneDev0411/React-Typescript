@@ -32,6 +32,9 @@ export default (user, room, contacts) => {
       delete AppStore.data.adding_contacts
       delete AppStore.data.show_contacts_modal
       AppStore.emitChange()
+    } else {
+      AppStore.data.add_contacts_error = true
+      AppStore.emitChange()
     }
   })
 }
