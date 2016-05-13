@@ -127,6 +127,7 @@ const controller = {
     delete AppStore.data.share_modal.phone_number_valid
     if (phone_number.trim())
       AppStore.data.share_modal.phone_number_valid = true
+    AppStore.data.share_modal.input_phone_number = phone_number
     AppStore.emitChange()
   },
   handleAddEmail(email) {
@@ -142,19 +143,20 @@ const controller = {
     AppStore.emitChange()
   },
   handleAddPhoneNumber(phone_number) {
-    if (!helpers.isValidPhoneNumber(phone_number)) {
+    let country_code = '+1'
+    if (AppStore.data.phone_country)
+      country_code = '+' + AppStore.data.phone_country.dialCode
+    if (!helpers.isValidPhoneNumber(country_code + phone_number)) {
       AppStore.data.error = {
         message: 'Invalid phone number'
       }
       AppStore.emitChange()
       return
     }
-    let country_code = '+1'
-    if (AppStore.data.phone_country)
-      country_code = '+' + AppStore.data.phone_country.dialCode
     controller.addToShareList('phone_number', country_code + phone_number)
     delete AppStore.data.share_modal.phone_number_valid
     delete AppStore.data.phone_country
+    delete AppStore.data.share_modal.input_phone_number
     AppStore.emitChange()
   },
   handleCountryCodeSelect(country) {

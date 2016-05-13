@@ -71,10 +71,10 @@ export default {
   getDaysFromMiliseconds: (miliseconds) => {
     return Math.floor(parseInt(miliseconds) / 86400000)
   },
-  isValidPhoneNumber: (value) => {
-    var phoneRe = /^[1-9]\d{2}[1-9]\d{2}\d{4}$/
-    var digits = value.replace(/\D/g, '')
-    return digits.match(phoneRe)
+  isValidPhoneNumber: (phone_number) => {
+    if(phone_number.trim() && phoneUtil.isValidNumber(phoneUtil.parse(phone_number)))
+      return true
+    return false
   },
   imageExists: (url) => {
     var img = new Image();
