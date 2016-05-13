@@ -291,7 +291,7 @@ export default class AddContactsModule extends Component {
               <div style={ S('ml-50') }>
                 <span style={ S('fw-600') }>{ contact.first_name } { contact.last_name }</span>{ contact.contact_user ? ',' : '' }&nbsp;
                 <span style={ S('color-666') }>{ contact.contact_user ? contact.contact_user.user_type : '' }</span><br />
-                <span style={ S('color-666 font-13') }>{ contact.email }</span><br />
+                <span style={ S('color-666 font-13') }>{ contact.email ? contact.email : contact.phone_number }</span><br />
               </div>
               <div className="clearfix"></div>
             </div>
