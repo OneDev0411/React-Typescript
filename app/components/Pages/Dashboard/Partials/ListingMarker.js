@@ -6,13 +6,14 @@ import helpers from '../../../../utils/helpers'
 export default class ListingMarker extends Component {
   render() {
     const data = this.props.data
+    const user = data.user
     const listing = this.props.listing
     const property = this.props.property
     const address = this.props.address
     const context = this.props.context
     const status_color = listing_util.getStatusColor(listing.status)
     let price = listing.price
-    if (listing.close_price)
+    if (listing.close_price && user.user_type === 'Agent')
       price = listing.close_price
     let price_small = Math.floor(price / 1000).toFixed(2).replace(/[.,]00$/, '')
     let letter = 'K'

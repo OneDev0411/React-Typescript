@@ -57,13 +57,8 @@ export default class ListingViewer extends Component {
     if (!current_slide)
       current_slide = 0
     let property
-    // let property_type
     let year_built
     let address
-    // let city
-    // let state
-    // let postal_code
-    // let full_address
     let listing_title
     let listing_subtitle
     let mls_number
@@ -76,7 +71,6 @@ export default class ListingViewer extends Component {
     let description
     let price
     let price_sq_foot
-    // let lot_size_square_feet
     let listing_images = (
       <div style={ S('bg-eff1f2 w-100p h-300 font-22 text-center pt-125 color-929292') }>No image</div>
     )
@@ -84,7 +78,7 @@ export default class ListingViewer extends Component {
     if (listing && listing.property) {
       property = listing.property
       price = listing.price
-      if (listing.close_price)
+      if (listing.close_price && user.user_type === 'Agent')
         price = listing.close_price
       price = helpers.numberWithCommas(price)
       // property_type = property.property_type

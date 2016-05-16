@@ -1,7 +1,6 @@
 // actions/upgrade-account.js
 import User from '../../models/User'
 import AppStore from '../../stores/AppStore'
-import async from 'async'
 export default (user, agent, secret) => {
   let access_token
   if (user)
@@ -29,17 +28,17 @@ export default (user, agent, secret) => {
         access_token: user.access_token
       }
       AppStore.data.user = new_user
-      // During settings edit
+      // Settings edit
       if (AppStore.data.settings)
         AppStore.data.settings.is_agent = true
-      // During signup
+      // Signup
       if (AppStore.data.signup) {
         // Sign in for new agent token
         const params_signin = {
           email: AppStore.data.signup.login.email,
           password: AppStore.data.signup.login.password
         }
-        User.signin(params_signin, (err_signin, response_signin) => {
+        User.signin(params_signin, () => {
           AppStore.data.signup.is_agent = true
           AppStore.emitChange()
         })
