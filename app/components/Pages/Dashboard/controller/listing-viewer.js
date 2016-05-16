@@ -16,6 +16,18 @@ const controller = {
       user,
       id: listing.id
     })
+    controller.addToAlreadyViewed(listing.id)
+  },
+  addToAlreadyViewed(id) {
+    const data = AppStore.data
+    const listing_map = data.listing_map
+    if (listing_map.listings_viewed) {
+      if (listing_map.listings_viewed.indexOf(id) === -1)
+        AppStore.data.listing_map.listings_viewed.push(id)
+    }
+    else
+      AppStore.data.listing_map.listings_viewed = [id]
+    AppStore.emitChange()
   },
   hideListingViewer() {
     delete AppStore.data.show_listing_viewer

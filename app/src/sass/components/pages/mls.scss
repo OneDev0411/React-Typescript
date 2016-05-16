@@ -25,6 +25,12 @@
       border-color: transparent #006aff #006aff transparent;   
     }
   }
+  &.viewed {
+    background-color: #dfe3e8;
+    &:after {
+      border-color: #dfe3e8;
+    }
+  }
 }
 .listing-map__marker__popup__title {
   white-space: nowrap;

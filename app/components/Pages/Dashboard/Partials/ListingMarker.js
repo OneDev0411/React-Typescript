@@ -8,6 +8,7 @@ export default class ListingMarker extends Component {
     const data = this.props.data
     const user = data.user
     const listing = this.props.listing
+    const listing_map = data.listing_map
     const property = this.props.property
     const address = this.props.address
     const context = this.props.context
@@ -50,8 +51,12 @@ export default class ListingMarker extends Component {
         </div>
       </div>
     )
+    let marker_style = S('relative w-70 h-25 br-3')
+    let viewed_class = ''
+    if (listing_map && listing_map.listings_viewed && listing_map.listings_viewed.indexOf(listing.id) !== -1)
+      viewed_class = ' viewed'
     let listing_marker = (
-      <div className={ 'map__listing-marker' + active_class } style={ S('relative w-70 h-25 br-3') }>
+      <div className={ 'map__listing-marker' + active_class + viewed_class } style={ marker_style }>
         <div style={ S('absolute l-6 t-8 w-10 h-10 br-100 bg-' + status_color) }></div>
         <div style={ S('absolute r-10 t-6') }>${ price_small }{ letter }</div>
       </div>
@@ -62,8 +67,11 @@ export default class ListingMarker extends Component {
         ...S('bg-35b863 w-15 h-100p color-fff font-5 pt-3'),
         lineHeight: '5px'
       }
+      marker_style = { ...marker_style, ...S('w-80') }
+      if (listing_map && listing_map.listings_viewed && listing_map.listings_viewed.indexOf(listing.id) !== -1)
+        viewed_class = ' viewed'
       listing_marker = (
-        <div className={ 'map__listing-marker' + active_class } style={ S('relative w-80 h-25 br-3') }>
+        <div className={ 'map__listing-marker' + active_class + viewed_class } style={ marker_style }>
           <div style={ open_style }>O<br />P<br />E<br />N</div>
           <div style={ S('absolute l-20 t-8 w-10 h-10 br-100 bg-' + status_color) }></div>
           <div style={ S('absolute r-10 t-6') }>${ price_small }{ letter }</div>
