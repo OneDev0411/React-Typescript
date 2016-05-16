@@ -67,6 +67,12 @@ export default class Create extends Component {
     if (this.refs.last_name)
       last_name = this.refs.last_name.refs.input.value.trim()
     const type = data.signup.type
+    // Save login
+    AppStore.data.signup.login = {
+      email,
+      password
+    }
+    AppStore.emitChange()
     const form_data = {
       password,
       token,
