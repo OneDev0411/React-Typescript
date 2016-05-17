@@ -30,12 +30,10 @@ export default (email, password, first_name, last_name, token, agent) => {
         if (response.status === 'success')
           callback()
         else {
-          AppStore.data = {
-            submitting: false,
-            errors: true,
-            show_message: true,
-            request_error: true
-          }
+          AppStore.data.submitting = false
+          AppStore.data.errors = true
+          AppStore.data.show_message = true
+          AppStore.data.request_error = true
           AppStore.emitChange()
         }
       })

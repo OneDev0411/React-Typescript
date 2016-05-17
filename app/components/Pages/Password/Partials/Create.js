@@ -172,7 +172,7 @@ export default class Create extends Component {
         alert_style = 'danger'
         message_text = (
           <div>
-            There was an error with this request.  Please <a href="/password/forgot">request a new password</a>.
+            This user is already in our system.  Please <a href="/signin">log in</a> or <a href="/password/forgot">request a new password</a>.
           </div>
         )
       }
