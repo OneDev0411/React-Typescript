@@ -134,7 +134,12 @@ export default class ListingViewerMobile extends Component {
           </span>
         )
       }
-      let agent_area
+      let agent_area = (
+        <div style={ S('mt-20 color-748090 w-100p border-1-solid-ededed br-3 p-20 text-center') }>
+          <div style={ S('font-18 mb-5 color-3388ff') }><span style={ S('fw-400') }>{ listing.list_agent_full_name }, Seller Agent</span></div>
+          <div style={ S('font-15 mb-5') }>{ listing.list_office_name }</div>
+        </div>
+      )
       if (user && user.user_type === 'Agent') {
         const email_style = {
           ...S('font-15 mb-20'),

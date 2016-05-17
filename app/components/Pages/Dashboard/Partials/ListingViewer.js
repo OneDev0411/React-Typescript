@@ -81,20 +81,14 @@ export default class ListingViewer extends Component {
       if (listing.close_price && user.user_type === 'Agent')
         price = listing.close_price
       price = helpers.numberWithCommas(price)
-      // property_type = property.property_type
       year_built = property.year_built
       address = listing_util.addressTitle(property.address)
-      // city = property.address.city
-      // state = property.address.state
-      // postal_code = property.address.postal_code
-      // full_address = `${address} ${city}, ${state}, ${postal_code}`
       listing_title = address
       mls_number = listing.mls_number
       bedroom_count = property.bedroom_count
       bathroom_count = property.bathroom_count
       square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
       price_sq_foot = (Number(price.replace(/,/g, '')) / Number(square_feet.replace(/,/g, ''))).toFixed(2)
-      // lot_size_square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.lot_square_meters)))
       if (property.lot_size_area)
         lot_size = property.lot_size_area
       prev_icon = '<'
@@ -181,7 +175,12 @@ export default class ListingViewer extends Component {
           </span>
         )
       }
-      let agent_area
+      let agent_area = (
+        <div style={ S('mt-20 color-748090 w-100p border-1-solid-ededed br-3 p-20 text-center') }>
+          <div style={ S('font-18 mb-5 color-3388ff') }><span style={ S('fw-400') }>{ listing.list_agent_full_name }, Seller Agent</span></div>
+          <div style={ S('font-15 mb-5') }>{ listing.list_office_name }</div>
+        </div>
+      )
       if (user && user.user_type === 'Agent') {
         const email_style = {
           ...S('font-15 mb-20'),
