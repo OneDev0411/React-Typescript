@@ -34,11 +34,13 @@ export default {
     image_replace = image_replace.replace('https://cdn.rechat.co/','')
     image_replace = image_replace.replace('https://cdn.rechat.com/','')
     const imgix_url = 'https://rechat.imgix.net/' + image_replace
-    var img = new Image();
-    img.src = imgix_url
-    if (img.height !== 0)
-      return imgix_url
-    else
-      return full_size_url
+    return imgix_url
+    // TODO handle image not found
+    // var img = new Image();
+    // img.src = imgix_url
+    // if (img.height !== 0)
+    //   return imgix_url
+    // else
+    //   return full_size_url
   }
 }
