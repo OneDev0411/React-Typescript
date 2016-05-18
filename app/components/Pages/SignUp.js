@@ -1,12 +1,12 @@
 // SignUp.js
 import React, { Component } from 'react'
-import { Col, Button, Input, Popover, OverlayTrigger, Modal } from 'react-bootstrap'
+import { Col, Button, Input, Popover, OverlayTrigger } from 'react-bootstrap'
 import S from 'shorti'
 import validator from 'validator'
 import { randomString } from '../../utils/helpers'
 import AppDispatcher from '../../dispatcher/AppDispatcher'
 import AppStore from '../../stores/AppStore'
-// import MapBackground from '../Partials/MapBackground'
+import CheckEmailModal from '../Partials/CheckEmailModal'
 export default class SignUp extends Component {
   componentWillMount() {
     // Reset data store before mounting
@@ -135,12 +135,6 @@ export default class SignUp extends Component {
         )
       }
     }
-    let resent_message_area
-    if (data.resent_email_confirmation) {
-      resent_message_area = (
-        <div style={ S('mt-20 mb-20') }>Confirmation email resent.</div>
-      )
-    }
     const main_content = (
       <div style={ S('pt-50') }>
         <Col xs={ 12 }>
@@ -170,26 +164,12 @@ export default class SignUp extends Component {
         <div className="text-center center-block" style={ S('w-100p maxw-470 z-100 relative mt-60n bg-fff br-6') }>
           { main_content }
         </div>
-        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_signup_confirm_modal } onHide={ this.hideModal }>
-          <Modal.Body className="text-center">
-            <div style={ S('mb-20 mt-20') }>
-              <div style={ S('br-100 w-90 h-90 center-block bg-3388ff text-center') }>
-                <i style={ S('color-fff font-40 mt-25') } className="fa fa-check"></i>
-              </div>
-            </div>
-            <div style={ S('font-24 mb-20') }>Check Your Inbox</div>
-            <div style={ S('color-9b9b9b font-15 mb-20') }>
-              For a secure experience, confirm your email address to continue.
-            </div>
-            <div style={ S('color-9b9b9b font-15 mb-20') }>
-              <span className="text-primary">{ data.new_user ? data.new_user.email : '' }</span>
-            </div>
-            <div style={ S('color-9b9b9b font-13 mb-20') }>
-              Didn’t get the email? <a onClick={ this.resend.bind(this) } href="#">Resend</a> or <a onClick={ this.showIntercom } href="#">contact support</a>.
-            </div>
-            { resent_message_area }
-          </Modal.Body>
-        </Modal>
+        <CheckEmailModal
+          data={ data }
+          hideModal={ this.hideModal }
+          showIntercom={ this.showIntercom }
+          resend={ this.resend }
+        />
       </div>
     )
   }
