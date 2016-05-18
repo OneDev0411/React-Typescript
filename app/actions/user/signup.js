@@ -1,6 +1,5 @@
 // actions/signup.js
 import User from '../../models/User'
-import Intercom from '../../models/Intercom'
 import AppStore from '../../stores/AppStore'
 import validator from 'validator'
 import async from 'async'
@@ -91,8 +90,6 @@ export default (user, password, confirm_password, redirect_to) => {
             new_user,
             redirect_to
           }
-          // Intercom
-          Intercom.signup({ user: new_user }, () => {})
           AppStore.emitChange()
           callback()
         }
