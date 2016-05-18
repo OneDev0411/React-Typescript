@@ -170,7 +170,7 @@ export default class MessagesList extends Component {
     const todays_date = helpers.getYMD()
     let prev_message_date
     const heading_style = {
-      ...S('bg-f9f9f9 p-5 pl-10 h-26 font-12 br-3 color-acacac mb-10'),
+      ...S('relative text-center p-5 pl-0 h-26 font-12 br-3 mb-10 mr-3'),
       textTransform: 'uppercase'
     }
     let prev_recommendation
@@ -208,7 +208,10 @@ export default class MessagesList extends Component {
           }
 
           heading = (
-            <div className="message-heading" style={ heading_style }>{ heading_date_area }</div>
+            <div className="message-heading" style={ heading_style }>
+              <div style={ S('absolute w-100p h-2 bg-e8e8e8 t-12 z-0') }></div>
+              <span style={ S('pl-10 pr-10 bg-fff z-1 relative') }>{ heading_date_area }</span>
+            </div>
           )
           new_date = true
         }
@@ -268,8 +271,11 @@ export default class MessagesList extends Component {
       if (data.is_mobile)
         heading_top = 't-55'
       fixed_heading_date_area = (
-        <div className="heading-fixed" style={ S('absolute w-98p z-3 pl-20 pr-5 pb-0 bg-fff ' + heading_top) }>
-          <div className="message-heading" style={ { ...heading_style, ...S('m-0') } }>{ fixed_heading_date }</div>
+        <div className="heading-fixed" style={ S('absolute z-3 pl-20 pr-5 pb-0 mb-0 h-20 bg-fff ' + heading_top + ' w-' + (data.is_mobile ? window.innerWidth : window.innerWidth - 400)) }>
+          <div className="message-heading" style={ { ...heading_style, ...S('mr-0') } }>
+            <div style={ S('absolute h-2 bg-e8e8e8 t-12 z-0 w-' + (data.is_mobile ? window.innerWidth - 43 : window.innerWidth - 434)) }></div>
+            <span style={ S('pl-10 l-5n pr-10 pb-5 br-3 bg-fff z-1 relative') }>{ fixed_heading_date }</span>
+          </div>
         </div>
       )
     }
