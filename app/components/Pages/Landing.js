@@ -52,6 +52,8 @@ export default class Landing extends Component {
   }
   handleEmailSubmit(e) {
     e.preventDefault()
+    delete AppStore.data.errors
+    AppStore.emitChange()
     const data = this.props.data
     const email = data.signup_email
     // If no email or double submit
@@ -254,7 +256,7 @@ export default class Landing extends Component {
                     <div style={ S('ml-15') }>
                       <form onSubmit={ this.handleEmailSubmit.bind(this) }>
                         <div style={ S('pull-left') }>
-                          <OverlayTrigger trigger="click" placement="bottom" overlay={ popover }>
+                          <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
                             <Input onChange={ this.setSignupEmail } style={ signup_input_style } type="text" placeholder="Enter email address" value={ data.signup_email } />
                           </OverlayTrigger>
                         </div>

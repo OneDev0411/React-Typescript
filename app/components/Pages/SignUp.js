@@ -40,6 +40,8 @@ export default class SignUp extends Component {
   }
   handleEmailSubmit(e) {
     e.preventDefault()
+    delete AppStore.data.errors
+    AppStore.emitChange()
     const data = this.props.data
     const signup = data.signup
     const email = signup.email
@@ -143,7 +145,7 @@ export default class SignUp extends Component {
             <div style={ S('border-bottom-2-solid-d8d8d8 mb-20 w-50 center-block') }></div>
             <form onSubmit={ this.handleEmailSubmit.bind(this) }>
               <div style={ S('pull-left') }>
-                <OverlayTrigger trigger="click" placement="bottom" overlay={ popover }>
+                <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
                   <Input ref="email" onChange={ this.setSignupEmail } style={ signup_input_style } type="text" placeholder="Enter email address" value={ data.signup_email } />
                 </OverlayTrigger>
               </div>
