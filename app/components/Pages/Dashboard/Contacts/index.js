@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import S from 'shorti'
 import _ from 'lodash'
 import { Table, Button, Input, DropdownButton, MenuItem, Alert } from 'react-bootstrap'
-import MaskedInput from 'react-input-mask'
+import MaskedInput from 'react-maskedinput'
 import { all_countries } from '../../../../utils/country-data'
 import helpers from '../../../../utils/helpers'
 import { PhoneNumberUtil } from 'google-libphonenumber'
@@ -223,7 +223,7 @@ export default class Contacts extends Component {
                   <div className="input-group-btn input-dropdown--country-codes">
                     { country_codes }
                   </div>
-                  <MaskedInput className="form-control" ref="phone_number" type="text" value={ contact.temp_phone ? contact.temp_phone : phone_number_parsed.phone_number } mask="(999)-999-9999" maskChar="_" onChange={ this.handleInputChange.bind(this, 'phone_number') }/>
+                  <MaskedInput className="form-control" ref="phone_number" type="text" value={ contact.temp_phone ? contact.temp_phone : phone_number_parsed.phone_number } mask="(111)-111-1111" onChange={ this.handleInputChange.bind(this, 'phone_number') }/>
                 </div>
               </div>
               { message }

@@ -17,17 +17,31 @@ export default (user, user_info) => {
       AppStore.data.user = new_user
       delete AppStore.data.saving_account_settings
       delete AppStore.data.show_account_settings_modal
+      // Check if email and new email are different
+      if (user.email !== user_info.email) {
+        params = {
+          access_token: user.access_token
+        }
+        User.sendVerifyEmail(params, () => {})
+      }
+      // Check if phone and new phone are different
+      if (user.phone_number !== user_info.phone_number) {
+        params = {
+          access_token: user.access_token
+        }
+        User.sendVerifyPhone(params, () => {})
+      }
       AppStore.emitChange()
     } else {
+      const res = response.response
+      const status = res.status
       delete AppStore.data.saving_account_settings
+      AppStore.data.error = {}
+      if (status === 400)
+        AppStore.data.error.message = 'First name, last name and email are required.'
+      if (status === 409)
+        AppStore.data.error.message = 'Email or phone number already exisits.'
       AppStore.emitChange()
-    }
-    // Check if email and new email are different
-    if (user.email !== user_info.email) {
-      params = {
-        access_token: user.access_token
-      }
-      User.sendVerifyEmail(params, () => {})
     }
   })
 }

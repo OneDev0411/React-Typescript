@@ -16,7 +16,8 @@ export default (user, room) => {
     if (response.status === 'success') {
       // Reverse order to latest first...
       const messages = response.data.reverse()
-      AppStore.data.heading_date = messages[0].created_at
+      if (messages[0])
+        AppStore.data.heading_date = messages[0].created_at
       AppStore.data.messages = messages
       room.messages = messages
       AppStore.data.current_room = room

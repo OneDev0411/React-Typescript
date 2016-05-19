@@ -12,3 +12,6 @@
   border: 1px dashed $brand-primary !important;
   color: $brand-primary !important;
 }
+.btn.disabled, .btn[disabled], fieldset[disabled] .btn {
+  cursor: default !important;
+}

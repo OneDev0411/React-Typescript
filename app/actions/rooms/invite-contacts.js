@@ -13,8 +13,12 @@ export default (user, room, contacts) => {
       invitation.invitee_last_name = contact.last_name
     if (contact.email)
       invitation.email = contact.email
-    if (contact.phone_number)
+    if (contact.phone_number) {
+      // Add US country code for now
+      if (contact.phone_number.length === 10)
+        contact.phone_number = '+1' + contact.phone_number
       invitation.phone_number = contact.phone_number
+    }
     return invitation
   })
   const params = {
@@ -27,6 +31,9 @@ export default (user, room, contacts) => {
       delete AppStore.data.contacts_added
       delete AppStore.data.adding_contacts
       delete AppStore.data.show_contacts_modal
+      AppStore.emitChange()
+    } else {
+      AppStore.data.add_contacts_error = true
       AppStore.emitChange()
     }
   })

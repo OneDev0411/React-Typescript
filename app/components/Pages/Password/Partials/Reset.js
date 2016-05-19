@@ -18,12 +18,13 @@ export default class Reset extends Component {
     // Get token
     const password = this.refs.password.getInputDOMNode().value.trim()
     const confirm_password = this.refs.confirm_password.getInputDOMNode().value.trim()
-    const token = helpers.getParameterByName('token')
+    const decoded_token = decodeURIComponent(helpers.getParameterByName('token'))
+    const encoded_token = encodeURIComponent(decoded_token)
 
     const form_data = {
       password,
       confirm_password,
-      token
+      token: encoded_token
     }
 
     this.props.handleSubmit('reset-password', form_data)

@@ -137,6 +137,7 @@ const controller = {
     })
   },
   hideModal() {
+    delete AppStore.data.listing_map.saving_alert
     delete AppStore.data.show_share_listing_modal
     if (AppStore.data.listing_map)
       delete AppStore.data.listing_map.show_share_modal

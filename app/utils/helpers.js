@@ -2,6 +2,15 @@ import { PhoneNumberUtil } from 'google-libphonenumber'
 const phoneUtil = PhoneNumberUtil.getInstance()
 
 export default {
+  randomString: (len, charSet) => {
+    charSet = charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    var randomString = '';
+    for (var i = 0; i < len; i++) {
+      var randomPoz = Math.floor(Math.random() * charSet.length);
+      randomString += charSet.substring(randomPoz,randomPoz+1);
+    }
+    return randomString;
+  },
   getParameterByName: (name) => {
     name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
     var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'),
@@ -62,10 +71,10 @@ export default {
   getDaysFromMiliseconds: (miliseconds) => {
     return Math.floor(parseInt(miliseconds) / 86400000)
   },
-  isValidPhoneNumber: (value) => {
-    var phoneRe = /^[1-9]\d{2}[1-9]\d{2}\d{4}$/
-    var digits = value.replace(/\D/g, '')
-    return digits.match(phoneRe)
+  isValidPhoneNumber: (phone_number) => {
+    if(phone_number.trim() && phoneUtil.isValidNumber(phoneUtil.parse(phone_number)))
+      return true
+    return false
   },
   imageExists: (url) => {
     var img = new Image();

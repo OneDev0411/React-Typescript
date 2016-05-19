@@ -122,7 +122,7 @@ export default class Forgot extends Component {
     }
 
     return (
-      <div className="center-block" style={ S('maxw-300') }>
+      <div className="center-block text-center box-shadow" style={ S('w-460 p-50 br-6') }>
         <h1 className="tempo">Rechat</h1>
         { main_content }
       </div>

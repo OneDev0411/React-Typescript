@@ -9,6 +9,8 @@ export default mlsid => {
   Agent.search(params, (err, response) => {
     if (response.status === 'success') {
       const agent = response.data
+      if (!AppStore.data.signup)
+        AppStore.data.signup = {}
       AppStore.data.signup.agent = agent
     } else {
       AppStore.data.error_type = 'agent-not-found'

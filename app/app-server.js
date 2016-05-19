@@ -39,6 +39,13 @@ io.on('connection', function(socket){
   })
 })
 
+// Global locals
+app.use(function(req, res, next) {
+  const date = new Date
+  res.locals.time = date.getTime()
+  next()
+})
+
 // For dev port access
 if(process.env.NODE_ENV === 'development'){
   app.use(function(req, res, next) {

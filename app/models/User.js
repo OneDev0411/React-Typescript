@@ -6,10 +6,60 @@ import superagent from 'superagent'
 import config from '../../config/public'
 
 export default {
+  get: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const endpoint = api_host + '/api/users/' + params.id + '?access_token=' + params.access_token
+    fetch(endpoint, {
+      method: 'get',
+      headers: {
+        'Content-type': 'application/json'
+      }
+    })
+    .then(response => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          response
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then(response => {
+      return callback(false, response)
+    })
+  },
   create: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
     const endpoint = api_host + '/api/signup'
+    const request_object = params.user
+    fetch(endpoint, {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(request_object)
+    })
+    .then(response => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          response
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then(response => {
+      return callback(false, response)
+    })
+  },
+  createShadow: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const endpoint = api_host + '/api/signup-shadow'
     const request_object = params.user
     fetch(endpoint, {
       method: 'post',
@@ -61,16 +111,45 @@ export default {
       return callback(false, response)
     })
   },
+  sendVerifyPhone: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const endpoint = api_host + '/api/phone-verifications'
+    const access_token = params.access_token
+    const request_object = {
+      access_token
+    }
+    fetch(endpoint, {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(request_object)
+    })
+    .then(response => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          response
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then(response => {
+      return callback(false, response)
+    })
+  },
   signin: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-
     const endpoint = api_host + '/api/signin'
     const request_object = {
       email: params.email,
-      password: params.password,
-      invite: params.invite
+      password: params.password
     }
+    if (params.invite)
+      request_object.invite = params.invite
     fetch(endpoint, {
       method: 'post',
       credentials: 'include',
@@ -129,10 +208,41 @@ export default {
 
     const endpoint = api_host + '/api/reset-password'
     const request_object = {
-      token: encodeURIComponent(params.token),
+      token: params.token,
       password: params.password
     }
 
+    fetch(endpoint, {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(request_object)
+    })
+    .then(response => {
+      if (response.status >= 400) {
+        const error = {
+          'status': 'error',
+          response
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then(response => {
+      return callback(false, response)
+    })
+  },
+  createPassword: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const endpoint = api_host + '/api/create-password'
+    const request_object = {
+      email: params.email,
+      token: params.token, // already decoded
+      password: params.password,
+      agent: params.agent
+    }
     fetch(endpoint, {
       method: 'post',
       headers: {
@@ -162,7 +272,7 @@ export default {
 
     const request_object = {
       code: params.code,
-      token: encodeURIComponent(params.token)
+      token: params.token
     }
 
     fetch(endpoint, {
@@ -397,6 +507,36 @@ export default {
     const request_object = {
       old_password: params.old_password,
       new_password: params.new_password,
+      access_token: params.access_token
+    }
+    fetch(endpoint, {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(request_object)
+    })
+    .then(response => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          response
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then(response => {
+      return callback(false, response)
+    })
+  },
+  upgradeAccount: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const endpoint = api_host + '/api/upgrade-account'
+    const request_object = {
+      agent: params.agent,
+      secret: params.secret,
       access_token: params.access_token
     }
     fetch(endpoint, {

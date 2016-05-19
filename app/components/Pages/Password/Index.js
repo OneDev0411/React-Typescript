@@ -5,14 +5,30 @@ import AppStore from '../../../stores/AppStore'
 // import MapBackground from '../../Partials/MapBackground'
 import Forgot from './Partials/Forgot'
 import Reset from './Partials/Reset'
+import Create from './Partials/Create'
 import S from 'shorti'
 
 export default class Password extends Component {
-
-  componentDidMount() {
-    // Reset data store
-    AppStore.data = {}
-    AppStore.emitChange()
+  componentDidUpdate() {
+    const data = this.props.data
+    const signup = data.signup
+    const user = data.user
+    // Redirect after Password creation
+    if (user) {
+      if (signup.type === 'client')
+        window.location.href = '/dashboard/mls?message=welcome'
+      if (signup.type === 'agent') {
+        // If verified agent
+        if (signup.is_agent) {
+          window.location.href = '/dashboard/mls?message=welcome'
+          return
+        }
+        delete AppStore.data.submitting
+        AppStore.emitChange()
+        // Go to confirm agent
+        this.props.history.pushState(null, '/signup/agent')
+      }
+    }
   }
 
   handleSubmit(action, form_data) {
@@ -34,6 +50,24 @@ export default class Password extends Component {
         password,
         confirm_password,
         token
+      })
+    }
+    // Reset pass
+    if (action === 'create-password') {
+      const password = form_data.password
+      const token = form_data.token
+      const email = form_data.email
+      const first_name = form_data.first_name
+      const last_name = form_data.last_name
+      const agent = form_data.agent
+      AppDispatcher.dispatch({
+        action: 'create-password',
+        password,
+        token,
+        email,
+        first_name,
+        last_name,
+        agent
       })
     }
   }
@@ -65,9 +99,15 @@ export default class Password extends Component {
       )
     }
 
+    if (slug === 'create') {
+      main_content = (
+        <Create handleSubmit={ this.handleSubmit } data={ data }/>
+      )
+    }
+
     return (
       <div id="main-content" className="flex-center-wrap" style={ S('absolute h-100p w-100p') }>
-        <div className="text-center center-block box-shadow" style={ S('w-460 z-100 relative mt-60n bg-fff br-6 p-50') }>
+        <div style={ S('z-100 relative mt-60n bg-fff br-6') }>
           { main_content }
         </div>
       </div>
@@ -78,5 +118,6 @@ export default class Password extends Component {
 // PropTypes
 Password.propTypes = {
   data: React.PropTypes.object,
-  params: React.PropTypes.object.isRequired
+  params: React.PropTypes.object.isRequired,
+  history: React.PropTypes.object.isRequired
 }

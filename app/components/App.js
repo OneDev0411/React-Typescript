@@ -53,6 +53,8 @@ export default class App extends Component {
       if (cb)
         cb(null, new Date)
     })
+    // Check for mobile
+    this.checkForMobile()
   }
 
   componentDidUpdate() {
@@ -70,6 +72,13 @@ export default class App extends Component {
     AppStore.removeChangeListener(this._onChange.bind(this))
   }
 
+  checkForMobile() {
+    // Check for mobile
+    AppDispatcher.dispatch({
+      action: 'check-for-mobile'
+    })
+  }
+
   getNotifications() {
     const data = AppStore.data
     AppDispatcher.dispatch({
@@ -84,10 +93,11 @@ export default class App extends Component {
     socket.emit('Authenticate', data.user.access_token)
     socket.on('Message.Sent', (room, message) => {
       const current_room = AppStore.data.current_room
-      if (current_room.id === room.id) {
+      if (current_room && room && current_room.id === room.id) {
         if (message.author && data.user.id === message.author.id)
           message.fade_in = true
-        AppStore.data.messages.push(message)
+        if (AppStore.data.messages)
+          AppStore.data.messages.push(message)
         const rooms = AppStore.data.rooms
         const current_room_index = _.findIndex(rooms, { id: current_room.id })
         AppStore.data.rooms[current_room_index].latest_message = message

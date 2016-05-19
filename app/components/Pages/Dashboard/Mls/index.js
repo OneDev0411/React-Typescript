@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import GoogleMap from 'google-map-react'
-import { ButtonGroup, Button } from 'react-bootstrap'
+import { ButtonGroup, Button, Modal } from 'react-bootstrap'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
@@ -15,7 +15,7 @@ import ListingViewerMobile from '../Partials/ListingViewerMobile'
 import ListingPanel from './Partials/ListingPanel'
 import FilterForm from './Partials/FilterForm'
 import ListingMarker from '../Partials/ListingMarker'
-import listing_util from '../../../../utils/listing'
+// import listing_util from '../../../../utils/listing'
 export default class Mls extends Component {
   componentWillMount() {
     const data = this.props.data
@@ -63,30 +63,25 @@ export default class Mls extends Component {
       action: 'get-contacts',
       user
     })
+    if (this.props.location && this.props.location.query.message && this.props.location.query.message === 'welcome') {
+      AppStore.data.show_welcome_modal = true
+      AppStore.emitChange()
+    }
   }
   componentDidMount() {
-    controller.mobile.checkForMobile()
+    this.checkForMobile()
   }
   componentWillUnmount() {
     controller.listing_map.hideModal()
   }
-  cacheImages() {
-    const data = this.props.data
-    const listing_map = data.listing_map
-    if (!listing_map)
-      return <div />
-    const listings = listing_map.listings
-    if (!listings)
-      return <div />
-    const cache_images = listings.map(listing => {
-      let resize_url
-      if (listing.cover_image_url)
-        resize_url = listing_util.getResizeUrl(listing.cover_image_url)
-      return (
-        <img key={ 'cache-image-' + listing.id } style={ S('absolute w-0 h-0 l-1000n') } src={ resize_url + '?w=160'} />
-      )
+  checkForMobile() {
+    AppDispatcher.dispatch({
+      action: 'check-for-mobile'
     })
-    return cache_images
+  }
+  hideWelcomeModal() {
+    delete AppStore.data.show_welcome_modal
+    AppStore.emitChange()
   }
   render() {
     const data = this.props.data
@@ -304,7 +299,7 @@ export default class Mls extends Component {
       <main>
         { nav_area }
         <div className={ main_class } style={ main_style }>
-          { this.cacheImages() }
+          { /* this.cacheImages() */ }
           { toolbar }
           { loading }
           <div style={ map_wrapper_style }>
@@ -364,11 +359,22 @@ export default class Mls extends Component {
         <main>
           { main_content }
         </main>
+        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_welcome_modal } onHide={ this.hideWelcomeModal }>
+          <Modal.Body style={ S('text-center p-50') }>
+            <div style={ S('font-42') }>Welcome to Rechat!</div>
+            <div style={ S('font-22 color-9b9b9b') }>The Real Estate app that Elevates Your Game</div>
+            <div style={ S('mt-20 mb-20 h-156') }>
+              <img style={ S('w-100p') } src="/images/signup/value-faces.png" />
+            </div>
+            <Button bsStyle="primary" style={ S('w-100p') } onClick={ this.hideWelcomeModal }>Start Using Rechat</Button>
+          </Modal.Body>
+        </Modal>
       </div>
     )
   }
 }
 Mls.propTypes = {
   data: React.PropTypes.object,
-  params: React.PropTypes.object
+  params: React.PropTypes.object,
+  location: React.PropTypes.object
 }

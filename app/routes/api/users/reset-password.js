@@ -3,17 +3,17 @@ import Crypto from '../../../models/Crypto'
 import helpers from '../../../utils/helpers'
 module.exports = (app, config) => {
   app.post('/api/reset-password',(req, res) => {
-    let token = helpers.prepareToken(req.body.token)
+    const decoded_token = decodeURIComponent(req.body.token)
     const password = req.body.password
-    const decrypted_token = Crypto.decrypt(token).split(':')
-    const email = decrypted_token[0]
-    token = decrypted_token[1]
+    const decrypted_obj = JSON.parse(Crypto.decrypt(decoded_token))
+    const email = decrypted_obj.email
+    const token = decrypted_obj.token
     const api_url = config.api.url
     const signin_url = api_url + '/users/password'
     const request_object = {
-      email: email,
-      token: token,
-      password: password
+      email,
+      token,
+      password
     }
     fetch(signin_url,{
       method: 'patch',

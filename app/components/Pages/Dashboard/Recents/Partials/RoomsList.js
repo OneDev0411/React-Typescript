@@ -65,12 +65,16 @@ export default class RoomsList extends Component {
         // Profile image
         let author
         let profile_image_div
-        let list_style = { ...S('pointer pt-10 pb-10 pl-10 pr-17'), borderBottom: '1px solid #e7e4e3' }
+        let list_style = S('pointer pt-10 pb-10 pl-10 pr-17 relative border-bottom-1-solid-e7e4e3')
         if (current_room && current_room.id === room.id)
           list_style = { ...list_style, ...S('bg-f5fafe') }
         if (!room.latest_message) {
+          const time_updated = helpers.friendlyDate(room.updated_at)
           return (
             <li className="room-list__item" style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, i) }>
+              <div className="text-right" style={ S('color-ccc w-50p absolute r-5 font-13') } >
+                { time_updated.month } { time_updated.date }, { time_updated.time_friendly }
+              </div>
               <div style={ S('relative') }>
                 New Room
               </div>

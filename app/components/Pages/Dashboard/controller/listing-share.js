@@ -70,7 +70,7 @@ const controller = {
       if (share_modal.rooms_added && share_modal.rooms_added.length)
         rooms_added = _.pluck(share_modal.rooms_added, 'id')
       if (share_modal.contacts_added && share_modal.contacts_added.length)
-        contacts_added = _.pluck(share_modal.contacts_added, 'id')
+        contacts_added = _.pluck(_.pluck(share_modal.contacts_added, 'contact_user'), 'id')
       if (share_modal.emails_added && share_modal.emails_added.length)
         emails_added = share_modal.emails_added
       if (share_modal.phone_numbers_added && share_modal.phone_numbers_added.length)

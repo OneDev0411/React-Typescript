@@ -16,6 +16,12 @@ import AppStore from '../../../../stores/AppStore'
 import ProfileImage from './ProfileImage'
 export default class SideBar extends Component {
 
+  componentDidUpdate() {
+    // Refresh page on agent update
+    const data = this.props.data
+    if (data.settings && data.settings.is_agent)
+      window.location.href = '/signin?message=account-upgraded'
+  }
   showSettingsModal(e) {
     e.preventDefault()
     delete AppStore.data.error
@@ -28,19 +34,50 @@ export default class SideBar extends Component {
     window.Intercom('show')
   }
 
-  handleSubmit(e) {
+  handleSubmit(type, e) {
     e.preventDefault()
     const data = this.props.data
-    if (data.show_change_password) {
-      this.changePassword()
-      return
+    if (type === 'edit-info') {
+      if (data.show_change_password)
+        this.changePassword()
+      else
+        this.editAccountInfo()
     }
-    this.editAccountInfo()
+    if (type === 'search-agent')
+      this.searchAgent()
+    if (type === 'confirm-agent')
+      this.confirmAgent()
+  }
+
+  searchAgent() {
+    delete AppStore.data.errors
+    AppStore.data.submitting = true
+    AppStore.emitChange()
+    const mlsid = this.refs.mlsid.refs.input.value.trim()
+    AppDispatcher.dispatch({
+      action: 'search-agent-settings',
+      mlsid
+    })
+  }
+
+  confirmAgent() {
+    delete AppStore.data.errors
+    AppStore.data.submitting = true
+    AppStore.emitChange()
+    const data = this.props.data
+    const user = data.user
+    const secret = this.refs.secret.refs.input.value.trim()
+    const agent = data.settings.agent.id
+    AppDispatcher.dispatch({
+      action: 'upgrade-account',
+      user,
+      agent,
+      secret
+    })
   }
 
   editAccountInfo() {
     delete AppStore.data.error
-    AppStore.emitChange()
     const data = this.props.data
     const user = data.user
     const first_name = this.refs.first_name.refs.input.value.trim()
@@ -77,9 +114,15 @@ export default class SideBar extends Component {
   changePassword() {
     const data = this.props.data
     const user = data.user
-    const old_password = this.refs.old_password.refs.input.value.trim()
-    const new_password = this.refs.new_password.refs.input.value.trim()
-    const new_password_confirm = this.refs.new_password_confirm.refs.input.value.trim()
+    let old_password
+    let new_password
+    let new_password_confirm
+    if (this.refs.old_password)
+      old_password = this.refs.old_password.refs.input.value.trim()
+    if (this.refs.new_password)
+      new_password = this.refs.new_password.refs.input.value.trim()
+    if (this.refs.new_password_confirm)
+      new_password_confirm = this.refs.new_password_confirm.refs.input.value.trim()
     AppStore.data.saving_account_settings = true
     delete AppStore.data.error
     delete AppStore.data.password_changed
@@ -118,13 +161,24 @@ export default class SideBar extends Component {
     })
   }
 
+  showUpgradeAccountModal() {
+    AppStore.data.show_upgrade_account_modal = true
+    AppStore.emitChange()
+  }
+
   hideModal() {
     delete AppStore.data.show_account_settings_modal
     delete AppStore.data.uploading_profile_pic
     delete AppStore.data.show_change_password
     delete AppStore.data.saving_account_settings
     delete AppStore.data.password_changed
+    delete AppStore.data.show_upgrade_account_modal
     AppStore.emitChange()
+    setTimeout(() => {
+      delete AppStore.data.settings
+      delete AppStore.data.errors
+      AppStore.emitChange()
+    }, 500)
   }
 
   notificationIcon(name) {
@@ -374,6 +428,91 @@ export default class SideBar extends Component {
       transactions: <Popover className="sidenav__popover" id="popover-transactions">Transactions</Popover>,
       support: <Popover className="sidenav__popover" id="popover-transactions">Need Help?</Popover>
     }
+    if (data.errors && data.errors.type && data.errors.type === 'agent-not-found') {
+      message = (
+        <Alert bsStyle="danger">
+          Agent not found.
+        </Alert>
+      )
+    }
+    let upgrade_account_area = (
+      <div>
+        <form onSubmit={ this.handleSubmit.bind(this, 'search-agent') }>
+          <Modal.Body>
+            <Col xs={ 12 }>
+              <label>Enter your agent license # to unlock MLS features.</label>
+              <Input key={'password'} ref="mlsid" type="text" defaultValue=""/>
+              { message }
+              <div className="clearfix"></div>
+            </Col>
+            <div style={ S('text-center mt-20') }>
+              Having trouble? <a href="#" onClick={ this.showIntercom }>Contact support</a>.
+            </div>
+          </Modal.Body>
+          <Modal.Footer style={ { border: 'none' } }>
+            <Col xs={ 9 } style={ S('pr-0 pull-right') }>
+              <Button bsStyle="link" onClick={ this.hideModal.bind(this) }>Cancel</Button>
+              <Button style={ S('h-30 pt-5 pl-30 pr-30') } className={ data.submitting ? 'disabled' : '' } type="submit" bsStyle="primary">
+                { data.submitting ? 'Searching...' : 'Search' }
+              </Button>
+            </Col>
+          </Modal.Footer>
+        </form>
+      </div>
+    )
+    if (data.settings && data.settings.agent) {
+      if (data.errors && data.errors.update_error) {
+        message = (
+          <Alert bsStyle="danger">
+            Agent information invalid.
+          </Alert>
+        )
+      }
+      const agent = data.settings.agent
+      upgrade_account_area = (
+        <div>
+          <form onSubmit={ this.handleSubmit.bind(this, 'confirm-agent') }>
+            <Modal.Body>
+              <div className="tk-calluna-sans" style={ S('color-cecdcd mb-20 font-26 text-left') }>Rechat</div>
+              <div style={ S('color-000 mb-20 text-left font-26') }>Confirm agent status</div>
+              <div style={ S('mb-20 color-9b9b9b') }>We found the following contact details associated with agent license <strong>#{ data.settings.agent.mlsid }</strong></div>
+              <div style={ S('mb-10 color-9b9b9b') }>Confirm this is you by entering your email or phone number # below</div>
+              <div style={ S('mb-20 color-4a4a4a') }>
+                {
+                  agent.secret_questions.map((question, i) => {
+                    return (
+                      <div key={ 'question-' + i } style={ S('fw-600') }>{ question }</div>
+                    )
+                  })
+                }
+              </div>
+              <div style={ S('w-100p mb-10') }>
+                <Input type="text" ref="secret" placeholder="Your email or phone #"/>
+                <div className="clearfix"></div>
+                { message }
+              </div>
+              <div style={ S('text-center mt-20') }>
+                Having trouble? <a href="#" onClick={ this.showIntercom }>Contact support</a>.
+              </div>
+            </Modal.Body>
+            <Modal.Footer style={ { border: 'none' } }>
+              <Col xs={ 9 } style={ S('pr-0 pull-right') }>
+                <Button bsStyle="link" onClick={ this.hideModal.bind(this) }>Cancel</Button>
+                <Button style={ S('h-30 pt-5 pl-30 pr-30') } className={ data.submitting ? 'disabled' : '' } type="submit" bsStyle="primary">
+                  { data.submitting ? 'Confirming...' : 'Confirm I\'m an agent' }
+                </Button>
+              </Col>
+            </Modal.Footer>
+          </form>
+        </div>
+      )
+    }
+    let upgrade_account_button
+    if (data.user && data.user.user_type === 'Client') {
+      upgrade_account_button = (
+        <li><a href="#" style={ S('pointer') } onClick={ this.showUpgradeAccountModal }><i className="fa fa-arrow-up" style={ S('mr-15') }></i>Upgrade Account</a></li>
+      )
+    }
     return (
       <aside style={ sidebar_style } className="sidebar__nav-list pull-left">
         <div style={ S('mt-12') }>
@@ -447,6 +586,7 @@ export default class SideBar extends Component {
               <ProfileImage data={ data } user={ user } />
             </div>
             <NavDropdown style={ S('z-1000') } title={ title_area } dropup id="account-dropdown" className="account-dropdown" eventKey={3} noCaret>
+              { upgrade_account_button }
               <li><a href="#" style={ S('pointer') } onClick={ this.showSettingsModal }><i className="fa fa-cog" style={ S('mr-15') }></i>Settings</a></li>
               <li role="separator" className="divider"></li>
               <li><a href="/signout"><i className="fa fa-power-off" style={ S('mr-15') }></i>Sign out</a></li>
@@ -454,7 +594,7 @@ export default class SideBar extends Component {
           </Nav>
         </div>
         <Modal show={ data.show_account_settings_modal } onHide={ this.hideModal.bind(this) }>
-          <form onSubmit={ this.handleSubmit.bind(this) }>
+          <form onSubmit={ this.handleSubmit.bind(this, 'edit-info') }>
             <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
               <Modal.Title style={ S('font-14') }>Edit Account Settings</Modal.Title>
             </Modal.Header>
@@ -477,11 +617,18 @@ export default class SideBar extends Component {
             </Modal.Footer>
           </form>
         </Modal>
+        <Modal show={ data.show_upgrade_account_modal } onHide={ this.hideModal.bind(this) }>
+          <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
+            <Modal.Title style={ S('font-14') }>Upgrade Account</Modal.Title>
+          </Modal.Header>
+          { upgrade_account_area }
+        </Modal>
       </aside>
     )
   }
 }
 SideBar.propTypes = {
   data: React.PropTypes.object,
-  viewAllTransactions: React.PropTypes.func
+  viewAllTransactions: React.PropTypes.func,
+  location: React.PropTypes.object
 }

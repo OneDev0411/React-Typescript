@@ -9,8 +9,9 @@ export default class Phone extends Component {
   handleSubmit(e) {
     e.preventDefault()
     const code = this.refs.code.refs.input.value
-    const token = helpers.getParameterByName('token')
-    this.props.handleSubmit(code, token)
+    const decoded_token = decodeURIComponent(helpers.getParameterByName('token'))
+    const encoded_token = encodeURIComponent(decoded_token)
+    this.props.handleSubmit(code, encoded_token)
   }
 
   render() {

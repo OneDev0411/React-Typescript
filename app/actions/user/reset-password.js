@@ -1,7 +1,6 @@
 // actions/reset-password.js
 import User from '../../models/User'
 import AppStore from '../../stores/AppStore'
-
 export default (password, confirm_password, token) => {
   if (password.length < 6 || password !== confirm_password) {
     let error_type
@@ -23,7 +22,6 @@ export default (password, confirm_password, token) => {
     password,
     token
   }
-
   User.resetPassword(params, (err, response) => {
     // Success
     if (response.status === 'success') {

@@ -1,11 +1,11 @@
 // SignIn.js
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import { Button, Input, Alert } from 'react-bootstrap'
+import { Button, Input, Alert, Modal } from 'react-bootstrap'
 import S from 'shorti'
 import AppStore from '../../stores/AppStore'
 import AppDispatcher from '../../dispatcher/AppDispatcher'
-// import MapBackground from '../Partials/MapBackground'
+import helpers from '../../utils/helpers'
 
 export default class SignIn extends Component {
 
@@ -16,6 +16,16 @@ export default class SignIn extends Component {
     if (this.props.location.query.message === 'invite-room') {
       AppStore.data.invite_room_message = true
       AppStore.emitChange()
+    }
+  }
+
+  componentDidMount() {
+    const message = helpers.getParameterByName('message')
+    if (message && message === 'account-upgraded') {
+      setTimeout(() => {
+        AppStore.data.show_upgrade_confirm_modal = true
+        AppStore.emitChange()
+      }, 500)
     }
   }
 
@@ -30,6 +40,11 @@ export default class SignIn extends Component {
         redirect_to = data.location.query.redirect_to
       this.props.history.pushState(null, redirect_to)
     }
+  }
+
+  hideModal() {
+    delete AppStore.data.show_upgrade_confirm_modal
+    AppStore.emitChange()
   }
 
   initFullStory(user) {
@@ -154,6 +169,18 @@ export default class SignIn extends Component {
             }
           </form>
         </div>
+        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_upgrade_confirm_modal } onHide={ this.hideModal }>
+          <Modal.Body className="text-center">
+            <div style={ S('mb-20 mt-20') }>
+              <div style={ S('br-100 w-90 h-90 center-block bg-3388ff text-center') }>
+                <i style={ S('color-fff font-40 mt-25') } className="fa fa-check"></i>
+              </div>
+            </div>
+            <div style={ S('font-24 mb-20') }>Account Upgraded</div>
+            <div style={ S('font-18 mb-20') }>You may now log in and use enhanced features.</div>
+            <Button style={ S('mb-20') } bsStyle="primary" onClick={ this.hideModal.bind(this) }>Ok</Button>
+          </Modal.Body>
+        </Modal>
       </div>
     )
   }

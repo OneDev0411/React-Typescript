@@ -4,10 +4,9 @@ import S from 'shorti'
 import _ from 'lodash'
 import { Button, Modal, Alert, DropdownButton, MenuItem } from 'react-bootstrap'
 import { all_countries } from '../../../../../utils/country-data'
-import MaskedInput from 'react-input-mask'
+import MaskedInput from 'react-maskedinput'
 import controller from '../../controller'
 import ProfileImage from '../../Partials/ProfileImage'
-import helpers from '../../../../../utils/helpers'
 import validator from 'validator'
 export default class ShareAlertModal extends Component {
   onShow() {
@@ -30,6 +29,10 @@ export default class ShareAlertModal extends Component {
     const email = e.target.value
     this.props.handleEmailChange(email)
   }
+  handleKeyUp(e) {
+    if (e.which === 13)
+      this.handleAddPhoneNumber()
+  }
   handlePhoneNumberChange(e) {
     if (e.which === 13)
       return this.handleAddPhoneNumber()
@@ -45,12 +48,11 @@ export default class ShareAlertModal extends Component {
       this.refs.email.value = ''
   }
   handleAddPhoneNumber() {
-    const phone_number = this.refs.phone_number.refs.input.value
+    const data = this.props.data
+    const phone_number = data.share_modal.input_phone_number
     if (!phone_number.trim())
       return
     this.props.handleAddPhoneNumber(phone_number)
-    if (helpers.isValidPhoneNumber(phone_number))
-      this.refs.phone_number.refs.input.value = ''
   }
   handleCountryCodeSelect(country) {
     controller.share_modal.handleCountryCodeSelect(country)
@@ -328,7 +330,7 @@ export default class ShareAlertModal extends Component {
                 <div className="input-group-btn input-dropdown--country-codes">
                   { country_codes }
                 </div>
-                <MaskedInput ref="phone_number" placeholder="Add phone number" onKeyUp={ this.handlePhoneNumberChange.bind(this) } className="form-control" type="text" mask="(999)-999-9999" maskChar="_"/>
+                <MaskedInput placeholder="Add phone number" onKeyUp={ this.handleKeyUp.bind(this) } onChange={ this.handlePhoneNumberChange.bind(this) } value={ data.share_modal ? data.share_modal.input_phone_number : '' } className="form-control" type="text" mask="(111)-111-1111"/>
               </div>
               <div className="clearfix"></div>
             </div>

@@ -1,13 +1,16 @@
 // Landing.js
 import React, { Component } from 'react'
-import { Col, Input, Button } from 'react-bootstrap'
+import { Col, Input, Button, OverlayTrigger, Popover } from 'react-bootstrap'
 import S from 'shorti'
+import validator from 'validator'
+import { randomString } from '../../utils/helpers'
 import emojify from 'emojify.js'
 emojify.setConfig({
   img_dir: '/images/emoji'
 })
 import AppDispatcher from '../../dispatcher/AppDispatcher'
 import AppStore from '../../stores/AppStore'
+import CheckEmailModal from '../Partials/CheckEmailModal'
 export default class Landing extends Component {
   componentWillMount() {
     if (process.env.NODE_ENV === 'development')
@@ -40,6 +43,72 @@ export default class Landing extends Component {
       delete AppStore.data.navbar_in
     else
       AppStore.data.navbar_in = true
+    AppStore.emitChange()
+  }
+  setSignupEmail(e) {
+    const email = e.target.value
+    AppStore.data.signup_email = email
+    AppStore.emitChange()
+  }
+  handleEmailSubmit(e) {
+    e.preventDefault()
+    delete AppStore.data.errors
+    AppStore.emitChange()
+    const data = this.props.data
+    const email = data.signup_email
+    // If no email or double submit
+    if (!email || data.submitting)
+      return
+    const random_password = randomString(9)
+    if (!email.trim())
+      return
+    if (!validator.isEmail(email)) {
+      AppStore.data.errors = {
+        type: 'email-invalid'
+      }
+      AppStore.emitChange()
+      setTimeout(() => {
+        delete AppStore.data.errors
+        AppStore.emitChange()
+      }, 3000)
+      return
+    }
+    AppStore.data.submitting = true
+    AppStore.emitChange()
+    const user = {
+      first_name: email,
+      email,
+      user_type: 'Client',
+      password: random_password,
+      grant_type: 'password',
+      is_shadow: true
+    }
+    AppDispatcher.dispatch({
+      action: 'sign-up-shadow',
+      user,
+      redirect_to: ''
+    })
+  }
+  resend() {
+    const data = this.props.data
+    const new_user = data.new_user
+    const user = {
+      first_name: new_user.email,
+      email: new_user.email,
+      user_type: 'Client',
+      password: new_user.random_password,
+      grant_type: 'password',
+      is_shadow: true
+    }
+    AppStore.data.resent_email_confirmation = true
+    AppDispatcher.dispatch({
+      action: 'sign-up-shadow',
+      user,
+      redirect_to: ''
+    })
+  }
+  hideModal() {
+    delete AppStore.data.show_signup_confirm_modal
     AppStore.emitChange()
   }
   render() {
@@ -127,11 +196,40 @@ export default class Landing extends Component {
     }
     let login_btn_li_style
     let login_btn_style
-    let is_mobile = false
+    let signup_input_style = {
+      ...S('h-37'),
+      borderTopRightRadius: 0,
+      borderBottomRightRadius: 0
+    }
+    const signup_btn_style = {
+      borderTopLeftRadius: 0,
+      borderBottomLeftRadius: 0
+    }
     if (typeof window !== 'undefined' && window.innerWidth <= 768) {
-      is_mobile = true
       login_btn_style = ' w-100p'
       login_btn_li_style = S('pl-15 pr-15')
+      signup_input_style = {
+        ...signup_input_style,
+        width: window.innerWidth - 125
+      }
+    }
+    let popover = <Popover id="popover" className="hidden" />
+    if (data.errors) {
+      if (data.errors.type === 'email-invalid') {
+        popover = (
+          <Popover id="popover" title="">You must enter a valid email</Popover>
+        )
+      }
+      if (data.errors.type === 'email-in-use') {
+        popover = (
+          <Popover id="popover" title="">This email is already in use.  Follow the <a href="/password/forgot">forgot password process</a> or <a href="#" onClick={ this.showIntercom }>contact support</a>.</Popover>
+        )
+      }
+      if (data.errors.type === 'bad-request') {
+        popover = (
+          <Popover id="popover" title="">Bad request.</Popover>
+        )
+      }
     }
     return (
       <div className="page-landing page-bg-video" style={ page_style }>
@@ -151,19 +249,23 @@ export default class Landing extends Component {
               </div>
               <div style={ collapse_style } className={ `collapse navbar-collapse text-center${data.navbar_in ? ' in' : ''}` }>
                 <ul className="nav navbar-nav navbar-right">
-                  <li className="contact-us-btn" style={ S(`mr-20${is_mobile ? ' pt-15' : ''}`) }>
-                    <a onClick={ this.showIntercom } href="#" style={ S('color-fff relative t-6n') }>Contact Us</a>
-                  </li>
                   <li style={ login_btn_li_style }>
                     <a className="btn btn-default" href="/signin" style={ S('color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 mr-15' + login_btn_style) }>Log in</a>
                   </li>
-                  {
-                    /*
-                    <li>
-                      <a className="sign-up__button btn btn-primary" href="/signup" style={ S('color-fff w-80 p-7') }>Sign up</a>
-                    </li>
-                    */
-                  }
+                  <li>
+                    <div style={ S('ml-15') }>
+                      <form onSubmit={ this.handleEmailSubmit.bind(this) }>
+                        <div style={ S('pull-left') }>
+                          <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
+                            <Input onChange={ this.setSignupEmail } style={ signup_input_style } type="text" placeholder="Enter email address" value={ data.signup_email } />
+                          </OverlayTrigger>
+                        </div>
+                        <div style={ S('pull-left') }>
+                          <Button className={ data.submitting ? 'disabled' : '' } bsStyle="primary" style={ signup_btn_style } type="submit">{ data.submitting ? 'Submitting...' : 'Get started' }</Button>
+                        </div>
+                      </form>
+                    </div>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -199,13 +301,19 @@ export default class Landing extends Component {
         <footer className="footer" style={ footer_style }>
           <div className="container">
             <Col className="footer-text footer-text--left" sm={6}>
-              Made with <img src="/images/landing/heart.png" /> by Rechat | <a onClick={ this.showIntercom } href="/">Contact Us</a>
+              Made with <img src="/images/landing/heart.png" /> by Rechat | <a onClick={ this.showIntercom } href="#">Contact Us</a>
             </Col>
             <Col className="footer-text footer-text--right" sm={6}>
               Rechat Inc. &copy; { new Date().getFullYear() }. All Rights Reserved. <a href="/terms">Terms of Service</a> | <a href="/terms/mls">MLS Terms</a> | <a href="/privacy">Privacy Policy</a>
             </Col>
           </div>
         </footer>
+        <CheckEmailModal
+          data={ data }
+          hideModal={ this.hideModal }
+          showIntercom={ this.showIntercom }
+          resend={ this.resend }
+        />
       </div>
     )
   }

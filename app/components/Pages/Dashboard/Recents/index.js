@@ -38,15 +38,16 @@ export default class Dashboard extends Component {
 
       const data = this.props.data
       const user = data.user
-      const room_id = data.current_room.id
-
+      const current_room = data.current_room
+      let room_id
+      if (current_room)
+        room_id = data.current_room.id
       AppDispatcher.dispatch({
         action: 'get-rooms',
         user,
         room_id
       })
     })
-    controller.mobile.checkForMobile()
   }
 
   componentWillUpdate() {
@@ -119,6 +120,8 @@ export default class Dashboard extends Component {
   }
 
   addContactsToRoom() {
+    delete AppStore.data.add_contacts_error
+    AppStore.emitChange()
     const contacts_added = AppStore.data.contacts_added
     const user = AppStore.data.user
     const room = this.props.data.current_room
@@ -181,6 +184,8 @@ export default class Dashboard extends Component {
     delete AppStore.data.show_settings_modal
     delete AppStore.data.show_modal_gallery
     delete AppStore.data.show_alert_viewer
+    delete AppStore.data.adding_contacts
+    delete AppStore.data.add_contacts_error
     AppStore.emitChange()
   }
 
@@ -487,7 +492,6 @@ export default class Dashboard extends Component {
         showDeleteRoomModal={ controller.recents.showDeleteRoomModal }
         hideDeleteRoomModal={ controller.recents.hideDeleteRoomModal }
         confirmDeleteRoom={ controller.recents.confirmDeleteRoom }
-        checkForMobile={ controller.mobile.checkForMobile }
       />
     )
     if (!rooms) {

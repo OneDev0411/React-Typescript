@@ -26,6 +26,7 @@ export default class MessageItem extends Component {
   render() {
     // Data
     const data = this.props.data
+    const user = data.user
     const messages = data.messages
     const message = this.props.message
     let recommendation
@@ -157,7 +158,7 @@ export default class MessageItem extends Component {
       }
       // Hide recommendation notification message
       let price = listing.price
-      if (listing.close_price)
+      if (listing.close_price && user.user_type === 'Agent')
         price = listing.close_price
       const card_style = {
         ...S('mt-10 pointer border-1-solid-e7e4e3 br-3' + card_width),
