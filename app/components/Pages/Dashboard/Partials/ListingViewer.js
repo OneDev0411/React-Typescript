@@ -267,6 +267,12 @@ export default class ListingViewer extends Component {
           </GoogleMap>
         )
       }
+      let asking_price_area
+      if (listing.close_price && user.user_type === 'Client') {
+        asking_price_area = (
+          <span style={ S('font-28 relative t-5n color-ccc fw-400') }>(Asking price)</span>
+        )
+      }
       main_content = (
         <div style={ S('bg-fff') }>
           <div style={ S('p-0 relative') }>
@@ -276,7 +282,7 @@ export default class ListingViewer extends Component {
           </div>
           <div style={ S('pl-40 pr-40 relative') }>
             <Col xs={9}>
-              <div style={ S('fw-700 font-70 mb-10n') }>${ price }</div>
+              <div style={ S('fw-700 font-70 mb-10n') }>${ price } { asking_price_area }</div>
               <div>
                 <div className="tempo pull-left" style={ S('font-32 fw-100 color-7d8288 mb-10 mr-20') }>
                   { listing_title }

@@ -198,6 +198,12 @@ export default class ListingViewerMobile extends Component {
           </div>
         )
       }
+      let asking_price_area
+      if (listing.close_price && user.user_type === 'Client') {
+        asking_price_area = (
+          <span style={ S('font-14 relative color-ccc fw-400') }>(Asking price)</span>
+        )
+      }
       main_content = (
         <div style={ S('bg-fff relative z-1000') }>
           <div style={ S('p-0 relative') }>
@@ -208,7 +214,7 @@ export default class ListingViewerMobile extends Component {
           </div>
           <div>
             <Col xs={12}>
-              <div style={ S('fw-700 font-30') }>${ price }</div>
+              <div style={ S('fw-700 font-30') }>${ price } { asking_price_area }</div>
               <div>
                 <div className="tempo" style={ S('font-20 fw-100 color-7d8288 mb-10 mr-20') }>
                   { listing_title }
