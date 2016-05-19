@@ -441,6 +441,7 @@ export default {
     }
     fetch(endpoint, {
       method: 'post',
+      credentials: 'include',
       headers: {
         'Content-type': 'application/json'
       },

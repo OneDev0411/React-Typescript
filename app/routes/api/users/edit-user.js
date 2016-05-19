@@ -38,6 +38,12 @@ module.exports = (app, config) => {
     })
     .then(response => {
       let response_object = response
+      // Reset user session
+      const user = response.data
+      req.session.user = {
+        ...user,
+        access_token
+      }
       response_object.status = 'success'
       return res.json(response_object)
     });
