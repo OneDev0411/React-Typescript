@@ -1,7 +1,6 @@
 // actions/notifications/get.js
 import Notification from '../../models/Notification'
 import AppStore from '../../stores/AppStore'
-import AppDispatcher from '../../dispatcher/AppDispatcher'
 
 export default (user) => {
   AppStore.data.notifications = {}
