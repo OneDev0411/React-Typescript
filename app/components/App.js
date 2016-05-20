@@ -102,6 +102,8 @@ export default class App extends Component {
       if (AppStore.data.rooms[current_room_index].messages && !_.find(AppStore.data.rooms[current_room_index].messages, { id: message.id }))
         AppStore.data.rooms[current_room_index].messages.push(message)
       AppStore.data.scroll_bottom = true
+      if (current_room && room && current_room.id === room.id)
+        AppStore.data.current_room.messages.push(message)
       AppStore.emitChange()
       if (message.author && data.user.id !== message.author.id)
         this.checkNotification(message)
