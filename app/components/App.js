@@ -116,6 +116,7 @@ export default class App extends Component {
         if (!AppStore.data.rooms[message_room_index].messages)
           AppStore.data.rooms[message_room_index].messages = []
         AppStore.data.rooms[message_room_index].messages.push(message)
+        AppStore.data.rooms[message_room_index].latest_message = message
         AppStore.data.rooms = _.sortBy(AppStore.data.rooms, room_loop => {
           if (room_loop.latest_message)
             return -room_loop.latest_message.created_at
