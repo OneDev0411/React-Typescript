@@ -5,23 +5,11 @@ import ProfileImage from '../../Partials/ProfileImage'
 import helpers from '../../../../../utils/helpers'
 import _ from 'lodash'
 export default class RoomsList extends Component {
-  handleClick(i) {
+  handleClick(id) {
     const data = this.props.data
-    let rooms = data.rooms
-    // Sort by updates
-    if (rooms) {
-      rooms = _.sortBy(rooms, room => {
-        if (!room.latest_message && room.messages)
-          room.latest_message = room.messages[0]
-        if (room.latest_message)
-          return -room.latest_message.updated_at
-      })
-    }
-    const filtered_rooms = data.filtered_rooms
-    let room = rooms[i]
-    if (filtered_rooms)
-      room = filtered_rooms[i]
-    this.props.setCurrentRoom(room)
+    const rooms = data.rooms
+    const current_room = _.find(rooms, { id })
+    this.props.setCurrentRoom(current_room)
   }
   roomHasNotifications(room_id) {
     let result = false
@@ -61,7 +49,7 @@ export default class RoomsList extends Component {
     if (data.is_filtering)
       rooms = data.filtered_rooms
     if (rooms) {
-      rooms_list = rooms.map((room, i) => {
+      rooms_list = rooms.map(room => {
         // Profile image
         let author
         let profile_image_div
@@ -71,7 +59,7 @@ export default class RoomsList extends Component {
         if (!room.latest_message) {
           const time_updated = helpers.friendlyDate(room.updated_at)
           return (
-            <li className="room-list__item" style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, i) }>
+            <li className="room-list__item" style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, room.id) }>
               <div className="text-right" style={ S('color-ccc w-50p absolute r-5 font-13') } >
                 { time_updated.month } { time_updated.date }, { time_updated.time_friendly }
               </div>
@@ -134,7 +122,7 @@ export default class RoomsList extends Component {
           }
         }
         return (
-          <li className="room-list__item" style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, i) }>
+          <li className="room-list__item" style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, room.id) }>
             <div style={ S('relative') }>
               { profile_image_div }
               <div className="pull-left" style={ S('ml-50 w-90p') }>
