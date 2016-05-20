@@ -93,6 +93,7 @@ export default class App extends Component {
     socket.emit('Authenticate', data.user.access_token)
     socket.on('Message.Sent', (room, message) => {
       const current_room = AppStore.data.current_room
+      const rooms = AppStore.data.rooms
       // If in current room
       if (current_room && room && current_room.id === room.id) {
         if (message.author && data.user.id === message.author.id)
@@ -102,16 +103,25 @@ export default class App extends Component {
             AppStore.data.current_room.messages = []
           AppStore.data.current_room.messages.push(message)
         }
-        const rooms = AppStore.data.rooms
         const current_room_index = _.findIndex(rooms, { id: current_room.id })
         AppStore.data.rooms[current_room_index].latest_message = message
         if (AppStore.data.rooms[current_room_index].messages && !_.find(AppStore.data.rooms[current_room_index].messages, { id: message.id }))
           AppStore.data.rooms[current_room_index].messages.push(message)
         AppStore.data.scroll_bottom = true
-        AppStore.emitChange()
         if (message.author && data.user.id !== message.author.id)
           this.checkNotification(message)
+      } else {
+        // Add to not current room
+        const message_room_index = _.findIndex(rooms, { id: room.id })
+        if (!AppStore.data.rooms[message_room_index].messages)
+          AppStore.data.rooms[message_room_index].messages = []
+        AppStore.data.rooms[message_room_index].messages.push(message)
+        AppStore.data.rooms = _.sortBy(AppStore.data.rooms, room_loop => {
+          if (room_loop.latest_message)
+            return -room_loop.latest_message.created_at
+        })
       }
+      AppStore.emitChange()
     })
     socket.on('User.Typing', response => {
       const author_id = response.user_id
