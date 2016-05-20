@@ -15,16 +15,24 @@ import ListingViewer from '../../Partials/ListingViewer'
 import ListingViewerMobile from '../../Partials/ListingViewerMobile'
 
 export default class MainContent extends Component {
-
   handleSearchRoomKeyUp() {
     const search_text = this.refs.search_text.value
     this.props.filterRooms(search_text)
   }
-
   hideModal() {
     this.props.hideModal()
   }
-
+  handleMessageKeyDown(e) {
+    const data = this.props.data
+    const active_contact = data.active_contact
+    if (e.which === 9) { // tab
+      e.preventDefault()
+      const contact = data.filtered_contacts[active_contact]
+      if (contact)
+        this.addContactToMessage(contact)
+    } else
+      this.props.handleMessageTyping()
+  }
   handleMessageKeyUp(e) {
     const message_input = this.refs.message_input.value
     const data = this.props.data
@@ -35,7 +43,9 @@ export default class MainContent extends Component {
         return this.props.handleContactFilterNav('up')
       if (e.which === 40) // down
         return this.props.handleContactFilterNav('down')
+      console.log(e.which)
       if (e.which === 13) { // enter
+        e.preventDefault()
         const contact = data.filtered_contacts[active_contact]
         if (contact)
           this.addContactToMessage(contact)
@@ -53,7 +63,6 @@ export default class MainContent extends Component {
       }, 10)
     }
   }
-
   addContactToMessage(contact) {
     this.props.addContactToMessage()
     const message_input = this.refs.message_input.value
@@ -61,12 +70,10 @@ export default class MainContent extends Component {
     this.refs.message_input.value = message_arr[0] + contact.first_name + ' ' + contact.last_name + ' '
     this.refs.message_input.focus()
   }
-
   handleSubmit(e) {
     e.preventDefault()
     this.createMessage()
   }
-
   createMessage() {
     const data = this.props.data
     const comment = this.refs.message_input.value
@@ -78,14 +85,12 @@ export default class MainContent extends Component {
       this.refs.message_input.value = ''
     }
   }
-
   handleBlur() {
     // Send message on mobile
     const data = this.props.data
     if (data.is_mobile)
       this.createMessage()
   }
-
   render() {
     // Data
     const data = this.props.data
@@ -136,7 +141,6 @@ export default class MainContent extends Component {
         </div>
       )
     }
-
     // Create message form
     let create_message_area = ''
     const btn_style = {
@@ -191,7 +195,7 @@ export default class MainContent extends Component {
           </div>
           <form onSubmit={ this.handleSubmit.bind(this) }>
             <div className="form-group" style={ S('w-100p') }>
-              <input onBlur={ this.handleBlur.bind(this) } onKeyUp={ this.handleMessageKeyUp.bind(this) } onKeyDown={ this.props.handleMessageTyping.bind(this) } ref="message_input" type="text" className="form-control chat-message-input" style={ S('w-100p pl-70 bw-2 z-3 relative') } placeholder="Type your message and press enter"/>
+              <input onBlur={ this.handleBlur.bind(this) } onKeyUp={ this.handleMessageKeyUp.bind(this) } onKeyDown={ this.handleMessageKeyDown.bind(this) } ref="message_input" type="text" className="form-control chat-message-input" style={ S('w-100p pl-70 bw-2 z-3 relative') } placeholder="Type your message and press enter"/>
               <Dropzone onDrop={ this.props.uploadFiles } type="button" className="btn btn-default create-message__btn" style={ btn_style }>
                 <span className="plus" style={ S('font-22 relative t-1n') }>+</span>
               </Dropzone>
