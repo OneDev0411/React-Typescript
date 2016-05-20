@@ -97,8 +97,11 @@ export default class App extends Component {
       if (current_room && room && current_room.id === room.id) {
         if (message.author && data.user.id === message.author.id)
           message.fade_in = true
-        if (AppStore.data.messages)
-          AppStore.data.messages.push(message)
+        if (AppStore.data.current_room) {
+          if (!AppStore.data.current_room.messages)
+            AppStore.data.current_room.messages = []
+          AppStore.data.current_room.messages.push(message)
+        }
         const rooms = AppStore.data.rooms
         const current_room_index = _.findIndex(rooms, { id: current_room.id })
         AppStore.data.rooms[current_room_index].latest_message = message
