@@ -94,17 +94,21 @@ export default class App extends Component {
     socket.on('Message.Sent', (room, message) => {
       const current_room = AppStore.data.current_room
       // If in current room
-      if (message.author && data.user.id === message.author.id)
-        message.fade_in = true
-      const rooms = AppStore.data.rooms
-      const current_room_index = _.findIndex(rooms, { id: current_room.id })
-      AppStore.data.rooms[current_room_index].latest_message = message
-      if (AppStore.data.rooms[current_room_index].messages && !_.find(AppStore.data.rooms[current_room_index].messages, { id: message.id }))
-        AppStore.data.rooms[current_room_index].messages.push(message)
-      AppStore.data.scroll_bottom = true
-      AppStore.emitChange()
-      if (message.author && data.user.id !== message.author.id)
-        this.checkNotification(message)
+      if (current_room && room && current_room.id === room.id) {
+        if (message.author && data.user.id === message.author.id)
+          message.fade_in = true
+        if (AppStore.data.messages)
+          AppStore.data.messages.push(message)
+        const rooms = AppStore.data.rooms
+        const current_room_index = _.findIndex(rooms, { id: current_room.id })
+        AppStore.data.rooms[current_room_index].latest_message = message
+        if (AppStore.data.rooms[current_room_index].messages && !_.find(AppStore.data.rooms[current_room_index].messages, { id: message.id }))
+          AppStore.data.rooms[current_room_index].messages.push(message)
+        AppStore.data.scroll_bottom = true
+        AppStore.emitChange()
+        if (message.author && data.user.id !== message.author.id)
+          this.checkNotification(message)
+      }
     })
     socket.on('User.Typing', response => {
       const author_id = response.user_id
