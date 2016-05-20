@@ -43,7 +43,6 @@ export default class MainContent extends Component {
         return this.props.handleContactFilterNav('up')
       if (e.which === 40) // down
         return this.props.handleContactFilterNav('down')
-      console.log(e.which)
       if (e.which === 13) { // enter
         e.preventDefault()
         const contact = data.filtered_contacts[active_contact]

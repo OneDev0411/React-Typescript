@@ -25,7 +25,7 @@ export default (user, rooms) => {
           delete AppStore.data.messages_loading
           AppStore.data.current_room.message_count = 20
           AppStore.data.scroll_bottom = true
-          AppStore.data.messages = messages
+          AppStore.data.current_room.messages = messages
           AppStore.emitChange()
         }
       }

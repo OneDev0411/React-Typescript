@@ -134,10 +134,8 @@ export default class MessagesList extends Component {
       return false
     const messages_scroll_area = this.refs.messages_scroll_area
     if (messages_scroll_area.scrollTop === 0) {
-      setTimeout(() => {
-        if (messages_scroll_area.scrollTop === 0)
-          this.props.getPreviousMessages(messages_scroll_area.scrollHeight)
-      }, 1000)
+      if (messages_scroll_area.scrollTop === 0)
+        this.props.getPreviousMessages(messages_scroll_area.scrollHeight)
     }
   }
 
@@ -161,15 +159,14 @@ export default class MessagesList extends Component {
       ...S('absolute ml-20 w-100p h-100p bg-url(/images/loading-states/messages.svg)'),
       backgroundRepeat: 'repeat-y'
     }
-    if (data.messages_loading) {
+    // Messages
+    const messages = current_room.messages
+    if (!current_room || data.messages_loading || !messages) {
       return (
         <div style={ loading_style }>
         </div>
       )
     }
-
-    // Messages
-    const messages = data.messages
     let message_date
     const todays_date = helpers.getYMD()
     let prev_message_date

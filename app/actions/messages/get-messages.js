@@ -18,7 +18,7 @@ export default (user, room) => {
       const messages = response.data.reverse()
       if (messages[0])
         AppStore.data.heading_date = messages[0].created_at
-      AppStore.data.messages = messages
+      AppStore.data.current_room.messages = messages
       room.messages = messages
       AppStore.data.current_room = room
       const index = _.indexOf(AppStore.data.rooms, room)

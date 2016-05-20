@@ -70,7 +70,7 @@ export default (user, rooms, contacts, emails, phone_numbers, alert) => {
           const new_room = response.data
           AppStore.data.rooms.unshift(new_room)
           AppStore.data.current_room = new_room
-          AppStore.data.messages = [new_room.latest_message]
+          AppStore.data.current_room.messages = [new_room.latest_message]
           getMessages(user, new_room)
           locals.room_id = new_room.id
           callback()

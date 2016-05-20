@@ -20,7 +20,7 @@ export default (user, title) => {
         AppStore.data.rooms = []
       AppStore.data.rooms.unshift(new_room)
       AppStore.data.current_room = new_room
-      AppStore.data.messages = [new_room.latest_message]
+      AppStore.data.current_room.messages = [new_room.latest_message]
       getMessages(user, new_room)
     } else {
       AppStore.data.status = 'error'

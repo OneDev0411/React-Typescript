@@ -44,7 +44,6 @@ export default (user, room_id) => {
         // Delete last room
         delete AppStore.data.rooms
         delete AppStore.data.current_room
-        delete AppStore.data.messages
       }
     }
     delete AppStore.data.loading

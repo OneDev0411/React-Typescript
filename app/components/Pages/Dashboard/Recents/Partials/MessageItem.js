@@ -27,7 +27,8 @@ export default class MessageItem extends Component {
     // Data
     const data = this.props.data
     const user = data.user
-    const messages = data.messages
+    const current_room = data.current_room
+    const messages = current_room.messages
     const message = this.props.message
     let recommendation
     if (message.recommendation)
