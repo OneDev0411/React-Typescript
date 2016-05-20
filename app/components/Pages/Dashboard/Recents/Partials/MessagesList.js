@@ -133,8 +133,12 @@ export default class MessagesList extends Component {
     if (this.props.data.current_room.showing_all)
       return false
     const messages_scroll_area = this.refs.messages_scroll_area
-    if (messages_scroll_area.scrollTop === 0)
-      this.props.getPreviousMessages(messages_scroll_area.scrollHeight)
+    if (messages_scroll_area.scrollTop === 0) {
+      setTimeout(() => {
+        if (messages_scroll_area.scrollTop === 0)
+          this.props.getPreviousMessages(messages_scroll_area.scrollHeight)
+      }, 1000)
+    }
   }
 
   handleAlertListingSelect(index) {
