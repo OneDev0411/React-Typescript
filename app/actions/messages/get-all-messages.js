@@ -34,6 +34,8 @@ export default (user, rooms) => {
     })
   }, () => {
     // console.log('done')
+    AppStore.data.rooms_loaded = true
+    AppStore.emitChange()
     setRoomsIndexedDB(user.id, rooms)
   })
 }

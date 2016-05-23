@@ -107,7 +107,6 @@ export default class Dashboard extends Component {
     const data = this.props.data
     const user = data.user
     const room_id = this.props.params.room_id
-
     AppDispatcher.dispatch({
       action: 'get-rooms',
       user,
@@ -329,9 +328,7 @@ export default class Dashboard extends Component {
   }
 
   init() {
-    setTimeout(() => {
-      this.getRoomsIndexedDB()
-    }, 1000)
+    this.getRoomsIndexedDB()
     AppStore.data.messages_loading = true
     AppStore.emitChange()
     this.addUserToStore()
@@ -505,7 +502,7 @@ export default class Dashboard extends Component {
         confirmDeleteRoom={ controller.recents.confirmDeleteRoom }
       />
     )
-    if (!rooms) {
+    if (data.rooms_loaded && !rooms) {
       // Empty state
       main_content = (
         <div style={ S('absolute h-100p w-100p') }>

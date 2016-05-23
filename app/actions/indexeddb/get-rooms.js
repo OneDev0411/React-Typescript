@@ -18,8 +18,12 @@ export default (user_id) => {
     const get_rooms = store.get(user_id)
     get_rooms.onsuccess = () => {
       if (get_rooms.result) {
+        // Kill if API response faster
+        if (AppStore.data.rooms_loaded && !AppStore.data.rooms)
+          return
         const rooms = get_rooms.result.rooms
         AppStore.data.rooms = rooms
+        AppStore.data.rooms_loaded = true
         AppStore.emitChange()
       }
     }

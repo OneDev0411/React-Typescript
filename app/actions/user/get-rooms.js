@@ -42,6 +42,8 @@ export default (user, room_id) => {
         getAllMessages(user, rooms)
       } else {
         // Delete last room
+        console.log(rooms)
+        AppStore.data.rooms_loaded = true
         delete AppStore.data.rooms
         delete AppStore.data.current_room
       }
