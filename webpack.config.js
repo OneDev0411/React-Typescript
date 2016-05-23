@@ -52,7 +52,9 @@ module.exports = {
       'process.env.RECHAT_API_URL': JSON.stringify(process.env.RECHAT_API_URL),
       'process.env.SOCKET_SERVER': JSON.stringify(process.env.SOCKET_SERVER),
       'process.env.COSMIC_BUCKET': JSON.stringify(process.env.COSMIC_BUCKET),
-      'process.env.COSMIC_KEY': JSON.stringify(process.env.COSMIC_KEY)
+      'process.env.COSMIC_KEY': JSON.stringify(process.env.COSMIC_KEY),
+      'process.env.CLOUDFRONT_URL': JSON.stringify(process.env.CLOUDFRONT_URL),
+      'process.env.IMGIX_URL': JSON.stringify(process.env.IMGIX_URL)
     })
  ]
 }
