@@ -19,6 +19,9 @@ export default class Dashboard extends Component {
   }
 
   componentDidMount() {
+    setTimeout(() => {
+      this.getRoomsIndexedDB()
+    }, 1000)
     // If already mounted
     if (AppStore.data.mounted && AppStore.data.mounted.indexOf('recents') !== -1)
       return
@@ -58,6 +61,15 @@ export default class Dashboard extends Component {
       delete AppStore.data.play_sound
       AppStore.emitChange()
     }
+  }
+
+  getRoomsIndexedDB() {
+    const data = this.props.data
+    const user = data.user
+    AppDispatcher.dispatch({
+      action: 'get-rooms-indexeddb',
+      user_id: user.id
+    })
   }
 
   getContacts() {

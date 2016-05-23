@@ -14,6 +14,7 @@ import verifyPhone from '../actions/user/verify-phone'
 import sendVerifyEmail from '../actions/user/send-verify-email'
 import addUserToStore from '../actions/user/add-user-to-store'
 import getRooms from '../actions/user/get-rooms'
+import getRoomsIndexedDB from '../actions/indexeddb/get-rooms'
 import getContacts from '../actions/user/get-contacts'
 import createContacts from '../actions/user/create-contacts'
 import editContact from '../actions/user/edit-contact'
@@ -32,6 +33,7 @@ import acknowledgeRoomNotifications from '../actions/rooms/acknowledge-notificat
 
 // Messages
 import createMessage from '../actions/messages/create-message'
+import updateRoomsIndexedDB from '../actions/indexeddb/update-rooms'
 import getMessages from '../actions/messages/get-messages'
 import getAllMessages from '../actions/messages/get-all-messages'
 import getPreviousMessages from '../actions/messages/get-previous-messages'
@@ -126,6 +128,10 @@ AppDispatcher.register(payload => {
       getRooms(payload.user, payload.room_id)
       break
 
+    case 'get-rooms-indexeddb':
+      getRoomsIndexedDB(payload.user_id)
+      break
+
     case 'delete-room':
       deleteRoom(payload.user, payload.id)
       break
@@ -140,6 +146,10 @@ AppDispatcher.register(payload => {
 
     case 'create-message':
       createMessage(payload.user, payload.room, payload.comment, payload.image_url, payload.attachment)
+      break
+
+    case 'update-rooms-indexeddb':
+      updateRoomsIndexedDB(payload.user_id)
       break
 
     case 'get-messages':

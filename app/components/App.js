@@ -87,6 +87,15 @@ export default class App extends Component {
     })
   }
 
+  updateRoomsIndexedDB() {
+    const data = AppStore.data
+    const user = data.user
+    AppDispatcher.dispatch({
+      action: 'update-rooms-indexeddb',
+      user_id: user.id
+    })
+  }
+
   initSockets() {
     const socket = window.socket
     const data = AppStore.data
@@ -122,6 +131,7 @@ export default class App extends Component {
             return -room_loop.latest_message.created_at
         })
       }
+      this.updateRoomsIndexedDB()
       AppStore.emitChange()
     })
     socket.on('User.Typing', response => {
