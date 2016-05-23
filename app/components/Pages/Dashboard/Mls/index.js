@@ -55,10 +55,13 @@ export default class Mls extends Component {
     }
     AppStore.emitChange()
     // Allow for seamless
-    AppDispatcher.dispatch({
-      action: 'get-rooms',
-      user
-    })
+    if (!AppStore.data.mounted || AppStore.data.mounted && AppStore.data.mounted.indexOf('recents') === -1) {
+      if (!AppStore.data.mounted)
+        AppStore.data.mounted = []
+      AppStore.data.mounted.push('recents')
+      this.getRoomsIndexedDB()
+      this.getUserRooms()
+    }
     AppDispatcher.dispatch({
       action: 'get-contacts',
       user
@@ -77,6 +80,24 @@ export default class Mls extends Component {
   checkForMobile() {
     AppDispatcher.dispatch({
       action: 'check-for-mobile'
+    })
+  }
+  getRoomsIndexedDB() {
+    const data = this.props.data
+    const user = data.user
+    AppDispatcher.dispatch({
+      action: 'get-rooms-indexeddb',
+      user_id: user.id
+    })
+  }
+  getUserRooms() {
+    const data = this.props.data
+    const user = data.user
+    const room_id = this.props.params.room_id
+    AppDispatcher.dispatch({
+      action: 'get-rooms',
+      user,
+      room_id
     })
   }
   hideWelcomeModal() {

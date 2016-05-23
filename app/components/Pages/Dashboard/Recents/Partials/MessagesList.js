@@ -158,7 +158,7 @@ export default class MessagesList extends Component {
     let messages
     if (current_room)
       messages = current_room.messages
-    if (!current_room || data.messages_loading || !messages) {
+    if (!current_room || !messages) {
       return (
         <div style={ loading_style }>
         </div>
