@@ -1,7 +1,7 @@
 // ProfileImage.js
 import React, { Component } from 'react'
 import S from 'shorti'
-// import helpers from '../../../../utils/helpers'
+import { getResizeAvatarUrl } from '../../../../utils/user'
 // helpers.imageExists(profile_image_url)
 
 export default class ProfileImage extends Component {
@@ -13,7 +13,8 @@ export default class ProfileImage extends Component {
     if (this.props.font)
       font = this.props.font
     const profile_image_url = user.profile_image_url
-    let background = `bg-url(${profile_image_url})`
+    const resize_image_url = getResizeAvatarUrl(profile_image_url) + '?w=180'
+    let background = `bg-url(${resize_image_url})`
     let initials
     let top = 8
     if (this.props.top)
