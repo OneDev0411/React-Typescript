@@ -131,8 +131,8 @@ export default class App extends Component {
             return -room_loop.latest_message.created_at
         })
       }
-      this.updateRoomsIndexedDB()
       AppStore.emitChange()
+      this.updateRoomsIndexedDB()
     })
     socket.on('User.Typing', response => {
       const author_id = response.user_id

@@ -7,7 +7,6 @@ import config from '../../../../../../config/public'
 import helpers from '../../../../../utils/helpers'
 import listing_util from '../../../../../utils/listing'
 import Switch from 'react-ios-switch'
-
 // AppDispatcher
 import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
 
@@ -76,7 +75,10 @@ export default class MessagesList extends Component {
 
   getMessagePositions() {
     const data = this.props.data
-    const messages = data.messages
+    const current_room = data.current_room
+    if (!current_room)
+      return false
+    const messages = current_room.messages
     if (!messages)
       return false
     const heading_objects = []
@@ -129,14 +131,12 @@ export default class MessagesList extends Component {
   }
 
   handleScroll() {
-    this.getLockedHeadingDate()
+    // this.getLockedHeadingDate()
     if (this.props.data.current_room.showing_all)
       return false
     const messages_scroll_area = this.refs.messages_scroll_area
-    if (messages_scroll_area.scrollTop === 0) {
-      if (messages_scroll_area.scrollTop === 0)
-        this.props.getPreviousMessages(messages_scroll_area.scrollHeight)
-    }
+    if (messages_scroll_area.scrollTop === 0)
+      this.props.getPreviousMessages(messages_scroll_area.scrollHeight)
   }
 
   handleAlertListingSelect(index) {
@@ -146,7 +146,6 @@ export default class MessagesList extends Component {
   render() {
     // Data
     const data = this.props.data
-    const user = data.user
     const current_room = data.current_room
     let listing_switch_checked
     if (current_room)
@@ -352,15 +351,12 @@ export default class MessagesList extends Component {
         </div>
       )
     }
-    let delete_area
-    if (user.id === current_room.owner.id) {
-      delete_area = (
-        <Modal.Footer>
-          <Button bsStyle="link" onClick={ this.props.hideModal }>Cancel</Button>
-          <Button bsStyle="danger" onClick={ this.props.showDeleteRoomModal.bind(this) }>Delete room</Button>
-        </Modal.Footer>
-      )
-    }
+    const delete_area = (
+      <Modal.Footer>
+        <Button bsStyle="link" onClick={ this.props.hideModal }>Cancel</Button>
+        <Button bsStyle="danger" onClick={ this.props.showDeleteRoomModal.bind(this) }>Leave room</Button>
+      </Modal.Footer>
+    )
     let messages_mb = 'mb-40'
     let heading_pt = 'pt-0'
     if (data.is_mobile) {
