@@ -147,10 +147,6 @@ export default class MessagesList extends Component {
     // Data
     const data = this.props.data
     const current_room = data.current_room
-    let listing_switch_checked
-    if (current_room)
-      listing_switch_checked = current_room.notification_settings[data.user.id].system_generated
-
     if (data.rooms && !data.rooms.length)
       return <div style={ S('ml-20') }>No messages yet.</div>
 
@@ -159,13 +155,18 @@ export default class MessagesList extends Component {
       backgroundRepeat: 'repeat-y'
     }
     // Messages
-    const messages = current_room.messages
+    let messages
+    if (current_room)
+      messages = current_room.messages
     if (!current_room || data.messages_loading || !messages) {
       return (
         <div style={ loading_style }>
         </div>
       )
     }
+    let listing_switch_checked
+    listing_switch_checked = current_room.notification_settings[data.user.id].system_generated
+
     let message_date
     const todays_date = helpers.getYMD()
     let prev_message_date

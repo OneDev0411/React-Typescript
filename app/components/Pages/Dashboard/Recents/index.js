@@ -19,9 +19,6 @@ export default class Dashboard extends Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      this.getRoomsIndexedDB()
-    }, 1000)
     // If already mounted
     if (AppStore.data.mounted && AppStore.data.mounted.indexOf('recents') !== -1)
       return
@@ -332,6 +329,7 @@ export default class Dashboard extends Component {
   }
 
   init() {
+    this.getRoomsIndexedDB()
     AppStore.data.messages_loading = true
     AppStore.emitChange()
     this.addUserToStore()

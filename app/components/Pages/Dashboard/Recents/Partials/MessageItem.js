@@ -140,7 +140,7 @@ export default class MessageItem extends Component {
       if (data.is_mobile)
         card_width = 'w-280'
       const placeholder_style = {
-        ...S(message_thumb_size + ' bg-efefef color-ccc font-40 relative z-0 ' + card_width),
+        ...S(message_thumb_size + ' bg-efefef h-100 color-ccc font-40 relative z-0 ' + card_width),
         borderTopLeftRadius: '3px',
         borderTopRightRadius: '3px'
       }
