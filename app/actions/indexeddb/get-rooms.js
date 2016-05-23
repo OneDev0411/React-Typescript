@@ -17,9 +17,11 @@ export default (user_id) => {
     // Query the data
     const get_rooms = store.get(user_id)
     get_rooms.onsuccess = () => {
-      const rooms = get_rooms.result.rooms
-      AppStore.data.rooms = rooms
-      AppStore.emitChange()
+      if (get_rooms.result) {
+        const rooms = get_rooms.result.rooms
+        AppStore.data.rooms = rooms
+        AppStore.emitChange()
+      }
     }
     // Close the db when the transaction is done
     tx.oncomplete = () => {

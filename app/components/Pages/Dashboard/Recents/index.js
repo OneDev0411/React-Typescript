@@ -329,7 +329,9 @@ export default class Dashboard extends Component {
   }
 
   init() {
-    this.getRoomsIndexedDB()
+    setTimeout(() => {
+      this.getRoomsIndexedDB()
+    }, 1000)
     AppStore.data.messages_loading = true
     AppStore.emitChange()
     this.addUserToStore()
