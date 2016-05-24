@@ -45,13 +45,34 @@ export default class ConfirmAgent extends Component {
       secret
     })
   }
+  handleAgentNumberChange(e) {
+    delete AppStore.data.signup.has_agent_number
+    const value = e.target.value.trim()
+    if (value)
+      AppStore.data.signup.has_agent_number = true
+    AppStore.emitChange()
+  }
+  handleAgentSecretChange(e) {
+    delete AppStore.data.signup.has_secret_answer
+    const value = e.target.value.trim()
+    if (value)
+      AppStore.data.signup.has_secret_answer = true
+    AppStore.emitChange()
+  }
   render() {
     const data = this.props.data
     const errors = data.errors
     const submitting = data.submitting
-    let submitting_class = ''
-    if (submitting)
-      submitting_class = 'disabled'
+    let disabled_class = ''
+    let is_disabled = false
+    if (submitting) {
+      disabled_class = 'disabled'
+      is_disabled = true
+    }
+    if (!data.signup || data.signup && !data.signup.has_agent_number) {
+      disabled_class = 'disabled'
+      is_disabled = true
+    }
     // Errors
     let message
     if (errors) {
@@ -72,19 +93,19 @@ export default class ConfirmAgent extends Component {
     }
     let main_content = (
       <div>
-        <Col sm={ 5 } className={ data.is_mobile ? 'hidden' : '' }>
+        <Col sm={ 6 } className={ data.is_mobile ? 'hidden' : '' }>
           <img style={ S('w-100p maxw-300') } src="/images/signup/ntreis-logo.png" />
         </Col>
-        <Col sm={ 7 }>
+        <Col sm={ 6 }>
           <div className="tk-calluna-sans" style={ brand_style }>Rechat</div>
           <div style={ S('color-000 mb-20 text-left font-36') }>Confirm agent status</div>
           <div style={ S('mb-20 color-9b9b9b') }>Enter your agent license # to unlock MLS features.</div>
           <form onSubmit={ this.handleSubmit.bind(this, 'search-agent') }>
             <div style={ S('w-100p mb-10') }>
-              <Input bsSize="large" type="text" ref="mlsid" placeholder="Your agent number"/>
+              <Input onChange={ this.handleAgentNumberChange.bind(this) } bsSize="large" type="text" ref="mlsid" placeholder="Your agent number"/>
               <div className="clearfix"></div>
             </div>
-            <Button bsSize="large" type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p') }>
+            <Button bsSize="large" type="submit" ref="submit" className={ disabled_class + ' btn btn-primary' } disabled={ is_disabled } style={ S('w-100p') }>
               { submitting ? 'Submitting...' : 'Continue to Final Step' }
             </Button>
             <div style={ S('text-center mt-20') }>
@@ -99,16 +120,19 @@ export default class ConfirmAgent extends Component {
     )
     // Confirm agent
     if (agent) {
+      if (!data.signup || data.signup && !data.signup.has_secret_answer) {
+        disabled_class = 'disabled'
+        is_disabled = true
+      }
       main_content = (
         <div>
-          <Col sm={ 5 } className={ data.is_mobile ? 'hidden' : '' }>
+          <Col sm={ 6 } className={ data.is_mobile ? 'hidden' : '' }>
             <img style={ S('w-100p maxw-300') } src="/images/signup/agent-face.png" />
           </Col>
-          <Col sm={ 7 }>
+          <Col sm={ 6 }>
             <div className="tk-calluna-sans" style={ brand_style }>Rechat</div>
             <div style={ S('color-000 mb-20 text-left font-26') }>Confirm agent status</div>
             <div style={ S('mb-20 color-9b9b9b') }>We found the following contact details associated with agent license <strong>#{ data.signup.agent.mlsid }</strong></div>
-            <div style={ S('mb-10 color-9b9b9b') }>Confirm this is you by entering your email or phone number # below</div>
             <div style={ S('mb-20 color-4a4a4a') }>
               {
                 agent.secret_questions.map((question, i) => {
@@ -120,15 +144,16 @@ export default class ConfirmAgent extends Component {
             </div>
             <form onSubmit={ this.handleSubmit.bind(this, 'confirm-agent') }>
               <div style={ S('w-100p mb-10') }>
-                <Input bsSize="large" type="text" ref="secret" placeholder="Your email or phone #"/>
+                <div style={ S('mb-10 color-9b9b9b') }>Confirm this is you by entering your email or phone number # below</div>
+                <Input onChange={ this.handleAgentSecretChange.bind(this) } bsSize="large" type="text" ref="secret" placeholder="Your email or phone #"/>
                 <div className="clearfix"></div>
                 { message }
               </div>
-              <Button bsSize="large" type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p') }>
+              <Button bsSize="large" type="submit" ref="submit" className={ disabled_class + ' btn btn-primary' } disabled={ is_disabled } style={ S('w-100p') }>
                 { submitting ? 'Submitting...' : 'Confirm I\'m an agent' }
               </Button>
               <div style={ S('text-center mt-20') }>
-                <a href="/dashboard/mls">I'll do this later</a>
+                <a href="/dashboard/mls?message=welcome">I'll do this later</a>
               </div>
               <div style={ S('text-center mt-20') }>
                 Having trouble? <a href="#" onClick={ this.showIntercom }>Contact support</a>.
