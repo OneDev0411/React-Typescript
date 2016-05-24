@@ -16,8 +16,12 @@ export default (user, room_id) => {
     // Success
     if (response.status === 'success') {
       let rooms = response.data
-      // sort my latest message
       if (rooms.length) {
+        // remove personal room
+        rooms = rooms.filter(room => {
+          return room.room_type !== 'Personal'
+        })
+        // sort by latest message
         rooms = _.sortBy(rooms, room => {
           if (room.latest_message)
             return -room.latest_message.created_at

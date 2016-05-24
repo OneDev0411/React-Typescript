@@ -502,7 +502,7 @@ export default class Dashboard extends Component {
         confirmDeleteRoom={ controller.recents.confirmDeleteRoom }
       />
     )
-    if (data.rooms_loaded && !rooms) {
+    if (data.rooms_loaded && !rooms || data.rooms_loaded && !rooms.length) {
       // Empty state
       main_content = (
         <div style={ S('absolute h-100p w-100p') }>

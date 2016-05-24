@@ -109,7 +109,7 @@ export default class ConfirmAgent extends Component {
               { submitting ? 'Submitting...' : 'Continue to Final Step' }
             </Button>
             <div style={ S('text-center mt-20') }>
-              <a href="/dashboard/mls">I'll do this later</a>
+              <a href="/dashboard/mls?message=welcome">I'll do this later</a>
             </div>
             <div style={ S('text-center mt-20') }>
               Having trouble? <a href="#" onClick={ this.showIntercom }>Contact support</a>.

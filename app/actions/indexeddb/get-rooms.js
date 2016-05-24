@@ -21,7 +21,11 @@ export default (user_id) => {
         // Kill if API response faster
         if (AppStore.data.rooms_loaded && !AppStore.data.rooms)
           return
-        const rooms = get_rooms.result.rooms
+        let rooms = get_rooms.result.rooms
+        // remove personal room
+        rooms = rooms.filter(room => {
+          return room.room_type !== 'Personal'
+        })
         AppStore.data.rooms = rooms
         AppStore.data.rooms_loaded = true
         AppStore.emitChange()
