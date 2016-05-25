@@ -199,6 +199,16 @@ export default class MessageItem extends Component {
         borderBottomLeftRadius: '3px',
         borderBottomRightRadius: '3px'
       }
+      profile_image_div = (
+        <ProfileImage data={ data } user={ author ? author : null } size={ 30 } top={ 3 }/>
+      )
+      if (!author) {
+        profile_image_div = (
+          <div style={ S('absolute w-35 t-5') }>
+            <img className="center-block" src="/images/dashboard/rebot@2x.png" style={ S('w-30') } />
+          </div>
+        )
+      }
       return (
         <div className="message-item" style={ S('relative mb-15 pt-5 font-15') }>
           <div style={ S('mt-5 pull-left') }>
@@ -228,7 +238,7 @@ export default class MessageItem extends Component {
                 </div>
                 <div style={ S('mt-10 relative') }>
                   <div style={ S('mt-5 pull-left w-40 h-40') }>
-                    <ProfileImage data={ data } user={ author } size={ 30 } top={ 3 }/>
+                    { profile_image_div }
                   </div>
                   <div style={ S('mt-5 pull-left ml-10 w-80p mt-10 font-15') } className={ message_class_name } dangerouslySetInnerHTML={ { __html: '"' + message_text + '"' } }></div>
                   <div className="clearfix"></div>
