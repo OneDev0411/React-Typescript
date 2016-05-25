@@ -20,6 +20,7 @@ export default class SignIn extends Component {
   }
 
   componentDidMount() {
+    this.refs.email.refs.input.focus()
     const message = helpers.getParameterByName('message')
     if (message && message === 'account-upgraded') {
       setTimeout(() => {

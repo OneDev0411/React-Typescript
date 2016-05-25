@@ -8,6 +8,9 @@ import S from 'shorti'
 import AppStore from '../../../../stores/AppStore'
 
 export default class Forgot extends Component {
+  componentDidMount() {
+    this.refs.email.refs.input.focus()
+  }
 
   handleSubmit(e) {
     e.preventDefault()
