@@ -127,7 +127,7 @@ export default class SideBar extends Component {
     // Check for values
     if (!old_password) {
       AppStore.data.error = {
-        message: `You must add a password`
+        message: `You must add a password.`
       }
       delete AppStore.data.saving_account_settings
       AppStore.emitChange()
@@ -135,7 +135,7 @@ export default class SideBar extends Component {
     }
     if (!new_password) {
       AppStore.data.error = {
-        message: `You must add a new password`
+        message: `You must add a new password.`
       }
       delete AppStore.data.saving_account_settings
       AppStore.emitChange()
@@ -143,7 +143,7 @@ export default class SideBar extends Component {
     }
     if (new_password === old_password) {
       AppStore.data.error = {
-        message: `You must add a different password from your current password`
+        message: `You must add a different password from your current password.`
       }
       delete AppStore.data.saving_account_settings
       AppStore.emitChange()

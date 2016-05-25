@@ -104,7 +104,7 @@ export default class ListingViewer extends Component {
           {
             gallery_chunks.map((gallery_image_url, i) => {
               return (
-                <CarouselItem className="listing-carousel__item" key={ 'gallery-image-' + gallery_image_url[0] + i }>
+                <CarouselItem className="listing-carousel__item" key={ 'gallery-images-chunked-' + gallery_image_url[0] + i }>
                   <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[0]) } style={ S('border-right-1-solid-fff w-' + (viewer_width / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + listing_util.getResizeUrl(gallery_image_url[0]) + '?w=800)') }/>
                   <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[1]) } style={ S('border-right-1-solid-fff w-' + (viewer_width / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + listing_util.getResizeUrl(gallery_image_url[1]) + '?w=800)') }/>
                   <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[2]) } style={ S('w-' + (viewer_width / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + listing_util.getResizeUrl(gallery_image_url[2]) + '?w=800)') }/>
