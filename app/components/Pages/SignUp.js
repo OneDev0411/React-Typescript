@@ -162,7 +162,7 @@ export default class SignUp extends Component {
           </div>
           <div className="clearfix"></div>
           <div style={ S('mt-10 font-14 color-929292') }>
-            Already have an account? <a href="/signin">Log in</a>.
+            Already have an account?&nbsp;&nbsp;<a href="/signin">Log in</a>.
           </div>
         </Col>
       </div>

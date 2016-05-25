@@ -169,6 +169,9 @@ export default class SignIn extends Component {
               */
             }
           </form>
+          <div style={ S('mt-10 font-14 color-929292') }>
+            Don't have an account?&nbsp;&nbsp;<a href="/signup">Sign up</a>.
+          </div>
         </div>
         <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_upgrade_confirm_modal } onHide={ this.hideModal }>
           <Modal.Body className="text-center">
