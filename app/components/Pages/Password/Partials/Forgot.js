@@ -99,18 +99,18 @@ export default class Forgot extends Component {
       <div>
         <div style={ S('color-929292 mb-20') }>Forgot your password?</div>
         <form onSubmit={ this.handleSubmit.bind(this) }>
-          <Input style={ input_style } bsStyle={ email_style } ref="email" placeholder="Email address" type="text" />
+          <Input bsSize="large" style={ input_style } bsStyle={ email_style } ref="email" placeholder="Email address" type="text" />
           { message }
           <Col sm={4} className="forgot__password-btn--cancel" style={ S('p-0 pr-10') }>
             <Link className="btn btn-link" style={ S('w-100p') } to="/signin">Cancel</Link>
           </Col>
           <Col sm={8} style={ S('p-0') }>
-            <Button type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p') }>
+            <Button bsSize="large" type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p') }>
               { submitting ? 'Submitting...' : 'Reset Password' }
             </Button>
           </Col>
           <div className="clearfix"></div>
-          <div style={ S('mt-20 color-929292 font-13') }>Change your mind? <Link to="/signin">Sign in</Link></div>
+          <div style={ S('mt-20 color-929292 font-13') }>Change your mind? <Link to="/signin">Log in</Link></div>
         </form>
       </div>
     )

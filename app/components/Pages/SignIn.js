@@ -114,7 +114,7 @@ export default class SignIn extends Component {
     if (data.show_message) {
       message = (
         <Alert bsStyle="danger">
-          There was an error with this request.
+          There was an error with this request. This email or password is incorrect.
         </Alert>
       )
       if (data.email_not_confirmed) {
@@ -134,7 +134,7 @@ export default class SignIn extends Component {
     if (data.invite_room_message) {
       invite_message = (
         <Alert bsStyle="success">
-          You have been invited to join a chatroom!  Sign in or Sign up to complete the invite process.
+          You have been invited to join a chatroom!  Log in or Sign up to complete the invite process.
         </Alert>
       )
     }
@@ -161,7 +161,7 @@ export default class SignIn extends Component {
             <div className="clearfix"></div>
             { message }
             <Button bsSize="large" type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p mb-20') }>
-              { submitting ? 'Signing in...' : 'Sign in' }
+              { submitting ? 'Signing in...' : 'Log in' }
             </Button>
             {
               /*
