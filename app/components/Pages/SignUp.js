@@ -39,6 +39,10 @@ export default class SignUp extends Component {
     AppStore.emitChange()
   }
   handleEmailSubmit(e) {
+    // If clicked
+    setTimeout(() => {
+      this.refs.email.refs.input.focus()
+    }, 100)
     e.preventDefault()
     delete AppStore.data.errors
     AppStore.emitChange()

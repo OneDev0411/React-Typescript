@@ -51,6 +51,10 @@ export default class Landing extends Component {
     AppStore.emitChange()
   }
   handleEmailSubmit(e) {
+    // If clicked
+    setTimeout(() => {
+      this.refs.email.refs.input.focus()
+    }, 100)
     e.preventDefault()
     delete AppStore.data.errors
     AppStore.emitChange()
@@ -230,7 +234,7 @@ export default class Landing extends Component {
                       <form onSubmit={ this.handleEmailSubmit.bind(this) }>
                         <div style={ S('pull-left') }>
                           <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
-                            <Input onChange={ this.setSignupEmail } style={ signup_input_style } type="text" placeholder="Enter email address" value={ data.signup_email } />
+                            <Input ref="email" onChange={ this.setSignupEmail } style={ signup_input_style } type="text" placeholder="Enter email address" value={ data.signup_email } />
                           </OverlayTrigger>
                         </div>
                         <div style={ S('pull-left') }>
