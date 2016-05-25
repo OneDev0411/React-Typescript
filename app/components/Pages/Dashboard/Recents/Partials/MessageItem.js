@@ -210,7 +210,7 @@ export default class MessageItem extends Component {
               { time_created.month } { time_created.date }, { time_created.time_friendly }
             </span>
             <div>
-              <span style={ S('color-b0b0b0 fw-600') }>Shared a Home:</span>&nbsp;
+              <span style={ S('color-b0b0b0 fw-600 font-16') }>Shared a Home:</span>&nbsp;
               <span onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ S('fw-600 pointer') } className="text-primary">
                 { listing_util.addressTitle(listing.property.address) }, { listing.property.address.postal_code }
               </span>
@@ -220,7 +220,7 @@ export default class MessageItem extends Component {
               <div>{ message_image }</div>
               <div style={ share_info_style }>
                 <div style={ S('font-20 fw-700') }>${ helpers.numberWithCommas(price) }</div>
-                <div style={ S('font-14 color-929292') }>
+                <div style={ S('font-15 color-929292') }>
                   { listing.property.bedroom_count } Beds&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
                   { listing.property.bathroom_count } Bath&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
                   { helpers.numberWithCommas(listing_util.metersToFeet(listing.property.square_meters)) } Sqft&nbsp;&nbsp;&#8226;&nbsp;&nbsp;
@@ -230,7 +230,7 @@ export default class MessageItem extends Component {
                   <div style={ S('mt-5 pull-left w-40 h-40') }>
                     <ProfileImage data={ data } user={ author } size={ 30 } top={ 3 }/>
                   </div>
-                  <div style={ S('mt-5 pull-left ml-10 w-80p mt-10 font-14') } className={ message_class_name } dangerouslySetInnerHTML={ { __html: '"' + message_text + '"' } }></div>
+                  <div style={ S('mt-5 pull-left ml-10 w-80p mt-10 font-15') } className={ message_class_name } dangerouslySetInnerHTML={ { __html: '"' + message_text + '"' } }></div>
                   <div className="clearfix"></div>
                 </div>
               </div>
