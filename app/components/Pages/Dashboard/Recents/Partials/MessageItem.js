@@ -201,7 +201,9 @@ export default class MessageItem extends Component {
       }
       return (
         <div className="message-item" style={ S('relative mb-15 pt-5 font-15') }>
-          <div style={ S('mt-5 pull-left') }>{ profile_image_div }</div>
+          <div style={ S('mt-5 pull-left') }>
+            { profile_image_div }
+          </div>
           <div className="pull-left" style={ S('ml-55 ' + card_width) }>
             <b>{ first_name || 'Rebot' }</b>
             <span style={ S('color-ccc ml-20') } >
@@ -225,8 +227,10 @@ export default class MessageItem extends Component {
                   Built in { listing.property.year_built }
                 </div>
                 <div style={ S('mt-10 relative') }>
-                  <div style={ S('mt-5 pull-left w-40 h-40') }>{ profile_image_div }</div>
-                  <div style={ S('mt-5 pull-left ml-10 w-100p mt-10 font-14') } className={ message_class_name } dangerouslySetInnerHTML={ { __html: '"' + message_text + '"' } }></div>
+                  <div style={ S('mt-5 pull-left w-40 h-40') }>
+                    <ProfileImage data={ data } user={ author } size={ 30 } top={ 3 }/>
+                  </div>
+                  <div style={ S('mt-5 pull-left ml-10 w-80p mt-10 font-14') } className={ message_class_name } dangerouslySetInnerHTML={ { __html: '"' + message_text + '"' } }></div>
                   <div className="clearfix"></div>
                 </div>
               </div>
