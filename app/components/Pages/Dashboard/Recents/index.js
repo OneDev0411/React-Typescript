@@ -299,9 +299,9 @@ export default class Dashboard extends Component {
     AppStore.emitChange()
   }
 
-  filterRooms(search_text) {
+  filterRooms(search_rooms_input) {
     const data = this.props.data
-    const search_text_lower = search_text.toLowerCase().trim()
+    const search_text_lower = search_rooms_input.toLowerCase().trim()
     const rooms = data.rooms
     const filtered_rooms = rooms.filter(room => {
       const users_first_string = _.pluck(room.users, 'first_name').toString().toLowerCase()
@@ -317,12 +317,11 @@ export default class Dashboard extends Component {
 
       return false
     })
-
     if (!search_text_lower)
-      AppStore.data.is_filtering = false
+      delete AppStore.data.is_filtering
     else
       AppStore.data.is_filtering = true
-
+    AppStore.data.search_rooms_input = search_rooms_input
     AppStore.data.filtered_rooms = filtered_rooms
     AppStore.emitChange()
   }
@@ -500,6 +499,7 @@ export default class Dashboard extends Component {
         showDeleteRoomModal={ controller.recents.showDeleteRoomModal }
         hideDeleteRoomModal={ controller.recents.hideDeleteRoomModal }
         confirmDeleteRoom={ controller.recents.confirmDeleteRoom }
+        clearRoomSearchText={ controller.recents.clearRoomSearchText }
       />
     )
     if (data.rooms_loaded && !rooms || data.rooms_loaded && !rooms.length) {

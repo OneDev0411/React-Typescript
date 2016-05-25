@@ -22,6 +22,11 @@ const controller = {
       user,
       id
     })
+  },
+  clearRoomSearchText() {
+    delete AppStore.data.is_filtering
+    delete AppStore.data.search_rooms_input
+    AppStore.emitChange()
   }
 }
 export default controller

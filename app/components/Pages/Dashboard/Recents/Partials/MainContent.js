@@ -15,9 +15,9 @@ import ListingViewer from '../../Partials/ListingViewer'
 import ListingViewerMobile from '../../Partials/ListingViewerMobile'
 
 export default class MainContent extends Component {
-  handleSearchRoomKeyUp() {
-    const search_text = this.refs.search_text.value
-    this.props.filterRooms(search_text)
+  handleSearchRoomChange() {
+    const search_rooms_input = this.refs.search_rooms_input.value
+    this.props.filterRooms(search_rooms_input)
   }
   hideModal() {
     this.props.hideModal()
@@ -274,7 +274,7 @@ export default class MainContent extends Component {
           <div style={ main_style_mobile }>
             <div style={ S('p-10 pt-15 h-60 relative') }>
               <img style={ S('w-12 h-12 absolute l-20 t-28') } src="/images/dashboard/chats/search.svg" />
-              <input ref="search_text" onKeyUp={ this.handleSearchRoomKeyUp.bind(this) } style={ S('w-82p br-100 pl-30') } type="text" placeholder="Search Chatrooms" className="form-control pull-left" />
+              <input ref="search_rooms_input" onChange={ this.handleSearchRoomChange.bind(this) } style={ S('w-82p br-100 pl-30') } type="text" placeholder="Search Chatrooms" className="form-control pull-left" value={ data.search_rooms_input }/>
               <button onClick={ this.props.showModal.bind(this, 'create-chat') } type="button" className="btn btn-primary" style={ S('w-40 h-40 pointer absolute p-0 t-14 r-10 br-100') }>
                 <img src="/images/dashboard/icons/create-chat.svg"/>
               </button>
@@ -314,6 +314,12 @@ export default class MainContent extends Component {
         </div>
       )
     } // end mobile
+    let clear_search_btn
+    if (data.search_rooms_input) {
+      clear_search_btn = (
+        <div onClick={ this.props.clearRoomSearchText.bind(this) } className="close" style={ S('absolute l-230 t-23') }>&times;</div>
+      )
+    }
     return (
       <div>
         <Dropzone
@@ -327,7 +333,8 @@ export default class MainContent extends Component {
             <div className="dashboard__chat-rooms pull-left" style={ rooms_column_style }>
               <div style={ S('p-10 pt-15 h-60 relative') }>
                 <img style={ S('w-12 h-12 absolute l-20 t-28') } src="/images/dashboard/chats/search.svg" />
-                <input ref="search_text" onKeyUp={ this.handleSearchRoomKeyUp.bind(this) } style={ S('w-82p br-100 pl-30') } type="text" placeholder="Search Chatrooms" className="form-control pull-left" />
+                { clear_search_btn }
+                <input ref="search_rooms_input" onChange={ this.handleSearchRoomChange.bind(this) } style={ S('w-82p br-100 pl-30') } type="text" placeholder="Search Chatrooms" className="form-control pull-left" value={ data.search_rooms_input } />
                 <button onClick={ this.props.showModal.bind(this, 'create-chat') } type="button" className="btn btn-primary" style={ S('w-40 h-40 pointer absolute p-0 t-14 r-10 br-100') }>
                   <img src="/images/dashboard/icons/create-chat.svg"/>
                 </button>
@@ -405,5 +412,6 @@ MainContent.propTypes = {
   showDeleteRoomModal: React.PropTypes.func,
   hideDeleteRoomModal: React.PropTypes.func,
   confirmDeleteRoom: React.PropTypes.func,
-  setAlertGalleryActiveIndex: React.PropTypes.func
+  setAlertGalleryActiveIndex: React.PropTypes.func,
+  clearRoomSearchText: React.PropTypes.func
 }
