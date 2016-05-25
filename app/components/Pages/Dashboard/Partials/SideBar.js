@@ -116,13 +116,10 @@ export default class SideBar extends Component {
     const user = data.user
     let old_password
     let new_password
-    let new_password_confirm
     if (this.refs.old_password)
       old_password = this.refs.old_password.refs.input.value.trim()
     if (this.refs.new_password)
       new_password = this.refs.new_password.refs.input.value.trim()
-    if (this.refs.new_password_confirm)
-      new_password_confirm = this.refs.new_password_confirm.refs.input.value.trim()
     AppStore.data.saving_account_settings = true
     delete AppStore.data.error
     delete AppStore.data.password_changed
@@ -144,10 +141,9 @@ export default class SideBar extends Component {
       AppStore.emitChange()
       return
     }
-    // Check values match
-    if (new_password !== new_password_confirm) {
+    if (new_password === old_password) {
       AppStore.data.error = {
-        message: `Your passwords don't match`
+        message: `You must add a different password from your old password`
       }
       delete AppStore.data.saving_account_settings
       AppStore.emitChange()
@@ -252,6 +248,15 @@ export default class SideBar extends Component {
       history.pushState(null, null, '/dashboard/recents/' + current_room.id)
     else
       history.pushState(null, null, '/dashboard/recents/')
+  }
+  toggleShowPassword() {
+    if (!AppStore.data.settings)
+      AppStore.data.settings = {}
+    if (!AppStore.data.settings.show_password)
+      AppStore.data.settings.show_password = true
+    else
+      delete AppStore.data.settings.show_password
+    AppStore.emitChange()
   }
   render() {
     // Data
@@ -400,22 +405,19 @@ export default class SideBar extends Component {
         <Col xs={ 9 } style={ S('p-0') }>
           <Col xs={ 12 } style={ S('pr-0') }>
             <label>Current password</label>
-            <Input key={'password'} ref="old_password" type="password" defaultValue=""/>
+            <Input key="old_password" bsSize="large" style={ S('font-15') } ref="old_password" type="password" placeholder="Current password" />
           </Col>
           <Col xs={ 12 } style={ S('pr-0') }>
             <label>New password</label>
-            <Input key={'new_password'} ref="new_password" type="password" defaultValue=""/>
+            <div style={ S('relative') }>
+              <Input key="new_password" ref="new_password" autoComplete={ false } style={ S('font-15') } bsSize="large" placeholder="New Password" type={ data.settings && data.settings.show_password ? 'text' : 'password' } />
+              <i onClick={ this.toggleShowPassword } style={ S('absolute t-15 r-15 z-100 pointer color-666') } className={ `fa fa-eye${ data.settings && data.settings.show_password ? '-slash' : '' }` }></i>
+            </div>
           </Col>
-          <Col xs={ 12 } style={ S('pr-0') }>
-            <label>Confirm new password</label>
-            <Input key={'new_password_confirm'} ref="new_password_confirm" type="password" defaultValue=""/>
-            { message }
-          </Col>
+          <Col style={ S('pr-0') } xs={ 12 }>{ message }</Col>
         </Col>
       )
-      change_password_area = (
-        <a style={ S('mt-7') } className="pull-left" href="#" onClick={ this.hideChangePassword.bind(this) }>Cancel change password</a>
-      )
+      change_password_area = ''
     }
     const title_area = (
       <div>&nbsp;</div>
