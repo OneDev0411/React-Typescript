@@ -20,6 +20,7 @@ export default class ConfirmAgent extends Component {
   handleSubmit(type, e) {
     e.preventDefault()
     AppStore.data.submitting = true
+    delete AppStore.data.errors
     AppStore.emitChange()
     if (type === 'search-agent')
       this.searchAgent()
@@ -78,7 +79,7 @@ export default class ConfirmAgent extends Component {
     if (errors) {
       message = (
         <Alert bsStyle="danger">
-          Agent info not validated.
+          Agent not found.
         </Alert>
       )
     }
@@ -105,6 +106,7 @@ export default class ConfirmAgent extends Component {
               <Input onChange={ this.handleAgentNumberChange.bind(this) } bsSize="large" type="text" ref="mlsid" placeholder="Your agent number"/>
               <div className="clearfix"></div>
             </div>
+            { message }
             <Button bsSize="large" type="submit" ref="submit" className={ disabled_class + ' btn btn-primary' } disabled={ is_disabled } style={ S('w-100p') }>
               { submitting ? 'Submitting...' : 'Continue to Final Step' }
             </Button>
@@ -123,6 +125,13 @@ export default class ConfirmAgent extends Component {
       if (!data.signup || data.signup && !data.signup.has_secret_answer) {
         disabled_class = 'disabled'
         is_disabled = true
+      }
+      if (errors) {
+        message = (
+          <Alert bsStyle="danger">
+            Agent info not valid.
+          </Alert>
+        )
       }
       main_content = (
         <div>
