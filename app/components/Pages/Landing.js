@@ -27,12 +27,13 @@ export default class Landing extends Component {
       })
     }, 3000)
     const branch = require('branch-sdk')
-    branch.init('key_live_hhfGKmCFN6reXdK3f4uJBmjbqEdwk2TU')
     branch.banner({
       icon: '/images/logo-big.png',
       title: 'Download the Rechat App for iOS',
-      description: 'For a much better mobile experience',
-      showDesktop: false
+      description: 'For a better mobile experience',
+      showDesktop: false,
+      showAndroid: false,
+      forgetHide: 5 // show again after 5 days
     }, {})
   }
   getContent() {
