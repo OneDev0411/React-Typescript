@@ -18,5 +18,8 @@ export default {
       cloudfront_url: process.env.CLOUDFRONT_URL, // https://d2j29n432zojb.cloudfront.net (production) or https://dzr6z49fv66hq.cloudfront.net (test)
       imgix_url: process.env.IMGIX_URL // https://avatars.imgix.net (production) or https://avatars-test.imgix.net (test)
     }
+  },
+  branch: {
+    key:  process.env.BRANCH_KEY
   }
 }
