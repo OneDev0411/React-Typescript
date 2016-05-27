@@ -78,7 +78,7 @@ export default class FilterForm extends Component {
       const friendly_sold_date = helpers.friendlyDate(filter_options.sold_date)
       sold_date_picker_text = `${friendly_sold_date.date} ${friendly_sold_date.month}`
     }
-    let filter_form_style = S('w-300 absolute bg-fff t-62 font-15 pb-100 h-' + (window.innerHeight - 62))
+    let filter_form_style = S('w-300 absolute z-2 bg-fff t-66 font-15 pb-100 h-' + (window.innerHeight - 62))
     if (data.is_mobile) {
       filter_form_style = {
         ...filter_form_style,
@@ -89,6 +89,9 @@ export default class FilterForm extends Component {
     }
     return (
       <div className={ filter_form_class } style={ filter_form_style }>
+        <div onClick={ this.props.hideFilterForm } style={ S('r-45n t-10 absolute bg-fff w-45 h-45 z-100 text-center font-28 pointer color-929292') }>
+          &times;
+        </div>
         <form onSubmit={ this.props.setFilterOptions.bind(this) }>
           <div style={ filter_scroll_area_style }>
             <div style={ status_style }>
@@ -336,5 +339,6 @@ FilterForm.propTypes = {
   toggleListingStatusDropdown: React.PropTypes.func,
   handleFilterStatusOptionSelect: React.PropTypes.func,
   showSoldDatePicker: React.PropTypes.func,
-  handleSetSoldDate: React.PropTypes.func
+  handleSetSoldDate: React.PropTypes.func,
+  hideFilterForm: React.PropTypes.func
 }

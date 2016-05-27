@@ -275,6 +275,7 @@ const controller = {
   handleGoogleMapApi(google) {
     const map = google.map
     window.map = map
+    window.map.set('mapTypeControl', false)
     const data = AppStore.data
     const listing_map = data.listing_map
     if (listing_map.drawable && window.poly)

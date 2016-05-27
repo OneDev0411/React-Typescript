@@ -1,5 +1,6 @@
 // Dashboard/Mls/index.js
 import React, { Component } from 'react'
+import { Link } from 'react-router'
 import S from 'shorti'
 import GoogleMap from 'google-map-react'
 import { ButtonGroup, Button, Modal } from 'react-bootstrap'
@@ -190,7 +191,7 @@ export default class Mls extends Component {
     }
     const default_zoom = 13
     const toolbar_style = {
-      ...S('h-62 p-10'),
+      ...S('h-66 p-10 bg-f8fafb'),
       borderBottom: '1px solid #dcd9d9'
     }
     // TODO move to ENV_VAR
@@ -232,15 +233,26 @@ export default class Mls extends Component {
     let results_actions
     if (listing_map && listing_map.listings) {
       results_actions = (
-        <div style={ S('absolute r-10 mt-2') }>
-          <span style={ S('bg-a5c0e5 br-3 p-10 color-fff mr-10 relative t-1') }>
-            { listing_map.listings.length } Matches
-            &nbsp;&nbsp;&nbsp;<span style={ S('pointer') } onClick={ controller.listing_map.handleRemoveListings.bind(this) }>&times;</span>&nbsp;
-          </span>
-          <Button bsStyle="primary" type="button" onClick={ controller.listing_map.showShareModal.bind(this) }>
-            Share ({ listing_map.listings_info ? listing_map.listings_info.total : '' } results)
-            &nbsp;&nbsp;<i className="fa fa-share"></i>
-          </Button>
+        <div style={ S('absolute r-5 mt-2 t-15') }>
+          { /*
+            <span style={ S('bg-a5c0e5 br-3 p-10 color-fff mr-10 relative t-1') }>
+              { listing_map.listings.length } Matches
+              &nbsp;&nbsp;&nbsp;<span style={ S('pointer') } onClick={ controller.listing_map.handleRemoveListings.bind(this) }>&times;</span>&nbsp;
+            </span>
+            <Button bsStyle="primary" type="button" onClick={ controller.listing_map.showShareModal.bind(this) }>
+              Share ({ listing_map.listings_info ? listing_map.listings_info.total : '' } results)
+              &nbsp;&nbsp;<i className="fa fa-share"></i>
+            </Button>
+            */
+          }
+          <ButtonGroup style={ S('mr-10') }>
+            <Button style={ { ...S('bg-f8fafb'), outline: 'none' } } onClick={ controller.listing_panel.showPanelView.bind(this, 'list') }>
+              <img src={ `/images/dashboard/mls/list${data.listing_panel && data.listing_panel.view === 'list' ? '-active' : ''}.svg` } style={ S('w-20') }/>
+            </Button>
+            <Button style={ { ...S('bg-f8fafb'), outline: 'none' } } onClick={ controller.listing_panel.showPanelView.bind(this, 'photos') }>
+              <img src={ `/images/dashboard/mls/photos${data.listing_panel && data.listing_panel.view === 'photos' ? '-active' : ''}.svg` } style={ S('w-18') }/>
+            </Button>
+          </ButtonGroup>
         </div>
       )
     }
@@ -249,8 +261,7 @@ export default class Mls extends Component {
       search_input_text = data.listing_map.search_input_text
     let search_area = (
       <form onSubmit={ controller.listing_map.handleSearchSubmit.bind(this) }>
-        <img onClick={ controller.listing_map.handleSearchSubmit.bind(this) } src="/images/dashboard/mls/search.svg" style={ S('pointer w-22 h-22 absolute l-18 t-18') } />
-        <input onChange={ controller.listing_map.handleSearchInputChange.bind(this) } value={ search_input_text } ref="search_input" className="form-control" type="text" style={ S('font-18 bg-dfe3e8 w-400 pull-left pl-40') } placeholder="Search location or MLS#" />
+        <input onChange={ controller.listing_map.handleSearchInputChange.bind(this) } value={ search_input_text } ref="search_input" className="form-control" type="text" style={ S('font-18 bg-fff w-400 h-50 pull-left') } placeholder="Search location or MLS#" />
       </form>
     )
     if (data.current_listing)
@@ -263,28 +274,44 @@ export default class Mls extends Component {
         <MobileNav data={ data }/>
       )
     }
-    let toolbar = (
-      <nav style={ toolbar_style }>
-        <div style={ S('pull-left mr-10') }>
-          { search_area }
+    let search_filter_draw_area = (
+      <div style={ S('relative t-35 l-10 z-1') }>
+        <div style={ S('pull-left mr-10 bg-fff') }>
+          <div style={ S('pull-left mr-10') }>
+            { search_area }
+          </div>
+          <div style={ S('pull-left') }>
+            <Button onClick={ controller.listing_filter.showFilterForm.bind(this, 'photos') } style={ { ...S('h-50 border-1-solid-fff'), outline: 'none' } }>
+              <img src={ `/images/dashboard/mls/filters${data.show_filter_form ? '-active' : ''}.svg` } style={ S('w-20 mr-10') }/>
+              <span className={ data.show_filter_form ? 'text-primary' : '' }>Filters</span>
+            </Button>
+          </div>
         </div>
         <div style={ S('pull-left') }>
-          <Button onClick={ controller.listing_filter.showFilterForm.bind(this, 'photos') } style={ { ...S('mr-10'), outline: 'none' } }>
-            <img src={ `/images/dashboard/mls/filters${data.show_filter_form ? '-active' : ''}.svg` } style={ S('w-20 mr-10') }/>
-            <span className={ data.show_filter_form ? 'text-primary' : '' }>Filters</span>
-          </Button>
-          <Button onClick={ controller.listing_map.toggleDrawable.bind(this) } style={ { ...S('mr-10'), outline: 'none' } }>
+          <Button onClick={ controller.listing_map.toggleDrawable.bind(this) } style={ { ...S('mr-10 bg-f8fafb h-50 w-50'), outline: 'none' } }>
             <img src={ `/images/dashboard/mls/draw${data.listing_map && data.listing_map.drawable ? '-active' : ''}.svg` } style={ S('w-20') }/>
           </Button>
-          <ButtonGroup style={ S('mr-10') }>
-            <Button style={ { outline: 'none' } } onClick={ controller.listing_panel.showPanelView.bind(this, 'list') }>
-              <img src={ `/images/dashboard/mls/list${data.listing_panel && data.listing_panel.view === 'list' ? '-active' : ''}.svg` } style={ S('w-20') }/>
-            </Button>
-            <Button style={ { outline: 'none' } } onClick={ controller.listing_panel.showPanelView.bind(this, 'photos') }>
-              <img src={ `/images/dashboard/mls/photos${data.listing_panel && data.listing_panel.view === 'photos' ? '-active' : ''}.svg` } style={ S('w-18') }/>
-            </Button>
-          </ButtonGroup>
         </div>
+      </div>
+    )
+    if (data.show_filter_form)
+      search_filter_draw_area = ''
+    let toolbar = (
+      <nav style={ toolbar_style }>
+        <ul style={ S('relative l-30n t-5') }>
+          <li style={ S('pull-left font-28 mr-60') }>
+            <Link to="/dashboard/mls" style={ { ...S('color-263445'), textDecoration: 'none' } }>Search</Link>
+            <div style={ S('w-86 h-6 bg-3388ff relative b-5n') }></div>
+          </li>
+          <li style={ S('pull-left color-263445 font-28 mr-60') }>
+            <Link to="/dashboard/recents" style={ { ...S('color-8696a4'), textDecoration: 'none' } }>Alerts</Link>
+          </li>
+          <li style={ S('pull-left color-263445 font-28 mr-60') }>
+            <Link to="/dashboard/recents" style={ { ...S('color-8696a4'), textDecoration: 'none' } }>Activity</Link>
+          </li>
+        </ul>
+        <div className="clearfix"></div>
+        { search_filter_draw_area }
         { results_actions }
       </nav>
     )
@@ -359,6 +386,7 @@ export default class Mls extends Component {
           handleFilterStatusOptionSelect={ controller.listing_filter.handleFilterStatusOptionSelect }
           showSoldDatePicker={ controller.listing_filter.showSoldDatePicker }
           handleSetSoldDate={ controller.listing_filter.handleSetSoldDate }
+          hideFilterForm={ controller.listing_filter.hideFilterForm }
         />
         { zoom_controls }
         <ShareAlertModal

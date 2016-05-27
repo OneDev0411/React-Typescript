@@ -4,6 +4,10 @@ import _ from 'lodash'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 const controller = {
+  hideFilterForm() {
+    delete AppStore.data.show_filter_form
+    AppStore.emitChange()
+  },
   getSoldDate(minimum_sold_value) {
     const date = new Date()
     return (date.setMonth(date.getMonth() - minimum_sold_value)) / 1000
