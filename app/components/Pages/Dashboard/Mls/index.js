@@ -1,6 +1,5 @@
 // Dashboard/Mls/index.js
 import React, { Component } from 'react'
-import { Link } from 'react-router'
 import S from 'shorti'
 import GoogleMap from 'google-map-react'
 import { ButtonGroup, Button, Modal } from 'react-bootstrap'
@@ -30,6 +29,8 @@ export default class Mls extends Component {
     }
     if (!user)
       return
+    // Show map first
+    AppStore.data.show_search_map = true
     AppStore.data.user = user
     AppStore.emitChange()
     const listing_map = data.listing_map
@@ -105,6 +106,28 @@ export default class Mls extends Component {
     delete AppStore.data.show_welcome_modal
     AppStore.emitChange()
   }
+  handleTabClick(type) {
+    switch (type) {
+      case 'map':
+        delete AppStore.data.show_alerts_viewer
+        delete AppStore.data.show_favorites_viewer
+        AppStore.data.show_search_map = true
+        break
+      case 'alerts':
+        delete AppStore.data.show_search_map
+        delete AppStore.data.show_favorites_viewer
+        AppStore.data.show_alerts_viewer = true
+        break
+      case 'favorites':
+        delete AppStore.data.show_search_map
+        delete AppStore.data.show_alerts_viewer
+        AppStore.data.show_favorites_viewer = true
+        break
+      default:
+        return
+    }
+    AppStore.emitChange()
+  }
   render() {
     const data = this.props.data
     const user = data.user
@@ -140,7 +163,7 @@ export default class Mls extends Component {
       })
     }
     if (listing_map && listing_map.is_loading) {
-      let loading_style = S('z-1 center-block relative h-0 w-400 t-20 z-2')
+      let loading_style = S('z-1 center-block absolute h-0 w-100p t-80 z-2')
       if (data.is_mobile) {
         loading_style = {
           ...loading_style,
@@ -259,9 +282,13 @@ export default class Mls extends Component {
     let search_input_text
     if (data.listing_map && data.listing_map.search_input_text)
       search_input_text = data.listing_map.search_input_text
+    const search_input_style = {
+      ...S('font-18 bg-fff w-400 h-50 pull-left'),
+      border: 'none'
+    }
     let search_area = (
       <form onSubmit={ controller.listing_map.handleSearchSubmit.bind(this) }>
-        <input onChange={ controller.listing_map.handleSearchInputChange.bind(this) } value={ search_input_text } ref="search_input" className="form-control" type="text" style={ S('font-18 bg-fff w-400 h-50 pull-left') } placeholder="Search location or MLS#" />
+        <input onChange={ controller.listing_map.handleSearchInputChange.bind(this) } value={ search_input_text } ref="search_input" className="form-control" type="text" style={ search_input_style } placeholder="Search location or MLS#" />
       </form>
     )
     if (data.current_listing)
@@ -274,9 +301,19 @@ export default class Mls extends Component {
         <MobileNav data={ data }/>
       )
     }
+    const draw_button_style = {
+      ...S('mr-10 bg-fff h-50 w-50 br-5'),
+      outline: 'none',
+      border: 'solid 1px #d7d6d6',
+      boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.12), 0 0 4px 0 rgba(0, 0, 0, 0.1)'
+    }
+    const search_area_style = {
+      ...S('pull-left mr-10 bg-fff border-1-solid-d7d6d6 br-5'),
+      boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.12), 0 0 4px 0 rgba(0, 0, 0, 0.1)'
+    }
     let search_filter_draw_area = (
       <div style={ S('relative t-35 l-10 z-1') }>
-        <div style={ S('pull-left mr-10 bg-fff') }>
+        <div style={ search_area_style }>
           <div style={ S('pull-left mr-10') }>
             { search_area }
           </div>
@@ -288,26 +325,30 @@ export default class Mls extends Component {
           </div>
         </div>
         <div style={ S('pull-left') }>
-          <Button onClick={ controller.listing_map.toggleDrawable.bind(this) } style={ { ...S('mr-10 bg-f8fafb h-50 w-50'), outline: 'none' } }>
+          <Button onClick={ controller.listing_map.toggleDrawable.bind(this) } style={ draw_button_style }>
             <img src={ `/images/dashboard/mls/draw${data.listing_map && data.listing_map.drawable ? '-active' : ''}.svg` } style={ S('w-20') }/>
           </Button>
         </div>
       </div>
     )
-    if (data.show_filter_form)
+    // Hide search form
+    if (data.show_filter_form || data.show_alerts_viewer || data.show_favorites_viewer)
       search_filter_draw_area = ''
+    const underline = <div style={ S('w-100p h-6 bg-3388ff absolute b-11n') }></div>
     let toolbar = (
       <nav style={ toolbar_style }>
         <ul style={ S('relative l-30n t-5') }>
-          <li style={ S('pull-left font-28 mr-60') }>
-            <Link to="/dashboard/mls" style={ { ...S('color-263445'), textDecoration: 'none' } }>Search</Link>
-            <div style={ S('w-86 h-6 bg-3388ff relative b-5n') }></div>
+          <li style={ S('relative pull-left font-28 mr-60') }>
+            <span onClick={ this.handleTabClick.bind(this, 'map') } style={ S('pointer ' + (data.show_search_map ? 'color-263445' : 'color-8696a4')) }>Search</span>
+            { data.show_search_map ? underline : '' }
           </li>
-          <li style={ S('pull-left color-263445 font-28 mr-60') }>
-            <Link to="/dashboard/recents" style={ { ...S('color-8696a4'), textDecoration: 'none' } }>Alerts</Link>
+          <li style={ S('relative pull-left color-263445 font-28 mr-60') }>
+            <span onClick={ this.handleTabClick.bind(this, 'alerts') } style={ S('pointer ' + (data.show_alerts_viewer ? 'color-263445' : 'color-8696a4')) }>Alerts</span>
+            { data.show_alerts_viewer ? underline : '' }
           </li>
-          <li style={ S('pull-left color-263445 font-28 mr-60') }>
-            <Link to="/dashboard/recents" style={ { ...S('color-8696a4'), textDecoration: 'none' } }>Activity</Link>
+          <li style={ S('relative pull-left color-263445 font-28 mr-60') }>
+            <span onClick={ this.handleTabClick.bind(this, 'favorites') } style={ S('pointer ' + (data.show_favorites_viewer ? 'color-263445' : 'color-8696a4')) }>My Homes</span>
+            { data.show_favorites_viewer ? underline : '' }
           </li>
         </ul>
         <div className="clearfix"></div>
@@ -343,6 +384,33 @@ export default class Mls extends Component {
     let map_wrapper_style = S('h-' + (window.innerHeight - 62))
     if (data.is_mobile)
       map_wrapper_style = S('fixed w-100p h-100p')
+    let content_area
+    if (data.show_search_map) {
+      content_area = (
+        <GoogleMap
+          key={ 'map-' + map_id }
+          bootstrapURLKeys={ bootstrap_url_keys }
+          center={ listing_map ? listing_map.center : default_center }
+          zoom={ listing_map ? listing_map.zoom : default_zoom }
+          onBoundsChange={ controller.listing_map.handleBoundsChange.bind(this) }
+          options={ controller.listing_map.createMapOptions.bind(this) }
+          yesIWantToUseGoogleMapApiInternals
+          onGoogleApiLoaded={ controller.listing_map.handleGoogleMapApi.bind(this) }
+        >
+        { map_listing_markers }
+        </GoogleMap>
+      )
+    }
+    if (data.show_alerts_viewer) {
+      content_area = (
+        <div>Alerts</div>
+      )
+    }
+    if (data.show_favorites_viewer) {
+      content_area = (
+        <div>Favorites</div>
+      )
+    }
     let main_content = (
       <main>
         { nav_area }
@@ -352,18 +420,7 @@ export default class Mls extends Component {
           { loading }
           <div style={ map_wrapper_style }>
             { remove_drawing_button }
-            <GoogleMap
-              key={ 'map-' + map_id }
-              bootstrapURLKeys={ bootstrap_url_keys }
-              center={ listing_map ? listing_map.center : default_center }
-              zoom={ listing_map ? listing_map.zoom : default_zoom }
-              onBoundsChange={ controller.listing_map.handleBoundsChange.bind(this) }
-              options={ controller.listing_map.createMapOptions.bind(this) }
-              yesIWantToUseGoogleMapApiInternals
-              onGoogleApiLoaded={ controller.listing_map.handleGoogleMapApi.bind(this) }
-            >
-            { map_listing_markers }
-            </GoogleMap>
+            { content_area }
           </div>
         </div>
         { listing_viewer }
