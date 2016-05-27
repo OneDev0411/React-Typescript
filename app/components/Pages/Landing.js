@@ -27,6 +27,7 @@ export default class Landing extends Component {
       })
     }, 3000)
     const branch = require('branch-sdk')
+    branch.init()
     branch.banner({
       icon: '/images/logo-big.png',
       title: 'Download the Rechat App for iOS',
