@@ -128,6 +128,21 @@ export default class Mls extends Component {
     }
     AppStore.emitChange()
   }
+  handleClearSearchInputClick() {
+    const data = this.props.data
+    delete AppStore.data.listing_map.search_input_text
+    delete AppStore.data.listing_map.auto_move
+    delete AppStore.data.listing_map.has_search_input
+    AppStore.emitChange()
+    let bounds = window.map.getBounds().toJSON()
+    bounds = [
+      bounds.south,
+      bounds.west,
+      bounds.north,
+      bounds.east
+    ]
+    controller.listing_map.handleBoundsChange(data.listing_map.center, data.listing_map.zoom, bounds)
+  }
   render() {
     const data = this.props.data
     const user = data.user
@@ -311,11 +326,19 @@ export default class Mls extends Component {
       ...S('pull-left mr-10 bg-fff border-1-solid-d7d6d6 br-5'),
       boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.12), 0 0 4px 0 rgba(0, 0, 0, 0.1)'
     }
+    let clear_search_input
+    if (data.listing_map.search_input_text) {
+      clear_search_input = (
+        <div onClick={ this.handleClearSearchInputClick.bind(this) } className="close" style={ S('absolute l-360 t-15') }>&times;</div>
+      )
+    }
     let search_filter_draw_area = (
       <div style={ S('relative t-35 l-10 z-1') }>
         <div style={ search_area_style }>
           <div style={ S('pull-left mr-10') }>
             { search_area }
+            { clear_search_input }
+            <div style={ S('w-1 h-28 absolute l-400 t-13 bg-dddddd') }></div>
           </div>
           <div style={ S('pull-left') }>
             <Button onClick={ controller.listing_filter.showFilterForm.bind(this, 'photos') } style={ { ...S('h-50 border-1-solid-fff'), outline: 'none' } }>

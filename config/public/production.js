@@ -20,6 +20,6 @@ export default {
     }
   },
   branch: {
-    key:  process.env.BRANCH_KEY
+    key: process.env.BRANCH_KEY
   }
 }
