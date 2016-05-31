@@ -65,6 +65,7 @@
   "scripts": {
     "lint": "eslint . --ext .js --ext .jsx",
     "test": "NODE_ENV=development mocha --compilers js:babel/register",
+    "test:models-alert": "NODE_ENV=development mocha test/models-alert --compilers js:babel/register",
     "test:models-listing": "NODE_ENV=development mocha test/models-listing --compilers js:babel/register",
     "test:models-room": "NODE_ENV=development mocha test/models-room --compilers js:babel/register",
     "test:models-task": "NODE_ENV=development mocha test/models-task --compilers js:babel/register",
