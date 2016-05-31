@@ -1,6 +1,6 @@
-// api/alerts/get-alert.js
+// api/alerts/get-alert-room.js
 module.exports = (app, config) => {
-  app.get('/api/alerts/get-alert',(req, res) => {
+  app.get('/api/alerts/get-alert-room',(req, res) => {
     const api_url = config.api.url
     const room_id = req.query.room_id
     const alert_id = req.query.alert_id

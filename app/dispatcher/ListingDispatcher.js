@@ -1,4 +1,4 @@
-// AppDispatcher.js
+// ListingDispatcher.js
 import { Dispatcher } from 'flux'
 
 // Listings
@@ -8,7 +8,8 @@ import getSimilarListings from '../actions/listings/get-similars'
 import getValerts from '../actions/listings/get-valerts'
 import getListing from '../actions/listings/get-listing'
 import shareAlert from '../actions/alerts/share-alert'
-import getAlert from '../actions/alerts/get-alert'
+import getAlertRoom from '../actions/alerts/get-alert-room'
+import getAlerts from '../actions/alerts/get-alerts'
 import shareListing from '../actions/listings/share-listing'
 
 const ListingDispatcher = new Dispatcher()
@@ -42,8 +43,12 @@ ListingDispatcher.register(payload => {
       shareAlert(payload.user, payload.rooms, payload.contacts, payload.emails, payload.phone_numbers, payload.alert)
       break
 
-    case 'get-alert':
-      getAlert(payload.user, payload.room_id, payload.alert_id)
+    case 'get-alert-room':
+      getAlertRoom(payload.user, payload.room_id, payload.alert_id)
+      break
+
+    case 'get-alerts':
+      getAlerts(payload.user)
       break
 
     case 'share-listing':

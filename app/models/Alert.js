@@ -68,7 +68,26 @@ export default {
   get: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/alerts/get-alert?room_id=' + params.room_id + '&alert_id=' + params.alert_id + '&access_token=' + params.access_token
+    const endpoint = api_host + '/api/alerts/get-alert-room?room_id=' + params.room_id + '&alert_id=' + params.alert_id + '&access_token=' + params.access_token
+    fetch(endpoint)
+    .then(response => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          response
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then(response => {
+      return callback(false, response)
+    })
+  },
+  getAll: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const endpoint = api_host + '/api/alerts/get-alerts?access_token=' + params.access_token
     fetch(endpoint)
     .then(response => {
       if (response.status >= 400) {

@@ -179,13 +179,13 @@ export default class ListingPanel extends Component {
       overflowY: 'scroll'
     }
     let panel_class = 'listing-panel'
-    let button_class = 'listing-panel__button'
+    let button_class = 'listing-panel__button hidden'
     let listing_panel_icon = <i className="fa fa-chevron-left"></i>
     if (data.show_listing_panel) {
       panel_class = panel_class + ' active'
-      button_class = button_class + ' active'
+      button_class = 'listing-panel__button active'
       listing_panel_icon = (
-        <i className="fa fa-chevron-right"></i>
+        <span className="close">&times;</span>
       )
     }
     let panel_content_items = listing_panel_cards

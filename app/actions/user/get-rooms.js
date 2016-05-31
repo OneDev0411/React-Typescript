@@ -36,7 +36,7 @@ export default (user, room_id) => {
         if (alert) {
           AppStore.data.show_alert_viewer = true
           ListingDispatcher.dispatch({
-            action: 'get-alert',
+            action: 'get-alert-room',
             user,
             room_id: current_room.id,
             alert_id: alert

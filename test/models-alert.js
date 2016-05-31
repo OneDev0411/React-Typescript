@@ -1,16 +1,14 @@
 // test/models-user.js
 import { expect } from 'chai'
 import User from '../app/models/User'
-import Alert from '../app/models/Room'
+import Alert from '../app/models/Alert'
 import config from '../config/private'
 
 // Get access token
 let access_token
-let room_id
-let contact_id
 let test = config.test
 
-/* Room
+/* Alert
 ==================== */
 describe('Testing Alert model', () => {
   // Signin
@@ -21,22 +19,19 @@ describe('Testing Alert model', () => {
       api_host: test.api_host
     }
     User.signin(params, (err, response) => {
-      const access_token = response.access_token
+      access_token = response.access_token
       test.user.id = response.data.id
       expect(response.status).to.equal('success')
       done()
     })
   })
   // Create room
-  it('Alert.get should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
+  it('Alert.getAll should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
     const params = {
-      room_id: test.room_id,
-      alert_id: test.alert_id,
       access_token,
       api_host: test.api_host
     }
-    Alert.get(params, (err, response) => {
-      room_id = response.data.id
+    Alert.getAll(params, (err, response) => {
       expect(response.status).to.equal('success')
       done()
     })

@@ -1,4 +1,4 @@
-// actions/listings/share-alert.js
+// actions/listings/get-alert-room.js
 import Alert from '../../models/Alert'
 import AppStore from '../../stores/AppStore'
 

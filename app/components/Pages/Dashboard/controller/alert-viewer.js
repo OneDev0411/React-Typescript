@@ -2,19 +2,18 @@
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 const controller = {
-  showAlertViewer(alert_id) {
+  showAlertViewer(alert_id, room_id) {
     delete AppStore.data.error
     AppStore.emitChange()
     const data = AppStore.data
-    const current_room = data.current_room
     const user = data.user
     AppStore.data.show_alert_viewer = true
     const history = require('../../../../utils/history')
-    history.replaceState(null, '/dashboard/recents/' + current_room.id + '?alert=' + alert_id)
+    history.replaceState(null, '/dashboard/recents/' + room_id + '?alert=' + alert_id)
     ListingDispatcher.dispatch({
-      action: 'get-alert',
+      action: 'get-alert-room',
       user,
-      room_id: current_room.id,
+      room_id,
       alert_id
     })
   },

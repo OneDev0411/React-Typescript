@@ -15,6 +15,7 @@ import ListingViewerMobile from '../Partials/ListingViewerMobile'
 import ListingPanel from './Partials/ListingPanel'
 import FilterForm from './Partials/FilterForm'
 import ListingMarker from '../Partials/ListingMarker'
+import AlertDrawer from './Partials/AlertDrawer'
 // import listing_util from '../../../../utils/listing'
 export default class Mls extends Component {
   componentWillMount() {
@@ -107,20 +108,25 @@ export default class Mls extends Component {
     AppStore.emitChange()
   }
   handleTabClick(type) {
+    const user = this.props.data.user
     switch (type) {
       case 'map':
-        delete AppStore.data.show_alerts_viewer
+        delete AppStore.data.show_alerts_map
         delete AppStore.data.show_favorites_viewer
         AppStore.data.show_search_map = true
         break
       case 'alerts':
-        delete AppStore.data.show_search_map
+        AppStore.data.show_search_map = true
         delete AppStore.data.show_favorites_viewer
-        AppStore.data.show_alerts_viewer = true
+        ListingDispatcher.dispatch({
+          action: 'get-alerts',
+          user
+        })
+        AppStore.data.show_alerts_map = true
         break
       case 'favorites':
         delete AppStore.data.show_search_map
-        delete AppStore.data.show_alerts_viewer
+        delete AppStore.data.show_alerts_map
         AppStore.data.show_favorites_viewer = true
         break
       default:
@@ -250,7 +256,7 @@ export default class Mls extends Component {
           onClick={ controller.listing_map.removeDrawing.bind(this) }
           bsStyle="danger"
           className="transition"
-          style={ S('absolute z-10 t-80 br-100 w-50 h-50 color-fff pt-1 font-30 text-center r-' + right_value) }
+          style={ S('absolute z-10 t-160 br-100 w-50 h-50 color-fff pt-1 font-30 text-center r-' + right_value) }
         >
           &times;
         </Button>
@@ -269,20 +275,18 @@ export default class Mls extends Component {
       </ButtonGroup>
     )
     let results_actions
+    let create_alert_button
+    if (data.show_listing_map) {
+      create_alert_button = (
+        <Button style={ S('absolute r-20 t-70 z-1 bg-2196f3 w-200 h-50') } bsStyle="primary" type="button" onClick={ controller.listing_map.showShareModal.bind(this) }>
+          Create Alert
+        </Button>
+      )
+    }
     if (listing_map && listing_map.listings) {
       results_actions = (
         <div style={ S('absolute r-5 mt-2 t-15') }>
-          { /*
-            <span style={ S('bg-a5c0e5 br-3 p-10 color-fff mr-10 relative t-1') }>
-              { listing_map.listings.length } Matches
-              &nbsp;&nbsp;&nbsp;<span style={ S('pointer') } onClick={ controller.listing_map.handleRemoveListings.bind(this) }>&times;</span>&nbsp;
-            </span>
-            <Button bsStyle="primary" type="button" onClick={ controller.listing_map.showShareModal.bind(this) }>
-              Share ({ listing_map.listings_info ? listing_map.listings_info.total : '' } results)
-              &nbsp;&nbsp;<i className="fa fa-share"></i>
-            </Button>
-            */
-          }
+          { create_alert_button }
           <ButtonGroup style={ S('mr-10') }>
             <Button style={ { ...S('bg-f8fafb'), outline: 'none' } } onClick={ controller.listing_panel.showPanelView.bind(this, 'list') }>
               <img src={ `/images/dashboard/mls/list${data.listing_panel && data.listing_panel.view === 'list' ? '-active' : ''}.svg` } style={ S('w-20') }/>
@@ -355,19 +359,19 @@ export default class Mls extends Component {
       </div>
     )
     // Hide search form
-    if (data.show_filter_form || data.show_alerts_viewer || data.show_favorites_viewer)
+    if (data.show_filter_form || data.show_alerts_map || data.show_favorites_viewer)
       search_filter_draw_area = ''
     const underline = <div style={ S('w-100p h-6 bg-3388ff absolute b-11n') }></div>
     let toolbar = (
       <nav style={ toolbar_style }>
         <ul style={ S('relative l-30n t-5') }>
           <li style={ S('relative pull-left font-28 mr-60') }>
-            <span onClick={ this.handleTabClick.bind(this, 'map') } style={ S('pointer ' + (data.show_search_map ? 'color-263445' : 'color-8696a4')) }>Search</span>
-            { data.show_search_map ? underline : '' }
+            <span onClick={ this.handleTabClick.bind(this, 'map') } style={ S('pointer ' + (data.show_search_map && !data.show_alerts_map ? 'color-263445' : 'color-8696a4')) }>Search</span>
+            { data.show_search_map && !data.show_alerts_map ? underline : '' }
           </li>
           <li style={ S('relative pull-left color-263445 font-28 mr-60') }>
-            <span onClick={ this.handleTabClick.bind(this, 'alerts') } style={ S('pointer ' + (data.show_alerts_viewer ? 'color-263445' : 'color-8696a4')) }>Alerts</span>
-            { data.show_alerts_viewer ? underline : '' }
+            <span onClick={ this.handleTabClick.bind(this, 'alerts') } style={ S('pointer ' + (data.show_alerts_map ? 'color-263445' : 'color-8696a4')) }>Alerts</span>
+            { data.show_alerts_map ? underline : '' }
           </li>
           <li style={ S('relative pull-left color-263445 font-28 mr-60') }>
             <span onClick={ this.handleTabClick.bind(this, 'favorites') } style={ S('pointer ' + (data.show_favorites_viewer ? 'color-263445' : 'color-8696a4')) }>My Homes</span>
@@ -424,9 +428,10 @@ export default class Mls extends Component {
         </GoogleMap>
       )
     }
-    if (data.show_alerts_viewer) {
-      content_area = (
-        <div>Alerts</div>
+    let alert_drawer_area
+    if (data.show_alerts_map) {
+      alert_drawer_area = (
+        <AlertDrawer data={ data } />
       )
     }
     if (data.show_favorites_viewer) {
@@ -444,6 +449,7 @@ export default class Mls extends Component {
           <div style={ map_wrapper_style }>
             { remove_drawing_button }
             { content_area }
+            { alert_drawer_area }
           </div>
         </div>
         { listing_viewer }
