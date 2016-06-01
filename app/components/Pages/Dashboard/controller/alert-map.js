@@ -5,10 +5,6 @@ const controller = {
   showAlertOnMap(alert) {
     const lat = alert.location.latitude
     const lng = alert.location.longitude
-    AppStore.data.listing_map.center = {
-      lat,
-      lng
-    }
     const options = {
       maximum_price: alert.maximum_price,
       limit: '75',
@@ -39,6 +35,19 @@ const controller = {
       user: AppStore.data.user,
       options
     })
+    // Fit points on map
+    const bounds = new google.maps.LatLngBounds()
+    alert.points.forEach(point => {
+      const location = new google.maps.LatLng(point.latitude, point.longitude)
+      bounds.extend(location)
+    })
+    map.fitBounds(bounds)
+    window.map.fitBounds(bounds)
+    const center = {
+      lat: map.center.lat(),
+      lng: map.center.lng()
+    }
+    AppStore.data.listing_map.center = center
     AppStore.data.listing_map.options = options
     AppStore.data.listing_map.auto_move = true
     AppStore.data.listing_map.current_alert = alert

@@ -117,6 +117,7 @@ export default class Mls extends Component {
         break
       case 'alerts':
         AppStore.data.show_search_map = true
+        delete AppStore.data.auto_move
         delete AppStore.data.show_favorites_viewer
         ListingDispatcher.dispatch({
           action: 'get-alerts',
