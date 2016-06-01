@@ -16,7 +16,7 @@ import ListingPanel from './Partials/ListingPanel'
 import FilterForm from './Partials/FilterForm'
 import ListingMarker from '../Partials/ListingMarker'
 import AlertDrawer from './Partials/AlertDrawer'
-// import listing_util from '../../../../utils/listing'
+import helpers from '../../../../utils/helpers'
 export default class Mls extends Component {
   componentWillMount() {
     const data = this.props.data
@@ -276,7 +276,7 @@ export default class Mls extends Component {
     )
     let results_actions
     let create_alert_button
-    if (data.show_listing_map) {
+    if (data.show_search_map && !data.show_alerts_map) {
       create_alert_button = (
         <Button style={ S('absolute r-20 t-70 z-1 bg-2196f3 w-200 h-50') } bsStyle="primary" type="button" onClick={ controller.listing_map.showShareModal.bind(this) }>
           Create Alert
@@ -430,8 +430,31 @@ export default class Mls extends Component {
     }
     let alert_drawer_area
     if (data.show_alerts_map) {
+      const alert_header_style = {
+        ...S('w-100p h-42 absolute t-66')
+      }
+      const alert_header_bg = {
+        ...alert_header_style,
+        ...S('bg-000 t-0 z-0'),
+        opacity: '.5'
+      }
+      let alert_header_area
+      if (data.show_alerts_map && data.listing_map.current_alert) {
+        const current_alert = data.listing_map.current_alert
+        alert_header_area = (
+          <div style={ alert_header_style }>
+            <div style={ alert_header_bg }></div>
+            <div style={ S('relative ml-365 mt-10 color-fff z-1 font-15') }>
+              { current_alert.title } ({ current_alert.property_subtypes.toString().replace(new RegExp('RES-', 'g'), ' ').trim() }, ${ helpers.numberWithCommas(current_alert.minimum_price) }-${ helpers.numberWithCommas(current_alert.maximum_price) })
+            </div>
+          </div>
+        )
+      }
       alert_drawer_area = (
-        <AlertDrawer data={ data } />
+        <div>
+          <AlertDrawer data={ data } />
+          { alert_header_area }
+        </div>
       )
     }
     if (data.show_favorites_viewer) {
