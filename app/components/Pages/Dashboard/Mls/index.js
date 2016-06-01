@@ -111,13 +111,16 @@ export default class Mls extends Component {
     const user = this.props.data.user
     switch (type) {
       case 'map':
+        delete AppStore.data.listing_map.auto_move
         delete AppStore.data.show_alerts_map
         delete AppStore.data.show_favorites_viewer
         AppStore.data.show_search_map = true
+        controller.listing_filter.setFilterOptions.bind(this)
         break
       case 'alerts':
         AppStore.data.show_search_map = true
-        delete AppStore.data.auto_move
+        delete AppStore.data.listing_map.auto_move
+        delete AppStore.data.show_filter_form
         delete AppStore.data.show_favorites_viewer
         ListingDispatcher.dispatch({
           action: 'get-alerts',
@@ -322,7 +325,7 @@ export default class Mls extends Component {
       )
     }
     const draw_button_style = {
-      ...S('mr-10 bg-fff h-50 w-50 br-5'),
+      ...S('mr-10 bg-fff h-52 w-50 br-5'),
       outline: 'none',
       border: 'solid 1px #d7d6d6',
       boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.12), 0 0 4px 0 rgba(0, 0, 0, 0.1)'
@@ -332,7 +335,7 @@ export default class Mls extends Component {
       boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.12), 0 0 4px 0 rgba(0, 0, 0, 0.1)'
     }
     let clear_search_input
-    if (data.listing_map.search_input_text) {
+    if (data.listing_map && data.listing_map.search_input_text) {
       clear_search_input = (
         <div onClick={ this.handleClearSearchInputClick.bind(this) } className="close" style={ S('absolute l-360 t-15') }>&times;</div>
       )
@@ -442,11 +445,12 @@ export default class Mls extends Component {
       let alert_header_area
       if (data.show_alerts_map && data.listing_map.current_alert) {
         const current_alert = data.listing_map.current_alert
+        const alert_options = `${current_alert.property_subtypes.toString().replace(new RegExp('RES-', 'g'), ' ').trim()}, $${helpers.numberWithCommas(current_alert.minimum_price)}-$${helpers.numberWithCommas(current_alert.maximum_price)}, ${current_alert.minimum_bedrooms} Beds ${current_alert.minimum_bathrooms} Baths`
         alert_header_area = (
           <div style={ alert_header_style }>
             <div style={ alert_header_bg }></div>
             <div style={ S('relative ml-365 mt-10 color-fff z-1 font-15') }>
-              { current_alert.title } ({ current_alert.property_subtypes.toString().replace(new RegExp('RES-', 'g'), ' ').trim() }, ${ helpers.numberWithCommas(current_alert.minimum_price) }-${ helpers.numberWithCommas(current_alert.maximum_price) })
+              { current_alert.title } ({ alert_options })
             </div>
           </div>
         )

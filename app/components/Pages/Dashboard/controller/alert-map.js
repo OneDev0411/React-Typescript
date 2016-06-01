@@ -36,16 +36,16 @@ const controller = {
       options
     })
     // Fit points on map
+    const google = window.google
     const bounds = new google.maps.LatLngBounds()
     alert.points.forEach(point => {
       const location = new google.maps.LatLng(point.latitude, point.longitude)
       bounds.extend(location)
     })
-    map.fitBounds(bounds)
     window.map.fitBounds(bounds)
     const center = {
-      lat: map.center.lat(),
-      lng: map.center.lng()
+      lat: window.map.center.lat(),
+      lng: window.map.center.lng()
     }
     AppStore.data.listing_map.center = center
     AppStore.data.listing_map.options = options
