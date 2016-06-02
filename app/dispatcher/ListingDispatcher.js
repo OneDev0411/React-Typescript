@@ -6,6 +6,7 @@ import searchListingTransaction from '../actions/listings/search-transaction'
 import searchListingMap from '../actions/listings/search-map'
 import getSimilarListings from '../actions/listings/get-similars'
 import getValerts from '../actions/listings/get-valerts'
+import getValertsAlert from '../actions/listings/get-valerts-alert'
 import getListing from '../actions/listings/get-listing'
 import shareAlert from '../actions/alerts/share-alert'
 import getAlertRoom from '../actions/alerts/get-alert-room'
@@ -33,6 +34,10 @@ ListingDispatcher.register(payload => {
 
     case 'get-valerts':
       getValerts(payload.user, payload.options)
+      break
+
+    case 'get-valerts-alert':
+      getValertsAlert(payload.user, payload.options)
       break
 
     case 'get-listing':

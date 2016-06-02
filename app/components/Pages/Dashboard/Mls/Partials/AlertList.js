@@ -1,9 +1,9 @@
-// Partials/AlertDrawer.js
+// Partials/AlertList.js
 import React, { Component } from 'react'
 import { Input } from 'react-bootstrap'
 import S from 'shorti'
 import controller from '../../controller'
-export default class AlertDrawer extends Component {
+export default class AlertList extends Component {
   render() {
     const data = this.props.data
     const alerts = data.alerts
@@ -29,7 +29,7 @@ export default class AlertDrawer extends Component {
                     <img style={ S('w-23 h-13 mr-5') }src="/images/dashboard/mls/eye.svg"/>
                     <span style={ S('color-c3c3c3 font-16 mr-15 t-1 relative') }>8</span>
                     <img style={ S('w-23 h-13 mr-5') }src="/images/dashboard/mls/heart.svg"/>
-                    <span style={ S('color-c3c3c3 font-16 mr-20 t-1 relative') }>8</span>
+                    <span style={ S('color-c3c3c3 font-16 mr-20 t-1 relative') }>3</span>
                     <img style={ S('w-14 h-13 mr-5') }src="/images/dashboard/mls/comment.svg"/>
                     <span style={ S('color-c3c3c3 font-16 t-1 relative') }>1</span>
                   </div>
@@ -42,7 +42,7 @@ export default class AlertDrawer extends Component {
     }
     const drawer_style = S(`bg-fff w-350 h-${window.innerHeight - 66} absolute z-1 t-66 l-0`)
     return (
-      <div className="alert-drawer" style={ drawer_style }>
+      <div className="alert-list" style={ drawer_style }>
         <div style={ S('p-10') }>
           <Input type="text" bsSize="large" placeholder="Search Alerts" />
         </div>
@@ -51,6 +51,6 @@ export default class AlertDrawer extends Component {
     )
   }
 }
-AlertDrawer.propTypes = {
+AlertList.propTypes = {
   data: React.PropTypes.object
 }

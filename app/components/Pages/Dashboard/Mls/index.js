@@ -15,7 +15,7 @@ import ListingViewerMobile from '../Partials/ListingViewerMobile'
 import ListingPanel from './Partials/ListingPanel'
 import FilterForm from './Partials/FilterForm'
 import ListingMarker from '../Partials/ListingMarker'
-import AlertDrawer from './Partials/AlertDrawer'
+import AlertList from './Partials/AlertList'
 import helpers from '../../../../utils/helpers'
 export default class Mls extends Component {
   componentWillMount() {
@@ -31,7 +31,7 @@ export default class Mls extends Component {
     if (!user)
       return
     // Show map first
-    AppStore.data.show_search_map = true
+    AppStore.data.show_listing_map = true
     AppStore.data.user = user
     AppStore.emitChange()
     const listing_map = data.listing_map
@@ -114,11 +114,11 @@ export default class Mls extends Component {
         delete AppStore.data.listing_map.auto_move
         delete AppStore.data.show_alerts_map
         delete AppStore.data.show_favorites_viewer
-        AppStore.data.show_search_map = true
+        AppStore.data.show_listing_map = true
         controller.listing_filter.setFilterOptions.bind(this)
         break
       case 'alerts':
-        AppStore.data.show_search_map = true
+        AppStore.data.show_alerts_map = true
         delete AppStore.data.listing_map.auto_move
         delete AppStore.data.show_filter_form
         delete AppStore.data.show_favorites_viewer
@@ -129,7 +129,7 @@ export default class Mls extends Component {
         AppStore.data.show_alerts_map = true
         break
       case 'favorites':
-        delete AppStore.data.show_search_map
+        delete AppStore.data.show_listing_map
         delete AppStore.data.show_alerts_map
         AppStore.data.show_favorites_viewer = true
         break
@@ -157,6 +157,7 @@ export default class Mls extends Component {
     const data = this.props.data
     const user = data.user
     const listing_map = data.listing_map
+    const alerts_map = data.alerts_map
     let main_style = S('absolute h-100p l-70')
     if (data.is_mobile) {
       main_style = {
@@ -166,27 +167,6 @@ export default class Mls extends Component {
     }
     let map_listing_markers
     let loading
-    if (listing_map && listing_map.listings) {
-      let listings = listing_map.listings
-      // Filter out non location
-      listings = listings.filter(listing => {
-        return listing.location
-      })
-      map_listing_markers = listings.map(listing => {
-        return (
-          <div onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) } onMouseOut={ controller.listing_map.hideListingPopup.bind(this) } key={ 'map-listing-' + listing.id } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
-            <ListingMarker
-              key={ 'listing-marker' + listing.id }
-              data={ data }
-              listing={ listing }
-              property={ listing.compact_property }
-              address={ listing.address }
-              context={ 'map' }
-            />
-          </div>
-        )
-      })
-    }
     if (listing_map && listing_map.is_loading) {
       let loading_style = S('z-1 center-block absolute h-0 w-100p t-80 z-2')
       if (data.is_mobile) {
@@ -280,7 +260,7 @@ export default class Mls extends Component {
     )
     let results_actions
     let create_alert_button
-    if (data.show_search_map && !data.show_alerts_map) {
+    if (data.show_listing_map && !data.show_alerts_map) {
       create_alert_button = (
         <Button style={ S('absolute r-20 t-70 z-1 bg-2196f3 w-200 h-50') } bsStyle="primary" type="button" onClick={ controller.listing_map.showShareModal.bind(this) }>
           Create Alert
@@ -370,8 +350,8 @@ export default class Mls extends Component {
       <nav style={ toolbar_style }>
         <ul style={ S('relative l-30n t-5') }>
           <li style={ S('relative pull-left font-28 mr-60') }>
-            <span onClick={ this.handleTabClick.bind(this, 'map') } style={ S('pointer ' + (data.show_search_map && !data.show_alerts_map ? 'color-263445' : 'color-8696a4')) }>Search</span>
-            { data.show_search_map && !data.show_alerts_map ? underline : '' }
+            <span onClick={ this.handleTabClick.bind(this, 'map') } style={ S('pointer ' + (data.show_listing_map ? 'color-263445' : 'color-8696a4')) }>Search</span>
+            { data.show_listing_map && !data.show_alerts_map ? underline : '' }
           </li>
           <li style={ S('relative pull-left color-263445 font-28 mr-60') }>
             <span onClick={ this.handleTabClick.bind(this, 'alerts') } style={ S('pointer ' + (data.show_alerts_map ? 'color-263445' : 'color-8696a4')) }>Alerts</span>
@@ -412,11 +392,54 @@ export default class Mls extends Component {
         </nav>
       )
     }
-    let map_wrapper_style = S('h-' + (window.innerHeight - 62))
+    if (listing_map && listing_map.listings) {
+      let listings = listing_map.listings
+      // Filter out non location
+      listings = listings.filter(listing => {
+        return listing.location
+      })
+      map_listing_markers = listings.map(listing => {
+        return (
+          <div onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) } onMouseOut={ controller.listing_map.hideListingPopup.bind(this) } key={ 'map-listing-' + listing.id } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
+            <ListingMarker
+              key={ 'listing-marker' + listing.id }
+              data={ data }
+              listing={ listing }
+              property={ listing.compact_property }
+              address={ listing.address }
+              context={ 'map' }
+            />
+          </div>
+        )
+      })
+    }
+    let map_alerts_markers
+    if (alerts_map && alerts_map.listings) {
+      let listings = alerts_map.listings
+      // Filter out non location
+      listings = listings.filter(listing => {
+        return listing.location
+      })
+      map_alerts_markers = listings.map(listing => {
+        return (
+          <div onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) } onMouseOut={ controller.listing_map.hideListingPopup.bind(this) } key={ 'map-listing-' + listing.id } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
+            <ListingMarker
+              key={ 'listing-marker' + listing.id }
+              data={ data }
+              listing={ listing }
+              property={ listing.compact_property }
+              address={ listing.address }
+              context={ 'map' }
+            />
+          </div>
+        )
+      })
+    }
+    let map_wrapper_style = S('h-' + (window.innerHeight - 66))
     if (data.is_mobile)
       map_wrapper_style = S('fixed w-100p h-100p')
     let content_area
-    if (data.show_search_map) {
+    if (data.show_listing_map) {
       content_area = (
         <GoogleMap
           key={ 'map-' + map_id }
@@ -432,7 +455,28 @@ export default class Mls extends Component {
         </GoogleMap>
       )
     }
-    let alert_drawer_area
+    // Show alerts map
+    if (data.show_alerts_map) {
+      map_wrapper_style = {
+        ...map_wrapper_style,
+        ...S('pl-350')
+      }
+      content_area = (
+        <GoogleMap
+          key={ 'map-' + map_id }
+          bootstrapURLKeys={ bootstrap_url_keys }
+          center={ listing_map ? listing_map.center : default_center }
+          zoom={ listing_map ? listing_map.zoom : default_zoom }
+          onBoundsChange={ controller.listing_map.handleBoundsChange.bind(this) }
+          options={ controller.listing_map.createMapOptions.bind(this) }
+          yesIWantToUseGoogleMapApiInternals
+          onGoogleApiLoaded={ controller.listing_map.handleGoogleMapApi.bind(this) }
+        >
+        { map_alerts_markers }
+        </GoogleMap>
+      )
+    }
+    let alert_list_area
     if (data.show_alerts_map) {
       const alert_header_style = {
         ...S('w-100p h-42 absolute t-66')
@@ -455,9 +499,9 @@ export default class Mls extends Component {
           </div>
         )
       }
-      alert_drawer_area = (
+      alert_list_area = (
         <div>
-          <AlertDrawer data={ data } />
+          <AlertList data={ data } />
           { alert_header_area }
         </div>
       )
@@ -477,7 +521,7 @@ export default class Mls extends Component {
           <div style={ map_wrapper_style }>
             { remove_drawing_button }
             { content_area }
-            { alert_drawer_area }
+            { alert_list_area }
           </div>
         </div>
         { listing_viewer }
@@ -502,7 +546,7 @@ export default class Mls extends Component {
           handleSetSoldDate={ controller.listing_filter.handleSetSoldDate }
           hideFilterForm={ controller.listing_filter.hideFilterForm }
         />
-        { zoom_controls }
+        { data.show_listing_map ? zoom_controls : '' }
         <ShareAlertModal
           data={ data }
           shareAlert={ controller.listing_share.shareAlert }

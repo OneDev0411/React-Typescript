@@ -31,7 +31,7 @@ const controller = {
       property_subtypes: alert.property_subtypes
     }
     ListingDispatcher.dispatch({
-      action: 'get-valerts',
+      action: 'get-valerts-alert',
       user: AppStore.data.user,
       options
     })
