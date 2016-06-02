@@ -11,6 +11,7 @@ import share_modal from './share-modal'
 import alert_modal from './alert-modal'
 import alert_viewer from './alert-viewer'
 import alert_map from './alert-map'
+import favorites_viewer from './favorites-viewer'
 // Rooms
 import recents from './recents'
 // combine controllers
@@ -24,6 +25,7 @@ const controller = {
   alert_modal,
   alert_viewer,
   alert_map,
-  recents
+  recents,
+  favorites_viewer
 }
 export default controller

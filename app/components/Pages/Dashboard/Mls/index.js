@@ -17,6 +17,7 @@ import FilterForm from './Partials/FilterForm'
 import ListingMarker from '../Partials/ListingMarker'
 import AlertList from './Partials/AlertList'
 import AlertViewer from './Partials/AlertViewer'
+import FavoritesViewer from './Partials/FavoritesViewer'
 import helpers from '../../../../utils/helpers'
 export default class Mls extends Component {
   componentWillMount() {
@@ -526,7 +527,9 @@ export default class Mls extends Component {
     }
     if (data.show_favorites_viewer) {
       content_area = (
-        <div>Favorites</div>
+        <FavoritesViewer
+          data={ data }
+        />
       )
     }
     let main_content = (

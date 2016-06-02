@@ -1,4 +1,4 @@
-// controller/alert-viewer.js
+// controller/favorites-viewer.js
 import AppStore from '../../../../stores/AppStore'
 import _ from 'lodash'
 const controller = {
@@ -19,6 +19,11 @@ const controller = {
       })
     else
       AppStore.data.user.favorite_listings.push(listing)
+    AppStore.emitChange()
+  },
+  hideFavoritesViewer() {
+    delete AppStore.data.show_favorites_viewer
+    AppStore.data.show_alerts_map = true
     AppStore.emitChange()
   }
 }

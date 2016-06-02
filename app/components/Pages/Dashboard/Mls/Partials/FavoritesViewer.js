@@ -1,4 +1,4 @@
-// Partials/AlertViewer.js
+// Partials/FavoritesViewer.js
 import React, { Component } from 'react'
 import S from 'shorti'
 import controller from '../../controller'
@@ -10,10 +10,10 @@ export default class AlertViewer extends Component {
   }
   render() {
     const data = this.props.data
-    const current_alert = data.current_alert
-    const listings = current_alert.listings
+    const user = data.user
+    const listings = user.favorite_listings
     let listing_gallery_area
-    if (current_alert && listings) {
+    if (listings) {
       listing_gallery_area = (
         <div style={ S('m-0 p-0') }>
           {
@@ -41,7 +41,7 @@ export default class AlertViewer extends Component {
               return (
                 <div key={ 'listing-viewer-' + listing.id } style={ listing_card_style }>
                   <img
-                    onClick={ controller.alert_viewer.handleFavoriteAction.bind(this, listing) } style={ S('absolute r-10 t-15 w-44 h-40 mr-5 z-2') }
+                    onClick={ controller.alert_viewer.handleFavoriteAction.bind(this, listing.id) } style={ S('absolute r-10 t-15 w-44 h-40 mr-5 z-2') }
                     src={`/images/dashboard/mls/heart${this.isFavorited(listing.id) ? '-red' : '-white'}.svg`}
                   />
                   <div style={ listing_image_style } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }>
@@ -85,8 +85,8 @@ export default class AlertViewer extends Component {
     return (
       <div className="alert-viewer" style={ alert_viewer_wrapper_style }>
         <div style={ alert_viewer_header_style }>
-          <span style={ S('color-263445 font-15 fw-500') }>{ current_alert.title }</span>
-          <div className="close pull-right" onClick={ controller.alert_map.hideAlertViewer.bind(this) }>&times;</div>
+          <span style={ S('color-263445 font-15 fw-500') }>Favorites</span>
+          <div className="close pull-right" onClick={ controller.favorites_viewer.hideFavoritesViewer.bind(this) }>&times;</div>
         </div>
         <div style={ alert_viewer_style }>
           { listing_gallery_area }
