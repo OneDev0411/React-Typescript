@@ -15,6 +15,11 @@ const controller = {
     }
     AppStore.emitChange()
   },
+  hideListingPanel() {
+    delete AppStore.data.show_listing_panel
+    delete AppStore.data.listing_panel
+    AppStore.emitChange()
+  },
   showPanelView(view) {
     if (AppStore.data.show_listing_panel && AppStore.data.listing_panel && AppStore.data.listing_panel.view === view) {
       delete AppStore.data.listing_panel

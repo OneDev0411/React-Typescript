@@ -272,10 +272,13 @@ export default class Mls extends Component {
         <div style={ S('absolute r-5 mt-2 t-15') }>
           { create_alert_button }
           <ButtonGroup style={ S('mr-10') }>
-            <Button style={ { ...S('bg-f8fafb'), outline: 'none' } } onClick={ controller.listing_panel.showPanelView.bind(this, 'list') }>
+            <Button style={ { ...S('bg-f8fafb h-37'), outline: 'none' } } onClick={ controller.listing_panel.hideListingPanel.bind(this) }>
+              <img src={ `/images/dashboard/mls/globe${!data.listing_panel ? '-active' : ''}.svg` } style={ S('w-20') }/>
+            </Button>
+            <Button style={ { ...S('bg-f8fafb h-37'), outline: 'none' } } onClick={ controller.listing_panel.showPanelView.bind(this, 'list') }>
               <img src={ `/images/dashboard/mls/list${data.listing_panel && data.listing_panel.view === 'list' ? '-active' : ''}.svg` } style={ S('w-20') }/>
             </Button>
-            <Button style={ { ...S('bg-f8fafb'), outline: 'none' } } onClick={ controller.listing_panel.showPanelView.bind(this, 'photos') }>
+            <Button style={ { ...S('bg-f8fafb h-37'), outline: 'none' } } onClick={ controller.listing_panel.showPanelView.bind(this, 'photos') }>
               <img src={ `/images/dashboard/mls/photos${data.listing_panel && data.listing_panel.view === 'photos' ? '-active' : ''}.svg` } style={ S('w-18') }/>
             </Button>
           </ButtonGroup>
@@ -479,7 +482,7 @@ export default class Mls extends Component {
     let alert_list_area
     if (data.show_alerts_map) {
       const alert_header_style = {
-        ...S('h-42 absolute t-66 w-' + (window.innerWidth - 400))
+        ...S('h-42 absolute t-66 w-' + (window.innerWidth - 420))
       }
       const alert_header_bg = {
         ...alert_header_style,
