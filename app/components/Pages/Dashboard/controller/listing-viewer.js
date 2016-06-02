@@ -9,7 +9,7 @@ const controller = {
     const user = data.user
     AppStore.data.show_listing_viewer = true
     AppStore.data.current_listing = listing
-    delete AppStore.data.show_alert_viewer
+    delete AppStore.data.show_alert_modal
     AppStore.emitChange()
     ListingDispatcher.dispatch({
       action: 'get-listing',

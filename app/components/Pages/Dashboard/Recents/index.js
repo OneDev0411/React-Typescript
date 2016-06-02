@@ -190,7 +190,7 @@ export default class Dashboard extends Component {
     delete AppStore.data.show_contacts_modal
     delete AppStore.data.show_settings_modal
     delete AppStore.data.show_modal_gallery
-    delete AppStore.data.show_alert_viewer
+    delete AppStore.data.show_alert_modal
     delete AppStore.data.adding_contacts
     delete AppStore.data.add_contacts_error
     AppStore.emitChange()
@@ -385,7 +385,7 @@ export default class Dashboard extends Component {
   showListingViewer(listing) {
     AppStore.data.show_listing_viewer = true
     AppStore.data.current_listing = listing
-    delete AppStore.data.show_alert_viewer
+    delete AppStore.data.show_alert_modal
     history.pushState(null, null, '/dashboard/mls/' + listing.id)
     AppStore.emitChange()
   }
@@ -493,9 +493,9 @@ export default class Dashboard extends Component {
         showModalGallery={ this.showModalGallery }
         handleModalGalleryNav={ this.handleModalGalleryNav }
         showShareListingModal={ controller.listing_viewer.showShareListingModal }
-        showAlertViewer={ controller.alert_viewer.showAlertViewer }
-        hideAlertViewer={ controller.alert_viewer.hideAlertViewer }
-        setAlertGalleryActiveIndex={ controller.alert_viewer.setAlertGalleryActiveIndex }
+        showAlertModal={ controller.alert_modal.showAlertModal }
+        hideAlertModal={ controller.alert_modal.hideAlertModal }
+        setAlertGalleryActiveIndex={ controller.alert_modal.setAlertGalleryActiveIndex }
         showDeleteRoomModal={ controller.recents.showDeleteRoomModal }
         hideDeleteRoomModal={ controller.recents.hideDeleteRoomModal }
         confirmDeleteRoom={ controller.recents.confirmDeleteRoom }

@@ -228,7 +228,7 @@ export default class MessagesList extends Component {
               showFileViewer={ this.props.showFileViewer }
               new_date={ new_date }
               showListingViewer={ this.props.showListingViewer }
-              showAlertViewer={ this.props.showAlertViewer }
+              showAlertModal={ this.props.showAlertModal }
             />
           </li>
         )
@@ -282,7 +282,7 @@ export default class MessagesList extends Component {
     }
     const btn_invite_style = S('w-40 h-40 pointer absolute p-0 t-10 r-20 br-100 bc-ddd bw-1 solid')
     const btn_settings_style = S('w-40 h-40 pointer absolute p-0 t-10 r-70 br-100 bc-ddd bw-1 solid color-929292')
-    let alert_viewer_area = (
+    let alert_modal_area = (
       <Loading />
     )
     const prev_icon = '<'
@@ -292,7 +292,7 @@ export default class MessagesList extends Component {
         const listing = listing_alert.listing
         return <img key={ `img-cache-${listing.id}`} src={ listing.cover_image_url } style={ S('absolute w-0 h-0 l-1000n r-1000n') }/>
       })
-      alert_viewer_area = (
+      alert_modal_area = (
         <div>
           { img_cache }
           <Carousel onSelect={ this.handleAlertListingSelect.bind(this) } className="listing-viewer__carousel carousel--alert" interval={0} indicators={false} prevIcon={ prev_icon } nextIcon={ next_icon }>
@@ -462,12 +462,12 @@ export default class MessagesList extends Component {
           </Modal.Body>
           { delete_area }
         </Modal>
-        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_alert_viewer } onHide={ this.props.hideAlertViewer }>
+        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_alert_modal } onHide={ this.props.hideAlertModal }>
           <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
-           <Modal.Title>Alert { data.listing_alerts ? `(${ data.alert_viewer && data.alert_viewer.active_index ? data.alert_viewer.active_index + 1 : '1' } of ${data.listing_alerts.length} Homes)` : '' } </Modal.Title>
+           <Modal.Title>Alert { data.listing_alerts ? `(${ data.alert_modal && data.alert_modal.active_index ? data.alert_modal.active_index + 1 : '1' } of ${data.listing_alerts.length} Homes)` : '' } </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            { alert_viewer_area }
+            { alert_modal_area }
             <div className="clearfix"></div>
           </Modal.Body>
         </Modal>
@@ -502,8 +502,8 @@ MessagesList.propTypes = {
   removeScrollBottom: React.PropTypes.func,
   showListingViewer: React.PropTypes.func,
   changeListingNotification: React.PropTypes.func,
-  showAlertViewer: React.PropTypes.func,
-  hideAlertViewer: React.PropTypes.func,
+  showAlertModal: React.PropTypes.func,
+  hideAlertModal: React.PropTypes.func,
   showDeleteRoomModal: React.PropTypes.func,
   hideDeleteRoomModal: React.PropTypes.func,
   confirmDeleteRoom: React.PropTypes.func,

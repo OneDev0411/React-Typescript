@@ -34,7 +34,7 @@ export default (user, room_id) => {
         // If going to show alert
         const alert = helpers.getParameterByName('alert')
         if (alert) {
-          AppStore.data.show_alert_viewer = true
+          AppStore.data.show_alert_modal = true
           ListingDispatcher.dispatch({
             action: 'get-alert-room',
             user,

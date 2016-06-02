@@ -31,11 +31,11 @@ export default class Landing extends Component {
     branch.init(config.branch.key)
     branch.banner({
       icon: '/images/logo-big.png',
-      title: 'Download the Rechat App for iOS',
+      title: 'Rechat',
       description: 'For a better mobile experience',
       showDesktop: false,
       showAndroid: false,
-      forgetHide: 5
+      forgetHide: 0
     }, {})
   }
   getContent() {

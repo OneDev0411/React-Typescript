@@ -23,10 +23,10 @@ export default class MessageItem extends Component {
     })
     return filterd_text
   }
-  showAlertViewer(alert_id) {
+  showAlertModal(alert_id) {
     const data = this.props.data
     const current_room = data.current_room
-    this.props.showAlertViewer(alert_id, current_room.id)
+    this.props.showAlertModal(alert_id, current_room.id)
   }
   render() {
     // Data
@@ -264,13 +264,13 @@ export default class MessageItem extends Component {
     if (alert) {
       message_area = (
         <div>
-          <div style={ S('mb-10 color-b0b0b0') }>Created an alert: <span onClick={ this.showAlertViewer.bind(this, alert.id) } style={ S('fw-600 pointer') } className="text-primary">{ alert.title }</span></div>
+          <div style={ S('mb-10 color-b0b0b0') }>Created an alert: <span onClick={ this.showAlertModal.bind(this, alert.id) } style={ S('fw-600 pointer') } className="text-primary">{ alert.title }</span></div>
           <div>
-            <div onClick={ this.showAlertViewer.bind(this, alert.id) } style={ S('pointer pull-left mr-10') }>
+            <div onClick={ this.showAlertModal.bind(this, alert.id) } style={ S('pointer pull-left mr-10') }>
               <img style={ S('br-3 w-75 h-75') } src="/images/dashboard/mls/map-tile.jpg"/>
             </div>
             <div style={ S('pull-left') }>
-              <span onClick={ this.showAlertViewer.bind(this, alert.id) } style={ S('pointer fw-600 font-18') }>{ alert.title }</span>
+              <span onClick={ this.showAlertModal.bind(this, alert.id) } style={ S('pointer fw-600 font-18') }>{ alert.title }</span>
               <div style={ S('color-b0b0b0') }>We'll keep you updated with new listings</div>
             </div>
             <div className="clearfix"></div>
@@ -305,5 +305,5 @@ MessageItem.propTypes = {
   showFileViewer: React.PropTypes.func,
   new_date: React.PropTypes.bool,
   showListingViewer: React.PropTypes.func,
-  showAlertViewer: React.PropTypes.func
+  showAlertModal: React.PropTypes.func
 }

@@ -16,6 +16,7 @@ import ListingPanel from './Partials/ListingPanel'
 import FilterForm from './Partials/FilterForm'
 import ListingMarker from '../Partials/ListingMarker'
 import AlertList from './Partials/AlertList'
+import AlertViewer from './Partials/AlertViewer'
 import helpers from '../../../../utils/helpers'
 export default class Mls extends Component {
   componentWillMount() {
@@ -482,6 +483,7 @@ export default class Mls extends Component {
       )
     }
     let alert_list_area
+    let alert_viewer_area
     if (data.show_alerts_map) {
       const alert_header_style = {
         ...S('h-42 absolute t-66 w-' + (window.innerWidth - 420))
@@ -492,8 +494,8 @@ export default class Mls extends Component {
         opacity: '.5'
       }
       let alert_header_area
-      if (data.show_alerts_map && data.listing_map.current_alert) {
-        const current_alert = data.listing_map.current_alert
+      if (data.show_alerts_map && data.current_alert) {
+        const current_alert = data.current_alert
         const alert_options = `${current_alert.property_subtypes.toString().replace(new RegExp('RES-', 'g'), ' ').trim()}, $${helpers.numberWithCommas(current_alert.minimum_price)}-$${helpers.numberWithCommas(current_alert.maximum_price)}, ${current_alert.minimum_bedrooms} Beds ${current_alert.minimum_bathrooms} Baths`
         alert_header_area = (
           <div style={ alert_header_style }>
@@ -514,6 +516,13 @@ export default class Mls extends Component {
           { alert_header_area }
         </div>
       )
+      if (data.show_alert_viewer) {
+        alert_viewer_area = (
+          <AlertViewer
+            data={ data }
+          />
+        )
+      }
     }
     if (data.show_favorites_viewer) {
       content_area = (
@@ -531,6 +540,7 @@ export default class Mls extends Component {
             { remove_drawing_button }
             { content_area }
             { alert_list_area }
+            { alert_viewer_area }
           </div>
         </div>
         { listing_viewer }

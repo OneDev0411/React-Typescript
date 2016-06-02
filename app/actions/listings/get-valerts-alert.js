@@ -14,6 +14,7 @@ export default (user, options) => {
       if (!AppStore.data.alerts_map)
         AppStore.data.alerts_map = {}
       AppStore.data.alerts_map.listings = response.data
+      AppStore.data.current_alert.listings = response.data
       AppStore.data.alerts_map.listings_info = response.info
     }
     delete AppStore.data.alerts_map.is_loading

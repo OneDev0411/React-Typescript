@@ -7,7 +7,7 @@ export default class AlertList extends Component {
   render() {
     const data = this.props.data
     const alerts = data.alerts
-    const current_alert = data.listing_map.current_alert
+    const current_alert = data.current_alert
     let alerts_list_area
     if (alerts) {
       alerts_list_area = (

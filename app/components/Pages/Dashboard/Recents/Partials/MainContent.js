@@ -302,8 +302,8 @@ export default class MainContent extends Component {
             removeScrollBottom={ this.props.removeScrollBottom }
             showListingViewer={ this.props.showListingViewer }
             changeListingNotification={ this.props.changeListingNotification }
-            showAlertViewer={ this.props.showAlertViewer }
-            hideAlertViewer={ this.props.hideAlertViewer }
+            showAlertModal={ this.props.showAlertModal }
+            hideAlertModal={ this.props.hideAlertModal }
             showDeleteRoomModal={ this.props.showDeleteRoomModal }
             hideDeleteRoomModal={ this.props.hideDeleteRoomModal }
             confirmDeleteRoom={ this.props.confirmDeleteRoom }
@@ -357,8 +357,8 @@ export default class MainContent extends Component {
                 removeScrollBottom={ this.props.removeScrollBottom }
                 showListingViewer={ this.props.showListingViewer }
                 changeListingNotification={ this.props.changeListingNotification }
-                showAlertViewer={ this.props.showAlertViewer }
-                hideAlertViewer={ this.props.hideAlertViewer }
+                showAlertModal={ this.props.showAlertModal }
+                hideAlertModal={ this.props.hideAlertModal }
                 showDeleteRoomModal={ this.props.showDeleteRoomModal }
                 hideDeleteRoomModal={ this.props.hideDeleteRoomModal }
                 confirmDeleteRoom={ this.props.confirmDeleteRoom }
@@ -407,8 +407,8 @@ MainContent.propTypes = {
   showModalGallery: React.PropTypes.func,
   handleModalGalleryNav: React.PropTypes.func,
   showShareListingModal: React.PropTypes.func,
-  showAlertViewer: React.PropTypes.func,
-  hideAlertViewer: React.PropTypes.func,
+  showAlertModal: React.PropTypes.func,
+  hideAlertModal: React.PropTypes.func,
   showDeleteRoomModal: React.PropTypes.func,
   hideDeleteRoomModal: React.PropTypes.func,
   confirmDeleteRoom: React.PropTypes.func,

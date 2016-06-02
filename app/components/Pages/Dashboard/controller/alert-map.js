@@ -50,11 +50,16 @@ const controller = {
     AppStore.data.listing_map.center = center
     AppStore.data.listing_map.options = options
     AppStore.data.listing_map.auto_move = true
-    AppStore.data.listing_map.current_alert = alert
+    AppStore.data.current_alert = alert
     AppStore.emitChange()
   },
   showAlertViewer() {
-    console.log('show alert viewer')
+    AppStore.data.show_alert_viewer = true
+    AppStore.emitChange()
+  },
+  hideAlertViewer() {
+    delete AppStore.data.show_alert_viewer
+    AppStore.emitChange()
   }
 }
 export default controller
