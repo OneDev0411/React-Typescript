@@ -479,7 +479,7 @@ export default class Mls extends Component {
     let alert_list_area
     if (data.show_alerts_map) {
       const alert_header_style = {
-        ...S('w-100p h-42 absolute t-66')
+        ...S('h-42 absolute t-66 w-' + (window.innerWidth - 400))
       }
       const alert_header_bg = {
         ...alert_header_style,
@@ -493,7 +493,7 @@ export default class Mls extends Component {
         alert_header_area = (
           <div style={ alert_header_style }>
             <div style={ alert_header_bg }></div>
-            <div style={ S('relative ml-365 mt-10 color-fff z-1 font-15') }>
+            <div style={ S('relative ml-15 mt-10 color-fff z-1 font-15') }>
               { current_alert.title } ({ alert_options })
             </div>
           </div>
