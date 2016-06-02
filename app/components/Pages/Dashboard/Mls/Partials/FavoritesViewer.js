@@ -41,7 +41,7 @@ export default class AlertViewer extends Component {
               return (
                 <div key={ 'listing-viewer-' + listing.id } style={ listing_card_style }>
                   <img
-                    onClick={ controller.alert_viewer.handleFavoriteAction.bind(this, listing.id) } style={ S('absolute r-10 t-15 w-44 h-40 mr-5 z-2') }
+                    onClick={ controller.alert_viewer.handleFavoriteAction.bind(this, listing) } style={ S('absolute r-10 t-15 w-44 h-40 mr-5 z-2') }
                     src={`/images/dashboard/mls/heart${this.isFavorited(listing.id) ? '-red' : '-white'}.svg`}
                   />
                   <div style={ listing_image_style } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }>

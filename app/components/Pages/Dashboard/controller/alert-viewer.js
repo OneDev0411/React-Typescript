@@ -12,12 +12,12 @@ const controller = {
   handleFavoriteAction(listing) {
     if (!AppStore.data.user.favorite_listings)
       AppStore.data.user.favorite_listings = []
-    if (controller.isFavorited(listing.id))
+    if (controller.isFavorited(listing.id)) {
       AppStore.data.user.favorite_listings = AppStore.data.user.favorite_listings.filter(listing_loop => {
         if (listing_loop.id !== listing.id)
           return listing
       })
-    else
+    } else
       AppStore.data.user.favorite_listings.push(listing)
     AppStore.emitChange()
   }
