@@ -52,6 +52,9 @@ const controller = {
     AppStore.data.listing_map.auto_move = true
     AppStore.data.listing_map.current_alert = alert
     AppStore.emitChange()
+  },
+  showAlertViewer() {
+    console.log('show alert viewer')
   }
 }
 export default controller

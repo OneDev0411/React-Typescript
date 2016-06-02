@@ -73,6 +73,13 @@ export default class Mls extends Component {
       AppStore.data.show_welcome_modal = true
       AppStore.emitChange()
     }
+    // Get alerts
+    if (!data.alerts) {
+      ListingDispatcher.dispatch({
+        action: 'get-alerts',
+        user
+      })
+    }
   }
   componentDidMount() {
     this.checkForMobile()
@@ -108,7 +115,6 @@ export default class Mls extends Component {
     AppStore.emitChange()
   }
   handleTabClick(type) {
-    const user = this.props.data.user
     switch (type) {
       case 'map':
         delete AppStore.data.listing_map.auto_move
@@ -122,10 +128,6 @@ export default class Mls extends Component {
         delete AppStore.data.listing_map.auto_move
         delete AppStore.data.show_filter_form
         delete AppStore.data.show_favorites_viewer
-        ListingDispatcher.dispatch({
-          action: 'get-alerts',
-          user
-        })
         AppStore.data.show_alerts_map = true
         break
       case 'favorites':
@@ -498,6 +500,10 @@ export default class Mls extends Component {
             <div style={ alert_header_bg }></div>
             <div style={ S('relative ml-15 mt-10 color-fff z-1 font-15') }>
               { current_alert.title } ({ alert_options })
+              <div style={ S('pull-right pointer') } onClick={ controller.alert_map.showAlertViewer.bind(this) }>
+                <span style={ S('color-98caf1 mr-15') }>View new listings</span>
+                <span style={ S('mr-15 relative t-2') }><i style={ S('color-98caf1') } className="fa fa-chevron-right"></i></span>
+              </div>
             </div>
           </div>
         )
