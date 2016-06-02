@@ -5,6 +5,9 @@ import controller from '../../controller'
 import listing_util from '../../../../../utils/listing'
 import helpers from '../../../../../utils/helpers'
 export default class AlertViewer extends Component {
+  isFavorited(listing_id) {
+    return controller.alert_viewer.isFavorited(listing_id)
+  }
   render() {
     const data = this.props.data
     const current_alert = data.current_alert
@@ -18,7 +21,7 @@ export default class AlertViewer extends Component {
               const property = listing.compact_property
               const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
               const listing_card_style = {
-                ...S(`w-375 h-320 mr-20 mb-20 pull-left br-3 pointer`),
+                ...S(`w-375 h-320 mr-20 mb-20 pull-left br-3 pointer relative`),
                 boxShadow: '0 0 2px 0 rgba(0, 0, 0, 0.2)',
                 borderTopRightRadius: '3px',
                 borderTopLeftRadius: '3px'
@@ -36,8 +39,12 @@ export default class AlertViewer extends Component {
                 borderTopLeftRadius: '3px'
               }
               return (
-                <div key={ 'listing-viewer-' + listing.id } style={ listing_card_style } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }>
-                  <div style={ listing_image_style }>
+                <div key={ 'listing-viewer-' + listing.id } style={ listing_card_style }>
+                  <img
+                    onClick={ controller.alert_viewer.handleFavoriteAction.bind(this, listing.id) } style={ S('absolute r-10 t-15 w-44 h-40 mr-5 z-2') }
+                    src={`/images/dashboard/mls/heart${this.isFavorited(listing.id) ? '-red' : '-white'}.svg`}
+                  />
+                  <div style={ listing_image_style } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }>
                     <div style={ overlay_style }></div>
                     <div style={ S('absolute b-0 p-10 color-fff') }>
                       <div style={ S('font-24 fw-500') }>${ helpers.numberWithCommas(listing.price) }</div>
@@ -53,7 +60,7 @@ export default class AlertViewer extends Component {
                       </div>
                     </div>
                   </div>
-                  <div style={ S('mt-12 ml-15 font-18') }>
+                  <div style={ S('mt-12 ml-15 font-18') } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }>
                     <img style={ S('w-23 h-13 mr-5') }src="/images/dashboard/mls/eye.svg"/>
                     <span style={ S('color-c3c3c3 mr-15 t-1 relative') }>8</span>
                     <img style={ S('w-23 h-13 mr-5') }src="/images/dashboard/mls/heart.svg"/>

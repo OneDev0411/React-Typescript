@@ -9,6 +9,7 @@ import listing_filter from './listing-filter'
 import share_modal from './share-modal'
 // Alert
 import alert_modal from './alert-modal'
+import alert_viewer from './alert-viewer'
 import alert_map from './alert-map'
 // Rooms
 import recents from './recents'
@@ -21,6 +22,7 @@ const controller = {
   listing_filter,
   share_modal,
   alert_modal,
+  alert_viewer,
   alert_map,
   recents
 }
