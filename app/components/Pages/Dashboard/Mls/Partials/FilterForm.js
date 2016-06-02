@@ -82,7 +82,7 @@ export default class FilterForm extends Component {
     if (data.is_mobile) {
       filter_form_style = {
         ...filter_form_style,
-        ...S('t-49 r-0 z-100 h-' + (window.innerHeight - 49))
+        ...S('t-49 r-0 z-100 h-' + (window.innerHeight - 60))
       }
       if (data.show_filter_form)
         filter_form_class = ''

@@ -566,9 +566,7 @@ export default class Mls extends Component {
       main_content = listing_viewer
     return (
       <div style={ S('minw-1000') }>
-        <main>
-          { main_content }
-        </main>
+        { main_content }
         <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_welcome_modal } onHide={ this.hideWelcomeModal }>
           <Modal.Body style={ S('text-center p-50') }>
             <div style={ S('font-42') }>Welcome to Rechat!</div>
