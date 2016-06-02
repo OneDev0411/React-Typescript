@@ -5,9 +5,6 @@ import controller from '../../controller'
 import listing_util from '../../../../../utils/listing'
 import helpers from '../../../../../utils/helpers'
 export default class AlertViewer extends Component {
-  componentDidMount() {
-
-  }
   render() {
     const data = this.props.data
     const current_alert = data.current_alert
@@ -22,18 +19,24 @@ export default class AlertViewer extends Component {
               const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
               const listing_card_style = {
                 ...S(`w-375 h-320 mr-20 mb-20 pull-left br-3 pointer`),
-                boxShadow: '0 0 2px 0 rgba(0, 0, 0, 0.2)'
+                boxShadow: '0 0 2px 0 rgba(0, 0, 0, 0.2)',
+                borderTopRightRadius: '3px',
+                borderTopLeftRadius: '3px'
               }
               const listing_image_style = {
                 ...S(`bg-cover bg-url(${listing.cover_image_url}) bg-center w-375 h-270 relative`),
-                backgroundSize: 'attachment'
+                backgroundSize: 'attachment',
+                borderTopRightRadius: '3px',
+                borderTopLeftRadius: '3px'
               }
               const overlay_style = {
                 ...S('bg-000 absolute w-100p h-100p'),
-                opacity: '.3'
+                opacity: '.3',
+                borderTopRightRadius: '3px',
+                borderTopLeftRadius: '3px'
               }
               return (
-                <div key={ 'listing-' + listing.id } style={ listing_card_style } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }>
+                <div key={ 'listing-viewer-' + listing.id } style={ listing_card_style } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }>
                   <div style={ listing_image_style }>
                     <div style={ overlay_style }></div>
                     <div style={ S('absolute b-0 p-10 color-fff') }>
