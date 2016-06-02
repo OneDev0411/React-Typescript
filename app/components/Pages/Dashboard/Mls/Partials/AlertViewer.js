@@ -53,13 +53,14 @@ export default class AlertViewer extends Component {
                       </div>
                     </div>
                   </div>
-                  <div style={ S('mt-15 ml-15') }>
+                  <div style={ S('mt-12 ml-15 font-18') }>
                     <img style={ S('w-23 h-13 mr-5') }src="/images/dashboard/mls/eye.svg"/>
-                    <span style={ S('color-c3c3c3 font-16 mr-15 t-1 relative') }>8</span>
+                    <span style={ S('color-c3c3c3 mr-15 t-1 relative') }>8</span>
                     <img style={ S('w-23 h-13 mr-5') }src="/images/dashboard/mls/heart.svg"/>
-                    <span style={ S('color-c3c3c3 font-16 mr-20 t-1 relative') }>3</span>
+                    <span style={ S('color-c3c3c3 mr-20 t-1 relative') }>3</span>
                     <img style={ S('w-14 h-13 mr-5') }src="/images/dashboard/mls/comment.svg"/>
-                    <span style={ S('color-c3c3c3 font-16 t-1 relative') }>1</span>
+                    <span style={ S('color-c3c3c3 t-1 relative') }>1</span>
+                    <img onClick={ controller.listing_viewer.showShareListingModal.bind(this, listing) } style={ S('w-17 h-24 mr-15 mt-1 pull-right') }src="/images/dashboard/mls/share.svg"/>
                   </div>
                 </div>
               )
