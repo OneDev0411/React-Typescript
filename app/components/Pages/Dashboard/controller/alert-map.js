@@ -52,6 +52,27 @@ const controller = {
     AppStore.data.listing_map.auto_move = true
     AppStore.data.current_alert = alert
     AppStore.emitChange()
+    controller.makePolygon(alert.points)
+  },
+  makePolygon(points) {
+    const paths = points.map(path => {
+      return {
+        lat: path.latitude,
+        lng: path.longitude
+      }
+    })
+    if (window.poly) {
+      window.poly.setMap(null)
+      delete window.poly
+    }
+    const google = window.google
+    window.poly = new google.maps.Polygon({
+      clickable: false,
+      map: window.map,
+      paths,
+      strokeColor: '#3388ff',
+      strokeWeight: 10
+    })
   },
   showAlertViewer() {
     AppStore.data.show_alert_viewer = true
