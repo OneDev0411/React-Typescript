@@ -365,7 +365,7 @@ export default class Mls extends Component {
             { data.show_alerts_map ? underline : '' }
           </li>
           <li style={ S('relative pull-left color-263445 font-28 mr-60') }>
-            <span onClick={ this.handleTabClick.bind(this, 'favorites') } style={ S('pointer ' + (data.show_favorites_viewer ? 'color-263445' : 'color-8696a4')) }>My Homes</span>
+            <span onClick={ this.handleTabClick.bind(this, 'favorites') } style={ S('pointer ' + (data.show_favorites_viewer ? 'color-263445' : 'color-8696a4')) }>Activity</span>
             { data.show_favorites_viewer ? underline : '' }
           </li>
         </ul>
