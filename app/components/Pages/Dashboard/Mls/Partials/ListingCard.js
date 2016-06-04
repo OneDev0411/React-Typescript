@@ -13,21 +13,15 @@ export default class ListingCard extends Component {
     const property = listing.compact_property
     const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
     const listing_card_style = {
-      ...S(`w-375 h-320 mr-20 mb-20 pull-left br-3 pointer relative`),
-      boxShadow: '0 0 2px 0 rgba(0, 0, 0, 0.2)',
-      borderTopRightRadius: '3px',
-      borderTopLeftRadius: '3px'
+      ...S(`w-375 h-270 mr-20 mb-20 pull-left br-3 pointer relative`),
+      boxShadow: '0 0 2px 0 rgba(0, 0, 0, 0.2)'
     }
     const listing_image_style = {
-      ...S(`bg-cover bg-url(${listing.cover_image_url}) bg-center w-375 h-270 relative`),
-      borderTopRightRadius: '3px',
-      borderTopLeftRadius: '3px'
+      ...S(`bg-cover bg-url(${listing.cover_image_url}) bg-center w-375 h-270 relative br-3`)
     }
     const overlay_style = {
-      ...S('bg-000 absolute w-100p h-100p'),
-      opacity: '.3',
-      borderTopRightRadius: '3px',
-      borderTopLeftRadius: '3px'
+      ...S('bg-000 absolute w-100p h-100p br-3'),
+      opacity: '.3'
     }
     return (
       <div key={ 'listing-viewer-' + listing.id } style={ listing_card_style }>
@@ -51,15 +45,19 @@ export default class ListingCard extends Component {
             </div>
           </div>
         </div>
-        <div style={ S('mt-12 ml-15 font-18') } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }>
-          <img style={ S('w-23 h-13 mr-5') }src="/images/dashboard/mls/eye.svg"/>
-          <span style={ S('color-c3c3c3 mr-15 t-1 relative') }>8</span>
-          <img style={ S('w-23 h-13 mr-5') }src="/images/dashboard/mls/heart.svg"/>
-          <span style={ S('color-c3c3c3 mr-20 t-1 relative') }>3</span>
-          <img style={ S('w-14 h-13 mr-5') }src="/images/dashboard/mls/comment.svg"/>
-          <span style={ S('color-c3c3c3 t-1 relative') }>1</span>
-          <img onClick={ controller.listing_viewer.showShareListingModal.bind(this, listing) } style={ S('w-17 h-24 mr-15 mt-1 pull-right') }src="/images/dashboard/mls/share.svg"/>
-        </div>
+        {
+          /*
+          <div style={ S('mt-12 ml-15 font-18') } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }>
+            <img style={ S('w-23 h-13 mr-5') }src="/images/dashboard/mls/eye.svg"/>
+            <span style={ S('color-c3c3c3 mr-15 t-1 relative') }>8</span>
+            <img style={ S('w-23 h-13 mr-5') }src="/images/dashboard/mls/heart.svg"/>
+            <span style={ S('color-c3c3c3 mr-20 t-1 relative') }>3</span>
+            <img style={ S('w-14 h-13 mr-5') }src="/images/dashboard/mls/comment.svg"/>
+            <span style={ S('color-c3c3c3 t-1 relative') }>1</span>
+            <img onClick={ controller.listing_viewer.showShareListingModal.bind(this, listing) } style={ S('w-17 h-24 mr-15 mt-1 pull-right') }src="/images/dashboard/mls/share.svg"/>
+          </div>
+          */
+        }
       </div>
     )
   }

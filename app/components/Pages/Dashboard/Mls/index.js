@@ -335,15 +335,16 @@ export default class Mls extends Component {
     let clear_search_input
     if (data.listing_map && data.listing_map.search_input_text) {
       clear_search_input = (
-        <div onClick={ this.handleClearSearchInputClick.bind(this) } className="close" style={ S('absolute l-360 t-15') }>&times;</div>
+        <div onClick={ this.handleClearSearchInputClick.bind(this) } className="close" style={ S('absolute l-340 t-15') }>&times;</div>
       )
     }
     let search_filter_draw_area = (
       <div style={ S('relative t-35 l-10 z-1') }>
         <div style={ search_area_style }>
-          <div style={ S('pull-left mr-10') }>
+          <div style={ S('pull-left mr-10 relative') }>
             { search_area }
             { clear_search_input }
+            <img onClick={ controller.listing_map.handleSearchSubmit.bind(this) } style={ S('absolute r-15 t-15 w-20 pointer') } src="/images/dashboard/mls/search.svg" />
             <div style={ S('w-1 h-28 absolute l-400 t-13 bg-dddddd') }></div>
           </div>
           <div style={ S('pull-left') }>
@@ -413,7 +414,10 @@ export default class Mls extends Component {
     // Create markers
     let map_listing_markers
     if (listing_map && listing_map.listings) {
-      const listings = listing_map.listings
+      let listings = listing_map.listings
+      listings = listings.filter(listing => {
+        return listing.location
+      })
       map_listing_markers = listings.map(listing => {
         return (
           <div onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) } onMouseOut={ controller.listing_map.hideListingPopup.bind(this) } key={ 'map-listing-' + listing.id } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
@@ -431,7 +435,10 @@ export default class Mls extends Component {
     }
     let map_alerts_markers
     if (alerts_map && alerts_map.listings) {
-      const listings = alerts_map.listings
+      let listings = alerts_map.listings
+      listings = listings.filter(listing => {
+        return listing.location
+      })
       map_alerts_markers = listings.map(listing => {
         return (
           <div onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) } onMouseOut={ controller.listing_map.hideListingPopup.bind(this) } key={ 'map-listing-' + listing.id } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
@@ -449,7 +456,10 @@ export default class Mls extends Component {
     }
     let map_favorites_markers
     if (user && user.favorite_listings) {
-      const listings = user.favorite_listings
+      let listings = user.favorite_listings
+      listings = listings.filter(listing => {
+        return listing.location
+      })
       map_favorites_markers = listings.map(listing => {
         return (
           <div onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) } onMouseOut={ controller.listing_map.hideListingPopup.bind(this) } key={ 'map-listing-' + listing.id } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>

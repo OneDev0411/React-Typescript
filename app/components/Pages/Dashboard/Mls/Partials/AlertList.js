@@ -25,14 +25,18 @@ export default class AlertList extends Component {
                 <li key={ 'alert-' + alert.id } style={ S('h-100 border-bottom-1-solid-dedede p-20 pointer' + (current_alert && current_alert.id === alert.id ? ' bg-f7f7f7' : '')) } onClick={ controller.alert_map.showAlertOnMap.bind(this, alert) }>
                   <div style={ S('font-18 fw-500') }>{ alert.title }</div>
                   <div style={ S('font-14 fw-500') }>Shared with: { users_area }</div>
-                  <div>
-                    <img style={ S('w-23 h-13 mr-5') }src="/images/dashboard/mls/eye.svg"/>
-                    <span style={ S('color-c3c3c3 font-16 mr-15 t-1 relative') }>8</span>
-                    <img style={ S('w-23 h-13 mr-5') }src="/images/dashboard/mls/heart.svg"/>
-                    <span style={ S('color-c3c3c3 font-16 mr-20 t-1 relative') }>3</span>
-                    <img style={ S('w-14 h-13 mr-5') }src="/images/dashboard/mls/comment.svg"/>
-                    <span style={ S('color-c3c3c3 font-16 t-1 relative') }>1</span>
-                  </div>
+                  {
+                    /*
+                    <div>
+                      <img style={ S('w-23 h-13 mr-5') }src="/images/dashboard/mls/eye.svg"/>
+                      <span style={ S('color-c3c3c3 font-16 mr-15 t-1 relative') }>8</span>
+                      <img style={ S('w-23 h-13 mr-5') }src="/images/dashboard/mls/heart.svg"/>
+                      <span style={ S('color-c3c3c3 font-16 mr-20 t-1 relative') }>3</span>
+                      <img style={ S('w-14 h-13 mr-5') }src="/images/dashboard/mls/comment.svg"/>
+                      <span style={ S('color-c3c3c3 font-16 t-1 relative') }>1</span>
+                    </div>
+                    */
+                  }
                 </li>
               )
             })
@@ -40,10 +44,11 @@ export default class AlertList extends Component {
         </ul>
       )
     }
-    const drawer_style = S(`bg-fff w-350 h-${window.innerHeight - 66} absolute z-1 t-66 l-0`)
+    const drawer_style = S(`bg-fff w-350 h-${window.innerHeight - 66} absolute z-1 t-66 l-0 border-right-1-solid-d3d3d3`)
     return (
       <div className="alert-list" style={ drawer_style }>
         <div style={ S('p-10 pb-0') }>
+          <img style={ S('absolute r-22 t-22 w-20') } src="/images/dashboard/mls/search.svg" />
           <Input type="text" bsSize="large" placeholder="Search Alerts" />
         </div>
         { alerts_list_area }
