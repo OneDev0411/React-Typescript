@@ -14,7 +14,7 @@ import ListingViewer from '../Partials/ListingViewer'
 import ListingViewerMobile from '../Partials/ListingViewerMobile'
 import ListingPanel from './Partials/ListingPanel'
 import FilterForm from './Partials/FilterForm'
-import ListingMarkers from './Partials/ListingMarkers'
+import ListingMarker from '../Partials/ListingMarker'
 import AlertList from './Partials/AlertList'
 import AlertViewer from './Partials/AlertViewer'
 // import FavoritesViewer from './Partials/FavoritesViewer'
@@ -124,6 +124,10 @@ export default class Mls extends Component {
         delete AppStore.data.show_favorites_map
         AppStore.data.show_listing_map = true
         controller.listing_filter.setFilterOptions.bind(this)
+        if (window.poly) {
+          window.poly.setMap(null)
+          delete window.poly
+        }
         break
       case 'alerts':
         AppStore.data.show_alerts_map = true
@@ -131,11 +135,19 @@ export default class Mls extends Component {
         delete AppStore.data.show_filter_form
         delete AppStore.data.show_favorites_map
         AppStore.data.show_alerts_map = true
+        if (window.poly) {
+          window.poly.setMap(null)
+          delete window.poly
+        }
         break
       case 'favorites':
         delete AppStore.data.show_listing_map
         delete AppStore.data.show_alerts_map
         AppStore.data.show_favorites_map = true
+        if (window.poly) {
+          window.poly.setMap(null)
+          delete window.poly
+        }
         break
       default:
         return
@@ -402,32 +414,56 @@ export default class Mls extends Component {
     let map_listing_markers
     if (listing_map && listing_map.listings) {
       const listings = listing_map.listings
-      map_listing_markers = (
-        <ListingMarkers
-          data={ data }
-          listings={ listings }
-        />
-      )
+      map_listing_markers = listings.map(listing => {
+        return (
+          <div onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) } onMouseOut={ controller.listing_map.hideListingPopup.bind(this) } key={ 'map-listing-' + listing.id } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
+            <ListingMarker
+              key={ 'listing-marker' + listing.id }
+              data={ data }
+              listing={ listing }
+              property={ listing.compact_property }
+              address={ listing.address }
+              context={ 'map' }
+            />
+          </div>
+        )
+      })
     }
     let map_alerts_markers
     if (alerts_map && alerts_map.listings) {
       const listings = alerts_map.listings
-      map_listing_markers = (
-        <ListingMarkers
-          data={ data }
-          listings={ listings }
-        />
-      )
+      map_alerts_markers = listings.map(listing => {
+        return (
+          <div onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) } onMouseOut={ controller.listing_map.hideListingPopup.bind(this) } key={ 'map-listing-' + listing.id } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
+            <ListingMarker
+              key={ 'listing-marker' + listing.id }
+              data={ data }
+              listing={ listing }
+              property={ listing.compact_property }
+              address={ listing.address }
+              context={ 'map' }
+            />
+          </div>
+        )
+      })
     }
     let map_favorites_markers
     if (user && user.favorite_listings) {
       const listings = user.favorite_listings
-      map_listing_markers = (
-        <ListingMarkers
-          data={ data }
-          listings={ listings }
-        />
-      )
+      map_favorites_markers = listings.map(listing => {
+        return (
+          <div onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) } onMouseOut={ controller.listing_map.hideListingPopup.bind(this) } key={ 'map-listing-' + listing.id } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
+            <ListingMarker
+              key={ 'listing-marker' + listing.id }
+              data={ data }
+              listing={ listing }
+              property={ listing.compact_property }
+              address={ listing.address }
+              context={ 'map' }
+            />
+          </div>
+        )
+      })
     }
     // Show listings map
     let map_wrapper_style = S('h-' + (window.innerHeight - 66))
@@ -573,7 +609,7 @@ export default class Mls extends Component {
           handleSetSoldDate={ controller.listing_filter.handleSetSoldDate }
           hideFilterForm={ controller.listing_filter.hideFilterForm }
         />
-        { data.show_listing_map ? zoom_controls : '' }
+        { zoom_controls }
         <ShareAlertModal
           data={ data }
           shareAlert={ controller.listing_share.shareAlert }

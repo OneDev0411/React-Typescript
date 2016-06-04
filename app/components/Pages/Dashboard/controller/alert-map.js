@@ -52,9 +52,9 @@ const controller = {
     AppStore.data.listing_map.auto_move = true
     AppStore.data.current_alert = alert
     AppStore.emitChange()
-    controller.makePolygon(alert.points)
+    controller.makePolygonAlert(alert.points)
   },
-  makePolygon(points) {
+  makePolygonAlert(points) {
     const paths = points.map(path => {
       return {
         lat: path.latitude,
