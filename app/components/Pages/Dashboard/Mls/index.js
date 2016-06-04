@@ -246,7 +246,7 @@ export default class Mls extends Component {
     if (listing_map && listing_map.map_id)
       map_id = listing_map.map_id
     let remove_drawing_button
-    if (window.poly) {
+    if (window.poly && data.show_search_map) {
       let right_value = 80
       if (data.listing_panel)
         right_value = 910
@@ -576,13 +576,6 @@ export default class Mls extends Component {
         )
       }
     }
-    // if (data.show_favorites_viewer) {
-    //   content_area = (
-    //     <FavoritesViewer
-    //       data={ data }
-    //     />
-    //   )
-    // }
     let main_content = (
       <main>
         { nav_area }

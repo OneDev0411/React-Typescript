@@ -37,7 +37,11 @@ const controller = {
   },
   sortListings(sort_by) {
     const data = AppStore.data
-    const listings = data.listing_map.listings
+    let listings = data.listing_map.listings
+    if (data.alerts_map && data.show_alerts_map && data.alerts_map.listings)
+      listings = data.alerts_map.listings
+    if (data.favorites_map && data.show_favorites_map && data.favorites_map.listings)
+      listings = data.favorites_map.listings
     let sorting_direction = 1
     if (AppStore.data.listing_map.sorting_direction)
       sorting_direction = AppStore.data.listing_map.sorting_direction * -1
@@ -59,7 +63,13 @@ const controller = {
       if (sort_by === 'price_per_square_foot')
         return (Math.floor(listing.price / listing_util.metersToFeet(listing.compact_property.square_meters))) * sorting_direction
     })
-    AppStore.data.listing_map.listings = listings_sorted
+    // Which map
+    if (data.show_search_map)
+      AppStore.data.listing_map.listings = listings_sorted
+    if (data.alerts_map && data.show_alerts_map && data.alerts_map.listings)
+      AppStore.data.alerts_map.listings = listings_sorted
+    if (data.favorites_map && data.show_favorites_map && data.favorites_map.listings)
+      AppStore.data.favorites_map.listings = listings_sorted
     AppStore.data.listing_map.sorting_direction = sorting_direction
     AppStore.data.listing_map.sorting_by = sort_by
     AppStore.emitChange()
