@@ -45,12 +45,14 @@ export default (user, rooms, contacts, emails, phone_numbers, alert) => {
         alert
       }
       Alert.createRoomAlert(params, () => {
-        getMessages(user, room)
+        if (room.id !== user.personal_room)
+          getMessages(user, room)
         callback()
       })
     }, () => {
       delete AppStore.data.listing_map.saving_alert
       delete AppStore.data.listing_map.show_share_modal
+      delete AppStore.data.listing_map.show_share_type_modal
       delete AppStore.data.share_list
       AppStore.emitChange()
     })

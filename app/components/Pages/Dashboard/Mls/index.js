@@ -10,6 +10,7 @@ import controller from '../controller'
 import SideBar from '../Partials/SideBar'
 import MobileNav from '../Partials/MobileNav'
 import ShareAlertModal from './Partials/ShareAlertModal'
+import ShareTypeModal from './Partials/ShareTypeModal'
 import ListingViewer from '../Partials/ListingViewer'
 import ListingViewerMobile from '../Partials/ListingViewerMobile'
 import ListingPanel from './Partials/ListingPanel'
@@ -277,7 +278,7 @@ export default class Mls extends Component {
     let create_alert_button
     if (data.show_listing_map && !data.show_alerts_map) {
       create_alert_button = (
-        <Button style={ S('absolute r-20 t-70 z-1 bg-2196f3 w-200 h-50') } bsStyle="primary" type="button" onClick={ controller.listing_map.showShareModal.bind(this) }>
+        <Button style={ S('absolute r-20 t-70 z-1 bg-2196f3 w-200 h-50') } bsStyle="primary" type="button" onClick={ controller.listing_map.showShareTypeModal.bind(this) }>
           Create Alert
         </Button>
       )
@@ -613,9 +614,12 @@ export default class Mls extends Component {
           hideFilterForm={ controller.listing_filter.hideFilterForm }
         />
         { zoom_controls }
+        <ShareTypeModal
+          data={ data }
+        />
         <ShareAlertModal
           data={ data }
-          shareAlert={ controller.listing_share.shareAlert }
+          shareAlert={ controller.alert_share.shareAlert }
           handleFilterChange={ controller.share_modal.handleFilterChange }
           handleEmailChange={ controller.share_modal.handleEmailChange }
           handlePhoneNumberChange={ controller.share_modal.handlePhoneNumberChange }

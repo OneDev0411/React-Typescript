@@ -494,7 +494,7 @@ export default class ListingViewerMobile extends Component {
         { main_content }
         <ShareListingModal
           data={ data }
-          shareAlert={ controller.listing_share.shareAlert }
+          shareAlert={ controller.alert_share.shareAlert }
           handleFilterChange={ controller.share_modal.handleFilterChange }
           handleEmailChange={ controller.share_modal.handleEmailChange }
           handlePhoneNumberChange={ controller.share_modal.handlePhoneNumberChange }
