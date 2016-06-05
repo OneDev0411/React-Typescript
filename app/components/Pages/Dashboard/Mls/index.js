@@ -577,6 +577,11 @@ export default class Mls extends Component {
         )
       }
     }
+    const share_type_modal_area = (
+      <ShareTypeModal
+        data={ data }
+      />
+    )
     let main_content = (
       <main>
         { nav_area }
@@ -614,9 +619,7 @@ export default class Mls extends Component {
           hideFilterForm={ controller.listing_filter.hideFilterForm }
         />
         { zoom_controls }
-        <ShareTypeModal
-          data={ data }
-        />
+        { listing_map && listing_map.show_share_type_modal ? share_type_modal_area : '' }
         <ShareAlertModal
           data={ data }
           shareAlert={ controller.alert_share.shareAlert }

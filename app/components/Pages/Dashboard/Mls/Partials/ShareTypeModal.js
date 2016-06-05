@@ -4,11 +4,8 @@ import S from 'shorti'
 import { Button, Modal, Input } from 'react-bootstrap'
 import controller from '../../controller'
 export default class ShareTypeModal extends Component {
-  onShow() {
-    console.log('show')
-    setTimeout(() => {
-      this.refs.title.refs.input.focus()
-    }, 300)
+  componentDidMount() {
+    this.refs.title.refs.input.focus()
   }
   saveForMe() {
     const title = this.refs.title.refs.input.value.trim()
@@ -38,7 +35,7 @@ export default class ShareTypeModal extends Component {
       )
     }
     return (
-      <Modal dialogClassName="modal-share-type" show={ listing_map && listing_map.show_share_type_modal } onShow={ this.onShow.bind(this) } onHide={ controller.listing_map.hideModal }>
+      <Modal dialogClassName="modal-share-type" show={ listing_map && listing_map.show_share_type_modal } onHide={ controller.listing_map.hideModal }>
         <Modal.Body style={ S('p-0') }>
           <div className="din" style={ S('bg-52ABF1 h-200 font-32 color-fff text-center') }>
             <div style={ S('pt-20 pb-10 text-center w-100p') }>
@@ -48,7 +45,7 @@ export default class ShareTypeModal extends Component {
             than your local MLS®
           </div>
           <div style={ S('p-15') }>
-            <div>
+            <div style={ S('mb-10') }>
               Name Your Alert
             </div>
             <div>
