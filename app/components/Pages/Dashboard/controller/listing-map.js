@@ -139,6 +139,7 @@ const controller = {
   hideModal() {
     delete AppStore.data.listing_map.saving_alert
     delete AppStore.data.show_share_listing_modal
+    delete AppStore.data.show_alert_saved_modal
     if (AppStore.data.listing_map) {
       delete AppStore.data.listing_map.show_share_modal
       delete AppStore.data.listing_map.show_share_type_modal
@@ -196,23 +197,6 @@ const controller = {
     delete AppStore.data.listing_map.has_search_input
     AppStore.emitChange()
     controller.removeDrawing()
-  },
-  showShareTypeModal() {
-    delete AppStore.data.share_modal
-    delete AppStore.data.error
-    const total = AppStore.data.listing_map.listings_info.total
-    AppStore.data.listing_map.show_share_type_modal = true
-    if (total >= 150) {
-      AppStore.data.share_modal = {
-        error: true
-      }
-    }
-    AppStore.emitChange()
-  },
-  showShareModal() {
-    delete AppStore.data.listing_map.show_share_type_modal
-    AppStore.data.listing_map.show_share_modal = true
-    AppStore.emitChange()
   },
   getValertsInArea(points) {
     const data = AppStore.data

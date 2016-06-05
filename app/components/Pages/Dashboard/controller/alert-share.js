@@ -1,7 +1,27 @@
-// controller/listing-share.js
+// controller/alert-share.js
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 const controller = {
+  showShareTypeModal() {
+    delete AppStore.data.share_modal
+    delete AppStore.data.error
+    const total = AppStore.data.listing_map.listings_info.total
+    AppStore.data.listing_map.show_share_type_modal = true
+    if (total >= 150) {
+      AppStore.data.share_modal = {
+        error: true
+      }
+    }
+    AppStore.emitChange()
+  },
+  showShareModal(title) {
+    delete AppStore.data.listing_map.show_share_type_modal
+    AppStore.data.listing_map.show_share_modal = true
+    if (!AppStore.data.share_modal)
+      AppStore.data.share_modal = {}
+    AppStore.data.share_modal.title = title
+    AppStore.emitChange()
+  },
   shareAlert(title) {
     delete AppStore.data.error
     AppStore.emitChange()
@@ -76,6 +96,10 @@ const controller = {
       latitude: center.lat,
       longitude: center.lng
     }
+    if (!AppStore.data.share_modal)
+      AppStore.data.share_modal = {}
+    AppStore.data.share_modal.saving = true
+    AppStore.emitChange()
     ListingDispatcher.dispatch({
       action: 'share-alert',
       user,
@@ -85,6 +109,12 @@ const controller = {
       phone_numbers: phone_numbers_added,
       alert
     })
+  },
+  handleAlertTitleChange(title) {
+    if (!AppStore.data.share_modal)
+      AppStore.data.share_modal = {}
+    AppStore.data.share_modal.title = title
+    AppStore.emitChange()
   }
 }
 export default controller

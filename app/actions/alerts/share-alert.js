@@ -19,6 +19,7 @@ export default (user, rooms, contacts, emails, phone_numbers, alert) => {
       delete AppStore.data.listing_map.saving_alert
       delete AppStore.data.listing_map.show_share_modal
       delete AppStore.data.share_list
+      AppStore.data.show_alert_saved_modal = true
       AppStore.emitChange()
     })
   }
@@ -33,6 +34,7 @@ export default (user, rooms, contacts, emails, phone_numbers, alert) => {
       delete AppStore.data.listing_map.saving_alert
       delete AppStore.data.listing_map.show_share_modal
       delete AppStore.data.share_list
+      AppStore.data.show_alert_saved_modal = true
       AppStore.emitChange()
     })
   }
@@ -54,6 +56,7 @@ export default (user, rooms, contacts, emails, phone_numbers, alert) => {
       delete AppStore.data.listing_map.show_share_modal
       delete AppStore.data.listing_map.show_share_type_modal
       delete AppStore.data.share_list
+      AppStore.data.show_alert_saved_modal = true
       AppStore.emitChange()
     })
   }
@@ -117,6 +120,7 @@ export default (user, rooms, contacts, emails, phone_numbers, alert) => {
       delete AppStore.data.listing_map.saving_alert
       delete AppStore.data.listing_map.show_share_modal
       delete AppStore.data.share_list
+      AppStore.data.show_alert_saved_modal = true
       AppStore.emitChange()
     })
   }

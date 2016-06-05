@@ -278,7 +278,7 @@ export default class Mls extends Component {
     let create_alert_button
     if (data.show_listing_map && !data.show_alerts_map) {
       create_alert_button = (
-        <Button style={ S('absolute r-20 t-70 z-1 bg-2196f3 w-200 h-50') } bsStyle="primary" type="button" onClick={ controller.listing_map.showShareTypeModal.bind(this) }>
+        <Button style={ S('absolute r-20 t-70 z-1 bg-2196f3 w-200 h-50') } bsStyle="primary" type="button" onClick={ controller.alert_share.showShareTypeModal.bind(this) }>
           Create Alert
         </Button>
       )
@@ -627,6 +627,14 @@ export default class Mls extends Component {
           handleAddPhoneNumber={ controller.share_modal.handleAddPhoneNumber }
           handleRemoveShareItem={ controller.share_modal.handleRemoveShareItem }
         />
+        <Modal dialogClassName="modal-alert-saved" show={ data.show_alert_saved_modal } onHide={ controller.listing_map.hideModal }>
+          <div className="din" style={ S('text-center font-60 color-fff') }>
+            <div style={ S('bg-2196f3 w-165 h-165 br-100 center-block pt-35') }>
+              <img style={ S('h-70 ml-5') } src="/images/dashboard/mls/alert-saved.png" />
+            </div>
+            <span style={ { textShadow: '0 2px 6px rgba(0, 0, 0, 0.2)' } }>Alert Saved</span>
+          </div>
+        </Modal>
       </main>
     )
     if (!user)

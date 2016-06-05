@@ -19,6 +19,10 @@ export default class ShareAlertModal extends Component {
     const title = this.refs.alert_title.value
     this.props.shareAlert(title)
   }
+  handleAlertTitleChange(e) {
+    const title = e.target.value
+    controller.alert_share.handleAlertTitleChange(title)
+  }
   handleFilterChange(e) {
     const filter_text = e.target.value
     this.props.handleFilterChange(filter_text)
@@ -305,7 +309,7 @@ export default class ShareAlertModal extends Component {
               <img style={ S('w-100 h-100 br-3') } src="/images/dashboard/mls/map-tile.jpg" />
             </div>
             <div style={ S('pull-left w-82p') }>
-              <input style={ filter_text_style } ref="alert_title" type="text" placeholder="Name this alert..." />
+              <input style={ filter_text_style } ref="alert_title" type="text" placeholder="Name this alert..." value={ share_modal ? share_modal.title : '' } onChange={ this.handleAlertTitleChange.bind(this) } />
               <div style={ S('color-929292 font-20') }>{ listing_map && listing_map.listings ? listing_map.listings.length : '' } Results</div>
               <div style={ S('color-929292 font-16') }>We’ll keep you updated with any new listings.</div>
             </div>
