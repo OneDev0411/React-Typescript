@@ -28,7 +28,7 @@ describe('Testing Room model', () => {
       done()
     })
   })
-  // Create room
+  Create room
   it('Room.create should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
     const params = {
       title: 'test title',
@@ -59,7 +59,7 @@ describe('Testing Room model', () => {
     })
   })
 
-  // Add user
+  // // Add user
   // it('Room.addUser should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
   //   const params = {
   //     room_id: room_id,
@@ -73,7 +73,7 @@ describe('Testing Room model', () => {
   //   })
   // })
 
-  // Add user
+  Add rec
   it('Room.createRec should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
     const params = {
       mls_number: '13315964',
@@ -83,6 +83,18 @@ describe('Testing Room model', () => {
     }
     Room.createRec(params, (err, response) => {
       console.log(err)
+      expect(response.status).to.equal('success')
+      done()
+    })
+  })
+  // Get actives
+  it('Room.getActives should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
+    const params = {
+      room_id: test.room_id,
+      access_token,
+      api_host: test.api_host
+    }
+    Room.getActives(params, (err, response) => {
       expect(response.status).to.equal('success')
       done()
     })

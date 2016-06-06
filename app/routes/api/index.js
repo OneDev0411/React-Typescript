@@ -34,6 +34,7 @@ module.exports = (app, config) => {
   require('./rooms/notifications')(app, config)
   require('./rooms/acknowledge-room-notifications')(app, config)
   require('./rooms/create-rec')(app, config)
+  require('./rooms/get-actives')(app, config)
   // Transactions
   require('./transactions/create-transaction')(app, config)
   require('./transactions/get-transactions')(app, config)

@@ -556,7 +556,7 @@ export default class Mls extends Component {
             <div style={ S('relative ml-15 mt-10 color-fff z-1 font-15') }>
               { current_alert.title } ({ alert_options })
               <div style={ S('pull-right pointer') } onClick={ controller.alert_map.showAlertViewer.bind(this) }>
-                <span style={ S('color-98caf1 mr-15') }>View new listings</span>
+                <span style={ S('color-98caf1 mr-15') }>View new listings ({current_alert.actives.length})</span>
                 <span style={ S('mr-15 relative t-2') }><i style={ S('color-98caf1') } className="fa fa-chevron-right"></i></span>
               </div>
             </div>

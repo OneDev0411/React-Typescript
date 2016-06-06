@@ -87,7 +87,6 @@ export default {
       return callback(false, response)
     })
   },
-
   getPrevious: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
@@ -279,6 +278,26 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
+    .then(response => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          response
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then(response => {
+      return callback(false, response)
+    })
+  },
+  getActives: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const room_id = params.room_id
+    const endpoint = api_host + '/api/get-actives?room_id=' + room_id + '&access_token=' + params.access_token
+    fetch(endpoint)
     .then(response => {
       if (response.status >= 400) {
         const error = {

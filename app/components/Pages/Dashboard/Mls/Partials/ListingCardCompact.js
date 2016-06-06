@@ -1,4 +1,4 @@
-// Partials/ListingCard.js
+// Partials/ListingCardCompact.js
 import React, { Component } from 'react'
 import S from 'shorti'
 import controller from '../../controller'
@@ -10,7 +10,7 @@ export default class ListingCard extends Component {
   }
   render() {
     const listing = this.props.listing
-    const property = listing.property
+    const property = listing.compact_property
     const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
     const listing_card_style = {
       ...S(`w-375 h-270 mr-20 mb-20 pull-left br-3 pointer relative`),
@@ -33,7 +33,7 @@ export default class ListingCard extends Component {
           <div style={ overlay_style }></div>
           <div style={ S('absolute b-0 p-10 color-fff') }>
             <div style={ S('font-24 fw-500') }>${ helpers.numberWithCommas(listing.price) }</div>
-            <div style={ { opacity: '.9' } }>{ listing_util.addressTitle(property.address) }</div>
+            <div style={ { opacity: '.9' } }>{ listing_util.addressTitle(listing.address) }</div>
             <div style={ { opacity: '.9' } }>
               <span>{ property.bedroom_count } Beds</span>
               &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
