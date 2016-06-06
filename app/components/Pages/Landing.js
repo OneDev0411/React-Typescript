@@ -5,7 +5,6 @@ import S from 'shorti'
 import validator from 'validator'
 import { randomString } from '../../utils/helpers'
 import emojify from 'emojify.js'
-import config from '../../../config/public'
 emojify.setConfig({
   img_dir: '/images/emoji'
 })
@@ -27,19 +26,6 @@ export default class Landing extends Component {
         action: 'landing-text-animation'
       })
     }, 3000)
-    const branch = require('branch-sdk')
-    branch.init(config.branch.key)
-    branch.banner({
-      icon: '/images/logo-big.png',
-      title: 'Download the Rechat iOS app',
-      description: 'For a better mobile experience',
-      showDesktop: false,
-      showAndroid: false,
-      forgetHide: false,
-      downloadAppButtonText: 'GET',
-      openAppButtonText: 'OPEN',
-      customCSS: '#branch-banner .button { color:  #3388ff; border-color: #3388ff; }'
-    }, {})
   }
   getContent() {
     AppDispatcher.dispatch({

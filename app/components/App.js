@@ -55,6 +55,7 @@ export default class App extends Component {
     })
     // Check for mobile
     this.checkForMobile()
+    this.triggerBranchBanner()
   }
 
   componentDidUpdate() {
@@ -70,6 +71,22 @@ export default class App extends Component {
   // Remove change listeners from stores
   componentWillUnmount() {
     AppStore.removeChangeListener(this._onChange.bind(this))
+  }
+
+  triggerBranchBanner() {
+    const branch = require('branch-sdk')
+    branch.init(config.branch.key)
+    branch.banner({
+      icon: '/images/logo-big.png',
+      title: 'Download the Rechat iOS app',
+      description: 'For a better mobile experience',
+      showDesktop: false,
+      showAndroid: false,
+      forgetHide: false,
+      downloadAppButtonText: 'GET',
+      openAppButtonText: 'OPEN',
+      customCSS: '#branch-banner .button { color:  #3388ff; border-color: #3388ff; }'
+    }, {})
   }
 
   checkForMobile() {
