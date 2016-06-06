@@ -39,7 +39,7 @@ export default class ShareTypeModal extends Component {
         <Modal.Body style={ S('p-0') }>
           <div className="din" style={ S('bg-52ABF1 h-200 font-32 color-fff text-center') }>
             <div style={ S('pt-20 pb-10 text-center w-100p') }>
-              <img style={ S('w-60') } src="/images/dashboard/mls/bell.png"/>
+              <img style={ S('w-60') } src="/images/dashboard/mls/alert-bell.svg"/>
             </div>
             Get new listings faster<br />
             than your local MLS®

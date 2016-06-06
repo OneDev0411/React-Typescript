@@ -556,7 +556,7 @@ export default class Mls extends Component {
             <div style={ S('relative ml-15 mt-10 color-fff z-1 font-15') }>
               { current_alert.title } ({ alert_options })
               <div style={ S('pull-right pointer') } onClick={ controller.alert_map.showAlertViewer.bind(this) }>
-                <span style={ S('color-98caf1 mr-15') }>View new listings ({current_alert.actives.length})</span>
+                <span style={ S('color-98caf1 mr-15') }>{ current_alert.actives ? `View new listings (${current_alert.actives.length})` : ''})</span>
                 <span style={ S('mr-15 relative t-2') }><i style={ S('color-98caf1') } className="fa fa-chevron-right"></i></span>
               </div>
             </div>
@@ -633,7 +633,7 @@ export default class Mls extends Component {
         <Modal dialogClassName="modal-alert-saved" show={ data.show_alert_saved_modal } onHide={ controller.listing_map.hideModal }>
           <div className="din" style={ S('text-center font-60 color-fff') }>
             <div style={ S('bg-2196f3 w-165 h-165 br-100 center-block pt-35') }>
-              <img style={ S('h-70 ml-5') } src="/images/dashboard/mls/alert-saved.png" />
+              <img style={ S('h-70 ml-5') } src="/images/dashboard/mls/alert-bell-saved.svg" />
             </div>
             <span style={ { textShadow: '0 2px 6px rgba(0, 0, 0, 0.2)' } }>Alert Saved</span>
           </div>
