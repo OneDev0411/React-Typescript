@@ -4,6 +4,7 @@ import { Button, DropdownButton, MenuItem } from 'react-bootstrap'
 import S from 'shorti'
 import helpers from '../../../../../utils/helpers'
 import listing_util from '../../../../../utils/listing'
+import FavoriteHeart from '../../Partials/FavoriteHeart'
 export default class ListingPanel extends Component {
   getSortingTitle() {
     const data = this.props.data
@@ -87,8 +88,13 @@ export default class ListingPanel extends Component {
       if (listing.close_price && user.user_type === 'Agent')
         price = listing.close_price
       return (
-        <div onMouseOut={ this.props.removeActiveListing.bind(this) } onMouseOver={ this.props.setActiveListing.bind(this, listing) } key={ 'panel-listing-' + listing.id } onClick={ this.props.showListingViewer.bind(this, listing) } style={ S('pointer w-415 h-350 pb-10 pl-10 bg-fff pull-left') }>
-          <div style={ S('relative') }>
+        <div onMouseOut={ this.props.removeActiveListing.bind(this) } onMouseOver={ this.props.setActiveListing.bind(this, listing) } key={ 'panel-listing-' + listing.id } style={ S('relative pointer w-415 h-350 pb-10 pl-10 bg-fff pull-left') }>
+          <div style={ S('absolute r-0') }>
+            <FavoriteHeart
+              listing={ listing }
+            />
+          </div>
+          <div onClick={ this.props.showListingViewer.bind(this, listing) } style={ S('relative') }>
             <div style={ image_overlay } />
             { listing_image }
             <div style={ S('absolute color-fff l-15 b-15') }>
@@ -107,7 +113,7 @@ export default class ListingPanel extends Component {
               </div>
             </div>
           </div>
-          <div style={ { borderRight: '1px solid #e7e8e9', borderBottom: '1px solid #e7e8e9', borderLeft: '1px solid #e7e8e9', ...S('p-10 pt-14 w-100p') } }>
+          <div onClick={ this.props.showListingViewer.bind(this, listing) } style={ { borderRight: '1px solid #e7e8e9', borderBottom: '1px solid #e7e8e9', borderLeft: '1px solid #e7e8e9', ...S('p-10 pt-14 w-100p') } }>
             <div>
               <div className="pull-left" style={ S('w-10 h-10 br-100 mr-8 bg-' + status_color) }></div>
               <div className="pull-left" style={ S('mt-4n mr-10') }>
