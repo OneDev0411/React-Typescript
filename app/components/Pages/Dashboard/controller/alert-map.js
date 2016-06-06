@@ -73,6 +73,7 @@ const controller = {
       strokeColor: '#3388ff',
       strokeWeight: 10
     })
+    window.poly_alerts = window.poly
   },
   showAlertViewer() {
     AppStore.data.show_alert_viewer = true

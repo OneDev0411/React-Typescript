@@ -1,6 +1,6 @@
 // Partials/AlertList.js
 import React, { Component } from 'react'
-import { Input } from 'react-bootstrap'
+// import { Input } from 'react-bootstrap'
 import S from 'shorti'
 import controller from '../../controller'
 export default class AlertList extends Component {
@@ -10,7 +10,7 @@ export default class AlertList extends Component {
     const current_alert = data.current_alert
     let alerts_list_area
     const alert_list_style = {
-      ...S(`m-0 p-0 h-${window.innerHeight - 135}`),
+      ...S(`m-0 p-0 h-${window.innerHeight - 66}`),
       overflowY: 'scroll'
     }
     if (alerts) {

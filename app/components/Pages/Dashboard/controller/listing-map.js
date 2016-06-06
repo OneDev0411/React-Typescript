@@ -223,6 +223,7 @@ const controller = {
       strokeColor: '#3388ff',
       strokeWeight: 10
     })
+    window.poly_search = window.poly
   },
   getPolygonBounds(google, polygon) {
     const polygon_bounds = polygon.getPath()

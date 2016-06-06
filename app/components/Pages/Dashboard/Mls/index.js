@@ -34,7 +34,7 @@ export default class Mls extends Component {
     if (!user)
       return
     // Show map first
-    AppStore.data.show_listing_map = true
+    AppStore.data.show_search_map = true
     AppStore.data.user = user
     AppStore.emitChange()
     const listing_map = data.listing_map
@@ -85,6 +85,8 @@ export default class Mls extends Component {
     }
   }
   componentDidMount() {
+    AppStore.data.show_search_map = true
+    AppStore.emitChange()
     this.checkForMobile()
   }
   componentWillUnmount() {
@@ -120,18 +122,32 @@ export default class Mls extends Component {
   handleTabClick(type) {
     switch (type) {
       case 'map':
+        AppStore.data.show_search_map = true
         delete AppStore.data.listing_map.auto_move
         delete AppStore.data.show_alerts_map
         delete AppStore.data.show_favorites_map
-        AppStore.data.show_listing_map = true
         controller.listing_filter.setFilterOptions.bind(this)
         if (window.poly) {
           window.poly.setMap(null)
           delete window.poly
         }
+        if (window.poly_search) {
+          window.poly = window.poly_search
+          const google = window.google
+          const map = window.map
+          const path = window.poly.getPath()
+          window.poly = new google.maps.Polygon({
+            clickable: false,
+            map,
+            path,
+            strokeColor: '#3388ff',
+            strokeWeight: 10
+          })
+        }
         break
       case 'alerts':
         AppStore.data.show_alerts_map = true
+        delete AppStore.data.show_search_map
         delete AppStore.data.listing_map.auto_move
         delete AppStore.data.show_filter_form
         delete AppStore.data.show_favorites_map
@@ -140,11 +156,24 @@ export default class Mls extends Component {
           window.poly.setMap(null)
           delete window.poly
         }
+        if (window.poly_alerts) {
+          window.poly = window.poly_alerts
+          const google = window.google
+          const map = window.map
+          const path = window.poly.getPath()
+          window.poly = new google.maps.Polygon({
+            clickable: false,
+            map,
+            path,
+            strokeColor: '#3388ff',
+            strokeWeight: 10
+          })
+        }
         break
       case 'favorites':
-        delete AppStore.data.show_listing_map
-        delete AppStore.data.show_alerts_map
         AppStore.data.show_favorites_map = true
+        delete AppStore.data.show_search_map
+        delete AppStore.data.show_alerts_map
         if (window.poly) {
           window.poly.setMap(null)
           delete window.poly
@@ -276,7 +305,7 @@ export default class Mls extends Component {
     )
     let results_actions
     let create_alert_button
-    if (data.show_listing_map && !data.show_alerts_map) {
+    if (data.show_search_map && !data.show_alerts_map) {
       create_alert_button = (
         <Button style={ S('absolute r-20 t-70 z-1 bg-2196f3 w-200 h-50') } bsStyle="primary" type="button" onClick={ controller.alert_share.showShareTypeModal.bind(this) }>
           Create Alert
@@ -370,8 +399,8 @@ export default class Mls extends Component {
       <nav style={ toolbar_style }>
         <ul style={ S('relative l-30n t-5') }>
           <li style={ S('relative pull-left font-28 mr-60') }>
-            <span onClick={ this.handleTabClick.bind(this, 'map') } style={ S('pointer ' + (data.show_listing_map ? 'color-263445' : 'color-8696a4')) }>Search</span>
-            { data.show_listing_map && !data.show_alerts_map ? underline : '' }
+            <span onClick={ this.handleTabClick.bind(this, 'map') } style={ S('pointer ' + (data.show_search_map ? 'color-263445' : 'color-8696a4')) }>Search</span>
+            { data.show_search_map && !data.show_alerts_map ? underline : '' }
           </li>
           <li style={ S('relative pull-left color-263445 font-28 mr-60') }>
             <span onClick={ this.handleTabClick.bind(this, 'alerts') } style={ S('pointer ' + (data.show_alerts_map ? 'color-263445' : 'color-8696a4')) }>Alerts</span>
@@ -481,7 +510,7 @@ export default class Mls extends Component {
     if (data.is_mobile)
       map_wrapper_style = S('fixed w-100p h-100p')
     let content_area
-    if (data.show_listing_map) {
+    if (data.show_search_map) {
       content_area = (
         <GoogleMap
           key={ 'map-' + map_id }
@@ -549,14 +578,14 @@ export default class Mls extends Component {
       let alert_header_area
       if (data.show_alerts_map && data.current_alert) {
         const current_alert = data.current_alert
-        const alert_options = `${current_alert.property_subtypes.toString().replace(new RegExp('RES-', 'g'), ' ').trim()}, $${helpers.numberWithCommas(current_alert.minimum_price)}-$${helpers.numberWithCommas(current_alert.maximum_price)}, ${current_alert.minimum_bedrooms} Beds ${current_alert.minimum_bathrooms} Baths`
+        const alert_options = `${(current_alert.property_subtypes.length < 5) ? current_alert.property_subtypes.toString().replace(new RegExp('RES-', 'g'), ' ').trim() : 'All types'}, $${helpers.numberWithCommas(current_alert.minimum_price)}-$${helpers.numberWithCommas(current_alert.maximum_price)}, Min ${current_alert.minimum_bedrooms} Beds ${current_alert.minimum_bathrooms} Baths`
         alert_header_area = (
           <div style={ alert_header_style }>
             <div style={ alert_header_bg }></div>
             <div style={ S('relative ml-15 mt-10 color-fff z-1 font-15') }>
               { current_alert.title } ({ alert_options })
               <div style={ S('pull-right pointer') } onClick={ controller.alert_map.showAlertViewer.bind(this) }>
-                <span style={ S('color-98caf1 mr-15') }>{ current_alert.actives ? `View new listings (${current_alert.actives.length})` : ''})</span>
+                <span style={ S('color-98caf1 mr-15') }>{ current_alert.actives ? `View new listings (${current_alert.actives.length})` : ''}</span>
                 <span style={ S('mr-15 relative t-2') }><i style={ S('color-98caf1') } className="fa fa-chevron-right"></i></span>
               </div>
             </div>

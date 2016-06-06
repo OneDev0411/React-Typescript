@@ -264,22 +264,22 @@ export default class MessagesList extends Component {
       height: window.innerHeight - 115,
       opacity: messages_opacity
     }
-    let fixed_heading_date_area
-    if (data.heading_date) {
-      const fixed_date_obj = helpers.friendlyDate(data.heading_date)
-      const fixed_heading_date = `${fixed_date_obj.day}, ${fixed_date_obj.month} ${fixed_date_obj.date}, ${fixed_date_obj.year}`
-      let heading_top = 't-60'
-      if (data.is_mobile)
-        heading_top = 't-55'
-      fixed_heading_date_area = (
-        <div className="heading-fixed" style={ S('absolute z-3 pl-20 pr-5 pb-0 mb-0 h-20 bg-fff ' + heading_top + ' w-' + (data.is_mobile ? window.innerWidth : window.innerWidth - 400)) }>
-          <div className="message-heading" style={ { ...heading_style, ...S('mr-0') } }>
-            <div style={ S('absolute h-2 bg-e8e8e8 t-12 z-0 w-' + (data.is_mobile ? window.innerWidth - 43 : window.innerWidth - 434)) }></div>
-            <span style={ S('pl-10 l-5n pr-10 pb-5 br-3 bg-fff z-1 relative') }>{ fixed_heading_date }</span>
-          </div>
-        </div>
-      )
-    }
+    // let fixed_heading_date_area
+    // if (data.heading_date) {
+    //   const fixed_date_obj = helpers.friendlyDate(data.heading_date)
+    //   const fixed_heading_date = `${fixed_date_obj.day}, ${fixed_date_obj.month} ${fixed_date_obj.date}, ${fixed_date_obj.year}`
+    //   let heading_top = 't-60'
+    //   if (data.is_mobile)
+    //     heading_top = 't-55'
+    //   fixed_heading_date_area = (
+    //     <div className="heading-fixed" style={ S('absolute z-3 pl-20 pr-5 pb-0 mb-0 h-20 bg-fff ' + heading_top + ' w-' + (data.is_mobile ? window.innerWidth : window.innerWidth - 400)) }>
+    //       <div className="message-heading" style={ { ...heading_style, ...S('mr-0') } }>
+    //         <div style={ S('absolute h-2 bg-e8e8e8 t-12 z-0 w-' + (data.is_mobile ? window.innerWidth - 43 : window.innerWidth - 434)) }></div>
+    //         <span style={ S('pl-10 l-5n pr-10 pb-5 br-3 bg-fff z-1 relative') }>{ fixed_heading_date }</span>
+    //       </div>
+    //     </div>
+    //   )
+    // }
     const btn_invite_style = S('w-40 h-40 pointer absolute p-0 t-10 r-20 br-100 bc-ddd bw-1 solid')
     const btn_settings_style = S('w-40 h-40 pointer absolute p-0 t-10 r-70 br-100 bc-ddd bw-1 solid color-929292')
     let alert_modal_area = (
