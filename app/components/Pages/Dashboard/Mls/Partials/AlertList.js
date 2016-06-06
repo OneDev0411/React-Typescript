@@ -51,10 +51,14 @@ export default class AlertList extends Component {
     const drawer_style = S(`bg-fff w-350 h-${window.innerHeight - 66} absolute z-1 t-66 l-0 border-right-1-solid-d3d3d3`)
     return (
       <div className="alert-list" style={ drawer_style }>
-        <div style={ S('p-10 pb-0') }>
-          <img style={ S('absolute r-22 t-22 w-20') } src="/images/dashboard/mls/search.svg" />
-          <Input type="text" bsSize="large" placeholder="Search Alerts" />
-        </div>
+        {
+          /*
+          <div style={ S('p-10 pb-0') }>
+            <img style={ S('absolute r-22 t-22 w-20') } src="/images/dashboard/mls/search.svg" />
+            <Input type="text" bsSize="large" placeholder="Search Alerts" />
+          </div>
+          */
+        }
         { alerts_list_area }
       </div>
     )

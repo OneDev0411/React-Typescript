@@ -59,7 +59,7 @@ export default class ListingPanel extends Component {
       listings = data.alerts_map.listings
     if (data.show_favorites_map && user && user.favorite_listings)
       listings = user.favorite_listings
-    const listing_panel_cards = listings.map(listing => {
+    const listing_panel_cards = listings.map((listing, i) => {
       const status_color = listing_util.getStatusColor(listing.status)
       let property = listing.compact_property
       let address = listing.address
@@ -88,7 +88,7 @@ export default class ListingPanel extends Component {
       if (listing.close_price && user.user_type === 'Agent')
         price = listing.close_price
       return (
-        <div onMouseOut={ this.props.removeActiveListing.bind(this) } onMouseOver={ this.props.setActiveListing.bind(this, listing) } key={ 'panel-listing-' + listing.id } style={ S('relative pointer w-415 h-350 pb-10 pl-10 bg-fff pull-left') }>
+        <div onMouseOut={ this.props.removeActiveListing.bind(this) } onMouseOver={ this.props.setActiveListing.bind(this, listing) } key={ 'panel-listing-grid-' + listing.id + '-' + i } style={ S('relative pointer w-415 h-350 pb-10 pl-10 bg-fff pull-left') }>
           <div style={ S('absolute r-0') }>
             <FavoriteHeart
               listing={ listing }
@@ -129,7 +129,7 @@ export default class ListingPanel extends Component {
       )
     })
     // Listing list
-    const listing_panel_list = listings.map(listing => {
+    const listing_panel_list = listings.map((listing, i) => {
       const status_color = listing_util.getStatusColor(listing.status)
       let property = listing.compact_property
       let address = listing.address
@@ -147,7 +147,7 @@ export default class ListingPanel extends Component {
         price = listing.close_price
       const price_per_square_foot = Math.floor(price / listing_util.metersToFeet(property.square_meters))
       return (
-        <div onMouseOut={ this.props.removeActiveListing.bind(this) } onMouseOver={ this.props.setActiveListing.bind(this, listing) } className="listing-panel__list-item" key={ 'panel-listing-' + listing.id } onClick={ this.props.showListingViewer.bind(this, listing) } style={ listing_style }>
+        <div onMouseOut={ this.props.removeActiveListing.bind(this) } onMouseOver={ this.props.setActiveListing.bind(this, listing) } className="listing-panel__list-item" key={ 'panel-listing-list-' + listing.id + '-' + i} onClick={ this.props.showListingViewer.bind(this, listing) } style={ listing_style }>
           <div style={ S('pull-left') }>
             { listing_image }
           </div>
