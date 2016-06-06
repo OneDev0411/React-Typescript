@@ -24,7 +24,7 @@ export default (user, rooms, contacts, emails, phone_numbers, alert) => {
         const new_alert = res.data
         if (!AppStore.data.alerts)
           AppStore.data.alerts = []
-        AppStore.data.alerts.push(new_alert)
+        AppStore.data.alerts.unshift(new_alert)
       }
       AppStore.emitChange()
     })
@@ -45,7 +45,7 @@ export default (user, rooms, contacts, emails, phone_numbers, alert) => {
         const new_alert = res.data
         if (!AppStore.data.alerts)
           AppStore.data.alerts = []
-        AppStore.data.alerts.push(new_alert)
+        AppStore.data.alerts.unshift(new_alert)
       }
       AppStore.emitChange()
     })
@@ -63,7 +63,7 @@ export default (user, rooms, contacts, emails, phone_numbers, alert) => {
           const new_alert = res.data
           if (!AppStore.data.alerts)
             AppStore.data.alerts = []
-          AppStore.data.alerts.push(new_alert)
+          AppStore.data.alerts.unshift(new_alert)
         }
         if (room.id !== user.personal_room)
           getMessages(user, room)
@@ -135,7 +135,7 @@ export default (user, rooms, contacts, emails, phone_numbers, alert) => {
             const new_alert = res.data
             if (!AppStore.data.alerts)
               AppStore.data.alerts = []
-            AppStore.data.alerts.push(new_alert)
+            AppStore.data.alerts.unshift(new_alert)
           }
           AppStore.emitChange()
           callback()
