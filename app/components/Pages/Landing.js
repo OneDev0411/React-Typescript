@@ -38,7 +38,7 @@ export default class Landing extends Component {
       forgetHide: false,
       downloadAppButtonText: 'GET',
       openAppButtonText: 'OPEN',
-      customCSS: '#branch-banner .button { color:  #3388ff; border-color: #3388ff; }',
+      customCSS: '#branch-banner .button { color:  #3388ff; border-color: #3388ff; }'
     }, {})
   }
   getContent() {
