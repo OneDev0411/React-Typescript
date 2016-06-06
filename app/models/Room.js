@@ -311,5 +311,39 @@ export default {
     .then(response => {
       return callback(false, response)
     })
+  },
+  editFavorite: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const room_id = params.room_id
+    const rec_id = params.rec_id
+    const favorite = params.favorite
+    const endpoint = api_host + '/api/edit-favorite'
+    const request_object = {
+      room_id,
+      rec_id,
+      favorite,
+      access_token: params.access_token
+    }
+    fetch(endpoint, {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(request_object)
+    })
+    .then(response => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          response
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then(response => {
+      return callback(false, response)
+    })
   }
 }
