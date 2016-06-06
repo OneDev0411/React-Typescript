@@ -23,21 +23,22 @@ export default (user, listing, favorite) => {
         room_id: user.personal_room,
         access_token: user.access_token
       }
-      Room.editFavorite(params, (err, response) => {
-        // Success
-        if (response.status === 'success') {
-          if (!AppStore.data.user.favorite_listings)
-            AppStore.data.user.favorite_listings = []
-          if (favorite)
-            AppStore.data.user.favorite_listings.push(listing)
-          else {
-            AppStore.data.user.favorite_listings = AppStore.data.user.favorite_listings.filter(listing_loop => {
-              if (listing_loop.id !== listing.id)
-                return listing_loop
-            })
-          }
-        }
-        AppStore.emitChange()
+      Room.editFavorite(params, () => {
+        // Handled on client
+        // // Success
+        // if (response.status === 'success') {
+        //   if (!AppStore.data.user.favorite_listings)
+        //     AppStore.data.user.favorite_listings = []
+        //   if (favorite)
+        //     AppStore.data.user.favorite_listings.push(listing)
+        //   else {
+        //     AppStore.data.user.favorite_listings = AppStore.data.user.favorite_listings.filter(listing_loop => {
+        //       if (listing_loop.id !== listing.id)
+        //         return listing_loop
+        //     })
+        //   }
+        // }
+        // AppStore.emitChange()
       })
     }
   ])
