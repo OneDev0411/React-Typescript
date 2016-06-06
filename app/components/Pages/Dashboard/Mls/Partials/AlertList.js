@@ -9,9 +9,13 @@ export default class AlertList extends Component {
     const alerts = data.alerts
     const current_alert = data.current_alert
     let alerts_list_area
+    const alert_list_style = {
+      ...S(`m-0 p-0 h-${window.innerHeight - 135}`),
+      overflowY: 'scroll'
+    }
     if (alerts) {
       alerts_list_area = (
-        <ul style={ S('m-0 p-0') }>
+        <ul style={ alert_list_style }>
           {
             alerts.map(alert => {
               const users = alert.users

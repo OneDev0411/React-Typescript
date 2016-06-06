@@ -15,11 +15,17 @@ export default (user, rooms, contacts, emails, phone_numbers, alert) => {
       alert,
       emails
     }
-    Alert.create(params, () => {
+    Alert.create(params, (err, res) => {
       delete AppStore.data.listing_map.saving_alert
       delete AppStore.data.listing_map.show_share_modal
       delete AppStore.data.share_list
       AppStore.data.show_alert_saved_modal = true
+      if (res.status === 'success') {
+        const new_alert = res.data
+        if (!AppStore.data.alerts)
+          AppStore.data.alerts = []
+        AppStore.data.alerts.push(new_alert)
+      }
       AppStore.emitChange()
     })
   }
@@ -30,11 +36,17 @@ export default (user, rooms, contacts, emails, phone_numbers, alert) => {
       alert,
       phone_numbers
     }
-    Alert.create(params, () => {
+    Alert.create(params, (err, res) => {
       delete AppStore.data.listing_map.saving_alert
       delete AppStore.data.listing_map.show_share_modal
       delete AppStore.data.share_list
       AppStore.data.show_alert_saved_modal = true
+      if (res.status === 'success') {
+        const new_alert = res.data
+        if (!AppStore.data.alerts)
+          AppStore.data.alerts = []
+        AppStore.data.alerts.push(new_alert)
+      }
       AppStore.emitChange()
     })
   }
@@ -46,7 +58,13 @@ export default (user, rooms, contacts, emails, phone_numbers, alert) => {
         access_token: user.access_token,
         alert
       }
-      Alert.createRoomAlert(params, () => {
+      Alert.createRoomAlert(params, (err, res) => {
+        if (res.status === 'success') {
+          const new_alert = res.data
+          if (!AppStore.data.alerts)
+            AppStore.data.alerts = []
+          AppStore.data.alerts.push(new_alert)
+        }
         if (room.id !== user.personal_room)
           getMessages(user, room)
         callback()
@@ -112,7 +130,14 @@ export default (user, rooms, contacts, emails, phone_numbers, alert) => {
           access_token: user.access_token,
           alert
         }
-        Alert.createRoomAlert(params, () => {
+        Alert.createRoomAlert(params, (err, res) => {
+          if (res.status === 'succes') {
+            const new_alert = res.data
+            if (!AppStore.data.alerts)
+              AppStore.data.alerts = []
+            AppStore.data.alerts.push(new_alert)
+          }
+          AppStore.emitChange()
           callback()
         })
       }
