@@ -1,5 +1,6 @@
 // controller/alert-viewer.js
 import AppStore from '../../../../stores/AppStore'
+import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import _ from 'lodash'
 const controller = {
   isFavorited(listing_id) {
@@ -10,6 +11,10 @@ const controller = {
     return false
   },
   handleFavoriteAction(listing) {
+    const data = AppStore.data
+    const user = data.user
+    // Do instant heart
+    let favorite = true
     if (!AppStore.data.user.favorite_listings)
       AppStore.data.user.favorite_listings = []
     if (controller.isFavorited(listing.id)) {
@@ -17,9 +22,17 @@ const controller = {
         if (listing_loop.id !== listing.id)
           return listing
       })
+      favorite = false
     } else
       AppStore.data.user.favorite_listings.push(listing)
     AppStore.emitChange()
+    // Handle DB later
+    ListingDispatcher.dispatch({
+      action: 'edit-favorite',
+      user,
+      listing,
+      favorite
+    })
   }
 }
 export default controller

@@ -12,6 +12,7 @@ import shareAlert from '../actions/alerts/share-alert'
 import getAlertRoom from '../actions/alerts/get-alert-room'
 import getAlerts from '../actions/alerts/get-alerts'
 import shareListing from '../actions/listings/share-listing'
+import editFavorite from '../actions/rooms/edit-favorite'
 
 const ListingDispatcher = new Dispatcher()
 
@@ -58,6 +59,10 @@ ListingDispatcher.register(payload => {
 
     case 'share-listing':
       shareListing(payload.user, payload.mls_number, payload.message, payload.rooms, payload.users, payload.emails, payload.phone_numbers, payload.notification)
+      break
+
+    case 'edit-favorite':
+      editFavorite(payload.user, payload.listing, payload.favorite)
       break
 
     default:

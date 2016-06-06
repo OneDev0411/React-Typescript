@@ -225,10 +225,11 @@ export default class MessageItem extends Component {
               { time_created.month } { time_created.date }, { time_created.time_friendly }
             </span>
             <div>
-              <span style={ S('color-b0b0b0 fw-600 font-16') }>Shared a Home:</span>&nbsp;
+              <span style={ S('color-b0b0b0 fw-600 font-16') }>{ author ? 'Shared a Home:' : ''}</span>&nbsp;
               <span onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ S('fw-600 pointer') } className="text-primary">
                 { listing_util.addressTitle(listing.property.address) }, { listing.property.address.postal_code }
               </span>
+              { !author ? ' just hit the market' : '' }
             </div>
             <div onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ card_style }>
               <div style={ S('relative t-5 l-5') }>{ listing_status_indicator }</div>

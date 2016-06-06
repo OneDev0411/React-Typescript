@@ -32,6 +32,16 @@ export default (user) => {
           const actives = res.data
           const index = _.findIndex(alerts, { id: alert.id })
           AppStore.data.alerts[index].actives = actives
+          // Add to user object
+          if (!AppStore.data.user.favorite_listings)
+            AppStore.data.user.favorite_listings = []
+          // Check for favorited
+          actives.forEach(active => {
+            const listing = active.listing
+            const favorited_by = active.favorited_by
+            if (_.find(favorited_by, { id: user.id }))
+              AppStore.data.user.favorite_listings.push(listing)
+          })
           callbackEach()
         })
       }, () => {
