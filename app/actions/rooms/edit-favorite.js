@@ -1,6 +1,5 @@
 // actions/edit-favorite.js
 import Room from '../../models/Room'
-import AppStore from '../../stores/AppStore'
 import async from 'async'
 export default (user, listing, favorite) => {
   const locals = {}

@@ -4,13 +4,19 @@ import S from 'shorti'
 import controller from '../../controller'
 import listing_util from '../../../../../utils/listing'
 import helpers from '../../../../../utils/helpers'
+import FavoriteHeart from '../../Partials/FavoriteHeart'
 export default class ListingCard extends Component {
   isFavorited(listing_id) {
     return controller.alert_viewer.isFavorited(listing_id)
   }
   render() {
     const listing = this.props.listing
-    const property = listing.property
+    let property = listing.property
+    if (!property)
+      property = listing.compact_property
+    let address = listing.address
+    if (!address)
+      address = property.address
     const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
     const listing_card_style = {
       ...S(`w-375 h-270 mr-20 mb-20 pull-left br-3 pointer relative`),
@@ -25,15 +31,14 @@ export default class ListingCard extends Component {
     }
     return (
       <div key={ 'listing-viewer-' + listing.id } style={ listing_card_style }>
-        <img
-          onClick={ controller.alert_viewer.handleFavoriteAction.bind(this, listing) } style={ S('absolute r-10 t-15 w-44 h-40 mr-5 z-2') }
-          src={`/images/dashboard/mls/heart${this.isFavorited(listing.id) ? '-red' : '-white'}.svg`}
+        <FavoriteHeart
+          listing={ listing }
         />
         <div style={ listing_image_style } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }>
           <div style={ overlay_style }></div>
           <div style={ S('absolute b-0 p-10 color-fff') }>
             <div style={ S('font-24 fw-500') }>${ helpers.numberWithCommas(listing.price) }</div>
-            <div style={ { opacity: '.9' } }>{ listing_util.addressTitle(property.address) }</div>
+            <div style={ { opacity: '.9' } }>{ listing_util.addressTitle(address) }</div>
             <div style={ { opacity: '.9' } }>
               <span>{ property.bedroom_count } Beds</span>
               &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
