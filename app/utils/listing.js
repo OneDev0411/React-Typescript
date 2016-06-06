@@ -1,3 +1,4 @@
+import helpers from './helpers'
 export default {
   getStatusColor: status => {
     let status_color = 'c3c3c3'
@@ -42,5 +43,8 @@ export default {
     //   return imgix_url
     // else
     //   return full_size_url
+  },
+  alertOptionsShort(alert) {
+    return `${(alert.property_subtypes.length < 5) ? alert.property_subtypes.toString().replace(new RegExp('RES-', 'g'), ' ').trim() : 'All types'}, $${helpers.numberWithCommas(alert.minimum_price)}-$${helpers.numberWithCommas(alert.maximum_price)}, Min ${alert.minimum_bedrooms} Beds ${alert.minimum_bathrooms} Baths`
   }
 }

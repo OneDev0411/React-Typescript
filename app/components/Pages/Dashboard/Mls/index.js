@@ -18,8 +18,7 @@ import FilterForm from './Partials/FilterForm'
 import ListingMarker from '../Partials/ListingMarker'
 import AlertList from './Partials/AlertList'
 import AlertViewer from './Partials/AlertViewer'
-// import FavoritesViewer from './Partials/FavoritesViewer'
-import helpers from '../../../../utils/helpers'
+import listing_util from '../../../../utils/listing'
 export default class Mls extends Component {
   componentWillMount() {
     const data = this.props.data
@@ -578,12 +577,12 @@ export default class Mls extends Component {
       let alert_header_area
       if (data.show_alerts_map && data.current_alert) {
         const current_alert = data.current_alert
-        const alert_options = `${(current_alert.property_subtypes.length < 5) ? current_alert.property_subtypes.toString().replace(new RegExp('RES-', 'g'), ' ').trim() : 'All types'}, $${helpers.numberWithCommas(current_alert.minimum_price)}-$${helpers.numberWithCommas(current_alert.maximum_price)}, Min ${current_alert.minimum_bedrooms} Beds ${current_alert.minimum_bathrooms} Baths`
+        const alert_options_short = listing_util.alertOptionsShort(current_alert)
         alert_header_area = (
           <div style={ alert_header_style }>
             <div style={ alert_header_bg }></div>
             <div style={ S('relative ml-15 mt-10 color-fff z-1 font-15') }>
-              { current_alert.title } ({ alert_options })
+              { current_alert.title } ({ alert_options_short })
               <div style={ S('pull-right pointer') } onClick={ controller.alert_map.showAlertViewer.bind(this) }>
                 <span style={ S('color-98caf1 mr-15') }>{ current_alert.actives ? `View new listings (${current_alert.actives.length})` : ''}</span>
                 <span style={ S('mr-15 relative t-2') }><i style={ S('color-98caf1') } className="fa fa-chevron-right"></i></span>

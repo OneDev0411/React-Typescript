@@ -88,7 +88,7 @@ const controller = {
     let emails_added
     let phone_numbers_added
     const alert = listing_map.options
-    alert.title = 'default title'
+    alert.title = ''
     if (title)
       alert.title = title
     const center = data.listing_map.center

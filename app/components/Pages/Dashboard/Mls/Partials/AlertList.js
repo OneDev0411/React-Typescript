@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 // import { Input } from 'react-bootstrap'
 import S from 'shorti'
 import controller from '../../controller'
+import listing_util from '../../../../../utils/listing'
 export default class AlertList extends Component {
   render() {
     const data = this.props.data
@@ -27,7 +28,7 @@ export default class AlertList extends Component {
               }
               return (
                 <li key={ 'alert-list-' + alert.id } style={ S('h-100 border-bottom-1-solid-dedede p-20 pointer' + (current_alert && current_alert.id === alert.id ? ' bg-f7f7f7' : '')) } onClick={ controller.alert_map.showAlertOnMap.bind(this, alert) }>
-                  <div style={ S('font-18 fw-500') }>{ alert.title }</div>
+                  <div style={ S('font-18 fw-500') }>{ alert.title ? alert.title : listing_util.alertOptionsShort(alert) }</div>
                   <div style={ S('font-14 fw-500') }>Shared with: { users_area }</div>
                   {
                     /*
