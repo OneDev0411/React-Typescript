@@ -60,7 +60,12 @@ export default class ListingPanel extends Component {
       listings = user.favorite_listings
     const listing_panel_cards = listings.map(listing => {
       const status_color = listing_util.getStatusColor(listing.status)
-      const property = listing.compact_property
+      let property = listing.compact_property
+      let address = listing.address
+      if (!property)
+        property = listing.property
+      if (!address)
+        address = property.address
       let listing_image = <div style={ S('w-405 h-300 bg-efefef') }/>
       if (listing.cover_image_url)
         listing_image = <div style={ S('w-405 h-300 bg-url(' + listing.cover_image_url + ') bg-cover bg-center') } />
@@ -91,7 +96,7 @@ export default class ListingPanel extends Component {
                 ${ helpers.numberWithCommas(Math.floor(price)) }
               </div>
               <div style={ S('font-14') }>
-                { listing_util.addressTitle(listing.address) } | { listing.address.city } { listing.address.state }
+                { listing_util.addressTitle(address) } | { address.city } { address.state }
               </div>
               <div style={ S('font-14') }>
                 <span>{ property.bedroom_count } Beds</span>
@@ -120,7 +125,12 @@ export default class ListingPanel extends Component {
     // Listing list
     const listing_panel_list = listings.map(listing => {
       const status_color = listing_util.getStatusColor(listing.status)
-      const property = listing.compact_property
+      let property = listing.compact_property
+      let address = listing.address
+      if (!property)
+        property = listing.property
+      if (!address)
+        address = property.address
       let listing_image = <div style={ S('w-40 h-40 bg-efefef') }/>
       if (listing.cover_image_url)
         listing_image = <div style={ S('w-40 h-40 br-3 bg-url(' + listing.cover_image_url + ') bg-cover bg-center') } />
@@ -136,14 +146,14 @@ export default class ListingPanel extends Component {
             { listing_image }
           </div>
           <div style={ S('ml-10 pull-left w-220') }>
-            <div style={ S('mb-5') }>{ listing_util.addressTitle(listing.address) }</div>
+            <div style={ S('mb-5') }>{ listing_util.addressTitle(address) }</div>
             <div className="pull-left" style={ S('w-10 h-10 br-100 mr-8 bg-' + status_color) }></div>
             <div className="pull-left" style={ S('mt-4n font-12') }>
               { listing.status }
             </div>
           </div>
           <div className="pull-left" style={ S('mt-10 w-80') }>
-            <div>{ listing.address.postal_code }</div>
+            <div>{ address.postal_code }</div>
           </div>
           <div className="pull-left" style={ S('mt-10 w-100') }>
             <div>${ helpers.numberWithCommas(Math.floor(price)) }</div>

@@ -22,11 +22,11 @@ export default class AlertList extends Component {
               let users_area
               if (users && users.length) {
                 users_area = users.map(user => {
-                  return <span>{ user.first_name }, </span>
+                  return <span key={ 'alert-user-' + user.id }>{ user.first_name }, </span>
                 })
               }
               return (
-                <li key={ 'alert-' + alert.id } style={ S('h-100 border-bottom-1-solid-dedede p-20 pointer' + (current_alert && current_alert.id === alert.id ? ' bg-f7f7f7' : '')) } onClick={ controller.alert_map.showAlertOnMap.bind(this, alert) }>
+                <li key={ 'alert-list-' + alert.id } style={ S('h-100 border-bottom-1-solid-dedede p-20 pointer' + (current_alert && current_alert.id === alert.id ? ' bg-f7f7f7' : '')) } onClick={ controller.alert_map.showAlertOnMap.bind(this, alert) }>
                   <div style={ S('font-18 fw-500') }>{ alert.title }</div>
                   <div style={ S('font-14 fw-500') }>Shared with: { users_area }</div>
                   {
