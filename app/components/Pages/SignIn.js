@@ -28,9 +28,12 @@ export default class SignIn extends Component {
         AppStore.emitChange()
       }, 500)
     }
-    const email = decodeURIComponent(helpers.getParameterByName('email'))
-    if (email)
-      this.refs.email.refs.input.value = email
+    const data = this.props.data
+    if (data.location && data.location.query) {
+      const email = decodeURIComponent(data.location.query.email)
+      if (email && email !== 'undefined')
+        this.refs.email.refs.input.value = email
+    }
   }
 
   componentDidUpdate() {
