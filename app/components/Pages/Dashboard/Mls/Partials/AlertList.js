@@ -5,6 +5,11 @@ import S from 'shorti'
 import controller from '../../controller'
 import listing_util from '../../../../../utils/listing'
 export default class AlertList extends Component {
+  truncateTitle(title) {
+    if (title.length > 35)
+      return title.substring(0, 35) + '...'
+    return title
+  }
   render() {
     const data = this.props.data
     const alerts = data.alerts
@@ -28,7 +33,7 @@ export default class AlertList extends Component {
               }
               return (
                 <li key={ 'alert-list-' + alert.id } style={ S('h-100 border-bottom-1-solid-dedede p-20 pointer' + (current_alert && current_alert.id === alert.id ? ' bg-f7f7f7' : '')) } onClick={ controller.alert_map.showAlertOnMap.bind(this, alert) }>
-                  <div style={ S('font-18 fw-500') }>{ alert.title ? alert.title : listing_util.alertOptionsShort(alert) }</div>
+                  <div style={ S('font-18 fw-500') }>{ this.truncateTitle(alert.title ? alert.title : listing_util.alertOptionsShort(alert)) }</div>
                   <div style={ S('font-14 fw-500') }>Shared with: { users_area }</div>
                   {
                     /*
