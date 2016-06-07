@@ -29,7 +29,7 @@ export default class SignIn extends Component {
       }, 500)
     }
     const data = this.props.data
-    if (data.location && data.location.query) {
+    if (typeof window !== 'undefined' && data.location && data.location.query) {
       const email = decodeURIComponent(data.location.query.email)
       if (email && email !== 'undefined')
         this.refs.email.refs.input.value = email
@@ -148,7 +148,7 @@ export default class SignIn extends Component {
       border: 'none',
       ...S('border-bottom-1-solid-ccc br-0 p-0')
     }
-    if (helpers.getParameterByName('email')) {
+    if (typeof window !== 'undefined' && helpers.getParameterByName('email')) {
       message = (
         <Alert bsStyle="warning">This email is already in use.  Please log in to continue.</Alert>
       )
