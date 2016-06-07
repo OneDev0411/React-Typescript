@@ -299,14 +299,14 @@ export default class ShareAlertModal extends Component {
       </DropdownButton>
     )
     return (
-      <Modal dialogClassName="modal-800" show={ listing_map && listing_map.show_share_modal } onHide={ controller.listing_map.hideModal } onShow={ this.onShow.bind(this) }>
+      <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : 'modal-800' } show={ listing_map && listing_map.show_share_modal } onHide={ controller.listing_map.hideModal } onShow={ this.onShow.bind(this) }>
         <Modal.Header closeButton style={ S('border-bottom-1-solid-f8f8f8') }>
           <Modal.Title className="tempo" style={ S('font-36 ml-15') }>Share Alert</Modal.Title>
         </Modal.Header>
         <Modal.Body style={ S('p-30') }>
           <div style={ S('mb-20') }>
             <div style={ S('pull-left mr-15') }>
-              <img style={ S('w-100 h-100 br-3') } src="/images/dashboard/mls/map-tile.jpg" />
+              <img className={ data.is_mobile ? 'hidden' : '' } style={ S('w-100 h-100 br-3') } src="/images/dashboard/mls/map-tile.jpg" />
             </div>
             <div style={ S('pull-left w-82p') }>
               <input style={ filter_text_style } ref="alert_title" type="text" placeholder="Name this alert..." value={ share_modal ? share_modal.title : '' } onChange={ this.handleAlertTitleChange.bind(this) } />

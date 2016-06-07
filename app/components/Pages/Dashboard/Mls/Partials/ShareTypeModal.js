@@ -23,7 +23,7 @@ export default class ShareTypeModal extends Component {
     const alert = data.listing_map.options
     if (share_modal && share_modal.error) {
       return (
-        <Modal show={ listing_map && listing_map.show_share_type_modal } onHide={ controller.listing_map.hideModal }>
+        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ listing_map && listing_map.show_share_type_modal } onHide={ controller.listing_map.hideModal }>
           <Modal.Header closeButton style={ S('border-bottom-1-solid-f8f8f8') }>
             <Modal.Title className="tempo" style={ S('font-36 ml-15') }>Share Alert</Modal.Title>
           </Modal.Header>
@@ -37,7 +37,7 @@ export default class ShareTypeModal extends Component {
       )
     }
     return (
-      <Modal dialogClassName="modal-share-type" show={ listing_map && listing_map.show_share_type_modal } onHide={ controller.listing_map.hideModal }>
+      <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : 'modal-share-type' } show={ listing_map && listing_map.show_share_type_modal } onHide={ controller.listing_map.hideModal }>
         <Modal.Body style={ S('p-0') }>
           <div className="din" style={ S('bg-52ABF1 h-200 font-32 color-fff text-center') }>
             <div style={ S('pt-20 pb-10 text-center w-100p') }>
