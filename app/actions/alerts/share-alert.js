@@ -94,6 +94,7 @@ export default (user, rooms, contacts, emails, phone_numbers, alert) => {
           AppStore.data.rooms.unshift(new_room)
           AppStore.data.current_room = new_room
           AppStore.data.current_room.messages = [new_room.latest_message]
+          AppStore.emitChange()
           getMessages(user, new_room)
           locals.room_id = new_room.id
           callback()

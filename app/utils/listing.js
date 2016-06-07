@@ -45,6 +45,11 @@ export default {
     //   return full_size_url
   },
   alertOptionsShort(alert) {
-    return `${(alert.property_subtypes.length < 5) ? alert.property_subtypes.toString().replace(new RegExp('RES-', 'g'), ' ').trim() : 'All types'}, $${helpers.numberWithCommas(alert.minimum_price)}-$${helpers.numberWithCommas(alert.maximum_price)}, Min ${alert.minimum_bedrooms} Beds ${alert.minimum_bathrooms} Baths`
+    if (!alert.property_subtypes)
+      return
+    const property_types = alert.property_subtypes.toString().replace(new RegExp('RES-', 'g'), ' ').trim()
+    const min_price = helpers.numberWithCommas(alert.minimum_price)
+    const max_price = alert.maximum_price < 10000000 ? helpers.numberWithCommas(alert.maximum_price) : 'any'
+    return `${(alert.property_subtypes.length < 5) ? property_types : 'All types'}, $${min_price}-$${max_price}, Min ${alert.minimum_bedrooms} Beds ${alert.minimum_bathrooms} Baths`
   }
 }

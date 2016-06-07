@@ -464,7 +464,7 @@ export default class MessagesList extends Component {
         </Modal>
         <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_alert_modal } onHide={ this.props.hideAlertModal }>
           <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
-           <Modal.Title>Alert { data.listing_alerts ? `(${ data.alert_modal && data.alert_modal.active_index ? data.alert_modal.active_index + 1 : '1' } of ${data.listing_alerts.length} Homes)` : '' } </Modal.Title>
+           <Modal.Title>Alert { data.listing_alerts ? `(${ data.alert_modal && data.alert_modal.active_index ? data.alert_modal.active_index + 1 : '1' } of ${data.current_alert_info ? data.current_alert_info.total : ''} Homes)` : '' } </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             { alert_modal_area }

@@ -371,13 +371,13 @@ export default class Mls extends Component {
     if (listing_map)
       options_text = (listing_map.listings ? listing_map.listings.length : '') + ' ' + listing_util.alertOptionsShort(listing_map.options) + ' homes'
     const options_gist = (
-      <div style={ S('relative mt-10') }>
+      <div style={ S('relative mt-10 w-504') }>
         <div style={ S('z-0 op-.4 bg-000 absolute w-504 h-40 br-3') }></div>
-        <div style={ S('z-1 color-fff p-10 relative') }>{ options_text }</div>
+        <div style={ S('z-1 color-fff p-10 relative w-504') }>{ options_text }</div>
       </div>
     )
     let search_filter_draw_area = (
-      <div style={ S('relative t-35 l-10 z-1') }>
+      <div style={ S('relative t-35 l-10 z-1 w-580') }>
         <div style={ search_area_style }>
           <div style={ S('pull-left mr-10 relative') }>
             { search_area }
@@ -672,7 +672,7 @@ export default class Mls extends Component {
         <Modal dialogClassName="modal-alert-saved" show={ data.show_alert_saved_modal } onHide={ controller.listing_map.hideModal }>
           <div className="din" style={ S('text-center font-60 color-fff') }>
             <div style={ S('bg-2196f3 w-165 h-165 br-100 center-block pt-35') }>
-              <img style={ S('h-70 ml-5') } src="/images/dashboard/mls/alert-bell-saved.svg" />
+              <img style={ S('h-70 ml-13') } src="/images/dashboard/mls/alert-bell-saved.svg" />
             </div>
             <span style={ { textShadow: '0 2px 6px rgba(0, 0, 0, 0.2)' } }>Alert Saved</span>
           </div>

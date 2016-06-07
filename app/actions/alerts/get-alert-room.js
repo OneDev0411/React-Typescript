@@ -12,6 +12,7 @@ export default (user, room_id, alert_id) => {
     const alert = res.data
     AppStore.data.current_alert = alert
     AppStore.data.listing_alerts = alert
+    AppStore.data.current_alert_info = res.info
     AppStore.emitChange()
   })
 }
