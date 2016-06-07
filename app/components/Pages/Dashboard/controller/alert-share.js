@@ -46,13 +46,13 @@ const controller = {
     }
     if (!rooms_added && !contacts_added && !emails_added && !phone_numbers_added)
       return
-    if (!title) {
-      AppStore.data.error = {
-        message: 'You must name this alert.'
-      }
-      AppStore.emitChange()
-      return
-    }
+    // if (!title) {
+    //   AppStore.data.error = {
+    //     message: 'You must name this alert.'
+    //   }
+    //   AppStore.emitChange()
+    //   return
+    // }
     if (!rooms_added && !contacts_added && !emails_added && !phone_numbers_added) {
       AppStore.data.error = {
         message: 'You must add at least one room, contact, email or phone number.'
