@@ -28,6 +28,9 @@ export default class SignIn extends Component {
         AppStore.emitChange()
       }, 500)
     }
+    const email = decodeURIComponent(helpers.getParameterByName('email'))
+    if (email)
+      this.refs.email.refs.input.value = email
   }
 
   componentDidUpdate() {
@@ -141,6 +144,11 @@ export default class SignIn extends Component {
     const input_style = {
       border: 'none',
       ...S('border-bottom-1-solid-ccc br-0 p-0')
+    }
+    if (helpers.getParameterByName('email')) {
+      message = (
+        <Alert bsStyle="warning">This email is already in use.  Please log in to continue.</Alert>
+      )
     }
     // Signup link
     let signup_link = '/signup'

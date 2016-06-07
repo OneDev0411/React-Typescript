@@ -27,6 +27,13 @@ export default class Landing extends Component {
       })
     }, 3000)
   }
+  componentDidUpdate() {
+    const data = this.props.data
+    if (data.errors && data.errors.type === 'email-in-use') {
+      const email = data.signup_email
+      window.location.href = '/signin?email=' + encodeURIComponent(email)
+    }
+  }
   getContent() {
     AppDispatcher.dispatch({
       action: 'get-content',
@@ -195,11 +202,6 @@ export default class Landing extends Component {
       if (data.errors.type === 'email-invalid') {
         popover = (
           <Popover id="popover" title="">You must enter a valid email</Popover>
-        )
-      }
-      if (data.errors.type === 'email-in-use') {
-        popover = (
-          <Popover id="popover" title="">This email is already in use.  Follow the <a href="/password/forgot">forgot password process</a> or <a href="#" onClick={ this.showIntercom }>contact support</a>.</Popover>
         )
       }
       if (data.errors.type === 'bad-request') {

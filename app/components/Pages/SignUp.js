@@ -30,6 +30,13 @@ export default class SignUp extends Component {
   componentDidMount() {
     this.refs.email.refs.input.focus()
   }
+  componentDidUpdate() {
+    const data = this.props.data
+    if (data.errors && data.errors.type === 'email-in-use') {
+      const email = data.signup.email
+      window.location.href = '/signin?email=' + encodeURIComponent(email)
+    }
+  }
   showIntercom() {
     window.Intercom('show')
   }
@@ -130,11 +137,6 @@ export default class SignUp extends Component {
       if (data.errors.type === 'email-invalid') {
         popover = (
           <Popover id="popover" title="">You must enter a valid email</Popover>
-        )
-      }
-      if (data.errors.type === 'email-in-use') {
-        popover = (
-          <Popover id="popover" title="">This email is already in use.  Follow the <a href="/password/forgot">forgot password process</a> or <a href="#" onClick={ this.showIntercom }>contact support</a>.</Popover>
         )
       }
       if (data.errors.type === 'bad-request') {
