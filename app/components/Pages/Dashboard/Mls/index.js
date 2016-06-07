@@ -367,10 +367,13 @@ export default class Mls extends Component {
         <div onClick={ this.handleClearSearchInputClick.bind(this) } className="close" style={ S('absolute l-340 t-15') }>&times;</div>
       )
     }
+    let options_text
+    if (listing_map)
+      options_text = (listing_map.listings ? listing_map.listings.length : '') + ' ' + listing_util.alertOptionsShort(listing_map.options) + ' homes'
     const options_gist = (
       <div style={ S('relative mt-10') }>
-        <div style={ S('z-0 op-.4 bg-000 absolute w-504 h-30 br-3') }></div>
-        <div style={ S('z-1 color-fff p-5 pl-10 relative') }>{ listing_map ? listing_util.alertOptionsShort(listing_map.options) : '' }</div>
+        <div style={ S('z-0 op-.4 bg-000 absolute w-504 h-40 br-3') }></div>
+        <div style={ S('z-1 color-fff p-10 relative') }>{ options_text }</div>
       </div>
     )
     let search_filter_draw_area = (
