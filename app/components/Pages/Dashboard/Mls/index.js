@@ -370,7 +370,7 @@ export default class Mls extends Component {
     const options_gist = (
       <div style={ S('relative mt-10') }>
         <div style={ S('z-0 op-.4 bg-000 absolute w-504 h-30 br-3') }></div>
-        <div style={ S('z-1 color-fff p-5 pl-10 relative') }>{ listing_util.alertOptionsShort(listing_map.options) }</div>
+        <div style={ S('z-1 color-fff p-5 pl-10 relative') }>{ listing_map ? listing_util.alertOptionsShort(listing_map.options) : '' }</div>
       </div>
     )
     let search_filter_draw_area = (
