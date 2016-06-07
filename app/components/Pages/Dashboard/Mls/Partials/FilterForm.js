@@ -89,7 +89,7 @@ export default class FilterForm extends Component {
     }
     return (
       <div className={ filter_form_class } style={ filter_form_style }>
-        <div onClick={ this.props.hideFilterForm } style={ S('r-45n t-10 absolute bg-fff w-45 h-45 z-100 text-center font-28 pointer color-929292') }>
+        <div className={ data.is_mobile ? 'hidden' : '' } onClick={ this.props.hideFilterForm } style={ S('r-45n t-10 absolute bg-fff w-45 h-45 z-100 text-center font-28 pointer color-929292') }>
           &times;
         </div>
         <form onSubmit={ this.props.setFilterOptions.bind(this) }>

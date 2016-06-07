@@ -201,14 +201,13 @@ export default class ListingPanel extends Component {
       overflowY: 'scroll'
     }
     let panel_class = 'listing-panel'
-    let button_class = 'listing-panel__button hidden'
-    let listing_panel_icon = <i className="fa fa-chevron-left"></i>
+    let button_class = 'listing-panel__button invisible'
+    const listing_panel_icon = (
+      <span className="close">&times;</span>
+    )
     if (data.show_listing_panel) {
       panel_class = panel_class + ' active'
-      button_class = 'listing-panel__button active'
-      listing_panel_icon = (
-        <span className="close">&times;</span>
-      )
+      button_class = 'listing-panel__button'
     }
     let panel_content_items = listing_panel_cards
     let items_heading
@@ -256,8 +255,15 @@ export default class ListingPanel extends Component {
       )
     }
     const sortby_title = this.getSortingTitle()
+    let button_style = S('absolute z-1 pt-8 pb-8 h-40 w-40 mr-0')
+    if (data.show_listing_panel) {
+      button_style = {
+        ...button_style,
+        right: 850
+      }
+    }
     let listing_panel_btn = (
-      <Button onClick={ this.props.toggleListingPanel.bind(this) } className={ button_class } style={ S('absolute z-1 pt-8 pb-8 h-40 w-40 mr-0') }>
+      <Button onClick={ this.props.toggleListingPanel.bind(this) } className={ button_class } style={ button_style }>
         { listing_panel_icon }
       </Button>
     )
