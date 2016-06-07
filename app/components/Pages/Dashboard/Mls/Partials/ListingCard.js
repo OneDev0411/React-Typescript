@@ -23,7 +23,7 @@ export default class ListingCard extends Component {
       boxShadow: '0 0 2px 0 rgba(0, 0, 0, 0.2)'
     }
     const listing_image_style = {
-      ...S(`bg-cover bg-url(${listing.cover_image_url}) bg-center w-375 h-270 relative br-3`)
+      ...S(`bg-cover bg-url(${listing_util.getResizeUrl(listing.cover_image_url)}) bg-center w-375 h-270 relative br-3`)
     }
     const overlay_style = {
       ...S('bg-000 absolute w-100p h-100p br-3'),
