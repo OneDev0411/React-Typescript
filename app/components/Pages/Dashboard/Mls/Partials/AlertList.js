@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 import S from 'shorti'
 import controller from '../../controller'
 import listing_util from '../../../../../utils/listing'
+import Loading from '../../../../Partials/Loading'
 export default class AlertList extends Component {
   truncateTitle(title) {
     if (title.length > 35)
@@ -14,7 +15,7 @@ export default class AlertList extends Component {
     const data = this.props.data
     const alerts = data.alerts
     const current_alert = data.current_alert
-    let alerts_list_area
+    let alerts_list_area = <Loading />
     const alert_list_style = {
       ...S(`m-0 p-0 h-${window.innerHeight - 66}`),
       overflowY: 'scroll'
