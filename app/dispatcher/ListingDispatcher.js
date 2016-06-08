@@ -13,6 +13,8 @@ import getAlertRoom from '../actions/alerts/get-alert-room'
 import getAlerts from '../actions/alerts/get-alerts'
 import shareListing from '../actions/listings/share-listing'
 import editFavorite from '../actions/rooms/edit-favorite'
+import getActives from '../actions/recs/get-actives'
+import getFavorites from '../actions/recs/get-favorites'
 
 const ListingDispatcher = new Dispatcher()
 
@@ -57,12 +59,20 @@ ListingDispatcher.register(payload => {
       getAlerts(payload.user)
       break
 
+    case 'get-actives':
+      getActives(payload.user)
+      break
+
+    case 'get-favorites':
+      getFavorites(payload.user)
+      break
+
     case 'share-listing':
       shareListing(payload.user, payload.mls_number, payload.message, payload.rooms, payload.users, payload.emails, payload.phone_numbers, payload.notification)
       break
 
     case 'edit-favorite':
-      editFavorite(payload.user, payload.listing, payload.favorite)
+      editFavorite(payload.user, payload.mls_number, payload.favorite)
       break
 
     default:

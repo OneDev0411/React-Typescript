@@ -529,18 +529,18 @@ export default class SideBar extends Component {
           <img src="/images/dashboard/sidenav/transactions-active.svg"/>
         </div>
         <Nav bsStyle="pills" stacked>
-          <OverlayTrigger placement="right" overlay={ popover.map } delayShow={ 200 } delayHide={ 0 }>
-            <LinkContainer onClick={ this.hideListingViewer.bind(this) } className={ active.mls } to="/dashboard/mls">
-              <NavItem style={ S('w-85p') }>
-                <img src={ active.mls ? '/images/dashboard/sidenav/map-active.svg' : '/images/dashboard/sidenav/map.svg' } style={ S('w-19 h-19') }/>
-              </NavItem>
-            </LinkContainer>
-          </OverlayTrigger>
           <OverlayTrigger placement="right" overlay={ popover.conversation } delayShow={ 200 } delayHide={ 0 }>
             <LinkContainer onClick={ this.handleChatNavClick.bind(this) } className={ active.recents } to="/dashboard/recents">
               <NavItem style={ S('w-85p') }>
                 <img src={ active.recents ? '/images/dashboard/sidenav/chat-active.svg' : '/images/dashboard/sidenav/chat.svg' } style={ S('w-19 h-19') }/>
                 {this.notificationIcon('room_notification_count')}
+              </NavItem>
+            </LinkContainer>
+          </OverlayTrigger>
+          <OverlayTrigger placement="right" overlay={ popover.map } delayShow={ 200 } delayHide={ 0 }>
+            <LinkContainer onClick={ this.hideListingViewer.bind(this) } className={ active.mls } to="/dashboard/mls">
+              <NavItem style={ S('w-85p') }>
+                <img src={ active.mls ? '/images/dashboard/sidenav/map-active.svg' : '/images/dashboard/sidenav/map.svg' } style={ S('w-19 h-19') }/>
               </NavItem>
             </LinkContainer>
           </OverlayTrigger>

@@ -29,7 +29,7 @@ export default class SignIn extends Component {
       }, 500)
     }
     const data = this.props.data
-    if (typeof window !== 'undefined' && data.location && data.location.query) {
+    if (data.location && data.location.query && data.location.query.email) {
       const email = decodeURIComponent(data.location.query.email)
       if (email && email !== 'undefined')
         this.refs.email.refs.input.value = email
@@ -117,6 +117,11 @@ export default class SignIn extends Component {
       submitting_class = 'disabled'
 
     let message
+    if (data.location && data.location.query && data.location.query.email) {
+      message = (
+        <Alert bsStyle="warning">This email is already in use.  Please log in to continue.</Alert>
+      )
+    }
     if (data.show_message) {
       message = (
         <Alert bsStyle="danger">
@@ -147,11 +152,6 @@ export default class SignIn extends Component {
     const input_style = {
       border: 'none',
       ...S('border-bottom-1-solid-ccc br-0 p-0')
-    }
-    if (typeof window !== 'undefined' && helpers.getParameterByName('email')) {
-      message = (
-        <Alert bsStyle="warning">This email is already in use.  Please log in to continue.</Alert>
-      )
     }
     // Signup link
     let signup_link = '/signup'

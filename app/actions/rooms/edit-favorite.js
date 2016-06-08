@@ -1,13 +1,13 @@
 // actions/edit-favorite.js
 import Room from '../../models/Room'
 import async from 'async'
-export default (user, listing, favorite) => {
+export default (user, mls_number, favorite) => {
   const locals = {}
   async.series([
     callback => {
       const params = {
         rooms: [user.personal_room],
-        mls_number: listing.mls_number,
+        mls_number,
         access_token: user.access_token
       }
       Room.createRec(params, (err, res) => {
@@ -23,21 +23,6 @@ export default (user, listing, favorite) => {
         access_token: user.access_token
       }
       Room.editFavorite(params, () => {
-        // Handled on client
-        // // Success
-        // if (response.status === 'success') {
-        //   if (!AppStore.data.user.favorite_listings)
-        //     AppStore.data.user.favorite_listings = []
-        //   if (favorite)
-        //     AppStore.data.user.favorite_listings.push(listing)
-        //   else {
-        //     AppStore.data.user.favorite_listings = AppStore.data.user.favorite_listings.filter(listing_loop => {
-        //       if (listing_loop.id !== listing.id)
-        //         return listing_loop
-        //     })
-        //   }
-        // }
-        // AppStore.emitChange()
       })
     }
   ])

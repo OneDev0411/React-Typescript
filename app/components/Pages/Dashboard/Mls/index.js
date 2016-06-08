@@ -82,6 +82,18 @@ export default class Mls extends Component {
         user
       })
     }
+    if (!user.favorite_listings) {
+      ListingDispatcher.dispatch({
+        action: 'get-actives',
+        user
+      })
+    }
+    if (!user.favorite_listings) {
+      ListingDispatcher.dispatch({
+        action: 'get-favorites',
+        user
+      })
+    }
   }
   componentDidMount() {
     AppStore.data.show_search_map = true
@@ -124,7 +136,7 @@ export default class Mls extends Component {
         AppStore.data.show_search_map = true
         delete AppStore.data.listing_map.auto_move
         delete AppStore.data.show_alerts_map
-        delete AppStore.data.show_favorites_map
+        delete AppStore.data.show_actives_map
         controller.listing_filter.setFilterOptions.bind(this)
         if (window.poly) {
           window.poly.setMap(null)
@@ -149,7 +161,7 @@ export default class Mls extends Component {
         delete AppStore.data.show_search_map
         delete AppStore.data.listing_map.auto_move
         delete AppStore.data.show_filter_form
-        delete AppStore.data.show_favorites_map
+        delete AppStore.data.show_actives_map
         AppStore.data.show_alerts_map = true
         if (window.poly) {
           window.poly.setMap(null)
@@ -170,7 +182,7 @@ export default class Mls extends Component {
         }
         break
       case 'favorites':
-        AppStore.data.show_favorites_map = true
+        AppStore.data.show_actives_map = true
         delete AppStore.data.show_search_map
         delete AppStore.data.show_alerts_map
         if (window.poly) {
@@ -402,7 +414,7 @@ export default class Mls extends Component {
       </div>
     )
     // Hide search form
-    if (data.show_filter_form || data.show_alerts_map || data.show_favorites_map)
+    if (data.show_filter_form || data.show_alerts_map || data.show_actives_map)
       search_filter_draw_area = ''
     const underline = <div style={ S('w-100p h-6 bg-3388ff absolute b-11n') }></div>
     let toolbar = (
@@ -417,8 +429,8 @@ export default class Mls extends Component {
             { data.show_alerts_map ? underline : '' }
           </li>
           <li style={ S('relative pull-left color-263445 font-28 mr-60') }>
-            <span onClick={ this.handleTabClick.bind(this, 'favorites') } style={ S('pointer ' + (data.show_favorites_map ? 'color-263445' : 'color-8696a4')) }>Activity</span>
-            { data.show_favorites_map ? underline : '' }
+            <span onClick={ this.handleTabClick.bind(this, 'favorites') } style={ S('pointer ' + (data.show_actives_map ? 'color-263445' : 'color-8696a4')) }>Activity</span>
+            { data.show_actives_map ? underline : '' }
           </li>
         </ul>
         <div className="clearfix"></div>
@@ -495,13 +507,13 @@ export default class Mls extends Component {
         )
       })
     }
-    let map_favorites_markers
-    if (user && user.favorite_listings) {
-      let listings = user.favorite_listings
+    let map_actives_markers
+    if (user && data.active_listings) {
+      let listings = data.active_listings
       listings = listings.filter(listing => {
         return listing.property.address.location
       })
-      map_favorites_markers = listings.map((listing, i) => {
+      map_actives_markers = listings.map((listing, i) => {
         return (
           <div onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) } onMouseOut={ controller.listing_map.hideListingPopup.bind(this) } key={ 'favorites-map--map-listing-' + listing.id + '-' + i } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.property.address.location.latitude } lng={ listing.property.address.location.longitude } text={'A'}>
             <ListingMarker
@@ -559,7 +571,7 @@ export default class Mls extends Component {
       )
     }
     // Show favorites map
-    if (data.show_favorites_map) {
+    if (data.show_actives_map) {
       content_area = (
         <GoogleMap
           key={ 'map-' + map_id }
@@ -571,7 +583,7 @@ export default class Mls extends Component {
           yesIWantToUseGoogleMapApiInternals
           onGoogleApiLoaded={ controller.listing_map.handleGoogleMapApi.bind(this) }
         >
-        { map_favorites_markers }
+        { map_actives_markers }
         </GoogleMap>
       )
     }
