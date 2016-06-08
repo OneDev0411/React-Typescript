@@ -53,10 +53,10 @@ export default {
     let price_area = `$${min_price}-$${max_price}`
     if (alert.minimum_price === 0 && alert.maximum_price === 900000001)
       price_area = 'Any price'
-    let bedrooms_area = `Min ${alert.minimum_bedrooms} Beds`
+    let bedrooms_area = `${alert.minimum_bedrooms}+ Beds`
     if (alert.minimum_bedrooms === 0)
       bedrooms_area = 'Any beds'
-    let bathrooms_area = `${alert.minimum_bathrooms} Baths`
+    let bathrooms_area = `${alert.minimum_bathrooms}+ Baths`
     if (alert.minimum_bathrooms === 1)
       bathrooms_area = 'Any baths'
     return `${(alert.property_subtypes.length < 5) ? property_types : 'All types'}, ${price_area}, ${bedrooms_area}, ${bathrooms_area}`

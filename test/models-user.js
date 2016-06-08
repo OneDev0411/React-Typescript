@@ -15,25 +15,25 @@ const random_phone = Math.floor(Math.random() * 1000000000)
 ==================== */
 describe('Testing User model', () => {
   // Create
-  it('User.create should return access token from UN:' + random_email + ' PHONE: ' + random_phone + ' PW:' + test.user.password, function(done) {
-    const user = {
-      first_name: 'Test',
-      last_name: 'User',
-      email: random_email,
-      user_type: 'Client',
-      password: test.user.password,
-      phone_number: random_phone,
-      grant_type: 'password'
-    }
-    const params = {
-      user,
-      api_host: test.api_host
-    }
-    User.create(params, (err, response) => {
-      expect(response.status).to.equal('success')
-      done()
-    })
-  })
+  // it('User.create should return access token from UN:' + random_email + ' PHONE: ' + random_phone + ' PW:' + test.user.password, function(done) {
+  //   const user = {
+  //     first_name: 'Test',
+  //     last_name: 'User',
+  //     email: random_email,
+  //     user_type: 'Client',
+  //     password: test.user.password,
+  //     phone_number: random_phone,
+  //     grant_type: 'password'
+  //   }
+  //   const params = {
+  //     user,
+  //     api_host: test.api_host
+  //   }
+  //   User.create(params, (err, response) => {
+  //     expect(response.status).to.equal('success')
+  //     done()
+  //   })
+  // })
 
   // Signin
   it('User.signin should return access token from UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
@@ -51,69 +51,82 @@ describe('Testing User model', () => {
   })
 
   // Edit
-  it('User.edit should return successful for user UN:' + random_email + ' PHONE: ' + random_phone + ' PW:' + test.user.password, function(done) {
-    const user = {
-      first_name: 'New Test First',
-      last_name: 'New User Last',
-      email: randomString(9) + '@rechat.co',
-      phone_number: random_phone
-    }
+  // it('User.edit should return successful for user UN:' + random_email + ' PHONE: ' + random_phone + ' PW:' + test.user.password, function(done) {
+  //   const user = {
+  //     first_name: 'New Test First',
+  //     last_name: 'New User Last',
+  //     email: randomString(9) + '@rechat.co',
+  //     phone_number: random_phone
+  //   }
+  //   const params = {
+  //     user,
+  //     access_token,
+  //     api_host: test.api_host
+  //   }
+  //   User.edit(params, (err, response) => {
+  //     expect(response.status).to.equal('success')
+  //     done()
+  //   })
+  // })
+
+  // // Forgot password
+  // it('User.forgotPassword should return successful for user email:' + test.user.email, function(done) {
+  //   const params = {
+  //     email: test.user.email,
+  //     api_host: test.api_host
+  //   }
+  //   User.forgotPassword(params, (err, response) => {
+  //     expect(response.status).to.equal('success')
+  //     done()
+  //   })
+  // })
+
+  // // Get rooms
+  // it('User.getRooms should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
+  //   const params = {
+  //     access_token,
+  //     api_host: test.api_host
+  //   }
+  //   User.getRooms(params, (err, response) => {
+  //     expect(response.status).to.equal('success')
+  //     done()
+  //   })
+  // })
+
+  // // Create contact
+  // it('User.createContacts should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
+  //   const params = {
+  //     contacts: test.contacts,
+  //     access_token,
+  //     api_host: test.api_host
+  //   }
+  //   User.createContacts(params, (err, response) => {
+  //     contact_id = response.data[0].id
+  //     expect(response.status).to.equal('success')
+  //     done()
+  //   })
+  // })
+
+  // // Get contacts
+  // it('User.getContacts should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
+  //   const params = {
+  //     access_token,
+  //     api_host: test.api_host
+  //   }
+  //   User.getContacts(params, (err, response) => {
+  //     expect(response.status).to.equal('success')
+  //     done()
+  //   })
+  // })
+
+  // Get favorites
+  it('User.getFavorites should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
     const params = {
-      user,
       access_token,
       api_host: test.api_host
     }
-    User.edit(params, (err, response) => {
-      expect(response.status).to.equal('success')
-      done()
-    })
-  })
-
-  // Forgot password
-  it('User.forgotPassword should return successful for user email:' + test.user.email, function(done) {
-    const params = {
-      email: test.user.email,
-      api_host: test.api_host
-    }
-    User.forgotPassword(params, (err, response) => {
-      expect(response.status).to.equal('success')
-      done()
-    })
-  })
-
-  // Get rooms
-  it('User.getRooms should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
-    const params = {
-      access_token,
-      api_host: test.api_host
-    }
-    User.getRooms(params, (err, response) => {
-      expect(response.status).to.equal('success')
-      done()
-    })
-  })
-
-  // Create contact
-  it('User.createContacts should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
-    const params = {
-      contacts: test.contacts,
-      access_token,
-      api_host: test.api_host
-    }
-    User.createContacts(params, (err, response) => {
-      contact_id = response.data[0].id
-      expect(response.status).to.equal('success')
-      done()
-    })
-  })
-
-  // Get contacts
-  it('User.getContacts should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
-    const params = {
-      access_token,
-      api_host: test.api_host
-    }
-    User.getContacts(params, (err, response) => {
+    User.getFavorites(params, (err, response) => {
+      console.log(response)
       expect(response.status).to.equal('success')
       done()
     })

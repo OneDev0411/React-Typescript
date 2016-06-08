@@ -1,7 +1,7 @@
 // api/users/get.js
 import config from '../../../../config/private'
 module.exports = (app, config) => {
-  app.get('/api/users/:id',(req, res) => {
+  app.get('/api/users/get-user/:id',(req, res) => {
     const api_url = config.api.url
     const id = req.params.id
     const access_token = req.query.access_token

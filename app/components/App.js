@@ -86,7 +86,12 @@ export default class App extends Component {
       downloadAppButtonText: 'GET',
       openAppButtonText: 'OPEN',
       customCSS: '#branch-banner .button { color:  #3388ff; border-color: #3388ff; }'
-    }, {})
+    }, {
+      data: {
+        type: (AppStore.data.user ? 'WebBranchBannerClickedUser' : 'WebBranchBannerClickedShadowUser'),
+        access_token: (AppStore.data.user ? AppStore.data.user.access_token : null)
+      }
+    })
   }
 
   checkForMobile() {

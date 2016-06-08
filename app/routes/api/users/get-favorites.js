@@ -3,7 +3,7 @@ module.exports = (app, config) => {
   app.get('/api/users/get-favorites',(req, res) => {
     const api_url = config.api.url
     const access_token = req.query.access_token
-    const endpoint = api_url + '/users/favorites'
+    const endpoint = api_url + '/user/favorites'
     fetch(endpoint,{
       method: 'get',
       headers: {  
@@ -22,8 +22,10 @@ module.exports = (app, config) => {
       return response.json()
     })
     .then(response => {
-      let response_object = response
-      response_object.status = 'success'
+      let response_object = {
+        data: response,
+        status: 'success'
+      }
       return res.json(response_object)
     })
   })

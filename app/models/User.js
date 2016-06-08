@@ -9,7 +9,7 @@ export default {
   get: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/users/' + params.id + '?access_token=' + params.access_token
+    const endpoint = api_host + '/api/users/get-user/' + params.id + '?access_token=' + params.access_token
     fetch(endpoint, {
       method: 'get',
       headers: {
