@@ -381,7 +381,7 @@ export default class Mls extends Component {
     }
     let options_text
     if (listing_map)
-      options_text = (listing_map.listings ? (listing_map.listings.length + ' of ' + listing_map.listings_info.total) : '') + ' ' + listing_util.alertOptionsShort(listing_map.options) + ' homes'
+      options_text = (listing_map.listings ? (listing_map.listings.length + ' showing of ' + listing_map.listings_info.total) : '') + ' homes. ' + listing_util.alertOptionsShort(listing_map.options)
     const options_gist = (
       <div style={ S('relative mt-10 w-504') }>
         <div style={ S('z-0 op-.4 bg-000 absolute w-504 h-40 br-3') }></div>
