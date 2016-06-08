@@ -320,9 +320,11 @@ export default class FilterForm extends Component {
             </div>
             <div style={ S('h-100') }></div>
           </div>
-          <div style={ S('absolute b-0 w-300') }>
-            <Button onClick={ this.props.resetFilterOptions.bind(this) } style={ { ...S('color-fff bg-c5cdd8 w-50p br-0'), border: 'none' } }>Reset Filter</Button>
-            <Button type="submit" bsStyle="primary" style={ { ...S('w-50p br-0'), border: 'none' } }>Update Filter</Button>
+          <div style={ S('absolute b-0 w-300 p-15') }>
+            {
+              /* <Button onClick={ this.props.resetFilterOptions.bind(this) } style={ { ...S('color-fff bg-c5cdd8 w-50p br-0'), border: 'none' } }>Reset Filter</Button> */
+            }
+            <Button type="submit" bsStyle="primary" style={ { ...S('w-100p br-3 p-15'), border: 'none' } }>Update Filters</Button>
           </div>
         </form>
       </div>
