@@ -14,7 +14,7 @@ import getAlerts from '../actions/alerts/get-alerts'
 import shareListing from '../actions/listings/share-listing'
 import editFavorite from '../actions/rooms/edit-favorite'
 import getActives from '../actions/recs/get-actives'
-import getFavorites from '../actions/recs/get-favorites'
+import getFavorites from '../actions/user/get-favorites'
 
 const ListingDispatcher = new Dispatcher()
 

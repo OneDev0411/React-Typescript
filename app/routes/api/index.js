@@ -24,6 +24,7 @@ module.exports = (app, config) => {
   require('./users/email-verifications')(app, config)
   require('./users/phone-verifications')(app, config)
   require('./users/upgrade-account')(app, config)
+  require('./users/get-favorites')(app, config)
   // Rooms
   require('./rooms/create-room')(app, config)
   require('./rooms/delete-room')(app, config)
@@ -76,5 +77,4 @@ module.exports = (app, config) => {
   require('./intercom/signin')(app, config)
   // Recs
   require('./recs/get-actives')(app, config)
-  require('./recs/get-favorites')(app, config)
 }

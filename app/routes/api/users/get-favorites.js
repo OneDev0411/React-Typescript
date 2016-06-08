@@ -1,6 +1,6 @@
-// api/recs/get-favorites.js
+// api/users/get-favorites.js
 module.exports = (app, config) => {
-  app.get('/api/recs/get-favorites',(req, res) => {
+  app.get('/api/users/get-favorites',(req, res) => {
     const api_url = config.api.url
     const access_token = req.query.access_token
     const endpoint = api_url + '/users/favorites'
