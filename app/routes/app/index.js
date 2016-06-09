@@ -15,7 +15,7 @@ module.exports = (app, config) => {
   })
 
   app.get('/signin',(req, res, next) => {
-    if (req.session.user) {
+    if (req.session.user && !req.query.email) {
       return res.redirect('/dashboard/mls')
     }
     next()
