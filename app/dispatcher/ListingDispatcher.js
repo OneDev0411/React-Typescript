@@ -10,6 +10,7 @@ import getValertsAlert from '../actions/listings/get-valerts-alert'
 import getListing from '../actions/listings/get-listing'
 import shareAlert from '../actions/alerts/share-alert'
 import getAlertRoom from '../actions/alerts/get-alert-room'
+import getAlertMap from '../actions/alerts/get-alert-map'
 import getAlerts from '../actions/alerts/get-alerts'
 import shareListing from '../actions/listings/share-listing'
 import editFavorite from '../actions/rooms/edit-favorite'
@@ -53,6 +54,10 @@ ListingDispatcher.register(payload => {
 
     case 'get-alert-room':
       getAlertRoom(payload.user, payload.room_id, payload.alert_id)
+      break
+
+    case 'get-alert-map':
+      getAlertMap(payload.user, payload.room_id, payload.alert_id)
       break
 
     case 'get-alerts':

@@ -35,6 +35,12 @@ const controller = {
       user: AppStore.data.user,
       options
     })
+    ListingDispatcher.dispatch({
+      action: 'get-alert-map',
+      user: AppStore.data.user,
+      room_id: alert.room,
+      alert_id: alert.id
+    })
     // Fit points on map
     const google = window.google
     const bounds = new google.maps.LatLngBounds()
