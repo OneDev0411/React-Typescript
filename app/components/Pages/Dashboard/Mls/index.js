@@ -82,9 +82,17 @@ export default class Mls extends Component {
         user
       })
     }
+    // Get favorites
     if (!user.favorite_listings) {
       ListingDispatcher.dispatch({
         action: 'get-favorites',
+        user
+      })
+    }
+    // Get actives
+    if (!data.active_listings) {
+      ListingDispatcher.dispatch({
+        action: 'get-actives',
         user
       })
     }
@@ -175,7 +183,7 @@ export default class Mls extends Component {
           })
         }
         break
-      case 'favorites':
+      case 'actives':
         AppStore.data.show_actives_map = true
         delete AppStore.data.show_search_map
         delete AppStore.data.show_alerts_map
@@ -419,11 +427,11 @@ export default class Mls extends Component {
             { data.show_search_map && !data.show_alerts_map ? underline : '' }
           </li>
           <li style={ S('relative pull-left color-263445 font-28 mr-60') }>
-            <span onClick={ this.handleTabClick.bind(this, 'alerts') } style={ S('pointer ' + (data.show_alerts_map ? 'color-263445' : 'color-8696a4')) }>Alerts</span>
+            <span onClick={ this.handleTabClick.bind(this, 'alerts') } style={ S('pointer ' + (data.show_alerts_map ? 'color-263445' : 'color-8696a4')) }>{ user.user_type === 'Agent' ? 'Alerts' : 'Saved Searches' }</span>
             { data.show_alerts_map ? underline : '' }
           </li>
           <li style={ S('relative pull-left color-263445 font-28 mr-60') }>
-            <span onClick={ this.handleTabClick.bind(this, 'favorites') } style={ S('pointer ' + (data.show_actives_map ? 'color-263445' : 'color-8696a4')) }>Activity</span>
+            <span onClick={ this.handleTabClick.bind(this, 'actives') } style={ S('pointer ' + (data.show_actives_map ? 'color-263445' : 'color-8696a4')) }>{ user.user_type === 'Agent' ? 'Activity' : 'My Homes' }</span>
             { data.show_actives_map ? underline : '' }
           </li>
         </ul>
@@ -509,7 +517,7 @@ export default class Mls extends Component {
       })
       map_actives_markers = listings.map((listing, i) => {
         return (
-          <div onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) } onMouseOut={ controller.listing_map.hideListingPopup.bind(this) } key={ 'favorites-map--map-listing-' + listing.id + '-' + i } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.property.address.location.latitude } lng={ listing.property.address.location.longitude } text={'A'}>
+          <div onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) } onMouseOut={ controller.listing_map.hideListingPopup.bind(this) } key={ 'actives-map--map-listing-' + listing.id + '-' + i } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.property.address.location.latitude } lng={ listing.property.address.location.longitude } text={'A'}>
             <ListingMarker
               key={ 'listing-marker-' + listing.id }
               data={ data }
@@ -564,7 +572,7 @@ export default class Mls extends Component {
         </GoogleMap>
       )
     }
-    // Show favorites map
+    // Show actives map
     if (data.show_actives_map) {
       content_area = (
         <GoogleMap
