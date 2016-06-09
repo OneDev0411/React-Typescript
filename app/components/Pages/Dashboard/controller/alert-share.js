@@ -7,7 +7,7 @@ const controller = {
     delete AppStore.data.error
     const total = AppStore.data.listing_map.listings_info.total
     AppStore.data.listing_map.show_share_type_modal = true
-    if (total >= 150) {
+    if (total > 200) {
       AppStore.data.share_modal = {
         error: true
       }

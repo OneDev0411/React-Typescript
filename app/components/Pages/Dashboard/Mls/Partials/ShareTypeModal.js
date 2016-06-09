@@ -6,7 +6,8 @@ import controller from '../../controller'
 import listing_util from '../../../../../utils/listing'
 export default class ShareTypeModal extends Component {
   componentDidMount() {
-    this.refs.title.refs.input.focus()
+    if (this.refs.title)
+      this.refs.title.refs.input.focus()
   }
   saveForMe() {
     const title = this.refs.title.refs.input.value.trim()
@@ -22,18 +23,20 @@ export default class ShareTypeModal extends Component {
     const listing_map = data.listing_map
     const alert = data.listing_map.options
     if (share_modal && share_modal.error) {
+      const warning_style = {
+        ...S('absolute r-260 t-90 bg-fff w-347 h-210 border-1-solid-d7d6d6 text-center p-30 z-10'),
+        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.12), 0 0 4px 0 rgba(0, 0, 0, 0.1)'
+      }
       return (
-        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ listing_map && listing_map.show_share_type_modal } onHide={ controller.listing_map.hideModal }>
-          <Modal.Header closeButton style={ S('border-bottom-1-solid-f8f8f8') }>
-            <Modal.Title className="tempo" style={ S('font-36 ml-15') }>Share Alert</Modal.Title>
-          </Modal.Header>
-          <Modal.Body style={ S('p-30') }>
-            Too many matches!  Please zoom in or set more filters.
-          </Modal.Body>
-          <Modal.Footer style={ S('bg-f8f8f8') }>
-            <Button onClick={ controller.listing_map.hideModal } bsStyle="default">Ok</Button>
-          </Modal.Footer>
-        </Modal>
+        <div style={ warning_style }>
+          <div className="din" style={ S('font-26 color-fe3824 mb-10') }>TOO MANY LISTINGS!</div>
+          <div style={ S('font-15 mb-20') }>
+            We allow up to <strong>200</strong> listings per alert.<br />
+            You have <strong>{ listing_map.listings_info.total }</strong> in your search right now.<br />
+            Please either zoom in or add more filters.
+          </div>
+          <div onClick={ controller.listing_map.hideModal } style={ S('font-17 color-9b9b9b pointer') }>Close</div>
+        </div>
       )
     }
     return (
