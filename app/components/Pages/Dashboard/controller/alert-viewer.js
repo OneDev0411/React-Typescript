@@ -9,9 +9,10 @@ const controller = {
       return true
     return false
   },
-  handleFavoriteAction(mls_number) {
+  handleFavoriteAction(listing) {
     const data = AppStore.data
     const user = data.user
+    const mls_number = listing.mls_number
     // Do instant heart
     let favorite = true
     if (!AppStore.data.user.favorite_listings)
@@ -21,9 +22,19 @@ const controller = {
         if (mls_number_loop !== mls_number)
           return mls_number_loop
       })
+      // Edit actives
+      AppStore.data.active_listings = AppStore.data.active_listings.filter(listing_loop => {
+        if (listing_loop.id !== listing.id)
+          return listing_loop
+      })
       favorite = false
-    } else
+    } else {
       AppStore.data.user.favorite_listings.push(mls_number)
+      // Edit actives
+      if (!AppStore.data.active_listings)
+        AppStore.data.active_listings = []
+      AppStore.data.active_listings.push(listing)
+    }
     AppStore.emitChange()
     // Handle DB later
     ListingDispatcher.dispatch({
