@@ -22,7 +22,6 @@ module.exports = (app, config) => {
       return response.json()
     })
     .then(response => {
-      console.log(response)
       let response_object = response
       response_object.status = 'success'
       return res.json(response_object)

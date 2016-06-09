@@ -59,6 +59,8 @@ const controller = {
     AppStore.data.current_alert = alert
     AppStore.emitChange()
     controller.makePolygonAlert(alert.points)
+    const history = require('../../../../utils/history')
+    history.replaceState(null, '/dashboard/mls/alerts/' + alert.id)
   },
   makePolygonAlert(points) {
     const paths = points.map(path => {

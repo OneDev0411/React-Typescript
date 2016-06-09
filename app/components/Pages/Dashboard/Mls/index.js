@@ -1,6 +1,7 @@
 // Dashboard/Mls/index.js
 import React, { Component } from 'react'
 import S from 'shorti'
+import _ from 'lodash'
 import GoogleMap from 'google-map-react'
 import { ButtonGroup, Button, Modal } from 'react-bootstrap'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
@@ -98,12 +99,36 @@ export default class Mls extends Component {
     }
   }
   componentDidMount() {
-    AppStore.data.show_search_map = true
-    AppStore.emitChange()
+    this.resetViews()
+    this.routeURL()
     this.checkForMobile()
+  }
+  componentDidUpdate() {
+    const data = this.props.data
+    const routeParams = this.props.routeParams
+    const alert_id = routeParams.alert_id
+    if (!alert_id || !data.alerts || data.current_alert)
+      return
+    const alert = _.find(data.alerts, { id: alert_id })
+    if (alert && window.map) {
+      AppStore.data.current_alert = alert
+      AppStore.emitChange()
+      controller.alert_map.showAlertOnMap(alert)
+    }
   }
   componentWillUnmount() {
     controller.listing_map.hideModal()
+  }
+  routeURL() {
+    const data = this.props.data
+    const path = data.path
+    if (path === '/dashboard/mls')
+      AppStore.data.show_search_map = true
+    if (path === '/dashboard/mls/actives')
+      AppStore.data.show_actives_map = true
+    if (path.indexOf('/dashboard/mls/alerts') !== -1)
+      AppStore.data.show_alerts_map = true
+    AppStore.emitChange()
   }
   checkForMobile() {
     AppDispatcher.dispatch({
@@ -132,13 +157,22 @@ export default class Mls extends Component {
     delete AppStore.data.show_welcome_modal
     AppStore.emitChange()
   }
+  changeURL(url) {
+    const history = require('../../../../utils/history')
+    history.replaceState(null, url)
+  }
+  resetViews() {
+    delete AppStore.data.show_search_map
+    delete AppStore.data.show_alerts_map
+    delete AppStore.data.show_actives_map
+    AppStore.emitChange()
+  }
   handleTabClick(type) {
     switch (type) {
       case 'map':
+        this.resetViews()
         AppStore.data.show_search_map = true
         delete AppStore.data.listing_map.auto_move
-        delete AppStore.data.show_alerts_map
-        delete AppStore.data.show_actives_map
         controller.listing_filter.setFilterOptions.bind(this)
         if (window.poly) {
           window.poly.setMap(null)
@@ -157,13 +191,13 @@ export default class Mls extends Component {
             strokeWeight: 10
           })
         }
+        this.changeURL('/dashboard/mls')
         break
       case 'alerts':
+        this.resetViews()
         AppStore.data.show_alerts_map = true
-        delete AppStore.data.show_search_map
         delete AppStore.data.listing_map.auto_move
         delete AppStore.data.show_filter_form
-        delete AppStore.data.show_actives_map
         AppStore.data.show_alerts_map = true
         if (window.poly) {
           window.poly.setMap(null)
@@ -182,15 +216,16 @@ export default class Mls extends Component {
             strokeWeight: 10
           })
         }
+        this.changeURL('/dashboard/mls/alerts')
         break
       case 'actives':
+        this.resetViews()
         AppStore.data.show_actives_map = true
-        delete AppStore.data.show_search_map
-        delete AppStore.data.show_alerts_map
         if (window.poly) {
           window.poly.setMap(null)
           delete window.poly
         }
+        this.changeURL('/dashboard/mls/actives')
         break
       default:
         return
@@ -611,7 +646,7 @@ export default class Mls extends Component {
           <div style={ alert_header_style }>
             <div style={ alert_header_bg }></div>
             <div style={ S('relative ml-15 mt-10 color-fff z-1 font-15') }>
-              { current_alert.title ? current_alert.title : current_alert.proposed_title } ({ alert_options_short })
+              { alert_options_short }
               <div style={ S('pull-right pointer') } onClick={ controller.alert_map.showAlertViewer.bind(this) }>
                 <span style={ S('color-98caf1 mr-15') }>{ new_listings_link }</span>
                 <span className={ !current_alert.actives || (current_alert.actives && !current_alert.actives.length) ? 'hidden' : '' } style={ S('mr-15 relative t-2') }><i style={ S('color-98caf1') } className="fa fa-chevron-right"></i></span>
@@ -719,5 +754,6 @@ export default class Mls extends Component {
 Mls.propTypes = {
   data: React.PropTypes.object,
   params: React.PropTypes.object,
-  location: React.PropTypes.object
+  location: React.PropTypes.object,
+  routeParams: React.PropTypes.object
 }
