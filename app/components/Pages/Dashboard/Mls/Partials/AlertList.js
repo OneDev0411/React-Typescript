@@ -54,6 +54,11 @@ export default class AlertList extends Component {
           }
         </ul>
       )
+      if (!alerts.length) {
+        alerts_list_area = (
+          <div style={ S('p-15') }>No alerts yet</div>
+        )
+      }
     }
     const drawer_style = S(`bg-fff w-350 h-${window.innerHeight - 66} absolute z-1 t-66 l-0 border-right-1-solid-d3d3d3`)
     return (
