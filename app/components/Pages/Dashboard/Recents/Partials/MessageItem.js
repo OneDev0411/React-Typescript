@@ -214,6 +214,21 @@ export default class MessageItem extends Component {
           </div>
         )
       }
+      // If text comment
+      let message_area = (
+        <div style={ S('mt-5 pull-left ml-10 w-80p mt-10 font-15') } className={ message_class_name } dangerouslySetInnerHTML={ { __html: '"' + message_text + '"' } }></div>
+      )
+      // If image comment
+      if (!message_text && message.attachments && message.attachments.length) {
+        const attachment = message.attachments[0]
+        const image_url = attachment.url
+        message_area = (
+          <div style={ S('mt-5 pull-left ml-10 w-80p mt-10 font-15') } className={ message_class_name }>
+            <div style={ S('color-b0b0b0 fw-600 font-16 mb-10') }>{ author.first_name } uploaded an image:</div>
+            <div onClick={ this.props.showFileViewer.bind(this, attachment) } style={ S(`bg-url(${image_url}) bg-cover w-80p h-200 mb-10`) }></div>
+          </div>
+        )
+      }
       return (
         <div className="message-item" style={ S('relative mb-15 pt-5 font-15') }>
           <div style={ S('mt-5 pull-left') }>
@@ -246,7 +261,7 @@ export default class MessageItem extends Component {
                   <div style={ S('mt-5 pull-left w-40 h-40') }>
                     { profile_image_div }
                   </div>
-                  <div style={ S('mt-5 pull-left ml-10 w-80p mt-10 font-15') } className={ message_class_name } dangerouslySetInnerHTML={ { __html: '"' + message_text + '"' } }></div>
+                  { message_area }
                   <div className="clearfix"></div>
                 </div>
               </div>

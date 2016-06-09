@@ -564,7 +564,7 @@ export default {
   getFavorites: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/users/get-favorites?access_token=' + params.access_token
+    const endpoint = api_host + '/api/user/get-favorites?access_token=' + params.access_token
     fetch(endpoint)
     .then(response => {
       if (response.status >= 400) {

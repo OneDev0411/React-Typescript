@@ -84,12 +84,6 @@ export default class Mls extends Component {
     }
     if (!user.favorite_listings) {
       ListingDispatcher.dispatch({
-        action: 'get-actives',
-        user
-      })
-    }
-    if (!user.favorite_listings) {
-      ListingDispatcher.dispatch({
         action: 'get-favorites',
         user
       })

@@ -366,6 +366,7 @@ export default class Dashboard extends Component {
   }
 
   showFileViewer(attachment) {
+    AppStore.data.show_file_viewer = true
     AppStore.data.current_room.viewer = {
       file: attachment
     }
@@ -374,6 +375,7 @@ export default class Dashboard extends Component {
 
   closeFileViewer() {
     delete AppStore.data.current_room.viewer
+    delete AppStore.data.show_file_viewer
     AppStore.emitChange()
   }
 
@@ -383,6 +385,8 @@ export default class Dashboard extends Component {
   }
 
   showListingViewer(listing) {
+    if (AppStore.data.show_file_viewer)
+      return
     AppStore.data.show_listing_viewer = true
     AppStore.data.current_listing = listing
     delete AppStore.data.show_alert_modal
