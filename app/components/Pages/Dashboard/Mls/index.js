@@ -548,7 +548,8 @@ export default class Mls extends Component {
     if (user && data.active_listings) {
       let listings = data.active_listings
       listings = listings.filter(listing => {
-        return listing.property.address.location
+        if (listing.property && listing.property.address)
+          return listing.property.address.location
       })
       map_actives_markers = listings.map((listing, i) => {
         return (

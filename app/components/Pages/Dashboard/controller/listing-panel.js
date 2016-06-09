@@ -68,8 +68,8 @@ const controller = {
       AppStore.data.listing_map.listings = listings_sorted
     if (data.alerts_map && data.show_alerts_map && data.alerts_map.listings)
       AppStore.data.alerts_map.listings = listings_sorted
-    if (data.favorites_map && data.show_favorites_map && data.favorites_map.listings)
-      AppStore.data.favorites_map.listings = listings_sorted
+    if (data.show_actives_map && data.active_listings)
+      AppStore.data.active_listings = listings_sorted
     AppStore.data.listing_map.sorting_direction = sorting_direction
     AppStore.data.listing_map.sorting_by = sort_by
     AppStore.emitChange()

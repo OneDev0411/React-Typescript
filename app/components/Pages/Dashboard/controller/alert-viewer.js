@@ -1,6 +1,7 @@
 // controller/alert-viewer.js
 import AppStore from '../../../../stores/AppStore'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
+import _ from 'lodash'
 const controller = {
   isFavorited(mls_number) {
     const data = AppStore.data
@@ -33,7 +34,8 @@ const controller = {
       // Edit actives
       if (!AppStore.data.active_listings)
         AppStore.data.active_listings = []
-      AppStore.data.active_listings.push(listing)
+      if (!_.find(AppStore.data.active_listings, { id: listing.id }))
+        AppStore.data.active_listings.push(listing)
     }
     AppStore.emitChange()
     // Handle DB later
