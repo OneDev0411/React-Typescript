@@ -262,6 +262,7 @@ const controller = {
       bounds.getNorthEast().lng()
     ]
     delete window.poly
+    delete window.poly_search
     controller.handleBoundsChange(center, zoom, bounds)
   },
   handleGoogleMapApi(google) {
