@@ -57,15 +57,23 @@ export default class RoomsList extends Component {
         if (current_room && current_room.id === room.id)
           list_style = { ...list_style, ...S('bg-f5fafe') }
         if (!room.latest_message) {
+          list_style = { ...list_style, ...S('h-60') }
           const time_updated = helpers.friendlyDate(room.updated_at)
           return (
             <li className="room-list__item" style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, room.id) }>
-              <div className="text-right" style={ S('color-ccc w-50p absolute r-5 font-13') } >
-                { time_updated.month } { time_updated.date }, { time_updated.time_friendly }
-              </div>
               <div style={ S('relative') }>
-                New Room
+                <ProfileImage data={ data } user={ room.owner }/>
+                <div className="pull-left" style={ S('ml-50 w-90p') }>
+                  <div className="room-list__item__title pull-left" style={ S('w-60p') }>
+                    <b>{ room.title }</b>
+                  </div>
+                </div>
+                <div className="text-right" style={ S('color-ccc w-50p absolute r-10n font-13') } >
+                  { time_updated.month } { time_updated.date }, { time_updated.time_friendly }
+                </div>
+                <div className="clearfix"></div>
               </div>
+              <div className="clearfix"></div>
             </li>
           )
         }
