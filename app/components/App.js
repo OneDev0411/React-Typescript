@@ -35,9 +35,7 @@ export default class App extends Component {
   componentDidMount() {
     AppStore.addChangeListener(this._onChange.bind(this))
     window.socket.on('reconnecting', () => {
-      console.log('reconnecting')
       AppStore.data.socket_reconnecting = true
-      AppStore.data.socket_disconnect_time = new Date().getTime()
       AppStore.emitChange()
     })
     window.socket.on('reconnect', () => {
