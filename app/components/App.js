@@ -35,13 +35,26 @@ export default class App extends Component {
   componentDidMount() {
     AppStore.addChangeListener(this._onChange.bind(this))
     window.socket.on('reconnecting', () => {
+      console.log('reconnecting')
       AppStore.data.socket_reconnecting = true
+      AppStore.data.socket_disconnect_time = new Date().getTime()
       AppStore.emitChange()
     })
     window.socket.on('reconnect', () => {
       window.socket.emit('Authenticate', AppStore.data.user.access_token)
       delete AppStore.data.socket_reconnecting
       AppStore.data.socket_reconnected = true
+      const data = AppStore.data
+      const current_room = data.current_room
+      const user = data.user
+      let room_id
+      if (current_room)
+        room_id = data.current_room.id
+      AppDispatcher.dispatch({
+        action: 'get-rooms',
+        user,
+        room_id
+      })
       AppStore.emitChange()
       // Remove reconnected message after 3 seconds
       setTimeout(() => {

@@ -24,7 +24,7 @@ export default class ShareTypeModal extends Component {
     const alert = data.listing_map.options
     if (share_modal && share_modal.error) {
       const warning_style = {
-        ...S('absolute r-260 t-90 bg-fff w-347 h-210 border-1-solid-d7d6d6 text-center p-30 z-10'),
+        ...S('absolute r-260 t-87 bg-fff w-347 h-210 border-1-solid-d7d6d6 text-center p-30 z-10'),
         boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.12), 0 0 4px 0 rgba(0, 0, 0, 0.1)'
       }
       return (
