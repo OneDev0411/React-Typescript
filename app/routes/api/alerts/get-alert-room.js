@@ -5,7 +5,7 @@ module.exports = (app, config) => {
     const room_id = req.query.room_id
     const alert_id = req.query.alert_id
     const access_token = req.query.access_token
-    const endpoint = api_url + '/rooms/' + room_id + '/recs/feed?filter=' + alert_id + '&sorting_value=Update'
+    const endpoint = api_url + '/rooms/' + room_id + '/recs/feed?filter=' + alert_id + '&sorting_value=Update&limit=50'
     fetch(endpoint,{
       method: 'get',
       headers: {

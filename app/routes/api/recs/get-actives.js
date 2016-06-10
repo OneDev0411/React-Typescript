@@ -2,7 +2,7 @@
 module.exports = (app, config) => {
   app.get('/api/recs/get-actives',(req, res) => {
     const api_url = config.api.url
-    const endpoint = api_url + '/recs/actives'
+    const endpoint = api_url + '/recs/actives?limit=50'
     const access_token = req.query.access_token
     fetch(endpoint,{
       method: 'get',
