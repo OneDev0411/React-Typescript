@@ -67,7 +67,8 @@ export default class App extends Component {
     // Check for mobile
     this.checkForMobile()
     // If logged in
-    if (AppStore.data.user)
+    const data = AppStore.data
+    if (data.user)
       this.triggerBranchBanner()
   }
 

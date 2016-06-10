@@ -8,6 +8,7 @@ export default class ListingMarker extends Component {
     const data = this.props.data
     const user = data.user
     const listing = this.props.listing
+    // console.log(listing)
     const listing_map = data.listing_map
     const property = this.props.property
     const address = this.props.address

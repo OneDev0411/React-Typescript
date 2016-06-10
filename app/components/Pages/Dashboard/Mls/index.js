@@ -168,16 +168,16 @@ export default class Mls extends Component {
     AppStore.emitChange()
   }
   handleTabClick(type) {
+    if (window.poly) {
+      window.poly.setMap(null)
+      delete window.poly
+    }
+    this.resetViews()
     switch (type) {
-      case 'map':
-        this.resetViews()
+      case 'search':
         AppStore.data.show_search_map = true
         delete AppStore.data.listing_map.auto_move
         controller.listing_filter.setFilterOptions.bind(this)
-        if (window.poly) {
-          window.poly.setMap(null)
-          delete window.poly
-        }
         if (window.poly_search) {
           window.poly = window.poly_search
           const google = window.google
@@ -194,15 +194,10 @@ export default class Mls extends Component {
         this.changeURL('/dashboard/mls')
         break
       case 'alerts':
-        this.resetViews()
         AppStore.data.show_alerts_map = true
         delete AppStore.data.listing_map.auto_move
         delete AppStore.data.show_filter_form
         AppStore.data.show_alerts_map = true
-        if (window.poly) {
-          window.poly.setMap(null)
-          delete window.poly
-        }
         if (window.poly_alerts) {
           window.poly = window.poly_alerts
           const google = window.google
@@ -219,12 +214,7 @@ export default class Mls extends Component {
         this.changeURL('/dashboard/mls/alerts')
         break
       case 'actives':
-        this.resetViews()
         AppStore.data.show_actives_map = true
-        if (window.poly) {
-          window.poly.setMap(null)
-          delete window.poly
-        }
         this.changeURL('/dashboard/mls/actives')
         break
       default:
@@ -324,7 +314,7 @@ export default class Mls extends Component {
     if (listing_map && listing_map.map_id)
       map_id = listing_map.map_id
     let remove_drawing_button
-    if (window.poly && data.show_search_map) {
+    if (data.show_search_map && window.poly) {
       let right_value = 80
       if (data.listing_panel)
         right_value = 910
@@ -353,7 +343,7 @@ export default class Mls extends Component {
     )
     let results_actions
     let create_alert_button
-    if (data.show_search_map && !data.show_alerts_map) {
+    if (data.show_search_map) {
       create_alert_button = (
         <Button style={ S('absolute r-20 t-70 z-1 bg-2196f3 w-200 h-50') } bsStyle="primary" type="button" onClick={ controller.alert_share.showShareTypeModal.bind(this) }>
           { (user && user.user_type === 'Agent') ? 'Create Alert' : 'Save Search' }
@@ -458,15 +448,15 @@ export default class Mls extends Component {
       <nav style={ toolbar_style }>
         <ul style={ S('relative l-30n t-5') }>
           <li style={ S('relative pull-left font-28 mr-60') }>
-            <span onClick={ this.handleTabClick.bind(this, 'map') } style={ S('pointer ' + (data.show_search_map ? 'color-263445' : 'color-8696a4')) }>Search</span>
+            <span onClick={ this.handleTabClick.bind(this, 'search') } style={ S('pointer ' + (data.show_search_map ? 'color-263445' : 'color-8696a4')) }>Search</span>
             { data.show_search_map && !data.show_alerts_map ? underline : '' }
           </li>
           <li style={ S('relative pull-left color-263445 font-28 mr-60') }>
-            <span onClick={ this.handleTabClick.bind(this, 'alerts') } style={ S('pointer ' + (data.show_alerts_map ? 'color-263445' : 'color-8696a4')) }>{ user.user_type === 'Agent' ? 'Alerts' : 'Saved Searches' }</span>
+            <span onClick={ this.handleTabClick.bind(this, 'alerts') } style={ S('pointer ' + (data.show_alerts_map ? 'color-263445' : 'color-8696a4')) }>{ user && user.user_type === 'Agent' ? 'Alerts' : 'Saved Searches' }</span>
             { data.show_alerts_map ? underline : '' }
           </li>
           <li style={ S('relative pull-left color-263445 font-28 mr-60') }>
-            <span onClick={ this.handleTabClick.bind(this, 'actives') } style={ S('pointer ' + (data.show_actives_map ? 'color-263445' : 'color-8696a4')) }>{ user.user_type === 'Agent' ? 'Activity' : 'My Homes' }</span>
+            <span onClick={ this.handleTabClick.bind(this, 'actives') } style={ S('pointer ' + (data.show_actives_map ? 'color-263445' : 'color-8696a4')) }>{ user && user.user_type === 'Agent' ? 'Activity' : 'My Homes' }</span>
             { data.show_actives_map ? underline : '' }
           </li>
         </ul>
@@ -503,7 +493,7 @@ export default class Mls extends Component {
     }
     // Create markers
     let map_listing_markers
-    if (listing_map && listing_map.listings) {
+    if (data.show_search_map && listing_map && listing_map.listings) {
       let listings = listing_map.listings
       listings = listings.filter(listing => {
         return listing.location
@@ -524,7 +514,7 @@ export default class Mls extends Component {
       })
     }
     let map_alerts_markers
-    if (alerts_map && alerts_map.listings) {
+    if (data.show_alerts_map && alerts_map && alerts_map.listings) {
       let listings = alerts_map.listings
       listings = listings.filter(listing => {
         return listing.location
@@ -545,7 +535,7 @@ export default class Mls extends Component {
       })
     }
     let map_actives_markers
-    if (user && data.active_listings) {
+    if (data.show_actives_map && data.active_listings) {
       let listings = data.active_listings
       listings = listings.filter(listing => {
         if (listing.property && listing.property.address)
