@@ -518,8 +518,8 @@ export default class Dashboard extends Component {
               <div style={ S('color-929292 font-18') }>Start a Conversation</div>
               <div style={ S('color-bebebe font-14') }>Conversations are awesome. Start one now.</div>
             </div>
-            <Button onClick={ this.showModal.bind(this, 'create-chat') } style={ S('w-200 p-0') } bsStyle="primary">
-              <img src="/images/dashboard/icons/create-chat.svg" />
+            <Button onClick={ this.showModal.bind(this, 'create-chat') } style={ S('w-200 p-20 color-929292') } bsStyle="default">
+              <img style={ S('h-18 relative t-1n l-2') } src="/images/dashboard/chats/add-chat.svg"/>&nbsp;&nbsp;&nbsp;Create Chat
             </Button>
           </div>
         </div>
