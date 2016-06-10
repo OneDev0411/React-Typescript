@@ -55,7 +55,7 @@ const controller = {
     }
     const listing_map = {
       map_id: new Date().getTime(),
-      default_options: options,
+      default_options: { ...options },
       options,
       is_loading: true,
       center,

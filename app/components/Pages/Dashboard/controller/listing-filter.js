@@ -27,8 +27,7 @@ const controller = {
     options.minimum_price = default_options.minimum_price
     options.maximum_price = default_options.maximum_price
     const minimum_price = Number(this.refs.minimum_price.refs.input.value.trim())
-    if (minimum_price)
-      options.minimum_price = minimum_price
+    options.minimum_price = minimum_price
     const maximum_price = Number(this.refs.maximum_price.refs.input.value.trim())
     if (maximum_price)
       options.maximum_price = maximum_price
@@ -208,7 +207,7 @@ const controller = {
     ListingDispatcher.dispatch({
       action: 'get-valerts',
       user,
-      default_options
+      options: default_options
     })
   },
   handleOptionChange(key, value) {

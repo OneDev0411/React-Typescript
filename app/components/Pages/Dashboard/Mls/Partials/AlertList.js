@@ -12,6 +12,7 @@ export default class AlertList extends Component {
   }
   render() {
     const data = this.props.data
+    const user = data.user
     const alerts = data.alerts
     const current_alert = data.current_alert
     let alerts_list_area = <Loading />
@@ -27,8 +28,8 @@ export default class AlertList extends Component {
               const users = alert.users
               let users_area
               if (users && users.length) {
-                users_area = users.map(user => {
-                  return <span key={ 'alert-user-' + user.id }>{ user.first_name }, </span>
+                users_area = users.map(user_shared => {
+                  return <span key={ 'alert-user-' + user_shared.id }>{ user_shared.first_name }, </span>
                 })
               }
               return (
@@ -55,7 +56,7 @@ export default class AlertList extends Component {
       )
       if (!alerts.length) {
         alerts_list_area = (
-          <div style={ S('p-15') }>No alerts yet</div>
+          <div style={ S('p-15') }>No { user.user_type === 'Agent' ? 'alerts' : 'saved searches' } yet.</div>
         )
       }
     }
