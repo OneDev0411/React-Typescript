@@ -345,7 +345,7 @@ export default class Mls extends Component {
     let create_alert_button
     if (data.show_search_map) {
       create_alert_button = (
-        <Button style={ S('absolute r-20 t-70 z-1 bg-2196f3 w-200 h-50') } bsStyle="primary" type="button" onClick={ controller.alert_share.showShareTypeModal.bind(this) }>
+        <Button style={ S('absolute r-20 t-70 z-1 bg-2196f3 w-200 h-50 font-18') } bsStyle="primary" type="button" onClick={ controller.alert_share.showShareTypeModal.bind(this) }>
           { (user && user.user_type === 'Agent') ? 'Create Alert' : 'Save Search' }
         </Button>
       )
