@@ -1,7 +1,6 @@
 // Partials/ListingMarker.js
 import React, { Component } from 'react'
 import S from 'shorti'
-import _ from 'lodash'
 import listing_util from '../../../../utils/listing'
 import helpers from '../../../../utils/helpers'
 export default class ListingMarker extends Component {
@@ -14,9 +13,11 @@ export default class ListingMarker extends Component {
     return false
   }
   getSocialBadge(listing) {
-    let social_icon = 'heart'
-    if (listing.commented_by)
+    let social_icon
+    if (listing.commented_by || listing.shared_by)
       social_icon = 'comment-bubble'
+    if (this.isFavorited(listing))
+      social_icon = 'heart'
     let badge_style = S('absolute l-4 pr-4 t-3 w-20 h-20 border-right-1-solid-dbdbdb')
     if (listing.open_houses) {
       badge_style = {
@@ -66,22 +67,20 @@ export default class ListingMarker extends Component {
     let social_info
     if (listing.shared_by && listing.shared_by.length) {
       social_info = 'Shared by '
-      social_info = listing.shared_by.map(shared_user => {
+      social_info += listing.shared_by.map(shared_user => {
         if (shared_user.id === user.id)
           return 'You, '
-        return shared_user.first_name + ', '
+        return (shared_user.first_name ? shared_user.first_name : shared_user.email) + ', '
       })
     }
     if (listing.commented_by && listing.commented_by.length) {
       social_info = 'Commented by '
-      social_info = listing.commented_by.map(commented_user => {
+      social_info += listing.commented_by.map(commented_user => {
         if (commented_user.id === user.id)
           return 'You, '
-        return commented_user.first_name + ', '
+        return (commented_user.first_name.trim() ? commented_user.first_name : commented_user.email) + ', '
       })
     }
-    if (listing.commented_by)
-      social_info = 'Commented by ' + _.pluck(listing.commented_by, 'first_name')
     const listing_popup = (
       <div className={ popup_class } style={ S('absolute w-240 t-110n l-35n z-1000 bg-fff border-1-solid-929292') }>
         <div style={ S('pull-left mr-10') }>
@@ -93,7 +92,7 @@ export default class ListingMarker extends Component {
           { property.bathroom_count } Baths,&nbsp;
           { square_feet } Sqft</div>
           <div style={ S('font-11 color-' + listing_util.getStatusColor(listing.status)) }>{ listing.status } { sold_date }</div>
-          <div>{ social_info }</div>
+          <div style={ S('w-100 overflow-hidden pb-5') }>{ social_info }</div>
         </div>
       </div>
     )
