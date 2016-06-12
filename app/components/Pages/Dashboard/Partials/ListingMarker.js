@@ -67,18 +67,20 @@ export default class ListingMarker extends Component {
     let social_info
     if (listing.shared_by && listing.shared_by.length) {
       social_info = 'Shared by '
-      social_info += listing.shared_by.map(shared_user => {
+      listing.shared_by.forEach((shared_user, shared_i) => {
         if (shared_user.id === user.id)
-          return 'You, '
-        return (shared_user.first_name ? shared_user.first_name : shared_user.email) + ', '
+          social_info += 'You' + (shared_i === listing.shared_by.length - 1 ? '' : ', ')
+        else
+          social_info += (shared_user.first_name.trim() ? shared_user.first_name : shared_user.email) + (shared_i === listing.shared_by.length - 1 ? '' : ', ')
       })
     }
     if (listing.commented_by && listing.commented_by.length) {
       social_info = 'Commented by '
-      social_info += listing.commented_by.map(commented_user => {
+      listing.commented_by.forEach((commented_user, comment_i) => {
         if (commented_user.id === user.id)
-          return 'You, '
-        return (commented_user.first_name.trim() ? commented_user.first_name : commented_user.email) + ', '
+          social_info += 'You' + (comment_i === listing.commented_by.length - 1 ? '' : ', ')
+        else
+          social_info += (commented_user.first_name.trim() ? commented_user.first_name : commented_user.email) + (comment_i === listing.commented_by.length - 1 ? '' : ', ')
       })
     }
     const listing_popup = (

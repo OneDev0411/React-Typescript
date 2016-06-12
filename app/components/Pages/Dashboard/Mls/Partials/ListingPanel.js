@@ -84,9 +84,30 @@ export default class ListingPanel extends Component {
           </div>
         )
       }
+      // Price
       let price = listing.price
       if (listing.close_price && user.user_type === 'Agent')
         price = listing.close_price
+      // Social info
+      let social_info
+      if (listing.shared_by && listing.shared_by.length) {
+        social_info = 'Shared by '
+        listing.shared_by.forEach((shared_user, shared_i) => {
+          if (shared_user.id === user.id)
+            social_info += 'You' + (shared_i === listing.shared_by.length - 1 ? '' : ', ')
+          else
+            social_info += (shared_user.first_name.trim() ? shared_user.first_name : shared_user.email) + (shared_i === listing.shared_by.length - 1 ? '' : ', ')
+        })
+      }
+      if (listing.commented_by && listing.commented_by.length) {
+        social_info = 'Commented by '
+        listing.commented_by.forEach((commented_user, comment_i) => {
+          if (commented_user.id === user.id)
+            social_info += 'You' + (comment_i === listing.commented_by.length - 1 ? '' : ', ')
+          else
+            social_info += (commented_user.first_name.trim() ? commented_user.first_name : commented_user.email) + (comment_i === listing.commented_by.length - 1 ? '' : ', ')
+        })
+      }
       return (
         <div onMouseOut={ this.props.removeActiveListing.bind(this) } onMouseOver={ this.props.setActiveListing.bind(this, listing) } key={ 'panel-listing-grid-' + listing.id + '-' + i } style={ S('relative pointer w-415 h-350 pb-10 pl-10 bg-fff pull-left') }>
           <div style={ S('absolute r-0') }>
@@ -121,6 +142,9 @@ export default class ListingPanel extends Component {
               </div>
               <div className="pull-left" style={ S('mt-4n') }>
                 { open_houses }
+              </div>
+              <div className="pull-left" style={ S('mt-4n') }>
+                { social_info }
               </div>
               <div className="clearfix"></div>
             </div>
