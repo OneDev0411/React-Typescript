@@ -92,7 +92,7 @@ export default class ListingMarker extends Component {
           { property.bathroom_count } Baths,&nbsp;
           { square_feet } Sqft</div>
           <div style={ S('font-11 color-' + listing_util.getStatusColor(listing.status)) }>{ listing.status } { sold_date }</div>
-          <div style={ S('w-100 overflow-hidden pb-5') }>{ social_info }</div>
+          <div style={ S('w-120 overflow-hidden pb-5') }>{ social_info }</div>
         </div>
       </div>
     )
