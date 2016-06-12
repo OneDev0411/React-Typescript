@@ -8,12 +8,12 @@ export default (user) => {
   Rec.getActives(params, (err, res) => {
     const recs = res.data
     const active_listings = []
-    recs.forEach(active_listing => {
+    recs.forEach(rec => {
       active_listings.push({
-        ...active_listing.listing,
-        favorited_by: active_listing.favorited_by,
-        commented_by: active_listing.commented_by,
-        shared_by: active_listing.shared_by
+        ...rec.listing,
+        favorited_by: rec.favorited_by,
+        commented_by: rec.commented_by,
+        shared_by: rec.shared_by
       })
     })
     AppStore.data.active_listings = active_listings

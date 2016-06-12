@@ -5,11 +5,35 @@ import _ from 'lodash'
 import listing_util from '../../../../utils/listing'
 import helpers from '../../../../utils/helpers'
 export default class ListingMarker extends Component {
+  isFavorited(listing) {
+    const data = this.props.data
+    const user = data.user
+    const mls_number = listing.mls_number
+    if (user.favorite_listings.indexOf(mls_number) !== -1)
+      return true
+    return false
+  }
+  getSocialBadge(listing) {
+    let social_icon = 'heart'
+    if (listing.commented_by)
+      social_icon = 'comment-bubble'
+    let badge_style = S('absolute l-4 pr-4 t-3 w-20 h-20 border-right-1-solid-dbdbdb')
+    if (listing.open_houses) {
+      badge_style = {
+        ...badge_style,
+        ...S('l-18')
+      }
+    }
+    return (
+      <div style={ badge_style }>
+        <img src={ '/images/dashboard/mls/marker/' + social_icon + '.svg' } />
+      </div>
+    )
+  }
   render() {
     const data = this.props.data
     const user = data.user
     const listing = this.props.listing
-    // console.log(listing)
     const listing_map = data.listing_map
     const property = this.props.property
     const address = this.props.address
@@ -40,10 +64,22 @@ export default class ListingMarker extends Component {
     if (listing.cover_image_url)
       resize_url = listing_util.getResizeUrl(listing.cover_image_url)
     let social_info
-    if (listing.shared_by)
-      social_info = 'Shared by ' + _.pluck(listing.shared_by, 'first_name')
-    if (listing.favorited_by)
-      social_info = 'Favorited by ' + _.pluck(listing.favorited_by, 'first_name')
+    if (listing.shared_by && listing.shared_by.length) {
+      social_info = 'Shared by '
+      social_info = listing.shared_by.map(shared_user => {
+        if (shared_user.id === user.id)
+          return 'You, '
+        return shared_user.first_name + ', '
+      })
+    }
+    if (listing.commented_by && listing.commented_by.length) {
+      social_info = 'Commented by '
+      social_info = listing.commented_by.map(commented_user => {
+        if (commented_user.id === user.id)
+          return 'You, '
+        return commented_user.first_name + ', '
+      })
+    }
     if (listing.commented_by)
       social_info = 'Commented by ' + _.pluck(listing.commented_by, 'first_name')
     const listing_popup = (
@@ -64,41 +100,22 @@ export default class ListingMarker extends Component {
     let marker_style = S('relative w-70 h-25 br-3')
     let status_style = S('absolute l-6 t-8 w-10 h-10 br-100 bg-' + status_color)
     let viewed_class = ''
-    // Social tag
-    let social_tag
-    if (listing.favorited) {
+    // Social badge
+    let social_badge
+    if (this.isFavorited(listing) || listing.commented_by) {
       marker_style = {
         ...marker_style,
-        ...S('w-85')
+        ...S('w-95')
       }
       status_style = {
         ...status_style,
-        ...S('l-23')
+        ...S('l-30')
       }
-      social_tag = (
-        <div style={ S('absolute l-6 t-3 w-10 h-10 br-100') }>
-          <img src="/images/dashboard/mls/marker/heart.svg" />
-        </div>
-      )
-    }
-    if (listing.commented_by) {
-      marker_style = {
-        ...marker_style,
-        ...S('w-90')
-      }
-      status_style = {
-        ...status_style,
-        ...S('l-25')
-      }
-      social_tag = (
-        <div style={ S('absolute l-6 t-4 w-10 h-10 br-100') }>
-          <img src="/images/dashboard/mls/marker/comment-bubble.svg" />
-        </div>
-      )
+      social_badge = this.getSocialBadge(listing)
     }
     let listing_marker = (
       <div className={ 'map__listing-marker' + active_class + viewed_class } style={ marker_style }>
-        { social_tag }
+        { social_badge }
         <div style={ status_style }></div>
         <div style={ S('absolute r-10 t-5') }>${ price_small }{ letter }</div>
       </div>
@@ -114,13 +131,24 @@ export default class ListingMarker extends Component {
         ...status_style,
         ...S('l-20')
       }
-      marker_style = { ...marker_style, ...S('w-80') }
+      marker_style = { ...marker_style, ...S('w-90') }
+      if (this.isFavorited(listing) || listing.commented_by) {
+        marker_style = {
+          ...marker_style,
+          ...S('w-110')
+        }
+        status_style = {
+          ...status_style,
+          ...S('l-46')
+        }
+        social_badge = this.getSocialBadge(listing)
+      }
       if (listing_map && listing_map.listings_viewed && listing_map.listings_viewed.indexOf(listing.id) !== -1)
         viewed_class = ' viewed'
       listing_marker = (
         <div className={ 'map__listing-marker' + active_class + viewed_class } style={ marker_style }>
           <div style={ open_style }>O<br />P<br />E<br />N</div>
-          { social_tag }
+          { social_badge }
           <div style={ status_style }></div>
           <div style={ S('absolute r-10 t-5') }>${ price_small }{ letter }</div>
         </div>
