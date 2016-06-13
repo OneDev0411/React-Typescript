@@ -10,6 +10,21 @@ export default class AlertList extends Component {
       return title.substring(0, 35) + '...'
     return title
   }
+  alertHasNotifications(alert_id) {
+    let result = false
+    const data = this.props.data
+    if (!data.notifications)
+      return false
+    const summaries = data.notifications.summary.room_notification_summaries
+    if (!summaries)
+      return false
+    summaries.forEach(summary => {
+      const user_created_alert_ids = summary.user_created_alert_ids
+      if (user_created_alert_ids && user_created_alert_ids.indexOf(alert_id))
+        result = true
+    })
+    return result
+  }
   render() {
     const data = this.props.data
     const user = data.user
@@ -32,10 +47,24 @@ export default class AlertList extends Component {
                   return <span key={ 'alert-user-' + user_shared.id }>{ user_shared.first_name }, </span>
                 })
               }
+              // Notifications
+              let notification
+              let has_notification
+              if (data.notifications) {
+                has_notification = this.alertHasNotifications(alert.id)
+                if (has_notification) {
+                  notification = (
+                    <div style={ S('absolute t-35 r-15 w-0 h-0') }>
+                      <i className="fa fa-circle" style={ S('font-8 color-3388FF z-10') }></i>
+                    </div>
+                  )
+                }
+              }
               return (
-                <li key={ 'alert-list-' + alert.id } style={ S('h-100 border-bottom-1-solid-dedede p-20 pointer' + (current_alert && current_alert.id === alert.id ? ' bg-f7f7f7' : '')) } onClick={ controller.alert_map.showAlertOnMap.bind(this, alert) }>
-                  <div style={ S('font-18 fw-500') }>{ this.truncateTitle(alert.title ? alert.title : alert.proposed_title) }</div>
-                  <div style={ S('font-14 fw-500') }>Shared with: { users_area }</div>
+                <li key={ 'alert-list-' + alert.id } style={ S('relative h-100 border-bottom-1-solid-dedede p-20 pointer' + (current_alert && current_alert.id === alert.id ? ' bg-f7f7f7' : '')) } onClick={ controller.alert_map.showAlertOnMap.bind(this, alert) }>
+                  <div style={ S('font-18' + (has_notification ? ' fw-500' : '')) }>{ this.truncateTitle(alert.title ? alert.title : alert.proposed_title) }</div>
+                  { notification }
+                  <div style={ S('font-14 color-9b9b9b') }>Shared with: { users_area }</div>
                   {
                     /*
                     <div>

@@ -49,8 +49,8 @@ export default {
       return
     const property_types = alert.property_subtypes.toString().replace(new RegExp('RES-', 'g'), ' ').trim()
     const min_price = helpers.numberWithCommas(alert.minimum_price)
-    const max_price = alert.maximum_price < 900000001 ? helpers.numberWithCommas(alert.maximum_price) : 'any'
-    let price_area = `$${min_price}-$${max_price}`
+    const max_price = alert.maximum_price < 900000001 ? '$' + helpers.numberWithCommas(alert.maximum_price) : 'any'
+    let price_area = `$${min_price}-${max_price}`
     if (alert.minimum_price === 0 && alert.maximum_price === 900000001)
       price_area = 'Any price'
     let bedrooms_area = `${alert.minimum_bedrooms}+ Beds`
