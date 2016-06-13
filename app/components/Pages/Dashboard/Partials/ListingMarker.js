@@ -8,7 +8,7 @@ export default class ListingMarker extends Component {
     const data = this.props.data
     const user = data.user
     const mls_number = listing.mls_number
-    if (user.favorite_listings.indexOf(mls_number) !== -1)
+    if (user && user.favorite_listings && user.favorite_listings.indexOf(mls_number) !== -1)
       return true
     return false
   }

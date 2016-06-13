@@ -50,6 +50,29 @@ module.exports = (app, config) => {
     })
   })
 
+  // Other MLS
+  app.get('/dashboard/mls/alerts', (req, res, next) => {
+    if (!req.session.user) {
+      const path = req.path
+      return res.redirect('/signin?redirect_to=' + path)
+    }
+    next()
+  })
+  app.get('/dashboard/mls/alerts/:id', (req, res, next) => {
+    if (!req.session.user) {
+      const path = req.path
+      return res.redirect('/signin?redirect_to=' + path)
+    }
+    next()
+  })
+  app.get('/dashboard/mls/actives', (req, res, next) => {
+    if (!req.session.user) {
+      const path = req.path
+      return res.redirect('/signin?redirect_to=' + path)
+    }
+    next()
+  })
+
   // Seamless listing
   app.get('/dashboard/mls/:id', (req, res, next) => {
     AppStore.data.user = req.session.user
