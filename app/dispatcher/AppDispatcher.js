@@ -57,6 +57,9 @@ import searchAgentSettings from '../actions/agents/search-agent-settings'
 // Device
 import checkForMobile from '../actions/device/check-for-mobile'
 
+// Alerts
+import acknowledgeAlertNotifications from '../actions/alerts/acknowledge-notifications'
+
 const AppDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
@@ -202,6 +205,10 @@ AppDispatcher.register(payload => {
 
     case 'edit-password':
       editPassword(payload.user, payload.old_password, payload.new_password)
+      break
+
+    case 'acknowledge-alert-notifications':
+      acknowledgeAlertNotifications(payload.user, payload.alert_id)
       break
 
     case 'acknowledge-room-notifications':

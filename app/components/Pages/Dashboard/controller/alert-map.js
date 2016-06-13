@@ -1,7 +1,34 @@
 // controller/alert-map.js
 import AppStore from '../../../../stores/AppStore'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
+import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 const controller = {
+  alertHasNotifications(alert_id) {
+    let result = false
+    const data = AppStore.data
+    if (!data.notifications)
+      return false
+    const summaries = data.notifications.summary.room_notification_summaries
+    if (!summaries)
+      return false
+    summaries.forEach(summary => {
+      const user_created_alert_ids = summary.user_created_alert_ids
+      if (user_created_alert_ids && user_created_alert_ids.indexOf(alert_id) !== -1)
+        result = true
+    })
+    return result
+  },
+  acknowledgeNotifications(alert_id) {
+    if (!this.alertHasNotifications(alert_id))
+      return
+    const data = AppStore.data
+    const user = data.user
+    AppDispatcher.dispatch({
+      action: 'acknowledge-alert-notifications',
+      user,
+      alert_id
+    })
+  },
   showAlertOnMap(alert) {
     const lat = alert.location.latitude
     const lng = alert.location.longitude
@@ -41,6 +68,7 @@ const controller = {
       room_id: alert.room,
       alert_id: alert.id
     })
+    controller.acknowledgeNotifications(alert.id)
     // Fit points on map
     const google = window.google
     const bounds = new google.maps.LatLngBounds()

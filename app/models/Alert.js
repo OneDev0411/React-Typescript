@@ -106,10 +106,10 @@ export default {
   acknowledgeNotifications: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const room = params.room
+    const alert = params.alert
     const endpoint = api_host + '/api/acknowledge-alert-notifications'
     const request_object = {
-      room,
+      alert,
       access_token: params.access_token
     }
     fetch(endpoint, {

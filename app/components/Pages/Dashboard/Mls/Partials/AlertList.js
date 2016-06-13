@@ -20,7 +20,7 @@ export default class AlertList extends Component {
       return false
     summaries.forEach(summary => {
       const user_created_alert_ids = summary.user_created_alert_ids
-      if (user_created_alert_ids && user_created_alert_ids.indexOf(alert_id))
+      if (user_created_alert_ids && user_created_alert_ids.indexOf(alert_id) !== -1)
         result = true
     })
     return result
@@ -54,7 +54,7 @@ export default class AlertList extends Component {
                 has_notification = this.alertHasNotifications(alert.id)
                 if (has_notification) {
                   notification = (
-                    <div style={ S('absolute t-35 r-15 w-0 h-0') }>
+                    <div style={ S('absolute t-35 r-20 w-0 h-0') }>
                       <i className="fa fa-circle" style={ S('font-8 color-3388FF z-10') }></i>
                     </div>
                   )
@@ -64,7 +64,7 @@ export default class AlertList extends Component {
                 <li key={ 'alert-list-' + alert.id } style={ S('relative h-100 border-bottom-1-solid-dedede p-20 pointer' + (current_alert && current_alert.id === alert.id ? ' bg-f7f7f7' : '')) } onClick={ controller.alert_map.showAlertOnMap.bind(this, alert) }>
                   <div style={ S('font-18' + (has_notification ? ' fw-500' : '')) }>{ this.truncateTitle(alert.title ? alert.title : alert.proposed_title) }</div>
                   { notification }
-                  <div style={ S('font-14 color-9b9b9b') }>Shared with: { users_area }</div>
+                  <div style={ S('font-14' + (has_notification ? ' fw-500' : ' color-9b9b9b')) }>Shared with: { users_area }</div>
                   {
                     /*
                     <div>

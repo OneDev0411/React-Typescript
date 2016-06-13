@@ -5,6 +5,7 @@ module.exports = (app, config) => {
     const alert = req.body.alert
     const endpoint = api_url + '/alerts/' + alert + '/notifications'
     const access_token = req.body.access_token
+    console.log(endpoint)
     fetch(endpoint,{
       method: 'delete',
       headers: {
