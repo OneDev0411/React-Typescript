@@ -314,7 +314,7 @@ export default class Mls extends Component {
     if (listing_map && listing_map.map_id)
       map_id = listing_map.map_id
     let remove_drawing_button
-    if (data.show_search_map && window.poly) {
+    if (data.show_search_map && window.poly && window.poly_search) {
       let right_value = 80
       if (data.listing_panel)
         right_value = 910
