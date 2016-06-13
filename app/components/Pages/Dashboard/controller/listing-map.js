@@ -137,7 +137,8 @@ const controller = {
     })
   },
   hideModal() {
-    delete AppStore.data.listing_map.saving_alert
+    if (AppStore.data.listing_map)
+      delete AppStore.data.listing_map.saving_alert
     delete AppStore.data.show_share_listing_modal
     delete AppStore.data.show_alert_saved_modal
     if (AppStore.data.listing_map) {
@@ -310,7 +311,8 @@ const controller = {
     AppStore.emitChange()
   },
   removeActiveListing() {
-    delete AppStore.data.listing_map.active_listing
+    if (AppStore.data.listing_map)
+      delete AppStore.data.listing_map.active_listing
     AppStore.emitChange()
   },
   showListingPopup(listing) {
