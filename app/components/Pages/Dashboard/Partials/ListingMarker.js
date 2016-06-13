@@ -13,12 +13,17 @@ export default class ListingMarker extends Component {
     return false
   }
   getSocialBadge(listing) {
+    let badge_style = S('absolute l-4 pr-4 t-3 w-20 h-20 border-right-1-solid-dbdbdb')
     let social_icon
-    if (listing.commented_by || listing.shared_by)
+    if (listing.commented_by || listing.shared_by) {
       social_icon = 'comment-bubble'
+      badge_style = {
+        ...badge_style,
+        ...S('t-4')
+      }
+    }
     if (this.isFavorited(listing))
       social_icon = 'heart'
-    let badge_style = S('absolute l-4 pr-4 t-3 w-20 h-20 border-right-1-solid-dbdbdb')
     if (listing.open_houses) {
       badge_style = {
         ...badge_style,
