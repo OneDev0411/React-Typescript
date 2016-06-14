@@ -27,6 +27,10 @@ export default (user, rooms, contacts, emails, phone_numbers, alert) => {
         AppStore.data.alerts.unshift(new_alert)
       }
       AppStore.emitChange()
+      setTimeout(() => {
+        delete AppStore.data.show_alert_saved_modal
+        AppStore.emitChange()
+      }, 3000)
     })
   }
   // Share w/ phone_numbers
@@ -48,6 +52,10 @@ export default (user, rooms, contacts, emails, phone_numbers, alert) => {
         AppStore.data.alerts.unshift(new_alert)
       }
       AppStore.emitChange()
+      setTimeout(() => {
+        delete AppStore.data.show_alert_saved_modal
+        AppStore.emitChange()
+      }, 3000)
     })
   }
   // Share w/ room
@@ -76,6 +84,10 @@ export default (user, rooms, contacts, emails, phone_numbers, alert) => {
       delete AppStore.data.share_list
       AppStore.data.show_alert_saved_modal = true
       AppStore.emitChange()
+      setTimeout(() => {
+        delete AppStore.data.show_alert_saved_modal
+        AppStore.emitChange()
+      }, 3000)
     })
   }
   // Share w/ contacts
@@ -148,6 +160,10 @@ export default (user, rooms, contacts, emails, phone_numbers, alert) => {
       delete AppStore.data.share_list
       AppStore.data.show_alert_saved_modal = true
       AppStore.emitChange()
+      setTimeout(() => {
+        delete AppStore.data.show_alert_saved_modal
+        AppStore.emitChange()
+      }, 3000)
     })
   }
 }
