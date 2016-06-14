@@ -6,14 +6,12 @@ const controller = {
   markAsRead(recs) {
     const data = AppStore.data
     const user = data.user
-    console.log(recs)
     if (!recs || !recs.length)
       return
     const recommendations = recs.map(rec => {
       return {
         recommendation: rec.id,
-        action: 'read',
-        delete: true
+        action: 'read'
       }
     })
     ListingDispatcher.dispatch({

@@ -5,7 +5,7 @@ export default (user, recommendations) => {
     access_token: user.access_token,
     recommendations
   }
-  Rec.mark(params, (err, res) => {
-    console.log(err, res)
+  Rec.mark(params, () => {
+    // console.log(err, res)
   })
 }

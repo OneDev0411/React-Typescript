@@ -10,7 +10,6 @@ export default (user, room_id, alert_id) => {
   }
   Alert.get(params, (err, res) => {
     const listings = res.data
-    console.log('Alert.get', listings)
     AppStore.data.current_alert.feed = listings
     AppStore.emitChange()
   })
