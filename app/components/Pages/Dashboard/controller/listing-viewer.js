@@ -31,6 +31,8 @@ const controller = {
   hideListingViewer() {
     delete AppStore.data.show_listing_viewer
     delete AppStore.data.current_listing
+    if (!AppStore.data.show_search_map || !AppStore.data.show_alerts_map || !AppStore.data.show_actives_map)
+      AppStore.data.show_search_map = true
     this.props.history.pushState(null, '/dashboard/mls')
     AppStore.emitChange()
   },
