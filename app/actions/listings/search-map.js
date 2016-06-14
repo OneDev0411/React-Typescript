@@ -18,6 +18,12 @@ export default (user, q, status) => {
     AppStore.data.listing_map.listings = listings
     const zoom = 13
     AppStore.data.listing_map.auto_move = true
+    if (!listings || !listings.length) {
+      delete AppStore.data.listing_map.auto_move
+      AppStore.data.listing_map.no_listings_found = true
+      AppStore.emitChange()
+      return
+    }
     // Center and zoom map on single listing MLS
     if (listings.length === 1) {
       const listing = listings[0]
@@ -51,6 +57,7 @@ export default (user, q, status) => {
       delete AppStore.data.listing_map.auto_move
       AppStore.emitChange()
     }, 4000)
+    delete AppStore.data.listing_map.no_listings_found
     AppStore.data.listing_map.has_search_input = true
     AppStore.emitChange()
   })
