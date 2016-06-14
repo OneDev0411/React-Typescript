@@ -7,7 +7,7 @@ export default class AlertViewer extends Component {
   componentDidMount() {
     const data = this.props.data
     const current_alert = data.current_alert
-    const recommendations = current_alert.actives
+    const recommendations = current_alert.feed
     controller.alert_viewer.markAsRead(recommendations)
   }
   render() {
@@ -19,10 +19,10 @@ export default class AlertViewer extends Component {
       listing_gallery_area = (
         <div style={ S('m-0 p-0') }>
           {
-            feed.map(active => {
+            feed.map(feed_item => {
               return (
                 <ListingCard
-                  listing={ active.listing }
+                  listing={ feed_item.listing }
                 />
               )
             })

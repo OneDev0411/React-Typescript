@@ -8,7 +8,6 @@ module.exports = (app, config) => {
     const request_object = {
       recommendations
     }
-    console.log(request_object)
     fetch(endpoint, {
       method: 'patch',
       headers: {  
