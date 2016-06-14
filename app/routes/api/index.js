@@ -78,4 +78,5 @@ module.exports = (app, config) => {
   require('./intercom/signin')(app, config)
   // Recs
   require('./recs/get-actives')(app, config)
+  require('./recs/get-feed')(app, config)
 }

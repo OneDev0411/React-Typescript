@@ -1,4 +1,4 @@
-// models/Agent.js
+// models/Alert.js
 import es6Promise from 'es6-promise'
 es6Promise.polyfill()
 import 'isomorphic-fetch'
