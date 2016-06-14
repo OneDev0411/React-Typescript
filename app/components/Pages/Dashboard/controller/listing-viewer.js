@@ -3,8 +3,7 @@ import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 const controller = {
   showListingViewer(listing) {
-    const history = require('../../../../utils/history')
-    history.replaceState(null, '/dashboard/mls/' + listing.id)
+    this.props.history.pushState(null, '/dashboard/mls/' + listing.id)
     const data = AppStore.data
     const user = data.user
     AppStore.data.show_listing_viewer = true
@@ -32,7 +31,9 @@ const controller = {
   hideListingViewer() {
     delete AppStore.data.show_listing_viewer
     delete AppStore.data.current_listing
-    history.pushState(null, null, '/dashboard/mls')
+    if (!AppStore.data.show_search_map || !AppStore.data.show_alerts_map || !AppStore.data.show_actives_map)
+      AppStore.data.show_search_map = true
+    this.props.history.pushState(null, '/dashboard/mls')
     AppStore.emitChange()
   },
   showModalGallery(image_url) {

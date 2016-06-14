@@ -13,13 +13,13 @@ export default class AlertViewer extends Component {
   render() {
     const data = this.props.data
     const current_alert = data.current_alert
-    const actives = current_alert.actives
+    const feed = current_alert.feed
     let listing_gallery_area
-    if (current_alert && actives) {
+    if (current_alert && feed) {
       listing_gallery_area = (
         <div style={ S('m-0 p-0') }>
           {
-            actives.map(active => {
+            feed.map(active => {
               return (
                 <ListingCard
                   listing={ active.listing }

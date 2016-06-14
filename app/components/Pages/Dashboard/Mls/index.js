@@ -107,6 +107,12 @@ export default class Mls extends Component {
     const data = this.props.data
     const routeParams = this.props.routeParams
     const alert_id = routeParams.alert_id
+    const path = data.path
+    if (data.show_listing_viewer && path === '/dashboard/mls') {
+      delete AppStore.data.show_listing_viewer
+      delete AppStore.data.current_listing
+      AppStore.emitChange()
+    }
     if (!alert_id || !data.alerts || data.current_alert)
       return
     const alert = _.find(data.alerts, { id: alert_id })
@@ -158,8 +164,7 @@ export default class Mls extends Component {
     AppStore.emitChange()
   }
   changeURL(url) {
-    const history = require('../../../../utils/history')
-    history.replaceState(null, url)
+    this.props.history.pushState(null, url)
   }
   resetViews() {
     delete AppStore.data.show_search_map
@@ -271,7 +276,7 @@ export default class Mls extends Component {
           data={ data }
           listing={ data.current_listing }
           hideModal={ controller.listing_map.hideModal }
-          hideListingViewer={ controller.listing_viewer.hideListingViewer }
+          hideListingViewer={ controller.listing_viewer.hideListingViewer.bind(this) }
           showModalGallery={ controller.listing_viewer.showModalGallery }
           handleModalGalleryNav={ controller.listing_viewer.handleModalGalleryNav }
           showShareListingModal={ controller.listing_viewer.showShareListingModal }
@@ -631,8 +636,8 @@ export default class Mls extends Component {
         const current_alert = data.current_alert
         const alert_options_short = listing_util.alertOptionsShort(current_alert)
         let new_listings_link = 'Loading...'
-        if (current_alert.actives)
-          new_listings_link = current_alert.actives.length ? `View new listings (${current_alert.actives.length})` : 'No new listings'
+        if (current_alert.feed)
+          new_listings_link = current_alert.feed.length ? `View new listings (${current_alert.feed.length})` : 'No new listings'
         alert_header_area = (
           <div style={ alert_header_style }>
             <div style={ alert_header_bg }></div>
@@ -640,7 +645,7 @@ export default class Mls extends Component {
               { alert_options_short }
               <div style={ S('pull-right pointer') } onClick={ controller.alert_map.showAlertViewer.bind(this) }>
                 <span style={ S('color-98caf1 mr-15') }>{ new_listings_link }</span>
-                <span className={ !current_alert.actives || (current_alert.actives && !current_alert.actives.length) ? 'hidden' : '' } style={ S('mr-15 relative t-2') }><i style={ S('color-98caf1') } className="fa fa-chevron-right"></i></span>
+                <span className={ !current_alert.feed || (current_alert.feed && !current_alert.feed.length) ? 'hidden' : '' } style={ S('mr-15 relative t-2') }><i style={ S('color-98caf1') } className="fa fa-chevron-right"></i></span>
               </div>
             </div>
           </div>
@@ -746,5 +751,6 @@ Mls.propTypes = {
   data: React.PropTypes.object,
   params: React.PropTypes.object,
   location: React.PropTypes.object,
-  routeParams: React.PropTypes.object
+  routeParams: React.PropTypes.object,
+  history: React.PropTypes.object
 }
