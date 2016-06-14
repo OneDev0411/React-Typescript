@@ -241,13 +241,8 @@ export default class SideBar extends Component {
   }
   handleChatNavClick() {
     const data = this.props.data
-    const current_room = data.current_room
     if (data.current_listing)
       this.hideListingViewer()
-    if (current_room)
-      history.pushState(null, null, '/dashboard/recents/' + current_room.id)
-    else
-      history.pushState(null, null, '/dashboard/recents/')
   }
   toggleShowPassword() {
     if (!AppStore.data.settings)
@@ -632,5 +627,6 @@ export default class SideBar extends Component {
 SideBar.propTypes = {
   data: React.PropTypes.object,
   viewAllTransactions: React.PropTypes.func,
-  location: React.PropTypes.object
+  location: React.PropTypes.object,
+  history: React.PropTypes.object
 }

@@ -107,6 +107,12 @@ export default class Mls extends Component {
     const data = this.props.data
     const routeParams = this.props.routeParams
     const alert_id = routeParams.alert_id
+    const path = data.path
+    if (data.show_listing_viewer && path === '/dashboard/mls') {
+      delete AppStore.data.show_listing_viewer
+      delete AppStore.data.current_listing
+      AppStore.emitChange()
+    }
     if (!alert_id || !data.alerts || data.current_alert)
       return
     const alert = _.find(data.alerts, { id: alert_id })
@@ -158,8 +164,7 @@ export default class Mls extends Component {
     AppStore.emitChange()
   }
   changeURL(url) {
-    const history = require('../../../../utils/history')
-    history.replaceState(null, url)
+    this.props.history.pushState(null, url)
   }
   resetViews() {
     delete AppStore.data.show_search_map
@@ -271,7 +276,7 @@ export default class Mls extends Component {
           data={ data }
           listing={ data.current_listing }
           hideModal={ controller.listing_map.hideModal }
-          hideListingViewer={ controller.listing_viewer.hideListingViewer }
+          hideListingViewer={ controller.listing_viewer.hideListingViewer.bind(this) }
           showModalGallery={ controller.listing_viewer.showModalGallery }
           handleModalGalleryNav={ controller.listing_viewer.handleModalGalleryNav }
           showShareListingModal={ controller.listing_viewer.showShareListingModal }
@@ -746,5 +751,6 @@ Mls.propTypes = {
   data: React.PropTypes.object,
   params: React.PropTypes.object,
   location: React.PropTypes.object,
-  routeParams: React.PropTypes.object
+  routeParams: React.PropTypes.object,
+  history: React.PropTypes.object
 }
