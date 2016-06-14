@@ -3,6 +3,22 @@ import AppStore from '../../../../stores/AppStore'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import _ from 'lodash'
 const controller = {
+  markAsRead(recs) {
+    const data = AppStore.data
+    const user = data.user
+    const recommendations = recs.map(rec => {
+      return {
+        recommendation: rec.id,
+        action: 'read',
+        delete: true
+      }
+    })
+    ListingDispatcher.dispatch({
+      action: 'mark-recs-as-read',
+      user,
+      recommendations
+    })
+  },
   isFavorited(mls_number) {
     const data = AppStore.data
     const user = data.user

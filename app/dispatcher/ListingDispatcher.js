@@ -16,6 +16,8 @@ import shareListing from '../actions/listings/share-listing'
 import editFavorite from '../actions/rooms/edit-favorite'
 import getActives from '../actions/recs/get-actives'
 import getFavorites from '../actions/user/get-favorites'
+// import getFeed from '../actions/recs/get-feed'
+import markRecsAsRead from '../actions/recs/mark-as-read'
 
 const ListingDispatcher = new Dispatcher()
 
@@ -78,6 +80,10 @@ ListingDispatcher.register(payload => {
 
     case 'edit-favorite':
       editFavorite(payload.user, payload.mls_number, payload.favorite)
+      break
+
+    case 'mark-recs-as-read':
+      markRecsAsRead(payload.user, payload.recommendations)
       break
 
     default:
