@@ -62,6 +62,22 @@ const controller = {
       mls_number,
       favorite
     })
+  },
+  handleMoreResultsClick() {
+    const data = AppStore.data
+    const user = data.user
+    const current_alert = data.current_alert
+    const feed = current_alert.feed
+    if (!feed || feed.length === 0)
+      return
+    AppStore.data.current_alert.loading_more_feed_results = true
+    AppStore.emitChange()
+    ListingDispatcher.dispatch({
+      action: 'get-paged-recs',
+      user,
+      alert: current_alert,
+      timestamp: feed[feed.length - 1].created_at
+    })
   }
 }
 export default controller

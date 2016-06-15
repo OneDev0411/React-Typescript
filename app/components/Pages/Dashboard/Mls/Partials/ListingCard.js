@@ -30,7 +30,7 @@ export default class ListingCard extends Component {
       opacity: '.3'
     }
     return (
-      <div key={ 'listing-viewer-' + listing.id } style={ listing_card_style }>
+      <div key={ 'listing-viewer-' + listing.id + '-' + helpers.randomString(10) } style={ listing_card_style }>
         <FavoriteHeart
           listing={ listing }
         />

@@ -16,7 +16,7 @@ import shareListing from '../actions/listings/share-listing'
 import editFavorite from '../actions/rooms/edit-favorite'
 import getActives from '../actions/recs/get-actives'
 import getFavorites from '../actions/user/get-favorites'
-// import getFeed from '../actions/recs/get-feed'
+import getPagedRecs from '../actions/recs/get-paged-recs'
 import markRecsAsRead from '../actions/recs/mark-as-read'
 
 const ListingDispatcher = new Dispatcher()
@@ -60,6 +60,10 @@ ListingDispatcher.register(payload => {
 
     case 'get-alert-map':
       getAlertMap(payload.user, payload.room_id, payload.alert_id)
+      break
+
+    case 'get-paged-recs':
+      getPagedRecs(payload.user, payload.alert, payload.timestamp)
       break
 
     case 'get-alerts':

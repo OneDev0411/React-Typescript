@@ -5,7 +5,13 @@ module.exports = (app, config) => {
     const room_id = req.query.room_id
     const alert_id = req.query.alert_id
     const access_token = req.query.access_token
-    const endpoint = api_url + '/rooms/' + room_id + '/recs/feed?filter=' + alert_id + '&sorting_value=Update&limit=50'
+    let limit = req.query.limit
+    const timestamp = req.query.timestamp
+    if (!limit)
+      limit = 50
+    let endpoint = api_url + '/rooms/' + room_id + '/recs/feed?filter=' + alert_id + '&sorting_value=Update&limit=' + limit
+    if (timestamp)
+      endpoint += '&timestamp=' + timestamp
     fetch(endpoint,{
       method: 'get',
       headers: {
