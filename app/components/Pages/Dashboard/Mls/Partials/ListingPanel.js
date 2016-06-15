@@ -49,7 +49,7 @@ export default class ListingPanel extends Component {
   render() {
     const data = this.props.data
     const user = data.user
-    const listing_map = this.props.data.listing_map
+    const listing_map = data.listing_map
     if (!listing_map || listing_map && !listing_map.listings)
       return <div></div>
     let listings
@@ -293,13 +293,22 @@ export default class ListingPanel extends Component {
     )
     if (data.is_mobile)
       listing_panel_btn = null
+    let listings_total
+    if (data.show_search_map) {
+      if (listing_map.listings_info && listing_map.listings_info.total)
+        listings_total = 'of ' + listing_map.listings_info.total
+    }
+    if (data.show_alerts_map) {
+      if (data.alerts_map && data.alerts_map.listings_info)
+        listings_total = 'of ' + data.alerts_map.listings_info.total
+    }
     return (
       <div style={ listing_panel_wrap_style }>
         { listing_panel_btn }
         <div style={ listing_panel_style } className={ panel_class }>
           <div>
             <div style={ S('pt-10 pl-15 pr-15 mb-10') }>
-              <div className="tempo" style={ S('color-444 fw-100 font-24') }>{ listings.length } Homes Found</div>
+              <div className="tempo" style={ S('color-444 fw-100 font-24') }>{ listings.length }{ listings_total } Homes Found</div>
               <div>
                 Sorting by
                 <DropdownButton bsStyle="link" title={ sortby_title } id="dropdown-size-large">

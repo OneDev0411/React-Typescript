@@ -38,7 +38,7 @@ export default class AlertViewer extends Component {
     }
     const alert_viewer_header_style = S(`w-${window.innerWidth - 420} absolute z-2 pt-25 pr-20 pl-20 h-70 bg-f7f7f7`)
     let more_button
-    if (current_alert.info.total > feed.length) {
+    if (current_alert.feed_info.total > feed.length) {
       more_button = (
         <div style={ S('w-100p p-60 text-center') }>
           <Button
