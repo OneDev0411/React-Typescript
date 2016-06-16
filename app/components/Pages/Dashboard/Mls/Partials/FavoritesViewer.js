@@ -5,7 +5,7 @@ import controller from '../../controller'
 import ListingCard from './ListingCard'
 export default class AlertViewer extends Component {
   isFavorited(listing_id) {
-    return controller.alert_viewer.isFavorited(listing_id)
+    return controller.listing_card.isFavorited(listing_id)
   }
   render() {
     const data = this.props.data

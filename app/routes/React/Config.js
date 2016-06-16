@@ -25,6 +25,9 @@ import Notifications from '../../components/Pages/Account/Notifications'
 import Recommend from '../../components/Pages/Dashboard/Mls/Listing/Recommend'
 import Agents from '../../components/Pages/Dashboard/Mls/Agents'
 
+// Widgets
+import ListingsWidget from '../../components/Pages/Widgets/Listings'
+
 export default (
   <Route path="/" component={App}>
     <IndexRoute component={Landing}/>
@@ -52,6 +55,7 @@ export default (
     <Route path="dashboard/transactions/:id/attachments/:id" component={SingleTransaction}/>
     <Route path="verify/:slug" component={Verify}/>
     <Route path="password/:slug" component={Password}/>
+    <Route path="widgets/listings" component={ListingsWidget}/>
     <Route path="*" component={NoMatch}/>
   </Route>
 )

@@ -18,6 +18,7 @@ import getActives from '../actions/recs/get-actives'
 import getFavorites from '../actions/user/get-favorites'
 import getPagedRecs from '../actions/recs/get-paged-recs'
 import markRecsAsRead from '../actions/recs/mark-as-read'
+import getValertsWidget from '../actions/listings/get-valerts-widget'
 
 const ListingDispatcher = new Dispatcher()
 
@@ -44,6 +45,10 @@ ListingDispatcher.register(payload => {
 
     case 'get-valerts-alert':
       getValertsAlert(payload.user, payload.options)
+      break
+
+    case 'get-valerts-widget':
+      getValertsWidget(payload.user, payload.options)
       break
 
     case 'get-listing':

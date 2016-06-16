@@ -7,7 +7,7 @@ import helpers from '../../../../../utils/helpers'
 import FavoriteHeart from '../../Partials/FavoriteHeart'
 export default class ListingCard extends Component {
   isFavorited(listing_id) {
-    return controller.alert_viewer.isFavorited(listing_id)
+    return controller.listing_card.isFavorited(listing_id)
   }
   render() {
     const listing = this.props.listing

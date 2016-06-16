@@ -78,7 +78,7 @@ export default class ListingViewer extends Component {
     if (listing && listing.property) {
       property = listing.property
       price = listing.price
-      if (listing.close_price && user.user_type === 'Agent')
+      if (listing.close_price && user && user.user_type === 'Agent')
         price = listing.close_price
       price = helpers.numberWithCommas(price)
       year_built = property.year_built

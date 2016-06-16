@@ -27,6 +27,15 @@ export default {
   getDOM: dom_seconds => {
     return Math.floor((((new Date()).getTime() / 1000) - dom_seconds) / 86400)
   },
+  getSmallPrice: price => {
+    let price_small = Math.floor(price / 1000).toFixed(2).replace(/[.,]00$/, '')
+    let letter = 'K'
+    if (price_small > 1000) {
+      price_small = (price_small / 1000).toFixed(2).replace(/[.,]00$/, '')
+      letter = 'M'
+    }
+    return price_small + letter
+  },
   getResizeUrl(full_size_url) {
     if (!full_size_url)
       return ''

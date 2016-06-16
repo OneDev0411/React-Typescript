@@ -21,6 +21,8 @@ const controller = {
   addToAlreadyViewed(id) {
     const data = AppStore.data
     const listing_map = data.listing_map
+    if (!listing_map)
+      return
     if (listing_map.listings_viewed) {
       if (listing_map.listings_viewed.indexOf(id) === -1)
         AppStore.data.listing_map.listings_viewed.push(id)

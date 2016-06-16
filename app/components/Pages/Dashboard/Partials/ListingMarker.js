@@ -48,12 +48,7 @@ export default class ListingMarker extends Component {
     let price = listing.price
     if (listing.close_price && user.user_type === 'Agent')
       price = listing.close_price
-    let price_small = Math.floor(price / 1000).toFixed(2).replace(/[.,]00$/, '')
-    let letter = 'K'
-    if (price_small > 1000) {
-      price_small = (price_small / 1000).toFixed(2).replace(/[.,]00$/, '')
-      letter = 'M'
-    }
+    const price_small = listing_util.getSmallPrice(price)
     let active_class = ''
     if (data.listing_map && listing.id === data.listing_map.active_listing || context === 'single')
       active_class = ' active'
@@ -123,7 +118,7 @@ export default class ListingMarker extends Component {
       <div className={ 'map__listing-marker' + active_class + viewed_class } style={ marker_style }>
         { social_badge }
         <div style={ status_style }></div>
-        <div style={ S('absolute r-10 t-5') }>${ price_small }{ letter }</div>
+        <div style={ S('absolute r-10 t-5') }>${ price_small }</div>
       </div>
     )
     // Open house
@@ -156,7 +151,7 @@ export default class ListingMarker extends Component {
           <div style={ open_style }>O<br />P<br />E<br />N</div>
           { social_badge }
           <div style={ status_style }></div>
-          <div style={ S('absolute r-10 t-5') }>${ price_small }{ letter }</div>
+          <div style={ S('absolute r-10 t-5') }>${ price_small }</div>
         </div>
       )
     }

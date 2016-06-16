@@ -5,12 +5,14 @@ module.exports = (app, config) => {
     const endpoint = api_url + '/valerts'
     const access_token = req.body.access_token
     const options = req.body.options
+    const headers = {  
+      'Content-Type': 'application/json'
+    }
+    if (access_token)
+      headers.authorization = 'Bearer ' + (access_token ? access_token : '')
     fetch(endpoint,{
       method: 'post',
-      headers: {  
-        'Content-Type': 'application/json',
-        'authorization': 'Bearer ' + access_token,
-      },
+      headers,
       body: JSON.stringify(options)
     })
     .then(response => {
