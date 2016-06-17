@@ -184,8 +184,20 @@ export default class Listings extends Component {
         />
       )
     })
+    let links_area = (
+      <div>
+        <div style={ S('text-center mt-20 mb-30') }>
+          <a href="https://rechat.com/dashboard/mls" target="_blank" className="btn btn-default" style={ S(`w-280 font-17 p-20 color-fff border-1-solid-${data.theme.primary} bg-${data.theme.primary}`) }>View Exclusive Listings</a>
+        </div>
+        <div style={ S('color-9b9b9b font-15 mb-40') } className="text-center">
+          Powered by <a href="https://rechat.com" target="_blank" style={ S('color-2196f3 fw-500') }>Rechat<span style={ S('color-2196f3 font-9 relative t-7n fw-500') }>TM</span></a>
+        </div>
+      </div>
+    )
     if (widget.is_loading_listings)
       listings_area = <Loading />
+    if (widget.is_loading_listings)
+      links_area = ''
     const header_style = S('text-center')
     const status_buttons_area_style = S('text-center mb-20')
     return (
@@ -202,12 +214,7 @@ export default class Listings extends Component {
         </div>
         { listings_area }
         <div className="clearfix"></div>
-        <div style={ S('text-center mt-20 mb-30') }>
-          <a href="https://rechat.com/dashboard/mls" target="_blank" className="btn btn-default" style={ S(`w-280 font-17 p-20 color-fff border-1-solid-${data.theme.primary} bg-${data.theme.primary}`) }>View Exclusive Listings</a>
-        </div>
-        <div style={ S('color-9b9b9b font-15 mb-40') } className="text-center">
-          Powered by <a href="https://rechat.com" target="_blank" style={ S('color-2196f3 fw-500') }>Rechat<span style={ S('color-2196f3 font-9 relative t-7n fw-500') }>TM</span></a>
-        </div>
+        { links_area }
         <CheckEmailModal
           data={ data }
           hideModal={ this.hideModal }
