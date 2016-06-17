@@ -18,7 +18,7 @@ export default class ListingCard extends Component {
       address = property.address
     const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
     const listing_card_style = {
-      ...S(`w-480 h-420 mr-20 mb-20 pull-left br-3 pointer relative`),
+      ...S(`w-480 h-420 ml-20 mb-20 pull-left br-3 pointer relative`),
       boxShadow: '0 0 2px 0 rgba(0, 0, 0, 0.2)',
       overflow: 'hidden'
     }
@@ -31,7 +31,7 @@ export default class ListingCard extends Component {
     }
     const price_small = listing_util.getSmallPrice(listing.price)
     const price_tag_style = {
-      ...S('absolute b-30 p-15 pt-6 h-48 bg-f47624 font-26 fw-500 color-fff'),
+      ...S(`absolute b-30 p-15 pt-6 h-48 bg-f47624 font-26 fw-500 color-fff`),
       borderTopRightRadius: '3px',
       borderBottomRightRadius: '3px'
     }
@@ -51,35 +51,48 @@ export default class ListingCard extends Component {
         }
       }
       const signup_input_style = {
-        ...S('h-37'),
+        ...S('h-46 w-230'),
         borderTopRightRadius: 0,
         borderBottomRightRadius: 0
       }
       const signup_btn_style = {
+        ...S('h-46 w-130'),
         borderTopLeftRadius: 0,
         borderBottomLeftRadius: 0
       }
       signup_form = (
         <div style={ S('absolute w-450 h-240 br-3 t-70 l-15 bg-fff p-20 z-2') }>
-          <div className="din" style={ S('font-30 color-263445') }>We are on <span style={ S('color-2196f3') }>Rechat</span><span style={ S('color-2196f3 font-14 relative t-12n') }>TM</span></div>
-          <div style={ S('font-17 fw-500 color-9b9b9b') }>Sign up with Rechat to save this home and to share<br/>
+          <div onClick={ this.props.handleCloseSignupForm } className="close" style={ S('absolute r-15 t-10') }>&times;</div>
+          <div className="din" style={ S('font-30 color-263445 mb-5') }>We are on <span style={ S('color-2196f3') }>Rechat</span><span style={ S('color-2196f3 font-14 relative t-12n') }>TM</span></div>
+          <div style={ S('font-17 fw-500 color-9b9b9b mb-20 text-center') }>Sign up with Rechat to save this home and to share<br/>
           your favorites with our agent or your partner.</div>
-          <div>
-            <form onSubmit={ this.props.handleEmailSubmit.bind(this) }>
+          <div style={ S('mb-5 w-100p') }>
+            <form style={ S('mb-20 center-block w-360') } onSubmit={ this.props.handleEmailSubmit.bind(this) }>
               <div style={ S('pull-left') }>
                 <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
                   <Input ref="email" style={ signup_input_style } type="text" placeholder="Enter email address" />
                 </OverlayTrigger>
               </div>
               <div style={ S('pull-left') }>
-                <Button className={ data.submitting ? 'disabled' : '' } bsStyle="primary" style={ signup_btn_style } type="submit">{ data.submitting ? 'Submitting...' : 'Get started' }</Button>
+                <Button className={ data.submitting ? 'disabled' : '' } bsStyle="primary" style={ signup_btn_style } type="submit">{ data.submitting ? 'Submitting...' : 'Lets Go' }</Button>
               </div>
             </form>
+            <div className="clearfix"></div>
           </div>
+          <div style={ S('color-9b9b9b text-center') }>Already have an account? <a href="/signin" target="_parent">Log in</a></div>
         </div>
       )
     }
     const status_color = listing_util.getStatusColor(listing.status)
+    let year_built_area
+    if (property.year_built) {
+      year_built_area = (
+        <span>
+          &nbsp;&middot;&nbsp;{ property.year_built ? 'Built in ' + property.year_built : '' }
+        </span>
+      )
+    }
+
     return (
       <div key={ 'listing-viewer-' + listing.id + '-' + helpers.randomString(10) } style={ listing_card_style }>
         <FavoriteHeart
@@ -100,12 +113,11 @@ export default class ListingCard extends Component {
             </div>
             <div style={ S('pull-left mt-8') }>
               <span>{ property.bedroom_count } Beds</span>
-              &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+              &nbsp;&middot;&nbsp;
               <span>{ property.bathroom_count } Baths</span>
-              &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+              &nbsp;&middot;&nbsp;
               <span>{ square_feet } Sqft</span>
-              &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-              <span>{ property.year_built ? 'Built in ' + property.year_built : '' }</span>
+              { year_built_area }
             </div>
           </div>
         </div>
@@ -117,5 +129,6 @@ export default class ListingCard extends Component {
 ListingCard.propTypes = {
   data: React.PropTypes.object,
   listing: React.PropTypes.object,
-  handleEmailSubmit: React.PropTypes.func
+  handleEmailSubmit: React.PropTypes.func,
+  handleCloseSignupForm: React.PropTypes.func
 }

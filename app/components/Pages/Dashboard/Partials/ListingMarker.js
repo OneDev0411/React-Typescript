@@ -46,7 +46,7 @@ export default class ListingMarker extends Component {
     const context = this.props.context
     const status_color = listing_util.getStatusColor(listing.status)
     let price = listing.price
-    if (listing.close_price && user.user_type === 'Agent')
+    if (listing.close_price && user && user.user_type === 'Agent')
       price = listing.close_price
     const price_small = listing_util.getSmallPrice(price)
     let active_class = ''

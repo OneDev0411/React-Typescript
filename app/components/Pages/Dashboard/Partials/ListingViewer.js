@@ -268,7 +268,7 @@ export default class ListingViewer extends Component {
         )
       }
       let asking_price_area
-      if (listing.close_price && user.user_type === 'Client') {
+      if (listing.close_price && user && user.user_type === 'Client') {
         asking_price_area = (
           <span style={ S('font-28 relative t-5n color-ccc fw-400') }>(Asking price)</span>
         )

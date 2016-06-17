@@ -11,6 +11,14 @@ import validator from 'validator'
 import { randomString } from '../../../../utils/helpers'
 import CheckEmailModal from '../../../Partials/CheckEmailModal'
 export default class Listings extends Component {
+  // componentWillMount() {
+  //   if (!AppStore.data.widget)
+  //     AppStore.data.widget = {}
+  //   AppStore.data.widget.theme = {
+  //     primary: 'f47624'
+  //   }
+  //   AppStore.emitChange()
+  // }
   componentDidMount() {
     const data = this.props.data
     // Testing
@@ -67,12 +75,17 @@ export default class Listings extends Component {
       options.listing_statuses = ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract']
       delete AppStore.data.widget.is_showing_sold
     }
+    delete AppStore.data.show_signup_form_over_listing
     AppStore.emitChange()
     ListingDispatcher.dispatch({
       action: 'get-valerts-widget',
       user,
       options
     })
+  }
+  handleCloseSignupForm() {
+    delete AppStore.data.show_signup_form_over_listing
+    AppStore.emitChange()
   }
   showIntercom(e) {
     e.preventDefault()
@@ -162,6 +175,7 @@ export default class Listings extends Component {
           key={ listing.id }
           data={ data }
           listing={ listing }
+          handleCloseSignupForm={ this.handleCloseSignupForm }
         />
       )
     })
@@ -170,15 +184,15 @@ export default class Listings extends Component {
     const header_style = S('text-center')
     const status_buttons_area_style = S('text-center mb-20')
     return (
-      <div style={ S('pt-20') }>
+      <div>
         <div style={ header_style }>
-          <h1 className="din" style={ S('font-50 color-263445') }>Our Exclusive Listings</h1>
+          <h1 className="din" style={ S('font-50 color-263445 mb-0') }>Our Exclusive Listings</h1>
           <span style={ S('h-1 bg-e2e2e2 w-80 m-20 inline-block') }></span>
         </div>
         <div style={ status_buttons_area_style }>
           <ButtonGroup>
-            <Button onClick={ this.handleButtonClick.bind(this, 'active')} bsStyle={ widget && widget.is_showing_sold ? 'default' : 'primary'}>Active</Button>
-            <Button onClick={ this.handleButtonClick.bind(this, 'sold')} bsStyle={ widget && widget.is_showing_sold ? 'primary' : 'default'}>Sold</Button>
+            <Button onClick={ this.handleButtonClick.bind(this, 'active')} style={ widget && widget.is_showing_sold ? S('color-929292 font-17 p-15 w-100') : S(`color-f47624 font-17 p-15 w-100`) } bsStyle="default">Active</Button>
+            <Button onClick={ this.handleButtonClick.bind(this, 'sold')} style={ widget && widget.is_showing_sold ? S(`color-f47624 font-17 p-15 w-100`) : S('color-929292 font-17 p-15 w-100') } bsStyle="default">Sold</Button>
           </ButtonGroup>
         </div>
         { listings_area }
