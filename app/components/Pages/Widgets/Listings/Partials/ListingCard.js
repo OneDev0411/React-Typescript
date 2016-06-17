@@ -79,6 +79,7 @@ export default class ListingCard extends Component {
         </div>
       )
     }
+    const status_color = listing_util.getStatusColor(listing.status)
     return (
       <div key={ 'listing-viewer-' + listing.id + '-' + helpers.randomString(10) } style={ listing_card_style }>
         <FavoriteHeart
@@ -89,15 +90,23 @@ export default class ListingCard extends Component {
           <div style={ price_tag_style }>${ price_small }</div>
         </div>
         <div style={ S('absolute b-0 h-80 p-10 color-000') }>
-          <div style={ { opacity: '.9' } }>{ listing_util.addressTitle(address) }</div>
-          <div style={ { opacity: '.9' } }>
-            <span>{ property.bedroom_count } Beds</span>
-            &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-            <span>{ property.bathroom_count } Baths</span>
-            &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-            <span>{ square_feet } Sqft</span>
-            &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-            <span>{ property.year_built ? 'Built in ' + property.year_built : '' }</span>
+          <div style={ S('font-20') }>{ listing_util.addressTitle(address) }</div>
+          <div style={ S('font-15') }>
+            <div style={ S('pull-left mr-15 ml-2 mt-13') }>
+              <div style={ S('pull-left w-10 h-10 br-100 mr-8 bg-' + status_color) }></div>
+              <div style={ S('pull-left mt-5n color-' + status_color) }>
+                { listing.status }
+              </div>
+            </div>
+            <div style={ S('pull-left mt-8') }>
+              <span>{ property.bedroom_count } Beds</span>
+              &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+              <span>{ property.bathroom_count } Baths</span>
+              &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+              <span>{ square_feet } Sqft</span>
+              &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+              <span>{ property.year_built ? 'Built in ' + property.year_built : '' }</span>
+            </div>
           </div>
         </div>
         { signup_form }

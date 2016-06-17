@@ -10,6 +10,16 @@ module.exports = (app, config) => {
   app.use((req, res, next) => {
     if(!req.session.user){
       delete AppStore.data.user
+    } else {
+      AppStore.data.user = req.session.user
+      res.locals.AppStore = JSON.stringify(AppStore)
+    }
+    next()
+  })
+  
+  app.get('/',(req, res, next) => {
+    if (req.session.user) {
+      return res.redirect('/dashboard/mls')
     }
     next()
   })
