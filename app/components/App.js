@@ -159,7 +159,7 @@ export default class App extends Component {
         // Add to not current room
         const message_room_index = _.findIndex(rooms, { id: room.id })
         // If room not found
-        if (!AppStore.data.rooms[message_room_index])
+        if (!AppStore.data.rooms || !AppStore.data.rooms[message_room_index])
           return
         if (!AppStore.data.rooms[message_room_index].messages)
           AppStore.data.rooms[message_room_index].messages = []

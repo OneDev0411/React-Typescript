@@ -2,7 +2,6 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import { OverlayTrigger, Input, Button, Popover } from 'react-bootstrap'
-import controller from '../../../Dashboard/controller'
 import listing_util from '../../../../../utils/listing'
 import helpers from '../../../../../utils/helpers'
 import FavoriteHeart from '../../../Dashboard/Partials/FavoriteHeart'
@@ -31,7 +30,7 @@ export default class ListingCard extends Component {
     }
     const price_small = listing_util.getSmallPrice(listing.price)
     const price_tag_style = {
-      ...S(`absolute b-30 p-15 pt-6 h-48 bg-f47624 font-26 fw-500 color-fff`),
+      ...S(`absolute b-30 p-15 pt-6 h-48 bg-${data.theme.primary} font-26 fw-500 color-fff`),
       borderTopRightRadius: '3px',
       borderBottomRightRadius: '3px'
     }
@@ -98,11 +97,11 @@ export default class ListingCard extends Component {
         <FavoriteHeart
           listing={ listing }
         />
-        <div style={ listing_image_style } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }>
+        <div style={ listing_image_style } onClick={ this.props.handleListingClick.bind(this, listing) }>
           <div style={ overlay_style }></div>
           <div style={ price_tag_style }>${ price_small }</div>
         </div>
-        <div style={ S('absolute b-0 h-80 p-10 color-000') }>
+        <div style={ S('absolute b-0 h-80 p-10 color-000') } onClick={ this.props.handleListingClick.bind(this, listing) }>
           <div style={ S('font-20') }>{ listing_util.addressTitle(address) }</div>
           <div style={ S('font-15') }>
             <div style={ S('pull-left mr-15 ml-2 mt-13') }>
@@ -130,5 +129,6 @@ ListingCard.propTypes = {
   data: React.PropTypes.object,
   listing: React.PropTypes.object,
   handleEmailSubmit: React.PropTypes.func,
-  handleCloseSignupForm: React.PropTypes.func
+  handleCloseSignupForm: React.PropTypes.func,
+  handleListingClick: React.PropTypes.func
 }

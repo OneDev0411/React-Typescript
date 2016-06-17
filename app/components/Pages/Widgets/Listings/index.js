@@ -11,18 +11,18 @@ import validator from 'validator'
 import { randomString } from '../../../../utils/helpers'
 import CheckEmailModal from '../../../Partials/CheckEmailModal'
 export default class Listings extends Component {
-  // componentWillMount() {
-  //   if (!AppStore.data.widget)
-  //     AppStore.data.widget = {}
-  //   AppStore.data.widget.theme = {
-  //     primary: 'f47624'
-  //   }
-  //   AppStore.emitChange()
-  // }
+  componentWillMount() {
+    AppStore.data.theme = {
+      primary: 'f47624'
+    }
+    AppStore.emitChange()
+  }
   componentDidMount() {
     const data = this.props.data
-    // Testing
     const user = data.user
+    // Set user
+    AppStore.data.user = user
+    AppStore.emitChange()
     const location = data.location
     const brokerage = location.query.brokerage
     const options = this.initOptions(brokerage)
@@ -156,6 +156,10 @@ export default class Listings extends Component {
       redirect_to: ''
     })
   }
+  handleListingClick(listing) {
+    const url = '/dashboard/mls/' + listing.id
+    window.open(url, '_blank')
+  }
   render() {
     // Data
     const data = this.props.data
@@ -176,6 +180,7 @@ export default class Listings extends Component {
           data={ data }
           listing={ listing }
           handleCloseSignupForm={ this.handleCloseSignupForm }
+          handleListingClick={ this.handleListingClick }
         />
       )
     })
@@ -191,11 +196,18 @@ export default class Listings extends Component {
         </div>
         <div style={ status_buttons_area_style }>
           <ButtonGroup>
-            <Button onClick={ this.handleButtonClick.bind(this, 'active')} style={ widget && widget.is_showing_sold ? S('color-929292 font-17 p-15 w-100') : S(`color-f47624 font-17 p-15 w-100`) } bsStyle="default">Active</Button>
-            <Button onClick={ this.handleButtonClick.bind(this, 'sold')} style={ widget && widget.is_showing_sold ? S(`color-f47624 font-17 p-15 w-100`) : S('color-929292 font-17 p-15 w-100') } bsStyle="default">Sold</Button>
+            <Button onClick={ this.handleButtonClick.bind(this, 'active')} style={ widget && widget.is_showing_sold ? S('color-929292 font-17 p-15 w-100') : S(`color-${data.theme.primary} font-17 p-15 w-100`) } bsStyle="default">Active</Button>
+            <Button onClick={ this.handleButtonClick.bind(this, 'sold')} style={ widget && widget.is_showing_sold ? S(`color-${data.theme.primary} font-17 p-15 w-100`) : S('color-929292 font-17 p-15 w-100') } bsStyle="default">Sold</Button>
           </ButtonGroup>
         </div>
         { listings_area }
+        <div className="clearfix"></div>
+        <div style={ S('text-center mt-20 mb-30') }>
+          <a href="https://rechat.com/dashboard/mls" target="_blank" className="btn btn-default" style={ S(`w-280 p-20 color-fff border-1-solid-${data.theme.primary} bg-${data.theme.primary}`) }>View Exclusive Listings</a>
+        </div>
+        <div style={ S('color-9b9b9b font-15 mb-40') } className="text-center">
+          Powered by <a href="https://rechat.com" target="_blank" style={ S('color-2196f3 fw-500') }>Rechat<span style={ S('color-2196f3 font-9 relative t-7n fw-500') }>TM</span></a>
+        </div>
         <CheckEmailModal
           data={ data }
           hideModal={ this.hideModal }
