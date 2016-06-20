@@ -7,6 +7,8 @@ module.exports = (app, config) => {
       method: 'delete',
       headers: {
         'authorization': 'Bearer ' + req.query.access_token,
+        'x-real-agent' : req.headers['user-agent'],
+        'user-agent' : config.app_name
       }
     })
     .then(response => {

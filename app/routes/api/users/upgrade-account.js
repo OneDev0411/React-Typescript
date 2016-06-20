@@ -15,6 +15,8 @@ module.exports = (app, config) => {
       headers: {
         'Content-Type': 'application/json',
         'authorization': 'Bearer ' + access_token,
+        'x-real-agent' : req.headers['user-agent'],
+        'user-agent' : config.app_name
       },
       body: JSON.stringify(request_object)
     })
