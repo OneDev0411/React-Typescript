@@ -1,4 +1,4 @@
-// Listings.js
+// Widgets/Listings/index.js
 import React, { Component } from 'react'
 import { ButtonGroup, Button } from 'react-bootstrap'
 import S from 'shorti'
@@ -9,7 +9,7 @@ import ListingCard from './Partials/ListingCard'
 import AppStore from '../../../../stores/AppStore'
 import validator from 'validator'
 import { randomString } from '../../../../utils/helpers'
-import CheckEmailModal from '../../../Partials/CheckEmailModal'
+import CheckEmailModal from '../Partials/CheckEmailModal'
 export default class Listings extends Component {
   componentWillMount() {
     AppStore.data.theme = {
