@@ -479,7 +479,7 @@ export default class Mls extends Component {
     )
     let toolbar = (
       <nav style={ toolbar_style }>
-        <div style={ S('h-35') }>{ user ? map_tabs : '' }</div>
+        <div style={ S('h-45 mt-10n') }>{ user ? map_tabs : '' }</div>
         <div className="clearfix"></div>
         { search_filter_draw_area }
         { results_actions }
