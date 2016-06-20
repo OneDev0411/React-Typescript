@@ -44,9 +44,12 @@
 }
 .listing-map__filter-form {
   transition: 150ms;
-  left: -300px;
+  left: -345px;
   &.active {
     left: 70px;
+  }
+  &.active--non-logged-in {
+    left: 0px;
   }
 }
 .listing-panel {

@@ -6,9 +6,10 @@ export default (user, q, status) => {
   const q_commas = q.replace(/\s+/g, ',')
   const params = {
     status,
-    q: q_commas,
-    access_token: user.access_token
+    q: q_commas
   }
+  if (user)
+    params.access_token = user.access_token
   Listing.search(params, (err, response) => {
     // Listing map
     const listings = response.data

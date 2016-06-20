@@ -9,7 +9,7 @@ module.exports = (app, config) => {
       'Content-Type': 'application/json'
     }
     if (access_token)
-      headers.authorization = 'Bearer ' + (access_token ? access_token : '')
+      headers.authorization = 'Bearer ' + access_token
     fetch(endpoint,{
       method: 'post',
       headers,

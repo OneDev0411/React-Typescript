@@ -4,12 +4,14 @@ module.exports = (app, config) => {
     const api_url = config.api.url
     const endpoint = api_url + '/listings/search?q=' + req.query.q
     const access_token = req.query.access_token
+    const headers = {  
+      'Content-Type': 'application/json'
+    }
+    if (access_token)
+      headers.authorization = 'Bearer ' + access_token
     fetch(endpoint, {
       method: 'get',
-      headers: {  
-        'Content-Type': 'application/json',
-        'authorization': 'Bearer ' + access_token
-      }
+      headers
     })
     .then(response => {
       if (response.status >= 400) {

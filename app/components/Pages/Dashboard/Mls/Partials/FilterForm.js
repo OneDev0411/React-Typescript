@@ -37,7 +37,7 @@ export default class FilterForm extends Component {
     }
     let filter_form_class = 'listing-map__filter-form'
     if (data.show_filter_form)
-      filter_form_class += ' active'
+      filter_form_class += ' active' + (!data.user ? '--non-logged-in' : '')
     let filter_options = {}
     if (data.listing_map) {
       const listing_map = data.listing_map

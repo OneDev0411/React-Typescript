@@ -24,15 +24,13 @@ export default class Mls extends Component {
   componentWillMount() {
     const data = this.props.data
     const user = data.user
-    if (this.props.params.id) {
+    if (this.props.params && this.props.params.id) {
       ListingDispatcher.dispatch({
         action: 'get-listing',
         user,
         id: this.props.params.id
       })
     }
-    if (!user)
-      return
     // Show map first
     AppStore.data.show_search_map = true
     AppStore.data.user = user
@@ -60,6 +58,15 @@ export default class Mls extends Component {
       }
     }
     AppStore.emitChange()
+    // Get only map (above) for non-logged in user
+    if (!user && AppStore.data.listing_map) {
+      ListingDispatcher.dispatch({
+        action: 'get-valerts',
+        user,
+        options: AppStore.data.listing_map.options
+      })
+      return
+    }
     // Allow for seamless
     if (!AppStore.data.mounted || AppStore.data.mounted && AppStore.data.mounted.indexOf('recents') === -1) {
       if (!AppStore.data.mounted)
@@ -106,7 +113,9 @@ export default class Mls extends Component {
   componentDidUpdate() {
     const data = this.props.data
     const routeParams = this.props.routeParams
-    const alert_id = routeParams.alert_id
+    let alert_id
+    if (routeParams)
+      alert_id = routeParams.alert_id
     const path = data.path
     if (data.show_listing_viewer && path === '/dashboard/mls') {
       delete AppStore.data.show_listing_viewer
@@ -248,7 +257,7 @@ export default class Mls extends Component {
     const user = data.user
     const listing_map = data.listing_map
     const alerts_map = data.alerts_map
-    let main_style = S('absolute h-100p l-70')
+    let main_style = S('absolute h-100p' + (user ? ' l-70' : ' l-0'))
     if (data.is_mobile) {
       main_style = {
         ...main_style,
@@ -452,22 +461,25 @@ export default class Mls extends Component {
     if (data.show_filter_form || data.show_alerts_map || data.show_actives_map)
       search_filter_draw_area = ''
     const underline = <div style={ S('w-100p h-6 bg-3388ff absolute b-11n') }></div>
+    const map_tabs = (
+      <ul style={ S('relative l-30n t-5') }>
+        <li style={ S('relative pull-left font-28 mr-60') }>
+          <span onClick={ this.handleTabClick.bind(this, 'search') } style={ S('pointer ' + (data.show_search_map ? 'color-263445' : 'color-8696a4')) }>Search</span>
+          { data.show_search_map && !data.show_alerts_map ? underline : '' }
+        </li>
+        <li style={ S('relative pull-left color-263445 font-28 mr-60') }>
+          <span onClick={ this.handleTabClick.bind(this, 'alerts') } style={ S('pointer ' + (data.show_alerts_map ? 'color-263445' : 'color-8696a4')) }>{ user && user.user_type === 'Agent' ? 'Alerts' : 'Saved Searches' }</span>
+          { data.show_alerts_map ? underline : '' }
+        </li>
+        <li style={ S('relative pull-left color-263445 font-28 mr-60') }>
+          <span onClick={ this.handleTabClick.bind(this, 'actives') } style={ S('pointer ' + (data.show_actives_map ? 'color-263445' : 'color-8696a4')) }>{ user && user.user_type === 'Agent' ? 'Activity' : 'My Homes' }</span>
+          { data.show_actives_map ? underline : '' }
+        </li>
+      </ul>
+    )
     let toolbar = (
       <nav style={ toolbar_style }>
-        <ul style={ S('relative l-30n t-5') }>
-          <li style={ S('relative pull-left font-28 mr-60') }>
-            <span onClick={ this.handleTabClick.bind(this, 'search') } style={ S('pointer ' + (data.show_search_map ? 'color-263445' : 'color-8696a4')) }>Search</span>
-            { data.show_search_map && !data.show_alerts_map ? underline : '' }
-          </li>
-          <li style={ S('relative pull-left color-263445 font-28 mr-60') }>
-            <span onClick={ this.handleTabClick.bind(this, 'alerts') } style={ S('pointer ' + (data.show_alerts_map ? 'color-263445' : 'color-8696a4')) }>{ user && user.user_type === 'Agent' ? 'Alerts' : 'Saved Searches' }</span>
-            { data.show_alerts_map ? underline : '' }
-          </li>
-          <li style={ S('relative pull-left color-263445 font-28 mr-60') }>
-            <span onClick={ this.handleTabClick.bind(this, 'actives') } style={ S('pointer ' + (data.show_actives_map ? 'color-263445' : 'color-8696a4')) }>{ user && user.user_type === 'Agent' ? 'Activity' : 'My Homes' }</span>
-            { data.show_actives_map ? underline : '' }
-          </li>
-        </ul>
+        <div style={ S('h-35') }>{ user ? map_tabs : '' }</div>
         <div className="clearfix"></div>
         { search_filter_draw_area }
         { results_actions }
@@ -673,9 +685,9 @@ export default class Mls extends Component {
         data={ data }
       />
     )
-    let main_content = (
+    const main_content = (
       <main>
-        { nav_area }
+        { user ? nav_area : '' }
         <div className={ main_class } style={ main_style }>
           { /* this.cacheImages() */ }
           { toolbar }
@@ -731,8 +743,6 @@ export default class Mls extends Component {
         </Modal>
       </main>
     )
-    if (!user)
-      main_content = listing_viewer
     return (
       <div style={ S('minw-1000') }>
         { main_content }

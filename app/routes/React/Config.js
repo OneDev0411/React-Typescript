@@ -27,6 +27,7 @@ import Agents from '../../components/Pages/Dashboard/Mls/Agents'
 
 // Widgets
 import ListingsWidget from '../../components/Pages/Widgets/Listings'
+import MapWidget from '../../components/Pages/Widgets/Map'
 
 export default (
   <Route path="/" component={App}>
@@ -56,6 +57,7 @@ export default (
     <Route path="verify/:slug" component={Verify}/>
     <Route path="password/:slug" component={Password}/>
     <Route path="widgets/listings" component={ListingsWidget}/>
+    <Route path="widgets/map" component={MapWidget}/>
     <Route path="*" component={NoMatch}/>
   </Route>
 )
