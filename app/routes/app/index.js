@@ -141,6 +141,11 @@ module.exports = (app, config) => {
     next()
   })
 
+  // Widgets
+  app.get('/widgets*', (req, res, next) => {
+    return res.status(200).render('index.html')
+  })
+
   app.get('/invite',(req, res) => {
     const room_id = req.query.room_id
     const invite_token = req.query.invite_token

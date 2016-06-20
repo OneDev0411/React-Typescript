@@ -40,9 +40,10 @@ export default class Mls extends Component {
       controller.listing_map.initMap()
     delete AppStore.data.current_listing
     delete AppStore.data.share_list
-    delete AppStore.data.listing_map.saving_alert
+    if (listing_map && listing_map.saving_alert)
+      delete AppStore.data.listing_map.saving_alert
     // Set switch states
-    if (!AppStore.data.listing_map.filter_options) {
+    if (listing_map && !listing_map.filter_options) {
       AppStore.data.listing_map.filter_options = {
         sold: false,
         active: true,
@@ -59,12 +60,14 @@ export default class Mls extends Component {
     }
     AppStore.emitChange()
     // Get only map (above) for non-logged in user
-    if (!user && AppStore.data.listing_map) {
-      ListingDispatcher.dispatch({
-        action: 'get-valerts',
-        user,
-        options: AppStore.data.listing_map.options
-      })
+    if (!user) {
+      if (listing_map) {
+        ListingDispatcher.dispatch({
+          action: 'get-valerts',
+          user,
+          options: listing_map.options
+        })
+      }
       return
     }
     // Allow for seamless
@@ -72,7 +75,8 @@ export default class Mls extends Component {
       if (!AppStore.data.mounted)
         AppStore.data.mounted = []
       AppStore.data.mounted.push('recents')
-      this.getRoomsIndexedDB()
+      if (typeof window !== 'undefined')
+        this.getRoomsIndexedDB()
       this.getUserRooms()
     }
     AppDispatcher.dispatch({
@@ -159,6 +163,8 @@ export default class Mls extends Component {
     })
   }
   getUserRooms() {
+    if (!this.props.params)
+      return
     const data = this.props.data
     const user = data.user
     const room_id = this.props.params.room_id
@@ -173,7 +179,8 @@ export default class Mls extends Component {
     AppStore.emitChange()
   }
   changeURL(url) {
-    this.props.history.pushState(null, url)
+    if (this.props.history)
+      this.props.history.pushState(null, url)
   }
   resetViews() {
     delete AppStore.data.show_search_map

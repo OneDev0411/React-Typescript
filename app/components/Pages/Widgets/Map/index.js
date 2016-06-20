@@ -15,7 +15,7 @@ export default class Listings extends Component {
   }
   render() {
     // Data
-    const data = AppStore.data
+    const data = this.props.data
     return <SearchMap data={ data }/>
   }
 }
