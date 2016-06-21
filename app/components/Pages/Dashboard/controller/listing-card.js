@@ -4,7 +4,10 @@ import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import _ from 'lodash'
 const controller = {
   handleNotLoggedIn(listing_id) {
-    AppStore.data.show_signup_form_over_listing = listing_id
+    AppStore.data.signup_tooltip = {
+      action: 'favorite_clicked',
+      listing_id
+    }
     AppStore.emitChange()
   },
   isFavorited(mls_number) {

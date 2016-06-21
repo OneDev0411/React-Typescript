@@ -35,7 +35,7 @@ export default class ListingCard extends Component {
       borderBottomRightRadius: '3px'
     }
     let signup_form
-    if (data.show_signup_form_over_listing && data.show_signup_form_over_listing === listing.id) {
+    if (data.signup_tooltip && data.signup_tooltip.listing_id === listing.id) {
       let popover = <Popover id="popover" className="hidden" />
       if (data.errors) {
         if (data.errors.type === 'email-invalid') {
@@ -59,12 +59,39 @@ export default class ListingCard extends Component {
         borderTopLeftRadius: 0,
         borderBottomLeftRadius: 0
       }
+      let signup_title = (
+        <div>
+          We are on <span style={ S('color-2196f3') }>Rechat</span><span style={ S('color-2196f3 font-14 relative t-12n') }>TM</span>
+        </div>
+      )
+      let signup_message = (
+        <div>
+          Sign up with Rechat to save this home and to share<br/>
+          your favorites with our agent or your partner.
+        </div>
+      )
+      if (data.signup_tooltip.action === 'agent_clicked') {
+        signup_title = (
+          <div>
+            Chat with me on <span style={ S('color-2196f3') }>Rechat</span><span style={ S('color-2196f3 font-14 relative t-12n') }>TM</span>
+          </div>
+        )
+        signup_message = (
+          <div>
+            I'm here if you have any questions about this<br/>
+            home or any other homes you like.
+          </div>
+        )
+      }
       signup_form = (
-        <div style={ S('absolute w-450 h-240 br-3 t-70 l-15 bg-fff p-20 z-2') }>
+        <div style={ S('absolute w-450 h-240 br-3 t-65 l-15 bg-fff p-20 z-2') }>
           <div onClick={ this.props.handleCloseSignupForm } className="close" style={ S('absolute r-15 t-10') }>&times;</div>
-          <div className="din" style={ S('font-30 color-263445 mb-5') }>We are on <span style={ S('color-2196f3') }>Rechat</span><span style={ S('color-2196f3 font-14 relative t-12n') }>TM</span></div>
-          <div style={ S('font-17 fw-500 color-9b9b9b mb-20 text-center') }>Sign up with Rechat to save this home and to share<br/>
-          your favorites with our agent or your partner.</div>
+          <div className="din" style={ S('font-30 color-263445 mb-5') }>
+            { signup_title }
+          </div>
+          <div style={ S('font-17 fw-500 color-9b9b9b mb-20 text-center') }>
+            { signup_message }
+          </div>
           <div style={ S('mb-5 w-100p') }>
             <form style={ S('mb-20 center-block w-360') } onSubmit={ this.props.handleEmailSubmit.bind(this) }>
               <div style={ S('pull-left') }>
@@ -91,7 +118,14 @@ export default class ListingCard extends Component {
         </span>
       )
     }
-
+    let agent_image_area
+    if (listing.list_agent) {
+      agent_image_area = (
+        <div onClick={ this.props.handleAgentClick.bind(this, listing) } style={ S('w-60 h-60 br-100 border-2-solid-fff absolute r-10 b-50 bg-ccc p-10 pt-5') }>
+          <i style={ S('font-45 color-fff') } className="fa fa-user"></i>
+        </div>
+      )
+    }
     return (
       <div key={ 'listing-viewer-' + listing.id + '-' + helpers.randomString(10) } style={ listing_card_style }>
         <FavoriteHeart
@@ -120,6 +154,7 @@ export default class ListingCard extends Component {
             </div>
           </div>
         </div>
+        { agent_image_area }
         { signup_form }
       </div>
     )
@@ -130,5 +165,6 @@ ListingCard.propTypes = {
   listing: React.PropTypes.object,
   handleEmailSubmit: React.PropTypes.func,
   handleCloseSignupForm: React.PropTypes.func,
-  handleListingClick: React.PropTypes.func
+  handleListingClick: React.PropTypes.func,
+  handleAgentClick: React.PropTypes.func
 }

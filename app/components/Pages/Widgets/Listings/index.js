@@ -75,7 +75,7 @@ export default class Listings extends Component {
       options.listing_statuses = ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract']
       delete AppStore.data.widget.is_showing_sold
     }
-    delete AppStore.data.show_signup_form_over_listing
+    delete AppStore.data.signup_tooltip
     AppStore.emitChange()
     ListingDispatcher.dispatch({
       action: 'get-valerts-widget',
@@ -84,7 +84,7 @@ export default class Listings extends Component {
     })
   }
   handleCloseSignupForm() {
-    delete AppStore.data.show_signup_form_over_listing
+    delete AppStore.data.signup_tooltip
     AppStore.emitChange()
   }
   showIntercom(e) {
@@ -160,6 +160,14 @@ export default class Listings extends Component {
     const url = '/dashboard/mls/' + listing.id
     window.open(url, '_blank')
   }
+  handleAgentClick(listing) {
+    AppStore.data.signup_tooltip = {
+      action: 'agent_clicked',
+      list_agent: listing.list_agent,
+      listing_id: listing.id
+    }
+    AppStore.emitChange()
+  }
   render() {
     // Data
     const data = this.props.data
@@ -181,6 +189,7 @@ export default class Listings extends Component {
           listing={ listing }
           handleCloseSignupForm={ this.handleCloseSignupForm }
           handleListingClick={ this.handleListingClick }
+          handleAgentClick={ this.handleAgentClick }
         />
       )
     })
