@@ -2,8 +2,7 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import _ from 'lodash'
-import GoogleMap from 'google-map-react'
-import { ButtonGroup, Button, Modal } from 'react-bootstrap'
+import { Input, ButtonGroup, Button, Modal, OverlayTrigger, Popover } from 'react-bootstrap'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
@@ -16,10 +15,13 @@ import ListingViewer from '../Partials/ListingViewer'
 import ListingViewerMobile from '../Partials/ListingViewerMobile'
 import ListingPanel from './Partials/ListingPanel'
 import FilterForm from './Partials/FilterForm'
-import ListingMarker from '../Partials/ListingMarker'
+import MlsMap from './Partials/MlsMap'
 import AlertList from './Partials/AlertList'
 import AlertViewer from './Partials/AlertViewer'
 import listing_util from '../../../../utils/listing'
+import validator from 'validator'
+import { randomString } from '../../../../utils/helpers'
+import CheckEmailModal from '../Partials/CheckEmailModal'
 export default class Mls extends Component {
   componentWillMount() {
     const data = this.props.data
@@ -259,13 +261,81 @@ export default class Mls extends Component {
     ]
     controller.listing_map.handleBoundsChange(data.listing_map.center, data.listing_map.zoom, bounds)
   }
+  handleCloseSignupForm() {
+    delete AppStore.data.show_signup_form
+    AppStore.emitChange()
+  }
+  handleEmailSubmit(e) {
+    // If clicked
+    setTimeout(() => {
+      this.refs.email.refs.input.focus()
+    }, 100)
+    e.preventDefault()
+    delete AppStore.data.errors
+    AppStore.emitChange()
+    const data = this.props.data
+    const email = this.refs.email.refs.input.value
+    // If no email or double submit
+    if (!email || data.submitting)
+      return
+    const random_password = randomString(9)
+    if (!email.trim())
+      return
+    if (!validator.isEmail(email)) {
+      AppStore.data.errors = {
+        type: 'email-invalid'
+      }
+      AppStore.emitChange()
+      setTimeout(() => {
+        delete AppStore.data.errors
+        AppStore.emitChange()
+      }, 3000)
+      return
+    }
+    AppStore.data.submitting = true
+    AppStore.emitChange()
+    const user = {
+      first_name: email,
+      email,
+      user_type: 'Client',
+      password: random_password,
+      grant_type: 'password',
+      is_shadow: true
+    }
+    AppDispatcher.dispatch({
+      action: 'sign-up-shadow',
+      user,
+      redirect_to: ''
+    })
+  }
+  hideModal() {
+    delete AppStore.data.show_signup_confirm_modal
+    AppStore.emitChange()
+  }
+  resend() {
+    const data = this.props.data
+    const new_user = data.new_user
+    const user = {
+      first_name: new_user.email,
+      email: new_user.email,
+      user_type: 'Client',
+      password: new_user.random_password,
+      grant_type: 'password',
+      is_shadow: true
+    }
+    AppStore.data.resent_email_confirmation = true
+    AppDispatcher.dispatch({
+      action: 'sign-up-shadow',
+      user,
+      redirect_to: ''
+    })
+  }
   render() {
     const data = this.props.data
     const user = data.user
     const listing_map = data.listing_map
-    const alerts_map = data.alerts_map
     let main_style = S('absolute h-100p' + (user ? ' l-70' : ' l-0'))
-    if (data.is_mobile) {
+    if (data.is_mobile || data.is_widget) {
       main_style = {
         ...main_style,
         ...S('l-0 w-100p')
@@ -318,23 +388,12 @@ export default class Mls extends Component {
     let main_class = 'listing-map'
     if (data.show_listing_panel)
       main_class = main_class + ' active'
-    const default_center = {
-      lat: 32.7767,
-      lng: -96.7970
-    }
-    const default_zoom = 13
-    const toolbar_style = {
+    let toolbar_style = {
       ...S('h-66 p-10 bg-f8fafb'),
       borderBottom: '1px solid #dcd9d9'
     }
-    // TODO move to ENV_VAR
-    const bootstrap_url_keys = {
-      key: 'AIzaSyDagxNRLRIOsF8wxmuh1J3ysqnwdDB93-4',
-      libraries: ['drawing'].join(',')
-    }
-    let map_id
-    if (listing_map && listing_map.map_id)
-      map_id = listing_map.map_id
+    if (data.is_widget)
+      toolbar_style = S('relative t-20n h-0 p-0 w-100p')
     let remove_drawing_button
     if (data.show_search_map && window.poly && window.poly_search) {
       let right_value = 80
@@ -366,24 +425,99 @@ export default class Mls extends Component {
     let results_actions
     let create_alert_button
     if (data.show_search_map) {
+      let save_search_btn_style = S('absolute r-20 t-70 z-1 w-200 h-50 font-18 color-fff ' + (data.theme && data.theme.primary ? `border-1-solid-${data.theme.primary} bg-${data.theme.primary}` : `bg-2196f3 border-1-solid-2196f3`))
+      if (data.is_widget) {
+        save_search_btn_style = {
+          ...save_search_btn_style,
+          ...S('t-20')
+        }
+      }
       create_alert_button = (
-        <Button style={ S('absolute r-20 t-70 z-1 bg-2196f3 w-200 h-50 font-18') } bsStyle="primary" type="button" onClick={ controller.alert_share.showShareTypeModal.bind(this) }>
+        <Button style={ save_search_btn_style } type="button" onClick={ controller.alert_share.handleAlertShareClick.bind(this) }>
           { (user && user.user_type === 'Agent') ? 'Create Alert' : 'Save Search' }
         </Button>
       )
     }
+    let signup_form
+    if (data.show_signup_form) {
+      let popover = <Popover id="popover" className="hidden" />
+      if (data.errors) {
+        if (data.errors.type === 'email-invalid') {
+          popover = (
+            <Popover id="popover" title="">You must enter a valid email</Popover>
+          )
+        }
+        if (data.errors.type === 'bad-request') {
+          popover = (
+            <Popover id="popover" title="">Bad request.</Popover>
+          )
+        }
+      }
+      const signup_input_style = {
+        ...S('h-46 w-230'),
+        borderTopRightRadius: 0,
+        borderBottomRightRadius: 0
+      }
+      const signup_btn_style = {
+        ...S('h-46 w-130'),
+        borderTopLeftRadius: 0,
+        borderBottomLeftRadius: 0
+      }
+      let signup_form_style = S('absolute w-450 h-240 br-3 t-130 r-20 bg-fff p-20 z-2')
+      if (data.is_widget) {
+        signup_form_style = {
+          ...signup_form_style,
+          ...S('t-80')
+        }
+      }
+      signup_form = (
+        <div style={ signup_form_style }>
+          <div onClick={ this.handleCloseSignupForm } className="close" style={ S('absolute r-15 t-10') }>&times;</div>
+          <div className="din" style={ S('font-30 color-263445 mb-5') }>We are on <span style={ S('color-2196f3') }>Rechat</span><span style={ S('color-2196f3 font-14 relative t-12n') }>TM</span></div>
+          <div style={ S('font-17 fw-500 color-9b9b9b mb-20 text-center') }>Sign up with Rechat to save this home and to share<br/>
+          your favorites with our agent or your partner.</div>
+          <div style={ S('mb-5 w-100p') }>
+            <form style={ S('mb-20 center-block w-360') } onSubmit={ this.handleEmailSubmit.bind(this) }>
+              <div style={ S('pull-left') }>
+                <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
+                  <Input ref="email" style={ signup_input_style } type="text" placeholder="Enter email address" />
+                </OverlayTrigger>
+              </div>
+              <div style={ S('pull-left') }>
+                <Button className={ data.submitting ? 'disabled' : '' } bsStyle="primary" style={ signup_btn_style } type="submit">{ data.submitting ? 'Submitting...' : 'Lets Go' }</Button>
+              </div>
+            </form>
+            <div className="clearfix"></div>
+          </div>
+          <div style={ S('color-9b9b9b text-center') }>Already have an account? <a href="/signin" target="_parent">Log in</a></div>
+        </div>
+      )
+    }
     if (listing_map && listing_map.listings) {
+      let viewing_type_button_group_style = S('absolute t-15 r-0 mr-10 z-10')
+      if (data.is_widget)
+        viewing_type_button_group_style = S('absolute t-36 l-600 w-200 z-2')
+      let btn_style = { ...S('bg-f8fafb h-37'), outline: 'none' }
+      if (data.is_widget) {
+        btn_style = {
+          ...btn_style,
+          ...S('w-50 h-52')
+        }
+      }
       results_actions = (
-        <div style={ S('absolute r-5 mt-2 t-15') }>
-          { create_alert_button }
-          <ButtonGroup style={ S('mr-10') }>
-            <Button style={ { ...S('bg-f8fafb h-37'), outline: 'none' } } onClick={ controller.listing_panel.hideListingPanel.bind(this) }>
+        <div>
+          <div style={ S('absolute r-5 mt-2 t-15 z-10') }>
+            { create_alert_button }
+            { signup_form }
+          </div>
+          <ButtonGroup style={ viewing_type_button_group_style }>
+            <Button style={ btn_style } onClick={ controller.listing_panel.hideListingPanel.bind(this) }>
               <img src={ `/images/dashboard/mls/globe${!data.listing_panel ? '-active' : ''}.svg` } style={ S('w-20') }/>
             </Button>
-            <Button style={ { ...S('bg-f8fafb h-37'), outline: 'none' } } onClick={ controller.listing_panel.showPanelView.bind(this, 'list') }>
+            <Button style={ btn_style } onClick={ controller.listing_panel.showPanelView.bind(this, 'list') }>
               <img src={ `/images/dashboard/mls/list${data.listing_panel && data.listing_panel.view === 'list' ? '-active' : ''}.svg` } style={ S('w-20') }/>
             </Button>
-            <Button style={ { ...S('bg-f8fafb h-37'), outline: 'none' } } onClick={ controller.listing_panel.showPanelView.bind(this, 'photos') }>
+            <Button style={ btn_style } onClick={ controller.listing_panel.showPanelView.bind(this, 'photos') }>
               <img src={ `/images/dashboard/mls/photos${data.listing_panel && data.listing_panel.view === 'photos' ? '-active' : ''}.svg` } style={ S('w-18') }/>
             </Button>
           </ButtonGroup>
@@ -486,7 +620,7 @@ export default class Mls extends Component {
     )
     let toolbar = (
       <nav style={ toolbar_style }>
-        <div style={ S('h-45 mt-10n') }>{ user ? map_tabs : '' }</div>
+        <div style={ !data.is_widget ? S('h-45 mt-10n') : {} }>{ user && !data.is_widget ? map_tabs : '' }</div>
         <div className="clearfix"></div>
         { search_filter_draw_area }
         { results_actions }
@@ -519,129 +653,19 @@ export default class Mls extends Component {
       )
     }
     // Create markers
-    let map_listing_markers
-    if (data.show_search_map && listing_map && listing_map.listings) {
-      let listings = listing_map.listings
-      listings = listings.filter(listing => {
-        return listing.location
-      })
-      map_listing_markers = listings.map(listing => {
-        return (
-          <div onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) } onMouseOut={ controller.listing_map.hideListingPopup.bind(this) } key={ 'search-map--map-listing-' + listing.id } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
-            <ListingMarker
-              key={ 'listing-marker-' + listing.id }
-              data={ data }
-              listing={ listing }
-              property={ listing.compact_property }
-              address={ listing.address }
-              context={ 'map' }
-            />
-          </div>
-        )
-      })
-    }
-    let map_alerts_markers
-    if (data.show_alerts_map && alerts_map && alerts_map.listings) {
-      let listings = alerts_map.listings
-      listings = listings.filter(listing => {
-        return listing.location
-      })
-      map_alerts_markers = listings.map(listing => {
-        return (
-          <div onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) } onMouseOut={ controller.listing_map.hideListingPopup.bind(this) } key={ 'alert-map--map-listing-' + listing.id } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
-            <ListingMarker
-              key={ 'listing-marker-' + listing.id }
-              data={ data }
-              listing={ listing }
-              property={ listing.compact_property }
-              address={ listing.address }
-              context={ 'map' }
-            />
-          </div>
-        )
-      })
-    }
-    let map_actives_markers
-    if (data.show_actives_map && data.active_listings) {
-      let listings = data.active_listings
-      listings = listings.filter(listing => {
-        if (listing.property && listing.property.address)
-          return listing.property.address.location
-      })
-      map_actives_markers = listings.map((listing, i) => {
-        return (
-          <div onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) } onMouseOut={ controller.listing_map.hideListingPopup.bind(this) } key={ 'actives-map--map-listing-' + listing.id + '-' + i } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.property.address.location.latitude } lng={ listing.property.address.location.longitude } text={'A'}>
-            <ListingMarker
-              key={ 'listing-marker-' + listing.id }
-              data={ data }
-              listing={ listing }
-              property={ listing.property }
-              address={ listing.property.address }
-              context={ 'map' }
-            />
-          </div>
-        )
-      })
-    }
     // Show listings map
     let map_wrapper_style = S('h-' + (window.innerHeight - 66))
-    if (data.is_mobile)
-      map_wrapper_style = S('fixed w-100p h-100p')
+    if (data.is_mobile || data.is_widget)
+      map_wrapper_style = S('fixed w-100p h-100p t-0')
     let content_area
-    if (data.show_search_map) {
-      content_area = (
-        <GoogleMap
-          key={ 'map-' + map_id }
-          bootstrapURLKeys={ bootstrap_url_keys }
-          center={ listing_map ? listing_map.center : default_center }
-          zoom={ listing_map ? listing_map.zoom : default_zoom }
-          onBoundsChange={ controller.listing_map.handleBoundsChange.bind(this) }
-          options={ controller.listing_map.createMapOptions.bind(this) }
-          yesIWantToUseGoogleMapApiInternals
-          onGoogleApiLoaded={ controller.listing_map.handleGoogleMapApi.bind(this) }
-        >
-        { map_listing_markers }
-        </GoogleMap>
-      )
-    }
     // Show alerts map
     if (data.show_alerts_map) {
       map_wrapper_style = {
         ...map_wrapper_style,
         ...S('pl-350')
       }
-      content_area = (
-        <GoogleMap
-          key={ 'map-' + map_id }
-          bootstrapURLKeys={ bootstrap_url_keys }
-          center={ listing_map ? listing_map.center : default_center }
-          zoom={ listing_map ? listing_map.zoom : default_zoom }
-          onBoundsChange={ controller.listing_map.handleBoundsChange.bind(this) }
-          options={ controller.listing_map.createMapOptions.bind(this) }
-          yesIWantToUseGoogleMapApiInternals
-          onGoogleApiLoaded={ controller.listing_map.handleGoogleMapApi.bind(this) }
-        >
-        { map_alerts_markers }
-        </GoogleMap>
-      )
     }
-    // Show actives map
-    if (data.show_actives_map) {
-      content_area = (
-        <GoogleMap
-          key={ 'map-' + map_id }
-          bootstrapURLKeys={ bootstrap_url_keys }
-          center={ listing_map ? listing_map.center : default_center }
-          zoom={ listing_map ? listing_map.zoom : default_zoom }
-          onBoundsChange={ controller.listing_map.handleBoundsChange.bind(this) }
-          options={ controller.listing_map.createMapOptions.bind(this) }
-          yesIWantToUseGoogleMapApiInternals
-          onGoogleApiLoaded={ controller.listing_map.handleGoogleMapApi.bind(this) }
-        >
-        { map_actives_markers }
-        </GoogleMap>
-      )
-    }
+    content_area = <MlsMap data={ data } />
     let alert_list_area
     let alert_viewer_area
     if (data.show_alerts_map) {
@@ -694,7 +718,7 @@ export default class Mls extends Component {
     )
     const main_content = (
       <main>
-        { user ? nav_area : '' }
+        { user && !data.is_widget ? nav_area : '' }
         <div className={ main_class } style={ main_style }>
           { /* this.cacheImages() */ }
           { toolbar }
@@ -763,6 +787,12 @@ export default class Mls extends Component {
             <Button bsStyle="primary" style={ S('w-100p') } onClick={ this.hideWelcomeModal }>Start Using Rechat</Button>
           </Modal.Body>
         </Modal>
+        <CheckEmailModal
+          data={ data }
+          hideModal={ this.hideModal }
+          showIntercom={ this.showIntercom }
+          resend={ this.resend }
+        />
       </div>
     )
   }

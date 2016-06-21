@@ -14,6 +14,15 @@ const controller = {
     }
     AppStore.emitChange()
   },
+  handleAlertShareClick() {
+    const data = AppStore.data
+    const user = data.user
+    if (!user) {
+      AppStore.data.show_signup_form = true
+      return AppStore.emitChange()
+    }
+    controller.showShareTypeModal()
+  },
   showShareModal(title) {
     delete AppStore.data.listing_map.show_share_type_modal
     AppStore.data.listing_map.show_share_modal = true

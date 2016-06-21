@@ -7,6 +7,7 @@ export default class Listings extends Component {
     AppStore.data.theme = {
       primary: 'f47624'
     }
+    AppStore.data.is_widget = true
     AppStore.emitChange()
   }
   componentDidMount() {
