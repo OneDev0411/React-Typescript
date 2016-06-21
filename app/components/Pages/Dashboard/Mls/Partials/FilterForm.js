@@ -87,6 +87,12 @@ export default class FilterForm extends Component {
       if (data.show_filter_form)
         filter_form_class = ''
     }
+    if (data.is_widget) {
+      filter_form_style = {
+        ...filter_form_style,
+        ...S('t-0 h-100p')
+      }
+    }
     return (
       <div className={ filter_form_class } style={ filter_form_style }>
         <div className={ data.is_mobile ? 'hidden' : '' } onClick={ this.props.hideFilterForm } style={ S('r-45n t-10 absolute bg-fff w-45 h-45 z-100 text-center font-28 pointer color-929292') }>
