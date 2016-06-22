@@ -18,7 +18,9 @@ module.exports = (app, config) => {
     fetch(signin_url,{
       method: 'patch',
       headers: {  
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'x-real-agent' : req.headers['user-agent'],
+        'user-agent' : config.app_name
       },
       body: JSON.stringify(request_object)
     })
