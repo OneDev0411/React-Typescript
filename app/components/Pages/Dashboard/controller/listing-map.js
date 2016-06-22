@@ -125,10 +125,10 @@ const controller = {
       AppStore.data.listing_map.options.points = points
     }
     // If has search input
-    if (data.listing_map && data.listing_map.has_search_input) {
-      delete AppStore.data.listing_map.is_loading
-      return
-    }
+    // if (data.listing_map && data.listing_map.has_search_input) {
+    //   delete AppStore.data.listing_map.is_loading
+    //   return
+    // }
     AppStore.emitChange()
     ListingDispatcher.dispatch({
       action: 'get-valerts',
