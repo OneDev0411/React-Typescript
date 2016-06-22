@@ -12,10 +12,17 @@ import { randomString } from '../../../../utils/helpers'
 import CheckEmailModal from '../Partials/CheckEmailModal'
 export default class Listings extends Component {
   componentWillMount() {
-    AppStore.data.theme = {
-      primary: 'f47624'
+    AppStore.data.brand = {
+      primary: '2196f3'
     }
     AppStore.emitChange()
+    let subdomain = window.location.host.split('.')[0]
+    if (window.location.host.indexOf('.') === -1)
+      subdomain = 'claystapp'
+    AppDispatcher.dispatch({
+      action: 'get-branding',
+      subdomain
+    })
   }
   componentDidMount() {
     const data = this.props.data
@@ -196,7 +203,7 @@ export default class Listings extends Component {
     let links_area = (
       <div>
         <div style={ S('text-center mt-20 mb-30') }>
-          <a href="https://rechat.com/dashboard/mls" target="_blank" className="btn btn-default" style={ S(`w-280 font-17 p-20 color-fff border-1-solid-${data.theme.primary} bg-${data.theme.primary}`) }>View Exclusive Listings</a>
+          <a href="https://rechat.com/dashboard/mls" target="_blank" className="btn btn-default" style={ S(`w-280 font-17 p-20 color-fff border-1-solid-${data.brand.primary} bg-${data.brand.primary}`) }>View Exclusive Listings</a>
         </div>
         <div style={ S('color-9b9b9b font-15 mb-40') } className="text-center">
           Powered by <a href="https://rechat.com" target="_blank" style={ S('color-2196f3 fw-500') }>Rechat<span style={ S('color-2196f3 font-9 relative t-7n fw-500') }>TM</span></a>
@@ -217,8 +224,8 @@ export default class Listings extends Component {
         </div>
         <div style={ status_buttons_area_style }>
           <ButtonGroup>
-            <Button onClick={ this.handleButtonClick.bind(this, 'active')} style={ widget && widget.is_showing_sold ? S('color-929292 font-17 p-15 w-100') : S(`color-${data.theme.primary} font-17 p-15 w-100`) } bsStyle="default">Active</Button>
-            <Button onClick={ this.handleButtonClick.bind(this, 'sold')} style={ widget && widget.is_showing_sold ? S(`color-${data.theme.primary} font-17 p-15 w-100`) : S('color-929292 font-17 p-15 w-100') } bsStyle="default">Sold</Button>
+            <Button onClick={ this.handleButtonClick.bind(this, 'active')} style={ widget && widget.is_showing_sold ? S('color-929292 font-17 p-15 w-100') : S(`color-${data.brand.primary} font-17 p-15 w-100`) } bsStyle="default">Active</Button>
+            <Button onClick={ this.handleButtonClick.bind(this, 'sold')} style={ widget && widget.is_showing_sold ? S(`color-${data.brand.primary} font-17 p-15 w-100`) : S('color-929292 font-17 p-15 w-100') } bsStyle="default">Sold</Button>
           </ButtonGroup>
         </div>
         { listings_area }

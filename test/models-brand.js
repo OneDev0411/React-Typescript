@@ -4,11 +4,11 @@ import Brand from '../app/models/Brand'
 import config from '../config/private'
 /* Branding
 ==================== */
-describe('Testing Branding model', () => {
+describe('Testing Brand model', () => {
   // Signin
   it('Branding.getBySubdomain should return successful', function(done) {
     const params = {
-      'claystapp'
+      subdomain: 'claystapp'
     }
     Brand.getBySubdomain(params, (err, response) => {
       expect(response.status).to.equal('success')

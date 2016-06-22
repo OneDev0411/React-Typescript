@@ -60,6 +60,9 @@ import checkForMobile from '../actions/device/check-for-mobile'
 // Alerts
 import acknowledgeAlertNotifications from '../actions/alerts/acknowledge-notifications'
 
+// Branding
+import getBranding from '../actions/branding/get-branding'
+
 const AppDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
@@ -233,6 +236,10 @@ AppDispatcher.register(payload => {
 
     case 'upgrade-account':
       upgradeAccount(payload.user, payload.agent, payload.secret)
+      break
+
+    case 'get-branding':
+      getBranding(payload.subdomain)
       break
 
     default:

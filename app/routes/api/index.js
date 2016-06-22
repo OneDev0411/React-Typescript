@@ -4,6 +4,8 @@ module.exports = (app, config) => {
   require('./contacts/get-contacts')(app, config)
   // Messages
   require('./messages/get-messages')(app, config)
+  // Brands
+  require('./brands/get-brand-by-subdomain')(app, config)
   // Listings
   require('./listings/search-listings')(app, config)
   require('./listings/get-listing')(app, config)

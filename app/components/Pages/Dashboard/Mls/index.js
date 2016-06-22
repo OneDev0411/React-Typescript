@@ -425,7 +425,7 @@ export default class Mls extends Component {
     let results_actions
     let create_alert_button
     if (data.show_search_map) {
-      let save_search_btn_style = S('absolute r-20 t-70 z-1 w-200 h-50 font-18 color-fff ' + (data.theme && data.theme.primary ? `border-1-solid-${data.theme.primary} bg-${data.theme.primary}` : `bg-2196f3 border-1-solid-2196f3`))
+      let save_search_btn_style = S('absolute r-20 t-70 z-1 w-200 h-50 font-18 color-fff ' + (data.brand && data.brand.primary ? `border-1-solid-${data.brand.primary} bg-${data.brand.primary}` : `bg-2196f3 border-1-solid-2196f3`))
       if (data.is_widget) {
         save_search_btn_style = {
           ...save_search_btn_style,

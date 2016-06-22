@@ -30,7 +30,7 @@ export default class ListingCard extends Component {
     }
     const price_small = listing_util.getSmallPrice(listing.price)
     const price_tag_style = {
-      ...S(`absolute b-30 p-15 pt-6 h-48 bg-${data.theme.primary} font-26 fw-500 color-fff`),
+      ...S(`absolute b-30 p-15 pt-6 h-48 bg-${data.brand.primary} font-26 fw-500 color-fff`),
       borderTopRightRadius: '3px',
       borderBottomRightRadius: '3px'
     }
