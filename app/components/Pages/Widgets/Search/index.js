@@ -1,4 +1,4 @@
-// Landing.js
+// Search.js
 import React, { Component } from 'react'
 import { Col, Input, Button, OverlayTrigger, Popover } from 'react-bootstrap'
 import S from 'shorti'

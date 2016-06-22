@@ -38,6 +38,10 @@ export default class Listings extends Component {
       user,
       options
     })
+    ListingDispatcher.dispatch({
+      action: 'get-favorites',
+      user
+    })
   }
   initOptions(brokerage) {
     const options = {
