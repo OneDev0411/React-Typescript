@@ -12,6 +12,17 @@ export default (user, redirect_to) => {
     user.phone_number = AppStore.data.signup.phone_number
   if (signup && signup.room)
     user.room_connect = AppStore.data.signup.room
+  // Widgets and subdomain signup
+  if (AppStore.data.brand && AppStore.data.brand.subdomain)
+    user.subdomain = AppStore.data.brand.subdomain
+  // If coming from signup tooltip
+  if (AppStore.data.signup_tooltip && AppStore.data.signup_tooltip.listing_id)
+    user.listing = AppStore.data.signup_tooltip.listing_id
+  if (AppStore.data.signup_tooltip && AppStore.data.signup_tooltip.list_agent)
+    user.user_connect = AppStore.data.signup_tooltip.list_agent.user_id
+  // If coming from map
+  if (AppStore.data.signup_tooltip && AppStore.data.signup_tooltip.alert)
+    user.alert = AppStore.data.signup_tooltip.alert
   const params = {
     user
   }
@@ -25,7 +36,7 @@ export default (user, redirect_to) => {
               type: 'bad-request'
             }
           }
-          // Bad request
+          // Email in use
           if (err.response.status === 409) {
             AppStore.data.errors = {
               type: 'email-in-use'

@@ -10,7 +10,8 @@ export default (subdomain) => {
       AppStore.data.brand = {
         title: res.data.title,
         logo_url: res.data.logo_url,
-        primary: res.data.palette.primary_color.replace('#', '')
+        primary: res.data.palette.primary_color.replace('#', ''),
+        subdomain
       }
       AppStore.emitChange()
     }

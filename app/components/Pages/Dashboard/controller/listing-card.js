@@ -21,6 +21,7 @@ const controller = {
     const data = AppStore.data
     const user = data.user
     const mls_number = listing.mls_number
+    // Handle not logged in
     if (!user) {
       controller.handleNotLoggedIn(listing.id)
       return

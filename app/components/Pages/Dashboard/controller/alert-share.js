@@ -2,25 +2,37 @@
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 const controller = {
+  handleUserNotLoggedIn() {
+    AppStore.data.show_signup_form = true
+    const data = AppStore.data
+    const listing_map = data.listing_map
+    const alert = listing_map.options
+    AppStore.data.signup_tooltip = {
+      alert
+    }
+    AppStore.emitChange()
+  },
   showShareTypeModal() {
     delete AppStore.data.share_modal
     delete AppStore.data.error
     const total = AppStore.data.listing_map.listings_info.total
-    AppStore.data.listing_map.show_share_type_modal = true
+    // If too many listings
     if (total > 200) {
       AppStore.data.share_modal = {
         error: true
       }
+      AppStore.emitChange()
+      return
     }
+    // If user not logged in
+    if (!AppStore.data.user) {
+      controller.handleUserNotLoggedIn()
+      return
+    }
+    AppStore.data.listing_map.show_share_type_modal = true
     AppStore.emitChange()
   },
   handleAlertShareClick() {
-    const data = AppStore.data
-    const user = data.user
-    if (!user) {
-      AppStore.data.show_signup_form = true
-      return AppStore.emitChange()
-    }
     controller.showShareTypeModal()
   },
   showShareModal(title) {
