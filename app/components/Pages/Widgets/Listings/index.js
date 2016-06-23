@@ -38,6 +38,8 @@ export default class Listings extends Component {
       user,
       options
     })
+    if (!user)
+      return
     ListingDispatcher.dispatch({
       action: 'get-favorites',
       user
