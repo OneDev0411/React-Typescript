@@ -711,11 +711,37 @@ export default class Mls extends Component {
         )
       }
     }
+    // Share type modal
     const share_type_modal_area = (
       <ShareTypeModal
         data={ data }
       />
     )
+    // Error tooltip
+    let share_alert_error_tooltip
+    if (listing_map && listing_map.show_share_alert_error_tooltip) {
+      let warning_style = {
+        ...S('absolute r-260 t-87 bg-fff w-347 h-210 border-1-solid-d7d6d6 text-center p-30 z-10'),
+        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.12), 0 0 4px 0 rgba(0, 0, 0, 0.1)'
+      }
+      if (data.is_mobile) {
+        warning_style = {
+          ...warning_style,
+          ...S('l-10 t-10 w-' + (window.innerWidth - 20))
+        }
+      }
+      share_alert_error_tooltip = (
+        <div style={ warning_style }>
+          <div className="din" style={ S('font-26 color-fe3824 mb-10') }>TOO MANY LISTINGS!</div>
+          <div style={ S('font-15 mb-20') }>
+            We allow up to <strong>200</strong> listings per alert.<br />
+            You have <strong>{ listing_map.listings_info.total }</strong> in your search right now.<br />
+            Please either zoom in or add more filters.
+          </div>
+          <div onClick={ controller.listing_map.hideModal } style={ S('font-17 color-9b9b9b pointer') }>Close</div>
+        </div>
+      )
+    }
     const main_content = (
       <main>
         { user && !data.is_widget ? nav_area : '' }
@@ -754,6 +780,7 @@ export default class Mls extends Component {
         />
         { zoom_controls }
         { listing_map && listing_map.show_share_type_modal ? share_type_modal_area : '' }
+        { listing_map && listing_map.show_share_alert_error_tooltip ? share_alert_error_tooltip : '' }
         <ShareAlertModal
           data={ data }
           shareAlert={ controller.alert_share.shareAlert }

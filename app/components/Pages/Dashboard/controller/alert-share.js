@@ -18,9 +18,7 @@ const controller = {
     const total = AppStore.data.listing_map.listings_info.total
     // If too many listings
     if (total > 200) {
-      AppStore.data.share_modal = {
-        error: true
-      }
+      AppStore.data.listing_map.show_share_alert_error_tooltip = true
       AppStore.emitChange()
       return
     }

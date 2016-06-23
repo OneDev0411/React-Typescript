@@ -144,6 +144,7 @@ const controller = {
     if (AppStore.data.listing_map) {
       delete AppStore.data.listing_map.show_share_modal
       delete AppStore.data.listing_map.show_share_type_modal
+      delete AppStore.data.listing_map.show_share_alert_error_tooltip
     }
     delete AppStore.data.show_modal_gallery
     setTimeout(() => {
