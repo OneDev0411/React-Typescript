@@ -640,7 +640,7 @@ export default class Mls extends Component {
         const alert_options_short = listing_util.alertOptionsShort(current_alert)
         let new_listings_link = 'Loading...'
         if (current_alert.feed)
-          new_listings_link = current_alert.feed.length ? `View new listings (${current_alert.feed.length})` : 'No new listings'
+          new_listings_link = current_alert.feed.length ? `View new listings (${current_alert.feed_info.total})` : 'No new listings'
         alert_header_area = (
           <div style={ alert_header_style }>
             <div style={ alert_header_bg }></div>
