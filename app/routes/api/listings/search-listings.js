@@ -6,7 +6,6 @@ module.exports = (app, config) => {
     const access_token = req.query.access_token
     const headers = {  
       'Content-Type': 'application/json',
-      'authorization': 'Bearer ' + access_token,
       'x-real-agent' : req.headers['user-agent'],
       'user-agent' : config.app_name
     }

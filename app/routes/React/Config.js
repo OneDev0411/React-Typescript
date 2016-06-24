@@ -28,6 +28,7 @@ import Agents from '../../components/Pages/Dashboard/Mls/Agents'
 // Widgets
 import ListingsWidget from '../../components/Pages/Widgets/Listings'
 import MapWidget from '../../components/Pages/Widgets/Map'
+import SearchWidget from '../../components/Pages/Widgets/Search'
 
 export default (
   <Route path="/" component={App}>
@@ -58,6 +59,7 @@ export default (
     <Route path="password/:slug" component={Password}/>
     <Route path="widgets/listings" component={ListingsWidget}/>
     <Route path="widgets/map" component={MapWidget}/>
+    <Route path="widgets/search" component={SearchWidget}/>
     <Route path="*" component={NoMatch}/>
   </Route>
 )
