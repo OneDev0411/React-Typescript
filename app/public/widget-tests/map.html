@@ -468,7 +468,8 @@ jQuery("input, textarea").cleardefault();
 <div class="sixteen columns outercontainer" id="content">
   
         
-         <iframe src="https://claystapp.chappar.rechat.com/widgets/map?brokerage=CSTPP01" frameborder="0" width="980" height="800" style="margin-left: -20px"></iframe>
+         <iframe id="rechat_map" src="http://localhost:8080/widgets/map?brokerage=CSTPP01" frameborder="0" width="980" height="800" style="margin-left: -20px"></iframe>
+         <script>document.getElementById('rechat_map').src = document.getElementById('rechat_map').src + '&' + window.location.search.replace('?', '');</script>
 
 </div><!-- end container (started in header) -->
 
