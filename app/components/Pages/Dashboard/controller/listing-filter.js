@@ -137,6 +137,8 @@ const controller = {
       AppStore.data.listing_map.filter_options = {}
     if (!AppStore.data.listing_map.filter_options[key]) {
       AppStore.data.listing_map.filter_options[key] = true
+      if (!AppStore.data.listing_map.filter_options.status_options)
+        AppStore.data.listing_map.filter_options.status_options = {}
       if (key === 'sold')
         AppStore.data.listing_map.filter_options.status_options[key] = [3]
       if (key === 'active')

@@ -7,9 +7,8 @@ module.exports = (app, config) => {
     const options = req.body.options
     const headers = {  
       'Content-Type': 'application/json',
-      'authorization': 'Bearer ' + access_token,
-      'x-real-agent' : req.headers['user-agent'],
-      'user-agent' : config.app_name
+      'x-real-agent': req.headers['user-agent'],
+      'user-agent': config.app_name
     }
     if (access_token)
       headers.authorization = 'Bearer ' + access_token
