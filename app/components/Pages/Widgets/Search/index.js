@@ -113,7 +113,7 @@ export default class Search extends Component {
         <div style={ S('absolute z-1 t-0 l-0 w-100p h-100p bg-000 op-.5') }></div>
         <div style={ S('relative z-2 p-10') }>
           <div style={ S('relative t-250 maxw-770 center-block') }>
-            <Input onKeyDown={ this.handleKeyDown.bind(this) } onChange={ this.handleOnChange } style={ S('h-76') } type="text" bsSize="large" placeholder="Search for an address, neighborhood, or MLS#" />
+            <Input onKeyDown={ this.handleKeyDown.bind(this) } onChange={ this.handleOnChange } style={ S('h-76 border-none') } type="text" bsSize="large" placeholder="Search for an address, neighborhood, or MLS#" />
             { listing_area }
           </div>
         </div>
