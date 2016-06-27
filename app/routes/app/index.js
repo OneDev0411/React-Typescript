@@ -83,6 +83,14 @@ module.exports = (app, config) => {
     next()
   })
 
+  // Allow public map
+  app.get('/dashboard/mls', (req, res, next) => {
+    AppStore.data.user = req.session.user
+    res.locals.AppStore = JSON.stringify(AppStore)
+    return res.status(200).render('index.html')
+    res.end()
+  })
+
   // Seamless listing
   app.get('/dashboard/mls/:id', (req, res, next) => {
     AppStore.data.user = req.session.user
