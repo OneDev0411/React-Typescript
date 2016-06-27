@@ -12,6 +12,11 @@ import { randomString } from '../../../../utils/helpers'
 import CheckEmailModal from '../Partials/CheckEmailModal'
 export default class Listings extends Component {
   componentWillMount() {
+    AppStore.data.brand = {
+      primary: '2196f3'
+    }
+    AppStore.data.is_widget = true
+    AppStore.emitChange()
     let subdomain = window.location.host.split('.')[0]
     if (window.location.host.indexOf('.') === -1)
       subdomain = 'claystapp'
@@ -171,9 +176,9 @@ export default class Listings extends Component {
   }
   handleAgentClick(listing) {
     AppStore.data.signup_tooltip = {
-      action: 'agent_clicked',
+      action: 'listing_inquiry',
       list_agent: listing.list_agent,
-      listing_id: listing.id
+      listing: listing.id
     }
     AppStore.emitChange()
   }

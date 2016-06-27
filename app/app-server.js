@@ -47,12 +47,14 @@ app.use(function(req, res, next) {
 })
 
 // For dev port access
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-  res.header('Access-Control-Allow-Credentials', 'true')
-  next()
-})
+if(process.env.NODE_ENV === 'development'){
+  app.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:' + process.env.DEV_PORT)
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+    res.header('Access-Control-Allow-Credentials', 'true')
+    next()
+  })
+}
 
 // Routes
 require('./routes')(app, config)

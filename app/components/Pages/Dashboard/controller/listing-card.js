@@ -5,8 +5,8 @@ import _ from 'lodash'
 const controller = {
   handleNotLoggedIn(listing_id) {
     AppStore.data.signup_tooltip = {
-      action: 'favorite_clicked',
-      listing_id
+      action: 'favorite_listing',
+      listing: listing_id
     }
     AppStore.emitChange()
   },

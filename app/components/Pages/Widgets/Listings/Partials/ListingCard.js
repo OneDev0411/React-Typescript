@@ -35,7 +35,7 @@ export default class ListingCard extends Component {
       borderBottomRightRadius: '3px'
     }
     let signup_form
-    if (data.signup_tooltip && data.signup_tooltip.listing_id === listing.id) {
+    if (data.signup_tooltip && data.signup_tooltip.listing === listing.id) {
       let popover = <Popover id="popover" className="hidden" />
       if (data.errors) {
         if (data.errors.type === 'email-invalid') {
@@ -70,7 +70,7 @@ export default class ListingCard extends Component {
           your favorites with our agent or your partner.
         </div>
       )
-      if (data.signup_tooltip.action === 'agent_clicked') {
+      if (data.signup_tooltip.action === 'listing_inquiry') {
         signup_title = (
           <div>
             Chat with me on <span style={ S('color-2196f3') }>Rechat</span><span style={ S('color-2196f3 font-14 relative t-12n') }>TM</span>

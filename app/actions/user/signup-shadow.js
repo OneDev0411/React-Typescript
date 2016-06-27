@@ -13,16 +13,38 @@ export default (user, redirect_to) => {
   if (signup && signup.room)
     user.room_connect = AppStore.data.signup.room
   // Widgets and subdomain signup
-  if (AppStore.data.brand && AppStore.data.brand.subdomain)
-    user.subdomain = AppStore.data.brand.subdomain
-  // If coming from signup tooltip
-  if (AppStore.data.signup_tooltip && AppStore.data.signup_tooltip.listing_id)
-    user.listing = AppStore.data.signup_tooltip.listing_id
-  if (AppStore.data.signup_tooltip && AppStore.data.signup_tooltip.list_agent)
-    user.user_connect = AppStore.data.signup_tooltip.list_agent.user_id
-  // If coming from map
-  if (AppStore.data.signup_tooltip && AppStore.data.signup_tooltip.alert)
-    user.alert = AppStore.data.signup_tooltip.alert
+  if (AppStore.data.signup_tooltip) {
+    user.actions = []
+    if (AppStore.data.signup_tooltip.action === 'listing_inquiry') {
+      user.actions.push({
+        action: 'listing_inquiry',
+        listing: AppStore.data.signup_tooltip.listing
+      })
+    }
+    if (AppStore.data.signup_tooltip.action === 'favorite_listing') {
+      user.actions.push({
+        action: 'favorite_listing',
+        listing: AppStore.data.signup_tooltip.listing
+      })
+    }
+    if (AppStore.data.signup_tooltip.alert) {
+      user.actions.push({
+        action: 'alert',
+        alert: AppStore.data.signup_tooltip.alert
+      })
+    }
+  }
+  console.log(user)
+  // if (AppStore.data.brand && AppStore.data.brand.subdomain)
+  //   user.subdomain = AppStore.data.brand.subdomain
+  // // If coming from signup tooltip
+  // if (AppStore.data.signup_tooltip && AppStore.data.signup_tooltip.listing_id)
+  //   user.listing = AppStore.data.signup_tooltip.listing_id
+  // if (AppStore.data.signup_tooltip && AppStore.data.signup_tooltip.list_agent)
+  //   user.user_connect = AppStore.data.signup_tooltip.list_agent.user_id
+  // // If coming from map
+  // if (AppStore.data.signup_tooltip && AppStore.data.signup_tooltip.alert)
+  //   user.alert = AppStore.data.signup_tooltip.alert
   const params = {
     user
   }
