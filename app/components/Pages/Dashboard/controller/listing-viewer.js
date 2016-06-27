@@ -3,9 +3,14 @@ import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 const controller = {
   showListingViewer(listing) {
+    const data = AppStore.data
+    // Check for widget
+    if (data.is_widget) {
+      window.open('https://rechat.com/dashboard/mls/' + listing.id)
+      return
+    }
     const history = require('../../../../utils/history')
     history.pushState(null, '/dashboard/mls/' + listing.id)
-    const data = AppStore.data
     const user = data.user
     AppStore.data.show_listing_viewer = true
     AppStore.data.current_listing = listing

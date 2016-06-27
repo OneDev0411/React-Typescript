@@ -17,7 +17,16 @@ export default class MlsMap extends Component {
       })
       map_listing_markers = listings.map(listing => {
         return (
-          <div onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) } onMouseOut={ controller.listing_map.hideListingPopup.bind(this) } key={ 'search-map--map-listing-' + listing.id } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
+          <div
+            onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) }
+            onMouseOut={ controller.listing_map.hideListingPopup.bind(this) }
+            key={ 'search-map--map-listing-' + listing.id }
+            onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }
+            style={ S('pointer mt-10') }
+            lat={ listing.location.latitude }
+            lng={ listing.location.longitude }
+            text={'A'}
+          >
             <ListingMarker
               key={ 'listing-marker-' + listing.id }
               data={ data }
@@ -37,7 +46,16 @@ export default class MlsMap extends Component {
       })
       map_listing_markers = listings.map(listing => {
         return (
-          <div onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) } onMouseOut={ controller.listing_map.hideListingPopup.bind(this) } key={ 'alert-map--map-listing-' + listing.id } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.location.latitude } lng={ listing.location.longitude } text={'A'}>
+          <div
+            onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) }
+            onMouseOut={ controller.listing_map.hideListingPopup.bind(this) }
+            key={ 'alert-map--map-listing-' + listing.id }
+            onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }
+            style={ S('pointer mt-10') }
+            lat={ listing.location.latitude }
+            lng={ listing.location.longitude }
+            text={'A'}
+          >
             <ListingMarker
               key={ 'listing-marker-' + listing.id }
               data={ data }
@@ -58,7 +76,16 @@ export default class MlsMap extends Component {
       })
       map_listing_markers = listings.map((listing, i) => {
         return (
-          <div onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) } onMouseOut={ controller.listing_map.hideListingPopup.bind(this) } key={ 'actives-map--map-listing-' + listing.id + '-' + i } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) } style={ S('pointer mt-10') } lat={ listing.property.address.location.latitude } lng={ listing.property.address.location.longitude } text={'A'}>
+          <div
+            onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) }
+            onMouseOut={ controller.listing_map.hideListingPopup.bind(this) }
+            key={ 'actives-map--map-listing-' + listing.id + '-' + i }
+            onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }
+            style={ S('pointer mt-10') }
+            lat={ listing.property.address.location.latitude }
+            lng={ listing.property.address.location.longitude }
+            text={'A'}
+          >
             <ListingMarker
               key={ 'listing-marker-' + listing.id }
               data={ data }
