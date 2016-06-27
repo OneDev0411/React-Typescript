@@ -27,9 +27,9 @@ export default (user, redirect_to) => {
         listing: AppStore.data.signup_tooltip.listing
       })
     }
-    if (AppStore.data.signup_tooltip.alert) {
+    if (AppStore.data.signup_tooltip.action === 'create_alert') {
       user.actions.push({
-        action: 'alert',
+        action: 'create_alert',
         alert: AppStore.data.signup_tooltip.alert
       })
     }

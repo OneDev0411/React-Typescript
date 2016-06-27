@@ -7,6 +7,7 @@ module.exports = (app, config) => {
     const user_connect = req.body.user_connect
     const room_connect = req.body.room_connect
     const phone_number = req.body.phone_number
+    const actions = req.body.actions
     const request_object = {
       client_id: config.api.client_id,
       client_secret: config.api.client_secret,
@@ -24,13 +25,15 @@ module.exports = (app, config) => {
       request_object.room_connect = room_connect
     if (phone_number)
       request_object.phone_number = phone_number
+    if (actions)
+      request_object.actions = actions
     const endpoint = api_url + '/users'
     fetch(endpoint,{
       method: 'post',
       headers: {  
         'Content-Type': 'application/json',
-        'x-real-agent' : req.headers['user-agent'],
-        'user-agent' : config.app_name
+        'x-real-agent': req.headers['user-agent'],
+        'user-agent': config.app_name
       },
       body: JSON.stringify(request_object)
     })

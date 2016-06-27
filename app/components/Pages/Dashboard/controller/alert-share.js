@@ -8,6 +8,7 @@ const controller = {
     const listing_map = data.listing_map
     const alert = listing_map.options
     AppStore.data.signup_tooltip = {
+      action: 'create_alert',
       alert
     }
     AppStore.emitChange()
