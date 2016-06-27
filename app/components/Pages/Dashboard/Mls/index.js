@@ -613,7 +613,7 @@ export default class Mls extends Component {
     // Hide search form
     if (data.show_filter_form || data.show_alerts_map || data.show_actives_map)
       search_filter_draw_area = ''
-    const underline = <div style={ S('w-100p h-6 bg-3388ff absolute b-11n') }></div>
+    const underline = <div style={ S(`w-100p h-6 bg-${!data.brand || !data.brand.primary ? '3388ff' : data.brand.primary} absolute b-11n`) }></div>
     const map_tabs = (
       <ul style={ S('relative l-30n t-5') }>
         <li style={ S('relative pull-left font-28 mr-60') }>
