@@ -31,13 +31,18 @@ export default class Search extends Component {
     AppStore.data.widget.typing = true
     AppStore.emitChange()
     setTimeout(() => {
+      if (!AppStore.data.widget.q) {
+        delete AppStore.data.widget.listings
+        AppStore.emitChange()
+        return
+      }
       delete AppStore.data.widget.typing
       AppStore.emitChange()
       ListingDispatcher.dispatch({
         action: 'search-listing-widget',
         q: AppStore.data.widget.q
       })
-    }, 1000)
+    }, 500)
   }
   handleSubmit(q) {
     const data = this.props.data
@@ -117,7 +122,7 @@ export default class Search extends Component {
     let listing_area
     if (listing_list) {
       listing_area = (
-        <div style={ { overflow: 'scroll', ...S('bg-fff br-3 maxh-250') } }>{ listing_list }</div>
+        <div style={ { overflow: 'scroll', ...S('bg-fff br-3 maxh-250 z-1 relative') } }>{ listing_list }</div>
       )
     }
     return (
@@ -129,7 +134,7 @@ export default class Search extends Component {
             <div style={ S('color-fff text-center font-58 mb-10') } className="tempo">Own a piece of Dallas.</div>
             <Input onKeyDown={ this.handleKeyDown.bind(this) } onChange={ this.handleOnChange } style={ S('h-76 border-none') } type="text" bsSize="large" placeholder="Search for an address, neighborhood, or MLS#" />
             { listing_area }
-            <div style={ S('absolute t-185 r-0') }>
+            <div style={ S('absolute t-185 r-0 z-0') }>
               <a style={ S('color-fff') } href="" target="_blank">Powered by <span style={ S('fw-600') } className="din">Rechat</span><sup>TM</sup></a>
             </div>
           </div>
