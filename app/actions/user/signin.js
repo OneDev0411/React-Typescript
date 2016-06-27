@@ -2,7 +2,6 @@
 import User from '../../models/User'
 import Intercom from '../../models/Intercom'
 import AppStore from '../../stores/AppStore'
-import config from '../../../config/public'
 
 export default (email, password, redirect_to, invite) => {
   let email_trim
@@ -42,9 +41,6 @@ export default (email, password, redirect_to, invite) => {
     redirect_to,
     invite
   }
-  const data = AppStore.data
-  if (data.brand && data.brand.subdomain)
-    params.api_host = 'https://' + data.brand.subdomain + '.' + config.app.url.replace('https://', '')
   User.signin(params, (err, response) => {
     // Success
     if (response.status === 'success') {
