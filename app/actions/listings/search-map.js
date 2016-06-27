@@ -17,6 +17,11 @@ export default (user, q, status) => {
     const map = window.map
     delete AppStore.data.listing_map.is_loading
     AppStore.data.listing_map.listings = listings
+    if (listings && listings.length) {
+      AppStore.data.listing_map.listings_info = {
+        total: listings.length
+      }
+    }
     const zoom = 13
     AppStore.data.listing_map.auto_move = true
     if (!listings || !listings.length) {
