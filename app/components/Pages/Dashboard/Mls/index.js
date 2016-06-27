@@ -158,8 +158,10 @@ export default class Mls extends Component {
     })
   }
   checkForBranding() {
-    let subdomain = window.location.host.split('.')[0]
     if (window.location.host.indexOf('.') !== -1) {
+      const subdomain = window.location.host.split('.')[0]
+      if (!subdomain)
+        return
       AppDispatcher.dispatch({
         action: 'get-branding',
         subdomain
