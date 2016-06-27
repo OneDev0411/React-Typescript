@@ -34,7 +34,7 @@ export default (user, redirect_to) => {
       })
     }
   }
-  console.log(user)
+  // console.log(user)
   // if (AppStore.data.brand && AppStore.data.brand.subdomain)
   //   user.subdomain = AppStore.data.brand.subdomain
   // // If coming from signup tooltip
