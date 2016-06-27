@@ -115,6 +115,7 @@ export default class Mls extends Component {
     this.resetViews()
     this.routeURL()
     this.checkForMobile()
+    this.checkForBranding()
   }
   componentDidUpdate() {
     const data = this.props.data
@@ -155,6 +156,15 @@ export default class Mls extends Component {
     AppDispatcher.dispatch({
       action: 'check-for-mobile'
     })
+  }
+  checkForBranding() {
+    let subdomain = window.location.host.split('.')[0]
+    if (window.location.host.indexOf('.') !== -1) {
+      AppDispatcher.dispatch({
+        action: 'get-branding',
+        subdomain
+      })
+    }
   }
   getRoomsIndexedDB() {
     const data = this.props.data
