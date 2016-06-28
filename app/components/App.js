@@ -1,24 +1,14 @@
 // App.js
-// Build stlye sheet
 if (process.env.WEBPACK_PROCESS === 'build')
-  // Style
   require('../src/sass/main.scss')
-
 import React, { Component } from 'react'
 import _ from 'lodash'
 import config from '../../config/public'
-
-// Socket.io
 import io from 'socket.io-client'
-
-// AppDispatcher
 import AppDispatcher from '../dispatcher/AppDispatcher'
-
-// Store
 import AppStore from '../stores/AppStore'
 
 export default class App extends Component {
-
   componentWillMount() {
     if (typeof window !== 'undefined') {
       const reconnect_vars = {
@@ -30,7 +20,6 @@ export default class App extends Component {
       window.socket = io(config.socket.server, reconnect_vars)
     }
   }
-
   // Add change listeners to stores
   componentDidMount() {
     AppStore.addChangeListener(this._onChange.bind(this))
@@ -71,7 +60,6 @@ export default class App extends Component {
     if (data.user)
       this.triggerBranchBanner()
   }
-
   componentDidUpdate() {
     const data = AppStore.data
     if (data.user && !data.session_started) {
@@ -80,13 +68,25 @@ export default class App extends Component {
       AppStore.data.session_started = true
       AppStore.emitChange()
     }
+    // Check for brand
+    if (window.location.host.indexOf('.') !== -1 && !data.brand)
+      this.checkForBranding()
   }
-
   // Remove change listeners from stores
   componentWillUnmount() {
     AppStore.removeChangeListener(this._onChange.bind(this))
   }
-
+  checkForBranding() {
+    if (window.location.host.indexOf('.') !== -1) {
+      const subdomain = window.location.host.split('.')[0]
+      if (!subdomain)
+        return
+      AppDispatcher.dispatch({
+        action: 'get-branding',
+        subdomain
+      })
+    }
+  }
   triggerBranchBanner() {
     const branch = require('branch-sdk')
     branch.init(config.branch.key)

@@ -510,6 +510,14 @@ export default class SideBar extends Component {
         <li><a href="#" style={ S('pointer') } onClick={ this.showUpgradeAccountModal }><i className="fa fa-arrow-up" style={ S('mr-15') }></i>Upgrade Account</a></li>
       )
     }
+    let branding_logo
+    if (data.brand && data.brand.logo_url) {
+      branding_logo = (
+        <div>
+          <div style={ S(`bg-url(${data.brand.logo_url}) bg-cover bg-center w-30 h-35 ml-10`) }></div>
+        </div>
+      )
+    }
     return (
       <aside style={ sidebar_style } className="sidebar__nav-list pull-left">
         <div style={ S('mt-12') }>
@@ -524,6 +532,7 @@ export default class SideBar extends Component {
           <img src="/images/dashboard/sidenav/transactions-active.svg"/>
         </div>
         <Nav bsStyle="pills" stacked>
+          { branding_logo }
           <OverlayTrigger placement="right" overlay={ popover.conversation } delayShow={ 200 } delayHide={ 0 }>
             <LinkContainer onClick={ this.handleChatNavClick.bind(this) } className={ active.recents } to="/dashboard/recents">
               <NavItem style={ S('w-85p') }>
