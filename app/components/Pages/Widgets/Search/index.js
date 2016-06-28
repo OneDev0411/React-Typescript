@@ -26,6 +26,8 @@ export default class Search extends Component {
       return
     }
     // Throttle
+    AppStore.data.widget.is_loading = true
+    AppStore.emitChange()
     if (AppStore.data.widget && AppStore.data.widget.typing)
       return
     AppStore.data.widget.typing = true
@@ -125,6 +127,12 @@ export default class Search extends Component {
         <div style={ { overflow: 'scroll', ...S('bg-fff br-3 maxh-250 z-1 relative') } }>{ listing_list }</div>
       )
     }
+    let loading
+    if (widget.is_loading) {
+      loading = (
+        <div style={ S('absolute r-20 t-120 z-10 color-929292') }>Searching...</div>
+      )
+    }
     return (
       <div>
         <div style={ S('absolute z-0 t-0 l-0 w-100p h-100p bg-cover bg-center bg-url(/images/widgets/stapp-search.jpg)') }></div>
@@ -133,6 +141,7 @@ export default class Search extends Component {
           <div style={ S('relative t-190 maxw-770 center-block') }>
             <div style={ S('color-fff text-center font-58 mb-10') } className="tempo">Own a piece of Dallas.</div>
             <Input onKeyDown={ this.handleKeyDown.bind(this) } onChange={ this.handleOnChange } style={ S('h-76 border-none') } type="text" bsSize="large" placeholder="Search for an address, neighborhood, or MLS#" />
+            { loading }
             { listing_area }
             <div style={ S('absolute t-185 r-0 z-0') }>
               <a style={ S('color-fff') } href="" target="_blank">Powered by <span style={ S('fw-600') } className="din">Rechat</span><sup>TM</sup></a>

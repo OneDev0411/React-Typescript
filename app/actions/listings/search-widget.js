@@ -17,6 +17,7 @@ export default (user, q) => {
         listings
       }
     }
+    delete AppStore.data.widget.is_loading
     AppStore.emitChange()
   })
 }
