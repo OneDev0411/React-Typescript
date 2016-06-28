@@ -22,6 +22,11 @@ import listing_util from '../../../../utils/listing'
 import validator from 'validator'
 import { randomString } from '../../../../utils/helpers'
 import CheckEmailModal from '../Partials/CheckEmailModal'
+import SvgFilters from '../Partials/Svgs/Filters'
+import SvgDraw from '../Partials/Svgs/Draw'
+import SvgGlobe from '../Partials/Svgs/Globe'
+import SvgList from '../Partials/Svgs/List'
+import SvgPhotos from '../Partials/Svgs/Photos'
 export default class Mls extends Component {
   componentWillMount() {
     const data = this.props.data
@@ -504,6 +509,24 @@ export default class Mls extends Component {
           ...S('w-50 h-52')
         }
       }
+      let globe_color = '929292'
+      if (!data.listing_panel) {
+        globe_color = '3388ff'
+        if (data.brand && data.brand.primary)
+          globe_color = data.brand.primary
+      }
+      let list_color = '929292'
+      if (data.listing_panel && data.listing_panel.view === 'list') {
+        list_color = '3388ff'
+        if (data.brand && data.brand.primary)
+          list_color = data.brand.primary
+      }
+      let photos_color = '929292'
+      if (data.listing_panel && data.listing_panel.view === 'photos') {
+        photos_color = '3388ff'
+        if (data.brand && data.brand.primary)
+          photos_color = data.brand.primary
+      }
       results_actions = (
         <div>
           <div style={ S('absolute r-5 mt-2 t-15 z-10') }>
@@ -512,13 +535,19 @@ export default class Mls extends Component {
           </div>
           <ButtonGroup style={ viewing_type_button_group_style }>
             <Button style={ btn_style } onClick={ controller.listing_panel.hideListingPanel.bind(this) }>
-              <img src={ `/images/dashboard/mls/globe${!data.listing_panel ? '-active' : ''}.svg` } style={ S('w-20') }/>
+              <div style={ S('mt-3') }>
+                <SvgGlobe color={`#${globe_color}`} />
+              </div>
             </Button>
             <Button style={ btn_style } onClick={ controller.listing_panel.showPanelView.bind(this, 'list') }>
-              <img src={ `/images/dashboard/mls/list${data.listing_panel && data.listing_panel.view === 'list' ? '-active' : ''}.svg` } style={ S('w-20') }/>
+              <div style={ S('mt-5') }>
+                <SvgList color={`#${list_color}`} />
+              </div>
             </Button>
             <Button style={ btn_style } onClick={ controller.listing_panel.showPanelView.bind(this, 'photos') }>
-              <img src={ `/images/dashboard/mls/photos${data.listing_panel && data.listing_panel.view === 'photos' ? '-active' : ''}.svg` } style={ S('w-18') }/>
+              <div style={ S('mt-3') }>
+                <SvgPhotos color={`#${photos_color}`} />
+              </div>
             </Button>
           </ButtonGroup>
         </div>
@@ -573,6 +602,12 @@ export default class Mls extends Component {
         <div style={ S('z-1 color-fff p-10 relative w-504') }>{ options_text }</div>
       </div>
     )
+    let draw_color = '929292'
+    if (data.listing_map && data.listing_map.drawable) {
+      draw_color = '3388ff'
+      if (data.brand && data.brand.primary)
+        draw_color = data.brand.primary
+    }
     let search_filter_draw_area = (
       <div style={ S('relative t-35 l-10 z-1 w-580') }>
         <div style={ search_area_style }>
@@ -583,15 +618,19 @@ export default class Mls extends Component {
             <div style={ S('w-1 h-28 absolute l-400 t-13 bg-dddddd') }></div>
           </div>
           <div style={ S('pull-left') }>
-            <Button onClick={ controller.listing_filter.showFilterForm.bind(this, 'photos') } style={ { ...S('h-50 border-1-solid-fff'), outline: 'none' } }>
-              <img src={ `/images/dashboard/mls/filters${data.show_filter_form ? '-active' : ''}.svg` } style={ S('w-20 mr-10') }/>
+            <Button onClick={ controller.listing_filter.showFilterForm.bind(this, 'photos') } style={ { ...S('h-50 border-1-solid-fff pt-15'), outline: 'none' } }>
+              <div style={ S('w-20 mr-10 pull-left') }>
+                <SvgFilters color={`#${data.brand && data.brand.primary ? data.brand.primary : '929292'}`} />
+              </div>
               <span className={ data.show_filter_form ? 'text-primary' : '' }>Filters</span>
             </Button>
           </div>
         </div>
         <div style={ S('pull-left') }>
           <Button onClick={ controller.listing_map.toggleDrawable.bind(this) } style={ draw_button_style }>
-            <img src={ `/images/dashboard/mls/draw${data.listing_map && data.listing_map.drawable ? '-active' : ''}.svg` } style={ S('w-20') }/>
+            <div style={ S('w-20 relative t-3 l-3') }>
+              <SvgDraw color={`#${draw_color}`} />
+            </div>
           </Button>
         </div>
         <div className="clearfix"></div>
