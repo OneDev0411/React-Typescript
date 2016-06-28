@@ -195,7 +195,6 @@ export default class Listings extends Component {
     }
     const listings = widget.listings
     let listings_area = listings.map(listing => {
-      console.log(listing.list_agent)
       return (
         <ListingCard
           handleEmailSubmit={ this.handleEmailSubmit }

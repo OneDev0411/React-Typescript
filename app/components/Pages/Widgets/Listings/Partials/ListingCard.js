@@ -120,9 +120,18 @@ export default class ListingCard extends Component {
     }
     let agent_image_area
     if (listing.list_agent) {
+      let avatar = (
+        <i style={ S('font-45 color-fff') } className="fa fa-user"></i>
+      )
+      const profile_image_url = listing.list_agent.profile_image_url
+      if (profile_image_url) {
+        avatar = (
+          <div style={ S(`bg-url(${profile_image_url}) w-50 h-50 bg-center bg-cover br-100`) }></div>
+        )
+      }
       agent_image_area = (
-        <div onClick={ this.props.handleAgentClick.bind(this, listing) } style={ S('w-60 h-60 br-100 border-2-solid-fff absolute r-10 b-50 bg-ccc p-10 pt-5') }>
-          <i style={ S('font-45 color-fff') } className="fa fa-user"></i>
+        <div onClick={ this.props.handleAgentClick.bind(this, listing) } style={ S('p-0 w-55 h-55 br-100 border-2-solid-fff absolute r-10 b-50 bg-ccc') }>
+          { avatar }
         </div>
       )
     }

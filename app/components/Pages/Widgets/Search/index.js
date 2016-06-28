@@ -128,7 +128,7 @@ export default class Search extends Component {
       )
     }
     let loading
-    if (widget.is_loading) {
+    if (widget && widget.is_loading) {
       loading = (
         <div style={ S('absolute r-20 t-120 z-10 color-929292') }>Searching...</div>
       )
