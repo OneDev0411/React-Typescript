@@ -620,7 +620,7 @@ export default class Mls extends Component {
           <div style={ S('pull-left') }>
             <Button onClick={ controller.listing_filter.showFilterForm.bind(this, 'photos') } style={ { ...S('h-50 border-1-solid-fff pt-15'), outline: 'none' } }>
               <div style={ S('w-20 mr-10 pull-left') }>
-                <SvgFilters color={`#${data.brand && data.brand.primary ? data.brand.primary : '929292'}`} />
+                <SvgFilters color={'#929292'} />
               </div>
               <span className={ data.show_filter_form ? 'text-primary' : '' }>Filters</span>
             </Button>
