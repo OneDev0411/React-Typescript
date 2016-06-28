@@ -56,8 +56,12 @@ export default class Search extends Component {
       return
     }
     // Send to search map
-    if (q)
-      window.open('http://claystapp.com/search?q=' + q)
+    if (q) {
+      if (data.brand && data.brand.map_url)
+        window.open(data.brand.map_url + '?q=' + q)
+      else
+        window.open('https://rechat.com/dashboard/mls/?q=' + q)
+    }
   }
   handleKeyDown(e) {
     const data = AppStore.data
@@ -144,7 +148,7 @@ export default class Search extends Component {
             { loading }
             { listing_area }
             <div style={ S('absolute t-185 r-0 z-0') }>
-              <a style={ S('color-fff') } href="" target="_blank">Powered by <span style={ S('fw-600') } className="din">Rechat</span><sup>TM</sup></a>
+              <a style={ S('color-fff') } href="https://rechat.com" target="_blank">Powered by <span style={ S('fw-600') } className="din">Rechat</span><sup>TM</sup></a>
             </div>
           </div>
         </div>
