@@ -499,10 +499,10 @@ export default class Mls extends Component {
       )
     }
     if (listing_map && listing_map.listings) {
-      let viewing_type_button_group_style = S('absolute t-15 r-0 mr-10 z-10')
+      let viewing_type_button_group_style = S('absolute t-9 r-0 mr-10 z-10')
       if (data.is_widget)
         viewing_type_button_group_style = S('absolute t-36 l-600 w-200 z-2')
-      let btn_style = { ...S('bg-f8fafb h-37'), outline: 'none' }
+      let btn_style = { ...S('bg-f8fafb h-47'), outline: 'none' }
       if (data.is_widget) {
         btn_style = {
           ...btn_style,
