@@ -514,7 +514,7 @@ export default class SideBar extends Component {
     if (data.brand && data.brand.logo_url) {
       branding_logo = (
         <div>
-          <div style={ S(`bg-url(${data.brand.logo_url}) bg-cover bg-center w-30 h-35 ml-10 br-100`) }></div>
+          <div style={ S(`bg-url(${data.brand.logo_url}) bg-cover bg-center w-30 h-35 ml-10`) }></div>
         </div>
       )
     }
