@@ -124,7 +124,7 @@ export default class Search extends Component {
     let listing_area
     if (listing_list) {
       listing_area = (
-        <div style={ { overflow: 'scroll', ...S('bg-fff br-3 maxh-250 z-1 relative') } }>{ listing_list }</div>
+        <div style={ { overflow: 'scroll', ...S('bg-fff br-3 maxh-250 z-1 relative t-5n') } }>{ listing_list }</div>
       )
     }
     let loading

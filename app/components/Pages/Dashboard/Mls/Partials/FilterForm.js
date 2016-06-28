@@ -330,7 +330,7 @@ export default class FilterForm extends Component {
             {
               /* <Button onClick={ this.props.resetFilterOptions.bind(this) } style={ { ...S('color-fff bg-c5cdd8 w-50p br-0'), border: 'none' } }>Reset Filter</Button> */
             }
-            <Button type="submit" bsStyle="primary" style={ { ...S('w-100p br-3 p-15'), border: 'none' } }>Update Filters</Button>
+            <Button type="submit" style={ { ...S(`bg-${data.brand && data.brand.primary ? data.brand.primary : '3388ff'} w-100p br-3 p-15 color-fff`), border: 'none' } }>Update Filters</Button>
           </div>
         </form>
       </div>

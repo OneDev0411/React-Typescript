@@ -352,7 +352,7 @@ export default class Mls extends Component {
       }
       loading = (
         <div style={ loading_style }>
-          <div style={ S('bg-3388ff br-20 color-fff w-190 h-29 pt-5 center-block text-center') }>Loading MLS&reg; Listings...</div>
+          <div style={ S(`br-20 color-fff w-190 h-29 pt-5 center-block text-center bg-${data.brand && data.brand.primary ? data.brand.primary : '3388ff'}`) }>Loading MLS&reg; Listings...</div>
         </div>
       )
     }
