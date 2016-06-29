@@ -515,7 +515,7 @@ export default class SideBar extends Component {
     let branding_logo
     if (data.brand && data.brand.logo_url) {
       branding_logo = (
-        <div>
+        <div style={ S('mb-10') }>
           <div style={ S(`bg-url(${data.brand.logo_url}) bg-cover bg-center w-30 h-35 ml-10`) }></div>
         </div>
       )
@@ -525,17 +525,6 @@ export default class SideBar extends Component {
       nav_active_color = '#' + data.brand.primary
     return (
       <aside style={ sidebar_style } className="sidebar__nav-list pull-left">
-        <div style={ S('mt-12') }>
-          { /* <img src="/images/dashboard/icons/hamburger.svg"/> */ }
-        </div>
-        { /* cache images */ }
-        <div style={ S('w-0 h-0 absolute l-1000n t-1000n') }>
-          <img src="/images/dashboard/sidenav/chat-active.svg"/>
-          <img src="/images/dashboard/sidenav/map-active.svg"/>
-          <img src="/images/dashboard/sidenav/people-active.svg"/>
-          <img src="/images/dashboard/sidenav/task-active.svg"/>
-          <img src="/images/dashboard/sidenav/transactions-active.svg"/>
-        </div>
         <Nav bsStyle="pills" stacked>
           { branding_logo }
           <OverlayTrigger placement="right" overlay={ popover.conversation } delayShow={ 200 } delayHide={ 0 }>
