@@ -20,6 +20,8 @@ export default (user, redirect_to) => {
         action: 'listing_inquiry',
         listing: AppStore.data.signup_tooltip.listing
       })
+      // Add agent
+      user.user_connect = AppStore.data.signup_tooltip.list_agent.user_id
     }
     if (AppStore.data.signup_tooltip.action === 'favorite_listing') {
       user.actions.push({
