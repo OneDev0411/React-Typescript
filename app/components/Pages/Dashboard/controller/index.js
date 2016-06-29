@@ -6,6 +6,7 @@ import listing_viewer from './listing-viewer'
 import listing_panel from './listing-panel'
 import listing_filter from './listing-filter'
 import listing_card from './listing-card'
+import search_input_map from './search-input-map'
 // Share modal
 import share_modal from './share-modal'
 // Alert
@@ -28,6 +29,7 @@ const controller = {
   alert_viewer,
   alert_map,
   alert_share,
-  recents
+  recents,
+  search_input_map
 }
 export default controller

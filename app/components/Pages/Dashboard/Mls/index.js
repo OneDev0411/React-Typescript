@@ -256,6 +256,7 @@ export default class Mls extends Component {
     delete AppStore.data.listing_map.auto_move
     delete AppStore.data.listing_map.has_search_input
     delete AppStore.data.listing_map.no_listings_found
+    delete AppStore.data.search_input.listings
     AppStore.emitChange()
     let bounds = window.map.getBounds().toJSON()
     bounds = [
@@ -560,10 +561,53 @@ export default class Mls extends Component {
       ...S('font-18 bg-fff w-400 h-50 pull-left'),
       border: 'none'
     }
+    // Non mobile search
+    const search_input = data.search_input
+    let listing_list
+    if (search_input && search_input.listings) {
+      const listings = search_input.listings
+      const active_listing = search_input.active_listing
+      listing_list = listings.map((listing, i) => {
+        let bg_color = ''
+        if (active_listing === i)
+          bg_color = ' bg-EDF7FD'
+        let cover_image = <div style={ S('bg-929292 w-87 h-50 color-fff text-center pt-15') }>No Image</div>
+        if (listing.cover_image_url) {
+          cover_image = (
+            <div style={ S(`w-87 h-50 bg-cover bg-center bg-url(${listing.cover_image_url})`) }></div>
+          )
+        }
+        return (
+          <div onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) } key={ listing.id } className="search-listings__listing" style={ S('br-3 h-62 relative pointer p-5 ' + bg_color) }>
+            <div className="pull-left" style={ S('mr-10') }>{ cover_image }</div>
+            <div style={ S('mt-5') } className="pull-left">
+              <span style={ S('color-666') }>
+                <span style={ S('mr-10') }><b>{ listing.address.street_number } { listing.address.street_name } { listing.address.street_suffix }</b></span>
+                <span style={ S('mr-10 font-12 color-929292') }>
+                  <span style={ S('font-20 t-5 absolute color-' + listing_util.getStatusColor(listing.status)) }>&#8226;</span>
+                  <span style={ S('ml-12') }>{ listing.status }</span>
+                </span>
+                <br/>
+                <span style={ S('color-929292 font-10') }>{ listing.address.city }, { listing.address.state }</span>
+              </span>
+            </div>
+            <div className="clearfix"></div>
+          </div>
+        )
+      })
+    }
+    let listing_area
+    if (listing_list) {
+      listing_area = (
+        <div style={ { overflow: 'scroll', ...S('w-504 bg-fff br-3 maxh-250 z-1 relative t-5') } }>{ listing_list }</div>
+      )
+    }
     let search_area = (
-      <form onSubmit={ controller.listing_map.handleSearchSubmit.bind(this) }>
-        <input onChange={ controller.listing_map.handleSearchInputChange.bind(this) } value={ search_input_text } ref="search_input" className="form-control" type="text" style={ search_input_style } placeholder="Search location or MLS#" />
-      </form>
+      <div>
+        <form onSubmit={ controller.search_input_map.handleSearchSubmit.bind(this) }>
+          <input onKeyDown={ controller.search_input_map.handleKeyDown.bind(this) } onChange={ controller.search_input_map.handleSearchInputChange.bind(this) } value={ search_input_text } ref="search_input" className="form-control" type="text" style={ search_input_style } placeholder="Search location or MLS#" />
+        </form>
+      </div>
     )
     if (data.current_listing)
       search_area = ''
@@ -614,7 +658,7 @@ export default class Mls extends Component {
           <div style={ S('pull-left mr-10 relative') }>
             { search_area }
             { clear_search_input }
-            <img onClick={ controller.listing_map.handleSearchSubmit.bind(this) } style={ S('absolute r-15 t-15 w-20 pointer') } src="/images/dashboard/mls/search.svg" />
+            <img onClick={ controller.search_input_map.handleSearchSubmit.bind(this) } style={ S('absolute r-15 t-15 w-20 pointer') } src="/images/dashboard/mls/search.svg" />
             <div style={ S('w-1 h-28 absolute l-400 t-13 bg-dddddd') }></div>
           </div>
           <div style={ S('pull-left') }>
@@ -634,7 +678,8 @@ export default class Mls extends Component {
           </Button>
         </div>
         <div className="clearfix"></div>
-        { options_gist }
+        { listing_area }
+        { !listing_area ? options_gist : '' }
       </div>
     )
     // Hide search form
@@ -667,9 +712,9 @@ export default class Mls extends Component {
     )
     if (data.is_mobile) {
       search_area = (
-        <form onSubmit={ controller.listing_map.handleSearchSubmit.bind(this) }>
-          <img onClick={ controller.listing_map.handleSearchSubmit.bind(this) } src="/images/dashboard/mls/search.svg" style={ S('pointer w-22 h-22 absolute l-13 t-14') } />
-          <input onChange={ controller.listing_map.handleSearchInputChange.bind(this) } value={ search_input_text } ref="search_input" className="form-control" type="text" style={ S('font-18 bg-dfe3e8 w-200 pull-left pl-40') } placeholder="Location or MLS#" />
+        <form onSubmit={ controller.search_input_map.handleSearchSubmit.bind(this) }>
+          <img onClick={ controller.search_input_map.handleSearchSubmit.bind(this) } src="/images/dashboard/mls/search.svg" style={ S('pointer w-22 h-22 absolute l-13 t-14') } />
+          <input onChange={ controller.search_input_map.handleSearchInputChange.bind(this) } value={ search_input_text } ref="search_input" className="form-control" type="text" style={ S('font-18 bg-dfe3e8 w-200 pull-left pl-40') } placeholder="Location or MLS#" />
         </form>
       )
       toolbar = (

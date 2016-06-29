@@ -163,29 +163,6 @@ const controller = {
     }
     AppStore.emitChange()
   },
-  handleSearchSubmit(e) {
-    if (window.poly) {
-      window.poly.setMap(null)
-      delete window.poly
-      delete AppStore.data.listing_map.drawable
-      AppStore.emitChange()
-    }
-    e.preventDefault()
-    const data = AppStore.data
-    const user = data.user
-    const q = this.refs.search_input.value.trim()
-    AppStore.data.listing_map.is_loading = true
-    const listing_map = data.listing_map
-    const options = listing_map.options
-    const status = options.listing_statuses.join(',')
-    AppStore.emitChange()
-    ListingDispatcher.dispatch({
-      action: 'search-listing-map',
-      user,
-      q,
-      status
-    })
-  },
   handleZoomClick(type) {
     const current_zoom = AppStore.data.listing_map.zoom
     if (type === 'in')
@@ -328,14 +305,6 @@ const controller = {
   hideListingPopup() {
     controller.removeActiveListing()
     delete AppStore.data.listing_map.listing_popup
-    AppStore.emitChange()
-  },
-  handleSearchInputChange() {
-    const search_input_text = this.refs.search_input.value
-    AppStore.data.listing_map.search_input_text = search_input_text
-    AppStore.emitChange()
-    if (!search_input_text.length)
-      delete AppStore.data.listing_map.has_search_input
     AppStore.emitChange()
   }
 }

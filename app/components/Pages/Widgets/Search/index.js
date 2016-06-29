@@ -72,7 +72,7 @@ export default class Search extends Component {
       this.handleSubmit(q)
     const listings = data.widget.listings
     if (typeof data.widget.active_listing === 'undefined')
-      AppStore.data.widget.active_listing = 0
+      AppStore.data.widget.active_listing = -1
     // Down
     if (e.which === 40) {
       if (data.widget.active_listing === listings.length - 1)

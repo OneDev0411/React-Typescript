@@ -5,6 +5,7 @@ import { Dispatcher } from 'flux'
 import searchListingTransaction from '../actions/listings/search-transaction'
 import searchListingMap from '../actions/listings/search-map'
 import searchListingWidget from '../actions/listings/search-widget'
+import searchListingInput from '../actions/listings/search-input'
 import getSimilarListings from '../actions/listings/get-similars'
 import getValerts from '../actions/listings/get-valerts'
 import getValertsAlert from '../actions/listings/get-valerts-alert'
@@ -34,6 +35,10 @@ ListingDispatcher.register(payload => {
 
     case 'search-listing-map':
       searchListingMap(payload.user, payload.q, payload.status)
+      break
+
+    case 'search-listing-input':
+      searchListingInput(payload.user, payload.q)
       break
 
     case 'search-listing-widget':
