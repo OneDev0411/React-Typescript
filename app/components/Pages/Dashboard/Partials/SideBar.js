@@ -14,6 +14,8 @@ const phoneUtil = PhoneNumberUtil.getInstance()
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import ProfileImage from './ProfileImage'
+import SvgChat from './Svgs/Chat'
+import SvgMap from './Svgs/Map'
 export default class SideBar extends Component {
 
   componentDidUpdate() {
@@ -518,6 +520,9 @@ export default class SideBar extends Component {
         </div>
       )
     }
+    let nav_active_color = '#3388ff'
+    if (data.brand && data.brand.primary)
+      nav_active_color = '#' + data.brand.primary
     return (
       <aside style={ sidebar_style } className="sidebar__nav-list pull-left">
         <div style={ S('mt-12') }>
@@ -536,7 +541,7 @@ export default class SideBar extends Component {
           <OverlayTrigger placement="right" overlay={ popover.conversation } delayShow={ 200 } delayHide={ 0 }>
             <LinkContainer onClick={ this.handleChatNavClick.bind(this) } className={ active.recents } to="/dashboard/recents">
               <NavItem style={ S('w-85p') }>
-                <img src={ active.recents ? '/images/dashboard/sidenav/chat-active.svg' : '/images/dashboard/sidenav/chat.svg' } style={ S('w-19 h-19') }/>
+                <SvgChat color={ active.recents ? nav_active_color : '#4e5c6c' }/>
                 {this.notificationIcon('room_notification_count')}
               </NavItem>
             </LinkContainer>
@@ -544,7 +549,7 @@ export default class SideBar extends Component {
           <OverlayTrigger placement="right" overlay={ popover.map } delayShow={ 200 } delayHide={ 0 }>
             <LinkContainer onClick={ this.hideListingViewer.bind(this) } className={ active.mls } to="/dashboard/mls">
               <NavItem style={ S('w-85p') }>
-                <img src={ active.mls ? '/images/dashboard/sidenav/map-active.svg' : '/images/dashboard/sidenav/map.svg' } style={ S('w-19 h-19') }/>
+                <SvgMap color={ active.mls ? nav_active_color : '#4e5c6c' }/>
               </NavItem>
             </LinkContainer>
           </OverlayTrigger>
