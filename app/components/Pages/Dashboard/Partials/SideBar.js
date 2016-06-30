@@ -515,7 +515,7 @@ export default class SideBar extends Component {
     let branding_logo
     if (data.brand && data.brand.logo_url) {
       branding_logo = (
-        <div style={ S('mb-10 mt-15') }>
+        <div style={ S('mb-10') }>
           <div style={ S(`bg-url(${data.brand.logo_url}) bg-cover bg-center w-30 h-35 ml-10`) }></div>
         </div>
       )
@@ -525,7 +525,7 @@ export default class SideBar extends Component {
       nav_active_color = '#' + data.brand.primary
     return (
       <aside style={ sidebar_style } className="sidebar__nav-list pull-left">
-        <Nav bsStyle="pills" stacked>
+        <Nav bsStyle="pills" stacked style={ S('mt-10') }>
           { branding_logo }
           <OverlayTrigger placement="right" overlay={ popover.conversation } delayShow={ 200 } delayHide={ 0 }>
             <LinkContainer onClick={ this.handleChatNavClick.bind(this) } className={ active.recents } to="/dashboard/recents">
