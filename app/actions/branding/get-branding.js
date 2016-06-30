@@ -8,6 +8,7 @@ export default (subdomain) => {
   Brand.getBySubdomain(params, (err, res) => {
     if (res.status === 'success') {
       AppStore.data.brand = {
+        id: res.data.id,
         title: res.data.title,
         logo_url: res.data.logo_url,
         primary: res.data.palette.primary_color.replace('#', ''),
