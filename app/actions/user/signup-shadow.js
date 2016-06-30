@@ -35,6 +35,9 @@ export default (user, redirect_to) => {
         alert: AppStore.data.signup_tooltip.alert
       })
     }
+    // Add brand
+    if (AppStore.data.brand)
+      user.brand = AppStore.data.brand.id
   }
   // console.log(user)
   // if (AppStore.data.brand && AppStore.data.brand.subdomain)

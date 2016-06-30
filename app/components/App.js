@@ -77,7 +77,8 @@ export default class App extends Component {
     AppStore.removeChangeListener(this._onChange.bind(this))
   }
   checkForBranding() {
-    if (window.location.host.indexOf('.') !== -1) {
+    const data = AppStore.data
+    if (window.location.host.indexOf('.') !== -1 && !data.brand) {
       const subdomain = window.location.host.split('.')[0]
       if (!subdomain)
         return
