@@ -13,7 +13,8 @@ export default (subdomain) => {
         logo_url: res.data.logo_url,
         primary: res.data.palette.primary_color.replace('#', ''),
         map_url: res.data.map_url,
-        subdomain
+        subdomain,
+        logo_url_wide: res.data.logo_url_wide
       }
       AppStore.emitChange()
     }
