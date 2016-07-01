@@ -583,13 +583,24 @@ export default class ListingViewer extends Component {
       )
     }
     let join_area
+    let brand_logo = (
+      <a style={ S('font-28') } href="/" className="tk-calluna-sans text-primary">
+        Rechat
+      </a>
+    )
+    if (data.brand && data.brand.logo_url_wide) {
+      // !!!!!!!! TODO before push live: change pull chappar from subdomain!!!!!!!!
+      brand_logo = (
+        <a style={ S('w-100') } href={ 'https://' + data.brand.subdomain + '.chappar.rechat.com' }>
+          <img src={ brand.logo_url_wide } />
+        </a>
+      )
+    }
     if (!user) {
       join_area = (
         <div style={ S('h-70') }>
           <div style={ S('pull-left p-16') }>
-            <a style={ S('font-28') } href="/" className="tk-calluna-sans text-primary">
-              Rechat
-            </a>
+            { brand_logo }
           </div>
           <div style={ S('pull-right p-16') }>
             <a style={ S('mr-15 bg-a1bde4 border-1-solid-a1bde4') } className="btn btn-primary" href="/signin">Log in</a>
