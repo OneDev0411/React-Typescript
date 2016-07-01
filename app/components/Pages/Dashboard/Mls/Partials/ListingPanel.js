@@ -86,7 +86,7 @@ export default class ListingPanel extends Component {
       }
       // Price
       let price = listing.price
-      if (listing.close_price && user.user_type === 'Agent')
+      if (listing.close_price && user && user.user_type === 'Agent')
         price = listing.close_price
       // Social info
       let social_info
@@ -167,7 +167,7 @@ export default class ListingPanel extends Component {
       const listing_style = S('pointer pl-10 h-60 pt-10 border-bottom-1-solid-f5fafe')
       const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
       let price = listing.price
-      if (listing.close_price && user.user_type === 'Agent')
+      if (listing.close_price && user && user.user_type === 'Agent')
         price = listing.close_price
       const price_per_square_foot = Math.floor(price / listing_util.metersToFeet(property.square_meters))
       return (
