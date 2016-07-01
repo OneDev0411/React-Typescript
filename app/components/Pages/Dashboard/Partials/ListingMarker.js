@@ -115,7 +115,7 @@ export default class ListingMarker extends Component {
       social_badge = this.getSocialBadge(listing)
     }
     if (listing_map && listing_map.listings_viewed && listing_map.listings_viewed.indexOf(listing.id) !== -1)
-        viewed_class = ' viewed'
+      viewed_class = ' viewed'
     let listing_marker = (
       <div className={ 'map__listing-marker' + active_class + viewed_class } style={ marker_style }>
         { social_badge }

@@ -5,8 +5,13 @@ const controller = {
   showListingViewer(listing) {
     const data = AppStore.data
     // Check for widget
-    if (data.is_widget) {
+    if (data.is_widget && !data.brand) {
       window.open('https://rechat.com/dashboard/mls/' + listing.id)
+      return
+    }
+    // Check for subdomain
+    if (data.brand && data.brand.subdomain) {
+      window.open('https://' + data.brand.subdomain + '.rechat.com/dashboard/mls/' + listing.id)
       return
     }
     const history = require('../../../../utils/history')

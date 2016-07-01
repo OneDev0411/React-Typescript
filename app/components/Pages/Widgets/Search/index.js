@@ -7,7 +7,12 @@ import AppStore from '../../../../stores/AppStore'
 import listing_util from '../../../../utils/listing'
 export default class Search extends Component {
   handleListingClick(id) {
-    window.open('https://rechat.com/dashboard/mls/' + id)
+    const data = AppStore.data
+    // !!!!!!!! TODO before push live: change pull chappar from subdomain!!!!!!!!
+    if (data.brand && data.brand.subdomain)
+      window.open('https://' + data.brand.subdomain + '.chappar.rechat.com/dashboard/mls/' + id)
+    else
+      window.open('https://rechat.com/dashboard/mls/' + id)
   }
   handleOnChange(e) {
     // Reset up / down
@@ -52,7 +57,10 @@ export default class Search extends Component {
     // Send to full listing
     if (widget && widget.listings && typeof widget.active_listing !== 'undefined') {
       const id = widget.listings[widget.active_listing].id
-      window.open('https://rechat.com/dashboard/mls/' + id)
+      if (data.brand && data.brand.subdomain)
+        window.open('https://' + data.brand.subdomain + '.chappar.rechat.com/dashboard/mls/' + id)
+      else
+        window.open('https://rechat.com/dashboard/mls/' + id)
       return
     }
     // Send to search map
