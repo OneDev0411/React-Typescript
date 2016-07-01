@@ -66,7 +66,7 @@ export default class Search extends Component {
     // Send to search map
     if (q) {
       if (data.brand && data.brand.map_url)
-        window.open(data.brand.map_url + '?q=' + q)
+        window.location.href = data.brand.map_url + '?q=' + q
       else
         window.open('https://rechat.com/dashboard/mls/?q=' + q)
     }
