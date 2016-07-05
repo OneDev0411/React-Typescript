@@ -28,6 +28,10 @@ export default class ListingCard extends Component {
     if (typeof window !== 'undefined' && window.innerWidth < 1000) {
       listing_card_style.width = window.innerWidth - 20
       listing_card_style.height = listing_card_style.width * '.4'
+      listing_card_style = {
+        ...listing_card_style,
+        ...S('ml-15')
+      }
       if (window.innerWidth < 500)
         listing_card_style.height = listing_card_style.width * '.6'
       listing_image_style.width = listing_card_style.width
