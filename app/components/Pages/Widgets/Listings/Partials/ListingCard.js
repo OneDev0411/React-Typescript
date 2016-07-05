@@ -16,7 +16,7 @@ export default class ListingCard extends Component {
     if (!address)
       address = property.address
     const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
-    const listing_card_style = {
+    let listing_card_style = {
       ...S(`w-480 h-420 mr-10 ml-10 mb-20 pull-left br-3 pointer relative`),
       boxShadow: '0 0 2px 0 rgba(0, 0, 0, 0.2)',
       overflow: 'hidden'
