@@ -175,11 +175,11 @@ export default class SignIn extends Component {
               bsSize="large"
               type="submit"
               ref="submit"
-              className={ submitting_class + 'btn btn-primary' }
+              className={ submitting_class + 'btn' }
               disabled={ submitting }
               style={ S(`w-100p mb-20 border-none color-fff bg-${data.brand && data.brand.primary ? data.brand.primary : '3388ff'}`) }
             >
-              { submitting ? 'Signing in...' : 'Log in' }
+              { submitting ? 'Logging in...' : 'Log in' }
             </Button>
             {
               /*

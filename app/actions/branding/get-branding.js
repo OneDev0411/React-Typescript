@@ -16,6 +16,7 @@ export default (subdomain) => {
         subdomain,
         logo_url_wide: res.data.logo_url_wide
       }
+      console.log('branding got')
       AppStore.emitChange()
     }
   })
