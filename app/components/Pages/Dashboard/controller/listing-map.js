@@ -195,11 +195,14 @@ const controller = {
     const map = window.map
     const path = window.poly.getPath()
     window.poly.setMap(null)
+    let stroke_color = '#3388ff'
+    if (AppStore.data.brand && AppStore.data.brand.primary)
+      stroke_color = '#' + AppStore.data.brand.primary
     window.poly = new google.maps.Polygon({
       clickable: false,
       map,
       path,
-      strokeColor: '#3388ff',
+      strokeColor: stroke_color,
       strokeWeight: 10
     })
     window.poly_search = window.poly
@@ -255,10 +258,13 @@ const controller = {
     google.maps.event.addDomListener(map.getDiv(), 'mousedown', () => {
       if (!listing_map.drawable || listing_map.drawable && window.poly)
         return
+      let stroke_color = '#3388ff'
+      if (AppStore.data.brand && AppStore.data.brand.primary)
+        stroke_color = '#' + AppStore.data.brand.primary
       window.poly = new google.maps.Polyline({
         map,
         clickable: false,
-        strokeColor: '#3388ff',
+        strokeColor: stroke_color,
         strokeWeight: 10
       })
       AppStore.data.listing_map.no_popup = true

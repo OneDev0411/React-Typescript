@@ -102,11 +102,14 @@ const controller = {
       delete window.poly
     }
     const google = window.google
+    let stroke_color = '#3388ff'
+    if (AppStore.data.brand && AppStore.data.brand.primary)
+      stroke_color = '#' + AppStore.data.brand.primary
     window.poly = new google.maps.Polygon({
       clickable: false,
       map: window.map,
       paths,
-      strokeColor: '#3388ff',
+      strokeColor: stroke_color,
       strokeWeight: 10
     })
     window.poly_alerts = window.poly
