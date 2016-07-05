@@ -92,13 +92,23 @@ export default class ConfirmAgent extends Component {
       ...S('color-cecdcd mb-20 font-26 text-left'),
       letterSpacing: '1.5px'
     }
+    let brand_title = (
+      <div className="tk-calluna-sans" style={ brand_style }>Rechat</div>
+    )
+    if (data.brand && data.brand.logo_url_wide) {
+      brand_title = (
+        <div style={ brand_style }>
+          <img style={ S('w-200') } src={ data.brand.logo_url_wide } />
+        </div>
+      )
+    }
     let main_content = (
       <div>
         <Col sm={ 6 } className={ data.is_mobile ? 'hidden' : '' }>
           <img style={ S('w-100p maxw-300') } src="/images/signup/ntreis-logo.png" />
         </Col>
         <Col sm={ 6 }>
-          <div className="tk-calluna-sans" style={ brand_style }>Rechat</div>
+          { brand_title }
           <div style={ S('color-000 mb-20 text-left font-36') }>Confirm agent status</div>
           <div style={ S('mb-20 color-9b9b9b') }>Enter your agent license # to unlock MLS features.</div>
           <form onSubmit={ this.handleSubmit.bind(this, 'search-agent') }>
