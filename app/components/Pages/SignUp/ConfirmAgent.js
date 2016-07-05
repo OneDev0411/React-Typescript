@@ -143,13 +143,23 @@ export default class ConfirmAgent extends Component {
           </Alert>
         )
       }
+      let brand_title = (
+        <div className="tk-calluna-sans" style={ brand_style }>Rechat</div>
+      )
+      if (data.brand && data.brand.logo_url_wide) {
+        brand_title = (
+          <div style={ brand_style }>
+            <img style={ S('w-200') } src={ data.brand.logo_url_wide } />
+          </div>
+        )
+      }
       main_content = (
         <div>
           <Col sm={ 6 } className={ data.is_mobile ? 'hidden' : '' }>
             <img style={ S('w-100p maxw-300') } src="/images/signup/agent-face.png" />
           </Col>
           <Col sm={ 6 }>
-            <div className="tk-calluna-sans" style={ brand_style }>Rechat</div>
+            { brand_title }
             <div style={ S('color-000 mb-20 text-left font-26') }>Confirm agent status</div>
             <div style={ S('mb-20 color-9b9b9b') }>We found the following contact details associated with agent license <strong>#{ data.signup.agent.mlsid }</strong></div>
             <div style={ S('mb-20 color-4a4a4a') }>
