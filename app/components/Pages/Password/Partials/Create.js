@@ -271,13 +271,23 @@ export default class Create extends Component {
       name_area = <div/>
       type_area = <div/>
     }
+    let brand_title = (
+      <div className="tk-calluna-sans" style={ brand_style }>Rechat</div>
+    )
+    if (data.brand && data.brand.logo_url_wide) {
+      brand_title = (
+        <div style={ brand_style }>
+          <img style={ S('w-200') } src={ data.brand.logo_url_wide } />
+        </div>
+      )
+    }
     let main_content = (
       <div>
         <Col sm={ 5 } className={ data.is_mobile ? 'hidden' : '' }>
           <img style={ S('w-100p') } src="/images/signup/house.png" />
         </Col>
         <Col sm={ 7 }>
-          <div className="tk-calluna-sans" style={ brand_style }>Rechat</div>
+          { brand_title }
           <div style={ S('color-000 mb-0 text-left font-36') }>Thanks{ data.signup && data.signup.is_agent && first_name ? ' ' + first_name : ''}!  You're almost there...</div>
           <div style={ S('color-9b9b9b mb-20 text-left font-15') }>Please fill out the details below to set up your profile.</div>
           <form onSubmit={ this.handleSubmit.bind(this) }>
@@ -289,7 +299,14 @@ export default class Create extends Component {
             </div>
             { type_area }
             { message }
-            <Button bsSize="large" type="submit" ref="submit" className={ disabled_class + submitting_class + 'btn btn-primary' } disabled={ is_disabled ? 'true' : '' } style={ S('w-100p') }>
+            <Button
+              bsSize="large"
+              type="submit"
+              ref="submit"
+              className={ disabled_class + submitting_class + 'btn' }
+              disabled={ is_disabled ? 'true' : '' }
+              style={ S(`border-none color-fff w-100p bg-${data.brand && data.brand.primary ? data.brand.primary : '3388ff'}`) }
+            >
               { submitting ? 'Submitting...' : 'Continue' }
             </Button>
           </form>

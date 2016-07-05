@@ -162,7 +162,7 @@ export default class SignIn extends Component {
     return (
       <div id="main-content" className="flex-center-wrap page-bg-video" style={ S('absolute h-100p w-100p') }>
         <div className="text-center center-block box-shadow" style={ S('w-460 z-100 relative mt-60n bg-fff br-6 p-50') }>
-          <h1 className="tempo" style={ S('mb-20') }>Log in to Rechat</h1>
+          <h1 className="tempo" style={ S('mb-20') }>Log in to { data.brand && data.brand.title ? data.brand.title : 'Rechat' }</h1>
           <div style={ S('color-555555 mb-20 font-18 mb-20') }>It’s nice to have you back!</div>
           { invite_message }
           <form action="/signin" onSubmit={ this.handleSubmit.bind(this) }>
@@ -171,7 +171,14 @@ export default class SignIn extends Component {
             <div style={ S('color-929292 font-13 mt-0 mb-10') } className="pull-right"><Link to="/password/forgot">Forgot Password</Link></div>
             <div className="clearfix"></div>
             { message }
-            <Button bsSize="large" type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p mb-20') }>
+            <Button
+              bsSize="large"
+              type="submit"
+              ref="submit"
+              className={ submitting_class + 'btn btn-primary' }
+              disabled={ submitting }
+              style={ S(`w-100p mb-20 border-none color-fff bg-${data.brand && data.brand.primary ? data.brand.primary : '3388ff'}`) }
+            >
               { submitting ? 'Signing in...' : 'Log in' }
             </Button>
             {

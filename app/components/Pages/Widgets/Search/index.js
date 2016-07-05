@@ -57,6 +57,7 @@ export default class Search extends Component {
     // Send to full listing
     if (widget && widget.listings && typeof widget.active_listing !== 'undefined') {
       const id = widget.listings[widget.active_listing].id
+      // !!!!!!!! TODO before push live: change pull chappar from subdomain!!!!!!!!
       if (data.brand && data.brand.subdomain)
         window.open('https://' + data.brand.subdomain + '.chappar.rechat.com/dashboard/mls/' + id)
       else
