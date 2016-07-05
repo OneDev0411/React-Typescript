@@ -18,15 +18,15 @@ export default (user, redirect_to) => {
     if (AppStore.data.signup_tooltip.action === 'listing_inquiry') {
       user.actions.push({
         action: 'listing_inquiry',
-        listing: AppStore.data.signup_tooltip.listing
+        listing: AppStore.data.signup_tooltip.listing,
+        agent: AppStore.data.signup_tooltip.list_agent.id
       })
-      // Add agent
-      user.user_connect = AppStore.data.signup_tooltip.list_agent.user_id
     }
     if (AppStore.data.signup_tooltip.action === 'favorite_listing') {
       user.actions.push({
         action: 'favorite_listing',
-        listing: AppStore.data.signup_tooltip.listing
+        listing: AppStore.data.signup_tooltip.listing,
+        agent: AppStore.data.signup_tooltip.list_agent.id
       })
     }
     if (AppStore.data.signup_tooltip.action === 'create_alert') {
@@ -38,18 +38,11 @@ export default (user, redirect_to) => {
     // Add brand
     if (AppStore.data.brand)
       user.brand = AppStore.data.brand.id
+    // Add source_type
+    if (AppStore.data.is_widget)
+      user.source_type = 'BrokerageWidget'
   }
   // console.log(user)
-  // if (AppStore.data.brand && AppStore.data.brand.subdomain)
-  //   user.subdomain = AppStore.data.brand.subdomain
-  // // If coming from signup tooltip
-  // if (AppStore.data.signup_tooltip && AppStore.data.signup_tooltip.listing_id)
-  //   user.listing = AppStore.data.signup_tooltip.listing_id
-  // if (AppStore.data.signup_tooltip && AppStore.data.signup_tooltip.list_agent)
-  //   user.user_connect = AppStore.data.signup_tooltip.list_agent.user_id
-  // // If coming from map
-  // if (AppStore.data.signup_tooltip && AppStore.data.signup_tooltip.alert)
-  //   user.alert = AppStore.data.signup_tooltip.alert
   const params = {
     user
   }

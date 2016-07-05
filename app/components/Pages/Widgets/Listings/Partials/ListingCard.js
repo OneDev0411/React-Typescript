@@ -24,6 +24,15 @@ export default class ListingCard extends Component {
     const listing_image_style = {
       ...S(`bg-cover bg-url(${listing_util.getResizeUrl(listing.cover_image_url)}?w=800) bg-center w-480 h-340 relative`)
     }
+    // Responsive
+    if (typeof window !== 'undefined' && window.innerWidth < 1000) {
+      listing_card_style.width = window.innerWidth - 20
+      listing_card_style.height = listing_card_style.width * '.4'
+      if (window.innerWidth < 500)
+        listing_card_style.height = listing_card_style.width * '.6'
+      listing_image_style.width = listing_card_style.width
+      listing_image_style.height = listing_card_style.height - 80
+    }
     const overlay_style = {
       ...S('bg-000 absolute w-100p h-100p br-3'),
       opacity: '.3'

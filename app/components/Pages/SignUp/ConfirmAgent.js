@@ -143,7 +143,7 @@ export default class ConfirmAgent extends Component {
           </Alert>
         )
       }
-      let brand_title = (
+      brand_title = (
         <div className="tk-calluna-sans" style={ brand_style }>Rechat</div>
       )
       if (data.brand && data.brand.logo_url_wide) {

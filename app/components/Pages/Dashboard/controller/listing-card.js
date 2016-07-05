@@ -3,10 +3,11 @@ import AppStore from '../../../../stores/AppStore'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import _ from 'lodash'
 const controller = {
-  handleNotLoggedIn(listing_id) {
+  handleNotLoggedIn(listing) {
     AppStore.data.signup_tooltip = {
       action: 'favorite_listing',
-      listing: listing_id
+      listing: listing.id,
+      list_agent: listing.list_agent
     }
     AppStore.emitChange()
   },
@@ -23,7 +24,7 @@ const controller = {
     const mls_number = listing.mls_number
     // Handle not logged in
     if (!user) {
-      controller.handleNotLoggedIn(listing.id)
+      controller.handleNotLoggedIn(listing)
       return
     }
     // Do instant heart
