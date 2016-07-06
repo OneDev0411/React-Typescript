@@ -120,6 +120,18 @@ export default class Mls extends Component {
     this.resetViews()
     this.routeURL()
     this.checkForMobile()
+    this.checkBranding()
+  }
+  checkBranding() {
+    if (!window.location.host.split('.'))
+      return
+    let subdomain = window.location.host.split('.')[0]
+    if (window.location.host.indexOf('.') === -1)
+      subdomain = 'claystapp'
+    AppDispatcher.dispatch({
+      action: 'get-branding',
+      subdomain
+    })
   }
   componentDidUpdate() {
     const data = this.props.data
@@ -838,8 +850,8 @@ export default class Mls extends Component {
     let powered_by
     if (data.widget || data.brand) {
       powered_by = (
-        <a href="https://rechat.com" style={ S('w-150 h-30 text-center absolute b-50 r-100 color-fff bg-2196f3 br-3 pt-6') }>
-          Powered by Rechat<sup>TM</sup>
+        <a href="https://rechat.com" style={ S('font-12 w-150 h-30 text-center absolute b-50 r-100 color-fff bg-2196f3 br-3 pt-7') }>
+          Powered by <strong>Rechat<sup>TM</sup></strong>
         </a>
       )
     }
