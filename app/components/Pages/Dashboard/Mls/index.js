@@ -826,6 +826,23 @@ export default class Mls extends Component {
         </div>
       )
     }
+    let signup_message
+    if (!data.user) {
+      signup_message = (
+        <div style={ S('absolute b-50 l-20 color-fff w-310') }>
+          <div style={ S('absolute bg-000 op-.5 br-3 h-36 w-100p z-0') }></div>
+          <div style={ S('z-1 relative pt-8 text-center') }><a style={ { textDecoration: 'underline', ...S('color-fff') } } href="/signup">Sign up</a> to save lisings and chat with our agents.</div>
+        </div>
+      )
+    }
+    let powered_by
+    if (data.widget || data.brand) {
+      powered_by = (
+        <a href="https://rechat.com" style={ S('w-150 h-30 text-center absolute b-50 r-100 color-fff bg-2196f3 br-3 pt-6') }>
+          Powered by Rechat<sup>TM</sup>
+        </a>
+      )
+    }
     const main_content = (
       <main>
         { user && !data.is_widget ? nav_area : '' }
@@ -883,6 +900,8 @@ export default class Mls extends Component {
             <span style={ { textShadow: '0 2px 6px rgba(0, 0, 0, 0.2)' } }>Alert Saved</span>
           </div>
         </Modal>
+        { signup_message }
+        { powered_by }
       </main>
     )
     return (
