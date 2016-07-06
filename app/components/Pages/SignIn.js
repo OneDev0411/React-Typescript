@@ -34,6 +34,7 @@ export default class SignIn extends Component {
       if (email && email !== 'undefined')
         this.refs.email.refs.input.value = email
     }
+    this.checkBranding()
   }
 
   componentDidUpdate() {
@@ -47,6 +48,18 @@ export default class SignIn extends Component {
         redirect_to = data.location.query.redirect_to
       this.props.history.pushState(null, redirect_to)
     }
+  }
+
+  checkBranding() {
+    if (!window.location.host.split('.'))
+      return
+    let subdomain = window.location.host.split('.')[0]
+    if (window.location.host.indexOf('.') === -1)
+      subdomain = 'claystapp'
+    AppDispatcher.dispatch({
+      action: 'get-branding',
+      subdomain
+    })
   }
 
   hideModal() {

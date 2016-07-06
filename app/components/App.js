@@ -59,6 +59,8 @@ export default class App extends Component {
     const data = AppStore.data
     if (data.user)
       this.triggerBranchBanner()
+    // Check for brand
+    this.checkForBranding()
   }
   componentDidUpdate() {
     const data = AppStore.data
@@ -68,8 +70,6 @@ export default class App extends Component {
       AppStore.data.session_started = true
       AppStore.emitChange()
     }
-    // Check for brand
-    this.checkForBranding()
   }
   // Remove change listeners from stores
   componentWillUnmount() {

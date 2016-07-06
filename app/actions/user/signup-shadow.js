@@ -1,6 +1,5 @@
 // actions/signup-shadow.js
 import User from '../../models/User'
-import Intercom from '../../models/Intercom'
 import AppStore from '../../stores/AppStore'
 import async from 'async'
 export default (user, redirect_to) => {
@@ -76,8 +75,6 @@ export default (user, redirect_to) => {
           AppStore.data.new_user = new_user
           AppStore.data.show_signup_confirm_modal = true
           AppStore.data.redirect_to = redirect_to
-          // Intercom
-          Intercom.signup({ user: new_user }, () => {})
           AppStore.emitChange()
           callback()
         }
