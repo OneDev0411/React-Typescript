@@ -26,10 +26,6 @@ export default class Listings extends Component {
     })
   }
   componentDidMount() {
-    // For responsive
-    window.onresize = () => {
-      AppStore.emitChange()
-    }
     const data = this.props.data
     const user = data.user
     // Set user
