@@ -69,6 +69,7 @@ export default class App extends Component {
       AppStore.emitChange()
     }
     // Check for brand
+    console.log('brand', data.brand)
     if (window.location.host.indexOf('.') !== -1 && !data.brand)
       this.checkForBranding()
   }
