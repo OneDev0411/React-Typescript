@@ -18,28 +18,31 @@ export default (user, redirect_to) => {
       user.actions.push({
         action: 'listing_inquiry',
         listing: AppStore.data.signup_tooltip.listing,
-        agent: AppStore.data.signup_tooltip.list_agent.id
+        agent: AppStore.data.signup_tooltip.list_agent.id,
+        brand: AppStore.data.brand.id,
+        source_type: 'BrokerageWidget'
       })
     }
     if (AppStore.data.signup_tooltip.action === 'favorite_listing') {
       user.actions.push({
         action: 'favorite_listing',
         listing: AppStore.data.signup_tooltip.listing,
-        agent: AppStore.data.signup_tooltip.list_agent.id
+        agent: AppStore.data.signup_tooltip.list_agent.id,
+        brand: AppStore.data.brand.id,
+        source_type: 'BrokerageWidget'
       })
     }
     if (AppStore.data.signup_tooltip.action === 'create_alert') {
       user.actions.push({
         action: 'create_alert',
-        alert: AppStore.data.signup_tooltip.alert
+        alert: AppStore.data.signup_tooltip.alert,
+        brand: AppStore.data.brand.id,
+        source_type: 'BrokerageWidget'
       })
     }
     // Add brand
     if (AppStore.data.brand)
       user.brand = AppStore.data.brand.id
-    // Add source_type
-    if (AppStore.data.is_widget)
-      user.source_type = 'BrokerageWidget'
   }
   // console.log(user)
   const params = {

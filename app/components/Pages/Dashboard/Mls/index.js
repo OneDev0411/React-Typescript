@@ -122,17 +122,6 @@ export default class Mls extends Component {
     this.checkForMobile()
     this.checkBranding()
   }
-  checkBranding() {
-    if (!window.location.host.split('.'))
-      return
-    let subdomain = window.location.host.split('.')[0]
-    if (window.location.host.indexOf('.') === -1)
-      subdomain = 'claystapp'
-    AppDispatcher.dispatch({
-      action: 'get-branding',
-      subdomain
-    })
-  }
   componentDidUpdate() {
     const data = this.props.data
     const routeParams = this.props.routeParams
@@ -156,6 +145,17 @@ export default class Mls extends Component {
   }
   componentWillUnmount() {
     controller.listing_map.hideModal()
+  }
+  checkBranding() {
+    if (!window.location.host.split('.'))
+      return
+    let subdomain = window.location.host.split('.')[0]
+    if (window.location.host.indexOf('.') === -1)
+      subdomain = 'claystapp'
+    AppDispatcher.dispatch({
+      action: 'get-branding',
+      subdomain
+    })
   }
   routeURL() {
     const data = this.props.data
