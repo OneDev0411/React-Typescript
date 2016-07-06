@@ -40,6 +40,8 @@ export default class AlertList extends Component {
         <ul style={ alert_list_style }>
           {
             alerts.map(alert => {
+              if (!alert.title && !alert.proposed_title)
+                return <li/>
               const users = alert.users
               let users_area
               if (users && users.length) {

@@ -21,7 +21,7 @@ export default (user, rooms, contacts, emails, phone_numbers, alert) => {
       delete AppStore.data.share_list
       AppStore.data.show_alert_saved_modal = true
       if (res.status === 'success') {
-        const new_alert = res.data
+        const new_alert = res.data[0]
         if (!AppStore.data.alerts)
           AppStore.data.alerts = []
         AppStore.data.alerts.unshift(new_alert)
@@ -46,7 +46,7 @@ export default (user, rooms, contacts, emails, phone_numbers, alert) => {
       delete AppStore.data.share_list
       AppStore.data.show_alert_saved_modal = true
       if (res.status === 'success') {
-        const new_alert = res.data
+        const new_alert = res.data[0]
         if (!AppStore.data.alerts)
           AppStore.data.alerts = []
         AppStore.data.alerts.unshift(new_alert)
