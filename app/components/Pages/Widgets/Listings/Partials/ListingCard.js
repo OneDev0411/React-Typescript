@@ -134,7 +134,7 @@ export default class ListingCard extends Component {
     let agent_image_area
     if (listing.list_agent) {
       let avatar = (
-        <i style={ S('font-45 color-fff') } className="fa fa-user"></i>
+        <i style={ S('font-38 color-fff ml-10 mt-5') } className="fa fa-user"></i>
       )
       const profile_image_url = listing.list_agent.profile_image_url
       if (profile_image_url) {
