@@ -591,7 +591,7 @@ export default class ListingViewer extends Component {
     if (data.brand && data.brand.logo_url_wide) {
       // !!!!!!!! TODO before push live: change pull chappar from subdomain!!!!!!!!
       brand_logo = (
-        <a href={ 'https://' + data.brand.subdomain + '.chappar.rechat.com' }>
+        <a href={ 'https://' + data.brand.subdomain + '.irish.rechat.com' }>
           <img style={ S('w-200') } src={ data.brand.logo_url_wide } />
         </a>
       )

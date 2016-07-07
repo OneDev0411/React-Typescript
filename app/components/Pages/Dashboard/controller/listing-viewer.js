@@ -12,7 +12,7 @@ const controller = {
     // Check for subdomain
     if (data.brand && data.brand.subdomain) {
       // !!!!!!!! TODO before push live: change pull chappar from subdomain!!!!!!!!
-      window.open('https://' + data.brand.subdomain + '.chappar.rechat.com/dashboard/mls/' + listing.id)
+      window.open('https://' + data.brand.subdomain + '.irish.rechat.com/dashboard/mls/' + listing.id)
       return
     }
     const history = require('../../../../utils/history')

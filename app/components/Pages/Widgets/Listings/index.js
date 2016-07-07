@@ -210,7 +210,7 @@ export default class Listings extends Component {
     let links_area = (
       <div>
         <div style={ S('text-center mt-20 mb-30') }>
-          <a href={ `https://${data.brand.subdomain}.chappar.rechat.com/dashboard/mls` } target="_blank" className="btn btn-default" style={ S(`w-280 font-17 p-20 color-fff border-1-solid-${data.brand.primary} bg-${data.brand.primary}`) }>View Exclusive Listings</a>
+          <a href={ `https://${data.brand.subdomain}.irish.rechat.com/dashboard/mls` } target="_blank" className="btn btn-default" style={ S(`w-280 font-17 p-20 color-fff border-1-solid-${data.brand.primary} bg-${data.brand.primary}`) }>View Exclusive Listings</a>
         </div>
         <div style={ S('color-9b9b9b font-15 mb-40') } className="text-center">
           Powered by <a href="https://rechat.com" target="_blank" style={ S('color-2196f3 fw-500') }>Rechat<span style={ S('color-2196f3 font-9 relative t-7n fw-500') }>TM</span></a>

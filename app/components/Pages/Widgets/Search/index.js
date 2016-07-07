@@ -10,7 +10,7 @@ export default class Search extends Component {
     const data = AppStore.data
     // !!!!!!!! TODO before push live: change pull chappar from subdomain!!!!!!!!
     if (data.brand && data.brand.subdomain)
-      window.open('https://' + data.brand.subdomain + '.chappar.rechat.com/dashboard/mls/' + id)
+      window.open('https://' + data.brand.subdomain + '.irish.rechat.com/dashboard/mls/' + id)
     else
       window.open('https://rechat.com/dashboard/mls/' + id)
   }
@@ -59,7 +59,7 @@ export default class Search extends Component {
       const id = widget.listings[widget.active_listing].id
       // !!!!!!!! TODO before push live: change pull chappar from subdomain!!!!!!!!
       if (data.brand && data.brand.subdomain)
-        window.open('https://' + data.brand.subdomain + '.chappar.rechat.com/dashboard/mls/' + id)
+        window.open('https://' + data.brand.subdomain + '.irish.rechat.com/dashboard/mls/' + id)
       else
         window.open('https://rechat.com/dashboard/mls/' + id)
       return
