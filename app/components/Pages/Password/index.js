@@ -15,6 +15,22 @@ export default class Password extends Component {
     const user = data.user
     // Redirect after Password creation
     if (user) {
+      // If has action in url
+      let action
+      let listing_id
+      let room_id
+      if (data.location && data.location.query && data.location.query.action) {
+        action = data.location.query.action
+        if (data.location.query.listing_id)
+          listing_id = data.location.query.listing_id
+        if (data.location.query.room_id)
+          room_id = data.location.query.room_id
+        if (action === 'favorite_listing' && listing_id)
+          window.location.href = '/dashboard/mls/' + listing_id
+        if (action === 'listing_inquiry' && room_id)
+          window.location.href = '/dashboard/recents/' + room_id
+        return
+      }
       if (signup.type === 'client')
         window.location.href = '/dashboard/mls?message=welcome'
       if (signup.type === 'agent') {

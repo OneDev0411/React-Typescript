@@ -16,6 +16,8 @@ module.exports = (app, config) => {
     const phone_number = decrypted_obj.phone_number
     const inviting_user = decrypted_obj.inviting_user
     const room = decrypted_obj.room
+    const action = req.query.action
+    const listing_id = req.query.listing_id
     // Agent
     if (agent) {
       const first_name = agent.first_name
@@ -24,8 +26,14 @@ module.exports = (app, config) => {
       return res.redirect('/password/create?token=' + encodeURIComponent(token) + '&email=' + encodeURIComponent(email) + '&first_name=' + encodeURIComponent(first_name) + '&last_name=' + encodeURIComponent(last_name) + '&agent=' + id)
     }
     // Client
-    if (token && email)
-      return res.redirect('/password/create?token=' + encodeURIComponent(token) + '&email=' + encodeURIComponent(email))
+    if (token && email) {
+      let url = '/password/create?token=' + encodeURIComponent(token) + '&email=' + encodeURIComponent(email)
+      if (action)
+        url = url + '&action=' + action
+      if (listing_id)
+        url = url + '&listing_id=' + listing_id
+      return res.redirect(url)
+    }
     // Invite SMS
     if (phone_number && inviting_user && room)
       return res.redirect('/signup?phone_number=' + encodeURIComponent(phone_number) + '&inviting_user=' + encodeURIComponent(inviting_user) + '&room=' + encodeURIComponent(room))
