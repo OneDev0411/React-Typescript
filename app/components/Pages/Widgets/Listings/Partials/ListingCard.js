@@ -97,8 +97,8 @@ export default class ListingCard extends Component {
         )
       }
       signup_form = (
-        <div style={ S('absolute w-450 h-240 br-3 t-65 l-15 bg-fff p-20 z-2') }>
-          <div onClick={ this.props.handleCloseSignupForm } className="close" style={ S('absolute r-15 t-10') }>&times;</div>
+        <div style={ S('absolute w-450 h-220 br-3 t-75 l-15 bg-fff p-10 pl-15 z-2') }>
+          <div onClick={ this.props.handleCloseSignupForm } className="close" style={ S('absolute r-15 t-10 z-1') }>&times;</div>
           <div className="din" style={ S('font-30 color-263445 mb-5') }>
             { signup_title }
           </div>
@@ -119,6 +119,7 @@ export default class ListingCard extends Component {
             <div className="clearfix"></div>
           </div>
           <div style={ S('color-9b9b9b text-center') }>Already have an account? <a href="/signin" target="_parent">Log in</a></div>
+          <i className={`fa fa-caret-${(data.signup_tooltip.action === 'listing_inquiry') ? 'down' : 'up'}`} style={ S(`z-0 color-fff font-60 absolute r-15 ${(data.signup_tooltip.action === 'listing_inquiry') ? 'b-35n' : 't-35n'}`) }></i>
         </div>
       )
     }
@@ -143,7 +144,7 @@ export default class ListingCard extends Component {
         )
       }
       agent_image_area = (
-        <div onClick={ this.props.handleAgentClick.bind(this, listing) } style={ S('p-0 w-55 h-55 br-100 border-2-solid-fff absolute r-10 b-50 bg-ccc') }>
+        <div onClick={ this.props.handleAgentClick.bind(this, listing) } style={ S('p-0 w-55 h-55 br-100 border-2-solid-fff absolute r-20 b-50 bg-ccc') }>
           { avatar }
         </div>
       )
