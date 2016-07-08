@@ -8,9 +8,9 @@ import listing_util from '../../../../utils/listing'
 export default class Search extends Component {
   handleListingClick(id) {
     const data = AppStore.data
-    const host = window.location.host.replace('https://', '')
+    const host = window.location.host
     if (data.brand && data.brand.subdomain)
-      window.open('https://' + data.brand.subdomain + '.' + host + '/dashboard/mls/' + id)
+      window.open(host + '/dashboard/mls/' + id)
     else
       window.open('https://rechat.com/dashboard/mls/' + id)
   }
@@ -57,9 +57,9 @@ export default class Search extends Component {
     // Send to full listing
     if (widget && widget.listings && typeof widget.active_listing !== 'undefined') {
       const id = widget.listings[widget.active_listing].id
-      const host = window.location.host.replace('https://', '')
+      const host = window.location.host
       if (data.brand && data.brand.subdomain)
-        window.open('https://' + data.brand.subdomain + '.' + host + '/dashboard/mls/' + id)
+        window.open(host + '/dashboard/mls/' + id)
       else
         window.open('https://rechat.com/dashboard/mls/' + id)
       return
