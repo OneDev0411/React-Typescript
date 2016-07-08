@@ -6,8 +6,8 @@ const controller = {
     const data = AppStore.data
     // Check for subdomain
     if (data.is_widget && data.brand && data.brand.subdomain) {
-      // !!!!!!!! TODO before push live: change pull chappar from subdomain!!!!!!!!
-      window.open('https://' + data.brand.subdomain + '.irish.rechat.com/dashboard/mls/' + listing.id)
+      const host = window.location.host.replace('https://', '')
+      window.open('https://' + data.brand.subdomain + '.' + host + '/dashboard/mls/' + listing.id)
       return
     }
     const history = require('../../../../utils/history')
