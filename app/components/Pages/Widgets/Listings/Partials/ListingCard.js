@@ -143,8 +143,14 @@ export default class ListingCard extends Component {
           <div style={ S(`bg-url(${profile_image_url}) w-50 h-50 bg-center bg-cover br-100`) }></div>
         )
       }
+      let online_indicator
+      let bg_color = 'dddfe0'
+      if (listing.list_agent.is_online)
+        bg_color = '35b863'
+      online_indicator = <div style={ S('br-100 bg-' + bg_color + ' w-13 h-13 bw-2 solid bc-fff absolute z-100 t-2n r-2') }></div>
       agent_image_area = (
         <div onClick={ this.props.handleAgentClick.bind(this, listing) } style={ S('p-0 w-55 h-55 br-100 border-2-solid-fff absolute r-20 b-50 bg-ccc') }>
+          { online_indicator }
           { avatar }
         </div>
       )
