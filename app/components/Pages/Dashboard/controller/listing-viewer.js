@@ -4,13 +4,8 @@ import AppStore from '../../../../stores/AppStore'
 const controller = {
   showListingViewer(listing) {
     const data = AppStore.data
-    // Check for widget
-    if (data.is_widget && !data.brand) {
-      window.open('https://rechat.com/dashboard/mls/' + listing.id)
-      return
-    }
     // Check for subdomain
-    if (data.brand && data.brand.subdomain) {
+    if (data.is_widget && data.brand && data.brand.subdomain) {
       // !!!!!!!! TODO before push live: change pull chappar from subdomain!!!!!!!!
       window.open('https://' + data.brand.subdomain + '.irish.rechat.com/dashboard/mls/' + listing.id)
       return
