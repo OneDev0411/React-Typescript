@@ -5,6 +5,8 @@ const controller = {
   showListingViewer(listing) {
     const data = AppStore.data
     // Check for subdomain
+    const host = window.location.host
+    console.log(host)
     if (data.is_widget && data.brand && data.brand.subdomain) {
       const host = window.location.host
       window.open(host + '/dashboard/mls/' + listing.id)
