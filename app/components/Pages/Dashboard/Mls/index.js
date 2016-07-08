@@ -843,7 +843,7 @@ export default class Mls extends Component {
       signup_message = (
         <div style={ S('absolute b-50 l-20 color-fff w-310') }>
           <div style={ S('absolute bg-000 op-.5 br-3 h-36 w-100p z-0') }></div>
-          <div style={ S('z-1 relative pt-8 text-center') }><a style={ { textDecoration: 'underline', ...S('color-fff') } } href="/signup">Sign up</a> to save lisings and chat with our agents.</div>
+          <div style={ S('z-1 relative pt-8 text-center') }><a style={ { textDecoration: 'underline', ...S('color-fff') } } href="/signup">Sign up</a> to save listings and chat with our agents.</div>
         </div>
       )
     }
