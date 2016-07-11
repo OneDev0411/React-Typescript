@@ -5,6 +5,7 @@ import S from 'shorti'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import listing_util from '../../../../utils/listing'
+
 export default class Search extends Component {
   handleListingClick(id) {
     const data = AppStore.data
