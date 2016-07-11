@@ -19,6 +19,7 @@ module.exports = (app, config) => {
     const action = req.query.action
     const listing_id = req.query.listing_id
     const room_id = req.query.room_id
+    const alert_id = req.query.alert_id
     // Agent
     if (agent) {
       const first_name = agent.first_name
@@ -35,6 +36,8 @@ module.exports = (app, config) => {
         url = url + '&listing_id=' + listing_id
       if (room_id)
         url = url + '&room_id=' + room_id
+      if (alert_id)
+        url = url + '&alert_id=' + alert_id
       return res.redirect(url)
     }
     // Invite SMS
