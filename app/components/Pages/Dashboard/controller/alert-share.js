@@ -3,7 +3,6 @@ import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 const controller = {
   handleUserNotLoggedIn() {
-    console.log('not logged in')
     AppStore.data.show_signup_form = true
     const data = AppStore.data
     const listing_map = data.listing_map
