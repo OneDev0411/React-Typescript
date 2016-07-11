@@ -167,13 +167,13 @@ export default class ListingCard extends Component {
         <div style={ S('absolute b-0 h-80 p-10 color-000') } onClick={ this.props.handleListingClick.bind(this, listing) }>
           <div style={ S('font-20') }>{ listing_util.addressTitle(address) }</div>
           <div style={ S('font-15') }>
-            <div style={ S('pull-left mr-15 ml-2 mt-13') }>
+            <div style={ S('pull-left mr-10 mt-13' + (data.is_mobile ? ' font-14' : '')) }>
               <div style={ S('pull-left w-10 h-10 br-100 mr-8 bg-' + status_color) }></div>
               <div style={ S('pull-left mt-5n color-' + status_color) }>
                 { listing.status }
               </div>
             </div>
-            <div style={ S('pull-left mt-8') }>
+            <div style={ S('pull-left mt-8' + (data.is_mobile ? ' font-14' : '')) }>
               <span>{ property.bedroom_count } Beds</span>
               &nbsp;&middot;&nbsp;
               <span>{ property.bathroom_count } Baths</span>
