@@ -109,11 +109,11 @@ export default class ListingCard extends Component {
           <div className="din" style={ S('font-30 color-263445 mb-5') }>
             { signup_title }
           </div>
-          <div style={ S('fw-500 color-9b9b9b mb-20 text-center' + (!data.is_mobile ? ' font-17' : 'font-14')) }>
+          <div style={ S('fw-500 color-9b9b9b mb-20 text-left' + (!data.is_mobile ? ' font-17' : 'font-14')) }>
             { signup_message }
           </div>
           <div style={ S('mb-5 w-100p') }>
-            <form style={ S('mb-20 center-block ' + (data.is_mobile ? 'w-300' : 'w-360')) } onSubmit={ this.props.handleEmailSubmit.bind(this) }>
+            <form style={ S('pull-left ' + (data.is_mobile ? 'w-300' : 'w-360')) } onSubmit={ this.props.handleEmailSubmit.bind(this) }>
               <div style={ S('pull-left') }>
                 <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
                   <Input ref="email" style={ signup_input_style } type="text" placeholder="Enter email address" />

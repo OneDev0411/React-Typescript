@@ -498,10 +498,10 @@ export default class Mls extends Component {
         <div style={ signup_form_style }>
           <div onClick={ this.handleCloseSignupForm } className="close" style={ S('absolute r-15 t-10') }>&times;</div>
           <div className="din" style={ S('font-30 color-263445 mb-5') }>We are on <span style={ S('color-2196f3') }>Rechat</span><span style={ S('color-2196f3 font-14 relative t-12n') }>TM</span></div>
-          <div style={ S(`${data.is_mobile ? 'font-14' : 'font-17'} fw-500 color-9b9b9b mb-20 text-center`) }>Sign up with Rechat to save this home and to share<br/>
+          <div style={ S(`${data.is_mobile ? 'font-14' : 'font-17'} fw-500 color-9b9b9b mb-20 text-left`) }>Sign up with Rechat to save this home and to share<br/>
           your favorites with our agent or your partner.</div>
           <div style={ S('mb-5 w-100p') }>
-            <form style={ S('mb-20 center-block w-360') } onSubmit={ this.handleEmailSubmit.bind(this) }>
+            <form style={ S('pull-left w-360') } onSubmit={ this.handleEmailSubmit.bind(this) }>
               <div style={ S('pull-left') }>
                 <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
                   <Input ref="email" style={ signup_input_style } type="text" placeholder="Enter email address" />
