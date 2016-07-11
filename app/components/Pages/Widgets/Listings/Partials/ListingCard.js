@@ -100,12 +100,12 @@ export default class ListingCard extends Component {
       if (data.is_mobile) {
         form_style = {
           ...form_style,
-          ...S('t-0 l-0 w-' + window.innerWidth)
+          ...S('t-0 l-0 w-100p')
         }
       }
       signup_form = (
         <div style={ form_style }>
-          <div onClick={ this.props.handleCloseSignupForm } className="close" style={ S('absolute t-10 z-1 ' + (data.is_mobile ? 'r-35' : 'r-15')) }>&times;</div>
+          <div onClick={ this.props.handleCloseSignupForm } className="close" style={ S('absolute t-10 z-1 r-15') }>&times;</div>
           <div className="din" style={ S('font-30 color-263445 mb-5') }>
             { signup_title }
           </div>
