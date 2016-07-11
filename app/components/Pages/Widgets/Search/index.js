@@ -154,7 +154,7 @@ export default class Search extends Component {
             <Input onKeyDown={ this.handleKeyDown.bind(this) } onChange={ this.handleOnChange } style={ S('h-76 border-none') } type="text" bsSize="large" placeholder="Search for an address, neighborhood, or MLS#" />
             { loading }
             { listing_area }
-            <div style={ S('pull-right z-0') }>
+            <div style={ S('pull-right z-0 mt-5') }>
               <a style={ S('color-fff') } href="https://rechat.com" target="_blank">Powered by <span style={ S('fw-600') } className="din">Rechat</span><sup>TM</sup></a>
             </div>
           </div>
