@@ -150,11 +150,11 @@ export default class Search extends Component {
         <div style={ S('absolute z-1 t-0 l-0 w-100p h-100p bg-000 op-.5') }></div>
         <div style={ S('relative z-2 p-10') }>
           <div style={ S('relative t-190 maxw-770 center-block') }>
-            <div style={ S('color-fff text-center font-58 mb-10') } className="tempo">Own a piece of Dallas.</div>
+            <div style={ S('color-fff text-center font-58 mb-30') } className="tempo">Own a piece of Dallas.</div>
             <Input onKeyDown={ this.handleKeyDown.bind(this) } onChange={ this.handleOnChange } style={ S('h-76 border-none') } type="text" bsSize="large" placeholder="Search for an address, neighborhood, or MLS#" />
             { loading }
             { listing_area }
-            <div style={ S('absolute t-185 r-0 z-0') }>
+            <div style={ S('pull-right z-0') }>
               <a style={ S('color-fff') } href="https://rechat.com" target="_blank">Powered by <span style={ S('fw-600') } className="din">Rechat</span><sup>TM</sup></a>
             </div>
           </div>
