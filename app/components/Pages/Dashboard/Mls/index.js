@@ -472,7 +472,7 @@ export default class Mls extends Component {
         }
       }
       const signup_input_style = {
-        ...S('h-46 w-230'),
+        ...S(`h-46 ${data.is_mobile ? 'w-200' : 'w-230'}`),
         borderTopRightRadius: 0,
         borderBottomRightRadius: 0
       }
@@ -488,11 +488,17 @@ export default class Mls extends Component {
           ...S('t-80')
         }
       }
+      if (data.is_mobile) {
+        signup_form_style = {
+          ...signup_form_style,
+          ...S('w-100p r-0')
+        }
+      }
       signup_form = (
         <div style={ signup_form_style }>
           <div onClick={ this.handleCloseSignupForm } className="close" style={ S('absolute r-15 t-10') }>&times;</div>
           <div className="din" style={ S('font-30 color-263445 mb-5') }>We are on <span style={ S('color-2196f3') }>Rechat</span><span style={ S('color-2196f3 font-14 relative t-12n') }>TM</span></div>
-          <div style={ S('font-17 fw-500 color-9b9b9b mb-20 text-center') }>Sign up with Rechat to save this home and to share<br/>
+          <div style={ S(`${data.is_mobile ? 'font-14' : 'font-17'} fw-500 color-9b9b9b mb-20 text-center`) }>Sign up with Rechat to save this home and to share<br/>
           your favorites with our agent or your partner.</div>
           <div style={ S('mb-5 w-100p') }>
             <form style={ S('mb-20 center-block w-360') } onSubmit={ this.handleEmailSubmit.bind(this) }>
@@ -745,6 +751,7 @@ export default class Mls extends Component {
           </div>
           <div className="clearfix"></div>
           { create_alert_button }
+          { signup_form }
         </nav>
       )
     }
