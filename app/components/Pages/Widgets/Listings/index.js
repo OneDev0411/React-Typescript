@@ -226,7 +226,7 @@ export default class Listings extends Component {
     return (
       <div>
         <div style={ header_style }>
-          <h1 className="din" style={ S('font-50 color-263445 mb-0') }>Our Exclusive Listings</h1>
+          <h1 className="din" style={ S('font-50 color-263445 mb-0' + (data.is_mobile ? ' ml-10 mr-10' : '')) }>Our Exclusive Listings</h1>
           <span style={ S('h-1 bg-e2e2e2 w-80 m-20 inline-block') }></span>
         </div>
         <div style={ status_buttons_area_style }>
