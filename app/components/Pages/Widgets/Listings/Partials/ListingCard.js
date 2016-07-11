@@ -63,7 +63,7 @@ export default class ListingCard extends Component {
         }
       }
       const signup_input_style = {
-        ...S('h-46 w-230'),
+        ...S(`h-46 ${data.is_mobile ? 'w-150' : 'w-230'}`),
         borderTopRightRadius: 0,
         borderBottomRightRadius: 0
       }
@@ -96,17 +96,24 @@ export default class ListingCard extends Component {
           </div>
         )
       }
+      let form_style = S('absolute w-450 h-220 br-3 t-75 l-15 bg-fff p-10 pl-15 z-2')
+      if (data.is_mobile) {
+        form_style = {
+          ...form_style,
+          ...S('t-0 l-0 w-' + window.innerWidth)
+        }
+      }
       signup_form = (
-        <div style={ S('absolute w-450 h-220 br-3 t-75 l-15 bg-fff p-10 pl-15 z-2') }>
-          <div onClick={ this.props.handleCloseSignupForm } className="close" style={ S('absolute r-15 t-10 z-1') }>&times;</div>
+        <div style={ form_style }>
+          <div onClick={ this.props.handleCloseSignupForm } className="close" style={ S('absolute t-10 z-1 ' + (data.is_mobile ? 'r-35' : 'r-15')) }>&times;</div>
           <div className="din" style={ S('font-30 color-263445 mb-5') }>
             { signup_title }
           </div>
-          <div style={ S('font-17 fw-500 color-9b9b9b mb-20 text-center') }>
+          <div style={ S('fw-500 color-9b9b9b mb-20 text-center' + (!data.is_mobile ? ' font-17' : 'font-14')) }>
             { signup_message }
           </div>
           <div style={ S('mb-5 w-100p') }>
-            <form style={ S('mb-20 center-block w-360') } onSubmit={ this.props.handleEmailSubmit.bind(this) }>
+            <form style={ S('mb-20 center-block ' + (data.is_mobile ? 'w-300' : 'w-360')) } onSubmit={ this.props.handleEmailSubmit.bind(this) }>
               <div style={ S('pull-left') }>
                 <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
                   <Input ref="email" style={ signup_input_style } type="text" placeholder="Enter email address" />
@@ -147,7 +154,7 @@ export default class ListingCard extends Component {
       let bg_color = 'dddfe0'
       if (listing.list_agent.is_online)
         bg_color = '35b863'
-      online_indicator = <div style={ S('br-100 bg-' + bg_color + ' w-13 h-13 bw-2 solid bc-fff absolute z-100 t-2n r-2') }></div>
+      online_indicator = <div style={ S('br-100 bg-' + bg_color + ' w-13 h-13 bw-2 solid bc-fff absolute z-2 t-2n r-2') }></div>
       agent_image_area = (
         <div onClick={ this.props.handleAgentClick.bind(this, listing) } style={ S('p-0 w-55 h-55 br-100 border-2-solid-fff absolute r-20 b-50 bg-ccc') }>
           { online_indicator }
