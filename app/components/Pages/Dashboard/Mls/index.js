@@ -625,16 +625,25 @@ export default class Mls extends Component {
     let google_suggest = ''
     const google = window.google
     if (google) {
+      let powered_by_google_area
+      if (search_input_text) {
+        powered_by_google_area = (
+          <div style={ S('absolute w-500 t-60 z-10 bg-fff p-20') }>Places <div style={ S('relative pull-right') }>Powered by Google</div></div>
+        )
+      }
       google_suggest = (
-        <Geosuggest
-          location={new google.maps.LatLng(-96.79698789999998, 32.7766642)}
-          radius="20"
-          onChange={ controller.search_input_map.handleSearchInputChange.bind(this) }
-          onKeyDown={ controller.search_input_map.handleKeyDown.bind(this) }
-          value={ search_input_text }
-          style={ { 'input': { ...search_input_style }, 'suggests': { ...S('absolute t-300 bg-fff w-500 z-100 p-20') } } }
-          placeholder="Search location or MLS#"
-        />
+        <div>
+          { powered_by_google_area }
+          <Geosuggest
+            location={new google.maps.LatLng(-96.79698789999998, 32.7766642)}
+            radius="20"
+            onChange={ controller.search_input_map.handleSearchInputChange.bind(this) }
+            onKeyDown={ controller.search_input_map.handleKeyDown.bind(this) }
+            value={ search_input_text }
+            style={ { 'input': { ...search_input_style }, 'suggests': { ...S('absolute t-100 bg-fff w-500 z-100 p-20') } } }
+            placeholder="Search location or MLS#"
+          />
+        </div>
       )
     }
     let search_area = (
