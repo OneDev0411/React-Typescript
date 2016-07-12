@@ -27,6 +27,7 @@ import SvgDraw from '../Partials/Svgs/Draw'
 import SvgGlobe from '../Partials/Svgs/Globe'
 import SvgList from '../Partials/Svgs/List'
 import SvgPhotos from '../Partials/Svgs/Photos'
+import Geosuggest from 'react-geosuggest'
 export default class Mls extends Component {
   componentWillMount() {
     const data = this.props.data
@@ -576,8 +577,9 @@ export default class Mls extends Component {
     if (data.listing_map && data.listing_map.search_input_text)
       search_input_text = data.listing_map.search_input_text
     const search_input_style = {
-      ...S('font-18 bg-fff w-400 h-50 pull-left'),
-      border: 'none'
+      ...S('font-18 bg-fff w-400 h-50 pull-left relative l-10 p-10'),
+      border: 'none',
+      outline: 'none'
     }
     // Non mobile search
     const search_input = data.search_input
@@ -620,10 +622,25 @@ export default class Mls extends Component {
         <div style={ { overflow: 'scroll', ...S('w-504 bg-fff br-3 maxh-250 z-1 relative t-5') } }>{ listing_list }</div>
       )
     }
+    let google_suggest = ''
+    const google = window.google
+    if (google) {
+      google_suggest = (
+        <Geosuggest
+          location={new google.maps.LatLng(-96.79698789999998, 32.7766642)}
+          radius="20"
+          onChange={ controller.search_input_map.handleSearchInputChange.bind(this) }
+          onKeyDown={ controller.search_input_map.handleKeyDown.bind(this) }
+          value={ search_input_text }
+          style={ { 'input': { ...search_input_style }, 'suggests': { ...S('absolute t-300 bg-fff w-500 z-100 p-20') } } }
+          placeholder="Search location or MLS#"
+        />
+      )
+    }
     let search_area = (
       <div>
         <form onSubmit={ controller.search_input_map.handleSearchSubmit.bind(this) }>
-          <input onKeyDown={ controller.search_input_map.handleKeyDown.bind(this) } onChange={ controller.search_input_map.handleSearchInputChange.bind(this) } value={ search_input_text } ref="search_input" className="form-control" type="text" style={ search_input_style } placeholder="Search location or MLS#" />
+          { google_suggest }
         </form>
       </div>
     )

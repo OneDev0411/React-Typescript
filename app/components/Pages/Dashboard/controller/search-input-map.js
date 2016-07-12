@@ -3,8 +3,8 @@ import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import listing_viewer_controller from './listing-viewer'
 const controller = {
-  handleSearchInputChange(e) {
-    const search_input_text = this.refs.search_input.value
+  handleSearchInputChange(value) {
+    const search_input_text = value
     AppStore.data.listing_map.search_input_text = search_input_text
     AppStore.emitChange()
     if (!search_input_text.length)
@@ -15,7 +15,7 @@ const controller = {
       delete AppStore.data.search_input.active_listing
       AppStore.emitChange()
     }
-    const q = e.target.value
+    const q = value
     if (!AppStore.data.search_input)
       AppStore.data.search_input = {}
     AppStore.data.search_input.q = q
@@ -40,6 +40,7 @@ const controller = {
       }
       delete AppStore.data.search_input.typing
       AppStore.emitChange()
+      console.log('pre dis')
       ListingDispatcher.dispatch({
         action: 'search-listing-input',
         q: AppStore.data.search_input.q
@@ -68,7 +69,7 @@ const controller = {
     e.preventDefault()
     const data = AppStore.data
     const user = data.user
-    const q = this.refs.search_input.value.trim()
+    const q = AppStore.data.listing_map.search_input_text.trim()
     AppStore.data.listing_map.is_loading = true
     const listing_map = data.listing_map
     const options = listing_map.options

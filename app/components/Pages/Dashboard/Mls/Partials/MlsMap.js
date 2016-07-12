@@ -106,7 +106,7 @@ export default class MlsMap extends Component {
     // TODO move to ENV_VAR
     const bootstrap_url_keys = {
       key: 'AIzaSyDagxNRLRIOsF8wxmuh1J3ysqnwdDB93-4',
-      libraries: ['drawing'].join(',')
+      libraries: ['drawing', 'places'].join(',')
     }
     let map_id
     if (listing_map && listing_map.map_id)
