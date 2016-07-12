@@ -22,6 +22,7 @@ import deleteContact from '../actions/user/delete-contact'
 import editProfilePic from '../actions/user/edit-profile-pic'
 import editPassword from '../actions/user/edit-password'
 import upgradeAccount from '../actions/user/upgrade-account'
+import listingInquiry from '../actions/user/listing-inquiry'
 
 // Rooms
 import createRoom from '../actions/rooms/create-room'
@@ -240,6 +241,10 @@ AppDispatcher.register(payload => {
 
     case 'get-branding':
       getBranding(payload.subdomain)
+      break
+
+    case 'listing-inquiry':
+      listingInquiry(payload.user, payload.list_agent, payload.listing)
       break
 
     default:

@@ -21,7 +21,6 @@ import getFavorites from '../actions/user/get-favorites'
 import getPagedRecs from '../actions/recs/get-paged-recs'
 import markRecsAsRead from '../actions/recs/mark-as-read'
 import getValertsWidget from '../actions/listings/get-valerts-widget'
-
 const ListingDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher

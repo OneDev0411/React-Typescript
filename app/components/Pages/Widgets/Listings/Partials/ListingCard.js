@@ -47,7 +47,7 @@ export default class ListingCard extends Component {
       borderTopRightRadius: '3px',
       borderBottomRightRadius: '3px'
     }
-    let signup_form
+    let action_bubble
     if (data.signup_tooltip && data.signup_tooltip.listing === listing.id) {
       let popover = <Popover id="popover" className="hidden" />
       if (data.errors) {
@@ -66,11 +66,6 @@ export default class ListingCard extends Component {
         ...S(`h-46 ${data.is_mobile ? 'w-150' : 'w-230'}`),
         borderTopRightRadius: 0,
         borderBottomRightRadius: 0
-      }
-      const signup_btn_style = {
-        ...S('h-46 w-130'),
-        borderTopLeftRadius: 0,
-        borderBottomLeftRadius: 0
       }
       let signup_title = (
         <div>
@@ -103,7 +98,36 @@ export default class ListingCard extends Component {
           ...S('t-0 l-0 w-100p')
         }
       }
-      signup_form = (
+      let signup_btn_style = S('h-46 w-100p')
+      let action_form = (
+        <form style={ S('pull-left ' + (data.is_mobile ? 'w-300' : 'w-100p mb-10')) } onSubmit={ this.props.handleListingInquirySubmit.bind(this) }>
+          <Button className={ data.submitting ? 'disabled' : '' } bsStyle="primary" style={ signup_btn_style } type="submit">{ data.submitting ? 'Submitting...' : 'Start Chat' }</Button>
+        </form>
+      )
+      let login_link_area
+      if (!data.user) {
+        signup_btn_style = {
+          ...S('h-46 w-130'),
+          borderTopLeftRadius: 0,
+          borderBottomLeftRadius: 0
+        }
+        action_form = (
+          <form style={ S('pull-left ' + (data.is_mobile ? 'w-300' : 'w-360')) } onSubmit={ this.props.handleEmailSubmit.bind(this) }>
+            <div style={ S('pull-left') }>
+              <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
+                <Input ref="email" style={ signup_input_style } type="text" placeholder="Enter email address" />
+              </OverlayTrigger>
+            </div>
+            <div style={ S('pull-left') }>
+              <Button className={ data.submitting ? 'disabled' : '' } bsStyle="primary" style={ signup_btn_style } type="submit">{ data.submitting ? 'Submitting...' : 'Lets Go' }</Button>
+            </div>
+          </form>
+        )
+        login_link_area = (
+          <div style={ S('color-9b9b9b text-center') }>Already have an account? <a href="/signin" target="_parent">Log in</a></div>
+        )
+      }
+      action_bubble = (
         <div style={ form_style }>
           <div onClick={ this.props.handleCloseSignupForm } className="close" style={ S('absolute t-10 z-1 r-15') }>&times;</div>
           <div className="din" style={ S('font-30 color-263445 mb-5') }>
@@ -113,19 +137,10 @@ export default class ListingCard extends Component {
             { signup_message }
           </div>
           <div style={ S('mb-5 w-100p') }>
-            <form style={ S('pull-left ' + (data.is_mobile ? 'w-300' : 'w-360')) } onSubmit={ this.props.handleEmailSubmit.bind(this) }>
-              <div style={ S('pull-left') }>
-                <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
-                  <Input ref="email" style={ signup_input_style } type="text" placeholder="Enter email address" />
-                </OverlayTrigger>
-              </div>
-              <div style={ S('pull-left') }>
-                <Button className={ data.submitting ? 'disabled' : '' } bsStyle="primary" style={ signup_btn_style } type="submit">{ data.submitting ? 'Submitting...' : 'Lets Go' }</Button>
-              </div>
-            </form>
+            { action_form }
             <div className="clearfix"></div>
           </div>
-          <div style={ S('color-9b9b9b text-center') }>Already have an account? <a href="/signin" target="_parent">Log in</a></div>
+          { login_link_area }
           <i className={`fa fa-caret-${(data.signup_tooltip.action === 'listing_inquiry') ? 'down' : 'up'}`} style={ S(`z-0 color-fff font-60 absolute r-15 ${(data.signup_tooltip.action === 'listing_inquiry') ? 'b-35n' : 't-35n'}`) }></i>
         </div>
       )
@@ -191,7 +206,7 @@ export default class ListingCard extends Component {
           </div>
         </div>
         { agent_image_area }
-        { signup_form }
+        { action_bubble }
       </div>
     )
   }
@@ -200,6 +215,7 @@ ListingCard.propTypes = {
   data: React.PropTypes.object,
   listing: React.PropTypes.object,
   handleEmailSubmit: React.PropTypes.func,
+  handleListingInquirySubmit: React.PropTypes.func,
   handleCloseSignupForm: React.PropTypes.func,
   handleListingClick: React.PropTypes.func,
   handleAgentClick: React.PropTypes.func

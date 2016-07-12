@@ -105,6 +105,17 @@ export default class Listings extends Component {
     e.preventDefault()
     window.Intercom('show')
   }
+  handleListingInquirySubmit(e) {
+    const data = AppStore.data
+    const user = data.user
+    e.preventDefault()
+    AppDispatcher.dispatch({
+      action: 'listing-inquiry',
+      user,
+      list_agent: data.signup_tooltip.list_agent,
+      listing: data.signup_tooltip.listing
+    })
+  }
   handleEmailSubmit(e) {
     // If clicked
     setTimeout(() => {
@@ -204,6 +215,7 @@ export default class Listings extends Component {
           handleCloseSignupForm={ this.handleCloseSignupForm }
           handleListingClick={ this.handleListingClick }
           handleAgentClick={ this.handleAgentClick }
+          handleListingInquirySubmit={ this.handleListingInquirySubmit }
         />
       )
     })
