@@ -44,7 +44,6 @@
     "react-day-picker": "^1.2.0",
     "react-dom": "^0.14.3",
     "react-dropzone": "^3.3.2",
-    "react-geosuggest": "^1.24.1",
     "react-input-mask": "^0.6.7",
     "react-ios-switch": "0.1.4",
     "react-maskedinput": "^3.1.3",

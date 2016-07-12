@@ -27,7 +27,6 @@ import SvgDraw from '../Partials/Svgs/Draw'
 import SvgGlobe from '../Partials/Svgs/Globe'
 import SvgList from '../Partials/Svgs/List'
 import SvgPhotos from '../Partials/Svgs/Photos'
-import Geosuggest from 'react-geosuggest'
 export default class Mls extends Component {
   componentWillMount() {
     const data = this.props.data
@@ -125,6 +124,12 @@ export default class Mls extends Component {
   }
   componentDidUpdate() {
     const data = this.props.data
+    // Init google search
+    if (window.google && !data.google_search_is_loaded) {
+      controller.search_input_map.initGoogleSearch()
+      AppStore.data.google_search_is_loaded = true
+      AppStore.emitChange()
+    }
     const routeParams = this.props.routeParams
     let alert_id
     if (routeParams)
@@ -269,7 +274,8 @@ export default class Mls extends Component {
     delete AppStore.data.listing_map.auto_move
     delete AppStore.data.listing_map.has_search_input
     delete AppStore.data.listing_map.no_listings_found
-    delete AppStore.data.search_input.listings
+    if (AppStore.data.search_input)
+      delete AppStore.data.search_input.listings
     AppStore.emitChange()
     let bounds = window.map.getBounds().toJSON()
     bounds = [
@@ -499,10 +505,10 @@ export default class Mls extends Component {
         <div style={ signup_form_style }>
           <div onClick={ this.handleCloseSignupForm } className="close" style={ S('absolute r-15 t-10') }>&times;</div>
           <div className="din" style={ S('font-30 color-263445 mb-5') }>We are on <span style={ S('color-2196f3') }>Rechat</span><span style={ S('color-2196f3 font-14 relative t-12n') }>TM</span></div>
-          <div style={ S(`${data.is_mobile ? 'font-14' : 'font-17'} fw-500 color-9b9b9b mb-20 text-left`) }>Sign up with Rechat to save this home and to share<br/>
+          <div style={ S(`${data.is_mobile ? 'font-14' : 'font-17'} fw-500 color-9b9b9b mb-20 text-center`) }>Sign up with Rechat to save this home and to share<br/>
           your favorites with our agent or your partner.</div>
           <div style={ S('mb-5 w-100p') }>
-            <form style={ S('pull-left w-360') } onSubmit={ this.handleEmailSubmit.bind(this) }>
+            <form style={ S('mb-20 center-block w-360') } onSubmit={ this.handleEmailSubmit.bind(this) }>
               <div style={ S('pull-left') }>
                 <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
                   <Input ref="email" style={ signup_input_style } type="text" placeholder="Enter email address" />
@@ -577,9 +583,8 @@ export default class Mls extends Component {
     if (data.listing_map && data.listing_map.search_input_text)
       search_input_text = data.listing_map.search_input_text
     const search_input_style = {
-      ...S('font-18 bg-fff w-400 h-50 pull-left relative l-10 p-10'),
-      border: 'none',
-      outline: 'none'
+      ...S('font-18 bg-fff w-400 h-50 pull-left'),
+      border: 'none'
     }
     // Non mobile search
     const search_input = data.search_input
@@ -622,34 +627,10 @@ export default class Mls extends Component {
         <div style={ { overflow: 'scroll', ...S('w-504 bg-fff br-3 maxh-250 z-1 relative t-5') } }>{ listing_list }</div>
       )
     }
-    let google_suggest = ''
-    const google = window.google
-    if (google) {
-      let powered_by_google_area
-      if (search_input_text) {
-        powered_by_google_area = (
-          <div style={ S('absolute w-500 t-60 z-10 bg-fff p-20') }>Places <div style={ S('relative pull-right') }>Powered by Google</div></div>
-        )
-      }
-      google_suggest = (
-        <div>
-          { powered_by_google_area }
-          <Geosuggest
-            location={new google.maps.LatLng(-96.79698789999998, 32.7766642)}
-            radius="20"
-            onChange={ controller.search_input_map.handleSearchInputChange.bind(this) }
-            onKeyDown={ controller.search_input_map.handleKeyDown.bind(this) }
-            value={ search_input_text }
-            style={ { 'input': { ...search_input_style }, 'suggests': { ...S('absolute t-100 bg-fff w-500 z-100 p-20') } } }
-            placeholder="Search location or MLS#"
-          />
-        </div>
-      )
-    }
     let search_area = (
       <div>
         <form onSubmit={ controller.search_input_map.handleSearchSubmit.bind(this) }>
-          { google_suggest }
+          <input id="google_search" onKeyDown={ controller.search_input_map.handleKeyDown.bind(this) } onChange={ controller.search_input_map.handleSearchInputChange.bind(this) } value={ search_input_text } ref="search_input" className="form-control" type="text" style={ search_input_style } placeholder="Search location or MLS#" />
         </form>
       </div>
     )

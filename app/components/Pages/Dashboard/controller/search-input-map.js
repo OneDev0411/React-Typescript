@@ -1,50 +1,30 @@
 // controller/search-input-map.js
-import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
+// import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import listing_viewer_controller from './listing-viewer'
 const controller = {
-  handleSearchInputChange(value) {
-    const search_input_text = value
+  handleSearchInputChange(e) {
+    const search_input_text = e.target.value
     AppStore.data.listing_map.search_input_text = search_input_text
     AppStore.emitChange()
     if (!search_input_text.length)
       delete AppStore.data.listing_map.has_search_input
     AppStore.emitChange()
-    // Reset up / down
-    if (AppStore.data.search_input) {
-      delete AppStore.data.search_input.active_listing
-      AppStore.emitChange()
-    }
-    const q = value
-    if (!AppStore.data.search_input)
-      AppStore.data.search_input = {}
-    AppStore.data.search_input.q = q
-    AppStore.emitChange()
-    if (!q.trim()) {
-      delete AppStore.data.search_input.listings
-      AppStore.emitChange()
-      return
-    }
-    // Throttle
-    AppStore.data.search_input.is_loading = true
-    AppStore.emitChange()
-    if (AppStore.data.search_input && AppStore.data.search_input.typing)
-      return
-    AppStore.data.search_input.typing = true
-    AppStore.emitChange()
-    setTimeout(() => {
-      if (!AppStore.data.search_input.q) {
-        delete AppStore.data.search_input.listings
-        AppStore.emitChange()
-        return
+  },
+  initGoogleSearch() {
+    const google = window.google
+    const autocomplete = new google.maps.places.Autocomplete(document.getElementById('google_search'))
+    autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace()
+      // console.log(place)
+      AppStore.data.listing_map.search_input_text = place.formatted_address
+      const center = {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng()
       }
-      delete AppStore.data.search_input.typing
+      AppStore.data.listing_map.center = center
       AppStore.emitChange()
-      ListingDispatcher.dispatch({
-        action: 'search-listing-input',
-        q: AppStore.data.search_input.q
-      })
-    }, 500)
+    })
   },
   handleListingClick() {
     const data = AppStore.data
@@ -59,27 +39,28 @@ const controller = {
     controller.handleSearchSubmit()
   },
   handleSearchSubmit(e) {
-    if (window.poly) {
-      window.poly.setMap(null)
-      delete window.poly
-      delete AppStore.data.listing_map.drawable
-      AppStore.emitChange()
-    }
     e.preventDefault()
-    const data = AppStore.data
-    const user = data.user
-    const q = AppStore.data.listing_map.search_input_text.trim()
-    AppStore.data.listing_map.is_loading = true
-    const listing_map = data.listing_map
-    const options = listing_map.options
-    const status = options.listing_statuses.join(',')
-    AppStore.emitChange()
-    ListingDispatcher.dispatch({
-      action: 'search-listing-map',
-      user,
-      q,
-      status
-    })
+    // if (window.poly) {
+    //   window.poly.setMap(null)
+    //   delete window.poly
+    //   delete AppStore.data.listing_map.drawable
+    //   AppStore.emitChange()
+    // }
+    // e.preventDefault()
+    // const data = AppStore.data
+    // const user = data.user
+    // const q = AppStore.data.listing_map.search_input_text.trim()
+    // AppStore.data.listing_map.is_loading = true
+    // const listing_map = data.listing_map
+    // const options = listing_map.options
+    // const status = options.listing_statuses.join(',')
+    // AppStore.emitChange()
+    // ListingDispatcher.dispatch({
+    //   action: 'search-listing-map',
+    //   user,
+    //   q,
+    //   status
+    // })
   },
   handleKeyDown(e) {
     const data = AppStore.data
