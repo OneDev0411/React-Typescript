@@ -40,7 +40,6 @@ const controller = {
       }
       delete AppStore.data.search_input.typing
       AppStore.emitChange()
-      console.log('pre dis')
       ListingDispatcher.dispatch({
         action: 'search-listing-input',
         q: AppStore.data.search_input.q
