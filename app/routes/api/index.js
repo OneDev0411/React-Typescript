@@ -27,6 +27,7 @@ module.exports = (app, config) => {
   require('./users/phone-verifications')(app, config)
   require('./users/upgrade-account')(app, config)
   require('./users/get-favorites')(app, config)
+  require('./users/listing-inquiry')(app, config)
   // Rooms
   require('./rooms/create-room')(app, config)
   require('./rooms/delete-room')(app, config)
