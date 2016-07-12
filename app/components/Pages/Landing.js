@@ -226,8 +226,8 @@ export default class Landing extends Component {
     if (data.brand && data.brand.logo_url_wide) {
       const host = window.location.host
       brand_logo = (
-        <a style={ S('ml-15') } href={ host }>
-          <span style={ S('font-30 mr-10 color-' + data.brand.primary) }>+</span> <img style={ S('w-200 relative t-2n') } src={ data.brand.logo_url_wide } />
+        <a style={ { ...S('ml-15'), textDecoration: 'none' } } href={ host }>
+          <span style={ S('font-30 mr-10 relative t-1n color-' + data.brand.primary) }>+</span> <img style={ S('w-200 relative t-3n') } src={ data.brand.logo_url_wide } />
         </a>
       )
     }
