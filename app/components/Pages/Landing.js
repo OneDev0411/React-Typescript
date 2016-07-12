@@ -26,6 +26,7 @@ export default class Landing extends Component {
         action: 'landing-text-animation'
       })
     }, 3000)
+    this.checkBranding()
   }
   componentDidUpdate() {
     const data = this.props.data
@@ -122,6 +123,17 @@ export default class Landing extends Component {
     delete AppStore.data.show_signup_confirm_modal
     AppStore.emitChange()
   }
+  checkBranding() {
+    if (!window.location.host.split('.'))
+      return
+    let subdomain = window.location.host.split('.')[0]
+    if (window.location.host.indexOf('.') === -1)
+      subdomain = 'claystapp'
+    AppDispatcher.dispatch({
+      action: 'get-branding',
+      subdomain
+    })
+  }
   render() {
     // Data
     const data = this.props.data
@@ -210,6 +222,15 @@ export default class Landing extends Component {
         )
       }
     }
+    let brand_logo
+    if (data.brand && data.brand.logo_url_wide) {
+      const host = window.location.host
+      brand_logo = (
+        <a style={ S('ml-15') } href={ host }>
+          <span style={ S('font-30 mr-10 color-' + data.brand.primary) }>+</span> <img style={ S('w-200 relative t-2n') } src={ data.brand.logo_url_wide } />
+        </a>
+      )
+    }
     return (
       <div className="page-landing page-bg-video" style={ page_style }>
         <div className="overlay"></div>
@@ -224,7 +245,10 @@ export default class Landing extends Component {
                   <span className="icon-bar"></span>
                   <span className="icon-bar"></span>
                 </button>
-                <div className="tk-calluna-sans pull-left" style={ S('font-28 mt-12 color-fff') }>Rechat</div>
+                <div className="tk-calluna-sans pull-left" style={ S('font-28 mt-12 color-fff') }>
+                  Rechat
+                  { brand_logo }
+                </div>
               </div>
               <div style={ collapse_style } className={ `collapse navbar-collapse text-center${data.navbar_in ? ' in' : ''}` }>
                 <ul className="nav navbar-nav navbar-right">
