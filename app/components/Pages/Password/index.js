@@ -37,7 +37,7 @@ export default class Password extends Component {
           return
         }
         if (action === 'create_alert' && alert_id) {
-          window.location.href = '/dashboard/mls/' + alert_id
+          window.location.href = '/dashboard/mls/alerts/' + alert_id
           return
         }
       }
