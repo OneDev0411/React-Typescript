@@ -587,7 +587,9 @@ export default {
     const request_object = {
       access_token: params.access_token,
       agent: params.agent,
-      listing: params.listing
+      listing: params.listing,
+      brand: params.brand,
+      source_type: params.source_type
     }
     fetch(endpoint, {
       method: 'post',

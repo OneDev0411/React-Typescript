@@ -244,7 +244,7 @@ AppDispatcher.register(payload => {
       break
 
     case 'listing-inquiry':
-      listingInquiry(payload.user, payload.list_agent, payload.listing)
+      listingInquiry(payload.user, payload.agent, payload.listing)
       break
 
     default:

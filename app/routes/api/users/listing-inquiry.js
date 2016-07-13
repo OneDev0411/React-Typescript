@@ -4,13 +4,17 @@ module.exports = (app, config) => {
     const access_token = req.body.access_token
     const agent = req.body.agent
     const listing = req.body.listing
-    const endpoint = api_url + '/users/listing-inquiry'
+    const brand = req.body.brand
+    const source_type = req.body.source_type
+    const api_url = config.api.url
+    const endpoint = api_url + '/listings/' + listing + '/inquiry'
     const request_object = {
       agent,
-      listing
+      brand,
+      source_type
     }
     fetch(endpoint,{
-      method: 'patch',
+      method: 'post',
       headers: {
         'Content-Type': 'application/json',
         'authorization': 'Bearer ' + access_token,

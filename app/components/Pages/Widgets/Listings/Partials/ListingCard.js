@@ -62,6 +62,16 @@ export default class ListingCard extends Component {
           )
         }
       }
+      if (data.show_listing_inquiry_success) {
+        popover = (
+          <Popover id="popover" title="">Success!  A new chat room has been created. <a href="/dashboard/recents" target="_blank">Go to your rooms</a>.</Popover>
+        )
+      }
+      if (data.show_listing_inquiry_error) {
+        popover = (
+          <Popover id="popover" title="">There was an error with this request.</Popover>
+        )
+      }
       const signup_input_style = {
         ...S(`h-46 ${data.is_mobile ? 'w-150' : 'w-230'}`),
         borderTopRightRadius: 0,

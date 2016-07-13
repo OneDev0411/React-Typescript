@@ -112,7 +112,7 @@ export default class Listings extends Component {
     AppDispatcher.dispatch({
       action: 'listing-inquiry',
       user,
-      list_agent: data.signup_tooltip.list_agent,
+      agent: data.signup_tooltip.list_agent.id,
       listing: data.signup_tooltip.listing
     })
   }
