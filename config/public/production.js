@@ -1,7 +1,8 @@
 // config/public/production.js
 export default {
   app: {
-    url: ''
+    url: '',
+    share_url: process.env.APP_SHARE_URL
   },
   api_url: process.env.RECHAT_API_URL,
   socket: {
