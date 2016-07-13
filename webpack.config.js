@@ -55,7 +55,8 @@ module.exports = {
       'process.env.COSMIC_KEY': JSON.stringify(process.env.COSMIC_KEY),
       'process.env.CLOUDFRONT_URL': JSON.stringify(process.env.CLOUDFRONT_URL),
       'process.env.IMGIX_URL': JSON.stringify(process.env.IMGIX_URL),
-      'process.env.BRANCH_KEY': JSON.stringify(process.env.BRANCH_KEY)
+      'process.env.BRANCH_KEY': JSON.stringify(process.env.BRANCH_KEY),
+      'process.env.APP_SHARE_URL': JSON.stringify(process.env.APP_SHARE_URL)
     })
  ]
 }
