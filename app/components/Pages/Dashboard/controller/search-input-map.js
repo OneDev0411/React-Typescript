@@ -1,5 +1,5 @@
 // controller/search-input-map.js
-// import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
+import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import listing_viewer_controller from './listing-viewer'
 const controller = {
@@ -16,13 +16,38 @@ const controller = {
     const autocomplete = new google.maps.places.Autocomplete(document.getElementById('google_search'))
     autocomplete.addListener('place_changed', () => {
       const place = autocomplete.getPlace()
-      // console.log(place)
+      // Place not selected
+      if (!place.formatted_address) {
+        const data = AppStore.data
+        const user = data.user
+        AppStore.data.listing_map.is_loading = true
+        const listing_map = data.listing_map
+        const options = listing_map.options
+        const status = options.listing_statuses.join(',')
+        AppStore.emitChange()
+        ListingDispatcher.dispatch({
+          action: 'search-listing-map',
+          user,
+          q: place.name,
+          status
+        })
+        return
+        // Need compact listing from API
+        // If number search mls 13294501
+        // ListingDispatcher.dispatch({
+        //   action: 'search-listing-map-mls',
+        //   user,
+        //   mls_number: place.name,
+        //   status
+        // })
+      }
       AppStore.data.listing_map.search_input_text = place.formatted_address
       const center = {
         lat: place.geometry.location.lat(),
         lng: place.geometry.location.lng()
       }
       AppStore.data.listing_map.center = center
+      AppStore.data.listing_map.zoom = 13
       AppStore.emitChange()
     })
   },

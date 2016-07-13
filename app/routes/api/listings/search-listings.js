@@ -1,8 +1,11 @@
-// api/gets/listings.js
+// api/listings/search-listings.js
 module.exports = (app, config) => {
   app.get('/api/listings/search',(req, res) => {
     const api_url = config.api.url
-    const endpoint = api_url + '/listings/search?q=' + req.query.q
+    let endpoint = api_url + '/listings/search?q=' + req.query.q
+    if (req.query.mls_number)
+      endpoint = api_url + '/listings/search?mls_number=' + req.query.mls_number
+    console.log(endpoint)
     const access_token = req.query.access_token
     const headers = {  
       'Content-Type': 'application/json',

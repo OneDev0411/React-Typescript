@@ -8,11 +8,14 @@ export default (user, q, status) => {
     status,
     q: q_commas
   }
+  if (!isNaN(q_commas))
+    params.mls_number = q_commas
   if (user)
     params.access_token = user.access_token
   Listing.search(params, (err, response) => {
     // Listing map
     const listings = response.data
+    // If mls_number, put in array
     const google = window.google
     const map = window.map
     delete AppStore.data.listing_map.is_loading
