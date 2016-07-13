@@ -13,7 +13,7 @@ export default (user, agent, listing) => {
   User.listingInquiry(params, (err, res) => {
     // Success
     if (res.status === 'success')
-      AppStore.data.show_listing_inquiry_success = true
+      AppStore.data.listing_inquiry_success_id = listing
     else
       AppStore.data.show_listing_inquiry_error = true
     AppStore.emitChange()

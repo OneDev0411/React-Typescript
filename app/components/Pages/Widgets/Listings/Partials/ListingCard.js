@@ -1,7 +1,7 @@
 // Widgets/Partials/ListingCard.js
 import React, { Component } from 'react'
 import S from 'shorti'
-import { OverlayTrigger, Input, Button, Popover } from 'react-bootstrap'
+import { OverlayTrigger, Input, Button, Popover, Alert } from 'react-bootstrap'
 import listing_util from '../../../../../utils/listing'
 import helpers from '../../../../../utils/helpers'
 import FavoriteHeart from '../../../Dashboard/Partials/FavoriteHeart'
@@ -62,11 +62,6 @@ export default class ListingCard extends Component {
           )
         }
       }
-      if (data.show_listing_inquiry_success) {
-        popover = (
-          <Popover id="popover" title="">Success!  A new chat room has been created. <a href="/dashboard/recents" target="_blank">Go to your rooms</a>.</Popover>
-        )
-      }
       if (data.show_listing_inquiry_error) {
         popover = (
           <Popover id="popover" title="">There was an error with this request.</Popover>
@@ -109,9 +104,17 @@ export default class ListingCard extends Component {
         }
       }
       let signup_btn_style = S('h-46 w-100p')
+      let button_area = (
+        <Button className={ data.submitting ? 'disabled' : '' } bsStyle="primary" style={ signup_btn_style } type="submit">{ data.submitting ? 'Submitting...' : 'Start Chat' }</Button>
+      )
+      if (data.listing_inquiry_success_id && data.listing_inquiry_success_id === listing.id) {
+        button_area = (
+          <Alert bsStyle="success">Success!  A new chat room has been created. <a href="/dashboard/recents" target="_blank">Go to your rooms</a>.</Alert>
+        )
+      }
       let action_form = (
-        <form style={ S('pull-left ' + (data.is_mobile ? 'w-300' : 'w-100p mb-10')) } onSubmit={ this.props.handleListingInquirySubmit.bind(this) }>
-          <Button className={ data.submitting ? 'disabled' : '' } bsStyle="primary" style={ signup_btn_style } type="submit">{ data.submitting ? 'Submitting...' : 'Start Chat' }</Button>
+        <form style={ S('pull-left ' + (data.is_mobile ? 'w-300' : 'w-100p mb-10')) } onSubmit={ this.props.handleListingInquirySubmit.bind(this) } overlay={ popover }>
+          { button_area }
         </form>
       )
       let login_link_area
