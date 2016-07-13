@@ -235,7 +235,7 @@ export default class MessagesList extends Component {
       })
     }
 
-    const invite_link = config.app.url + '/invite/?room_id=' + data.current_room.id + '&invite_token=' + data.user.access_token
+    const invite_link = config.app.share_url + '/invite/?room_id=' + data.current_room.id + '&invite_token=' + data.user.access_token
 
     const tooltip = (
       <Tooltip id="copied-tooltip">
