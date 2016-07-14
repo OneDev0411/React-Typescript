@@ -69,10 +69,7 @@ export default class ListingViewerMobile extends Component {
       if (property.lot_size_area)
         lot_size = property.lot_size_area
       description = property.description
-      const gallery_image_urls = [
-        listing.cover_image_url,
-        ...listing.gallery_image_urls
-      ]
+      const gallery_image_urls = listing.gallery_image_urls
       listing_images = (
         <ReactSwipe className="carousel" swipeOptions={{ continuous: false }}>
           {
