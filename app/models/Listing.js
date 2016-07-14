@@ -28,9 +28,7 @@ export default {
   search: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    let endpoint = api_host + '/api/listings/search?q=' + params.q + '&access_token=' + params.access_token
-    if (params.mls_number)
-      endpoint = api_host + '/api/listings/search?mls_number=' + params.mls_number + '&access_token=' + params.access_token
+    const endpoint = api_host + '/api/listings/search?q=' + params.q + '&access_token=' + params.access_token
     fetch(endpoint)
     .then(response => {
       if (response.status >= 400) {

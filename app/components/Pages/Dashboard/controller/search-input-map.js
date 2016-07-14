@@ -32,14 +32,6 @@ const controller = {
           status
         })
         return
-        // Need compact listing from API
-        // If number search mls 13294501
-        // ListingDispatcher.dispatch({
-        //   action: 'search-listing-map-mls',
-        //   user,
-        //   mls_number: place.name,
-        //   status
-        // })
       }
       AppStore.data.listing_map.search_input_text = place.formatted_address
       const center = {

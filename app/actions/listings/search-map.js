@@ -8,8 +8,6 @@ export default (user, q, status) => {
     status,
     q: q_commas
   }
-  if (!isNaN(q_commas))
-    params.mls_number = q_commas
   if (user)
     params.access_token = user.access_token
   Listing.search(params, (err, response) => {
