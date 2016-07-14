@@ -8,6 +8,7 @@ module.exports = (app, config) => {
     return res.redirect('/verify/email?token=' + encoded_token)
   })
   app.get('/activate',(req, res) => {
+    req.session.destroy()
     const decoded_token = decodeURIComponent(req.query.token)
     const decrypted_obj = JSON.parse(Crypto.decrypt(decoded_token))
     const email = decrypted_obj.email
