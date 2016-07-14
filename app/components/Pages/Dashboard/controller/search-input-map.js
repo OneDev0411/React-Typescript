@@ -14,7 +14,7 @@ const controller = {
   initGoogleSearch() {
     const google = window.google
     const autocomplete = new google.maps.places.Autocomplete(document.getElementById('google_search'), {
-      location: new google.maps.LatLngBounds()
+      location: new google.maps.LatLng(AppStore.data.listing_map.center.lat, AppStore.data.listing_map.center.lng)
     })
     autocomplete.addListener('place_changed', () => {
       const place = autocomplete.getPlace()
