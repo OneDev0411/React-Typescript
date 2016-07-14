@@ -13,7 +13,9 @@ const controller = {
   },
   initGoogleSearch() {
     const google = window.google
-    const autocomplete = new google.maps.places.Autocomplete(document.getElementById('google_search'))
+    const autocomplete = new google.maps.places.Autocomplete(document.getElementById('google_search'), {
+      location: new google.maps.LatLngBounds()
+    })
     autocomplete.addListener('place_changed', () => {
       const place = autocomplete.getPlace()
       // Place not selected

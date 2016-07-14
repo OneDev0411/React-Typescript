@@ -124,6 +124,12 @@ export default class Mls extends Component {
   }
   componentDidUpdate() {
     const data = this.props.data
+    // Init google search
+    if (window.google && !data.google_search_is_loaded) {
+      controller.search_input_map.initGoogleSearch()
+      AppStore.data.google_search_is_loaded = true
+      AppStore.emitChange()
+    }
     const routeParams = this.props.routeParams
     let alert_id
     if (routeParams)
@@ -145,6 +151,13 @@ export default class Mls extends Component {
   }
   componentWillUnmount() {
     controller.listing_map.hideModal()
+  }
+  initGoogleSearch() {
+    if (window.google) {
+      setTimeout(() => {
+        controller.search_input_map.initGoogleSearch()
+      }, 500)
+    }
   }
   checkBranding() {
     if (!window.location.host.split('.'))
@@ -215,9 +228,7 @@ export default class Mls extends Component {
     this.resetViews()
     switch (type) {
       case 'search':
-        // Init google search
-        if (window.google)
-          controller.search_input_map.initGoogleSearch()
+        this.initGoogleSearch()
         AppStore.data.show_search_map = true
         delete AppStore.data.listing_map.auto_move
         controller.listing_filter.setFilterOptions.bind(this)
