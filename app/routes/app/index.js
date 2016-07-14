@@ -31,6 +31,12 @@ module.exports = (app, config) => {
     next()
   })
 
+  app.get('/signup',(req, res, next) => {
+    if (req.session.user)
+      return res.redirect('/dashboard/mls')
+    next()
+  })
+
   app.get('/signout',(req, res) => {
     req.session.destroy()
     return res.redirect('/')
