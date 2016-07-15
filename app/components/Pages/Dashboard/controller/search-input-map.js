@@ -1,5 +1,5 @@
 // controller/search-input-map.js
-import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
+import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import listing_viewer_controller from './listing-viewer'
 const controller = {
@@ -20,18 +20,11 @@ const controller = {
       const place = autocomplete.getPlace()
       // Place not selected
       if (!place.formatted_address) {
-        const data = AppStore.data
-        const user = data.user
         AppStore.data.listing_map.is_loading = true
-        const listing_map = data.listing_map
-        const options = listing_map.options
-        const status = options.listing_statuses.join(',')
         AppStore.emitChange()
-        ListingDispatcher.dispatch({
-          action: 'search-listing-map',
-          user,
-          q: place.name,
-          status
+        AppDispatcher.dispatch({
+          action: 'geocode-address',
+          address: place.name
         })
         return
       }
@@ -41,7 +34,7 @@ const controller = {
         lng: place.geometry.location.lng()
       }
       AppStore.data.listing_map.center = center
-      AppStore.data.listing_map.zoom = 13
+      AppStore.data.listing_map.zoom = 15
       AppStore.emitChange()
     })
   },

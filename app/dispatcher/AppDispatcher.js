@@ -64,6 +64,9 @@ import acknowledgeAlertNotifications from '../actions/alerts/acknowledge-notific
 // Branding
 import getBranding from '../actions/branding/get-branding'
 
+// Google geocodeAddress
+import geocodeAddress from '../actions/google/geocode-address'
+
 const AppDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
@@ -245,6 +248,10 @@ AppDispatcher.register(payload => {
 
     case 'listing-inquiry':
       listingInquiry(payload.user, payload.agent, payload.listing)
+      break
+
+    case 'geocode-address':
+      geocodeAddress(payload.address)
       break
 
     default:
