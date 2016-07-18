@@ -34,7 +34,7 @@ export default {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
     const endpoint = api_host + '/api/users/get-user/self?access_token=' + params.access_token
-    console.log('model')
+    console.log('model', endpoint)
     fetch(endpoint)
     .then(response => {
       if (response.status >= 400) {
@@ -47,6 +47,7 @@ export default {
       return response.json()
     })
     .then(response => {
+      console.log('model', response)
       return callback(false, response)
     })
   },
