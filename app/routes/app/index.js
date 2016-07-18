@@ -33,6 +33,8 @@ module.exports = (app, config) => {
       console.log(decrypted_obj)
       if (decrypted_obj.tokens) {
         User.getSelf({ access_token: decrypted_obj.tokens.access }, (err, response) => {
+          console.log(req.query)
+          console.log(response.data)
           if (!err && response.data) {
             req.session.user = {
               ...response.data,
