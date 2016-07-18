@@ -30,11 +30,8 @@ module.exports = (app, config) => {
     if (req.query.token) {
       const decoded_token = decodeURIComponent(req.query.token)
       const decrypted_obj = JSON.parse(Crypto.decrypt(decoded_token))
-      console.log(1, decrypted_obj)
       if (decrypted_obj.tokens) {
-        console.log(2, decrypted_obj.tokens)
         User.getSelf({ access_token: decrypted_obj.tokens.access }, (err, response) => {
-          console.log(3, response.data)
           if (!err && response.data) {
             req.session.user = {
               ...response.data,
