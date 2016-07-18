@@ -13,6 +13,7 @@ module.exports = (app, config) => {
   require('./listings/get-valerts')(app, config)
   // Users
   require('./users/get')(app, config)
+  require('./users/get-self')(app, config)
   require('./users/signup')(app, config)
   require('./users/signup-shadow')(app, config)
   require('./users/edit-user')(app, config)

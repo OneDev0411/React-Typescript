@@ -165,7 +165,8 @@ export default class MessagesList extends Component {
       )
     }
     let listing_switch_checked
-    listing_switch_checked = current_room.notification_settings[data.user.id].system_generated
+    if (current_room.notification_settings)
+      listing_switch_checked = current_room.notification_settings[data.user.id].system_generated
 
     let message_date
     const todays_date = helpers.getYMD()

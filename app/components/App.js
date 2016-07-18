@@ -206,6 +206,17 @@ export default class App extends Component {
       AppStore.data.users_online = users_online_edited
       AppStore.emitChange()
     })
+    socket.on('Room.UserJoined', (user, room) => {
+      if (data.rooms) {
+        room.messages = []
+        AppStore.data.rooms = [
+          room,
+          ...data.rooms
+        ]
+      } else
+        AppStore.data.rooms = [room]
+      AppStore.emitChange()
+    })
     socket.on('Notification', this.getNotifications)
   }
 

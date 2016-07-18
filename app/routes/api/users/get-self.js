@@ -1,15 +1,18 @@
-// api/alerts/acknowledge-notifications.js
+// api/users/get.js
+import config from '../../../../config/private'
 module.exports = (app, config) => {
-  app.post('/api/acknowledge-alert-notifications',(req, res) => {
+  app.get('/api/users/get-user/self',(req, res) => {
     const api_url = config.api.url
-    const alert = req.body.alert
-    const endpoint = api_url + '/alerts/' + alert + '/notifications'
-    const access_token = req.body.access_token
+    const id = req.params.id
+    const access_token = req.query.access_token
+    const endpoint = api_url + '/users/self'
     fetch(endpoint,{
-      method: 'delete',
+      method: 'get',
       headers: {
         'Content-Type': 'application/json',
         'authorization': 'Bearer ' + access_token,
+        'x-real-agent' : req.headers['user-agent'],
+        'user-agent' : config.app_name
       }
     })
     .then(response => {
@@ -20,12 +23,10 @@ module.exports = (app, config) => {
         }
         return res.json(error)
       }
-      return response
+      return response.json()
     })
     .then(response => {
-      let response_object = {}
-      response_object.status = 'success'
-      return res.json(response_object)
+      return res.json(response)
     });
   })
 }
