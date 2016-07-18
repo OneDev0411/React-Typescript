@@ -38,6 +38,7 @@ module.exports = (app, config) => {
             }
             res.redirect(req.query.redirect_to)
           }
+          next()
         })
       } else {
         next()
