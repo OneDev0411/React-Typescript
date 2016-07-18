@@ -25,7 +25,6 @@ module.exports = (app, config) => {
   })
 
   app.get('/signin',(req, res, next) => {
-    console.log('signin')
     // Auto sign in
     if (req.query.token) {
       const decoded_token = decodeURIComponent(req.query.token)

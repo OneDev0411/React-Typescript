@@ -2,6 +2,7 @@
 import config from '../../../../config/private'
 module.exports = (app, config) => {
   app.get('/api/users/get-user/self',(req, res) => {
+    console.log('self')
     const api_url = config.api.url
     const access_token = req.query.access_token
     const endpoint = api_url + '/users/self'
