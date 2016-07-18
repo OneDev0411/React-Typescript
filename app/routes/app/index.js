@@ -124,6 +124,10 @@ module.exports = (app, config) => {
 
   // Seamless listing
   app.get('/dashboard/mls/:id', (req, res, next) => {
+    if (!req.session.user && req.query.token) {
+      const path = req.path
+      return res.redirect('/signin?redirect_to=' + path + '&token=' + req.query.token)
+    }
     AppStore.data.user = req.session.user
     res.locals.AppStore = JSON.stringify(AppStore)
     return res.status(200).render('index.html')
