@@ -13,9 +13,16 @@ const controller = {
   },
   initGoogleSearch() {
     const google = window.google
-    const autocomplete = new google.maps.places.Autocomplete(document.getElementById('google_search'), {
-      location: new google.maps.LatLng(AppStore.data.listing_map.center.lat, AppStore.data.listing_map.center.lng)
+    const autocomplete = new google.maps.places.Autocomplete(document.getElementById('google_search'))
+    const geolocation = {
+      lat: AppStore.data.listing_map.center.lat,
+      lng: AppStore.data.listing_map.center.lng
+    }
+    const circle = new google.maps.Circle({
+      center: geolocation,
+      radius: 500
     })
+    autocomplete.setBounds(circle.getBounds())
     autocomplete.addListener('place_changed', () => {
       const place = autocomplete.getPlace()
       // Place not selected
