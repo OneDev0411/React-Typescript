@@ -127,11 +127,12 @@ module.exports = (app, config) => {
     if (!req.session.user && req.query.token) {
       const path = req.path
       return res.redirect('/signin?redirect_to=' + path + '&token=' + req.query.token)
+    } else {
+      AppStore.data.user = req.session.user
+      res.locals.AppStore = JSON.stringify(AppStore)
+      return res.status(200).render('index.html')
+      res.end()
     }
-    AppStore.data.user = req.session.user
-    res.locals.AppStore = JSON.stringify(AppStore)
-    return res.status(200).render('index.html')
-    res.end()
   })
 
   // Seamless chatroom / alert
