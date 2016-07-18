@@ -39,6 +39,8 @@ module.exports = (app, config) => {
             res.redirect(req.query.redirect_to)
           }
         })
+      } else {
+        next()
       }
     } else if (req.session.user && !req.query.email) {
       return res.redirect('/dashboard/mls')
