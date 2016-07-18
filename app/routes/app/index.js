@@ -147,6 +147,7 @@ module.exports = (app, config) => {
     async.series([
       callback => {
         const params = {
+          api_host: config.api_host_local,
           id,
           access_token
         }
