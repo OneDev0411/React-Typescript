@@ -37,8 +37,9 @@ module.exports = (app, config) => {
               access_token: decrypted_obj.tokens.access
             }
             res.redirect(req.query.redirect_to)
+          } else {
+            next()
           }
-          next()
         })
       } else {
         next()
