@@ -25,10 +25,12 @@ module.exports = (app, config) => {
   })
 
   app.get('/signin',(req, res, next) => {
+    console.log('signin')
     // Auto sign in
     if (req.query.token) {
       const decoded_token = decodeURIComponent(req.query.token)
       const decrypted_obj = JSON.parse(Crypto.decrypt(decoded_token))
+      console.log(decrypted_obj)
       if (decrypted_obj.tokens) {
         User.getSelf({ access_token: decrypted_obj.tokens.access }, (err, response) => {
           if (!err && response.data) {
