@@ -6,13 +6,14 @@ module.exports = (app, config) => {
     const id = req.params.id
     const access_token = req.query.access_token
     const endpoint = api_url + '/users/self'
+    console.log('api endpoint')
     fetch(endpoint,{
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
         'authorization': 'Bearer ' + access_token,
-        'x-real-agent' : req.headers['user-agent'],
-        'user-agent' : config.app_name
+        'x-real-agent': req.headers['user-agent'],
+        'user-agent': config.app_name
       }
     })
     .then(response => {
