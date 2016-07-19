@@ -11,8 +11,10 @@ export default (user, q) => {
     params.access_token = user.access_token
   Listing.search(params, (err, response) => {
     // Success
-    if (response.status === 'success')
-      AppStore.data.search_input.listings = response.data
+    if (response.status === 'success' && response.data.length === 1) {
+      AppStore.data.listing_map.listings = response.data
+      AppStore.data.listing_map.active_listing = response.data[0].id
+    }
     AppStore.emitChange()
   })
 }

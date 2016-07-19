@@ -1,5 +1,6 @@
 // controller/search-input-map.js
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
+import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import listing_viewer_controller from './listing-viewer'
 const controller = {
@@ -25,6 +26,12 @@ const controller = {
     autocomplete.setBounds(circle.getBounds())
     autocomplete.addListener('place_changed', () => {
       const place = autocomplete.getPlace()
+      // Do async search for single listing
+      ListingDispatcher.dispatch({
+        action: 'search-listing-input',
+        user: AppStore.data.user,
+        q: place.name
+      })
       // Place not selected
       if (!place.formatted_address) {
         AppStore.data.listing_map.is_loading = true
