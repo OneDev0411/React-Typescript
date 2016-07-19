@@ -4,7 +4,6 @@ import bodyParser from 'body-parser'
 import hogan from 'hogan-express'
 import compression from 'compression'
 import session from 'express-session'
-import helmet from 'helmet'
 import config from '../config/private'
 import Redis from 'connect-redis'
 const RedisStore = Redis(session)
@@ -31,11 +30,6 @@ app.use(session({
 }))
 app.use(bodyParser.json({limit: '5mb'}))
 
-// Disable frame guard
-app.use(helmet({
-  frameguard: false
-}))
-
 // Socket.io
 const http = require('http').Server(app)
 const io = require('socket.io')(http)
@@ -56,6 +50,13 @@ app.use(function(req, res, next) {
 if(process.env.NODE_ENV === 'development'){
   app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', 'http://localhost:' + process.env.DEV_PORT)
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+    res.header('Access-Control-Allow-Credentials', 'true')
+    next()
+  })
+} else {
+  app.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*')
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
     res.header('Access-Control-Allow-Credentials', 'true')
     next()
