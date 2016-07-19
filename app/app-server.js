@@ -4,6 +4,7 @@ import bodyParser from 'body-parser'
 import hogan from 'hogan-express'
 import compression from 'compression'
 import session from 'express-session'
+import helmet from 'helmet'
 import config from '../config/private'
 import Redis from 'connect-redis'
 const RedisStore = Redis(session)
@@ -29,6 +30,11 @@ app.use(session({
   }
 }))
 app.use(bodyParser.json({limit: '5mb'}))
+
+// Disable frame guard
+app.use(helmet({
+  frameguard: false
+}))
 
 // Socket.io
 const http = require('http').Server(app)
