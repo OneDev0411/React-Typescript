@@ -95,10 +95,6 @@ export default class ListingViewer extends Component {
       next_icon = '>'
       description = property.description
       const gallery_image_urls = listing.gallery_image_urls
-<<<<<<< HEAD
-=======
-
->>>>>>> fff505537e7e6c711f88dda56dab9ee3ce8d8dce
       const gallery_chunks = _.chunk(gallery_image_urls, 3)
       listing_images = (
         <Carousel className="listing-viewer__carousel" interval={0} indicators={false} prevIcon={ prev_icon } nextIcon={ next_icon }>
