@@ -31,6 +31,7 @@ import inviteContacts from '../actions/rooms/invite-contacts'
 import uploadFilesToRoom from '../actions/rooms/upload-files'
 import setNotification from '../actions/rooms/notifications'
 import acknowledgeRoomNotifications from '../actions/rooms/acknowledge-notifications'
+import getRoomAndMessages from '../actions/rooms/get-room-and-messages'
 
 // Messages
 import createMessage from '../actions/messages/create-message'
@@ -136,6 +137,10 @@ AppDispatcher.register(payload => {
 
     case 'get-rooms':
       getRooms(payload.user, payload.room_id)
+      break
+
+    case 'get-room-and-messages':
+      getRoomAndMessages(payload.user, payload.room)
       break
 
     case 'get-rooms-indexeddb':
