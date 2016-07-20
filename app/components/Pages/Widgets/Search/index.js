@@ -9,6 +9,7 @@ export default class Search extends Component {
   componentDidMount() {
     const GoogleMapsLoader = require('google-maps')
     GoogleMapsLoader.LIBRARIES = ['places']
+    console.log(config.google.api_key)
     GoogleMapsLoader.KEY = config.google.api_key
     GoogleMapsLoader.load(google => {
       this.initGoogleSearch(google)
@@ -27,6 +28,10 @@ export default class Search extends Component {
     autocomplete.setBounds(circle.getBounds())
     autocomplete.addListener('place_changed', () => {
       const place = autocomplete.getPlace()
+      let q = place.formatted_address
+      // Place not selected
+      if (!q.formatted_address)
+        q = place.name
       this.handleSubmit(place.name)
     })
   }
