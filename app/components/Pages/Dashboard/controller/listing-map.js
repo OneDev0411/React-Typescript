@@ -63,6 +63,19 @@ const controller = {
       google_options: {
         mapTypeControl: true,
         draggable: true
+      },
+      filter_options: {
+        sold: false,
+        active: true,
+        other: false,
+        open_houses: false,
+        listing_types: ['any'],
+        status_options: {
+          active: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract']
+        },
+        minimum_bedrooms: 0,
+        minimum_bathrooms: 1,
+        pool: 'either'
       }
     }
     AppStore.data.listing_map = listing_map

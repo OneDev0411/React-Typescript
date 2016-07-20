@@ -104,7 +104,6 @@ export default class Mls extends Component {
     this.routeURL()
     this.checkForMobile()
     this.checkBranding()
-    this.setDefaultFilterOptions()
   }
   componentDidUpdate() {
     const data = this.props.data
@@ -135,26 +134,6 @@ export default class Mls extends Component {
   }
   componentWillUnmount() {
     controller.listing_map.hideModal()
-  }
-  setDefaultFilterOptions() {
-    // Set switch states
-    const data = this.props.data
-    if (data.listing_map) {
-      AppStore.data.listing_map.filter_options = {
-        sold: false,
-        active: true,
-        other: false,
-        open_houses: false,
-        listing_types: ['any'],
-        status_options: {
-          active: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract']
-        },
-        minimum_bedrooms: 0,
-        minimum_bathrooms: 1,
-        pool: 'either'
-      }
-    }
-    AppStore.emitChange()
   }
   initGoogleSearch() {
     if (window.google) {
