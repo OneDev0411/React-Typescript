@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import AppStore from '../../../../stores/AppStore'
 import SearchMap from '../../Dashboard/Mls'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
-import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 export default class Listings extends Component {
   componentWillMount() {
     AppStore.data.brand = {
@@ -33,11 +32,11 @@ export default class Listings extends Component {
       delete AppStore.data.listing_map.listings_info
       AppStore.emitChange()
       const q = data.location.query.q
-      ListingDispatcher.dispatch({
-        action: 'search-listing-map',
-        q,
-        user: data.user
+      AppDispatcher.dispatch({
+        action: 'geocode-address',
+        address: q
       })
+      return
     }
   }
   render() {

@@ -652,7 +652,7 @@ export default class Mls extends Component {
       )
     }
     let options_text
-    if (listing_map)
+    if (listing_map && listing_map.listings_info)
       options_text = (listing_map.listings ? (listing_map.listings.length + ' showing of ' + listing_map.listings_info.total) : '') + ' homes. ' + listing_util.alertOptionsShort(listing_map.options)
     if (listing_map && data.listing_map.search_input_text && listing_map.no_listings_found)
       options_text = 'No listings found'
