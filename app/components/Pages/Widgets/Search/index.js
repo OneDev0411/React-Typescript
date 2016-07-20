@@ -30,7 +30,7 @@ export default class Search extends Component {
       const place = autocomplete.getPlace()
       let q = place.formatted_address
       // Place not selected
-      if (!q.formatted_address)
+      if (!q)
         q = place.name
       this.handleSubmit(place.name)
     })
