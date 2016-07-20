@@ -49,23 +49,6 @@ export default class Mls extends Component {
     delete AppStore.data.share_list
     if (listing_map && listing_map.saving_alert)
       delete AppStore.data.listing_map.saving_alert
-    // Set switch states
-    if (listing_map && !listing_map.filter_options) {
-      AppStore.data.listing_map.filter_options = {
-        sold: false,
-        active: true,
-        other: false,
-        open_houses: false,
-        listing_types: ['any'],
-        status_options: {
-          active: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract']
-        },
-        minimum_bedrooms: 0,
-        minimum_bathrooms: 1,
-        pool: 'either'
-      }
-    }
-    AppStore.emitChange()
     // Get only map (above) for non-logged in user
     if (!user) {
       if (listing_map) {
@@ -121,6 +104,7 @@ export default class Mls extends Component {
     this.routeURL()
     this.checkForMobile()
     this.checkBranding()
+    this.setDefaultFilterOptions()
   }
   componentDidUpdate() {
     const data = this.props.data
@@ -151,6 +135,26 @@ export default class Mls extends Component {
   }
   componentWillUnmount() {
     controller.listing_map.hideModal()
+  }
+  setDefaultFilterOptions() {
+    // Set switch states
+    const data = this.props.data
+    if (data.listing_map) {
+      AppStore.data.listing_map.filter_options = {
+        sold: false,
+        active: true,
+        other: false,
+        open_houses: false,
+        listing_types: ['any'],
+        status_options: {
+          active: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract']
+        },
+        minimum_bedrooms: 0,
+        minimum_bathrooms: 1,
+        pool: 'either'
+      }
+    }
+    AppStore.emitChange()
   }
   initGoogleSearch() {
     if (window.google) {
