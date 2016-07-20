@@ -28,6 +28,7 @@
     "flux": "^2.1.1",
     "google-libphonenumber": "^1.0.14",
     "google-map-react": "^0.10.5",
+    "google-maps": "^3.2.1",
     "history": "^1.13.1",
     "hogan-express": "^0.5.2",
     "icloud": "^0.1.0",

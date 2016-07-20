@@ -480,7 +480,7 @@ export default class ListingViewerMobile extends Component {
       </a>
     )
     if (data.brand && data.brand.logo_url_wide) {
-      const host = window.location.host
+      const host = 'https://' + window.location.host
       brand_logo = (
         <a href={ host }>
           <img style={ S('w-200') } src={ data.brand.logo_url_wide } />

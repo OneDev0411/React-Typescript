@@ -4,6 +4,7 @@ import S from 'shorti'
 import controller from '../../controller'
 import ListingMarker from '../../Partials/ListingMarker'
 import GoogleMap from 'google-map-react'
+import config from '../../../../../../config/public'
 export default class MlsMap extends Component {
   render() {
     const data = this.props.data
@@ -105,7 +106,7 @@ export default class MlsMap extends Component {
     const default_zoom = 13
     // TODO move to ENV_VAR
     const bootstrap_url_keys = {
-      key: 'AIzaSyDagxNRLRIOsF8wxmuh1J3ysqnwdDB93-4',
+      key: config.google.api_key,
       libraries: ['drawing', 'places'].join(',')
     }
     let map_id

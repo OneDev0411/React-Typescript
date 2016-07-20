@@ -2,100 +2,43 @@
 import React, { Component } from 'react'
 import { Input } from 'react-bootstrap'
 import S from 'shorti'
-import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
-import AppStore from '../../../../stores/AppStore'
 import listing_util from '../../../../utils/listing'
+import config from '../../../../../config/public'
 
 export default class Search extends Component {
-  handleListingClick(id) {
-    const data = AppStore.data
-    if (data.brand && data.brand.subdomain)
-      window.open('/dashboard/mls/' + id)
-    else
-      window.open('https://rechat.com/dashboard/mls/' + id)
+  componentDidMount() {
+    const GoogleMapsLoader = require('google-maps')
+    GoogleMapsLoader.LIBRARIES = ['places']
+    GoogleMapsLoader.KEY = config.google.api_key
+    GoogleMapsLoader.load(google => {
+      this.initGoogleSearch(google)
+    })
   }
-  handleOnChange(e) {
-    // Reset up / down
-    if (AppStore.data.widget) {
-      delete AppStore.data.widget.active_listing
-      AppStore.emitChange()
+  initGoogleSearch(google) {
+    const autocomplete = new google.maps.places.Autocomplete(document.getElementById('google_search'))
+    const geolocation = {
+      lat: 32.7767,
+      lng: -96.7970
     }
-    const q = e.target.value
-    if (!AppStore.data.widget)
-      AppStore.data.widget = {}
-    AppStore.data.widget.q = q
-    AppStore.emitChange()
-    if (!q.trim()) {
-      delete AppStore.data.widget.listings
-      AppStore.emitChange()
-      return
-    }
-    // Throttle
-    AppStore.data.widget.is_loading = true
-    AppStore.emitChange()
-    if (AppStore.data.widget && AppStore.data.widget.typing)
-      return
-    AppStore.data.widget.typing = true
-    AppStore.emitChange()
-    setTimeout(() => {
-      if (!AppStore.data.widget.q) {
-        delete AppStore.data.widget.listings
-        AppStore.emitChange()
-        return
-      }
-      delete AppStore.data.widget.typing
-      AppStore.emitChange()
-      ListingDispatcher.dispatch({
-        action: 'search-listing-widget',
-        q: AppStore.data.widget.q
-      })
-    }, 500)
+    const circle = new google.maps.Circle({
+      center: geolocation,
+      radius: 500
+    })
+    autocomplete.setBounds(circle.getBounds())
+    autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace()
+      this.handleSubmit(place.name)
+    })
   }
   handleSubmit(q) {
     const data = this.props.data
-    const widget = data.widget
-    // Send to full listing
-    if (widget && widget.listings && typeof widget.active_listing !== 'undefined') {
-      const id = widget.listings[widget.active_listing].id
-      if (data.brand && data.brand.subdomain)
-        window.open('/dashboard/mls/' + id)
-      else
-        window.open('https://rechat.com/dashboard/mls/' + id)
-      return
-    }
     // Send to search map
     if (q) {
       if (data.brand && data.brand.map_url)
         window.top.location.href = data.brand.map_url + '?q=' + q
       else
-        window.open('https://rechat.com/dashboard/mls/?q=' + q)
+        window.top.location.href = 'https://rechat.com/dashboard/mls/?q=' + q
     }
-  }
-  handleKeyDown(e) {
-    const data = AppStore.data
-    const q = encodeURIComponent(e.target.value)
-    if (!data.widget)
-      return
-    if (e.which === 13)
-      this.handleSubmit(q)
-    const listings = data.widget.listings
-    if (typeof data.widget.active_listing === 'undefined')
-      AppStore.data.widget.active_listing = -1
-    // Down
-    if (e.which === 40) {
-      if (data.widget.active_listing === listings.length - 1)
-        AppStore.data.widget.active_listing = 0
-      else
-        AppStore.data.widget.active_listing = data.widget.active_listing + 1
-    }
-    // Up
-    if (e.which === 38) {
-      if (!data.widget.active_listing)
-        AppStore.data.widget.active_listing = listings.length - 1
-      else
-        AppStore.data.widget.active_listing = data.widget.active_listing - 1
-    }
-    AppStore.emitChange()
   }
   render() {
     const data = this.props.data
@@ -152,7 +95,7 @@ export default class Search extends Component {
         <div style={ S('relative z-2 p-10') }>
           <div style={ S('relative t-190 maxw-770 center-block') }>
             <div style={ S('color-fff text-center font-58 mb-30') } className="tempo">Own a piece of Dallas.</div>
-            <Input onKeyDown={ this.handleKeyDown.bind(this) } onChange={ this.handleOnChange } style={ S('h-76 border-none') } type="text" bsSize="large" placeholder="Search for an address, neighborhood, or MLS#" />
+            <Input id="google_search" style={ S('h-76 border-none') } type="text" bsSize="large" placeholder="Search for an address, neighborhood, or MLS#" />
             { loading }
             { listing_area }
             <div style={ S('pull-right z-0 mt-5') }>

@@ -22,5 +22,8 @@ export default {
   },
   branch: {
     key: process.env.BRANCH_KEY
+  },
+  google: {
+    api_key: 'AIzaSyDagxNRLRIOsF8wxmuh1J3ysqnwdDB93-4'
   }
 }
