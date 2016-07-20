@@ -31,7 +31,7 @@ export default class Search extends Component {
       // Place not selected
       if (!q)
         q = place.name
-      this.handleSubmit(place.name)
+      this.handleSubmit(q)
     })
   }
   handleSubmit(q) {
