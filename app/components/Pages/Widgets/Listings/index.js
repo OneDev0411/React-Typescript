@@ -108,6 +108,8 @@ export default class Listings extends Component {
   handleListingInquirySubmit(e) {
     const data = AppStore.data
     const user = data.user
+    AppStore.data.submitting = true
+    AppStore.emitChange()
     e.preventDefault()
     AppDispatcher.dispatch({
       action: 'listing-inquiry',
