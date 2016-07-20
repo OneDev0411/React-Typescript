@@ -56,7 +56,8 @@ module.exports = {
       'process.env.CLOUDFRONT_URL': JSON.stringify(process.env.CLOUDFRONT_URL),
       'process.env.IMGIX_URL': JSON.stringify(process.env.IMGIX_URL),
       'process.env.BRANCH_KEY': JSON.stringify(process.env.BRANCH_KEY),
-      'process.env.APP_SHARE_URL': JSON.stringify(process.env.APP_SHARE_URL)
+      'process.env.APP_SHARE_URL': JSON.stringify(process.env.APP_SHARE_URL),
+      'process.env.GOOGLE_API_KEY': JSON.stringify(process.env.GOOGLE_API_KEY)
     })
  ]
 }
