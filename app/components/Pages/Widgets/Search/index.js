@@ -9,7 +9,6 @@ export default class Search extends Component {
   componentDidMount() {
     const GoogleMapsLoader = require('google-maps')
     GoogleMapsLoader.LIBRARIES = ['places']
-    console.log(config.google.api_key)
     GoogleMapsLoader.KEY = config.google.api_key
     GoogleMapsLoader.load(google => {
       this.initGoogleSearch(google)
