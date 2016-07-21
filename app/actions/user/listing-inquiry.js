@@ -16,7 +16,9 @@ export default (user, agent, listing) => {
       AppStore.data.listing_inquiry_success_id = listing
     else
       AppStore.data.show_listing_inquiry_error = true
-    window.top.location.href = 'https://' + AppStore.data.brand.subdomain + '.rechat.com/dashboard/recents'
-    AppStore.emitChange()
+    setTimeout(() => {
+      window.top.location.href = 'https://' + AppStore.data.brand.subdomain + '.rechat.com/dashboard/recents'
+      AppStore.emitChange()
+    }, 1000)
   })
 }
