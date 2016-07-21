@@ -225,7 +225,7 @@ export default class Listings extends Component {
     if (!data.location.query.all) {
       view_all_button = (
         <div style={ S('text-center mt-20 mb-30') }>
-          <a href={ `http://www.claystapp.com/exclusive-listings` } className="btn btn-default" style={ S(`w-280 font-17 p-20 color-fff border-1-solid-${data.brand.primary} bg-${data.brand.primary}`) }>View Exclusive Listings</a>
+          <a target="_parent" href={ `http://www.claystapp.com/exclusive-listings` } className="btn btn-default" style={ S(`w-280 font-17 p-20 color-fff border-1-solid-${data.brand.primary} bg-${data.brand.primary}`) }>View Exclusive Listings</a>
         </div>
       )
     }
