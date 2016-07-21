@@ -22,7 +22,7 @@ export default {
     return address.street_number + ' ' + address.street_name + ' ST ' + address.unit_number
   },
   addressTitle: address => {
-    return `${address.street_number} ${address.street_name} ${address.street_suffix}`
+    return `${address.street_number} ${address.street_name} ${address.street_suffix} ${address.unit_number ? 'Unit ' + address.unit_number : ''}`
   },
   getDOM: dom_seconds => {
     return Math.floor((((new Date()).getTime() / 1000) - dom_seconds) / 86400)

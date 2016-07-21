@@ -120,7 +120,6 @@ export default class ListingViewer extends Component {
           </div>
         )
       })
-      listing_title = `${listing.property.address.street_number} ${listing.property.address.street_name} ${listing.property.address.street_suffix}`
       listing_subtitle = `${listing.property.address.city}, ${listing.property.address.state} ${listing.property.address.postal_code}`
       const status_color = listing_util.getStatusColor(listing.status)
       let sold_date
