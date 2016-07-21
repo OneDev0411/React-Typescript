@@ -207,30 +207,32 @@ export default class App extends Component {
       AppStore.emitChange()
     })
     socket.on('Room.UserJoined', (user, room) => {
-      // Add users
-      if (AppStore.data.rooms) {
-        if (_.find(AppStore.data.rooms, { id: room.id })) {
-          const index = _.findIndex(AppStore.data.rooms, { id: room.id })
-          AppStore.data.rooms[index].users.push(user)
+      setTimeout(() => {
+        // Add users
+        if (AppStore.data.rooms) {
+          if (_.find(AppStore.data.rooms, { id: room.id })) {
+            const index = _.findIndex(AppStore.data.rooms, { id: room.id })
+            AppStore.data.rooms[index].users.push(user)
+          } else {
+            room.users = [user]
+            AppStore.data.rooms = [
+              room,
+              ...AppStore.data.rooms
+            ]
+          }
         } else {
           room.users = [user]
-          AppStore.data.rooms = [
-            room,
-            ...AppStore.data.rooms
-          ]
+          AppStore.data.rooms = [room]
         }
-      } else {
-        room.users = [user]
-        AppStore.data.rooms = [room]
-      }
-      // Get messages
-      if (user.id === AppStore.data.user.id) {
-        AppDispatcher.dispatch({
-          action: 'get-room-and-messages',
-          user: AppStore.data.user,
-          room
-        })
-      }
+        // Get messages
+        if (user.id === AppStore.data.user.id) {
+          AppDispatcher.dispatch({
+            action: 'get-room-and-messages',
+            user: AppStore.data.user,
+            room
+          })
+        }
+      }, 1000)
     })
     socket.on('Notification', this.getNotifications)
   }
