@@ -94,7 +94,7 @@ export default class Search extends Component {
     }
     return (
       <div>
-        <div style={ S('absolute z-0 t-0 l-0 w-100p h-100p bg-cover bg-center bg-url(/images/widgets/stapp-search.jpg)') }></div>
+        <div style={ S('absolute z-0 t-0 l-0 w-100p h-100p bg-cover bg-center bg-url(http://www.claystapp.com/wp-content/uploads/2016/07/search_widget-e1469211969640.jpg)') }></div>
         <div style={ S('absolute z-1 t-0 l-0 w-100p h-100p bg-000 op-.5') }></div>
         <div style={ S('relative z-2 p-10') }>
           <div style={ S('relative t-190 maxw-770 center-block') }>

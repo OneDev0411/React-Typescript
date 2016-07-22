@@ -117,7 +117,7 @@ export default class ListingPanel extends Component {
           </div>
           <div onClick={ this.props.showListingViewer.bind(this, listing) } style={ S('relative') }>
             <div style={ image_overlay } />
-            { listing_image }
+            { data.show_listing_panel ? listing_image : '' }
             <div style={ S('absolute color-fff l-15 b-15') }>
               <div style={ S('font-18 fw-600') }>
                 ${ helpers.numberWithCommas(Math.floor(price)) }
@@ -173,7 +173,7 @@ export default class ListingPanel extends Component {
       return (
         <div onMouseOut={ this.props.removeActiveListing.bind(this) } onMouseOver={ this.props.setActiveListing.bind(this, listing) } className="listing-panel__list-item" key={ 'panel-listing-list-' + listing.id + '-' + i} onClick={ this.props.showListingViewer.bind(this, listing) } style={ listing_style }>
           <div style={ S('pull-left') }>
-            { listing_image }
+            { data.show_listing_panel ? listing_image : '' }
           </div>
           <div style={ S('ml-10 pull-left w-220') }>
             <div style={ S('mb-5') }>{ listing_util.addressTitle(address) }</div>
