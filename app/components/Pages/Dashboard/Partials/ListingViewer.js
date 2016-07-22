@@ -35,6 +35,12 @@ export default class ListingViewer extends Component {
     }
     this.fadeIn()
   }
+  componentWillUnmount() {
+    // Reinit google search
+    setTimeout(() => {
+      controller.search_input_map.initGoogleSearch()
+    }, 300)
+  }
   fadeIn() {
     const elem = ReactDOM.findDOMNode(this)
     elem.style.opacity = 0
