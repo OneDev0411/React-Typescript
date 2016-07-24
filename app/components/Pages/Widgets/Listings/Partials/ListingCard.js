@@ -137,7 +137,7 @@ export default class ListingCard extends Component {
           </form>
         )
         login_link_area = (
-          <div style={ S('color-9b9b9b text-center') }>Already have an account? <a href={`/signin?redirect_to=${window.top.location.href}`} target="_parent">Log in</a></div>
+          <div style={ S('color-9b9b9b text-center') }>Already have an account? <a href="/signin" target="_parent">Log in</a></div>
         )
       }
       action_bubble = (
