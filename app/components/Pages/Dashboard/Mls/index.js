@@ -103,7 +103,6 @@ export default class Mls extends Component {
     this.resetViews()
     this.routeURL()
     this.checkForMobile()
-    this.checkBranding()
   }
   componentDidUpdate() {
     const data = this.props.data
@@ -141,17 +140,6 @@ export default class Mls extends Component {
         controller.search_input_map.initGoogleSearch()
       }, 500)
     }
-  }
-  checkBranding() {
-    if (!window.location.host.split('.'))
-      return
-    let subdomain = window.location.host.split('.')[0]
-    if (window.location.host.indexOf('.') === -1)
-      subdomain = 'claystapp'
-    AppDispatcher.dispatch({
-      action: 'get-branding',
-      subdomain
-    })
   }
   routeURL() {
     const data = this.props.data

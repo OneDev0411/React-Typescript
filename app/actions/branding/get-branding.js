@@ -1,6 +1,7 @@
 // actions/branding/get-branding.js
 import Brand from '../../models/Brand'
 import AppStore from '../../stores/AppStore'
+import ListingDispatcher from '../../dispatcher/ListingDispatcher'
 export default (subdomain) => {
   const params = {
     subdomain
@@ -17,6 +18,11 @@ export default (subdomain) => {
         logo_url_wide: res.data.logo_url_wide,
         office_mls_id: res.data.office_mls_id
       }
+      ListingDispatcher.dispatch({
+        action: 'get-valerts',
+        user: AppStore.data.user,
+        options: AppStore.data.listing_map.options
+      })
       AppStore.emitChange()
     }
   })
