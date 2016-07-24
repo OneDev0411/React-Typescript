@@ -8,6 +8,8 @@ export default (user, options) => {
   }
   if (user)
     params.access_token = user.access_token
+  if (AppStore.data.brand)
+    params.office = AppStore.data.brand.office_mls_id
   Listing.getValerts(params, (err, response) => {
     // Success
     if (response.status === 'success') {

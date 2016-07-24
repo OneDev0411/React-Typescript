@@ -116,7 +116,7 @@ export default class ListingMarker extends Component {
     }
     // Brand badge
     let brand_badge
-    if (listing.list_office && listing.list_office.brand) {
+    if (listing.list_office && listing.list_office.brand && !this.isFavorited(listing) && !listing.commented_by) {
       brand_badge = (
         <div style={ S(`bg-url(${listing.list_office.brand.logo_url}) w-20 h-20 bg-center bg-cover absolute l-3 t-3`) }></div>
       )

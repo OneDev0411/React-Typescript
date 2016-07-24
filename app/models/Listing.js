@@ -71,6 +71,8 @@ export default {
       options: params.options,
       access_token: params.access_token
     }
+    if (params.office)
+      request_object.office = params.office
     fetch(endpoint, {
       method: 'post',
       headers: {

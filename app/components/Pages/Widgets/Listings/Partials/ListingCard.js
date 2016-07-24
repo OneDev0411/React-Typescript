@@ -104,8 +104,11 @@ export default class ListingCard extends Component {
         }
       }
       let signup_btn_style = S('h-46 w-100p')
+      let chat_copy = 'Chat with Me'
+      if (!listing.list_agent)
+        chat_copy = 'Chat with Us'
       let button_area = (
-        <Button className={ data.submitting ? 'disabled' : '' } bsStyle="primary" style={ signup_btn_style } type="submit">{ data.submitting ? 'Submitting...' : 'Start Chat' }</Button>
+        <Button className={ data.submitting ? 'disabled' : '' } bsStyle="primary" style={ signup_btn_style } type="submit">{ data.submitting ? 'Submitting...' : chat_copy }</Button>
       )
       if (data.listing_inquiry_success_id && data.listing_inquiry_success_id === listing.id) {
         button_area = (

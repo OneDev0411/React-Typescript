@@ -14,7 +14,8 @@ export default (subdomain) => {
         primary: res.data.palette.primary_color.replace('#', ''),
         map_url: res.data.map_url,
         subdomain,
-        logo_url_wide: res.data.logo_url_wide
+        logo_url_wide: res.data.logo_url_wide,
+        office_mls_id: res.data.office_mls_id
       }
       AppStore.emitChange()
     }

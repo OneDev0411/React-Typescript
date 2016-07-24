@@ -2,7 +2,9 @@
 module.exports = (app, config) => {
   app.post('/api/listings/valerts',(req, res) => {
     const api_url = config.api.url
-    const endpoint = api_url + '/valerts'
+    let endpoint = api_url + '/valerts'
+    if (req.body.office)
+      endpoint = endpoint + '?order_by=office,status&office=' + req.body.office
     const access_token = req.body.access_token
     const options = req.body.options
     const headers = {  
