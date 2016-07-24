@@ -114,10 +114,26 @@ export default class ListingMarker extends Component {
       }
       social_badge = this.getSocialBadge(listing)
     }
+    // Brand badge
+    let brand_badge
+    if (listing.list_office && listing.list_office.brand) {
+      brand_badge = (
+        <div style={ S(`bg-url(${listing.list_office.brand.logo_url}) w-20 h-20 bg-center bg-cover absolute l-3 t-3 z-100`) }></div>
+      )
+      marker_style = {
+        ...marker_style,
+        ...S('w-95')
+      }
+      status_style = {
+        ...status_style,
+        ...S('l-30')
+      }
+    }
     if (listing_map && listing_map.listings_viewed && listing_map.listings_viewed.indexOf(listing.id) !== -1)
       viewed_class = ' viewed'
     let listing_marker = (
       <div className={ 'map__listing-marker' + active_class + viewed_class } style={ marker_style }>
+        { brand_badge }
         { social_badge }
         <div style={ status_style }></div>
         <div style={ S('absolute r-10 t-5') }>${ price_small }</div>
