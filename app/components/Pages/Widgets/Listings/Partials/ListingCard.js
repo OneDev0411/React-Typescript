@@ -173,7 +173,7 @@ export default class ListingCard extends Component {
     let agent_image_area
     if (listing.list_agent) {
       let avatar = (
-        <div style={ S(`bg-url(${data.brand.logo_url}) w-50 h-50 bg-center bg-cover br-100`) }></div>
+        <div style={ S(`bg-url(${data.brand.default_avatar}) w-50 h-50 bg-center bg-cover br-100`) }></div>
       )
       const profile_image_url = listing.list_agent.profile_image_url
       if (profile_image_url) {

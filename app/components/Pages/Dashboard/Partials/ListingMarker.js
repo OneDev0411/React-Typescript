@@ -118,11 +118,11 @@ export default class ListingMarker extends Component {
     let brand_badge
     if (listing.list_office && listing.list_office.brand && !this.isFavorited(listing) && !listing.commented_by) {
       brand_badge = (
-        <div style={ S(`bg-url(${listing.list_office.brand.logo_url}) w-20 h-20 bg-center bg-cover absolute l-3 t-3`) }></div>
+        <div style={ S(`bg-url(${listing.list_office.brand.default_avatar}) w-21 h-21 bg-center bg-cover absolute l-2 t-2`) }></div>
       )
       marker_style = {
         ...marker_style,
-        ...S('w-95')
+        ...S('w-95 z-100')
       }
       status_style = {
         ...status_style,

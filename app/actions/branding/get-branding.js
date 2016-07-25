@@ -16,7 +16,8 @@ export default (subdomain) => {
         map_url: res.data.map_url,
         subdomain,
         logo_url_wide: res.data.logo_url_wide,
-        office_mls_id: res.data.office_mls_id
+        office_mls_id: res.data.office_mls_id,
+        default_avatar: res.data.default_avatar
       }
       if (AppStore.data.listing_map) {
         setTimeout(() => {
