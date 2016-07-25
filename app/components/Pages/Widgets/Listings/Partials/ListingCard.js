@@ -84,9 +84,12 @@ export default class ListingCard extends Component {
         </div>
       )
       if (data.signup_tooltip.action === 'listing_inquiry') {
+        let chat_copy = 'Chat with Me'
+        if (!listing.list_agent)
+          chat_copy = 'Chat with Us'
         signup_title = (
           <div>
-            Chat with me on <span style={ S('color-2196f3') }>Rechat</span><span style={ S('color-2196f3 font-14 relative t-12n') }>TM</span>
+            { chat_copy } on <span style={ S('color-2196f3') }>Rechat</span><span style={ S('color-2196f3 font-14 relative t-12n') }>TM</span>
           </div>
         )
         signup_message = (
@@ -104,11 +107,8 @@ export default class ListingCard extends Component {
         }
       }
       let signup_btn_style = S('h-46 w-100p')
-      let chat_copy = 'Chat with Me'
-      if (!listing.list_agent)
-        chat_copy = 'Chat with Us'
       let button_area = (
-        <Button className={ data.submitting ? 'disabled' : '' } bsStyle="primary" style={ signup_btn_style } type="submit">{ data.submitting ? 'Submitting...' : chat_copy }</Button>
+        <Button className={ data.submitting ? 'disabled' : '' } bsStyle="primary" style={ signup_btn_style } type="submit">{ data.submitting ? 'Submitting...' : 'Start Chat' }</Button>
       )
       if (data.listing_inquiry_success_id && data.listing_inquiry_success_id === listing.id) {
         button_area = (
@@ -140,7 +140,7 @@ export default class ListingCard extends Component {
           </form>
         )
         login_link_area = (
-          <div style={ S('color-9b9b9b text-center') }>Already have an account? <a href="/signin" target="_parent">Log in</a></div>
+          <div style={ S('color-9b9b9b text-center') }>Already have an account? <span style={ S('pointer') } className="text-primary" onClick={ this.props.handleLoginClick.bind(this, listing.id) }>Log in</span></div>
         )
       }
       action_bubble = (
@@ -234,5 +234,6 @@ ListingCard.propTypes = {
   handleListingInquirySubmit: React.PropTypes.func,
   handleCloseSignupForm: React.PropTypes.func,
   handleListingClick: React.PropTypes.func,
-  handleAgentClick: React.PropTypes.func
+  handleAgentClick: React.PropTypes.func,
+  handleLoginClick: React.PropTypes.func
 }

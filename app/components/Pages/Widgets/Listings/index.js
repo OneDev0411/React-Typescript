@@ -195,6 +195,10 @@ export default class Listings extends Component {
     }
     AppStore.emitChange()
   }
+  handleLoginClick(listing_id) {
+    const data = this.props.data
+    window.top.location.href = 'https://' + data.brand.subdomain + '.rechat.com/signin?redirect_to=dashboard/mls/' + listing_id
+  }
   render() {
     // Data
     const data = this.props.data
@@ -218,6 +222,7 @@ export default class Listings extends Component {
           handleListingClick={ this.handleListingClick }
           handleAgentClick={ this.handleAgentClick }
           handleListingInquirySubmit={ this.handleListingInquirySubmit }
+          handleLoginClick={ this.handleLoginClick }
         />
       )
     })
