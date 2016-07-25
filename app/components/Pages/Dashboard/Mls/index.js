@@ -103,6 +103,19 @@ export default class Mls extends Component {
     this.resetViews()
     this.routeURL()
     this.checkForMobile()
+    this.checkForBranding()
+  }
+  checkForBranding() {
+    const data = AppStore.data
+    if (window.location.host.indexOf('.') !== -1 && !data.brand) {
+      const subdomain = window.location.host.split('.')[0]
+      if (!subdomain)
+        return
+      AppDispatcher.dispatch({
+        action: 'get-branding',
+        subdomain
+      })
+    }
   }
   componentDidUpdate() {
     const data = this.props.data
