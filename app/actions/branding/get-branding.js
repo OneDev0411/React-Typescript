@@ -18,11 +18,15 @@ export default (subdomain) => {
         logo_url_wide: res.data.logo_url_wide,
         office_mls_id: res.data.office_mls_id
       }
-      ListingDispatcher.dispatch({
-        action: 'get-valerts',
-        user: AppStore.data.user,
-        options: AppStore.data.listing_map.options
-      })
+      if (AppStore.data.listing_map) {
+        setTimeout(() => {
+          ListingDispatcher.dispatch({
+            action: 'get-valerts',
+            user: AppStore.data.user,
+            options: AppStore.data.listing_map.options
+          })
+        }, 500)
+      }
       AppStore.emitChange()
     }
   })
