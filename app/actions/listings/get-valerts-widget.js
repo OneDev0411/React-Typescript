@@ -26,7 +26,8 @@ export default (user, options) => {
         return parseFloat(a.price) - parseFloat(b.price)
       })
       AppStore.data.widget.listings.reverse()
-    }
+    } else
+      AppStore.data.widget.listings = _.shuffle(AppStore.data.widget.listings)
     delete AppStore.data.widget.is_loading
     delete AppStore.data.widget.is_loading_listings
     AppStore.emitChange()
