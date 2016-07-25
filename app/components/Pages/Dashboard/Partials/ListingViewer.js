@@ -278,8 +278,8 @@ export default class ListingViewer extends Component {
       main_content = (
         <div style={ S('bg-fff') }>
           <div style={ S('p-0 relative') }>
-            { listing_images }
-            { listing_images_cached }
+            { listing.gallery_image_urls && listing.gallery_image_urls.length ? listing_images : '' }
+            { listing.gallery_image_urls && listing.gallery_image_urls.length ? listing_images_cached : '' }
             <div className="clearfix"></div>
           </div>
           <div style={ S('pl-40 pr-40 relative') }>
