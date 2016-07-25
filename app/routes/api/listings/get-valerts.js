@@ -3,10 +3,14 @@ module.exports = (app, config) => {
   app.post('/api/listings/valerts',(req, res) => {
     const api_url = config.api.url
     let endpoint = api_url + '/valerts'
-    if (req.body.office)
-      endpoint = endpoint + '?order_by=office,status&office=' + req.body.office
     const access_token = req.body.access_token
     const options = req.body.options
+    // From map widget
+    if (req.body.office && !options.list_offices)
+      endpoint = endpoint + '?order_by=office,status&office=' + req.body.office
+    // From listing widget
+    if (options.list_offices && options.list_offices.length && options.listing_statuses[0] === 'Sold')
+      endpoint = endpoint + '?order_by=price'
     const headers = {  
       'Content-Type': 'application/json',
       'x-real-agent': req.headers['user-agent'],
