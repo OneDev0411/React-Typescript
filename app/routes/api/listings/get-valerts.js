@@ -11,6 +11,9 @@ module.exports = (app, config) => {
     // From listing widget
     if (options.list_offices && options.list_offices.length && options.listing_statuses[0] === 'Sold')
       endpoint = endpoint + '?order_by=price'
+    // Offset
+    if (req.body.offset)
+      endpoint = endpoint + '&limit=75&offset=' + req.body.offset
     const headers = {  
       'Content-Type': 'application/json',
       'x-real-agent': req.headers['user-agent'],

@@ -30,10 +30,13 @@ export default class Listings extends Component {
     const user = data.user
     // Set user
     AppStore.data.user = user
-    AppStore.emitChange()
     const location = data.location
     const brokerage = location.query.brokerage
     const options = this.initOptions(brokerage)
+    AppStore.data.widget = {
+      options
+    }
+    AppStore.emitChange()
     ListingDispatcher.dispatch({
       action: 'get-valerts-widget',
       user,
@@ -47,20 +50,29 @@ export default class Listings extends Component {
     })
   }
   listenToScroll() {
-    // console.log('listen')
-    // window.onscroll = () => {
-    //   const scroll_position = window.innerHeight + document.body.scrollTop
-    //   // Within 100 of bottom
-    //   if ((scroll_position + 100) > document.body.scrollHeight)
-    //     this.triggerNextPage()
-    // }
+    window.onscroll = () => {
+      const scroll_position = window.innerHeight + document.body.scrollTop
+      // Within 100 of bottom
+      if ((scroll_position + 100) > document.body.scrollHeight) {
+        if (AppStore.data.widget.loaded_all)
+          return
+        if (AppStore.data.widget.options.listing_statuses[0] !== 'Sold')
+          return
+        if (AppStore.data.widget.is_loading_listings)
+          return
+        if (AppStore.data.widget.is_loading)
+          return
+        this.triggerNextPage()
+      }
+    }
   }
   triggerNextPage() {
     const data = this.props.data
     const user = data.user
-    const location = data.location
-    const brokerage = location.query.brokerage
-    const options = this.initOptions(brokerage)
+    const options = data.widget.options
+    AppStore.data.widget.options = options
+    AppStore.data.widget.is_loading = true
+    AppStore.emitChange()
     ListingDispatcher.dispatch({
       action: 'page-listings-widget',
       user,
@@ -99,9 +111,7 @@ export default class Listings extends Component {
   handleButtonClick(type) {
     const data = this.props.data
     const user = data.user
-    const location = data.location
-    const brokerage = location.query.brokerage
-    const options = this.initOptions(brokerage)
+    const options = data.widget.options
     AppStore.data.widget.is_loading_listings = true
     if (type === 'sold') {
       options.listing_statuses = ['Sold']
@@ -111,6 +121,7 @@ export default class Listings extends Component {
       delete AppStore.data.widget.is_showing_sold
     }
     delete AppStore.data.signup_tooltip
+    AppStore.data.widget.options = options
     AppStore.emitChange()
     ListingDispatcher.dispatch({
       action: 'get-valerts-widget',
@@ -233,24 +244,27 @@ export default class Listings extends Component {
       )
     }
     const listings = widget.listings
-    let listings_area = listings.map(listing => {
-      return (
-        <ListingCard
-          handleEmailSubmit={ this.handleEmailSubmit }
-          key={ listing.id }
-          data={ data }
-          listing={ listing }
-          handleCloseSignupForm={ this.handleCloseSignupForm }
-          handleListingClick={ this.handleListingClick }
-          handleAgentClick={ this.handleAgentClick }
-          handleListingInquirySubmit={ this.handleListingInquirySubmit }
-          handleLoginClick={ this.handleLoginClick }
-          showIntercom={ this.showIntercom }
-          resend={ this.resend }
-          hideModal={ this.hideModal }
-        />
-      )
-    })
+    let listings_area
+    if (listings) {
+      listings_area = listings.map(listing => {
+        return (
+          <ListingCard
+            handleEmailSubmit={ this.handleEmailSubmit }
+            key={ listing.id }
+            data={ data }
+            listing={ listing }
+            handleCloseSignupForm={ this.handleCloseSignupForm }
+            handleListingClick={ this.handleListingClick }
+            handleAgentClick={ this.handleAgentClick }
+            handleListingInquirySubmit={ this.handleListingInquirySubmit }
+            handleLoginClick={ this.handleLoginClick }
+            showIntercom={ this.showIntercom }
+            resend={ this.resend }
+            hideModal={ this.hideModal }
+          />
+        )
+      })
+    }
     let view_all_button
     if (!data.location.query.all) {
       view_all_button = (
