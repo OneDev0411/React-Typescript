@@ -28,6 +28,13 @@ export default (user, options) => {
       AppStore.data.widget.listings.reverse()
     } else
       AppStore.data.widget.listings = _.shuffle(AppStore.data.widget.listings)
+    // Order actives by price
+    if (AppStore.data.location.query.order_by && AppStore.data.location.query.order_by === 'price') {
+      AppStore.data.widget.listings.sort((a, b) => {
+        return parseFloat(a.price) - parseFloat(b.price)
+      })
+      AppStore.data.widget.listings.reverse()
+    }
     delete AppStore.data.widget.is_loading
     delete AppStore.data.widget.is_loading_listings
     AppStore.emitChange()
