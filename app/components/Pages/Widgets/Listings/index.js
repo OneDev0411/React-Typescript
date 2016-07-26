@@ -9,7 +9,6 @@ import ListingCard from './Partials/ListingCard'
 import AppStore from '../../../../stores/AppStore'
 import validator from 'validator'
 import { randomString } from '../../../../utils/helpers'
-import CheckEmailModal from '../Partials/CheckEmailModal'
 export default class Listings extends Component {
   componentWillMount() {
     AppStore.data.brand = {
@@ -26,6 +25,7 @@ export default class Listings extends Component {
     })
   }
   componentDidMount() {
+    this.listenToScroll()
     const data = this.props.data
     const user = data.user
     // Set user
@@ -44,6 +44,27 @@ export default class Listings extends Component {
     ListingDispatcher.dispatch({
       action: 'get-favorites',
       user
+    })
+  }
+  listenToScroll() {
+    // console.log('listen')
+    // window.onscroll = () => {
+    //   const scroll_position = window.innerHeight + document.body.scrollTop
+    //   // Within 100 of bottom
+    //   if ((scroll_position + 100) > document.body.scrollHeight)
+    //     this.triggerNextPage()
+    // }
+  }
+  triggerNextPage() {
+    const data = this.props.data
+    const user = data.user
+    const location = data.location
+    const brokerage = location.query.brokerage
+    const options = this.initOptions(brokerage)
+    ListingDispatcher.dispatch({
+      action: 'page-listings-widget',
+      user,
+      options
     })
   }
   initOptions(brokerage) {
@@ -163,6 +184,7 @@ export default class Listings extends Component {
   }
   hideModal() {
     delete AppStore.data.show_signup_confirm_modal
+    delete AppStore.data.signup_tooltip
     AppStore.emitChange()
   }
   resend() {
@@ -223,6 +245,9 @@ export default class Listings extends Component {
           handleAgentClick={ this.handleAgentClick }
           handleListingInquirySubmit={ this.handleListingInquirySubmit }
           handleLoginClick={ this.handleLoginClick }
+          showIntercom={ this.showIntercom }
+          resend={ this.resend }
+          hideModal={ this.hideModal }
         />
       )
     })
@@ -263,12 +288,6 @@ export default class Listings extends Component {
         { listings_area }
         <div className="clearfix"></div>
         { links_area }
-        <CheckEmailModal
-          data={ data }
-          hideModal={ this.hideModal }
-          showIntercom={ this.showIntercom }
-          resend={ this.resend }
-        />
       </div>
     )
   }

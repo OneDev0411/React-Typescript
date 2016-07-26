@@ -105,18 +105,6 @@ export default class Mls extends Component {
     this.checkForMobile()
     this.checkForBranding()
   }
-  checkForBranding() {
-    const data = AppStore.data
-    if (window.location.host.indexOf('.') !== -1 && !data.brand) {
-      const subdomain = window.location.host.split('.')[0]
-      if (!subdomain)
-        return
-      AppDispatcher.dispatch({
-        action: 'get-branding',
-        subdomain
-      })
-    }
-  }
   componentDidUpdate() {
     const data = this.props.data
     // Init google search
@@ -146,6 +134,18 @@ export default class Mls extends Component {
   }
   componentWillUnmount() {
     controller.listing_map.hideModal()
+  }
+  checkForBranding() {
+    const data = AppStore.data
+    if (window.location.host.indexOf('.') !== -1 && !data.brand) {
+      const subdomain = window.location.host.split('.')[0]
+      if (!subdomain)
+        return
+      AppDispatcher.dispatch({
+        action: 'get-branding',
+        subdomain
+      })
+    }
   }
   initGoogleSearch() {
     if (window.google) {

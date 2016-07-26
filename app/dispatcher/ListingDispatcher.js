@@ -21,6 +21,7 @@ import getFavorites from '../actions/user/get-favorites'
 import getPagedRecs from '../actions/recs/get-paged-recs'
 import markRecsAsRead from '../actions/recs/mark-as-read'
 import getValertsWidget from '../actions/listings/get-valerts-widget'
+import pageValertsWidget from '../actions/listings/page-valerts-widget'
 const ListingDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
@@ -58,6 +59,10 @@ ListingDispatcher.register(payload => {
 
     case 'get-valerts-widget':
       getValertsWidget(payload.user, payload.options)
+      break
+
+    case 'page-listings-widget':
+      pageValertsWidget(payload.user, payload.options)
       break
 
     case 'get-listing':

@@ -193,6 +193,42 @@ export default class ListingCard extends Component {
         </div>
       )
     }
+    // Configm message
+    let resent_message_area
+    if (data.resent_email_confirmation) {
+      resent_message_area = (
+        <div style={ S('mt-20 mb-20') }>Confirmation email resent.</div>
+      )
+    }
+    let signup_confirm_message
+    if (data.show_signup_confirm_modal && data.signup_tooltip && data.signup_tooltip.listing === listing.id) {
+      signup_confirm_message = (
+        <div style={ S('absolute z-100 w-100p h-100p t-0 bg-fff') }>
+          <div onClick={ this.props.hideModal } className="close" style={ S('font-30 t-10 r-20 absolute') }>&times;</div>
+          <div className="text-center">
+            <div style={ S('mb-20 mt-20 center-block text-center' + (!data.is_mobile ? ' mt-50 w-280' : '')) }>
+              <img style={ S('h-68 mr-40 relative') } src={ data.brand ? data.brand.logo_url : '' } />
+              <i style={ S('color-929292 mr-40 font-30 relative t-5') } className="fa fa-arrow-right"></i>
+              <img style={ S('h-68') } src="/images/logo-200w.png" />
+            </div>
+            <div className="din" style={ S('color-263445 font-34 mb-10') }>Great! Please verify your email</div>
+            <div style={ S('font-17 color-9b9b9b mb-20') }>It may take a few minutes for<br /> the email to show up.</div>
+            <div style={ S('color-263445 font-21 mb-20') }>
+              { data.new_user ? data.new_user.email : '' }
+            </div>
+            <div style={ S('color-9b9b9b font-16 mb-20') }>
+              Didn’t get the email? <a onClick={ this.props.resend.bind(this) } href="#">Resend</a> or <a onClick={ this.props.showIntercom } href="#">contact support</a>.
+            </div>
+            { resent_message_area }
+          </div>
+          <div style={ S('bg-e2e6ea p-20 pt-20 absolute w-100p b-0') }>
+            <div className="text-center">
+              Powered by <a href="https://rechat.com" target="_blank" style={ S('color-2196f3 fw-500') }>Rechat<span style={ S('color-2196f3 font-9 relative t-7n fw-500') }>TM</span></a>
+            </div>
+          </div>
+        </div>
+        )
+    }
     return (
       <div key={ 'listing-viewer-' + listing.id + '-' + helpers.randomString(10) } style={ listing_card_style }>
         <FavoriteHeart
@@ -223,6 +259,7 @@ export default class ListingCard extends Component {
         </div>
         { agent_image_area }
         { action_bubble }
+        { signup_confirm_message }
       </div>
     )
   }
@@ -235,5 +272,8 @@ ListingCard.propTypes = {
   handleCloseSignupForm: React.PropTypes.func,
   handleListingClick: React.PropTypes.func,
   handleAgentClick: React.PropTypes.func,
-  handleLoginClick: React.PropTypes.func
+  handleLoginClick: React.PropTypes.func,
+  showIntercom: React.PropTypes.func,
+  resend: React.PropTypes.func,
+  hideModal: React.PropTypes.func
 }
