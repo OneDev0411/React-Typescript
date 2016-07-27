@@ -228,7 +228,7 @@ export default class Mls extends Component {
             clickable: false,
             map,
             path,
-            strokeColor: stroke_color
+            strokeColor: stroke_color,
             strokeWeight: 10
           })
         }
