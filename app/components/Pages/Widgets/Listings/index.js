@@ -8,6 +8,7 @@ import Loading from '../../../Partials/Loading'
 import ListingCard from './Partials/ListingCard'
 import AppStore from '../../../../stores/AppStore'
 import validator from 'validator'
+// import _ from 'lodash'
 import { randomString } from '../../../../utils/helpers'
 export default class Listings extends Component {
   componentWillMount() {
@@ -94,7 +95,7 @@ export default class Listings extends Component {
       property_type: 'Residential',
       vertical_distance: 2830,
       minimum_square_meters: 0,
-      listing_statuses: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract'],
+      listing_statuses: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract', 'Pending'],
       minimum_lot_square_meters: 0,
       currency: 'USD',
       maximum_year_built: 2016,
@@ -117,7 +118,7 @@ export default class Listings extends Component {
       options.listing_statuses = ['Sold']
       AppStore.data.widget.is_showing_sold = true
     } else {
-      options.listing_statuses = ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract']
+      options.listing_statuses = ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract', 'Pending']
       delete AppStore.data.widget.is_showing_sold
     }
     delete AppStore.data.signup_tooltip
