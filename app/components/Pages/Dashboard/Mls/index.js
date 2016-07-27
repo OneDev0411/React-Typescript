@@ -221,6 +221,7 @@ export default class Mls extends Component {
           const google = window.google
           const map = window.map
           const path = window.poly.getPath()
+          let stroke_color = '#3388ff'
           if (AppStore.data.brand && AppStore.data.brand.primary)
             stroke_color = '#' + AppStore.data.brand.primary
           window.poly = new google.maps.Polygon({
