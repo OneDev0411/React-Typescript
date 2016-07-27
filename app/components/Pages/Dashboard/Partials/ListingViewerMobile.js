@@ -55,7 +55,7 @@ export default class ListingViewerMobile extends Component {
     if (listing && listing.property) {
       property = listing.property
       price = listing.price
-      if (listing.close_price && user.user_type === 'Agent')
+      if (listing.close_price && user && user.user_type === 'Agent')
         price = listing.close_price
       price = helpers.numberWithCommas(price)
       year_built = property.year_built
@@ -197,7 +197,7 @@ export default class ListingViewerMobile extends Component {
         )
       }
       let asking_price_area
-      if (listing.close_price && user.user_type === 'Client') {
+      if (listing.close_price && user && user.user_type === 'Client') {
         asking_price_area = (
           <span style={ S('font-14 relative color-ccc fw-400') }>(Asking price)</span>
         )
