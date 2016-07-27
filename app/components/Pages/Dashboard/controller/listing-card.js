@@ -4,6 +4,7 @@ import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import _ from 'lodash'
 const controller = {
   handleNotLoggedIn(listing) {
+    delete AppStore.data.show_signup_confirm_modal
     AppStore.data.signup_tooltip = {
       action: 'favorite_listing',
       listing: listing.id,
