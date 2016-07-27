@@ -10,7 +10,7 @@ const controller = {
     }
     let zoom = 13
     const options = {
-      maximum_price: 900000001,
+      maximum_price: 9.22337203685478e+18,
       limit: '75',
       maximum_lot_square_meters: 100000000,
       minimum_bathrooms: 1,
