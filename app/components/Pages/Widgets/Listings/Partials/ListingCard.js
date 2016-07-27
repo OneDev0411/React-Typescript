@@ -224,7 +224,7 @@ export default class ListingCard extends Component {
             </div>
             { user_already_signed_up_message }
             <div style={ S('color-9b9b9b font-16 mb-20') }>
-              Didn’t get the email? <a onClick={ this.props.resend.bind(this) } href="#">Resend</a> or <a onClick={ this.props.showIntercom } href="#">contact support</a>.
+              Didn’t get the email? <a onClick={ this.props.resend.bind(this) } href="#">Resend</a> or <a href="mailto:support@rechat.com">contact support</a>.
             </div>
             { resent_message_area }
           </div>
@@ -247,6 +247,9 @@ export default class ListingCard extends Component {
               <img style={ S('h-68') } src="/images/logo-200w.png" />
             </div>
             <div style={ S('color-9b9b9b text-center mb-20 font-21') }>This email address is already in use.</div>
+            <div style={ S('color-9b9b9b font-16 mb-20') }>
+              <a href="mailto:support@rechat.com">Contact support</a>.
+            </div>
             <div style={ S('color-9b9b9b text-center') }>
               <span style={ S('pointer') } className="text-primary btn btn-primary" onClick={ this.props.handleLoginClick.bind(this, listing.id) }>Log in</span>
             </div>
@@ -270,6 +273,9 @@ export default class ListingCard extends Component {
               <img style={ S('h-68') } src="/images/logo-200w.png" />
             </div>
             <div style={ S('color-9b9b9b text-center mb-20 font-21') }>There was an error with this request.</div>
+            <div style={ S('color-9b9b9b font-16 mb-20') }>
+              <a href="mailto:support@rechat.com">Contact support</a>.
+            </div>
             <div style={ S('color-9b9b9b text-center') }>
               <span style={ S('pointer') } className="text-primary btn btn-primary" onClick={ this.props.handleLoginClick.bind(this, listing.id) }>Log in</span>
             </div>
