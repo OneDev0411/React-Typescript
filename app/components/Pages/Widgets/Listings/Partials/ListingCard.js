@@ -200,6 +200,12 @@ export default class ListingCard extends Component {
         <div style={ S('mt-20 mb-20') }>Confirmation email resent.</div>
       )
     }
+    let user_already_signed_up_message
+    if (data.new_user && data.new_user.type === 'user_reference') {
+      user_already_signed_up_message = (
+        <div style={ S('color-9b9b9b font-17 mb-20') }>This email has already signed up.</div>
+      )
+    }
     let signup_confirm_message
     if (data.show_signup_confirm_modal && data.signup_tooltip && data.signup_tooltip.listing === listing.id) {
       signup_confirm_message = (
@@ -216,6 +222,7 @@ export default class ListingCard extends Component {
             <div style={ S('color-263445 font-21 mb-20') }>
               { data.new_user ? data.new_user.email : '' }
             </div>
+            { user_already_signed_up_message }
             <div style={ S('color-9b9b9b font-16 mb-20') }>
               Didn’t get the email? <a onClick={ this.props.resend.bind(this) } href="#">Resend</a> or <a onClick={ this.props.showIntercom } href="#">contact support</a>.
             </div>
@@ -228,6 +235,29 @@ export default class ListingCard extends Component {
           </div>
         </div>
         )
+    }
+    if (data.errors && data.errors.type === 'email-in-use' && data.signup_tooltip.listing === listing.id) {
+      signup_confirm_message = (
+        <div style={ S('absolute z-100 w-100p h-100p t-0 bg-fff') }>
+          <div onClick={ this.props.hideModal } className="close" style={ S('font-30 t-10 r-20 absolute') }>&times;</div>
+          <div className="text-center">
+            <div style={ S('mb-20 mt-20 center-block text-center' + (!data.is_mobile ? ' mt-50 w-280' : '')) }>
+              <img style={ S('h-68 mr-40 relative') } src={ data.brand ? data.brand.logo_url : '' } />
+              <i style={ S('color-929292 mr-40 font-30 relative t-5') } className="fa fa-arrow-right"></i>
+              <img style={ S('h-68') } src="/images/logo-200w.png" />
+            </div>
+            <div style={ S('color-9b9b9b text-center mb-20 font-21') }>This email address is already in use.</div>
+            <div style={ S('color-9b9b9b text-center') }>
+              <span style={ S('pointer') } className="text-primary btn btn-primary" onClick={ this.props.handleLoginClick.bind(this, listing.id) }>Log in</span>
+            </div>
+          </div>
+          <div style={ S('bg-e2e6ea p-20 pt-20 absolute w-100p b-0') }>
+            <div className="text-center">
+              Powered by <a href="https://rechat.com" target="_blank" style={ S('color-2196f3 fw-500') }>Rechat<span style={ S('color-2196f3 font-9 relative t-7n fw-500') }>TM</span></a>
+            </div>
+          </div>
+        </div>
+      )
     }
     return (
       <div key={ 'listing-viewer-' + listing.id + '-' + helpers.randomString(10) } style={ listing_card_style }>

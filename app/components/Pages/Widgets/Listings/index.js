@@ -194,6 +194,7 @@ export default class Listings extends Component {
     })
   }
   hideModal() {
+    delete AppStore.data.errors
     delete AppStore.data.show_signup_confirm_modal
     delete AppStore.data.signup_tooltip
     AppStore.emitChange()
@@ -221,6 +222,7 @@ export default class Listings extends Component {
     window.open(url, '_blank')
   }
   handleAgentClick(listing) {
+    delete AppStore.data.show_signup_confirm_modal
     AppStore.data.signup_tooltip = {
       action: 'listing_inquiry',
       list_agent: listing.list_agent,
@@ -230,7 +232,8 @@ export default class Listings extends Component {
   }
   handleLoginClick(listing_id) {
     const data = this.props.data
-    window.top.location.href = 'https://' + data.brand.subdomain + '.rechat.com/signin?redirect_to=dashboard/mls/' + listing_id
+    const url = 'https://' + data.brand.subdomain + '.rechat.com/signin?redirect_to=dashboard/mls/' + listing_id
+    window.top.location.href = url
   }
   render() {
     // Data
