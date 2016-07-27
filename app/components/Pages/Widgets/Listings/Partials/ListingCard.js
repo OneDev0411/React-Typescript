@@ -259,6 +259,29 @@ export default class ListingCard extends Component {
         </div>
       )
     }
+    if (data.errors && data.errors.type === 'bad-request' && data.signup_tooltip.listing === listing.id) {
+      signup_confirm_message = (
+        <div style={ S('absolute z-100 w-100p h-100p t-0 bg-fff') }>
+          <div onClick={ this.props.hideModal } className="close" style={ S('font-30 t-10 r-20 absolute') }>&times;</div>
+          <div className="text-center">
+            <div style={ S('mb-20 mt-20 center-block text-center' + (!data.is_mobile ? ' mt-50 w-280' : '')) }>
+              <img style={ S('h-68 mr-40 relative') } src={ data.brand ? data.brand.logo_url : '' } />
+              <i style={ S('color-929292 mr-40 font-30 relative t-5') } className="fa fa-arrow-right"></i>
+              <img style={ S('h-68') } src="/images/logo-200w.png" />
+            </div>
+            <div style={ S('color-9b9b9b text-center mb-20 font-21') }>There was an error with this request.</div>
+            <div style={ S('color-9b9b9b text-center') }>
+              <span style={ S('pointer') } className="text-primary btn btn-primary" onClick={ this.props.handleLoginClick.bind(this, listing.id) }>Log in</span>
+            </div>
+          </div>
+          <div style={ S('bg-e2e6ea p-20 pt-20 absolute w-100p b-0') }>
+            <div className="text-center">
+              Powered by <a href="https://rechat.com" target="_blank" style={ S('color-2196f3 fw-500') }>Rechat<span style={ S('color-2196f3 font-9 relative t-7n fw-500') }>TM</span></a>
+            </div>
+          </div>
+        </div>
+      )
+    }
     return (
       <div key={ 'listing-viewer-' + listing.id + '-' + helpers.randomString(10) } style={ listing_card_style }>
         <FavoriteHeart
