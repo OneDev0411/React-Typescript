@@ -570,14 +570,17 @@ export default class ListingViewer extends Component {
     }
     let right_area
     if (user) {
+      let login_btn_color = '006aff'
+      if (data.brand && data.brand.primary)
+        login_btn_color = data.brand.primary
       right_area = (
         <div style={ nav_bar_style }>
-          <div style={ S('pull-right relative r-110 t-9n') }>
+          <div style={ S('pull-right relative r-110 t-14n') }>
             <FavoriteHeart
               listing={ listing }
             />
           </div>
-          <Button onClick={ this.props.showShareListingModal.bind(this) } style={ S('absolute r-20 t-15') } bsStyle="primary" type="button">
+          <Button onClick={ this.props.showShareListingModal.bind(this) } style={ S(`absolute color-fff r-20 t-15 bg-${login_btn_color} border-1-solid-${login_btn_color}`) } type="button">
             Share
             &nbsp;&nbsp;<i className="fa fa-share"></i>
           </Button>
@@ -590,7 +593,9 @@ export default class ListingViewer extends Component {
         Rechat
       </a>
     )
+    let login_btn_color = 'a1bde4'
     if (data.brand && data.brand.logo_url_wide) {
+      login_btn_color = data.brand.primary
       const host = 'https://' + window.location.host
       brand_logo = (
         <a href={ host }>
@@ -605,7 +610,7 @@ export default class ListingViewer extends Component {
             { brand_logo }
           </div>
           <div style={ S('pull-right p-16') }>
-            <a style={ S('mr-15 bg-a1bde4 border-1-solid-a1bde4') } className="btn btn-primary" href="/signin">Log in</a>
+            <a style={ S(`mr-15 bg-${login_btn_color} border-1-solid-${login_btn_color}`) } className="btn btn-primary" href="/signin">Log in</a>
             { /* <a className="btn btn-primary" href="/signup">Sign up</a> */ }
           </div>
         </div>

@@ -108,7 +108,7 @@ export default class Mls extends Component {
   componentDidUpdate() {
     const data = this.props.data
     // Init google search
-    if (window.google && !data.google_search_is_loaded) {
+    if (window.google && !data.google_search_is_loaded && document.getElementById('search_input')) {
       controller.search_input_map.initGoogleSearch()
       AppStore.data.google_search_is_loaded = true
       AppStore.emitChange()
