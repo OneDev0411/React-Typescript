@@ -459,14 +459,17 @@ export default class ListingViewerMobile extends Component {
     }
     let right_area
     if (user) {
+      let login_btn_color = '006aff'
+      if (data.brand && data.brand.primary)
+        login_btn_color = data.brand.primary
       right_area = (
         <div style={ nav_bar_style }>
-          <div style={ S('pull-right relative r-110 t-9n') }>
+          <div style={ S('pull-right relative r-110 t-14n') }>
             <FavoriteHeart
               listing={ listing }
             />
           </div>
-          <Button onClick={ this.props.showShareListingModal.bind(this) } style={ S('absolute r-20 t-15') } bsStyle="primary" type="button">
+          <Button onClick={ this.props.showShareListingModal.bind(this) } style={ S(`absolute r-20 t-15 bg-${login_btn_color} border-1-solid-${login_btn_color}`) } bsStyle="primary" type="button">
             Share
             &nbsp;&nbsp;<i className="fa fa-share"></i>
           </Button>
@@ -488,13 +491,16 @@ export default class ListingViewerMobile extends Component {
       )
     }
     if (!user) {
+      let login_btn_color = '006aff'
+      if (data.brand && data.brand.primary)
+        login_btn_color = data.brand.primary
       join_area = (
         <div style={ S('h-70') }>
           <div style={ S('pull-left p-16') }>
             { brand_logo }
           </div>
           <div style={ S('pull-right p-16') }>
-            <a style={ S('mr-15 bg-a1bde4 border-1-solid-a1bde4') } className="btn btn-primary" href="/signin">Log in</a>
+            <a style={ S(`color-fff mr-15 bg-${login_btn_color} border-1-solid-${login_btn_color}`) } className="btn" href={ '/signin?redirect_to=/dashboard/mls/' + listing.id }>Log in</a>
             { /* <a className="btn btn-primary" href="/signup">Sign up</a> */ }
           </div>
         </div>
