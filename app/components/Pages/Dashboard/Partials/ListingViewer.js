@@ -610,7 +610,7 @@ export default class ListingViewer extends Component {
             { brand_logo }
           </div>
           <div style={ S('pull-right p-16') }>
-            <a style={ S(`mr-15 bg-${login_btn_color} border-1-solid-${login_btn_color}`) } className="btn btn-primary" href="/signin">Log in</a>
+            <a style={ S(`mr-15 bg-${login_btn_color} border-1-solid-${login_btn_color}`) } className="btn btn-primary" href={ '/signin?redirect_to=/dashboard/mls/' + listing.id }>Log in</a>
             { /* <a className="btn btn-primary" href="/signup">Sign up</a> */ }
           </div>
         </div>
