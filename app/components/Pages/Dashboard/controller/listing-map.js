@@ -20,7 +20,7 @@ const controller = {
         latitude: 32.7766642
       },
       horizontal_distance: 2830,
-      property_type: 'Residential',
+      property_types: ['Residential'],
       vertical_distance: 2830,
       minimum_square_meters: 0,
       listing_statuses: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract'],

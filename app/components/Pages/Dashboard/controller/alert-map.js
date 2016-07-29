@@ -43,7 +43,7 @@ const controller = {
         latitude: lat
       },
       horizontal_distance: 2830,
-      property_type: 'Residential',
+      property_types: ['Residential'],
       vertical_distance: 2830,
       minimum_square_meters: alert.minimum_square_meters,
       listing_statuses: alert.listing_statuses,
