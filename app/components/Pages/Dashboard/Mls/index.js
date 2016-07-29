@@ -350,6 +350,10 @@ export default class Mls extends Component {
       redirect_to: ''
     })
   }
+  hideFilterErrorModal() {
+    delete AppStore.data.show_filter_error_modal
+    AppStore.emitChange()
+  }
   render() {
     const data = this.props.data
     const user = data.user
@@ -944,6 +948,13 @@ export default class Mls extends Component {
           showIntercom={ this.showIntercom }
           resend={ this.resend }
         />
+        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_filter_error_modal } onHide={ this.hideFilterErrorModal }>
+          <Modal.Body style={ S('text-center p-50') }>
+            <div className="close" onClick={ this.hideFilterErrorModal } style={ S('absolute t-15 r-15 font-26') }>&times;</div>
+            <div style={ S('font-22 color-9b9b9b mb-30') }>You must select at least one listing status</div>
+            <Button bsStyle="primary" onClick={ this.hideFilterErrorModal }>Ok</Button>
+          </Modal.Body>
+        </Modal>
       </div>
     )
   }
