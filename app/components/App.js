@@ -190,7 +190,7 @@ export default class App extends Component {
     socket.on('Users.States', response => {
       const user_states = response
       const users_online = user_states.filter(user_state => {
-        if (user_state.status === 'Online' || user_state.status === 'Background')
+        if (user_state.state === 'Online' || user_state.state === 'Background')
           return true
       })
       const user_ids = _.pluck(users_online, 'user_id')
