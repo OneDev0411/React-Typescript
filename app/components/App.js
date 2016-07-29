@@ -187,14 +187,27 @@ export default class App extends Component {
       delete AppStore.data.is_typing
       AppStore.emitChange()
     })
-    socket.on('Users.Online', response => {
-      AppStore.data.users_online = response
+    socket.on('Users.States', response => {
+      const user_states = response
+      const users_online = user_states.filter(user_state => {
+        if (user_state.state === 'Online' || user_state.state === 'Background')
+          return true
+      })
+      const user_ids = _.pluck(users_online, 'user_id')
+      AppStore.data.users_online = user_ids
       AppStore.emitChange()
     })
-    socket.on('User.Online', response => {
+    socket.on('User.State', (state, user_id) => {
       if (!AppStore.data.users_online)
         AppStore.data.users_online = []
-      AppStore.data.users_online.push(response)
+      if (state === 'Online' || state === 'Background')
+        AppStore.data.users_online.push(user_id)
+      if (state === 'Offline') {
+        AppStore.data.users_online.filter(id => {
+          if (user_id !== id)
+            return true
+        })
+      }
       AppStore.emitChange()
     })
     socket.on('User.Offline', response => {
