@@ -5,7 +5,7 @@ export default {
     if (status) {
       if (status === 'Active')
         status_color = '35b863'
-      if (status === 'Active Contingent')
+      if (status === 'Active Option Contract' || status === 'Active Contingent' || status === 'Active Kick Out' || status === 'Pending')
         status_color = 'f8b619'
       if (status === 'Expired' || status === 'Sold')
         status_color = 'db3821'
