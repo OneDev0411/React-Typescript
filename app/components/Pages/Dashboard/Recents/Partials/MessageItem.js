@@ -205,7 +205,7 @@ export default class MessageItem extends Component {
         borderBottomRightRadius: '3px'
       }
       profile_image_div = (
-        <ProfileImage data={ data } user={ author ? author : null } size={ 30 } top={ 3 }/>
+        <ProfileImage data={ data } user={ author ? author : null } />
       )
       if (!author) {
         profile_image_div = (

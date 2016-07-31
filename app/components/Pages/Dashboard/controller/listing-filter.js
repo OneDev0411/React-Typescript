@@ -109,9 +109,9 @@ const controller = {
       if (filter_options.maximum_year_built)
         options.maximum_year_built = Number(filter_options.maximum_year_built)
     }
-    // Remove all listings
+    // Listings statues not selected
     if (!options.listing_statuses.length) {
-      AppStore.data.listing_map.listings = []
+      AppStore.data.show_filter_error_modal = true
       AppStore.emitChange()
       return
     }
