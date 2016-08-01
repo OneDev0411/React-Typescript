@@ -112,6 +112,19 @@ export default class MlsMap extends Component {
     let map_id
     if (listing_map && listing_map.map_id)
       map_id = listing_map.map_id
+    // Pinpoint
+    if (map_listing_markers) {
+      const pinpoint = (
+        <div
+          style={ S('pointer mt-10') }
+          lat={ listing_map.center.lat }
+          lng={ listing_map.center.lng }
+          text={'Hello!'}
+        ><img style={ S('h-30') } src="http://www.clker.com/cliparts/0/V/t/A/W/N/google-maps-gris-hi.png"/>
+        </div>
+      )
+      map_listing_markers.push(pinpoint)
+    }
     return (
       <GoogleMap
         key={ 'map-' + map_id }
