@@ -12,7 +12,7 @@ export default (address) => {
       lat: geocode.geometry.location.lat,
       lng: geocode.geometry.location.lng
     }
-    AppStore.data.listing_map.zoom = 15
+    AppStore.data.listing_map.zoom = 16
     AppStore.emitChange()
   })
 }

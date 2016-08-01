@@ -116,6 +116,7 @@ export default class MlsMap extends Component {
     if (map_listing_markers) {
       const pinpoint = (
         <div
+          key="center-marker"
           style={ S('pointer mt-10') }
           lat={ listing_map.center.lat }
           lng={ listing_map.center.lng }
