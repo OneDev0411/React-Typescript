@@ -114,6 +114,7 @@ export default class MlsMap extends Component {
       map_id = listing_map.map_id
     // Pinpoint
     if (map_listing_markers) {
+      // TODO Need a custom map marker
       const pinpoint = (
         <div
           key="center-marker"
