@@ -23,6 +23,7 @@ import markRecsAsRead from '../actions/recs/mark-as-read'
 import getValertsWidget from '../actions/listings/get-valerts-widget'
 import pageValertsWidget from '../actions/listings/page-valerts-widget'
 import searchSchoolsMap from '../actions/schools/search-schools-map'
+import searchAreasMap from '../actions/areas/search-areas-map'
 const ListingDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
@@ -112,6 +113,10 @@ ListingDispatcher.register(payload => {
 
     case 'search-schools-map':
       searchSchoolsMap(payload.q)
+      break
+
+    case 'search-areas-map':
+      searchAreasMap(payload.parents, payload.q)
       break
 
     default:

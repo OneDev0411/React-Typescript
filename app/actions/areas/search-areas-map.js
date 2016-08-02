@@ -2,7 +2,7 @@
 import AppStore from '../../stores/AppStore'
 import Area from '../../models/Area'
 
-export default (q, parents) => {
+export default (parents, q) => {
   const params = {
     q,
     parents

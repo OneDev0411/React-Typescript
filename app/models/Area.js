@@ -7,7 +7,7 @@ export default {
   search: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/areas/search?parents=' + params.parents + 'q=' + params.q
+    const endpoint = api_host + '/api/areas/search?parents=' + params.parents + '&q=' + params.q
     fetch(endpoint)
     .then(response => {
       if (response.status >= 400) {

@@ -289,6 +289,22 @@ const controller = {
       AppStore.data.listing_map.schools_selected = []
     AppStore.data.listing_map.schools_selected = schools_selected
     AppStore.emitChange()
+  },
+  showAreasList() {
+    AppStore.data.listing_map.areas_loading = true
+    AppStore.data.listing_map.show_areas_list = true
+    AppStore.emitChange()
+    ListingDispatcher.dispatch({
+      action: 'search-areas-map',
+      parents: 0,
+      q: ''
+    })
+  },
+  changeAreasSelected(areas_selected) {
+    if (!AppStore.data.listing_map.areas_selected)
+      AppStore.data.listing_map.areas_selected = []
+    AppStore.data.listing_map.areas_selected = areas_selected
+    AppStore.emitChange()
   }
 }
 export default controller

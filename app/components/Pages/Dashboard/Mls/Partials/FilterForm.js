@@ -30,6 +30,14 @@ export default class FilterForm extends Component {
     if (DateUtils.isPastDay(day))
       this.props.handleSetSoldDate(day)
   }
+  handleAreaSelectChange(schools) {
+    this.props.changeAreasSelected(schools)
+  }
+  handleAreaInputChange() {
+    const data = this.props.data
+    if (!data.listing_map.areas)
+      this.props.showAreasList()
+  }
   handleSchoolSelectChange(schools) {
     this.props.changeSchoolsSelected(schools)
   }
@@ -108,6 +116,15 @@ export default class FilterForm extends Component {
         return {
           value: school.name,
           label: school.name
+        }
+      })
+    }
+    let area_select_options
+    if (data.listing_map && data.listing_map.show_areas_list && data.listing_map.areas) {
+      area_select_options = data.listing_map.areas.map(area => {
+        return {
+          value: area.title,
+          label: area.title + ' - ' + area.number
         }
       })
     }
@@ -346,11 +363,25 @@ export default class FilterForm extends Component {
               </div>
             </div>
             <div style={ S('p-15 relative') }>
+              <div style={ S('mb-10') }>Area</div>
+              <div style={ S('relative') }>
+                <Select
+                  name="areas"
+                  options={ area_select_options }
+                  onInputChange={ this.handleAreaInputChange.bind(this) }
+                  onOpen={ this.handleAreaInputChange.bind(this) }
+                  onChange={ this.handleAreaSelectChange.bind(this) }
+                  placeholder="Area"
+                  multi
+                  value={ data.listing_map.areas_selected }
+                />
+              </div>
+            </div>
+            <div style={ S('p-15 relative') }>
               <div style={ S('mb-10') }>Schools</div>
               <div style={ S('relative') }>
                 <Select
-                  name="form-field-name"
-                  value="one"
+                  name="schools"
                   options={ school_select_options }
                   onInputChange={ this.handleSchoolInputChange.bind(this) }
                   onChange={ this.handleSchoolSelectChange.bind(this) }
@@ -386,5 +417,7 @@ FilterForm.propTypes = {
   handleSetSoldDate: React.PropTypes.func,
   hideFilterForm: React.PropTypes.func,
   showSchoolsList: React.PropTypes.func,
-  changeSchoolsSelected: React.PropTypes.func
+  changeSchoolsSelected: React.PropTypes.func,
+  showAreasList: React.PropTypes.func,
+  changeAreasSelected: React.PropTypes.func
 }

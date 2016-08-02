@@ -905,6 +905,8 @@ export default class Mls extends Component {
           hideFilterForm={ controller.listing_filter.hideFilterForm }
           showSchoolsList={ controller.listing_filter.showSchoolsList }
           changeSchoolsSelected={ controller.listing_filter.changeSchoolsSelected }
+          showAreasList={ controller.listing_filter.showAreasList }
+          changeAreasSelected={ controller.listing_filter.changeAreasSelected }
         />
         { zoom_controls }
         { listing_map && listing_map.show_share_type_modal ? share_type_modal_area : '' }
