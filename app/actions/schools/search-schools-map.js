@@ -8,6 +8,7 @@ export default (q) => {
   }
   School.search(params, (err, res) => {
     if (res.status === 'success') {
+      delete AppStore.data.listing_map.schools_loading
       AppStore.data.listing_map.schools = res.data
       AppStore.emitChange()
     }

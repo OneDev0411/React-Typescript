@@ -276,6 +276,7 @@ const controller = {
       AppStore.emitChange()
       return
     }
+    AppStore.data.listing_map.schools_loading = true
     ListingDispatcher.dispatch({
       action: 'search-schools-map',
       q

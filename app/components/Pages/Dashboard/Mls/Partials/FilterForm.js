@@ -34,7 +34,9 @@ export default class FilterForm extends Component {
     this.props.changeSchoolsSelected(schools)
   }
   handleSchoolInputChange(value) {
-    this.props.showSchoolsList(value)
+    const data = this.props.data
+    if (!data.listing_map.schools_loading && value.length > 2)
+      this.props.showSchoolsList(value)
   }
   render() {
     const data = this.props.data
@@ -300,7 +302,7 @@ export default class FilterForm extends Component {
               <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 2) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '2' }) }>+2</Button>
               <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 3) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '3' }) }>+3</Button>
               <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 4) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '4' }) }>+4</Button>
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 5) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '5' }) }>+5</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 5) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-0 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '5' }) }>+5</Button>
             </div>
             <div style={ S('p-15') }>
               <div style={ S('mb-10') }>Square Footage</div>
