@@ -22,6 +22,7 @@ import getPagedRecs from '../actions/recs/get-paged-recs'
 import markRecsAsRead from '../actions/recs/mark-as-read'
 import getValertsWidget from '../actions/listings/get-valerts-widget'
 import pageValertsWidget from '../actions/listings/page-valerts-widget'
+import searchSchoolsMap from '../actions/schools/search-schools-map'
 const ListingDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
@@ -107,6 +108,10 @@ ListingDispatcher.register(payload => {
 
     case 'mark-recs-as-read':
       markRecsAsRead(payload.user, payload.recommendations)
+      break
+
+    case 'search-schools-map':
+      searchSchoolsMap(payload.q)
       break
 
     default:

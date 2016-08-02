@@ -903,6 +903,8 @@ export default class Mls extends Component {
           showSoldDatePicker={ controller.listing_filter.showSoldDatePicker }
           handleSetSoldDate={ controller.listing_filter.handleSetSoldDate }
           hideFilterForm={ controller.listing_filter.hideFilterForm }
+          showSchoolsList={ controller.listing_filter.showSchoolsList }
+          changeSchoolsSelected={ controller.listing_filter.changeSchoolsSelected }
         />
         { zoom_controls }
         { listing_map && listing_map.show_share_type_modal ? share_type_modal_area : '' }

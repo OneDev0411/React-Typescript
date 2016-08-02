@@ -83,4 +83,6 @@ module.exports = (app, config) => {
   // Recs
   require('./recs/get-actives')(app, config)
   require('./recs/mark')(app, config)
+  // Schools
+  require('./schools/search')(app, config)
 }

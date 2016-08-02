@@ -268,6 +268,26 @@ const controller = {
     delete AppStore.data.listing_map.filter_options.show_sold_date_picker
     AppStore.data.listing_map.filter_options.sold = true
     AppStore.emitChange()
+  },
+  showSchoolsList(q) {
+    if (!q) {
+      delete AppStore.data.listing_map.show_schools_list
+      delete AppStore.data.listing_map.schools
+      AppStore.emitChange()
+      return
+    }
+    ListingDispatcher.dispatch({
+      action: 'search-schools-map',
+      q
+    })
+    AppStore.data.listing_map.show_schools_list = true
+    AppStore.emitChange()
+  },
+  changeSchoolsSelected(schools_selected) {
+    if (!AppStore.data.listing_map.schools_selected)
+      AppStore.data.listing_map.schools_selected = []
+    AppStore.data.listing_map.schools_selected = schools_selected
+    AppStore.emitChange()
   }
 }
 export default controller

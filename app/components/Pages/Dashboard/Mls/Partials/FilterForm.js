@@ -5,6 +5,7 @@ import S from 'shorti'
 import Switch from 'react-ios-switch'
 import helpers from '../../../../../utils/helpers'
 import DayPicker, { DateUtils } from 'react-day-picker'
+import Select from 'react-select'
 export default class FilterForm extends Component {
   buttonIsActive(key, value) {
     const data = this.props.data
@@ -28,6 +29,12 @@ export default class FilterForm extends Component {
   handleSetSoldDate(e, day) {
     if (DateUtils.isPastDay(day))
       this.props.handleSetSoldDate(day)
+  }
+  handleSchoolSelectChange(schools) {
+    this.props.changeSchoolsSelected(schools)
+  }
+  handleSchoolInputChange(value) {
+    this.props.showSchoolsList(value)
   }
   render() {
     const data = this.props.data
@@ -92,6 +99,15 @@ export default class FilterForm extends Component {
         ...filter_form_style,
         ...S('t-0 h-100p')
       }
+    }
+    let school_select_options
+    if (data.listing_map && data.listing_map.show_schools_list && data.listing_map.schools) {
+      school_select_options = data.listing_map.schools.map(school => {
+        return {
+          value: school.name,
+          label: school.name
+        }
+      })
     }
     return (
       <div className={ filter_form_class } style={ filter_form_style }>
@@ -268,20 +284,23 @@ export default class FilterForm extends Component {
               <div style={ S('mb-10') }>
                 Bedrooms
               </div>
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 0) ? S('mr-5 bg-667688 bc-667688 color-fff') : S('mr-5 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: 0 }) }>Any</Button>
-              { /* <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 0) ? S('mr-5 bg-667688 bc-667688 color-fff') : S('mr-5 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: 0 }) }>Studio</Button> */ }
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 1) ? S('mr-5 bg-667688 bc-667688 color-fff') : S('mr-5 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '1' }) }>+1</Button>
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 2) ? S('mr-5 bg-667688 bc-667688 color-fff') : S('mr-5 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '2' }) }>+2</Button>
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 3) ? S('mr-5 bg-667688 bc-667688 color-fff') : S('mr-5 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '3' }) }>+3</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 0) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: 0 }) }>Any</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 1) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '1' }) }>+1</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 2) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '2' }) }>+2</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 3) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '3' }) }>+3</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 4) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '4' }) }>+4</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 5) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '5' }) }>+5</Button>
             </div>
             <div style={ S('p-15') }>
               <div style={ S('mb-10') }>
                 Bathrooms
               </div>
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 1) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '1' }) }>+1</Button>
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 2) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '2' }) }>+2</Button>
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 3) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '3' }) }>+3</Button>
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 4) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '4' }) }>+4</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 0) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: 0 }) }>Any</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 1) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '1' }) }>+1</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 2) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '2' }) }>+2</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 3) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '3' }) }>+3</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 4) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '4' }) }>+4</Button>
+              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 5) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '5' }) }>+5</Button>
             </div>
             <div style={ S('p-15') }>
               <div style={ S('mb-10') }>Square Footage</div>
@@ -324,7 +343,22 @@ export default class FilterForm extends Component {
                 </div>
               </div>
             </div>
-            <div style={ S('h-100') }></div>
+            <div style={ S('p-15 relative') }>
+              <div style={ S('mb-10') }>Schools</div>
+              <div style={ S('relative') }>
+                <Select
+                  name="form-field-name"
+                  value="one"
+                  options={ school_select_options }
+                  onInputChange={ this.handleSchoolInputChange.bind(this) }
+                  onChange={ this.handleSchoolSelectChange.bind(this) }
+                  placeholder="Schools"
+                  multi
+                  value={ data.listing_map.schools_selected }
+                />
+              </div>
+            </div>
+            <div style={ S('h-200') }></div>
           </div>
           <div style={ S('absolute b-0 w-300 p-15') }>
             {
@@ -348,5 +382,7 @@ FilterForm.propTypes = {
   handleFilterStatusOptionSelect: React.PropTypes.func,
   showSoldDatePicker: React.PropTypes.func,
   handleSetSoldDate: React.PropTypes.func,
-  hideFilterForm: React.PropTypes.func
+  hideFilterForm: React.PropTypes.func,
+  showSchoolsList: React.PropTypes.func,
+  changeSchoolsSelected: React.PropTypes.func
 }

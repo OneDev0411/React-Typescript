@@ -122,7 +122,7 @@ export default class MlsMap extends Component {
           lat={ listing_map.center.lat }
           lng={ listing_map.center.lng }
           text={'Hello!'}
-        ><img style={ S('h-30') } src="http://www.clker.com/cliparts/0/V/t/A/W/N/google-maps-gris-hi.png"/>
+        ><img style={ S('h-30') } src="/images/dashboard/mls/map-pin.svg"/>
         </div>
       )
       map_listing_markers.push(pinpoint)
