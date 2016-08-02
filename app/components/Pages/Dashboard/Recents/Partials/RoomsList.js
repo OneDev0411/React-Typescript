@@ -59,10 +59,20 @@ export default class RoomsList extends Component {
         if (!room.latest_message) {
           list_style = { ...list_style, ...S('h-60') }
           const time_updated = helpers.friendlyDate(room.updated_at)
+          let room_owner = room.owner
+          // One to one
+          if (!room_owner) {
+            const not_current_user = room.users.filter(room_user => {
+              if (room_user.id !== data.user.id) {
+                return true
+              }
+            })
+            room_owner = not_current_user[0]
+          }
           return (
             <li className="room-list__item" style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, room.id) }>
               <div style={ S('relative') }>
-                <ProfileImage data={ data } user={ room.owner }/>
+                <ProfileImage data={ data } user={ room_owner }/>
                 <div className="pull-left" style={ S('ml-50 w-90p') }>
                   <div className="room-list__item__title pull-left" style={ S('w-60p') }>
                     <b>{ room.title }</b>
