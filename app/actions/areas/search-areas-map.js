@@ -11,7 +11,6 @@ export default (parents, q) => {
     if (res.status === 'success') {
       delete AppStore.data.listing_map.areas_loading
       if (!parents) {
-        console.log('no parents')
         AppStore.data.listing_map.areas = res.data
         return
       }
