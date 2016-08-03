@@ -304,6 +304,7 @@
   margin-left: 5px;
   margin-top: 5px;
   vertical-align: top;
+  position: relative;
 }
 .Select--multi .Select-value-icon,
 .Select--multi .Select-value-label {
@@ -315,6 +316,7 @@
   border-top-right-radius: 2px;
   cursor: default;
   padding: 2px 5px;
+  margin-left: 20px;
 }
 .Select--multi a.Select-value-label {
   color: #007eff;
@@ -332,6 +334,8 @@
   /* Fallback color for IE 8 */
   border-right: 1px solid rgba(0, 126, 255, 0.24);
   padding: 1px 5px 3px;
+  position: absolute;
+  height: 100%;
 }
 .Select--multi .Select-value-icon:hover,
 .Select--multi .Select-value-icon:focus {

@@ -373,7 +373,7 @@ export default class FilterForm extends Component {
                   onChange={ this.handleAreaSelectChange.bind(this) }
                   placeholder="Area"
                   multi
-                  value={ data.listing_map.areas_selected }
+                  value={ data.listing_map ? data.listing_map.areas_selected : '' }
                 />
               </div>
             </div>
@@ -387,7 +387,7 @@ export default class FilterForm extends Component {
                   onChange={ this.handleSchoolSelectChange.bind(this) }
                   placeholder="Schools"
                   multi
-                  value={ data.listing_map.schools_selected }
+                  value={ data.listing_map ? data.listing_map.schools_selected : '' }
                 />
               </div>
             </div>

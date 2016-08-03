@@ -63,9 +63,8 @@ export default class RoomsList extends Component {
           // One to one
           if (!room_owner) {
             const not_current_user = room.users.filter(room_user => {
-              if (room_user.id !== data.user.id) {
+              if (room_user.id !== data.user.id)
                 return true
-              }
             })
             room_owner = not_current_user[0]
           }
