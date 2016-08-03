@@ -285,8 +285,6 @@ const controller = {
     AppStore.emitChange()
   },
   changeSchoolsSelected(schools_selected) {
-    if (!AppStore.data.listing_map.schools_selected)
-      AppStore.data.listing_map.schools_selected = []
     AppStore.data.listing_map.schools_selected = schools_selected
     AppStore.emitChange()
   },
@@ -301,9 +299,20 @@ const controller = {
     })
   },
   changeAreasSelected(areas_selected) {
-    if (!AppStore.data.listing_map.areas_selected)
-      AppStore.data.listing_map.areas_selected = []
     AppStore.data.listing_map.areas_selected = areas_selected
+    controller.getSubAreas(areas_selected)
+    AppStore.emitChange()
+  },
+  getSubAreas(areas_selected) {
+    const area_numbers = _.pluck(areas_selected, 'value')
+    ListingDispatcher.dispatch({
+      action: 'search-areas-map',
+      parents: area_numbers.join(','),
+      q: ''
+    })
+  },
+  changeSubAreasSelected(sub_areas_selected) {
+    AppStore.data.listing_map.sub_areas_selected = sub_areas_selected
     AppStore.emitChange()
   }
 }

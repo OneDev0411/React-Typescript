@@ -30,13 +30,16 @@ export default class FilterForm extends Component {
     if (DateUtils.isPastDay(day))
       this.props.handleSetSoldDate(day)
   }
-  handleAreaSelectChange(schools) {
-    this.props.changeAreasSelected(schools)
+  handleAreaSelectChange(areas) {
+    this.props.changeAreasSelected(areas)
   }
   handleAreaInputChange() {
     const data = this.props.data
     if (!data.listing_map.areas)
       this.props.showAreasList()
+  }
+  handleSubAreaSelectChange(sub_areas) {
+    this.props.changeSubAreasSelected(sub_areas)
   }
   handleSchoolSelectChange(schools) {
     this.props.changeSchoolsSelected(schools)
@@ -123,10 +126,37 @@ export default class FilterForm extends Component {
     if (data.listing_map && data.listing_map.show_areas_list && data.listing_map.areas) {
       area_select_options = data.listing_map.areas.map(area => {
         return {
-          value: area.title,
+          value: area.number,
           label: area.title + ' - ' + area.number
         }
       })
+    }
+    let sub_area_select_options
+    if (data.listing_map && data.listing_map.show_areas_list && data.listing_map.sub_areas) {
+      sub_area_select_options = data.listing_map.sub_areas.map(sub_area => {
+        return {
+          value: sub_area.number,
+          label: sub_area.title + ' - ' + sub_area.number
+        }
+      })
+    }
+    let sub_areas_area
+    if (data.listing_map && data.listing_map.areas_selected) {
+      sub_areas_area = (
+        <div style={ S('p-15 relative') }>
+          <div style={ S('mb-10') }>Sub Areas</div>
+          <div style={ S('relative') }>
+            <Select
+              name="sub_areas"
+              options={ sub_area_select_options }
+              onChange={ this.handleSubAreaSelectChange.bind(this) }
+              placeholder="Sub Area"
+              multi
+              value={ data.listing_map ? data.listing_map.sub_areas_selected : '' }
+            />
+          </div>
+        </div>
+      )
     }
     return (
       <div className={ filter_form_class } style={ filter_form_style }>
@@ -377,6 +407,7 @@ export default class FilterForm extends Component {
                 />
               </div>
             </div>
+            { sub_areas_area }
             <div style={ S('p-15 relative') }>
               <div style={ S('mb-10') }>Schools</div>
               <div style={ S('relative') }>
@@ -419,5 +450,6 @@ FilterForm.propTypes = {
   showSchoolsList: React.PropTypes.func,
   changeSchoolsSelected: React.PropTypes.func,
   showAreasList: React.PropTypes.func,
-  changeAreasSelected: React.PropTypes.func
+  changeAreasSelected: React.PropTypes.func,
+  changeSubAreasSelected: React.PropTypes.func
 }

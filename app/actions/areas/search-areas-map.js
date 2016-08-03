@@ -10,7 +10,12 @@ export default (parents, q) => {
   Area.search(params, (err, res) => {
     if (res.status === 'success') {
       delete AppStore.data.listing_map.areas_loading
-      AppStore.data.listing_map.areas = res.data
+      if (!parents) {
+        console.log('no parents')
+        AppStore.data.listing_map.areas = res.data
+        return
+      }
+      AppStore.data.listing_map.sub_areas = res.data
       AppStore.emitChange()
     }
   })
