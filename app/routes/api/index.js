@@ -85,6 +85,7 @@ module.exports = (app, config) => {
   require('./recs/mark')(app, config)
   // Schools
   require('./schools/search')(app, config)
+  require('./schools/search-districts')(app, config)
   // Areas
   require('./areas/search')(app, config)
 }

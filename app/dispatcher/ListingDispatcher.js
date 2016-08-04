@@ -22,6 +22,7 @@ import getPagedRecs from '../actions/recs/get-paged-recs'
 import markRecsAsRead from '../actions/recs/mark-as-read'
 import getValertsWidget from '../actions/listings/get-valerts-widget'
 import pageValertsWidget from '../actions/listings/page-valerts-widget'
+import searchSchoolDistrictsMap from '../actions/schools/search-school-districts-map'
 import searchSchoolsMap from '../actions/schools/search-schools-map'
 import searchAreasMap from '../actions/areas/search-areas-map'
 const ListingDispatcher = new Dispatcher()
@@ -113,6 +114,10 @@ ListingDispatcher.register(payload => {
 
     case 'search-schools-map':
       searchSchoolsMap(payload.q)
+      break
+
+    case 'search-school-districts-map':
+      searchSchoolDistrictsMap(payload.q)
       break
 
     case 'search-areas-map':

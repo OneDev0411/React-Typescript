@@ -41,6 +41,14 @@ export default class FilterForm extends Component {
   handleSubAreaSelectChange(sub_areas) {
     this.props.changeSubAreasSelected(sub_areas)
   }
+  handleSchoolDistrictsInputChange() {
+    const data = this.props.data
+    if (!data.listing_map.school_districts)
+      this.props.showSchoolDistrictsList()
+  }
+  handleSchoolDistrictsSelectChange(school_districts) {
+    this.props.changeSchoolDistrictsSelected(school_districts)
+  }
   handleSchoolSelectChange(schools) {
     this.props.changeSchoolsSelected(schools)
   }
@@ -113,6 +121,16 @@ export default class FilterForm extends Component {
         ...S('t-0 h-100p')
       }
     }
+    // Schools
+    let school_districts_select_options
+    if (data.listing_map && data.listing_map.show_school_districts_list && data.listing_map.school_districts) {
+      school_districts_select_options = data.listing_map.school_districts.map(school_district => {
+        return {
+          value: school_district.district,
+          label: school_district.district
+        }
+      })
+    }
     let school_select_options
     if (data.listing_map && data.listing_map.show_schools_list && data.listing_map.schools) {
       school_select_options = data.listing_map.schools.map(school => {
@@ -122,6 +140,7 @@ export default class FilterForm extends Component {
         }
       })
     }
+    // Areas
     let area_select_options
     if (data.listing_map && data.listing_map.show_areas_list && data.listing_map.areas) {
       area_select_options = data.listing_map.areas.map(area => {
@@ -131,6 +150,7 @@ export default class FilterForm extends Component {
         }
       })
     }
+    // Sub Areas
     let sub_area_select_options
     if (data.listing_map && data.listing_map.show_areas_list && data.listing_map.sub_areas) {
       sub_area_select_options = data.listing_map.sub_areas.map(sub_area => {
@@ -410,6 +430,21 @@ export default class FilterForm extends Component {
             </div>
             { sub_areas_area }
             <div style={ S('p-15 relative') }>
+              <div style={ S('mb-10') }>School Districts</div>
+              <div style={ S('relative') }>
+                <Select
+                  name="school_districts"
+                  options={ school_districts_select_options }
+                  onInputChange={ this.handleSchoolDistrictsInputChange.bind(this) }
+                  onOpen={ this.handleSchoolDistrictsInputChange.bind(this) }
+                  onChange={ this.handleSchoolDistrictsSelectChange.bind(this) }
+                  placeholder="School Districts"
+                  multi
+                  value={ data.listing_map ? data.listing_map.school_districts_selected : '' }
+                />
+              </div>
+            </div>
+            <div style={ S('p-15 relative') }>
               <div style={ S('mb-10') }>Schools</div>
               <div style={ S('relative') }>
                 <Select
@@ -448,6 +483,8 @@ FilterForm.propTypes = {
   showSoldDatePicker: React.PropTypes.func,
   handleSetSoldDate: React.PropTypes.func,
   hideFilterForm: React.PropTypes.func,
+  showSchoolDistrictsList: React.PropTypes.func,
+  changeSchoolDistrictsSelected: React.PropTypes.func,
   showSchoolsList: React.PropTypes.func,
   changeSchoolsSelected: React.PropTypes.func,
   showAreasList: React.PropTypes.func,

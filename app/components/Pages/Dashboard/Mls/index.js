@@ -903,6 +903,8 @@ export default class Mls extends Component {
           showSoldDatePicker={ controller.listing_filter.showSoldDatePicker }
           handleSetSoldDate={ controller.listing_filter.handleSetSoldDate }
           hideFilterForm={ controller.listing_filter.hideFilterForm }
+          showSchoolDistrictsList={ controller.listing_filter.showSchoolDistrictsList }
+          changeSchoolDistrictsSelected={ controller.listing_filter.changeSchoolDistrictsSelected }
           showSchoolsList={ controller.listing_filter.showSchoolsList }
           changeSchoolsSelected={ controller.listing_filter.changeSchoolsSelected }
           showAreasList={ controller.listing_filter.showAreasList }

@@ -126,13 +126,20 @@ const controller = {
         })
       })
     }
-    // Areas
+    // Sub Areas
     if (AppStore.data.listing_map.sub_areas_selected) {
       AppStore.data.listing_map.sub_areas_selected.forEach(sub_area => {
         const parent_area_index = _.findIndex(options.mls_areas, { area: sub_area.parent })
         if (!options.mls_areas[parent_area_index].sub_areas)
           options.mls_areas[parent_area_index].sub_areas = []
         options.mls_areas[parent_area_index].sub_areas.push(sub_area.value)
+      })
+    }
+    // School Districts
+    if (AppStore.data.listing_map.school_districts_selected) {
+      options.school_districts = []
+      AppStore.data.listing_map.school_districts_selected.forEach(school_district => {
+        options.school_districts.push(school_district.value)
       })
     }
     AppStore.data.listing_map.is_loading = true
@@ -287,6 +294,19 @@ const controller = {
     AppStore.data.listing_map.filter_options.sold_date = (day.getTime() / 1000)
     delete AppStore.data.listing_map.filter_options.show_sold_date_picker
     AppStore.data.listing_map.filter_options.sold = true
+    AppStore.emitChange()
+  },
+  showSchoolDistrictsList(q) {
+    AppStore.data.listing_map.school_districts_loading = true
+    AppStore.data.listing_map.show_school_districts_list = true
+    AppStore.emitChange()
+    ListingDispatcher.dispatch({
+      action: 'search-school-districts-map',
+      q: q ? q : ''
+    })
+  },
+  changeSchoolDistrictsSelected(school_districts_selected) {
+    AppStore.data.listing_map.school_districts_selected = school_districts_selected
     AppStore.emitChange()
   },
   showSchoolsList(q) {
