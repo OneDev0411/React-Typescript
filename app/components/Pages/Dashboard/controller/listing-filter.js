@@ -115,6 +115,26 @@ const controller = {
       AppStore.emitChange()
       return
     }
+    // Add additional filters
+    // Areas
+    delete options.mls_areas
+    if (AppStore.data.listing_map.areas_selected) {
+      options.mls_areas = []
+      AppStore.data.listing_map.areas_selected.forEach(area => {
+        options.mls_areas.push({
+          area: area.value
+        })
+      })
+    }
+    // Areas
+    if (AppStore.data.listing_map.sub_areas_selected) {
+      AppStore.data.listing_map.sub_areas_selected.forEach(sub_area => {
+        const parent_area_index = _.findIndex(options.mls_areas, { area: sub_area.parent })
+        if (!options.mls_areas[parent_area_index].sub_areas)
+          options.mls_areas[parent_area_index].sub_areas = []
+        options.mls_areas[parent_area_index].sub_areas.push(sub_area.value)
+      })
+    }
     AppStore.data.listing_map.is_loading = true
     AppStore.emitChange()
     ListingDispatcher.dispatch({
@@ -303,8 +323,8 @@ const controller = {
     controller.getSubAreas(areas_selected)
     AppStore.emitChange()
   },
-  getSubAreas(areas_selected) {
-    const area_numbers = _.pluck(areas_selected, 'value')
+  getSubAreas(sub_areas_selected) {
+    const area_numbers = _.pluck(sub_areas_selected, 'value')
     ListingDispatcher.dispatch({
       action: 'search-areas-map',
       parents: area_numbers.join(','),

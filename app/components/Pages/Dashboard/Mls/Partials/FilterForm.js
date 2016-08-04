@@ -136,7 +136,8 @@ export default class FilterForm extends Component {
       sub_area_select_options = data.listing_map.sub_areas.map(sub_area => {
         return {
           value: sub_area.number,
-          label: sub_area.title + ' - ' + sub_area.number
+          label: sub_area.title + ' - ' + sub_area.number,
+          parent: sub_area.parent
         }
       })
     }

@@ -12,6 +12,7 @@ export default (parents, q) => {
       delete AppStore.data.listing_map.areas_loading
       if (!parents) {
         AppStore.data.listing_map.areas = res.data
+        AppStore.emitChange()
         return
       }
       AppStore.data.listing_map.sub_areas = res.data
