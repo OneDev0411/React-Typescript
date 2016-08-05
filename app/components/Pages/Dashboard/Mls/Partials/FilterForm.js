@@ -67,6 +67,9 @@ export default class FilterForm extends Component {
     if (!data.listing_map.schools_loading && value.length > 2)
       this.props.showSchoolsList(value)
   }
+  handleHomeStylesSelectChange(value) {
+    this.props.changeHomeStylesSelected(value)
+  }
   render() {
     const data = this.props.data
     const filter_scroll_area_style = {
@@ -175,7 +178,7 @@ export default class FilterForm extends Component {
       area_select_options = data.listing_map.areas.map(area => {
         return {
           value: area.number,
-          label: area.title + ' - ' + area.number
+          label: area.number + ' ' + area.title
         }
       })
     }
@@ -185,7 +188,7 @@ export default class FilterForm extends Component {
       sub_area_select_options = data.listing_map.sub_areas.map(sub_area => {
         return {
           value: sub_area.number,
-          label: sub_area.title + ' - ' + sub_area.number,
+          label: sub_area.number + ' ' + sub_area.title,
           parent: sub_area.parent
         }
       })
@@ -218,6 +221,128 @@ export default class FilterForm extends Component {
         }
       })
     }
+    const home_styles_select_options = [
+      {
+        label: 'Traditional',
+        value: 'Traditional'
+      },
+      {
+        label: 'Ranch',
+        value: 'Ranch'
+      },
+      {
+        label: 'Contemporary/Modern',
+        value: 'Contemporary/Modern'
+      },
+      {
+        label: 'Other',
+        value: 'Other'
+      },
+      {
+        label: 'Ranch,Traditional',
+        value: 'Ranch,Traditional'
+      },
+      {
+        label: 'Mediterranean',
+        value: 'Mediterranean'
+      },
+      {
+        label: 'Tudor',
+        value: 'Tudor'
+      },
+      {
+        label: 'Contemporary/Modern,Traditional',
+        value: 'Contemporary/Modern,Traditional'
+      },
+      {
+        label: 'French',
+        value: 'French'
+      },
+      {
+        label: 'Colonial',
+        value: 'Colonial'
+      },
+      {
+        label: 'Craftsman',
+        value: 'Craftsman'
+      },
+      {
+        label: 'Prairie',
+        value: 'Prairie'
+      },
+      {
+        label: 'A-Frame',
+        value: 'A-Frame'
+      },
+      {
+        label: 'Early American',
+        value: 'Early American'
+      },
+      {
+        label: 'Spanish',
+        value: 'Spanish'
+      },
+      {
+        label: 'Victorian',
+        value: 'Victorian'
+      },
+      {
+        label: 'Split Level',
+        value: 'Split Level'
+      },
+      {
+        label: 'French,Traditional',
+        value: 'French,Traditional'
+      },
+      {
+        label: 'English',
+        value: 'English'
+      },
+      {
+        label: 'Split Level,Traditional',
+        value: 'Split Level,Traditional'
+      },
+      {
+        label: 'Southwestern',
+        value: 'Southwestern'
+      },
+      {
+        label: 'Mid-Century Modern',
+        value: 'Mid-Century Modern'
+      },
+      {
+        label: 'Loft',
+        value: 'Loft'
+      },
+      {
+        label: 'Other,Traditional',
+        value: 'Other,Traditional'
+      },
+      {
+        label: 'Traditional,Tudor',
+        value: 'Traditional,Tudor'
+      },
+      {
+        label: 'Mediterranean,Traditional',
+        value: 'Mediterranean,Traditional'
+      },
+      {
+        label: 'Colonial,Traditional',
+        value: 'Colonial,Traditional'
+      },
+      {
+        label: 'English,Traditional',
+        value: 'English,Traditional'
+      },
+      {
+        label: 'Craftsman,Traditional',
+        value: 'Craftsman,Traditional'
+      },
+      {
+        label: 'Studio',
+        value: 'Studio'
+      }
+    ]
     return (
       <div className={ filter_form_class } style={ filter_form_style }>
         <div className={ data.is_mobile ? 'hidden' : '' } onClick={ this.props.hideFilterForm } style={ S('r-45n t-10 absolute bg-fff w-45 h-45 z-100 text-center font-28 pointer color-929292') }>
@@ -409,6 +534,19 @@ export default class FilterForm extends Component {
                 <span style={ S(`font-10 color-${this.buttonIsActive('listing_types', 'townhouse') ? 'fff' : '929292'}`) }>Townhouse</span>
               </Button>
             </div>
+            <div style={ S('p-15 relative') }>
+              <div style={ S('mb-10') }>Style of Home</div>
+              <div style={ S('relative') }>
+                <Select
+                  name="home_styles"
+                  options={ home_styles_select_options }
+                  onChange={ this.handleHomeStylesSelectChange.bind(this) }
+                  placeholder="Home Styles"
+                  multi
+                  value={ data.listing_map ? data.listing_map.home_styles_selected : '' }
+                />
+              </div>
+            </div>
             <div style={ S('p-15 mb-40') }>
               <div style={ S('mb-10') }>Price Range</div>
               <div>
@@ -532,5 +670,6 @@ FilterForm.propTypes = {
   changeAreasSelected: React.PropTypes.func,
   changeSubAreasSelected: React.PropTypes.func,
   changeCountiesSelected: React.PropTypes.func,
-  showCountiesList: React.PropTypes.func
+  showCountiesList: React.PropTypes.func,
+  changeHomeStylesSelected: React.PropTypes.func
 }

@@ -150,6 +150,14 @@ const controller = {
         options.school_districts.push(school_district.value)
       })
     }
+    // Home Styles
+    delete options.architectural_styles
+    if (AppStore.data.listing_map.home_styles_selected) {
+      options.architectural_styles = []
+      AppStore.data.listing_map.home_styles_selected.forEach(home_styles_selected => {
+        options.architectural_styles.push(home_styles_selected.value)
+      })
+    }
     AppStore.data.listing_map.is_loading = true
     AppStore.emitChange()
     ListingDispatcher.dispatch({
@@ -374,6 +382,10 @@ const controller = {
   },
   changeCountiesSelected(counties_selected) {
     AppStore.data.listing_map.counties_selected = counties_selected
+    AppStore.emitChange()
+  },
+  changeHomeStylesSelected(home_styles_selected) {
+    AppStore.data.listing_map.home_styles_selected = home_styles_selected
     AppStore.emitChange()
   }
 }

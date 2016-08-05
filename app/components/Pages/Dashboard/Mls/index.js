@@ -912,6 +912,7 @@ export default class Mls extends Component {
           changeSubAreasSelected={ controller.listing_filter.changeSubAreasSelected }
           showCountiesList={ controller.listing_filter.showCountiesList }
           changeCountiesSelected={ controller.listing_filter.changeCountiesSelected }
+          changeHomeStylesSelected={ controller.listing_filter.changeHomeStylesSelected }
         />
         { zoom_controls }
         { listing_map && listing_map.show_share_type_modal ? share_type_modal_area : '' }
