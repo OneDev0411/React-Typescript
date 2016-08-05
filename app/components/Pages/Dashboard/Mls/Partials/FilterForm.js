@@ -221,6 +221,7 @@ export default class FilterForm extends Component {
         }
       })
     }
+    // Home styles
     const home_styles_select_options = [
       {
         label: 'Traditional',
