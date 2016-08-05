@@ -312,6 +312,22 @@ export default class FilterForm extends Component {
               </div>
               <div className="clearfix"></div>
             </div>
+            <div style={ S('p-15 relative') }>
+              <div style={ S('mb-10') }>Area</div>
+              <div style={ S('relative') }>
+                <Select
+                  name="areas"
+                  options={ area_select_options }
+                  onInputChange={ this.handleAreaInputChange.bind(this) }
+                  onOpen={ this.handleAreaInputChange.bind(this) }
+                  onChange={ this.handleAreaSelectChange.bind(this) }
+                  placeholder="Area"
+                  multi
+                  value={ data.listing_map ? data.listing_map.areas_selected : '' }
+                />
+              </div>
+            </div>
+            { sub_areas_area }
             <div style={ S('pl-15 pt-15 pb-15') }>
               <div style={ S('mb-10') }>Listing Types</div>
               <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'any') ? S('mr-10 bg-667688 bc-667688') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'any' }) }>
@@ -413,22 +429,6 @@ export default class FilterForm extends Component {
                 </div>
               </div>
             </div>
-            <div style={ S('p-15 relative') }>
-              <div style={ S('mb-10') }>Area</div>
-              <div style={ S('relative') }>
-                <Select
-                  name="areas"
-                  options={ area_select_options }
-                  onInputChange={ this.handleAreaInputChange.bind(this) }
-                  onOpen={ this.handleAreaInputChange.bind(this) }
-                  onChange={ this.handleAreaSelectChange.bind(this) }
-                  placeholder="Area"
-                  multi
-                  value={ data.listing_map ? data.listing_map.areas_selected : '' }
-                />
-              </div>
-            </div>
-            { sub_areas_area }
             <div style={ S('p-15 relative') }>
               <div style={ S('mb-10') }>School Districts</div>
               <div style={ S('relative') }>
