@@ -354,6 +354,19 @@ const controller = {
   changeSubAreasSelected(sub_areas_selected) {
     AppStore.data.listing_map.sub_areas_selected = sub_areas_selected
     AppStore.emitChange()
+  },
+  showCountiesList() {
+    AppStore.data.listing_map.counties_loading = true
+    AppStore.data.listing_map.show_counties_list = true
+    AppStore.emitChange()
+    ListingDispatcher.dispatch({
+      action: 'show-counties-map',
+      q: ''
+    })
+  },
+  changeCountiesSelected(counties_selected) {
+    AppStore.data.listing_map.counties_selected = counties_selected
+    AppStore.emitChange()
   }
 }
 export default controller

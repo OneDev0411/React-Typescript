@@ -88,4 +88,6 @@ module.exports = (app, config) => {
   require('./schools/search-districts')(app, config)
   // Areas
   require('./areas/search')(app, config)
+  // Counties
+  require('./counties/search')(app, config)
 }

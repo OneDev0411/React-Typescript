@@ -25,6 +25,7 @@ import pageValertsWidget from '../actions/listings/page-valerts-widget'
 import searchSchoolDistrictsMap from '../actions/schools/search-school-districts-map'
 import searchSchoolsMap from '../actions/schools/search-schools-map'
 import searchAreasMap from '../actions/areas/search-areas-map'
+import showCountiesMap from '../actions/counties/show-counties-map'
 const ListingDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
@@ -122,6 +123,10 @@ ListingDispatcher.register(payload => {
 
     case 'search-areas-map':
       searchAreasMap(payload.parents, payload.q)
+      break
+
+    case 'show-counties-map':
+      showCountiesMap(payload.q)
       break
 
     default:

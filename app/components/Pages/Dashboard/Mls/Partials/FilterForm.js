@@ -30,6 +30,7 @@ export default class FilterForm extends Component {
     if (DateUtils.isPastDay(day))
       this.props.handleSetSoldDate(day)
   }
+  // Areas
   handleAreaSelectChange(areas) {
     this.props.changeAreasSelected(areas)
   }
@@ -37,6 +38,15 @@ export default class FilterForm extends Component {
     const data = this.props.data
     if (!data.listing_map.areas)
       this.props.showAreasList()
+  }
+  // Counties
+  handleCountiesSelectChange(counties) {
+    this.props.changeCountiesSelected(counties)
+  }
+  handleCountiesInputChange() {
+    const data = this.props.data
+    if (!data.listing_map.counties)
+      this.props.showCountiesList()
   }
   handleSubAreaSelectChange(sub_areas) {
     this.props.changeSubAreasSelected(sub_areas)
@@ -140,6 +150,25 @@ export default class FilterForm extends Component {
         }
       })
     }
+    let schools_area
+    if (data.listing_map && data.listing_map.school_districts_selected) {
+      schools_area = (
+        <div style={ S('p-15 relative') }>
+          <div style={ S('mb-10') }>Schools</div>
+          <div style={ S('relative') }>
+            <Select
+              name="schools"
+              options={ school_select_options }
+              onInputChange={ this.handleSchoolInputChange.bind(this) }
+              onChange={ this.handleSchoolSelectChange.bind(this) }
+              placeholder="Schools"
+              multi
+              value={ data.listing_map ? data.listing_map.schools_selected : '' }
+            />
+          </div>
+        </div>
+      )
+    }
     // Areas
     let area_select_options
     if (data.listing_map && data.listing_map.show_areas_list && data.listing_map.areas) {
@@ -178,6 +207,16 @@ export default class FilterForm extends Component {
           </div>
         </div>
       )
+    }
+    // Counties
+    let counties_select_options
+    if (data.listing_map && data.listing_map.show_counties_list && data.listing_map.counties) {
+      counties_select_options = data.listing_map.counties.map(county => {
+        return {
+          value: county.title,
+          label: county.title
+        }
+      })
     }
     return (
       <div className={ filter_form_class } style={ filter_form_style }>
@@ -328,6 +367,21 @@ export default class FilterForm extends Component {
               </div>
             </div>
             { sub_areas_area }
+            <div style={ S('p-15 relative') }>
+              <div style={ S('mb-10') }>Counties</div>
+              <div style={ S('relative') }>
+                <Select
+                  name="county"
+                  options={ counties_select_options }
+                  onInputChange={ this.handleCountiesInputChange.bind(this) }
+                  onOpen={ this.handleCountiesInputChange.bind(this) }
+                  onChange={ this.handleCountiesSelectChange.bind(this) }
+                  placeholder="Counties"
+                  multi
+                  value={ data.listing_map ? data.listing_map.counties_selected : '' }
+                />
+              </div>
+            </div>
             <div style={ S('pl-15 pt-15 pb-15') }>
               <div style={ S('mb-10') }>Listing Types</div>
               <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'any') ? S('mr-10 bg-667688 bc-667688') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'any' }) }>
@@ -444,20 +498,7 @@ export default class FilterForm extends Component {
                 />
               </div>
             </div>
-            <div style={ S('p-15 relative') }>
-              <div style={ S('mb-10') }>Schools</div>
-              <div style={ S('relative') }>
-                <Select
-                  name="schools"
-                  options={ school_select_options }
-                  onInputChange={ this.handleSchoolInputChange.bind(this) }
-                  onChange={ this.handleSchoolSelectChange.bind(this) }
-                  placeholder="Schools"
-                  multi
-                  value={ data.listing_map ? data.listing_map.schools_selected : '' }
-                />
-              </div>
-            </div>
+            { schools_area }
             <div style={ S('h-200') }></div>
           </div>
           <div style={ S('absolute b-0 w-300 p-15') }>
@@ -489,5 +530,7 @@ FilterForm.propTypes = {
   changeSchoolsSelected: React.PropTypes.func,
   showAreasList: React.PropTypes.func,
   changeAreasSelected: React.PropTypes.func,
-  changeSubAreasSelected: React.PropTypes.func
+  changeSubAreasSelected: React.PropTypes.func,
+  changeCountiesSelected: React.PropTypes.func,
+  showCountiesList: React.PropTypes.func
 }
