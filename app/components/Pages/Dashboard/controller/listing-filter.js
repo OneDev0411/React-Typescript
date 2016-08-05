@@ -135,6 +135,14 @@ const controller = {
         options.mls_areas[parent_area_index].sub_areas.push(sub_area.value)
       })
     }
+    // Areas
+    delete options.counties
+    if (AppStore.data.listing_map.counties_selected) {
+      options.counties = []
+      AppStore.data.listing_map.counties_selected.forEach(county => {
+        options.counties.push(county.value)
+      })
+    }
     // School Districts
     if (AppStore.data.listing_map.school_districts_selected) {
       options.school_districts = []
