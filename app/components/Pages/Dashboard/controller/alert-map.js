@@ -29,9 +29,18 @@ const controller = {
       alert_id
     })
   },
+  getBounds(points) {
+    const google = window.google
+    const bound = new google.maps.LatLngBounds()
+    points.forEach(point => {
+      bound.extend(new google.maps.LatLng(point.latitude, point.longitude))
+    })
+    return bound.getCenter()
+  },
   showAlertOnMap(alert) {
-    const lat = alert.location.latitude
-    const lng = alert.location.longitude
+    const center_from_points = controller.getBounds(alert.points)
+    const lat = center_from_points.lat()
+    const lng = center_from_points.lng()
     const options = {
       maximum_price: alert.maximum_price,
       limit: '75',
