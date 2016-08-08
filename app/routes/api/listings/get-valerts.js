@@ -9,8 +9,11 @@ module.exports = (app, config) => {
     if (req.body.office && !options.list_offices)
       endpoint = endpoint + '?order_by=office,status&office=' + req.body.office
     // From listing widget
-    if (options.list_offices && options.list_offices.length && options.listing_statuses[0] === 'Sold')
-      endpoint = endpoint + '?order_by=price'
+    if (options.list_offices && options.list_offices.length) {
+      endpoint = endpoint + '?associations=compact_listing.list_agent'
+      if (options.listing_statuses[0] === 'Sold')
+        endpoint = endpoint + '&order_by=price'
+    }
     // Offset
     if (req.body.offset)
       endpoint = endpoint + '&limit=75&offset=' + req.body.offset
