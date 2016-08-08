@@ -193,7 +193,7 @@ export default class App extends Component {
         if (user_state.state === 'Online' || user_state.state === 'Background')
           return true
       })
-      const user_ids = _.pluck(users_online, 'user_id')
+      const user_ids = _.map(users_online, 'user_id')
       AppStore.data.users_online = user_ids
       AppStore.emitChange()
     })

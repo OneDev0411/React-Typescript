@@ -101,7 +101,7 @@ export default class RoomsList extends Component {
         }
         // List users
         const users = room.users
-        const first_names = _.pluck(users, 'first_name')
+        const first_names = _.map(users, 'first_name')
         let first_name_list = ''
         first_names.forEach((first_name, _i) => {
           first_name_list += first_name

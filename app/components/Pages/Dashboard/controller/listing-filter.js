@@ -359,7 +359,7 @@ const controller = {
     AppStore.emitChange()
   },
   getSubAreas(sub_areas_selected) {
-    const area_numbers = _.pluck(sub_areas_selected, 'value')
+    const area_numbers = _.map(sub_areas_selected, 'value')
     ListingDispatcher.dispatch({
       action: 'search-areas-map',
       parents: area_numbers.join(','),

@@ -7,7 +7,7 @@ import createContacts from './create-contacts'
 export default (user, task, contacts) => {
   let contact_ids
   let new_contacts
-  contact_ids = _.pluck(contacts, 'id')
+  contact_ids = _.map(contacts, 'id')
   // Remove placeholder ids
   contact_ids = contact_ids.filter(contact_id => {
     return typeof contact_id === 'string'

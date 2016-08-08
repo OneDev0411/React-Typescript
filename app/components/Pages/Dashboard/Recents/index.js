@@ -304,8 +304,8 @@ export default class Dashboard extends Component {
     const search_text_lower = search_rooms_input.toLowerCase().trim()
     const rooms = data.rooms
     const filtered_rooms = rooms.filter(room => {
-      const users_first_string = _.pluck(room.users, 'first_name').toString().toLowerCase()
-      const users_last_string = _.pluck(room.users, 'last_name').toString().toLowerCase()
+      const users_first_string = _.map(room.users, 'first_name').toString().toLowerCase()
+      const users_last_string = _.map(room.users, 'last_name').toString().toLowerCase()
       if (users_first_string.indexOf(search_text_lower) !== -1)
         return true
 

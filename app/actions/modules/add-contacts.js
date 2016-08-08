@@ -30,7 +30,7 @@ export default (contacts, module_type) => {
   if (module_type === 'share-task' && !AppStore.data.new_task) {
     const user = AppStore.data.user
     const task = AppStore.data.current_task
-    const current_contacts_ids = _.pluck(contacts, 'id')
+    const current_contacts_ids = _.map(contacts, 'id')
     // Add contacts to task
     TaskDispatcher.dispatch({
       action: 'add-contacts',
