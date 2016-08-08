@@ -132,6 +132,12 @@ export default class FilterForm extends Component {
         ...filter_form_style,
         ...S('t-0 h-100p')
       }
+      if (data.show_filter_form) {
+        filter_form_style = {
+          ...filter_form_style,
+          ...S('l-0')
+        }
+      }
     }
     // Schools
     let school_districts_select_options

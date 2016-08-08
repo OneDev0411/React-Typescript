@@ -3,8 +3,12 @@ import listing_util from '../../../../utils/listing'
 import _ from 'lodash'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
+import search_input_controller from './search-input-map'
 const controller = {
   hideFilterForm() {
+    setTimeout(() => {
+      search_input_controller.initGoogleSearch()
+    }, 300)
     delete AppStore.data.show_filter_form
     AppStore.emitChange()
   },
