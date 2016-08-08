@@ -339,8 +339,13 @@ const controller = {
       district: AppStore.data.listing_map.school_districts_selected[new_districts_selected - 1].value
     })
   },
-  changeSchoolsSelected(schools_selected) {
-    AppStore.data.listing_map.schools_selected = schools_selected
+  changeSchoolsSelected(school_type, schools_selected) {
+    if (school_type === 'elementary_school')
+      AppStore.data.listing_map.elementary_schools_selected = schools_selected
+    if (school_type === 'middle_school')
+      AppStore.data.listing_map.middle_schools_selected = schools_selected
+    if (school_type === 'senior_high_school')
+      AppStore.data.listing_map.high_schools_selected = schools_selected
     AppStore.emitChange()
   },
   showAreasList() {

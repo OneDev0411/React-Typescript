@@ -30,7 +30,6 @@ const controller = {
     })
   },
   showAlertOnMap(alert) {
-    console.log(alert)
     const lat = alert.location.latitude
     const lng = alert.location.longitude
     const options = {

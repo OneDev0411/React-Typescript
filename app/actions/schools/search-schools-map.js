@@ -15,7 +15,8 @@ export default (district) => {
         AppStore.data.listing_map.schools.push(...res.data)
       AppStore.data.listing_map.schools = _.uniqBy(AppStore.data.listing_map.schools, 'name')
       AppStore.data.listing_map.elementary_schools = _.filter(AppStore.data.listing_map.schools, { school_type: 'elementary_school' })
-      AppStore.data.listing_map.middle_schools = _.find(AppStore.data.listing_map.schools, { school_type: 'middle_school' })
+      AppStore.data.listing_map.middle_schools = _.filter(AppStore.data.listing_map.schools, { school_type: 'middle_school' })
+      AppStore.data.listing_map.high_schools = _.filter(AppStore.data.listing_map.schools, { school_type: 'senior_high_school' })
       AppStore.emitChange()
     }
   })

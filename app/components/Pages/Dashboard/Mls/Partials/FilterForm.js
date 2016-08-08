@@ -61,7 +61,7 @@ export default class FilterForm extends Component {
     this.props.changeSchoolDistrictsSelected(school_districts)
   }
   handleSchoolSelectChange(school_type, schools) {
-    this.props.changeSchoolsSelected(schools)
+    this.props.changeSchoolsSelected(school_type, schools)
   }
   handleSchoolInputChange() {
     this.props.showSchoolsList()
@@ -158,6 +158,24 @@ export default class FilterForm extends Component {
         }
       })
     }
+    let middle_school_select_options
+    if (data.listing_map && data.listing_map.show_schools_list && data.listing_map.middle_schools) {
+      middle_school_select_options = data.listing_map.middle_schools.map(school => {
+        return {
+          value: school.name,
+          label: school.name
+        }
+      })
+    }
+    let high_school_select_options
+    if (data.listing_map && data.listing_map.show_schools_list && data.listing_map.high_schools) {
+      high_school_select_options = data.listing_map.high_schools.map(school => {
+        return {
+          value: school.name,
+          label: school.name
+        }
+      })
+    }
     let schools_area
     if (data.listing_map && data.listing_map.school_districts_selected) {
       schools_area = (
@@ -173,6 +191,36 @@ export default class FilterForm extends Component {
                 onInputChange={ this.handleSchoolInputChange.bind(this) }
                 onChange={ this.handleSchoolSelectChange.bind(this, 'elementary_school') }
                 value={ data.listing_map ? data.listing_map.elementary_schools_selected : '' }
+                multi
+              />
+            </div>
+          </div>
+          <div style={ S('p-15 relative') }>
+            <div style={ S('mb-10') }>Middle Schools</div>
+            <div style={ S('relative') }>
+              <Select
+                name="middle_schools"
+                options={ middle_school_select_options }
+                placeholder="Middle Schools"
+                onOpen={ this.handleSchoolInputChange.bind(this) }
+                onInputChange={ this.handleSchoolInputChange.bind(this) }
+                onChange={ this.handleSchoolSelectChange.bind(this, 'middle_school') }
+                value={ data.listing_map ? data.listing_map.middle_schools_selected : '' }
+                multi
+              />
+            </div>
+          </div>
+          <div style={ S('p-15 relative') }>
+            <div style={ S('mb-10') }>High Schools</div>
+            <div style={ S('relative') }>
+              <Select
+                name="high_schools"
+                options={ high_school_select_options }
+                placeholder="High Schools"
+                onOpen={ this.handleSchoolInputChange.bind(this) }
+                onInputChange={ this.handleSchoolInputChange.bind(this) }
+                onChange={ this.handleSchoolSelectChange.bind(this, 'senior_high_school') }
+                value={ data.listing_map ? data.listing_map.high_schools_selected : '' }
                 multi
               />
             </div>
