@@ -6,7 +6,7 @@ export default (contact_id, module_type) => {
   const contacts_added = AppStore.data.contacts_added[module_type]
   const filtered_contacts = AppStore.data.filtered_contacts
   if (filtered_contacts) {
-    const contact = _.findWhere(contacts_added, { id: contact_id })
+    const contact = _.find(contacts_added, { id: contact_id })
     const contact_index = _.findIndex(filtered_contacts, { id: contact_id })
     delete contact.added
     AppStore.data.filtered_contacts[contact_index] = contact

@@ -88,7 +88,7 @@ export default class Transactions extends Component {
 
   handleClickTransaction(transaction) {
     const transaction_tabs = AppStore.data.transaction_tabs
-    if (!_.findWhere(transaction_tabs, { id: transaction.id }))
+    if (!_.find(transaction_tabs, { id: transaction.id }))
       this.addTransactionTab(transaction)
     this.viewTransaction(transaction)
   }
