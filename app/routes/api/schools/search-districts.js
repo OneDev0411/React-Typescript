@@ -3,7 +3,6 @@ module.exports = (app, config) => {
   app.get('/api/schools/districts/search',(req, res) => {
     const api_url = config.api.url
     const endpoint = api_url + '/schools/districts/search?q=' + req.query.q
-    console.log(endpoint)
     fetch(endpoint)
     .then(response => {
       if (response.status >= 400) {

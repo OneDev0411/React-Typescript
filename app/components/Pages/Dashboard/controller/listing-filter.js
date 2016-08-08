@@ -325,20 +325,15 @@ const controller = {
     AppStore.data.listing_map.school_districts_selected = school_districts_selected
     AppStore.emitChange()
   },
-  showSchoolsList(q) {
-    if (!q) {
-      delete AppStore.data.listing_map.show_schools_list
-      delete AppStore.data.listing_map.schools
-      AppStore.emitChange()
-      return
-    }
+  showSchoolsList() {
     AppStore.data.listing_map.schools_loading = true
+    AppStore.data.listing_map.show_schools_list = true
+    const new_districts_selected = AppStore.data.listing_map.school_districts_selected.length
+    AppStore.emitChange()
     ListingDispatcher.dispatch({
       action: 'search-schools-map',
-      q
+      district: AppStore.data.listing_map.school_districts_selected[new_districts_selected - 1].value
     })
-    AppStore.data.listing_map.show_schools_list = true
-    AppStore.emitChange()
   },
   changeSchoolsSelected(schools_selected) {
     AppStore.data.listing_map.schools_selected = schools_selected

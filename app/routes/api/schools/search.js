@@ -2,7 +2,7 @@
 module.exports = (app, config) => {
   app.get('/api/schools/search',(req, res) => {
     const api_url = config.api.url
-    const endpoint = api_url + '/schools/search?q=' + req.query.q
+    const endpoint = api_url + '/schools/search?district=' + req.query.district
     fetch(endpoint)
     .then(response => {
       if (response.status >= 400) {

@@ -6,6 +6,7 @@ import Switch from 'react-ios-switch'
 import helpers from '../../../../../utils/helpers'
 import DayPicker, { DateUtils } from 'react-day-picker'
 import Select from 'react-select'
+import home_styles_select_options from '../../../../../utils/home-style-data'
 export default class FilterForm extends Component {
   buttonIsActive(key, value) {
     const data = this.props.data
@@ -59,13 +60,11 @@ export default class FilterForm extends Component {
   handleSchoolDistrictsSelectChange(school_districts) {
     this.props.changeSchoolDistrictsSelected(school_districts)
   }
-  handleSchoolSelectChange(schools) {
+  handleSchoolSelectChange(school_type, schools) {
     this.props.changeSchoolsSelected(schools)
   }
-  handleSchoolInputChange(value) {
-    const data = this.props.data
-    if (!data.listing_map.schools_loading && value.length > 2)
-      this.props.showSchoolsList(value)
+  handleSchoolInputChange() {
+    this.props.showSchoolsList()
   }
   handleHomeStylesSelectChange(value) {
     this.props.changeHomeStylesSelected(value)
@@ -144,9 +143,9 @@ export default class FilterForm extends Component {
         }
       })
     }
-    let school_select_options
-    if (data.listing_map && data.listing_map.show_schools_list && data.listing_map.schools) {
-      school_select_options = data.listing_map.schools.map(school => {
+    let elementary_school_select_options
+    if (data.listing_map && data.listing_map.show_schools_list && data.listing_map.elementary_schools) {
+      elementary_school_select_options = data.listing_map.elementary_schools.map(school => {
         return {
           value: school.name,
           label: school.name
@@ -156,18 +155,21 @@ export default class FilterForm extends Component {
     let schools_area
     if (data.listing_map && data.listing_map.school_districts_selected) {
       schools_area = (
-        <div style={ S('p-15 relative') }>
-          <div style={ S('mb-10') }>Schools</div>
-          <div style={ S('relative') }>
-            <Select
-              name="schools"
-              options={ school_select_options }
-              onInputChange={ this.handleSchoolInputChange.bind(this) }
-              onChange={ this.handleSchoolSelectChange.bind(this) }
-              placeholder="Schools"
-              multi
-              value={ data.listing_map ? data.listing_map.schools_selected : '' }
-            />
+        <div>
+          <div style={ S('p-15 relative') }>
+            <div style={ S('mb-10') }>Elementary Schools</div>
+            <div style={ S('relative') }>
+              <Select
+                name="elementary_schools"
+                options={ elementary_school_select_options }
+                placeholder="Elementary Schools"
+                onOpen={ this.handleSchoolInputChange.bind(this) }
+                onInputChange={ this.handleSchoolInputChange.bind(this) }
+                onChange={ this.handleSchoolSelectChange.bind(this, 'elementary_school') }
+                value={ data.listing_map ? data.listing_map.elementary_schools_selected : '' }
+                multi
+              />
+            </div>
           </div>
         </div>
       )
@@ -221,129 +223,6 @@ export default class FilterForm extends Component {
         }
       })
     }
-    // Home styles
-    const home_styles_select_options = [
-      {
-        label: 'Traditional',
-        value: 'Traditional'
-      },
-      {
-        label: 'Ranch',
-        value: 'Ranch'
-      },
-      {
-        label: 'Contemporary/Modern',
-        value: 'Contemporary/Modern'
-      },
-      {
-        label: 'Other',
-        value: 'Other'
-      },
-      {
-        label: 'Ranch,Traditional',
-        value: 'Ranch,Traditional'
-      },
-      {
-        label: 'Mediterranean',
-        value: 'Mediterranean'
-      },
-      {
-        label: 'Tudor',
-        value: 'Tudor'
-      },
-      {
-        label: 'Contemporary/Modern,Traditional',
-        value: 'Contemporary/Modern,Traditional'
-      },
-      {
-        label: 'French',
-        value: 'French'
-      },
-      {
-        label: 'Colonial',
-        value: 'Colonial'
-      },
-      {
-        label: 'Craftsman',
-        value: 'Craftsman'
-      },
-      {
-        label: 'Prairie',
-        value: 'Prairie'
-      },
-      {
-        label: 'A-Frame',
-        value: 'A-Frame'
-      },
-      {
-        label: 'Early American',
-        value: 'Early American'
-      },
-      {
-        label: 'Spanish',
-        value: 'Spanish'
-      },
-      {
-        label: 'Victorian',
-        value: 'Victorian'
-      },
-      {
-        label: 'Split Level',
-        value: 'Split Level'
-      },
-      {
-        label: 'French,Traditional',
-        value: 'French,Traditional'
-      },
-      {
-        label: 'English',
-        value: 'English'
-      },
-      {
-        label: 'Split Level,Traditional',
-        value: 'Split Level,Traditional'
-      },
-      {
-        label: 'Southwestern',
-        value: 'Southwestern'
-      },
-      {
-        label: 'Mid-Century Modern',
-        value: 'Mid-Century Modern'
-      },
-      {
-        label: 'Loft',
-        value: 'Loft'
-      },
-      {
-        label: 'Other,Traditional',
-        value: 'Other,Traditional'
-      },
-      {
-        label: 'Traditional,Tudor',
-        value: 'Traditional,Tudor'
-      },
-      {
-        label: 'Mediterranean,Traditional',
-        value: 'Mediterranean,Traditional'
-      },
-      {
-        label: 'Colonial,Traditional',
-        value: 'Colonial,Traditional'
-      },
-      {
-        label: 'English,Traditional',
-        value: 'English,Traditional'
-      },
-      {
-        label: 'Craftsman,Traditional',
-        value: 'Craftsman,Traditional'
-      },
-      {
-        label: 'Studio',
-        value: 'Studio'
-      }
-    ]
     return (
       <div className={ filter_form_class } style={ filter_form_style }>
         <div className={ data.is_mobile ? 'hidden' : '' } onClick={ this.props.hideFilterForm } style={ S('r-45n t-10 absolute bg-fff w-45 h-45 z-100 text-center font-28 pointer color-929292') }>
