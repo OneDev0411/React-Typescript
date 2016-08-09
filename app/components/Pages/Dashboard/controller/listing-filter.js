@@ -209,7 +209,6 @@ const controller = {
         options.subdivisions.push(subdivision.value)
       })
     }
-    console.log(options)
     AppStore.data.listing_map.is_loading = true
     AppStore.emitChange()
     ListingDispatcher.dispatch({
