@@ -474,7 +474,7 @@ export default class FilterForm extends Component {
             </div>
             { sub_areas_area }
             <div style={ S('p-15 relative') }>
-              <div style={ S('mb-10') }>Counties</div>
+              <div style={ S('mb-10') }>County</div>
               <div style={ S('relative') }>
                 <Select
                   name="county"
@@ -488,32 +488,45 @@ export default class FilterForm extends Component {
                 />
               </div>
             </div>
+            <div style={ S('p-15 mb-40') }>
+              <div style={ S('mb-10') }>Price Range</div>
+              <div>
+                <div style={ S('w-50p pull-left') }>
+                  <Input onChange={ this.handleOptionChange.bind(this, 'minimum_price') } value={ filter_options && filter_options.minimum_price ? filter_options.minimum_price : '' } ref="minimum_price" type="number" placeholder="Min"/>
+                </div>
+                <div style={ S('w-50p pull-left') }>
+                  <Input onChange={ this.handleOptionChange.bind(this, 'maximum_price') } value={ filter_options && filter_options.maximum_price ? filter_options.maximum_price : '' } ref="maximum_price" type="number" placeholder="Max"/>
+                </div>
+              </div>
+            </div>
             <div style={ S('pl-15 pt-15 pb-15') }>
-              <div style={ S('mb-10') }>Listing Types</div>
-              <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'any') ? S('mr-10 bg-667688 bc-667688') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'any' }) }>
-                <div style={ S('mb-10') }>
-                  <img src={`/images/dashboard/mls/listing-types/any${this.buttonIsActive('listing_types', 'any') ? '-active' : ''}.svg`}/>
-                </div>
-                <span style={ S(`font-10 color-${this.buttonIsActive('listing_types', 'any') ? 'fff' : '929292'}`) }>Any</span>
-              </Button>
-              <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'house') ? S('mr-10 bg-667688 bc-667688') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'house' }) }>
-                <div style={ S('mb-10') }>
-                  <img src={`/images/dashboard/mls/listing-types/house${this.buttonIsActive('listing_types', 'house') ? '-active' : ''}.svg`}/>
-                </div>
-                <span style={ S(`font-10 color-${this.buttonIsActive('listing_types', 'house') ? 'fff' : '929292'}`) }>House</span>
-              </Button>
-              <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'condo') ? S('mr-10 bg-667688 bc-667688') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'condo' }) }>
-                <div style={ S('mb-10') }>
-                  <img src={`/images/dashboard/mls/listing-types/condo${this.buttonIsActive('listing_types', 'condo') ? '-active' : ''}.svg`}/>
-                </div>
-                <span style={ S(`font-10 color-${this.buttonIsActive('listing_types', 'condo') ? 'fff' : '929292'}`) }>Condo</span>
-              </Button>
-              <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'townhouse') ? S('mr-10 bg-667688 bc-667688') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'townhouse' }) }>
-                <div style={ S('mb-10') }>
-                  <img src={`/images/dashboard/mls/listing-types/townhouse${this.buttonIsActive('listing_types', 'townhouse') ? '-active' : ''}.svg`}/>
-                </div>
-                <span style={ S(`font-10 color-${this.buttonIsActive('listing_types', 'townhouse') ? 'fff' : '929292'}`) }>Townhouse</span>
-              </Button>
+              <div style={ S('mb-10') }>Property Types</div>
+              <ButtonGroup style={ S('w-100p') }>
+                <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'any') ? S('h-80 w-24p bg-667688 bc-667688') : S('h-80 w-24p bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'any' }) }>
+                  <div style={ S('mb-10') }>
+                    <img src={`/images/dashboard/mls/listing-types/any${this.buttonIsActive('listing_types', 'any') ? '-active' : ''}.svg`}/>
+                  </div>
+                  <span style={ S(`font-10 color-${this.buttonIsActive('listing_types', 'any') ? 'fff' : '929292'}`) }>Any</span>
+                </Button>
+                <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'house') ? S('h-80 w-24p bg-667688 bc-667688') : S('h-80 w-24p bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'house' }) }>
+                  <div style={ S('mb-10') }>
+                    <img src={`/images/dashboard/mls/listing-types/house${this.buttonIsActive('listing_types', 'house') ? '-active' : ''}.svg`}/>
+                  </div>
+                  <span style={ S(`font-10 color-${this.buttonIsActive('listing_types', 'house') ? 'fff' : '929292'}`) }>House</span>
+                </Button>
+                <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'condo') ? S('h-80 w-24p bg-667688 bc-667688') : S('h-80 w-24p bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'condo' }) }>
+                  <div style={ S('mb-10') }>
+                    <img src={`/images/dashboard/mls/listing-types/condo${this.buttonIsActive('listing_types', 'condo') ? '-active' : ''}.svg`}/>
+                  </div>
+                  <span style={ S(`font-10 color-${this.buttonIsActive('listing_types', 'condo') ? 'fff' : '929292'}`) }>Condo</span>
+                </Button>
+                <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'townhouse') ? S('h-80 w-24p bg-667688 bc-667688') : S('h-80 w-24p bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'townhouse' }) }>
+                  <div style={ S('mb-10') }>
+                    <img src={`/images/dashboard/mls/listing-types/townhouse${this.buttonIsActive('listing_types', 'townhouse') ? '-active' : ''}.svg`}/>
+                  </div>
+                  <span style={ S(`font-10 color-${this.buttonIsActive('listing_types', 'townhouse') ? 'fff' : '929292'}`) }>Townhouse</span>
+                </Button>
+              </ButtonGroup>
             </div>
             <div style={ S('p-15 relative') }>
               <div style={ S('mb-10') }>Style of Home</div>
@@ -526,17 +539,6 @@ export default class FilterForm extends Component {
                   multi
                   value={ data.listing_map ? data.listing_map.home_styles_selected : '' }
                 />
-              </div>
-            </div>
-            <div style={ S('p-15 mb-40') }>
-              <div style={ S('mb-10') }>Price Range</div>
-              <div>
-                <div style={ S('w-50p pull-left') }>
-                  <Input onChange={ this.handleOptionChange.bind(this, 'minimum_price') } value={ filter_options && filter_options.minimum_price ? filter_options.minimum_price : '' } ref="minimum_price" type="number" placeholder="Min"/>
-                </div>
-                <div style={ S('w-50p pull-left') }>
-                  <Input onChange={ this.handleOptionChange.bind(this, 'maximum_price') } value={ filter_options && filter_options.maximum_price ? filter_options.maximum_price : '' } ref="maximum_price" type="number" placeholder="Max"/>
-                </div>
               </div>
             </div>
             <div style={ S('p-15') }>
