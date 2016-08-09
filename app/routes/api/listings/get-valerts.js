@@ -18,8 +18,9 @@ module.exports = (app, config) => {
     if (req.body.offset)
       endpoint = endpoint + '&limit=75&offset=' + req.body.offset
     // Remove points for counties
-    if (options.counties)
+    if (options.counties || options.school_districts)
       options.points = null
+    // console.log(options)
     const headers = {  
       'Content-Type': 'application/json',
       'x-real-agent': req.headers['user-agent'],
