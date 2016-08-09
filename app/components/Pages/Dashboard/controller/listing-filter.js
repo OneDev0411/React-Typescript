@@ -88,6 +88,10 @@ const controller = {
       const minimum_bathrooms = filter_options.minimum_bathrooms
       if (minimum_bathrooms)
         options.minimum_bathrooms = minimum_bathrooms
+      // Garage
+      const minimum_parking_spaces = filter_options.minimum_parking_spaces
+      if (minimum_parking_spaces)
+        options.minimum_parking_spaces = minimum_parking_spaces
       // Pool
       const pool = filter_options.pool
       if (pool === 'either')
@@ -267,7 +271,7 @@ const controller = {
         listing_types = ['any']
       AppStore.data.listing_map.filter_options.listing_types = listing_types
     }
-    if (key === 'minimum_bedrooms' || key === 'minimum_bathrooms')
+    if (key === 'minimum_bedrooms' || key === 'minimum_bathrooms' || key === 'minimum_parking_spaces')
       AppStore.data.listing_map.filter_options[key] = Number(value)
     if (key === 'pool')
       AppStore.data.listing_map.filter_options[key] = value

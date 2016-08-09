@@ -1,6 +1,6 @@
 // Partials/FilterForm.js
 import React, { Component } from 'react'
-import { Button, Input } from 'react-bootstrap'
+import { ButtonGroup, Button, Input } from 'react-bootstrap'
 import S from 'shorti'
 import Switch from 'react-ios-switch'
 import helpers from '../../../../../utils/helpers'
@@ -301,13 +301,12 @@ export default class FilterForm extends Component {
     if (data.listing_map && data.listing_map.areas_selected) {
       sub_areas_area = (
         <div style={ S('p-15 relative') }>
-          <div style={ S('mb-10') }>Sub Areas</div>
           <div style={ S('relative') }>
             <Select
               name="sub_areas"
               options={ sub_area_select_options }
               onChange={ this.handleSubAreaSelectChange.bind(this) }
-              placeholder="Sub Area"
+              placeholder="Sub area #..."
               multi
               value={ data.listing_map ? data.listing_map.sub_areas_selected : '' }
             />
@@ -458,8 +457,8 @@ export default class FilterForm extends Component {
               </div>
               <div className="clearfix"></div>
             </div>
-            <div style={ S('p-15 relative') }>
-              <div style={ S('mb-10') }>Area</div>
+            <div style={ S('p-15 pb-0 relative') }>
+              <div style={ S('mb-10') }>MLS Areas</div>
               <div style={ S('relative') }>
                 <Select
                   name="areas"
@@ -467,7 +466,7 @@ export default class FilterForm extends Component {
                   onInputChange={ this.handleAreaInputChange.bind(this) }
                   onOpen={ this.handleAreaInputChange.bind(this) }
                   onChange={ this.handleAreaSelectChange.bind(this) }
-                  placeholder="Area"
+                  placeholder="Area #..."
                   multi
                   value={ data.listing_map ? data.listing_map.areas_selected : '' }
                 />
@@ -483,7 +482,7 @@ export default class FilterForm extends Component {
                   onInputChange={ this.handleCountiesInputChange.bind(this) }
                   onOpen={ this.handleCountiesInputChange.bind(this) }
                   onChange={ this.handleCountiesSelectChange.bind(this) }
-                  placeholder="Counties"
+                  placeholder="Type in county name..."
                   multi
                   value={ data.listing_map ? data.listing_map.counties_selected : '' }
                 />
@@ -544,23 +543,50 @@ export default class FilterForm extends Component {
               <div style={ S('mb-10') }>
                 Bedrooms
               </div>
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 0) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: 0 }) }>Any</Button>
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 1) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '1' }) }>+1</Button>
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 2) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '2' }) }>+2</Button>
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 3) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '3' }) }>+3</Button>
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 4) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '4' }) }>+4</Button>
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 5) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '5' }) }>+5</Button>
+              <ButtonGroup>
+                <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 0) ? S('bg-667688 bc-667688 color-fff') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: 0 }) }>Any</Button>
+                <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 1) ? S('bg-667688 bc-667688 color-fff') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '1' }) }>1+</Button>
+                <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 2) ? S('bg-667688 bc-667688 color-fff') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '2' }) }>2+</Button>
+                <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 3) ? S('bg-667688 bc-667688 color-fff') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '3' }) }>3+</Button>
+                <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 4) ? S('bg-667688 bc-667688 color-fff') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '4' }) }>4+</Button>
+                <Button bsStyle="default" style={ this.buttonIsActive('minimum_bedrooms', 5) ? S('bg-667688 bc-667688 color-fff') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bedrooms', value: '5' }) }>5+</Button>
+              </ButtonGroup>
             </div>
             <div style={ S('p-15') }>
               <div style={ S('mb-10') }>
                 Bathrooms
               </div>
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 0) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: 0 }) }>Any</Button>
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 1) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '1' }) }>+1</Button>
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 2) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '2' }) }>+2</Button>
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 3) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '3' }) }>+3</Button>
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 4) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-3 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '4' }) }>+4</Button>
-              <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 5) ? S('mr-3 bg-667688 bc-667688 color-fff') : S('mr-0 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '5' }) }>+5</Button>
+              <ButtonGroup>
+                <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 0) ? S('bg-667688 bc-667688 color-fff') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: 0 }) }>Any</Button>
+                <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 1) ? S('bg-667688 bc-667688 color-fff') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '1' }) }>1+</Button>
+                <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 2) ? S('bg-667688 bc-667688 color-fff') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '2' }) }>2+</Button>
+                <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 3) ? S('bg-667688 bc-667688 color-fff') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '3' }) }>3+</Button>
+                <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 4) ? S('bg-667688 bc-667688 color-fff') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '4' }) }>4+</Button>
+                <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 5) ? S('bg-667688 bc-667688 color-fff') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '5' }) }>5+</Button>
+              </ButtonGroup>
+            </div>
+            <div style={ S('p-15') }>
+              <div style={ S('mb-10') }>
+                Pool
+              </div>
+              <ButtonGroup style={ S('w-100p') }>
+                <Button bsStyle="default" style={ this.buttonIsActive('pool', true) ? S('w-33p bg-667688 bc-667688 color-fff') : S('w-33p bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: true }) }>Yes</Button>
+                <Button bsStyle="default" style={ this.buttonIsActive('pool', false) ? S('w-33p bg-667688 bc-667688 color-fff') : S('w-33p bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: false }) }>No</Button>
+                <Button bsStyle="default" style={ this.buttonIsActive('pool', 'either') ? S('w-33p bg-667688 bc-667688 color-fff') : S('w-33p bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: 'either' }) }>Either</Button>
+              </ButtonGroup>
+            </div>
+            <div style={ S('p-15') }>
+              <div style={ S('mb-10') }>
+                Garage Spaces
+              </div>
+              <ButtonGroup>
+                <Button bsStyle="default" style={ this.buttonIsActive('minimum_parking_spaces', 0) ? S('bg-667688 bc-667688 color-fff') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_parking_spaces', value: 0 }) }>Any</Button>
+                <Button bsStyle="default" style={ this.buttonIsActive('minimum_parking_spaces', 1) ? S('bg-667688 bc-667688 color-fff') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_parking_spaces', value: '1' }) }>1+</Button>
+                <Button bsStyle="default" style={ this.buttonIsActive('minimum_parking_spaces', 2) ? S('bg-667688 bc-667688 color-fff') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_parking_spaces', value: '2' }) }>2+</Button>
+                <Button bsStyle="default" style={ this.buttonIsActive('minimum_parking_spaces', 3) ? S('bg-667688 bc-667688 color-fff') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_parking_spaces', value: '3' }) }>3+</Button>
+                <Button bsStyle="default" style={ this.buttonIsActive('minimum_parking_spaces', 4) ? S('bg-667688 bc-667688 color-fff') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_parking_spaces', value: '4' }) }>4+</Button>
+                <Button bsStyle="default" style={ this.buttonIsActive('minimum_parking_spaces', 5) ? S('bg-667688 bc-667688 color-fff') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_parking_spaces', value: '5' }) }>5+</Button>
+              </ButtonGroup>
             </div>
             <div style={ S('p-15') }>
               <div style={ S('mb-10') }>Square Footage</div>
@@ -572,14 +598,6 @@ export default class FilterForm extends Component {
                   <Input onChange={ this.handleOptionChange.bind(this, 'maximum_square_feet') } value={ filter_options && filter_options.maximum_square_feet ? filter_options.maximum_square_feet : '' } ref="maximum_square_feet" type="number" placeholder="Max"/>
                 </div>
               </div>
-            </div>
-            <div style={ S('p-15') }>
-              <div style={ S('mb-10') }>
-                Pool
-              </div>
-              <Button bsStyle="default" style={ this.buttonIsActive('pool', true) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: true }) }>Yes</Button>
-              <Button bsStyle="default" style={ this.buttonIsActive('pool', false) ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: false }) }>No</Button>
-              <Button bsStyle="default" style={ this.buttonIsActive('pool', 'either') ? S('mr-10 bg-667688 bc-667688 color-fff') : S('mr-10 bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: 'either' }) }>Either</Button>
             </div>
             <div style={ S('p-15') }>
               <div style={ S('mb-10') }>Lot Square Footage</div>
