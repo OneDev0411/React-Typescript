@@ -201,6 +201,15 @@ const controller = {
         options.architectural_styles.push(home_styles_selected.value)
       })
     }
+    // Home Styles
+    delete options.subdivisions
+    if (AppStore.data.listing_map.subdivisions_selected) {
+      options.subdivisions = []
+      AppStore.data.listing_map.subdivisions_selected.forEach(subdivision => {
+        options.subdivisions.push(subdivision.value)
+      })
+    }
+    console.log(options)
     AppStore.data.listing_map.is_loading = true
     AppStore.emitChange()
     ListingDispatcher.dispatch({
@@ -438,6 +447,18 @@ const controller = {
   },
   changeHomeStylesSelected(home_styles_selected) {
     AppStore.data.listing_map.home_styles_selected = home_styles_selected
+    AppStore.emitChange()
+  },
+  showSubdivisionsList(value) {
+    if (value.length > 2) {
+      ListingDispatcher.dispatch({
+        action: 'search-subdivisions-map',
+        q: value
+      })
+    }
+  },
+  changeSubdivisionsSelected(subdivisions_selected) {
+    AppStore.data.listing_map.subdivisions_selected = subdivisions_selected
     AppStore.emitChange()
   }
 }

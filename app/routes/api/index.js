@@ -90,4 +90,6 @@ module.exports = (app, config) => {
   require('./areas/search')(app, config)
   // Counties
   require('./counties/search')(app, config)
+  // Subdivisions
+  require('./subdivisions/search')(app, config)
 }

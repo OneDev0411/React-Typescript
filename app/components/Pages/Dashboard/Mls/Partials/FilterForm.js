@@ -69,6 +69,12 @@ export default class FilterForm extends Component {
   handleHomeStylesSelectChange(value) {
     this.props.changeHomeStylesSelected(value)
   }
+  handleSubdivisionsInputChange(value) {
+    this.props.showSubdivisionsList(value)
+  }
+  handleSubdivisionsSelectChange(subdivisions) {
+    this.props.changeSubdivisionsSelected(subdivisions)
+  }
   render() {
     const data = this.props.data
     const filter_scroll_area_style = {
@@ -324,6 +330,16 @@ export default class FilterForm extends Component {
         }
       })
     }
+    // Subdivisions
+    let subdivisions_select_options
+    if (data.listing_map && data.listing_map.subdivisions) {
+      subdivisions_select_options = data.listing_map.subdivisions.map(subdivision => {
+        return {
+          value: subdivision.title,
+          label: subdivision.title
+        }
+      })
+    }
     return (
       <div className={ filter_form_class } style={ filter_form_style }>
         <div className={ data.is_mobile ? 'hidden' : '' } onClick={ this.props.hideFilterForm } style={ S('r-45n t-10 absolute bg-fff w-45 h-45 z-100 text-center font-28 pointer color-929292') }>
@@ -567,15 +583,19 @@ export default class FilterForm extends Component {
                 <Button bsStyle="default" style={ this.buttonIsActive('minimum_bathrooms', 5) ? S('bg-667688 bc-667688 color-fff') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_bathrooms', value: '5' }) }>5+</Button>
               </ButtonGroup>
             </div>
-            <div style={ S('p-15') }>
-              <div style={ S('mb-10') }>
-                Pool
+            <div style={ S('p-15 relative') }>
+              <div style={ S('mb-10') }>Subdivision</div>
+              <div style={ S('relative') }>
+                <Select
+                  name="subdivisions"
+                  options={ subdivisions_select_options }
+                  onInputChange={ this.handleSubdivisionsInputChange.bind(this) }
+                  onChange={ this.handleSubdivisionsSelectChange.bind(this) }
+                  placeholder="Subdivision name..."
+                  multi
+                  value={ data.listing_map ? data.listing_map.subdivisions_selected : '' }
+                />
               </div>
-              <ButtonGroup style={ S('w-100p') }>
-                <Button bsStyle="default" style={ this.buttonIsActive('pool', true) ? S('w-33p bg-667688 bc-667688 color-fff') : S('w-33p bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: true }) }>Yes</Button>
-                <Button bsStyle="default" style={ this.buttonIsActive('pool', false) ? S('w-33p bg-667688 bc-667688 color-fff') : S('w-33p bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: false }) }>No</Button>
-                <Button bsStyle="default" style={ this.buttonIsActive('pool', 'either') ? S('w-33p bg-667688 bc-667688 color-fff') : S('w-33p bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: 'either' }) }>Either</Button>
-              </ButtonGroup>
             </div>
             <div style={ S('p-15 relative') }>
               <div style={ S('mb-10') }>School Districts</div>
@@ -604,6 +624,16 @@ export default class FilterForm extends Component {
                 <Button bsStyle="default" style={ this.buttonIsActive('minimum_parking_spaces', 3) ? S('bg-667688 bc-667688 color-fff') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_parking_spaces', value: '3' }) }>3+</Button>
                 <Button bsStyle="default" style={ this.buttonIsActive('minimum_parking_spaces', 4) ? S('bg-667688 bc-667688 color-fff') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_parking_spaces', value: '4' }) }>4+</Button>
                 <Button bsStyle="default" style={ this.buttonIsActive('minimum_parking_spaces', 5) ? S('bg-667688 bc-667688 color-fff') : S('bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'minimum_parking_spaces', value: '5' }) }>5+</Button>
+              </ButtonGroup>
+            </div>
+            <div style={ S('p-15') }>
+              <div style={ S('mb-10') }>
+                Pool
+              </div>
+              <ButtonGroup style={ S('w-100p') }>
+                <Button bsStyle="default" style={ this.buttonIsActive('pool', true) ? S('w-33p bg-667688 bc-667688 color-fff') : S('w-33p bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: true }) }>Yes</Button>
+                <Button bsStyle="default" style={ this.buttonIsActive('pool', false) ? S('w-33p bg-667688 bc-667688 color-fff') : S('w-33p bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: false }) }>No</Button>
+                <Button bsStyle="default" style={ this.buttonIsActive('pool', 'either') ? S('w-33p bg-667688 bc-667688 color-fff') : S('w-33p bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: 'either' }) }>Either</Button>
               </ButtonGroup>
             </div>
             <div style={ S('p-15') }>
@@ -673,5 +703,7 @@ FilterForm.propTypes = {
   changeSubAreasSelected: React.PropTypes.func,
   changeCountiesSelected: React.PropTypes.func,
   showCountiesList: React.PropTypes.func,
-  changeHomeStylesSelected: React.PropTypes.func
+  changeHomeStylesSelected: React.PropTypes.func,
+  showSubdivisionsList: React.PropTypes.func,
+  changeSubdivisionsSelected: React.PropTypes.func
 }

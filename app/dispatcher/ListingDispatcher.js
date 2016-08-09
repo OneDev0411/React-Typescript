@@ -26,6 +26,7 @@ import searchSchoolDistrictsMap from '../actions/schools/search-school-districts
 import searchSchoolsMap from '../actions/schools/search-schools-map'
 import searchAreasMap from '../actions/areas/search-areas-map'
 import showCountiesMap from '../actions/counties/show-counties-map'
+import searchSubdivisionsMap from '../actions/subdivisions/search-subdivisions-map'
 const ListingDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
@@ -127,6 +128,10 @@ ListingDispatcher.register(payload => {
 
     case 'show-counties-map':
       showCountiesMap(payload.q)
+      break
+
+    case 'search-subdivisions-map':
+      searchSubdivisionsMap(payload.q)
       break
 
     default:
