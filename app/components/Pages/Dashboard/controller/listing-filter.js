@@ -148,10 +148,47 @@ const controller = {
       })
     }
     // School Districts
+    delete options.school_districts
     if (AppStore.data.listing_map.school_districts_selected) {
       options.school_districts = []
       AppStore.data.listing_map.school_districts_selected.forEach(school_district => {
         options.school_districts.push(school_district.value)
+      })
+    }
+    // Schools
+    delete options.elementary_schools
+    if (AppStore.data.listing_map.elementary_schools_selected) {
+      options.elementary_schools = []
+      AppStore.data.listing_map.elementary_schools_selected.forEach(elementary_school => {
+        options.elementary_schools.push(elementary_school.value)
+      })
+    }
+    delete options.middle_schools
+    if (AppStore.data.listing_map.middle_schools_selected) {
+      options.middle_schools = []
+      AppStore.data.listing_map.middle_schools_selected.forEach(middle_school => {
+        options.middle_schools.push(middle_school.value)
+      })
+    }
+    delete options.junior_high_schools
+    if (AppStore.data.listing_map.junior_high_schools_selected) {
+      options.junior_high_schools = []
+      AppStore.data.listing_map.junior_high_schools_selected.forEach(junior_high_school => {
+        options.junior_high_schools.push(junior_high_school.value)
+      })
+    }
+    delete options.senior_high_schools
+    if (AppStore.data.listing_map.senior_high_schools_selected) {
+      options.senior_high_schools = []
+      AppStore.data.listing_map.senior_high_schools_selected.forEach(senior_high_school => {
+        options.senior_high_schools.push(senior_high_school.value)
+      })
+    }
+    delete options.intermediate_schools
+    if (AppStore.data.listing_map.intermediate_schools_selected) {
+      options.intermediate_schools = []
+      AppStore.data.listing_map.intermediate_schools_selected.forEach(intermediate_school => {
+        options.intermediate_schools.push(intermediate_school.value)
       })
     }
     // Home Styles
@@ -344,8 +381,12 @@ const controller = {
       AppStore.data.listing_map.elementary_schools_selected = schools_selected
     if (school_type === 'middle_school')
       AppStore.data.listing_map.middle_schools_selected = schools_selected
+    if (school_type === 'junior_high_school')
+      AppStore.data.listing_map.junior_high_schools_selected = schools_selected
     if (school_type === 'senior_high_school')
-      AppStore.data.listing_map.high_schools_selected = schools_selected
+      AppStore.data.listing_map.senior_high_schools_selected = schools_selected
+    if (school_type === 'intermediate_school')
+      AppStore.data.listing_map.intermediate_schools_selected = schools_selected
     AppStore.emitChange()
   },
   showAreasList() {

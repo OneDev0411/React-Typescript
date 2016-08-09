@@ -167,9 +167,27 @@ export default class FilterForm extends Component {
         }
       })
     }
-    let high_school_select_options
-    if (data.listing_map && data.listing_map.show_schools_list && data.listing_map.high_schools) {
-      high_school_select_options = data.listing_map.high_schools.map(school => {
+    let junior_high_schools_select_options
+    if (data.listing_map && data.listing_map.show_schools_list && data.listing_map.junior_high_schools) {
+      junior_high_schools_select_options = data.listing_map.junior_high_schools.map(school => {
+        return {
+          value: school.name,
+          label: school.name
+        }
+      })
+    }
+    let senior_high_schools_select_options
+    if (data.listing_map && data.listing_map.show_schools_list && data.listing_map.senior_high_schools) {
+      senior_high_schools_select_options = data.listing_map.senior_high_schools.map(school => {
+        return {
+          value: school.name,
+          label: school.name
+        }
+      })
+    }
+    let intermediate_schools_select_options
+    if (data.listing_map && data.listing_map.show_schools_list && data.listing_map.intermediate_schools) {
+      intermediate_schools_select_options = data.listing_map.intermediate_schools.map(school => {
         return {
           value: school.name,
           label: school.name
@@ -211,16 +229,46 @@ export default class FilterForm extends Component {
             </div>
           </div>
           <div style={ S('p-15 relative') }>
-            <div style={ S('mb-10') }>High Schools</div>
+            <div style={ S('mb-10') }>Junior High Schools</div>
             <div style={ S('relative') }>
               <Select
-                name="high_schools"
-                options={ high_school_select_options }
-                placeholder="High Schools"
+                name="junior_high_schools"
+                options={ junior_high_schools_select_options }
+                placeholder="Junior High Schools"
+                onOpen={ this.handleSchoolInputChange.bind(this) }
+                onInputChange={ this.handleSchoolInputChange.bind(this) }
+                onChange={ this.handleSchoolSelectChange.bind(this, 'junior_high_school') }
+                value={ data.listing_map ? data.listing_map.junior_high_schools_selected : '' }
+                multi
+              />
+            </div>
+          </div>
+          <div style={ S('p-15 relative') }>
+            <div style={ S('mb-10') }>Senior High Schools</div>
+            <div style={ S('relative') }>
+              <Select
+                name="senior_high_schools"
+                options={ senior_high_schools_select_options }
+                placeholder="Senior High Schools"
                 onOpen={ this.handleSchoolInputChange.bind(this) }
                 onInputChange={ this.handleSchoolInputChange.bind(this) }
                 onChange={ this.handleSchoolSelectChange.bind(this, 'senior_high_school') }
-                value={ data.listing_map ? data.listing_map.high_schools_selected : '' }
+                value={ data.listing_map ? data.listing_map.senior_high_schools_selected : '' }
+                multi
+              />
+            </div>
+          </div>
+          <div style={ S('p-15 relative') }>
+            <div style={ S('mb-10') }>Intermediate High Schools</div>
+            <div style={ S('relative') }>
+              <Select
+                name="intermediate_schools"
+                options={ intermediate_schools_select_options }
+                placeholder="Intermediate Schools"
+                onOpen={ this.handleSchoolInputChange.bind(this) }
+                onInputChange={ this.handleSchoolInputChange.bind(this) }
+                onChange={ this.handleSchoolSelectChange.bind(this, 'intermediate_school') }
+                value={ data.listing_map ? data.listing_map.intermediate_schools_selected : '' }
                 multi
               />
             </div>
