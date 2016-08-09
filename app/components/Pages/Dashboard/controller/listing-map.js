@@ -142,7 +142,6 @@ const controller = {
     //   delete AppStore.data.listing_map.is_loading
     //   return
     // }
-    AppStore.emitChange()
     ListingDispatcher.dispatch({
       action: 'get-valerts',
       user,

@@ -271,6 +271,8 @@ export default class Mls extends Component {
     delete AppStore.data.listing_map.no_listings_found
     if (AppStore.data.search_input)
       delete AppStore.data.search_input.listings
+    delete AppStore.data.listing_map.has_location_search
+    delete AppStore.data.listing_map.location_search
     AppStore.emitChange()
     let bounds = window.map.getBounds().toJSON()
     bounds = [

@@ -113,14 +113,14 @@ export default class MlsMap extends Component {
     if (listing_map && listing_map.map_id)
       map_id = listing_map.map_id
     // Pinpoint
-    if (map_listing_markers) {
+    if (map_listing_markers && listing_map.has_location_search) {
       // TODO Need a custom map marker
       const pinpoint = (
         <div
           key="center-marker"
           style={ S('pointer mt-10') }
-          lat={ listing_map.center.lat }
-          lng={ listing_map.center.lng }
+          lat={ listing_map.location_search.center.lat }
+          lng={ listing_map.location_search.center.lng }
           text={'Hello!'}
         ><img style={ S('h-30') } src="/images/dashboard/mls/map-pin.svg"/>
         </div>
