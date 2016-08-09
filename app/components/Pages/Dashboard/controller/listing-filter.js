@@ -89,9 +89,7 @@ const controller = {
       if (minimum_bathrooms)
         options.minimum_bathrooms = minimum_bathrooms
       // Garage
-      const minimum_parking_spaces = filter_options.minimum_parking_spaces
-      if (minimum_parking_spaces)
-        options.minimum_parking_spaces = minimum_parking_spaces
+      options.minimum_parking_spaces = filter_options.minimum_parking_spaces
       // Pool
       const pool = filter_options.pool
       if (pool === 'either')

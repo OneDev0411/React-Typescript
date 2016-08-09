@@ -575,6 +575,22 @@ export default class FilterForm extends Component {
                 <Button bsStyle="default" style={ this.buttonIsActive('pool', 'either') ? S('w-33p bg-667688 bc-667688 color-fff') : S('w-33p bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'pool', value: 'either' }) }>Either</Button>
               </ButtonGroup>
             </div>
+            <div style={ S('p-15 relative') }>
+              <div style={ S('mb-10') }>School Districts</div>
+              <div style={ S('relative') }>
+                <Select
+                  name="school_districts"
+                  options={ school_districts_select_options }
+                  onInputChange={ this.handleSchoolDistrictsInputChange.bind(this) }
+                  onOpen={ this.handleSchoolDistrictsInputChange.bind(this) }
+                  onChange={ this.handleSchoolDistrictsSelectChange.bind(this) }
+                  placeholder="School Districts"
+                  multi
+                  value={ data.listing_map ? data.listing_map.school_districts_selected : '' }
+                />
+              </div>
+            </div>
+            { schools_area }
             <div style={ S('p-15') }>
               <div style={ S('mb-10') }>
                 Garage Spaces
@@ -621,22 +637,6 @@ export default class FilterForm extends Component {
                 </div>
               </div>
             </div>
-            <div style={ S('p-15 relative') }>
-              <div style={ S('mb-10') }>School Districts</div>
-              <div style={ S('relative') }>
-                <Select
-                  name="school_districts"
-                  options={ school_districts_select_options }
-                  onInputChange={ this.handleSchoolDistrictsInputChange.bind(this) }
-                  onOpen={ this.handleSchoolDistrictsInputChange.bind(this) }
-                  onChange={ this.handleSchoolDistrictsSelectChange.bind(this) }
-                  placeholder="School Districts"
-                  multi
-                  value={ data.listing_map ? data.listing_map.school_districts_selected : '' }
-                />
-              </div>
-            </div>
-            { schools_area }
             <div style={ S('h-200') }></div>
           </div>
           <div style={ S('absolute b-0 w-300 p-15') }>
