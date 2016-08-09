@@ -404,8 +404,13 @@ const controller = {
     controller.getSubAreas(areas_selected)
     AppStore.emitChange()
   },
-  getSubAreas(sub_areas_selected) {
-    const area_numbers = _.map(sub_areas_selected, 'value')
+  getSubAreas(areas_selected) {
+    if (!areas_selected) {
+      delete AppStore.data.listing_map.sub_areas_selected
+      AppStore.emitChange()
+      return
+    }
+    const area_numbers = _.map(areas_selected, 'value')
     ListingDispatcher.dispatch({
       action: 'search-areas-map',
       parents: area_numbers.join(','),
