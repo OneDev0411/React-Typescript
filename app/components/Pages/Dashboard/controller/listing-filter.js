@@ -129,17 +129,17 @@ const controller = {
           area: area.value
         })
       })
+      // Sub Areas
+      if (AppStore.data.listing_map.sub_areas_selected) {
+        AppStore.data.listing_map.sub_areas_selected.forEach(sub_area => {
+          const parent_area_index = _.findIndex(options.mls_areas, { area: sub_area.parent })
+          if (!options.mls_areas[parent_area_index].sub_areas)
+            options.mls_areas[parent_area_index].sub_areas = []
+          options.mls_areas[parent_area_index].sub_areas.push(sub_area.value)
+        })
+      }
     }
-    // Sub Areas
-    if (AppStore.data.listing_map.sub_areas_selected) {
-      AppStore.data.listing_map.sub_areas_selected.forEach(sub_area => {
-        const parent_area_index = _.findIndex(options.mls_areas, { area: sub_area.parent })
-        if (!options.mls_areas[parent_area_index].sub_areas)
-          options.mls_areas[parent_area_index].sub_areas = []
-        options.mls_areas[parent_area_index].sub_areas.push(sub_area.value)
-      })
-    }
-    // Areas
+    // Counties
     delete options.counties
     if (AppStore.data.listing_map.counties_selected) {
       options.counties = []
