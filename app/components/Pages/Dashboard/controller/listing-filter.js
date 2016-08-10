@@ -134,7 +134,7 @@ const controller = {
       // Sub Areas
       if (AppStore.data.listing_map.sub_areas_selected) {
         AppStore.data.listing_map.sub_areas_selected.forEach(sub_area => {
-          options.mls_areas.push([sub_area.parent, sub_area.value])
+          options.mls_areas.push([sub_area.value, sub_area.parent])
         })
       }
       // Filter out major areas
