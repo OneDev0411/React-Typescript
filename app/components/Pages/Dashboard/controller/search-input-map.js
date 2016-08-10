@@ -51,7 +51,7 @@ const controller = {
       AppStore.data.listing_map.zoom = 15
       AppStore.data.listing_map.has_location_search = true
       AppStore.data.listing_map.location_search = {
-        center 
+        center
       }
       AppStore.emitChange()
     })

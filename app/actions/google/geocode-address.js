@@ -16,7 +16,7 @@ export default (address) => {
     AppStore.data.listing_map.zoom = 16
     AppStore.data.listing_map.has_location_search = true
     AppStore.data.listing_map.location_search = {
-      center 
+      center
     }
     AppStore.emitChange()
   })

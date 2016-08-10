@@ -20,7 +20,8 @@ module.exports = (app, config) => {
     // Remove points for counties
     if (options.counties || options.school_districts)
       options.points = null
-    // console.log(options)
+    // endpoint = endpoint + '?order_by=office,status&associations=compact_listing.list_office&office=CSTPP01'
+    // console.log(endpoint, options)
     const headers = {  
       'Content-Type': 'application/json',
       'x-real-agent': req.headers['user-agent'],
