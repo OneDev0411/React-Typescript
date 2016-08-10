@@ -340,6 +340,44 @@ export default class FilterForm extends Component {
         }
       })
     }
+    let areas_area
+    if (data.user && data.user.user_type === 'Agent') {
+      areas_area = (
+        <div>
+          <div style={ S('p-15 pb-0 relative') }>
+            <div style={ S('mb-10') }>MLS Areas</div>
+            <div style={ S('relative') }>
+              <Select
+                name="areas"
+                options={ area_select_options }
+                onInputChange={ this.handleAreaInputChange.bind(this) }
+                onOpen={ this.handleAreaInputChange.bind(this) }
+                onChange={ this.handleAreaSelectChange.bind(this) }
+                placeholder="Area #..."
+                multi
+                value={ data.listing_map ? data.listing_map.areas_selected : '' }
+              />
+            </div>
+          </div>
+          { sub_areas_area }
+          <div style={ S('p-15 relative') }>
+            <div style={ S('mb-10') }>County</div>
+            <div style={ S('relative') }>
+              <Select
+                name="county"
+                options={ counties_select_options }
+                onInputChange={ this.handleCountiesInputChange.bind(this) }
+                onOpen={ this.handleCountiesInputChange.bind(this) }
+                onChange={ this.handleCountiesSelectChange.bind(this) }
+                placeholder="Type in county name..."
+                multi
+                value={ data.listing_map ? data.listing_map.counties_selected : '' }
+              />
+            </div>
+          </div>
+        </div>
+      )
+    }
     return (
       <div className={ filter_form_class } style={ filter_form_style }>
         <div className={ data.is_mobile ? 'hidden' : '' } onClick={ this.props.hideFilterForm } style={ S('r-45n t-10 absolute bg-fff w-45 h-45 z-100 text-center font-28 pointer color-929292') }>
@@ -473,37 +511,7 @@ export default class FilterForm extends Component {
               </div>
               <div className="clearfix"></div>
             </div>
-            <div style={ S('p-15 pb-0 relative') }>
-              <div style={ S('mb-10') }>MLS Areas</div>
-              <div style={ S('relative') }>
-                <Select
-                  name="areas"
-                  options={ area_select_options }
-                  onInputChange={ this.handleAreaInputChange.bind(this) }
-                  onOpen={ this.handleAreaInputChange.bind(this) }
-                  onChange={ this.handleAreaSelectChange.bind(this) }
-                  placeholder="Area #..."
-                  multi
-                  value={ data.listing_map ? data.listing_map.areas_selected : '' }
-                />
-              </div>
-            </div>
-            { sub_areas_area }
-            <div style={ S('p-15 relative') }>
-              <div style={ S('mb-10') }>County</div>
-              <div style={ S('relative') }>
-                <Select
-                  name="county"
-                  options={ counties_select_options }
-                  onInputChange={ this.handleCountiesInputChange.bind(this) }
-                  onOpen={ this.handleCountiesInputChange.bind(this) }
-                  onChange={ this.handleCountiesSelectChange.bind(this) }
-                  placeholder="Type in county name..."
-                  multi
-                  value={ data.listing_map ? data.listing_map.counties_selected : '' }
-                />
-              </div>
-            </div>
+            { areas_area }
             <div style={ S('p-15 mb-40') }>
               <div style={ S('mb-10') }>Price Range</div>
               <div>
