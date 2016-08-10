@@ -36,9 +36,10 @@ export default class ListingViewer extends Component {
     this.fadeIn()
   }
   componentWillUnmount() {
-    // Reinit google search
+    // Reinit google search if on map
     setTimeout(() => {
-      controller.search_input_map.initGoogleSearch()
+      if (document.getElementById('google_search'))
+        controller.search_input_map.initGoogleSearch()
     }, 300)
   }
   fadeIn() {
