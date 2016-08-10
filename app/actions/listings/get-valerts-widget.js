@@ -10,6 +10,7 @@ export default (user, options) => {
     params.access_token = user.access_token
   if (AppStore.data.brand)
     params.office = AppStore.data.brand.office_mls_id
+  console.log('widget')
   Listing.getValerts(params, (err, response) => {
     // Success
     if (response.status === 'success') {
