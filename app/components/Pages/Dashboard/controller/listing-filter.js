@@ -127,19 +127,22 @@ const controller = {
     if (AppStore.data.listing_map.areas_selected) {
       options.mls_areas = []
       AppStore.data.listing_map.areas_selected.forEach(area => {
-        options.mls_areas.push({
-          area: area.value
-        })
+        options.mls_areas.push(
+          [area.value, null]
+        )
       })
       // Sub Areas
       if (AppStore.data.listing_map.sub_areas_selected) {
         AppStore.data.listing_map.sub_areas_selected.forEach(sub_area => {
-          const parent_area_index = _.findIndex(options.mls_areas, { area: sub_area.parent })
-          if (!options.mls_areas[parent_area_index].sub_areas)
-            options.mls_areas[parent_area_index].sub_areas = []
-          options.mls_areas[parent_area_index].sub_areas.push(sub_area.value)
+          options.mls_areas.push([sub_area.parent, sub_area.value])
         })
       }
+      // Filter out major areas
+      options.mls_areas = options.mls_areas.filter(area => {
+        if (AppStore.data.listing_map.sub_areas_selected && !area[1])
+          return false
+        return true
+      })
     }
     // Counties
     delete options.counties
