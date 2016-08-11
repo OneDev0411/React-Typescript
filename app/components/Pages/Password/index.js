@@ -15,6 +15,11 @@ export default class Password extends Component {
     const user = data.user
     // Redirect after Password creation
     if (user) {
+      // If invited to room
+      if (data.current_room) {
+        window.location.href = '/dashboard/recents/' + data.current_room.id
+        return
+      }
       // If has action in url
       let action
       let listing_id
@@ -40,11 +45,6 @@ export default class Password extends Component {
           window.location.href = '/dashboard/mls/alerts/' + alert_id
           return
         }
-      }
-      // If invited to room
-      if (data.current_room) {
-        window.location.href = '/dashboard/recents/' + data.current_room.id
-        return
       }
       if (signup.type === 'client')
         window.location.href = '/dashboard/mls?message=welcome'
