@@ -214,7 +214,7 @@ const controller = {
     }
     AppStore.data.listing_map.is_loading = true
     AppStore.emitChange()
-    if (options.mls_areas || options.counties) {
+    if (options.mls_areas || options.counties || options.school_districts) {
       options.points = null
       ListingDispatcher.dispatch({
         action: 'get-valerts-no-geo',
