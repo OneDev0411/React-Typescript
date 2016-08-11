@@ -16,6 +16,8 @@ export default class Password extends Component {
     // Redirect after Password creation
     if (user) {
       // If invited to room
+      console.log(data)
+      return
       if (data.current_room) {
         window.location.href = '/dashboard/recents/' + data.current_room.id
         return
