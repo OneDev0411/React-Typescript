@@ -6,8 +6,9 @@ module.exports = (app, config) => {
     const access_token = req.body.access_token
     const options = req.body.options
     // From map widget
-    if (req.body.office && !options.list_offices)
-      endpoint = endpoint + '?order_by=office,status&office=' + req.body.office
+    console.log(req.body.office, options.list_offices)
+    if (req.body.office && !options.list_offices) 
+      endpoint = endpoint + '?associations=compact_listing.list_agent&order_by=office,status&office=' + req.body.office
     // From listing widget
     if (options.list_offices && options.list_offices.length) {
       endpoint = endpoint + '?associations=compact_listing.list_agent'
@@ -17,11 +18,6 @@ module.exports = (app, config) => {
     // Offset
     if (req.body.offset)
       endpoint = endpoint + '&limit=75&offset=' + req.body.offset
-    // Remove points for counties
-    if (options.counties || options.school_districts)
-      options.points = null
-    // endpoint = endpoint + '?order_by=office,status&associations=compact_listing.list_office&office=CSTPP01'
-    // console.log(endpoint, options)
     const headers = {  
       'Content-Type': 'application/json',
       'x-real-agent': req.headers['user-agent'],
