@@ -41,6 +41,11 @@ export default class Password extends Component {
           return
         }
       }
+      // If invited to room
+      if (data.current_room) {
+        window.location.href = '/dashboard/recents/' + data.current_room.id
+        return
+      }
       if (signup.type === 'client')
         window.location.href = '/dashboard/mls?message=welcome'
       if (signup.type === 'agent') {
