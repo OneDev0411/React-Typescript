@@ -128,7 +128,7 @@ const controller = {
       options.mls_areas = []
       AppStore.data.listing_map.areas_selected.forEach(area => {
         options.mls_areas.push(
-          [area.value, null]
+          [area.value, 0]
         )
       })
       // Sub Areas
@@ -214,6 +214,15 @@ const controller = {
     }
     AppStore.data.listing_map.is_loading = true
     AppStore.emitChange()
+    if (options.mls_areas || options.counties) {
+      options.points = null
+      ListingDispatcher.dispatch({
+        action: 'get-valerts-no-geo',
+        user,
+        options
+      })
+      return
+    }
     ListingDispatcher.dispatch({
       action: 'get-valerts',
       user,

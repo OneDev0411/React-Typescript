@@ -9,6 +9,7 @@ import searchListingInput from '../actions/listings/search-input'
 import getSimilarListings from '../actions/listings/get-similars'
 import getValerts from '../actions/listings/get-valerts'
 import getValertsAlert from '../actions/listings/get-valerts-alert'
+import getValertsNoGeo from '../actions/listings/get-valerts-no-geo'
 import getListing from '../actions/listings/get-listing'
 import shareAlert from '../actions/alerts/share-alert'
 import getAlertRoom from '../actions/alerts/get-alert-room'
@@ -64,6 +65,10 @@ ListingDispatcher.register(payload => {
 
     case 'get-valerts-widget':
       getValertsWidget(payload.user, payload.options)
+      break
+
+    case 'get-valerts-no-geo':
+      getValertsNoGeo(payload.user, payload.options)
       break
 
     case 'page-listings-widget':
