@@ -139,7 +139,6 @@ const controller = {
     }
     // Get options
     if (listing_map.options.mls_areas || listing_map.options.school_districts || listing_map.options.counties) {
-      // console.log('changed', listing_map.options)
       if (!listing_map.search_area_on_move)
         AppStore.data.listing_map.search_area_on_move = true
       else {
