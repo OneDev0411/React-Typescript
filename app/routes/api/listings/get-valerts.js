@@ -6,9 +6,8 @@ module.exports = (app, config) => {
     const access_token = req.body.access_token
     const options = req.body.options
     // From map widget
-    console.log(req.body.office, options.list_offices)
     if (req.body.office && !options.list_offices) 
-      endpoint = endpoint + '?associations=compact_listing.list_agent&order_by=office,status&office=' + req.body.office
+      endpoint = endpoint + '?associations=compact_listing.list_office&order_by=office,status&office=' + req.body.office
     // From listing widget
     if (options.list_offices && options.list_offices.length) {
       endpoint = endpoint + '?associations=compact_listing.list_agent'
