@@ -108,7 +108,6 @@ const controller = {
     const auto_move = listing_map.auto_move
     if (auto_move)
       return
-    console.log('handleBoundsChange through')
     const points = [
       {
         latitude: bounds[0],
