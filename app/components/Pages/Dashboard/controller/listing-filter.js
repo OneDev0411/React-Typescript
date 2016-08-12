@@ -216,6 +216,9 @@ const controller = {
     AppStore.emitChange()
     if (options.mls_areas || options.counties || options.school_districts) {
       options.points = null
+      AppStore.data.listing_map.auto_move = true
+      console.log('no-geo')
+      AppStore.emitChange()
       ListingDispatcher.dispatch({
         action: 'get-valerts-no-geo',
         user,

@@ -1,4 +1,4 @@
-// actions/listings/get-valerts.js
+// actions/listings/get-valerts-no-geo.js
 import Listing from '../../models/Listing'
 import AppStore from '../../stores/AppStore'
 import _ from 'lodash'
@@ -35,5 +35,10 @@ export default (user, options) => {
       window.map.fitBounds(bound)
     }
     AppStore.emitChange()
+    // Allow bounds change
+    setTimeout(() => {
+      delete AppStore.data.listing_map.auto_move
+      AppStore.emitChange()
+    }, 1000)
   })
 }
