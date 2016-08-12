@@ -16,48 +16,48 @@ export default class Password extends Component {
     // Redirect after Password creation
     if (user) {
       // If invited to room
-      if (data.current_room)
+      if (data.current_room) {
         window.location.href = '/dashboard/recents/' + data.current_room.id
-      else {
-        // If has action in url
-        let action
-        let listing_id
-        let room_id
-        let alert_id
-        if (data.location && data.location.query && data.location.query.action) {
-          action = data.location.query.action
-          if (data.location.query.listing_id)
-            listing_id = data.location.query.listing_id
-          if (data.location.query.room_id)
-            room_id = data.location.query.room_id
-          if (data.location.query.alert_id)
-            alert_id = data.location.query.alert_id
-          if (action === 'favorite_listing' && listing_id) {
-            window.location.href = '/dashboard/mls/' + listing_id
-            return
-          }
-          if (action === 'listing_inquiry' && room_id) {
-            window.location.href = '/dashboard/recents/' + room_id
-            return
-          }
-          if (action === 'create_alert' && alert_id) {
-            window.location.href = '/dashboard/mls/alerts/' + alert_id
-            return
-          }
+        return
+      }
+      // If has action in url
+      let action
+      let listing_id
+      let room_id
+      let alert_id
+      if (data.location && data.location.query && data.location.query.action) {
+        action = data.location.query.action
+        if (data.location.query.listing_id)
+          listing_id = data.location.query.listing_id
+        if (data.location.query.room_id)
+          room_id = data.location.query.room_id
+        if (data.location.query.alert_id)
+          alert_id = data.location.query.alert_id
+        if (action === 'favorite_listing' && listing_id) {
+          window.location.href = '/dashboard/mls/' + listing_id
+          return
         }
-        if (signup.type === 'client')
+        if (action === 'listing_inquiry' && room_id) {
+          window.location.href = '/dashboard/recents/' + room_id
+          return
+        }
+        if (action === 'create_alert' && alert_id) {
+          window.location.href = '/dashboard/mls/alerts/' + alert_id
+          return
+        }
+      }
+      if (signup.type === 'client')
+        window.location.href = '/dashboard/mls?message=welcome'
+      if (signup.type === 'agent') {
+        // If verified agent
+        if (signup.is_agent) {
           window.location.href = '/dashboard/mls?message=welcome'
-        if (signup.type === 'agent') {
-          // If verified agent
-          if (signup.is_agent) {
-            window.location.href = '/dashboard/mls?message=welcome'
-            return
-          }
-          delete AppStore.data.submitting
-          AppStore.emitChange()
-          // Go to confirm agent
-          this.props.history.pushState(null, '/signup/agent')
+          return
         }
+        delete AppStore.data.submitting
+        AppStore.emitChange()
+        // Go to confirm agent
+        this.props.history.pushState(null, '/signup/agent')
       }
     }
   }
