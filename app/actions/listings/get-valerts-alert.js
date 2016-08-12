@@ -38,5 +38,9 @@ export default (user, options) => {
       }
     }
     AppStore.emitChange()
+    setTimeout(() => {
+      delete AppStore.data.listing_map.auto_move
+      AppStore.emitChange()
+    }, 200)
   })
 }
