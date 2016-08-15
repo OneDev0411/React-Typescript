@@ -33,10 +33,17 @@ const controller = {
         q: place.name
       })
       // Check if MLS number
-      // if (!isNaN(place.name)) {
-      //   console.log('is number')
-      //   return
-      // }
+      if (!isNaN(place.name)) {
+        AppStore.data.listing_map.is_loading = true
+        // console.log(place.name) // 13362991
+        AppStore.emitChange()
+        ListingDispatcher.dispatch({
+          action: 'search-listing-map',
+          user: AppStore.data.user,
+          q: place.name
+        })
+        return
+      }
       if (!place.formatted_address) {
         AppStore.data.listing_map.is_loading = true
         AppStore.emitChange()
