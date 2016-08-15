@@ -214,8 +214,10 @@ const controller = {
     }
     AppStore.data.listing_map.is_loading = true
     AppStore.emitChange()
-    if (options.mls_areas || options.counties || options.school_districts) {
-      options.points = null
+    if (options.mls_areas || options.school_districts || options.counties) {
+      // only for mls areas and school districts
+      if (options.mls_areas || options.school_districts)
+        options.points = null
       AppStore.data.listing_map.auto_move = true
       AppStore.emitChange()
       ListingDispatcher.dispatch({

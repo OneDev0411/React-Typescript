@@ -360,21 +360,6 @@ export default class FilterForm extends Component {
             </div>
           </div>
           { sub_areas_area }
-          <div style={ S('p-15 relative') }>
-            <div style={ S('mb-10') }>County</div>
-            <div style={ S('relative') }>
-              <Select
-                name="county"
-                options={ counties_select_options }
-                onInputChange={ this.handleCountiesInputChange.bind(this) }
-                onOpen={ this.handleCountiesInputChange.bind(this) }
-                onChange={ this.handleCountiesSelectChange.bind(this) }
-                placeholder="Type in county name..."
-                multi
-                value={ data.listing_map ? data.listing_map.counties_selected : '' }
-              />
-            </div>
-          </div>
         </div>
       )
     }
@@ -512,6 +497,21 @@ export default class FilterForm extends Component {
               <div className="clearfix"></div>
             </div>
             { areas_area }
+            <div style={ S('p-15 relative') }>
+              <div style={ S('mb-10') }>County</div>
+              <div style={ S('relative') }>
+                <Select
+                  name="county"
+                  options={ counties_select_options }
+                  onInputChange={ this.handleCountiesInputChange.bind(this) }
+                  onOpen={ this.handleCountiesInputChange.bind(this) }
+                  onChange={ this.handleCountiesSelectChange.bind(this) }
+                  placeholder="Type in county name..."
+                  multi
+                  value={ data.listing_map ? data.listing_map.counties_selected : '' }
+                />
+              </div>
+            </div>
             <div style={ S('p-15 mb-40') }>
               <div style={ S('mb-10') }>Price Range</div>
               <div>

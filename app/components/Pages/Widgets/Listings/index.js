@@ -85,7 +85,7 @@ export default class Listings extends Component {
       maximum_price: 900000001,
       limit: '75',
       maximum_lot_square_meters: 100000000,
-      minimum_bathrooms: 1,
+      minimum_bathrooms: 0,
       maximum_square_meters: 10000000,
       location: {
         longitude: -96.79698789999998,
