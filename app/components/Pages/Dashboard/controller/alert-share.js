@@ -86,9 +86,7 @@ const controller = {
     //   latitude: center.lat,
     //   longitude: center.lng
     // }
-    // console.log(alert)
-    if (alert.mls_areas)
-      alert.points = null
+    // console.log(alert.points)
     ListingDispatcher.dispatch({
       action: 'share-alert',
       user,
@@ -119,8 +117,7 @@ const controller = {
     //   latitude: center.lat,
     //   longitude: center.lng
     // }
-    if (alert.mls_areas)
-      alert.points = null
+    // console.log(alert.points)
     if (!AppStore.data.share_modal)
       AppStore.data.share_modal = {}
     AppStore.data.share_modal.saving = true

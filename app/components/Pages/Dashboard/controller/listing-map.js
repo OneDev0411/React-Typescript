@@ -14,6 +14,7 @@ const controller = {
       limit: '75',
       maximum_lot_square_meters: 100000000,
       minimum_bathrooms: 0,
+      minimum_parking_spaces: 0,
       maximum_square_meters: 10000000,
       location: {
         longitude: -96.79698789999998,
@@ -75,6 +76,7 @@ const controller = {
         },
         minimum_bedrooms: 0,
         minimum_bathrooms: 0,
+        minimum_parking_spaces: 0,
         pool: 'either'
       }
     }
