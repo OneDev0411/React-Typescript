@@ -140,17 +140,18 @@ const controller = {
       AppStore.data.listing_map.options.points = points
     }
     // Get options
-    if (listing_map.options.mls_areas || listing_map.options.school_districts || listing_map.options.counties) {
-      if (!listing_map.search_area_on_move)
-        AppStore.data.listing_map.search_area_on_move = true
-      else {
-        delete listing_map.options.mls_areas
-        delete listing_map.options.school_districts
-        delete listing_map.options.counties
-        delete AppStore.data.listing_map.search_area_on_move
-      }
-      AppStore.emitChange()
-    }
+    // Zoom fix
+    // if (listing_map.options.mls_areas || listing_map.options.school_districts || listing_map.options.counties) {
+    //   if (!listing_map.search_area_on_move)
+    //     AppStore.data.listing_map.search_area_on_move = true
+    //   else {
+    //     delete listing_map.options.mls_areas
+    //     delete listing_map.options.school_districts
+    //     delete listing_map.options.counties
+    //     delete AppStore.data.listing_map.search_area_on_move
+    //   }
+    //   AppStore.emitChange()
+    // }
     ListingDispatcher.dispatch({
       action: 'get-valerts',
       user,
