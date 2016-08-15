@@ -200,7 +200,8 @@ export default class Listings extends Component {
     delete AppStore.data.signup_tooltip
     AppStore.emitChange()
   }
-  resend() {
+  resend(e) {
+    e.preventDefault()
     const data = this.props.data
     const new_user = data.new_user
     const user = {

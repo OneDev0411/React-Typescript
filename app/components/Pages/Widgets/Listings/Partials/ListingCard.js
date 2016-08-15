@@ -199,7 +199,7 @@ export default class ListingCard extends Component {
     let resent_message_area
     if (data.resent_email_confirmation) {
       resent_message_area = (
-        <div style={ S('mt-20 mb-20') }>Confirmation email resent.</div>
+        <div style={ S('mt-0 mb-20') }>Confirmation email resent.</div>
       )
     }
     let user_already_signed_up_message
@@ -214,7 +214,7 @@ export default class ListingCard extends Component {
         <div style={ S('absolute z-100 w-100p h-100p t-0 bg-fff') }>
           <div onClick={ this.props.hideModal } className="close" style={ S('font-30 t-10 r-20 absolute') }>&times;</div>
           <div className="text-center">
-            <div style={ S('mb-20 mt-20 center-block text-center' + (!data.is_mobile ? ' mt-50 w-280' : '')) }>
+            <div style={ S('mb-20 mt-20 center-block text-center' + (!data.is_mobile ? ' mt-30 w-280' : '')) }>
               <img style={ S('h-68 mr-40 relative') } src={ data.brand ? data.brand.logo_url : '' } />
               <i style={ S('color-929292 mr-40 font-30 relative t-5') } className="fa fa-arrow-right"></i>
               <img style={ S('h-68') } src="/images/logo-200w.png" />
@@ -225,7 +225,7 @@ export default class ListingCard extends Component {
               { data.new_user ? data.new_user.email : '' }
             </div>
             { user_already_signed_up_message }
-            <div style={ S('color-9b9b9b font-16 mb-20') }>
+            <div style={ S('color-9b9b9b font-16 mb-15') }>
               Didn’t get the email? <a onClick={ this.props.resend.bind(this) } href="#">Resend</a> or <a href="mailto:support@rechat.com">contact support</a>.
             </div>
             { resent_message_area }
@@ -243,7 +243,7 @@ export default class ListingCard extends Component {
         <div style={ S('absolute z-100 w-100p h-100p t-0 bg-fff') }>
           <div onClick={ this.props.hideModal } className="close" style={ S('font-30 t-10 r-20 absolute') }>&times;</div>
           <div className="text-center">
-            <div style={ S('mb-20 mt-20 center-block text-center' + (!data.is_mobile ? ' mt-50 w-280' : '')) }>
+            <div style={ S('mb-20 mt-20 center-block text-center' + (!data.is_mobile ? ' mt-30 w-280' : '')) }>
               <img style={ S('h-68 mr-40 relative') } src={ data.brand ? data.brand.logo_url : '' } />
               <i style={ S('color-929292 mr-40 font-30 relative t-5') } className="fa fa-arrow-right"></i>
               <img style={ S('h-68') } src="/images/logo-200w.png" />
