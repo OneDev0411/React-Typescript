@@ -462,7 +462,7 @@ const controller = {
     AppStore.emitChange()
   },
   showSubdivisionsList(value) {
-    if (value.length > 2) {
+    if (value.length > 0) {
       ListingDispatcher.dispatch({
         action: 'search-subdivisions-map',
         q: value

@@ -601,6 +601,7 @@ export default class FilterForm extends Component {
                   onChange={ this.handleSubdivisionsSelectChange.bind(this) }
                   placeholder="Subdivision name..."
                   multi
+                  noResultsText={ subdivisions_select_options && !subdivisions_select_options.length ? 'No results found' : false }
                   value={ data.listing_map ? data.listing_map.subdivisions_selected : '' }
                 />
               </div>
