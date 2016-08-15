@@ -135,6 +135,12 @@ const controller = {
       if (AppStore.data.listing_map.sub_areas_selected) {
         AppStore.data.listing_map.sub_areas_selected.forEach(sub_area => {
           options.mls_areas.push([sub_area.value, sub_area.parent])
+          // Remove parent area
+          if (_.find(options.mls_areas, { 0: sub_area.parent, 1: 0 })) {
+            options.mls_areas = options.mls_areas.filter(area => {
+              return area[0] !== sub_area.parent &&  area[0] !== 0
+            })
+          }
         })
       }
     }
