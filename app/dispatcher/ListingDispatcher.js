@@ -120,7 +120,7 @@ ListingDispatcher.register(payload => {
       break
 
     case 'search-schools-map':
-      searchSchoolsMap(payload.district)
+      searchSchoolsMap(payload.districts)
       break
 
     case 'search-school-districts-map':

@@ -138,7 +138,7 @@ const controller = {
           // Remove parent area
           if (_.find(options.mls_areas, { 0: sub_area.parent, 1: 0 })) {
             options.mls_areas = options.mls_areas.filter(area => {
-              return area[0] !== sub_area.parent &&  area[0] !== 0
+              return area[0] !== sub_area.parent && area[0] !== 0
             })
           }
         })
@@ -393,11 +393,10 @@ const controller = {
   showSchoolsList() {
     AppStore.data.listing_map.schools_loading = true
     AppStore.data.listing_map.show_schools_list = true
-    const new_districts_selected = AppStore.data.listing_map.school_districts_selected.length
     AppStore.emitChange()
     ListingDispatcher.dispatch({
       action: 'search-schools-map',
-      district: AppStore.data.listing_map.school_districts_selected[new_districts_selected - 1].value
+      districts: _.map(AppStore.data.listing_map.school_districts_selected, 'value')
     })
   },
   changeSchoolsSelected(school_type, schools_selected) {
