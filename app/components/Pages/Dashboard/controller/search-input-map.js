@@ -32,7 +32,11 @@ const controller = {
         user: AppStore.data.user,
         q: place.name
       })
-      // Place not selected
+      // Check if MLS number
+      // if (!isNaN(place.name)) {
+      //   console.log('is number')
+      //   return
+      // }
       if (!place.formatted_address) {
         AppStore.data.listing_map.is_loading = true
         AppStore.emitChange()
