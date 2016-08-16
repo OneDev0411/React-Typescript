@@ -230,6 +230,20 @@ export default class FilterForm extends Component {
             </div>
           </div>
           <div style={ S('p-15 relative') }>
+            <div style={ S('mb-10') }>Intermediate</div>
+            <div style={ S('relative') }>
+              <Select
+                name="intermediate_schools"
+                options={ intermediate_schools_select_options }
+                placeholder={ intermediate_schools_select_options && !intermediate_schools_select_options.length ? 'No schools found' : 'Intermediate Schools' }
+                onChange={ this.handleSchoolSelectChange.bind(this, 'intermediate_school') }
+                value={ data.listing_map ? data.listing_map.intermediate_schools_selected : '' }
+                multi
+                noResultsText={ 'No schools found'}
+              />
+            </div>
+          </div>
+          <div style={ S('p-15 relative') }>
             <div style={ S('mb-10') }>Junior High Schools</div>
             <div style={ S('relative') }>
               <Select
@@ -252,20 +266,6 @@ export default class FilterForm extends Component {
                 placeholder={ senior_high_schools_select_options && !senior_high_schools_select_options.length ? 'No schools found' : 'Senior High Schools' }
                 onChange={ this.handleSchoolSelectChange.bind(this, 'senior_high_school') }
                 value={ data.listing_map ? data.listing_map.senior_high_schools_selected : '' }
-                multi
-                noResultsText={ 'No schools found'}
-              />
-            </div>
-          </div>
-          <div style={ S('p-15 relative') }>
-            <div style={ S('mb-10') }>Intermediate High Schools</div>
-            <div style={ S('relative') }>
-              <Select
-                name="intermediate_schools"
-                options={ intermediate_schools_select_options }
-                placeholder={ intermediate_schools_select_options && !intermediate_schools_select_options.length ? 'No schools found' : 'Intermediate Schools' }
-                onChange={ this.handleSchoolSelectChange.bind(this, 'intermediate_school') }
-                value={ data.listing_map ? data.listing_map.intermediate_schools_selected : '' }
                 multi
                 noResultsText={ 'No schools found'}
               />
