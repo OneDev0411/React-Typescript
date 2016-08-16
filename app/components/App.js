@@ -204,22 +204,22 @@ export default class App extends Component {
       if (state === 'Online' || state === 'Background')
         AppStore.data.users_online.push(user_id)
       if (state === 'Offline') {
-        AppStore.data.users_online.filter(id => {
+        AppStore.data.users_online = AppStore.data.users_online.filter(id => {
           if (user_id !== id)
             return true
         })
       }
       AppStore.emitChange()
     })
-    socket.on('User.Offline', response => {
-      if (!AppStore.data.users_online)
-        AppStore.data.users_online = []
-      const users_online_edited = AppStore.data.users_online.filter(user_id => {
-        return user_id !== response
-      })
-      AppStore.data.users_online = users_online_edited
-      AppStore.emitChange()
-    })
+    // socket.on('User.Offline', response => {
+    //   if (!AppStore.data.users_online)
+    //     AppStore.data.users_online = []
+    //   const users_online_edited = AppStore.data.users_online.filter(user_id => {
+    //     return user_id !== response
+    //   })
+    //   AppStore.data.users_online = users_online_edited
+    //   AppStore.emitChange()
+    // })
     socket.on('Room.UserJoined', (user, room) => {
       setTimeout(() => {
         // Add users
