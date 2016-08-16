@@ -101,7 +101,6 @@ export default class Listings extends Component {
       minimum_year_built: 0,
       points: null,
       minimum_bedrooms: 0,
-      minimum_price: 0,
       open_house: false,
       property_subtypes: ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse', 'LSE-Apartment', 'LSE-Condo/Townhome', 'LSE-Duplex', 'LSE-Fourplex', 'LSE-House', 'LSE-Mobile', 'LSE-Triplex'],
       list_offices: [brokerage]

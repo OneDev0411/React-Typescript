@@ -45,7 +45,6 @@ const controller = {
         longitude: -96.89115626525879
       }],
       minimum_bedrooms: 0,
-      minimum_price: 0,
       open_house: false,
       property_subtypes: ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse']
     }
