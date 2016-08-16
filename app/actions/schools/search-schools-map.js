@@ -18,11 +18,14 @@ export default (districts) => {
       callback()
     })
   }, () => {
-    AppStore.data.listing_map.elementary_schools = _.uniqBy(_.filter(AppStore.data.listing_map.schools, { school_type: 'elementary_school' }), 'name')
-    AppStore.data.listing_map.middle_schools = _.uniqBy(_.filter(AppStore.data.listing_map.schools, { school_type: 'middle_school' }), 'name')
-    AppStore.data.listing_map.junior_high_schools = _.uniqBy(_.filter(AppStore.data.listing_map.schools, { school_type: 'junior_high_school' }), 'name')
-    AppStore.data.listing_map.senior_high_schools = _.uniqBy(_.filter(AppStore.data.listing_map.schools, { school_type: 'senior_high_school' }), 'name')
-    AppStore.data.listing_map.intermediate_schools = _.uniqBy(_.filter(AppStore.data.listing_map.schools, { school_type: 'intermediate_school' }), 'name')
+    AppStore.data.listing_map.schools.forEach(school => {
+      school.appearances = Number(school.appearances)
+    })
+    AppStore.data.listing_map.elementary_schools = _.orderBy(_.uniqBy(_.filter(AppStore.data.listing_map.schools, { school_type: 'elementary_school' }), 'name'), ['appearances'], ['desc'])
+    AppStore.data.listing_map.middle_schools = _.orderBy(_.uniqBy(_.filter(AppStore.data.listing_map.schools, { school_type: 'middle_school' }), 'name'), ['appearances'], ['desc'])
+    AppStore.data.listing_map.junior_high_schools = _.orderBy(_.uniqBy(_.filter(AppStore.data.listing_map.schools, { school_type: 'junior_high_school' }), 'name'), ['appearances'], ['desc'])
+    AppStore.data.listing_map.senior_high_schools = _.orderBy(_.uniqBy(_.filter(AppStore.data.listing_map.schools, { school_type: 'senior_high_school' }), 'name'), ['appearances'], ['desc'])
+    AppStore.data.listing_map.intermediate_schools = _.orderBy(_.uniqBy(_.filter(AppStore.data.listing_map.schools, { school_type: 'intermediate_school' }), 'name'), ['appearances'], ['desc'])
     AppStore.emitChange()
   })
 }
