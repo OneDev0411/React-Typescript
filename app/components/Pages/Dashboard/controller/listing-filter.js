@@ -389,8 +389,11 @@ const controller = {
   changeSchoolDistrictsSelected(school_districts_selected) {
     AppStore.data.listing_map.school_districts_selected = school_districts_selected
     AppStore.emitChange()
+    AppStore.data.listing_map.schools_loading = true
+    AppStore.data.listing_map.show_schools_list = true
+    controller.getSchoolsFromDistricts()
   },
-  showSchoolsList() {
+  getSchoolsFromDistricts() {
     AppStore.data.listing_map.schools_loading = true
     AppStore.data.listing_map.show_schools_list = true
     AppStore.emitChange()

@@ -63,9 +63,6 @@ export default class FilterForm extends Component {
   handleSchoolSelectChange(school_type, schools) {
     this.props.changeSchoolsSelected(school_type, schools)
   }
-  handleSchoolInputChange() {
-    this.props.showSchoolsList()
-  }
   handleHomeStylesSelectChange(value) {
     this.props.changeHomeStylesSelected(value)
   }
@@ -210,12 +207,11 @@ export default class FilterForm extends Component {
               <Select
                 name="elementary_schools"
                 options={ elementary_school_select_options }
-                placeholder="Elementary Schools"
-                onOpen={ this.handleSchoolInputChange.bind(this) }
-                onInputChange={ this.handleSchoolInputChange.bind(this) }
+                placeholder={ elementary_school_select_options && !elementary_school_select_options.length ? 'No schools found' : 'Elementary Schools' }
                 onChange={ this.handleSchoolSelectChange.bind(this, 'elementary_school') }
                 value={ data.listing_map ? data.listing_map.elementary_schools_selected : '' }
                 multi
+                noResultsText={ 'No schools found'}
               />
             </div>
           </div>
@@ -225,12 +221,11 @@ export default class FilterForm extends Component {
               <Select
                 name="middle_schools"
                 options={ middle_school_select_options }
-                placeholder="Middle Schools"
-                onOpen={ this.handleSchoolInputChange.bind(this) }
-                onInputChange={ this.handleSchoolInputChange.bind(this) }
+                placeholder={ middle_school_select_options && !middle_school_select_options.length ? 'No schools found' : 'Middle Schools' }
                 onChange={ this.handleSchoolSelectChange.bind(this, 'middle_school') }
                 value={ data.listing_map ? data.listing_map.middle_schools_selected : '' }
                 multi
+                noResultsText={ 'No schools found'}
               />
             </div>
           </div>
@@ -240,12 +235,11 @@ export default class FilterForm extends Component {
               <Select
                 name="junior_high_schools"
                 options={ junior_high_schools_select_options }
-                placeholder="Junior High Schools"
-                onOpen={ this.handleSchoolInputChange.bind(this) }
-                onInputChange={ this.handleSchoolInputChange.bind(this) }
+                placeholder={ junior_high_schools_select_options && !junior_high_schools_select_options.length ? 'No schools found' : 'Junior High Schools' }
                 onChange={ this.handleSchoolSelectChange.bind(this, 'junior_high_school') }
                 value={ data.listing_map ? data.listing_map.junior_high_schools_selected : '' }
                 multi
+                noResultsText={ 'No schools found'}
               />
             </div>
           </div>
@@ -255,12 +249,11 @@ export default class FilterForm extends Component {
               <Select
                 name="senior_high_schools"
                 options={ senior_high_schools_select_options }
-                placeholder="Senior High Schools"
-                onOpen={ this.handleSchoolInputChange.bind(this) }
-                onInputChange={ this.handleSchoolInputChange.bind(this) }
+                placeholder={ senior_high_schools_select_options && !senior_high_schools_select_options.length ? 'No schools found' : 'Senior High Schools' }
                 onChange={ this.handleSchoolSelectChange.bind(this, 'senior_high_school') }
                 value={ data.listing_map ? data.listing_map.senior_high_schools_selected : '' }
                 multi
+                noResultsText={ 'No schools found'}
               />
             </div>
           </div>
@@ -270,12 +263,11 @@ export default class FilterForm extends Component {
               <Select
                 name="intermediate_schools"
                 options={ intermediate_schools_select_options }
-                placeholder="Intermediate Schools"
-                onOpen={ this.handleSchoolInputChange.bind(this) }
-                onInputChange={ this.handleSchoolInputChange.bind(this) }
+                placeholder={ intermediate_schools_select_options && !intermediate_schools_select_options.length ? 'No schools found' : 'Intermediate Schools' }
                 onChange={ this.handleSchoolSelectChange.bind(this, 'intermediate_school') }
                 value={ data.listing_map ? data.listing_map.intermediate_schools_selected : '' }
                 multi
+                noResultsText={ 'No schools found'}
               />
             </div>
           </div>
@@ -705,7 +697,6 @@ FilterForm.propTypes = {
   hideFilterForm: React.PropTypes.func,
   showSchoolDistrictsList: React.PropTypes.func,
   changeSchoolDistrictsSelected: React.PropTypes.func,
-  showSchoolsList: React.PropTypes.func,
   changeSchoolsSelected: React.PropTypes.func,
   showAreasList: React.PropTypes.func,
   changeAreasSelected: React.PropTypes.func,

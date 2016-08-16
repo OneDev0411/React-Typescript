@@ -907,7 +907,6 @@ export default class Mls extends Component {
           hideFilterForm={ controller.listing_filter.hideFilterForm }
           showSchoolDistrictsList={ controller.listing_filter.showSchoolDistrictsList }
           changeSchoolDistrictsSelected={ controller.listing_filter.changeSchoolDistrictsSelected }
-          showSchoolsList={ controller.listing_filter.showSchoolsList }
           changeSchoolsSelected={ controller.listing_filter.changeSchoolsSelected }
           showAreasList={ controller.listing_filter.showAreasList }
           changeAreasSelected={ controller.listing_filter.changeAreasSelected }
