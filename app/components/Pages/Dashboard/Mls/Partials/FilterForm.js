@@ -157,7 +157,7 @@ export default class FilterForm extends Component {
       elementary_school_select_options = data.listing_map.elementary_schools.map(school => {
         return {
           value: school.name,
-          label: school.name
+          label: school.appearances + ' - ' + school.name
         }
       })
     }
@@ -166,7 +166,7 @@ export default class FilterForm extends Component {
       middle_school_select_options = data.listing_map.middle_schools.map(school => {
         return {
           value: school.name,
-          label: school.name
+          label: school.appearances + ' - ' + school.name
         }
       })
     }
@@ -175,7 +175,7 @@ export default class FilterForm extends Component {
       junior_high_schools_select_options = data.listing_map.junior_high_schools.map(school => {
         return {
           value: school.name,
-          label: school.name
+          label: school.appearances + ' - ' + school.name
         }
       })
     }
@@ -184,7 +184,7 @@ export default class FilterForm extends Component {
       senior_high_schools_select_options = data.listing_map.senior_high_schools.map(school => {
         return {
           value: school.name,
-          label: school.name
+          label: school.appearances + ' - ' + school.name
         }
       })
     }
@@ -193,7 +193,7 @@ export default class FilterForm extends Component {
       intermediate_schools_select_options = data.listing_map.intermediate_schools.map(school => {
         return {
           value: school.name,
-          label: school.name
+          label: school.appearances + ' - ' + school.name
         }
       })
     }
