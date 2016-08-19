@@ -13,7 +13,8 @@ import { randomString } from '../../../../utils/helpers'
 export default class Listings extends Component {
   componentWillMount() {
     AppStore.data.brand = {
-      primary: '2196f3'
+      primary: '2196f3',
+      office_mls_id: 'CSTPP01'
     }
     AppStore.data.is_widget = true
     AppStore.emitChange()

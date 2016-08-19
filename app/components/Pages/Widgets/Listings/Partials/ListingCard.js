@@ -17,7 +17,7 @@ export default class ListingCard extends Component {
       address = property.address
     const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
     let listing_card_style = {
-      ...S(`w-480 h-420 mr-10 ml-10 mb-20 pull-left br-3 pointer relative`),
+      ...S(`w-480 h-460 mr-10 ml-10 mb-20 pull-left br-3 pointer relative`),
       boxShadow: '0 0 2px 0 rgba(0, 0, 0, 0.2)',
       overflow: 'hidden'
     }
@@ -290,6 +290,9 @@ export default class ListingCard extends Component {
         </div>
       )
     }
+    let agent_type = 'Listing Agent'
+    if (!listing.list_office.brand || listing.list_office.brand.office_mls_id !== data.brand.office_mls_id)
+      agent_type = 'Buyer Agent'
     return (
       <div key={ 'listing-viewer-' + listing.id + '-' + helpers.randomString(10) } style={ listing_card_style }>
         <FavoriteHeart
@@ -299,22 +302,28 @@ export default class ListingCard extends Component {
           <div style={ overlay_style }></div>
           <div style={ price_tag_style }>${ price_small }</div>
         </div>
-        <div style={ S('absolute b-0 h-80 p-10 color-000') } onClick={ this.props.handleListingClick.bind(this, listing) }>
+        <div style={ S('absolute b-40 h-80 p-10 pl-15 color-000') } onClick={ this.props.handleListingClick.bind(this, listing) }>
           <div style={ S('font-20') }>{ listing_util.addressTitle(address) }</div>
           <div style={ S('font-15') }>
-            <div style={ S('pull-left mr-10 mt-13' + (data.is_mobile ? ' font-14' : '')) }>
-              <div style={ S('pull-left w-10 h-10 br-100 mr-8 bg-' + status_color) }></div>
-              <div style={ S('pull-left mt-5n color-' + status_color) }>
-                { listing.status }
-              </div>
-            </div>
-            <div style={ S('pull-left mt-8' + (data.is_mobile ? ' font-14' : '')) }>
+            <div style={ S('mt-8' + (data.is_mobile ? ' font-14' : '')) }>
               <span>{ property.bedroom_count } Beds</span>
               &nbsp;&middot;&nbsp;
               <span>{ property.bathroom_count } Baths</span>
               &nbsp;&middot;&nbsp;
               <span>{ square_feet } Sqft</span>
               { year_built_area }
+            </div>
+          </div>
+          <div style={ S('font-15') }>
+            <div style={ S('pull-left mr-15 mt-18' + (data.is_mobile ? ' font-14' : '')) }>
+              <div style={ S('pull-left w-10 h-10 br-100 mr-8 bg-' + status_color) }></div>
+              <div style={ S('pull-left mt-5n color-' + status_color) }>
+                { listing.status }
+              </div>
+            </div>
+            <div style={ S('pull-left relative t-17 w-1 h-14 bg-e5e5e5 mr-15') }></div>
+            <div style={ S('pull-left mr-10 mt-13 color-8696a4') }>
+              { agent_type }
             </div>
           </div>
         </div>
