@@ -6,11 +6,14 @@ module.exports = (app, config) => {
     const access_token = req.body.access_token
     const options = req.body.options
     // From map widget
-    if (req.body.office && !options.list_offices)
-      endpoint = endpoint + '?order_by=office,status&office=' + req.body.office
+    if (req.body.office && !options.list_offices) 
+      endpoint = endpoint + '?associations=compact_listing.list_office&order_by=office,status&office=' + req.body.office
     // From listing widget
-    if (options.list_offices && options.list_offices.length && options.listing_statuses[0] === 'Sold')
-      endpoint = endpoint + '?order_by=price'
+    if (options.list_offices && options.list_offices.length) {
+      endpoint = endpoint + '?associations=compact_listing.list_agent'
+      if (options.listing_statuses[0] === 'Sold')
+        endpoint = endpoint + '&order_by=price'
+    }
     // Offset
     if (req.body.offset)
       endpoint = endpoint + '&limit=75&offset=' + req.body.offset
@@ -21,6 +24,7 @@ module.exports = (app, config) => {
     }
     if (access_token)
       headers.authorization = 'Bearer ' + access_token
+    // console.log(options)
     fetch(endpoint,{
       method: 'post',
       headers,

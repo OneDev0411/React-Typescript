@@ -9,6 +9,7 @@ import searchListingInput from '../actions/listings/search-input'
 import getSimilarListings from '../actions/listings/get-similars'
 import getValerts from '../actions/listings/get-valerts'
 import getValertsAlert from '../actions/listings/get-valerts-alert'
+import getValertsNoGeo from '../actions/listings/get-valerts-no-geo'
 import getListing from '../actions/listings/get-listing'
 import shareAlert from '../actions/alerts/share-alert'
 import getAlertRoom from '../actions/alerts/get-alert-room'
@@ -22,6 +23,11 @@ import getPagedRecs from '../actions/recs/get-paged-recs'
 import markRecsAsRead from '../actions/recs/mark-as-read'
 import getValertsWidget from '../actions/listings/get-valerts-widget'
 import pageValertsWidget from '../actions/listings/page-valerts-widget'
+import searchSchoolDistrictsMap from '../actions/schools/search-school-districts-map'
+import searchSchoolsMap from '../actions/schools/search-schools-map'
+import searchAreasMap from '../actions/areas/search-areas-map'
+import showCountiesMap from '../actions/counties/show-counties-map'
+import searchSubdivisionsMap from '../actions/subdivisions/search-subdivisions-map'
 const ListingDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
@@ -59,6 +65,10 @@ ListingDispatcher.register(payload => {
 
     case 'get-valerts-widget':
       getValertsWidget(payload.user, payload.options)
+      break
+
+    case 'get-valerts-no-geo':
+      getValertsNoGeo(payload.user, payload.options)
       break
 
     case 'page-listings-widget':
@@ -107,6 +117,26 @@ ListingDispatcher.register(payload => {
 
     case 'mark-recs-as-read':
       markRecsAsRead(payload.user, payload.recommendations)
+      break
+
+    case 'search-schools-map':
+      searchSchoolsMap(payload.districts)
+      break
+
+    case 'search-school-districts-map':
+      searchSchoolDistrictsMap(payload.q)
+      break
+
+    case 'search-areas-map':
+      searchAreasMap(payload.parents, payload.q)
+      break
+
+    case 'show-counties-map':
+      showCountiesMap(payload.q)
+      break
+
+    case 'search-subdivisions-map':
+      searchSubdivisionsMap(payload.q)
       break
 
     default:

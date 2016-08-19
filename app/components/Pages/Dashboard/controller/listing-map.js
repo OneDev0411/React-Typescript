@@ -13,7 +13,8 @@ const controller = {
       maximum_price: 9.22337203685478e+18,
       limit: '75',
       maximum_lot_square_meters: 100000000,
-      minimum_bathrooms: 1,
+      minimum_bathrooms: 0,
+      minimum_parking_spaces: 0,
       maximum_square_meters: 10000000,
       location: {
         longitude: -96.79698789999998,
@@ -74,7 +75,8 @@ const controller = {
           active: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract']
         },
         minimum_bedrooms: 0,
-        minimum_bathrooms: 1,
+        minimum_bathrooms: 0,
+        minimum_parking_spaces: 0,
         pool: 'either'
       }
     }
@@ -137,12 +139,19 @@ const controller = {
       AppStore.data.listing_map.is_loading = true
       AppStore.data.listing_map.options.points = points
     }
-    // If has search input
-    // if (data.listing_map && data.listing_map.has_search_input) {
-    //   delete AppStore.data.listing_map.is_loading
-    //   return
+    // Get options
+    // Zoom fix
+    // if (listing_map.options.mls_areas || listing_map.options.school_districts || listing_map.options.counties) {
+    //   if (!listing_map.search_area_on_move)
+    //     AppStore.data.listing_map.search_area_on_move = true
+    //   else {
+    //     delete listing_map.options.mls_areas
+    //     delete listing_map.options.school_districts
+    //     delete listing_map.options.counties
+    //     delete AppStore.data.listing_map.search_area_on_move
+    //   }
+    //   AppStore.emitChange()
     // }
-    AppStore.emitChange()
     ListingDispatcher.dispatch({
       action: 'get-valerts',
       user,

@@ -29,19 +29,29 @@ const controller = {
       alert_id
     })
   },
+  getBounds(points) {
+    const google = window.google
+    const bound = new google.maps.LatLngBounds()
+    points.forEach(point => {
+      bound.extend(new google.maps.LatLng(point.latitude, point.longitude))
+    })
+    return bound.getCenter()
+  },
   showAlertOnMap(alert) {
-    const lat = alert.location.latitude
-    const lng = alert.location.longitude
+    let center_from_points
+    let lat
+    let lng
+    if (alert.points) {
+      center_from_points = controller.getBounds(alert.points)
+      lat = center_from_points.lat()
+      lng = center_from_points.lng()
+    }
     const options = {
       maximum_price: alert.maximum_price,
       limit: '75',
       maximum_lot_square_meters: alert.maximum_lot_square_meters,
       minimum_bathrooms: alert.minimum_bathrooms,
       maximum_square_meters: alert.maximum_square_meters,
-      location: {
-        longitude: lng,
-        latitude: lat
-      },
       horizontal_distance: 2830,
       property_types: ['Residential'],
       vertical_distance: 2830,
@@ -56,6 +66,20 @@ const controller = {
       minimum_price: alert.minimum_price,
       open_house: alert.open_house,
       property_subtypes: alert.property_subtypes
+    }
+    if (center_from_points) {
+      options.location = {
+        longitude: lng,
+        latitude: lat
+      }
+    }
+    if (alert.mls_areas) {
+      const mls_areas = []
+      alert.mls_areas.forEach(mls_area => {
+        mls_areas.push([mls_area.number, mls_area.parent])
+      })
+      options.mls_areas = mls_areas
+      options.points = null
     }
     ListingDispatcher.dispatch({
       action: 'get-valerts-alert',
@@ -72,21 +96,29 @@ const controller = {
     // Fit points on map
     const google = window.google
     const bounds = new google.maps.LatLngBounds()
-    alert.points.forEach(point => {
-      const location = new google.maps.LatLng(point.latitude, point.longitude)
-      bounds.extend(location)
-    })
-    window.map.fitBounds(bounds)
-    const center = {
-      lat: window.map.center.lat(),
-      lng: window.map.center.lng()
+    // Reset poly
+    if (window.poly) {
+      window.poly.setMap(null)
+      delete window.poly
     }
-    AppStore.data.listing_map.center = center
+    if (alert.points) {
+      alert.points.forEach(point => {
+        const location = new google.maps.LatLng(point.latitude, point.longitude)
+        bounds.extend(location)
+      })
+      window.map.fitBounds(bounds)
+      const center = {
+        lat: window.map.center.lat(),
+        lng: window.map.center.lng()
+      }
+      AppStore.data.listing_map.center = center
+    }
     AppStore.data.listing_map.options = options
     AppStore.data.listing_map.auto_move = true
     AppStore.data.current_alert = alert
     AppStore.emitChange()
-    controller.makePolygonAlert(alert.points)
+    if (alert.points)
+      controller.makePolygonAlert(alert.points)
     const history = require('../../../../utils/history')
     history.replaceState(null, '/dashboard/mls/alerts/' + alert.id)
   },

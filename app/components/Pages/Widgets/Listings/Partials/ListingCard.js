@@ -183,8 +183,10 @@ export default class ListingCard extends Component {
       }
       let online_indicator
       let bg_color = 'dddfe0'
-      if (listing.list_agent.is_online)
-        bg_color = '35b863'
+      if (listing.list_agent.online_state) {
+        if (listing.list_agent.online_state === 'Online' || listing.list_agent.online_state === 'Background')
+          bg_color = '35b863'
+      }
       online_indicator = <div style={ S('br-100 bg-' + bg_color + ' w-13 h-13 bw-2 solid bc-fff absolute z-2 t-2n r-2') }></div>
       agent_image_area = (
         <div onClick={ this.props.handleAgentClick.bind(this, listing) } style={ S('p-0 w-55 h-55 br-100 border-2-solid-fff absolute r-20 b-50 bg-ccc') }>
@@ -197,7 +199,7 @@ export default class ListingCard extends Component {
     let resent_message_area
     if (data.resent_email_confirmation) {
       resent_message_area = (
-        <div style={ S('mt-20 mb-20') }>Confirmation email resent.</div>
+        <div style={ S('mt-0 mb-20') }>Confirmation email resent.</div>
       )
     }
     let user_already_signed_up_message
@@ -212,7 +214,7 @@ export default class ListingCard extends Component {
         <div style={ S('absolute z-100 w-100p h-100p t-0 bg-fff') }>
           <div onClick={ this.props.hideModal } className="close" style={ S('font-30 t-10 r-20 absolute') }>&times;</div>
           <div className="text-center">
-            <div style={ S('mb-20 mt-20 center-block text-center' + (!data.is_mobile ? ' mt-50 w-280' : '')) }>
+            <div style={ S('mb-20 mt-20 center-block text-center' + (!data.is_mobile ? ' mt-30 w-280' : '')) }>
               <img style={ S('h-68 mr-40 relative') } src={ data.brand ? data.brand.logo_url : '' } />
               <i style={ S('color-929292 mr-40 font-30 relative t-5') } className="fa fa-arrow-right"></i>
               <img style={ S('h-68') } src="/images/logo-200w.png" />
@@ -223,7 +225,7 @@ export default class ListingCard extends Component {
               { data.new_user ? data.new_user.email : '' }
             </div>
             { user_already_signed_up_message }
-            <div style={ S('color-9b9b9b font-16 mb-20') }>
+            <div style={ S('color-9b9b9b font-16 mb-15') }>
               Didn’t get the email? <a onClick={ this.props.resend.bind(this) } href="#">Resend</a> or <a href="mailto:support@rechat.com">contact support</a>.
             </div>
             { resent_message_area }
@@ -241,7 +243,7 @@ export default class ListingCard extends Component {
         <div style={ S('absolute z-100 w-100p h-100p t-0 bg-fff') }>
           <div onClick={ this.props.hideModal } className="close" style={ S('font-30 t-10 r-20 absolute') }>&times;</div>
           <div className="text-center">
-            <div style={ S('mb-20 mt-20 center-block text-center' + (!data.is_mobile ? ' mt-50 w-280' : '')) }>
+            <div style={ S('mb-20 mt-20 center-block text-center' + (!data.is_mobile ? ' mt-30 w-280' : '')) }>
               <img style={ S('h-68 mr-40 relative') } src={ data.brand ? data.brand.logo_url : '' } />
               <i style={ S('color-929292 mr-40 font-30 relative t-5') } className="fa fa-arrow-right"></i>
               <img style={ S('h-68') } src="/images/logo-200w.png" />

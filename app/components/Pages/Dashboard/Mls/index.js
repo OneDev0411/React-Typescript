@@ -108,7 +108,7 @@ export default class Mls extends Component {
   componentDidUpdate() {
     const data = this.props.data
     // Init google search
-    if (window.google && !data.google_search_is_loaded && document.getElementById('google_search')) {
+    if (window.google && window.google.maps.places && !data.google_search_is_loaded && document.getElementById('google_search')) {
       controller.search_input_map.initGoogleSearch()
       AppStore.data.google_search_is_loaded = true
       AppStore.emitChange()
@@ -271,6 +271,8 @@ export default class Mls extends Component {
     delete AppStore.data.listing_map.no_listings_found
     if (AppStore.data.search_input)
       delete AppStore.data.search_input.listings
+    delete AppStore.data.listing_map.has_location_search
+    delete AppStore.data.listing_map.location_search
     AppStore.emitChange()
     let bounds = window.map.getBounds().toJSON()
     bounds = [
@@ -903,6 +905,17 @@ export default class Mls extends Component {
           showSoldDatePicker={ controller.listing_filter.showSoldDatePicker }
           handleSetSoldDate={ controller.listing_filter.handleSetSoldDate }
           hideFilterForm={ controller.listing_filter.hideFilterForm }
+          showSchoolDistrictsList={ controller.listing_filter.showSchoolDistrictsList }
+          changeSchoolDistrictsSelected={ controller.listing_filter.changeSchoolDistrictsSelected }
+          changeSchoolsSelected={ controller.listing_filter.changeSchoolsSelected }
+          showAreasList={ controller.listing_filter.showAreasList }
+          changeAreasSelected={ controller.listing_filter.changeAreasSelected }
+          changeSubAreasSelected={ controller.listing_filter.changeSubAreasSelected }
+          showCountiesList={ controller.listing_filter.showCountiesList }
+          changeCountiesSelected={ controller.listing_filter.changeCountiesSelected }
+          changeHomeStylesSelected={ controller.listing_filter.changeHomeStylesSelected }
+          showSubdivisionsList={ controller.listing_filter.showSubdivisionsList }
+          changeSubdivisionsSelected={ controller.listing_filter.changeSubdivisionsSelected }
         />
         { zoom_controls }
         { listing_map && listing_map.show_share_type_modal ? share_type_modal_area : '' }

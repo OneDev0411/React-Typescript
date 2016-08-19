@@ -82,17 +82,17 @@ export default class Listings extends Component {
   }
   initOptions(brokerage) {
     const options = {
-      maximum_price: 900000001,
+      maximum_price: 9.22337203685478e+18,
       limit: '75',
       maximum_lot_square_meters: 100000000,
-      minimum_bathrooms: 1,
+      minimum_bathrooms: 0,
       maximum_square_meters: 10000000,
       location: {
         longitude: -96.79698789999998,
         latitude: 32.7766642
       },
       horizontal_distance: 2830,
-      property_type: ['Residential', 'Residential Lease'],
+      property_types: ['Residential', 'Residential Lease'],
       vertical_distance: 2830,
       minimum_square_meters: 0,
       listing_statuses: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract', 'Pending'],
@@ -104,7 +104,7 @@ export default class Listings extends Component {
       minimum_bedrooms: 0,
       minimum_price: 0,
       open_house: false,
-      property_subtypes: ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse'],
+      property_subtypes: ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse', 'LSE-Apartment', 'LSE-Condo/Townhome', 'LSE-Duplex', 'LSE-Fourplex', 'LSE-House', 'LSE-Mobile', 'LSE-Triplex'],
       list_offices: [brokerage]
     }
     return options
@@ -200,7 +200,8 @@ export default class Listings extends Component {
     delete AppStore.data.signup_tooltip
     AppStore.emitChange()
   }
-  resend() {
+  resend(e) {
+    e.preventDefault()
     const data = this.props.data
     const new_user = data.new_user
     const user = {

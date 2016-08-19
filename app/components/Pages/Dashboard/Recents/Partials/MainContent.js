@@ -115,7 +115,7 @@ export default class MainContent extends Component {
     let is_typing
     if (data.is_typing && data.is_typing.author_id !== data.user.id && data.is_typing.room_id === data.current_room.id) {
       // Get user name
-      const author_typing = _.findWhere(data.current_room.users, { id: data.is_typing.author_id })
+      const author_typing = _.find(data.current_room.users, { id: data.is_typing.author_id })
       if (author_typing) {
         is_typing = (
           <div style={ S('absolute l-20 t-0 font-12') }>

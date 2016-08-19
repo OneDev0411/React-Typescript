@@ -23,7 +23,7 @@ export default (user, task, contacts) => {
     () => {
       let contact_ids
       const new_contacts = locals.contacts
-      contact_ids = _.pluck(new_contacts, 'id')
+      contact_ids = _.map(new_contacts, 'id')
       const params = {
         access_token: user.access_token,
         task,

@@ -41,7 +41,7 @@ export default class Transactions extends Component {
 
   handleClickTransaction(transaction) {
     const transaction_tabs = AppStore.data.transaction_tabs
-    if (!_.findWhere(transaction_tabs, { id: transaction.id }))
+    if (!_.find(transaction_tabs, { id: transaction.id }))
       this.addTransactionTab(transaction)
     this.viewTransaction(transaction)
   }
@@ -113,7 +113,7 @@ export default class Transactions extends Component {
         const important_dates = transaction.important_dates
         let closing_date
         if (important_dates)
-          closing_date = _.result(_.findWhere(important_dates, { title: 'closing' }), 'due_date')
+          closing_date = _.result(_.find(important_dates, { title: 'closing' }), 'due_date')
         if (transaction.listing) {
           listing = transaction.listing
           address = `${listing.property.address.street_number} ${listing.property.address.street_name}`

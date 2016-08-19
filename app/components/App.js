@@ -56,9 +56,10 @@ export default class App extends Component {
     // Check for mobile
     this.checkForMobile()
     // If logged in
-    const data = AppStore.data
-    if (data.user)
-      this.triggerBranchBanner()
+    // const data = AppStore.data
+    // if (data.user)
+    //   this.triggerBranchBanner()
+    this.triggerBranchBanner()
     // Check for brand
     this.checkForBranding()
   }
@@ -187,23 +188,27 @@ export default class App extends Component {
       delete AppStore.data.is_typing
       AppStore.emitChange()
     })
-    socket.on('Users.Online', response => {
-      AppStore.data.users_online = response
-      AppStore.emitChange()
-    })
-    socket.on('User.Online', response => {
-      if (!AppStore.data.users_online)
-        AppStore.data.users_online = []
-      AppStore.data.users_online.push(response)
-      AppStore.emitChange()
-    })
-    socket.on('User.Offline', response => {
-      if (!AppStore.data.users_online)
-        AppStore.data.users_online = []
-      const users_online_edited = AppStore.data.users_online.filter(user_id => {
-        return user_id !== response
+    socket.on('Users.States', response => {
+      const user_states = response
+      const users_online = user_states.filter(user_state => {
+        if (user_state.state === 'Online' || user_state.state === 'Background')
+          return true
       })
-      AppStore.data.users_online = users_online_edited
+      const user_ids = _.map(users_online, 'user_id')
+      AppStore.data.users_online = user_ids
+      AppStore.emitChange()
+    })
+    socket.on('User.State', (state, user_id) => {
+      if (!AppStore.data.users_online)
+        AppStore.data.users_online = []
+      if (state === 'Online' || state === 'Background')
+        AppStore.data.users_online.push(user_id)
+      if (state === 'Offline') {
+        AppStore.data.users_online = AppStore.data.users_online.filter(id => {
+          if (user_id !== id)
+            return true
+        })
+      }
       AppStore.emitChange()
     })
     socket.on('Room.UserJoined', (user, room) => {

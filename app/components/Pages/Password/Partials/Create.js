@@ -294,7 +294,7 @@ export default class Create extends Component {
             { name_area }
             <div className="clearfix"></div>
             <div style={ S('relative') }>
-              <Input autoComplete={ false } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } bsStyle={ password_style } placeholder="New Password" type={ data.signup && data.signup.show_password ? 'text' : 'password' } ref="password"/>
+              <Input autoComplete={ false } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } bsStyle={ password_style } placeholder="Add a Password" type={ data.signup && data.signup.show_password ? 'text' : 'password' } ref="password"/>
               <i onClick={ this.toggleShowPassword } style={ S('absolute t-15 r-15 z-100 pointer color-666') } className={ `fa fa-eye${ data.signup && data.signup.show_password ? '-slash' : '' }` }></i>
             </div>
             { type_area }

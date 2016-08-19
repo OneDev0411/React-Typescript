@@ -32,7 +32,18 @@ const controller = {
         user: AppStore.data.user,
         q: place.name
       })
-      // Place not selected
+      // Check if MLS number
+      if (!isNaN(place.name)) {
+        AppStore.data.listing_map.is_loading = true
+        // console.log(place.name) // 13362991
+        AppStore.emitChange()
+        ListingDispatcher.dispatch({
+          action: 'search-listing-map',
+          user: AppStore.data.user,
+          q: place.name
+        })
+        return
+      }
       if (!place.formatted_address) {
         AppStore.data.listing_map.is_loading = true
         AppStore.emitChange()
@@ -49,6 +60,10 @@ const controller = {
       }
       AppStore.data.listing_map.center = center
       AppStore.data.listing_map.zoom = 15
+      AppStore.data.listing_map.has_location_search = true
+      AppStore.data.listing_map.location_search = {
+        center
+      }
       AppStore.emitChange()
     })
   },

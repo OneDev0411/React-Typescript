@@ -296,11 +296,11 @@ export default class ListingPanel extends Component {
     let listings_total
     if (data.show_search_map) {
       if (listing_map.listings_info && listing_map.listings_info.total)
-        listings_total = 'of ' + listing_map.listings_info.total
+        listings_total = ' of ' + listing_map.listings_info.total
     }
     if (data.show_alerts_map) {
       if (data.alerts_map && data.alerts_map.listings_info)
-        listings_total = 'of ' + data.alerts_map.listings_info.total
+        listings_total = ' of ' + data.alerts_map.listings_info.total
     }
     return (
       <div style={ listing_panel_wrap_style }>

@@ -81,11 +81,12 @@ const controller = {
       return
     }
     alert.title = title
-    const center = data.listing_map.center
-    alert.location = {
-      latitude: center.lat,
-      longitude: center.lng
-    }
+    // const center = data.listing_map.center
+    // alert.location = {
+    //   latitude: center.lat,
+    //   longitude: center.lng
+    // }
+    // console.log(alert.points)
     ListingDispatcher.dispatch({
       action: 'share-alert',
       user,
@@ -111,11 +112,12 @@ const controller = {
     alert.title = ''
     if (title)
       alert.title = title
-    const center = data.listing_map.center
-    alert.location = {
-      latitude: center.lat,
-      longitude: center.lng
-    }
+    // const center = data.listing_map.center
+    // alert.location = {
+    //   latitude: center.lat,
+    //   longitude: center.lng
+    // }
+    // console.log(alert.points)
     if (!AppStore.data.share_modal)
       AppStore.data.share_modal = {}
     AppStore.data.share_modal.saving = true

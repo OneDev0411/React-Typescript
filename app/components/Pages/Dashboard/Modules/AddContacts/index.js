@@ -219,7 +219,7 @@ export default class AddContactsModule extends Component {
     let contacts_added_ids
     if (data.contacts_added) {
       contacts_added = data.contacts_added[module_type]
-      contacts_added_ids = _.pluck(contacts_added, 'id')
+      contacts_added_ids = _.map(contacts_added, 'id')
     }
     let filtered_contacts = contacts
     if (contacts) {

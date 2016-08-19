@@ -36,9 +36,10 @@ export default class ListingViewer extends Component {
     this.fadeIn()
   }
   componentWillUnmount() {
-    // Reinit google search
+    // Reinit google search if on map
     setTimeout(() => {
-      controller.search_input_map.initGoogleSearch()
+      if (document.getElementById('google_search'))
+        controller.search_input_map.initGoogleSearch()
     }, 300)
   }
   fadeIn() {
@@ -188,11 +189,19 @@ export default class ListingViewer extends Component {
           ...S('font-15 mb-20'),
           wordWrap: 'break-word'
         }
+        // TODO New Listing Info
+        let showing_instructions
+        if (listing.showing_instructions) {
+          showing_instructions = (
+            <div style={ S('font-15 mb-5') }>{ showing_instructions }</div>
+          )
+        }
         agent_area = (
           <div style={ S('mt-20 color-748090 w-100p border-1-solid-ededed br-3 p-20 text-center') }>
             <div style={ S('font-18 mb-5 color-3388ff') }><span style={ S('fw-400') }>{ listing.list_agent_full_name }, Seller Agent</span></div>
             <div style={ S('font-15 mb-5') }>{ listing.list_agent_direct_work_phone }</div>
             <div style={ S('font-15 mb-5') }>{ listing.list_office_name }</div>
+            { showing_instructions }
             <div style={ email_style }><a href={ `mailto:${ listing.list_agent_email }?subject=Your listing on Rechat.com&body=I saw your listing (${ listing_title }) on Rechat.com and I'm interested in getting more information.` } style={ S('color-748090') }>{ listing.list_agent_email }</a></div>
             <div style={ S('border-bottom-2-solid-e4e4e4 w-40 center-block mb-5') }></div>
           </div>
