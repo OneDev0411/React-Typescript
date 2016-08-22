@@ -12,6 +12,18 @@ export default {
     }
     return status_color
   },
+  getStatusColorClass: status => {
+    let status_color_class = ''
+    if (status) {
+      if (status === 'Active')
+        status_color_class = 'green'
+      if (status === 'Active Option Contract' || status === 'Active Contingent' || status === 'Active Kick Out' || status === 'Pending')
+        status_color_class = 'orange'
+      if (status === 'Expired' || status === 'Sold')
+        status_color_class = 'red'
+    }
+    return status_color_class
+  },
   metersToFeet: meters => {
     return Math.round(meters * '10.7639')
   },
