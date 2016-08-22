@@ -105,7 +105,7 @@ export default class ListingMarker extends Component {
     if (this.isFavorited(listing) || listing.commented_by) {
       marker_style = {
         ...marker_style,
-        ...S('w-95')
+        ...S('w-80')
       }
       social_badge = this.getSocialBadge(listing)
     }
@@ -117,7 +117,7 @@ export default class ListingMarker extends Component {
       )
       marker_style = {
         ...marker_style,
-        ...S('w-95 z-100')
+        ...S('w-80 z-100')
       }
     }
     if (listing_map && listing_map.listings_viewed && listing_map.listings_viewed.indexOf(listing.id) !== -1)
@@ -126,7 +126,7 @@ export default class ListingMarker extends Component {
       <div className={ 'map__listing-marker' + active_class + viewed_class + ' ' + status_color_class } style={ marker_style }>
         { brand_badge }
         { social_badge }
-        <div style={ S('absolute r-10 t-5') }>${ price_small }</div>
+        <div style={ S(`w-100p text-center pt-6${social_badge ? ' pl-22' : ''}`) }>${ price_small }</div>
       </div>
     )
     // Open house
