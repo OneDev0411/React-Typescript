@@ -51,9 +51,8 @@ export default class RoomsList extends Component {
     if (rooms) {
       rooms_list = rooms.map(room => {
         // Profile image
-        let author
         let profile_image_div
-        let list_style = S('pointer pt-10 pb-10 pl-10 pr-17 relative border-bottom-1-solid-e7e4e3')
+        let list_style = S('pointer pt-10 pb-10 pl-10 pr-17 relative border-bottom-1-solid-e7e4e3 h-70')
         if (current_room && current_room.id === room.id)
           list_style = { ...list_style, ...S('bg-f5fafe') }
         if (!room.latest_message) {
@@ -86,16 +85,18 @@ export default class RoomsList extends Component {
             </li>
           )
         }
-        if (room.latest_message.author) {
-          author = room.latest_message.author
+        if (room.users.length === 2) {
+          const other_users = room.users.filter(user => {
+            return user.id !== data.user.id
+          })
           profile_image_div = (
-            <ProfileImage data={ data } user={ author }/>
+            <ProfileImage data={ data } user={ other_users[0] }/>
           )
         }
-        if (!room.latest_message.author) {
+        if (room.users.length > 2) {
           profile_image_div = (
-            <div style={ S('absolute w-35') }>
-              <img className="center-block" src="/images/dashboard/rebot@2x.png" style={ S('w-30') } />
+            <div style={ S('absolute w-35 br-100 bg-2196f3 color-fff w-40 h-40 pt-11 text-center op-.7') }>
+              { room.users.length }
             </div>
           )
         }
@@ -109,23 +110,6 @@ export default class RoomsList extends Component {
         })
         // Time posted
         const latest_created = room.latest_message.created_at.toString().split('.')
-        const time_created = helpers.friendlyDate(latest_created[0])
-        let author_name
-        if (room.latest_message.author)
-          author_name = `${room.latest_message.author.first_name} ${room.latest_message.author.last_name}: `
-        let comment
-        if (room.latest_message.comment) {
-          comment = (
-            <div className="room-list__item__message" style={ S('w-90p color-808080') }>{ author_name }{ room.latest_message.comment.substring(0, 50) }{ room.latest_message.comment.length > 50 ? '...' : '' }</div>
-          )
-        }
-
-        if (room.latest_message.image_url) {
-          comment = (
-            <div style={ S('color-808080') }>{ author_name }Uploaded a file</div>
-          )
-        }
-
         // Notifications
         let notification
         if (data.notifications) {
@@ -138,24 +122,24 @@ export default class RoomsList extends Component {
             )
           }
         }
+        if (notification) {
+          first_name_list = (
+            <div style={ S('fw-500 color-000') }>{ first_name_list }</div>
+          )
+        }
         return (
           <li className="room-list__item" style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, room.id) }>
             <div style={ S('relative') }>
               { profile_image_div }
               <div className="pull-left" style={ S('ml-50 w-90p') }>
-                <div className="room-list__item__title pull-left" style={ S('w-60p') }>
-                  <b>{ room.title }</b>
+                <div className="room-list__item__names" style={ S('color-263445 relative t-15 w-70p') }>
+                  { first_name_list }
                 </div>
-                <div className="text-right" style={ S('color-ccc w-50p absolute r-10n font-13') } >
-                  { time_created.month } { time_created.date }, { time_created.time_friendly }
+                <div className="text-right" style={ S('color-ccc w-50p absolute r-10n t-15 font-13') } >
+                  { helpers.getTimeAgo(latest_created[0]) }
                   &nbsp;
                   { notification }
                 </div>
-                <div className="clearfix"></div>
-                <div className="room-list__item__names" style={ S('color-aaaaaa w-74p relative t-3n') }>
-                  { first_name_list }
-                </div>
-                { comment }
               </div>
               <div className="clearfix"></div>
             </div>

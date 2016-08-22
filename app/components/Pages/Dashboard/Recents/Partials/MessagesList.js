@@ -1,6 +1,7 @@
 // MessagesList.js
 import React, { Component } from 'react'
 import S from 'shorti'
+import _ from 'lodash'
 import Loading from '../../../../Partials/Loading'
 import { Carousel, CarouselItem, Tooltip, OverlayTrigger, Modal, Button, Alert } from 'react-bootstrap'
 import config from '../../../../../../config/public'
@@ -373,6 +374,14 @@ export default class MessagesList extends Component {
         </div>
       )
     }
+    // List users
+    const users = current_room.users
+    const first_names = _.map(users, 'first_name')
+    let first_name_list = ''
+    first_names.forEach((first_name, i) => {
+      first_name_list += first_name
+      if (i < first_names.length - 1) first_name_list += ', '
+    })
     return (
       <div>
         <button onClick={ this.props.showModal.bind(this, 'invite-user') } type="button" className="btn btn-default" style={ btn_invite_style } >
@@ -381,7 +390,7 @@ export default class MessagesList extends Component {
         <button onClick={ this.props.showModal.bind(this, 'settings') } type="button" className="btn btn-default" style={ btn_settings_style } >
           <i style={ S('font-16 relative t-1') } className="fa fa-cog"></i>
         </button>
-        <h3 style={ S('mt-6 ml-20 mr-50 ' + heading_pt) }>{ current_room.title }</h3>
+        <h3 className="room-list__item__names" style={ S('w-80p mt-6 ml-20 mr-50 ' + heading_pt) }>{ first_name_list }</h3>
         { /* fixed_heading_date_area */ }
         <div className="touch-scroll" ref="messages_scroll_area" style={ messages_scroll_area } onScroll={ this.handleScroll.bind(this) }>
           { loading_previous }
