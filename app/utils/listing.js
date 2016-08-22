@@ -7,7 +7,7 @@ export default {
         status_color = '35b863'
       if (status === 'Active Option Contract' || status === 'Active Contingent' || status === 'Active Kick Out' || status === 'Pending')
         status_color = 'f8b619'
-      if (status === 'Expired' || status === 'Sold')
+      if (status === 'Expired' || status === 'Sold' || status === 'Cancelled')
         status_color = 'db3821'
     }
     return status_color
@@ -19,7 +19,7 @@ export default {
         status_color_class = 'green'
       if (status === 'Active Option Contract' || status === 'Active Contingent' || status === 'Active Kick Out' || status === 'Pending')
         status_color_class = 'orange'
-      if (status === 'Expired' || status === 'Sold')
+      if (status === 'Expired' || status === 'Sold' || status === 'Cancelled')
         status_color_class = 'red'
     }
     return status_color_class
