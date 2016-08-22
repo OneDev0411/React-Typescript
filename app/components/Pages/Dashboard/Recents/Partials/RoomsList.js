@@ -53,6 +53,10 @@ export default class RoomsList extends Component {
         // Profile image
         let profile_image_div
         let list_style = S('pointer pt-15 pb-10 pl-10 pr-17 relative h-70')
+        const not_current_user_users = room.users.filter(room_user => {
+          if (room_user.id !== data.user.id)
+            return true
+        })
         if (current_room && current_room.id === room.id)
           list_style = { ...list_style, ...S('bg-f5fafe') }
         if (!room.latest_message) {
@@ -60,13 +64,8 @@ export default class RoomsList extends Component {
           const time_updated = helpers.friendlyDate(room.updated_at)
           let room_owner = room.owner
           // One to one
-          if (!room_owner) {
-            const not_current_user = room.users.filter(room_user => {
-              if (room_user.id !== data.user.id)
-                return true
-            })
-            room_owner = not_current_user[0]
-          }
+          if (!room_owner)
+            room_owner = not_current_user_users[0]
           return (
             <li className="room-list__item" style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, room.id) }>
               <div style={ S('relative') }>
@@ -101,8 +100,7 @@ export default class RoomsList extends Component {
           )
         }
         // List users
-        const users = room.users
-        const first_names = _.map(users, 'first_name')
+        const first_names = _.map(not_current_user_users, 'first_name')
         let first_name_list = ''
         first_names.forEach((first_name, _i) => {
           first_name_list += first_name

@@ -375,8 +375,11 @@ export default class MessagesList extends Component {
       )
     }
     // List users
-    const users = current_room.users
-    const first_names = _.map(users, 'first_name')
+    const not_current_user_users = current_room.users.filter(room_user => {
+      if (room_user.id !== data.user.id)
+        return true
+    })
+    const first_names = _.map(not_current_user_users, 'first_name')
     let first_name_list = ''
     first_names.forEach((first_name, i) => {
       first_name_list += first_name
