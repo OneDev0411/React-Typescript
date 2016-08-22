@@ -126,7 +126,7 @@ export default class ListingMarker extends Component {
       <div className={ 'map__listing-marker' + active_class + viewed_class + ' ' + status_color_class } style={ marker_style }>
         { brand_badge }
         { social_badge }
-        <div style={ S(`w-100p text-center pt-6${social_badge || brand_badge ? ' pl-22' : ''}`) }>${ price_small }</div>
+        <div style={ S(`w-100p text-center pt-6${social_badge || brand_badge ? ' pl-22' : ''}`) }>{ price_small }</div>
       </div>
     )
     // Open house
@@ -151,7 +151,7 @@ export default class ListingMarker extends Component {
           <div style={ open_style }>O<br />P<br />E<br />N</div>
           { brand_badge }
           { social_badge }
-          <div style={ S(`w-100p text-center pt-6${social_badge || brand_badge ? ' pl-22' : ''}`) }>${ price_small }</div>
+          <div style={ S(`w-100p text-center pt-6${social_badge || brand_badge ? ' pl-22' : ''}`) }>{ price_small }</div>
         </div>
       )
     }
