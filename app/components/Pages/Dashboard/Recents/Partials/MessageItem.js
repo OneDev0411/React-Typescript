@@ -229,6 +229,11 @@ export default class MessageItem extends Component {
           </div>
         )
       }
+      let notification_message
+      if (message.notification && message.notification.action === 'BecameAvailable')
+        notification_message = ' just hit the market'
+      if (message.notification && message.notification.action === 'PriceDropped')
+        notification_message = ' price dropped'
       return (
         <div className="message-item" style={ S('relative mb-15 pt-5 font-15') }>
           <div style={ S('mt-5 pull-left') }>
@@ -244,7 +249,7 @@ export default class MessageItem extends Component {
               <span onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ S('fw-600 pointer') } className="text-primary">
                 { listing_util.addressTitle(listing.property.address) }, { listing.property.address.postal_code }
               </span>
-              { !author ? ' just hit the market' : '' }
+              { !author ? ' ' + notification_message : '' }
             </div>
             <div onClick={ this.props.showListingViewer.bind(this, message.recommendation.listing) } style={ card_style }>
               <div style={ S('relative t-5 l-5') }>{ listing_status_indicator }</div>
