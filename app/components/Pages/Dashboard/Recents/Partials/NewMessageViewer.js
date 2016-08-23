@@ -2,10 +2,8 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import Select from 'react-select'
+import CreateMessageArea from './CreateMessageArea'
 export default class NewMessageViewer extends Component {
-  componentDidMount() {
-    this.refs.search_email.refs.input.focus()
-  }
   handleChange(rooms_selected) {
     this.props.addRoomsToSearchInput(rooms_selected)
   }
@@ -21,7 +19,7 @@ export default class NewMessageViewer extends Component {
       room_users.forEach(user => {
         if (user.id !== data.user.id) {
           rooms_select_options.push({
-            name: user.first_name + ' ' + user.last_name,
+            value: user.first_name + ' ' + user.last_name,
             label: user.first_name + ' ' + user.last_name
           })
         }
@@ -46,6 +44,15 @@ export default class NewMessageViewer extends Component {
             />
           </div>
         </div>
+        <CreateMessageArea
+          data={ data }
+          uploadFiles={ this.props.uploadFiles }
+          createMessage={ this.props.createMessage }
+          addContactToMessage={ this.props.addContactToMessage }
+          handleContactFilterNav={ this.props.handleContactFilterNav }
+          handleMessageTyping={ this.props.handleMessageTyping }
+          handleContactFilter={ this.props.handleContactFilter }
+        />
       </div>
     )
   }
@@ -54,5 +61,11 @@ export default class NewMessageViewer extends Component {
 // PropTypes
 NewMessageViewer.propTypes = {
   data: React.PropTypes.object,
-  addRoomsToSearchInput: React.PropTypes.func
+  addRoomsToSearchInput: React.PropTypes.func,
+  uploadFiles: React.PropTypes.func,
+  createMessage: React.PropTypes.func,
+  addContactToMessage: React.PropTypes.func,
+  handleContactFilterNav: React.PropTypes.func,
+  handleMessageTyping: React.PropTypes.func,
+  handleContactFilter: React.PropTypes.func
 }
