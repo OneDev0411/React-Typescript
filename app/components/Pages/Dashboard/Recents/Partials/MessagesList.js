@@ -136,7 +136,7 @@ export default class MessagesList extends Component {
     if (this.props.data.current_room.showing_all)
       return false
     const messages_scroll_area = this.refs.messages_scroll_area
-    if (messages_scroll_area.scrollTop === 0)
+    if (messages_scroll_area.scrollTop < 10)
       this.props.getPreviousMessages(messages_scroll_area.scrollHeight)
   }
 
@@ -261,7 +261,7 @@ export default class MessagesList extends Component {
 
     // Styles
     const messages_scroll_area = {
-      ...S('pl-20 pr-20 mt-20 relative'),
+      ...S('pl-20 pr-20 relative'),
       overflowY: messages_overflow,
       height: window.innerHeight - 115,
       opacity: messages_opacity
@@ -361,11 +361,8 @@ export default class MessagesList extends Component {
       </Modal.Footer>
     )
     let messages_mb = 'mb-40'
-    let heading_pt = 'pt-0'
-    if (data.is_mobile) {
+    if (data.is_mobile)
       messages_mb = 'mb-80'
-      heading_pt = 'pt-15'
-    }
     let message
     if (data.add_contacts_error) {
       message = (
@@ -393,8 +390,9 @@ export default class MessagesList extends Component {
         <button onClick={ this.props.showModal.bind(this, 'settings') } type="button" className="btn btn-default" style={ btn_settings_style } >
           <i style={ S('font-16 relative t-1') } className="fa fa-cog"></i>
         </button>
-        <h3 className="room-list__item__names" style={ S('w-80p mt-6 ml-20 mr-50 ' + heading_pt) }>{ first_name_list }</h3>
-        { /* fixed_heading_date_area */ }
+        <div style={ S('h-60 border-bottom-1-solid-eeeff3') }>
+          <h3 className="room-list__item__names" style={ S('w-80p mt-0 ml-20 mr-50 pt-15') }>{ first_name_list }</h3>
+        </div>
         <div className="touch-scroll" ref="messages_scroll_area" style={ messages_scroll_area } onScroll={ this.handleScroll.bind(this) }>
           { loading_previous }
           <ul style={ S('pl-0 ' + messages_mb) }>{ messages_list_items }</ul>

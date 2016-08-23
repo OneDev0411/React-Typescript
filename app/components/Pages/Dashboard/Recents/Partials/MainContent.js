@@ -97,12 +97,12 @@ export default class MainContent extends Component {
     const rooms_column_style = {
       height: window.innerHeight,
       borderRight: '1px solid #e7e4e3',
-      width: '320px'
+      width: '340px'
     }
     const messages_column_style = {
-      ...S('absolute pt-15 l-320 minw-450'),
+      ...S('absolute l-340 minw-450'),
       height: window.innerHeight,
-      width: window.innerWidth - 391
+      width: window.innerWidth - 411
     }
     let footer_style = S('absolute w-100p l-0 b-0 r-0 p-20 pb-10')
     // Mobile footer
@@ -274,9 +274,9 @@ export default class MainContent extends Component {
           <div style={ main_style_mobile }>
             <div style={ S('p-10 pt-15 h-60 relative') }>
               <img style={ S('w-12 h-12 absolute l-20 t-28') } src="/images/dashboard/chats/search.svg" />
-              <input ref="search_rooms_input" onChange={ this.handleSearchRoomChange.bind(this) } style={ S('w-82p br-100 pl-30') } type="text" placeholder="Search Chatrooms" className="form-control pull-left" value={ data.search_rooms_input }/>
-              <button onClick={ this.props.showModal.bind(this, 'create-chat') } type="button" className="btn btn-default" style={ S('w-40 h-40 pointer absolute p-0 t-14 r-10 br-100') }>
-                <img style={ S('h-18 relative t-1n l-2') } src="/images/dashboard/chats/add-chat.svg"/>
+              <input ref="search_rooms_input" onChange={ this.handleSearchRoomChange.bind(this) } style={ S('w-170 br-5 bg-f8fafb pl-30 h-34') } type="text" placeholder="Search" className="form-control pull-left" value={ data.search_rooms_input }/>
+              <button onClick={ this.props.showModal.bind(this, 'create-chat') } type="button" className="btn btn-primary" style={ S('h-34 pointer absolute p-0 t-14 r-10 br-100') }>
+                <img src="/images/dashboard/chats/pencil.svg" style={ S('mr-10') }/>New Message
               </button>
               <div className="clearfix"></div>
             </div>
@@ -331,12 +331,12 @@ export default class MainContent extends Component {
         >
           <div style={ main_style }>
             <div className="dashboard__chat-rooms pull-left" style={ rooms_column_style }>
-              <div style={ S('p-10 pt-15 h-60 relative') }>
-                <img style={ S('w-12 h-12 absolute l-20 t-28') } src="/images/dashboard/chats/search.svg" />
+              <div style={ S('p-10 pt-12 h-60 relative border-bottom-1-solid-eeeff3') }>
+                <img style={ S('w-12 h-12 absolute l-20 t-23') } src="/images/dashboard/chats/search.svg" />
                 { clear_search_btn }
-                <input ref="search_rooms_input" onChange={ this.handleSearchRoomChange.bind(this) } style={ S('w-82p br-100 pl-30') } type="text" placeholder="Search Chatrooms" className="form-control pull-left" value={ data.search_rooms_input } />
-                <button onClick={ this.props.showModal.bind(this, 'create-chat') } type="button" className="btn btn-default" style={ S('w-40 h-40 pointer absolute p-0 t-14 r-10 br-100') }>
-                  <img style={ S('h-18 relative t-1n l-2') } src="/images/dashboard/chats/add-chat.svg"/>
+                <input ref="search_rooms_input" onChange={ this.handleSearchRoomChange.bind(this) } style={ S('w-170 br-5 bg-f8fafb pl-30 h-34') } type="text" placeholder="Search" className="form-control pull-left" value={ data.search_rooms_input } />
+                <button onClick={ this.props.showModal.bind(this, 'create-chat') } type="button" className="btn btn-primary" style={ S('pointer absolute t-12 r-10 br-5 pt-7 h-34') }>
+                  <img src="/images/dashboard/chats/pencil.svg" style={ S('mr-10') }/>New Message
                 </button>
                 <div className="clearfix"></div>
               </div>

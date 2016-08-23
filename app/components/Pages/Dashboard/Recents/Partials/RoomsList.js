@@ -58,7 +58,7 @@ export default class RoomsList extends Component {
             return true
         })
         if (current_room && current_room.id === room.id)
-          list_style = { ...list_style, ...S('bg-f5fafe') }
+          list_style = { ...list_style, ...S('bg-f7f7f7') }
         if (!room.latest_message) {
           list_style = { ...list_style, ...S('h-60') }
           const time_updated = helpers.friendlyDate(room.updated_at)
@@ -146,7 +146,6 @@ export default class RoomsList extends Component {
       })
     }
     const rooms_scroll_area = {
-      ...S('mt-5'),
       overflowY: 'scroll',
       overflowX: 'hidden',
       height: window.innerHeight - 70
