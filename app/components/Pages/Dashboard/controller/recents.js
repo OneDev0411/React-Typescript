@@ -29,9 +29,14 @@ const controller = {
     AppStore.emitChange()
   },
   showNewMessageView() {
-    console.log('showNewMessageView')
     delete AppStore.data.current_room
     AppStore.data.show_new_message_viewer = true
+    AppStore.emitChange()
+  },
+  addRoomsToSearchInput(rooms_selected) {
+    AppStore.data.new_message = {
+      rooms_selected
+    }
     AppStore.emitChange()
   }
 }

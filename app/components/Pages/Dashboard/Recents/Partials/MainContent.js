@@ -344,6 +344,7 @@ export default class MainContent extends Component {
       messages_area = (
         <NewMessageViewer
           data={ data }
+          addRoomsToSearchInput={ this.props.addRoomsToSearchInput }
         />
       )
     }
@@ -424,5 +425,6 @@ MainContent.propTypes = {
   confirmDeleteRoom: React.PropTypes.func,
   setAlertGalleryActiveIndex: React.PropTypes.func,
   clearRoomSearchText: React.PropTypes.func,
-  showNewMessageView: React.PropTypes.func
+  showNewMessageView: React.PropTypes.func,
+  addRoomsToSearchInput: React.PropTypes.func
 }
