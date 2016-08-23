@@ -92,6 +92,7 @@ export default class Dashboard extends Component {
   setCurrentRoom(current_room) {
     AppStore.data.current_room = current_room
     AppStore.data.scroll_bottom = true
+    delete AppStore.data.show_new_message_viewer
     if (AppStore.data.is_mobile)
       AppStore.data.current_room_mobile = current_room
     AppStore.emitChange()
@@ -504,6 +505,7 @@ export default class Dashboard extends Component {
         hideDeleteRoomModal={ controller.recents.hideDeleteRoomModal }
         confirmDeleteRoom={ controller.recents.confirmDeleteRoom }
         clearRoomSearchText={ controller.recents.clearRoomSearchText }
+        showNewMessageView={ controller.recents.showNewMessageView }
       />
     )
     if (data.rooms_loaded && !rooms || data.rooms_loaded && !rooms.length) {

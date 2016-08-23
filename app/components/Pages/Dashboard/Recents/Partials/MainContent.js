@@ -13,7 +13,7 @@ import ProfileImage from '../../Partials/ProfileImage'
 import DropzoneOverlay from '../../Partials/DropzoneOverlay'
 import ListingViewer from '../../Partials/ListingViewer'
 import ListingViewerMobile from '../../Partials/ListingViewerMobile'
-
+import NewMessageViewer from './NewMessageViewer'
 export default class MainContent extends Component {
   handleSearchRoomChange() {
     const search_rooms_input = this.refs.search_rooms_input.value
@@ -275,7 +275,7 @@ export default class MainContent extends Component {
             <div style={ S('p-10 pt-15 h-60 relative') }>
               <img style={ S('w-12 h-12 absolute l-20 t-28') } src="/images/dashboard/chats/search.svg" />
               <input ref="search_rooms_input" onChange={ this.handleSearchRoomChange.bind(this) } style={ S('w-170 br-5 bg-f8fafb pl-30 h-34') } type="text" placeholder="Search" className="form-control pull-left" value={ data.search_rooms_input }/>
-              <button onClick={ this.props.showModal.bind(this, 'create-chat') } type="button" className="btn btn-primary" style={ S('h-34 pointer absolute p-0 t-14 r-10 br-100') }>
+              <button onClick={ this.props.showNewMessageView.bind(this) } type="button" className="btn btn-primary" style={ S('h-34 pointer absolute p-0 t-14 r-10 br-100') }>
                 <img src="/images/dashboard/chats/pencil.svg" style={ S('mr-10') }/>New Message
               </button>
               <div className="clearfix"></div>
@@ -320,6 +320,33 @@ export default class MainContent extends Component {
         <div onClick={ this.props.clearRoomSearchText.bind(this) } className="close" style={ S('absolute l-230 t-23') }>&times;</div>
       )
     }
+    let messages_area = (
+      <MessagesList
+        data={ data }
+        getPreviousMessages={ this.props.getPreviousMessages }
+        showModal={ this.props.showModal.bind(this) }
+        addContactsToRoom={ this.props.addContactsToRoom }
+        hideModal={ this.hideModal.bind(this) }
+        showFileViewer={ this.props.showFileViewer }
+        setHeadingDate={ this.props.setHeadingDate }
+        removeScrollBottom={ this.props.removeScrollBottom }
+        showListingViewer={ this.props.showListingViewer }
+        changeListingNotification={ this.props.changeListingNotification }
+        showAlertModal={ this.props.showAlertModal }
+        hideAlertModal={ this.props.hideAlertModal }
+        showDeleteRoomModal={ this.props.showDeleteRoomModal }
+        hideDeleteRoomModal={ this.props.hideDeleteRoomModal }
+        confirmDeleteRoom={ this.props.confirmDeleteRoom }
+        setAlertGalleryActiveIndex={ this.props.setAlertGalleryActiveIndex }
+      />
+    )
+    if (data.show_new_message_viewer) {
+      messages_area = (
+        <NewMessageViewer
+          data={ data }
+        />
+      )
+    }
     return (
       <div>
         <Dropzone
@@ -335,7 +362,7 @@ export default class MainContent extends Component {
                 <img style={ S('w-12 h-12 absolute l-20 t-23') } src="/images/dashboard/chats/search.svg" />
                 { clear_search_btn }
                 <input ref="search_rooms_input" onChange={ this.handleSearchRoomChange.bind(this) } style={ S('w-170 br-5 bg-f8fafb pl-30 h-34') } type="text" placeholder="Search" className="form-control pull-left" value={ data.search_rooms_input } />
-                <button onClick={ this.props.showModal.bind(this, 'create-chat') } type="button" className="btn btn-primary" style={ S('pointer absolute t-12 r-10 br-5 pt-7 h-34') }>
+                <button onClick={ this.props.showNewMessageView.bind(this) } type="button" className="btn btn-primary" style={ S('pointer absolute t-12 r-10 br-5 pt-7 h-34') }>
                   <img src="/images/dashboard/chats/pencil.svg" style={ S('mr-10') }/>New Message
                 </button>
                 <div className="clearfix"></div>
@@ -346,24 +373,7 @@ export default class MainContent extends Component {
               />
             </div>
             <div className="dashboard__messages pull-left" style={ messages_column_style }>
-              <MessagesList
-                data={ data }
-                getPreviousMessages={ this.props.getPreviousMessages }
-                showModal={ this.props.showModal.bind(this) }
-                addContactsToRoom={ this.props.addContactsToRoom }
-                hideModal={ this.hideModal.bind(this) }
-                showFileViewer={ this.props.showFileViewer }
-                setHeadingDate={ this.props.setHeadingDate }
-                removeScrollBottom={ this.props.removeScrollBottom }
-                showListingViewer={ this.props.showListingViewer }
-                changeListingNotification={ this.props.changeListingNotification }
-                showAlertModal={ this.props.showAlertModal }
-                hideAlertModal={ this.props.hideAlertModal }
-                showDeleteRoomModal={ this.props.showDeleteRoomModal }
-                hideDeleteRoomModal={ this.props.hideDeleteRoomModal }
-                confirmDeleteRoom={ this.props.confirmDeleteRoom }
-                setAlertGalleryActiveIndex={ this.props.setAlertGalleryActiveIndex }
-              />
+              { messages_area }
               { uploading_area }
               { create_message_area }
             </div>
@@ -413,5 +423,6 @@ MainContent.propTypes = {
   hideDeleteRoomModal: React.PropTypes.func,
   confirmDeleteRoom: React.PropTypes.func,
   setAlertGalleryActiveIndex: React.PropTypes.func,
-  clearRoomSearchText: React.PropTypes.func
+  clearRoomSearchText: React.PropTypes.func,
+  showNewMessageView: React.PropTypes.func
 }
