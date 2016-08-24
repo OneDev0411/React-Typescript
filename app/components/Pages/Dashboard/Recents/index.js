@@ -202,12 +202,14 @@ export default class Dashboard extends Component {
     const socket = window.socket
     AppStore.data.is_typing = data.user
     AppStore.emitChange()
-    socket.emit('User.Typing', AppStore.data.current_room.id)
+    if (AppStore.data.current_room)
+      socket.emit('User.Typing', AppStore.data.current_room.id)
   }
 
   sendTypingEnded() {
     const socket = window.socket
-    socket.emit('User.TypingEnded', AppStore.data.current_room.id)
+    if (AppStore.data.current_room)
+      socket.emit('User.TypingEnded', AppStore.data.current_room.id)
     delete AppStore.data.is_typing
     AppStore.emitChange()
   }
