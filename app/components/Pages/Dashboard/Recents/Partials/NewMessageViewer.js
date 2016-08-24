@@ -11,16 +11,17 @@ export default class NewMessageViewer extends Component {
     // Data
     const data = this.props.data
     const users_select_options = []
-    if (data.rooms) {
-      const room_users = []
-      data.rooms.forEach(room => {
-        room_users.push(...room.users)
-      })
-      room_users.forEach(user => {
+    console.log(data.contacts)
+    if (data.contacts) {
+      data.contacts.forEach(user => {
+        let full_name
         if (user.id !== data.user.id) {
+          full_name = user.first_name
+          if (user.last_name)
+            full_name += full_name + ' ' + user.first_name
           users_select_options.push({
-            value: user.first_name + ' ' + user.last_name,
-            label: user.first_name + ' ' + user.last_name
+            value: full_name,
+            label: full_name
           })
         }
       })
