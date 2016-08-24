@@ -33,11 +33,15 @@ const controller = {
     AppStore.data.show_new_message_viewer = true
     AppStore.emitChange()
   },
-  addRoomsToSearchInput(rooms_selected) {
+  addUsersToSearchInput(users_selected) {
     AppStore.data.new_message = {
-      rooms_selected
+      users_selected
     }
     AppStore.emitChange()
+    controller.getRoomFromUsersList(users_selected)
+  },
+  getRoomFromUsersList(users_selected) {
+    console.log(users_selected)
   }
 }
 export default controller

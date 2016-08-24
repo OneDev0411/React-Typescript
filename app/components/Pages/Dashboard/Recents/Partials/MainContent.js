@@ -191,7 +191,7 @@ export default class MainContent extends Component {
       messages_area = (
         <NewMessageViewer
           data={ data }
-          addRoomsToSearchInput={ this.props.addRoomsToSearchInput }
+          addUsersToSearchInput={ this.props.addUsersToSearchInput }
           uploadFiles={ this.props.uploadFiles }
           createMessage={ this.props.createMessage }
           addContactToMessage={ this.props.addContactToMessage }
@@ -279,5 +279,5 @@ MainContent.propTypes = {
   setAlertGalleryActiveIndex: React.PropTypes.func,
   clearRoomSearchText: React.PropTypes.func,
   showNewMessageView: React.PropTypes.func,
-  addRoomsToSearchInput: React.PropTypes.func
+  addUsersToSearchInput: React.PropTypes.func
 }

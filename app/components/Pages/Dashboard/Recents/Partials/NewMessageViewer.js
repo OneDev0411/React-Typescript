@@ -4,13 +4,13 @@ import S from 'shorti'
 import Select from 'react-select'
 import CreateMessageArea from './CreateMessageArea'
 export default class NewMessageViewer extends Component {
-  handleChange(rooms_selected) {
-    this.props.addRoomsToSearchInput(rooms_selected)
+  handleChange(users_selected) {
+    this.props.addUsersToSearchInput(users_selected)
   }
   render() {
     // Data
     const data = this.props.data
-    const rooms_select_options = []
+    const users_select_options = []
     if (data.rooms) {
       const room_users = []
       data.rooms.forEach(room => {
@@ -18,7 +18,7 @@ export default class NewMessageViewer extends Component {
       })
       room_users.forEach(user => {
         if (user.id !== data.user.id) {
-          rooms_select_options.push({
+          users_select_options.push({
             value: user.first_name + ' ' + user.last_name,
             label: user.first_name + ' ' + user.last_name
           })
@@ -35,10 +35,10 @@ export default class NewMessageViewer extends Component {
           <div style={ S('absolute l-35 t-5 w-90p') }>
             <Select
               name="rooms"
-              options={ rooms_select_options }
+              options={ users_select_options }
               onChange={ this.handleChange.bind(this) }
               placeholder="Enter name, email or phone"
-              value={ data.new_message ? data.new_message.rooms_selected : null }
+              value={ data.new_message ? data.new_message.users_selected : null }
               multi
               noResultsText={ 'No rooms found'}
             />
@@ -61,7 +61,7 @@ export default class NewMessageViewer extends Component {
 // PropTypes
 NewMessageViewer.propTypes = {
   data: React.PropTypes.object,
-  addRoomsToSearchInput: React.PropTypes.func,
+  addUsersToSearchInput: React.PropTypes.func,
   uploadFiles: React.PropTypes.func,
   createMessage: React.PropTypes.func,
   addContactToMessage: React.PropTypes.func,
