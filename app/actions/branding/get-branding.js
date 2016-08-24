@@ -18,7 +18,9 @@ export default (subdomain) => {
         logo_url_wide: res.data.logo_url_wide,
         office_mls_id: res.data.office_mls_id,
         default_avatar: res.data.default_avatar,
-        listing_url: res.data.listing_url
+        listing_url: res.data.listing_url,
+        search_bg_image_url: res.data.search_bg_image_url,
+        search_headline: res.data.search_headline
       }
       if (AppStore.data.listing_map) {
         setTimeout(() => {
