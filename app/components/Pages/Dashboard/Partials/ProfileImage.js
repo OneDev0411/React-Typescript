@@ -7,6 +7,8 @@ import { getResizeAvatarUrl } from '../../../../utils/user'
 export default class ProfileImage extends Component {
   render() {
     const user = this.props.user
+    if (!user)
+      return <div></div>
     const me = this.props.data.user
     const data = this.props.data
     let font = 17

@@ -218,6 +218,7 @@ export default class App extends Component {
           if (_.find(AppStore.data.rooms, { id: room.id })) {
             const index = _.findIndex(AppStore.data.rooms, { id: room.id })
             AppStore.data.rooms[index].users.push(user)
+            AppStore.data.rooms[index].users = _.uniqBy(AppStore.data.rooms[index].users, 'id')
           } else {
             room.users = [user]
             AppStore.data.rooms = [

@@ -14,7 +14,7 @@ export default class NewMessageViewer extends Component {
     const users_select_options = []
     // Get users selected
     const users_selected = []
-    if (data.new_message.items_selected) {
+    if (data.new_message && data.new_message.items_selected) {
       const items_selected = data.new_message.items_selected
       items_selected.forEach(item => {
         if (item.type === 'room') {
@@ -68,11 +68,11 @@ export default class NewMessageViewer extends Component {
     //   })
     // }
     return (
-      <div>
-        <div style={ S('h-60 border-bottom-1-solid-e2e6ea') }>
+      <div style={ S('bg-f6f7f9 h-100p absolute w-100p') }>
+        <div style={ S('h-60 border-bottom-1-solid-e2e6ea bg-fff') }>
           <h3 style={ S('w-80p mt-0 ml-20 mr-50 pt-15') }>New Message</h3>
         </div>
-        <div style={ S('relative w-100p h-50 p-10') }>
+        <div style={ S('relative w-100p h-50 p-10 bg-fff border-bottom-1-solid-e2e6ea') }>
           <div style={ S('absolute l-10 t-15') }>To:</div>
           <div className="new-message__user-select" style={ S('absolute l-35 t-5 w-90p') }>
             <Select

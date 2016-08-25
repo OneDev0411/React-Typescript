@@ -119,6 +119,17 @@ export default class Dashboard extends Component {
     const data = this.props.data
     const user = data.user
     const current_room = data.current_room
+    if (!current_room) {
+      const items_selected = data.new_message.items_selected
+      const users = _.map(_.filter(items_selected, { type: 'contact' }), 'value.contact_user.id')
+      AppDispatcher.dispatch({
+        action: 'create-room',
+        user,
+        users,
+        comment
+      })
+      return
+    }
     AppDispatcher.dispatch({
       action: 'create-message',
       user,

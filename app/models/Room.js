@@ -15,7 +15,8 @@ export default {
     const request_object = {
       title: params.title,
       owner: params.owner,
-      access_token: params.access_token
+      access_token: params.access_token,
+      users: params.users
     }
     fetch(create_room_url, {
       method: 'post',
