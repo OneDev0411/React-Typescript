@@ -103,13 +103,14 @@ export default class NewMessageViewer extends Component {
           <div style={ S('absolute l-10 t-15') }>To:</div>
           <div className="new-message__user-select" style={ S('absolute l-35 t-5 w-90p z-1000') }>
             <Select
-              name="rooms"
+              autofocus
+              name="users"
               options={ users_select_options }
               onChange={ this.handleChange.bind(this) }
               placeholder="Enter name, email or phone"
               value={ users_selected ? users_selected : null }
               multi
-              noResultsText={ 'No rooms found'}
+              noResultsText={ 'No users found'}
               style={ S('border-none mt-3') }
               onInputChange={ this.handleInputChange.bind(this) }
             />

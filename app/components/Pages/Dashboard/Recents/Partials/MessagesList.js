@@ -382,6 +382,14 @@ export default class MessagesList extends Component {
       first_name_list += first_name
       if (i < first_names.length - 1) first_name_list += ', '
     })
+    let title_area
+    if (!data.show_new_message_viewer) {
+      title_area = (
+        <div style={ S('h-60 border-bottom-1-solid-eeeff3') }>
+          <h3 className="room-list__item__names" style={ S('w-80p mt-0 ml-20 mr-50 pt-15') }>{ first_name_list }</h3>
+        </div>
+      )
+    }
     return (
       <div>
         <button onClick={ this.props.showModal.bind(this, 'invite-user') } type="button" className="btn btn-default" style={ btn_invite_style } >
@@ -390,9 +398,7 @@ export default class MessagesList extends Component {
         <button onClick={ this.props.showModal.bind(this, 'settings') } type="button" className="btn btn-default" style={ btn_settings_style } >
           <i style={ S('font-16 relative t-1') } className="fa fa-cog"></i>
         </button>
-        <div style={ S('h-60 border-bottom-1-solid-eeeff3') }>
-          <h3 className="room-list__item__names" style={ S('w-80p mt-0 ml-20 mr-50 pt-15') }>{ first_name_list }</h3>
-        </div>
+        { title_area }
         <div className="touch-scroll" ref="messages_scroll_area" style={ messages_scroll_area } onScroll={ this.handleScroll.bind(this) }>
           { loading_previous }
           <ul style={ S('pl-0 ' + messages_mb) }>{ messages_list_items }</ul>

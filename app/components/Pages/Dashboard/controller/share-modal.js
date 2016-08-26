@@ -195,6 +195,17 @@ const controller = {
         return false
     }
     AppStore.emitChange()
+  },
+  addUsersToSearchInput(items_selected) {
+    if (!items_selected && AppStore.data.share_modal) {
+      delete AppStore.data.share_modal.items_selected
+      AppStore.emitChange()
+      return
+    }
+    AppStore.data.share_modal = {
+      items_selected
+    }
+    AppStore.emitChange()
   }
 }
 export default controller

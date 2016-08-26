@@ -61,8 +61,8 @@ const controller = {
     if (room_found) {
       AppStore.data.current_room = room_found
       AppStore.data.messages = _.map(_.find(AppStore.data.rooms, { id: room_found.id }), 'messages')
-      AppStore.emitChange()
     }
+    AppStore.emitChange()
   }
 }
 export default controller
