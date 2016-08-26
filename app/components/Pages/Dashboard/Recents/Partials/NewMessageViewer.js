@@ -4,12 +4,13 @@ import S from 'shorti'
 import _ from 'lodash'
 import Select from 'react-select'
 import CreateMessageArea from './CreateMessageArea'
+import MessagesList from './MessagesList'
 export default class NewMessageViewer extends Component {
   handleChange(users_selected) {
     this.props.addUsersToSearchInput(users_selected)
   }
   handleInputChange() {
-    console.log('handleInputChange')
+    // console.log('handleInputChange')
   }
   render() {
     // Data
@@ -70,6 +71,29 @@ export default class NewMessageViewer extends Component {
     //     })
     //   })
     // }
+    let messages_area
+    if (data.current_room) {
+      messages_area = (
+        <MessagesList
+          data={ data }
+          getPreviousMessages={ this.props.getPreviousMessages }
+          showModal={ this.props.showModal.bind(this) }
+          addContactsToRoom={ this.props.addContactsToRoom }
+          hideModal={ this.props.hideModal.bind(this) }
+          showFileViewer={ this.props.showFileViewer }
+          setHeadingDate={ this.props.setHeadingDate }
+          removeScrollBottom={ this.props.removeScrollBottom }
+          showListingViewer={ this.props.showListingViewer }
+          changeListingNotification={ this.props.changeListingNotification }
+          showAlertModal={ this.props.showAlertModal }
+          hideAlertModal={ this.props.hideAlertModal }
+          showDeleteRoomModal={ this.props.showDeleteRoomModal }
+          hideDeleteRoomModal={ this.props.hideDeleteRoomModal }
+          confirmDeleteRoom={ this.props.confirmDeleteRoom }
+          setAlertGalleryActiveIndex={ this.props.setAlertGalleryActiveIndex }
+        />
+      )
+    }
     return (
       <div style={ S('bg-f6f7f9 h-100p absolute w-100p') }>
         <div style={ S('h-60 border-bottom-1-solid-e2e6ea bg-fff') }>
@@ -77,7 +101,7 @@ export default class NewMessageViewer extends Component {
         </div>
         <div style={ S('relative w-100p h-50 p-10 bg-fff border-bottom-1-solid-e2e6ea') }>
           <div style={ S('absolute l-10 t-15') }>To:</div>
-          <div className="new-message__user-select" style={ S('absolute l-35 t-5 w-90p') }>
+          <div className="new-message__user-select" style={ S('absolute l-35 t-5 w-90p z-1000') }>
             <Select
               name="rooms"
               options={ users_select_options }
@@ -91,6 +115,7 @@ export default class NewMessageViewer extends Component {
             />
           </div>
         </div>
+        { messages_area }
         <CreateMessageArea
           data={ data }
           uploadFiles={ this.props.uploadFiles }
@@ -114,5 +139,20 @@ NewMessageViewer.propTypes = {
   addContactToMessage: React.PropTypes.func,
   handleContactFilterNav: React.PropTypes.func,
   handleMessageTyping: React.PropTypes.func,
-  handleContactFilter: React.PropTypes.func
+  handleContactFilter: React.PropTypes.func,
+  getPreviousMessages: React.PropTypes.func,
+  showModal: React.PropTypes.func,
+  addContactsToRoom: React.PropTypes.func,
+  hideModal: React.PropTypes.func,
+  showFileViewer: React.PropTypes.func,
+  setHeadingDate: React.PropTypes.func,
+  removeScrollBottom: React.PropTypes.func,
+  showListingViewer: React.PropTypes.func,
+  changeListingNotification: React.PropTypes.func,
+  showAlertModal: React.PropTypes.func,
+  hideAlertModal: React.PropTypes.func,
+  showDeleteRoomModal: React.PropTypes.func,
+  hideDeleteRoomModal: React.PropTypes.func,
+  confirmDeleteRoom: React.PropTypes.func,
+  setAlertGalleryActiveIndex: React.PropTypes.func
 }

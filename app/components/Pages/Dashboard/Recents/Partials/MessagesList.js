@@ -263,7 +263,7 @@ export default class MessagesList extends Component {
     const messages_scroll_area = {
       ...S('pl-20 pr-20 relative'),
       overflowY: messages_overflow,
-      height: window.innerHeight - 115,
+      height: data.show_new_message_viewer ? window.innerHeight - 170 : window.innerHeight - 115,
       opacity: messages_opacity
     }
     // let fixed_heading_date_area

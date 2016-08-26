@@ -198,6 +198,21 @@ export default class MainContent extends Component {
           handleContactFilterNav={ this.props.handleContactFilterNav }
           handleMessageTyping={ this.props.handleMessageTyping }
           handleContactFilter={ this.props.handleContactFilter }
+          getPreviousMessages={ this.props.getPreviousMessages }
+          showModal={ this.props.showModal.bind(this) }
+          addContactsToRoom={ this.props.addContactsToRoom }
+          hideModal={ this.hideModal.bind(this) }
+          showFileViewer={ this.props.showFileViewer }
+          setHeadingDate={ this.props.setHeadingDate }
+          removeScrollBottom={ this.props.removeScrollBottom }
+          showListingViewer={ this.props.showListingViewer }
+          changeListingNotification={ this.props.changeListingNotification }
+          showAlertModal={ this.props.showAlertModal }
+          hideAlertModal={ this.props.hideAlertModal }
+          showDeleteRoomModal={ this.props.showDeleteRoomModal }
+          hideDeleteRoomModal={ this.props.hideDeleteRoomModal }
+          confirmDeleteRoom={ this.props.confirmDeleteRoom }
+          setAlertGalleryActiveIndex={ this.props.setAlertGalleryActiveIndex }
         />
       )
     }

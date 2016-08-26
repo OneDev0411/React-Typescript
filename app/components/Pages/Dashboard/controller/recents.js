@@ -31,10 +31,13 @@ const controller = {
   },
   showNewMessageView() {
     delete AppStore.data.current_room
+    delete AppStore.data.new_message
     AppStore.data.show_new_message_viewer = true
     AppStore.emitChange()
   },
   addUsersToSearchInput(items_selected) {
+    delete AppStore.data.current_room
+    AppStore.emitChange()
     if (!items_selected && AppStore.data.new_message) {
       delete AppStore.data.new_message.items_selected
       AppStore.emitChange()
@@ -43,15 +46,23 @@ const controller = {
     AppStore.data.new_message = {
       items_selected
     }
-    AppStore.emitChange()
-    // Get room
-    // const rooms = AppStore.data.rooms
-    // const user_ids = _.map(_.filter(items_selected, { type: 'contact' }), 'value.contact_user.id')
-    // rooms.forEach(room => {
-    //   const user_ids_room = _.map(room.users, 'id')
-    //   console.log(user_ids, user_ids_room)
-    //   console.log(_.isEqual(user_ids, user_ids_room))
-    // })
+    // Get a room
+    const rooms = AppStore.data.rooms
+    const user_ids = _.map(_.filter(items_selected, { type: 'contact' }), 'value.contact_user.id')
+    let room_found = false
+    rooms.forEach(room => {
+      let user_ids_room = _.map(room.users, 'id')
+      user_ids_room = user_ids_room.filter(user_id => {
+        return user_id !== AppStore.data.user.id
+      })
+      if (_.isEqual(user_ids, user_ids_room))
+        room_found = room
+    })
+    if (room_found) {
+      AppStore.data.current_room = room_found
+      AppStore.data.messages = _.map(_.find(AppStore.data.rooms, { id: room_found.id }), 'messages')
+      AppStore.emitChange()
+    }
   }
 }
 export default controller
