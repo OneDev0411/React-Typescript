@@ -101,7 +101,7 @@ export default class NewMessageViewer extends Component {
         </div>
         <div style={ S('relative w-100p h-50 p-10 bg-fff border-bottom-1-solid-e2e6ea') }>
           <div style={ S('absolute l-10 t-15') }>To:</div>
-          <div className="new-message__user-select" style={ S('absolute l-35 t-5 w-90p z-1000') }>
+          <div className="new-message__user-select" style={ S('absolute l-35 t-5 w-90p z-3') }>
             <Select
               autofocus
               name="users"
