@@ -1,6 +1,7 @@
 // controller/recents.js
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import AppStore from '../../../../stores/AppStore'
+import _ from 'lodash'
 const controller = {
   showDeleteRoomModal() {
     AppStore.data.show_delete_room_modal = true
@@ -43,6 +44,14 @@ const controller = {
       items_selected
     }
     AppStore.emitChange()
+    // Get room
+    // const rooms = AppStore.data.rooms
+    // const user_ids = _.map(_.filter(items_selected, { type: 'contact' }), 'value.contact_user.id')
+    // rooms.forEach(room => {
+    //   const user_ids_room = _.map(room.users, 'id')
+    //   console.log(user_ids, user_ids_room)
+    //   console.log(_.isEqual(user_ids, user_ids_room))
+    // })
   }
 }
 export default controller

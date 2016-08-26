@@ -8,6 +8,9 @@ export default class NewMessageViewer extends Component {
   handleChange(users_selected) {
     this.props.addUsersToSearchInput(users_selected)
   }
+  handleInputChange() {
+    console.log('handleInputChange')
+  }
   render() {
     // Data
     const data = this.props.data
@@ -84,6 +87,7 @@ export default class NewMessageViewer extends Component {
               multi
               noResultsText={ 'No rooms found'}
               style={ S('border-none mt-3') }
+              onInputChange={ this.handleInputChange.bind(this) }
             />
           </div>
         </div>
