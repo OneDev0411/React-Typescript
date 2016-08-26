@@ -104,7 +104,7 @@ export default class ShareListingModal extends Component {
           </div>
           <div>
             <div style={ S('pull-left w-400') }>
-              <Input type="text" placeholder="Write Message..."/>
+              <Input ref="message" type="text" placeholder="Write Message..."/>
             </div>
             <div style={ S('pull-right') }>
               <Button onClick={ controller.listing_viewer.hideShareListingModal } bsStyle="link">Cancel</Button>

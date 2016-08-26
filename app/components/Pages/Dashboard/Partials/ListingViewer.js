@@ -16,7 +16,7 @@ export default class ListingViewer extends Component {
   componentDidMount() {
     document.onkeydown = e => {
       const data = this.props.data
-      if (e.keyCode === 27) {
+      if (e.keyCode === 27 && !this.props.data.show_share_listing_modal) {
         if (!data.show_modal_gallery)
           this.props.hideListingViewer()
         this.props.hideModal()

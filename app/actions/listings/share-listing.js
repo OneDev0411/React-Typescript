@@ -17,7 +17,7 @@ export default (user, mls_number, message, rooms, users, emails, phone_numbers, 
   }
   async.series([
     callback => {
-      Room.createRec(params, () => {
+      Room.createRec(params, (err, res) => {
         // Success
         delete AppStore.data.share_modal.sending_share
         delete AppStore.data.show_share_listing_modal
