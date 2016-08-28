@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import S from 'shorti'
 import _ from 'lodash'
 import Select from 'react-select'
+import validator from 'validator'
 import CreateMessageArea from './CreateMessageArea'
 import MessagesList from './MessagesList'
 import SelectContainer from './SelectContainer'
@@ -11,15 +12,27 @@ export default class NewMessageViewer extends Component {
     // Enter clicked
     const data = this.props.data
     if (e.which === 13) {
-      if (data.new_message && data.new_message.items_selected) {
+      if (data.new_message && data.new_message.items_selected && data.new_message.search_value) {
         // Emails
-        data.new_message.items_selected.push({
-          email: data.new_message.search_value,
-          type: 'email',
-          label: data.new_message.search_value,
-          value: data.new_message.search_value
-        })
-        this.props.addUsersToSearchInput(data.new_message.items_selected)
+        if (validator.isEmail(data.new_message.search_value)) {
+          data.new_message.items_selected.push({
+            email: data.new_message.search_value,
+            type: 'email',
+            label: data.new_message.search_value,
+            value: data.new_message.search_value
+          })
+          this.props.addUsersToSearchInput(data.new_message.items_selected)
+        }
+        // Phone numbers
+        if (validator.isNumeric(data.new_message.search_value)) {
+          data.new_message.items_selected.push({
+            email: data.new_message.search_value,
+            type: 'phone_number',
+            label: data.new_message.search_value,
+            value: data.new_message.search_value
+          })
+          this.props.addUsersToSearchInput(data.new_message.items_selected)
+        }
       }
     }
   }

@@ -3,7 +3,7 @@ import Room from '../../models/Room'
 import AppStore from '../../stores/AppStore'
 import AppDispatcher from '../../dispatcher/AppDispatcher'
 import async from 'async'
-export default (user, users, message) => {
+export default (user, users, emails, phone_numbers, message) => {
   const locals = {}
   async.series([
     callback => {
@@ -12,7 +12,9 @@ export default (user, users, message) => {
         title: 'No title',
         owner: user.id,
         access_token: user.access_token,
-        users
+        users,
+        emails,
+        phone_numbers
       }
       Room.create(params, (err, response) => {
         // Success

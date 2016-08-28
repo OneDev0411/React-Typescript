@@ -65,6 +65,8 @@ const controller = {
     AppStore.emitChange()
   },
   handleInputChange(value) {
+    if (!AppStore.data.new_message)
+      AppStore.data.new_message = {}
     AppStore.data.new_message.search_value = value
     AppStore.emitChange()
   }

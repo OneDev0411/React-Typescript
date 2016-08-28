@@ -4,10 +4,14 @@ module.exports = (app, config) => {
     const api_url = config.api.url
     const create_room_url = api_url + '/rooms'
     const users = req.body.users
+    const emails = req.body.emails
+    const phone_numbers = req.body.phone_numbers
     const owner = req.body.owner
     const access_token = req.body.access_token
     const request_object = {
       users,
+      emails,
+      phone_numbers,
       client_type: 'Unknown',
       room_type: 'Group',
       owner

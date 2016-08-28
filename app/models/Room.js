@@ -16,7 +16,9 @@ export default {
       title: params.title,
       owner: params.owner,
       access_token: params.access_token,
-      users: params.users
+      users: params.users,
+      emails: params.emails,
+      phone_numbers: params.phone_numbers
     }
     fetch(create_room_url, {
       method: 'post',
