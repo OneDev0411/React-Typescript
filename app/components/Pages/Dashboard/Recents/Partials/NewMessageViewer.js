@@ -5,12 +5,29 @@ import _ from 'lodash'
 import Select from 'react-select'
 import CreateMessageArea from './CreateMessageArea'
 import MessagesList from './MessagesList'
+import SelectContainer from './SelectContainer'
 export default class NewMessageViewer extends Component {
+  inputChange(e) {
+    // Enter clicked
+    const data = this.props.data
+    if (e.which === 13) {
+      if (data.new_message && data.new_message.items_selected) {
+        // Emails
+        data.new_message.items_selected.push({
+          email: data.new_message.search_value,
+          type: 'email',
+          label: data.new_message.search_value,
+          value: data.new_message.search_value
+        })
+        this.props.addUsersToSearchInput(data.new_message.items_selected)
+      }
+    }
+  }
   handleChange(users_selected) {
     this.props.addUsersToSearchInput(users_selected)
   }
-  handleInputChange() {
-    // console.log('handleInputChange')
+  handleInputChange(value) {
+    this.props.handleInputChange(value)
   }
   render() {
     // Data
@@ -102,18 +119,20 @@ export default class NewMessageViewer extends Component {
         <div style={ S('relative w-100p h-50 p-10 bg-fff border-bottom-1-solid-e2e6ea') }>
           <div style={ S('absolute l-10 t-15') }>To:</div>
           <div className="new-message__user-select" style={ S('absolute l-35 t-5 w-90p z-3') }>
-            <Select
-              autofocus
-              name="users"
-              options={ users_select_options }
-              onChange={ this.handleChange.bind(this) }
-              placeholder="Enter name, email or phone"
-              value={ users_selected ? users_selected : null }
-              multi
-              noResultsText={ 'No users found'}
-              style={ S('border-none mt-3') }
-              onInputChange={ this.handleInputChange.bind(this) }
-            />
+            <SelectContainer inputChange={ this.inputChange.bind(this) }>
+              <Select
+                autofocus
+                name="users"
+                options={ users_select_options }
+                placeholder="Enter name, email or phone"
+                value={ users_selected ? users_selected : null }
+                multi
+                noResultsText={ 'No users found'}
+                style={ S('border-none mt-3') }
+                onInputChange={ this.handleInputChange.bind(this) }
+                onChange={ this.handleChange.bind(this) }
+              />
+            </SelectContainer>
           </div>
         </div>
         { messages_area }
@@ -155,5 +174,6 @@ NewMessageViewer.propTypes = {
   showDeleteRoomModal: React.PropTypes.func,
   hideDeleteRoomModal: React.PropTypes.func,
   confirmDeleteRoom: React.PropTypes.func,
-  setAlertGalleryActiveIndex: React.PropTypes.func
+  setAlertGalleryActiveIndex: React.PropTypes.func,
+  handleInputChange: React.PropTypes.func
 }

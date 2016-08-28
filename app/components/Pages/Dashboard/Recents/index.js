@@ -520,6 +520,7 @@ export default class Dashboard extends Component {
         clearRoomSearchText={ controller.recents.clearRoomSearchText }
         showNewMessageView={ controller.recents.showNewMessageView }
         addUsersToSearchInput={ controller.recents.addUsersToSearchInput }
+        handleInputChange={ controller.recents.handleInputChange }
       />
     )
     if (data.rooms_loaded && !rooms || data.rooms_loaded && !rooms.length) {

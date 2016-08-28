@@ -63,6 +63,10 @@ const controller = {
       AppStore.data.messages = _.map(_.find(AppStore.data.rooms, { id: room_found.id }), 'messages')
     }
     AppStore.emitChange()
+  },
+  handleInputChange(value) {
+    AppStore.data.new_message.search_value = value
+    AppStore.emitChange()
   }
 }
 export default controller
