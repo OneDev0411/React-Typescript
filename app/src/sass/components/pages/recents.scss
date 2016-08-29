@@ -23,3 +23,28 @@
     color: #fff !important;
   } 
 }
+// React Select
+.create-item__user-select {
+  .Select-value {
+    height: 28px;
+    overflow: hidden;
+    background-color: #2196f3 !important;
+    border: none;
+  }
+  .Select-value-icon {
+    height: 28px;
+    padding: 3px 5px 3px !important;
+    right: 0;
+    background-color: #2196f3 !important;
+    color: #fff !important;
+  }
+  .Select-value-label {
+    height: 28px;
+    padding: 4px 5px !important;
+    background-color: #2196f3 !important;
+    color: #fff !important;
+    margin-left: 0 !important;
+    margin-right: 20px;
+    border-radius: 3px;
+  }
+}

@@ -42,6 +42,25 @@ export default class NewMessageViewer extends Component {
   handleInputChange(value) {
     this.props.handleInputChange(value)
   }
+  handleValueRender(value) {
+    let profile_image
+    let display_name
+    if (value.type === 'contact') {
+      const user = value.value.contact_user
+      profile_image = <div style={ S(`absolute l-0 t-0 pull-left mr-10 bg-url(${user.profile_image_url}) w-26 h-26 bg-cover bg-center`) }/>
+      display_name = (
+        <div style={ S(`pull-left ml-30`) }>
+          { value.value.contact_user.first_name }
+        </div>
+      )
+    }
+    return (
+      <div>
+        { profile_image }
+        { display_name }
+      </div>
+    )
+  }
   render() {
     // Data
     const data = this.props.data
@@ -131,7 +150,7 @@ export default class NewMessageViewer extends Component {
         </div>
         <div style={ S('relative w-100p h-50 p-10 bg-fff border-bottom-1-solid-e2e6ea') }>
           <div style={ S('absolute l-10 t-15') }>To:</div>
-          <div className="new-message__user-select" style={ S('absolute l-35 t-5 w-90p z-3') }>
+          <div className="create-item__user-select" style={ S('absolute l-35 t-5 w-90p z-3') }>
             <SelectContainer inputChange={ this.inputChange.bind(this) }>
               <Select
                 autofocus
@@ -144,6 +163,7 @@ export default class NewMessageViewer extends Component {
                 style={ S('border-none mt-3') }
                 onInputChange={ this.handleInputChange.bind(this) }
                 onChange={ this.handleChange.bind(this) }
+                valueRenderer={ this.handleValueRender.bind(this) }
               />
             </SelectContainer>
           </div>
