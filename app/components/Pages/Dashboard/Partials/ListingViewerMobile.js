@@ -521,6 +521,8 @@ export default class ListingViewerMobile extends Component {
           handleAddEmail={ controller.share_modal.handleAddEmail }
           handleAddPhoneNumber={ controller.share_modal.handleAddPhoneNumber }
           handleRemoveShareItem={ controller.share_modal.handleRemoveShareItem }
+          addUsersToSearchInput={ controller.share_modal.addUsersToSearchInput }
+          handleInputChange={ controller.share_modal.handleInputChange }
         />
       </div>
     )

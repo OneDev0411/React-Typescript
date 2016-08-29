@@ -1,351 +1,161 @@
-// Dashboard/Mls/index.js
+// Dashboard/Partials/ShareListingModal.js
 import React, { Component } from 'react'
 import S from 'shorti'
 import _ from 'lodash'
-import { Button, Modal, Alert, DropdownButton, MenuItem } from 'react-bootstrap'
-import { all_countries } from '../../../../../utils/country-data'
-import MaskedInput from 'react-maskedinput'
+import { Button, Modal, Input } from 'react-bootstrap'
 import controller from '../../controller'
-import ProfileImage from '../../Partials/ProfileImage'
+import Select from 'react-select'
 import validator from 'validator'
+import SelectContainer from '../../Partials/SelectContainer'
+import { getResizeAvatarUrl } from '../../../../../utils/user'
 export default class ShareAlertModal extends Component {
-  onShow() {
-    setTimeout(() => {
-      if (this.refs.alert_title)
-        this.refs.alert_title.focus()
-    }, 100)
-  }
-  shareAlert() {
-    const title = this.refs.alert_title.value
-    this.props.shareAlert(title)
-  }
-  handleAlertTitleChange(e) {
-    const title = e.target.value
-    controller.alert_share.handleAlertTitleChange(title)
-  }
-  handleFilterChange(e) {
-    const filter_text = e.target.value
-    this.props.handleFilterChange(filter_text)
-  }
-  handleEmailChange(e) {
-    if (e.which === 13)
-      return this.handleAddEmail()
-    const email = e.target.value
-    this.props.handleEmailChange(email)
-  }
-  handleKeyUp(e) {
-    if (e.which === 13)
-      this.handleAddPhoneNumber()
-  }
-  handlePhoneNumberChange(e) {
-    if (e.which === 13)
-      return this.handleAddPhoneNumber()
-    const phone_number = e.target.value
-    this.props.handlePhoneNumberChange(phone_number)
-  }
-  handleAddEmail() {
-    const email = this.refs.email.value
-    if (!email.trim())
-      return
-    this.props.handleAddEmail(email)
-    if (validator.isEmail(email))
-      this.refs.email.value = ''
-  }
-  handleAddPhoneNumber() {
+  inputChange(e) {
+    // Enter clicked
     const data = this.props.data
-    const phone_number = data.share_modal.input_phone_number
-    if (!phone_number.trim())
-      return
-    this.props.handleAddPhoneNumber(phone_number)
+    if (e.which === 13) {
+      if (data.share_modal && data.share_modal.items_selected && data.share_modal.search_value) {
+        // Emails
+        if (validator.isEmail(data.share_modal.search_value)) {
+          data.share_modal.items_selected.push({
+            email: data.share_modal.search_value,
+            type: 'email',
+            label: data.share_modal.search_value,
+            value: data.share_modal.search_value
+          })
+          this.props.addUsersToSearchInput(data.share_modal.items_selected)
+        }
+        // Phone numbers
+        if (validator.isNumeric(data.share_modal.search_value)) {
+          data.share_modal.items_selected.push({
+            email: data.share_modal.search_value,
+            type: 'phone_number',
+            label: data.share_modal.search_value,
+            value: data.share_modal.search_value
+          })
+          this.props.addUsersToSearchInput(data.share_modal.items_selected)
+        }
+      }
+    }
   }
-  handleCountryCodeSelect(country) {
-    controller.share_modal.handleCountryCodeSelect(country)
+  handleChange(users_selected) {
+    this.props.addUsersToSearchInput(users_selected)
+  }
+  handleInputChange(value) {
+    this.props.handleInputChange(value)
+  }
+  handleValueRender(value) {
+    let profile_image
+    let display_name
+    if (value.type === 'contact') {
+      const user = value.value.contact_user
+      if (getResizeAvatarUrl(user.profile_image_url))
+        profile_image = <div style={ S(`pull-left bg-url(${getResizeAvatarUrl(user.profile_image_url)}?w=160) w-26 h-26 bg-cover bg-center`) }/>
+      display_name = (
+        <div style={ S(`pull-left mt-4 ml-10 mr-5`) }>
+          { value.value.contact_user.first_name }
+        </div>
+      )
+    }
+    return (
+      <div>
+        { profile_image }
+        { display_name }
+      </div>
+    )
   }
   isSharable() {
     const data = this.props.data
-    const share_modal = data.share_modal
-    if (share_modal) {
-      const rooms_added = share_modal.rooms_added
-      const contacts_added = share_modal.contacts_added
-      const emails_added = share_modal.emails_added
-      const phone_numbers_added = share_modal.phone_numbers_added
-      if (rooms_added && rooms_added.length)
-        return true
-      if (contacts_added && contacts_added.length)
-        return true
-      if (rooms_added && rooms_added.length)
-        return true
-      if (emails_added && emails_added.length)
-        return true
-      if (phone_numbers_added && phone_numbers_added.length)
-        return true
-    }
-    return false
+    if (data.share_modal && data.share_modal.items_selected && data.share_modal.items_selected.length)
+      return true
   }
   render() {
     const data = this.props.data
-    const listing_map = data.listing_map
+    const current_listing = data.current_listing
     const share_modal = data.share_modal
-    let rooms_added
-    let contacts_added
-    let emails_added
-    let phone_numbers_added
-    let rooms_filtered
-    let contacts_filtered
-    if (share_modal) {
-      rooms_filtered = share_modal.rooms_filtered
-      contacts_filtered = share_modal.contacts_filtered
-      rooms_added = share_modal.rooms_added
-      contacts_added = share_modal.contacts_added
-      emails_added = share_modal.emails_added
-      phone_numbers_added = share_modal.phone_numbers_added
-    }
-    let message
-    if (data.error) {
-      message = (
-        <Alert bsStyle="danger" closeButton className="text-left">{ data.error.message }</Alert>
-      )
-    }
-    const contacts_rooms_scroll = {
-      overflowY: 'scroll',
-      ...S('absolute z-1000 bg-fff t-50 w-100p maxh-380 border-1-solid-ccc br-3')
-    }
-    let rooms_list
-    if (rooms_filtered) {
-      rooms_list = rooms_filtered.map(room => {
-        // List users
-        const users = room.users
-        const first_names = _.map(users, 'first_name')
-        let first_name_list = ''
-        first_names.forEach((first_name, _i) => {
-          first_name_list += first_name
-          if (_i < first_names.length - 1) first_name_list += ', '
-        })
-        let author
-        let profile_image_div
-        if (room.latest_message && room.latest_message.author) {
-          author = room.latest_message.author
-          profile_image_div = (
-            <ProfileImage data={ data } user={ author }/>
-          )
-        }
-        if (!room.latest_message || !room.latest_message.author) {
-          profile_image_div = (
-            <div style={ S('absolute w-35') }>
-              <img className="center-block" src="/images/dashboard/rebot@2x.png" style={ S('w-30') } />
-            </div>
-          )
-        }
-        return (
-          <div onClick={ controller.share_modal.addToShareList.bind(this, 'rooms', room) } style={ S('relative h-60 pointer p-10') } className="share-item" key={ 'share-alert__room-' + room.id }>
-            { profile_image_div }
-            <div className="pull-left" style={ S('ml-50 w-90p') }>
-              <div className="pull-left">
-                <b>{ room.title.substring(0, 50) }{ room.title.length > 50 ? '...' : '' }</b>
-              </div>
-              <div className="clearfix"></div>
-              <div style={ S('color-aaaaaa w-74p') }>{ first_name_list }</div>
-            </div>
-            <div className="clearfix"></div>
-          </div>
-        )
-      })
-    }
-    let contacts_list
-    if (contacts_filtered) {
-      contacts_list = contacts_filtered.map(contact => {
-        return (
-          <div onClick={ controller.share_modal.addToShareList.bind(this, 'contacts', contact) } style={ S('h-60 relative p-3 pl-0 pr-10 mr-10 w-100p pointer p-10') } className="share-item" key={ 'share-alert__contact-' + contact.id }>
-            <div style={ S('l-10 t-10 absolute') }>
-              <ProfileImage data={ data } top={11} size={40} user={ contact }/>
-            </div>
-            <div style={ S('ml-65') }>
-              <div>{ contact.first_name } { contact.last_name }</div>
-              <div>{ contact.email }</div>
-            </div>
-          </div>
-        )
-      })
-    }
-    let rooms_list_area
-    if (rooms_list && rooms_list.length) {
-      rooms_list_area = (
-        <div>
-          <div style={ S('bg-f8f8f8 color-929292 p-10') }>Rooms ({ rooms_list.length })</div>
-          { rooms_list }
-        </div>
-      )
-    }
-    let contacts_list_area
-    if (contacts_list && contacts_list.length) {
-      contacts_list_area = (
-        <div>
-          <div style={ S('bg-f8f8f8 color-929292 p-10') }>Contacts ({ contacts_list.length })</div>
-          { contacts_list }
-        </div>
-      )
-    }
-    let results
-    if (rooms_filtered || contacts_filtered) {
-      results = (
-        <div style={ contacts_rooms_scroll }>
-          { rooms_list_area }
-          { contacts_list_area }
-        </div>
-      )
-    }
-    const filter_text_style = {
-      ...S('p-0 mb-5 border-1-solid-fff font-28 h-40 w-100p'),
-      outline: 'none'
-    }
-    const pill_style = S('bg-dadada color-4c7dbf pr-10 pl-10 pt-5 pb-5 br-3 pull-left mr-5 mb-5')
-    const items_added_pills = []
-    let rooms_added_pills = []
-    if (rooms_added) {
-      rooms_added_pills = rooms_added.map(room => {
-        return (
-          <div key={ 'pill-room-' + room.id } style={ pill_style }>
-            <span style={ S('mr-10') }>{ room.title }</span>
-            <span onClick={ this.props.handleRemoveShareItem.bind(this, 'room', room) } className="close">&times;</span>
-          </div>
-        )
-      })
-      items_added_pills.push(rooms_added_pills)
-    }
-    let contacts_added_pills = []
-    if (contacts_added) {
-      contacts_added_pills = contacts_added.map(contact => {
-        return (
-          <div key={ 'pill-contact-' + contact.id } style={ pill_style }>
-            <span style={ S('mr-10') }>{ contact.first_name } { contact.last_name }</span>
-            <span onClick={ this.props.handleRemoveShareItem.bind(this, 'contact', contact) } className="close">&times;</span>
-          </div>
-        )
-      })
-      items_added_pills.push(contacts_added_pills)
-    }
-    let emails_added_pills = []
-    if (emails_added) {
-      emails_added_pills = emails_added.map(email => {
-        return (
-          <div key={ 'pill-contact-' + email } style={ pill_style }>
-            <span style={ S('mr-10') }>{ email }</span>
-            <span onClick={ this.props.handleRemoveShareItem.bind(this, 'email', email) } className="close">&times;</span>
-          </div>
-        )
-      })
-      items_added_pills.push(emails_added_pills)
-    }
-    let phone_numbers_added_pills = []
-    if (phone_numbers_added) {
-      phone_numbers_added_pills = phone_numbers_added.map(phone_number => {
-        return (
-          <div key={ 'pill-contact-' + phone_number } style={ pill_style }>
-            <span style={ S('mr-10') }>{ phone_number }</span>
-            <span onClick={ this.props.handleRemoveShareItem.bind(this, 'phone_number', phone_number) } className="close">&times;</span>
-          </div>
-        )
-      })
-      items_added_pills.push(phone_numbers_added_pills)
-    }
-    let items_added_area
-    if (items_added_pills && items_added_pills.length) {
-      items_added_area = (
-        <div style={ S('w-550 pull-left') }>
-          { items_added_pills }
-        </div>
-      )
-    }
-    let filter_text
-    if (share_modal && share_modal.filter_text)
-      filter_text = share_modal.filter_text
-    let email_btn_color = 'e5e5e5'
-    let phone_number_btn_color = 'e5e5e5'
-    if (share_modal) {
-      filter_text = share_modal.filter_text
-      if (share_modal.email_valid)
-        email_btn_color = '006aff'
-      if (share_modal.phone_number_valid)
-        phone_number_btn_color = '006aff'
-    }
-    // If trying to share too many
-    if (share_modal && share_modal.error) {
-      return (
-        <Modal dialogClassName="modal-800" show={ listing_map && listing_map.show_share_modal } onHide={ controller.listing_map.hideModal } onShow={ this.onShow.bind(this) }>
-          <Modal.Header closeButton style={ S('border-bottom-1-solid-f8f8f8') }>
-            <Modal.Title className="tempo" style={ S('font-36 ml-15') }>Share Alert</Modal.Title>
-          </Modal.Header>
-          <Modal.Body style={ S('p-30') }>
-            Too many matches!  Please zoom in or set more filters.
-          </Modal.Body>
-          <Modal.Footer style={ S('bg-f8f8f8') }>
-            <Button onClick={ controller.listing_map.hideModal } bsStyle="default">Ok</Button>
-          </Modal.Footer>
-        </Modal>
-      )
-    }
-    let phone_country = `+1`
-    if (data.phone_country)
-      phone_country = `+${data.phone_country.dialCode}`
-    const country_codes = (
-      <DropdownButton title={ phone_country } id="input-dropdown-country-codes" style={ S('pt-12 pb-13') }>
-        <MenuItem key={ 1 } onClick={ this.handleCountryCodeSelect.bind(this, _.find(all_countries, { iso2: 'us' })) }>United States +1</MenuItem>
-        {
-          all_countries.map((country, i) => {
-            if (country.dialCode !== 1)
-              return <MenuItem onClick={ this.handleCountryCodeSelect.bind(this, country) } key={ country.iso2 + country.dialCode + i }>{ country.name } +{ country.dialCode }</MenuItem>
+    const users_select_options = []
+    // Get users selected
+    const users_selected = []
+    if (data.share_modal && data.share_modal.items_selected) {
+      const items_selected = data.share_modal.items_selected
+      items_selected.forEach(item => {
+        if (item.type === 'room') {
+          // Parse users
+          item.value.forEach(user => {
+            if (user.id !== data.user.id) {
+              users_selected.push({
+                label: user.first_name,
+                value: user,
+                type: 'user'
+              })
+            }
           })
+        } else
+          users_selected.push(item)
+      })
+    }
+    if (data.contacts) {
+      data.contacts.forEach(user => {
+        let full_name
+        if (user.id !== data.user.id && user.first_name) {
+          full_name = user.first_name
+          if (user.last_name)
+            full_name += ' ' + user.last_name
+          if (!_.find(users_selected, { id: user.id })) {
+            users_select_options.push({
+              value: user,
+              label: full_name,
+              type: 'contact'
+            })
+          }
         }
-      </DropdownButton>
-    )
+      })
+    }
+    let dialog_class_name = 'modal-800'
+    // Check if mobile
+    if (data.is_mobile)
+      dialog_class_name = 'modal-mobile'
     return (
-      <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : 'modal-800' } show={ listing_map && listing_map.show_share_modal } onHide={ controller.listing_map.hideModal } onShow={ this.onShow.bind(this) }>
-        <Modal.Header closeButton style={ S('border-bottom-1-solid-f8f8f8') }>
-          <Modal.Title className="tempo" style={ S('font-36 ml-15') }>Share Alert</Modal.Title>
+      <Modal dialogClassName={ dialog_class_name } show={ data.listing_map && data.listing_map.show_share_modal } onHide={ controller.listing_map.hideModal }>
+        <Modal.Header closeButton style={ S('border-bottom-1-solid-b2b2b2 bg-fafafa') }>
+          <Modal.Title className="din" style={ S('font-36 ml-15 color-4a4a4a') }>Share Alert</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={ S('p-30') }>
-          <div style={ S('mb-20') }>
-            <div style={ S('pull-left mr-15') }>
-              <img className={ data.is_mobile ? 'hidden' : '' } style={ S('w-100 h-100 br-3') } src="/images/dashboard/mls/map-tile.jpg" />
+        <Modal.Body style={ S('p-0 h-300') }>
+          <div style={ S('relative w-100p h-50 p-10 bg-fff border-bottom-1-solid-e2e6ea bg-fafafa') }>
+            <div style={ S('absolute l-10 t-15') }>To:</div>
+            <div className="create-item__user-select" style={ S('absolute l-35 t-5 w-90p z-1000') }>
+              <SelectContainer inputChange={ this.inputChange.bind(this) }>
+                <Select
+                  autofocus
+                  name="users"
+                  options={ users_select_options }
+                  placeholder="Enter name, email or phone"
+                  value={ users_selected ? users_selected : null }
+                  multi
+                  noResultsText={ 'No users found'}
+                  style={ S('border-none mt-3') }
+                  onInputChange={ this.handleInputChange.bind(this) }
+                  onChange={ this.handleChange.bind(this) }
+                  valueRenderer={ this.handleValueRender.bind(this) }
+                />
+              </SelectContainer>
             </div>
-            <div style={ S('pull-left w-82p') }>
-              <input style={ filter_text_style } ref="alert_title" type="text" placeholder="Name this alert..." value={ share_modal ? share_modal.title : '' } onChange={ this.handleAlertTitleChange.bind(this) } />
-              <div style={ S('color-929292 font-20') }>{ listing_map && listing_map.listings ? listing_map.listings.length : '' } Results</div>
-              <div style={ S('color-929292 font-16') }>We’ll keep you updated with any new listings.</div>
-            </div>
-            <div className="clearfix"></div>
-          </div>
-          <div style={ S('mb-10') }>
-            <div className="form-group" style={ S('relative') }>
-              <img style={ S('absolute t-14 l-20') } src={`/images/dashboard/mls/share-alert/chat${share_modal && share_modal.chat_valid ? '-active' : ''}.svg`} />
-              <input onChange={ this.handleFilterChange.bind(this) } value={ filter_text } style={ S('pl-62 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send to chatrooms and contacts"/>
-              { results }
-              <div className="clearfix"></div>
-            </div>
-            <div className="form-group" style={ S('relative') }>
-              <img style={ S('absolute t-18 l-15') } src={`/images/dashboard/mls/share-alert/email${share_modal && share_modal.email_valid ? '-active' : ''}.svg`} />
-              <input ref="email" onKeyUp={ this.handleEmailChange.bind(this) } style={ S('pl-62 pull-left mr-10') } className="form-control input-lg" type="text" placeholder="Send as an email"/>
-              <div onClick={ this.handleAddEmail.bind(this) } style={ S('pointer absolute font-18 r-15 t-11 color-' + email_btn_color) }>Add Email</div>
-              <div className="clearfix"></div>
-            </div>
-            <div className="form-group" style={ S('relative') }>
-              <div onClick={ this.handleAddPhoneNumber.bind(this) } style={ S('pointer z-100 absolute font-18 r-15 t-11 color-' + phone_number_btn_color) }>Add Number</div>
-              <div className="input-group input-group-lg">
-                <div className="input-group-btn input-dropdown--country-codes">
-                  { country_codes }
-                </div>
-                <MaskedInput placeholder="Add phone number" onKeyUp={ this.handleKeyUp.bind(this) } onChange={ this.handlePhoneNumberChange.bind(this) } value={ data.share_modal ? data.share_modal.input_phone_number : '' } className="form-control" type="text" mask="(111)-111-1111"/>
-              </div>
-              <div className="clearfix"></div>
-            </div>
-            <div className="clearfix"></div>
           </div>
         </Modal.Body>
-        <Modal.Footer style={ S('bg-f8f8f8') }>
-          { message }
-          { items_added_area }
-          <Button onClick={ controller.listing_map.hideModal } bsStyle="link">Cancel</Button>
-          <Button className={ listing_map && listing_map.saving_alert || !this.isSharable() ? 'disabled' : '' } bsStyle="primary" onClick={ this.shareAlert.bind(this) }>{ listing_map && !listing_map.saving_alert ? 'Share Alert' : 'Sending...' }&nbsp;&nbsp;<i className="fa fa-share"></i></Button>
+        <Modal.Footer style={ S('bg-fff') }>
+          <div style={ S('mr-15 mb-20 border-1-solid-d5dce5 bg-e7eaed br-3 w-220 h-64 p-6') }>
+            <div style={ S(`pull-left mr-10 w-50 h-50 bg-cover bg-center bg-url(${ current_listing ? current_listing.cover_image_url : '' })`) }/>
+            <div style={ S('pull-left') }>
+              <div>Alert</div>
+            </div>
+          </div>
+          <div>
+            <div style={ S('pull-left w-400') }>
+              <Input style={ S('border-none') } ref="message" type="text" placeholder="Write Message..."/>
+            </div>
+            <div style={ S('pull-right') }>
+              <Button className={ share_modal && share_modal.sending_share || !this.isSharable() ? 'disabled' : '' } bsStyle="primary" onClick={ controller.listing_share.shareListing.bind(this) }>{ share_modal && !share_modal.sending_share ? 'Share' : 'Sending...' }</Button>
+            </div>
+          </div>
         </Modal.Footer>
       </Modal>
     )
@@ -353,11 +163,12 @@ export default class ShareAlertModal extends Component {
 }
 ShareAlertModal.propTypes = {
   data: React.PropTypes.object,
-  shareAlert: React.PropTypes.func,
   handleFilterChange: React.PropTypes.func,
   handleEmailChange: React.PropTypes.func,
   handlePhoneNumberChange: React.PropTypes.func,
   handleAddEmail: React.PropTypes.func,
   handleAddPhoneNumber: React.PropTypes.func,
-  handleRemoveShareItem: React.PropTypes.func
+  handleRemoveShareItem: React.PropTypes.func,
+  addUsersToSearchInput: React.PropTypes.func,
+  handleInputChange: React.PropTypes.func
 }

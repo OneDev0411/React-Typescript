@@ -206,6 +206,12 @@ const controller = {
       items_selected
     }
     AppStore.emitChange()
+  },
+  handleInputChange(value) {
+    if (!AppStore.data.share_modal)
+      AppStore.data.share_modal = {}
+    AppStore.data.share_modal.search_value = value
+    AppStore.emitChange()
   }
 }
 export default controller

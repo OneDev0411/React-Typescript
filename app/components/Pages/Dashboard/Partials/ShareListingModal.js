@@ -7,12 +7,62 @@ import controller from '../controller'
 import Select from 'react-select'
 import listing_util from '../../../../utils/listing'
 import helpers from '../../../../utils/helpers'
+import validator from 'validator'
+import SelectContainer from './SelectContainer'
+import { getResizeAvatarUrl } from '../../../../utils/user'
 export default class ShareListingModal extends Component {
+  inputChange(e) {
+    // Enter clicked
+    const data = this.props.data
+    if (e.which === 13) {
+      if (data.share_modal && data.share_modal.items_selected && data.share_modal.search_value) {
+        // Emails
+        if (validator.isEmail(data.share_modal.search_value)) {
+          data.share_modal.items_selected.push({
+            email: data.share_modal.search_value,
+            type: 'email',
+            label: data.share_modal.search_value,
+            value: data.share_modal.search_value
+          })
+          this.props.addUsersToSearchInput(data.share_modal.items_selected)
+        }
+        // Phone numbers
+        if (validator.isNumeric(data.share_modal.search_value)) {
+          data.share_modal.items_selected.push({
+            email: data.share_modal.search_value,
+            type: 'phone_number',
+            label: data.share_modal.search_value,
+            value: data.share_modal.search_value
+          })
+          this.props.addUsersToSearchInput(data.share_modal.items_selected)
+        }
+      }
+    }
+  }
   handleChange(users_selected) {
     this.props.addUsersToSearchInput(users_selected)
   }
-  handleInputChange() {
-    // console.log('handleInputChange')
+  handleInputChange(value) {
+    this.props.handleInputChange(value)
+  }
+  handleValueRender(value) {
+    let profile_image
+    let display_name
+    if (value.type === 'contact') {
+      const user = value.value.contact_user
+      profile_image = <div style={ S(`absolute l-0 t-0 pull-left mr-10 bg-url(${getResizeAvatarUrl(user.profile_image_url)}?w=160) w-26 h-26 bg-cover bg-center`) }/>
+      display_name = (
+        <div style={ S(`pull-left ml-32`) }>
+          { value.value.contact_user.first_name }
+        </div>
+      )
+    }
+    return (
+      <div>
+        { profile_image }
+        { display_name }
+      </div>
+    )
   }
   isSharable() {
     const data = this.props.data
@@ -72,29 +122,32 @@ export default class ShareListingModal extends Component {
     price = helpers.numberWithCommas(price)
     return (
       <Modal dialogClassName={ dialog_class_name } show={ data.show_share_listing_modal } onHide={ controller.listing_viewer.hideShareListingModal }>
-        <Modal.Header closeButton style={ S('border-bottom-1-solid-f8f8f8') }>
+        <Modal.Header closeButton style={ S('border-bottom-1-solid-b2b2b2 bg-fafafa') }>
           <Modal.Title className="din" style={ S('font-36 ml-15 color-4a4a4a') }>Share Listing</Modal.Title>
         </Modal.Header>
         <Modal.Body style={ S('p-0 h-300') }>
-          <div style={ S('relative w-100p h-50 p-10 bg-fff border-bottom-1-solid-e2e6ea') }>
+          <div style={ S('relative w-100p h-50 p-10 bg-fff border-bottom-1-solid-e2e6ea bg-fafafa') }>
             <div style={ S('absolute l-10 t-15') }>To:</div>
             <div className="create-item__user-select" style={ S('absolute l-35 t-5 w-90p z-1000') }>
-              <Select
-                autofocus
-                name="users"
-                options={ users_select_options }
-                onChange={ this.handleChange.bind(this) }
-                placeholder="Enter name, email or phone"
-                value={ users_selected ? users_selected : null }
-                multi
-                noResultsText={ 'No users found'}
-                style={ S('border-none mt-3') }
-                onInputChange={ this.handleInputChange.bind(this) }
-              />
+              <SelectContainer inputChange={ this.inputChange.bind(this) }>
+                <Select
+                  autofocus
+                  name="users"
+                  options={ users_select_options }
+                  placeholder="Enter name, email or phone"
+                  value={ users_selected ? users_selected : null }
+                  multi
+                  noResultsText={ 'No users found'}
+                  style={ S('border-none mt-3') }
+                  onInputChange={ this.handleInputChange.bind(this) }
+                  onChange={ this.handleChange.bind(this) }
+                  valueRenderer={ this.handleValueRender.bind(this) }
+                />
+              </SelectContainer>
             </div>
           </div>
         </Modal.Body>
-        <Modal.Footer style={ S('bg-f8f8f8') }>
+        <Modal.Footer style={ S('bg-fff') }>
           <div style={ S('mr-15 mb-20 border-1-solid-d5dce5 bg-e7eaed br-3 w-220 h-64 p-6') }>
             <div style={ S(`pull-left mr-10 w-50 h-50 bg-cover bg-center bg-url(${ current_listing ? current_listing.cover_image_url : '' })`) }/>
             <div style={ S('pull-left') }>
@@ -104,11 +157,10 @@ export default class ShareListingModal extends Component {
           </div>
           <div>
             <div style={ S('pull-left w-400') }>
-              <Input ref="message" type="text" placeholder="Write Message..."/>
+              <Input style={ S('border-none') } ref="message" type="text" placeholder="Write Message..."/>
             </div>
             <div style={ S('pull-right') }>
-              <Button onClick={ controller.listing_viewer.hideShareListingModal } bsStyle="link">Cancel</Button>
-              <Button className={ share_modal && share_modal.sending_share || !this.isSharable() ? 'disabled' : '' } bsStyle="primary" onClick={ controller.listing_share.shareListing.bind(this) }>{ share_modal && !share_modal.sending_share ? 'Share Listing' : 'Sending...' }&nbsp;&nbsp;<i className="fa fa-share"></i></Button>
+              <Button className={ share_modal && share_modal.sending_share || !this.isSharable() ? 'disabled' : '' } bsStyle="primary" onClick={ controller.listing_share.shareListing.bind(this) }>{ share_modal && !share_modal.sending_share ? 'Share' : 'Sending...' }</Button>
             </div>
           </div>
         </Modal.Footer>
@@ -124,5 +176,6 @@ ShareListingModal.propTypes = {
   handleAddEmail: React.PropTypes.func,
   handleAddPhoneNumber: React.PropTypes.func,
   handleRemoveShareItem: React.PropTypes.func,
-  addUsersToSearchInput: React.PropTypes.func
+  addUsersToSearchInput: React.PropTypes.func,
+  handleInputChange: React.PropTypes.func
 }

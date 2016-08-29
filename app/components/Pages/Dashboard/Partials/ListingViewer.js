@@ -647,6 +647,7 @@ export default class ListingViewer extends Component {
           handleAddPhoneNumber={ controller.share_modal.handleAddPhoneNumber }
           handleRemoveShareItem={ controller.share_modal.handleRemoveShareItem }
           addUsersToSearchInput={ controller.share_modal.addUsersToSearchInput }
+          handleInputChange={ controller.share_modal.handleInputChange }
         />
       </div>
     )

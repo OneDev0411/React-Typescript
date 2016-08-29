@@ -6,7 +6,8 @@ import Select from 'react-select'
 import validator from 'validator'
 import CreateMessageArea from './CreateMessageArea'
 import MessagesList from './MessagesList'
-import SelectContainer from './SelectContainer'
+import SelectContainer from '../../Partials/SelectContainer'
+import { getResizeAvatarUrl } from '../../../../../utils/user'
 export default class NewMessageViewer extends Component {
   inputChange(e) {
     // Enter clicked
@@ -47,9 +48,10 @@ export default class NewMessageViewer extends Component {
     let display_name
     if (value.type === 'contact') {
       const user = value.value.contact_user
-      profile_image = <div style={ S(`absolute l-0 t-0 pull-left mr-10 bg-url(${user.profile_image_url}) w-26 h-26 bg-cover bg-center`) }/>
+      if (getResizeAvatarUrl(user.profile_image_url))
+        profile_image = <div style={ S(`pull-left mr-15 bg-url(${getResizeAvatarUrl(user.profile_image_url)}?w=160) w-26 h-26 bg-cover bg-center`) }/>
       display_name = (
-        <div style={ S(`pull-left ml-32`) }>
+        <div style={ S(`pull-left`) }>
           { value.value.contact_user.first_name }
         </div>
       )
