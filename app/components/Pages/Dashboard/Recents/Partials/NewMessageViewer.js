@@ -49,9 +49,9 @@ export default class NewMessageViewer extends Component {
     if (value.type === 'contact') {
       const user = value.value.contact_user
       if (getResizeAvatarUrl(user.profile_image_url))
-        profile_image = <div style={ S(`pull-left mr-15 bg-url(${getResizeAvatarUrl(user.profile_image_url)}?w=160) w-26 h-26 bg-cover bg-center`) }/>
+        profile_image = <div style={ S(`pull-left bg-url(${getResizeAvatarUrl(user.profile_image_url)}?w=160) w-26 h-26 bg-cover bg-center`) }/>
       display_name = (
-        <div style={ S(`pull-left`) }>
+        <div style={ S(`pull-left mt-4 ml-10 mr-5`) }>
           { value.value.contact_user.first_name }
         </div>
       )
