@@ -142,12 +142,16 @@ export default class ShareAlertModal extends Component {
           </div>
         </Modal.Body>
         <Modal.Footer style={ S('bg-fff') }>
-          <div style={ S('mr-15 mb-20 border-1-solid-d5dce5 bg-e7eaed br-3 w-220 h-64 p-6') }>
-            <div style={ S(`pull-left mr-10 w-50 h-50 bg-cover bg-center bg-url(${ current_listing ? current_listing.cover_image_url : '' })`) }/>
-            <div style={ S('pull-left') }>
-              <div>Alert</div>
+          <div style={ S('pull-left mr-15 mb-20 border-1-solid-d5dce5 bg-e7eaed br-3 inline-block') }>
+            <div style={ S(`pull-left w-50 h-50 pt-20 text-center border-right-1-solid-d5dce5 h-64`) }>
+              <img src="/images/dashboard/mls/alert-bell--gray.svg"/>
+            </div>
+            <div style={ S('pull-left p-15 pt-10 text-left h-64') }>
+              <div>{ data.share_modal && data.share_modal.title ? data.share_modal.title : 'Alert'}</div>
+              <div style={ S('color-bfc3c7') }>You are sharing this alert</div>
             </div>
           </div>
+          <div className="clearfix"></div>
           <div>
             <div style={ S('pull-left w-400') }>
               <Input style={ S('border-none') } ref="message" type="text" placeholder="Write Message..."/>
