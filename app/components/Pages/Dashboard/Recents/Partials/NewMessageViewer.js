@@ -49,7 +49,7 @@ export default class NewMessageViewer extends Component {
       const user = value.value.contact_user
       profile_image = <div style={ S(`absolute l-0 t-0 pull-left mr-10 bg-url(${user.profile_image_url}) w-26 h-26 bg-cover bg-center`) }/>
       display_name = (
-        <div style={ S(`pull-left ml-30`) }>
+        <div style={ S(`pull-left ml-32`) }>
           { value.value.contact_user.first_name }
         </div>
       )
