@@ -14,23 +14,24 @@ export default class NewMessageViewer extends Component {
     const data = this.props.data
     if (e.which === 13) {
       if (data.new_message && data.new_message.items_selected && data.new_message.search_value) {
+        const search_value = data.new_message.search_value
         // Emails
-        if (validator.isEmail(data.new_message.search_value)) {
+        if (validator.isEmail(search_value)) {
           data.new_message.items_selected.push({
-            email: data.new_message.search_value,
+            email: search_value,
             type: 'email',
-            label: data.new_message.search_value,
-            value: data.new_message.search_value
+            label: search_value,
+            value: search_value
           })
           this.props.addUsersToSearchInput(data.new_message.items_selected)
         }
         // Phone numbers
-        if (validator.isNumeric(data.new_message.search_value)) {
+        if (validator.isNumeric(search_value)) {
           data.new_message.items_selected.push({
-            email: data.new_message.search_value,
+            email: search_value,
             type: 'phone_number',
-            label: data.new_message.search_value,
-            value: data.new_message.search_value
+            label: search_value,
+            value: search_value
           })
           this.props.addUsersToSearchInput(data.new_message.items_selected)
         }
@@ -43,17 +44,21 @@ export default class NewMessageViewer extends Component {
   handleInputChange(value) {
     this.props.handleInputChange(value)
   }
-  handleValueRender(value) {
+  handleValueRender(item) {
     let profile_image
     let display_name
-    if (value.type === 'contact') {
-      const user = value.value.contact_user
+    if (item.type === 'contact') {
+      const user = item.value.contact_user
       if (getResizeAvatarUrl(user.profile_image_url))
         profile_image = <div style={ S(`pull-left bg-url(${getResizeAvatarUrl(user.profile_image_url)}?w=160) w-26 h-26 bg-cover bg-center`) }/>
       display_name = (
         <div style={ S(`pull-left mt-4 ml-10 mr-5`) }>
-          { value.value.contact_user.first_name }
+          { item.value.contact_user.first_name }
         </div>
+      )
+    } else {
+      display_name = (
+        <div style={ S(`pull-left mt-4 ml-10 mr-5`) }>{ item.value }</div>
       )
     }
     return (

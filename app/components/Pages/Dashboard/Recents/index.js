@@ -326,13 +326,8 @@ export default class Dashboard extends Component {
       const users_last_string = _.map(room.users, 'last_name').toString().toLowerCase()
       if (users_first_string.indexOf(search_text_lower) !== -1)
         return true
-
       if (users_last_string.indexOf(search_text_lower) !== -1)
         return true
-
-      if (room.title.toLowerCase().indexOf(search_text_lower) !== -1)
-        return true
-
       return false
     })
     if (!search_text_lower)

@@ -43,17 +43,21 @@ export default class ShareAlertModal extends Component {
   handleInputChange(value) {
     this.props.handleInputChange(value)
   }
-  handleValueRender(value) {
+  handleValueRender(item) {
     let profile_image
     let display_name
-    if (value.type === 'contact') {
-      const user = value.value.contact_user
+    if (item.type === 'contact') {
+      const user = item.value.contact_user
       if (getResizeAvatarUrl(user.profile_image_url))
         profile_image = <div style={ S(`pull-left bg-url(${getResizeAvatarUrl(user.profile_image_url)}?w=160) w-26 h-26 bg-cover bg-center`) }/>
       display_name = (
         <div style={ S(`pull-left mt-4 ml-10 mr-5`) }>
-          { value.value.contact_user.first_name }
+          { item.value.contact_user.first_name }
         </div>
+      )
+    } else {
+      display_name = (
+        <div style={ S(`pull-left mt-4 ml-10 mr-5`) }>{ item.value }</div>
       )
     }
     return (
