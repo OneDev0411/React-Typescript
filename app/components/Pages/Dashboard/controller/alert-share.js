@@ -56,6 +56,7 @@ const controller = {
     AppStore.emitChange()
     let emails
     let phone_numbers
+    // console.log(alert)
     ListingDispatcher.dispatch({
       action: 'share-alert',
       user,

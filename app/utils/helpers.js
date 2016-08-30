@@ -87,7 +87,8 @@ export default {
     return `${date.getFullYear()}-${ ('0' + (date.getMonth() + 1)).slice(-2) }-${('0' + date.getDate()).slice(-2)}`
   },
   numberWithCommas: (x) => {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    if (x)
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   },
   getDaysFromMiliseconds: (miliseconds) => {
     return Math.floor(parseInt(miliseconds) / 86400000)
