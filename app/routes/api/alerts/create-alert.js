@@ -15,6 +15,7 @@ module.exports = (app, config) => {
       request_object.emails = emails
     if (phone_numbers)
       request_object.phone_numbers = phone_numbers
+    // console.log(request_object)
     const access_token = req.body.access_token
     const endpoint = api_url + '/alerts'
     fetch(endpoint,{
