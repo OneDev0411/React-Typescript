@@ -13,6 +13,7 @@ export default {
       access_token: params.access_token,
       alert: params.alert,
       emails: params.emails,
+      users: params.users,
       phone_numbers: params.phone_numbers
     }
     fetch(endpoint, {

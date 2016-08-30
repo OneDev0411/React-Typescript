@@ -70,7 +70,6 @@ export default class ShareAlertModal extends Component {
   }
   render() {
     const data = this.props.data
-    const current_listing = data.current_listing
     const share_modal = data.share_modal
     const users_select_options = []
     // Get users selected
@@ -157,7 +156,7 @@ export default class ShareAlertModal extends Component {
               <Input style={ S('border-none') } ref="message" type="text" placeholder="Write Message..."/>
             </div>
             <div style={ S('pull-right') }>
-              <Button className={ share_modal && share_modal.sending_share || !this.isSharable() ? 'disabled' : '' } bsStyle="primary" onClick={ controller.listing_share.shareListing.bind(this) }>{ share_modal && !share_modal.sending_share ? 'Share' : 'Sending...' }</Button>
+              <Button className={ share_modal && share_modal.sending_share || !this.isSharable() ? 'disabled' : '' } bsStyle="primary" onClick={ controller.alert_share.shareAlert.bind(this) }>{ share_modal && !share_modal.sending_share ? 'Share' : 'Sending...' }</Button>
             </div>
           </div>
         </Modal.Footer>

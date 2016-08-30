@@ -3,11 +3,14 @@ module.exports = (app, config) => {
   app.post('/api/alerts/create-alert',(req, res) => {
     const api_url = config.api.url
     const alert = req.body.alert
+    const users = req.body.users
     const emails = req.body.emails
     const phone_numbers = req.body.phone_numbers
     const request_object = {
       alert
     }
+    if (users)
+      request_object.users = users
     if (emails)
       request_object.emails = emails
     if (phone_numbers)
