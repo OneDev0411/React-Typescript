@@ -114,7 +114,7 @@ export default class RoomsList extends Component {
           const hasNotification = this.roomHasNotifications(room.id)
           if (hasNotification) {
             notification = (
-              <div style={ S('absolute r-15 w-0 h-0') }>
+              <div style={ S('absolute t-17n r-15 w-0 h-0') }>
                 <i className="fa fa-circle" style={ S('font-8 color-3388FF z-10') }></i>
               </div>
             )
