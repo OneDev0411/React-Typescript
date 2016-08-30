@@ -6,6 +6,7 @@ module.exports = (app, config) => {
     const users = req.body.users
     const emails = req.body.emails
     const phone_numbers = req.body.phone_numbers
+    const message = req.body.message
     const request_object = {
       alert
     }
@@ -15,7 +16,11 @@ module.exports = (app, config) => {
       request_object.emails = emails
     if (phone_numbers)
       request_object.phone_numbers = phone_numbers
-    // console.log(request_object)
+    if (message) {
+      request_object.message = {
+        comment: message
+      }
+    }
     const access_token = req.body.access_token
     const endpoint = api_url + '/alerts'
     fetch(endpoint,{

@@ -53,8 +53,6 @@ const controller = {
     const share_modal = AppStore.data.share_modal
     const users = _.map(share_modal.items_selected, 'value.contact_user.id')
     const message = this.refs.message.refs.input.value.trim()
-    if (message)
-      alert.message = message
     AppStore.data.share_modal.sending_share = true
     AppStore.emitChange()
     let emails
@@ -66,7 +64,8 @@ const controller = {
       users,
       emails,
       phone_numbers,
-      alert
+      alert,
+      message
     })
   },
   saveForMe(title) {

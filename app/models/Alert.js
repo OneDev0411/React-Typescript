@@ -14,7 +14,8 @@ export default {
       alert: params.alert,
       emails: params.emails,
       users: params.users,
-      phone_numbers: params.phone_numbers
+      phone_numbers: params.phone_numbers,
+      message: params.message
     }
     fetch(endpoint, {
       method: 'post',

@@ -2,7 +2,7 @@
 import Alert from '../../models/Alert'
 import AppStore from '../../stores/AppStore'
 
-export default (user, rooms, users, emails, phone_numbers, alert) => {
+export default (user, rooms, users, emails, phone_numbers, alert, message) => {
   AppStore.data.listing_map.saving_alert = true
   AppStore.emitChange()
   const params = {
@@ -10,7 +10,8 @@ export default (user, rooms, users, emails, phone_numbers, alert) => {
     alert,
     users,
     emails,
-    phone_numbers
+    phone_numbers,
+    message
   }
   Alert.create(params, (err, res) => {
     delete AppStore.data.listing_map.saving_alert
