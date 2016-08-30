@@ -115,8 +115,11 @@ export default class ShareAlertModal extends Component {
       dialog_class_name = 'modal-mobile'
     return (
       <Modal dialogClassName={ dialog_class_name } show={ data.listing_map && data.listing_map.show_share_modal } onHide={ controller.listing_map.hideModal }>
-        <Modal.Header closeButton style={ S('border-bottom-1-solid-b2b2b2 bg-fafafa') }>
-          <Modal.Title className="din" style={ S('font-36 ml-15 color-4a4a4a') }>Share Alert</Modal.Title>
+        <Modal.Header style={ S('bg-fafafa br-5 p-0 border-none') }>
+          <div style={ S('border-bottom-1-solid-ebebeb p-15') }>
+            <a className="close" onClick={ controller.listing_map.hideModal }>&times;</a>
+            <Modal.Title className="din" style={ S('font-36 ml-15 color-4a4a4a') }>Share Alert</Modal.Title>
+          </div>
         </Modal.Header>
         <Modal.Body style={ S('p-0 h-300') }>
           <div style={ S('relative w-100p h-50 p-10 bg-fff border-bottom-1-solid-e2e6ea bg-fafafa') }>
@@ -140,7 +143,7 @@ export default class ShareAlertModal extends Component {
             </div>
           </div>
         </Modal.Body>
-        <Modal.Footer style={ S('bg-fff') }>
+        <Modal.Footer>
           <div style={ S('pull-left mr-15 mb-20 border-1-solid-d5dce5 bg-e7eaed br-3 inline-block') }>
             <div style={ S(`pull-left w-50 h-50 pt-20 text-center border-right-1-solid-d5dce5 h-64`) }>
               <img src="/images/dashboard/mls/alert-bell--gray.svg"/>

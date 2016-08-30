@@ -50,9 +50,10 @@ export default class ShareListingModal extends Component {
     let display_name
     if (value.type === 'contact') {
       const user = value.value.contact_user
-      profile_image = <div style={ S(`absolute l-0 t-0 pull-left mr-10 bg-url(${getResizeAvatarUrl(user.profile_image_url)}?w=160) w-26 h-26 bg-cover bg-center`) }/>
+      if (getResizeAvatarUrl(user.profile_image_url))
+        profile_image = <div style={ S(`pull-left bg-url(${getResizeAvatarUrl(user.profile_image_url)}?w=160) w-26 h-26 bg-cover bg-center`) }/>
       display_name = (
-        <div style={ S(`pull-left ml-32`) }>
+        <div style={ S(`pull-left mt-4 ml-10 mr-5`) }>
           { value.value.contact_user.first_name }
         </div>
       )
@@ -122,8 +123,11 @@ export default class ShareListingModal extends Component {
     price = helpers.numberWithCommas(price)
     return (
       <Modal dialogClassName={ dialog_class_name } show={ data.show_share_listing_modal } onHide={ controller.listing_viewer.hideShareListingModal }>
-        <Modal.Header closeButton style={ S('border-bottom-1-solid-b2b2b2 bg-fafafa') }>
-          <Modal.Title className="din" style={ S('font-36 ml-15 color-4a4a4a') }>Share Listing</Modal.Title>
+        <Modal.Header style={ S('bg-fafafa br-5 p-0 border-none') }>
+          <div style={ S('border-bottom-1-solid-ebebeb p-15') }>
+            <a className="close" onClick={ controller.listing_viewer.hideShareListingModal }>&times;</a>
+            <Modal.Title className="din" style={ S('font-36 ml-15 color-4a4a4a') }>Share Listing</Modal.Title>
+          </div>
         </Modal.Header>
         <Modal.Body style={ S('p-0 h-300') }>
           <div style={ S('relative w-100p h-50 p-10 bg-fff border-bottom-1-solid-e2e6ea bg-fafafa') }>
@@ -147,16 +151,17 @@ export default class ShareListingModal extends Component {
             </div>
           </div>
         </Modal.Body>
-        <Modal.Footer style={ S('bg-fff') }>
-          <div style={ S('mr-15 mb-20 border-1-solid-d5dce5 bg-e7eaed br-3 w-220 h-64 p-6') }>
+        <Modal.Footer>
+          <div style={ S('pull-left mr-15 mb-20 border-1-solid-d5dce5 bg-e7eaed br-3 inline-block p-6 pr-10') }>
             <div style={ S(`pull-left mr-10 w-50 h-50 bg-cover bg-center bg-url(${ current_listing ? current_listing.cover_image_url : '' })`) }/>
             <div style={ S('pull-left') }>
-              <div>{ current_listing && current_listing.property ? listing_util.addressTitle(current_listing.property.address) : '' }</div>
-              <div style={ S('text-left') }>${ price }</div>
+              <div style={ S('color-333333') }>{ current_listing && current_listing.property ? listing_util.addressTitle(current_listing.property.address) : '' }</div>
+              <div style={ S('text-left color-8696a4') }>${ price }</div>
             </div>
           </div>
+          <div className="clearfix"></div>
           <div>
-            <div style={ S('pull-left w-400') }>
+            <div style={ S('pull-left') }>
               <Input style={ S('border-none') } ref="message" type="text" placeholder="Write Message..."/>
             </div>
             <div style={ S('pull-right') }>
