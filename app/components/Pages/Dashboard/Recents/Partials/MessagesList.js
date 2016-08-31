@@ -392,12 +392,15 @@ export default class MessagesList extends Component {
     }
     return (
       <div>
-        <button onClick={ this.props.showModal.bind(this, 'invite-user') } type="button" className="btn btn-default" style={ btn_invite_style } >
-          <img style={ S('ml-1n mt-1n') } src="/images/dashboard/icons/invite-user.svg"/>
-        </button>
-        <button onClick={ this.props.showModal.bind(this, 'settings') } type="button" className="btn btn-default" style={ btn_settings_style } >
-          <i style={ S('font-16 relative t-1') } className="fa fa-cog"></i>
-        </button>
+        <div style={ S('pull-right relative t-10 r-10') }>
+          <div style={ S('pull-left p-10 pointer mr-40') }>
+            <img style={ S('w-22 relative') } src="/images/dashboard/chats/members.svg"/>
+            <span style={ S('color-4eabf6 absolute l-40 t-9 font-17 fw-500') }>{ data.current_room && data.current_room.users ? data.current_room.users.length : '' }</span>
+          </div>
+          <div style={ S('pull-left p-10 pointer') }>
+            <img style={ S('w-4') } src="/images/dashboard/chats/dots.svg"/>
+          </div>
+        </div>
         { title_area }
         <div className="touch-scroll" ref="messages_scroll_area" style={ messages_scroll_area } onScroll={ this.handleScroll.bind(this) }>
           { loading_previous }
