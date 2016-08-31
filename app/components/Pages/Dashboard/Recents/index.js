@@ -192,6 +192,8 @@ export default class Dashboard extends Component {
       AppStore.data.show_contacts_modal = true
     if (modal_key === 'settings')
       AppStore.data.show_settings_modal = true
+    if (modal_key === 'room-users')
+      AppStore.data.show_room_users_modal = true
     AppStore.emitChange()
   }
 
@@ -205,6 +207,7 @@ export default class Dashboard extends Component {
     delete AppStore.data.show_create_chat_modal
     delete AppStore.data.show_contacts_modal
     delete AppStore.data.show_settings_modal
+    delete AppStore.data.show_room_users_modal
     delete AppStore.data.show_modal_gallery
     delete AppStore.data.show_alert_modal
     delete AppStore.data.adding_contacts

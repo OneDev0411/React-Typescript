@@ -3,21 +3,14 @@ import React, { Component } from 'react'
 import S from 'shorti'
 import _ from 'lodash'
 import Loading from '../../../../Partials/Loading'
-import { Carousel, CarouselItem, Tooltip, OverlayTrigger, Modal, Button, Alert } from 'react-bootstrap'
-import config from '../../../../../../config/public'
+import { Carousel, CarouselItem, Modal, Button, Alert, DropdownButton } from 'react-bootstrap'
 import helpers from '../../../../../utils/helpers'
 import listing_util from '../../../../../utils/listing'
-import Switch from 'react-ios-switch'
 // AppDispatcher
 import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
-
-
 // Partials
 import MessageItem from './MessageItem'
 import ProfileImage from '../../Partials/ProfileImage'
-
-// Modules
-import AddContactsModule from '../../Modules/AddContacts'
 
 export default class MessagesList extends Component {
   componentDidMount() {
@@ -165,9 +158,9 @@ export default class MessagesList extends Component {
         </div>
       )
     }
-    let listing_switch_checked
+    let has_system_generated_notifs
     if (current_room.notification_settings)
-      listing_switch_checked = current_room.notification_settings[data.user.id].system_generated
+      has_system_generated_notifs = current_room.notification_settings[data.user.id].system_generated
 
     let message_date
     const todays_date = helpers.getYMD()
@@ -237,14 +230,6 @@ export default class MessagesList extends Component {
       })
     }
 
-    const invite_link = config.app.share_url + '/invite/?room_id=' + data.current_room.id + '&invite_token=' + data.user.access_token
-
-    const tooltip = (
-      <Tooltip id="copied-tooltip">
-        Copied
-      </Tooltip>
-    )
-
     let messages_overflow = 'scroll'
     let messages_opacity = 1
     // Load previous messages
@@ -282,8 +267,6 @@ export default class MessagesList extends Component {
     //     </div>
     //   )
     // }
-    const btn_invite_style = S('w-40 h-40 pointer absolute p-0 t-10 r-20 br-100 bc-ddd bw-1 solid')
-    const btn_settings_style = S('w-40 h-40 pointer absolute p-0 t-10 r-70 br-100 bc-ddd bw-1 solid color-929292')
     let alert_modal_area = (
       <Loading />
     )
@@ -354,12 +337,6 @@ export default class MessagesList extends Component {
         </div>
       )
     }
-    const delete_area = (
-      <Modal.Footer>
-        <Button bsStyle="link" onClick={ this.props.hideModal }>Cancel</Button>
-        <Button bsStyle="danger" onClick={ this.props.showDeleteRoomModal.bind(this) }>Leave room</Button>
-      </Modal.Footer>
-    )
     let messages_mb = 'mb-40'
     if (data.is_mobile)
       messages_mb = 'mb-80'
@@ -390,77 +367,43 @@ export default class MessagesList extends Component {
         </div>
       )
     }
+    const settings_dropdown_dots = (
+      <img style={ S('w-4') } src="/images/dashboard/chats/dots.svg"/>
+    )
+    let room_settings = (
+      <div className="no-user-select" style={ S('pull-right relative t-10 r-10') }>
+        <div style={ S('pull-left p-10 pointer mr-30') } onClick={ this.props.showModal.bind(this, 'room-users') }>
+          <img style={ S('w-22 relative') } src="/images/dashboard/chats/members.svg"/>
+          <span style={ S('color-4eabf6 absolute l-40 t-9 font-17 fw-500') }>{ data.current_room && data.current_room.users ? data.current_room.users.length : '' }</span>
+        </div>
+        <div className="dropdown-menu--room-settings" style={ S('pull-left mr-10') }>
+          <DropdownButton style={ S('border-none mt-2') } pullRight title={ settings_dropdown_dots } id="room-dropdown" className="room-dropdown" noCaret>
+            <li style={ S('w-260 p-20 border-bottom-1-solid-d8d8d8 pointer') } onClick={ this.props.changeListingNotification.bind(this, has_system_generated_notifs) }>
+              { has_system_generated_notifs ? 'Mute' : 'Unmute' } this chat
+              <img style={ S('pull-right mt-2n mr-5') } src={ `/images/dashboard/chats/bell${!has_system_generated_notifs ? '-strike' : ''}.svg` }/>
+            </li>
+            <li style={ S('w-260 p-20 pointer') } onClick={ this.props.showDeleteRoomModal.bind(this) }>
+              Leave this chat
+            </li>
+          </DropdownButton>
+        </div>
+      </div>
+    )
+    if (data.show_new_message_viewer)
+      room_settings = ''
     return (
       <div>
-        <div style={ S('pull-right relative t-10 r-10') }>
-          <div style={ S('pull-left p-10 pointer mr-40') }>
-            <img style={ S('w-22 relative') } src="/images/dashboard/chats/members.svg"/>
-            <span style={ S('color-4eabf6 absolute l-40 t-9 font-17 fw-500') }>{ data.current_room && data.current_room.users ? data.current_room.users.length : '' }</span>
-          </div>
-          <div style={ S('pull-left p-10 pointer') }>
-            <img style={ S('w-4') } src="/images/dashboard/chats/dots.svg"/>
-          </div>
-        </div>
+        { room_settings }
         { title_area }
         <div className="touch-scroll" ref="messages_scroll_area" style={ messages_scroll_area } onScroll={ this.handleScroll.bind(this) }>
           { loading_previous }
           <ul style={ S('pl-0 ' + messages_mb) }>{ messages_list_items }</ul>
         </div>
-        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_contacts_modal } onHide={ this.props.hideModal }>
+        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_room_users_modal } onHide={ this.props.hideModal }>
           <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
-           <Modal.Title style={ S('font-14') }>Invite contacts <span style={ S('color-929292 fw-400') }>(use any email or any phone number)</span></Modal.Title>
+           <Modal.Title style={ S('font-14') }>Room users</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <div style={ S('mb-15') }>
-              <div style={ S('font-14 fw-500 mb-5') }>Share link</div>
-              <div style={ S('r-10 t-16 w-100p mr-15') }>
-                <div className="input-group">
-                  <OverlayTrigger rootClose trigger="click" placement="bottom" overlay={ tooltip }>
-                    <input data-clipboard-text={ invite_link } readOnly onClick={ this.handleInviteLinkClick.bind(this) } className="copy-link form-control pull-right" ref="clipboard_target" id="invite-link" type="text" value={ invite_link } style={ S('h-37 w-100p') } />
-                  </OverlayTrigger>
-                  <span className="input-group-btn">
-                    <OverlayTrigger rootClose trigger="click" placement="bottom" overlay={ tooltip }>
-                      <button className="copy-link btn btn-default" type="button" data-clipboard-target="#invite-link" style={ S('h-37') }>
-                        <img src="/images/dashboard/icons/clippy.svg" width="13" alt="Copy to clipboard" />
-                      </button>
-                    </OverlayTrigger>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <hr />
-            <div style={ S('mt-10n pt-5') }>
-              <div style={ S('font-14 fw-500') }>Add contacts</div>
-              <AddContactsModule
-                data={ data }
-                module_type="room"
-              />
-            </div>
-            <div className="text-center">
-              <img style={ S('w-200 h-103') } src="/images/dashboard/add-contacts/people.png" />
-            </div>
-          </Modal.Body>
-          <Modal.Footer style={ { border: 'none' } }>
-            <Button bsStyle="link" onClick={ this.props.hideModal }>Cancel</Button>
-            <Button onClick={ this.props.addContactsToRoom.bind(this) } style={ S('pl-30 pr-30') } className={ data.adding_contacts ? 'disabled' : '' } type="submit" bsStyle="primary">
-              { data.adding_contacts ? 'Saving...' : 'Save' }
-            </Button>
-            { message }
-          </Modal.Footer>
-        </Modal>
-        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_settings_modal } onHide={ this.props.hideModal }>
-          <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
-           <Modal.Title style={ S('font-14') }>Room settings</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <div style={ S('mb-20') }>
-              <label>Listing notifications</label>
-              <div className="clearfix"></div>
-              <div className="pull-left">
-                <Switch checked={ listing_switch_checked } onChange={ this.props.changeListingNotification.bind(this, listing_switch_checked) } />
-              </div>
-              <div className="clearfix"></div>
-            </div>
             <label>Team</label>
             <div style={ { ...S('maxh-200 pt-10'), overflow: 'scroll' } }>
             {
@@ -480,7 +423,9 @@ export default class MessagesList extends Component {
             }
             </div>
           </Modal.Body>
-          { delete_area }
+          <Modal.Footer>
+            <Button bsStyle="default" onClick={ this.props.hideModal }>Ok</Button>
+          </Modal.Footer>
         </Modal>
         <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_alert_modal } onHide={ this.props.hideAlertModal }>
           <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
