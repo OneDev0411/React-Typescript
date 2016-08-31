@@ -14,7 +14,9 @@ export default class NewMessageViewer extends Component {
     // Enter clicked
     const data = this.props.data
     if (e.which === 13) {
-      if (data.new_message && data.new_message.items_selected && data.new_message.search_value) {
+      if (data.new_message && data.new_message.search_value) {
+        if (!data.new_message.items_selected)
+          data.new_message.items_selected = []
         const search_value = data.new_message.search_value
         // Emails
         if (validator.isEmail(search_value)) {

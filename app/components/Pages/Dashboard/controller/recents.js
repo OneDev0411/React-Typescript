@@ -49,18 +49,20 @@ const controller = {
     // Get a room
     const rooms = AppStore.data.rooms
     const user_ids = _.map(_.filter(items_selected, { type: 'contact' }), 'value.contact_user.id')
-    let room_found = false
-    rooms.forEach(room => {
-      let user_ids_room = _.map(room.users, 'id')
-      user_ids_room = user_ids_room.filter(user_id => {
-        return user_id !== AppStore.data.user.id
+    if (user_ids.length) {
+      let room_found = false
+      rooms.forEach(room => {
+        let user_ids_room = _.map(room.users, 'id')
+        user_ids_room = user_ids_room.filter(user_id => {
+          return user_id !== AppStore.data.user.id
+        })
+        if (_.isEqual(user_ids, user_ids_room))
+          room_found = room
       })
-      if (_.isEqual(user_ids, user_ids_room))
-        room_found = room
-    })
-    if (room_found) {
-      AppStore.data.current_room = room_found
-      AppStore.data.messages = _.map(_.find(AppStore.data.rooms, { id: room_found.id }), 'messages')
+      if (room_found) {
+        AppStore.data.current_room = room_found
+        AppStore.data.messages = _.map(_.find(AppStore.data.rooms, { id: room_found.id }), 'messages')
+      }
     }
     AppStore.emitChange()
   },
