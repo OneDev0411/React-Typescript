@@ -8,6 +8,7 @@ import CreateMessageArea from './CreateMessageArea'
 import MessagesList from './MessagesList'
 import SelectContainer from '../../Partials/SelectContainer'
 import { getResizeAvatarUrl } from '../../../../../utils/user'
+import ProfileImage from '../../Partials/ProfileImage'
 export default class NewMessageViewer extends Component {
   inputChange(e) {
     // Enter clicked
@@ -44,7 +45,7 @@ export default class NewMessageViewer extends Component {
   handleInputChange(value) {
     this.props.handleInputChange(value)
   }
-  handleValueRender(item) {
+  handleValueRenderer(item) {
     let profile_image
     let display_name
     if (item.type === 'contact') {
@@ -65,6 +66,26 @@ export default class NewMessageViewer extends Component {
       <div>
         { profile_image }
         { display_name }
+      </div>
+    )
+  }
+  handleOptionRenderer(item) {
+    const data = this.props.data
+    let profile_image
+    let display_value
+    if (item.type === 'contact') {
+      const user = item.value.contact_user
+      profile_image = (
+        <ProfileImage data={ data } user={ user }/>
+      )
+      display_value = item.value.contact_user.first_name
+    } else
+      display_value = item.value
+    return (
+      <div style={ S('relative h-54') }>
+        <div style={ S('mt-10') }>{ profile_image }</div>
+        <div style={ S('pull-left mt-10 ml-60 mr-5') }>{ display_value }</div>
+        <div className="clearfix"/>
       </div>
     )
   }
@@ -170,7 +191,8 @@ export default class NewMessageViewer extends Component {
                 style={ S('border-none mt-3') }
                 onInputChange={ this.handleInputChange.bind(this) }
                 onChange={ this.handleChange.bind(this) }
-                valueRenderer={ this.handleValueRender.bind(this) }
+                valueRenderer={ this.handleValueRenderer.bind(this) }
+                optionRenderer={ this.handleOptionRenderer.bind(this) }
               />
             </SelectContainer>
           </div>
