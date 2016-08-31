@@ -171,6 +171,20 @@ export default class NewMessageViewer extends Component {
         />
       )
     }
+    let create_message_area
+    if (users_selected && users_selected.length) {
+      create_message_area = (
+        <CreateMessageArea
+          data={ data }
+          uploadFiles={ this.props.uploadFiles }
+          createMessage={ this.props.createMessage }
+          addContactToMessage={ this.props.addContactToMessage }
+          handleContactFilterNav={ this.props.handleContactFilterNav }
+          handleMessageTyping={ this.props.handleMessageTyping }
+          handleContactFilter={ this.props.handleContactFilter }
+        />
+      )
+    }
     return (
       <div style={ S('bg-f6f7f9 h-100p absolute w-100p') }>
         <div style={ S('h-60 border-bottom-1-solid-e2e6ea bg-fff') }>
@@ -198,15 +212,7 @@ export default class NewMessageViewer extends Component {
           </div>
         </div>
         { messages_area }
-        <CreateMessageArea
-          data={ data }
-          uploadFiles={ this.props.uploadFiles }
-          createMessage={ this.props.createMessage }
-          addContactToMessage={ this.props.addContactToMessage }
-          handleContactFilterNav={ this.props.handleContactFilterNav }
-          handleMessageTyping={ this.props.handleMessageTyping }
-          handleContactFilter={ this.props.handleContactFilter }
-        />
+        { create_message_area }
       </div>
     )
   }
