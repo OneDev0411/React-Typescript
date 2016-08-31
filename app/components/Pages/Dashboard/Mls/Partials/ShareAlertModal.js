@@ -14,7 +14,9 @@ export default class ShareAlertModal extends Component {
     // Enter clicked
     const data = this.props.data
     if (e.which === 13) {
-      if (data.share_modal && data.share_modal.items_selected && data.share_modal.search_value) {
+      if (data.share_modal && data.share_modal.search_value) {
+        if (!data.share_modal.items_selected)
+          data.share_modal.items_selected = []
         // Emails
         if (validator.isEmail(data.share_modal.search_value)) {
           data.share_modal.items_selected.push({
