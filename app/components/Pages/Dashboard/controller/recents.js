@@ -43,8 +43,31 @@ const controller = {
       AppStore.emitChange()
       return
     }
+    items_selected.forEach(item => {
+      if (item.type === 'room') {
+        const users = item.value.users
+        users.forEach(user => {
+          items_selected.push({
+            label: user.first_name,
+            value: user,
+            type: 'contact'
+          })
+        })
+      }
+    })
+    let filtered_items_selected
+    // Filter out rooms
+    filtered_items_selected = items_selected.filter(item => {
+      return item.type !== 'room'
+    })
+    // Filter out self
+    filtered_items_selected = filtered_items_selected.filter(item => {
+      return item.value.id !== AppStore.data.user.id
+    })
+    // Make unique
+    const unique_items_selected = _.uniqBy(filtered_items_selected, 'value.id')
     AppStore.data.new_message = {
-      items_selected
+      items_selected: unique_items_selected
     }
     // Get a room
     const rooms = AppStore.data.rooms

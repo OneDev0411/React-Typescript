@@ -8,7 +8,9 @@ import CreateMessageArea from './CreateMessageArea'
 import MessagesList from './MessagesList'
 import SelectContainer from '../../Partials/SelectContainer'
 import { getResizeAvatarUrl } from '../../../../../utils/user'
+import { getFirstNameString } from '../../../../../utils/room'
 import ProfileImage from '../../Partials/ProfileImage'
+import ProfileImageMultiple from '../../Partials/ProfileImageMultiple'
 export default class NewMessageViewer extends Component {
   inputChange(e) {
     // Enter clicked
@@ -51,12 +53,12 @@ export default class NewMessageViewer extends Component {
     let profile_image
     let display_name
     if (item.type === 'contact') {
-      const user = item.value.contact_user
+      const user = item.value
       if (getResizeAvatarUrl(user.profile_image_url))
         profile_image = <div style={ S(`pull-left bg-url(${getResizeAvatarUrl(user.profile_image_url)}?w=160) w-26 h-26 bg-cover bg-center`) }/>
       display_name = (
         <div style={ S(`pull-left mt-4 ml-10 mr-5`) }>
-          { item.value.contact_user.first_name }
+          { item.value.first_name }
         </div>
       )
     } else {
@@ -76,13 +78,19 @@ export default class NewMessageViewer extends Component {
     let profile_image
     let display_value
     if (item.type === 'contact') {
+      // Contact
       const user = item.value.contact_user
       profile_image = (
         <ProfileImage data={ data } user={ user }/>
       )
       display_value = item.value.contact_user.first_name
-    } else
-      display_value = item.value
+    } else {
+      // Room
+      profile_image = (
+        <ProfileImageMultiple users={ item.value.users }/>
+      )
+      display_value = getFirstNameString(item.value, data.user)
+    }
     return (
       <div style={ S('relative h-54') }>
         <div style={ S('mt-10') }>{ profile_image }</div>
@@ -115,6 +123,17 @@ export default class NewMessageViewer extends Component {
           users_selected.push(item)
       })
     }
+    if (data.rooms) {
+      data.rooms.forEach(room => {
+        if (room.users.length > 2) {
+          users_select_options.push({
+            value: room,
+            label: getFirstNameString(room, data.user),
+            type: 'room'
+          })
+        }
+      })
+    }
     if (data.contacts) {
       data.contacts.forEach(user => {
         let full_name
@@ -132,24 +151,6 @@ export default class NewMessageViewer extends Component {
         }
       })
     }
-    // if (data.rooms) {
-    //   data.rooms.forEach(room => {
-    //     const not_current_user_users = room.users.filter(room_user => {
-    //       if (room_user.id !== data.user.id)
-    //         return true
-    //     })
-    //     let first_name_list = ''
-    //     not_current_user_users.forEach((user, _i) => {
-    //       first_name_list += user.first_name
-    //       if (_i < not_current_user_users.length - 1) first_name_list += ', '
-    //     })
-    //     users_select_options.push({
-    //       value: room.users,
-    //       label: first_name_list,
-    //       type: 'room'
-    //     })
-    //   })
-    // }
     let messages_area
     if (data.current_room) {
       messages_area = (
