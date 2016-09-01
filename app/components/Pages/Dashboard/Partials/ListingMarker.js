@@ -13,13 +13,16 @@ export default class ListingMarker extends Component {
     return false
   }
   getSocialBadge(listing) {
-    let badge_style = S('absolute l-4 pr-4 t-3 w-20 h-20 border-right-1-solid-dbdbdb')
+    let badge_style = {
+      ...S('absolute t-0 pl-4 pr-4 pt-3 w-20 h-21 bg-fff'),
+      'borderTopLeftRadius': '3px',
+      'borderBottomLeftRadius': '3px'
+    }
     let social_icon
     if (listing.commented_by || listing.shared_by) {
       social_icon = 'comment-bubble'
       badge_style = {
-        ...badge_style,
-        ...S('t-4')
+        ...badge_style
       }
     }
     if (this.isFavorited(listing))
@@ -98,14 +101,14 @@ export default class ListingMarker extends Component {
         </div>
       </div>
     )
-    let marker_style = S('relative w-55 h-25 br-3 color-fff')
+    let marker_style = S('relative w-45 h-21 br-3 color-fff')
     let viewed_class = ''
     // Social badge
     let social_badge
     if (this.isFavorited(listing) || listing.commented_by) {
       marker_style = {
         ...marker_style,
-        ...S('w-80')
+        ...S('w-65')
       }
       social_badge = this.getSocialBadge(listing)
     }
@@ -117,7 +120,7 @@ export default class ListingMarker extends Component {
       )
       marker_style = {
         ...marker_style,
-        ...S('w-80 z-100')
+        ...S('w-65 z-100')
       }
     }
     if (listing_map && listing_map.listings_viewed && listing_map.listings_viewed.indexOf(listing.id) !== -1)
@@ -126,7 +129,7 @@ export default class ListingMarker extends Component {
       <div className={ 'map__listing-marker' + active_class + viewed_class + ' ' + status_color_class } style={ marker_style }>
         { brand_badge }
         { social_badge }
-        <div style={ S(`w-100p text-center pt-6${social_badge || brand_badge ? ' pl-22' : ''}`) }>{ price_small }</div>
+        <div style={ S(`w-100p text-center pt-4${social_badge || brand_badge ? ' pl-22' : ''}`) }>{ price_small }</div>
       </div>
     )
     // Open house
@@ -151,7 +154,7 @@ export default class ListingMarker extends Component {
           <div style={ open_style }>O<br />P<br />E<br />N</div>
           { brand_badge }
           { social_badge }
-          <div style={ S(`w-100p text-center pt-6${social_badge || brand_badge ? ' pl-22' : ''}`) }>{ price_small }</div>
+          <div style={ S(`w-100p text-center pt-4${social_badge || brand_badge ? ' pl-22' : ''}`) }>{ price_small }</div>
         </div>
       )
     }
