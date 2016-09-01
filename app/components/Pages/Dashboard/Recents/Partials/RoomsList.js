@@ -95,7 +95,7 @@ export default class RoomsList extends Component {
         if (room.users.length > 2) {
           profile_image_div = (
             <div style={ S('absolute w-35 br-100 bg-2196f3 color-fff w-40 h-40 pt-11 text-center op-.7') }>
-              { room.users.length }
+              { room.users.length - 1 }
             </div>
           )
         }
