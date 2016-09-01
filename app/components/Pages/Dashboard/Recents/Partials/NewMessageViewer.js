@@ -52,20 +52,20 @@ export default class NewMessageViewer extends Component {
   handleValueRenderer(item) {
     let profile_image
     let display_name
-    if (item.type === 'contact') {
-      const user = item.value
-      if (getResizeAvatarUrl(user.profile_image_url))
-        profile_image = <div style={ S(`pull-left bg-url(${getResizeAvatarUrl(user.profile_image_url)}?w=160) w-26 h-26 bg-cover bg-center`) }/>
-      display_name = (
-        <div style={ S(`pull-left mt-4 ml-10 mr-5`) }>
-          { item.value.first_name }
-        </div>
-      )
-    } else {
-      display_name = (
-        <div style={ S(`pull-left mt-4 ml-10 mr-5`) }>{ item.value }</div>
-      )
+    const user = item.value
+    if (user.profile_image_url || user.display_profile_image_url) {
+      let profile_image_url
+      if (user.profile_image_url)
+        profile_image_url = user.profile_image_url
+      if (user.display_profile_image_url)
+        profile_image_url = user.display_profile_image_url
+      profile_image = <div style={ S(`pull-left bg-url(${getResizeAvatarUrl(profile_image_url)}?w=160) w-26 h-26 bg-cover bg-center`) }/>
     }
+    display_name = (
+      <div style={ S(`pull-left mt-4 ml-10 mr-5`) }>
+        { user.contact_user ? user.contact_user.first_name : user.first_name }
+      </div>
+    )
     return (
       <div>
         { profile_image }
@@ -105,24 +105,18 @@ export default class NewMessageViewer extends Component {
     const users_select_options = []
     // Get users selected
     const users_selected = []
+    let users_selected_ids = []
     if (data.new_message && data.new_message.items_selected) {
       const items_selected = data.new_message.items_selected
       items_selected.forEach(item => {
-        if (item.type === 'room') {
-          // Parse users
-          item.value.forEach(user => {
-            if (user.id !== data.user.id) {
-              users_selected.push({
-                label: user.first_name,
-                value: user,
-                type: 'user'
-              })
-            }
-          })
-        } else
-          users_selected.push(item)
+        users_selected.push(item)
+      })
+      // Contacts available
+      users_selected_ids = _.map(users_selected, item => {
+        return item.value.id
       })
     }
+    // Rooms available
     if (data.rooms) {
       data.rooms.forEach(room => {
         if (room.users.length > 2) {
@@ -136,18 +130,12 @@ export default class NewMessageViewer extends Component {
     }
     if (data.contacts) {
       data.contacts.forEach(user => {
-        let full_name
-        if (user.id !== data.user.id && user.first_name) {
-          full_name = user.first_name
-          if (user.last_name)
-            full_name += ' ' + user.last_name
-          if (!_.find(users_selected, { id: user.id })) {
-            users_select_options.push({
-              value: user,
-              label: full_name,
-              type: 'contact'
-            })
-          }
+        if (user.contact_user.id !== data.user.id && user.first_name && users_selected_ids && users_selected_ids.indexOf(user.contact_user.id) === -1) {
+          users_select_options.push({
+            value: user,
+            label: user.first_name,
+            type: 'contact'
+          })
         }
       })
     }

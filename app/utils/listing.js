@@ -41,10 +41,10 @@ export default {
   },
   getSmallPrice: price => {
     let price_small = Math.floor(price / 1000).toFixed(2).replace(/[.,]00$/, '')
-    let letter = 'K'
+    let letter = 'k'
     if (price_small > 1000) {
       price_small = (price_small / 1000).toFixed(2).replace(/[.,]00$/, '')
-      letter = 'M'
+      letter = 'm'
     }
     return price_small + letter
   },
