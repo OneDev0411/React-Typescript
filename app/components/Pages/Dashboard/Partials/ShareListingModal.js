@@ -10,7 +10,9 @@ import helpers from '../../../../utils/helpers'
 import validator from 'validator'
 import SelectContainer from './SelectContainer'
 import { getResizeAvatarUrl } from '../../../../utils/user'
+import { getFirstNameString } from '../../../../utils/room'
 import ProfileImage from './ProfileImage'
+import ProfileImageMultiple from './ProfileImageMultiple'
 export default class ShareListingModal extends Component {
   inputChange(e) {
     // Enter clicked
@@ -52,12 +54,12 @@ export default class ShareListingModal extends Component {
     let profile_image
     let display_name
     if (item.type === 'contact') {
-      const user = item.value.contact_user
+      const user = item.value
       if (getResizeAvatarUrl(user.profile_image_url))
         profile_image = <div style={ S(`pull-left bg-url(${getResizeAvatarUrl(user.profile_image_url)}?w=160) w-26 h-26 bg-cover bg-center`) }/>
       display_name = (
         <div style={ S(`pull-left mt-4 ml-10 mr-5`) }>
-          { item.value.contact_user.first_name }
+          { item.value.first_name }
         </div>
       )
     } else {
@@ -77,13 +79,19 @@ export default class ShareListingModal extends Component {
     let profile_image
     let display_value
     if (item.type === 'contact') {
+      // Contact
       const user = item.value.contact_user
       profile_image = (
         <ProfileImage data={ data } user={ user }/>
       )
       display_value = item.value.contact_user.first_name
-    } else
-      display_value = item.value
+    } else {
+      // Room
+      profile_image = (
+        <ProfileImageMultiple users={ item.value.users }/>
+      )
+      display_value = getFirstNameString(item.value, data.user)
+    }
     return (
       <div style={ S('relative h-54') }>
         <div style={ S('mt-10') }>{ profile_image }</div>
@@ -101,6 +109,7 @@ export default class ShareListingModal extends Component {
     const data = this.props.data
     const current_listing = data.current_listing
     const share_modal = data.share_modal
+    // Data
     const users_select_options = []
     // Get users selected
     const users_selected = []
@@ -120,6 +129,17 @@ export default class ShareListingModal extends Component {
           })
         } else
           users_selected.push(item)
+      })
+    }
+    if (data.rooms) {
+      data.rooms.forEach(room => {
+        if (room.users.length > 2) {
+          users_select_options.push({
+            value: room,
+            label: getFirstNameString(room, data.user),
+            type: 'room'
+          })
+        }
       })
     }
     if (data.contacts) {
