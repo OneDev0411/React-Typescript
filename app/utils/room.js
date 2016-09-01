@@ -7,7 +7,7 @@ export default {
     users.forEach((user, i) => {
       if (current_user.id !== user.id) {
         first_name_string += user.first_name
-        if (i > 0 && i !== total_other_users)
+        if (i !== total_other_users)
           first_name_string += ', '
       }
     })
