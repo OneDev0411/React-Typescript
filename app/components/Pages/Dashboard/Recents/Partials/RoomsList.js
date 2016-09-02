@@ -28,6 +28,7 @@ export default class RoomsList extends Component {
   render() {
     const data = this.props.data
     let rooms = data.rooms
+    let title_area
     // Sort by updates
     if (rooms) {
       rooms = _.sortBy(rooms, room => {
@@ -66,6 +67,11 @@ export default class RoomsList extends Component {
           // One to one
           if (!room_owner)
             room_owner = not_current_user_users[0]
+          if (room.title) {
+            title_area = (
+              <div style={ S('mt-10 color-ccc') }>{ room.title }</div>
+            )
+          }
           return (
             <li className="room-list__item" style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, room.id) }>
               <div style={ S('relative') }>
@@ -78,6 +84,7 @@ export default class RoomsList extends Component {
                 <div className="text-right" style={ S('color-ccc w-50p absolute r-10n font-13') } >
                   { time_updated.month } { time_updated.date }, { time_updated.time_friendly }
                 </div>
+                { title_area }
                 <div className="clearfix"></div>
               </div>
               <div className="clearfix"></div>
@@ -125,6 +132,11 @@ export default class RoomsList extends Component {
             <div style={ S('fw-500 color-000') }>{ first_name_list }</div>
           )
         }
+        if (room.title) {
+          title_area = (
+            <div style={ S('mt-10 color-ccc') }>{ room.title }</div>
+          )
+        }
         return (
           <li className="room-list__item" style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, room.id) }>
             <div style={ S('relative') }>
@@ -138,6 +150,7 @@ export default class RoomsList extends Component {
                   &nbsp;
                   { notification }
                 </div>
+                { title_area }
               </div>
               <div className="clearfix"></div>
             </div>
