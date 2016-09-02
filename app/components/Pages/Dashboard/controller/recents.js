@@ -50,7 +50,7 @@ const controller = {
           items_selected.push({
             label: user.first_name,
             value: user,
-            type: 'contact'
+            type: 'user'
           })
         })
       }
@@ -71,7 +71,7 @@ const controller = {
     }
     // Get a room
     const rooms = AppStore.data.rooms
-    const user_ids = _.map(_.filter(items_selected, { type: 'contact' }), 'value.contact_user.id')
+    const user_ids = _.map(_.filter(unique_items_selected, { type: 'user' }), 'value.id')
     if (user_ids.length) {
       let room_found = false
       rooms.forEach(room => {

@@ -9,7 +9,7 @@ export default (user, users, emails, phone_numbers, message) => {
     callback => {
       // Create room
       const params = {
-        title: 'No title',
+        title: '',
         owner: user.id,
         access_token: user.access_token,
         users,

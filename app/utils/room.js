@@ -3,6 +3,8 @@ export default {
   getFirstNameString(room, current_user) {
     const users = room.users
     let first_name_string = ''
+    if (!users)
+      return
     const total_other_users = users.length - 1
     users.forEach((user, i) => {
       if (current_user.id !== user.id) {

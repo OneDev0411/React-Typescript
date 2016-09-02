@@ -121,7 +121,7 @@ export default class Dashboard extends Component {
     const current_room = data.current_room
     if (!current_room) {
       const items_selected = data.new_message.items_selected
-      const users = _.map(_.filter(items_selected, { type: 'contact' }), 'value.contact_user.id')
+      const users = _.map(_.filter(items_selected, { type: 'user' }), 'value.id')
       const phone_numbers = _.map(_.filter(items_selected, { type: 'phone_number' }), 'value')
       const emails = _.map(_.filter(items_selected, { type: 'email' }), 'value')
       AppDispatcher.dispatch({
