@@ -51,7 +51,7 @@ const controller = {
       alert.title = data.share_modal.title
     const user = data.user
     const share_modal = AppStore.data.share_modal
-    const users = _.map(share_modal.items_selected, 'value.contact_user.id')
+    const users = _.map(share_modal.items_selected, 'value.id')
     const message = this.refs.message.refs.input.value.trim()
     AppStore.data.share_modal.sending_share = true
     AppStore.emitChange()

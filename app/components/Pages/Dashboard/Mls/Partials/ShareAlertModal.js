@@ -62,7 +62,7 @@ export default class ShareAlertModal extends Component {
     }
     display_name = (
       <div style={ S(`pull-left mt-4 ml-10 mr-5`) }>
-        { user.contact_user ? user.contact_user.first_name : user.first_name }
+        { user.first_name }
       </div>
     )
     return (
@@ -76,13 +76,13 @@ export default class ShareAlertModal extends Component {
     const data = this.props.data
     let profile_image
     let display_value
-    if (item.type === 'contact') {
+    if (item.type === 'user') {
       // Contact
-      const user = item.value.contact_user
+      const user = item.value
       profile_image = (
         <ProfileImage data={ data } user={ user }/>
       )
-      display_value = item.value.contact_user.first_name
+      display_value = user.first_name
     } else {
       // Room
       profile_image = (
@@ -134,13 +134,14 @@ export default class ShareAlertModal extends Component {
       })
     }
     if (data.contacts) {
-      data.contacts.forEach(user => {
-        if (user.contact_user) {
-          if (user.contact_user.id !== data.user.id && user.first_name && users_selected_ids && users_selected_ids.indexOf(user.contact_user.id) === -1) {
+      data.contacts.forEach(contact => {
+        const user = contact.contact_user
+        if (user) {
+          if (user.id !== data.user.id && user.first_name && users_selected_ids && users_selected_ids.indexOf(user.id) === -1) {
             users_select_options.push({
               value: user,
               label: user.first_name,
-              type: 'contact'
+              type: 'user'
             })
           }
         }
@@ -193,7 +194,7 @@ export default class ShareAlertModal extends Component {
           </div>
           <div className="clearfix"></div>
           <div>
-            <div style={ S('pull-left w-90p') }>
+            <div style={ S('pull-left w-85p') }>
               <Input style={ S('border-none') } ref="message" type="text" placeholder="Write Message..."/>
             </div>
             <div style={ S('pull-right') }>

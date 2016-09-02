@@ -18,7 +18,7 @@ const controller = {
           items_selected.push({
             label: user.first_name,
             value: user,
-            type: 'contact'
+            type: 'user'
           })
         })
       }

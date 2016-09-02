@@ -63,7 +63,7 @@ export default class NewMessageViewer extends Component {
     }
     display_name = (
       <div style={ S(`pull-left mt-4 ml-10 mr-5`) }>
-        { user.contact_user ? user.contact_user.first_name : user.first_name }
+        { user.first_name }
       </div>
     )
     return (
