@@ -134,7 +134,7 @@ export default class RoomsList extends Component {
         }
         if (room.title) {
           title_area = (
-            <div style={ S('mt-10 color-ccc') }>{ room.title }</div>
+            <div style={ S('color-ccc') }>{ room.title }</div>
           )
         }
         return (
@@ -142,7 +142,7 @@ export default class RoomsList extends Component {
             <div style={ S('relative') }>
               { profile_image_div }
               <div className="pull-left" style={ S('ml-50 w-90p') }>
-                <div className="room-list__item__names" style={ S('color-263445 relative t-10 w-70p') }>
+                <div className="room-list__item__names" style={ S('color-263445 relative w-70p' + (!title_area ? ' t-10' : '')) }>
                   { first_name_list }
                 </div>
                 <div className="text-right" style={ S('color-ccc w-50p absolute r-10n t-10 font-13') } >
