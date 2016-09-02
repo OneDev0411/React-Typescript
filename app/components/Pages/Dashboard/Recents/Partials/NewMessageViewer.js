@@ -180,7 +180,7 @@ export default class NewMessageViewer extends Component {
       )
     }
     return (
-      <div style={ S('bg-f6f7f9 h-100p absolute w-100p') }>
+      <div style={ S('h-100p absolute w-100p' + (!data.current_room ? ' bg-f6f7f9' : '')) }>
         <div style={ S('h-60 border-bottom-1-solid-e2e6ea bg-fff') }>
           <h3 style={ S('w-80p mt-0 ml-20 mr-50 pt-15') }>New Message</h3>
         </div>
