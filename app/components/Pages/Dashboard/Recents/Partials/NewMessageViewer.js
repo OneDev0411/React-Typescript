@@ -130,12 +130,14 @@ export default class NewMessageViewer extends Component {
     }
     if (data.contacts) {
       data.contacts.forEach(user => {
-        if (user.contact_user.id !== data.user.id && user.first_name && users_selected_ids && users_selected_ids.indexOf(user.contact_user.id) === -1) {
-          users_select_options.push({
-            value: user,
-            label: user.first_name,
-            type: 'contact'
-          })
+        if (user.contact_user) {
+          if (user.contact_user.id !== data.user.id && user.first_name && users_selected_ids && users_selected_ids.indexOf(user.contact_user.id) === -1) {
+            users_select_options.push({
+              value: user,
+              label: user.first_name,
+              type: 'contact'
+            })
+          }
         }
       })
     }
