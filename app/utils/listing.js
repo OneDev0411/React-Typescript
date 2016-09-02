@@ -36,8 +36,9 @@ export default {
   addressTitle: address => {
     return `${address.street_number} ${address.street_name} ${address.street_suffix} ${address.unit_number ? 'Unit ' + address.unit_number : ''}`
   },
-  getDOM: dom_seconds => {
-    return Math.floor((((new Date()).getTime() / 1000) - dom_seconds) / 86400)
+  getDOM: dom => {
+    return Math.floor(dom)
+    // return Math.floor((((new Date()).getTime() / 1000) - dom_seconds) / 86400)
   },
   getSmallPrice: price => {
     let price_small = Math.floor(price / 1000).toFixed(2).replace(/[.,]00$/, '')
