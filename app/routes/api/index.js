@@ -41,6 +41,7 @@ module.exports = (app, config) => {
   require('./rooms/create-rec')(app, config)
   require('./rooms/get-actives')(app, config)
   require('./rooms/edit-favorite')(app, config)
+  require('./rooms/create-alert')(app, config)
   // Transactions
   require('./transactions/create-transaction')(app, config)
   require('./transactions/get-transactions')(app, config)
