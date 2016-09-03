@@ -100,73 +100,7 @@ export default class MainContent extends Component {
         )
       }
     }
-    // Mobile
-    if (data.is_mobile) {
-      if (data.show_listing_viewer) {
-        return (
-          <ListingViewerMobile
-            data={ data }
-            listing={ data.current_listing }
-            hideModal={ controller.listing_map.hideModal }
-            hideListingViewer={ controller.listing_viewer.hideListingViewer }
-            showModalGallery={ controller.listing_viewer.showModalGallery }
-            handleModalGalleryNav={ controller.listing_viewer.handleModalGalleryNav }
-            showShareListingModal={ controller.listing_viewer.showShareListingModal }
-          />
-        )
-      }
-      if (!data.current_room_mobile) {
-        const main_style_mobile = S('w-' + window.innerWidth)
-        return (
-          <div style={ main_style_mobile }>
-            <div style={ S('p-10 pt-15 h-60 relative') }>
-              <img style={ S('w-12 h-12 absolute l-20 t-28') } src="/images/dashboard/chats/search.svg" />
-              <input ref="search_rooms_input" onChange={ this.handleSearchRoomChange.bind(this) } style={ S('w-170 br-5 bg-f8fafb pl-30 h-34') } type="text" placeholder="Search" className="form-control pull-left" value={ data.search_rooms_input }/>
-              <button onClick={ this.props.showNewMessageView.bind(this) } type="button" className="btn btn-primary" style={ S('h-34 pointer absolute p-0 t-14 r-10 br-100') }>
-                <img src="/images/dashboard/chats/pencil.svg" style={ S('mr-10') }/>New Message
-              </button>
-              <div className="clearfix"></div>
-            </div>
-            <RoomsList
-              setCurrentRoom={ this.props.setCurrentRoom }
-              data={ data }
-            />
-          </div>
-        )
-      }
-      // Messages
-      const main_style_mobile = S('w-' + window.innerWidth)
-      return (
-        <div style={ main_style_mobile }>
-          <MessagesList
-            data={ data }
-            getPreviousMessages={ this.props.getPreviousMessages }
-            showModal={ this.props.showModal.bind(this) }
-            addContactsToRoom={ this.props.addContactsToRoom }
-            hideModal={ this.hideModal.bind(this) }
-            showFileViewer={ this.props.showFileViewer }
-            setHeadingDate={ this.props.setHeadingDate }
-            removeScrollBottom={ this.props.removeScrollBottom }
-            showListingViewer={ this.props.showListingViewer }
-            changeListingNotification={ this.props.changeListingNotification }
-            showAlertModal={ this.props.showAlertModal }
-            hideAlertModal={ this.props.hideAlertModal }
-            showDeleteRoomModal={ this.props.showDeleteRoomModal }
-            hideDeleteRoomModal={ this.props.hideDeleteRoomModal }
-            confirmDeleteRoom={ this.props.confirmDeleteRoom }
-            setAlertGalleryActiveIndex={ this.props.setAlertGalleryActiveIndex }
-          />
-          { uploading_area }
-          { create_message_area }
-        </div>
-      )
-    } // end mobile
-    let clear_search_btn
-    if (data.search_rooms_input) {
-      clear_search_btn = (
-        <div onClick={ this.props.clearRoomSearchText.bind(this) } className="close" style={ S('absolute l-230 t-23') }>&times;</div>
-      )
-    }
+    // Messages
     let messages_area = (
       <MessagesList
         data={ data }
@@ -215,6 +149,55 @@ export default class MainContent extends Component {
           setAlertGalleryActiveIndex={ this.props.setAlertGalleryActiveIndex }
           handleInputChange={ this.props.handleInputChange }
         />
+      )
+    }
+    // Mobile
+    if (data.is_mobile) {
+      if (data.show_listing_viewer) {
+        return (
+          <ListingViewerMobile
+            data={ data }
+            listing={ data.current_listing }
+            hideModal={ controller.listing_map.hideModal }
+            hideListingViewer={ controller.listing_viewer.hideListingViewer }
+            showModalGallery={ controller.listing_viewer.showModalGallery }
+            handleModalGalleryNav={ controller.listing_viewer.handleModalGalleryNav }
+            showShareListingModal={ controller.listing_viewer.showShareListingModal }
+          />
+        )
+      }
+      if (!data.current_room_mobile && !data.show_new_message_viewer) {
+        const main_style_mobile = S('w-' + window.innerWidth)
+        return (
+          <div style={ main_style_mobile }>
+            <div style={ S('p-10 pt-15 h-60 relative') }>
+              <img style={ S('w-12 h-12 absolute l-20 t-28') } src="/images/dashboard/chats/search.svg" />
+              <input ref="search_rooms_input" onChange={ this.handleSearchRoomChange.bind(this) } style={ S('w-170 br-5 bg-f8fafb pl-30 h-34') } type="text" placeholder="Search" className="form-control pull-left" value={ data.search_rooms_input }/>
+              <button onClick={ this.props.showNewMessageView.bind(this) } type="button" className="btn btn-primary" style={ S('h-34 pointer absolute p-0 pl-10 pr-10 t-14 r-10 br-100') }>
+                <img src="/images/dashboard/chats/pencil.svg" style={ S('mr-10') }/>New Message
+              </button>
+              <div className="clearfix"></div>
+            </div>
+            <RoomsList
+              setCurrentRoom={ this.props.setCurrentRoom }
+              data={ data }
+            />
+          </div>
+        )
+      }
+      const main_style_mobile = S('w-' + window.innerWidth)
+      return (
+        <div style={ main_style_mobile }>
+          { messages_area }
+          { uploading_area }
+          { create_message_area }
+        </div>
+      )
+    } // end mobile
+    let clear_search_btn
+    if (data.search_rooms_input) {
+      clear_search_btn = (
+        <div onClick={ this.props.clearRoomSearchText.bind(this) } className="close" style={ S('absolute l-230 t-23') }>&times;</div>
       )
     }
     return (

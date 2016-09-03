@@ -353,7 +353,7 @@ export default class MessagesList extends Component {
     if (!data.show_new_message_viewer) {
       title_area = (
         <div style={ S('h-60 border-bottom-1-solid-eeeff3') }>
-          <h3 className="room-list__item__names" style={ S('w-80p mt-0 ml-20 mr-50 pt-15') }>{ getDisplayNameString(current_room, data.user) }</h3>
+          <h3 className="room-list__item__names" style={ S(`${data.is_mobile ? 'w-60p' : 'w-80p'} mt-0 ml-20 mr-50 pt-15`) }>{ getDisplayNameString(current_room, data.user) }</h3>
         </div>
       )
     }
