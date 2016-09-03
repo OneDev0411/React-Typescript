@@ -59,7 +59,7 @@ export default class App extends Component {
     // const data = AppStore.data
     // if (data.user)
     //   this.triggerBranchBanner()
-    this.triggerBranchBanner()
+    // this.triggerBranchBanner()
     // Check for brand
     this.checkForBranding()
   }
