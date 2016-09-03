@@ -1,11 +1,11 @@
 // MessagesList.js
 import React, { Component } from 'react'
 import S from 'shorti'
-import _ from 'lodash'
 import Loading from '../../../../Partials/Loading'
 import { Carousel, CarouselItem, Modal, Button, Alert, DropdownButton } from 'react-bootstrap'
 import helpers from '../../../../../utils/helpers'
 import listing_util from '../../../../../utils/listing'
+import { getDisplayNameString } from '../../../../../utils/room'
 // AppDispatcher
 import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
 // Partials
@@ -349,21 +349,11 @@ export default class MessagesList extends Component {
       )
     }
     // List users
-    const not_current_user_users = current_room.users.filter(room_user => {
-      if (room_user.id !== data.user.id)
-        return true
-    })
-    const first_names = _.map(not_current_user_users, 'first_name')
-    let first_name_list = ''
-    first_names.forEach((first_name, i) => {
-      first_name_list += first_name
-      if (i < first_names.length - 1) first_name_list += ', '
-    })
     let title_area
     if (!data.show_new_message_viewer) {
       title_area = (
         <div style={ S('h-60 border-bottom-1-solid-eeeff3') }>
-          <h3 className="room-list__item__names" style={ S('w-80p mt-0 ml-20 mr-50 pt-15') }>{ first_name_list }</h3>
+          <h3 className="room-list__item__names" style={ S('w-80p mt-0 ml-20 mr-50 pt-15') }>{ getDisplayNameString(current_room, data.user) }</h3>
         </div>
       )
     }
