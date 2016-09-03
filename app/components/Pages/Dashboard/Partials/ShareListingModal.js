@@ -10,7 +10,7 @@ import helpers from '../../../../utils/helpers'
 import validator from 'validator'
 import SelectContainer from './SelectContainer'
 import { getResizeAvatarUrl } from '../../../../utils/user'
-import { getFirstNameString } from '../../../../utils/room'
+import { getDisplayNameString } from '../../../../utils/room'
 import ProfileImage from './ProfileImage'
 import ProfileImageMultiple from './ProfileImageMultiple'
 export default class ShareListingModal extends Component {
@@ -125,7 +125,7 @@ export default class ShareListingModal extends Component {
         if (room.users.length > 2) {
           users_select_options.push({
             value: room,
-            label: getFirstNameString(room, data.user),
+            label: getDisplayNameString(room, data.user),
             type: 'room'
           })
         }

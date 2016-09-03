@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import S from 'shorti'
 import ProfileImage from '../../Partials/ProfileImage'
 import helpers from '../../../../../utils/helpers'
+import { getDisplayNameString } from '../../../../../utils/room'
 import _ from 'lodash'
 export default class RoomsList extends Component {
   handleClick(id) {
@@ -106,16 +107,6 @@ export default class RoomsList extends Component {
             </div>
           )
         }
-        // List users
-        const first_names = _.map(not_current_user_users, 'first_name')
-        let display_name_list = ''
-        first_names.forEach((first_name, _i) => {
-          let display_name = first_name
-          if (!display_name)
-            display_name = not_current_user_users[_i].display_name
-          display_name_list += display_name
-          if (_i < first_names.length - 1) display_name_list += ', '
-        })
         // Time posted
         const latest_created = room.latest_message.created_at.toString().split('.')
         // Notifications
@@ -130,9 +121,10 @@ export default class RoomsList extends Component {
             )
           }
         }
+        let display_name_list = getDisplayNameString(room, data.user)
         if (notification) {
           display_name_list = (
-            <div style={ S('fw-500 color-000') }>{ display_name_list }</div>
+            <div style={ S('fw-500 color-000') }>{ getDisplayNameString(room, data.user) }</div>
           )
         }
         if (room.title) {

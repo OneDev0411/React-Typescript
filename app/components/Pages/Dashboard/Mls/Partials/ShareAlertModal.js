@@ -8,7 +8,7 @@ import Select from 'react-select'
 import validator from 'validator'
 import SelectContainer from '../../Partials/SelectContainer'
 import { getResizeAvatarUrl } from '../../../../../utils/user'
-import { getFirstNameString } from '../../../../../utils/room'
+import { getDisplayNameString } from '../../../../../utils/room'
 import ProfileImage from '../../Partials/ProfileImage'
 import ProfileImageMultiple from '../../Partials/ProfileImageMultiple'
 export default class ShareAlertModal extends Component {
@@ -123,7 +123,7 @@ export default class ShareAlertModal extends Component {
         if (room.users.length > 2) {
           users_select_options.push({
             value: room,
-            label: getFirstNameString(room, data.user),
+            label: getDisplayNameString(room, data.user),
             type: 'room'
           })
         }
