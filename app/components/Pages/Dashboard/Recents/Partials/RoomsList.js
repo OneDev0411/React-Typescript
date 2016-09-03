@@ -28,7 +28,6 @@ export default class RoomsList extends Component {
   render() {
     const data = this.props.data
     let rooms = data.rooms
-    let title_area
     // Sort by updates
     if (rooms) {
       rooms = _.sortBy(rooms, room => {
@@ -51,6 +50,7 @@ export default class RoomsList extends Component {
       rooms = data.filtered_rooms
     if (rooms) {
       rooms_list = rooms.map(room => {
+        let title_area
         // Profile image
         let profile_image_div
         let list_style = S('pointer pt-15 pb-10 pl-10 pr-17 relative h-70')
@@ -108,10 +108,13 @@ export default class RoomsList extends Component {
         }
         // List users
         const first_names = _.map(not_current_user_users, 'first_name')
-        let first_name_list = ''
+        let display_name_list = ''
         first_names.forEach((first_name, _i) => {
-          first_name_list += first_name
-          if (_i < first_names.length - 1) first_name_list += ', '
+          let display_name = first_name
+          if (!display_name)
+            display_name = not_current_user_users[_i].display_name
+          display_name_list += display_name
+          if (_i < first_names.length - 1) display_name_list += ', '
         })
         // Time posted
         const latest_created = room.latest_message.created_at.toString().split('.')
@@ -128,8 +131,8 @@ export default class RoomsList extends Component {
           }
         }
         if (notification) {
-          first_name_list = (
-            <div style={ S('fw-500 color-000') }>{ first_name_list }</div>
+          display_name_list = (
+            <div style={ S('fw-500 color-000') }>{ display_name_list }</div>
           )
         }
         if (room.title) {
@@ -143,7 +146,7 @@ export default class RoomsList extends Component {
               { profile_image_div }
               <div className="pull-left" style={ S('ml-50 w-90p') }>
                 <div className="room-list__item__names" style={ S('color-263445 relative w-70p' + (!title_area ? ' t-10' : '')) }>
-                  { first_name_list }
+                  { display_name_list }
                 </div>
                 <div className="text-right" style={ S('color-ccc w-50p absolute r-10n t-10 font-13') } >
                   { helpers.getTimeAgo(latest_created[0]) }

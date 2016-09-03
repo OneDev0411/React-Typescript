@@ -50,7 +50,6 @@ export default class ShareAlertModal extends Component {
   }
   handleValueRenderer(item) {
     let profile_image
-    let display_name
     const user = item.value
     if (user.profile_image_url || user.display_profile_image_url) {
       let profile_image_url
@@ -60,9 +59,15 @@ export default class ShareAlertModal extends Component {
         profile_image_url = user.display_profile_image_url
       profile_image = <div style={ S(`pull-left bg-url(${getResizeAvatarUrl(profile_image_url)}?w=160) w-26 h-26 bg-cover bg-center`) }/>
     }
+    let display_name
+    let display_value = user.first_name
+    if (item.type === 'email')
+      display_value = item.value
+    if (item.type === 'phone_number')
+      display_value = item.value
     display_name = (
       <div style={ S(`pull-left mt-4 ml-10 mr-5`) }>
-        { user.first_name }
+        { display_value }
       </div>
     )
     return (
