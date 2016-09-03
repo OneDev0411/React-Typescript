@@ -51,6 +51,8 @@ export default class RoomsList extends Component {
       rooms = data.filtered_rooms
     if (rooms) {
       rooms_list = rooms.map(room => {
+        if (room.users.length === 1)
+          return ''
         let title_area
         // Profile image
         let profile_image_div

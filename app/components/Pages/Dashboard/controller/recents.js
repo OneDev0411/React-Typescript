@@ -79,7 +79,7 @@ const controller = {
         user_ids_room = user_ids_room.filter(user_id => {
           return user_id !== AppStore.data.user.id
         })
-        if (_.isEqual(user_ids, user_ids_room))
+        if (_.isEqual(_.sortBy(user_ids), _.sortBy(user_ids_room)))
           room_found = room
       })
       if (room_found) {
