@@ -48,7 +48,7 @@ const controller = {
         const users = item.value.users
         users.forEach(user => {
           items_selected.push({
-            label: user.first_name,
+            label: user.first_name || user.display_name,
             value: user,
             type: 'user'
           })
