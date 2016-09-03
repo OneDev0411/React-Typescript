@@ -59,15 +59,9 @@ export default class ShareAlertModal extends Component {
         profile_image_url = user.display_profile_image_url
       profile_image = <div style={ S(`pull-left bg-url(${getResizeAvatarUrl(profile_image_url)}?w=160) w-26 h-26 bg-cover bg-center`) }/>
     }
-    let display_name
-    let display_value = user.first_name
-    if (item.type === 'email')
-      display_value = item.value
-    if (item.type === 'phone_number')
-      display_value = item.value
-    display_name = (
+    const display_name = (
       <div style={ S(`pull-left mt-4 ml-10 mr-5`) }>
-        { display_value }
+        { item.label }
       </div>
     )
     return (
@@ -80,25 +74,22 @@ export default class ShareAlertModal extends Component {
   handleOptionRenderer(item) {
     const data = this.props.data
     let profile_image
-    let display_value
     if (item.type === 'user') {
       // Contact
       const user = item.value
       profile_image = (
         <ProfileImage data={ data } user={ user }/>
       )
-      display_value = user.first_name
     } else {
       // Room
       profile_image = (
         <ProfileImageMultiple users={ item.value.users }/>
       )
-      display_value = getFirstNameString(item.value, data.user)
     }
     return (
       <div style={ S('relative h-54') }>
         <div style={ S('mt-10') }>{ profile_image }</div>
-        <div style={ S('pull-left mt-10 ml-60 mr-5') }>{ display_value }</div>
+        <div style={ S('pull-left mt-10 ml-60 mr-5') }>{ item.label }</div>
         <div className="clearfix"/>
       </div>
     )
@@ -142,10 +133,10 @@ export default class ShareAlertModal extends Component {
       data.contacts.forEach(contact => {
         const user = contact.contact_user
         if (user) {
-          if (user.id !== data.user.id && user.first_name && users_selected_ids && users_selected_ids.indexOf(user.id) === -1) {
+          if (user.id !== data.user.id && users_selected_ids && users_selected_ids.indexOf(user.id) === -1) {
             users_select_options.push({
               value: user,
-              label: user.first_name,
+              label: user.first_name ? user.first_name : contact.phone_number,
               type: 'user'
             })
           }
