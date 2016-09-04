@@ -47,8 +47,27 @@ export default (user, options) => {
             return parseFloat(a.price) - parseFloat(b.price)
           })
           AppStore.data.widget.listings.reverse()
-        } else
-          AppStore.data.widget.listings = _.shuffle(AppStore.data.widget.listings)
+        } else {
+          // Active listings with an online agent show up first. (Issue #500)
+          const onlines = []
+          const offlines = []
+
+          AppStore.data.widget.listings.forEach(l => {
+            const agent = l.list_agent
+
+            if (!agent || agent.online_state === 'Offline') {
+              offlines.push(l)
+              return
+            }
+
+            onlines.push(l)
+          })
+
+          AppStore.data.widget.listings = [
+            ..._(onlines).shuffle(),
+            ..._(offlines).shuffle()
+          ]
+        }
         // Order actives by price
         if (AppStore.data.location.query.order_by && AppStore.data.location.query.order_by === 'price') {
           AppStore.data.widget.listings.sort((a, b) => {
