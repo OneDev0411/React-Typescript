@@ -32,6 +32,7 @@ const controller = {
   showNewMessageView() {
     delete AppStore.data.current_room
     delete AppStore.data.new_message
+    delete AppStore.data.show_create_chat_viewer
     AppStore.data.show_new_message_viewer = true
     AppStore.emitChange()
   },

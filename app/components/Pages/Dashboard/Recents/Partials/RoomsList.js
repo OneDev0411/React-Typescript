@@ -40,7 +40,7 @@ export default class RoomsList extends Component {
     }
     const current_room = data.current_room
     if (rooms && !rooms.length)
-      return <div style={ S('ml-20 mt-20') }>No rooms yet.</div>
+      return <div></div>
 
     const loading_style = {
       ...S('absolute w-100p h-100p bg-url(/images/loading-states/rooms.svg)'),
