@@ -7,7 +7,7 @@ module.exports = (app, config) => {
     const options = req.body.options
     // From map widget
     if (req.body.office && !options.list_offices) 
-      endpoint = endpoint + '?associations=compact_listing.list_office,compact_listing.selling_office,compact_listing.selling_agent&order_by=office,status&office=' + req.body.office
+      endpoint = endpoint + '?associations=compact_listing.list_agent,compact_listing.list_office,compact_listing.selling_office,compact_listing.selling_agent&order_by=office,status&office=' + req.body.office
     // From listing widget
     if (options.list_offices && options.list_offices.length) {
       endpoint = endpoint + '?associations=compact_listing.list_agent'
