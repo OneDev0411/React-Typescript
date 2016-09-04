@@ -12,9 +12,9 @@ import validator from 'validator'
 import { randomString } from '../../../../utils/helpers'
 export default class Listings extends Component {
   componentWillMount() {
-    AppStore.data.brand = {
-      primary: '2196f3'
-    }
+    // AppStore.data.brand = {
+    //   primary: '2196f3'
+    // }
     AppStore.data.is_widget = true
     AppStore.emitChange()
     let subdomain = window.location.host.split('.')[0]
