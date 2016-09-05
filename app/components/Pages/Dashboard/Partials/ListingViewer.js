@@ -517,7 +517,10 @@ export default class ListingViewer extends Component {
                     Middle School: <span style={ S('color-777') }>{ property.middle_school_name }</span>
                   </div>
                   <div style={ S('color-aaaaaa mb-10') }>
-                    High School: <span style={ S('color-777') }>{ property.high_school_name }</span>
+                    Junior High School: <span style={ S('color-777') }>{ property.junior_high_school_name }</span>
+                  </div>
+                  <div style={ S('color-aaaaaa mb-10') }>
+                    Senior High School: <span style={ S('color-777') }>{ property.senior_high_school_name }</span>
                   </div>
                 </div>
                 <div className="clearfix"></div>
