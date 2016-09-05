@@ -22,6 +22,8 @@ export default (user, rooms) => {
         new_rooms.push(room)
         // Set messages on current room
         const current_room = AppStore.data.current_room
+        if (!current_room)
+          return callback()
         if (current_room.id === room.id) {
           delete AppStore.data.messages_loading
           AppStore.data.current_room.message_count = 40

@@ -170,18 +170,9 @@ export default class FilterForm extends Component {
         }
       })
     }
-    let junior_high_schools_select_options
-    if (data.listing_map && data.listing_map.show_schools_list && data.listing_map.junior_high_schools) {
-      junior_high_schools_select_options = data.listing_map.junior_high_schools.map(school => {
-        return {
-          value: school.name,
-          label: school.name
-        }
-      })
-    }
-    let senior_high_schools_select_options
-    if (data.listing_map && data.listing_map.show_schools_list && data.listing_map.senior_high_schools) {
-      senior_high_schools_select_options = data.listing_map.senior_high_schools.map(school => {
+    let high_schools_select_options
+    if (data.listing_map && data.listing_map.show_schools_list && data.listing_map.high_schools) {
+      high_schools_select_options = data.listing_map.high_schools.map(school => {
         return {
           value: school.name,
           label: school.name
@@ -244,28 +235,14 @@ export default class FilterForm extends Component {
             </div>
           </div>
           <div style={ S('p-15 relative') }>
-            <div style={ S('mb-10') }>Junior High Schools</div>
+            <div style={ S('mb-10') }>High Schools</div>
             <div style={ S('relative') }>
               <Select
-                name="junior_high_schools"
-                options={ junior_high_schools_select_options }
-                placeholder={ junior_high_schools_select_options && !junior_high_schools_select_options.length ? 'No schools found' : 'Junior High Schools' }
-                onChange={ this.handleSchoolSelectChange.bind(this, 'junior_high_school') }
-                value={ data.listing_map ? data.listing_map.junior_high_schools_selected : '' }
-                multi
-                noResultsText={ 'No schools found'}
-              />
-            </div>
-          </div>
-          <div style={ S('p-15 relative') }>
-            <div style={ S('mb-10') }>Senior High Schools</div>
-            <div style={ S('relative') }>
-              <Select
-                name="senior_high_schools"
-                options={ senior_high_schools_select_options }
-                placeholder={ senior_high_schools_select_options && !senior_high_schools_select_options.length ? 'No schools found' : 'Senior High Schools' }
-                onChange={ this.handleSchoolSelectChange.bind(this, 'senior_high_school') }
-                value={ data.listing_map ? data.listing_map.senior_high_schools_selected : '' }
+                name="high_schools"
+                options={ high_schools_select_options }
+                placeholder={ high_schools_select_options && !high_schools_select_options.length ? 'No schools found' : 'High Schools' }
+                onChange={ this.handleSchoolSelectChange.bind(this, 'high_school') }
+                value={ data.listing_map ? data.listing_map.high_schools_selected : '' }
                 multi
                 noResultsText={ 'No schools found'}
               />

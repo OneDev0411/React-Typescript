@@ -77,40 +77,50 @@ export default class MessageItem extends Component {
     const time_created = helpers.friendlyDate(message_created[0])
 
     // Message image
-    let message_image
-    let message_thumb_size = 'w-400 h-300'
-    if (data.is_mobile)
-      message_thumb_size = 'w-250 h-200'
+    let message_image = []
+    const message_thumb_size = 'w-150 h-150'
+
     if (message.attachments.length) {
       const attachments = message.attachments
-      const attachment = attachments[0]
-      const file_url = attachment.url
-      const ext = attachment.info['mime-extension']
-      let message_thumb
-      // If image
-      if (ext.indexOf('png') !== -1 || ext.indexOf('jpg') !== -1 || ext.indexOf('gif') !== -1) {
-        message_thumb = (
-          <div style={ S(message_thumb_size + ' br-3 bg-url(' + file_url + ') bg-cover bg-center mb-10') }></div>
+
+      if (message.attachments.length === 1) {
+        message_image.push(
+          <div style={ S('color-b0b0b0 fw-600') }>Uploaded a file:</div>
         )
       } else {
-        message_thumb = (
-          <div style={ S('w-60 mt-10 mb-10') }>
-            <i style={ S('font-60') } className="text-primary fa fa-file-o"></i>
-            <br />
-            <div style={ S('w-50 text-center relative t-35n font-12 fw-700 color-e0523e') }>
-              { ext }
+        message_image.push(
+          <div style={ S('color-b0b0b0 fw-600') }>Uploaded { attachments.length } files:</div>
+        )
+      }
+
+      attachments.forEach(attachment => {
+        const file_url = attachment.url
+        const ext = attachment.info['mime-extension']
+        let message_thumb
+        // If image
+        if (ext.indexOf('png') !== -1 || ext.indexOf('jpg') !== -1 || ext.indexOf('gif') !== -1) {
+          message_thumb = (
+            <div style={ S(message_thumb_size + ' br-3 bg-url(' + file_url + ') no-repeat bg-contain mb-10') }></div>
+          )
+        } else {
+          message_thumb = (
+            <div style={ S(message_thumb_size) }>
+              <i style={ S('font-150') } className="text-primary fa fa-file-o"></i>
+              <br />
+              <div style={ S('text-center relative t-90n l-15n font-35 fw-700 color-e0523e') }>
+                { ext }
+              </div>
+            </div>
+          )
+        }
+        message_image.push(
+          <div style={ S('pull-left') }>
+            <div onClick={ this.props.showFileViewer.bind(this, attachment) } style={ { ...S('mt-10'), cursor: 'zoom-in' } }>
+              { message_thumb }
             </div>
           </div>
         )
-      }
-      message_image = (
-        <div>
-          <div style={ S('color-b0b0b0 fw-600') }>Uploaded a file:</div>
-          <div onClick={ this.props.showFileViewer.bind(this, attachment) } style={ { ...S('mt-10'), cursor: 'zoom-in' } }>
-            { message_thumb }
-          </div>
-        </div>
-      )
+      })
     }
 
     // Fade in

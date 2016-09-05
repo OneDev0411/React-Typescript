@@ -1,35 +1,21 @@
-// api/alerts/create-alert.js
+// api/rooms/create-alert.js
 module.exports = (app, config) => {
-  app.post('/api/alerts/create-alert',(req, res) => {
+  app.post('/api/rooms/create-alert',(req, res) => {
     const api_url = config.api.url
     const alert = req.body.alert
-    const users = req.body.users
-    const emails = req.body.emails
-    const phone_numbers = req.body.phone_numbers
-    const message = req.body.message
+    const room_id = req.body.room_id
     const request_object = {
-      alert
-    }
-    if (users)
-      request_object.users = users
-    if (emails)
-      request_object.emails = emails
-    if (phone_numbers)
-      request_object.phone_numbers = phone_numbers
-    if (message) {
-      request_object.message = {
-        comment: message
-      }
+      ...alert
     }
     const access_token = req.body.access_token
-    const endpoint = api_url + '/alerts'
-    fetch(endpoint,{
+    const endpoint = api_url + '/rooms/' + room_id + '/alerts'
+    fetch(endpoint, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
         'authorization': 'Bearer ' + access_token,
-        'x-real-agent' : req.headers['user-agent'],
-        'user-agent' : config.app_name
+        'x-real-agent': req.headers['user-agent'],
+        'user-agent': config.app_name
       },
       body: JSON.stringify(request_object)
     })

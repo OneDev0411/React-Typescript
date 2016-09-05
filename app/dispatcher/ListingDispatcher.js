@@ -12,6 +12,7 @@ import getValertsAlert from '../actions/listings/get-valerts-alert'
 import getValertsNoGeo from '../actions/listings/get-valerts-no-geo'
 import getListing from '../actions/listings/get-listing'
 import shareAlert from '../actions/alerts/share-alert'
+import saveAlert from '../actions/alerts/save-alert'
 import getAlertRoom from '../actions/alerts/get-alert-room'
 import getAlertMap from '../actions/alerts/get-alert-map'
 import getAlerts from '../actions/alerts/get-alerts'
@@ -79,8 +80,12 @@ ListingDispatcher.register(payload => {
       getListing(payload.user, payload.id)
       break
 
+    case 'save-alert':
+      saveAlert(payload.user, payload.alert)
+      break
+
     case 'share-alert':
-      shareAlert(payload.user, payload.rooms, payload.contacts, payload.emails, payload.phone_numbers, payload.alert)
+      shareAlert(payload.user, payload.rooms, payload.users, payload.emails, payload.phone_numbers, payload.alert, payload.message)
       break
 
     case 'get-alert-room':

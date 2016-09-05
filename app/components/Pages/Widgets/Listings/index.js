@@ -12,9 +12,9 @@ import validator from 'validator'
 import { randomString } from '../../../../utils/helpers'
 export default class Listings extends Component {
   componentWillMount() {
-    AppStore.data.brand = {
-      primary: '2196f3'
-    }
+    // AppStore.data.brand = {
+    //   primary: '2196f3'
+    // }
     AppStore.data.is_widget = true
     AppStore.emitChange()
     let subdomain = window.location.host.split('.')[0]
@@ -270,7 +270,7 @@ export default class Listings extends Component {
       })
     }
     let view_all_button
-    if (!data.location.query.all && data.brand.listing_url) {
+    if (!data.location.query.all && data.brand && data.brand.listing_url) {
       view_all_button = (
         <div style={ S('text-center mt-20 mb-30') }>
           <a target="_parent" href={ data.brand.listing_url } className="btn btn-default" style={ S(`w-280 font-17 p-20 color-fff border-1-solid-${data.brand.primary} bg-${data.brand.primary}`) }>View Exclusive Listings</a>

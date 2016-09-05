@@ -12,17 +12,41 @@
     box-shadow: rgba(0, 0, 0, 0.3) 2px 2px 2px;
     transform: rotate(45deg);
     bottom: -5px;
-    left: 30px;
+    right: 17px;
     border-width: 5px;
     border-style: solid;
     border-color: transparent #FFF #FFF transparent;
   }
+  &.green {
+    background-color: #35b863;
+    &:after {
+      border-color: transparent #35b863 #35b863 transparent !important;   
+    }
+  }
+  &.orange {
+    background-color: #f5a623;
+    &:after {
+      border-color: transparent #f5a623 #f5a623 transparent !important;   
+    }
+  }
+  &.red {
+    background-color: #fe3824;
+    &:after {
+      border-color: transparent #fe3824 #fe3824 transparent !important;   
+    }
+  }
+  &.brown {
+    background-color: #835833;
+    &:after {
+      border-color: transparent #835833 #835833 transparent !important;   
+    }
+  }
   &.active {
-    background: #006aff;
+    background: #006aff !important;
     color: #fff;
     z-index: 100000;
     &:after {
-      border-color: transparent #006aff #006aff transparent;   
+      border-color: transparent #006aff #006aff transparent !important;   
     }
   }
   &.viewed {

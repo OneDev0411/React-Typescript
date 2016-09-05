@@ -7,10 +7,22 @@ export default {
         status_color = '35b863'
       if (status === 'Active Option Contract' || status === 'Active Contingent' || status === 'Active Kick Out' || status === 'Pending')
         status_color = 'f8b619'
-      if (status === 'Expired' || status === 'Sold')
+      if (status === 'Expired' || status === 'Sold' || status === 'Cancelled')
         status_color = 'db3821'
     }
     return status_color
+  },
+  getStatusColorClass: status => {
+    let status_color_class = ''
+    if (status) {
+      if (status === 'Active')
+        status_color_class = 'green'
+      if (status === 'Active Option Contract' || status === 'Active Contingent' || status === 'Active Kick Out' || status === 'Pending')
+        status_color_class = 'orange'
+      if (status === 'Expired' || status === 'Sold' || status === 'Cancelled')
+        status_color_class = 'red'
+    }
+    return status_color_class
   },
   metersToFeet: meters => {
     return Math.round(meters * '10.7639')
@@ -24,15 +36,16 @@ export default {
   addressTitle: address => {
     return `${address.street_number} ${address.street_name} ${address.street_suffix} ${address.unit_number ? 'Unit ' + address.unit_number : ''}`
   },
-  getDOM: dom_seconds => {
-    return Math.floor((((new Date()).getTime() / 1000) - dom_seconds) / 86400)
+  getDOM: dom => {
+    return Math.floor(dom)
+    // return Math.floor((((new Date()).getTime() / 1000) - dom_seconds) / 86400)
   },
   getSmallPrice: price => {
     let price_small = Math.floor(price / 1000).toFixed(2).replace(/[.,]00$/, '')
-    let letter = 'K'
+    let letter = 'k'
     if (price_small > 1000) {
       price_small = (price_small / 1000).toFixed(2).replace(/[.,]00$/, '')
-      letter = 'M'
+      letter = 'm'
     }
     return price_small + letter
   },

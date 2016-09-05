@@ -16,7 +16,7 @@ export default class ListingViewer extends Component {
   componentDidMount() {
     document.onkeydown = e => {
       const data = this.props.data
-      if (e.keyCode === 27) {
+      if (e.keyCode === 27 && !this.props.data.show_share_listing_modal) {
         if (!data.show_modal_gallery)
           this.props.hideListingViewer()
         this.props.hideModal()
@@ -144,7 +144,7 @@ export default class ListingViewer extends Component {
       )
       let number_days_indicator
       if (listing.list_date) {
-        const days_on_market = listing_util.getDOM(listing.list_date)
+        const days_on_market = listing_util.getDOM(listing.dom)
         number_days_indicator = (
           <div className="pull-left" style={ S('bg-ebeef1 relative t-7 br-100 pt-11 h-35 pl-15 pr-15 mr-15') }>
             <span style={ S('font-14 relative t-3n') }>
@@ -517,7 +517,10 @@ export default class ListingViewer extends Component {
                     Middle School: <span style={ S('color-777') }>{ property.middle_school_name }</span>
                   </div>
                   <div style={ S('color-aaaaaa mb-10') }>
-                    High School: <span style={ S('color-777') }>{ property.high_school_name }</span>
+                    Junior High School: <span style={ S('color-777') }>{ property.junior_high_school_name }</span>
+                  </div>
+                  <div style={ S('color-aaaaaa mb-10') }>
+                    Senior High School: <span style={ S('color-777') }>{ property.senior_high_school_name }</span>
                   </div>
                 </div>
                 <div className="clearfix"></div>
@@ -646,6 +649,8 @@ export default class ListingViewer extends Component {
           handleAddEmail={ controller.share_modal.handleAddEmail }
           handleAddPhoneNumber={ controller.share_modal.handleAddPhoneNumber }
           handleRemoveShareItem={ controller.share_modal.handleRemoveShareItem }
+          addUsersToSearchInput={ controller.share_modal.addUsersToSearchInput }
+          handleInputChange={ controller.share_modal.handleInputChange }
         />
       </div>
     )

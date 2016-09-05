@@ -92,6 +92,7 @@ export default class Dashboard extends Component {
   setCurrentRoom(current_room) {
     AppStore.data.current_room = current_room
     AppStore.data.scroll_bottom = true
+    delete AppStore.data.show_new_message_viewer
     if (AppStore.data.is_mobile)
       AppStore.data.current_room_mobile = current_room
     AppStore.emitChange()
@@ -118,6 +119,21 @@ export default class Dashboard extends Component {
     const data = this.props.data
     const user = data.user
     const current_room = data.current_room
+    if (!current_room) {
+      const items_selected = data.new_message.items_selected
+      const users = _.map(_.filter(items_selected, { type: 'user' }), 'value.id')
+      const phone_numbers = _.map(_.filter(items_selected, { type: 'phone_number' }), 'value')
+      const emails = _.map(_.filter(items_selected, { type: 'email' }), 'value')
+      AppDispatcher.dispatch({
+        action: 'create-room',
+        user,
+        users,
+        emails,
+        phone_numbers,
+        comment
+      })
+      return
+    }
     AppDispatcher.dispatch({
       action: 'create-message',
       user,
@@ -176,6 +192,8 @@ export default class Dashboard extends Component {
       AppStore.data.show_contacts_modal = true
     if (modal_key === 'settings')
       AppStore.data.show_settings_modal = true
+    if (modal_key === 'room-users')
+      AppStore.data.show_room_users_modal = true
     AppStore.emitChange()
   }
 
@@ -189,6 +207,7 @@ export default class Dashboard extends Component {
     delete AppStore.data.show_create_chat_modal
     delete AppStore.data.show_contacts_modal
     delete AppStore.data.show_settings_modal
+    delete AppStore.data.show_room_users_modal
     delete AppStore.data.show_modal_gallery
     delete AppStore.data.show_alert_modal
     delete AppStore.data.adding_contacts
@@ -201,12 +220,14 @@ export default class Dashboard extends Component {
     const socket = window.socket
     AppStore.data.is_typing = data.user
     AppStore.emitChange()
-    socket.emit('User.Typing', AppStore.data.current_room.id)
+    if (AppStore.data.current_room)
+      socket.emit('User.Typing', AppStore.data.current_room.id)
   }
 
   sendTypingEnded() {
     const socket = window.socket
-    socket.emit('User.TypingEnded', AppStore.data.current_room.id)
+    if (AppStore.data.current_room)
+      socket.emit('User.TypingEnded', AppStore.data.current_room.id)
     delete AppStore.data.is_typing
     AppStore.emitChange()
   }
@@ -308,13 +329,8 @@ export default class Dashboard extends Component {
       const users_last_string = _.map(room.users, 'last_name').toString().toLowerCase()
       if (users_first_string.indexOf(search_text_lower) !== -1)
         return true
-
       if (users_last_string.indexOf(search_text_lower) !== -1)
         return true
-
-      if (room.title.toLowerCase().indexOf(search_text_lower) !== -1)
-        return true
-
       return false
     })
     if (!search_text_lower)
@@ -458,7 +474,6 @@ export default class Dashboard extends Component {
   render() {
     // Data
     const data = this.props.data
-    const rooms = data.rooms
     const current_room = data.current_room
     let file_viewer
     if (current_room && current_room.viewer) {
@@ -504,9 +519,12 @@ export default class Dashboard extends Component {
         hideDeleteRoomModal={ controller.recents.hideDeleteRoomModal }
         confirmDeleteRoom={ controller.recents.confirmDeleteRoom }
         clearRoomSearchText={ controller.recents.clearRoomSearchText }
+        showNewMessageView={ controller.recents.showNewMessageView }
+        addUsersToSearchInput={ controller.recents.addUsersToSearchInput }
+        handleInputChange={ controller.recents.handleInputChange }
       />
     )
-    if (data.rooms_loaded && !rooms || data.rooms_loaded && !rooms.length) {
+    if (data.show_create_chat_viewer) {
       // Empty state
       main_content = (
         <div style={ S('absolute h-100p w-100p') }>
@@ -518,7 +536,7 @@ export default class Dashboard extends Component {
               <div style={ S('color-929292 font-18') }>Start a Conversation</div>
               <div style={ S('color-bebebe font-14') }>Conversations are awesome. Start one now.</div>
             </div>
-            <Button onClick={ this.showModal.bind(this, 'create-chat') } style={ S('w-200 p-20 color-929292') } bsStyle="default">
+            <Button onClick={ controller.recents.showNewMessageView } style={ S('w-200 p-20 color-929292') } bsStyle="default">
               <img style={ S('h-18 relative t-1n l-2') } src="/images/dashboard/chats/add-chat.svg"/>&nbsp;&nbsp;&nbsp;Create Chat
             </Button>
           </div>

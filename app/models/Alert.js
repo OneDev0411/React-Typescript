@@ -13,7 +13,9 @@ export default {
       access_token: params.access_token,
       alert: params.alert,
       emails: params.emails,
-      phone_numbers: params.phone_numbers
+      users: params.users,
+      phone_numbers: params.phone_numbers,
+      message: params.message
     }
     fetch(endpoint, {
       method: 'post',

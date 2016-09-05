@@ -156,8 +156,7 @@ const controller = {
     delete options.school_districts
     delete options.elementary_schools
     delete options.middle_schools
-    delete options.junior_high_schools
-    delete options.senior_high_schools
+    delete options.high_schools
     delete options.intermediate_schools
     if (AppStore.data.listing_map.school_districts_selected) {
       options.school_districts = []
@@ -177,16 +176,10 @@ const controller = {
           options.middle_schools.push(middle_school.value)
         })
       }
-      if (AppStore.data.listing_map.junior_high_schools_selected && AppStore.data.listing_map.junior_high_schools_selected.length) {
-        options.junior_high_schools = []
-        AppStore.data.listing_map.junior_high_schools_selected.forEach(junior_high_school => {
-          options.junior_high_schools.push(junior_high_school.value)
-        })
-      }
-      if (AppStore.data.listing_map.senior_high_schools_selected && AppStore.data.listing_map.senior_high_schools_selected.length) {
-        options.senior_high_schools = []
-        AppStore.data.listing_map.senior_high_schools_selected.forEach(senior_high_school => {
-          options.senior_high_schools.push(senior_high_school.value)
+      if (AppStore.data.listing_map.high_schools_selected && AppStore.data.listing_map.high_schools_selected.length) {
+        options.high_schools = []
+        AppStore.data.listing_map.high_schools_selected.forEach(high_school => {
+          options.high_schools.push(high_school.value)
         })
       }
       if (AppStore.data.listing_map.intermediate_schools_selected && AppStore.data.listing_map.intermediate_schools_selected.length) {
@@ -407,10 +400,8 @@ const controller = {
       AppStore.data.listing_map.elementary_schools_selected = schools_selected
     if (school_type === 'middle_school')
       AppStore.data.listing_map.middle_schools_selected = schools_selected
-    if (school_type === 'junior_high_school')
-      AppStore.data.listing_map.junior_high_schools_selected = schools_selected
-    if (school_type === 'senior_high_school')
-      AppStore.data.listing_map.senior_high_schools_selected = schools_selected
+    if (school_type === 'high_school')
+      AppStore.data.listing_map.high_schools_selected = schools_selected
     if (school_type === 'intermediate_school')
       AppStore.data.listing_map.intermediate_schools_selected = schools_selected
     AppStore.emitChange()

@@ -3,14 +3,18 @@ module.exports = (app, config) => {
   app.post('/api/create-room',(req, res) => {
     const api_url = config.api.url
     const create_room_url = api_url + '/rooms'
-    const title = req.body.title
+    const users = req.body.users
+    const emails = req.body.emails
+    const phone_numbers = req.body.phone_numbers
     const owner = req.body.owner
     const access_token = req.body.access_token
     const request_object = {
-      title: title,
+      users,
+      emails,
+      phone_numbers,
       client_type: 'Unknown',
       room_type: 'Group',
-      owner: owner
+      owner
     }
     fetch(create_room_url,{
       method: 'post',

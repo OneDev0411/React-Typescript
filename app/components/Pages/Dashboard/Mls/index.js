@@ -929,6 +929,8 @@ export default class Mls extends Component {
           handleAddEmail={ controller.share_modal.handleAddEmail }
           handleAddPhoneNumber={ controller.share_modal.handleAddPhoneNumber }
           handleRemoveShareItem={ controller.share_modal.handleRemoveShareItem }
+          addUsersToSearchInput={ controller.share_modal.addUsersToSearchInput }
+          handleInputChange={ controller.share_modal.handleInputChange }
         />
         <Modal dialogClassName="modal-alert-saved" show={ data.show_alert_saved_modal } onHide={ controller.listing_map.hideModal }>
           <div className="din" style={ S('text-center font-60 color-fff') }>

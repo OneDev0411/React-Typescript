@@ -187,6 +187,7 @@ export default class SideBar extends Component {
     const data = this.props.data
     const current_room = data.current_room
     delete AppStore.data.current_room_mobile
+    delete AppStore.data.show_new_message_viewer
     AppStore.emitChange()
     if (data.current_listing)
       this.hideListingViewer()

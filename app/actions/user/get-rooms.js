@@ -50,8 +50,12 @@ export default (user, room_id) => {
         delete AppStore.data.rooms
         delete AppStore.data.current_room
       }
+      if (!rooms.length)
+        AppStore.data.show_create_chat_viewer = true
     }
     delete AppStore.data.loading
     AppStore.emitChange()
   })
 }
+
+// spirony+101@gmail.com

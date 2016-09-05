@@ -7,7 +7,6 @@ export default (user, options) => {
     options,
     access_token: user.access_token
   }
-
   Listing.getValerts(params, (err, response) => {
     // Success
     if (response.status === 'success') {
@@ -17,7 +16,8 @@ export default (user, options) => {
       AppStore.data.current_alert.listings = response.data
       AppStore.data.alerts_map.listings_info = response.info
     }
-    delete AppStore.data.alerts_map.is_loading
+    if (AppStore.data.alerts_map)
+      delete AppStore.data.alerts_map.is_loading
     // Get google geo
     if (!options.points) {
       const listing_locations = _.map(response.data, 'location')

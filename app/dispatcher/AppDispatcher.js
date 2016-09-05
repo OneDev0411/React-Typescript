@@ -132,7 +132,7 @@ AppDispatcher.register(payload => {
       break
 
     case 'create-room':
-      createRoom(payload.user, payload.title)
+      createRoom(payload.user, payload.users, payload.emails, payload.phone_numbers, payload.comment)
       break
 
     case 'get-rooms':
