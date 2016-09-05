@@ -72,34 +72,17 @@ const controller = {
     const data = AppStore.data
     const listing_map = data.listing_map
     const user = data.user
-    const rooms = [{
-      title: 'Personal',
-      id: user.personal_room
-    }]
-    let contacts_added
-    let emails_added
-    let phone_numbers_added
     const alert = listing_map.options
     alert.title = ''
     if (title)
       alert.title = title
-    // const center = data.listing_map.center
-    // alert.location = {
-    //   latitude: center.lat,
-    //   longitude: center.lng
-    // }
-    // console.log(alert.points)
     if (!AppStore.data.share_modal)
       AppStore.data.share_modal = {}
     AppStore.data.share_modal.saving = true
     AppStore.emitChange()
     ListingDispatcher.dispatch({
-      action: 'share-alert',
+      action: 'save-alert',
       user,
-      rooms,
-      contacts: contacts_added,
-      emails: emails_added,
-      phone_numbers: phone_numbers_added,
       alert
     })
   },
