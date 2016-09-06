@@ -16,7 +16,8 @@ export default class ListingMarker extends Component {
     let badge_style = {
       ...S('absolute t-0 pl-4 pr-4 pt-3 w-20 h-21 bg-fff'),
       'borderTopLeftRadius': '3px',
-      'borderBottomLeftRadius': '3px'
+      'borderBottomLeftRadius': '3px',
+      'overflow': 'hidden'
     }
     let social_icon
     if (listing.commented_by || listing.shared_by) {
@@ -116,7 +117,7 @@ export default class ListingMarker extends Component {
     let brand_badge
     if (listing.list_office && listing.list_office.brand && !this.isFavorited(listing) && !listing.commented_by) {
       brand_badge = (
-        <div style={ S(`bg-url(${listing.list_office.brand.default_avatar}) w-21 h-21 bg-center bg-cover absolute l-2 t-2`) }></div>
+        <div style={ S(`bg-url(${listing.list_office.brand.default_avatar}) w-21 h-21 bg-center bg-cover pull-left inline-block`) }></div>
       )
       marker_style = {
         ...marker_style,
