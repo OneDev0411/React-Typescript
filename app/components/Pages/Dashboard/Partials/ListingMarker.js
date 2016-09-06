@@ -137,7 +137,7 @@ export default class ListingMarker extends Component {
     if (listing.open_houses) {
       // Open house marker
       const open_style = {
-        ...S('bg-35b863 w-15 h-100p color-fff font-5 pt-3'),
+        ...S('bg-fff w-25 h-100p color-35b863 font-10 pt-8 inline-block pull-left bold'),
         lineHeight: '5px'
       }
       marker_style = { ...marker_style, ...S('w-90') }
@@ -152,7 +152,7 @@ export default class ListingMarker extends Component {
         viewed_class = ' viewed'
       listing_marker = (
         <div className={ 'map__listing-marker' + active_class + viewed_class + ' ' + status_color_class } style={ marker_style }>
-          <div style={ open_style }>O<br />P<br />E<br />N</div>
+          <div style={ open_style }>OH</div>
           { brand_badge }
           { social_badge }
           <div style={ S(`w-100p text-center pt-4${social_badge || brand_badge ? ' pl-22' : ''}`) }>{ price_small }</div>
