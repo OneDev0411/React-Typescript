@@ -175,7 +175,7 @@ export default class FilterForm extends Component {
       high_schools_select_options = data.listing_map.high_schools.map(school => {
         return {
           value: school.name,
-          label: school.name
+          label: school.name + '(' + (school.school_type === 'senior_high_school' ? 'Senior' : 'Junior') + ')'
         }
       })
     }
