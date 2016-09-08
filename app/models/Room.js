@@ -178,6 +178,32 @@ export default {
       return callback(false, response)
     })
   },
+  removeUser: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+
+    const url = api_host + '/api/remove-user-from-room?user=' + params.user + '&room_id=' + params.room + '&access_token=' + params.access_token
+
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-type': 'application/json'
+      }
+    })
+    .then(response => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          response
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then(response => {
+      return callback(false, response)
+    })
+  },
   inviteContacts: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
