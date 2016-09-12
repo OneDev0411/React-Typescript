@@ -33,7 +33,12 @@ export default (user, mls_number, message, rooms, users, emails, phone_numbers, 
       // Success
       delete AppStore.data.share_modal.sending_share
       delete AppStore.data.show_share_listing_modal
+      AppStore.data.show_listing_shared_modal = true
       AppStore.emitChange()
+      setTimeout(() => {
+        delete AppStore.data.show_listing_shared_modal
+        AppStore.emitChange()
+      }, 3000)
       if (message) {
         AppDispatcher.dispatch({
           action: 'create-message',
@@ -102,7 +107,12 @@ export default (user, mls_number, message, rooms, users, emails, phone_numbers, 
         // Success
         delete AppStore.data.share_modal.sending_share
         delete AppStore.data.show_share_listing_modal
+        AppStore.data.show_listing_shared_modal = true
         AppStore.emitChange()
+        setTimeout(() => {
+          delete AppStore.data.show_listing_shared_modal
+          AppStore.emitChange()
+        }, 3000)
       })
     }
   ])

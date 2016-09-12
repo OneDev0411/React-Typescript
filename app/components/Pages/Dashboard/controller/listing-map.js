@@ -164,6 +164,7 @@ const controller = {
       delete AppStore.data.listing_map.saving_alert
     delete AppStore.data.show_share_listing_modal
     delete AppStore.data.show_alert_saved_modal
+    delete AppStore.data.show_listing_shared_modal
     if (AppStore.data.listing_map) {
       delete AppStore.data.listing_map.show_share_modal
       delete AppStore.data.listing_map.show_share_type_modal

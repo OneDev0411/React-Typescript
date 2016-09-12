@@ -921,6 +921,14 @@ export default class Mls extends Component {
             <span style={ { textShadow: '0 2px 6px rgba(0, 0, 0, 0.2)' } }>Alert Saved</span>
           </div>
         </Modal>
+        <Modal dialogClassName="modal-alert-saved" show={ data.show_listing_shared_modal } onHide={ controller.listing_map.hideModal }>
+          <div className="din" style={ S('text-center font-60 color-fff') }>
+            <div style={ S('bg-2196f3 w-165 h-165 br-100 center-block pt-35') }>
+              <i className="fa fa-check" style={ S('h-70 mt-20') }></i>
+            </div>
+            <span style={ { textShadow: '0 2px 6px rgba(0, 0, 0, 0.2)' } }>Listing Shared</span>
+          </div>
+        </Modal>
         { signup_message }
         { powered_by }
       </main>
