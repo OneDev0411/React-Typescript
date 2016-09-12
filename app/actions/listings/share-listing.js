@@ -96,11 +96,8 @@ export default (user, mls_number, message, rooms, users, emails, phone_numbers, 
       const params = {
         access_token: user.access_token,
         message,
-        rooms,
-        users,
+        room: locals.current_room.id,
         mls_number,
-        emails,
-        phone_numbers,
         notification
       }
       Room.createRec(params, () => {

@@ -316,17 +316,11 @@ export default {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
     const endpoint = api_host + '/api/create-rec'
-    const rooms = params.rooms
-    const users = params.users
-    const emails = params.emails
-    const phone_numbers = params.phone_numbers
+    const room = params.room
     const mls_number = params.mls_number
     const request_object = {
       access_token: params.access_token,
-      rooms,
-      users,
-      emails,
-      phone_numbers,
+      room,
       mls_number,
       notification: params.notification,
       message: params.message

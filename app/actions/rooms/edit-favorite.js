@@ -6,7 +6,7 @@ export default (user, mls_number, favorite) => {
   async.series([
     callback => {
       const params = {
-        rooms: [user.personal_room],
+        room: user.personal_room,
         mls_number,
         access_token: user.access_token
       }

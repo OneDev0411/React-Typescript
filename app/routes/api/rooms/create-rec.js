@@ -2,14 +2,11 @@
 module.exports = (app, config) => {
   app.post('/api/create-rec',(req, res) => {
     const api_url = config.api.url
-    const rooms = req.body.rooms
-    const users = req.body.users
-    const emails = req.body.emails
-    const phone_numbers = req.body.phone_numbers
     const mls_number = req.body.mls_number
     const message = req.body.message
     const notification = req.body.notification
-    const endpoint = api_url + '/recs'
+    const room = req.body.room
+    const endpoint = api_url + '/rooms/' + room + '/recs'
     const access_token = req.body.access_token
     const request_object = {
       mls_number,
@@ -22,14 +19,6 @@ module.exports = (app, config) => {
         recommendation: 'SubLevel'
       }
     }
-    if (rooms && rooms.length)
-      request_object.rooms = rooms
-    if (users && users.length)
-      request_object.users = users
-    if (emails && emails.length)
-      request_object.emails = emails
-    if (phone_numbers && phone_numbers.length)
-      request_object.phone_numbers = phone_numbers
     fetch(endpoint, {
       method: 'post',
       headers: {  
