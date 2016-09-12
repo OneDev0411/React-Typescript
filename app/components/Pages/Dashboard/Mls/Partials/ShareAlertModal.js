@@ -39,6 +39,7 @@ export default class ShareAlertModal extends Component {
           })
           this.props.addUsersToSearchInput(data.share_modal.items_selected)
         }
+        this.refs.myselect.refs.input.blur()
       }
     }
   }
@@ -161,6 +162,7 @@ export default class ShareAlertModal extends Component {
             <div className="create-item__user-select" style={ S('absolute l-35 t-5 w-90p z-1000') }>
               <SelectContainer inputChange={ this.inputChange.bind(this) }>
                 <Select
+                  ref="myselect"
                   autofocus
                   name="users"
                   options={ users_select_options }
