@@ -1,6 +1,8 @@
 // controller/listing-map.js
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
+import Brand from '../../../Partials/Brand'
+
 const controller = {
   initMap() {
     const data = AppStore.data
@@ -216,14 +218,12 @@ const controller = {
     const map = window.map
     const path = window.poly.getPath()
     window.poly.setMap(null)
-    let stroke_color = '#3388ff'
-    if (AppStore.data.brand && AppStore.data.brand.primary)
-      stroke_color = '#' + AppStore.data.brand.primary
+
     window.poly = new google.maps.Polygon({
       clickable: false,
       map,
       path,
-      strokeColor: stroke_color,
+      strokeColor: '#' + Brand.color('primary', '3388ff'),
       strokeWeight: 10
     })
     window.poly_search = window.poly
@@ -279,13 +279,11 @@ const controller = {
     google.maps.event.addDomListener(map.getDiv(), 'mousedown', () => {
       if (!listing_map.drawable || listing_map.drawable && window.poly)
         return
-      let stroke_color = '#3388ff'
-      if (AppStore.data.brand && AppStore.data.brand.primary)
-        stroke_color = '#' + AppStore.data.brand.primary
+
       window.poly = new google.maps.Polyline({
         map,
         clickable: false,
-        strokeColor: stroke_color,
+        strokeColor: '#' + Brand.color('primary', '3388ff'),
         strokeWeight: 10
       })
       AppStore.data.listing_map.no_popup = true

@@ -4,8 +4,8 @@ import AppStore from '../../../../stores/AppStore'
 const controller = {
   showListingViewer(listing) {
     const data = AppStore.data
-    // Check for subdomain
-    if (data.is_widget && data.brand && data.brand.subdomain) {
+    // Check for hostname
+    if (data.is_widget && data.brand && data.brand.hostnames) {
       window.open('/dashboard/mls/' + listing.id)
       return
     }

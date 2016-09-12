@@ -5,7 +5,7 @@ module.exports = (app, config) => {
   // Messages
   require('./messages/get-messages')(app, config)
   // Brands
-  require('./brands/get-brand-by-subdomain')(app, config)
+  require('./brands/get-brand-by-hostname')(app, config)
   // Listings
   require('./listings/search-listings')(app, config)
   require('./listings/get-listing')(app, config)

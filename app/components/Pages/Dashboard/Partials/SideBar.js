@@ -16,6 +16,8 @@ import AppStore from '../../../../stores/AppStore'
 import ProfileImage from './ProfileImage'
 import SvgChat from './Svgs/Chat'
 import SvgMap from './Svgs/Map'
+import Brand from '../../../Partials/Brand'
+
 export default class SideBar extends Component {
 
   componentDidUpdate() {
@@ -512,19 +514,19 @@ export default class SideBar extends Component {
         <li><a href="#" style={ S('pointer') } onClick={ this.showUpgradeAccountModal }><i className="fa fa-arrow-up" style={ S('mr-15') }></i>Upgrade Account</a></li>
       )
     }
+
     let branding_logo
-    if (data.brand && data.brand.logo_url) {
+    if (Brand.asset('logo')) {
       branding_logo = (
         <div style={ S('mb-10') }>
           <a target="_blank" href="http://www.claystapp.com">
-            <div style={ S(`bg-url(${data.brand.logo_url}) bg-cover bg-center w-30 h-35 ml-10`) }></div>
+            <div style={ S(`bg-url(${Brand.asset('logo')}) bg-cover bg-center w-30 h-35 ml-10`) }></div>
           </a>
         </div>
       )
     }
-    let nav_active_color = '#3388ff'
-    if (data.brand && data.brand.primary)
-      nav_active_color = '#' + data.brand.primary
+    const nav_active_color = '#' + Brand.color('primary', '3388ff')
+
     return (
       <aside style={ sidebar_style } className="sidebar__nav-list pull-left">
         <Nav bsStyle="pills" stacked style={ S('mt-10') }>

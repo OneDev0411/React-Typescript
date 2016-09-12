@@ -6,11 +6,11 @@ import config from '../config/private'
 ==================== */
 describe('Testing Brand model', () => {
   // Signin
-  it('Branding.getBySubdomain should return successful', function(done) {
+  it('Branding.getByHostname should return successful', function(done) {
     const params = {
-      subdomain: 'claystapp'
+      hostname: 'claystapp.rechat.com'
     }
-    Brand.getBySubdomain(params, (err, response) => {
+    Brand.getByHostname(params, (err, response) => {
       expect(response.status).to.equal('success')
       done()
     })

@@ -274,10 +274,10 @@ export default class Create extends Component {
     let brand_title = (
       <div className="tk-calluna-sans" style={ brand_style }>Rechat</div>
     )
-    if (data.brand && data.brand.logo_url_wide) {
+    if (data.brand && data.brand.assets.logo_wide) {
       brand_title = (
         <div style={ brand_style }>
-          <img style={ S('w-200') } src={ data.brand.logo_url_wide } />
+          <img style={ S('w-200') } src={ data.brand.assets.logo_wide } />
         </div>
       )
     }
@@ -305,7 +305,7 @@ export default class Create extends Component {
               ref="submit"
               className={ disabled_class + submitting_class + 'btn' }
               disabled={ is_disabled ? 'true' : '' }
-              style={ S(`border-none color-fff w-100p bg-${data.brand && data.brand.primary ? data.brand.primary : '3388ff'}`) }
+              style={ S(`border-none color-fff w-100p bg-${data.brand && data.brand.palette.primary.replace('#', '') ? data.brand.palette.primary : '3388ff'}`) }
             >
               { submitting ? 'Submitting...' : 'Continue' }
             </Button>

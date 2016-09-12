@@ -11,6 +11,8 @@ emojify.setConfig({
 import AppDispatcher from '../../dispatcher/AppDispatcher'
 import AppStore from '../../stores/AppStore'
 import CheckEmailModal from '../Partials/CheckEmailModal'
+import Brand from '../Partials/Brand'
+
 export default class Landing extends Component {
   componentWillMount() {
     if (process.env.NODE_ENV === 'development')
@@ -26,7 +28,6 @@ export default class Landing extends Component {
         action: 'landing-text-animation'
       })
     }, 3000)
-    this.checkBranding()
   }
   componentDidUpdate() {
     const data = this.props.data
@@ -123,17 +124,6 @@ export default class Landing extends Component {
     delete AppStore.data.show_signup_confirm_modal
     AppStore.emitChange()
   }
-  checkBranding() {
-    if (!window.location.host.split('.'))
-      return
-    let subdomain = window.location.host.split('.')[0]
-    if (window.location.host.indexOf('.') === -1)
-      subdomain = 'claystapp'
-    AppDispatcher.dispatch({
-      action: 'get-branding',
-      subdomain
-    })
-  }
   render() {
     // Data
     const data = this.props.data
@@ -222,12 +212,13 @@ export default class Landing extends Component {
         )
       }
     }
+
     let brand_logo
-    if (data.brand && data.brand.logo_url_wide) {
+    if (Brand.asset('logo_wide')) {
       brand_logo = (
         <div style={ { ...S('ml-15 inline-block'), textDecoration: 'none' } }>
-          <span style={ S('inline-block font-30 mr-15 relative t-1n color-' + data.brand.primary) }>+</span>
-          <img style={ S('w-200 relative t-3n') } src={ data.brand.logo_url_wide } />
+          <span style={ S('inline-block font-30 mr-15 relative t-1n color-' + Brand.color('primary')) }>+</span>
+          <img style={ S('w-200 relative t-3n') } src={ Brand.asset('logo_wide') } />
         </div>
       )
     }

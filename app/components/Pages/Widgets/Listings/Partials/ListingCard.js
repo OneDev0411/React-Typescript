@@ -5,6 +5,8 @@ import { OverlayTrigger, Input, Button, Popover, Alert } from 'react-bootstrap'
 import listing_util from '../../../../../utils/listing'
 import helpers from '../../../../../utils/helpers'
 import FavoriteHeart from '../../../Dashboard/Partials/FavoriteHeart'
+import Brand from '../../../../Partials/Brand'
+
 export default class ListingCard extends Component {
   render() {
     const listing = this.props.listing
@@ -43,7 +45,7 @@ export default class ListingCard extends Component {
     }
     const price_small = listing_util.getSmallPrice(listing.price)
     const price_tag_style = {
-      ...S(`absolute b-30 p-15 pt-6 h-48 bg-${data.brand.primary} font-26 fw-500 color-fff`),
+      ...S(`absolute b-30 p-15 pt-6 h-48 bg-${Brand.color('primary')} font-26 fw-500 color-fff`),
       borderTopRightRadius: '3px',
       borderBottomRightRadius: '3px'
     }
@@ -173,7 +175,7 @@ export default class ListingCard extends Component {
     let agent_image_area
     if (listing.list_agent) {
       let avatar = (
-        <div style={ S(`bg-url(${data.brand.default_avatar}) w-50 h-50 bg-center bg-cover br-100`) }></div>
+        <div style={ S(`bg-url(${Brand.asset('default_avatar')}) w-50 h-50 bg-center bg-cover br-100`) }></div>
       )
       const profile_image_url = listing.list_agent.profile_image_url
       if (profile_image_url) {
@@ -215,7 +217,7 @@ export default class ListingCard extends Component {
           <div onClick={ this.props.hideModal } className="close" style={ S('font-30 t-10 r-20 absolute') }>&times;</div>
           <div className="text-center">
             <div style={ S('mb-20 mt-20 center-block text-center' + (!data.is_mobile ? ' mt-30 w-280' : '')) }>
-              <img style={ S('h-68 mr-40 relative') } src={ data.brand ? data.brand.logo_url : '' } />
+              <img style={ S('h-68 mr-40 relative') } src={ Brand.asset('logo') } />
               <i style={ S('color-929292 mr-40 font-30 relative t-5') } className="fa fa-arrow-right"></i>
               <img style={ S('h-68') } src="/images/logo-200w.png" />
             </div>
@@ -244,7 +246,7 @@ export default class ListingCard extends Component {
           <div onClick={ this.props.hideModal } className="close" style={ S('font-30 t-10 r-20 absolute') }>&times;</div>
           <div className="text-center">
             <div style={ S('mb-20 mt-20 center-block text-center' + (!data.is_mobile ? ' mt-30 w-280' : '')) }>
-              <img style={ S('h-68 mr-40 relative') } src={ data.brand ? data.brand.logo_url : '' } />
+              <img style={ S('h-68 mr-40 relative') } src={ Brand.asset('logo') } />
               <i style={ S('color-929292 mr-40 font-30 relative t-5') } className="fa fa-arrow-right"></i>
               <img style={ S('h-68') } src="/images/logo-200w.png" />
             </div>
@@ -270,7 +272,7 @@ export default class ListingCard extends Component {
           <div onClick={ this.props.hideModal } className="close" style={ S('font-30 t-10 r-20 absolute') }>&times;</div>
           <div className="text-center">
             <div style={ S('mb-20 mt-20 center-block text-center' + (!data.is_mobile ? ' mt-50 w-280' : '')) }>
-              <img style={ S('h-68 mr-40 relative') } src={ data.brand ? data.brand.logo_url : '' } />
+              <img style={ S('h-68 mr-40 relative') } src={ Brand.asset('logo') } />
               <i style={ S('color-929292 mr-40 font-30 relative t-5') } className="fa fa-arrow-right"></i>
               <img style={ S('h-68') } src="/images/logo-200w.png" />
             </div>
@@ -290,9 +292,7 @@ export default class ListingCard extends Component {
         </div>
       )
     }
-    let agent_type = 'Listing Agent'
-    if (!listing.list_office.brand || listing.list_office.brand.office_mls_id !== data.brand.office_mls_id)
-      agent_type = 'Buyer Agent'
+
     return (
       <div key={ 'listing-viewer-' + listing.id + '-' + helpers.randomString(10) } style={ listing_card_style }>
         <FavoriteHeart
@@ -323,7 +323,7 @@ export default class ListingCard extends Component {
             </div>
             <div style={ S('pull-left relative t-17 w-1 h-14 bg-e5e5e5 mr-15') }></div>
             <div style={ S('pull-left mr-10 mt-13 color-8696a4') }>
-              { agent_type }
+              { Brand.side(listing) }
             </div>
           </div>
         </div>

@@ -2,6 +2,8 @@
 import AppStore from '../../../../stores/AppStore'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
+import Brand from '../../../Partials/Brand'
+
 const controller = {
   alertHasNotifications(alert_id) {
     let result = false
@@ -134,14 +136,12 @@ const controller = {
       delete window.poly
     }
     const google = window.google
-    let stroke_color = '#3388ff'
-    if (AppStore.data.brand && AppStore.data.brand.primary)
-      stroke_color = '#' + AppStore.data.brand.primary
+
     window.poly = new google.maps.Polygon({
       clickable: false,
       map: window.map,
       paths,
-      strokeColor: stroke_color,
+      strokeColor: '#' + Brand.color('primary', '3388ff'),
       strokeWeight: 10
     })
     window.poly_alerts = window.poly

@@ -60,8 +60,6 @@ export default class App extends Component {
     // if (data.user)
     //   this.triggerBranchBanner()
     // this.triggerBranchBanner()
-    // Check for brand
-    this.checkForBranding()
   }
   componentDidUpdate() {
     const data = AppStore.data
@@ -75,18 +73,6 @@ export default class App extends Component {
   // Remove change listeners from stores
   componentWillUnmount() {
     AppStore.removeChangeListener(this._onChange.bind(this))
-  }
-  checkForBranding() {
-    const data = AppStore.data
-    if (window.location.host.indexOf('.') !== -1 && !data.brand) {
-      const subdomain = window.location.host.split('.')[0]
-      if (!subdomain)
-        return
-      AppDispatcher.dispatch({
-        action: 'get-branding',
-        subdomain
-      })
-    }
   }
   triggerBranchBanner() {
     const branch = require('branch-sdk')

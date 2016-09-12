@@ -10,7 +10,7 @@ module.exports = (app, config) => {
       endpoint = endpoint + '?associations=compact_listing.list_agent,compact_listing.list_office,compact_listing.selling_office,compact_listing.selling_agent&order_by=office,status&office=' + req.body.office
     // From listing widget
     if (options.list_offices && options.list_offices.length) {
-      endpoint = endpoint + '?associations=compact_listing.list_agent,compact_listing.list_office'
+      endpoint = endpoint + '?associations=compact_listing.list_agent'
       if (options.listing_statuses[0] === 'Sold')
         endpoint = endpoint + '&order_by=price'
     }

@@ -12,6 +12,8 @@ import FavoriteHeart from './FavoriteHeart'
 import controller from '../controller'
 import GoogleMap from 'google-map-react'
 import ReactSwipe from 'react-swipe'
+import Brand from '../../../Partials/Brand.js'
+
 export default class ListingViewerMobile extends Component {
   componentDidMount() {
     this.fadeIn()
@@ -459,9 +461,8 @@ export default class ListingViewerMobile extends Component {
     }
     let right_area
     if (user) {
-      let login_btn_color = '006aff'
-      if (data.brand && data.brand.primary)
-        login_btn_color = data.brand.primary
+      const login_btn_color = Brand.color('primary', '006aff')
+
       right_area = (
         <div style={ nav_bar_style }>
           <div style={ S('pull-right relative r-110 t-14n') }>
@@ -482,18 +483,17 @@ export default class ListingViewerMobile extends Component {
         Rechat
       </a>
     )
-    if (data.brand && data.brand.logo_url_wide) {
+    if (Brand.asset('logo_wide')) {
       const host = 'https://' + window.location.host
       brand_logo = (
         <a href={ host }>
-          <img style={ S('w-200') } src={ data.brand.logo_url_wide } />
+          <img style={ S('w-200') } src={ Brand.asset('logo_wide') } />
         </a>
       )
     }
     if (!user) {
-      let login_btn_color = '006aff'
-      if (data.brand && data.brand.primary)
-        login_btn_color = data.brand.primary
+      const login_btn_color = Brand.color('primary', '006aff')
+
       join_area = (
         <div style={ S('h-70') }>
           <div style={ S('pull-left p-16') }>

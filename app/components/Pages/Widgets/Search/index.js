@@ -38,8 +38,8 @@ export default class Search extends Component {
     const data = this.props.data
     // Send to search map
     if (q) {
-      if (data.brand && data.brand.map_url)
-        window.top.location.href = data.brand.map_url + '?q=' + q
+      if (data.brand && data.brand.assets.map_url)
+        window.top.location.href = data.brand.assets.map_url + '?q=' + q
       else
         window.top.location.href = 'https://rechat.com/dashboard/mls/?q=' + q
     }
@@ -94,11 +94,11 @@ export default class Search extends Component {
     }
     return (
       <div>
-        <div style={ S(`absolute z-0 t-0 l-0 w-100p h-100p bg-cover bg-center bg-url(${ data.brand && data.brand.search_bg_image_url ? data.brand.search_bg_image_url : '' })`) }></div>
+        <div style={ S(`absolute z-0 t-0 l-0 w-100p h-100p bg-cover bg-center bg-url(${ data.brand && data.brand.assets.search_bg ? data.brand.assets.search_bg : '' })`) }></div>
         <div style={ S('absolute z-1 t-0 l-0 w-100p h-100p bg-000 op-.5') }></div>
         <div style={ S('relative z-2 p-10') }>
           <div style={ S('relative t-190 maxw-770 center-block') }>
-            <div style={ S('color-fff text-center font-58 mb-30') } className="tempo">{ data.brand && data.brand.search_headline ? data.brand.search_headline : '' }</div>
+            <div style={ S('color-fff text-center font-58 mb-30') } className="tempo">{ data.brand && data.brand.messages.search_headline ? data.brand.messages.search_headline : '' }</div>
             <Input id="google_search" style={ S('h-76 border-none') } type="text" bsSize="large" placeholder="Search for an address, neighborhood, or MLS#" />
             { loading }
             { listing_area }

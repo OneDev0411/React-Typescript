@@ -18,12 +18,10 @@ export default (user, options) => {
   async.series([
     callback => {
       if (!AppStore.data.brand) {
-        let subdomain = window.location.host.split('.')[0]
-        if (window.location.host.indexOf('.') === -1)
-          subdomain = 'claystapp'
-        Brand.getBySubdomain({ subdomain }, (err, res) => {
+        const hostname = window.location.hostname
+
+        Brand.getByHostname({ hostname }, (err, res) => {
           AppStore.data.brand = res.data
-          AppStore.data.brand.primary = res.data.palette.primary_color.replace('#', '')
           AppStore.emitChange()
           callback()
         })

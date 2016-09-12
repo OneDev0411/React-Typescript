@@ -10,20 +10,12 @@ import AppStore from '../../../../stores/AppStore'
 import validator from 'validator'
 // import _ from 'lodash'
 import { randomString } from '../../../../utils/helpers'
+import Brand from '../../../Partials/Brand'
+
 export default class Listings extends Component {
   componentWillMount() {
-    // AppStore.data.brand = {
-    //   primary: '2196f3'
-    // }
     AppStore.data.is_widget = true
     AppStore.emitChange()
-    let subdomain = window.location.host.split('.')[0]
-    if (window.location.host.indexOf('.') === -1)
-      subdomain = 'claystapp'
-    AppDispatcher.dispatch({
-      action: 'get-branding',
-      subdomain
-    })
   }
   componentDidMount() {
     this.listenToScroll()
@@ -233,7 +225,7 @@ export default class Listings extends Component {
   }
   handleLoginClick(listing_id) {
     const data = this.props.data
-    const url = 'https://' + data.brand.subdomain + '.rechat.com/signin?redirect_to=dashboard/mls/' + listing_id
+    const url = 'https://' + data.brand.hostnames[0] + '/signin?redirect_to=dashboard/mls/' + listing_id
     window.top.location.href = url
   }
   render() {
@@ -270,10 +262,10 @@ export default class Listings extends Component {
       })
     }
     let view_all_button
-    if (!data.location.query.all && data.brand && data.brand.listing_url) {
+    if (!data.location.query.all && Brand.asset('listing_url')) {
       view_all_button = (
         <div style={ S('text-center mt-20 mb-30') }>
-          <a target="_parent" href={ data.brand.listing_url } className="btn btn-default" style={ S(`w-280 font-17 p-20 color-fff border-1-solid-${data.brand.primary} bg-${data.brand.primary}`) }>View Exclusive Listings</a>
+          <a target="_parent" href={ Brand.asset('listing_url') } className="btn btn-default" style={ S(`w-280 font-17 p-20 color-fff border-1-solid-${Brand.color('primary')} bg-${Brand.color('primary')}`) }>View Exclusive Listings</a>
         </div>
       )
     }
@@ -299,8 +291,8 @@ export default class Listings extends Component {
         </div>
         <div style={ status_buttons_area_style }>
           <ButtonGroup>
-            <Button onClick={ this.handleButtonClick.bind(this, 'active')} style={ widget && widget.is_showing_sold ? S('color-929292 font-17 p-15 w-100') : S(`color-${data.brand.primary} font-17 p-15 w-100`) } bsStyle="default">Active</Button>
-            <Button onClick={ this.handleButtonClick.bind(this, 'sold')} style={ widget && widget.is_showing_sold ? S(`color-${data.brand.primary} font-17 p-15 w-100`) : S('color-929292 font-17 p-15 w-100') } bsStyle="default">Sold</Button>
+            <Button onClick={ this.handleButtonClick.bind(this, 'active')} style={ widget && widget.is_showing_sold ? S('color-929292 font-17 p-15 w-100') : S(`color-${Brand.color('primary')} font-17 p-15 w-100`) } bsStyle="default">Active</Button>
+            <Button onClick={ this.handleButtonClick.bind(this, 'sold')} style={ widget && widget.is_showing_sold ? S(`color-${Brand.color('primary')} font-17 p-15 w-100`) : S('color-929292 font-17 p-15 w-100') } bsStyle="default">Sold</Button>
           </ButtonGroup>
         </div>
         { listings_area }

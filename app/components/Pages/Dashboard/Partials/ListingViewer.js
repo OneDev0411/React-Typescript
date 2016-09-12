@@ -12,6 +12,8 @@ import ListingMarker from './ListingMarker'
 import FavoriteHeart from './FavoriteHeart'
 import controller from '../controller'
 import GoogleMap from 'google-map-react'
+import Brand from '../../../Partials/Brand.js'
+
 export default class ListingViewer extends Component {
   componentDidMount() {
     document.onkeydown = e => {
@@ -582,9 +584,8 @@ export default class ListingViewer extends Component {
     }
     let right_area
     if (user) {
-      let login_btn_color = '006aff'
-      if (data.brand && data.brand.primary)
-        login_btn_color = data.brand.primary
+      const login_btn_color = Brand.color('primary', '006aff')
+
       right_area = (
         <div style={ nav_bar_style }>
           <div style={ S('pull-right relative r-110 t-14n') }>
@@ -605,13 +606,13 @@ export default class ListingViewer extends Component {
         Rechat
       </a>
     )
-    let login_btn_color = 'a1bde4'
-    if (data.brand && data.brand.logo_url_wide) {
-      login_btn_color = data.brand.primary
+    const login_btn_color = Brand.color('primary', 'a1bde4')
+
+    if (Brand.asset('logo_wide')) {
       const host = 'https://' + window.location.host
       brand_logo = (
         <a href={ host }>
-          <img style={ S('w-200') } src={ data.brand.logo_url_wide } />
+          <img style={ S('w-200') } src={ Brand.asset('logo_wide') } />
         </a>
       )
     }

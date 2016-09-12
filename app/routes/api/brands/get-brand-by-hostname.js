@@ -1,9 +1,9 @@
-// api/brands/get-brand-by-subdomain.js
+// api/brands/get-brand-by-hostname.js
 module.exports = (app, config) => {
   app.get('/api/brands/search',(req, res) => {
     const api_url = config.api.url
-    const subdomain = req.query.subdomain
-    const endpoint = api_url + '/brands/search?subdomain=' + subdomain
+    const hostname = req.query.hostname
+    const endpoint = api_url + '/brands/search?hostname=' + hostname
     fetch(endpoint)
     .then(response => {
       if (response.status >= 400) {

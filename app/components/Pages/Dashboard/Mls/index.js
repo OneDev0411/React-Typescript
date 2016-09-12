@@ -27,8 +27,11 @@ import SvgDraw from '../Partials/Svgs/Draw'
 import SvgGlobe from '../Partials/Svgs/Globe'
 import SvgList from '../Partials/Svgs/List'
 import SvgPhotos from '../Partials/Svgs/Photos'
+import Brand from '../../../Partials/Brand'
+
 export default class Mls extends Component {
   componentWillMount() {
+    Brand.checkBranding()
     const data = this.props.data
     const user = data.user
     if (this.props.params && this.props.params.id) {
@@ -103,7 +106,6 @@ export default class Mls extends Component {
     this.resetViews()
     this.routeURL()
     this.checkForMobile()
-    this.checkForBranding()
   }
   componentDidUpdate() {
     const data = this.props.data
@@ -134,18 +136,6 @@ export default class Mls extends Component {
   }
   componentWillUnmount() {
     controller.listing_map.hideModal()
-  }
-  checkForBranding() {
-    const data = AppStore.data
-    if (window.location.host.indexOf('.') !== -1 && !data.brand) {
-      const subdomain = window.location.host.split('.')[0]
-      if (!subdomain)
-        return
-      AppDispatcher.dispatch({
-        action: 'get-branding',
-        subdomain
-      })
-    }
   }
   initGoogleSearch() {
     if (window.google) {
@@ -221,14 +211,12 @@ export default class Mls extends Component {
           const google = window.google
           const map = window.map
           const path = window.poly.getPath()
-          let stroke_color = '#3388ff'
-          if (AppStore.data.brand && AppStore.data.brand.primary)
-            stroke_color = '#' + AppStore.data.brand.primary
+
           window.poly = new google.maps.Polygon({
             clickable: false,
             map,
             path,
-            strokeColor: stroke_color,
+            strokeColor: '#' + Brand.color('primary', '3388ff'),
             strokeWeight: 10
           })
         }
@@ -378,7 +366,7 @@ export default class Mls extends Component {
       }
       loading = (
         <div style={ loading_style }>
-          <div style={ S(`br-20 color-fff w-190 h-29 pt-5 center-block text-center bg-${data.brand && data.brand.primary ? data.brand.primary : '3388ff'}`) }>Loading MLS&reg; Listings...</div>
+          <div style={ S(`br-20 color-fff w-190 h-29 pt-5 center-block text-center bg-${Brand.color('primary', '3388ff')}`) }>Loading MLS&reg; Listings...</div>
         </div>
       )
     }
@@ -451,7 +439,8 @@ export default class Mls extends Component {
     let results_actions
     let create_alert_button
     if (data.show_search_map) {
-      let save_search_btn_style = S('absolute r-20 t-70 z-1 w-200 h-50 font-18 color-fff ' + (data.brand && data.brand.primary ? `border-1-solid-${data.brand.primary} bg-${data.brand.primary}` : `bg-2196f3 border-1-solid-2196f3`))
+      let save_search_btn_style = S(`absolute r-20 t-70 z-1 w-200 h-50 font-18 color-fff border-1-solid-${Brand.color('primary', '2196f3')} bg-${Brand.color('primary', '2196f3')}`)
+
       if (data.is_widget && !data.is_mobile) {
         save_search_btn_style = {
           ...save_search_btn_style,
@@ -537,23 +526,17 @@ export default class Mls extends Component {
         }
       }
       let globe_color = '929292'
-      if (!data.listing_panel) {
-        globe_color = '3388ff'
-        if (data.brand && data.brand.primary)
-          globe_color = data.brand.primary
-      }
+      if (!data.listing_panel)
+        globe_color = Brand.color('primary', '3388ff')
+
       let list_color = '929292'
-      if (data.listing_panel && data.listing_panel.view === 'list') {
-        list_color = '3388ff'
-        if (data.brand && data.brand.primary)
-          list_color = data.brand.primary
-      }
+      if (data.listing_panel && data.listing_panel.view === 'list')
+        list_color = Brand.color('primary', '3388ff')
+
       let photos_color = '929292'
-      if (data.listing_panel && data.listing_panel.view === 'photos') {
-        photos_color = '3388ff'
-        if (data.brand && data.brand.primary)
-          photos_color = data.brand.primary
-      }
+      if (data.listing_panel && data.listing_panel.view === 'photos')
+        photos_color = Brand.color('primary', '3388ff')
+
       results_actions = (
         <div>
           <div style={ S('absolute r-5 mt-2 t-15 z-10') }>
@@ -673,11 +656,9 @@ export default class Mls extends Component {
       </div>
     )
     let draw_color = '929292'
-    if (data.listing_map && data.listing_map.drawable) {
-      draw_color = '3388ff'
-      if (data.brand && data.brand.primary)
-        draw_color = data.brand.primary
-    }
+    if (data.listing_map && data.listing_map.drawable)
+      draw_color = Brand.color('primary', '3388ff')
+
     let search_filter_draw_area = (
       <div style={ S('relative t-35 l-10 z-1 w-580') }>
         <div style={ search_area_style }>
@@ -711,7 +692,7 @@ export default class Mls extends Component {
     // Hide search form
     if (data.show_filter_form || data.show_alerts_map || data.show_actives_map)
       search_filter_draw_area = ''
-    const underline = <div style={ S(`w-100p h-6 bg-${!data.brand || !data.brand.primary ? '3388ff' : data.brand.primary} absolute b-11n`) }></div>
+    const underline = <div style={ S(`w-100p h-6 bg-${Brand.color('primary', '3388ff')} absolute b-11n`) }></div>
     const map_tabs = (
       <ul style={ S('relative l-30n t-5') }>
         <li style={ S('relative pull-left font-28 mr-60') }>

@@ -4,10 +4,10 @@ es6Promise.polyfill()
 import 'isomorphic-fetch'
 import config from '../../config/public'
 export default {
-  getBySubdomain: (params, callback) => {
+  getByHostname: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/brands/search?subdomain=' + params.subdomain
+    const endpoint = api_host + '/api/brands/search?hostname=' + params.hostname
     fetch(endpoint)
     .then(response => {
       if (response.status >= 400) {

@@ -14,7 +14,7 @@ export default class CheckEmailModal extends Component {
       <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ !data.show_signup_confirm_modal } onHide={ this.props.hideModal }>
         <Modal.Body className="text-center" style={ !data.is_mobile ? S('w-600 h-480') : S('w-100p') } >
           <div style={ S('mb-20 mt-20 center-block text-center' + (!data.is_mobile ? ' mt-100 w-280' : '')) }>
-            <img style={ S('h-68 mr-40 relative') } src={ data.brand ? data.brand.logo_url : '' } />
+            <img style={ S('h-68 mr-40 relative') } src={ data.brand ? data.brand.assets.logo : '' } />
             <i style={ S('color-929292 mr-40 font-30 relative t-5') } className="fa fa-arrow-right"></i>
             <img style={ S('h-68') } src="/images/logo-200w.png" />
           </div>

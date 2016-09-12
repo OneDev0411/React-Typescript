@@ -11,7 +11,7 @@ export default (user, redirect_to) => {
     user.phone_number = AppStore.data.signup.phone_number
   if (signup && signup.room)
     user.room_connect = AppStore.data.signup.room
-  // Widgets and subdomain signup
+  // Widgets and hostname signup
   if (AppStore.data.signup_tooltip) {
     user.actions = []
     if (AppStore.data.signup_tooltip.action === 'listing_inquiry') {
