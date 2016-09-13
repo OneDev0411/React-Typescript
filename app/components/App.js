@@ -7,6 +7,7 @@ import config from '../../config/public'
 import io from 'socket.io-client'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import AppStore from '../stores/AppStore'
+import Brand from '../controllers/Brand'
 
 export default class App extends Component {
   componentWillMount() {
@@ -22,6 +23,7 @@ export default class App extends Component {
   }
   // Add change listeners to stores
   componentDidMount() {
+    Brand.checkBranding()
     AppStore.addChangeListener(this._onChange.bind(this))
     window.socket.on('reconnecting', () => {
       AppStore.data.socket_reconnecting = true
