@@ -46,23 +46,19 @@ class Brand {
 
   side(listing) {
     const brand = AppStore.data.brand
-    const office_ids = brand.offices ? brand.offices.map(o => o.id) : []
     const agent_ids = brand.agents ? brand.agents.map(a => a.id) : []
-
-    const is_list_office = office_ids.indexOf(listing.list_office) > -1
-    const is_selling_office = office_ids.indexOf(listing.selling_office) > -1
 
     const is_list_agent = agent_ids.indexOf(listing.list_agent.id) > -1
     const is_selling_agent = agent_ids.indexOf(listing.selling_agent) > -1
 
-    if ((is_list_office || is_list_agent) && (is_selling_office || is_selling_agent))
-      return 'Both'
+    if (is_list_agentis_selling_agent)
+      return 'Listing & Buyer Agent'
 
     if ((is_list_office || is_list_agent) && !(is_selling_office || is_selling_agent))
-      return 'Listing'
+      return 'Listing Agent'
 
     if (!(is_list_office || is_list_agent) && (is_selling_office || is_selling_agent))
-      return 'Buyer'
+      return 'Buyer Agent'
 
     return ''
   }
