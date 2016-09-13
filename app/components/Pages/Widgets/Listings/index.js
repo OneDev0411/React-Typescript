@@ -10,7 +10,7 @@ import AppStore from '../../../../stores/AppStore'
 import validator from 'validator'
 // import _ from 'lodash'
 import { randomString } from '../../../../utils/helpers'
-import Brand from '../../../Partials/Brand'
+import Brand from '../../../../controllers/Brand'
 
 export default class Listings extends Component {
   componentWillMount() {

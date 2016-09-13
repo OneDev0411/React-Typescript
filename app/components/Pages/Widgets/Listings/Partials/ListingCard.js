@@ -5,7 +5,7 @@ import { OverlayTrigger, Input, Button, Popover, Alert } from 'react-bootstrap'
 import listing_util from '../../../../../utils/listing'
 import helpers from '../../../../../utils/helpers'
 import FavoriteHeart from '../../../Dashboard/Partials/FavoriteHeart'
-import Brand from '../../../../Partials/Brand'
+import Brand from '../../../../../controllers/Brand'
 
 export default class ListingCard extends Component {
   render() {

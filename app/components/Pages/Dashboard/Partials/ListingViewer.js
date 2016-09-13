@@ -12,7 +12,7 @@ import ListingMarker from './ListingMarker'
 import FavoriteHeart from './FavoriteHeart'
 import controller from '../controller'
 import GoogleMap from 'google-map-react'
-import Brand from '../../../Partials/Brand.js'
+import Brand from '../../../../controllers/Brand.js'
 
 export default class ListingViewer extends Component {
   componentDidMount() {

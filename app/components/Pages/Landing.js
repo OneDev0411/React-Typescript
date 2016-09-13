@@ -11,7 +11,7 @@ emojify.setConfig({
 import AppDispatcher from '../../dispatcher/AppDispatcher'
 import AppStore from '../../stores/AppStore'
 import CheckEmailModal from '../Partials/CheckEmailModal'
-import Brand from '../Partials/Brand'
+import Brand from '../../controllers/Brand'
 
 export default class Landing extends Component {
   componentWillMount() {

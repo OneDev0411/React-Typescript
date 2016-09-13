@@ -1,7 +1,7 @@
 // controller/listing-map.js
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
-import Brand from '../../../Partials/Brand'
+import Brand from '../../../../controllers/Brand'
 
 const controller = {
   initMap() {

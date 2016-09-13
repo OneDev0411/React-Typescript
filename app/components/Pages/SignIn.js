@@ -6,7 +6,7 @@ import S from 'shorti'
 import AppStore from '../../stores/AppStore'
 import AppDispatcher from '../../dispatcher/AppDispatcher'
 import helpers from '../../utils/helpers'
-import Brand from '../Partials/Brand'
+import Brand from '../../controllers/Brand'
 
 export default class SignIn extends Component {
 

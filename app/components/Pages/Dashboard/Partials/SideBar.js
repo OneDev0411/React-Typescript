@@ -16,7 +16,7 @@ import AppStore from '../../../../stores/AppStore'
 import ProfileImage from './ProfileImage'
 import SvgChat from './Svgs/Chat'
 import SvgMap from './Svgs/Map'
-import Brand from '../../../Partials/Brand'
+import Brand from '../../../../controllers/Brand'
 
 export default class SideBar extends Component {
 

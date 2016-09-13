@@ -360,12 +360,59 @@ export default class MessagesList extends Component {
     const settings_dropdown_dots = (
       <img style={ S('w-4') } src="/images/dashboard/chats/dots.svg"/>
     )
+    let user_dropdown
+    if (data.show_room_users_modal) {
+      const dropdown_style = {
+        ...S('absolute r-53 t-40 br-5 bg-fff w-300 z-3'),
+        boxShadow: '0 8px 12px 0 rgba(0, 0, 0, 0.15)'
+      }
+      const header_style = {
+        ...S('h-49 w-100p bg-fafafa color-4a4a4a font-22 p-10 fw-500 border-bottom-1-solid-e7e7e7'),
+        borderTopRightRadius: '5px',
+        borderTopLeftRadius: '5px'
+      }
+      const footer_style = {
+        ...S('bg-fff font-17 pt-10 pb-10 fw-500 color-2196f3 text-center border-top-1-solid-eaeaea pointer'),
+        borderBottomRightRadius: '5px',
+        borderBottomLeftRadius: '5px'
+      }
+      user_dropdown = (
+        <div style={ dropdown_style }>
+          <div style={ header_style } className="lato">
+            Members
+            <a className="close" href="#" onClick={ this.props.hideModal }>&times;</a>
+          </div>
+          <div style={ S('p-10') }>
+            {
+              current_room.users.map(contact => {
+                return (
+                  <div style={ S('h-50 relative br-100 p-3 pl-0 pr-10 mb-10 mr-10 w-100p') } className="pull-left" key={ 'added-contact-' + contact.id }>
+                    <div style={ S('l-0 t-0 absolute') }>
+                      <ProfileImage data={ data } top={11} size={40} user={ contact }/>
+                    </div>
+                    <div style={ S('ml-50') }>
+                      <div>{ contact.first_name } { contact.last_name }</div>
+                      <div>{ contact.email }</div>
+                    </div>
+                  </div>
+                )
+              })
+            }
+            <div className="clearfix"></div>
+          </div>
+          <div style={ footer_style } className="lato" onClick={ this.props.showModal.bind(this, 'add-members') }>
+            + Add Members
+          </div>
+        </div>
+      )
+    }
     let room_settings = (
       <div className="no-user-select" style={ S('pull-right relative t-10 r-10') }>
         <div style={ S('pull-left p-10 pointer mr-30') } onClick={ this.props.showModal.bind(this, 'room-users') }>
           <img style={ S('w-22 relative') } src="/images/dashboard/chats/members.svg"/>
           <span style={ S('color-4eabf6 absolute l-40 t-9 font-17 fw-500') }>{ data.current_room && data.current_room.users ? data.current_room.users.length : '' }</span>
         </div>
+        { user_dropdown }
         <div className="dropdown-menu--room-settings" style={ S('pull-left mr-10') }>
           <DropdownButton style={ S('border-none mt-2') } pullRight title={ settings_dropdown_dots } id="room-dropdown" className="room-dropdown" noCaret>
             <li style={ S('w-260 p-20 border-bottom-1-solid-d8d8d8 pointer') } onClick={ this.props.changeListingNotification.bind(this, has_system_generated_notifs) }>
@@ -389,34 +436,6 @@ export default class MessagesList extends Component {
           { loading_previous }
           <ul style={ S('pl-0 ' + messages_mb) }>{ messages_list_items }</ul>
         </div>
-        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_room_users_modal } onHide={ this.props.hideModal }>
-          <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
-           <Modal.Title style={ S('font-14') }>Room users</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <label>Team</label>
-            <div style={ { ...S('maxh-200 pt-10'), overflow: 'scroll' } }>
-            {
-              current_room.users.map(contact => {
-                return (
-                  <div style={ S('h-50 relative br-100 p-3 pl-0 pr-10 mb-10 mr-10 w-100p') } className="pull-left" key={ 'added-contact-' + contact.id }>
-                    <div style={ S('l-0 t-0 absolute') }>
-                      <ProfileImage data={ data } top={11} size={40} user={ contact }/>
-                    </div>
-                    <div style={ S('ml-50') }>
-                      <div>{ contact.first_name } { contact.last_name }</div>
-                      <div>{ contact.email }</div>
-                    </div>
-                  </div>
-                )
-              })
-            }
-            </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button bsStyle="default" onClick={ this.props.hideModal }>Ok</Button>
-          </Modal.Footer>
-        </Modal>
         <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_alert_modal } onHide={ this.props.hideAlertModal }>
           <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
            <Modal.Title>Alert { data.listing_alerts ? `(${ data.alert_modal && data.alert_modal.active_index ? data.alert_modal.active_index + 1 : '1' } of ${data.current_alert_info ? data.current_alert_info.total : ''} Homes)` : '' } </Modal.Title>
@@ -437,6 +456,21 @@ export default class MessagesList extends Component {
             <Button bsStyle="link" onClick={ this.props.hideDeleteRoomModal }>Cancel</Button>
             <Button bsStyle="danger" onClick={ this.props.confirmDeleteRoom } className={ data.deleting_room ? 'disabled' : '' }>
               { data.deleting_room ? 'Leaving...' : 'Yes, leave' }
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_add_members_modal } onHide={ this.props.hideModal }>
+          <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
+           <Modal.Title>Add Members</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Add members
+            <div className="clearfix"></div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button bsStyle="link" onClick={ this.props.hideModal }>Cancel</Button>
+            <Button>
+              Add
             </Button>
           </Modal.Footer>
         </Modal>

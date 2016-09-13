@@ -1,6 +1,6 @@
 // Brand.js
-import AppDispatcher from '../../dispatcher/AppDispatcher'
-import AppStore from '../../stores/AppStore'
+import AppDispatcher from '../dispatcher/AppDispatcher'
+import AppStore from '../stores/AppStore'
 
 class Brand {
   constructor() {

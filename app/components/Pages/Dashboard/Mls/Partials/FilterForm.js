@@ -7,7 +7,7 @@ import helpers from '../../../../../utils/helpers'
 import DayPicker, { DateUtils } from 'react-day-picker'
 import Select from 'react-select'
 import home_styles_select_options from '../../../../../utils/home-style-data'
-import Brand from '../../../../Partials/Brand'
+import Brand from '../../../../../controllers/Brand'
 
 export default class FilterForm extends Component {
   buttonIsActive(key, value) {

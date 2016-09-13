@@ -2,7 +2,7 @@
 import AppStore from '../../../../stores/AppStore'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
-import Brand from '../../../Partials/Brand'
+import Brand from '../../../../controllers/Brand'
 
 const controller = {
   alertHasNotifications(alert_id) {

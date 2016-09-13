@@ -12,7 +12,7 @@ import FavoriteHeart from './FavoriteHeart'
 import controller from '../controller'
 import GoogleMap from 'google-map-react'
 import ReactSwipe from 'react-swipe'
-import Brand from '../../../Partials/Brand.js'
+import Brand from '../../../../controllers/Brand.js'
 
 export default class ListingViewerMobile extends Component {
   componentDidMount() {

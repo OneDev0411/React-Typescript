@@ -27,7 +27,7 @@ import SvgDraw from '../Partials/Svgs/Draw'
 import SvgGlobe from '../Partials/Svgs/Globe'
 import SvgList from '../Partials/Svgs/List'
 import SvgPhotos from '../Partials/Svgs/Photos'
-import Brand from '../../../Partials/Brand'
+import Brand from '../../../../controllers/Brand'
 
 export default class Mls extends Component {
   componentWillMount() {
