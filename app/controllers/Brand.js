@@ -36,9 +36,8 @@ class Brand {
     const brand = AppStore.data.brand
     if (!brand)
       return def
-
     const messages = brand.messages
-    if (messages[name])
+    if (messages && messages[name])
       return messages[name]
 
     return def

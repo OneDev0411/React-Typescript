@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import _ from 'lodash'
+import validator from 'validator'
 import { Modal, Input, Button } from 'react-bootstrap'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import AppStore from '../../../../stores/AppStore'
@@ -10,9 +11,12 @@ import SideBar from '../Partials/SideBar'
 import MobileNav from '../Partials/MobileNav'
 import MainContent from './Partials/MainContent'
 import FileViewer from './Partials/FileViewer'
-
+import Select from 'react-select'
+import SelectContainer from '../Partials/SelectContainer'
+import { getResizeAvatarUrl } from '../../../../utils/user'
+import ProfileImage from '../Partials/ProfileImage'
+import ProfileImageMultiple from '../Partials/ProfileImageMultiple'
 export default class Dashboard extends Component {
-
   componentWillMount() {
     AppStore.data.loading = true
     AppStore.emitChange()
@@ -95,6 +99,7 @@ export default class Dashboard extends Component {
     delete AppStore.data.show_new_message_viewer
     if (AppStore.data.is_mobile)
       AppStore.data.current_room_mobile = current_room
+    delete AppStore.data.show_room_users_modal
     AppStore.emitChange()
     history.pushState(null, null, '/dashboard/recents/' + current_room.id)
   }
@@ -474,6 +479,108 @@ export default class Dashboard extends Component {
     AppStore.emitChange()
   }
 
+  inputChange(e) {
+    // Enter clicked
+    const data = this.props.data
+    if (e.which === 13) {
+      if (data.new_message && data.new_message.search_value) {
+        if (!data.new_message.items_selected)
+          data.new_message.items_selected = []
+        const search_value = data.new_message.search_value
+        // Emails
+        if (validator.isEmail(search_value)) {
+          data.new_message.items_selected.push({
+            email: search_value,
+            type: 'email',
+            label: search_value,
+            value: search_value
+          })
+          controller.add_members.addUsersToSearchInput(data.new_message.items_selected)
+        }
+        // Phone numbers
+        if (validator.isNumeric(search_value)) {
+          data.new_message.items_selected.push({
+            email: search_value,
+            type: 'phone_number',
+            label: search_value,
+            value: search_value
+          })
+          controller.add_members.addUsersToSearchInput(data.new_message.items_selected)
+        }
+        this.refs.myselect.refs.input.blur()
+      }
+    }
+  }
+  handleChange(users_selected) {
+    controller.add_members.addUsersToSearchInput(users_selected)
+  }
+  handleInputChange(value) {
+    controller.add_members.handleInputChange(value)
+  }
+  handleValueRenderer(item) {
+    let profile_image
+    const user = item.value
+    if (user.profile_image_url || user.display_profile_image_url) {
+      let profile_image_url
+      if (user.profile_image_url)
+        profile_image_url = user.profile_image_url
+      if (user.display_profile_image_url)
+        profile_image_url = user.display_profile_image_url
+      profile_image = <div style={ S(`pull-left bg-url(${getResizeAvatarUrl(profile_image_url)}?w=160) w-26 h-26 bg-cover bg-center`) }/>
+    }
+    const display_name = (
+      <div style={ S(`pull-left mt-4 ml-10 mr-5`) }>
+        { item.label }
+      </div>
+    )
+    return (
+      <div>
+        { profile_image }
+        { display_name }
+      </div>
+    )
+  }
+  handleOptionRenderer(item) {
+    const data = this.props.data
+    let profile_image
+    if (item.type === 'user') {
+      // Contact
+      const user = item.value
+      profile_image = (
+        <ProfileImage data={ data } user={ user }/>
+      )
+    } else {
+      // Room
+      profile_image = (
+        <ProfileImageMultiple users={ item.value.users }/>
+      )
+    }
+    return (
+      <div style={ S('relative h-54') }>
+        <div style={ S('mt-10') }>{ profile_image }</div>
+        <div style={ S('pull-left mt-10 ml-60 mr-5') }>{ item.label }</div>
+        <div className="clearfix"/>
+      </div>
+    )
+  }
+
+  handleAddMembers() {
+    const data = this.props.data
+    const users = _.map(_.filter(data.add_members.items_selected, { type: 'user' }), 'value.id')
+    const phone_numbers = _.map(_.filter(data.add_members.items_selected, { type: 'phone_number' }), 'value')
+    const emails = _.map(_.filter(data.add_members.items_selected, { type: 'email' }), 'value')
+    AppStore.data.adding_users = true
+    AppStore.emitChange()
+    AppDispatcher.dispatch({
+      action: 'add-users',
+      room: data.current_room.id,
+      users,
+      emails,
+      phone_numbers,
+      user: data.user
+    })
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -486,6 +593,34 @@ export default class Dashboard extends Component {
           closeFileViewer={ this.closeFileViewer }
         />
       )
+    }
+    const users_select_options = []
+    // Get users selected
+    const users_selected = []
+    let users_selected_ids = []
+    if (data.add_members && data.add_members.items_selected) {
+      const items_selected = data.add_members.items_selected
+      items_selected.forEach(item => {
+        users_selected.push(item)
+      })
+      // Contacts available
+      users_selected_ids = _.map(users_selected, item => {
+        return item.value.id
+      })
+    }
+    if (data.contacts && current_room) {
+      data.contacts.forEach(contact => {
+        const user = contact.contact_user
+        if (user && !_.find(current_room.users, { id: user.id })) {
+          if (user.id !== data.user.id && users_selected_ids && users_selected_ids.indexOf(user.id) === -1) {
+            users_select_options.push({
+              value: user,
+              label: user.first_name ? user.first_name : contact.phone_number,
+              type: 'user'
+            })
+          }
+        }
+      })
     }
     let main_content = (
       <MainContent
@@ -580,6 +715,39 @@ export default class Dashboard extends Component {
               <Button type="submit" bsStyle="primary">Start chat</Button>
             </Modal.Footer>
           </form>
+        </Modal>
+        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_add_members_modal } onHide={ this.hideModal }>
+          <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
+           <Modal.Title>Add Members</Modal.Title>
+          </Modal.Header>
+          <Modal.Body style={ S('h-500') }>
+            <div className="create-item__user-select">
+              <SelectContainer inputChange={ this.inputChange.bind(this) }>
+                <Select
+                  ref="myselect"
+                  autofocus
+                  name="users"
+                  options={ users_select_options }
+                  placeholder="Enter name, email or phone"
+                  value={ users_selected ? users_selected : null }
+                  multi
+                  noResultsText={ 'No users found'}
+                  style={ S('border-none mt-3') }
+                  onInputChange={ this.handleInputChange.bind(this) }
+                  onChange={ this.handleChange.bind(this) }
+                  valueRenderer={ this.handleValueRenderer.bind(this) }
+                  optionRenderer={ this.handleOptionRenderer.bind(this) }
+                />
+              </SelectContainer>
+            </div>
+            <div className="clearfix"></div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button bsStyle="link" onClick={ this.hideModal }>Cancel</Button>
+            <Button className={ data.adding_users ? 'disabled' : '' } bsStyle="primary" onClick={ this.handleAddMembers.bind(this) }>
+              { data.adding_users ? 'Adding users...' : 'Add' }
+            </Button>
+          </Modal.Footer>
         </Modal>
       </div>
     )

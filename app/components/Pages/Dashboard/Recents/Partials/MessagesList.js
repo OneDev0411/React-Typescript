@@ -11,7 +11,6 @@ import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
 // Partials
 import MessageItem from './MessageItem'
 import ProfileImage from '../../Partials/ProfileImage'
-
 export default class MessagesList extends Component {
   componentDidMount() {
     if (typeof window !== 'undefined') {
@@ -363,11 +362,11 @@ export default class MessagesList extends Component {
     let user_dropdown
     if (data.show_room_users_modal) {
       const dropdown_style = {
-        ...S('absolute r-53 t-40 br-5 bg-fff w-300 z-3'),
+        ...S('absolute r-53 t-40 br-5 bg-fff w-350 z-3'),
         boxShadow: '0 8px 12px 0 rgba(0, 0, 0, 0.15)'
       }
       const header_style = {
-        ...S('h-49 w-100p bg-fafafa color-4a4a4a font-22 p-10 fw-500 border-bottom-1-solid-e7e7e7'),
+        ...S('h-49 w-100p bg-fafafa color-4a4a4a font-22 p-10 pl-20 fw-500 border-bottom-1-solid-e7e7e7'),
         borderTopRightRadius: '5px',
         borderTopLeftRadius: '5px'
       }
@@ -382,7 +381,7 @@ export default class MessagesList extends Component {
             Members
             <a className="close" href="#" onClick={ this.props.hideModal }>&times;</a>
           </div>
-          <div style={ S('p-10') }>
+          <div style={ S('p-10 pl-20') }>
             {
               current_room.users.map(contact => {
                 return (
@@ -456,21 +455,6 @@ export default class MessagesList extends Component {
             <Button bsStyle="link" onClick={ this.props.hideDeleteRoomModal }>Cancel</Button>
             <Button bsStyle="danger" onClick={ this.props.confirmDeleteRoom } className={ data.deleting_room ? 'disabled' : '' }>
               { data.deleting_room ? 'Leaving...' : 'Yes, leave' }
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_add_members_modal } onHide={ this.props.hideModal }>
-          <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
-           <Modal.Title>Add Members</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            Add members
-            <div className="clearfix"></div>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button bsStyle="link" onClick={ this.props.hideModal }>Cancel</Button>
-            <Button>
-              Add
             </Button>
           </Modal.Footer>
         </Modal>
