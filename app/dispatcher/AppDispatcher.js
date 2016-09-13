@@ -28,6 +28,7 @@ import listingInquiry from '../actions/user/listing-inquiry'
 import createRoom from '../actions/rooms/create-room'
 import deleteRoom from '../actions/rooms/delete-room'
 import inviteContacts from '../actions/rooms/invite-contacts'
+import addUsers from '../actions/rooms/add-users'
 import uploadFilesToRoom from '../actions/rooms/upload-files'
 import setNotification from '../actions/rooms/notifications'
 import acknowledgeRoomNotifications from '../actions/rooms/acknowledge-notifications'
@@ -162,6 +163,10 @@ AppDispatcher.register(payload => {
 
     case 'invite-contacts':
       inviteContacts(payload.user, payload.room, payload.contacts)
+      break
+
+    case 'add-users':
+      addUsers(payload.user, payload.room, payload.users, payload.emails, payload.phone_numbers)
       break
 
     case 'create-message':
