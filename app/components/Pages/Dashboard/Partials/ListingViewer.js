@@ -177,7 +177,7 @@ export default class ListingViewer extends Component {
         )
       }
       let agent_area = (
-        <div style={ S('mt-50 color-bfc3c7 w-100p text-left bg-263445') }>
+        <div style={ S('mt-50 color-bfc3c7 p-20 w-100p text-left bg-263445') }>
           <div style={ S('font-18 mb-5 color-fff') }><span style={ S('fw-400') }>{ listing.list_agent_full_name }</span></div>
           <div style={ S('font-15 mb-5') }>{ listing.list_office_name }</div>
         </div>
