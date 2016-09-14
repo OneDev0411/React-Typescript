@@ -717,8 +717,8 @@ export default class Dashboard extends Component {
           </form>
         </Modal>
         <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_add_members_modal } onHide={ this.hideModal }>
-          <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
-           <Modal.Title>Add Members</Modal.Title>
+          <Modal.Header closeButton style={ S('h-70 bc-f3f3f3') }>
+           <Modal.Title style={ S('font-36') } className="din">Add Members</Modal.Title>
           </Modal.Header>
           <Modal.Body style={ S('h-500') }>
             <div className="create-item__user-select">

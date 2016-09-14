@@ -389,7 +389,6 @@ export default class MessagesList extends Component {
           <div style={ scroll_area }>
             {
               current_room.users.map(user => {
-                console.log(user)
                 return (
                   <div style={ S('h-50 relative br-100 p-3 pl-0 pr-10 mb-10 mr-10 w-100p') } className="pull-left" key={ 'added-contact-' + user.id }>
                     <div style={ S('l-0 t-0 absolute') }>
