@@ -104,16 +104,17 @@ export default class ListingViewer extends Component {
       next_icon = '>'
       description = property.description
       const gallery_image_urls = listing.gallery_image_urls
-      const gallery_chunks = _.chunk(gallery_image_urls, 3)
+      const gallery_chunks = _.chunk(gallery_image_urls, 4)
       listing_images = (
         <Carousel className="listing-viewer__carousel" interval={0} indicators={false} prevIcon={ prev_icon } nextIcon={ next_icon }>
           {
             gallery_chunks.map((gallery_image_url, i) => {
               return (
                 <CarouselItem className="listing-carousel__item" key={ 'gallery-images-chunked-' + gallery_image_url[0] + i }>
-                  <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[0]) } style={ S('border-right-1-solid-fff w-' + (viewer_width / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[0] + ')') }/>
-                  <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[1]) } style={ S('border-right-1-solid-fff w-' + (viewer_width / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[1] + ')') }/>
-                  <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[2]) } style={ S('w-' + (viewer_width / 3) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[2] + ')') }/>
+                  <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[0]) } style={ S('border-right-1-solid-fff w-' + (viewer_width / 4) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[0] + ')') }/>
+                  <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[1]) } style={ S('border-right-1-solid-fff w-' + (viewer_width / 4) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[1] + ')') }/>
+                  <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[2]) } style={ S('border-right-1-solid-fff w-' + (viewer_width / 4) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[2] + ')') }/>
+                  <div onClick={ this.props.showModalGallery.bind(this, gallery_image_url[3]) } style={ S('w-' + (viewer_width / 4) + ' h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(' + gallery_image_url[3] + ')') }/>
                 </CarouselItem>
               )
             })
@@ -221,38 +222,6 @@ export default class ListingViewer extends Component {
           lat: latitude,
           lng: longitude
         }
-        location_area = (
-          <div>
-            <h2>Location</h2>
-            <div style={ S('relative w-100p pull-left') }>
-              <GoogleMap
-                style={ S('w-100p h-300') }
-                key={ 'map' }
-                center={ { lat: latitude, lng: longitude } }
-                zoom={ 12 }
-                options={ { scrollwheel: false } }
-              >
-                <div
-                  onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) }
-                  onMouseOut={ controller.listing_map.hideListingPopup.bind(this) }
-                  onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }
-                  style={ S('pointer mt-10') } lat={ latitude }
-                  lng={ longitude }
-                  text={'A'}
-                >
-                  <ListingMarker
-                    key={ 'listing-marker' + listing.id }
-                    data={ data }
-                    listing={ listing }
-                    property={ listing.property }
-                    address={ listing.property.address }
-                    context={ 'single' }
-                  />
-                </div>
-              </GoogleMap>
-            </div>
-          </div>
-        )
         listing_map_small = (
           <GoogleMap
             style={ S('w-280 h-280') }
@@ -529,7 +498,6 @@ export default class ListingViewer extends Component {
               </div>
             </div>
             <div className="clearfix"></div>
-            { location_area }
             <div className="clearfix"></div>
             <div style={ S('h-100 w-100p') }></div>
             <div className="clearfix"></div>
