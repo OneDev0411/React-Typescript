@@ -375,13 +375,18 @@ export default class MessagesList extends Component {
         borderBottomRightRadius: '5px',
         borderBottomLeftRadius: '5px'
       }
+      const scroll_area = {
+        ...S('p-10 pl-20 maxh-300'),
+        overflowY: 'scroll',
+        overflowX: 'hidden'
+      }
       user_dropdown = (
         <div style={ dropdown_style }>
           <div style={ header_style } className="lato">
             Members
             <a className="close" href="#" onClick={ this.props.hideModal }>&times;</a>
           </div>
-          <div style={ S('p-10 pl-20') }>
+          <div style={ scroll_area }>
             {
               current_room.users.map(contact => {
                 return (
