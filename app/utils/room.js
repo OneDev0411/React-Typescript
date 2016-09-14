@@ -11,6 +11,8 @@ export default {
         let display_name = user.first_name
         if (!display_name)
           display_name = user.display_name
+        if (!display_name)
+          display_name = user.phone_number
         display_name_list += display_name
         if (total_other_user_indexes > 1 && i < total_other_user_indexes)
           display_name_list += ', '
