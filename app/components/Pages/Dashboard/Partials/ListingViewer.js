@@ -138,21 +138,16 @@ export default class ListingViewer extends Component {
         sold_date = `${sold_date_obj.month} ${sold_date_obj.date}, ${sold_date_obj.year}`
       }
       const listing_status_indicator = (
-        <div className="pull-left" style={ S('bg-ebeef1 relative t-7 br-100 ml-15 pt-11 h-35 pl-36 pr-15 mr-15') }>
-          <span style={ S('mr-5 font-46 l-10 t-17n absolute color-' + status_color) }>&#8226;</span>
-          <span style={ S('font-14 relative t-3n') }>
-            <b>{ listing.status } { sold_date }</b>
-          </span>
+        <div className="pull-left" style={ S('border-1-solid-' + status_color + ' font-14 color-fff relative br-3 pt-5 pb-5 pl-10 pr-10 mt-3 bg-' + status_color) }>
+          { listing.status } { sold_date }
         </div>
       )
       let number_days_indicator
       if (listing.list_date) {
         const days_on_market = listing_util.getDOM(listing.dom)
         number_days_indicator = (
-          <div className="pull-left" style={ S('bg-ebeef1 relative t-7 br-100 pt-11 h-35 pl-15 pr-15 mr-15') }>
-            <span style={ S('font-14 relative t-3n') }>
-              <b>{ days_on_market } days ago</b>
-            </span>
+          <div className="pull-left" style={ S('border-1-solid-263445 br-3 pt-5 pb-5 pl-10 pr-10 mt-3 font-14') }>
+            { days_on_market } days ago
           </div>
         )
       }
@@ -199,14 +194,23 @@ export default class ListingViewer extends Component {
             <div style={ S('font-15 mb-5') }>{ showing_instructions }</div>
           )
         }
+        let profile_image_area
+        if (listing.list_agent && listing.list_agent.profile_image_url) {
+          profile_image_area = (
+            <div style={ S('w-100p h-200 bg-cover bg-center bg-url(' + listing.list_agent.profile_image_url + ')') } />
+          )
+        }
         agent_area = (
-          <div style={ S('mt-20 color-748090 w-100p border-1-solid-ededed br-3 p-20 text-center') }>
-            <div style={ S('font-18 mb-5 color-3388ff') }><span style={ S('fw-400') }>{ listing.list_agent_full_name }, Seller Agent</span></div>
-            <div style={ S('font-15 mb-5') }>{ listing.list_agent_direct_work_phone }</div>
-            <div style={ S('font-15 mb-5') }>{ listing.list_office_name }</div>
-            { showing_instructions }
-            <div style={ email_style }><a href={ `mailto:${ listing.list_agent_email }?subject=Your listing on Rechat.com&body=I saw your listing (${ listing_title }) on Rechat.com and I'm interested in getting more information.` } style={ S('color-748090') }>{ listing.list_agent_email }</a></div>
-            <div style={ S('border-bottom-2-solid-e4e4e4 w-40 center-block mb-5') }></div>
+          <div style={ S('mt-50 color-bfc3c7 w-100p text-left') }>
+            { profile_image_area }
+            <div style={ S('bg-263445 p-20 w-100p') }>
+              <div style={ S('font-18 mb-5 color-fff') }><span style={ S('fw-400') }>{ listing.list_agent_full_name }</span></div>
+              <div style={ S('font-15 mb-5') }>{ listing.list_office_name }</div>
+              <div style={ S('font-15 mb-5') }>{ listing.list_agent_direct_work_phone }</div>
+              { showing_instructions }
+              <div style={ email_style }><a href={ `mailto:${ listing.list_agent_email }?subject=Your listing on Rechat.com&body=I saw your listing (${ listing_title }) on Rechat.com and I'm interested in getting more information.` } style={ S('color-bfc3c7') }>{ listing.list_agent_email }</a></div>
+              <div style={ S('border-bottom-2-solid-e4e4e4 w-40 center-block mb-5') }></div>
+            </div>
           </div>
         )
       }
@@ -214,7 +218,6 @@ export default class ListingViewer extends Component {
       let longitude
       let center
       let listing_map_small
-      let location_area
       if (listing.property.address.location) {
         latitude = listing.property.address.location.latitude
         longitude = listing.property.address.location.longitude
@@ -224,7 +227,6 @@ export default class ListingViewer extends Component {
         }
         listing_map_small = (
           <GoogleMap
-            style={ S('w-280 h-280') }
             key={ 'map' }
             center={ center }
             zoom={ 12 }
@@ -262,50 +264,58 @@ export default class ListingViewer extends Component {
             { listing.gallery_image_urls && listing.gallery_image_urls.length ? listing_images_cached : '' }
             <div className="clearfix"></div>
           </div>
-          <div style={ S('pl-40 pr-40 relative') }>
-            <Col xs={9}>
-              <div style={ S('fw-700 font-70 mb-10n') }>${ price } { asking_price_area }</div>
-              <div>
-                <div className="tempo pull-left" style={ S('font-32 fw-100 color-7d8288 mb-10 mr-20') }>
-                  { listing_title }
+          <div>
+            <div style={ S('pl-40 pr-40 relative') }>
+              <Col xs={9} style={ S('pl-0') }>
+                <div style={ S('pt-50 mb-20') }>
+                  <Col style={ S('w-200 h-200 mr-20 p-0') } xs={3}>
+                    { listing_map_small }
+                  </Col>
+                  <Col xs={9} style={ S('p-0') }>
+                    <div style={ S('fw-700 font-60') }>
+                      ${ price } { asking_price_area }
+                    </div>
+                    <div style={ S('mb-20') }>
+                      <div className="lato" style={ S('pull-left font-24 color-8696a4 mr-20') }>
+                        { listing_title }
+                      </div>
+                      <div style={ S('pull-left font-15 mb-10 mr-10') }>
+                        { listing_status_indicator }
+                      </div>
+                      <div className="pull-left">
+                        { number_days_indicator }
+                      </div>
+                    </div>
+                    <div className="clearfix"></div>
+                    <div style={ S('font-18 color-b7bfc7 mb-10') }>{ listing_subtitle } { mls_link }</div>
+                    <div style={ S('font-15 color-4a4a4a mb-10') }>
+                      <span>{ bedroom_count } Beds</span>
+                      &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+                      <span>{ bathroom_count } Baths</span>
+                      &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+                      <span>{ square_feet } Sqft</span>
+                      &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+                      <span>{ year_built ? 'Built in ' + year_built : '' }</span>
+                      { lot_size_area }
+                    </div>
+                  </Col>
+                  <div className="clearfix"></div>
                 </div>
-                <div className="pull-left">
-                  { listing_status_indicator }
+                <div style={ S('mb-20 font-15') }>
+                  { description }
                 </div>
-                <div className="pull-left">
-                  { number_days_indicator }
-                </div>
-              </div>
-              <div className="clearfix"></div>
-              <div style={ S('font-18 color-b7bfc7 mb-30') }>{ listing_subtitle } { mls_link }</div>
-              <div style={ S('font-30 color-4a4a4a mb-30') }>
-                <span>{ bedroom_count } Beds</span>
-                &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-                <span>{ bathroom_count } Baths</span>
-                &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-                <span>{ square_feet } Sqft</span>
-                &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-                <span>{ year_built ? 'Built in ' + year_built : '' }</span>
-                { lot_size_area }
-              </div>
-            </Col>
-            <Col xs={3}>
-              { agent_area }
-            </Col>
-            <div className="clearfix"></div>
-            <div>
-              <Col xs={9}>
-                <div style={ S('color-4a4a4a font-24 mb-20 pr-30') }>{ description }</div>
               </Col>
-              <Col xs={3}>
-                { listing_map_small }
+              <Col xs={3} style={ S('pl-0') }>
+                { agent_area }
               </Col>
-              <div className="clearfix"></div>
             </div>
-            <hr style={ S('mt-40 mb-30') }/>
-            <div>
+            <div className="clearfix"></div>
+            <div style={ S('w-100p h-120 p-40 pt-45 bg-f8f8f8 font-21 mb-20') }>
+              Ready to see this home? I can show it to you.
+            </div>
+            <div style={ S('pl-40 pr-40 relative') }>
               <div style={ S('mb-30 font-15') }>
-                <div style={ S('w-30p pull-left pr-20') }>
+                <div style={ S('w-300 pull-left pr-20') }>
                   <div style={ S('mb-30') }>
                     <div style={ S('fw-600 mb-10 font-18') }>Cost Breakdown</div>
                     <div style={ S('color-aaaaaa mb-10') }>
@@ -325,7 +335,7 @@ export default class ListingViewer extends Component {
                     </div>
                   </div>
                 </div>
-                <div style={ S('w-30p pull-left pr-20') }>
+                <div style={ S('w-300 pull-left pr-20') }>
                   <div style={ S('fw-600 mb-10 font-18') }>Key Facts</div>
                   <div style={ S('color-aaaaaa mb-10') }>
                     Year Built: <span style={ S('color-777') }>{ property.year_built }</span>
@@ -355,7 +365,7 @@ export default class ListingViewer extends Component {
                     Current Days On Market: <span style={ S('color-777') }>{ listing_util.getDOM(listing.cdom) }</span>
                   </div>
                 </div>
-                <div style={ S('w-30p pull-left pr-20') }>
+                <div style={ S('w-300 pull-left pr-20') }>
                   <div style={ S('fw-600 font-18 mb-10') }>Amenities & Utilities</div>
                   <div style={ S('color-aaaaaa mb-10') }>
                     Pool: <span style={ S('color-777') }>{ property.pool_yn ? 'Yes' : 'No' }</span>
@@ -398,7 +408,7 @@ export default class ListingViewer extends Component {
               </div>
               <div className="clearfix"></div>
               <div style={ S('mb-30 font-15') }>
-                <div style={ S('w-30p pull-left pr-20') }>
+                <div style={ S('w-300 pull-left pr-20') }>
                   <div style={ S('mb-30') }>
                     <div style={ S('fw-600 font-18 mb-10') }>All Features</div>
                     <div style={ S('color-aaaaaa mb-10') }>
@@ -445,7 +455,7 @@ export default class ListingViewer extends Component {
                     </div>
                   </div>
                 </div>
-                <div style={ S('w-30p pull-left pr-20') }>
+                <div style={ S('w-300 pull-left pr-20') }>
                   <div style={ S('h-35') }></div>
                   <div style={ S('color-aaaaaa mb-10') }>
                     Exterior Features:&nbsp;
@@ -476,7 +486,7 @@ export default class ListingViewer extends Component {
                     </span>
                   </div>
                 </div>
-                <div style={ S('w-30p pull-left pr-20') }>
+                <div style={ S('w-300 pull-left pr-20') }>
                   <div style={ S('fw-600 font-18 mb-10') }>Schools</div>
                   <div style={ S('color-aaaaaa mb-10') }>
                     School District: <span style={ S('color-777') }>{ property.school_district }</span>
