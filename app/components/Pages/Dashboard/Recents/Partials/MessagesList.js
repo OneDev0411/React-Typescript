@@ -388,15 +388,15 @@ export default class MessagesList extends Component {
           </div>
           <div style={ scroll_area }>
             {
-              current_room.users.map(contact => {
+              current_room.users.map(user => {
+                console.log(user)
                 return (
-                  <div style={ S('h-50 relative br-100 p-3 pl-0 pr-10 mb-10 mr-10 w-100p') } className="pull-left" key={ 'added-contact-' + contact.id }>
+                  <div style={ S('h-50 relative br-100 p-3 pl-0 pr-10 mb-10 mr-10 w-100p') } className="pull-left" key={ 'added-contact-' + user.id }>
                     <div style={ S('l-0 t-0 absolute') }>
-                      <ProfileImage data={ data } top={11} size={40} user={ contact }/>
+                      <ProfileImage data={ data } top={11} size={40} user={ user }/>
                     </div>
                     <div style={ S('ml-50') }>
-                      <div>{ contact.first_name } { contact.last_name }</div>
-                      <div>{ contact.email }</div>
+                      <div>{ !user.fake_email ? user.first_name : user.phone_number }</div>
                     </div>
                   </div>
                 )
