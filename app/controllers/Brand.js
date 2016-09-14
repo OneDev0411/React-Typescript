@@ -50,13 +50,13 @@ class Brand {
     const is_list_agent = agent_ids.indexOf(listing.list_agent.id) > -1
     const is_selling_agent = agent_ids.indexOf(listing.selling_agent) > -1
 
-    if (is_list_agentis_selling_agent)
+    if (is_list_agent && is_selling_agent)
       return 'Listing & Buyer Agent'
 
-    if ((is_list_office || is_list_agent) && !(is_selling_office || is_selling_agent))
+    if (is_list_agent && !is_selling_agent)
       return 'Listing Agent'
 
-    if (!(is_list_office || is_list_agent) && (is_selling_office || is_selling_agent))
+    if (!is_list_agent && is_selling_agent)
       return 'Buyer Agent'
 
     return ''
