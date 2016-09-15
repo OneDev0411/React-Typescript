@@ -176,9 +176,39 @@ export default class ListingViewer extends Component {
           </span>
         )
       }
-      let agent_area = (
-        <div style={ S('mt-50 color-bfc3c7 p-20 w-100p text-left bg-263445') }>
-          <div style={ S('font-18 mb-5 color-fff') }><span style={ S('fw-400') }>{ listing.list_agent_full_name }</span></div>
+      // Agent info
+      let brand_agent_area
+      if (data.brand) {
+        const brand_agent = data.brand.users[0]
+        console.log(brand_agent)
+        let profile_image_area
+        if (brand_agent.profile_image_url) {
+          profile_image_area = (
+            <div style={ S('w-100p h-200 bg-cover bg-center bg-url(' + brand_agent.profile_image_url + ')') } />
+          )
+        }
+        let phone_area
+        if (brand_agent.phone_number)
+          phone_area = <div style={ S('font-15 mb-5') }>M: { brand_agent.phone_number }</div>
+        brand_agent_area = (
+          <div style={ S('mt-50 color-bfc3c7 w-100p text-left') }>
+            { profile_image_area }
+            <div style={ S('bg-263445 p-20 w-100p') }>
+              <div style={ S('font-18 mb-5 color-fff') }><span style={ S('fw-400') }>{ brand_agent.first_name } { brand_agent.last_name }</span></div>
+              <div style={ S('font-14 mb-5 color-bfc3c7') }>
+                <div style={ S('bg-cover bg-url(' + data.brand.assets.default_avatar + ') bg-center w-20 h-20 pull-left mr-10') }></div>
+                <div style={ S('pull-left') }>{ data.brand.offices[0].name }</div>
+                <div className="clearfix"></div>
+              </div>
+              { phone_area }
+              <div style={ S('font-15 mb-5') }>E: { brand_agent.email }</div>
+            </div>
+          </div>
+        )
+      }
+      let list_agent_area = (
+        <div style={ S('mt-20 color-748090 w-100p border-1-solid-ededed br-3 p-20 text-center') }>
+          <div style={ S('font-18 mb-5 color-3388ff') }><span style={ S('fw-400') }>{ listing.list_agent_full_name }, Seller Agent</span></div>
           <div style={ S('font-15 mb-5') }>{ listing.list_office_name }</div>
         </div>
       )
@@ -194,23 +224,14 @@ export default class ListingViewer extends Component {
             <div style={ S('font-15 mb-5') }>{ showing_instructions }</div>
           )
         }
-        let profile_image_area
-        if (listing.list_agent && listing.list_agent.profile_image_url) {
-          profile_image_area = (
-            <div style={ S('w-100p h-200 bg-cover bg-center bg-url(' + listing.list_agent.profile_image_url + ')') } />
-          )
-        }
-        agent_area = (
-          <div style={ S('mt-50 color-bfc3c7 w-100p text-left') }>
-            { profile_image_area }
-            <div style={ S('bg-263445 p-20 w-100p') }>
-              <div style={ S('font-18 mb-5 color-fff') }><span style={ S('fw-400') }>{ listing.list_agent_full_name }</span></div>
-              <div style={ S('font-15 mb-5') }>{ listing.list_office_name }</div>
-              <div style={ S('font-15 mb-5') }>{ listing.list_agent_direct_work_phone }</div>
-              { showing_instructions }
-              <div style={ email_style }><a href={ `mailto:${ listing.list_agent_email }?subject=Your listing on Rechat.com&body=I saw your listing (${ listing_title }) on Rechat.com and I'm interested in getting more information.` } style={ S('color-bfc3c7') }>{ listing.list_agent_email }</a></div>
-              <div style={ S('border-bottom-2-solid-e4e4e4 w-40 center-block mb-5') }></div>
-            </div>
+        list_agent_area = (
+          <div style={ S('mt-20 color-748090 w-100p border-1-solid-ededed br-3 p-20 text-center') }>
+            <div style={ S('font-18 mb-5 color-3388ff') }><span style={ S('fw-400') }>{ listing.list_agent_full_name }, Seller Agent</span></div>
+            <div style={ S('font-15 mb-5') }>{ listing.list_agent_direct_work_phone }</div>
+            <div style={ S('font-15 mb-5') }>{ listing.list_office_name }</div>
+            { showing_instructions }
+            <div style={ email_style }><a href={ `mailto:${ listing.list_agent_email }?subject=Your listing on Rechat.com&body=I saw your listing (${ listing_title }) on Rechat.com and I'm interested in getting more information.` } style={ S('color-748090') }>{ listing.list_agent_email }</a></div>
+            <div style={ S('border-bottom-2-solid-e4e4e4 w-40 center-block mb-5') }></div>
           </div>
         )
       }
@@ -306,11 +327,12 @@ export default class ListingViewer extends Component {
                 </div>
               </Col>
               <Col xs={3} style={ S('pl-0') }>
-                { agent_area }
+                { brand_agent_area }
+                { list_agent_area }
               </Col>
             </div>
             <div className="clearfix"></div>
-            <div style={ S('w-100p h-120 p-40 pt-45 bg-f8f8f8 font-21 mb-20') }>
+            <div style={ S('w-100p h-120 p-40 pt-45 bg-f8f8f8 font-21 mb-20 mt-20') }>
               Ready to see this home? I can show it to you.
             </div>
             <div style={ S('pl-40 pr-40 relative') }>
