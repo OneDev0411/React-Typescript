@@ -180,7 +180,6 @@ export default class ListingViewer extends Component {
       let brand_agent_area
       if (data.brand) {
         const brand_agent = data.brand.users[0]
-        console.log(brand_agent)
         let profile_image_area
         if (brand_agent.profile_image_url) {
           profile_image_area = (
