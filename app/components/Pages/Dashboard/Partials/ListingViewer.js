@@ -288,10 +288,10 @@ export default class ListingViewer extends Component {
             <div style={ S('pl-40 pr-40 relative') }>
               <Col xs={9} style={ S('pl-0') }>
                 <div style={ S('pt-50 mb-20') }>
-                  <Col style={ S('w-200 h-200 mr-20 p-0') } xs={3}>
+                  <Col style={ S('w-200 h-200 p-0') } xs={3}>
                     { listing_map_small }
                   </Col>
-                  <Col xs={9} style={ S('p-0') }>
+                  <Col xs={9} style={ S('p-0 pl-20') }>
                     <div style={ S('fw-700 font-60') }>
                       ${ price } { asking_price_area }
                     </div>
