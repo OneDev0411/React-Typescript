@@ -430,6 +430,8 @@ export default class ListingViewer extends Component {
                 <div className="clearfix"></div>
               </div>
               <div className="clearfix"></div>
+            </div>
+            <div style={ S('p-40 bg-f8f8f8') }>
               <div style={ S('mb-30 font-15') }>
                 <div style={ S('w-300 pull-left pr-20') }>
                   <div style={ S('mb-30') }>
@@ -532,7 +534,6 @@ export default class ListingViewer extends Component {
             </div>
             <div className="clearfix"></div>
             <div className="clearfix"></div>
-            <div style={ S('h-100 w-100p') }></div>
             <div className="clearfix"></div>
           </div>
         </div>
@@ -635,25 +636,26 @@ export default class ListingViewer extends Component {
       let profile_image_area
       if (brand_agent.profile_image_url) {
         profile_image_area = (
-          <div style={ S('w-300 h-300 br-300 bg-cover bg-center bg-url(' + brand_agent.profile_image_url + ')') } />
+          <div style={ S('w-300 h-300 center-block br-300 bg-cover bg-center bg-url(' + brand_agent.profile_image_url + ')') } />
         )
       }
       let phone_area
       if (brand_agent.phone_number)
         phone_area = <div style={ S('font-15 mb-5') }>M: { brand_agent.phone_number }</div>
       const brand_agent_area = (
-        <div style={ S('mt-50 color-bfc3c7 w-100p text-left center-block text-center w-300') }>
+        <div style={ S('mt-50 color-bfc3c7 w-100p text-left center-block text-center') }>
           { profile_image_area }
           <div style={ S('bg-263445 p-20 w-100p') }>
             <div style={ S('font-18 mb-5 color-fff') }><span style={ S('fw-400') }>{ brand_agent.first_name } { brand_agent.last_name }</span></div>
-            <div style={ S('font-14 mb-5 color-bfc3c7') }>
-              <div style={ S('bg-cover bg-url(' + data.brand.assets.default_avatar + ') bg-center w-20 h-20 pull-left mr-10') }></div>
-              <div style={ S('pull-left') }>{ data.brand.offices[0].name }</div>
+            <div style={ S('font-14 mb-15 color-bfc3c7 relative') }>
+              <div style={ S('bg-cover bg-url(' + data.brand.assets.default_avatar + ') bg-center w-20 h-20 inline-block mr-10 mt-10') }></div>
+              <div style={ S('inline-block relative t-5n') }>{ data.brand.offices[0].name }</div>
               <div className="clearfix"></div>
             </div>
             { phone_area }
             <div style={ S('font-15 mb-5') }>E: { brand_agent.email }</div>
           </div>
+          <div style={ S('font-32 color-fff') } className="lato">Love this home?  I can help you.</div>
         </div>
       )
       brand_agent_footer = (
