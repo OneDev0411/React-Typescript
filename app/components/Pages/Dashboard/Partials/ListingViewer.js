@@ -56,6 +56,9 @@ export default class ListingViewer extends Component {
     // Listing modal
     const data = this.props.data
     const user = data.user
+    let brand_agent
+    if (data.brand)
+      brand_agent = data.brand.users[0]
     let viewer_width = window.innerWidth - 70
     if (!user)
       viewer_width = window.innerWidth
@@ -178,8 +181,7 @@ export default class ListingViewer extends Component {
       }
       // Agent info
       let brand_agent_area
-      if (data.brand) {
-        const brand_agent = data.brand.users[0]
+      if (brand_agent) {
         let profile_image_area
         if (brand_agent.profile_image_url) {
           profile_image_area = (
@@ -628,12 +630,45 @@ export default class ListingViewer extends Component {
         </div>
       )
     }
+    let brand_agent_footer
+    if (brand_agent) {
+      let profile_image_area
+      if (brand_agent.profile_image_url) {
+        profile_image_area = (
+          <div style={ S('w-300 h-300 br-300 bg-cover bg-center bg-url(' + brand_agent.profile_image_url + ')') } />
+        )
+      }
+      let phone_area
+      if (brand_agent.phone_number)
+        phone_area = <div style={ S('font-15 mb-5') }>M: { brand_agent.phone_number }</div>
+      const brand_agent_area = (
+        <div style={ S('mt-50 color-bfc3c7 w-100p text-left center-block text-center w-300') }>
+          { profile_image_area }
+          <div style={ S('bg-263445 p-20 w-100p') }>
+            <div style={ S('font-18 mb-5 color-fff') }><span style={ S('fw-400') }>{ brand_agent.first_name } { brand_agent.last_name }</span></div>
+            <div style={ S('font-14 mb-5 color-bfc3c7') }>
+              <div style={ S('bg-cover bg-url(' + data.brand.assets.default_avatar + ') bg-center w-20 h-20 pull-left mr-10') }></div>
+              <div style={ S('pull-left') }>{ data.brand.offices[0].name }</div>
+              <div className="clearfix"></div>
+            </div>
+            { phone_area }
+            <div style={ S('font-15 mb-5') }>E: { brand_agent.email }</div>
+          </div>
+        </div>
+      )
+      brand_agent_footer = (
+        <div style={ S('w-100p pt-100 pb-100 bg-263445 text-center') }>
+          { brand_agent_area }
+        </div>
+      )
+    }
     return (
       <div style={ viewer_wrap_style }>
         { join_area }
         { left_area }
         { right_area }
         { main_content }
+        { brand_agent_footer }
         <Modal bsSize="large" show={ data.show_modal_gallery } onHide={ this.props.hideModal }>
           <div style={ S('relative') }>
             <div style={ S('absolute r-0 t-60n font-60 z-1000 fw-100') } className="close" onClick={ this.props.hideModal }>&times;</div>
