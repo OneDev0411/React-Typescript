@@ -56,6 +56,9 @@ export default class ListingViewer extends Component {
     // Listing modal
     const data = this.props.data
     const user = data.user
+    let brand_agent
+    if (data.brand)
+      brand_agent = data.brand.users[0]
     let viewer_width = window.innerWidth - 70
     if (!user)
       viewer_width = window.innerWidth
@@ -176,7 +179,35 @@ export default class ListingViewer extends Component {
           </span>
         )
       }
-      let agent_area = (
+      // Agent info
+      let brand_agent_area
+      if (brand_agent) {
+        let profile_image_area
+        if (brand_agent.profile_image_url) {
+          profile_image_area = (
+            <div style={ S('w-100p h-200 bg-cover bg-center bg-url(' + brand_agent.profile_image_url + ')') } />
+          )
+        }
+        let phone_area
+        if (brand_agent.phone_number)
+          phone_area = <div style={ S('font-15 mb-5') }>M: { brand_agent.phone_number }</div>
+        brand_agent_area = (
+          <div style={ S('mt-50 color-bfc3c7 w-100p text-left') }>
+            { profile_image_area }
+            <div style={ S('bg-263445 p-20 w-100p') }>
+              <div style={ S('font-18 mb-5 color-fff') }><span style={ S('fw-400') }>{ brand_agent.first_name } { brand_agent.last_name }</span></div>
+              <div style={ S('font-14 mb-5 color-bfc3c7') }>
+                <div style={ S('bg-cover bg-url(' + data.brand.assets.default_avatar + ') bg-center w-20 h-20 pull-left mr-10') }></div>
+                <div style={ S('pull-left') }>{ data.brand.offices[0].name }</div>
+                <div className="clearfix"></div>
+              </div>
+              { phone_area }
+              <div style={ S('font-15 mb-5') }>E: { brand_agent.email }</div>
+            </div>
+          </div>
+        )
+      }
+      let list_agent_area = (
         <div style={ S('mt-20 color-748090 w-100p border-1-solid-ededed br-3 p-20 text-center') }>
           <div style={ S('font-18 mb-5 color-3388ff') }><span style={ S('fw-400') }>{ listing.list_agent_full_name }, Seller Agent</span></div>
           <div style={ S('font-15 mb-5') }>{ listing.list_office_name }</div>
@@ -194,23 +225,14 @@ export default class ListingViewer extends Component {
             <div style={ S('font-15 mb-5') }>{ showing_instructions }</div>
           )
         }
-        let profile_image_area
-        if (listing.list_agent && listing.list_agent.profile_image_url) {
-          profile_image_area = (
-            <div style={ S('w-100p h-200 bg-cover bg-center bg-url(' + listing.list_agent.profile_image_url + ')') } />
-          )
-        }
-        agent_area = (
-          <div style={ S('mt-50 color-bfc3c7 w-100p text-left') }>
-            { profile_image_area }
-            <div style={ S('bg-263445 p-20 w-100p') }>
-              <div style={ S('font-18 mb-5 color-fff') }><span style={ S('fw-400') }>{ listing.list_agent_full_name }</span></div>
-              <div style={ S('font-15 mb-5') }>{ listing.list_office_name }</div>
-              <div style={ S('font-15 mb-5') }>{ listing.list_agent_direct_work_phone }</div>
-              { showing_instructions }
-              <div style={ email_style }><a href={ `mailto:${ listing.list_agent_email }?subject=Your listing on Rechat.com&body=I saw your listing (${ listing_title }) on Rechat.com and I'm interested in getting more information.` } style={ S('color-bfc3c7') }>{ listing.list_agent_email }</a></div>
-              <div style={ S('border-bottom-2-solid-e4e4e4 w-40 center-block mb-5') }></div>
-            </div>
+        list_agent_area = (
+          <div style={ S('mt-20 color-748090 w-100p border-1-solid-ededed br-3 p-20 text-center') }>
+            <div style={ S('font-18 mb-5 color-3388ff') }><span style={ S('fw-400') }>{ listing.list_agent_full_name }, Seller Agent</span></div>
+            <div style={ S('font-15 mb-5') }>{ listing.list_agent_direct_work_phone }</div>
+            <div style={ S('font-15 mb-5') }>{ listing.list_office_name }</div>
+            { showing_instructions }
+            <div style={ email_style }><a href={ `mailto:${ listing.list_agent_email }?subject=Your listing on Rechat.com&body=I saw your listing (${ listing_title }) on Rechat.com and I'm interested in getting more information.` } style={ S('color-748090') }>{ listing.list_agent_email }</a></div>
+            <div style={ S('border-bottom-2-solid-e4e4e4 w-40 center-block mb-5') }></div>
           </div>
         )
       }
@@ -268,12 +290,23 @@ export default class ListingViewer extends Component {
             <div style={ S('pl-40 pr-40 relative') }>
               <Col xs={9} style={ S('pl-0') }>
                 <div style={ S('pt-50 mb-20') }>
-                  <Col style={ S('w-200 h-200 mr-20 p-0') } xs={3}>
-                    { listing_map_small }
+                  <Col style={ S('p-0') } xs={3}>
+                    <div style={ S('w-200 h-200') }>
+                      { listing_map_small }
+                    </div>
+                    <div style={ S('w-200 bg-fff') }>
+                      <div style={ S('text-center w-50p pull-left') }>
+                        Google Maps
+                        <div style={ S('bg-ebebeb w-1 h-16') }></div>
+                      </div>
+                      <div style={ S('text-center w-50p pull-left') }>
+                        Street View
+                      </div>
+                    </div>
                   </Col>
-                  <Col xs={9} style={ S('p-0') }>
+                  <Col xs={9} style={ S('p-0 pl-20') }>
                     <div style={ S('fw-700 font-60') }>
-                      ${ price } { asking_price_area }
+                      ${ price }{ listing.transaction_type === 'For Lease' ? '/mo' : '' } { asking_price_area }
                     </div>
                     <div style={ S('mb-20') }>
                       <div className="lato" style={ S('pull-left font-24 color-8696a4 mr-20') }>
@@ -306,11 +339,12 @@ export default class ListingViewer extends Component {
                 </div>
               </Col>
               <Col xs={3} style={ S('pl-0') }>
-                { agent_area }
+                { brand_agent_area }
+                { list_agent_area }
               </Col>
             </div>
             <div className="clearfix"></div>
-            <div style={ S('w-100p h-120 p-40 pt-45 bg-f8f8f8 font-21 mb-20') }>
+            <div style={ S('w-100p h-120 p-40 pt-45 bg-f8f8f8 font-21 mb-20 mt-20') }>
               Ready to see this home? I can show it to you.
             </div>
             <div style={ S('pl-40 pr-40 relative') }>
@@ -407,6 +441,8 @@ export default class ListingViewer extends Component {
                 <div className="clearfix"></div>
               </div>
               <div className="clearfix"></div>
+            </div>
+            <div style={ S('p-40 bg-f8f8f8') }>
               <div style={ S('mb-30 font-15') }>
                 <div style={ S('w-300 pull-left pr-20') }>
                   <div style={ S('mb-30') }>
@@ -509,7 +545,6 @@ export default class ListingViewer extends Component {
             </div>
             <div className="clearfix"></div>
             <div className="clearfix"></div>
-            <div style={ S('h-100 w-100p') }></div>
             <div className="clearfix"></div>
           </div>
         </div>
@@ -607,12 +642,46 @@ export default class ListingViewer extends Component {
         </div>
       )
     }
+    let brand_agent_footer
+    if (brand_agent) {
+      let profile_image_area
+      if (brand_agent.profile_image_url) {
+        profile_image_area = (
+          <div style={ S('w-300 h-300 center-block br-300 bg-cover bg-center bg-url(' + brand_agent.profile_image_url + ')') } />
+        )
+      }
+      let phone_area
+      if (brand_agent.phone_number)
+        phone_area = <div style={ S('font-15 mb-5') }>M: { brand_agent.phone_number }</div>
+      const brand_agent_area = (
+        <div style={ S('mt-50 color-bfc3c7 w-100p text-left center-block text-center') }>
+          { profile_image_area }
+          <div style={ S('bg-263445 p-20 w-100p') }>
+            <div style={ S('font-18 mb-5 color-fff') }><span style={ S('fw-400') }>{ brand_agent.first_name } { brand_agent.last_name }</span></div>
+            <div style={ S('font-14 mb-15 color-bfc3c7 relative') }>
+              <div style={ S('bg-cover bg-url(' + data.brand.assets.default_avatar + ') bg-center w-20 h-20 inline-block mr-10 mt-10') }></div>
+              <div style={ S('inline-block relative t-5n') }>{ data.brand.offices[0].name }</div>
+              <div className="clearfix"></div>
+            </div>
+            { phone_area }
+            <div style={ S('font-15 mb-5') }>E: { brand_agent.email }</div>
+          </div>
+          <div style={ S('font-32 color-fff') } className="lato">Love this home?  I can help you.</div>
+        </div>
+      )
+      brand_agent_footer = (
+        <div style={ S('w-100p pt-100 pb-100 bg-263445 text-center') }>
+          { brand_agent_area }
+        </div>
+      )
+    }
     return (
       <div style={ viewer_wrap_style }>
         { join_area }
         { left_area }
         { right_area }
         { main_content }
+        { brand_agent_footer }
         <Modal bsSize="large" show={ data.show_modal_gallery } onHide={ this.props.hideModal }>
           <div style={ S('relative') }>
             <div style={ S('absolute r-0 t-60n font-60 z-1000 fw-100') } className="close" onClick={ this.props.hideModal }>&times;</div>

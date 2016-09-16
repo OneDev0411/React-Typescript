@@ -31,7 +31,6 @@ import Brand from '../../../../controllers/Brand'
 
 export default class Mls extends Component {
   componentWillMount() {
-    Brand.checkBranding()
     const data = this.props.data
     const user = data.user
     if (this.props.params && this.props.params.id) {

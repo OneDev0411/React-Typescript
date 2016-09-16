@@ -70,10 +70,12 @@ export default {
     if (!alert.property_subtypes)
       return
     const property_types = alert.property_subtypes.toString().replace(new RegExp('RES-', 'g'), ' ').trim()
-    const min_price = helpers.numberWithCommas(alert.minimum_price)
-    const max_price = alert.maximum_price < 900000001 ? '$' + helpers.numberWithCommas(alert.maximum_price) : 'any'
+    const min_price = alert.minimum_price ? helpers.numberWithCommas(alert.minimum_price) : '0'
+    const max_price = (alert.maximum_price && alert.maximum_price < 900000001) ? '$' + helpers.numberWithCommas(alert.maximum_price) : 'any'
     let price_area = `$${min_price}-${max_price}`
     if (alert.minimum_price === 0 && alert.maximum_price === 900000001)
+      price_area = 'Any price'
+    if (!alert.minimum_price && !alert.maximum_price)
       price_area = 'Any price'
     let bedrooms_area = `${alert.minimum_bedrooms}+ Beds`
     if (alert.minimum_bedrooms === 0)
