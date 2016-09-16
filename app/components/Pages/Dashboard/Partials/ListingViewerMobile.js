@@ -214,7 +214,7 @@ export default class ListingViewerMobile extends Component {
           </div>
           <div>
             <Col xs={12}>
-              <div style={ S('fw-700 font-30') }>${ price } { asking_price_area }</div>
+              <div style={ S('fw-700 font-30') }>${ price }{ listing.property && listing.property.property_type === 'Residential Lease' ? '/mo' : '' } { asking_price_area }</div>
               <div>
                 <div className="tempo" style={ S('font-20 fw-100 color-7d8288 mb-10 mr-20') }>
                   { listing_title }

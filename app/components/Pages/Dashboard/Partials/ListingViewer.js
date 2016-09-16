@@ -309,7 +309,7 @@ export default class ListingViewer extends Component {
                   </Col>
                   <Col xs={9} style={ S('p-0 pl-20') }>
                     <div style={ S('fw-700 font-60') }>
-                      ${ price }{ listing.transaction_type === 'For Lease' ? '/mo' : '' } { asking_price_area }
+                      ${ price }{ listing.property && listing.property.property_type === 'Residential Lease' ? '/mo' : '' } { asking_price_area }
                     </div>
                     <div style={ S('mb-20') }>
                       <div className="lato" style={ S('pull-left font-24 color-8696a4 mr-20') }>
