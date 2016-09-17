@@ -4,6 +4,7 @@ import { Link } from 'react-router'
 import { Input, Button, Alert, Col } from 'react-bootstrap'
 import S from 'shorti'
 import helpers from '../../../../utils/helpers'
+import Brand from '../../../../controllers/Brand'
 
 // AppStore
 import AppStore from '../../../../stores/AppStore'
@@ -305,7 +306,7 @@ export default class Create extends Component {
               ref="submit"
               className={ disabled_class + submitting_class + 'btn' }
               disabled={ is_disabled ? 'true' : '' }
-              style={ S(`border-none color-fff w-100p bg-${data.brand && data.brand.palette.primary.replace('#', '') ? data.brand.palette.primary : '3388ff'}`) }
+              style={ S(`border-none color-fff w-100p bg-${Brand.Color('primary', '3388ff')}`) }
             >
               { submitting ? 'Submitting...' : 'Continue' }
             </Button>
