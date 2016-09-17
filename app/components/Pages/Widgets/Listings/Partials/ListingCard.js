@@ -227,7 +227,7 @@ export default class ListingCard extends Component {
         </div>
         )
     }
-    if (data.show_signup_confirm_modal && data.signup_tooltip && data.signup_tooltip.listing === listing.id && data.new_user.email_confirmed) {
+    if (data.show_signup_confirm_modal && data.signup_tooltip && data.signup_tooltip.listing === listing.id && (data.new_user.email_confirmed || (data.errors && data.errors.type === 'email-in-use'))) {
       signup_confirm_message = (
         <div style={ S('absolute z-100 w-100p h-100p t-0 bg-fff') }>
           <div onClick={ this.props.hideModal } className="close" style={ S('font-30 t-10 r-20 absolute') }>&times;</div>
