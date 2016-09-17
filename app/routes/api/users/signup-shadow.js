@@ -8,7 +8,7 @@ module.exports = (app, config) => {
     const room_connect = req.body.room_connect
     const phone_number = req.body.phone_number
     const actions = req.body.actions
-    const brand = req.body.brand
+
     const request_object = {
       client_id: config.api.client_id,
       client_secret: config.api.client_secret,
@@ -28,15 +28,15 @@ module.exports = (app, config) => {
       request_object.phone_number = phone_number
     if (actions)
       request_object.actions = actions
-    if (brand)
-      request_object.brand = brand
+
     const endpoint = api_url + '/users'
     fetch(endpoint,{
       method: 'post',
-      headers: {  
+      headers: {
         'Content-Type': 'application/json',
         'x-real-agent': req.headers['user-agent'],
-        'user-agent': config.app_name
+        'user-agent': config.app_name,
+        'x-rechat-brand': req.body.brand
       },
       body: JSON.stringify(request_object)
     })

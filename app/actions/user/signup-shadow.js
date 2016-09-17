@@ -40,10 +40,12 @@ export default (user, redirect_to) => {
         source_type: 'BrokerageWidget'
       })
     }
-    // Add brand
-    if (AppStore.data.brand)
-      user.brand = AppStore.data.brand.id
   }
+
+  // Add brand
+  if (AppStore.data.brand)
+    user.brand = AppStore.data.brand.id
+
   // console.log(user)
   const params = {
     user

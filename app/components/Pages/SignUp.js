@@ -7,6 +7,8 @@ import { randomString } from '../../utils/helpers'
 import AppDispatcher from '../../dispatcher/AppDispatcher'
 import AppStore from '../../stores/AppStore'
 import CheckEmailModal from '../Partials/CheckEmailModal'
+import Brand from '../../controllers/Brand'
+
 export default class SignUp extends Component {
   componentWillMount() {
     // Reset data store before mounting
@@ -117,7 +119,7 @@ export default class SignUp extends Component {
     // Data
     const data = this.props.data
     let signup_input_style = {
-      ...S('h-52 w-260 font-16 bg-fafbfc border-1-solid-dfe6ee'),
+      ...S(`h-52 w-260 font-16 bg-fafbfc border-1-solid-${Brand.color('primary', 'dfe6ee')}`),
       borderTopRightRadius: 0,
       borderBottomRightRadius: 0
     }
@@ -126,6 +128,12 @@ export default class SignUp extends Component {
       borderTopLeftRadius: 0,
       borderBottomLeftRadius: 0
     }
+
+    if (Brand.color('primary')) {
+      signup_btn_style.backgroundColor = '#' + Brand.color('primary')
+      signup_btn_style.borderColor = '#' + Brand.color('primary')
+    }
+
     if (typeof window !== 'undefined' && window.innerWidth <= 768) {
       signup_input_style = {
         ...signup_input_style,
