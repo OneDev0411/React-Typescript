@@ -291,22 +291,25 @@ export default class ListingViewer extends Component {
               <Col xs={9} style={ S('pl-0') }>
                 <div style={ S('pt-50 mb-20') }>
                   <Col style={ S('p-0') } xs={3}>
-                    <div style={ S('w-200 h-200') }>
-                      { listing_map_small }
-                    </div>
-                    <div style={ S('w-200 bg-fff') }>
-                      <div style={ S('text-center w-50p pull-left') }>
-                        Google Maps
-                        <div style={ S('bg-ebebeb w-1 h-16') }></div>
+                    <div style={ S('w-200 br-3 border-1-solid-f4f6f9') }>
+                      <div style={ S('w-100p h-200') }>
+                        { listing_map_small }
                       </div>
-                      <div style={ S('text-center w-50p pull-left') }>
-                        Street View
+                      <div style={ S('w-100p bg-fff p-5 font-13') }>
+                        <div style={ S('text-center w-50p pull-left') }>
+                          <a target="_blank" href={ `http://maps.google.com/?q=${listing.property.address.geo_source_formatted_address_google.split(' ').join('%')}` }>Google Maps</a>
+                          <div style={ S('bg-ebebeb w-1 h-16 pull-right') }></div>
+                        </div>
+                        <div style={ S('text-center w-50p pull-left') }>
+                          <a target="_blank" href={ `http://maps.google.com/?q=${listing.property.address.geo_source_formatted_address_google.split(' ').join('%')}&layer=c` }>Street View</a>
+                        </div>
+                        <div className="clearfix"/>
                       </div>
                     </div>
                   </Col>
                   <Col xs={9} style={ S('p-0 pl-20') }>
                     <div style={ S('fw-700 font-60') }>
-                      ${ price }{ listing.transaction_type === 'For Lease' ? '/mo' : '' } { asking_price_area }
+                      ${ price }{ listing.property && listing.property.property_type === 'Residential Lease' ? '/mo' : '' } { asking_price_area }
                     </div>
                     <div style={ S('mb-20') }>
                       <div className="lato" style={ S('pull-left font-24 color-8696a4 mr-20') }>
