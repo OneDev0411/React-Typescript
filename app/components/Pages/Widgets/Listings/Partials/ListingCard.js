@@ -75,8 +75,10 @@ export default class ListingCard extends Component {
         borderBottomRightRadius: 0
       }
       let signup_title = (
-        <div>Favorite this listing</div>
+        <div>Stay in the know</div>
       )
+
+      let email_label = 'Enter your email to save this home'
 
       if (data.signup_tooltip.action === 'listing_inquiry') {
         let chat_copy = 'Chat with Me'
@@ -87,6 +89,8 @@ export default class ListingCard extends Component {
             { chat_copy }
           </div>
         )
+
+        email_label = 'Enter email address'
       }
       let form_style = S(`absolute w-450 h-150 br-3 t-${(data.signup_tooltip.action === 'listing_inquiry') ? '170' : '75'} l-15 bg-fff p-10 pl-15 z-2`)
       if (data.is_mobile) {
@@ -115,13 +119,14 @@ export default class ListingCard extends Component {
           ...S('h-46 w-130'),
           borderTopLeftRadius: 0,
           borderBottomLeftRadius: 0,
-          backgroundColor: '#' + Brand.color('primary', '006aff')
+          backgroundColor: '#' + Brand.color('primary', '006aff'),
+          borderColor: '#' + Brand.color('primary', '006aff')
         }
         action_form = (
           <form style={ S('pull-left ' + (data.is_mobile ? 'w-300' : 'w-360')) } onSubmit={ this.props.handleEmailSubmit.bind(this) }>
             <div style={ S('pull-left') }>
               <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
-                <Input ref="email" style={ signup_input_style } type="text" placeholder="Enter email address" />
+                <Input ref="email" style={ signup_input_style } type="text" placeholder={ email_label } />
               </OverlayTrigger>
             </div>
             <div style={ S('pull-left') }>
