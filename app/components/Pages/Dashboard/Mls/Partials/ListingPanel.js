@@ -9,7 +9,8 @@ export default class ListingPanel extends Component {
   getSortingTitle() {
     const data = this.props.data
     const listing_map = data.listing_map
-    let sortby_title = 'Best results'
+
+    let sortby_title
     if (listing_map.sorting_by) {
       switch (listing_map.sorting_by) {
         case 'area':
@@ -35,6 +36,9 @@ export default class ListingPanel extends Component {
           break
         case 'price_per_square_foot':
           sortby_title = '$/Sqft'
+          break
+        case 'distance':
+          sortby_title = 'Distance to map center'
           break
         default:
           return true
@@ -217,7 +221,7 @@ export default class ListingPanel extends Component {
       heading_height = 180
     }
     const listing_panel_wrap_style = S('fixed t-62 r-0 w-0 h-0 z-5')
-    const listing_panel_style = S('absolute t-0 w-850 bg-fff h-' + window.innerHeight)
+    const listing_panel_style = S('absolute t-0 w-865 bg-fff h-' + window.innerHeight)
     const listing_scroll_style = {
       ...listing_panel_style,
       top: panel_top + 'px',
@@ -283,7 +287,7 @@ export default class ListingPanel extends Component {
     if (data.show_listing_panel) {
       button_style = {
         ...button_style,
-        right: 850
+        right: 865
       }
     }
     let listing_panel_btn = (
@@ -320,6 +324,7 @@ export default class ListingPanel extends Component {
                   <MenuItem onClick={ this.props.sortListings.bind(this, 'price_per_square_foot') }>$/Sqft</MenuItem>
                   <MenuItem onClick={ this.props.sortListings.bind(this, 'year_built') }>Built</MenuItem>
                   <MenuItem onClick={ this.props.sortListings.bind(this, 'dom') }>Dom</MenuItem>
+                  <MenuItem onClick={ this.props.sortListings.bind(this, 'distance') }>Distance to map center</MenuItem>
                 </DropdownButton>
               </div>
             </div>
