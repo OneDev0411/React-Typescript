@@ -27,6 +27,10 @@ const controller = {
       AppStore.emitChange()
       return
     }
+
+    if (AppStore.data.listing_map && !AppStore.data.listing_map.sorting_by)
+      controller.sortListings('distance')
+
     AppStore.data.listing_panel = {
       view
     }
@@ -62,6 +66,12 @@ const controller = {
         return listing_util.getDOM(listing.dom) * sorting_direction
       if (sort_by === 'price_per_square_foot')
         return (Math.floor(listing.price / listing_util.metersToFeet(listing.compact_property.square_meters))) * sorting_direction
+      if (sort_by === 'distance') {
+        return window.google.maps.geometry.spherical.computeDistanceBetween(
+          window.map.getCenter(),
+          new window.google.maps.LatLng(listing.location.latitude, listing.location.longitude)
+        ) * sorting_direction
+      }
     })
     // Which map
     if (data.show_search_map)

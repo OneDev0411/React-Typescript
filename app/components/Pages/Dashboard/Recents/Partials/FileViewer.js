@@ -11,10 +11,7 @@ export default class FileViewer extends Component {
       if (evt.keyCode === 27)
         this.props.closeFileViewer()
     }
-    const data = this.props.data
-    const current_room = data.current_room
-    const file = current_room.viewer.file
-    history.pushState(null, null, '/dashboard/recents/' + current_room.id + '/file/' + file.id)
+
     // fade in component
     this.fadeIn()
   }

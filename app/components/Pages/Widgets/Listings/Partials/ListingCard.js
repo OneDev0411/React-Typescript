@@ -75,33 +75,24 @@ export default class ListingCard extends Component {
         borderBottomRightRadius: 0
       }
       let signup_title = (
-        <div>
-          We are on <span style={ S('color-2196f3') }>Rechat</span><span style={ S('color-2196f3 font-14 relative t-12n') }>TM</span>
-        </div>
+        <div>Stay in the know</div>
       )
-      let signup_message = (
-        <div>
-          Sign up with Rechat to save this home and to share<br/>
-          your favorites with our agent or your partner.
-        </div>
-      )
+
+      let email_label = 'Enter your email to save this home'
+
       if (data.signup_tooltip.action === 'listing_inquiry') {
         let chat_copy = 'Chat with Me'
         if (!listing.list_agent)
           chat_copy = 'Chat with Us'
         signup_title = (
           <div>
-            { chat_copy } on <span style={ S('color-2196f3') }>Rechat</span><span style={ S('color-2196f3 font-14 relative t-12n') }>TM</span>
+            { chat_copy }
           </div>
         )
-        signup_message = (
-          <div>
-            I'm here if you have any questions about this<br/>
-            home or any other homes you like.
-          </div>
-        )
+
+        email_label = 'Enter email address'
       }
-      let form_style = S('absolute w-450 h-220 br-3 t-75 l-15 bg-fff p-10 pl-15 z-2')
+      let form_style = S(`absolute w-450 h-150 br-3 t-${(data.signup_tooltip.action === 'listing_inquiry') ? '170' : '75'} l-15 bg-fff p-10 pl-15 z-2`)
       if (data.is_mobile) {
         form_style = {
           ...form_style,
@@ -127,13 +118,15 @@ export default class ListingCard extends Component {
         signup_btn_style = {
           ...S('h-46 w-130'),
           borderTopLeftRadius: 0,
-          borderBottomLeftRadius: 0
+          borderBottomLeftRadius: 0,
+          backgroundColor: '#' + Brand.color('primary', '006aff'),
+          borderColor: '#' + Brand.color('primary', '006aff')
         }
         action_form = (
           <form style={ S('pull-left ' + (data.is_mobile ? 'w-300' : 'w-360')) } onSubmit={ this.props.handleEmailSubmit.bind(this) }>
             <div style={ S('pull-left') }>
               <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
-                <Input ref="email" style={ signup_input_style } type="text" placeholder="Enter email address" />
+                <Input ref="email" style={ signup_input_style } type="text" placeholder={ email_label } />
               </OverlayTrigger>
             </div>
             <div style={ S('pull-left') }>
@@ -150,9 +143,6 @@ export default class ListingCard extends Component {
           <div onClick={ this.props.handleCloseSignupForm } className="close" style={ S('absolute t-10 z-1 r-15') }>&times;</div>
           <div className="din" style={ S('font-30 color-263445 mb-5') }>
             { signup_title }
-          </div>
-          <div style={ S('fw-500 color-9b9b9b mb-20 text-left' + (!data.is_mobile ? ' font-17' : 'font-14')) }>
-            { signup_message }
           </div>
           <div style={ S('mb-5 w-100p') }>
             { action_form }
@@ -197,44 +187,46 @@ export default class ListingCard extends Component {
         </div>
       )
     }
-    // Configm message
-    let resent_message_area
+
+    let extra_info = ''
     if (data.resent_email_confirmation) {
-      resent_message_area = (
-        <div style={ S('mt-0 mb-20') }>Confirmation email resent.</div>
+      extra_info = (
+        <div>
+          <div>{ data.new_user.email }</div>
+          <div>Confirmation email resent</div>
+        </div>
+      )
+    } else if (data.new_user) {
+      extra_info = (
+        <div>{ data.new_user.email }</div>
       )
     }
-    let user_already_signed_up_message
-    if (data.new_user && data.new_user.type === 'user_reference') {
-      user_already_signed_up_message = (
-        <div style={ S('color-9b9b9b font-17 mb-20') }>This email has already signed up.</div>
-      )
-    }
+
     let signup_confirm_message
-    if (data.show_signup_confirm_modal && data.signup_tooltip && data.signup_tooltip.listing === listing.id) {
+    if (data.show_signup_confirm_modal && data.signup_tooltip && data.signup_tooltip.listing === listing.id && !data.new_user.email_confirmed) {
       signup_confirm_message = (
         <div style={ S('absolute z-100 w-100p h-100p t-0 bg-fff') }>
           <div onClick={ this.props.hideModal } className="close" style={ S('font-30 t-10 r-20 absolute') }>&times;</div>
           <div className="text-center">
             <div style={ S('mb-20 mt-20 center-block text-center' + (!data.is_mobile ? ' mt-30 w-280' : '')) }>
-              <img style={ S('h-68 mr-40 relative') } src={ Brand.asset('logo') } />
-              <i style={ S('color-929292 mr-40 font-30 relative t-5') } className="fa fa-arrow-right"></i>
-              <img style={ S('h-68') } src="/images/logo-200w.png" />
+              <img style={ S('h-68 relative') } src={ Brand.asset('logo') } />
             </div>
-            <div className="din" style={ S('color-263445 font-34 mb-10') }>Great! Please verify your email</div>
-            <div style={ S('font-17 color-9b9b9b mb-20') }>It may take a few minutes for<br /> the email to show up.</div>
+            <div className="din" style={ S('color-263445 font-34 mb-10') }>Please verify your email</div>
             <div style={ S('color-263445 font-21 mb-20') }>
-              { data.new_user ? data.new_user.email : '' }
+              { extra_info }
             </div>
-            { user_already_signed_up_message }
-            <div style={ S('color-9b9b9b font-16 mb-15') }>
-              Didn’t get the email? <a onClick={ this.props.resend.bind(this) } href="#">Resend</a> or <a href="mailto:support@rechat.com">contact support</a>.
-            </div>
-            { resent_message_area }
           </div>
           <div style={ S('bg-e2e6ea p-20 pt-20 absolute w-100p b-0') }>
             <div className="text-center">
-              Powered by <a href="https://rechat.com" target="_blank" style={ S('color-2196f3 fw-500') }>Rechat<span style={ S('color-2196f3 font-9 relative t-7n fw-500') }>TM</span></a>
+              <div style={ S('color-9b9b9b font-16 mb-15') }>
+                <div>
+                  Didn’t get the email?
+                </div>
+
+                <div>
+                  <a onClick={ this.props.resend.bind(this) } href="#">Resend</a> | <a href="mailto:support@rechat.com">Contact support</a>.
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -246,21 +238,20 @@ export default class ListingCard extends Component {
           <div onClick={ this.props.hideModal } className="close" style={ S('font-30 t-10 r-20 absolute') }>&times;</div>
           <div className="text-center">
             <div style={ S('mb-20 mt-20 center-block text-center' + (!data.is_mobile ? ' mt-30 w-280' : '')) }>
-              <img style={ S('h-68 mr-40 relative') } src={ Brand.asset('logo') } />
-              <i style={ S('color-929292 mr-40 font-30 relative t-5') } className="fa fa-arrow-right"></i>
-              <img style={ S('h-68') } src="/images/logo-200w.png" />
+              <img style={ S('h-68 relative') } src={ Brand.asset('logo') } />
             </div>
             <div style={ S('color-9b9b9b text-center mb-20 font-21') }>This email address is already in use.</div>
-            <div style={ S('color-9b9b9b font-16 mb-20') }>
-              <a href="mailto:support@rechat.com">Contact support</a>.
-            </div>
             <div style={ S('color-9b9b9b text-center') }>
               <span style={ S('pointer') } className="text-primary btn btn-primary" onClick={ this.props.handleLoginClick.bind(this, listing.id) }>Log in</span>
             </div>
           </div>
           <div style={ S('bg-e2e6ea p-20 pt-20 absolute w-100p b-0') }>
             <div className="text-center">
-              Powered by <a href="https://rechat.com" target="_blank" style={ S('color-2196f3 fw-500') }>Rechat<span style={ S('color-2196f3 font-9 relative t-7n fw-500') }>TM</span></a>
+              <div style={ S('color-9b9b9b font-16 mb-15') }>
+                <div>
+                  <a href="mailto:support@rechat.com">Contact support</a>.
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -272,21 +263,20 @@ export default class ListingCard extends Component {
           <div onClick={ this.props.hideModal } className="close" style={ S('font-30 t-10 r-20 absolute') }>&times;</div>
           <div className="text-center">
             <div style={ S('mb-20 mt-20 center-block text-center' + (!data.is_mobile ? ' mt-50 w-280' : '')) }>
-              <img style={ S('h-68 mr-40 relative') } src={ Brand.asset('logo') } />
-              <i style={ S('color-929292 mr-40 font-30 relative t-5') } className="fa fa-arrow-right"></i>
-              <img style={ S('h-68') } src="/images/logo-200w.png" />
+              <img style={ S('h-68 relative') } src={ Brand.asset('logo') } />
             </div>
             <div style={ S('color-9b9b9b text-center mb-20 font-21') }>There was an error with this request.</div>
-            <div style={ S('color-9b9b9b font-16 mb-20') }>
-              <a href="mailto:support@rechat.com">Contact support</a>.
-            </div>
             <div style={ S('color-9b9b9b text-center') }>
               <span style={ S('pointer') } className="text-primary btn btn-primary" onClick={ this.props.handleLoginClick.bind(this, listing.id) }>Log in</span>
             </div>
           </div>
           <div style={ S('bg-e2e6ea p-20 pt-20 absolute w-100p b-0') }>
             <div className="text-center">
-              Powered by <a href="https://rechat.com" target="_blank" style={ S('color-2196f3 fw-500') }>Rechat<span style={ S('color-2196f3 font-9 relative t-7n fw-500') }>TM</span></a>
+              <div style={ S('color-9b9b9b font-16 mb-15') }>
+                <div>
+                  <a href="mailto:support@rechat.com">Contact support</a>.
+                </div>
+              </div>
             </div>
           </div>
         </div>
