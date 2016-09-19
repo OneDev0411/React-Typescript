@@ -17,6 +17,8 @@ import alert_share from './alert-share'
 // Rooms
 import recents from './recents'
 import add_members from './add-members'
+// Chat
+import chat_module from './chat-module'
 // combine controllers
 const controller = {
   listing_map,
@@ -32,6 +34,7 @@ const controller = {
   alert_share,
   recents,
   search_input_map,
-  add_members
+  add_members,
+  chat_module
 }
 export default controller

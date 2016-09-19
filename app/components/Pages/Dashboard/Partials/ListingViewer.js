@@ -13,7 +13,7 @@ import FavoriteHeart from './FavoriteHeart'
 import controller from '../controller'
 import GoogleMap from 'google-map-react'
 import Brand from '../../../../controllers/Brand.js'
-
+import ChatModule from './ChatModule'
 export default class ListingViewer extends Component {
   componentDidMount() {
     document.onkeydown = e => {
@@ -192,7 +192,7 @@ export default class ListingViewer extends Component {
         if (brand_agent.phone_number)
           phone_area = <div style={ S('font-15 mb-5') }>M: { brand_agent.phone_number }</div>
         brand_agent_area = (
-          <div style={ S('mt-50 color-bfc3c7 w-100p text-left') }>
+          <div style={ S('mt-50 color-bfc3c7 w-100p text-left relative') }>
             { profile_image_area }
             <div style={ S('bg-263445 p-20 w-100p') }>
               <div style={ S('font-18 mb-5 color-fff') }><span style={ S('fw-400') }>{ brand_agent.first_name } { brand_agent.last_name }</span></div>
@@ -203,6 +203,12 @@ export default class ListingViewer extends Component {
               </div>
               { phone_area }
               <div style={ S('font-15 mb-5') }>E: { brand_agent.email }</div>
+            </div>
+            <div style={ S('mt-10') }>
+              <ChatModule
+                agent={ brand_agent }
+                data={ data }
+              />
             </div>
           </div>
         )
@@ -547,8 +553,6 @@ export default class ListingViewer extends Component {
               </div>
             </div>
             <div className="clearfix"></div>
-            <div className="clearfix"></div>
-            <div className="clearfix"></div>
           </div>
         </div>
       )
@@ -622,8 +626,6 @@ export default class ListingViewer extends Component {
         Rechat
       </a>
     )
-    const login_btn_color = Brand.color('primary', 'a1bde4')
-
     if (Brand.asset('logo_wide')) {
       const host = 'https://' + window.location.host
       brand_logo = (
@@ -639,7 +641,7 @@ export default class ListingViewer extends Component {
             { brand_logo }
           </div>
           <div style={ S('pull-right p-16') }>
-            <a style={ S(`mr-15 bg-${login_btn_color} border-1-solid-${login_btn_color}`) } className="btn btn-primary" href={ '/signin?redirect_to=/dashboard/mls/' + listing.id }>Log in</a>
+            <a style={ S(`mr-15 bg-${Brand.color('primary', 'a1bde4')} border-1-solid-${Brand.color('primary', 'a1bde4')}`) } className="btn btn-primary" href={ '/signin?redirect_to=/dashboard/mls/' + listing.id }>Log in</a>
             { /* <a className="btn btn-primary" href="/signup">Sign up</a> */ }
           </div>
         </div>
