@@ -8,6 +8,7 @@ export default class ChatModule extends Component {
   render() {
     const data = this.props.data
     const agent = this.props.agent
+    const chat_module = data.chat_module
     const chat_bubble_style = {
       boxShadow: '0 6px 30px 0 rgba(0, 0, 0, 0.2)',
       ...S('w-380 h-600 z-3 br-8 absolute bg-fff l-60n b-60')
@@ -32,6 +33,12 @@ export default class ChatModule extends Component {
         borderBottomLeftRadius: '8px',
         borderBottomRightRadius: '8px'
       }
+      let messages
+      if (chat_module && chat_module.messages) {
+        messages = (
+          <div>Messages</div>
+        )
+      }
       chat_bubble = (
         <div style={ chat_bubble_style }>
           <div style={ header_style }>
@@ -42,6 +49,7 @@ export default class ChatModule extends Component {
               <span style={ S('fw-400 color-fff') }>{ agent.first_name } { agent.last_name }</span>, Listing Agent
             </div>
           </div>
+          { messages }
           <div style={ footer_style }>
             <Input onKeyUp={ controller.chat_module.handleKeyUp } autoFocus style={ S('border-none bg-fafafa h-60 br-8') } type="text" placeholder="Write Message" />
           </div>

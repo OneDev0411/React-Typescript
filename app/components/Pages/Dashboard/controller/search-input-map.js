@@ -33,7 +33,7 @@ const controller = {
         q: place.name
       })
       // Check if MLS number
-      if (!isNaN(place.name)) {
+      if (!isNaN(place.name) && place.name.length > 7) {
         AppStore.data.listing_map.is_loading = true
         // console.log(place.name) // 13362991
         AppStore.emitChange()
