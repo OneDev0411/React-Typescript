@@ -428,15 +428,15 @@ export default class MessagesList extends Component {
         </Modal>
         <Modal show={ data.show_delete_room_modal } onHide={ this.props.hideDeleteRoomModal }>
           <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
-           <Modal.Title>Delete Room</Modal.Title>
+           <Modal.Title>Leave Room</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            Are you sure you want to delete this room?  This can not be undone.
+            Are you sure you want to leave this room?  This can not be undone.
           </Modal.Body>
           <Modal.Footer>
             <Button bsStyle="link" onClick={ this.props.hideDeleteRoomModal }>Cancel</Button>
             <Button bsStyle="danger" onClick={ this.props.confirmDeleteRoom } className={ data.deleting_room ? 'disabled' : '' }>
-              { data.deleting_room ? 'Deleting...' : 'Yes, delete' }
+              { data.deleting_room ? 'Leaving...' : 'Yes, leave' }
             </Button>
           </Modal.Footer>
         </Modal>

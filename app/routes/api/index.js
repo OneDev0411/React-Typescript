@@ -34,6 +34,7 @@ module.exports = (app, config) => {
   require('./rooms/delete-room')(app, config)
   require('./rooms/get-rooms')(app, config)
   require('./rooms/add-user-to-room')(app, config)
+  require('./rooms/remove-user-from-room')(app, config)
   require('./rooms/create-message')(app, config)
   require('./rooms/invite-contacts')(app, config)
   require('./rooms/notifications')(app, config)

@@ -32,6 +32,7 @@ import uploadFilesToRoom from '../actions/rooms/upload-files'
 import setNotification from '../actions/rooms/notifications'
 import acknowledgeRoomNotifications from '../actions/rooms/acknowledge-notifications'
 import getRoomAndMessages from '../actions/rooms/get-room-and-messages'
+import leaveRoom from '../actions/rooms/leave-room'
 
 // Messages
 import createMessage from '../actions/messages/create-message'
@@ -149,6 +150,10 @@ AppDispatcher.register(payload => {
 
     case 'delete-room':
       deleteRoom(payload.user, payload.id)
+      break
+
+    case 'leave-room':
+      leaveRoom(payload.user, payload.id)
       break
 
     case 'get-contacts':

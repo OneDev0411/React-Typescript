@@ -19,7 +19,7 @@ const controller = {
     AppStore.data.deleting_room = true
     AppStore.emitChange()
     AppDispatcher.dispatch({
-      action: 'delete-room',
+      action: 'leave-room',
       user,
       id
     })
