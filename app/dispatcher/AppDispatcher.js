@@ -70,6 +70,9 @@ import getBranding from '../actions/branding/get-branding'
 // Google geocodeAddress
 import geocodeAddress from '../actions/google/geocode-address'
 
+// Chat module
+import sendChatModuleMessage from '../actions/chat-module/send-message'
+
 const AppDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
@@ -267,6 +270,10 @@ AppDispatcher.register(payload => {
 
     case 'geocode-address':
       geocodeAddress(payload.address)
+      break
+    
+    case 'send-chat-module-message':
+      sendChatModuleMessage(payload.user, payload.agent, payload.message)
       break
 
     default:

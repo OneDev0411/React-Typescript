@@ -11,12 +11,18 @@ const controller = {
     delete AppStore.data.show_chat_bubble
     AppStore.emitChange()
   },
-  handleKeyUp(e) {
+  handleKeyUp(agent, e) {
     if (e.which === 13)
-      controller.sendMessage()
+      controller.sendMessage(agent, e.target.value)
   },
-  sendMessage() {
-    // do something
+  sendMessage(agent, message) {
+    const user = AppStore.data.user
+    AppDispatcher.dispatch({
+      action: 'send-chat-module-message',
+      user,
+      agent,
+      message
+    })
   },
   getMessages() {
     console.log('getMessages')

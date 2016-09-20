@@ -184,7 +184,7 @@ export default class SideBar extends Component {
   notificationIcon(name) {
     const data = this.props.data
     let icon
-    if (data.notifications && data.notifications.summary[name] > 0) {
+    if (data.notifications && data.notifications.summary && data.notifications.summary[name] > 0) {
       icon = (
         <div style={ S('pl-10 absolute t-0 r-0') }>
           <div style={ S('font-15 bg-db3821 br-100 p-6 h-17 text-center') }>

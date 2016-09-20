@@ -11,7 +11,7 @@ export default class ChatModule extends Component {
     const chat_module = data.chat_module
     const chat_bubble_style = {
       boxShadow: '0 6px 30px 0 rgba(0, 0, 0, 0.2)',
-      ...S('w-380 h-600 z-3 br-8 absolute bg-fff l-60n b-60')
+      ...S('w-380 h-600 z-3 br-8 absolute bg-fff l-80n b-60')
     }
     let button = (
       <Button onClick={ controller.chat_module.showChatBubble } style={ S(`w-100p bg-${Brand.color('primary', 'a1bde4')} border-1-solid-${Brand.color('primary', 'a1bde4')} color-fff`) }>
@@ -39,6 +39,13 @@ export default class ChatModule extends Component {
           <div>Messages</div>
         )
       }
+      const input_style = {
+        ...S('border-none bg-fafafa h-60'),
+        borderTopLeftRadius: '0',
+        borderTopRightRadius: '0',
+        borderBottomLeftRadius: '8px',
+        borderBottomRightRadius: '8px'
+      }
       chat_bubble = (
         <div style={ chat_bubble_style }>
           <div style={ header_style }>
@@ -51,7 +58,7 @@ export default class ChatModule extends Component {
           </div>
           { messages }
           <div style={ footer_style }>
-            <Input onKeyUp={ controller.chat_module.handleKeyUp } autoFocus style={ S('border-none bg-fafafa h-60 br-8') } type="text" placeholder="Write Message" />
+            <Input onKeyUp={ controller.chat_module.handleKeyUp.bind(this, agent) } autoFocus style={ input_style } type="text" placeholder="Write Message" />
           </div>
         </div>
       )
