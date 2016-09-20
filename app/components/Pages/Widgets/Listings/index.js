@@ -3,15 +3,11 @@ import React, { Component } from 'react'
 import { ButtonGroup, Button } from 'react-bootstrap'
 import S from 'shorti'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
-import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import Loading from '../../../Partials/Loading'
 import ListingCard from './Partials/ListingCard'
 import AppStore from '../../../../stores/AppStore'
-import validator from 'validator'
-// import _ from 'lodash'
-import { randomString } from '../../../../utils/helpers'
 import Brand from '../../../../controllers/Brand'
-
+import controller from '../../Dashboard/controller'
 export default class Listings extends Component {
   componentWillMount() {
     AppStore.data.is_widget = true
@@ -121,112 +117,9 @@ export default class Listings extends Component {
       options
     })
   }
-  handleCloseSignupForm() {
-    delete AppStore.data.signup_tooltip
-    AppStore.emitChange()
-  }
-  showIntercom(e) {
-    e.preventDefault()
-    window.Intercom('show')
-  }
-  handleListingInquirySubmit(e) {
-    const data = AppStore.data
-    const user = data.user
-    AppStore.data.submitting = true
-    AppStore.emitChange()
-    e.preventDefault()
-    AppDispatcher.dispatch({
-      action: 'listing-inquiry',
-      user,
-      agent: data.signup_tooltip.list_agent.id,
-      listing: data.signup_tooltip.listing
-    })
-  }
-  handleEmailSubmit(e) {
-    // If clicked
-    setTimeout(() => {
-      this.refs.email.refs.input.focus()
-    }, 100)
-    e.preventDefault()
-    delete AppStore.data.errors
-    AppStore.emitChange()
-    const data = this.props.data
-    const email = this.refs.email.refs.input.value
-    // If no email or double submit
-    if (!email || data.submitting)
-      return
-    const random_password = randomString(9)
-    if (!email.trim())
-      return
-    if (!validator.isEmail(email)) {
-      AppStore.data.errors = {
-        type: 'email-invalid'
-      }
-      AppStore.emitChange()
-      setTimeout(() => {
-        delete AppStore.data.errors
-        AppStore.emitChange()
-      }, 3000)
-      return
-    }
-    AppStore.data.submitting = true
-    AppStore.emitChange()
-    const user = {
-      first_name: email,
-      email,
-      user_type: 'Client',
-      password: random_password,
-      grant_type: 'password',
-      is_shadow: true
-    }
-    AppDispatcher.dispatch({
-      action: 'sign-up-shadow',
-      user,
-      redirect_to: ''
-    })
-  }
-  hideModal() {
-    delete AppStore.data.errors
-    delete AppStore.data.show_signup_confirm_modal
-    delete AppStore.data.signup_tooltip
-    AppStore.emitChange()
-  }
-  resend(e) {
-    e.preventDefault()
-    const data = this.props.data
-    const new_user = data.new_user
-    const user = {
-      first_name: new_user.email,
-      email: new_user.email,
-      user_type: 'Client',
-      password: new_user.random_password,
-      grant_type: 'password',
-      is_shadow: true
-    }
-    AppStore.data.resent_email_confirmation = true
-    AppDispatcher.dispatch({
-      action: 'sign-up-shadow',
-      user,
-      redirect_to: ''
-    })
-  }
   handleListingClick(listing) {
     const url = '/dashboard/mls/' + listing.id
     window.open(url, '_blank')
-  }
-  handleAgentClick(listing) {
-    delete AppStore.data.show_signup_confirm_modal
-    AppStore.data.signup_tooltip = {
-      action: 'listing_inquiry',
-      list_agent: listing.list_agent,
-      listing: listing.id
-    }
-    AppStore.emitChange()
-  }
-  handleLoginClick(listing_id) {
-    const data = this.props.data
-    const url = 'https://' + data.brand.hostnames[0] + '/signin?redirect_to=dashboard/mls/' + listing_id
-    window.top.location.href = url
   }
   render() {
     // Data
@@ -245,18 +138,18 @@ export default class Listings extends Component {
       listings_area = listings.map(listing => {
         return (
           <ListingCard
-            handleEmailSubmit={ this.handleEmailSubmit }
+            handleEmailSubmit={ controller.action_bubble.handleEmailSubmit }
             key={ listing.id }
             data={ data }
             listing={ listing }
-            handleCloseSignupForm={ this.handleCloseSignupForm }
+            handleCloseSignupForm={ controller.action_bubble.handleCloseSignupForm }
             handleListingClick={ this.handleListingClick }
-            handleAgentClick={ this.handleAgentClick }
-            handleListingInquirySubmit={ this.handleListingInquirySubmit }
-            handleLoginClick={ this.handleLoginClick }
-            showIntercom={ this.showIntercom }
-            resend={ this.resend }
-            hideModal={ this.hideModal }
+            handleAgentClick={ controller.action_bubble.handleAgentClick }
+            handleListingInquirySubmit={ controller.action_bubble.handleListingInquirySubmit }
+            handleLoginClick={ controller.action_bubble.handleLoginClick }
+            showIntercom={ controller.action_bubble.showIntercom }
+            resend={ controller.action_bubble.resend }
+            hideModal={ controller.action_bubble.hideModal }
           />
         )
       })

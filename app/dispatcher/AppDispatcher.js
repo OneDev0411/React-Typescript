@@ -271,7 +271,7 @@ AppDispatcher.register(payload => {
     case 'geocode-address':
       geocodeAddress(payload.address)
       break
-    
+
     case 'send-chat-module-message':
       sendChatModuleMessage(payload.user, payload.agent, payload.message)
       break
