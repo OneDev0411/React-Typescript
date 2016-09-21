@@ -28,6 +28,7 @@ import SvgGlobe from '../Partials/Svgs/Globe'
 import SvgList from '../Partials/Svgs/List'
 import SvgPhotos from '../Partials/Svgs/Photos'
 import Brand from '../../../../controllers/Brand'
+import MobileSplashViewer from '../../../Partials/MobileSplashViewer'
 
 export default class Mls extends Component {
   componentWillMount() {
@@ -932,6 +933,9 @@ export default class Mls extends Component {
         { powered_by }
       </main>
     )
+    let mobile_splash_viewer
+    if (data.show_mobile_splash_viewer)
+      mobile_splash_viewer = <MobileSplashViewer data={ data } />
     return (
       <div style={ S('minw-1000') }>
         { main_content }
@@ -958,6 +962,7 @@ export default class Mls extends Component {
             <Button bsStyle="primary" onClick={ this.hideFilterErrorModal }>Ok</Button>
           </Modal.Body>
         </Modal>
+        { mobile_splash_viewer }
       </div>
     )
   }
