@@ -89,7 +89,6 @@ const controller = {
       list_agent: brand_agent,
       listing: listing.id
     }
-    console.log(AppStore.data.signup_tooltip)
     AppStore.emitChange()
   },
   handleLoginClick(listing_id) {

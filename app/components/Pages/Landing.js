@@ -12,6 +12,7 @@ import AppDispatcher from '../../dispatcher/AppDispatcher'
 import AppStore from '../../stores/AppStore'
 import CheckEmailModal from '../Partials/CheckEmailModal'
 import Brand from '../../controllers/Brand'
+import MobileSplashViewer from '../Partials/MobileSplashViewer'
 
 export default class Landing extends Component {
   componentWillMount() {
@@ -222,6 +223,9 @@ export default class Landing extends Component {
         </div>
       )
     }
+    let mobile_splash_viewer
+    if (data.show_mobile_splash_viewer)
+      mobile_splash_viewer = <MobileSplashViewer data={ data } />
     return (
       <div className="page-landing page-bg-video" style={ page_style }>
         <div className="overlay"></div>
@@ -290,6 +294,7 @@ export default class Landing extends Component {
           showIntercom={ this.showIntercom }
           resend={ this.resend }
         />
+        { mobile_splash_viewer }
       </div>
     )
   }

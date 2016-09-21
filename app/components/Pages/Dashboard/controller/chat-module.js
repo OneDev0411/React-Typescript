@@ -25,7 +25,7 @@ const controller = {
     })
   },
   getMessages() {
-    console.log('getMessages')
+    // console.log('getMessages')
     AppDispatcher.dispatch({
       action: ''
     })
