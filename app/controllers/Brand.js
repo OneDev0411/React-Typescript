@@ -45,7 +45,7 @@ class Brand {
 
   side(listing) {
     const brand = AppStore.data.brand
-    const agent_ids = brand.agents ? brand.agents.map(a => a.id) : []
+    const agent_ids = brand && brand.agents ? brand.agents.map(a => a.id) : []
 
     const is_list_agent = agent_ids.indexOf(listing.list_agent.id) > -1
     const is_selling_agent = agent_ids.indexOf(listing.selling_agent) > -1

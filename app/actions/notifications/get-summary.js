@@ -13,6 +13,8 @@ export default (user) => {
     const summary = response.data
     AppStore.data.notifications.summary = summary
     // If room notification on new room, refresh room
+    if (!summary)
+      return
     if (summary.room_notification_summaries && summary.room_notification_summaries.length) {
       let refresh_room = true
       // Search for room
