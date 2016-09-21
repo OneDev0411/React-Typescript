@@ -479,7 +479,7 @@ export default class Mls extends Component {
         backgroundColor: '#' + Brand.color('primary', '006aff'),
         borderColor: '#' + Brand.color('primary', '006aff')
       }
-      let signup_form_style = S('absolute w-450 h-190 br-3 t-130 r-20 bg-fff p-20 z-2')
+      let signup_form_style = S('absolute w-450 h-175 br-3 t-130 r-20 bg-fff p-20 z-2')
       if (data.is_widget) {
         signup_form_style = {
           ...signup_form_style,
@@ -497,7 +497,7 @@ export default class Mls extends Component {
           <div onClick={ this.handleCloseSignupForm } className="close" style={ S('absolute r-15 t-10') }>&times;</div>
           <div className="din" style={ S('font-30 color-263445 mb-5') }>Get the Fastest Listing Alerts</div>
           <div style={ S('mb-5 w-100p') }>
-            <form style={ S('mb-20 center-block w-360') } onSubmit={ this.handleEmailSubmit.bind(this) }>
+            <form style={ S('mb-5 center-block pull-left w-100p block') } onSubmit={ this.handleEmailSubmit.bind(this) }>
               <div style={ S('pull-left') }>
                 <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
                   <Input ref="email" style={ signup_input_style } type="text" placeholder="Enter email to save this search" />
