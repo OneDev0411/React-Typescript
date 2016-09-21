@@ -14,7 +14,7 @@ import controller from '../controller'
 import GoogleMap from 'google-map-react'
 import Brand from '../../../../controllers/Brand.js'
 // import ChatModule from './ChatModule'
-import ActionBubble from '../../Partials/ActionBubble'
+// import ActionBubble from '../../Partials/ActionBubble'
 export default class ListingViewer extends Component {
   componentDidMount() {
     document.onkeydown = e => {
@@ -192,25 +192,25 @@ export default class ListingViewer extends Component {
         let phone_area
         if (brand_agent.phone_number)
           phone_area = <div style={ S('font-15 mb-5') }>M: { brand_agent.phone_number }</div>
-        const chat_button_style = {
-          ...S('w-100p'),
-          backgroundColor: '#' + Brand.color('primary', '006aff'),
-          borderColor: '#' + Brand.color('primary', '006aff')
-        }
-        let action_bubble
-        if (data.signup_tooltip) {
-          action_bubble = (
-            <ActionBubble
-              data={ data }
-              listing={ listing }
-              handleEmailSubmit={ controller.action_bubble.handleEmailSubmit }
-              handleListingInquirySubmit={ controller.action_bubble.handleListingInquirySubmit }
-              handleCloseSignupForm={ controller.action_bubble.handleCloseSignupForm }
-              handleLoginClick={ controller.action_bubble.handleLoginClick }
-              showIntercom={ controller.action_bubble.showIntercom }
-            />
-          )
-        }
+        // const chat_button_style = {
+        //   ...S('w-100p'),
+        //   backgroundColor: '#' + Brand.color('primary', '006aff'),
+        //   borderColor: '#' + Brand.color('primary', '006aff')
+        // }
+        // let action_bubble
+        // if (data.signup_tooltip) {
+        //   action_bubble = (
+        //     <ActionBubble
+        //       data={ data }
+        //       listing={ listing }
+        //       handleEmailSubmit={ controller.action_bubble.handleEmailSubmit }
+        //       handleListingInquirySubmit={ controller.action_bubble.handleListingInquirySubmit }
+        //       handleCloseSignupForm={ controller.action_bubble.handleCloseSignupForm }
+        //       handleLoginClick={ controller.action_bubble.handleLoginClick }
+        //       showIntercom={ controller.action_bubble.showIntercom }
+        //     />
+        //   )
+        // }
         brand_agent_area = (
           <div style={ S('mt-50 color-bfc3c7 w-100p text-left relative') }>
             { profile_image_area }
@@ -224,12 +224,16 @@ export default class ListingViewer extends Component {
               { phone_area }
               <div style={ S('font-15 mb-5') }>E: { brand_agent.email }</div>
             </div>
-            <div style={ S('mt-10 relative') }>
-              <Button onClick={ controller.action_bubble.handleBrandAgentClick.bind(this, listing, brand_agent) } bsStyle="primary" style={ chat_button_style } type="submit">Chat With Me</Button>
-              <div style={ S('absolute l-150n t-170n') }>
-                { action_bubble }
+            {
+              /*
+              <div style={ S('mt-10 relative') }>
+                <Button onClick={ controller.action_bubble.handleBrandAgentClick.bind(this, listing, brand_agent) } bsStyle="primary" style={ chat_button_style } type="submit">Chat With Me</Button>
+                <div style={ S('absolute l-150n t-170n') }>
+                  { action_bubble }
+                </div>
               </div>
-            </div>
+              */
+            }
           </div>
         )
       }
