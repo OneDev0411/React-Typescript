@@ -72,6 +72,14 @@
       window.AppStore = AppStore;
     </script>
     {{/ AppStore }}
+    {{# branch_data }}
+      <script id="branch_data" type="application/json">{{{ branch_data }}}</script>
+      <script>
+        var container = document.getElementById("branch_data");
+        var branchData = JSON.parse(document.getElementById("branch_data").innerHTML);
+        window.branchData = branchData;
+      </script>
+    {{/ branch_data }}
   </div>
   <script>
     window['_fs_debug'] = false;
@@ -105,13 +113,5 @@
   </script>
   <script type="text/javascript">window._trackJs = { token: '4a7e52ac864c4e86a95a7bf290f49500' };</script>
   <script type="text/javascript" src="https://cdn.trackjs.com/releases/current/tracker.js"></script>
-  {{# branch_data }}
-    <script id="branch_data" type="application/json">{{ branch_data }}</script>
-    <script>
-      var container = document.getElementById("branch_data");
-      var branch_data = JSON.parse(document.getElementById("branch_data").innerHTML);
-      window.branch_data = branch_data;
-    </script>
-  {{/ branch_data }}
 </body>
 </html>

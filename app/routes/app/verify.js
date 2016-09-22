@@ -8,7 +8,6 @@ module.exports = (app, config) => {
     return res.redirect('/verify/email?token=' + encoded_token)
   })
   app.get('/activate',(req, res) => {
-    req.session.destroy()
     const decoded_token = decodeURIComponent(req.query.token)
     const decrypted_obj = JSON.parse(Crypto.decrypt(decoded_token))
     const email = decrypted_obj.email
@@ -21,9 +20,9 @@ module.exports = (app, config) => {
     const listing_id = req.query.listing_id
     const room_id = req.query.room_id
     const alert_id = req.query.alert_id
+    // Reset session and save branch data
     const branch_data = decrypted_obj
-    if (!req.session)
-      req.session = {}
+    delete req.session.user
     req.session.branch_data = branch_data
     // Agent
     if (agent) {

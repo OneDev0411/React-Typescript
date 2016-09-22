@@ -85,7 +85,7 @@ export default class App extends Component {
   createBranchLink() {
     const branch = require('branch-sdk')
     branch.init(config.branch.key)
-    const branch_data = window.branch_data
+    const branch_data = window.branchData
     branch.link({
       data: branch_data
     }, (err, link) => {
