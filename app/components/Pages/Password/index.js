@@ -136,7 +136,6 @@ export default class Password extends Component {
         <Create handleSubmit={ this.handleSubmit } data={ data }/>
       )
     }
-    let mobile_splash_viewer
     if (data.show_mobile_splash_viewer)
       return <MobileSplashViewer data={ data } />
     return (
