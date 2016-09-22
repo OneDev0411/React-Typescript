@@ -21,7 +21,7 @@ module.exports = (app, config) => {
     const listing_id = req.query.listing_id
     const room_id = req.query.room_id
     const alert_id = req.query.alert_id
-    const branch_data = JSON.stringify(decrypted_obj)
+    const branch_data = decrypted_obj
     if (!req.session)
       req.session = {}
     req.session.branch_data = branch_data
