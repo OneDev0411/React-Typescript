@@ -85,18 +85,9 @@ export default class App extends Component {
   createBranchLink() {
     const branch = require('branch-sdk')
     branch.init(config.branch.key)
+    const branch_data = window.branch_data
     branch.link({
-      data: {
-        type: (AppStore.data.user ? 'WebBranchBannerClickedUser' : 'WebBranchBannerClickedShadowUser'),
-        access_token: (AppStore.data.user ? AppStore.data.user.access_token : null),
-        '$desktop_url': 'https://rechat.com',
-        '$ios_url': 'https://rechat.com',
-        '$ipad_url': 'https://rechat.com',
-        '$android_url': 'https://rechat.com',
-        '$og_title': 'Rechat',
-        '$og_description': 'Rechat offers Realtors and Brokerages the easiest way to stay connected with clients.',
-        '$og_image_url': 'https://rechat.com/images/logo-big.png'
-      }
+      data: branch_data
     }, (err, link) => {
       // console.log(err, link)
       AppStore.data.branch_link = link

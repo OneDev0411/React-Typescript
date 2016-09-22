@@ -21,6 +21,8 @@ module.exports = (app, config) => {
     const listing_id = req.query.listing_id
     const room_id = req.query.room_id
     const alert_id = req.query.alert_id
+    const branch_data = JSON.stringify(decrypted_obj)
+    req.session.branch_data = branch_data
     // Agent
     if (agent) {
       const first_name = agent.first_name
