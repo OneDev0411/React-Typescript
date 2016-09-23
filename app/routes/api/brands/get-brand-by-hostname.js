@@ -3,8 +3,18 @@ module.exports = (app, config) => {
   app.get('/api/brands/search',(req, res) => {
     const api_url = config.api.url
     const hostname = req.query.hostname
+    const access_token = req.body.access_token
     const endpoint = api_url + '/brands/search?hostname=' + hostname
-    fetch(endpoint)
+
+    const headers = {
+      'x-real-agent': req.headers['user-agent'],
+      'user-agent': config.app_name
+    }
+
+    if (access_token)
+      headers.authorization = 'Bearer ' + access_token
+
+    fetch(endpoint, {headers})
     .then(response => {
       if (response.status >= 400) {
         var error = {

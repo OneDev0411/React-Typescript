@@ -66,10 +66,14 @@ class Brand {
     if (typeof window === 'undefined')
       return
 
+    const data = AppStore.data
+    const user = data.user
+
     const hostname = window.location.hostname
     AppDispatcher.dispatch({
       action: 'get-branding',
-      hostname
+      hostname,
+      user
     })
   }
 }

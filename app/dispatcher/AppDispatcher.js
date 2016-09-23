@@ -261,7 +261,7 @@ AppDispatcher.register(payload => {
       break
 
     case 'get-branding':
-      getBranding(payload.hostname)
+      getBranding(payload.hostname, payload.user)
       break
 
     case 'listing-inquiry':
