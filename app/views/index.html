@@ -72,6 +72,14 @@
       window.AppStore = AppStore;
     </script>
     {{/ AppStore }}
+    {{# branch_data }}
+      <script id="branch_data" type="application/json">{{{ branch_data }}}</script>
+      <script>
+        var container = document.getElementById("branch_data");
+        var branchData = JSON.parse(document.getElementById("branch_data").innerHTML);
+        window.branchData = branchData;
+      </script>
+    {{/ branch_data }}
   </div>
   <script>
     window['_fs_debug'] = false;

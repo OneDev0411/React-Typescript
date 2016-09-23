@@ -43,6 +43,10 @@ io.on('connection', function(socket){
 app.use(function(req, res, next) {
   const date = new Date
   res.locals.time = date.getTime()
+  if (req.session && req.session.branch_data) {
+    res.locals.branch_data = JSON.stringify(req.session.branch_data)
+    delete req.session.branch_data
+  }
   next()
 })
 
