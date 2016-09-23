@@ -26,8 +26,8 @@ module.exports = (app, config) => {
       return response.json()
     })
     .then(response => {
-      let response_object = {
-        data: response,
+      const response_object = {
+        ...response,
         status: 'success'
       }
       return res.json(response_object)

@@ -139,6 +139,20 @@ export default class NewMessageViewer extends Component {
         }
       })
     }
+    // Search users
+    if (data.new_message && data.new_message.users_found) {
+      data.new_message.users_found.forEach(user => {
+        if (user) {
+          if (user.id !== data.user.id && users_selected_ids && users_selected_ids.indexOf(user.id) === -1 && users_select_options.indexOf(user.id) === -1) {
+            users_select_options.push({
+              value: user,
+              label: user.first_name ? user.first_name : user.phone_number,
+              type: 'user'
+            })
+          }
+        }
+      })
+    }
     let messages_area
     if (data.current_room) {
       messages_area = (

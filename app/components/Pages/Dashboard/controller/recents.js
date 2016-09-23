@@ -90,11 +90,20 @@ const controller = {
     }
     AppStore.emitChange()
   },
+  searchUsers(q) {
+    const user = AppStore.data.user
+    AppDispatcher.dispatch({
+      action: 'search-users-new-message',
+      user,
+      q
+    })
+  },
   handleInputChange(value) {
     if (!AppStore.data.new_message)
       AppStore.data.new_message = {}
     AppStore.data.new_message.search_value = value
     AppStore.emitChange()
+    controller.searchUsers(value)
   }
 }
 export default controller
