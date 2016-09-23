@@ -14,6 +14,7 @@ module.exports = (app, config) => {
   // Users
   require('./users/get-self')(app, config)
   require('./users/get')(app, config)
+  require('./users/search')(app, config)
   require('./users/signup')(app, config)
   require('./users/signup-shadow')(app, config)
   require('./users/edit-user')(app, config)
