@@ -3,7 +3,7 @@ module.exports = (app, config) => {
   app.get('/api/brands/search',(req, res) => {
     const api_url = config.api.url
     const hostname = req.query.hostname
-    const access_token = req.body.access_token
+    const access_token = req.query.access_token
     const endpoint = api_url + '/brands/search?hostname=' + hostname
 
     const headers = {

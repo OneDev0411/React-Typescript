@@ -2,10 +2,10 @@
 import Brand from '../../models/Brand'
 import AppStore from '../../stores/AppStore'
 import ListingDispatcher from '../../dispatcher/ListingDispatcher'
-export default (hostname, user) => {
+export default (hostname) => {
   const params = {
     hostname,
-    access_token: user ? user.access_token : undefined
+    user: AppStore.data.user
   }
   Brand.getByHostname(params, (err, res) => {
     if (res.status === 'success') {
