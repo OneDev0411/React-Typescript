@@ -1,19 +1,25 @@
 {
   "src_folders" : ["./tests"],
   "page_objects_path" : "./tests/pages",
+
   "selenium" : {
     "start_process" : false
   },
 
   "test_settings" : {
     "default" : {
-      "launch_url" : "http://irish.rechat.com",
+      "launch_url" : "https://irish.rechat.com",
       "selenium_port"  : 4444,
       "selenium_host" : "127.0.0.1",
       "browserName": "chrome",
       "desiredCapabilities": {
         "browserName": "chrome",
         "browser": "chrome"
+      },
+      "globals": {
+        "waitForConditionTimeout": 15000,
+        "rechat_username": "test@rechat.com",
+        "rechat_password": "aaaaaa"
       }
     },
 

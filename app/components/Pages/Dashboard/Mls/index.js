@@ -377,7 +377,7 @@ export default class Mls extends Component {
         }
       }
       loading = (
-        <div style={ loading_style }>
+        <div id="loading" style={ loading_style }>
           <div style={ S(`br-20 color-fff w-190 h-29 pt-5 center-block text-center bg-${data.brand && data.brand.primary ? data.brand.primary : '3388ff'}`) }>Loading MLS&reg; Listings...</div>
         </div>
       )
@@ -688,7 +688,7 @@ export default class Mls extends Component {
             <div style={ S('w-1 h-28 absolute l-400 t-13 bg-dddddd') }></div>
           </div>
           <div style={ S('pull-left') }>
-            <Button onClick={ controller.listing_filter.showFilterForm.bind(this, 'photos') } style={ { ...S('h-50 border-1-solid-fff pt-15'), outline: 'none' } }>
+            <Button id="open_filters" onClick={ controller.listing_filter.showFilterForm.bind(this, 'photos') } style={ { ...S('h-50 border-1-solid-fff pt-15'), outline: 'none' } }>
               <div style={ S('w-20 mr-10 pull-left') }>
                 <SvgFilters color={'#929292'} />
               </div>

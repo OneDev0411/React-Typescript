@@ -4,9 +4,26 @@ module.exports = {
     index.navigate()
 
     client
-      .waitForElementVisible('body', 1000)
+      .waitForElementVisible('body')
       .assert.containsText('body', 'Rechat')
       .end();
+  },
+
+  'Search' : function(client) {
+    const search = client.page.search()
+    search.navigate()
+    search.ready()
+    search.openFilters()
+    search.toggleSold()   // Enable Sold
+    search.toggleActive() // Disable Active
+    search.update()
+    search.closeFilters()
+    search.allMarkersShouldBe('red')
+    search.zoomIn()
+    search.allMarkersShouldBe('red')
+    search.closeFilters()
+    search.zip(75214)
+    search.allMarkersShouldBe('red')
   },
 
   'Rooms' : function(client) {
@@ -15,7 +32,7 @@ module.exports = {
     index.goToLogin()
 
     const login = client.page.login()
-    login.login('emil@rechat.com', 'aaaaaa')
+    login.login(client.globals.rechat_username, client.globals.rechat_password)
 
     const sidebar = client.page.sidebar()
     sidebar.goToRooms()

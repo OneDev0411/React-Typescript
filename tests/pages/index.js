@@ -20,10 +20,10 @@ module.exports = {
   commands: [
     {
       goToLogin: function() {
-        return this.waitForElementVisible('@loginButton', 1000)
+        return this.waitForElementVisible('@loginButton')
           .click('@loginButton')
-          .waitForElementNotPresent('@loginButton', 1000)
-          .waitForElementPresent('form[action="/signin"]', 1000)
+          .waitForElementNotPresent('@loginButton')
+          .waitForElementPresent('form[action="/signin"]')
       }
     }
   ]

@@ -44,7 +44,7 @@ module.exports = {
   commands: [
     {
       createRoom() {
-        this.waitForElementVisible('@room_list', 1000)
+        this.waitForElementVisible('@room_list')
           .click('@new_room')
           .click('@recipients_arrow')
 
@@ -61,7 +61,7 @@ module.exports = {
 
         this.api.keys([this.api.Keys.ENTER])
 
-        this.waitForElementVisible('div.fade-in', 1000)
+        this.waitForElementVisible('div.fade-in')
 
         return this
       },
@@ -71,16 +71,16 @@ module.exports = {
       },
 
       deleteRoom() {
-        this.waitForElementVisible('@more', 1000)
+        this.waitForElementVisible('@more')
           .click('@more')
           .click('ul[aria-labelledby="room-dropdown"]>li:last-child')
 
-        this.api.expect('@delete_dialog').to.be.visible
-        this.api.expect('@delete_confirm').to.be.visible
+        this.api.expect.element(this.elements.delete_dialog.selector).to.be.visible
+        this.api.expect.element(this.elements.delete_confirm.selector).to.be.visible
 
         this.click('@delete_confirm')
 
-        this.api.expect('@delete_dialog').to.be.not.present
+        this.api.expect.element('@delete_dialog').to.be.not.present
       }
     }
   ]

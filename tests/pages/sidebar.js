@@ -12,7 +12,7 @@ module.exports = {
   commands: [
     {
       goToRooms() {
-        return this.waitForElementVisible('@sidebar', 1000)
+        return this.waitForElementVisible('@sidebar')
           .click('@rooms')
       }
     }

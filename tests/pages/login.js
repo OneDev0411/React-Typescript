@@ -24,9 +24,9 @@ module.exports = {
   commands: [
     {
       login: function(email, password) {
-        this.waitForElementVisible('@email', 1000).setValue('@email', email)
-        this.waitForElementVisible('@password', 1000).setValue('@password', password)
-        this.waitForElementVisible('@submit', 1000).click('@submit')
+        this.waitForElementVisible('@email').setValue('@email', email)
+        this.waitForElementVisible('@password').setValue('@password', password)
+        this.waitForElementVisible('@submit').click('@submit')
         return this
       }
     }
