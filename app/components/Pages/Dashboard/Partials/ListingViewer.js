@@ -60,6 +60,8 @@ export default class ListingViewer extends Component {
     let brand_agent
     if (data.brand)
       brand_agent = data.brand.users[0]
+    if (user.agent)
+      brand_agent = user.agent
     let viewer_width = window.innerWidth - 70
     if (!user)
       viewer_width = window.innerWidth
@@ -367,7 +369,7 @@ export default class ListingViewer extends Component {
                   </div>
                   <div className="clearfix"></div>
                 </div>
-                <div style={ S('mb-40 font-15') }>
+                <div style={ S('mb-70 font-15') }>
                   { description }
                 </div>
                 <div style={ S('pr-40 relative') }>
