@@ -1,4 +1,5 @@
 // controller/add-members.js
+import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import AppStore from '../../../../stores/AppStore'
 const controller = {
   addUsersToSearchInput(items_selected) {
@@ -25,11 +26,20 @@ const controller = {
     }
     AppStore.emitChange()
   },
+  searchUsers(q) {
+    const user = AppStore.data.user
+    AppDispatcher.dispatch({
+      action: 'search-users-add-members',
+      user,
+      q
+    })
+  },
   handleInputChange(value) {
     if (!AppStore.data.add_members)
       AppStore.data.add_members = {}
     AppStore.data.add_members.search_value = value
     AppStore.emitChange()
+    controller.searchUsers(value)
   }
 }
 export default controller

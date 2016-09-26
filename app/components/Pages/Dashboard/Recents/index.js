@@ -622,6 +622,20 @@ export default class Dashboard extends Component {
         }
       })
     }
+    // Search users
+    if (data.add_members && data.add_members.users_found) {
+      data.add_members.users_found.forEach(user => {
+        if (user) {
+          if (user.id !== data.user.id && users_selected_ids && users_selected_ids.indexOf(user.id) === -1 && users_select_options.indexOf(user.id) === -1) {
+            users_select_options.push({
+              value: user,
+              label: user.first_name ? user.first_name : user.phone_number,
+              type: 'user'
+            })
+          }
+        }
+      })
+    }
     let main_content = (
       <MainContent
         data={ data }
@@ -718,7 +732,7 @@ export default class Dashboard extends Component {
         </Modal>
         <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_add_members_modal } onHide={ this.hideModal }>
           <Modal.Header closeButton style={ S('h-70 bc-f3f3f3') }>
-           <Modal.Title style={ S('font-36') } className="din">Add Members</Modal.Title>
+            <Modal.Title style={ S('font-36') } className="din">Add Members</Modal.Title>
           </Modal.Header>
           <Modal.Body style={ S('h-500') }>
             <div className="create-item__user-select">

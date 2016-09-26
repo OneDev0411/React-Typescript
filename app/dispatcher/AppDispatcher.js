@@ -25,6 +25,7 @@ import upgradeAccount from '../actions/user/upgrade-account'
 import listingInquiry from '../actions/user/listing-inquiry'
 import searchUsersNewMessage from '../actions/user/search-new-message'
 import searchUsersShare from '../actions/user/search-share'
+import searchUsersAddMembers from '../actions/user/search-add-members'
 // Rooms
 import createRoom from '../actions/rooms/create-room'
 import deleteRoom from '../actions/rooms/delete-room'
@@ -283,6 +284,10 @@ AppDispatcher.register(payload => {
 
     case 'search-users-share':
       searchUsersShare(payload.user, payload.q)
+      break
+
+    case 'search-users-add-members':
+      searchUsersAddMembers(payload.user, payload.q)
       break
 
     default:
