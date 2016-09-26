@@ -24,6 +24,12 @@ module.exports = {
     search.closeFilters()
     search.zip(75214)
     search.allMarkersShouldBe('red')
+    search.openFilters()
+    search.toggleSold()
+    search.toggleOthers()
+    search.update()
+//     search.allMarkersShouldBe('orange')
+
   },
 
   'Rooms' : function(client) {

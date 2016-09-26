@@ -67,6 +67,7 @@ module.exports = {
           .setValue('@keywords', zip)
 
         this.api.keys([this.api.Keys.ENTER])
+        this.ready()
       },
 
       openFilters() {
