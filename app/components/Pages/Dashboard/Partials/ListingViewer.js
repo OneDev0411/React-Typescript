@@ -58,11 +58,12 @@ export default class ListingViewer extends Component {
     const data = this.props.data
     const user = data.user
     let brand_agent
-    if (data.brand)
+    if (data.brand) {
       brand_agent = data.brand.users[0]
-    // Check for user is agent in branding
-    if (_.find(data.brand.users, { id: user.id }))
-      brand_agent = _.find(data.brand.users, { id: user.id })
+      // Check for user is agent in branding
+      if (_.find(data.brand.users, { id: user.id }))
+        brand_agent = _.find(data.brand.users, { id: user.id })
+    }
     let viewer_width = window.innerWidth - 70
     if (!user)
       viewer_width = window.innerWidth
