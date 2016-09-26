@@ -483,29 +483,29 @@ export default class Dashboard extends Component {
     // Enter clicked
     const data = this.props.data
     if (e.which === 13) {
-      if (data.new_message && data.new_message.search_value) {
-        if (!data.new_message.items_selected)
-          data.new_message.items_selected = []
-        const search_value = data.new_message.search_value
+      if (data.add_members && data.add_members.search_value) {
+        if (!data.add_members.items_selected)
+          data.add_members.items_selected = []
+        const search_value = data.add_members.search_value
         // Emails
         if (validator.isEmail(search_value)) {
-          data.new_message.items_selected.push({
+          data.add_members.items_selected.push({
             email: search_value,
             type: 'email',
             label: search_value,
             value: search_value
           })
-          controller.add_members.addUsersToSearchInput(data.new_message.items_selected)
+          controller.add_members.addUsersToSearchInput(data.add_members.items_selected)
         }
         // Phone numbers
         if (validator.isNumeric(search_value)) {
-          data.new_message.items_selected.push({
+          data.add_members.items_selected.push({
             email: search_value,
             type: 'phone_number',
             label: search_value,
             value: search_value
           })
-          controller.add_members.addUsersToSearchInput(data.new_message.items_selected)
+          controller.add_members.addUsersToSearchInput(data.add_members.items_selected)
         }
         this.refs.myselect.refs.input.blur()
       }
