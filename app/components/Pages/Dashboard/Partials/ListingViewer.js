@@ -60,8 +60,9 @@ export default class ListingViewer extends Component {
     let brand_agent
     if (data.brand)
       brand_agent = data.brand.users[0]
-    if (user.agent)
-      brand_agent = user.agent
+    // Check for user is agent in branding
+    if (_.find(data.brand.users, { id: user.id }))
+      brand_agent = _.find(data.brand.users, { id: user.id })
     let viewer_width = window.innerWidth - 70
     if (!user)
       viewer_width = window.innerWidth
