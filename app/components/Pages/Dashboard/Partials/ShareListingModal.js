@@ -146,6 +146,20 @@ export default class ShareListingModal extends Component {
         }
       })
     }
+    // Search users
+    if (data.share_modal && data.share_modal.users_found) {
+      data.share_modal.users_found.forEach(user => {
+        if (user) {
+          if (user.id !== data.user.id && users_selected_ids && users_selected_ids.indexOf(user.id) === -1 && users_select_options.indexOf(user.id) === -1) {
+            users_select_options.push({
+              value: user,
+              label: user.first_name ? user.first_name : user.phone_number,
+              type: 'user'
+            })
+          }
+        }
+      })
+    }
     let dialog_class_name = 'modal-800'
     // Check if mobile
     if (data.is_mobile)
