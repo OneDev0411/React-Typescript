@@ -110,6 +110,14 @@ export default (user, mls_number, message, users, emails, phone_numbers, notific
           delete AppStore.data.show_listing_shared_modal
           AppStore.emitChange()
         }, 3000)
+        if (message) {
+          AppDispatcher.dispatch({
+            action: 'create-message',
+            user,
+            room: locals.current_room,
+            comment: message
+          })
+        }
       })
     }
   ])

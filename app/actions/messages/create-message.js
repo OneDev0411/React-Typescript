@@ -9,7 +9,6 @@ export default (user, room, comment, image_url, attachment) => {
   }
   if (attachment)
     message.attachments = [attachment]
-  // console.log('send', room.id, message)
   socket.emit('Message.Send', room.id, message)
   socket.emit('User.TypingEnded', room.id)
 }
