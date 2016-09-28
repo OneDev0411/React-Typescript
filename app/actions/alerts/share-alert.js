@@ -5,7 +5,6 @@ import _ from 'lodash'
 import async from 'async'
 import AppDispatcher from '../../dispatcher/AppDispatcher'
 export default (user, rooms, users, emails, phone_numbers, alert, message) => {
-  console.log(user, rooms, users, emails, phone_numbers, alert, message)
   AppStore.data.listing_map.saving_alert = true
   AppStore.emitChange()
   // Get a room
