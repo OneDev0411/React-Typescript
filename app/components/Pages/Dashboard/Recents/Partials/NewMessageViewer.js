@@ -89,7 +89,7 @@ export default class NewMessageViewer extends Component {
       )
     }
     return (
-      <div style={ S('relative h-54') }>
+      <div style={ S('relative ' + (item.index < 1 ? 'h-74' : 'h-54')) } className={ item.index < 1 ? 'other-users--first' : '' } >
         <div style={ S('mt-10') }>{ profile_image }</div>
         <div style={ S('pull-left mt-10 ml-60 mr-5') }>{ item.label }</div>
         <div className="clearfix"/>
@@ -154,13 +154,14 @@ export default class NewMessageViewer extends Component {
     }
     // Search users
     if (data.new_message && data.new_message.users_found) {
-      data.new_message.users_found.forEach(user => {
+      data.new_message.users_found.forEach((user, i) => {
         if (user) {
           if (user.id !== data.user.id && users_selected_ids && users_selected_ids.indexOf(user.id) === -1 && users_select_options.indexOf(user.id) === -1) {
             users_select_options.push({
               value: user,
               label: user.first_name ? user.first_name : user.phone_number,
-              type: 'user'
+              type: 'user',
+              index: i
             })
           }
         }
