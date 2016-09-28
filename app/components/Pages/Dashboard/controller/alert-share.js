@@ -51,12 +51,13 @@ const controller = {
       alert.title = data.share_modal.title
     const user = data.user
     const share_modal = AppStore.data.share_modal
-    const users = _.map(share_modal.items_selected, 'value.id')
+    const users = _.map(share_modal.items_selected, 'value.id').filter(Boolean)
+    const phone_numbers = _.map(_.filter(share_modal.items_selected, { type: 'phone_number' }), 'value')
+    const emails = _.map(_.filter(share_modal.items_selected, { type: 'email' }), 'value')
     const message = this.refs.message.refs.input.value.trim()
     AppStore.data.share_modal.sending_share = true
     AppStore.emitChange()
-    let emails
-    let phone_numbers
+
     // console.log(alert)
     ListingDispatcher.dispatch({
       action: 'share-alert',
