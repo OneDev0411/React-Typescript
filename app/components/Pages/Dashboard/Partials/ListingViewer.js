@@ -58,8 +58,12 @@ export default class ListingViewer extends Component {
     const data = this.props.data
     const user = data.user
     let brand_agent
-    if (data.brand)
+    if (data.brand) {
       brand_agent = data.brand.users[0]
+      // Check for user is agent in branding
+      if (user && _.find(data.brand.users, { id: user.id }))
+        brand_agent = _.find(data.brand.users, { id: user.id })
+    }
     let viewer_width = window.innerWidth - 70
     if (!user)
       viewer_width = window.innerWidth
@@ -318,9 +322,9 @@ export default class ListingViewer extends Component {
           </div>
           <div>
             <div style={ S('pl-40 pr-40 relative') }>
-              <Col xs={9} style={ S('pl-0') }>
+              <Col sm={8} md={9} style={ S('pl-0') }>
                 <div style={ S('pt-50 mb-20') }>
-                  <Col style={ S('p-0') } xs={3}>
+                  <div style={ S('p-0 pull-left w-210') }>
                     <div style={ S('w-200 br-3 border-1-solid-f4f6f9') }>
                       <div style={ S('w-100p h-200') }>
                         { listing_map_small }
@@ -336,8 +340,8 @@ export default class ListingViewer extends Component {
                         <div className="clearfix"/>
                       </div>
                     </div>
-                  </Col>
-                  <Col xs={9} style={ S('p-0 pl-20') }>
+                  </div>
+                  <div style={ S('p-0 pl-20 pull-left') }>
                     <div style={ S('fw-700 font-60') }>
                       ${ price }{ listing.property && listing.property.property_type === 'Residential Lease' ? '/mo' : '' } { asking_price_area }
                     </div>
@@ -364,217 +368,220 @@ export default class ListingViewer extends Component {
                       <span>{ year_built ? 'Built in ' + year_built : '' }</span>
                       { lot_size_area }
                     </div>
-                  </Col>
+                  </div>
                   <div className="clearfix"></div>
                 </div>
-                <div style={ S('mb-20 font-15') }>
+                <div style={ S('mb-70 font-15') }>
                   { description }
                 </div>
+                <div style={ S('pr-40 relative') }>
+                  <div style={ S('mb-30 font-15') }>
+                    <div style={ S('w-33p pull-left pr-20') }>
+                      <div style={ S('mb-30') }>
+                        <div style={ S('fw-600 mb-10 font-18') }>Cost Breakdown</div>
+                        <div style={ S('color-aaaaaa mb-10') }>
+                          Price/sqt: <span style={ S('color-777') }>${ price_sq_foot }</span>
+                        </div>
+                        <div style={ S('color-aaaaaa mb-10') }>
+                          Unexempt Taxes: <span style={ S('color-777') }>${ listing.unexempt_taxes ? helpers.numberWithCommas(listing.unexempt_taxes) : 0 }</span>
+                        </div>
+                        <div style={ S('color-aaaaaa mb-10') }>
+                          HOA Fees: <span style={ S('color-777') }>${ listing.association_fee ? listing.association_fee : 0 }</span>
+                        </div>
+                        <div style={ S('color-aaaaaa mb-10') }>
+                          HOA Frequency: <span style={ S('color-777') }>{ listing.association_fee_frequency }</span>
+                        </div>
+                        <div style={ S('color-aaaaaa mb-10') }>
+                          HOA Includes: <span style={ S('color-777') }>{ listing.association_fee_includes }</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div style={ S('w-33p pull-left pr-20') }>
+                      <div style={ S('fw-600 mb-10 font-18') }>Key Facts</div>
+                      <div style={ S('color-aaaaaa mb-10') }>
+                        Year Built: <span style={ S('color-777') }>{ property.year_built }</span>
+                      </div>
+                      <div style={ S('color-aaaaaa mb-10') }>
+                        Style of House: <span style={ S('color-777') }>{ property.architectural_style }</span>
+                      </div>
+                      <div style={ S('color-aaaaaa mb-10') }>
+                        Subdivision: <span style={ S('color-777') }>{ property.subdivision_name }</span>
+                      </div>
+                      <div style={ S('color-aaaaaa mb-10') }>
+                        Acres: <span style={ S('color-777') }>{ property.lot_size_area }</span>
+                      </div>
+                      <div style={ S('color-aaaaaa mb-10') }>
+                        Stories: <span style={ S('color-777') }>{ property.number_of_stories }</span>
+                      </div>
+                      <div style={ S('color-aaaaaa mb-10') }>
+                        MLS#: <span style={ S('color-777') }>{ listing.mls_number }</span>
+                      </div>
+                      <div style={ S('color-aaaaaa mb-10') }>
+                        Possession: <span style={ S('color-777') }>{ listing.possession }</span>
+                      </div>
+                      <div style={ S('color-aaaaaa mb-10') }>
+                        Days On Market: <span style={ S('color-777') }>{ listing_util.getDOM(listing.dom) }</span>
+                      </div>
+                      <div style={ S('color-aaaaaa') }>
+                        Current Days On Market: <span style={ S('color-777') }>{ listing_util.getDOM(listing.cdom) }</span>
+                      </div>
+                    </div>
+                    <div style={ S('w-33p pull-left pr-20') }>
+                      <div style={ S('fw-600 font-18 mb-10') }>Amenities & Utilities</div>
+                      <div style={ S('color-aaaaaa mb-10') }>
+                        Pool: <span style={ S('color-777') }>{ property.pool_yn ? 'Yes' : 'No' }</span>
+                      </div>
+                      <div style={ S('color-aaaaaa mb-10') }>
+                        Pool Features:&nbsp;
+                        <span style={ S('color-777') }>
+                          {
+                            property.pool_features.map(item => {
+                              return <span key={ item }>{ item }, </span>
+                            })
+                          }
+                        </span>
+                      </div>
+                      <div style={ S('color-aaaaaa mb-10') }>
+                        Handicap Amenities: <span style={ S('color-777') }>{ property.handicap_yn ? 'Yes' : 'No' }</span>
+                      </div>
+                      <div style={ S('color-aaaaaa mb-10') }>
+                        Heating/Cooling:&nbsp;
+                        <span style={ S('color-777') }>
+                          {
+                            property.heating.map(item => {
+                              return <span key={ item }>{ item }, </span>
+                            })
+                          }
+                        </span>
+                      </div>
+                      <div style={ S('color-aaaaaa mb-10') }>
+                        Other:&nbsp;
+                        <span style={ S('color-777') }>
+                          {
+                            property.utilities.map(item => {
+                              return <span key={ item }>{ item }, </span>
+                            })
+                          }
+                        </span>
+                      </div>
+                    </div>
+                    <div className="clearfix"></div>
+                  </div>
+                  <div className="clearfix"></div>
+                </div>
               </Col>
-              <Col xs={3} style={ S('pl-0') }>
+              <Col sm={4} md={3} style={ S('pl-0') }>
                 { brand_agent_area }
                 { list_agent_area }
               </Col>
             </div>
             <div className="clearfix"></div>
-            <div style={ S('w-100p h-120 p-40 pt-45 bg-f8f8f8 font-21 mb-20 mt-20') }>
-              Ready to see this home? I can show it to you.
-            </div>
-            <div style={ S('pl-40 pr-40 relative') }>
-              <div style={ S('mb-30 font-15') }>
-                <div style={ S('w-300 pull-left pr-20') }>
-                  <div style={ S('mb-30') }>
-                    <div style={ S('fw-600 mb-10 font-18') }>Cost Breakdown</div>
-                    <div style={ S('color-aaaaaa mb-10') }>
-                      Price/sqt: <span style={ S('color-777') }>${ price_sq_foot }</span>
+            <div style={ S('pl-0 bg-f8f8f8 w-100p') }>
+              <Col sm={8} md={9} style={ S('pl-0 bg-f8f8f8') }>
+                <div style={ S('p-40') }>
+                  <div style={ S('mb-30 font-15') }>
+                    <div style={ S('w-33p pull-left pr-20') }>
+                      <div style={ S('mb-30') }>
+                        <div style={ S('fw-600 font-18 mb-10') }>All Features</div>
+                        <div style={ S('color-aaaaaa mb-10') }>
+                          Garage Spaces:&nbsp;
+                          <span style={ S('color-777') }>
+                            { property.parking_spaces_garage }
+                          </span>
+                        </div>
+                        <div style={ S('color-aaaaaa mb-10') }>
+                          Parking/Garage:&nbsp;
+                          <span style={ S('color-777') }>
+                            { property.parking_spaces_garage ? 'Yes' : 'No' }
+                          </span>
+                        </div>
+                        <div style={ S('color-aaaaaa mb-10') }>
+                          Interior Features:&nbsp;
+                          <span style={ S('color-777') }>
+                            {
+                              property.interior_features.map(item => {
+                                return <span key={ item }>{ item }, </span>
+                              })
+                            }
+                          </span>
+                        </div>
+                        <div style={ S('color-aaaaaa mb-10') }>
+                          Alarm/Security:&nbsp;
+                          <span style={ S('color-777') }>
+                            {
+                              property.security_features.map(item => {
+                                return <span key={ item }>{ item }, </span>
+                              })
+                            }
+                          </span>
+                        </div>
+                        <div style={ S('color-aaaaaa mb-10') }>
+                          Flooring:&nbsp;
+                          <span style={ S('color-777') }>
+                            {
+                              property.flooring.map(item => {
+                                return <span key={ item }>{ item }, </span>
+                              })
+                            }
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <div style={ S('color-aaaaaa mb-10') }>
-                      Unexempt Taxes: <span style={ S('color-777') }>${ listing.unexempt_taxes ? helpers.numberWithCommas(listing.unexempt_taxes) : 0 }</span>
+                    <div style={ S('w-33p pull-left pr-20') }>
+                      <div style={ S('h-35') }></div>
+                      <div style={ S('color-aaaaaa mb-10') }>
+                        Exterior Features:&nbsp;
+                        <span style={ S('color-777') }>
+                          {
+                            property.exterior_features.map(item => {
+                              return <span key={ item }>{ item }, </span>
+                            })
+                          }
+                        </span>
+                      </div>
+                      <div style={ S('color-aaaaaa mb-10') }>
+                        Construction:&nbsp;
+                        <span style={ S('color-777') }>
+                          { property.construction_materials }
+                        </span>
+                      </div>
+                      <div style={ S('color-aaaaaa mb-10') }>
+                        Foundation:&nbsp;
+                        <span style={ S('color-777') }>
+                          { property.foundation_details }
+                        </span>
+                      </div>
+                      <div style={ S('color-aaaaaa mb-10') }>
+                        Roof:&nbsp;
+                        <span style={ S('color-777') }>
+                          { property.roof }
+                        </span>
+                      </div>
                     </div>
-                    <div style={ S('color-aaaaaa mb-10') }>
-                      HOA Fees: <span style={ S('color-777') }>${ listing.association_fee ? listing.association_fee : 0 }</span>
+                    <div style={ S('w-33p pull-left pr-20') }>
+                      <div style={ S('fw-600 font-18 mb-10') }>Schools</div>
+                      <div style={ S('color-aaaaaa mb-10') }>
+                        School District: <span style={ S('color-777') }>{ property.school_district }</span>
+                      </div>
+                      <div style={ S('color-aaaaaa mb-10') }>
+                        Elementary School: <span style={ S('color-777') }>{ property.elementary_school_name }</span>
+                      </div>
+                      <div style={ S('color-aaaaaa mb-10') }>
+                        Middle School: <span style={ S('color-777') }>{ property.middle_school_name }</span>
+                      </div>
+                      <div style={ S('color-aaaaaa mb-10') }>
+                        Junior High School: <span style={ S('color-777') }>{ property.junior_high_school_name }</span>
+                      </div>
+                      <div style={ S('color-aaaaaa mb-10') }>
+                        Senior High School: <span style={ S('color-777') }>{ property.senior_high_school_name }</span>
+                      </div>
                     </div>
-                    <div style={ S('color-aaaaaa mb-10') }>
-                      HOA Frequency: <span style={ S('color-777') }>{ listing.association_fee_frequency }</span>
-                    </div>
-                    <div style={ S('color-aaaaaa mb-10') }>
-                      HOA Includes: <span style={ S('color-777') }>{ listing.association_fee_includes }</span>
-                    </div>
-                  </div>
-                </div>
-                <div style={ S('w-300 pull-left pr-20') }>
-                  <div style={ S('fw-600 mb-10 font-18') }>Key Facts</div>
-                  <div style={ S('color-aaaaaa mb-10') }>
-                    Year Built: <span style={ S('color-777') }>{ property.year_built }</span>
-                  </div>
-                  <div style={ S('color-aaaaaa mb-10') }>
-                    Style of House: <span style={ S('color-777') }>{ property.architectural_style }</span>
-                  </div>
-                  <div style={ S('color-aaaaaa mb-10') }>
-                    Subdivision: <span style={ S('color-777') }>{ property.subdivision_name }</span>
-                  </div>
-                  <div style={ S('color-aaaaaa mb-10') }>
-                    Acres: <span style={ S('color-777') }>{ property.lot_size_area }</span>
-                  </div>
-                  <div style={ S('color-aaaaaa mb-10') }>
-                    Stories: <span style={ S('color-777') }>{ property.number_of_stories }</span>
-                  </div>
-                  <div style={ S('color-aaaaaa mb-10') }>
-                    MLS#: <span style={ S('color-777') }>{ listing.mls_number }</span>
-                  </div>
-                  <div style={ S('color-aaaaaa mb-10') }>
-                    Possession: <span style={ S('color-777') }>{ listing.possession }</span>
-                  </div>
-                  <div style={ S('color-aaaaaa mb-10') }>
-                    Days On Market: <span style={ S('color-777') }>{ listing_util.getDOM(listing.dom) }</span>
-                  </div>
-                  <div style={ S('color-aaaaaa') }>
-                    Current Days On Market: <span style={ S('color-777') }>{ listing_util.getDOM(listing.cdom) }</span>
-                  </div>
-                </div>
-                <div style={ S('w-300 pull-left pr-20') }>
-                  <div style={ S('fw-600 font-18 mb-10') }>Amenities & Utilities</div>
-                  <div style={ S('color-aaaaaa mb-10') }>
-                    Pool: <span style={ S('color-777') }>{ property.pool_yn ? 'Yes' : 'No' }</span>
-                  </div>
-                  <div style={ S('color-aaaaaa mb-10') }>
-                    Pool Features:&nbsp;
-                    <span style={ S('color-777') }>
-                      {
-                        property.pool_features.map(item => {
-                          return <span key={ item }>{ item }, </span>
-                        })
-                      }
-                    </span>
-                  </div>
-                  <div style={ S('color-aaaaaa mb-10') }>
-                    Handicap Amenities: <span style={ S('color-777') }>{ property.handicap_yn ? 'Yes' : 'No' }</span>
-                  </div>
-                  <div style={ S('color-aaaaaa mb-10') }>
-                    Heating/Cooling:&nbsp;
-                    <span style={ S('color-777') }>
-                      {
-                        property.heating.map(item => {
-                          return <span key={ item }>{ item }, </span>
-                        })
-                      }
-                    </span>
-                  </div>
-                  <div style={ S('color-aaaaaa mb-10') }>
-                    Other:&nbsp;
-                    <span style={ S('color-777') }>
-                      {
-                        property.utilities.map(item => {
-                          return <span key={ item }>{ item }, </span>
-                        })
-                      }
-                    </span>
+                    <div className="clearfix"></div>
                   </div>
                 </div>
                 <div className="clearfix"></div>
-              </div>
+              </Col>
               <div className="clearfix"></div>
-            </div>
-            <div style={ S('p-40 bg-f8f8f8') }>
-              <div style={ S('mb-30 font-15') }>
-                <div style={ S('w-300 pull-left pr-20') }>
-                  <div style={ S('mb-30') }>
-                    <div style={ S('fw-600 font-18 mb-10') }>All Features</div>
-                    <div style={ S('color-aaaaaa mb-10') }>
-                      Garage Spaces:&nbsp;
-                      <span style={ S('color-777') }>
-                        { property.parking_spaces_garage }
-                      </span>
-                    </div>
-                    <div style={ S('color-aaaaaa mb-10') }>
-                      Parking/Garage:&nbsp;
-                      <span style={ S('color-777') }>
-                        { property.parking_spaces_garage ? 'Yes' : 'No' }
-                      </span>
-                    </div>
-                    <div style={ S('color-aaaaaa mb-10') }>
-                      Interior Features:&nbsp;
-                      <span style={ S('color-777') }>
-                        {
-                          property.interior_features.map(item => {
-                            return <span key={ item }>{ item }, </span>
-                          })
-                        }
-                      </span>
-                    </div>
-                    <div style={ S('color-aaaaaa mb-10') }>
-                      Alarm/Security:&nbsp;
-                      <span style={ S('color-777') }>
-                        {
-                          property.security_features.map(item => {
-                            return <span key={ item }>{ item }, </span>
-                          })
-                        }
-                      </span>
-                    </div>
-                    <div style={ S('color-aaaaaa mb-10') }>
-                      Flooring:&nbsp;
-                      <span style={ S('color-777') }>
-                        {
-                          property.flooring.map(item => {
-                            return <span key={ item }>{ item }, </span>
-                          })
-                        }
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div style={ S('w-300 pull-left pr-20') }>
-                  <div style={ S('h-35') }></div>
-                  <div style={ S('color-aaaaaa mb-10') }>
-                    Exterior Features:&nbsp;
-                    <span style={ S('color-777') }>
-                      {
-                        property.exterior_features.map(item => {
-                          return <span key={ item }>{ item }, </span>
-                        })
-                      }
-                    </span>
-                  </div>
-                  <div style={ S('color-aaaaaa mb-10') }>
-                    Construction:&nbsp;
-                    <span style={ S('color-777') }>
-                      { property.construction_materials }
-                    </span>
-                  </div>
-                  <div style={ S('color-aaaaaa mb-10') }>
-                    Foundation:&nbsp;
-                    <span style={ S('color-777') }>
-                      { property.foundation_details }
-                    </span>
-                  </div>
-                  <div style={ S('color-aaaaaa mb-10') }>
-                    Roof:&nbsp;
-                    <span style={ S('color-777') }>
-                      { property.roof }
-                    </span>
-                  </div>
-                </div>
-                <div style={ S('w-300 pull-left pr-20') }>
-                  <div style={ S('fw-600 font-18 mb-10') }>Schools</div>
-                  <div style={ S('color-aaaaaa mb-10') }>
-                    School District: <span style={ S('color-777') }>{ property.school_district }</span>
-                  </div>
-                  <div style={ S('color-aaaaaa mb-10') }>
-                    Elementary School: <span style={ S('color-777') }>{ property.elementary_school_name }</span>
-                  </div>
-                  <div style={ S('color-aaaaaa mb-10') }>
-                    Middle School: <span style={ S('color-777') }>{ property.middle_school_name }</span>
-                  </div>
-                  <div style={ S('color-aaaaaa mb-10') }>
-                    Junior High School: <span style={ S('color-777') }>{ property.junior_high_school_name }</span>
-                  </div>
-                  <div style={ S('color-aaaaaa mb-10') }>
-                    Senior High School: <span style={ S('color-777') }>{ property.senior_high_school_name }</span>
-                  </div>
-                </div>
-                <div className="clearfix"></div>
-              </div>
             </div>
             <div className="clearfix"></div>
           </div>

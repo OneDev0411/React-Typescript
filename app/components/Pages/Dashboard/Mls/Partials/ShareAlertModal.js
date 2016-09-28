@@ -122,11 +122,24 @@ export default class ShareAlertModal extends Component {
     if (data.rooms) {
       data.rooms.forEach(room => {
         if (room.users.length > 2) {
-          users_select_options.push({
-            value: room,
-            label: getDisplayNameString(room, data.user),
-            type: 'room'
-          })
+          // Test if user in available rooms
+          if (users_selected_ids && users_selected_ids.length) {
+            const room_user_ids = _.map(room.users, 'id')
+            const has_all_users = users_selected_ids.every(id => room_user_ids.indexOf(id) !== -1)
+            if (has_all_users) {
+              users_select_options.push({
+                value: room,
+                label: getDisplayNameString(room, data.user),
+                type: 'room'
+              })
+            }
+          } else {
+            users_select_options.push({
+              value: room,
+              label: getDisplayNameString(room, data.user),
+              type: 'room'
+            })
+          }
         }
       })
     }
@@ -138,6 +151,20 @@ export default class ShareAlertModal extends Component {
             users_select_options.push({
               value: user,
               label: user.first_name ? user.first_name : contact.phone_number,
+              type: 'user'
+            })
+          }
+        }
+      })
+    }
+    // Search users
+    if (data.share_modal && data.share_modal.users_found) {
+      data.share_modal.users_found.forEach(user => {
+        if (user) {
+          if (user.id !== data.user.id && users_selected_ids && users_selected_ids.indexOf(user.id) === -1 && users_select_options.indexOf(user.id) === -1) {
+            users_select_options.push({
+              value: user,
+              label: user.first_name ? user.first_name : user.phone_number,
               type: 'user'
             })
           }

@@ -1,5 +1,6 @@
 // controller/share-modal.js
 import AppStore from '../../../../stores/AppStore'
+import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import _ from 'lodash'
 const controller = {
   addUsersToSearchInput(items_selected) {
@@ -37,11 +38,20 @@ const controller = {
     AppStore.data.share_modal.items_selected = unique_items_selected
     AppStore.emitChange()
   },
+  searchUsers(q) {
+    const user = AppStore.data.user
+    AppDispatcher.dispatch({
+      action: 'search-users-share',
+      user,
+      q
+    })
+  },
   handleInputChange(value) {
     if (!AppStore.data.share_modal)
       AppStore.data.share_modal = {}
     AppStore.data.share_modal.search_value = value
     AppStore.emitChange()
+    controller.searchUsers(value)
   }
 }
 export default controller

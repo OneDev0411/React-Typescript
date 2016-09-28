@@ -106,6 +106,7 @@ export default class Mls extends Component {
     this.resetViews()
     this.routeURL()
     this.checkForMobile()
+    Brand.checkBranding()
   }
   componentDidUpdate() {
     const data = this.props.data

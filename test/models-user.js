@@ -120,12 +120,24 @@ describe('Testing User model', () => {
   // })
 
   // Get favorites
-  it('User.getFavorites should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
+  // it('User.getFavorites should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
+  //   const params = {
+  //     access_token,
+  //     api_host: test.api_host
+  //   }
+  //   User.getFavorites(params, (err, response) => {
+  //     console.log(response)
+  //     expect(response.status).to.equal('success')
+  //     done()
+  //   })
+  // })
+  // Get all
+  it('User.search should users', function(done) {
     const params = {
-      access_token,
-      api_host: test.api_host
+      access_token: access_token,
+      q: 'Tony'
     }
-    User.getFavorites(params, (err, response) => {
+    User.search(params, (err, response) => {
       console.log(response)
       expect(response.status).to.equal('success')
       done()

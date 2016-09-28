@@ -483,29 +483,29 @@ export default class Dashboard extends Component {
     // Enter clicked
     const data = this.props.data
     if (e.which === 13) {
-      if (data.new_message && data.new_message.search_value) {
-        if (!data.new_message.items_selected)
-          data.new_message.items_selected = []
-        const search_value = data.new_message.search_value
+      if (data.add_members && data.add_members.search_value) {
+        if (!data.add_members.items_selected)
+          data.add_members.items_selected = []
+        const search_value = data.add_members.search_value
         // Emails
         if (validator.isEmail(search_value)) {
-          data.new_message.items_selected.push({
+          data.add_members.items_selected.push({
             email: search_value,
             type: 'email',
             label: search_value,
             value: search_value
           })
-          controller.add_members.addUsersToSearchInput(data.new_message.items_selected)
+          controller.add_members.addUsersToSearchInput(data.add_members.items_selected)
         }
         // Phone numbers
         if (validator.isNumeric(search_value)) {
-          data.new_message.items_selected.push({
+          data.add_members.items_selected.push({
             email: search_value,
             type: 'phone_number',
             label: search_value,
             value: search_value
           })
-          controller.add_members.addUsersToSearchInput(data.new_message.items_selected)
+          controller.add_members.addUsersToSearchInput(data.add_members.items_selected)
         }
         this.refs.myselect.refs.input.blur()
       }
@@ -622,6 +622,20 @@ export default class Dashboard extends Component {
         }
       })
     }
+    // Search users
+    if (data.add_members && data.add_members.users_found) {
+      data.add_members.users_found.forEach(user => {
+        if (user) {
+          if (user.id !== data.user.id && users_selected_ids && users_selected_ids.indexOf(user.id) === -1 && users_select_options.indexOf(user.id) === -1) {
+            users_select_options.push({
+              value: user,
+              label: user.first_name ? user.first_name : user.phone_number,
+              type: 'user'
+            })
+          }
+        }
+      })
+    }
     let main_content = (
       <MainContent
         data={ data }
@@ -718,7 +732,7 @@ export default class Dashboard extends Component {
         </Modal>
         <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_add_members_modal } onHide={ this.hideModal }>
           <Modal.Header closeButton style={ S('h-70 bc-f3f3f3') }>
-           <Modal.Title style={ S('font-36') } className="din">Add Members</Modal.Title>
+            <Modal.Title style={ S('font-36') } className="din">Add Members</Modal.Title>
           </Modal.Header>
           <Modal.Body style={ S('h-500') }>
             <div className="create-item__user-select">
