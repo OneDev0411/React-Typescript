@@ -6,7 +6,7 @@ import _ from 'lodash'
 import async from 'async'
 import getAllMessages from '../messages/get-all-messages'
 import AppDispatcher from '../../dispatcher/AppDispatcher'
-export default (user, mls_number, message, rooms, users, emails, phone_numbers, notification) => {
+export default (user, mls_number, message, users, emails, phone_numbers, notification) => {
   // Get a room
   const available_rooms = AppStore.data.rooms
   let room_found = null
@@ -25,7 +25,7 @@ export default (user, mls_number, message, rooms, users, emails, phone_numbers, 
     const params = {
       access_token: user.access_token,
       message,
-      rooms: [room_id],
+      room: room_id,
       mls_number,
       notification
     }
@@ -33,7 +33,12 @@ export default (user, mls_number, message, rooms, users, emails, phone_numbers, 
       // Success
       delete AppStore.data.share_modal.sending_share
       delete AppStore.data.show_share_listing_modal
+      AppStore.data.show_listing_shared_modal = true
       AppStore.emitChange()
+      setTimeout(() => {
+        delete AppStore.data.show_listing_shared_modal
+        AppStore.emitChange()
+      }, 3000)
       if (message) {
         AppDispatcher.dispatch({
           action: 'create-message',
@@ -91,18 +96,20 @@ export default (user, mls_number, message, rooms, users, emails, phone_numbers, 
       const params = {
         access_token: user.access_token,
         message,
-        rooms,
-        users,
+        room: locals.current_room.id,
         mls_number,
-        emails,
-        phone_numbers,
         notification
       }
       Room.createRec(params, () => {
         // Success
         delete AppStore.data.share_modal.sending_share
         delete AppStore.data.show_share_listing_modal
+        AppStore.data.show_listing_shared_modal = true
         AppStore.emitChange()
+        setTimeout(() => {
+          delete AppStore.data.show_listing_shared_modal
+          AppStore.emitChange()
+        }, 3000)
       })
     }
   ])
