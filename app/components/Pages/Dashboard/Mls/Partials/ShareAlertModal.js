@@ -126,7 +126,7 @@ export default class ShareAlertModal extends Component {
           if (users_selected_ids && users_selected_ids.length) {
             const room_user_ids = _.map(room.users, 'id')
             const has_all_users = users_selected_ids.every(id => room_user_ids.indexOf(id) !== -1)
-            if (has_all_users) {
+            if (has_all_users && room_user_ids.length - 1 > users_selected_ids.length) {
               users_select_options.push({
                 value: room,
                 label: getDisplayNameString(room, data.user),
