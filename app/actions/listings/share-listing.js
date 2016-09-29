@@ -29,7 +29,7 @@ export default (user, mls_number, message, users, emails, phone_numbers, notific
       mls_number,
       notification
     }
-    Room.createRec(params, () => {
+    Room.createRec(params, (err, res) => {
       // Success
       delete AppStore.data.share_modal.sending_share
       delete AppStore.data.show_share_listing_modal
@@ -44,11 +44,12 @@ export default (user, mls_number, message, users, emails, phone_numbers, notific
           action: 'create-message',
           user,
           room: room_found,
-          comment: message
+          comment: message,
+          recommendation: res.data.id
         })
       }
-      User.getRooms(params, (err, res) => {
-        const updated_rooms = res.data
+      User.getRooms(params, (error, response) => {
+        const updated_rooms = response.data
         AppStore.data.rooms = updated_rooms
         getAllMessages(user, updated_rooms)
         AppStore.emitChange()
@@ -100,7 +101,7 @@ export default (user, mls_number, message, users, emails, phone_numbers, notific
         mls_number,
         notification
       }
-      Room.createRec(params, () => {
+      Room.createRec(params, (err, res) => {
         // Success
         delete AppStore.data.share_modal.sending_share
         delete AppStore.data.show_share_listing_modal
@@ -115,7 +116,8 @@ export default (user, mls_number, message, users, emails, phone_numbers, notific
             action: 'create-message',
             user,
             room: locals.current_room,
-            comment: message
+            comment: message,
+            recommendation: res.data.id
           })
         }
       })

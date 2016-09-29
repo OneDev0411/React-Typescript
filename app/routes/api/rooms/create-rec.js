@@ -12,13 +12,6 @@ module.exports = (app, config) => {
       mls_number,
       notification
     }
-    if (message) {
-      request_object.message = {
-        message_type: 'SubLevel',
-        comment: message,
-        recommendation: 'SubLevel'
-      }
-    }
     fetch(endpoint, {
       method: 'post',
       headers: {  

@@ -175,7 +175,7 @@ AppDispatcher.register(payload => {
       break
 
     case 'create-message':
-      createMessage(payload.user, payload.room, payload.comment, payload.image_url, payload.attachment)
+      createMessage(payload.user, payload.room, payload.comment, payload.image_url, payload.attachment, payload.recommendation)
       break
 
     case 'update-rooms-indexeddb':

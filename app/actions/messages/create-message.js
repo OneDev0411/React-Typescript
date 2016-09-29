@@ -1,5 +1,5 @@
 // actions/create-message.js
-export default (user, room, comment, image_url, attachment) => {
+export default (user, room, comment, image_url, attachment, recommendation) => {
   // Socket
   const socket = window.socket
   const message = {
@@ -9,6 +9,8 @@ export default (user, room, comment, image_url, attachment) => {
   }
   if (attachment)
     message.attachments = [attachment]
+  if (recommendation)
+    message.recommendation = recommendation
   socket.emit('Message.Send', room.id, message)
   socket.emit('User.TypingEnded', room.id)
 }
