@@ -8,37 +8,52 @@ class Brand {
   }
 
   color(name, def) {
-    const brand = AppStore.data.brand
+    let brand = AppStore.data.brand
     if (!brand)
       return def
 
-    const palette = brand.palette
+    do {
+      const palette = brand.palette
 
-    if (palette[name])
-      return palette[name].replace('#', '')
+      if (palette && palette[name])
+        return palette[name].replace('#', '')
+
+      brand = brand.parent
+    } while (brand)
 
     return def
   }
 
   asset(name, def) {
-    const brand = AppStore.data.brand
+    let brand = AppStore.data.brand
     if (!brand)
       return def
 
-    const assets = brand.assets
-    if (assets[name])
-      return assets[name]
+    do {
+      const assets = brand.assets
+
+      if (assets && assets[name])
+        return assets[name]
+
+      brand = brand.parent
+    } while (brand)
 
     return def
   }
 
   message(name, def) {
-    const brand = AppStore.data.brand
+    let brand = AppStore.data.brand
     if (!brand)
       return def
-    const messages = brand.messages
-    if (messages && messages[name])
-      return messages[name]
+
+    do {
+      const messages = brand.messages
+
+      if (messages && messages[name])
+        return messages[name]
+
+      brand = brand.parent
+    } while (brand)
 
     return def
   }
