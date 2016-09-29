@@ -51,8 +51,6 @@ export default class RoomsList extends Component {
       rooms = data.filtered_rooms
     if (rooms) {
       rooms_list = rooms.map(room => {
-        if (room.room_type === 'Personal')
-          return ''
         let title_area
         // Profile image
         let profile_image_div
@@ -94,6 +92,11 @@ export default class RoomsList extends Component {
             </li>
           )
         }
+        if (room.users.length === 1) {
+          profile_image_div = (
+            <ProfileImage data={ data } user={ data.user }/>
+          )
+        }
         if (room.users.length === 2) {
           const other_users = room.users.filter(user => {
             return user.id !== data.user.id
@@ -123,12 +126,16 @@ export default class RoomsList extends Component {
             )
           }
         }
-        let display_name_list = getDisplayNameString(room, data.user)
+        // Room title
+        let room_title = getDisplayNameString(room, data.user)
         if (notification) {
-          display_name_list = (
-            <div style={ S('fw-500 color-000') }>{ getDisplayNameString(room, data.user) }</div>
+          room_title = (
+            <div style={ S('fw-500 color-000') }>{ room_title }</div>
           )
         }
+        // Personal room
+        if (room.users.length === 1)
+          room_title = 'You'
         if (room.title) {
           title_area = (
             <div style={ S('color-ccc') }>{ room.title }</div>
@@ -140,7 +147,7 @@ export default class RoomsList extends Component {
               { profile_image_div }
               <div className="pull-left" style={ S('ml-50 w-90p') }>
                 <div className="room-list__item__names" style={ S('color-263445 relative w-70p' + (!title_area ? ' t-10' : '')) }>
-                  { display_name_list }
+                  { room_title }
                 </div>
                 <div className="text-right" style={ S('color-ccc w-50p absolute r-10n t-10 font-13') } >
                   { helpers.getTimeAgo(latest_created[0]) }
