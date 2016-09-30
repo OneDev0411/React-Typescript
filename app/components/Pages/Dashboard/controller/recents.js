@@ -68,7 +68,7 @@ const controller = {
     // Make unique if existing
     const unique_items_selected = []
     filtered_items_selected.forEach(item => {
-      if(item.value.id) {
+      if (item.value.id) {
         if (!_.find(unique_items_selected, { 'value.id': item.value.id }))
           unique_items_selected.push(item)
       } else
