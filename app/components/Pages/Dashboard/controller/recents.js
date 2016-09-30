@@ -65,8 +65,15 @@ const controller = {
     filtered_items_selected = filtered_items_selected.filter(item => {
       return item.value.id !== AppStore.data.user.id
     })
-    // Make unique
-    const unique_items_selected = _.uniqBy(filtered_items_selected, 'value.id')
+    // Make unique if existing
+    const unique_items_selected = []
+    filtered_items_selected.forEach(item => {
+      if(item.value.id) {
+        if (!_.find(unique_items_selected, { 'value.id': item.value.id }))
+          unique_items_selected.push(item)
+      } else
+        unique_items_selected.push(item)
+    })
     AppStore.data.new_message = {
       items_selected: unique_items_selected
     }
