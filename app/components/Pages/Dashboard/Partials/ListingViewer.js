@@ -105,7 +105,8 @@ export default class ListingViewer extends Component {
       bedroom_count = property.bedroom_count
       bathroom_count = property.bathroom_count
       square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
-      price_sq_foot = (Number(price.replace(/,/g, '')) / Number(square_feet.replace(/,/g, ''))).toFixed(2)
+      if (property.square_meters)
+        price_sq_foot = (Number(price.replace(/,/g, '')) / Number(square_feet.replace(/,/g, ''))).toFixed(2)
       if (property.lot_size_area)
         lot_size = property.lot_size_area
       prev_icon = '<'
