@@ -124,7 +124,7 @@ export default class ListingMarker extends Component {
         ...S('w-65 z-100')
       }
     }
-    if (listing_map && listing_map.listings_viewed && listing_map.listings_viewed.indexOf(listing.id) !== -1)
+    if (listing_map && listing_map.listings_viewed && listing_map.listings_viewed.indexOf(listing.id) !== -1 && !data.current_listing)
       viewed_class = ' viewed'
     let listing_marker = (
       <div className={ 'map__listing-marker' + active_class + viewed_class + ' ' + status_color_class } style={ marker_style }>
