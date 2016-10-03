@@ -215,11 +215,11 @@ export default class Landing extends Component {
     }
 
     let brand_logo
-    if (Brand.asset('logo_wide')) {
+    if (Brand.asset('site_logo_wide')) {
       brand_logo = (
         <div style={ { ...S('ml-15 inline-block'), textDecoration: 'none' } }>
           <span style={ S('inline-block font-30 mr-15 relative t-1n color-' + Brand.color('primary')) }>+</span>
-          <img style={ S('w-200 relative t-3n') } src={ Brand.asset('logo_wide') } />
+          <img style={ S('w-200 relative t-3n') } src={ Brand.asset('site_logo_wide') } />
         </div>
       )
     }

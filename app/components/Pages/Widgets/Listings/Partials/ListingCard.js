@@ -118,7 +118,7 @@ export default class ListingCard extends Component {
           <div onClick={ this.props.hideModal } className="close" style={ S('font-30 t-10 r-20 absolute') }>&times;</div>
           <div className="text-center">
             <div style={ S('mb-20 mt-20 center-block text-center' + (!data.is_mobile ? ' mt-30 w-280' : '')) }>
-              <img style={ S('h-68 relative') } src={ Brand.asset('logo') } />
+              <img style={ S('h-68 relative') } src={ Brand.asset('site_logo') } />
             </div>
             <div className="din" style={ S('color-263445 font-34 mb-10') }>Please verify your email</div>
             <div style={ S('color-263445 font-21 mb-20') }>
@@ -147,7 +147,7 @@ export default class ListingCard extends Component {
           <div onClick={ this.props.hideModal } className="close" style={ S('font-30 t-10 r-20 absolute') }>&times;</div>
           <div className="text-center">
             <div style={ S('mb-20 mt-20 center-block text-center' + (!data.is_mobile ? ' mt-30 w-280' : '')) }>
-              <img style={ S('h-68 relative') } src={ Brand.asset('logo') } />
+              <img style={ S('h-68 relative') } src={ Brand.asset('site_logo') } />
             </div>
             <div style={ S('color-9b9b9b text-center mb-20 font-21') }>This email address is already in use.</div>
             <div style={ S('color-9b9b9b text-center') }>
@@ -172,7 +172,7 @@ export default class ListingCard extends Component {
           <div onClick={ this.props.hideModal } className="close" style={ S('font-30 t-10 r-20 absolute') }>&times;</div>
           <div className="text-center">
             <div style={ S('mb-20 mt-20 center-block text-center' + (!data.is_mobile ? ' mt-50 w-280' : '')) }>
-              <img style={ S('h-68 relative') } src={ Brand.asset('logo') } />
+              <img style={ S('h-68 relative') } src={ Brand.asset('site_logo') } />
             </div>
             <div style={ S('color-9b9b9b text-center mb-20 font-21') }>There was an error with this request.</div>
             <div style={ S('color-9b9b9b text-center') }>
