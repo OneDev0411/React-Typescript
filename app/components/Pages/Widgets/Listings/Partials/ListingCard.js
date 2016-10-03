@@ -199,7 +199,7 @@ export default class ListingCard extends Component {
         />
         <div style={ listing_image_style } onClick={ this.props.handleListingClick.bind(this, listing) }>
           <div style={ overlay_style }></div>
-          <div style={ price_tag_style }>${ price_small }</div>
+          <div style={ price_tag_style }>${ price_small }{ listing.compact_property && listing.compact_property.property_type === 'Residential Lease' ? '/mo' : '' }</div>
         </div>
         <div style={ S('absolute b-40 h-80 p-10 pl-15 color-000') } onClick={ this.props.handleListingClick.bind(this, listing) }>
           <div style={ S('font-20') }>{ listing_util.addressTitle(address) }</div>

@@ -85,8 +85,6 @@ export default class Listings extends Component {
       listing_statuses: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract', 'Pending'],
       minimum_lot_square_meters: 0,
       currency: 'USD',
-      maximum_year_built: 2016,
-      minimum_year_built: 0,
       points: null,
       minimum_bedrooms: 0,
       minimum_price: 0,
