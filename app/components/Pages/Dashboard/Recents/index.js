@@ -220,6 +220,7 @@ export default class Dashboard extends Component {
     delete AppStore.data.adding_contacts
     delete AppStore.data.add_contacts_error
     delete AppStore.data.show_add_members_modal
+    delete AppStore.data.show_room_saved_message
     AppStore.emitChange()
   }
 
@@ -762,6 +763,14 @@ export default class Dashboard extends Component {
               { data.adding_users ? 'Adding users...' : 'Add' }
             </Button>
           </Modal.Footer>
+        </Modal>
+        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile modal-alert-saved' : 'modal-alert-saved' } show={ data.show_room_saved_message } onHide={ this.hideModal.bind(this) }>
+          <div className="din" style={ S('text-center font-60 color-fff') }>
+            <div style={ S('bg-2196f3 w-165 h-165 br-100 center-block pt-35') }>
+              <i className="fa fa-check" style={ S('h-70 mt-20') }></i>
+            </div>
+            <span style={ { textShadow: '0 2px 6px rgba(0, 0, 0, 0.2)' } }>Room Saved!</span>
+          </div>
         </Modal>
       </div>
     )

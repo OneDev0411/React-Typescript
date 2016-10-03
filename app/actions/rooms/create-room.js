@@ -49,7 +49,12 @@ export default (user, users, emails, phone_numbers, message) => {
       window.socket.emit('Authenticate', user.access_token)
       delete AppStore.data.show_new_message_viewer
       delete AppStore.data.new_message
+      AppStore.data.show_room_saved_message = true
       AppStore.emitChange()
+      setTimeout(() => {
+        delete AppStore.data.show_room_saved_message
+        AppStore.emitChange()
+      }, 3000)
     }
   ])
 }
