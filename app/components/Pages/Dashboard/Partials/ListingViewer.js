@@ -222,8 +222,8 @@ export default class ListingViewer extends Component {
             <div style={ S('bg-263445 p-20 w-100p') }>
               <div style={ S('font-18 mb-5 color-fff') }><span style={ S('fw-400') }>{ brand_agent.first_name } { brand_agent.last_name }</span></div>
               <div style={ S('font-14 mb-5 color-bfc3c7') }>
-                <div style={ S('bg-cover bg-url(' + data.brand.assets.default_avatar + ') bg-center w-20 h-20 pull-left mr-10') }></div>
-                <div style={ S('pull-left') }>{ data.brand.offices[0].name }</div>
+                <div style={ S('bg-cover bg-url(' + Brand.asset('office_logo') + ') bg-center w-20 h-20 pull-left mr-10') }></div>
+                <div style={ S('pull-left') }>{ Brand.message('office_title') }</div>
                 <div className="clearfix"></div>
               </div>
               { phone_area }
@@ -662,7 +662,7 @@ export default class ListingViewer extends Component {
       const host = 'https://' + window.location.host
       brand_logo = (
         <a href={ host }>
-          <img style={ S('w-200') } src={ Brand.asset('logo_wide') } />
+          <img style={ S('w-200') } src={ Brand.asset('site_logo_wide') } />
         </a>
       )
     }
@@ -696,8 +696,8 @@ export default class ListingViewer extends Component {
           <div style={ S('bg-263445 p-20 w-100p') }>
             <div style={ S('font-18 mb-5 color-fff') }><span style={ S('fw-400') }>{ brand_agent.first_name } { brand_agent.last_name }</span></div>
             <div style={ S('font-14 mb-15 color-bfc3c7 relative') }>
-              <div style={ S('bg-cover bg-url(' + data.brand.assets.default_avatar + ') bg-center w-20 h-20 inline-block mr-10 mt-10') }></div>
-              <div style={ S('inline-block relative t-5n') }>{ data.brand.offices[0].name }</div>
+              <div style={ S('bg-cover bg-url(' + Brand.asset('office_logo') + ') bg-center w-20 h-20 inline-block mr-10 mt-10') }></div>
+              <div style={ S('inline-block relative t-5n') }>{ Brand.message('office_title') }</div>
               <div className="clearfix"></div>
             </div>
             { phone_area }

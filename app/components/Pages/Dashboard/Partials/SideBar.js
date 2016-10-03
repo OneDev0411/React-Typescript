@@ -516,11 +516,11 @@ export default class SideBar extends Component {
     }
 
     let branding_logo
-    if (Brand.asset('logo')) {
+    if (Brand.asset('site_logo')) {
       branding_logo = (
         <div style={ S('mb-10') }>
           <a target="_blank" href="http://www.claystapp.com">
-            <div style={ S(`bg-url(${Brand.asset('logo')}) bg-cover bg-center w-30 h-35 ml-10`) }></div>
+            <div style={ S(`bg-url(${Brand.asset('site_logo')}) bg-cover bg-center w-30 h-35 ml-10`) }></div>
           </a>
         </div>
       )

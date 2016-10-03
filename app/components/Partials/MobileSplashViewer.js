@@ -10,7 +10,7 @@ export default class MobileSplashViewer extends Component {
     const mobile_splash_style = S('absolute t-0 z-10 l-0 w-100p h-100p bg-000 color-fff bg-url(/images/mobile/mask@3x.jpg) bg-center bg-cover')
     let logo = '/images/mobile/icon@3x.png'
     if (data.brand)
-      logo = Brand.asset('logo')
+      logo = Brand.asset('site_logo')
     return (
       <div style={ mobile_splash_style }>
         <div style={ S('bg-263445 absolute t-0 l-0 w-100p h-100p op-.7 z-9') }></div>
