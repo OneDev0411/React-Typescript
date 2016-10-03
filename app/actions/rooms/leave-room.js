@@ -9,7 +9,8 @@ export default (user, room) => {
     room,
     access_token: user.access_token
   }
-  Room.removeUser(params, () => {
+  console.log(params)
+  Room.removeUser(params, (err, res) => {
     delete AppStore.data.deleting_room
     delete AppStore.data.show_delete_room_modal
     delete AppStore.data.show_settings_modal
