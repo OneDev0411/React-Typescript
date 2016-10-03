@@ -332,11 +332,11 @@ export default class ListingViewer extends Component {
                       </div>
                       <div style={ S('w-100p bg-fff p-5 font-13') }>
                         <div style={ S('text-center w-50p pull-left') }>
-                          <a target="_blank" href={ `http://maps.google.com/?q=${listing.property.address.geo_source_formatted_address_google.split(' ').join('%')}` }>Google Maps</a>
+                          <a target="_blank" href={ `http://maps.google.com/?q=${listing.property.address.geo_source_formatted_address_google}` }>Google Maps</a>
                           <div style={ S('bg-ebebeb w-1 h-16 pull-right') }></div>
                         </div>
                         <div style={ S('text-center w-50p pull-left') }>
-                          <a target="_blank" href={ `http://maps.google.com/?q=${listing.property.address.geo_source_formatted_address_google.split(' ').join('%')}&layer=c` }>Street View</a>
+                          <a target="_blank" href={ `http://maps.google.com/?q=${listing.property.address.geo_source_formatted_address_google}&layer=c&cbll=${listing.property.address.location.latitude},${listing.property.address.location.longitude}` }>Street View</a>
                         </div>
                         <div className="clearfix"/>
                       </div>
