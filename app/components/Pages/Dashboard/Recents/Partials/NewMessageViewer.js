@@ -14,7 +14,8 @@ export default class NewMessageViewer extends Component {
   inputChange(e) {
     // Enter clicked
     const data = this.props.data
-    if (e.which === 13) {
+    if (e.which === 13 || e.which === 9) {
+      e.preventDefault()
       if (data.new_message && data.new_message.search_value) {
         if (!data.new_message.items_selected)
           data.new_message.items_selected = []

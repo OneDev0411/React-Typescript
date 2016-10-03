@@ -483,7 +483,8 @@ export default class Dashboard extends Component {
   inputChange(e) {
     // Enter clicked
     const data = this.props.data
-    if (e.which === 13) {
+    if (e.which === 13 || e.which === 9) {
+      e.preventDefault()
       if (data.add_members && data.add_members.search_value) {
         if (!data.add_members.items_selected)
           data.add_members.items_selected = []

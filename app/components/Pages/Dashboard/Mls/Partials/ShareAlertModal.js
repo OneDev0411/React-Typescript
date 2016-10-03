@@ -15,7 +15,8 @@ export default class ShareAlertModal extends Component {
   inputChange(e) {
     // Enter clicked
     const data = this.props.data
-    if (e.which === 13) {
+    if (e.which === 13 || e.which === 9) {
+      e.preventDefault()
       if (data.share_modal && data.share_modal.search_value) {
         if (!data.share_modal.items_selected)
           data.share_modal.items_selected = []
@@ -224,7 +225,7 @@ export default class ShareAlertModal extends Component {
               <Input style={ S('border-none') } ref="message" type="text" placeholder="Write Message..."/>
             </div>
             <div style={ S('pull-right') }>
-              <Button className={ share_modal && share_modal.sending_share || !this.isSharable() ? 'disabled' : '' } bsStyle="primary" onClick={ controller.alert_share.shareAlert.bind(this) }>{ share_modal && !share_modal.sending_share ? 'Share' : 'Sending...' }</Button>
+              <Button disabled={!this.isSharable() ? true : false} className={ share_modal && share_modal.sending_share || !this.isSharable() ? 'disabled' : '' } bsStyle="primary" onClick={ controller.alert_share.shareAlert.bind(this) }>{ share_modal && !share_modal.sending_share ? 'Share' : 'Sending...' }</Button>
             </div>
           </div>
         </Modal.Footer>
