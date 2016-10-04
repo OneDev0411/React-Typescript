@@ -111,6 +111,11 @@ const controller = {
     AppStore.data.new_message.search_value = value
     AppStore.emitChange()
     controller.searchUsers(value)
+  },
+  handleCancelClick() {
+    delete AppStore.data.show_new_message_viewer
+    AppStore.data.current_room = AppStore.data.rooms[0]
+    AppStore.emitChange()
   }
 }
 export default controller

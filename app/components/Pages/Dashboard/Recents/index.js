@@ -678,6 +678,7 @@ export default class Dashboard extends Component {
         showNewMessageView={ controller.recents.showNewMessageView }
         addUsersToSearchInput={ controller.recents.addUsersToSearchInput }
         handleInputChange={ controller.recents.handleInputChange }
+        handleCancelClick={ controller.recents.handleCancelClick }
       />
     )
     if (data.show_create_chat_viewer) {

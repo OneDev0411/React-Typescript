@@ -182,7 +182,8 @@ export default class NewMessageViewer extends Component {
     return (
       <div style={ S('h-100p absolute w-100p' + (!data.current_room ? ' bg-f6f7f9' : '')) }>
         <div style={ S('h-60 border-bottom-1-solid-e2e6ea bg-fff') }>
-          <h3 style={ S('w-80p mt-0 ml-20 mr-50 pt-15') }>New Message</h3>
+          <h3 style={ S('w-80p mt-0 ml-20 mr-50 pt-15 pull-left') }>New Message</h3>
+          <div onClick={ this.props.handleCancelClick } style={ S('pull-right mr-20 mt-10 bg-e2e6ea br-3 pl-15 pr-15 pt-10 pb-10 color-8696a4 pointer') }>Cancel</div>
         </div>
         <div style={ S('relative w-100p h-50 p-10 bg-fff border-bottom-1-solid-e2e6ea') }>
           <div style={ S('absolute l-10 t-15') }>To:</div>
@@ -238,5 +239,6 @@ NewMessageViewer.propTypes = {
   hideDeleteRoomModal: React.PropTypes.func,
   confirmDeleteRoom: React.PropTypes.func,
   setAlertGalleryActiveIndex: React.PropTypes.func,
-  handleInputChange: React.PropTypes.func
+  handleInputChange: React.PropTypes.func,
+  handleCancelClick: React.PropTypes.func
 }
