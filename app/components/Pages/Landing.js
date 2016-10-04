@@ -16,7 +16,6 @@ import MobileSplashViewer from '../Partials/MobileSplashViewer'
 
 export default class Landing extends Component {
   componentWillMount() {
-    const data = this.props.data
     if (process.env.NODE_ENV === 'development')
       this.getContent()
   }
