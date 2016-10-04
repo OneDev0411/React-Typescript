@@ -62,7 +62,6 @@ export default class AlertList extends Component {
                   )
                 }
               }
-              console.log(alert)
               return (
                 <li key={ 'alert-list-' + alert.id } style={ S('relative h-100 border-bottom-1-solid-dedede p-20 pointer' + (current_alert && current_alert.id === alert.id ? ' bg-f7f7f7' : '')) } onClick={ controller.alert_map.showAlertOnMap.bind(this, alert) }>
                   <div style={ S('font-18' + (has_notification ? ' fw-500' : '')) }>{ this.truncateTitle(alert.title ? alert.title : alert.proposed_title) }</div>
