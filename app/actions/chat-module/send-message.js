@@ -28,13 +28,17 @@ export default (user, agent, message) => {
         })
       } else {
         const locals = {}
+
+        const brand = AppStore.data.brand ? AppStore.data.brand.id : null
+
         async.series([
           callback => {
             const params = {
               title: '',
               owner: user.id,
               access_token: user.access_token,
-              users: [user.id, agent.id]
+              users: [user.id, agent.id],
+              brand
             }
             Room.create(params, (err, res) => {
               const new_room = res.data
@@ -91,11 +95,14 @@ export default (user, agent, message) => {
       })
     },
     callback => {
+      const brand = AppStore.data.brand ? AppStore.data.brand.id : null
+
       const params = {
         title: '',
         owner: locals.user.id,
         access_token: locals.user.access_token,
-        users: [locals.user.id, agent.id]
+        users: [locals.user.id, agent.id],
+        brand
       }
       Room.create(params, (err, res) => {
         const new_room = res.data
