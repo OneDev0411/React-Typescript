@@ -87,7 +87,10 @@ export default class App extends Component {
     branch.init(config.branch.key)
     const branch_data = window.branchData
     branch.link({
-      data: branch_data
+      data: {
+        ...branch_data,
+        '$deeplink_path': 'rechat://'
+      }
     }, (err, link) => {
       // console.log(err, link)
       AppStore.data.branch_link = link
