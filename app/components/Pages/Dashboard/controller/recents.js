@@ -39,7 +39,7 @@ const controller = {
   addUsersToSearchInput(items_selected) {
     delete AppStore.data.current_room
     AppStore.emitChange()
-    if (!items_selected && AppStore.data.new_message || !items_selected.length && AppStore.data.new_message) {
+    if (!items_selected && AppStore.data.new_message || !items_selected && AppStore.data.new_message) {
       delete AppStore.data.new_message.items_selected
       AppStore.emitChange()
       return
