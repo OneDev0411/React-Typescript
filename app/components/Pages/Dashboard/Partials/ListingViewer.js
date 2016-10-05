@@ -56,10 +56,14 @@ export default class ListingViewer extends Component {
   render() {
     // Listing modal
     const data = this.props.data
+    const listing = this.props.listing
     const user = data.user
     let brand_agent
     if (data.brand) {
       brand_agent = data.brand.users[0]
+      // Check if listing agent is agent
+      if (listing.list_agent && listing.list_agent.user_id && _.find(data.brand.users, { id: listing.list_agent.user_id }))
+        brand_agent = _.find(data.brand.users, { id: listing.list_agent.user_id })
       // Check for user is agent in branding
       if (user && _.find(data.brand.users, { id: user.id }))
         brand_agent = _.find(data.brand.users, { id: user.id })
@@ -67,7 +71,6 @@ export default class ListingViewer extends Component {
     let viewer_width = window.innerWidth - 70
     if (!user)
       viewer_width = window.innerWidth
-    const listing = this.props.listing
     let current_slide
     if (listing)
       current_slide = listing.current_slide
