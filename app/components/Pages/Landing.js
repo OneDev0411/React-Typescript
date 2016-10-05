@@ -36,6 +36,8 @@ export default class Landing extends Component {
       const email = data.signup_email
       window.location.href = '/signin?email=' + encodeURIComponent(email)
     }
+    if (data.brand && window !== 'undefined')
+      window.location.href = '/dashboard/mls'
   }
   getContent() {
     AppDispatcher.dispatch({

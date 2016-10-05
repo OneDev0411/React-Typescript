@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import S from 'shorti'
 import ProfileImage from '../../Partials/ProfileImage'
 import helpers from '../../../../../utils/helpers'
-import { getDisplayNameString } from '../../../../../utils/room'
 import _ from 'lodash'
 export default class RoomsList extends Component {
   handleClick(id) {
@@ -51,6 +50,8 @@ export default class RoomsList extends Component {
       rooms = data.filtered_rooms
     if (rooms) {
       rooms_list = rooms.map(room => {
+        // Room title
+        let room_title = room.proposed_title
         let title_area
         // Profile image
         let profile_image_div
@@ -79,7 +80,7 @@ export default class RoomsList extends Component {
                 <ProfileImage data={ data } user={ room_owner }/>
                 <div className="pull-left" style={ S('ml-50 w-90p') }>
                   <div className="room-list__item__title pull-left" style={ S('w-60p') }>
-                    <b>{ room.title }</b>
+                    { room_title }
                   </div>
                 </div>
                 <div className="text-right" style={ S('color-ccc w-50p absolute r-10n font-13') } >
@@ -125,13 +126,6 @@ export default class RoomsList extends Component {
               </div>
             )
           }
-        }
-        // Room title
-        let room_title = getDisplayNameString(room, data.user)
-        if (notification) {
-          room_title = (
-            <div style={ S('fw-500 color-000') }>{ room_title }</div>
-          )
         }
         // Personal room
         if (room.users.length === 1)

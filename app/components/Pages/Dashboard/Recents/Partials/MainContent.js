@@ -148,6 +148,7 @@ export default class MainContent extends Component {
           confirmDeleteRoom={ this.props.confirmDeleteRoom }
           setAlertGalleryActiveIndex={ this.props.setAlertGalleryActiveIndex }
           handleInputChange={ this.props.handleInputChange }
+          handleCancelClick={ this.props.handleCancelClick }
         />
       )
     }
@@ -279,5 +280,6 @@ MainContent.propTypes = {
   clearRoomSearchText: React.PropTypes.func,
   showNewMessageView: React.PropTypes.func,
   addUsersToSearchInput: React.PropTypes.func,
-  handleInputChange: React.PropTypes.func
+  handleInputChange: React.PropTypes.func,
+  handleCancelClick: React.PropTypes.func
 }

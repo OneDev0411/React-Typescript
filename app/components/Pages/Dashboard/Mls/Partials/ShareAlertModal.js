@@ -15,7 +15,8 @@ export default class ShareAlertModal extends Component {
   inputChange(e) {
     // Enter clicked
     const data = this.props.data
-    if (e.which === 13) {
+    if (e.which === 13 || e.which === 9) {
+      e.preventDefault()
       if (data.share_modal && data.share_modal.search_value) {
         if (!data.share_modal.items_selected)
           data.share_modal.items_selected = []
@@ -83,9 +84,16 @@ export default class ShareAlertModal extends Component {
       )
     } else {
       // Room
-      profile_image = (
-        <ProfileImageMultiple users={ item.value.users }/>
-      )
+      if (item.value.users.length > 2) {
+        profile_image = (
+          <ProfileImageMultiple users={ item.value.users }/>
+        )
+      } else {
+        const other_user = _.filter(item.value.users, user => user.id !== data.user.id)[0]
+        profile_image = (
+          <ProfileImage data={ data } user={ other_user }/>
+        )
+      }
     }
     return (
       <div style={ S('relative ' + (item.index < 1 ? 'h-74' : 'h-54')) } className={ item.index < 1 ? 'other-users--first' : '' } >
@@ -121,7 +129,7 @@ export default class ShareAlertModal extends Component {
     // Rooms available
     if (data.rooms) {
       data.rooms.forEach(room => {
-        if (room.users.length > 2) {
+        if (room.users.length > 1) {
           // Test if user in available rooms
           if (users_selected_ids && users_selected_ids.length) {
             const room_user_ids = _.map(room.users, 'id')
@@ -224,7 +232,7 @@ export default class ShareAlertModal extends Component {
               <Input style={ S('border-none') } ref="message" type="text" placeholder="Write Message..."/>
             </div>
             <div style={ S('pull-right') }>
-              <Button className={ share_modal && share_modal.sending_share || !this.isSharable() ? 'disabled' : '' } bsStyle="primary" onClick={ controller.alert_share.shareAlert.bind(this) }>{ share_modal && !share_modal.sending_share ? 'Share' : 'Sending...' }</Button>
+              <Button disabled={!this.isSharable() ? true : false} className={ share_modal && share_modal.sending_share || !this.isSharable() ? 'disabled' : '' } bsStyle="primary" onClick={ controller.alert_share.shareAlert.bind(this) }>{ share_modal && !share_modal.sending_share ? 'Share' : 'Sending...' }</Button>
             </div>
           </div>
         </Modal.Footer>

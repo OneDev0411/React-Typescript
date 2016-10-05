@@ -16,6 +16,8 @@ import SelectContainer from '../Partials/SelectContainer'
 import { getResizeAvatarUrl } from '../../../../utils/user'
 import ProfileImage from '../Partials/ProfileImage'
 import ProfileImageMultiple from '../Partials/ProfileImageMultiple'
+import MobileSplashViewer from '../../../Partials/MobileSplashViewer'
+
 export default class Dashboard extends Component {
   componentWillMount() {
     AppStore.data.loading = true
@@ -483,7 +485,8 @@ export default class Dashboard extends Component {
   inputChange(e) {
     // Enter clicked
     const data = this.props.data
-    if (e.which === 13) {
+    if (e.which === 13 || e.which === 9) {
+      e.preventDefault()
       if (data.add_members && data.add_members.search_value) {
         if (!data.add_members.items_selected)
           data.add_members.items_selected = []
@@ -675,6 +678,7 @@ export default class Dashboard extends Component {
         showNewMessageView={ controller.recents.showNewMessageView }
         addUsersToSearchInput={ controller.recents.addUsersToSearchInput }
         handleInputChange={ controller.recents.handleInputChange }
+        handleCancelClick={ controller.recents.handleCancelClick }
       />
     )
     if (data.show_create_chat_viewer) {
@@ -707,6 +711,9 @@ export default class Dashboard extends Component {
     let main_style = S('minw-1000')
     if (data.is_mobile)
       main_style = S('w-' + window.innerWidth)
+    let mobile_splash_viewer
+    if (data.show_mobile_splash_viewer)
+      mobile_splash_viewer = <MobileSplashViewer data={ data } />
     return (
       <div style={ main_style }>
         <main>
@@ -772,6 +779,7 @@ export default class Dashboard extends Component {
             <span style={ { textShadow: '0 2px 6px rgba(0, 0, 0, 0.2)' } }>Room Saved!</span>
           </div>
         </Modal>
+        { mobile_splash_viewer }
       </div>
     )
   }

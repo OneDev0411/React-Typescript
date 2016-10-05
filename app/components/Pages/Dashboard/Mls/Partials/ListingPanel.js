@@ -221,7 +221,7 @@ export default class ListingPanel extends Component {
       heading_height = 180
     }
     const listing_panel_wrap_style = S('fixed t-62 r-0 w-0 h-0 z-5')
-    const listing_panel_style = S('absolute t-0 w-865 bg-fff h-' + window.innerHeight)
+    const listing_panel_style = S('absolute t-0 w-850 bg-fff h-' + window.innerHeight)
     const listing_scroll_style = {
       ...listing_panel_style,
       top: panel_top + 'px',
@@ -287,7 +287,7 @@ export default class ListingPanel extends Component {
     if (data.show_listing_panel) {
       button_style = {
         ...button_style,
-        right: 865
+        right: 850
       }
     }
     let listing_panel_btn = (

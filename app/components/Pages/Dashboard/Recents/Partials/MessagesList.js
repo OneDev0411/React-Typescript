@@ -380,6 +380,14 @@ export default class MessagesList extends Component {
         overflowY: 'scroll',
         overflowX: 'hidden'
       }
+      let add_members_area
+      if (current_room.room_type === 'Group') {
+        add_members_area = (
+          <div style={ footer_style } className="lato" onClick={ this.props.showModal.bind(this, 'add-members') }>
+            + Add Members
+          </div>
+        )
+      }
       user_dropdown = (
         <div style={ dropdown_style }>
           <div style={ header_style } className="lato">
@@ -403,9 +411,7 @@ export default class MessagesList extends Component {
             }
             <div className="clearfix"></div>
           </div>
-          <div style={ footer_style } className="lato" onClick={ this.props.showModal.bind(this, 'add-members') }>
-            + Add Members
-          </div>
+          { add_members_area }
         </div>
       )
     }
