@@ -61,7 +61,9 @@ export default class App extends Component {
     // const data = AppStore.data
     // if (data.user)
     //   this.triggerBranchBanner()
-    if (window.innerWidth < 500)
+    const MobileDetect = require('mobile-detect')
+    const md = new MobileDetect(window.navigator.userAgent)
+    if (md.is('iPhone'))
       this.showMobileSplashViewer()
   }
   componentDidUpdate() {
@@ -88,7 +90,7 @@ export default class App extends Component {
     let branch_data = window.branchData
     if (!branch_data) {
       branch_data = {
-        deeplink_path: 'rechat://'
+        '$always_deeplink': true
       }
     }
     branch.link({
