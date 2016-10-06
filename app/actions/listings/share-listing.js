@@ -10,7 +10,7 @@ export default (user, mls_number, message, users, emails, phone_numbers, notific
   // Get a room
   const available_rooms = AppStore.data.rooms
   let room_found = null
-  if (users.length && !emails && !phone_numbers) {
+  if (users.length && !emails.length && !phone_numbers.length) {
     available_rooms.forEach(room => {
       let user_ids_room = _.map(room.users, 'id')
       user_ids_room = user_ids_room.filter(user_id => {
