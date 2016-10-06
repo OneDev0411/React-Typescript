@@ -85,7 +85,12 @@ export default class App extends Component {
   createBranchLink() {
     const branch = require('branch-sdk')
     branch.init(config.branch.key)
-    const branch_data = window.branchData
+    let branch_data = window.branchData
+    if (!branch_data) {
+      branch_data = {
+        deeplink_path: 'rechat://'
+      }
+    }
     branch.link({
       data: branch_data
     }, (err, link) => {
