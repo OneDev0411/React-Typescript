@@ -7,8 +7,7 @@ export default (user, room, users, emails, phone_numbers) => {
     users,
     emails,
     phone_numbers,
-    access_token: user.access_token,
-    inviting_user: user.id
+    access_token: user.access_token
   }
   Room.addUsers(params, (err, response) => {
     // Success

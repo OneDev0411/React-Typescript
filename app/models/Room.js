@@ -190,8 +190,7 @@ export default {
       users: params.users,
       emails: params.emails,
       phone_numbers: params.phone_numbers,
-      access_token: params.access_token,
-      inviting_user: params.inviting_user
+      access_token: params.access_token
     }
     fetch(endpoint, {
       method: 'post',
