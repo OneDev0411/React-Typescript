@@ -25,6 +25,14 @@ export default class Dashboard extends Component {
   }
 
   componentDidMount() {
+    // Esc pressed on new message viewer
+    document.onkeydown = e => {
+      if (e.which === 27 && this.props.data.show_new_message_viewer) {
+        delete AppStore.data.show_new_message_viewer
+        AppStore.data.current_room = AppStore.data.rooms[0]
+        AppStore.emitChange()
+      }
+    }
     // If already mounted
     if (AppStore.data.mounted && AppStore.data.mounted.indexOf('recents') !== -1)
       return
