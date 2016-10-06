@@ -59,6 +59,9 @@ export default (user, mls_number, message, users, emails, phone_numbers, notific
   }
   // Room not found, create room
   const locals = {}
+
+  const brand = AppStore.data.brand ? AppStore.data.brand.id : null
+
   async.series([
     callback => {
       // Create room
@@ -68,7 +71,8 @@ export default (user, mls_number, message, users, emails, phone_numbers, notific
         access_token: user.access_token,
         users,
         emails,
-        phone_numbers
+        phone_numbers,
+        brand
       }
       Room.create(params, (err, response) => {
         // Success

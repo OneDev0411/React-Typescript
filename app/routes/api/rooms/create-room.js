@@ -22,7 +22,8 @@ module.exports = (app, config) => {
         'Content-Type': 'application/json',
         'authorization': 'Bearer ' + access_token,
         'x-real-agent' : req.headers['user-agent'],
-        'user-agent' : config.app_name
+        'user-agent' : config.app_name,
+        'x-rechat-brand': req.body.brand
       },
       body: JSON.stringify(request_object)
     })

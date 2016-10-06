@@ -5,6 +5,9 @@ import AppDispatcher from '../../dispatcher/AppDispatcher'
 import async from 'async'
 export default (user, users, emails, phone_numbers, message) => {
   const locals = {}
+
+  const brand = AppStore.data.brand ? AppStore.data.brand.id : null
+
   async.series([
     callback => {
       // Create room
@@ -14,7 +17,8 @@ export default (user, users, emails, phone_numbers, message) => {
         access_token: user.access_token,
         users,
         emails,
-        phone_numbers
+        phone_numbers,
+        brand
       }
       Room.create(params, (err, response) => {
         // Success
