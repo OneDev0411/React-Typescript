@@ -661,7 +661,7 @@ export default class ListingViewer extends Component {
         Rechat
       </a>
     )
-    if (Brand.asset('logo_wide')) {
+    if (Brand.asset('site_logo_wide')) {
       const host = 'https://' + window.location.host
       brand_logo = (
         <a href={ host }>
