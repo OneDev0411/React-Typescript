@@ -11,7 +11,7 @@ export default (user, options) => {
   if (AppStore.data.brand) {
     let brokerage = getParameterByName('brokerage')
     if (!brokerage && AppStore.data.brand.offices)
-      brokerage = AppStore.data.brand.offices[0].mls_office_id
+      brokerage = AppStore.data.brand.offices[0].mls_id
     params.office = brokerage
   }
   Listing.getValerts(params, (err, response) => {
