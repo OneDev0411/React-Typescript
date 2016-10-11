@@ -853,7 +853,7 @@ export default class Mls extends Component {
       )
     }
     let brand_logo
-    if (Brand.asset('site_logo_wide')) {
+    if (!data.is_widget && Brand.asset('site_logo_wide')) {
       const host = 'https://' + window.location.host
       brand_logo = (
         <div style={ S('pull-left z-100 absolute t-13 l-15') }>
