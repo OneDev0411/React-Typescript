@@ -81,26 +81,26 @@ export default class App extends Component {
   }
   showMobileSplashViewer() {
     AppStore.data.show_mobile_splash_viewer = true
-    this.createBranchLink()
+    // this.createBranchLink()
     AppStore.emitChange()
   }
-  createBranchLink() {
-    const branch = require('branch-sdk')
-    branch.init(config.branch.key)
-    let branch_data = window.branchData
-    if (!branch_data) {
-      branch_data = {
-        '$always_deeplink': true
-      }
-    }
-    branch.link({
-      data: branch_data
-    }, (err, link) => {
-      // console.log(err, link)
-      AppStore.data.branch_link = link
-      AppStore.emitChange()
-    })
-  }
+  // createBranchLink() {
+  //   const branch = require('branch-sdk')
+  //   branch.init(config.branch.key)
+  //   let branch_data = window.branchData
+  //   if (!branch_data) {
+  //     branch_data = {
+  //       '$always_deeplink': true
+  //     }
+  //   }
+  //   branch.link({
+  //     data: branch_data
+  //   }, (err, link) => {
+  //     // console.log(err, link)
+  //     AppStore.data.branch_link = link
+  //     AppStore.emitChange()
+  //   })
+  // }
   triggerBranchBanner() {
     const branch = require('branch-sdk')
     branch.init(config.branch.key)

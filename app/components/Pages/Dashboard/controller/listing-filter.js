@@ -208,6 +208,11 @@ const controller = {
     AppStore.data.listing_map.is_loading = true
     AppStore.emitChange()
     if (options.mls_areas || options.school_districts || options.counties) {
+      // Remove poly
+      if (window.poly) {
+        window.poly.setMap(null)
+        delete window.poly
+      }
       options.points = null
       AppStore.data.listing_map.auto_move = true
       AppStore.emitChange()

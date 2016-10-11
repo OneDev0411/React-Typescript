@@ -23,6 +23,7 @@ export default {
   branch: {
     key: process.env.BRANCH_KEY
   },
+  itunes_url: process.env.ITUNES_URL,
   google: {
     api_key: process.env.GOOGLE_API_KEY
   }

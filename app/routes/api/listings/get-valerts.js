@@ -24,7 +24,6 @@ module.exports = (app, config) => {
     }
     if (access_token)
       headers.authorization = 'Bearer ' + access_token
-    // console.log(options)
     fetch(endpoint,{
       method: 'post',
       headers,

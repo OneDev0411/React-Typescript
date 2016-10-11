@@ -43,6 +43,7 @@ export default class ListingCard extends Component {
       opacity: '.3'
     }
     const price_small = listing_util.getSmallPrice(listing.price)
+    const price = helpers.numberWithCommas(listing.price)
     const price_tag_style = {
       ...S(`absolute b-30 p-15 pt-6 h-48 bg-${Brand.color('primary')} font-26 fw-500 color-fff`),
       borderTopRightRadius: '3px',
@@ -199,7 +200,9 @@ export default class ListingCard extends Component {
         />
         <div style={ listing_image_style } onClick={ this.props.handleListingClick.bind(this, listing) }>
           <div style={ overlay_style }></div>
-          <div style={ price_tag_style }>${ price_small }{ listing.compact_property && listing.compact_property.property_type === 'Residential Lease' ? '/mo' : '' }</div>
+          <div style={ price_tag_style }>
+            ${ listing.compact_property && listing.compact_property.property_type === 'Residential Lease' ? price : price_small }{ listing.compact_property && listing.compact_property.property_type === 'Residential Lease' ? '/mo' : '' }
+          </div>
         </div>
         <div style={ S('absolute b-40 h-80 p-10 pl-15 color-000') } onClick={ this.props.handleListingClick.bind(this, listing) }>
           <div style={ S('font-20') }>{ listing_util.addressTitle(address) }</div>

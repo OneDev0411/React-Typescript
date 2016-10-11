@@ -474,7 +474,7 @@ export default class ListingViewer extends Component {
                   <div className="clearfix"></div>
                 </div>
               </Col>
-              <Col sm={4} md={3} style={ S('pl-0') }>
+              <Col sm={4} md={3} style={ S('pl-0 maxw-350') }>
                 { brand_agent_area }
                 { list_agent_area }
               </Col>
@@ -661,7 +661,7 @@ export default class ListingViewer extends Component {
         Rechat
       </a>
     )
-    if (Brand.asset('logo_wide')) {
+    if (Brand.asset('site_logo_wide')) {
       const host = 'https://' + window.location.host
       brand_logo = (
         <a href={ host }>

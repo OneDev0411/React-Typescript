@@ -16,7 +16,7 @@ export default (user, mls_number, message, users, emails, phone_numbers, notific
       user_ids_room = user_ids_room.filter(user_id => {
         return user_id !== AppStore.data.user.id
       })
-      if (_.isEqual(users, user_ids_room))
+      if (_.isEqual(users.sort(), user_ids_room.sort()))
         room_found = room
     })
   }

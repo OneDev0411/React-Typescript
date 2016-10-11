@@ -425,7 +425,7 @@ export default class MessagesList extends Component {
         <div className="dropdown-menu--room-settings" style={ S('pull-left mr-10') }>
           <DropdownButton style={ S('border-none mt-2') } pullRight title={ settings_dropdown_dots } id="room-dropdown" className="room-dropdown" noCaret>
             <li style={ S('w-260 p-20 border-bottom-1-solid-d8d8d8 pointer') } onClick={ this.props.changeListingNotification.bind(this, has_system_generated_notifs) }>
-              { has_system_generated_notifs ? 'Mute' : 'Unmute' } this chat
+              { has_system_generated_notifs ? 'Mute' : 'Unmute' } listing notifications
               <img style={ S('pull-right mt-2n mr-5') } src={ `/images/dashboard/chats/bell${!has_system_generated_notifs ? '-strike' : ''}.svg` }/>
             </li>
             <li style={ S('w-260 p-20 pointer') } onClick={ this.props.showDeleteRoomModal.bind(this) }>
