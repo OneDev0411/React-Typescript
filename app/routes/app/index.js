@@ -14,6 +14,8 @@ module.exports = (app, config) => {
       AppStore.data.user = req.session.user
       res.locals.AppStore = JSON.stringify(AppStore)
     }
+    if (req.url.indexOf('widgets') !== -1)
+      res.locals.is_widget = true
     next()
   })
   
