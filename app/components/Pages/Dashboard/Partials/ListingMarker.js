@@ -117,7 +117,7 @@ export default class ListingMarker extends Component {
     // Brand badge
     let brand_badge
     const current_brand_ids = _.map(data.brand, 'offices.id')
-    if (current_brand_ids.indexOf(listing.list_office.id) !== -1 && !this.isFavorited(listing) && !listing.commented_by) {
+    if (listing && listing.list_office && current_brand_ids.indexOf(listing.list_office.id) !== -1 && !this.isFavorited(listing) && !listing.commented_by) {
       brand_badge = (
         <div style={ S(`bg-url(${data.brand.default_avatar}) w-21 h-21 bg-center bg-cover pull-left inline-block`) }></div>
       )
