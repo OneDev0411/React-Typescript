@@ -9,7 +9,9 @@ export default (user, options) => {
   if (user)
     params.access_token = user.access_token
   if (AppStore.data.brand) {
-    const brokerage = getParameterByName('brokerage')
+    let brokerage = getParameterByName('brokerage')
+    if (!brokerage && AppStore.data.brand.offices)
+      brokerage = AppStore.data.brand.offices[0].mls_office_id
     params.office = brokerage
   }
   Listing.getValerts(params, (err, response) => {
