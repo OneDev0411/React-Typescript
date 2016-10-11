@@ -4,7 +4,7 @@ import AppStore from '../../stores/AppStore'
 import ListingDispatcher from '../../dispatcher/ListingDispatcher'
 export default (hostname) => {
   const params = {
-    hostname,
+    hostname: 'claystapp.irish.rechat.com',
     user: AppStore.data.user
   }
   Brand.getByHostname(params, (err, res) => {
