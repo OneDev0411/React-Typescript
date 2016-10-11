@@ -856,7 +856,7 @@ export default class Mls extends Component {
     if (!data.is_widget && Brand.asset('site_logo_wide')) {
       const host = 'https://' + window.location.host
       brand_logo = (
-        <div style={ S('pull-left z-3 absolute t-13 l-15') }>
+        <div style={ S('pull-left z-3 absolute p-16') }>
           <a href={ host }>
             <img style={ S('w-200') } src={ Brand.asset('site_logo_wide') } />
           </a>
