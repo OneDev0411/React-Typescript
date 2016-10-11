@@ -852,8 +852,20 @@ export default class Mls extends Component {
         </a>
       )
     }
+    let brand_logo
+    if (Brand.asset('site_logo_wide')) {
+      const host = 'https://' + window.location.host
+      brand_logo = (
+        <div style={ S('pull-left z-100 absolute t-13 l-15') }>
+          <a href={ host }>
+            <img style={ S('w-200') } src={ Brand.asset('site_logo_wide') } />
+          </a>
+        </div>
+      )
+    }
     const main_content = (
       <main>
+        { brand_logo }
         { user && !data.is_widget ? nav_area : '' }
         <div className={ main_class } style={ main_style }>
           { /* this.cacheImages() */ }
