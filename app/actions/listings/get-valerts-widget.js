@@ -4,6 +4,7 @@ import Brand from '../../models/Brand'
 import AppStore from '../../stores/AppStore'
 import _ from 'lodash'
 import async from 'async'
+import { getParameterByName } from '../../utils/helpers'
 export default (user, options) => {
   const params = {
     options
@@ -11,9 +12,10 @@ export default (user, options) => {
   if (user)
     params.access_token = user.access_token
   if (AppStore.data.brand) {
-    params.office = AppStore.data.brand.office_mls_id
-    params.options.offices = [AppStore.data.brand.office_mls_id]
-    delete params.options.list_offices
+    const brokerage = getParameterByName('brokerage')
+    params.office = brokerage
+    params.options.list_offices = [brokerage]
+    // delete params.options.list_offices
   }
   async.series([
     callback => {
