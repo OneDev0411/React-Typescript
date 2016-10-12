@@ -63,7 +63,7 @@ export default class App extends Component {
     //   this.triggerBranchBanner()
     const MobileDetect = require('mobile-detect')
     const md = new MobileDetect(window.navigator.userAgent)
-    if (md.is('iPhone'))
+    if (md.is('iPhone') && !AppStore.data.is_widget)
       this.showMobileSplashViewer()
   }
   componentDidUpdate() {

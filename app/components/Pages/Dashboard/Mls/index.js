@@ -425,10 +425,10 @@ export default class Mls extends Component {
         </Button>
       )
     }
-    let zoom_right = 'r-26'
+    let zoom_right = 'r-25'
     if (data.show_listing_panel)
       zoom_right = 'r-860'
-    let zoom_bottom = ' b-95'
+    let zoom_bottom = ' b-25'
     if (data.is_mobile)
       zoom_bottom = ' b-75'
     const zoom_controls = (
@@ -852,8 +852,20 @@ export default class Mls extends Component {
         </a>
       )
     }
+    let brand_logo
+    if (!data.is_widget && Brand.asset('site_logo_wide')) {
+      const host = 'https://' + window.location.host
+      brand_logo = (
+        <div style={ S('pull-left z-3 absolute p-16') }>
+          <a href={ host }>
+            <img style={ S('w-200') } src={ Brand.asset('site_logo_wide') } />
+          </a>
+        </div>
+      )
+    }
     const main_content = (
       <main>
+        { brand_logo }
         { user && !data.is_widget ? nav_area : '' }
         <div className={ main_class } style={ main_style }>
           { /* this.cacheImages() */ }
