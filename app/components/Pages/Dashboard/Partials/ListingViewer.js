@@ -194,7 +194,7 @@ export default class ListingViewer extends Component {
         let profile_image_area
         if (brand_agent.profile_image_url) {
           profile_image_area = (
-            <div style={ S('w-100p h-200 bg-cover bg-top bg-url(' + brand_agent.profile_image_url + ')') } />
+            <img style={ S('w-100p') } src={ brand_agent.profile_image_url } />
           )
         }
         let phone_area
