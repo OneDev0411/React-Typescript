@@ -127,7 +127,7 @@ export default class ShareAlertModal extends Component {
       })
     }
     // Rooms available
-    if (data.rooms) {
+    if (data.rooms && !users_selected_ids.length) {
       data.rooms.forEach(room => {
         if (room.users.length > 1) {
           // Test if user in available rooms
