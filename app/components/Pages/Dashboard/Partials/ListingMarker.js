@@ -139,7 +139,7 @@ export default class ListingMarker extends Component {
       </div>
     )
     // Open house
-    if (!listing.open_houses) {
+    if (listing.open_houses) {
       // Open house marker
       const open_style = {
         ...S('bg-fff w-25 h-100p color-35b863 font-10 pt-8 inline-block pull-left bold'),
