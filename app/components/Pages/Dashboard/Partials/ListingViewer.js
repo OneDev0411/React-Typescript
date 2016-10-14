@@ -244,7 +244,6 @@ export default class ListingViewer extends Component {
             }
           </div>
         )
-        brand_agent_area = ''
       }
       let list_agent_area = (
         <div style={ S('mt-20 color-748090 w-100p border-1-solid-ededed br-3 p-20 text-center') }>
@@ -715,7 +714,6 @@ export default class ListingViewer extends Component {
           { brand_agent_area }
         </div>
       )
-      brand_agent_footer = ''
     }
     return (
       <div style={ viewer_wrap_style }>
