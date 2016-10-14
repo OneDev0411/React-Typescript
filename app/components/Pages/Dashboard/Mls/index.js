@@ -812,7 +812,7 @@ export default class Mls extends Component {
     )
     // Error tooltip
     let share_alert_error_tooltip
-    if (listing_map && listing_map.show_share_alert_error_tooltip) {
+    if (listing_map && listing_map.show_share_alert_error_tooltip && !data.current_listing) {
       let warning_style = {
         ...S('absolute r-260 t-87 bg-fff w-347 h-210 border-1-solid-d7d6d6 text-center p-30 z-10'),
         boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.12), 0 0 4px 0 rgba(0, 0, 0, 0.1)'
