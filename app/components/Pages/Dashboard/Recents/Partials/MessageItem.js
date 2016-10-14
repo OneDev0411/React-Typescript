@@ -243,7 +243,7 @@ export default class MessageItem extends Component {
       if (message.notification && message.notification.action === 'BecameAvailable')
         notification_message = ' just hit the market'
       if (message.notification && message.notification.action === 'PriceDropped')
-        notification_message = ' price dropped'
+        notification_message = ' price changed'
       return (
         <div className="message-item" style={ S('relative mb-15 pt-5 font-15') }>
           <div style={ S('mt-5 pull-left') }>
