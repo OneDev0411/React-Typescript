@@ -5,7 +5,7 @@ export default class Branch extends Component {
   componentDidMount() {
     const branch = require('branch-sdk')
     branch.init(config.branch.key, (err, data) => {
-      console.log('init', data)
+      window.location.href = '/password/create?token=' + data.data_parsed.token + '&email=' + data.data_parsed.email
     })
   }
   render() {
