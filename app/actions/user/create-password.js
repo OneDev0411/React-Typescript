@@ -25,10 +25,8 @@ export default (email, password, first_name, last_name, token, agent) => {
   async.series([
     callback => {
       // Create pass
-      console.log(params)
       User.createPassword(params, (err, response) => {
         // Success
-        console.log(response)
         if (response.status === 'success')
           callback()
         else {
