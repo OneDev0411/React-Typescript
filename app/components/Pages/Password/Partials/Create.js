@@ -34,6 +34,10 @@ export default class Create extends Component {
       if (!AppStore.data.signup)
         AppStore.data.signup = {}
       AppStore.data.signup.show_form = true
+      // New email
+      const new_email = decodeURIComponent(helpers.getParameterByName('new_email'))
+      if (new_email)
+        AppStore.data.signup.new_email = true
       AppStore.emitChange()
     }, 300)
   }
@@ -55,6 +59,7 @@ export default class Create extends Component {
     AppStore.emitChange()
     // Get token
     const password = this.refs.password.getInputDOMNode().value.trim()
+    const new_email = this.refs.new_email.getInputDOMNode().value.trim()
     const token = decodeURIComponent(helpers.getParameterByName('token'))
     const email = decodeURIComponent(helpers.getParameterByName('email'))
     let first_name
@@ -85,6 +90,8 @@ export default class Create extends Component {
     // Set agent
     if (data.signup && data.signup.agent)
       form_data.agent = data.signup.agent
+    if (new_email)
+      form_data.new_email = new_email
     this.props.handleSubmit('create-password', form_data)
   }
 
@@ -282,6 +289,14 @@ export default class Create extends Component {
         </div>
       )
     }
+    let new_email_area
+    if (data.signup && data.signup.new_email) {
+      new_email_area = (
+        <div style={ S('relative') }>
+          <Input type="email" autoComplete={ false } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="Add an Email" ref="new_email"/>
+        </div>
+      )
+    }
     let main_content = (
       <div>
         <Col sm={ 5 } className={ data.is_mobile ? 'hidden' : '' }>
@@ -294,6 +309,7 @@ export default class Create extends Component {
           <form onSubmit={ this.handleSubmit.bind(this) }>
             { name_area }
             <div className="clearfix"></div>
+            { new_email_area }
             <div style={ S('relative') }>
               <Input autoComplete={ false } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } bsStyle={ password_style } placeholder="Add a Password" type={ data.signup && data.signup.show_password ? 'text' : 'password' } ref="password"/>
               <i onClick={ this.toggleShowPassword } style={ S('absolute t-15 r-15 z-100 pointer color-666') } className={ `fa fa-eye${ data.signup && data.signup.show_password ? '-slash' : '' }` }></i>

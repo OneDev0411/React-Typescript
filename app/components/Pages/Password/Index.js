@@ -92,6 +92,7 @@ export default class Password extends Component {
       const first_name = form_data.first_name
       const last_name = form_data.last_name
       const agent = form_data.agent
+      const new_email = form_data.new_email
       AppDispatcher.dispatch({
         action: 'create-password',
         password,
@@ -99,7 +100,8 @@ export default class Password extends Component {
         email,
         first_name,
         last_name,
-        agent
+        agent,
+        new_email
       })
     }
   }

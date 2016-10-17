@@ -1,7 +1,6 @@
 // controller/add-members.js
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import AppStore from '../../../../stores/AppStore'
-import _ from 'lodash'
 const controller = {
   addUsersToSearchInput(items_selected) {
     if (!items_selected && AppStore.data.add_members || !items_selected.length && AppStore.data.add_members) {

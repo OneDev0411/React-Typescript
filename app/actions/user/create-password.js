@@ -2,7 +2,7 @@
 import User from '../../models/User'
 import AppStore from '../../stores/AppStore'
 import async from 'async'
-export default (email, password, first_name, last_name, token, agent) => {
+export default (email, password, first_name, last_name, token, agent, new_email) => {
   if (password.length < 6) {
     let error_type
     if (password.length < 6)
@@ -59,10 +59,15 @@ export default (email, password, first_name, last_name, token, agent) => {
         first_name,
         last_name
       }
+      // Phone shadow user
+      if (new_email)
+        user_info.email = new_email
       const params_edit = {
         access_token: local_user.access_token,
         user: user_info
       }
+      if (new_email)
+        params_edit.email = new_email
       User.edit(params_edit, () => {
         callback()
       })
