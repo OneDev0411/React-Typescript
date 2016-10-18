@@ -8,6 +8,10 @@ export default class Branch extends Component {
       window.location.href = '/password/create?token=' + data.data_parsed.token +
       '&email=' + encodeURIComponent(data.data_parsed.email) +
       '&phone_number=' + encodeURIComponent(data.data_parsed.phone_number) +
+      '&room=' + encodeURIComponent(data.data_parsed.room) +
+      '&listing=' + encodeURIComponent(data.data_parsed.listing) +
+      '&alert=' + encodeURIComponent(data.data_parsed.alert) +
+      '&action=' + encodeURIComponent(data.data_parsed.action) +
       '&new_email=true'
     })
   }
