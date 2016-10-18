@@ -39,7 +39,6 @@ module.exports = (app, config) => {
       return response.json()
     })
     .then(response => {
-      console.log(response)
       let response_object = response
       // Reset user session
       const user = response.data

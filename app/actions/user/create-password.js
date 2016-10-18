@@ -78,6 +78,8 @@ export default (email, password, first_name, last_name, token, agent, new_email)
         email,
         password
       }
+      if (new_email)
+        params_signin_again.email = new_email
       User.signin(params_signin_again, (err, response) => {
         const user = response.data
         AppStore.data.user = user
