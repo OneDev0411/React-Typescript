@@ -27,16 +27,23 @@ export default class Password extends Component {
       let room_id
       let alert_id
       let room
+      let listing
+      let alert
       if (data.location && data.location.query && data.location.query.action) {
         action = data.location.query.action
         if (data.location.query.listing_id)
           listing_id = data.location.query.listing_id
         if (data.location.query.room_id)
           room_id = data.location.query.room_id
-        if (data.location.query.room)
-          room = data.location.query.room
         if (data.location.query.alert_id)
           alert_id = data.location.query.alert_id
+        // New branch data
+        if (data.location.query.room)
+          room = data.location.query.room
+        if (data.location.query.listing)
+          listing = data.location.query.listing
+        if (data.location.query.alert)
+          alert = data.location.query.alert
         if (action === 'favorite_listing' && listing_id) {
           window.location.href = '/dashboard/mls/' + listing_id
           return
@@ -49,8 +56,17 @@ export default class Password extends Component {
           window.location.href = '/dashboard/mls/alerts/' + alert_id
           return
         }
+        // New branch actions
         if (action === 'RedirectToRoom' && room) {
-          window.location.href = '/dashboard/mls/' + room
+          window.location.href = '/dashboard/recents/' + room
+          return
+        }
+        if (action === 'RedirectToListing' && listing) {
+          window.location.href = '/dashboard/mls/' + listing
+          return
+        }
+        if (action === 'RedirectToAlert' && alert) {
+          window.location.href = '/dashboard/mls/alerts/' + alert
           return
         }
       }
