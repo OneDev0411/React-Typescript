@@ -93,11 +93,13 @@ export default class Password extends Component {
       const last_name = form_data.last_name
       const agent = form_data.agent
       const new_email = form_data.new_email
+      const phone_number = form_data.phone_number
       AppDispatcher.dispatch({
         action: 'create-password',
         password,
         token,
         email,
+        phone_number,
         first_name,
         last_name,
         agent,

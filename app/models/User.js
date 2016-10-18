@@ -276,6 +276,7 @@ export default {
     if (!api_host) api_host = config.app.url
     const endpoint = api_host + '/api/create-password'
     const request_object = {
+      phone_number: params.phone_number,
       email: params.email,
       token: params.token, // already decoded
       password: params.password,

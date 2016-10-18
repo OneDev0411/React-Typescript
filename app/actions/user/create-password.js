@@ -2,7 +2,7 @@
 import User from '../../models/User'
 import AppStore from '../../stores/AppStore'
 import async from 'async'
-export default (email, password, first_name, last_name, token, agent, new_email) => {
+export default (email, password, first_name, last_name, token, agent, new_email, phone_number) => {
   if (password.length < 6) {
     let error_type
     if (password.length < 6)
@@ -21,9 +21,15 @@ export default (email, password, first_name, last_name, token, agent, new_email)
     token,
     agent
   }
+  if (phone_number) {
+    delete params.email
+    params.phone_number = phone_number
+    params.new_email = true
+  }
   const locals = {}
   async.series([
     callback => {
+      console.log(params)
       // Create pass
       User.createPassword(params, (err, response) => {
         // Success

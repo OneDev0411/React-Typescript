@@ -62,6 +62,7 @@ export default class Create extends Component {
     const new_email = this.refs.new_email.getInputDOMNode().value.trim()
     const token = decodeURIComponent(helpers.getParameterByName('token'))
     const email = decodeURIComponent(helpers.getParameterByName('email'))
+    const phone_number = decodeURIComponent(helpers.getParameterByName('phone_number'))
     let first_name
     let last_name
     if (data.signup && data.signup.first_name)
@@ -83,6 +84,7 @@ export default class Create extends Component {
       password,
       token,
       email,
+      phone_number,
       first_name,
       last_name,
       type
@@ -92,6 +94,7 @@ export default class Create extends Component {
       form_data.agent = data.signup.agent
     if (new_email)
       form_data.new_email = new_email
+    console.log(form_data)
     this.props.handleSubmit('create-password', form_data)
   }
 
