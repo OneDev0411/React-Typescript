@@ -22,7 +22,6 @@ module.exports = (app, config) => {
     }
     if (agent)
       request_object.agent = agent
-    console.log(request_object)
     fetch(endpoint,{
       method: 'patch',
       headers: {  

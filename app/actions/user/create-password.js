@@ -29,7 +29,6 @@ export default (email, password, first_name, last_name, token, agent, new_email,
   const locals = {}
   async.series([
     callback => {
-      console.log(params)
       // Create pass
       User.createPassword(params, (err, response) => {
         // Success

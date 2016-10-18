@@ -94,7 +94,6 @@ export default class Create extends Component {
       form_data.agent = data.signup.agent
     if (new_email)
       form_data.new_email = new_email
-    console.log(form_data)
     this.props.handleSubmit('create-password', form_data)
   }
 
