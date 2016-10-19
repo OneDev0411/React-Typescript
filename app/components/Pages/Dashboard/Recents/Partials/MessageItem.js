@@ -244,13 +244,19 @@ export default class MessageItem extends Component {
         notification_message = ' just hit the market'
       if (message.notification && message.notification.action === 'PriceDropped')
         notification_message = ' price changed'
+      // Get author name
+      let author_name = first_name
+      if (!author_name && author.phone_number)
+        author_name = author.phone_number
+      if (!author_name)
+        author_name = 'Rebot'
       return (
         <div className="message-item" style={ S('relative mb-15 pt-5 font-15') }>
           <div style={ S('mt-5 pull-left') }>
             { profile_image_div }
           </div>
           <div className="pull-left" style={ S('ml-55 ' + card_width) }>
-            <b>{ first_name || 'Rebot' }</b>
+            <b>{ author_name }</b>
             <span style={ S('color-ccc ml-20') } >
               { time_created.month } { time_created.date }, { time_created.time_friendly }
             </span>
