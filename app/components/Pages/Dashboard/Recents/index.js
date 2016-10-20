@@ -157,36 +157,6 @@ export default class Dashboard extends Component {
     })
   }
 
-  addContactsToRoom() {
-    delete AppStore.data.add_contacts_error
-    AppStore.emitChange()
-    const contacts_added = AppStore.data.contacts_added
-    const user = AppStore.data.user
-    const room = this.props.data.current_room
-    if (contacts_added && contacts_added.room) {
-      AppStore.data.adding_contacts = true
-      AppStore.emitChange()
-      const contacts = contacts_added.room
-      AppDispatcher.dispatch({
-        action: 'invite-contacts',
-        user,
-        room,
-        contacts
-      })
-      // Create contacts if email or phone
-      const new_contacts = contacts_added.room.filter(contact => {
-        return contact.type !== 'contact'
-      })
-      if (new_contacts) {
-        AppDispatcher.dispatch({
-          action: 'create-contacts',
-          user,
-          contacts: new_contacts
-        })
-      }
-    }
-  }
-
   createRoom(e) {
     e.preventDefault()
     const title = this.refs.title.getInputDOMNode().value.trim()
@@ -661,7 +631,6 @@ export default class Dashboard extends Component {
         hideModal={ this.hideModal }
         createRoom={ this.createRoom }
         setCurrentRoom={ this.setCurrentRoom.bind(this) }
-        addContactsToRoom={ this.addContactsToRoom }
         handleDragEnter={ this.handleDragEnter }
         handleDragLeave={ this.handleDragLeave }
         uploadFiles={ this.uploadFiles.bind(this) }

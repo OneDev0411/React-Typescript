@@ -478,7 +478,6 @@ MessagesList.propTypes = {
   data: React.PropTypes.object,
   getPreviousMessages: React.PropTypes.func.isRequired,
   showModal: React.PropTypes.func.isRequired,
-  addContactsToRoom: React.PropTypes.func,
   hideModal: React.PropTypes.func,
   showFileViewer: React.PropTypes.func,
   setHeadingDate: React.PropTypes.func,

@@ -149,7 +149,6 @@ export default class NewMessageViewer extends Component {
           data={ data }
           getPreviousMessages={ this.props.getPreviousMessages }
           showModal={ this.props.showModal.bind(this) }
-          addContactsToRoom={ this.props.addContactsToRoom }
           hideModal={ this.props.hideModal.bind(this) }
           showFileViewer={ this.props.showFileViewer }
           setHeadingDate={ this.props.setHeadingDate }
@@ -226,7 +225,6 @@ NewMessageViewer.propTypes = {
   handleContactFilter: React.PropTypes.func,
   getPreviousMessages: React.PropTypes.func,
   showModal: React.PropTypes.func,
-  addContactsToRoom: React.PropTypes.func,
   hideModal: React.PropTypes.func,
   showFileViewer: React.PropTypes.func,
   setHeadingDate: React.PropTypes.func,

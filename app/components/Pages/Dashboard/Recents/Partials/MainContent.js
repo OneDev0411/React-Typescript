@@ -106,7 +106,6 @@ export default class MainContent extends Component {
         data={ data }
         getPreviousMessages={ this.props.getPreviousMessages }
         showModal={ this.props.showModal.bind(this) }
-        addContactsToRoom={ this.props.addContactsToRoom }
         hideModal={ this.hideModal.bind(this) }
         showFileViewer={ this.props.showFileViewer }
         setHeadingDate={ this.props.setHeadingDate }
@@ -134,7 +133,6 @@ export default class MainContent extends Component {
           handleContactFilter={ this.props.handleContactFilter }
           getPreviousMessages={ this.props.getPreviousMessages }
           showModal={ this.props.showModal.bind(this) }
-          addContactsToRoom={ this.props.addContactsToRoom }
           hideModal={ this.hideModal.bind(this) }
           showFileViewer={ this.props.showFileViewer }
           setHeadingDate={ this.props.setHeadingDate }
@@ -256,7 +254,6 @@ MainContent.propTypes = {
   handleContactFilterNav: React.PropTypes.func.isRequired,
   setCurrentRoom: React.PropTypes.func.isRequired,
   getPreviousMessages: React.PropTypes.func.isRequired,
-  addContactsToRoom: React.PropTypes.func.isRequired,
   handleDragEnter: React.PropTypes.func.isRequired,
   handleDragLeave: React.PropTypes.func.isRequired,
   uploadFiles: React.PropTypes.func.isRequired,
