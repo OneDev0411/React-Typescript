@@ -29,6 +29,12 @@ export default class SignIn extends Component {
         AppStore.emitChange()
       }, 500)
     }
+    if (message && message === 'phone-signup-success') {
+      setTimeout(() => {
+        AppStore.data.show_email_verified_modal = true
+        AppStore.emitChange()
+      }, 500)
+    }
     const data = this.props.data
     if (data.location && data.location.query && data.location.query.email) {
       const email = decodeURIComponent(data.location.query.email)
@@ -52,6 +58,7 @@ export default class SignIn extends Component {
 
   hideModal() {
     delete AppStore.data.show_upgrade_confirm_modal
+    delete AppStore.data.show_email_verified_modal
     AppStore.emitChange()
   }
 
@@ -141,7 +148,6 @@ export default class SignIn extends Component {
         )
       }
     }
-
     let invite_message
     if (data.invite_room_message) {
       invite_message = (
@@ -201,6 +207,18 @@ export default class SignIn extends Component {
             </div>
             <div style={ S('font-24 mb-20') }>Account Upgraded</div>
             <div style={ S('font-18 mb-20') }>You may now log in and use enhanced features.</div>
+            <Button style={ S('mb-20') } bsStyle="primary" onClick={ this.hideModal.bind(this) }>Ok</Button>
+          </Modal.Body>
+        </Modal>
+        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_email_verified_modal } onHide={ this.hideModal }>
+          <Modal.Body className="text-center">
+            <div style={ S('mb-20 mt-20') }>
+              <div style={ S('br-100 w-90 h-90 center-block bg-3388ff text-center') }>
+                <i style={ S('color-fff font-40 mt-25') } className="fa fa-check"></i>
+              </div>
+            </div>
+            <div style={ S('font-24 mb-20') }>Email Verified</div>
+            <div style={ S('font-18 mb-20') }>You may now log in.</div>
             <Button style={ S('mb-20') } bsStyle="primary" onClick={ this.hideModal.bind(this) }>Ok</Button>
           </Modal.Body>
         </Modal>
