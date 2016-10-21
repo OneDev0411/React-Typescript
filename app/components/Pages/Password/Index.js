@@ -7,6 +7,7 @@ import Forgot from './Partials/Forgot'
 import Reset from './Partials/Reset'
 import Create from './Partials/Create'
 import S from 'shorti'
+import { Modal } from 'react-bootstrap'
 import MobileSplashViewer from '../../Partials/MobileSplashViewer'
 
 export default class Password extends Component {
@@ -170,6 +171,16 @@ export default class Password extends Component {
         <div style={ S('z-100 relative mt-60n bg-fff br-6') }>
           { main_content }
         </div>
+        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_confirm_email_modal }>
+          <div className="din" style={ S('text-center font-60 p-40 color-666') }>
+            <div style={ S('bg-2196f3 w-165 h-165 br-100 center-block pt-35') }>
+              <i className="fa fa-envelope" style={ S('h-70 mt-20 color-fff') }></i>
+            </div>
+            <div>Email Verification Sent!</div>
+            <div style={ S('font-20') }>Please check your email:</div>
+            <div style={ S('color-2196f3 font-20') }>{ data.signup && data.signup.email ? data.signup.email : '' }</div>
+          </div>
+        </Modal>
       </div>
     )
   }

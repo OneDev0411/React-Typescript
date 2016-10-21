@@ -78,13 +78,18 @@ export default (email, password, first_name, last_name, token, agent, new_email,
       })
     },
     () => {
+      // Phone shadow
+      if (new_email) {
+        AppStore.data.show_confirm_email_modal = true
+        AppStore.data.signup.email = new_email
+        AppStore.emitChange()
+        return
+      }
       // Signin with new edited info
       const params_signin_again = {
         email,
         password
       }
-      if (new_email)
-        params_signin_again.email = new_email
       User.signin(params_signin_again, (err, response) => {
         const user = response.data
         AppStore.data.user = user

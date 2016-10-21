@@ -96,7 +96,10 @@ module.exports = (app, config) => {
     })
     .then(response => {
       // redirect to success page
-      return res.redirect('/verify/email?status=success&token=' + token + '&email=' + encodeURIComponent(email))
+      if (response.data.is_shadow)
+        return res.redirect('/verify/email?status=success&token=' + token + '&email=' + encodeURIComponent(email))
+      else
+        return res.redirect('/signin?message=phone-signup-success')
     })
   })
   app.get('/verify_phone',(req, res) => {
