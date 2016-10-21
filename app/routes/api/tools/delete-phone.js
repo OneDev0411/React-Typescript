@@ -2,7 +2,7 @@
 module.exports = (app, config) => {
   app.delete('/api/tools/delete-phone',(req, res) => {
     const api_url = config.api.url
-    const endpoint = api_url + '/admin/users/phone?q=' + decodeURIComponent(req.query.phone_number)
+    const endpoint = api_url + '/admin/users/phone?q=' + encodeURIComponent(req.query.phone_number)
     fetch(endpoint,{
       method: 'delete',
     })

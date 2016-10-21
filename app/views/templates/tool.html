@@ -23,6 +23,8 @@
     <div>
         <form id="delete_phone_form">
           <input id="phone_number" placeholder="phone_number" name="q">
+          <button type="submit">Delete</button>
+          <div class="message"></div>
         </form>
     </div>
 </div>
@@ -37,7 +39,10 @@ $(function() {
     $.ajax({
       url: '{{ api_host_local }}/api/tools/delete-phone?phone_number=' + encodeURIComponent(phone_number),
       type: 'DELETE'
+    }).done(function(data) {
+      // console.log('success')
     });
+    $('.message').html('Success! Phone number deleted.');
     return false;
   });
 });
