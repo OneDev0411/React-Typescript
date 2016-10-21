@@ -36,13 +36,13 @@
 $(function() {
   $('#delete_phone_form').on('submit', function() {
     var phone_number = $(this).find('#phone_number').val()
-    $.ajax({
+    var request = $.ajax({
       url: '{{ api_host_local }}/api/tools/delete-phone?phone_number=' + encodeURIComponent(phone_number),
       type: 'DELETE'
-    }).done(function(data) {
-      // console.log('success')
     });
-    $('.message').html('Success! Phone number deleted.');
+    request.done(function() {
+      $('.message').html('Success! Phone number deleted.');
+    });
     return false;
   });
 });

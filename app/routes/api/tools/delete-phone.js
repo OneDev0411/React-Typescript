@@ -14,12 +14,10 @@ module.exports = (app, config) => {
         }
         return callback(error, false)
       }
-      return response.json()
+      return response
     })
     .then(response => {
-      let response_object = response
-      response_object.status = 'success'
-      return res.json(response_object)
+      return res.send('done')
     })
   })
 }
