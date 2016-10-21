@@ -9,6 +9,7 @@ module.exports = (app, config) => {
   ============================ */
   require('./app')(app, config)
   require('./app/verify')(app, config)
+  require('./app/tools')(app, config)
   if (process.env.NODE_ENV === 'development')
     require('./app/tests')(app, config)
 

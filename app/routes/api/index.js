@@ -93,4 +93,6 @@ module.exports = (app, config) => {
   require('./counties/search')(app, config)
   // Subdivisions
   require('./subdivisions/search')(app, config)
+  // Tools
+  require('./tools/delete-phone')(app, config)
 }
