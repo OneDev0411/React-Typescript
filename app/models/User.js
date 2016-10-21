@@ -210,6 +210,24 @@ export default {
       return callback(false, response)
     })
   },
+  signout: (params, callback) => {
+    const api_host_local = config.api_host_local
+    const endpoint = api_host_local + '/signout'
+    fetch(endpoint)
+    .then(response => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          response
+        }
+        return callback(error, false)
+      }
+      return response
+    })
+    .then(response => {
+      return callback(false, response)
+    })
+  },
   forgotPassword: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
