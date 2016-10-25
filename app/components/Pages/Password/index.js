@@ -181,7 +181,7 @@ export default class Password extends Component {
             { email_area }
             { phone_number_area }
             <div style={ S('text-center') }>
-              <a href="/signout" className="btn btn-primary">Log out</a>
+              <a href={`/signout?redirect_to=${encodeURIComponent(window.location.href)}`} className="btn btn-primary">Log out</a>
             </div>
           </div>
         </Modal>
