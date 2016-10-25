@@ -15,13 +15,15 @@ export default class Password extends Component {
     const data = this.props.data
     const signup = data.signup
     const user = data.user
+    if (user && !signup)
+      console.log('Already logged in!')
     // Redirect after Password creation
-    if (user) {
+    if (user && signup) {
       // If invited to room
-      // if (data.current_room) {
-      //   window.location.href = '/dashboard/recents/' + data.current_room.id
-      //   return
-      // }
+      if (data.current_room) {
+        window.location.href = '/dashboard/recents/' + data.current_room.id
+        return
+      }
       // If has action in url
       let action
       let listing_id
