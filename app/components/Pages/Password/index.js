@@ -104,8 +104,8 @@ export default class Password extends Component {
     const receiving_user = data.receiving_user
     if (receiving_user) {
       if (!receiving_user.is_shadow) {
-        const redirect_url = this.getActionRedirectURL()
-        window.location.href = `/signin?email=${decodeURIComponent(data.location.query.email)}&redirect_to=${redirect_url}`
+        const redirect_url = encodeURIComponent(this.getActionRedirectURL())
+        window.location.href = `/signin?email=${encodeURIComponent(receiving_user.email)}&redirect_to=${redirect_url}`
       }
     }
   }

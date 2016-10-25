@@ -8,11 +8,7 @@ export default user_id => {
     id: user_id
   }
   User.get(params, (err, res) => {
-    // Success
-    if (res.status === 'success') {
-      AppStore.data.receiving_user = res.data
-      AppStore.emitChange()
-    }
-    console.log(res)
+    AppStore.data.receiving_user = res.data
+    AppStore.emitChange()
   })
 }
