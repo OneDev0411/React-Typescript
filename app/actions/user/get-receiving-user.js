@@ -13,5 +13,6 @@ export default user_id => {
       AppStore.data.receiving_user = res.data
       AppStore.emitChange()
     }
+    console.log(res)
   })
 }
