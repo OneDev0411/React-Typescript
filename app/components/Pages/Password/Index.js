@@ -11,7 +11,11 @@ import { Modal } from 'react-bootstrap'
 import MobileSplashViewer from '../../Partials/MobileSplashViewer'
 
 export default class Password extends Component {
+  componentDidMount() {
+    this.getReceivingUser()
+  }
   componentDidUpdate() {
+    this.checkIsShadowUser()
     const data = this.props.data
     const signup = data.signup
     const user = data.user
@@ -28,53 +32,9 @@ export default class Password extends Component {
         return
       }
       // If has action in url
-      let action
-      let listing_id
-      let room_id
-      let alert_id
-      let room
-      let listing
-      let alert
       if (data.location && data.location.query && data.location.query.action) {
-        action = data.location.query.action
-        if (data.location.query.listing_id)
-          listing_id = data.location.query.listing_id
-        if (data.location.query.room_id)
-          room_id = data.location.query.room_id
-        if (data.location.query.alert_id)
-          alert_id = data.location.query.alert_id
-        // New branch data
-        if (data.location.query.room)
-          room = data.location.query.room
-        if (data.location.query.listing)
-          listing = data.location.query.listing
-        if (data.location.query.alert)
-          alert = data.location.query.alert
-        if (action === 'favorite_listing' && listing_id) {
-          window.location.href = '/dashboard/mls/' + listing_id
-          return
-        }
-        if (action === 'listing_inquiry' && room_id) {
-          window.location.href = '/dashboard/recents/' + room_id
-          return
-        }
-        if (action === 'create_alert' && alert_id) {
-          window.location.href = '/dashboard/mls/alerts/' + alert_id
-          return
-        }
-        // New branch actions
-        if (action === 'RedirectToRoom' && room) {
-          window.location.href = '/dashboard/recents/' + room
-          return
-        }
-        if (action === 'RedirectToListing' && listing) {
-          window.location.href = '/dashboard/mls/' + listing
-          return
-        }
-        if (action === 'RedirectToAlert' && alert) {
-          window.location.href = '/dashboard/mls/alerts/' + alert
-          return
-        }
+        const redirect_url = this.getActionRedirectURL()
+        window.location.href = redirect_url
       }
       if (signup.type === 'client')
         window.location.href = '/dashboard/mls?message=welcome'
@@ -91,7 +51,64 @@ export default class Password extends Component {
       }
     }
   }
-
+  getActionRedirectURL() {
+    // If has action in url
+    let action
+    let listing_id
+    let room_id
+    let alert_id
+    let room
+    let listing
+    let alert
+    const data = this.props.data
+    if (data.location && data.location.query && data.location.query.action) {
+      action = data.location.query.action
+      if (data.location.query.listing_id)
+        listing_id = data.location.query.listing_id
+      if (data.location.query.room_id)
+        room_id = data.location.query.room_id
+      if (data.location.query.alert_id)
+        alert_id = data.location.query.alert_id
+      // New branch data
+      if (data.location.query.room)
+        room = data.location.query.room
+      if (data.location.query.listing)
+        listing = data.location.query.listing
+      if (data.location.query.alert)
+        alert = data.location.query.alert
+      if (action === 'favorite_listing' && listing_id)
+        return '/dashboard/mls/' + listing_id
+      if (action === 'listing_inquiry' && room_id)
+        return '/dashboard/recents/' + room_id
+      if (action === 'create_alert' && alert_id)
+        return '/dashboard/mls/alerts/' + alert_id
+      // New branch actions
+      if (action === 'RedirectToRoom' && room)
+        return '/dashboard/recents/' + room
+      if (action === 'RedirectToListing' && listing)
+        return '/dashboard/mls/' + listing
+      if (action === 'RedirectToAlert' && alert)
+        return '/dashboard/mls/alerts/' + alert
+    }
+  }
+  getReceivingUser() {
+    const data = this.props.data
+    const user_id = decodeURIComponent(data.location.query.receiving_user)
+    AppDispatcher.dispatch({
+      action: 'get-receiving-user',
+      user_id 
+    })
+  }
+  checkIsShadowUser() {
+    const data = this.props.data
+    const receiving_user = data.receiving_user
+    if (receiving_user) {
+      if (!receiving_user.is_shadow) {
+        const redirect_url = this.getActionRedirectURL()
+        window.location.href = `/signin?email=${decodeURIComponent(data.location.query.email)}&redirect_to=${redirect_url}`
+      }
+    }
+  }
   handleSubmit(action, form_data) {
     AppStore.data.signup.form_submitted = true
     AppStore.emitChange()

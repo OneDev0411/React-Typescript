@@ -20,6 +20,8 @@ export default class Branch extends Component {
         redirect += '&alert=' + encodeURIComponent(data.data_parsed.alert)
       if (data.data_parsed.action)
         redirect += '&action=' + encodeURIComponent(data.data_parsed.action)
+      if (data.data_parsed.receiving_user)
+        redirect += '&receiving_user=' + encodeURIComponent(data.data_parsed.receiving_user)
       window.location.href = redirect
     })
   }

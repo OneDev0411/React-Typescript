@@ -26,6 +26,7 @@ import listingInquiry from '../actions/user/listing-inquiry'
 import searchUsersNewMessage from '../actions/user/search-new-message'
 import searchUsersShare from '../actions/user/search-share'
 import searchUsersAddMembers from '../actions/user/search-add-members'
+import getReceivingUser from '../actions/user/get-receiving-user'
 // Rooms
 import createRoom from '../actions/rooms/create-room'
 import deleteRoom from '../actions/rooms/delete-room'
@@ -283,6 +284,10 @@ AppDispatcher.register(payload => {
 
     case 'search-users-add-members':
       searchUsersAddMembers(payload.user, payload.q)
+      break
+
+    case 'get-receiving-user':
+      getReceivingUser(payload.user_id)
       break
 
     default:
