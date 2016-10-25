@@ -152,16 +152,34 @@ export default class Password extends Component {
     // Data
     const data = AppStore.data
     const slug = this.props.params.slug
+    let email_area
+    if (data.location.query.email && !data.location.query.phone_number) {
+      email_area = (
+        <div>
+          <div style={ S('font-20') }>Email:</div>
+          <div style={ S('color-2196f3 font-20') }>{ decodeURIComponent(data.location.query.email) }</div>
+        </div>
+      )
+    }
+    let phone_number_area
+    if (data.location.query.phone_number) {
+      phone_number_area = (
+        <div>
+          <div style={ S('font-20') }>Phone number:</div>
+          <div style={ S('color-2196f3 font-20') }>{ decodeURIComponent(data.location.query.phone_number) }</div>
+        </div>
+      )
+    }
     if (data.show_logout_message) {
       return (
         <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_logout_message }>
           <div style={ S('text-center font-40 p-40 color-666') }>
             <div style={ S('bg-2196f3 w-165 h-165 br-100 center-block pt-35') }>
-              <i className="fa fa-envelope" style={ S('h-70 mt-20 color-fff') }></i>
+              <i className={`fa fa-${email_area ? 'envelope' : 'phone'}`} style={ S('h-70 mt-20 color-fff font-60') }></i>
             </div>
             <div className="din">Logout to Activate This New Account</div>
-            <div style={ S('font-20') }>Phone number:</div>
-            <div style={ S('color-2196f3 font-20') }>{ decodeURIComponent(data.location.query.phone_number) }</div>
+            { email_area }
+            { phone_number_area }
             <div style={ S('text-center') }>
               <a href="/signout" className="btn btn-primary">Log out</a>
             </div>
