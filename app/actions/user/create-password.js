@@ -73,8 +73,18 @@ export default (email, password, first_name, last_name, token, agent, new_email,
       }
       if (new_email)
         params_edit.email = new_email
-      User.edit(params_edit, () => {
-        callback()
+      User.edit(params_edit, (err, response_edit) => {
+        // Success
+        if (response_edit.status === 'success')
+          callback()
+        else {
+          // Error
+          AppStore.data.submitting = false
+          AppStore.data.errors = true
+          AppStore.data.show_message = true
+          AppStore.data.request_error = true
+          AppStore.emitChange()
+        }
       })
     },
     () => {
