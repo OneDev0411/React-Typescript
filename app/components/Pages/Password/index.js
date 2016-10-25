@@ -18,10 +18,10 @@ export default class Password extends Component {
     // Redirect after Password creation
     if (user) {
       // If invited to room
-      if (data.current_room) {
-        window.location.href = '/dashboard/recents/' + data.current_room.id
-        return
-      }
+      // if (data.current_room) {
+      //   window.location.href = '/dashboard/recents/' + data.current_room.id
+      //   return
+      // }
       // If has action in url
       let action
       let listing_id

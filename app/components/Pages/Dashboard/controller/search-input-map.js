@@ -3,6 +3,7 @@ import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import listing_viewer_controller from './listing-viewer'
+// import { isValidUSZip } from '../../../../utils/helpers'
 const controller = {
   handleSearchInputChange(e) {
     const search_input_text = e.target.value
@@ -47,6 +48,18 @@ const controller = {
       if (!place.formatted_address) {
         AppStore.data.listing_map.is_loading = true
         AppStore.emitChange()
+        // Do zip test
+        // if (isValidUSZip(place.name)) {
+        //   const options = AppStore.data.listing_map.options
+        //   options.postal_codes = [place.name]
+        //   options.points = null
+        //   ListingDispatcher.dispatch({
+        //     action: 'get-valerts',
+        //     user: AppStore.data.user,
+        //     options
+        //   })
+        //   return
+        // }
         AppDispatcher.dispatch({
           action: 'geocode-address',
           address: place.name
