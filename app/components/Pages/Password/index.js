@@ -15,10 +15,13 @@ export default class Password extends Component {
     const data = this.props.data
     const signup = data.signup
     const user = data.user
-    if (user && !signup)
-      console.log('Already logged in!')
+    // If user logged in on mount
+    if (user && !signup.form_submitted && !data.show_logout_message) {
+      AppStore.data.show_logout_message = true
+      AppStore.emitChange()
+    }
     // Redirect after Password creation
-    if (user && signup) {
+    if (user && signup.form_submitted) {
       // If invited to room
       if (data.current_room) {
         window.location.href = '/dashboard/recents/' + data.current_room.id
@@ -90,6 +93,8 @@ export default class Password extends Component {
   }
 
   handleSubmit(action, form_data) {
+    AppStore.data.signup.form_submitted = true
+    AppStore.emitChange()
     // Forgot pass
     if (action === 'forgot-password') {
       const email = form_data.email
@@ -147,7 +152,23 @@ export default class Password extends Component {
     // Data
     const data = AppStore.data
     const slug = this.props.params.slug
-
+    if (data.show_logout_message) {
+      return (
+        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_logout_message }>
+          <div style={ S('text-center font-40 p-40 color-666') }>
+            <div style={ S('bg-2196f3 w-165 h-165 br-100 center-block pt-35') }>
+              <i className="fa fa-envelope" style={ S('h-70 mt-20 color-fff') }></i>
+            </div>
+            <div className="din">Logout to Activate This New Account</div>
+            <div style={ S('font-20') }>Phone number:</div>
+            <div style={ S('color-2196f3 font-20') }>{ decodeURIComponent(data.location.query.phone_number) }</div>
+            <div style={ S('text-center') }>
+              <a href="/signout" className="btn btn-primary">Log out</a>
+            </div>
+          </div>
+        </Modal>
+      )
+    }
     let main_content
     if (slug === 'forgot') {
       main_content = (
