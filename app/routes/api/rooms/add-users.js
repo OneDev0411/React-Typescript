@@ -9,7 +9,7 @@ module.exports = (app, config) => {
     const phone_numbers = req.body.phone_numbers
     const access_token = req.body.access_token
     const request_object = {
-      user: users,
+      users: users,
       emails,
       phone_numbers
     }

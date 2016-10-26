@@ -16,10 +16,6 @@ export default (user, room, users, emails, phone_numbers) => {
       delete AppStore.data.adding_users
       delete AppStore.data.add_members
       delete AppStore.data.show_add_members_modal
-      response.data.forEach(invitation => {
-        if (invitation.invited_user)
-          AppStore.data.current_room.users.push(invitation.invited_user)
-      })
       AppStore.emitChange()
     } else {
       AppStore.data.add_users_error = true
