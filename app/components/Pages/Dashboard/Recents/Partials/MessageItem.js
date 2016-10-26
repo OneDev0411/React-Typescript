@@ -42,7 +42,6 @@ export default class MessageItem extends Component {
     if (message.notification && message.notification.object_class === 'Alert' && message.notification.objects)
       alert = message.notification.objects[0]
     const i = this.props.i
-    let first_name
     // Profile image
     let author
     let profile_image_div
@@ -67,10 +66,6 @@ export default class MessageItem extends Component {
         </div>
       )
     }
-
-    // First name
-    if (author)
-      first_name = author.first_name
 
     // Message time
     const message_created = message.created_at.toString().split('.')
@@ -244,19 +239,13 @@ export default class MessageItem extends Component {
         notification_message = ' just hit the market'
       if (message.notification && message.notification.action === 'PriceDropped')
         notification_message = ' price changed'
-      // Get author name
-      let author_name = first_name
-      if (!author_name && author.phone_number)
-        author_name = author.phone_number
-      if (!author_name)
-        author_name = 'Rebot'
       return (
         <div className="message-item" style={ S('relative mb-15 pt-5 font-15') }>
           <div style={ S('mt-5 pull-left') }>
             { profile_image_div }
           </div>
           <div className="pull-left" style={ S('ml-55 ' + card_width) }>
-            <b>{ author_name }</b>
+            <b>{ author ? author.display_name : 'Rebot' }</b>
             <span style={ S('color-ccc ml-20') } >
               { time_created.month } { time_created.date }, { time_created.time_friendly }
             </span>
@@ -320,7 +309,7 @@ export default class MessageItem extends Component {
       <div className="message-item" style={ S('relative mb-5 font-15') }>
         <div style={ S('mt-5 pull-left') }>{ profile_image_div }</div>
         <div className="pull-left" style={ S('ml-55 pt-6') }>
-          <b>{ first_name || 'Rebot' }</b>
+          <b>{ author ? author.display_name : 'Rebot' }</b>
           <span style={ S('color-ccc ml-20') } >
             { time_created.month } { time_created.date }, { time_created.time_friendly }
           </span>
