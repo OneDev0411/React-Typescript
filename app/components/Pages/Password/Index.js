@@ -96,7 +96,7 @@ export default class Password extends Component {
     const user_id = decodeURIComponent(data.location.query.receiving_user)
     AppDispatcher.dispatch({
       action: 'get-receiving-user',
-      user_id 
+      user_id
     })
   }
   checkIsShadowUser() {
