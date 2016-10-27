@@ -66,7 +66,7 @@ module.exports = (app, config) => {
     req.session.destroy()
     let redirect_to = '/'
     if (req.query.redirect_to)
-      redirect_to = decodeURIComponent(req.query.redirect_to)
+      redirect_to = req.query.redirect_to
     return res.redirect(redirect_to)
   })
 
