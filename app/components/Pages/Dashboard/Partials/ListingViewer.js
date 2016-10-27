@@ -313,7 +313,7 @@ export default class ListingViewer extends Component {
         )
       }
       let agent_area_client
-      if (user.user_type === 'Client') {
+      if (!user || user && user.user_type === 'Client') {
         agent_area_client = (
           <div>
             <div style={ S('fw-600 font-18 mb-10') }>Listing Provided by</div>
