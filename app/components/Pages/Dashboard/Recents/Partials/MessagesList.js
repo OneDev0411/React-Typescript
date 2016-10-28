@@ -415,6 +415,14 @@ export default class MessagesList extends Component {
         </div>
       )
     }
+    let leave_chat_button_area
+    if (data.current_room && data.current_room.users.length > 2) {
+      leave_chat_button_area = (
+        <li style={ S('w-260 p-20 pointer') } onClick={ this.props.showDeleteRoomModal.bind(this) }>
+          Leave this chat
+        </li>
+      )
+    }
     let room_settings = (
       <div className="no-user-select" style={ S('pull-right relative t-10 r-10') }>
         <div style={ S('pull-left p-10 pointer mr-30') } onClick={ this.props.showModal.bind(this, 'room-users') }>
@@ -428,9 +436,7 @@ export default class MessagesList extends Component {
               { has_system_generated_notifs ? 'Mute' : 'Unmute' } listing notifications
               <img style={ S('pull-right mt-2n mr-5') } src={ `/images/dashboard/chats/bell${!has_system_generated_notifs ? '-strike' : ''}.svg` }/>
             </li>
-            <li style={ S('w-260 p-20 pointer') } onClick={ this.props.showDeleteRoomModal.bind(this) }>
-              Leave this chat
-            </li>
+            { leave_chat_button_area }
           </DropdownButton>
         </div>
       </div>
