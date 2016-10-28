@@ -50,6 +50,8 @@ module.exports = (app, config) => {
     return res.redirect('/?message=error')
   })
   app.get('/verify/email',(req, res) => {
+    // Logout user
+    delete req.session.user
     let AppStore = {}
     AppStore.data = {
       status: 'success'
