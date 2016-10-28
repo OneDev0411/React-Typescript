@@ -91,8 +91,8 @@ module.exports = (app, config) => {
     })
     .then(response => {
       if (response.status >= 400) {
-        // redirect to error page
-        return res.redirect('/verify/email?status=error')
+        // redirect to login page
+        return res.redirect('/signin?message=email-already-verified')
       }
       return response.json()
     })

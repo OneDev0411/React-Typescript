@@ -29,7 +29,7 @@ export default class SignIn extends Component {
         AppStore.emitChange()
       }, 500)
     }
-    if (message && message === 'phone-signup-success') {
+    if (message && message === 'phone-signup-success' || message && message === 'email-already-verified') {
       setTimeout(() => {
         AppStore.data.show_email_verified_modal = true
         AppStore.emitChange()
