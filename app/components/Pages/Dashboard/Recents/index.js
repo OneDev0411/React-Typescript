@@ -576,7 +576,7 @@ export default class Dashboard extends Component {
         />
       )
     }
-    const users_select_options = []
+    let users_select_options = []
     // Get users selected
     const users_selected = []
     let users_selected_ids = []
@@ -616,6 +616,14 @@ export default class Dashboard extends Component {
             })
           }
         }
+      })
+    }
+    // Filter our current room members
+    if (data.current_room) {
+      const room_users_ids = _.map(data.current_room.users, 'id')
+      users_select_options = users_select_options.filter(user => {
+        if (room_users_ids.indexOf(user.value.id) === -1)
+          return user
       })
     }
     let main_content = (
