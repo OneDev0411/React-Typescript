@@ -699,11 +699,11 @@ export default class ListingViewer extends Component {
       if (brand_agent.phone_number)
         phone_area = <div style={ S('font-15 mb-5') }>M: { brand_agent.phone_number }</div>
       const brand_agent_area = (
-        <div style={ S('mt-50 color-bfc3c7 w-100p text-left center-block text-center') }>
+        <div style={ S('mt-50 color-fff w-100p text-left center-block text-center') }>
           { profile_image_area }
-          <div style={ S('bg-263445 p-20 w-100p') }>
+          <div style={ S('p-20 w-100p') }>
             <div style={ S('font-18 mb-5 color-fff') }><span style={ S('fw-400') }>{ brand_agent.first_name } { brand_agent.last_name }</span></div>
-            <div style={ S('font-14 mb-15 color-bfc3c7 relative') }>
+            <div style={ S('font-14 mb-15 relative') }>
               <div style={ S('bg-cover bg-url(' + Brand.asset('office_logo') + ') bg-center w-20 h-20 inline-block mr-10 mt-10') }></div>
               <div style={ S('inline-block relative t-5n') }>{ Brand.message('office_title') }</div>
               <div className="clearfix"></div>
@@ -715,7 +715,7 @@ export default class ListingViewer extends Component {
         </div>
       )
       brand_agent_footer = (
-        <div style={ S('w-100p pt-100 pb-100 bg-263445 text-center') }>
+        <div style={ S(`w-100p pt-100 pb-100 bg-${Brand.color('primary', '263445')} text-center`) }>
           { brand_agent_area }
         </div>
       )
