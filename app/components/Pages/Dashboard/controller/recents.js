@@ -80,7 +80,9 @@ const controller = {
     // Get a room
     const rooms = AppStore.data.rooms
     const user_ids = _.map(_.filter(unique_items_selected, { type: 'user' }), 'value.id')
-    if (user_ids.length) {
+    const emails = _.map(_.filter(unique_items_selected, { type: 'phone_number' }), 'value')
+    const phone_numbers = _.map(_.filter(unique_items_selected, { type: 'email' }), 'value')
+    if (user_ids.length && !emails.length && !phone_numbers.length) {
       let room_found = false
       rooms.forEach(room => {
         let user_ids_room = _.map(room.users, 'id')
