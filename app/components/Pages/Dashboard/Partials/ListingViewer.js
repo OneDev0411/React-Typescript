@@ -715,7 +715,7 @@ export default class ListingViewer extends Component {
         </div>
       )
       brand_agent_footer = (
-        <div style={ S(`w-100p pt-100 pb-100 bg-${Brand.color('primary', '263445')} text-center`) }>
+        <div style={ S(`w-100p pt-100 pb-100 bg-263445 text-center`) }>
           { brand_agent_area }
         </div>
       )
