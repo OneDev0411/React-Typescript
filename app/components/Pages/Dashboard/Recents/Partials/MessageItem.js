@@ -240,11 +240,11 @@ export default class MessageItem extends Component {
       if (message.notification && message.notification.action === 'PriceDropped')
         notification_message = ' price changed'
       return (
-        <div className="message-item" style={ S('relative mb-15 pt-5 font-15') }>
+        <div className="message-item" style={ S('relative mb-15 font-15') }>
           <div style={ S('mt-5 pull-left') }>
             { profile_image_div }
           </div>
-          <div className="pull-left" style={ S('ml-55 ' + card_width) }>
+          <div className="pull-left" style={ S('pt-6 ml-55 ' + card_width) }>
             <b>{ author ? author.display_name : 'Rebot' }</b>
             <span style={ S('color-ccc ml-20') } >
               { time_created.month } { time_created.date }, { time_created.time_friendly }
