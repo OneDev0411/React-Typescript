@@ -9,6 +9,7 @@ import validator from 'validator'
 import SelectContainer from '../../Partials/SelectContainer'
 import { getResizeAvatarUrl } from '../../../../../utils/user'
 import { getDisplayNameString } from '../../../../../utils/room'
+import { alertOptionsShort } from '../../../../../utils/listing'
 import ProfileImage from '../../Partials/ProfileImage'
 import ProfileImageMultiple from '../../Partials/ProfileImageMultiple'
 export default class ShareAlertModal extends Component {
@@ -184,6 +185,7 @@ export default class ShareAlertModal extends Component {
     // Check if mobile
     if (data.is_mobile)
       dialog_class_name = 'modal-mobile'
+    const default_title = alertOptionsShort(data.listing_map.options)
     return (
       <Modal dialogClassName={ dialog_class_name } show={ data.listing_map && data.listing_map.show_share_modal } onHide={ controller.listing_map.hideModal }>
         <Modal.Header style={ S('bg-fafafa br-5 p-0 border-none') }>
@@ -222,7 +224,7 @@ export default class ShareAlertModal extends Component {
               <img src="/images/dashboard/mls/alert-bell--gray.svg"/>
             </div>
             <div style={ S('pull-left p-15 pt-10 text-left h-64') }>
-              <div>{ data.share_modal && data.share_modal.title ? data.share_modal.title : 'Alert'}</div>
+              <div>{ data.share_modal && data.share_modal.title ? data.share_modal.title : default_title }</div>
               <div style={ S('color-bfc3c7') }>You are sharing this alert</div>
             </div>
           </div>

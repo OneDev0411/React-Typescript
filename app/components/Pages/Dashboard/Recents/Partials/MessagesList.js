@@ -404,6 +404,7 @@ export default class MessagesList extends Component {
                     </div>
                     <div style={ S('ml-50') }>
                       <div>{ !user.fake_email ? user.first_name : user.phone_number }</div>
+                      <div>{ !user.fake_email ? user.email : '' }</div>
                     </div>
                   </div>
                 )
