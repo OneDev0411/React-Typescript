@@ -35,7 +35,15 @@ export default class SideBar extends Component {
   }
 
   showIntercom() {
+    AppStore.data.show_intercom = true
+    AppStore.emitChange()
     window.Intercom('show')
+  }
+
+  hideIntercom() {
+    delete AppStore.data.show_intercom
+    AppStore.emitChange()
+    window.Intercom('hide')
   }
 
   handleSubmit(type, e) {
@@ -526,7 +534,20 @@ export default class SideBar extends Component {
       )
     }
     const nav_active_color = '#' + Brand.color('primary', '3388ff')
-
+    let close_intercom
+    if (data.show_intercom) {
+      let close_btn_style = S('fixed w-50 h-50 bg-fff r-20 b-30 br-100 text-center pt-5 pointer font-50')
+      close_btn_style = {
+        ...close_btn_style,
+        lineHeight: '32px',
+        boxShadow: '0 2px 13px 0 rgba(0, 0, 0, 0.15)'
+      }
+      close_intercom = (
+        <div onClick={ this.hideIntercom } style={ close_btn_style }>
+          &times;
+        </div>
+      )
+    }
     return (
       <aside style={ sidebar_style } className="sidebar__nav-list pull-left">
         <Nav bsStyle="pills" stacked style={ S('mt-10') }>
@@ -627,6 +648,7 @@ export default class SideBar extends Component {
           </Modal.Header>
           { upgrade_account_area }
         </Modal>
+        { close_intercom }
       </aside>
     )
   }
