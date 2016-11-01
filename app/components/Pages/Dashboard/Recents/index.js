@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import S from 'shorti'
 import _ from 'lodash'
 import validator from 'validator'
-import { Modal, Input, Button } from 'react-bootstrap'
+import { Modal, Input, Button, Alert } from 'react-bootstrap'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import controller from '../controller'
@@ -552,6 +552,7 @@ export default class Dashboard extends Component {
     const phone_numbers = _.map(_.filter(data.add_members.items_selected, { type: 'phone_number' }), 'value')
     const emails = _.map(_.filter(data.add_members.items_selected, { type: 'email' }), 'value')
     AppStore.data.adding_users = true
+    delete AppStore.data.add_users_error
     AppStore.emitChange()
     AppDispatcher.dispatch({
       action: 'add-users',
@@ -699,6 +700,14 @@ export default class Dashboard extends Component {
     let mobile_splash_viewer
     if (data.show_mobile_splash_viewer)
       mobile_splash_viewer = <MobileSplashViewer data={ data } />
+    let message
+    if (data.add_users_error) {
+      message = (
+        <Alert bsStyle="danger" style={ S('text-left') }>
+          There was an error with this request.  This user may already be a member of this room.
+        </Alert>
+      )
+    }
     return (
       <div style={ main_style }>
         <main>
@@ -750,6 +759,7 @@ export default class Dashboard extends Component {
             <div className="clearfix"></div>
           </Modal.Body>
           <Modal.Footer>
+            { message }
             <Button bsStyle="link" onClick={ this.hideModal }>Cancel</Button>
             <Button className={ data.adding_users ? 'disabled' : '' } bsStyle="primary" onClick={ this.handleAddMembers.bind(this) }>
               { data.adding_users ? 'Adding users...' : 'Add' }

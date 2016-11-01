@@ -13,13 +13,12 @@ export default (user, room, users, emails, phone_numbers) => {
     // Success
     if (response.status === 'success') {
       delete AppStore.data.users_added
-      delete AppStore.data.adding_users
       delete AppStore.data.add_members
       delete AppStore.data.show_add_members_modal
-      AppStore.emitChange()
     } else {
+      delete AppStore.data.adding_users
       AppStore.data.add_users_error = true
-      AppStore.emitChange()
     }
+    AppStore.emitChange()
   })
 }
