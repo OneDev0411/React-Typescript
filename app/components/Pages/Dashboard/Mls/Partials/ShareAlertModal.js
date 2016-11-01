@@ -185,7 +185,9 @@ export default class ShareAlertModal extends Component {
     // Check if mobile
     if (data.is_mobile)
       dialog_class_name = 'modal-mobile'
-    const default_title = alertOptionsShort(data.listing_map.options)
+    let default_title = 'Alert'
+    if (data.listing_map && data.listing_map.options)
+      default_title = alertOptionsShort(data.listing_map.options)
     return (
       <Modal dialogClassName={ dialog_class_name } show={ data.listing_map && data.listing_map.show_share_modal } onHide={ controller.listing_map.hideModal }>
         <Modal.Header style={ S('bg-fafafa br-5 p-0 border-none') }>
