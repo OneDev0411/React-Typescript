@@ -9,6 +9,8 @@ export default (user, room, users, emails, phone_numbers) => {
     phone_numbers,
     access_token: user.access_token
   }
+  if (AppStore.data.brand)
+    params.brand = AppStore.data.brand.id
   Room.addUsers(params, (err, response) => {
     // Success
     if (response.status === 'success') {
