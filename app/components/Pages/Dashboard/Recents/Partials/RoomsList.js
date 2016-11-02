@@ -60,8 +60,11 @@ export default class RoomsList extends Component {
           if (room_user.id !== data.user.id)
             return true
         })
-        if (current_room && current_room.id === room.id)
+        let is_current_room = false
+        if (current_room && current_room.id === room.id) {
+          is_current_room = true
           list_style = { ...list_style, ...S('bg-465a71') }
+        }
         if (!room.latest_message) {
           list_style = { ...list_style, ...S('h-60') }
           const time_updated = helpers.friendlyDate(room.updated_at)
@@ -140,10 +143,10 @@ export default class RoomsList extends Component {
             <div style={ S('relative') }>
               { profile_image_div }
               <div className="pull-left" style={ S('ml-50 w-90p') }>
-                <div className="room-list__item__names" style={ S('color-8696a4 relative w-70p' + (!title_area ? ' t-10' : '')) }>
+                <div className="room-list__item__names" style={ S(`color-${is_current_room ? 'fafafa' : '8696a4'} relative w-70p${(!title_area ? ' t-10' : '')}`) }>
                   { room_title }
                 </div>
-                <div className="text-right" style={ S('color-8696a4 w-50p absolute r-10n t-10 font-13') } >
+                <div className="text-right" style={ S(`color-${is_current_room ? 'fafafa' : '8696a4'} w-50p absolute r-10n t-10 font-13`) } >
                   { helpers.getTimeAgo(latest_created[0]) }
                   &nbsp;
                   { notification }
