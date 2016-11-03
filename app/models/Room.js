@@ -155,7 +155,8 @@ export default {
     const request_object = {
       room_id: params.room_id,
       user: params.user,
-      access_token: params.access_token
+      access_token: params.access_token,
+      brand: params.brand
     }
 
     fetch(add_user_to_room_url, {
