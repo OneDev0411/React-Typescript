@@ -92,8 +92,6 @@ export default class NewMessageViewer extends Component {
       <div style={ S('relative h-54') }>
         <div style={ S('mt-10') }>{ profile_image }</div>
         <div style={ S('pull-left mt-10 ml-60 mr-5') }>{ item.label }</div>
-        <div style={ S('pull-left mt-10 ml-60 mr-5') }>{ item.value.email }</div>
-        <div style={ S('pull-left mt-10 ml-60 mr-5') }>{ item.value.phone_number }</div>
         <div className="clearfix"/>
       </div>
     )
