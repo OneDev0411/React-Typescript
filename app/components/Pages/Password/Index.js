@@ -35,6 +35,7 @@ export default class Password extends Component {
       if (data.location && data.location.query && data.location.query.action) {
         const redirect_url = this.getActionRedirectURL()
         window.location.href = redirect_url
+        return
       }
       if (signup.type === 'client')
         window.location.href = '/dashboard/mls?message=welcome'
