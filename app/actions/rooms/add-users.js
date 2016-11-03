@@ -18,9 +18,9 @@ export default (user, room, users, emails, phone_numbers) => {
       delete AppStore.data.add_members
       delete AppStore.data.show_add_members_modal
     } else {
-      delete AppStore.data.adding_users
       AppStore.data.add_users_error = true
     }
+    delete AppStore.data.adding_users
     AppStore.emitChange()
   })
 }
