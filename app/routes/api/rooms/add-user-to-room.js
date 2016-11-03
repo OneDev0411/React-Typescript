@@ -9,15 +9,18 @@ module.exports = (app, config) => {
     const request_object = {
       user: [user]
     }
+    const headers = {  
+      'Content-Type': 'application/json',
+      'authorization': 'Bearer ' + access_token,
+      'x-real-agent': req.headers['user-agent'],
+      'user-agent': config.app_name
+    }
+    // If brand
+    if (req.body.brand)
+      headers['x-rechat-brand'] = req.body.brand
     fetch(endpoint,{
       method: 'post',
-      headers: {  
-        'Content-Type': 'application/json',
-        'authorization': 'Bearer ' + access_token,
-        'x-real-agent': req.headers['user-agent'],
-        'user-agent': config.app_name,
-        'x-rechat-brand': req.body.brand
-      },
+      headers,
       body: JSON.stringify(request_object)
     })
     .then(response => {

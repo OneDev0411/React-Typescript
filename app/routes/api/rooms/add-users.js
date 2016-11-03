@@ -19,6 +19,7 @@ module.exports = (app, config) => {
       'x-real-agent': req.headers['user-agent'],
       'user-agent': config.app_name
     }
+    // If brand
     if (req.body.brand)
       headers['x-rechat-brand'] = req.body.brand
     fetch(endpoint, {
