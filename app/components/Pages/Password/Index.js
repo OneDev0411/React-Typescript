@@ -95,6 +95,8 @@ export default class Password extends Component {
   getReceivingUser() {
     const data = this.props.data
     const user_id = decodeURIComponent(data.location.query.receiving_user)
+    if (!user_id)
+      return
     AppDispatcher.dispatch({
       action: 'get-receiving-user',
       user_id
