@@ -2,15 +2,7 @@
 module.exports = (app, config) => {
   app.get('/api/listings/search',(req, res) => {
     const api_url = config.api.url
-    const query_array = req.query.q.split(',')
-    let query_string = ''
-    query_array.forEach(string => {
-      if (!query_string)
-        query_string = 'q[]=' + string
-      else
-        query_string += '&q[]=' + string
-    })
-    let endpoint = api_url + '/listings/search?' + query_string
+    let endpoint = api_url + '/listings/search?q=' + req.query.q
     const access_token = req.query.access_token
     const headers = {  
       'Content-Type': 'application/json',
