@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import AppStore from '../../../../stores/AppStore'
 import SearchMap from '../../Dashboard/Mls'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
+import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 export default class Listings extends Component {
   componentWillMount() {
     AppStore.data.is_widget = true
@@ -21,6 +22,24 @@ export default class Listings extends Component {
       delete AppStore.data.listing_map.listings_info
       AppStore.emitChange()
       const q = data.location.query.q
+      // Check if MLS number
+      if (!isNaN(q) && q.length > 7) {
+        AppStore.data.listing_map.is_loading = true
+        // console.log(place.name) // 13362991
+        AppStore.data.listing_map.has_location_search = true
+        AppStore.data.listing_map.auto_move = true
+        const center = AppStore.data.listing_map.center
+        AppStore.data.listing_map.location_search = {
+          center
+        }
+        AppStore.emitChange()
+        ListingDispatcher.dispatch({
+          action: 'search-listing-map',
+          user: AppStore.data.user,
+          q
+        })
+        return
+      }
       AppDispatcher.dispatch({
         action: 'geocode-address',
         address: q

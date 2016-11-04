@@ -107,6 +107,7 @@ export default class Mls extends Component {
     this.routeURL()
     this.checkForMobile()
     Brand.checkBranding()
+    this.checkQuery()
   }
   componentDidUpdate() {
     const data = this.props.data
@@ -160,6 +161,12 @@ export default class Mls extends Component {
     AppDispatcher.dispatch({
       action: 'check-for-mobile'
     })
+  }
+  checkQuery() {
+    const data = this.props.data
+    const q = data.location.query.q
+    if (q)
+      this.refs.search_input.value = q
   }
   getRoomsIndexedDB() {
     const data = this.props.data
