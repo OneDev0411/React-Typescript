@@ -10,7 +10,8 @@ export default (hostname) => {
   Brand.getByHostname(params, (err, res) => {
     if (res.status === 'success') {
       AppStore.data.brand = res.data
-      if (AppStore.data.listing_map) {
+      // Auto move for the map when user loads map from search query
+      if (AppStore.data.listing_map && !AppStore.data.listing_map.auto_move) {
         setTimeout(() => {
           ListingDispatcher.dispatch({
             action: 'get-valerts',
