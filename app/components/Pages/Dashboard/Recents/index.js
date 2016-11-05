@@ -736,12 +736,13 @@ export default class Dashboard extends Component {
           <Modal.Header closeButton style={ S('h-70 bc-f3f3f3') }>
             <Modal.Title style={ S('font-36') } className="din">Add Members</Modal.Title>
           </Modal.Header>
-          <Modal.Body style={ S('h-500') }>
+          <Modal.Body style={ S('h-70') }>
             <div className="create-item__user-select">
               <SelectContainer inputChange={ this.inputChange.bind(this) }>
                 <Select
                   ref="myselect"
                   autofocus
+                  autosize
                   name="users"
                   options={ users_select_options }
                   placeholder="Enter name, email or phone"
