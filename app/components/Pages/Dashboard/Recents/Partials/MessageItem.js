@@ -93,7 +93,7 @@ export default class MessageItem extends Component {
         const ext = attachment.info['mime-extension']
         let message_thumb
         // If image
-        if (ext.indexOf('png') !== -1 || ext.indexOf('jpg') !== -1 || ext.indexOf('gif') !== -1) {
+        if (ext.indexOf('png') !== -1 || ext.indexOf('jpg') !== -1 || ext.indexOf('gif') !== -1 || ext.indexOf('jpeg') !== -1) {
           message_thumb = (
             <div style={ S(message_thumb_size + ' br-3 bg-url(' + file_url + ') no-repeat bg-contain mb-10') }></div>
           )
