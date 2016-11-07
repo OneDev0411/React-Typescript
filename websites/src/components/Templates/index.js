@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import S from 'shorti';
+import React, { Component } from 'react'
+import S from 'shorti'
 import { Link } from 'react-router'
-import { Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap'
 import './templates.scss'
 import thumb_1 from './EagerSeller/images/thumb.png'
 
@@ -26,8 +26,8 @@ class Templates extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default Templates;
+export default Templates

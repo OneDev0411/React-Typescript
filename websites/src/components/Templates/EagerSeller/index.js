@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
-import S from 'shorti';
-import { Navbar, NavItem, Nav, Button } from 'react-bootstrap';
-import './eager-seller.scss'
+import React, { Component } from 'react'
+import S from 'shorti'
+import { Navbar, NavItem, Nav, Button } from 'react-bootstrap'
 import agent_image from './images/agent.png'
 
 class EagerSeller extends Component {
@@ -28,8 +27,8 @@ class EagerSeller extends Component {
           <div style={ S(`bg-url(${agent_image}) bg-cover bg-center h-700`) }></div>
         </main>
       </div>
-    );
+    )
   }
 }
 
-export default EagerSeller;
+export default EagerSeller

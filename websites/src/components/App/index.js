@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import S from 'shorti';
-import { Button, Col } from 'react-bootstrap';
-import { Link } from 'react-router';
+import React, { Component } from 'react'
+import S from 'shorti'
+import { Button, Col } from 'react-bootstrap'
+import { Link } from 'react-router'
 
 class App extends Component {
   render() {
@@ -38,8 +38,8 @@ class App extends Component {
           </div>
         </Col>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App
