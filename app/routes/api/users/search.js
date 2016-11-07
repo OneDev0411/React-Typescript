@@ -13,7 +13,7 @@ module.exports = (app, config) => {
       else
         query_string += '&q[]=' + string
     })
-    const endpoint = api_url + '/users/search?' + query_string
+    const endpoint = api_url + '/users/search?limit=1000000&' + query_string
     fetch(endpoint,{
       method: 'get',
       headers: {

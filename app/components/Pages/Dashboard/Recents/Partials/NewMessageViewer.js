@@ -130,8 +130,8 @@ export default class NewMessageViewer extends Component {
     return users_select_options
   }
   filterOption(option, string) {
-    const deep_search = option.deep_search
-    if (deep_search.indexOf(string) !== -1)
+    const deep_search = option.deep_search.toLowerCase()
+    if (deep_search.indexOf(string.toLowerCase()) !== -1)
       return true
     return false
   }
