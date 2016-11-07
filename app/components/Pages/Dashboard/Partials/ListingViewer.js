@@ -192,9 +192,9 @@ export default class ListingViewer extends Component {
       let brand_agent_area
       if (brand_agent) {
         let profile_image_area
-        if (brand_agent.profile_image_url) {
+        if (brand_agent.cover_image_url) {
           profile_image_area = (
-            <img style={ S('w-100p') } src={ brand_agent.profile_image_url } />
+            <img style={ S('w-100p') } src={ brand_agent.cover_image_url } />
           )
         }
         let phone_area
@@ -690,9 +690,9 @@ export default class ListingViewer extends Component {
     let brand_agent_footer
     if (brand_agent) {
       let profile_image_area
-      if (brand_agent.profile_image_url) {
+      if (brand_agent.cover_image_url) {
         profile_image_area = (
-          <div style={ S('w-300 h-300 center-block br-300 bg-cover bg-top bg-url(' + brand_agent.profile_image_url + ')') } />
+          <div style={ S('w-300 h-300 center-block br-300 bg-cover bg-top bg-url(' + brand_agent.cover_image_url + ')') } />
         )
       }
       let phone_area
