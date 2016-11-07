@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import S from 'shorti';
 import { Navbar, NavItem, Nav, Button } from 'react-bootstrap';
 import './eager-seller.scss'
+import agent_image from './images/agent.png'
 
 class EagerSeller extends Component {
   render() {
     return (
       <div style={ S('absolute w-100p h-100p') }>
-        <Navbar style={ S('br-0 border-none') }>
+        <Navbar style={ S('br-0 border-none mb-0') }>
           <Navbar.Header>
             <Navbar.Brand>
               <a href="#">ClayStapp</a>
@@ -24,7 +25,7 @@ class EagerSeller extends Component {
           </Nav>
         </Navbar>
         <main>
-          <div style={ S(`bg-url(/templates/eager-seller/images/agent.png)`) }></div>
+          <div style={ S(`bg-url(${agent_image}) bg-cover bg-center h-700`) }></div>
         </main>
       </div>
     );

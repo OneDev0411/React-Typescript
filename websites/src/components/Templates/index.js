@@ -3,6 +3,7 @@ import S from 'shorti';
 import { Link } from 'react-router'
 import { Button } from 'react-bootstrap';
 import './templates.scss'
+import thumb_1 from './EagerSeller/images/thumb.png'
 
 class Templates extends Component {
   render() {
@@ -12,7 +13,7 @@ class Templates extends Component {
         <div style={ S('font-36 color-fff text-center mt-60') }>Choose a website layout</div>
         <div className="container" style={ S('mt-60') }>
           <div className="template-thumb" style={ S('w-440 h-284 relative') }>
-            <img role="presentation" className="template-thumb__image" style={ S('w-100p absolute') } src="/template-assets/template-1/images/thumb-1.png" />
+            <img role="presentation" className="template-thumb__image" style={ S('w-100p absolute') } src={ thumb_1 } />
             <div className="template-thumb__buttons" style={ S('absolute text-center w-100p h-100p pt-100') }>
               <Link to="/templates/eager-seller">
                 <Button style={ S('bg-f67608 color-fff border-none w-120 h-40 mr-5') }>Select</Button>
