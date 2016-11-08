@@ -113,6 +113,8 @@ export default class Password extends Component {
     }
   }
   handleSubmit(action, form_data) {
+    if (!AppStore.data.signup)
+      AppStore.data.signup = {}
     AppStore.data.signup.form_submitted = true
     AppStore.emitChange()
     // Forgot pass
@@ -225,8 +227,6 @@ export default class Password extends Component {
         <Create handleSubmit={ this.handleSubmit } data={ data }/>
       )
     }
-    if (data.show_mobile_splash_viewer)
-      return <MobileSplashViewer data={ data } />
     return (
       <div id="main-content" className="flex-center-wrap" style={ S('absolute h-100p w-100p') }>
         <div style={ S('z-100 relative mt-60n bg-fff br-6') }>
