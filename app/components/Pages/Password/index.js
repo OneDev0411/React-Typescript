@@ -8,7 +8,6 @@ import Reset from './Partials/Reset'
 import Create from './Partials/Create'
 import S from 'shorti'
 import { Modal } from 'react-bootstrap'
-import MobileSplashViewer from '../../Partials/MobileSplashViewer'
 
 export default class Password extends Component {
   componentDidMount() {
