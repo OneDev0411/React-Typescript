@@ -2,13 +2,9 @@ import React, { Component } from 'react'
 import S from 'shorti'
 import { Button, Col } from 'react-bootstrap'
 import { Link } from 'react-router'
-import { observer } from 'mobx-react'
 
-@observer
 class App extends Component {
   render() {
-    const data = this.props.data
-    console.log(data)
     const bg_gradient = 'linear-gradient(to bottom, rgba(38, 51, 69, 0.9), #18222e)'
     return (
       <div style={ S('absolute w-100p h-100p') }>

@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router'
 import S from 'shorti'
 import { Button } from 'react-bootstrap'
 import upload_photo from '../images/upload.png'
 class CoverPhoto extends Component {
-  triggerNavClick() {
-    // this.props.data.step = 2
-  }
   render() {
+    const data = this.props.data
     return (
       <div>
         <div style={ S('w-100p h-4 bg-34475e mb-10 mt-20n br-3') }>
@@ -32,8 +29,8 @@ class CoverPhoto extends Component {
           </div>
         </div>
         <div style={ S('absolute b-20 w-340') }>
-          <Button style={ S('bg-f67608 border-none color-fff w-100p h-40') } onClick={ this.triggerNavClick.bind(this) }>
-            Looks Good!
+          <Button style={ S('bg-f67608 border-none color-fff w-100p h-40') } onClick={ this.props.goToStep.bind(this, data.step + 1) }>
+            Looks Good! <i className="fa fa-chevron-right"></i>
           </Button>
         </div>
       </div>
