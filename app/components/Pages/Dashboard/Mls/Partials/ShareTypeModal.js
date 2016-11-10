@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import S from 'shorti'
 import { Button, Modal, Input } from 'react-bootstrap'
 import controller from '../../controller'
-import listing_util from '../../../../../utils/listing'
 export default class ShareTypeModal extends Component {
   componentDidMount() {
     if (this.refs.title)
