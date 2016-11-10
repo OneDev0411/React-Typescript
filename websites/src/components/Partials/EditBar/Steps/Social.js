@@ -1,28 +1,25 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import { Button, FormControl } from 'react-bootstrap'
+import style from './style'
 class Social extends Component {
   render() {
     const data = this.props.data
-    const input_style = {
-      ...S('mb-20 bg-2e3f54 border-none'),
-      outline: 'none'
-    }
     return (
       <div>
         <div style={ S('w-100p h-4 bg-34475e mb-10 mt-20n br-3') }>
-          <div style={ S('w-40p bg-6488b5 h-4 br-3') }></div>
+          <div style={ S('w-45p bg-6488b5 h-4 br-3') }></div>
         </div>
         <div style={ S('font-32 mb-20') }>Social Links</div>
         <div>
-          <div>Facebook</div>
-          <FormControl style={ input_style } type="text"></FormControl>
-          <div>Twitter</div>
-          <FormControl style={ input_style } type="text"></FormControl>
-          <div>Instagram</div>
-          <FormControl style={ input_style } type="text"></FormControl>
-          <div>Blog</div>
-          <FormControl style={ input_style } type="text"></FormControl>
+          <div style={ S('mb-10') }>Facebook</div>
+          <FormControl style={ style.input } type="text"></FormControl>
+          <div style={ S('mb-10') }>Twitter</div>
+          <FormControl style={ style.input } type="text"></FormControl>
+          <div style={ S('mb-10') }>Instagram</div>
+          <FormControl style={ style.input } type="text"></FormControl>
+          <div style={ S('mb-10') }>Blog</div>
+          <FormControl style={ style.input } type="text"></FormControl>
           <div>
             You can enter in your urls manually or just copy and paste a url into the field.
           </div>

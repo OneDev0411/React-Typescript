@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import S from 'shorti'
-import { Button } from 'react-bootstrap'
+import { Button, FormControl } from 'react-bootstrap'
+import style from './style'
 class Social extends Component {
   render() {
     const data = this.props.data
@@ -11,10 +12,19 @@ class Social extends Component {
         </div>
         <div style={ S('font-32 mb-20') }>Quick Highlights</div>
         <div>
-          <div style={ S('mb-20') }>Facebook</div>
-          <div style={ S('mb-20') }>Twitter</div>
-          <div style={ S('mb-20') }>Instagram</div>
-          <div style={ S('mb-20') }>Blog</div>
+          <div style={ S('mb-10') }>Highlight 1</div>
+          <FormControl style={ style.input } type="text"></FormControl>
+          <div style={ S('mb-10') }>Highlight 2</div>
+          <FormControl style={ style.input } type="text"></FormControl>
+          <div style={ S('mb-10') }>Highlight 3</div>
+          <FormControl style={ style.input } type="text"></FormControl>
+          <div style={ S('mb-10') }>Highlight 4</div>
+          <FormControl style={ style.input } type="text"></FormControl>
+          <div style={ S('mb-10') }>Highlight 5</div>
+          <FormControl style={ style.input } type="text"></FormControl>
+          <div>
+            These are all sample highlights. Highlights are important to let clients know your experience at a glance.
+          </div>
         </div>
         <div style={ S('absolute b-20 w-340') }>
           <Button style={ S('bg-f67608 border-none color-fff w-45p h-40') } onClick={ this.props.goToStep.bind(this, data.step - 1) }>

@@ -56,7 +56,14 @@ class EagerSeller extends Component {
             </section>
             <section>
               <div className="text-center">
-                <div style={ S('font-40 mb-20') }>Nora Hortan</div>
+                <div style={ S(`mb-20${data.step === 2 ? ` border-1-dotted-${data.outline_color}` : ''}`) }>
+                  <div style={ S(`font-40 text-center`) }>
+                    Nora Hortan
+                  </div>
+                  <div style={ S('font-16') }>
+                    Tagline
+                  </div>
+                </div>
                 <div style={ S('font-14 mb-20') }>
                   MLS#: 0142356&nbsp;&nbsp;|&nbsp;&nbsp;
                   linne@claystapp.com&nbsp;&nbsp;|&nbsp;&nbsp;
@@ -65,7 +72,7 @@ class EagerSeller extends Component {
               </div>
             </section>
             <section style={ S('mb-20') }>
-              <div style={ S(`text-center w-200 center-block${data.step === 2 ? ` border-1-dotted-${data.outline_color}` : ''}`) }>
+              <div style={ S(`text-center w-200 center-block${data.step === 3 ? ` border-1-dotted-${data.outline_color}` : ''}`) }>
                 <i style={ S('font-20') } className="fa fa-facebook"></i>&nbsp;&nbsp;&nbsp;
                 <i style={ S('font-20') } className="fa fa-instagram"></i>&nbsp;&nbsp;&nbsp;
                 <i style={ S('font-20') } className="fa fa-twitter"></i>
@@ -74,36 +81,40 @@ class EagerSeller extends Component {
             <section style={ S('mb-20') }>
               <Col xs={ 6 }>
                 <div>Quick Highlights</div>
-                <div>
-                  Climb Top Producer 2006-2015
-                </div>
-                <div>
-                  Top 1% of San Francisco Real Estate Agents
-                </div>
-                <div>
-                  Luxury Urban Living (Condos and Lofts)
-                </div>
-                <div>
-                  SOMA/South Beach Resident
-                </div>
-                <div>
-                  Fluent in French
+                <div style={ S(`${data.step === 4 ? `border-1-dotted-${data.outline_color}` : ''}`) }>
+                  <div>
+                    Climb Top Producer 2006-2015
+                  </div>
+                  <div>
+                    Top 1% of San Francisco Real Estate Agents
+                  </div>
+                  <div>
+                    Luxury Urban Living (Condos and Lofts)
+                  </div>
+                  <div>
+                    SOMA/South Beach Resident
+                  </div>
+                  <div>
+                    Fluent in French
+                  </div>
                 </div>
               </Col>
               <Col style={ S('pr-0') } xs={ 6 }>
-                <img style={ S('w-100p') } src={ default_media }/>
+                <img style={ S(`${data.step === 5 ? `border-1-dotted-${data.outline_color}` : ''} w-100p`) } src={ default_media }/>
               </Col>
               <div className="clearfix"></div>
             </section>
             <section style={ S('mb-20') }>
               <Col xs={ 6 }>
-                <div>
+                <div style={ S(`${data.step === 6 ? `border-1-dotted-${data.outline_color}` : ''}`) }>
                   “An unconditional friend who loves kickboxing and is always ready for an adventure.”
                 </div>
               </Col>
               <Col style={ S('pr-0') } xs={ 6 }>
                 <div>ABOUT NORA</div>
-                <div>In every profession, a group of leaders emerge that set the standards for the rest. As a former elementary school teacher, Tiffany continually raised the bar and set new standards in the teaching profession. It is with that same commitment to excellence that Tiffany has made a profound presence in the real estate community by showcasing her passion for real estate and loyalty to her clients and commitment to their real estate goals. She prides herself on open, honest and consistent communication with clients paired with the best customer relations in the industry. Her love for developing and strengthening relationships with others and impeccable follow through has continually maintained her phenomenal reputation with both clients and colleagues. Real estate relationships built on trust and the highest level of confidentiality are especially important to her.</div>
+                <div style={ S(`${data.step === 7 ? `border-1-dotted-${data.outline_color}` : ''}`) }>
+                  In every profession, a group of leaders emerge that set the standards for the rest. As a former elementary school teacher, Tiffany continually raised the bar and set new standards in the teaching profession. It is with that same commitment to excellence that Tiffany has made a profound presence in the real estate community by showcasing her passion for real estate and loyalty to her clients and commitment to their real estate goals. She prides herself on open, honest and consistent communication with clients paired with the best customer relations in the industry. Her love for developing and strengthening relationships with others and impeccable follow through has continually maintained her phenomenal reputation with both clients and colleagues. Real estate relationships built on trust and the highest level of confidentiality are especially important to her.
+                </div>
               </Col>
               <div className="clearfix"></div>
             </section>
