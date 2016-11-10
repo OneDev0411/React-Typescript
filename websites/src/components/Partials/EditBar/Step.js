@@ -37,7 +37,7 @@ class Step extends Component {
     let back_button
     if (data.step !== 1) {
       back_button = (
-        <Button style={ S('bg-f67608 border-none color-fff w-45p h-40 mr-10') } onClick={ this.props.goToStep.bind(this, data.step - 1) }>
+        <Button style={ S(`bg-f67608 border-none color-fff w-${!next_step ? '30' : '45'}p h-40`) } onClick={ this.props.goToStep.bind(this, data.step - 1) }>
           Back
         </Button>
       )
@@ -45,8 +45,16 @@ class Step extends Component {
     let next_button
     if (next_step) {
       next_button = (
-        <Button style={ S(`bg-f67608 border-none color-fff w-${!back_button ? '100' : '45'}p h-40`) } onClick={ this.props.goToStep.bind(this, data.step + 1) }>
+        <Button style={ S(`bg-f67608 border-none color-fff w-${!back_button ? '100' : '45'}p h-40 pull-right`) } onClick={ this.props.goToStep.bind(this, data.step + 1) }>
           Looks Good! <i className="fa fa-chevron-right"></i>
+        </Button>
+      )
+    }
+    let domains_button
+    if (!next_step) {
+      domains_button = (
+        <Button style={ S('bg-f67608 border-none color-fff w-65p h-40 pull-right') }>
+          Done. Go to Domains. <i className="fa fa-chevron-right"></i>
         </Button>
       )
     }
@@ -54,6 +62,7 @@ class Step extends Component {
       <div>
         { back_button }
         { next_button }
+        { domains_button }
       </div>
     )
   }
