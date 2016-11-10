@@ -65,6 +65,41 @@
       ]
     },
     {
+      "title": "Social Links",
+      "attributes": [
+        {
+          "key": "title",
+          "type": "text",
+          "title": "Title"
+        },
+        {
+          "key": "tagline",
+          "type": "text",
+          "title": "Tagline"
+        },
+        {
+          "key": "facebook_url",
+          "type": "text",
+          "title": "Facebook"
+        },
+        {
+          "key": "twitter_url",
+          "type": "text",
+          "title": "Twitter"
+        },
+        {
+          "key": "instagram_url",
+          "type": "text",
+          "title": "Instagram"
+        },
+        {
+          "key": "blog_url",
+          "type": "text",
+          "title": "Blog"
+        }
+      ]
+    },
+    {
       "title": "Quick Highlights",
       "attributes": [
         {
@@ -76,6 +111,16 @@
           "key": "highlight_2",
           "type": "text",
           "title": "Highlight 2"
+        },
+        {
+          "key": "highlight_3",
+          "type": "text",
+          "title": "Highlight 3"
+        },
+        {
+          "key": "highlight_4",
+          "type": "text",
+          "title": "Highlight 4"
         }
       ]
     },

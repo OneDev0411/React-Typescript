@@ -1,12 +1,5 @@
 import React, { Component } from 'react'
 import S from 'shorti'
-import CoverPhoto from './Steps/CoverPhoto'
-// import Social from './Steps/Social'
-// import Text1 from './Steps/Text1'
-// import Text2 from './Steps/Text2'
-// import Text3 from './Steps/Text3'
-// import QuickHighlights from './Steps/QuickHighlights'
-// import Media from './Steps/Media'
 import Step from './Step'
 
 class EditBar extends Component {
