@@ -1,29 +1,39 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import { Button, FormControl } from 'react-bootstrap'
-import upload_photo from './images/upload.png'
 import style from './style'
+import Dropzone from 'react-dropzone'
 class Step extends Component {
+  onDrop(key, accepted_files, rejected_files) {
+    this.props.uploadMedia(key, accepted_files)
+  }
+  handleChange(key, e) {
+    this.props.editText(key, e.target.value)
+  }
   getInput(attribute) {
     switch (attribute.type) {
       case 'Media':
         return (
           <div style={ S('mb-20') }>
-            <img role="presentation" src={ upload_photo } style={ S('w-100p') }/>
+            <Dropzone style={ S('w-250 h-250 border-3-dashed-ccc') } onDrop={this.onDrop.bind(this, attribute.key)} multiple={false}>
+              <div style={ S(`text-center pt-100 bg-url(${attribute.value ? attribute.value : ''}) bg-cover w-250 h-250 absolute`) }>
+                <Button bsStyle="primary">Upload</Button>
+              </div>
+            </Dropzone>
           </div>
         )
       case 'text':
         return (
           <div>
             <div style={ S('mb-10') }>{ attribute.title }</div>
-            <FormControl style={ style.input } type="text"></FormControl>
+            <FormControl key={`key-${attribute.key}`} style={ style.input } type="text" onChange={this.handleChange.bind(this, attribute.key)} defaultValue={ attribute.value }></FormControl>
           </div>
         )
       case 'textarea':
         return (
           <div>
             <div style={ S('mb-10') }>{ attribute.title }</div>
-            <FormControl style={ { ...style.input, ...S('h-100'), resize: 'none' } } componentClass="textarea"></FormControl>
+            <FormControl key={`key-${attribute.key}`} style={ { ...style.input, ...S('h-100'), resize: 'none' } } componentClass="textarea" onChange={this.handleChange.bind(this, attribute.key)} defaultValue={ attribute.value }></FormControl>
           </div>
         )
       default:

@@ -1,40 +1,23 @@
 {
   "template_name": "Light Mark",
   "attributes": {
-    "cover_image": {
-      "type": "Image",
-      "title": "Cover photo",
-      "description": "Upload a cover image of yourself blah blah"
-    },
-    "profile_image": {
-      "type": "Image",
-      "title": "Profile photo",
-      "description": "Upload a profile..."
-    },
-    "tagline": {
-      "type": "text",
-      "title": "Tagline"
-    },
-    "testimonial": {
-      "type": "textarea",
-      "title": "testimonial"
-    },
-    "about": {
-      "type": "textarea",
-      "title": "About Me"
-    },
-    "facebook_url": {
-      "type": "url",
-      "title": "Facebook Page"
-    },
-    "twitter_url": {
-      "type": "url",
-      "title": "Twitter Page"
-    },
-    "instagram_url": {
-      "type": "url",
-      "title": "Instagram Page"
-    }
+    "cover_image": "",
+    "title": "Nora Horton",
+    "tagline": "Let's Find Your Dream Home",
+    "profile_image": "",
+    "testimonial": "",
+    "about": "",
+    "facebook_url": "",
+    "twitter_url": "",
+    "instagram_url": "",
+    "highlight_1": "Climb Top Producer 2006-2015",
+    "highlight_2": "Top 1% of San Francisco Real Estate Agents",
+    "highlight_3": "Luxury Urban Living (Condos and Lofts)",
+    "highlight_4": "SOMA/South Beach Resident",
+    "highlight_5": "Fluent in French",
+    "video_url": "https://player.vimeo.com/video/146782320?title=0",
+    "quote": "“An unconditional friend who loves kickboxing and is always ready for an adventure.”",
+    "bio": "In every profession, a group of leaders emerge that set the standards for the rest. As a former elementary school teacher, Tiffany continually raised the bar and set new standards in the teaching profession. It is with that same commitment to excellence that Tiffany has made a profound presence in the real estate community by showcasing her passion for real estate and loyalty to her clients and commitment to their real estate goals. She prides herself on open, honest and consistent communication with clients paired with the best customer relations in the industry. Her love for developing and strengthening relationships with others and impeccable follow through has continually maintained her phenomenal reputation with both clients and colleagues. Real estate relationships built on trust and the highest level of confidentiality are especially important to her."
   },
   "steps": [
     {
@@ -55,7 +38,8 @@
         {
           "key": "title",
           "type": "text",
-          "title": "Title"
+          "title": "Title",
+          "description": "Add your name"
         },
         {
           "key": "tagline",
@@ -67,16 +51,6 @@
     {
       "title": "Social Links",
       "attributes": [
-        {
-          "key": "title",
-          "type": "text",
-          "title": "Title"
-        },
-        {
-          "key": "tagline",
-          "type": "text",
-          "title": "Tagline"
-        },
         {
           "key": "facebook_url",
           "type": "text",
@@ -121,6 +95,11 @@
           "key": "highlight_4",
           "type": "text",
           "title": "Highlight 4"
+        },
+        {
+          "key": "highlight_5",
+          "type": "text",
+          "title": "Highlight 5"
         }
       ]
     },
@@ -128,12 +107,7 @@
       "title": "Media",
       "attributes": [
         {
-          "key:": "video",
-          "type": "text",
-          "title": "Link to Video"
-        },
-        {
-          "key:": "video",
+          "key": "video_url",
           "type": "text",
           "title": "Link to Video"
         }
