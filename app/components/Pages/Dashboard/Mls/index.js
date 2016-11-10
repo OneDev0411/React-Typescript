@@ -654,7 +654,7 @@ export default class Mls extends Component {
     }
     let options_text
     if (listing_map && listing_map.listings_info)
-      options_text = (listing_map.listings ? (listing_map.listings.length + ' showing of ' + listing_map.listings_info.total) : '') + ' homes. ' + listing_util.alertOptionsShort(listing_map.options)
+      options_text = (listing_map.listings ? (listing_map.listings.length + ' showing of ' + listing_map.listings_info.total) : '') + ' homes. ' + listing_map.listings_info.proposed_title
     if (listing_map && data.listing_map.search_input_text && listing_map.no_listings_found)
       options_text = 'No listings found'
     const options_gist = (
@@ -780,7 +780,6 @@ export default class Mls extends Component {
       let alert_header_area
       if (data.show_alerts_map && data.current_alert) {
         const current_alert = data.current_alert
-        const alert_options_short = listing_util.alertOptionsShort(current_alert)
         let new_listings_link = 'Loading...'
         if (current_alert.feed)
           new_listings_link = current_alert.feed.length ? `View new listings (${current_alert.feed_info.total})` : 'No new listings'
@@ -788,7 +787,7 @@ export default class Mls extends Component {
           <div style={ alert_header_style }>
             <div style={ alert_header_bg }></div>
             <div style={ S('relative ml-15 mt-10 color-fff z-1 font-15') }>
-              { alert_options_short }
+              { data.listing_map.listings_info.proposed_title }
               <div style={ S('pull-right pointer') } onClick={ controller.alert_map.showAlertViewer.bind(this) }>
                 <span style={ S('color-98caf1 mr-15') }>{ new_listings_link }</span>
                 <span className={ !current_alert.feed || (current_alert.feed && !current_alert.feed.length) ? 'hidden' : '' } style={ S('mr-15 relative t-2') }><i style={ S('color-98caf1') } className="fa fa-chevron-right"></i></span>

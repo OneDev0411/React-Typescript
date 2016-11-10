@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import S from 'shorti'
 import { Button, Modal, Input } from 'react-bootstrap'
 import controller from '../../controller'
-import listing_util from '../../../../../utils/listing'
 export default class ShareTypeModal extends Component {
   componentDidMount() {
     if (this.refs.title)
@@ -21,7 +20,6 @@ export default class ShareTypeModal extends Component {
     const data = this.props.data
     const share_modal = data.share_modal
     const listing_map = data.listing_map
-    const alert = data.listing_map.options
     return (
       <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : 'modal-share-type' } show={ listing_map && listing_map.show_share_type_modal } onHide={ controller.listing_map.hideModal }>
         <Modal.Body style={ S('p-0') }>
@@ -37,7 +35,7 @@ export default class ShareTypeModal extends Component {
               Name Your Alert
             </div>
             <div>
-              <Input ref="title" type="text" placeholder={ listing_util.alertOptionsShort(alert) }/>
+              <Input ref="title" type="text" placeholder={ listing_map.listings_info.proposed_title }/>
             </div>
           </div>
         </Modal.Body>
