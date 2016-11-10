@@ -1,0 +1,118 @@
+{
+  "template_name": "Light Mark",
+  "attributes": {
+    "cover_image": {
+      "type": "Image",
+      "title": "Cover photo",
+      "description": "Upload a cover image of yourself blah blah"
+    },
+    "profile_image": {
+      "type": "Image",
+      "title": "Profile photo",
+      "description": "Upload a profile..."
+    },
+    "tagline": {
+      "type": "text",
+      "title": "Tagline"
+    },
+    "testimonial": {
+      "type": "textarea",
+      "title": "testimonial"
+    },
+    "about": {
+      "type": "textarea",
+      "title": "About Me"
+    },
+    "facebook_url": {
+      "type": "url",
+      "title": "Facebook Page"
+    },
+    "twitter_url": {
+      "type": "url",
+      "title": "Twitter Page"
+    },
+    "instagram_url": {
+      "type": "url",
+      "title": "Instagram Page"
+    }
+  },
+  "steps": [
+    {
+      "title": "Cover Photo",
+      "attributes": [
+        {
+          "key": "cover_image",
+          "type": "Media",
+          "title": "Cover photo",
+          "default": "./images/upload.png",
+          "description": "The cover photo is an extension of you, your brand, and your personality. Cover photo should be clean and balanced with focus on you."
+        }
+      ]
+    },
+    {
+      "title": "Text",
+      "attributes": [
+        {
+          "key": "title",
+          "type": "text",
+          "title": "Title"
+        },
+        {
+          "key": "tagline",
+          "type": "text",
+          "title": "Tagline"
+        }
+      ]
+    },
+    {
+      "title": "Quick Highlights",
+      "attributes": [
+        {
+          "key": "highlight_1",
+          "type": "text",
+          "title": "Highlight 1"
+        },
+        {
+          "key": "highlight_2",
+          "type": "text",
+          "title": "Highlight 2"
+        }
+      ]
+    },
+    {
+      "title": "Media",
+      "attributes": [
+        {
+          "key:": "video",
+          "type": "text",
+          "title": "Link to Video"
+        },
+        {
+          "key:": "video",
+          "type": "text",
+          "title": "Link to Video"
+        }
+      ]
+    },
+    {
+      "title": "Text",
+      "attributes": [
+        {
+          "key": "quote",
+          "type": "text",
+          "title": "Quote"
+        }
+      ]
+    },
+    {
+      "title": "Bio",
+      "attributes": [
+        {
+          "key": "bio",
+          "type": "textarea",
+          "title": "Bio"
+        }
+      ]
+    }
+  ]
+}

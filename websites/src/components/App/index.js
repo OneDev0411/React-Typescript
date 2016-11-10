@@ -32,7 +32,7 @@ class App extends Component {
               Rechat’s Dynamic Web Templates are built beautifully to 
               adapt to your personality and to your brand.
             </div>
-            <Link to="/templates">
+            <Link to="/templates/eager-seller">
               <Button style={ S('bg-f67608 color-fff border-none h-40 w-340') }>Get Started</Button>
             </Link>
           </div>
@@ -41,5 +41,4 @@ class App extends Component {
     )
   }
 }
-
 export default App

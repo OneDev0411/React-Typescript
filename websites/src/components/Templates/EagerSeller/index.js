@@ -5,6 +5,7 @@ import default_agent_image from './images/agent.png'
 import default_media from './images/media.png'
 import EditBar from '../../Partials/EditBar/'
 import './eager-seller.scss'
+import store from './template.json'
 
 class EagerSeller extends Component {
   constructor() {
@@ -12,7 +13,8 @@ class EagerSeller extends Component {
     this.state = {
       data: {
         step: 1,
-        outline_color: '1561bd'
+        outline_color: '1561bd',
+        ...store,
       },
       template_width: window.innerWidth - 400
     }
@@ -100,7 +102,7 @@ class EagerSeller extends Component {
                 </div>
               </Col>
               <Col style={ S('pr-0') } xs={ 6 }>
-                <img style={ S(`${data.step === 5 ? `border-1-dotted-${data.outline_color}` : ''} w-100p`) } src={ default_media }/>
+                <img role="presentation" style={ S(`${data.step === 5 ? `border-1-dotted-${data.outline_color}` : ''} w-100p`) } src={ default_media }/>
               </Col>
               <div className="clearfix"></div>
             </section>
