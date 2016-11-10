@@ -9,7 +9,6 @@ import validator from 'validator'
 import SelectContainer from '../../Partials/SelectContainer'
 import { getResizeAvatarUrl } from '../../../../../utils/user'
 import { getDisplayNameString } from '../../../../../utils/room'
-import { alertOptionsShort } from '../../../../../utils/listing'
 import ProfileImage from '../../Partials/ProfileImage'
 import ProfileImageMultiple from '../../Partials/ProfileImageMultiple'
 export default class ShareAlertModal extends Component {
@@ -186,8 +185,8 @@ export default class ShareAlertModal extends Component {
     if (data.is_mobile)
       dialog_class_name = 'modal-mobile'
     let default_title = 'Alert'
-    if (data.listing_map && data.listing_map.options)
-      default_title = alertOptionsShort(data.listing_map.options)
+    if (data.listing_map && data.listing_map.hasOwnProperty('listings_info'))
+      default_title = data.listing_map.listings_info.proposed_title
     return (
       <Modal dialogClassName={ dialog_class_name } show={ data.listing_map && data.listing_map.show_share_modal } onHide={ controller.listing_map.hideModal }>
         <Modal.Header style={ S('bg-fafafa br-5 p-0 border-none') }>
