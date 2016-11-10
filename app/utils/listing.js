@@ -65,24 +65,5 @@ export default {
     //   return imgix_url
     // else
     //   return full_size_url
-  },
-  alertOptionsShort(alert) {
-    if (!alert.property_subtypes)
-      return
-    const property_types = alert.property_subtypes.toString().replace(new RegExp('RES-', 'g'), ' ').trim()
-    const min_price = alert.minimum_price ? helpers.numberWithCommas(alert.minimum_price) : '0'
-    const max_price = (alert.maximum_price && alert.maximum_price < 900000001) ? '$' + helpers.numberWithCommas(alert.maximum_price) : 'any'
-    let price_area = `$${min_price}-${max_price}`
-    if (alert.minimum_price === 0 && alert.maximum_price === 900000001)
-      price_area = 'Any price'
-    if (!alert.minimum_price && !alert.maximum_price)
-      price_area = 'Any price'
-    let bedrooms_area = `${alert.minimum_bedrooms}+ Beds`
-    if (alert.minimum_bedrooms === 0)
-      bedrooms_area = 'Any beds'
-    let bathrooms_area = `${alert.minimum_bathrooms}+ Baths`
-    if (alert.minimum_bathrooms === 1)
-      bathrooms_area = 'Any baths'
-    return `${(alert.property_subtypes.length < 5) ? property_types : 'All types'}, ${price_area}, ${bedrooms_area}, ${bathrooms_area}`
   }
 }
