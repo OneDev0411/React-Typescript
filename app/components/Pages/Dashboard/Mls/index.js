@@ -779,6 +779,7 @@ export default class Mls extends Component {
       }
       let alert_header_area
       if (data.show_alerts_map && data.current_alert) {
+        const current_alert = data.current_alert
         let new_listings_link = 'Loading...'
         if (current_alert.feed)
           new_listings_link = current_alert.feed.length ? `View new listings (${current_alert.feed_info.total})` : 'No new listings'
