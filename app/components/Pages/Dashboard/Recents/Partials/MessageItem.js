@@ -95,7 +95,7 @@ export default class MessageItem extends Component {
         // If image
         if (ext.indexOf('png') !== -1 || ext.indexOf('jpg') !== -1 || ext.indexOf('gif') !== -1) {
           message_thumb = (
-            <div style={ S(message_thumb_size + ' br-3 bg-url(' + file_url + ') no-repeat bg-cover mb-10') }></div>
+            <div style={ S(message_thumb_size + ' br-3 bg-url(' + file_url + ') no-repeat bg-contain mb-10') }></div>
           )
         } else {
           message_thumb = (
