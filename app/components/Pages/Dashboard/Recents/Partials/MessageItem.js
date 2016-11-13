@@ -1,11 +1,13 @@
 // MessagesItem.js
 import React, { Component } from 'react'
+import { Popover, OverlayTrigger } from 'react-bootstrap'
 import ProfileImage from '../../Partials/ProfileImage'
 import S from 'shorti'
 import helpers from '../../../../../utils/helpers'
 import listing_util from '../../../../../utils/listing'
 import emojify from 'emojify.js'
 import linkifyString from 'linkifyjs/string'
+import _ from 'lodash'
 emojify.setConfig({
   img_dir: '/images/emoji'
 })
@@ -29,7 +31,6 @@ export default class MessageItem extends Component {
     this.props.showAlertModal(alert_id, current_room.id)
   }
   render() {
-    // Data
     const data = this.props.data
     const user = data.user
     const current_room = data.current_room
@@ -304,6 +305,89 @@ export default class MessageItem extends Component {
         </div>
       )
     }
+
+    let delivery_notification
+    if (author && author.id === data.user.id) {
+      const double_check_color = message.deliveries && message.deliveries.length > 0 ? '#2196f3' : '#c3c3c3'
+      const double_check = (
+        <span style={ S('color-' + double_check_color + ' ml-5') }>
+          <i className="fa fa-check" style={ S('font-12') } />
+          <i className="fa fa-check" style={ S('font-12 ml-1n') } />
+        </span>
+      )
+      const message_info_dialog = (
+        <Popover id="popover-message-info" title="Message Info">
+          {
+            message.acked_by &&
+            <div className="content read-by">
+              <div className="title">
+                <span style={ S('color-2196f3') }>
+                  <i className="fa fa-check" style={ S('font-12') } />
+                  <i className="fa fa-check" style={ S('font-12 mr-5 ml-1n') } />
+                </span>
+                READ BY
+              </div>
+              <div className="report">
+                {
+                  message.acked_by.map(id => {
+                    const user_info = _.find(current_room.users, { id })
+                    return (
+                      <div className="item">
+                        <ProfileImage size={30} font={12} data={ data } user={ user_info } show_online_indicator={ false } />
+                        <div className="name">{ user_info.display_name }</div>
+                      </div>
+                    )
+                  })
+                }
+              </div>
+            </div>
+          }
+
+          {
+            message.deliveries &&
+            <div className="content delivered-to">
+              <div className="title">
+                <span style={ S('color-c3c3c3') }>
+                  <i className="fa fa-check" style={ S('font-12') } />
+                  <i className="fa fa-check" style={ S('font-12 mr-5 ml-1n') } />
+                </span>
+                DELIVERED TO
+              </div>
+              <div className="report">
+                {
+                  message.deliveries.map(dlvr => {
+                    const user_info = _.find(current_room.users, { id: dlvr.user })
+                    const user_info_date = helpers.friendlyDate(user_info.created_at)
+                    return (
+                      <div className="item">
+                        <ProfileImage size={30} font={12} data={ data } user={ user_info } show_online_indicator={ false } />
+                        <div className="name">{ user_info.display_name }</div>
+                        <div className="time">
+                          <span style={ S('color-9b9b9b mr-6') } >{ user_info_date.day}</span>{ user_info_date.time_friendly }
+                        </div>
+                      </div>
+                    )
+                  })
+                }
+              </div>
+            </div>
+          }
+        </Popover>
+      )
+
+      delivery_notification = (
+        <span>
+          { double_check }
+          {
+            message.deliveries && message.deliveries.length > 0 &&
+            <OverlayTrigger trigger="click" rootClose placement="right" overlay={message_info_dialog}>
+              <i className="fa fa-info-circle" style={ S('color-2196f3 ml-5') } />
+            </OverlayTrigger>
+          }
+        </span>
+      )
+    }
+
     // Default
     return (
       <div className="message-item" style={ S('relative mb-5 font-15') }>
@@ -311,7 +395,7 @@ export default class MessageItem extends Component {
         <div className="pull-left" style={ S('ml-55 pt-6') }>
           <b>{ author ? author.display_name : 'Rebot' }</b>
           <span style={ S('color-ccc ml-20') } >
-            { time_created.month } { time_created.date }, { time_created.time_friendly }
+            { time_created.month } { time_created.date }, { time_created.time_friendly } { delivery_notification }
           </span>
           { message_area }
           { message_image }
