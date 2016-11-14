@@ -35,18 +35,6 @@
           "type": "text",
           "title": "Headline",
           "description": "Add your headline"
-        },
-        {
-          "key": "headline",
-          "type": "text",
-          "title": "Headline",
-          "description": "Add your headline"
-        },
-        {
-          "key": "headline",
-          "type": "text",
-          "title": "Headline",
-          "description": "Add your headline"
         }
       ]
     },

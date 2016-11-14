@@ -10,6 +10,9 @@ class Step extends Component {
   handleChange(key, e) {
     this.props.editText(key, e.target.value)
   }
+  saveWebsite() {
+    this.props.saveWebsite() 
+  }
   getInput(attribute) {
     switch (attribute.type) {
       case 'Media':
@@ -63,8 +66,8 @@ class Step extends Component {
     let domains_button
     if (!next_step) {
       domains_button = (
-        <Button style={ S('bg-f67608 border-none color-fff w-65p h-40 pull-right') }>
-          Done. Go to Domains. <i className="fa fa-chevron-right"></i>
+        <Button onClick={ this.saveWebsite.bind(this) } style={ S('bg-f67608 border-none color-fff w-65p h-40 pull-right') }>
+          Save and go to domains. <i className="fa fa-chevron-right"></i>
         </Button>
       )
     }

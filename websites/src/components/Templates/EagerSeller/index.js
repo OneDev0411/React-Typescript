@@ -6,6 +6,7 @@ import EditBar from '../../Partials/EditBar/'
 import './eager-seller.scss'
 import template from './template.json'
 import _ from 'lodash'
+import Website from '../../../models/Website'
 
 class EagerSeller extends Component {
   constructor() {
@@ -18,9 +19,45 @@ class EagerSeller extends Component {
         template_width: window.innerWidth - 400
       }
     }
+    this.getWebsite()
     window.onresize = () => {
       this.resizeWidth()
     }
+  }
+  getWebsite() {
+    const params = {
+      access_token: 'YWQ0Zjk1YzAtYWE5Mi0xMWU2LWE5NDQtYTVmYzQ5ZDc2Yjk5'
+    }
+    Website.get(params, (err, res) => {
+      if (err) {
+        this.setState({
+          data: {
+            ...this.state.data,
+            error: true
+          }
+        })
+        return
+      }
+      // Reset input values in steps
+      const steps = this.state.data.steps
+      const saved_attributes = res.data[res.data.length - 1].attributes
+      steps.forEach(step => {
+        const attributes = step.attributes
+        attributes.forEach(attribute => {
+          attribute.value = saved_attributes[attribute.key]
+        })
+      })
+      console.log(steps)
+      this.setState({
+        data: {
+          ...this.state.data,
+          attributes: saved_attributes,
+          steps: {
+            ...steps
+          }
+        }
+      })
+    })
   }
   resizeWidth() {
     this.setState({
@@ -62,6 +99,19 @@ class EagerSeller extends Component {
       data: {
         ...this.state.data
       }
+    })
+  }
+  saveWebsite() {
+    const params = {
+      website: {
+        template: 'light',
+        brand: '0e4487b2-5360-11e6-a9f9-0242ac11000b',
+        attributes: this.state.data.attributes
+      },
+      access_token: 'YWQ0Zjk1YzAtYWE5Mi0xMWU2LWE5NDQtYTVmYzQ5ZDc2Yjk5'
+    }
+    Website.save(params, (err, res) => {
+      console.log(res)
     })
   }
   render() {
@@ -158,6 +208,7 @@ class EagerSeller extends Component {
           goToStep={ this.goToStep.bind(this) }
           uploadMedia={ this.uploadMedia.bind(this) }
           editText={ this.editText.bind(this) }
+          saveWebsite={ this.saveWebsite.bind(this) }
         />
       </div>
     )
