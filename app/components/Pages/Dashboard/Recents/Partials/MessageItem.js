@@ -308,7 +308,7 @@ export default class MessageItem extends Component {
 
     let delivery_notification
     if (author && author.id === data.user.id) {
-      const double_check_color = message.deliveries && message.deliveries.length > 0 ? '#2196f3' : '#c3c3c3'
+      const double_check_color = message.deliveries && message.deliveries.length > 0 ? '2196f3' : 'c3c3c3'
       const double_check = (
         <span style={ S('color-' + double_check_color + ' ml-5') }>
           <i className="fa fa-check" style={ S('font-12') } />
