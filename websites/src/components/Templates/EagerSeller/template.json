@@ -29,6 +29,24 @@
           "title": "Cover photo",
           "default": "./images/upload.png",
           "description": "The cover photo is an extension of you, your brand, and your personality. Cover photo should be clean and balanced with focus on you."
+        },
+        {
+          "key": "headline",
+          "type": "text",
+          "title": "Headline",
+          "description": "Add your headline"
+        },
+        {
+          "key": "headline",
+          "type": "text",
+          "title": "Headline",
+          "description": "Add your headline"
+        },
+        {
+          "key": "headline",
+          "type": "text",
+          "title": "Headline",
+          "description": "Add your headline"
         }
       ]
     },
