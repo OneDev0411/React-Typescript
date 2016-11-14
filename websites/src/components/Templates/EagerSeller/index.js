@@ -8,6 +8,9 @@ import template from './template.json'
 import _ from 'lodash'
 import Website from '../../../models/Website'
 
+/* URL For Testing
+http://localhost:3000/templates/eager-seller?access_token=YWQ0Zjk1YzAtYWE5Mi0xMWU2LWE5NDQtYTVmYzQ5ZDc2Yjk5&brand=0e4487b2-5360-11e6-a9f9-0242ac11000b
+*/
 class EagerSeller extends Component {
   constructor() {
     super()
@@ -19,14 +22,17 @@ class EagerSeller extends Component {
         template_width: window.innerWidth - 400
       }
     }
-    this.getWebsite()
     window.onresize = () => {
       this.resizeWidth()
     }
   }
+  componentDidMount() {
+    this.getWebsite()
+  }
   getWebsite() {
+    // YWQ0Zjk1YzAtYWE5Mi0xMWU2LWE5NDQtYTVmYzQ5ZDc2Yjk5
     const params = {
-      access_token: 'YWQ0Zjk1YzAtYWE5Mi0xMWU2LWE5NDQtYTVmYzQ5ZDc2Yjk5'
+      access_token: this.props.location.query.access_token
     }
     Website.get(params, (err, res) => {
       if (err) {
@@ -104,10 +110,10 @@ class EagerSeller extends Component {
     const params = {
       website: {
         template: 'light',
-        brand: '0e4487b2-5360-11e6-a9f9-0242ac11000b',
+        brand: this.props.location.query.brand,
         attributes: this.state.data.attributes
       },
-      access_token: 'YWQ0Zjk1YzAtYWE5Mi0xMWU2LWE5NDQtYTVmYzQ5ZDc2Yjk5'
+      access_token: this.props.location.query.access_token
     }
     Website.save(params, (err, res) => {
       console.log(res)
