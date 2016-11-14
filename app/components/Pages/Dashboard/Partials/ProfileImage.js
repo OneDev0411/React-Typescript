@@ -6,6 +6,7 @@ import { getResizeAvatarUrl } from '../../../../utils/user'
 
 export default class ProfileImage extends Component {
   render() {
+    const show_online_indicator = typeof this.props.show_online_indicator === 'undefined' ? true : this.props.show_online_indicator
     const user = this.props.user
     if (!user)
       return <div></div>
@@ -56,7 +57,7 @@ export default class ProfileImage extends Component {
     return (
       <div style={ S('inline') }>
         <div className="img-circle" style={ profile_image_style }>
-          { online_indicator }
+          { show_online_indicator && online_indicator }
           { initials }
         </div>
       </div>
@@ -70,5 +71,6 @@ ProfileImage.propTypes = {
   top: React.PropTypes.number,
   font: React.PropTypes.number,
   user: React.PropTypes.object,
+  show_online_indicator: React.PropTypes.bool,
   data: React.PropTypes.object.isRequired
 }
