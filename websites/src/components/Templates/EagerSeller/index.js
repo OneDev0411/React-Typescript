@@ -47,14 +47,13 @@ class EagerSeller extends Component {
           attribute.value = saved_attributes[attribute.key]
         })
       })
-      console.log(steps)
       this.setState({
         data: {
           ...this.state.data,
           attributes: saved_attributes,
-          steps: {
+          steps: [
             ...steps
-          }
+          ]
         }
       })
     })

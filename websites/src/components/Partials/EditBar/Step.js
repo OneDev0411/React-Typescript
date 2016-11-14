@@ -29,14 +29,14 @@ class Step extends Component {
         return (
           <div>
             <div style={ S('mb-10') }>{ attribute.title }</div>
-            <FormControl key={`key-${attribute.key}`} style={ style.input } type="text" onChange={this.handleChange.bind(this, attribute.key)} defaultValue={ attribute.value }></FormControl>
+            <FormControl key={`key-${attribute.key}`} style={ style.input } type="text" onChange={this.handleChange.bind(this, attribute.key)} value={ attribute.value }></FormControl>
           </div>
         )
       case 'textarea':
         return (
           <div>
             <div style={ S('mb-10') }>{ attribute.title }</div>
-            <FormControl key={`key-${attribute.key}`} style={ { ...style.input, ...S('h-100'), resize: 'none' } } componentClass="textarea" onChange={this.handleChange.bind(this, attribute.key)} defaultValue={ attribute.value }></FormControl>
+            <FormControl key={`key-${attribute.key}`} style={ { ...style.input, ...S('h-100'), resize: 'none' } } componentClass="textarea" onChange={this.handleChange.bind(this, attribute.key)} value={ attribute.value }></FormControl>
           </div>
         )
       default:
