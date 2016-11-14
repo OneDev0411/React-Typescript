@@ -7,24 +7,19 @@ export default (user, room, users, emails, phone_numbers) => {
     users,
     emails,
     phone_numbers,
-    access_token: user.access_token,
-    inviting_user: user.id
+    access_token: user.access_token
   }
+  if (AppStore.data.brand)
+    params.brand = AppStore.data.brand.id
   Room.addUsers(params, (err, response) => {
     // Success
     if (response.status === 'success') {
       delete AppStore.data.users_added
-      delete AppStore.data.adding_users
       delete AppStore.data.add_members
       delete AppStore.data.show_add_members_modal
-      response.data.forEach(invitation => {
-        if (invitation.invited_user)
-          AppStore.data.current_room.users.push(invitation.invited_user)
-      })
-      AppStore.emitChange()
-    } else {
+    } else
       AppStore.data.add_users_error = true
-      AppStore.emitChange()
-    }
+    delete AppStore.data.adding_users
+    AppStore.emitChange()
   })
 }

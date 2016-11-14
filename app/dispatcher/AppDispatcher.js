@@ -26,10 +26,10 @@ import listingInquiry from '../actions/user/listing-inquiry'
 import searchUsersNewMessage from '../actions/user/search-new-message'
 import searchUsersShare from '../actions/user/search-share'
 import searchUsersAddMembers from '../actions/user/search-add-members'
+import getReceivingUser from '../actions/user/get-receiving-user'
 // Rooms
 import createRoom from '../actions/rooms/create-room'
 import deleteRoom from '../actions/rooms/delete-room'
-import inviteContacts from '../actions/rooms/invite-contacts'
 import addUsers from '../actions/rooms/add-users'
 import uploadFilesToRoom from '../actions/rooms/upload-files'
 import setNotification from '../actions/rooms/notifications'
@@ -123,7 +123,7 @@ AppDispatcher.register(payload => {
       break
 
     case 'create-password':
-      createPassword(payload.email, payload.password, payload.first_name, payload.last_name, payload.token)
+      createPassword(payload.email, payload.password, payload.first_name, payload.last_name, payload.token, payload.agent, payload.new_email, payload.phone_number)
       break
 
     case 'send-verify-email':
@@ -164,10 +164,6 @@ AppDispatcher.register(payload => {
 
     case 'get-contacts':
       getContacts(payload.user)
-      break
-
-    case 'invite-contacts':
-      inviteContacts(payload.user, payload.room, payload.contacts)
       break
 
     case 'add-users':
@@ -288,6 +284,10 @@ AppDispatcher.register(payload => {
 
     case 'search-users-add-members':
       searchUsersAddMembers(payload.user, payload.q)
+      break
+
+    case 'get-receiving-user':
+      getReceivingUser(payload.user_id)
       break
 
     default:

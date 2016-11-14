@@ -11,8 +11,10 @@ export default (user, mls_number, favorite) => {
         access_token: user.access_token
       }
       Room.createRec(params, (err, res) => {
-        locals.rec_id = res.data[0].id
-        callback()
+        if (res.data[0]) {
+          locals.rec_id = res.data[0].id
+          callback()
+        }
       })
     },
     () => {

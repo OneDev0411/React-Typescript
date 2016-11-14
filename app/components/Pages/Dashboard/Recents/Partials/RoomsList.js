@@ -55,13 +55,16 @@ export default class RoomsList extends Component {
         let title_area
         // Profile image
         let profile_image_div
-        let list_style = S('pointer pt-15 pb-10 pl-10 pr-17 relative h-70')
+        let list_style = S('pointer pt-15 pb-10 pl-10 pr-17 relative h-70 color-8696a4')
         const not_current_user_users = room.users.filter(room_user => {
           if (room_user.id !== data.user.id)
             return true
         })
-        if (current_room && current_room.id === room.id)
-          list_style = { ...list_style, ...S('bg-f7f7f7') }
+        let is_current_room = false
+        if (current_room && current_room.id === room.id) {
+          is_current_room = true
+          list_style = { ...list_style, ...S('bg-465a71') }
+        }
         if (!room.latest_message) {
           list_style = { ...list_style, ...S('h-60') }
           const time_updated = helpers.friendlyDate(room.updated_at)
@@ -132,7 +135,7 @@ export default class RoomsList extends Component {
           room_title = 'You'
         if (room.title) {
           title_area = (
-            <div style={ S('color-ccc') }>{ room.title }</div>
+            <div style={ S('color-8696a4') }>{ room.title }</div>
           )
         }
         return (
@@ -140,10 +143,10 @@ export default class RoomsList extends Component {
             <div style={ S('relative') }>
               { profile_image_div }
               <div className="pull-left" style={ S('ml-50 w-90p') }>
-                <div className="room-list__item__names" style={ S('color-263445 relative w-70p' + (!title_area ? ' t-10' : '')) }>
+                <div className="room-list__item__names" style={ S(`color-${is_current_room ? 'fafafa' : '8696a4'} relative w-70p${(!title_area ? ' t-10' : '')}`) }>
                   { room_title }
                 </div>
-                <div className="text-right" style={ S('color-ccc w-50p absolute r-10n t-10 font-13') } >
+                <div className="text-right" style={ S(`color-${is_current_room ? 'fafafa' : '8696a4'} w-50p absolute r-10n t-10 font-13`) } >
                   { helpers.getTimeAgo(latest_created[0]) }
                   &nbsp;
                   { notification }
@@ -159,7 +162,8 @@ export default class RoomsList extends Component {
     const rooms_scroll_area = {
       overflowY: 'scroll',
       overflowX: 'hidden',
-      height: window.innerHeight - 70
+      height: window.innerHeight - 60,
+      backgroundColor: '#303e4d'
     }
     let list_style = S('pl-0')
     if (data.is_mobile) {

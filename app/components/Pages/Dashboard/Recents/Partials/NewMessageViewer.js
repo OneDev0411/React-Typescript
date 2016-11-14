@@ -89,18 +89,16 @@ export default class NewMessageViewer extends Component {
       )
     }
     return (
-      <div style={ S('relative ' + (item.index < 1 ? 'h-74' : 'h-54')) } className={ item.index < 1 ? 'other-users--first' : '' } >
+      <div style={ S('relative h-54') }>
         <div style={ S('mt-10') }>{ profile_image }</div>
         <div style={ S('pull-left mt-10 ml-60 mr-5') }>{ item.label }</div>
         <div className="clearfix"/>
       </div>
     )
   }
-  render() {
-    // Data
+  getFilterOptions() {
     const data = this.props.data
     const users_select_options = []
-    // Get users selected
     const users_selected = []
     let users_selected_ids = []
     if (data.new_message && data.new_message.items_selected) {
@@ -113,33 +111,39 @@ export default class NewMessageViewer extends Component {
         return item.value.id
       })
     }
-    if (data.contacts) {
-      data.contacts.forEach(contact => {
-        const user = contact.contact_user
-        if (user) {
-          if (user.id !== data.user.id && users_selected_ids && users_selected_ids.indexOf(user.id) === -1) {
-            users_select_options.push({
-              value: user,
-              label: user.first_name ? user.first_name : contact.phone_number,
-              type: 'user'
-            })
-          }
-        }
-      })
-    }
-    // Search users
     if (data.new_message && data.new_message.users_found) {
       data.new_message.users_found.forEach((user, i) => {
         if (user) {
           if (user.id !== data.user.id && users_selected_ids && users_selected_ids.indexOf(user.id) === -1 && users_select_options.indexOf(user.id) === -1) {
+            const deep_search = `${user.first_name ? user.first_name : ''} ${user.last_name ? user.last_name : ''} ${user.email ? user.email : ''} ${user.phone_number ? user.phone_number : ''} `
             users_select_options.push({
               value: user,
               label: user.first_name ? user.first_name : user.phone_number,
+              deep_search,
               type: 'user',
               index: i
             })
           }
         }
+      })
+    }
+    return users_select_options
+  }
+  filterOption(option, string) {
+    const deep_search = option.deep_search.toLowerCase()
+    if (deep_search.indexOf(string.toLowerCase()) !== -1)
+      return true
+    return false
+  }
+  render() {
+    // Data
+    const data = this.props.data
+    // Get users selected
+    const users_selected = []
+    if (data.new_message && data.new_message.items_selected) {
+      const items_selected = data.new_message.items_selected
+      items_selected.forEach(item => {
+        users_selected.push(item)
       })
     }
     let messages_area
@@ -149,7 +153,6 @@ export default class NewMessageViewer extends Component {
           data={ data }
           getPreviousMessages={ this.props.getPreviousMessages }
           showModal={ this.props.showModal.bind(this) }
-          addContactsToRoom={ this.props.addContactsToRoom }
           hideModal={ this.props.hideModal.bind(this) }
           showFileViewer={ this.props.showFileViewer }
           setHeadingDate={ this.props.setHeadingDate }
@@ -193,16 +196,17 @@ export default class NewMessageViewer extends Component {
                 ref="myselect"
                 autofocus
                 name="users"
-                options={ users_select_options }
                 placeholder="Enter name, email or phone"
                 value={ users_selected ? users_selected : null }
                 multi
                 noResultsText={ 'No users found'}
                 style={ S('border-none mt-3') }
+                options={ this.getFilterOptions() }
                 onInputChange={ this.handleInputChange.bind(this) }
                 onChange={ this.handleChange.bind(this) }
                 valueRenderer={ this.handleValueRenderer.bind(this) }
                 optionRenderer={ this.handleOptionRenderer.bind(this) }
+                filterOption={ this.filterOption.bind(this) }
               />
             </SelectContainer>
           </div>
@@ -226,7 +230,6 @@ NewMessageViewer.propTypes = {
   handleContactFilter: React.PropTypes.func,
   getPreviousMessages: React.PropTypes.func,
   showModal: React.PropTypes.func,
-  addContactsToRoom: React.PropTypes.func,
   hideModal: React.PropTypes.func,
   showFileViewer: React.PropTypes.func,
   setHeadingDate: React.PropTypes.func,

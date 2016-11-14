@@ -4,6 +4,8 @@ import helpers from '../../../utils/helpers'
 module.exports = (app, config) => {
   app.post('/api/create-password',(req, res) => {
     const email = req.body.email
+    const new_email = req.body.new_email
+    const phone_number = req.body.phone_number
     const token = req.body.token
     const password = req.body.password
     const agent = req.body.agent
@@ -13,6 +15,10 @@ module.exports = (app, config) => {
       email,
       shadow_token: token,
       password
+    }
+    if (phone_number) {
+      delete request_object.email
+      request_object.phone_number = phone_number
     }
     if (agent)
       request_object.agent = agent

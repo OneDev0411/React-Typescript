@@ -50,6 +50,8 @@ module.exports = (app, config) => {
     return res.redirect('/?message=error')
   })
   app.get('/verify/email',(req, res) => {
+    // Logout user
+    delete req.session.user
     let AppStore = {}
     AppStore.data = {
       status: 'success'
@@ -89,14 +91,17 @@ module.exports = (app, config) => {
     })
     .then(response => {
       if (response.status >= 400) {
-        // redirect to error page
-        return res.redirect('/verify/email?status=error')
+        // redirect to login page
+        return res.redirect('/signin?message=email-already-verified')
       }
       return response.json()
     })
     .then(response => {
       // redirect to success page
-      return res.redirect('/verify/email?status=success&token=' + token + '&email=' + encodeURIComponent(email))
+      if (response.data.is_shadow)
+        return res.redirect('/verify/email?status=success&token=' + token + '&email=' + encodeURIComponent(email))
+      else
+        return res.redirect('/signin?message=phone-signup-success')
     })
   })
   app.get('/verify_phone',(req, res) => {

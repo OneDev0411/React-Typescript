@@ -29,9 +29,12 @@ export default class ProfileImage extends Component {
       let last_initial = ''
       if (user.last_name)
         last_initial = user.last_name.substring(0, 1).toUpperCase()
+      let initials_area = first_initial + last_initial
+      if (!first_initial && !last_initial)
+        initials_area = <i className="fa fa-phone"></i>
       initials = (
         <div className="text-center" style={ S(`w-100p t-${top} absolute color-fff ${font ? 'font-' + font : '17'}`) }>
-          { first_initial + last_initial }
+          { initials_area }
         </div>
       )
     }

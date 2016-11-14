@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import S from 'shorti'
 import _ from 'lodash'
 import validator from 'validator'
-import { Modal, Input, Button } from 'react-bootstrap'
+import { Modal, Input, Button, Alert } from 'react-bootstrap'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import controller from '../controller'
@@ -155,36 +155,6 @@ export default class Dashboard extends Component {
       room: current_room,
       comment
     })
-  }
-
-  addContactsToRoom() {
-    delete AppStore.data.add_contacts_error
-    AppStore.emitChange()
-    const contacts_added = AppStore.data.contacts_added
-    const user = AppStore.data.user
-    const room = this.props.data.current_room
-    if (contacts_added && contacts_added.room) {
-      AppStore.data.adding_contacts = true
-      AppStore.emitChange()
-      const contacts = contacts_added.room
-      AppDispatcher.dispatch({
-        action: 'invite-contacts',
-        user,
-        room,
-        contacts
-      })
-      // Create contacts if email or phone
-      const new_contacts = contacts_added.room.filter(contact => {
-        return contact.type !== 'contact'
-      })
-      if (new_contacts) {
-        AppDispatcher.dispatch({
-          action: 'create-contacts',
-          user,
-          contacts: new_contacts
-        })
-      }
-    }
   }
 
   createRoom(e) {
@@ -582,6 +552,7 @@ export default class Dashboard extends Component {
     const phone_numbers = _.map(_.filter(data.add_members.items_selected, { type: 'phone_number' }), 'value')
     const emails = _.map(_.filter(data.add_members.items_selected, { type: 'email' }), 'value')
     AppStore.data.adding_users = true
+    delete AppStore.data.add_users_error
     AppStore.emitChange()
     AppDispatcher.dispatch({
       action: 'add-users',
@@ -606,7 +577,7 @@ export default class Dashboard extends Component {
         />
       )
     }
-    const users_select_options = []
+    let users_select_options = []
     // Get users selected
     const users_selected = []
     let users_selected_ids = []
@@ -648,6 +619,14 @@ export default class Dashboard extends Component {
         }
       })
     }
+    // Filter our current room members
+    if (data.current_room) {
+      const room_users_ids = _.map(data.current_room.users, 'id')
+      users_select_options = users_select_options.filter(user => {
+        if (room_users_ids.indexOf(user.value.id) === -1)
+          return user
+      })
+    }
     let main_content = (
       <MainContent
         data={ data }
@@ -661,7 +640,6 @@ export default class Dashboard extends Component {
         hideModal={ this.hideModal }
         createRoom={ this.createRoom }
         setCurrentRoom={ this.setCurrentRoom.bind(this) }
-        addContactsToRoom={ this.addContactsToRoom }
         handleDragEnter={ this.handleDragEnter }
         handleDragLeave={ this.handleDragLeave }
         uploadFiles={ this.uploadFiles.bind(this) }
@@ -722,6 +700,14 @@ export default class Dashboard extends Component {
     let mobile_splash_viewer
     if (data.show_mobile_splash_viewer)
       mobile_splash_viewer = <MobileSplashViewer data={ data } />
+    let message
+    if (data.add_users_error) {
+      message = (
+        <Alert bsStyle="danger" style={ S('text-left') }>
+          There was an error with this request.  This user may already be a member of this room.
+        </Alert>
+      )
+    }
     return (
       <div style={ main_style }>
         <main>
@@ -750,12 +736,13 @@ export default class Dashboard extends Component {
           <Modal.Header closeButton style={ S('h-70 bc-f3f3f3') }>
             <Modal.Title style={ S('font-36') } className="din">Add Members</Modal.Title>
           </Modal.Header>
-          <Modal.Body style={ S('h-500') }>
+          <Modal.Body style={ S('h-70') }>
             <div className="create-item__user-select">
               <SelectContainer inputChange={ this.inputChange.bind(this) }>
                 <Select
                   ref="myselect"
                   autofocus
+                  autosize
                   name="users"
                   options={ users_select_options }
                   placeholder="Enter name, email or phone"
@@ -773,6 +760,7 @@ export default class Dashboard extends Component {
             <div className="clearfix"></div>
           </Modal.Body>
           <Modal.Footer>
+            { message }
             <Button bsStyle="link" onClick={ this.hideModal }>Cancel</Button>
             <Button className={ data.adding_users ? 'disabled' : '' } bsStyle="primary" onClick={ this.handleAddMembers.bind(this) }>
               { data.adding_users ? 'Adding users...' : 'Add' }

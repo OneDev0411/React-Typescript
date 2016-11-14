@@ -245,12 +245,7 @@ export default class ListingViewer extends Component {
           </div>
         )
       }
-      let list_agent_area = (
-        <div style={ S('mt-20 color-748090 w-100p border-1-solid-ededed br-3 p-20 text-center') }>
-          <div style={ S('font-18 mb-5 color-3388ff') }><span style={ S('fw-400') }>{ listing.list_agent_full_name }, Seller Agent</span></div>
-          <div style={ S('font-15 mb-5') }>{ listing.list_office_name }</div>
-        </div>
-      )
+      let list_agent_area
       if (user && user.user_type === 'Agent') {
         const email_style = {
           ...S('font-15 mb-20'),
@@ -315,6 +310,15 @@ export default class ListingViewer extends Component {
       if (listing.close_price && user && user.user_type === 'Client') {
         asking_price_area = (
           <span style={ S('font-28 relative t-5n color-ccc fw-400') }>(Asking price)</span>
+        )
+      }
+      let agent_area_client
+      if (!user || user && user.user_type === 'Client') {
+        agent_area_client = (
+          <div>
+            <div style={ S('fw-600 font-18 mb-10') }>Listing Provided by</div>
+            <div><span style={ S('fw-400') }>{ listing.list_agent_full_name }, { listing.list_office_name }</span></div>
+          </div>
         )
       }
       main_content = (
@@ -581,6 +585,7 @@ export default class ListingViewer extends Component {
                       </div>
                     </div>
                     <div className="clearfix"></div>
+                    { agent_area_client }
                   </div>
                 </div>
                 <div className="clearfix"></div>
@@ -694,11 +699,11 @@ export default class ListingViewer extends Component {
       if (brand_agent.phone_number)
         phone_area = <div style={ S('font-15 mb-5') }>M: { brand_agent.phone_number }</div>
       const brand_agent_area = (
-        <div style={ S('mt-50 color-bfc3c7 w-100p text-left center-block text-center') }>
+        <div style={ S('mt-50 color-fff w-100p text-left center-block text-center') }>
           { profile_image_area }
-          <div style={ S('bg-263445 p-20 w-100p') }>
+          <div style={ S('p-20 w-100p') }>
             <div style={ S('font-18 mb-5 color-fff') }><span style={ S('fw-400') }>{ brand_agent.first_name } { brand_agent.last_name }</span></div>
-            <div style={ S('font-14 mb-15 color-bfc3c7 relative') }>
+            <div style={ S('font-14 mb-15 relative') }>
               <div style={ S('bg-cover bg-url(' + Brand.asset('office_logo') + ') bg-center w-20 h-20 inline-block mr-10 mt-10') }></div>
               <div style={ S('inline-block relative t-5n') }>{ Brand.message('office_title') }</div>
               <div className="clearfix"></div>
@@ -710,7 +715,7 @@ export default class ListingViewer extends Component {
         </div>
       )
       brand_agent_footer = (
-        <div style={ S('w-100p pt-100 pb-100 bg-263445 text-center') }>
+        <div style={ S(`w-100p pt-100 pb-100 bg-263445 text-center`) }>
           { brand_agent_area }
         </div>
       )

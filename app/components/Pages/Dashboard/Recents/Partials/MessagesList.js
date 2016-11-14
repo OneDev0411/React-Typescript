@@ -404,6 +404,7 @@ export default class MessagesList extends Component {
                     </div>
                     <div style={ S('ml-50') }>
                       <div>{ !user.fake_email ? user.first_name : user.phone_number }</div>
+                      <div>{ !user.fake_email ? user.email : '' }</div>
                     </div>
                   </div>
                 )
@@ -413,6 +414,14 @@ export default class MessagesList extends Component {
           </div>
           { add_members_area }
         </div>
+      )
+    }
+    let leave_chat_button_area
+    if (data.current_room && data.current_room.users.length > 2) {
+      leave_chat_button_area = (
+        <li style={ S('w-260 p-20 pointer') } onClick={ this.props.showDeleteRoomModal.bind(this) }>
+          Leave this chat
+        </li>
       )
     }
     let room_settings = (
@@ -428,9 +437,7 @@ export default class MessagesList extends Component {
               { has_system_generated_notifs ? 'Mute' : 'Unmute' } listing notifications
               <img style={ S('pull-right mt-2n mr-5') } src={ `/images/dashboard/chats/bell${!has_system_generated_notifs ? '-strike' : ''}.svg` }/>
             </li>
-            <li style={ S('w-260 p-20 pointer') } onClick={ this.props.showDeleteRoomModal.bind(this) }>
-              Leave this chat
-            </li>
+            { leave_chat_button_area }
           </DropdownButton>
         </div>
       </div>
@@ -478,7 +485,6 @@ MessagesList.propTypes = {
   data: React.PropTypes.object,
   getPreviousMessages: React.PropTypes.func.isRequired,
   showModal: React.PropTypes.func.isRequired,
-  addContactsToRoom: React.PropTypes.func,
   hideModal: React.PropTypes.func,
   showFileViewer: React.PropTypes.func,
   setHeadingDate: React.PropTypes.func,

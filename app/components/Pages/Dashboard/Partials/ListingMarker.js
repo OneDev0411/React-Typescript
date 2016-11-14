@@ -145,7 +145,7 @@ export default class ListingMarker extends Component {
         ...S('bg-fff w-25 h-100p color-35b863 font-10 pt-8 inline-block pull-left bold'),
         lineHeight: '5px'
       }
-      marker_style = { ...marker_style, ...S('w-90') }
+      marker_style = { ...marker_style, ...S('w-70') }
       if (this.isFavorited(listing) || listing.commented_by) {
         marker_style = {
           ...marker_style,

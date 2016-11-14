@@ -155,7 +155,8 @@ export default {
     const request_object = {
       room_id: params.room_id,
       user: params.user,
-      access_token: params.access_token
+      access_token: params.access_token,
+      brand: params.brand
     }
 
     fetch(add_user_to_room_url, {
@@ -191,7 +192,7 @@ export default {
       emails: params.emails,
       phone_numbers: params.phone_numbers,
       access_token: params.access_token,
-      inviting_user: params.inviting_user
+      brand: params.brand
     }
     fetch(endpoint, {
       method: 'post',
@@ -225,35 +226,6 @@ export default {
       headers: {
         'Content-type': 'application/json'
       }
-    })
-    .then(response => {
-      if (response.status >= 400) {
-        const error = {
-          status: 'error',
-          response
-        }
-        return callback(error, false)
-      }
-      return response.json()
-    })
-    .then(response => {
-      return callback(false, response)
-    })
-  },
-  inviteContacts: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/invite-contacts'
-    const request_object = {
-      invitations: params.invitations,
-      access_token: params.access_token
-    }
-    fetch(endpoint, {
-      method: 'post',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(request_object)
     })
     .then(response => {
       if (response.status >= 400) {

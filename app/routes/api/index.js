@@ -37,7 +37,6 @@ module.exports = (app, config) => {
   require('./rooms/add-user-to-room')(app, config)
   require('./rooms/remove-user-from-room')(app, config)
   require('./rooms/create-message')(app, config)
-  require('./rooms/invite-contacts')(app, config)
   require('./rooms/notifications')(app, config)
   require('./rooms/acknowledge-room-notifications')(app, config)
   require('./rooms/create-rec')(app, config)
@@ -94,4 +93,6 @@ module.exports = (app, config) => {
   require('./counties/search')(app, config)
   // Subdivisions
   require('./subdivisions/search')(app, config)
+  // Tools
+  require('./tools/delete-phone')(app, config)
 }

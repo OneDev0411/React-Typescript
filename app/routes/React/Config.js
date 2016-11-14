@@ -24,6 +24,7 @@ import Settings from '../../components/Pages/Account/Settings'
 import Notifications from '../../components/Pages/Account/Notifications'
 import Recommend from '../../components/Pages/Dashboard/Mls/Listing/Recommend'
 import Agents from '../../components/Pages/Dashboard/Mls/Agents'
+import Branch from '../../components/Pages/Branch'
 
 // Widgets
 import ListingsWidget from '../../components/Pages/Widgets/Listings'
@@ -36,6 +37,7 @@ export default (
     <Route path="signup" component={SignUp}/>
     <Route path="signup/agent" component={ConfirmAgent}/>
     <Route path="signin" component={SignIn}/>
+    <Route path="branch" component={Branch}/>
     <Route path="account/settings" component={Settings}/>
     <Route path="account/notifications" component={Notifications}/>
     <Redirect from="dashboard" to="dashboard/recents" />

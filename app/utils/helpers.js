@@ -128,5 +128,8 @@ export default {
       country_code: 1,
       phone_number
     }
+  },
+  isValidUSZip(zip) {
+   return /^\d{5}(-\d{4})?$/.test(zip);
   }
 }

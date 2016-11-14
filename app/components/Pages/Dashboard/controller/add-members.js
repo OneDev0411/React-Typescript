@@ -38,8 +38,15 @@ const controller = {
     if (!AppStore.data.add_members)
       AppStore.data.add_members = {}
     AppStore.data.add_members.search_value = value
-    AppStore.emitChange()
-    controller.searchUsers(value)
+    // Debounce
+    if (window.is_typing_timeout) {
+      clearTimeout(window.is_typing_timeout)
+      delete window.is_typing_timeout
+    }
+    // Send stopped typing event
+    window.is_typing_timeout = setTimeout(() => {
+      controller.searchUsers(value)
+    }, 1000)
   }
 }
 export default controller

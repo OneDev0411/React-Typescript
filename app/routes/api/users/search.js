@@ -5,7 +5,15 @@ module.exports = (app, config) => {
     const api_url = config.api.url
     const q = req.query.q
     const access_token = req.query.access_token
-    const endpoint = api_url + '/users/search?q[]=' + q
+    const query_array = req.query.q.split(' ')
+    let query_string = ''
+    query_array.forEach(string => {
+      if (!query_string)
+        query_string = 'q[]=' + string
+      else
+        query_string += '&q[]=' + string
+    })
+    const endpoint = api_url + '/users/search?limit=1000000&' + query_string
     fetch(endpoint,{
       method: 'get',
       headers: {

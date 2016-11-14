@@ -42,7 +42,6 @@ export default class MessageItem extends Component {
     if (message.notification && message.notification.object_class === 'Alert' && message.notification.objects)
       alert = message.notification.objects[0]
     const i = this.props.i
-    let first_name
     // Profile image
     let author
     let profile_image_div
@@ -67,10 +66,6 @@ export default class MessageItem extends Component {
         </div>
       )
     }
-
-    // First name
-    if (author)
-      first_name = author.first_name
 
     // Message time
     const message_created = message.created_at.toString().split('.')
@@ -98,7 +93,7 @@ export default class MessageItem extends Component {
         const ext = attachment.info['mime-extension']
         let message_thumb
         // If image
-        if (ext.indexOf('png') !== -1 || ext.indexOf('jpg') !== -1 || ext.indexOf('gif') !== -1) {
+        if (ext.indexOf('png') !== -1 || ext.indexOf('jpg') !== -1 || ext.indexOf('gif') !== -1 || ext.indexOf('jpeg') !== -1) {
           message_thumb = (
             <div style={ S(message_thumb_size + ' br-3 bg-url(' + file_url + ') no-repeat bg-contain mb-10') }></div>
           )
@@ -243,14 +238,14 @@ export default class MessageItem extends Component {
       if (message.notification && message.notification.action === 'BecameAvailable')
         notification_message = ' just hit the market'
       if (message.notification && message.notification.action === 'PriceDropped')
-        notification_message = ' price dropped'
+        notification_message = ' price changed'
       return (
-        <div className="message-item" style={ S('relative mb-15 pt-5 font-15') }>
+        <div className="message-item" style={ S('relative mb-15 font-15') }>
           <div style={ S('mt-5 pull-left') }>
             { profile_image_div }
           </div>
-          <div className="pull-left" style={ S('ml-55 ' + card_width) }>
-            <b>{ first_name || 'Rebot' }</b>
+          <div className="pull-left" style={ S('pt-6 ml-55 ' + card_width) }>
+            <b>{ author ? author.display_name : 'Rebot' }</b>
             <span style={ S('color-ccc ml-20') } >
               { time_created.month } { time_created.date }, { time_created.time_friendly }
             </span>
@@ -314,7 +309,7 @@ export default class MessageItem extends Component {
       <div className="message-item" style={ S('relative mb-5 font-15') }>
         <div style={ S('mt-5 pull-left') }>{ profile_image_div }</div>
         <div className="pull-left" style={ S('ml-55 pt-6') }>
-          <b>{ first_name || 'Rebot' }</b>
+          <b>{ author ? author.display_name : 'Rebot' }</b>
           <span style={ S('color-ccc ml-20') } >
             { time_created.month } { time_created.date }, { time_created.time_friendly }
           </span>
