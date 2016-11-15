@@ -6,6 +6,7 @@ import EditBar from '../../Partials/EditBar/'
 import './eager-seller.scss'
 import template from './template.json'
 import _ from 'lodash'
+import async from 'async'
 import Website from '../../../models/Website'
 
 /* URL For Testing
@@ -39,7 +40,7 @@ class EagerSeller extends Component {
         this.setState({
           data: {
             ...this.state.data,
-            error: true
+            website_get_error: true
           }
         })
         return
@@ -98,7 +99,9 @@ class EagerSeller extends Component {
     const steps = data.steps
     const step = steps[data.step - 1]
     const attribute = _.find(step.attributes, { key })
-    attribute.value = accepted_files[0].preview
+    const file = accepted_files[0]
+    attribute.file = file
+    attribute.value = file.preview
     data.attributes[key] = accepted_files[0].preview
     this.setState({
       data: {
@@ -106,7 +109,21 @@ class EagerSeller extends Component {
       }
     })
   }
+  getFiles() {
+    const data = this.state.data
+    const steps = data.steps
+    const attributes = _.flatMap(steps, 'attributes')
+    const file_attributes = _.filter(attributes, attribute => { return attribute.type === 'Media' })
+    if (file_attributes && file_attributes.length)
+      return file_attributes
+  }
   saveWebsite() {
+    this.setState({
+      data: {
+        ...this.state.data,
+        saving_website: true
+      }
+    })
     const params = {
       website: {
         template: 'light',
@@ -114,6 +131,42 @@ class EagerSeller extends Component {
         attributes: this.state.data.attributes
       },
       access_token: this.props.location.query.access_token
+    }
+    // Test if files uploaded
+    const file_attributes = this.getFiles()
+    if (file_attributes) {
+      async.eachSeries(file_attributes, (file_attribute, callback) => {
+        if (!file_attribute.file)
+          return callback()
+        const upload_params = {
+          file: file_attribute.file,
+          access_token: this.props.location.query.access_token
+        }
+        Website.uploadFiles(upload_params, (err, res) => {
+          params.website.attributes[file_attribute.key] = res.url
+          callback()
+        })
+      }, () => {
+        Website.save(params, (err, res) => {
+          delete this.state.data.saving_website
+          if (err) {
+            this.setState({
+              data: {
+                ...this.state.data,
+                website_save_error: true
+              }
+            })
+            return
+          }
+          this.setState({
+            data: {
+              ...this.state.data,
+              website_saved: true
+            }
+          })
+        })
+      })
+      return
     }
     Website.save(params, (err, res) => {
       console.log(res)

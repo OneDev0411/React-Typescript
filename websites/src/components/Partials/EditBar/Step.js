@@ -66,8 +66,8 @@ class Step extends Component {
     let domains_button
     if (!next_step) {
       domains_button = (
-        <Button onClick={ this.saveWebsite.bind(this) } style={ S('bg-f67608 border-none color-fff w-65p h-40 pull-right') }>
-          Save and go to domains. <i className="fa fa-chevron-right"></i>
+        <Button className={ data.saving_website ? 'disabled' : '' } onClick={ this.saveWebsite.bind(this) } style={ S('bg-f67608 border-none color-fff w-65p h-40 pull-right') }>
+          { data.saving_website ? 'Saving...' : 'Save and go to domains.' } <i className="fa fa-chevron-right"></i>
         </Button>
       )
     }
