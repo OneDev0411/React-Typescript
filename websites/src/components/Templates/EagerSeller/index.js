@@ -256,6 +256,7 @@ class EagerSeller extends Component {
                 <div style={ S(`${data.step === 7 ? `border-1-dotted-${data.outline_color}` : ''}`) }>
                   { attributes.bio }
                 </div>
+                <img src={ attributes.another_image } />
               </Col>
               <div className="clearfix"></div>
             </section>

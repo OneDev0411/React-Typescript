@@ -126,6 +126,13 @@
           "key": "quote",
           "type": "text",
           "title": "Quote"
+        },
+        {
+          "key": "another_image",
+          "type": "Media",
+          "title": "Another photo",
+          "default": "./images/upload.png",
+          "description": "This is another image"
         }
       ]
     },
