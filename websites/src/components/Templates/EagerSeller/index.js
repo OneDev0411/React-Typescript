@@ -10,6 +10,7 @@ import async from 'async'
 import Website from '../../../models/Website'
 
 /* URL For Testing
+npm run development
 http://localhost:3000/templates/eager-seller?access_token=YWQ0Zjk1YzAtYWE5Mi0xMWU2LWE5NDQtYTVmYzQ5ZDc2Yjk5&brand=0e4487b2-5360-11e6-a9f9-0242ac11000b
 */
 class EagerSeller extends Component {
@@ -47,7 +48,8 @@ class EagerSeller extends Component {
       }
       // Reset input values in steps
       const steps = this.state.data.steps
-      const saved_attributes = res.data[res.data.length - 1].attributes
+      const website = res.data[res.data.length - 1]
+      const saved_attributes = website.attributes
       steps.forEach(step => {
         const attributes = step.attributes
         attributes.forEach(attribute => {
@@ -56,6 +58,7 @@ class EagerSeller extends Component {
       })
       this.setState({
         data: {
+          website,
           ...this.state.data,
           attributes: saved_attributes,
           steps: [
@@ -147,23 +150,59 @@ class EagerSeller extends Component {
           callback()
         })
       }, () => {
-        Website.save(params, (err, res) => {
-          delete this.state.data.saving_website
-          if (err) {
+        const website = this.state.data.website
+        if (website) {
+          const params = {
+            website
+          }
+          // Edit website
+          Website.edit(params, (err, res) => {
+            delete this.state.data.saving_website
+            if (err) {
+              this.setState({
+                data: {
+                  ...this.state.data,
+                  website_save_error: true
+                }
+              })
+              return
+            }
             this.setState({
               data: {
                 ...this.state.data,
-                website_save_error: true
+                website_saved: true
               }
             })
-            return
-          }
-          this.setState({
-            data: {
-              ...this.state.data,
-              website_saved: true
-            }
           })
+        } else {
+          // Create website
+          Website.create(params, (err, res) => {
+            delete this.state.data.saving_website
+            if (err) {
+              this.setState({
+                data: {
+                  ...this.state.data,
+                  website_save_error: true
+                }
+              })
+              return
+            }
+            this.setState({
+              data: {
+                ...this.state.data,
+                website_saved: true
+              }
+            })
+          })
+        }
+        const hostname_params = {
+          id: this.state.data.website.id,
+          hostname: 'localhost:3000',
+          is_default: true,
+          access_token: this.props.location.query.access_token
+        }
+        Website.createHostname(hostname_params, (err, res) => {
+          console.log(res)
         })
       })
       return

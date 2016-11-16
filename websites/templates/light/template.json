@@ -1,0 +1,39 @@
+{
+  "template_name": "Light Mark",
+  "attributes": {
+    "cover_image": {
+      "type": "Image",
+      "title": "Cover photo",
+      "description": "Upload a cover image of yourself blah blah"
+    },
+    "profile_image": {
+      "type": "Image",
+      "title": "Profile photo",
+      "description": "Upload a profile..."
+    },
+    "tagline": {
+      "type": "text",
+      "title": "Tagline"
+    },
+    "testimonial": {
+      "type": "textarea",
+      "title": "testimonial"
+    },
+    "about": {
+      "type": "textarea",
+      "title": "About Me"
+    },
+    "facebook_url": {
+      "type": "url",
+      "title": "Facebook Page"
+    },
+    "twitter_url": {
+      "type": "url",
+      "title": "Twitter Page"
+    },
+    "instagram_url": {
+      "type": "url",
+      "title": "Instagram Page"
+    }
+  }
+}

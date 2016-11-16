@@ -24,7 +24,7 @@ export default {
       return callback(null, response)
     })
   },
-  save(params, callback) {
+  create(params, callback) {
     const endpoint = `${config.api_url}/websites`
     fetch(endpoint, {
       method: 'post',
@@ -44,9 +44,28 @@ export default {
       return callback(null, response)
     })
   },
+  edit(params, callback) {
+    const endpoint = `${config.api_url}/websites/${params.website.id}`
+    fetch(endpoint, {
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': 'Bearer ' + params.access_token
+      },
+      body: JSON.stringify(params.website)
+    })
+    .then(response => {
+      if (response.status >= 400) {
+        return callback(response, null)
+      }
+      return response.json()
+    })
+    .then(response => {
+      return callback(null, response)
+    })
+  },
   uploadFiles: (params, callback) => {
-    const api_url = config.api_url
-    const endpoint = api_url + '/attachments'
+    const endpoint = `${config.api_url}/attachments`
     const request = superagent.post(endpoint)
     const file = params.file
     request.set('authorization', 'Bearer ' + params.access_token)
@@ -55,4 +74,28 @@ export default {
       return callback(err, res.body)
     })
   },
+  createHostname: (params, callback) => {
+    const endpoint = `${config.api_url}/websites/${params.id}/hostnames`
+    const body = {
+      hostname: params.hostname,
+      is_default: params.is_default
+    }
+    fetch(endpoint, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': 'Bearer ' + params.access_token
+      },
+      body: JSON.stringify(body)
+    })
+    .then(response => {
+      if (response.status >= 400) {
+        return callback(response, null)
+      }
+      return response.json()
+    })
+    .then(response => {
+      return callback(null, response)
+    })
+  }
 }
