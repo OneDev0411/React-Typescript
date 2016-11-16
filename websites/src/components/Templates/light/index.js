@@ -222,7 +222,6 @@ class Light extends Component {
 
     const cover_image = attributes.cover_image || '/images/cover.jpg'
     const profile_image = user.profile_image_url || '/images/profile.png'
-
     const tagline = attributes.tagline || 'Own a piece of Dallas'
 
     const twitter_url = attributes.twitter_url || '#'
@@ -281,29 +280,30 @@ class Light extends Component {
       )
     }
     return (
-      <div>
-        <main className="main-template" style={ S(`w-${data.template_width} absolute l-0`) }>
-          <header className="header">
-            <figure className="mast-head" style={{backgroundImage: `url(${cover_image})`}} />
-            <figcaption className="mast-head_content container"><img className="img-header" src={profile_image} alt={user.display_name} />
-              <div className="content wrapper">
-                <h2 className="name">
-                  {user.display_name}
-                </h2>
-                <h4 className="text">{tagline}</h4>
-                <nav className="properties">
-                  <a className="meta" href="#">{user.email}</a>
-                  <a className="meta" href="#">{user.phone_number}</a>
-                </nav><a className="btn-blue" href="#" target="_blank"><i className="mdi mdi-mr mdi-md mdi-magnify" />FIND YOUR DREAM HOME WITH ME</a>
-                <hr className="line" />
-                <div className="social">
-                  {facebookIcon()}
-                  {twitterIcon()}
-                  {instagramIcon()}
-                </div>
+      <div style={ S(`w-${data.template_width} relative l-0`) }>
+        <header className="header">
+          <figure className="mast-head" style={{backgroundImage: `url(${cover_image})`}} />
+          <figcaption className="mast-head_content container">
+            <img className="img-header" src={profile_image} alt={user.display_name} />
+            <div className="content wrapper">
+              <h2 className="name">
+                {user.display_name}
+              </h2>
+              <h4 className="text">{tagline}</h4>
+              <nav className="properties">
+                <a className="meta" href="#">{user.email}</a>
+                <a className="meta" href="#">{user.phone_number}</a>
+              </nav><a className="btn-blue" href="#" target="_blank"><i className="mdi mdi-mr mdi-md mdi-magnify" />FIND YOUR DREAM HOME WITH ME</a>
+              <hr className="line" />
+              <div className="social">
+                {facebookIcon()}
+                {twitterIcon()}
+                {instagramIcon()}
               </div>
-            </figcaption>
-          </header>
+            </div>
+          </figcaption>
+        </header>
+        <main className="main-template">
           <section className="section-highlights">
             <div className="col--md_6 col--sm_12 col--xsm_12">
               <section className="inner-box">
@@ -365,14 +365,15 @@ class Light extends Component {
               </div>
             </section>
           </section>
+          <section className="section-partners">
+            <div className="container"><a className="section-partners-item" href="#">
+              {brand.messages.office_title}
+            </a></div>
+          </section>
         </main>
-        <section className="section-partners">
-          <div className="container"><a className="section-partners-item" href="#">
-            {brand.messages.office_title}
-          </a></div>
-        </section>
         <footer className="footer">
-          <div className="footer-body container"><img className="img-footer" src={profile_image} alt={user.display_name} />
+          <div className="footer-body">
+            <img className="img-footer" src={profile_image} alt={user.display_name} />
             <h2 className="name">{user.display_name}</h2>
             <nav className="properties">
               <a className="meta" href="#">M: {user.phone_number}</a>,
