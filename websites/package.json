@@ -52,10 +52,12 @@
     "async": "^2.1.2",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "es6-promise": "^4.0.5",
+    "hogan-express": "^0.5.2",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.16.6",
     "node-jsx": "^0.13.3",
     "node-sass": "^3.11.2",
+    "nodemon": "^1.11.0",
     "react": "^15.3.2",
     "react-bootstrap": "^0.30.6",
     "react-dom": "^15.3.2",
@@ -66,9 +68,9 @@
     "superagent": "^2.3.0"
   },
   "scripts": {
-    "start": "RECHAT_CLIENT_ID=bf0da47e-7226-11e4-905b-0024d71b10fc RECHAT_CLIENT_SECRET=secret RECHAT_HOST=https://boer.d.rechat.com node index.js",
-    "development": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "start": "NODE_ENV=production TEMPLATE_NAME=light RECHAT_HOST=https://boer.d.rechat.com node app.js",
+    "development": "TEMPLATE_NAME=light node scripts/start.js",
+    "build": "TEMPLATE_NAME=light node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom"
   },
   "jest": {

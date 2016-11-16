@@ -3,7 +3,7 @@ import S from 'shorti'
 import { Link } from 'react-router'
 import { Button } from 'react-bootstrap'
 import './templates.scss'
-import thumb_1 from './EagerSeller/images/thumb.png'
+import thumb_1 from './EagerSeller/assets/images/thumb.png'
 
 class Templates extends Component {
   render() {

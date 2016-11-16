@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import { Button, Col } from 'react-bootstrap'
-import default_agent_image from './images/agent.png'
+import default_agent_image from './assets/images/agent.png'
 import EditBar from '../../Partials/EditBar/'
 import './eager-seller.scss'
 import template from './template.json'
@@ -32,7 +32,6 @@ class EagerSeller extends Component {
     this.getWebsite()
   }
   getWebsite() {
-    // YWQ0Zjk1YzAtYWE5Mi0xMWU2LWE5NDQtYTVmYzQ5ZDc2Yjk5
     const params = {
       access_token: this.props.location.query.access_token
     }

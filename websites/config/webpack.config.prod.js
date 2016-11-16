@@ -63,8 +63,8 @@ module.exports = {
     // Generated JS file names (with nested folders).
     // There will be one main bundle, and one file per asynchronous chunk.
     // We don't currently advertise code splitting but Webpack supports it.
-    filename: 'static/js/[name].[chunkhash:8].js',
-    chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
+    filename: 'assets/js/bundle.js',
+    chunkFilename: 'assets/js/[name].[chunkhash:8].chunk.js',
     // We inferred the "public path" (such as / or /my-project) from homepage.
     publicPath: publicPath
   },
@@ -118,17 +118,8 @@ module.exports = {
       // use the "style" loader inside the async code so CSS from them won't be
       // in the main CSS file.
       {
-        test: /\.css$/,
-        // "?-autoprefixer" disables autoprefixer in css-loader itself:
-        // https://github.com/webpack/css-loader/issues/281
-        // We already have it thanks to postcss. We only pass this flag in
-        // production because "css" loader only enables autoprefixer-powered
-        // removal of unnecessary prefixes when Uglify plugin is enabled.
-        // Webpack 1.x uses Uglify plugin as a signal to minify *all* the assets
-        // including CSS. This is confusing and will be removed in Webpack 2:
-        // https://github.com/webpack/webpack/issues/283
-        loader: ExtractTextPlugin.extract('style', 'css?importLoaders=1&-autoprefixer!postcss')
-        // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+        test: /\.scss$/,
+        loaders: ["style", "css", "sass"]
       },
       // JSON is not enabled by default in Webpack but both Node and Browserify
       // allow it implicitly so we also enable it.
@@ -181,7 +172,7 @@ module.exports = {
     }),
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
-      inject: true,
+      inject: false,
       template: paths.appHtml,
       minify: {
         removeComments: true,
