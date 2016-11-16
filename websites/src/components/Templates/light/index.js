@@ -23,6 +23,7 @@ class Light extends Component {
   componentDidMount() {
     this.getWebsite()
     if (typeof window !== 'undefined') {
+      this.resizeWidth()
       window.onresize = () => {
         this.resizeWidth()
       }

@@ -68,7 +68,7 @@
     "superagent": "^2.3.0"
   },
   "scripts": {
-    "start": "NODE_ENV=production TEMPLATE_NAME=light RECHAT_HOST=https://boer.d.rechat.com node app.js",
+    "start": "NODE_ENV=production RECHAT_HOST=https://boer.d.rechat.com node app.js",
     "development": "TEMPLATE_NAME=light node scripts/start.js",
     "build": "TEMPLATE_NAME=light node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom"
