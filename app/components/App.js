@@ -253,7 +253,70 @@ export default class App extends Component {
         }
       }, 1000)
     })
+
+    socket.on('Notification.Delivered', resp => {
+      const { room, object, notification_type } = resp.notification
+      const room_index = this.getRoomIndexById(room)
+      const messages = AppStore.data.rooms[room_index].messages
+      const me = AppStore.data.user.id
+      const user = resp.user
+
+      AppStore.data.rooms[room_index].messages = _.map(messages, message => {
+        if (message.id === object && message.author && message.author.id === me && user !== me) {
+          if (!_.find(message.deliveries, { user })) {
+            const dlvr = {
+              created_at: new Date(),
+              delivery_type: resp.delivery_type,
+              type: notification_type,
+              user
+            }
+
+            if (message.deliveries)
+              message.deliveries.push(dlvr)
+            else
+              message.deliveries = [dlvr]
+          }
+        }
+
+        return message
+      })
+
+      AppStore.emitChange()
+    })
+
+    // socket.on('Notification.Acknowledged', () => {
+    // })
+
+    socket.on('Room.Acknowledged', ack => {
+      const { type, user, room } = ack
+
+      if (type && type.actions && type.actions.indexOf('Sent') === -1)
+        return
+
+      const room_index = this.getRoomIndexById(room)
+      const messages = AppStore.data.rooms[room_index].messages
+      const me = AppStore.data.user.id
+
+      AppStore.data.rooms[room_index].messages = _.map(messages, message => {
+        if (message.author && message.author.id === me && user !== me) {
+          if (message.acked_by && message.acked_by.indexOf(user) === -1)
+            message.acked_by.push(user)
+          else
+            message.acked_by = [user]
+        }
+        return message
+      })
+
+      AppStore.emitChange()
+    })
+
     socket.on('Notification', this.getNotifications)
+  }
+
+  getRoomIndexById(id) {
+    const rooms = AppStore.data.rooms
+    const current_room = AppStore.data.current_room
+    return id === current_room ? current_room : _.findIndex(rooms, { id })
   }
 
   checkNotification(message) {
