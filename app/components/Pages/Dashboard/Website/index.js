@@ -10,7 +10,7 @@ export default class Website extends Component {
     let brand = data.brand
     let brand_id
     if (!brand)
-     brand = user.brand
+      brand = user.brand
     if (brand)
       brand_id = brand.id
     const main_style = S(`absolute h-100p l-70 w-${window.innerWidth - 70}`)
