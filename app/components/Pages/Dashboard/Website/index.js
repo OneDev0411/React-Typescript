@@ -8,7 +8,6 @@ export default class Website extends Component {
     const data = this.props.data
     const user = data.user
     let brand = data.brand
-    console.log(brand)
     let brand_id
     if (!brand)
       brand = user.brand

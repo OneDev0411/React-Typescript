@@ -614,7 +614,7 @@ export default class SideBar extends Component {
             <NavDropdown style={ S('z-1000') } title={ title_area } dropup id="account-dropdown" className="account-dropdown" eventKey={3} noCaret>
               { upgrade_account_button }
               <li><a href="#" style={ S('pointer') } onClick={ this.showSettingsModal }><i className="fa fa-cog" style={ S('mr-15') }></i>Settings</a></li>
-              <li><Link to="/dashboard/website"><i className="fa fa-web"></i>Website</Link></li>
+              <li><Link to="/dashboard/website"><i className="fa fa-globe"></i>Website</Link></li>
               <li role="separator" className="divider"></li>
               <li><a href="/signout"><i className="fa fa-power-off" style={ S('mr-15') }></i>Sign out</a></li>
             </NavDropdown>
