@@ -3,10 +3,9 @@ import Listing from '../../models/Listing'
 import AppStore from '../../stores/AppStore'
 
 export default (user, q, status) => {
-  const q_commas = q.replace(/\s+/g, ',')
   const params = {
     status,
-    q: q_commas
+    q: q.replace(/\s+/g, ',')
   }
   if (user)
     params.access_token = user.access_token
