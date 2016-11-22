@@ -12,10 +12,16 @@ const controller = {
       delete AppStore.data.listing_map.has_search_input
 
     if (/^\d{5}(?:[-\s]\d{4})?$/.test(search_input_text)) {
+      const options = AppStore.data.listing_map.options
+      options.points = null
+      options.mls_areas = null
+      options.school_districts = null
+      options.counties = null
+      options.postal_codes = [search_input_text]
       ListingDispatcher.dispatch({
-        action: 'search-listing-map',
+        action: 'get-valerts',
         user: AppStore.data.user,
-        q: search_input_text
+        options
       })
     }
 
