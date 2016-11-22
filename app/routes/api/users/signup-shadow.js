@@ -28,7 +28,6 @@ module.exports = (app, config) => {
       request_object.phone_number = phone_number
     if (actions)
       request_object.actions = actions
-
     const endpoint = api_url + '/users'
     fetch(endpoint,{
       method: 'post',

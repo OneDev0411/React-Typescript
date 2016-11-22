@@ -9,9 +9,11 @@ module.exports = (app, config) => {
   ============================ */
   require('./app')(app, config)
   require('./app/verify')(app, config)
-  require('./app/tools')(app, config)
+
   if (process.env.NODE_ENV === 'development')
     require('./app/tests')(app, config)
+  if (process.env.API_HOST_LOCAL !== 'https://rechat.com')
+    require('./app/tools')(app, config)
 
   /* React routes
   ============================ */
