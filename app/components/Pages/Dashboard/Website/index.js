@@ -21,7 +21,7 @@ export default class Website extends Component {
             data={ data }
           />
           <div style={ main_style }>
-            <iframe style={ S('w-100p h-100p absolute') } src={ `https://sarda.rechat.com?access_token=${user.access_token}${brand_id ? `&brand=${brand_id}` : ``}`} frameBorder="0"></iframe>
+            <iframe style={ S('w-100p h-100p absolute') } src={ `https://sarda.d.rechat.co?access_token=${user.access_token}${brand_id ? `&brand=${brand_id}` : ``}`} frameBorder="0"></iframe>
           </div>
         </main>
       </div>
