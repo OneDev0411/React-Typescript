@@ -3,14 +3,29 @@ import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import listing_viewer_controller from './listing-viewer'
-// import { isValidUSZip } from '../../../../utils/helpers'
+
 const controller = {
   handleSearchInputChange(e) {
     const search_input_text = e.target.value
-    AppStore.data.listing_map.search_input_text = search_input_text
-    AppStore.emitChange()
-    if (!search_input_text.length)
+
+    if (search_input_text.length === 0)
       delete AppStore.data.listing_map.has_search_input
+
+    if (/^\d{5}(?:[-\s]\d{4})?$/.test(search_input_text)) {
+      const options = AppStore.data.listing_map.options
+      options.points = null
+      options.mls_areas = null
+      options.school_districts = null
+      options.counties = null
+      options.postal_codes = [search_input_text]
+      ListingDispatcher.dispatch({
+        action: 'get-valerts',
+        user: AppStore.data.user,
+        options
+      })
+    }
+
+    AppStore.data.listing_map.search_input_text = search_input_text
     AppStore.emitChange()
   },
   initGoogleSearch() {
