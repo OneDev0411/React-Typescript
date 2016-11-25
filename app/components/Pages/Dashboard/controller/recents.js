@@ -18,11 +18,21 @@ const controller = {
     const id = current_room.id
     AppStore.data.deleting_room = true
     AppStore.emitChange()
-    AppDispatcher.dispatch({
-      action: 'leave-room',
-      user,
-      id
-    })
+    const users = current_room.users
+    // Leave if over 2 users
+    if (users.length > 2) {
+      AppDispatcher.dispatch({
+        action: 'leave-room',
+        user,
+        id
+      })
+    } else {
+      AppDispatcher.dispatch({
+        action: 'delete-room',
+        user,
+        id
+      })
+    }
   },
   clearRoomSearchText() {
     delete AppStore.data.is_filtering
