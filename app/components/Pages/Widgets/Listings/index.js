@@ -175,7 +175,7 @@ export default class Listings extends Component {
     const header_style = S('text-center')
     const status_buttons_area_style = S('text-center mb-20')
     return (
-      <div className='futurastd'>
+      <div className="futurastd">
         <div style={ header_style }>
           <h1 style={ S('font-50 color-263445 mb-0' + (data.is_mobile ? ' ml-10 mr-10' : '')) }>Our Exclusive Listings</h1>
           <span style={ S('h-1 bg-e2e2e2 w-80 m-20 inline-block') }></span>
