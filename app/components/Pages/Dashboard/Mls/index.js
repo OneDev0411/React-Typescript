@@ -872,7 +872,7 @@ export default class Mls extends Component {
       brand_logo = (
         <div style={ S('pull-left z-3 absolute p-16') }>
           <a href={ host }>
-            <img style={ S('w-200') } src={ Brand.asset('site_logo_wide') } />
+            <img style={ S('maxw-200 maxh-40') } src={ Brand.asset('site_logo_wide') } />
           </a>
         </div>
       )
