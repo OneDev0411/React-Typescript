@@ -6,7 +6,7 @@ import Listing from '../../models/Listing'
 import AppStore from '../../stores/AppStore'
 import Cosmic from 'cosmicjs'
 import async from 'async'
-
+import listing_util from '../../utils/listing'
 module.exports = (app, config) => {
   app.use((req, res, next) => {
     if(!req.session.user){
@@ -134,7 +134,13 @@ module.exports = (app, config) => {
     } else {
       const id = req.params.id
       Listing.get({ id }, (err, response) => {
-        AppStore.data.current_listing = response.data
+        const listing = response.data
+        AppStore.data.current_listing = listing
+        res.locals.has_og = true
+        res.locals.og_title = listing_util.addressTitle(listing.property.address)
+        res.locals.og_url = req.protocol + '://' + req.hostname + req.url
+        res.locals.og_description = listing.property.description
+        res.locals.og_image = listing.cover_image_url
         res.locals.AppStore = JSON.stringify(AppStore)
         next()
       })
