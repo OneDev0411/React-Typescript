@@ -103,7 +103,7 @@ export default class Search extends Component {
             { loading }
             { listing_area }
             <div style={ S('pull-right z-0 mt-5') }>
-              <a style={ S('color-fff') } href="https://rechat.com" target="_blank">Powered by <span style={ S('fw-600') } className="din">Rechat</span><sup>TM</sup></a>
+              <a style={ S('color-fff') } href="https://rechat.com" target="_blank">Powered by <span style={ S('fw-600') } className="futurastd">Rechat</span><sup>TM</sup></a>
             </div>
           </div>
         </div>
