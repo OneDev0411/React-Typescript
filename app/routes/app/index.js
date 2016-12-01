@@ -2,6 +2,7 @@
 import Room from '../../models/Room'
 import Crypto from '../../models/Crypto'
 import User from '../../models/User'
+import Listing from '../../models/Listing'
 import AppStore from '../../stores/AppStore'
 import Cosmic from 'cosmicjs'
 import async from 'async'
@@ -131,11 +132,19 @@ module.exports = (app, config) => {
       const path = req.path
       return res.redirect('/signin?redirect_to=' + path + '&token=' + req.query.token)
     } else {
-      AppStore.data.user = req.session.user
-      res.locals.AppStore = JSON.stringify(AppStore)
-      return res.status(200).render('index.html')
-      res.end()
+      const id = req.params.id
+      Listing.get({ id }, (err, response) => {
+        AppStore.data.current_listing = response.data
+        res.locals.AppStore = JSON.stringify(AppStore)
+        next()
+      })
     }
+    // } else {
+    //   AppStore.data.user = req.session.user
+    //   res.locals.AppStore = JSON.stringify(AppStore)
+    //   return res.status(200).render('index.html')
+    //   res.end()
+    // }
   })
 
   // Seamless chatroom / alert
@@ -183,6 +192,10 @@ module.exports = (app, config) => {
       res.locals.AppStore = JSON.stringify(AppStore)
       return res.status(200).render('index.html')
     } else {
+      // If mls listing
+      if (req.url.indexOf('/dashboard/mls/') !== -1) {
+        return next()
+      }
       const path = req.path
       return res.redirect('/signin?redirect_to=' + path)
     }
