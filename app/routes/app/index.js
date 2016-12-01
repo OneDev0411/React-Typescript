@@ -133,14 +133,14 @@ module.exports = (app, config) => {
       return res.redirect('/signin?redirect_to=' + path + '&token=' + req.query.token)
     } else {
       const id = req.params.id
-      Listing.get({ id }, (err, response) => {
+      Listing.get({ id, api_host: config.api_host_local }, (err, response) => {
         const listing = response.data
         AppStore.data.current_listing = listing
-        // res.locals.has_og = true
-        // res.locals.og_title = listing_util.addressTitle(listing.property.address)
-        // res.locals.og_url = req.protocol + '://' + req.hostname + req.url
-        // res.locals.og_description = listing.property.description
-        // res.locals.og_image = listing.cover_image_url
+        res.locals.has_og = true
+        res.locals.og_title = listing_util.addressTitle(listing.property.address)
+        res.locals.og_url = req.protocol + '://' + req.hostname + req.url
+        res.locals.og_description = listing.property.description
+        res.locals.og_image = listing.cover_image_url
         res.locals.AppStore = JSON.stringify(AppStore)
         next()
       })
