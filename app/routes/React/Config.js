@@ -9,6 +9,7 @@ import App from '../../components/App'
 import Landing from '../../components/Pages/Landing'
 import Recents from '../../components/Pages/Dashboard/Recents'
 import Mls from '../../components/Pages/Dashboard/Mls'
+import Listing from '../../components/Pages/Dashboard/Mls/Listing'
 import Contacts from '../../components/Pages/Dashboard/Contacts'
 import Tasks from '../../components/Pages/Dashboard/Tasks'
 import Transactions from '../../components/Pages/Dashboard/Transactions'
@@ -49,7 +50,7 @@ export default (
     <Route path="dashboard/mls/alerts" component={Mls}/>
     <Route path="dashboard/mls/alerts/:alert_id" component={Mls}/>
     <Route path="dashboard/mls/actives" component={Mls}/>
-    <Route path="dashboard/mls/:id" component={Mls}/>
+    <Route path="dashboard/mls/:id" component={Listing}/>
     <Route path="dashboard/mls/listing/recommend" component={Recommend}/>
     <Route path="dashboard/contacts" component={Contacts}/>
     <Route path="dashboard/contacts/:id" component={Contacts}/>
