@@ -140,7 +140,7 @@ module.exports = (app, config) => {
         res.locals.og_title = listing_util.addressTitle(listing.property.address)
         res.locals.og_url = req.protocol + '://' + req.hostname + req.url
         res.locals.og_description = listing.property.description
-        res.locals.og_image = listing.cover_image_url
+        res.locals.og_image_url = listing.cover_image_url
         res.locals.AppStore = JSON.stringify(AppStore)
         next()
       })
