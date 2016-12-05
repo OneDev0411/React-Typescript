@@ -74,9 +74,7 @@ export default {
     })
   },
   delete: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host)
-      api_host = config.app.url
+    const api_host = params.api_host || config.app.url
     const url = `${api_host}/api/delete-room/?id=${params.id}&access_token=${params.access_token}`
     fetch(url, {
       method: 'get',
@@ -216,10 +214,8 @@ export default {
     })
   },
   removeUser: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-
-    const url = api_host + '/api/remove-user-from-room?user=' + params.user + '&room_id=' + params.room + '&access_token=' + params.access_token
+    const api_host = params.api_host || config.app.url
+    const url = `${api_host}/api/remove-user-from-room?user=${params.user}&room_id=${params.room}&access_token=${params.access_token}`
 
     fetch(url, {
       method: 'get',
