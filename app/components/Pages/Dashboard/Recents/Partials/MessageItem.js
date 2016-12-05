@@ -357,7 +357,7 @@ export default class MessageItem extends Component {
               </div>
               <div className="report">
                 {
-                  _.uniq(message.deliveries, dlvr => dlvr.user)
+                  _.uniqBy(message.deliveries, dlvr => dlvr.user)
                   .map(dlvr => {
                     const user_info = _.find(current_room.users, { id: dlvr.user })
                     const user_info_date = helpers.friendlyDate(user_info.created_at)
