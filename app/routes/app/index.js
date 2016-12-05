@@ -129,7 +129,7 @@ module.exports = (app, config) => {
   // Seamless listing
   app.get('/dashboard/mls/:id', (req, res, next) => {
     // Destroy token
-    if (req.session.user && req.query.token) {
+    if (req.session && req.session.user && req.query.token) {
       req.session.destroy()
     }
     const id = req.params.id
@@ -189,7 +189,7 @@ module.exports = (app, config) => {
   })
 
   app.get('/dashboard*', (req, res, next) => {
-    if(req.session.user){
+    if(req.session && req.session.user){
       AppStore.data.user = req.session.user
       AppStore.data.path = req.url
       AppStore.data.location = {

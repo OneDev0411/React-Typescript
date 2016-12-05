@@ -71,9 +71,12 @@ export default class ListingViewer extends Component {
       if (user && _.find(data.brand.users, { id: user.id }))
         brand_agent = _.find(data.brand.users, { id: user.id })
     }
-    let viewer_width = window.innerWidth - 70
-    if (!user)
-      viewer_width = window.innerWidth
+    let viewer_width = 0
+    if (window) {
+      viewer_width = window.innerWidth - 70
+      if (!user)
+        viewer_width = window.innerWidth
+    }
     let current_slide
     if (listing)
       current_slide = listing.current_slide
