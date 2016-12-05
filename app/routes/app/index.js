@@ -128,10 +128,10 @@ module.exports = (app, config) => {
 
   // Seamless listing
   app.get('/dashboard/mls/:id', (req, res, next) => {
-    if (!req.session.user && req.query.token) {
-      const path = req.path
-      return res.redirect('/signin?redirect_to=' + path + '&token=' + req.query.token)
-    } else {
+    // if (!req.session.user && req.query.token) {
+    //   const path = req.path
+    //   return res.redirect('/signin?redirect_to=' + path + '&token=' + req.query.token)
+    // } else {
       const id = req.params.id
       Listing.get({ id, api_host: config.api_host_local }, (err, response) => {
         const listing = response.data
@@ -144,7 +144,7 @@ module.exports = (app, config) => {
         res.locals.AppStore = JSON.stringify(AppStore)
         next()
       })
-    }
+    // }
     // } else {
     //   AppStore.data.user = req.session.user
     //   res.locals.AppStore = JSON.stringify(AppStore)
