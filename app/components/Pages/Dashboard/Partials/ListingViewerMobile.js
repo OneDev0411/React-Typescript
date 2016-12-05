@@ -456,7 +456,7 @@ export default class ListingViewerMobile extends Component {
     let left_area
     if (user) {
       left_area = (
-        <div onClick={ this.props.hideListingViewer } style={ S('pointer relative l-20 t-20 font-18 fw-400') }>
+        <div onClick={ this.props.hideListingViewer } style={ S('pointer absolute l-20 t-20 font-18 fw-400') }>
           <a href="#" style={ S('relative pull-left font-30 mr-10 t-5n') } className="close">
             &times;
           </a>
@@ -470,12 +470,12 @@ export default class ListingViewerMobile extends Component {
 
       right_area = (
         <div style={ nav_bar_style }>
-          <div style={ S('pull-right relative r-10 t-14n') }>
+          <div style={ S('pull-right relative r-110 t-14n') }>
             <FavoriteHeart
               listing={ listing }
             />
           </div>
-          <Button onClick={ this.props.showShareListingModal.bind(this) } style={ S(`relative r-20 t-15 bg-${login_btn_color} border-1-solid-${login_btn_color}`) } bsStyle="primary" type="button">
+          <Button onClick={ this.props.showShareListingModal.bind(this) } style={ S(`absolute r-20 t-15 bg-${login_btn_color} border-1-solid-${login_btn_color}`) } bsStyle="primary" type="button">
             Share
             &nbsp;&nbsp;<i className="fa fa-share"></i>
           </Button>
@@ -521,7 +521,7 @@ export default class ListingViewerMobile extends Component {
       if (data.location.query.phone_number)
         contact_info = data.location.query.phone_number
       claim_account_message = (
-        <div style={ S('bg-2196f3 color-fff w-100p font-17 p-20 text-center z-100 relative') }>
+        <div style={ S('bg-2196f3 color-fff w-100p font-17 p-20 text-center') }>
           This listing was shared to { contact_info }. Claim your account to save this listing and check out many more.&nbsp;&nbsp;&nbsp;&nbsp;
           <Button bsSize="large" style={ S('bg-fff color-2196f3 border-none') } onClick={ this.handleActivateAccountClick }>Activate your account</Button>
         </div>
