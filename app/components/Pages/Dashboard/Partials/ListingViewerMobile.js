@@ -518,7 +518,7 @@ export default class ListingViewerMobile extends Component {
       token = data.location.query.token
     if (token) {
       let contact_info = data.location.query.email
-      if (!contact_info)
+      if (data.location.query.phone_number)
         contact_info = data.location.query.phone_number
       claim_account_message = (
         <div style={ S('bg-2196f3 color-fff w-100p font-17 p-20 text-center') }>
