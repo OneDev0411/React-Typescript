@@ -128,10 +128,6 @@ module.exports = (app, config) => {
 
   // Seamless listing
   app.get('/dashboard/mls/:id', (req, res, next) => {
-    // Destroy token
-    if (req.session && req.session.user && req.query.token) {
-      req.session.destroy()
-    }
     const id = req.params.id
     Listing.get({ id, api_host: config.api_host_local }, (err, response) => {
       const listing = response.data
@@ -142,7 +138,13 @@ module.exports = (app, config) => {
       res.locals.og_description = listing.property.description
       res.locals.og_image_url = listing.cover_image_url
       res.locals.AppStore = JSON.stringify(AppStore)
-      next()
+      // Destroy token
+      if (req.session && req.session.user && req.query.token) {
+        req.session.destroy(err => {
+          next()
+        })
+      } else
+        next()
     })
     // }
     // } else {
