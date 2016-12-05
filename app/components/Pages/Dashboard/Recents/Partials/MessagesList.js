@@ -424,6 +424,13 @@ export default class MessagesList extends Component {
         </li>
       )
     }
+    if (data.current_room && data.current_room.users.length === 2) {
+      leave_chat_button_area = (
+        <li style={ S('w-260 p-20 pointer') } onClick={ this.props.showDeleteRoomModal.bind(this) }>
+          Delete this chat
+        </li>
+      )
+    }
     let room_settings = (
       <div className="no-user-select" style={ S('pull-right relative t-10 r-10') }>
         <div style={ S('pull-left p-10 pointer mr-30') } onClick={ this.props.showModal.bind(this, 'room-users') }>
@@ -463,15 +470,15 @@ export default class MessagesList extends Component {
         </Modal>
         <Modal show={ data.show_delete_room_modal } onHide={ this.props.hideDeleteRoomModal }>
           <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
-           <Modal.Title>Leave Room</Modal.Title>
+           <Modal.Title>Delete Room</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            Are you sure you want to leave this room?  This can not be undone.
+            Are you sure you want to delete this room?  This can not be undone.
           </Modal.Body>
           <Modal.Footer>
             <Button bsStyle="link" onClick={ this.props.hideDeleteRoomModal }>Cancel</Button>
             <Button bsStyle="danger" onClick={ this.props.confirmDeleteRoom } className={ data.deleting_room ? 'disabled' : '' }>
-              { data.deleting_room ? 'Leaving...' : 'Yes, leave' }
+              { data.deleting_room ? 'Deleting...' : 'Confirm' }
             </Button>
           </Modal.Footer>
         </Modal>

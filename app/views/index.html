@@ -16,7 +16,18 @@
   <meta name="description" content="">
   <meta name="author" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Rechat</title>
+  {{^ has_og }}
+    <title>Rechat</title>
+  {{/ has_og }}
+  {{# has_og }}
+    <title>{{ og_title }} | Rechat</title>
+  {{/ has_og }}
+  {{# has_og }}
+    <meta property="og:url" content="{{ og_url }}" />
+    <meta property="og:title" content="{{ og_title }}" />
+    <meta property="og:description" content="{{ og_description }}" />
+    <meta property="og:image" content="{{ og_image_url }}" />
+  {{/ has_og }}
   <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png" />
   <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png" />
   <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png" />

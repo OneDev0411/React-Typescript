@@ -261,15 +261,23 @@ export default class Mls extends Component {
   }
   handleClearSearchInputClick() {
     const data = this.props.data
+
     delete AppStore.data.listing_map.search_input_text
     delete AppStore.data.listing_map.auto_move
     delete AppStore.data.listing_map.has_search_input
     delete AppStore.data.listing_map.no_listings_found
+
     if (AppStore.data.search_input)
       delete AppStore.data.search_input.listings
+
+    if (AppStore.data.listing_map.options)
+      AppStore.data.listing_map.options.postal_codes = null
+
     delete AppStore.data.listing_map.has_location_search
     delete AppStore.data.listing_map.location_search
+
     AppStore.emitChange()
+
     let bounds = window.map.getBounds().toJSON()
     bounds = [
       bounds.south,

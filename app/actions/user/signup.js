@@ -51,6 +51,9 @@ export default (user, password, confirm_password, redirect_to) => {
   // Check for inviting_user
   if (AppStore.data.signup.inviting_user)
     user.user_connect = AppStore.data.signup.inviting_user
+  // Add brand
+  if (AppStore.data.brand)
+    user.brand = AppStore.data.brand.id
   let params = {
     user
   }

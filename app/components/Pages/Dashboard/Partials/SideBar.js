@@ -1,5 +1,6 @@
 // Sidebar.js
 import React, { Component } from 'react'
+import { Link } from 'react-router'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Nav, NavItem, NavDropdown, Modal, Col, Input, Button, Alert, OverlayTrigger, Popover, DropdownButton, MenuItem } from 'react-bootstrap'
 import S from 'shorti'
@@ -268,7 +269,9 @@ export default class SideBar extends Component {
   render() {
     // Data
     const data = this.props.data
-    const sidebar_height = window.innerHeight
+    let sidebar_height
+    if (window)
+      sidebar_height = window.innerHeight
     const sidebar_style = S('w-70 fixed pl-8 t-0 z-100 bg-263445 h-' + sidebar_height)
     const path = data.path
 
@@ -613,6 +616,7 @@ export default class SideBar extends Component {
             <NavDropdown style={ S('z-1000') } title={ title_area } dropup id="account-dropdown" className="account-dropdown" eventKey={3} noCaret>
               { upgrade_account_button }
               <li><a href="#" style={ S('pointer') } onClick={ this.showSettingsModal }><i className="fa fa-cog" style={ S('mr-15') }></i>Settings</a></li>
+              <li><Link to="/dashboard/website"><i className="fa fa-globe" style={ S('mr-15') }></i>Website</Link></li>
               <li role="separator" className="divider"></li>
               <li><a href="/signout"><i className="fa fa-power-off" style={ S('mr-15') }></i>Sign out</a></li>
             </NavDropdown>

@@ -2,10 +2,11 @@
 import Room from '../../models/Room'
 import Crypto from '../../models/Crypto'
 import User from '../../models/User'
+import Listing from '../../models/Listing'
 import AppStore from '../../stores/AppStore'
 import Cosmic from 'cosmicjs'
 import async from 'async'
-
+import listing_util from '../../utils/listing'
 module.exports = (app, config) => {
   app.use((req, res, next) => {
     if(!req.session.user){
@@ -131,11 +132,25 @@ module.exports = (app, config) => {
       const path = req.path
       return res.redirect('/signin?redirect_to=' + path + '&token=' + req.query.token)
     } else {
-      AppStore.data.user = req.session.user
-      res.locals.AppStore = JSON.stringify(AppStore)
-      return res.status(200).render('index.html')
-      res.end()
+      const id = req.params.id
+      Listing.get({ id, api_host: config.api_host_local }, (err, response) => {
+        const listing = response.data
+        AppStore.data.current_listing = listing
+        res.locals.has_og = true
+        res.locals.og_title = listing_util.addressTitle(listing.property.address)
+        res.locals.og_url = req.protocol + '://' + req.hostname + req.url
+        res.locals.og_description = listing.property.description
+        res.locals.og_image_url = listing.cover_image_url
+        res.locals.AppStore = JSON.stringify(AppStore)
+        next()
+      })
     }
+    // } else {
+    //   AppStore.data.user = req.session.user
+    //   res.locals.AppStore = JSON.stringify(AppStore)
+    //   return res.status(200).render('index.html')
+    //   res.end()
+    // }
   })
 
   // Seamless chatroom / alert
@@ -183,6 +198,10 @@ module.exports = (app, config) => {
       res.locals.AppStore = JSON.stringify(AppStore)
       return res.status(200).render('index.html')
     } else {
+      // If mls listing
+      if (req.url.indexOf('/dashboard/mls/') !== -1) {
+        return next()
+      }
       const path = req.path
       return res.redirect('/signin?redirect_to=' + path)
     }

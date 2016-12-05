@@ -33,7 +33,8 @@ module.exports = (app, config) => {
       headers: {  
         'Content-Type': 'application/json',
         'x-real-agent' : req.headers['user-agent'],
-        'user-agent' : config.app_name
+        'user-agent': config.app_name,
+        'x-rechat-brand': req.body.brand
       },
       body: JSON.stringify(request_object)
     })
