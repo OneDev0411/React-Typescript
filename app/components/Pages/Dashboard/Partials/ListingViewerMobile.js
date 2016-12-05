@@ -470,7 +470,7 @@ export default class ListingViewerMobile extends Component {
 
       right_area = (
         <div style={ nav_bar_style }>
-          <div style={ S('pull-right relative r-110 t-14n') }>
+          <div style={ S('pull-right relative r-10 t-14n') }>
             <FavoriteHeart
               listing={ listing }
             />
