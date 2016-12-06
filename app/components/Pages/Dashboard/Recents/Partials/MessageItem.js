@@ -94,9 +94,9 @@ export default class MessageItem extends Component {
         const ext = attachment.info['mime-extension']
         let message_thumb
         // If image
-        if (ext.indexOf('png') !== -1 || ext.indexOf('jpg') !== -1 || ext.indexOf('gif') !== -1 || ext.indexOf('jpeg') !== -1) {
+        if (ext.indexOf('png') !== -1 || ext.indexOf('jpg') !== -1 || ext.indexOf('gif') !== -1) {
           message_thumb = (
-            <div style={ S(message_thumb_size + ' br-3 bg-url(' + file_url + ') no-repeat bg-contain mb-10') }></div>
+            <div style={ S(message_thumb_size + ' br-3 bg-url(' + file_url + ') no-repeat bg-cover mb-10') }></div>
           )
         } else {
           message_thumb = (
@@ -308,9 +308,10 @@ export default class MessageItem extends Component {
 
     let delivery_notification
     if (author && author.id === data.user.id) {
-      const double_check_color = message.deliveries && message.deliveries.length > 0 ? '2196f3' : 'c3c3c3'
+      // blue double check means at least one person has read the message.
+      const double_check_color = message.acked_by && message.acked_by.length > 0 ? '2196f3' : 'c3c3c3'
       const double_check = (
-        <span style={ S('color-' + double_check_color + ' ml-5') }>
+        <span style={ S(`color-${double_check_color} ml-5`) }>
           <i className="fa fa-check" style={ S('font-12') } />
           <i className="fa fa-check" style={ S('font-12 ml-1n') } />
         </span>
@@ -329,7 +330,8 @@ export default class MessageItem extends Component {
               </div>
               <div className="report">
                 {
-                  message.acked_by.map(id => {
+                  _.uniq(message.acked_by)
+                  .map(id => {
                     const user_info = _.find(current_room.users, { id })
                     return (
                       <div className="item">
@@ -355,7 +357,8 @@ export default class MessageItem extends Component {
               </div>
               <div className="report">
                 {
-                  message.deliveries.map(dlvr => {
+                  _.uniq(message.deliveries, dlvr => dlvr.user)
+                  .map(dlvr => {
                     const user_info = _.find(current_room.users, { id: dlvr.user })
                     const user_info_date = helpers.friendlyDate(user_info.created_at)
                     return (
@@ -379,7 +382,7 @@ export default class MessageItem extends Component {
         <span>
           { double_check }
           {
-            message.deliveries && message.deliveries.length > 0 &&
+            (message.acked_by || message.deliveries) &&
             <OverlayTrigger trigger="click" rootClose placement="right" overlay={message_info_dialog}>
               <i className="fa fa-info-circle" style={ S('color-2196f3 ml-5') } />
             </OverlayTrigger>

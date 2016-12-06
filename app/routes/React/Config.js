@@ -9,6 +9,7 @@ import App from '../../components/App'
 import Landing from '../../components/Pages/Landing'
 import Recents from '../../components/Pages/Dashboard/Recents'
 import Mls from '../../components/Pages/Dashboard/Mls'
+import Listing from '../../components/Pages/Dashboard/Mls/Listing'
 import Contacts from '../../components/Pages/Dashboard/Contacts'
 import Tasks from '../../components/Pages/Dashboard/Tasks'
 import Transactions from '../../components/Pages/Dashboard/Transactions'
@@ -25,6 +26,7 @@ import Notifications from '../../components/Pages/Account/Notifications'
 import Recommend from '../../components/Pages/Dashboard/Mls/Listing/Recommend'
 import Agents from '../../components/Pages/Dashboard/Mls/Agents'
 import Branch from '../../components/Pages/Branch'
+import Website from '../../components/Pages/Dashboard/Website'
 
 // Widgets
 import ListingsWidget from '../../components/Pages/Widgets/Listings'
@@ -48,7 +50,7 @@ export default (
     <Route path="dashboard/mls/alerts" component={Mls}/>
     <Route path="dashboard/mls/alerts/:alert_id" component={Mls}/>
     <Route path="dashboard/mls/actives" component={Mls}/>
-    <Route path="dashboard/mls/:id" component={Mls}/>
+    <Route path="dashboard/mls/:id" component={Listing}/>
     <Route path="dashboard/mls/listing/recommend" component={Recommend}/>
     <Route path="dashboard/contacts" component={Contacts}/>
     <Route path="dashboard/contacts/:id" component={Contacts}/>
@@ -57,6 +59,7 @@ export default (
     <Route path="dashboard/transactions/new" component={NewTransaction}/>
     <Route path="dashboard/transactions/:id" component={SingleTransaction}/>
     <Route path="dashboard/transactions/:id/attachments/:id" component={SingleTransaction}/>
+    <Route path="dashboard/website" component={Website}/>
     <Route path="verify/:slug" component={Verify}/>
     <Route path="password/:slug" component={Password}/>
     <Route path="widgets/listings" component={ListingsWidget}/>
