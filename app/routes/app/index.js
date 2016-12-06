@@ -128,23 +128,25 @@ module.exports = (app, config) => {
 
   // Seamless listing
   app.get('/dashboard/mls/:id', (req, res, next) => {
-    if (!req.session.user && req.query.token) {
-      const path = req.path
-      return res.redirect('/signin?redirect_to=' + path + '&token=' + req.query.token)
-    } else {
-      const id = req.params.id
-      Listing.get({ id }, (err, response) => {
-        const listing = response.data
-        AppStore.data.current_listing = listing
-        res.locals.has_og = true
-        res.locals.og_title = listing_util.addressTitle(listing.property.address)
-        res.locals.og_url = req.protocol + '://' + req.hostname + req.url
-        res.locals.og_description = listing.property.description
-        res.locals.og_image = listing.cover_image_url
-        res.locals.AppStore = JSON.stringify(AppStore)
+    const id = req.params.id
+    Listing.get({ id, api_host: config.api_host_local }, (err, response) => {
+      const listing = response.data
+      AppStore.data.current_listing = listing
+      res.locals.has_og = true
+      res.locals.og_title = listing_util.addressTitle(listing.property.address)
+      res.locals.og_url = req.protocol + '://' + req.hostname + req.url
+      res.locals.og_description = listing.property.description
+      res.locals.og_image_url = listing.cover_image_url
+      res.locals.AppStore = JSON.stringify(AppStore)
+      // Destroy token
+      if (req.session && req.session.user && req.query.token) {
+        req.session.destroy(err => {
+          next()
+        })
+      } else
         next()
-      })
-    }
+    })
+    // }
     // } else {
     //   AppStore.data.user = req.session.user
     //   res.locals.AppStore = JSON.stringify(AppStore)
@@ -189,7 +191,7 @@ module.exports = (app, config) => {
   })
 
   app.get('/dashboard*', (req, res, next) => {
-    if(req.session.user){
+    if(req.session && req.session.user){
       AppStore.data.user = req.session.user
       AppStore.data.path = req.url
       AppStore.data.location = {

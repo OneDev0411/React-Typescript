@@ -27,6 +27,9 @@ export default class ListingViewerMobile extends Component {
       elem.style.opacity = 1
     })
   }
+  handleActivateAccountClick() {
+    window.location.href = '/password/create' + window.location.search
+  }
   render() {
     // Listing modal
     const data = this.props.data
@@ -508,8 +511,25 @@ export default class ListingViewerMobile extends Component {
         </div>
       )
     }
+    // Claim account message
+    let claim_account_message
+    let token
+    if (data.location && data.location.query && data.location.query.token)
+      token = data.location.query.token
+    if (token) {
+      let contact_info = data.location.query.email
+      if (data.location.query.phone_number)
+        contact_info = data.location.query.phone_number
+      claim_account_message = (
+        <div style={ S('bg-2196f3 color-fff w-100p font-17 p-20 text-center') }>
+          This listing was shared to { contact_info }. Claim your account to save this listing and check out many more.&nbsp;&nbsp;&nbsp;&nbsp;
+          <Button bsSize="large" style={ S('bg-fff color-2196f3 border-none') } onClick={ this.handleActivateAccountClick }>Activate your account</Button>
+        </div>
+      )
+    }
     return (
       <div style={ viewer_wrap_style }>
+        { claim_account_message }
         { join_area }
         { left_area }
         { right_area }
