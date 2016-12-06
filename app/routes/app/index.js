@@ -129,6 +129,8 @@ module.exports = (app, config) => {
   // Seamless listing
   app.get('/dashboard/mls/:id', (req, res, next) => {
     const id = req.params.id
+    if (!id)
+      return next();
     Listing.get({ id, api_host: config.api_host_local }, (err, response) => {
       const listing = response.data
       AppStore.data.current_listing = listing
