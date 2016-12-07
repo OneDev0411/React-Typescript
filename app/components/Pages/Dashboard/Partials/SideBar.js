@@ -1,6 +1,6 @@
 // Sidebar.js
 import React, { Component } from 'react'
-import { Link } from 'react-router'
+// import { Link } from 'react-router'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Nav, NavItem, NavDropdown, Modal, Col, Input, Button, Alert, OverlayTrigger, Popover, DropdownButton, MenuItem } from 'react-bootstrap'
 import S from 'shorti'
