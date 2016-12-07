@@ -16,6 +16,8 @@ const controller = {
     AppStore.data.current_listing = listing
     delete AppStore.data.show_alert_modal
     AppStore.emitChange()
+    if (!listing.id)
+      return
     ListingDispatcher.dispatch({
       action: 'get-listing',
       user,
