@@ -334,9 +334,9 @@ export default class MessageItem extends Component {
                   .map(id => {
                     const user_info = _.find(current_room.users, { id })
                     if (!user_info)
-                      return
+                      return <div key={`${message.id}-ack-user-blank`} />
                     return (
-                      <div className="item">
+                      <div className="item" key={`${message.id}-ack-user-${user_info.id}`}>
                         <ProfileImage size={30} font={12} data={ data } user={ user_info } show_online_indicator={ false } />
                         <div className="name">{ user_info.display_name }</div>
                       </div>
@@ -362,9 +362,11 @@ export default class MessageItem extends Component {
                   _.uniqBy(message.deliveries, dlvr => dlvr.user)
                   .map(dlvr => {
                     const user_info = _.find(current_room.users, { id: dlvr.user })
+                    if (!user_info)
+                      return <div key={`${message.id}-ack-user-blank`}/>
                     const user_info_date = helpers.friendlyDate(user_info.created_at)
                     return (
-                      <div className="item">
+                      <div className="item" key={`${message.id}-ack-user-${user_info.id}`}>
                         <ProfileImage size={30} font={12} data={ data } user={ user_info } show_online_indicator={ false } />
                         <div className="name">{ user_info.display_name }</div>
                         <div className="time">
