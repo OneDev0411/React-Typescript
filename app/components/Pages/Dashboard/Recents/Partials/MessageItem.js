@@ -333,6 +333,8 @@ export default class MessageItem extends Component {
                   _.uniq(message.acked_by)
                   .map(id => {
                     const user_info = _.find(current_room.users, { id })
+                    if (!user_info)
+                      return
                     return (
                       <div className="item">
                         <ProfileImage size={30} font={12} data={ data } user={ user_info } show_online_indicator={ false } />
