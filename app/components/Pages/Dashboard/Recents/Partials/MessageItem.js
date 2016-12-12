@@ -308,14 +308,10 @@ export default class MessageItem extends Component {
 
     let delivery_notification
     if (author && author.id === data.user.id) {
-      let deliveries = []
+      let deliveries = _.uniqBy(message.deliveries, dlvr => dlvr.user)
 
-      if (message.deliveries) {
-        deliveries = _.chain(message.deliveries)
-          .uniqBy(dlvr => dlvr.user)
-          .filter(dlvr => message.acked_by[dlvr.user])
-          .value()
-      }
+      if (message.acked_by)
+        deliveries = _.filter(deliveries, dlvr => message.acked_by[dlvr.user])
 
       // blue double check means at least one person has read the message.
       const double_check_color = message.acked_by && message.acked_by.length > 0 ? '2196f3' : 'c3c3c3'
