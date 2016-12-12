@@ -308,6 +308,15 @@ export default class MessageItem extends Component {
 
     let delivery_notification
     if (author && author.id === data.user.id) {
+      let deliveries = []
+
+      if (message.deliveries) {
+        deliveries = _.chain(message.deliveries)
+          .uniqBy(dlvr => dlvr.user)
+          .filter(dlvr => message.acked_by[dlvr.user])
+          .value()
+      }
+
       // blue double check means at least one person has read the message.
       const double_check_color = message.acked_by && message.acked_by.length > 0 ? '2196f3' : 'c3c3c3'
       const double_check = (
@@ -346,7 +355,7 @@ export default class MessageItem extends Component {
           }
 
           {
-            message.deliveries &&
+            deliveries.length > 0 &&
             <div className="content delivered-to">
               <div className="title">
                 <span style={ S('color-c3c3c3') }>
@@ -357,7 +366,7 @@ export default class MessageItem extends Component {
               </div>
               <div className="report">
                 {
-                  _.uniqBy(message.deliveries, dlvr => dlvr.user)
+                  deliveries
                   .map(dlvr => {
                     const user_info = _.find(current_room.users, { id: dlvr.user })
                     const user_info_date = helpers.friendlyDate(user_info.created_at)
