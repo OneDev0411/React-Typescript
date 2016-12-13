@@ -307,11 +307,16 @@ export default class MessageItem extends Component {
     }
 
     let delivery_notification
+    let show_double_check = false
+
     if (author && author.id === data.user.id) {
       let deliveries = _.uniqBy(message.deliveries, dlvr => dlvr.user)
 
       if (message.acked_by)
         deliveries = _.filter(deliveries, dlvr => message.acked_by.indexOf(dlvr.user) === -1)
+
+      if (deliveries.length > 0 || message.acked_by)
+        show_double_check = true
 
       // blue double check means at least one person has read the message.
       const double_check_color = message.acked_by && message.acked_by.length > 0 ? '2196f3' : 'c3c3c3'
@@ -388,7 +393,10 @@ export default class MessageItem extends Component {
 
       delivery_notification = (
         <span>
-          { double_check }
+          {
+            show_double_check && double_check
+          }
+
           {
             (message.acked_by || message.deliveries) &&
             <OverlayTrigger trigger="click" rootClose placement="right" overlay={message_info_dialog}>
