@@ -311,7 +311,7 @@ export default class MessageItem extends Component {
       let deliveries = _.uniqBy(message.deliveries, dlvr => dlvr.user)
 
       if (message.acked_by)
-        deliveries = _.filter(deliveries, dlvr => message.acked_by[dlvr.user])
+        deliveries = _.filter(deliveries, dlvr => message.acked_by.indexOf(dlvr.user) === -1)
 
       // blue double check means at least one person has read the message.
       const double_check_color = message.acked_by && message.acked_by.length > 0 ? '2196f3' : 'c3c3c3'
@@ -366,6 +366,8 @@ export default class MessageItem extends Component {
                   deliveries
                   .map(dlvr => {
                     const user_info = _.find(current_room.users, { id: dlvr.user })
+
+                    if (!user_info) return false
                     const user_info_date = helpers.friendlyDate(user_info.created_at)
                     return (
                       <div className="item">
