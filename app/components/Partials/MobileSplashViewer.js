@@ -16,7 +16,7 @@ export default class MobileSplashViewer extends Component {
         <div style={ S('bg-263445 absolute t-0 l-0 w-100p h-100p op-.7 z-9') }></div>
         <div style={ S('color-fff z-10 relative text-center') }>
           <div style={ S('mt-50 mb-30') }>
-            <img style={ S('w-76 br-100') } src={ logo } />
+            <img style={ S('w-76') } src={ logo } />
           </div>
           <Button style={ S(`mb-20 color-fff border-1-solid-${Brand.color('primary', '3388ff')} bg-${Brand.color('primary', '3388ff')}`) } bsSize="large" onClick={ MobileSplashController.goToBranchLink }>Open in my Rechat App</Button>
           <div>
