@@ -522,8 +522,12 @@ export default class ListingViewerMobile extends Component {
         contact_info = data.location.query.phone_number
       claim_account_message = (
         <div style={ S('bg-2196f3 color-fff w-100p font-17 p-20 text-center') }>
-          This listing was shared to { contact_info }. Claim your account to save this listing and check out many more.&nbsp;&nbsp;&nbsp;&nbsp;
-          <Button bsSize="large" style={ S('bg-fff color-2196f3 border-none') } onClick={ this.handleActivateAccountClick }>Activate your account</Button>
+          <div stlye={ S('mb-10') }>
+            This listing was shared to { contact_info }. Claim your account to save this listing and check out many more.
+          </div>
+          <div>
+            <Button bsSize="large" style={ S('bg-fff color-2196f3 border-none') } onClick={ this.handleActivateAccountClick }>Activate your account</Button>
+          </div>
         </div>
       )
     }
