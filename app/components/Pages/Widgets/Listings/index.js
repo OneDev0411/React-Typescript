@@ -22,7 +22,8 @@ export default class Listings extends Component {
     AppStore.data.user = user
     const location = data.location
     const brokerage = location.query.brokerage
-    const options = this.initOptions(brokerage)
+    const agent = location.query.agent
+    const options = this.initOptions(brokerage, agent)
     AppStore.data.widget = {
       options
     }
@@ -69,7 +70,7 @@ export default class Listings extends Component {
       options
     })
   }
-  initOptions(brokerage) {
+  initOptions(brokerage, agent) {
     const options = {
       limit: '75',
       maximum_lot_square_meters: 100000000,
@@ -89,9 +90,12 @@ export default class Listings extends Component {
       minimum_bedrooms: 0,
       minimum_price: 0,
       open_house: false,
-      property_subtypes: ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse', 'LSE-Apartment', 'LSE-Condo/Townhome', 'LSE-Duplex', 'LSE-Fourplex', 'LSE-House', 'LSE-Mobile', 'LSE-Triplex', 'LND-Commercial', 'LND-Farm/Ranch', 'LND-Residential'],
-      list_offices: [brokerage]
+      property_subtypes: ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse', 'LSE-Apartment', 'LSE-Condo/Townhome', 'LSE-Duplex', 'LSE-Fourplex', 'LSE-House', 'LSE-Mobile', 'LSE-Triplex', 'LND-Commercial', 'LND-Farm/Ranch', 'LND-Residential']
     }
+    if (brokerage)
+      options.list_offices = [brokerage]
+    if (agent)
+      options.agents = [agent]
     return options
   }
   handleButtonClick(type) {
