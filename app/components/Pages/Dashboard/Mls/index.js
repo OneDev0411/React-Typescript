@@ -634,8 +634,6 @@ export default class Mls extends Component {
         </form>
       </div>
     )
-    if (data.current_listing)
-      search_area = ''
     let nav_area = (
       <SideBar data={ data }/>
     )
