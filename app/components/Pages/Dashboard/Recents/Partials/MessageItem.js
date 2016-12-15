@@ -343,7 +343,7 @@ export default class MessageItem extends Component {
                   _.uniq(message.acked_by)
                   .map(id => {
                     const user_info = _.find(current_room.users, { id })
-                    if (!user_info) return false
+                    if (!user_info) return <div></div>
                     return (
                       <div className="item">
                         <ProfileImage size={30} font={12} data={ data } user={ user_info } show_online_indicator={ false } />
@@ -372,7 +372,7 @@ export default class MessageItem extends Component {
                   .map(dlvr => {
                     const user_info = _.find(current_room.users, { id: dlvr.user })
 
-                    if (!user_info) return false
+                    if (!user_info) return <div></div>
                     const user_info_date = helpers.friendlyDate(user_info.created_at)
                     return (
                       <div className="item">
