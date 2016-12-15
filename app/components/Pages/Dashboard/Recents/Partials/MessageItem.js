@@ -307,7 +307,17 @@ export default class MessageItem extends Component {
     }
 
     let delivery_notification
+    let show_double_check = false
+
     if (author && author.id === data.user.id) {
+      let deliveries = _.uniqBy(message.deliveries, dlvr => dlvr.user)
+
+      if (message.acked_by)
+        deliveries = _.filter(deliveries, dlvr => message.acked_by.indexOf(dlvr.user) === -1)
+
+      if (deliveries.length > 0 || message.acked_by)
+        show_double_check = true
+
       // blue double check means at least one person has read the message.
       const double_check_color = message.acked_by && message.acked_by.length > 0 ? '2196f3' : 'c3c3c3'
       const double_check = (
@@ -333,10 +343,9 @@ export default class MessageItem extends Component {
                   _.uniq(message.acked_by)
                   .map(id => {
                     const user_info = _.find(current_room.users, { id })
-                    if (!user_info)
-                      return <div key={`${message.id}-ack-user-blank`} />
+                    if (!user_info) return <div></div>
                     return (
-                      <div className="item" key={`${message.id}-ack-user-${user_info.id}`}>
+                      <div className="item">
                         <ProfileImage size={30} font={12} data={ data } user={ user_info } show_online_indicator={ false } />
                         <div className="name">{ user_info.display_name }</div>
                       </div>
@@ -348,7 +357,7 @@ export default class MessageItem extends Component {
           }
 
           {
-            message.deliveries &&
+            deliveries.length > 0 &&
             <div className="content delivered-to">
               <div className="title">
                 <span style={ S('color-c3c3c3') }>
@@ -359,14 +368,14 @@ export default class MessageItem extends Component {
               </div>
               <div className="report">
                 {
-                  _.uniqBy(message.deliveries, dlvr => dlvr.user)
+                  deliveries
                   .map(dlvr => {
                     const user_info = _.find(current_room.users, { id: dlvr.user })
-                    if (!user_info)
-                      return <div key={`${message.id}-ack-user-blank`}/>
+
+                    if (!user_info) return <div></div>
                     const user_info_date = helpers.friendlyDate(user_info.created_at)
                     return (
-                      <div className="item" key={`${message.id}-ack-user-${user_info.id}`}>
+                      <div className="item">
                         <ProfileImage size={30} font={12} data={ data } user={ user_info } show_online_indicator={ false } />
                         <div className="name">{ user_info.display_name }</div>
                         <div className="time">
@@ -384,7 +393,10 @@ export default class MessageItem extends Component {
 
       delivery_notification = (
         <span>
-          { double_check }
+          {
+            show_double_check && double_check
+          }
+
           {
             (message.acked_by || message.deliveries) &&
             <OverlayTrigger trigger="click" rootClose placement="right" overlay={message_info_dialog}>
