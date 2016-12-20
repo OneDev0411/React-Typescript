@@ -13,6 +13,7 @@ export default (user, room_id) => {
     access_token: user.access_token
   }
   User.getRooms(params, (err, response) => {
+    console.log(response)
     // Success
     if (response.status === 'success') {
       let rooms = response.data
