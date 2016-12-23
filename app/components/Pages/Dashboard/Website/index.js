@@ -13,7 +13,7 @@ export default class Website extends Component {
       brand = user.brand
     if (brand)
       brand_id = brand.id
-    const main_style = S(`absolute h-100p l-70 w-${window.innerWidth - 70}`)
+    const main_style = S(`absolute h-100p l-70 w-100p`)
     return (
       <div style={ S('minw-1000') }>
         <main>
