@@ -27,6 +27,7 @@ import Recommend from '../../components/Pages/Dashboard/Mls/Listing/Recommend'
 import Agents from '../../components/Pages/Dashboard/Mls/Agents'
 import Branch from '../../components/Pages/Branch'
 import Website from '../../components/Pages/Dashboard/Website'
+import Cards from '../../components/Pages/Dashboard/Cards'
 
 // Widgets
 import ListingsWidget from '../../components/Pages/Widgets/Listings'
@@ -60,6 +61,7 @@ export default (
     <Route path="dashboard/transactions/:id" component={SingleTransaction}/>
     <Route path="dashboard/transactions/:id/attachments/:id" component={SingleTransaction}/>
     <Route path="dashboard/website" component={Website}/>
+    <Route path="dashboard/cards" component={Cards}/>
     <Route path="verify/:slug" component={Verify}/>
     <Route path="password/:slug" component={Password}/>
     <Route path="widgets/listings" component={ListingsWidget}/>

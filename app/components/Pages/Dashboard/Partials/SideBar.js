@@ -552,6 +552,7 @@ export default class SideBar extends Component {
       )
     }
     let website_link
+    const payments_link = <li><Link to="/dashboard/cards"><i className="fa fa-money" style={ S('mr-15') }></i>Payment Info</Link></li>
     if (user.brand)
       website_link = <li><Link to="/dashboard/website"><i className="fa fa-globe" style={ S('mr-15') }></i>Website</Link></li>
     return (
@@ -620,6 +621,7 @@ export default class SideBar extends Component {
               { upgrade_account_button }
               <li><a href="#" style={ S('pointer') } onClick={ this.showSettingsModal }><i className="fa fa-cog" style={ S('mr-15') }></i>Settings</a></li>
               { website_link }
+              { payments_link }
               <li role="separator" className="divider"></li>
               <li><a href="/signout"><i className="fa fa-power-off" style={ S('mr-15') }></i>Sign out</a></li>
             </NavDropdown>
