@@ -7,7 +7,7 @@ export default class Cards extends Component {
     // Data
     const data = this.props.data
     const user = data.user
-    const main_style = S(`fixed h-100p w-100p`)
+    const main_style = S(`absolute h-100p l-70 w-100p`)
     return (
       <div style={ S('minw-1000') }>
         <main>
