@@ -551,10 +551,8 @@ export default class SideBar extends Component {
         </div>
       )
     }
-    let website_link
     const payments_link = <li><Link to="/dashboard/cards"><i className="fa fa-money" style={ S('mr-15') }></i>Payment Info</Link></li>
-    if (user.brand)
-      website_link = <li><Link to="/dashboard/website"><i className="fa fa-globe" style={ S('mr-15') }></i>Website</Link></li>
+    const website_link = <li><Link to="/dashboard/website"><i className="fa fa-globe" style={ S('mr-15') }></i>Website</Link></li>
     return (
       <aside style={ sidebar_style } className="sidebar__nav-list pull-left">
         <Nav bsStyle="pills" stacked style={ S('mt-10') }>
