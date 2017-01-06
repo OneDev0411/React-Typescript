@@ -16,33 +16,39 @@ export default class ShareAlertModal extends Component {
     // Enter clicked
     const data = this.props.data
     if (e.which === 13 || e.which === 9) {
-      e.preventDefault()
-      if (data.share_modal && data.share_modal.search_value) {
-        if (!data.share_modal.items_selected)
-          data.share_modal.items_selected = []
-        // Emails
-        if (validator.isEmail(data.share_modal.search_value)) {
-          data.share_modal.items_selected.push({
-            email: data.share_modal.search_value,
-            type: 'email',
-            label: data.share_modal.search_value,
-            value: data.share_modal.search_value
-          })
-          this.props.addUsersToSearchInput(data.share_modal.items_selected)
-        }
-        // Phone numbers
-        if (validator.isNumeric(data.share_modal.search_value)) {
-          data.share_modal.items_selected.push({
-            email: data.share_modal.search_value,
-            type: 'phone_number',
-            label: data.share_modal.search_value,
-            value: data.share_modal.search_value
-          })
-          this.props.addUsersToSearchInput(data.share_modal.items_selected)
-        }
-        this.refs.myselect.refs.input.blur()
+      if (data.share_modal && data.share_modal.search_value)
+        this.addToSelectedItems(data.share_modal.search_value)
+    }
+  }
+  addToSelectedItems(value) {
+    const data = this.props.data
+    if (!data.share_modal.items_selected)
+      data.share_modal.items_selected = []
+    // Emails
+    if (validator.isEmail(value)) {
+      if (!_.find(data.share_modal.items_selected, { email: value })) {
+        data.share_modal.items_selected.push({
+          email: value,
+          type: 'email',
+          label: value,
+          value: value
+        })
+        this.props.addUsersToSearchInput(data.share_modal.items_selected)
       }
     }
+    // Phone numbers
+    if (validator.isNumeric(value)) {
+      if (!_.find(data.share_modal.items_selected, { email: value })) {
+        data.share_modal.items_selected.push({
+          email: value,
+          type: 'phone_number',
+          label: value,
+          value: value
+        })
+        this.props.addUsersToSearchInput(data.share_modal.items_selected)
+      }
+    }
+    this.refs.myselect.refs.input.blur()
   }
   handleChange(users_selected) {
     this.props.addUsersToSearchInput(users_selected)
@@ -107,6 +113,10 @@ export default class ShareAlertModal extends Component {
     const data = this.props.data
     if (data.share_modal && data.share_modal.items_selected && data.share_modal.items_selected.length)
       return true
+  }
+  handleShareInputBlur() {
+    this.addToSelectedItems(this.refs.myselect.refs.input.refs.input.value)
+    this.refs.myselect.value = ''
   }
   render() {
     // Data
@@ -214,6 +224,8 @@ export default class ShareAlertModal extends Component {
                   onChange={ this.handleChange.bind(this) }
                   valueRenderer={ this.handleValueRenderer.bind(this) }
                   optionRenderer={ this.handleOptionRenderer.bind(this) }
+                  onBlur={ this.handleShareInputBlur.bind(this) }
+                  onBlurResetsInput={ false }
                 />
               </SelectContainer>
             </div>
