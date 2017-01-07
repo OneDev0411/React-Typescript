@@ -6,6 +6,9 @@ import config from '../../../config/public'
 
 export default (slug, rendered, res, callback) => {
   Cosmic.getObject(config.cosmicjs, { slug }, (err, response) => {
+    if (!response.object) {
+      return callback()
+    }
     const metafields = response.object.metafields
     if (slug === 'landing-page') {
       const subheadline = _.find(metafields, { key: 'subheadline' }).value
