@@ -6,7 +6,7 @@ import config from '../../../config/public'
 
 export default (slug, rendered, res, callback) => {
   Cosmic.getObject(config.cosmicjs, { slug }, (err, response) => {
-    if (!response.object) {
+    if (!response || response.object) {
       return callback()
     }
     const metafields = response.object.metafields
