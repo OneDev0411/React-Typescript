@@ -111,7 +111,7 @@ export default class ShareAlertModal extends Component {
   }
   isSharable() {
     const data = this.props.data
-    if (data.share_modal && data.share_modal.items_selected && data.share_modal.items_selected.length)
+    if (data.share_modal && data.share_modal.search_value && data.share_modal.search_value.trim())
       return true
   }
   handleShareInputBlur() {

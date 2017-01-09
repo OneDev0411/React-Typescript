@@ -42,6 +42,7 @@ const controller = {
       } else
         unique_items_selected.push(item)
     })
+    delete AppStore.data.share_modal.search_value
     AppStore.data.share_modal.items_selected = unique_items_selected
     AppStore.emitChange()
   },
