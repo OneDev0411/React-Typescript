@@ -117,7 +117,7 @@ export default class ShareListingModal extends Component {
       return true
   }
   handleShareInputBlur() {
-    if (!this.refs.myselect)
+    if (!this.refs.myselect || !this.refs.myselect.refs.input.refs)
       return
     this.addToSelectedItems(this.refs.myselect.refs.input.refs.input.value)
     this.refs.myselect.value = ''
