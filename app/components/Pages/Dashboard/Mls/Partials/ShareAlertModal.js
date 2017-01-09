@@ -115,7 +115,7 @@ export default class ShareAlertModal extends Component {
       return true
   }
   handleShareInputBlur() {
-    if (!this.refs.myselect || !this.refs.myselect.refs.input.refs)
+    if (!this.refs.myselect || !this.refs.myselect.refs.input)
       return
     this.addToSelectedItems(this.refs.myselect.refs.input.refs.input.value)
     this.refs.myselect.value = ''
