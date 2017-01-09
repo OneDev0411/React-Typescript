@@ -33,7 +33,7 @@ export default class ShareListingModal extends Component {
           email: value,
           type: 'email',
           label: value,
-          value: value
+          value
         })
         this.props.addUsersToSearchInput(data.share_modal.items_selected)
       }
@@ -45,7 +45,7 @@ export default class ShareListingModal extends Component {
           email: value,
           type: 'phone_number',
           label: value,
-          value: value
+          value
         })
         this.props.addUsersToSearchInput(data.share_modal.items_selected)
       }
@@ -117,6 +117,8 @@ export default class ShareListingModal extends Component {
       return true
   }
   handleShareInputBlur() {
+    if (!this.refs.myselect)
+      return
     this.addToSelectedItems(this.refs.myselect.refs.input.refs.input.value)
     this.refs.myselect.value = ''
   }
