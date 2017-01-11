@@ -553,6 +553,12 @@ export default class SideBar extends Component {
     }
     const payments_link = <li><Link to="/dashboard/cards"><i className="fa fa-money" style={ S('mr-15') }></i>Payment Info</Link></li>
     const website_link = <li><Link to="/dashboard/website"><i className="fa fa-globe" style={ S('mr-15') }></i>Website</Link></li>
+
+    let form_link = ''
+
+    if (user.user_type === 'Admin')
+      form_link = <li><Link to="/dashboard/forms"><i className="fa fa-wpforms" style={ S('mr-15') }></i>Forms</Link></li>
+
     return (
       <aside style={ sidebar_style } className="sidebar__nav-list pull-left">
         <Nav bsStyle="pills" stacked style={ S('mt-10') }>
@@ -620,6 +626,7 @@ export default class SideBar extends Component {
               <li><a href="#" style={ S('pointer') } onClick={ this.showSettingsModal }><i className="fa fa-cog" style={ S('mr-15') }></i>Settings</a></li>
               { website_link }
               { payments_link }
+              { form_link }
               <li role="separator" className="divider"></li>
               <li><a href="/signout"><i className="fa fa-power-off" style={ S('mr-15') }></i>Sign out</a></li>
             </NavDropdown>
