@@ -31,7 +31,7 @@ export default class ShareAlertModal extends Component {
           email: value,
           type: 'email',
           label: value,
-          value: value
+          value
         })
         this.props.addUsersToSearchInput(data.share_modal.items_selected)
       }
@@ -43,7 +43,7 @@ export default class ShareAlertModal extends Component {
           email: value,
           type: 'phone_number',
           label: value,
-          value: value
+          value
         })
         this.props.addUsersToSearchInput(data.share_modal.items_selected)
       }
