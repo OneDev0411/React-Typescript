@@ -25,6 +25,7 @@ export default class ListingCard extends Component {
     const listing_image_style = {
       ...S(`bg-cover bg-url(${listing_util.getResizeUrl(listing.cover_image_url)}?w=800) bg-center w-480 h-340 relative`)
     }
+    let is_mobile
     // Responsive
     if (typeof window !== 'undefined' && window.innerWidth < 1000) {
       listing_card_style.width = window.innerWidth - 20
@@ -33,10 +34,13 @@ export default class ListingCard extends Component {
         ...listing_card_style,
         ...S('ml-15')
       }
-      if (window.innerWidth < 500)
+      if (window.innerWidth < 500) {
         listing_card_style.height = listing_card_style.width * '.6'
+        listing_card_style.height = 253
+        is_mobile = true
+      }
       listing_image_style.width = listing_card_style.width
-      listing_image_style.height = listing_card_style.height - 80
+      listing_image_style.height = listing_card_style.height - 130
     }
     const overlay_style = {
       ...S('bg-000 absolute w-100p h-100p br-3'),
@@ -90,7 +94,7 @@ export default class ListingCard extends Component {
       }
       online_indicator = <div style={ S('br-100 bg-' + bg_color + ' w-13 h-13 bw-2 solid bc-fff absolute z-2 t-2n r-2') }></div>
       agent_image_area = (
-        <div onClick={ this.props.handleAgentClick.bind(this, listing) } style={ S('p-0 br-100 border-2-solid-fff absolute r-20 b-50 bg-ccc') }>
+        <div onClick={ this.props.handleAgentClick.bind(this, listing) } style={ S(`p-0 br-100 border-2-solid-fff absolute r-20 b-${is_mobile ? '103' : '90'} bg-ccc`) }>
           { online_indicator }
           { avatar }
         </div>
