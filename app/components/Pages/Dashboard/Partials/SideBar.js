@@ -557,7 +557,7 @@ export default class SideBar extends Component {
       )
     }
     const payments_link = <li><Link to="/dashboard/cards"><i className="fa fa-money" style={ S('mr-15') }></i>Payment Info</Link></li>
-    
+
     let form_link = ''
 
     if (user.user_type === 'Admin')
