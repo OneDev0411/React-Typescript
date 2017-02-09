@@ -1,0 +1,51 @@
+// main.scss
+@import 'vendor/bootstrap/stylesheets/_bootstrap.scss';
+@import 'components/resets';
+@import 'components/resets-bootstrap';
+@import 'components/typography';
+@import 'components/buttons';
+@import 'components/loader';
+@import 'components/colors';
+@import 'components/flexbox';
+@import 'components/global';
+@import 'components/nav';
+@import 'components/sidebar';
+@import 'components/mobile-nav';
+@import 'components/modals';
+@import 'components/listing-viewer';
+@import 'components/animations';
+@import 'components/shadows';
+@import 'components/carousels';
+@import 'components/google';
+@import 'components/react-select';
+@import 'components/dropdowns';
+
+// Pages
+@import 'components/pages/landing';
+@import 'components/pages/dashboard';
+@import 'components/pages/transactions';
+@import 'components/pages/tasks';
+@import 'components/pages/contacts';
+@import 'components/pages/recents';
+@import 'components/pages/mls';
+@import 'components/pages/agent-report';
+
+// Modules
+@import 'components/modules/add-contacts';
+@import 'components/modules/search-listings';
+@import 'components/modules/drawer';
+@import 'components/modules/daypicker';
+@import 'components/modules/forms';
+@import 'components/modules/empty-state';
+@import 'components/modules/search-rooms-users';
+
+// Vendor
+@import 'vendor/react-day-picker/style.scss';
+@import 'vendor/react-ios-switch/index.scss';
+@import 'vendor/react-select/index.scss';
+
+// Fonts
+@import 'fonts/sf.scss';
+@import 'fonts/tempos-headline.scss';
+@import 'fonts/din.scss';
+@import 'fonts/futurastd.scss';
