@@ -1,8 +1,0 @@
-// Drawer
-.drawer {
-  transition: all 150ms ease-in-out;
-  right: -500px;
-  &.active{
-    right: 0;
-  }
-}
