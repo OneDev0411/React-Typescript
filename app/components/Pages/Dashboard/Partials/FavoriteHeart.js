@@ -13,7 +13,7 @@ export default class FavoriteHeart extends Component {
     return (
       <img
         onClick={ controller.listing_card.handleFavoriteAction.bind(this, listing) } style={ heart_style }
-        src={`/images/dashboard/mls/heart${this.isFavorited(mls_number) ? '-red' : '-white'}.svg`}
+        src={`/static/images/dashboard/mls/heart${this.isFavorited(mls_number) ? '-red' : '-white'}.svg`}
       />
     )
   }

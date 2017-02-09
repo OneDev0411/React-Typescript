@@ -679,7 +679,7 @@ export default class Mls extends Component {
           <div style={ S('pull-left mr-10 relative') }>
             { search_area }
             { clear_search_input }
-            <img onClick={ controller.search_input_map.handleSearchSubmit.bind(this) } style={ S('absolute r-15 t-15 w-20 pointer') } src="/images/dashboard/mls/search.svg" />
+            <img onClick={ controller.search_input_map.handleSearchSubmit.bind(this) } style={ S('absolute r-15 t-15 w-20 pointer') } src="/static/images/dashboard/mls/search.svg" />
             <div style={ S('w-1 h-28 absolute l-400 t-13 bg-dddddd') }></div>
           </div>
           <div style={ S('pull-left') }>
@@ -734,7 +734,7 @@ export default class Mls extends Component {
     if (data.is_mobile) {
       search_area = (
         <form onSubmit={ controller.search_input_map.handleSearchSubmit.bind(this) }>
-          <img onClick={ controller.search_input_map.handleSearchSubmit.bind(this) } src="/images/dashboard/mls/search.svg" style={ S('pointer w-22 h-22 absolute l-13 t-14') } />
+          <img onClick={ controller.search_input_map.handleSearchSubmit.bind(this) } src="/static/images/dashboard/mls/search.svg" style={ S('pointer w-22 h-22 absolute l-13 t-14') } />
           <input onChange={ controller.search_input_map.handleSearchInputChange.bind(this) } value={ search_input_text } ref="search_input" className="form-control" type="text" style={ S('font-18 bg-dfe3e8 w-200 pull-left pl-40') } placeholder="Location or MLS#" />
         </form>
       )
@@ -745,10 +745,10 @@ export default class Mls extends Component {
           </div>
           <div style={ S('pull-right') }>
             <Button onClick={ controller.listing_map.toggleDrawable.bind(this) } style={ { ...S('mr-10'), outline: 'none' } }>
-              <img src={ `/images/dashboard/mls/draw${data.listing_map && data.listing_map.drawable ? '-active' : ''}.svg` } style={ S('w-20') }/>
+              <img src={ `/static/images/dashboard/mls/draw${data.listing_map && data.listing_map.drawable ? '-active' : ''}.svg` } style={ S('w-20') }/>
             </Button>
             <Button onClick={ controller.listing_filter.showFilterForm.bind(this, 'photos') } style={ { outline: 'none' } }>
-              <img src={ `/images/dashboard/mls/filters${data.show_filter_form ? '-active' : ''}.svg` } style={ S('w-20 mr-10') }/>
+              <img src={ `/static/images/dashboard/mls/filters${data.show_filter_form ? '-active' : ''}.svg` } style={ S('w-20 mr-10') }/>
               <span className={ data.show_filter_form ? 'text-primary' : '' }>Filters</span>
             </Button>
           </div>
@@ -941,7 +941,7 @@ export default class Mls extends Component {
         <Modal dialogClassName="modal-alert-saved" show={ data.show_alert_saved_modal } onHide={ controller.listing_map.hideModal }>
           <div className="din" style={ S('text-center font-60 color-fff') }>
             <div style={ S('bg-2196f3 w-165 h-165 br-100 center-block pt-35') }>
-              <img style={ S('h-70 ml-13') } src="/images/dashboard/mls/alert-bell-saved.svg" />
+              <img style={ S('h-70 ml-13') } src="/static/images/dashboard/mls/alert-bell-saved.svg" />
             </div>
             <span style={ { textShadow: '0 2px 6px rgba(0, 0, 0, 0.2)' } }>Alert Saved</span>
           </div>
@@ -969,7 +969,7 @@ export default class Mls extends Component {
             <div style={ S('font-42') }>Welcome to Rechat!</div>
             <div style={ S('font-22 color-9b9b9b') }>The Real Estate app that Elevates Your Game</div>
             <div style={ S('mt-20 mb-20 h-156') }>
-              <img style={ S('w-100p') } src="/images/signup/value-faces.png" />
+              <img style={ S('w-100p') } src="/static/images/signup/value-faces.png" />
             </div>
             <Button bsStyle="primary" style={ S('w-100p') } onClick={ this.hideWelcomeModal }>Start Using Rechat</Button>
           </Modal.Body>

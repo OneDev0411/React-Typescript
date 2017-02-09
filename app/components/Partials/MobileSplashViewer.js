@@ -7,8 +7,8 @@ import Brand from '../../controllers/Brand'
 export default class MobileSplashViewer extends Component {
   render() {
     const data = this.props.data
-    const mobile_splash_style = S('absolute t-0 z-1000 l-0 w-100p h-100p bg-000 color-fff bg-url(/images/mobile/mask@3x.jpg) bg-center bg-cover')
-    let logo = '/images/mobile/icon@3x.png'
+    const mobile_splash_style = S('absolute t-0 z-1000 l-0 w-100p h-100p bg-000 color-fff bg-url(/static/images/mobile/mask@3x.jpg) bg-center bg-cover')
+    let logo = '/static/images/mobile/icon@3x.png'
     if (data.brand)
       logo = Brand.asset('site_logo')
     return (

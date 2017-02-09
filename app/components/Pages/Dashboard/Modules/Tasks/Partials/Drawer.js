@@ -213,7 +213,7 @@ export default class Drawer extends Component {
           </div>
           <div onClick={ this.props.showDayPicker } style={ { ...S('pointer pt-20 p-15 h-60 mb-30 bg-fff'), ...bottomLine } }>
             <span style={ S('mr-15') }>
-              <img width="17" src="/images/dashboard/icons/calendar-red.svg"/>
+              <img width="17" src="/static/images/dashboard/icons/calendar-red.svg"/>
             </span>
             <span style={ S('color-e0523e') }>Due on { due_date_area }</span>
           </div>
@@ -221,7 +221,7 @@ export default class Drawer extends Component {
           <div style={ { ...S('mb-30'), ...topLine } }>
             <div style={ { ...S('h-54 p-10 bg-fff'), ...bottomLine } }>
               <div style={ S('p-10 pull-left color-a3a9ac font-12') }>
-                <span style={ S('mr-15') }><img src="/images/dashboard/icons/tasks/contacts.svg"/></span>
+                <span style={ S('mr-15') }><img src="/static/images/dashboard/icons/tasks/contacts.svg"/></span>
                 Share this task with others
               </div>
               <Button onClick={ this.props.showShareTaskModal.bind(this, 'edit') } style={ S('color-006aff w-72 h-30 p-5 mt-3 bc-3388ff') } className="pull-right" bsStyle="default">Share</Button>
@@ -235,7 +235,7 @@ export default class Drawer extends Component {
           <div style={ { ...S('mb-30'), ...topLine } }>
             <div style={ { ...S('h-54 p-10 bg-fff'), ...bottomLine } }>
               <div style={ S('p-10 pull-left color-a3a9ac font-12') }>
-                <span style={ S('mr-15') }><img src="/images/dashboard/icons/tasks/contacts.svg"/></span>
+                <span style={ S('mr-15') }><img src="/static/images/dashboard/icons/tasks/contacts.svg"/></span>
                 Add a Transaction
               </div>
               <Button onClick={ this.props.showAddTransactionModal.bind(this) } style={ S('color-006aff w-72 h-30 p-5 mt-3 bc-3388ff') } className="pull-right" bsStyle="default">Add</Button>
@@ -247,8 +247,8 @@ export default class Drawer extends Component {
           <div style={ footer_style }>
             { created_area }
             <div style={ S('pull-right') }>
-              <span onClick={ this.props.showSnoozeModal.bind(this, current_task) } style={ S('pointer mr-20') }><img src="/images/dashboard/icons/clock.svg"/></span>
-              <span onClick={ this.props.deleteTask.bind(this, current_task) } style={ S('pointer') }><img src="/images/dashboard/icons/trash.svg"/></span>
+              <span onClick={ this.props.showSnoozeModal.bind(this, current_task) } style={ S('pointer mr-20') }><img src="/static/images/dashboard/icons/clock.svg"/></span>
+              <span onClick={ this.props.deleteTask.bind(this, current_task) } style={ S('pointer') }><img src="/static/images/dashboard/icons/trash.svg"/></span>
             </div>
           </div>
         </div>

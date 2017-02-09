@@ -144,7 +144,7 @@ export default class MessagesList extends Component {
       return <div style={ S('ml-20') }>No messages yet.</div>
 
     const loading_style = {
-      ...S('absolute ml-20 w-100p h-100p bg-url(/images/loading-states/messages.svg)'),
+      ...S('absolute ml-20 w-100p h-100p bg-url(/static/images/loading-states/messages.svg)'),
       backgroundRepeat: 'repeat-y'
     }
     // Messages
@@ -357,7 +357,7 @@ export default class MessagesList extends Component {
       )
     }
     const settings_dropdown_dots = (
-      <img style={ S('w-4') } src="/images/dashboard/chats/dots.svg"/>
+      <img style={ S('w-4') } src="/static/images/dashboard/chats/dots.svg"/>
     )
     let user_dropdown
     if (data.show_room_users_modal) {
@@ -434,7 +434,7 @@ export default class MessagesList extends Component {
     let room_settings = (
       <div className="no-user-select" style={ S('pull-right relative t-10 r-10') }>
         <div style={ S('pull-left p-10 pointer mr-30') } onClick={ this.props.showModal.bind(this, 'room-users') }>
-          <img style={ S('w-22 relative') } src="/images/dashboard/chats/members.svg"/>
+          <img style={ S('w-22 relative') } src="/static/images/dashboard/chats/members.svg"/>
           <span style={ S('color-4eabf6 absolute l-40 t-9 font-17 fw-500') }>{ data.current_room && data.current_room.users ? data.current_room.users.length : '' }</span>
         </div>
         { user_dropdown }
@@ -442,7 +442,7 @@ export default class MessagesList extends Component {
           <DropdownButton style={ S('border-none mt-2') } pullRight title={ settings_dropdown_dots } id="room-dropdown" className="room-dropdown" noCaret>
             <li style={ S('w-260 p-20 border-bottom-1-solid-d8d8d8 pointer') } onClick={ this.props.changeListingNotification.bind(this, has_system_generated_notifs) }>
               { has_system_generated_notifs ? 'Mute' : 'Unmute' } listing notifications
-              <img style={ S('pull-right mt-2n mr-5') } src={ `/images/dashboard/chats/bell${!has_system_generated_notifs ? '-strike' : ''}.svg` }/>
+              <img style={ S('pull-right mt-2n mr-5') } src={ `/static/images/dashboard/chats/bell${!has_system_generated_notifs ? '-strike' : ''}.svg` }/>
             </li>
             { leave_chat_button_area }
           </DropdownButton>

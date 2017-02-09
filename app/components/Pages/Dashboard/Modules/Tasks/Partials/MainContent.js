@@ -300,7 +300,7 @@ export default class MainContent extends Component {
                 <div style={ S('absolute b-0 pl-15 pb-15 pointer') }>
                   <div className="pull-left" style={ S('color-3388ff') } onClick={ this.props.showDayPicker.bind(this, 'create') }>
                     <span style={ S('mr-10') }>
-                      <img width="17" src="/images/dashboard/icons/calendar-blue.svg"/>
+                      <img width="17" src="/static/images/dashboard/icons/calendar-blue.svg"/>
                     </span>
                     <span style={ S('relative t-1 font-16') }>
                       { due_date_area }
@@ -308,7 +308,7 @@ export default class MainContent extends Component {
                   </div>
                   <div onClick={ this.props.showShareTaskModal.bind(this, 'new') } style={ S('absolute l-230 t-4n w-300 color-929292 font-12') } className="pull-left">
                     <span>
-                      <img style={ S('w-34 h-34') } src="/images/dashboard/icons/invite-user.svg"/>
+                      <img style={ S('w-34 h-34') } src="/static/images/dashboard/icons/invite-user.svg"/>
                     </span>
                     { share_new_task_area }
                   </div>
@@ -346,7 +346,7 @@ export default class MainContent extends Component {
               module_type="share-task"
             />
             <div className="text-center">
-              <img style={ S('w-200 h-103') } src="/images/dashboard/add-contacts/people.png" />
+              <img style={ S('w-200 h-103') } src="/static/images/dashboard/add-contacts/people.png" />
             </div>
           </Modal.Body>
           <Modal.Footer style={ { border: 'none' } }>
@@ -364,7 +364,7 @@ export default class MainContent extends Component {
             <Input type="text" ref="search_transactions" placeholder="Search for a transaction" onKeyDown={ this.props.navTransactionsList.bind(this) } onKeyUp={ this.props.searchTransactions.bind(this) }/>
             { transaction_results_area }
             <div className="text-center">
-              <img style={ S('w-126 h-121 mt-20 mb-20') } src="/images/dashboard/tasks/transaction.png" />
+              <img style={ S('w-126 h-121 mt-20 mb-20') } src="/static/images/dashboard/tasks/transaction.png" />
             </div>
           </Modal.Body>
         </Modal>

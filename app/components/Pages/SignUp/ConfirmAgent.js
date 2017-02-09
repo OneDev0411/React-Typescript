@@ -105,7 +105,7 @@ export default class ConfirmAgent extends Component {
     let main_content = (
       <div>
         <Col sm={ 6 } className={ data.is_mobile ? 'hidden' : '' }>
-          <img style={ S('w-100p maxw-300') } src="/images/signup/ntreis-logo.png" />
+          <img style={ S('w-100p maxw-300') } src="/static/images/signup/ntreis-logo.png" />
         </Col>
         <Col sm={ 6 }>
           { brand_title }
@@ -156,7 +156,7 @@ export default class ConfirmAgent extends Component {
       main_content = (
         <div>
           <Col sm={ 6 } className={ data.is_mobile ? 'hidden' : '' }>
-            <img style={ S('w-100p maxw-300') } src="/images/signup/agent-face.png" />
+            <img style={ S('w-100p maxw-300') } src="/static/images/signup/agent-face.png" />
           </Col>
           <Col sm={ 6 }>
             { brand_title }

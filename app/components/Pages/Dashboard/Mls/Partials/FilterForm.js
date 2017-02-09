@@ -500,25 +500,25 @@ export default class FilterForm extends Component {
               <ButtonGroup style={ S('w-100p') }>
                 <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'any') ? S('h-80 w-24p bg-667688 bc-667688') : S('h-80 w-24p bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'any' }) }>
                   <div style={ S('mb-10') }>
-                    <img src={`/images/dashboard/mls/listing-types/any${this.buttonIsActive('listing_types', 'any') ? '-active' : ''}.svg`}/>
+                    <img src={`/static/images/dashboard/mls/listing-types/any${this.buttonIsActive('listing_types', 'any') ? '-active' : ''}.svg`}/>
                   </div>
                   <span style={ S(`font-10 color-${this.buttonIsActive('listing_types', 'any') ? 'fff' : '929292'}`) }>Any</span>
                 </Button>
                 <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'house') ? S('h-80 w-24p bg-667688 bc-667688') : S('h-80 w-24p bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'house' }) }>
                   <div style={ S('mb-10') }>
-                    <img src={`/images/dashboard/mls/listing-types/house${this.buttonIsActive('listing_types', 'house') ? '-active' : ''}.svg`}/>
+                    <img src={`/static/images/dashboard/mls/listing-types/house${this.buttonIsActive('listing_types', 'house') ? '-active' : ''}.svg`}/>
                   </div>
                   <span style={ S(`font-10 color-${this.buttonIsActive('listing_types', 'house') ? 'fff' : '929292'}`) }>House</span>
                 </Button>
                 <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'condo') ? S('h-80 w-24p bg-667688 bc-667688') : S('h-80 w-24p bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'condo' }) }>
                   <div style={ S('mb-10') }>
-                    <img src={`/images/dashboard/mls/listing-types/condo${this.buttonIsActive('listing_types', 'condo') ? '-active' : ''}.svg`}/>
+                    <img src={`/static/images/dashboard/mls/listing-types/condo${this.buttonIsActive('listing_types', 'condo') ? '-active' : ''}.svg`}/>
                   </div>
                   <span style={ S(`font-10 color-${this.buttonIsActive('listing_types', 'condo') ? 'fff' : '929292'}`) }>Condo</span>
                 </Button>
                 <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'townhouse') ? S('h-80 w-24p bg-667688 bc-667688') : S('h-80 w-24p bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'townhouse' }) }>
                   <div style={ S('mb-10') }>
-                    <img src={`/images/dashboard/mls/listing-types/townhouse${this.buttonIsActive('listing_types', 'townhouse') ? '-active' : ''}.svg`}/>
+                    <img src={`/static/images/dashboard/mls/listing-types/townhouse${this.buttonIsActive('listing_types', 'townhouse') ? '-active' : ''}.svg`}/>
                   </div>
                   <span style={ S(`font-10 color-${this.buttonIsActive('listing_types', 'townhouse') ? 'fff' : '929292'}`) }>Townhouse</span>
                 </Button>

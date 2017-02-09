@@ -304,7 +304,7 @@ export default class Create extends Component {
     let main_content = (
       <div>
         <Col sm={ 5 } className={ data.is_mobile ? 'hidden' : '' }>
-          <img style={ S('w-100p') } src="/images/signup/house.png" />
+          <img style={ S('w-100p') } src="/static/images/signup/house.png" />
         </Col>
         <Col sm={ 7 }>
           { brand_title }

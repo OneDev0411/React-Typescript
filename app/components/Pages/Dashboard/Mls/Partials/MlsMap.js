@@ -121,7 +121,7 @@ export default class MlsMap extends Component {
           lat={ listing_map.location_search.center.lat }
           lng={ listing_map.location_search.center.lng }
           text={'Hello!'}
-        ><img style={ S('h-30') } src="/images/dashboard/mls/map-pin.svg"/>
+        ><img style={ S('h-30') } src="/static/images/dashboard/mls/map-pin.svg"/>
         </div>
       )
       map_listing_markers.push(pinpoint)

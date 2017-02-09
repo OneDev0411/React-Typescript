@@ -363,22 +363,22 @@ export default class SideBar extends Component {
       <aside className="mobile-nav" style={ mobile_nav_style }>
         { /* cache images */ }
         <div style={ S('w-0 h-0 absolute l-1000n t-1000n') }>
-          <img src="/images/dashboard/sidenav/chat-active.svg"/>
-          <img src="/images/dashboard/sidenav/map-active.svg"/>
-          <img src="/images/dashboard/sidenav/people-active.svg"/>
-          <img src="/images/dashboard/sidenav/task-active.svg"/>
-          <img src="/images/dashboard/sidenav/transactions-active.svg"/>
+          <img src="/static/images/dashboard/sidenav/chat-active.svg"/>
+          <img src="/static/images/dashboard/sidenav/map-active.svg"/>
+          <img src="/static/images/dashboard/sidenav/people-active.svg"/>
+          <img src="/static/images/dashboard/sidenav/task-active.svg"/>
+          <img src="/static/images/dashboard/sidenav/transactions-active.svg"/>
         </div>
         <Nav bsStyle="tabs" justified>
           <LinkContainer className={ 'main-nav ' + active.recents } to="/dashboard/recents">
             <NavItem style={ S('w-60 pull-left') } onClick={ this.handleChatNavClick.bind(this) }>
-              <img src={ active.recents ? '/images/dashboard/sidenav/chat-active.svg' : '/images/dashboard/sidenav/chat.svg' } style={ S('w-19 h-19') }/>
+              <img src={ active.recents ? '/static/images/dashboard/sidenav/chat-active.svg' : '/static/images/dashboard/sidenav/chat.svg' } style={ S('w-19 h-19') }/>
               {this.notificationIcon('room_notification_count')}
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ 'main-nav ' + active.mls } to="/dashboard/mls">
             <NavItem style={ S('w-60 pull-left') }>
-              <img src={ active.mls ? '/images/dashboard/sidenav/map-active.svg' : '/images/dashboard/sidenav/map.svg' } style={ S('w-19 h-19') }/>
+              <img src={ active.mls ? '/static/images/dashboard/sidenav/map-active.svg' : '/static/images/dashboard/sidenav/map.svg' } style={ S('w-19 h-19') }/>
             </NavItem>
           </LinkContainer>
           <NavItem className="main-nav" style={ S('w-60 absolute t-5 r-80') } onClick={ this.showIntercom }>
@@ -397,7 +397,7 @@ export default class SideBar extends Component {
             <OverlayTrigger placement="right" overlay={ popover.people } delayShow={ 200 } delayHide={ 0 }>
               <LinkContainer className={ active.contacts } to="/dashboard/contacts">
                 <NavItem style={ S('w-85p') }>
-                  <img src={ active.contacts ? '/images/dashboard/sidenav/people-active.svg' : '/images/dashboard/sidenav/people.svg' } style={ S('w-19 h-19') }/>
+                  <img src={ active.contacts ? '/static/images/dashboard/sidenav/people-active.svg' : '/static/images/dashboard/sidenav/people.svg' } style={ S('w-19 h-19') }/>
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
@@ -407,7 +407,7 @@ export default class SideBar extends Component {
             <OverlayTrigger placement="right" overlay={ popover.tasks } delayShow={ 200 } delayHide={ 0 }>
               <LinkContainer className={ active.tasks } to="/dashboard/tasks">
                 <NavItem style={ S('w-85p') }>
-                  <img src={ active.tasks ? '/images/dashboard/sidenav/task-active.svg' : '/images/dashboard/sidenav/task.svg' } style={ S('w-19 h-19') }/>
+                  <img src={ active.tasks ? '/static/images/dashboard/sidenav/task-active.svg' : '/static/images/dashboard/sidenav/task.svg' } style={ S('w-19 h-19') }/>
                   {this.notificationIcon('task_notification_count')}
                 </NavItem>
               </LinkContainer>
@@ -415,7 +415,7 @@ export default class SideBar extends Component {
             <OverlayTrigger placement="right" overlay={ popover.transactions } delayShow={ 200 } delayHide={ 0 }>
               <LinkContainer className={ active.transactions } to="/dashboard/transactions" onClick={ this.props.viewAllTransactions }>
                 <NavItem style={ S('w-85p') }>
-                  <img src={ active.transactions ? '/images/dashboard/sidenav/transactions-active.svg' : '/images/dashboard/sidenav/transactions.svg' } style={ S('w-19 h-19') }/>
+                  <img src={ active.transactions ? '/static/images/dashboard/sidenav/transactions-active.svg' : '/static/images/dashboard/sidenav/transactions.svg' } style={ S('w-19 h-19') }/>
                   {this.notificationIcon('transaction_notification_count')}
                 </NavItem>
               </LinkContainer>

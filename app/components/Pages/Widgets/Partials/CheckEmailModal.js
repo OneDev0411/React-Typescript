@@ -16,7 +16,7 @@ export default class CheckEmailModal extends Component {
           <div style={ S('mb-20 mt-20 center-block text-center' + (!data.is_mobile ? ' mt-100 w-280' : '')) }>
             <img style={ S('h-68 mr-40 relative') } src={ data.brand ? data.brand.assets.logo : '' } />
             <i style={ S('color-929292 mr-40 font-30 relative t-5') } className="fa fa-arrow-right"></i>
-            <img style={ S('h-68') } src="/images/logo-200w.png" />
+            <img style={ S('h-68') } src="/static/images/logo-200w.png" />
           </div>
           <div className="din" style={ S('color-263445 font-34 mb-10') }>Great! Please verify your email</div>
           <div style={ S('font-17 color-9b9b9b mb-40') }>It may take a few minutes for<br /> the email to show up.</div>

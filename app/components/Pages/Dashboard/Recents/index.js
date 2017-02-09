@@ -673,14 +673,14 @@ export default class Dashboard extends Component {
         <div style={ S('absolute h-100p w-100p') }>
           <div style={ S('h-220 w-360 relative center-block t-30p br-5 text-center') }>
             <div className="empty-state" style={ S('w-360 h-220 mb-25 relative br-5 p-25 border-1-solid-e2e2e2') }>
-              <img src="/images/empty-states/chats.jpg" />
+              <img src="/static/images/empty-states/chats.jpg" />
             </div>
             <div style={ S('mb-25') }>
               <div style={ S('color-929292 font-18') }>Start a Conversation</div>
               <div style={ S('color-bebebe font-14') }>Conversations are awesome. Start one now.</div>
             </div>
             <Button onClick={ controller.recents.showNewMessageView } style={ S('w-200 p-20 color-929292') } bsStyle="default">
-              <img style={ S('h-18 relative t-1n l-2') } src="/images/dashboard/chats/add-chat.svg"/>&nbsp;&nbsp;&nbsp;Create Chat
+              <img style={ S('h-18 relative t-1n l-2') } src="/static/images/dashboard/chats/add-chat.svg"/>&nbsp;&nbsp;&nbsp;Create Chat
             </Button>
           </div>
         </div>
@@ -715,7 +715,7 @@ export default class Dashboard extends Component {
           { main_content }
         </main>
         <audio ref="notif_sound" id="notif-sound">
-          <source src="/audio/ding.mp3" type="audio/mpeg" />
+          <source src="/static/audio/ding.mp3" type="audio/mpeg" />
         </audio>
         { file_viewer }
         <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_create_chat_modal } onHide={ this.hideModal.bind(this) } onShow={ this.onModalShow.bind(this) }>

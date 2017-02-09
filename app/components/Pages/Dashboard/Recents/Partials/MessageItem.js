@@ -9,7 +9,7 @@ import emojify from 'emojify.js'
 import linkifyString from 'linkifyjs/string'
 import _ from 'lodash'
 emojify.setConfig({
-  img_dir: '/images/emoji'
+  img_dir: '/static/images/emoji'
 })
 
 export default class MessageItem extends Component {
@@ -63,7 +63,7 @@ export default class MessageItem extends Component {
     if (!author) {
       profile_image_div = (
         <div style={ S('absolute w-35 t-5') }>
-          <img className="center-block" src="/images/dashboard/rebot@2x.png" style={ S('w-30') } />
+          <img className="center-block" src="/static/images/dashboard/rebot@2x.png" style={ S('w-30') } />
         </div>
       )
     }
@@ -216,7 +216,7 @@ export default class MessageItem extends Component {
       if (!author) {
         profile_image_div = (
           <div style={ S('absolute w-35 t-5') }>
-            <img className="center-block" src="/images/dashboard/rebot@2x.png" style={ S('w-30') } />
+            <img className="center-block" src="/static/images/dashboard/rebot@2x.png" style={ S('w-30') } />
           </div>
         )
       }
@@ -294,7 +294,7 @@ export default class MessageItem extends Component {
           <div style={ S('mb-10 color-b0b0b0') }>Created an alert: <span onClick={ this.showAlertModal.bind(this, alert.id) } style={ S('fw-600 pointer') } className="text-primary">{ alert.title ? alert.title : alert.proposed_title }</span></div>
           <div>
             <div onClick={ this.showAlertModal.bind(this, alert.id) } style={ S('pointer pull-left mr-10') }>
-              <img style={ S('br-3 w-75 h-75') } src="/images/dashboard/mls/map-tile.jpg"/>
+              <img style={ S('br-3 w-75 h-75') } src="/static/images/dashboard/mls/map-tile.jpg"/>
             </div>
             <div style={ S('pull-left') }>
               <span onClick={ this.showAlertModal.bind(this, alert.id) } style={ S('pointer fw-600 font-18') }>{ alert.title ? alert.title : alert.proposed_title }</span>

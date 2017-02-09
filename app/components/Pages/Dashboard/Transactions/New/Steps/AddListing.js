@@ -194,7 +194,7 @@ export default class AddListing extends Component {
     return (
       <div>
         <div style={ S('absolute t-120n') }>
-          <img style={ S('h-121') } src="/images/dashboard/transactions/house.png" />
+          <img style={ S('h-121') } src="/static/images/dashboard/transactions/house.png" />
         </div>
         <div style={ S('mb-20') }>
           <h1>We’re almost done! Do you have a property listing in mind?</h1>

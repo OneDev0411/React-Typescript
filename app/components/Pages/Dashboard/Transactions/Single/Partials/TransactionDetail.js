@@ -244,7 +244,7 @@ export default class TransactionDetail extends Component {
     if (transaction.listing && transaction.listing.property) {
       map_btn = (
         <button onClick={ this.props.setDrawerContent.bind(this, 'map', false) } type="button" className="btn btn-default" style={ { ...btn_action_style, ...S('mr-10') } }>
-          <img style={ S('mt-1n') } src={ `/images/dashboard/icons/drawer/map${drawer && drawer.content === 'map' ? '-active' : ''}.svg`}/>
+          <img style={ S('mt-1n') } src={ `/static/images/dashboard/icons/drawer/map${drawer && drawer.content === 'map' ? '-active' : ''}.svg`}/>
         </button>
       )
     }
@@ -303,10 +303,10 @@ export default class TransactionDetail extends Component {
           <div style={ S('mt-8 absolute r-10 z-100') }>
             { map_btn }
             <button onClick={ this.props.setDrawerContent.bind(this, 'contacts', false) } type="button" className="btn btn-default" style={ { ...btn_action_style, ...S('mr-10') } }>
-              <img style={ S('mt-3n') } src={ `/images/dashboard/icons/drawer/contacts${drawer && drawer.content === 'contacts' ? '-active' : ''}.svg`}/>
+              <img style={ S('mt-3n') } src={ `/static/images/dashboard/icons/drawer/contacts${drawer && drawer.content === 'contacts' ? '-active' : ''}.svg`}/>
             </button>
             <button onClick={ this.props.setDrawerContent.bind(this, 'docs', false) } type="button" className="btn btn-default" style={ btn_action_style }>
-              <img style={ S('mt-3n') } src={ `/images/dashboard/icons/drawer/docs${drawer && drawer.content === 'docs' ? '-active' : ''}.svg`}/>
+              <img style={ S('mt-3n') } src={ `/static/images/dashboard/icons/drawer/docs${drawer && drawer.content === 'docs' ? '-active' : ''}.svg`}/>
             </button>
           </div>
           <Drawer
@@ -326,7 +326,7 @@ export default class TransactionDetail extends Component {
             </div>
             { listing_status_indicator }
             <div className="pull-left text-center" style={ S('bg-F7F9FA relative t-7 br-100 p-8 w-35 h-35 mr-15') }>
-              <img src="/images/dashboard/icons/link.svg"/>
+              <img src="/static/images/dashboard/icons/link.svg"/>
             </div>
             <div className="pull-left text-center">
               <Dropdown id="settings-dropdown">

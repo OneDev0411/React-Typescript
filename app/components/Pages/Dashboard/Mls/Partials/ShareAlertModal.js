@@ -234,7 +234,7 @@ export default class ShareAlertModal extends Component {
         <Modal.Footer>
           <div style={ S('pull-left mr-15 mb-20 border-1-solid-d5dce5 bg-e7eaed br-3 inline-block') }>
             <div style={ S(`pull-left w-50 h-50 pt-20 text-center border-right-1-solid-d5dce5 h-64`) }>
-              <img src="/images/dashboard/mls/alert-bell--gray.svg"/>
+              <img src="/static/images/dashboard/mls/alert-bell--gray.svg"/>
             </div>
             <div style={ S('pull-left p-15 pt-10 text-left h-64') }>
               <div>{ data.share_modal && data.share_modal.title ? data.share_modal.title : default_title }</div>
