@@ -8,6 +8,7 @@ import io from 'socket.io-client'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import AppStore from '../stores/AppStore'
 import Brand from '../controllers/Brand'
+import ReactGA from 'react-ga'
 
 export default class App extends Component {
   componentWillMount() {
@@ -73,6 +74,16 @@ export default class App extends Component {
       this.getNotifications()
       AppStore.data.session_started = true
       AppStore.emitChange()
+    }
+  }
+  componentDidUpdate() {
+    const data = AppStore.data
+    const brand = data.brand
+    if (brand && brand.google_analytics_id) {
+      const google_analytics_id = brand.google_analytics_id
+      ReactGA.initialize(google_analytics_id)
+      ReactGA.set({ page: window.location.pathname })
+      ReactGA.pageview(window.location.pathname)
     }
   }
   // Remove change listeners from stores
