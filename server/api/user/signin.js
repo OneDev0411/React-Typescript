@@ -4,14 +4,6 @@ import Room from '../../../app/models/Room'
 const router = require('koa-router')()
 const app = new Koa()
 
-function addUser(add_user_params) {
-  return new Promise(resolve => {
-    Room.addUser(add_user_params, (err, response) => {
-      resolve()
-    })
-  })
-}
-
 router.post('/signin', async (ctx, next) => {
 
   const email = ctx.request.body.email
@@ -45,7 +37,8 @@ router.post('/signin', async (ctx, next) => {
         api_host: ctx.config.app_url
       }
 
-      await addUser(add_user_params)
+      // add user to room
+      Room.addUser(add_user_params, (err, response) => {})
     }
 
     ctx.body = response.body
