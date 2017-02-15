@@ -5,12 +5,12 @@ import views from 'koa-views'
 import cookie from 'koa-cookie'
 import path from 'path'
 import webpack from 'webpack'
+import session from "koa-session2"
 import _ from 'underscore'
 
 import universalMiddleware from './util/universal'
 import webpackConfig from '../webpack.config.babel'
 import appConfig from '../config/webpack'
-// import routes from './routes'
 
 const app = new Koa()
 const __DEV__ = process.env.NODE_ENV === 'development'
@@ -44,8 +44,27 @@ if (__DEV__) {
   app.use(mount(serve(path.join(output))))
 }
 
+/**
+ * middleware for session
+ */
+app.use(session({
+  key: "rechat and react rock!!!",
+}))
+
+/**
+ * middleware for time
+ */
+app.use(async function(ctx, next) {
+  ctx.locals = {
+    time: (new Date).getTime()
+  }
+
+  await next()
+})
+
 // eslint-disable-next-line
-// _.each(routes, r => app.use(mount('/api', require(r.path))))
+_.each(require('./api/routes'), r =>
+  app.use(mount('/api', require(r.path))))
 
 // universal rendering middleware
 app.use(mount(universalMiddleware))
