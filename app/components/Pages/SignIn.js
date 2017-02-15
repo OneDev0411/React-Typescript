@@ -1,6 +1,6 @@
 // SignIn.js
 import React, { Component } from 'react'
-import { Link } from 'react-router'
+import { Link, browserHistory } from 'react-router'
 import { Button, Input, Alert, Modal } from 'react-bootstrap'
 import S from 'shorti'
 import AppStore from '../../stores/AppStore'
@@ -52,7 +52,8 @@ export default class SignIn extends Component {
       let redirect_to = '/dashboard/mls'
       if (data.location.query && data.location.query.redirect_to)
         redirect_to = data.location.query.redirect_to
-      this.props.history.pushState(null, redirect_to)
+
+      browserHistory.push(redirect_to)
     }
   }
 
@@ -63,10 +64,10 @@ export default class SignIn extends Component {
   }
 
   initFullStory(user) {
-    window.FS.identify(user.id, {
-      displayName: user.first_name + ' ' + user.last_name,
-      email: user.email
-    })
+    // window.FS.identify(user.id, {
+    //   displayName: user.first_name + ' ' + user.last_name,
+    //   email: user.email
+    // })
   }
 
   handleSubmit(e) {
