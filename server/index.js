@@ -49,7 +49,7 @@ if (__DEV__) {
  * middleware for session
  */
 app.use(session({
-  key: "rechat and react rock!!!",
+  key: 'r3ch4t@re4ct_rocks!!!',
   httpOnly: false,
   store: new SessionStore()
 }))
