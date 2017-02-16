@@ -30,7 +30,6 @@ const request = async function (ctx, next) {
     return agent[method.toLowerCase()](`${api_url}${url}?hostname=${host_name}`)
       .set(headers)
       .on('error', err => {
-        console.log('>ERR')
         ctx.body = {
           status: 'error',
           response: {
