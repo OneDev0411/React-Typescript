@@ -9,6 +9,7 @@ import session from "koa-session2"
 import _ from 'underscore'
 
 import universalMiddleware from './util/universal'
+import SessionStore from './util/session-store'
 import webpackConfig from '../webpack.config.babel'
 import appConfig from '../config/webpack'
 
@@ -49,6 +50,8 @@ if (__DEV__) {
  */
 app.use(session({
   key: "rechat and react rock!!!",
+  httpOnly: false,
+  store: new SessionStore()
 }))
 
 /**
