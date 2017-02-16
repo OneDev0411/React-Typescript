@@ -19,7 +19,7 @@ const request = async function (ctx, next) {
 
     const headers = {
       'x-real-agent': user_agent,
-      'user-agent': app_name,
+      'User-Agent': app_name,
       'Content-Type': 'application/json'
     }
 
@@ -27,14 +27,29 @@ const request = async function (ctx, next) {
       headers.authorization = `Bearer ${access_token}`
     }
 
-    return agent[method.toLowerCase()](`${api_url}${url}?hostname=${host_name}`)
+    if (host_name != null) {
+      url = `${url}?hostname=${host_name}`
+    }
+
+    console.log(`${api_url}${url}`)
+
+    return agent[method.toLowerCase()](`${api_url}${url}`)
       .set(headers)
       .on('error', err => {
+        let responseText = err.response.text
+
+        // try to parse encoded json
+        try {
+          responseText = JSON.parse(responseText)
+        }
+        catch(e) {}
+
+        ctx.status = err.response.status
         ctx.body = {
           status: 'error',
           response: {
             status: err.response.status,
-            text: JSON.parse(err.response.text)
+            text: responseText
           }
         }
       })
