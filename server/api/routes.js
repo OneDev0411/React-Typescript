@@ -4,10 +4,15 @@ const list = [{ path: './util/request' }]
 
 const routes = {
   brand: [
-    { path: 'get-brand-by-hostname' }
+    { path: 'by-hostname' }
+  ],
+  listing: [
+    { path: 'valert' }
   ],
   'user': [
-    { path: 'signin' }
+    { path: 'signin' },
+    { path: 'signup' },
+    { path: 'signup-shadow' }
   ]
 }
 
