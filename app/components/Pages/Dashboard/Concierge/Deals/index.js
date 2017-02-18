@@ -48,12 +48,7 @@ export default class Deals extends Component {
     return (
       <img
         src={ deal.listing.cover_image_url }
-        style={{
-          width: '35px',
-          height: '35px',
-          borderRadius: '3px',
-          marginRight: '2%'
-        }}
+        className="preview-file"
       />
     )
   }
