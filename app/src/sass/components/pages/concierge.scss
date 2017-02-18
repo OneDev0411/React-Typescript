@@ -26,13 +26,16 @@
     }
 
     tbody {
+      color: #95A3B0;
       tr {
         background-color: #FFFFFF;
         margin-bottom: 1.5%;
         td {
           padding: 1%;
+          padding-left: 0;
           &:first-child {
             border-radius: 4px 0 0 4px;
+            padding-left: 1%;
           }
           &:last-child {
             border-radius: 0 4px 4px 0;
