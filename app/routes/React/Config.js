@@ -24,6 +24,8 @@ import Settings from '../../components/Pages/Account/Settings'
 import Notifications from '../../components/Pages/Account/Notifications'
 import Recommend from '../../components/Pages/Dashboard/Mls/Listing/Recommend'
 import Agents from '../../components/Pages/Dashboard/Mls/Agents'
+import Concierge from '../../components/Pages/Dashboard/Concierge'
+import Deals from '../../components/Pages/Dashboard/Concierge/Deals'
 
 export default (
   <Route path="/" component={App}>
@@ -47,6 +49,8 @@ export default (
     <Route path="dashboard/transactions/new" component={NewTransaction}/>
     <Route path="dashboard/transactions/:id" component={SingleTransaction}/>
     <Route path="dashboard/transactions/:id/attachments/:id" component={SingleTransaction}/>
+    <Route path="dashboard/concierge" component={Concierge}/>
+    <Route path="dashboard/concierge/deals" component={Deals}/>
     <Route path="verify/:slug" component={Verify}/>
     <Route path="password/:slug" component={Password}/>
     <Route path="*" component={NoMatch}/>
