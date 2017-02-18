@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router'
 import S from 'shorti'
 import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
 import ConciergeDispatcher from '../../../../../dispatcher/ConciergeDispatcher'
@@ -47,7 +48,12 @@ export default class Deals extends Component {
     return (
       <img
         src={ deal.listing.cover_image_url }
-        style={{ width: '35px', height: '35px', borderRadius: '3px', marginRight: '2%' }}
+        style={{
+          width: '35px',
+          height: '35px',
+          borderRadius: '3px',
+          marginRight: '2%'
+        }}
       />
     )
   }
@@ -88,8 +94,10 @@ export default class Deals extends Component {
                     return (
                       <tr key={`DEAL_${deal.id}`}>
                         <td>
-                          { this.getListingImage(deal) }
-                          { this.getDealAddress(deal) }
+                          <Link to={`dashboard/concierge/deals/${deal.id}`}>
+                            { this.getListingImage(deal) }
+                            { this.getDealAddress(deal) }
+                          </Link>
                         </td>
                         <td>{ deal.created_by.display_name }</td>
                         <td>{ deal.deal_type }</td>
