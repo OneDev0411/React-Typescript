@@ -425,6 +425,7 @@ export default class SideBar extends Component {
       map: <Popover className="sidenav__popover" id="popover-listing">Listings</Popover>,
       people: <Popover className="sidenav__popover" id="popover-people">People</Popover>,
       tasks: <Popover className="sidenav__popover" id="popover-tasks">Tasks</Popover>,
+      concierge: <Popover className="sidenav__popover" id="popover-tasks">Concierge</Popover>,
       transactions: <Popover className="sidenav__popover" id="popover-transactions">Transactions</Popover>,
       support: <Popover className="sidenav__popover" id="popover-transactions">Need Help?</Popover>
     }
@@ -539,6 +540,13 @@ export default class SideBar extends Component {
               <NavItem style={ S('w-85p') }>
                 <img src={ active.recents ? '/images/dashboard/sidenav/chat-active.svg' : '/images/dashboard/sidenav/chat.svg' } style={ S('w-19 h-19') }/>
                 {this.notificationIcon('room_notification_count')}
+              </NavItem>
+            </LinkContainer>
+          </OverlayTrigger>
+          <OverlayTrigger placement="right" overlay={ popover.concierge } delayShow={ 200 } delayHide={ 0 }>
+            <LinkContainer onClick={ this.hideListingViewer.bind(this) } className={ active.concierge } to="/dashboard/concierge">
+              <NavItem style={ S('w-85p') }>
+                <img src={ active.concierge ? '/images/dashboard/sidenav/task-active.svg' : '/images/dashboard/sidenav/task.svg' } style={ S('w-19 h-19') }/>
               </NavItem>
             </LinkContainer>
           </OverlayTrigger>
