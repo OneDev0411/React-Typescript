@@ -1,5 +1,8 @@
 // api/index.js
 module.exports = (app, config) => {
+  // Brands
+  require('./brands/get-deals')(app, config)
+
   // Contacts
   require('./contacts/get-contacts')(app, config)
   // Messages
