@@ -26,6 +26,7 @@ import Recommend from '../../components/Pages/Dashboard/Mls/Listing/Recommend'
 import Agents from '../../components/Pages/Dashboard/Mls/Agents'
 import Concierge from '../../components/Pages/Dashboard/Concierge'
 import Deals from '../../components/Pages/Dashboard/Concierge/Deals'
+import DealDetail from '../../components/Pages/Dashboard/Concierge/DealDetail'
 
 export default (
   <Route path="/" component={App}>
@@ -51,6 +52,7 @@ export default (
     <Route path="dashboard/transactions/:id/attachments/:id" component={SingleTransaction}/>
     <Route path="dashboard/concierge" component={Concierge}/>
     <Route path="dashboard/concierge/deals" component={Deals}/>
+    <Route path="dashboard/concierge/deals/:id" component={DealDetail}/>
     <Route path="verify/:slug" component={Verify}/>
     <Route path="password/:slug" component={Password}/>
     <Route path="*" component={NoMatch}/>
