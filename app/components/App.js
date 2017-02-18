@@ -1,9 +1,4 @@
 // App.js
-// Build stlye sheet
-if (process.env.WEBPACK_PROCESS === 'build')
-  // Style
-  require('../src/sass/main.scss')
-
 import React, { Component } from 'react'
 import _ from 'lodash'
 import config from '../../config/public'

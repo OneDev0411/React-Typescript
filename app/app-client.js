@@ -7,6 +7,9 @@ import history from './utils/history'
 // Routes config
 import react_routes from './routes/React/Config'
 
+// import styles
+import './src/sass/main.scss'
+
 const router = (
   <Router history={ history }>
     { react_routes }
