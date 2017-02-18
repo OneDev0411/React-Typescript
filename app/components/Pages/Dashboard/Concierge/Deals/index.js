@@ -5,6 +5,7 @@ import ConciergeDispatcher from '../../../../../dispatcher/ConciergeDispatcher'
 import AppStore from '../../../../../stores/AppStore'
 import SideBar from '../../Partials/SideBar'
 import MobileNav from '../../Partials/MobileNav'
+import { addressTitle } from '../../../../../utils/listing'
 
 export default class Deals extends Component {
 
@@ -35,6 +36,22 @@ export default class Deals extends Component {
     })
   }
 
+  getDealAddress(deal) {
+    return deal.listing ? addressTitle(deal.listing.property.address) : deal.address
+  }
+
+  getListingImage(deal) {
+    if (!deal.listing)
+      return <span></span>
+
+    return (
+      <img
+        src={ deal.listing.cover_image_url }
+        style={{ width: '35px', height: '35px', borderRadius: '3px', marginRight: '2%' }}
+      />
+    )
+  }
+
   render() {
     const { data } = this.props
     const user = data.user
@@ -61,6 +78,7 @@ export default class Deals extends Component {
                 <tr>
                   <td>ADDRESS</td>
                   <td>AGENT NAME</td>
+                  <td>SIDE</td>
                 </tr>
               </thead>
               <tbody>
@@ -69,8 +87,12 @@ export default class Deals extends Component {
                   AppStore.data.concierge_deals.map(deal => {
                     return (
                       <tr key={`DEAL_${deal.id}`}>
-                        <td>{ deal.address }</td>
-                        <td></td>
+                        <td>
+                          { this.getListingImage(deal) }
+                          { this.getDealAddress(deal) }
+                        </td>
+                        <td>{ deal.created_by.display_name }</td>
+                        <td>{ deal.deal_type }</td>
                       </tr>
                     )
                   })
