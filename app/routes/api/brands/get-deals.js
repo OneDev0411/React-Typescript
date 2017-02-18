@@ -1,10 +1,11 @@
-// api/alerts/get-alert.js
 module.exports = (app, config) => {
   app.get('/api/brands/deals',(req, res) => {
     const api_url = config.api.url
     const brand_id = req.query.brand_id
     const access_token = req.query.access_token
-    const endpoint = api_url + '/brands/' + brand_id + '/deals'
+    const endpoint = api_url + '/brands/' + brand_id +
+      '/deals?associations=deal.listing,deal.created_by'
+
     fetch(endpoint,{
       method: 'get',
       headers: {
