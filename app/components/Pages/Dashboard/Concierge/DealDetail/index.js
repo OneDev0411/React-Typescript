@@ -18,6 +18,15 @@ export default class Deals extends Component {
   componentDidMount() {
   }
 
+  getPreview(file) {
+    return (
+      <img
+        src={ file.preview_url }
+        className="preview-file"
+      />
+    )
+  }
+
   render() {
     const { data } = this.props
     const user = data.user
@@ -54,7 +63,10 @@ export default class Deals extends Component {
                   deal.files && deal.files.map(file => {
                     return (
                       <tr key={`FILE_${file.id}`}>
-                        <td>{ file.name }</td>
+                        <td>
+                          { this.getPreview(file) }
+                          { file.name }
+                        </td>
                         <td>{ file.type }</td>
                         <td>{ file.mime }</td>
                         <td>{ moment(file.created_at * 1000).format('Y/M/D HH:mm') }</td>
