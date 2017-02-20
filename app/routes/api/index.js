@@ -2,7 +2,9 @@
 module.exports = (app, config) => {
   // Brands
   require('./brands/get-deals')(app, config)
-
+  // Deals
+  require('./deals/get-submissions')(app, config)
+  require('./deals/get-envelopes')(app, config)
   // Contacts
   require('./contacts/get-contacts')(app, config)
   // Messages
