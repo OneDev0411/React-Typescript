@@ -63,13 +63,10 @@ export default (
     <Route path="dashboard/transactions/new" component={NewTransaction}/>
     <Route path="dashboard/transactions/:id" component={SingleTransaction}/>
     <Route path="dashboard/transactions/:id/attachments/:id" component={SingleTransaction}/>
-<<<<<<< HEAD
     <Route path="dashboard/website" component={Website}/>
-=======
     <Route path="dashboard/concierge" component={Concierge}/>
     <Route path="dashboard/concierge/deals" component={Deals}/>
     <Route path="dashboard/concierge/deals/:id" component={DealDetail}/>
->>>>>>> deals
     <Route path="verify/:slug" component={Verify}/>
     <Route path="password/:slug" component={Password}/>
     <Route path="widgets/listings" component={ListingsWidget}/>
