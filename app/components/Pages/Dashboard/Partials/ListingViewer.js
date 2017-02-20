@@ -676,14 +676,14 @@ export default class ListingViewer extends Component {
       const host = 'https://' + window.location.host
       brand_logo = (
         <a href={ host }>
-          <img style={ S('w-200') } src={ Brand.asset('site_logo_wide') } />
+          <img style={ S('maxw-200 maxh-35') } src={ Brand.asset('site_logo_wide') } />
         </a>
       )
     }
     if (!user) {
       join_area = (
         <div style={ S('h-70') }>
-          <div style={ S('pull-left p-16') }>
+          <div style={ S('pull-left p-16 h-35') }>
             { brand_logo }
           </div>
           <div style={ S('pull-right p-16') }>
