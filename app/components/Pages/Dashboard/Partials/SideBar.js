@@ -437,6 +437,7 @@ export default class SideBar extends Component {
       map: <Popover className="sidenav__popover" id="popover-listing">Listings</Popover>,
       people: <Popover className="sidenav__popover" id="popover-people">People</Popover>,
       tasks: <Popover className="sidenav__popover" id="popover-tasks">Tasks</Popover>,
+      concierge: <Popover className="sidenav__popover" id="popover-tasks">Concierge</Popover>,
       transactions: <Popover className="sidenav__popover" id="popover-transactions">Transactions</Popover>,
       support: <Popover className="sidenav__popover" id="popover-transactions">Need Help?</Popover>
     }
@@ -570,6 +571,13 @@ export default class SideBar extends Component {
               </NavItem>
             </LinkContainer>
           </OverlayTrigger>
+          <OverlayTrigger placement="right" overlay={ popover.concierge } delayShow={ 200 } delayHide={ 0 }>
+            <LinkContainer onClick={ this.hideListingViewer.bind(this) } className={ active.concierge } to="/dashboard/concierge">
+              <NavItem style={ S('w-85p') }>
+                <img src={ active.concierge ? '/images/dashboard/sidenav/task-active.svg' : '/images/dashboard/sidenav/task.svg' } style={ S('w-19 h-19') }/>
+              </NavItem>
+            </LinkContainer>
+          </OverlayTrigger>
           { /*
             <OverlayTrigger placement="right" overlay={ popover.people } delayShow={ 200 } delayHide={ 0 }>
               <LinkContainer className={ active.contacts } to="/dashboard/contacts">
@@ -660,6 +668,5 @@ export default class SideBar extends Component {
 SideBar.propTypes = {
   data: React.PropTypes.object,
   viewAllTransactions: React.PropTypes.func,
-  location: React.PropTypes.object,
-  history: React.PropTypes.object
+  location: React.PropTypes.object
 }

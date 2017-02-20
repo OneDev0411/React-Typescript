@@ -1,6 +1,4 @@
 // App.js
-if (process.env.WEBPACK_PROCESS === 'build')
-  require('../src/sass/main.scss')
 import React, { Component } from 'react'
 import _ from 'lodash'
 import config from '../../config/public'

@@ -33,6 +33,10 @@ import ListingsWidget from '../../components/Pages/Widgets/Listings'
 import MapWidget from '../../components/Pages/Widgets/Map'
 import SearchWidget from '../../components/Pages/Widgets/Search'
 
+import Concierge from '../../components/Pages/Dashboard/Concierge'
+import Deals from '../../components/Pages/Dashboard/Concierge/Deals'
+import DealDetail from '../../components/Pages/Dashboard/Concierge/DealDetail'
+
 export default (
   <Route path="/" component={App}>
     <IndexRoute component={Landing}/>
@@ -59,7 +63,13 @@ export default (
     <Route path="dashboard/transactions/new" component={NewTransaction}/>
     <Route path="dashboard/transactions/:id" component={SingleTransaction}/>
     <Route path="dashboard/transactions/:id/attachments/:id" component={SingleTransaction}/>
+<<<<<<< HEAD
     <Route path="dashboard/website" component={Website}/>
+=======
+    <Route path="dashboard/concierge" component={Concierge}/>
+    <Route path="dashboard/concierge/deals" component={Deals}/>
+    <Route path="dashboard/concierge/deals/:id" component={DealDetail}/>
+>>>>>>> deals
     <Route path="verify/:slug" component={Verify}/>
     <Route path="password/:slug" component={Password}/>
     <Route path="widgets/listings" component={ListingsWidget}/>
