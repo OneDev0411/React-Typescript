@@ -67,41 +67,49 @@ export default class Deals extends Component {
         nav_area = <MobileNav data={ data } />
     }
 
-    console.log(AppStore.data)
     return (
       <div style={ S('minw-1000') }>
         <main>
           { nav_area }
           <div className="deals" style={ main_style }>
-            <h3>Deals</h3>
-            <table>
-              <thead>
-                <tr>
-                  <td>ADDRESS</td>
-                  <td>AGENT NAME</td>
-                  <td>SIDE</td>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  AppStore.data.concierge_deals &&
-                  AppStore.data.concierge_deals.map(deal => {
-                    return (
-                      <tr key={`DEAL_${deal.id}`}>
-                        <td>
-                          <Link to={`dashboard/concierge/deals/${deal.id}`}>
-                            { this.getListingImage(deal) }
-                            { this.getDealAddress(deal) }
-                          </Link>
-                        </td>
-                        <td>{ deal.created_by.display_name }</td>
-                        <td>{ deal.deal_type }</td>
-                      </tr>
-                    )
-                  })
-                }
-              </tbody>
-            </table>
+            {
+              data.concierge_deals &&
+              <div>
+                <h3>Deals</h3>
+                <table>
+                  <thead>
+                    <tr>
+                      <td>ADDRESS</td>
+                      <td>AGENT NAME</td>
+                      <td>SIDE</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      data.concierge_deals.map(deal => {
+                        return (
+                          <tr key={`DEAL_${deal.id}`}>
+                            <td>
+                              <Link to={`dashboard/concierge/deals/${deal.id}`}>
+                                { this.getListingImage(deal) }
+                                { this.getDealAddress(deal) }
+                              </Link>
+                            </td>
+                            <td>{ deal.created_by.display_name }</td>
+                            <td>{ deal.deal_type }</td>
+                          </tr>
+                        )
+                      })
+                    }
+                  </tbody>
+                </table>
+              </div>
+            }
+
+            {
+              !data.concierge_deals &&
+              <div>Loading deals ...</div>
+            }
           </div>
         </main>
       </div>
