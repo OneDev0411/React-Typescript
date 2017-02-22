@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import S from 'shorti'
 import SideBar from '../../Partials/SideBar'
 import MobileNav from '../../Partials/MobileNav'
-import config from '../../../../../../config/private'
+import config from '../../../../../../config/public'
 
 export default class DealFormPreview extends Component {
 
