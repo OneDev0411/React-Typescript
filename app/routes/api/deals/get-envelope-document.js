@@ -9,6 +9,8 @@ module.exports = (app, config) => {
     const file_name = envelope_id + '_' + envelope_index + '.pdf'
     const endpoint = api_url + '/envelopes/' + envelope_id + '/' + envelope_index + '.pdf'
 
+    res.set('X-Frame-Options', 'SAMEORIGIN, GOFORIT')
+
     request({
       url: endpoint,
       headers: {
