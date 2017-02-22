@@ -90,7 +90,7 @@ export default class Deals extends Component {
                         return (
                           <tr key={`DEAL_${deal.id}`}>
                             <td>
-                              <Link to={`dashboard/concierge/deals/${deal.id}`}>
+                              <Link to={`/dashboard/concierge/deals/${deal.id}`}>
                                 { this.getListingImage(deal) }
                                 { this.getDealAddress(deal) }
                               </Link>
