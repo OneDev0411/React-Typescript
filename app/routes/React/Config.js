@@ -27,6 +27,8 @@ import Recommend from '../../components/Pages/Dashboard/Mls/Listing/Recommend'
 import Agents from '../../components/Pages/Dashboard/Mls/Agents'
 import Branch from '../../components/Pages/Branch'
 import Website from '../../components/Pages/Dashboard/Website'
+import Cards from '../../components/Pages/Dashboard/Cards'
+import Forms from '../../components/Pages/Dashboard/Forms'
 
 // Widgets
 import ListingsWidget from '../../components/Pages/Widgets/Listings'
@@ -67,6 +69,8 @@ export default (
     <Route path="dashboard/concierge" component={Concierge}/>
     <Route path="dashboard/concierge/deals" component={Deals}/>
     <Route path="dashboard/concierge/deals/:id" component={DealDetail}/>
+    <Route path="dashboard/cards" component={Cards}/>
+    <Route path="dashboard/forms" component={Forms}/>
     <Route path="verify/:slug" component={Verify}/>
     <Route path="password/:slug" component={Password}/>
     <Route path="widgets/listings" component={ListingsWidget}/>
