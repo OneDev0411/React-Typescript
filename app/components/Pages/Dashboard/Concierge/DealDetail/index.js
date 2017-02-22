@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router'
 import S from 'shorti'
 import cookie from 'react-cookie'
 import moment from 'moment'
@@ -24,7 +25,7 @@ export default class Deals extends Component {
   componentDidMount() {
     const { deal } = this.state
     const cookies = deal.cookies
-    console.log(cookies)
+
     _.each(cookies, (value, key) => {
       cookie.save(key, value, {
         path: '/',
@@ -138,7 +139,11 @@ export default class Deals extends Component {
                       deal.submissions.map(submission => {
                         return (
                           <tr key={`SUBMISSIONS_${submission.id}`}>
-                            <td>{ submission.title }</td>
+                            <td>
+                              <Link to={`/dashboard/concierge/deals/submission/${submission.last_revision}`}>
+                                { submission.title }
+                              </Link>
+                            </td>
                             <td>{ submission.state }</td>
                           </tr>
                         )
@@ -157,7 +162,9 @@ export default class Deals extends Component {
                   deal.envelopes.map(envelope => {
                     return (
                       <div key={`ENVELOP_${envelope.id}`}>
-                        <b>{ envelope.title }</b>
+                        <b>
+                          { envelope.title }
+                        </b>
 
                         <table>
                           <thead>
@@ -167,10 +174,16 @@ export default class Deals extends Component {
                           </thead>
                           <tbody>
                             {
-                              envelope.documents.map(edoc => {
+                              envelope.documents.map((edoc, key) => {
                                 return (
                                   <tr key={`ENVELOPE_DOC_${edoc.id}`}>
-                                    <td>{ edoc.title }</td>
+                                    <td>
+                                      <Link
+                                        to={`/dashboard/concierge/deals/envelope/${envelope.id}/${key}`}
+                                      >
+                                        { edoc.title }
+                                      </Link>
+                                    </td>
                                   </tr>
                                 )
                               })
