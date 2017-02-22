@@ -38,6 +38,7 @@ import SearchWidget from '../../components/Pages/Widgets/Search'
 import Concierge from '../../components/Pages/Dashboard/Concierge'
 import Deals from '../../components/Pages/Dashboard/Concierge/Deals'
 import DealDetail from '../../components/Pages/Dashboard/Concierge/DealDetail'
+import DealFormPreview from '../../components/Pages/Dashboard/Concierge/DealFormPreview'
 
 export default (
   <Route path="/" component={App}>
@@ -69,6 +70,7 @@ export default (
     <Route path="dashboard/concierge" component={Concierge}/>
     <Route path="dashboard/concierge/deals" component={Deals}/>
     <Route path="dashboard/concierge/deals/:id" component={DealDetail}/>
+    <Route path="dashboard/concierge/deals/:type/:id(/:index)" component={DealFormPreview}/>
     <Route path="dashboard/cards" component={Cards}/>
     <Route path="dashboard/forms" component={Forms}/>
     <Route path="verify/:slug" component={Verify}/>
