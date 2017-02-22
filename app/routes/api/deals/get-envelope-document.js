@@ -9,9 +9,6 @@ module.exports = (app, config) => {
     const file_name = envelope_id + '_' + envelope_index + '.pdf'
     const endpoint = api_url + '/envelopes/' + envelope_id + '/' + envelope_index + '.pdf'
 
-    console.log(endpoint)
-    console.log(access_token)
-
     request({
       url: endpoint,
       headers: {

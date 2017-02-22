@@ -34,7 +34,6 @@ export default class DealFormPreview extends Component {
     const token = data.user.access_token
     const base_url = `${config.app_url}/api/deals/envelope/preview`
     const url = `${base_url}?id=${id}&index=${index}&access_token=${token}`
-    console.log(url)
     this.setState({ url })
   }
 
