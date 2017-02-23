@@ -267,6 +267,9 @@ export default class SideBar extends Component {
       delete AppStore.data.settings.show_password
     AppStore.emitChange()
   }
+  goToStore() {
+    window.location = '/dashboard/website'
+  }
   render() {
     // Data
     const data = this.props.data
@@ -614,11 +617,9 @@ export default class SideBar extends Component {
           { recommend }
           { agents }
           <OverlayTrigger placement="right" overlay={ popover.store } delayShow={ 200 } delayHide={ 0 }>
-            <LinkContainer className={ active.store } to="/dashboard/website">
-              <NavItem style={ S('w-85p') }>
-                <SvgStore color={ active.store ? nav_active_color : '#4e5c6c' }/>
-              </NavItem>
-            </LinkContainer>
+            <NavItem style={ S('w-85p') } onClick={ this.goToStore.bind(this) }>
+              <SvgStore color={ active.store ? nav_active_color : '#4e5c6c' }/>
+            </NavItem>
           </OverlayTrigger>
         </Nav>
         <div style={ S('absolute b-10 l-15') }>
