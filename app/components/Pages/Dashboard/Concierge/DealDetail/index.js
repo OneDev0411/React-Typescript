@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router'
 import S from 'shorti'
 import cookie from 'react-cookie'
 import moment from 'moment'
@@ -8,6 +7,7 @@ import AppStore from '../../../../../stores/AppStore'
 import ConciergeDispatcher from '../../../../../dispatcher/ConciergeDispatcher'
 import SideBar from '../../Partials/SideBar'
 import MobileNav from '../../Partials/MobileNav'
+import config from '../../../../../../config/public'
 
 export default class Deals extends Component {
 
@@ -65,6 +65,21 @@ export default class Deals extends Component {
       user,
       deal_id: this.props.params.id
     })
+  }
+
+  loadEnvelopeForm(id, index) {
+    const { data } = this.props
+    const token = data.user.access_token
+    const base_url = `${config.app.url}/api/deals/envelope/preview`
+    const url = `${base_url}?id=${id}&index=${index}&access_token=${token}`
+    return url
+  }
+
+  loadSubmissionForm(id) {
+    const { data } = this.props
+    const token = data.user.access_token
+    const url = `${config.forms.url}/submissions/${id}.pdf?token=${token}&flat=1`
+    return url
   }
 
   render() {
@@ -140,9 +155,9 @@ export default class Deals extends Component {
                         return (
                           <tr key={`SUBMISSIONS_${submission.id}`}>
                             <td>
-                              <Link to={`/dashboard/concierge/deals/submission/${submission.last_revision}`}>
+                              <a target="_blank" href={this.loadSubmissionForm(submission.last_revision)}>
                                 { submission.title }
-                              </Link>
+                              </a>
                             </td>
                             <td>{ submission.state }</td>
                           </tr>
@@ -178,11 +193,9 @@ export default class Deals extends Component {
                                 return (
                                   <tr key={`ENVELOPE_DOC_${edoc.id}`}>
                                     <td>
-                                      <Link
-                                        to={`/dashboard/concierge/deals/envelope/${envelope.id}/${key}`}
-                                      >
+                                      <a target="_blank" href={this.loadEnvelopeForm(envelope.id, key)}>
                                         { edoc.title }
-                                      </Link>
+                                      </a>
                                     </td>
                                   </tr>
                                 )
