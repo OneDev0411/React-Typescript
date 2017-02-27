@@ -40,7 +40,8 @@ export default class NewMessageViewer extends Component {
           })
           this.props.addUsersToSearchInput(data.new_message.items_selected)
         }
-        this.refs.myselect.refs.input.blur()
+        if (this.refs.myselect.refs.input)
+          this.refs.myselect.refs.input.blur()
       }
     }
   }
