@@ -34,7 +34,7 @@ const routes = {
   listing: [
     [ 'valert' ],
     [ 'listings' ],
-    [ 'similar' ],
+    [ 'similars' ],
     [ 'search' ]
   ],
   message: [
@@ -49,7 +49,7 @@ const routes = {
     [ 'mark' ]
   ],
   room: [
-    [ 'acknowledege-room-notifications' ],
+    [ 'acknowledge-room-notifications' ],
     [ 'add-user-to-room' ],
     [ 'add-users' ],
     [ 'create-alert' ],
@@ -71,7 +71,7 @@ const routes = {
     [ 'search' ]
   ],
   task: [
-    [ 'acknowledege-notifications' ],
+    [ 'acknowledge-notifications' ],
     [ 'add-contacts' ],
     [ 'add-transaction' ],
     [ 'create-task' ],
@@ -86,7 +86,7 @@ const routes = {
     [ 'delete-phone' ],
   ],
   transaction: [
-    [ 'acknowledege-transaction-notifications' ],
+    [ 'acknowledge-transaction-notifications' ],
     [ 'add-role' ],
     [ 'create-transaction' ],
     [ 'delete-file' ],

@@ -5,7 +5,7 @@ const app = new Koa()
 
 router.post('/user/listing-inquiry', bodyParser(), async (ctx, next) => {
 
-  const { agent, brand_ source_type, listing } = ctx.request.body.user
+  const { agent, brand, source_type, listing } = ctx.request.body.user
 
   try {
     const response = await ctx

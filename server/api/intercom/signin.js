@@ -1,11 +1,12 @@
 import Koa from 'koa'
 const router = require('koa-router')()
 const Intercom = require('intercom-client')
+import config from '../../../config/private'
 
 const app = new Koa()
 const client = new Intercom.Client({
-  appId: ctx.config.intercom.app_id,
-  appApiKey: ctx.config.intercom.secret_key
+  appId: config.intercom.app_id,
+  appApiKey: config.intercom.secret_key
 })
 
 router.post('/intercom/signin', async (ctx, next) => {
