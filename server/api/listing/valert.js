@@ -5,9 +5,7 @@ const app = new Koa()
 
 router.post('/listings/valerts', async (ctx, next) => {
 
-  const req = ctx.request
-  const access_token = req.body.access_token
-  const options = req.body.options
+  const  { options } = ctx.request.body
 
   // base endpoint
   let endpoint = '/valerts'

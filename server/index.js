@@ -10,10 +10,15 @@ import _ from 'underscore'
 
 import universalMiddleware from './util/universal'
 import SessionStore from './util/session-store'
+import request from './util/request'
 import webpackConfig from '../webpack.config.babel'
 import appConfig from '../config/webpack'
 
 const app = new Koa()
+
+// app uses proxy
+app.proxy = true
+
 const __DEV__ = process.env.NODE_ENV === 'development'
 
 // attach template engine
@@ -64,6 +69,9 @@ app.use(async function(ctx, next) {
 
   await next()
 })
+
+// add request middleware
+app.use(mount('/api', request))
 
 // eslint-disable-next-line
 _.each(require('./api/routes'), r =>
