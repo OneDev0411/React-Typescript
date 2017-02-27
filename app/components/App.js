@@ -75,9 +75,6 @@ export default class App extends Component {
       AppStore.data.session_started = true
       AppStore.emitChange()
     }
-  }
-  componentDidUpdate() {
-    const data = AppStore.data
     const brand = data.brand
     if (brand && brand.assets.google_analytics_id) {
       const google_analytics_id = brand.assets.google_analytics_id
