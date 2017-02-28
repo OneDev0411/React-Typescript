@@ -1,4 +1,5 @@
 // controller/listing-viewer.js
+import { browserHistory } from 'react-router'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 const controller = {
@@ -9,8 +10,8 @@ const controller = {
       window.open('/dashboard/mls/' + listing.id)
       return
     }
-    const history = require('../../../../utils/history')
-    history.pushState(null, '/dashboard/mls/' + listing.id)
+
+    browserHistory.push('/dashboard/mls/' + listing.id)
     const user = data.user
     AppStore.data.show_listing_viewer = true
     AppStore.data.current_listing = listing
@@ -43,8 +44,8 @@ const controller = {
     delete AppStore.data.current_listing
     if (!AppStore.data.show_search_map || !AppStore.data.show_alerts_map || !AppStore.data.show_actives_map)
       AppStore.data.show_search_map = true
-    const history = require('../../../../utils/history')
-    history.pushState(null, '/dashboard/mls')
+
+    browserHistory.push('/dashboard/mls')
     AppStore.emitChange()
   },
   showModalGallery(image_url) {

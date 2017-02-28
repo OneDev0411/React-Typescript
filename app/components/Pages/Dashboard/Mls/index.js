@@ -1,5 +1,6 @@
 // Dashboard/Mls/index.js
 import React, { Component } from 'react'
+import { browserHistory } from 'react-router'
 import S from 'shorti'
 import _ from 'lodash'
 import { Input, ButtonGroup, Button, Modal, OverlayTrigger, Popover } from 'react-bootstrap'
@@ -193,8 +194,7 @@ export default class Mls extends Component {
     AppStore.emitChange()
   }
   changeURL(url) {
-    if (this.props.history)
-      this.props.history.pushState(null, url)
+    browserHistory.push(url)
   }
   resetViews() {
     delete AppStore.data.show_search_map

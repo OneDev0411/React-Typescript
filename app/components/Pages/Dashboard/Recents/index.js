@@ -1,5 +1,6 @@
 // Recents/Index.js
 import React, { Component } from 'react'
+import { browserHistory } from 'react-router'
 import S from 'shorti'
 import _ from 'lodash'
 import validator from 'validator'
@@ -111,7 +112,7 @@ export default class Dashboard extends Component {
       AppStore.data.current_room_mobile = current_room
     delete AppStore.data.show_room_users_modal
     AppStore.emitChange()
-    history.pushState(null, null, '/dashboard/recents/' + current_room.id)
+    browserHistory.push('/dashboard/recents/' + current_room.id)
   }
 
   removeScrollBottom() {
@@ -395,7 +396,7 @@ export default class Dashboard extends Component {
     AppStore.data.show_listing_viewer = true
     AppStore.data.current_listing = listing
     delete AppStore.data.show_alert_modal
-    history.pushState(null, null, '/dashboard/mls/' + listing.id)
+    browserHistory.push('/dashboard/mls/' + listing.id)
     AppStore.emitChange()
   }
 
@@ -403,7 +404,7 @@ export default class Dashboard extends Component {
     const data = AppStore.data
     const current_room = data.current_room
     delete AppStore.data.show_listing_viewer
-    history.pushState(null, null, '/dashboard/recents/' + current_room.id)
+    browserHistory.push('/dashboard/recents/' + current_room.id)
     AppStore.emitChange()
   }
 

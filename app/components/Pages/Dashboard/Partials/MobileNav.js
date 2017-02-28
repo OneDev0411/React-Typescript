@@ -1,5 +1,6 @@
 // Sidebar.js
 import React, { Component } from 'react'
+import { browserHistory } from 'react-router'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Nav, NavItem, NavDropdown, Modal, Col, Input, Button, Alert, DropdownButton, MenuItem } from 'react-bootstrap'
 import S from 'shorti'
@@ -192,9 +193,9 @@ export default class SideBar extends Component {
     if (data.current_listing)
       this.hideListingViewer()
     if (current_room)
-      history.pushState(null, null, '/dashboard/recents/' + current_room.id)
+      browserHistory.push('/dashboard/recents/' + current_room.id)
     else
-      history.pushState(null, null, '/dashboard/recents/')
+      browserHistory.push('/dashboard/recents/')
   }
   render() {
     // Data
