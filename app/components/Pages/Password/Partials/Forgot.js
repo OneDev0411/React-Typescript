@@ -1,7 +1,7 @@
 // Forgot.js
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import { Input, Button, Col, Alert } from 'react-bootstrap'
+import { FormControl, Button, Col, Alert } from 'react-bootstrap'
 import S from 'shorti'
 
 // AppStore
@@ -99,7 +99,7 @@ export default class Forgot extends Component {
       <div>
         <div style={ S('color-929292 mb-20') }>Forgot your password?</div>
         <form onSubmit={ this.handleSubmit.bind(this) }>
-          <Input bsSize="large" style={ input_style } bsStyle={ email_style } ref="email" placeholder="Email address" type="text" />
+          <FormControl bsSize="large" style={ input_style } bsStyle={ email_style } ref="email" placeholder="Email address" type="text" />
           { message }
           <Col sm={4} className="forgot__password-btn--cancel" style={ S('p-0 pr-10') }>
             <Link className="btn btn-link" style={ S('w-100p') } to="/signin">Cancel</Link>

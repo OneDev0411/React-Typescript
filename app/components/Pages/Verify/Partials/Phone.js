@@ -1,7 +1,7 @@
 // Phone.js
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import { Input, Button, Alert } from 'react-bootstrap'
+import { FormControl, Button, Alert } from 'react-bootstrap'
 import S from 'shorti'
 import helpers from '../../../../utils/helpers'
 
@@ -58,7 +58,7 @@ export default class Phone extends Component {
       <div>
         <div style={ S('color-929292 mb-20') }>Confirm your phone</div>
         <form onSubmit={ this.handleSubmit.bind(this) }>
-          <Input bsStyle={ code_style } ref="code" placeholder="Enter 5 digit code" type="text" maxLength="5" />
+          <FormControl bsStyle={ code_style } ref="code" placeholder="Enter 5 digit code" type="text" maxLength="5" />
           { message }
           <Button type="submit" bsStyle="primary" style={ S('w-100p') }>Verify</Button>
         </form>

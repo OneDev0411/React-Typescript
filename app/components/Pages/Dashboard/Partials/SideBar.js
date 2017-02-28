@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Nav, NavItem, NavDropdown, Modal, Col, Input, Button, Alert, OverlayTrigger, Popover, DropdownButton, MenuItem } from 'react-bootstrap'
+import { Nav, NavItem, NavDropdown, Modal, Col, FormControl, Button, Alert, OverlayTrigger, Popover, DropdownButton, MenuItem } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
 import Dropzone from 'react-dropzone'
@@ -380,15 +380,15 @@ export default class SideBar extends Component {
       <Col xs={ 9 } style={ S('p-0') }>
         <Col xs={ 6 }>
           <label>First name</label>
-          <Input ref="first_name" type="text" defaultValue={ user.first_name }/>
+          <FormControl ref="first_name" type="text" defaultValue={ user.first_name }/>
         </Col>
         <Col xs={ 6 } style={ S('p-0') }>
           <label>Last name</label>
-          <Input ref="last_name" type="text" defaultValue={ user.last_name }/>
+          <FormControl ref="last_name" type="text" defaultValue={ user.last_name }/>
         </Col>
         <Col xs={ 6 }>
           <label>Email</label>
-          <Input ref="email" type="text" defaultValue={ user.email }/>
+          <FormControl ref="email" type="text" defaultValue={ user.email }/>
         </Col>
         <Col xs={ 6 } style={ S('p-0') }>
           <label>Phone number</label>
@@ -415,12 +415,12 @@ export default class SideBar extends Component {
         <Col xs={ 9 } style={ S('p-0') }>
           <Col xs={ 12 } style={ S('pr-0') }>
             <label>Current password</label>
-            <Input key="old_password" bsSize="large" style={ S('font-15') } ref="old_password" type="password" placeholder="Current password" />
+            <FormControl key="old_password" bsSize="large" style={ S('font-15') } ref="old_password" type="password" placeholder="Current password" />
           </Col>
           <Col xs={ 12 } style={ S('pr-0') }>
             <label>New password</label>
             <div style={ S('relative') }>
-              <Input key="new_password" ref="new_password" autoComplete={ false } style={ S('font-15') } bsSize="large" placeholder="New Password" type={ data.settings && data.settings.show_password ? 'text' : 'password' } />
+              <FormControl key="new_password" ref="new_password" autoComplete={ false } style={ S('font-15') } bsSize="large" placeholder="New Password" type={ data.settings && data.settings.show_password ? 'text' : 'password' } />
               <i onClick={ this.toggleShowPassword } style={ S('absolute t-15 r-15 z-100 pointer color-666') } className={ `fa fa-eye${ data.settings && data.settings.show_password ? '-slash' : '' }` }></i>
             </div>
           </Col>
@@ -453,7 +453,7 @@ export default class SideBar extends Component {
           <Modal.Body>
             <Col xs={ 12 }>
               <label>Enter your agent license # to unlock MLS features.</label>
-              <Input key={'password'} ref="mlsid" type="text" defaultValue=""/>
+              <FormControl key={'password'} ref="mlsid" type="text" defaultValue=""/>
               { message }
               <div className="clearfix"></div>
             </Col>
@@ -499,7 +499,7 @@ export default class SideBar extends Component {
                 }
               </div>
               <div style={ S('w-100p mb-10') }>
-                <Input type="text" ref="secret" placeholder="Your email or phone #"/>
+                <FormControl type="text" ref="secret" placeholder="Your email or phone #"/>
                 <div className="clearfix"></div>
                 { message }
               </div>

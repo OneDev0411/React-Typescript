@@ -42,16 +42,16 @@ export default class DayTimePicker extends Component {
           TIME
           <div className="clearfix"></div>
           <div style={ S('w-60 pull-left') }>
-            <Input defaultValue={ current_hour } ref="hours" type="number" max={ 12 } min={ 1 }/>
+            <FormControl defaultValue={ current_hour } ref="hours" type="number" max={ 12 } min={ 1 }/>
           </div>
           <div style={ S('w-60 pull-left') }>
-            <Input defaultValue={ current_minutes } ref="minutes" type="number" max={ 59 } min={ 1 }/>
+            <FormControl defaultValue={ current_minutes } ref="minutes" type="number" max={ 59 } min={ 1 }/>
           </div>
           <div style={ S('w-60 pull-left') }>
-            <Input defaultValue={ current_suffix } ref="suffix" type="select">
+            <FormControl defaultValue={ current_suffix } ref="suffix" type="select">
               <option value={ 'AM' }>AM</option>
               <option value={ 'PM' }>PM</option>
-            </Input>
+            </FormControl>
           </div>
         </div>
         <div style={ S('p-10') }>

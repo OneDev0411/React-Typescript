@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Nav, NavItem, NavDropdown, Modal, Col, Input, Button, Alert, DropdownButton, MenuItem } from 'react-bootstrap'
+import { Nav, NavItem, NavDropdown, Modal, Col, FormControl, Button, Alert, DropdownButton, MenuItem } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
 import Dropzone from 'react-dropzone'
@@ -304,15 +304,15 @@ export default class SideBar extends Component {
       <Col xs={ 9 }>
         <div>
           <label>First name</label>
-          <Input ref="first_name" type="text" defaultValue={ user.first_name }/>
+          <FormControl ref="first_name" type="text" defaultValue={ user.first_name }/>
         </div>
         <div>
           <label>Last name</label>
-          <Input ref="last_name" type="text" defaultValue={ user.last_name }/>
+          <FormControl ref="last_name" type="text" defaultValue={ user.last_name }/>
         </div>
         <div>
           <label>Email</label>
-          <Input ref="email" type="text" defaultValue={ user.email }/>
+          <FormControl ref="email" type="text" defaultValue={ user.email }/>
         </div>
         <div>
           <label>Phone number</label>
@@ -339,15 +339,15 @@ export default class SideBar extends Component {
         <Col xs={ 9 } style={ S('p-0') }>
           <Col xs={ 12 } style={ S('pr-0') }>
             <label>Current password</label>
-            <Input key={'password'} ref="old_password" type="password" defaultValue=""/>
+            <FormControl key={'password'} ref="old_password" type="password" defaultValue=""/>
           </Col>
           <Col xs={ 12 } style={ S('pr-0') }>
             <label>New password</label>
-            <Input key={'new_password'} ref="new_password" type="password" defaultValue=""/>
+            <FormControl key={'new_password'} ref="new_password" type="password" defaultValue=""/>
           </Col>
           <Col xs={ 12 } style={ S('pr-0') }>
             <label>Confirm new password</label>
-            <Input key={'new_password_confirm'} ref="new_password_confirm" type="password" defaultValue=""/>
+            <FormControl key={'new_password_confirm'} ref="new_password_confirm" type="password" defaultValue=""/>
             { message }
           </Col>
         </Col>

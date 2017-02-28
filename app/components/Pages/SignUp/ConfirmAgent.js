@@ -1,6 +1,6 @@
 // Reset.js
 import React, { Component } from 'react'
-import { Input, Button, Col, Alert } from 'react-bootstrap'
+import { FormControl, Button, Col, Alert } from 'react-bootstrap'
 import S from 'shorti'
 // AppStore
 import AppDispatcher from '../../../dispatcher/AppDispatcher'
@@ -113,7 +113,7 @@ export default class ConfirmAgent extends Component {
           <div style={ S('mb-20 color-9b9b9b') }>Enter your agent license # to unlock MLS features.</div>
           <form onSubmit={ this.handleSubmit.bind(this, 'search-agent') }>
             <div style={ S('w-100p mb-10') }>
-              <Input onChange={ this.handleAgentNumberChange.bind(this) } bsSize="large" type="text" ref="mlsid" placeholder="Your agent number"/>
+              <FormControl onChange={ this.handleAgentNumberChange.bind(this) } bsSize="large" type="text" ref="mlsid" placeholder="Your agent number"/>
               <div className="clearfix"></div>
             </div>
             { message }
@@ -174,7 +174,7 @@ export default class ConfirmAgent extends Component {
             <form onSubmit={ this.handleSubmit.bind(this, 'confirm-agent') }>
               <div style={ S('w-100p mb-10') }>
                 <div style={ S('mb-10 color-9b9b9b') }>Confirm this is you by entering your email or phone number # below</div>
-                <Input onChange={ this.handleAgentSecretChange.bind(this) } bsSize="large" type="text" ref="secret" placeholder="Your email or phone #"/>
+                <FormControl onChange={ this.handleAgentSecretChange.bind(this) } bsSize="large" type="text" ref="secret" placeholder="Your email or phone #"/>
                 <div className="clearfix"></div>
                 { message }
               </div>

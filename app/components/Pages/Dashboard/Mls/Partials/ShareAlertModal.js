@@ -244,7 +244,7 @@ export default class ShareAlertModal extends Component {
           <div className="clearfix"></div>
           <div>
             <div style={ S('pull-left w-85p') }>
-              <Input style={ S('border-none') } ref="message" type="text" placeholder="Write Message..."/>
+              <FormControl style={ S('border-none') } ref="message" type="text" placeholder="Write Message..."/>
             </div>
             <div style={ S('pull-right') }>
               <Button disabled={!this.isSharable() ? true : false} className={ share_modal && share_modal.sending_share || !this.isSharable() ? 'disabled' : '' } bsStyle="primary" onClick={ controller.alert_share.shareAlert.bind(this) }>{ share_modal && !share_modal.sending_share ? 'Share' : 'Sending...' }</Button>

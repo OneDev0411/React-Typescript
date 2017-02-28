@@ -228,15 +228,15 @@ export default class FilterBar extends Component {
               From
             </label>
             <div>
-              <Input type="select" ref="from_year" style={ S('w-32p pull-left') }>
+              <FormControl type="select" ref="from_year" style={ S('w-32p pull-left') }>
                 { this.years() }
-              </Input>
-              <Input type="select" ref="from_day" style={ S('w-32p pull-left ml-1p') }>
+              </FormControl>
+              <FormControl type="select" ref="from_day" style={ S('w-32p pull-left ml-1p') }>
                 { this.days() }
-              </Input>
-              <Input type="select" ref="from_month" style={ S('w-32p pull-left ml-1p') }>
+              </FormControl>
+              <FormControl type="select" ref="from_month" style={ S('w-32p pull-left ml-1p') }>
                 { this.months() }
-              </Input>
+              </FormControl>
             </div>
           </div>
 
@@ -247,15 +247,15 @@ export default class FilterBar extends Component {
               To
             </label>
             <div>
-              <Input type="select" ref="to_year" style={ S('w-32p pull-left') }>
+              <FormControl type="select" ref="to_year" style={ S('w-32p pull-left') }>
                 { this.years() }
-              </Input>
-              <Input type="select" ref="to_day" style={ S('w-32p pull-left ml-1p') }>
+              </FormControl>
+              <FormControl type="select" ref="to_day" style={ S('w-32p pull-left ml-1p') }>
                 { this.days() }
-              </Input>
-              <Input type="select" ref="to_month" style={ S('w-32p pull-left ml-1p') }>
+              </FormControl>
+              <FormControl type="select" ref="to_month" style={ S('w-32p pull-left ml-1p') }>
                 { this.months() }
-              </Input>
+              </FormControl>
             </div>
           </div>
 
@@ -267,7 +267,7 @@ export default class FilterBar extends Component {
               Location
             </label>
             <div>
-              <Input type="select" placeholder="Area" ref="area">
+              <FormControl type="select" placeholder="Area" ref="area">
                 <option value="">---</option>
                 <option>CEDAR HILL AREA (1)</option>
                 <option>DESOTO AREA (2)</option>
@@ -450,7 +450,7 @@ export default class FilterBar extends Component {
                 <option>OTHER AREAS WITHIN THE U.S. (999)</option>
                 <option>OUTSIDE OF THE U.S. (1000)</option>
                 <option>NTREIS TEST ONLY</option>
-              </Input>
+              </FormControl>
             </div>
           </div>
 
@@ -461,10 +461,10 @@ export default class FilterBar extends Component {
             </label>
             <div style={ this.filterEnabled('total_value') }>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="total_value_min"/>
+                <FormControl type="text" bsSize="small" placeholder="Min" ref="total_value_min"/>
               </div>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="total_value_max"/>
+                <FormControl type="text" bsSize="small" placeholder="Max" ref="total_value_max"/>
               </div>
             </div>
           </div>
@@ -476,10 +476,10 @@ export default class FilterBar extends Component {
             </label>
             <div style={ this.filterEnabled('total_volume') }>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="total_volume_min"/>
+                <FormControl type="text" bsSize="small" placeholder="Min" ref="total_volume_min"/>
               </div>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="total_volume_max"/>
+                <FormControl type="text" bsSize="small" placeholder="Max" ref="total_volume_max"/>
               </div>
             </div>
           </div>
@@ -491,10 +491,10 @@ export default class FilterBar extends Component {
             </label>
             <div style={ this.filterEnabled('list_value') }>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="list_value_min"/>
+                <FormControl type="text" bsSize="small" placeholder="Min" ref="list_value_min"/>
               </div>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="list_value_max"/>
+                <FormControl type="text" bsSize="small" placeholder="Max" ref="list_value_max"/>
               </div>
             </div>
           </div>
@@ -506,10 +506,10 @@ export default class FilterBar extends Component {
             </label>
             <div style={ this.filterEnabled('list_volume') }>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="list_volume_min"/>
+                <FormControl type="text" bsSize="small" placeholder="Min" ref="list_volume_min"/>
               </div>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="list_volume_max"/>
+                <FormControl type="text" bsSize="small" placeholder="Max" ref="list_volume_max"/>
               </div>
             </div>
           </div>
@@ -521,10 +521,10 @@ export default class FilterBar extends Component {
             </label>
             <div style={ this.filterEnabled('sell_value') }>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="sell_value_min"/>
+                <FormControl type="text" bsSize="small" placeholder="Min" ref="sell_value_min"/>
               </div>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="sell_value_max"/>
+                <FormControl type="text" bsSize="small" placeholder="Max" ref="sell_value_max"/>
               </div>
             </div>
           </div>
@@ -536,10 +536,10 @@ export default class FilterBar extends Component {
             </label>
             <div style={ this.filterEnabled('sell_volume') }>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="sell_volume_min"/>
+                <FormControl type="text" bsSize="small" placeholder="Min" ref="sell_volume_min"/>
               </div>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="sell_volume_max"/>
+                <FormControl type="text" bsSize="small" placeholder="Max" ref="sell_volume_max"/>
               </div>
             </div>
           </div>
@@ -554,10 +554,10 @@ export default class FilterBar extends Component {
             </label>
             <div style={ this.filterEnabled('active_value') }>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="active_value_min"/>
+                <FormControl type="text" bsSize="small" placeholder="Min" ref="active_value_min"/>
               </div>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="active_value_max"/>
+                <FormControl type="text" bsSize="small" placeholder="Max" ref="active_value_max"/>
               </div>
             </div>
           </div>
@@ -572,10 +572,10 @@ export default class FilterBar extends Component {
             </label>
             <div style={ this.filterEnabled('active_volume') }>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="active_volume_min"/>
+                <FormControl type="text" bsSize="small" placeholder="Min" ref="active_volume_min"/>
               </div>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="active_volume_max"/>
+                <FormControl type="text" bsSize="small" placeholder="Max" ref="active_volume_max"/>
               </div>
             </div>
           </div>
@@ -590,10 +590,10 @@ export default class FilterBar extends Component {
             </label>
             <div style={ this.filterEnabled('total_active_value') }>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="total_active_value_min"/>
+                <FormControl type="text" bsSize="small" placeholder="Min" ref="total_active_value_min"/>
               </div>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="total_active_value_max"/>
+                <FormControl type="text" bsSize="small" placeholder="Max" ref="total_active_value_max"/>
               </div>
             </div>
           </div>
@@ -608,10 +608,10 @@ export default class FilterBar extends Component {
             </label>
             <div style={ this.filterEnabled('total_active_volume') }>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="total_active_volume_min"/>
+                <FormControl type="text" bsSize="small" placeholder="Min" ref="total_active_volume_min"/>
               </div>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="total_active_volume_max"/>
+                <FormControl type="text" bsSize="small" placeholder="Max" ref="total_active_volume_max"/>
               </div>
             </div>
           </div>
@@ -625,7 +625,7 @@ export default class FilterBar extends Component {
               </span>
             </label>
             <div style={ this.filterEnabled('agent_experience') }>
-              <Input type="select" ref="agent_experience">
+              <FormControl type="select" ref="agent_experience">
                 <option value="">---</option>
                 <option value="0-5">0-5 Years</option>
                 <option value="5-10">5-10 Years</option>
@@ -633,13 +633,13 @@ export default class FilterBar extends Component {
                 <option value="15-25">15-25 Years</option>
                 <option value="25-40">25-40 Years</option>
                 <option value="20+">20+</option>
-              </Input>
+              </FormControl>
             </div>
           </div>
 
           <br/> <br/>
 
-          <Input type="submit" value="Show results"/>
+          <FormControl type="submit" value="Show results"/>
         </form>
       </div>
     )

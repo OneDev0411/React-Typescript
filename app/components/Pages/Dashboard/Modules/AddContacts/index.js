@@ -1,6 +1,6 @@
 // AddContactsModule/index.js
 import React, { Component } from 'react'
-import { Button, Input, Alert } from 'react-bootstrap'
+import { Button, FormControl, Alert } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
 import validator from 'validator'
@@ -404,7 +404,7 @@ export default class AddContactsModule extends Component {
     return (
       <div style={ module_style } className="add-contact-form">
         <div style={ S('maxw-820') }>
-          <Input onClick={ this.handleInputClick.bind(this) } onFocus={ this.handleInputFocus.bind(this) } onBlur={ this.handleInputBlur.bind(this) } ref="search_contacts" onKeyDown={ this.navContactList.bind(this) } onKeyUp={ this.filterContacts.bind(this) } className="pull-left" style={ search_contact_input_style } type="text" placeholder="Enter any name, email or phone number"/>
+          <FormControl onClick={ this.handleInputClick.bind(this) } onFocus={ this.handleInputFocus.bind(this) } onBlur={ this.handleInputBlur.bind(this) } ref="search_contacts" onKeyDown={ this.navContactList.bind(this) } onKeyUp={ this.filterContacts.bind(this) } className="pull-left" style={ search_contact_input_style } type="text" placeholder="Enter any name, email or phone number"/>
           <Button className="pull-left" style={ add_button_style } bsStyle="primary" onClick={ this.handleButtonClick.bind(this) }>
             Add
           </Button>

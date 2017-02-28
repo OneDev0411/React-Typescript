@@ -1,7 +1,7 @@
 // SignIn.js
 import React, { Component } from 'react'
 import { Link, browserHistory } from 'react-router'
-import { Button, Input, Alert, Modal } from 'react-bootstrap'
+import { Button, FormControl, Alert, Modal } from 'react-bootstrap'
 import S from 'shorti'
 import AppStore from '../../stores/AppStore'
 import AppDispatcher from '../../dispatcher/AppDispatcher'
@@ -21,7 +21,8 @@ export default class SignIn extends Component {
   }
 
   componentDidMount() {
-    this.refs.email.refs.input.focus()
+
+    // this.refs.email.refs.input.focus()
     const message = helpers.getParameterByName('message')
     if (message && message === 'account-upgraded') {
       setTimeout(() => {
@@ -75,6 +76,8 @@ export default class SignIn extends Component {
     AppStore.data.submitting = true
     AppStore.emitChange()
 
+    console.log(this.email.value)
+    return
     const email = this.refs.email.refs.input.value
     const password = this.refs.password.refs.input.value
     let invite
@@ -174,8 +177,8 @@ export default class SignIn extends Component {
           <div style={ S('color-555555 mb-20 font-18 mb-20') }>It’s nice to have you back!</div>
           { invite_message }
           <form action="/signin" onSubmit={ this.handleSubmit.bind(this) }>
-            <Input bsSize="large" style={ input_style } bsStyle={ email_style } type="text" ref="email" placeholder="Email"/>
-            <Input bsSize="large" style={ input_style } bsStyle={ password_style } type={ data.signin && data.signin.password_is_visible ? 'text' : 'password' } ref="password" placeholder="Password"/>
+            <FormControl bsSize="large" style={ input_style } bsStyle={ email_style } type="text" inputRef={ ref => this.email = ref } placeholder="Email"/>
+            <FormControl bsSize="large" style={ input_style } bsStyle={ password_style } type={ data.signin && data.signin.password_is_visible ? 'text' : 'password' } ref="password" placeholder="Password"/>
             <div style={ S('color-929292 font-13 mt-0 mb-10') } className="pull-right"><Link to="/password/forgot">Forgot Password</Link></div>
             <div className="clearfix"></div>
             { message }
@@ -231,6 +234,5 @@ export default class SignIn extends Component {
 // PropTypes
 SignIn.propTypes = {
   data: React.PropTypes.object,
-  location: React.PropTypes.object.isRequired,
-  history: React.PropTypes.object.isRequired
+  location: React.PropTypes.object.isRequired
 }

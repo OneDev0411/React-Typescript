@@ -199,7 +199,7 @@ export default class Recommend extends Component {
         <div style={ main_style }>
           <div style={ S('mb-30') }>
             <form onSubmit={ this.handleSubmit }>
-              <Input style={ S('w-300') } ref="mls_number" type="number" placeholder="MLS Number" onKeyUp={ this.handleMLSNumberChange.bind(this) } />
+              <FormControl style={ S('w-300') } ref="mls_number" type="number" placeholder="MLS Number" onKeyUp={ this.handleMLSNumberChange.bind(this) } />
             </form>
           </div>
           <div>

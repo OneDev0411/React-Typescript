@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import S from 'shorti'
 import _ from 'lodash'
-import { Input, ButtonGroup, Button, Modal, OverlayTrigger, Popover } from 'react-bootstrap'
+import { FormControl, ButtonGroup, Button, Modal, OverlayTrigger, Popover } from 'react-bootstrap'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
@@ -517,7 +517,7 @@ export default class Mls extends Component {
             <form style={ S('mb-5 center-block pull-left w-100p block') } onSubmit={ this.handleEmailSubmit.bind(this) }>
               <div style={ S('pull-left') }>
                 <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
-                  <Input ref="email" style={ signup_input_style } type="text" placeholder="Enter email to save this search" />
+                  <FormControl ref="email" style={ signup_input_style } type="text" placeholder="Enter email to save this search" />
                 </OverlayTrigger>
               </div>
               <div style={ S('pull-left') }>

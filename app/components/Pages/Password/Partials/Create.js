@@ -1,7 +1,7 @@
 // Create.js
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import { Input, Button, Alert, Col } from 'react-bootstrap'
+import { FormControl, Button, Alert, Col } from 'react-bootstrap'
 import S from 'shorti'
 import helpers from '../../../../utils/helpers'
 import Brand from '../../../../controllers/Brand'
@@ -257,10 +257,10 @@ export default class Create extends Component {
     let name_area = (
       <div>
         <Col sm={ 6 } style={ S(data.is_mobile ? 'mb-10 p-0 mr-0 pr-0' : 'p-0 pr-10') }>
-          <Input autoComplete={ false } onChange={ this.handleNameChange.bind(this, 'first') } value={ first_name } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="First Name" type="text" ref="first_name"/>
+          <FormControl autoComplete={ false } onChange={ this.handleNameChange.bind(this, 'first') } value={ first_name } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="First Name" type="text" ref="first_name"/>
         </Col>
         <Col sm={ 6 } style={ S('p-0') }>
-          <Input autoComplete={ false } onChange={ this.handleNameChange.bind(this, 'last') } value={ last_name } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="Last Name" type="text" ref="last_name"/>
+          <FormControl autoComplete={ false } onChange={ this.handleNameChange.bind(this, 'last') } value={ last_name } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="Last Name" type="text" ref="last_name"/>
         </Col>
       </div>
     )
@@ -297,7 +297,7 @@ export default class Create extends Component {
     if (data.signup && data.signup.new_email) {
       new_email_area = (
         <div style={ S('relative') }>
-          <Input type="email" autoComplete={ false } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="Add an Email" ref="new_email"/>
+          <FormControl type="email" autoComplete={ false } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="Add an Email" ref="new_email"/>
         </div>
       )
     }
@@ -315,7 +315,7 @@ export default class Create extends Component {
             <div className="clearfix"></div>
             { new_email_area }
             <div style={ S('relative') }>
-              <Input autoComplete={ false } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } bsStyle={ password_style } placeholder="Add a Password" type={ data.signup && data.signup.show_password ? 'text' : 'password' } ref="password"/>
+              <FormControl autoComplete={ false } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } bsStyle={ password_style } placeholder="Add a Password" type={ data.signup && data.signup.show_password ? 'text' : 'password' } ref="password"/>
               <i onClick={ this.toggleShowPassword } style={ S('absolute t-15 r-15 z-100 pointer color-666') } className={ `fa fa-eye${ data.signup && data.signup.show_password ? '-slash' : '' }` }></i>
             </div>
             { type_area }

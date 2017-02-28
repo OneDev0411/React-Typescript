@@ -1,7 +1,7 @@
 // Dashboard/Tasks/Partials/MainContent.js
 import React, { Component } from 'react'
 import S from 'shorti'
-import { Button, Input, Modal } from 'react-bootstrap'
+import { Button, FormControl, Modal } from 'react-bootstrap'
 import DayPicker, { DateUtils } from 'react-day-picker'
 
 // Partials
@@ -295,7 +295,7 @@ export default class MainContent extends Component {
           <div style={ S('ml-15') }>
             <div style={ S('mr-15 relative') }>
               <form>
-                <Input onKeyUp={ this.handleAddTaskKeyUp.bind(this) } onKeyDown={ this.handleAddTaskKeyDown.bind(this) } style={ { ...S('h-110 pt-12 font-18'), resize: 'none' } } ref="task_title" type="textarea" placeholder="Type your task then press enter"/>
+                <FormControl onKeyUp={ this.handleAddTaskKeyUp.bind(this) } onKeyDown={ this.handleAddTaskKeyDown.bind(this) } style={ { ...S('h-110 pt-12 font-18'), resize: 'none' } } ref="task_title" type="textarea" placeholder="Type your task then press enter"/>
                 { search_contacts_area }
                 <div style={ S('absolute b-0 pl-15 pb-15 pointer') }>
                   <div className="pull-left" style={ S('color-3388ff') } onClick={ this.props.showDayPicker.bind(this, 'create') }>
@@ -361,7 +361,7 @@ export default class MainContent extends Component {
            <Modal.Title style={ S('font-14') }>Add a Transaction <span style={ S('color-929292 fw-400') }>(you can assign one transaction per task)</span></Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Input type="text" ref="search_transactions" placeholder="Search for a transaction" onKeyDown={ this.props.navTransactionsList.bind(this) } onKeyUp={ this.props.searchTransactions.bind(this) }/>
+            <FormControl type="text" ref="search_transactions" placeholder="Search for a transaction" onKeyDown={ this.props.navTransactionsList.bind(this) } onKeyUp={ this.props.searchTransactions.bind(this) }/>
             { transaction_results_area }
             <div className="text-center">
               <img style={ S('w-126 h-121 mt-20 mb-20') } src="/static/images/dashboard/tasks/transaction.png" />

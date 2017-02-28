@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import _ from 'lodash'
-import { Table, Button, Input, DropdownButton, MenuItem, Alert } from 'react-bootstrap'
+import { Table, Button, FormControl, DropdownButton, MenuItem, Alert } from 'react-bootstrap'
 import MaskedInput from 'react-maskedinput'
 import { all_countries } from '../../../../utils/country-data'
 import helpers from '../../../../utils/helpers'
@@ -212,11 +212,11 @@ export default class Contacts extends Component {
           <div style={ S('ml-80 relative w-300') }>
             <form onSubmit={ this.handleContactSubmit.bind(this) }>
               <label>First name</label>
-              <Input ref="first_name" type="text" value={ contact.first_name } onChange={ this.handleInputChange.bind(this, 'first_name') } />
+              <FormControl ref="first_name" type="text" value={ contact.first_name } onChange={ this.handleInputChange.bind(this, 'first_name') } />
               <label>Last name</label>
-              <Input ref="last_name" type="text" value={ contact.last_name } onChange={ this.handleInputChange.bind(this, 'last_name') } />
+              <FormControl ref="last_name" type="text" value={ contact.last_name } onChange={ this.handleInputChange.bind(this, 'last_name') } />
               <label>Email</label>
-              <Input ref="email" type="text" value={ contact.email } onChange={ this.handleInputChange.bind(this, 'email') } />
+              <FormControl ref="email" type="text" value={ contact.email } onChange={ this.handleInputChange.bind(this, 'email') } />
               <label>Phone number</label>
               <div className="form-group">
                 <div className="input-group">

@@ -4,7 +4,7 @@ import { browserHistory } from 'react-router'
 import S from 'shorti'
 import _ from 'lodash'
 import validator from 'validator'
-import { Modal, Input, Button, Alert } from 'react-bootstrap'
+import { Modal, FormControl, Button, Alert } from 'react-bootstrap'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import controller from '../controller'
@@ -725,7 +725,7 @@ export default class Dashboard extends Component {
               <Modal.Title>Start a new chat</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <Input type="text" ref="title" placeholder="Chat room title"/>
+              <FormControl type="text" ref="title" placeholder="Chat room title"/>
             </Modal.Body>
             <Modal.Footer>
               <Button bsStyle="link" onClick={ this.hideModal.bind(this) }>Cancel</Button>

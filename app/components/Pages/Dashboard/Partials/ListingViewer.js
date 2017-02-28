@@ -47,6 +47,10 @@ export default class ListingViewer extends Component {
   }
   fadeIn() {
     const elem = ReactDOM.findDOMNode(this)
+
+    if (!elem)
+      return
+
     elem.style.opacity = 0
     window.requestAnimationFrame(() => {
       elem.style.transition = 'opacity 150ms'
@@ -62,7 +66,8 @@ export default class ListingViewer extends Component {
     const listing = this.props.listing
     const user = data.user
     let brand_agent
-    if (data.brand) {
+    console.log(data)
+    if (data.brand && data.brand.users) {
       brand_agent = data.brand.users[0]
       // Check if listing agent is agent
       if (listing.list_agent && listing.list_agent.user_id && _.find(data.brand.users, { id: listing.list_agent.user_id }))

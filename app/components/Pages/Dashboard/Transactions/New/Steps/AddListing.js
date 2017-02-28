@@ -1,6 +1,6 @@
 // Dashboard/Transactions/New/Steps/AddListing.js
 import React, { Component } from 'react'
-import { Button, Input, Modal, Col } from 'react-bootstrap'
+import { Button, FormControl, Modal, Col } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
 import listing_util from '../../../../../../utils/listing'
@@ -200,7 +200,7 @@ export default class AddListing extends Component {
           <h1>We’re almost done! Do you have a property listing in mind?</h1>
         </div>
         <div style={ S('maxw-820') }>
-          <Input ref="q" onKeyDown={ this.navListingList.bind(this) } onKeyUp={ this.searchListings.bind(this) } className="pull-left" style={ S('w-600') } type="text" placeholder="Enter an address or MLS number"/>
+          <FormControl ref="q" onKeyDown={ this.navListingList.bind(this) } onKeyUp={ this.searchListings.bind(this) } className="pull-left" style={ S('w-600') } type="text" placeholder="Enter an address or MLS number"/>
           <span className="pull-left" style={ S('w-30 ml-15 mt-8 color-666') }>OR</span>
           <Button onClick={ this.props.showListingModal.bind(this, 'new') } className="pull-left" style={ S('w-160') } bsStyle="primary" type="button">
             Add New Property

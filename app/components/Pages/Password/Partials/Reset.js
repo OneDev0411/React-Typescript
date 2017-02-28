@@ -1,7 +1,7 @@
 // Reset.js
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import { Input, Button, Alert } from 'react-bootstrap'
+import { FormControl, Button, Alert } from 'react-bootstrap'
 import S from 'shorti'
 import helpers from '../../../../utils/helpers'
 
@@ -86,8 +86,8 @@ export default class Reset extends Component {
       <div>
         <div style={ S('color-929292 mb-20') }>Reset your password</div>
         <form onSubmit={ this.handleSubmit.bind(this) }>
-          <Input bsStyle={ password_style } placeholder="New Password" type="password" ref="password"/>
-          <Input bsStyle={ password_style } placeholder="Confirm New Password" type="password" ref="confirm_password"/>
+          <FormControl bsStyle={ password_style } placeholder="New Password" type="password" ref="password"/>
+          <FormControl bsStyle={ password_style } placeholder="Confirm New Password" type="password" ref="confirm_password"/>
           { message }
           <Button type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p') }>
             { submitting ? 'Submitting...' : 'Change Password' }

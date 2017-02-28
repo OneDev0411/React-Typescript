@@ -98,7 +98,7 @@ export default class AlertList extends Component {
           /*
           <div style={ S('p-10 pb-0') }>
             <img style={ S('absolute r-22 t-22 w-20') } src="/static/images/dashboard/mls/search.svg" />
-            <Input type="text" bsSize="large" placeholder="Search Alerts" />
+            <FormControl type="text" bsSize="large" placeholder="Search Alerts" />
           </div>
           */
         }

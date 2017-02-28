@@ -35,7 +35,7 @@ export default class ShareTypeModal extends Component {
               Name Your Alert
             </div>
             <div>
-              <Input ref="title" type="text" placeholder={ listing_map.listings_info.proposed_title }/>
+              <FormControl ref="title" type="text" placeholder={ listing_map.listings_info.proposed_title }/>
             </div>
           </div>
         </Modal.Body>

@@ -1,6 +1,6 @@
 // Dashboard/Transactions/TransactionDetail.js
 import React, { Component } from 'react'
-import { Carousel, CarouselItem, Modal, Button, Input, Col, OverlayTrigger, Tooltip, Dropdown, MenuItem } from 'react-bootstrap'
+import { Carousel, CarouselItem, Modal, Button, FormControl, Col, OverlayTrigger, Tooltip, Dropdown, MenuItem } from 'react-bootstrap'
 import S from 'shorti'
 import listing_util from '../../../../../../utils/listing'
 import helpers from '../../../../../../utils/helpers'
@@ -390,7 +390,7 @@ export default class TransactionDetail extends Component {
               </div>
               <div className="pull-left" style={ S('w-360') }>
                 <label>Title</label>
-                <Input ref="file_name" onChange={ this.handleNameChange.bind(this) } value={ editing_name ? current_file_new_name : current_file_name } type="text" />
+                <FormControl ref="file_name" onChange={ this.handleNameChange.bind(this) } value={ editing_name ? current_file_new_name : current_file_name } type="text" />
                 <div style={ S('color-bcc3c6 font-13 mb-15') }>Titles are the easiest ways to search for files: it pays to be descriptive.</div>
                 <Col xs={ 10 } style={ S('p-0') }>
                   <label>Make this file Private</label>

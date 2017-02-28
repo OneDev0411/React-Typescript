@@ -58,7 +58,7 @@ export default class ChatModule extends Component {
           </div>
           { messages }
           <div style={ footer_style }>
-            <Input onKeyUp={ controller.chat_module.handleKeyUp.bind(this, agent) } autoFocus style={ input_style } type="text" placeholder="Write Message" />
+            <FormControl onKeyUp={ controller.chat_module.handleKeyUp.bind(this, agent) } autoFocus style={ input_style } type="text" placeholder="Write Message" />
           </div>
         </div>
       )

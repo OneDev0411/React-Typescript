@@ -1,6 +1,6 @@
 // Landing.js
 import React, { Component } from 'react'
-import { Col, Input, Button, OverlayTrigger, Popover } from 'react-bootstrap'
+import { Col, FormControl, Button, OverlayTrigger, Popover } from 'react-bootstrap'
 import S from 'shorti'
 import validator from 'validator'
 import { randomString } from '../../utils/helpers'
@@ -258,7 +258,7 @@ export default class Landing extends Component {
                       <form onSubmit={ this.handleEmailSubmit.bind(this) }>
                         <div style={ S('pull-left') }>
                           <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
-                            <Input ref="email" onChange={ this.setSignupEmail } style={ signup_input_style } type="text" placeholder="Enter email address" value={ data.signup_email } />
+                            <FormControl ref="email" onChange={ this.setSignupEmail } style={ signup_input_style } type="text" placeholder="Enter email address" value={ data.signup_email } />
                           </OverlayTrigger>
                         </div>
                         <div style={ S('pull-left') }>

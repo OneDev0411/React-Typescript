@@ -66,7 +66,7 @@ export default class InputField extends React.Component {
 
     return (
       <div>
-        <Input
+        <FormControl
           bsSize="small"
           ref="input"
           type="text"
