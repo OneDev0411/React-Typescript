@@ -4,7 +4,7 @@ module.exports = (app, config) => {
   app.get('/api/deals/envelope/preview',(req, res) => {
     const api_url = config.api.url
     const envelope_id = req.query.id
-    const envelope_index = req.query.index
+    const envelope_index = req.query.index + 1 // Documents should start from 1 not 0.
     const access_token = req.query.access_token
     const file_name = envelope_id + '_' + envelope_index + '.pdf'
     const endpoint = api_url + '/envelopes/' + envelope_id + '/' + envelope_index + '.pdf'
