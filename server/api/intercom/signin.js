@@ -1,4 +1,5 @@
 import Koa from 'koa'
+import bodyParser from 'koa-bodyparser'
 const router = require('koa-router')()
 const Intercom = require('intercom-client')
 import config from '../../../config/private'
@@ -9,7 +10,7 @@ const client = new Intercom.Client({
   appApiKey: config.intercom.secret_key
 })
 
-router.post('/intercom/signin', async (ctx, next) => {
+router.post('/intercom/signin', bodyParser(), async (ctx, next) => {
 
   const { user } = ctx.request.body
 
