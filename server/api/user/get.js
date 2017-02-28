@@ -4,7 +4,7 @@ const app = new Koa()
 
 router.get('/users/get-user/:id', async (ctx, next) => {
 
-  const { id } = ctx.request.params
+  const { id } = ctx.params
 
   try {
     const response = await ctx.fetch(`/users/${id}`)
