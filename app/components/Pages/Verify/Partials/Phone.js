@@ -8,7 +8,7 @@ import helpers from '../../../../utils/helpers'
 export default class Phone extends Component {
   handleSubmit(e) {
     e.preventDefault()
-    const code = this.refs.code.refs.input.value
+    const code = this.codeInput.value
     const decoded_token = decodeURIComponent(helpers.getParameterByName('token'))
     const encoded_token = encodeURIComponent(decoded_token)
     this.props.handleSubmit(code, encoded_token)
@@ -58,7 +58,7 @@ export default class Phone extends Component {
       <div>
         <div style={ S('color-929292 mb-20') }>Confirm your phone</div>
         <form onSubmit={ this.handleSubmit.bind(this) }>
-          <FormControl bsStyle={ code_style } ref="code" placeholder="Enter 5 digit code" type="text" maxLength="5" />
+          <FormControl bsStyle={ code_style } inputRef={ ref => this.codeInput = ref } placeholder="Enter 5 digit code" type="text" maxLength="5" />
           { message }
           <Button type="submit" bsStyle="primary" style={ S('w-100p') }>Verify</Button>
         </form>

@@ -38,10 +38,10 @@ export default class CreateMessageArea extends Component {
       this.props.handleContactFilter(message_input, 'show')
     } else
       this.props.handleContactFilter(message_input, 'hide')
-    if (this.refs.filter_contacts_scroll_area) {
+    if (this.filter_contacts_scroll_area) {
       setTimeout(() => {
-        if (this.refs.filter_contacts_scroll_area)
-          this.refs.filter_contacts_scroll_area.scrollTop = this.refs.filter_contacts_scroll_area.scrollHeight
+        if (this.filter_contacts_scroll_area)
+          this.filter_contacts_scroll_area.scrollTop = this.filter_contacts_scroll_area.scrollHeight
       }, 10)
     }
   }
@@ -148,7 +148,7 @@ export default class CreateMessageArea extends Component {
         return n !== undefined
       })
       filtered_contacts_area = (
-        <div ref="filter_contacts_scroll_area" style={ { overflowY: 'scroll', ...S('z-1000 absolute b-5 maxh-300 w-100p br-3 border-1-solid-ccc p-5 bg-fff') } }>
+        <div ref={ ref => this.filter_contacts_scroll_area = ref } style={ { overflowY: 'scroll', ...S('z-1000 absolute b-5 maxh-300 w-100p br-3 border-1-solid-ccc p-5 bg-fff') } }>
           { filtered_contacts_list_items }
         </div>
       )
@@ -163,7 +163,7 @@ export default class CreateMessageArea extends Component {
         </div>
         <form onSubmit={ this.handleSubmit.bind(this) }>
           <div className="form-group" style={ S('w-100p') }>
-            <input onBlur={ this.handleBlur.bind(this) } onKeyUp={ this.handleMessageKeyUp.bind(this) } onKeyDown={ this.handleMessageKeyDown.bind(this) } ref="message_input" type="text" className="form-control chat-message-input" style={ S('w-100p pl-70 bw-2 z-3 relative') } placeholder="Type your message and press enter"/>
+            <input onBlur={ this.handleBlur.bind(this) } onKeyUp={ this.handleMessageKeyUp.bind(this) } onKeyDown={ this.handleMessageKeyDown.bind(this) } ref={ ref => this.message_inputInput = ref } type="text" className="form-control chat-message-input" style={ S('w-100p pl-70 bw-2 z-3 relative') } placeholder="Type your message and press enter"/>
             <Dropzone onDrop={ this.props.uploadFiles } type="button" className="btn btn-default create-message__btn" style={ btn_style }>
               <span className="plus" style={ S('font-22 relative t-1n') }>+</span>
             </Dropzone>

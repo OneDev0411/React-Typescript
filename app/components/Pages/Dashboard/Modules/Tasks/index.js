@@ -344,7 +344,7 @@ export default class TasksModule extends Component {
   searchTransactions() {
     const data = this.props.data
     const transactions = data.transactions
-    const search_text = this.refs.search_transactions.refs.input.value
+    const search_text = this.search_transactionsInput.value
     if (!search_text.trim()) {
       delete AppStore.data.transaction_results
       AppStore.emitChange()

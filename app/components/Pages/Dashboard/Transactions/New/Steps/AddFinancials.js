@@ -1,16 +1,16 @@
 // Dashboard/Transactions/New/Steps/AddFinancials.js
 import React, { Component } from 'react'
-import { Col, Input } from 'react-bootstrap'
+import { Col, FormControl } from 'react-bootstrap'
 import S from 'shorti'
 import helpers from '../../../../../../utils/helpers'
 
 export default class AddFinancials extends Component {
 
   calculateFinancials() {
-    const price = this.refs.price.refs.input.value
-    const contract_price = this.refs.contract_price.refs.input.value
-    const buyers_agency_commission = this.refs.buyers_agency_commission.refs.input.value
-    const sub_agency_commission = this.refs.sub_agency_commission.refs.input.value
+    const price = this.priceInput.value
+    const contract_price = this.contract_priceInput.value
+    const buyers_agency_commission = this.buyers_agency_commissionInput.value
+    const sub_agency_commission = this.sub_agency_commissionInput.value
     this.props.calculateFinancials(price, contract_price, buyers_agency_commission, sub_agency_commission)
   }
 
@@ -81,21 +81,21 @@ export default class AddFinancials extends Component {
         <div>
           <Col sm={3} style={ container_style }>
             <span style={ { ...label_style, ...move_left } }>Listing price</span><br/>
-            <span style={ dollar_style }>$</span><FormControl style={ input_style } ref="price" onKeyUp={ this.calculateFinancials.bind(this) } type="number" defaultValue={ price }/>
+            <span style={ dollar_style }>$</span><FormControl style={ input_style } inputRef={ ref => this.priceInput = ref } onKeyUp={ this.calculateFinancials.bind(this) } type="number" defaultValue={ price }/>
           </Col>
           <Col sm={3} style={ { ...container_style, ...{ paddingLeft: 30 } } }>
             <span style={ { ...label_style, ...move_left } }>Contract price</span><br/>
-            <span style={ { ...dollar_style, ...{ left: 14 } } }>$</span><FormControl style={ input_style } ref="contract_price" onKeyUp={ this.calculateFinancials.bind(this) } type="number" defaultValue={ contract_price }/>
+            <span style={ { ...dollar_style, ...{ left: 14 } } }>$</span><FormControl style={ input_style } inputRef={ ref => this.contract_priceInput = ref } onKeyUp={ this.calculateFinancials.bind(this) } type="number" defaultValue={ contract_price }/>
           </Col>
           <Col sm={3} style={ container_style }>
             <span style={ { ...label_style, ...move_left_small } }>Agent Commission</span><br/>
             <div style={ percent_style }>%</div>
-            <FormControl maxLength={3} style={ { ...input_style, ...S('w-100p') } } ref="buyers_agency_commission" onKeyUp={ this.calculateFinancials.bind(this) } type="number" defaultValue={ buyers_agency_commission }/>
+            <FormControl maxLength={3} style={ { ...input_style, ...S('w-100p') } } inputRef={ ref => this.buyers_agency_commissionInput = ref } onKeyUp={ this.calculateFinancials.bind(this) } type="number" defaultValue={ buyers_agency_commission }/>
           </Col>
           <Col sm={3} style={ container_style }>
             <span style={ { ...label_style, ...move_left_small } }>Co-Agent Commission</span><br/>
             <div style={ percent_style }>%</div>
-            <FormControl maxLength={3} style={ { ...input_style, ...S('w-100p') } } ref="sub_agency_commission" onKeyUp={ this.calculateFinancials.bind(this) } type="number" defaultValue={ sub_agency_commission }/>
+            <FormControl maxLength={3} style={ { ...input_style, ...S('w-100p') } } inputRef={ ref => this.sub_agency_commissionInput = ref } onKeyUp={ this.calculateFinancials.bind(this) } type="number" defaultValue={ sub_agency_commission }/>
           </Col>
           <div className="clearfix"></div>
           <Col sm={6} style={ { ...container_style, ...S('h-89') } }/>

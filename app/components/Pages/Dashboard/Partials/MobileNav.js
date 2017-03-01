@@ -44,10 +44,10 @@ export default class SideBar extends Component {
     AppStore.emitChange()
     const data = this.props.data
     const user = data.user
-    const first_name = this.refs.first_name.refs.input.value.trim()
-    const last_name = this.refs.last_name.refs.input.value.trim()
-    const email = this.refs.email.refs.input.value.trim()
-    const phone_number_input = this.refs.phone_number.refs.input.value.replace(/\D/g, '').trim()
+    const first_name = this.first_nameInput.value.trim()
+    const last_name = this.last_nameInput.value.trim()
+    const email = this.emailInput.value.trim()
+    const phone_number_input = this.phone_numberInput.value.replace(/\D/g, '').trim()
     let country_code = 1
     if (data.phone_country)
       country_code = data.phone_country.dialCode
@@ -78,9 +78,9 @@ export default class SideBar extends Component {
   changePassword() {
     const data = this.props.data
     const user = data.user
-    const old_password = this.refs.old_password.refs.input.value.trim()
-    const new_password = this.refs.new_password.refs.input.value.trim()
-    const new_password_confirm = this.refs.new_password_confirm.refs.input.value.trim()
+    const old_password = this.old_passwordInput.value.trim()
+    const new_password = this.new_passwordInput.value.trim()
+    const new_password_confirm = this.new_password_confirmInput.value.trim()
     AppStore.data.saving_account_settings = true
     delete AppStore.data.error
     delete AppStore.data.password_changed
@@ -304,15 +304,15 @@ export default class SideBar extends Component {
       <Col xs={ 9 }>
         <div>
           <label>First name</label>
-          <FormControl ref="first_name" type="text" defaultValue={ user.first_name }/>
+          <FormControl inputRef={ ref => this.first_nameInput = ref } type="text" defaultValue={ user.first_name }/>
         </div>
         <div>
           <label>Last name</label>
-          <FormControl ref="last_name" type="text" defaultValue={ user.last_name }/>
+          <FormControl inputRef={ ref => this.last_nameInput = ref } type="text" defaultValue={ user.last_name }/>
         </div>
         <div>
           <label>Email</label>
-          <FormControl ref="email" type="text" defaultValue={ user.email }/>
+          <FormControl inputRef={ ref => this.emailInput = ref } type="text" defaultValue={ user.email }/>
         </div>
         <div>
           <label>Phone number</label>
@@ -320,7 +320,7 @@ export default class SideBar extends Component {
             <div className="input-group-btn input-dropdown--country-codes">
               { country_codes }
             </div>
-            <MaskedInput className="form-control" ref="phone_number" type="text" defaultValue={ user.phone_number ? phone_number_parsed.phone_number : '' } mask="(999)-999-9999" maskChar="_"/>
+            <MaskedInput className="form-control" ref={ ref => this.phone_numberInput = ref } type="text" defaultValue={ user.phone_number ? phone_number_parsed.phone_number : '' } mask="(999)-999-9999" maskChar="_"/>
           </div>
         </div>
         <div className="clearfix"></div>
@@ -339,15 +339,15 @@ export default class SideBar extends Component {
         <Col xs={ 9 } style={ S('p-0') }>
           <Col xs={ 12 } style={ S('pr-0') }>
             <label>Current password</label>
-            <FormControl key={'password'} ref="old_password" type="password" defaultValue=""/>
+            <FormControl key={'password'} inputRef={ ref => this.old_passwordInput = ref } type="password" defaultValue=""/>
           </Col>
           <Col xs={ 12 } style={ S('pr-0') }>
             <label>New password</label>
-            <FormControl key={'new_password'} ref="new_password" type="password" defaultValue=""/>
+            <FormControl key={'new_password'} inputRef={ ref => this.new_passwordInput = ref } type="password" defaultValue=""/>
           </Col>
           <Col xs={ 12 } style={ S('pr-0') }>
             <label>Confirm new password</label>
-            <FormControl key={'new_password_confirm'} ref="new_password_confirm" type="password" defaultValue=""/>
+            <FormControl key={'new_password_confirm'} inputRef={ ref => this.new_password_confirmInput = ref } type="password" defaultValue=""/>
             { message }
           </Col>
         </Col>

@@ -61,7 +61,7 @@ export default class MessagesList extends Component {
   }
 
   scrollBottom() {
-    const messages_scroll_area = this.refs.messages_scroll_area
+    const messages_scroll_area = this.messages_scroll_area
     if (messages_scroll_area)
       messages_scroll_area.scrollTop = messages_scroll_area.scrollHeight
   }
@@ -455,7 +455,7 @@ export default class MessagesList extends Component {
       <div>
         { room_settings }
         { title_area }
-        <div className="touch-scroll" ref="messages_scroll_area" style={ messages_scroll_area } onScroll={ this.handleScroll.bind(this) }>
+        <div className="touch-scroll" ref={ ref => this.messages_scroll_area = ref } style={ messages_scroll_area } onScroll={ this.handleScroll.bind(this) }>
           { loading_previous }
           <ul style={ S('pl-0 ' + messages_mb) }>{ messages_list_items }</ul>
         </div>

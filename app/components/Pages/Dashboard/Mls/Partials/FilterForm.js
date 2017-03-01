@@ -1,6 +1,6 @@
 // Partials/FilterForm.js
 import React, { Component } from 'react'
-import { ButtonGroup, Button, Input } from 'react-bootstrap'
+import { ButtonGroup, Button, FormControl } from 'react-bootstrap'
 import S from 'shorti'
 import Switch from 'react-ios-switch'
 import helpers from '../../../../../utils/helpers'
@@ -488,10 +488,10 @@ export default class FilterForm extends Component {
               <div style={ S('mb-10') }>Price Range</div>
               <div>
                 <div style={ S('w-50p pull-left') }>
-                  <FormControl onChange={ this.handleOptionChange.bind(this, 'minimum_price') } value={ filter_options && filter_options.minimum_price ? filter_options.minimum_price : '' } ref="minimum_price" type="number" placeholder="Min"/>
+                  <FormControl onChange={ this.handleOptionChange.bind(this, 'minimum_price') } value={ filter_options && filter_options.minimum_price ? filter_options.minimum_price : '' } inputRef={ ref => this.minimum_priceInput = ref } type="number" placeholder="Min"/>
                 </div>
                 <div style={ S('w-50p pull-left') }>
-                  <FormControl onChange={ this.handleOptionChange.bind(this, 'maximum_price') } value={ filter_options && filter_options.maximum_price ? filter_options.maximum_price : '' } ref="maximum_price" type="number" placeholder="Max"/>
+                  <FormControl onChange={ this.handleOptionChange.bind(this, 'maximum_price') } value={ filter_options && filter_options.maximum_price ? filter_options.maximum_price : '' } inputRef={ ref => this.maximum_priceInput = ref } type="number" placeholder="Max"/>
                 </div>
               </div>
             </div>
@@ -621,10 +621,10 @@ export default class FilterForm extends Component {
               <div style={ S('mb-10') }>Square Footage</div>
               <div>
                 <div style={ S('w-50p pull-left') }>
-                  <FormControl onChange={ this.handleOptionChange.bind(this, 'minimum_square_feet') } value={ filter_options && filter_options.minimum_square_feet ? filter_options.minimum_square_feet : '' } ref="minimum_square_feet" type="number" placeholder="Min"/>
+                  <FormControl onChange={ this.handleOptionChange.bind(this, 'minimum_square_feet') } value={ filter_options && filter_options.minimum_square_feet ? filter_options.minimum_square_feet : '' } inputRef={ ref => this.minimum_square_feetInput = ref } type="number" placeholder="Min"/>
                 </div>
                 <div style={ S('w-50p pull-left') }>
-                  <FormControl onChange={ this.handleOptionChange.bind(this, 'maximum_square_feet') } value={ filter_options && filter_options.maximum_square_feet ? filter_options.maximum_square_feet : '' } ref="maximum_square_feet" type="number" placeholder="Max"/>
+                  <FormControl onChange={ this.handleOptionChange.bind(this, 'maximum_square_feet') } value={ filter_options && filter_options.maximum_square_feet ? filter_options.maximum_square_feet : '' } inputRef={ ref => this.maximum_square_feetInput = ref } type="number" placeholder="Max"/>
                 </div>
               </div>
             </div>
@@ -632,10 +632,10 @@ export default class FilterForm extends Component {
               <div style={ S('mb-10') }>Lot Square Footage</div>
               <div>
                 <div style={ S('w-50p pull-left') }>
-                  <FormControl onChange={ this.handleOptionChange.bind(this, 'minimum_lot_square_feet') } value={ filter_options && filter_options.minimum_lot_square_feet ? filter_options.minimum_lot_square_feet : '' } ref="minimum_lot_square_feet" type="number" placeholder="Min"/>
+                  <FormControl onChange={ this.handleOptionChange.bind(this, 'minimum_lot_square_feet') } value={ filter_options && filter_options.minimum_lot_square_feet ? filter_options.minimum_lot_square_feet : '' } inputRef={ ref => this.minimum_lot_square_feetInput = ref } type="number" placeholder="Min"/>
                 </div>
                 <div style={ S('w-50p pull-left') }>
-                  <FormControl onChange={ this.handleOptionChange.bind(this, 'maximum_lot_square_feet') } value={ filter_options && filter_options.maximum_lot_square_feet ? filter_options.maximum_lot_square_feet : '' } ref="maximum_lot_square_feet" type="number" placeholder="Max"/>
+                  <FormControl onChange={ this.handleOptionChange.bind(this, 'maximum_lot_square_feet') } value={ filter_options && filter_options.maximum_lot_square_feet ? filter_options.maximum_lot_square_feet : '' } inputRef={ ref => this.maximum_lot_square_feetInput = ref } type="number" placeholder="Max"/>
                 </div>
               </div>
             </div>
@@ -643,10 +643,10 @@ export default class FilterForm extends Component {
               <div style={ S('mb-10') }>Year Built</div>
               <div>
                 <div style={ S('w-50p pull-left') }>
-                  <FormControl onChange={ this.handleOptionChange.bind(this, 'minimum_year_built') } value={ filter_options && filter_options.minimum_year_built ? filter_options.minimum_year_built : '' } ref="minimum_year_built" type="number" placeholder="Min"/>
+                  <FormControl onChange={ this.handleOptionChange.bind(this, 'minimum_year_built') } value={ filter_options && filter_options.minimum_year_built ? filter_options.minimum_year_built : '' } inputRef={ ref => this.minimum_year_builtInput = ref } type="number" placeholder="Min"/>
                 </div>
                 <div style={ S('w-50p pull-left') }>
-                  <FormControl onChange={ this.handleOptionChange.bind(this, 'maximum_year_built') } value={ filter_options && filter_options.maximum_year_built ? filter_options.maximum_year_built : '' } ref="maximum_year_built" type="number" placeholder="Max"/>
+                  <FormControl onChange={ this.handleOptionChange.bind(this, 'maximum_year_built') } value={ filter_options && filter_options.maximum_year_built ? filter_options.maximum_year_built : '' } inputRef={ ref => this.maximum_year_builtInput = ref } type="number" placeholder="Max"/>
                 </div>
               </div>
             </div>

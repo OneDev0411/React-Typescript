@@ -47,7 +47,7 @@ export default class InputField extends React.Component {
   }
 
   handleFocus() {
-    this.refs.daypicker.showMonth(this.state.month)
+    this.daypicker.showMonth(this.state.month)
     this.setState({ showCalendar: true })
   }
 
@@ -68,7 +68,7 @@ export default class InputField extends React.Component {
       <div>
         <FormControl
           bsSize="small"
-          ref="input"
+          inputRef={ ref => this.inputInput = ref }
           type="text"
           value={ this.state.value }
           placeholder={ this.props.placeholder }
@@ -79,7 +79,7 @@ export default class InputField extends React.Component {
 
         <div style={ calendarStyle }>
           <DayPicker
-            ref="daypicker"
+            ref={ ref => this.daypicker = ref }
             initialMonth={ this.state.month }
             modifiers={{
               selected: day => DateUtils.isSameDay(selectedDay, day)

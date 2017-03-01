@@ -40,7 +40,7 @@ export default class SignIn extends Component {
     if (data.location && data.location.query && data.location.query.email) {
       const email = decodeURIComponent(data.location.query.email)
       if (email && email !== 'undefined')
-        this.refs.email.refs.input.value = email
+        this.emailInput.value = email
     }
   }
 
@@ -76,10 +76,8 @@ export default class SignIn extends Component {
     AppStore.data.submitting = true
     AppStore.emitChange()
 
-    console.log(this.email.value)
-    return
-    const email = this.refs.email.refs.input.value
-    const password = this.refs.password.refs.input.value
+    const email = this.emailInput.value
+    const password = this.passwordInput.value
     let invite
     if (this.props.location.query.message === 'invite-room') {
       invite = {
@@ -177,15 +175,14 @@ export default class SignIn extends Component {
           <div style={ S('color-555555 mb-20 font-18 mb-20') }>It’s nice to have you back!</div>
           { invite_message }
           <form action="/signin" onSubmit={ this.handleSubmit.bind(this) }>
-            <FormControl bsSize="large" style={ input_style } bsStyle={ email_style } type="text" inputRef={ ref => this.email = ref } placeholder="Email"/>
-            <FormControl bsSize="large" style={ input_style } bsStyle={ password_style } type={ data.signin && data.signin.password_is_visible ? 'text' : 'password' } ref="password" placeholder="Password"/>
+            <FormControl bsSize="large" style={ input_style } bsStyle={ email_style } type="text" inputRef={ ref => this.emailInput = ref } placeholder="Email"/>
+            <FormControl bsSize="large" style={ input_style } bsStyle={ password_style } type={ data.signin && data.signin.password_is_visible ? 'text' : 'password' } inputRef={ ref => this.passwordInput = ref } placeholder="Password"/>
             <div style={ S('color-929292 font-13 mt-0 mb-10') } className="pull-right"><Link to="/password/forgot">Forgot Password</Link></div>
             <div className="clearfix"></div>
             { message }
             <Button
               bsSize="large"
               type="submit"
-              ref="submit"
               className={ submitting_class + 'btn' }
               disabled={ submitting }
               style={ S('w-100p mb-20 border-none color-fff bg-' + Brand.color('primary', '3388ff')) }

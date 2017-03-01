@@ -162,7 +162,7 @@ export default class SignUp extends Component {
             <form onSubmit={ this.handleEmailSubmit.bind(this) }>
               <div style={ S('pull-left') }>
                 <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
-                  <FormControl ref="email" onChange={ this.setSignupEmail } style={ signup_input_style } type="text" placeholder="Enter email address" value={ data.signup_email } />
+                  <FormControl inputRef={ ref => this.emailInput = ref } onChange={ this.setSignupEmail } style={ signup_input_style } type="text" placeholder="Enter email address" value={ data.signup_email } />
                 </OverlayTrigger>
               </div>
               <div style={ S('pull-left') }>

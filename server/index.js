@@ -9,7 +9,7 @@ import session from "koa-session2"
 import _ from 'underscore'
 
 import universalMiddleware from './util/universal'
-import SessionStore from './util/session-store'
+import RedisStore from './util/session-store'
 import request from './util/request'
 import webpackConfig from '../webpack.config.babel'
 import appConfig from '../config/webpack'
@@ -55,8 +55,7 @@ if (__DEV__) {
  */
 app.use(session({
   key: 'r3ch4t@re4ct_rocks!!!',
-  httpOnly: false,
-  store: new SessionStore()
+  httpOnly: false
 }))
 
 /**

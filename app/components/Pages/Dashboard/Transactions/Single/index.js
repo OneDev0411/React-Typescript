@@ -223,7 +223,7 @@ export default class Transactions extends Component {
       this.hideModal()
     else {
       const next_file = files[current_file.index + 1]
-      // this.refs.file_name.refs.input.value = next_file.name
+      // this.file_nameInput.value = next_file.name
       AppStore.data.document_modal.current_file = next_file
     }
     delete AppStore.data.document_modal.editing_name

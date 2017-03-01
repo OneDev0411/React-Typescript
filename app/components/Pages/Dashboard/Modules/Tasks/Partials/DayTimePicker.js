@@ -1,15 +1,15 @@
 // Dashboard/Tasks/Partials/DayTimePicker.js
 import React, { Component } from 'react'
 import S from 'shorti'
-import { Button, Input } from 'react-bootstrap'
+import { Button, FormControl } from 'react-bootstrap'
 import DayPicker, { DateUtils } from 'react-day-picker'
 
 export default class DayTimePicker extends Component {
 
   handleSaveDateTime() {
-    const hours = this.refs.hours.refs.input.value
-    const minutes = this.refs.minutes.refs.input.value
-    const suffix = this.refs.suffix.refs.input.value
+    const hours = this.hoursInput.value
+    const minutes = this.minutesInput.value
+    const suffix = this.suffixInput.value
     this.props.handleSaveDateTime(hours, minutes, suffix)
   }
 
@@ -42,13 +42,13 @@ export default class DayTimePicker extends Component {
           TIME
           <div className="clearfix"></div>
           <div style={ S('w-60 pull-left') }>
-            <FormControl defaultValue={ current_hour } ref="hours" type="number" max={ 12 } min={ 1 }/>
+            <FormControl defaultValue={ current_hour } inputRef={ ref => this.hoursInput = ref } type="number" max={ 12 } min={ 1 }/>
           </div>
           <div style={ S('w-60 pull-left') }>
-            <FormControl defaultValue={ current_minutes } ref="minutes" type="number" max={ 59 } min={ 1 }/>
+            <FormControl defaultValue={ current_minutes } inputRef={ ref => this.minutesInput = ref } type="number" max={ 59 } min={ 1 }/>
           </div>
           <div style={ S('w-60 pull-left') }>
-            <FormControl defaultValue={ current_suffix } ref="suffix" type="select">
+            <FormControl defaultValue={ current_suffix } inputRef={ ref => this.suffixInput = ref } type="select">
               <option value={ 'AM' }>AM</option>
               <option value={ 'PM' }>PM</option>
             </FormControl>

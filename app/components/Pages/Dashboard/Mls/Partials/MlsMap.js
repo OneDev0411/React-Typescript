@@ -132,7 +132,7 @@ export default class MlsMap extends Component {
         bootstrapURLKeys={ bootstrap_url_keys }
         center={ listing_map ? listing_map.center : default_center }
         zoom={ listing_map ? listing_map.zoom : default_zoom }
-        onBoundsChange={ controller.listing_map.handleBoundsChange.bind(this) }
+        onChange={ controller.listing_map.handleBoundsChange.bind(this) }
         options={ controller.listing_map.createMapOptions.bind(this) }
         yesIWantToUseGoogleMapApiInternals
         onGoogleApiLoaded={ controller.listing_map.handleGoogleMapApi.bind(this) }

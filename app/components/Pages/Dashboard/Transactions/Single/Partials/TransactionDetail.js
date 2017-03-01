@@ -44,12 +44,12 @@ export default class TransactionDetail extends Component {
 
   uploadFile(e) {
     e.preventDefault()
-    const file_name = this.refs.file_name.refs.input.value
+    const file_name = this.file_nameInput.value
     this.props.uploadFile(file_name)
   }
 
   handleNameChange() {
-    const file_name = this.refs.file_name.refs.input.value
+    const file_name = this.file_nameInput.value
     this.props.handleNameChange(file_name)
   }
 
@@ -79,7 +79,7 @@ export default class TransactionDetail extends Component {
     let subtitle
 
     // Get main body height for drawers
-    const containing_body = this.refs.containing_body
+    const containing_body = this.containing_body
     let containing_body_height
     if (containing_body)
       containing_body_height = containing_body.clientHeight
@@ -343,7 +343,7 @@ export default class TransactionDetail extends Component {
             <div className="clearfix"></div>
             <div style={ S('color-929394 mb-20') }>{ subtitle_area }</div>
           </div>
-          <div ref="containing_body" style={ S('relative') }>
+          <div inputRef={ ref => this.containing_body = ref } style={ S('relative') }>
             <div style={ S('pl-15 pr-15 w-500') } className="pull-left">
               <div style={ S(carousel_wh + ' mr-15 mb-20') }>
                 { listing_images }
@@ -390,7 +390,7 @@ export default class TransactionDetail extends Component {
               </div>
               <div className="pull-left" style={ S('w-360') }>
                 <label>Title</label>
-                <FormControl ref="file_name" onChange={ this.handleNameChange.bind(this) } value={ editing_name ? current_file_new_name : current_file_name } type="text" />
+                <FormControl inputRef={ ref => this.file_nameInput = ref } onChange={ this.handleNameChange.bind(this) } value={ editing_name ? current_file_new_name : current_file_name } type="text" />
                 <div style={ S('color-bcc3c6 font-13 mb-15') }>Titles are the easiest ways to search for files: it pays to be descriptive.</div>
                 <Col xs={ 10 } style={ S('p-0') }>
                   <label>Make this file Private</label>
@@ -428,52 +428,52 @@ export default class TransactionDetail extends Component {
                 <div style={ row_style }>
                   <Col xs={8} style={ S('pl-0 pr-0') }>
                     <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>ADDRESS</label>
-                    <input className="form-control" style={ input_style } type="text" ref="address" defaultValue={ address }/>
+                    <input className="form-control" style={ input_style } type="text" inputRef={ ref => this.addressInput = ref } defaultValue={ address }/>
                   </Col>
                   <Col xs={4} style={ S('pr-0') }>
                     <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>STATUS</label>
-                    <input className="form-control" style={ input_style } type="text" ref="status" defaultValue={ status }/>
+                    <input className="form-control" style={ input_style } type="text" inputRef={ ref => this.statusInput = ref } defaultValue={ status }/>
                   </Col>
                   <div className="clearfix"></div>
                 </div>
                 <div style={ row_style }>
                   <Col xs={6} style={ S('pl-0') }>
                     <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>CITY</label>
-                    <input className="form-control" style={ input_style } type="text" ref="city" defaultValue={ city }/>
+                    <input className="form-control" style={ input_style } type="text" inputRef={ ref => this.cityInput = ref } defaultValue={ city }/>
                   </Col>
                   <Col xs={3} style={ S('p-0') }>
                     <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>STATE</label>
-                    <input className="form-control" style={ input_style } type="text" ref="state" defaultValue={ state }/>
+                    <input className="form-control" style={ input_style } type="text" inputRef={ ref => this.stateInput = ref } defaultValue={ state }/>
                   </Col>
                   <Col xs={3} style={ S('pr-0') }>
                     <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>ZIP</label>
-                    <input className="form-control" style={ input_style } type="text" ref="postal_code" defaultValue={ postal_code }/>
+                    <input className="form-control" style={ input_style } type="text" inputRef={ ref => this.postal_codeInput = ref } defaultValue={ postal_code }/>
                   </Col>
                   <div className="clearfix"></div>
                 </div>
                 <div style={ row_style }>
                   <Col xs={6} style={ S('pl-0 pr-0') }>
                     <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>YEAR BUILT</label>
-                    <input className="form-control" style={ input_style } type="text" ref="year_built" defaultValue={ year_built }/>
+                    <input className="form-control" style={ input_style } type="text" inputRef={ ref => this.year_builtInput = ref } defaultValue={ year_built }/>
                   </Col>
                   <Col xs={6} style={ S('pr-0') }>
                     <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>PROPERTY TYPE</label>
-                    <input className="form-control" style={ input_style } type="text" ref="property_type" defaultValue={ property_type }/>
+                    <input className="form-control" style={ input_style } type="text" inputRef={ ref => this.property_typeInput = ref } defaultValue={ property_type }/>
                   </Col>
                   <div className="clearfix"></div>
                 </div>
                 <div style={ row_style }>
                   <Col xs={4} style={ S('pl-0') }>
                     <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>SQFT</label>
-                    <input className="form-control" style={ input_style } type="text" ref="square_feet" defaultValue={ square_feet }/>
+                    <input className="form-control" style={ input_style } type="text" inputRef={ ref => this.square_feetInput = ref } defaultValue={ square_feet }/>
                   </Col>
                   <Col xs={4} style={ S('p-0') }>
                     <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>BEDS</label>
-                    <input className="form-control" style={ input_style } type="text" ref="bedroom_count" defaultValue={ bedroom_count }/>
+                    <input className="form-control" style={ input_style } type="text" inputRef={ ref => this.bedroom_countInput = ref } defaultValue={ bedroom_count }/>
                   </Col>
                   <Col xs={4} style={ S('pr-0') }>
                     <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>BATHS</label>
-                    <input className="form-control" style={ input_style } type="text" ref="bathroom_count" defaultValue={ bathroom_count }/>
+                    <input className="form-control" style={ input_style } type="text" inputRef={ ref => this.bathroom_countInput = ref } defaultValue={ bathroom_count }/>
                   </Col>
                   <div className="clearfix"></div>
                 </div>

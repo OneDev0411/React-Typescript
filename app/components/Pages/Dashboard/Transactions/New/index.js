@@ -219,7 +219,7 @@ export default class NewTransaction extends Component {
       delete AppStore.data.new_transaction.listing_added
       delete AppStore.data.new_transaction.listings_found
       delete AppStore.data.new_transaction.listing_q
-      this.refs.q.refs.input.value = ''
+      this.qInput.value = ''
       setTimeout(() => {
         this.refs.address.focus()
       }, 100)

@@ -86,10 +86,10 @@ export default class Reset extends Component {
       <div>
         <div style={ S('color-929292 mb-20') }>Reset your password</div>
         <form onSubmit={ this.handleSubmit.bind(this) }>
-          <FormControl bsStyle={ password_style } placeholder="New Password" type="password" ref="password"/>
-          <FormControl bsStyle={ password_style } placeholder="Confirm New Password" type="password" ref="confirm_password"/>
+          <FormControl bsStyle={ password_style } placeholder="New Password" type="password" inputRef={ ref => this.passwordInput = ref }/>
+          <FormControl bsStyle={ password_style } placeholder="Confirm New Password" type="password" inputRef={ ref => this.confirm_passwordInput = ref }/>
           { message }
-          <Button type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p') }>
+          <Button type="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p') }>
             { submitting ? 'Submitting...' : 'Change Password' }
           </Button>
           <div style={ S('mt-20 color-929292 font-13') }>Code not working? <Link to="/password/forgot">Try sending it again</Link></div>

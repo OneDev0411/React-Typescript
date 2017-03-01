@@ -82,7 +82,7 @@ export default class ActionBubble extends Component {
         <form style={ S('pull-left ' + (data.is_mobile ? 'w-300' : 'w-360')) } onSubmit={ this.props.handleEmailSubmit.bind(this) }>
           <div style={ S('pull-left') }>
             <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
-              <FormControl ref="email" style={ signup_input_style } type="text" placeholder={ email_label } />
+              <FormControl inputRef={ ref => this.emailInput = ref } style={ signup_input_style } type="text" placeholder={ email_label } />
             </OverlayTrigger>
           </div>
           <div style={ S('pull-left') }>

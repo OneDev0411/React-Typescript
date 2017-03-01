@@ -40,7 +40,6 @@ export default class NewMessageViewer extends Component {
           })
           this.props.addUsersToSearchInput(data.new_message.items_selected)
         }
-        this.refs.myselect.refs.input.blur()
       }
     }
   }
@@ -193,7 +192,7 @@ export default class NewMessageViewer extends Component {
           <div className="create-item__user-select" style={ S('absolute l-35 t-5 w-90p z-3') }>
             <SelectContainer inputChange={ this.inputChange.bind(this) }>
               <Select
-                ref="myselect"
+                ref={ ref => this.myselect = ref }
                 autofocus
                 name="users"
                 placeholder="Enter name, email or phone"

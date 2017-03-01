@@ -1,7 +1,7 @@
 // Dashboard/Mls/Partials/ShareTypeModal.js
 import React, { Component } from 'react'
 import S from 'shorti'
-import { Button, Modal, Input } from 'react-bootstrap'
+import { Button, Modal, FormControl } from 'react-bootstrap'
 import controller from '../../controller'
 export default class ShareTypeModal extends Component {
   componentDidMount() {
@@ -9,11 +9,11 @@ export default class ShareTypeModal extends Component {
       this.refs.title.refs.input.focus()
   }
   saveForMe() {
-    const title = this.refs.title.refs.input.value.trim()
+    const title = this.titleInput.value.trim()
     controller.alert_share.saveForMe(title)
   }
   showShareModal() {
-    const title = this.refs.title.refs.input.value.trim()
+    const title = this.titleInput.value.trim()
     controller.alert_share.showShareModal(title)
   }
   render() {
@@ -35,7 +35,7 @@ export default class ShareTypeModal extends Component {
               Name Your Alert
             </div>
             <div>
-              <FormControl ref="title" type="text" placeholder={ listing_map.listings_info.proposed_title }/>
+              <FormControl inputRef={ ref => this.titleInput = ref } type="text" placeholder={ listing_map.listings_info.proposed_title }/>
             </div>
           </div>
         </Modal.Body>

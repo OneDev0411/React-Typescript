@@ -69,7 +69,7 @@ export default class Dashboard extends Component {
     window.addEventListener('resize', this.handleResize)
     const data = this.props.data
     if (data.play_sound) {
-      this.refs.notif_sound.play()
+      this.notif_sound.play()
       delete AppStore.data.play_sound
       AppStore.emitChange()
     }
@@ -490,7 +490,7 @@ export default class Dashboard extends Component {
           })
           controller.add_members.addUsersToSearchInput(data.add_members.items_selected)
         }
-        this.refs.myselect.refs.input.blur()
+        this.myselect.refs.input.blur()
       }
     }
   }
@@ -715,7 +715,7 @@ export default class Dashboard extends Component {
           { nav_area }
           { main_content }
         </main>
-        <audio ref="notif_sound" id="notif-sound">
+        <audio ref={ ref => this.notif_sound = ref } id="notif-sound">
           <source src="/static/audio/ding.mp3" type="audio/mpeg" />
         </audio>
         { file_viewer }
@@ -725,7 +725,7 @@ export default class Dashboard extends Component {
               <Modal.Title>Start a new chat</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <FormControl type="text" ref="title" placeholder="Chat room title"/>
+              <FormControl type="text" inputRef={ ref => this.titleInput = ref } placeholder="Chat room title"/>
             </Modal.Body>
             <Modal.Footer>
               <Button bsStyle="link" onClick={ this.hideModal.bind(this) }>Cancel</Button>
@@ -741,7 +741,7 @@ export default class Dashboard extends Component {
             <div className="create-item__user-select">
               <SelectContainer inputChange={ this.inputChange.bind(this) }>
                 <Select
-                  ref="myselect"
+                  ref={ ref => this.myselect = ref }
                   autofocus
                   autosize
                   name="users"

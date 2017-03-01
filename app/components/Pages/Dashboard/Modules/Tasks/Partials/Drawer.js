@@ -1,7 +1,7 @@
 // Dashboard/Tasks/Drawer.js
 import React, { Component } from 'react'
 import S from 'shorti'
-import { Button, Input } from 'react-bootstrap'
+import { Button, FormControl } from 'react-bootstrap'
 
 // Partials
 import CheckBox from './CheckBox'
@@ -18,7 +18,7 @@ export default class Drawer extends Component {
   editTaskTitle() {
     const data = this.props.data
     const current_task = data.current_task
-    const task_title = this.refs.task_title.refs.input.value
+    const task_title = this.task_titleInput.value
     this.props.editTaskTitle(current_task, task_title)
   }
 
@@ -208,7 +208,7 @@ export default class Drawer extends Component {
               />
             </div>
             <span style={ text_style }>
-              <FormControl ref="task_title" onChange={ this.editTaskTitle.bind(this) } style={ S('bw-0 absolute l-50 t-10 bg w-400 bg-f5fafe') } type="text" value={ task_title } />
+              <FormControl inputRef={ ref => this.task_titleInput = ref } onChange={ this.editTaskTitle.bind(this) } style={ S('bw-0 absolute l-50 t-10 bg w-400 bg-f5fafe') } type="text" value={ task_title } />
             </span>
           </div>
           <div onClick={ this.props.showDayPicker } style={ { ...S('pointer pt-20 p-15 h-60 mb-30 bg-fff'), ...bottomLine } }>

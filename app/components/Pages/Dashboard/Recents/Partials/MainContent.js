@@ -171,7 +171,7 @@ export default class MainContent extends Component {
           <div style={ main_style_mobile }>
             <div style={ S('p-10 pt-15 h-60 relative') }>
               <img style={ S('w-12 h-12 absolute l-20 t-28') } src="/static/images/dashboard/chats/search.svg" />
-              <input ref="search_rooms_input" onChange={ this.handleSearchRoomChange.bind(this) } style={ S('w-170 br-5 bg-f8fafb pl-30 h-34') } type="text" placeholder="Search" className="form-control pull-left" value={ data.search_rooms_input }/>
+              <input ref={ ref => this.search_rooms_inputInput = ref } onChange={ this.handleSearchRoomChange.bind(this) } style={ S('w-170 br-5 bg-f8fafb pl-30 h-34') } type="text" placeholder="Search" className="form-control pull-left" value={ data.search_rooms_input }/>
               <button onClick={ this.props.showNewMessageView.bind(this) } type="button" className="btn btn-primary" style={ S('h-34 pointer absolute p-0 pl-10 pr-10 t-14 r-10 br-100') }>
                 <img src="/static/images/dashboard/chats/pencil.svg" style={ S('mr-10') }/>New Message
               </button>
@@ -213,7 +213,7 @@ export default class MainContent extends Component {
               <div style={ S('p-10 pt-12 h-60 relative bg-303e4d') }>
                 <img style={ S('w-12 h-12 absolute l-20 t-23') } src="/static/images/dashboard/chats/search.svg" />
                 { clear_search_btn }
-                <input ref="search_rooms_input" onChange={ this.handleSearchRoomChange.bind(this) } style={ S('w-170 br-5 bg-4e5c6c color-8696a4 border-none pl-30 h-34') } type="text" placeholder="Search" className="form-control pull-left" value={ data.search_rooms_input } />
+                <input ref={ ref => this.search_rooms_inputInput = ref } onChange={ this.handleSearchRoomChange.bind(this) } style={ S('w-170 br-5 bg-4e5c6c color-8696a4 border-none pl-30 h-34') } type="text" placeholder="Search" className="form-control pull-left" value={ data.search_rooms_input } />
                 <button onClick={ this.props.showNewMessageView.bind(this) } type="button" className="btn btn-primary" style={ S('pointer absolute t-12 r-10 br-5 pt-7 h-34') }>
                   <img src="/static/images/dashboard/chats/pencil.svg" style={ S('mr-10') }/>New Message
                 </button>

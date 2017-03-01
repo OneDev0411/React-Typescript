@@ -1,6 +1,6 @@
 // Partials/ChatModule.js
 import React, { Component } from 'react'
-import { Button, Input } from 'react-bootstrap'
+import { Button, FormControl } from 'react-bootstrap'
 import S from 'shorti'
 import Brand from '../../../../controllers/Brand'
 import controller from '../controller'
