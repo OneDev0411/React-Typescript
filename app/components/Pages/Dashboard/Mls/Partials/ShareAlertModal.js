@@ -48,7 +48,8 @@ export default class ShareAlertModal extends Component {
         this.props.addUsersToSearchInput(data.share_modal.items_selected)
       }
     }
-    this.refs.myselect.refs.input.blur()
+    if (this.refs.myselect.refs.input)
+      this.refs.myselect.refs.input.blur()
   }
   handleChange(users_selected) {
     this.props.addUsersToSearchInput(users_selected)
@@ -82,13 +83,7 @@ export default class ShareAlertModal extends Component {
   handleOptionRenderer(item) {
     const data = this.props.data
     let profile_image
-    if (item.type === 'user') {
-      // Contact
-      const user = item.value
-      profile_image = (
-        <ProfileImage data={ data } user={ user }/>
-      )
-    } else {
+    if (item.type === 'room') {
       // Room
       if (item.value.users.length > 2) {
         profile_image = (
@@ -100,6 +95,12 @@ export default class ShareAlertModal extends Component {
           <ProfileImage data={ data } user={ other_user }/>
         )
       }
+    } else {
+      // Contact
+      const user = item.value
+      profile_image = (
+        <ProfileImage data={ data } user={ user }/>
+      )
     }
     return (
       <div style={ S('relative ' + (item.index < 1 ? 'h-74' : 'h-54')) } className={ item.index < 1 ? 'other-users--first' : '' } >
@@ -122,7 +123,7 @@ export default class ShareAlertModal extends Component {
     // Data
     const data = this.props.data
     const share_modal = data.share_modal
-    const users_select_options = []
+    let users_select_options = []
     // Get users selected
     const users_selected = []
     let users_selected_ids = []
@@ -190,6 +191,11 @@ export default class ShareAlertModal extends Component {
         }
       })
     }
+    // Add reformatted contacts
+    const contacts_found = controller.contacts.getContactsForSearch(data.contacts)
+    if (contacts_found && contacts_found.length)
+      users_select_options = [...users_select_options, ...contacts_found]
+
     let dialog_class_name = 'modal-800'
     // Check if mobile
     if (data.is_mobile)
