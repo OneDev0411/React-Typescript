@@ -22,7 +22,8 @@ export default class Listings extends Component {
     AppStore.data.user = user
     const location = data.location
     const brokerage = location.query.brokerage
-    const options = this.initOptions(brokerage)
+    const agent = location.query.agent
+    const options = this.initOptions(brokerage, agent)
     AppStore.data.widget = {
       options
     }
@@ -69,7 +70,7 @@ export default class Listings extends Component {
       options
     })
   }
-  initOptions(brokerage) {
+  initOptions(brokerage, agent) {
     const options = {
       limit: '75',
       maximum_lot_square_meters: 100000000,
@@ -89,9 +90,12 @@ export default class Listings extends Component {
       minimum_bedrooms: 0,
       minimum_price: 0,
       open_house: false,
-      property_subtypes: ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse', 'LSE-Apartment', 'LSE-Condo/Townhome', 'LSE-Duplex', 'LSE-Fourplex', 'LSE-House', 'LSE-Mobile', 'LSE-Triplex', 'LND-Commercial', 'LND-Farm/Ranch', 'LND-Residential'],
-      list_offices: [brokerage]
+      property_subtypes: ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse', 'LSE-Apartment', 'LSE-Condo/Townhome', 'LSE-Duplex', 'LSE-Fourplex', 'LSE-House', 'LSE-Mobile', 'LSE-Triplex', 'LND-Commercial', 'LND-Farm/Ranch', 'LND-Residential']
     }
+    if (brokerage)
+      options.list_offices = [brokerage]
+    if (agent)
+      options.agents = [agent]
     return options
   }
   handleButtonClick(type) {
@@ -108,6 +112,16 @@ export default class Listings extends Component {
     }
     delete AppStore.data.signup_tooltip
     AppStore.data.widget.options = options
+    // Get brokerage listings
+    delete options.list_offices
+    const brokerage = data.location.query.brokerage
+    if (brokerage)
+      options.list_offices = [brokerage]
+    // Get agent listings
+    delete options.agents
+    const agent = data.location.query.agent
+    if (agent)
+      options.agents = [agent]
     AppStore.emitChange()
     ListingDispatcher.dispatch({
       action: 'get-valerts-widget',
@@ -174,10 +188,13 @@ export default class Listings extends Component {
       links_area = ''
     const header_style = S('text-center')
     const status_buttons_area_style = S('text-center mb-20')
+    let title = 'Our Exclusive Listings'
+    if (this.props.location.query.agent)
+      title = 'My Listings'
     return (
       <div className="futurastd">
         <div style={ header_style }>
-          <h1 style={ S('font-50 color-263445 mb-0' + (data.is_mobile ? ' ml-10 mr-10' : '')) }>Our Exclusive Listings</h1>
+          <h1 style={ S('font-50 color-263445 mb-0' + (data.is_mobile ? ' ml-10 mr-10' : '')) }>{ title }</h1>
           <span style={ S('h-1 bg-e2e2e2 w-80 m-20 inline-block') }></span>
         </div>
         <div style={ status_buttons_area_style }>
@@ -196,5 +213,6 @@ export default class Listings extends Component {
 
 // PropTypes
 Listings.propTypes = {
-  data: React.PropTypes.object
+  data: React.PropTypes.object,
+  location: React.PropTypes.object
 }

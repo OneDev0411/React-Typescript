@@ -16,33 +16,40 @@ export default class ShareAlertModal extends Component {
     // Enter clicked
     const data = this.props.data
     if (e.which === 13 || e.which === 9) {
-      e.preventDefault()
-      if (data.share_modal && data.share_modal.search_value) {
-        if (!data.share_modal.items_selected)
-          data.share_modal.items_selected = []
-        // Emails
-        if (validator.isEmail(data.share_modal.search_value)) {
-          data.share_modal.items_selected.push({
-            email: data.share_modal.search_value,
-            type: 'email',
-            label: data.share_modal.search_value,
-            value: data.share_modal.search_value
-          })
-          this.props.addUsersToSearchInput(data.share_modal.items_selected)
-        }
-        // Phone numbers
-        if (validator.isNumeric(data.share_modal.search_value)) {
-          data.share_modal.items_selected.push({
-            email: data.share_modal.search_value,
-            type: 'phone_number',
-            label: data.share_modal.search_value,
-            value: data.share_modal.search_value
-          })
-          this.props.addUsersToSearchInput(data.share_modal.items_selected)
-        }
-        this.refs.myselect.refs.input.blur()
+      if (data.share_modal && data.share_modal.search_value)
+        this.addToSelectedItems(data.share_modal.search_value)
+    }
+  }
+  addToSelectedItems(value) {
+    const data = this.props.data
+    if (!data.share_modal.items_selected)
+      data.share_modal.items_selected = []
+    // Emails
+    if (validator.isEmail(value)) {
+      if (!_.find(data.share_modal.items_selected, { email: value })) {
+        data.share_modal.items_selected.push({
+          email: value,
+          type: 'email',
+          label: value,
+          value
+        })
+        this.props.addUsersToSearchInput(data.share_modal.items_selected)
       }
     }
+    // Phone numbers
+    if (validator.isNumeric(value)) {
+      if (!_.find(data.share_modal.items_selected, { email: value })) {
+        data.share_modal.items_selected.push({
+          email: value,
+          type: 'phone_number',
+          label: value,
+          value
+        })
+        this.props.addUsersToSearchInput(data.share_modal.items_selected)
+      }
+    }
+    if (this.refs.myselect.refs.input)
+      this.refs.myselect.refs.input.blur()
   }
   handleChange(users_selected) {
     this.props.addUsersToSearchInput(users_selected)
@@ -76,13 +83,7 @@ export default class ShareAlertModal extends Component {
   handleOptionRenderer(item) {
     const data = this.props.data
     let profile_image
-    if (item.type === 'user') {
-      // Contact
-      const user = item.value
-      profile_image = (
-        <ProfileImage data={ data } user={ user }/>
-      )
-    } else {
+    if (item.type === 'room') {
       // Room
       if (item.value.users.length > 2) {
         profile_image = (
@@ -94,6 +95,12 @@ export default class ShareAlertModal extends Component {
           <ProfileImage data={ data } user={ other_user }/>
         )
       }
+    } else {
+      // Contact
+      const user = item.value
+      profile_image = (
+        <ProfileImage data={ data } user={ user }/>
+      )
     }
     return (
       <div style={ S('relative ' + (item.index < 1 ? 'h-74' : 'h-54')) } className={ item.index < 1 ? 'other-users--first' : '' } >
@@ -105,14 +112,18 @@ export default class ShareAlertModal extends Component {
   }
   isSharable() {
     const data = this.props.data
-    if (data.share_modal && data.share_modal.items_selected && data.share_modal.items_selected.length)
+    if (data.share_modal && data.share_modal.search_value && data.share_modal.search_value.trim())
       return true
+  }
+  handleShareInputBlur() {
+    const data = this.props.data
+    this.addToSelectedItems(data.share_modal.search_value)
   }
   render() {
     // Data
     const data = this.props.data
     const share_modal = data.share_modal
-    const users_select_options = []
+    let users_select_options = []
     // Get users selected
     const users_selected = []
     let users_selected_ids = []
@@ -180,6 +191,11 @@ export default class ShareAlertModal extends Component {
         }
       })
     }
+    // Add reformatted contacts
+    const contacts_found = controller.contacts.getContactsForSearch(data.contacts)
+    if (contacts_found && contacts_found.length)
+      users_select_options = [...users_select_options, ...contacts_found]
+
     let dialog_class_name = 'modal-800'
     // Check if mobile
     if (data.is_mobile)
@@ -214,6 +230,8 @@ export default class ShareAlertModal extends Component {
                   onChange={ this.handleChange.bind(this) }
                   valueRenderer={ this.handleValueRenderer.bind(this) }
                   optionRenderer={ this.handleOptionRenderer.bind(this) }
+                  onBlur={ this.handleShareInputBlur.bind(this) }
+                  onBlurResetsInput={ false }
                 />
               </SelectContainer>
             </div>

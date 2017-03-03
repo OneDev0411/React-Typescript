@@ -62,7 +62,7 @@ export default class ListingViewer extends Component {
     const listing = this.props.listing
     const user = data.user
     let brand_agent
-    if (data.brand) {
+    if (data.brand && data.brand.users) {
       brand_agent = data.brand.users[0]
       // Check if listing agent is agent
       if (listing.list_agent && listing.list_agent.user_id && _.find(data.brand.users, { id: listing.list_agent.user_id }))

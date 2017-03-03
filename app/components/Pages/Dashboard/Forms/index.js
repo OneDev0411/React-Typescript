@@ -1,18 +1,12 @@
-// Dashboard/Website/index.js
+// Dashboard/Forms/index.js
 import React, { Component } from 'react'
 import SideBar from '../Partials/SideBar'
 import S from 'shorti'
-export default class Website extends Component {
+export default class Forms extends Component {
   render() {
     // Data
     const data = this.props.data
     const user = data.user
-    let brand = data.brand
-    let brand_id
-    if (!brand)
-      brand = user.brand
-    if (brand)
-      brand_id = brand.id
     const main_style = S(`absolute h-100p border-left-70-solid-fff w-100p`)
     return (
       <div style={ S('minw-1000') }>
@@ -21,7 +15,7 @@ export default class Website extends Component {
             data={ data }
           />
           <div style={ main_style }>
-            <iframe style={ S('w-100p h-100p absolute') } src={ `https://rechat.site/store?access_token=${user.access_token}${brand_id ? `&brand=${brand_id}` : ``}`} frameBorder="0"></iframe>
+            <iframe style={ S('w-100p h-100p absolute') } src={ `https://forms-boer.d.rechat.co?access_token=${user.access_token}`} frameBorder="0"></iframe>
           </div>
         </main>
       </div>
@@ -30,6 +24,6 @@ export default class Website extends Component {
 }
 
 // PropTypes
-Website.propTypes = {
+Forms.propTypes = {
   data: React.PropTypes.object
 }

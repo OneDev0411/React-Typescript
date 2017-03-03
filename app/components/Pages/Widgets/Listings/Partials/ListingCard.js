@@ -143,7 +143,7 @@ export default class ListingCard extends Component {
             </div>
           </div>
         </div>
-        )
+      )
     }
     if (data.errors && data.errors.type === 'email-in-use' && data.signup_tooltip.listing === listing.id) {
       signup_confirm_message = (

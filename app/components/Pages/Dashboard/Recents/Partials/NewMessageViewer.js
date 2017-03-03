@@ -10,6 +10,7 @@ import SelectContainer from '../../Partials/SelectContainer'
 import { getResizeAvatarUrl } from '../../../../../utils/user'
 import ProfileImage from '../../Partials/ProfileImage'
 import ProfileImageMultiple from '../../Partials/ProfileImageMultiple'
+import controller from '../../controller'
 export default class NewMessageViewer extends Component {
   inputChange(e) {
     // Enter clicked
@@ -97,53 +98,56 @@ export default class NewMessageViewer extends Component {
       </div>
     )
   }
-  getContacts() {
-    const data = this.props.data
-    const contacts = data.contacts
-    const contacts_found = []
-    contacts.forEach((contact, i) => {
-      const users = contact.users
-      if (users) {
-        // Loop through users
-        contact.users.forEach(user => {
-          const deep_search = `${user.first_name ? user.first_name : ''} ${user.last_name ? user.last_name : ''} ${user.email ? user.email : ''} ${user.phone_number ? user.phone_number : ''} `
-          contacts_found.push({
-            value: user,
-            label: user.first_name ? user.first_name : user.phone_number,
-            deep_search,
-            type: 'user',
-            index: i
-          })
-        })
-      } else {
-        const sub_contact = contact.sub_contacts[0]
-        contact.email = sub_contact.attributes.emails[0].email
-        // Loop through emails
-        sub_contact.attributes.emails.forEach(email_obj => {
-          const deep_search = `${contact.display_name} ${email_obj.email}`
-          contacts_found.push({
-            value: email_obj.email,
-            label: `${contact.display_name} ${email_obj.email}`,
-            deep_search,
-            type: 'email',
-            index: i
-          })
-        })
-        // Loop through phone numbers
-        sub_contact.attributes.phone_numbers.forEach(phone_number_obj => {
-          const deep_search = `${contact.display_name} ${phone_number_obj.phone_number}`
-          contacts_found.push({
-            value: phone_number_obj.phone_number,
-            label: `${contact.display_name} ${phone_number_obj.phone_number}`,
-            deep_search,
-            type: 'phone_number',
-            index: i
-          })
-        })
-      }
-    })
-    return contacts_found
-  }
+  // getContacts() {
+  //   const data = this.props.data
+  //   const contacts = data.contacts
+  //   const contacts_found = []
+  //   contacts.forEach((contact, i) => {
+  //     const users = contact.users
+  //     if (users) {
+  //       // Loop through users
+  //       contact.users.forEach(user => {
+  //         const deep_search = `${user.first_name ? user.first_name : ''} ${user.last_name ? user.last_name : ''} ${user.email ? user.email : ''} ${user.phone_number ? user.phone_number : ''} `
+  //         contacts_found.push({
+  //           value: user,
+  //           label: user.first_name ? user.first_name : user.phone_number,
+  //           deep_search,
+  //           type: 'user',
+  //           index: i
+  //         })
+  //       })
+  //     } else {
+  //       const sub_contact = contact.sub_contacts[0]
+  //       if (sub_contact.attributes.emails) {
+  //         // Loop through emails
+  //         sub_contact.attributes.emails.forEach(email_obj => {
+  //           const deep_search = `${contact.display_name} ${email_obj.email}`
+  //           contacts_found.push({
+  //             value: email_obj.email,
+  //             label: `${contact.display_name} ${email_obj.email}`,
+  //             deep_search,
+  //             type: 'email',
+  //             index: i
+  //           })
+  //         })
+  //       }
+  //       // Loop through phone numbers
+  //       if (sub_contact.attributes.phone_numbers) {
+  //         sub_contact.attributes.phone_numbers.forEach(phone_number_obj => {
+  //           const deep_search = `${contact.display_name} ${phone_number_obj.phone_number}`
+  //           contacts_found.push({
+  //             value: phone_number_obj.phone_number,
+  //             label: `${contact.display_name} ${phone_number_obj.phone_number}`,
+  //             deep_search,
+  //             type: 'phone_number',
+  //             index: i
+  //           })
+  //         })
+  //       }
+  //     }
+  //   })
+  //   return contacts_found
+  // }
   getFilterOptions() {
     const data = this.props.data
     let users_select_options = []
@@ -175,9 +179,10 @@ export default class NewMessageViewer extends Component {
         }
       })
     }
-    const contacts_found = this.getContacts()
+    // Add reformatted contacts
+    const contacts_found = controller.contacts.getContactsForSearch(data.contacts)
     if (contacts_found && contacts_found.length)
-      users_select_options = [...users_select_options, ...this.getContacts()]
+      users_select_options = [...users_select_options, ...contacts_found]
     return users_select_options
   }
   filterOption(option, string) {

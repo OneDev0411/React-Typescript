@@ -104,7 +104,6 @@ export default class MlsMap extends Component {
       lng: -96.7970
     }
     const default_zoom = 13
-    // TODO move to ENV_VAR
     const bootstrap_url_keys = {
       key: config.google.api_key,
       libraries: ['drawing', 'places'].join(',')

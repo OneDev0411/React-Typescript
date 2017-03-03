@@ -3,9 +3,7 @@ module.exports = (app, config) => {
   app.get('/api/contacts',(req, res) => {
     const api_url = config.api.url
     const endpoint = api_url + '/contacts'
-
     const access_token = req.query.access_token
-
     fetch(endpoint,{
       method: 'get',
       headers: {  
