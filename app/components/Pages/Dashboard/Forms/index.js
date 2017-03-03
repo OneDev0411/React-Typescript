@@ -15,7 +15,7 @@ export default class Forms extends Component {
             data={ data }
           />
           <div style={ main_style }>
-            <iframe style={ S('w-100p h-100p absolute') } src={ `https://forms-boer.d.rechat.co?access_token=${user.access_token}`} frameBorder="0"></iframe>
+            <iframe style={ S('w-100p h-100p absolute') } src={ `https://forms.rechat.com?access_token=${user.access_token}`} frameBorder="0"></iframe>
           </div>
         </main>
       </div>

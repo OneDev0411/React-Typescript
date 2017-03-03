@@ -23,7 +23,7 @@ var loaders_module = [
 // Development loaders
 if(process.env.NODE_ENV === 'development'){
   var es_lint = {
-    test: /\.js$/, 
+    test: /\.js$/,
     loader: 'eslint-loader',
     exclude: /node_modules/
   }
@@ -58,7 +58,8 @@ module.exports = {
       'process.env.BRANCH_KEY': JSON.stringify(process.env.BRANCH_KEY),
       'process.env.APP_SHARE_URL': JSON.stringify(process.env.APP_SHARE_URL),
       'process.env.GOOGLE_API_KEY': JSON.stringify(process.env.GOOGLE_API_KEY),
-      'process.env.ITUNES_URL': JSON.stringify(process.env.ITUNES_URL)
+      'process.env.ITUNES_URL': JSON.stringify(process.env.ITUNES_URL),
+      'process.env.RECHAT_FORMS_URL': JSON.stringify(process.env.RECHAT_FORMS_URL)
     })
  ]
 }
