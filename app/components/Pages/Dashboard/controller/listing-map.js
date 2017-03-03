@@ -116,24 +116,24 @@ const controller = {
       return
     const points = [
       {
-        latitude: bounds[0],
-        longitude: bounds[1]
+        latitude: bounds.ne.lat,
+        longitude: bounds.ne.lng
       },
       {
-        latitude: bounds[0],
-        longitude: bounds[3]
+        latitude: bounds.nw.lat,
+        longitude: bounds.nw.lng
       },
       {
-        latitude: bounds[2],
-        longitude: bounds[3]
+        latitude: bounds.sw.lat,
+        longitude: bounds.sw.lng
       },
       {
-        latitude: bounds[2],
-        longitude: bounds[1]
+        latitude: bounds.se.lat,
+        longitude: bounds.se.lng
       },
       {
-        latitude: bounds[0],
-        longitude: bounds[1]
+        latitude: bounds.ne.lat,
+        longitude: bounds.ne.lng
       }
     ]
     AppStore.data.listing_map.center = center
