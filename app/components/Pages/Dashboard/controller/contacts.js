@@ -2,7 +2,7 @@
 const controller = {
   getContactsForSearch(contacts) {
     if (!contacts)
-      return
+      return ''
     const contacts_found = []
     contacts.forEach((contact, i) => {
       const users = contact.users
