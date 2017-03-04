@@ -244,7 +244,9 @@ export default class ShareListingModal extends Component {
       })
     }
     // Add reformatted contacts
-    const contacts_found = this.getContacts()
+    let contacts_found
+    if (data.contacts)
+      contacts_found = this.getContacts()
     if (contacts_found && contacts_found.length)
       users_select_options = [...users_select_options, ...contacts_found]
 
