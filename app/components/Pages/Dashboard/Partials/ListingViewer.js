@@ -8,6 +8,7 @@ import helpers from '../../../../utils/helpers'
 import listing_util from '../../../../utils/listing'
 import Loading from '../../../Partials/Loading'
 import ShareListingModal from './ShareListingModal'
+import ListingMapMarker from './ListingMapMarker'
 import ListingMarker from './ListingMarker'
 import FavoriteHeart from './FavoriteHeart'
 import controller from '../controller'
@@ -297,7 +298,7 @@ export default class ListingViewer extends Component {
             zoom={ 12 }
             options={ { scrollwheel: false } }
           >
-            <div
+            <ListingMapMarker
               onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) }
               onMouseOut={ controller.listing_map.hideListingPopup.bind(this) }
               onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }
@@ -312,7 +313,7 @@ export default class ListingViewer extends Component {
                 property={ listing.property }
                 address={ listing.property.address }
               />
-            </div>
+            </ListingMapMarker>
           </GoogleMap>
         )
       }

@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import controller from '../../controller'
+import ListingMapMarker from '../../Partials/ListingMapMarker'
 import ListingMarker from '../../Partials/ListingMarker'
 import GoogleMap from 'google-map-react'
 import config from '../../../../../../config/public'
@@ -18,12 +19,11 @@ export default class MlsMap extends Component {
       })
       map_listing_markers = listings.map(listing => {
         return (
-          <div
+          <ListingMapMarker
+            key={ 'search-map--map-listing-' + listing.id }
             onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) }
             onMouseOut={ controller.listing_map.hideListingPopup.bind(this) }
-            key={ 'search-map--map-listing-' + listing.id }
             onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }
-            style={ S('pointer mt-10') }
             lat={ listing.location.latitude }
             lng={ listing.location.longitude }
             text={'A'}
@@ -36,7 +36,7 @@ export default class MlsMap extends Component {
               address={ listing.address }
               context={ 'map' }
             />
-          </div>
+          </ListingMapMarker>
         )
       })
     }
@@ -47,7 +47,7 @@ export default class MlsMap extends Component {
       })
       map_listing_markers = listings.map(listing => {
         return (
-          <div
+          <ListingMapMarker
             onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) }
             onMouseOut={ controller.listing_map.hideListingPopup.bind(this) }
             key={ 'alert-map--map-listing-' + listing.id }
@@ -65,7 +65,7 @@ export default class MlsMap extends Component {
               address={ listing.address }
               context={ 'map' }
             />
-          </div>
+          </ListingMapMarker>
         )
       })
     }
@@ -77,7 +77,7 @@ export default class MlsMap extends Component {
       })
       map_listing_markers = listings.map((listing, i) => {
         return (
-          <div
+          <ListingMapMarker
             onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) }
             onMouseOut={ controller.listing_map.hideListingPopup.bind(this) }
             key={ 'actives-map--map-listing-' + listing.id + '-' + i }
@@ -95,7 +95,7 @@ export default class MlsMap extends Component {
               address={ listing.property.address }
               context={ 'map' }
             />
-          </div>
+          </ListingMapMarker>
         )
       })
     }
