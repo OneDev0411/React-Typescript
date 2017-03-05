@@ -630,7 +630,15 @@ export default class Mls extends Component {
     let search_area = (
       <div>
         <form onSubmit={ controller.search_input_map.handleSearchSubmit.bind(this) }>
-          <input id="google_search" onKeyDown={ controller.search_input_map.handleKeyDown.bind(this) } onChange={ controller.search_input_map.handleSearchInputChange.bind(this) } value={ search_input_text } ref={ ref => this.search_inputInput = ref } className="form-control" type="text" style={ search_input_style } placeholder="Search location or MLS#" />
+          <input
+            id="google_search"
+            onKeyDown={ controller.search_input_map.handleKeyDown.bind(this) }
+            onChange={ controller.search_input_map.handleSearchInputChange.bind(this) }
+            className="form-control"
+            type="text"
+            style={ search_input_style }
+            placeholder="Search location or MLS#"
+          />
         </form>
       </div>
     )
@@ -735,7 +743,13 @@ export default class Mls extends Component {
       search_area = (
         <form onSubmit={ controller.search_input_map.handleSearchSubmit.bind(this) }>
           <img onClick={ controller.search_input_map.handleSearchSubmit.bind(this) } src="/static/images/dashboard/mls/search.svg" style={ S('pointer w-22 h-22 absolute l-13 t-14') } />
-          <input onChange={ controller.search_input_map.handleSearchInputChange.bind(this) } value={ search_input_text } ref={ ref => this.search_inputInput = ref } className="form-control" type="text" style={ S('font-18 bg-dfe3e8 w-200 pull-left pl-40') } placeholder="Location or MLS#" />
+          <input
+            onChange={ controller.search_input_map.handleSearchInputChange.bind(this) }
+            value={ search_input_text }
+            className="form-control" type="text"
+            style={ S('font-18 bg-dfe3e8 w-200 pull-left pl-40') }
+            placeholder="Location or MLS#"
+          />
         </form>
       )
       toolbar = (
