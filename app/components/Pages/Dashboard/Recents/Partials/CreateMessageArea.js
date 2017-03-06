@@ -17,7 +17,7 @@ export default class CreateMessageArea extends Component {
       this.props.handleMessageTyping()
   }
   handleMessageKeyUp(e) {
-    const message_input = this.refs.message_input.value
+    const message_input = this.messageInput.value
     const data = this.props.data
     const active_contact = data.active_contact
     // Check for @
@@ -47,10 +47,10 @@ export default class CreateMessageArea extends Component {
   }
   addContactToMessage(contact) {
     this.props.addContactToMessage()
-    const message_input = this.refs.message_input.value
+    const message_input = this.messageInput.value
     const message_arr = message_input.split('@')
-    this.refs.message_input.value = message_arr[0] + contact.first_name + ' ' + contact.last_name + ' '
-    this.refs.message_input.focus()
+    this.messageInput.value = message_arr[0] + contact.first_name + ' ' + contact.last_name + ' '
+    this.messageInput.focus()
   }
   handleSubmit(e) {
     e.preventDefault()
@@ -58,13 +58,13 @@ export default class CreateMessageArea extends Component {
   }
   createMessage() {
     const data = this.props.data
-    const comment = this.refs.message_input.value
+    const comment = this.messageInput.value
     // If no comment
     if (!comment.trim())
       return false
     if (data.active_contact === undefined || data.active_contact === -1) {
       this.props.createMessage(comment)
-      this.refs.message_input.value = ''
+      this.messageInput.value = ''
     }
   }
   handleBlur() {
@@ -163,7 +163,16 @@ export default class CreateMessageArea extends Component {
         </div>
         <form onSubmit={ this.handleSubmit.bind(this) }>
           <div className="form-group" style={ S('w-100p') }>
-            <input onBlur={ this.handleBlur.bind(this) } onKeyUp={ this.handleMessageKeyUp.bind(this) } onKeyDown={ this.handleMessageKeyDown.bind(this) } ref={ ref => this.message_inputInput = ref } type="text" className="form-control chat-message-input" style={ S('w-100p pl-70 bw-2 z-3 relative') } placeholder="Type your message and press enter"/>
+            <input
+              onBlur={ this.handleBlur.bind(this) }
+              onKeyUp={ this.handleMessageKeyUp.bind(this) }
+              onKeyDown={ this.handleMessageKeyDown.bind(this) }
+              ref={ ref => this.messageInput = ref }
+              type="text"
+              className="form-control chat-message-input"
+              style={ S('w-100p pl-70 bw-2 z-3 relative') }
+              placeholder="Type your message and press enter"
+            />
             <Dropzone onDrop={ this.props.uploadFiles } type="button" className="btn btn-default create-message__btn" style={ btn_style }>
               <span className="plus" style={ S('font-22 relative t-1n') }>+</span>
             </Dropzone>
