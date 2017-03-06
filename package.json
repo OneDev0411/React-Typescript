@@ -72,6 +72,7 @@
     "react-day-picker": "^5.0.0",
     "react-dom": "^15.4.2",
     "react-dropzone": "^3.11.0",
+    "react-ga": "^2.1.2",
     "react-input-mask": "^0.7.7",
     "react-ios-switch": "0.1.10",
     "react-maskedinput": "^3.3.4",
