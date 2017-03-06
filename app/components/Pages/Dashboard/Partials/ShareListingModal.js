@@ -168,10 +168,6 @@ export default class ShareListingModal extends Component {
       }
     })
     return contacts_found
-=======
-    this.addToSelectedItems(this.myselect.refs.input.refs.input.value)
-    this.refs.myselect.value = ''
->>>>>>> v3.0
   }
   render() {
     const data = this.props.data
