@@ -29,7 +29,7 @@ export default class FilterForm extends Component {
     const value = this[`${key}Input`].value
     this.props.handleOptionChange(key, value)
   }
-  handleSetSoldDate(e, day) {
+  handleSetSoldDate(day, { disabled, selected }) {
     if (DateUtils.isPastDay(day))
       this.props.handleSetSoldDate(day)
   }
@@ -105,14 +105,13 @@ export default class FilterForm extends Component {
     const sold_date = filter_options.sold_date
     const date_obj = new Date(sold_date * 1000)
     let sold_date_picker
+
     if (filter_options.show_sold_date_picker) {
       sold_date_picker = (
         <div style={ S('absolute z-100 l-105 t-110 border-1-solid-ccc bg-fff br-3') }>
           <DayPicker
-            modifiers={{
-              selected: day => DateUtils.isSameDay(date_obj, day),
-              disabled: day => { return !DateUtils.isPastDay(day) }
-            }}
+            selectedDays={ day => DateUtils.isSameDay(date_obj, day) }
+            disabledDays={ day => { return !DateUtils.isPastDay(day) } }
             onDayClick={ this.handleSetSoldDate.bind(this) }
           />
         </div>
