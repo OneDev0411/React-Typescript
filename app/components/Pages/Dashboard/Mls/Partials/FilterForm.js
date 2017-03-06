@@ -26,7 +26,7 @@ export default class FilterForm extends Component {
     return false
   }
   handleOptionChange(key) {
-    const value = this.refs[key].refs.input.value
+    const value = this[`${key}Input`].value
     this.props.handleOptionChange(key, value)
   }
   handleSetSoldDate(e, day) {
@@ -356,7 +356,7 @@ export default class FilterForm extends Component {
                   <span style={ S('color-dcdedf relative ml-15') }>|</span>
                 </div>
                 <div style={ S('pull-right') }>
-                  <Switch checked={ filter_options ? filter_options.sold : false } onChange={ this.props.handleFilterSwitch.bind(this, 'sold') } />
+                  <Switch checked={ filter_options && filter_options.sold ? filter_options.sold : false } onChange={ this.props.handleFilterSwitch.bind(this, 'sold') } />
                 </div>
               </div>
               <div className="clearfix"></div>
@@ -383,7 +383,10 @@ export default class FilterForm extends Component {
                   <span style={ S('color-dcdedf relative ml-15') }>|</span>
                 </div>
                 <div style={ S('pull-right') }>
-                  <Switch checked={ filter_options ? filter_options.active : false } onChange={ this.props.handleFilterSwitch.bind(this, 'active') } />
+                  <Switch
+                    checked={ filter_options && filter_options.active ? filter_options.active : false }
+                    onChange={ this.props.handleFilterSwitch.bind(this, 'active') }
+                  />
                 </div>
               </div>
               <div className="clearfix"></div>
@@ -421,7 +424,7 @@ export default class FilterForm extends Component {
                   <span style={ S('color-dcdedf relative ml-15') }>|</span>
                 </div>
                 <div style={ S('pull-right') }>
-                  <Switch checked={ filter_options ? filter_options.other : false } onChange={ this.props.handleFilterSwitch.bind(this, 'other') } />
+                  <Switch checked={ filter_options && filter_options.other ? filter_options.other : false } onChange={ this.props.handleFilterSwitch.bind(this, 'other') } />
                 </div>
               </div>
               <div className="clearfix"></div>
@@ -463,7 +466,7 @@ export default class FilterForm extends Component {
                   <span style={ S('color-dcdedf relative ml-15') }>|</span>
                 </div>
                 <div style={ S('pull-right') }>
-                  <Switch checked={ filter_options ? filter_options.open_house : false } onChange={ this.props.handleFilterSwitch.bind(this, 'open_house') } />
+                  <Switch checked={ filter_options && filter_options.open_house ? filter_options.open_house : false } onChange={ this.props.handleFilterSwitch.bind(this, 'open_house') } />
                 </div>
               </div>
               <div className="clearfix"></div>
