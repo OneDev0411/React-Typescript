@@ -7,7 +7,11 @@
   "license": "ISC",
   "scripts": {
     "develop": "NODE_ENV=development nodemon ./bin/server --ignore ./app --exec babel-node",
-    "lint": "eslint . --ext .js --ext .jsx"
+    "build": "npm run lint && rimraf dist && NODE_ENV=production webpack -p --progress --colors --config ./webpack.config.babel.js",
+    "serve": "NODE_ENV=production babel-node ./bin/server",
+    "lint": "npm run lint:app && npm run lint:server",
+    "lint:app": "eslint ./app",
+    "lint:server": "eslint ./server"
   },
   "dependencies": {
     "async": "^2.1.5",
@@ -25,6 +29,7 @@
     "emojify.js": "^1.1.0",
     "emojione": "^2.2.7",
     "es6-promise": "^4.0.5",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
     "events": "^1.1.1",
     "express": "^4.14.1",
     "express-session": "^1.15.1",
