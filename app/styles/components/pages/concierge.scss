@@ -1,0 +1,62 @@
+.concierge {
+  width: 100%;
+}
+
+.deals {
+  background-color: #f6f6f6;
+  min-height: 100%;
+  padding: 5%;
+
+  h3 {
+    margin-bottom: 5%;
+  }
+
+  h3.section-title {
+    margin-bottom: 1%;
+  }
+
+  .preview-file {
+    width: 35px;
+    height: 35px;
+    border-radius: 3px;
+    margin-right: 8px;
+  }
+
+  table {
+    width: 100%;
+    margin-top: 1%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+
+    thead {
+      color: #95A3B0;
+      tr {
+        td {
+          padding-bottom: 10px;
+        }
+      }
+    }
+
+    tbody {
+      color: #95A3B0;
+      tr {
+        background-color: #FFFFFF;
+        margin-bottom: 1.5%;
+        td {
+          padding: 1%;
+          padding-left: 0;
+          &:first-child {
+            border-radius: 4px 0 0 4px;
+            padding-left: 1%;
+          }
+          &:last-child {
+            border-radius: 0 4px 4px 0;
+          }
+          a {
+            color: #95A3B0;
+          }
+        }
+      }
+    }
+  }
+}
