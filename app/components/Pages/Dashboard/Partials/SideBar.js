@@ -17,6 +17,7 @@ import AppStore from '../../../../stores/AppStore'
 import ProfileImage from './ProfileImage'
 import SvgChat from './Svgs/Chat'
 import SvgMap from './Svgs/Map'
+import SvgStore from './Svgs/Store'
 import Brand from '../../../../controllers/Brand'
 
 export default class SideBar extends Component {
@@ -266,6 +267,9 @@ export default class SideBar extends Component {
       delete AppStore.data.settings.show_password
     AppStore.emitChange()
   }
+  goToStore() {
+    window.location = '/dashboard/website'
+  }
   render() {
     // Data
     const data = this.props.data
@@ -295,6 +299,9 @@ export default class SideBar extends Component {
 
     if (path.indexOf('/dashboard/mls/agents') !== -1)
       active.agents = 'active'
+
+    if (path.indexOf('/dashboard/website') !== -1)
+      active.store = 'active'
 
     // User info
     const user = data.user
@@ -438,7 +445,8 @@ export default class SideBar extends Component {
       people: <Popover className="sidenav__popover" id="popover-people">People</Popover>,
       tasks: <Popover className="sidenav__popover" id="popover-tasks">Tasks</Popover>,
       transactions: <Popover className="sidenav__popover" id="popover-transactions">Transactions</Popover>,
-      support: <Popover className="sidenav__popover" id="popover-transactions">Need Help?</Popover>
+      support: <Popover className="sidenav__popover" id="popover-transactions">Need Help?</Popover>,
+      store: <Popover className="sidenav__popover" id="popover-transactions">Store</Popover>
     }
     if (data.errors && data.errors.type && data.errors.type === 'agent-not-found') {
       message = (
@@ -609,6 +617,13 @@ export default class SideBar extends Component {
           }
           { recommend }
           { agents }
+          { data.user && data.user.agent &&
+            <OverlayTrigger placement="right" overlay={ popover.store } delayShow={ 200 } delayHide={ 0 }>
+              <NavItem style={ S('w-85p') } onClick={ this.goToStore.bind(this) }>
+                <SvgStore color={ active.store ? nav_active_color : '#4e5c6c' }/>
+              </NavItem>
+            </OverlayTrigger>
+          }
         </Nav>
         <div style={ S('absolute b-10 l-15') }>
           <Nav className="sidebar__account">
