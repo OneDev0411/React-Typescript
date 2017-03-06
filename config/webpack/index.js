@@ -17,11 +17,7 @@ const config = {
     cssBundle: 'app.[hash].css',
     template: path.resolve(__dirname, '../../src/templates/production.html'),
     vendors: [
-      'react',
-      'redux',
-      'react-redux',
-      'react-router',
-      'react-router-redux'
+      'react'
     ]
   },
   globals: {
