@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import _ from 'lodash'
-import { Button, Modal, Input } from 'react-bootstrap'
+import { Button, Modal, FormControl } from 'react-bootstrap'
 import controller from '../../controller'
 import Select from 'react-select'
 import validator from 'validator'
@@ -48,8 +48,6 @@ export default class ShareAlertModal extends Component {
         this.props.addUsersToSearchInput(data.share_modal.items_selected)
       }
     }
-    if (this.refs.myselect.refs.input)
-      this.refs.myselect.refs.input.blur()
   }
   handleChange(users_selected) {
     this.props.addUsersToSearchInput(users_selected)
@@ -217,7 +215,7 @@ export default class ShareAlertModal extends Component {
             <div className="create-item__user-select" style={ S('absolute l-35 t-5 w-90p z-1000') }>
               <SelectContainer inputChange={ this.inputChange.bind(this) }>
                 <Select
-                  ref="myselect"
+                  input={ ref => this.myselectInput = ref }
                   autofocus
                   name="users"
                   options={ users_select_options }
@@ -240,7 +238,7 @@ export default class ShareAlertModal extends Component {
         <Modal.Footer>
           <div style={ S('pull-left mr-15 mb-20 border-1-solid-d5dce5 bg-e7eaed br-3 inline-block') }>
             <div style={ S(`pull-left w-50 h-50 pt-20 text-center border-right-1-solid-d5dce5 h-64`) }>
-              <img src="/images/dashboard/mls/alert-bell--gray.svg"/>
+              <img src="/static/images/dashboard/mls/alert-bell--gray.svg"/>
             </div>
             <div style={ S('pull-left p-15 pt-10 text-left h-64') }>
               <div>{ data.share_modal && data.share_modal.title ? data.share_modal.title : default_title }</div>
@@ -250,7 +248,7 @@ export default class ShareAlertModal extends Component {
           <div className="clearfix"></div>
           <div>
             <div style={ S('pull-left w-85p') }>
-              <Input style={ S('border-none') } ref="message" type="text" placeholder="Write Message..."/>
+              <FormControl style={ S('border-none') } inputRef={ ref => this.messageInput = ref } type="text" placeholder="Write Message..."/>
             </div>
             <div style={ S('pull-right') }>
               <Button disabled={!this.isSharable() ? true : false} className={ share_modal && share_modal.sending_share || !this.isSharable() ? 'disabled' : '' } bsStyle="primary" onClick={ controller.alert_share.shareAlert.bind(this) }>{ share_modal && !share_modal.sending_share ? 'Share' : 'Sending...' }</Button>

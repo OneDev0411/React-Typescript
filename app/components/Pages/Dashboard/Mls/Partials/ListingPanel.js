@@ -315,7 +315,7 @@ export default class ListingPanel extends Component {
               <div className="tempo" style={ S('color-444 fw-100 font-24') }>{ listings.length }{ listings_total } Homes Found</div>
               <div>
                 Sorting by
-                <DropdownButton bsStyle="link" title={ sortby_title } id="dropdown-size-large">
+                <DropdownButton bsStyle="link" title={ sortby_title || '' } id="dropdown-size-large">
                   <MenuItem onClick={ this.props.sortListings.bind(this, 'area') }>Area</MenuItem>
                   <MenuItem onClick={ this.props.sortListings.bind(this, 'price') }>Price</MenuItem>
                   <MenuItem onClick={ this.props.sortListings.bind(this, 'bedroom_count') }>Beds</MenuItem>

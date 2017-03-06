@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import _ from 'lodash'
-import { Button, Modal, Input } from 'react-bootstrap'
+import { Button, Modal, FormControl } from 'react-bootstrap'
 import controller from '../controller'
 import Select from 'react-select'
 import listing_util from '../../../../utils/listing'
@@ -50,8 +50,6 @@ export default class ShareListingModal extends Component {
         this.props.addUsersToSearchInput(data.share_modal.items_selected)
       }
     }
-    if (this.refs.myselect.refs.input)
-      this.refs.myselect.refs.input.blur()
   }
   handleChange(users_selected) {
     this.props.addUsersToSearchInput(users_selected)
@@ -170,6 +168,10 @@ export default class ShareListingModal extends Component {
       }
     })
     return contacts_found
+=======
+    this.addToSelectedItems(this.myselect.refs.input.refs.input.value)
+    this.refs.myselect.value = ''
+>>>>>>> v3.0
   }
   render() {
     const data = this.props.data
@@ -273,7 +275,7 @@ export default class ShareListingModal extends Component {
             <div className="create-item__user-select" style={ S('absolute l-35 t-5 w-90p z-1000') }>
               <SelectContainer inputChange={ this.inputChange.bind(this) }>
                 <Select
-                  ref="myselect"
+                  ref={ ref => this.myselectInput = ref }
                   autofocus
                   name="users"
                   options={ users_select_options }
@@ -304,7 +306,7 @@ export default class ShareListingModal extends Component {
           <div className="clearfix"></div>
           <div>
             <div style={ S('pull-left w-85p') }>
-              <Input style={ S('border-none') } ref="message" type="text" placeholder="Write Message..."/>
+              <FormControl style={ S('border-none') } inputRef={ ref => this.messageInput = ref } type="text" placeholder="Write Message..."/>
             </div>
             <div style={ S('pull-right') }>
               <Button disabled={!this.isSharable() ? true : false} className={ share_modal && share_modal.sending_share || !this.isSharable() ? 'disabled' : '' } bsStyle="primary" onClick={ controller.listing_share.shareListing.bind(this) }>{ share_modal && !share_modal.sending_share ? 'Share' : 'Sending...' }</Button>

@@ -1,7 +1,7 @@
 // Dashboard/Mls/Partials/ShareTypeModal.js
 import React, { Component } from 'react'
 import S from 'shorti'
-import { Button, Modal, Input } from 'react-bootstrap'
+import { Button, Modal, FormControl } from 'react-bootstrap'
 import controller from '../../controller'
 export default class ShareTypeModal extends Component {
   componentDidMount() {
@@ -9,11 +9,11 @@ export default class ShareTypeModal extends Component {
       this.refs.title.refs.input.focus()
   }
   saveForMe() {
-    const title = this.refs.title.refs.input.value.trim()
+    const title = this.titleInput.value.trim()
     controller.alert_share.saveForMe(title)
   }
   showShareModal() {
-    const title = this.refs.title.refs.input.value.trim()
+    const title = this.titleInput.value.trim()
     controller.alert_share.showShareModal(title)
   }
   render() {
@@ -25,7 +25,7 @@ export default class ShareTypeModal extends Component {
         <Modal.Body style={ S('p-0') }>
           <div className="din" style={ S('bg-52ABF1 h-200 font-32 color-fff text-center') }>
             <div style={ S('pt-20 pb-10 text-center w-100p') }>
-              <img style={ S('w-60 h-60') } src="/images/dashboard/mls/alert-bell.svg"/>
+              <img style={ S('w-60 h-60') } src="/static/images/dashboard/mls/alert-bell.svg"/>
             </div>
             Get new listings faster<br />
             than your local MLS®
@@ -35,7 +35,7 @@ export default class ShareTypeModal extends Component {
               Name Your Alert
             </div>
             <div>
-              <Input ref="title" type="text" placeholder={ listing_map.listings_info.proposed_title }/>
+              <FormControl inputRef={ ref => this.titleInput = ref } type="text" placeholder={ listing_map.listings_info.proposed_title }/>
             </div>
           </div>
         </Modal.Body>

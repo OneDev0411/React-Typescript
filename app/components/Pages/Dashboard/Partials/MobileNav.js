@@ -1,7 +1,8 @@
 // Sidebar.js
 import React, { Component } from 'react'
+import { browserHistory } from 'react-router'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Nav, NavItem, NavDropdown, Modal, Col, Input, Button, Alert, DropdownButton, MenuItem } from 'react-bootstrap'
+import { Nav, NavItem, NavDropdown, Modal, Col, FormControl, Button, Alert, DropdownButton, MenuItem } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
 import Dropzone from 'react-dropzone'
@@ -43,10 +44,10 @@ export default class SideBar extends Component {
     AppStore.emitChange()
     const data = this.props.data
     const user = data.user
-    const first_name = this.refs.first_name.refs.input.value.trim()
-    const last_name = this.refs.last_name.refs.input.value.trim()
-    const email = this.refs.email.refs.input.value.trim()
-    const phone_number_input = this.refs.phone_number.refs.input.value.replace(/\D/g, '').trim()
+    const first_name = this.first_nameInput.value.trim()
+    const last_name = this.last_nameInput.value.trim()
+    const email = this.emailInput.value.trim()
+    const phone_number_input = this.phone_numberInput.value.replace(/\D/g, '').trim()
     let country_code = 1
     if (data.phone_country)
       country_code = data.phone_country.dialCode
@@ -77,9 +78,9 @@ export default class SideBar extends Component {
   changePassword() {
     const data = this.props.data
     const user = data.user
-    const old_password = this.refs.old_password.refs.input.value.trim()
-    const new_password = this.refs.new_password.refs.input.value.trim()
-    const new_password_confirm = this.refs.new_password_confirm.refs.input.value.trim()
+    const old_password = this.old_passwordInput.value.trim()
+    const new_password = this.new_passwordInput.value.trim()
+    const new_password_confirm = this.new_password_confirmInput.value.trim()
     AppStore.data.saving_account_settings = true
     delete AppStore.data.error
     delete AppStore.data.password_changed
@@ -192,9 +193,9 @@ export default class SideBar extends Component {
     if (data.current_listing)
       this.hideListingViewer()
     if (current_room)
-      history.pushState(null, null, '/dashboard/recents/' + current_room.id)
+      browserHistory.push('/dashboard/recents/' + current_room.id)
     else
-      history.pushState(null, null, '/dashboard/recents/')
+      browserHistory.push('/dashboard/recents/')
   }
   render() {
     // Data
@@ -303,15 +304,15 @@ export default class SideBar extends Component {
       <Col xs={ 9 }>
         <div>
           <label>First name</label>
-          <Input ref="first_name" type="text" defaultValue={ user.first_name }/>
+          <FormControl inputRef={ ref => this.first_nameInput = ref } type="text" defaultValue={ user.first_name }/>
         </div>
         <div>
           <label>Last name</label>
-          <Input ref="last_name" type="text" defaultValue={ user.last_name }/>
+          <FormControl inputRef={ ref => this.last_nameInput = ref } type="text" defaultValue={ user.last_name }/>
         </div>
         <div>
           <label>Email</label>
-          <Input ref="email" type="text" defaultValue={ user.email }/>
+          <FormControl inputRef={ ref => this.emailInput = ref } type="text" defaultValue={ user.email }/>
         </div>
         <div>
           <label>Phone number</label>
@@ -319,7 +320,7 @@ export default class SideBar extends Component {
             <div className="input-group-btn input-dropdown--country-codes">
               { country_codes }
             </div>
-            <MaskedInput className="form-control" ref="phone_number" type="text" defaultValue={ user.phone_number ? phone_number_parsed.phone_number : '' } mask="(999)-999-9999" maskChar="_"/>
+            <MaskedInput className="form-control" ref={ ref => this.phone_numberInput = ref } type="text" defaultValue={ user.phone_number ? phone_number_parsed.phone_number : '' } mask="(999)-999-9999" maskChar="_"/>
           </div>
         </div>
         <div className="clearfix"></div>
@@ -338,15 +339,15 @@ export default class SideBar extends Component {
         <Col xs={ 9 } style={ S('p-0') }>
           <Col xs={ 12 } style={ S('pr-0') }>
             <label>Current password</label>
-            <Input key={'password'} ref="old_password" type="password" defaultValue=""/>
+            <FormControl key={'password'} inputRef={ ref => this.old_passwordInput = ref } type="password" defaultValue=""/>
           </Col>
           <Col xs={ 12 } style={ S('pr-0') }>
             <label>New password</label>
-            <Input key={'new_password'} ref="new_password" type="password" defaultValue=""/>
+            <FormControl key={'new_password'} inputRef={ ref => this.new_passwordInput = ref } type="password" defaultValue=""/>
           </Col>
           <Col xs={ 12 } style={ S('pr-0') }>
             <label>Confirm new password</label>
-            <Input key={'new_password_confirm'} ref="new_password_confirm" type="password" defaultValue=""/>
+            <FormControl key={'new_password_confirm'} inputRef={ ref => this.new_password_confirmInput = ref } type="password" defaultValue=""/>
             { message }
           </Col>
         </Col>
@@ -363,22 +364,22 @@ export default class SideBar extends Component {
       <aside className="mobile-nav" style={ mobile_nav_style }>
         { /* cache images */ }
         <div style={ S('w-0 h-0 absolute l-1000n t-1000n') }>
-          <img src="/images/dashboard/sidenav/chat-active.svg"/>
-          <img src="/images/dashboard/sidenav/map-active.svg"/>
-          <img src="/images/dashboard/sidenav/people-active.svg"/>
-          <img src="/images/dashboard/sidenav/task-active.svg"/>
-          <img src="/images/dashboard/sidenav/transactions-active.svg"/>
+          <img src="/static/images/dashboard/sidenav/chat-active.svg"/>
+          <img src="/static/images/dashboard/sidenav/map-active.svg"/>
+          <img src="/static/images/dashboard/sidenav/people-active.svg"/>
+          <img src="/static/images/dashboard/sidenav/task-active.svg"/>
+          <img src="/static/images/dashboard/sidenav/transactions-active.svg"/>
         </div>
         <Nav bsStyle="tabs" justified>
           <LinkContainer className={ 'main-nav ' + active.recents } to="/dashboard/recents">
             <NavItem style={ S('w-60 pull-left') } onClick={ this.handleChatNavClick.bind(this) }>
-              <img src={ active.recents ? '/images/dashboard/sidenav/chat-active.svg' : '/images/dashboard/sidenav/chat.svg' } style={ S('w-19 h-19') }/>
+              <img src={ active.recents ? '/static/images/dashboard/sidenav/chat-active.svg' : '/static/images/dashboard/sidenav/chat.svg' } style={ S('w-19 h-19') }/>
               {this.notificationIcon('room_notification_count')}
             </NavItem>
           </LinkContainer>
           <LinkContainer className={ 'main-nav ' + active.mls } to="/dashboard/mls">
             <NavItem style={ S('w-60 pull-left') }>
-              <img src={ active.mls ? '/images/dashboard/sidenav/map-active.svg' : '/images/dashboard/sidenav/map.svg' } style={ S('w-19 h-19') }/>
+              <img src={ active.mls ? '/static/images/dashboard/sidenav/map-active.svg' : '/static/images/dashboard/sidenav/map.svg' } style={ S('w-19 h-19') }/>
             </NavItem>
           </LinkContainer>
           <NavItem className="main-nav" style={ S('w-60 absolute t-5 r-80') } onClick={ this.showIntercom }>
@@ -397,7 +398,7 @@ export default class SideBar extends Component {
             <OverlayTrigger placement="right" overlay={ popover.people } delayShow={ 200 } delayHide={ 0 }>
               <LinkContainer className={ active.contacts } to="/dashboard/contacts">
                 <NavItem style={ S('w-85p') }>
-                  <img src={ active.contacts ? '/images/dashboard/sidenav/people-active.svg' : '/images/dashboard/sidenav/people.svg' } style={ S('w-19 h-19') }/>
+                  <img src={ active.contacts ? '/static/images/dashboard/sidenav/people-active.svg' : '/static/images/dashboard/sidenav/people.svg' } style={ S('w-19 h-19') }/>
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
@@ -407,7 +408,7 @@ export default class SideBar extends Component {
             <OverlayTrigger placement="right" overlay={ popover.tasks } delayShow={ 200 } delayHide={ 0 }>
               <LinkContainer className={ active.tasks } to="/dashboard/tasks">
                 <NavItem style={ S('w-85p') }>
-                  <img src={ active.tasks ? '/images/dashboard/sidenav/task-active.svg' : '/images/dashboard/sidenav/task.svg' } style={ S('w-19 h-19') }/>
+                  <img src={ active.tasks ? '/static/images/dashboard/sidenav/task-active.svg' : '/static/images/dashboard/sidenav/task.svg' } style={ S('w-19 h-19') }/>
                   {this.notificationIcon('task_notification_count')}
                 </NavItem>
               </LinkContainer>
@@ -415,7 +416,7 @@ export default class SideBar extends Component {
             <OverlayTrigger placement="right" overlay={ popover.transactions } delayShow={ 200 } delayHide={ 0 }>
               <LinkContainer className={ active.transactions } to="/dashboard/transactions" onClick={ this.props.viewAllTransactions }>
                 <NavItem style={ S('w-85p') }>
-                  <img src={ active.transactions ? '/images/dashboard/sidenav/transactions-active.svg' : '/images/dashboard/sidenav/transactions.svg' } style={ S('w-19 h-19') }/>
+                  <img src={ active.transactions ? '/static/images/dashboard/sidenav/transactions-active.svg' : '/static/images/dashboard/sidenav/transactions.svg' } style={ S('w-19 h-19') }/>
                   {this.notificationIcon('transaction_notification_count')}
                 </NavItem>
               </LinkContainer>

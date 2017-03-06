@@ -37,7 +37,7 @@ export default class ListingMarker extends Component {
     }
     return (
       <div style={ badge_style }>
-        <img src={ '/images/dashboard/mls/marker/' + social_icon + '.svg' } />
+        <img src={ '/static/images/dashboard/mls/marker/' + social_icon + '.svg' } />
       </div>
     )
   }

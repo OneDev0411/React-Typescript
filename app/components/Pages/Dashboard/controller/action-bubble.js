@@ -34,7 +34,7 @@ const controller = {
     delete AppStore.data.errors
     AppStore.emitChange()
     const data = this.props.data
-    const email = this.refs.email.refs.input.value
+    const email = this.emailInput.value
     // If no email or double submit
     if (!email || data.submitting)
       return

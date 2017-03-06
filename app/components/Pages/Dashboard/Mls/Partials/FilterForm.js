@@ -1,6 +1,6 @@
 // Partials/FilterForm.js
 import React, { Component } from 'react'
-import { ButtonGroup, Button, Input } from 'react-bootstrap'
+import { ButtonGroup, Button, FormControl } from 'react-bootstrap'
 import S from 'shorti'
 import Switch from 'react-ios-switch'
 import helpers from '../../../../../utils/helpers'
@@ -26,10 +26,10 @@ export default class FilterForm extends Component {
     return false
   }
   handleOptionChange(key) {
-    const value = this.refs[key].refs.input.value
+    const value = this[`${key}Input`].value
     this.props.handleOptionChange(key, value)
   }
-  handleSetSoldDate(e, day) {
+  handleSetSoldDate(day, { disabled, selected }) {
     if (DateUtils.isPastDay(day))
       this.props.handleSetSoldDate(day)
   }
@@ -105,14 +105,13 @@ export default class FilterForm extends Component {
     const sold_date = filter_options.sold_date
     const date_obj = new Date(sold_date * 1000)
     let sold_date_picker
+
     if (filter_options.show_sold_date_picker) {
       sold_date_picker = (
         <div style={ S('absolute z-100 l-105 t-110 border-1-solid-ccc bg-fff br-3') }>
           <DayPicker
-            modifiers={{
-              selected: day => DateUtils.isSameDay(date_obj, day),
-              disabled: day => { return !DateUtils.isPastDay(day) }
-            }}
+            selectedDays={ day => DateUtils.isSameDay(date_obj, day) }
+            disabledDays={ day => { return !DateUtils.isPastDay(day) } }
             onDayClick={ this.handleSetSoldDate.bind(this) }
           />
         </div>
@@ -356,7 +355,7 @@ export default class FilterForm extends Component {
                   <span style={ S('color-dcdedf relative ml-15') }>|</span>
                 </div>
                 <div style={ S('pull-right') }>
-                  <Switch checked={ filter_options ? filter_options.sold : false } onChange={ this.props.handleFilterSwitch.bind(this, 'sold') } />
+                  <Switch checked={ filter_options && filter_options.sold ? filter_options.sold : false } onChange={ this.props.handleFilterSwitch.bind(this, 'sold') } />
                 </div>
               </div>
               <div className="clearfix"></div>
@@ -383,7 +382,10 @@ export default class FilterForm extends Component {
                   <span style={ S('color-dcdedf relative ml-15') }>|</span>
                 </div>
                 <div style={ S('pull-right') }>
-                  <Switch checked={ filter_options ? filter_options.active : false } onChange={ this.props.handleFilterSwitch.bind(this, 'active') } />
+                  <Switch
+                    checked={ filter_options && filter_options.active ? filter_options.active : false }
+                    onChange={ this.props.handleFilterSwitch.bind(this, 'active') }
+                  />
                 </div>
               </div>
               <div className="clearfix"></div>
@@ -421,7 +423,7 @@ export default class FilterForm extends Component {
                   <span style={ S('color-dcdedf relative ml-15') }>|</span>
                 </div>
                 <div style={ S('pull-right') }>
-                  <Switch checked={ filter_options ? filter_options.other : false } onChange={ this.props.handleFilterSwitch.bind(this, 'other') } />
+                  <Switch checked={ filter_options && filter_options.other ? filter_options.other : false } onChange={ this.props.handleFilterSwitch.bind(this, 'other') } />
                 </div>
               </div>
               <div className="clearfix"></div>
@@ -463,7 +465,7 @@ export default class FilterForm extends Component {
                   <span style={ S('color-dcdedf relative ml-15') }>|</span>
                 </div>
                 <div style={ S('pull-right') }>
-                  <Switch checked={ filter_options ? filter_options.open_house : false } onChange={ this.props.handleFilterSwitch.bind(this, 'open_house') } />
+                  <Switch checked={ filter_options && filter_options.open_house ? filter_options.open_house : false } onChange={ this.props.handleFilterSwitch.bind(this, 'open_house') } />
                 </div>
               </div>
               <div className="clearfix"></div>
@@ -488,10 +490,10 @@ export default class FilterForm extends Component {
               <div style={ S('mb-10') }>Price Range</div>
               <div>
                 <div style={ S('w-50p pull-left') }>
-                  <Input onChange={ this.handleOptionChange.bind(this, 'minimum_price') } value={ filter_options && filter_options.minimum_price ? filter_options.minimum_price : '' } ref="minimum_price" type="number" placeholder="Min"/>
+                  <FormControl onChange={ this.handleOptionChange.bind(this, 'minimum_price') } value={ filter_options && filter_options.minimum_price ? filter_options.minimum_price : '' } inputRef={ ref => this.minimum_priceInput = ref } type="number" placeholder="Min"/>
                 </div>
                 <div style={ S('w-50p pull-left') }>
-                  <Input onChange={ this.handleOptionChange.bind(this, 'maximum_price') } value={ filter_options && filter_options.maximum_price ? filter_options.maximum_price : '' } ref="maximum_price" type="number" placeholder="Max"/>
+                  <FormControl onChange={ this.handleOptionChange.bind(this, 'maximum_price') } value={ filter_options && filter_options.maximum_price ? filter_options.maximum_price : '' } inputRef={ ref => this.maximum_priceInput = ref } type="number" placeholder="Max"/>
                 </div>
               </div>
             </div>
@@ -500,25 +502,25 @@ export default class FilterForm extends Component {
               <ButtonGroup style={ S('w-100p') }>
                 <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'any') ? S('h-80 w-24p bg-667688 bc-667688') : S('h-80 w-24p bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'any' }) }>
                   <div style={ S('mb-10') }>
-                    <img src={`/images/dashboard/mls/listing-types/any${this.buttonIsActive('listing_types', 'any') ? '-active' : ''}.svg`}/>
+                    <img src={`/static/images/dashboard/mls/listing-types/any${this.buttonIsActive('listing_types', 'any') ? '-active' : ''}.svg`}/>
                   </div>
                   <span style={ S(`font-10 color-${this.buttonIsActive('listing_types', 'any') ? 'fff' : '929292'}`) }>Any</span>
                 </Button>
                 <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'house') ? S('h-80 w-24p bg-667688 bc-667688') : S('h-80 w-24p bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'house' }) }>
                   <div style={ S('mb-10') }>
-                    <img src={`/images/dashboard/mls/listing-types/house${this.buttonIsActive('listing_types', 'house') ? '-active' : ''}.svg`}/>
+                    <img src={`/static/images/dashboard/mls/listing-types/house${this.buttonIsActive('listing_types', 'house') ? '-active' : ''}.svg`}/>
                   </div>
                   <span style={ S(`font-10 color-${this.buttonIsActive('listing_types', 'house') ? 'fff' : '929292'}`) }>House</span>
                 </Button>
                 <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'condo') ? S('h-80 w-24p bg-667688 bc-667688') : S('h-80 w-24p bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'condo' }) }>
                   <div style={ S('mb-10') }>
-                    <img src={`/images/dashboard/mls/listing-types/condo${this.buttonIsActive('listing_types', 'condo') ? '-active' : ''}.svg`}/>
+                    <img src={`/static/images/dashboard/mls/listing-types/condo${this.buttonIsActive('listing_types', 'condo') ? '-active' : ''}.svg`}/>
                   </div>
                   <span style={ S(`font-10 color-${this.buttonIsActive('listing_types', 'condo') ? 'fff' : '929292'}`) }>Condo</span>
                 </Button>
                 <Button bsStyle="default" style={ this.buttonIsActive('listing_types', 'townhouse') ? S('h-80 w-24p bg-667688 bc-667688') : S('h-80 w-24p bg-fff') } onClick={ this.props.handleFilterButton.bind(this, { key: 'listing_types', value: 'townhouse' }) }>
                   <div style={ S('mb-10') }>
-                    <img src={`/images/dashboard/mls/listing-types/townhouse${this.buttonIsActive('listing_types', 'townhouse') ? '-active' : ''}.svg`}/>
+                    <img src={`/static/images/dashboard/mls/listing-types/townhouse${this.buttonIsActive('listing_types', 'townhouse') ? '-active' : ''}.svg`}/>
                   </div>
                   <span style={ S(`font-10 color-${this.buttonIsActive('listing_types', 'townhouse') ? 'fff' : '929292'}`) }>Townhouse</span>
                 </Button>
@@ -621,10 +623,10 @@ export default class FilterForm extends Component {
               <div style={ S('mb-10') }>Square Footage</div>
               <div>
                 <div style={ S('w-50p pull-left') }>
-                  <Input onChange={ this.handleOptionChange.bind(this, 'minimum_square_feet') } value={ filter_options && filter_options.minimum_square_feet ? filter_options.minimum_square_feet : '' } ref="minimum_square_feet" type="number" placeholder="Min"/>
+                  <FormControl onChange={ this.handleOptionChange.bind(this, 'minimum_square_feet') } value={ filter_options && filter_options.minimum_square_feet ? filter_options.minimum_square_feet : '' } inputRef={ ref => this.minimum_square_feetInput = ref } type="number" placeholder="Min"/>
                 </div>
                 <div style={ S('w-50p pull-left') }>
-                  <Input onChange={ this.handleOptionChange.bind(this, 'maximum_square_feet') } value={ filter_options && filter_options.maximum_square_feet ? filter_options.maximum_square_feet : '' } ref="maximum_square_feet" type="number" placeholder="Max"/>
+                  <FormControl onChange={ this.handleOptionChange.bind(this, 'maximum_square_feet') } value={ filter_options && filter_options.maximum_square_feet ? filter_options.maximum_square_feet : '' } inputRef={ ref => this.maximum_square_feetInput = ref } type="number" placeholder="Max"/>
                 </div>
               </div>
             </div>
@@ -632,10 +634,10 @@ export default class FilterForm extends Component {
               <div style={ S('mb-10') }>Lot Square Footage</div>
               <div>
                 <div style={ S('w-50p pull-left') }>
-                  <Input onChange={ this.handleOptionChange.bind(this, 'minimum_lot_square_feet') } value={ filter_options && filter_options.minimum_lot_square_feet ? filter_options.minimum_lot_square_feet : '' } ref="minimum_lot_square_feet" type="number" placeholder="Min"/>
+                  <FormControl onChange={ this.handleOptionChange.bind(this, 'minimum_lot_square_feet') } value={ filter_options && filter_options.minimum_lot_square_feet ? filter_options.minimum_lot_square_feet : '' } inputRef={ ref => this.minimum_lot_square_feetInput = ref } type="number" placeholder="Min"/>
                 </div>
                 <div style={ S('w-50p pull-left') }>
-                  <Input onChange={ this.handleOptionChange.bind(this, 'maximum_lot_square_feet') } value={ filter_options && filter_options.maximum_lot_square_feet ? filter_options.maximum_lot_square_feet : '' } ref="maximum_lot_square_feet" type="number" placeholder="Max"/>
+                  <FormControl onChange={ this.handleOptionChange.bind(this, 'maximum_lot_square_feet') } value={ filter_options && filter_options.maximum_lot_square_feet ? filter_options.maximum_lot_square_feet : '' } inputRef={ ref => this.maximum_lot_square_feetInput = ref } type="number" placeholder="Max"/>
                 </div>
               </div>
             </div>
@@ -643,10 +645,10 @@ export default class FilterForm extends Component {
               <div style={ S('mb-10') }>Year Built</div>
               <div>
                 <div style={ S('w-50p pull-left') }>
-                  <Input onChange={ this.handleOptionChange.bind(this, 'minimum_year_built') } value={ filter_options && filter_options.minimum_year_built ? filter_options.minimum_year_built : '' } ref="minimum_year_built" type="number" placeholder="Min"/>
+                  <FormControl onChange={ this.handleOptionChange.bind(this, 'minimum_year_built') } value={ filter_options && filter_options.minimum_year_built ? filter_options.minimum_year_built : '' } inputRef={ ref => this.minimum_year_builtInput = ref } type="number" placeholder="Min"/>
                 </div>
                 <div style={ S('w-50p pull-left') }>
-                  <Input onChange={ this.handleOptionChange.bind(this, 'maximum_year_built') } value={ filter_options && filter_options.maximum_year_built ? filter_options.maximum_year_built : '' } ref="maximum_year_built" type="number" placeholder="Max"/>
+                  <FormControl onChange={ this.handleOptionChange.bind(this, 'maximum_year_built') } value={ filter_options && filter_options.maximum_year_built ? filter_options.maximum_year_built : '' } inputRef={ ref => this.maximum_year_builtInput = ref } type="number" placeholder="Max"/>
                 </div>
               </div>
             </div>

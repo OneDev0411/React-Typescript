@@ -86,22 +86,26 @@ const controller = {
   createMapOptions() {
     const data = AppStore.data
     const listing_map = data.listing_map
-    if (!listing_map) {
-      return {
-        mapTypeControl: true,
-        draggable: true
-      }
-    }
+
     const google_options = {
-      disableDefaultUI: true,
       mapTypeControl: true,
       draggable: true
     }
-    AppStore.data.listing_map.google_options = google_options
-    AppStore.emitChange()
+
+    if (!listing_map) {
+      return google_options
+    }
+
+    // set disable default ui
+    google_options.disableDefaultUI = true
+
+    // AppStore.data.listing_map.google_options = google_options
+    // AppStore.emitChange()
+
     return google_options
   },
-  handleBoundsChange(center, zoom, bounds) {
+  handleBoundsChange(gmap) {
+    const { bounds, center, zoom, size, marginBounds } = gmap
     const data = AppStore.data
     const user = data.user
     const listing_map = data.listing_map
@@ -112,24 +116,24 @@ const controller = {
       return
     const points = [
       {
-        latitude: bounds[0],
-        longitude: bounds[1]
+        latitude: bounds.ne.lat,
+        longitude: bounds.ne.lng
       },
       {
-        latitude: bounds[0],
-        longitude: bounds[3]
+        latitude: bounds.nw.lat,
+        longitude: bounds.nw.lng
       },
       {
-        latitude: bounds[2],
-        longitude: bounds[3]
+        latitude: bounds.sw.lat,
+        longitude: bounds.sw.lng
       },
       {
-        latitude: bounds[2],
-        longitude: bounds[1]
+        latitude: bounds.se.lat,
+        longitude: bounds.se.lng
       },
       {
-        latitude: bounds[0],
-        longitude: bounds[1]
+        latitude: bounds.ne.lat,
+        longitude: bounds.ne.lng
       }
     ]
     AppStore.data.listing_map.center = center

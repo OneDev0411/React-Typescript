@@ -6,10 +6,10 @@ import S from 'shorti'
 export default class Home extends Component {
 
   render(){
-    
+
     // Data
     const data = this.props.data
-    
+
     // Styles
     const btnStyle = S('font-18 w-100p maxw-400 mb-20 bc-3388ff color-3388ff')
     const lightWeight = S('fw-100')
@@ -21,7 +21,7 @@ export default class Home extends Component {
       <div id="main-content" className="container" style={ S('mb-40') }>
         <div className="text-center col-sm-12">
           <div style={ S('m-20') }>
-            <img src="/images/home/family-1.png"/>
+            <img src="/static/images/home/family-1.png"/>
           </div>
           <p className="tempo" style={tagStyle}>
             real estate moves fast<br className="hidden-xs"/>

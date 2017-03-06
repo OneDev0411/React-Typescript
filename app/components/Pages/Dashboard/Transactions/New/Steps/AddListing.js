@@ -1,6 +1,6 @@
 // Dashboard/Transactions/New/Steps/AddListing.js
 import React, { Component } from 'react'
-import { Button, Input, Modal, Col } from 'react-bootstrap'
+import { Button, FormControl, Modal, Col } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
 import listing_util from '../../../../../../utils/listing'
@@ -36,7 +36,7 @@ export default class AddListing extends Component {
   searchListings(e) {
     // alpha-num and delete / backspace
     if (e.keyCode >= 48 && e.keyCode <= 57 || e.keyCode >= 65 && e.keyCode <= 90 || e.keyCode === 46 || e.keyCode === 8) {
-      const q = this.refs.q.refs.input.value
+      const q = this.qInput.value
       clearTimeout(window.is_typing_timeout)
       // Send stopped typing event
       window.is_typing_timeout = setTimeout(() => {
@@ -60,7 +60,7 @@ export default class AddListing extends Component {
 
   addListing(listing) {
     const listings_found = this.props.data.new_transaction.listings_found
-    this.refs.q.refs.input.value = ''
+    this.qInput.value = ''
     this.props.addListing(listing)
     const listing_id = listing.id
     const listing_index = _.findIndex(listings_found, { id: listing_id })
@@ -86,7 +86,7 @@ export default class AddListing extends Component {
     const listing_q = data.new_transaction.listing_q
     let q
     if (this.refs.q)
-      q = this.refs.q.refs.input.value
+      q = this.qInput.value
     if (listing_q === q && new_transaction.listings_found && new_transaction.listings_found.length) {
       const listings_found = new_transaction.listings_found
       const listing_list = listings_found.map((listing, i) => {
@@ -194,13 +194,13 @@ export default class AddListing extends Component {
     return (
       <div>
         <div style={ S('absolute t-120n') }>
-          <img style={ S('h-121') } src="/images/dashboard/transactions/house.png" />
+          <img style={ S('h-121') } src="/static/images/dashboard/transactions/house.png" />
         </div>
         <div style={ S('mb-20') }>
           <h1>We’re almost done! Do you have a property listing in mind?</h1>
         </div>
         <div style={ S('maxw-820') }>
-          <Input ref="q" onKeyDown={ this.navListingList.bind(this) } onKeyUp={ this.searchListings.bind(this) } className="pull-left" style={ S('w-600') } type="text" placeholder="Enter an address or MLS number"/>
+          <FormControl inputRef={ ref => this.qInput = ref } onKeyDown={ this.navListingList.bind(this) } onKeyUp={ this.searchListings.bind(this) } className="pull-left" style={ S('w-600') } type="text" placeholder="Enter an address or MLS number"/>
           <span className="pull-left" style={ S('w-30 ml-15 mt-8 color-666') }>OR</span>
           <Button onClick={ this.props.showListingModal.bind(this, 'new') } className="pull-left" style={ S('w-160') } bsStyle="primary" type="button">
             Add New Property
@@ -219,52 +219,52 @@ export default class AddListing extends Component {
                   <div style={ row_style }>
                     <Col xs={8} style={ S('pl-0 pr-0') }>
                       <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>ADDRESS</label>
-                      <input className="form-control" style={ input_style } type="text" ref="address" defaultValue={ listing_address }/>
+                      <input className="form-control" style={ input_style } type="text" ref={ ref => this.addressInput = ref } defaultValue={ listing_address }/>
                     </Col>
                     <Col xs={4} style={ S('pr-0') }>
                       <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>STATUS</label>
-                      <input className="form-control" style={ input_style } type="text" ref="status" defaultValue={ listing_added ? listing_added.status : '' }/>
+                      <input className="form-control" style={ input_style } type="text" ref={ ref => this.statusInput = ref } defaultValue={ listing_added ? listing_added.status : '' }/>
                     </Col>
                     <div className="clearfix"></div>
                   </div>
                   <div style={ row_style }>
                     <Col xs={6} style={ S('pl-0') }>
                       <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>CITY</label>
-                      <input className="form-control" style={ input_style } type="text" ref="city" defaultValue={ listing_added ? listing_added.address.city : '' }/>
+                      <input className="form-control" style={ input_style } type="text" ref={ ref => this.cityInput = ref } defaultValue={ listing_added ? listing_added.address.city : '' }/>
                     </Col>
                     <Col xs={3} style={ S('p-0') }>
                       <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>STATE</label>
-                      <input className="form-control" style={ input_style } type="text" ref="state" defaultValue={ listing_added ? listing_added.address.state : '' }/>
+                      <input className="form-control" style={ input_style } type="text" ref={ ref => this.stateInput = ref } defaultValue={ listing_added ? listing_added.address.state : '' }/>
                     </Col>
                     <Col xs={3} style={ S('pr-0') }>
                       <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>ZIP</label>
-                      <input className="form-control" style={ input_style } type="text" ref="postal_code" defaultValue={ listing_added ? listing_added.address.postal_code : '' }/>
+                      <input className="form-control" style={ input_style } type="text" ref={ ref => this.postal_codeInput = ref } defaultValue={ listing_added ? listing_added.address.postal_code : '' }/>
                     </Col>
                     <div className="clearfix"></div>
                   </div>
                   <div style={ row_style }>
                     <Col xs={6} style={ S('pl-0 pr-0') }>
                       <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>YEAR BUILT</label>
-                      <input className="form-control" style={ input_style } type="text" ref="year_built" defaultValue={ listing_added ? listing_added.compact_property.year_built : '' }/>
+                      <input className="form-control" style={ input_style } type="text" ref={ ref => this.year_builtInput = ref } defaultValue={ listing_added ? listing_added.compact_property.year_built : '' }/>
                     </Col>
                     <Col xs={6} style={ S('pr-0') }>
                       <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>PROPERTY TYPE</label>
-                      <input className="form-control" style={ input_style } type="text" ref="property_type" defaultValue={ listing_added ? listing_added.compact_property.property_type : '' }/>
+                      <input className="form-control" style={ input_style } type="text" ref={ ref => this.property_typeInput = ref } defaultValue={ listing_added ? listing_added.compact_property.property_type : '' }/>
                     </Col>
                     <div className="clearfix"></div>
                   </div>
                   <div style={ row_style }>
                     <Col xs={4} style={ S('pl-0') }>
                       <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>SQFT</label>
-                      <input className="form-control" style={ input_style } type="text" ref="square_feet" defaultValue={ square_feet }/>
+                      <input className="form-control" style={ input_style } type="text" ref={ ref => this.square_feetInput = ref } defaultValue={ square_feet }/>
                     </Col>
                     <Col xs={4} style={ S('p-0') }>
                       <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>BEDS</label>
-                      <input className="form-control" style={ input_style } type="text" ref="bedroom_count" defaultValue={ listing_added ? listing_added.compact_property.bedroom_count : '' }/>
+                      <input className="form-control" style={ input_style } type="text" ref={ ref => this.bedroom_countInput = ref } defaultValue={ listing_added ? listing_added.compact_property.bedroom_count : '' }/>
                     </Col>
                     <Col xs={4} style={ S('pr-0') }>
                       <label style={ S('p-10 mb-0 fw-400 color-bfc2c3') }>BATHS</label>
-                      <input className="form-control" style={ input_style } type="text" ref="bathroom_count" defaultValue={ listing_added ? listing_added.compact_property.bathroom_count : '' }/>
+                      <input className="form-control" style={ input_style } type="text" ref={ ref => this.bathroom_countInput = ref } defaultValue={ listing_added ? listing_added.compact_property.bathroom_count : '' }/>
                     </Col>
                     <div className="clearfix"></div>
                   </div>

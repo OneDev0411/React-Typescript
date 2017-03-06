@@ -70,11 +70,11 @@ export default class AlertList extends Component {
                   {
                     /*
                     <div>
-                      <img style={ S('w-23 h-13 mr-5') }src="/images/dashboard/mls/eye.svg"/>
+                      <img style={ S('w-23 h-13 mr-5') }src="/static/images/dashboard/mls/eye.svg"/>
                       <span style={ S('color-c3c3c3 font-16 mr-15 t-1 relative') }>8</span>
-                      <img style={ S('w-23 h-13 mr-5') }src="/images/dashboard/mls/heart.svg"/>
+                      <img style={ S('w-23 h-13 mr-5') }src="/static/images/dashboard/mls/heart.svg"/>
                       <span style={ S('color-c3c3c3 font-16 mr-20 t-1 relative') }>3</span>
-                      <img style={ S('w-14 h-13 mr-5') }src="/images/dashboard/mls/comment.svg"/>
+                      <img style={ S('w-14 h-13 mr-5') }src="/static/images/dashboard/mls/comment.svg"/>
                       <span style={ S('color-c3c3c3 font-16 t-1 relative') }>1</span>
                     </div>
                     */
@@ -97,8 +97,8 @@ export default class AlertList extends Component {
         {
           /*
           <div style={ S('p-10 pb-0') }>
-            <img style={ S('absolute r-22 t-22 w-20') } src="/images/dashboard/mls/search.svg" />
-            <Input type="text" bsSize="large" placeholder="Search Alerts" />
+            <img style={ S('absolute r-22 t-22 w-20') } src="/static/images/dashboard/mls/search.svg" />
+            <FormControl type="text" bsSize="large" placeholder="Search Alerts" />
           </div>
           */
         }

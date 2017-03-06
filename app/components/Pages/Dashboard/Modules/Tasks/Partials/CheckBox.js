@@ -12,7 +12,7 @@ export default class Tasks extends Component {
     // If Done
     if (task && task.status === 'Done') {
       check_mark = (
-        <img style={ S('absolute t-3 l-2 w-12') } src="/images/dashboard/icons/check-green.svg"/>
+        <img style={ S('absolute t-3 l-2 w-12') } src="/static/images/dashboard/icons/check-green.svg"/>
       )
       status_action = 'New'
       checkbox_style = {

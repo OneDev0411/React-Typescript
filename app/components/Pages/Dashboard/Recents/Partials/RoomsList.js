@@ -42,7 +42,7 @@ export default class RoomsList extends Component {
       return <div></div>
 
     const loading_style = {
-      ...S('absolute w-100p h-100p bg-url(/images/loading-states/rooms.svg)'),
+      ...S('absolute w-100p h-100p bg-url(/static/images/loading-states/rooms.svg)'),
       backgroundRepeat: 'repeat-y'
     }
     let rooms_list = <div style={ loading_style } />

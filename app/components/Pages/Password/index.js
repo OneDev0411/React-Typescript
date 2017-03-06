@@ -1,5 +1,6 @@
 // Password/index.js
 import React, { Component } from 'react'
+import { browserHistory } from 'react-router'
 import AppDispatcher from '../../../dispatcher/AppDispatcher'
 import AppStore from '../../../stores/AppStore'
 // import MapBackground from '../../Partials/MapBackground'
@@ -47,7 +48,7 @@ export default class Password extends Component {
         delete AppStore.data.submitting
         AppStore.emitChange()
         // Go to confirm agent
-        this.props.history.pushState(null, '/signup/agent')
+        browserHistory.push('/signup/agent')
       }
     }
   }

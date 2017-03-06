@@ -30,9 +30,9 @@ const controller = {
     // defaults
     options.minimum_price = default_options.minimum_price
     options.maximum_price = default_options.maximum_price
-    const minimum_price = Number(this.refs.minimum_price.refs.input.value.trim())
+    const minimum_price = Number(this.minimum_priceInput.value.trim())
     options.minimum_price = minimum_price
-    const maximum_price = Number(this.refs.maximum_price.refs.input.value.trim())
+    const maximum_price = Number(this.maximum_priceInput.value.trim())
     if (maximum_price)
       options.maximum_price = maximum_price
 
@@ -40,19 +40,19 @@ const controller = {
     // defaults
     options.minimum_square_meters = 0
     options.maximum_square_meters = default_options.maximum_square_meters
-    const minimum_square_feet = Number(this.refs.minimum_square_feet.refs.input.value.trim())
+    const minimum_square_feet = Number(this.minimum_square_feetInput.value.trim())
     if (minimum_square_feet)
       options.minimum_square_meters = listing_util.feetToMeters(minimum_square_feet)
-    const maximum_square_feet = Number(this.refs.maximum_square_feet.refs.input.value.trim())
+    const maximum_square_feet = Number(this.maximum_square_feetInput.value.trim())
     if (maximum_square_feet)
       options.maximum_square_meters = listing_util.feetToMeters(maximum_square_feet)
     // Lot
     options.minimum_lot_square_meters = 0
     options.maximum_lot_square_meters = default_options.maximum_lot_square_meters
-    const minimum_lot_square_feet = Number(this.refs.minimum_lot_square_feet.refs.input.value.trim())
+    const minimum_lot_square_feet = Number(this.minimum_lot_square_feetInput.value.trim())
     if (minimum_lot_square_feet)
       options.minimum_lot_square_meters = listing_util.feetToMeters(minimum_lot_square_feet)
-    const maximum_lot_square_feet = Number(this.refs.maximum_lot_square_feet.refs.input.value.trim())
+    const maximum_lot_square_feet = Number(this.maximum_lot_square_feetInput.value.trim())
     if (maximum_lot_square_feet)
       options.maximum_lot_square_meters = listing_util.feetToMeters(maximum_lot_square_feet)
 

@@ -10,7 +10,7 @@ export default class DropzoneOverlay extends Component {
     if (this.props.context === 'transaction') {
       arrow_area = (
         <div style={ S('absolute t-90 r-130n') }>
-          <img src="/images/dashboard/transactions/drop-arrow.png"/>
+          <img src="/static/images/dashboard/transactions/drop-arrow.png"/>
         </div>
       )
     }
@@ -21,7 +21,7 @@ export default class DropzoneOverlay extends Component {
           <div className="center-block" style={ S('relative p-20 mt-20p w-700 h-300 bg-fff br-2 color-929292') }>
             { arrow_area }
             <div style={ S('h-110 relative t-60n') }>
-              <img src="/images/dashboard/transactions/drop-here.png"/>
+              <img src="/static/images/dashboard/transactions/drop-here.png"/>
             </div>
             <div style={ S('font-36 mb-10') }>Drop to add to <br/><span className="text-primary">{ this.props.title }</span></div>
             <div style={ S('font-20') }>Drop files like pdfs, word docs and images</div>

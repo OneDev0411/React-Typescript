@@ -1,7 +1,7 @@
 // SignIn.js
 import React, { Component } from 'react'
-import { Link } from 'react-router'
-import { Button, Input, Alert, Modal } from 'react-bootstrap'
+import { Link, browserHistory } from 'react-router'
+import { Button, FormControl, Alert, Modal } from 'react-bootstrap'
 import S from 'shorti'
 import AppStore from '../../stores/AppStore'
 import AppDispatcher from '../../dispatcher/AppDispatcher'
@@ -21,7 +21,8 @@ export default class SignIn extends Component {
   }
 
   componentDidMount() {
-    this.refs.email.refs.input.focus()
+
+    // this.refs.email.refs.input.focus()
     const message = helpers.getParameterByName('message')
     if (message && message === 'account-upgraded') {
       setTimeout(() => {
@@ -39,7 +40,7 @@ export default class SignIn extends Component {
     if (data.location && data.location.query && data.location.query.email) {
       const email = decodeURIComponent(data.location.query.email)
       if (email && email !== 'undefined')
-        this.refs.email.refs.input.value = email
+        this.emailInput.value = email
     }
   }
 
@@ -52,7 +53,8 @@ export default class SignIn extends Component {
       let redirect_to = '/dashboard/mls'
       if (data.location.query && data.location.query.redirect_to)
         redirect_to = data.location.query.redirect_to
-      this.props.history.pushState(null, redirect_to)
+
+      browserHistory.push(redirect_to)
     }
   }
 
@@ -63,10 +65,10 @@ export default class SignIn extends Component {
   }
 
   initFullStory(user) {
-    window.FS.identify(user.id, {
-      displayName: user.first_name + ' ' + user.last_name,
-      email: user.email
-    })
+    // window.FS.identify(user.id, {
+    //   displayName: user.first_name + ' ' + user.last_name,
+    //   email: user.email
+    // })
   }
 
   handleSubmit(e) {
@@ -74,8 +76,8 @@ export default class SignIn extends Component {
     AppStore.data.submitting = true
     AppStore.emitChange()
 
-    const email = this.refs.email.refs.input.value
-    const password = this.refs.password.refs.input.value
+    const email = this.emailInput.value
+    const password = this.passwordInput.value
     let invite
     if (this.props.location.query.message === 'invite-room') {
       invite = {
@@ -173,15 +175,14 @@ export default class SignIn extends Component {
           <div style={ S('color-555555 mb-20 font-18 mb-20') }>It’s nice to have you back!</div>
           { invite_message }
           <form action="/signin" onSubmit={ this.handleSubmit.bind(this) }>
-            <Input bsSize="large" style={ input_style } bsStyle={ email_style } type="text" ref="email" placeholder="Email"/>
-            <Input bsSize="large" style={ input_style } bsStyle={ password_style } type={ data.signin && data.signin.password_is_visible ? 'text' : 'password' } ref="password" placeholder="Password"/>
+            <FormControl bsSize="large" style={ input_style } bsStyle={ email_style } type="text" inputRef={ ref => this.emailInput = ref } placeholder="Email"/>
+            <FormControl bsSize="large" style={ input_style } bsStyle={ password_style } type={ data.signin && data.signin.password_is_visible ? 'text' : 'password' } inputRef={ ref => this.passwordInput = ref } placeholder="Password"/>
             <div style={ S('color-929292 font-13 mt-0 mb-10') } className="pull-right"><Link to="/password/forgot">Forgot Password</Link></div>
             <div className="clearfix"></div>
             { message }
             <Button
               bsSize="large"
               type="submit"
-              ref="submit"
               className={ submitting_class + 'btn' }
               disabled={ submitting }
               style={ S('w-100p mb-20 border-none color-fff bg-' + Brand.color('primary', '3388ff')) }
@@ -230,6 +231,5 @@ export default class SignIn extends Component {
 // PropTypes
 SignIn.propTypes = {
   data: React.PropTypes.object,
-  location: React.PropTypes.object.isRequired,
-  history: React.PropTypes.object.isRequired
+  location: React.PropTypes.object.isRequired
 }

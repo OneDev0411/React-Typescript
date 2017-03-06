@@ -4,7 +4,7 @@ export default class Globe extends Component {
   render() {
     return (
       <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
-        <g id="Symbols" stroke="none" strokeWidth="1" fill="none" fill-rule="evenodd">
+        <g id="Symbols" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
             <g id="Global-viewing-options" transform="translate(-14.000000, -6.000000)">
                 <g id="Map" transform="translate(14.000000, 6.000000)">
                     <g id="Group">

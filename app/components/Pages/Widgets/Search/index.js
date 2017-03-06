@@ -99,7 +99,7 @@ export default class Search extends Component {
         <div style={ S('relative z-2 p-10') }>
           <div style={ S('relative t-190 maxw-770 center-block') }>
             <div style={ S('color-fff text-center font-58 mb-30') } className="tempo">{ data.brand && data.brand.messages.search_headline ? data.brand.messages.search_headline : '' }</div>
-            <Input id="google_search" style={ S('h-76 border-none') } type="text" bsSize="large" placeholder="Search for an address, neighborhood, or MLS#" />
+            <FormControl id="google_search" style={ S('h-76 border-none') } type="text" bsSize="large" placeholder="Search for an address, neighborhood, or MLS#" />
             { loading }
             { listing_area }
             <div style={ S('pull-right z-0 mt-5') }>

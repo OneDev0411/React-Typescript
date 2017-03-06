@@ -1,5 +1,6 @@
 // Dashboard/Transactions/New/index.js
 import React, { Component } from 'react'
+import { browserHistory } from 'react-router'
 import { Link } from 'react-router'
 import { Button, Breadcrumb, BreadcrumbItem, Alert, Modal, Navbar, Nav } from 'react-bootstrap'
 import S from 'shorti'
@@ -57,7 +58,7 @@ export default class NewTransaction extends Component {
   componentDidUpdate() {
     if (AppStore.data.new_transaction && AppStore.data.new_transaction.redirect_to) {
       const redirect_to = AppStore.data.new_transaction.redirect_to
-      this.props.history.pushState(null, redirect_to)
+      browserHistory.push(redirect_to)
     }
   }
 
@@ -218,7 +219,7 @@ export default class NewTransaction extends Component {
       delete AppStore.data.new_transaction.listing_added
       delete AppStore.data.new_transaction.listings_found
       delete AppStore.data.new_transaction.listing_q
-      this.refs.q.refs.input.value = ''
+      this.qInput.value = ''
       setTimeout(() => {
         this.refs.address.focus()
       }, 100)
@@ -281,7 +282,7 @@ export default class NewTransaction extends Component {
       AppStore.data.new_transaction.show_cancel_confirm = true
       AppStore.emitChange()
     } else
-      this.props.history.pushState(null, '/dashboard/transactions')
+      browserHistory.push('/dashboard/transactions')
   }
 
   handleCancelClick(e) {

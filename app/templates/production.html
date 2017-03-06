@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+  </head>
+  <body>
+    <div id='app'>{{ body | safe }}</div>
+
+    <script type="text/javascript">
+      window.__APPLICATION_STATE__ = '{{ store | safe }}'
+    </script>
+  </body>
+</html>

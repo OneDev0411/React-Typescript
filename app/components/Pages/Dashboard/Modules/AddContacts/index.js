@@ -1,6 +1,6 @@
 // AddContactsModule/index.js
 import React, { Component } from 'react'
-import { Button, Input, Alert } from 'react-bootstrap'
+import { Button, FormControl, Alert } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
 import validator from 'validator'
@@ -22,12 +22,12 @@ export default class AddContactsModule extends Component {
   componentDidUpdate() {
     const new_contact_created = this.props.data.new_contact_created
     if (new_contact_created) {
-      this.refs.first_name.refs.input.value = ''
-      this.refs.last_name.refs.input.value = ''
-      this.refs.phone_number.refs.input.value = ''
-      this.refs.email.refs.input.value = ''
-      this.refs.company.refs.input.value = ''
-      this.refs.role.refs.input.value = ''
+      this.first_nameInput.value = ''
+      this.last_nameInput.value = ''
+      this.phone_numberInput.value = ''
+      this.emailInput.value = ''
+      this.companyInput.value = ''
+      this.roleInput.value = ''
     }
   }
   getContacts() {
@@ -54,8 +54,8 @@ export default class AddContactsModule extends Component {
     })
   }
   showNewContentInitials() {
-    const first_initial = this.refs.first_name.refs.input.value.charAt(0)
-    const last_initial = this.refs.last_name.refs.input.value.charAt(0)
+    const first_initial = this.first_nameInput.value.charAt(0)
+    const last_initial = this.last_nameInput.value.charAt(0)
     AppStore.data.new_contact_modal = {
       first_initial,
       last_initial
@@ -79,7 +79,7 @@ export default class AddContactsModule extends Component {
       AppStore.data.contacts_added[module_type] = []
     AppStore.data.contacts_added[module_type].unshift(contact)
     delete AppStore.data.filtered_contacts
-    this.refs.search_contacts.refs.input.value = ''
+    this.search_contactsInput.value = ''
     AppStore.emitChange()
   }
   setContactActive(direction) {
@@ -108,13 +108,13 @@ export default class AddContactsModule extends Component {
   }
   setContactFields(contact) {
     if (contact.first_name)
-      this.refs.first_name.refs.input.value = contact.first_name
+      this.first_nameInput.value = contact.first_name
     if (contact.last_name)
-      this.refs.last_name.refs.input.value = contact.last_name
+      this.last_nameInput.value = contact.last_name
     if (contact.email)
-      this.refs.email.refs.input.value = contact.email
+      this.emailInput.value = contact.email
     if (contact.company)
-      this.refs.company.refs.input.value = contact.company
+      this.companyInput.value = contact.company
     this.refs.first_name.refs.input.focus()
     this.showNewContentInitials()
     if (contact.phone_number) {
@@ -127,7 +127,7 @@ export default class AddContactsModule extends Component {
     // No arrow keys
     if (e.which === 38 || e.which === 40)
       return
-    const text = this.refs.search_contacts.refs.input.value.trim()
+    const text = this.search_contactsInput.value.trim()
     const text_lower = text.toLowerCase()
     const data = this.props.data
     const contacts = data.contacts
@@ -172,7 +172,7 @@ export default class AddContactsModule extends Component {
   createContactFromInput() {
     delete AppStore.data.error
     AppStore.emitChange()
-    const search_input = this.refs.search_contacts.refs.input.value
+    const search_input = this.search_contactsInput.value
     // Check if contact phone or email
     let contact
     if (validator.isEmail(search_input)) {
@@ -404,7 +404,7 @@ export default class AddContactsModule extends Component {
     return (
       <div style={ module_style } className="add-contact-form">
         <div style={ S('maxw-820') }>
-          <Input onClick={ this.handleInputClick.bind(this) } onFocus={ this.handleInputFocus.bind(this) } onBlur={ this.handleInputBlur.bind(this) } ref="search_contacts" onKeyDown={ this.navContactList.bind(this) } onKeyUp={ this.filterContacts.bind(this) } className="pull-left" style={ search_contact_input_style } type="text" placeholder="Enter any name, email or phone number"/>
+          <FormControl onClick={ this.handleInputClick.bind(this) } onFocus={ this.handleInputFocus.bind(this) } onBlur={ this.handleInputBlur.bind(this) } inputRef={ ref => this.search_contactsInput = ref } onKeyDown={ this.navContactList.bind(this) } onKeyUp={ this.filterContacts.bind(this) } className="pull-left" style={ search_contact_input_style } type="text" placeholder="Enter any name, email or phone number"/>
           <Button className="pull-left" style={ add_button_style } bsStyle="primary" onClick={ this.handleButtonClick.bind(this) }>
             Add
           </Button>

@@ -54,7 +54,7 @@ const controller = {
     const users = _.map(share_modal.items_selected, 'value.id').filter(Boolean)
     const phone_numbers = _.map(_.filter(share_modal.items_selected, { type: 'phone_number' }), 'value')
     const emails = _.map(_.filter(share_modal.items_selected, { type: 'email' }), 'value')
-    const message = this.refs.message.refs.input.value.trim()
+    const message = this.messageInput.value.trim()
     AppStore.data.share_modal.sending_share = true
     AppStore.emitChange()
 

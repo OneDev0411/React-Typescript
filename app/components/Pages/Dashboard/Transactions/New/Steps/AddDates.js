@@ -1,6 +1,6 @@
 // Dashboard/Transactions/New/Steps/AddDates.js
 import React, { Component } from 'react'
-import { Col, Input, Button, Modal } from 'react-bootstrap'
+import { Col, FormControl, Button, Modal } from 'react-bootstrap'
 import S from 'shorti'
 import DayPickerType from '../Partials/DayPickerType'
 
@@ -79,7 +79,7 @@ export default class AddDates extends Component {
                 <Button bsStyle="primary" onClick={ this.props.showDatePickerModal.bind(this, 'contract') }>Change</Button>
               </div>
             </div>
-            <Input readOnly value={ contract_date_formatted } type="hidden" />
+            <FormControl readOnly value={ contract_date_formatted } type="hidden" />
           </Col>
           <Col sm={4} style={ S('pl-0') }>
             <div style={ S('color-bfc2c3 font-13 mb-10') }>
@@ -93,7 +93,7 @@ export default class AddDates extends Component {
                 <Button bsStyle="primary" onClick={ this.props.showDatePickerModal.bind(this, 'due_diligence') }>Change</Button>
               </div>
             </div>
-            <Input readOnly value={ due_diligence_date_formatted } type="hidden" />
+            <FormControl readOnly value={ due_diligence_date_formatted } type="hidden" />
           </Col>
           <Col sm={4} style={ S('pl-0') }>
             <div style={ S('color-bfc2c3 font-13 mb-10') }>
@@ -107,7 +107,7 @@ export default class AddDates extends Component {
                 <Button bsStyle="primary" onClick={ this.props.showDatePickerModal.bind(this, 'closing') }>Change</Button>
               </div>
             </div>
-            <Input readOnly value={ closing_date_formatted } type="hidden" />
+            <FormControl readOnly value={ closing_date_formatted } type="hidden" />
           </Col>
           <Modal show={ show_date_picker } onHide={ this.props.hideModal.bind(this) }>
             <Modal.Header closeButton>

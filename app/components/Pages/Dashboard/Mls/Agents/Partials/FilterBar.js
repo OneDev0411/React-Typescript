@@ -20,15 +20,15 @@ export default class FilterBar extends Component {
   }
 
   getFromTime() {
-    return this.getTime(this.refs.from_year.refs.input.value,
-                   this.refs.from_month.refs.input.value,
-                   this.refs.from_day.refs.input.value)
+    return this.getTime(this.from_yearInput.value,
+                   this.from_monthInput.value,
+                   this.from_dayInput.value)
   }
 
   getToTime() {
-    return this.getTime(this.refs.to_year.refs.input.value,
-                   this.refs.to_month.refs.input.value,
-                   this.refs.to_day.refs.input.value)
+    return this.getTime(this.to_yearInput.value,
+                   this.to_monthInput.value,
+                   this.to_dayInput.value)
   }
 
   handleSubmit(e) {
@@ -39,8 +39,8 @@ export default class FilterBar extends Component {
     criteria.from = this.getFromTime()
     criteria.to = this.getToTime()
 
-    criteria.area = this.refs.area.refs.input.value
-//     criteria.subarea = this.refs.subarea.refs.input.value
+    criteria.area = this.areaInput.value
+//     criteria.subarea = this.subareaInput.value
 
     criteria.total_volume = {
       min: null,
@@ -48,8 +48,8 @@ export default class FilterBar extends Component {
     }
 
     if (this.filterEnabled('total_volume')) {
-      criteria.total_volume.min = this.refs.total_volume_min.refs.input.value
-      criteria.total_volume.max = this.refs.total_volume_max.refs.input.value
+      criteria.total_volume.min = this.total_volume_minInput.value
+      criteria.total_volume.max = this.total_volume_maxInput.value
     }
 
     criteria.total_value = {
@@ -58,8 +58,8 @@ export default class FilterBar extends Component {
     }
 
     if (this.filterEnabled('total_value')) {
-      criteria.total_value.min = this.refs.total_value_min.refs.input.value
-      criteria.total_value.max = this.refs.total_value_max.refs.input.value
+      criteria.total_value.min = this.total_value_minInput.value
+      criteria.total_value.max = this.total_value_maxInput.value
     }
 
     criteria.list_volume = {
@@ -68,8 +68,8 @@ export default class FilterBar extends Component {
     }
 
     if (this.filterEnabled('list_volume')) {
-      criteria.list_volume.min = this.refs.list_volume_min.refs.input.value
-      criteria.list_volume.max = this.refs.list_volume_max.refs.input.value
+      criteria.list_volume.min = this.list_volume_minInput.value
+      criteria.list_volume.max = this.list_volume_maxInput.value
     }
 
     criteria.list_value = {
@@ -78,8 +78,8 @@ export default class FilterBar extends Component {
     }
 
     if (this.filterEnabled('list_value')) {
-      criteria.list_value.min = this.refs.list_value_min.refs.input.value
-      criteria.list_value.max = this.refs.list_value_max.refs.input.value
+      criteria.list_value.min = this.list_value_minInput.value
+      criteria.list_value.max = this.list_value_maxInput.value
     }
 
     criteria.sell_volume = {
@@ -88,8 +88,8 @@ export default class FilterBar extends Component {
     }
 
     if (this.filterEnabled('sell_volume')) {
-      criteria.sell_volume.min = this.refs.sell_volume_min.refs.input.value
-      criteria.sell_volume.max = this.refs.sell_volume_max.refs.input.value
+      criteria.sell_volume.min = this.sell_volume_minInput.value
+      criteria.sell_volume.max = this.sell_volume_maxInput.value
     }
 
     criteria.sell_value = {
@@ -98,8 +98,8 @@ export default class FilterBar extends Component {
     }
 
     if (this.filterEnabled('sell_value')) {
-      criteria.sell_value.min = this.refs.sell_value_min.refs.input.value
-      criteria.sell_value.max = this.refs.sell_value_max.refs.input.value
+      criteria.sell_value.min = this.sell_value_minInput.value
+      criteria.sell_value.max = this.sell_value_maxInput.value
     }
 
     criteria.active_volume = {
@@ -108,8 +108,8 @@ export default class FilterBar extends Component {
     }
 
     if (this.filterEnabled('active_volume')) {
-      criteria.active_volume.min = this.refs.active_volume_min.refs.input.value
-      criteria.active_volume.max = this.refs.active_volume_max.refs.input.value
+      criteria.active_volume.min = this.active_volume_minInput.value
+      criteria.active_volume.max = this.active_volume_maxInput.value
     }
 
     criteria.active_value = {
@@ -118,8 +118,8 @@ export default class FilterBar extends Component {
     }
 
     if (this.filterEnabled('active_value')) {
-      criteria.active_value.min = this.refs.active_value_min.refs.input.value
-      criteria.active_value.max = this.refs.active_value_max.refs.input.value
+      criteria.active_value.min = this.active_value_minInput.value
+      criteria.active_value.max = this.active_value_maxInput.value
     }
 
     criteria.total_active_volume = {
@@ -128,8 +128,8 @@ export default class FilterBar extends Component {
     }
 
     if (this.filterEnabled('total_active_volume')) {
-      criteria.total_active_volume.min = this.refs.total_active_volume_min.refs.input.value
-      criteria.total_active_volume.max = this.refs.total_active_volume_max.refs.input.value
+      criteria.total_active_volume.min = this.total_active_volume_minInput.value
+      criteria.total_active_volume.max = this.total_active_volume_maxInput.value
     }
 
     criteria.total_active_value = {
@@ -138,13 +138,13 @@ export default class FilterBar extends Component {
     }
 
     if (this.filterEnabled('total_active_value')) {
-      criteria.total_active_value.min = this.refs.total_active_value_min.refs.input.value
-      criteria.total_active_value.max = this.refs.total_active_value_max.refs.input.value
+      criteria.total_active_value.min = this.total_active_value_minInput.value
+      criteria.total_active_value.max = this.total_active_value_maxInput.value
     }
 
     criteria.agent_experience = null
     if (this.filterEnabled('total_active_value'))
-      criteria.agent_experience = this.refs.agent_experience.refs.input.value
+      criteria.agent_experience = this.agent_experienceInput.value
 
     const user = this.props.data.user
     AppDispatcher.dispatch({
@@ -228,15 +228,15 @@ export default class FilterBar extends Component {
               From
             </label>
             <div>
-              <Input type="select" ref="from_year" style={ S('w-32p pull-left') }>
+              <FormControl type="select" inputRef={ ref => this.from_yearInput = ref } style={ S('w-32p pull-left') }>
                 { this.years() }
-              </Input>
-              <Input type="select" ref="from_day" style={ S('w-32p pull-left ml-1p') }>
+              </FormControl>
+              <FormControl type="select" inputRef={ ref => this.from_dayInput = ref } style={ S('w-32p pull-left ml-1p') }>
                 { this.days() }
-              </Input>
-              <Input type="select" ref="from_month" style={ S('w-32p pull-left ml-1p') }>
+              </FormControl>
+              <FormControl type="select" inputRef={ ref => this.from_monthInput = ref } style={ S('w-32p pull-left ml-1p') }>
                 { this.months() }
-              </Input>
+              </FormControl>
             </div>
           </div>
 
@@ -247,15 +247,15 @@ export default class FilterBar extends Component {
               To
             </label>
             <div>
-              <Input type="select" ref="to_year" style={ S('w-32p pull-left') }>
+              <FormControl type="select" inputRef={ ref => this.to_yearInput = ref } style={ S('w-32p pull-left') }>
                 { this.years() }
-              </Input>
-              <Input type="select" ref="to_day" style={ S('w-32p pull-left ml-1p') }>
+              </FormControl>
+              <FormControl type="select" inputRef={ ref => this.to_dayInput = ref } style={ S('w-32p pull-left ml-1p') }>
                 { this.days() }
-              </Input>
-              <Input type="select" ref="to_month" style={ S('w-32p pull-left ml-1p') }>
+              </FormControl>
+              <FormControl type="select" inputRef={ ref => this.to_monthInput = ref } style={ S('w-32p pull-left ml-1p') }>
                 { this.months() }
-              </Input>
+              </FormControl>
             </div>
           </div>
 
@@ -267,7 +267,7 @@ export default class FilterBar extends Component {
               Location
             </label>
             <div>
-              <Input type="select" placeholder="Area" ref="area">
+              <FormControl type="select" placeholder="Area" inputRef={ ref => this.areaInput = ref }>
                 <option value="">---</option>
                 <option>CEDAR HILL AREA (1)</option>
                 <option>DESOTO AREA (2)</option>
@@ -450,7 +450,7 @@ export default class FilterBar extends Component {
                 <option>OTHER AREAS WITHIN THE U.S. (999)</option>
                 <option>OUTSIDE OF THE U.S. (1000)</option>
                 <option>NTREIS TEST ONLY</option>
-              </Input>
+              </FormControl>
             </div>
           </div>
 
@@ -461,10 +461,10 @@ export default class FilterBar extends Component {
             </label>
             <div style={ this.filterEnabled('total_value') }>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="total_value_min"/>
+                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ ref => this.total_value_minInput = ref }/>
               </div>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="total_value_max"/>
+                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ ref => this.total_value_maxInput = ref }/>
               </div>
             </div>
           </div>
@@ -476,10 +476,10 @@ export default class FilterBar extends Component {
             </label>
             <div style={ this.filterEnabled('total_volume') }>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="total_volume_min"/>
+                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ ref => this.total_volume_minInput = ref }/>
               </div>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="total_volume_max"/>
+                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ ref => this.total_volume_maxInput = ref }/>
               </div>
             </div>
           </div>
@@ -491,10 +491,10 @@ export default class FilterBar extends Component {
             </label>
             <div style={ this.filterEnabled('list_value') }>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="list_value_min"/>
+                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ ref => this.list_value_minInput = ref }/>
               </div>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="list_value_max"/>
+                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ ref => this.list_value_maxInput = ref }/>
               </div>
             </div>
           </div>
@@ -506,10 +506,10 @@ export default class FilterBar extends Component {
             </label>
             <div style={ this.filterEnabled('list_volume') }>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="list_volume_min"/>
+                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ ref => this.list_volume_minInput = ref }/>
               </div>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="list_volume_max"/>
+                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ ref => this.list_volume_maxInput = ref }/>
               </div>
             </div>
           </div>
@@ -521,10 +521,10 @@ export default class FilterBar extends Component {
             </label>
             <div style={ this.filterEnabled('sell_value') }>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="sell_value_min"/>
+                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ ref => this.sell_value_minInput = ref }/>
               </div>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="sell_value_max"/>
+                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ ref => this.sell_value_maxInput = ref }/>
               </div>
             </div>
           </div>
@@ -536,10 +536,10 @@ export default class FilterBar extends Component {
             </label>
             <div style={ this.filterEnabled('sell_volume') }>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="sell_volume_min"/>
+                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ ref => this.sell_volume_minInput = ref }/>
               </div>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="sell_volume_max"/>
+                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ ref => this.sell_volume_maxInput = ref }/>
               </div>
             </div>
           </div>
@@ -554,10 +554,10 @@ export default class FilterBar extends Component {
             </label>
             <div style={ this.filterEnabled('active_value') }>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="active_value_min"/>
+                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ ref => this.active_value_minInput = ref }/>
               </div>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="active_value_max"/>
+                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ ref => this.active_value_maxInput = ref }/>
               </div>
             </div>
           </div>
@@ -572,10 +572,10 @@ export default class FilterBar extends Component {
             </label>
             <div style={ this.filterEnabled('active_volume') }>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="active_volume_min"/>
+                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ ref => this.active_volume_minInput = ref }/>
               </div>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="active_volume_max"/>
+                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ ref => this.active_volume_maxInput = ref }/>
               </div>
             </div>
           </div>
@@ -590,10 +590,10 @@ export default class FilterBar extends Component {
             </label>
             <div style={ this.filterEnabled('total_active_value') }>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="total_active_value_min"/>
+                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ ref => this.total_active_value_minInput = ref }/>
               </div>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="total_active_value_max"/>
+                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ ref => this.total_active_value_maxInput = ref }/>
               </div>
             </div>
           </div>
@@ -608,10 +608,10 @@ export default class FilterBar extends Component {
             </label>
             <div style={ this.filterEnabled('total_active_volume') }>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Min" ref="total_active_volume_min"/>
+                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ ref => this.total_active_volume_minInput = ref }/>
               </div>
               <div style={ s }>
-                <Input type="text" bsSize="small" placeholder="Max" ref="total_active_volume_max"/>
+                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ ref => this.total_active_volume_maxInput = ref }/>
               </div>
             </div>
           </div>
@@ -625,7 +625,7 @@ export default class FilterBar extends Component {
               </span>
             </label>
             <div style={ this.filterEnabled('agent_experience') }>
-              <Input type="select" ref="agent_experience">
+              <FormControl type="select" inputRef={ ref => this.agent_experienceInput = ref }>
                 <option value="">---</option>
                 <option value="0-5">0-5 Years</option>
                 <option value="5-10">5-10 Years</option>
@@ -633,13 +633,13 @@ export default class FilterBar extends Component {
                 <option value="15-25">15-25 Years</option>
                 <option value="25-40">25-40 Years</option>
                 <option value="20+">20+</option>
-              </Input>
+              </FormControl>
             </div>
           </div>
 
           <br/> <br/>
 
-          <Input type="submit" value="Show results"/>
+          <FormControl type="submit" value="Show results"/>
         </form>
       </div>
     )

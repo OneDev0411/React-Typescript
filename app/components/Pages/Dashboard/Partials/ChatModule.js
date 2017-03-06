@@ -1,6 +1,6 @@
 // Partials/ChatModule.js
 import React, { Component } from 'react'
-import { Button, Input } from 'react-bootstrap'
+import { Button, FormControl } from 'react-bootstrap'
 import S from 'shorti'
 import Brand from '../../../../controllers/Brand'
 import controller from '../controller'
@@ -58,7 +58,7 @@ export default class ChatModule extends Component {
           </div>
           { messages }
           <div style={ footer_style }>
-            <Input onKeyUp={ controller.chat_module.handleKeyUp.bind(this, agent) } autoFocus style={ input_style } type="text" placeholder="Write Message" />
+            <FormControl onKeyUp={ controller.chat_module.handleKeyUp.bind(this, agent) } autoFocus style={ input_style } type="text" placeholder="Write Message" />
           </div>
         </div>
       )

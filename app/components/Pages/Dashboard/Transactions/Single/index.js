@@ -1,5 +1,6 @@
 // Dashboard/Transactions/Single/index.js
 import React, { Component } from 'react'
+import { browserHistory } from 'react-router'
 import { Alert } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
@@ -111,7 +112,7 @@ export default class Transactions extends Component {
     })
     transaction.attachments = attachments_sorted
     AppStore.data.current_transaction = transaction
-    history.pushState(null, null, '/dashboard/transactions/' + transaction.id)
+    browserHistory.push('/dashboard/transactions/' + transaction.id)
     AppStore.emitChange()
   }
 
@@ -135,8 +136,8 @@ export default class Transactions extends Component {
       AppStore.data.transaction_tabs = reduced_transaction_tabs
       if (current_transaction.id === id)
         delete AppStore.data.current_transaction
-      const history = require('../../../../../utils/history')
-      history.replaceState(null, '/dashboard/transactions')
+
+      browserHistory.push('/dashboard/transactions')
       AppStore.emitChange()
     }, 1)
   }
@@ -222,7 +223,7 @@ export default class Transactions extends Component {
       this.hideModal()
     else {
       const next_file = files[current_file.index + 1]
-      // this.refs.file_name.refs.input.value = next_file.name
+      // this.file_nameInput.value = next_file.name
       AppStore.data.document_modal.current_file = next_file
     }
     delete AppStore.data.document_modal.editing_name
@@ -322,7 +323,7 @@ export default class Transactions extends Component {
     delete AppStore.data.current_transaction.viewer
     const data = AppStore.data
     const transaction = data.current_transaction
-    history.pushState(null, null, '/dashboard/transactions/' + transaction.id)
+    browserHistory.push('/dashboard/transactions/' + transaction.id)
     AppStore.emitChange()
   }
 

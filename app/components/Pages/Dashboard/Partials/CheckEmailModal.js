@@ -14,7 +14,7 @@ export default class CheckEmailModal extends Component {
       <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_signup_confirm_modal } onHide={ this.props.hideModal }>
         <Modal.Body className="text-center" style={ !data.is_mobile ? S('w-600 h-480') : S('w-100p') } >
           <div style={ S('mb-20 mt-20 w-280 center-block text-center' + (!data.is_mobile ? ' mt-100' : '')) }>
-            <img style={ S('w-280') } src="/images/widgets/stapp-to-rechat.png" />
+            <img style={ S('w-280') } src="/static/images/widgets/stapp-to-rechat.png" />
           </div>
           <div className="din" style={ S('color-263445 font-34 mb-10') }>Great! Please verify your email</div>
           <div style={ S('font-17 color-9b9b9b mb-40') }>It may take a few minutes for<br /> the email to show up.</div>

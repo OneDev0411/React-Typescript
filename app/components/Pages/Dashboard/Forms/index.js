@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import SideBar from '../Partials/SideBar'
 import S from 'shorti'
+import config from '../../../../../config/private'
 export default class Forms extends Component {
   render() {
     // Data
@@ -15,7 +16,7 @@ export default class Forms extends Component {
             data={ data }
           />
           <div style={ main_style }>
-            <iframe style={ S('w-100p h-100p absolute') } src={ `https://forms.rechat.com?access_token=${user.access_token}`} frameBorder="0"></iframe>
+            <iframe style={ S('w-100p h-100p absolute') } src={ `${config.forms.url}?access_token=${user.access_token}`} frameBorder="0"></iframe>
           </div>
         </main>
       </div>

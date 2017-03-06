@@ -1,7 +1,7 @@
 // Create.js
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import { Input, Button, Alert, Col } from 'react-bootstrap'
+import { FormControl, Button, Alert, Col } from 'react-bootstrap'
 import S from 'shorti'
 import helpers from '../../../../utils/helpers'
 import Brand from '../../../../controllers/Brand'
@@ -72,9 +72,9 @@ export default class Create extends Component {
     if (data.signup && data.signup.last_name)
       last_name = data.signup.last_name
     if (this.refs.first_name)
-      first_name = this.refs.first_name.refs.input.value.trim()
+      first_name = this.first_nameInput.value.trim()
     if (this.refs.last_name)
-      last_name = this.refs.last_name.refs.input.value.trim()
+      last_name = this.last_nameInput.value.trim()
     const type = data.signup.type
     // Save login
     AppStore.data.signup.login = {
@@ -109,7 +109,7 @@ export default class Create extends Component {
     const data = this.props.data
     if (data.signup)
       delete AppStore.data.signup.can_submit
-    const password = this.refs.password.refs.input.value.trim()
+    const password = this.passwordInput.value.trim()
     let first_name
     let last_name
     if (data.signup && data.signup.first_name)
@@ -117,9 +117,9 @@ export default class Create extends Component {
     if (data.signup && data.signup.last_name)
       last_name = data.signup.last_name
     if (this.refs.first_name)
-      first_name = this.refs.first_name.refs.input.value.trim()
+      first_name = this.first_nameInput.value.trim()
     if (this.refs.last_name)
-      last_name = this.refs.last_name.refs.input.value.trim()
+      last_name = this.last_nameInput.value.trim()
     if (data.signup && data.signup.type && password && first_name && last_name)
       AppStore.data.signup.can_submit = true
     AppStore.emitChange()
@@ -257,10 +257,10 @@ export default class Create extends Component {
     let name_area = (
       <div>
         <Col sm={ 6 } style={ S(data.is_mobile ? 'mb-10 p-0 mr-0 pr-0' : 'p-0 pr-10') }>
-          <Input autoComplete={ false } onChange={ this.handleNameChange.bind(this, 'first') } value={ first_name } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="First Name" type="text" ref="first_name"/>
+          <FormControl autoComplete={ false } onChange={ this.handleNameChange.bind(this, 'first') } value={ first_name } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="First Name" type="text" inputRef={ ref => this.first_nameInput = ref }/>
         </Col>
         <Col sm={ 6 } style={ S('p-0') }>
-          <Input autoComplete={ false } onChange={ this.handleNameChange.bind(this, 'last') } value={ last_name } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="Last Name" type="text" ref="last_name"/>
+          <FormControl autoComplete={ false } onChange={ this.handleNameChange.bind(this, 'last') } value={ last_name } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="Last Name" type="text" inputRef={ ref => this.last_nameInput = ref }/>
         </Col>
       </div>
     )
@@ -297,14 +297,14 @@ export default class Create extends Component {
     if (data.signup && data.signup.new_email) {
       new_email_area = (
         <div style={ S('relative') }>
-          <Input type="email" autoComplete={ false } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="Add an Email" ref="new_email"/>
+          <FormControl type="email" autoComplete={ false } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="Add an Email" inputRef={ ref => this.new_emailInput = ref }/>
         </div>
       )
     }
     let main_content = (
       <div>
         <Col sm={ 5 } className={ data.is_mobile ? 'hidden' : '' }>
-          <img style={ S('w-100p') } src="/images/signup/house.png" />
+          <img style={ S('w-100p') } src="/static/images/signup/house.png" />
         </Col>
         <Col sm={ 7 }>
           { brand_title }
@@ -315,7 +315,7 @@ export default class Create extends Component {
             <div className="clearfix"></div>
             { new_email_area }
             <div style={ S('relative') }>
-              <Input autoComplete={ false } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } bsStyle={ password_style } placeholder="Add a Password" type={ data.signup && data.signup.show_password ? 'text' : 'password' } ref="password"/>
+              <FormControl autoComplete={ false } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } bsStyle={ password_style } placeholder="Add a Password" type={ data.signup && data.signup.show_password ? 'text' : 'password' } inputRef={ ref => this.passwordInput = ref }/>
               <i onClick={ this.toggleShowPassword } style={ S('absolute t-15 r-15 z-100 pointer color-666') } className={ `fa fa-eye${ data.signup && data.signup.show_password ? '-slash' : '' }` }></i>
             </div>
             { type_area }
@@ -323,7 +323,6 @@ export default class Create extends Component {
             <Button
               bsSize="large"
               type="submit"
-              ref="submit"
               className={ disabled_class + submitting_class + 'btn' }
               disabled={ is_disabled ? 'true' : '' }
               style={ S(`border-none color-fff w-100p bg-${Brand.color('primary', '3388ff')}`) }

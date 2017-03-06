@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import _ from 'lodash'
-import { Table, Button, Input, DropdownButton, MenuItem, Alert } from 'react-bootstrap'
+import { Table, Button, FormControl, DropdownButton, MenuItem, Alert } from 'react-bootstrap'
 import MaskedInput from 'react-maskedinput'
 import { all_countries } from '../../../../utils/country-data'
 import helpers from '../../../../utils/helpers'
@@ -86,10 +86,10 @@ export default class Contacts extends Component {
     const data = this.props.data
     const current_contact = data.current_contact
     const user = data.user
-    const first_name = this.refs.first_name.refs.input.value
-    const last_name = this.refs.last_name.refs.input.value
-    const email = this.refs.email.refs.input.value
-    const phone_number_input = this.refs.phone_number.refs.input.value.replace(/\D/g, '').trim()
+    const first_name = this.first_nameInput.value
+    const last_name = this.last_nameInput.value
+    const email = this.emailInput.value
+    const phone_number_input = this.phone_numberInput.value.replace(/\D/g, '').trim()
     let country_code = 1
     if (data.phone_country)
       country_code = data.phone_country.dialCode
@@ -212,18 +212,18 @@ export default class Contacts extends Component {
           <div style={ S('ml-80 relative w-300') }>
             <form onSubmit={ this.handleContactSubmit.bind(this) }>
               <label>First name</label>
-              <Input ref="first_name" type="text" value={ contact.first_name } onChange={ this.handleInputChange.bind(this, 'first_name') } />
+              <FormControl inputRef={ ref => this.first_nameInput = ref } type="text" value={ contact.first_name } onChange={ this.handleInputChange.bind(this, 'first_name') } />
               <label>Last name</label>
-              <Input ref="last_name" type="text" value={ contact.last_name } onChange={ this.handleInputChange.bind(this, 'last_name') } />
+              <FormControl inputRef={ ref => this.last_nameInput = ref } type="text" value={ contact.last_name } onChange={ this.handleInputChange.bind(this, 'last_name') } />
               <label>Email</label>
-              <Input ref="email" type="text" value={ contact.email } onChange={ this.handleInputChange.bind(this, 'email') } />
+              <FormControl inputRef={ ref => this.emailInput = ref } type="text" value={ contact.email } onChange={ this.handleInputChange.bind(this, 'email') } />
               <label>Phone number</label>
               <div className="form-group">
                 <div className="input-group">
                   <div className="input-group-btn input-dropdown--country-codes">
                     { country_codes }
                   </div>
-                  <MaskedInput className="form-control" ref="phone_number" type="text" value={ contact.temp_phone ? contact.temp_phone : phone_number_parsed.phone_number } mask="(111)-111-1111" onChange={ this.handleInputChange.bind(this, 'phone_number') }/>
+                  <MaskedInput className="form-control" ref={ ref => this.phone_numberInput = ref } type="text" value={ contact.temp_phone ? contact.temp_phone : phone_number_parsed.phone_number } mask="(111)-111-1111" onChange={ this.handleInputChange.bind(this, 'phone_number') }/>
                 </div>
               </div>
               { message }

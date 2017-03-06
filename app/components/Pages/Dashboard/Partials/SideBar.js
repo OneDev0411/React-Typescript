@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Nav, NavItem, NavDropdown, Modal, Col, Input, Button, Alert, OverlayTrigger, Popover, DropdownButton, MenuItem } from 'react-bootstrap'
+import { Nav, NavItem, NavDropdown, Modal, Col, FormControl, Button, Alert, OverlayTrigger, Popover, DropdownButton, MenuItem } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
 import Dropzone from 'react-dropzone'
@@ -67,7 +67,7 @@ export default class SideBar extends Component {
     delete AppStore.data.errors
     AppStore.data.submitting = true
     AppStore.emitChange()
-    const mlsid = this.refs.mlsid.refs.input.value.trim()
+    const mlsid = this.mlsidInput.value.trim()
     AppDispatcher.dispatch({
       action: 'search-agent-settings',
       mlsid
@@ -80,7 +80,7 @@ export default class SideBar extends Component {
     AppStore.emitChange()
     const data = this.props.data
     const user = data.user
-    const secret = this.refs.secret.refs.input.value.trim()
+    const secret = this.secretInput.value.trim()
     const agent = data.settings.agent.id
     AppDispatcher.dispatch({
       action: 'upgrade-account',
@@ -94,10 +94,10 @@ export default class SideBar extends Component {
     delete AppStore.data.error
     const data = this.props.data
     const user = data.user
-    const first_name = this.refs.first_name.refs.input.value.trim()
-    const last_name = this.refs.last_name.refs.input.value.trim()
-    const email = this.refs.email.refs.input.value.trim()
-    const phone_number_input = this.refs.phone_number.refs.input.value.replace(/\D/g, '').trim()
+    const first_name = this.first_nameInput.value.trim()
+    const last_name = this.last_nameInput.value.trim()
+    const email = this.emailInput.value.trim()
+    const phone_number_input = this.phone_numberInput.value.replace(/\D/g, '').trim()
     let country_code = 1
     if (data.phone_country)
       country_code = data.phone_country.dialCode
@@ -131,9 +131,9 @@ export default class SideBar extends Component {
     let old_password
     let new_password
     if (this.refs.old_password)
-      old_password = this.refs.old_password.refs.input.value.trim()
+      old_password = this.old_passwordInput.value.trim()
     if (this.refs.new_password)
-      new_password = this.refs.new_password.refs.input.value.trim()
+      new_password = this.new_passwordInput.value.trim()
     AppStore.data.saving_account_settings = true
     delete AppStore.data.error
     delete AppStore.data.password_changed
@@ -387,15 +387,15 @@ export default class SideBar extends Component {
       <Col xs={ 9 } style={ S('p-0') }>
         <Col xs={ 6 }>
           <label>First name</label>
-          <Input ref="first_name" type="text" defaultValue={ user.first_name }/>
+          <FormControl inputRef={ ref => this.first_nameInput = ref } type="text" defaultValue={ user.first_name }/>
         </Col>
         <Col xs={ 6 } style={ S('p-0') }>
           <label>Last name</label>
-          <Input ref="last_name" type="text" defaultValue={ user.last_name }/>
+          <FormControl inputRef={ ref => this.last_nameInput = ref } type="text" defaultValue={ user.last_name }/>
         </Col>
         <Col xs={ 6 }>
           <label>Email</label>
-          <Input ref="email" type="text" defaultValue={ user.email }/>
+          <FormControl inputRef={ ref => this.emailInput = ref } type="text" defaultValue={ user.email }/>
         </Col>
         <Col xs={ 6 } style={ S('p-0') }>
           <label>Phone number</label>
@@ -403,7 +403,7 @@ export default class SideBar extends Component {
             <div className="input-group-btn input-dropdown--country-codes">
               { country_codes }
             </div>
-            <MaskedInput className="form-control" ref="phone_number" type="text" defaultValue={ user.phone_number ? phone_number_parsed.phone_number : '' } mask="(999)-999-9999" maskChar="_"/>
+            <MaskedInput className="form-control" ref={ ref => this.phone_numberInput = ref } type="text" defaultValue={ user.phone_number ? phone_number_parsed.phone_number : '' } mask="(999)-999-9999" maskChar="_"/>
           </div>
         </Col>
         <div className="clearfix"></div>
@@ -422,12 +422,12 @@ export default class SideBar extends Component {
         <Col xs={ 9 } style={ S('p-0') }>
           <Col xs={ 12 } style={ S('pr-0') }>
             <label>Current password</label>
-            <Input key="old_password" bsSize="large" style={ S('font-15') } ref="old_password" type="password" placeholder="Current password" />
+            <FormControl key="old_password" bsSize="large" style={ S('font-15') } inputRef={ ref => this.old_passwordInput = ref } type="password" placeholder="Current password" />
           </Col>
           <Col xs={ 12 } style={ S('pr-0') }>
             <label>New password</label>
             <div style={ S('relative') }>
-              <Input key="new_password" ref="new_password" autoComplete={ false } style={ S('font-15') } bsSize="large" placeholder="New Password" type={ data.settings && data.settings.show_password ? 'text' : 'password' } />
+              <FormControl key="new_password" inputRef={ ref => this.new_passwordInput = ref } autoComplete={ false } style={ S('font-15') } bsSize="large" placeholder="New Password" type={ data.settings && data.settings.show_password ? 'text' : 'password' } />
               <i onClick={ this.toggleShowPassword } style={ S('absolute t-15 r-15 z-100 pointer color-666') } className={ `fa fa-eye${ data.settings && data.settings.show_password ? '-slash' : '' }` }></i>
             </div>
           </Col>
@@ -462,7 +462,7 @@ export default class SideBar extends Component {
           <Modal.Body>
             <Col xs={ 12 }>
               <label>Enter your agent license # to unlock MLS features.</label>
-              <Input key={'password'} ref="mlsid" type="text" defaultValue=""/>
+              <FormControl key={'password'} inputRef={ ref => this.mlsidInput = ref } type="text" defaultValue=""/>
               { message }
               <div className="clearfix"></div>
             </Col>
@@ -508,7 +508,7 @@ export default class SideBar extends Component {
                 }
               </div>
               <div style={ S('w-100p mb-10') }>
-                <Input type="text" ref="secret" placeholder="Your email or phone #"/>
+                <FormControl type="text" inputRef={ ref => this.secretInput = ref } placeholder="Your email or phone #"/>
                 <div className="clearfix"></div>
                 { message }
               </div>
@@ -601,7 +601,7 @@ export default class SideBar extends Component {
             <OverlayTrigger placement="right" overlay={ popover.people } delayShow={ 200 } delayHide={ 0 }>
               <LinkContainer className={ active.contacts } to="/dashboard/contacts">
                 <NavItem style={ S('w-85p') }>
-                  <img src={ active.contacts ? '/images/dashboard/sidenav/people-active.svg' : '/images/dashboard/sidenav/people.svg' } style={ S('w-19 h-19') }/>
+                  <img src={ active.contacts ? '/static/images/dashboard/sidenav/people-active.svg' : '/static/images/dashboard/sidenav/people.svg' } style={ S('w-19 h-19') }/>
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
@@ -611,7 +611,7 @@ export default class SideBar extends Component {
             <OverlayTrigger placement="right" overlay={ popover.tasks } delayShow={ 200 } delayHide={ 0 }>
               <LinkContainer className={ active.tasks } to="/dashboard/tasks">
                 <NavItem style={ S('w-85p') }>
-                  <img src={ active.tasks ? '/images/dashboard/sidenav/task-active.svg' : '/images/dashboard/sidenav/task.svg' } style={ S('w-19 h-19') }/>
+                  <img src={ active.tasks ? '/static/images/dashboard/sidenav/task-active.svg' : '/static/images/dashboard/sidenav/task.svg' } style={ S('w-19 h-19') }/>
                   {this.notificationIcon('task_notification_count')}
                 </NavItem>
               </LinkContainer>
@@ -619,7 +619,7 @@ export default class SideBar extends Component {
             <OverlayTrigger placement="right" overlay={ popover.transactions } delayShow={ 200 } delayHide={ 0 }>
               <LinkContainer className={ active.transactions } to="/dashboard/transactions" onClick={ this.props.viewAllTransactions }>
                 <NavItem style={ S('w-85p') }>
-                  <img src={ active.transactions ? '/images/dashboard/sidenav/transactions-active.svg' : '/images/dashboard/sidenav/transactions.svg' } style={ S('w-19 h-19') }/>
+                  <img src={ active.transactions ? '/static/images/dashboard/sidenav/transactions-active.svg' : '/static/images/dashboard/sidenav/transactions.svg' } style={ S('w-19 h-19') }/>
                   {this.notificationIcon('transaction_notification_count')}
                 </NavItem>
               </LinkContainer>

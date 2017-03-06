@@ -1,6 +1,6 @@
 // Reset.js
 import React, { Component } from 'react'
-import { Input, Button, Col, Alert } from 'react-bootstrap'
+import { FormControl, Button, Col, Alert } from 'react-bootstrap'
 import S from 'shorti'
 // AppStore
 import AppDispatcher from '../../../dispatcher/AppDispatcher'
@@ -28,7 +28,7 @@ export default class ConfirmAgent extends Component {
       this.confirmAgent()
   }
   searchAgent() {
-    const mlsid = this.refs.mlsid.refs.input.value.trim()
+    const mlsid = this.mlsidInput.value.trim()
     AppDispatcher.dispatch({
       action: 'search-agent-signup',
       mlsid
@@ -37,7 +37,7 @@ export default class ConfirmAgent extends Component {
   confirmAgent() {
     const data = this.props.data
     const user = data.user
-    const secret = this.refs.secret.refs.input.value.trim()
+    const secret = this.secretInput.value.trim()
     const agent = data.signup.agent.id
     AppDispatcher.dispatch({
       action: 'upgrade-account',
@@ -105,7 +105,7 @@ export default class ConfirmAgent extends Component {
     let main_content = (
       <div>
         <Col sm={ 6 } className={ data.is_mobile ? 'hidden' : '' }>
-          <img style={ S('w-100p maxw-300') } src="/images/signup/ntreis-logo.png" />
+          <img style={ S('w-100p maxw-300') } src="/static/images/signup/ntreis-logo.png" />
         </Col>
         <Col sm={ 6 }>
           { brand_title }
@@ -113,11 +113,11 @@ export default class ConfirmAgent extends Component {
           <div style={ S('mb-20 color-9b9b9b') }>Enter your agent license # to unlock MLS features.</div>
           <form onSubmit={ this.handleSubmit.bind(this, 'search-agent') }>
             <div style={ S('w-100p mb-10') }>
-              <Input onChange={ this.handleAgentNumberChange.bind(this) } bsSize="large" type="text" ref="mlsid" placeholder="Your agent number"/>
+              <FormControl onChange={ this.handleAgentNumberChange.bind(this) } bsSize="large" type="text" inputRef={ ref => this.mlsidInput = ref } placeholder="Your agent number"/>
               <div className="clearfix"></div>
             </div>
             { message }
-            <Button bsSize="large" type="submit" ref="submit" className={ disabled_class + ' btn btn-primary' } disabled={ is_disabled } style={ S('w-100p') }>
+            <Button bsSize="large" type="submit"  className={ disabled_class + ' btn btn-primary' } disabled={ is_disabled } style={ S('w-100p') }>
               { submitting ? 'Submitting...' : 'Continue to Final Step' }
             </Button>
             <div style={ S('text-center mt-20') }>
@@ -156,7 +156,7 @@ export default class ConfirmAgent extends Component {
       main_content = (
         <div>
           <Col sm={ 6 } className={ data.is_mobile ? 'hidden' : '' }>
-            <img style={ S('w-100p maxw-300') } src="/images/signup/agent-face.png" />
+            <img style={ S('w-100p maxw-300') } src="/static/images/signup/agent-face.png" />
           </Col>
           <Col sm={ 6 }>
             { brand_title }
@@ -174,11 +174,11 @@ export default class ConfirmAgent extends Component {
             <form onSubmit={ this.handleSubmit.bind(this, 'confirm-agent') }>
               <div style={ S('w-100p mb-10') }>
                 <div style={ S('mb-10 color-9b9b9b') }>Confirm this is you by entering your email or phone number # below</div>
-                <Input onChange={ this.handleAgentSecretChange.bind(this) } bsSize="large" type="text" ref="secret" placeholder="Your email or phone #"/>
+                <FormControl onChange={ this.handleAgentSecretChange.bind(this) } bsSize="large" type="text" inputRef={ ref => this.secretInput = ref } placeholder="Your email or phone #"/>
                 <div className="clearfix"></div>
                 { message }
               </div>
-              <Button bsSize="large" type="submit" ref="submit" className={ disabled_class + ' btn btn-primary' } disabled={ is_disabled } style={ S('w-100p') }>
+              <Button bsSize="large" type="submit"  className={ disabled_class + ' btn btn-primary' } disabled={ is_disabled } style={ S('w-100p') }>
                 { submitting ? 'Submitting...' : 'Confirm I\'m an agent' }
               </Button>
               <div style={ S('text-center mt-20') }>

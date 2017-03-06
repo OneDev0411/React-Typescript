@@ -1,12 +1,13 @@
 // Landing.js
 import React, { Component } from 'react'
-import { Col, Input, Button, OverlayTrigger, Popover } from 'react-bootstrap'
+import { Col, FormControl, Button, OverlayTrigger, Popover } from 'react-bootstrap'
 import S from 'shorti'
 import validator from 'validator'
 import { randomString } from '../../utils/helpers'
+
 import emojify from 'emojify.js'
 emojify.setConfig({
-  img_dir: '/images/emoji'
+  img_dir: '/static/images/emoji'
 })
 import AppDispatcher from '../../dispatcher/AppDispatcher'
 import AppStore from '../../stores/AppStore'
@@ -178,9 +179,9 @@ export default class Landing extends Component {
     )
     const video = (
       <video style={ S('z-0 absolute') } autoPlay="true" loop="true" className="fullscreen-bg__video">
-        <source src={'/videos/landing/' + video_src + '.webm'} type="video/webm"/>
-        <source src={'/videos/landing/' + video_src + '.mp4'} type="video/mp4"/>
-        <source src={'/videos/landing/' + video_src + '.ogv'} type="video/ogg"/>
+        <source src={'/static/videos/landing/' + video_src + '.webm'} type="video/webm"/>
+        <source src={'/static/videos/landing/' + video_src + '.mp4'} type="video/mp4"/>
+        <source src={'/static/videos/landing/' + video_src + '.ogv'} type="video/ogg"/>
       </video>
     )
     let login_btn_li_style
@@ -257,7 +258,7 @@ export default class Landing extends Component {
                       <form onSubmit={ this.handleEmailSubmit.bind(this) }>
                         <div style={ S('pull-left') }>
                           <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
-                            <Input ref="email" onChange={ this.setSignupEmail } style={ signup_input_style } type="text" placeholder="Enter email address" value={ data.signup_email } />
+                            <FormControl inputRef={ ref => this.emailInput = ref } onChange={ this.setSignupEmail } style={ signup_input_style } type="text" placeholder="Enter email address" value={ data.signup_email } />
                           </OverlayTrigger>
                         </div>
                         <div style={ S('pull-left') }>
@@ -283,7 +284,7 @@ export default class Landing extends Component {
         <footer className="footer" style={ footer_style }>
           <div className="container">
             <Col className="footer-text footer-text--left" sm={6}>
-              Made with <img src="/images/landing/heart.png" /> by Rechat | <a onClick={ this.showIntercom } href="#">Contact Us</a>
+              Made with <img src="/static/images/landing/heart.png" /> by Rechat | <a onClick={ this.showIntercom } href="#">Contact Us</a>
             </Col>
             <Col className="footer-text footer-text--right" sm={6}>
               Rechat Inc. &copy; { new Date().getFullYear() }. All Rights Reserved. <a href="/terms">Terms of Service</a> | <a href="/terms/mls">MLS Terms</a> | <a href="/privacy">Privacy Policy</a>

@@ -1,9 +1,10 @@
 // Recents/Index.js
 import React, { Component } from 'react'
+import { browserHistory } from 'react-router'
 import S from 'shorti'
 import _ from 'lodash'
 import validator from 'validator'
-import { Modal, Input, Button, Alert } from 'react-bootstrap'
+import { Modal, FormControl, Button, Alert } from 'react-bootstrap'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import controller from '../controller'
@@ -68,7 +69,7 @@ export default class Dashboard extends Component {
     window.addEventListener('resize', this.handleResize)
     const data = this.props.data
     if (data.play_sound) {
-      this.refs.notif_sound.play()
+      this.notif_sound.play()
       delete AppStore.data.play_sound
       AppStore.emitChange()
     }
@@ -111,7 +112,7 @@ export default class Dashboard extends Component {
       AppStore.data.current_room_mobile = current_room
     delete AppStore.data.show_room_users_modal
     AppStore.emitChange()
-    history.pushState(null, null, '/dashboard/recents/' + current_room.id)
+    browserHistory.push('/dashboard/recents/' + current_room.id)
   }
 
   removeScrollBottom() {
@@ -395,7 +396,7 @@ export default class Dashboard extends Component {
     AppStore.data.show_listing_viewer = true
     AppStore.data.current_listing = listing
     delete AppStore.data.show_alert_modal
-    history.pushState(null, null, '/dashboard/mls/' + listing.id)
+    browserHistory.push('/dashboard/mls/' + listing.id)
     AppStore.emitChange()
   }
 
@@ -403,7 +404,7 @@ export default class Dashboard extends Component {
     const data = AppStore.data
     const current_room = data.current_room
     delete AppStore.data.show_listing_viewer
-    history.pushState(null, null, '/dashboard/recents/' + current_room.id)
+    browserHistory.push('/dashboard/recents/' + current_room.id)
     AppStore.emitChange()
   }
 
@@ -489,7 +490,7 @@ export default class Dashboard extends Component {
           })
           controller.add_members.addUsersToSearchInput(data.add_members.items_selected)
         }
-        this.refs.myselect.refs.input.blur()
+        this.myselect.refs.input.blur()
       }
     }
   }
@@ -673,14 +674,14 @@ export default class Dashboard extends Component {
         <div style={ S('absolute h-100p w-100p') }>
           <div style={ S('h-220 w-360 relative center-block t-30p br-5 text-center') }>
             <div className="empty-state" style={ S('w-360 h-220 mb-25 relative br-5 p-25 border-1-solid-e2e2e2') }>
-              <img src="/images/empty-states/chats.jpg" />
+              <img src="/static/images/empty-states/chats.jpg" />
             </div>
             <div style={ S('mb-25') }>
               <div style={ S('color-929292 font-18') }>Start a Conversation</div>
               <div style={ S('color-bebebe font-14') }>Conversations are awesome. Start one now.</div>
             </div>
             <Button onClick={ controller.recents.showNewMessageView } style={ S('w-200 p-20 color-929292') } bsStyle="default">
-              <img style={ S('h-18 relative t-1n l-2') } src="/images/dashboard/chats/add-chat.svg"/>&nbsp;&nbsp;&nbsp;Create Chat
+              <img style={ S('h-18 relative t-1n l-2') } src="/static/images/dashboard/chats/add-chat.svg"/>&nbsp;&nbsp;&nbsp;Create Chat
             </Button>
           </div>
         </div>
@@ -714,8 +715,8 @@ export default class Dashboard extends Component {
           { nav_area }
           { main_content }
         </main>
-        <audio ref="notif_sound" id="notif-sound">
-          <source src="/audio/ding.mp3" type="audio/mpeg" />
+        <audio ref={ ref => this.notif_sound = ref } id="notif-sound">
+          <source src="/static/audio/ding.mp3" type="audio/mpeg" />
         </audio>
         { file_viewer }
         <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_create_chat_modal } onHide={ this.hideModal.bind(this) } onShow={ this.onModalShow.bind(this) }>
@@ -724,7 +725,7 @@ export default class Dashboard extends Component {
               <Modal.Title>Start a new chat</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <Input type="text" ref="title" placeholder="Chat room title"/>
+              <FormControl type="text" inputRef={ ref => this.titleInput = ref } placeholder="Chat room title"/>
             </Modal.Body>
             <Modal.Footer>
               <Button bsStyle="link" onClick={ this.hideModal.bind(this) }>Cancel</Button>
@@ -740,7 +741,7 @@ export default class Dashboard extends Component {
             <div className="create-item__user-select">
               <SelectContainer inputChange={ this.inputChange.bind(this) }>
                 <Select
-                  ref="myselect"
+                  ref={ ref => this.myselect = ref }
                   autofocus
                   autosize
                   name="users"

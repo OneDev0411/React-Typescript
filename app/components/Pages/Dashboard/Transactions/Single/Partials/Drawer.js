@@ -152,7 +152,7 @@ export default class Drawer extends Component {
                 onDrop={ this.props.drawerDrop.bind(this) }
               >
                 <div style={ S('mb-10') }>
-                  <img src="/images/dashboard/transactions/drag-n-drop.png"/>
+                  <img src="/static/images/dashboard/transactions/drag-n-drop.png"/>
                 </div>
                 <div style={ S('color-929292') }>
                   <span style={ S('font-16') }>DRAG & DROP</span><br />

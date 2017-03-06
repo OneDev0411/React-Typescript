@@ -1,12 +1,12 @@
 // App.js
 import React, { Component } from 'react'
 import _ from 'lodash'
-import config from '../../config/public'
 import io from 'socket.io-client'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import AppStore from '../stores/AppStore'
 import Brand from '../controllers/Brand'
 import ReactGA from 'react-ga'
+import config from '../../config/public'
 
 export default class App extends Component {
   componentWillMount() {
@@ -111,7 +111,7 @@ export default class App extends Component {
     const branch = require('branch-sdk')
     branch.init(config.branch.key)
     branch.banner({
-      icon: '/images/logo-big.png',
+      icon: '/static/images/logo-big.png',
       title: 'Download the Rechat iOS app',
       description: 'For a better mobile experience',
       showDesktop: false,
@@ -345,7 +345,7 @@ export default class App extends Component {
   }
 
   sendNotification(message) {
-    const profile_image_url = config.app.url + '/images/dashboard/rebot@2x.png'
+    const profile_image_url = config.app.url + '/static/images/dashboard/rebot@2x.png'
     let first_name = 'Rebot'
     if (message.author)
       first_name = message.author.first_name
@@ -358,7 +358,7 @@ export default class App extends Component {
       title, {
         body: comment,
         icon: profile_image_url,
-        sound: '/audio/ding.mp3'
+        sound: '/static/audio/ding.mp3'
       }
     )
     instance.onclick = () => {
