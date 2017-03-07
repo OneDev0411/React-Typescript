@@ -15,9 +15,12 @@ const config = {
     jsBundle: __DEV__ ? 'app.js' : 'app.[hash].js',
     jsVendorBundle: 'core.[hash].js',
     cssBundle: 'app.[hash].css',
-    template: path.resolve(__dirname, '../../src/templates/production.html'),
+    template: path.resolve(__dirname, '../../app/templates/production.html'),
     vendors: [
-      'react'
+      'react',
+      'react-bootstrap',
+      'lodash',
+      'moment'
     ]
   },
   globals: {
@@ -33,7 +36,8 @@ const config = {
       'BRANCH_KEY': JSON.stringify(process.env.BRANCH_KEY),
       'APP_SHARE_URL': JSON.stringify(process.env.APP_SHARE_URL),
       'GOOGLE_API_KEY': JSON.stringify(process.env.GOOGLE_API_KEY),
-      'ITUNES_URL': JSON.stringify(process.env.ITUNES_URL)
+      'ITUNES_URL': JSON.stringify(process.env.ITUNES_URL),
+      'RECHAT_FORMS_URL': JSON.stringify(process.env.RECHAT_FORMS_URL)
     },
     __DEV__: __DEV__,
     NODE_ENV: env,
