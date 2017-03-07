@@ -12,13 +12,6 @@ function matcher(location) {
   })
 }
 
-function fetch(renderProps, store) {
-  return renderProps.components.map((c) => {
-    if (c && c.fetchData) { return c.fetchData(store.dispatch, renderProps.params) }
-    return Promise.reslove
-  })
-}
-
 export default async function (ctx) {
   const { error, redirectLocation, renderProps } = await matcher(ctx.request.url)
 
@@ -31,16 +24,9 @@ export default async function (ctx) {
   }
   else if (renderProps) {
 
-    try {
-      await Promise.all(fetch(renderProps, store))
-    } catch (e) {
-      /* do nothing */
-    }
-
-    if (process.env.NODE_ENV === 'production') {
+    if (['production', 'staging'].indexOf(process.env.NODE_ENV) > -1) {
       await ctx.render('app', {
-        title: 'App',
-        store: xss(JSON.stringify(store.getState())),
+        title: 'Rechat',
         body: renderToString(
           <RouterContext
             data={AppStore.data}
