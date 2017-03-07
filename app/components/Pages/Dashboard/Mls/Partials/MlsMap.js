@@ -26,7 +26,6 @@ export default class MlsMap extends Component {
             onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }
             lat={ listing.location.latitude }
             lng={ listing.location.longitude }
-            text={'A'}
           >
             <ListingMarker
               key={ 'listing-marker-' + listing.id }
@@ -103,7 +102,7 @@ export default class MlsMap extends Component {
       lat: 32.7767,
       lng: -96.7970
     }
-    const default_zoom = 13
+    const default_zoom = 10
     const bootstrap_url_keys = {
       key: config.google.api_key,
       libraries: ['drawing', 'places'].join(',')
@@ -114,14 +113,15 @@ export default class MlsMap extends Component {
     // Pinpoint
     if (map_listing_markers && listing_map.has_location_search) {
       const pinpoint = (
-        <div
+        <ListingMapMarker
           key="center-marker"
           style={ S('pointer mt-10') }
           lat={ listing_map.location_search.center.lat }
           lng={ listing_map.location_search.center.lng }
           text={'Hello!'}
-        ><img style={ S('h-30') } src="/static/images/dashboard/mls/map-pin.svg"/>
-        </div>
+        >
+          <img style={ S('h-30') } src="/static/images/dashboard/mls/map-pin.svg"/>
+        </ListingMapMarker>
       )
       map_listing_markers.push(pinpoint)
     }
