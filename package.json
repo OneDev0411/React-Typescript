@@ -9,7 +9,7 @@
     "develop": "NODE_ENV=development nodemon ./bin/server --ignore ./app --exec babel-node",
     "build": "rimraf dist && NODE_ENV=production webpack -p --progress --colors --config ./webpack.config.babel.js",
     "serve": "NODE_ENV=production babel-node ./bin/server",
-    "stage":"NODE_ENV=staging babel-node ./bin/server",
+    "stage": "NODE_ENV=staging babel-node ./bin/server",
     "lint": "npm run lint:app && npm run lint:server",
     "lint:app": "eslint ./app",
     "lint:server": "eslint ./server"
