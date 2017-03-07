@@ -1,6 +1,6 @@
 // Search.js
 import React, { Component } from 'react'
-import { Input } from 'react-bootstrap'
+import { FormControl } from 'react-bootstrap'
 import S from 'shorti'
 import listing_util from '../../../../utils/listing'
 import config from '../../../../../config/public'

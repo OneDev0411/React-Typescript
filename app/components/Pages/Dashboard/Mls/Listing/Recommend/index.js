@@ -1,6 +1,6 @@
 // Dashboard/Mls/Listing/Recommend.js
 import React, { Component } from 'react'
-import { Input } from 'react-bootstrap'
+import { FormControl } from 'react-bootstrap'
 import S from 'shorti'
 
 // Partials

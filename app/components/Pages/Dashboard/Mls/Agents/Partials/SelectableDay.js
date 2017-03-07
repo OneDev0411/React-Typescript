@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment'
-import { Input } from 'react-bootstrap'
+import { FormControl } from 'react-bootstrap'
 import DayPicker, { DateUtils } from 'react-day-picker'
 
 export default class InputField extends React.Component {

@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import S from 'shorti'
 import moment from 'moment'
-import { Input } from 'react-bootstrap'
+import { FormControl } from 'react-bootstrap'
 
 // AppDispatcher
 import AppDispatcher from '../../../../../../dispatcher/AppDispatcher'

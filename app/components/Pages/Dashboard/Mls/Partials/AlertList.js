@@ -1,6 +1,6 @@
 // Partials/AlertList.js
 import React, { Component } from 'react'
-// import { Input } from 'react-bootstrap'
+// import { FormControl } from 'react-bootstrap'
 import S from 'shorti'
 import controller from '../../controller'
 import Loading from '../../../../Partials/Loading'
