@@ -17,7 +17,7 @@ import AppStore from '../../../../stores/AppStore'
 import ProfileImage from './ProfileImage'
 import SvgChat from './Svgs/Chat'
 import SvgMap from './Svgs/Map'
-// import SvgStore from './Svgs/Store'
+import SvgStore from './Svgs/Store'
 import Brand from '../../../../controllers/Brand'
 
 export default class SideBar extends Component {
@@ -628,14 +628,13 @@ export default class SideBar extends Component {
           }
           { recommend }
           { agents }
-          {
-            // STORE SET LIVE
-            // data.user && data.user.agent &&
-            // <OverlayTrigger placement="right" overlay={ popover.store } delayShow={ 200 } delayHide={ 0 }>
-            //   <NavItem style={ S('w-85p') } onClick={ this.goToStore.bind(this) }>
-            //     <SvgStore color={ active.store ? nav_active_color : '#4e5c6c' }/>
-            //   </NavItem>
-            // </OverlayTrigger>
+
+          { data.user && data.user.agent &&
+            <OverlayTrigger placement="right" overlay={ popover.store } delayShow={ 200 } delayHide={ 0 }>
+              <NavItem style={ S('w-85p') } onClick={ this.goToStore.bind(this) }>
+                <SvgStore color={ active.store ? nav_active_color : '#4e5c6c' }/>
+              </NavItem>
+            </OverlayTrigger>
           }
         </Nav>
         <div style={ S('absolute b-10 l-15') }>
