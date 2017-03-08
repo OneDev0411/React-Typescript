@@ -25,15 +25,16 @@ export default async function (ctx) {
   else if (renderProps) {
 
     if (['production', 'staging'].indexOf(process.env.NODE_ENV) > -1) {
-      await ctx.render('app', {
-        title: 'Rechat',
-        body: renderToString(
-          <RouterContext
-            data={AppStore.data}
-            {...renderProps}
-          />
-        )
-      })
+      if (/\/dashboard\/mls\/(\w+)/.test(ctx.request.url)) {
+        await ctx.render('app', {
+          title: 'Rechat',
+          body: renderToString( <RouterContext data={AppStore.data} {...renderProps} /> )
+        })
+      }
+      else {
+        await ctx.render('app')
+      }
+
     } else {
       await ctx.render('development', {
         title: '_DEV_',
