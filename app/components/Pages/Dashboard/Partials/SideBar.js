@@ -17,7 +17,7 @@ import AppStore from '../../../../stores/AppStore'
 import ProfileImage from './ProfileImage'
 import SvgChat from './Svgs/Chat'
 import SvgMap from './Svgs/Map'
-// import SvgStore from './Svgs/Store'
+import SvgStore from './Svgs/Store'
 import Brand from '../../../../controllers/Brand'
 
 export default class SideBar extends Component {
@@ -276,7 +276,7 @@ export default class SideBar extends Component {
     let sidebar_height = 0
     if (typeof window !== 'undefined')
       sidebar_height = window.innerHeight
-    const sidebar_style = S('w-70 fixed pl-8 t-0 z-100 bg-202A33 h-' + sidebar_height)
+    const sidebar_style = S('w-70 fixed pl-8 t-0 z-100 bg-263445 h-' + sidebar_height)
     const path = data.path
 
     const active = {}
@@ -444,7 +444,6 @@ export default class SideBar extends Component {
       map: <Popover className="sidenav__popover" id="popover-listing">Listings</Popover>,
       people: <Popover className="sidenav__popover" id="popover-people">People</Popover>,
       tasks: <Popover className="sidenav__popover" id="popover-tasks">Tasks</Popover>,
-      concierge: <Popover className="sidenav__popover" id="popover-tasks">Concierge</Popover>,
       transactions: <Popover className="sidenav__popover" id="popover-transactions">Transactions</Popover>,
       support: <Popover className="sidenav__popover" id="popover-transactions">Need Help?</Popover>,
       store: <Popover className="sidenav__popover" id="popover-transactions">Store</Popover>
@@ -561,6 +560,8 @@ export default class SideBar extends Component {
       )
     }
     const payments_link = <li><Link to="/dashboard/cards"><i className="fa fa-money" style={ S('mr-15') }></i>Payment Info</Link></li>
+    const website_link = <li><Link to="/dashboard/website"><i className="fa fa-globe" style={ S('mr-15') }></i>Website</Link></li>
+
     let form_link = ''
 
     if (user.user_type === 'Admin')
@@ -585,18 +586,6 @@ export default class SideBar extends Component {
               </NavItem>
             </LinkContainer>
           </OverlayTrigger>
-
-          {
-            user.features && user.features.indexOf('Concierge') > -1 &&
-            <OverlayTrigger placement="right" overlay={ popover.concierge } delayShow={ 200 } delayHide={ 0 }>
-              <LinkContainer onClick={ this.hideListingViewer.bind(this) } className={ active.concierge } to="/dashboard/concierge/deals">
-                <NavItem style={ S('w-85p') }>
-                  <img src={ active.concierge ? '/images/dashboard/sidenav/deals.svg' : '/images/dashboard/sidenav/deals.svg' } style={ S('w-19 h-19') }/>
-                </NavItem>
-              </LinkContainer>
-            </OverlayTrigger>
-          }
-
           { /*
             <OverlayTrigger placement="right" overlay={ popover.people } delayShow={ 200 } delayHide={ 0 }>
               <LinkContainer className={ active.contacts } to="/dashboard/contacts">
@@ -628,21 +617,19 @@ export default class SideBar extends Component {
           }
           { recommend }
           { agents }
-          {
-            // STORE SET LIVE
-            // data.user && data.user.agent &&
-            // <OverlayTrigger placement="right" overlay={ popover.store } delayShow={ 200 } delayHide={ 0 }>
-            //   <NavItem style={ S('w-85p') } onClick={ this.goToStore.bind(this) }>
-            //     <SvgStore color={ active.store ? nav_active_color : '#4e5c6c' }/>
-            //   </NavItem>
-            // </OverlayTrigger>
+          { data.user && data.user.agent &&
+            <OverlayTrigger placement="right" overlay={ popover.store } delayShow={ 200 } delayHide={ 0 }>
+              <NavItem style={ S('w-85p') } onClick={ this.goToStore.bind(this) }>
+                <SvgStore color={ active.store ? nav_active_color : '#4e5c6c' }/>
+              </NavItem>
+            </OverlayTrigger>
           }
         </Nav>
         <div style={ S('absolute b-10 l-15') }>
           <Nav className="sidebar__account">
             <OverlayTrigger placement="right" overlay={ popover.support } delayShow={ 200 } delayHide={ 0 }>
               <div style={ S('pointer relative t-15n') } onClick={ this.showIntercom }>
-                <i className="fa fa-question" style={ S('font-20 color-202A33 relative t-5n l-13 z-100') }></i>
+                <i className="fa fa-question" style={ S('font-20 color-263445 relative t-5n l-13 z-100') }></i>
                 <i className="fa fa-comment" style={ S('font-35 relative l-10n color-4D5C6C') }></i>
               </div>
             </OverlayTrigger>
@@ -652,6 +639,7 @@ export default class SideBar extends Component {
             <NavDropdown style={ S('z-1000') } title={ title_area } dropup id="account-dropdown" className="account-dropdown" eventKey={3} noCaret>
               { upgrade_account_button }
               <li><a href="#" style={ S('pointer') } onClick={ this.showSettingsModal }><i className="fa fa-cog" style={ S('mr-15') }></i>Settings</a></li>
+              { website_link }
               { payments_link }
               { form_link }
               <li role="separator" className="divider"></li>
