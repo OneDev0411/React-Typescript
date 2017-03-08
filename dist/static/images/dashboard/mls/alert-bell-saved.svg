@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="73px" height="68px" viewBox="0 0 73 68" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 3.8.3 (29802) - http://www.bohemiancoding.com/sketch -->
+    <title>6E5FD66B-06E9-4122-8992-72A7F88F9053</title>
+    <desc>Created with sketchtool.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fillRule="evenodd">
+        <g id="Confirmation" transform="translate(-801.000000, -393.000000)" fill="#FFFFFF">
+            <g id="Alert-Bell-Saved" transform="translate(801.000000, 393.000000)">
+                <path d="M54,0 C42.748,0 34,8.748 34,20 C34,30.252 42.748,39 54,39 C64.252,39 73,30.252 73,20 C73,8.748 64.252,0 54,0 Z M61,11 L50,22 L47,19 L44,22 L50,28 L64,14 L61,11 Z" id="Combined-Shape"></path>
+                <g id="Group" transform="translate(0.000000, 9.000000)">
+                    <path d="M35,52 C34.3852476,51.2304 33.9343804,51 33,51 L22,51 C21.0630479,51 20.6121807,51.2304 20,52 C20.0285239,52.0112 19.9297037,52.5232 20,53 C20.9271702,56.5328 23.9905967,59 27,59 C31.0037436,59 34.0671701,56.5328 35,53 C35.0708129,52.5232 34.9689045,52.0112 35,52 L35,52 Z" id="Shape"></path>
+                    <path d="M53,45 C50.019,45 48,42.981 48,41 L48,33 C37.743,30.456 30,21.366 30,11 C30,7.293 30.687,4.242 32,1 C30.489,0.552 28.812,0 27,0 C22.374,0 18.555,3.507 18,8 C10.701,11.457 6,18.813 6,27 L6,41 C6,42.981 3.981,45 2,45 C0.672,45 0,45.672 0,47 C0,47.328 0.672,48 2,48 L53,48 C53.328,48 54,47.328 54,47 C54,45.672 53.328,45 53,45 L53,45 Z" id="Shape"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
