@@ -108,16 +108,17 @@ describe('Testing User model', () => {
   // })
 
   // // Get contacts
-  // it('User.getContacts should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
-  //   const params = {
-  //     access_token,
-  //     api_host: test.api_host
-  //   }
-  //   User.getContacts(params, (err, response) => {
-  //     expect(response.status).to.equal('success')
-  //     done()
-  //   })
-  // })
+  it('User.getContacts should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
+    const params = {
+      access_token,
+      api_host: test.api_host
+    }
+    User.getContacts(params, (err, response) => {
+      console.log(response)
+      expect(response.status).to.equal('success')
+      done()
+    })
+  })
 
   // Get favorites
   // it('User.getFavorites should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
@@ -132,17 +133,17 @@ describe('Testing User model', () => {
   //   })
   // })
   // Get all
-  it('User.search should users', function(done) {
-    const params = {
-      access_token: access_token,
-      q: 'Tony'
-    }
-    User.search(params, (err, response) => {
-      console.log(response)
-      expect(response.status).to.equal('success')
-      done()
-    })
-  })
+  // it('User.search should users', function(done) {
+  //   const params = {
+  //     access_token: access_token,
+  //     q: 'Tony'
+  //   }
+  //   User.search(params, (err, response) => {
+  //     // console.log(response)
+  //     expect(response.status).to.equal('success')
+  //     done()
+  //   })
+  // })
 })
 
 function randomString(len, charSet) {

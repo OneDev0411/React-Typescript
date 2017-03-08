@@ -525,16 +525,16 @@ export default class Dashboard extends Component {
   handleOptionRenderer(item) {
     const data = this.props.data
     let profile_image
-    if (item.type === 'user') {
+    if (item.type === 'room') {
+      // Room
+      profile_image = (
+        <ProfileImageMultiple users={ item.value.users }/>
+      )
+    } else {
       // Contact
       const user = item.value
       profile_image = (
         <ProfileImage data={ data } user={ user }/>
-      )
-    } else {
-      // Room
-      profile_image = (
-        <ProfileImageMultiple users={ item.value.users }/>
       )
     }
     return (

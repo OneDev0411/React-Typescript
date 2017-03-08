@@ -62,7 +62,7 @@ export default class ListingViewer extends Component {
     const listing = this.props.listing
     const user = data.user
     let brand_agent
-    if (data.brand) {
+    if (data.brand && data.brand.users) {
       brand_agent = data.brand.users[0]
       // Check if listing agent is agent
       if (listing.list_agent && listing.list_agent.user_id && _.find(data.brand.users, { id: listing.list_agent.user_id }))
@@ -676,14 +676,14 @@ export default class ListingViewer extends Component {
       const host = 'https://' + window.location.host
       brand_logo = (
         <a href={ host }>
-          <img style={ S('w-200') } src={ Brand.asset('site_logo_wide') } />
+          <img style={ S('maxw-200 maxh-35') } src={ Brand.asset('site_logo_wide') } />
         </a>
       )
     }
     if (!user) {
       join_area = (
         <div style={ S('h-70') }>
-          <div style={ S('pull-left p-16') }>
+          <div style={ S('pull-left p-16 h-35') }>
             { brand_logo }
           </div>
           <div style={ S('pull-right p-16') }>

@@ -1,21 +1,20 @@
-// api/gets/contacts.js
 module.exports = (app, config) => {
-  app.get('/api/contacts',(req, res) => {
+  app.get('/api/deals/envelopes',(req, res) => {
     const api_url = config.api.url
-    const endpoint = api_url + '/contacts'
+    const deal_id = req.query.deal_id
     const access_token = req.query.access_token
+    const endpoint = api_url + '/deals/' + deal_id + '/envelopes'
+
     fetch(endpoint,{
       method: 'get',
-      headers: {  
+      headers: {
         'Content-Type': 'application/json',
         'authorization': 'Bearer ' + access_token,
-        'x-real-agent' : req.headers['user-agent'],
-        'user-agent' : config.app_name
       }
     })
     .then(response => {
       if (response.status >= 400) {
-        let error = {
+        var error = {
           status: 'error',
           response
         }
@@ -27,6 +26,6 @@ module.exports = (app, config) => {
       let response_object = response
       response_object.status = 'success'
       return res.json(response_object)
-    })
+    });
   })
 }

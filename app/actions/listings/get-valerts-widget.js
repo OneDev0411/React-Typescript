@@ -13,8 +13,10 @@ export default (user, options) => {
     params.access_token = user.access_token
   if (AppStore.data.brand) {
     const brokerage = getParameterByName('brokerage')
-    params.office = brokerage
-    params.options.list_offices = [brokerage]
+    if (brokerage) {
+      params.office = brokerage
+      params.options.list_offices = [brokerage]
+    }
     // delete params.options.list_offices
   }
   async.series([
