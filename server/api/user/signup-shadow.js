@@ -25,7 +25,7 @@ router.post('/signup-shadow', async (ctx, next) => {
     grant_type: 'password',
     is_shadow: true
   }
-
+  console.log(request_object)
   if (user_connect) {
     request_object.user_connect = user_connect
   }
@@ -44,9 +44,8 @@ router.post('/signup-shadow', async (ctx, next) => {
 
   try {
     const response = await ctx.fetch('/users', 'POST')
-    .set({ 'x-rechat-brand': req.body.brand })
+    .set({ 'x-rechat-brand': req.body.brand ? req.body.brand : '' })
     .send(request_object)
-
     ctx.body = response.body
 
   }

@@ -42,7 +42,7 @@ router.post('/signup', async (ctx, next) => {
 
   try {
     const response = await ctx.fetch('/users', 'POST')
-    .set({ 'x-rechat-brand': req.body.brand })
+    .set({ 'x-rechat-brand': req.body.brand ? req.body.brand : '' })
     .send(request_object)
 
     ctx.body = response.body
