@@ -31,7 +31,7 @@ router.post('/listings/valerts', async (ctx, next) => {
   }
 
   try {
-    const response = await ctx.fetch(endpoint, 'POST')
+    const response = await ctx.fetch(endpoint, 'POST').send(options)
     ctx.body = response.body
   }
   catch(e) {}
