@@ -8,7 +8,7 @@ export default (hostname) => {
     user: AppStore.data.user
   }
   Brand.getByHostname(params, (err, res) => {
-    if (res.status === 'success') {
+    if (res && res.status === 'success') {
       AppStore.data.brand = res.data
       // Auto move for the map when user loads map from search query
       if (AppStore.data.listing_map && !AppStore.data.listing_map.auto_move) {

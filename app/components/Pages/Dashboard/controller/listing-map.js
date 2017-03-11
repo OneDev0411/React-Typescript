@@ -27,7 +27,7 @@ const controller = {
       listing_statuses: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract'],
       minimum_lot_square_meters: 0,
       currency: 'USD',
-      maximum_year_built: 2016,
+      maximum_year_built: new Date().getFullYear(),
       minimum_year_built: 0,
       points: [{
         latitude: 32.83938955111425,
