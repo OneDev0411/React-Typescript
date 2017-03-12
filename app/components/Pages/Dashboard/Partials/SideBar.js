@@ -273,6 +273,11 @@ export default class SideBar extends Component {
   render() {
     // Data
     const data = this.props.data
+
+    if (!data.user) {
+      return false
+    }
+
     let sidebar_height = 0
     if (typeof window !== 'undefined')
       sidebar_height = window.innerHeight
@@ -445,6 +450,7 @@ export default class SideBar extends Component {
       people: <Popover className="sidenav__popover" id="popover-people">People</Popover>,
       tasks: <Popover className="sidenav__popover" id="popover-tasks">Tasks</Popover>,
       concierge: <Popover className="sidenav__popover" id="popover-tasks">Concierge</Popover>,
+      deals: <Popover className="sidenav__popover" id="popover-tasks">Deals</Popover>,
       transactions: <Popover className="sidenav__popover" id="popover-transactions">Transactions</Popover>,
       support: <Popover className="sidenav__popover" id="popover-transactions">Need Help?</Popover>,
       store: <Popover className="sidenav__popover" id="popover-transactions">Store</Popover>
@@ -592,6 +598,17 @@ export default class SideBar extends Component {
               <LinkContainer onClick={ this.hideListingViewer.bind(this) } className={ active.concierge } to="/dashboard/concierge/deals">
                 <NavItem style={ S('w-85p') }>
                   <img src={ active.concierge ? '/images/dashboard/sidenav/deals.svg' : '/images/dashboard/sidenav/deals.svg' } style={ S('w-19 h-19') }/>
+                </NavItem>
+              </LinkContainer>
+            </OverlayTrigger>
+          }
+
+          {
+            user.features && user.features.indexOf('Deals') > -1 &&
+            <OverlayTrigger placement="right" overlay={ popover.deals } delayShow={ 200 } delayHide={ 0 }>
+              <LinkContainer onClick={ this.hideListingViewer.bind(this) } className={ active.deals } to="/dashboard/deals">
+                <NavItem style={ S('w-85p') }>
+                  <img src={ active.deals ? '/images/dashboard/sidenav/deals.svg' : '/images/dashboard/sidenav/deals.svg' } style={ S('w-19 h-19') }/>
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
