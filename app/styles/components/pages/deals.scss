@@ -1,0 +1,228 @@
+.deals {
+
+  .dashboard {
+
+    .hr {
+      width: 96%;
+      height: 1px;
+      background-color: #f0f0f0;
+      margin: 3% 0 4% 0;
+    }
+
+    .header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      padding: 1.7% 4%;
+      background: #fff;
+    }
+
+    .content {
+      margin-top: 5%;
+
+      .sidebar {
+        margin: 1%;
+        border-radius: 4px;
+        background-color: #ffffff;
+        padding: 5%;
+
+        .item {
+          color: #738493;
+          margin-bottom: 2%;
+          span {
+            color: #5b6469;
+          }
+        }
+      }
+
+      .main {
+        background-color: #ffffff;
+        margin: 1%;
+        ul.nav-tabs {
+          background-color: #f6f6f6;
+          border: none;
+          li {
+            background-color: #eee;
+            font-size: 18px;
+            a {
+              padding: 20px;
+              border-radius: 0;
+              border: none;
+            }
+
+            &.active {
+              a {
+                border: none;
+                border-left: 2px solid #2196f3;
+                border-radius: 0;
+              }
+            }
+          }
+        }
+
+        .tab-content {
+          .forms {
+            padding: 3%;
+            .add-form-btn {
+              border: 1px dashed #9b9b9b;
+              padding: 2%;
+              width: 300px;
+              color: #9b9b9b;
+            }
+
+            .doc-detail {
+              margin-bottom: 20px;
+              padding: 10px;
+
+              &:hover {
+                cursor: pointer;
+                background-color: #eee;
+              }
+
+              img {
+                width: 32px;
+                float: left;
+                margin-right: 20px;
+              }
+
+              .title {
+                font-weight: bold;
+                color: #4a4a4a;
+              }
+
+              .status {
+                color: #9b9b9b;
+              }
+            }
+          }
+
+          .eSigns {
+            .esign-detail {
+              background-color: #fafafa;
+              border: 1px solid #e6e6e6;
+              font-size: 16px;
+              padding: 10px;
+              margin: 0 20px 10px 30px;
+              z-index: 30;
+              cursor: pointer;
+
+              &:first-child {
+                margin-top: 20px;
+              }
+
+              &.active {
+                position: relative;
+                margin-right: 0;
+                border-right: none;
+                &:after, &:before {
+                  left: 100%;
+                  top: 50%;
+                  border: solid transparent;
+                  content: " ";
+                  height: 0;
+                  width: 0;
+                  position: absolute;
+                  pointer-events: none;
+                }
+
+                &:after {
+                  border-color: rgba(246, 246, 246, 0);
+                  border-left-color: #fafafa;
+                  border-width: 15px;
+                  margin-top: -15px;
+                }
+
+                &:before {
+                  border-color: rgba(230, 230, 230, 0);
+                  border-left-color: #e6e6e6;
+                  border-width: 16px;
+                  margin-top: -16px;
+                }
+              }
+
+              img {
+                width: 32px;
+                float: left;
+                margin-right: 20px;
+              }
+
+              .info {
+                color: gray;
+              }
+            }
+
+            .detail {
+              border-left: 1px solid #e6e6e6;
+              min-height: 50vh;
+              padding: 0 3% 5% 3%;
+
+              .documents {
+                margin-bottom: 10px;
+              }
+
+              .signed_at {
+                color: gray;
+                font-size: 10px;
+              }
+
+              .not-signed {
+                margin-top: 50px;
+                .resend {
+                  text-align: right;
+                  padding-right: 30px;
+                }
+              }
+
+              .not-signed-list {
+
+              }
+            }
+          }
+
+          .uploads {
+            .list {
+              padding-right: 0;
+              border-right: 1px solid #eee;
+              min-height: 40vh;
+              max-height: 70vh;
+              overflow: auto;
+
+              .dropzone {
+                text-align: center;
+                padding: 5%;
+                border-bottom: 1px solid #eee;
+                img {
+                  width: 100%;
+                }
+                .title {
+                  font-weight: bold;
+                  font-size: 17px;
+                }
+                span {
+                  color: blue;
+                  cursor: pointer;
+                }
+              }
+
+              .item {
+                padding: 3%;
+                border-bottom: 1px solid #eee;
+                margin-bottom: 2%;
+                cursor: pointer;
+              }
+            }
+
+            .display {
+              padding: 3%;
+              img {
+                width: 100%;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
