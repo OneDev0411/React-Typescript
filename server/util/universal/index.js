@@ -33,7 +33,7 @@ export default async function (ctx) {
         return
       }
       if (ctx.request.url.indexOf('signout') !== -1) {
-        ctx.session.destroy()
+        ctx.session.user = null
         let redirect_to = '/'
         if (ctx.query.redirect_to)
           redirect_to = ctx.query.redirect_to
