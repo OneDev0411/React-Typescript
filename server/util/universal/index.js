@@ -37,7 +37,8 @@ export default async function (ctx) {
         let redirect_to = '/'
         if (ctx.query.redirect_to)
           redirect_to = ctx.query.redirect_to
-        return ctx.redirect(redirect_to)
+        await ctx.redirect(redirect_to)
+        return
       }
       await ctx.render('app')
       return
