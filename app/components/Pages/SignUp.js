@@ -30,7 +30,7 @@ export default class SignUp extends Component {
     AppStore.emitChange()
   }
   componentDidMount() {
-    this.refs.email.refs.input.focus()
+    this.emailInput.focus()
   }
   componentDidUpdate() {
     const data = this.props.data
@@ -50,7 +50,7 @@ export default class SignUp extends Component {
   handleEmailSubmit(e) {
     // If clicked
     setTimeout(() => {
-      this.refs.email.refs.input.focus()
+      this.emailInput.focus()
     }, 100)
     e.preventDefault()
     delete AppStore.data.errors
