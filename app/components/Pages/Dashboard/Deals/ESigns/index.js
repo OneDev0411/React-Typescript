@@ -38,8 +38,21 @@ export default class DealESigns extends React.Component {
     const { envelopes } = this.props
     const { envelope } = this.state
 
-    if (!envelope)
-      return <div></div>
+    if (!envelopes) {
+      return (
+        <div className="loading center">
+          <i className="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+        </div>
+      )
+    }
+
+    if (envelopes.length === 0) {
+      return (
+        <div className="no-esign">
+          There is no eSign!
+        </div>
+      )
+    }
 
     let signed_users = _.filter(envelope.recipients, recp => recp.signed_at !== null)
     let not_signed_users = _.filter(envelope.recipients, recp => recp.signed_at === null)
