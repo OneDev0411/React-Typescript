@@ -119,8 +119,6 @@ export default class DealDashboard extends React.Component {
     if (deal === null)
       return false
 
-    console.log(activeTab)
-
     return (
       <div className="dashboard">
         <Row className="header">
@@ -191,29 +189,30 @@ export default class DealDashboard extends React.Component {
             <div className="main">
               <Tabs
                 defaultActiveKey={activeTab}
-                animation={true}
+                animation={false}
                 id="deals-dashboard"
                 onSelect={this.onTabChange.bind(this)}
               >
                 <Tab eventKey='forms' title="Forms" className="forms">
-                  {
-                    activeTab === 'forms' &&
-                    <DealForms submissions={submissions} user={this.props.user} />
-                  }
+                  <DealForms
+                    submissions={submissions}
+                    user={this.props.user}
+                  />
                 </Tab>
 
                 <Tab eventKey='esigns' title="eSigns" className="eSigns">
-                  {
-                    activeTab === 'esigns' &&
-                    <DealESigns envelopes={envelopes} user={this.props.user} />
-                  }
+                  <DealESigns
+                    envelopes={envelopes}
+                    user={this.props.user}
+                  />
                 </Tab>
 
                 <Tab eventKey='uploads' title="Uploads" className="uploads">
-                  {
-                    activeTab === 'uploads' &&
-                    <Uploads files={files} user={this.props.user} deal_id={this.props.params.id} />
-                  }
+                  <Uploads
+                    files={files}
+                    user={this.props.user}
+                    deal_id={this.props.params.id}
+                  />
                 </Tab>
               </Tabs>
             </div>
