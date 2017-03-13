@@ -2,6 +2,13 @@
 
   .dashboard {
 
+    .loading {
+      &.center {
+        text-align: center;
+        padding: 10%;
+      }
+    }
+
     .hr {
       width: 96%;
       height: 1px;
@@ -99,6 +106,11 @@
           }
 
           .eSigns {
+            .no-esign {
+              text-align: center;
+              padding: 10%;
+            }
+
             .esign-detail {
               background-color: #fafafa;
               border: 1px solid #e6e6e6;
