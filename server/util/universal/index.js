@@ -25,15 +25,22 @@ export default async function (ctx) {
   else if (renderProps) {
 
     if (['production', 'staging'].indexOf(process.env.NODE_ENV) > -1) {
-      if (/\/dashboard\/mls\/(\w+)/.test(ctx.request.url) || ctx.request.url.indexOf('signout') !== -1) {
+      if (/\/dashboard\/mls\/(\w+)/.test(ctx.request.url)) {
         await ctx.render('app', {
           title: 'Rechat',
           body: renderToString( <RouterContext data={AppStore.data} {...renderProps} /> )
         })
+        return
       }
-      else {
-        await ctx.render('app')
+      if (ctx.request.url.indexOf('signout') !== -1) {
+        ctx.session.destroy()
+        let redirect_to = '/'
+        if (req.query.redirect_to)
+          redirect_to = req.query.redirect_to
+        return res.redirect(redirect_to)
       }
+      await ctx.render('app')
+      return
 
     } else {
       await ctx.render('development', {
