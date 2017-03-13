@@ -7,6 +7,10 @@
         text-align: center;
         padding: 10%;
       }
+      p {
+        margin-top: 5px;
+        font-weight: bold;
+      }
     }
 
     .hr {
@@ -77,10 +81,11 @@
               padding: 2%;
               width: 300px;
               color: #9b9b9b;
+              margin-bottom: 20px;
             }
 
             .doc-detail {
-              margin-bottom: 20px;
+              margin-bottom: 0px;
               padding: 10px;
 
               &:hover {
