@@ -75,11 +75,18 @@ import geocodeAddress from '../actions/google/geocode-address'
 // Chat module
 import sendChatModuleMessage from '../actions/chat-module/send-message'
 
+// Deals
+import getDeals from '../actions/deals/get-deals'
+import getSubmissions from '../actions/deals/get-submissions'
+import getEnvelopes from '../actions/deals/get-envelopes'
+import uploadFile from '../actions/deals/upload-file'
+
 const AppDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
 AppDispatcher.register(payload => {
   const action = payload.action
+
   switch (action) {
 
     case 'get-content':
@@ -288,6 +295,22 @@ AppDispatcher.register(payload => {
 
     case 'get-receiving-user':
       getReceivingUser(payload.user_id)
+      break
+
+    case 'get-deals':
+      getDeals(payload.user)
+      break
+
+    case 'get-submissions':
+      getSubmissions(payload.id, payload.user)
+      break
+
+    case 'get-envelopes':
+      getEnvelopes(payload.id, payload.user)
+      break
+
+    case 'upload-file':
+      uploadFile(payload.id, payload.user, payload.file)
       break
 
     default:

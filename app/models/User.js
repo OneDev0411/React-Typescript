@@ -94,31 +94,23 @@ export default {
       return callback(false, response)
     })
   },
-  createShadow: (params, callback) => {
+  createShadow: async function(params, callback){
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
     const endpoint = api_host + '/api/signup-shadow'
-    const request_object = params.user
-    fetch(endpoint, {
-      method: 'post',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(request_object)
-    })
-    .then(response => {
-      if (response.status >= 400) {
-        const error = {
-          status: 'error',
-          response
-        }
-        return callback(error, false)
+
+    try {
+      const response = await superagent.post(endpoint).send(params.user)
+      return callback(false, response.body)
+    }
+    catch(e) {
+      const error = {
+        status: 'error',
+        response: e.response
       }
-      return response.json()
-    })
-    .then(response => {
-      return callback(false, response)
-    })
+
+      return callback(error, false)
+    }
   },
   sendVerifyEmail: (params, callback) => {
     let api_host = params.api_host

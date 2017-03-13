@@ -30,6 +30,11 @@ import Website from '../components/Pages/Dashboard/Website'
 import Cards from '../components/Pages/Dashboard/Cards'
 import Forms from '../components/Pages/Dashboard/Forms'
 
+// deals
+import DealsLayout from '../components/Pages/Dashboard/Deals'
+import DealsList from '../components/Pages/Dashboard/Deals/DealsList'
+import DealDashboard from '../components/Pages/Dashboard/Deals/Dashboard'
+
 // Widgets
 import ListingsWidget from '../components/Pages/Widgets/Listings'
 import MapWidget from '../components/Pages/Widgets/Map'
@@ -69,6 +74,11 @@ export default (
     <Route path="widgets/listings" component={ListingsWidget}/>
     <Route path="widgets/map" component={MapWidget}/>
     <Route path="widgets/search" component={SearchWidget}/>
+
+    <Route path="/dashboard/deals" component={DealsLayout}>
+      <IndexRoute component={DealsList} />
+      <Route path="/dashboard/deals/:id" component={DealDashboard} />
+    </Route>
     <Route path="*" component={NoMatch}/>
   </Route>
 )

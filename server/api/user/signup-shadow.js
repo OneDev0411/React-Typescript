@@ -46,8 +46,8 @@ router.post('/signup-shadow', async (ctx, next) => {
     const response = await ctx.fetch('/users', 'POST')
     .set({ 'x-rechat-brand': req.body.brand ? req.body.brand : '' })
     .send(request_object)
-    ctx.body = response.body
 
+    ctx.body = response.body
   }
   catch(e) {}
 })
