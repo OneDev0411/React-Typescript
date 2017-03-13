@@ -1,0 +1,58 @@
+.pdf-context {
+  position: relative;
+  width: 100%;
+
+  .pagination {
+    position: absolute;
+    left: 50px;
+    bottom: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5px;
+    text-align: center;
+
+    i {
+      color: #fff;
+      font-size: 19px;
+      cursor: pointer;
+      &:hover {
+        color: orange;
+      }
+    }
+
+    .pnum {
+      margin: 0 10px;
+      color: #fff;
+      font-size: 18px;
+    }
+  }
+
+  .pdf-viewer {
+    position: relative;
+    width: 100%;
+
+    .pdf-container {
+      position: relative;
+      margin: 0 auto 7% auto;
+      top: 0;
+      left: 0;
+      z-index: 10;
+
+      .pdf-page {
+        position: relative;
+        margin: 0 auto 0 auto;
+        padding: 0;
+        overflow: visible;
+        background-clip: content-box;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.54);
+        background-color: #fff;
+      }
+
+      .page-number {
+        text-align: center;
+        font-size: 12px;
+        margin: 1% auto 3% 0;
+        color: gray;
+      }
+    }
+  }
+}
