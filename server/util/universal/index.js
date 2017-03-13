@@ -35,9 +35,9 @@ export default async function (ctx) {
       if (ctx.request.url.indexOf('signout') !== -1) {
         ctx.session.destroy()
         let redirect_to = '/'
-        if (req.query.redirect_to)
-          redirect_to = req.query.redirect_to
-        return res.redirect(redirect_to)
+        if (ctx.query.redirect_to)
+          redirect_to = ctx.query.redirect_to
+        return ctx.redirect(redirect_to)
       }
       await ctx.render('app')
       return
