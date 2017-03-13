@@ -56,7 +56,7 @@ const request = async function (ctx, next) {
         }
       })
       .on('response', response => {
-        if (~~response.status === 200) {
+        if (~~response.status >= 200 && ~~response.status <= 207) {
           response.body.status = 'success'
         }
       })
