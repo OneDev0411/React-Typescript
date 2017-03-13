@@ -25,7 +25,7 @@ export default async function (ctx) {
   else if (renderProps) {
 
     if (['production', 'staging'].indexOf(process.env.NODE_ENV) > -1) {
-      if (/\/dashboard\/mls\/(\w+)/.test(ctx.request.url)) {
+      if (/\/dashboard\/mls\/(\w+)/.test(ctx.request.url) || ctx.request.url.indexOf('signout') !== -1) {
         await ctx.render('app', {
           title: 'Rechat',
           body: renderToString( <RouterContext data={AppStore.data} {...renderProps} /> )
