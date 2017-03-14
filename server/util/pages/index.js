@@ -1,5 +1,6 @@
 import Koa from 'koa'
 import mount from 'koa-mount'
+import config from '../../../config/private'
 const _ = require('underscore')
 
 const app = new Koa()
@@ -8,9 +9,16 @@ const routes = {
   app: [
     [ 'home' ],
     [ 'signin' ],
-    [ 'signout' ]
+    [ 'signup' ],
+    [ 'signout' ],
+    [ 'terms' ]
   ]
 }
+
+app.use(async function(ctx, next) {
+  ctx.config = config
+  await next()
+})
 
 _.each(routes, (group, name) => {
   _.each(group, rt => {
