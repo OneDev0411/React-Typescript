@@ -308,6 +308,9 @@ export default class SideBar extends Component {
     if (path.indexOf('/dashboard/website') !== -1)
       active.store = 'active'
 
+    if (path.indexOf('/dashboard/deals') !== -1)
+      active.deals = 'active'
+
     // User info
     const user = data.user
     let recommend
@@ -597,7 +600,7 @@ export default class SideBar extends Component {
             <OverlayTrigger placement="right" overlay={ popover.concierge } delayShow={ 200 } delayHide={ 0 }>
               <LinkContainer onClick={ this.hideListingViewer.bind(this) } className={ active.concierge } to="/dashboard/concierge/deals">
                 <NavItem style={ S('w-85p') }>
-                  <img src={ active.concierge ? '/images/dashboard/sidenav/deals.svg' : '/images/dashboard/sidenav/deals.svg' } style={ S('w-19 h-19') }/>
+                  <img src={ active.concierge ? '/static/images/dashboard/sidenav/deals-active.svg' : '/static/images/dashboard/sidenav/deals.svg' } style={ S('w-19 h-19') }/>
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
@@ -608,7 +611,7 @@ export default class SideBar extends Component {
             <OverlayTrigger placement="right" overlay={ popover.deals } delayShow={ 200 } delayHide={ 0 }>
               <LinkContainer onClick={ this.hideListingViewer.bind(this) } className={ active.deals } to="/dashboard/deals">
                 <NavItem style={ S('w-85p') }>
-                  <img src={ active.deals ? '/images/dashboard/sidenav/deals.svg' : '/images/dashboard/sidenav/deals.svg' } style={ S('w-19 h-19') }/>
+                  <img src={ active.deals ? '/static/images/dashboard/sidenav/deals-active.svg' : '/static/images/dashboard/sidenav/deals.svg' } style={ S('w-19 h-19') }/>
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>

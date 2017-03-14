@@ -2,15 +2,15 @@ import React from 'react'
 import { Grid, Container, Row, Col, Tabs, Tab, Button } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'underscore'
-import 'pdfjs-dist/build/pdf.combined'
-import 'pdfjs-dist/web/compatibility'
+import PdfViewer from '../../../../Partials/Pdf/Viewer'
 import config from '../../../../../../config/public'
 
 export default class DealForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-
+      submission: null,
+      documentUrl: null
     }
   }
 
@@ -18,49 +18,65 @@ export default class DealForm extends React.Component {
 
   }
 
-  async loadForm(submission) {
+  loadForm(submission) {
     const { last_revision } = submission
     const { user } = this.props
     const token = user.access_token
-    const url = `${config.forms.url}/submissions/${last_revision}.pdf?token=${token}&flat=1`
+    const documentUrl = `${config.forms.url}/submissions/${last_revision}.pdf?token=${token}&flat=1`
 
-    try {
-      const doc = await PDFJS.getDocument(url)
-      console.log(doc)
-    }
-    catch(e) {
-    }
-
+    this.setState({
+      submission,
+      documentUrl
+    })
   }
 
   render() {
     const { submissions } = this.props
+    const { submission, documentUrl } = this.state
 
     return (
       <div>
-        <Button className="add-form-btn">
-          Add Blank Form
-        </Button>
+        <Row>
+          <Col xs={5}>
 
-        <Row style={ S('mt-30') }>
-          <Col xs={7}>
+            <Button className="add-form-btn">
+              Add Blank Form
+            </Button>
+
             {
-              submissions && submissions.map(submission => {
+              submissions && submissions.map(subm => {
                 return (
                   <div
-                    key={`submission${submission.id}`}
+                    key={`submission${subm.id}`}
                     className="doc-detail"
-                    onClick={ this.loadForm.bind(this, submission) }
+                    onClick={ this.loadForm.bind(this, subm) }
                   >
                     <img src="/static/images/deals/file.png" />
-                    <div className="title">{ submission.title }</div>
-                    <div className="status">{ submission.state }</div>
+                    <div className="title">{ subm.title }</div>
+                    <div className="status">{ subm.state }</div>
                   </div>
                 )
               })
             }
+
+            {
+              !submissions &&
+              <div className="loading center">
+                <i className="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+              </div>
+            }
+
+            {
+              submissions && submissions.length === 0 &&
+              <div className="no-form">
+                There is no form
+              </div>
+            }
           </Col>
-          <Col xs={5}>---</Col>
+
+          <Col xs={7}>
+            <PdfViewer uri={documentUrl} scale={0.7} />
+          </Col>
         </Row>
       </div>
     )

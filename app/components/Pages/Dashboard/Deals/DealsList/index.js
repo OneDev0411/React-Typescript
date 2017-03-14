@@ -9,22 +9,29 @@ export default class DealsList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      deals: []
+      deals: [],
+      loading: false
     }
   }
   componentDidMount() {
-    const { user } = this.props
-    this.getDeals(user)
+    const { user, deals } = this.props
+
+    if (deals)
+      this.setState({ deals })
+    else
+      this.getDeals(user)
   }
 
   componentWillReceiveProps(nextProps) {
     const { deals } = nextProps
 
     if (deals)
-      this.setState({ deals })
+      this.setState({ deals, loading: false })
   }
 
   getDeals(user) {
+    this.setState({ loading: true })
+
     AppDispatcher.dispatch({
       action: 'get-deals',
       user
@@ -42,9 +49,9 @@ export default class DealsList extends React.Component {
 
   getPrice(deal) {
     if (deal.context.list_price)
-      return deal.context.list_price
+      return this.getNumberWithCommas(deal.context.list_price)
     else if (deal.proposed_values)
-      return deal.proposed_values.list_price
+      return this.getNumberWithCommas(deal.proposed_values.list_price)
     else
       return '-'
   }
@@ -58,54 +65,61 @@ export default class DealsList extends React.Component {
       return '-'
   }
 
+  getNumberWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  }
+
   render() {
 
-    const { deals } = this.state
+    const { deals, loading } = this.state
 
     return (
       <div>
+        <h3>Deals</h3>
+
         {
-          deals &&
-          <div>
-            <h3>Deals</h3>
-            <table>
-              <thead>
-                <tr>
-                  <td>ADDRESS</td>
-                  <td>STATUS</td>
-                  <td>PRICE $</td>
-                  <td>SIDE</td>
-                  <td>EXP. DATE</td>
-                  <td>CLOSING DATE</td>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  deals.map(deal => {
-                    return (
-                      <tr key={`DEAL_${deal.id}`}>
-                        <td>
-                          <Link to={`/dashboard/deals/${deal.id}`}>
-                            {
-                              deal.id === '4987a970-c7ab-11e6-abde-0242ac110006' &&
-                              <span>***</span>
-                            }
-                            <img style={ S('mr-10') } src="/static/images/deals/home.svg" />
-                            { this.getDealAddress(deal) }
-                          </Link>
-                        </td>
-                        <td>-</td>
-                        <td>{ this.getPrice(deal) } </td>
-                        <td>{ deal.context.deal_type }</td>
-                        <td>-</td>
-                        <td>-</td>
-                      </tr>
-                    )
-                  })
-                }
-              </tbody>
-            </table>
+          loading &&
+          <div className="loading">
+            <i className="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+            <b>Loading deals ...</b>
           </div>
+        }
+
+        {
+          deals.length > 0 &&
+          <table>
+            <thead>
+              <tr>
+                <td>ADDRESS</td>
+                <td>STATUS</td>
+                <td>PRICE $</td>
+                <td>SIDE</td>
+                <td>EXP. DATE</td>
+                <td>CLOSING DATE</td>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                deals.map(deal => {
+                  return (
+                    <tr key={`DEAL_${deal.id}`}>
+                      <td>
+                        <Link to={`/dashboard/deals/${deal.id}`}>
+                          <img style={ S('mr-10') } src="/static/images/deals/home.svg" />
+                          { this.getDealAddress(deal) }
+                        </Link>
+                      </td>
+                      <td>-</td>
+                      <td>{ this.getPrice(deal) } </td>
+                      <td>{ deal.context.deal_type }</td>
+                      <td>-</td>
+                      <td>-</td>
+                    </tr>
+                  )
+                })
+              }
+            </tbody>
+          </table>
         }
       </div>
     )
