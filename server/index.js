@@ -9,6 +9,7 @@ import session from "koa-session2"
 import _ from 'underscore'
 
 import universalMiddleware from './util/universal'
+import pagesMiddleware from './util/pages'
 import RedisStore from './util/session-store'
 import request from './util/request'
 import webpackConfig from '../webpack.config.babel'
@@ -34,21 +35,21 @@ app.use(cookie())
 
 const { entry, output, publicPath } = appConfig.compile
 
-if (__DEV__) {
-  // eslint-disable-next-line global-require
-  const webpackDevMiddleware = require('./util/webpack-dev').default
-  // eslint-disable-next-line global-require
-  const webpackHMRMiddleware = require('./util/webpack-hmr').default
+// if (__DEV__) {
+//   // eslint-disable-next-line global-require
+//   const webpackDevMiddleware = require('./util/webpack-dev').default
+//   // eslint-disable-next-line global-require
+//   const webpackHMRMiddleware = require('./util/webpack-hmr').default
 
-  const compiler = webpack(webpackConfig)
+//   const compiler = webpack(webpackConfig)
 
-  app.use(webpackDevMiddleware(compiler, publicPath))
-  app.use(webpackHMRMiddleware(compiler))
+//   app.use(webpackDevMiddleware(compiler, publicPath))
+//   app.use(webpackHMRMiddleware(compiler))
 
-  app.use(mount(publicPath, serve(path.join(entry, publicPath))))
-} else {
-  app.use(mount(serve(path.join(output))))
-}
+//   app.use(mount(publicPath, serve(path.join(entry, publicPath))))
+// } else {
+//   app.use(mount(serve(path.join(output))))
+// }
 
 /**
  * middleware for session
@@ -69,12 +70,16 @@ app.use(async function(ctx, next) {
   await next()
 })
 
+// parse pages
+app.use(mount(pagesMiddleware))
+
 // add request middleware
 app.use(mount('/api', request))
 
 // eslint-disable-next-line
-_.each(require('./api/routes'), r =>
-  app.use(mount('/api', require(r.path))))
+_.each(require('./api/routes'), function(r) {
+  app.use(mount('/api', require(r.path)))
+})
 
 // universal rendering middleware
 app.use(mount(universalMiddleware))
