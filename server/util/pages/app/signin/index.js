@@ -4,7 +4,7 @@ import Crypto from '../../../../../app/models/Crypto'
 const router = require('koa-router')()
 const app = new Koa()
 
-async function getUser(config, decrypted_obj,) {
+async function getSelf(config, decrypted_obj,) {
   return new Promise((resolve, reject) => {
     User.getSelf({
       access_token: decrypted_obj.tokens.access,
@@ -30,7 +30,7 @@ router.get('/signin', async (ctx, next) => {
 
     if (decrypted_obj.tokens) {
       try {
-        const response = await getUser(ctx.config, decrypted_obj)
+        const response = await getSelf(ctx.config, decrypted_obj)
         ctx.session.user = {
           ...response.data,
           access_token: decrypted_obj.tokens.access
