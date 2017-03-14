@@ -12,7 +12,8 @@ const routes = {
     [ 'signup' ],
     [ 'signout' ],
     [ 'terms' ],
-    [ 'mls' ]
+    [ 'mls' ],
+    [ 'recent' ]
   ]
 }
 
