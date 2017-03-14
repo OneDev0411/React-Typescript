@@ -13,7 +13,10 @@ const routes = {
     [ 'signout' ],
     [ 'terms' ],
     [ 'mls' ],
-    [ 'recent' ]
+    [ 'recent' ],
+    [ 'dashboard' ],
+    [ 'widget' ],
+    [ 'invite' ]
   ]
 }
 
