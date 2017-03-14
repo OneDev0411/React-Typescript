@@ -30,19 +30,10 @@ export default async function (ctx) {
           title: 'Rechat',
           body: renderToString( <RouterContext data={AppStore.data} {...renderProps} /> )
         })
-        return
       }
-      if (ctx.request.url.indexOf('signout') !== -1) {
-        ctx.session.user = null
-        let redirect_to = '/'
-        if (ctx.query.redirect_to)
-          redirect_to = ctx.query.redirect_to
-        await ctx.redirect(redirect_to)
-        return
+      else {
+        await ctx.render('app')
       }
-      await ctx.render('app')
-      return
-
     } else {
       await ctx.render('development', {
         title: '_DEV_',
