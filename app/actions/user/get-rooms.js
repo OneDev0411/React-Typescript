@@ -30,7 +30,9 @@ export default (user, room_id) => {
         if (room_id)
           current_room = _.find(rooms, { id: room_id })
         AppStore.data.rooms = rooms
-        AppStore.data.current_room = current_room
+        // Don't show default room if creating new message view
+        if (!AppStore.data.show_new_message_viewer)
+          AppStore.data.current_room = current_room
         // If going to show alert
         const alert = helpers.getParameterByName('alert')
         if (alert) {
