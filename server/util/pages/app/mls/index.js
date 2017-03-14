@@ -1,7 +1,7 @@
 import Koa from 'koa'
 import AppStore from '../../../../../app/stores/AppStore'
-import Listing from '../../../../../models/Listing'
-import listing_util from '../../../../../utils/listing'
+import Listing from '../../../../../app/models/Listing'
+import listing_util from '../../../../../app/utils/listing'
 const router = require('koa-router')()
 const app = new Koa()
 
@@ -71,7 +71,7 @@ router.get('/dashboard/mls/:id', async (ctx, next) => {
     AppStore.data.current_listing = listing
     ctx.locals.has_og = true
     ctx.locals.og_title = listing_util.addressTitle(listing.property.address)
-    ctx.locals.og_url = req.protocol + '://' + req.hostname + req.url
+    ctx.locals.og_url = ctx.request.protocol + '://' + ctx.request.hostname + ctx.request.url
     ctx.locals.og_description = listing.property.description
     ctx.locals.og_image_url = listing.cover_image_url
     ctx.locals.AppStore = JSON.stringify(AppStore)
@@ -80,7 +80,9 @@ router.get('/dashboard/mls/:id', async (ctx, next) => {
       ctx.session.destroy()
     }
   }
-  catch(e) {}
+  catch(e) {
+    console.log(e)
+  }
 
   await next()
 })
