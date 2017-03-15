@@ -16,7 +16,13 @@ const routes = {
     [ 'recent' ],
     [ 'dashboard' ],
     [ 'widget' ],
-    [ 'invite' ]
+    [ 'invite' ],
+    [ 'reset-password' ]
+  ],
+  verify: [
+    [ 'email' ],
+    [ 'activate' ],
+    [ 'phone' ]
   ]
 }
 
