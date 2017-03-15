@@ -35,21 +35,21 @@ app.use(cookie())
 
 const { entry, output, publicPath } = appConfig.compile
 
-// if (__DEV__) {
-//   // eslint-disable-next-line global-require
-//   const webpackDevMiddleware = require('./util/webpack-dev').default
-//   // eslint-disable-next-line global-require
-//   const webpackHMRMiddleware = require('./util/webpack-hmr').default
+if (__DEV__) {
+  // eslint-disable-next-line global-require
+  const webpackDevMiddleware = require('./util/webpack-dev').default
+  // eslint-disable-next-line global-require
+  const webpackHMRMiddleware = require('./util/webpack-hmr').default
 
-//   const compiler = webpack(webpackConfig)
+  const compiler = webpack(webpackConfig)
 
-//   app.use(webpackDevMiddleware(compiler, publicPath))
-//   app.use(webpackHMRMiddleware(compiler))
+  app.use(webpackDevMiddleware(compiler, publicPath))
+  app.use(webpackHMRMiddleware(compiler))
 
-//   app.use(mount(publicPath, serve(path.join(entry, publicPath))))
-// } else {
-//   app.use(mount(serve(path.join(output))))
-// }
+  app.use(mount(publicPath, serve(path.join(entry, publicPath))))
+} else {
+  app.use(mount(serve(path.join(output))))
+}
 
 /**
  * middleware for session
