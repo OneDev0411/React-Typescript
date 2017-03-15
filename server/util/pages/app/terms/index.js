@@ -15,30 +15,30 @@ async function getPage(config, slug) {
 router.get('/terms', async (ctx, next) => {
 
   const page = await getPage(ctx.config, 'terms-of-service')
-  ctx.title = page.title
-  ctx.content = page.content
+  ctx.locals.title = page.title
+  ctx.locals.content = page.content
 
-  return ctx.render('legal')
+  await ctx.display('legal')
 })
 
 // mls terms
 router.get('/terms/mls', async (ctx, next) => {
 
   const page = await getPage(ctx.config, 'mls-terms')
-  ctx.title = page.title
-  ctx.content = page.content
+  ctx.locals.title = page.title
+  ctx.locals.content = page.content
 
-  return ctx.render('legal')
+  await ctx.display('legal')
 })
 
 // privacy
 router.get('/privacy', async (ctx, next) => {
 
   const page = await getPage(ctx.config, 'privacy')
-  ctx.title = page.title
-  ctx.content = page.content
+  ctx.locals.title = page.title
+  ctx.locals.content = page.content
 
-  return ctx.render('legal')
+  await ctx.display('legal')
 })
 
 module.exports = app.use(router.routes())

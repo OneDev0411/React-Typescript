@@ -25,7 +25,7 @@ router.post('/signup-shadow', async (ctx, next) => {
     grant_type: 'password',
     is_shadow: true
   }
-  console.log(request_object)
+
   if (user_connect) {
     request_object.user_connect = user_connect
   }

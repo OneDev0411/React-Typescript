@@ -4,7 +4,7 @@ const app = new Koa()
 
 router.get('/signout', async (ctx, next) => {
 
-  ctx.session.destroy()
+  ctx.session = null
 
   const redirect_to = ctx.request.query.redirect_to || '/'
   ctx.redirect(redirect_to)

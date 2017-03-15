@@ -15,7 +15,7 @@ const config = {
     jsBundle: __DEV__ ? 'app.js' : 'app.[hash].js',
     jsVendorBundle: 'core.[hash].js',
     cssBundle: 'app.[hash].css',
-    template: path.resolve(__dirname, '../../app/templates/production.html'),
+    template: path.resolve(__dirname, '../../app/templates/app.html'),
     vendors: [
       'react',
       'react-bootstrap',

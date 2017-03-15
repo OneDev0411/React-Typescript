@@ -48,10 +48,9 @@ router.get('/dashboard/mls/actives', async (ctx, next) => {
  * route for /mls
  */
 router.get('/dashboard/mls', async (ctx, next) => {
-
   AppStore.data.user = ctx.session.user
   ctx.locals.AppStore = JSON.stringify(AppStore)
-  return ctx.render('app')
+  await ctx.display()
 })
 
 /**
@@ -77,11 +76,11 @@ router.get('/dashboard/mls/:id', async (ctx, next) => {
     ctx.locals.AppStore = JSON.stringify(AppStore)
 
     if (ctx.session.user && ctx.request.query.token) {
-      ctx.session.destroy()
+      ctx.session = null
     }
   }
   catch(e) {
-    console.log(e)
+
   }
 
   await next()

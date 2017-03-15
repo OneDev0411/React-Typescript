@@ -63,7 +63,7 @@ router.get('/verify_email/submitted', async (ctx, next) => {
  */
 router.get('/verify/email', async (ctx, next) => {
   // Logout user
-  ctx.session.destroy()
+  ctx.session = null
   let AppStore = {}
 
   AppStore.data = {
@@ -77,7 +77,7 @@ router.get('/verify/email', async (ctx, next) => {
   }
 
   ctx.locals.AppStore = JSON.stringify(AppStore)
-  return ctx.render('app')
+  await ctx.display()
 })
 
 

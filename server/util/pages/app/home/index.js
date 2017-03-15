@@ -3,7 +3,6 @@ const router = require('koa-router')()
 const app = new Koa()
 
 router.get('/', async (ctx, next) => {
-
   if (ctx.session.user) {
     ctx.redirect('/dashboard/mls')
   }

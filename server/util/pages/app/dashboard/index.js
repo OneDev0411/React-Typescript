@@ -10,7 +10,7 @@ router.get(/^\/dashboard(?:\/|$)/, async (ctx, next) => {
     AppStore.data.path = ctx.request.url
     AppStore.data.location = { pathname: ctx.request.url }
     ctx.locals.AppStore = JSON.stringify(AppStore)
-    return ctx.render('app')
+    return await ctx.display()
   } else {
     // If mls listing
     if (ctx.request.url.indexOf('/dashboard/mls/') === -1) {
