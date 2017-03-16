@@ -56,7 +56,7 @@ export default class DealForm extends React.Component {
                 accept="application/pdf,image/*"
                 style={{ border: 'none' }}
               >
-                <img src="/static/images/deals/upload.png" />
+                <img src="/static/images/deals/upload.svg" />
                 <div className="title">DRAG & DROP</div>
                 <div>your files to upload, or <span>Browse</span></div>
               </Dropzone>

@@ -1,10 +1,11 @@
 import Koa from 'koa'
 import superagent from 'superagent'
+import request from 'request'
 import config from '../../../config/private'
 
 const app = new Koa()
 
-const request = async function (ctx, next) {
+const requestMiddleware = async function (ctx, next) {
 
   ctx.config = config
   const api_url = config.api.url
@@ -38,7 +39,7 @@ const request = async function (ctx, next) {
     return agent[method.toLowerCase()](`${api_url}${url}`)
       .set(headers)
       .on('error', err => {
-        let responseText = err.response.text
+        let responseText = err.response ? err.response.text : err.message
 
         // try to parse encoded json
         try {
@@ -46,11 +47,11 @@ const request = async function (ctx, next) {
         }
         catch(e) {}
 
-        ctx.status = err.response.status
+        ctx.status = err.response ? err.response.status : 500
         ctx.body = {
           status: 'error',
           response: {
-            status: err.response.status,
+            status: err.response ? err.response.status : 'Internal server error',
             text: responseText
           }
         }
@@ -62,7 +63,23 @@ const request = async function (ctx, next) {
       })
   }
 
+  /**
+  * stream file
+  */
+  ctx.stream = async function(url) {
+    const download = request({
+      url: `${api_url}${url}`,
+      headers: {
+        authorization: `Bearer ${access_token}`
+      }
+    })
+
+    return new Promise(resolve => {
+      return resolve(download)
+    })
+  }
+
   await next()
 }
 
-module.exports = app.use(request)
+module.exports = app.use(requestMiddleware)

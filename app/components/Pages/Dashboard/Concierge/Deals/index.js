@@ -6,7 +6,6 @@ import ConciergeDispatcher from '../../../../../dispatcher/ConciergeDispatcher'
 import AppStore from '../../../../../stores/AppStore'
 import SideBar from '../../Partials/SideBar'
 import MobileNav from '../../Partials/MobileNav'
-import { addressTitle } from '../../../../../utils/listing'
 
 export default class Deals extends Component {
 
@@ -38,7 +37,21 @@ export default class Deals extends Component {
   }
 
   getDealAddress(deal) {
-    return deal.listing ? addressTitle(deal.listing.property.address) : deal.address
+    if (deal.context && deal.context.street_address)
+      return deal.context.street_address
+    else if (deal.proposed_values && deal.proposed_values.street_address)
+      return deal.proposed_values.street_address
+
+    return '-'
+  }
+
+  getDealSide(deal) {
+    if (deal.context && deal.context.deal_type)
+      return deal.context.deal_type
+    else if (deal.proposed_values && deal.proposed_values.deal_type)
+      return deal.proposed_values.deal_type
+
+    return '-'
   }
 
   getListingImage(deal) {
@@ -57,7 +70,7 @@ export default class Deals extends Component {
     const { data } = this.props
     const user = data.user
 
-    let main_style = S('absolute h-100p l-70 r-0')
+    let main_style = S('absolute l-70 r-0')
     let nav_area = <SideBar data={ data } />
 
     if (data.is_mobile) {
@@ -96,7 +109,7 @@ export default class Deals extends Component {
                               </Link>
                             </td>
                             <td>{ deal.created_by.display_name }</td>
-                            <td>{ deal.deal_type }</td>
+                            <td>{ this.getDealSide(deal) }</td>
                           </tr>
                         )
                       })

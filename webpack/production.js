@@ -63,7 +63,10 @@ webpackConfig.plugins.push(
   new CopyWebpackPlugin([
     {
       from: path.join(appConfig.compile.entry, appConfig.compile.publicDirName),
-      to: path.join(appConfig.compile.output, appConfig.compile.publicDirName),
+      to: path.join(appConfig.compile.output, appConfig.compile.publicDirName)
+    }, {
+      from: path.join(appConfig.compile.entry, '/templates/legal.html'),
+      to: path.join(appConfig.compile.output, '/legal.html')
     }
   ])
 )

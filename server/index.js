@@ -5,16 +5,20 @@ import views from 'koa-views'
 import cookie from 'koa-cookie'
 import path from 'path'
 import webpack from 'webpack'
-import session from "koa-session2"
+import session from 'koa-session'
 import _ from 'underscore'
 
 import universalMiddleware from './util/universal'
-import RedisStore from './util/session-store'
+import pagesMiddleware from './util/pages'
+import render from './util/render'
 import request from './util/request'
 import webpackConfig from '../webpack.config.babel'
 import appConfig from '../config/webpack'
 
 const app = new Koa()
+
+// webpack variables
+const { entry, output, publicPath } = appConfig.compile
 
 // app uses proxy
 app.proxy = true
@@ -27,12 +31,49 @@ const templatesDir = __DEV__ ?
   appConfig.compile.output
 
 // use template engine
-app.use(views(templatesDir, { map: { html: 'nunjucks' } }))
+app.use(views(templatesDir, { map: { html: 'hogan' } }))
 
 // use cookies
 app.use(cookie())
 
-const { entry, output, publicPath } = appConfig.compile
+// use renders
+app.use(render())
+
+/**
+ * middleware for session
+ */
+app.keys = ['r3ch4t@re4ct_rocks!!!']
+app.use(session({
+  key: 'rechat-web:sess',
+  maxAge: 86400000,
+  overwrite: true,
+  httpOnly: true,
+  signed: true
+}, app))
+
+/**
+ * middleware for time
+ */
+app.use(async function(ctx, next) {
+  ctx.locals = {}
+
+  ctx.locals.time = (new Date).getTime()
+
+  if (ctx.session && ctx.session.branch_data) {
+    ctx.locals.branch_data = JSON.stringify(ctx.session.branch_data)
+    delete ctx.session.branch_data
+  }
+
+  await next()
+})
+
+// add request middleware
+app.use(mount('/api', request))
+
+// eslint-disable-next-line
+_.each(require('./api/routes'), function(r) {
+  app.use(mount('/api', require(r.path)))
+})
 
 if (__DEV__) {
   // eslint-disable-next-line global-require
@@ -50,31 +91,8 @@ if (__DEV__) {
   app.use(mount(serve(path.join(output))))
 }
 
-/**
- * middleware for session
- */
-app.use(session({
-  key: 'r3ch4t@re4ct_rocks!!!',
-  httpOnly: false
-}))
-
-/**
- * middleware for time
- */
-app.use(async function(ctx, next) {
-  ctx.locals = {
-    time: (new Date).getTime()
-  }
-
-  await next()
-})
-
-// add request middleware
-app.use(mount('/api', request))
-
-// eslint-disable-next-line
-_.each(require('./api/routes'), r =>
-  app.use(mount('/api', require(r.path))))
+// parse pages
+app.use(mount(pagesMiddleware))
 
 // universal rendering middleware
 app.use(mount(universalMiddleware))

@@ -59,6 +59,11 @@ export default class DealDashboard extends React.Component {
   }
 
   onTabChange(id) {
+
+    this.setState({
+      activeTab: id
+    })
+
     switch(id) {
       case 'forms':
         this.getSubmissions()
@@ -139,11 +144,11 @@ export default class DealDashboard extends React.Component {
               <div className="hr"></div>
 
               <div className="item">
-                Status: <span>--</span>
+                Status: <span>-</span>
               </div>
 
               <div className="item">
-                Closing Date: <span>--</span>
+                Closing Date: <span>-</span>
               </div>
 
               <div className="item">
@@ -184,20 +189,30 @@ export default class DealDashboard extends React.Component {
             <div className="main">
               <Tabs
                 defaultActiveKey={activeTab}
-                animation={true}
+                animation={false}
                 id="deals-dashboard"
                 onSelect={this.onTabChange.bind(this)}
               >
                 <Tab eventKey='forms' title="Forms" className="forms">
-                  <DealForms submissions={submissions} user={this.props.user} />
+                  <DealForms
+                    submissions={submissions}
+                    user={this.props.user}
+                  />
                 </Tab>
 
                 <Tab eventKey='esigns' title="eSigns" className="eSigns">
-                  <DealESigns envelopes={envelopes} user={this.props.user} />
+                  <DealESigns
+                    envelopes={envelopes}
+                    user={this.props.user}
+                  />
                 </Tab>
 
                 <Tab eventKey='uploads' title="Uploads" className="uploads">
-                  <Uploads files={files} user={this.props.user} deal_id={this.props.params.id} />
+                  <Uploads
+                    files={files}
+                    user={this.props.user}
+                    deal_id={this.props.params.id}
+                  />
                 </Tab>
               </Tabs>
             </div>
