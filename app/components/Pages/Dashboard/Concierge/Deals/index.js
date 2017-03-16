@@ -45,6 +45,15 @@ export default class Deals extends Component {
     return '-'
   }
 
+  getDealSide(deal) {
+    if (deal.context && deal.context.deal_type)
+      return deal.context.deal_type
+    else if (deal.proposed_values && deal.proposed_values.deal_type)
+      return deal.proposed_values.deal_type
+
+    return '-'
+  }
+
   getListingImage(deal) {
     if (!deal.listing)
       return <span></span>
@@ -100,7 +109,7 @@ export default class Deals extends Component {
                               </Link>
                             </td>
                             <td>{ deal.created_by.display_name }</td>
-                            <td>{ deal.deal_type }</td>
+                            <td>{ this.getDealSide(deal) }</td>
                           </tr>
                         )
                       })
