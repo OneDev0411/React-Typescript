@@ -4,6 +4,7 @@ import _ from 'underscore'
 import cn from 'classnames'
 import Avatar from 'react-avatar'
 import S from 'shorti'
+import config from '../../../../../../config/public'
 
 export default class DealESigns extends React.Component {
   constructor(props) {
@@ -32,6 +33,15 @@ export default class DealESigns extends React.Component {
     this.setState({
       envelope
     })
+  }
+
+  loadEnvelopeForm(id, index) {
+    const { user } = this.props
+
+    const token = user.access_token
+    const base_url = `${config.app.url}/api/deals/envelope/preview`
+    const url = `${base_url}?id=${id}&index=${index}&access_token=${token}`
+    return url
   }
 
   render() {
@@ -90,11 +100,13 @@ export default class DealESigns extends React.Component {
 
           <div className="hr"></div>
           {
-            envelope.documents && envelope.documents.map(doc => {
+            envelope.documents && envelope.documents.map((doc, key) => {
               return (
                 <div key={`env_doc_${doc.id}`} className="documents">
                   <img src="/static/images/deals/file.png" style={ S('w-16 mr-10') }/>
-                  <a href="#">{ doc.title }</a>
+                  <a target="_blank" href={this.loadEnvelopeForm(envelope.id, key)}>
+                    { doc.title }
+                  </a>
                 </div>
               )
             })
