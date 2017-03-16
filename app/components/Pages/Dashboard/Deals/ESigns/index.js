@@ -35,13 +35,18 @@ export default class DealESigns extends React.Component {
     })
   }
 
-  loadEnvelopeForm(id, index) {
+  displayEnvelopeDocument(id, index) {
     const { user } = this.props
-
     const token = user.access_token
     const base_url = `${config.app.url}/api/deals/envelope/preview`
     const url = `${base_url}?id=${id}&index=${index}&access_token=${token}`
     return url
+  }
+
+  getSignLink(eid) {
+    const { user } = this.props
+    const token = user.access_token
+    return `${config.app.url}/api/deals/envelope/${eid}/sign?access_token=${token}`
   }
 
   render() {
@@ -104,7 +109,7 @@ export default class DealESigns extends React.Component {
               return (
                 <div key={`env_doc_${doc.id}`} className="documents">
                   <img src="/static/images/deals/file.png" style={ S('w-16 mr-10') }/>
-                  <a target="_blank" href={this.loadEnvelopeForm(envelope.id, key)}>
+                  <a target="_blank" href={this.displayEnvelopeDocument(envelope.id, key)}>
                     { doc.title }
                   </a>
                 </div>
@@ -178,7 +183,12 @@ export default class DealESigns extends React.Component {
 
                         {
                           this.props.user.id === recp.user.id &&
-                          <a href="#">Sign now</a>
+                          <a
+                            href={ this.getSignLink(envelope.id) }
+                            target="_blank"
+                          >
+                            Sign now
+                          </a>
                         }
                       </div>
                     )
