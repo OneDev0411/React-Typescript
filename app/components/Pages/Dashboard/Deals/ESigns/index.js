@@ -4,13 +4,17 @@ import _ from 'underscore'
 import cn from 'classnames'
 import Avatar from 'react-avatar'
 import S from 'shorti'
+import moment from 'moment'
+import Deal from '../../../../../models/Deal'
 import config from '../../../../../../config/public'
 
 export default class DealESigns extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      envelope: null
+      envelope: null,
+      docsResent: false,
+      resendingDoc: false
     }
   }
 
@@ -31,7 +35,9 @@ export default class DealESigns extends React.Component {
 
   displayEnvelope(envelope) {
     this.setState({
-      envelope
+      envelope,
+      docsResent: false,
+      resendingDoc: false
     })
   }
 
@@ -49,9 +55,31 @@ export default class DealESigns extends React.Component {
     return `${config.app.url}/api/deals/envelope/${eid}/sign?access_token=${token}`
   }
 
+  async resendDocs(eid) {
+    const { user } = this.props
+    const token = user.access_token
+
+    this.setState({ resendingDoc: true })
+
+    // resending docs
+    try {
+      await Deal.resendEnvelopeDocs(eid, token)
+      this.setState({
+        docsResent: true,
+        resendingDoc: false
+      })
+    }
+    catch(e) {
+      this.setState({
+        docsResent: false,
+        resendingDoc: false
+      })
+    }
+  }
+
   render() {
     const { envelopes } = this.props
-    const { envelope } = this.state
+    const { envelope, resendingDoc, docsResent } = this.state
 
     if (!envelopes) {
       return (
@@ -139,7 +167,9 @@ export default class DealESigns extends React.Component {
 
                       <Col xs={10}>
                         <div>{ recp.user.display_name }</div>
-                        <div className="signed_at">SIGNED AT</div>
+                        <div className="signed_at">
+                          { moment(recp.signed_at).format('Y-MM-D HH:mm') }
+                        </div>
                       </Col>
                     </Row>
                   )
@@ -157,8 +187,12 @@ export default class DealESigns extends React.Component {
                   <Button
                     bsStyle="primary"
                     bsSize="small"
+                    disabled={ resendingDoc || docsResent }
+                    onClick={ this.resendDocs.bind(this, envelope.id) }
                   >
-                    Resend Docs
+                    { resendingDoc && 'Sending' }
+                    { docsResent && 'Docs sent' }
+                    { !resendingDoc && !docsResent && 'Resend Docs' }
                   </Button>
                 </Col>
               </Row>

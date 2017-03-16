@@ -76,5 +76,17 @@ export default {
       }
       return callback(error, false)
     }
+  },
+  resendEnvelopeDocs: async function(id, access_token) {
+    try {
+      const response = await agent
+        .post(`${config.api_url}/envelopes/${id}/resend`)
+        .set({ 'Authorization': `Bearer ${access_token}`})
+
+      return response.body
+    }
+    catch(e) {
+      throw e
+    }
   }
 }
