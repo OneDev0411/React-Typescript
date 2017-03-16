@@ -28,7 +28,8 @@ const routes = {
     [ 'search' ]
   ],
   deal: [
-    [ 'envelope-document' ]
+    [ 'envelope-document' ],
+    [ 'envelope-sign' ]
   ],
   intercom: [
     [ 'signin' ],
