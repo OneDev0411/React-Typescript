@@ -67,9 +67,6 @@ app.use(async function(ctx, next) {
   await next()
 })
 
-// parse pages
-app.use(mount(pagesMiddleware))
-
 // add request middleware
 app.use(mount('/api', request))
 
@@ -93,6 +90,9 @@ if (__DEV__) {
 } else {
   app.use(mount(serve(path.join(output))))
 }
+
+// parse pages
+app.use(mount(pagesMiddleware))
 
 // universal rendering middleware
 app.use(mount(universalMiddleware))
