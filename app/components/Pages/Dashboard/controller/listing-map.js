@@ -62,7 +62,7 @@ const controller = {
       center,
       zoom,
       google_options: {
-        mapTypeControl: true,
+        mapTypeControl: false,
         draggable: true
       },
       filter_options: {
@@ -88,7 +88,7 @@ const controller = {
     const listing_map = data.listing_map
 
     const google_options = {
-      mapTypeControl: true,
+      mapTypeControl: false,
       draggable: true
     }
 
@@ -275,7 +275,7 @@ const controller = {
   handleGoogleMapApi(google) {
     const map = google.map
     window.map = map
-    window.map.set('mapTypeControl', false)
+    window.map.set('mapTypeControl',false)
     const data = AppStore.data
     const listing_map = data.listing_map
     if (listing_map.drawable && window.poly)
