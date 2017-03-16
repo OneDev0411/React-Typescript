@@ -32,7 +32,7 @@ export default class Concierge extends Component {
     const { data } = this.props
     const user = data.user
 
-    let main_style = S('absolute h-100p l-70 w-100p')
+    let main_style = S('absolute l-70 w-100p')
     let nav_area = <SideBar data={ data } />
 
     if (data.is_mobile) {
