@@ -37,10 +37,10 @@ export default class Deals extends Component {
   }
 
   getDealAddress(deal) {
-    if (deal.context && deal.context.street_name)
-      return deal.context.street_name
-    else if (deal.proposed_values && deal.proposed_values.street_name)
-      return deal.proposed_values.street_name
+    if (deal.context && deal.context.street_address)
+      return deal.context.street_address
+    else if (deal.proposed_values && deal.proposed_values.street_address)
+      return deal.proposed_values.street_address
 
     return '-'
   }
