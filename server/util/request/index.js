@@ -1,10 +1,11 @@
 import Koa from 'koa'
 import superagent from 'superagent'
+import request from 'request'
 import config from '../../../config/private'
 
 const app = new Koa()
 
-const request = async function (ctx, next) {
+const requestMiddleware = async function (ctx, next) {
 
   ctx.config = config
   const api_url = config.api.url
@@ -62,7 +63,23 @@ const request = async function (ctx, next) {
       })
   }
 
+  /**
+  * stream file
+  */
+  ctx.stream = async function(url) {
+    const download = request({
+      url: `${api_url}${url}`,
+      headers: {
+        authorization: `Bearer ${access_token}`
+      }
+    })
+
+    return new Promise(resolve => {
+      return resolve(download)
+    })
+  }
+
   await next()
 }
 
-module.exports = app.use(request)
+module.exports = app.use(requestMiddleware)
