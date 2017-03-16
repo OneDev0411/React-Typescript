@@ -144,11 +144,11 @@ export default class DealDashboard extends React.Component {
               <div className="hr"></div>
 
               <div className="item">
-                Status: <span>--</span>
+                Status: <span>-</span>
               </div>
 
               <div className="item">
-                Closing Date: <span>--</span>
+                Closing Date: <span>-</span>
               </div>
 
               <div className="item">
