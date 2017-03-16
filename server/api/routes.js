@@ -27,6 +27,9 @@ const routes = {
   county: [
     [ 'search' ]
   ],
+  deal: [
+    [ 'envelope-document' ]
+  ],
   intercom: [
     [ 'signin' ],
     [ 'signup' ]
