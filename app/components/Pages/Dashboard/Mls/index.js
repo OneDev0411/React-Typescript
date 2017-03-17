@@ -261,7 +261,6 @@ export default class Mls extends Component {
   }
   handleClearSearchInputClick() {
     const data = this.props.data
-
     delete AppStore.data.listing_map.search_input_text
     delete AppStore.data.listing_map.auto_move
     delete AppStore.data.listing_map.has_search_input
@@ -579,7 +578,7 @@ export default class Mls extends Component {
         </div>
       )
     }
-    let search_input_text
+    let search_input_text = ''
     if (data.listing_map && data.listing_map.search_input_text)
       search_input_text = data.listing_map.search_input_text
     const search_input_style = {
@@ -637,6 +636,7 @@ export default class Mls extends Component {
             className="form-control"
             type="text"
             style={ search_input_style }
+            value={ search_input_text }
             placeholder="Search location or MLS#"
           />
         </form>
