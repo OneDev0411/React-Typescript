@@ -1,8 +1,9 @@
 import React from 'react'
-import { Grid, Container, Row, Col, Tabs, Tab, Button } from 'react-bootstrap'
+import { Grid, Container, Row, Col, Tabs, Tab, Button} from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'underscore'
 import PdfViewer from '../../../../Partials/Pdf/Viewer'
+import FormSelect from '../Form-Select'
 import config from '../../../../../../config/public'
 
 export default class DealForm extends React.Component {
@@ -12,10 +13,6 @@ export default class DealForm extends React.Component {
       submission: null,
       documentUrl: null
     }
-  }
-
-  componentDidMount() {
-
   }
 
   loadForm(submission) {
@@ -30,18 +27,24 @@ export default class DealForm extends React.Component {
     })
   }
 
+  onAddForm(form) {
+    console.log('>>>', form)
+  }
+
   render() {
-    const { submissions } = this.props
-    const { submission, documentUrl } = this.state
+    const { submissions, forms, user } = this.props
+    const { submission, documentUrl, showSelectForm } = this.state
 
     return (
       <div>
         <Row>
           <Col xs={5}>
 
-            <Button className="add-form-btn">
-              Add Blank Form
-            </Button>
+            <FormSelect
+              forms={ forms }
+              user={user}
+              onSelect={this.onAddForm.bind(this)}
+            />
 
             {
               submissions && submissions.map(subm => {
@@ -78,6 +81,7 @@ export default class DealForm extends React.Component {
             <PdfViewer uri={documentUrl} scale={0.7} />
           </Col>
         </Row>
+
       </div>
     )
   }
