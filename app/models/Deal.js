@@ -77,6 +77,12 @@ export default {
       return callback(error, false)
     }
   },
+  getForms: async function(params) {
+    const response = await agent
+      .get(`${config.forms.url}/api/formstack/form.json?access_token=${params.token}`)
+
+    return response
+  },
   resendEnvelopeDocs: async function(id, access_token) {
     try {
       const response = await agent

@@ -79,6 +79,7 @@ import sendChatModuleMessage from '../actions/chat-module/send-message'
 import getDeals from '../actions/deals/get-deals'
 import getSubmissions from '../actions/deals/get-submissions'
 import getEnvelopes from '../actions/deals/get-envelopes'
+import getDealForms from '../actions/deals/get-deal-forms'
 import uploadFile from '../actions/deals/upload-file'
 
 const AppDispatcher = new Dispatcher()
@@ -303,6 +304,10 @@ AppDispatcher.register(payload => {
 
     case 'get-submissions':
       getSubmissions(payload.id, payload.user)
+      break
+
+    case 'get-deal-forms':
+      getDealForms(payload.user)
       break
 
     case 'get-envelopes':
