@@ -74,7 +74,7 @@ export default class DealsList extends React.Component {
     const { deals, loading } = this.state
 
     return (
-      <div>
+      <div className="deals-list">
         <h3>Deals</h3>
 
         {
