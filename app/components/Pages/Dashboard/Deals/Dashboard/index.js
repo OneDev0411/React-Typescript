@@ -122,7 +122,9 @@ export default class DealDashboard extends React.Component {
     return (
       <div className="dashboard">
         <Row className="header">
-          <h4>Deals dashboard</h4>
+          <Col lg={3} md={3} sm={3}>
+            <h4>Deals dashboard</h4>
+          </Col>
         </Row>
 
         <Row className="content">
@@ -197,6 +199,7 @@ export default class DealDashboard extends React.Component {
                   <DealForms
                     submissions={submissions}
                     user={this.props.user}
+                    forms={this.props.deals.forms}
                   />
                 </Tab>
 
