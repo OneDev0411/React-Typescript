@@ -10,16 +10,19 @@ export default async function(user)  {
 
   try {
     const response = await Deals.getForms(params)
-    console.log(response)
 
     if (response.status === 200)
-      AppStore.data.deals.forms = _.map(response.body, f => {
-        return { id: f.id, name: f.name }
+      AppStore.data.deals.forms = _.map(response.body.data, f => {
+        return {
+          id: f.id,
+          title: f.name,
+          roles: f.roles,
+          state: 'UNKNOWN',
+          created_at: f.created_at
+        }
       })
 
     AppStore.emitChange()
   }
-  catch(e) {
-    console.log('>', e)
-  }
+  catch(e) {}
 }
