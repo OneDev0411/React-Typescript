@@ -86,7 +86,7 @@ export default class FormSelect extends React.Component {
                   {
                     _.chain(this.props.forms)
                     .filter(form => {
-                      return form.name.includes(this.state.filter)
+                      return form.title.includes(this.state.filter)
                     })
                     .map(form => {
                       return (
@@ -95,7 +95,7 @@ export default class FormSelect extends React.Component {
                           onClick={this.onSelectForm.bind(this, form)}
                         >
                           <img src="/static/images/deals/file.png" />
-                          { form.name }
+                          { form.title }
                         </li>
                       )
                     })
