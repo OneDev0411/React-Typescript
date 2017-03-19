@@ -79,7 +79,8 @@ export default {
   },
   getForms: async function(params) {
     const response = await agent
-      .get(`${config.forms.url}/api/formstack/form.json?access_token=${params.token}`)
+      .get(`${config.api_url}/forms`)
+      .set({ 'Authorization': `Bearer ${params.token}`})
 
     return response
   },
