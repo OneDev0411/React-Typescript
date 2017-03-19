@@ -1,5 +1,6 @@
 import React from 'react'
 import { Grid, Container, Row, Col, Tabs, Tab, Button } from 'react-bootstrap'
+import { Link } from 'react-router'
 import S from 'shorti'
 import _ from 'underscore'
 import cookie from 'react-cookie'
@@ -125,6 +126,16 @@ export default class DealDashboard extends React.Component {
           <Col lg={3} md={3} sm={3}>
             <h4>Deals dashboard</h4>
           </Col>
+
+          <Col lg={9} md={9} sm={9}>
+            <ul className="menu">
+              <li>
+                <Link to='collect-signature'>
+                  <img src="/static/images/deals/pen.svg" />
+                </Link>
+              </li>
+            </ul>
+          </Col>
         </Row>
 
         <Row className="content">
@@ -200,6 +211,7 @@ export default class DealDashboard extends React.Component {
                     submissions={submissions}
                     user={this.props.user}
                     forms={this.props.deals.forms}
+                    deal_id={this.props.params.id}
                   />
                 </Tab>
 
