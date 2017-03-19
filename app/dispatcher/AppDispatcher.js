@@ -78,6 +78,7 @@ import sendChatModuleMessage from '../actions/chat-module/send-message'
 // Deals
 import getDeals from '../actions/deals/get-deals'
 import getSubmissions from '../actions/deals/get-submissions'
+import addSubmission from '../actions/deals/add-submission'
 import getEnvelopes from '../actions/deals/get-envelopes'
 import getDealForms from '../actions/deals/get-deal-forms'
 import uploadFile from '../actions/deals/upload-file'
@@ -304,6 +305,10 @@ AppDispatcher.register(payload => {
 
     case 'get-submissions':
       getSubmissions(payload.id, payload.user)
+      break
+
+    case 'add-submission':
+      addSubmission(payload.id, payload.form)
       break
 
     case 'get-deal-forms':
