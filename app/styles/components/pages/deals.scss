@@ -34,6 +34,15 @@
     .header {
       padding: 2% 7%;
       background: #fff;
+      ul.menu {
+        text-align: right;
+        li {
+          &:hover {
+            cursor: pointer;
+            opacity: 0.7;
+          }
+        }
+      }
     }
 
     .content {
@@ -267,6 +276,7 @@
 
   .list {
     max-height: 50vh;
+    min-height: 50vh;
     overflow: auto;
     margin-top: 3%;
     ul {
