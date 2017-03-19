@@ -2,6 +2,7 @@ import React from 'react'
 import { Grid, Container, Row, Col, Tabs, Tab, Button} from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'underscore'
+import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
 import PdfViewer from '../../../../Partials/Pdf/Viewer'
 import FormSelect from '../Form-Select'
 import config from '../../../../../../config/public'
@@ -28,7 +29,11 @@ export default class DealForm extends React.Component {
   }
 
   onAddForm(form) {
-    console.log('>>>', form)
+    AppDispatcher.dispatch({
+      action: 'add-submission',
+      id: this.props.deal_id,
+      form
+    })
   }
 
   render() {
