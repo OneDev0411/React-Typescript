@@ -66,10 +66,9 @@ export default {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
     const alert = params.alert
-    const endpoint = api_host + '/api/acknowledge-alert-notifications'
+    const endpoint = api_host + '/api/acknowledge-alert-notifications?access_token=' + params.access_token
     const request_object = {
-      alert,
-      access_token: params.access_token
+      alert
     }
     fetch(endpoint, {
       method: 'post',

@@ -10,13 +10,12 @@ export default {
     // If no comment
     if(!params.comment.trim())
       return false
-    const create_room_url = api_host + '/api/create-message'
+    const create_room_url = api_host + '/api/create-message?access_token=' + params.access_token
     const request_object = {
       room_id: params.room_id,
       comment: params.comment,
       message_type: params.message_type,
-      author: params.author,
-      access_token: params.access_token
+      author: params.author
     }
     fetch(create_room_url,{
       method: 'post',

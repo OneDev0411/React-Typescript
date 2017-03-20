@@ -50,10 +50,9 @@ export default {
     const recommendations = params.recommendations
     const access_token = params.access_token
     const request_object = {
-      recommendations,
-      access_token
+      recommendations
     }
-    const endpoint = api_host + '/api/recs/mark'
+    const endpoint = api_host + '/api/recs/mark?access_token=' + params.access_token
     fetch(endpoint, {
       method: 'post',
       headers: {

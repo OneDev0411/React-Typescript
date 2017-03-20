@@ -66,10 +66,9 @@ export default {
   getValerts: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/listings/valerts'
+    const endpoint = api_host + '/api/listings/valerts?access_token=' + params.access_token
     const request_object = {
-      options: params.options,
-      access_token: params.access_token
+      options: params.options
     }
     if (params.office)
       request_object.office = params.office

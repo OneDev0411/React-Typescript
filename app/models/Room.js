@@ -146,12 +146,11 @@ export default {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
 
-    const add_user_to_room_url = api_host + '/api/add-user-to-room'
+    const add_user_to_room_url = api_host + '/api/add-user-to-room?access_token=' + params.access_token
 
     const request_object = {
       room_id: params.room_id,
       user: params.user,
-      access_token: params.access_token,
       brand: params.brand
     }
 
@@ -180,14 +179,13 @@ export default {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
 
-    const endpoint = api_host + '/api/rooms/add-users'
+    const endpoint = api_host + '/api/rooms/add-users?access_token=' + params.access_token
 
     const request_object = {
       room_id: params.room_id,
       users: params.users,
       emails: params.emails,
       phone_numbers: params.phone_numbers,
-      access_token: params.access_token,
       brand: params.brand
     }
     fetch(endpoint, {
@@ -257,11 +255,10 @@ export default {
     if (!api_host) api_host = config.app.url
     const id = params.id
     const notification = params.notification
-    const endpoint = api_host + '/api/notifications'
+    const endpoint = api_host + '/api/notifications?access_token=' + params.access_token
     const request_object = {
       id,
-      notification,
-      access_token: params.access_token
+      notification
     }
     fetch(endpoint, {
       method: 'post',
@@ -288,10 +285,9 @@ export default {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
     const room = params.room
-    const endpoint = api_host + '/api/acknowledge-room-notifications'
+    const endpoint = api_host + '/api/acknowledge-room-notifications?access_token=' + params.access_token
     const request_object = {
-      room,
-      access_token: params.access_token
+      room
     }
     fetch(endpoint, {
       method: 'post',
@@ -317,11 +313,10 @@ export default {
   createRec: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/create-rec'
+    const endpoint = api_host + '/api/create-rec?access_token=' + params.access_token
     const room = params.room
     const mls_number = params.mls_number
     const request_object = {
-      access_token: params.access_token,
       room,
       mls_number,
       notification: params.notification,
@@ -374,12 +369,11 @@ export default {
     const room_id = params.room_id
     const rec_id = params.rec_id
     const favorite = params.favorite
-    const endpoint = api_host + '/api/edit-favorite'
+    const endpoint = api_host + '/api/edit-favorite?access_token=' + params.access_token
     const request_object = {
       room_id,
       rec_id,
-      favorite,
-      access_token: params.access_token
+      favorite
     }
     fetch(endpoint, {
       method: 'post',
