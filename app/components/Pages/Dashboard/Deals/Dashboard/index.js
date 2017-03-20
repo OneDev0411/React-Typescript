@@ -15,6 +15,7 @@ export default class DealDashboard extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      id: this.props.params.id,
       deal: null,
       activeTab: 'forms',
       submissions: null,
@@ -130,7 +131,7 @@ export default class DealDashboard extends React.Component {
           <Col lg={9} md={9} sm={9}>
             <ul className="menu">
               <li>
-                <Link to='collect-signature'>
+                <Link to={`/dashboard/deals/${this.state.id}/collect-signatures`}>
                   <img src="/static/images/deals/pen.svg" />
                 </Link>
               </li>
