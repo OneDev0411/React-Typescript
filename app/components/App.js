@@ -74,7 +74,7 @@ export default class App extends Component {
       AppStore.emitChange()
     }
     const brand = data.brand
-    if (brand && brand.assets.google_analytics_id) {
+    if (brand && brand.assets && brand.assets.google_analytics_id) {
       const google_analytics_id = brand.assets.google_analytics_id
       ReactGA.initialize(google_analytics_id)
       ReactGA.set({ page: window.location.pathname })
