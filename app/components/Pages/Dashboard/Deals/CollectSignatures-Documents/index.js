@@ -1,6 +1,6 @@
 import React from 'react'
 import { Grid, Container, Row, Col, Tabs, Tab, Button } from 'react-bootstrap'
-import { Link } from 'react-router'
+import { browserHistory } from 'react-router'
 import S from 'shorti'
 import _ from 'underscore'
 import AppStore from '../../../../../stores/AppStore'
@@ -12,7 +12,7 @@ export default class CollectSignatures extends React.Component {
     super(props)
     this.state = {
       submissions: null,
-      selectedDocuments: {}
+      selectedDocuments: []
     }
   }
 
@@ -50,18 +50,16 @@ export default class CollectSignatures extends React.Component {
 
   onDocumentChange(submission, e) {
     const { selectedDocuments } = this.state
-    selectedDocuments[submission.id] = e.target.checked
+    let list = selectedDocuments
 
-    const docs = []
-    _.each(selectedDocuments, (checked, id) => {
-      if (!checked) return
-      docs.push(id)
-    })
+    if (e.target.checked)
+      list.push(submission.id)
+    else
+      list = _.without(selectedDocuments, submission.id)
 
     this.setState({
-      selectedDocuments: docs
+      selectedDocuments: list
     })
-
   }
 
   onSubmit() {
@@ -71,11 +69,14 @@ export default class CollectSignatures extends React.Component {
     }
 
     AppStore.emitChange()
+
+    // navigate to collect recipients page
+    browserHistory.push(`/dashboard/deals/${this.props.params.id}/collect-signatures/recipients`)
   }
 
   render() {
 
-    const { submissions } = this.state
+    const { submissions, selectedDocuments } = this.state
 
     return (
       <div className="collect-signatures documents">
@@ -116,6 +117,14 @@ export default class CollectSignatures extends React.Component {
         </div>
 
         <div className="right">
+
+          {
+            selectedDocuments.length > 0 &&
+            <span style={{ marginRight: '15px', color: 'gray' }}>
+              { selectedDocuments.length } documents selected
+            </span>
+          }
+
           <Button
             bsStyle="primary"
             onClick={ this.onSubmit.bind(this) }
