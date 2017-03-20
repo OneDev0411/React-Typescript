@@ -14,6 +14,7 @@ export default class Deals extends Component {
   constructor(props) {
     super(props)
     const deals = AppStore.data.concierge_deals
+
     const deal_index = _.findIndex(deals, d => d.id === props.params.id)
     const deal = deals[deal_index]
 
