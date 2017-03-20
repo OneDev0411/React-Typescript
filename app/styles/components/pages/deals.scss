@@ -3,15 +3,61 @@
   padding: 0;
   min-height: 100vh;
 
+  .hr {
+    width: 96%;
+    height: 1px;
+    background-color: #f0f0f0;
+    margin: 3% 0 4% 0;
+  }
+
+  .row {
+    margin-right: 0;
+  }
+
   .deals-list {
     padding: 4%;
   }
 
-  .dashboard {
+  .collect-signatures {
+    padding: 10% 5% 4% 10%;
+    &.documents {
+      .title {
+        color: gray;
+        img {
+          margin-right: 10px;
+        }
+      }
+      .doc-detail {
+        margin-bottom: 0px;
+        padding: 10px;
 
-    .row {
-      margin-right: 0;
+        &:hover {
+          cursor: pointer;
+          background-color: #eee;
+        }
+
+        .control {
+          float: left;
+          margin-right: 15px;
+          img {
+            width: 28px;
+            margin-left: 15px;
+          }
+        }
+
+        .title {
+          font-weight: bold;
+          color: #4a4a4a;
+        }
+
+        .status {
+          color: #9b9b9b;
+        }
+      }
     }
+  }
+
+  .dashboard {
 
     .loading {
       &.center {
@@ -22,13 +68,6 @@
         margin-top: 5px;
         font-weight: bold;
       }
-    }
-
-    .hr {
-      width: 96%;
-      height: 1px;
-      background-color: #f0f0f0;
-      margin: 3% 0 4% 0;
     }
 
     .header {
