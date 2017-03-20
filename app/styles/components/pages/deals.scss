@@ -1,5 +1,62 @@
 .deals {
 
+  padding: 0;
+  min-height: 100vh;
+
+  .hr {
+    width: 96%;
+    height: 1px;
+    background-color: #f0f0f0;
+    margin: 3% 0 4% 0;
+  }
+
+  .row {
+    margin-right: 0;
+  }
+
+  .deals-list {
+    padding: 4%;
+  }
+
+  .collect-signatures {
+    padding: 10% 5% 4% 10%;
+    &.documents {
+      .title {
+        color: gray;
+        img {
+          margin-right: 10px;
+        }
+      }
+      .doc-detail {
+        margin-bottom: 0px;
+        padding: 10px;
+
+        &:hover {
+          cursor: pointer;
+          background-color: #eee;
+        }
+
+        .control {
+          float: left;
+          margin-right: 15px;
+          img {
+            width: 28px;
+            margin-left: 15px;
+          }
+        }
+
+        .title {
+          font-weight: bold;
+          color: #4a4a4a;
+        }
+
+        .status {
+          color: #9b9b9b;
+        }
+      }
+    }
+  }
+
   .dashboard {
 
     .loading {
@@ -13,25 +70,23 @@
       }
     }
 
-    .hr {
-      width: 96%;
-      height: 1px;
-      background-color: #f0f0f0;
-      margin: 3% 0 4% 0;
-    }
-
     .header {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 70px;
-      padding: 1.7% 4%;
+      padding: 2% 7%;
       background: #fff;
+      ul.menu {
+        text-align: right;
+        li {
+          &:hover {
+            cursor: pointer;
+            opacity: 0.7;
+          }
+        }
+      }
     }
 
     .content {
       margin-top: 5%;
+      padding: 1% 5%;
 
       .sidebar {
         margin: 1%;
@@ -78,10 +133,13 @@
             padding: 3%;
             .add-form-btn {
               border: 1px dashed #9b9b9b;
-              padding: 2%;
+              padding: 5%;
               width: 300px;
               color: #9b9b9b;
               margin-bottom: 20px;
+              &:hover {
+                background-color: #fff;
+              }
             }
 
             .doc-detail {
@@ -238,6 +296,42 @@
               }
             }
           }
+        }
+      }
+    }
+  }
+}
+
+
+.select-form {
+  padding: 5%;
+  .search {
+    margin-top: 5%;
+    width: 100%;
+    background: #FBFBFB;
+    border-radius: 0px;
+    padding: 3%;
+  }
+
+  .list {
+    max-height: 50vh;
+    min-height: 50vh;
+    overflow: auto;
+    margin-top: 3%;
+    ul {
+      padding: 0;
+      margin: 0;
+      margin-top: 3%;
+      li {
+        padding: 2%;
+        font-size: 16px;
+        img {
+          width: 18px;
+          margin-right: 10px;
+        }
+        &:hover {
+          background-color: #F4FAFF;
+          cursor: pointer;
         }
       }
     }

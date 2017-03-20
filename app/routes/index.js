@@ -34,6 +34,7 @@ import Forms from '../components/Pages/Dashboard/Forms'
 import DealsLayout from '../components/Pages/Dashboard/Deals'
 import DealsList from '../components/Pages/Dashboard/Deals/DealsList'
 import DealDashboard from '../components/Pages/Dashboard/Deals/Dashboard'
+import CollectSignatures from '../components/Pages/Dashboard/Deals/CollectSignatures'
 
 // Widgets
 import ListingsWidget from '../components/Pages/Widgets/Listings'
@@ -78,6 +79,7 @@ export default (
     <Route path="/dashboard/deals" component={DealsLayout}>
       <IndexRoute component={DealsList} />
       <Route path="/dashboard/deals/:id" component={DealDashboard} />
+      <Route path="/dashboard/deals/:id/collect-signatures" component={CollectSignatures} />
     </Route>
     <Route path="*" component={NoMatch}/>
   </Route>

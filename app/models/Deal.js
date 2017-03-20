@@ -77,6 +77,13 @@ export default {
       return callback(error, false)
     }
   },
+  getForms: async function(params) {
+    const response = await agent
+      .get(`${config.api_url}/forms`)
+      .set({ 'Authorization': `Bearer ${params.token}`})
+
+    return response
+  },
   resendEnvelopeDocs: async function(id, access_token) {
     try {
       const response = await agent

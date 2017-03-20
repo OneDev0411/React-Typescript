@@ -31,11 +31,11 @@ export default class Deals extends React.Component {
     const { data } = this.props
     const user = data.user
 
-    let main_style = S('absolute mh-100p l-70 w-100p')
+    let main_style = S('ml-5p h-100p')
     let nav_area = <SideBar data={ data } />
 
     if (data.is_mobile) {
-      main_style = { ...main_style, ...S('l-0 w-100p') }
+      main_style = { ...main_style, ...S('') }
 
       if (user)
         nav_area = <MobileNav data={ data } />
@@ -50,12 +50,10 @@ export default class Deals extends React.Component {
 
     return (
       <div>
-        <main>
-          { nav_area }
-          <div className="deals" style={ main_style }>
-            { children }
-          </div>
-        </main>
+        { nav_area }
+        <div className="deals" style={ main_style }>
+          { children }
+        </div>
       </div>
     )
   }
