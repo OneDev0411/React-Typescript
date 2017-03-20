@@ -10,12 +10,11 @@ export default {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
 
-    const create_room_url = api_host + '/api/create-room'
+    const create_room_url = api_host + '/api/create-room?access_token=' + params.access_token
 
     const request_object = {
       title: params.title,
       owner: params.owner,
-      access_token: params.access_token,
       users: params.users,
       emails: params.emails,
       phone_numbers: params.phone_numbers,
@@ -45,9 +44,8 @@ export default {
   createAlert: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/rooms/create-alert'
+    const endpoint = api_host + '/api/rooms/create-alert?access_token=' + params.access_token
     const request_object = {
-      access_token: params.access_token,
       alert: params.alert,
       room_id: params.room_id,
       message: params.message
