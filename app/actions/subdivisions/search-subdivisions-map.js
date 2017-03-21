@@ -7,7 +7,7 @@ export default q => {
     q
   }
   Subdivision.search(params, (err, res) => {
-    if (res.status === 'success') {
+    if (res && res.status === 'success') {
       AppStore.data.listing_map.subdivisions = res.data
       AppStore.data.listing_map.subdivisions.forEach(subdivision => {
         subdivision.appearances = Number(subdivision.appearances)

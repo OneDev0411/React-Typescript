@@ -114,6 +114,8 @@ const controller = {
     const auto_move = listing_map.auto_move
     if (auto_move)
       return
+    if (!bounds)
+      return
     const points = [
       {
         latitude: bounds.ne.lat,

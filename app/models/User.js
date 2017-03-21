@@ -115,7 +115,7 @@ export default {
   sendVerifyEmail: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/email-verifications'
+    const endpoint = api_host + '/api/email-verifications?access_token=' + params.access_token
     const access_token = params.access_token
     const request_object = {
       access_token
@@ -144,7 +144,7 @@ export default {
   sendVerifyPhone: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/phone-verifications'
+    const endpoint = api_host + '/api/phone-verifications?access_token=' + params.access_token
     const access_token = params.access_token
     const request_object = {
       access_token
@@ -369,7 +369,7 @@ export default {
   createContacts: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/create-contacts'
+    const endpoint = api_host + '/api/create-contacts?access_token=' + params.access_token
     const contacts = params.contacts
     const access_token = params.access_token
     const request_object = {
@@ -400,7 +400,7 @@ export default {
   editContact: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/edit-contact'
+    const endpoint = api_host + '/api/edit-contact?access_token=' + params.access_token
     const contact = params.contact
     const access_token = params.access_token
     const request_object = {
@@ -431,7 +431,7 @@ export default {
   deleteContact: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/delete-contact'
+    const endpoint = api_host + '/api/delete-contact?access_token=' + params.access_token
     const contact_id = params.contact_id
     const access_token = params.access_token
     const request_object = {
@@ -483,7 +483,7 @@ export default {
   edit: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/edit-user'
+    const endpoint = api_host + '/api/edit-user?access_token=' + params.access_token
     const request_object = {
       user: params.user,
       access_token: params.access_token
@@ -524,7 +524,7 @@ export default {
   editProfilePic: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/edit-profile-pic'
+    const endpoint = api_host + '/api/edit-profile-pic?access_token=' + params.access_token
     const request_object = {
       profile_image_url: params.profile_image_url,
       access_token: params.access_token
@@ -553,7 +553,7 @@ export default {
   editPassword: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/edit-password'
+    const endpoint = api_host + '/api/edit-password?access_token=' + params.access_token
     const request_object = {
       old_password: params.old_password,
       new_password: params.new_password,
@@ -583,7 +583,7 @@ export default {
   upgradeAccount: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/upgrade-account'
+    const endpoint = api_host + '/api/upgrade-account?access_token=' + params.access_token
     const request_object = {
       agent: params.agent,
       secret: params.secret,
@@ -632,7 +632,7 @@ export default {
   listingInquiry: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/user/listing-inquiry'
+    const endpoint = api_host + '/api/user/listing-inquiry?access_token=' + params.access_token
     const request_object = {
       access_token: params.access_token,
       agent: params.agent,
