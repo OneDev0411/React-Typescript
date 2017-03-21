@@ -131,7 +131,7 @@ export default class DealDashboard extends React.Component {
           <Col lg={9} md={9} sm={9}>
             <ul className="menu">
               <li>
-                <Link to={`/dashboard/deals/${this.state.id}/collect-signatures`}>
+                <Link to={`/dashboard/deals/${this.state.id}/collect-signatures/documents`}>
                   <img src="/static/images/deals/pen.svg" />
                 </Link>
               </li>
