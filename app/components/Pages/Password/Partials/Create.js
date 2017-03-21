@@ -58,10 +58,10 @@ export default class Create extends Component {
     AppStore.data.submitting = true
     AppStore.emitChange()
     // Get token
-    const password = this.refs.password.getInputDOMNode().value.trim()
+    const password = this.passwordInput.value.trim()
     let new_email
     if (this.refs.new_email)
-      new_email = this.refs.new_email.getInputDOMNode().value.trim()
+      new_email = this.new_emailInput.value.trim()
     const token = decodeURIComponent(helpers.getParameterByName('token'))
     const email = decodeURIComponent(helpers.getParameterByName('email'))
     const phone_number = decodeURIComponent(helpers.getParameterByName('phone_number'))
