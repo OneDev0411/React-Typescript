@@ -16,8 +16,8 @@ export default class Reset extends Component {
     AppStore.emitChange()
 
     // Get token
-    const password = this.refs.password.getInputDOMNode().value.trim()
-    const confirm_password = this.refs.confirm_password.getInputDOMNode().value.trim()
+    const password = this.passwordInput.value.trim()
+    const confirm_password = this.confirm_passwordInput.value.trim()
     const decoded_token = decodeURIComponent(helpers.getParameterByName('token'))
     const encoded_token = encodeURIComponent(decoded_token)
 
@@ -86,8 +86,8 @@ export default class Reset extends Component {
       <div>
         <div style={ S('color-929292 mb-20') }>Reset your password</div>
         <form onSubmit={ this.handleSubmit.bind(this) }>
-          <FormControl bsStyle={ password_style } placeholder="New Password" type="password" inputRef={ ref => this.passwordInput = ref }/>
-          <FormControl bsStyle={ password_style } placeholder="Confirm New Password" type="password" inputRef={ ref => this.confirm_passwordInput = ref }/>
+          <FormControl style={ S('mb-10') } bsStyle={ password_style } placeholder="New Password" type="password" inputRef={ ref => this.passwordInput = ref }/>
+          <FormControl style={ S('mb-10') } bsStyle={ password_style } placeholder="Confirm New Password" type="password" inputRef={ ref => this.confirm_passwordInput = ref }/>
           { message }
           <Button type="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p') }>
             { submitting ? 'Submitting...' : 'Change Password' }

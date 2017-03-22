@@ -17,7 +17,7 @@ export default class Forgot extends Component {
     AppStore.data.submitting = true
     AppStore.emitChange()
 
-    const email = this.refs.email.getInputDOMNode().value
+    const email = this.emailInput.value
     const form_data = {
       email
     }
@@ -93,7 +93,7 @@ export default class Forgot extends Component {
       submitting_class = 'disabled'
     const input_style = {
       border: 'none',
-      ...S('border-bottom-1-solid-ccc br-0 p-0')
+      ...S('border-bottom-1-solid-ccc br-0 p-0 mb-10')
     }
     let main_content = (
       <div>

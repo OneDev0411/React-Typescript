@@ -58,10 +58,10 @@ export default class Create extends Component {
     AppStore.data.submitting = true
     AppStore.emitChange()
     // Get token
-    const password = this.refs.password.getInputDOMNode().value.trim()
+    const password = this.passwordInput.value.trim()
     let new_email
     if (this.refs.new_email)
-      new_email = this.refs.new_email.getInputDOMNode().value.trim()
+      new_email = this.new_emailInput.value.trim()
     const token = decodeURIComponent(helpers.getParameterByName('token'))
     const email = decodeURIComponent(helpers.getParameterByName('email'))
     const phone_number = decodeURIComponent(helpers.getParameterByName('phone_number'))
@@ -257,10 +257,10 @@ export default class Create extends Component {
     let name_area = (
       <div>
         <Col sm={ 6 } style={ S(data.is_mobile ? 'mb-10 p-0 mr-0 pr-0' : 'p-0 pr-10') }>
-          <FormControl autoComplete={ false } onChange={ this.handleNameChange.bind(this, 'first') } value={ first_name } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="First Name" type="text" inputRef={ ref => this.first_nameInput = ref }/>
+          <FormControl autoComplete={ false } onChange={ this.handleNameChange.bind(this, 'first') } value={ first_name } style={ S('font-15 mb-10') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="First Name" type="text" inputRef={ ref => this.first_nameInput = ref }/>
         </Col>
         <Col sm={ 6 } style={ S('p-0') }>
-          <FormControl autoComplete={ false } onChange={ this.handleNameChange.bind(this, 'last') } value={ last_name } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="Last Name" type="text" inputRef={ ref => this.last_nameInput = ref }/>
+          <FormControl autoComplete={ false } onChange={ this.handleNameChange.bind(this, 'last') } value={ last_name } style={ S('font-15 mb-10') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="Last Name" type="text" inputRef={ ref => this.last_nameInput = ref }/>
         </Col>
       </div>
     )
@@ -297,7 +297,7 @@ export default class Create extends Component {
     if (data.signup && data.signup.new_email) {
       new_email_area = (
         <div style={ S('relative') }>
-          <FormControl type="email" autoComplete={ false } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="Add an Email" inputRef={ ref => this.new_emailInput = ref }/>
+          <FormControl type="email" autoComplete={ false } style={ S('font-15 mb-10') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } placeholder="Add an Email" inputRef={ ref => this.new_emailInput = ref }/>
         </div>
       )
     }
@@ -315,7 +315,7 @@ export default class Create extends Component {
             <div className="clearfix"></div>
             { new_email_area }
             <div style={ S('relative') }>
-              <FormControl autoComplete={ false } style={ S('font-15') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } bsStyle={ password_style } placeholder="Add a Password" type={ data.signup && data.signup.show_password ? 'text' : 'password' } inputRef={ ref => this.passwordInput = ref }/>
+              <FormControl autoComplete={ false } style={ S('font-15 mb-10') } bsSize="large" onKeyUp={ this.handleKeyUp.bind(this) } bsStyle={ password_style } placeholder="Add a Password" type={ data.signup && data.signup.show_password ? 'text' : 'password' } inputRef={ ref => this.passwordInput = ref }/>
               <i onClick={ this.toggleShowPassword } style={ S('absolute t-15 r-15 z-100 pointer color-666') } className={ `fa fa-eye${ data.signup && data.signup.show_password ? '-slash' : '' }` }></i>
             </div>
             { type_area }
