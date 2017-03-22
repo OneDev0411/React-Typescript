@@ -22,14 +22,13 @@ export default class extends React.Component {
 
   onSave() {
     const win = this.iframe.contentWindow
-    win.postMessage('message', config.forms.url)
 
-    win.addEventListener("message", receiveMessage, false);
+    win.addEventListener("load", receiveMessage, true);
 
-      function receiveMessage(event)
-      {
-        console.log(event)
-      }
+    function receiveMessage(event)
+    {
+      // console.log(event)
+    }
   }
 
   receiveMessage(event) {
