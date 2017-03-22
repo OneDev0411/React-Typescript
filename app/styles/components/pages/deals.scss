@@ -15,7 +15,20 @@
   }
 
   .deals-list {
-    padding: 4%;
+    padding: 4% 10%;
+  }
+
+  .edit-form {
+    padding: 4% 5%;
+    background: #fff;
+    .toolbar {
+      text-align: right;
+      margin-bottom: 10px;
+    }
+    iframe {
+      width: 100%;
+      height: 90vh;
+    }
   }
 
   .right {
@@ -24,6 +37,40 @@
 
   .collect-signatures {
     padding: 10% 5% 4% 10%;
+
+    .doc-detail {
+      margin-bottom: 0px;
+      padding: 10px;
+
+      &:hover {
+        cursor: pointer;
+        background-color: #eee;
+      }
+
+      &.no-hover {
+        cursor: auto;
+        background-color: #F6F6F6;
+      }
+
+      .control {
+        float: left;
+        margin-right: 15px;
+        img {
+          width: 28px;
+          margin-left: 15px;
+        }
+      }
+
+      .title {
+        font-weight: bold;
+        color: #4a4a4a;
+      }
+
+      .status {
+        color: #9b9b9b;
+      }
+    }
+
     &.documents {
       .title {
         color: gray;
@@ -31,31 +78,52 @@
           margin-right: 10px;
         }
       }
-      .doc-detail {
-        margin-bottom: 0px;
-        padding: 10px;
+    }
 
-        &:hover {
-          cursor: pointer;
-          background-color: #eee;
-        }
+    &.recipients {
+      h2 {
+        margin-bottom: 4%;
+      }
 
-        .control {
-          float: left;
-          margin-right: 15px;
-          img {
-            width: 28px;
-            margin-left: 15px;
+      ul {
+        margin: 3% 0 0 0;
+        padding: 0;
+        list-style-type: none;
+        li {
+          display: inline-block;
+          margin: 0 0.7% 0 0;
+          &.separator {
+            color: gray;
+          }
+          &.btn {
+            color: #2196f3;
+            &:hover {
+              color: purple;
+              cursor: pointer;
+            }
           }
         }
+      }
 
-        .title {
-          font-weight: bold;
-          color: #4a4a4a;
-        }
-
-        .status {
-          color: #9b9b9b;
+      .list {
+        min-height: 10vh;
+        margin-bottom: 10px;
+        ul {
+          margin: 5% 0 0 0;
+          padding: 0;
+          li {
+            display: inline-block;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #e6e6e6;
+            padding: 1%;
+            min-width: 300px;
+            .info {
+              color: gray;
+              margin-top: 5px;
+              font-size: 12px;
+            }
+          }
         }
       }
     }
@@ -335,6 +403,38 @@
         }
         &:hover {
           background-color: #F4FAFF;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+.add-signer-form {
+  padding: 5%;
+  input {
+    border-radius: 0;
+  }
+
+  .assign-role {
+    margin-top: 40px;
+    font-size: 16px;
+    color: gray;
+    ul {
+      margin: 15px 0 0 0;
+      padding: 0;
+      li {
+        display: inline-block;
+        font-size: 14px;
+        border: 1px solid #e2e6ea;
+        margin-right: 10px;
+        padding: 1.5%;
+        border-radius: 100px;
+        &.selected {
+          background: #eee;
+        }
+        &:hover {
+          background: #f4f4f4;
           cursor: pointer;
         }
       }
