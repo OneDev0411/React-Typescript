@@ -98,7 +98,6 @@ export default class DealForm extends React.Component {
             {
               file &&
               <div className="display">
-                <code>I have problem with setting Amazon AWS cookies for private file, so Emil should look and fix that</code>
                 <img src={file.url} />
               </div>
             }

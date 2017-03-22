@@ -1,5 +1,6 @@
 import React from 'react'
-import { Grid, Container, Row, Col, Tabs, Tab, Button} from 'react-bootstrap'
+import { Row, Col, Button} from 'react-bootstrap'
+import { browserHistory } from 'react-router'
 import S from 'shorti'
 import _ from 'underscore'
 import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
@@ -12,7 +13,21 @@ export default class DealForm extends React.Component {
     super(props)
     this.state = {
       submission: null,
-      documentUrl: null
+      documentUrl: null,
+      documentLoaded: false
+    }
+  }
+
+  componentDidMount() {
+
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { submissions } = nextProps
+    const { submission } = this.state
+
+    if (submissions && !submission) {
+      this.loadForm(submissions[0])
     }
   }
 
@@ -24,8 +39,15 @@ export default class DealForm extends React.Component {
 
     this.setState({
       submission,
-      documentUrl
+      documentUrl,
+      documentLoaded: false,
     })
+  }
+
+  editForm() {
+    const { submission } = this.state
+    const { deal_id } = this.props
+    browserHistory.push(`/dashboard/deals/${deal_id}/edit-form/${submission.form}`)
   }
 
   onAddForm(form) {
@@ -83,7 +105,24 @@ export default class DealForm extends React.Component {
           </Col>
 
           <Col xs={7}>
-            <PdfViewer uri={documentUrl} scale={0.7} />
+
+            {
+              this.state.documentLoaded &&
+              <div style={{ textAlign: 'right' }}>
+                <Button
+                  bsStyle="primary"
+                  onClick={ this.editForm.bind(this) }
+                >
+                  Edit Pdf
+                </Button>
+              </div>
+            }
+
+            <PdfViewer
+              uri={documentUrl}
+              scale={0.7}
+              onLoaded={ () => this.setState({ documentLoaded: true}) }
+            />
           </Col>
         </Row>
 

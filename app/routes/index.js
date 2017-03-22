@@ -34,7 +34,9 @@ import Forms from '../components/Pages/Dashboard/Forms'
 import DealsLayout from '../components/Pages/Dashboard/Deals'
 import DealsList from '../components/Pages/Dashboard/Deals/DealsList'
 import DealDashboard from '../components/Pages/Dashboard/Deals/Dashboard'
+import DealEditForm from '../components/Pages/Dashboard/Deals/Edit-Form'
 import CollectSignatures_Documents from '../components/Pages/Dashboard/Deals/CollectSignatures-Documents'
+import CollectSignatures_Recipients from '../components/Pages/Dashboard/Deals/CollectSignatures-Recipients'
 
 // Widgets
 import ListingsWidget from '../components/Pages/Widgets/Listings'
@@ -79,7 +81,9 @@ export default (
     <Route path="/dashboard/deals" component={DealsLayout}>
       <IndexRoute component={DealsList} />
       <Route path="/dashboard/deals/:id" component={DealDashboard} />
+      <Route path="/dashboard/deals/:id/edit-form/:form" component={DealEditForm} />
       <Route path="/dashboard/deals/:id/collect-signatures/documents" component={CollectSignatures_Documents} />
+      <Route path="/dashboard/deals/:id/collect-signatures/recipients" component={CollectSignatures_Recipients} />
     </Route>
     <Route path="*" component={NoMatch}/>
   </Route>

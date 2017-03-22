@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Container, Row, Col, Tabs, Tab, Button } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
 import S from 'shorti'
 import _ from 'underscore'
@@ -12,7 +12,7 @@ export default class CollectSignatures extends React.Component {
     super(props)
     this.state = {
       submissions: null,
-      selectedDocuments: []
+      selectedDocuments: {}
     }
   }
 
@@ -20,6 +20,12 @@ export default class CollectSignatures extends React.Component {
     const deals = this.props.deals
     const deal_id = this.props.params.id
     const deal = _.find(deals, d => d.id === deal_id)
+
+    if (AppStore.data.deals_signatures && AppStore.data.deals_signatures.documents) {
+      this.setState({
+        selectedDocuments: AppStore.data.deals_signatures.documents || {}
+      })
+    }
 
     if (!deal.submissions) {
       return this.getSubmissions()
@@ -50,16 +56,13 @@ export default class CollectSignatures extends React.Component {
 
   onDocumentChange(submission, e) {
     const { selectedDocuments } = this.state
-    let list = selectedDocuments
 
     if (e.target.checked)
-      list.push(submission.id)
+      selectedDocuments[submission.id] = submission
     else
-      list = _.without(selectedDocuments, submission.id)
+      delete selectedDocuments[submission.id]
 
-    this.setState({
-      selectedDocuments: list
-    })
+    this.setState({ selectedDocuments })
   }
 
   onSubmit() {
@@ -102,6 +105,7 @@ export default class CollectSignatures extends React.Component {
                   <div className="control">
                     <input
                       type="checkbox"
+                      checked={ typeof selectedDocuments[subm.id] !== 'undefined' }
                       onChange={this.onDocumentChange.bind(this, subm)}
                     />
                     <img src="/static/images/deals/file.png" />
@@ -119,15 +123,16 @@ export default class CollectSignatures extends React.Component {
         <div className="right">
 
           {
-            selectedDocuments.length > 0 &&
+            Object.keys(selectedDocuments).length > 0 &&
             <span style={{ marginRight: '15px', color: 'gray' }}>
-              { selectedDocuments.length } documents selected
+              { Object.keys(selectedDocuments).length } documents selected
             </span>
           }
 
           <Button
             bsStyle="primary"
             onClick={ this.onSubmit.bind(this) }
+            disabled={ Object.keys(selectedDocuments).length === 0 }
           >
             Next
           </Button>

@@ -1,4 +1,5 @@
 import agent from 'superagent'
+import _ from 'underscore'
 import config from '../../config/public'
 
 export default {
@@ -93,6 +94,31 @@ export default {
       return response.body
     }
     catch(e) {
+      throw e
+    }
+  },
+  collectSignatures: async function(deal_id, subject, documents, recipients, access_token) {
+
+    const data = {
+      deal: deal_id,
+      title: subject,
+      documents: _.map(documents, doc => {
+        return { revision: doc.last_revision}
+      }),
+      recipients: _.map(recipients, recipient => recipient)
+    }
+
+    try {
+      const response = await agent
+        .post(`${config.api_url}/envelopes`)
+        .set({ 'Authorization': `Bearer ${access_token}`})
+        .send(data)
+
+      console.log(response)
+      return response.body
+    }
+    catch(e) {
+      console.log(e)
       throw e
     }
   }
