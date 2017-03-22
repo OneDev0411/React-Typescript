@@ -45,6 +45,9 @@ class PdfViewer extends React.Component {
     try {
       const doc = await PDFJS.getDocument(uri)
       this.setState({ doc, loading: false })
+
+      // trigger when load is completed
+      this.props.onLoaded()
     }
     catch(e) {
       this.setState({ uri: null, loading: false })
