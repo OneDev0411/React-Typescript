@@ -6,7 +6,7 @@ import _ from 'underscore'
 import AddSigner from './add-signer'
 import AppStore from '../../../../../stores/AppStore'
 import Deals from '../../../../../models/Deal'
-import MessageModal from '../../../../partials/MessageModal'
+import MessageModal from '../../../../Partials/MessageModal'
 
 export default class CollectSignaturesRecipients extends React.Component {
 
