@@ -6,7 +6,7 @@ export default (user, alert_id) => {
   const summary = AppStore.data.notifications.summary
   summary.room_notification_count--
   summary.room_notification_summaries = summary.room_notification_summaries.filter(s => {
-    if (s.user_created_alert_ids.indexOf(alert_id) !== -1)
+    if (s.user_created_alert_ids && s.user_created_alert_ids.indexOf(alert_id) !== -1)
       return false
     return true
   })
