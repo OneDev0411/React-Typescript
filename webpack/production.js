@@ -2,7 +2,6 @@ import webpack from 'webpack'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import ImageminPlugin from 'imagemin-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
-import CopyWebpackPlugin from 'copy-webpack-plugin'
 import path from 'path'
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
@@ -35,9 +34,6 @@ webpackConfig.entry = {
 }
 
 webpackConfig.plugins.push(
-  new webpack.optimize.UglifyJsPlugin({
-    minimize: true
-  }),
   new webpack.optimize.CommonsChunkPlugin({
     name: 'vendor',
     filename: appConfig.compile.jsVendorBundle
@@ -45,11 +41,6 @@ webpackConfig.plugins.push(
   new ExtractTextPlugin({
     filename: appConfig.compile.cssBundle,
     allChunks: true
-  }),
-  new ImageminPlugin({
-    pngquant: {
-      quality: '95-100'
-    }
   }),
   new HtmlWebpackPlugin({
     template: appConfig.compile.template,
@@ -59,16 +50,7 @@ webpackConfig.plugins.push(
     minify: {
       collapseWhitespace: false
     }
-  }),
-  new CopyWebpackPlugin([
-    {
-      from: path.join(appConfig.compile.entry, appConfig.compile.publicDirName),
-      to: path.join(appConfig.compile.output, appConfig.compile.publicDirName)
-    }, {
-      from: path.join(appConfig.compile.entry, '/templates/legal.html'),
-      to: path.join(appConfig.compile.output, '/legal.html')
-    }
-  ])
+  })
 )
 
 webpackConfig.module.rules.push(
