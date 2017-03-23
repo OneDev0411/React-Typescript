@@ -158,6 +158,8 @@ const controller = {
     //   }
     //   AppStore.emitChange()
     // }
+    AppStore.data.gmap = gmap
+    AppStore.emitChange()
     ListingDispatcher.dispatch({
       action: 'get-valerts',
       user,
@@ -257,22 +259,9 @@ const controller = {
     window.poly.setMap(null)
     delete AppStore.data.listing_map.drawable
     AppStore.emitChange()
-    let center = window.map.getCenter()
-    center = {
-      lat: center.lat(),
-      lng: center.lng()
-    }
-    const zoom = window.map.getZoom()
-    let bounds = window.map.getBounds()
-    bounds = [
-      bounds.getNorthEast().lat(),
-      bounds.getSouthWest().lng(),
-      bounds.getSouthWest().lat(),
-      bounds.getNorthEast().lng()
-    ]
     delete window.poly
     delete window.poly_search
-    controller.handleBoundsChange(center, zoom, bounds)
+    controller.handleBoundsChange(AppStore.data.gmap)
   },
   handleGoogleMapApi(google) {
     const map = google.map
