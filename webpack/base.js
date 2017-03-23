@@ -59,25 +59,25 @@ export default {
       {
         test: /\.woff(\?.*)?$/,
         use: [{
-          loader: 'url-loader?prefix=fonts/&name=[path][name].[ext]&limit=32000&mimetype=application/font-woff'
+          loader: 'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=application/font-woff'
         }]
       },
       {
         test: /\.woff2(\?.*)?$/,
         use: [{
-          loader: 'url-loader?prefix=fonts/&name=[path][name].[ext]&limit=32000&mimetype=application/font-woff2'
+          loader: 'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=application/font-woff2'
         }]
       },
       {
         test: /\.otf(\?.*)?$/,
         use: [{
-          loader: 'file-loader?prefix=fonts/&name=[path][name].[ext]&limit=32000&mimetype=font/opentype'
+          loader: 'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=font/opentype'
         }]
       },
       {
         test: /\.ttf(\?.*)?$/,
         use: [{
-          loader: 'url-loader?prefix=fonts/&name=[path][name].[ext]&limit=32000&mimetype=application/octet-stream'
+          loader: 'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=application/octet-stream'
         }]
       },
       {
@@ -89,13 +89,13 @@ export default {
       {
         test: /\.svg(\?.*)?$/,
         use: [{
-          loader: 'url-loader?prefix=fonts/&name=[path][name].[ext]&limit=32000&mimetype=image/svg+xml'
+          loader: 'file-loader?prefix=fonts/&name=[path][name].[ext]&mimetype=image/svg+xml'
         }]
       },
       {
         test: /\.(png|jpg|gif)$/,
         use: [{
-          loader: 'url-loader?limit=8192'
+          loader: 'file-loader'
         }]
       }
     ]

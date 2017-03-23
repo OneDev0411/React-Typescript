@@ -1,0 +1,82 @@
+#!/usr/bin/env node
+import fs from 'fs-extra'
+import webpack from 'webpack'
+import minifier from 'minifier'
+import path from 'path'
+import colors from 'colors'
+import _ from 'underscore'
+import config from './webpack.config.babel'
+import appConfig from './config/webpack'
+
+async function run() {
+
+  let chunks = []
+  console.log('[ + ] Start compiling')
+
+  try {
+    const stats = await compile()
+    console.log(`[ + ] Webpack compile is complete in ${stats.time / 1000} seconds`.magenta)
+
+    // output chunks
+    chunks = stats.chunks
+  }
+  catch(e) {
+    console.log(e.red.underline)
+    return
+  }
+
+  fs.copySync(
+    path.join(appConfig.compile.entry, appConfig.compile.publicDirName),
+    path.join(appConfig.compile.output, appConfig.compile.publicDirName)
+  )
+
+  console.log('[ + ] Static assets are copied'.magenta)
+
+  fs.copySync(
+    path.join(appConfig.compile.entry, '/templates/legal.html'),
+    path.join(appConfig.compile.output, '/legal.html')
+  )
+
+  console.log('[ + ] Template files are copied'.magenta)
+
+  // minifying
+  console.log('[ + ] Start minifying'.magenta)
+  chunks.forEach(chunk => {
+    chunk.files.forEach(file => {
+      const filepath = `${appConfig.compile.output}/${file}`
+      minifier.minify(filepath, { output: filepath })
+      console.log(`[ + ] ${file} minified.`.green)
+    })
+  })
+}
+
+function compile() {
+
+  const compiler = webpack(config)
+
+  return new Promise((resolve, reject) => {
+    compiler.run((err, stats) => {
+      if (err) {
+        return reject(err)
+      }
+
+      const jsonStats = stats.toJson(true)
+
+      if (jsonStats.errors.length > 0) {
+        console.log('[ * ] Webpack compiler encountered errors.'.red)
+        console.log(colors.red(jsonStats.errors.join('\n')))
+        return reject(new Error('Webpack compiler encountered errors'))
+      }
+
+      if (jsonStats.warnings.length > 0) {
+        console.log('[ ! ] Webpack compiler encountered warnings.'.yellow.underline)
+        console.log(colors.yellow(jsonStats.warnings.join('\n')))
+      }
+
+      return resolve(jsonStats)
+    })
+  })
+}
+
+
+run()
