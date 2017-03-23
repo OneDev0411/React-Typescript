@@ -1,7 +1,7 @@
 // Brand.js
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import AppStore from '../stores/AppStore'
-
+import merge from 'merge'
 class Brand {
   constructor() {
     this.checkBranding()
@@ -86,6 +86,23 @@ class Brand {
       action: 'get-branding',
       hostname
     })
+  }
+
+  flatten(brand) {
+    if (!brand)
+      return null
+    let new_brand = { ...brand }
+    const brands = [new_brand]
+    while (new_brand.parent) {
+      brands.push(new_brand.parent)
+      new_brand = new_brand.parent
+    }
+    brands.reverse()
+    const merged = {}
+    brands.forEach(brand_loop => {
+      merge.recursive(merged, brand_loop)
+    })
+    return merged
   }
 }
 

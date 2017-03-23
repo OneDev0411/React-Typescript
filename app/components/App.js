@@ -73,12 +73,14 @@ export default class App extends Component {
       AppStore.data.session_started = true
       AppStore.emitChange()
     }
-    const brand = data.brand
-    if (brand && brand.assets && brand.assets.google_analytics_id) {
+    const brand = Brand.flatten(data.brand)
+    if (brand && brand.assets.google_analytics_id && !data.brand_merged) {
       const google_analytics_id = brand.assets.google_analytics_id
       ReactGA.initialize(google_analytics_id)
       ReactGA.set({ page: window.location.pathname })
       ReactGA.pageview(window.location.pathname)
+      AppStore.data.brand_merged = true
+      AppStore.emitChange()
     }
   }
   // Remove change listeners from stores
