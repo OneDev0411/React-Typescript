@@ -286,7 +286,7 @@ export default class Create extends Component {
     let brand_title = (
       <div className="tk-calluna-sans" style={ brand_style }>Rechat</div>
     )
-    if (data.brand && data.brand.assets.logo_wide) {
+    if (data.brand && data.brand.assets && data.brand.assets.logo_wide) {
       brand_title = (
         <div style={ brand_style }>
           <img style={ S('w-200') } src={ data.brand.assets.logo_wide } />
