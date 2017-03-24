@@ -1,5 +1,6 @@
 import React from 'react'
 import { Grid, Container, Row, Col, Tabs, Tab, Button } from 'react-bootstrap'
+import { browserHistory } from 'react-router'
 import { Link } from 'react-router'
 import S from 'shorti'
 import _ from 'underscore'
@@ -60,6 +61,19 @@ export default class DealDashboard extends React.Component {
       this.setState({ files: deal.files })
   }
 
+  getCoverImage(deal) {
+    let src = '/static/images/deals/home.svg'
+
+    if (deal.listing)
+      src = deal.listing.cover_image_url
+
+    return <img style={ S('mr-10 w-40 br-2') } src={ src } />
+  }
+
+  getNumberWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  }
+
   onTabChange(id) {
 
     this.setState({
@@ -97,21 +111,48 @@ export default class DealDashboard extends React.Component {
   }
 
   getAddress(deal) {
-    if (deal.context.address)
-      return deal.context.address
-    else if (deal.proposed_values)
-      return deal.proposed_values.full_address
+    const address = this.getValue(deal, 'street_address')
+
+    if (address.endsWith(','))
+      return address.substring(0, address.length - 1)
     else
-      return '-'
+      return address
+  }
+
+  getFullAddress(deal) {
+    const city = this.getValue(deal, 'city')
+    const county = this.getValue(deal, 'county')
+    const postal_code = this.getValue(deal, 'postal_code')
+    return `${city}, ${county}, ${postal_code}`
   }
 
   getPrice(deal) {
-    if (deal.context.list_price)
-      return deal.context.list_price
-    else if (deal.proposed_values)
-      return deal.proposed_values.list_price
-    else
-      return '-'
+    const price = this.getValue(deal, 'list_price')
+
+    if (price === '-')
+      return price
+
+    return this.getNumberWithCommas(price) + '$'
+  }
+
+  getStatus(deal) {
+    if (deal.listing)
+      return deal.listing.status
+
+    return '-'
+  }
+
+  getValue(deal, field) {
+    if (deal.context && deal.context[field])
+      return deal.context[field]
+    else if (deal.proposed_values && deal.proposed_values[field])
+      return deal.proposed_values[field]
+
+    return '-'
+  }
+
+  goBack() {
+    browserHistory.goBack()
   }
 
   render() {
@@ -124,11 +165,14 @@ export default class DealDashboard extends React.Component {
     return (
       <div className="dashboard">
         <Row className="header">
-          <Col lg={3} md={3} sm={3}>
-            <h4>Deals dashboard</h4>
+          <Col lg={5} md={5} sm={5}>
+            <h4>
+              <i className="fa fa-angle-left" onClick={ () => this.goBack() }></i>
+              { this.getAddress(deal) }
+            </h4>
           </Col>
 
-          <Col lg={9} md={9} sm={9}>
+          <Col lg={7} md={7} sm={7}>
             <ul className="menu">
               <li>
                 <Link to={`/dashboard/deals/${this.state.id}/collect-signatures/documents`}>
@@ -146,27 +190,23 @@ export default class DealDashboard extends React.Component {
             <div className="sidebar">
               <Row>
                 <Col xs={8}>
-                  <div>{ this.getAddress(deal) }</div>
-                  <div></div>
+                  <div className="street">{ this.getAddress(deal) }</div>
+                  <div className="address">{ this.getFullAddress(deal) }</div>
                 </Col>
 
                 <Col xs={4}>
-                  <img style={ S('mr-10') } src="/static/images/deals/home.svg" />
+                  { this.getCoverImage(deal) }
                 </Col>
               </Row>
 
               <div className="hr"></div>
 
               <div className="item">
-                Status: <span>-</span>
+                Status: <span>{ this.getStatus(deal) }</span>
               </div>
 
               <div className="item">
-                Closing Date: <span>-</span>
-              </div>
-
-              <div className="item">
-                Price: <span>{ this.getPrice(deal) }$</span>
+                Price: <span>{ this.getPrice(deal) }</span>
               </div>
 
               <div className="hr"></div>
