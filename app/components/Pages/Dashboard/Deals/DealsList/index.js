@@ -39,30 +39,42 @@ export default class DealsList extends React.Component {
   }
 
   getDealAddress(deal) {
-    if (deal.context.address)
-      return deal.context.address
-    else if (deal.proposed_values)
-      return deal.proposed_values.full_address
+    const address = this.getValue(deal, 'street_address')
+
+    if (address.endsWith(','))
+      return address.substring(0, address.length - 1)
     else
-      return '-'
+      return address
   }
 
   getPrice(deal) {
-    if (deal.context.list_price)
-      return this.getNumberWithCommas(deal.context.list_price)
-    else if (deal.proposed_values)
-      return this.getNumberWithCommas(deal.proposed_values.list_price)
-    else
-      return '-'
+    const price = this.getValue(deal, 'list_price')
+    return this.getNumberWithCommas(price)
   }
 
-  getType(deal) {
-    if (deal.context.transaction_type)
-      return deal.context.transaction_type
-    else if (deal.proposed_values)
-      return deal.proposed_values.transaction_type
-    else
-      return '-'
+  getValue(deal, field) {
+    if (deal.context && deal.context[field])
+      return deal.context[field]
+    else if (deal.proposed_values && deal.proposed_values[field])
+      return deal.proposed_values[field]
+
+    return '-'
+  }
+
+  getCoverImage(deal) {
+    let src = '/static/images/deals/home.svg'
+
+    if (deal.listing)
+      src = deal.listing.cover_image_url
+
+    return <img style={ S('mr-10 w-20') } src={ src } />
+  }
+
+  getStatus(deal) {
+    if (deal.listing)
+      return deal.listing.status
+
+    return '-'
   }
 
   getNumberWithCommas(number) {
@@ -105,13 +117,13 @@ export default class DealsList extends React.Component {
                     <tr key={`DEAL_${deal.id}`}>
                       <td>
                         <Link to={`/dashboard/deals/${deal.id}`}>
-                          <img style={ S('mr-10') } src="/static/images/deals/home.svg" />
+                          { this.getCoverImage(deal) }
                           { this.getDealAddress(deal) }
                         </Link>
                       </td>
-                      <td>-</td>
+                      <td>{ this.getStatus(deal) }</td>
                       <td>{ this.getPrice(deal) } </td>
-                      <td>{ deal.context.deal_type }</td>
+                      <td>{ this.getValue(deal, 'deal_type') }</td>
                       <td>-</td>
                       <td>-</td>
                     </tr>
