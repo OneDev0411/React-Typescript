@@ -3,6 +3,7 @@ import { Row, Col, Button} from 'react-bootstrap'
 import { browserHistory } from 'react-router'
 import S from 'shorti'
 import _ from 'underscore'
+import cn from 'classnames'
 import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
 import PdfViewer from '../../../../Partials/Pdf/Viewer'
 import FormSelect from '../Form-Select'
@@ -78,7 +79,7 @@ export default class DealForm extends React.Component {
                 return (
                   <div
                     key={`submission${subm.id}`}
-                    className="doc-detail"
+                    className={ cn('doc-detail', { selected: submission.id === subm.id } )}
                     onClick={ this.loadForm.bind(this, subm) }
                   >
                     <img src="/static/images/deals/file.png" />

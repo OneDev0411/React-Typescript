@@ -6,7 +6,7 @@ export default {
   getDeals: async function(params, callback) {
     const api_host = config.api_url
 
-    const endpoint = api_host + '/deals'
+    const endpoint = api_host + '/deals?associations=deal.listing'
 
     try {
       const response = await agent
