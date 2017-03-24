@@ -82,7 +82,7 @@ export default class App extends Component {
       AppStore.data.brand_merged = true
       AppStore.emitChange()
     }
-    setIntercom()
+    this.setIntercom()
   }
   setIntercom() {
     const data = AppStore.data
