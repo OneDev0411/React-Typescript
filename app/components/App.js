@@ -82,6 +82,19 @@ export default class App extends Component {
       AppStore.data.brand_merged = true
       AppStore.emitChange()
     }
+    setIntercom()
+  }
+  setIntercom() {
+    const data = AppStore.data
+    if (!data.intercom_set && data.user) {
+      window.intercomSettings = {
+        app_id: "pkzkvg9a",
+        name: `${ data.user.first_name } ${ data.user.last_name }`, // Full name
+        email: `${ data.user.email }`, // Email address
+      }
+      AppStore.data.intercom_set = true
+      AppStore.emitChange()
+    }
   }
   // Remove change listeners from stores
   componentWillUnmount() {
