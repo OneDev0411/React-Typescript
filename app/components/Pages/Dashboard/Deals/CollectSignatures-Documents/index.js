@@ -54,10 +54,10 @@ export default class CollectSignatures extends React.Component {
     })
   }
 
-  onDocumentChange(submission, e) {
+  onDocumentChange(submission) {
     const { selectedDocuments } = this.state
 
-    if (e.target.checked)
+    if (!selectedDocuments[submission.id])
       selectedDocuments[submission.id] = submission
     else
       delete selectedDocuments[submission.id]
@@ -101,12 +101,12 @@ export default class CollectSignatures extends React.Component {
                 <div
                   key={`submission${subm.id}`}
                   className="doc-detail"
+                  onClick={this.onDocumentChange.bind(this, subm)}
                 >
                   <div className="control">
                     <input
                       type="checkbox"
                       checked={ typeof selectedDocuments[subm.id] !== 'undefined' }
-                      onChange={this.onDocumentChange.bind(this, subm)}
                     />
                     <img src="/static/images/deals/file.png" />
                   </div>
