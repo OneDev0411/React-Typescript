@@ -145,6 +145,15 @@
     .header {
       padding: 2% 7%;
       background: #fff;
+      i.fa-angle-left {
+        font-size: 25px;
+        margin-right: 10px;
+        &:hover {
+          color: blue;
+          cursor: pointer;
+        }
+      }
+
       ul.menu {
         text-align: right;
         li {
@@ -172,6 +181,15 @@
           span {
             color: #5b6469;
           }
+        }
+
+        .street {
+          font-size: 11px;
+        }
+
+        .address {
+          font-size: 10px;
+          color: gray;
         }
       }
 

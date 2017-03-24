@@ -86,7 +86,7 @@ export default class FormSelect extends React.Component {
                   {
                     _.chain(this.props.forms)
                     .filter(form => {
-                      return form.title.includes(this.state.filter)
+                      return form.title.toLowerCase().includes(this.state.filter)
                     })
                     .map(form => {
                       return (
