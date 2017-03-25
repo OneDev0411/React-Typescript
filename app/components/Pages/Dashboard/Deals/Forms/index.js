@@ -19,10 +19,6 @@ export default class DealForm extends React.Component {
     }
   }
 
-  componentDidMount() {
-
-  }
-
   componentWillReceiveProps(nextProps) {
     const { submissions } = nextProps
     const { submission } = this.state
