@@ -135,7 +135,7 @@ export default class DealESigns extends React.Component {
           sm={7}
           className="detail"
           style={{
-            minHeight: (envelopes.length * 13) + 'vh'
+            minHeight: (envelopes.length * 14) + 'vh'
           }}
         >
           <h3>{ envelope.title }</h3>
