@@ -133,7 +133,7 @@ export default class DealDashboard extends React.Component {
     if (price === '-')
       return price
 
-    return this.getNumberWithCommas(price) + '$'
+    return '$' + this.getNumberWithCommas(price)
   }
 
   getStatus(deal) {
