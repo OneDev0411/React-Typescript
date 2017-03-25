@@ -118,8 +118,9 @@ export default class DealESigns extends React.Component {
                     <Col xs={10}>
                       <div className="title">{ evlp.title }</div>
                       <div className="info">
-                        { evlp.documents.length } docs | &nbsp;
-                        { signed_users.length } of { evlp.recipients.length } signed
+                        { evlp.documents ? evlp.documents.length : 0 } docs | &nbsp;
+                        { signed_users ? signed_users.length : 0 } of &nbsp;
+                        { evlp.recipients ? evlp.recipients.length : 0 } signed
                       </div>
                     </Col>
                   </Row>
@@ -128,27 +129,40 @@ export default class DealESigns extends React.Component {
             })
           }
         </Col>
-        <Col xs={7} sm={7} className="detail">
+
+        <Col
+          xs={7}
+          sm={7}
+          className="detail"
+          style={{
+            minHeight: (envelopes.length * 13) + 'vh'
+          }}
+        >
           <h3>{ envelope.title }</h3>
 
-          <div className="hr"></div>
           {
-            envelope.documents && envelope.documents.map((doc, key) => {
-              return (
-                <div key={`env_doc_${doc.id}`} className="documents">
-                  <img src="/static/images/deals/file.png" style={ S('w-16 mr-10') }/>
-                  <a target="_blank" href={this.displayEnvelopeDocument(envelope.id, key)}>
-                    { doc.title }
-                  </a>
-                </div>
-              )
-            })
+            envelope.documents &&
+            <div>
+              <div className="hr"></div>
+              {
+                envelope.documents.map((doc, key) => {
+                  return (
+                    <div key={`env_doc_${doc.id}`} className="documents">
+                      <img src="/static/images/deals/file.png" style={ S('w-16 mr-10') }/>
+                      <a target="_blank" href={this.displayEnvelopeDocument(envelope.id, key)}>
+                        { doc.title }
+                      </a>
+                    </div>
+                  )
+                })
+              }
+
+              <div className="hr"></div>
+            </div>
           }
 
-          <div className="hr"></div>
-
           {
-            signed_users.length > 0 &&
+            signed_users && signed_users.length > 0 &&
             <div>
               <div style={ S('mt-50') }>SIGNED BY</div>
               <div className="hr"></div>
