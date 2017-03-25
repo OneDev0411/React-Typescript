@@ -13,24 +13,8 @@ export default class FormSelect extends React.Component {
     }
   }
 
-  componentDidMount() {
-
-  }
-
-  loadFormsList() {
-    AppDispatcher.dispatch({
-      action: 'get-deal-forms',
-      user: this.props.user,
-    })
-  }
-
   addForm() {
-
     const { forms } = this.props
-
-    if (typeof forms === 'undefined')
-      this.loadFormsList()
-
     this.setState({ show: true })
   }
 
