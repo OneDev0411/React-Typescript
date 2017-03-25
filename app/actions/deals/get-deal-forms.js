@@ -17,7 +17,7 @@ export default async function(user)  {
           id: f.id,
           title: f.name,
           roles: f.roles,
-          state: 'UNKNOWN',
+          state: 'In Progress',
           created_at: f.created_at
         }
       })
