@@ -106,6 +106,7 @@ export default class CollectSignatures extends React.Component {
                   <div className="control">
                     <input
                       type="checkbox"
+                      onChange={ () => {} }
                       checked={ typeof selectedDocuments[subm.id] !== 'undefined' }
                     />
                     <img src="/static/images/deals/file.png" />
