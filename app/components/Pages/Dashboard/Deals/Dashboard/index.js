@@ -6,6 +6,7 @@ import S from 'shorti'
 import _ from 'underscore'
 import cookie from 'react-cookie'
 import Avatar from 'react-avatar'
+import AppStore from '../../../../../stores/AppStore'
 import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
 import DealForms from '../Forms'
 import DealESigns from '../ESigns'
@@ -155,6 +156,15 @@ export default class DealDashboard extends React.Component {
     browserHistory.goBack()
   }
 
+  collectSignatures() {
+    if (AppStore.data.deals_signatures) {
+      AppStore.data.deals_signatures.documents = {}
+      AppStore.emitChange()
+    }
+
+    browserHistory.push(`/dashboard/deals/${this.state.id}/collect-signatures/documents`)
+  }
+
   render() {
 
     const { deal, submissions, envelopes, files, activeTab } = this.state
@@ -174,10 +184,8 @@ export default class DealDashboard extends React.Component {
 
           <Col lg={7} md={7} sm={7}>
             <ul className="menu">
-              <li>
-                <Link to={`/dashboard/deals/${this.state.id}/collect-signatures/documents`}>
-                  <img src="/static/images/deals/pen.svg" />
-                </Link>
+              <li onClick={ this.collectSignatures.bind(this) }>
+                <img src="/static/images/deals/pen.svg" />
               </li>
             </ul>
           </Col>
