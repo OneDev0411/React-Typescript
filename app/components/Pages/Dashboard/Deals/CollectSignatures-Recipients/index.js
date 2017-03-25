@@ -15,6 +15,7 @@ export default class CollectSignaturesRecipients extends React.Component {
     this.state = {
       documents: [],
       recipients: {},
+      roles: {},
       subject: '',
       showSuccessModal: false,
       sending: false
@@ -22,8 +23,25 @@ export default class CollectSignaturesRecipients extends React.Component {
   }
 
   componentDidMount() {
+
+    const { forms } = this.props
+    const { documents } = AppStore.data.deals_signatures
+    const roles = {}
+
+    _.each(documents, doc => {
+      const form = _.find(forms, f => f.id === doc.form)
+
+      if (!form.roles)
+        return
+
+      _.each(form.roles, r => {
+        roles[r.role] = r.role
+      })
+    })
+
     this.setState({
-      documents: AppStore.data.deals_signatures.documents
+      documents,
+      roles
     })
   }
 
@@ -82,6 +100,7 @@ export default class CollectSignaturesRecipients extends React.Component {
           <ul>
             <li className="btn">
               <AddSigner
+                roles={ this.state.roles }
                 onSubmit={ this.onAddSigner.bind(this) }
               >
                 Add signer
@@ -91,10 +110,11 @@ export default class CollectSignaturesRecipients extends React.Component {
             <li className="separator">|</li>
             <li className="btn">
               <AddSigner
-                onSubmit={ this.onAddSigner.bind(this) }
+                roles={ this.state.roles }
                 firstName={ user.first_name }
                 lastName={ user.last_name }
                 email={ user.email }
+                onSubmit={ this.onAddSigner.bind(this) }
               >
                 Add myself
               </AddSigner>
