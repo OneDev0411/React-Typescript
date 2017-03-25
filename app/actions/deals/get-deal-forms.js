@@ -12,7 +12,7 @@ export default async function(user)  {
     const response = await Deals.getForms(params)
 
     if (response.status === 200)
-      AppStore.data.deals.forms = _.map(response.body.data, f => {
+      AppStore.data.deals_forms = _.map(response.body.data, f => {
         return {
           id: f.id,
           title: f.name,
