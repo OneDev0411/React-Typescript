@@ -23,13 +23,13 @@ export default class DealsList extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { deals } = nextProps
+    const { deals, forms } = nextProps
 
     if (deals)
       this.setState({ deals, loading: false })
 
     // load all forms list
-    if (deals && !deals.forms)
+    if (!forms)
       this.getForms()
   }
 

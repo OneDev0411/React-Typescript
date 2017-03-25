@@ -44,7 +44,8 @@ export default class Deals extends React.Component {
     const children = React.Children.map(this.props.children, child =>
       React.cloneElement(child, {
         user,
-        deals: data.deals
+        deals: data.deals,
+        forms: data.deals_forms
       })
     )
 

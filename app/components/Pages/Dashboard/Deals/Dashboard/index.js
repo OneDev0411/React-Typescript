@@ -251,7 +251,7 @@ export default class DealDashboard extends React.Component {
                   <DealForms
                     submissions={submissions}
                     user={this.props.user}
-                    forms={this.props.deals.forms}
+                    forms={this.props.forms}
                     deal_id={this.props.params.id}
                   />
                 </Tab>
