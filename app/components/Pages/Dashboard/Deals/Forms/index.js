@@ -29,6 +29,10 @@ export default class DealForm extends React.Component {
   }
 
   loadForm(submission) {
+
+    if (!submission)
+      return false
+
     const { last_revision } = submission
     const { user } = this.props
     const token = user.access_token
