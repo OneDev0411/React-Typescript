@@ -182,7 +182,7 @@ export default class DealESigns extends React.Component {
                       <Col xs={10}>
                         <div>{ recp.user.display_name }</div>
                         <div className="signed_at">
-                          { moment(recp.signed_at).format('Y-MM-D HH:mm') }
+                          { moment(recp.signed_at).format('Y/MM/D, HH:mm') }
                         </div>
                       </Col>
                     </Row>
@@ -216,29 +216,38 @@ export default class DealESigns extends React.Component {
                 {
                   not_signed_users.map(recp => {
                     return (
-                      <div key={`env_recp_ns_${recp.id}`} style={ S('mb-10') }>
-                        <Avatar
-                          style={ S('op-0.3') }
-                          round={true}
-                          name={recp.user.display_name}
-                          src={recp.user.profile_image_url}
-                          size={30}
-                        />
+                      <Row key={`env_recp_ns_${recp.id}`} style={ S('mb-10') }>
+                        <Col xs={2}>
+                          <Avatar
+                            style={ S('op-0.3') }
+                            round={true}
+                            name={recp.user.display_name}
+                            src={recp.user.profile_image_url}
+                            size={30}
+                          />
+                        </Col>
 
-                        <span style={ S('mr-10 ml-10 op-0.3') }>
-                          { recp.user.display_name }
-                        </span>
+                        <Col xs={6}>
+                          <div style={ S('op-0.3') }>
+                            { recp.user.display_name }
+                          </div>
+                          <div style={ S('op-0.3 font-11') }>
+                            Doc sent { moment.unix(recp.created_at).format('Y/MM/D, HH:mm') }
+                          </div>
+                        </Col>
 
-                        {
-                          this.props.user.id === recp.user.id &&
-                          <a
-                            href={ this.getSignLink(envelope.id) }
-                            target="_blank"
-                          >
-                            Sign now
-                          </a>
-                        }
-                      </div>
+                        <Col xs={4}>
+                          {
+                            this.props.user.id === recp.user.id &&
+                            <a
+                              href={ this.getSignLink(envelope.id) }
+                              target="_blank"
+                            >
+                              Sign now
+                            </a>
+                          }
+                        </Col>
+                      </Row>
                     )
                   })
                 }
