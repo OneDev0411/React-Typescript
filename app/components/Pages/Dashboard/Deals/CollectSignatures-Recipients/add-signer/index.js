@@ -2,12 +2,11 @@ import React from 'react'
 import { Row, Col, Modal, FormControl, Button } from 'react-bootstrap'
 import cn from 'classnames'
 import S from 'shorti'
+import _ from 'underscore'
 
 export default class extends React.Component {
   constructor(props) {
     super(props)
-
-    this.roles = [ 'Buyer', 'Co-Buyer', 'Seller', 'Co-Seller']
 
     this.state = {
       show: false,
@@ -105,7 +104,7 @@ export default class extends React.Component {
                 Assign a role
                 <ul>
                   {
-                    this.roles.map((role, key) => {
+                    _.map(this.props.roles, (role, key) => {
                       return (
                         <li
                           key={`rl_${key}`}
