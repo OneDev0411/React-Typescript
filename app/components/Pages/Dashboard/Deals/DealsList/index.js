@@ -27,6 +27,21 @@ export default class DealsList extends React.Component {
 
     if (deals)
       this.setState({ deals, loading: false })
+
+    // load all forms list
+    if (deals && !deals.forms)
+      this.getForms()
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+
+    if (nextState.deals.length > 0 && this.state.deals.length === nextState.deals.length)
+      return false
+
+    return (
+      ( nextState.deals.length > 0 && nextState.loading === false ) ||
+      ( nextState.deals.length === 0 && nextState.loading === true )
+    )
   }
 
   getDeals(user) {
@@ -35,6 +50,13 @@ export default class DealsList extends React.Component {
     AppDispatcher.dispatch({
       action: 'get-deals',
       user
+    })
+  }
+
+  getForms() {
+    AppDispatcher.dispatch({
+      action: 'get-deal-forms',
+      user: this.props.user,
     })
   }
 
@@ -82,7 +104,6 @@ export default class DealsList extends React.Component {
   }
 
   render() {
-
     const { deals, loading } = this.state
 
     return (
