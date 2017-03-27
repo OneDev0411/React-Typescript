@@ -77,12 +77,21 @@ export default class CollectSignatures extends React.Component {
     browserHistory.push(`/dashboard/deals/${this.props.params.id}/collect-signatures/recipients`)
   }
 
+  close() {
+    browserHistory.push(`/dashboard/deals/${this.props.params.id}`)
+  }
+
   render() {
 
     const { submissions, selectedDocuments } = this.state
 
     return (
       <div className="collect-signatures documents">
+
+        <div className="close" onClick={ this.close.bind(this) }>
+          <i className="fa fa-close fa-2x"></i>
+          esc
+        </div>
 
         <h2>Select documents</h2>
         <p className="title">

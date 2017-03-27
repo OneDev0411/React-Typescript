@@ -77,6 +77,10 @@ export default class CollectSignaturesRecipients extends React.Component {
     }), 3000)
   }
 
+  close() {
+    browserHistory.push(`/dashboard/deals/${this.props.params.id}`)
+  }
+
   render() {
 
     const { user } = this.props
@@ -84,6 +88,11 @@ export default class CollectSignaturesRecipients extends React.Component {
 
     return (
       <div className="collect-signatures recipients">
+
+        <div className="close" onClick={ this.close.bind(this) }>
+          <i className="fa fa-close fa-2x"></i>
+          esc
+        </div>
 
         <h2>Add recipients</h2>
 

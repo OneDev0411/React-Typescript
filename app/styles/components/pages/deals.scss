@@ -38,6 +38,12 @@
   .collect-signatures {
     padding: 10% 5% 4% 10%;
 
+    .close {
+      position: absolute;
+      right: 30px;
+      top: 30px;
+    }
+
     .doc-detail {
       margin-bottom: 0px;
       padding: 10px;
@@ -351,6 +357,7 @@
           .uploads {
             .uploading {
               margin-top: 10%;
+              margin-bottom: 10%;
               .preview {
                 img {
                   width: 100%;
@@ -368,7 +375,7 @@
             .list {
               padding-right: 0;
               border-right: 1px solid #eee;
-              min-height: 40vh;
+              min-height: 60vh;
               max-height: 70vh;
               overflow: auto;
 
