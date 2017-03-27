@@ -1,38 +1,54 @@
 import React from 'react'
 import { Button } from 'react-bootstrap'
 import config from '../../../../../../config/public'
+config.forms.url = 'http://localhost:3000'
 
 export default class extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      loaded: false
+      loaded: false,
+      deal: null
     }
   }
 
   componentDidMount() {
-    this.iframe.addEventListener('load', this.onLoad.bind(this))
+    // this.iframe.addEventListener('load', this.onLoad.bind(this))
+
+    const { deals, params } = this.props
+
+    // get deal
+    const deal = _.find(deals, deal => deal.id === params.id)
+    this.setState({ deal })
+
+    window.addEventListener('message', event => {
+      const { type, fn, args } = event.data
+
+      // make first case of function uppercase
+      const func = 'on' + fn.charAt(0).toUpperCase() + fn.slice(1)
+
+      if (type === 'trigger')
+        this[func].apply(this, args)
+
+    }, false)
   }
 
   onLoad() {
     this.setState({
       loaded: true
     })
+
+    const win = this.iframe.contentWindow
+
+    // set deal
+    win.postMessage({
+      fn: 'setDeal',
+      args: [ this.state.deal ]
+    }, 'http://localhost:3000')
   }
 
   onSave() {
-    const win = this.iframe.contentWindow
 
-    win.addEventListener("load", receiveMessage, true);
-
-    function receiveMessage(event)
-    {
-      // console.log(event)
-    }
-  }
-
-  receiveMessage(event) {
-    console.log(event)
   }
 
   render() {
@@ -53,7 +69,7 @@ export default class extends React.Component {
         </div>
 
         <iframe
-          src={`${config.forms.url}/embed/${this.props.params.form}?access_token=${token}`}
+          src={`${config.forms.url}/embed/${this.props.params.form}?domain=${window.location.hostname}&access_token=${token}`}
           frameBorder="0"
           ref={ ref => this.iframe = ref }
         />
