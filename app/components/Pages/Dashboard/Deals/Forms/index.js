@@ -28,9 +28,17 @@ export default class DealForm extends React.Component {
     }
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.activeTab === 'forms'
+  }
+
+
   loadForm(submission) {
 
     if (!submission)
+      return false
+
+    if (this.state.submission && submission.id === this.state.submission.id)
       return false
 
     const { last_revision } = submission
@@ -108,7 +116,7 @@ export default class DealForm extends React.Component {
           <Col xs={7}>
 
             {
-              this.state.documentLoaded &&
+              !this.state.documentLoaded &&
               <div style={{ textAlign: 'right' }}>
                 <Button
                   bsStyle="primary"

@@ -261,6 +261,7 @@ export default class DealDashboard extends React.Component {
                     user={this.props.user}
                     forms={this.props.forms}
                     deal_id={this.props.params.id}
+                    activeTab={activeTab}
                   />
                 </Tab>
 
@@ -268,6 +269,7 @@ export default class DealDashboard extends React.Component {
                   <DealESigns
                     envelopes={envelopes}
                     user={this.props.user}
+                    activeTab={activeTab}
                   />
                 </Tab>
 
@@ -276,6 +278,7 @@ export default class DealDashboard extends React.Component {
                     files={files}
                     user={this.props.user}
                     deal_id={this.props.params.id}
+                    activeTab={activeTab}
                   />
                 </Tab>
               </Tabs>

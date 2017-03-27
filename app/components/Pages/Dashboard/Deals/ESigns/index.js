@@ -22,6 +22,10 @@ export default class DealESigns extends React.Component {
 
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.activeTab === 'esigns'
+  }
+
   componentWillReceiveProps(nextProps) {
     const { envelope } = this.state
     const { envelopes } = nextProps

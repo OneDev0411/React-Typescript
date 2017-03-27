@@ -19,19 +19,21 @@ export default class DealForm extends React.Component {
 
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.activeTab === 'uploads'
+  }
+
   onDrop(acceptedFiles, rejectedFiles){
 
     if (!acceptedFiles || acceptedFiles.length < 1)
       return false
 
-    console.log('>1')
     AppDispatcher.dispatch({
       action: 'upload-file',
       user: this.props.user,
       id: this.props.deal_id,
       file: acceptedFiles[0]
     })
-    console.log('>2')
   }
 
   display(file) {
