@@ -74,6 +74,13 @@ export default class MlsMap extends Component {
         if (listing.property && listing.property.address)
           return listing.property.address.location
       })
+      const favorite_listings = data.user.favorite_listings
+      listings = listings.filter(listing => {
+        if (favorite_listings && favorite_listings.indexOf(listing.mls_number) !== -1)
+          return listing
+      })
+      // make sure no dupes
+      listings = _.uniqBy(listings, 'id')
       map_listing_markers = listings.map((listing, i) => {
         return (
           <ListingMapMarker

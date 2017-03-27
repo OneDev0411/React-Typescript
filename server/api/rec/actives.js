@@ -5,7 +5,7 @@ const app = new Koa()
 router.get('/recs/get-actives', async (ctx, next) => {
 
   try {
-    const response = await ctx.fetch('/recs/actives?limit=50')
+    const response = await ctx.fetch('/recs/actives?limit=1000')
     ctx.body = response.body
   }
   catch(e) {}

@@ -6,7 +6,7 @@ export default (user) => {
     access_token: user.access_token
   }
   User.getFavorites(params, (err, res) => {
-    const mls_numbers = res.data
+    const mls_numbers = res
     AppStore.data.user.favorite_listings = mls_numbers
     AppStore.emitChange()
   })
