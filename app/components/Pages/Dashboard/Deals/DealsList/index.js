@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router'
 import S from 'shorti'
+import _ from 'underscore'
 import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
 import { addressTitle } from '../../../../../utils/listing'
 
@@ -99,6 +100,32 @@ export default class DealsList extends React.Component {
     return '-'
   }
 
+  getSortOrder(deal) {
+    const status = this.getStatus(deal).toLowerCase()
+
+   let order = 4
+
+    switch (status) {
+      case 'active':
+        order = 2
+        break
+      case 'sold':
+        order = 3
+        break
+      case 'pending':
+        order = 1
+        break
+      case 'leased':
+        order = 3
+        break
+      case '-':
+        order = 0
+        break
+    }
+
+    return order
+  }
+
   getNumberWithCommas(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
   }
@@ -133,7 +160,11 @@ export default class DealsList extends React.Component {
             </thead>
             <tbody>
               {
-                deals.map(deal => {
+                _.chain(deals)
+                .sortBy(deal => {
+                  return this.getSortOrder(deal)
+                })
+                .map(deal => {
                   return (
                     <tr key={`DEAL_${deal.id}`}>
                       <td>
@@ -150,6 +181,7 @@ export default class DealsList extends React.Component {
                     </tr>
                   )
                 })
+                .value()
               }
             </tbody>
           </table>
