@@ -97,33 +97,28 @@ export default class DealsList extends React.Component {
     if (deal.listing)
       return deal.listing.status
 
-    return '-'
+    return 'Coming Soon'
   }
 
   getSortOrder(deal) {
-    const status = this.getStatus(deal).toLowerCase()
+    const status = this.getStatus(deal)
+    const list = [
+      'Coming Soon',
+      'Active',
+      'Active Option',
+      'Active Contingent',
+      'Active Kickout',
+      'Pending',
+      'Sold',
+      'Leased',
+      'Expired',
+      'Temporarily Off Market',
+      'Cancelled',
+      'Withdrawn'
+    ]
 
-   let order = 4
-
-    switch (status) {
-      case 'active':
-        order = 2
-        break
-      case 'sold':
-        order = 3
-        break
-      case 'pending':
-        order = 1
-        break
-      case 'leased':
-        order = 3
-        break
-      case '-':
-        order = 0
-        break
-    }
-
-    return order
+    const order = list.indexOf(status)
+    return order > -1 ? order : list.length + 1
   }
 
   getNumberWithCommas(number) {
