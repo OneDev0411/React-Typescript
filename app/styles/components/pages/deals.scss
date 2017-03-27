@@ -149,11 +149,12 @@
     }
 
     .header {
-      padding: 2% 7%;
+      padding: 2% 3.5%;
       background: #fff;
       i.fa-angle-left {
         font-size: 25px;
-        margin-right: 10px;
+        margin-right: 0px;
+        width: 20px;
         &:hover {
           color: blue;
           cursor: pointer;
@@ -190,11 +191,11 @@
         }
 
         .street {
-          font-size: 11px;
+          font-size: 13px;
         }
 
         .address {
-          font-size: 10px;
+          font-size: 12px;
           color: gray;
         }
       }
