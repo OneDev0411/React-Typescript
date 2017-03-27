@@ -52,9 +52,7 @@ export default class DealDashboard extends React.Component {
     if (!files) {
       this.setState({ files: deal.files })
       _.each(deal.cookies, (cval, cname) => {
-        cookie.save(cname, cval, {
-          domain: 'https://*.rechat.com'
-        })
+        cookie.save(cname, cval)
       })
     }
 
