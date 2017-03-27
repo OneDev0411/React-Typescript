@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Container, Row, Col, Tabs, Tab, Button } from 'react-bootstrap'
+import { Row, Col, ProgressBar, Button } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'underscore'
 import Dropzone from 'react-dropzone'
@@ -11,12 +11,24 @@ export default class DealForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      file: null
+      file: null,
+      preview: null,
+      uploading: false
     }
   }
 
   componentDidMount() {
 
+  }
+
+  componentWillReceiveProps(nextProps) {
+
+    const { uploading } = nextProps.deal
+
+    if (typeof uploading === 'undefined' || uploading === this.state.uploading)
+      return
+
+    this.setState({ uploading })
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -28,23 +40,37 @@ export default class DealForm extends React.Component {
     if (!acceptedFiles || acceptedFiles.length < 1)
       return false
 
+    this.setState({
+      uploading: true,
+      file: null
+    })
+
     AppDispatcher.dispatch({
       action: 'upload-file',
       user: this.props.user,
       id: this.props.deal_id,
       file: acceptedFiles[0]
     })
+
+    const reader = new FileReader()
+    reader.readAsDataURL(acceptedFiles[0])
+
+    reader.onload = e => {
+      this.setState({ preview: e.target.result })
+    }
   }
 
   display(file) {
     this.setState({
+      preview: null,
+      uploading: false,
       file
     })
   }
 
   render() {
     const { files } = this.props
-    const { file } = this.state
+    const { file, uploading, preview } = this.state
 
     return (
       <div>
@@ -97,6 +123,24 @@ export default class DealForm extends React.Component {
           </Col>
 
           <Col xs={6}>
+
+            <div className="uploading">
+              {
+                uploading &&
+                <ProgressBar active now={100} bsStyle="success" />
+              }
+
+              {
+                preview &&
+                <div className="preview">
+                  <img
+                    src={ preview }
+                    style={{ opacity: uploading ? 0.3 : 1 }}
+                  />
+                </div>
+              }
+            </div>
+
             {
               file &&
               <div className="display">

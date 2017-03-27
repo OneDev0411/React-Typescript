@@ -275,6 +275,7 @@ export default class DealDashboard extends React.Component {
                   <Uploads
                     files={files}
                     user={this.props.user}
+                    deal={deal}
                     deal_id={this.props.params.id}
                     activeTab={activeTab}
                   />

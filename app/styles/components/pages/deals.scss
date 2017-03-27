@@ -349,6 +349,22 @@
           }
 
           .uploads {
+            .uploading {
+              margin-top: 10%;
+              .preview {
+                img {
+                  width: 100%;
+                  border-radius: 0 0 2px 2px;
+                  transition: all 500ms ease-in;
+                }
+              }
+
+              .progress {
+                margin-bottom: 0;
+                border-radius: 2px 2px 0 0;
+              }
+            }
+
             .list {
               padding-right: 0;
               border-right: 1px solid #eee;

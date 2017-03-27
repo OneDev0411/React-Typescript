@@ -9,6 +9,9 @@ export default (id, user, file) => {
   // find deal index
   const index = _.findIndex(AppStore.data.deals, deal => deal.id === id)
 
+  AppStore.data.deals[index].uploading = true
+  AppStore.emitChange()
+
   Deals.uploadFile(params, (err, response) => {
 
     let files = AppStore.data.deals[index].files
@@ -21,6 +24,9 @@ export default (id, user, file) => {
       files.push(response.body.data)
       AppStore.data.deals[index].files = files
     }
+
+    // set uploading to false
+    AppStore.data.deals[index].uploading = false
 
     AppStore.emitChange()
   })
