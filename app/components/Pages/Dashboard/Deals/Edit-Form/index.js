@@ -1,7 +1,8 @@
 import React from 'react'
 import { Button } from 'react-bootstrap'
 import config from '../../../../../../config/public'
-config.forms.url = 'http://localhost:3000'
+
+// config.forms.url = 'http://localhost:3000'
 
 export default class extends React.Component {
   constructor(props) {
