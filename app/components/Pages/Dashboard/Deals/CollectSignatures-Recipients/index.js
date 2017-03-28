@@ -63,8 +63,9 @@ export default class CollectSignaturesRecipients extends React.Component {
     try {
       await Deals.collectSignatures(deal_id, subject, documents, recipients, token)
     }
-    catch(e){
-
+    catch(e) {
+      this.setState({ sending: false })
+      return
     }
 
     this.setState({
@@ -72,9 +73,10 @@ export default class CollectSignaturesRecipients extends React.Component {
       sending: false
     })
 
-    setTimeout(() => this.setState({
-      showSuccessModal: false
-    }), 3000)
+    setTimeout(() => {
+      this.setState({ showSuccessModal: false })
+      browserHistory.push(`/dashboard/deals/${this.props.params.id}/esigns`)
+    }, 3000)
   }
 
   close() {
@@ -175,7 +177,7 @@ export default class CollectSignaturesRecipients extends React.Component {
                     <img src="/static/images/deals/file.png" />
                   </div>
                   <div>{ doc.title }</div>
-                  <div style={{ color: 'gray' }}>Completed</div>
+                  <div style={{ color: 'gray' }}>{ doc.state }</div>
                 </div>
               )
             })
