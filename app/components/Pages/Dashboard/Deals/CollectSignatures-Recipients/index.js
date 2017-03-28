@@ -13,6 +13,7 @@ export default class CollectSignaturesRecipients extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      deal: null,
       documents: [],
       recipients: {},
       roles: {},
@@ -24,8 +25,10 @@ export default class CollectSignaturesRecipients extends React.Component {
 
   componentDidMount() {
 
-    const { forms } = this.props
+    const { deals, forms } = this.props
     const { documents } = AppStore.data.deals_signatures
+    const deal = _.find(deals, d => d.id === this.props.params.id)
+
     const roles = {}
 
     _.each(documents, doc => {
@@ -40,6 +43,8 @@ export default class CollectSignaturesRecipients extends React.Component {
     })
 
     this.setState({
+      subject: `Please sign document for ${this.getAddress(deal)}`,
+      deal,
       documents,
       roles
     })
@@ -63,8 +68,9 @@ export default class CollectSignaturesRecipients extends React.Component {
     try {
       await Deals.collectSignatures(deal_id, subject, documents, recipients, token)
     }
-    catch(e){
-
+    catch(e) {
+      this.setState({ sending: false })
+      return
     }
 
     this.setState({
@@ -72,35 +78,54 @@ export default class CollectSignaturesRecipients extends React.Component {
       sending: false
     })
 
-    setTimeout(() => this.setState({
-      showSuccessModal: false
-    }), 3000)
+    setTimeout(() => {
+      this.setState({ showSuccessModal: false })
+      browserHistory.push(`/dashboard/deals/${this.props.params.id}/esigns`)
+    }, 3000)
   }
 
   close() {
     browserHistory.push(`/dashboard/deals/${this.props.params.id}`)
   }
 
+  getAddress(deal) {
+
+    if (!deal)
+      return
+
+    let address = '-'
+
+    if (deal.context && deal.context.street_address)
+      address = deal.context.street_address
+    else if (deal.proposed_values && deal.proposed_values.street_address)
+      address = deal.proposed_values.street_address
+
+    if (address.endsWith(','))
+      return address.substring(0, address.length - 1)
+    else
+      return address
+  }
+
   render() {
 
     const { user } = this.props
-    const { recipients, documents, sending, subject } = this.state
+    const { recipients, documents, sending, subject, deal } = this.state
 
     return (
       <div className="collect-signatures recipients">
 
         <div className="close" onClick={ this.close.bind(this) }>
-          <i className="fa fa-close fa-2x"></i>
+          <i className="fa fa-times fa-1x"></i>
           esc
         </div>
 
         <h2>Add recipients</h2>
 
         <FormGroup>
-          <ControlLabel>Subject</ControlLabel>
+          <ControlLabel>Email Subject</ControlLabel>
           <FormControl
             type="text"
-            placeholder="Please sign document for 1212 Mickinnely ..."
+            value={ subject }
             onChange={ e => this.setState({ subject: e.target.value }) }
           />
         </FormGroup>

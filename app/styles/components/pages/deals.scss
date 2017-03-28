@@ -14,8 +14,22 @@
     margin-right: 0;
   }
 
+  .loading-deals {
+    padding: 10%;
+  }
+
   .deals-list {
-    padding: 4% 10%;
+    padding: 4% 7%;
+    table {
+      tbody {
+        tr {
+          &:hover {
+            cursor: pointer;
+            background-color: #eee;
+          }
+        }
+      }
+    }
   }
 
   .edit-form {
@@ -40,8 +54,11 @@
 
     .close {
       position: absolute;
-      right: 30px;
+      right: 5.5%;
       top: 30px;
+      i {
+        margin-right: 5px;
+      }
     }
 
     .doc-detail {
@@ -149,11 +166,12 @@
     }
 
     .header {
-      padding: 2% 7%;
+      padding: 2% 3.5%;
       background: #fff;
       i.fa-angle-left {
         font-size: 25px;
-        margin-right: 10px;
+        margin-right: 0px;
+        width: 20px;
         &:hover {
           color: blue;
           cursor: pointer;
@@ -162,6 +180,7 @@
 
       ul.menu {
         text-align: right;
+        margin-right: 7%;
         li {
           &:hover {
             cursor: pointer;
@@ -190,11 +209,11 @@
         }
 
         .street {
-          font-size: 11px;
+          font-size: 14px;
         }
 
         .address {
-          font-size: 10px;
+          font-size: 13px;
           color: gray;
         }
       }
@@ -375,9 +394,6 @@
             .list {
               padding-right: 0;
               border-right: 1px solid #eee;
-              min-height: 60vh;
-              max-height: 70vh;
-              overflow: auto;
 
               .dropzone {
                 text-align: center;
@@ -394,6 +410,12 @@
                   color: blue;
                   cursor: pointer;
                 }
+              }
+
+              .files {
+                min-height: 50vh;
+                max-height: 50vh;
+                overflow: auto;
               }
 
               .item {

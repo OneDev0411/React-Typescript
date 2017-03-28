@@ -1,5 +1,14 @@
 import React from 'react'
-import { Grid, Container, Row, Col, Tabs, Tab, Button } from 'react-bootstrap'
+import {
+  Row,
+  Col,
+  Tabs,
+  Tab,
+  Button,
+  Overlay,
+  Tooltip,
+  Popover
+} from 'react-bootstrap'
 import { browserHistory } from 'react-router'
 import { Link } from 'react-router'
 import S from 'shorti'
@@ -17,9 +26,9 @@ export default class DealDashboard extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      id: this.props.params.id,
+      id: props.params.id,
       deal: null,
-      activeTab: 'forms',
+      activeTab: props.params.tab || 'forms',
       submissions: null,
       envelopes: null,
       files: null
@@ -32,6 +41,10 @@ export default class DealDashboard extends React.Component {
 
     // get deal
     const deal = _.find(deals, deal => deal.id === params.id)
+
+    if (!deal)
+      return
+
     this.setState({ deal })
 
     // load data based on active tab
@@ -41,7 +54,15 @@ export default class DealDashboard extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { deals, params } = nextProps
     const { submissions, envelopes, files } = this.state
+
+    // load deal
     const deal = _.find(deals, d => d.id === params.id)
+
+    if (!deal)
+      return
+
+    if (!this.state.deal)
+      this.setState({ deal })
 
     if (!submissions)
       this.setState({ submissions: deal.submissions })
@@ -51,13 +72,22 @@ export default class DealDashboard extends React.Component {
 
     if (!files) {
       this.setState({ files: deal.files })
+
+      // set cookies for this deal
       _.each(deal.cookies, (cval, cname) => {
-        cookie.save(cname, cval)
+        cookie.remove(cname)
+        cookie.save(cname, cval, {
+          domain: '.irish.rechat.com'
+        })
       })
     }
 
     if (deal.files && files && deal.files.length > files.length)
       this.setState({ files: deal.files })
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return typeof nextProps.deals !== 'undefined'
   }
 
   getCoverImage(deal) {
@@ -151,7 +181,7 @@ export default class DealDashboard extends React.Component {
   }
 
   goBack() {
-    browserHistory.goBack()
+    browserHistory.push('/dashboard/deals')
   }
 
   collectSignatures() {
@@ -172,6 +202,7 @@ export default class DealDashboard extends React.Component {
 
     return (
       <div className="dashboard">
+
         <Row className="header">
           <Col lg={5} md={5} sm={5}>
             <h4>
@@ -182,7 +213,9 @@ export default class DealDashboard extends React.Component {
 
           <Col lg={7} md={7} sm={7}>
             <ul className="menu">
-              <li onClick={ this.collectSignatures.bind(this) }>
+              <li
+                onClick={ this.collectSignatures.bind(this) }
+              >
                 <img src="/static/images/deals/pen.svg" />
               </li>
             </ul>
