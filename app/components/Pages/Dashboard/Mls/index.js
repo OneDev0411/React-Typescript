@@ -90,7 +90,6 @@ export default class Mls extends Component {
     }
     // Get favorites
     if (!user.favorite_listings) {
-      console.log('get-favorites')
       ListingDispatcher.dispatch({
         action: 'get-favorites',
         user
@@ -110,6 +109,7 @@ export default class Mls extends Component {
     this.checkForMobile()
     Brand.checkBranding()
     this.checkQuery()
+    this.showHalfPanel()
   }
   componentDidUpdate() {
     const data = this.props.data
@@ -140,6 +140,15 @@ export default class Mls extends Component {
   }
   componentWillUnmount() {
     controller.listing_map.hideModal()
+  }
+  showHalfPanel() {
+    const data = this.props.data
+    AppStore.data.listing_panel = {
+      view: 'photos',
+      size: 'half'
+    }
+    AppStore.data.show_listing_panel = true
+    AppStore.emitChange()
   }
   initGoogleSearch() {
     if (window.google) {
@@ -230,6 +239,7 @@ export default class Mls extends Component {
           })
         }
         this.changeURL('/dashboard/mls')
+        this.showHalfPanel()
         break
       case 'alerts':
         AppStore.data.show_alerts_map = true
@@ -787,6 +797,12 @@ export default class Mls extends Component {
       }
     }
     content_area = <MlsMap data={ data } />
+    // Show search
+    if (data.listing_panel && data.listing_panel.size) {
+      <div style={ S('absolute h-100p w-50p') }>
+        { content_area }
+      </div>
+    }
     let alert_list_area
     let alert_viewer_area
     if (data.show_alerts_map) {
