@@ -12,11 +12,16 @@ import config from '../../../../../../config/public'
 export default class DealForm extends React.Component {
   constructor(props) {
     super(props)
+    this.mounted = true
     this.state = {
       submission: null,
       documentUrl: null,
       documentLoaded: false
     }
+  }
+
+  componentDidMount() {
+    this.mounted = true
   }
 
   componentWillReceiveProps(nextProps) {
@@ -26,6 +31,10 @@ export default class DealForm extends React.Component {
     if (submissions && !submission) {
       this.loadForm(submissions[0])
     }
+  }
+
+  componentWillUnmount() {
+    this.mounted = false
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -91,7 +100,7 @@ export default class DealForm extends React.Component {
                   >
                     <img src="/static/images/deals/file.png" />
                     <div className="title">{ subm.title }</div>
-                    <div className="status">{ subm.state }</div>
+                    <div className="status">{ subm.state === 'Fair' ? 'Completed' : subm.state }</div>
                   </div>
                 )
               })
@@ -142,7 +151,10 @@ export default class DealForm extends React.Component {
             <PdfViewer
               uri={documentUrl}
               scale={0.7}
-              onLoaded={ () => this.setState({ documentLoaded: true}) }
+              onLoaded={ () => {
+                if (this.mounted)
+                  this.setState({ documentLoaded: true})
+              }}
             />
           </Col>
         </Row>
