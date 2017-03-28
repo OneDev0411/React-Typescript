@@ -9,3 +9,4 @@ desktop/builds
 dist
 *.lock
 *.bkp
+*.log*
