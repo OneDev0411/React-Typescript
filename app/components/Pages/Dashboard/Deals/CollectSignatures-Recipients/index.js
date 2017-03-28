@@ -43,6 +43,7 @@ export default class CollectSignaturesRecipients extends React.Component {
     })
 
     this.setState({
+      subject: `Please sign document for ${this.getAddress(deal)}`,
       deal,
       documents,
       roles
@@ -124,7 +125,7 @@ export default class CollectSignaturesRecipients extends React.Component {
           <ControlLabel>Email Subject</ControlLabel>
           <FormControl
             type="text"
-            value={ `Please sign document for ${this.getAddress(deal)}` }
+            value={ subject }
             onChange={ e => this.setState({ subject: e.target.value }) }
           />
         </FormGroup>
