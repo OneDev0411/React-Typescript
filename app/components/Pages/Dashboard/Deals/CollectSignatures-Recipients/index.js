@@ -7,6 +7,7 @@ import AddSigner from './add-signer'
 import AppStore from '../../../../../stores/AppStore'
 import Deals from '../../../../../models/Deal'
 import MessageModal from '../../../../Partials/MessageModal'
+import config from '../../../../../../config/public'
 
 export default class CollectSignaturesRecipients extends React.Component {
 
@@ -34,7 +35,7 @@ export default class CollectSignaturesRecipients extends React.Component {
     _.each(documents, doc => {
       const form = _.find(forms, f => f.id === doc.form)
 
-      if (!form.roles)
+      if (form && !form.roles)
         return
 
       _.each(form.roles, r => {
@@ -57,9 +58,12 @@ export default class CollectSignaturesRecipients extends React.Component {
   }
 
   async onSubmit() {
-    const { subject, documents, recipients } = this.state
+    const { subject, documents, recipients, sending } = this.state
     const deal_id = this.props.params.id
     const token = this.props.user.access_token
+
+    if (sending)
+      return
 
     this.setState({
       sending: true
@@ -70,6 +74,10 @@ export default class CollectSignaturesRecipients extends React.Component {
     }
     catch(e) {
       this.setState({ sending: false })
+
+      if (~~e.status === 412)
+        this.loginToDocusign()
+
       return
     }
 
@@ -82,6 +90,19 @@ export default class CollectSignaturesRecipients extends React.Component {
       this.setState({ showSuccessModal: false })
       browserHistory.push(`/dashboard/deals/${this.props.params.id}/esigns`)
     }, 3000)
+  }
+
+  loginToDocusign() {
+    const token = this.props.user.access_token
+    const login = window.open(`${config.app.url}/api/deals/docusign/login?access_token=${token}`,
+      'sharer', 'toolbar=0,status=0,width=548,height=325')
+
+    window.addEventListener('message', event => {
+      login.close()
+      setTimeout(() => {
+        this.onSubmit()
+      }, 100)
+    }, false)
   }
 
   close() {

@@ -21,6 +21,9 @@ export default class Deals extends React.Component {
     // get deals
     this.getDeals(user)
 
+    // get forms
+    this.getForms(user)
+
     // check for mobile
     this.checkForMobile()
   }
@@ -28,6 +31,13 @@ export default class Deals extends React.Component {
   checkForMobile() {
     AppDispatcher.dispatch({
       action: 'check-for-mobile'
+    })
+  }
+
+  getForms(user) {
+    AppDispatcher.dispatch({
+      action: 'get-deal-forms',
+      user
     })
   }
 
