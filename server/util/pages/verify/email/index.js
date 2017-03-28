@@ -1,5 +1,5 @@
 import Koa from 'koa'
-import agent from 'superagent'
+import super_agent from 'superagent'
 import AppStore from '../../../../../app/stores/AppStore'
 import Crypto from '../../../../../app/models/Crypto'
 const router = require('koa-router')()
@@ -44,7 +44,7 @@ router.get('/verify_email/submitted', async (ctx, next) => {
   }
 
   try {
-    const response = await agent.patch(verify_email_url).send(request_object)
+    const response = await super_agent.patch(verify_email_url).send(request_object)
 
     if (response.data.is_shadow) {
       return ctx.redirect('/verify/email?status=success&token=' + token +
