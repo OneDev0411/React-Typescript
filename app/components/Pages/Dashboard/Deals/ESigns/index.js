@@ -112,6 +112,9 @@ export default class DealESigns extends React.Component {
         <Col xs={5} sm={5} style={ S('p-0') }>
           {
             envelopes && envelopes.map(evlp => {
+
+              let _signed_users = _.filter(evlp.recipients, recp => recp.signed_at !== null)
+
               return (
                 <div
                   key={`envelope${evlp.id}`}
@@ -126,8 +129,8 @@ export default class DealESigns extends React.Component {
                       <div className="title">{ evlp.title }</div>
                       <div className="info">
                         { evlp.documents ? evlp.documents.length : 0 } docs | &nbsp;
-                        { signed_users ? signed_users.length : 0 } of &nbsp;
-                        { evlp.recipients ? evlp.recipients.length : 0 } signed
+                        { _signed_users.length } of &nbsp;
+                        { evlp.recipients.length } signed
                       </div>
                     </Col>
                   </Row>
