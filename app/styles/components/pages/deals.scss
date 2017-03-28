@@ -14,6 +14,10 @@
     margin-right: 0;
   }
 
+  .loading-deals {
+    padding: 10%;
+  }
+
   .deals-list {
     padding: 4% 7%;
     table {
@@ -173,6 +177,8 @@
 
       ul.menu {
         text-align: right;
+        margin-right: 7%;
+        padding: 2%;
         li {
           &:hover {
             cursor: pointer;

@@ -96,7 +96,7 @@ export default class DealESigns extends React.Component {
     if (envelopes.length === 0) {
       return (
         <div className="no-esign">
-          There is no eSign!
+          You haven't sent any docs yet
         </div>
       )
     }

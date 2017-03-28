@@ -11,7 +11,7 @@ export default class DealsList extends React.Component {
     super(props);
     this.state = {
       deals: [],
-      loading: false
+      loading: true
     }
   }
   componentDidMount() {
@@ -19,14 +19,12 @@ export default class DealsList extends React.Component {
 
     if (deals)
       this.setState({ deals })
-    else
-      this.getDeals(user)
   }
 
   componentWillReceiveProps(nextProps) {
     const { deals, forms } = nextProps
 
-    if (deals)
+    if (deals && this.state.deals.length === 0)
       this.setState({ deals, loading: false })
 
     // load all forms list
@@ -35,23 +33,7 @@ export default class DealsList extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-
-    if (nextState.deals.length > 0 && this.state.deals.length === nextState.deals.length)
-      return false
-
-    return (
-      ( nextState.deals.length > 0 && nextState.loading === false ) ||
-      ( nextState.deals.length === 0 && nextState.loading === true )
-    )
-  }
-
-  getDeals(user) {
-    this.setState({ loading: true })
-
-    AppDispatcher.dispatch({
-      action: 'get-deals',
-      user
-    })
+    return true
   }
 
   getForms() {
@@ -124,14 +106,6 @@ export default class DealsList extends React.Component {
     return (
       <div className="deals-list">
         <h3>Deals</h3>
-
-        {
-          loading &&
-          <div className="loading">
-            <i className="fa fa-spinner fa-spin fa-2x fa-fw"></i>
-            <b>Loading deals ...</b>
-          </div>
-        }
 
         {
           deals.length > 0 &&
