@@ -20,7 +20,7 @@ const controller = {
     delete AppStore.data.listing_panel
     AppStore.emitChange()
   },
-  showPanelView(view) {
+  showPanelView(view, size) {
     if (AppStore.data.show_listing_panel && AppStore.data.listing_panel && AppStore.data.listing_panel.view === view) {
       delete AppStore.data.listing_panel
       delete AppStore.data.show_listing_panel
@@ -34,6 +34,7 @@ const controller = {
     AppStore.data.listing_panel = {
       view
     }
+    AppStore.data.listing_panel.size = size
     if (!AppStore.data.show_listing_panel)
       AppStore.data.show_listing_panel = true
     delete AppStore.data.show_filter_form

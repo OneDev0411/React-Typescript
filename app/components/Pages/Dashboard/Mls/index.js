@@ -560,7 +560,7 @@ export default class Mls extends Component {
         list_color = Brand.color('primary', '3388ff')
 
       let photos_color = '929292'
-      if (data.listing_panel && data.listing_panel.view === 'photos')
+      if (data.listing_panel && data.listing_panel.view === 'photos' && data.listing_panel.size === 'full')
         photos_color = Brand.color('primary', '3388ff')
 
       results_actions = (
@@ -580,7 +580,7 @@ export default class Mls extends Component {
                 <SvgList color={`#${list_color}`} />
               </div>
             </Button>
-            <Button style={ btn_style } onClick={ controller.listing_panel.showPanelView.bind(this, 'photos') }>
+            <Button style={ btn_style } onClick={ controller.listing_panel.showPanelView.bind(this, 'photos', 'full') }>
               <div style={ S('mt-3') }>
                 <SvgPhotos color={`#${photos_color}`} />
               </div>
@@ -799,9 +799,13 @@ export default class Mls extends Component {
     content_area = <MlsMap data={ data } />
     // Show search
     if (data.listing_panel && data.listing_panel.size) {
-      <div style={ S('absolute h-100p w-50p') }>
-        { content_area }
-      </div>
+      content_area = (
+        <div style={ S(`absolute h-100p w-${window.innerWidth - 850 - 70}`) }>
+          { content_area }
+        </div>
+      )
+      if (data.listing_panel.size === 'full')
+        content_area = null
     }
     let alert_list_area
     let alert_viewer_area

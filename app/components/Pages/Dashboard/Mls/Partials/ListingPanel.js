@@ -221,12 +221,23 @@ export default class ListingPanel extends Component {
       heading_height = 180
     }
     const listing_panel_wrap_style = S('fixed t-62 r-0 w-0 h-0 z-5')
-    const listing_panel_style = S('absolute t-0 w-850 bg-fff h-' + window.innerHeight)
-    const listing_scroll_style = {
+    let listing_panel_style = S(`absolute t-0 w-850 bg-fff h-${window.innerHeight}`)
+    let listing_scroll_style = {
       ...listing_panel_style,
       top: panel_top + 'px',
       height: window.innerHeight - heading_height + 10,
       overflowY: 'scroll'
+    }
+    // Go full (width) monty
+    if (data.listing_panel && data.listing_panel.size === 'full') {
+      listing_panel_style = {
+        ...listing_panel_style,
+        ...S(`w-${window.innerWidth - 70}`)
+      }
+      listing_scroll_style = {
+        ...listing_scroll_style,
+        ...S(`w-${window.innerWidth - 70}`)
+      }
     }
     let panel_class = 'listing-panel'
     let button_class = 'listing-panel__button invisible'
