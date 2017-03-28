@@ -5,6 +5,7 @@ import cn from 'classnames'
 import Avatar from 'react-avatar'
 import S from 'shorti'
 import moment from 'moment'
+import tz from 'moment-timezone'
 import Deal from '../../../../../models/Deal'
 import config from '../../../../../../config/public'
 
@@ -14,7 +15,8 @@ export default class DealESigns extends React.Component {
     this.state = {
       envelope: null,
       docsResent: false,
-      resendingDoc: false
+      resendingDoc: false,
+      docLastResent: null
     }
   }
 
@@ -70,7 +72,8 @@ export default class DealESigns extends React.Component {
       await Deal.resendEnvelopeDocs(eid, token)
       this.setState({
         docsResent: true,
-        resendingDoc: false
+        resendingDoc: false,
+        docLastResent: moment().unix()
       })
     }
     catch(e) {
@@ -82,8 +85,8 @@ export default class DealESigns extends React.Component {
   }
 
   render() {
-    const { envelopes } = this.props
-    const { envelope, resendingDoc, docsResent } = this.state
+    const { envelopes, user } = this.props
+    const { envelope, resendingDoc, docsResent, docLastResent } = this.state
 
     if (!envelopes) {
       return (
@@ -109,6 +112,9 @@ export default class DealESigns extends React.Component {
         <Col xs={5} sm={5} style={ S('p-0') }>
           {
             envelopes && envelopes.map(evlp => {
+
+              let _signed_users = _.filter(evlp.recipients, recp => recp.signed_at !== null)
+
               return (
                 <div
                   key={`envelope${evlp.id}`}
@@ -123,8 +129,8 @@ export default class DealESigns extends React.Component {
                       <div className="title">{ evlp.title }</div>
                       <div className="info">
                         { evlp.documents ? evlp.documents.length : 0 } docs | &nbsp;
-                        { signed_users ? signed_users.length : 0 } of &nbsp;
-                        { evlp.recipients ? evlp.recipients.length : 0 } signed
+                        { _signed_users.length } of &nbsp;
+                        { evlp.recipients.length } signed
                       </div>
                     </Col>
                   </Row>
@@ -236,7 +242,12 @@ export default class DealESigns extends React.Component {
                             { recp.user.display_name }
                           </div>
                           <div style={ S('op-0.3 font-11') }>
-                            Doc sent { moment.unix(recp.created_at).format('Y/MM/D, HH:mm') }
+                            Doc sent {
+                              moment
+                                .unix(docLastResent ? docLastResent : recp.created_at)
+                                .tz(user.timezone)
+                                .format('Y/MM/D, HH:mm')
+                            }
                           </div>
                         </Col>
 
