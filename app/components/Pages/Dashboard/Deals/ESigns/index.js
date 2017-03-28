@@ -15,7 +15,8 @@ export default class DealESigns extends React.Component {
     this.state = {
       envelope: null,
       docsResent: false,
-      resendingDoc: false
+      resendingDoc: false,
+      docLastResent: null
     }
   }
 
@@ -71,7 +72,8 @@ export default class DealESigns extends React.Component {
       await Deal.resendEnvelopeDocs(eid, token)
       this.setState({
         docsResent: true,
-        resendingDoc: false
+        resendingDoc: false,
+        docLastResent: moment().unix()
       })
     }
     catch(e) {
@@ -84,7 +86,7 @@ export default class DealESigns extends React.Component {
 
   render() {
     const { envelopes, user } = this.props
-    const { envelope, resendingDoc, docsResent } = this.state
+    const { envelope, resendingDoc, docsResent, docLastResent } = this.state
 
     if (!envelopes) {
       return (
@@ -239,7 +241,7 @@ export default class DealESigns extends React.Component {
                           <div style={ S('op-0.3 font-11') }>
                             Doc sent {
                               moment
-                                .unix(recp.created_at)
+                                .unix(docLastResent ? docLastResent : recp.created_at)
                                 .tz(user.timezone)
                                 .format('Y/MM/D, HH:mm')
                             }
