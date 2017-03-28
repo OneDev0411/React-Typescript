@@ -102,20 +102,9 @@ export default class DealsList extends React.Component {
 
   getSortOrder(deal) {
     const status = this.getStatus(deal)
-    const list = [
-      'Coming Soon',
-      'Active',
-      'Active Option',
-      'Active Contingent',
-      'Active Kickout',
-      'Pending',
-      'Sold',
-      'Leased',
-      'Expired',
-      'Temporarily Off Market',
-      'Cancelled',
-      'Withdrawn'
-    ]
+    const list = [ 'Incoming', 'Coming Soon', 'Active', 'Active Option Contract',
+      'Active Contingent', 'Active Kick Out', 'Pending', 'Sold', 'Leased', 'Expired',
+      'Temp Off Market', 'Cancelled', 'Withdrawn' ]
 
     const order = list.indexOf(status)
     return order > -1 ? order : list.length + 1
