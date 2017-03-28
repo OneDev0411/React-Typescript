@@ -29,7 +29,8 @@ const routes = {
   ],
   deal: [
     [ 'envelope-document' ],
-    [ 'envelope-sign' ]
+    [ 'envelope-sign' ],
+    [ 'docusign-login' ]
   ],
   intercom: [
     [ 'signin' ],

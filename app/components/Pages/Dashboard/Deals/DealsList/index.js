@@ -22,25 +22,14 @@ export default class DealsList extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { deals, forms } = nextProps
+    const { deals } = nextProps
 
     if (deals && this.state.deals.length === 0)
       this.setState({ deals, loading: false })
-
-    // load all forms list
-    if (!forms)
-      this.getForms()
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     return true
-  }
-
-  getForms() {
-    AppDispatcher.dispatch({
-      action: 'get-deal-forms',
-      user: this.props.user,
-    })
   }
 
   getDealAddress(deal) {
