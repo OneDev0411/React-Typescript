@@ -104,7 +104,7 @@ export default class CollectSignatures extends React.Component {
           {
             submissions &&
             _.chain(submissions)
-            // .filter(subm => subm.state === 'Completed')
+            .filter(subm => subm.state === 'Completed' || subm.state === 'Fair')
             .map(subm => {
               return (
                 <div
