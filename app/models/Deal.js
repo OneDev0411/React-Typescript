@@ -114,11 +114,9 @@ export default {
         .set({ 'Authorization': `Bearer ${access_token}`})
         .send(data)
 
-      console.log(response)
       return response.body
     }
     catch(e) {
-      console.log(e)
       throw e
     }
   }
