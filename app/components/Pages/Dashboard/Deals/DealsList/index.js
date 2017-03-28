@@ -1,6 +1,7 @@
 import React from 'react'
-import { Link } from 'react-router'
+import { browserHistory } from 'react-router'
 import S from 'shorti'
+import _ from 'underscore'
 import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
 import { addressTitle } from '../../../../../utils/listing'
 
@@ -10,7 +11,7 @@ export default class DealsList extends React.Component {
     super(props);
     this.state = {
       deals: [],
-      loading: false
+      loading: true
     }
   }
   componentDidMount() {
@@ -18,14 +19,12 @@ export default class DealsList extends React.Component {
 
     if (deals)
       this.setState({ deals })
-    else
-      this.getDeals(user)
   }
 
   componentWillReceiveProps(nextProps) {
     const { deals, forms } = nextProps
 
-    if (deals)
+    if (deals && this.state.deals.length === 0)
       this.setState({ deals, loading: false })
 
     // load all forms list
@@ -34,23 +33,7 @@ export default class DealsList extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-
-    if (nextState.deals.length > 0 && this.state.deals.length === nextState.deals.length)
-      return false
-
-    return (
-      ( nextState.deals.length > 0 && nextState.loading === false ) ||
-      ( nextState.deals.length === 0 && nextState.loading === true )
-    )
-  }
-
-  getDeals(user) {
-    this.setState({ loading: true })
-
-    AppDispatcher.dispatch({
-      action: 'get-deals',
-      user
-    })
+    return true
   }
 
   getForms() {
@@ -96,7 +79,21 @@ export default class DealsList extends React.Component {
     if (deal.listing)
       return deal.listing.status
 
-    return '-'
+    return 'Coming Soon'
+  }
+
+  getClosingDate(deal) {
+    return this.getValue(deal, 'closing_date')
+  }
+
+  getSortOrder(deal) {
+    const status = this.getStatus(deal)
+    const list = [ 'Incoming', 'Coming Soon', 'Active', 'Active Option Contract',
+      'Active Contingent', 'Active Kick Out', 'Pending', 'Sold', 'Leased', 'Expired',
+      'Temp Off Market', 'Cancelled', 'Withdrawn' ]
+
+    const order = list.indexOf(status)
+    return order > -1 ? order : list.length + 1
   }
 
   getNumberWithCommas(number) {
@@ -111,14 +108,6 @@ export default class DealsList extends React.Component {
         <h3>Deals</h3>
 
         {
-          loading &&
-          <div className="loading">
-            <i className="fa fa-spinner fa-spin fa-2x fa-fw"></i>
-            <b>Loading deals ...</b>
-          </div>
-        }
-
-        {
           deals.length > 0 &&
           <table>
             <thead>
@@ -127,29 +116,33 @@ export default class DealsList extends React.Component {
                 <td>STATUS</td>
                 <td>PRICE $</td>
                 <td>SIDE</td>
-                <td>EXP. DATE</td>
                 <td>CLOSING DATE</td>
               </tr>
             </thead>
             <tbody>
               {
-                deals.map(deal => {
+                _.chain(deals)
+                .sortBy(deal => {
+                  return this.getSortOrder(deal)
+                })
+                .map(deal => {
                   return (
-                    <tr key={`DEAL_${deal.id}`}>
+                    <tr
+                      key={`DEAL_${deal.id}`}
+                      onClick={() => browserHistory.push(`/dashboard/deals/${deal.id}`) }
+                    >
                       <td>
-                        <Link to={`/dashboard/deals/${deal.id}`}>
-                          { this.getCoverImage(deal) }
-                          { this.getDealAddress(deal) }
-                        </Link>
+                        { this.getCoverImage(deal) }
+                        { this.getDealAddress(deal) }
                       </td>
                       <td>{ this.getStatus(deal) }</td>
                       <td>{ this.getPrice(deal) } </td>
                       <td>{ this.getValue(deal, 'deal_type') }</td>
-                      <td>-</td>
-                      <td>-</td>
+                      <td>{ this.getClosingDate(deal) }</td>
                     </tr>
                   )
                 })
+                .value()
               }
             </tbody>
           </table>

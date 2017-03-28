@@ -18,12 +18,25 @@ export default class Deals extends React.Component {
     AppStore.data.user = user
     AppStore.emitChange()
 
+    // get deals
+    this.getDeals(user)
+
+    // check for mobile
     this.checkForMobile()
   }
 
   checkForMobile() {
     AppDispatcher.dispatch({
       action: 'check-for-mobile'
+    })
+  }
+
+  getDeals(user) {
+    this.setState({ loading: true })
+
+    AppDispatcher.dispatch({
+      action: 'get-deals',
+      user
     })
   }
 
@@ -53,7 +66,15 @@ export default class Deals extends React.Component {
       <div>
         { nav_area }
         <div className="deals" style={ main_style }>
-          { children }
+          {
+            !data.deals &&
+            <div className="loading-deals">
+              <i className="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+              <b>loading deals ...</b>
+            </div>
+          }
+
+          { data.deals && children }
         </div>
       </div>
     )

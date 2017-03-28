@@ -4,6 +4,7 @@ import S from 'shorti'
 import _ from 'underscore'
 import Dropzone from 'react-dropzone'
 import Avatar from 'react-avatar'
+import PdfViewer from '../../../../Partials/Pdf/Viewer'
 import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
 import { getTimeAgo } from '../../../../../utils/helpers'
 
@@ -15,10 +16,6 @@ export default class DealForm extends React.Component {
       preview: null,
       uploading: false
     }
-  }
-
-  componentDidMount() {
-
   }
 
   componentWillReceiveProps(nextProps) {
@@ -68,6 +65,26 @@ export default class DealForm extends React.Component {
     })
   }
 
+  getPreviewHandler(preview) {
+    const format = preview.split(';')[0]
+
+    if (format.includes('image/'))
+      return <img src={ preview } />
+
+    if (format.includes('pdf'))
+      return <PdfViewer uri={ preview } />
+  }
+
+  getDisplayHandler(url) {
+    const extname = url.split('.').pop().toLowerCase()
+
+    if (['jpg', 'jpeg', 'png', 'gif'].indexOf(extname) > -1)
+      return <img src={ url } />
+
+    if (extname === 'pdf')
+      return <PdfViewer uri={ url } />
+  }
+
   render() {
     const { files } = this.props
     const { file, uploading, preview } = this.state
@@ -90,36 +107,38 @@ export default class DealForm extends React.Component {
               </Dropzone>
             </div>
 
-            {
-              files &&
-              _.chain(files)
-              .sortBy(file => file.created_at * -1)
-              .map(file => {
-                return (
-                  <div
-                    className="item"
-                    key={`file_${file.id}`}
-                    onClick={ this.display.bind(this, file) }
-                  >
-                    <Row>
-                      <Col xs={2}>
-                        <Avatar
-                          round={true}
-                          src={file.preview_url}
-                          size={40}
-                        />
-                      </Col>
+            <div className="files">
+              {
+                files &&
+                _.chain(files)
+                .sortBy(file => file.created_at * -1)
+                .map(file => {
+                  return (
+                    <div
+                      className="item"
+                      key={`file_${file.id}`}
+                      onClick={ this.display.bind(this, file) }
+                    >
+                      <Row>
+                        <Col xs={2}>
+                          <Avatar
+                            round={true}
+                            src={file.preview_url}
+                            size={40}
+                          />
+                        </Col>
 
-                      <Col xs={10}>
-                        <div><b>{ file.name }</b></div>
-                        <div>Uploaded { getTimeAgo(file.created_at) } ago</div>
-                      </Col>
-                    </Row>
-                  </div>
-                )
-              })
-              .value()
-            }
+                        <Col xs={10}>
+                          <div><b>{ file.name }</b></div>
+                          <div>Uploaded { getTimeAgo(file.created_at) } ago</div>
+                        </Col>
+                      </Row>
+                    </div>
+                  )
+                })
+                .value()
+              }
+            </div>
           </Col>
 
           <Col xs={6}>
@@ -133,10 +152,7 @@ export default class DealForm extends React.Component {
               {
                 preview &&
                 <div className="preview">
-                  <img
-                    src={ preview }
-                    style={{ opacity: uploading ? 0.3 : 1 }}
-                  />
+                  { this.getPreviewHandler(preview) }
                 </div>
               }
             </div>
@@ -144,7 +160,7 @@ export default class DealForm extends React.Component {
             {
               file &&
               <div className="display">
-                <img src={file.url} />
+                { this.getDisplayHandler(file.url) }
               </div>
             }
           </Col>

@@ -32,7 +32,6 @@ export default class DealForm extends React.Component {
     return nextProps.activeTab === 'forms'
   }
 
-
   loadForm(submission) {
 
     if (!submission)
@@ -116,7 +115,7 @@ export default class DealForm extends React.Component {
           <Col xs={7}>
 
             {
-              !this.state.documentLoaded &&
+              !this.state.documentLoaded && 1 === 2 &&
               <div style={{ textAlign: 'right' }}>
                 <Button
                   bsStyle="primary"
@@ -124,6 +123,19 @@ export default class DealForm extends React.Component {
                 >
                   Edit Pdf
                 </Button>
+              </div>
+            }
+
+            {
+              this.state.documentLoaded &&
+              <div style={{ textAlign: 'right' }}>
+                <a
+                  target="_blank"
+                  href={ documentUrl }
+                  className="btn btn-primary"
+                >
+                  View
+                </a>
               </div>
             }
 

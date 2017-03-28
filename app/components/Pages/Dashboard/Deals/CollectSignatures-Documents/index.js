@@ -89,7 +89,7 @@ export default class CollectSignatures extends React.Component {
       <div className="collect-signatures documents">
 
         <div className="close" onClick={ this.close.bind(this) }>
-          <i className="fa fa-close fa-2x"></i>
+          <i className="fa fa-times fa-1x"></i>
           esc
         </div>
 
@@ -104,7 +104,7 @@ export default class CollectSignatures extends React.Component {
           {
             submissions &&
             _.chain(submissions)
-            // .filter(subm => subm.state === 'Completed')
+            .filter(subm => subm.state === 'Fair')
             .map(subm => {
               return (
                 <div
@@ -122,7 +122,7 @@ export default class CollectSignatures extends React.Component {
                   </div>
 
                   <div className="title">{ subm.title }</div>
-                  <div className="status">{ subm.state }</div>
+                  <div className="status">Completed</div>
                 </div>
               )
             })
