@@ -29,7 +29,11 @@ export default class DealForm extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.activeTab === 'uploads'
+
+    if (nextProps.activeTab !== 'uploads')
+      return false
+
+    return true
   }
 
   onDrop(acceptedFiles, rejectedFiles){
@@ -58,6 +62,12 @@ export default class DealForm extends React.Component {
   }
 
   display(file) {
+
+    const extname = file.url.split('.').pop().toLowerCase()
+
+    if (extname === 'pdf')
+      window.open(file.url, 'pdf', 'toolbar=0,status=0,width=700,height=600')
+
     this.setState({
       preview: null,
       uploading: false,
@@ -80,9 +90,6 @@ export default class DealForm extends React.Component {
 
     if (['jpg', 'jpeg', 'png', 'gif'].indexOf(extname) > -1)
       return <img src={ url } />
-
-    if (extname === 'pdf')
-      return <PdfViewer uri={ url } />
   }
 
   render() {
