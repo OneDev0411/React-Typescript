@@ -89,7 +89,7 @@ export default class CollectSignatures extends React.Component {
       <div className="collect-signatures documents">
 
         <div className="close" onClick={ this.close.bind(this) }>
-          <i className="fa fa-close fa-2x"></i>
+          <i className="fa fa-times fa-1x"></i>
           esc
         </div>
 

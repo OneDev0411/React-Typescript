@@ -54,8 +54,11 @@
 
     .close {
       position: absolute;
-      right: 30px;
+      right: 5.5%;
       top: 30px;
+      i {
+        margin-right: 5px;
+      }
     }
 
     .doc-detail {
