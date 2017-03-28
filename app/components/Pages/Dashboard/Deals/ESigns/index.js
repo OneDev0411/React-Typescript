@@ -5,6 +5,7 @@ import cn from 'classnames'
 import Avatar from 'react-avatar'
 import S from 'shorti'
 import moment from 'moment'
+import tz from 'moment-timezone'
 import Deal from '../../../../../models/Deal'
 import config from '../../../../../../config/public'
 
@@ -82,7 +83,7 @@ export default class DealESigns extends React.Component {
   }
 
   render() {
-    const { envelopes } = this.props
+    const { envelopes, user } = this.props
     const { envelope, resendingDoc, docsResent } = this.state
 
     if (!envelopes) {
@@ -236,7 +237,12 @@ export default class DealESigns extends React.Component {
                             { recp.user.display_name }
                           </div>
                           <div style={ S('op-0.3 font-11') }>
-                            Doc sent { moment.unix(recp.created_at).format('Y/MM/D, HH:mm') }
+                            Doc sent {
+                              moment
+                                .unix(recp.created_at)
+                                .tz(user.timezone)
+                                .format('Y/MM/D, HH:mm')
+                            }
                           </div>
                         </Col>
 
