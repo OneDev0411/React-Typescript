@@ -43,6 +43,20 @@ export default class CollectSignaturesRecipients extends React.Component {
       })
     })
 
+    // prefill roles
+    // see https://bitbucket.org/rechat/server/issues/664/prefill-roles-on-collect-signatures-view
+    _.each(deal.roles, rl => {
+      if (roles[rl.role]) {
+        const user = {
+          firstName: rl.user.first_name,
+          lastName: rl.user.last_name,
+          email: rl.user.email,
+          role: rl.role
+        }
+        this.onAddSigner(user)
+      }
+    })
+
     this.setState({
       subject: `Please sign document for ${this.getAddress(deal)}`,
       deal,
