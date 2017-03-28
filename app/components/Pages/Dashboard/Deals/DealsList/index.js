@@ -100,6 +100,10 @@ export default class DealsList extends React.Component {
     return 'Coming Soon'
   }
 
+  getClosingDate(deal) {
+    return this.getValue(deal, 'closing_date')
+  }
+
   getSortOrder(deal) {
     const status = this.getStatus(deal)
     const list = [ 'Incoming', 'Coming Soon', 'Active', 'Active Option Contract',
@@ -138,7 +142,6 @@ export default class DealsList extends React.Component {
                 <td>STATUS</td>
                 <td>PRICE $</td>
                 <td>SIDE</td>
-                <td>EXP. DATE</td>
                 <td>CLOSING DATE</td>
               </tr>
             </thead>
@@ -160,8 +163,7 @@ export default class DealsList extends React.Component {
                       <td>{ this.getStatus(deal) }</td>
                       <td>{ this.getPrice(deal) } </td>
                       <td>{ this.getValue(deal, 'deal_type') }</td>
-                      <td>-</td>
-                      <td>-</td>
+                      <td>{ this.getClosingDate(deal) }</td>
                     </tr>
                   )
                 })
