@@ -141,6 +141,13 @@
             border: 1px solid #e6e6e6;
             padding: 1%;
             min-width: 300px;
+            span {
+              float: right;
+              &:hover {
+                color: red;
+                cursor: pointer;
+              }
+            }
             .info {
               color: gray;
               margin-top: 5px;

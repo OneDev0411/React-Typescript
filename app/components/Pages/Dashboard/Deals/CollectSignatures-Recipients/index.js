@@ -71,6 +71,12 @@ export default class CollectSignaturesRecipients extends React.Component {
     this.setState({ recipients })
   }
 
+  deleteSigner(user) {
+    const { recipients } = this.state
+    delete recipients[user.email]
+    this.setState({ recipients })
+  }
+
   async onSubmit() {
     const { subject, documents, recipients, sending } = this.state
     const deal_id = this.props.params.id
@@ -197,6 +203,11 @@ export default class CollectSignaturesRecipients extends React.Component {
               _.map(recipients, user => {
                 return (
                   <li key={`user_${user.email}`}>
+                    <span
+                      onClick={ this.deleteSigner.bind(this, user) }
+                    >
+                      <i className="fa fa-times"></i>
+                    </span>
                     <div><b>{ user.firstName } { user.lastName }</b></div>
                     <div className="info">{ user.email } | { user.role } </div>
                   </li>
