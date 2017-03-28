@@ -126,6 +126,19 @@ export default class DealForm extends React.Component {
               </div>
             }
 
+            {
+              this.state.documentLoaded &&
+              <div style={{ textAlign: 'right' }}>
+                <a
+                  target="_blank"
+                  href={ documentUrl }
+                  className="btn btn-primary"
+                >
+                  View
+                </a>
+              </div>
+            }
+
             <PdfViewer
               uri={documentUrl}
               scale={0.7}
