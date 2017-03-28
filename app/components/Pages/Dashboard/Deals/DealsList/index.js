@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router'
+import { browserHistory } from 'react-router'
 import S from 'shorti'
 import _ from 'underscore'
 import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
@@ -153,12 +153,13 @@ export default class DealsList extends React.Component {
                 })
                 .map(deal => {
                   return (
-                    <tr key={`DEAL_${deal.id}`}>
+                    <tr
+                      key={`DEAL_${deal.id}`}
+                      onClick={() => browserHistory.push(`/dashboard/deals/${deal.id}`) }
+                    >
                       <td>
-                        <Link to={`/dashboard/deals/${deal.id}`}>
-                          { this.getCoverImage(deal) }
-                          { this.getDealAddress(deal) }
-                        </Link>
+                        { this.getCoverImage(deal) }
+                        { this.getDealAddress(deal) }
                       </td>
                       <td>{ this.getStatus(deal) }</td>
                       <td>{ this.getPrice(deal) } </td>
