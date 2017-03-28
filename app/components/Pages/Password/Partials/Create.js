@@ -60,7 +60,7 @@ export default class Create extends Component {
     // Get token
     const password = this.passwordInput.value.trim()
     let new_email
-    if (this.refs.new_email)
+    if (this.new_emailInput)
       new_email = this.new_emailInput.value.trim()
     const token = decodeURIComponent(helpers.getParameterByName('token'))
     const email = decodeURIComponent(helpers.getParameterByName('email'))
