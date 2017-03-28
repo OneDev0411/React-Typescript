@@ -178,7 +178,6 @@
       ul.menu {
         text-align: right;
         margin-right: 7%;
-        padding: 2%;
         li {
           &:hover {
             cursor: pointer;
@@ -207,11 +206,11 @@
         }
 
         .street {
-          font-size: 13px;
+          font-size: 14px;
         }
 
         .address {
-          font-size: 12px;
+          font-size: 13px;
           color: gray;
         }
       }
