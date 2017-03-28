@@ -158,7 +158,7 @@ export default class DealDashboard extends React.Component {
   }
 
   goBack() {
-    browserHistory.goBack()
+    browserHistory.push('/dashboard/deals')
   }
 
   collectSignatures() {
