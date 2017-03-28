@@ -199,7 +199,7 @@ export default class CollectSignaturesRecipients extends React.Component {
                     <img src="/static/images/deals/file.png" />
                   </div>
                   <div>{ doc.title }</div>
-                  <div style={{ color: 'gray' }}>{ doc.state }</div>
+                  <div style={{ color: 'gray' }}>Completed</div>
                 </div>
               )
             })
