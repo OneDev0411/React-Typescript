@@ -19,7 +19,7 @@ export default class DealDashboard extends React.Component {
     this.state = {
       id: this.props.params.id,
       deal: null,
-      activeTab: 'forms',
+      activeTab: this.props.params.tab || 'forms',
       submissions: null,
       envelopes: null,
       files: null
@@ -32,6 +32,16 @@ export default class DealDashboard extends React.Component {
 
     // get deal
     const deal = _.find(deals, deal => deal.id === params.id)
+
+    // set cookies for this deal
+    _.each(deal.cookies, (cval, cname) => {
+      cookie.remove(cname)
+      cookie.save(cname, cval, {
+        domain: '.irish.rechat.com'
+      })
+    })
+
+    // set deal
     this.setState({ deal })
 
     // load data based on active tab
@@ -51,12 +61,6 @@ export default class DealDashboard extends React.Component {
 
     if (!files) {
       this.setState({ files: deal.files })
-      _.each(deal.cookies, (cval, cname) => {
-        cookie.remove(cname)
-        cookie.save(cname, cval, {
-          domain: '.irish.rechat.com'
-        })
-      })
     }
 
     if (deal.files && files && deal.files.length > files.length)
