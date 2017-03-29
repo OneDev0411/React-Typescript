@@ -37,10 +37,10 @@ const routes = {
     [ 'signup' ]
   ],
   listing: [
-    [ 'valert' ],
+    [ 'search' ],
     [ 'listings' ],
     [ 'similars' ],
-    [ 'search' ]
+    [ 'valert' ]
   ],
   message: [
     [ 'messages' ]
