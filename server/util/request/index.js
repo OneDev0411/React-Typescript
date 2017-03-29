@@ -33,7 +33,7 @@ const requestMiddleware = async function (ctx, next) {
     }
 
     if (process.env.NODE_ENV === 'development') {
-      console.log(`${api_url}${url}\n`)
+      console.log(`${api_url}${url}`)
     }
 
     try {
