@@ -26,7 +26,7 @@ export default class Phone extends Component {
 
     // Errors
     if (errors) {
-      message_text = `This token or code is invalid.`
+      message_text = 'This token or code is invalid.'
       alert_style = 'danger'
     }
 
@@ -34,7 +34,7 @@ export default class Phone extends Component {
       // Success
       if (data.status === 'success') {
         alert_style = 'success'
-        message_text = `Your phone is now verified.`
+        message_text = 'Your phone is now verified.'
       }
 
       // Error
@@ -48,7 +48,7 @@ export default class Phone extends Component {
       }
 
       message = (
-        <Alert bsStyle={ alert_style }>
+        <Alert bsStyle={alert_style}>
           { message_text }
         </Alert>
       )
@@ -56,11 +56,11 @@ export default class Phone extends Component {
 
     let main_content = (
       <div>
-        <div style={ S('color-929292 mb-20') }>Confirm your phone</div>
-        <form onSubmit={ this.handleSubmit.bind(this) }>
-          <FormControl bsStyle={ code_style } inputRef={ ref => this.codeInput = ref } placeholder="Enter 5 digit code" type="text" maxLength="5" />
+        <div style={S('color-929292 mb-20')}>Confirm your phone</div>
+        <form onSubmit={this.handleSubmit.bind(this)}>
+          <FormControl bsStyle={code_style} inputRef={ref => this.codeInput = ref} placeholder="Enter 5 digit code" type="text" maxLength="5" />
           { message }
-          <Button type="submit" bsStyle="primary" style={ S('w-100p') }>Verify</Button>
+          <Button type="submit" bsStyle="primary" style={S('w-100p')}>Verify</Button>
         </form>
       </div>
     )
@@ -69,13 +69,13 @@ export default class Phone extends Component {
       main_content = (
         <div>
           { message }
-          <Link style={ S('w-100p') } className="btn btn-primary" to="/signin">Sign in</Link>
+          <Link style={S('w-100p')} className="btn btn-primary" to="/signin">Sign in</Link>
         </div>
       )
     }
 
     return (
-      <div className="center-block" style={ S('maxw-150') }>
+      <div className="center-block" style={S('maxw-150')}>
         { main_content }
       </div>
     )

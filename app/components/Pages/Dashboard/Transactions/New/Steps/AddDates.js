@@ -61,63 +61,63 @@ export default class AddDates extends Component {
       width: 200
     }
     return (
-      <div style={ S('minw-1000') }>
-        <div style={ S('t-100n absolute color-d0d4d9') }>Never leave that till tomorrow which you can do today.</div>
-        <div style={ S('mb-70') }>
+      <div style={S('minw-1000')}>
+        <div style={S('t-100n absolute color-d0d4d9')}>Never leave that till tomorrow which you can do today.</div>
+        <div style={S('mb-70')}>
           <h1>Important Dates</h1>
         </div>
         <div>
-          <Col sm={4} style={ S('pl-0') }>
-            <div style={ S('color-bfc2c3 font-13 mb-10') }>
+          <Col sm={4} style={S('pl-0')}>
+            <div style={S('color-bfc2c3 font-13 mb-10')}>
               EXECUTED DATE
             </div>
             <div>
-              <div style={ S('font-28 color-a1bde4') }>{ contract_date_formatted ? contract_date_formatted.day.toUpperCase() : '' }</div>
-              <div style={ S('font-28 color-a1bde4 mb-10') }>{ contract_date_formatted ? contract_date_formatted.month.toUpperCase() : '' } { contract_date_formatted ? contract_date_formatted.date : '' }</div>
-              <div style={ { ...year_style, ...S('color-a1bde4') } }>{ contract_date_formatted ? contract_date_formatted.year : '' }</div>
+              <div style={S('font-28 color-a1bde4')}>{ contract_date_formatted ? contract_date_formatted.day.toUpperCase() : '' }</div>
+              <div style={S('font-28 color-a1bde4 mb-10')}>{ contract_date_formatted ? contract_date_formatted.month.toUpperCase() : '' } { contract_date_formatted ? contract_date_formatted.date : '' }</div>
+              <div style={{ ...year_style, ...S('color-a1bde4') }}>{ contract_date_formatted ? contract_date_formatted.year : '' }</div>
               <div>
-                <Button bsStyle="primary" onClick={ this.props.showDatePickerModal.bind(this, 'contract') }>Change</Button>
+                <Button bsStyle="primary" onClick={this.props.showDatePickerModal.bind(this, 'contract')}>Change</Button>
               </div>
             </div>
-            <FormControl readOnly value={ contract_date_formatted } type="hidden" />
+            <FormControl readOnly value={contract_date_formatted} type="hidden" />
           </Col>
-          <Col sm={4} style={ S('pl-0') }>
-            <div style={ S('color-bfc2c3 font-13 mb-10') }>
+          <Col sm={4} style={S('pl-0')}>
+            <div style={S('color-bfc2c3 font-13 mb-10')}>
               OPTION PERIOD ENDS
             </div>
             <div>
-              <div style={ S('font-28 color-828c99') }>{ due_diligence_date_formatted ? due_diligence_date_formatted.day.toUpperCase() : '' }</div>
-              <div style={ S('font-28 color-828c99 mb-10') }>{ due_diligence_date_formatted ? due_diligence_date_formatted.month.toUpperCase() : '' } { due_diligence_date_formatted ? due_diligence_date_formatted.date : '' }</div>
-              <div style={ { ...year_style, ...S('color-828c99') } }>{ due_diligence_date_formatted ? due_diligence_date_formatted.year : '' }</div>
+              <div style={S('font-28 color-828c99')}>{ due_diligence_date_formatted ? due_diligence_date_formatted.day.toUpperCase() : '' }</div>
+              <div style={S('font-28 color-828c99 mb-10')}>{ due_diligence_date_formatted ? due_diligence_date_formatted.month.toUpperCase() : '' } { due_diligence_date_formatted ? due_diligence_date_formatted.date : '' }</div>
+              <div style={{ ...year_style, ...S('color-828c99') }}>{ due_diligence_date_formatted ? due_diligence_date_formatted.year : '' }</div>
               <div>
-                <Button bsStyle="primary" onClick={ this.props.showDatePickerModal.bind(this, 'due_diligence') }>Change</Button>
+                <Button bsStyle="primary" onClick={this.props.showDatePickerModal.bind(this, 'due_diligence')}>Change</Button>
               </div>
             </div>
-            <FormControl readOnly value={ due_diligence_date_formatted } type="hidden" />
+            <FormControl readOnly value={due_diligence_date_formatted} type="hidden" />
           </Col>
-          <Col sm={4} style={ S('pl-0') }>
-            <div style={ S('color-bfc2c3 font-13 mb-10') }>
+          <Col sm={4} style={S('pl-0')}>
+            <div style={S('color-bfc2c3 font-13 mb-10')}>
               CLOSING DATE
             </div>
             <div>
-              <div style={ S('font-28 color-db3821') }>{ closing_date_formatted ? closing_date_formatted.day.toUpperCase() : '' }</div>
-              <div style={ S('font-28 color-db3821 mb-10') }>{ closing_date_formatted ? closing_date_formatted.month.toUpperCase() : '' } { closing_date_formatted ? closing_date_formatted.date : '' }</div>
-              <div style={ { ...year_style, ...S('color-db3821') } }>{ closing_date_formatted ? closing_date_formatted.year : '' }</div>
+              <div style={S('font-28 color-db3821')}>{ closing_date_formatted ? closing_date_formatted.day.toUpperCase() : '' }</div>
+              <div style={S('font-28 color-db3821 mb-10')}>{ closing_date_formatted ? closing_date_formatted.month.toUpperCase() : '' } { closing_date_formatted ? closing_date_formatted.date : '' }</div>
+              <div style={{ ...year_style, ...S('color-db3821') }}>{ closing_date_formatted ? closing_date_formatted.year : '' }</div>
               <div>
-                <Button bsStyle="primary" onClick={ this.props.showDatePickerModal.bind(this, 'closing') }>Change</Button>
+                <Button bsStyle="primary" onClick={this.props.showDatePickerModal.bind(this, 'closing')}>Change</Button>
               </div>
             </div>
-            <FormControl readOnly value={ closing_date_formatted } type="hidden" />
+            <FormControl readOnly value={closing_date_formatted} type="hidden" />
           </Col>
-          <Modal show={ show_date_picker } onHide={ this.props.hideModal.bind(this) }>
+          <Modal show={show_date_picker} onHide={this.props.hideModal.bind(this)}>
             <Modal.Header closeButton>
               <Modal.Title>Select { date_type_title } Date</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <DayPickerType
-                handleDayClick={ this.handleDayClick.bind(this) }
-                date_selected={ closing_date }
-                date_type={ date_type_key }
+                handleDayClick={this.handleDayClick.bind(this)}
+                date_selected={closing_date}
+                date_type={date_type_key}
               />
             </Modal.Body>
           </Modal>

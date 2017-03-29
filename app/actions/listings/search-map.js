@@ -46,7 +46,7 @@ export default (user, q, status) => {
     } else {
       // Multiple listings
       const bounds = new google.maps.LatLngBounds()
-      listings.forEach(listing => {
+      listings.forEach((listing) => {
         if (listing && listing.location) {
           const location = new google.maps.LatLng(listing.location.latitude, listing.location.longitude)
           bounds.extend(location)

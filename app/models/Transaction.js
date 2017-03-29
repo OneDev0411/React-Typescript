@@ -9,7 +9,7 @@ export default {
   create: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/create-transaction'
+    const endpoint = `${api_host}/api/create-transaction`
     const request_object = {
       transaction_type: params.transaction_type,
       title: params.title,
@@ -31,7 +31,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -41,16 +41,14 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   get: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/get-transaction?access_token=' + params.access_token + '&id=' + params.id
+    const endpoint = `${api_host}/api/get-transaction?access_token=${params.access_token}&id=${params.id}`
     fetch(endpoint)
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -60,16 +58,14 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   getAll: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/transactions?access_token=' + params.access_token
+    const endpoint = `${api_host}/api/transactions?access_token=${params.access_token}`
     fetch(endpoint)
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -79,15 +75,13 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   edit: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
     const transaction = params.transaction
-    const endpoint = api_host + '/api/edit-transaction?id=' + transaction.id
+    const endpoint = `${api_host}/api/edit-transaction?id=${transaction.id}`
     const user = params.user
     const request_object = {
       access_token: params.access_token,
@@ -102,7 +96,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -112,15 +106,13 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   addRole: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
     const transaction = params.transaction
-    const endpoint = api_host + '/api/transactions/role?id=' + transaction.id
+    const endpoint = `${api_host}/api/transactions/role?id=${transaction.id}`
     const role = params.role
     const request_object = {
       access_token: params.access_token,
@@ -133,7 +125,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -143,15 +135,13 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   deleteRole: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
     const transaction = params.transaction
-    const endpoint = api_host + '/api/transactions/delete-role?id=' + transaction.id
+    const endpoint = `${api_host}/api/transactions/delete-role?id=${transaction.id}`
     const role = params.role
     const request_object = {
       access_token: params.access_token,
@@ -164,7 +154,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -174,15 +164,13 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   deleteFile: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
     const transaction = params.transaction
-    const endpoint = api_host + '/api/transactions/delete-file?id=' + transaction
+    const endpoint = `${api_host}/api/transactions/delete-file?id=${transaction}`
     const file = params.file
     const request_object = {
       access_token: params.access_token,
@@ -195,7 +183,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -205,14 +193,12 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   delete: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/delete-transaction?id=' + params.id
+    const endpoint = `${api_host}/api/delete-transaction?id=${params.id}`
     const request_object = {
       access_token: params.access_token
     }
@@ -223,7 +209,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -233,19 +219,17 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   uploadFiles: (params, callback) => {
     const api_url = config.api_url
-    const endpoint = api_url + '/transactions/' + params.id + '/attachments'
+    const endpoint = `${api_url}/transactions/${params.id}/attachments`
     // const endpoint = 'http://5.34.214.120:3078/transactions/e8d9e5ce-c47d-11e5-bd78-7b3ccf621e11/attachments'
     const request = superagent.post(endpoint)
     const files = params.files
-    request.set('authorization', 'Bearer ' + params.access_token)
+    request.set('authorization', `Bearer ${params.access_token}`)
     // request.set('authorization', 'Bearer MGFkZjE0ZjAtY2Y1NS0xMWU1LWEwYmMtYzE0YzAzNGQ2NjZj')
-    files.forEach(file => {
+    files.forEach((file) => {
       const info = {
         name: file.name,
         original_name: file.name,
@@ -263,7 +247,7 @@ export default {
   acknowledge: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/transactions/acknowledge-notifications'
+    const endpoint = `${api_host}/api/transactions/acknowledge-notifications`
     const request_object = {
       access_token: params.access_token,
       transaction: params.transaction
@@ -275,7 +259,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -285,8 +269,6 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   }
 }

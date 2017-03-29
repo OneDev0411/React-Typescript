@@ -10,11 +10,11 @@ export default class ListingMapMarker extends React.Component {
   render() {
     return (
       <div
-        key={ this.props.key }
-        onMouseOver={ this.props.onMouseOver }
-        onMouseOut={ this.props.onMouseOut }
-        onClick={ this.props.onClick }
-        style={ S('pointer mt-10') }
+        key={this.props.key}
+        onMouseOver={this.props.onMouseOver}
+        onMouseOut={this.props.onMouseOut}
+        onClick={this.props.onClick}
+        style={S('pointer mt-10')}
       >
         { this.props.children }
       </div>

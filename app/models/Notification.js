@@ -8,9 +8,9 @@ export default {
   getSummary: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/get-notification-summary?access_token=' + params.access_token
+    const endpoint = `${api_host}/api/get-notification-summary?access_token=${params.access_token}`
     fetch(endpoint)
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -20,8 +20,6 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   }
 }

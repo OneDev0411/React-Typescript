@@ -51,7 +51,7 @@ export default (user, redirect_to) => {
     user
   }
   async.series([
-    callback => {
+    (callback) => {
       User.createShadow(params, (err, response) => {
         if (err) {
           // Bad request

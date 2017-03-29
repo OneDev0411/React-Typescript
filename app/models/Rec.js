@@ -8,9 +8,9 @@ export default {
   getActives: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/recs/get-actives?access_token=' + params.access_token
+    const endpoint = `${api_host}/api/recs/get-actives?access_token=${params.access_token}`
     fetch(endpoint)
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -20,17 +20,15 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   getFeed: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
     const room_id = params.room_id
-    const endpoint = api_host + '/api/recs/get-feed?room_id=' + room_id + '&access_token=' + params.access_token
+    const endpoint = `${api_host}/api/recs/get-feed?room_id=${room_id}&access_token=${params.access_token}`
     fetch(endpoint)
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -40,9 +38,7 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   mark: (params, callback) => {
     let api_host = params.api_host
@@ -52,7 +48,7 @@ export default {
     const request_object = {
       recommendations
     }
-    const endpoint = api_host + '/api/recs/mark?access_token=' + params.access_token
+    const endpoint = `${api_host}/api/recs/mark?access_token=${params.access_token}`
     fetch(endpoint, {
       method: 'post',
       headers: {
@@ -60,7 +56,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -70,8 +66,6 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   }
 }

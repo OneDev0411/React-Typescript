@@ -10,7 +10,7 @@ export default {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
 
-    const endpoint = api_host + '/api/tasks'
+    const endpoint = `${api_host}/api/tasks`
 
     const request_object = {
       title: params.title,
@@ -25,7 +25,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -35,14 +35,12 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   delete: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/tasks/delete-task'
+    const endpoint = `${api_host}/api/tasks/delete-task`
     const request_object = {
       id: params.id,
       access_token: params.access_token
@@ -54,7 +52,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -64,16 +62,14 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   getAll: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/tasks?access_token=' + params.access_token
+    const endpoint = `${api_host}/api/tasks?access_token=${params.access_token}`
     fetch(endpoint)
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -83,14 +79,12 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   editStatus: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/tasks/edit-status?access_token=' + params.access_token
+    const endpoint = `${api_host}/api/tasks/edit-status?access_token=${params.access_token}`
     const request_object = {
       id: params.task.id,
       status: params.status
@@ -102,7 +96,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -112,14 +106,12 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   editTitle: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/tasks/edit-title?access_token=' + params.access_token
+    const endpoint = `${api_host}/api/tasks/edit-title?access_token=${params.access_token}`
     const request_object = {
       id: params.id,
       title: params.title
@@ -131,7 +123,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -141,14 +133,12 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   editDate: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/tasks/edit-date?access_token=' + params.access_token
+    const endpoint = `${api_host}/api/tasks/edit-date?access_token=${params.access_token}`
     const request_object = {
       id: params.id,
       due_date: params.due_date
@@ -160,7 +150,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -170,14 +160,12 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   addContacts: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/tasks/add-contacts?access_token=' + params.access_token
+    const endpoint = `${api_host}/api/tasks/add-contacts?access_token=${params.access_token}`
     const request_object = {
       task: params.task,
       contacts: params.contacts
@@ -189,7 +177,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -199,14 +187,12 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   removeContact: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/tasks/remove-contact?access_token=' + params.access_token
+    const endpoint = `${api_host}/api/tasks/remove-contact?access_token=${params.access_token}`
     const request_object = {
       task: params.task,
       contact: params.contact
@@ -218,7 +204,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -228,14 +214,12 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   addTransaction: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/tasks/add-transaction?access_token=' + params.access_token
+    const endpoint = `${api_host}/api/tasks/add-transaction?access_token=${params.access_token}`
     const request_object = {
       task: params.task,
       transaction: params.transaction
@@ -247,7 +231,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -257,14 +241,12 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   acknowledgeNotifications: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/tasks/acknowledge-notifications'
+    const endpoint = `${api_host}/api/tasks/acknowledge-notifications`
     const request_object = {
       access_token: params.access_token
     }
@@ -275,7 +257,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -285,8 +267,6 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   }
 }

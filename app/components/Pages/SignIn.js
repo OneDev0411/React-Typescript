@@ -21,7 +21,6 @@ export default class SignIn extends Component {
   }
 
   componentDidMount() {
-
     // this.refs.email.refs.input.focus()
     const message = helpers.getParameterByName('message')
     if (message && message === 'account-upgraded') {
@@ -143,7 +142,7 @@ export default class SignIn extends Component {
           <Alert bsStyle="danger">
             This email has not been verified yet.
             <div>
-              <a href="#" onClick={ this.sendEmailVerification.bind(this) }>Send email verification again</a>.
+              <a href="#" onClick={this.sendEmailVerification.bind(this)}>Send email verification again</a>.
               <div>{ data.verify_email_sent ? 'Email resent' : ''}</div>
             </div>
           </Alert>
@@ -167,25 +166,25 @@ export default class SignIn extends Component {
     const room_id = this.props.location.query.room_id
     const invite_token = this.props.location.query.invite_token
     if (room_id && invite_token)
-      signup_link += '?message=invite-room&room_id=' + room_id + '&invite_token=' + invite_token
+      signup_link += `?message=invite-room&room_id=${room_id}&invite_token=${invite_token}`
     return (
-      <div id="main-content" className="flex-center-wrap page-bg-video" style={ S('absolute h-100p w-100p') }>
-        <div className="text-center center-block box-shadow" style={ S('w-460 z-100 relative mt-60n bg-fff br-6 p-50') }>
-          <h1 className="tempo" style={ S('mb-20') }>Log into { Brand.message('site_title', 'Rechat') }</h1>
-          <div style={ S('color-555555 mb-20 font-18 mb-20') }>It’s nice to have you back!</div>
+      <div id="main-content" className="flex-center-wrap page-bg-video" style={S('absolute h-100p w-100p')}>
+        <div className="text-center center-block box-shadow" style={S('w-460 z-100 relative mt-60n bg-fff br-6 p-50')}>
+          <h1 className="tempo" style={S('mb-20')}>Log into { Brand.message('site_title', 'Rechat') }</h1>
+          <div style={S('color-555555 mb-20 font-18 mb-20')}>It’s nice to have you back!</div>
           { invite_message }
-          <form action="/signin" onSubmit={ this.handleSubmit.bind(this) }>
-            <FormControl bsSize="large" style={ input_style } bsStyle={ email_style } type="text" inputRef={ ref => this.emailInput = ref } placeholder="Email"/>
-            <FormControl bsSize="large" style={ input_style } bsStyle={ password_style } type={ data.signin && data.signin.password_is_visible ? 'text' : 'password' } inputRef={ ref => this.passwordInput = ref } placeholder="Password"/>
-            <div style={ S('color-929292 font-13 mt-0 mb-10') } className="pull-right"><Link to="/password/forgot">Forgot Password</Link></div>
-            <div className="clearfix"></div>
+          <form action="/signin" onSubmit={this.handleSubmit.bind(this)}>
+            <FormControl bsSize="large" style={input_style} bsStyle={email_style} type="text" inputRef={ref => this.emailInput = ref} placeholder="Email" />
+            <FormControl bsSize="large" style={input_style} bsStyle={password_style} type={data.signin && data.signin.password_is_visible ? 'text' : 'password'} inputRef={ref => this.passwordInput = ref} placeholder="Password" />
+            <div style={S('color-929292 font-13 mt-0 mb-10')} className="pull-right"><Link to="/password/forgot">Forgot Password</Link></div>
+            <div className="clearfix" />
             { message }
             <Button
               bsSize="large"
               type="submit"
-              className={ submitting_class + 'btn' }
-              disabled={ submitting }
-              style={ S('w-100p mb-20 border-none color-fff bg-' + Brand.color('primary', '3388ff')) }
+              className={`${submitting_class}btn`}
+              disabled={submitting}
+              style={S(`w-100p mb-20 border-none color-fff bg-${Brand.color('primary', '3388ff')}`)}
             >
               { submitting ? 'Logging in...' : 'Log in' }
             </Button>
@@ -195,32 +194,32 @@ export default class SignIn extends Component {
               */
             }
           </form>
-          <div style={ S('mt-10 font-14 color-929292') }>
+          <div style={S('mt-10 font-14 color-929292')}>
             Don't have an account?&nbsp;&nbsp;<a href="/signup">Sign up</a>.
           </div>
         </div>
-        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_upgrade_confirm_modal } onHide={ this.hideModal }>
+        <Modal dialogClassName={data.is_mobile ? 'modal-mobile' : ''} show={data.show_upgrade_confirm_modal} onHide={this.hideModal}>
           <Modal.Body className="text-center">
-            <div style={ S('mb-20 mt-20') }>
-              <div style={ S('br-100 w-90 h-90 center-block bg-3388ff text-center') }>
-                <i style={ S('color-fff font-40 mt-25') } className="fa fa-check"></i>
+            <div style={S('mb-20 mt-20')}>
+              <div style={S('br-100 w-90 h-90 center-block bg-3388ff text-center')}>
+                <i style={S('color-fff font-40 mt-25')} className="fa fa-check" />
               </div>
             </div>
-            <div style={ S('font-24 mb-20') }>Account Upgraded</div>
-            <div style={ S('font-18 mb-20') }>You may now log in and use enhanced features.</div>
-            <Button style={ S('mb-20') } bsStyle="primary" onClick={ this.hideModal.bind(this) }>Ok</Button>
+            <div style={S('font-24 mb-20')}>Account Upgraded</div>
+            <div style={S('font-18 mb-20')}>You may now log in and use enhanced features.</div>
+            <Button style={S('mb-20')} bsStyle="primary" onClick={this.hideModal.bind(this)}>Ok</Button>
           </Modal.Body>
         </Modal>
-        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_email_verified_modal } onHide={ this.hideModal }>
+        <Modal dialogClassName={data.is_mobile ? 'modal-mobile' : ''} show={data.show_email_verified_modal} onHide={this.hideModal}>
           <Modal.Body className="text-center">
-            <div style={ S('mb-20 mt-20') }>
-              <div style={ S('br-100 w-90 h-90 center-block bg-3388ff text-center') }>
-                <i style={ S('color-fff font-40 mt-25') } className="fa fa-check"></i>
+            <div style={S('mb-20 mt-20')}>
+              <div style={S('br-100 w-90 h-90 center-block bg-3388ff text-center')}>
+                <i style={S('color-fff font-40 mt-25')} className="fa fa-check" />
               </div>
             </div>
-            <div style={ S('font-24 mb-20') }>Email Verified</div>
-            <div style={ S('font-18 mb-20') }>You may now log in.</div>
-            <Button style={ S('mb-20') } bsStyle="primary" onClick={ this.hideModal.bind(this) }>Ok</Button>
+            <div style={S('font-24 mb-20')}>Email Verified</div>
+            <div style={S('font-18 mb-20')}>You may now log in.</div>
+            <Button style={S('mb-20')} bsStyle="primary" onClick={this.hideModal.bind(this)}>Ok</Button>
           </Modal.Body>
         </Modal>
       </div>

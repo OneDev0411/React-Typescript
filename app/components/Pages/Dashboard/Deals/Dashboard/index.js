@@ -96,20 +96,19 @@ export default class DealDashboard extends React.Component {
     if (deal.listing)
       src = deal.listing.cover_image_url
 
-    return <img style={ S('mr-10 w-40 br-2') } src={ src } />
+    return <img style={S('mr-10 w-40 br-2')} src={src} />
   }
 
   getNumberWithCommas(number) {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   }
 
   onTabChange(id) {
-
     this.setState({
       activeTab: id
     })
 
-    switch(id) {
+    switch (id) {
       case 'forms':
         this.getSubmissions()
         break
@@ -144,8 +143,7 @@ export default class DealDashboard extends React.Component {
 
     if (address.endsWith(','))
       return address.substring(0, address.length - 1)
-    else
-      return address
+    return address
   }
 
   getFullAddress(deal) {
@@ -161,7 +159,7 @@ export default class DealDashboard extends React.Component {
     if (price === '-')
       return price
 
-    return '$' + this.getNumberWithCommas(price)
+    return `$${this.getNumberWithCommas(price)}`
   }
 
   getStatus(deal) {
@@ -194,7 +192,6 @@ export default class DealDashboard extends React.Component {
   }
 
   render() {
-
     const { deal, submissions, envelopes, files, activeTab } = this.state
 
     if (deal === null)
@@ -206,7 +203,7 @@ export default class DealDashboard extends React.Component {
         <Row className="header">
           <Col lg={5} md={5} sm={5}>
             <h4>
-              <i className="fa fa-angle-left" onClick={ () => this.goBack() }></i>
+              <i className="fa fa-angle-left" onClick={() => this.goBack()} />
               { this.getAddress(deal) }
             </h4>
           </Col>
@@ -214,7 +211,7 @@ export default class DealDashboard extends React.Component {
           <Col lg={7} md={7} sm={7}>
             <ul className="menu">
               <li
-                onClick={ this.collectSignatures.bind(this) }
+                onClick={this.collectSignatures.bind(this)}
               >
                 <img src="/static/images/deals/pen.svg" />
               </li>
@@ -238,7 +235,7 @@ export default class DealDashboard extends React.Component {
                 </Col>
               </Row>
 
-              <div className="hr"></div>
+              <div className="hr" />
 
               <div className="item">
                 Status: <span>{ this.getStatus(deal) }</span>
@@ -248,31 +245,29 @@ export default class DealDashboard extends React.Component {
                 Price: <span>{ this.getPrice(deal) }</span>
               </div>
 
-              <div className="hr"></div>
+              <div className="hr" />
 
               {
-                deal.roles && deal.roles.map(role => {
-                  return (
-                    <Row
-                      key={`ROLE_${role.id}`}
-                      style={ S('mb-15') }
-                    >
-                      <Col xs={8}>
-                        <div>{ role.user.display_name }</div>
-                        <div style={{ color: 'gray' }}>{ role.role }</div>
-                      </Col>
+                deal.roles && deal.roles.map(role => (
+                  <Row
+                    key={`ROLE_${role.id}`}
+                    style={S('mb-15')}
+                  >
+                    <Col xs={8}>
+                      <div>{ role.user.display_name }</div>
+                      <div style={{ color: 'gray' }}>{ role.role }</div>
+                    </Col>
 
-                      <Col xs={4}>
-                        <Avatar
-                          round={true}
-                          name={role.user.display_name}
-                          src={role.user.profile_image_url}
-                          size={35}
-                        />
-                      </Col>
-                    </Row>
-                  )
-                })
+                    <Col xs={4}>
+                      <Avatar
+                        round
+                        name={role.user.display_name}
+                        src={role.user.profile_image_url}
+                        size={35}
+                      />
+                    </Col>
+                  </Row>
+                  ))
               }
 
             </div>
@@ -286,7 +281,7 @@ export default class DealDashboard extends React.Component {
                 id="deals-dashboard"
                 onSelect={this.onTabChange.bind(this)}
               >
-                <Tab eventKey='forms' title="Forms" className="forms">
+                <Tab eventKey="forms" title="Forms" className="forms">
                   <DealForms
                     submissions={submissions}
                     user={this.props.user}
@@ -296,7 +291,7 @@ export default class DealDashboard extends React.Component {
                   />
                 </Tab>
 
-                <Tab eventKey='esigns' title="eSigns" className="eSigns">
+                <Tab eventKey="esigns" title="eSigns" className="eSigns">
                   <DealESigns
                     envelopes={envelopes}
                     user={this.props.user}
@@ -304,7 +299,7 @@ export default class DealDashboard extends React.Component {
                   />
                 </Tab>
 
-                <Tab eventKey='uploads' title="Uploads" className="uploads">
+                <Tab eventKey="uploads" title="Uploads" className="uploads">
                   <Uploads
                     files={files}
                     user={this.props.user}

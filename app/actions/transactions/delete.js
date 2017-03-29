@@ -10,16 +10,12 @@ export default (user, id) => {
   Transaction.delete(params, (err, response) => {
     if (response.status === 'success') {
       let transactions = AppStore.data.transactions
-      transactions = transactions.filter(transaction => {
-        return transaction.id !== id
-      })
+      transactions = transactions.filter(transaction => transaction.id !== id)
       delete AppStore.data.deleting_transaction
       delete AppStore.data.current_transaction
       AppStore.data.transactions = transactions
       const transaction_tabs = AppStore.data.transaction_tabs
-      const reduced_transaction_tabs = transaction_tabs.filter(transaction => {
-        return transaction.id !== id
-      })
+      const reduced_transaction_tabs = transaction_tabs.filter(transaction => transaction.id !== id)
       const history = require('../../utils/history')
       history.replaceState(null, '/dashboard/transactions')
       AppStore.data.transaction_tabs = reduced_transaction_tabs

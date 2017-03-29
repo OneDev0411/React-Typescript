@@ -42,7 +42,7 @@ export default class Deals extends Component {
   getPreview(file) {
     return (
       <img
-        src={ file.preview_url }
+        src={file.preview_url}
         className="preview-file"
       />
     )
@@ -88,22 +88,22 @@ export default class Deals extends Component {
     const user = data.user
 
     let main_style = S('absolute l-70 r-0')
-    let nav_area = <SideBar data={ data } />
+    let nav_area = <SideBar data={data} />
 
     if (data.is_mobile) {
       main_style = { ...main_style, ...S('l-0 w-100p') }
 
       if (user)
-        nav_area = <MobileNav data={ data } />
+        nav_area = <MobileNav data={data} />
     }
 
     const { deal } = this.state
 
     return (
-      <div style={ S('minw-1000') }>
+      <div style={S('minw-1000')}>
         <main>
           { nav_area }
-          <div className="deals" style={ main_style }>
+          <div className="deals" style={main_style}>
 
             {
               deal.files && deal.files.length > 0 &&
@@ -120,19 +120,17 @@ export default class Deals extends Component {
                   </thead>
                   <tbody>
                     {
-                      deal.files.map(file => {
-                        return (
-                          <tr key={`FILE_${file.id}`}>
-                            <td>
-                              { this.getPreview(file) }
-                              { file.name }
-                            </td>
-                            <td>{ file.type }</td>
-                            <td>{ file.mime }</td>
-                            <td>{ moment(file.created_at * 1000).format('Y/M/D HH:mm') }</td>
-                          </tr>
-                        )
-                      })
+                      deal.files.map(file => (
+                        <tr key={`FILE_${file.id}`}>
+                          <td>
+                            { this.getPreview(file) }
+                            { file.name }
+                          </td>
+                          <td>{ file.type }</td>
+                          <td>{ file.mime }</td>
+                          <td>{ moment(file.created_at * 1000).format('Y/M/D HH:mm') }</td>
+                        </tr>
+                        ))
                     }
                   </tbody>
                 </table>
@@ -152,18 +150,16 @@ export default class Deals extends Component {
                   </thead>
                   <tbody>
                     {
-                      deal.submissions.map(submission => {
-                        return (
-                          <tr key={`SUBMISSIONS_${submission.id}`}>
-                            <td>
-                              <a target="_blank" href={this.loadSubmissionForm(submission.last_revision)}>
-                                { submission.title }
-                              </a>
-                            </td>
-                            <td>{ submission.state }</td>
-                          </tr>
-                        )
-                      })
+                      deal.submissions.map(submission => (
+                        <tr key={`SUBMISSIONS_${submission.id}`}>
+                          <td>
+                            <a target="_blank" href={this.loadSubmissionForm(submission.last_revision)}>
+                              { submission.title }
+                            </a>
+                          </td>
+                          <td>{ submission.state }</td>
+                        </tr>
+                        ))
                     }
                   </tbody>
                 </table>
@@ -175,38 +171,34 @@ export default class Deals extends Component {
               <div>
                 <h3 className="section-title">E-Signs</h3>
                 {
-                  deal.envelopes.map(envelope => {
-                    return (
-                      <div key={`ENVELOP_${envelope.id}`}>
-                        <b>
-                          { envelope.title }
-                        </b>
+                  deal.envelopes.map(envelope => (
+                    <div key={`ENVELOP_${envelope.id}`}>
+                      <b>
+                        { envelope.title }
+                      </b>
 
-                        <table>
-                          <thead>
-                            <tr>
-                              <td>TITLE</td>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {
-                              envelope.documents.map((edoc, key) => {
-                                return (
-                                  <tr key={`ENVELOPE_DOC_${edoc.id}`}>
-                                    <td>
-                                      <a target="_blank" href={this.loadEnvelopeForm(envelope.id, key)}>
-                                        { edoc.title }
-                                      </a>
-                                    </td>
-                                  </tr>
-                                )
-                              })
+                      <table>
+                        <thead>
+                          <tr>
+                            <td>TITLE</td>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {
+                              envelope.documents.map((edoc, key) => (
+                                <tr key={`ENVELOPE_DOC_${edoc.id}`}>
+                                  <td>
+                                    <a target="_blank" href={this.loadEnvelopeForm(envelope.id, key)}>
+                                      { edoc.title }
+                                    </a>
+                                  </td>
+                                </tr>
+                                ))
                             }
-                          </tbody>
-                        </table>
-                      </div>
-                    )
-                  })
+                        </tbody>
+                      </table>
+                    </div>
+                    ))
                 }
               </div>
             }

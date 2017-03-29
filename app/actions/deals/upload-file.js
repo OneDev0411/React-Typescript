@@ -13,7 +13,6 @@ export default (id, user, file) => {
   AppStore.emitChange()
 
   Deals.uploadFile(params, (err, response) => {
-
     let files = AppStore.data.deals[index].files
 
     if (!files)

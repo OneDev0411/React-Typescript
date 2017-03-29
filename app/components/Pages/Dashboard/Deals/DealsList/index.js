@@ -8,7 +8,7 @@ import { addressTitle } from '../../../../../utils/listing'
 export default class DealsList extends React.Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       deals: [],
       loading: true
@@ -37,8 +37,7 @@ export default class DealsList extends React.Component {
 
     if (address.endsWith(','))
       return address.substring(0, address.length - 1)
-    else
-      return address
+    return address
   }
 
   getPrice(deal) {
@@ -61,7 +60,7 @@ export default class DealsList extends React.Component {
     if (deal.listing)
       src = deal.listing.cover_image_url
 
-    return <img style={ S('mr-10 w-20') } src={ src } />
+    return <img style={S('mr-10 w-20')} src={src} />
   }
 
   getStatus(deal) {
@@ -77,16 +76,16 @@ export default class DealsList extends React.Component {
 
   getSortOrder(deal) {
     const status = this.getStatus(deal)
-    const list = [ 'Incoming', 'Coming Soon', 'Active', 'Active Option Contract',
+    const list = ['Incoming', 'Coming Soon', 'Active', 'Active Option Contract',
       'Active Contingent', 'Active Kick Out', 'Pending', 'Sold', 'Leased', 'Expired',
-      'Temp Off Market', 'Cancelled', 'Withdrawn' ]
+      'Temp Off Market', 'Cancelled', 'Withdrawn']
 
     const order = list.indexOf(status)
     return order > -1 ? order : list.length + 1
   }
 
   getNumberWithCommas(number) {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   }
 
   render() {
@@ -111,26 +110,22 @@ export default class DealsList extends React.Component {
             <tbody>
               {
                 _.chain(deals)
-                .sortBy(deal => {
-                  return this.getSortOrder(deal)
-                })
-                .map(deal => {
-                  return (
-                    <tr
-                      key={`DEAL_${deal.id}`}
-                      onClick={() => browserHistory.push(`/dashboard/deals/${deal.id}`) }
-                    >
-                      <td>
-                        { this.getCoverImage(deal) }
-                        { this.getDealAddress(deal) }
-                      </td>
-                      <td>{ this.getStatus(deal) }</td>
-                      <td>{ this.getPrice(deal) } </td>
-                      <td>{ this.getValue(deal, 'deal_type') }</td>
-                      <td>{ this.getClosingDate(deal) }</td>
-                    </tr>
-                  )
-                })
+                .sortBy(deal => this.getSortOrder(deal))
+                .map(deal => (
+                  <tr
+                    key={`DEAL_${deal.id}`}
+                    onClick={() => browserHistory.push(`/dashboard/deals/${deal.id}`)}
+                  >
+                    <td>
+                      { this.getCoverImage(deal) }
+                      { this.getDealAddress(deal) }
+                    </td>
+                    <td>{ this.getStatus(deal) }</td>
+                    <td>{ this.getPrice(deal) } </td>
+                    <td>{ this.getValue(deal, 'deal_type') }</td>
+                    <td>{ this.getClosingDate(deal) }</td>
+                  </tr>
+                  ))
                 .value()
               }
             </tbody>

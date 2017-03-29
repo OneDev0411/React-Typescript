@@ -56,11 +56,11 @@ export default class Deals extends Component {
 
   getListingImage(deal) {
     if (!deal.listing)
-      return <span></span>
+      return <span />
 
     return (
       <img
-        src={ deal.listing.cover_image_url }
+        src={deal.listing.cover_image_url}
         className="preview-file"
       />
     )
@@ -71,20 +71,20 @@ export default class Deals extends Component {
     const user = data.user
 
     let main_style = S('absolute l-70 r-0')
-    let nav_area = <SideBar data={ data } />
+    let nav_area = <SideBar data={data} />
 
     if (data.is_mobile) {
       main_style = { ...main_style, ...S('l-0 w-100p') }
 
       if (user)
-        nav_area = <MobileNav data={ data } />
+        nav_area = <MobileNav data={data} />
     }
 
     return (
-      <div style={ S('minw-1000') }>
+      <div style={S('minw-1000')}>
         <main>
           { nav_area }
-          <div className="deals" style={ main_style }>
+          <div className="deals" style={main_style}>
             {
               data.concierge_deals &&
               <div>
@@ -99,20 +99,18 @@ export default class Deals extends Component {
                   </thead>
                   <tbody>
                     {
-                      data.concierge_deals.map(deal => {
-                        return (
-                          <tr key={`DEAL_${deal.id}`}>
-                            <td>
-                              <Link to={`/dashboard/concierge/deals/${deal.id}`}>
-                                { this.getListingImage(deal) }
-                                { this.getDealAddress(deal) }
-                              </Link>
-                            </td>
-                            <td>{ deal.created_by.display_name }</td>
-                            <td>{ this.getDealSide(deal) }</td>
-                          </tr>
-                        )
-                      })
+                      data.concierge_deals.map(deal => (
+                        <tr key={`DEAL_${deal.id}`}>
+                          <td>
+                            <Link to={`/dashboard/concierge/deals/${deal.id}`}>
+                              { this.getListingImage(deal) }
+                              { this.getDealAddress(deal) }
+                            </Link>
+                          </td>
+                          <td>{ deal.created_by.display_name }</td>
+                          <td>{ this.getDealSide(deal) }</td>
+                        </tr>
+                        ))
                     }
                   </tbody>
                 </table>

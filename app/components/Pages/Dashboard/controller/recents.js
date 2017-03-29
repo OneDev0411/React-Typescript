@@ -54,10 +54,10 @@ const controller = {
       AppStore.emitChange()
       return
     }
-    items_selected.forEach(item => {
+    items_selected.forEach((item) => {
       if (item.type === 'room') {
         const users = item.value.users
-        users.forEach(user => {
+        users.forEach((user) => {
           items_selected.push({
             label: user.first_name || user.display_name,
             value: user,
@@ -68,16 +68,12 @@ const controller = {
     })
     let filtered_items_selected
     // Filter out rooms
-    filtered_items_selected = items_selected.filter(item => {
-      return item.type !== 'room'
-    })
+    filtered_items_selected = items_selected.filter(item => item.type !== 'room')
     // Filter out self
-    filtered_items_selected = filtered_items_selected.filter(item => {
-      return item.value.id !== AppStore.data.user.id
-    })
+    filtered_items_selected = filtered_items_selected.filter(item => item.value.id !== AppStore.data.user.id)
     // Make unique if existing
     const unique_items_selected = []
-    filtered_items_selected.forEach(item => {
+    filtered_items_selected.forEach((item) => {
       if (item.value.id) {
         if (!_.find(unique_items_selected, { 'value.id': item.value.id }))
           unique_items_selected.push(item)
@@ -94,11 +90,9 @@ const controller = {
     const phone_numbers = _.map(_.filter(unique_items_selected, { type: 'email' }), 'value')
     if (user_ids.length && !emails.length && !phone_numbers.length) {
       let room_found = false
-      rooms.forEach(room => {
+      rooms.forEach((room) => {
         let user_ids_room = _.map(room.users, 'id')
-        user_ids_room = user_ids_room.filter(user_id => {
-          return user_id !== AppStore.data.user.id
-        })
+        user_ids_room = user_ids_room.filter(user_id => user_id !== AppStore.data.user.id)
         if (_.isEqual(_.sortBy(user_ids), _.sortBy(user_ids_room)))
           room_found = room
       })

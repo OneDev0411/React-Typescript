@@ -74,40 +74,40 @@ export default class AddFinancials extends Component {
       sub_agency_commission_format = helpers.numberWithCommas((contract_price * sub_agency_commission * '.01').toFixed(2))
     return (
       <div>
-        <div style={ S('t-100n absolute color-d0d4d9') }>Never leave that till tomorrow which you can do today.</div>
-        <div style={ S('mb-40') }>
+        <div style={S('t-100n absolute color-d0d4d9')}>Never leave that till tomorrow which you can do today.</div>
+        <div style={S('mb-40')}>
           <h1>Financials</h1>
         </div>
         <div>
-          <Col sm={3} style={ container_style }>
-            <span style={ { ...label_style, ...move_left } }>Listing price</span><br/>
-            <span style={ dollar_style }>$</span><FormControl style={ input_style } inputRef={ ref => this.priceInput = ref } onKeyUp={ this.calculateFinancials.bind(this) } type="number" defaultValue={ price }/>
+          <Col sm={3} style={container_style}>
+            <span style={{ ...label_style, ...move_left }}>Listing price</span><br />
+            <span style={dollar_style}>$</span><FormControl style={input_style} inputRef={ref => this.priceInput = ref} onKeyUp={this.calculateFinancials.bind(this)} type="number" defaultValue={price} />
           </Col>
-          <Col sm={3} style={ { ...container_style, ...{ paddingLeft: 30 } } }>
-            <span style={ { ...label_style, ...move_left } }>Contract price</span><br/>
-            <span style={ { ...dollar_style, ...{ left: 14 } } }>$</span><FormControl style={ input_style } inputRef={ ref => this.contract_priceInput = ref } onKeyUp={ this.calculateFinancials.bind(this) } type="number" defaultValue={ contract_price }/>
+          <Col sm={3} style={{ ...container_style, ...{ paddingLeft: 30 } }}>
+            <span style={{ ...label_style, ...move_left }}>Contract price</span><br />
+            <span style={{ ...dollar_style, ...{ left: 14 } }}>$</span><FormControl style={input_style} inputRef={ref => this.contract_priceInput = ref} onKeyUp={this.calculateFinancials.bind(this)} type="number" defaultValue={contract_price} />
           </Col>
-          <Col sm={3} style={ container_style }>
-            <span style={ { ...label_style, ...move_left_small } }>Agent Commission</span><br/>
-            <div style={ percent_style }>%</div>
-            <FormControl maxLength={3} style={ { ...input_style, ...S('w-100p') } } inputRef={ ref => this.buyers_agency_commissionInput = ref } onKeyUp={ this.calculateFinancials.bind(this) } type="number" defaultValue={ buyers_agency_commission }/>
+          <Col sm={3} style={container_style}>
+            <span style={{ ...label_style, ...move_left_small }}>Agent Commission</span><br />
+            <div style={percent_style}>%</div>
+            <FormControl maxLength={3} style={{ ...input_style, ...S('w-100p') }} inputRef={ref => this.buyers_agency_commissionInput = ref} onKeyUp={this.calculateFinancials.bind(this)} type="number" defaultValue={buyers_agency_commission} />
           </Col>
-          <Col sm={3} style={ container_style }>
-            <span style={ { ...label_style, ...move_left_small } }>Co-Agent Commission</span><br/>
-            <div style={ percent_style }>%</div>
-            <FormControl maxLength={3} style={ { ...input_style, ...S('w-100p') } } inputRef={ ref => this.sub_agency_commissionInput = ref } onKeyUp={ this.calculateFinancials.bind(this) } type="number" defaultValue={ sub_agency_commission }/>
+          <Col sm={3} style={container_style}>
+            <span style={{ ...label_style, ...move_left_small }}>Co-Agent Commission</span><br />
+            <div style={percent_style}>%</div>
+            <FormControl maxLength={3} style={{ ...input_style, ...S('w-100p') }} inputRef={ref => this.sub_agency_commissionInput = ref} onKeyUp={this.calculateFinancials.bind(this)} type="number" defaultValue={sub_agency_commission} />
           </Col>
-          <div className="clearfix"></div>
-          <Col sm={6} style={ { ...container_style, ...S('h-89') } }/>
-          <Col sm={3} style={ { ...container_style, ...{ padding: 15 } } }>
-            <span style={ label_style }>est. payout</span><br/>
-            <div style={ S('font-28 color-35b863') }>
+          <div className="clearfix" />
+          <Col sm={6} style={{ ...container_style, ...S('h-89') }} />
+          <Col sm={3} style={{ ...container_style, ...{ padding: 15 } }}>
+            <span style={label_style}>est. payout</span><br />
+            <div style={S('font-28 color-35b863')}>
               <b>${ buyers_agency_commission_format }</b>
             </div>
           </Col>
-          <Col sm={3} style={ { ...container_style, ...{ padding: 15 } } }>
-            <span style={ label_style }>est. payout</span><br/>
-            <div style={ S('font-28 color-82dd00') }>
+          <Col sm={3} style={{ ...container_style, ...{ padding: 15 } }}>
+            <span style={label_style}>est. payout</span><br />
+            <div style={S('font-28 color-82dd00')}>
               <b>${ sub_agency_commission_format }</b>
             </div>
           </Col>

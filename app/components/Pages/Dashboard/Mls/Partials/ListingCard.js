@@ -19,7 +19,7 @@ export default class ListingCard extends Component {
       address = property.address
     const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
     const listing_card_style = {
-      ...S(`w-375 h-270 mr-20 mb-20 pull-left br-3 pointer relative`),
+      ...S('w-375 h-270 mr-20 mb-20 pull-left br-3 pointer relative'),
       boxShadow: '0 0 2px 0 rgba(0, 0, 0, 0.2)'
     }
     const listing_image_style = {
@@ -30,23 +30,23 @@ export default class ListingCard extends Component {
       opacity: '.3'
     }
     return (
-      <div key={ 'listing-viewer-' + listing.id + '-' + helpers.randomString(10) } style={ listing_card_style }>
+      <div key={`listing-viewer-${listing.id}-${helpers.randomString(10)}`} style={listing_card_style}>
         <FavoriteHeart
-          listing={ listing }
+          listing={listing}
         />
-        <div style={ listing_image_style } onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }>
-          <div style={ overlay_style }></div>
-          <div style={ S('absolute b-0 p-10 color-fff') }>
-            <div style={ S('font-24 fw-500') }>${ helpers.numberWithCommas(listing.price) }</div>
-            <div style={ { opacity: '.9' } }>{ listing_util.addressTitle(address) }</div>
-            <div style={ { opacity: '.9' } }>
+        <div style={listing_image_style} onClick={controller.listing_viewer.showListingViewer.bind(this, listing)}>
+          <div style={overlay_style} />
+          <div style={S('absolute b-0 p-10 color-fff')}>
+            <div style={S('font-24 fw-500')}>${ helpers.numberWithCommas(listing.price) }</div>
+            <div style={{ opacity: '.9' }}>{ listing_util.addressTitle(address) }</div>
+            <div style={{ opacity: '.9' }}>
               <span>{ property.bedroom_count } Beds</span>
               &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
               <span>{ property.bathroom_count } Baths</span>
               &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
               <span>{ square_feet } Sqft</span>
               &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-              <span>{ property.year_built ? 'Built in ' + property.year_built : '' }</span>
+              <span>{ property.year_built ? `Built in ${property.year_built}` : '' }</span>
             </div>
           </div>
         </div>

@@ -14,15 +14,13 @@ export default class AlertViewer extends Component {
     let listing_gallery_area
     if (listings) {
       listing_gallery_area = (
-        <div style={ S('m-0 p-0') }>
+        <div style={S('m-0 p-0')}>
           {
-            listings.map(listing => {
-              return (
-                <ListingCard
-                  listing={ listing }
-                />
-              )
-            })
+            listings.map(listing => (
+              <ListingCard
+                listing={listing}
+              />
+              ))
           }
         </div>
       )
@@ -33,8 +31,8 @@ export default class AlertViewer extends Component {
       overflowY: 'scroll'
     }
     return (
-      <div className="alert-viewer" style={ alert_viewer_wrapper_style }>
-        <div style={ alert_viewer_style }>
+      <div className="alert-viewer" style={alert_viewer_wrapper_style}>
+        <div style={alert_viewer_style}>
           { listing_gallery_area }
         </div>
       </div>

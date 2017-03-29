@@ -8,9 +8,9 @@ export default {
   get: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/alerts/get-alert-room?room_id=' + params.room_id + '&alert_id=' + params.alert_id + '&access_token=' + params.access_token
+    const endpoint = `${api_host}/api/alerts/get-alert-room?room_id=${params.room_id}&alert_id=${params.alert_id}&access_token=${params.access_token}`
     fetch(endpoint)
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -20,16 +20,14 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   getPaged: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/alerts/get-alert-room?room_id=' + params.room_id + '&alert_id=' + params.alert_id + '&access_token=' + params.access_token + '&timestamp=' + params.timestamp
+    const endpoint = `${api_host}/api/alerts/get-alert-room?room_id=${params.room_id}&alert_id=${params.alert_id}&access_token=${params.access_token}&timestamp=${params.timestamp}`
     fetch(endpoint)
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -39,16 +37,14 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   getAll: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/alerts/get-alerts?access_token=' + params.access_token
+    const endpoint = `${api_host}/api/alerts/get-alerts?access_token=${params.access_token}`
     fetch(endpoint)
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -58,15 +54,13 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   acknowledgeNotifications: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
     const alert = params.alert
-    const endpoint = api_host + '/api/acknowledge-alert-notifications?access_token=' + params.access_token
+    const endpoint = `${api_host}/api/acknowledge-alert-notifications?access_token=${params.access_token}`
     const request_object = {
       alert
     }
@@ -77,7 +71,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -87,8 +81,6 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   }
 }

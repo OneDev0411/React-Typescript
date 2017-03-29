@@ -11,8 +11,8 @@ export default (user, room, files) => {
       id: room.id,
       files: [file]
     }
-    Room.uploadFiles(params, request => {
-      request.on('progress', e => {
+    Room.uploadFiles(params, (request) => {
+      request.on('progress', (e) => {
         const upload_percent = e.percent
         AppStore.data.current_room.upload_percent = upload_percent
         AppStore.emitChange()

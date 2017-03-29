@@ -25,7 +25,7 @@ export default class TasksModule extends Component {
       this.getAllTransactions()
     AppStore.emitChange()
     // Esc to close
-    document.onkeydown = evt => {
+    document.onkeydown = (evt) => {
       if (evt.keyCode === 27 && data.current_task && !data.show_contacts_modal)
         this.closeDrawer()
     }
@@ -158,7 +158,7 @@ export default class TasksModule extends Component {
     }
     const data = this.props.data
     const contacts = data.contacts
-    const contacts_filtered = contacts.filter(contact => {
+    const contacts_filtered = contacts.filter((contact) => {
       let first_name
       let email
       if (contact.first_name) {
@@ -290,9 +290,7 @@ export default class TasksModule extends Component {
     const user = data.user
     const task = data.current_task
     const contacts = AppStore.data.contacts_added['share-task']
-    const new_contacts = contacts.filter(contact => {
-      return contact.type !== 'contact'
-    })
+    const new_contacts = contacts.filter(contact => contact.type !== 'contact')
     if (new_contacts) {
       // Create contacts if email or phone
       AppDispatcher.dispatch({
@@ -350,7 +348,7 @@ export default class TasksModule extends Component {
       AppStore.emitChange()
       return
     }
-    const transaction_results = transactions.filter(transaction => {
+    const transaction_results = transactions.filter((transaction) => {
       if (transaction.title.indexOf(search_text) !== -1)
         return true
       if (transaction.listing_data)
@@ -385,14 +383,14 @@ export default class TasksModule extends Component {
 
     if (direction === 'up') {
       if (active_transaction > -1)
-        active_transaction = active_transaction - 1
+        active_transaction -= 1
       else
         active_transaction = transaction_results.length - 1
     }
 
     if (direction === 'down') {
       if (active_transaction < transaction_results.length - 1)
-        active_transaction = active_transaction + 1
+        active_transaction += 1
       else
         active_transaction = 0
     }
@@ -473,14 +471,14 @@ export default class TasksModule extends Component {
 
     if (direction === 'up') {
       if (active_contact > -1)
-        active_contact = active_contact - 1
+        active_contact -= 1
       else
         active_contact = search_contacts_list.length - 1
     }
 
     if (direction === 'down') {
       if (active_contact < search_contacts_list.length - 1)
-        active_contact = active_contact + 1
+        active_contact += 1
       else
         active_contact = 0
     }
@@ -548,37 +546,37 @@ export default class TasksModule extends Component {
     const data = this.props.data
     return (
       <MainContent
-        data={ data }
-        module_type={ this.props.module_type }
-        addTransactionToTask={ this.addTransactionToTask }
-        containing_body_height={ this.props.containing_body_height }
-        editTaskStatus={ this.editTaskStatus }
-        deleteTask={ this.deleteTask }
-        handleTaskClick={ this.handleTaskClick.bind(this) }
-        showDayPicker={ this.showDayPicker }
-        showShareTaskModal={ this.showShareTaskModal }
-        closeDrawer={ this.closeDrawer }
-        removeContactFromTask={ this.removeContactFromTask }
-        showAddTransactionModal={ this.showAddTransactionModal }
-        editTaskTitle={ this.editTaskTitle }
-        editTaskDate={ this.editTaskDate.bind(this) }
-        setEditTaskDate={ this.setEditTaskDate }
-        hideDayPicker={ this.hideDayPicker }
-        addContactsToTask={ this.addContactsToTask }
-        navTransactionsList={ this.navTransactionsList.bind(this) }
-        searchTransactions={ this.searchTransactions }
-        showSnoozeModal={ this.showSnoozeModal }
-        snoozeTaskSave={ this.snoozeTaskSave }
-        searchContacts={ this.searchContacts.bind(this) }
-        hideModal={ this.hideModal.bind(this) }
-        setTaskDate={ this.setTaskDate }
-        setTaskDateTime={ this.setTaskDateTime }
-        setContactActive={ this.setContactActive.bind(this) }
-        createTask={ this.createTask.bind(this) }
-        addContactFromSearch={ this.addContactFromSearch.bind(this) }
-        removeSearchContacts={ this.removeSearchContacts }
-        setSnoozeOption={ this.setSnoozeOption }
-        setSnoozeDate={ this.setSnoozeDate }
+        data={data}
+        module_type={this.props.module_type}
+        addTransactionToTask={this.addTransactionToTask}
+        containing_body_height={this.props.containing_body_height}
+        editTaskStatus={this.editTaskStatus}
+        deleteTask={this.deleteTask}
+        handleTaskClick={this.handleTaskClick.bind(this)}
+        showDayPicker={this.showDayPicker}
+        showShareTaskModal={this.showShareTaskModal}
+        closeDrawer={this.closeDrawer}
+        removeContactFromTask={this.removeContactFromTask}
+        showAddTransactionModal={this.showAddTransactionModal}
+        editTaskTitle={this.editTaskTitle}
+        editTaskDate={this.editTaskDate.bind(this)}
+        setEditTaskDate={this.setEditTaskDate}
+        hideDayPicker={this.hideDayPicker}
+        addContactsToTask={this.addContactsToTask}
+        navTransactionsList={this.navTransactionsList.bind(this)}
+        searchTransactions={this.searchTransactions}
+        showSnoozeModal={this.showSnoozeModal}
+        snoozeTaskSave={this.snoozeTaskSave}
+        searchContacts={this.searchContacts.bind(this)}
+        hideModal={this.hideModal.bind(this)}
+        setTaskDate={this.setTaskDate}
+        setTaskDateTime={this.setTaskDateTime}
+        setContactActive={this.setContactActive.bind(this)}
+        createTask={this.createTask.bind(this)}
+        addContactFromSearch={this.addContactFromSearch.bind(this)}
+        removeSearchContacts={this.removeSearchContacts}
+        setSnoozeOption={this.setSnoozeOption}
+        setSnoozeDate={this.setSnoozeDate}
       />
     )
   }

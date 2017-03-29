@@ -7,7 +7,7 @@ import Loading from '../../../../Partials/Loading'
 export default class AlertList extends Component {
   truncateTitle(title) {
     if (title.length > 35)
-      return title.substring(0, 35) + '...'
+      return `${title.substring(0, 35)}...`
     return title
   }
   alertHasNotifications(alert_id) {
@@ -18,7 +18,7 @@ export default class AlertList extends Component {
     const summaries = data.notifications.summary.room_notification_summaries
     if (!summaries)
       return false
-    summaries.forEach(summary => {
+    summaries.forEach((summary) => {
       const user_created_alert_ids = summary.user_created_alert_ids
       if (user_created_alert_ids && user_created_alert_ids.indexOf(alert_id) !== -1)
         result = true
@@ -37,18 +37,16 @@ export default class AlertList extends Component {
     }
     if (alerts) {
       alerts_list_area = (
-        <ul style={ alert_list_style }>
+        <ul style={alert_list_style}>
           {
-            alerts.map(alert => {
+            alerts.map((alert) => {
               if (!alert.title && !alert.proposed_title)
-                return <li/>
+                return <li />
               const users = alert.users
               let users_area
-              if (users && users.length) {
-                users_area = users.map(user_shared => {
-                  return <span key={ 'alert-user-' + user_shared.id }>{ user_shared.first_name }, </span>
-                })
-              }
+              if (users && users.length)
+                users_area = users.map(user_shared => <span key={`alert-user-${user_shared.id}`}>{ user_shared.first_name }, </span>)
+
               // Notifications
               let notification
               let has_notification
@@ -56,17 +54,17 @@ export default class AlertList extends Component {
                 has_notification = this.alertHasNotifications(alert.id)
                 if (has_notification) {
                   notification = (
-                    <div style={ S('absolute t-35 r-20 w-0 h-0') }>
-                      <i className="fa fa-circle" style={ S('font-8 color-3388FF z-10') }></i>
+                    <div style={S('absolute t-35 r-20 w-0 h-0')}>
+                      <i className="fa fa-circle" style={S('font-8 color-3388FF z-10')} />
                     </div>
                   )
                 }
               }
               return (
-                <li key={ 'alert-list-' + alert.id } style={ S('relative h-100 border-bottom-1-solid-dedede p-20 pointer' + (current_alert && current_alert.id === alert.id ? ' bg-f7f7f7' : '')) } onClick={ controller.alert_map.showAlertOnMap.bind(this, alert) }>
-                  <div style={ S('font-18' + (has_notification ? ' fw-500' : '')) }>{ this.truncateTitle(alert.title ? alert.title : alert.proposed_title) }</div>
+                <li key={`alert-list-${alert.id}`} style={S(`relative h-100 border-bottom-1-solid-dedede p-20 pointer${current_alert && current_alert.id === alert.id ? ' bg-f7f7f7' : ''}`)} onClick={controller.alert_map.showAlertOnMap.bind(this, alert)}>
+                  <div style={S(`font-18${has_notification ? ' fw-500' : ''}`)}>{ this.truncateTitle(alert.title ? alert.title : alert.proposed_title) }</div>
                   { notification }
-                  <div style={ S('font-14' + (has_notification ? ' fw-500' : ' color-9b9b9b')) }>Shared with: { users_area }</div>
+                  <div style={S(`font-14${has_notification ? ' fw-500' : ' color-9b9b9b'}`)}>Shared with: { users_area }</div>
                   {
                     /*
                     <div>
@@ -87,13 +85,13 @@ export default class AlertList extends Component {
       )
       if (!alerts.length) {
         alerts_list_area = (
-          <div style={ S('p-15') }>No { user.user_type === 'Agent' ? 'alerts' : 'saved searches' } yet.</div>
+          <div style={S('p-15')}>No { user.user_type === 'Agent' ? 'alerts' : 'saved searches' } yet.</div>
         )
       }
     }
     const drawer_style = S(`bg-fff w-350 h-${window.innerHeight - 66} absolute z-1 t-66 l-0 border-right-1-solid-d3d3d3`)
     return (
-      <div className="alert-list" style={ drawer_style }>
+      <div className="alert-list" style={drawer_style}>
         {
           /*
           <div style={ S('p-10 pb-0') }>

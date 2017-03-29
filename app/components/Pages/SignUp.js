@@ -36,7 +36,7 @@ export default class SignUp extends Component {
     const data = this.props.data
     if (data.errors && data.errors.type === 'email-in-use') {
       const email = data.signup.email
-      window.location.href = '/signin?email=' + encodeURIComponent(email)
+      window.location.href = `/signin?email=${encodeURIComponent(email)}`
     }
   }
   showIntercom() {
@@ -130,8 +130,8 @@ export default class SignUp extends Component {
     }
 
     if (Brand.color('primary')) {
-      signup_btn_style.backgroundColor = '#' + Brand.color('primary')
-      signup_btn_style.borderColor = '#' + Brand.color('primary')
+      signup_btn_style.backgroundColor = `#${Brand.color('primary')}`
+      signup_btn_style.borderColor = `#${Brand.color('primary')}`
     }
 
     if (typeof window !== 'undefined' && window.innerWidth <= 768) {
@@ -154,39 +154,39 @@ export default class SignUp extends Component {
       }
     }
     const main_content = (
-      <div style={ S('pt-50') }>
-        <Col xs={ 12 }>
-          <div style={ S('text-center') }>
-            <div className="din" style={ S('font-30 color-263445 mb-10') }>Hello, lets get started.</div>
-            <div style={ S('border-bottom-2-solid-d8d8d8 mb-20 w-50 center-block') }></div>
-            <form onSubmit={ this.handleEmailSubmit.bind(this) }>
-              <div style={ S('pull-left') }>
-                <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
-                  <FormControl inputRef={ ref => this.emailInput = ref } onChange={ this.setSignupEmail } style={ signup_input_style } type="text" placeholder="Enter email address" value={ data.signup_email } />
+      <div style={S('pt-50')}>
+        <Col xs={12}>
+          <div style={S('text-center')}>
+            <div className="din" style={S('font-30 color-263445 mb-10')}>Hello, lets get started.</div>
+            <div style={S('border-bottom-2-solid-d8d8d8 mb-20 w-50 center-block')} />
+            <form onSubmit={this.handleEmailSubmit.bind(this)}>
+              <div style={S('pull-left')}>
+                <OverlayTrigger trigger="focus" placement="bottom" overlay={popover}>
+                  <FormControl inputRef={ref => this.emailInput = ref} onChange={this.setSignupEmail} style={signup_input_style} type="text" placeholder="Enter email address" value={data.signup_email} />
                 </OverlayTrigger>
               </div>
-              <div style={ S('pull-left') }>
-                <Button className={ data.submitting ? 'disabled' : '' } bsStyle="primary" style={ signup_btn_style } type="submit">{ data.submitting ? 'Submitting...' : 'Lets go' }</Button>
+              <div style={S('pull-left')}>
+                <Button className={data.submitting ? 'disabled' : ''} bsStyle="primary" style={signup_btn_style} type="submit">{ data.submitting ? 'Submitting...' : 'Lets go' }</Button>
               </div>
             </form>
           </div>
-          <div className="clearfix"></div>
-          <div style={ S('mt-10 font-14 color-929292') }>
+          <div className="clearfix" />
+          <div style={S('mt-10 font-14 color-929292')}>
             Already have an account?&nbsp;&nbsp;<a href="/signin">Log in</a>.
           </div>
         </Col>
       </div>
     )
     return (
-      <div id="main-content" className="flex-center-wrap" style={ S('absolute h-100p w-100p') }>
-        <div className="text-center center-block" style={ S('w-100p maxw-470 z-100 relative mt-60n bg-fff br-6') }>
+      <div id="main-content" className="flex-center-wrap" style={S('absolute h-100p w-100p')}>
+        <div className="text-center center-block" style={S('w-100p maxw-470 z-100 relative mt-60n bg-fff br-6')}>
           { main_content }
         </div>
         <CheckEmailModal
-          data={ data }
-          hideModal={ this.hideModal }
-          showIntercom={ this.showIntercom }
-          resend={ this.resend }
+          data={data}
+          hideModal={this.hideModal}
+          showIntercom={this.showIntercom}
+          resend={this.resend}
         />
       </div>
     )

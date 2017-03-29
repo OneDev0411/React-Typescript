@@ -11,11 +11,9 @@ export default (user, mls_number, message, users, emails, phone_numbers, notific
   const available_rooms = AppStore.data.rooms
   let room_found = null
   if (users.length && !emails.length && !phone_numbers.length) {
-    available_rooms.forEach(room => {
+    available_rooms.forEach((room) => {
       let user_ids_room = _.map(room.users, 'id')
-      user_ids_room = user_ids_room.filter(user_id => {
-        return user_id !== AppStore.data.user.id
-      })
+      user_ids_room = user_ids_room.filter(user_id => user_id !== AppStore.data.user.id)
       if (_.isEqual(users.sort(), user_ids_room.sort()))
         room_found = room
     })
@@ -63,7 +61,7 @@ export default (user, mls_number, message, users, emails, phone_numbers, notific
   const brand = AppStore.data.brand ? AppStore.data.brand.id : null
 
   async.series([
-    callback => {
+    (callback) => {
       // Create room
       const params = {
         title: '',

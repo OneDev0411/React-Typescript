@@ -36,42 +36,38 @@ export default class Recommend extends Component {
   }
 
   createRow(listings, formatter) {
-    return listings.map(listing => {
-      return (
-        <td>
-          {formatter(listing)}
-        </td>
-      )
-    })
+    return listings.map(listing => (
+      <td>
+        {formatter(listing)}
+      </td>
+      ))
   }
 
   createTable(listings) {
     const row = this.createRow.bind(null, listings)
 
-    const photo = l => {
-      return (
-        <img src={l.cover_image_url} width="100" />
+    const photo = l => (
+      <img src={l.cover_image_url} width="100" />
       )
-    }
 
     const date = (time) => {
       if (!time)
         return ''
 
       const d = helpers.friendlyDate(time)
-      return d.month + ' ' + d.date + ', ' + d.year
+      return `${d.month} ${d.date}, ${d.year}`
     }
 
     return (
       <table width="100%">
         <tbody>
           <tr>
-            <th></th>
+            <th />
             { row(photo) }
           </tr>
 
           <tr>
-            <th></th>
+            <th />
             {row(l => listingHelpers.localAddress(l.property.address))}
           </tr>
 
@@ -82,7 +78,7 @@ export default class Recommend extends Component {
 
           <tr>
             <th>List Price</th>
-            {row(l => '$' + helpers.numberWithCommas(l.price))}
+            {row(l => `$${helpers.numberWithCommas(l.price)}`)}
           </tr>
 
           <tr>
@@ -122,7 +118,7 @@ export default class Recommend extends Component {
 
           <tr>
             <th>HOA Free</th>
-            {row(l => '$' + (l.association_fee))}
+            {row(l => `$${l.association_fee}`)}
           </tr>
 
           <tr>
@@ -167,7 +163,7 @@ export default class Recommend extends Component {
 
           <tr>
             <th>$/Sqft</th>
-            {row(l => '$' + (l.price / (listingHelpers.metersToFeet(l.property.square_meters))).toFixed(2))}
+            {row(l => `$${(l.price / (listingHelpers.metersToFeet(l.property.square_meters))).toFixed(2)}`)}
           </tr>
 
           <tr>
@@ -194,12 +190,12 @@ export default class Recommend extends Component {
     }
 
     return (
-      <main style={ S('pt-20') }>
-        <SideBar data={ data }/>
-        <div style={ main_style }>
-          <div style={ S('mb-30') }>
-            <form onSubmit={ this.handleSubmit }>
-              <FormControl style={ S('w-300') } inputRef={ ref => this.mls_numberInput = ref } type="number" placeholder="MLS Number" onKeyUp={ this.handleMLSNumberChange.bind(this) } />
+      <main style={S('pt-20')}>
+        <SideBar data={data} />
+        <div style={main_style}>
+          <div style={S('mb-30')}>
+            <form onSubmit={this.handleSubmit}>
+              <FormControl style={S('w-300')} inputRef={ref => this.mls_numberInput = ref} type="number" placeholder="MLS Number" onKeyUp={this.handleMLSNumberChange.bind(this)} />
             </form>
           </div>
           <div>

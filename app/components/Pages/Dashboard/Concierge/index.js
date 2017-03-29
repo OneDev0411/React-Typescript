@@ -33,20 +33,20 @@ export default class Concierge extends Component {
     const user = data.user
 
     let main_style = S('absolute l-70 w-100p')
-    let nav_area = <SideBar data={ data } />
+    let nav_area = <SideBar data={data} />
 
     if (data.is_mobile) {
       main_style = { ...main_style, ...S('l-0 w-100p') }
 
       if (user)
-        nav_area = <MobileNav data={ data } />
+        nav_area = <MobileNav data={data} />
     }
 
     return (
       <div>
         <main>
           { nav_area }
-          <div className="concierge" style={ main_style }>
+          <div className="concierge" style={main_style}>
             <Link to="/dashboard/concierge/deals">Deals</Link>
           </div>
         </main>

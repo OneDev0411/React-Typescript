@@ -33,13 +33,13 @@ const controller = {
     if (!AppStore.data.user.favorite_listings)
       AppStore.data.user.favorite_listings = []
     if (controller.isFavorited(mls_number)) {
-      AppStore.data.user.favorite_listings = AppStore.data.user.favorite_listings.filter(mls_number_loop => {
+      AppStore.data.user.favorite_listings = AppStore.data.user.favorite_listings.filter((mls_number_loop) => {
         if (mls_number_loop !== mls_number)
           return mls_number_loop
       })
       // Edit actives
       if (AppStore.data.active_listings) {
-        AppStore.data.active_listings = AppStore.data.active_listings.filter(listing_loop => {
+        AppStore.data.active_listings = AppStore.data.active_listings.filter((listing_loop) => {
           if (listing_loop.id !== listing.id)
             return listing_loop
         })

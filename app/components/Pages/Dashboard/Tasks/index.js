@@ -12,12 +12,12 @@ export default class Tasks extends Component {
   render() {
     const data = this.props.data
     return (
-      <div style={ S('minw-1000') }>
-        <Header data={ data }/>
-        <main style={ S('pt-15') }>
-          <SideBar data={ data }/>
+      <div style={S('minw-1000')}>
+        <Header data={data} />
+        <main style={S('pt-15')}>
+          <SideBar data={data} />
           <TasksModule
-            data={ data }
+            data={data}
             module_type="tasks"
           />
         </main>

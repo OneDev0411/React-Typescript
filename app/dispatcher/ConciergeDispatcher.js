@@ -9,7 +9,7 @@ import getSubmissions from '../actions/concierge/get-submissions'
 const ConciergeDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
-ConciergeDispatcher.register(payload => {
+ConciergeDispatcher.register((payload) => {
   const action = payload.action
 
   switch (action) {

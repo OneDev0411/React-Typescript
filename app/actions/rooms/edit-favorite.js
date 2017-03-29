@@ -4,7 +4,7 @@ import async from 'async'
 export default (user, mls_number, favorite) => {
   const locals = {}
   async.series([
-    callback => {
+    (callback) => {
       const params = {
         room: user.personal_room,
         mls_number,

@@ -31,35 +31,35 @@ export default class DayTimePicker extends Component {
     if (hour === 12)
       current_suffix = 'PM'
     return (
-      <div className="daypicker--tasks" style={ S('absolute bg-fff z-100 l-10') }>
+      <div className="daypicker--tasks" style={S('absolute bg-fff z-100 l-10')}>
         <DayPicker
           modifiers={{
             selected: day => DateUtils.isSameDay(date_obj, day)
           }}
-          onDayClick={ this.props.handleSetDate.bind(this) }
+          onDayClick={this.props.handleSetDate.bind(this)}
         />
-        <div style={ S('w-200 pl-10 pb-10 font-12') }>
+        <div style={S('w-200 pl-10 pb-10 font-12')}>
           TIME
-          <div className="clearfix"></div>
-          <div style={ S('w-60 pull-left') }>
-            <FormControl defaultValue={ current_hour } inputRef={ ref => this.hoursInput = ref } type="number" max={ 12 } min={ 1 }/>
+          <div className="clearfix" />
+          <div style={S('w-60 pull-left')}>
+            <FormControl defaultValue={current_hour} inputRef={ref => this.hoursInput = ref} type="number" max={12} min={1} />
           </div>
-          <div style={ S('w-60 pull-left') }>
-            <FormControl defaultValue={ current_minutes } inputRef={ ref => this.minutesInput = ref } type="number" max={ 59 } min={ 1 }/>
+          <div style={S('w-60 pull-left')}>
+            <FormControl defaultValue={current_minutes} inputRef={ref => this.minutesInput = ref} type="number" max={59} min={1} />
           </div>
-          <div style={ S('w-60 pull-left') }>
-            <FormControl defaultValue={ current_suffix } inputRef={ ref => this.suffixInput = ref } type="select">
-              <option value={ 'AM' }>AM</option>
-              <option value={ 'PM' }>PM</option>
+          <div style={S('w-60 pull-left')}>
+            <FormControl defaultValue={current_suffix} inputRef={ref => this.suffixInput = ref} type="select">
+              <option value={'AM'}>AM</option>
+              <option value={'PM'}>PM</option>
             </FormControl>
           </div>
         </div>
-        <div style={ S('p-10') }>
-          <a onClick={ this.props.hideDayPicker.bind(this) } href="#" className="pull-left" style={ S('mt-10') }>Cancel</a>
-          <Button onClick={ this.handleSaveDateTime.bind(this) } className="pull-right" bsStyle="primary" type="button">Select</Button>
-          <div className="clearfix"></div>
+        <div style={S('p-10')}>
+          <a onClick={this.props.hideDayPicker.bind(this)} href="#" className="pull-left" style={S('mt-10')}>Cancel</a>
+          <Button onClick={this.handleSaveDateTime.bind(this)} className="pull-right" bsStyle="primary" type="button">Select</Button>
+          <div className="clearfix" />
         </div>
-        <div className="clearfix"></div>
+        <div className="clearfix" />
       </div>
     )
   }

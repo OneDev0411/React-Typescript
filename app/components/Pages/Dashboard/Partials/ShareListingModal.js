@@ -66,10 +66,10 @@ export default class ShareListingModal extends Component {
         profile_image_url = user.profile_image_url
       if (user.display_profile_image_url)
         profile_image_url = user.display_profile_image_url
-      profile_image = <div style={ S(`pull-left bg-url(${getResizeAvatarUrl(profile_image_url)}?w=160) w-26 h-26 bg-cover bg-center`) }/>
+      profile_image = <div style={S(`pull-left bg-url(${getResizeAvatarUrl(profile_image_url)}?w=160) w-26 h-26 bg-cover bg-center`)} />
     }
     const display_name = (
-      <div style={ S(`pull-left mt-4 ml-10 mr-5`) }>
+      <div style={S('pull-left mt-4 ml-10 mr-5')}>
         { item.label }
       </div>
     )
@@ -87,26 +87,26 @@ export default class ShareListingModal extends Component {
       // Room
       if (item.value.users.length > 2) {
         profile_image = (
-          <ProfileImageMultiple users={ item.value.users }/>
+          <ProfileImageMultiple users={item.value.users} />
         )
       } else {
         const other_user = _.filter(item.value.users, user => user.id !== data.user.id)[0]
         profile_image = (
-          <ProfileImage data={ data } user={ other_user }/>
+          <ProfileImage data={data} user={other_user} />
         )
       }
     } else {
       // Contact
       const user = item.value
       profile_image = (
-        <ProfileImage data={ data } user={ user }/>
+        <ProfileImage data={data} user={user} />
       )
     }
     return (
-      <div style={ S('relative ' + (item.index < 1 ? 'h-74' : 'h-54')) } className={ item.index < 1 ? 'other-users--first' : '' } >
-        <div style={ S('mt-10') }>{ profile_image }</div>
-        <div style={ S('pull-left mt-10 ml-60 mr-5') }>{ item.label }</div>
-        <div className="clearfix"/>
+      <div style={S(`relative ${item.index < 1 ? 'h-74' : 'h-54'}`)} className={item.index < 1 ? 'other-users--first' : ''} >
+        <div style={S('mt-10')}>{ profile_image }</div>
+        <div style={S('pull-left mt-10 ml-60 mr-5')}>{ item.label }</div>
+        <div className="clearfix" />
       </div>
     )
   }
@@ -127,7 +127,7 @@ export default class ShareListingModal extends Component {
       const users = contact.users
       if (users) {
         // Loop through users
-        contact.users.forEach(user => {
+        contact.users.forEach((user) => {
           const deep_search = `${user.first_name ? user.first_name : ''} ${user.last_name ? user.last_name : ''} ${user.email ? user.email : ''} ${user.phone_number ? user.phone_number : ''} `
           contacts_found.push({
             value: user,
@@ -141,7 +141,7 @@ export default class ShareListingModal extends Component {
         const sub_contact = contact.sub_contacts[0]
         if (sub_contact.attributes.emails) {
           // Loop through emails
-          sub_contact.attributes.emails.forEach(email_obj => {
+          sub_contact.attributes.emails.forEach((email_obj) => {
             const deep_search = `${contact.display_name} ${email_obj.email}`
             contacts_found.push({
               value: email_obj.email,
@@ -154,7 +154,7 @@ export default class ShareListingModal extends Component {
         }
         // Loop through phone numbers
         if (sub_contact.attributes.phone_numbers) {
-          sub_contact.attributes.phone_numbers.forEach(phone_number_obj => {
+          sub_contact.attributes.phone_numbers.forEach((phone_number_obj) => {
             const deep_search = `${contact.display_name} ${phone_number_obj.phone_number}`
             contacts_found.push({
               value: phone_number_obj.phone_number,
@@ -179,17 +179,15 @@ export default class ShareListingModal extends Component {
     let users_selected_ids = []
     if (data.share_modal && data.share_modal.items_selected) {
       const items_selected = data.share_modal.items_selected
-      items_selected.forEach(item => {
+      items_selected.forEach((item) => {
         users_selected.push(item)
       })
       // Contacts available
-      users_selected_ids = _.map(users_selected, item => {
-        return item.value.id
-      })
+      users_selected_ids = _.map(users_selected, item => item.value.id)
     }
     // Rooms available
     if (data.rooms && !users_selected_ids.length) {
-      data.rooms.forEach(room => {
+      data.rooms.forEach((room) => {
         if (room.users.length > 1) {
           // Test if user in available rooms
           if (users_selected_ids && users_selected_ids.length) {
@@ -213,7 +211,7 @@ export default class ShareListingModal extends Component {
       })
     }
     if (data.contacts) {
-      data.contacts.forEach(contact => {
+      data.contacts.forEach((contact) => {
         const user = contact.contact_user
         if (user) {
           if (user.id !== data.user.id && users_selected_ids && users_selected_ids.indexOf(user.id) === -1) {
@@ -258,54 +256,54 @@ export default class ShareListingModal extends Component {
       price = current_listing.close_price
     price = helpers.numberWithCommas(price)
     return (
-      <Modal dialogClassName={ dialog_class_name } show={ data.show_share_listing_modal } onHide={ controller.listing_viewer.hideShareListingModal }>
-        <Modal.Header style={ S('bg-fafafa br-5 p-0 border-none') }>
-          <div style={ S('border-bottom-1-solid-ebebeb p-15') }>
-            <a className="close" onClick={ controller.listing_viewer.hideShareListingModal }>&times;</a>
-            <Modal.Title className="din" style={ S('font-36 ml-15 color-4a4a4a') }>Share Listing</Modal.Title>
+      <Modal dialogClassName={dialog_class_name} show={data.show_share_listing_modal} onHide={controller.listing_viewer.hideShareListingModal}>
+        <Modal.Header style={S('bg-fafafa br-5 p-0 border-none')}>
+          <div style={S('border-bottom-1-solid-ebebeb p-15')}>
+            <a className="close" onClick={controller.listing_viewer.hideShareListingModal}>&times;</a>
+            <Modal.Title className="din" style={S('font-36 ml-15 color-4a4a4a')}>Share Listing</Modal.Title>
           </div>
         </Modal.Header>
-        <Modal.Body style={ S('p-0 h-300') }>
-          <div style={ S('relative w-100p h-50 p-10 bg-fff border-bottom-1-solid-e2e6ea bg-fafafa') }>
-            <div style={ S('absolute l-10 t-15') }>To:</div>
-            <div className="create-item__user-select" style={ S('absolute l-35 t-5 w-90p z-1000') }>
-              <SelectContainer inputChange={ this.inputChange.bind(this) }>
+        <Modal.Body style={S('p-0 h-300')}>
+          <div style={S('relative w-100p h-50 p-10 bg-fff border-bottom-1-solid-e2e6ea bg-fafafa')}>
+            <div style={S('absolute l-10 t-15')}>To:</div>
+            <div className="create-item__user-select" style={S('absolute l-35 t-5 w-90p z-1000')}>
+              <SelectContainer inputChange={this.inputChange.bind(this)}>
                 <Select
-                  ref={ ref => this.myselectInput = ref }
+                  ref={ref => this.myselectInput = ref}
                   autofocus
                   name="users"
-                  options={ users_select_options }
+                  options={users_select_options}
                   placeholder="Enter name, email or phone"
-                  value={ users_selected ? users_selected : null }
+                  value={users_selected || null}
                   multi
-                  noResultsText={ 'No users found'}
-                  style={ S('border-none mt-3') }
-                  onInputChange={ this.handleInputChange.bind(this) }
-                  onChange={ this.handleChange.bind(this) }
-                  valueRenderer={ this.handleValueRenderer.bind(this) }
-                  optionRenderer={ this.handleOptionRenderer.bind(this) }
-                  onBlur={ this.handleShareInputBlur.bind(this) }
-                  onBlurResetsInput={ false }
+                  noResultsText={'No users found'}
+                  style={S('border-none mt-3')}
+                  onInputChange={this.handleInputChange.bind(this)}
+                  onChange={this.handleChange.bind(this)}
+                  valueRenderer={this.handleValueRenderer.bind(this)}
+                  optionRenderer={this.handleOptionRenderer.bind(this)}
+                  onBlur={this.handleShareInputBlur.bind(this)}
+                  onBlurResetsInput={false}
                 />
               </SelectContainer>
             </div>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <div style={ S('pull-left mr-15 mb-20 border-1-solid-d5dce5 bg-e7eaed br-3 inline-block p-6 pr-10') }>
-            <div style={ S(`pull-left mr-10 w-50 h-50 bg-cover bg-center bg-url(${ current_listing ? current_listing.cover_image_url : '' })`) }/>
-            <div style={ S('pull-left') }>
-              <div style={ S('color-333333') }>{ current_listing && current_listing.property ? listing_util.addressTitle(current_listing.property.address) : '' }</div>
-              <div style={ S('text-left color-8696a4') }>${ price }</div>
+          <div style={S('pull-left mr-15 mb-20 border-1-solid-d5dce5 bg-e7eaed br-3 inline-block p-6 pr-10')}>
+            <div style={S(`pull-left mr-10 w-50 h-50 bg-cover bg-center bg-url(${current_listing ? current_listing.cover_image_url : ''})`)} />
+            <div style={S('pull-left')}>
+              <div style={S('color-333333')}>{ current_listing && current_listing.property ? listing_util.addressTitle(current_listing.property.address) : '' }</div>
+              <div style={S('text-left color-8696a4')}>${ price }</div>
             </div>
           </div>
-          <div className="clearfix"></div>
+          <div className="clearfix" />
           <div>
-            <div style={ S('pull-left w-85p') }>
-              <FormControl style={ S('border-none') } inputRef={ ref => this.messageInput = ref } type="text" placeholder="Write Message..."/>
+            <div style={S('pull-left w-85p')}>
+              <FormControl style={S('border-none')} inputRef={ref => this.messageInput = ref} type="text" placeholder="Write Message..." />
             </div>
-            <div style={ S('pull-right') }>
-              <Button disabled={!this.isSharable() ? true : false} className={ share_modal && share_modal.sending_share || !this.isSharable() ? 'disabled' : '' } bsStyle="primary" onClick={ controller.listing_share.shareListing.bind(this) }>{ share_modal && !share_modal.sending_share ? 'Share' : 'Sending...' }</Button>
+            <div style={S('pull-right')}>
+              <Button disabled={!this.isSharable()} className={share_modal && share_modal.sending_share || !this.isSharable() ? 'disabled' : ''} bsStyle="primary" onClick={controller.listing_share.shareListing.bind(this)}>{ share_modal && !share_modal.sending_share ? 'Share' : 'Sending...' }</Button>
             </div>
           </div>
         </Modal.Footer>

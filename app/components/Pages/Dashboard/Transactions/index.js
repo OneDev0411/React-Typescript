@@ -59,13 +59,11 @@ export default class Transactions extends Component {
     delete AppStore.data.current_task
     AppStore.emitChange()
     const attachments = transaction.attachments
-    const attachments_sorted = _.sortBy(attachments, 'created', attachment => {
-      return - attachment.created
-    })
+    const attachments_sorted = _.sortBy(attachments, 'created', attachment => -attachment.created)
     transaction.attachments = attachments_sorted
     AppStore.data.current_transaction = transaction
     const history = require('../../../../utils/history')
-    history.replaceState(null, '/dashboard/transactions/' + transaction.id)
+    history.replaceState(null, `/dashboard/transactions/${transaction.id}`)
     AppStore.emitChange()
   }
 
@@ -74,9 +72,7 @@ export default class Transactions extends Component {
     setTimeout(() => {
       const transaction_tabs = AppStore.data.transaction_tabs
       const current_transaction = AppStore.data.current_transaction
-      const reduced_transaction_tabs = transaction_tabs.filter(transaction => {
-        return transaction.id !== id
-      })
+      const reduced_transaction_tabs = transaction_tabs.filter(transaction => transaction.id !== id)
       AppStore.data.transaction_tabs = reduced_transaction_tabs
       if (current_transaction.id === id)
         delete AppStore.data.current_transaction
@@ -102,13 +98,13 @@ export default class Transactions extends Component {
     // Transactions
     let transactions_rows
     if (transactions) {
-      transactions_rows = transactions.map(transaction => {
+      transactions_rows = transactions.map((transaction) => {
         let listing
         let address
         // Price
         let contract_price = transaction.contract_price
         if (contract_price)
-          contract_price = '$' + helpers.numberWithCommas(contract_price)
+          contract_price = `$${helpers.numberWithCommas(contract_price)}`
         // Dates
         const important_dates = transaction.important_dates
         let closing_date
@@ -118,10 +114,10 @@ export default class Transactions extends Component {
           listing = transaction.listing
           address = `${listing.property.address.street_number} ${listing.property.address.street_name}`
         }
-        let cover_image = <div style={ S('w-90 h-62 bg-eff1f2 color-929292 text-center pt-20') }>No image</div>
+        let cover_image = <div style={S('w-90 h-62 bg-eff1f2 color-929292 text-center pt-20')}>No image</div>
         if (listing && listing.cover_image_url) {
           cover_image = (
-            <div style={ S('w-90 h-62 bg-center bg-cover bg-url(' + listing.cover_image_url + ')') }></div>
+            <div style={S(`w-90 h-62 bg-center bg-cover bg-url(${listing.cover_image_url})`)} />
           )
         }
         let listing_status
@@ -129,7 +125,7 @@ export default class Transactions extends Component {
           listing_status = listing.status
         const status_color = listing_util.getStatusColor(listing_status)
         // Get client
-        const clients = _.forEach(transaction.contacts, contact => {
+        const clients = _.forEach(transaction.contacts, (contact) => {
           const roles = contact.roles
           if (roles && roles.indexOf('Client') !== -1)
             return contact
@@ -137,8 +133,8 @@ export default class Transactions extends Component {
         let listing_status_indicator
         if (listing) {
           listing_status_indicator = (
-            <div style={ S('color-929394 relative t-10n') }>
-              <span style={ S('font-26 relative t-3 color-' + status_color) }>&#8226;</span> { listing.status }
+            <div style={S('color-929394 relative t-10n')}>
+              <span style={S(`font-26 relative t-3 color-${status_color}`)}>&#8226;</span> { listing.status }
             </div>
           )
         }
@@ -147,45 +143,45 @@ export default class Transactions extends Component {
           friendly_date = helpers.friendlyDate(closing_date)
         let client_name
         if (clients && clients[0])
-          client_name = clients[0].first_name + ' ' + clients[0].last_name
+          client_name = `${clients[0].first_name} ${clients[0].last_name}`
 
         let notification_icon
         if (this.hasNotification(transaction.id)) {
           notification_icon = (
-            <i className="fa fa-circle" style={ S('font-8 color-3388FF pt-30') }></i>
+            <i className="fa fa-circle" style={S('font-8 color-3388FF pt-30')} />
           )
         }
 
         return (
-          <tr onClick={ this.handleClickTransaction.bind(this, transaction) } style={ S('pointer') } key={ transaction.id }>
+          <tr onClick={this.handleClickTransaction.bind(this, transaction)} style={S('pointer')} key={transaction.id}>
             <td>
               { notification_icon }
             </td>
             <td>
-              <div className="pull-left" style={ S('mt-5 ml-5') }>{ cover_image }</div>
-              <div className="pull-left" style={ S('ml-20 mt-15 maxw-200') }>
+              <div className="pull-left" style={S('mt-5 ml-5')}>{ cover_image }</div>
+              <div className="pull-left" style={S('ml-20 mt-15 maxw-200')}>
                 { address }
                 { listing_status_indicator }
               </div>
             </td>
             <td>
-              <div style={ S('mt-20') }>
+              <div style={S('mt-20')}>
                 { client_name }
-                <div style={ S('color-929394') }>{ transaction.transaction_type }</div>
+                <div style={S('color-929394')}>{ transaction.transaction_type }</div>
               </div>
             </td>
             <td>
-              <div style={ S('mt-20') }>
+              <div style={S('mt-20')}>
                 { contract_price }
               </div>
             </td>
             <td>
-              <div style={ S('mt-20') }>
+              <div style={S('mt-20')}>
                 Tax Document
               </div>
             </td>
             <td>
-              <div style={ S('mt-20') }>
+              <div style={S('mt-20')}>
                 { friendly_date ? `${friendly_date.month} ${friendly_date.date}, ${friendly_date.year}` : 'TBD' }
               </div>
             </td>
@@ -195,18 +191,18 @@ export default class Transactions extends Component {
     } // end if (transactions)
 
     let main_content = (
-        <div style={ S('pl-15 pr-15') }>
-          <Loading />
-        </div>
+      <div style={S('pl-15 pr-15')}>
+        <Loading />
+      </div>
       )
     if (transactions_rows) {
       if (transactions_rows.length) {
         main_content = (
-          <div style={ S('pl-15 pr-15') }>
-            <Table style={ S('mt-10n minw-760') } className="table--tabbable" condensed hover>
+          <div style={S('pl-15 pr-15')}>
+            <Table style={S('mt-10n minw-760')} className="table--tabbable" condensed hover>
               <thead>
                 <tr>
-                  <th width="5"></th>
+                  <th width="5" />
                   <th width="150">Property</th>
                   <th width="100">Contact</th>
                   <th width="100">Price</th>
@@ -222,7 +218,7 @@ export default class Transactions extends Component {
         )
       } else {
         main_content = (
-          <div style={ S('pl-15 pr-15') }>No transactions yet.  Maybe this needs to say something snarky or clever.</div>
+          <div style={S('pl-15 pr-15')}>No transactions yet.  Maybe this needs to say something snarky or clever.</div>
         )
       }
     }
@@ -231,17 +227,17 @@ export default class Transactions extends Component {
     const main_style = S('absolute l-70 r-0')
 
     return (
-      <div style={ S('minw-1000') }>
+      <div style={S('minw-1000')}>
         <Header
-          data={ data }
-          viewTransaction={ this.viewTransaction.bind(this) }
-          removeTransactionTab={ this.removeTransactionTab }
+          data={data}
+          viewTransaction={this.viewTransaction.bind(this)}
+          removeTransactionTab={this.removeTransactionTab}
         />
-        <main style={ S('pt-15') }>
+        <main style={S('pt-15')}>
           <SideBar
-            data={ data }
+            data={data}
           />
-          <div style={ main_style }>
+          <div style={main_style}>
             { main_content }
           </div>
         </main>

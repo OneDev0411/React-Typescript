@@ -17,7 +17,7 @@ import acknowledgeTransaction from '../actions/transactions/acknowledge-transact
 const TransactionDispatcher = new Dispatcher()
 
 // Register callback with TransactionDispatcher
-TransactionDispatcher.register(payload => {
+TransactionDispatcher.register((payload) => {
   const action = payload.action
   switch (action) {
     case 'init':

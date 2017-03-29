@@ -28,13 +28,13 @@ export default class Verify extends Component {
     let main_content
     if (slug === 'email') {
       main_content = (
-        <Email data={ data }/>
+        <Email data={data} />
       )
     }
 
     if (slug === 'phone') {
       main_content = (
-        <Phone data={ data } handleSubmit={ this.handleSubmit }/>
+        <Phone data={data} handleSubmit={this.handleSubmit} />
       )
     }
 

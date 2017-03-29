@@ -8,7 +8,7 @@ const controller = {
       const users = contact.users
       if (users) {
         // Loop through users
-        contact.users.forEach(user => {
+        contact.users.forEach((user) => {
           const deep_search = `${user.first_name ? user.first_name : ''} ${user.last_name ? user.last_name : ''} ${user.email ? user.email : ''} ${user.phone_number ? user.phone_number : ''} `
           contacts_found.push({
             value: user,
@@ -22,7 +22,7 @@ const controller = {
         const sub_contact = contact.sub_contacts[0]
         if (sub_contact.attributes.emails) {
           // Loop through emails
-          sub_contact.attributes.emails.forEach(email_obj => {
+          sub_contact.attributes.emails.forEach((email_obj) => {
             const deep_search = `${contact.display_name} ${email_obj.email}`
             contacts_found.push({
               value: email_obj.email,
@@ -35,7 +35,7 @@ const controller = {
         }
         // Loop through phone numbers
         if (sub_contact.attributes.phone_numbers) {
-          sub_contact.attributes.phone_numbers.forEach(phone_number_obj => {
+          sub_contact.attributes.phone_numbers.forEach((phone_number_obj) => {
             const deep_search = `${contact.display_name} ${phone_number_obj.phone_number}`
             contacts_found.push({
               value: phone_number_obj.phone_number,

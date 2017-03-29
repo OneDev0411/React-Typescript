@@ -14,7 +14,7 @@ export default (user, old_password, new_password) => {
       AppStore.data.password_changed = true
     if (response.status === 'error') {
       AppStore.data.error = {
-        message: `There was an error with your password`
+        message: 'There was an error with your password'
       }
     }
     AppStore.emitChange()

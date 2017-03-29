@@ -11,7 +11,7 @@ export default class MapBackground extends Component {
       backgroundRepeat: 'no-repeat'
     }
     return (
-      <div style={ bg_style }></div>
+      <div style={bg_style} />
     )
   }
 }

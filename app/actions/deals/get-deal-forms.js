@@ -3,7 +3,7 @@ import Deals from '../../models/Deal'
 import AppStore from '../../stores/AppStore'
 import _ from 'underscore'
 
-export default async function(user)  {
+export default async function (user) {
   const params = {
     token: user.access_token
   }
@@ -11,18 +11,16 @@ export default async function(user)  {
   try {
     const response = await Deals.getForms(params)
 
-    if (response.status === 200)
-      AppStore.data.deals_forms = _.map(response.body.data, f => {
-        return {
-          id: f.id,
-          title: f.name,
-          roles: f.roles,
-          state: 'In Progress',
-          created_at: f.created_at
-        }
-      })
+    if (response.status === 200) {
+      AppStore.data.deals_forms = _.map(response.body.data, f => ({
+        id: f.id,
+        title: f.name,
+        roles: f.roles,
+        state: 'In Progress',
+        created_at: f.created_at
+      }))
+    }
 
     AppStore.emitChange()
-  }
-  catch(e) {}
+  } catch (e) {}
 }

@@ -23,9 +23,7 @@ export default (user_id) => {
           return
         let rooms = get_rooms.result.rooms
         // remove personal room
-        rooms = rooms.filter(room => {
-          return room.room_type !== 'Personal'
-        })
+        rooms = rooms.filter(room => room.room_type !== 'Personal')
         AppStore.data.rooms = rooms
         AppStore.data.rooms_loaded = true
         AppStore.emitChange()

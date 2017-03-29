@@ -101,7 +101,7 @@ export default class SideBar extends Component {
     let country_code = 1
     if (data.phone_country)
       country_code = data.phone_country.dialCode
-    const phone_number = '+' + country_code + phone_number_input
+    const phone_number = `+${country_code}${phone_number_input}`
     if (phone_number_input && !phoneUtil.isPossibleNumberString(phone_number)) {
       AppStore.data.error = {
         message: 'You must use a valid phone number'
@@ -141,7 +141,7 @@ export default class SideBar extends Component {
     // Check for values
     if (!old_password) {
       AppStore.data.error = {
-        message: `You must add a password.`
+        message: 'You must add a password.'
       }
       delete AppStore.data.saving_account_settings
       AppStore.emitChange()
@@ -149,7 +149,7 @@ export default class SideBar extends Component {
     }
     if (!new_password) {
       AppStore.data.error = {
-        message: `You must add a new password.`
+        message: 'You must add a new password.'
       }
       delete AppStore.data.saving_account_settings
       AppStore.emitChange()
@@ -157,7 +157,7 @@ export default class SideBar extends Component {
     }
     if (new_password === old_password) {
       AppStore.data.error = {
-        message: `You must add a different password from your current password.`
+        message: 'You must add a different password from your current password.'
       }
       delete AppStore.data.saving_account_settings
       AppStore.emitChange()
@@ -196,9 +196,9 @@ export default class SideBar extends Component {
     let icon
     if (data.notifications && data.notifications.summary && data.notifications.summary[name] > 0) {
       icon = (
-        <div style={ S('pl-10 absolute t-0 r-0') }>
-          <div style={ S('font-15 bg-db3821 br-100 p-6 h-17 text-center') }>
-            <span style={ S('color-fff font-10 relative t-9n') }>
+        <div style={S('pl-10 absolute t-0 r-0')}>
+          <div style={S('font-15 bg-db3821 br-100 p-6 h-17 text-center')}>
+            <span style={S('color-fff font-10 relative t-9n')}>
               { data.notifications.summary.room_notification_count }
             </span>
           </div>
@@ -274,14 +274,14 @@ export default class SideBar extends Component {
     // Data
     const data = this.props.data
 
-    if (!data.user) {
+    if (!data.user)
       return false
-    }
+
 
     let sidebar_height = 0
     if (typeof window !== 'undefined')
       sidebar_height = window.innerHeight
-    const sidebar_style = S('w-70 fixed pl-8 t-0 z-100 bg-202A33 h-' + sidebar_height)
+    const sidebar_style = S(`w-70 fixed pl-8 t-0 z-100 bg-202A33 h-${sidebar_height}`)
     const path = data.path
 
     const active = {}
@@ -316,9 +316,9 @@ export default class SideBar extends Component {
     let recommend
     if (data.user.user_type === 'Brokerage') {
       recommend = (
-        <LinkContainer className={ active.recommend } to="/dashboard/mls/listing/recommend">
-          <NavItem style={ S('w-85p') }>
-            <i className="fa fa-tasks"> </i>
+        <LinkContainer className={active.recommend} to="/dashboard/mls/listing/recommend">
+          <NavItem style={S('w-85p')}>
+            <i className="fa fa-tasks" />
           </NavItem>
         </LinkContainer>
       )
@@ -327,9 +327,9 @@ export default class SideBar extends Component {
     let agents
     if (data.user.user_type === 'Brokerage') {
       agents = (
-        <LinkContainer className={ active.agents } to="/dashboard/mls/agents">
-          <NavItem style={ S('w-85p') }>
-            <i className="fa fa-group"> </i>
+        <LinkContainer className={active.agents} to="/dashboard/mls/agents">
+          <NavItem style={S('w-85p')}>
+            <i className="fa fa-group" />
           </NavItem>
         </LinkContainer>
       )
@@ -341,44 +341,44 @@ export default class SideBar extends Component {
     if (data.show_pic_overlay)
       overlay_class = ''
     let profile_image_area = (
-      <Dropzone onMouseLeave={ this.hidePicOverlay.bind(this) } onMouseEnter={ this.showPicOverlay.bind(this) } multiple={ false } onDrop={ this.uploadProfilePic.bind(this) } type="button" style={ dropzone_style }>
-        <div className={ overlay_class } style={ S('pointer') }>
-          <div style={ { ...S('absolute z-101 color-fff text-center t-40 w-100') } }>
+      <Dropzone onMouseLeave={this.hidePicOverlay.bind(this)} onMouseEnter={this.showPicOverlay.bind(this)} multiple={false} onDrop={this.uploadProfilePic.bind(this)} type="button" style={dropzone_style}>
+        <div className={overlay_class} style={S('pointer')}>
+          <div style={{ ...S('absolute z-101 color-fff text-center t-40 w-100') }}>
             Edit picture
           </div>
-          <div style={ { ...S('bg-100 br-100 absolute w-100 h-100 z-100 color-fff'), opacity: '.3' } }></div>
+          <div style={{ ...S('bg-100 br-100 absolute w-100 h-100 z-100 color-fff'), opacity: '.3' }} />
         </div>
         <ProfileImage
-          size={ 100 }
-          data={ data }
-          user={ user }
-          font={ 50 }
-          top={ 15 }
+          size={100}
+          data={data}
+          user={user}
+          font={50}
+          top={15}
         />
       </Dropzone>
     )
     if (data.uploading_profile_pic) {
       profile_image_area = (
-        <div style={ S('absolute t-60n l-42') }>
+        <div style={S('absolute t-60n l-42')}>
           <Loading />
         </div>
       )
     }
     let change_password_area = (
-      <a style={ S('mt-7') } className="pull-left" href="#" onClick={ this.showChangePassword.bind(this) }>Change password</a>
+      <a style={S('mt-7')} className="pull-left" href="#" onClick={this.showChangePassword.bind(this)}>Change password</a>
     )
     const phone_number_parsed = helpers.parsePhoneNumber(user.phone_number)
     const current_country_code = phone_number_parsed.country_code
-    let phone_country = '+' + current_country_code
+    let phone_country = `+${current_country_code}`
     if (data.phone_country)
       phone_country = `+${data.phone_country.dialCode}`
     const country_codes = (
-      <DropdownButton title={ phone_country } id="input-dropdown-country-codes" style={ S('pb-9') }>
-        <MenuItem key={ 1 } onClick={ this.handleCountryCodeSelect.bind(this, _.find(all_countries, { iso2: 'us' })) }>United States +1</MenuItem>
+      <DropdownButton title={phone_country} id="input-dropdown-country-codes" style={S('pb-9')}>
+        <MenuItem key={1} onClick={this.handleCountryCodeSelect.bind(this, _.find(all_countries, { iso2: 'us' }))}>United States +1</MenuItem>
         {
           all_countries.map((country, i) => {
             if (country.dialCode !== 1)
-              return <MenuItem onClick={ this.handleCountryCodeSelect.bind(this, country) } key={ country.iso2 + country.dialCode + i }>{ country.name } +{ country.dialCode }</MenuItem>
+              return <MenuItem onClick={this.handleCountryCodeSelect.bind(this, country)} key={country.iso2 + country.dialCode + i}>{ country.name } +{ country.dialCode }</MenuItem>
           })
         }
       </DropdownButton>
@@ -392,30 +392,30 @@ export default class SideBar extends Component {
       )
     }
     let form_fields = (
-      <Col xs={ 9 } style={ S('p-0') }>
-        <Col xs={ 6 }>
+      <Col xs={9} style={S('p-0')}>
+        <Col xs={6}>
           <label>First name</label>
-          <FormControl inputRef={ ref => this.first_nameInput = ref } type="text" defaultValue={ user.first_name }/>
+          <FormControl inputRef={ref => this.first_nameInput = ref} type="text" defaultValue={user.first_name} />
         </Col>
-        <Col xs={ 6 } style={ S('p-0') }>
+        <Col xs={6} style={S('p-0')}>
           <label>Last name</label>
-          <FormControl inputRef={ ref => this.last_nameInput = ref } type="text" defaultValue={ user.last_name }/>
+          <FormControl inputRef={ref => this.last_nameInput = ref} type="text" defaultValue={user.last_name} />
         </Col>
-        <Col xs={ 6 }>
+        <Col xs={6}>
           <label>Email</label>
-          <FormControl inputRef={ ref => this.emailInput = ref } type="text" defaultValue={ user.email }/>
+          <FormControl inputRef={ref => this.emailInput = ref} type="text" defaultValue={user.email} />
         </Col>
-        <Col xs={ 6 } style={ S('p-0') }>
+        <Col xs={6} style={S('p-0')}>
           <label>Phone number</label>
           <div className="input-group">
             <div className="input-group-btn input-dropdown--country-codes">
               { country_codes }
             </div>
-            <MaskedInput className="form-control" ref={ ref => this.phone_numberInput = ref } type="text" defaultValue={ user.phone_number ? phone_number_parsed.phone_number : '' } mask="(999)-999-9999" maskChar="_"/>
+            <MaskedInput className="form-control" ref={ref => this.phone_numberInput = ref} type="text" defaultValue={user.phone_number ? phone_number_parsed.phone_number : ''} mask="(999)-999-9999" maskChar="_" />
           </div>
         </Col>
-        <div className="clearfix"></div>
-        <Col style={ S('pr-0') } xs={ 12 }>{ message }</Col>
+        <div className="clearfix" />
+        <Col style={S('pr-0')} xs={12}>{ message }</Col>
       </Col>
     )
     if (data.password_changed) {
@@ -427,19 +427,19 @@ export default class SideBar extends Component {
     }
     if (data.show_change_password) {
       form_fields = (
-        <Col xs={ 9 } style={ S('p-0') }>
-          <Col xs={ 12 } style={ S('pr-0') }>
+        <Col xs={9} style={S('p-0')}>
+          <Col xs={12} style={S('pr-0')}>
             <label>Current password</label>
-            <FormControl key="old_password" bsSize="large" style={ S('font-15') } inputRef={ ref => this.old_passwordInput = ref } type="password" placeholder="Current password" />
+            <FormControl key="old_password" bsSize="large" style={S('font-15')} inputRef={ref => this.old_passwordInput = ref} type="password" placeholder="Current password" />
           </Col>
-          <Col xs={ 12 } style={ S('pr-0') }>
+          <Col xs={12} style={S('pr-0')}>
             <label>New password</label>
-            <div style={ S('relative') }>
-              <FormControl key="new_password" inputRef={ ref => this.new_passwordInput = ref } autoComplete={ false } style={ S('font-15') } bsSize="large" placeholder="New Password" type={ data.settings && data.settings.show_password ? 'text' : 'password' } />
-              <i onClick={ this.toggleShowPassword } style={ S('absolute t-15 r-15 z-100 pointer color-666') } className={ `fa fa-eye${ data.settings && data.settings.show_password ? '-slash' : '' }` }></i>
+            <div style={S('relative')}>
+              <FormControl key="new_password" inputRef={ref => this.new_passwordInput = ref} autoComplete={false} style={S('font-15')} bsSize="large" placeholder="New Password" type={data.settings && data.settings.show_password ? 'text' : 'password'} />
+              <i onClick={this.toggleShowPassword} style={S('absolute t-15 r-15 z-100 pointer color-666')} className={`fa fa-eye${data.settings && data.settings.show_password ? '-slash' : ''}`} />
             </div>
           </Col>
-          <Col style={ S('pr-0') } xs={ 12 }>{ message }</Col>
+          <Col style={S('pr-0')} xs={12}>{ message }</Col>
         </Col>
       )
       change_password_area = ''
@@ -467,22 +467,22 @@ export default class SideBar extends Component {
     }
     let upgrade_account_area = (
       <div>
-        <form onSubmit={ this.handleSubmit.bind(this, 'search-agent') }>
+        <form onSubmit={this.handleSubmit.bind(this, 'search-agent')}>
           <Modal.Body>
-            <Col xs={ 12 }>
+            <Col xs={12}>
               <label>Enter your agent license # to unlock MLS features.</label>
-              <FormControl key={'password'} inputRef={ ref => this.mlsidInput = ref } type="text" defaultValue=""/>
+              <FormControl key={'password'} inputRef={ref => this.mlsidInput = ref} type="text" defaultValue="" />
               { message }
-              <div className="clearfix"></div>
+              <div className="clearfix" />
             </Col>
-            <div style={ S('text-center mt-20') }>
-              Having trouble? <a href="#" onClick={ this.showIntercom }>Contact support</a>.
+            <div style={S('text-center mt-20')}>
+              Having trouble? <a href="#" onClick={this.showIntercom}>Contact support</a>.
             </div>
           </Modal.Body>
-          <Modal.Footer style={ { border: 'none' } }>
-            <Col xs={ 9 } style={ S('pr-0 pull-right') }>
-              <Button bsStyle="link" onClick={ this.hideModal.bind(this) }>Cancel</Button>
-              <Button style={ S('h-30 pt-5 pl-30 pr-30') } className={ data.submitting ? 'disabled' : '' } type="submit" bsStyle="primary">
+          <Modal.Footer style={{ border: 'none' }}>
+            <Col xs={9} style={S('pr-0 pull-right')}>
+              <Button bsStyle="link" onClick={this.hideModal.bind(this)}>Cancel</Button>
+              <Button style={S('h-30 pt-5 pl-30 pr-30')} className={data.submitting ? 'disabled' : ''} type="submit" bsStyle="primary">
                 { data.submitting ? 'Searching...' : 'Search' }
               </Button>
             </Col>
@@ -501,34 +501,32 @@ export default class SideBar extends Component {
       const agent = data.settings.agent
       upgrade_account_area = (
         <div>
-          <form onSubmit={ this.handleSubmit.bind(this, 'confirm-agent') }>
+          <form onSubmit={this.handleSubmit.bind(this, 'confirm-agent')}>
             <Modal.Body>
-              <div className="tk-calluna-sans" style={ S('color-cecdcd mb-20 font-26 text-left') }>Rechat</div>
-              <div style={ S('color-000 mb-20 text-left font-26') }>Confirm agent status</div>
-              <div style={ S('mb-20 color-9b9b9b') }>We found the following contact details associated with agent license <strong>#{ data.settings.agent.mlsid }</strong></div>
-              <div style={ S('mb-10 color-9b9b9b') }>Confirm this is you by entering your email or phone number # below</div>
-              <div style={ S('mb-20 color-4a4a4a') }>
+              <div className="tk-calluna-sans" style={S('color-cecdcd mb-20 font-26 text-left')}>Rechat</div>
+              <div style={S('color-000 mb-20 text-left font-26')}>Confirm agent status</div>
+              <div style={S('mb-20 color-9b9b9b')}>We found the following contact details associated with agent license <strong>#{ data.settings.agent.mlsid }</strong></div>
+              <div style={S('mb-10 color-9b9b9b')}>Confirm this is you by entering your email or phone number # below</div>
+              <div style={S('mb-20 color-4a4a4a')}>
                 {
-                  agent.secret_questions.map((question, i) => {
-                    return (
-                      <div key={ 'question-' + i } style={ S('fw-600') }>{ question }</div>
-                    )
-                  })
+                  agent.secret_questions.map((question, i) => (
+                    <div key={`question-${i}`} style={S('fw-600')}>{ question }</div>
+                    ))
                 }
               </div>
-              <div style={ S('w-100p mb-10') }>
-                <FormControl type="text" inputRef={ ref => this.secretInput = ref } placeholder="Your email or phone #"/>
-                <div className="clearfix"></div>
+              <div style={S('w-100p mb-10')}>
+                <FormControl type="text" inputRef={ref => this.secretInput = ref} placeholder="Your email or phone #" />
+                <div className="clearfix" />
                 { message }
               </div>
-              <div style={ S('text-center mt-20') }>
-                Having trouble? <a href="#" onClick={ this.showIntercom }>Contact support</a>.
+              <div style={S('text-center mt-20')}>
+                Having trouble? <a href="#" onClick={this.showIntercom}>Contact support</a>.
               </div>
             </Modal.Body>
-            <Modal.Footer style={ { border: 'none' } }>
-              <Col xs={ 9 } style={ S('pr-0 pull-right') }>
-                <Button bsStyle="link" onClick={ this.hideModal.bind(this) }>Cancel</Button>
-                <Button style={ S('h-30 pt-5 pl-30 pr-30') } className={ data.submitting ? 'disabled' : '' } type="submit" bsStyle="primary">
+            <Modal.Footer style={{ border: 'none' }}>
+              <Col xs={9} style={S('pr-0 pull-right')}>
+                <Button bsStyle="link" onClick={this.hideModal.bind(this)}>Cancel</Button>
+                <Button style={S('h-30 pt-5 pl-30 pr-30')} className={data.submitting ? 'disabled' : ''} type="submit" bsStyle="primary">
                   { data.submitting ? 'Confirming...' : 'Confirm I\'m an agent' }
                 </Button>
               </Col>
@@ -540,21 +538,21 @@ export default class SideBar extends Component {
     let upgrade_account_button
     if (data.user && data.user.user_type === 'Client') {
       upgrade_account_button = (
-        <li><a href="#" style={ S('pointer') } onClick={ this.showUpgradeAccountModal }><i className="fa fa-arrow-up" style={ S('mr-15') }></i>Upgrade Account</a></li>
+        <li><a href="#" style={S('pointer')} onClick={this.showUpgradeAccountModal}><i className="fa fa-arrow-up" style={S('mr-15')} />Upgrade Account</a></li>
       )
     }
 
     let branding_logo
     if (Brand.asset('site_logo')) {
       branding_logo = (
-        <div style={ S('mb-10 mt-10') }>
+        <div style={S('mb-10 mt-10')}>
           <a target="_blank" href="http://www.claystapp.com">
-            <div style={ S(`bg-url(${Brand.asset('site_logo')}) bg-cover bg-center w-30 h-30 ml-10 br-3`) }></div>
+            <div style={S(`bg-url(${Brand.asset('site_logo')}) bg-cover bg-center w-30 h-30 ml-10 br-3`)} />
           </a>
         </div>
       )
     }
-    const nav_active_color = '#' + Brand.color('primary', '3388ff')
+    const nav_active_color = `#${Brand.color('primary', '3388ff')}`
     let close_intercom
     if (data.show_intercom) {
       let close_btn_style = S('fixed w-50 h-50 bg-fff r-20 b-30 br-100 text-center pt-5 pointer font-50')
@@ -564,43 +562,43 @@ export default class SideBar extends Component {
         boxShadow: '0 2px 13px 0 rgba(0, 0, 0, 0.15)'
       }
       close_intercom = (
-        <div onClick={ this.hideIntercom } style={ close_btn_style }>
+        <div onClick={this.hideIntercom} style={close_btn_style}>
           &times;
         </div>
       )
     }
-    const payments_link = <li><Link to="/dashboard/cards"><i className="fa fa-money" style={ S('mr-15') }></i>Payment Info</Link></li>
+    const payments_link = <li><Link to="/dashboard/cards"><i className="fa fa-money" style={S('mr-15')} />Payment Info</Link></li>
     let form_link = ''
 
     if (user.user_type === 'Admin')
-      form_link = <li><Link to="/dashboard/forms"><i className="fa fa-wpforms" style={ S('mr-15') }></i>Forms</Link></li>
+      form_link = <li><Link to="/dashboard/forms"><i className="fa fa-wpforms" style={S('mr-15')} />Forms</Link></li>
 
     return (
-      <aside style={ sidebar_style } className="sidebar__nav-list pull-left">
-        <Nav bsStyle="pills" stacked style={ S('mt-10') }>
+      <aside style={sidebar_style} className="sidebar__nav-list pull-left">
+        <Nav bsStyle="pills" stacked style={S('mt-10')}>
           { branding_logo }
-          <OverlayTrigger placement="right" overlay={ popover.conversation } delayShow={ 200 } delayHide={ 0 }>
-            <LinkContainer onClick={ this.handleChatNavClick.bind(this) } className={ active.recents } to="/dashboard/recents">
-              <NavItem style={ S('w-85p') }>
-                <SvgChat color={ active.recents ? nav_active_color : '#4e5c6c' }/>
+          <OverlayTrigger placement="right" overlay={popover.conversation} delayShow={200} delayHide={0}>
+            <LinkContainer onClick={this.handleChatNavClick.bind(this)} className={active.recents} to="/dashboard/recents">
+              <NavItem style={S('w-85p')}>
+                <SvgChat color={active.recents ? nav_active_color : '#4e5c6c'} />
                 {this.notificationIcon('room_notification_count')}
               </NavItem>
             </LinkContainer>
           </OverlayTrigger>
-          <OverlayTrigger placement="right" overlay={ popover.map } delayShow={ 200 } delayHide={ 0 }>
-            <LinkContainer onClick={ this.hideListingViewer.bind(this) } className={ active.mls } to="/dashboard/mls">
-              <NavItem style={ S('w-85p') }>
-                <SvgMap color={ active.mls ? nav_active_color : '#4e5c6c' }/>
+          <OverlayTrigger placement="right" overlay={popover.map} delayShow={200} delayHide={0}>
+            <LinkContainer onClick={this.hideListingViewer.bind(this)} className={active.mls} to="/dashboard/mls">
+              <NavItem style={S('w-85p')}>
+                <SvgMap color={active.mls ? nav_active_color : '#4e5c6c'} />
               </NavItem>
             </LinkContainer>
           </OverlayTrigger>
 
           {
             user.features && user.features.indexOf('Concierge') > -1 &&
-            <OverlayTrigger placement="right" overlay={ popover.concierge } delayShow={ 200 } delayHide={ 0 }>
-              <LinkContainer onClick={ this.hideListingViewer.bind(this) } className={ active.concierge } to="/dashboard/concierge/deals">
-                <NavItem style={ S('w-85p') }>
-                  <img src={ active.concierge ? '/static/images/dashboard/sidenav/deals-active.svg' : '/static/images/dashboard/sidenav/deals.svg' } style={ S('w-19 h-19') }/>
+            <OverlayTrigger placement="right" overlay={popover.concierge} delayShow={200} delayHide={0}>
+              <LinkContainer onClick={this.hideListingViewer.bind(this)} className={active.concierge} to="/dashboard/concierge/deals">
+                <NavItem style={S('w-85p')}>
+                  <img src={active.concierge ? '/static/images/dashboard/sidenav/deals-active.svg' : '/static/images/dashboard/sidenav/deals.svg'} style={S('w-19 h-19')} />
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
@@ -608,10 +606,10 @@ export default class SideBar extends Component {
 
           {
             user.features && user.features.indexOf('Deals') > -1 &&
-            <OverlayTrigger placement="right" overlay={ popover.deals } delayShow={ 200 } delayHide={ 0 }>
-              <LinkContainer onClick={ this.hideListingViewer.bind(this) } className={ active.deals } to="/dashboard/deals">
-                <NavItem style={ S('w-85p') }>
-                  <img src={ active.deals ? '/static/images/dashboard/sidenav/deals-active.svg' : '/static/images/dashboard/sidenav/deals.svg' } style={ S('w-19 h-19') }/>
+            <OverlayTrigger placement="right" overlay={popover.deals} delayShow={200} delayHide={0}>
+              <LinkContainer onClick={this.hideListingViewer.bind(this)} className={active.deals} to="/dashboard/deals">
+                <NavItem style={S('w-85p')}>
+                  <img src={active.deals ? '/static/images/dashboard/sidenav/deals-active.svg' : '/static/images/dashboard/sidenav/deals.svg'} style={S('w-19 h-19')} />
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
@@ -650,61 +648,61 @@ export default class SideBar extends Component {
           { agents }
           {
             data.user.user_type && data.user.user_type === 'Agent' &&
-            <OverlayTrigger placement="right" overlay={ popover.store } delayShow={ 200 } delayHide={ 0 }>
-              <NavItem style={ S('w-85p') } onClick={ this.goToStore.bind(this) }>
-                <SvgStore color={ active.store ? nav_active_color : '#4e5c6c' }/>
+            <OverlayTrigger placement="right" overlay={popover.store} delayShow={200} delayHide={0}>
+              <NavItem style={S('w-85p')} onClick={this.goToStore.bind(this)}>
+                <SvgStore color={active.store ? nav_active_color : '#4e5c6c'} />
               </NavItem>
             </OverlayTrigger>
           }
         </Nav>
-        <div style={ S('absolute b-10 l-15') }>
+        <div style={S('absolute b-10 l-15')}>
           <Nav className="sidebar__account">
-            <OverlayTrigger placement="right" overlay={ popover.support } delayShow={ 200 } delayHide={ 0 }>
-              <div style={ S('pointer relative t-15n') } onClick={ this.showIntercom }>
-                <i className="fa fa-question" style={ S('font-20 color-202A33 relative t-5n l-13 z-100') }></i>
-                <i className="fa fa-comment" style={ S('font-35 relative l-10n color-4D5C6C') }></i>
+            <OverlayTrigger placement="right" overlay={popover.support} delayShow={200} delayHide={0}>
+              <div style={S('pointer relative t-15n')} onClick={this.showIntercom}>
+                <i className="fa fa-question" style={S('font-20 color-202A33 relative t-5n l-13 z-100')} />
+                <i className="fa fa-comment" style={S('font-35 relative l-10n color-4D5C6C')} />
               </div>
             </OverlayTrigger>
-            <div style={ S('absolute z-0 l-3n') }>
-              <ProfileImage data={ data } user={ user } />
+            <div style={S('absolute z-0 l-3n')}>
+              <ProfileImage data={data} user={user} />
             </div>
-            <NavDropdown style={ S('z-1000') } title={ title_area } dropup id="account-dropdown" className="account-dropdown" eventKey={3} noCaret>
+            <NavDropdown style={S('z-1000')} title={title_area} dropup id="account-dropdown" className="account-dropdown" eventKey={3} noCaret>
               { upgrade_account_button }
-              <li><a href="#" style={ S('pointer') } onClick={ this.showSettingsModal }><i className="fa fa-cog" style={ S('mr-15') }></i>Settings</a></li>
+              <li><a href="#" style={S('pointer')} onClick={this.showSettingsModal}><i className="fa fa-cog" style={S('mr-15')} />Settings</a></li>
               { payments_link }
               { form_link }
-              <li role="separator" className="divider"></li>
-              <li><a href="/signout"><i className="fa fa-power-off" style={ S('mr-15') }></i>Sign out</a></li>
+              <li role="separator" className="divider" />
+              <li><a href="/signout"><i className="fa fa-power-off" style={S('mr-15')} />Sign out</a></li>
             </NavDropdown>
           </Nav>
         </div>
-        <Modal show={ data.show_account_settings_modal } onHide={ this.hideModal.bind(this) }>
-          <form onSubmit={ this.handleSubmit.bind(this, 'edit-info') }>
-            <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
-              <Modal.Title style={ S('font-14') }>Edit Account Settings</Modal.Title>
+        <Modal show={data.show_account_settings_modal} onHide={this.hideModal.bind(this)}>
+          <form onSubmit={this.handleSubmit.bind(this, 'edit-info')}>
+            <Modal.Header closeButton style={S('h-45 bc-f3f3f3')}>
+              <Modal.Title style={S('font-14')}>Edit Account Settings</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <Col xs={ 3 }>
+              <Col xs={3}>
                 <div className="pull-left">
                   { profile_image_area }
                 </div>
               </Col>
               { form_fields }
             </Modal.Body>
-            <Modal.Footer style={ { border: 'none' } }>
-              <Col xs={ 9 } style={ S('pr-0 pull-right') }>
+            <Modal.Footer style={{ border: 'none' }}>
+              <Col xs={9} style={S('pr-0 pull-right')}>
                 { change_password_area }
-                <Button bsStyle="link" onClick={ this.hideModal.bind(this) }>Cancel</Button>
-                <Button style={ S('h-30 pt-5 pl-30 pr-30') } className={ data.saving_account_settings ? 'disabled' : '' } type="submit" bsStyle="primary">
+                <Button bsStyle="link" onClick={this.hideModal.bind(this)}>Cancel</Button>
+                <Button style={S('h-30 pt-5 pl-30 pr-30')} className={data.saving_account_settings ? 'disabled' : ''} type="submit" bsStyle="primary">
                   { data.saving_account_settings ? 'Saving...' : 'Save' }
                 </Button>
               </Col>
             </Modal.Footer>
           </form>
         </Modal>
-        <Modal show={ data.show_upgrade_account_modal } onHide={ this.hideModal.bind(this) }>
-          <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
-            <Modal.Title style={ S('font-14') }>Upgrade Account</Modal.Title>
+        <Modal show={data.show_upgrade_account_modal} onHide={this.hideModal.bind(this)}>
+          <Modal.Header closeButton style={S('h-45 bc-f3f3f3')}>
+            <Modal.Title style={S('font-14')}>Upgrade Account</Modal.Title>
           </Modal.Header>
           { upgrade_account_area }
         </Modal>

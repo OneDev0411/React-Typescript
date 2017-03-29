@@ -11,7 +11,7 @@ import routes from './routes'
 import './styles/main.scss'
 
 export default () => (
-  <Router history={ history }>
+  <Router history={history}>
     { routes }
   </Router>
 )

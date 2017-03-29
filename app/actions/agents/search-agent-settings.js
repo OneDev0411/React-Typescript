@@ -2,7 +2,7 @@
 import Agent from '../../models/Agent'
 import AppStore from '../../stores/AppStore'
 
-export default mlsid => {
+export default (mlsid) => {
   const params = {
     mlsid
   }

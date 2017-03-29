@@ -7,7 +7,7 @@ import _ from 'lodash'
 export default (user, task, contacts) => {
   const locals = {}
   async.series([
-    callback => {
+    (callback) => {
       const params = {
         access_token: user.access_token,
         contacts

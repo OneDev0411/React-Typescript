@@ -44,13 +44,12 @@ export default class Listings extends Component {
         action: 'geocode-address',
         address: q
       })
-      return
     }
   }
   render() {
     // Data
     const data = this.props.data
-    return <SearchMap data={ data }/>
+    return <SearchMap data={data} />
   }
 }
 

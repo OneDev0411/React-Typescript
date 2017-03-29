@@ -16,7 +16,7 @@ export default class Agents extends Component {
     const data = AppStore.data
 
     data.agents = {
-      filters: new Set,
+      filters: new Set(),
       agents: undefined,
       rows: undefined,
       searching: false,
@@ -34,10 +34,10 @@ export default class Agents extends Component {
     return (
       <div id="agents">
         <main>
-          <Header data={ data }/>
-          <SideBar data={ data }/>
-          <FilterBar data={ data }/>
-          <Results data={ data }/>
+          <Header data={data} />
+          <SideBar data={data} />
+          <FilterBar data={data} />
+          <Results data={data} />
         </main>
       </div>
     )

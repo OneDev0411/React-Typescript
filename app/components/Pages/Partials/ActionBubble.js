@@ -57,7 +57,7 @@ export default class ActionBubble extends Component {
     }
     let signup_btn_style = S('h-46 w-100p')
     let button_area = (
-      <Button className={ data.submitting ? 'disabled' : '' } bsStyle="primary" style={ signup_btn_style } type="submit">{ data.submitting ? 'Submitting...' : 'Start Chat' }</Button>
+      <Button className={data.submitting ? 'disabled' : ''} bsStyle="primary" style={signup_btn_style} type="submit">{ data.submitting ? 'Submitting...' : 'Start Chat' }</Button>
     )
     if (data.listing_inquiry_success_id && data.listing_inquiry_success_id === listing.id) {
       button_area = (
@@ -65,7 +65,7 @@ export default class ActionBubble extends Component {
       )
     }
     let action_form = (
-      <form style={ S('pull-left ' + (data.is_mobile ? 'w-300' : 'w-100p mb-10')) } onSubmit={ this.props.handleListingInquirySubmit.bind(this) } overlay={ popover }>
+      <form style={S(`pull-left ${data.is_mobile ? 'w-300' : 'w-100p mb-10'}`)} onSubmit={this.props.handleListingInquirySubmit.bind(this)} overlay={popover}>
         { button_area }
       </form>
     )
@@ -75,37 +75,37 @@ export default class ActionBubble extends Component {
         ...S('h-46 w-130'),
         borderTopLeftRadius: 0,
         borderBottomLeftRadius: 0,
-        backgroundColor: '#' + Brand.color('primary', '006aff'),
-        borderColor: '#' + Brand.color('primary', '006aff')
+        backgroundColor: `#${Brand.color('primary', '006aff')}`,
+        borderColor: `#${Brand.color('primary', '006aff')}`
       }
       action_form = (
-        <form style={ S('pull-left ' + (data.is_mobile ? 'w-300' : 'w-360')) } onSubmit={ this.props.handleEmailSubmit.bind(this) }>
-          <div style={ S('pull-left') }>
-            <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
-              <FormControl inputRef={ ref => this.emailInput = ref } style={ signup_input_style } type="text" placeholder={ email_label } />
+        <form style={S(`pull-left ${data.is_mobile ? 'w-300' : 'w-360'}`)} onSubmit={this.props.handleEmailSubmit.bind(this)}>
+          <div style={S('pull-left')}>
+            <OverlayTrigger trigger="focus" placement="bottom" overlay={popover}>
+              <FormControl inputRef={ref => this.emailInput = ref} style={signup_input_style} type="text" placeholder={email_label} />
             </OverlayTrigger>
           </div>
-          <div style={ S('pull-left') }>
-            <Button className={ data.submitting ? 'disabled' : '' } bsStyle="primary" style={ signup_btn_style } type="submit">{ data.submitting ? 'Submitting...' : 'Lets Go' }</Button>
+          <div style={S('pull-left')}>
+            <Button className={data.submitting ? 'disabled' : ''} bsStyle="primary" style={signup_btn_style} type="submit">{ data.submitting ? 'Submitting...' : 'Lets Go' }</Button>
           </div>
         </form>
       )
       login_link_area = (
-        <div style={ S('color-9b9b9b text-center') }>Already have an account? <span style={ S('pointer') } className="text-primary" onClick={ this.props.handleLoginClick.bind(this, listing.id) }>Log in</span></div>
+        <div style={S('color-9b9b9b text-center')}>Already have an account? <span style={S('pointer')} className="text-primary" onClick={this.props.handleLoginClick.bind(this, listing.id)}>Log in</span></div>
       )
     }
     const action_bubble = (
-      <div style={ form_style }>
-        <div onClick={ this.props.handleCloseSignupForm } className="close" style={ S('absolute t-10 z-1 r-15') }>&times;</div>
-        <div className="din" style={ S('font-30 color-263445 mb-5') }>
+      <div style={form_style}>
+        <div onClick={this.props.handleCloseSignupForm} className="close" style={S('absolute t-10 z-1 r-15')}>&times;</div>
+        <div className="din" style={S('font-30 color-263445 mb-5')}>
           { signup_title }
         </div>
-        <div style={ S('mb-5 w-100p') }>
+        <div style={S('mb-5 w-100p')}>
           { action_form }
-          <div className="clearfix"></div>
+          <div className="clearfix" />
         </div>
         { login_link_area }
-        <i className={`fa fa-caret-${(data.signup_tooltip.action === 'listing_inquiry') ? 'down' : 'up'}`} style={ S(`z-0 color-fff font-60 absolute r-15 ${(data.signup_tooltip.action === 'listing_inquiry') ? 'b-35n' : 't-35n'}`) }></i>
+        <i className={`fa fa-caret-${(data.signup_tooltip.action === 'listing_inquiry') ? 'down' : 'up'}`} style={S(`z-0 color-fff font-60 absolute r-15 ${(data.signup_tooltip.action === 'listing_inquiry') ? 'b-35n' : 't-35n'}`)} />
       </div>
     )
     return action_bubble

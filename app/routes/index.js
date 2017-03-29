@@ -45,38 +45,38 @@ import SearchWidget from '../components/Pages/Widgets/Search'
 
 export default (
   <Route path="/" component={App}>
-    <IndexRoute component={Landing}/>
-    <Route path="signup" component={SignUp}/>
-    <Route path="signup/agent" component={ConfirmAgent}/>
-    <Route path="signin" component={SignIn}/>
-    <Route path="branch" component={Branch}/>
-    <Route path="account/settings" component={Settings}/>
-    <Route path="account/notifications" component={Notifications}/>
+    <IndexRoute component={Landing} />
+    <Route path="signup" component={SignUp} />
+    <Route path="signup/agent" component={ConfirmAgent} />
+    <Route path="signin" component={SignIn} />
+    <Route path="branch" component={Branch} />
+    <Route path="account/settings" component={Settings} />
+    <Route path="account/notifications" component={Notifications} />
     <Redirect from="dashboard" to="dashboard/recents" />
-    <Route path="dashboard/recents" component={Recents}/>
-    <Route path="dashboard/recents/:room_id" component={Recents}/>
-    <Route path="dashboard/mls" component={Mls}/>
-    <Route path="dashboard/mls/agents" component={Agents}/>
-    <Route path="dashboard/mls/alerts" component={Mls}/>
-    <Route path="dashboard/mls/alerts/:alert_id" component={Mls}/>
-    <Route path="dashboard/mls/actives" component={Mls}/>
-    <Route path="dashboard/mls/:id" component={Listing}/>
-    <Route path="dashboard/mls/listing/recommend" component={Recommend}/>
-    <Route path="dashboard/contacts" component={Contacts}/>
-    <Route path="dashboard/contacts/:id" component={Contacts}/>
-    <Route path="dashboard/tasks" component={Tasks}/>
-    <Route path="dashboard/transactions" component={Transactions}/>
-    <Route path="dashboard/transactions/new" component={NewTransaction}/>
-    <Route path="dashboard/transactions/:id" component={SingleTransaction}/>
-    <Route path="dashboard/transactions/:id/attachments/:id" component={SingleTransaction}/>
-    <Route path="dashboard/website" component={Website}/>
-    <Route path="dashboard/cards" component={Cards}/>
-    <Route path="dashboard/forms" component={Forms}/>
-    <Route path="verify/:slug" component={Verify}/>
-    <Route path="password/:slug" component={Password}/>
-    <Route path="widgets/listings" component={ListingsWidget}/>
-    <Route path="widgets/map" component={MapWidget}/>
-    <Route path="widgets/search" component={SearchWidget}/>
+    <Route path="dashboard/recents" component={Recents} />
+    <Route path="dashboard/recents/:room_id" component={Recents} />
+    <Route path="dashboard/mls" component={Mls} />
+    <Route path="dashboard/mls/agents" component={Agents} />
+    <Route path="dashboard/mls/alerts" component={Mls} />
+    <Route path="dashboard/mls/alerts/:alert_id" component={Mls} />
+    <Route path="dashboard/mls/actives" component={Mls} />
+    <Route path="dashboard/mls/:id" component={Listing} />
+    <Route path="dashboard/mls/listing/recommend" component={Recommend} />
+    <Route path="dashboard/contacts" component={Contacts} />
+    <Route path="dashboard/contacts/:id" component={Contacts} />
+    <Route path="dashboard/tasks" component={Tasks} />
+    <Route path="dashboard/transactions" component={Transactions} />
+    <Route path="dashboard/transactions/new" component={NewTransaction} />
+    <Route path="dashboard/transactions/:id" component={SingleTransaction} />
+    <Route path="dashboard/transactions/:id/attachments/:id" component={SingleTransaction} />
+    <Route path="dashboard/website" component={Website} />
+    <Route path="dashboard/cards" component={Cards} />
+    <Route path="dashboard/forms" component={Forms} />
+    <Route path="verify/:slug" component={Verify} />
+    <Route path="password/:slug" component={Password} />
+    <Route path="widgets/listings" component={ListingsWidget} />
+    <Route path="widgets/map" component={MapWidget} />
+    <Route path="widgets/search" component={SearchWidget} />
 
     <Route path="/dashboard/deals" component={DealsLayout}>
       <IndexRoute component={DealsList} />
@@ -85,6 +85,6 @@ export default (
       <Route path="/dashboard/deals/:id/collect-signatures/documents" component={CollectSignatures_Documents} />
       <Route path="/dashboard/deals/:id/collect-signatures/recipients" component={CollectSignatures_Recipients} />
     </Route>
-    <Route path="*" component={NoMatch}/>
+    <Route path="*" component={NoMatch} />
   </Route>
 )

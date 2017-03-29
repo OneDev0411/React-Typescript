@@ -8,10 +8,10 @@ const controller = {
       AppStore.emitChange()
       return
     }
-    items_selected.forEach(item => {
+    items_selected.forEach((item) => {
       if (item.type === 'room') {
         const users = item.value.users
-        users.forEach(user => {
+        users.forEach((user) => {
           items_selected.push({
             label: user.first_name || user.display_name,
             value: user,

@@ -5,9 +5,9 @@ import AppStore from '../../stores/AppStore'
 export default (user) => {
   const params = {}
 
-  if (user) {
+  if (user)
     params.user = user.access_token
-  }
+
 
   Deals.getDeals(params, (err, response) => {
     // Success

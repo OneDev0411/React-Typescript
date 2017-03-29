@@ -27,9 +27,9 @@ export default class CollectSignatures extends React.Component {
       })
     }
 
-    if (!deal.submissions) {
+    if (!deal.submissions)
       return this.getSubmissions()
-    }
+
 
     this.setState({
       submissions: deal.submissions
@@ -82,14 +82,13 @@ export default class CollectSignatures extends React.Component {
   }
 
   render() {
-
     const { submissions, selectedDocuments } = this.state
 
     return (
       <div className="collect-signatures documents">
 
-        <div className="close" onClick={ this.close.bind(this) }>
-          <i className="fa fa-times fa-1x"></i>
+        <div className="close" onClick={this.close.bind(this)}>
+          <i className="fa fa-times fa-1x" />
           esc
         </div>
 
@@ -105,27 +104,25 @@ export default class CollectSignatures extends React.Component {
             submissions &&
             _.chain(submissions)
             .filter(subm => subm.state === 'Fair')
-            .map(subm => {
-              return (
-                <div
-                  key={`submission${subm.id}`}
-                  className="doc-detail"
-                  onClick={this.onDocumentChange.bind(this, subm)}
-                >
-                  <div className="control">
-                    <input
-                      type="checkbox"
-                      onChange={ () => {} }
-                      checked={ typeof selectedDocuments[subm.id] !== 'undefined' }
-                    />
-                    <img src="/static/images/deals/file.png" />
-                  </div>
-
-                  <div className="title">{ subm.title }</div>
-                  <div className="status">Completed</div>
+            .map(subm => (
+              <div
+                key={`submission${subm.id}`}
+                className="doc-detail"
+                onClick={this.onDocumentChange.bind(this, subm)}
+              >
+                <div className="control">
+                  <input
+                    type="checkbox"
+                    onChange={() => {}}
+                    checked={typeof selectedDocuments[subm.id] !== 'undefined'}
+                  />
+                  <img src="/static/images/deals/file.png" />
                 </div>
-              )
-            })
+
+                <div className="title">{ subm.title }</div>
+                <div className="status">Completed</div>
+              </div>
+              ))
             .value()
           }
         </div>
@@ -141,8 +138,8 @@ export default class CollectSignatures extends React.Component {
 
           <Button
             bsStyle="primary"
-            onClick={ this.onSubmit.bind(this) }
-            disabled={ Object.keys(selectedDocuments).length === 0 }
+            onClick={this.onSubmit.bind(this)}
+            disabled={Object.keys(selectedDocuments).length === 0}
           >
             Next
           </Button>

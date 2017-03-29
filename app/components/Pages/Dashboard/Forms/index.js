@@ -7,15 +7,15 @@ export default class Forms extends Component {
     // Data
     const data = this.props.data
     const user = data.user
-    const main_style = S(`absolute h-100p border-left-70-solid-fff w-100p`)
+    const main_style = S('absolute h-100p border-left-70-solid-fff w-100p')
     return (
-      <div style={ S('minw-1000') }>
+      <div style={S('minw-1000')}>
         <main>
           <SideBar
-            data={ data }
+            data={data}
           />
-          <div style={ main_style }>
-            <iframe style={ S('w-100p h-100p absolute') } src={ `${config.forms.url}?access_token=${user.access_token}`} frameBorder="0"></iframe>
+          <div style={main_style}>
+            <iframe style={S('w-100p h-100p absolute')} src={`${config.forms.url}?access_token=${user.access_token}`} frameBorder="0" />
           </div>
         </main>
       </div>

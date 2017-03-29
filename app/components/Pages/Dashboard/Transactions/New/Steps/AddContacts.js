@@ -12,19 +12,19 @@ export default class AddContacts extends Component {
     const data = this.props.data
     return (
       <div>
-        <div style={ S('t-100n absolute color-d0d4d9') }>Never leave that till tomorrow which you can do today.</div>
+        <div style={S('t-100n absolute color-d0d4d9')}>Never leave that till tomorrow which you can do today.</div>
         <h1>Invite your partner, vendors and even those on<br /> the other side of the negotiation!</h1>
         <AddContactsModule
           module_type="contact"
-          data={ data }
-          setContactActive={ this.props.setContactActive }
-          setFilteredContacts={ this.props.setFilteredContacts }
-          hideContactsForm={ this.props.hideContactsForm }
-          addContact={ this.props.addContact }
-          removeContact={ this.props.removeContact }
-          showContactModal={ this.props.showContactModal }
-          hideModal={ this.props.hideModal }
-          showNewContentInitials={ this.props.showNewContentInitials }
+          data={data}
+          setContactActive={this.props.setContactActive}
+          setFilteredContacts={this.props.setFilteredContacts}
+          hideContactsForm={this.props.hideContactsForm}
+          addContact={this.props.addContact}
+          removeContact={this.props.removeContact}
+          showContactModal={this.props.showContactModal}
+          hideModal={this.props.hideModal}
+          showNewContentInitials={this.props.showNewContentInitials}
         />
       </div>
     )

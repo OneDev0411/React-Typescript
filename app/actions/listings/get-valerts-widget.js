@@ -20,7 +20,7 @@ export default (user, options) => {
     // delete params.options.list_offices
   }
   async.series([
-    callback => {
+    (callback) => {
       if (!AppStore.data.brand) {
         const hostname = window.location.hostname
 
@@ -45,16 +45,14 @@ export default (user, options) => {
           AppStore.data.widget.listings_info = response.info
         }
         if (options.listing_statuses[0] === 'Sold') {
-          AppStore.data.widget.listings.sort((a, b) => {
-            return parseFloat(a.price) - parseFloat(b.price)
-          })
+          AppStore.data.widget.listings.sort((a, b) => parseFloat(a.price) - parseFloat(b.price))
           AppStore.data.widget.listings.reverse()
         } else {
           // Active listings with an online agent show up first. (Issue #500)
           const onlines = []
           const offlines = []
 
-          AppStore.data.widget.listings.forEach(l => {
+          AppStore.data.widget.listings.forEach((l) => {
             const agent = l.list_agent
 
             if (!agent || agent.online_state === 'Offline') {
@@ -72,9 +70,7 @@ export default (user, options) => {
         }
         // Order actives by price
         if (AppStore.data.location.query.order_by && AppStore.data.location.query.order_by === 'price') {
-          AppStore.data.widget.listings.sort((a, b) => {
-            return parseFloat(a.price) - parseFloat(b.price)
-          })
+          AppStore.data.widget.listings.sort((a, b) => parseFloat(a.price) - parseFloat(b.price))
           AppStore.data.widget.listings.reverse()
         }
         delete AppStore.data.widget.is_loading

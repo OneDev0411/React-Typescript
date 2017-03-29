@@ -7,11 +7,11 @@ const controller = {
     const data = AppStore.data
     // Check for hostname
     if (data.is_widget && data.brand && data.brand.hostnames) {
-      window.open('/dashboard/mls/' + listing.id)
+      window.open(`/dashboard/mls/${listing.id}`)
       return
     }
 
-    browserHistory.push('/dashboard/mls/' + listing.id)
+    browserHistory.push(`/dashboard/mls/${listing.id}`)
     const user = data.user
     AppStore.data.show_listing_viewer = true
     AppStore.data.current_listing = listing
@@ -34,8 +34,7 @@ const controller = {
     if (listing_map.listings_viewed) {
       if (listing_map.listings_viewed.indexOf(id) === -1)
         AppStore.data.listing_map.listings_viewed.push(id)
-    }
-    else
+    } else
       AppStore.data.listing_map.listings_viewed = [id]
     AppStore.emitChange()
   },

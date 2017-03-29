@@ -53,11 +53,11 @@ export default class Drawer extends Component {
     if (module_type === 'tasks')
       position = 'fixed'
     let drawer_wrap_style = {
-      ...S('z-101 h-' + drawer_wrap_height + ' r-0 w-0 t-70 ' + position),
+      ...S(`z-101 h-${drawer_wrap_height} r-0 w-0 t-70 ${position}`),
       overflow: 'hidden'
     }
     let drawer_style = {
-      ...S('absolute h-' + drawer_wrap_height + ' z-100 bg-fcfbf9 w-500'),
+      ...S(`absolute h-${drawer_wrap_height} z-100 bg-fcfbf9 w-500`),
       borderLeft: '6px solid #edf1f3'
     }
     if (module_type === 'transaction') {
@@ -119,7 +119,7 @@ export default class Drawer extends Component {
       if (hour === 12)
         current_suffix = 'PM'
       due_date_area = (
-        <span>{ `${due_date_obj.day}, ${due_date_obj.month} ${due_date_obj.date}, ${due_date_obj.year} ${current_hour}:${due_date_obj.min < 10 ? '0' + due_date_obj.min : due_date_obj.min}${current_suffix}` }</span>
+        <span>{ `${due_date_obj.day}, ${due_date_obj.month} ${due_date_obj.date}, ${due_date_obj.year} ${current_hour}:${due_date_obj.min < 10 ? `0${due_date_obj.min}` : due_date_obj.min}${current_suffix}` }</span>
       )
       const created_date = current_task.created_at
       const created_date_obj = helpers.friendlyDate(created_date)
@@ -133,20 +133,18 @@ export default class Drawer extends Component {
     let contacts_markup
     if (contacts) {
       contacts_markup = (
-        contacts.map(contact => {
-          return (
-            <div style={ { ...S('relative p-15 w-100p bg-fff'), ...bottomLine } } className="pull-left" key={ 'added-contact-' + contact.id }>
-              <div style={ S('l-0 t-12 l-10 absolute') }>
-                <ProfileImage data={ data } top={11} size={40} user={ contact }/>
-              </div>
-              <div style={ S('ml-50') }>
-                <div onClick={ this.props.removeContactFromTask.bind(this, contact) } className="close pull-right" style={ S('pointer mt-5') }>&times;</div>
-                <div>{ contact.first_name } { contact.last_name }</div>
-                <div style={ S('color-a3a9ac font-12') }>{ contact.email }</div>
-              </div>
+        contacts.map(contact => (
+          <div style={{ ...S('relative p-15 w-100p bg-fff'), ...bottomLine }} className="pull-left" key={`added-contact-${contact.id}`}>
+            <div style={S('l-0 t-12 l-10 absolute')}>
+              <ProfileImage data={data} top={11} size={40} user={contact} />
             </div>
-          )
-        })
+            <div style={S('ml-50')}>
+              <div onClick={this.props.removeContactFromTask.bind(this, contact)} className="close pull-right" style={S('pointer mt-5')}>&times;</div>
+              <div>{ contact.first_name } { contact.last_name }</div>
+              <div style={S('color-a3a9ac font-12')}>{ contact.email }</div>
+            </div>
+          </div>
+          ))
       )
     }
     // Transaction
@@ -185,52 +183,52 @@ export default class Drawer extends Component {
           date_seconds = current_task.due_date
       }
       day_picker = (
-        <div style={ S('absolute t-145') }>
+        <div style={S('absolute t-145')}>
           <DayTimePicker
-            data={ data }
-            date_seconds={ date_seconds }
-            hideDayPicker={ this.props.hideDayPicker }
-            handleSetDate={ this.props.setEditTaskDate }
-            handleSaveDateTime={ this.editTaskDate.bind(this) }
+            data={data}
+            date_seconds={date_seconds}
+            hideDayPicker={this.props.hideDayPicker}
+            handleSetDate={this.props.setEditTaskDate}
+            handleSaveDateTime={this.editTaskDate.bind(this)}
           />
         </div>
       )
     }
     return (
-      <div style={ drawer_wrap_style }>
-        <div style={ drawer_style } className={ 'drawer ' + drawer_class }>
-          <div onClick={ this.props.closeDrawer } style={ S('mt-5 mr-15 fw-400 font-32 relative z-3') }className="close pull-right">&times;</div>
-          <div style={ title_style }>
-            <div style={ S('relative t-3') }>
+      <div style={drawer_wrap_style}>
+        <div style={drawer_style} className={`drawer ${drawer_class}`}>
+          <div onClick={this.props.closeDrawer} style={S('mt-5 mr-15 fw-400 font-32 relative z-3')}className="close pull-right">&times;</div>
+          <div style={title_style}>
+            <div style={S('relative t-3')}>
               <CheckBox
-                task={ current_task }
-                editTaskStatus= { this.props.editTaskStatus }
+                task={current_task}
+                editTaskStatus={this.props.editTaskStatus}
               />
             </div>
-            <span style={ text_style }>
-              <FormControl inputRef={ ref => this.task_titleInput = ref } onChange={ this.editTaskTitle.bind(this) } style={ S('bw-0 absolute l-50 t-10 bg w-400 bg-f5fafe') } type="text" value={ task_title } />
+            <span style={text_style}>
+              <FormControl inputRef={ref => this.task_titleInput = ref} onChange={this.editTaskTitle.bind(this)} style={S('bw-0 absolute l-50 t-10 bg w-400 bg-f5fafe')} type="text" value={task_title} />
             </span>
           </div>
-          <div onClick={ this.props.showDayPicker } style={ { ...S('pointer pt-20 p-15 h-60 mb-30 bg-fff'), ...bottomLine } }>
-            <span style={ S('mr-15') }>
-              <img width="17" src="/static/images/dashboard/icons/calendar-red.svg"/>
+          <div onClick={this.props.showDayPicker} style={{ ...S('pointer pt-20 p-15 h-60 mb-30 bg-fff'), ...bottomLine }}>
+            <span style={S('mr-15')}>
+              <img width="17" src="/static/images/dashboard/icons/calendar-red.svg" />
             </span>
-            <span style={ S('color-e0523e') }>Due on { due_date_area }</span>
+            <span style={S('color-e0523e')}>Due on { due_date_area }</span>
           </div>
           { day_picker }
-          <div style={ { ...S('mb-30'), ...topLine } }>
-            <div style={ { ...S('h-54 p-10 bg-fff'), ...bottomLine } }>
-              <div style={ S('p-10 pull-left color-a3a9ac font-12') }>
-                <span style={ S('mr-15') }><img src="/static/images/dashboard/icons/tasks/contacts.svg"/></span>
+          <div style={{ ...S('mb-30'), ...topLine }}>
+            <div style={{ ...S('h-54 p-10 bg-fff'), ...bottomLine }}>
+              <div style={S('p-10 pull-left color-a3a9ac font-12')}>
+                <span style={S('mr-15')}><img src="/static/images/dashboard/icons/tasks/contacts.svg" /></span>
                 Share this task with others
               </div>
-              <Button onClick={ this.props.showShareTaskModal.bind(this, 'edit') } style={ S('color-006aff w-72 h-30 p-5 mt-3 bc-3388ff') } className="pull-right" bsStyle="default">Share</Button>
-              <div className="clearfix"></div>
+              <Button onClick={this.props.showShareTaskModal.bind(this, 'edit')} style={S('color-006aff w-72 h-30 p-5 mt-3 bc-3388ff')} className="pull-right" bsStyle="default">Share</Button>
+              <div className="clearfix" />
             </div>
             { contacts_markup }
-            <div className="clearfix"></div>
+            <div className="clearfix" />
           </div>
-          <div className="clearfix"></div>
+          <div className="clearfix" />
           { /*
           <div style={ { ...S('mb-30'), ...topLine } }>
             <div style={ { ...S('h-54 p-10 bg-fff'), ...bottomLine } }>
@@ -244,11 +242,11 @@ export default class Drawer extends Component {
             <div className="clearfix"></div>
           </div>
           */ }
-          <div style={ footer_style }>
+          <div style={footer_style}>
             { created_area }
-            <div style={ S('pull-right') }>
-              <span onClick={ this.props.showSnoozeModal.bind(this, current_task) } style={ S('pointer mr-20') }><img src="/static/images/dashboard/icons/clock.svg"/></span>
-              <span onClick={ this.props.deleteTask.bind(this, current_task) } style={ S('pointer') }><img src="/static/images/dashboard/icons/trash.svg"/></span>
+            <div style={S('pull-right')}>
+              <span onClick={this.props.showSnoozeModal.bind(this, current_task)} style={S('pointer mr-20')}><img src="/static/images/dashboard/icons/clock.svg" /></span>
+              <span onClick={this.props.deleteTask.bind(this, current_task)} style={S('pointer')}><img src="/static/images/dashboard/icons/trash.svg" /></span>
             </div>
           </div>
         </div>

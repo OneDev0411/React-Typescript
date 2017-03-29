@@ -12,10 +12,10 @@ const controller = {
     if (!AppStore.data.share_modal)
       AppStore.data.share_modal = {}
     // AppStore.data.share_modal.items_selected = items_selected
-    items_selected.forEach(item => {
+    items_selected.forEach((item) => {
       if (item.type === 'room') {
         const users = item.value.users
-        users.forEach(user => {
+        users.forEach((user) => {
           items_selected.push({
             label: user.first_name || user.display_name,
             value: user,
@@ -26,16 +26,12 @@ const controller = {
     })
     let filtered_items_selected
     // Filter out rooms
-    filtered_items_selected = items_selected.filter(item => {
-      return item.type !== 'room'
-    })
+    filtered_items_selected = items_selected.filter(item => item.type !== 'room')
     // Filter out self
-    filtered_items_selected = filtered_items_selected.filter(item => {
-      return item.value.id !== AppStore.data.user.id
-    })
+    filtered_items_selected = filtered_items_selected.filter(item => item.value.id !== AppStore.data.user.id)
     // Make unique if existing
     const unique_items_selected = []
-    filtered_items_selected.forEach(item => {
+    filtered_items_selected.forEach((item) => {
       if (item.value.id) {
         if (!_.find(unique_items_selected, { 'value.id': item.value.id }))
           unique_items_selected.push(item)

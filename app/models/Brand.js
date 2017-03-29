@@ -7,12 +7,12 @@ export default {
   getByHostname: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    let endpoint = api_host + '/api/brands/search?hostname=' + params.hostname
+    let endpoint = `${api_host}/api/brands/search?hostname=${params.hostname}`
     if (params.user)
-      endpoint += '&access_token=' + params.user.access_token
+      endpoint += `&access_token=${params.user.access_token}`
 
     fetch(endpoint)
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -22,8 +22,6 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   }
 }

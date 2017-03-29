@@ -13,7 +13,7 @@ export default (user, new_transaction) => {
   const role_objects = []
   if (contacts_added) {
     const clients = contacts_added.client
-    clients.forEach(contact => {
+    clients.forEach((contact) => {
       let role = 'Other'
       if (contact.role)
         role = contact.role
@@ -25,7 +25,7 @@ export default (user, new_transaction) => {
     })
     const others = contacts_added.contact
     if (others) {
-      others.forEach(contact => {
+      others.forEach((contact) => {
         let role = 'Other'
         if (contact.role)
           role = contact.role
@@ -64,7 +64,7 @@ export default (user, new_transaction) => {
       AppStore.data.transaction_tabs.push(transaction)
       AppStore.data.transactions.push(transaction)
       const history = require('../../utils/history')
-      history.replaceState(null, '/dashboard/transactions/' + transaction.id)
+      history.replaceState(null, `/dashboard/transactions/${transaction.id}`)
       AppStore.emitChange()
     } else {
       delete AppStore.data.new_transaction.saving

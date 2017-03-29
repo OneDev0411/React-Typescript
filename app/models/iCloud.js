@@ -5,7 +5,6 @@ const instance = icloud()
 export default {
 
   getContacts: (params, callback) => {
-    
     instance.login(params.username, params.password, (err) => {
       if (err) return console.log('login failed')
       instance.contacts((err, results) => {

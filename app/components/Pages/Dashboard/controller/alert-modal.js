@@ -9,7 +9,7 @@ const controller = {
     const user = data.user
     AppStore.data.show_alert_modal = true
     const history = require('../../../../utils/history')
-    history.replaceState(null, '/dashboard/recents/' + room_id + '?alert=' + alert_id)
+    history.replaceState(null, `/dashboard/recents/${room_id}?alert=${alert_id}`)
     ListingDispatcher.dispatch({
       action: 'get-alert-room',
       user,
@@ -24,7 +24,7 @@ const controller = {
     const data = AppStore.data
     const current_room = data.current_room
     const history = require('../../../../utils/history')
-    history.replaceState(null, '/dashboard/recents/' + current_room.id)
+    history.replaceState(null, `/dashboard/recents/${current_room.id}`)
     delete AppStore.data.current_alert
     AppStore.emitChange()
   },

@@ -7,12 +7,10 @@ const controller = {
     const user = data.user
     if (!recs || !recs.length)
       return
-    const recommendations = recs.map(rec => {
-      return {
-        recommendation: rec.id,
-        action: 'read'
-      }
-    })
+    const recommendations = recs.map(rec => ({
+      recommendation: rec.id,
+      action: 'read'
+    }))
     ListingDispatcher.dispatch({
       action: 'mark-recs-as-read',
       user,

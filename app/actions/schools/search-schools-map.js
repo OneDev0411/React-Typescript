@@ -18,7 +18,7 @@ export default (districts) => {
       callback()
     })
   }, () => {
-    AppStore.data.listing_map.schools.forEach(school => {
+    AppStore.data.listing_map.schools.forEach((school) => {
       school.appearances = Number(school.appearances)
     })
     AppStore.data.listing_map.elementary_schools = _.orderBy(_.uniqBy(_.filter(AppStore.data.listing_map.schools, { school_type: 'elementary_school' }), 'name'), ['appearances'], ['desc'])

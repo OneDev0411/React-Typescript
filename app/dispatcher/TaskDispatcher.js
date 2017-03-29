@@ -17,7 +17,7 @@ import acknowledgeNotifications from '../actions/tasks/acknowledge-notifications
 const TaskDispatcher = new Dispatcher()
 
 // Register callback with TransactionDispatcher
-TaskDispatcher.register(payload => {
+TaskDispatcher.register((payload) => {
   const action = payload.action
 
   let id

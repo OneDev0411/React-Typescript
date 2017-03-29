@@ -99,7 +99,7 @@ class Brand {
     }
     brands.reverse()
     const merged = {}
-    brands.forEach(brand_loop => {
+    brands.forEach((brand_loop) => {
       merge.recursive(merged, brand_loop)
     })
     return merged
