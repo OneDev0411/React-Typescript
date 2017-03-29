@@ -32,9 +32,7 @@ const requestMiddleware = async function (ctx, next) {
       url = `${url}?hostname=${host_name}`
     }
 
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[ + ] ${api_url}${url}`)
-    }
+    console.log(`[ + ] ${api_url}${url}`)
 
     try {
       return agent[method.toLowerCase()](`${api_url}${url}`)
