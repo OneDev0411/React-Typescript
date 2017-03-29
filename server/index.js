@@ -25,11 +25,6 @@ app.proxy = true
 
 const __DEV__ = process.env.NODE_ENV === 'development'
 
-// attach template engine
-const templatesDir = __DEV__ ?
-  path.resolve(appConfig.compile.entry, 'templates') :
-  appConfig.compile.output
-
 // handle application errors
 app.use(async function(ctx, next) {
   try {
@@ -43,6 +38,11 @@ app.use(async function(ctx, next) {
     ctx.body = e.message || 'Internal Server Error'
   }
 })
+
+// attach template engine
+const templatesDir = __DEV__ ?
+  path.resolve(appConfig.compile.entry, 'templates') :
+  appConfig.compile.output
 
 // use template engine
 app.use(views(templatesDir, { map: { html: 'hogan' } }))
