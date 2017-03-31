@@ -90,7 +90,6 @@ export default class Mls extends Component {
     }
     // Get favorites
     if (!data.favorite_listings) {
-      console.log('get faves')
       ListingDispatcher.dispatch({
         action: 'get-favorites',
         user

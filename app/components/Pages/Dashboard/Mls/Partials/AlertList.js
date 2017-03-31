@@ -60,6 +60,16 @@ export default class AlertList extends Component {
                   )
                 }
               }
+              let new_badge
+              if (alert.new_recommendations) {
+                new_badge = (
+                  <div style={ S('absolute w-100p h-100p t-0 l-0') }>
+                    <div style={ S('absolute t-30 r-20 bg-2196f3 br-100 color-fff w-26 h-26 text-center pt-4') }>
+                      { alert.new_recommendations }
+                    </div>
+                  </div>
+                )
+              }
               return (
                 <li key={`alert-list-${alert.id}`} style={S(`relative h-100 border-bottom-1-solid-dedede p-20 pointer${current_alert && current_alert.id === alert.id ? ' bg-f7f7f7' : ''}`)} onClick={controller.alert_map.showAlertOnMap.bind(this, alert)}>
                   <div style={S(`font-18${has_notification ? ' fw-500' : ''}`)}>{ this.truncateTitle(alert.title ? alert.title : alert.proposed_title) }</div>
@@ -77,6 +87,7 @@ export default class AlertList extends Component {
                     </div>
                     */
                   }
+                  { new_badge }
                 </li>
               )
             })
