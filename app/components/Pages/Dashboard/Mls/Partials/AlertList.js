@@ -25,6 +25,28 @@ export default class AlertList extends Component {
     })
     return result
   }
+  getThumb(alert) {
+    // Listing Thumb
+    let listing_thumb = <div style={ S(`bg-url(http://cdn.rechat.co/59563879.jpg) bg-cover bg-center w-54 h-54 pull-left mr-15`) }/>
+    if (alert.cover_image_url) {
+      listing_thumb = <div style={ S(`bg-url(${alert.cover_image_url}) bg-cover bg-center w-54 h-54 pull-left mr-15`) }/>
+    }
+    return listing_thumb
+  }
+  getBadge(new_recommendations) {
+    // Badge
+    let new_badge
+    if (new_recommendations) {
+      new_badge = (
+        <div style={ S('absolute w-100p h-100p t-0 l-0') }>
+          <div style={ S('absolute t-30 r-20 bg-2196f3 br-100 color-fff w-26 h-26 text-center pt-4') }>
+            { new_recommendations }
+          </div>
+        </div>
+      )
+    }
+    return new_badge
+  }
   render() {
     const data = this.props.data
     const user = data.user
@@ -60,18 +82,9 @@ export default class AlertList extends Component {
                   )
                 }
               }
-              let new_badge
-              if (alert.new_recommendations) {
-                new_badge = (
-                  <div style={ S('absolute w-100p h-100p t-0 l-0') }>
-                    <div style={ S('absolute t-30 r-20 bg-2196f3 br-100 color-fff w-26 h-26 text-center pt-4') }>
-                      { alert.new_recommendations }
-                    </div>
-                  </div>
-                )
-              }
               return (
                 <li key={`alert-list-${alert.id}`} style={S(`relative h-100 border-bottom-1-solid-dedede p-20 pointer${current_alert && current_alert.id === alert.id ? ' bg-f7f7f7' : ''}`)} onClick={controller.alert_map.showAlertOnMap.bind(this, alert)}>
+                  { this.getThumb(alert) }
                   <div style={S(`font-18${has_notification ? ' fw-500' : ''}`)}>{ this.truncateTitle(alert.title ? alert.title : alert.proposed_title) }</div>
                   { notification }
                   <div style={S(`font-14${has_notification ? ' fw-500' : ' color-9b9b9b'}`)}>Shared with: { users_area }</div>
@@ -87,7 +100,7 @@ export default class AlertList extends Component {
                     </div>
                     */
                   }
-                  { new_badge }
+                  { this.getBadge(alert.new_recommendations) }
                 </li>
               )
             })

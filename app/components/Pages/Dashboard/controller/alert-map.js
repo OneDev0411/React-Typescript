@@ -122,7 +122,7 @@ const controller = {
     if (alert.points)
       controller.makePolygonAlert(alert.points)
     const history = require('../../../../utils/history')
-    history.replaceState(null, `/dashboard/mls/alerts/${alert.id}`)
+    history.default.push(`/dashboard/mls/alerts/${alert.id}`)
   },
   makePolygonAlert(points) {
     const paths = points.map(path => ({
