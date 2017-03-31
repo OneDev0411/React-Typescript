@@ -38,8 +38,8 @@ const controller = {
           return mls_number_loop
       })
       // Edit actives
-      if (AppStore.data.active_listings) {
-        AppStore.data.active_listings = AppStore.data.active_listings.filter((listing_loop) => {
+      if (AppStore.data.favorite_listings) {
+        AppStore.data.favorite_listings = AppStore.data.favorite_listings.filter((listing_loop) => {
           if (listing_loop.id !== listing.id)
             return listing_loop
         })
@@ -48,10 +48,10 @@ const controller = {
     } else {
       AppStore.data.user.favorite_listings.push(mls_number)
       // Edit actives
-      if (!AppStore.data.active_listings)
-        AppStore.data.active_listings = []
-      if (!_.find(AppStore.data.active_listings, { id: listing.id }))
-        AppStore.data.active_listings.push(listing)
+      if (!AppStore.data.favorite_listings)
+        AppStore.data.favorite_listings = []
+      if (!_.find(AppStore.data.favorite_listings, { id: listing.id }))
+        AppStore.data.favorite_listings.push(listing)
     }
     AppStore.emitChange()
     // Handle DB later

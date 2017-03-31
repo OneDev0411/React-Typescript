@@ -61,8 +61,8 @@ export default class ListingPanel extends Component {
       listings = data.listing_map.listings
     if (data.show_alerts_map && data.alerts_map && data.alerts_map.listings)
       listings = data.alerts_map.listings
-    if (data.show_actives_map && data.active_listings)
-      listings = data.active_listings
+    if (data.show_actives_map && data.favorite_listings)
+      listings = data.favorite_listings
     const listing_panel_cards = listings.map((listing, i) => {
       const status_color = listing_util.getStatusColor(listing.status)
       let property = listing.compact_property

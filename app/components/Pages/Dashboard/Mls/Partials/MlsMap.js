@@ -68,16 +68,11 @@ export default class MlsMap extends Component {
         )
       })
     }
-    if (data.show_actives_map && data.active_listings) {
-      let listings = data.active_listings
-      listings = listings.filter(listing => {
+    if (data.show_actives_map && data.favorite_listings) {
+      const favorite_listings = data.favorite_listings
+      let listings = favorite_listings.filter(listing => {
         if (listing.property && listing.property.address)
           return listing.property.address.location
-      })
-      const favorite_listings = data.user.favorite_listings
-      listings = listings.filter(listing => {
-        if (favorite_listings && favorite_listings.indexOf(listing.mls_number) !== -1)
-          return listing
       })
       // make sure no dupes
       listings = _.uniqBy(listings, 'id')

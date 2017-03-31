@@ -89,19 +89,21 @@ export default class Mls extends Component {
       })
     }
     // Get favorites
-    if (!user.favorite_listings) {
+    if (!data.favorite_listings) {
+      console.log('get faves')
       ListingDispatcher.dispatch({
         action: 'get-favorites',
         user
       })
     }
+    // TODO REMOVE DEPRECATED //
     // Get actives
-    if (!data.active_listings) {
-      ListingDispatcher.dispatch({
-        action: 'get-actives',
-        user
-      })
-    }
+    // if (!data.active_listings) {
+    //   ListingDispatcher.dispatch({
+    //     action: 'get-actives',
+    //     user
+    //   })
+    // }
   }
   componentDidMount() {
     this.resetViews()
@@ -245,6 +247,8 @@ export default class Mls extends Component {
         AppStore.data.show_alerts_map = true
         delete AppStore.data.listing_map.auto_move
         delete AppStore.data.show_filter_form
+        delete AppStore.data.show_listing_panel
+        delete AppStore.data.listing_panel
         AppStore.data.show_alerts_map = true
         if (window.poly_alerts) {
           window.poly = window.poly_alerts
