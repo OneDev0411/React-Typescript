@@ -130,7 +130,7 @@ export default class Listings extends Component {
     })
   }
   handleListingClick(listing) {
-    const url = '/dashboard/mls/' + listing.id
+    const url = `/dashboard/mls/${listing.id}`
     window.open(url, '_blank')
   }
   render() {
@@ -139,7 +139,7 @@ export default class Listings extends Component {
     const widget = data.widget
     if (!widget || widget.loading) {
       return (
-        <div style={ S('text-center') }>
+        <div style={S('text-center')}>
           <Loading />
         </div>
       )
@@ -147,38 +147,36 @@ export default class Listings extends Component {
     const listings = widget.listings
     let listings_area
     if (listings) {
-      listings_area = listings.map(listing => {
-        return (
-          <ListingCard
-            handleEmailSubmit={ controller.action_bubble.handleEmailSubmit }
-            key={ listing.id }
-            data={ data }
-            listing={ listing }
-            handleCloseSignupForm={ controller.action_bubble.handleCloseSignupForm }
-            handleListingClick={ this.handleListingClick }
-            handleAgentClick={ controller.action_bubble.handleAgentClick }
-            handleListingInquirySubmit={ controller.action_bubble.handleListingInquirySubmit }
-            handleLoginClick={ controller.action_bubble.handleLoginClick }
-            showIntercom={ controller.action_bubble.showIntercom }
-            resend={ controller.action_bubble.resend }
-            hideModal={ controller.action_bubble.hideModal }
-          />
-        )
-      })
+      listings_area = listings.map(listing => (
+        <ListingCard
+          handleEmailSubmit={controller.action_bubble.handleEmailSubmit}
+          key={listing.id}
+          data={data}
+          listing={listing}
+          handleCloseSignupForm={controller.action_bubble.handleCloseSignupForm}
+          handleListingClick={this.handleListingClick}
+          handleAgentClick={controller.action_bubble.handleAgentClick}
+          handleListingInquirySubmit={controller.action_bubble.handleListingInquirySubmit}
+          handleLoginClick={controller.action_bubble.handleLoginClick}
+          showIntercom={controller.action_bubble.showIntercom}
+          resend={controller.action_bubble.resend}
+          hideModal={controller.action_bubble.hideModal}
+        />
+        ))
     }
     let view_all_button
     if (!data.location.query.all && Brand.asset('listing_url')) {
       view_all_button = (
-        <div style={ S('text-center mt-20 mb-30') }>
-          <a target="_parent" href={ Brand.asset('listing_url') } className="btn btn-default" style={ S(`w-280 font-17 p-20 color-fff border-1-solid-${Brand.color('primary')} bg-${Brand.color('primary')}`) }>View Exclusive Listings</a>
+        <div style={S('text-center mt-20 mb-30')}>
+          <a target="_parent" href={Brand.asset('listing_url')} className="btn btn-default" style={S(`w-280 font-17 p-20 color-fff border-1-solid-${Brand.color('primary')} bg-${Brand.color('primary')}`)}>View Exclusive Listings</a>
         </div>
       )
     }
     let links_area = (
       <div>
         { view_all_button }
-        <div style={ S('color-9b9b9b font-15 mb-40') } className="text-center">
-          Powered by <a href="https://rechat.com" target="_blank" style={ S('color-2196f3 fw-500') }>Rechat<span style={ S('color-2196f3 font-9 relative t-7n fw-500') }>TM</span></a>
+        <div style={S('color-9b9b9b font-15 mb-40')} className="text-center">
+          Powered by <a href="https://rechat.com" target="_blank" style={S('color-2196f3 fw-500')}>Rechat<span style={S('color-2196f3 font-9 relative t-7n fw-500')}>TM</span></a>
         </div>
       </div>
     )
@@ -193,18 +191,18 @@ export default class Listings extends Component {
       title = 'My Listings'
     return (
       <div className="futurastd">
-        <div style={ header_style }>
-          <h1 style={ S('font-50 color-263445 mb-0' + (data.is_mobile ? ' ml-10 mr-10' : '')) }>{ title }</h1>
-          <span style={ S('h-1 bg-e2e2e2 w-80 m-20 inline-block') }></span>
+        <div style={header_style}>
+          <h1 style={S(`font-50 color-263445 mb-0${data.is_mobile ? ' ml-10 mr-10' : ''}`)}>{ title }</h1>
+          <span style={S('h-1 bg-e2e2e2 w-80 m-20 inline-block')} />
         </div>
-        <div style={ status_buttons_area_style }>
+        <div style={status_buttons_area_style}>
           <ButtonGroup>
-            <Button onClick={ this.handleButtonClick.bind(this, 'active')} style={ widget && widget.is_showing_sold ? S('color-929292 font-17 p-15 w-100') : S(`color-${Brand.color('primary')} font-17 p-15 w-100`) } bsStyle="default">Active</Button>
-            <Button onClick={ this.handleButtonClick.bind(this, 'sold')} style={ widget && widget.is_showing_sold ? S(`color-${Brand.color('primary')} font-17 p-15 w-100`) : S('color-929292 font-17 p-15 w-100') } bsStyle="default">Sold</Button>
+            <Button onClick={this.handleButtonClick.bind(this, 'active')} style={widget && widget.is_showing_sold ? S('color-929292 font-17 p-15 w-100') : S(`color-${Brand.color('primary')} font-17 p-15 w-100`)} bsStyle="default">Active</Button>
+            <Button onClick={this.handleButtonClick.bind(this, 'sold')} style={widget && widget.is_showing_sold ? S(`color-${Brand.color('primary')} font-17 p-15 w-100`) : S('color-929292 font-17 p-15 w-100')} bsStyle="default">Sold</Button>
           </ButtonGroup>
         </div>
         { listings_area }
-        <div className="clearfix"></div>
+        <div className="clearfix" />
         { links_area }
       </div>
     )

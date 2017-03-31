@@ -12,20 +12,20 @@ export default class AddClients extends Component {
     const data = this.props.data
     return (
       <div>
-        <div style={ S('t-100n absolute color-d0d4d9') }>Lost time is never found again.</div>
-        <h1>Very nice. New { data.new_transaction.type }. Who are we creating this <br/>transaction for?</h1>
+        <div style={S('t-100n absolute color-d0d4d9')}>Lost time is never found again.</div>
+        <h1>Very nice. New { data.new_transaction.type }. Who are we creating this <br />transaction for?</h1>
         <AddContactsModule
           module_type="client"
-          data={ data }
-          setContactActive={ this.props.setContactActive }
-          setFilteredContacts={ this.props.setFilteredContacts }
-          hideContactsForm={ this.props.hideContactsForm }
-          addContact={ this.props.addContact }
-          removeContact={ this.props.removeContact }
-          showContactModal={ this.props.showContactModal }
-          hideModal={ this.props.hideModal }
-          createContact={ this.props.createContact }
-          showNewContentInitials={ this.props.showNewContentInitials }
+          data={data}
+          setContactActive={this.props.setContactActive}
+          setFilteredContacts={this.props.setFilteredContacts}
+          hideContactsForm={this.props.hideContactsForm}
+          addContact={this.props.addContact}
+          removeContact={this.props.removeContact}
+          showContactModal={this.props.showContactModal}
+          hideModal={this.props.hideModal}
+          createContact={this.props.createContact}
+          showNewContentInitials={this.props.showNewContentInitials}
         />
       </div>
     )

@@ -5,7 +5,7 @@ import AppStore from '../../stores/AppStore'
 export default (user, room) => {
   const summary = AppStore.data.notifications.summary
   summary.room_notification_count--
-  summary.room_notification_summaries = summary.room_notification_summaries.filter(s => {
+  summary.room_notification_summaries = summary.room_notification_summaries.filter((s) => {
     if (s.room_id === room)
       return false
     return true

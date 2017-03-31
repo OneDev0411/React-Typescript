@@ -6,7 +6,7 @@ import Page from './Page'
 
 class PdfViewer extends React.Component {
 
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       uri: null,
@@ -16,7 +16,7 @@ class PdfViewer extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const { uri } = this.props
 
     if (uri)
@@ -31,7 +31,6 @@ class PdfViewer extends React.Component {
   }
 
   async load(uri) {
-
     if (this.state.loading || uri === this.state.uri)
       return false
 
@@ -48,27 +47,26 @@ class PdfViewer extends React.Component {
 
       // trigger when load is completed
       this.props.onLoaded()
-    }
-    catch(e) {
+    } catch (e) {
       this.setState({ uri: null, loading: false })
     }
   }
 
-  prevPage(){
+  prevPage() {
     const { pageNumber } = this.state
 
     if (pageNumber > 1)
       this.setState({ pageNumber: pageNumber - 1 })
   }
 
-  nextPage(){
+  nextPage() {
     const { pageNumber, doc } = this.state
 
     if (pageNumber < doc.pdfInfo.numPages)
       this.setState({ pageNumber: pageNumber + 1 })
   }
 
-  render () {
+  render() {
     const { doc, pageNumber, loading } = this.state
 
     return (
@@ -76,7 +74,7 @@ class PdfViewer extends React.Component {
         {
           loading &&
           <div className="loading center">
-            <i className="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+            <i className="fa fa-spinner fa-spin fa-2x fa-fw" />
             <p>Loading document</p>
           </div>
         }
@@ -84,22 +82,22 @@ class PdfViewer extends React.Component {
         {
           doc && !loading &&
           <div className="pdf-context">
-             <Page
-              doc={ doc }
-              scale={ this.props.scale }
-              pageNumber={ pageNumber }
+            <Page
+              doc={doc}
+              scale={this.props.scale}
+              pageNumber={pageNumber}
             />
 
             <div className="pagination">
               <i
                 className="left fa fa-chevron-circle-left fa-2x"
                 onClick={this.prevPage.bind(this)}
-              ></i>
+              />
               <span className="pnum">{ pageNumber } / { doc.pdfInfo.numPages }</span>
               <i
                 className="right fa fa-chevron-circle-right fa-2x"
                 onClick={this.nextPage.bind(this)}
-              ></i>
+              />
             </div>
           </div>
         }

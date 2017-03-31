@@ -9,8 +9,8 @@ export default (user, transaction, files) => {
     id: transaction.id,
     access_token: user.access_token
   }
-  Transaction.uploadFiles(params, request => {
-    request.on('progress', e => {
+  Transaction.uploadFiles(params, (request) => {
+    request.on('progress', (e) => {
       const upload_percent = e.percent
       const uploading_file = _.find(AppStore.data.current_transaction.attachments, { name: files[0].name })
       if (uploading_file) {
@@ -25,9 +25,7 @@ export default (user, transaction, files) => {
         return err
       const data = res.body.data
       let attachments = data.attachments
-      attachments = _.sortBy(attachments, attachment => {
-        return attachment.created_at * -1
-      })
+      attachments = _.sortBy(attachments, attachment => attachment.created_at * -1)
       AppStore.data.current_transaction.attachments = attachments
       AppStore.emitChange()
     })

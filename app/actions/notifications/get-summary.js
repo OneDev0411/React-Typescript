@@ -18,7 +18,7 @@ export default (user) => {
     if (summary.room_notification_summaries && summary.room_notification_summaries.length) {
       let refresh_room = true
       // Search for room
-      summary.room_notification_summaries.forEach(summary_loop => {
+      summary.room_notification_summaries.forEach((summary_loop) => {
         if (_.find(AppStore.data.rooms, { id: summary_loop.room_id }))
           refresh_room = false
       })

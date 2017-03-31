@@ -50,7 +50,7 @@ const controller = {
     let sorting_direction = 1
     if (AppStore.data.listing_map.sorting_direction)
       sorting_direction = AppStore.data.listing_map.sorting_direction * -1
-    const listings_sorted = _.sortBy(listings, listing => {
+    const listings_sorted = _.sortBy(listings, (listing) => {
       if (sort_by === 'area')
         return listing.address.postal_code * sorting_direction
       if (sort_by === 'price')

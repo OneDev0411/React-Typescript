@@ -11,7 +11,7 @@ export default (contact_id, module_type) => {
     delete contact.added
     AppStore.data.filtered_contacts[contact_index] = contact
   }
-  const contacts_added_edited = contacts_added.filter(contact_loop => {
+  const contacts_added_edited = contacts_added.filter((contact_loop) => {
     if (contact_loop)
       return contact_loop.id !== contact_id
   })

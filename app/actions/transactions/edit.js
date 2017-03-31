@@ -15,9 +15,7 @@ export default (user, transaction, listing_data) => {
       const edited_transaction = response.data
       AppStore.data.current_transaction = edited_transaction
       const transactions = AppStore.data.transactions
-      const new_transactions = transactions.filter(transaction_loop => {
-        return transaction_loop.id !== edited_transaction.id
-      })
+      const new_transactions = transactions.filter(transaction_loop => transaction_loop.id !== edited_transaction.id)
       new_transactions.push(edited_transaction)
       AppStore.data.transactions = new_transactions
     }

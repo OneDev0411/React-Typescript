@@ -12,7 +12,7 @@ export default class FavoriteHeart extends Component {
     const heart_style = S('pointer absolute r-20 t-20 w-44 h-40 mr-5 z-2')
     return (
       <img
-        onClick={ controller.listing_card.handleFavoriteAction.bind(this, listing) } style={ heart_style }
+        onClick={controller.listing_card.handleFavoriteAction.bind(this, listing)} style={heart_style}
         src={`/static/images/dashboard/mls/heart${this.isFavorited(mls_number) ? '-red' : '-white'}.svg`}
       />
     )

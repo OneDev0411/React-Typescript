@@ -59,10 +59,10 @@ export default class NewMessageViewer extends Component {
         profile_image_url = user.profile_image_url
       if (user.display_profile_image_url)
         profile_image_url = user.display_profile_image_url
-      profile_image = <div style={ S(`pull-left bg-url(${getResizeAvatarUrl(profile_image_url)}?w=160) w-26 h-26 bg-cover bg-center`) }/>
+      profile_image = <div style={S(`pull-left bg-url(${getResizeAvatarUrl(profile_image_url)}?w=160) w-26 h-26 bg-cover bg-center`)} />
     }
     const display_name = (
-      <div style={ S(`pull-left mt-4 ml-10 mr-5`) }>
+      <div style={S('pull-left mt-4 ml-10 mr-5')}>
         { item.label }
       </div>
     )
@@ -79,20 +79,20 @@ export default class NewMessageViewer extends Component {
     if (item.type === 'room') {
       // Room
       profile_image = (
-        <ProfileImageMultiple users={ item.value.users }/>
+        <ProfileImageMultiple users={item.value.users} />
       )
     } else {
       // Contact
       const user = item.value
       profile_image = (
-        <ProfileImage data={ data } user={ user }/>
+        <ProfileImage data={data} user={user} />
       )
     }
     return (
-      <div style={ S('relative h-54') }>
-        <div style={ S('mt-10') }>{ profile_image }</div>
-        <div style={ S('pull-left mt-10 ml-60 mr-5') }>{ item.label }</div>
-        <div className="clearfix"/>
+      <div style={S('relative h-54')}>
+        <div style={S('mt-10')}>{ profile_image }</div>
+        <div style={S('pull-left mt-10 ml-60 mr-5')}>{ item.label }</div>
+        <div className="clearfix" />
       </div>
     )
   }
@@ -153,13 +153,11 @@ export default class NewMessageViewer extends Component {
     let users_selected_ids = []
     if (data.new_message && data.new_message.items_selected) {
       const items_selected = data.new_message.items_selected
-      items_selected.forEach(item => {
+      items_selected.forEach((item) => {
         users_selected.push(item)
       })
       // Contacts available
-      users_selected_ids = _.map(users_selected, item => {
-        return item.value.id
-      })
+      users_selected_ids = _.map(users_selected, item => item.value.id)
     }
     if (data.new_message && data.new_message.users_found) {
       data.new_message.users_found.forEach((user, i) => {
@@ -198,7 +196,7 @@ export default class NewMessageViewer extends Component {
     const users_selected = []
     if (data.new_message && data.new_message.items_selected) {
       const items_selected = data.new_message.items_selected
-      items_selected.forEach(item => {
+      items_selected.forEach((item) => {
         users_selected.push(item)
       })
     }
@@ -206,21 +204,21 @@ export default class NewMessageViewer extends Component {
     if (data.current_room) {
       messages_area = (
         <MessagesList
-          data={ data }
-          getPreviousMessages={ this.props.getPreviousMessages }
-          showModal={ this.props.showModal.bind(this) }
-          hideModal={ this.props.hideModal.bind(this) }
-          showFileViewer={ this.props.showFileViewer }
-          setHeadingDate={ this.props.setHeadingDate }
-          removeScrollBottom={ this.props.removeScrollBottom }
-          showListingViewer={ this.props.showListingViewer }
-          changeListingNotification={ this.props.changeListingNotification }
-          showAlertModal={ this.props.showAlertModal }
-          hideAlertModal={ this.props.hideAlertModal }
-          showDeleteRoomModal={ this.props.showDeleteRoomModal }
-          hideDeleteRoomModal={ this.props.hideDeleteRoomModal }
-          confirmDeleteRoom={ this.props.confirmDeleteRoom }
-          setAlertGalleryActiveIndex={ this.props.setAlertGalleryActiveIndex }
+          data={data}
+          getPreviousMessages={this.props.getPreviousMessages}
+          showModal={this.props.showModal.bind(this)}
+          hideModal={this.props.hideModal.bind(this)}
+          showFileViewer={this.props.showFileViewer}
+          setHeadingDate={this.props.setHeadingDate}
+          removeScrollBottom={this.props.removeScrollBottom}
+          showListingViewer={this.props.showListingViewer}
+          changeListingNotification={this.props.changeListingNotification}
+          showAlertModal={this.props.showAlertModal}
+          hideAlertModal={this.props.hideAlertModal}
+          showDeleteRoomModal={this.props.showDeleteRoomModal}
+          hideDeleteRoomModal={this.props.hideDeleteRoomModal}
+          confirmDeleteRoom={this.props.confirmDeleteRoom}
+          setAlertGalleryActiveIndex={this.props.setAlertGalleryActiveIndex}
         />
       )
     }
@@ -228,41 +226,41 @@ export default class NewMessageViewer extends Component {
     if (users_selected && users_selected.length) {
       create_message_area = (
         <CreateMessageArea
-          data={ data }
-          uploadFiles={ this.props.uploadFiles }
-          createMessage={ this.props.createMessage }
-          addContactToMessage={ this.props.addContactToMessage }
-          handleContactFilterNav={ this.props.handleContactFilterNav }
-          handleMessageTyping={ this.props.handleMessageTyping }
-          handleContactFilter={ this.props.handleContactFilter }
+          data={data}
+          uploadFiles={this.props.uploadFiles}
+          createMessage={this.props.createMessage}
+          addContactToMessage={this.props.addContactToMessage}
+          handleContactFilterNav={this.props.handleContactFilterNav}
+          handleMessageTyping={this.props.handleMessageTyping}
+          handleContactFilter={this.props.handleContactFilter}
         />
       )
     }
     return (
-      <div style={ S('h-100p absolute w-100p' + (!data.current_room ? ' bg-f6f7f9' : '')) }>
-        <div style={ S('h-60 border-bottom-1-solid-e2e6ea bg-fff') }>
-          <h3 style={ S('w-80p mt-0 ml-20 mr-50 pt-15 pull-left') }>New Message</h3>
-          <div onClick={ this.props.handleCancelClick } style={ S('pull-right mr-20 mt-10 bg-e2e6ea br-3 pl-15 pr-15 pt-10 pb-10 color-8696a4 pointer') }>Cancel</div>
+      <div style={S(`h-100p absolute w-100p${!data.current_room ? ' bg-f6f7f9' : ''}`)}>
+        <div style={S('h-60 border-bottom-1-solid-e2e6ea bg-fff')}>
+          <h3 style={S('w-80p mt-0 ml-20 mr-50 pt-15 pull-left')}>New Message</h3>
+          <div onClick={this.props.handleCancelClick} style={S('pull-right mr-20 mt-10 bg-e2e6ea br-3 pl-15 pr-15 pt-10 pb-10 color-8696a4 pointer')}>Cancel</div>
         </div>
-        <div style={ S('relative w-100p h-50 p-10 bg-fff border-bottom-1-solid-e2e6ea') }>
-          <div style={ S('absolute l-10 t-15') }>To:</div>
-          <div className="create-item__user-select" style={ S('absolute l-35 t-5 w-90p z-3') }>
-            <SelectContainer inputChange={ this.inputChange.bind(this) }>
+        <div style={S('relative w-100p h-50 p-10 bg-fff border-bottom-1-solid-e2e6ea')}>
+          <div style={S('absolute l-10 t-15')}>To:</div>
+          <div className="create-item__user-select" style={S('absolute l-35 t-5 w-90p z-3')}>
+            <SelectContainer inputChange={this.inputChange.bind(this)}>
               <Select
-                ref={ ref => this.myselect = ref }
+                ref={ref => this.myselect = ref}
                 autofocus
                 name="users"
                 placeholder="Enter name, email or phone"
-                value={ users_selected ? users_selected : null }
+                value={users_selected || null}
                 multi
-                noResultsText={ 'No users found'}
-                style={ S('border-none mt-3') }
-                options={ this.getFilterOptions() }
-                onInputChange={ this.handleInputChange.bind(this) }
-                onChange={ this.handleChange.bind(this) }
-                valueRenderer={ this.handleValueRenderer.bind(this) }
-                optionRenderer={ this.handleOptionRenderer.bind(this) }
-                filterOption={ this.filterOption.bind(this) }
+                noResultsText={'No users found'}
+                style={S('border-none mt-3')}
+                options={this.getFilterOptions()}
+                onInputChange={this.handleInputChange.bind(this)}
+                onChange={this.handleChange.bind(this)}
+                valueRenderer={this.handleValueRenderer.bind(this)}
+                optionRenderer={this.handleOptionRenderer.bind(this)}
+                filterOption={this.filterOption.bind(this)}
               />
             </SelectContainer>
           </div>

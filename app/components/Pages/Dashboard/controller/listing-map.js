@@ -92,9 +92,9 @@ const controller = {
       draggable: true
     }
 
-    if (!listing_map) {
+    if (!listing_map)
       return google_options
-    }
+
 
     // set disable default ui
     google_options.disableDefaultUI = true
@@ -231,7 +231,7 @@ const controller = {
       clickable: false,
       map,
       path,
-      strokeColor: '#' + Brand.color('primary', '3388ff'),
+      strokeColor: `#${Brand.color('primary', '3388ff')}`,
       strokeWeight: 10
     })
     window.poly_search = window.poly
@@ -266,7 +266,7 @@ const controller = {
   handleGoogleMapApi(google) {
     const map = google.map
     window.map = map
-    window.map.set('mapTypeControl',false)
+    window.map.set('mapTypeControl', false)
     const data = AppStore.data
     const listing_map = data.listing_map
     if (listing_map.drawable && window.poly)
@@ -278,12 +278,12 @@ const controller = {
       window.poly = new google.maps.Polyline({
         map,
         clickable: false,
-        strokeColor: '#' + Brand.color('primary', '3388ff'),
+        strokeColor: `#${Brand.color('primary', '3388ff')}`,
         strokeWeight: 10
       })
       AppStore.data.listing_map.no_popup = true
       AppStore.emitChange()
-      const move = google.maps.event.addListener(map, 'mousemove', e => {
+      const move = google.maps.event.addListener(map, 'mousemove', (e) => {
         if (!listing_map.drawable) {
           window.poly.setMap(null)
           return false

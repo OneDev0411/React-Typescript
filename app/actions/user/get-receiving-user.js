@@ -2,7 +2,7 @@
 import User from '../../models/User'
 import AppStore from '../../stores/AppStore'
 
-export default user_id => {
+export default (user_id) => {
   const params = {
     access_token: null,
     id: user_id

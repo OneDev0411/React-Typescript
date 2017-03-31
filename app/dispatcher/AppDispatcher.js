@@ -86,7 +86,7 @@ import uploadFile from '../actions/deals/upload-file'
 const AppDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
-AppDispatcher.register(payload => {
+AppDispatcher.register((payload) => {
   const action = payload.action
 
   switch (action) {

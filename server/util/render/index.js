@@ -1,3 +1,4 @@
+import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { RouterContext } from 'react-router'
 import AppStore from '../../../app/stores/AppStore'

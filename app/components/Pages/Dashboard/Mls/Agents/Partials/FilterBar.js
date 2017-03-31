@@ -12,11 +12,11 @@ import AppStore from '../../../../../../stores/AppStore'
 
 export default class FilterBar extends Component {
   doubleDigit(str) {
-    return ('00' + str).slice(-2)
+    return (`00${str}`).slice(-2)
   }
 
   getTime(year, month, day) {
-    return moment(year + '-' + this.doubleDigit(month) + '-' + this.doubleDigit(day)).toISOString()
+    return moment(`${year}-${this.doubleDigit(month)}-${this.doubleDigit(day)}`).toISOString()
   }
 
   getFromTime() {
@@ -221,45 +221,45 @@ export default class FilterBar extends Component {
   render() {
     const s = S('w-49p pull-left pl-5')
     return (
-      <div id="filters" style={ S('w-370 pl-80 pt-10 pull-left bg-F5F5F6 p-5') }>
+      <div id="filters" style={S('w-370 pl-80 pt-10 pull-left bg-F5F5F6 p-5')}>
         <form onSubmit={this.handleSubmit.bind(this)}>
           <div>
             <label>
               From
             </label>
             <div>
-              <FormControl type="select" inputRef={ ref => this.from_yearInput = ref } style={ S('w-32p pull-left') }>
+              <FormControl type="select" inputRef={ref => this.from_yearInput = ref} style={S('w-32p pull-left')}>
                 { this.years() }
               </FormControl>
-              <FormControl type="select" inputRef={ ref => this.from_dayInput = ref } style={ S('w-32p pull-left ml-1p') }>
+              <FormControl type="select" inputRef={ref => this.from_dayInput = ref} style={S('w-32p pull-left ml-1p')}>
                 { this.days() }
               </FormControl>
-              <FormControl type="select" inputRef={ ref => this.from_monthInput = ref } style={ S('w-32p pull-left ml-1p') }>
+              <FormControl type="select" inputRef={ref => this.from_monthInput = ref} style={S('w-32p pull-left ml-1p')}>
                 { this.months() }
               </FormControl>
             </div>
           </div>
 
-          <br/><br/>
+          <br /><br />
 
           <div>
             <label>
               To
             </label>
             <div>
-              <FormControl type="select" inputRef={ ref => this.to_yearInput = ref } style={ S('w-32p pull-left') }>
+              <FormControl type="select" inputRef={ref => this.to_yearInput = ref} style={S('w-32p pull-left')}>
                 { this.years() }
               </FormControl>
-              <FormControl type="select" inputRef={ ref => this.to_dayInput = ref } style={ S('w-32p pull-left ml-1p') }>
+              <FormControl type="select" inputRef={ref => this.to_dayInput = ref} style={S('w-32p pull-left ml-1p')}>
                 { this.days() }
               </FormControl>
-              <FormControl type="select" inputRef={ ref => this.to_monthInput = ref } style={ S('w-32p pull-left ml-1p') }>
+              <FormControl type="select" inputRef={ref => this.to_monthInput = ref} style={S('w-32p pull-left ml-1p')}>
                 { this.months() }
               </FormControl>
             </div>
           </div>
 
-          <br/><br/>
+          <br /><br />
 
 
           <div>
@@ -267,7 +267,7 @@ export default class FilterBar extends Component {
               Location
             </label>
             <div>
-              <FormControl type="select" placeholder="Area" inputRef={ ref => this.areaInput = ref }>
+              <FormControl type="select" placeholder="Area" inputRef={ref => this.areaInput = ref}>
                 <option value="">---</option>
                 <option>CEDAR HILL AREA (1)</option>
                 <option>DESOTO AREA (2)</option>
@@ -456,176 +456,176 @@ export default class FilterBar extends Component {
 
           <div>
             <label>
-              <input type="checkbox" onChange={ this.toggle.bind(this, 'total_value') } />
+              <input type="checkbox" onChange={this.toggle.bind(this, 'total_value')} />
               &nbsp; <span>Total $</span>
             </label>
-            <div style={ this.filterEnabled('total_value') }>
-              <div style={ s }>
-                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ ref => this.total_value_minInput = ref }/>
+            <div style={this.filterEnabled('total_value')}>
+              <div style={s}>
+                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ref => this.total_value_minInput = ref} />
               </div>
-              <div style={ s }>
-                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ ref => this.total_value_maxInput = ref }/>
+              <div style={s}>
+                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ref => this.total_value_maxInput = ref} />
               </div>
             </div>
           </div>
 
           <div>
             <label>
-              <input type="checkbox" onChange={ this.toggle.bind(this, 'total_volume') } />
+              <input type="checkbox" onChange={this.toggle.bind(this, 'total_volume')} />
               &nbsp; <span>Total #</span>
             </label>
-            <div style={ this.filterEnabled('total_volume') }>
-              <div style={ s }>
-                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ ref => this.total_volume_minInput = ref }/>
+            <div style={this.filterEnabled('total_volume')}>
+              <div style={s}>
+                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ref => this.total_volume_minInput = ref} />
               </div>
-              <div style={ s }>
-                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ ref => this.total_volume_maxInput = ref }/>
+              <div style={s}>
+                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ref => this.total_volume_maxInput = ref} />
               </div>
             </div>
           </div>
 
           <div>
             <label>
-              <input type="checkbox" onChange={ this.toggle.bind(this, 'list_value') } />
+              <input type="checkbox" onChange={this.toggle.bind(this, 'list_value')} />
               &nbsp; <span className="listing-side">Listing-side $</span>
             </label>
-            <div style={ this.filterEnabled('list_value') }>
-              <div style={ s }>
-                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ ref => this.list_value_minInput = ref }/>
+            <div style={this.filterEnabled('list_value')}>
+              <div style={s}>
+                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ref => this.list_value_minInput = ref} />
               </div>
-              <div style={ s }>
-                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ ref => this.list_value_maxInput = ref }/>
+              <div style={s}>
+                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ref => this.list_value_maxInput = ref} />
               </div>
             </div>
           </div>
 
           <div>
             <label>
-              <input type="checkbox" onChange={ this.toggle.bind(this, 'list_volume') } />
+              <input type="checkbox" onChange={this.toggle.bind(this, 'list_volume')} />
               &nbsp; <span className="listing-side">Listing-side #</span>
             </label>
-            <div style={ this.filterEnabled('list_volume') }>
-              <div style={ s }>
-                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ ref => this.list_volume_minInput = ref }/>
+            <div style={this.filterEnabled('list_volume')}>
+              <div style={s}>
+                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ref => this.list_volume_minInput = ref} />
               </div>
-              <div style={ s }>
-                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ ref => this.list_volume_maxInput = ref }/>
+              <div style={s}>
+                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ref => this.list_volume_maxInput = ref} />
               </div>
             </div>
           </div>
 
           <div>
             <label>
-              <input type="checkbox" onChange={ this.toggle.bind(this, 'sell_value') } />
+              <input type="checkbox" onChange={this.toggle.bind(this, 'sell_value')} />
               &nbsp; <span className="buying-side">Buying-side $</span>
             </label>
-            <div style={ this.filterEnabled('sell_value') }>
-              <div style={ s }>
-                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ ref => this.sell_value_minInput = ref }/>
+            <div style={this.filterEnabled('sell_value')}>
+              <div style={s}>
+                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ref => this.sell_value_minInput = ref} />
               </div>
-              <div style={ s }>
-                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ ref => this.sell_value_maxInput = ref }/>
+              <div style={s}>
+                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ref => this.sell_value_maxInput = ref} />
               </div>
             </div>
           </div>
 
           <div>
             <label>
-              <input type="checkbox" onChange={ this.toggle.bind(this, 'sell_volume') } />
+              <input type="checkbox" onChange={this.toggle.bind(this, 'sell_volume')} />
               &nbsp; <span className="buying-side">Buying-side #</span>
             </label>
-            <div style={ this.filterEnabled('sell_volume') }>
-              <div style={ s }>
-                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ ref => this.sell_volume_minInput = ref }/>
+            <div style={this.filterEnabled('sell_volume')}>
+              <div style={s}>
+                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ref => this.sell_volume_minInput = ref} />
               </div>
-              <div style={ s }>
-                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ ref => this.sell_volume_maxInput = ref }/>
+              <div style={s}>
+                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ref => this.sell_volume_maxInput = ref} />
               </div>
             </div>
           </div>
 
           <div>
             <label title="Sum of value of active listings this agent currently has (In the area you searched for)">
-              <input type="checkbox" onChange={ this.toggle.bind(this, 'active_value') } />
+              <input type="checkbox" onChange={this.toggle.bind(this, 'active_value')} />
               &nbsp; <span className="listing-side">Active listings $</span>
               <span className="tip">
                 Limited to searched area
               </span>
             </label>
-            <div style={ this.filterEnabled('active_value') }>
-              <div style={ s }>
-                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ ref => this.active_value_minInput = ref }/>
+            <div style={this.filterEnabled('active_value')}>
+              <div style={s}>
+                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ref => this.active_value_minInput = ref} />
               </div>
-              <div style={ s }>
-                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ ref => this.active_value_maxInput = ref }/>
+              <div style={s}>
+                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ref => this.active_value_maxInput = ref} />
               </div>
             </div>
           </div>
 
           <div>
             <label title="Number of active listings this agent currently has (In the area you searched for)">
-              <input type="checkbox" onChange={ this.toggle.bind(this, 'active_volume') } />
+              <input type="checkbox" onChange={this.toggle.bind(this, 'active_volume')} />
               &nbsp; <span className="listing-side">Active Listings #</span>
               <span className="tip">
                 Limited to searched area
               </span>
             </label>
-            <div style={ this.filterEnabled('active_volume') }>
-              <div style={ s }>
-                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ ref => this.active_volume_minInput = ref }/>
+            <div style={this.filterEnabled('active_volume')}>
+              <div style={s}>
+                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ref => this.active_volume_minInput = ref} />
               </div>
-              <div style={ s }>
-                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ ref => this.active_volume_maxInput = ref }/>
+              <div style={s}>
+                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ref => this.active_volume_maxInput = ref} />
               </div>
             </div>
           </div>
 
           <div>
             <label title="Sum of value of active listings this agent currently has (Not limited to current area)">
-              <input type="checkbox" onChange={ this.toggle.bind(this, 'total_active_value') } />
+              <input type="checkbox" onChange={this.toggle.bind(this, 'total_active_value')} />
               &nbsp; <span className="listing-side">Total Active $</span>
               <span className="tip">
                 Not limited to searched area
               </span>
             </label>
-            <div style={ this.filterEnabled('total_active_value') }>
-              <div style={ s }>
-                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ ref => this.total_active_value_minInput = ref }/>
+            <div style={this.filterEnabled('total_active_value')}>
+              <div style={s}>
+                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ref => this.total_active_value_minInput = ref} />
               </div>
-              <div style={ s }>
-                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ ref => this.total_active_value_maxInput = ref }/>
+              <div style={s}>
+                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ref => this.total_active_value_maxInput = ref} />
               </div>
             </div>
           </div>
 
           <div>
             <label title="Number of active listings this agent currently has (Not limited to current area)">
-              <input type="checkbox" onChange={ this.toggle.bind(this, 'total_active_volume') } />
+              <input type="checkbox" onChange={this.toggle.bind(this, 'total_active_volume')} />
               &nbsp; <span className="listing-side">Total Active #</span>
               <span className="tip">
                 Not limited to searched area
               </span>
             </label>
-            <div style={ this.filterEnabled('total_active_volume') }>
-              <div style={ s }>
-                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ ref => this.total_active_volume_minInput = ref }/>
+            <div style={this.filterEnabled('total_active_volume')}>
+              <div style={s}>
+                <FormControl type="text" bsSize="small" placeholder="Min" inputRef={ref => this.total_active_volume_minInput = ref} />
               </div>
-              <div style={ s }>
-                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ ref => this.total_active_volume_maxInput = ref }/>
+              <div style={s}>
+                <FormControl type="text" bsSize="small" placeholder="Max" inputRef={ref => this.total_active_volume_maxInput = ref} />
               </div>
             </div>
           </div>
 
           <div>
             <label>
-              <input type="checkbox" onChange={ this.toggle.bind(this, 'agent_experience') } />
+              <input type="checkbox" onChange={this.toggle.bind(this, 'agent_experience')} />
               &nbsp; Agent Experience
               <span className="tip">
                 Guessed based on MLSID
               </span>
             </label>
-            <div style={ this.filterEnabled('agent_experience') }>
-              <FormControl type="select" inputRef={ ref => this.agent_experienceInput = ref }>
+            <div style={this.filterEnabled('agent_experience')}>
+              <FormControl type="select" inputRef={ref => this.agent_experienceInput = ref}>
                 <option value="">---</option>
                 <option value="0-5">0-5 Years</option>
                 <option value="5-10">5-10 Years</option>
@@ -637,9 +637,9 @@ export default class FilterBar extends Component {
             </div>
           </div>
 
-          <br/> <br/>
+          <br /> <br />
 
-          <FormControl type="submit" value="Show results"/>
+          <FormControl type="submit" value="Show results" />
         </form>
       </div>
     )

@@ -14,8 +14,8 @@ export default class ChatModule extends Component {
       ...S('w-380 h-600 z-3 br-8 absolute bg-fff l-80n b-60')
     }
     let button = (
-      <Button onClick={ controller.chat_module.showChatBubble } style={ S(`w-100p bg-${Brand.color('primary', 'a1bde4')} border-1-solid-${Brand.color('primary', 'a1bde4')} color-fff`) }>
-        <i className="fa fa-comment-o"></i>&nbsp;&nbsp;Chat With Me
+      <Button onClick={controller.chat_module.showChatBubble} style={S(`w-100p bg-${Brand.color('primary', 'a1bde4')} border-1-solid-${Brand.color('primary', 'a1bde4')} color-fff`)}>
+        <i className="fa fa-comment-o" />&nbsp;&nbsp;Chat With Me
       </Button>
     )
     const header_style = {
@@ -26,7 +26,7 @@ export default class ChatModule extends Component {
     let chat_bubble
     if (data.show_chat_bubble && data.brand) {
       const profile_image_area = (
-        <div style={ S('br-100 w-40 h-40 bg-cover bg-center bg-url(' + agent.profile_image_url + ')') } />
+        <div style={S(`br-100 w-40 h-40 bg-cover bg-center bg-url(${agent.profile_image_url})`)} />
       )
       const footer_style = {
         ...S('bg-fafafa h-60 w-100p absolute b-0'),
@@ -47,32 +47,32 @@ export default class ChatModule extends Component {
         borderBottomRightRadius: '8px'
       }
       chat_bubble = (
-        <div style={ chat_bubble_style }>
-          <div style={ header_style }>
-            <div style={ S('pull-left mr-10') }>
+        <div style={chat_bubble_style}>
+          <div style={header_style}>
+            <div style={S('pull-left mr-10')}>
               { profile_image_area }
             </div>
-            <div style={ S('pull-left color-bfc3c7') }>
-              <span style={ S('fw-400 color-fff') }>{ agent.first_name } { agent.last_name }</span>, Listing Agent
+            <div style={S('pull-left color-bfc3c7')}>
+              <span style={S('fw-400 color-fff')}>{ agent.first_name } { agent.last_name }</span>, Listing Agent
             </div>
           </div>
           { messages }
-          <div style={ footer_style }>
-            <FormControl onKeyUp={ controller.chat_module.handleKeyUp.bind(this, agent) } autoFocus style={ input_style } type="text" placeholder="Write Message" />
+          <div style={footer_style}>
+            <FormControl onKeyUp={controller.chat_module.handleKeyUp.bind(this, agent)} autoFocus style={input_style} type="text" placeholder="Write Message" />
           </div>
         </div>
       )
       button = (
-        <Button onClick={ controller.chat_module.hideChatBubble } style={ S(`font-30 p-0 br-150 w-50 h-50 pull-right bg-${Brand.color('primary', 'a1bde4')} border-1-solid-${Brand.color('primary', 'a1bde4')} color-fff`) }>
-          <div style={ S('mt-3n') }>&times;</div>
+        <Button onClick={controller.chat_module.hideChatBubble} style={S(`font-30 p-0 br-150 w-50 h-50 pull-right bg-${Brand.color('primary', 'a1bde4')} border-1-solid-${Brand.color('primary', 'a1bde4')} color-fff`)}>
+          <div style={S('mt-3n')}>&times;</div>
         </Button>
       )
     }
     return (
-      <div style={ S('h-50') }>
+      <div style={S('h-50')}>
         { chat_bubble }
         { button }
-        <div className="clearfix"></div>
+        <div className="clearfix" />
       </div>
     )
   }

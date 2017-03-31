@@ -32,7 +32,7 @@ import searchSubdivisionsMap from '../actions/subdivisions/search-subdivisions-m
 const ListingDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
-ListingDispatcher.register(payload => {
+ListingDispatcher.register((payload) => {
   const action = payload.action
   switch (action) {
 

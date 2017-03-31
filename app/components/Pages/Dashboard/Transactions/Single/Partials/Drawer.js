@@ -28,11 +28,11 @@ export default class Drawer extends Component {
     let drawer_content
     const drawer_height = window.innerHeight - 203
     let drawer_wrap_style = {
-      ...S('z-101 absolute h-' + drawer_height + ' r-0 w-0 t-79'),
+      ...S(`z-101 absolute h-${drawer_height} r-0 w-0 t-79`),
       overflow: 'hidden'
     }
     const drawer_style = {
-      ...S('absolute h-' + drawer_height + ' z-100 bg-fff w-500'),
+      ...S(`absolute h-${drawer_height} z-100 bg-fff w-500`),
       borderLeft: '6px solid #edf1f3'
     }
     let drawer_class
@@ -66,14 +66,14 @@ export default class Drawer extends Component {
               file_icon_short = 'FILE'
           }
           let file_image = (
-            <a href={ file.preview } target="_blank" className="pull-left" style={ S('ml-10 w-60 h-60 color-929292') }>
-              <i style={ S('font-50') } className="fa fa-file-o"></i>
+            <a href={file.preview} target="_blank" className="pull-left" style={S('ml-10 w-60 h-60 color-929292')}>
+              <i style={S('font-50')} className="fa fa-file-o" />
               { file_icon_short }
             </a>
           )
           if (file.info && mime === 'image/jpeg' || file.info && mime === 'image/png' || file.info && mime === 'image/gif') {
             file_image = (
-              <a href={ file.preview } target="_blank" className="pull-left" style={ S('w-60 h-60 ml-10 bg-url(' + file.url + ') bg-cover bg-center br-2') }></a>
+              <a href={file.preview} target="_blank" className="pull-left" style={S(`w-60 h-60 ml-10 bg-url(${file.url}) bg-cover bg-center br-2`)} />
             )
           }
           const file_style = {
@@ -93,16 +93,16 @@ export default class Drawer extends Component {
           }
           let file_area = (
             <div>
-              <Button onClick={ this.props.deleteFile.bind(this, file) } style={ S('mt-10 mr-10 absolute r-0') } bsStyle="danger" className={ file.is_deleting ? 'delete disabled' : 'delete' }>
+              <Button onClick={this.props.deleteFile.bind(this, file)} style={S('mt-10 mr-10 absolute r-0')} bsStyle="danger" className={file.is_deleting ? 'delete disabled' : 'delete'}>
                 { file.is_deleting ? 'Deleting...' : 'Delete' }
               </Button>
-              <div onClick={ this.openFileViewer.bind(this, file) } className="pull-left">
+              <div onClick={this.openFileViewer.bind(this, file)} className="pull-left">
                 { file_image }
               </div>
-              <div onClick={ this.openFileViewer.bind(this, file) } style={ S('w-350') } className="pull-left text-left">
-                <div style={ S('ml-10 color-444 font-14 mb-5') }>{ file.info ? file.info.title : '' }</div>
-                <div style={ S('w-150 ml-10 font-12') }>{ created_string } - { user_string }</div>
-                <div style={ S('w-150 ml-10 font-12') }>Shared with Shayan</div>
+              <div onClick={this.openFileViewer.bind(this, file)} style={S('w-350')} className="pull-left text-left">
+                <div style={S('ml-10 color-444 font-14 mb-5')}>{ file.info ? file.info.title : '' }</div>
+                <div style={S('w-150 ml-10 font-12')}>{ created_string } - { user_string }</div>
+                <div style={S('w-150 ml-10 font-12')}>Shared with Shayan</div>
               </div>
             </div>
           )
@@ -111,18 +111,18 @@ export default class Drawer extends Component {
             if (file.upload_percent)
               upload_percent = file.upload_percent
             file_area = (
-              <div style={ S('ml-20 mr-20 mt-10') }>
-                <div style={ S('relative t-10n') }>Uploading { file.new_name || file.name }</div>
+              <div style={S('ml-20 mr-20 mt-10')}>
+                <div style={S('relative t-10n')}>Uploading { file.new_name || file.name }</div>
                 <div>
-                  <ProgressBar active striped bsStyle="success" now={ upload_percent } />
+                  <ProgressBar active striped bsStyle="success" now={upload_percent} />
                 </div>
               </div>
             )
           }
           return (
-            <div className="transaction-file" key={ 'file-' + i } style={ file_style }>
+            <div className="transaction-file" key={`file-${i}`} style={file_style}>
               { file_area }
-              <div className="clearfix"></div>
+              <div className="clearfix" />
             </div>
           )
         })
@@ -133,7 +133,7 @@ export default class Drawer extends Component {
       }
       const doczone_height = window.innerHeight - 470
       const doczone_style = {
-        ...S('absolute w-100p h-' + doczone_height),
+        ...S(`absolute w-100p h-${doczone_height}`),
         overflow: 'scroll'
       }
       const drawer_header_style = S('relative z-2 bg-f7f9fa ml-5 br-3 p-12 font-18 color-4a4a4a')
@@ -141,25 +141,26 @@ export default class Drawer extends Component {
       if (drawer.content === 'docs') {
         let doc_count
         if (attachments && attachments.length)
-          doc_count = '(' + attachments.length + ')'
+          doc_count = `(${attachments.length})`
         drawer_content = (
           <div>
-            <div style={ drawer_header_style }>Documents { doc_count }</div>
-            <div className="text-center" style={ S('pt-30') }>
-              <Dropzone style={ dropzone_style }
-                onDragEnter={ this.props.handleDragEnter.bind(this) }
-                onDragLeave={ this.props.handleDragLeave.bind(this) }
-                onDrop={ this.props.drawerDrop.bind(this) }
+            <div style={drawer_header_style}>Documents { doc_count }</div>
+            <div className="text-center" style={S('pt-30')}>
+              <Dropzone
+                style={dropzone_style}
+                onDragEnter={this.props.handleDragEnter.bind(this)}
+                onDragLeave={this.props.handleDragLeave.bind(this)}
+                onDrop={this.props.drawerDrop.bind(this)}
               >
-                <div style={ S('mb-10') }>
-                  <img src="/static/images/dashboard/transactions/drag-n-drop.png"/>
+                <div style={S('mb-10')}>
+                  <img src="/static/images/dashboard/transactions/drag-n-drop.png" />
                 </div>
-                <div style={ S('color-929292') }>
-                  <span style={ S('font-16') }>DRAG & DROP</span><br />
-                  <span style={ S('font-14 color-bfc2c3') }>your files to upload, or <a href="#">browse</a></span>
+                <div style={S('color-929292')}>
+                  <span style={S('font-16')}>DRAG & DROP</span><br />
+                  <span style={S('font-14 color-bfc2c3')}>your files to upload, or <a href="#">browse</a></span>
                 </div>
               </Dropzone>
-              <div style={ doczone_style }>
+              <div style={doczone_style}>
                 { attachments_markup }
               </div>
             </div>
@@ -170,7 +171,7 @@ export default class Drawer extends Component {
       if (drawer.content === 'contacts' && roles) {
         let contacts_list
         if (roles) {
-          contacts_list = roles.map(role => {
+          contacts_list = roles.map((role) => {
             const contact = role.contact
             const contact_style = {
               ...S('pt-15 pb-15 pl-15'),
@@ -185,19 +186,19 @@ export default class Drawer extends Component {
             let delete_button
             if (roles.length > 1) {
               delete_button = (
-                <Button onClick={ this.props.deleteContact.bind(this, contact) } style={ S('mr-10 absolute r-0') } bsStyle="danger" className={ 'delete' + deleting_class }>
+                <Button onClick={this.props.deleteContact.bind(this, contact)} style={S('mr-10 absolute r-0')} bsStyle="danger" className={`delete${deleting_class}`}>
                   { delete_text }
                 </Button>
               )
             }
             return (
-              <div className="transaction-contact" key={ 'contact-' + contact.id } style={ contact_style }>
+              <div className="transaction-contact" key={`contact-${contact.id}`} style={contact_style}>
                 { delete_button }
-                <ProfileImage data={ data } user={ contact }/>
-                <div style={ S('ml-50 ') }>
-                  <div><b>{ contact.first_name } { contact.last_name }</b>, <span style={ S('color-929292') }>{ contact.roles ? contact.roles[0] : '' }</span></div>
-                  <div style={ S('color-929292') }>
-                    <div>{ contact.phone_number }{ contact.phone_number ? ',' : '' } <a style={{ textDecoration: 'none' }} href={ 'mailto:' + contact.email}>{ contact.email }</a></div>
+                <ProfileImage data={data} user={contact} />
+                <div style={S('ml-50 ')}>
+                  <div><b>{ contact.first_name } { contact.last_name }</b>, <span style={S('color-929292')}>{ contact.roles ? contact.roles[0] : '' }</span></div>
+                  <div style={S('color-929292')}>
+                    <div>{ contact.phone_number }{ contact.phone_number ? ',' : '' } <a style={{ textDecoration: 'none' }} href={`mailto:${contact.email}`}>{ contact.email }</a></div>
                   </div>
                 </div>
               </div>
@@ -206,12 +207,12 @@ export default class Drawer extends Component {
         }
         drawer_content = (
           <div>
-            <div style={ drawer_header_style }>Contacts</div>
+            <div style={drawer_header_style}>Contacts</div>
             <div>
               { contacts_list }
             </div>
             <AddContactsModule
-              data={ data }
+              data={data}
               module_type="transaction"
             />
           </div>
@@ -224,20 +225,19 @@ export default class Drawer extends Component {
           google_address = transaction.listing.property.address.geo_source_formatted_address_google
         drawer_content = (
           <div>
-            <div style={ drawer_header_style }>Map</div>
+            <div style={drawer_header_style}>Map</div>
             <div>
-              <div style={ S('absolute w-100p z-0') }>
+              <div style={S('absolute w-100p z-0')}>
                 <Loading />
               </div>
-              <div style={ S('absolute z-1 t-50n') }>
+              <div style={S('absolute z-1 t-50n')}>
                 <iframe
                   width="500"
-                  height={ window.innerHeight - 152 }
-                  frameBorder="0" style={ { border: 0 } }
-                  src={ 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDagxNRLRIOsF8wxmuh1J3ysqnwdDB93-4&q=' + google_address }
+                  height={window.innerHeight - 152}
+                  frameBorder="0" style={{ border: 0 }}
+                  src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyDagxNRLRIOsF8wxmuh1J3ysqnwdDB93-4&q=${google_address}`}
                   allowFullScreen
-                >
-                </iframe>
+                />
               </div>
             </div>
           </div>
@@ -245,9 +245,9 @@ export default class Drawer extends Component {
       }
     }
     return (
-      <div style={ drawer_wrap_style }>
-        <div style={ drawer_style } className={ 'drawer ' + drawer_class }>
-          <div onClick={ this.props.closeDrawer } style={ S('mt-5 mr-15 fw-400 font-32 relative z-3') }className="close pull-right">&times;</div>
+      <div style={drawer_wrap_style}>
+        <div style={drawer_style} className={`drawer ${drawer_class}`}>
+          <div onClick={this.props.closeDrawer} style={S('mt-5 mr-15 fw-400 font-32 relative z-3')}className="close pull-right">&times;</div>
           { drawer_content }
         </div>
       </div>

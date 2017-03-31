@@ -22,15 +22,14 @@ export default class extends React.Component {
     const deal = _.find(deals, deal => deal.id === params.id)
     this.setState({ deal })
 
-    window.addEventListener('message', event => {
+    window.addEventListener('message', (event) => {
       const { type, fn, args } = event.data
 
       // make first case of function uppercase
-      const func = 'on' + fn.charAt(0).toUpperCase() + fn.slice(1)
+      const func = `on${fn.charAt(0).toUpperCase()}${fn.slice(1)}`
 
       if (type === 'trigger')
         this[func].apply(this, args)
-
     }, false)
   }
 
@@ -44,7 +43,7 @@ export default class extends React.Component {
     // set deal
     win.postMessage({
       fn: 'setDeal',
-      args: [ this.state.deal ]
+      args: [this.state.deal]
     }, 'http://localhost:3000')
   }
 
@@ -63,7 +62,7 @@ export default class extends React.Component {
           <Button
             bsStyle="primary"
             disabled={!loaded}
-            onClick={ this.onSave.bind(this) }
+            onClick={this.onSave.bind(this)}
           >
             Save
           </Button>
@@ -72,7 +71,7 @@ export default class extends React.Component {
         <iframe
           src={`${config.forms.url}/embed/${this.props.params.form}?domain=${window.location.hostname}&access_token=${token}`}
           frameBorder="0"
-          ref={ ref => this.iframe = ref }
+          ref={ref => this.iframe = ref}
         />
       </div>
     )

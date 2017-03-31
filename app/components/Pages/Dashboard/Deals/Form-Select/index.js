@@ -36,33 +36,31 @@ export default class FormSelect extends React.Component {
   }
 
   render() {
-
     return (
       <div>
         { 1 === 2 &&
           <Button
-              className="add-form-btn"
-              onClick={ this.addForm.bind(this) }
-            >
+            className="add-form-btn"
+            onClick={this.addForm.bind(this)}
+          >
               Add Blank Form
           </Button>
         }
 
         <Modal
           dialogClassName="modal-fullscreen"
-          show={ this.state.show }
+          show={this.state.show}
           bsSize="large"
-          onHide={ this.hide.bind(this) }
+          onHide={this.hide.bind(this)}
         >
           <Modal.Body>
-            <Modal.Header closeButton>
-            </Modal.Header>
+            <Modal.Header closeButton />
             <div className="select-form">
               <h1>Add forms</h1>
 
               <FormControl
                 className="search"
-                onChange={ this.filter.bind(this) }
+                onChange={this.filter.bind(this)}
                 value={this.state.filter}
                 placeholder="Search forms"
               />
@@ -71,20 +69,16 @@ export default class FormSelect extends React.Component {
                 <ul>
                   {
                     _.chain(this.props.forms)
-                    .filter(form => {
-                      return form.title.toLowerCase().includes(this.state.filter)
-                    })
-                    .map(form => {
-                      return (
-                        <li
-                          key={`form_${form.id}`}
-                          onClick={this.onSelectForm.bind(this, form)}
-                        >
-                          <img src="/static/images/deals/file.png" />
-                          { form.title }
-                        </li>
-                      )
-                    })
+                    .filter(form => form.title.toLowerCase().includes(this.state.filter))
+                    .map(form => (
+                      <li
+                        key={`form_${form.id}`}
+                        onClick={this.onSelectForm.bind(this, form)}
+                      >
+                        <img src="/static/images/deals/file.png" />
+                        { form.title }
+                      </li>
+                      ))
                     .value()
                   }
                 </ul>

@@ -25,12 +25,10 @@ export default (user, alert, timestamp) => {
     // Mark as read
     if (!feed || !feed.length)
       return
-    const recommendations = feed.map(rec => {
-      return {
-        recommendation: rec.id,
-        action: 'read'
-      }
-    })
+    const recommendations = feed.map(rec => ({
+      recommendation: rec.id,
+      action: 'read'
+    }))
     ListingDispatcher.dispatch({
       action: 'mark-recs-as-read',
       user,

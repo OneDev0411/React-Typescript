@@ -59,7 +59,7 @@ export default (user, password, confirm_password, redirect_to) => {
   }
   const locals = {}
   async.series([
-    callback => {
+    (callback) => {
       User.create(params, (err, response) => {
         if (err) {
           // Bad request
@@ -98,7 +98,7 @@ export default (user, password, confirm_password, redirect_to) => {
         }
       })
     },
-    callback => {
+    (callback) => {
       params = {
         email: user.email,
         password: user.password

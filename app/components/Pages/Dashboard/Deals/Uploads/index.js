@@ -19,7 +19,6 @@ export default class DealForm extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-
     const { uploading } = nextProps.deal
 
     if (typeof uploading === 'undefined' || uploading === this.state.uploading)
@@ -29,15 +28,13 @@ export default class DealForm extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-
     if (nextProps.activeTab !== 'uploads')
       return false
 
     return true
   }
 
-  onDrop(acceptedFiles, rejectedFiles){
-
+  onDrop(acceptedFiles, rejectedFiles) {
     if (!acceptedFiles || acceptedFiles.length < 1)
       return false
 
@@ -56,13 +53,12 @@ export default class DealForm extends React.Component {
     const reader = new FileReader()
     reader.readAsDataURL(acceptedFiles[0])
 
-    reader.onload = e => {
+    reader.onload = (e) => {
       this.setState({ preview: e.target.result })
     }
   }
 
   display(file) {
-
     const extname = file.url.split('.').pop().toLowerCase()
 
     if (extname === 'pdf')
@@ -79,17 +75,17 @@ export default class DealForm extends React.Component {
     const format = preview.split(';')[0]
 
     if (format.includes('image/'))
-      return <img src={ preview } />
+      return <img src={preview} />
 
     if (format.includes('pdf'))
-      return <PdfViewer uri={ preview } />
+      return <PdfViewer uri={preview} />
   }
 
   getDisplayHandler(url) {
     const extname = url.split('.').pop().toLowerCase()
 
     if (['jpg', 'jpeg', 'png', 'gif'].indexOf(extname) > -1)
-      return <img src={ url } />
+      return <img src={url} />
   }
 
   render() {
@@ -119,30 +115,28 @@ export default class DealForm extends React.Component {
                 files &&
                 _.chain(files)
                 .sortBy(file => file.created_at * -1)
-                .map(file => {
-                  return (
-                    <div
-                      className="item"
-                      key={`file_${file.id}`}
-                      onClick={ this.display.bind(this, file) }
-                    >
-                      <Row>
-                        <Col xs={2}>
-                          <Avatar
-                            round={true}
-                            src={file.preview_url}
-                            size={40}
-                          />
-                        </Col>
+                .map(file => (
+                  <div
+                    className="item"
+                    key={`file_${file.id}`}
+                    onClick={this.display.bind(this, file)}
+                  >
+                    <Row>
+                      <Col xs={2}>
+                        <Avatar
+                          round
+                          src={file.preview_url}
+                          size={40}
+                        />
+                      </Col>
 
-                        <Col xs={10}>
-                          <div><b>{ file.name }</b></div>
-                          <div>Uploaded { getTimeAgo(file.created_at) } ago</div>
-                        </Col>
-                      </Row>
-                    </div>
-                  )
-                })
+                      <Col xs={10}>
+                        <div><b>{ file.name }</b></div>
+                        <div>Uploaded { getTimeAgo(file.created_at) } ago</div>
+                      </Col>
+                    </Row>
+                  </div>
+                  ))
                 .value()
               }
             </div>

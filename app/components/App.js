@@ -52,7 +52,7 @@ export default class App extends Component {
     })
     window.socket.on('ping', (cb) => {
       if (cb)
-        cb(null, new Date)
+        cb(null, new Date())
     })
     // Check for mobile
     this.checkForMobile()
@@ -84,21 +84,21 @@ export default class App extends Component {
     }
     this.setIntercom()
   }
+  // Remove change listeners from stores
+  componentWillUnmount() {
+    AppStore.removeChangeListener(this._onChange.bind(this))
+  }
   setIntercom() {
     const data = AppStore.data
     if (!data.intercom_set && data.user) {
       window.intercomSettings = {
-        app_id: "pkzkvg9a",
-        name: `${ data.user.first_name } ${ data.user.last_name }`, // Full name
-        email: `${ data.user.email }`, // Email address
+        app_id: 'pkzkvg9a',
+        name: `${data.user.first_name} ${data.user.last_name}`, // Full name
+        email: `${data.user.email}` // Email address
       }
       AppStore.data.intercom_set = true
       AppStore.emitChange()
     }
-  }
-  // Remove change listeners from stores
-  componentWillUnmount() {
-    AppStore.removeChangeListener(this._onChange.bind(this))
   }
   showMobileSplashViewer() {
     AppStore.data.show_mobile_splash_viewer = true
@@ -200,7 +200,7 @@ export default class App extends Component {
           AppStore.data.rooms[message_room_index].messages = []
         AppStore.data.rooms[message_room_index].messages.push(message)
         AppStore.data.rooms[message_room_index].latest_message = message
-        AppStore.data.rooms = _.sortBy(AppStore.data.rooms, room_loop => {
+        AppStore.data.rooms = _.sortBy(AppStore.data.rooms, (room_loop) => {
           if (room_loop.latest_message)
             return -room_loop.latest_message.created_at
         })
@@ -208,7 +208,7 @@ export default class App extends Component {
       AppStore.emitChange()
       this.updateRoomsIndexedDB()
     })
-    socket.on('User.Typing', response => {
+    socket.on('User.Typing', (response) => {
       const author_id = response.user_id
       const room_id = response.room_id
       AppStore.data.is_typing = {
@@ -222,9 +222,9 @@ export default class App extends Component {
       delete AppStore.data.is_typing
       AppStore.emitChange()
     })
-    socket.on('Users.States', response => {
+    socket.on('Users.States', (response) => {
       const user_states = response
-      const users_online = user_states.filter(user_state => {
+      const users_online = user_states.filter((user_state) => {
         if (user_state.state === 'Online' || user_state.state === 'Background')
           return true
       })
@@ -238,7 +238,7 @@ export default class App extends Component {
       if (state === 'Online' || state === 'Background')
         AppStore.data.users_online.push(user_id)
       if (state === 'Offline') {
-        AppStore.data.users_online = AppStore.data.users_online.filter(id => {
+        AppStore.data.users_online = AppStore.data.users_online.filter((id) => {
           if (user_id !== id)
             return true
         })
@@ -275,14 +275,14 @@ export default class App extends Component {
       }, 1000)
     })
 
-    socket.on('Notification.Delivered', resp => {
+    socket.on('Notification.Delivered', (resp) => {
       const { room, object, notification_type } = resp.notification
       const room_index = this.getRoomIndexById(room)
       const messages = AppStore.data.rooms[room_index].messages
       const me = AppStore.data.user.id
       const user = resp.user
 
-      AppStore.data.rooms[room_index].messages = _.map(messages, message => {
+      AppStore.data.rooms[room_index].messages = _.map(messages, (message) => {
         if (message.id === object && message.author && message.author.id === me && user !== me) {
           if (!_.find(message.deliveries, { user })) {
             const dlvr = {
@@ -308,7 +308,7 @@ export default class App extends Component {
     // socket.on('Notification.Acknowledged', () => {
     // })
 
-    socket.on('Room.Acknowledged', ack => {
+    socket.on('Room.Acknowledged', (ack) => {
       const { type, user, room } = ack
 
       if (type && type.actions && type.actions.indexOf('Sent') === -1)
@@ -318,7 +318,7 @@ export default class App extends Component {
       const messages = AppStore.data.rooms[room_index].messages
       const me = AppStore.data.user.id
 
-      AppStore.data.rooms[room_index].messages = _.map(messages, message => {
+      AppStore.data.rooms[room_index].messages = _.map(messages, (message) => {
         if (message.author && message.author.id === me && user !== me) {
           if (message.acked_by && message.acked_by.indexOf(user) === -1)
             message.acked_by.push(user)
@@ -352,7 +352,7 @@ export default class App extends Component {
     if (Notification.permission === 'granted')
       this.sendNotification(message)
     else {
-      Notification.requestPermission(permission => {
+      Notification.requestPermission((permission) => {
         if (permission === 'granted')
           this.sendNotification(message)
       })
@@ -360,12 +360,12 @@ export default class App extends Component {
   }
 
   sendNotification(message) {
-    const profile_image_url = config.app.url + '/static/images/dashboard/rebot@2x.png'
+    const profile_image_url = `${config.app.url}/static/images/dashboard/rebot@2x.png`
     let first_name = 'Rebot'
     if (message.author)
       first_name = message.author.first_name
 
-    const title = 'New message from ' + first_name
+    const title = `New message from ${first_name}`
     let comment = message.comment
     if (!comment)
       comment = 'File uploaded'

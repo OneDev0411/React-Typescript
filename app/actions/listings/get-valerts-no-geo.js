@@ -22,7 +22,7 @@ export default (user, options) => {
     if (listing_locations.length) {
       const google = window.google
       const bound = new google.maps.LatLngBounds()
-      listing_locations.forEach(listing_location => {
+      listing_locations.forEach((listing_location) => {
         bound.extend(new google.maps.LatLng(listing_location.latitude, listing_location.longitude))
       })
       const center = bound.getCenter()

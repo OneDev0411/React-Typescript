@@ -45,7 +45,7 @@ export default class Forgot extends Component {
           email_style = 'error'
           alert_style = 'warning'
           message_text = (
-            <div>Sorry, that email address is not registered with us.<br/> Please try again or <Link to="/signup">register for a new account</Link>.</div>
+            <div>Sorry, that email address is not registered with us.<br /> Please try again or <Link to="/signup">register for a new account</Link>.</div>
           )
         }
 
@@ -72,7 +72,7 @@ export default class Forgot extends Component {
         message_text = (
           <div>
             We've sent you an email with instructions on how to reset your password.  Please check <span className="text-primary">{ forgot_password.email }</span>.<br />
-            <a href="#" onClick={ this.handleSendVerificationAgain.bind(this) }>Send email verification again</a>.
+            <a href="#" onClick={this.handleSendVerificationAgain.bind(this)}>Send email verification again</a>.
             { resend_message }
           </div>
         )
@@ -80,7 +80,7 @@ export default class Forgot extends Component {
 
       if (message_text) {
         message = (
-          <Alert bsStyle={ alert_style }>
+          <Alert bsStyle={alert_style}>
             { message_text }
           </Alert>
         )
@@ -97,20 +97,20 @@ export default class Forgot extends Component {
     }
     let main_content = (
       <div>
-        <div style={ S('color-929292 mb-20') }>Forgot your password?</div>
-        <form onSubmit={ this.handleSubmit.bind(this) }>
-          <FormControl bsSize="large" style={ input_style } bsStyle={ email_style } inputRef={ ref => this.emailInput = ref } placeholder="Email address" type="text" />
+        <div style={S('color-929292 mb-20')}>Forgot your password?</div>
+        <form onSubmit={this.handleSubmit.bind(this)}>
+          <FormControl bsSize="large" style={input_style} bsStyle={email_style} inputRef={ref => this.emailInput = ref} placeholder="Email address" type="text" />
           { message }
-          <Col sm={4} className="forgot__password-btn--cancel" style={ S('p-0 pr-10') }>
-            <Link className="btn btn-link" style={ S('w-100p') } to="/signin">Cancel</Link>
+          <Col sm={4} className="forgot__password-btn--cancel" style={S('p-0 pr-10')}>
+            <Link className="btn btn-link" style={S('w-100p')} to="/signin">Cancel</Link>
           </Col>
-          <Col sm={8} style={ S('p-0') }>
-            <Button bsSize="large" type="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p') }>
+          <Col sm={8} style={S('p-0')}>
+            <Button bsSize="large" type="submit" className={`${submitting_class}btn btn-primary`} disabled={submitting} style={S('w-100p')}>
               { submitting ? 'Submitting...' : 'Reset Password' }
             </Button>
           </Col>
-          <div className="clearfix"></div>
-          <div style={ S('mt-20 color-929292 font-13') }>Change your mind? <Link to="/signin">Log in</Link></div>
+          <div className="clearfix" />
+          <div style={S('mt-20 color-929292 font-13')}>Change your mind? <Link to="/signin">Log in</Link></div>
         </form>
       </div>
     )
@@ -119,13 +119,13 @@ export default class Forgot extends Component {
       main_content = (
         <div>
           { message }
-          <Link style={ S('w-100p') } className="btn btn-primary" to="/">Done</Link>
+          <Link style={S('w-100p')} className="btn btn-primary" to="/">Done</Link>
         </div>
       )
     }
 
     return (
-      <div className="center-block text-center box-shadow" style={ S('w-460 p-50 br-6') }>
+      <div className="center-block text-center box-shadow" style={S('w-460 p-50 br-6')}>
         <h1 className="tempo">Rechat</h1>
         { main_content }
       </div>

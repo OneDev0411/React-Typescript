@@ -26,47 +26,47 @@ export default class Listing extends Component {
     if (data.show_listing_viewer) {
       listing_viewer = (
         <ListingViewer
-          data={ data }
-          listing={ data.current_listing }
-          hideModal={ controller.listing_map.hideModal }
-          hideListingViewer={ controller.listing_viewer.hideListingViewer.bind(this) }
-          showModalGallery={ controller.listing_viewer.showModalGallery }
-          handleModalGalleryNav={ controller.listing_viewer.handleModalGalleryNav }
-          showShareListingModal={ controller.listing_viewer.showShareListingModal }
+          data={data}
+          listing={data.current_listing}
+          hideModal={controller.listing_map.hideModal}
+          hideListingViewer={controller.listing_viewer.hideListingViewer.bind(this)}
+          showModalGallery={controller.listing_viewer.showModalGallery}
+          handleModalGalleryNav={controller.listing_viewer.handleModalGalleryNav}
+          showShareListingModal={controller.listing_viewer.showShareListingModal}
         />
       )
       // Check for mobile
       if (data.is_mobile) {
         listing_viewer = (
           <ListingViewerMobile
-            data={ data }
-            listing={ data.current_listing }
-            hideModal={ controller.listing_map.hideModal }
-            hideListingViewer={ controller.listing_viewer.hideListingViewer }
-            showModalGallery={ controller.listing_viewer.showModalGallery }
-            handleModalGalleryNav={ controller.listing_viewer.handleModalGalleryNav }
-            showShareListingModal={ controller.listing_viewer.showShareListingModal }
+            data={data}
+            listing={data.current_listing}
+            hideModal={controller.listing_map.hideModal}
+            hideListingViewer={controller.listing_viewer.hideListingViewer}
+            showModalGallery={controller.listing_viewer.showModalGallery}
+            handleModalGalleryNav={controller.listing_viewer.handleModalGalleryNav}
+            showShareListingModal={controller.listing_viewer.showShareListingModal}
           />
         )
       }
     }
     let brand_logo
     if (!data.is_widget && !data.user && Brand.asset('site_logo_wide')) {
-      const host = 'https://' + window.location.host
+      const host = `https://${window.location.host}`
       brand_logo = (
-        <div style={ S('pull-left z-3 absolute p-16') }>
-          <a href={ host }>
-            <img style={ S('maxw-200 maxh-40') } src={ Brand.asset('site_logo_wide') } />
+        <div style={S('pull-left z-3 absolute p-16')}>
+          <a href={host}>
+            <img style={S('maxw-200 maxh-40')} src={Brand.asset('site_logo_wide')} />
           </a>
         </div>
       )
     }
     let nav_area = (
-      <SideBar data={ data }/>
+      <SideBar data={data} />
     )
     if (data.is_mobile && user) {
       nav_area = (
-        <MobileNav data={ data }/>
+        <MobileNav data={data} />
       )
     }
     return (

@@ -25,6 +25,20 @@ app.proxy = true
 
 const __DEV__ = process.env.NODE_ENV === 'development'
 
+// handle application errors
+app.use(async function(ctx, next) {
+  try {
+    await next()
+  } catch(e) {
+
+    // log error
+    console.log(e, e.stack)
+
+    ctx.status = e.status || 400
+    ctx.body = e.message || 'Internal Server Error'
+  }
+})
+
 // attach template engine
 const templatesDir = __DEV__ ?
   path.resolve(appConfig.compile.entry, 'templates') :

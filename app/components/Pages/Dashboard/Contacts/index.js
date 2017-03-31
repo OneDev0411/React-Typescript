@@ -56,7 +56,7 @@ export default class Contacts extends Component {
     AppStore.data.current_contact = contact
     this.addContactTab(contact)
     const history = require('../../../../utils/history')
-    history.replaceState(null, '/dashboard/contacts/' + contact.id)
+    history.replaceState(null, `/dashboard/contacts/${contact.id}`)
     delete AppStore.data.phone_country
     delete AppStore.data.current_contact.temp_phone
     delete AppStore.data.error
@@ -67,9 +67,7 @@ export default class Contacts extends Component {
     setTimeout(() => {
       const contact_tabs = AppStore.data.contact_tabs
       const current_contact = AppStore.data.current_contact
-      const reduced_contact_tabs = contact_tabs.filter(contact => {
-        return contact.id !== id
-      })
+      const reduced_contact_tabs = contact_tabs.filter(contact => contact.id !== id)
       AppStore.data.contact_tabs = reduced_contact_tabs
       if (current_contact.id === id)
         delete AppStore.data.current_contact
@@ -93,7 +91,7 @@ export default class Contacts extends Component {
     let country_code = 1
     if (data.phone_country)
       country_code = data.phone_country.dialCode
-    const phone_number = '+' + country_code + phone_number_input
+    const phone_number = `+${country_code}${phone_number_input}`
     if (phone_number_input && !phoneUtil.isPossibleNumberString(phone_number)) {
       AppStore.data.error = {
         message: 'You must use a valid phone number'
@@ -139,33 +137,31 @@ export default class Contacts extends Component {
     const contacts = AppStore.data.contacts
     if (contacts) {
       main_content = (
-        <Table className="contacts-table" style={ S('minw-760') } condensed hover>
+        <Table className="contacts-table" style={S('minw-760')} condensed hover>
           <thead>
             <tr>
               <th>Name</th>
-              <th></th>
+              <th />
               <th>Email</th>
               <th>Phone</th>
-              <th></th>
+              <th />
             </tr>
           </thead>
           <tbody>
             {
-              contacts.map((contact) => {
-                return (
-                  <tr onClick={ this.handeContactClick.bind(this, contact) } className="contact-row" key={ 'contact-' + contact.id } style={ S('h-45 pointer') }>
-                    <td width="50"><ProfileImage data={ data } user={ contact }/></td>
-                    <td style={ S('pt-12') }>{ contact.first_name } { contact.last_name }</td>
-                    <td style={ S('pt-12') }>{ contact.email }</td>
-                    <td style={ S('pt-12') }>{ contact.phone_number }</td>
-                    <td>
-                      <Button className={ data.deleting_contact === contact.id ? 'disabled delete' : 'delete' } bsStyle="danger" onClick={ this.deleteContact.bind(this, contact.id) }>
-                        { data.deleting_contact === contact.id ? 'Deleting...' : 'Delete' }
-                      </Button>
-                    </td>
-                  </tr>
-                )
-              })
+              contacts.map(contact => (
+                <tr onClick={this.handeContactClick.bind(this, contact)} className="contact-row" key={`contact-${contact.id}`} style={S('h-45 pointer')}>
+                  <td width="50"><ProfileImage data={data} user={contact} /></td>
+                  <td style={S('pt-12')}>{ contact.first_name } { contact.last_name }</td>
+                  <td style={S('pt-12')}>{ contact.email }</td>
+                  <td style={S('pt-12')}>{ contact.phone_number }</td>
+                  <td>
+                    <Button className={data.deleting_contact === contact.id ? 'disabled delete' : 'delete'} bsStyle="danger" onClick={this.deleteContact.bind(this, contact.id)}>
+                      { data.deleting_contact === contact.id ? 'Deleting...' : 'Delete' }
+                    </Button>
+                  </td>
+                </tr>
+                ))
             }
           </tbody>
         </Table>
@@ -179,16 +175,16 @@ export default class Contacts extends Component {
       }
       if (contact.phone_number)
         phone_number_parsed = helpers.parsePhoneNumber(contact.phone_number)
-      let phone_country = '+' + phone_number_parsed.country_code
+      let phone_country = `+${phone_number_parsed.country_code}`
       if (data.phone_country)
         phone_country = `+${data.phone_country.dialCode}`
       const country_codes = (
-        <DropdownButton title={ phone_country } id="input-dropdown-country-codes" style={ S('pb-9') }>
-          <MenuItem key={ 1 } onClick={ this.handleCountryCodeSelect.bind(this, _.find(all_countries, { iso2: 'us' })) }>United States +1</MenuItem>
+        <DropdownButton title={phone_country} id="input-dropdown-country-codes" style={S('pb-9')}>
+          <MenuItem key={1} onClick={this.handleCountryCodeSelect.bind(this, _.find(all_countries, { iso2: 'us' }))}>United States +1</MenuItem>
           {
             all_countries.map((country, i) => {
               if (country.dialCode !== 1)
-                return <MenuItem onClick={ this.handleCountryCodeSelect.bind(this, country) } key={ country.iso2 + country.dialCode + i }>{ country.name } +{ country.dialCode }</MenuItem>
+                return <MenuItem onClick={this.handleCountryCodeSelect.bind(this, country)} key={country.iso2 + country.dialCode + i}>{ country.name } +{ country.dialCode }</MenuItem>
             })
           }
         </DropdownButton>
@@ -202,32 +198,32 @@ export default class Contacts extends Component {
         )
       }
       main_content = (
-        <div style={ S('ml-20') }>
+        <div style={S('ml-20')}>
           <ProfileImage
-            size={ 50 }
-            font={ 24 }
-            data={ data }
-            user={ contact }
+            size={50}
+            font={24}
+            data={data}
+            user={contact}
           />
-          <div style={ S('ml-80 relative w-300') }>
-            <form onSubmit={ this.handleContactSubmit.bind(this) }>
+          <div style={S('ml-80 relative w-300')}>
+            <form onSubmit={this.handleContactSubmit.bind(this)}>
               <label>First name</label>
-              <FormControl inputRef={ ref => this.first_nameInput = ref } type="text" value={ contact.first_name } onChange={ this.handleInputChange.bind(this, 'first_name') } />
+              <FormControl inputRef={ref => this.first_nameInput = ref} type="text" value={contact.first_name} onChange={this.handleInputChange.bind(this, 'first_name')} />
               <label>Last name</label>
-              <FormControl inputRef={ ref => this.last_nameInput = ref } type="text" value={ contact.last_name } onChange={ this.handleInputChange.bind(this, 'last_name') } />
+              <FormControl inputRef={ref => this.last_nameInput = ref} type="text" value={contact.last_name} onChange={this.handleInputChange.bind(this, 'last_name')} />
               <label>Email</label>
-              <FormControl inputRef={ ref => this.emailInput = ref } type="text" value={ contact.email } onChange={ this.handleInputChange.bind(this, 'email') } />
+              <FormControl inputRef={ref => this.emailInput = ref} type="text" value={contact.email} onChange={this.handleInputChange.bind(this, 'email')} />
               <label>Phone number</label>
               <div className="form-group">
                 <div className="input-group">
                   <div className="input-group-btn input-dropdown--country-codes">
                     { country_codes }
                   </div>
-                  <MaskedInput className="form-control" ref={ ref => this.phone_numberInput = ref } type="text" value={ contact.temp_phone ? contact.temp_phone : phone_number_parsed.phone_number } mask="(111)-111-1111" onChange={ this.handleInputChange.bind(this, 'phone_number') }/>
+                  <MaskedInput className="form-control" ref={ref => this.phone_numberInput = ref} type="text" value={contact.temp_phone ? contact.temp_phone : phone_number_parsed.phone_number} mask="(111)-111-1111" onChange={this.handleInputChange.bind(this, 'phone_number')} />
                 </div>
               </div>
               { message }
-              <Button style={ S('pl-30 pr-30 pull-right') } type="submit" className={ data.saving_contact ? 'disabled' : '' } bsStyle="primary">
+              <Button style={S('pl-30 pr-30 pull-right')} type="submit" className={data.saving_contact ? 'disabled' : ''} bsStyle="primary">
                 { data.saving_contact ? 'Saving...' : 'Save' }
               </Button>
             </form>
@@ -237,15 +233,15 @@ export default class Contacts extends Component {
     }
     const main_style = S('absolute l-70 r-0 pl-15 pr-15')
     return (
-      <div style={ S('minw-1000') }>
+      <div style={S('minw-1000')}>
         <Header
-          data={ data }
-          viewContact={ this.viewContact.bind(this) }
-          removeContactTab={ this.removeContactTab }
+          data={data}
+          viewContact={this.viewContact.bind(this)}
+          removeContactTab={this.removeContactTab}
         />
-        <main style={ S('pt-20') }>
-          <SideBar data={ data }/>
-          <div style={ main_style }>
+        <main style={S('pt-20')}>
+          <SideBar data={data} />
+          <div style={main_style}>
             { main_content }
           </div>
         </main>

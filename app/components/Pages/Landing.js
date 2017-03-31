@@ -35,7 +35,7 @@ export default class Landing extends Component {
     const data = this.props.data
     if (data.errors && data.errors.type === 'email-in-use') {
       const email = data.signup_email
-      window.location.href = '/signin?email=' + encodeURIComponent(email)
+      window.location.href = `/signin?email=${encodeURIComponent(email)}`
     }
     if (data.brand && window !== 'undefined')
       window.location.href = '/dashboard/mls'
@@ -174,14 +174,14 @@ export default class Landing extends Component {
     // Get video and text from random number
     const headline_text = (
       <div>
-        From search to close be<br/><span style={ current_text_style }>{ current_text }</span><span className={ blinking_cursor }>|</span>
+        From search to close be<br /><span style={current_text_style}>{ current_text }</span><span className={blinking_cursor}>|</span>
       </div>
     )
     const video = (
-      <video style={ S('z-0 absolute') } autoPlay="true" loop="true" className="fullscreen-bg__video">
-        <source src={'/static/videos/landing/' + video_src + '.webm'} type="video/webm"/>
-        <source src={'/static/videos/landing/' + video_src + '.mp4'} type="video/mp4"/>
-        <source src={'/static/videos/landing/' + video_src + '.ogv'} type="video/ogg"/>
+      <video style={S('z-0 absolute')} autoPlay="true" loop="true" className="fullscreen-bg__video">
+        <source src={`/static/videos/landing/${video_src}.webm`} type="video/webm" />
+        <source src={`/static/videos/landing/${video_src}.mp4`} type="video/mp4" />
+        <source src={`/static/videos/landing/${video_src}.ogv`} type="video/ogg" />
       </video>
     )
     let login_btn_li_style
@@ -220,49 +220,49 @@ export default class Landing extends Component {
     let brand_logo
     if (Brand.asset('site_logo_wide')) {
       brand_logo = (
-        <div style={ { ...S('ml-15 inline-block'), textDecoration: 'none' } }>
-          <span style={ S('inline-block font-30 mr-15 relative t-1n color-' + Brand.color('primary')) }>+</span>
-          <img style={ S('w-200 relative t-3n') } src={ Brand.asset('site_logo_wide') } />
+        <div style={{ ...S('ml-15 inline-block'), textDecoration: 'none' }}>
+          <span style={S(`inline-block font-30 mr-15 relative t-1n color-${Brand.color('primary')}`)}>+</span>
+          <img style={S('w-200 relative t-3n')} src={Brand.asset('site_logo_wide')} />
         </div>
       )
     }
     let mobile_splash_viewer
     if (data.show_mobile_splash_viewer)
-      mobile_splash_viewer = <MobileSplashViewer data={ data } />
+      mobile_splash_viewer = <MobileSplashViewer data={data} />
     return (
-      <div className="page-landing page-bg-video" style={ page_style }>
-        <div className="overlay"></div>
+      <div className="page-landing page-bg-video" style={page_style}>
+        <div className="overlay" />
         { video }
-        <header style={ S('absolute w-100p z-3') }>
-          <nav className="navbar navbar-default" style={ navbar_style }>
+        <header style={S('absolute w-100p z-3')}>
+          <nav className="navbar navbar-default" style={navbar_style}>
             <div className="container-fluid">
               <div className="navbar-header">
-                <button onClick={ this.toggleNavBarLinks.bind(this) } style={ S('mt-15') } type="button" className="navbar-toggle collapsed" data-toggle="collapse" aria-expanded={ data.navbar_in ? 'true' : 'false' }>
+                <button onClick={this.toggleNavBarLinks.bind(this)} style={S('mt-15')} type="button" className="navbar-toggle collapsed" data-toggle="collapse" aria-expanded={data.navbar_in ? 'true' : 'false'}>
                   <span className="sr-only">Toggle navigation</span>
-                  <span className="icon-bar"></span>
-                  <span className="icon-bar"></span>
-                  <span className="icon-bar"></span>
+                  <span className="icon-bar" />
+                  <span className="icon-bar" />
+                  <span className="icon-bar" />
                 </button>
-                <div className="tk-calluna-sans pull-left" style={ S('font-28 mt-12 color-fff') }>
+                <div className="tk-calluna-sans pull-left" style={S('font-28 mt-12 color-fff')}>
                   Rechat
                   { brand_logo }
                 </div>
               </div>
-              <div style={ collapse_style } className={ `collapse navbar-collapse text-center${data.navbar_in ? ' in' : ''}` }>
+              <div style={collapse_style} className={`collapse navbar-collapse text-center${data.navbar_in ? ' in' : ''}`}>
                 <ul className="nav navbar-nav navbar-right">
-                  <li style={ login_btn_li_style }>
-                    <a className="btn btn-default" href="/signin" style={ S('color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 mr-15' + login_btn_style) }>Log in</a>
+                  <li style={login_btn_li_style}>
+                    <a className="btn btn-default" href="/signin" style={S(`color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 mr-15${login_btn_style}`)}>Log in</a>
                   </li>
                   <li>
-                    <div style={ S('ml-15') }>
-                      <form onSubmit={ this.handleEmailSubmit.bind(this) }>
-                        <div style={ S('pull-left') }>
-                          <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
-                            <FormControl inputRef={ ref => this.emailInput = ref } onChange={ this.setSignupEmail } style={ signup_input_style } type="text" placeholder="Enter email address" value={ data.signup_email } />
+                    <div style={S('ml-15')}>
+                      <form onSubmit={this.handleEmailSubmit.bind(this)}>
+                        <div style={S('pull-left')}>
+                          <OverlayTrigger trigger="focus" placement="bottom" overlay={popover}>
+                            <FormControl inputRef={ref => this.emailInput = ref} onChange={this.setSignupEmail} style={signup_input_style} type="text" placeholder="Enter email address" value={data.signup_email} />
                           </OverlayTrigger>
                         </div>
-                        <div style={ S('pull-left') }>
-                          <Button className={ data.submitting ? 'disabled' : '' } bsStyle="primary" style={ signup_btn_style } type="submit">{ data.submitting ? 'Submitting...' : 'Get started' }</Button>
+                        <div style={S('pull-left')}>
+                          <Button className={data.submitting ? 'disabled' : ''} bsStyle="primary" style={signup_btn_style} type="submit">{ data.submitting ? 'Submitting...' : 'Get started' }</Button>
                         </div>
                       </form>
                     </div>
@@ -272,19 +272,19 @@ export default class Landing extends Component {
             </div>
           </nav>
         </header>
-        <main className="container" style={ S('h-100p z-2 relative') }>
-          <div className="landing-main text-center" style={ S('h-100p') }>
-            <div className="center-block" style={ S('maxw-750 mt-50n') }>
-              <h1 className="tempo headline" style={ headline_style }>
+        <main className="container" style={S('h-100p z-2 relative')}>
+          <div className="landing-main text-center" style={S('h-100p')}>
+            <div className="center-block" style={S('maxw-750 mt-50n')}>
+              <h1 className="tempo headline" style={headline_style}>
                 { headline_text }
               </h1>
             </div>
           </div>
         </main>
-        <footer className="footer" style={ footer_style }>
+        <footer className="footer" style={footer_style}>
           <div className="container">
             <Col className="footer-text footer-text--left" sm={6}>
-              Made with <img src="/static/images/landing/heart.png" /> by Rechat | <a onClick={ this.showIntercom } href="#">Contact Us</a>
+              Made with <img src="/static/images/landing/heart.png" /> by Rechat | <a onClick={this.showIntercom} href="#">Contact Us</a>
             </Col>
             <Col className="footer-text footer-text--right" sm={6}>
               Rechat Inc. &copy; { new Date().getFullYear() }. All Rights Reserved. <a href="/terms">Terms of Service</a> | <a href="/terms/mls">MLS Terms</a> | <a href="/privacy">Privacy Policy</a>
@@ -292,10 +292,10 @@ export default class Landing extends Component {
           </div>
         </footer>
         <CheckEmailModal
-          data={ data }
-          hideModal={ this.hideModal }
-          showIntercom={ this.showIntercom }
-          resend={ this.resend }
+          data={data}
+          hideModal={this.hideModal}
+          showIntercom={this.showIntercom}
+          resend={this.resend}
         />
         { mobile_splash_viewer }
       </div>

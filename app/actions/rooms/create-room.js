@@ -9,7 +9,7 @@ export default (user, users, emails, phone_numbers, message) => {
   const brand = AppStore.data.brand ? AppStore.data.brand.id : null
 
   async.series([
-    callback => {
+    (callback) => {
       // Create room
       const params = {
         title: '',

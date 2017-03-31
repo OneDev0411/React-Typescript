@@ -10,7 +10,7 @@ export default (user, agent, message) => {
   if (user) {
     // Check for room exists between user and agent
     const rooms = AppStore.data.rooms
-    rooms.forEach(room => {
+    rooms.forEach((room) => {
       const users = room.users
       // search for 1:1
       let room_found
@@ -32,7 +32,7 @@ export default (user, agent, message) => {
         const brand = AppStore.data.brand ? AppStore.data.brand.id : null
 
         async.series([
-          callback => {
+          (callback) => {
             const params = {
               title: '',
               owner: user.id,
@@ -64,11 +64,11 @@ export default (user, agent, message) => {
     return
   }
   // if !user
-  const email = 'guest+' + (new Date()).getTime() + '@rechat.com'
+  const email = `guest+${(new Date()).getTime()}@rechat.com`
   const random_password = randomString(9)
   const locals = {}
   async.series([
-    callback => {
+    (callback) => {
       const new_user = {
         first_name: email,
         email,
@@ -84,7 +84,7 @@ export default (user, agent, message) => {
         callback()
       })
     },
-    callback => {
+    (callback) => {
       const params = {
         email,
         password: random_password
@@ -94,7 +94,7 @@ export default (user, agent, message) => {
         callback()
       })
     },
-    callback => {
+    (callback) => {
       const brand = AppStore.data.brand ? AppStore.data.brand.id : null
 
       const params = {

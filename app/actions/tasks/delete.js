@@ -9,9 +9,7 @@ export default (user, task) => {
   }
   Task.delete(params, () => {
     const tasks = AppStore.data.tasks
-    const edited_tasks = tasks.filter(task_loop => {
-      return task_loop.id !== task.id
-    })
+    const edited_tasks = tasks.filter(task_loop => task_loop.id !== task.id)
     delete AppStore.data.deleting_task
     delete AppStore.data.current_task
     AppStore.data.tasks = edited_tasks

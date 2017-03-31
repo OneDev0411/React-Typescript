@@ -28,7 +28,7 @@ export default class Password extends Component {
     if (user && signup.form_submitted) {
       // If invited to room
       if (data.current_room) {
-        window.location.href = '/dashboard/recents/' + data.current_room.id
+        window.location.href = `/dashboard/recents/${data.current_room.id}`
         return
       }
       // If has action in url
@@ -78,18 +78,18 @@ export default class Password extends Component {
       if (data.location.query.alert)
         alert = data.location.query.alert
       if (action === 'favorite_listing' && listing_id)
-        return '/dashboard/mls/' + listing_id
+        return `/dashboard/mls/${listing_id}`
       if (action === 'listing_inquiry' && room_id)
-        return '/dashboard/recents/' + room_id
+        return `/dashboard/recents/${room_id}`
       if (action === 'create_alert' && alert_id)
-        return '/dashboard/mls/alerts/' + alert_id
+        return `/dashboard/mls/alerts/${alert_id}`
       // New branch actions
       if (action === 'RedirectToRoom' && room)
-        return '/dashboard/recents/' + room
+        return `/dashboard/recents/${room}`
       if (action === 'RedirectToListing' && listing)
-        return '/dashboard/mls/' + listing
+        return `/dashboard/mls/${listing}`
       if (action === 'RedirectToAlert' && alert)
-        return '/dashboard/mls/alerts/' + alert
+        return `/dashboard/mls/alerts/${alert}`
     }
   }
   getReceivingUser() {
@@ -178,8 +178,8 @@ export default class Password extends Component {
     if (data.location.query.email && !data.location.query.phone_number) {
       email_area = (
         <div>
-          <div style={ S('font-20') }>Email:</div>
-          <div style={ S('color-2196f3 font-20') }>{ decodeURIComponent(data.location.query.email) }</div>
+          <div style={S('font-20')}>Email:</div>
+          <div style={S('color-2196f3 font-20')}>{ decodeURIComponent(data.location.query.email) }</div>
         </div>
       )
     }
@@ -187,22 +187,22 @@ export default class Password extends Component {
     if (data.location.query.phone_number) {
       phone_number_area = (
         <div>
-          <div style={ S('font-20') }>Phone number:</div>
-          <div style={ S('color-2196f3 font-20') }>{ decodeURIComponent(data.location.query.phone_number) }</div>
+          <div style={S('font-20')}>Phone number:</div>
+          <div style={S('color-2196f3 font-20')}>{ decodeURIComponent(data.location.query.phone_number) }</div>
         </div>
       )
     }
     if (data.show_logout_message) {
       return (
-        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_logout_message }>
-          <div style={ S('text-center font-40 p-40 color-666') }>
-            <div style={ S('bg-2196f3 w-165 h-165 br-100 center-block pt-35') }>
-              <i className={`fa fa-${email_area ? 'envelope' : 'phone'}`} style={ S('h-70 mt-20 color-fff font-60') }></i>
+        <Modal dialogClassName={data.is_mobile ? 'modal-mobile' : ''} show={data.show_logout_message}>
+          <div style={S('text-center font-40 p-40 color-666')}>
+            <div style={S('bg-2196f3 w-165 h-165 br-100 center-block pt-35')}>
+              <i className={`fa fa-${email_area ? 'envelope' : 'phone'}`} style={S('h-70 mt-20 color-fff font-60')} />
             </div>
             <div className="din">Logout to Activate This New Account</div>
             { email_area }
             { phone_number_area }
-            <div style={ S('text-center') }>
+            <div style={S('text-center')}>
               <a href={`/signout?redirect_to=${encodeURIComponent(window.location.href)}`} className="btn btn-primary">Log out</a>
             </div>
           </div>
@@ -212,34 +212,34 @@ export default class Password extends Component {
     let main_content
     if (slug === 'forgot') {
       main_content = (
-        <Forgot handleSendVerificationAgain={ this.handleSendVerificationAgain.bind(this) } handleSubmit={ this.handleSubmit } data={ data }/>
+        <Forgot handleSendVerificationAgain={this.handleSendVerificationAgain.bind(this)} handleSubmit={this.handleSubmit} data={data} />
       )
     }
 
     if (slug === 'reset') {
       main_content = (
-        <Reset handleSubmit={ this.handleSubmit } data={ data }/>
+        <Reset handleSubmit={this.handleSubmit} data={data} />
       )
     }
 
     if (slug === 'create') {
       main_content = (
-        <Create handleSubmit={ this.handleSubmit } data={ data }/>
+        <Create handleSubmit={this.handleSubmit} data={data} />
       )
     }
     return (
-      <div id="main-content" className="flex-center-wrap" style={ S('absolute h-100p w-100p') }>
-        <div style={ S('z-100 relative mt-60n bg-fff br-6') }>
+      <div id="main-content" className="flex-center-wrap" style={S('absolute h-100p w-100p')}>
+        <div style={S('z-100 relative mt-60n bg-fff br-6')}>
           { main_content }
         </div>
-        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_confirm_email_modal }>
-          <div className="din" style={ S('text-center font-60 p-40 color-666') }>
-            <div style={ S('bg-2196f3 w-165 h-165 br-100 center-block pt-35') }>
-              <i className="fa fa-envelope" style={ S('h-70 mt-20 color-fff') }></i>
+        <Modal dialogClassName={data.is_mobile ? 'modal-mobile' : ''} show={data.show_confirm_email_modal}>
+          <div className="din" style={S('text-center font-60 p-40 color-666')}>
+            <div style={S('bg-2196f3 w-165 h-165 br-100 center-block pt-35')}>
+              <i className="fa fa-envelope" style={S('h-70 mt-20 color-fff')} />
             </div>
             <div>Email Verification Sent!</div>
-            <div style={ S('font-20') }>Please check your email:</div>
-            <div style={ S('color-2196f3 font-20') }>{ data.signup && data.signup.email ? data.signup.email : '' }</div>
+            <div style={S('font-20')}>Please check your email:</div>
+            <div style={S('color-2196f3 font-20')}>{ data.signup && data.signup.email ? data.signup.email : '' }</div>
           </div>
         </Modal>
       </div>

@@ -2,7 +2,7 @@ import React from 'react'
 
 class PdfPage extends React.Component {
 
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       page: null,
@@ -11,7 +11,7 @@ class PdfPage extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const { pageNumber } = this.props
     this.renderPage(pageNumber)
   }
@@ -30,8 +30,7 @@ class PdfPage extends React.Component {
   /**
    *
    */
-  async renderPage (pageNumber) {
-
+  async renderPage(pageNumber) {
     const { doc, scale } = this.props
 
     // load page
@@ -53,12 +52,12 @@ class PdfPage extends React.Component {
     await this.setStateSync({ page, width, height })
   }
 
-  render () {
+  render() {
     const { width, height } = this.state
 
     return (
-      <div className='pdf-container' style={{ width, height }}>
-        <canvas className='pdf-page' ref={canv => this.container = canv } />
+      <div className="pdf-container" style={{ width, height }}>
+        <canvas className="pdf-page" ref={canv => this.container = canv} />
       </div>
     )
   }

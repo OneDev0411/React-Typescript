@@ -50,14 +50,14 @@ export default class Reset extends Component {
           message_text = 'Your password must be at least 6 characters long.'
 
         if (password_error === 'no-match')
-          message_text = `Your passwords don't match`
+          message_text = 'Your passwords don\'t match'
       }
     }
     if (data.show_message) {
       // Success
       if (data.status === 'success') {
         alert_style = 'success'
-        message_text = `Your password is now changed.  You may now sign in.`
+        message_text = 'Your password is now changed.  You may now sign in.'
       }
 
       // Error
@@ -71,7 +71,7 @@ export default class Reset extends Component {
       }
 
       message = (
-        <Alert bsStyle={ alert_style }>
+        <Alert bsStyle={alert_style}>
           { message_text }
         </Alert>
       )
@@ -84,15 +84,15 @@ export default class Reset extends Component {
 
     let main_content = (
       <div>
-        <div style={ S('color-929292 mb-20') }>Reset your password</div>
-        <form onSubmit={ this.handleSubmit.bind(this) }>
-          <FormControl style={ S('mb-10') } bsStyle={ password_style } placeholder="New Password" type="password" inputRef={ ref => this.passwordInput = ref }/>
-          <FormControl style={ S('mb-10') } bsStyle={ password_style } placeholder="Confirm New Password" type="password" inputRef={ ref => this.confirm_passwordInput = ref }/>
+        <div style={S('color-929292 mb-20')}>Reset your password</div>
+        <form onSubmit={this.handleSubmit.bind(this)}>
+          <FormControl style={S('mb-10')} bsStyle={password_style} placeholder="New Password" type="password" inputRef={ref => this.passwordInput = ref} />
+          <FormControl style={S('mb-10')} bsStyle={password_style} placeholder="Confirm New Password" type="password" inputRef={ref => this.confirm_passwordInput = ref} />
           { message }
-          <Button type="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p') }>
+          <Button type="submit" className={`${submitting_class}btn btn-primary`} disabled={submitting} style={S('w-100p')}>
             { submitting ? 'Submitting...' : 'Change Password' }
           </Button>
-          <div style={ S('mt-20 color-929292 font-13') }>Code not working? <Link to="/password/forgot">Try sending it again</Link></div>
+          <div style={S('mt-20 color-929292 font-13')}>Code not working? <Link to="/password/forgot">Try sending it again</Link></div>
         </form>
       </div>
     )
@@ -101,12 +101,12 @@ export default class Reset extends Component {
       main_content = (
         <div>
           { message }
-          <Link style={ S('w-100p') } className="btn btn-primary" to="/signin">Sign in</Link>
+          <Link style={S('w-100p')} className="btn btn-primary" to="/signin">Sign in</Link>
         </div>
       )
     }
     return (
-      <div className="center-block" style={ S('maxw-300') }>
+      <div className="center-block" style={S('maxw-300')}>
         { main_content }
       </div>
     )

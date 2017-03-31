@@ -10,7 +10,7 @@ export default class DayPickerType extends Component {
         modifiers={{
           selected: day => DateUtils.isSameDay(this.props.date_selected, day)
         }}
-        onDayClick={ this.props.handleDayClick.bind(this, this.props.date_type) }
+        onDayClick={this.props.handleDayClick.bind(this, this.props.date_type)}
       />
     )
   }

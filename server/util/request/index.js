@@ -32,11 +32,10 @@ const requestMiddleware = async function (ctx, next) {
       url = `${url}?hostname=${host_name}`
     }
 
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`${api_url}${url}`)
-    }
+    console.log(`[ + ] ${api_url}${url}`)
 
-    return agent[method.toLowerCase()](`${api_url}${url}`)
+    try {
+      return agent[method.toLowerCase()](`${api_url}${url}`)
       .set(headers)
       .on('error', err => {
         let responseText = err.response ? err.response.text : err.message
@@ -61,6 +60,11 @@ const requestMiddleware = async function (ctx, next) {
           response.body.status = 'success'
         }
       })
+    }
+    catch(e) {
+      console.log(e)
+      throw e
+    }
   }
 
   /**
@@ -73,6 +77,9 @@ const requestMiddleware = async function (ctx, next) {
         authorization: `Bearer ${access_token}`
       }
     })
+
+    // log
+    console.log(`[ + ] Stream ${url}`)
 
     return new Promise(resolve => {
       return resolve(download)

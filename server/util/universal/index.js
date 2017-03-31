@@ -1,4 +1,3 @@
-import React from 'react'
 import { match } from 'react-router'
 import routes from '../../../app/routes'
 import config from '../../../config/webpack'

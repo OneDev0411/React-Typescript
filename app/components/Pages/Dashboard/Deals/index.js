@@ -55,13 +55,13 @@ export default class Deals extends React.Component {
     const user = data.user
 
     let main_style = S('ml-5p h-100p')
-    let nav_area = <SideBar data={ data } />
+    let nav_area = <SideBar data={data} />
 
     if (data.is_mobile) {
       main_style = { ...main_style, ...S('') }
 
       if (user)
-        nav_area = <MobileNav data={ data } />
+        nav_area = <MobileNav data={data} />
     }
 
     const children = React.Children.map(this.props.children, child =>
@@ -75,11 +75,11 @@ export default class Deals extends React.Component {
     return (
       <div>
         { nav_area }
-        <div className="deals" style={ main_style }>
+        <div className="deals" style={main_style}>
           {
             !data.deals &&
             <div className="loading-deals">
-              <i className="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+              <i className="fa fa-spinner fa-spin fa-2x fa-fw" />
               <b>loading deals ...</b>
             </div>
           }

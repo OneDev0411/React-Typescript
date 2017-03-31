@@ -13,7 +13,7 @@ export default class Header extends Component {
           Filters
         </div>
         <div id="info">
-          <div id="arrow"></div>
+          <div id="arrow" />
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { helpers.numberWithCommas(count) } Agent Matches
         </div>
       </div>

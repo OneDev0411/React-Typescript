@@ -9,12 +9,8 @@ export default (user, task, contacts) => {
   let new_contacts
   contact_ids = _.map(contacts, 'id')
   // Remove placeholder ids
-  contact_ids = contact_ids.filter(contact_id => {
-    return typeof contact_id === 'string'
-  })
-  new_contacts = contacts.filter(contact => {
-    return contact.type === 'email' || contact.type === 'phone_number'
-  })
+  contact_ids = contact_ids.filter(contact_id => typeof contact_id === 'string')
+  new_contacts = contacts.filter(contact => contact.type === 'email' || contact.type === 'phone_number')
   const params = {
     access_token: user.access_token,
     task,

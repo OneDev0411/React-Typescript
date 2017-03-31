@@ -18,15 +18,13 @@ export default class AlertViewer extends Component {
     let listing_gallery_area
     if (current_alert && feed) {
       listing_gallery_area = (
-        <div style={ S('m-0 p-0') }>
+        <div style={S('m-0 p-0')}>
           {
-            feed.map(feed_item => {
-              return (
-                <ListingCard
-                  listing={ feed_item.listing }
-                />
-              )
-            })
+            feed.map(feed_item => (
+              <ListingCard
+                listing={feed_item.listing}
+              />
+              ))
           }
         </div>
       )
@@ -40,10 +38,10 @@ export default class AlertViewer extends Component {
     let more_button
     if (current_alert.feed_info.total > feed.length) {
       more_button = (
-        <div style={ S('w-100p p-60 text-center') }>
+        <div style={S('w-100p p-60 text-center')}>
           <Button
-            className={ current_alert.loading_more_feed_results ? 'disabled' : '' }
-            onClick={ controller.alert_viewer.handleMoreResultsClick }
+            className={current_alert.loading_more_feed_results ? 'disabled' : ''}
+            onClick={controller.alert_viewer.handleMoreResultsClick}
             bsStyle="primary"
             bsSize="large"
           >
@@ -53,16 +51,16 @@ export default class AlertViewer extends Component {
       )
     }
     return (
-      <div className="alert-viewer" style={ alert_viewer_wrapper_style }>
-        <div style={ alert_viewer_header_style }>
-          <span style={ S('color-263445 font-15 fw-500') }>New listings ({ current_alert.feed_info.total })</span>
-          <div className="close pull-right" onClick={ controller.alert_map.hideAlertViewer.bind(this) }>
+      <div className="alert-viewer" style={alert_viewer_wrapper_style}>
+        <div style={alert_viewer_header_style}>
+          <span style={S('color-263445 font-15 fw-500')}>New listings ({ current_alert.feed_info.total })</span>
+          <div className="close pull-right" onClick={controller.alert_map.hideAlertViewer.bind(this)}>
             Close &times;
           </div>
         </div>
-        <div style={ alert_viewer_style }>
+        <div style={alert_viewer_style}>
           { listing_gallery_area }
-          <div className="clearfix"></div>
+          <div className="clearfix" />
           { more_button }
         </div>
       </div>

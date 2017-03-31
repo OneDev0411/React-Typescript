@@ -4,9 +4,9 @@ es6Promise.polyfill()
 import 'isomorphic-fetch'
 export default {
   geocodeAddress: (params, callback) => {
-    const endpoint = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + params.address
+    const endpoint = `https://maps.googleapis.com/maps/api/geocode/json?address=${params.address}`
     fetch(endpoint)
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -16,8 +16,6 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   }
 }

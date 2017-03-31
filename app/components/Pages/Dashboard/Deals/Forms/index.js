@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Col, Button} from 'react-bootstrap'
+import { Row, Col, Button } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
 import S from 'shorti'
 import _ from 'underscore'
@@ -28,21 +28,19 @@ export default class DealForm extends React.Component {
     const { submissions } = nextProps
     const { submission } = this.state
 
-    if (submissions && !submission) {
+    if (submissions && !submission)
       this.loadForm(submissions[0])
-    }
-  }
-
-  componentWillUnmount() {
-    this.mounted = false
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     return nextProps.activeTab === 'forms'
   }
 
-  loadForm(submission) {
+  componentWillUnmount() {
+    this.mounted = false
+  }
 
+  loadForm(submission) {
     if (!submission)
       return false
 
@@ -57,7 +55,7 @@ export default class DealForm extends React.Component {
     this.setState({
       submission,
       documentUrl,
-      documentLoaded: false,
+      documentLoaded: false
     })
   }
 
@@ -85,31 +83,29 @@ export default class DealForm extends React.Component {
           <Col xs={5}>
 
             <FormSelect
-              forms={ forms }
+              forms={forms}
               user={user}
               onSelect={this.onAddForm.bind(this)}
             />
 
             {
-              submissions && submissions.map(subm => {
-                return (
-                  <div
-                    key={`submission${subm.id}`}
-                    className={ cn('doc-detail', { selected: submission.id === subm.id } )}
-                    onClick={ this.loadForm.bind(this, subm) }
-                  >
-                    <img src="/static/images/deals/file.png" />
-                    <div className="title">{ subm.title }</div>
-                    <div className="status">{ subm.state === 'Fair' ? 'Completed' : subm.state }</div>
-                  </div>
-                )
-              })
+              submissions && submissions.map(subm => (
+                <div
+                  key={`submission${subm.id}`}
+                  className={cn('doc-detail', { selected: submission.id === subm.id })}
+                  onClick={this.loadForm.bind(this, subm)}
+                >
+                  <img src="/static/images/deals/file.png" />
+                  <div className="title">{ subm.title }</div>
+                  <div className="status">{ subm.state === 'Fair' ? 'Completed' : subm.state }</div>
+                </div>
+                ))
             }
 
             {
               !submissions &&
               <div className="loading center">
-                <i className="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+                <i className="fa fa-spinner fa-spin fa-2x fa-fw" />
               </div>
             }
 
@@ -128,7 +124,7 @@ export default class DealForm extends React.Component {
               <div style={{ textAlign: 'right' }}>
                 <Button
                   bsStyle="primary"
-                  onClick={ this.editForm.bind(this) }
+                  onClick={this.editForm.bind(this)}
                 >
                   Edit Pdf
                 </Button>
@@ -140,7 +136,7 @@ export default class DealForm extends React.Component {
               <div style={{ textAlign: 'right' }}>
                 <a
                   target="_blank"
-                  href={ documentUrl }
+                  href={documentUrl}
                   className="btn btn-primary"
                 >
                   View
@@ -151,9 +147,9 @@ export default class DealForm extends React.Component {
             <PdfViewer
               uri={documentUrl}
               scale={0.7}
-              onLoaded={ () => {
+              onLoaded={() => {
                 if (this.mounted)
-                  this.setState({ documentLoaded: true})
+                  this.setState({ documentLoaded: true })
               }}
             />
           </Col>

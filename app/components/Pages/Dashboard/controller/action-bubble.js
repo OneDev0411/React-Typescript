@@ -93,7 +93,7 @@ const controller = {
   },
   handleLoginClick(listing_id) {
     const data = this.props.data
-    const url = 'https://' + data.brand.hostnames[0] + '/signin?redirect_to=dashboard/mls/' + listing_id
+    const url = `https://${data.brand.hostnames[0]}/signin?redirect_to=dashboard/mls/${listing_id}`
     window.top.location.href = url
   },
   resend(e) {

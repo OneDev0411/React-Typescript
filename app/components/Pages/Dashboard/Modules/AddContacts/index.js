@@ -92,14 +92,14 @@ export default class AddContactsModule extends Component {
 
     if (direction === 'up') {
       if (active_contact > -1)
-        active_contact = active_contact - 1
+        active_contact -= 1
       else
         active_contact = filtered_contacts.length - 1
     }
 
     if (direction === 'down') {
       if (filtered_contacts && active_contact < filtered_contacts.length - 1)
-        active_contact = active_contact + 1
+        active_contact += 1
       else
         active_contact = 0
     }
@@ -131,7 +131,7 @@ export default class AddContactsModule extends Component {
     const text_lower = text.toLowerCase()
     const data = this.props.data
     const contacts = data.contacts
-    let filtered_contacts = contacts.filter(contact => {
+    let filtered_contacts = contacts.filter((contact) => {
       if (contact.first_name && contact.first_name.toLowerCase().indexOf(text_lower) !== -1)
         return true
       if (contact.last_name && contact.last_name.toLowerCase().indexOf(text_lower) !== -1)
@@ -223,11 +223,9 @@ export default class AddContactsModule extends Component {
     }
     let filtered_contacts = contacts
     if (contacts) {
-      if (contacts_added_ids) {
-        filtered_contacts = contacts.filter(contact => {
-          return contacts_added_ids.indexOf(contact.id) === -1
-        })
-      }
+      if (contacts_added_ids)
+        filtered_contacts = contacts.filter(contact => contacts_added_ids.indexOf(contact.id) === -1)
+
       this.setFilteredContacts(filtered_contacts)
     }
   }
@@ -253,7 +251,7 @@ export default class AddContactsModule extends Component {
     let search_input_width = 'w-430'
     if (data.is_mobile)
       search_input_width = 'w-100p'
-    let search_contact_input_style = S(search_input_width + ' mr-15')
+    let search_contact_input_style = S(`${search_input_width} mr-15`)
 
     // If transaction edit
     if (module_type === 'transaction') {
@@ -271,7 +269,7 @@ export default class AddContactsModule extends Component {
         ...module_style,
         ...S('w-100p')
       }
-      search_contact_input_style = S(search_input_width + ' mr-15')
+      search_contact_input_style = S(`${search_input_width} mr-15`)
       filter_scroll_style.width = 475
     }
     if (data.is_mobile)
@@ -286,26 +284,24 @@ export default class AddContactsModule extends Component {
           active_contact_style = ' bg-EDF7FD'
         if (!contact.added) {
           return (
-            <div className="add-contact-form__contact" onClick={ this.addContact.bind(this, contact) } key={ 'contact-' + contact.id } style={ S('br-3 relative h-60 pointer mb-5 p-10' + active_contact_style + contact_added_style) }>
-              <ProfileImage data={ data } user={ contact }/>
-              <div style={ S('ml-50') }>
-                <span style={ S('fw-600') }>{ contact.first_name } { contact.last_name }</span>{ contact.contact_user ? ',' : '' }&nbsp;
-                <span style={ S('color-666') }>{ contact.contact_user ? contact.contact_user.user_type : '' }</span><br />
-                <span style={ S('color-666 font-13') }>{ contact.email ? contact.email : contact.phone_number }</span><br />
+            <div className="add-contact-form__contact" onClick={this.addContact.bind(this, contact)} key={`contact-${contact.id}`} style={S(`br-3 relative h-60 pointer mb-5 p-10${active_contact_style}${contact_added_style}`)}>
+              <ProfileImage data={data} user={contact} />
+              <div style={S('ml-50')}>
+                <span style={S('fw-600')}>{ contact.first_name } { contact.last_name }</span>{ contact.contact_user ? ',' : '' }&nbsp;
+                <span style={S('color-666')}>{ contact.contact_user ? contact.contact_user.user_type : '' }</span><br />
+                <span style={S('color-666 font-13')}>{ contact.email ? contact.email : contact.phone_number }</span><br />
               </div>
-              <div className="clearfix"></div>
+              <div className="clearfix" />
             </div>
           )
         }
       })
-      filtered_contacts_list = filtered_contacts_list.filter((n) => {
-        return n !== undefined
-      })
+      filtered_contacts_list = filtered_contacts_list.filter(n => n !== undefined)
     }
     let filtered_contacts_markup
     if (filtered_contacts_list && filtered_contacts_list.length) {
       filtered_contacts_markup = (
-        <div className="add-contact-form__contacts touch-scroll" style={ filter_scroll_style }>
+        <div className="add-contact-form__contacts touch-scroll" style={filter_scroll_style}>
           { filtered_contacts_list }
         </div>
       )
@@ -314,18 +310,18 @@ export default class AddContactsModule extends Component {
     if (data.contacts_added && data.contacts_added[module_type]) {
       const contacts_added = data.contacts_added[module_type]
       contacts_added_markup = (
-        contacts_added.map(contact => {
+        contacts_added.map((contact) => {
           let contact_info
           if (!contact)
             return ''
           if (contact.type === 'contact') {
             contact_info = (
               <div>
-                <div style={ S('l-0 t-0 absolute') }>
-                  <ProfileImage data={ data } top={11} size={40} user={ contact }/>
+                <div style={S('l-0 t-0 absolute')}>
+                  <ProfileImage data={data} top={11} size={40} user={contact} />
                 </div>
-                <div style={ S('ml-50') }>
-                  <div className="close pull-right" onClick={ this.removeContact.bind(this, contact.id) } style={ S('pointer') }>&times;</div>
+                <div style={S('ml-50')}>
+                  <div className="close pull-right" onClick={this.removeContact.bind(this, contact.id)} style={S('pointer')}>&times;</div>
                   <div>
                     <div>{ contact.first_name } { contact.last_name }</div>
                     <div>{ contact.email }</div>
@@ -338,7 +334,7 @@ export default class AddContactsModule extends Component {
             contact_info = (
               <div>
                 <div>
-                  <div className="close pull-right" onClick={ this.removeContact.bind(this, contact.id) } style={ S('pointer') }>&times;</div>
+                  <div className="close pull-right" onClick={this.removeContact.bind(this, contact.id)} style={S('pointer')}>&times;</div>
                   <div>
                     <div>{ contact.email }</div>
                   </div>
@@ -350,7 +346,7 @@ export default class AddContactsModule extends Component {
             contact_info = (
               <div>
                 <div>
-                  <div className="close pull-right" onClick={ this.removeContact.bind(this, contact.id) } style={ S('pointer') }>&times;</div>
+                  <div className="close pull-right" onClick={this.removeContact.bind(this, contact.id)} style={S('pointer')}>&times;</div>
                   <div>
                     <div>{ contact.phone_number }</div>
                   </div>
@@ -359,7 +355,7 @@ export default class AddContactsModule extends Component {
             )
           }
           return (
-            <div style={ S('h-50 relative p-3 pl-0 pr-10 mb-10 mr-10 w-100p') } className="pull-left" key={ 'added-contact-' + contact.id }>
+            <div style={S('h-50 relative p-3 pl-0 pr-10 mb-10 mr-10 w-100p')} className="pull-left" key={`added-contact-${contact.id}`}>
               { contact_info }
             </div>
           )
@@ -384,7 +380,7 @@ export default class AddContactsModule extends Component {
     }
     if (data.error) {
       message = (
-        <Alert style={ S('mt-15') } bsStyle="danger">
+        <Alert style={S('mt-15')} bsStyle="danger">
           { data.error.message }
         </Alert>
       )
@@ -392,9 +388,9 @@ export default class AddContactsModule extends Component {
     let contacts_added_area
     if (module_type !== 'transaction') {
       contacts_added_area = (
-        <div style={ S('maxw-620 minh-35 mt-20') }>
+        <div style={S('maxw-620 minh-35 mt-20')}>
           { contacts_added_markup }
-          <div className="clearfix"></div>
+          <div className="clearfix" />
         </div>
       )
     }
@@ -402,17 +398,17 @@ export default class AddContactsModule extends Component {
     if (data.is_mobile)
       add_button_style = S('w-100p mt-10')
     return (
-      <div style={ module_style } className="add-contact-form">
-        <div style={ S('maxw-820') }>
-          <FormControl onClick={ this.handleInputClick.bind(this) } onFocus={ this.handleInputFocus.bind(this) } onBlur={ this.handleInputBlur.bind(this) } inputRef={ ref => this.search_contactsInput = ref } onKeyDown={ this.navContactList.bind(this) } onKeyUp={ this.filterContacts.bind(this) } className="pull-left" style={ search_contact_input_style } type="text" placeholder="Enter any name, email or phone number"/>
-          <Button className="pull-left" style={ add_button_style } bsStyle="primary" onClick={ this.handleButtonClick.bind(this) }>
+      <div style={module_style} className="add-contact-form">
+        <div style={S('maxw-820')}>
+          <FormControl onClick={this.handleInputClick.bind(this)} onFocus={this.handleInputFocus.bind(this)} onBlur={this.handleInputBlur.bind(this)} inputRef={ref => this.search_contactsInput = ref} onKeyDown={this.navContactList.bind(this)} onKeyUp={this.filterContacts.bind(this)} className="pull-left" style={search_contact_input_style} type="text" placeholder="Enter any name, email or phone number" />
+          <Button className="pull-left" style={add_button_style} bsStyle="primary" onClick={this.handleButtonClick.bind(this)}>
             Add
           </Button>
         </div>
-        <div className="clearfix"></div>
+        <div className="clearfix" />
         { message }
         { contacts_added_area }
-        <div className="clearfix"></div>
+        <div className="clearfix" />
         { filtered_contacts_markup }
       </div>
     )

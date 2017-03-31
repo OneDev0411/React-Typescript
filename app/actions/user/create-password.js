@@ -28,7 +28,7 @@ export default (email, password, first_name, last_name, token, agent, new_email,
   }
   const locals = {}
   async.series([
-    callback => {
+    (callback) => {
       // Create pass
       User.createPassword(params, (err, response) => {
         // Success
@@ -43,7 +43,7 @@ export default (email, password, first_name, last_name, token, agent, new_email,
         }
       })
     },
-    callback => {
+    (callback) => {
       // Sign in
       const params_signin = {
         email,
@@ -57,7 +57,7 @@ export default (email, password, first_name, last_name, token, agent, new_email,
         callback()
       })
     },
-    callback => {
+    (callback) => {
       // Edit first / last name
       const local_user = locals.user
       const user_info = {
@@ -94,7 +94,6 @@ export default (email, password, first_name, last_name, token, agent, new_email,
           AppStore.data.show_confirm_email_modal = true
           AppStore.data.signup.email = new_email
           AppStore.emitChange()
-          return
         })
       }
       // Signin with new edited info

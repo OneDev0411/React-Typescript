@@ -9,9 +9,7 @@ export default (q) => {
   County.search(params, (err, res) => {
     if (res.status === 'success') {
       delete AppStore.data.listing_map.counties_loading
-      AppStore.data.listing_map.counties = res.data.filter(county => {
-        return county && county.title !== ''
-      })
+      AppStore.data.listing_map.counties = res.data.filter(county => county && county.title !== '')
       AppStore.emitChange()
     }
   })

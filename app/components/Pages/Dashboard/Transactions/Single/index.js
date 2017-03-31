@@ -40,9 +40,7 @@ export default class Transactions extends Component {
     // Reorder attachments
     let attachments = data.attachments
     if (attachments) {
-      attachments = _.sortBy(attachments, attachment => {
-        return attachment.created_at * -1
-      })
+      attachments = _.sortBy(attachments, attachment => attachment.created_at * -1)
       AppStore.data.attachments = attachments
     }
     AppStore.emitChange()
@@ -107,12 +105,10 @@ export default class Transactions extends Component {
     delete AppStore.data.current_task
     AppStore.emitChange()
     const attachments = transaction.attachments
-    const attachments_sorted = _.sortBy(attachments, 'created', attachment => {
-      return - attachment.created
-    })
+    const attachments_sorted = _.sortBy(attachments, 'created', attachment => -attachment.created)
     transaction.attachments = attachments_sorted
     AppStore.data.current_transaction = transaction
-    browserHistory.push('/dashboard/transactions/' + transaction.id)
+    browserHistory.push(`/dashboard/transactions/${transaction.id}`)
     AppStore.emitChange()
   }
 
@@ -130,9 +126,7 @@ export default class Transactions extends Component {
     setTimeout(() => {
       const transaction_tabs = AppStore.data.transaction_tabs
       const current_transaction = AppStore.data.current_transaction
-      const reduced_transaction_tabs = transaction_tabs.filter(transaction => {
-        return transaction.id !== id
-      })
+      const reduced_transaction_tabs = transaction_tabs.filter(transaction => transaction.id !== id)
       AppStore.data.transaction_tabs = reduced_transaction_tabs
       if (current_transaction.id === id)
         delete AppStore.data.current_transaction
@@ -235,7 +229,7 @@ export default class Transactions extends Component {
     const user = data.user
     const transaction = data.current_transaction
     let attachments = transaction.attachments
-    attachments = attachments.map(attachment => {
+    attachments = attachments.map((attachment) => {
       if (file.id === attachment.id)
         attachment.is_deleting = true
       return attachment
@@ -323,7 +317,7 @@ export default class Transactions extends Component {
     delete AppStore.data.current_transaction.viewer
     const data = AppStore.data
     const transaction = data.current_transaction
-    browserHistory.push('/dashboard/transactions/' + transaction.id)
+    browserHistory.push(`/dashboard/transactions/${transaction.id}`)
     AppStore.emitChange()
   }
 
@@ -366,8 +360,8 @@ export default class Transactions extends Component {
     let saved_message
     if (data.new_transaction && data.new_transaction.saved) {
       saved_message = (
-        <div style={ S('pl-15 pr-15') }>
-          <Alert bsStyle="success">Transaction saved!<button className="close" type="button" onClick={ this.handleCloseSavedAlert.bind(this) }>&times;</button></Alert>
+        <div style={S('pl-15 pr-15')}>
+          <Alert bsStyle="success">Transaction saved!<button className="close" type="button" onClick={this.handleCloseSavedAlert.bind(this)}>&times;</button></Alert>
         </div>
       )
     }
@@ -378,24 +372,24 @@ export default class Transactions extends Component {
     if (current_transaction) {
       main_content = (
         <TransactionDetail
-          data={ data }
-          setDrawerContent={ this.setDrawerContent.bind(this) }
-          closeDrawer={ this.closeDrawer }
-          deleteTransaction={ this.deleteTransaction }
-          addDocs={ this.addDocs.bind(this) }
-          dragEnter={ this.dragEnter }
-          dragLeave={ this.dragLeave }
-          hideModal={ this.hideModal }
-          uploadFile={ this.uploadFile.bind(this) }
-          deleteFile={ this.deleteFile }
-          handleNameChange={ this.handleNameChange }
-          showEditModal={ this.showEditModal }
-          editTransaction={ this.editTransaction }
-          openFileViewer={ this.openFileViewer }
-          closeFileViewer={ this.closeFileViewer }
-          deleteContact={ this.deleteContact }
-          getTransaction={ this.getTransaction.bind(this) }
-          uploadFilePermission={ this.uploadFilePermission }
+          data={data}
+          setDrawerContent={this.setDrawerContent.bind(this)}
+          closeDrawer={this.closeDrawer}
+          deleteTransaction={this.deleteTransaction}
+          addDocs={this.addDocs.bind(this)}
+          dragEnter={this.dragEnter}
+          dragLeave={this.dragLeave}
+          hideModal={this.hideModal}
+          uploadFile={this.uploadFile.bind(this)}
+          deleteFile={this.deleteFile}
+          handleNameChange={this.handleNameChange}
+          showEditModal={this.showEditModal}
+          editTransaction={this.editTransaction}
+          openFileViewer={this.openFileViewer}
+          closeFileViewer={this.closeFileViewer}
+          deleteContact={this.deleteContact}
+          getTransaction={this.getTransaction.bind(this)}
+          uploadFilePermission={this.uploadFilePermission}
         />
       )
     }
@@ -404,17 +398,17 @@ export default class Transactions extends Component {
     const main_style = S('absolute l-70 r-0')
 
     return (
-      <div style={ S('minw-1000') }>
+      <div style={S('minw-1000')}>
         <Header
-          data={ data }
-          viewTransaction={ this.viewTransaction.bind(this) }
-          removeTransactionTab={ this.removeTransactionTab }
+          data={data}
+          viewTransaction={this.viewTransaction.bind(this)}
+          removeTransactionTab={this.removeTransactionTab}
         />
-        <main style={ S('pt-15') }>
+        <main style={S('pt-15')}>
           <SideBar
-            data={ data }
+            data={data}
           />
-          <div style={ main_style }>
+          <div style={main_style}>
             { saved_message }
             { main_content }
           </div>

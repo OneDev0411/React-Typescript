@@ -17,20 +17,20 @@ export default class Results extends Component {
   }
 
   setRows(rows) {
-    const normalize = v => {
+    const normalize = (v) => {
       if (parseInt(v, 10))
         return parseInt(v, 10)
 
       return 0
     }
 
-    const transform = agent => {
+    const transform = (agent) => {
       const row = {
         avatar: {
-          name: agent.first_name + ' ' + agent.last_name,
+          name: `${agent.first_name} ${agent.last_name}`,
           email: agent.email
         },
-        name: agent.first_name + ' ' + agent.last_name,
+        name: `${agent.first_name} ${agent.last_name}`,
         mlsid: agent.mlsid,
         office_name: agent.data.office_name,
         experience: agent.data.agent_experience || agent.mlsid,
@@ -98,7 +98,7 @@ export default class Results extends Component {
         }
       }
       return (
-        <div style={ s }>
+        <div style={s}>
           <Loading />
         </div>
       )
@@ -107,7 +107,7 @@ export default class Results extends Component {
     const rows = this.props.data.agents.rows
     if (!rows) {
       return (
-        <div></div>
+        <div />
       )
     }
 
@@ -177,10 +177,10 @@ export default class Results extends Component {
             {rows.map(agent => (
               <tr>
                 <td>
-                    <Avatar name={agent.name} email={agent.email} size={28} round color="#DDDFE0" fgCol="#ffffff" />
-                    <span>
-                      {agent.name}
-                    </span>
+                  <Avatar name={agent.name} email={agent.email} size={28} round color="#DDDFE0" fgCol="#ffffff" />
+                  <span>
+                    {agent.name}
+                  </span>
                 </td>
 
                 <td>

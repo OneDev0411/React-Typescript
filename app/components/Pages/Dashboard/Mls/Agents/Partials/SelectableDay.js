@@ -25,8 +25,7 @@ export default class InputField extends React.Component {
         month: moment(value, 'll').toDate(),
         value
       }, this.showCurrentDate)
-    }
-    else
+    } else
       this.setState({ value }, this.showCurrentDate)
   }
 
@@ -68,23 +67,23 @@ export default class InputField extends React.Component {
       <div>
         <FormControl
           bsSize="small"
-          inputRef={ ref => this.inputInput = ref }
+          inputRef={ref => this.inputInput = ref}
           type="text"
-          value={ this.state.value }
-          placeholder={ this.props.placeholder }
-          onChange={ this.handleInputChange.bind(this) }
-          onFocus={ this.handleFocus.bind(this) }
-          onBlur={ this.handleBlur.bind(this) }
+          value={this.state.value}
+          placeholder={this.props.placeholder}
+          onChange={this.handleInputChange.bind(this)}
+          onFocus={this.handleFocus.bind(this)}
+          onBlur={this.handleBlur.bind(this)}
         />
 
-        <div style={ calendarStyle }>
+        <div style={calendarStyle}>
           <DayPicker
-            ref={ ref => this.daypicker = ref }
-            initialMonth={ this.state.month }
+            ref={ref => this.daypicker = ref}
+            initialMonth={this.state.month}
             modifiers={{
               selected: day => DateUtils.isSameDay(selectedDay, day)
             }}
-            onDayClick={ this.handleDayClick.bind(this) }
+            onDayClick={this.handleDayClick.bind(this)}
           />
         </div>
       </div>

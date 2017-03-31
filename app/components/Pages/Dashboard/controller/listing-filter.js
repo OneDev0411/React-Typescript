@@ -126,21 +126,18 @@ const controller = {
     delete options.mls_areas
     if (AppStore.data.listing_map.areas_selected) {
       options.mls_areas = []
-      AppStore.data.listing_map.areas_selected.forEach(area => {
+      AppStore.data.listing_map.areas_selected.forEach((area) => {
         options.mls_areas.push(
           [area.value, 0]
         )
       })
       // Sub Areas
       if (AppStore.data.listing_map.sub_areas_selected) {
-        AppStore.data.listing_map.sub_areas_selected.forEach(sub_area => {
+        AppStore.data.listing_map.sub_areas_selected.forEach((sub_area) => {
           options.mls_areas.push([sub_area.value, sub_area.parent])
           // Remove parent area
-          if (_.find(options.mls_areas, { 0: sub_area.parent, 1: 0 })) {
-            options.mls_areas = options.mls_areas.filter(area => {
-              return area[0] !== sub_area.parent && area[0] !== 0
-            })
-          }
+          if (_.find(options.mls_areas, { 0: sub_area.parent, 1: 0 }))
+            options.mls_areas = options.mls_areas.filter(area => area[0] !== sub_area.parent && area[0] !== 0)
         })
       }
     }
@@ -148,7 +145,7 @@ const controller = {
     delete options.counties
     if (AppStore.data.listing_map.counties_selected) {
       options.counties = []
-      AppStore.data.listing_map.counties_selected.forEach(county => {
+      AppStore.data.listing_map.counties_selected.forEach((county) => {
         options.counties.push(county.value)
       })
     }
@@ -160,31 +157,31 @@ const controller = {
     delete options.intermediate_schools
     if (AppStore.data.listing_map.school_districts_selected) {
       options.school_districts = []
-      AppStore.data.listing_map.school_districts_selected.forEach(school_district => {
+      AppStore.data.listing_map.school_districts_selected.forEach((school_district) => {
         options.school_districts.push(school_district.value)
       })
       // Schools
       if (AppStore.data.listing_map.elementary_schools_selected && AppStore.data.listing_map.elementary_schools_selected.length) {
         options.elementary_schools = []
-        AppStore.data.listing_map.elementary_schools_selected.forEach(elementary_school => {
+        AppStore.data.listing_map.elementary_schools_selected.forEach((elementary_school) => {
           options.elementary_schools.push(elementary_school.value)
         })
       }
       if (AppStore.data.listing_map.middle_schools_selected && AppStore.data.listing_map.middle_schools_selected.length) {
         options.middle_schools = []
-        AppStore.data.listing_map.middle_schools_selected.forEach(middle_school => {
+        AppStore.data.listing_map.middle_schools_selected.forEach((middle_school) => {
           options.middle_schools.push(middle_school.value)
         })
       }
       if (AppStore.data.listing_map.high_schools_selected && AppStore.data.listing_map.high_schools_selected.length) {
         options.high_schools = []
-        AppStore.data.listing_map.high_schools_selected.forEach(high_school => {
+        AppStore.data.listing_map.high_schools_selected.forEach((high_school) => {
           options.high_schools.push(high_school.value)
         })
       }
       if (AppStore.data.listing_map.intermediate_schools_selected && AppStore.data.listing_map.intermediate_schools_selected.length) {
         options.intermediate_schools = []
-        AppStore.data.listing_map.intermediate_schools_selected.forEach(intermediate_school => {
+        AppStore.data.listing_map.intermediate_schools_selected.forEach((intermediate_school) => {
           options.intermediate_schools.push(intermediate_school.value)
         })
       }
@@ -193,7 +190,7 @@ const controller = {
     delete options.architectural_styles
     if (AppStore.data.listing_map.home_styles_selected) {
       options.architectural_styles = []
-      AppStore.data.listing_map.home_styles_selected.forEach(home_styles_selected => {
+      AppStore.data.listing_map.home_styles_selected.forEach((home_styles_selected) => {
         options.architectural_styles.push(home_styles_selected.value)
       })
     }
@@ -201,7 +198,7 @@ const controller = {
     delete options.subdivisions
     if (AppStore.data.listing_map.subdivisions_selected) {
       options.subdivisions = []
-      AppStore.data.listing_map.subdivisions_selected.forEach(subdivision => {
+      AppStore.data.listing_map.subdivisions_selected.forEach((subdivision) => {
         options.subdivisions.push(subdivision.value)
       })
     }
@@ -354,11 +351,9 @@ const controller = {
         AppStore.data.listing_map.filter_options.active = true
       if (key === 'other')
         AppStore.data.listing_map.filter_options.other = true
-    } else {
-      AppStore.data.listing_map.filter_options.status_options[key] = options.filter(new_option => {
-        return new_option !== value
-      })
-    }
+    } else
+      AppStore.data.listing_map.filter_options.status_options[key] = options.filter(new_option => new_option !== value)
+
     AppStore.emitChange()
   },
   showSoldDatePicker() {
@@ -381,7 +376,7 @@ const controller = {
     AppStore.emitChange()
     ListingDispatcher.dispatch({
       action: 'search-school-districts-map',
-      q: q ? q : ''
+      q: q || ''
     })
   },
   changeSchoolDistrictsSelected(school_districts_selected) {

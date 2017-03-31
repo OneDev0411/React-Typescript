@@ -55,14 +55,14 @@ export default class extends React.Component {
 
     return (
       <div>
-        <div onClick={ this.addSigner.bind(this) }>
+        <div onClick={this.addSigner.bind(this)}>
           { this.props.children }
         </div>
 
         <Modal
           dialogClassName="modal-fullscreen"
-          show={ this.state.show }
-          onHide={ () => this.setState({ show: false }) }
+          show={this.state.show}
+          onHide={() => this.setState({ show: false })}
         >
           <Modal.Body>
             <Modal.Header closeButton>
@@ -71,31 +71,31 @@ export default class extends React.Component {
             <div className="add-signer-form">
 
               <Row>
-                <Col xs={6} style={ S('pr-0') }>
+                <Col xs={6} style={S('pr-0')}>
                   <FormControl
                     type="text"
                     placeholder="First Name"
-                    value={ this.state.firstName }
-                    onChange={ e => this.setState({ firstName: e.target.value }) }
+                    value={this.state.firstName}
+                    onChange={e => this.setState({ firstName: e.target.value })}
                   />
                 </Col>
-                <Col xs={6} style={ S('pl-0') }>
+                <Col xs={6} style={S('pl-0')}>
                   <FormControl
                     type="text"
                     placeholder="Last Name"
-                    value={ this.state.lastName }
-                    onChange={ e => this.setState({ lastName: e.target.value }) }
+                    value={this.state.lastName}
+                    onChange={e => this.setState({ lastName: e.target.value })}
                   />
                 </Col>
               </Row>
 
-              <Row style={ S('mt-10') }>
+              <Row style={S('mt-10')}>
                 <Col xs={12}>
                   <FormControl
                     type="text"
                     placeholder="Email"
-                    value={ this.state.email }
-                    onChange={ e => this.setState({ email: e.target.value }) }
+                    value={this.state.email}
+                    onChange={e => this.setState({ email: e.target.value })}
                   />
                 </Col>
               </Row>
@@ -104,17 +104,15 @@ export default class extends React.Component {
                 Assign a role
                 <ul>
                   {
-                    _.map(this.props.roles, (role, key) => {
-                      return (
-                        <li
-                          key={`rl_${key}`}
-                          onClick={ this.onRoleChange.bind(this, role) }
-                          className={ cn({ selected: role === this.state.role }) }
-                        >
-                          { role }
-                        </li>
-                      )
-                    })
+                    _.map(this.props.roles, (role, key) => (
+                      <li
+                        key={`rl_${key}`}
+                        onClick={this.onRoleChange.bind(this, role)}
+                        className={cn({ selected: role === this.state.role })}
+                      >
+                        { role }
+                      </li>
+                      ))
                   }
                 </ul>
               </div>
@@ -122,8 +120,8 @@ export default class extends React.Component {
               <div style={{ textAlign: 'right', marginTop: '30px' }}>
                 <Button
                   bsStyle="primary"
-                  onClick={ this.onSubmit.bind(this) }
-                  disabled={ !email || !role }
+                  onClick={this.onSubmit.bind(this)}
+                  disabled={!email || !role}
                 >
                   Add
                 </Button>

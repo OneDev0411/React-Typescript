@@ -13,7 +13,7 @@ const controller = {
     const summaries = data.notifications.summary.room_notification_summaries
     if (!summaries)
       return false
-    summaries.forEach(summary => {
+    summaries.forEach((summary) => {
       const user_created_alert_ids = summary.user_created_alert_ids
       if (user_created_alert_ids && user_created_alert_ids.indexOf(alert_id) !== -1)
         result = true
@@ -34,7 +34,7 @@ const controller = {
   getBounds(points) {
     const google = window.google
     const bound = new google.maps.LatLngBounds()
-    points.forEach(point => {
+    points.forEach((point) => {
       bound.extend(new google.maps.LatLng(point.latitude, point.longitude))
     })
     return bound.getCenter()
@@ -77,7 +77,7 @@ const controller = {
     }
     if (alert.mls_areas) {
       const mls_areas = []
-      alert.mls_areas.forEach(mls_area => {
+      alert.mls_areas.forEach((mls_area) => {
         mls_areas.push([mls_area.number, mls_area.parent])
       })
       options.mls_areas = mls_areas
@@ -104,7 +104,7 @@ const controller = {
       delete window.poly
     }
     if (alert.points) {
-      alert.points.forEach(point => {
+      alert.points.forEach((point) => {
         const location = new google.maps.LatLng(point.latitude, point.longitude)
         bounds.extend(location)
       })
@@ -122,15 +122,13 @@ const controller = {
     if (alert.points)
       controller.makePolygonAlert(alert.points)
     const history = require('../../../../utils/history')
-    history.replaceState(null, '/dashboard/mls/alerts/' + alert.id)
+    history.replaceState(null, `/dashboard/mls/alerts/${alert.id}`)
   },
   makePolygonAlert(points) {
-    const paths = points.map(path => {
-      return {
-        lat: path.latitude,
-        lng: path.longitude
-      }
-    })
+    const paths = points.map(path => ({
+      lat: path.latitude,
+      lng: path.longitude
+    }))
     if (window.poly) {
       window.poly.setMap(null)
       delete window.poly
@@ -141,7 +139,7 @@ const controller = {
       clickable: false,
       map: window.map,
       paths,
-      strokeColor: '#' + Brand.color('primary', '3388ff'),
+      strokeColor: `#${Brand.color('primary', '3388ff')}`,
       strokeWeight: 10
     })
     window.poly_alerts = window.poly

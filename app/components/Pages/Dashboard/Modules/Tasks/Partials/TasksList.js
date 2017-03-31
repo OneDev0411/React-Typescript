@@ -28,9 +28,7 @@ export default class TasksList extends Component {
         const current_index = _.indexOf(tasks, _.find(tasks, { id: current_task.id }))
         tasks[current_index] = current_task
       }
-      tasks = _.sortBy(tasks, task => {
-        return task.due_date
-      })
+      tasks = _.sortBy(tasks, task => task.due_date)
       tasks_list = tasks.map((task, i) => {
         const due_date = task.due_date
         let text_style = S('fw-500 mr-15')
@@ -68,7 +66,7 @@ export default class TasksList extends Component {
               }
             }
             heading = (
-              <div style={ heading_style }>{ due_date_area }</div>
+              <div style={heading_style}>{ due_date_area }</div>
             )
             if (task_date === todays_date) {
               heading_style = {
@@ -76,7 +74,7 @@ export default class TasksList extends Component {
                 ...S('color-e0523e')
               }
               heading = (
-                <div style={ heading_style }>Today</div>
+                <div style={heading_style}>Today</div>
               )
             }
           }
@@ -90,17 +88,17 @@ export default class TasksList extends Component {
           }
         }
         return (
-          <div key={ 'task-' + task.id }>
+          <div key={`task-${task.id}`}>
             { heading }
-            <div onClick={ this.props.handleTaskClick.bind(this, task) } className="task-row" style={ row_style }>
-              <Button onClick={ this.props.deleteTask.bind(this, task) } style={ S('absolute r-5 t-5') } bsStyle="danger" className={ 'delete' + delete_class }>
+            <div onClick={this.props.handleTaskClick.bind(this, task)} className="task-row" style={row_style}>
+              <Button onClick={this.props.deleteTask.bind(this, task)} style={S('absolute r-5 t-5')} bsStyle="danger" className={`delete${delete_class}`}>
                 { delete_text }
               </Button>
               <CheckBox
-                task={ task }
-                editTaskStatus={ this.props.editTaskStatus }
+                task={task}
+                editTaskStatus={this.props.editTaskStatus}
               />
-              <span style={ text_style }>
+              <span style={text_style}>
                 { task.title }
               </span>
             </div>
@@ -119,8 +117,8 @@ export default class TasksList extends Component {
       }
     }
     return (
-      <div style={ list_wrap_style }>
-       { tasks_list }
+      <div style={list_wrap_style}>
+        { tasks_list }
       </div>
     )
   }

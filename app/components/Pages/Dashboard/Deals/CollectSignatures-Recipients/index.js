@@ -25,27 +25,26 @@ export default class CollectSignaturesRecipients extends React.Component {
   }
 
   componentDidMount() {
-
     const { deals, forms } = this.props
     const { documents } = AppStore.data.deals_signatures
     const deal = _.find(deals, d => d.id === this.props.params.id)
 
     const roles = {}
 
-    _.each(documents, doc => {
+    _.each(documents, (doc) => {
       const form = _.find(forms, f => f.id === doc.form)
 
       if (form && !form.roles)
         return
 
-      _.each(form.roles, r => {
+      _.each(form.roles, (r) => {
         roles[r.role] = r.role
       })
     })
 
     // prefill roles
     // see https://bitbucket.org/rechat/server/issues/664/prefill-roles-on-collect-signatures-view
-    _.each(deal.roles, rl => {
+    _.each(deal.roles, (rl) => {
       if (roles[rl.role]) {
         const user = {
           firstName: rl.user.first_name,
@@ -71,6 +70,12 @@ export default class CollectSignaturesRecipients extends React.Component {
     this.setState({ recipients })
   }
 
+  deleteSigner(user) {
+    const { recipients } = this.state
+    delete recipients[user.email]
+    this.setState({ recipients })
+  }
+
   async onSubmit() {
     const { subject, documents, recipients, sending } = this.state
     const deal_id = this.props.params.id
@@ -85,8 +90,7 @@ export default class CollectSignaturesRecipients extends React.Component {
 
     try {
       await Deals.collectSignatures(deal_id, subject, documents, recipients, token)
-    }
-    catch(e) {
+    } catch (e) {
       this.setState({ sending: false })
 
       if (~~e.status === 412)
@@ -111,7 +115,7 @@ export default class CollectSignaturesRecipients extends React.Component {
     const login = window.open(`${config.app.url}/api/deals/docusign/login?access_token=${token}`,
       'sharer', 'toolbar=0,status=0,width=548,height=325')
 
-    window.addEventListener('message', event => {
+    window.addEventListener('message', (event) => {
       login.close()
       setTimeout(() => {
         this.onSubmit()
@@ -124,7 +128,6 @@ export default class CollectSignaturesRecipients extends React.Component {
   }
 
   getAddress(deal) {
-
     if (!deal)
       return
 
@@ -137,20 +140,18 @@ export default class CollectSignaturesRecipients extends React.Component {
 
     if (address.endsWith(','))
       return address.substring(0, address.length - 1)
-    else
-      return address
+    return address
   }
 
   render() {
-
     const { user } = this.props
     const { recipients, documents, sending, subject, deal } = this.state
 
     return (
       <div className="collect-signatures recipients">
 
-        <div className="close" onClick={ this.close.bind(this) }>
-          <i className="fa fa-times fa-1x"></i>
+        <div className="close" onClick={this.close.bind(this)}>
+          <i className="fa fa-times fa-1x" />
           esc
         </div>
 
@@ -160,8 +161,8 @@ export default class CollectSignaturesRecipients extends React.Component {
           <ControlLabel>Email Subject</ControlLabel>
           <FormControl
             type="text"
-            value={ subject }
-            onChange={ e => this.setState({ subject: e.target.value }) }
+            value={subject}
+            onChange={e => this.setState({ subject: e.target.value })}
           />
         </FormGroup>
 
@@ -169,8 +170,8 @@ export default class CollectSignaturesRecipients extends React.Component {
           <ul>
             <li className="btn">
               <AddSigner
-                roles={ this.state.roles }
-                onSubmit={ this.onAddSigner.bind(this) }
+                roles={this.state.roles}
+                onSubmit={this.onAddSigner.bind(this)}
               >
                 Add signer
               </AddSigner>
@@ -179,11 +180,11 @@ export default class CollectSignaturesRecipients extends React.Component {
             <li className="separator">|</li>
             <li className="btn">
               <AddSigner
-                roles={ this.state.roles }
-                firstName={ user.first_name }
-                lastName={ user.last_name }
-                email={ user.email }
-                onSubmit={ this.onAddSigner.bind(this) }
+                roles={this.state.roles}
+                firstName={user.first_name}
+                lastName={user.last_name}
+                email={user.email}
+                onSubmit={this.onAddSigner.bind(this)}
               >
                 Add myself
               </AddSigner>
@@ -194,33 +195,36 @@ export default class CollectSignaturesRecipients extends React.Component {
         <div className="list">
           <ul>
             {
-              _.map(recipients, user => {
-                return (
-                  <li key={`user_${user.email}`}>
-                    <div><b>{ user.firstName } { user.lastName }</b></div>
-                    <div className="info">{ user.email } | { user.role } </div>
-                  </li>
-                )
-              })
+              _.map(recipients, user => (
+                <li key={`user_${user.email}`}>
+                  <span
+                    onClick={this.deleteSigner.bind(this, user)}
+                  >
+                    <i className="fa fa-times" />
+                  </span>
+                  <div><b>{ user.firstName } { user.lastName }</b></div>
+                  <div className="info">{ user.email } | { user.role } </div>
+                </li>
+                ))
             }
           </ul>
         </div>
 
-        <div className="hr"></div>
-        <div style={{ textAlign: 'right'}}>
+        <div className="hr" />
+        <div style={{ textAlign: 'right' }}>
 
           <Button
             bsStyle="link"
             style={{ color: 'gray' }}
-            onClick={ () => browserHistory.goBack() }
+            onClick={() => browserHistory.goBack()}
           >
             Back
           </Button>
 
           <Button
             bsStyle="primary"
-            onClick={ this.onSubmit.bind(this) }
-            disabled={ !subject || Object.keys(recipients).length === 0 || sending }
+            onClick={this.onSubmit.bind(this)}
+            disabled={!subject || Object.keys(recipients).length === 0 || sending}
           >
             Send
           </Button>
@@ -228,22 +232,20 @@ export default class CollectSignaturesRecipients extends React.Component {
 
         <div className="documents">
           {
-            _.map(documents, doc => {
-              return (
-                <div key={`doc_${doc.id}`} className="doc-detail no-hover">
-                  <div className="control">
-                    <img src="/static/images/deals/file.png" />
-                  </div>
-                  <div>{ doc.title }</div>
-                  <div style={{ color: 'gray' }}>Completed</div>
+            _.map(documents, doc => (
+              <div key={`doc_${doc.id}`} className="doc-detail no-hover">
+                <div className="control">
+                  <img src="/static/images/deals/file.png" />
                 </div>
-              )
-            })
+                <div>{ doc.title }</div>
+                <div style={{ color: 'gray' }}>Completed</div>
+              </div>
+              ))
           }
         </div>
 
         <MessageModal
-          show={ this.state.showSuccessModal }
+          show={this.state.showSuccessModal}
           text="Documents Sent"
         />
 

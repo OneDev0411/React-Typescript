@@ -50,7 +50,7 @@ export default class NewTransaction extends Component {
             this.props.history.pushState(null, '/dashboard/transactions')
           break
         default:
-          return
+
       }
     }
   }
@@ -84,12 +84,12 @@ export default class NewTransaction extends Component {
     if (step === 5)
       dates_active = true
     const breadcrumb_items = [
-      <BreadcrumbItem key={ 'breadcrumb-1' } onClick={ this.handleGoToStep.bind(this, 0) } active={ type_active }>Type</BreadcrumbItem>,
-      <BreadcrumbItem key={ 'breadcrumb-2' } onClick={ this.handleGoToStep.bind(this, 1) } active={ contacts_active }>Clients</BreadcrumbItem>,
-      <BreadcrumbItem key={ 'breadcrumb-3' } onClick={ this.handleGoToStep.bind(this, 2) } active={ entries_active }>Other contacts</BreadcrumbItem>,
-      <BreadcrumbItem key={ 'breadcrumb-4' } onClick={ this.handleGoToStep.bind(this, 3) } active={ listing_active }>Listing</BreadcrumbItem>,
-      <BreadcrumbItem key={ 'breadcrumb-5' } onClick={ this.handleGoToStep.bind(this, 4) } active={ financials_active }>Financials</BreadcrumbItem>,
-      <BreadcrumbItem key={ 'breadcrumb-6' } onClick={ this.handleGoToStep.bind(this, 5) } active={ dates_active }>Important dates</BreadcrumbItem>
+      <BreadcrumbItem key={'breadcrumb-1'} onClick={this.handleGoToStep.bind(this, 0)} active={type_active}>Type</BreadcrumbItem>,
+      <BreadcrumbItem key={'breadcrumb-2'} onClick={this.handleGoToStep.bind(this, 1)} active={contacts_active}>Clients</BreadcrumbItem>,
+      <BreadcrumbItem key={'breadcrumb-3'} onClick={this.handleGoToStep.bind(this, 2)} active={entries_active}>Other contacts</BreadcrumbItem>,
+      <BreadcrumbItem key={'breadcrumb-4'} onClick={this.handleGoToStep.bind(this, 3)} active={listing_active}>Listing</BreadcrumbItem>,
+      <BreadcrumbItem key={'breadcrumb-5'} onClick={this.handleGoToStep.bind(this, 4)} active={financials_active}>Financials</BreadcrumbItem>,
+      <BreadcrumbItem key={'breadcrumb-6'} onClick={this.handleGoToStep.bind(this, 5)} active={dates_active}>Important dates</BreadcrumbItem>
     ]
     return breadcrumb_items.filter((item, i) => {
       if (i <= step)
@@ -324,15 +324,15 @@ export default class NewTransaction extends Component {
 
     let main_content = (
       <div>
-        <div style={ S('t-100n absolute color-d0d4d9') }>Never leave that till tomorrow which you can do today.</div>
+        <div style={S('t-100n absolute color-d0d4d9')}>Never leave that till tomorrow which you can do today.</div>
         <div>
-          <div style={ S('mb-20') }>
+          <div style={S('mb-20')}>
             <h1>Keep'em comin!  So are we...</h1>
           </div>
           <div>
-            <Button bsStyle="default" onClick={ this.handleTypeClick.bind(this, 'Buyer') } style={ btn_style_first } className={ buying_class }>Buying</Button>
-            <Button bsStyle="default" onClick={ this.handleTypeClick.bind(this, 'Seller') } style={ btn_style } className={ selling_class }>Selling</Button>
-            <Button bsStyle="default" onClick={ this.handleTypeClick.bind(this, 'Lease') } style={ btn_style } className={ lease_class }>Leasing</Button>
+            <Button bsStyle="default" onClick={this.handleTypeClick.bind(this, 'Buyer')} style={btn_style_first} className={buying_class}>Buying</Button>
+            <Button bsStyle="default" onClick={this.handleTypeClick.bind(this, 'Seller')} style={btn_style} className={selling_class}>Selling</Button>
+            <Button bsStyle="default" onClick={this.handleTypeClick.bind(this, 'Lease')} style={btn_style} className={lease_class}>Leasing</Button>
           </div>
         </div>
       </div>
@@ -347,47 +347,47 @@ export default class NewTransaction extends Component {
         case 1:
           main_content = (
             <AddClients
-              data={ data }
+              data={data}
             />
           )
           break
         case 2:
           main_content = (
             <AddContacts
-              data={ data }
+              data={data}
             />
           )
           break
         case 3:
           main_content = (
             <AddListing
-              data={ data }
-              searchListings={ this.searchListings.bind(this) }
-              setListingActive={ this.setListingActive }
-              addListing={ this.addListing }
-              hideModal={ this.hideModal }
-              showListingModal={ this.showListingModal }
-              addCustomListingInfo={ this.addCustomListingInfo }
-              removeAddedListing={ this.removeAddedListing }
-              removeAddedProperty={ this.removeAddedProperty }
+              data={data}
+              searchListings={this.searchListings.bind(this)}
+              setListingActive={this.setListingActive}
+              addListing={this.addListing}
+              hideModal={this.hideModal}
+              showListingModal={this.showListingModal}
+              addCustomListingInfo={this.addCustomListingInfo}
+              removeAddedListing={this.removeAddedListing}
+              removeAddedProperty={this.removeAddedProperty}
             />
           )
           break
         case 4:
           main_content = (
             <AddFinancials
-              data={ data }
-              calculateFinancials={ this.calculateFinancials.bind(this) }
+              data={data}
+              calculateFinancials={this.calculateFinancials.bind(this)}
             />
           )
           break
         case 5:
           main_content = (
             <AddDates
-              data={ data }
-              selectDay={ this.selectDay }
-              hideModal={ this.hideModal }
-              showDatePickerModal={ this.showDatePickerModal }
+              data={data}
+              selectDay={this.selectDay}
+              hideModal={this.hideModal}
+              showDatePickerModal={this.showDatePickerModal}
             />
           )
           break
@@ -410,25 +410,25 @@ export default class NewTransaction extends Component {
       // Cancel Button
       if (!step && new_transaction.type && new_transaction.contacts_added && new_transaction.contacts_added.client.length) {
         cancel_button = (
-          <a href="#" onClick={ this.handleCancelClick.bind(this) } className="btn btn-danger pull-left" style={ S('mr-20') }>Cancel</a>
+          <a href="#" onClick={this.handleCancelClick.bind(this)} className="btn btn-danger pull-left" style={S('mr-20')}>Cancel</a>
         )
       }
 
       // Back Button
       if (step) {
         previous_button = (
-          <Button bsStyle="link" style={ S('mr-20') } onClick={ this.handlePrevNext.bind(this, 'prev') }>Back</Button>
+          <Button bsStyle="link" style={S('mr-20')} onClick={this.handlePrevNext.bind(this, 'prev')}>Back</Button>
         )
       }
       // Next Button
       if (step < new_transaction.total_steps && new_transaction.type && new_transaction.contacts_added && new_transaction.contacts_added.client.length) {
         next_button = (
-          <Button onClick={ this.handlePrevNext.bind(this, 'next') }>Next</Button>
+          <Button onClick={this.handlePrevNext.bind(this, 'next')}>Next</Button>
         )
       }
 
       nav_buttons = (
-        <div style={ S('absolute r-0 t-500') }>
+        <div style={S('absolute r-0 t-500')}>
           { cancel_button }
           { previous_button }
           { next_button }
@@ -439,21 +439,21 @@ export default class NewTransaction extends Component {
     let message
     if (new_transaction && new_transaction.save_error) {
       message = (
-        <Alert style={ S('mt-20') } bsStyle="danger">There was an error with this request.  Make sure that you have at least one contact added.</Alert>
+        <Alert style={S('mt-20')} bsStyle="danger">There was an error with this request.  Make sure that you have at least one contact added.</Alert>
       )
     }
 
     const cancel_button = (
-      <div style={ S('absolute w-40 r-10 t-10n text-center') }>
-        <a href="#" onClick={ this.handleCancelClick.bind(this) } style={ { ...S('color-929292'), ...{ 'textDecoration': 'none' } } }>
-          <div style={ S('font-30 relative t-10') }>&times;</div>
-          <div style={ S('font-12') }>esc</div>
+      <div style={S('absolute w-40 r-10 t-10n text-center')}>
+        <a href="#" onClick={this.handleCancelClick.bind(this)} style={{ ...S('color-929292'), ...{ textDecoration: 'none' } }}>
+          <div style={S('font-30 relative t-10')}>&times;</div>
+          <div style={S('font-12')}>esc</div>
         </a>
       </div>
     )
 
     const save_button = (
-      <Button onClick={ this.createTransaction.bind(this) } style={ S('absolute r-10 t-10') } className={ new_transaction && new_transaction.saving ? ' disabled' : '' } type="button" bsStyle="primary">
+      <Button onClick={this.createTransaction.bind(this)} style={S('absolute r-10 t-10')} className={new_transaction && new_transaction.saving ? ' disabled' : ''} type="button" bsStyle="primary">
         { new_transaction && new_transaction.saving ? 'Saving...' : 'Skip all' }
       </Button>
     )
@@ -471,14 +471,14 @@ export default class NewTransaction extends Component {
     const nav_bar_style = { ...S('mb-0 p-0 h-58 pt-3'), borderBottom: '1px solid #e7e4e3' }
 
     return (
-      <div style={ S('minw-1000') }>
+      <div style={S('minw-1000')}>
         <header>
-          <Navbar className="bg-aqua" style={ nav_bar_style } fluid>
-            <Nav/>
+          <Navbar className="bg-aqua" style={nav_bar_style} fluid>
+            <Nav />
           </Navbar>
-          <div className="center-block" style={ S('relative h-0 l-15n t-48n w-960') }>{ breadcrumbs }</div>
+          <div className="center-block" style={S('relative h-0 l-15n t-48n w-960')}>{ breadcrumbs }</div>
           { action_button }
-          <Modal show={ show_cancel_confirm } onHide={ this.hideModal.bind(this) }>
+          <Modal show={show_cancel_confirm} onHide={this.hideModal.bind(this)}>
             <Modal.Header closeButton>
               <Modal.Title>Confirm Cancel</Modal.Title>
             </Modal.Header>
@@ -492,10 +492,10 @@ export default class NewTransaction extends Component {
             </Modal.Footer>
           </Modal>
         </header>
-        <main style={ S('w-100p') }>
-          <div style={ main_style } className="center-block">
+        <main style={S('w-100p')}>
+          <div style={main_style} className="center-block">
             { message }
-            <div style={ S('absolute w-100p') }>
+            <div style={S('absolute w-100p')}>
               { main_content }
             </div>
             { nav_buttons }

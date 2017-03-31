@@ -10,7 +10,6 @@ export default (id, user) => {
   }
 
   Deals.getSubmissions(params, (err, response) => {
-
     // Success
     if (response.status === 200) {
       const index = _.findIndex(AppStore.data.deals, deal => deal.id === id)

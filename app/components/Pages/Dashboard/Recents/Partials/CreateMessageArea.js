@@ -49,7 +49,7 @@ export default class CreateMessageArea extends Component {
     this.props.addContactToMessage()
     const message_input = this.messageInput.value
     const message_arr = message_input.split('@')
-    this.messageInput.value = message_arr[0] + contact.first_name + ' ' + contact.last_name + ' '
+    this.messageInput.value = `${message_arr[0] + contact.first_name} ${contact.last_name} `
     this.messageInput.focus()
   }
   handleSubmit(e) {
@@ -98,7 +98,7 @@ export default class CreateMessageArea extends Component {
       const author_typing = _.find(data.current_room.users, { id: data.is_typing.author_id })
       if (author_typing) {
         is_typing = (
-          <div style={ S('absolute l-20 t-0 font-12') }>
+          <div style={S('absolute l-20 t-0 font-12')}>
             { author_typing.first_name } is typing...
           </div>
         )
@@ -108,14 +108,14 @@ export default class CreateMessageArea extends Component {
     let is_reconnecting
     if (data.socket_reconnecting) {
       is_reconnecting = (
-        <div style={ S('absolute l-20 t-0 font-12') }>
+        <div style={S('absolute l-20 t-0 font-12')}>
           Lost connection.  Reconnecting...
         </div>
       )
     }
     if (data.socket_reconnected) {
       is_reconnecting = (
-        <div style={ S('absolute l-20 t-0 font-12') }>
+        <div style={S('absolute l-20 t-0 font-12')}>
           Reconnected!
         </div>
       )
@@ -132,49 +132,47 @@ export default class CreateMessageArea extends Component {
           active_contact_style = ' bg-EDF7FD'
         if (!contact.added) {
           return (
-            <div onClick={ this.addContactToMessage.bind(this, contact) } className="add-contact-form__contact" key={ 'contact-' + contact.id } style={ S('br-3 relative h-60 pointer mb-5 p-10' + active_contact_style + contact_added_style) }>
-              <ProfileImage data={ data } user={ contact }/>
-              <div style={ S('ml-50') }>
-                <span style={ S('fw-600') }>{ contact.first_name } { contact.last_name }</span>{ contact.contact_user ? ',' : '' }&nbsp;
-                <span style={ S('color-666') }>{ contact.contact_user ? contact.contact_user.user_type : '' }</span><br />
-                <span style={ S('color-666 font-13') }>{ contact.email }</span><br />
+            <div onClick={this.addContactToMessage.bind(this, contact)} className="add-contact-form__contact" key={`contact-${contact.id}`} style={S(`br-3 relative h-60 pointer mb-5 p-10${active_contact_style}${contact_added_style}`)}>
+              <ProfileImage data={data} user={contact} />
+              <div style={S('ml-50')}>
+                <span style={S('fw-600')}>{ contact.first_name } { contact.last_name }</span>{ contact.contact_user ? ',' : '' }&nbsp;
+                <span style={S('color-666')}>{ contact.contact_user ? contact.contact_user.user_type : '' }</span><br />
+                <span style={S('color-666 font-13')}>{ contact.email }</span><br />
               </div>
-              <div className="clearfix"></div>
+              <div className="clearfix" />
             </div>
           )
         }
       })
-      filtered_contacts_list_items = filtered_contacts_list_items.filter(n => {
-        return n !== undefined
-      })
+      filtered_contacts_list_items = filtered_contacts_list_items.filter(n => n !== undefined)
       filtered_contacts_area = (
-        <div ref={ ref => this.filter_contacts_scroll_area = ref } style={ { overflowY: 'scroll', ...S('z-1000 absolute b-5 maxh-300 w-100p br-3 border-1-solid-ccc p-5 bg-fff') } }>
+        <div ref={ref => this.filter_contacts_scroll_area = ref} style={{ overflowY: 'scroll', ...S('z-1000 absolute b-5 maxh-300 w-100p br-3 border-1-solid-ccc p-5 bg-fff') }}>
           { filtered_contacts_list_items }
         </div>
       )
     }
     return (
-      <div style={ footer_style }>
+      <div style={footer_style}>
         <div>
           { is_reconnecting } { is_typing }
         </div>
-        <div style={ S('relative') }>
+        <div style={S('relative')}>
           { filtered_contacts_area }
         </div>
-        <form onSubmit={ this.handleSubmit.bind(this) }>
-          <div className="form-group" style={ S('w-100p') }>
+        <form onSubmit={this.handleSubmit.bind(this)}>
+          <div className="form-group" style={S('w-100p')}>
             <input
-              onBlur={ this.handleBlur.bind(this) }
-              onKeyUp={ this.handleMessageKeyUp.bind(this) }
-              onKeyDown={ this.handleMessageKeyDown.bind(this) }
-              ref={ ref => this.messageInput = ref }
+              onBlur={this.handleBlur.bind(this)}
+              onKeyUp={this.handleMessageKeyUp.bind(this)}
+              onKeyDown={this.handleMessageKeyDown.bind(this)}
+              ref={ref => this.messageInput = ref}
               type="text"
               className="form-control chat-message-input"
-              style={ S('w-100p pl-70 bw-2 z-3 relative') }
+              style={S('w-100p pl-70 bw-2 z-3 relative')}
               placeholder="Type your message and press enter"
             />
-            <Dropzone onDrop={ this.props.uploadFiles } type="button" className="btn btn-default create-message__btn" style={ btn_style }>
-              <span className="plus" style={ S('font-22 relative t-1n') }>+</span>
+            <Dropzone onDrop={this.props.uploadFiles} type="button" className="btn btn-default create-message__btn" style={btn_style}>
+              <span className="plus" style={S('font-22 relative t-1n')}>+</span>
             </Dropzone>
           </div>
         </form>

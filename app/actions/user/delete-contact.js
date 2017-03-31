@@ -10,9 +10,7 @@ export default (user, contact_id) => {
   User.deleteContact(params, (err, response) => {
     // Success
     if (response.status === 'success') {
-      const new_contacts = AppStore.data.contacts.filter(contact => {
-        return contact.id !== contact_id
-      })
+      const new_contacts = AppStore.data.contacts.filter(contact => contact.id !== contact_id)
       AppStore.data.contacts = new_contacts
     }
     AppStore.emitChange()
