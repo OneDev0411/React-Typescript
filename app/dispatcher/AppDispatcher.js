@@ -79,9 +79,11 @@ import sendChatModuleMessage from '../actions/chat-module/send-message'
 import getDeals from '../actions/deals/get-deals'
 import getSubmissions from '../actions/deals/get-submissions'
 import addSubmission from '../actions/deals/add-submission'
+import getSubmissionForm from '../actions/deals/get-submission-form'
 import getEnvelopes from '../actions/deals/get-envelopes'
 import getDealForms from '../actions/deals/get-deal-forms'
 import uploadFile from '../actions/deals/upload-file'
+import saveSubmissionForm from '../actions/deals/save-submission-form'
 
 const AppDispatcher = new Dispatcher()
 
@@ -321,6 +323,15 @@ AppDispatcher.register((payload) => {
 
     case 'upload-file':
       uploadFile(payload.id, payload.user, payload.file)
+      break
+
+    case 'save-submission-form':
+      saveSubmissionForm(payload.user, payload.type, payload.deal,
+        payload.form, payload.state, payload.values, payload.submission)
+      break
+
+    case 'get-submission-form':
+      getSubmissionForm(payload.user, payload.deal, payload.last_revision)
       break
 
     default:

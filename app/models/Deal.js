@@ -81,6 +81,13 @@ export default {
 
     return response
   },
+  async getSubmissionForm(params) {
+    const response = await agent
+      .get(`${config.api_url}/forms/submissions/revisions/${params.id}`)
+      .set({ Authorization: `Bearer ${params.access_token}` })
+
+    return response
+  },
   async resendEnvelopeDocs(id, access_token) {
     try {
       const response = await agent
@@ -105,6 +112,24 @@ export default {
         .post(`${config.api_url}/envelopes`)
         .set({ Authorization: `Bearer ${access_token}` })
         .send(data)
+
+      return response.body
+    } catch (e) {
+      throw e
+    }
+  },
+  async saveSubmissionForm(params) {
+    try {
+      const response = await agent
+        .post(`${config.app.url}/api/deals/submission/form?access_token=${params.access_token}`)
+        .send({
+          deal: params.deal,
+          state: params.state,
+          values: params.values,
+          form: params.form,
+          type: params.type,
+          submission: params.submission
+        })
 
       return response.body
     } catch (e) {

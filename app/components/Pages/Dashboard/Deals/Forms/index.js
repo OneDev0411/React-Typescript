@@ -62,21 +62,17 @@ export default class DealForm extends React.Component {
   editForm() {
     const { submission } = this.state
     const { deal_id } = this.props
-    browserHistory.push(`/dashboard/deals/${deal_id}/edit-form/${submission.form}`)
+    browserHistory.push(`/dashboard/deals/${deal_id}/edit-form/${submission.form}/update`)
   }
 
   onAddForm(form) {
-    AppDispatcher.dispatch({
-      action: 'add-submission',
-      id: this.props.deal_id,
-      form
-    })
+    const { deal_id } = this.props
+    browserHistory.push(`/dashboard/deals/${deal_id}/edit-form/${form.id}/create`)
   }
 
   render() {
     const { submissions, forms, user } = this.props
     const { submission, documentUrl, showSelectForm } = this.state
-
     return (
       <div>
         <Row>
@@ -89,7 +85,10 @@ export default class DealForm extends React.Component {
             />
 
             {
-              submissions && submissions.map(subm => (
+              submissions &&
+              _.chain(submissions)
+              .sortBy(subm => subm.created_at * -1)
+              .map(subm => (
                 <div
                   key={`submission${subm.id}`}
                   className={cn('doc-detail', { selected: submission.id === subm.id })}
@@ -99,7 +98,8 @@ export default class DealForm extends React.Component {
                   <div className="title">{ subm.title }</div>
                   <div className="status">{ subm.state === 'Fair' ? 'Completed' : subm.state }</div>
                 </div>
-                ))
+              ))
+              .value()
             }
 
             {
@@ -118,21 +118,8 @@ export default class DealForm extends React.Component {
           </Col>
 
           <Col xs={7}>
-
             {
-              this.state.documentLoaded &&
-              <div style={{ textAlign: 'right' }}>
-                <Button
-                  bsStyle="primary"
-                  onClick={this.editForm.bind(this)}
-                >
-                  Edit Pdf
-                </Button>
-              </div>
-            }
-
-            {
-              this.state.documentLoaded &&
+              submissions && submissions.length > 0 &&
               <div style={{ textAlign: 'right' }}>
                 <a
                   target="_blank"
@@ -141,6 +128,14 @@ export default class DealForm extends React.Component {
                 >
                   View
                 </a>
+
+                <Button
+                  style={{ marginLeft: '5px' }}
+                  bsStyle="primary"
+                  onClick={this.editForm.bind(this)}
+                >
+                  Edit Pdf
+                </Button>
               </div>
             }
 

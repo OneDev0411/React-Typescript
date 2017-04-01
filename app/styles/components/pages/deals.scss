@@ -33,11 +33,15 @@
   }
 
   .edit-form {
-    padding: 4% 5%;
     background: #fff;
     .toolbar {
-      text-align: right;
+      padding: 15px;
       margin-bottom: 10px;
+      background: #eee;
+      .messages {
+        padding-left: 4%;
+        padding-top: 0.5%;
+      }
     }
     iframe {
       width: 100%;
