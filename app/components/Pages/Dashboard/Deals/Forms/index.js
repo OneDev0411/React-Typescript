@@ -120,7 +120,7 @@ export default class DealForm extends React.Component {
           <Col xs={7}>
 
             {
-              !this.state.documentLoaded && 1 === 2 &&
+              this.state.documentLoaded &&
               <div style={{ textAlign: 'right' }}>
                 <Button
                   bsStyle="primary"
@@ -147,10 +147,7 @@ export default class DealForm extends React.Component {
             <PdfViewer
               uri={documentUrl}
               scale={0.7}
-              onLoaded={() => {
-                if (this.mounted)
-                  this.setState({ documentLoaded: true })
-              }}
+              onLoad={() => this.setState({ documentLoaded: true }) }
             />
           </Col>
         </Row>

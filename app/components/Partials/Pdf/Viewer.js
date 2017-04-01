@@ -8,6 +8,10 @@ class PdfViewer extends React.Component {
 
   constructor(props) {
     super(props)
+
+    // set component mounted
+    this.mounted = true
+
     this.state = {
       uri: null,
       loading: false,
@@ -18,6 +22,7 @@ class PdfViewer extends React.Component {
 
   componentDidMount() {
     const { uri } = this.props
+    this.mounted = true
 
     if (uri)
       this.load(uri)
@@ -28,6 +33,10 @@ class PdfViewer extends React.Component {
 
     if (uri)
       this.load(uri)
+  }
+
+  componentWillUnmount() {
+    this.mounted = false
   }
 
   async load(uri) {
@@ -43,10 +52,17 @@ class PdfViewer extends React.Component {
 
     try {
       const doc = await PDFJS.getDocument(uri)
-      this.setState({ doc, loading: false })
 
       // trigger when load is completed
-      this.props.onLoaded()
+      if (!this.mounted)
+        return false
+
+      // set states
+      this.setState({ doc, loading: false })
+
+      // trigger onLoaded event
+      this.props.onLoad()
+
     } catch (e) {
       this.setState({ uri: null, loading: false })
     }

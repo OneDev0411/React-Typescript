@@ -81,7 +81,7 @@ export default (
     <Route path="/dashboard/deals" component={DealsLayout}>
       <IndexRoute component={DealsList} />
       <Route path="/dashboard/deals/:id(/:tab)" component={DealDashboard} />
-      <Route path="/dashboard/deals/:id/edit-form/:form" component={DealEditForm} />
+      <Route path="/dashboard/deals/:id/edit-form/:form/:type" component={DealEditForm} />
       <Route path="/dashboard/deals/:id/collect-signatures/documents" component={CollectSignatures_Documents} />
       <Route path="/dashboard/deals/:id/collect-signatures/recipients" component={CollectSignatures_Recipients} />
     </Route>
