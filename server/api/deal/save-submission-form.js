@@ -5,7 +5,7 @@ const app = new Koa()
 
 router.post('/deals/submission/form', bodyParser(), async (ctx, next) => {
 
-  const { state, values, form, deal, type, last_revision } = ctx.request.body
+  const { state, values, form, deal, type, submission } = ctx.request.body
 
   // setup endpoint according to update or create
   let endpoint = ''
@@ -20,7 +20,7 @@ router.post('/deals/submission/form', bodyParser(), async (ctx, next) => {
     data.form = form
     endpoint = `/deals/${deal}/submissions`
   } else {
-    endpoint = `/forms/submissions/${last_revision}`
+    endpoint = `/forms/submissions/${submission}`
   }
 
   try {
