@@ -76,7 +76,7 @@ export default class ListingCard extends Component {
           <div style={ S('absolute color-fff z-10 h-32') }>
             <div style={ S('relative w-100p t-20 l-0') }>
               <div style={ S(`absolute z-0 h-32 bg-000 op-.7 w-${this.getBadgeWidth(this.props.last_update)}`) } />
-              <div class="sf" style={ S(`font-14 absolute color-fff z-1 t-6 l-10 w-${this.getBadgeWidth(this.props.last_update)}`) }>{ this.getUpdateText(this.props.last_update) }</div>
+              <div className="sf" style={ S(`font-14 absolute color-fff z-1 t-6 l-10 w-${this.getBadgeWidth(this.props.last_update)}`) }>{ this.getUpdateText(this.props.last_update) }</div>
             </div>
           </div>
         }
