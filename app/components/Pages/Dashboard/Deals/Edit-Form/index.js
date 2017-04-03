@@ -105,8 +105,10 @@ export default class EditForm extends React.Component {
   }
 
   onGetValues(data) {
+    if (this.state.saving === false)
+      this.saveForm(data)
+
     this.changeState({ saving: true })
-    this.saveForm(data)
   }
 
   onSave() {
@@ -213,6 +215,7 @@ export default class EditForm extends React.Component {
         </Row>
 
         <iframe
+          className="frame"
           src={`${config.forms.url}/embed/${this.props.params.form}?domain=${window.location.hostname}&access_token=${token}`}
           frameBorder="0"
           ref={ref => this.frame = ref}
