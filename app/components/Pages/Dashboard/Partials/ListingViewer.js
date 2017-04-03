@@ -602,6 +602,9 @@ export default class ListingViewer extends Component {
     if (data.show_modal_gallery) {
       const modal_gallery = data.modal_gallery
       const gallery_image_urls = modal_gallery.gallery_image_urls
+      const onSelectHandler = (selectedIndex, e) => {
+        this.props.handleModalGalleryNav(selectedIndex, e.direction)
+      }
       modal_gallery_area = (
         <Carousel
           activeIndex={modal_gallery.current_index}
@@ -609,8 +612,7 @@ export default class ListingViewer extends Component {
           indicators={false}
           prevIcon={prev_icon}
           nextIcon={next_icon}
-          onSelect={this.props.handleModalGalleryNav}
-          direction={modal_gallery.direction}
+          onSelect={onSelectHandler}
         >
           {
             gallery_image_urls.map((gallery_image_url, i) => (
