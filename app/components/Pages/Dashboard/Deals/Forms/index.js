@@ -29,7 +29,7 @@ export default class DealForm extends React.Component {
     const { submission } = this.state
 
     if (submissions && !submission)
-      this.loadForm(submissions[0])
+      this.loadForm(submissions[submissions.length - 1])
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -73,6 +73,7 @@ export default class DealForm extends React.Component {
   render() {
     const { submissions, forms, user } = this.props
     const { submission, documentUrl, showSelectForm } = this.state
+
     return (
       <div>
         <Row>

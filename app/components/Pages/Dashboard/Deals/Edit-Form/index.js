@@ -70,8 +70,13 @@ export default class EditForm extends React.Component {
       this.setState({ initial: submission.form_data })
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.frame !== null
+  }
+
   componentWillUnmount() {
     window.removeEventListener('message', this.receiveMessage)
+    ReactDOM.unmountComponentAtNode(this.frame)
   }
 
   onLoad() {
@@ -105,10 +110,7 @@ export default class EditForm extends React.Component {
   }
 
   onGetValues(data) {
-    if (this.state.saving === false)
-      this.saveForm(data)
-
-    this.changeState({ saving: true })
+    this.saveForm(data)
   }
 
   onSave() {
@@ -137,11 +139,19 @@ export default class EditForm extends React.Component {
     this[func](args)
   }
 
-  changeState(state) {
+  async changeState(state, sync = false) {
     if (!this.frame)
       return
 
-    this.setState(state)
+    return new Promise(resolve => {
+      if (sync) {
+        this.setState(state, resolve)
+      }
+      else {
+        this.setState(state)
+        resolve()
+      }
+    })
   }
 
   getSubmissionForm(last_revision) {
@@ -154,9 +164,14 @@ export default class EditForm extends React.Component {
     })
   }
 
-  saveForm(values) {
+  async saveForm(values) {
     const { user, params } = this.props
     const { incompleteFields, submission } = this.state
+
+    if (this.state.saving || !this.frame)
+      return
+
+    await this.changeState({ saving: true }, true)
 
     AppDispatcher.dispatch({
       action: 'save-submission-form',
@@ -215,7 +230,6 @@ export default class EditForm extends React.Component {
         </Row>
 
         <iframe
-          className="frame"
           src={`${config.forms.url}/embed/${this.props.params.form}?domain=${window.location.hostname}&access_token=${token}`}
           frameBorder="0"
           ref={ref => this.frame = ref}
