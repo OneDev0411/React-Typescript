@@ -736,11 +736,11 @@ export default class Mls extends Component {
           { data.show_search_map && !data.show_alerts_map ? underline : '' }
         </li>
         <li style={ S('relative pull-left color-263445 font-28 mr-60') }>
-          <span onClick={ this.handleTabClick.bind(this, 'alerts') } style={ S('pointer ' + (data.show_alerts_map ? 'color-263445' : 'color-8696a4')) }>{ user && user.user_type === 'Agent' ? 'Alerts' : 'Saved Searches' }</span>
+          <span onClick={ this.handleTabClick.bind(this, 'alerts') } style={ S('pointer ' + (data.show_alerts_map ? 'color-263445' : 'color-8696a4')) }>Saved Searches</span>
           { data.show_alerts_map ? underline : '' }
         </li>
         <li style={ S('relative pull-left color-263445 font-28 mr-60') }>
-          <span onClick={ this.handleTabClick.bind(this, 'actives') } style={ S('pointer ' + (data.show_actives_map ? 'color-263445' : 'color-8696a4')) }>{ user && user.user_type === 'Agent' ? 'Saved Listings' : 'Saved Listings' }</span>
+          <span onClick={ this.handleTabClick.bind(this, 'actives') } style={ S('pointer ' + (data.show_actives_map ? 'color-263445' : 'color-8696a4')) }>Saved Listings</span>
           { data.show_actives_map ? underline : '' }
         </li>
       </ul>
