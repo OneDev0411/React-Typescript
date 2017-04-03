@@ -23,8 +23,9 @@ export default class AlertViewer extends Component {
             feed.map(feed_item => (
               <ListingCard
                 listing={feed_item.listing}
+                last_update={feed_item.last_update}
               />
-              ))
+            ))
           }
         </div>
       )
@@ -36,7 +37,7 @@ export default class AlertViewer extends Component {
     }
     const alert_viewer_header_style = S(`w-${window.innerWidth - 420} absolute z-2 pt-25 pr-20 pl-20 h-70 bg-f7f7f7`)
     let more_button
-    if (current_alert.feed_info.total > feed.length) {
+    if (current_alert.feed_info && current_alert.feed_info.total > feed.length) {
       more_button = (
         <div style={S('w-100p p-60 text-center')}>
           <Button
@@ -53,7 +54,7 @@ export default class AlertViewer extends Component {
     return (
       <div className="alert-viewer" style={alert_viewer_wrapper_style}>
         <div style={alert_viewer_header_style}>
-          <span style={S('color-263445 font-15 fw-500')}>New listings ({ current_alert.feed_info.total })</span>
+          <span style={S('color-263445 font-15 fw-500')}>New listings ({ current_alert.feed_info ? current_alert.feed_info.total : '' })</span>
           <div className="close pull-right" onClick={controller.alert_map.hideAlertViewer.bind(this)}>
             Close &times;
           </div>

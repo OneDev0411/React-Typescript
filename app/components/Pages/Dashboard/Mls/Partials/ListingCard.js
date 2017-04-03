@@ -9,6 +9,46 @@ export default class ListingCard extends Component {
   isFavorited(listing_id) {
     return controller.listing_card.isFavorited(listing_id)
   }
+  getUpdateText(last_update) {
+    let update_text
+    switch (last_update) {
+      case 'New':
+        update_text = 'NEW LISTING'
+        break
+      case 'PriceDrop':
+        update_text = 'PRICE DROP!'
+        break
+      case 'StatusChange':
+        update_text = 'STATUS CHANGE'
+        break
+      case 'PriceIncrease':
+        update_text = 'PRICE INCREASE!'
+        break
+      default:
+        return update_text
+    }
+    return update_text
+  }
+  getBadgeWidth(last_update) {
+    let badge_width = 100
+    switch (last_update) {
+      case 'New':
+        badge_width = 100
+        break
+      case 'PriceDrop':
+        badge_width = 160
+        break
+      case 'StatusChange':
+        badge_width = 160
+        break
+      case 'PriceIncrease':
+        badge_width = 180
+        break
+      default:
+        return badge_width
+    }
+    return badge_width
+  }
   render() {
     const listing = this.props.listing
     let property = listing.property
@@ -31,6 +71,15 @@ export default class ListingCard extends Component {
     }
     return (
       <div key={`listing-viewer-${listing.id}-${helpers.randomString(10)}`} style={listing_card_style}>
+        {
+          this.props.last_update &&
+          <div style={ S('absolute color-fff z-10 h-32') }>
+            <div style={ S('relative w-100p t-20 l-0') }>
+              <div style={ S(`absolute z-0 h-32 bg-000 op-.7 w-${this.getBadgeWidth(this.props.last_update)}`) } />
+              <div class="sf" style={ S(`font-14 absolute color-fff z-1 t-6 l-10 w-${this.getBadgeWidth(this.props.last_update)}`) }>{ this.getUpdateText(this.props.last_update) }</div>
+            </div>
+          </div>
+        }
         <FavoriteHeart
           listing={listing}
         />
