@@ -104,7 +104,7 @@ export default class Listings extends Component {
     const options = data.widget.options
     AppStore.data.widget.is_loading_listings = true
     if (type === 'sold') {
-      options.listing_statuses = ['Sold']
+      options.listing_statuses = ['Sold', 'Leased']
       AppStore.data.widget.is_showing_sold = true
     } else {
       options.listing_statuses = ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract', 'Pending']
