@@ -32,7 +32,7 @@ const requestMiddleware = async function (ctx, next) {
       url = `${url}?hostname=${host_name}`
     }
 
-    console.log(`[ + ] ${api_url}${url}`)
+    console.log(`[ + ] ${method.toUpperCase()} ${api_url}${url}`)
 
     try {
       return agent[method.toLowerCase()](`${api_url}${url}`)

@@ -3,7 +3,7 @@ import Deals from '../../models/Deal'
 import AppStore from '../../stores/AppStore'
 import _ from 'underscore'
 
-export default async function (user, type, deal, form, state, values, last_revision) {
+export default async function (user, type, deal, form, state, values, submission) {
   const params = {
     access_token: user.access_token,
     type,
@@ -11,7 +11,7 @@ export default async function (user, type, deal, form, state, values, last_revis
     deal,
     state,
     values,
-    last_revision
+    submission
   }
 
   const deal_index = _.findIndex(AppStore.data.deals, d => d.id === deal)
