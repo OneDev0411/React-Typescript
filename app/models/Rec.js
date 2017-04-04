@@ -61,10 +61,12 @@ export default {
   mark: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const recommendations = params.recommendations
+    const alert_id = params.alert_id
     const access_token = params.access_token
+    const room_id = params.room_id
     const request_object = {
-      recommendations
+      alert_id,
+      room_id
     }
     const endpoint = `${api_host}/api/recs/mark?access_token=${params.access_token}`
     fetch(endpoint, {

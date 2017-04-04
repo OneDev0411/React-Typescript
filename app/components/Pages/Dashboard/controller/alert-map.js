@@ -123,6 +123,8 @@ const controller = {
       controller.makePolygonAlert(alert.points)
     const history = require('../../../../utils/history')
     history.default.push(`/dashboard/mls/alerts/${alert.id}`)
+    if (AppStore.data.show_alert_viewer)
+      controller.markAsRead(alert.id, alert.room)
   },
   makePolygonAlert(points) {
     const paths = points.map(path => ({
@@ -144,8 +146,21 @@ const controller = {
     })
     window.poly_alerts = window.poly
   },
+  markAsRead(alert_id, room_id) {
+    const data = AppStore.data
+    const user = data.user
+    ListingDispatcher.dispatch({
+      action: 'mark-recs-as-read',
+      alert_id,
+      room_id,
+      user
+    })
+  },
   showAlertViewer() {
     AppStore.data.show_alert_viewer = true
+    const data = AppStore.data
+    const current_alert = data.current_alert
+    controller.markAsRead(current_alert.id, current_alert.room)
     AppStore.emitChange()
   },
   hideAlertViewer() {

@@ -2,21 +2,6 @@
 import AppStore from '../../../../stores/AppStore'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 const controller = {
-  markAsRead(recs) {
-    const data = AppStore.data
-    const user = data.user
-    if (!recs || !recs.length)
-      return
-    const recommendations = recs.map(rec => ({
-      recommendation: rec.id,
-      action: 'read'
-    }))
-    ListingDispatcher.dispatch({
-      action: 'mark-recs-as-read',
-      user,
-      recommendations
-    })
-  },
   handleMoreResultsClick() {
     const data = AppStore.data
     const user = data.user

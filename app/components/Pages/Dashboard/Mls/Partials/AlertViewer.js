@@ -5,12 +5,6 @@ import { Button } from 'react-bootstrap'
 import controller from '../../controller'
 import ListingCard from './ListingCard'
 export default class AlertViewer extends Component {
-  componentDidMount() {
-    const data = this.props.data
-    const current_alert = data.current_alert
-    const recommendations = current_alert.feed
-    controller.alert_viewer.markAsRead(recommendations)
-  }
   render() {
     const data = this.props.data
     const current_alert = data.current_alert

@@ -121,7 +121,7 @@ ListingDispatcher.register((payload) => {
       break
 
     case 'mark-recs-as-read':
-      markRecsAsRead(payload.user, payload.recommendations)
+      markRecsAsRead(payload.user, payload.alert_id, payload.room_id)
       break
 
     case 'search-schools-map':
