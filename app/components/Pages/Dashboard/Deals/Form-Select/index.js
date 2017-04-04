@@ -42,7 +42,7 @@ export default class FormSelect extends React.Component {
           className="add-form-btn"
           onClick={this.addForm.bind(this)}
         >
-            Add Blank Form
+          Add Blank Form
         </Button>
 
         <Modal
