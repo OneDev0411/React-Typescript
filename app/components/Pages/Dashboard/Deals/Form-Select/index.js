@@ -44,7 +44,6 @@ export default class FormSelect extends React.Component {
         >
           Add Blank Form
         </Button>
-
         <Modal
           dialogClassName="modal-fullscreen"
           show={this.state.show}
