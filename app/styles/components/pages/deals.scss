@@ -3,6 +3,10 @@
   padding: 0;
   min-height: 100vh;
 
+  button {
+    font-size: 14px;
+    padding: auto 20px !important;
+  }
   .hr {
     width: 96%;
     height: 1px;
@@ -20,14 +24,52 @@
 
   .deals-list {
     padding: 4% 7%;
-    table {
-      tbody {
-        tr {
-          &:hover {
-            cursor: pointer;
-            background-color: #eee;
-          }
+    .toolbar {
+      margin-bottom: 3%;
+      span.title {
+        font-size: 31px;
+        font-weight: 300;
+        line-height: 1.0;
+      }
+
+      .vcenter {
+        display: inline-block;
+        vertical-align: middle;
+        float: none;
+        &.right {
+          text-align: right;
         }
+      }
+
+      button:first-child {
+        margin-right: 5px;
+      }
+    }
+
+    .table {
+      .header {
+        color: #8696a4;
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+      .deal {
+        background: #fff;
+        border-radius: 4px;
+        margin: 10px 0;
+        padding: 8px 0;
+        color: #656e72;
+        font-size: 14px;
+        &:hover {
+          cursor: pointer;
+          background-color: #eee;
+        }
+      }
+
+      .type_Sold {
+        margin-top: 40px;
+      }
+      .type_Sold ~ .type_Sold {
+        margin-top: auto;
       }
     }
   }
