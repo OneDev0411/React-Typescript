@@ -33,6 +33,10 @@ export default class DealsList extends React.Component {
     return true
   }
 
+  create(type) {
+    browserHistory.push(`/dashboard/deals/create/${type}`)
+  }
+
   getDealAddress(deal) {
     const address = this.getValue(deal, 'street_address')
 
@@ -107,12 +111,14 @@ export default class DealsList extends React.Component {
           <Col lg={6} md={6} sm={6} className="vcenter right">
             <Button
               bsStyle="primary"
+              onClick={this.create.bind(this, 'listing')}
             >
               New Listing
             </Button>
 
             <Button
               bsStyle="primary"
+              onClick={this.create.bind(this, 'offer')}
             >
               Make an Offer
             </Button>

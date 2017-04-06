@@ -22,6 +22,90 @@
     padding: 10%;
   }
 
+  .deal-create {
+    background: #fff;
+    min-height: 100vh;
+    $size: 60%;
+    padding: 6% 0 0 20%;
+    .title {
+      font-size: 50px;
+      font-weight: 300;
+    }
+    .address {
+      margin-top: 2%;
+      width: $size;
+    }
+    .places {
+      margin-top: 20px;
+      width: $size;
+      button {
+        float: right;
+        padding: 5px 13px;
+      }
+      .address {
+        color: #2196f3;
+        margin-left: 10px;
+        font-size: 15px;
+      }
+      .help {
+        color: #9b9b9b;
+        font-size: 12px;
+        text-align: right;
+        margin-top: 20px;
+      }
+      .list {
+        max-height: 50vh;
+        overflow: auto;
+        .title {
+          color: #8696a4;
+          font-size: 17px;
+          letter-spacing: -0.4px;
+          margin-bottom: 15px;
+          display: inline-block;
+        }
+        .loader {
+          margin-left: 5px;
+        }
+        .item {
+          color: #5b6469;
+          margin-bottom: 5px;
+          padding: 5px;
+          border-radius: 2px;
+          transition: all 0.2s ease-in;
+          &.listing {
+            padding: 12px 0 22px 10px;
+            margin-bottom: 8px;
+            .listing-image {
+              min-width: 50px;
+              max-width: 50px;
+              min-height: 50px;
+              max-height: 50px;
+              border-radius: 2px;
+              float: left;
+              margin-right: 10px;
+            }
+            .status {
+              display: block;
+              float: right;
+              background-color: #35b863;
+              color: #fff;
+              padding: 4px;
+              border-radius: 3px;
+              font-size: 12px;
+              min-width: 60px;
+              text-align: center;
+              margin-right: 10px;
+            }
+          }
+          &:hover {
+            background: #eee;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+
   .deals-list {
     padding: 4% 7%;
     .toolbar {
@@ -556,6 +640,40 @@
           background: #f4f4f4;
           cursor: pointer;
         }
+      }
+    }
+  }
+}
+
+.modal-offer {
+  .modal-body {
+    padding: 0;
+    margin: 0;
+    .place-create {
+      input {
+        display: inline;
+        border-radius: 0;
+        width: 33.3333%;
+      }
+
+      input:first-child {
+        border-left: none;
+      }
+
+      input:last-child {
+        border-right: none;
+      }
+
+      .row_one {
+        input {
+          border-top: none;
+          border-bottom: none;
+        }
+      }
+
+      .street_address, .state {
+        border-right: none;
+        border-left: none;
       }
     }
   }
