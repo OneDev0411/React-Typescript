@@ -1,6 +1,7 @@
 import React from 'react'
 import { browserHistory } from 'react-router'
 import { Grid, Row, Col, Button, FormControl, Modal } from 'react-bootstrap'
+import debounce from 'debounce'
 import _ from 'underscore'
 import Deal from '../../../../../models/Deal'
 import listings from '../../../../../utils/listing'
@@ -19,9 +20,10 @@ export default class DealCreate extends React.Component {
   }
 
   componentDidMount() {
+    this.search = debounce(this.search, 1500)
   }
 
-  async onChangeAddress(e) {
+  onChangeAddress(e) {
     const address = e.target.value
 
     this.setState({
@@ -32,37 +34,37 @@ export default class DealCreate extends React.Component {
     if (address.length === 0)
       return
 
-    // show loading
-    this.setState({ searching: true })
-
-    // get data
-    const places = await this.search(address)
-
-    // hide loading
-    this.setState({
-      places,
-      searching: false
-    })
+    this.search(address)
   }
 
   async search(address) {
     const type = this.props.params.type
+    let places
+
+    // show loading
+    this.setState({ searching: true })
 
     try {
       let response
 
       if (type === 'listing') {
         response = await Deal.searchPlaces(address)
-        return this.createList(response.results)
+        places = this.createList(response.results)
       }
 
       if (type === 'offer') {
         response = await Deal.searchListings(address)
-        return this.createList(response.data)
+        places = this.createList(response.data)
       }
+
+      // hide loading
+      this.setState({
+        places,
+        searching: false
+      })
     }
     catch(e) {
-      console.warn(e)
+      this.setState({ searching: false })
       return
     }
   }
