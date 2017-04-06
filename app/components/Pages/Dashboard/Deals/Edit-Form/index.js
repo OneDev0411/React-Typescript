@@ -132,6 +132,9 @@ export default class EditForm extends React.Component {
   receiveMessage(event) {
     const { type, fn, args } = event.data
 
+    if (!fn)
+      return
+
     // make first case of function uppercase
     const func = `on${fn.charAt(0).toUpperCase()}${fn.slice(1)}`
 
