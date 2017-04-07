@@ -13,7 +13,6 @@ import { browserHistory } from 'react-router'
 import { Link } from 'react-router'
 import S from 'shorti'
 import _ from 'underscore'
-import cookie from 'react-cookie'
 import Avatar from 'react-avatar'
 import AppStore from '../../../../../stores/AppStore'
 import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
@@ -72,14 +71,6 @@ export default class DealDashboard extends React.Component {
 
     if (!files) {
       this.setState({ files: deal.files })
-
-      // set cookies for this deal
-      _.each(deal.cookies, (cval, cname) => {
-        cookie.remove(cname)
-        cookie.save(cname, cval, {
-          domain: '.irish.rechat.com'
-        })
-      })
     }
 
     if (deal.files && files && deal.files.length > files.length)
