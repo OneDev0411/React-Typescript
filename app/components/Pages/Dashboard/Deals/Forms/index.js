@@ -47,14 +47,11 @@ export default class DealForm extends React.Component {
     if (this.state.submission && submission.id === this.state.submission.id)
       return false
 
-    const { last_revision } = submission
-    const { user } = this.props
-    const token = user.access_token
-    const documentUrl = `${config.forms.url}/submissions/${last_revision}.pdf?token=${token}&flat=1`
+    const { file } = submission
 
     this.setState({
       submission,
-      documentUrl,
+      documentUrl: file.url,
       documentLoaded: false
     })
   }
