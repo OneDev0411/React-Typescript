@@ -5,13 +5,11 @@ const app = new Koa()
 
 router.post('/recs/mark', bodyParser(), async (ctx, next) => {
 
-  const { recommendations } = ctx.request.body
+  const { room_id, alert_id } = ctx.request.body
 
   try {
     const response = await ctx
-      .fetch('/recs/mark', 'PATCH')
-      .send({ recommendations })
-
+      .fetch(`/rooms/${room_id}/recs/feed?filter=${alert_id}`, 'DELETE')
     ctx.body = response.body
   }
   catch(e) {}

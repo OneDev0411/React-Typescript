@@ -1,23 +1,24 @@
-// TODO REMOVE DEPRECATED //
-// actions/recs/get-actives.js
+// actions/recs/get-favorites.js
 import Rec from '../../models/Rec'
 import AppStore from '../../stores/AppStore'
 export default (user) => {
   const params = {
+    room_id: user.personal_room,
     access_token: user.access_token
   }
-  Rec.getActives(params, (err, res) => {
+  Rec.getFavorites(params, (err, res) => {
     const recs = res.data
-    const active_listings = []
+    const favorite_listings = []
     recs.forEach((rec) => {
-      active_listings.push({
+      favorite_listings.push({
         ...rec.listing,
         favorited_by: rec.favorited_by,
         commented_by: rec.commented_by,
         shared_by: rec.shared_by
       })
     })
-    AppStore.data.active_listings = active_listings
+    AppStore.data.favorite_listings = favorite_listings
+    AppStore.data.user.favorite_listings = _.map(favorite_listings, 'mls_number')
     AppStore.emitChange()
   })
 }

@@ -126,6 +126,14 @@ export default class DealForm extends React.Component {
                 >
                   View
                 </a>
+
+                <Button
+                  style={{ marginLeft: '5px' }}
+                  bsStyle="primary"
+                  onClick={this.editForm.bind(this)}
+                >
+                  Edit Pdf
+                </Button>
               </div>
             }
 

@@ -4,15 +4,15 @@ import async from 'async'
 export default (user, mls_number, favorite) => {
   const locals = {}
   async.series([
-    (callback) => {
+    callback => {
       const params = {
         room: user.personal_room,
         mls_number,
         access_token: user.access_token
       }
       Room.createRec(params, (err, res) => {
-        if (res.data[0]) {
-          locals.rec_id = res.data[0].id
+        if (res.data) {
+          locals.rec_id = res.data.id
           callback()
         }
       })

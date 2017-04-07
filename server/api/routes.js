@@ -52,7 +52,8 @@ const routes = {
   rec: [
     [ 'actives' ],
     [ 'feed' ],
-    [ 'mark' ]
+    [ 'mark' ],
+    [ 'favorites' ]
   ],
   room: [
     [ 'acknowledge-room-notifications' ],

@@ -2,10 +2,11 @@ import Koa from 'koa'
 const router = require('koa-router')()
 const app = new Koa()
 
-router.get('/recs/get-actives', async (ctx, next) => {
+router.get('/recs/get-favorites', async (ctx, next) => {
 
+  const { room_id } = ctx.request.query
   try {
-    const response = await ctx.fetch('/recs/actives?limit=1000')
+    const response = await ctx.fetch(`/rooms/${room_id}/recs/favorites`)
     ctx.body = response.body
   }
   catch(e) {}

@@ -38,6 +38,12 @@ export default class FormSelect extends React.Component {
   render() {
     return (
       <div>
+        <Button
+          className="add-form-btn"
+          onClick={this.addForm.bind(this)}
+        >
+          Add Blank Form
+        </Button>
         <Modal
           dialogClassName="modal-fullscreen"
           show={this.state.show}

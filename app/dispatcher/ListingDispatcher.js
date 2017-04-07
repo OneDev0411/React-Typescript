@@ -19,7 +19,7 @@ import getAlerts from '../actions/alerts/get-alerts'
 import shareListing from '../actions/listings/share-listing'
 import editFavorite from '../actions/rooms/edit-favorite'
 import getActives from '../actions/recs/get-actives'
-import getFavorites from '../actions/user/get-favorites'
+import getFavorites from '../actions/recs/get-favorites'
 import getPagedRecs from '../actions/recs/get-paged-recs'
 import markRecsAsRead from '../actions/recs/mark-as-read'
 import getValertsWidget from '../actions/listings/get-valerts-widget'
@@ -121,7 +121,7 @@ ListingDispatcher.register((payload) => {
       break
 
     case 'mark-recs-as-read':
-      markRecsAsRead(payload.user, payload.recommendations)
+      markRecsAsRead(payload.user, payload.alert_id, payload.room_id)
       break
 
     case 'search-schools-map':
