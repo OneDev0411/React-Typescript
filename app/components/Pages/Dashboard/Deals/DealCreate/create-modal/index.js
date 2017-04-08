@@ -59,7 +59,6 @@ export default class extends React.Component {
 
     // create full address
     let full_address = [
-      unit_number,
       street_number,
       street_address,
       city,
