@@ -22,6 +22,21 @@ export default {
       return callback(error, false)
     }
   },
+  async create(params) {
+    const { context, access_token } = params
+
+    try {
+      const response = await agent
+        .post(`${config.api_url}/deals?associations=deal.listing`)
+        .set({ Authorization: `Bearer ${access_token}` })
+        .send({ context })
+
+      return response
+    } catch (e) {
+      console.log(e)
+      throw e
+    }
+  },
   async getSubmissions(params, callback) {
     const endpoint = `${config.api_url}/deals/${params.id}/submissions`
 

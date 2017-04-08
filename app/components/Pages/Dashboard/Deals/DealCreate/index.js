@@ -133,6 +133,7 @@ export default class DealCreate extends React.Component {
               <span className="address">“{ address }”</span>
 
               <Create
+                user={this.props.user}
                 address={address}
                 address_components={selected ? selected.address_components : null}
               />
