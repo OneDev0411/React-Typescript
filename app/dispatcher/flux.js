@@ -1,4 +1,6 @@
 import flux from 'flux'
+import invariant from 'invariant'
+import _ from 'underscore'
 
 /**
  * Dispatches a payload to all registered callbacks.

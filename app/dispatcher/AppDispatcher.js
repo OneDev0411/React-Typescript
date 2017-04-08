@@ -1,7 +1,5 @@
 // AppDispatcher.js
 import { Dispatcher } from './flux'
-import invariant from 'invariant'
-import _ from 'underscore'
 
 // User
 import signup from '../actions/user/signup'
