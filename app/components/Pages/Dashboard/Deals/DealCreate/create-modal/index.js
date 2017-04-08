@@ -1,6 +1,7 @@
 import React from 'react'
 import { Modal, Button, FormControl } from 'react-bootstrap'
 import { parseLocation } from 'parse-address'
+import AppDispatcher from '../../../../../../dispatcher/AppDispatcher'
 
 export default class extends React.Component {
   constructor(props) {
@@ -41,10 +42,11 @@ export default class extends React.Component {
   }
 
   save() {
+    const { user } = this.props
     const { street_number, street_address, unit_number, city, state, zipcode } = this.state
     const full_address = this.props.address.trim()
 
-    const data = {
+    const context = {
       full_address,
       street_number,
       street_address,
@@ -54,7 +56,11 @@ export default class extends React.Component {
       zipcode
     }
 
-    console.log(data)
+    AppDispatcher.dispatch({
+      action: 'create-deal',
+      user: user,
+      context
+    })
   }
 
   parseAddress(address) {
