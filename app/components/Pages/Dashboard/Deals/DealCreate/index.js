@@ -85,6 +85,8 @@ export default class DealCreate extends React.Component {
     if (type === 'offer') {
        _.each(data, item => {
         list.push({
+          isListing: true,
+          id: item.id,
           full_address: listings.addressTitle(item.address),
           address_components: item.address,
           price: item.price,
@@ -98,7 +100,6 @@ export default class DealCreate extends React.Component {
   }
 
   onPlaceSelect(item) {
-    console.log(item)
     this.setState({
       selected: item,
       address: item.full_address
@@ -133,9 +134,11 @@ export default class DealCreate extends React.Component {
               <span className="address">“{ address }”</span>
 
               <Create
+                type={params.type}
+                side={params.type === 'offer' ? 'Buying' : 'Selling'}
                 user={this.props.user}
                 address={address}
-                address_components={selected ? selected.address_components : null}
+                item={selected || {}}
               />
             </div>
             <div className="help">Don’t see your listing? Create it as a Hip Pocket.</div>
@@ -165,7 +168,12 @@ export default class DealCreate extends React.Component {
               }
 
               {
-                params.type === 'offer' && _.map(places, (item, key) => {
+                params.type === 'offer' &&
+                _.chain(places)
+                .filter(item => {
+                  return item.status.startsWith('Active') || item.status === 'Pending'
+                })
+                .map((item, key) => {
                   const c = item.address_components
                   return (
                     <div
@@ -192,6 +200,7 @@ export default class DealCreate extends React.Component {
                     </div>
                   )
                 })
+                .value()
               }
             </div>
           </div>

@@ -23,13 +23,13 @@ export default {
     }
   },
   async create(params) {
-    const { context, access_token } = params
+    const { data, access_token } = params
 
     try {
       const response = await agent
         .post(`${config.api_url}/deals?associations=deal.listing`)
         .set({ Authorization: `Bearer ${access_token}` })
-        .send({ context })
+        .send(data)
 
       return response
     } catch (e) {
