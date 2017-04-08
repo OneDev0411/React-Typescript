@@ -1,5 +1,5 @@
 // TransactionDispatcher.js
-import { Dispatcher } from 'flux'
+import { Dispatcher } from './flux'
 
 // Transaction actions
 import newTransaction from '../actions/transactions/new'

@@ -1,5 +1,5 @@
 // ListingDispatcher.js
-import { Dispatcher } from 'flux'
+import { Dispatcher } from './flux'
 
 // Listings
 import searchListingTransaction from '../actions/listings/search-transaction'

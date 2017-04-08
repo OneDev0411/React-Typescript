@@ -1,5 +1,5 @@
 // TaskDispatcher.js
-import { Dispatcher } from 'flux'
+import { Dispatcher } from './flux'
 
 // Tasks
 import getTasks from '../actions/tasks/get'
