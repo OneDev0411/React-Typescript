@@ -25,12 +25,8 @@ export default class DealsList extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { deals } = nextProps
 
-    if (deals && this.state.deals.length === 0)
+    if (deals && deals.length > this.state.deals.length)
       this.setState({ deals, loading: false })
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return true
   }
 
   create(type) {
