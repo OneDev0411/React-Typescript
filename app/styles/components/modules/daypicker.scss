@@ -13,7 +13,7 @@
     &--outside {
       &:hover {
         background-color: #fff;
-      } 
+      }
     }
   }
   .DayPicker-Caption {
@@ -25,9 +25,4 @@
   .DayPicker-NavBar {
     padding: 2px .5rem;
   }
-}
-.daypicker--tasks {
-  box-shadow: 0px 1px 5px #ccc;
-  border-radius: 3px;
-  background: #fff;
 }

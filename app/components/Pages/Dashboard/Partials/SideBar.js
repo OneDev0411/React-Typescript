@@ -293,9 +293,6 @@ export default class SideBar extends Component {
     if (path.indexOf('/dashboard/contacts') !== -1)
       active.contacts = 'active'
 
-    if (path === '/dashboard/tasks')
-      active.tasks = 'active'
-
     if (path.indexOf('/dashboard/transactions') !== -1)
       active.transactions = 'active'
 
@@ -454,7 +451,6 @@ export default class SideBar extends Component {
       conversation: <Popover className="sidenav__popover" id="popover-conversations">Conversations</Popover>,
       map: <Popover className="sidenav__popover" id="popover-listing">Listings</Popover>,
       people: <Popover className="sidenav__popover" id="popover-people">People</Popover>,
-      tasks: <Popover className="sidenav__popover" id="popover-tasks">Tasks</Popover>,
       concierge: <Popover className="sidenav__popover" id="popover-tasks">Concierge</Popover>,
       deals: <Popover className="sidenav__popover" id="popover-tasks">Deals</Popover>,
       transactions: <Popover className="sidenav__popover" id="popover-transactions">Transactions</Popover>,
@@ -626,26 +622,6 @@ export default class SideBar extends Component {
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
-          }
-
-          { /*
-            <OverlayTrigger placement="right" overlay={ popover.tasks } delayShow={ 200 } delayHide={ 0 }>
-              <LinkContainer className={ active.tasks } to="/dashboard/tasks">
-                <NavItem style={ S('w-85p') }>
-                  <img src={ active.tasks ? '/static/images/dashboard/sidenav/task-active.svg' : '/static/images/dashboard/sidenav/task.svg' } style={ S('w-19 h-19') }/>
-                  {this.notificationIcon('task_notification_count')}
-                </NavItem>
-              </LinkContainer>
-            </OverlayTrigger>
-            <OverlayTrigger placement="right" overlay={ popover.transactions } delayShow={ 200 } delayHide={ 0 }>
-              <LinkContainer className={ active.transactions } to="/dashboard/transactions" onClick={ this.props.viewAllTransactions }>
-                <NavItem style={ S('w-85p') }>
-                  <img src={ active.transactions ? '/static/images/dashboard/sidenav/transactions-active.svg' : '/static/images/dashboard/sidenav/transactions.svg' } style={ S('w-19 h-19') }/>
-                  {this.notificationIcon('transaction_notification_count')}
-                </NavItem>
-              </LinkContainer>
-            </OverlayTrigger>
-            */
           }
           { recommend }
           { agents }

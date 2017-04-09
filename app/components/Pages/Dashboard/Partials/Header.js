@@ -13,7 +13,6 @@ export default class Header extends Component {
     const data = this.props.data
     const user = data.user
     const transactions = data.transactions
-    const contacts = data.contacts
     const path = data.path
     let title
     let subtitle
@@ -28,96 +27,6 @@ export default class Header extends Component {
     if (path === '/dashboard/mls') {
       title = (
         <h2 style={S('font-22 mt-20')}>Search</h2>
-      )
-    }
-    // Contacts
-    if (path === '/dashboard/contacts') {
-      title = (
-        <h2 style={S('font-22 mt-20')}>People</h2>
-      )
-    }
-    // Tasks
-    if (path === '/dashboard/tasks') {
-      const tasks = data.tasks
-      const date = new Date()
-      const hour = date.getHours()
-      let greeting = 'Good morning'
-      if (hour > 11)
-        greeting = 'Good afternoon'
-      if (hour > 16)
-        greeting = 'Good evening'
-      if (user.first_name)
-        greeting += `, ${user.first_name}`
-      title = (
-        <div>
-          <h2 style={S('font-22 mt-10')}>
-            <span style={S('color-a1bde4')}>{ greeting }</span>
-          </h2>
-        </div>
-      )
-      let todays_tasks
-      if (tasks) {
-        const today = helpers.getYMD()
-        todays_tasks = tasks.filter((task) => {
-          const due_date = helpers.getYMD(task.due_date)
-          return due_date === today
-        })
-      }
-      const friendly_date = helpers.friendlyDate(date.getTime() / 1000)
-      subtitle = (
-        <span style={S('color-acacac relative t-7n font-12')}>
-          { `${friendly_date.day}, ${friendly_date.month} ${friendly_date.date}, ${friendly_date.year}` }.&nbsp;
-          You have { todays_tasks && todays_tasks.length ? todays_tasks.length : 0 } task{ todays_tasks && todays_tasks.length !== 1 ? 's' : '' } due today
-        </span>
-      )
-    }
-    // People
-    if (path.indexOf('/dashboard/contacts') !== -1) {
-      const has_s = !contacts || contacts.length !== 1 ? 's' : ''
-      title = (
-        <h2 style={S('font-22 mt-20')}>{ contacts ? contacts.length : '' } contact{ has_s }</h2>
-      )
-      let contact_tabs = data.contact_tabs
-      const current_contact = data.current_contact
-      let contact_tabs_markup
-      if (contact_tabs) {
-        // Always unique
-        contact_tabs = _.uniq(contact_tabs, (contact) => {
-          if (contact)
-            return contact.id
-        })
-        contact_tabs_markup = contact_tabs.map((contact) => {
-          let tab_title
-          if (contact.phone_number)
-            tab_title = contact.phone_number
-          if (contact.email)
-            tab_title = contact.email
-          if (contact.first_name && contact.last_name)
-            tab_title = `${contact.first_name} ${contact.last_name}`
-          return (
-            <NavItem onClick={this.props.viewContact.bind(this, contact)} key={`contact-tab-${contact.id}`} eventKey={contact.id}>
-              { tab_title }
-              <div onClick={this.props.removeContactTab.bind(this, contact.id)} style={S('relative l-8 w-23 h-25 bg-ccc text-center t-4n pointer')} className="close">
-                &times;
-              </div>
-            </NavItem>
-          )
-        })
-      }
-      let active_tab = 'all'
-      if (current_contact)
-        active_tab = current_contact.id
-      nav_tabs = (
-        <div>
-          <Nav className="table--tabbable__tabs" style={S('b-1n absolute ml-15')} bsStyle="tabs" activeKey={active_tab}>
-            <LinkContainer to="/dashboard/contacts">
-              <NavItem className="all-contacts-tab">
-                <div style={S('ml-15n pl-10 pr-10')}>All people</div>
-              </NavItem>
-            </LinkContainer>
-            { contact_tabs_markup }
-          </Nav>
-        </div>
       )
     }
 
@@ -173,7 +82,7 @@ export default class Header extends Component {
     let nav_bar_style = { ...S('mb-0 p-0 pt-3 relative'), borderBottom: '1px solid #e7e4e3' }
 
     // Taller header for transactions
-    if (path.indexOf('/dashboard/transactions') !== -1 || path.indexOf('/dashboard/contacts') !== -1)
+    if (path.indexOf('/dashboard/transactions') !== -1)
       nav_bar_style = { ...nav_bar_style, ...S('h-108') }
     else
       nav_bar_style = { ...nav_bar_style, ...S('h-70') }

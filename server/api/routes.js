@@ -71,19 +71,6 @@ const routes = {
   subdivision: [
     [ 'search' ]
   ],
-  task: [
-    [ 'acknowledge-notifications' ],
-    [ 'add-transaction' ],
-    [ 'create-task' ],
-    [ 'delete-task' ],
-    [ 'edit-date' ],
-    [ 'edit-status' ],
-    [ 'edit-title' ],
-    [ 'get-tasks' ],
-  ],
-  tools: [
-    [ 'delete-phone' ],
-  ],
   transaction: [
     [ 'acknowledge-transaction-notifications' ],
     [ 'add-role' ],

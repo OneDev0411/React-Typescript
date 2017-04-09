@@ -10,7 +10,6 @@ import Landing from '../components/Pages/Landing'
 import Recents from '../components/Pages/Dashboard/Recents'
 import Mls from '../components/Pages/Dashboard/Mls'
 import Listing from '../components/Pages/Dashboard/Mls/Listing'
-import Tasks from '../components/Pages/Dashboard/Tasks'
 import Transactions from '../components/Pages/Dashboard/Transactions'
 import SingleTransaction from '../components/Pages/Dashboard/Transactions/Single'
 import NewTransaction from '../components/Pages/Dashboard/Transactions/New'
@@ -66,7 +65,6 @@ export default (
     <Route path="dashboard/mls/actives" component={Mls} />
     <Route path="dashboard/mls/:id" component={Listing} />
     <Route path="dashboard/mls/listing/recommend" component={Recommend} />
-    <Route path="dashboard/tasks" component={Tasks} />
     <Route path="dashboard/transactions" component={Transactions} />
     <Route path="dashboard/transactions/new" component={NewTransaction} />
     <Route path="dashboard/transactions/:id" component={SingleTransaction} />
