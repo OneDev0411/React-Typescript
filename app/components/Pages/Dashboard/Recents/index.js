@@ -38,7 +38,6 @@ export default class Dashboard extends Component {
     if (AppStore.data.mounted && AppStore.data.mounted.indexOf('recents') !== -1)
       return
     this.init()
-    this.getContacts()
 
     const socket = window.socket
     socket.on('Notification', (notification) => {
