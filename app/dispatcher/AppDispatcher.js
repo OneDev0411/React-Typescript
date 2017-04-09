@@ -15,10 +15,6 @@ import sendVerifyEmail from '../actions/user/send-verify-email'
 import addUserToStore from '../actions/user/add-user-to-store'
 import getRooms from '../actions/user/get-rooms'
 import getRoomsIndexedDB from '../actions/indexeddb/get-rooms'
-import getContacts from '../actions/user/get-contacts'
-import createContacts from '../actions/user/create-contacts'
-import editContact from '../actions/user/edit-contact'
-import deleteContact from '../actions/user/delete-contact'
 import editProfilePic from '../actions/user/edit-profile-pic'
 import editPassword from '../actions/user/edit-password'
 import upgradeAccount from '../actions/user/upgrade-account'
@@ -47,10 +43,6 @@ import getPreviousMessages from '../actions/messages/get-previous-messages'
 // Pages
 import landingPage from '../actions/pages/landing'
 import getContent from '../actions/pages/get-content'
-
-// Modules
-import addContacts from '../actions/modules/add-contacts'
-import removeContact from '../actions/modules/remove-contact'
 
 // Notifications
 import getNotificationSummery from '../actions/notifications/get-summary'
@@ -174,10 +166,6 @@ AppDispatcher.register(async function (payload) {
       leaveRoom(payload.user, payload.id)
       break
 
-    case 'get-contacts':
-      getContacts(payload.user)
-      break
-
     case 'add-users':
       addUsers(payload.user, payload.room, payload.users, payload.emails, payload.phone_numbers)
       break
@@ -200,26 +188,6 @@ AppDispatcher.register(async function (payload) {
 
     case 'get-previous-messages':
       getPreviousMessages(payload.user, payload.room, payload.scroll_height)
-      break
-
-    case 'create-contacts':
-      createContacts(payload.user, payload.contacts, payload.module_type)
-      break
-
-    case 'edit-contact':
-      editContact(payload.user, payload.contact, payload.module_type)
-      break
-
-    case 'delete-contact':
-      deleteContact(payload.user, payload.contact_id)
-      break
-
-    case 'add-contacts':
-      addContacts(payload.contacts, payload.module_type)
-      break
-
-    case 'remove-contact':
-      removeContact(payload.contact_id, payload.module_type)
       break
 
     case 'room-notifications':

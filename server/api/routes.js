@@ -18,12 +18,6 @@ const routes = {
   area: [
     [ 'search' ]
   ],
-  contact: [
-    [ 'create' ],
-    [ 'delete' ],
-    [ 'edit' ],
-    [ 'get' ]
-  ],
   county: [
     [ 'search' ]
   ],
@@ -79,7 +73,6 @@ const routes = {
   ],
   task: [
     [ 'acknowledge-notifications' ],
-    [ 'add-contacts' ],
     [ 'add-transaction' ],
     [ 'create-task' ],
     [ 'delete-task' ],
@@ -87,7 +80,6 @@ const routes = {
     [ 'edit-status' ],
     [ 'edit-title' ],
     [ 'get-tasks' ],
-    [ 'remove-contact' ],
   ],
   tools: [
     [ 'delete-phone' ],

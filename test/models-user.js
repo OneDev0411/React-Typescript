@@ -93,32 +93,6 @@ describe('Testing User model', () => {
   //   })
   // })
 
-  // // Create contact
-  // it('User.createContacts should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
-  //   const params = {
-  //     contacts: test.contacts,
-  //     access_token,
-  //     api_host: test.api_host
-  //   }
-  //   User.createContacts(params, (err, response) => {
-  //     contact_id = response.data[0].id
-  //     expect(response.status).to.equal('success')
-  //     done()
-  //   })
-  // })
-
-  // // Get contacts
-  it('User.getContacts should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
-    const params = {
-      access_token,
-      api_host: test.api_host
-    }
-    User.getContacts(params, (err, response) => {
-      console.log(response)
-      expect(response.status).to.equal('success')
-      done()
-    })
-  })
 
   // Get favorites
   // it('User.getFavorites should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
