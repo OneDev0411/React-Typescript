@@ -84,14 +84,6 @@ export default class Dashboard extends Component {
     })
   }
 
-  getContacts() {
-    const data = this.props.data
-    AppDispatcher.dispatch({
-      action: 'get-contacts',
-      user: data.user
-    })
-  }
-
   getPreviousMessages(scroll_height) {
     const data = this.props.data
     const user = data.user
@@ -174,8 +166,6 @@ export default class Dashboard extends Component {
   showModal(modal_key) {
     if (modal_key === 'create-chat')
       AppStore.data.show_create_chat_modal = true
-    if (modal_key === 'invite-user')
-      AppStore.data.show_contacts_modal = true
     if (modal_key === 'settings')
       AppStore.data.show_settings_modal = true
     if (modal_key === 'room-users')
@@ -193,13 +183,10 @@ export default class Dashboard extends Component {
 
   hideModal() {
     delete AppStore.data.show_create_chat_modal
-    delete AppStore.data.show_contacts_modal
     delete AppStore.data.show_settings_modal
     delete AppStore.data.show_room_users_modal
     delete AppStore.data.show_modal_gallery
     delete AppStore.data.show_alert_modal
-    delete AppStore.data.adding_contacts
-    delete AppStore.data.add_contacts_error
     delete AppStore.data.show_add_members_modal
     delete AppStore.data.show_room_saved_message
     AppStore.emitChange()
@@ -237,30 +224,7 @@ export default class Dashboard extends Component {
   }
 
   handleContactFilterNav(direction) {
-    this.setContactActive(direction)
-  }
 
-  setContactActive(direction) {
-    const data = this.props.data
-    const filtered_contacts = data.filtered_contacts
-    let active_contact = -1
-    // Prev active contact
-    if (data.active_contact !== null)
-      active_contact = data.active_contact
-    if (direction === 'up') {
-      if (active_contact > -1)
-        active_contact -= 1
-      else
-        active_contact = filtered_contacts.length - 1
-    }
-    if (direction === 'down') {
-      if (filtered_contacts && active_contact < filtered_contacts.length - 1)
-        active_contact += 1
-      else
-        active_contact = 0
-    }
-    AppStore.data.active_contact = active_contact
-    AppStore.emitChange()
   }
 
   handleContactFilter(message_input, type) {
@@ -589,20 +553,6 @@ export default class Dashboard extends Component {
       })
       // Contacts available
       users_selected_ids = _.map(users_selected, item => item.value.id)
-    }
-    if (data.contacts && current_room) {
-      data.contacts.forEach((contact) => {
-        const user = contact.contact_user
-        if (user && !_.find(current_room.users, { id: user.id })) {
-          if (user.id !== data.user.id && users_selected_ids && users_selected_ids.indexOf(user.id) === -1) {
-            users_select_options.push({
-              value: user,
-              label: user.first_name ? user.first_name : contact.phone_number,
-              type: 'user'
-            })
-          }
-        }
-      })
     }
     // Search users
     if (data.add_members && data.add_members.users_found) {

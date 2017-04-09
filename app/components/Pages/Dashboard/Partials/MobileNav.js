@@ -211,9 +211,6 @@ export default class SideBar extends Component {
     if (path.indexOf('/dashboard/contacts') !== -1)
       active.contacts = 'active'
 
-    if (path.indexOf('/dashboard/transactions') !== -1)
-      active.transactions = 'active'
-
     if (path.indexOf('/dashboard/mls/listings/recommend') !== -1)
       active.recommend = 'active'
 
@@ -365,7 +362,6 @@ export default class SideBar extends Component {
           <img src="/static/images/dashboard/sidenav/map-active.svg" />
           <img src="/static/images/dashboard/sidenav/people-active.svg" />
           <img src="/static/images/dashboard/sidenav/task-active.svg" />
-          <img src="/static/images/dashboard/sidenav/transactions-active.svg" />
         </div>
         <Nav bsStyle="tabs" justified>
           <LinkContainer className={`main-nav ${active.recents}`} to="/dashboard/recents">
@@ -423,6 +419,5 @@ export default class SideBar extends Component {
   }
 }
 SideBar.propTypes = {
-  data: React.PropTypes.object,
-  viewAllTransactions: React.PropTypes.func
+  data: React.PropTypes.object
 }

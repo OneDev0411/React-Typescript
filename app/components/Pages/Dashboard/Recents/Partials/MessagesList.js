@@ -335,13 +335,6 @@ export default class MessagesList extends Component {
     if (data.is_mobile)
       messages_mb = 'mb-80'
     let message
-    if (data.add_contacts_error) {
-      message = (
-        <div style={S('mt-10 text-left')}>
-          <Alert bsStyle="danger">There was an error with this request.</Alert>
-        </div>
-      )
-    }
     // List users
     let title_area
     if (!data.show_new_message_viewer) {

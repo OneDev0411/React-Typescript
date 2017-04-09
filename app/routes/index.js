@@ -10,9 +10,6 @@ import Landing from '../components/Pages/Landing'
 import Recents from '../components/Pages/Dashboard/Recents'
 import Mls from '../components/Pages/Dashboard/Mls'
 import Listing from '../components/Pages/Dashboard/Mls/Listing'
-import Transactions from '../components/Pages/Dashboard/Transactions'
-import SingleTransaction from '../components/Pages/Dashboard/Transactions/Single'
-import NewTransaction from '../components/Pages/Dashboard/Transactions/New'
 import SignUp from '../components/Pages/SignUp'
 import ConfirmAgent from '../components/Pages/SignUp/ConfirmAgent'
 import SignIn from '../components/Pages/SignIn'
@@ -65,10 +62,6 @@ export default (
     <Route path="dashboard/mls/actives" component={Mls} />
     <Route path="dashboard/mls/:id" component={Listing} />
     <Route path="dashboard/mls/listing/recommend" component={Recommend} />
-    <Route path="dashboard/transactions" component={Transactions} />
-    <Route path="dashboard/transactions/new" component={NewTransaction} />
-    <Route path="dashboard/transactions/:id" component={SingleTransaction} />
-    <Route path="dashboard/transactions/:id/attachments/:id" component={SingleTransaction} />
     <Route path="dashboard/website" component={Website} />
     <Route path="dashboard/cards" component={Cards} />
     <Route path="dashboard/forms" component={Forms} />

@@ -293,9 +293,6 @@ export default class SideBar extends Component {
     if (path.indexOf('/dashboard/contacts') !== -1)
       active.contacts = 'active'
 
-    if (path.indexOf('/dashboard/transactions') !== -1)
-      active.transactions = 'active'
-
     if (path.indexOf('/dashboard/mls/listings/recommend') !== -1)
       active.recommend = 'active'
 
@@ -453,9 +450,8 @@ export default class SideBar extends Component {
       people: <Popover className="sidenav__popover" id="popover-people">People</Popover>,
       concierge: <Popover className="sidenav__popover" id="popover-tasks">Concierge</Popover>,
       deals: <Popover className="sidenav__popover" id="popover-tasks">Deals</Popover>,
-      transactions: <Popover className="sidenav__popover" id="popover-transactions">Transactions</Popover>,
-      support: <Popover className="sidenav__popover" id="popover-transactions">Need Help?</Popover>,
-      store: <Popover className="sidenav__popover" id="popover-transactions">Store</Popover>
+      support: <Popover className="sidenav__popover" id="popover-support">Need Help?</Popover>,
+      store: <Popover className="sidenav__popover" id="popover-store">Store</Popover>
     }
     if (data.errors && data.errors.type && data.errors.type === 'agent-not-found') {
       message = (
@@ -692,7 +688,6 @@ export default class SideBar extends Component {
 }
 SideBar.propTypes = {
   data: React.PropTypes.object,
-  viewAllTransactions: React.PropTypes.func,
   location: React.PropTypes.object,
   history: React.PropTypes.object
 }

@@ -6,7 +6,6 @@ import config from '../config/private'
 // Get access token
 let access_token
 let room_id
-let contact_id
 let test = config.test
 const random_email = randomString(9) + '@rechat.co'
 const random_phone = Math.floor(Math.random() * 1000000000)

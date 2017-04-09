@@ -71,17 +71,6 @@ const routes = {
   subdivision: [
     [ 'search' ]
   ],
-  transaction: [
-    [ 'acknowledge-transaction-notifications' ],
-    [ 'add-role' ],
-    [ 'create-transaction' ],
-    [ 'delete-file' ],
-    [ 'delete-role' ],
-    [ 'delete-transaction' ],
-    [ 'edit-transaction' ],
-    [ 'get-transaction' ],
-    [ 'get-transactions' ]
-  ],
   'user': [
     [ 'create-password' ],
     [ 'edit-password' ],

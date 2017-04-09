@@ -23,8 +23,7 @@
 // Pages
 @import 'components/pages/landing';
 @import 'components/pages/dashboard';
-@import 'components/pages/transactions';
-@import 'components/pages/contacts';
+
 @import 'components/pages/recents';
 @import 'components/pages/mls';
 @import 'components/pages/agent-report';
@@ -32,7 +31,6 @@
 @import 'components/pages/deals';
 
 // Modules
-@import 'components/modules/add-contacts';
 @import 'components/modules/search-listings';
 @import 'components/modules/drawer';
 @import 'components/modules/daypicker';

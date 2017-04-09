@@ -7,7 +7,6 @@ import config from '../config/private'
 // Get access token
 let access_token
 let room_id
-let contact_id
 let test = config.test
 const test_options = {
   "maximum_price": 9.223372036854776e+18,
