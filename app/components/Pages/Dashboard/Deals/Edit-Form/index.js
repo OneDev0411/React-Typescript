@@ -88,8 +88,9 @@ export default class EditForm extends React.Component {
 
   onSetDeal() {
     const { initial } = this.state
+    const { params } = this.props
 
-    if (initial !== null)
+    if (initial !== null && params.type === 'update')
       this.sendMessage('setValues', [initial.values])
   }
 
