@@ -10,7 +10,6 @@ import Landing from '../components/Pages/Landing'
 import Recents from '../components/Pages/Dashboard/Recents'
 import Mls from '../components/Pages/Dashboard/Mls'
 import Listing from '../components/Pages/Dashboard/Mls/Listing'
-import Contacts from '../components/Pages/Dashboard/Contacts'
 import Tasks from '../components/Pages/Dashboard/Tasks'
 import Transactions from '../components/Pages/Dashboard/Transactions'
 import SingleTransaction from '../components/Pages/Dashboard/Transactions/Single'
@@ -39,6 +38,10 @@ import DealEditForm from '../components/Pages/Dashboard/Deals/Edit-Form'
 import CollectSignatures_Documents from '../components/Pages/Dashboard/Deals/CollectSignatures-Documents'
 import CollectSignatures_Recipients from '../components/Pages/Dashboard/Deals/CollectSignatures-Recipients'
 
+// contacts
+import Contacts from '../components/Pages/Dashboard/Contacts'
+import ContactProfile from '../components/Pages/Dashboard/Contacts/Profile'
+
 // Widgets
 import ListingsWidget from '../components/Pages/Widgets/Listings'
 import MapWidget from '../components/Pages/Widgets/Map'
@@ -63,8 +66,6 @@ export default (
     <Route path="dashboard/mls/actives" component={Mls} />
     <Route path="dashboard/mls/:id" component={Listing} />
     <Route path="dashboard/mls/listing/recommend" component={Recommend} />
-    <Route path="dashboard/contacts" component={Contacts} />
-    <Route path="dashboard/contacts/:id" component={Contacts} />
     <Route path="dashboard/tasks" component={Tasks} />
     <Route path="dashboard/transactions" component={Transactions} />
     <Route path="dashboard/transactions/new" component={NewTransaction} />
@@ -87,6 +88,11 @@ export default (
       <Route path="/dashboard/deals/:id/collect-signatures/documents" component={CollectSignatures_Documents} />
       <Route path="/dashboard/deals/:id/collect-signatures/recipients" component={CollectSignatures_Recipients} />
     </Route>
+
+    <Route path="/dashboard/contacts" component={Contacts}>
+        <Route path="/dashboard/contacts/:id" component={ContactProfile} />
+    </Route>
+
     <Route path="*" component={NoMatch} />
   </Route>
 )
