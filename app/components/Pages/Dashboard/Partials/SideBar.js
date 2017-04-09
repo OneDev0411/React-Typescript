@@ -311,6 +311,9 @@ export default class SideBar extends Component {
     if (path.indexOf('/dashboard/deals') !== -1)
       active.deals = 'active'
 
+    if (path.indexOf('/dashboard/contacts') !== -1)
+      active.contacts = 'contacts'
+
     // User info
     const user = data.user
     let recommend
@@ -615,7 +618,7 @@ export default class SideBar extends Component {
             </OverlayTrigger>
           }
 
-          { /*
+          {
             <OverlayTrigger placement="right" overlay={ popover.people } delayShow={ 200 } delayHide={ 0 }>
               <LinkContainer className={ active.contacts } to="/dashboard/contacts">
                 <NavItem style={ S('w-85p') }>
@@ -623,8 +626,8 @@ export default class SideBar extends Component {
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
-            */
           }
+
           { /*
             <OverlayTrigger placement="right" overlay={ popover.tasks } delayShow={ 200 } delayHide={ 0 }>
               <LinkContainer className={ active.tasks } to="/dashboard/tasks">
