@@ -1,6 +1,6 @@
 import React from 'react'
 import S from 'shorti'
-import AppDispatcher from '../../../../dispatcher/AppDispatcher'
+import DealDispatcher from '../../../../dispatcher/DealDispatcher'
 
 export default class Deals extends React.Component {
 
@@ -16,7 +16,7 @@ export default class Deals extends React.Component {
   }
 
   getForms(user) {
-    AppDispatcher.dispatch({
+    DealDispatcher.dispatch({
       action: 'get-deal-forms',
       user
     })
@@ -25,7 +25,7 @@ export default class Deals extends React.Component {
   getDeals(user) {
     this.setState({ loading: true })
 
-    AppDispatcher.dispatch({
+    DealDispatcher.dispatch({
       action: 'get-deals',
       user
     })

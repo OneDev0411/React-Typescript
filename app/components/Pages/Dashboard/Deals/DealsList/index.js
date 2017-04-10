@@ -3,7 +3,6 @@ import { browserHistory } from 'react-router'
 import { Grid, Row, Col, Button } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'underscore'
-import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
 import { addressTitle } from '../../../../../utils/listing'
 
 export default class DealsList extends React.Component {

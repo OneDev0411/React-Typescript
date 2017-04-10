@@ -4,7 +4,7 @@ import { browserHistory } from 'react-router'
 import S from 'shorti'
 import _ from 'underscore'
 import AppStore from '../../../../../stores/AppStore'
-import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
+import DealDispatcher from '../../../../../dispatcher/DealDispatcher'
 
 export default class CollectSignatures extends React.Component {
 
@@ -47,7 +47,7 @@ export default class CollectSignatures extends React.Component {
   }
 
   getSubmissions() {
-    AppDispatcher.dispatch({
+    DealDispatcher.dispatch({
       action: 'get-submissions',
       user: this.props.user,
       id: this.props.params.id

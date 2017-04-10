@@ -3,7 +3,7 @@ import _ from 'underscore'
 import Deals from '../../models/Deal'
 import AppStore from '../../stores/AppStore'
 
-export default async (data, user) => {
+export default async function (data, user) {
   const params = {
     data,
     access_token: user.access_token

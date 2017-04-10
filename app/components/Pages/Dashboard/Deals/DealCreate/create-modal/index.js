@@ -2,7 +2,7 @@ import React from 'react'
 import { browserHistory } from 'react-router'
 import { Modal, Button, FormControl } from 'react-bootstrap'
 import { parseLocation } from 'parse-address'
-import AppDispatcher from '../../../../../../dispatcher/AppDispatcher'
+import DealDispatcher from '../../../../../../dispatcher/DealDispatcher'
 
 export default class extends React.Component {
   constructor(props) {
@@ -90,7 +90,7 @@ export default class extends React.Component {
     this.setState({ saving: true })
 
     // save deal
-    const deal = await AppDispatcher.dispatchSync({
+    const deal = await DealDispatcher.dispatchSync({
       action: 'create-deal',
       user: user,
       data

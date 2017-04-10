@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { browserHistory } from 'react-router'
 import { Row, Col, Button } from 'react-bootstrap'
 import MessageModal from '../../../../Partials/MessageModal'
-import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
+import DealDispatcher from '../../../../../dispatcher/DealDispatcher'
 import config from '../../../../../../config/public'
 
 export default class EditForm extends React.Component {
@@ -160,7 +160,7 @@ export default class EditForm extends React.Component {
 
   getSubmissionForm(last_revision) {
     const { user, params } = this.props
-    AppDispatcher.dispatch({
+    DealDispatcher.dispatch({
       action: 'get-submission-form',
       user: user,
       deal: params.id,
@@ -177,7 +177,7 @@ export default class EditForm extends React.Component {
 
     await this.changeState({ saving: true }, true)
 
-    AppDispatcher.dispatch({
+    DealDispatcher.dispatch({
       action: 'save-submission-form',
       user: user,
       type: params.type,
