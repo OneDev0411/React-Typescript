@@ -1,4 +1,5 @@
 import React from 'react'
+import { browserHistory } from 'react-router'
 import { Row, Col, Button } from 'react-bootstrap'
 import Avatar from 'react-avatar'
 import Stepper from '../../../../Partials/Stepper'
@@ -41,7 +42,7 @@ export default class ContactProfile extends React.Component {
   }
 
   goBack() {
-
+    browserHistory.push('/dashboard/contacts')
   }
 
   render() {
