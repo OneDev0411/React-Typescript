@@ -1,5 +1,6 @@
 import React from 'react'
 import { Grid, Row, Col, Button } from 'react-bootstrap'
+import { browserHistory } from 'react-router'
 import Avatar from 'react-avatar'
 import _ from 'underscore'
 
@@ -7,7 +8,7 @@ export default class ContactsList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      contacts: []
+      contacts: {}
     }
   }
 
@@ -21,13 +22,13 @@ export default class ContactsList extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { contacts } = nextProps
 
-    if (contacts && contacts.length > this.state.contacts.length)
+    if (contacts && _.size(contacts) > _.size(this.state.contacts))
       this.setState({ contacts })
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     const { contacts } = nextProps
-    return contacts && contacts.length > this.state.contacts.length
+    return contacts && _.size(contacts) > _.size(this.state.contacts)
   }
 
   addContact() {
@@ -78,12 +79,12 @@ export default class ContactsList extends React.Component {
       <div className="list">
 
         <Row className="toolbar">
-          <Col lg={2} md={2} sm={2} className="vcenter">
-            <span className="title">Contacts</span>
+          <Col lg={3} md={3} sm={3} className="vcenter">
+            <span className="title">All Contacts</span>
           </Col>
 
-          <Col lg={4} md={4} sm={4} className="vcenter">
-            { contacts.length } total
+          <Col lg={3} md={3} sm={3} className="vcenter">
+            { _.size(contacts) } Contacts
           </Col>
 
           <Col lg={6} md={6} sm={6} className="vcenter right">
@@ -99,7 +100,7 @@ export default class ContactsList extends React.Component {
         </Row>
 
         {
-          contacts.length > 0 &&
+          _.size(contacts) > 0 &&
           <Grid className="table">
             <Row className="header">
               <Col md={3} sm={3} xs={3}>NAME</Col>
