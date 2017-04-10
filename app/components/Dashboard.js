@@ -29,7 +29,7 @@ export default class Dashboard extends React.Component {
   }
 
   render() {
-    const { data, namespace } = this.props
+    const { data } = this.props
     const user = data.user
 
     let main_style = S('ml-5p h-100p')
@@ -43,7 +43,7 @@ export default class Dashboard extends React.Component {
     }
 
     const children = React.Children.map(this.props.children, child =>
-      React.cloneElement(child, { data, namespace })
+      React.cloneElement(child, { data })
     )
 
     return (

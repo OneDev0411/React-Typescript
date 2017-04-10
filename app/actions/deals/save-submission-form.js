@@ -26,7 +26,7 @@ export default async function (user, type, deal, form, state, values, submission
 
       AppStore.data.deals[deal_index].submissions[submission_index].form_data.values = values
 
-      AppStore.emitChange('deals')
+      AppStore.emitChange()
     }
 
   } catch (e) {}

@@ -12,7 +12,7 @@ export default async function (user) {
     if (response.status === 200)
       AppStore.data.contacts = response.body.data
 
-    AppStore.emitChange('contacts')
+    AppStore.emitChange()
   }
   catch(e) {
     console.log(e)

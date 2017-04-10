@@ -15,10 +15,6 @@ export default class Deals extends React.Component {
     this.getForms(user)
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   return nextProps.namespace === 'deals'
-  // }
-
   getForms(user) {
     DealDispatcher.dispatch({
       action: 'get-deal-forms',

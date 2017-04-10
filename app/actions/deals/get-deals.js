@@ -13,7 +13,7 @@ export default async function (user) {
     if (response.status === 200)
       AppStore.data.deals = response.body.data
 
-    AppStore.emitChange('deals')
+    AppStore.emitChange()
   }
   catch(e) {
   }

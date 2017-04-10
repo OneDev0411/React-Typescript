@@ -14,10 +14,6 @@ export default class extends React.Component {
     this.getContacts(user)
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   return nextProps.namespace === 'contacts'
-  // }
-
   getContacts(user) {
     Dispatcher.dispatch({
       action: 'get-contacts',

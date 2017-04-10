@@ -17,7 +17,7 @@ export default async function (id, user) {
       AppStore.data.deals[index].submissions = response.body.data
     }
 
-    AppStore.emitChange('deals')
+    AppStore.emitChange()
   }
   catch(e) {}
 }
