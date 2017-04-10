@@ -1,3 +1,4 @@
+import _ from 'underscore'
 import Contact from '../../models/Contact'
 import AppStore from '../../stores/AppStore'
 
@@ -10,7 +11,7 @@ export default async function (user) {
     const response = await Contact.getContacts(params)
 
     if (response.status === 200)
-      AppStore.data.contacts = response.body.data
+      AppStore.data.contacts = _.indexBy(response.body.data, 'id')
 
     AppStore.emitChange()
   }
