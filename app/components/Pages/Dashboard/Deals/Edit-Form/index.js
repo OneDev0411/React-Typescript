@@ -51,21 +51,6 @@ export default class EditForm extends React.Component {
     const deal = _.find(nextProps.deals, deal => deal.id === nextProps.params.id)
     const submission = _.find(deal.submissions, subm => subm.form === nextProps.params.form)
 
-    if (deal.saving_form !== this.state.saving && deal.saving_form === false) {
-      this.setState({
-        saving: deal.saving_form,
-        showSuccessModal: true
-      })
-
-      setTimeout(() => {
-        this.setState({ showSuccessModal: false})
-
-        if (nextProps.params.type === 'create')
-          this.goback()
-
-      }, 2000)
-    }
-
     if (submission && submission.form_data && !this.state.initial)
       this.setState({ initial: submission.form_data })
   }
@@ -177,7 +162,7 @@ export default class EditForm extends React.Component {
 
     await this.changeState({ saving: true }, true)
 
-    DealDispatcher.dispatch({
+    await DealDispatcher.dispatchSync({
       action: 'save-submission-form',
       user: user,
       type: params.type,
@@ -187,6 +172,16 @@ export default class EditForm extends React.Component {
       submission: submission ? submission.id : null,
       values
     })
+
+    this.setState({
+      saving: false,
+      showSuccessModal: true
+    })
+
+    setTimeout(() => {
+      this.setState({ showSuccessModal: false})
+      this.goback()
+    }, 2000)
   }
 
   goback() {
