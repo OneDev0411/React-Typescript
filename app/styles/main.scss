@@ -29,6 +29,7 @@
 @import 'components/pages/agent-report';
 @import 'components/pages/concierge';
 @import 'components/pages/deals';
+@import 'components/pages/contacts';
 
 // Modules
 @import 'components/modules/search-listings';
@@ -38,6 +39,7 @@
 @import 'components/modules/empty-state';
 @import 'components/modules/search-rooms-users';
 @import 'components/modules/pdf';
+@import 'components/modules/crm';
 
 // Vendor
 @import 'vendor/react-day-picker/style.scss';
