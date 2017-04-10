@@ -6,7 +6,7 @@ const Contact = {}
 
 Contact.getContacts = async function(params) {
   const { access_token } = params
-  const endpoint = `${api_host}/contacts`
+  const endpoint = `${api_host}/contacts?limit=10000`
 
   try {
     const response = await agent
