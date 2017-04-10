@@ -37,6 +37,7 @@ import CollectSignatures_Recipients from '../components/Pages/Dashboard/Deals/Co
 
 // contacts
 import Contacts from '../components/Pages/Dashboard/Contacts'
+import ContactsList from '../components/Pages/Dashboard/Contacts/List'
 import ContactProfile from '../components/Pages/Dashboard/Contacts/Profile'
 
 // Widgets
@@ -83,6 +84,7 @@ export default (
       </Route>
 
       <Route path="/dashboard/contacts" component={Contacts}>
+        <IndexRoute component={ContactsList} />
         <Route path="/dashboard/contacts/:id" component={ContactProfile} />
       </Route>
     </Route>
