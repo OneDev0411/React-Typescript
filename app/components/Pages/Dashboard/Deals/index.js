@@ -23,8 +23,6 @@ export default class Deals extends React.Component {
   }
 
   getDeals(user) {
-    this.setState({ loading: true })
-
     DealDispatcher.dispatch({
       action: 'get-deals',
       user
