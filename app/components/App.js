@@ -385,12 +385,16 @@ export default class App extends Component {
     }
   }
 
-  _onChange() {
-    this.setState(AppStore)
+  _onChange({ namespace }) {
+    this.setState({
+      AppStore,
+      namespace
+    })
   }
 
   render() {
     let data = AppStore.data
+    const namespace = this.state && this.state.namespace ? this.state.namespace : ''
     const path = this.props.location.pathname
     const location = this.props.location
     data.path = path
@@ -399,9 +403,9 @@ export default class App extends Component {
     if (typeof window !== 'undefined' && window.AppStore) {
       const server_data = window.AppStore.data
       // merge into client
-      data = { ...server_data, ...data }
+      data = { ...server_data, ...data, ...namespace }
     }
-    const Routes = React.cloneElement(this.props.children, { data })
+    const Routes = React.cloneElement(this.props.children, { data, namespace })
     return Routes
   }
 }

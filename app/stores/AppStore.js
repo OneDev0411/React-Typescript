@@ -9,8 +9,8 @@ export default _.extend({}, EventEmitter.prototype, {
   },
 
   // Emit Change event
-  emitChange() {
-    this.emit('change')
+  emitChange(namespace = '') {
+    this.emit('change', { namespace })
   },
 
   // Add change listener
