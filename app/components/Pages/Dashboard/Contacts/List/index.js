@@ -116,7 +116,7 @@ export default class ContactsList extends React.Component {
                   onClick={() => browserHistory.push(`/dashboard/contacts/${contact.id}`)}
                   className="item"
                 >
-                  <Col md={3} sm={3} xs={3}>
+                  <Col md={3} sm={3} xs={3} className="vcenter">
                     <Avatar
                       className="avatar"
                       round
@@ -126,16 +126,16 @@ export default class ContactsList extends React.Component {
                     />
                     <span style={{ marginLeft: '10px' }}>{ this.getDisplayName(contact) }</span>
                   </Col>
-                  <Col md={3} sm={3} xs={3}>
+                  <Col md={3} sm={3} xs={3} className="vcenter">
                     { this.getEmail(contact) }
                   </Col>
-                  <Col md={2} sm={2} xs={2}>
+                  <Col md={2} sm={2} xs={2} className="vcenter">
                     { this.getPhoneNumber(contact) }
                   </Col>
-                  <Col md={2} sm={2} xs={2}>
+                  <Col md={2} sm={2} xs={2} className="vcenter">
                     { this.getStage(contact) }
                   </Col>
-                  <Col md={2} sm={2} xs={2}>
+                  <Col md={2} sm={2} xs={2} className="vcenter">
                     { this.getSourceType(contact) }
                   </Col>
                 </Row>
