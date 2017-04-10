@@ -49,7 +49,7 @@ export default class Dashboard extends React.Component {
     return (
       <div>
         { nav_area }
-        <div className="deals" style={main_style}>
+        <div style={main_style}>
           { children }
         </div>
       </div>

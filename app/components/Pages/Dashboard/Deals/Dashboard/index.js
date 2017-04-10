@@ -264,7 +264,7 @@ export default class DealDashboard extends React.Component {
             </div>
           </Col>
 
-          <Col lg={8} md={8} sm={8}>
+          <Col lg={9} md={9} sm={9}>
             <div className="main">
               <Tabs
                 defaultActiveKey={activeTab}
