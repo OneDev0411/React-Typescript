@@ -36,8 +36,6 @@ export default class extends React.Component {
       })
     )
 
-    console.log(data.contacts)
-
     return (
       <div className="crm">
         <div className="contacts">

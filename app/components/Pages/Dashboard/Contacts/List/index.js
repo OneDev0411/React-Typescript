@@ -1,5 +1,6 @@
 import React from 'react'
 import { Grid, Row, Col, Button } from 'react-bootstrap'
+import Avatar from 'react-avatar'
 import _ from 'underscore'
 
 export default class ContactsList extends React.Component {
@@ -24,8 +25,50 @@ export default class ContactsList extends React.Component {
       this.setState({ contacts })
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    const { contacts } = nextProps
+    return contacts && contacts.length > this.state.contacts.length
+  }
+
   addContact() {
 
+  }
+
+  getDisplayName(contact) {
+    const max = 20
+    const name = contact.display_name.trim()
+    return name.length < max ? name : name.substr(0, max) + ' ...'
+  }
+
+  getAvatar(contact) {
+    if (!contact.users)
+      return
+
+    return contact.users[0].cover_image_url
+  }
+
+  getEmail(contact) {
+    return this.getValue(contact, 'emails', 'email')
+  }
+
+  getSourceType(contact) {
+    return this.getValue(contact, 'source_types', 'source_type')
+  }
+
+  getPhoneNumber(contact) {
+    return this.getValue(contact, 'phone_numbers', 'phone_number')
+  }
+
+  getStage(contact) {
+    return this.getValue(contact, 'stages', 'stage')
+  }
+
+  getValue(contact, attribute, field) {
+    const attrs = contact.sub_contacts[0].attributes
+    if (!attrs || !attrs[attribute])
+      return ''
+
+    return attrs[attribute][0][field]
   }
 
   render() {
@@ -48,6 +91,7 @@ export default class ContactsList extends React.Component {
             <Button
               bsStyle="primary"
               onClick={this.addContact.bind(this, 'offer')}
+              disabled={true}
             >
               Add Contact
             </Button>
@@ -58,11 +102,11 @@ export default class ContactsList extends React.Component {
           contacts.length > 0 &&
           <Grid className="table">
             <Row className="header">
-              <Col md={3} sm={3} xs={3}>Name</Col>
-              <Col md={3} sm={3} xs={3}>Email</Col>
-              <Col md={2} sm={2} xs={2}>Phone</Col>
-              <Col md={2} sm={2} xs={2}>Stage</Col>
-              <Col md={2} sm={2} xs={2}>Source</Col>
+              <Col md={3} sm={3} xs={3}>NAME</Col>
+              <Col md={3} sm={3} xs={3}>EMAIL</Col>
+              <Col md={2} sm={2} xs={2}>PHONE</Col>
+              <Col md={2} sm={2} xs={2}>STAGE</Col>
+              <Col md={2} sm={2} xs={2}>SOURCE</Col>
             </Row>
             {
               _.chain(contacts)
@@ -70,15 +114,30 @@ export default class ContactsList extends React.Component {
                 <Row
                   key={`CONTACT_${contact.id}`}
                   onClick={() => browserHistory.push(`/dashboard/contacts/${contact.id}`)}
-                  className="contact"
+                  className="item"
                 >
                   <Col md={3} sm={3} xs={3}>
-                    -
+                    <Avatar
+                      className="avatar"
+                      round
+                      name={this.getDisplayName(contact)}
+                      src={this.getAvatar(contact)}
+                      size={35}
+                    />
+                    <span style={{ marginLeft: '10px' }}>{ this.getDisplayName(contact) }</span>
                   </Col>
-                  <Col md={3} sm={3} xs={3}>--</Col>
-                  <Col md={2} sm={2} xs={2}>--</Col>
-                  <Col md={2} sm={2} xs={2}>--</Col>
-                  <Col md={2} sm={2} xs={2}>--</Col>
+                  <Col md={3} sm={3} xs={3}>
+                    { this.getEmail(contact) }
+                  </Col>
+                  <Col md={2} sm={2} xs={2}>
+                    { this.getPhoneNumber(contact) }
+                  </Col>
+                  <Col md={2} sm={2} xs={2}>
+                    { this.getStage(contact) }
+                  </Col>
+                  <Col md={2} sm={2} xs={2}>
+                    { this.getSourceType(contact) }
+                  </Col>
                 </Row>
               ))
               .value()
