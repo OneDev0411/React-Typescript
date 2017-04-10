@@ -21,6 +21,6 @@ export default async function (user) {
       }))
     }
 
-    AppStore.emitChange()
+    AppStore.emitChange('deals')
   } catch (e) {}
 }

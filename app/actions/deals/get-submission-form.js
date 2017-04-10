@@ -20,6 +20,6 @@ export default async function (user, deal_id, id) {
       subm => subm.last_revision === id)
 
     AppStore.data.deals[deal_index].submissions[submission_index].form_data = response.body.data
-    AppStore.emitChange()
+    AppStore.emitChange('deals')
   } catch (e) {}
 }

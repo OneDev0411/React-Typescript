@@ -26,7 +26,7 @@ export default async function (id, user, file) {
       AppStore.data.deals[index].files = files
     }
 
-    AppStore.emitChange()
+    AppStore.emitChange('deals')
   }
   catch(e) {}
 }

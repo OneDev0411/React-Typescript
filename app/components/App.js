@@ -394,7 +394,7 @@ export default class App extends Component {
 
   render() {
     let data = AppStore.data
-    const namespace = this.state && this.state.namespace ? this.state.namespace : ''
+    const namespace = this.state && this.state.namespace ? this.state.namespace : null
     const path = this.props.location.pathname
     const location = this.props.location
     data.path = path

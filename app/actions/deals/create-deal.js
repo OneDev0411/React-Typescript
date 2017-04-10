@@ -18,7 +18,7 @@ export default async function (data, user) {
 
   if (response.status === 200) {
     AppStore.data.deals.push(response.body.data)
-    AppStore.emitChange()
+    AppStore.emitChange('deals')
 
     return response.body.data
   }
