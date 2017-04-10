@@ -72,7 +72,7 @@ export default class ContactProfile extends React.Component {
             </div>
 
             <div className="card stage">
-              <span className="title">Stage:</span>
+              <div className="title">Stage:</div>
               <Stepper
                 steps={['General', 'Unqualified Lead', 'Qualified Lead', 'Active', 'Past Client']}
                 active="General"
@@ -80,9 +80,55 @@ export default class ContactProfile extends React.Component {
               />
             </div>
 
+            <div className="card details">
+              <div className="title">Details</div>
+              <ul className="table">
+                <li><span className="name">Email</span>mary_cain@gmail.com</li>
+                <li><span className="name">Original Source</span>Clay Stapp+Co</li>
+              </ul>
+            </div>
+
+            <div className="card address">
+              <div className="title">Address</div>
+              <ul className="table">
+                <li><span className="name">Address</span>4422 Margret Pine</li>
+                <li><span className="name">City</span>-</li>
+                <li><span className="name">State/region</span>-</li>
+                <li><span className="name">Zipcode</span>-</li>
+              </ul>
+            </div>
+
           </Col>
 
-          <Col lg={8} md={8} sm={8}>
+          <Col lg={7} md={7} sm={7}>
+
+            <div className="note">
+              <div className="head">
+                <img src="/static/images/contacts/notepad.svg" />
+                New Note
+              </div>
+              <textarea
+                placeholder="What do you want to say?"
+              ></textarea>
+              <div className="footer">
+                <Button bsStyle="danger" disabled={true}>Enter</Button>
+              </div>
+            </div>
+
+            <div className="card activity">
+              <div className="head">
+                <ul>
+                  <li className="active">All Activities</li>
+                  <li>Notes</li>
+                </ul>
+              </div>
+              <div className="content">
+                <div className="blank">
+                  <img src="/static/images/contacts/activity.svg" />
+                  Mary has no activity right now
+                </div>
+              </div>
+            </div>
           </Col>
         </Row>
       </div>

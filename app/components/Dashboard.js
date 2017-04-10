@@ -32,7 +32,7 @@ export default class Dashboard extends React.Component {
     const { data } = this.props
     const user = data.user
 
-    let main_style = S('ml-5p h-100p')
+    let main_style = { marginLeft: '5%', minHeight: '100vh'}
     let nav_area = <SideBar data={data} />
 
     if (data.is_mobile) {
