@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default class Contacts extends React.Component {
+export default class ContactProfile extends React.Component {
   constructor(props) {
     super(props)
   }
