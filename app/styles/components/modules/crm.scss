@@ -18,7 +18,11 @@
   }
 
   .loading-list {
-    padding: 10%;
+    text-align: center;
+    padding-top: 40vh;
+    i {
+      margin-bottom: 5px;
+    }
   }
 
   .list {

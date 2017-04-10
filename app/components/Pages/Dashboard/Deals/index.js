@@ -46,9 +46,9 @@ export default class Deals extends React.Component {
         <div className="deals">
           {
             !data.deals &&
-            <div className="loading-deals">
-              <i className="fa fa-spinner fa-spin fa-2x fa-fw" />
-              <b>loading deals ...</b>
+            <div className="loading-list">
+              <div><i className="fa fa-spinner fa-spin fa-2x fa-fw" /></div>
+              <b>Loading deals ...</b>
             </div>
           }
 

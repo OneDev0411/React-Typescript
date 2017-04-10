@@ -37,9 +37,9 @@ export default class extends React.Component {
         <div className="contacts">
           {
             !data.contacts &&
-            <div className="loading-contacts">
-              <i className="fa fa-spinner fa-spin fa-2x fa-fw" />
-              <b>loading contacts ...</b>
+            <div className="loading-list">
+              <div><i className="fa fa-spinner fa-spin fa-2x fa-fw" /></div>
+              <b>Loading contacts ...</b>
             </div>
           }
 
