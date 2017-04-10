@@ -47,7 +47,7 @@ DealDispatcher.register(async function (payload) {
       break
 
     case 'save-submission-form':
-      saveSubmissionForm(payload.user, payload.type, payload.deal,
+      return await saveSubmissionForm(payload.user, payload.type, payload.deal,
         payload.form, payload.state, payload.values, payload.submission)
       break
 
