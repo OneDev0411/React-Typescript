@@ -10,8 +10,7 @@ export default class DealsList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      deals: [],
-      loading: true
+      deals: []
     }
   }
   componentDidMount() {
@@ -25,7 +24,7 @@ export default class DealsList extends React.Component {
     const { deals } = nextProps
 
     if (deals && deals.length > this.state.deals.length)
-      this.setState({ deals, loading: false })
+      this.setState({ deals })
   }
 
   create(type) {
@@ -89,10 +88,10 @@ export default class DealsList extends React.Component {
   }
 
   render() {
-    const { deals, loading } = this.state
+    const { deals } = this.state
 
     return (
-      <div className="deals-list">
+      <div className="list">
 
         <Row className="toolbar">
           <Col lg={2} md={2} sm={2} className="vcenter">
@@ -137,7 +136,7 @@ export default class DealsList extends React.Component {
                 <Row
                   key={`DEAL_${deal.id}`}
                   onClick={() => browserHistory.push(`/dashboard/deals/${deal.id}`)}
-                  className={`deal type_${this.getStatus(deal)}`}
+                  className={`item type_${this.getStatus(deal)}`}
                 >
                   <Col md={4} sm={4} xs={4}>
                     { this.getCoverImage(deal) }

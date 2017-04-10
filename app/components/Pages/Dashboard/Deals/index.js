@@ -15,6 +15,10 @@ export default class Deals extends React.Component {
     this.getForms(user)
   }
 
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return nextProps.namespace === 'deals'
+  // }
+
   getForms(user) {
     DealDispatcher.dispatch({
       action: 'get-deal-forms',
@@ -42,7 +46,7 @@ export default class Deals extends React.Component {
     )
 
     return (
-      <div>
+      <div className="crm">
         <div className="deals">
           {
             !data.deals &&
