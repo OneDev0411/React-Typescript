@@ -1,5 +1,6 @@
 import agent from 'superagent'
 import _ from 'underscore'
+import moment from 'moment'
 import config from '../../config/public'
 
 const Contact = {
@@ -58,12 +59,15 @@ Contact.get = {
     if (item)
       return item.source_type
   },
-  email: (context, max = 30) => {
+  email: (context, max = 1000) => {
     const emails = context.sub_contacts[0].attributes.emails
     const item = Contact.get._sort(emails)
 
     if (item)
-       return Contact.get._trim(item.email, max)
+      return Contact.get._trim(item.email, max)
+  },
+  emails: context => {
+    return _.uniq(context.sub_contacts[0].attributes.emails, 'email')
   },
   phone: context => {
     const phone_numbers = context.sub_contacts[0].attributes.phone_numbers
@@ -72,12 +76,27 @@ Contact.get = {
     if (item)
       return item.phone_number
   },
+  phones: context => {
+    return _.uniq(context.sub_contacts[0].attributes.phone_numbers, 'phone_number')
+  },
   stage: context => {
     const stages = context.sub_contacts[0].attributes.stages
     const item = Contact.get._sort(stages)
 
     if (item)
       return item.stage
+  },
+  address: context => {
+    const addresses = context.sub_contacts[0].attributes.addresses
+    const item = Contact.get._sort(addresses)
+    return item ? item : {}
+  },
+  birthday: context => {
+    const birthdays = context.sub_contacts[0].attributes.birthdays
+    const item = Contact.get._sort(birthdays)
+
+    if (item)
+      return moment(item.birthday).format('MMMM DD, YYYY')
   }
 }
 

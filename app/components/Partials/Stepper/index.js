@@ -29,7 +29,7 @@ export default class Stepper extends React.Component {
               <li
                 key={`STEP_${step}`}
                 role="presentation"
-                className={ active === step ? 'active' : '' }
+                className={ active === key ? 'active' : '' }
                 style={{ width: (100 / steps.length) + '%' }}
                 onClick={() => this.gotoStep(step, key)}
               >

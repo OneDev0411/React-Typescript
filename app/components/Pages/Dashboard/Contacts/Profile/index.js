@@ -3,6 +3,7 @@ import { browserHistory } from 'react-router'
 import { Row, Col, Button } from 'react-bootstrap'
 import Avatar from 'react-avatar'
 import Stepper from '../../../../Partials/Stepper'
+import Contact from '../../../../../models/Contact'
 
 export default class ContactProfile extends React.Component {
   constructor(props) {
@@ -45,7 +46,21 @@ export default class ContactProfile extends React.Component {
     browserHistory.push('/dashboard/contacts')
   }
 
+  getStageIndex(contact) {
+    const list = ['General', 'UnqualifiedLead', 'QualifiedLead', 'Active', 'PastClient']
+    const stage = Contact.get.stage(contact)
+    return list.indexOf(stage)
+  }
+
   render() {
+    const { contact } = this.state
+
+    if (!contact)
+      return false
+
+    // get address
+    const address = Contact.get.address(contact)
+
     return (
       <div className="dashboard">
 
@@ -64,19 +79,24 @@ export default class ContactProfile extends React.Component {
               <Avatar
                 className="avatar"
                 round
-                name={'M M'}
-                src={''}
+                name={Contact.get.name(contact)}
+                src={Contact.get.avatar(contact)}
                 size={90}
               />
 
-              <span className="email">mary_cain@gmail.com</span>
+              <div className="email">
+                { Contact.get.name(contact, 30)}
+                <div style={{ fontSize: '15px', color: 'gray'}}>
+                  { Contact.get.email(contact, 30)}
+                </div>
+              </div>
             </div>
 
             <div className="card stage">
               <div className="title">Stage:</div>
               <Stepper
                 steps={['General', 'Unqualified Lead', 'Qualified Lead', 'Active', 'Past Client']}
-                active="General"
+                active={ this.getStageIndex(contact) }
                 onChange={ () => {}}
               />
             </div>
@@ -84,18 +104,33 @@ export default class ContactProfile extends React.Component {
             <div className="card details">
               <div className="title">Details</div>
               <ul className="table">
-                <li><span className="name">Email</span>mary_cain@gmail.com</li>
-                <li><span className="name">Original Source</span>Clay Stapp+Co</li>
+                {
+                  Contact.get.emails(contact).map(item => (
+                    <li key={`email_${item.id}`}>
+                      <span className="name">Email</span>{ item.email }
+                    </li>
+                  ))
+                }
+
+                {
+                  Contact.get.phones(contact).map(item => (
+                    <li key={`phone_${item.id}`}>
+                      <span className="name">Phone</span>{ item.phone_number }
+                    </li>
+                  ))
+                }
+                <li><span className="name">Original Source</span>{ Contact.get.source(contact) }</li>
+                <li><span className="name">Birthday</span>{ Contact.get.birthday(contact) }</li>
               </ul>
             </div>
 
             <div className="card address">
               <div className="title">Address</div>
               <ul className="table">
-                <li><span className="name">Address</span>4422 Margret Pine</li>
-                <li><span className="name">City</span>-</li>
-                <li><span className="name">State/region</span>-</li>
-                <li><span className="name">Zipcode</span>-</li>
+                <li><span className="name">Address</span>{ address.street_name || '-' }</li>
+                <li><span className="name">City</span>{ address.city || '-' }</li>
+                <li><span className="name">State/region</span>{ address.state || '-' }</li>
+                <li><span className="name">Zipcode</span>{ address.postal_code || '-' }</li>
               </ul>
             </div>
 

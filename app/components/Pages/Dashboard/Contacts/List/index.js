@@ -93,7 +93,7 @@ export default class ContactsList extends React.Component {
                     </span>
                   </Col>
                   <Col md={3} sm={3} xs={3} className="vcenter">
-                    { Contact.get.email(contact) }
+                    { Contact.get.email(contact, 30) }
                   </Col>
                   <Col md={2} sm={2} xs={2} className="vcenter">
                     { Contact.get.phone(contact) }
