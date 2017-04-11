@@ -11,7 +11,7 @@ export default class Stepper extends React.Component {
 
   gotoStep(step, key) {
     this.setState({
-      active: step
+      active: key
     })
 
     this.props.onChange(step, key)
