@@ -26,7 +26,7 @@ app.proxy = true
 const __DEV__ = process.env.NODE_ENV === 'development'
 
 // handle application errors
-app.use(async function(ctx, next) {
+app.use(async (ctx, next) => {
   try {
     await next()
   } catch(e) {
@@ -34,8 +34,9 @@ app.use(async function(ctx, next) {
     // log error
     console.log(e, e.stack)
 
-    ctx.status = e.status || 400
+    ctx.status = e.status || 500
     ctx.body = e.message || 'Internal Server Error'
+    ctx.app.emit('error', err, ctx)
   }
 })
 
