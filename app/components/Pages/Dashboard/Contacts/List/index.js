@@ -3,6 +3,7 @@ import { Grid, Row, Col, Button } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
 import Avatar from 'react-avatar'
 import _ from 'underscore'
+import Contact from '../../../../../models/Contact'
 
 export default class ContactsList extends React.Component {
   constructor(props) {
@@ -32,44 +33,6 @@ export default class ContactsList extends React.Component {
   }
 
   addContact() {
-
-  }
-
-  getDisplayName(contact) {
-    const max = 20
-    const name = contact.display_name.trim()
-    return name.length < max ? name : name.substr(0, max) + ' ...'
-  }
-
-  getAvatar(contact) {
-    if (!contact.users)
-      return
-
-    return contact.users[0].cover_image_url
-  }
-
-  getEmail(contact) {
-    return this.getValue(contact, 'emails', 'email')
-  }
-
-  getSourceType(contact) {
-    return this.getValue(contact, 'source_types', 'source_type')
-  }
-
-  getPhoneNumber(contact) {
-    return this.getValue(contact, 'phone_numbers', 'phone_number')
-  }
-
-  getStage(contact) {
-    return this.getValue(contact, 'stages', 'stage')
-  }
-
-  getValue(contact, attribute, field) {
-    const attrs = contact.sub_contacts[0].attributes
-    if (!attrs || !attrs[attribute])
-      return ''
-
-    return attrs[attribute][0][field]
   }
 
   render() {
@@ -121,23 +84,25 @@ export default class ContactsList extends React.Component {
                     <Avatar
                       className="avatar"
                       round
-                      name={this.getDisplayName(contact)}
-                      src={this.getAvatar(contact)}
+                      name={Contact.get.name(contact)}
+                      src={Contact.get.avatar(contact)}
                       size={35}
                     />
-                    <span style={{ marginLeft: '10px' }}>{ this.getDisplayName(contact) }</span>
+                    <span style={{ marginLeft: '10px' }}>
+                      { Contact.get.name(contact, 20) }
+                    </span>
                   </Col>
                   <Col md={3} sm={3} xs={3} className="vcenter">
-                    { this.getEmail(contact) }
+                    { Contact.get.email(contact) }
                   </Col>
                   <Col md={2} sm={2} xs={2} className="vcenter">
-                    { this.getPhoneNumber(contact) }
+                    { Contact.get.phone(contact) }
                   </Col>
                   <Col md={2} sm={2} xs={2} className="vcenter">
-                    { this.getStage(contact) }
+                    { Contact.get.stage(contact) }
                   </Col>
                   <Col md={2} sm={2} xs={2} className="vcenter">
-                    { this.getSourceType(contact) }
+                    { Contact.get.source(contact) }
                   </Col>
                 </Row>
               ))
