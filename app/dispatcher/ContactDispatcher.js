@@ -1,6 +1,7 @@
 import { Dispatcher } from './flux'
 
 import getContacts from '../actions/contacts/get-contacts'
+import getTimeline from '../actions/contacts/get-timeline'
 
 const ContactDispatcher = new Dispatcher()
 
@@ -12,6 +13,10 @@ ContactDispatcher.register(async (payload) => {
 
     case 'get-contacts':
       getContacts(payload.user)
+      break
+
+    case 'get-timeline':
+      getTimeline(payload.id, payload.user)
       break
 
     default:
