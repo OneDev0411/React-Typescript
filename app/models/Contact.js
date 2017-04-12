@@ -42,6 +42,15 @@ Contact.get = {
   _trim: (text, max) => {
     return text.length < max ? text : text.substr(0, max) + '...'
   },
+  _all: (context, attrs, type) => {
+    let list = new Array()
+    _.each(context.sub_contacts, sub => {
+      const collection = _.uniq(sub.attributes[attrs], type)
+      list = list.concat(collection)
+    })
+
+    return _.uniq(list, type)
+  },
   name: (context, max = 1000) => {
     const name = context.display_name.trim()
     return Contact.get._trim(name, max)
@@ -67,7 +76,7 @@ Contact.get = {
       return Contact.get._trim(item.email, max)
   },
   emails: context => {
-    return _.uniq(context.sub_contacts[0].attributes.emails, 'email')
+    return Contact.get._all(context, 'emails', 'email')
   },
   phone: context => {
     const phone_numbers = context.sub_contacts[0].attributes.phone_numbers
@@ -77,7 +86,7 @@ Contact.get = {
       return item.phone_number
   },
   phones: context => {
-    return _.uniq(context.sub_contacts[0].attributes.phone_numbers, 'phone_number')
+    return Contact.get._all(context, 'phone_numbers', 'phone_number')
   },
   stage: context => {
     const stages = context.sub_contacts[0].attributes.stages
@@ -91,12 +100,34 @@ Contact.get = {
     const item = Contact.get._sort(addresses)
     return item ? item : {}
   },
-  birthday: context => {
-    const birthdays = context.sub_contacts[0].attributes.birthdays
-    const item = Contact.get._sort(birthdays)
+  addresses: context => {
+    let list = []
+    _.each(context.sub_contacts, sub => {
+      const address = Contact.get._sort(sub.attributes.addresses)
+      if (address)
+        list.push(address)
+    })
 
-    if (item)
-      return moment(item.birthday).format('MMMM DD, YYYY')
+    if (list.length === 0) {
+      list = [{
+        street_name: '-',
+        city: '-',
+        state: '-',
+        postal_code: '-'
+      }]
+    }
+
+    return list
+  },
+  birthdays: context => {
+    const list = []
+    _.each(context.sub_contacts, sub => {
+      const item = Contact.get._sort(sub.attributes.birthdays)
+      if (item)
+        list.push(moment(item.birthday).format('MMMM DD, YYYY'))
+    })
+
+    return list
   }
 }
 
