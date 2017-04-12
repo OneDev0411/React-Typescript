@@ -9,9 +9,30 @@ const Contact = {
 // set api host
 const api_host = config.api_url
 
+/**
+* returns contacts list
+*/
 Contact.getContacts = async function(params) {
   const { access_token } = params
   const endpoint = `${api_host}/contacts?limit=10000`
+
+  try {
+    const response = await agent
+      .get(endpoint)
+      .set({ Authorization: `Bearer ${access_token}` })
+
+    return response
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
+* returns contact's timeline
+*/
+Contact.getTimeline = async function(params) {
+  const { id, access_token } = params
+  const endpoint = `${api_host}/contacts/${id}/timeline`
 
   try {
     const response = await agent
@@ -128,6 +149,9 @@ Contact.get = {
     })
 
     return list
+  },
+  notes: context => {
+    return Contact.get._all(context, 'notes', 'note')
   }
 }
 
