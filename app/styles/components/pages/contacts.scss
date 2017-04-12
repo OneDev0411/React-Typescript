@@ -77,6 +77,7 @@
 
         .activity {
           margin-top: 2%;
+          padding: 1% 0 0 0;
           min-height: 50vh;
           .head {
             ul {
@@ -144,6 +145,50 @@
             button {
               margin: 0 5px 5px 0;
               padding: 5px 18px;
+            }
+          }
+        }
+
+        #tab-timeline {
+          background-color: #fff;
+          ul.nav-tabs {
+            border: none;
+            margin: 2% 2% 3% 2%;
+            li {
+              a {
+                color: #9b9b9b;
+                &:hover {
+                  border-color: transparent;
+                  background-color: transparent;
+                }
+              }
+            }
+            li.active {
+              a {
+                color: #2196f3;
+                border: none;
+                font-weight: bold;
+                border-bottom: 2px solid #2196f3;
+              }
+            }
+          }
+
+          .tab-content {
+            padding: 0;
+            .notes {
+              padding: 0;
+              max-height: 40vh;
+              overflow: auto;
+              .item {
+                border-bottom: 1px solid #f6f6f6;
+                font-size: 16px;
+                padding: 2% 2% 2% 3%;
+                .time {
+                  display: block;
+                  color: gray;
+                  font-size: 14px;
+                }
+              }
             }
           }
         }
