@@ -23,6 +23,7 @@ router.post('/signin', async (ctx, next) => {
 
     const user = response.body.data
     user.access_token = response.body.access_token
+    user.refresh_token = response.body.refresh_token
 
     // store session
     ctx.session.user = user

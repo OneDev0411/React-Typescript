@@ -2,18 +2,19 @@
 import Deals from '../../models/Deal'
 import AppStore from '../../stores/AppStore'
 
-export default (user) => {
-  const params = {}
+export default async function (user) {
+  const params = {
+    access_token: user.access_token
+  }
 
-  if (user)
-    params.user = user.access_token
+  try {
+    const response = await Deals.getDeals(params)
 
-
-  Deals.getDeals(params, (err, response) => {
-    // Success
     if (response.status === 200)
       AppStore.data.deals = response.body.data
 
     AppStore.emitChange()
-  })
+  }
+  catch(e) {
+  }
 }

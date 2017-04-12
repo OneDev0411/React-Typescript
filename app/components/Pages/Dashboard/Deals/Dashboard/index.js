@@ -13,10 +13,9 @@ import { browserHistory } from 'react-router'
 import { Link } from 'react-router'
 import S from 'shorti'
 import _ from 'underscore'
-import cookie from 'react-cookie'
 import Avatar from 'react-avatar'
 import AppStore from '../../../../../stores/AppStore'
-import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
+import DealDispatcher from '../../../../../dispatcher/DealDispatcher'
 import DealForms from '../Forms'
 import DealESigns from '../ESigns'
 import Uploads from '../Uploads'
@@ -72,14 +71,6 @@ export default class DealDashboard extends React.Component {
 
     if (!files) {
       this.setState({ files: deal.files })
-
-      // set cookies for this deal
-      _.each(deal.cookies, (cval, cname) => {
-        cookie.remove(cname)
-        cookie.save(cname, cval, {
-          domain: '.irish.rechat.com'
-        })
-      })
     }
 
     if (deal.files && files && deal.files.length > files.length)
@@ -123,7 +114,7 @@ export default class DealDashboard extends React.Component {
   }
 
   getSubmissions() {
-    AppDispatcher.dispatch({
+    DealDispatcher.dispatch({
       action: 'get-submissions',
       user: this.props.user,
       id: this.props.params.id
@@ -131,7 +122,7 @@ export default class DealDashboard extends React.Component {
   }
 
   getEnvelopes() {
-    AppDispatcher.dispatch({
+    DealDispatcher.dispatch({
       action: 'get-envelopes',
       user: this.props.user,
       id: this.props.params.id
@@ -273,7 +264,7 @@ export default class DealDashboard extends React.Component {
             </div>
           </Col>
 
-          <Col lg={8} md={8} sm={8}>
+          <Col lg={9} md={9} sm={9}>
             <div className="main">
               <Tabs
                 defaultActiveKey={activeTab}

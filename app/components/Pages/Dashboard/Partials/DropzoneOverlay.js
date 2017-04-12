@@ -7,13 +7,7 @@ export default class DropzoneOverlay extends Component {
     if (this.props.overlay_active)
       overlay_class = ' active'
     let arrow_area = ''
-    if (this.props.context === 'transaction') {
-      arrow_area = (
-        <div style={S('absolute t-90 r-130n')}>
-          <img src="/static/images/dashboard/transactions/drop-arrow.png" />
-        </div>
-      )
-    }
+
     return (
       <div className={`dropzone__overlay${overlay_class}`}>
         <div style={S('w-100p h-100p text-center fixed t-0 l-0 z-1')} className="dropzone__bg" />

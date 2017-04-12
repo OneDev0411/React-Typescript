@@ -5,7 +5,7 @@ import _ from 'underscore'
 import Dropzone from 'react-dropzone'
 import Avatar from 'react-avatar'
 import PdfViewer from '../../../../Partials/Pdf/Viewer'
-import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
+import DealDispatcher from '../../../../../dispatcher/DealDispatcher'
 import { getTimeAgo } from '../../../../../utils/helpers'
 
 export default class DealForm extends React.Component {
@@ -18,15 +18,6 @@ export default class DealForm extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { uploading } = nextProps.deal
-
-    if (typeof uploading === 'undefined' || uploading === this.state.uploading)
-      return
-
-    this.setState({ uploading })
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
     if (nextProps.activeTab !== 'uploads')
       return false
@@ -34,7 +25,7 @@ export default class DealForm extends React.Component {
     return true
   }
 
-  onDrop(acceptedFiles, rejectedFiles) {
+  async onDrop(acceptedFiles, rejectedFiles) {
     if (!acceptedFiles || acceptedFiles.length < 1)
       return false
 
@@ -43,19 +34,23 @@ export default class DealForm extends React.Component {
       file: null
     })
 
-    AppDispatcher.dispatch({
-      action: 'upload-file',
-      user: this.props.user,
-      id: this.props.deal_id,
-      file: acceptedFiles[0]
-    })
-
     const reader = new FileReader()
     reader.readAsDataURL(acceptedFiles[0])
 
     reader.onload = (e) => {
       this.setState({ preview: e.target.result })
     }
+
+    await DealDispatcher.dispatchSync({
+      action: 'upload-file',
+      user: this.props.user,
+      id: this.props.deal_id,
+      file: acceptedFiles[0]
+    })
+
+    this.setState({
+      uploading: false
+    })
   }
 
   display(file) {

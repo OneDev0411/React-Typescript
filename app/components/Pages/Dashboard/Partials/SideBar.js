@@ -293,12 +293,6 @@ export default class SideBar extends Component {
     if (path.indexOf('/dashboard/contacts') !== -1)
       active.contacts = 'active'
 
-    if (path === '/dashboard/tasks')
-      active.tasks = 'active'
-
-    if (path.indexOf('/dashboard/transactions') !== -1)
-      active.transactions = 'active'
-
     if (path.indexOf('/dashboard/mls/listings/recommend') !== -1)
       active.recommend = 'active'
 
@@ -310,6 +304,9 @@ export default class SideBar extends Component {
 
     if (path.indexOf('/dashboard/deals') !== -1)
       active.deals = 'active'
+
+    if (path.indexOf('/dashboard/contacts') !== -1)
+      active.contacts = 'contacts'
 
     // User info
     const user = data.user
@@ -451,12 +448,10 @@ export default class SideBar extends Component {
       conversation: <Popover className="sidenav__popover" id="popover-conversations">Conversations</Popover>,
       map: <Popover className="sidenav__popover" id="popover-listing">Listings</Popover>,
       people: <Popover className="sidenav__popover" id="popover-people">People</Popover>,
-      tasks: <Popover className="sidenav__popover" id="popover-tasks">Tasks</Popover>,
       concierge: <Popover className="sidenav__popover" id="popover-tasks">Concierge</Popover>,
       deals: <Popover className="sidenav__popover" id="popover-tasks">Deals</Popover>,
-      transactions: <Popover className="sidenav__popover" id="popover-transactions">Transactions</Popover>,
-      support: <Popover className="sidenav__popover" id="popover-transactions">Need Help?</Popover>,
-      store: <Popover className="sidenav__popover" id="popover-transactions">Store</Popover>
+      support: <Popover className="sidenav__popover" id="popover-support">Need Help?</Popover>,
+      store: <Popover className="sidenav__popover" id="popover-store">Store</Popover>
     }
     if (data.errors && data.errors.type && data.errors.type === 'agent-not-found') {
       message = (
@@ -615,7 +610,7 @@ export default class SideBar extends Component {
             </OverlayTrigger>
           }
 
-          { /*
+          {
             <OverlayTrigger placement="right" overlay={ popover.people } delayShow={ 200 } delayHide={ 0 }>
               <LinkContainer className={ active.contacts } to="/dashboard/contacts">
                 <NavItem style={ S('w-85p') }>
@@ -623,31 +618,11 @@ export default class SideBar extends Component {
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
-            */
-          }
-          { /*
-            <OverlayTrigger placement="right" overlay={ popover.tasks } delayShow={ 200 } delayHide={ 0 }>
-              <LinkContainer className={ active.tasks } to="/dashboard/tasks">
-                <NavItem style={ S('w-85p') }>
-                  <img src={ active.tasks ? '/static/images/dashboard/sidenav/task-active.svg' : '/static/images/dashboard/sidenav/task.svg' } style={ S('w-19 h-19') }/>
-                  {this.notificationIcon('task_notification_count')}
-                </NavItem>
-              </LinkContainer>
-            </OverlayTrigger>
-            <OverlayTrigger placement="right" overlay={ popover.transactions } delayShow={ 200 } delayHide={ 0 }>
-              <LinkContainer className={ active.transactions } to="/dashboard/transactions" onClick={ this.props.viewAllTransactions }>
-                <NavItem style={ S('w-85p') }>
-                  <img src={ active.transactions ? '/static/images/dashboard/sidenav/transactions-active.svg' : '/static/images/dashboard/sidenav/transactions.svg' } style={ S('w-19 h-19') }/>
-                  {this.notificationIcon('transaction_notification_count')}
-                </NavItem>
-              </LinkContainer>
-            </OverlayTrigger>
-            */
           }
           { recommend }
           { agents }
           {
-            data.user.user_type && data.user.user_type === 'Agent' &&
+            data.user.user_type && data.user.user_type === 'Agent' && data.user.agent && data.user.agent.office_mlsid === 'CSTPP01' &&
             <OverlayTrigger placement="right" overlay={popover.store} delayShow={200} delayHide={0}>
               <NavItem style={S('w-85p')} onClick={this.goToStore.bind(this)}>
                 <SvgStore color={active.store ? nav_active_color : '#4e5c6c'} />
@@ -713,7 +688,6 @@ export default class SideBar extends Component {
 }
 SideBar.propTypes = {
   data: React.PropTypes.object,
-  viewAllTransactions: React.PropTypes.func,
   location: React.PropTypes.object,
   history: React.PropTypes.object
 }

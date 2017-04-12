@@ -1,11 +1,197 @@
-.contacts-table{
-  .contact-row{
-    .delete {
-      visibility: hidden;
+.crm {
+  .contacts {
+    min-height: 100vh;
+    background-color: #f6f6f6;
+
+    .list {
+      padding: 4%;
     }
-    &:hover {
-      .delete {
-        visibility: visible;
+
+    .dashboard {
+      .header {
+        padding: 1% 3.5%;
+        background: #fff;
+        i.fa-angle-left {
+          font-size: 25px;
+          margin-right: 0px;
+          width: 20px;
+          &:hover {
+            color: blue;
+            cursor: pointer;
+          }
+        }
+      }
+
+      .content {
+        margin: 2%;
+        margin-bottom: 0;
+        .card {
+          padding: 5px;
+          background: #fff;
+          border-radius: 3px;
+          margin-bottom: 5%;
+          .title {
+            color: #a3a6a8;
+            border-bottom: solid 1px #e5e7ea;
+            width: 90%;
+            margin: 5px auto;
+            font-weight: bold;
+            padding-bottom: 10px;
+          }
+
+          ul.table {
+            margin: 2% 5%;
+            padding: 0;
+            width: 100%;
+            li {
+              margin-bottom: 1%;
+              font-size: 13px;
+              color: #9b9b9b;
+              .name {
+                display: inline-block;
+                color: #5b6469;
+                width: 30%;
+              }
+            }
+          }
+        }
+
+        .contact-info {
+          margin-bottom: 2px;
+          padding: 20px;
+          .email {
+            font-size: 1.5em;
+            display: inline-block;
+            margin-left: 4%;
+          }
+        }
+
+        .stage {
+          padding: 5px 0 20px 0;
+          .title {
+            border-bottom: none;
+            font-weight: normal;
+            margin-bottom: 0px;
+          }
+        }
+
+        .activity {
+          margin-top: 2%;
+          padding: 1% 0 0 0;
+          min-height: 50vh;
+          .head {
+            ul {
+              margin: 0;
+              padding: 10px;
+              li {
+                display: inline-block;
+                margin-right: 15px;
+                cursor: pointer;
+                &.active {
+                  color: #2196f3;
+                  font-weight: bold;
+                  border-bottom: 2px solid #2196f3;
+                  padding-bottom: 5px;
+                }
+              }
+            }
+          }
+
+          .content {
+            .blank {
+              text-align: center;
+              color: #c7c7c7;
+              font-size: 17px;
+              margin-top: 10vh;
+              img {
+                display: block;
+                margin: 0 auto 10px auto;
+              }
+            }
+          }
+        }
+
+        .note {
+          border-radius: 3px;
+          background-color: #f7f7f7;
+          border: solid 1px #e5e5e5;
+          font-size: 16px;
+          ::-webkit-input-placeholder { color: #c6c6c6; font-size: 21px; padding: 8px; }
+          ::-moz-placeholder { color: #c6c6c6; font-size: 21px; padding: 8px; } /* Firefox 19+ */
+          :-moz-placeholder { color: #c6c6c6; font-size: 21px; padding: 8px; } /* Firefox 18- */
+          :-ms-input-placeholder { color: #c6c6c6; font-size: 21px; padding: 8px; }
+          .head {
+            margin: 10px;
+            padding-left: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            img {
+              margin-right: 10px;
+            }
+          }
+          textarea {
+            width: 100%;
+            height: 150px;
+            border: none;
+            border-bottom: solid 1px #e5e5e5;
+            resize: none;
+            &:focus {
+              outline:0px !important;
+              -webkit-appearance:none;
+            }
+          }
+          .footer {
+            text-align: right;
+            button {
+              margin: 0 5px 5px 0;
+              padding: 5px 18px;
+            }
+          }
+        }
+
+        #tab-timeline {
+          background-color: #fff;
+          ul.nav-tabs {
+            border: none;
+            margin: 2% 2% 3% 2%;
+            li {
+              a {
+                color: #9b9b9b;
+                &:hover {
+                  border-color: transparent;
+                  background-color: transparent;
+                }
+              }
+            }
+            li.active {
+              a {
+                color: #2196f3;
+                border: none;
+                font-weight: bold;
+                border-bottom: 2px solid #2196f3;
+              }
+            }
+          }
+
+          .tab-content {
+            padding: 0;
+            .notes {
+              padding: 0;
+              max-height: 40vh;
+              overflow: auto;
+              .item {
+                border-bottom: 1px solid #f6f6f6;
+                font-size: 16px;
+                padding: 2% 2% 2% 3%;
+                .time {
+                  display: block;
+                  color: gray;
+                  font-size: 14px;
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

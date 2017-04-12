@@ -8,7 +8,6 @@ import config from '../config/private'
 // Get access token
 let access_token
 let room_id
-let contact_id
 let test = config.test
 
 /* Room
@@ -63,7 +62,6 @@ describe('Testing Room model', () => {
   // it('Room.addUser should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
   //   const params = {
   //     room_id: room_id,
-  //     user: contact_id,
   //     access_token,
   //     api_host: test.api_host
   //   }

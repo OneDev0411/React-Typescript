@@ -1,10 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router'
 import S from 'shorti'
-import AppDispatcher from '../../../../dispatcher/AppDispatcher'
-import AppStore from '../../../../stores/AppStore'
-import SideBar from '../Partials/SideBar'
-import MobileNav from '../Partials/MobileNav'
+import DealDispatcher from '../../../../dispatcher/DealDispatcher'
 
 export default class Deals extends React.Component {
 
@@ -12,39 +8,22 @@ export default class Deals extends React.Component {
     const { data } = this.props
     const { user } = data
 
-    if (!user)
-      return
-
-    AppStore.data.user = user
-    AppStore.emitChange()
-
     // get deals
     this.getDeals(user)
 
     // get forms
     this.getForms(user)
-
-    // check for mobile
-    this.checkForMobile()
-  }
-
-  checkForMobile() {
-    AppDispatcher.dispatch({
-      action: 'check-for-mobile'
-    })
   }
 
   getForms(user) {
-    AppDispatcher.dispatch({
+    DealDispatcher.dispatch({
       action: 'get-deal-forms',
       user
     })
   }
 
   getDeals(user) {
-    this.setState({ loading: true })
-
-    AppDispatcher.dispatch({
+    DealDispatcher.dispatch({
       action: 'get-deals',
       user
     })
@@ -53,16 +32,6 @@ export default class Deals extends React.Component {
   render() {
     const { data } = this.props
     const user = data.user
-
-    let main_style = S('ml-5p h-100p')
-    let nav_area = <SideBar data={data} />
-
-    if (data.is_mobile) {
-      main_style = { ...main_style, ...S('') }
-
-      if (user)
-        nav_area = <MobileNav data={data} />
-    }
 
     const children = React.Children.map(this.props.children, child =>
       React.cloneElement(child, {
@@ -73,14 +42,13 @@ export default class Deals extends React.Component {
     )
 
     return (
-      <div>
-        { nav_area }
-        <div className="deals" style={main_style}>
+      <div className="crm">
+        <div className="deals">
           {
             !data.deals &&
-            <div className="loading-deals">
-              <i className="fa fa-spinner fa-spin fa-2x fa-fw" />
-              <b>loading deals ...</b>
+            <div className="loading-list">
+              <div><i className="fa fa-spinner fa-spin fa-2x fa-fw" /></div>
+              <b>Loading deals ...</b>
             </div>
           }
 

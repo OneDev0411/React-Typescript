@@ -1,5 +1,5 @@
 // ConciergeDispatcher.js
-import { Dispatcher } from 'flux'
+import { Dispatcher } from './flux'
 
 // Listings
 import getDeals from '../actions/concierge/get-deals'

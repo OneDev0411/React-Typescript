@@ -158,20 +158,7 @@ export default class ShareAlertModal extends Component {
         }
       })
     }
-    if (data.contacts) {
-      data.contacts.forEach((contact) => {
-        const user = contact.contact_user
-        if (user) {
-          if (user.id !== data.user.id && users_selected_ids && users_selected_ids.indexOf(user.id) === -1) {
-            users_select_options.push({
-              value: user,
-              label: user.first_name ? user.first_name : contact.phone_number,
-              type: 'user'
-            })
-          }
-        }
-      })
-    }
+
     // Search users
     if (data.share_modal && data.share_modal.users_found) {
       data.share_modal.users_found.forEach((user, i) => {
@@ -187,10 +174,6 @@ export default class ShareAlertModal extends Component {
         }
       })
     }
-    // Add reformatted contacts
-    const contacts_found = controller.contacts.getContactsForSearch(data.contacts)
-    if (contacts_found && contacts_found.length)
-      users_select_options = [...users_select_options, ...contacts_found]
 
     let dialog_class_name = 'modal-800'
     // Check if mobile

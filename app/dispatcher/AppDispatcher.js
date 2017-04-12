@@ -1,5 +1,5 @@
 // AppDispatcher.js
-import { Dispatcher } from 'flux'
+import { Dispatcher } from './flux'
 
 // User
 import signup from '../actions/user/signup'
@@ -15,10 +15,6 @@ import sendVerifyEmail from '../actions/user/send-verify-email'
 import addUserToStore from '../actions/user/add-user-to-store'
 import getRooms from '../actions/user/get-rooms'
 import getRoomsIndexedDB from '../actions/indexeddb/get-rooms'
-import getContacts from '../actions/user/get-contacts'
-import createContacts from '../actions/user/create-contacts'
-import editContact from '../actions/user/edit-contact'
-import deleteContact from '../actions/user/delete-contact'
 import editProfilePic from '../actions/user/edit-profile-pic'
 import editPassword from '../actions/user/edit-password'
 import upgradeAccount from '../actions/user/upgrade-account'
@@ -48,10 +44,6 @@ import getPreviousMessages from '../actions/messages/get-previous-messages'
 import landingPage from '../actions/pages/landing'
 import getContent from '../actions/pages/get-content'
 
-// Modules
-import addContacts from '../actions/modules/add-contacts'
-import removeContact from '../actions/modules/remove-contact'
-
 // Notifications
 import getNotificationSummery from '../actions/notifications/get-summary'
 
@@ -75,20 +67,10 @@ import geocodeAddress from '../actions/google/geocode-address'
 // Chat module
 import sendChatModuleMessage from '../actions/chat-module/send-message'
 
-// Deals
-import getDeals from '../actions/deals/get-deals'
-import getSubmissions from '../actions/deals/get-submissions'
-import addSubmission from '../actions/deals/add-submission'
-import getSubmissionForm from '../actions/deals/get-submission-form'
-import getEnvelopes from '../actions/deals/get-envelopes'
-import getDealForms from '../actions/deals/get-deal-forms'
-import uploadFile from '../actions/deals/upload-file'
-import saveSubmissionForm from '../actions/deals/save-submission-form'
-
 const AppDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
-AppDispatcher.register((payload) => {
+AppDispatcher.register(async function (payload) {
   const action = payload.action
 
   switch (action) {
@@ -173,10 +155,6 @@ AppDispatcher.register((payload) => {
       leaveRoom(payload.user, payload.id)
       break
 
-    case 'get-contacts':
-      getContacts(payload.user)
-      break
-
     case 'add-users':
       addUsers(payload.user, payload.room, payload.users, payload.emails, payload.phone_numbers)
       break
@@ -199,26 +177,6 @@ AppDispatcher.register((payload) => {
 
     case 'get-previous-messages':
       getPreviousMessages(payload.user, payload.room, payload.scroll_height)
-      break
-
-    case 'create-contacts':
-      createContacts(payload.user, payload.contacts, payload.module_type)
-      break
-
-    case 'edit-contact':
-      editContact(payload.user, payload.contact, payload.module_type)
-      break
-
-    case 'delete-contact':
-      deleteContact(payload.user, payload.contact_id)
-      break
-
-    case 'add-contacts':
-      addContacts(payload.contacts, payload.module_type)
-      break
-
-    case 'remove-contact':
-      removeContact(payload.contact_id, payload.module_type)
       break
 
     case 'room-notifications':
@@ -299,39 +257,6 @@ AppDispatcher.register((payload) => {
 
     case 'get-receiving-user':
       getReceivingUser(payload.user_id)
-      break
-
-    case 'get-deals':
-      getDeals(payload.user)
-      break
-
-    case 'get-submissions':
-      getSubmissions(payload.id, payload.user)
-      break
-
-    case 'add-submission':
-      addSubmission(payload.id, payload.form)
-      break
-
-    case 'get-deal-forms':
-      getDealForms(payload.user)
-      break
-
-    case 'get-envelopes':
-      getEnvelopes(payload.id, payload.user)
-      break
-
-    case 'upload-file':
-      uploadFile(payload.id, payload.user, payload.file)
-      break
-
-    case 'save-submission-form':
-      saveSubmissionForm(payload.user, payload.type, payload.deal,
-        payload.form, payload.state, payload.values, payload.submission)
-      break
-
-    case 'get-submission-form':
-      getSubmissionForm(payload.user, payload.deal, payload.last_revision)
       break
 
     default:

@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import S from 'shorti'
-import cookie from 'react-cookie'
 import moment from 'moment'
 import _ from 'underscore'
 import AppStore from '../../../../../stores/AppStore'
@@ -25,15 +24,6 @@ export default class Deals extends Component {
 
   componentDidMount() {
     const { deal } = this.state
-    const cookies = deal.cookies
-
-    _.each(cookies, (value, key) => {
-      cookie.save(key, value, {
-        path: '/',
-        domain: '.rechat.com',
-        expires: new Date('Fri Aug 02 2020 00:00:00')
-      })
-    })
 
     this.getSubmissions()
     this.getEnvelopes()

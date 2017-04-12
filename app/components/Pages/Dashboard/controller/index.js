@@ -21,8 +21,7 @@ import add_members from './add-members'
 import chat_module from './chat-module'
 // Action Bubble
 import action_bubble from './action-bubble'
-// Contacts
-import contacts from './contacts'
+
 // combine controllers
 const controller = {
   listing_map,
@@ -40,7 +39,6 @@ const controller = {
   search_input_map,
   add_members,
   chat_module,
-  action_bubble,
-  contacts
+  action_bubble
 }
 export default controller

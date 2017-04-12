@@ -386,11 +386,14 @@ export default class App extends Component {
   }
 
   _onChange() {
-    this.setState(AppStore)
+    this.setState({
+      AppStore
+    })
   }
 
   render() {
     let data = AppStore.data
+
     const path = this.props.location.pathname
     const location = this.props.location
     data.path = path

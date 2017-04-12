@@ -1,4 +1,5 @@
 // actions/notifications/get.js
+import { browserHistory } from 'react-router'
 import Notification from '../../models/Notification'
 import AppStore from '../../stores/AppStore'
 import AppDispatcher from '../../dispatcher/AppDispatcher'
@@ -10,6 +11,11 @@ export default (user) => {
     access_token: user.access_token
   }
   Notification.getSummary(params, (err, response) => {
+    if (err && err.response.status === 401) {
+      window.location.href = '/signout'
+      return
+    }
+
     const summary = response.data
     AppStore.data.notifications.summary = summary
     // If room notification on new room, refresh room

@@ -73,10 +73,6 @@ export default class Mls extends Component {
         this.getRoomsIndexedDB()
       this.getUserRooms()
     }
-    AppDispatcher.dispatch({
-      action: 'get-contacts',
-      user
-    })
     if (this.props.location && this.props.location.query.message && this.props.location.query.message === 'welcome') {
       AppStore.data.show_welcome_modal = true
       AppStore.emitChange()

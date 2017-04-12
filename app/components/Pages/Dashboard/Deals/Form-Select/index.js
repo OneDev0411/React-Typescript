@@ -1,6 +1,5 @@
 import React from 'react'
 import { Button, Modal, FormControl } from 'react-bootstrap'
-import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
 
 export default class FormSelect extends React.Component {
 
@@ -38,6 +37,12 @@ export default class FormSelect extends React.Component {
   render() {
     return (
       <div>
+        <Button
+          className="add-form-btn"
+          onClick={this.addForm.bind(this)}
+        >
+          Add Blank Form
+        </Button>
         <Modal
           dialogClassName="modal-fullscreen"
           show={this.state.show}
