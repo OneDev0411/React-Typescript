@@ -151,7 +151,8 @@ Contact.get = {
     return list
   },
   notes: context => {
-    return Contact.get._all(context, 'notes', 'note')
+    const list = Contact.get._all(context, 'notes', 'note')
+    return _.sortBy(list, item => item.created_at * -1)
   }
 }
 
