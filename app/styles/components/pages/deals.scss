@@ -516,69 +516,69 @@
       }
     }
   }
+}
 
-  .select-form {
-    padding: 5%;
-    .search {
-      margin-top: 5%;
-      width: 100%;
-      background: #FBFBFB;
-      border-radius: 0px;
-      padding: 3%;
-    }
+.select-form {
+  padding: 5%;
+  .search {
+    margin-top: 5%;
+    width: 100%;
+    background: #FBFBFB;
+    border-radius: 0px;
+    padding: 3%;
+  }
 
-    .list {
-      max-height: 50vh;
-      min-height: 50vh;
-      overflow: auto;
+  .list {
+    max-height: 50vh;
+    min-height: 50vh;
+    overflow: auto;
+    margin-top: 3%;
+    ul {
+      padding: 0;
+      margin: 0;
       margin-top: 3%;
-      ul {
-        padding: 0;
-        margin: 0;
-        margin-top: 3%;
-        li {
-          padding: 2%;
-          font-size: 16px;
-          img {
-            width: 18px;
-            margin-right: 10px;
-          }
-          &:hover {
-            background-color: #F4FAFF;
-            cursor: pointer;
-          }
+      li {
+        padding: 2%;
+        font-size: 16px;
+        img {
+          width: 18px;
+          margin-right: 10px;
+        }
+        &:hover {
+          background-color: #F4FAFF;
+          cursor: pointer;
         }
       }
     }
   }
+}
 
-  .add-signer-form {
-    padding: 5%;
-    input {
-      border-radius: 0;
-    }
+.add-signer-form {
+  padding: 5%;
+  input {
+    border-radius: 0;
+  }
 
-    .assign-role {
-      margin-top: 40px;
-      font-size: 16px;
-      color: gray;
-      ul {
-        margin: 15px 0 0 0;
-        padding: 0;
-        li {
-          display: inline-block;
-          font-size: 14px;
-          border: 1px solid #e2e6ea;
-          margin-right: 10px;
-          padding: 1.5%;
-          border-radius: 100px;
-          &.selected {
-            background: #eee;
-          }
-          &:hover {
-            background: #f4f4f4;
-            cursor: pointer;
-          }
+  .assign-role {
+    margin-top: 40px;
+    font-size: 16px;
+    color: gray;
+    ul {
+      margin: 15px 0 0 0;
+      padding: 0;
+      li {
+        display: inline-block;
+        font-size: 14px;
+        border: 1px solid #e2e6ea;
+        margin-right: 10px;
+        padding: 1.5%;
+        border-radius: 100px;
+        &.selected {
+          background: #eee;
+        }
+        &:hover {
+          background: #f4f4f4;
+          cursor: pointer;
         }
       }
     }
