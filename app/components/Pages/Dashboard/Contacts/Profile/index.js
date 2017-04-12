@@ -1,7 +1,8 @@
 import React from 'react'
 import { browserHistory } from 'react-router'
-import { Row, Col, Button } from 'react-bootstrap'
+import { Row, Col, Button, Tabs, Tab } from 'react-bootstrap'
 import Avatar from 'react-avatar'
+import moment from 'moment'
 import Stepper from '../../../../Partials/Stepper'
 import Contact from '../../../../../models/Contact'
 
@@ -50,6 +51,10 @@ export default class ContactProfile extends React.Component {
     const list = ['General', 'UnqualifiedLead', 'QualifiedLead', 'Active', 'PastClient']
     const stage = Contact.get.stage(contact)
     return list.indexOf(stage)
+  }
+
+  onTabChange() {
+
   }
 
   render() {
@@ -159,18 +164,26 @@ export default class ContactProfile extends React.Component {
             </div>
 
             <div className="card activity">
-              <div className="head">
-                <ul>
-                  <li className="active">All Activities</li>
-                  <li>Notes</li>
-                </ul>
-              </div>
-              <div className="content">
-                <div className="blank">
-                  <img src="/static/images/contacts/activity.svg" />
-                  Mary has no activity right now
-                </div>
-              </div>
+              <Tabs
+                defaultActiveKey='timeline'
+                animation={false}
+                id="tab-timeline"
+                onSelect={this.onTabChange.bind(this)}
+              >
+                <Tab eventKey="timeline" title="All Activity" className="timeline">
+                  Coming soon :)
+                </Tab>
+                <Tab eventKey="notes" title="Notes" className="notes">
+                  {
+                    Contact.get.notes(contact).map(item => (
+                      <div key={`note_${item.note}`} className="item">
+                        { item.note }
+                        <span className="time">{ moment(item.created_at).format('MMMM DD, YYYY')}</span>
+                      </div>
+                    ))
+                  }
+                </Tab>
+              </Tabs>
             </div>
           </Col>
         </Row>
