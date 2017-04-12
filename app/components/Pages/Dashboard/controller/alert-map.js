@@ -10,7 +10,10 @@ const controller = {
     const data = AppStore.data
     if (!data.notifications)
       return false
-    const summaries = data.notifications.summary.room_notification_summaries
+    // TODO refactor notifications
+    let summaries
+    if (data.notifications && data.notifications.summary)
+      summaries = data.notifications.summary.room_notification_summaries
     if (!summaries)
       return false
     summaries.forEach((summary) => {
