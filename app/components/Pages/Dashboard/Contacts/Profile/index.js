@@ -58,9 +58,6 @@ export default class ContactProfile extends React.Component {
     if (!contact)
       return false
 
-    // get address
-    const address = Contact.get.address(contact)
-
     return (
       <div className="dashboard">
 
@@ -120,18 +117,28 @@ export default class ContactProfile extends React.Component {
                   ))
                 }
                 <li><span className="name">Original Source</span>{ Contact.get.source(contact) }</li>
-                <li><span className="name">Birthday</span>{ Contact.get.birthday(contact) }</li>
+                {
+                  Contact.get.birthdays(contact).map((birthday, key) => (
+                    <li key={`birthday_${key}`}>
+                      <span className="name">Birthday</span>{ birthday }
+                    </li>
+                  ))
+                }
               </ul>
             </div>
 
             <div className="card address">
               <div className="title">Address</div>
-              <ul className="table">
-                <li><span className="name">Address</span>{ address.street_name || '-' }</li>
-                <li><span className="name">City</span>{ address.city || '-' }</li>
-                <li><span className="name">State/region</span>{ address.state || '-' }</li>
-                <li><span className="name">Zipcode</span>{ address.postal_code || '-' }</li>
-              </ul>
+              {
+                Contact.get.addresses(contact).map((address, key) => (
+                  <ul key={`address_${key}`} className="table" style={{ marginBottom: '10px' }}>
+                    <li><span className="name">Address</span>{ address.street_name || '-' }</li>
+                    <li><span className="name">City</span>{ address.city || '-' }</li>
+                    <li><span className="name">State/region</span>{ address.state || '-' }</li>
+                    <li><span className="name">Zipcode</span>{ address.postal_code || '-' }</li>
+                  </ul>
+                ))
+              }
             </div>
 
           </Col>
