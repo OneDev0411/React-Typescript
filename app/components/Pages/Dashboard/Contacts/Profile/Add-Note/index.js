@@ -28,7 +28,10 @@ export default class AddNote extends React.Component {
       note
     })
 
-    this.setState({ saving: false })
+    this.setState({
+      saving: false,
+      note: ''
+    })
 
     // trigger onSave function
     this.props.onSave()
