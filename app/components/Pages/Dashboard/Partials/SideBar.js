@@ -309,6 +309,9 @@ export default class SideBar extends Component {
     if (path.indexOf('/dashboard/contacts') !== -1)
       active.contacts = 'active'
 
+    if (path.indexOf('/dashboard/notifications') !== -1)
+      active.notifications = 'active'
+
     // User info
     const user = data.user
     let recommend
@@ -640,6 +643,9 @@ export default class SideBar extends Component {
         </Nav>
         <div style={S('absolute b-10 l-15')}>
           <Nav className="sidebar__account">
+            <Link to="/dashboard/notifications">
+              <i className="fa fa-bell" style={S(`font-30 relative l-5 t-30n color-${!active.notifications ? '4D5C6C' : '3388ff' }`)} />
+            </Link>
             <OverlayTrigger placement="right" overlay={popover.support} delayShow={200} delayHide={0}>
               <div style={S('pointer relative t-15n')} onClick={this.showIntercom}>
                 <i className="fa fa-question" style={S('font-20 color-202A33 relative t-5n l-13 z-100')} />
