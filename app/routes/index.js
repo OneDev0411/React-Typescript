@@ -40,6 +40,9 @@ import Contacts from '../components/Pages/Dashboard/Contacts'
 import ContactsList from '../components/Pages/Dashboard/Contacts/List'
 import ContactProfile from '../components/Pages/Dashboard/Contacts/Profile'
 
+// Notifications
+import NotificationsPage from '../components/Pages/Dashboard/Notifications'
+
 // Widgets
 import ListingsWidget from '../components/Pages/Widgets/Listings'
 import MapWidget from '../components/Pages/Widgets/Map'
@@ -88,6 +91,8 @@ export default (
         <Route path="/dashboard/contacts/:id" component={ContactProfile} />
       </Route>
     </Route>
+
+    <Route path="/dashboard/notifications" component={NotificationsPage} />
 
     <Route path="*" component={NoMatch} />
   </Route>
