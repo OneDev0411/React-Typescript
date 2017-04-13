@@ -185,7 +185,9 @@ Contact.get = {
   notes: context => {
     let list = new Array()
     _.each(context.sub_contacts, sub => {
-      list = list.concat(sub.attributes.notes)
+      const notes = sub.attributes.notes
+      if (notes && notes.length > 0)
+        list = list.concat(notes)
     })
 
     return _.sortBy(list, item => item.created_at * -1)
