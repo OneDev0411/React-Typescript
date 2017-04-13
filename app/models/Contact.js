@@ -4,7 +4,8 @@ import moment from 'moment'
 import config from '../../config/public'
 
 const Contact = {
-  get: {}
+  get: {},
+  helper: {}
 }
 // set api host
 const api_host = config.api_url
@@ -42,6 +43,37 @@ Contact.getTimeline = async function(params) {
     return response
   } catch (e) {
     throw e
+  }
+}
+
+/**
+* add note
+*/
+Contact.addNote = async function(params) {
+  const { id, note, access_token } = params
+  const endpoint = `${api_host}/contacts/${id}/attributes`
+  const payload = Contact.helper.addAttribute('note', note)
+
+  try {
+    const response = await agent
+      .post(endpoint)
+      .set({ Authorization: `Bearer ${access_token}` })
+      .send(payload)
+
+    return response
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
+* helpers functions
+*/
+Contact.helper = {
+  addAttribute: (type, value) => {
+    return {
+      attributes: [{ type, [type]: value }]
+    }
   }
 }
 
@@ -145,13 +177,17 @@ Contact.get = {
     _.each(context.sub_contacts, sub => {
       const item = Contact.get._sort(sub.attributes.birthdays)
       if (item)
-        list.push(moment(item.birthday).format('MMMM DD, YYYY'))
+        list.push(moment.unix(item.birthday).format('MMMM DD, YYYY'))
     })
 
     return list
   },
   notes: context => {
-    const list = Contact.get._all(context, 'notes', 'note')
+    let list = new Array()
+    _.each(context.sub_contacts, sub => {
+      list = list.concat(sub.attributes.notes)
+    })
+
     return _.sortBy(list, item => item.created_at * -1)
   }
 }
