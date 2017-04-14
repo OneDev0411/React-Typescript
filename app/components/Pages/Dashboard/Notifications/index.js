@@ -26,7 +26,7 @@ export default class extends React.Component {
     let icon
     switch (type) {
       case 'UserSentMessage':
-        icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
+        icon = <div><div style={ S(`${subject.profile_image_url ? `bg-url(${subject.profile_image_url})` : 'bg-ccc'} bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }>{ !subject.profile_image_url && <div style={ S('color-fff text-center font-10 mt-10') }>No <br />image</div> }</div></div>
         break
       case 'UserEditedAlert':
         icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
@@ -56,7 +56,7 @@ export default class extends React.Component {
         icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
         break
       case 'ContactCreatedForUser':
-        icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
+        icon = <div><div style={ S(`${subject.profile_image_url ? `bg-url(${subject.profile_image_url})` : 'bg-ccc'} bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }>{ !subject.profile_image_url && <div style={ S('color-fff text-center font-10 mt-10') }>No <br />image</div> }</div></div>
         break
       case 'UserReactedToEnvelope':
         icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
@@ -76,7 +76,7 @@ export default class extends React.Component {
           <div key={ notification.id + i } style={ { ...S('h-80 p-20 pointer w-100p relative'), boxShadow: '0 1px 0 0 #f1f1f1' } }>
             <div style={ S('pull-left') }>{ this.notificationIcon(notification) }</div>
             <div style={ S('pull-left relative l-80 w-100p') }>
-              <div style={ S('color-263445') }>{ notification.message }</div>
+              <div style={ S('color-263445 font-17') }>{ notification.message }</div>
               <div style={ S('color-c6c6c6') }>{ helpers.getTimeAgo(notification.created_at) } ago</div>
             </div>
           </div>
