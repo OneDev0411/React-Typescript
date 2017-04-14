@@ -3,6 +3,7 @@ import SideBar from '../Partials/SideBar'
 import MobileNav from '../Partials/MobileNav'
 import NotificationDispatcher from '../../../../dispatcher/NotificationDispatcher'
 import S  from 'shorti'
+import helpers from '../../../../utils/helpers'
 export default class extends React.Component {
   constructor(props) {
     super(props)
@@ -74,7 +75,10 @@ export default class extends React.Component {
         return (
           <div key={ notification.id + i } style={ { ...S('h-80 p-20 pointer w-100p relative'), boxShadow: '0 1px 0 0 #f1f1f1' } }>
             <div style={ S('pull-left') }>{ this.notificationIcon(notification) }</div>
-            <div style={ S('pull-left relative l-80 t-10') }>{ notification.message } { notification.seen }</div>
+            <div style={ S('pull-left relative l-80 w-100p') }>
+              <div style={ S('color-263445') }>{ notification.message }</div>
+              <div style={ S('color-c6c6c6') }>{ helpers.getTimeAgo(notification.created_at) } ago</div>
+            </div>
           </div>
         )
       })
