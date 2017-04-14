@@ -16,64 +16,70 @@ export default class extends React.Component {
       user
     })
   }
-  notificationIcon(type) {
+  notificationIcon(notification) {
+    const type = notification.notification_type
+    const subject = notification.subjects[0]
+    let object
+    if (notification.objects)
+      object = notification.objects[0]
     let icon
     switch (type) {
       case 'UserSentMessage':
-        icon = <div><i className="fa fa-comment text-primary"></i> User Sent Message</div>
+        icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
         break
       case 'UserEditedAlert':
-        icon = <div>UserEditedAlert</div>
+        icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
         break
       case 'UserCreatedAlert':
-        icon = <div>UserCreatedAlert</div>
+        icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
         break
       case 'UserSharedListing':
-        icon = <div><i className="fa fa-share text-primary"></i>  UserSharedListing</div>
+        icon = <div><div style={ S(`bg-url(${object.cover_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
         break
       case 'UserInvitedRoom':
-        icon = <div><i className="fa fa-envelope text-primary"></i> UserInvitedRoom</div>
+        icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
         break
       case 'ListingBecameAvailableRoom':
-        icon = <div>ListingBecameAvailableRoom</div>
+        icon = <div><div style={ S(`bg-url(${object.cover_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
         break
       case 'ListingPriceDroppedUser':
-        icon = <div><i className="fa fa-arrow-down text-primary"></i> ListingPriceDroppedUser</div>
+        icon = <div><div style={ S(`bg-url(${object.cover_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
         break
       case 'ListingStatusChangedUser':
-        icon = <div>ListingStatusChangedUser</div>
+        icon = <div><div style={ S(`bg-url(${object.cover_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
         break
       case 'OpenHouseAvailableListing':
-        icon = <div>OpenHouseAvailableListing</div>
+        icon = <div><div style={ S(`bg-url(${object.cover_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
         break
       case 'UserJoinedRoom':
-        icon = <div>UserJoinedRoom</div>
+        icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
         break
       case 'ContactCreatedForUser':
-        icon = <div><i className="fa fa-user text-primary"></i> ContactCreatedForUser</div>
+        icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
         break
       case 'UserReactedToEnvelope':
-        icon = <div>UserReactedToEnvelope</div>
+        icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
         break
       default:
-        icon = <div>default</div>
+        icon = <div></div>
     }
     return icon
   }
   getNotifications() {
     const { data } = this.props
     const { notifications } = data
-    if (notifications) {
-      return notifications.map(notification => {
-        console.log(notification)
+    if (notifications && notifications.length) {
+      return notifications.map((notification, i) => {
+        // console.log(notification)
         return (
-          <div key={ notification.id } style={ { ...S('h-80 p-20 pointer w-100p'), boxShadow: '0 1px 0 0 #f1f1f1' } }>
-            <div style={ S('pull-left mr-20') }>{ this.notificationIcon(notification.notification_type) }</div>
-            <div style={ S('pull-left') }>{ notification.message }</div>
+          <div key={ notification.id + i } style={ { ...S('h-80 p-20 pointer w-100p relative'), boxShadow: '0 1px 0 0 #f1f1f1' } }>
+            <div style={ S('pull-left') }>{ this.notificationIcon(notification) }</div>
+            <div style={ S('pull-left relative l-80 t-10') }>{ notification.message } { notification.seen }</div>
           </div>
         )
       })
     }
+    return <div style={ S('text-center mt-40') }>Loading...</div>
   }
   render() {
     const { data } = this.props
