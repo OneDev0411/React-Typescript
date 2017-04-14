@@ -24,42 +24,43 @@ export default class extends React.Component {
     if (notification.objects)
       object = notification.objects[0]
     let icon
+    const common_image_style = 'bg-center bg-cover w-50 h-50 absolute br-100 t-15'
     switch (type) {
       case 'UserSentMessage':
-        icon = <div><div style={ S(`${subject.profile_image_url ? `bg-url(${subject.profile_image_url})` : 'bg-ccc'} bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }>{ !subject.profile_image_url && <div style={ S('color-fff text-center font-10 mt-10') }>No <br />image</div> }</div></div>
+        icon = <div><div style={ S(`${subject.profile_image_url ? `bg-url(${subject.profile_image_url})` : 'bg-ccc'} ${common_image_style}`) }>{ !subject.profile_image_url && <div style={ S('color-fff text-center font-10 mt-10') }>No <br />image</div> }</div></div>
         break
       case 'UserEditedAlert':
-        icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
+        icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) ${common_image_style}`) }/></div>
         break
       case 'UserCreatedAlert':
-        icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
+        icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) ${common_image_style}`) }/></div>
         break
       case 'UserSharedListing':
-        icon = <div><div style={ S(`bg-url(${object.cover_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
+        icon = <div><div style={ S(`bg-url(${object.cover_image_url}) ${common_image_style}`) }/></div>
         break
       case 'UserInvitedRoom':
-        icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
+        icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) ${common_image_style}`) }/></div>
         break
       case 'ListingBecameAvailableRoom':
-        icon = <div><div style={ S(`bg-url(${object.cover_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
+        icon = <div><div style={ S(`bg-url(${object.cover_image_url}) ${common_image_style}`) }/></div>
         break
       case 'ListingPriceDroppedUser':
-        icon = <div><div style={ S(`bg-url(${object.cover_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
+        icon = <div><div style={ S(`bg-url(${object.cover_image_url}) ${common_image_style}`) }/></div>
         break
       case 'ListingStatusChangedUser':
-        icon = <div><div style={ S(`bg-url(${object.cover_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
+        icon = <div><div style={ S(`bg-url(${object.cover_image_url}) ${common_image_style}`) }/></div>
         break
       case 'OpenHouseAvailableListing':
-        icon = <div><div style={ S(`bg-url(${object.cover_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
+        icon = <div><div style={ S(`bg-url(${object.cover_image_url}) ${common_image_style}`) }/></div>
         break
       case 'UserJoinedRoom':
-        icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
+        icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) ${common_image_style}`) }/></div>
         break
       case 'ContactCreatedForUser':
-        icon = <div><div style={ S(`${subject.profile_image_url ? `bg-url(${subject.profile_image_url})` : 'bg-ccc'} bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }>{ !subject.profile_image_url && <div style={ S('color-fff text-center font-10 mt-10') }>No <br />image</div> }</div></div>
+        icon = <div><div style={ S(`${subject.profile_image_url ? `bg-url(${subject.profile_image_url})` : 'bg-ccc'} ${common_image_style}`) }>{ !subject.profile_image_url && <div style={ S('color-fff text-center font-10 mt-10') }>No <br />image</div> }</div></div>
         break
       case 'UserReactedToEnvelope':
-        icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) bg-center bg-cover w-50 h-50 absolute br-100 t-10`) }/></div>
+        icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) ${common_image_style}`) }/></div>
         break
       default:
         icon = <div></div>
