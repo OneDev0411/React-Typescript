@@ -112,8 +112,9 @@ export default class ShareListingModal extends Component {
   }
   isSharable() {
     const data = this.props.data
-    if (data.share_modal && data.share_modal.search_value && data.share_modal.search_value.trim())
+    if (data.share_modal && data.share_modal.search_value && data.share_modal.search_value.trim() || data.share_modal && data.share_modal.items_selected && data.share_modal.items_selected.length)
       return true
+    return false
   }
   handleShareInputBlur() {
     const data = this.props.data
