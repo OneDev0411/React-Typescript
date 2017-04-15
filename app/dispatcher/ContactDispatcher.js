@@ -5,7 +5,7 @@ import getContacts from '../actions/contacts/get-contacts'
 const ContactDispatcher = new Dispatcher()
 
 // Register callback with ContactDispatcher
-ContactDispatcher.register(async function (payload) {
+ContactDispatcher.register(async (payload) => {
   const action = payload.action
 
   switch (action) {

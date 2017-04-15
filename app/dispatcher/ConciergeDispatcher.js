@@ -9,27 +9,18 @@ import getSubmissions from '../actions/concierge/get-submissions'
 const ConciergeDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
-ConciergeDispatcher.register((payload) => {
-  const action = payload.action
-
-  switch (action) {
-
-    case 'get-deals':
-      getDeals(payload.user, payload.q)
+ConciergeDispatcher.register(async (payload) => {
+  switch (payload.type) {
+    case 'GET_DEALS':
+      getDeals(payload.user)
       break
-
-    case 'get-envelopes':
-      getEnvelopes(payload.user, payload.deal_id, payload.q)
-      break
-
-    case 'get-submissions':
-      getSubmissions(payload.user, payload.deal_id, payload.q)
-      break
-
+    case 'GET_ENVELOPES':
+      return await getEnvelopes(payload.user, payload.dealId)
+    case 'GET_SUBMISSIONS':
+      return await getSubmissions(payload.user, payload.dealId)
     default:
       return true
   }
-  return true
 })
 
 export default ConciergeDispatcher

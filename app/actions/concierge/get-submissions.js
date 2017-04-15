@@ -1,23 +1,30 @@
-// actions/concierge/get-deals.js
-import Concierge from '../../models/Concierge'
+
+
+import { getSubmissions } from '../../models/Concierge'
 import AppStore from '../../stores/AppStore'
-import _ from 'underscore'
 
-export default (user, deal_id) => {
-  const params = {}
-
-  if (user) {
-    params.user = user.access_token
-    params.deal_id = deal_id
+export default async function (user, dealId) {
+  const params = {
+    dealId,
+    token: user.access_token
   }
+  // let dealIndex = 0
+  try {
+    const submissions = await getSubmissions(params) || []
+    AppStore.data.conciergeDeals = AppStore.data.conciergeDeals.map((deal, index) => {
+      if (deal.id !== dealId)
+        return deal
 
-  Concierge.getSubmissions(params, (err, response) => {
-    // Success
-    if (response.status === 'success') {
-      const index = _.findIndex(AppStore.data.concierge_deals, deal => deal.id === deal_id)
-      AppStore.data.concierge_deals[index].submissions = response.data
-    }
-
-    AppStore.emitChange()
-  })
+      // dealIndex = index
+      return {
+        ...deal,
+        submissions
+      }
+    })
+    // console.log('hasSubmission', AppStore.data.conciergeDeals[dealIndex])
+    return submissions
+  } catch (error) {
+    console.log(`getSubmissions: ${error}`)
+    throw error
+  }
 }

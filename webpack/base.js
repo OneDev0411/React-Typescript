@@ -11,7 +11,7 @@ export default {
     publicPath: config.compile.publicPath
   },
   resolve: {
-    extensions: [ '.js', '.json', '.css', '.scss' ],
+    extensions: ['.js', '.json', '.css', '.scss'],
     modules: [
       config.compile.entry,
       'node_modules'
@@ -36,17 +36,17 @@ export default {
           ],
           env: {
             production: {
-              presets: [ 'react-optimize' ]
+              presets: ['react-optimize']
             },
             development: {
               plugins: [
-                [ 'react-hot-loader/babel' ],
+                ['react-hot-loader/babel'],
                 [
                   'react-transform', {
-                    'transforms': [
+                    transforms: [
                       {
-                        'transform': 'react-transform-catch-errors',
-                        'imports': [ 'react', 'redbox-react' ]
+                        transform: 'react-transform-catch-errors',
+                        imports: ['react', 'redbox-react']
                       }
                     ]
                   }

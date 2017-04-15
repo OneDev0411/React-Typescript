@@ -35,6 +35,11 @@ import DealEditForm from '../components/Pages/Dashboard/Deals/Edit-Form'
 import CollectSignatures_Documents from '../components/Pages/Dashboard/Deals/CollectSignatures-Documents'
 import CollectSignatures_Recipients from '../components/Pages/Dashboard/Deals/CollectSignatures-Recipients'
 
+// Concierge
+import ConciergeLayout from '../components/Pages/Dashboard/Concierge'
+import ConciergeDealsList from '../components/Pages/Dashboard/Concierge/DealsList'
+import DealReview from '../components/Pages/Dashboard/Concierge/DealReview'
+
 // contacts
 import Contacts from '../components/Pages/Dashboard/Contacts'
 import ContactsList from '../components/Pages/Dashboard/Contacts/List'
@@ -81,6 +86,12 @@ export default (
         <Route path="/dashboard/deals/:id/edit-form/:form/:type" component={DealEditForm} />
         <Route path="/dashboard/deals/:id/collect-signatures/documents" component={CollectSignatures_Documents} />
         <Route path="/dashboard/deals/:id/collect-signatures/recipients" component={CollectSignatures_Recipients} />
+        <Route path="/dashboard/deals/:id/review" component={DealReview} />
+      </Route>
+
+      <Route path="/dashboard/concierge/deals" component={ConciergeLayout}>
+        <IndexRoute component={ConciergeDealsList} />
+        <Route path="/dashboard/concierge/deals/:id/review" component={DealReview} />
       </Route>
 
       <Route path="/dashboard/contacts" component={Contacts}>
