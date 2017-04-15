@@ -18,26 +18,27 @@ const config = {
     template: path.resolve(__dirname, '../../app/templates/app.html'),
     vendors: [
       'react',
-      'react-bootstrap',
+      'moment',
       'lodash',
-      'moment'
+      'whatwg-fetch',
+      'react-bootstrap'
     ]
   },
   globals: {
     'process.env': {
-      'NODE_ENV': JSON.stringify(env),
-      'APP_URL': JSON.stringify(process.env.APP_URL),
-      'RECHAT_API_URL': JSON.stringify(process.env.RECHAT_API_URL),
-      'SOCKET_SERVER': JSON.stringify(process.env.SOCKET_SERVER),
-      'COSMIC_BUCKET': JSON.stringify(process.env.COSMIC_BUCKET),
-      'COSMIC_KEY': JSON.stringify(process.env.COSMIC_KEY),
-      'CLOUDFRONT_URL': JSON.stringify(process.env.CLOUDFRONT_URL),
-      'IMGIX_URL': JSON.stringify(process.env.IMGIX_URL),
-      'BRANCH_KEY': JSON.stringify(process.env.BRANCH_KEY),
-      'APP_SHARE_URL': JSON.stringify(process.env.APP_SHARE_URL),
-      'GOOGLE_API_KEY': JSON.stringify(process.env.GOOGLE_API_KEY),
-      'ITUNES_URL': JSON.stringify(process.env.ITUNES_URL),
-      'RECHAT_FORMS_URL': JSON.stringify(process.env.RECHAT_FORMS_URL)
+      NODE_ENV: JSON.stringify(env),
+      APP_URL: JSON.stringify(process.env.APP_URL),
+      RECHAT_API_URL: JSON.stringify(process.env.RECHAT_API_URL),
+      SOCKET_SERVER: JSON.stringify(process.env.SOCKET_SERVER),
+      COSMIC_BUCKET: JSON.stringify(process.env.COSMIC_BUCKET),
+      COSMIC_KEY: JSON.stringify(process.env.COSMIC_KEY),
+      CLOUDFRONT_URL: JSON.stringify(process.env.CLOUDFRONT_URL),
+      IMGIX_URL: JSON.stringify(process.env.IMGIX_URL),
+      BRANCH_KEY: JSON.stringify(process.env.BRANCH_KEY),
+      APP_SHARE_URL: JSON.stringify(process.env.APP_SHARE_URL),
+      GOOGLE_API_KEY: JSON.stringify(process.env.GOOGLE_API_KEY),
+      ITUNES_URL: JSON.stringify(process.env.ITUNES_URL),
+      RECHAT_FORMS_URL: JSON.stringify(process.env.RECHAT_FORMS_URL)
     },
     __DEV__: __DEV__,
     NODE_ENV: env,
