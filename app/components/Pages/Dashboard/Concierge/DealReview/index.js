@@ -1,7 +1,8 @@
 
 import S from 'shorti'
 import React from 'react'
-import { browserHistory } from 'react-router'
+import Modal from './Modal'
+import { browserHistory, Link } from 'react-router'
 import config from '../../../../../../config/public'
 import { Grid, Row, Col, Button } from 'react-bootstrap'
 import ConciergeDispatcher from '../../../../../dispatcher/ConciergeDispatcher'
@@ -23,8 +24,14 @@ export default class DealReview extends React.Component {
       envelopes: [],
       submissions: [],
       envelopesLoading: true,
-      submissionsLoading: true
+      submissionsLoading: true,
+      modalType: '',
+      modalTitle: '',
+      modalActive: false
     }
+
+    this.modalCloseHandler = this.modalCloseHandler.bind(this)
+    this.modalSubmitHandler = this.modalSubmitHandler.bind(this)
   }
 
   componentDidMount() {
@@ -89,6 +96,33 @@ export default class DealReview extends React.Component {
     })
   }
 
+  modalSubmitHandler(type) {
+    switch (type) {
+      case 'APPROVE':
+        this.approveDocuments()
+        break
+      case 'DECLINE':
+        this.declineDocuments()
+        break
+      default:
+        this.setState({
+          modalActive: false
+        })
+    }
+  }
+
+  approveDocuments() {
+
+  }
+
+  declineDocuments() {
+
+  }
+
+  modalCloseHandler() {
+    this.setState({ modalActive: false })
+  }
+
   render() {
     const {
       envelopes,
@@ -100,9 +134,7 @@ export default class DealReview extends React.Component {
       <div className="list">
         <div
           className="c-submissons"
-          style={{
-            marginBottom: '8rem'
-          }}
+          style={{ marginBottom: '4rem' }}
         >
           <Row>
             <h2 style={styles.title}>Forms</h2>
@@ -134,11 +166,13 @@ export default class DealReview extends React.Component {
                 >
                   {
                     submissions.length > 0 && submissions.map(submission => (
-                      <Row
+                      <a
                         key={`DEAL_${submission.id}`}
-                        onClick={() => browserHistory.push(`/dashboard/concierge/deals/${deal.id}/submission/${submission.id}`)}
-                        className={'item'}
+                        href={submission.file.url}
+                        target="_blank"
+                        className={'item row'}
                         style={{
+                          display: 'block',
                           height: '48px',
                           padding: '16px 0'
                         }}
@@ -149,7 +183,7 @@ export default class DealReview extends React.Component {
                         <Col md={6} xs={2}>
                           <span>{ submission.state }</span>
                         </Col>
-                      </Row>
+                      </a>
                     ))
                   }
                 </div>
@@ -190,13 +224,13 @@ export default class DealReview extends React.Component {
                     envelopes.length > 0 && envelopes.map(envelope => (
                       <Row
                         key={`DEAL_${envelope.id}`}
-                        style={{ position: 'relative' }}
-                        onClick={() => browserHistory.push(`/dashboard/concierge/deals/${deal.id}/envelope/${envelope.id}`)}
                         className={'item'}
                       >
-                        <Col xs={9}>
+                        <Col xs={12} lg={9}>
                           <span
+                            onClick={() => browserHistory.push(`/dashboard/concierge/deals/${envelope.deal}/envelope/${envelope.id}`)}
                             style={{
+                              width: '100%',
                               display: 'inline-block',
                               verticalAlign: 'middle',
                               lineHeight: '32px',
@@ -204,8 +238,15 @@ export default class DealReview extends React.Component {
                             }}
                           >{ envelope.proposed_title }</span>
                         </Col>
-                        <Col xs={3} style={{ textAlign: 'right' }}>
+                        <Col xs={12} lg={3} style={{ textAlign: 'right' }}>
                           <Button
+                            onClick={
+                              () => this.setState({
+                                modalActive: true,
+                                modalType: 'DECLINE',
+                                modalTitle: 'Why has this document been declined?'
+                              })
+                            }
                             style={{
                               width: '100px',
                               height: '32px',
@@ -224,9 +265,10 @@ export default class DealReview extends React.Component {
                                 verticalAlign: 'middle',
                                 marginRight: '.5rem'
                               }}
-                              fill="#5b6469" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                              <path d="M0 0h24v24H0z" fill="none"/>
+                              fill="#5b6469" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                              <path d="M0 0h24v24H0z" fill="none" />
                             </svg>
                             <span>Decline</span>
                           </Button>
@@ -240,6 +282,13 @@ export default class DealReview extends React.Component {
                               borderWidth: 0,
                               backgroundColor: '#2196f3'
                             }}
+                            onClick={
+                              () => this.setState({
+                                modalActive: true,
+                                modalType: 'APPROVE',
+                                modalTitle: 'Hurrah! Smooth sailing.'
+                              })
+                            }
                           >
                             <svg
                               style={{
@@ -247,9 +296,10 @@ export default class DealReview extends React.Component {
                                 verticalAlign: 'middle',
                                 marginRight: '.5rem'
                               }}
-                              fill="#fff" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M0 0h24v24H0z" fill="none"/>
-                              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                              fill="#fff" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path d="M0 0h24v24H0z" fill="none" />
+                              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
                             </svg>
                             <span>Approve</span>
                           </Button>
@@ -262,6 +312,12 @@ export default class DealReview extends React.Component {
             }
           </Row>
         </div>
+        <Modal
+          title={this.state.modalTitle}
+          isActive={this.state.modalActive}
+          onCloseHandler={this.modalCloseHandler}
+          onSubmitHandler={this.modalSubmitHandler}
+        />
       </div>
     )
   }
