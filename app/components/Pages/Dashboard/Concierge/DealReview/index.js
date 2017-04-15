@@ -138,6 +138,10 @@ export default class DealReview extends React.Component {
                         key={`DEAL_${submission.id}`}
                         onClick={() => browserHistory.push(`/dashboard/concierge/deals/${deal.id}/submission/${submission.id}`)}
                         className={'item'}
+                        style={{
+                          height: '48px',
+                          padding: '16px 0'
+                        }}
                       >
                         <Col md={6} xs={10}>
                           <span>{ submission.file.name }</span>
@@ -186,11 +190,69 @@ export default class DealReview extends React.Component {
                     envelopes.length > 0 && envelopes.map(envelope => (
                       <Row
                         key={`DEAL_${envelope.id}`}
+                        style={{ position: 'relative' }}
                         onClick={() => browserHistory.push(`/dashboard/concierge/deals/${deal.id}/envelope/${envelope.id}`)}
                         className={'item'}
                       >
-                        <Col xs={12}>
-                          <span>{ envelope.proposed_title }</span>
+                        <Col xs={9}>
+                          <span
+                            style={{
+                              display: 'inline-block',
+                              verticalAlign: 'middle',
+                              lineHeight: '32px',
+                              height: '32px'
+                            }}
+                          >{ envelope.proposed_title }</span>
+                        </Col>
+                        <Col xs={3} style={{ textAlign: 'right' }}>
+                          <Button
+                            style={{
+                              width: '100px',
+                              height: '32px',
+                              borderRadius: '4px',
+                              backgroundColor: '#f6f6f6',
+                              color: '#5b6469',
+                              lineHeight: 1,
+                              borderWidth: 0,
+                              display: 'inline-block',
+                              marginRight: '1rem'
+                            }}
+                          >
+                            <svg
+                              style={{
+                                display: 'inline-block',
+                                verticalAlign: 'middle',
+                                marginRight: '.5rem'
+                              }}
+                              fill="#5b6469" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                              <path d="M0 0h24v24H0z" fill="none"/>
+                            </svg>
+                            <span>Decline</span>
+                          </Button>
+                          <Button
+                            bsStyle="primary"
+                            style={{
+                              width: '100px',
+                              height: '32px',
+                              borderRadius: '4px',
+                              lineHeight: 1,
+                              borderWidth: 0,
+                              backgroundColor: '#2196f3'
+                            }}
+                          >
+                            <svg
+                              style={{
+                                display: 'inline-block',
+                                verticalAlign: 'middle',
+                                marginRight: '.5rem'
+                              }}
+                              fill="#fff" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M0 0h24v24H0z" fill="none"/>
+                              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                            <span>Approve</span>
+                          </Button>
                         </Col>
                       </Row>
                     ))
