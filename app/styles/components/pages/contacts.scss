@@ -190,6 +190,56 @@
                 }
               }
             }
+
+            .timeline {
+              overflow: auto;
+              max-height: 40vh;
+              .event {
+                margin-bottom: 14px;
+                position: relative;
+                padding: 1% 2%;
+                &:hover {
+                  background-color: rgba(32, 150, 243, 0.05);
+                }
+                .image {
+                  &::before {
+                    position: absolute;
+                    border-right: 1px solid #f3eeee;
+                    width: 0;
+                    height: 18px;
+                    display: block;
+                    content: '';
+                    left: 33px;
+                    z-index: 1;
+                    top: -23px;
+                    margin-left: -1px;
+                  }
+                  img {
+                    width: 34px;
+                    height: 34px;
+                    border-radius: 3px;
+                    &.round {
+                      border-radius: 30px;
+                    }
+                  }
+                }
+                .desc {
+                  font-size: 15px;
+                  color: #39393a;
+                  margin-left: 10px;
+                }
+                .time {
+                  font-size: 12px;
+                  color: #c6c6c6;
+                  margin-left: 10px;
+                  img {
+                    width: 8px;
+                    height: 8px;
+                    margin-right: 5px;
+                  }
+                }
+              }
+            }
           }
         }
       }
