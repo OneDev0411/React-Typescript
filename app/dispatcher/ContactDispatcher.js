@@ -17,7 +17,7 @@ ContactDispatcher.register(async (payload) => {
       break
 
     case 'get-timeline':
-      getTimeline(payload.id, payload.user)
+      return await getTimeline(payload.id, payload.user)
       break
 
     case 'add-note':
