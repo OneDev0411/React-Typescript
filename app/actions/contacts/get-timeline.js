@@ -11,11 +11,13 @@ export default async function (id, user) {
   try {
     const response = await Contact.getTimeline(params)
 
-    if (response.status === 200)
-      AppStore.data.contacts[id].timeline = response.body.data
+    if (response.status === 200) {
+      const timeline = _.indexBy(response.body.data, 'id')
+      AppStore.data.contacts[id].timeline = timeline
+      return timeline
+    }
+  }
+  catch(e) { }
 
-    AppStore.emitChange()
-  }
-  catch(e) {
-  }
+  return null
 }
