@@ -3,9 +3,11 @@ import { browserHistory } from 'react-router'
 import { Row, Col, Button, Tabs, Tab } from 'react-bootstrap'
 import Avatar from 'react-avatar'
 import moment from 'moment'
+import Dispatcher from '../../../../../dispatcher/ContactDispatcher'
 import Stepper from '../../../../Partials/Stepper'
 import Contact from '../../../../../models/Contact'
 import AddNote from './Add-Note'
+import Timeline from './Timeline'
 
 export default class ContactProfile extends React.Component {
   constructor(props) {
@@ -24,6 +26,9 @@ export default class ContactProfile extends React.Component {
       return
 
     this.setState({ contact })
+
+    if (!contact.timeline)
+      this.getTimeline()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -40,6 +45,23 @@ export default class ContactProfile extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     return typeof nextProps.contacts !== 'undefined'
+  }
+
+  async getTimeline() {
+    const { user, params } = this.props
+
+    const timeline = await Dispatcher.dispatchSync({
+      action: 'get-timeline',
+      id: params.id,
+      user
+    })
+
+    const contact = {
+      ...this.state.contact,
+      ...timeline
+    }
+
+    this.setState({ contact })
   }
 
   goBack() {
@@ -159,8 +181,11 @@ export default class ContactProfile extends React.Component {
                 onSelect={activeTab => this.setState({ activeTab })}
               >
                 <Tab eventKey="timeline" title="All Activity" className="timeline">
-
+                  <Timeline
+                    activities={contact.timeline || {}}
+                  />
                 </Tab>
+
                 <Tab eventKey="notes" title="Notes" className="notes">
                   {
                     Contact.get.notes(contact).map(item => (
