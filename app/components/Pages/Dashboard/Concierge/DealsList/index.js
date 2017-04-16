@@ -82,30 +82,39 @@ export default class DealsList extends React.Component {
   }
 
   getReview(deal) {
-    const review = deal.reviews
-    if (Array.isArray(deal.reviews)) {
-      return (<span
-        style={{
-          color: '#f5a623',
-          fontSize: '15px',
-          lineHeight: 1,
-          textAlign: 'right'
-        }}
-      >
-        <svg
+    if (!deal.reviews)
+      return null
+
+    const pendingReviews =
+      deal.reviews.filter(review => review.state === 'Pending')
+
+    if (pendingReviews.length) {
+      return (
+        <span
           style={{
-            display: 'inline-block',
-            verticalAlign: 'middle',
-            marginRight: '10px'
+            color: '#f5a623',
+            fontSize: '15px',
+            lineHeight: 1,
+            textAlign: 'right'
           }}
-          width="17"height="20"viewBox="0 0 17 20"
-          xmlns="http://www.w3.org/2000/svg"
         >
-          <g stroke="#F6A623"fill="none" fillRule="evenodd" strokeLinecap="round" strokeLinejoin="round"><path d="M16.397 17.5H3.474V.5h7.953l4.97 5z" /><path d="M14.41 17.5v2H1.484v-17h1.99m7.953-2v5h4.97" /></g>
-        </svg>
-        {`REVIEW(${deal.reviews.length})`}
-      </span>)
+          <svg
+            style={{
+              display: 'inline-block',
+              verticalAlign: 'middle',
+              marginRight: '10px'
+            }}
+            width="17"height="20"viewBox="0 0 17 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g stroke="#F6A623"fill="none" fillRule="evenodd" strokeLinecap="round" strokeLinejoin="round"><path d="M16.397 17.5H3.474V.5h7.953l4.97 5z" /><path d="M14.41 17.5v2H1.484v-17h1.99m7.953-2v5h4.97" /></g>
+          </svg>
+          {`REVIEW(${pendingReviews.length})`}
+        </span>
+      )
     }
+
+    return null
   }
 
   // getSortOrder(deal) {
