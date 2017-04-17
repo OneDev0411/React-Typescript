@@ -128,10 +128,10 @@ export default class SideBar extends Component {
     AppStore.emitChange()
   }
 
-  notificationIcon(name) {
+  notificationIcon() {
     const data = this.props.data
     let icon
-    if (data.notifications && data.notifications.summary[name] > 0) {
+    if (data.new_notifications_count && data.new_notifications_count > 0) {
       icon = (
         <i className="fa fa-circle" style={S('pl-10 font-8 color-3388FF absolute')} />
       )
