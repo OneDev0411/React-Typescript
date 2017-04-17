@@ -21,11 +21,12 @@ export default class extends React.Component {
   }
   makeNotifSeen(id) {
     const { data } = this.props
-    const { notifications } = data
-    const index = _.findIndex(notifications, { id })
-    notifications[index].seen = true
-    AppStore.data.notifications = notifications
-    AppStore.emitChange()
+    const { user } = data
+    NotificationDispatcher.dispatch({
+      action: 'mark-seen',
+      user,
+      id
+    })
   }
   notificationIcon(notification) {
     const type = notification.notification_type

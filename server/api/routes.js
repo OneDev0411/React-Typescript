@@ -44,7 +44,8 @@ const routes = {
     [ 'summary' ],
     [ 'all' ],
     [ 'delete' ],
-    [ 'delete-room-notifications' ]
+    [ 'delete-room-notifications' ],
+    [ 'mark-seen' ]
   ],
   rec: [
     [ 'actives' ],

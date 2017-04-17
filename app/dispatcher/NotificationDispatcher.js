@@ -2,6 +2,7 @@ import { Dispatcher } from './flux'
 import getNodifs from '../actions/notifications/get-all'
 import deleteNotifs from '../actions/notifications/delete-all'
 import deleteRoomNotifs from '../actions/notifications/delete-room-notifications'
+import markSeen from '../actions/notifications/mark-seen'
 
 const NotificationDispatcher = new Dispatcher()
 
@@ -21,6 +22,10 @@ NotificationDispatcher.register(async function (payload) {
 
     case 'delete-room-notifications':
       deleteRoomNotifs(payload.user, payload.id)
+      break
+
+    case 'mark-seen':
+      markSeen(payload.user, payload.id)
       break
 
     default:
