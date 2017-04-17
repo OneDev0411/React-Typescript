@@ -1,6 +1,7 @@
 import { Dispatcher } from './flux'
-import getNodifications from '../actions/notifications/get-all'
-import deleteNodifications from '../actions/notifications/delete-all'
+import getNodifs from '../actions/notifications/get-all'
+import deleteNotifs from '../actions/notifications/delete-all'
+import deleteRoomNotifs from '../actions/notifications/delete-room-notifications'
 
 const NotificationDispatcher = new Dispatcher()
 
@@ -11,11 +12,15 @@ NotificationDispatcher.register(async function (payload) {
   switch (action) {
 
     case 'get-all':
-      getNodifications(payload.user)
+      getNodifs(payload.user)
       break
 
     case 'delete-all':
-      deleteNodifications(payload.user)
+      deleteNotifs(payload.user)
+      break
+
+    case 'delete-room-notifications':
+      deleteRoomNotifs(payload.user, payload.id)
       break
 
     default:

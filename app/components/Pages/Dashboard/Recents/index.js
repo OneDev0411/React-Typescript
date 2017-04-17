@@ -6,6 +6,7 @@ import _ from 'lodash'
 import validator from 'validator'
 import { Modal, FormControl, Button, Alert } from 'react-bootstrap'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
+import NotificationDispatcher from '../../../../dispatcher/NotificationDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import controller from '../controller'
 import SideBar from '../Partials/SideBar'
@@ -96,6 +97,7 @@ export default class Dashboard extends Component {
   }
 
   setCurrentRoom(current_room) {
+    console.log('setCurrentRoom')
     AppStore.data.current_room = current_room
     AppStore.data.scroll_bottom = true
     delete AppStore.data.show_new_message_viewer
@@ -104,6 +106,12 @@ export default class Dashboard extends Component {
     delete AppStore.data.show_room_users_modal
     AppStore.emitChange()
     browserHistory.push(`/dashboard/recents/${current_room.id}`)
+    console.log(current_room.id)
+    NotificationDispatcher.dispatch({
+      action: 'delete-room-notifications',
+      user: AppStore.data.user,
+      id: current_room.id
+    })
   }
 
   removeScrollBottom() {

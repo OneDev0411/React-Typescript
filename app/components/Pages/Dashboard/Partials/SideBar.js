@@ -208,6 +208,25 @@ export default class SideBar extends Component {
     return icon
   }
 
+  roomNotificationIcon() {
+    const data = this.props.data
+    const rooms = data.rooms
+    const room_notifications_sum = _.sum(_.map(rooms, 'new_notifications'))
+    let icon
+    if (rooms && room_notifications_sum > 0) {
+      icon = (
+        <div style={S('pl-10 absolute t-1 r-0')}>
+          <div style={S('font-15 bg-db3821 br-100 p-6 h-17 text-center')}>
+            <span style={S('color-fff font-10 relative t-9n')}>
+              { room_notifications_sum }
+            </span>
+          </div>
+        </div>
+      )
+    }
+    return icon
+  }
+
   uploadProfilePic(files) {
     const data = this.props.data
     const user = data.user
@@ -579,6 +598,7 @@ export default class SideBar extends Component {
           <OverlayTrigger placement="right" overlay={popover.conversation} delayShow={200} delayHide={0}>
             <LinkContainer onClick={this.handleChatNavClick.bind(this)} className={active.recents} to="/dashboard/recents">
               <NavItem style={S('w-85p')}>
+                {this.roomNotificationIcon()}
                 <SvgChat color={active.recents ? nav_active_color : '#4e5c6c'} />
               </NavItem>
             </LinkContainer>
@@ -643,7 +663,7 @@ export default class SideBar extends Component {
         <div style={S('absolute b-10 l-15')}>
           <Nav className="sidebar__account">
             <Link to="/dashboard/notifications">
-              {this.notificationIcon('notification_count')}
+              {this.notificationIcon()}
               <i className="fa fa-bell" style={S(`font-30 relative l-5 t-30n color-${!active.notifications ? '4D5C6C' : '3388ff' }`)} />
             </Link>
             <OverlayTrigger placement="right" overlay={popover.support} delayShow={200} delayHide={0}>

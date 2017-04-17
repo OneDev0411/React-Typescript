@@ -43,7 +43,8 @@ const routes = {
   notification: [
     [ 'summary' ],
     [ 'all' ],
-    [ 'delete' ]
+    [ 'delete' ],
+    [ 'delete-room-notifications' ]
   ],
   rec: [
     [ 'actives' ],

@@ -1,4 +1,4 @@
-// actions/notifications/get-all.js
+// actions/notifications/delete-all.js
 import { browserHistory } from 'react-router'
 import Notification from '../../models/Notification'
 import AppStore from '../../stores/AppStore'
