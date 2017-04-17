@@ -11,9 +11,9 @@ export default class extends React.Component {
   componentDidMount() {
     const { data } = this.props
     const { user } = data
-    // get notification
+    // delete notifications
     NotificationDispatcher.dispatch({
-      action: 'get-all',
+      action: 'delete-all',
       user
     })
   }
