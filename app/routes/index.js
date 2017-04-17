@@ -94,7 +94,7 @@ export default (
 
       <Route path="/dashboard/concierge/deals" component={ConciergeLayout}>
         <IndexRoute component={ConciergeDealsList} />
-        <Route path="/dashboard/concierge/deals/:id/review" component={DealReview} />
+        <Route path="/dashboard/concierge/deals/:id" component={DealReview} />
       </Route>
 
       <Route path="/dashboard/contacts" component={Contacts}>
