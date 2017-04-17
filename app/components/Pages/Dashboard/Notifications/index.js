@@ -72,7 +72,7 @@ export default class extends React.Component {
     const { notifications } = data
     if (notifications && notifications.length) {
       return notifications.map((notification, i) => {
-        // console.log(notification)
+        console.log(notification)
         return (
           <div key={ notification.id + i } style={ { ...S('h-80 p-20 pointer w-100p relative'), boxShadow: '0 1px 0 0 #f1f1f1' } }>
             <div style={ S('pull-left') }>{ this.notificationIcon(notification) }</div>

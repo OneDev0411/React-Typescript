@@ -97,7 +97,6 @@ export default class Dashboard extends Component {
   }
 
   setCurrentRoom(current_room) {
-    console.log('setCurrentRoom')
     AppStore.data.current_room = current_room
     AppStore.data.scroll_bottom = true
     delete AppStore.data.show_new_message_viewer
@@ -106,7 +105,6 @@ export default class Dashboard extends Component {
     delete AppStore.data.show_room_users_modal
     AppStore.emitChange()
     browserHistory.push(`/dashboard/recents/${current_room.id}`)
-    console.log(current_room.id)
     NotificationDispatcher.dispatch({
       action: 'delete-room-notifications',
       user: AppStore.data.user,
