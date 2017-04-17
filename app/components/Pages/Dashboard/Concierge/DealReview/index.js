@@ -21,13 +21,18 @@ const getFieldValue = (deal, field) => {
   return '-'
 }
 
+const getIds = items => items.map(item => item.id)
+
+
 export default class DealReview extends React.Component {
 
   constructor(props) {
     super(props)
 
+    this.deal = null
+    this.reviews = {}
+
     this.state = {
-      deal: null,
       files: [],
       envelopes: [],
       submissions: [],
@@ -44,11 +49,14 @@ export default class DealReview extends React.Component {
 
   componentDidMount() {
     this.getDeal().then((deal) => {
-      const files = deal.files || []
-      this.setState({
-        deal,
-        files
-      })
+      this.deal = deal
+      this.fillreviews()
+
+      if (deal.files) {
+        const files = this.mapReviewsToFiles(deal.files)
+        this.setState({ files })
+      }
+
       this.getAll()
     })
   }
@@ -65,13 +73,48 @@ export default class DealReview extends React.Component {
     return deal
   }
 
+  fillreviews() {
+    this.deal.reviews.forEach((review) => {
+      const id = review.file || review.envelope_document
+      this.reviews[id] = {
+        ...review
+      }
+    })
+  }
+
+  mapReviewsToFiles(files) {
+    return files.map((file) => {
+      const review = this.reviews[file.id] || null
+      return {
+        ...file,
+        review
+      }
+    })
+  }
+
+  mapReviewsToDocuments(envelopes) {
+    return envelopes.map((envelope) => {
+      const documents = envelope.documents.map((doc) => {
+        const review = this.reviews[doc.id] || null
+        return {
+          ...doc,
+          review
+        }
+      })
+      return {
+        ...envelope,
+        documents
+      }
+    })
+  }
+
   async getAll() {
     const { user } = this.props
     const dealId = this.props.params.id
     const deals = this.props.conciergeDeals
 
-    let { submissions } = deals[this.state.deal.index]
-    let { envelopes } = deals[this.state.deal.index]
+    let { submissions } = deals[this.deal.index]
+    let { envelopes } = deals[this.deal.index]
 
     if (submissions) {
       this.setState({
@@ -82,6 +125,7 @@ export default class DealReview extends React.Component {
       await this.getSubmissions(user, dealId)
 
     if (envelopes) {
+      envelopes = this.mapReviewsToDocuments(envelopes)
       this.setState({
         envelopes,
         envelopesLoading: false
@@ -110,9 +154,9 @@ export default class DealReview extends React.Component {
       dealId,
       type: 'GET_ENVELOPES'
     }
-    const envelopes =
+    let envelopes =
       await ConciergeDispatcher.dispatchSync(action)
-
+    envelopes = this.mapReviewsToDocuments(envelopes)
     this.setState({
       envelopes,
       envelopesLoading: false
