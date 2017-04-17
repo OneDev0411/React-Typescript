@@ -182,6 +182,7 @@ export default class ContactProfile extends React.Component {
               >
                 <Tab eventKey="timeline" title="All Activity" className="timeline">
                   <Timeline
+                    name={Contact.get.name(contact)}
                     activities={contact.timeline || {}}
                   />
                 </Tab>
