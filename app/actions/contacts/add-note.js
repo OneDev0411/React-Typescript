@@ -13,7 +13,10 @@ export default async function (id, user, note) {
     const response = await Contact.addNote(params)
 
     if (response.status === 200) {
-      AppStore.data.contacts[id] = response.body.data
+      AppStore.data.contacts[id] = {
+        ...response.body.data,
+        ...{ timeline: AppStore.data.contacts[id].timeline }
+      }
     }
 
     AppStore.emitChange()
