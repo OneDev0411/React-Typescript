@@ -2,6 +2,7 @@ import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 import moment from 'moment'
 import _ from 'underscore'
+import Contact from '../../../../../../models/Contact'
 
 export default class Timeline extends React.Component {
 
@@ -46,7 +47,7 @@ export default class Timeline extends React.Component {
 
   UserCreatedAlert(activity) {
     return {
-      title: activity.object.users[0].display_name + ' created an alert'
+      title: ''
     }
   }
 
@@ -63,8 +64,25 @@ export default class Timeline extends React.Component {
   }
 
   UserCreatedContact(activity) {
+    console.log(activity.object)
+    const sourceType = Contact.get.source(activity.object)
+    let title = 'Contact created'
+
+    switch (sourceType) {
+      case 'BrokerageWidget':
+        title += ' from brokerage widget'
+        break
+      case 'IOSAddressBook':
+        title += ' from your address book'
+        break
+      case 'SharesRoom':
+        title += ' because you share a room with this user'
+        break
+    }
+
     return {
-      title: activity.object.users[0].display_name + ' created a contact'
+      title,
+      icon: 'alert-fill'
     }
   }
 
@@ -137,7 +155,7 @@ export default class Timeline extends React.Component {
         <Col sm={9} xs={9}>
           <div className="desc">{ attributes.title }</div>
           <div className="time">
-            <img src="/static/images/contacts/heart@3x.png" />
+            <img src={`/static/images/contacts/${attributes.icon}@3x.png`} />
             { attributes.time }
           </div>
         </Col>
