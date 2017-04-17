@@ -7,10 +7,8 @@ export default (user) => {
   const params = {
     access_token: user.access_token
   }
-  Notification.getAll(params, (err, response) => {
-    AppStore.data.notifications = response.data
-    AppStore.data.new_notifications_count = response.info.new
-    AppStore.data.notifications_retrieved = true
+  Notification.deleteAll(params, (err, response) => {
+    delete AppStore.data.notifications
     AppStore.emitChange()
   })
 }

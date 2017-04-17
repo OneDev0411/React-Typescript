@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import _ from 'lodash'
 import io from 'socket.io-client'
 import AppDispatcher from '../dispatcher/AppDispatcher'
+import NotificationDispatcher from '../dispatcher/NotificationDispatcher'
 import AppStore from '../stores/AppStore'
 import Brand from '../controllers/Brand'
 import ReactGA from 'react-ga'
@@ -83,6 +84,15 @@ export default class App extends Component {
       AppStore.emitChange()
     }
     this.setIntercom()
+    // get notifications once
+    if (data.user && !data.getting_notifications && !data.notifications_retrieved) {
+      AppStore.data.getting_notifications = true
+      AppStore.emitChange()
+      NotificationDispatcher.dispatch({
+        action: 'get-all',
+        user: data.user
+      })
+    }
   }
   // Remove change listeners from stores
   componentWillUnmount() {
