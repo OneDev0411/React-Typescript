@@ -1,6 +1,7 @@
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 import moment from 'moment'
+import Avatar from 'react-avatar'
 import _ from 'underscore'
 import Contact from '../../../../../../models/Contact'
 
@@ -18,7 +19,7 @@ export default class Timeline extends React.Component {
     let attributes = {}
 
     // action
-    console.log('Action: ', activity.action)
+    // console.log('Action: ', activity.action)
 
     if (this[activity.action])
       attributes = this[activity.action](activity)
@@ -30,41 +31,65 @@ export default class Timeline extends React.Component {
   }
 
   UserViewedAlert(activity) {
-    return {}
+    return {
+      title: `${this.props.name} <b>viewed an alert</b> ` + this.getAlertTitle(activity),
+      icon: 'alert-fill'
+    }
   }
 
   UserViewedListing(activity) {
-    return {}
+    return {
+      title: `${this.props.name} <b>viewed</b> ` + this.getListingTitle(activity),
+      image: activity.object.cover_image_url,
+      icon: 'group-142'
+    }
   }
 
   UserFavoritedListing(activity) {
-    return {}
+    return {
+      title: `${this.props.name} <b>favorited</b> ` + this.getListingTitle(activity),
+      image: activity.object.listing.cover_image_url,
+      icon: 'heart'
+    }
   }
 
   UserSharedListing(activity) {
-    return {}
+    return {
+      title: `${this.props.name} <b>share</b> ` + this.getListingTitle(activity),
+      image: activity.object.listing.cover_image_url,
+      icon: 'group-142'
+    }
   }
 
   UserCreatedAlert(activity) {
     return {
-      title: ''
+      title: `${this.props.name} <b>created an alert</b> ` + this.getAlertTitle(activity),
+      icon: 'alert-fill'
     }
   }
 
   UserCommentedRoom(activity) {
-    return {}
+    return {
+      title: `${this.props.name} <b>Commented on</b> ` + this.getListingTitle(activity),
+      icon: 'comment'
+    }
   }
 
   UserOpenedIOSApp(activity) {
-    return {}
+    return {
+      title: `${this.props.name} <b>was active</b> in iOS`,
+      icon: 'alert-fill'
+    }
   }
 
   UserCalledContact(activity) {
-    return {}
+    return {
+      title: `You called ${this.props.name}`,
+      icon: 'alert-fill'
+    }
   }
 
   UserCreatedContact(activity) {
-    console.log(activity.object)
     const sourceType = Contact.get.source(activity.object)
     let title = 'Contact created'
 
@@ -76,7 +101,7 @@ export default class Timeline extends React.Component {
         title += ' from your address book'
         break
       case 'SharesRoom':
-        title += ' because you share a room with this user'
+        title += ' because you shared a room with this user'
         break
     }
 
@@ -86,12 +111,15 @@ export default class Timeline extends React.Component {
     }
   }
 
-  UserCreatedNote(activity) {
-    return {}
-  }
+  // UserCreatedNote(activity) {
+  //   return {}
+  // }
 
   UserSignedUp(activity) {
-    return {}
+    return {
+      title: `${this.props.name} signed up to Rechat`,
+      icon: 'alert-fill'
+    }
   }
 
   addListingToTitle(notification) {
@@ -99,61 +127,62 @@ export default class Timeline extends React.Component {
     addListingToTitle(listing: listing)
   }
 
-  // addListingToTitle(listing) {
-  //   activityImageView.sd_setImageWithURLString(
-  //       listing.coverImageURL,
-  //       placeholderImage: UIImage(named: "house3")!,
-  //       animated: true
-  //   )
+  getListingTitle(activity) {
+    const type = activity.object.type
+    let listing
+    let title
 
-  //   var string = "\(listing.property.address.streetNumber) \(listing.property.address.streetName)"
-  //   if let newString = listing.property.address.streetSuffix {
-  //       string = string + " " + newString
-  //   }
-  //   if let newString = listing.property.address.unitNumber {
-  //       if newString != "" {
-  //           string = string + ", Unit " + newString
-  //       }
-  //   }
-  // }
+    if (type === 'message')
+      listing = activity.object.message.recommendation
+    else if (type === 'recommendation')
+      listing = activity.object.listing
+    else if (type === 'listing')
+      listing = activity.object
 
-    //     titleLabel.text! += "\"" + string + "\""
-    // }
+    if (!listing)
+      return ''
 
-    // func addListingToTitle(activity: Activity) {
-    //     var listing: Listing?
+    // get address object
+    const { address }  = listing.property
 
-    //     if let message = activity.object as? Message {
-    //         listing = message.recommendation?.listing
-    //     } else if let recommendation = activity.object as? Recommendation {
-    //         listing = recommendation.listing
-    //     } else if let aListing = activity.object as? Listing {
-    //         listing = aListing
-    //     }
+    title = address.street_number
+    title += ' ' + address.street_name
 
-    //     if let listing = listing {
-    //         addListingToTitle(listing: listing)
-    //     }
-    // }
+    if (address.street_suffix)
+      title += ' ' + address.street_suffix
 
-    // func addAlertToTitle(activity: Activity) {
-    //     if let alert = activity.object as? Alert {
-    //         if alert.title == nil || alert.title!.characters.count == 0 {
-    //             titleLabel.text! += "\"" + alert.proposedTitle + "\""
-    //         } else {
-    //             titleLabel.text! += "\"" + alert.title! + "\""
-    //         }
-    //     }
-    // }
+    if (address.unit_number)
+      title += ', Unit ' + address.unit_number
+
+    return title
+  }
+
+  getAlertTitle(activity) {
+    const alert = activity.object
+    const { title, proposed_title } = alert
+    return (title && title.length > 0) ? title : proposed_title
+  }
 
   renderItem(key, attributes) {
+    const image = attributes.image ?
+      <img src={attributes.image} /> :
+      <Avatar
+        round
+        name={this.props.name}
+        src={this.props.avatar}
+        size={34}
+      />
+
     return (
       <Row className="event" key={`timeline_item_${key}`}>
         <Col sm={1} xs={1} className="image">
-          <img src="https://cdn.rechat.com/62230287.jpg" />
+          { image }
         </Col>
         <Col sm={9} xs={9}>
-          <div className="desc">{ attributes.title }</div>
+          <div
+            className="desc"
+            dangerouslySetInnerHTML={{ __html: attributes.title }}
+          ></div>
           <div className="time">
             <img src={`/static/images/contacts/${attributes.icon}@3x.png`} />
             { attributes.time }
