@@ -1,73 +1,43 @@
-import es6Promise from 'es6-promise'
-es6Promise.polyfill()
-import 'isomorphic-fetch'
+import 'whatwg-fetch'
 import config from '../../config/public'
 
-export default {
-  getDeals: (params, callback) => {
-    let api_host = params.api_host
+// set api host
+const API_HOST = config.api_url
 
-    if (!api_host)
-      api_host = config.app.url
-
-    const endpoint = `${api_host}/api/brands/deals?access_token=${
-      params.user}&brand_id=${params.brand_id}`
-
-    fetch(endpoint)
-    .then((response) => {
-      if (response.status >= 400) {
-        const error = {
-          status: 'error',
-          response
-        }
-        return callback(error, false)
-      }
-      return response.json()
+const asyncFetch = async (url, token) => {
+  try {
+    const response = await fetch(url, {
+      headers: new Headers({
+        Authorization: `Bearer ${token}`
+      })
     })
-    .then(response => callback(false, response))
-  },
-  getEnvelopes: (params, callback) => {
-    let api_host = params.api_host
-
-    if (!api_host)
-      api_host = config.app.url
-
-    const endpoint = `${api_host}/api/deals/envelopes?access_token=${
-      params.user}&deal_id=${params.deal_id}`
-
-    fetch(endpoint)
-    .then((response) => {
-      if (response.status >= 400) {
-        const error = {
-          status: 'error',
-          response
-        }
-        return callback(error, false)
-      }
-      return response.json()
-    })
-    .then(response => callback(false, response))
-  },
-  getSubmissions: (params, callback) => {
-    let api_host = params.api_host
-
-    if (!api_host)
-      api_host = config.app.url
-
-    const endpoint = `${api_host}/api/deals/submissions?access_token=${
-      params.user}&deal_id=${params.deal_id}`
-
-    fetch(endpoint)
-    .then((response) => {
-      if (response.status >= 400) {
-        const error = {
-          status: 'error',
-          response
-        }
-        return callback(error, false)
-      }
-      return response.json()
-    })
-    .then(response => callback(false, response))
+    if (response.status >= 200 && response.status < 300) {
+      const parsedResponse = await response.json()
+      return parsedResponse.data
+    }
+    const error = new Error(response.statusText)
+    console.log(`getBrandDeals: ${error}`)
+    throw error
+  } catch (error) {
+    console.log(`getBrandDeals: ${error}`)
+    throw error
   }
+}
+
+export const getDeals = (params) => {
+  const { token, brand = null } = params
+  const url = `${API_HOST}/brands/${brand}/deals?associations=deal.listing,deal.created_by`
+  return asyncFetch(url, token)
+}
+
+export const getEnvelopes = async (params) => {
+  const { token, dealId = null } = params
+  const url = `${API_HOST}/deals/${dealId}/envelopes`
+  return asyncFetch(url, token)
+}
+
+export const getSubmissions = async (params) => {
+  const { token, dealId = null } = params
+  const url = `${API_HOST}/deals/${dealId}/submissions`
+  return asyncFetch(url, token)
 }

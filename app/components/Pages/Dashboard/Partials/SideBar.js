@@ -283,30 +283,31 @@ export default class SideBar extends Component {
       sidebar_height = window.innerHeight
     const sidebar_style = S(`w-70 fixed pl-8 t-0 z-100 bg-202A33 h-${sidebar_height}`)
     const path = data.path
-
     const active = {}
+
+    // if (path.indexOf('/dashboard/mls/listings/recommend') !== -1)
+    //   active.recommend = 'active'
+
+    // if (path.indexOf('/dashboard/mls/agents') !== -1)
+    //   active.agents = 'active'
+
+    // if (path.indexOf('/dashboard/website') !== -1)
+    //   active.store = 'active'
+
     if (path.indexOf('/dashboard/recents') !== -1)
       active.recents = 'active'
+
     if (path.indexOf('/dashboard/mls') !== -1)
       active.mls = 'active'
 
-    if (path.indexOf('/dashboard/contacts') !== -1)
-      active.contacts = 'active'
-
-    if (path.indexOf('/dashboard/mls/listings/recommend') !== -1)
-      active.recommend = 'active'
-
-    if (path.indexOf('/dashboard/mls/agents') !== -1)
-      active.agents = 'active'
-
-    if (path.indexOf('/dashboard/website') !== -1)
-      active.store = 'active'
+    if (path.indexOf('/dashboard/concierge/deals') !== -1)
+      active.concierge = 'active'
 
     if (path.indexOf('/dashboard/deals') !== -1)
       active.deals = 'active'
 
     if (path.indexOf('/dashboard/contacts') !== -1)
-      active.contacts = 'contacts'
+      active.contacts = 'active'
 
     // User info
     const user = data.user
@@ -593,7 +594,14 @@ export default class SideBar extends Component {
             <OverlayTrigger placement="right" overlay={popover.concierge} delayShow={200} delayHide={0}>
               <LinkContainer onClick={this.hideListingViewer.bind(this)} className={active.concierge} to="/dashboard/concierge/deals">
                 <NavItem style={S('w-85p')}>
-                  <img src={active.concierge ? '/static/images/dashboard/sidenav/deals-active.svg' : '/static/images/dashboard/sidenav/deals.svg'} style={S('w-19 h-19')} />
+                  <img
+                    src={
+                      active.concierge ?
+                        '/static/images/dashboard/sidenav/deals-active.svg' :
+                        '/static/images/dashboard/sidenav/deals.svg'
+                    }
+                    style={S('w-19 h-19')}
+                  />
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
@@ -611,10 +619,10 @@ export default class SideBar extends Component {
           }
 
           {
-            <OverlayTrigger placement="right" overlay={ popover.people } delayShow={ 200 } delayHide={ 0 }>
-              <LinkContainer className={ active.contacts } to="/dashboard/contacts">
-                <NavItem style={ S('w-85p') }>
-                  <img src={ active.contacts ? '/static/images/dashboard/sidenav/people-active.svg' : '/static/images/dashboard/sidenav/people.svg' } style={ S('w-19 h-19') }/>
+            <OverlayTrigger placement="right" overlay={ popover.people } delayShow={200} delayHide={0}>
+              <LinkContainer className={active.contacts} to="/dashboard/contacts">
+                <NavItem style={S('w-85p')}>
+                  <img src={active.contacts ? '/static/images/dashboard/sidenav/people-active.svg' : '/static/images/dashboard/sidenav/people.svg'} style={S('w-19 h-19')} />
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>

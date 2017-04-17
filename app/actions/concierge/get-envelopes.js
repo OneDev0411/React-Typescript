@@ -1,23 +1,33 @@
-// actions/concierge/get-deals.js
-import Concierge from '../../models/Concierge'
+
+
+import { getEnvelopes } from '../../models/Concierge'
 import AppStore from '../../stores/AppStore'
-import _ from 'underscore'
 
-export default (user, deal_id) => {
-  const params = {}
-
-  if (user) {
-    params.user = user.access_token
-    params.deal_id = deal_id
+export default async function (user, dealId) {
+  const params = {
+    dealId,
+    token: user.access_token
   }
+  // let dealIndex = 0
+  try {
+    const envelopes = await getEnvelopes(params) || []
+    AppStore.data.conciergeDeals =
+      AppStore.data.conciergeDeals.map((deal, index) => {
+        if (deal.id !== dealId)
+          return deal
 
-  Concierge.getEnvelopes(params, (err, response) => {
-    // Success
-    if (response.status === 'success') {
-      const index = _.findIndex(AppStore.data.concierge_deals, deal => deal.id === deal_id)
-      AppStore.data.concierge_deals[index].envelopes = response.data
-    }
-
-    AppStore.emitChange()
-  })
+        // dealIndex = index
+        return {
+          ...deal,
+          envelopes
+        }
+      })
+    // console.log('hasEnvelope', dealIndex, AppStore.data.conciergeDeals[dealIndex])
+    return envelopes
+  } catch (error) {
+    console.log(`getEnvelopes: ${error}`)
+    throw error
+  }
 }
+
+// 933937cc-0500-11e7-820d-0242ac110006

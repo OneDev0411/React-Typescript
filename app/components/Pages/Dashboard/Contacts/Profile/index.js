@@ -3,14 +3,18 @@ import { browserHistory } from 'react-router'
 import { Row, Col, Button, Tabs, Tab } from 'react-bootstrap'
 import Avatar from 'react-avatar'
 import moment from 'moment'
+import Dispatcher from '../../../../../dispatcher/ContactDispatcher'
 import Stepper from '../../../../Partials/Stepper'
 import Contact from '../../../../../models/Contact'
+import AddNote from './Add-Note'
+import Timeline from './Timeline'
 
 export default class ContactProfile extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      contact: null
+      contact: null,
+      activeTab: 'timeline'
     }
   }
 
@@ -22,13 +26,13 @@ export default class ContactProfile extends React.Component {
       return
 
     this.setState({ contact })
+
+    if (!contact.timeline)
+      this.getTimeline()
   }
 
   componentWillReceiveProps(nextProps) {
     const { contacts, params } = nextProps
-
-    if (this.state.contact)
-      return
 
     // load deal
     const contact = contacts[params.id]
@@ -43,6 +47,23 @@ export default class ContactProfile extends React.Component {
     return typeof nextProps.contacts !== 'undefined'
   }
 
+  async getTimeline() {
+    const { user, params } = this.props
+
+    const timeline = await Dispatcher.dispatchSync({
+      action: 'get-timeline',
+      id: params.id,
+      user
+    })
+
+    const contact = {
+      ...this.state.contact,
+      ...timeline
+    }
+
+    this.setState({ contact })
+  }
+
   goBack() {
     browserHistory.push('/dashboard/contacts')
   }
@@ -53,12 +74,8 @@ export default class ContactProfile extends React.Component {
     return list.indexOf(stage)
   }
 
-  onTabChange() {
-
-  }
-
   render() {
-    const { contact } = this.state
+    const { contact, activeTab } = this.state
 
     if (!contact)
       return false
@@ -150,35 +167,41 @@ export default class ContactProfile extends React.Component {
 
           <Col lg={7} md={7} sm={7}>
 
-            <div className="note">
-              <div className="head">
-                <img src="/static/images/contacts/notepad.svg" />
-                New Note
-              </div>
-              <textarea
-                placeholder="What do you want to say?"
-              ></textarea>
-              <div className="footer">
-                <Button bsStyle="danger" disabled={true}>Enter</Button>
-              </div>
-            </div>
+            <AddNote
+              user={this.props.user}
+              contact_id={this.props.params.id}
+              onSave={ () => this.setState({ activeTab: 'notes' }) }
+            />
 
             <div className="card activity">
               <Tabs
-                defaultActiveKey='timeline'
+                activeKey={activeTab}
                 animation={false}
                 id="tab-timeline"
-                onSelect={this.onTabChange.bind(this)}
+                onSelect={activeTab => this.setState({ activeTab })}
               >
                 <Tab eventKey="timeline" title="All Activity" className="timeline">
-                  Coming soon :)
+                  <Timeline
+                    name={Contact.get.name(contact)}
+                    avatar={Contact.get.avatar(contact)}
+                    activities={contact.timeline || {}}
+                  />
                 </Tab>
+
                 <Tab eventKey="notes" title="Notes" className="notes">
                   {
                     Contact.get.notes(contact).map(item => (
-                      <div key={`note_${item.note}`} className="item">
-                        { item.note }
-                        <span className="time">{ moment(item.created_at).format('MMMM DD, YYYY')}</span>
+                      <div key={`note_${item.id}`} className="item">
+                        {
+                          item.note.split('\n').map((text, key) => (
+                            <div key={`item_${item.id}_line_${key}`}>
+                              {text}
+                            </div>
+                          ))
+                        }
+                        <span className="time">
+                          { moment.unix(item.created_at ).format('MMMM DD, YYYY')}
+                        </span>
                       </div>
                     ))
                   }
