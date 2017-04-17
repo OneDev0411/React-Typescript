@@ -45,20 +45,20 @@
   height: 32px;
   border-radius: 4px;
   line-height: 1;
-  border-width: 0;
+  border-width: 0 !important;
 }
 
-.btn--cancel {
+.c-concierge__btn--cancel {
   background-color: #f6f6f6;
   color: #5b6469;
   margin-right: 1rem;
 }
 
-.btn--approve {
+.c-concierge__btn--approve {
   background-color: #2196f3;
 }
 
-%review-btn {
+%c-concierge__btn--review {
   position: absolute;
   z-index: 2;
 
@@ -70,25 +70,25 @@
 }
 
 .c-concierge__review__btn--decline {
-  @extend .btn;
-  @extend .btn--cancel;
-  @extend %review-btn;
+  @extend .c-concierge__btn;
+  @extend .c-concierge__btn--cancel;
+  @extend %c-concierge__btn--review;
   right: 115px;
 } // .c-concierge__btn--decline
 
 .c-concierge__review__btn--approve {
-  @extend .btn;
-  @extend .btn--approve;
-  @extend %review-btn;
+  @extend .c-concierge__btn;
+  @extend .c-concierge__btn--approve;
+  @extend %c-concierge__btn--review;
   right: 15px;
 } // .c-concierge__btn--approve
 
 .c-concierge__modal__btn--cancel {
-  @extend .btn;
-  @extend .btn--cancel;
+  @extend .c-concierge__btn;
+  @extend .c-concierge__btn--cancel;
 }
 
 .c-concierge__modal__btn--approve {
-  @extend .btn;
-  @extend .btn--approve;
+  @extend .c-concierge__btn;
+  @extend .c-concierge__btn--approve;
 }

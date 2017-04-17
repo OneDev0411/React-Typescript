@@ -119,10 +119,10 @@ export default class DealReview extends React.Component {
     })
   }
 
-  modalSubmitHandler(type) {
-    switch (type) {
+  modalSubmitHandler(action) {
+    switch (action.type) {
       case 'APPROVE':
-        this.approveDocuments()
+        this.approveDocuments(action.comment)
         break
       case 'DECLINE':
         this.declineDocuments()
@@ -134,8 +134,8 @@ export default class DealReview extends React.Component {
     }
   }
 
-  approveDocuments() {
-
+  approveDocuments(comment) {
+    console.log(comment)
   }
 
   declineDocuments() {

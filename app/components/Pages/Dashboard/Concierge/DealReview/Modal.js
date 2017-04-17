@@ -9,12 +9,21 @@ export default ({
 }) => {
   let input = ''
   return (
-    <Modal show={isActive} onHide={onCloseHandler}>
+    <Modal show={isActive} onHide={closeHandler}>
       <Modal.Header>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <form name="concierge-review">
+        <form
+          name="concierge-review"
+          onSubmit={(e) => {
+            e.preventDefault()
+            submitHandler({
+              type: 'APPROVE',
+              comment: input.value
+            })
+          }}
+        >
           <textarea
             ref={(node) => { input = node }}
             className="modal-textarea"
@@ -22,11 +31,12 @@ export default ({
           />
           <div style={{ textAlign: 'right' }}>
             <Button
-              onClick={onCloseHandler}
+              onClick={closeHandler}
               className="c-concierge__modal__btn--cancel"
             >Cancel</Button>
             <Button
-              onClick={submitHandler(input)}
+              type="submit"
+              bsStyle="primary"
               className="c-concierge__modal__btn--approve"
             >Send</Button>
           </div>
