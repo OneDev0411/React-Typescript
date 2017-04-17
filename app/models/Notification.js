@@ -35,7 +35,7 @@ export default {
         }
         return callback(error, false)
       }
-      return response.json()
+      return response
     })
     .then(response => callback(false, response))
   },

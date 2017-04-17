@@ -8,7 +8,7 @@ export default (user) => {
     access_token: user.access_token
   }
   Notification.deleteAll(params, (err, response) => {
-    delete AppStore.data.notifications
+    delete AppStore.data.new_notifications_count
     AppStore.emitChange()
   })
 }

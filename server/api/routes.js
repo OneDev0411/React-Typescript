@@ -42,7 +42,8 @@ const routes = {
   ],
   notification: [
     [ 'summary' ],
-    [ 'all' ]
+    [ 'all' ],
+    [ 'delete' ]
   ],
   rec: [
     [ 'actives' ],
