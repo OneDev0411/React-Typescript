@@ -1,50 +1,77 @@
 
 import S from 'shorti'
 import React from 'react'
-import { browserHistory } from 'react-router'
+import Modal from './Modal'
+import ListTitle from './ListTitle'
+import FilesList from './FilesList'
+import EnvelopesList from './EnvelopesList'
+import SubmissionsList from './SubmissionsList'
+import { browserHistory, Link } from 'react-router'
 import config from '../../../../../../config/public'
 import { Grid, Row, Col, Button } from 'react-bootstrap'
 import ConciergeDispatcher from '../../../../../dispatcher/ConciergeDispatcher'
 
-const styles = {
-  title: {
-    fontSize: '31px',
-    fontWeight: 300,
-    lineHeight: 1,
-    color: '#5e676c'
-  }
+
+const getFieldValue = (deal, field) => {
+  if (deal.context && deal.context[field])
+    return deal.context[field]
+  else if (deal.proposed_values && deal.proposed_values[field])
+    return deal.proposed_values[field]
+
+  return '-'
 }
 
 export default class DealReview extends React.Component {
 
   constructor(props) {
     super(props)
+
     this.state = {
+      deal: null,
+      files: [],
       envelopes: [],
       submissions: [],
       envelopesLoading: true,
-      submissionsLoading: true
+      submissionsLoading: true,
+      modalType: '',
+      modalTitle: '',
+      modalActive: false
     }
+
+    this.modalCloseHandler = this.modalCloseHandler.bind(this)
+    this.modalSubmitHandler = this.modalSubmitHandler.bind(this)
   }
 
   componentDidMount() {
-    this.getAll()
+    this.getDeal().then((deal) => {
+      const files = deal.files || []
+      this.setState({
+        deal,
+        files
+      })
+      this.getAll()
+    })
   }
 
-  async getAll() {
-    let dealIndex = null
-    const { user } = this.props
+  async getDeal() {
     const dealId = this.props.params.id
     const deals = this.props.conciergeDeals
-    const deal = deals.find((deal, index) => {
+    const deal = await deals.find((deal, index) => {
       if (deal.id === dealId) {
-        dealIndex = index
+        deal.index = index
         return deal
       }
     })
+    return deal
+  }
 
-    let { submissions } = deals[dealIndex]
-    let { envelopes } = deals[dealIndex]
+  async getAll() {
+    const { user } = this.props
+    const dealId = this.props.params.id
+    const deals = this.props.conciergeDeals
+
+    let { submissions } = deals[this.state.deal.index]
+    let { envelopes } = deals[this.state.deal.index]
 
     if (submissions) {
       this.setState({
@@ -64,12 +91,13 @@ export default class DealReview extends React.Component {
   }
 
   async getSubmissions(user, dealId) {
-    const submissions = await ConciergeDispatcher.dispatchSync({
+    const action = {
       user,
       dealId,
       type: 'GET_SUBMISSIONS'
-    })
-
+    }
+    const submissions =
+      await ConciergeDispatcher.dispatchSync(action)
     this.setState({
       submissions,
       submissionsLoading: false
@@ -77,11 +105,13 @@ export default class DealReview extends React.Component {
   }
 
   async getEnvelopes(user, dealId) {
-    const envelopes = await ConciergeDispatcher.dispatchSync({
+    const action = {
       user,
       dealId,
       type: 'GET_ENVELOPES'
-    })
+    }
+    const envelopes =
+      await ConciergeDispatcher.dispatchSync(action)
 
     this.setState({
       envelopes,
@@ -89,117 +119,76 @@ export default class DealReview extends React.Component {
     })
   }
 
+  modalSubmitHandler(type) {
+    switch (type) {
+      case 'APPROVE':
+        this.approveDocuments()
+        break
+      case 'DECLINE':
+        this.declineDocuments()
+        break
+      default:
+        this.setState({
+          modalActive: false
+        })
+    }
+  }
+
+  approveDocuments() {
+
+  }
+
+  declineDocuments() {
+
+  }
+
+  modalCloseHandler() {
+    this.setState({ modalActive: false })
+  }
+
   render() {
     const {
+      files,
       envelopes,
       submissions,
       envelopesLoading,
       submissionsLoading
     } = this.state
+    const approveState = {
+      modalActive: true,
+      modalType: 'DECLINE',
+      modalTitle: 'Why has this document been declined?'
+    }
+    const declineState = {
+      modalActive: true,
+      modalType: 'APPROVE',
+      modalTitle: 'Hurrah! Smooth sailing.'
+    }
+    const token = this.props.user.access_token
     return (
-      <div className="list">
-        <div
-          className="c-submissons"
-          style={{
-            marginBottom: '8rem'
-          }}
-        >
-          <Row>
-            <h2 style={styles.title}>Forms</h2>
-          </Row>
-          <Row>
-            {
-              <Grid
-                className="table"
-                style={{
-                  padding: 0
-                }}
-              >
-                <Row className="header">
-                  <Col md={6} xs={10}>TITLE</Col>
-                  <Col md={6} xs={2}>STATE</Col>
-                </Row>
-                {
-                  submissionsLoading && <div>
-                    <Row className="c-animated-background-placeholder" />
-                    <Row className="c-animated-background-placeholder" />
-                  </div>
-                }
-                <div
-                  className={
-                    submissionsLoading
-                    ? 'u-fade'
-                    : 'u-fade u-fade-out'
-                  }
-                >
-                  {
-                    submissions.length > 0 && submissions.map(submission => (
-                      <Row
-                        key={`DEAL_${submission.id}`}
-                        onClick={() => browserHistory.push(`/dashboard/concierge/deals/${deal.id}/submission/${submission.id}`)}
-                        className={'item'}
-                      >
-                        <Col md={6} xs={10}>
-                          <span>{ submission.file.name }</span>
-                        </Col>
-                        <Col md={6} xs={2}>
-                          <span>{ submission.state }</span>
-                        </Col>
-                      </Row>
-                    ))
-                  }
-                </div>
-              </Grid>
-            }
-          </Row>
-        </div>
-        <div className="c-envelopes">
-          <Row>
-            <h2 style={styles.title}>E-Sign</h2>
-          </Row>
-          <Row>
-            {
-              <Grid
-                className="table"
-                style={{
-                  padding: 0
-                }}
-              >
-                <Row className="header">
-                  <Col xs={12}>TITLE</Col>
-                </Row>
-                {
-                  envelopesLoading && <div>
-                    <Row className="c-animated-background-placeholder" />
-                    <Row className="c-animated-background-placeholder" />
-                    <Row className="c-animated-background-placeholder" />
-                  </div>
-                }
-                <div
-                  className={
-                    submissionsLoading
-                    ? 'u-fade'
-                    : 'u-fade u-fade-out'
-                  }
-                >
-                  {
-                    envelopes.length > 0 && envelopes.map(envelope => (
-                      <Row
-                        key={`DEAL_${envelope.id}`}
-                        onClick={() => browserHistory.push(`/dashboard/concierge/deals/${deal.id}/envelope/${envelope.id}`)}
-                        className={'item'}
-                      >
-                        <Col xs={12}>
-                          <span>{ envelope.proposed_title }</span>
-                        </Col>
-                      </Row>
-                    ))
-                  }
-                </div>
-              </Grid>
-            }
-          </Row>
-        </div>
+      <div className="list c-concierge">
+        <EnvelopesList
+          token={token}
+          list={envelopes}
+          loading={envelopesLoading}
+          declineHandler={() => this.setState(declineState)}
+          approveHandler={() => this.setState(approveState)}
+        />
+        <SubmissionsList
+          loading={submissionsLoading}
+          submissions={submissions}
+        />
+        <FilesList
+          list={files}
+          declineHandler={() => this.setState(declineState)}
+          approveHandler={() => this.setState(approveState)}
+        />
+        <Modal
+          title={this.state.modalTitle}
+          isActive={this.state.modalActive}
+          onCloseHandler={this.modalCloseHandler}
+          onSubmitHandler={this.modalSubmitHandler}
+        />
       </div>
     )
   }
