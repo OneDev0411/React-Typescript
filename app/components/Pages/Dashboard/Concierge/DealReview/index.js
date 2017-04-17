@@ -186,8 +186,8 @@ export default class DealReview extends React.Component {
         <Modal
           title={this.state.modalTitle}
           isActive={this.state.modalActive}
-          onCloseHandler={this.modalCloseHandler}
-          onSubmitHandler={this.modalSubmitHandler}
+          closeHandler={this.modalCloseHandler}
+          submitHandler={this.modalSubmitHandler}
         />
       </div>
     )
