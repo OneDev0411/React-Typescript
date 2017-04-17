@@ -41,7 +41,8 @@ const routes = {
     [ 'messages' ]
   ],
   notification: [
-    [ 'summary' ]
+    [ 'summary' ],
+    [ 'all' ]
   ],
   rec: [
     [ 'actives' ],
