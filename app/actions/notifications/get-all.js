@@ -9,6 +9,7 @@ export default (user) => {
   }
   Notification.getAll(params, (err, response) => {
     AppStore.data.notifications = response.data
+    AppStore.data.new_notifications_count = response.info.new
     AppStore.emitChange()
   })
 }

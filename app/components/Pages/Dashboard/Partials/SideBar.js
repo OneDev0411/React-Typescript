@@ -191,15 +191,15 @@ export default class SideBar extends Component {
     }, 500)
   }
 
-  notificationIcon(name) {
+  notificationIcon() {
     const data = this.props.data
     let icon
-    if (data.notifications && data.notifications.summary && data.notifications.summary[name] > 0) {
+    if (data.new_notifications_count && data.new_notifications_count > 0) {
       icon = (
-        <div style={S('pl-10 absolute t-0 r-0')}>
+        <div style={S('pl-10 absolute t-40n r-0')}>
           <div style={S('font-15 bg-db3821 br-100 p-6 h-17 text-center')}>
             <span style={S('color-fff font-10 relative t-9n')}>
-              { data.notifications.summary.room_notification_count }
+              { data.new_notifications_count }
             </span>
           </div>
         </div>
@@ -580,7 +580,6 @@ export default class SideBar extends Component {
             <LinkContainer onClick={this.handleChatNavClick.bind(this)} className={active.recents} to="/dashboard/recents">
               <NavItem style={S('w-85p')}>
                 <SvgChat color={active.recents ? nav_active_color : '#4e5c6c'} />
-                {this.notificationIcon('room_notification_count')}
               </NavItem>
             </LinkContainer>
           </OverlayTrigger>
@@ -644,6 +643,7 @@ export default class SideBar extends Component {
         <div style={S('absolute b-10 l-15')}>
           <Nav className="sidebar__account">
             <Link to="/dashboard/notifications">
+              {this.notificationIcon('notification_count')}
               <i className="fa fa-bell" style={S(`font-30 relative l-5 t-30n color-${!active.notifications ? '4D5C6C' : '3388ff' }`)} />
             </Link>
             <OverlayTrigger placement="right" overlay={popover.support} delayShow={200} delayHide={0}>
