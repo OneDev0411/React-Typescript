@@ -59,8 +59,8 @@
 }
 
 %c-concierge__btn--review {
-  position: absolute;
-  z-index: 2;
+  // position: absolute;
+  // z-index: 2;
 
   > svg {
     display: inline-block;
@@ -73,14 +73,14 @@
   @extend .c-concierge__btn;
   @extend .c-concierge__btn--cancel;
   @extend %c-concierge__btn--review;
-  right: 115px;
+  // right: 115px;
 } // .c-concierge__btn--decline
 
 .c-concierge__review__btn--approve {
   @extend .c-concierge__btn;
   @extend .c-concierge__btn--approve;
   @extend %c-concierge__btn--review;
-  right: 15px;
+  // right: 15px;
 } // .c-concierge__btn--approve
 
 .c-concierge__modal__btn--cancel {
@@ -92,3 +92,22 @@
   @extend .c-concierge__btn;
   @extend .c-concierge__btn--approve;
 }
+
+
+%review-state-caption {
+  opacity: 0.4;
+  font-size: 15px;
+  font-weight: bold;
+  display: inline-block;
+  margin-top: 7px;
+} // %review-state-caption
+
+.review-state--reject {
+  @extend %review-state-caption;
+  color: #ff3200;
+} // .review-state--reject
+
+.review-state--ok {
+  @extend %review-state-caption;
+  color: #35b863;
+} // .review-state--ok

@@ -74,12 +74,15 @@ export default class DealReview extends React.Component {
   }
 
   fillreviews() {
-    this.deal.reviews.forEach((review) => {
-      const id = review.file || review.envelope_document
-      this.reviews[id] = {
-        ...review
-      }
-    })
+    const reviews = this.deal.reviews
+    if (reviews) {
+      this.deal.reviews.forEach((review) => {
+        const id = review.file || review.envelope_document
+        this.reviews[id] = {
+          ...review
+        }
+      })
+    }
   }
 
   mapReviewsToFiles(files) {
