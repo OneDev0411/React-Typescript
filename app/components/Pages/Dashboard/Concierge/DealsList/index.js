@@ -156,7 +156,7 @@ export default class DealsList extends React.Component {
               getSortedDeals(deals).reverse().map(deal => (
                 <Row
                   key={`DEAL_${deal.id}`}
-                  onClick={() => browserHistory.push(`/dashboard/concierge/deals/${deal.id}/review`)}
+                  onClick={() => browserHistory.push(`/dashboard/concierge/deals/${deal.id}`)}
                   className={'item'}
                 >
                   <Col md={6} sm={6} xs={6}>

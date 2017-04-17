@@ -3,12 +3,12 @@ import React from 'react'
 import { ApproveBtn, DeclineBtn } from './ReviewButtons'
 import { Grid, Row, Col, Button } from 'react-bootstrap'
 
-
 export default ({
   id,
+  url,
   type,
-  title,
   name,
+  title,
   onClickApprove,
   onClickDecline
 }) => (
@@ -25,7 +25,7 @@ export default ({
     </Col>
     <a
       className="c-concierge__item-link"
-      href="#"
+      href={url}
       target="_blank"
     />
     <DeclineBtn onClick={onClickDecline} />

@@ -8,14 +8,7 @@ export default ({
 }) => (
   <Row>
     <Col xs={12}>
-      <h2
-        style={{
-          fontSize: '31px',
-          fontWeight: 300,
-          lineHeight: 1,
-          color: '#5e676c'
-        }}
-      >
+      <h2 className="c-concierge__list-title">
         {title}
       </h2>
     </Col>

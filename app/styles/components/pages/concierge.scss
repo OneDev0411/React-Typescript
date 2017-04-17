@@ -16,8 +16,7 @@
 }
 
 .c-concierge .header.header.header.header {
-  margin-top: 10px;
-  margin-bottom: 0;
+  margin: 10px 0 0;
 }
 
 .c-files,
@@ -25,6 +24,15 @@
 .c-submissons {
   margin-bottom: 4rem;
 } // .c-submissons
+
+.c-concierge__list-title {
+  margin-top: 0;
+  margin-bottom: 2rem;
+  font-size: 31px;
+  font-weight: 300;
+  line-height: 1;
+  color: #5e676c;
+} // .c-concierge__list-title
 
 .c-concierge__btn--decline {
   @extend %btn;
@@ -50,8 +58,7 @@
 } // .c-concierge__item-link
 
 .c-concierge__sublist-title {
-  font-size: 17px;
+  font-size: 20px;
   font-weight: 300;
   color: #5e676c;
-  margin-top: 2rem;
 } // .c-concierge__sublist-title

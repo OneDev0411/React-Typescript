@@ -25,10 +25,9 @@ export default class DealReview extends React.Component {
 
   constructor(props) {
     super(props)
-    this.deal = null
-    this.dealIndex = null
 
     this.state = {
+      deal: null,
       files: [],
       envelopes: [],
       submissions: [],
@@ -44,22 +43,26 @@ export default class DealReview extends React.Component {
   }
 
   componentDidMount() {
-    this.findDeal()
-    this.getAll()
+    this.getDeal().then((deal) => {
+      const files = deal.files || []
+      this.setState({
+        deal,
+        files
+      })
+      this.getAll()
+    })
   }
 
-  findDeal() {
+  async getDeal() {
     const dealId = this.props.params.id
     const deals = this.props.conciergeDeals
-    this.deal = deals.find((deal, index) => {
+    const deal = await deals.find((deal, index) => {
       if (deal.id === dealId) {
-        this.dealIndex = index
+        deal.index = index
         return deal
       }
     })
-    this.setState({
-      files: this.deal.files || []
-    })
+    return deal
   }
 
   async getAll() {
@@ -67,8 +70,8 @@ export default class DealReview extends React.Component {
     const dealId = this.props.params.id
     const deals = this.props.conciergeDeals
 
-    let { submissions } = deals[this.dealIndex]
-    let { envelopes } = deals[this.dealIndex]
+    let { submissions } = deals[this.state.deal.index]
+    let { envelopes } = deals[this.state.deal.index]
 
     if (submissions) {
       this.setState({
@@ -161,9 +164,11 @@ export default class DealReview extends React.Component {
       modalType: 'APPROVE',
       modalTitle: 'Hurrah! Smooth sailing.'
     }
+    const token = this.props.user.access_token
     return (
       <div className="list c-concierge">
         <EnvelopesList
+          token={token}
           list={envelopes}
           loading={envelopesLoading}
           declineHandler={() => this.setState(declineState)}
