@@ -1,4 +1,4 @@
-// actions/notifications/get-all.js
+// actions/notifications/delete-all.js
 import { browserHistory } from 'react-router'
 import Notification from '../../models/Notification'
 import AppStore from '../../stores/AppStore'
@@ -7,10 +7,8 @@ export default (user) => {
   const params = {
     access_token: user.access_token
   }
-  Notification.getAll(params, (err, response) => {
-    AppStore.data.notifications = response.data
-    AppStore.data.new_notifications_count = response.info.new
-    AppStore.data.notifications_retrieved = true
+  Notification.deleteAll(params, (err, response) => {
+    delete AppStore.data.new_notifications_count
     AppStore.emitChange()
   })
 }

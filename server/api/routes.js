@@ -42,7 +42,10 @@ const routes = {
   ],
   notification: [
     [ 'summary' ],
-    [ 'all' ]
+    [ 'all' ],
+    [ 'delete' ],
+    [ 'delete-room-notifications' ],
+    [ 'mark-seen' ]
   ],
   rec: [
     [ 'actives' ],
