@@ -163,7 +163,7 @@ export default class App extends Component {
   getNotifications() {
     const data = AppStore.data
     AppDispatcher.dispatch({
-      action: 'get-notification-summary',
+      action: 'get-all',
       user: data.user
     })
   }
