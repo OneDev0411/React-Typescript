@@ -15,7 +15,7 @@ import CreateMessageArea from './CreateMessageArea'
 import NewMessageViewer from './NewMessageViewer'
 export default class MainContent extends Component {
   handleSearchRoomChange() {
-    const search_rooms_input = this.refs.search_rooms_input.value
+    const search_rooms_input = this.search_rooms_inputInput.value
     this.props.filterRooms(search_rooms_input)
   }
   hideModal() {
