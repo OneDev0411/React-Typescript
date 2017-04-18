@@ -211,18 +211,25 @@ export default class SideBar extends Component {
   roomNotificationIcon() {
     const data = this.props.data
     const rooms = data.rooms
-    const room_notifications_sum = _.sum(_.map(rooms, 'new_notifications'))
+    let room_notifications_sum = 0
     let icon
-    if (rooms && room_notifications_sum > 0) {
-      icon = (
-        <div style={S('pl-10 absolute t-1 r-0')}>
-          <div style={S('font-15 bg-db3821 br-100 p-6 h-17 text-center')}>
-            <span style={S('color-fff font-10 relative t-9n')}>
-              { room_notifications_sum }
-            </span>
+    if (rooms) {
+      let count = 0
+      room_notifications_sum = rooms.forEach(room => {
+        if (room.new_notifications)
+          count++
+      })
+      if (rooms && count > 0) {
+        icon = (
+          <div style={S('pl-10 absolute t-1 r-0')}>
+            <div style={S('font-15 bg-db3821 br-100 p-6 h-17 text-center')}>
+              <span style={S('color-fff font-10 relative t-9n')}>
+                { count }
+              </span>
+            </div>
           </div>
-        </div>
-      )
+        )
+      }
     }
     return icon
   }
