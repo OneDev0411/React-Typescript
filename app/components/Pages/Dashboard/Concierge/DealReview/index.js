@@ -119,10 +119,10 @@ export default class DealReview extends React.Component {
     })
   }
 
-  modalSubmitHandler(type) {
-    switch (type) {
+  modalSubmitHandler(action) {
+    switch (action.type) {
       case 'APPROVE':
-        this.approveDocuments()
+        this.approveDocuments(action.comment)
         break
       case 'DECLINE':
         this.declineDocuments()
@@ -134,8 +134,8 @@ export default class DealReview extends React.Component {
     }
   }
 
-  approveDocuments() {
-
+  approveDocuments(comment) {
+    console.log(comment)
   }
 
   declineDocuments() {
@@ -186,8 +186,8 @@ export default class DealReview extends React.Component {
         <Modal
           title={this.state.modalTitle}
           isActive={this.state.modalActive}
-          onCloseHandler={this.modalCloseHandler}
-          onSubmitHandler={this.modalSubmitHandler}
+          closeHandler={this.modalCloseHandler}
+          submitHandler={this.modalSubmitHandler}
         />
       </div>
     )
