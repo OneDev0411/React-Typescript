@@ -162,7 +162,7 @@ export default class App extends Component {
 
   getNotifications() {
     const data = AppStore.data
-    AppDispatcher.dispatch({
+    NotificationDispatcher.dispatch({
       action: 'get-all',
       user: data.user
     })
