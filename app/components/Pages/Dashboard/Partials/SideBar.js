@@ -211,18 +211,25 @@ export default class SideBar extends Component {
   roomNotificationIcon() {
     const data = this.props.data
     const rooms = data.rooms
-    const room_notifications_sum = _.sum(_.map(rooms, 'new_notifications'))
+    let room_notifications_sum = 0
     let icon
-    if (rooms && room_notifications_sum > 0) {
-      icon = (
-        <div style={S('pl-10 absolute t-1 r-0')}>
-          <div style={S('font-15 bg-db3821 br-100 p-6 h-17 text-center')}>
-            <span style={S('color-fff font-10 relative t-9n')}>
-              { room_notifications_sum }
-            </span>
+    if (rooms) {
+      let count = 0
+      room_notifications_sum = rooms.forEach(room => {
+        if (room.new_notifications)
+          count++
+      })
+      if (rooms && count > 0) {
+        icon = (
+          <div style={S('pl-10 absolute t-1 r-0')}>
+            <div style={S('font-15 bg-db3821 br-100 p-6 h-17 text-center')}>
+              <span style={S('color-fff font-10 relative t-9n')}>
+                { count }
+              </span>
+            </div>
           </div>
-        </div>
-      )
+        )
+      }
     }
     return icon
   }
@@ -474,7 +481,8 @@ export default class SideBar extends Component {
       concierge: <Popover className="sidenav__popover" id="popover-tasks">Concierge</Popover>,
       deals: <Popover className="sidenav__popover" id="popover-tasks">Deals</Popover>,
       support: <Popover className="sidenav__popover" id="popover-support">Need Help?</Popover>,
-      store: <Popover className="sidenav__popover" id="popover-store">Store</Popover>
+      store: <Popover className="sidenav__popover" id="popover-store">Store</Popover>,
+      notifications: <Popover className="sidenav__popover" id="popover-notifications">Notifications</Popover>
     }
     if (data.errors && data.errors.type && data.errors.type === 'agent-not-found') {
       message = (
@@ -662,10 +670,14 @@ export default class SideBar extends Component {
         </Nav>
         <div style={S('absolute b-10 l-15')}>
           <Nav className="sidebar__account">
-            <Link to="/dashboard/notifications">
-              {this.notificationIcon()}
-              <i className="fa fa-bell" style={S(`font-30 relative l-5 t-30n color-${!active.notifications ? '4D5C6C' : '3388ff' }`)} />
-            </Link>
+            <NavItem style={ S('t-20n l-10n') }>
+              <OverlayTrigger placement="right" overlay={popover.notifications} delayShow={200} delayHide={0}>
+                <Link to="/dashboard/notifications">
+                  {this.notificationIcon()}
+                  <i className="fa fa-bell" style={S(`font-30 relative color-${!active.notifications ? '4D5C6C' : '3388ff' }`)} />
+                </Link>
+              </OverlayTrigger>
+            </NavItem>
             <OverlayTrigger placement="right" overlay={popover.support} delayShow={200} delayHide={0}>
               <div style={S('pointer relative t-15n')} onClick={this.showIntercom}>
                 <i className="fa fa-question" style={S('font-20 color-202A33 relative t-5n l-13 z-100')} />

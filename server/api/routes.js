@@ -44,7 +44,6 @@ const routes = {
     [ 'messages' ]
   ],
   notification: [
-    [ 'summary' ],
     [ 'all' ],
     [ 'delete' ],
     [ 'delete-room-notifications' ],
