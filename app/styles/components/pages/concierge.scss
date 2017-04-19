@@ -1,4 +1,22 @@
 
+.c-concierge__header {
+  margin-bottom: 4rem;
+  margin-left: -1.5rem;
+  color: #5e676c;
+  background-color: transparent;
+
+  .fa {
+    display: inline-block;
+    font-size:  2rem;
+    margin-right: .75rem;
+  }
+  > span {
+    cursor: pointer;
+    &:hover {
+      color: darken(#5e676c, 25%);
+    }
+  }
+}
 
 .c-concierge .header.header.header.header {
   margin: 10px 0 0;
@@ -7,12 +25,12 @@
 .c-files,
 .c-envelopes,
 .c-submissons {
-  margin-bottom: 4rem;
+  margin-bottom: 6rem;
 } // .c-submissons
 
 .c-concierge__list-title {
   margin-top: 0;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   font-size: 31px;
   font-weight: 300;
   line-height: 1;

@@ -15,6 +15,7 @@ export default ({
   onClickApprove,
   onClickDecline
 }) => {
+  const reviewId = review ? review.id : null
   const getReviewState = (state = 'Pending') => {
     switch (state) {
       case 'Approved':
@@ -23,8 +24,8 @@ export default ({
         return <span className="review-state--reject">DECLINED</span>
       default:
         return (<div>
-          <DeclineBtn onClick={onClickDecline} />
-          <ApproveBtn onClick={() => onClickApprove(review.id)} />
+          <DeclineBtn onClick={() => onClickDecline(reviewId)} />
+          <ApproveBtn onClick={() => onClickApprove(reviewId)} />
         </div>)
     }
   }
