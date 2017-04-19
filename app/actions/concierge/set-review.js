@@ -29,7 +29,7 @@ export default async function (id, body, user) {
     const reviewComment = res.comment
     const docId = res.envelope_document
 
-    let { deals, isUpdated } = AppStore.data.conciergeDeals
+    let deals = AppStore.data.conciergeDeals
     const { deal, dealIndex } = getDeal(deals, dealId)
     const reviews = deal.reviews
     let newReviews = []
@@ -88,10 +88,7 @@ export default async function (id, body, user) {
       default:
         return
     }
-    AppStore.data.conciergeDeals.deals = deals
-    if (!isUpdated)
-      AppStore.data.conciergeDeals.isUpdated = true
-    // AppStore.emitChange()
+    AppStore.data.conciergeDeals = deals
   } catch (error) {
     throw error
   }

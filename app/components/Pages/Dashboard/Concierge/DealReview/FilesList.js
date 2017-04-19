@@ -28,7 +28,7 @@ export default ({
               list.map(file => (
                 <File
                   {...file}
-                  type={'FILE'}
+                  key={`FILE_${file.id}`}
                   onClickApprove={approveHandler}
                   onClickDecline={declineHandler}
                 />
