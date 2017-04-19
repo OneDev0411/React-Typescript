@@ -28,8 +28,16 @@ export default class extends React.Component {
       user,
       id: notification.id
     })
+    // Deals
     if (notification.notification_type === 'UserReactedToEnvelope')
       browserHistory.push(`/dashboard/deals/${notification.objects[0].deal}`)
+    // Listings
+    if (notification.notification_type === 'ListingPriceDroppedUser')
+      browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
+    if (notification.notification_type === 'ListingStatusChangedUser')
+      browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
+    if (notification.notification_type === 'ListingBecameAvailableRoom')
+      browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
   }
   notificationIcon(notification) {
     const type = notification.notification_type
@@ -56,13 +64,13 @@ export default class extends React.Component {
         icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) ${common_image_style}`) }/></div>
         break
       case 'ListingBecameAvailableRoom':
-        icon = <div><div style={ S(`bg-url(${object.cover_image_url}) ${common_image_style}`) }/></div>
+        icon = <div><div style={ S(`${subject.cover_image_url ? `bg-url(${subject.cover_image_url})` : 'bg-ccc'} ${common_image_style}`) }>{ !subject.cover_image_url && <div style={ S('color-fff text-center font-10 mt-10') }>No <br />image</div> }</div></div>
         break
       case 'ListingPriceDroppedUser':
-        icon = <div><div style={ S(`bg-url(${object.cover_image_url}) ${common_image_style}`) }/></div>
+        icon = <div><div style={ S(`${subject.cover_image_url ? `bg-url(${subject.cover_image_url})` : 'bg-ccc'} ${common_image_style}`) }>{ !subject.cover_image_url && <div style={ S('color-fff text-center font-10 mt-10') }>No <br />image</div> }</div></div>
         break
       case 'ListingStatusChangedUser':
-        icon = <div><div style={ S(`bg-url(${object.cover_image_url}) ${common_image_style}`) }/></div>
+        icon = <div><div style={ S(`${subject.cover_image_url ? `bg-url(${subject.cover_image_url})` : 'bg-ccc'} ${common_image_style}`) }>{ !subject.cover_image_url && <div style={ S('color-fff text-center font-10 mt-10') }>No <br />image</div> }</div></div>
         break
       case 'OpenHouseAvailableListing':
         icon = <div><div style={ S(`bg-url(${object.cover_image_url}) ${common_image_style}`) }/></div>
