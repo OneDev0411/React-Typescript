@@ -61,7 +61,10 @@ export default ({
               </Row>
               {
                 submissions.map(submission => (
-                  <Item {...submission} />
+                  <Item
+                    key={`FORM_${submission.id}`}
+                    {...submission}
+                  />
                 ))
               }
             </div>
