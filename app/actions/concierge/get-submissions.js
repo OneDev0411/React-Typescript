@@ -10,8 +10,10 @@ export default async function (user, dealId) {
   }
   // let dealIndex = 0
   try {
+    const { deals } = AppStore.data.conciergeDeals
     const submissions = await getSubmissions(params) || []
-    AppStore.data.conciergeDeals = AppStore.data.conciergeDeals.map((deal, index) => {
+
+    const newDeals = deals.map((deal, index) => {
       if (deal.id !== dealId)
         return deal
 
@@ -21,10 +23,16 @@ export default async function (user, dealId) {
         submissions
       }
     })
-    // console.log('hasSubmission', AppStore.data.conciergeDeals[dealIndex])
+    // AppStore.emitChange()
+    // console.log('hasEnvelope', dealIndex, AppStore.data.conciergeDeals[dealIndex])
+
+    AppStore.data.conciergeDeals.deals = newDeals
+
+    // if (!isUpdated)
+    //   AppStore.data.conciergeDeals.isUpdated = true
+
     return submissions
   } catch (error) {
-    console.log(`getSubmissions: ${error}`)
     throw error
   }
 }
