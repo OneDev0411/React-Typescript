@@ -128,7 +128,7 @@ export default class ListingPanel extends Component {
                   { listing.status }
                 </span>
               </div>
-              <div style={ { ...S('font-21 fw-600 mb-10'), textShadow: '0 1px 4px rgba(0, 0, 0, 0.2)' } }>
+              <div style={ { ...S('font-21 fw-600 mb-5'), textShadow: '0 1px 4px rgba(0, 0, 0, 0.2)' } }>
                 { listing_util.addressTitle(address) }
               </div>
               <div style={ S('font-17 fw-600') }>

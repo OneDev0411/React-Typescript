@@ -451,7 +451,7 @@ export default class Mls extends Component {
     }
     let zoom_right = 'r-25'
     if (data.show_listing_panel)
-      zoom_right = 'r-860'
+      zoom_right = 'r-460'
     let zoom_bottom = ' b-25'
     if (data.is_mobile)
       zoom_bottom = ' b-75'
