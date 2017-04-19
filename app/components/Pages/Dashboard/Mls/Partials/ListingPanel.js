@@ -73,10 +73,10 @@ export default class ListingPanel extends Component {
         address = property.address
       let listing_image = <div style={ S('w-405 h-300 bg-efefef') }/>
       if (listing.cover_image_url)
-        listing_image = <div style={ S('w-405 h-300 bg-url(' + listing.cover_image_url + ') bg-cover bg-center') } />
+        listing_image = <div style={ S('w-405 h-300 bg-url(' + listing.cover_image_url + ') bg-cover bg-center br-3') } />
       const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
       const image_overlay = {
-        ...S('bg-000 absolute w-100p h-100p'),
+        ...S('bg-000 absolute w-100p h-100p br-3'),
         opacity: '.2'
       }
       let open_houses
@@ -113,7 +113,7 @@ export default class ListingPanel extends Component {
         })
       }
       return (
-        <div onMouseOut={ this.props.removeActiveListing.bind(this) } onMouseOver={ this.props.setActiveListing.bind(this, listing) } key={ 'panel-listing-grid-' + listing.id + '-' + i } style={ S('relative pointer w-415 h-350 pb-10 pl-10 bg-fff pull-left') }>
+        <div onMouseOut={ this.props.removeActiveListing.bind(this) } onMouseOver={ this.props.setActiveListing.bind(this, listing) } key={ 'panel-listing-grid-' + listing.id + '-' + i } style={ S('relative pointer w-415 h-315 pb-10 pl-10 bg-fff pull-left br-3') }>
           <div style={ S('absolute r-0') }>
             <FavoriteHeart
               listing={ listing }
