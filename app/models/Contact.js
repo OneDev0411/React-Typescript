@@ -67,6 +67,27 @@ Contact.addNote = async function(params) {
 }
 
 /**
+*
+*/
+Contact.updateUserTimeline = async function(params) {
+  const { user_action, object_class, object, access_token } = params
+  const endpoint = `${api_host}/users/self/timeline`
+
+  try {
+    const response = await agent
+      .post(endpoint)
+      .set({ Authorization: `Bearer ${access_token}` })
+      .send({ action: user_action })
+      .send({ object_class })
+      .send({ object })
+
+    return response
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
 * helpers functions
 */
 Contact.helper = {
