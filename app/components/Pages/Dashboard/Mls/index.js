@@ -464,7 +464,7 @@ export default class Mls extends Component {
     let results_actions
     let create_alert_button
     if (data.show_search_map) {
-      let save_search_btn_style = S(`absolute r-20 t-70 z-1 w-200 h-50 font-18 color-fff border-1-solid-${Brand.color('primary', '2196f3')} bg-${Brand.color('primary', '2196f3')}`)
+      let save_search_btn_style = S(`absolute r-5 t-50 z-1 w-150 h-45 font-18 color-fff border-1-solid-${Brand.color('primary', '2196f3')} bg-${Brand.color('primary', '2196f3')}`)
 
       if (data.is_widget && !data.is_mobile) {
         save_search_btn_style = {
@@ -799,7 +799,7 @@ export default class Mls extends Component {
     // Show search
     if (data.listing_panel && data.listing_panel.size) {
       content_area = (
-        <div style={ S(`absolute h-100p w-${window.innerWidth - 850 - 70}`) }>
+        <div style={ S(`absolute h-100p w-${window.innerWidth - 425 - 70}`) }>
           { content_area }
         </div>
       )

@@ -221,7 +221,7 @@ export default class ListingPanel extends Component {
       heading_height = 180
     }
     const listing_panel_wrap_style = S('fixed t-62 r-0 w-0 h-0 z-5')
-    let listing_panel_style = S(`absolute t-0 w-850 bg-fff h-${window.innerHeight}`)
+    let listing_panel_style = S(`absolute t-0 w-425 bg-fff h-${window.innerHeight}`)
     let listing_scroll_style = {
       ...listing_panel_style,
       top: panel_top + 'px',
@@ -298,7 +298,7 @@ export default class ListingPanel extends Component {
     if (data.show_listing_panel) {
       button_style = {
         ...button_style,
-        right: 850
+        right: 425
       }
     }
     let listing_panel_btn = (
@@ -323,7 +323,7 @@ export default class ListingPanel extends Component {
         <div style={ listing_panel_style } className={ panel_class }>
           <div>
             <div style={ S('pt-10 pl-15 pr-15 mb-10') }>
-              <div className="tempo" style={ S('color-444 fw-100 font-24') }>{ listings.length }{ listings_total } Homes Found</div>
+              <div className="tempo" style={ S('color-444 fw-100 font-24') }>{ listings.length }{ listings_total } Homes</div>
               <div>
                 Sorting by
                 <DropdownButton bsStyle="link" title={ sortby_title || '' } id="dropdown-size-large">
