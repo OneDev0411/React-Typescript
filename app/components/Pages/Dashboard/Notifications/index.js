@@ -6,6 +6,7 @@ import S  from 'shorti'
 import _  from 'lodash'
 import helpers from '../../../../utils/helpers'
 import AppStore from '../../../../stores/AppStore'
+import { browserHistory } from 'react-router'
 export default class extends React.Component {
   constructor(props) {
     super(props)
@@ -19,14 +20,16 @@ export default class extends React.Component {
       user
     })
   }
-  makeNotifSeen(id) {
+  handleNotifClick(notification) {
     const { data } = this.props
     const { user } = data
     NotificationDispatcher.dispatch({
       action: 'mark-seen',
       user,
-      id
+      id: notification.id
     })
+    if (notification.notification_type === 'UserReactedToEnvelope')
+      browserHistory.push(`/dashboard/deals/${notification.objects[0].deal}`)
   }
   notificationIcon(notification) {
     const type = notification.notification_type
@@ -67,9 +70,6 @@ export default class extends React.Component {
       case 'UserJoinedRoom':
         icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) ${common_image_style}`) }/></div>
         break
-      case 'ContactCreatedForUser':
-        icon = <div><div style={ S(`${subject.profile_image_url ? `bg-url(${subject.profile_image_url})` : 'bg-ccc'} ${common_image_style}`) }>{ !subject.profile_image_url && <div style={ S('color-fff text-center font-10 mt-10') }>No <br />image</div> }</div></div>
-        break
       case 'UserReactedToEnvelope':
         icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) ${common_image_style}`) }/></div>
         break
@@ -83,8 +83,13 @@ export default class extends React.Component {
     const { notifications } = data
     if (notifications && notifications.length) {
       return notifications.map((notification, i) => {
+        let bg_color = 'rgba(32, 150, 243, 0.05)'
+        if (notification.seen)
+          bg_color = '#ffffff'
+        if (notification.notification_type === 'ContactCreatedForUser')
+          return
         return (
-          <div onClick={ this.makeNotifSeen.bind(this, notification.id) } key={ notification.id + i } style={ { ...S(`h-80 p-20 pointer w-100p relative ${notification.seen ? 'bg-f1f1f1' : ''}`), boxShadow: '0 1px 0 0 #f1f1f1' } }>
+          <div onClick={ this.handleNotifClick.bind(this, notification) } key={ notification.id + i } style={ { ...S(`h-80 p-20 pointer w-100p relative`), backgroundColor: bg_color, boxShadow: '0 1px 0 0 #f1f1f1' } }>
             <div style={ S('pull-left') }>{ this.notificationIcon(notification) }</div>
             <div style={ S('pull-left relative l-80 w-100p') }>
               <div style={ S('color-263445 font-17') }>{ notification.message }</div>

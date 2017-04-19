@@ -196,7 +196,7 @@ export default class SideBar extends Component {
     let icon
     if (data.new_notifications_count && data.new_notifications_count > 0) {
       icon = (
-        <div style={S('pl-10 absolute t-40n r-0')}>
+        <div style={S('pl-10 absolute t-0 r-0')}>
           <div style={S('font-15 bg-db3821 br-100 p-6 h-17 text-center')}>
             <span style={S('color-fff font-10 relative t-9n')}>
               { data.new_notifications_count }
