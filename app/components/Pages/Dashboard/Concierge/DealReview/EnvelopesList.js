@@ -58,7 +58,7 @@ export default ({
                     {...document}
                     url={getDocumentUrl(document.id, index, token)}
                     token={token}
-                    type={'DOCUMENT'}
+                    key={`DOCUMENT_${document.id}`}
                     onClickApprove={approveHandler}
                     onClickDecline={declineHandler}
                   />

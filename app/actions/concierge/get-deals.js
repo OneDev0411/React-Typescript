@@ -8,11 +8,7 @@ export default async function (user) {
     token: user.access_token
   }
   try {
-    const deals = await getDeals(params)
-    AppStore.data.conciergeDeals = {
-      deals,
-      isUpdated: false
-    }
+    AppStore.data.conciergeDeals = await getDeals(params)
     AppStore.emitChange()
   } catch (error) {
     throw error

@@ -55,7 +55,7 @@ export default class DealsList extends React.Component {
 
   constructor(props) {
     super(props)
-    const { deals } = props.conciergeDeals
+    const deals = props.conciergeDeals
     this.state = {
       deals
     }

@@ -8,7 +8,6 @@ import { Grid, Row, Col, Button } from 'react-bootstrap'
 export default ({
   id,
   url,
-  type,
   name,
   title,
   review,
@@ -31,7 +30,6 @@ export default ({
   }
   return (
     <Row
-      key={`${type}_${id}`}
       className={'item'}
       style={S('relative')}
     >

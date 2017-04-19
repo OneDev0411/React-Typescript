@@ -64,9 +64,8 @@ export default class DealReview extends React.Component {
         const files = this.mapReviewsToFiles(deal.files)
         this.setState({ files })
         this.deal.files = files
-        // this.deals[this.deal.index] = this.deal
-        // AppStore.data.conciergeDeals = this.deals
-        // AppStore.emitChange()
+        this.deals[this.deal.index] = this.deal
+        AppStore.data.conciergeDeals = this.deals
       }
       this.getAll()
     })
@@ -74,7 +73,7 @@ export default class DealReview extends React.Component {
 
   async getDeal() {
     const dealId = this.props.params.id
-    const { deals } = this.props.conciergeDeals
+    const deals = this.props.conciergeDeals
     const deal = await deals.find((deal, index) => {
       if (deal.id === dealId) {
         deal.index = index
@@ -82,6 +81,61 @@ export default class DealReview extends React.Component {
       }
     })
     return deal
+  }
+
+  async getAll() {
+    const { user } = this.props
+    const dealId = this.props.params.id
+    const deals = this.props.conciergeDeals
+
+    let { submissions } = deals[this.deal.index]
+    let { envelopes } = deals[this.deal.index]
+
+    if (submissions) {
+      this.setState({
+        submissions,
+        submissionsLoading: false
+      })
+    } else
+      await this.getSubmissions(user, dealId)
+
+    if (envelopes) {
+      envelopes = this.mapReviewsToDocuments(envelopes)
+      this.setState({
+        envelopes,
+        envelopesLoading: false
+      })
+    } else
+      await this.getEnvelopes(user, dealId)
+  }
+
+  async getSubmissions(user, dealId) {
+    const action = {
+      user,
+      dealId,
+      type: 'GET_SUBMISSIONS'
+    }
+    const submissions =
+      await ConciergeDispatcher.dispatchSync(action)
+    this.setState({
+      submissions,
+      submissionsLoading: false
+    })
+  }
+
+  async getEnvelopes(user, dealId) {
+    const action = {
+      user,
+      dealId,
+      type: 'GET_ENVELOPES'
+    }
+    let envelopes =
+      await ConciergeDispatcher.dispatchSync(action)
+    envelopes = this.mapReviewsToDocuments(envelopes)
+    this.setState({
+      envelopes,
+      envelopesLoading: false
+    })
   }
 
   fillreviews() {
@@ -120,69 +174,6 @@ export default class DealReview extends React.Component {
         documents
       }
     })
-  }
-
-  async getAll() {
-    const { user } = this.props
-    const dealId = this.props.params.id
-    const deals = this.props.conciergeDeals.deals
-
-    let { submissions } = deals[this.deal.index]
-    let { envelopes } = deals[this.deal.index]
-
-    if (submissions) {
-      this.setState({
-        submissions,
-        submissionsLoading: false
-      })
-    } else
-      await this.getSubmissions(user, dealId)
-    // debugger
-    if (envelopes) {
-      envelopes = this.mapReviewsToDocuments(envelopes)
-      this.setState({
-        envelopes,
-        envelopesLoading: false
-      })
-      this.deal.envelopes = envelopes
-      // this.deals[this.deal.index] = this.deal
-      // AppStore.data.conciergeDeals = this.deals
-      // AppStore.emitChange()
-    } else
-      await this.getEnvelopes(user, dealId)
-  }
-
-  async getSubmissions(user, dealId) {
-    const action = {
-      user,
-      dealId,
-      type: 'GET_SUBMISSIONS'
-    }
-    const submissions =
-      await ConciergeDispatcher.dispatchSync(action)
-    this.setState({
-      submissions,
-      submissionsLoading: false
-    })
-  }
-
-  async getEnvelopes(user, dealId) {
-    const action = {
-      user,
-      dealId,
-      type: 'GET_ENVELOPES'
-    }
-    let envelopes =
-      await ConciergeDispatcher.dispatchSync(action)
-    envelopes = this.mapReviewsToDocuments(envelopes)
-    this.setState({
-      envelopes,
-      envelopesLoading: false
-    })
-    this.deal.envelopes = envelopes
-    this.deals[this.deal.index] = this.deal
-    // AppStore.data.conciergeDeals = this.deals
-    // AppStore.emitChange()
   }
 
   async submitReview(review) {
@@ -235,7 +226,8 @@ export default class DealReview extends React.Component {
   }
 
   modalCloseHandler() {
-    this.setState({ modalActive: false })
+    if (!this.state.modalIsFreezed)
+      this.setState({ modalIsActive: false })
   }
 
   approveHandler(selectedReviewId) {
