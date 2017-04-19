@@ -12,7 +12,7 @@ export default ({
 }) => {
   let input = ''
   return (
-    <Modal show={isActive} onHide={closeHandler}>
+    <Modal className="c-concierge-modal" show={isActive} onHide={closeHandler}>
       <Modal.Header>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
@@ -30,6 +30,7 @@ export default ({
         >
           <textarea
             required="true"
+            autoFocus="true"
             disabled={isFreezed}
             ref={(node) => { input = node }}
             className="modal-textarea"
@@ -37,11 +38,13 @@ export default ({
           />
           <div style={{ textAlign: 'right' }}>
             <Button
+              tabIndex="-1"
               disabled={isFreezed}
               onClick={closeHandler}
               className="c-concierge__modal__btn--cancel"
             >Cancel</Button>
             <Button
+              tabIndex="0"
               type="submit"
               bsStyle="primary"
               disabled={isFreezed}
