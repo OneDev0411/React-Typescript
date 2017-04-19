@@ -73,10 +73,10 @@ export default class ListingPanel extends Component {
         address = property.address
       let listing_image = <div style={ S('w-405 h-300 bg-efefef') }/>
       if (listing.cover_image_url)
-        listing_image = <div style={ S('w-405 h-300 bg-url(' + listing.cover_image_url + ') bg-cover bg-center') } />
+        listing_image = <div style={ S('w-405 h-300 bg-url(' + listing.cover_image_url + ') bg-cover bg-center br-3') } />
       const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
       const image_overlay = {
-        ...S('bg-000 absolute w-100p h-100p'),
+        ...S('bg-000 absolute w-100p h-100p br-3'),
         opacity: '.2'
       }
       let open_houses
@@ -113,7 +113,7 @@ export default class ListingPanel extends Component {
         })
       }
       return (
-        <div onMouseOut={ this.props.removeActiveListing.bind(this) } onMouseOver={ this.props.setActiveListing.bind(this, listing) } key={ 'panel-listing-grid-' + listing.id + '-' + i } style={ S('relative pointer w-415 h-350 pb-10 pl-10 bg-fff pull-left') }>
+        <div onMouseOut={ this.props.removeActiveListing.bind(this) } onMouseOver={ this.props.setActiveListing.bind(this, listing) } key={ 'panel-listing-grid-' + listing.id + '-' + i } style={ S('relative pointer w-415 h-315 pb-10 pl-10 bg-fff pull-left br-3') }>
           <div style={ S('absolute r-0') }>
             <FavoriteHeart
               listing={ listing }
@@ -123,11 +123,16 @@ export default class ListingPanel extends Component {
             <div style={ image_overlay } />
             { data.show_listing_panel ? listing_image : '' }
             <div style={ S('absolute color-fff l-15 b-15') }>
-              <div style={ S('font-18 fw-600') }>
-                ${ helpers.numberWithCommas(Math.floor(price)) }
+              <div style={ S('mb-10') }>
+                <span style={ S(`bg-${status_color} pt-6 pr-10 pb-6 pl-10 br-3`) }>
+                  { listing.status }
+                </span>
               </div>
-              <div style={ S('font-14') }>
-                { listing_util.addressTitle(address) } | { address.city } { address.state }
+              <div style={ { ...S('font-21 fw-600 mb-5'), textShadow: '0 1px 4px rgba(0, 0, 0, 0.2)' } }>
+                { listing_util.addressTitle(address) }
+              </div>
+              <div style={ S('font-17 fw-600') }>
+                ${ helpers.numberWithCommas(Math.floor(price)) }
               </div>
               <div style={ S('font-14') }>
                 <span>{ property.bedroom_count } Beds</span>
@@ -136,21 +141,6 @@ export default class ListingPanel extends Component {
                 &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
                 <span>{ square_feet } Sqft</span>
               </div>
-            </div>
-          </div>
-          <div onClick={ this.props.showListingViewer.bind(this, listing) } style={ { borderRight: '1px solid #e7e8e9', borderBottom: '1px solid #e7e8e9', borderLeft: '1px solid #e7e8e9', ...S('p-10 pt-14 w-100p') } }>
-            <div>
-              <div className="pull-left" style={ S('w-10 h-10 br-100 mr-8 bg-' + status_color) }></div>
-              <div className="pull-left" style={ S('mt-4n mr-10') }>
-                <b>{ listing.status }</b>
-              </div>
-              <div className="pull-left" style={ S('mt-4n') }>
-                { open_houses }
-              </div>
-              <div className="pull-left" style={ S('mt-4n') }>
-                { social_info }
-              </div>
-              <div className="clearfix"></div>
             </div>
           </div>
         </div>

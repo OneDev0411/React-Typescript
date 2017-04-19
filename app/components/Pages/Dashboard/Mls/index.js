@@ -451,7 +451,7 @@ export default class Mls extends Component {
     }
     let zoom_right = 'r-25'
     if (data.show_listing_panel)
-      zoom_right = 'r-860'
+      zoom_right = 'r-460'
     let zoom_bottom = ' b-25'
     if (data.is_mobile)
       zoom_bottom = ' b-75'
@@ -464,7 +464,7 @@ export default class Mls extends Component {
     let results_actions
     let create_alert_button
     if (data.show_search_map) {
-      let save_search_btn_style = S(`absolute r-5 t-50 z-1 w-150 h-45 font-18 color-fff border-1-solid-${Brand.color('primary', '2196f3')} bg-${Brand.color('primary', '2196f3')}`)
+      let save_search_btn_style = S(`absolute r-5 t-50 z-1 w-130 h-40 font-18 color-fff border-1-solid-${Brand.color('primary', '2196f3')} bg-${Brand.color('primary', '2196f3')}`)
 
       if (data.is_widget && !data.is_mobile) {
         save_search_btn_style = {
