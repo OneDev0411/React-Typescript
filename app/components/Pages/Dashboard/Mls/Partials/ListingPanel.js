@@ -123,11 +123,16 @@ export default class ListingPanel extends Component {
             <div style={ image_overlay } />
             { data.show_listing_panel ? listing_image : '' }
             <div style={ S('absolute color-fff l-15 b-15') }>
-              <div style={ S('font-18 fw-600') }>
-                ${ helpers.numberWithCommas(Math.floor(price)) }
+              <div style={ S('mb-10') }>
+                <span style={ S(`bg-${status_color} pt-6 pr-10 pb-6 pl-10 br-3`) }>
+                  { listing.status }
+                </span>
               </div>
-              <div style={ S('font-14') }>
-                { listing_util.addressTitle(address) } | { address.city } { address.state }
+              <div style={ { ...S('font-21 fw-600 mb-10'), textShadow: '0 1px 4px rgba(0, 0, 0, 0.2)' } }>
+                { listing_util.addressTitle(address) }
+              </div>
+              <div style={ S('font-17 fw-600') }>
+                ${ helpers.numberWithCommas(Math.floor(price)) }
               </div>
               <div style={ S('font-14') }>
                 <span>{ property.bedroom_count } Beds</span>
@@ -136,21 +141,6 @@ export default class ListingPanel extends Component {
                 &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
                 <span>{ square_feet } Sqft</span>
               </div>
-            </div>
-          </div>
-          <div onClick={ this.props.showListingViewer.bind(this, listing) } style={ { borderRight: '1px solid #e7e8e9', borderBottom: '1px solid #e7e8e9', borderLeft: '1px solid #e7e8e9', ...S('p-10 pt-14 w-100p') } }>
-            <div>
-              <div className="pull-left" style={ S('w-10 h-10 br-100 mr-8 bg-' + status_color) }></div>
-              <div className="pull-left" style={ S('mt-4n mr-10') }>
-                <b>{ listing.status }</b>
-              </div>
-              <div className="pull-left" style={ S('mt-4n') }>
-                { open_houses }
-              </div>
-              <div className="pull-left" style={ S('mt-4n') }>
-                { social_info }
-              </div>
-              <div className="clearfix"></div>
             </div>
           </div>
         </div>
