@@ -38,6 +38,8 @@ export default class extends React.Component {
       browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
     if (notification.notification_type === 'ListingBecameAvailableRoom')
       browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
+    if (notification.notification_type === 'OpenHouseAvailableListing')
+      browserHistory.push(`/dashboard/mls/${notification.objects[0].id}`)
   }
   notificationIcon(notification) {
     const type = notification.notification_type
