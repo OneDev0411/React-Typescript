@@ -201,11 +201,14 @@ export default class DealDashboard extends React.Component {
 
           <Col lg={7} md={7} sm={7}>
             <ul className="menu">
-              <li
-                onClick={this.collectSignatures.bind(this)}
-              >
-                <img src="/static/images/deals/pen.svg" />
-              </li>
+              {
+                submissions &&
+                <li
+                  onClick={this.collectSignatures.bind(this)}
+                >
+                  <img src="/static/images/deals/pen.svg" />
+                </li>
+              }
             </ul>
           </Col>
         </Row>
