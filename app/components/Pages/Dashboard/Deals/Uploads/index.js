@@ -136,11 +136,13 @@ export default class DealForm extends React.Component {
     return (
       <div>
         <Dropzone
+          ref={node => { this.dropzone = node }}
           onDrop={this.onDrop.bind(this)}
           onDragEnter={() => this.setState({ dropzoneActive: true })}
           onDragLeave={() => this.setState({ dropzoneActive: false })}
           multiple={false}
           accept="application/pdf,image/*"
+          disableClick={true}
           style={{ border: 'none' }}
         >
           {
@@ -168,7 +170,10 @@ export default class DealForm extends React.Component {
               <div className="dropbox">
                 <img src="/static/images/deals/upload.svg" />
                 <div className="title">DRAG & DROP</div>
-                <div>your files to upload, or <span>Browse</span></div>
+                <div>
+                  your files to upload, or
+                  <span onClick={() => this.dropzone.open()}>Browse</span>
+                </div>
               </div>
 
               <div className="files">
