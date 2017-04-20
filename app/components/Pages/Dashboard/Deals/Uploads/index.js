@@ -69,14 +69,14 @@ export default class DealForm extends React.Component {
       url: preview
     }
 
-    return this.getDisplayComponent(file, type)
+    return this.getDisplayComponent(file, type, true)
   }
 
   display(file) {
     this.setState({ file })
   }
 
-  getDisplayComponent(file, type = null) {
+  getDisplayComponent(file, type = null, isPreview = false) {
 
     if (!type)
       type = this.getFileType(file.mime)
@@ -85,7 +85,7 @@ export default class DealForm extends React.Component {
       return this.renderImage(file)
 
     if (type === 'pdf')
-      return this.renderPdf(file)
+      return this.renderPdf(file, isPreview)
 
   }
 
@@ -101,17 +101,20 @@ export default class DealForm extends React.Component {
     )
   }
 
-  renderPdf(file) {
+  renderPdf(file, isPreview = false) {
     return (
       <div>
         <div style={{textAlign: 'right'}}>
-          <a
-            href={file.url}
-            target="_blank"
-            className="btn btn-primary"
-          >
-            Open in new tab
-          </a>
+          {
+            !isPreview &&
+            <a
+              href={file.url}
+              target="_blank"
+              className="btn btn-primary"
+            >
+              Open in new tab
+            </a>
+          }
         </div>
 
         <PdfViewer
@@ -167,12 +170,11 @@ export default class DealForm extends React.Component {
                 </div>
               }
 
-              <div className="dropbox">
+              <div className="dropbox" onClick={() => this.dropzone.open()}>
                 <img src="/static/images/deals/upload.svg" />
                 <div className="title">DRAG & DROP</div>
                 <div>
-                  your files to upload, or
-                  <span onClick={() => this.dropzone.open()}>Browse</span>
+                  your files to upload, or <span>Browse</span>
                 </div>
               </div>
 
