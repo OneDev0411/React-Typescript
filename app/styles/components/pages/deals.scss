@@ -503,6 +503,7 @@
                 .preview {
                   img {
                     width: 100%;
+                    max-height: 60vh;
                     border-radius: 0 0 2px 2px;
                     transition: all 500ms ease-in;
                   }
@@ -560,7 +561,7 @@
                     display: block;
                     margin: 0 auto;
                     max-width: 100%;
-                    max-height: 55vh;
+                    max-height: 60vh;
                     border-radius: 3px;
                     margin-bottom: 10px;
                   }
