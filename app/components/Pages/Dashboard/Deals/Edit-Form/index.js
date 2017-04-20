@@ -185,7 +185,13 @@ export default class EditForm extends React.Component {
   }
 
   goback() {
-    browserHistory.push(`/dashboard/deals/${this.props.params.id}`)
+    const { submission } = this.state
+    let url = `/dashboard/deals/${this.props.params.id}`
+
+    if (submission.id)
+      url += `?submission=${submission.id}`
+
+    browserHistory.push(url)
   }
 
   render() {
