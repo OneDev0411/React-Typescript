@@ -133,7 +133,6 @@ export default class DealForm extends React.Component {
   render() {
     const { files } = this.props
     const { file, uploading, preview, dropzoneActive } = this.state
-
     return (
       <div>
         <Dropzone
@@ -200,6 +199,13 @@ export default class DealForm extends React.Component {
                     </div>
                     ))
                   .value()
+                }
+
+                {
+                  !files &&
+                  <div className="empty">
+                    You haven’t uploaded anything yet
+                  </div>
                 }
               </div>
             </Col>
