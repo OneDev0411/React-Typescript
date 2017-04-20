@@ -139,9 +139,9 @@ export default class DealDashboard extends React.Component {
 
   getFullAddress(deal) {
     const city = this.getValue(deal, 'city')
-    const county = this.getValue(deal, 'county')
+    const state = this.getValue(deal, 'state')
     const postal_code = this.getValue(deal, 'postal_code')
-    return `${city}, ${county}, ${postal_code}`
+    return `${city}, ${state}, ${postal_code}`
   }
 
   getPrice(deal) {
