@@ -4,7 +4,7 @@ import { Grid, Row, Col, Button, FormControl, Modal } from 'react-bootstrap'
 import debounce from 'debounce'
 import _ from 'underscore'
 import Deal from '../../../../../models/Deal'
-import listings from '../../../../../utils/listing'
+import listingsHelper from '../../../../../utils/listing'
 import Create from './create-modal'
 
 export default class DealCreate extends React.Component {
@@ -14,6 +14,7 @@ export default class DealCreate extends React.Component {
     this.state = {
       address: '',
       selected: null,
+      listings: {},
       places: {},
       searching: false
     }
@@ -39,6 +40,7 @@ export default class DealCreate extends React.Component {
 
   async search(address) {
     const type = this.props.params.type
+    let listings
     let places
 
     // show loading
@@ -47,18 +49,19 @@ export default class DealCreate extends React.Component {
     try {
       let response
 
-      if (type === 'listing') {
-        response = await Deal.searchPlaces(address)
-        places = this.createList(response.results)
-      }
-
+      // search in mls listings
       if (type === 'offer') {
         response = await Deal.searchListings(address)
-        places = this.createList(response.data)
+        listings = this.createList(response.data, 'offer')
       }
+
+      // get google results
+      response = await Deal.searchPlaces(address)
+      places = this.createList(response.results, 'listing')
 
       // hide loading
       this.setState({
+        listings,
         places,
         searching: false
       })
@@ -69,9 +72,8 @@ export default class DealCreate extends React.Component {
     }
   }
 
-  createList(data) {
+  createList(data, type) {
     const list = []
-    const type = this.props.params.type
 
     if (type === 'listing') {
        _.each(data, item => {
@@ -87,7 +89,7 @@ export default class DealCreate extends React.Component {
         list.push({
           isListing: true,
           id: item.id,
-          full_address: listings.addressTitle(item.address),
+          full_address: listingsHelper.addressTitle(item.address),
           address_components: item.address,
           price: item.price,
           status: item.status,
@@ -108,7 +110,7 @@ export default class DealCreate extends React.Component {
 
   render() {
     const { params } = this.props
-    const { address, places, searching, selected } = this.state
+    const { address, listings, places, searching, selected } = this.state
 
     return (
       <div className="deal-create">
@@ -146,30 +148,13 @@ export default class DealCreate extends React.Component {
             <div className="list">
 
               {
-                params.type === 'listing' &&
-                <span className="title">Places</span>
-              }
-
-              {
                 searching &&
                 <i className="fa fa-spinner fa-spin fa-fw loader"></i>
               }
 
               {
-                params.type === 'listing' && _.map(places, (item, key) => (
-                  <div
-                    key={`PLACE_${key}`}
-                    className="item"
-                    onClick={this.onPlaceSelect.bind(this, item)}
-                  >
-                    { item.full_address }
-                  </div>
-                ))
-              }
-
-              {
                 params.type === 'offer' &&
-                _.chain(places)
+                _.chain(listings)
                 .filter(item => {
                   return item.status.startsWith('Active') || item.status === 'Pending'
                 })
@@ -187,7 +172,7 @@ export default class DealCreate extends React.Component {
                       />
                       <span
                         className="status"
-                        style={{ backgroundColor: listings.getStatusColorClass(item.status) }}
+                        style={{ backgroundColor: listingsHelper.getStatusColorClass(item.status) }}
                       >
                         { item.status }
                       </span>
@@ -201,6 +186,29 @@ export default class DealCreate extends React.Component {
                   )
                 })
                 .value()
+              }
+
+              {
+                _.size(places) > 0 &&
+                <div>
+                  <span className="title">Places</span>
+                  <img
+                    src="/static/images/deals/google.png"
+                    style={{ height: '20px', float: 'right' }}
+                  />
+                </div>
+              }
+
+              {
+                _.map(places, (item, key) => (
+                  <div
+                    key={`PLACE_${key}`}
+                    className="item"
+                    onClick={this.onPlaceSelect.bind(this, item)}
+                  >
+                    { item.full_address }
+                  </div>
+                ))
               }
             </div>
           </div>
