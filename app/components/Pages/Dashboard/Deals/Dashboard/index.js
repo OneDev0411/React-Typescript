@@ -139,9 +139,9 @@ export default class DealDashboard extends React.Component {
 
   getFullAddress(deal) {
     const city = this.getValue(deal, 'city')
-    const county = this.getValue(deal, 'county')
+    const state = this.getValue(deal, 'state')
     const postal_code = this.getValue(deal, 'postal_code')
-    return `${city}, ${county}, ${postal_code}`
+    return `${city}, ${state}, ${postal_code}`
   }
 
   getPrice(deal) {
@@ -201,11 +201,14 @@ export default class DealDashboard extends React.Component {
 
           <Col lg={7} md={7} sm={7}>
             <ul className="menu">
-              <li
-                onClick={this.collectSignatures.bind(this)}
-              >
-                <img src="/static/images/deals/pen.svg" />
-              </li>
+              {
+                submissions &&
+                <li
+                  onClick={this.collectSignatures.bind(this)}
+                >
+                  <img src="/static/images/deals/pen.svg" />
+                </li>
+              }
             </ul>
           </Col>
         </Row>

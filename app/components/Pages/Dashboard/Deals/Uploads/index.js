@@ -1,9 +1,10 @@
 import React from 'react'
-import { Row, Col, ProgressBar, Button } from 'react-bootstrap'
+import { Row, Col, Modal, ProgressBar, Button } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'underscore'
 import Dropzone from 'react-dropzone'
 import Avatar from 'react-avatar'
+import Lightbox from 'react-images'
 import PdfViewer from '../../../../Partials/Pdf/Viewer'
 import DealDispatcher from '../../../../../dispatcher/DealDispatcher'
 import { getTimeAgo } from '../../../../../utils/helpers'
@@ -14,8 +15,13 @@ export default class DealForm extends React.Component {
     this.state = {
       file: null,
       preview: null,
-      uploading: false
+      uploading: false,
+      showBox: false,
+      dropzoneActive: false
     }
+  }
+
+  componentDidMount() {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -31,6 +37,7 @@ export default class DealForm extends React.Component {
 
     this.setState({
       uploading: true,
+      dropzoneActive: false,
       file: null
     })
 
@@ -41,6 +48,7 @@ export default class DealForm extends React.Component {
       this.setState({ preview: e.target.result })
     }
 
+
     await DealDispatcher.dispatchSync({
       action: 'upload-file',
       user: this.props.user,
@@ -49,118 +57,192 @@ export default class DealForm extends React.Component {
     })
 
     this.setState({
-      uploading: false
-    })
-  }
-
-  display(file) {
-    const extname = file.url.split('.').pop().toLowerCase()
-
-    if (extname === 'pdf')
-      window.open(file.url, 'pdf', 'toolbar=0,status=0,width=700,height=600')
-
-    this.setState({
-      preview: null,
       uploading: false,
-      file
+      file: this.props.files[this.props.files.length - 1]
     })
   }
 
   getPreviewHandler(preview) {
-    const format = preview.split(';')[0]
+    const type = this.getFileType(preview.split(';')[0])
 
-    if (format.includes('image/'))
-      return <img src={preview} />
+    const file = {
+      url: preview
+    }
 
-    if (format.includes('pdf'))
-      return <PdfViewer uri={preview} />
+    return this.getDisplayComponent(file, type, true)
   }
 
-  getDisplayHandler(url) {
-    const extname = url.split('.').pop().toLowerCase()
+  display(file) {
+    this.setState({ file })
+  }
 
-    if (['jpg', 'jpeg', 'png', 'gif'].indexOf(extname) > -1)
-      return <img src={url} />
+  getDisplayComponent(file, type = null, isPreview = false) {
+
+    if (!type)
+      type = this.getFileType(file.mime)
+
+    if (type === 'image')
+      return this.renderImage(file)
+
+    if (type === 'pdf')
+      return this.renderPdf(file, isPreview)
+
+  }
+
+  renderImage(file) {
+    return (
+      <div className="image">
+        <img
+          onClick={() => this.setState({ showBox: true})}
+          src={file.url}
+        />
+        { file.name}
+      </div>
+    )
+  }
+
+  renderPdf(file, isPreview = false) {
+    return (
+      <div>
+        <div style={{textAlign: 'right'}}>
+          {
+            !isPreview &&
+            <a
+              href={file.url}
+              target="_blank"
+              className="btn btn-primary"
+            >
+              Open in new tab
+            </a>
+          }
+        </div>
+
+        <PdfViewer
+          uri={file.url}
+          scale={0.9}
+        />
+      </div>
+    )
+  }
+
+  getFileType(mime) {
+    if (mime.includes('image/'))
+      return 'image'
+
+    if (mime.includes('pdf'))
+      return 'pdf'
   }
 
   render() {
     const { files } = this.props
-    const { file, uploading, preview } = this.state
-
+    const { file, uploading, preview, dropzoneActive } = this.state
     return (
       <div>
-        <Row>
-          <Col xs={6} className="list">
-
-            <div className="dropzone">
-              <Dropzone
-                onDrop={this.onDrop.bind(this)}
-                multiple={false}
-                accept="application/pdf,image/*"
-                style={{ border: 'none' }}
-              >
-                <img src="/static/images/deals/upload.svg" />
-                <div className="title">DRAG & DROP</div>
-                <div>your files to upload, or <span>Browse</span></div>
-              </Dropzone>
+        <Dropzone
+          ref={node => { this.dropzone = node }}
+          onDrop={this.onDrop.bind(this)}
+          onDragEnter={() => this.setState({ dropzoneActive: true })}
+          onDragLeave={() => this.setState({ dropzoneActive: false })}
+          multiple={false}
+          accept="application/pdf,image/*"
+          disableClick={true}
+          style={{ border: 'none' }}
+        >
+          {
+            dropzoneActive &&
+            <div
+              className="upload-intro"
+            >
+              <div className="upload-area">
+                <img src="/static/images/deals/dnd.png" />
+                <h1>Drop to upload to this deal</h1>
+                <span>You can drag and drop any files to the upload section of the deal you are in.</span>
+              </div>
             </div>
+          }
 
-            <div className="files">
-              {
-                files &&
-                _.chain(files)
-                .sortBy(file => file.created_at * -1)
-                .map(file => (
-                  <div
-                    className="item"
-                    key={`file_${file.id}`}
-                    onClick={this.display.bind(this, file)}
-                  >
-                    <Row>
-                      <Col xs={2}>
-                        <Avatar
-                          round
-                          src={file.preview_url}
-                          size={40}
-                        />
-                      </Col>
-
-                      <Col xs={10}>
-                        <div><b>{ file.name }</b></div>
-                        <div>Uploaded { getTimeAgo(file.created_at) } ago</div>
-                      </Col>
-                    </Row>
-                  </div>
-                  ))
-                .value()
-              }
-            </div>
-          </Col>
-
-          <Col xs={6}>
-
-            <div className="uploading">
+          <Row className="dropzone" style={{ margin: 0 }}>
+            <Col xs={5} sm={4} className="list">
               {
                 uploading &&
-                <ProgressBar active now={100} bsStyle="success" />
-              }
-
-              {
-                preview &&
-                <div className="preview">
-                  { this.getPreviewHandler(preview) }
+                <div>
+                  <ProgressBar active now={100} bsStyle="success" />
                 </div>
               }
-            </div>
 
-            {
-              file &&
-              <div className="display">
-                { this.getDisplayHandler(file.url) }
+              <div className="dropbox" onClick={() => this.dropzone.open()}>
+                <img src="/static/images/deals/upload.svg" />
+                <div className="title">DRAG & DROP</div>
+                <div>
+                  your files to upload, or <span>Browse</span>
+                </div>
               </div>
-            }
-          </Col>
-        </Row>
+
+              <div className="files">
+                {
+                  files &&
+                  _.chain(files)
+                  .sortBy(file => file.created_at * -1)
+                  .map(file => (
+                    <div
+                      className="item"
+                      key={`file_${file.id}`}
+                      onClick={this.display.bind(this, file)}
+                    >
+                      <Row>
+                        <Col xs={2}>
+                          <Avatar
+                            round
+                            src={file.preview_url}
+                            size={40}
+                          />
+                        </Col>
+
+                        <Col xs={10}>
+                          <div><b>{ file.name }</b></div>
+                          <div>Uploaded { getTimeAgo(file.created_at) } ago</div>
+                        </Col>
+                      </Row>
+                    </div>
+                    ))
+                  .value()
+                }
+
+                {
+                  !files &&
+                  <div className="empty">
+                    You haven’t uploaded anything yet
+                  </div>
+                }
+              </div>
+            </Col>
+
+            <Col xs={7} sm={8}>
+
+              <div className="uploading">
+                {
+                  uploading && preview &&
+                  <div className="preview">
+                    { this.getPreviewHandler(preview) }
+                  </div>
+                }
+              </div>
+
+              {
+                file &&
+                <div className="display">
+                  { this.getDisplayComponent(file) }
+                </div>
+              }
+            </Col>
+          </Row>
+        </Dropzone>
+
+        <Lightbox
+          images={file ? [{ src: file.url }] : []}
+          isOpen={this.state.showBox}
+          onClose={() => this.setState({ showBox: false })}
+        />
       </div>
     )
   }
