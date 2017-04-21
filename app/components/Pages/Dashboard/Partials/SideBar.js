@@ -21,6 +21,8 @@ import SvgStore from './Svgs/Store'
 import SvgPeople from './Svgs/People'
 import SvgDeals from './Svgs/Deals'
 import SvgBriefCase from './Svgs/BriefCase'
+import SvgSupport from './Svgs/Support'
+import SvgNotifications from './Svgs/Notifications'
 import Brand from '../../../../controllers/Brand'
 
 export default class SideBar extends Component {
@@ -666,20 +668,21 @@ export default class SideBar extends Component {
         </Nav>
         <div style={S('absolute b-10 l-15')}>
           <Nav className="sidebar__account">
-            <NavItem style={ S('t-20n l-10n') }>
+            <NavItem style={ S('t-0 l-10n') }>
               <OverlayTrigger placement="right" overlay={popover.notifications} delayShow={200} delayHide={0}>
                 <Link to="/dashboard/notifications">
                   {this.notificationIcon()}
-                  <i className="fa fa-bell" style={S(`font-30 relative color-${!active.notifications ? '4D5C6C' : '3388ff' }`)} />
+                  <SvgNotifications color={active.notifications ? nav_active_color : '#4e5c6c'} />
                 </Link>
               </OverlayTrigger>
             </NavItem>
-            <OverlayTrigger placement="right" overlay={popover.support} delayShow={200} delayHide={0}>
-              <div style={S('pointer relative t-15n')} onClick={this.showIntercom}>
-                <i className="fa fa-question" style={S('font-20 color-202A33 relative t-5n l-13 z-100')} />
-                <i className="fa fa-comment" style={S('font-35 relative l-10n color-4D5C6C')} />
-              </div>
-            </OverlayTrigger>
+            <NavItem style={ S('t-5n l-10n') }>
+              <OverlayTrigger placement="right" overlay={popover.support} delayShow={200} delayHide={0}>
+                <div style={S('pointer relative')}>
+                  <SvgSupport color={'#4e5c6c'} />
+                </div>
+              </OverlayTrigger>
+            </NavItem>
             <div style={S('absolute z-0 l-3n')}>
               <ProfileImage data={data} user={user} />
             </div>
