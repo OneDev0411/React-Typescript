@@ -18,7 +18,10 @@ import ProfileImage from './ProfileImage'
 import SvgChat from './Svgs/Chat'
 import SvgMap from './Svgs/Map'
 import SvgStore from './Svgs/Store'
+import ConciergeIcon from './Svgs/ConciergeIcon'
 import Brand from '../../../../controllers/Brand'
+
+console.log(ConciergeIcon)
 
 export default class SideBar extends Component {
 
@@ -624,14 +627,11 @@ export default class SideBar extends Component {
             <OverlayTrigger placement="right" overlay={popover.concierge} delayShow={200} delayHide={0}>
               <LinkContainer onClick={this.hideListingViewer.bind(this)} className={active.concierge} to="/dashboard/concierge/deals">
                 <NavItem style={S('w-85p')}>
-                  <img
-                    src={
-                      active.concierge ?
-                        '/static/images/dashboard/sidenav/deals-active.svg' :
-                        '/static/images/dashboard/sidenav/deals.svg'
-                    }
-                    style={S('w-19 h-19')}
-                  />
+                  {
+                    active.concierge
+                    ? <ConciergeIcon isActive="true" />
+                    : <ConciergeIcon />
+                  }
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
