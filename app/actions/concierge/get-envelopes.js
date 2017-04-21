@@ -8,26 +8,23 @@ export default async function (user, dealId) {
     dealId,
     token: user.access_token
   }
-  // let dealIndex = 0
   try {
+    const deals = AppStore.data.conciergeDeals
     const envelopes = await getEnvelopes(params) || []
-    AppStore.data.conciergeDeals =
-      AppStore.data.conciergeDeals.map((deal, index) => {
-        if (deal.id !== dealId)
-          return deal
 
-        // dealIndex = index
-        return {
-          ...deal,
-          envelopes
-        }
-      })
-    // console.log('hasEnvelope', dealIndex, AppStore.data.conciergeDeals[dealIndex])
+    const newDeals = deals.map((deal, index) => {
+      if (deal.id !== dealId)
+        return deal
+
+      return {
+        ...deal,
+        envelopes
+      }
+    })
+    AppStore.data.conciergeDeals = newDeals
     return envelopes
   } catch (error) {
     console.log(`getEnvelopes: ${error}`)
     throw error
   }
 }
-
-// 933937cc-0500-11e7-820d-0242ac110006

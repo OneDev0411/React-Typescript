@@ -44,9 +44,6 @@ import getPreviousMessages from '../actions/messages/get-previous-messages'
 import landingPage from '../actions/pages/landing'
 import getContent from '../actions/pages/get-content'
 
-// Notifications
-import getNotificationSummery from '../actions/notifications/get-summary'
-
 // Agents
 import getAgentReport from '../actions/agents/get-report'
 import searchAgentSignup from '../actions/agents/search-agent-signup'
@@ -185,10 +182,6 @@ AppDispatcher.register(async function (payload) {
 
     case 'upload-files-to-room':
       uploadFilesToRoom(payload.user, payload.room, payload.files)
-      break
-
-    case 'get-notification-summary':
-      getNotificationSummery(payload.user)
       break
 
     case 'edit-profile-pic':

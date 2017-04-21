@@ -23,10 +23,26 @@ const getFieldValue = (deal, field) => {
 
 const getSortedDeals = (deals) => {
   // temporary array holds objects with position and sort-value
-  const mapped = deals.map((deal, index) => ({
-    index,
-    review: deal.reviews ? deal.reviews.length : 0
-  }))
+
+  const hasPending = (deal) => {
+    if (deal.reviews && deal.reviews.length > 0)
+      return deal.reviews.some(review => review.state === 'Pending')
+
+    return false
+  }
+
+  const mapped = deals.map((deal, index) => {
+    if (!hasPending(deal)) {
+      return {
+        index,
+        review: 0
+      }
+    }
+    return {
+      index,
+      review: deal.reviews.length
+    }
+  })
 
   // sorting the mapped array containing the reduced values
   mapped.sort((a, b) => (a.review > b.review))
@@ -39,29 +55,39 @@ export default class DealsList extends React.Component {
 
   constructor(props) {
     super(props)
+    const deals = props.conciergeDeals
     this.state = {
-      deals: []
+      deals
     }
   }
 
-  componentDidMount() {
-    const { conciergeDeals } = this.props
+  // componentWillReceiveProps(nextProps) {
+  //   const { deals, isUpdated } = nextProps.conciergeDeals
 
-    if (conciergeDeals) {
-      this.setState({
-        deals: conciergeDeals
-      })
-    }
-  }
+  //   if (deals && deals.length !== this.state.deals.length) {
+  //     this.setState({
+  //       deals
+  //     })
+  //   }
 
-  componentWillReceiveProps(nextProps) {
-    const { conciergeDeals } = nextProps
+  //   if (deals && isUpdated) {
+  //     this.setState({
+  //       deals
+  //     })
+  //   }
+  // }
 
-    if (conciergeDeals && conciergeDeals.length > this.state.deals.length) {
-      this.setState({
-        deals: conciergeDeals
-      })
-    }
+  shouldComponentUpdate(nextProps, nextState) {
+    const { deals } = nextState
+
+    if (deals && deals.length > this.state.deals.length)
+      return true
+
+
+    // if (deals && isUpdated)
+    //   return true
+
+    return false
   }
 
   getDealAddress(deal) {
@@ -117,29 +143,20 @@ export default class DealsList extends React.Component {
     return null
   }
 
-  // getSortOrder(deal) {
-  //   const status = this.getStatus(deal)
-  //   const list = ['Incoming', 'Coming Soon', 'Active', 'Active Option Contract',
-  //     'Active Contingent', 'Active Kick Out', 'Pending', 'Sold', 'Leased', 'Expired',
-  //     'Temp Off Market', 'Cancelled', 'Withdrawn']
-
-  //   const order = list.indexOf(status)
-  //   return order > -1 ? order : list.length + 1
-  // }
-
   render() {
     const { deals } = this.state
-
     return (
       <div className="list">
 
         <Row className="toolbar">
-          <Col lg={2} md={2} sm={2} className="vcenter">
-            <span style={styles.title}>Deals</span>
-          </Col>
-
-          <Col lg={10} md={10} sm={10} className="vcenter">
-            { deals.length } total
+          <Col xs={12} className="vcenter">
+            <span style={styles.title}>Concierge - Deals</span>
+            <span
+              style={{
+                dispaly: 'inline-block',
+                marginLeft: '3rem'
+              }}
+            >{ deals.length } total</span>
           </Col>
         </Row>
 

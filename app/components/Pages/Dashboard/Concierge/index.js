@@ -29,7 +29,7 @@ export default class Concierge extends React.Component {
             !conciergeDeals &&
             <div className="loading-list">
               <div><i className="fa fa-spinner fa-spin fa-2x fa-fw" /></div>
-              <b>Loading List ...</b>
+              <b>Loading Deals ...</b>
             </div>
           }
 

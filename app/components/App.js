@@ -70,7 +70,6 @@ export default class App extends Component {
     const data = AppStore.data
     if (data.user && !data.session_started) {
       this.initSockets()
-      this.getNotifications()
       AppStore.data.session_started = true
       AppStore.emitChange()
     }
@@ -160,12 +159,19 @@ export default class App extends Component {
     })
   }
 
-  getNotifications() {
+  getNotifications(notification) {
     const data = AppStore.data
-    AppDispatcher.dispatch({
-      action: 'get-notification-summary',
+    NotificationDispatcher.dispatch({
+      action: 'get-all',
       user: data.user
     })
+    // Add notification to count
+    if (notification.notification_type === 'UserSentMessage') {
+      const room = notification.room
+      const room_index = _.findIndex(data.rooms, { id: room })
+      AppStore.data.rooms[room_index].new_notifications = AppStore.data.rooms[room_index].new_notifications + 1
+      AppStore.emitChange()
+    }
   }
 
   updateRoomsIndexedDB() {

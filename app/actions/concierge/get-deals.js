@@ -11,7 +11,6 @@ export default async function (user) {
     AppStore.data.conciergeDeals = await getDeals(params)
     AppStore.emitChange()
   } catch (error) {
-    console.log(`get-deals: ${error}`)
     throw error
   }
 }

@@ -21,6 +21,9 @@ const routes = {
   county: [
     [ 'search' ]
   ],
+  concierge: [
+    [ 'put-review' ]
+  ],
   deal: [
     [ 'envelope-document' ],
     [ 'envelope-sign' ],
@@ -41,7 +44,6 @@ const routes = {
     [ 'messages' ]
   ],
   notification: [
-    [ 'summary' ],
     [ 'all' ],
     [ 'delete' ],
     [ 'delete-room-notifications' ],

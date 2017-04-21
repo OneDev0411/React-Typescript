@@ -28,8 +28,19 @@ export default class DealForm extends React.Component {
     const { submissions } = nextProps
     const { submission } = this.state
 
-    if (submissions && !submission)
-      this.loadForm(submissions[submissions.length - 1])
+    if (submissions && !submission) {
+      const querySubmission = this.getActiveSubmission()
+      let activeIndex = _.findIndex(submissions, subm => subm.id === querySubmission)
+
+      if (activeIndex === -1)
+        activeIndex = submissions.length - 1
+
+      this.setState({
+        submission: submissions[activeIndex]
+      })
+
+      this.loadForm(submissions[activeIndex])
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -65,6 +76,15 @@ export default class DealForm extends React.Component {
   onAddForm(form) {
     const { deal_id } = this.props
     browserHistory.push(`/dashboard/deals/${deal_id}/edit-form/${form.id}/create`)
+  }
+
+  getActiveSubmission() {
+    const url = window.location.href
+    const regex = new RegExp("[?&]submission(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url)
+    if (!results) return null;
+    if (!results[2]) return ''
+    return decodeURIComponent(results[2].replace(/\+/g, " "))
   }
 
   render() {
@@ -139,7 +159,7 @@ export default class DealForm extends React.Component {
 
             <PdfViewer
               uri={documentUrl}
-              scale={0.7}
+              scale={0.85}
               onLoad={() => this.setState({ documentLoaded: true }) }
             />
           </Col>

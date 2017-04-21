@@ -8,23 +8,22 @@ export default async function (user, dealId) {
     dealId,
     token: user.access_token
   }
-  // let dealIndex = 0
   try {
+    const deals = AppStore.data.conciergeDeals
     const submissions = await getSubmissions(params) || []
-    AppStore.data.conciergeDeals = AppStore.data.conciergeDeals.map((deal, index) => {
+
+    const newDeals = deals.map((deal, index) => {
       if (deal.id !== dealId)
         return deal
 
-      // dealIndex = index
       return {
         ...deal,
         submissions
       }
     })
-    // console.log('hasSubmission', AppStore.data.conciergeDeals[dealIndex])
+    AppStore.data.conciergeDeals = newDeals
     return submissions
   } catch (error) {
-    console.log(`getSubmissions: ${error}`)
     throw error
   }
 }
