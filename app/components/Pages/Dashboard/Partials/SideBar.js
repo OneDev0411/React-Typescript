@@ -133,9 +133,9 @@ export default class SideBar extends Component {
     const user = data.user
     let old_password
     let new_password
-    if (this.refs.old_password)
+    if (this.old_passwordInput.value)
       old_password = this.old_passwordInput.value.trim()
-    if (this.refs.new_password)
+    if (this.new_passwordInput.value)
       new_password = this.new_passwordInput.value.trim()
     AppStore.data.saving_account_settings = true
     delete AppStore.data.error
@@ -460,12 +460,12 @@ export default class SideBar extends Component {
         <Col xs={9} style={S('p-0')}>
           <Col xs={12} style={S('pr-0')}>
             <label>Current password</label>
-            <FormControl key="old_password" bsSize="large" style={S('font-15')} inputRef={ref => this.old_passwordInput = ref} type="password" placeholder="Current password" />
+            <FormControl key="old_password" bsSize="large" style={S('font-15 mb-10')} inputRef={ref => this.old_passwordInput = ref} type="password" placeholder="Current password" />
           </Col>
           <Col xs={12} style={S('pr-0')}>
             <label>New password</label>
             <div style={S('relative')}>
-              <FormControl key="new_password" inputRef={ref => this.new_passwordInput = ref} autoComplete={false} style={S('font-15')} bsSize="large" placeholder="New Password" type={data.settings && data.settings.show_password ? 'text' : 'password'} />
+              <FormControl key="new_password" inputRef={ref => this.new_passwordInput = ref} autoComplete={false} style={S('font-15 mb-10')} bsSize="large" placeholder="New Password" type={data.settings && data.settings.show_password ? 'text' : 'password'} />
               <i onClick={this.toggleShowPassword} style={S('absolute t-15 r-15 z-100 pointer color-666')} className={`fa fa-eye${data.settings && data.settings.show_password ? '-slash' : ''}`} />
             </div>
           </Col>
