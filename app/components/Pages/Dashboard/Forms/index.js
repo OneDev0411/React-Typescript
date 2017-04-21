@@ -2,6 +2,8 @@
 import React, { Component } from 'react'
 import SideBar from '../Partials/SideBar'
 import S from 'shorti'
+import config from '../../../../../config/public'
+
 export default class Forms extends Component {
   render() {
     // Data
