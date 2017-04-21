@@ -572,7 +572,7 @@ export default class SideBar extends Component {
     if (Brand.asset('site_logo')) {
       branding_logo = (
         <div style={S('mb-10 mt-10')}>
-          <a target="_blank" href="http://www.claystapp.com">
+          <a target="_blank" href={'http://' + data.brand.hostnames[0]}>
             <div style={S(`bg-url(${Brand.asset('site_logo')}) bg-cover bg-center w-30 h-30 ml-10 br-3`)} />
           </a>
         </div>
