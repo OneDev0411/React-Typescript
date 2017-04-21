@@ -110,7 +110,7 @@ export default class DealForm extends React.Component {
             {
               submissions && submissions.length === 0 &&
               <div className="no-form">
-                There is no form
+                You currently have no forms added
               </div>
             }
           </Col>
