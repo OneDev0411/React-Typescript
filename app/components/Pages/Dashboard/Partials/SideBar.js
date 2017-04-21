@@ -18,6 +18,9 @@ import ProfileImage from './ProfileImage'
 import SvgChat from './Svgs/Chat'
 import SvgMap from './Svgs/Map'
 import SvgStore from './Svgs/Store'
+import SvgPeople from './Svgs/People'
+import SvgDeals from './Svgs/Deals'
+import SvgBriefCase from './Svgs/BriefCase'
 import Brand from '../../../../controllers/Brand'
 
 export default class SideBar extends Component {
@@ -624,14 +627,7 @@ export default class SideBar extends Component {
             <OverlayTrigger placement="right" overlay={popover.concierge} delayShow={200} delayHide={0}>
               <LinkContainer onClick={this.hideListingViewer.bind(this)} className={active.concierge} to="/dashboard/concierge/deals">
                 <NavItem style={S('w-85p')}>
-                  <img
-                    src={
-                      active.concierge ?
-                        '/static/images/dashboard/sidenav/deals-active.svg' :
-                        '/static/images/dashboard/sidenav/deals.svg'
-                    }
-                    style={S('w-19 h-19')}
-                  />
+                  <SvgBriefCase color={active.concierge ? nav_active_color : '#4e5c6c'} />
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
@@ -642,7 +638,7 @@ export default class SideBar extends Component {
             <OverlayTrigger placement="right" overlay={popover.deals} delayShow={200} delayHide={0}>
               <LinkContainer onClick={this.hideListingViewer.bind(this)} className={active.deals} to="/dashboard/deals">
                 <NavItem style={S('w-85p')}>
-                  <img src={active.deals ? '/static/images/dashboard/sidenav/deals-active.svg' : '/static/images/dashboard/sidenav/deals.svg'} style={S('w-19 h-19')} />
+                  <SvgDeals color={active.deals ? nav_active_color : '#4e5c6c'} />
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
@@ -652,7 +648,7 @@ export default class SideBar extends Component {
             <OverlayTrigger placement="right" overlay={ popover.people } delayShow={200} delayHide={0}>
               <LinkContainer className={active.contacts} to="/dashboard/contacts">
                 <NavItem style={S('w-85p')}>
-                  <img src={active.contacts ? '/static/images/dashboard/sidenav/people-active.svg' : '/static/images/dashboard/sidenav/people.svg'} style={S('w-19 h-19')} />
+                  <SvgPeople color={active.contacts ? nav_active_color : '#4e5c6c'} />
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
