@@ -63,12 +63,12 @@ export default async function (id, body, user) {
           if (!envelope.documents)
             return envelope
 
-          const documents = envelope.documents.map((document) => {
-            if (document.id !== docId)
-              return document
+          const documents = envelope.documents.map((doc) => {
+            if (doc.id !== docId)
+              return doc
 
-            document.review.state = reviewState
-            document.review.comment = reviewComment
+            doc.review.state = reviewState
+            doc.review.comment = reviewComment
             newReviews = reviews.map((review) => {
               if (review.envelope_document !== docId)
                 return review
@@ -77,7 +77,7 @@ export default async function (id, body, user) {
               review.comment = reviewComment
               return review
             })
-            return document
+            return doc
           })
           envelope.documents = documents
           return envelope
