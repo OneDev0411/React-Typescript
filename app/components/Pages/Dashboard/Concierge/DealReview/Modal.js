@@ -29,7 +29,6 @@ export default ({
           }}
         >
           <textarea
-            required="true"
             autoFocus="true"
             disabled={isFreezed}
             ref={(node) => { input = node }}
