@@ -36,7 +36,7 @@ export default class extends React.Component {
       browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
     if (notification.notification_type === 'ListingStatusChangedUser')
       browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
-    if (notification.notification_type === 'ListingBecameAvailableRoom')
+    if (notification.notification_type === 'ListingBecameAvailableUser')
       browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
     if (notification.notification_type === 'OpenHouseAvailableListing')
       browserHistory.push(`/dashboard/mls/${notification.objects[0].id}`)
@@ -65,7 +65,7 @@ export default class extends React.Component {
       case 'UserInvitedRoom':
         icon = <div><div style={ S(`bg-url(${subject.profile_image_url}) ${common_image_style}`) }/></div>
         break
-      case 'ListingBecameAvailableRoom':
+      case 'ListingBecameAvailableUser':
         icon = <div><div style={ S(`${subject.cover_image_url ? `bg-url(${subject.cover_image_url})` : 'bg-ccc'} ${common_image_style}`) }>{ !subject.cover_image_url && <div style={ S('color-fff text-center font-10 mt-10') }>No <br />image</div> }</div></div>
         break
       case 'ListingPriceDroppedUser':
