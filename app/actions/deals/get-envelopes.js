@@ -12,10 +12,8 @@ export default async function (id, user) {
   try {
     const response = await Deals.getEnvelopes(params)
 
-    if (response.status === 200) {
-      const index = _.findIndex(AppStore.data.deals, deal => deal.id === id)
-      AppStore.data.deals[index].envelopes = response.body.data
-    }
+    if (response.status === 200)
+      AppStore.data.deals.list[id].envelopes = _.indexBy(response.body.data, 'id')
 
     AppStore.emitChange()
   }

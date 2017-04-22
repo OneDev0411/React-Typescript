@@ -24,7 +24,6 @@ DealDispatcher.register(async function (payload) {
 
     case 'create-deal':
       return await createDeal(payload.data, payload.user)
-      break
 
     case 'get-submissions':
       getSubmissions(payload.id, payload.user)
@@ -52,8 +51,7 @@ DealDispatcher.register(async function (payload) {
       break
 
     case 'get-submission-form':
-      getSubmissionForm(payload.user, payload.deal, payload.last_revision)
-      break
+      return await getSubmissionForm(payload.user, payload.deal, payload.last_revision)
 
     default:
       return true

@@ -15,11 +15,10 @@ export default async function (user, deal_id, id) {
     if (response.status !== 200)
       return false
 
-    const deal_index = _.findIndex(AppStore.data.deals, deal => deal.id === deal_id)
-    const submission_index = _.findIndex(AppStore.data.deals[deal_index].submissions,
-      subm => subm.last_revision === id)
+    const deal = AppStore.data.deals.list[deal_id]
+    const submission = _.find(deal.submissions, subm => subm.last_revision === id)
+    deal.submissions[submission.id].form_data = response.body.data
 
-    AppStore.data.deals[deal_index].submissions[submission_index].form_data = response.body.data
-    AppStore.emitChange()
+    return response.body.data
   } catch (e) {}
 }

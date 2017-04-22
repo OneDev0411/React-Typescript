@@ -32,27 +32,23 @@ export default class Deals extends React.Component {
   render() {
     const { data } = this.props
     const user = data.user
-
+    const deals = data.deals || {}
     const children = React.Children.map(this.props.children, child =>
-      React.cloneElement(child, {
-        user,
-        deals: data.deals,
-        forms: data.deals_forms
-      })
+      React.cloneElement(child, { user, deals })
     )
 
     return (
       <div className="crm">
         <div className="deals">
           {
-            !data.deals &&
+            !deals.list &&
             <div className="loading-list">
               <div><i className="fa fa-spinner fa-spin fa-2x fa-fw" /></div>
               <b>Loading deals ...</b>
             </div>
           }
 
-          { data.deals && children }
+          { deals.list && children }
         </div>
       </div>
     )

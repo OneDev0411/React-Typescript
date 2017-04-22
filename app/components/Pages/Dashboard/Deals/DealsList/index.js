@@ -10,21 +10,21 @@ export default class DealsList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      deals: []
+      deals: {}
     }
   }
   componentDidMount() {
     const { user, deals } = this.props
 
     if (deals)
-      this.setState({ deals })
+      this.setState({ deals: deals.list })
   }
 
   componentWillReceiveProps(nextProps) {
     const { deals } = nextProps
 
-    if (deals && deals.length > this.state.deals.length)
-      this.setState({ deals })
+    if (deals && _.size(deals.list) > _.size(this.state.deals))
+      this.setState({ deals: deals.list })
   }
 
   create(type) {
@@ -99,7 +99,7 @@ export default class DealsList extends React.Component {
           </Col>
 
           <Col lg={4} md={4} sm={4} className="vcenter">
-            { deals.length } total
+            { _.size(deals) } total
           </Col>
 
           <Col lg={6} md={6} sm={6} className="vcenter right">
@@ -120,7 +120,7 @@ export default class DealsList extends React.Component {
         </Row>
 
         {
-          deals.length > 0 &&
+          _.size(deals) > 0 &&
           <Grid className="table">
             <Row className="header">
               <Col md={4} sm={4} xs={4}>ADDRESS</Col>

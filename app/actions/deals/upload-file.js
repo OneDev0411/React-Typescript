@@ -13,9 +13,7 @@ export default async function (id, user, file) {
   try {
     const response = await Deals.uploadFile(params)
 
-    // find deal index
-    const index = _.findIndex(AppStore.data.deals, deal => deal.id === id)
-    let files = AppStore.data.deals[index].files
+    let files = AppStore.data.deals.list[id].files
 
     if (!files)
       files = []
@@ -23,7 +21,7 @@ export default async function (id, user, file) {
     // Success
     if (response.status === 200) {
       files.push(response.body.data)
-      AppStore.data.deals[index].files = files
+      AppStore.data.deals.list[id].files = files
     }
 
     AppStore.emitChange()

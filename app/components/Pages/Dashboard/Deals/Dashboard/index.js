@@ -39,7 +39,7 @@ export default class DealDashboard extends React.Component {
     const { activeTab } = this.state
 
     // get deal
-    const deal = _.find(deals, deal => deal.id === params.id)
+    const deal = deals.list[params.id]
 
     if (!deal)
       return
@@ -55,7 +55,7 @@ export default class DealDashboard extends React.Component {
     const { submissions, envelopes, files } = this.state
 
     // load deal
-    const deal = _.find(deals, d => d.id === params.id)
+    const deal = deals.list[params.id]
 
     if (!deal)
       return
@@ -141,7 +141,7 @@ export default class DealDashboard extends React.Component {
     const city = this.getValue(deal, 'city')
     const state = this.getValue(deal, 'state')
     const postal_code = this.getValue(deal, 'postal_code')
-    return `${city}, ${state}, ${postal_code}`
+    return `${city}, ${state}, ${postal_code}`.replace(/-,/ig, '')
   }
 
   getPrice(deal) {
@@ -279,7 +279,7 @@ export default class DealDashboard extends React.Component {
                   <DealForms
                     submissions={submissions}
                     user={this.props.user}
-                    forms={this.props.forms}
+                    forms={this.props.deals.forms}
                     deal_id={this.props.params.id}
                     activeTab={activeTab}
                   />

@@ -129,7 +129,7 @@ export default class DealForm extends React.Component {
     if (mime.includes('image/'))
       return 'image'
 
-    if (mime.includes('pdf'))
+    if (mime === 'application/pdf')
       return 'pdf'
   }
 

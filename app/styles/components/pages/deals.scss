@@ -203,6 +203,8 @@
         .list {
           min-height: 10vh;
           margin-bottom: 10px;
+          background-color: #fff;
+          padding: 0;
           ul {
             margin: 5% 0 0 0;
             padding: 0;
@@ -226,6 +228,11 @@
                 font-size: 12px;
               }
             }
+          }
+        }
+        .documents {
+          .doc-detail {
+            background-color: #fff;
           }
         }
       }
@@ -501,8 +508,10 @@
                 margin-top: 10%;
                 margin-bottom: 10%;
                 .preview {
+                  text-align: center;
                   img {
-                    width: 100%;
+                    margin: 0 auto;
+                    max-width: 100%;
                     max-height: 60vh;
                     border-radius: 0 0 2px 2px;
                     transition: all 500ms ease-in;
