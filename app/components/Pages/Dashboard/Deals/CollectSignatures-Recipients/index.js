@@ -226,7 +226,7 @@ export default class CollectSignaturesRecipients extends React.Component {
           <Button
             bsStyle="primary"
             onClick={this.onSubmit.bind(this)}
-            disabled={!subject || Object.keys(recipients).length === 0 || sending}
+            disabled={!subject || _.size(recipients) === 0 || sending}
           >
             Send
           </Button>
