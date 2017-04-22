@@ -2,6 +2,7 @@
 import Deals from '../../models/Deal'
 import AppStore from '../../stores/AppStore'
 import _ from 'underscore'
+import moment from 'moment'
 
 export default async function (user) {
   const params = {
@@ -13,7 +14,14 @@ export default async function (user) {
 
     if (response.status === 200) {
       const list = _.indexBy(response.body.data, 'id')
-      AppStore.data.deals = Object.assign(AppStore.data.deals || {}, { list })
+
+      // expire deals after 12 minutes
+      const expire_at = moment().add(12, 'minutes')
+
+      AppStore.data.deals = Object.assign(AppStore.data.deals || {}, {
+        list,
+        expire_at
+      })
     }
 
     AppStore.emitChange()

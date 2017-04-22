@@ -36,9 +36,7 @@ export default class DealDashboard extends React.Component {
 
     // get deal
     const deal = deals.list[id]
-
-    if (!deal)
-      return
+    if (!deal) return
 
     this.setState({ deal })
 
@@ -52,9 +50,7 @@ export default class DealDashboard extends React.Component {
 
     // load deal
     const deal = deals.list[id]
-
-    if (!deal)
-      return
+    if (!deal) return
 
     if (!this.state.deal)
       this.setState({ deal })
@@ -90,9 +86,7 @@ export default class DealDashboard extends React.Component {
   }
 
   onTabChange(id) {
-    this.setState({
-      activeTab: id
-    })
+    this.setState({ activeTab: id })
 
     switch (id) {
       case 'forms':

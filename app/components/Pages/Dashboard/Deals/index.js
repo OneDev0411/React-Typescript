@@ -1,8 +1,14 @@
 import React from 'react'
 import S from 'shorti'
+import moment from 'moment'
 import DealDispatcher from '../../../../dispatcher/DealDispatcher'
 
 export default class Deals extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.reloadTimer = null
+  }
 
   componentDidMount() {
     const { data } = this.props
@@ -13,6 +19,13 @@ export default class Deals extends React.Component {
 
     // get forms
     this.getForms(user)
+
+    // create reload timer
+    this.reloadTimer = window.setInterval(this.reloadDeals.bind(this), 60 * 2 * 1000)
+  }
+
+  componentWillUnmount() {
+    window.clearInterval(this.reloadTimer)
   }
 
   getForms(user) {
@@ -27,6 +40,13 @@ export default class Deals extends React.Component {
       action: 'get-deals',
       user
     })
+  }
+
+  reloadDeals() {
+    const { user, deals } = this.props.data
+
+    if (moment().isAfter(deals.expire_at))
+      this.getDeals(user)
   }
 
   render() {
