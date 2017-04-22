@@ -5,12 +5,8 @@ import {
   Tabs,
   Tab,
   Button,
-  Overlay,
-  Tooltip,
-  Popover
 } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
-import { Link } from 'react-router'
 import S from 'shorti'
 import _ from 'underscore'
 import Avatar from 'react-avatar'
@@ -26,8 +22,8 @@ export default class DealDashboard extends React.Component {
     super(props)
     this.state = {
       id: props.params.id,
-      deal: null,
       activeTab: props.params.tab || 'forms',
+      deal: null,
       submissions: null,
       envelopes: null,
       files: null
@@ -35,11 +31,11 @@ export default class DealDashboard extends React.Component {
   }
 
   componentDidMount() {
-    const { deals, params } = this.props
-    const { activeTab } = this.state
+    const { deals } = this.props
+    const { activeTab, id } = this.state
 
     // get deal
-    const deal = deals.list[params.id]
+    const deal = deals.list[id]
 
     if (!deal)
       return
@@ -51,11 +47,11 @@ export default class DealDashboard extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { deals, params } = nextProps
-    const { submissions, envelopes, files } = this.state
+    const { deals } = nextProps
+    const { submissions, envelopes, files, id } = this.state
 
     // load deal
-    const deal = deals.list[params.id]
+    const deal = deals.list[id]
 
     if (!deal)
       return
@@ -69,9 +65,8 @@ export default class DealDashboard extends React.Component {
     if (!envelopes)
       this.setState({ envelopes: deal.envelopes })
 
-    if (!files) {
+    if (!files)
       this.setState({ files: deal.files })
-    }
 
     if (deal.files && files && deal.files.length > files.length)
       this.setState({ files: deal.files })
@@ -114,6 +109,9 @@ export default class DealDashboard extends React.Component {
   }
 
   getSubmissions() {
+    if (this.state.submissions)
+      return
+
     DealDispatcher.dispatch({
       action: 'get-submissions',
       user: this.props.user,
@@ -122,6 +120,9 @@ export default class DealDashboard extends React.Component {
   }
 
   getEnvelopes() {
+    if (this.state.envelopes)
+      return
+
     DealDispatcher.dispatch({
       action: 'get-envelopes',
       user: this.props.user,
