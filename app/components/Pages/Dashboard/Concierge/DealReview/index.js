@@ -132,6 +132,9 @@ export default class DealReview extends React.Component {
     let envelopes =
       await ConciergeDispatcher.dispatchSync(action)
     envelopes = this.mapReviewsToDocuments(envelopes)
+    this.deal.envelopes = envelopes
+    this.deals[this.deal.index] = this.deal
+    AppStore.data.conciergeDeals = this.deals
     this.setState({
       envelopes,
       envelopesLoading: false
@@ -162,6 +165,9 @@ export default class DealReview extends React.Component {
 
   mapReviewsToDocuments(envelopes) {
     return envelopes.map((envelope) => {
+      if (!envelope.documents)
+        return envelope
+
       const documents = envelope.documents.map((doc) => {
         const review = this.reviews[doc.id] || null
         return {

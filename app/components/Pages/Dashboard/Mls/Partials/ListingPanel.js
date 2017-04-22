@@ -206,12 +206,14 @@ export default class ListingPanel extends Component {
     // Listing panel
     let heading_height = 150
     let panel_top = 90
+    let panel_width = 425
     if (data.listing_panel && data.listing_panel.view === 'list') {
       panel_top = 123
       heading_height = 180
+      panel_width = 850
     }
     const listing_panel_wrap_style = S('fixed t-62 r-0 w-0 h-0 z-5')
-    let listing_panel_style = S(`absolute t-0 w-425 bg-fff h-${window.innerHeight}`)
+    let listing_panel_style = S(`absolute t-0 w-${panel_width} bg-fff h-${window.innerHeight}`)
     let listing_scroll_style = {
       ...listing_panel_style,
       top: panel_top + 'px',
@@ -288,7 +290,7 @@ export default class ListingPanel extends Component {
     if (data.show_listing_panel) {
       button_style = {
         ...button_style,
-        right: 425
+        right: panel_width
       }
     }
     let listing_panel_btn = (

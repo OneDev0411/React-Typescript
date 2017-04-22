@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 export default class Map extends Component {
   render() {
     return (
-      <svg width="24px" height="21px" viewBox="0 0 24 21" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <svg width={this.props.width || 24} height={this.props.height || 24} viewBox="0 0 24 21" version="1.1" xmlns="http://www.w3.org/2000/svg">
         <title>DAEA0308-705C-4560-A802-2EF0A341BAD2</title>
         <desc>Created with sketchtool.</desc>
         <defs />

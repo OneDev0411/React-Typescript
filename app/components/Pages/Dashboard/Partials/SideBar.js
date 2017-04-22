@@ -18,6 +18,11 @@ import ProfileImage from './ProfileImage'
 import SvgChat from './Svgs/Chat'
 import SvgMap from './Svgs/Map'
 import SvgStore from './Svgs/Store'
+import SvgPeople from './Svgs/People'
+import SvgDeals from './Svgs/Deals'
+import SvgBriefCase from './Svgs/BriefCase'
+import SvgSupport from './Svgs/Support'
+import SvgNotifications from './Svgs/Notifications'
 import Brand from '../../../../controllers/Brand'
 
 export default class SideBar extends Component {
@@ -130,9 +135,9 @@ export default class SideBar extends Component {
     const user = data.user
     let old_password
     let new_password
-    if (this.refs.old_password)
+    if (this.old_passwordInput.value)
       old_password = this.old_passwordInput.value.trim()
-    if (this.refs.new_password)
+    if (this.new_passwordInput.value)
       new_password = this.new_passwordInput.value.trim()
     AppStore.data.saving_account_settings = true
     delete AppStore.data.error
@@ -457,12 +462,12 @@ export default class SideBar extends Component {
         <Col xs={9} style={S('p-0')}>
           <Col xs={12} style={S('pr-0')}>
             <label>Current password</label>
-            <FormControl key="old_password" bsSize="large" style={S('font-15')} inputRef={ref => this.old_passwordInput = ref} type="password" placeholder="Current password" />
+            <FormControl key="old_password" bsSize="large" style={S('font-15 mb-10')} inputRef={ref => this.old_passwordInput = ref} type="password" placeholder="Current password" />
           </Col>
           <Col xs={12} style={S('pr-0')}>
             <label>New password</label>
             <div style={S('relative')}>
-              <FormControl key="new_password" inputRef={ref => this.new_passwordInput = ref} autoComplete={false} style={S('font-15')} bsSize="large" placeholder="New Password" type={data.settings && data.settings.show_password ? 'text' : 'password'} />
+              <FormControl key="new_password" inputRef={ref => this.new_passwordInput = ref} autoComplete={false} style={S('font-15 mb-10')} bsSize="large" placeholder="New Password" type={data.settings && data.settings.show_password ? 'text' : 'password'} />
               <i onClick={this.toggleShowPassword} style={S('absolute t-15 r-15 z-100 pointer color-666')} className={`fa fa-eye${data.settings && data.settings.show_password ? '-slash' : ''}`} />
             </div>
           </Col>
@@ -572,7 +577,7 @@ export default class SideBar extends Component {
     if (Brand.asset('site_logo')) {
       branding_logo = (
         <div style={S('mb-10 mt-10')}>
-          <a target="_blank" href="http://www.claystapp.com">
+          <a target="_blank" href={'http://' + data.brand.hostnames[0]}>
             <div style={S(`bg-url(${Brand.asset('site_logo')}) bg-cover bg-center w-30 h-30 ml-10 br-3`)} />
           </a>
         </div>
@@ -624,14 +629,7 @@ export default class SideBar extends Component {
             <OverlayTrigger placement="right" overlay={popover.concierge} delayShow={200} delayHide={0}>
               <LinkContainer onClick={this.hideListingViewer.bind(this)} className={active.concierge} to="/dashboard/concierge/deals">
                 <NavItem style={S('w-85p')}>
-                  <img
-                    src={
-                      active.concierge ?
-                        '/static/images/dashboard/sidenav/deals-active.svg' :
-                        '/static/images/dashboard/sidenav/deals.svg'
-                    }
-                    style={S('w-19 h-19')}
-                  />
+                  <SvgBriefCase color={active.concierge ? nav_active_color : '#4e5c6c'} />
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
@@ -642,7 +640,7 @@ export default class SideBar extends Component {
             <OverlayTrigger placement="right" overlay={popover.deals} delayShow={200} delayHide={0}>
               <LinkContainer onClick={this.hideListingViewer.bind(this)} className={active.deals} to="/dashboard/deals">
                 <NavItem style={S('w-85p')}>
-                  <img src={active.deals ? '/static/images/dashboard/sidenav/deals-active.svg' : '/static/images/dashboard/sidenav/deals.svg'} style={S('w-19 h-19')} />
+                  <SvgDeals color={active.deals ? nav_active_color : '#4e5c6c'} />
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
@@ -652,7 +650,7 @@ export default class SideBar extends Component {
             <OverlayTrigger placement="right" overlay={ popover.people } delayShow={200} delayHide={0}>
               <LinkContainer className={active.contacts} to="/dashboard/contacts">
                 <NavItem style={S('w-85p')}>
-                  <img src={active.contacts ? '/static/images/dashboard/sidenav/people-active.svg' : '/static/images/dashboard/sidenav/people.svg'} style={S('w-19 h-19')} />
+                  <SvgPeople color={active.contacts ? nav_active_color : '#4e5c6c'} />
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
@@ -670,20 +668,21 @@ export default class SideBar extends Component {
         </Nav>
         <div style={S('absolute b-10 l-15')}>
           <Nav className="sidebar__account">
-            <NavItem style={ S('t-20n l-10n') }>
+            <NavItem style={ S('t-0 l-10n') }>
               <OverlayTrigger placement="right" overlay={popover.notifications} delayShow={200} delayHide={0}>
                 <Link to="/dashboard/notifications">
                   {this.notificationIcon()}
-                  <i className="fa fa-bell" style={S(`font-30 relative color-${!active.notifications ? '4D5C6C' : '3388ff' }`)} />
+                  <SvgNotifications color={active.notifications ? nav_active_color : '#4e5c6c'} />
                 </Link>
               </OverlayTrigger>
             </NavItem>
-            <OverlayTrigger placement="right" overlay={popover.support} delayShow={200} delayHide={0}>
-              <div style={S('pointer relative t-15n')} onClick={this.showIntercom}>
-                <i className="fa fa-question" style={S('font-20 color-202A33 relative t-5n l-13 z-100')} />
-                <i className="fa fa-comment" style={S('font-35 relative l-10n color-4D5C6C')} />
-              </div>
-            </OverlayTrigger>
+            <NavItem style={ S('t-5n l-10n') }>
+              <OverlayTrigger placement="right" overlay={popover.support} delayShow={200} delayHide={0}>
+                <div style={S('pointer relative')}>
+                  <SvgSupport color={'#4e5c6c'} />
+                </div>
+              </OverlayTrigger>
+            </NavItem>
             <div style={S('absolute z-0 l-3n')}>
               <ProfileImage data={data} user={user} />
             </div>
