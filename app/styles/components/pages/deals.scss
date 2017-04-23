@@ -265,9 +265,12 @@
         }
 
         ul.menu {
+          margin: 0;
+          line-height: 45px;
           text-align: right;
-          margin-right: 7%;
           li {
+            display: inline-block;
+            margin-left: 2rem;
             &:hover {
               cursor: pointer;
               opacity: 0.7;

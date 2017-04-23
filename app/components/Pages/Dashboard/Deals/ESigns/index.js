@@ -153,11 +153,12 @@ export default class DealESigns extends React.Component {
               <div className="hr" />
               {
                 envelope.documents.map((doc, key) => (
-                  <div key={`env_doc_${doc.id}`} className="documents">
-                    <img src="/static/images/deals/file.png" style={S('w-16 mr-10')} />
+                  <div key={`env_doc_${doc.id}`} className="documents" style={{ marginTop: '-10px' }}>
+                    <img src="/static/images/deals/file.png" style={S('w-16 mr-10 mt-20')} />
                     <a target="_blank" href={this.displayEnvelopeDocument(envelope.id, key)}>
                       { doc.title }
                     </a>
+                    <p className="review-state--submit-request review-state--ok">APPROVED</p>
                   </div>
                   ))
               }

@@ -199,8 +199,9 @@ export default class DealForm extends React.Component {
                         </Col>
 
                         <Col xs={10}>
-                          <div><b>{ file.name }</b></div>
-                          <div>Uploaded { getTimeAgo(file.created_at) } ago</div>
+                          <p style={S('m-0')}><b>{ file.name }</b></p>
+                          <p style={S('m-0')} className="review-state--ok">APPROVED</p>
+                          <p style={S('mb-0 mt-10')}><small style={{ color: '#9b9b9b' }}>Uploaded { getTimeAgo(file.created_at) } ago</small></p>
                         </Col>
                       </Row>
                     </div>

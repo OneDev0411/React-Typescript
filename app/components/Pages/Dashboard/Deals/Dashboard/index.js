@@ -15,54 +15,62 @@ import DealDispatcher from '../../../../../dispatcher/DealDispatcher'
 import DealForms from '../Forms'
 import DealESigns from '../ESigns'
 import Uploads from '../Uploads'
+// import SubmitReviewModal from './submit-review-modal'
 
 export default class DealDashboard extends React.Component {
 
   constructor(props) {
     super(props)
+    this.reviews = {}
+    const { id } = props.params
+    this.deal = props.deals.list[id] || null
+    if (this.deal.reviews) {
+      this.fillreviews()
+      if (this.deal.files) this.mapReviewsToFiles()
+    }
+
     this.state = {
-      id: props.params.id,
       activeTab: props.params.tab || 'forms',
-      deal: null,
       submissions: null,
       envelopes: null,
-      files: null
+      files: this.deal.files || null,
+      reviewRequestModalIsFreeze: false,
+      reviewRequestModalIsActive: false
     }
+
+    this.reviewRequestModalCloseHandler =
+      this.reviewRequestModalCloseHandler.bind(this)
+    this.reviewRequestModalShowHandler =
+      this.reviewRequestModalShowHandler.bind(this)
   }
 
   componentDidMount() {
-    const { deals } = this.props
-    const { activeTab, id } = this.state
-
-    // get deal
-    const deal = deals.list[id]
-    if (!deal) return
-
-    this.setState({ deal })
+    const { activeTab } = this.state
+    if (!this.deal) return
 
     // load data based on active tab
     this.onTabChange(activeTab)
   }
 
   componentWillReceiveProps(nextProps) {
+    const { id } = nextProps.params
     const { deals } = nextProps
-    const { submissions, envelopes, files, id } = this.state
+    const { submissions, envelopes, files } = this.state
 
     // load deal
     const deal = deals.list[id]
     if (!deal) return
 
-    if (!this.state.deal)
-      this.setState({ deal })
-
-    if (!submissions)
-      this.setState({ submissions: deal.submissions })
-
-    if (!envelopes)
-      this.setState({ envelopes: deal.envelopes })
-
-    if (!files)
+    if (!files && deal.files)
       this.setState({ files: deal.files })
+
+    if (!envelopes && deal.envelopes) {
+      const envelopes = this.mapReviewsToDocuments(deal.envelopes)
+      this.setState({ envelopes })
+    }
+
+    if (!submissions && deal.submissions)
+      this.setState({ submissions: deal.submissions })
 
     if (deal.files && files && deal.files.length > files.length)
       this.setState({ files: deal.files })
@@ -72,34 +80,49 @@ export default class DealDashboard extends React.Component {
     return typeof nextProps.deals !== 'undefined'
   }
 
-  getCoverImage(deal) {
-    let src = '/static/images/deals/home.svg'
-
-    if (deal.listing)
-      src = deal.listing.cover_image_url
-
-    return <img style={S('mr-10 w-40 br-2')} src={src} />
-  }
-
-  getNumberWithCommas(number) {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-  }
-
-  onTabChange(id) {
-    this.setState({ activeTab: id })
-
-    switch (id) {
-      case 'forms':
-        this.getSubmissions()
-        break
-
-      case 'esigns':
-        this.getEnvelopes()
-        break
-
-      case 'uploads':
-        break
+  fillreviews() {
+    const reviews = this.deal.reviews
+    if (reviews) {
+      this.deal.reviews.forEach((review) => {
+        const id = review.file || review.envelope_document
+        this.reviews[id] = {
+          ...review
+        }
+      })
     }
+  }
+
+  mapReviewsToFiles() {
+    const newFiles = this.deal.files.map((file) => {
+      const review = this.reviews[file.id] || null
+      return {
+        ...file,
+        review
+      }
+    })
+    this.deal.files = newFiles
+    AppStore.data.deals.list[this.deal.id] = this.deal
+  }
+
+  mapReviewsToDocuments(envelopes) {
+    const newEnvelopes = Object.keys(envelopes).map((id) => {
+      const envelope = envelopes[id]
+      if (!envelope.documents)
+        return envelope
+
+      const documents = envelope.documents.map((doc) => {
+        const review = (this.reviews && this.reviews[doc.id]) || null
+        return {
+          ...doc,
+          review
+        }
+      })
+      return {
+        ...envelope,
+        documents
+      }
+    })
+    return _.indexBy(newEnvelopes, 'id')
   }
 
   getSubmissions() {
@@ -124,61 +147,91 @@ export default class DealDashboard extends React.Component {
     })
   }
 
-  getAddress(deal) {
-    const address = this.getValue(deal, 'street_address')
-
-    if (address.endsWith(','))
-      return address.substring(0, address.length - 1)
-    return address
+  reviewRequestModalCloseHandler() {
+    this.setState({
+      reviewRequestModalIsActive: false
+    })
+  }
+  reviewRequestModalShowHandler() {
+    this.setState({
+      reviewRequestModalIsActive: true
+    })
   }
 
-  getFullAddress(deal) {
-    const city = this.getValue(deal, 'city')
-    const state = this.getValue(deal, 'state')
-    const postal_code = this.getValue(deal, 'postal_code')
-    return `${city}, ${state}, ${postal_code}`.replace(/-,/ig, '')
-  }
-
-  getPrice(deal) {
-    const price = this.getValue(deal, 'list_price')
-
-    if (price === '-')
-      return price
-
-    return `$${this.getNumberWithCommas(price)}`
-  }
-
-  getStatus(deal) {
-    if (deal.listing)
-      return deal.listing.status
-
-    return '-'
-  }
-
-  getValue(deal, field) {
-    if (deal.context && deal.context[field])
-      return deal.context[field]
-    else if (deal.proposed_values && deal.proposed_values[field])
-      return deal.proposed_values[field]
-
-    return '-'
-  }
-
-  goBack() {
-    browserHistory.push('/dashboard/deals')
-  }
-
-  collectSignatures() {
-    if (AppStore.data.deals_signatures) {
-      AppStore.data.deals_signatures.documents = {}
-      AppStore.emitChange()
+  async submitReview(review) {
+    const { user } = this.props
+    const { id, comment, state } = review
+    const body = {
+      state,
+      comment
     }
+    const action = {
+      id,
+      body,
+      user,
+      type: 'SET_REVIEW'
+    }
+    this.setState({
+      modalIsFreezed: true
+    })
 
-    browserHistory.push(`/dashboard/deals/${this.state.id}/collect-signatures/documents`)
+    await ConciergeDispatcher.dispatchSync(action)
+
+    this.setState({
+      modalIsFreezed: false,
+      modalIsActive: false
+    })
+  }
+  reviewRequestModalSubmitHandler(review) {
+    const { type, comment, id } = review
+    switch (type) {
+      case 'APPROVE':
+        this.submitReview({
+          id,
+          comment,
+          state: 'Approved'
+        })
+        break
+      case 'DECLINE':
+        this.submitReview({
+          id,
+          comment,
+          state: 'Rejected'
+        })
+        break
+      default:
+        this.setState({
+          modalActive: false
+        })
+    }
+  }
+
+  modalCloseHandler() {
+    if (!this.state.modalIsFreezed)
+      this.setState({ modalIsActive: false })
+  }
+
+  approveHandler(selectedReviewId) {
+    this.setState({
+      selectedReviewId,
+      modalIsActive: true,
+      modalType: 'APPROVE',
+      modalTitle: 'Hurrah! Smooth sailing.'
+    })
+  }
+
+  declineHandler(selectedReviewId) {
+    this.setState({
+      selectedReviewId,
+      modalIsActive: true,
+      modalType: 'DECLINE',
+      modalTitle: 'Why has this document been declined?'
+    })
   }
 
   render() {
-    const { deal, submissions, envelopes, files, activeTab } = this.state
+    const deal = this.deal
+    const { submissions, envelopes, files, activeTab } = this.state
 
     if (deal === null)
       return false
@@ -204,6 +257,11 @@ export default class DealDashboard extends React.Component {
                   <img src="/static/images/deals/pen.svg" />
                 </li>
               }
+              <li
+                onClick={this.reviewRequestModalShowHandler}
+              >
+                <img src="/static/images/deals/glasses-round.svg" />
+              </li>
             </ul>
           </Col>
         </Row>
@@ -302,7 +360,96 @@ export default class DealDashboard extends React.Component {
           </Col>
 
         </Row>
+
+        {/*<SubmitReviewModal
+          isActive={this.state.reviewRequestModalIsActive}
+          isFreeze={this.state.reviewRequestModalIsFreeze}
+          closeHandler={this.reviewRequestModalCloseHandler}
+        />*/}
       </div>
     )
+  }
+
+  getCoverImage(deal) {
+    let src = '/static/images/deals/home.svg'
+
+    if (deal.listing)
+      src = deal.listing.cover_image_url
+
+    return <img style={S('mr-10 w-40 br-2')} src={src} />
+  }
+
+  getNumberWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  }
+
+  onTabChange(id) {
+    this.setState({ activeTab: id })
+
+    switch (id) {
+      case 'forms':
+        this.getSubmissions()
+        break
+
+      case 'esigns':
+        this.getEnvelopes()
+        break
+
+      case 'uploads':
+        break
+    }
+  }
+
+  getAddress(deal) {
+    const address = this.getValue(deal, 'street_address')
+
+    if (address.endsWith(','))
+      return address.substring(0, address.length - 1)
+    return address
+  }
+
+  getFullAddress(deal) {
+    const city = this.getValue(deal, 'city')
+    const state = this.getValue(deal, 'state')
+    const postal_code = this.getValue(deal, 'postal_code')
+    return `${city}, ${state}, ${postal_code}`.replace(/-,/ig, '')
+  }
+
+  getPrice(deal) {
+    const price = this.getValue(deal, 'list_price')
+
+    if (price === '-')
+      return price
+
+    return `$${this.getNumberWithCommas(price)}`
+  }
+
+  getStatus(deal) {
+    if (deal.listing)
+      return deal.listing.status
+
+    return '-'
+  }
+
+  getValue(deal, field) {
+    if (deal.context && deal.context[field])
+      return deal.context[field]
+    else if (deal.proposed_values && deal.proposed_values[field])
+      return deal.proposed_values[field]
+
+    return '-'
+  }
+
+  goBack() {
+    browserHistory.push('/dashboard/deals')
+  }
+
+  collectSignatures() {
+    if (AppStore.data.deals_signatures) {
+      AppStore.data.deals_signatures.documents = {}
+      AppStore.emitChange()
+    }
+
+    browserHistory.push(`/dashboard/deals/${this.props.params.id}/collect-signatures/documents`)
   }
 }

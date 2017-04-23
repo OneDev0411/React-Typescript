@@ -129,3 +129,17 @@
   @extend %review-state-caption;
   color: #35b863;
 } // .review-state--ok
+
+.review-state--pending {
+  @extend %review-state-caption;
+  color: #f5a623;
+  opacity: .6;
+} // .review-state--pending
+
+
+.review-state--submit-request {
+  display: block;
+  margin-top: -1rem;
+  margin-left: 2.8rem;
+} // .review-state--submit-request
+
