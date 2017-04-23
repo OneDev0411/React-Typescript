@@ -150,17 +150,41 @@ export default class DealESigns extends React.Component {
           {
             envelope.documents &&
             <div>
-              <div className="hr" />
+              <div
+                className="hr"
+                style={{ marginBottom: '10px' }}
+              />
               {
                 envelope.documents.map((doc, key) => (
-                  <div key={`env_doc_${doc.id}`} className="documents" style={{ marginTop: '-10px' }}>
-                    <img src="/static/images/deals/file.png" style={S('w-16 mr-10 mt-20')} />
-                    <a target="_blank" href={this.displayEnvelopeDocument(envelope.id, key)}>
+                  <div
+                    key={`env_doc_${doc.id}`}
+                    className="documents"
+                    style={{ marginBottom: '15px' }}
+                  >
+                    <img
+                      src="/static/images/deals/file.png"
+                      style={{
+                        width: '16px',
+                        marginRight: '10px',
+                        marginTop: doc.review ? '20px' : 0
+                      }}
+                    />
+                    <a
+                      target="_blank"
+                      href={this.displayEnvelopeDocument(envelope.id, key)}
+                    >
                       { doc.title }
                     </a>
-                    <p className="review-state--submit-request review-state--ok">APPROVED</p>
+                    {
+                      doc.review
+                      && <p
+                        className={`review-state--submit-request review-state--${doc.review.state.toLowerCase()}`}
+                      >
+                        {doc.review.state.toUpperCase()}
+                      </p>
+                    }
                   </div>
-                  ))
+                ))
               }
 
               <div className="hr" />
