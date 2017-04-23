@@ -15,7 +15,7 @@ import DealDispatcher from '../../../../../dispatcher/DealDispatcher'
 import DealForms from '../Forms'
 import DealESigns from '../ESigns'
 import Uploads from '../Uploads'
-// import SubmitReviewModal from './submit-review-modal'
+import SubmitReviewModal from './submit-review-modal'
 
 export default class DealDashboard extends React.Component {
 
@@ -361,11 +361,11 @@ export default class DealDashboard extends React.Component {
 
         </Row>
 
-        {/*<SubmitReviewModal
+        <SubmitReviewModal
           isActive={this.state.reviewRequestModalIsActive}
           isFreeze={this.state.reviewRequestModalIsFreeze}
           closeHandler={this.reviewRequestModalCloseHandler}
-        />*/}
+        />
       </div>
     )
   }
