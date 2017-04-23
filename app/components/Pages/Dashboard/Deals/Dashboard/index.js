@@ -42,6 +42,8 @@ export default class DealDashboard extends React.Component {
       this.reviewRequestModalCloseHandler.bind(this)
     this.reviewRequestModalShowHandler =
       this.reviewRequestModalShowHandler.bind(this)
+    this.reviewRequestModalSubmitHandler =
+      this.reviewRequestModalSubmitHandler.bind(this)
   }
 
   componentDidMount() {
@@ -105,8 +107,7 @@ export default class DealDashboard extends React.Component {
   }
 
   mapReviewsToDocuments(envelopes) {
-    const newEnvelopes = Object.keys(envelopes).map((id) => {
-      const envelope = envelopes[id]
+    return envelopes.map((envelope) => {
       if (!envelope.documents)
         return envelope
 
@@ -122,7 +123,6 @@ export default class DealDashboard extends React.Component {
         documents
       }
     })
-    return _.indexBy(newEnvelopes, 'id')
   }
 
   getSubmissions() {
@@ -182,28 +182,8 @@ export default class DealDashboard extends React.Component {
       modalIsActive: false
     })
   }
-  reviewRequestModalSubmitHandler(review) {
-    const { type, comment, id } = review
-    switch (type) {
-      case 'APPROVE':
-        this.submitReview({
-          id,
-          comment,
-          state: 'Approved'
-        })
-        break
-      case 'DECLINE':
-        this.submitReview({
-          id,
-          comment,
-          state: 'Rejected'
-        })
-        break
-      default:
-        this.setState({
-          modalActive: false
-        })
-    }
+  reviewRequestModalSubmitHandler() {
+    console.log('submit')
   }
 
   modalCloseHandler() {
@@ -211,27 +191,38 @@ export default class DealDashboard extends React.Component {
       this.setState({ modalIsActive: false })
   }
 
-  approveHandler(selectedReviewId) {
-    this.setState({
-      selectedReviewId,
-      modalIsActive: true,
-      modalType: 'APPROVE',
-      modalTitle: 'Hurrah! Smooth sailing.'
-    })
-  }
+  preparedEnvelopes(envelopes) {
+    let list = []
+    envelopes.map((envelope) => {
+      if (!envelope.documents)
+        return
 
-  declineHandler(selectedReviewId) {
-    this.setState({
-      selectedReviewId,
-      modalIsActive: true,
-      modalType: 'DECLINE',
-      modalTitle: 'Why has this document been declined?'
+      envelope.documents.forEach((document, index) => {
+        document = {
+          ...document,
+          index
+        }
+        list.push(document)
+      })
     })
+    return list
   }
 
   render() {
     const deal = this.deal
+    let reviewableDocs = []
     const { submissions, envelopes, files, activeTab } = this.state
+    if (envelopes && envelopes.length > 0) {
+      reviewableDocs = [
+        ...this.preparedEnvelopes(envelopes)
+      ]
+    }
+    if (files && files.length > 0) {
+      reviewableDocs = [
+        ...reviewableDocs,
+        ...files
+      ]
+    }
 
     if (deal === null)
       return false
@@ -362,9 +353,12 @@ export default class DealDashboard extends React.Component {
         </Row>
 
         <SubmitReviewModal
+          documents={reviewableDocs}
+          token={this.props.user.access_token}
           isActive={this.state.reviewRequestModalIsActive}
           isFreeze={this.state.reviewRequestModalIsFreeze}
           closeHandler={this.reviewRequestModalCloseHandler}
+          submitHandler={this.reviewRequestModalSubmitHandler}
         />
       </div>
     )

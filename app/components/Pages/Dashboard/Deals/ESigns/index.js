@@ -27,9 +27,9 @@ export default class DealESigns extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { envelopes } = nextProps
 
-    if (!this.state.envelope && envelopes && _.size(envelopes) > 0) {
+    if (!this.state.envelope && envelopes && envelopes.length > 0) {
       this.setState({
-        envelope: envelopes[Object.keys(envelopes)[0]]
+        envelope: envelopes[0]
       })
     }
   }
@@ -94,7 +94,7 @@ export default class DealESigns extends React.Component {
       )
     }
 
-    if (_.size(envelopes) === 0) {
+    if (envelopes.length === 0) {
       return (
         <div className="no-esign">
           You haven't sent any docs yet
@@ -109,7 +109,7 @@ export default class DealESigns extends React.Component {
       <Row>
         <Col xs={5} sm={5} style={S('p-0')}>
           {
-            envelopes && _.map(envelopes, evlp => {
+            envelopes && envelopes.map((evlp) => {
               const _signed_users = _.filter(evlp.recipients, recp => recp.signed_at !== null)
 
               return (

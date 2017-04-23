@@ -1,7 +1,32 @@
 import React from 'react'
 import Avatar from 'react-avatar'
 import { Modal, Button } from 'react-bootstrap'
+import config from '../../../../../../config/public'
 import Document from './submit-review-modal-review-item'
+
+const getDocumentUrl = (id, index, token) => {
+  const baseUrl = `${config.app.url}/api/deals/envelope/preview`
+  return `${baseUrl}?id=${id}&index=${index}&access_token=${token}`
+}
+
+const getSortedDocs = (docs) => {
+  // temporary array holds objects with position and sort-value
+  let sortedDocs = []
+  let reviewedDocs = []
+  let unreviewedDocs = []
+  docs.forEach((doc) => {
+    if (doc.review) reviewedDocs.push(doc)
+    else unreviewedDocs.push(doc)
+  })
+
+  // sorting the mapped array containing the reduced values
+  sortedDocs = reviewedDocs.sort((a, b) => (a.review.state > b.review.state))
+  sortedDocs = [
+    ...sortedDocs,
+    ...unreviewedDocs.sort((a, b) => (a.name || a.title > b.name || b.title))
+  ]
+  return sortedDocs
+}
 
 export default class SubmitReviewModal extends React.Component {
   constructor(props) {
@@ -56,139 +81,51 @@ export default class SubmitReviewModal extends React.Component {
             }}
           >
             <div className="c-request-review-modal__list">
-              <Document
-                id="01"
-                fileUrl="#"
-                avatar={{
-                  type: 'pdf',
-                  url: ''
-                }}
-                state="Rejected"
-                onSelectedHandler={this.selectedHandler}
-                title="Residential Data Input Form"
-              />
-              <Document
-                id="02"
-                fileUrl="#"
-                avatar={{
-                  type: 'pdf',
-                  url: ''
-                }}
-                state="Approved"
-                onSelectedHandler={this.selectedHandler}
-                title="One to Four Family Contract (Resale)"
-              />
-              <Document
-                id="03"
-                fileUrl="#"
-                avatar={{
-                  type: 'pdf',
-                  url: ''
-                }}
-                state="unclear"
-                onSelectedHandler={this.selectedHandler}
-                title="Lead-Based Paint Addendum"
-              />
-              <Document
-                id="04"
-                fileUrl="#"
-                avatar={{
-                  type: 'pdf',
-                  url: ''
-                }}
-                state="unclear"
-                onSelectedHandler={this.selectedHandler}
-                title="Amendment to Contract"
-              />
-              <Document
-                id="05"
-                fileUrl="#"
-                avatar={{
-                  type: 'img',
-                  src: '#'
-                }}
-                state="unclear"
-                onSelectedHandler={this.selectedHandler}
-                title="bedroom.jpg"
-              />
-              <Document
-                id="06"
-                fileUrl="#"
-                avatar={{
-                  type: 'img',
-                  src: '#'
-                }}
-                state="unclear"
-                onSelectedHandler={this.selectedHandler}
-                title="bathroom paint.jpg"
-              />
-              <Document
-                id="07"
-                fileUrl="#"
-                avatar={{
-                  type: 'pdf',
-                  src: '#'
-                }}
-                state="unclear"
-                onSelectedHandler={this.selectedHandler}
-                title="Insurance title.pdf"
-              />
-              <Document
-                id="08"
-                fileUrl="#"
-                avatar={{
-                  type: 'img',
-                  src: '#'
-                }}
-                state="unclear"
-                onSelectedHandler={this.selectedHandler}
-                title="bedroom.jpg"
-              />
-              <Document
-                id="06"
-                fileUrl="#"
-                avatar={{
-                  type: 'img',
-                  src: '#'
-                }}
-                state="unclear"
-                onSelectedHandler={this.selectedHandler}
-                title="bathroom paint.jpg"
-              />
-              <Document
-                id="07"
-                fileUrl="#"
-                avatar={{
-                  type: 'pdf',
-                  src: '#'
-                }}
-                state="unclear"
-                onSelectedHandler={this.selectedHandler}
-                title="Insurance title.pdf"
-              />
-              <Document
-                id="08"
-                fileUrl="#"
-                avatar={{
-                  type: 'img',
-                  src: '#'
-                }}
-                state="unclear"
-                onSelectedHandler={this.selectedHandler}
-                title="bedroom.jpg"
-              />
+              {
+                getSortedDocs(this.props.documents).map((doc) => {
+                  let type = ''
+                  let title = ''
+                  let docUrl = ''
+                  let avatar = {}
+                  let state = doc.review ? doc.review.state : 'unclear'
+
+                  if (doc.type === 'file') {
+                    docUrl = doc.url
+                    title = doc.name.slice(0, -4)
+                    avatar.type = doc.mime === 'application/pdf' ? 'pdf' : 'img'
+                    avatar.src = avatar.type === 'img' ? doc.url : '#'
+                  } else {
+                    title = doc.title.slice(0, -4)
+                    docUrl = getDocumentUrl(doc.id, doc.index, this.props.token)
+                  }
+
+                  return (
+                    <Document
+                      key={`DOC_${doc.id}`}
+                      id={doc.id}
+                      title={title}
+                      state={state}
+                      avatar={avatar}
+                      fileUrl={docUrl}
+                      onSelectedHandler={this.selectedHandler}
+                    />
+                  )
+                })
+              }
             </div>
             <div className="c-request-review-modal__footer">
               <span className="c-request-review-modal__footer__caption">
-                <b>{this.state.selectedDocuments || 0}</b>
+                <b>{this.state.selectedDocuments}</b>
                 <span> document selected</span>
               </span>
               <Button
                 tabIndex="0"
+                disabled={!this.state.selectedDocuments}
                 type="submit"
                 bsStyle="primary"
-                disabled={isFreezed}
-                className="c-request-review-modal__submit-btn"
+                className={
+                  `c-request-review-modal__submit-btn ${!this.state.selectedDocuments ? 'is-inactive' : ''}`
+                }
               >
                 {isFreezed ? 'Sending...' : 'Submit for review'}
               </Button>

@@ -61,31 +61,11 @@ export default class DealsList extends React.Component {
     }
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   const { deals, isUpdated } = nextProps.conciergeDeals
-
-  //   if (deals && deals.length !== this.state.deals.length) {
-  //     this.setState({
-  //       deals
-  //     })
-  //   }
-
-  //   if (deals && isUpdated) {
-  //     this.setState({
-  //       deals
-  //     })
-  //   }
-  // }
-
   shouldComponentUpdate(nextProps, nextState) {
     const { deals } = nextState
 
     if (deals && deals.length > this.state.deals.length)
       return true
-
-
-    // if (deals && isUpdated)
-    //   return true
 
     return false
   }
