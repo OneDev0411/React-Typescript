@@ -184,6 +184,7 @@ export default class App extends Component {
   }
 
   initSockets() {
+    window.socket_init = true
     const socket = window.socket
     const data = AppStore.data
     socket.emit('Authenticate', data.user.access_token)
@@ -246,9 +247,13 @@ export default class App extends Component {
       })
       const user_ids = _.map(users_online, 'user_id')
       AppStore.data.users_online = user_ids
+      delete window.socket_init
       AppStore.emitChange()
     })
     socket.on('User.State', (state, user_id) => {
+      // Prevent on init
+      if (window.socket_init)
+        return
       if (!AppStore.data.users_online)
         AppStore.data.users_online = []
       if (state === 'Online' || state === 'Background')
@@ -320,9 +325,6 @@ export default class App extends Component {
 
       AppStore.emitChange()
     })
-
-    // socket.on('Notification.Acknowledged', () => {
-    // })
 
     socket.on('Room.Acknowledged', (ack) => {
       const { type, user, room } = ack
