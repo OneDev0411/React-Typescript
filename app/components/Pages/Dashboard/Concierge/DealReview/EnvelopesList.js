@@ -56,7 +56,7 @@ export default ({
                 item.documents.map((document, index) => (
                   <Document
                     {...document}
-                    url={getDocumentUrl(document.id, index, token)}
+                    url={getDocumentUrl(item.id, index, token)}
                     token={token}
                     key={`DOCUMENT_${document.id}`}
                     onClickApprove={approveHandler}
