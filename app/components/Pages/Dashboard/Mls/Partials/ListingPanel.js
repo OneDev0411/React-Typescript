@@ -293,11 +293,14 @@ export default class ListingPanel extends Component {
         right: panel_width
       }
     }
-    let listing_panel_btn = (
-      <Button onClick={ this.props.toggleListingPanel.bind(this) } className={ button_class } style={ button_style }>
-        { listing_panel_icon }
-      </Button>
-    )
+    let listing_panel_btn
+    if (data.show_listing_panel && data.listing_panel.size !== 'full') {
+      listing_panel_btn = (
+        <Button onClick={ this.props.toggleListingPanel.bind(this) } className={ button_class } style={ button_style }>
+          { listing_panel_icon }
+        </Button>
+      )
+    }
     if (data.is_mobile)
       listing_panel_btn = null
     let listings_total
