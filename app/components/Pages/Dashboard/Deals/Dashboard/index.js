@@ -3,7 +3,10 @@ import {
   Row,
   Col,
   Tabs,
-  Tab
+  Tab,
+  Popover,
+  Tooltip,
+  OverlayTrigger
 } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
 import S from 'shorti'
@@ -312,6 +315,10 @@ export default class DealDashboard extends React.Component {
   }
 
   render() {
+    const popover = {
+      submitReview: <Popover className="c-popover c-popover--bottom" id="popover-submitReview">Submit for broker review</Popover>,
+      collectSignatures: <Popover className="c-popover c-popover--bottom" id="popover-collectSignatures">Collect Signatures</Popover>
+    }
     const deal = this.deal
     const { submissions, envelopes, files, activeTab } = this.state
     const allReviewableDocs = this.getAllReviewableDocs(envelopes, files)
@@ -334,17 +341,21 @@ export default class DealDashboard extends React.Component {
             <ul className="menu">
               {
                 submissions &&
-                <li
-                  onClick={this.collectSignatures.bind(this)}
-                >
-                  <img src="/static/images/deals/pen.svg" />
-                </li>
+                <OverlayTrigger placement="bottom" overlay={popover.collectSignatures} delayShow={200} delayHide={0}>
+                  <li
+                    onClick={this.collectSignatures.bind(this)}
+                  >
+                    <img src="/static/images/deals/pen.svg" />
+                  </li>
+                </OverlayTrigger>
               }
-              <li
-                onClick={this.reviewRequestModalShowHandler}
-              >
-                <img src="/static/images/deals/glasses-round.svg" />
-              </li>
+              <OverlayTrigger placement="bottom" overlay={popover.submitReview} delayShow={200} delayHide={0}>
+                <li
+                  onClick={this.reviewRequestModalShowHandler}
+                >
+                  <img src="/static/images/deals/glasses-round.svg" />
+                </li>
+              </OverlayTrigger>
             </ul>
           </Col>
         </Row>
