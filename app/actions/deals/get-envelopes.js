@@ -13,9 +13,8 @@ export default async function (id, user) {
     const response = await Deals.getEnvelopes(params)
 
     if (response.status === 200)
-      AppStore.data.deals.list[id].envelopes = _.indexBy(response.body.data, 'id')
+      AppStore.data.deals.list[id].envelopes = response.body.data
 
     AppStore.emitChange()
-  }
-  catch(e) {}
+  } catch (e) {}
 }

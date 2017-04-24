@@ -104,7 +104,7 @@ export default class DealForm extends React.Component {
   renderPdf(file, isPreview = false) {
     return (
       <div>
-        <div style={{textAlign: 'right'}}>
+        <div style={{ textAlign: 'right' }}>
           {
             !isPreview &&
             <a
@@ -139,7 +139,7 @@ export default class DealForm extends React.Component {
     return (
       <div>
         <Dropzone
-          ref={node => { this.dropzone = node }}
+          ref={(node) => { this.dropzone = node }}
           onDrop={this.onDrop.bind(this)}
           onDragEnter={() => this.setState({ dropzoneActive: true })}
           onDragLeave={() => this.setState({ dropzoneActive: false })}
@@ -199,8 +199,21 @@ export default class DealForm extends React.Component {
                         </Col>
 
                         <Col xs={10}>
-                          <div><b>{ file.name }</b></div>
-                          <div>Uploaded { getTimeAgo(file.created_at) } ago</div>
+                          <p style={S('m-0')}><b>{ file.name }</b></p>
+                          {
+                            file.review
+                            && <p
+                              style={S('m-0')}
+                              className={
+                                `review-state--${
+                                    file.review.state.toLowerCase()
+                                }`
+                              }
+                            >
+                              {file.review.state.toUpperCase()}
+                            </p>
+                          }
+                          <p style={S('mb-0')}><small style={{ color: '#9b9b9b' }}>Uploaded { getTimeAgo(file.created_at) } ago</small></p>
                         </Col>
                       </Row>
                     </div>

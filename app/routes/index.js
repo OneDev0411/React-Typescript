@@ -34,6 +34,7 @@ import DealDashboard from '../components/Pages/Dashboard/Deals/Dashboard'
 import DealEditForm from '../components/Pages/Dashboard/Deals/Edit-Form'
 import CollectSignatures_Documents from '../components/Pages/Dashboard/Deals/CollectSignatures-Documents'
 import CollectSignatures_Recipients from '../components/Pages/Dashboard/Deals/CollectSignatures-Recipients'
+import SubmitReviewRequest from '../components/Pages/Dashboard/Deals/Dashboard/submit-review-modal'
 
 // Concierge
 import ConciergeLayout from '../components/Pages/Dashboard/Concierge'
@@ -89,7 +90,6 @@ export default (
         <Route path="/dashboard/deals/:id/edit-form/:form/:type" component={DealEditForm} />
         <Route path="/dashboard/deals/:id/collect-signatures/documents" component={CollectSignatures_Documents} />
         <Route path="/dashboard/deals/:id/collect-signatures/recipients" component={CollectSignatures_Recipients} />
-        <Route path="/dashboard/deals/:id/review" component={DealReview} />
       </Route>
 
       <Route path="/dashboard/concierge/deals" component={ConciergeLayout}>

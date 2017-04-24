@@ -28,7 +28,6 @@ const asyncRequest = async (request) => {
       return parsedResponse.data
     }
   } catch (error) {
-    console.log(`getBrandDeals: ${error}`)
     throw error
   }
 }
@@ -54,5 +53,11 @@ export const getSubmissions = async (params) => {
 export const setReview = async (params) => {
   const { id, token, body } = params
   const url = `${PROXY_HOST}/api/concierge/reviews/${id}/edit?access_token=${token}`
+  return asyncRequest(postRequest(url, body))
+}
+
+export const submitReviewRequest = async (params) => {
+  const { id, token, body } = params
+  const url = `${PROXY_HOST}/api/deals/${id}/reviews?access_token=${token}`
   return asyncRequest(postRequest(url, body))
 }

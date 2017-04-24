@@ -27,9 +27,9 @@ export default class DealESigns extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { envelopes } = nextProps
 
-    if (!this.state.envelope && envelopes && _.size(envelopes) > 0) {
+    if (!this.state.envelope && envelopes && envelopes.length > 0) {
       this.setState({
-        envelope: envelopes[Object.keys(envelopes)[0]]
+        envelope: envelopes[0]
       })
     }
   }
@@ -94,7 +94,7 @@ export default class DealESigns extends React.Component {
       )
     }
 
-    if (_.size(envelopes) === 0) {
+    if (envelopes.length === 0) {
       return (
         <div className="no-esign">
           You haven't sent any docs yet
@@ -109,7 +109,7 @@ export default class DealESigns extends React.Component {
       <Row>
         <Col xs={5} sm={5} style={S('p-0')}>
           {
-            envelopes && _.map(envelopes, evlp => {
+            envelopes && envelopes.map((evlp) => {
               const _signed_users = _.filter(evlp.recipients, recp => recp.signed_at !== null)
 
               return (
@@ -150,16 +150,41 @@ export default class DealESigns extends React.Component {
           {
             envelope.documents &&
             <div>
-              <div className="hr" />
+              <div
+                className="hr"
+                style={{ marginBottom: '10px' }}
+              />
               {
                 envelope.documents.map((doc, key) => (
-                  <div key={`env_doc_${doc.id}`} className="documents">
-                    <img src="/static/images/deals/file.png" style={S('w-16 mr-10')} />
-                    <a target="_blank" href={this.displayEnvelopeDocument(envelope.id, key)}>
+                  <div
+                    key={`env_doc_${doc.id}`}
+                    className="documents"
+                    style={{ marginBottom: '15px' }}
+                  >
+                    <img
+                      src="/static/images/deals/file.png"
+                      style={{
+                        width: '16px',
+                        marginRight: '10px',
+                        marginTop: doc.review ? '20px' : 0
+                      }}
+                    />
+                    <a
+                      target="_blank"
+                      href={this.displayEnvelopeDocument(envelope.id, key)}
+                    >
                       { doc.title }
                     </a>
+                    {
+                      doc.review
+                      && <p
+                        className={`review-state--submit-request review-state--${doc.review.state.toLowerCase()}`}
+                      >
+                        {doc.review.state.toUpperCase()}
+                      </p>
+                    }
                   </div>
-                  ))
+                ))
               }
 
               <div className="hr" />

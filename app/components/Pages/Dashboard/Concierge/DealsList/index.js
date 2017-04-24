@@ -61,31 +61,11 @@ export default class DealsList extends React.Component {
     }
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   const { deals, isUpdated } = nextProps.conciergeDeals
-
-  //   if (deals && deals.length !== this.state.deals.length) {
-  //     this.setState({
-  //       deals
-  //     })
-  //   }
-
-  //   if (deals && isUpdated) {
-  //     this.setState({
-  //       deals
-  //     })
-  //   }
-  // }
-
   shouldComponentUpdate(nextProps, nextState) {
     const { deals } = nextState
 
     if (deals && deals.length > this.state.deals.length)
       return true
-
-
-    // if (deals && isUpdated)
-    //   return true
 
     return false
   }
@@ -103,6 +83,11 @@ export default class DealsList extends React.Component {
 
     if (deal.listing)
       src = deal.listing.cover_image_url
+
+    // if (deal.context && deal.context.photo)
+    //   src = deal.context.photo
+    // else if (deal.proposed_values && deal.proposed_values.photo)
+    //   src = deal.proposed_values.photo
 
     return <img style={S('mr-10 w-20')} src={src} />
   }
