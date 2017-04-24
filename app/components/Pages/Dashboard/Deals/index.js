@@ -1,8 +1,14 @@
 import React from 'react'
 import S from 'shorti'
+import moment from 'moment'
 import DealDispatcher from '../../../../dispatcher/DealDispatcher'
 
 export default class Deals extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.reloadTimer = null
+  }
 
   componentDidMount() {
     const { data } = this.props
@@ -13,6 +19,13 @@ export default class Deals extends React.Component {
 
     // get forms
     this.getForms(user)
+
+    // create reload timer
+    this.reloadTimer = window.setInterval(this.reloadDeals.bind(this), 60 * 2 * 1000)
+  }
+
+  componentWillUnmount() {
+    window.clearInterval(this.reloadTimer)
   }
 
   getForms(user) {
@@ -29,30 +42,33 @@ export default class Deals extends React.Component {
     })
   }
 
+  reloadDeals() {
+    const { user, deals } = this.props.data
+
+    if (moment().isAfter(deals.expire_at))
+      this.getDeals(user)
+  }
+
   render() {
     const { data } = this.props
     const user = data.user
-
+    const deals = data.deals || {}
     const children = React.Children.map(this.props.children, child =>
-      React.cloneElement(child, {
-        user,
-        deals: data.deals,
-        forms: data.deals_forms
-      })
+      React.cloneElement(child, { user, deals })
     )
 
     return (
       <div className="crm">
         <div className="deals">
           {
-            !data.deals &&
+            !deals.list &&
             <div className="loading-list">
               <div><i className="fa fa-spinner fa-spin fa-2x fa-fw" /></div>
               <b>Loading deals ...</b>
             </div>
           }
 
-          { data.deals && children }
+          { deals.list && children }
         </div>
       </div>
     )

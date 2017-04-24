@@ -26,9 +26,10 @@ export default class EditForm extends React.Component {
 
   componentDidMount() {
     const { deals, params } = this.props
+    let initial = this.state.initial
 
     // get deal
-    const deal = _.find(deals, deal => deal.id === params.id)
+    const deal = deals.list[params.id]
 
     // get submission
     const submission = _.find(deal.submissions, subm => subm.form === params.form)
@@ -44,15 +45,7 @@ export default class EditForm extends React.Component {
     this.connect()
 
     // set states
-    this.setState({ deal, submission })
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const deal = _.find(nextProps.deals, deal => deal.id === nextProps.params.id)
-    const submission = _.find(deal.submissions, subm => subm.form === nextProps.params.form)
-
-    if (submission && submission.form_data && !this.state.initial)
-      this.setState({ initial: submission.form_data })
+    this.setState({ deal, submission, initial })
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -143,14 +136,18 @@ export default class EditForm extends React.Component {
     })
   }
 
-  getSubmissionForm(last_revision) {
+  async getSubmissionForm(last_revision) {
     const { user, params } = this.props
-    DealDispatcher.dispatch({
+
+    const form_data = await DealDispatcher.dispatchSync({
       action: 'get-submission-form',
       user: user,
       deal: params.id,
       last_revision
     })
+
+    if (form_data)
+      this.setState({ initial: form_data })
   }
 
   async saveForm(values) {
@@ -188,7 +185,7 @@ export default class EditForm extends React.Component {
     const { submission } = this.state
     let url = `/dashboard/deals/${this.props.params.id}`
 
-    if (submission.id)
+    if (submission)
       url += `?submission=${submission.id}`
 
     browserHistory.push(url)

@@ -137,7 +137,7 @@ Deal.saveSubmissionForm = async function(params) {
     const response = await agent
       .post(`${config.app.url}/api/deals/submission/form?access_token=${params.access_token}`)
       .send({
-        deal: params.deal,
+        deal: params.deal_id,
         state: params.state,
         values: params.values,
         form: params.form,

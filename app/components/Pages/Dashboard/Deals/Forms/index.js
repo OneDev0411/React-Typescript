@@ -12,7 +12,6 @@ import config from '../../../../../../config/public'
 export default class DealForm extends React.Component {
   constructor(props) {
     super(props)
-    this.mounted = true
     this.state = {
       submission: null,
       documentUrl: null,
@@ -21,25 +20,22 @@ export default class DealForm extends React.Component {
   }
 
   componentDidMount() {
-    this.mounted = true
   }
 
   componentWillReceiveProps(nextProps) {
     const { submissions } = nextProps
-    const { submission } = this.state
 
-    if (submissions && !submission) {
-      const querySubmission = this.getActiveSubmission()
-      let activeIndex = _.findIndex(submissions, subm => subm.id === querySubmission)
+    if (submissions && !this.state.submission) {
+      let active = this.getActiveSubmission()
 
-      if (activeIndex === -1)
-        activeIndex = submissions.length - 1
+      if (!active)
+        active = Object.keys(submissions)[_.size(submissions) - 1]
 
       this.setState({
-        submission: submissions[activeIndex]
+        submission: submissions[active]
       })
 
-      this.loadForm(submissions[activeIndex])
+      this.loadForm(submissions[active])
     }
   }
 
@@ -48,7 +44,6 @@ export default class DealForm extends React.Component {
   }
 
   componentWillUnmount() {
-    this.mounted = false
   }
 
   loadForm(submission) {
@@ -128,7 +123,7 @@ export default class DealForm extends React.Component {
             }
 
             {
-              submissions && submissions.length === 0 &&
+              submissions && _.size(submissions) === 0 &&
               <div className="no-form">
                 You currently have no forms added
               </div>
@@ -137,7 +132,7 @@ export default class DealForm extends React.Component {
 
           <Col xs={7}>
             {
-              submissions && submissions.length > 0 &&
+              submissions && _.size(submissions) > 0 &&
               <div style={{ textAlign: 'right' }}>
                 <a
                   target="_blank"

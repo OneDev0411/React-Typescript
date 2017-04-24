@@ -25,9 +25,10 @@ export default class CollectSignaturesRecipients extends React.Component {
   }
 
   componentDidMount() {
-    const { deals, forms } = this.props
-    const { documents } = AppStore.data.deals_signatures
-    const deal = _.find(deals, d => d.id === this.props.params.id)
+    const { deals, params } = this.props
+    const forms = deals.forms
+    const { documents } = AppStore.data.deals.signatures
+    const deal = deals.list[params.id]
 
     const roles = {}
 
@@ -161,6 +162,7 @@ export default class CollectSignaturesRecipients extends React.Component {
           <ControlLabel>Email Subject</ControlLabel>
           <FormControl
             type="text"
+            style={{ width: '60%' }}
             value={subject}
             onChange={e => this.setState({ subject: e.target.value })}
           />
@@ -224,7 +226,7 @@ export default class CollectSignaturesRecipients extends React.Component {
           <Button
             bsStyle="primary"
             onClick={this.onSubmit.bind(this)}
-            disabled={!subject || Object.keys(recipients).length === 0 || sending}
+            disabled={!subject || _.size(recipients) === 0 || sending}
           >
             Send
           </Button>

@@ -5,12 +5,8 @@ import {
   Tabs,
   Tab,
   Button,
-  Overlay,
-  Tooltip,
-  Popover
 } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
-import { Link } from 'react-router'
 import S from 'shorti'
 import _ from 'underscore'
 import Avatar from 'react-avatar'
@@ -26,8 +22,8 @@ export default class DealDashboard extends React.Component {
     super(props)
     this.state = {
       id: props.params.id,
-      deal: null,
       activeTab: props.params.tab || 'forms',
+      deal: null,
       submissions: null,
       envelopes: null,
       files: null
@@ -35,14 +31,12 @@ export default class DealDashboard extends React.Component {
   }
 
   componentDidMount() {
-    const { deals, params } = this.props
-    const { activeTab } = this.state
+    const { deals } = this.props
+    const { activeTab, id } = this.state
 
     // get deal
-    const deal = _.find(deals, deal => deal.id === params.id)
-
-    if (!deal)
-      return
+    const deal = deals.list[id]
+    if (!deal) return
 
     this.setState({ deal })
 
@@ -51,14 +45,12 @@ export default class DealDashboard extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { deals, params } = nextProps
-    const { submissions, envelopes, files } = this.state
+    const { deals } = nextProps
+    const { submissions, envelopes, files, id } = this.state
 
     // load deal
-    const deal = _.find(deals, d => d.id === params.id)
-
-    if (!deal)
-      return
+    const deal = deals.list[id]
+    if (!deal) return
 
     if (!this.state.deal)
       this.setState({ deal })
@@ -69,9 +61,8 @@ export default class DealDashboard extends React.Component {
     if (!envelopes)
       this.setState({ envelopes: deal.envelopes })
 
-    if (!files) {
+    if (!files)
       this.setState({ files: deal.files })
-    }
 
     if (deal.files && files && deal.files.length > files.length)
       this.setState({ files: deal.files })
@@ -95,9 +86,7 @@ export default class DealDashboard extends React.Component {
   }
 
   onTabChange(id) {
-    this.setState({
-      activeTab: id
-    })
+    this.setState({ activeTab: id })
 
     switch (id) {
       case 'forms':
@@ -114,6 +103,9 @@ export default class DealDashboard extends React.Component {
   }
 
   getSubmissions() {
+    if (this.state.submissions)
+      return
+
     DealDispatcher.dispatch({
       action: 'get-submissions',
       user: this.props.user,
@@ -122,6 +114,9 @@ export default class DealDashboard extends React.Component {
   }
 
   getEnvelopes() {
+    if (this.state.envelopes)
+      return
+
     DealDispatcher.dispatch({
       action: 'get-envelopes',
       user: this.props.user,
@@ -141,7 +136,7 @@ export default class DealDashboard extends React.Component {
     const city = this.getValue(deal, 'city')
     const state = this.getValue(deal, 'state')
     const postal_code = this.getValue(deal, 'postal_code')
-    return `${city}, ${state}, ${postal_code}`
+    return `${city}, ${state}, ${postal_code}`.replace(/-,/ig, '')
   }
 
   getPrice(deal) {
@@ -279,7 +274,7 @@ export default class DealDashboard extends React.Component {
                   <DealForms
                     submissions={submissions}
                     user={this.props.user}
-                    forms={this.props.forms}
+                    forms={this.props.deals.forms}
                     deal_id={this.props.params.id}
                     activeTab={activeTab}
                   />

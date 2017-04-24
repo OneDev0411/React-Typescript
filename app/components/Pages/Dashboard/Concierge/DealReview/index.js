@@ -165,6 +165,9 @@ export default class DealReview extends React.Component {
 
   mapReviewsToDocuments(envelopes) {
     return envelopes.map((envelope) => {
+      if (!envelope.documents)
+        return envelope
+
       const documents = envelope.documents.map((doc) => {
         const review = this.reviews[doc.id] || null
         return {

@@ -17,7 +17,8 @@ export default async function (data, user) {
   catch(e) { /* nothing */ }
 
   if (response.status === 200) {
-    AppStore.data.deals.push(response.body.data)
+    const deal = response.body.data
+    AppStore.data.deals.list[deal.id] = deal
     AppStore.emitChange()
 
     return response.body.data
