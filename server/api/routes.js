@@ -28,7 +28,8 @@ const routes = {
     [ 'envelope-document' ],
     [ 'envelope-sign' ],
     [ 'docusign-login' ],
-    [ 'save-submission-form' ]
+    [ 'save-submission-form' ],
+    [ 'submit-review-request' ]
   ],
   intercom: [
     [ 'signin' ],

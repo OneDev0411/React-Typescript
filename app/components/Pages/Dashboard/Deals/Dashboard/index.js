@@ -3,8 +3,7 @@ import {
   Row,
   Col,
   Tabs,
-  Tab,
-  Button,
+  Tab
 } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
 import S from 'shorti'
@@ -12,10 +11,56 @@ import _ from 'underscore'
 import Avatar from 'react-avatar'
 import AppStore from '../../../../../stores/AppStore'
 import DealDispatcher from '../../../../../dispatcher/DealDispatcher'
+import ConciergeDispatcher from '../../../../../dispatcher/ConciergeDispatcher'
 import DealForms from '../Forms'
 import DealESigns from '../ESigns'
 import Uploads from '../Uploads'
 import SubmitReviewModal from './submit-review-modal'
+import MessageModal from '../../../../Partials/MessageModal'
+
+
+
+const serializeFormToObject = (form) => {
+  let obj = {}
+  let checkedCheckboxs = []
+  const file = form.elements.file
+  const envelopes = form.elements.envelope_document
+
+  if (envelopes) {
+    if (!envelopes.length)
+      checkedCheckboxs.push(envelopes)
+
+    if (envelopes.length > 1) {
+      checkedCheckboxs = [
+        ...checkedCheckboxs,
+        ...form.elements.envelopes
+      ]
+    }
+  }
+
+  if (file) {
+    if (file.length === 1)
+      checkedCheckboxs.push(file)
+
+    if (file.length > 1) {
+      checkedCheckboxs = [
+        ...checkedCheckboxs,
+        ...form.elements.file
+      ]
+    }
+  }
+
+  checkedCheckboxs = checkedCheckboxs.filter(
+    element => element.type === 'checkbox' && element.checked
+  )
+
+  return checkedCheckboxs.map((checkbox) => {
+    let obj = {}
+    obj[checkbox.name] = checkbox.id
+    obj.state = 'Pending'
+    return obj
+  })
+}
 
 export default class DealDashboard extends React.Component {
 
@@ -33,9 +78,11 @@ export default class DealDashboard extends React.Component {
       activeTab: props.params.tab || 'forms',
       submissions: null,
       envelopes: null,
+      showSuccessModal: false,
+      allReviewableDocs: null,
       files: this.deal.files || null,
-      reviewRequestModalIsFreeze: false,
-      reviewRequestModalIsActive: false
+      reviewRequestModalIsActive: false,
+      reviewRequestModalIsFreezed: false
     }
 
     this.reviewRequestModalCloseHandler =
@@ -147,48 +194,88 @@ export default class DealDashboard extends React.Component {
     })
   }
 
+
+
+
   reviewRequestModalCloseHandler() {
-    this.setState({
-      reviewRequestModalIsActive: false
-    })
+    if (!this.state.reviewRequestModalIsFreezed) {
+      browserHistory.push(`/dashboard/deals/${this.props.params.id}`)
+      this.setState({
+        reviewRequestModalIsActive: false
+      })
+    }
   }
   reviewRequestModalShowHandler() {
+    // browserHistory.push(`/dashboard/deals/${this.props.params.id}/reviews`)
     this.setState({
       reviewRequestModalIsActive: true
     })
   }
 
-  async submitReview(review) {
-    const { user } = this.props
-    const { id, comment, state } = review
+  async reviewRequestSubmit(docs) {
+    const token = this.props.user.access_token
+    const { id } = this.props.params
     const body = {
-      state,
-      comment
+      reviews: docs
     }
     const action = {
       id,
       body,
-      user,
-      type: 'SET_REVIEW'
+      token,
+      type: 'SUBMIT_REVIEW_REQUEST'
     }
-    this.setState({
-      modalIsFreezed: true
+    const reviews = await ConciergeDispatcher.dispatchSync(action)
+    reviews.forEach((review) => {
+      const type = review.file ? 'FILE' : 'ENVELOPE'
+      switch (type) {
+        case 'FILE':
+          if (this.state.files) {
+            const files = this.state.files.map((file) => {
+              if (file.id !== review.file) return file
+
+              file.review = review
+              return file
+            })
+            this.setState({ files })
+          }
+          break
+        case 'ENVELOPE':
+          if (this.state.envelopes) {
+            const envelopes = this.state.envelopes.map((envelope) => {
+              if (!envelope.documents) return envelope
+
+              const documents = envelope.documents.map((document) => {
+                document.review = review
+                return document
+              })
+              return {
+                ...envelope,
+                documents
+              }
+            })
+            this.setState({ envelopes })
+          }
+          break
+      }
     })
-
-    await ConciergeDispatcher.dispatchSync(action)
-
     this.setState({
-      modalIsFreezed: false,
-      modalIsActive: false
+      showSuccessModal: true,
+      reviewRequestModalIsActive: false,
+      reviewRequestModalIsFreezed: false
     })
-  }
-  reviewRequestModalSubmitHandler() {
-    console.log('submit')
+    setTimeout(() => {
+      this.setState({
+        showSuccessModal: false
+      })
+    }, 1500)
   }
 
-  modalCloseHandler() {
-    if (!this.state.modalIsFreezed)
-      this.setState({ modalIsActive: false })
+  reviewRequestModalSubmitHandler(form) {
+    this.setState({
+      reviewRequestModalIsFreezed: true
+    })
+    const docs = serializeFormToObject(form)
+    this.reviewRequestSubmit(docs)
   }
 
   preparedEnvelopes(envelopes) {
@@ -208,21 +295,26 @@ export default class DealDashboard extends React.Component {
     return list
   }
 
-  render() {
-    const deal = this.deal
-    let reviewableDocs = []
-    const { submissions, envelopes, files, activeTab } = this.state
-    if (envelopes && envelopes.length > 0) {
-      reviewableDocs = [
+  getAllReviewableDocs(envelopes, files) {
+    let allReviewableDocs = []
+    if (envelopes) {
+      allReviewableDocs = [
         ...this.preparedEnvelopes(envelopes)
       ]
     }
-    if (files && files.length > 0) {
-      reviewableDocs = [
-        ...reviewableDocs,
+    if (files) {
+      allReviewableDocs = [
+        ...allReviewableDocs,
         ...files
       ]
     }
+    return allReviewableDocs
+  }
+
+  render() {
+    const deal = this.deal
+    const { submissions, envelopes, files, activeTab } = this.state
+    const allReviewableDocs = this.getAllReviewableDocs(envelopes, files)
 
     if (deal === null)
       return false
@@ -353,12 +445,17 @@ export default class DealDashboard extends React.Component {
         </Row>
 
         <SubmitReviewModal
-          documents={reviewableDocs}
+          documents={allReviewableDocs}
           token={this.props.user.access_token}
           isActive={this.state.reviewRequestModalIsActive}
-          isFreeze={this.state.reviewRequestModalIsFreeze}
+          isFreezed={this.state.reviewRequestModalIsFreezed}
           closeHandler={this.reviewRequestModalCloseHandler}
           submitHandler={this.reviewRequestModalSubmitHandler}
+        />
+
+        <MessageModal
+          show={this.state.showSuccessModal}
+          text="Documents submitted for review!"
         />
       </div>
     )

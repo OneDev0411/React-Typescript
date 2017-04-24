@@ -6,6 +6,7 @@ import getDeals from '../actions/concierge/get-deals'
 import setReview from '../actions/concierge/set-review'
 import getEnvelopes from '../actions/concierge/get-envelopes'
 import getSubmissions from '../actions/concierge/get-submissions'
+import submitReviewRequest from '../actions/deals/submit-review-request'
 
 const ConciergeDispatcher = new Dispatcher()
 
@@ -21,6 +22,8 @@ ConciergeDispatcher.register(async (payload) => {
       return await getSubmissions(payload.user, payload.dealId)
     case 'SET_REVIEW':
       return await setReview(payload.id, payload.body, payload.user)
+    case 'SUBMIT_REVIEW_REQUEST':
+      return await submitReviewRequest(payload.id, payload.body, payload.token)
     default:
       return true
   }

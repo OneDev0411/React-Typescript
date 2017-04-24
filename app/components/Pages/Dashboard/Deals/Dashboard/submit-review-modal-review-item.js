@@ -63,6 +63,7 @@ export default class Document extends React.Component {
   render() {
     const {
       id,
+      type,
       state,
       title,
       avatar,
@@ -77,6 +78,7 @@ export default class Document extends React.Component {
         {
           !isReviewed && <input
             type="checkbox" id={id}
+            name={type === 'file' ? 'file' : 'envelope_document'}
             className="c-request-review__item__checkbox"
           />
         }

@@ -39,12 +39,6 @@ export default class SubmitReviewModal extends React.Component {
     this.onHidden = this.onHidden.bind(this)
   }
 
-  componentWillMount() {
-    this.state = {
-      selectedDocuments: 0
-    }
-  }
-
   selectedHandler(isSelected) {
     this.setState({
       selectedDocuments: isSelected
@@ -60,8 +54,14 @@ export default class SubmitReviewModal extends React.Component {
     })
   }
 
+  onSubmit(e) {
+    e.preventDefault()
+    this.props.submitHandler(e.target)
+  }
+
   render() {
-    const isFreezed = false
+    const { isFreezed } = this.props
+    const { selectedDocuments } = this.state
     return (
       <Modal className="c-request-review-modal" show={this.props.isActive} onHide={this.onHidden}>
         <Modal.Header>
@@ -76,11 +76,15 @@ export default class SubmitReviewModal extends React.Component {
         <Modal.Body>
           <form
             name="concierge-review"
-            onSubmit={(e) => {
-              e.preventDefault()
-            }}
+            onSubmit={this.onSubmit.bind(this)}
           >
-            <div className="c-request-review-modal__list">
+            <div
+              className={
+                `c-request-review-modal__list ${
+                  isFreezed ? 'is-inactive' : ''
+                }`
+              }
+            >
               {
                 getSortedDocs(this.props.documents).map((doc) => {
                   let type = ''
@@ -103,6 +107,7 @@ export default class SubmitReviewModal extends React.Component {
                     <Document
                       key={`DOC_${doc.id}`}
                       id={doc.id}
+                      type={doc.type}
                       title={title}
                       state={state}
                       avatar={avatar}
@@ -115,16 +120,16 @@ export default class SubmitReviewModal extends React.Component {
             </div>
             <div className="c-request-review-modal__footer">
               <span className="c-request-review-modal__footer__caption">
-                <b>{this.state.selectedDocuments}</b>
+                <b>{selectedDocuments}</b>
                 <span> document selected</span>
               </span>
               <Button
                 tabIndex="0"
-                disabled={!this.state.selectedDocuments}
+                disabled={selectedDocuments === 0 || isFreezed}
                 type="submit"
                 bsStyle="primary"
                 className={
-                  `c-request-review-modal__submit-btn ${!this.state.selectedDocuments ? 'is-inactive' : ''}`
+                  `c-request-review-modal__submit-btn ${selectedDocuments === 0 || isFreezed ? 'is-inactive' : ''}`
                 }
               >
                 {isFreezed ? 'Sending...' : 'Submit for review'}
