@@ -16,6 +16,7 @@ export default class AlertViewer extends Component {
           {
             feed.map(feed_item => (
               <ListingCard
+                key={ feed_item.id }
                 listing={feed_item.listing}
                 last_update={feed_item.last_update}
               />

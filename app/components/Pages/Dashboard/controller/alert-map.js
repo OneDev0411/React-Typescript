@@ -138,6 +138,8 @@ const controller = {
     history.default.push(`/dashboard/mls/alerts/${alert.id}`)
     if (AppStore.data.show_alert_viewer)
       controller.markAsRead(alert.id, alert.room)
+    // Go to gallery view
+    controller.showAlertViewer()
   },
   makePolygonAlert(points) {
     const paths = points.map(path => ({
