@@ -668,14 +668,14 @@ export default class SideBar extends Component {
         </Nav>
         <div style={S('absolute b-10 l-15')}>
           <Nav className="sidebar__account">
-            <NavItem style={ S('t-0 l-10n') }>
-              <OverlayTrigger placement="right" overlay={popover.notifications} delayShow={200} delayHide={0}>
-                <Link to="/dashboard/notifications">
+            <OverlayTrigger placement="right" overlay={popover.notifications} delayShow={200} delayHide={0}>
+              <LinkContainer to="/dashboard/notifications">
+                <NavItem style={ S('t-0 l-10n') }>
                   {this.notificationIcon()}
                   <SvgNotifications color={active.notifications ? nav_active_color : '#4e5c6c'} />
-                </Link>
-              </OverlayTrigger>
-            </NavItem>
+                </NavItem>
+              </LinkContainer>
+            </OverlayTrigger>
             <NavItem style={ S('t-5n l-10n') }>
               <OverlayTrigger placement="right" overlay={popover.support} delayShow={200} delayHide={0}>
                 <div style={S('pointer relative')}>

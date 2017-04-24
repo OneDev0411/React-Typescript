@@ -109,6 +109,8 @@ export default class extends React.Component {
         )
       })
     }
+    if (data.notifications_retrieved)
+      return <div style={ S('text-center mt-40') }>No Notifications Yet</div>
     return <div style={ S('text-center mt-40') }>Loading...</div>
   }
   render() {
