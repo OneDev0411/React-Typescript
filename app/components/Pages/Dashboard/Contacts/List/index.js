@@ -1,15 +1,19 @@
 import React from 'react'
-import { Grid, Row, Col, Button } from 'react-bootstrap'
+import { Grid, Row, Col } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
 import Avatar from 'react-avatar'
 import _ from 'underscore'
+import MessageModal from '../../../../Partials/MessageModal'
 import Contact from '../../../../../models/Contact'
+import AddContact from '../Add-Contact'
+import Stage from '../components/Stage'
 
 export default class ContactsList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      contacts: {}
+      contacts: {},
+      showSavedModal: false
     }
   }
 
@@ -29,14 +33,20 @@ export default class ContactsList extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const { contacts } = nextProps
-    return contacts && _.size(contacts) > _.size(this.state.contacts)
+    return (contacts && _.size(contacts) > _.size(this.state.contacts)) ||
+      (this.state.showSavedModal !== nextState.showSavedModal)
   }
 
-  addContact() {
+  onNewContact() {
+    this.setState({ showSavedModal: true })
+    setTimeout(() => this.setState({ showSavedModal: false }), 3000)
   }
 
   render() {
-    const { contacts } = this.state
+    const {
+      contacts,
+      showSavedModal
+    } = this.state
 
     return (
       <div className="list">
@@ -52,13 +62,11 @@ export default class ContactsList extends React.Component {
 
           <Col lg={6} md={6} sm={6} className="vcenter right">
 
-            <Button
-              bsStyle="primary"
-              onClick={this.addContact.bind(this, 'offer')}
-              disabled={true}
-            >
-              Add Contact
-            </Button>
+            <AddContact
+              user={this.props.user}
+              onNewContact={() => this.onNewContact()}
+            />
+
           </Col>
         </Row>
 
@@ -99,7 +107,9 @@ export default class ContactsList extends React.Component {
                     { Contact.get.phone(contact) }
                   </Col>
                   <Col md={2} sm={2} xs={2} className="vcenter">
-                    { Contact.get.stage(contact) }
+                    <Stage
+                      default={Contact.get.stage(contact).name}
+                    />
                   </Col>
                   <Col md={2} sm={2} xs={2} className="vcenter">
                     { Contact.get.source(contact) }
@@ -110,6 +120,11 @@ export default class ContactsList extends React.Component {
             }
           </Grid>
         }
+
+        <MessageModal
+          show={showSavedModal}
+          text="New contact added!"
+        />
       </div>
     )
   }
