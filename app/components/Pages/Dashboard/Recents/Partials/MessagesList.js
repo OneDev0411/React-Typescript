@@ -125,7 +125,7 @@ export default class MessagesList extends Component {
     // this.getLockedHeadingDate()
     if (this.props.data.current_room.showing_all)
       return false
-    const messages_scroll_area = this.refs.messages_scroll_area
+    const messages_scroll_area = this.messages_scroll_area
     if (messages_scroll_area && messages_scroll_area.scrollTop < 10)
       this.props.getPreviousMessages(messages_scroll_area.scrollHeight)
   }
