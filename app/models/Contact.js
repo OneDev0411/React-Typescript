@@ -9,6 +9,25 @@ const Contact = {
 }
 // set api host
 const api_host = config.api_url
+const proxy_host = config.app.url
+
+/**
+* add new contact
+*/
+Contact.add = async function(params) {
+  const { contacts, access_token } = params
+
+  try {
+    const response = await agent
+      .post(`${api_host}/contacts`)
+      .set({ Authorization: `Bearer ${access_token}` })
+      .send({contacts})
+
+    return response
+  } catch (e) {
+    throw e
+  }
+}
 
 /**
 * returns contacts list
@@ -67,7 +86,7 @@ Contact.addNote = async function(params) {
 }
 
 /**
-*
+* add new item to user's timeline
 */
 Contact.updateUserTimeline = async function(params) {
   const { user_action, object_class, object, access_token } = params
@@ -88,12 +107,82 @@ Contact.updateUserTimeline = async function(params) {
 }
 
 /**
+* update stage
+*/
+Contact.updateStage = async function(params) {
+  const { id, stage, stage_id, access_token } = params
+  const attributes = [{
+    id: stage_id,
+    type: 'stage',
+    stage
+  }]
+
+  try {
+    const response = await agent
+      .post(`${proxy_host}/api/contacts/stage-update?access_token=${access_token}`)
+      .send({ contact_id: id })
+      .send({ attributes })
+
+    return response
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
+* add tag
+*/
+Contact.addTags = async function(params) {
+  const { id, tags, access_token } = params
+  const endpoint = `${api_host}/contacts/${id}/attributes`
+  const payload = Contact.helper.addAttributes('tag', tags)
+
+  try {
+    const response = await agent
+      .post(endpoint)
+      .set({ Authorization: `Bearer ${access_token}` })
+      .send(payload)
+
+    return response
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
+* get tags
+*/
+// Contact.getTags = async function(params) {
+//   const { id, access_token } = params
+
+//   try {
+//     const response = await agent
+//       .get(`${api_host}/contacts/tags`)
+//       .set({ Authorization: `Bearer ${access_token}` })
+
+//     return response
+//   } catch (e) {
+//     throw e
+//   }
+// }
+
+/**
 * helpers functions
 */
 Contact.helper = {
   addAttribute: (type, value) => {
     return {
       attributes: [{ type, [type]: value }]
+    }
+  },
+  addAttributes: (type, values) => {
+    return {
+      attributes: _.map(values, val => {
+        return {
+          type,
+          [type]: val
+        }
+      })
     }
   }
 }
@@ -166,8 +255,14 @@ Contact.get = {
     const stages = context.sub_contacts[0].attributes.stages
     const item = Contact.get._sort(stages)
 
-    if (item)
-      return item.stage
+    if (item) {
+      return {
+        id: item.id,
+        name: item.stage
+      }
+    }
+
+    return {}
   },
   address: context => {
     const addresses = context.sub_contacts[0].attributes.addresses
@@ -212,6 +307,16 @@ Contact.get = {
     })
 
     return _.sortBy(list, item => item.created_at * -1)
+  },
+  tags: context => {
+    let list = new Array()
+    _.each(context.sub_contacts, sub => {
+      const tags = sub.attributes.tags
+      if (tags && tags.length > 0)
+        list = list.concat(tags)
+    })
+
+    return _.sortBy(list, item => item.created_at * 1)
   }
 }
 
