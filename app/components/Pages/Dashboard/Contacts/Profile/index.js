@@ -9,6 +9,7 @@ import Contact from '../../../../../models/Contact'
 import AddNote from './Add-Note'
 import Timeline from './Timeline'
 import Tags from './Tags'
+import Editable from './Editable'
 
 export default class ContactProfile extends React.Component {
   constructor(props) {
@@ -99,6 +100,7 @@ export default class ContactProfile extends React.Component {
           <Col lg={11} md={11} sm={11}>
             <h4>
               <i className="fa fa-angle-left" onClick={() => this.goBack()} />
+              All Contacts
             </h4>
           </Col>
         </Row>
@@ -146,7 +148,13 @@ export default class ContactProfile extends React.Component {
                 {
                   Contact.get.emails(contact).map(item => (
                     <li key={`email_${item.id}`}>
-                      <span className="name">Email</span>{ item.email }
+                      <span className="name">Email</span>
+                      <Editable
+                        type="email"
+                        showEdit={true}
+                        showAdd={true}
+                        text={ item.email }
+                      />
                     </li>
                   ))
                 }

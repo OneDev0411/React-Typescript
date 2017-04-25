@@ -23,6 +23,45 @@
   }
 }
 
+%contact-editable {
+  div.contact-editable {
+    display: inline;
+    width: 100%;
+    padding: 4px;
+    transition: border 0.4s ease-in;
+    input {
+      border: none;
+      &:focus {
+        box-shadow: none;
+      }
+    }
+    .control {
+      display: none;
+      margin-left: 12%;
+      &.show {
+        display: inline;
+      }
+      i {
+        cursor: pointer;
+        margin-left: 8px;
+        &:hover {
+          color: green;
+        }
+      }
+    }
+
+    &:hover {
+      border: 1px dashed #eaeaea;
+      border-radius: 3px;
+      padding: 3px;
+    }
+
+    &:hover .control {
+      display: inline-block;
+    }
+  }
+}
+
 .crm {
   .contacts {
     min-height: 100vh;
@@ -33,6 +72,9 @@
     }
 
     .dashboard {
+
+      @extend %contact-editable;
+
       .header {
         padding: 1% 3.5%;
         background: #fff;
