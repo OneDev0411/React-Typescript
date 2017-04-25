@@ -39,6 +39,14 @@ export default class SubmitReviewModal extends React.Component {
     this.onHidden = this.onHidden.bind(this)
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.isActive) {
+      this.setState({
+        selectedDocuments: 0
+      })
+    }
+  }
+
   selectedHandler(isSelected) {
     this.setState({
       selectedDocuments: isSelected
