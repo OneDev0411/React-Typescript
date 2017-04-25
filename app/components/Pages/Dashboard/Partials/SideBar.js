@@ -647,13 +647,13 @@ export default class SideBar extends Component {
           }
 
           {
-            <OverlayTrigger placement="right" overlay={ popover.people } delayShow={200} delayHide={0}>
-              <LinkContainer className={active.contacts} to="/dashboard/contacts">
-                <NavItem style={S('w-85p')}>
-                  <SvgPeople color={active.contacts ? nav_active_color : '#4e5c6c'} />
-                </NavItem>
-              </LinkContainer>
-            </OverlayTrigger>
+            // <OverlayTrigger placement="right" overlay={ popover.people } delayShow={200} delayHide={0}>
+            //   <LinkContainer className={active.contacts} to="/dashboard/contacts">
+            //     <NavItem style={S('w-85p')}>
+            //       <SvgPeople color={active.contacts ? nav_active_color : '#4e5c6c'} />
+            //     </NavItem>
+            //   </LinkContainer>
+            // </OverlayTrigger>
           }
           { recommend }
           { agents }
