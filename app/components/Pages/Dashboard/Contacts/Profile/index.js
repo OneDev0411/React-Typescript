@@ -8,6 +8,7 @@ import Stepper from '../../../../Partials/Stepper'
 import Contact from '../../../../../models/Contact'
 import AddNote from './Add-Note'
 import Timeline from './Timeline'
+import Tags from './Tags'
 
 export default class ContactProfile extends React.Component {
   constructor(props) {
@@ -71,7 +72,18 @@ export default class ContactProfile extends React.Component {
   getStageIndex(contact) {
     const list = ['General', 'UnqualifiedLead', 'QualifiedLead', 'Active', 'PastClient']
     const stage = Contact.get.stage(contact)
-    return list.indexOf(stage)
+    return list.indexOf(stage.name)
+  }
+
+  changeStage(stage, contact) {
+    const { user, params } = this.props
+    Dispatcher.dispatch({
+      action: 'update-stage',
+      id: params.id,
+      stage_id: Contact.get.stage(contact).id,
+      user,
+      stage
+    })
   }
 
   render() {
@@ -116,13 +128,21 @@ export default class ContactProfile extends React.Component {
               <Stepper
                 steps={['General', 'Unqualified Lead', 'Qualified Lead', 'Active', 'Past Client']}
                 active={ this.getStageIndex(contact) }
-                onChange={ () => {}}
+                onChange={stage => this.changeStage(stage, contact)}
               />
             </div>
 
             <div className="card details">
               <div className="title">Details</div>
+
+              <Tags
+                contact_id={this.props.params.id}
+                user={this.props.user}
+                tags={Contact.get.tags(contact)}
+              />
+
               <ul className="table">
+
                 {
                   Contact.get.emails(contact).map(item => (
                     <li key={`email_${item.id}`}>
@@ -138,7 +158,7 @@ export default class ContactProfile extends React.Component {
                     </li>
                   ))
                 }
-                <li><span className="name">Original Source</span>{ Contact.get.source(contact) }</li>
+                <li><span className="name">Original Source</span>{ Contact.get.source(contact) || '-' }</li>
                 {
                   Contact.get.birthdays(contact).map((birthday, key) => (
                     <li key={`birthday_${key}`}>
