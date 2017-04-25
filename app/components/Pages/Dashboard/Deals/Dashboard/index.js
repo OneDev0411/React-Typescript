@@ -26,31 +26,25 @@ import MessageModal from '../../../../Partials/MessageModal'
 const serializeFormToObject = (form) => {
   let obj = {}
   let checkedCheckboxs = []
-  const file = form.elements.file
+  const files = form.elements.file
   const envelopes = form.elements.envelope_document
 
   if (envelopes) {
-    if (!envelopes.length)
-      checkedCheckboxs.push(envelopes)
-
-    if (envelopes.length > 1) {
+    if (Array.isArray(envelopes)) {
       checkedCheckboxs = [
         ...checkedCheckboxs,
         ...form.elements.envelopes
       ]
-    }
+    } else checkedCheckboxs.push(envelopes)
   }
 
-  if (file) {
-    if (file.length === 1)
-      checkedCheckboxs.push(file)
-
-    if (file.length > 1) {
+  if (files) {
+    if (Array.isArray(files)) {
       checkedCheckboxs = [
         ...checkedCheckboxs,
-        ...form.elements.file
+        ...form.elements.files
       ]
-    }
+    } else checkedCheckboxs.push(files)
   }
 
   checkedCheckboxs = checkedCheckboxs.filter(
