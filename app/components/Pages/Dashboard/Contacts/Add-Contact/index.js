@@ -130,7 +130,7 @@ export default class AddContact extends React.Component {
             <Phones
               list={phones}
               attribute="phone"
-              mask={['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+              mask={false}
               onAdd={this.addNewAttribute.bind(this)}
               onChange={this.onChangeAttribute.bind(this)}
               onRemove={this.onRemoveAttribute.bind(this)}

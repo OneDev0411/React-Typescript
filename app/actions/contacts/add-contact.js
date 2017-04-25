@@ -4,13 +4,13 @@ export default async function (user, emails, phone_numbers, first_name, last_nam
 
   const contact = {
     type: 'contact',
-    emails: emails.map(email => {
-      return { type: 'email', email}
-    }),
-    phone_numbers: phone_numbers.map(phone => {
-      return { type: 'phone_number', phone}
-    }),
     attributes: {
+      emails: emails.map(email => {
+        return { type: 'email', email}
+      }),
+      phone_numbers: phone_numbers.map(phone_number => {
+        return { type: 'phone_number', phone_number}
+      }),
       names: [{
         type: 'name',
         first_name: first_name,
@@ -32,7 +32,11 @@ export default async function (user, emails, phone_numbers, first_name, last_nam
     const response = await Contact.add(params)
     const newContact = response.body.data[0]
     if (response.status === 200) {
-      AppStore.data.contacts[newContact.id] = newContact
+      AppStore.data.contacts = {
+        ...{[newContact.id]: newContact},
+        ...AppStore.data.contacts
+      }
+
       AppStore.emitChange()
     }
   }
