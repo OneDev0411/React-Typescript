@@ -148,3 +148,22 @@
   margin-bottom: 0;
 } // .review-state--submit-request
 
+
+
+.c-popover {
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.4px;
+  text-align: center;
+  color: #8696a4;
+  line-height: 1;
+  border-radius: 4px;
+  background-color: #263445;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.18);
+}
+
+.c-popover--bottom {
+  .arrow:after{
+    border-bottom-color: #263445 !important;
+  }
+}

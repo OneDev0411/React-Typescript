@@ -3,7 +3,10 @@ import {
   Row,
   Col,
   Tabs,
-  Tab
+  Tab,
+  Popover,
+  Tooltip,
+  OverlayTrigger
 } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
 import S from 'shorti'
@@ -23,31 +26,25 @@ import MessageModal from '../../../../Partials/MessageModal'
 const serializeFormToObject = (form) => {
   let obj = {}
   let checkedCheckboxs = []
-  const file = form.elements.file
+  const files = form.elements.file
   const envelopes = form.elements.envelope_document
 
   if (envelopes) {
-    if (!envelopes.length)
-      checkedCheckboxs.push(envelopes)
-
-    if (envelopes.length > 1) {
+    if (Array.isArray(envelopes)) {
       checkedCheckboxs = [
         ...checkedCheckboxs,
         ...form.elements.envelopes
       ]
-    }
+    } else checkedCheckboxs.push(envelopes)
   }
 
-  if (file) {
-    if (file.length === 1)
-      checkedCheckboxs.push(file)
-
-    if (file.length > 1) {
+  if (files) {
+    if (Array.isArray(files)) {
       checkedCheckboxs = [
         ...checkedCheckboxs,
-        ...form.elements.file
+        ...form.elements.files
       ]
-    }
+    } else checkedCheckboxs.push(files)
   }
 
   checkedCheckboxs = checkedCheckboxs.filter(
@@ -312,6 +309,10 @@ export default class DealDashboard extends React.Component {
   }
 
   render() {
+    const popover = {
+      submitReview: <Popover className="c-popover c-popover--bottom" id="popover-submitReview">Submit for broker review</Popover>,
+      collectSignatures: <Popover className="c-popover c-popover--bottom" id="popover-collectSignatures">Collect Signatures</Popover>
+    }
     const deal = this.deal
     const { submissions, envelopes, files, activeTab } = this.state
     const allReviewableDocs = this.getAllReviewableDocs(envelopes, files)
@@ -334,17 +335,21 @@ export default class DealDashboard extends React.Component {
             <ul className="menu">
               {
                 submissions &&
-                <li
-                  onClick={this.collectSignatures.bind(this)}
-                >
-                  <img src="/static/images/deals/pen.svg" />
-                </li>
+                <OverlayTrigger placement="bottom" overlay={popover.collectSignatures} delayShow={200} delayHide={0}>
+                  <li
+                    onClick={this.collectSignatures.bind(this)}
+                  >
+                    <img src="/static/images/deals/pen.svg" />
+                  </li>
+                </OverlayTrigger>
               }
-              <li
-                onClick={this.reviewRequestModalShowHandler}
-              >
-                <img src="/static/images/deals/glasses-round.svg" />
-              </li>
+              <OverlayTrigger placement="bottom" overlay={popover.submitReview} delayShow={200} delayHide={0}>
+                <li
+                  onClick={this.reviewRequestModalShowHandler}
+                >
+                  <img src="/static/images/deals/glasses-round.svg" />
+                </li>
+              </OverlayTrigger>
             </ul>
           </Col>
         </Row>

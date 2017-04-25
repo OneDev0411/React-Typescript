@@ -46,7 +46,7 @@ export default class Document extends React.Component {
     super(props)
     this.state = {
       isSelected: false,
-      isReviewed: this.props.state !== 'unclear'
+      isReviewed: props.state !== 'unclear'
     }
 
     this.onClickHandler = this.onClickHandler.bind(this)
