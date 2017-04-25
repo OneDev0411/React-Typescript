@@ -18,6 +18,11 @@ import ProfileImage from './ProfileImage'
 import SvgChat from './Svgs/Chat'
 import SvgMap from './Svgs/Map'
 import SvgStore from './Svgs/Store'
+import SvgPeople from './Svgs/People'
+import SvgDeals from './Svgs/Deals'
+import SvgBriefCase from './Svgs/BriefCase'
+import SvgSupport from './Svgs/Support'
+import SvgNotifications from './Svgs/Notifications'
 import Brand from '../../../../controllers/Brand'
 
 export default class SideBar extends Component {
@@ -130,9 +135,9 @@ export default class SideBar extends Component {
     const user = data.user
     let old_password
     let new_password
-    if (this.refs.old_password)
+    if (this.old_passwordInput.value)
       old_password = this.old_passwordInput.value.trim()
-    if (this.refs.new_password)
+    if (this.new_passwordInput.value)
       new_password = this.new_passwordInput.value.trim()
     AppStore.data.saving_account_settings = true
     delete AppStore.data.error
@@ -191,19 +196,45 @@ export default class SideBar extends Component {
     }, 500)
   }
 
-  notificationIcon(name) {
+  notificationIcon() {
     const data = this.props.data
     let icon
-    if (data.notifications && data.notifications.summary && data.notifications.summary[name] > 0) {
+    if (data.new_notifications_count && data.new_notifications_count > 0) {
       icon = (
         <div style={S('pl-10 absolute t-0 r-0')}>
           <div style={S('font-15 bg-db3821 br-100 p-6 h-17 text-center')}>
             <span style={S('color-fff font-10 relative t-9n')}>
-              { data.notifications.summary.room_notification_count }
+              { data.new_notifications_count }
             </span>
           </div>
         </div>
       )
+    }
+    return icon
+  }
+
+  roomNotificationIcon() {
+    const data = this.props.data
+    const rooms = data.rooms
+    let room_notifications_sum = 0
+    let icon
+    if (rooms) {
+      let count = 0
+      room_notifications_sum = rooms.forEach(room => {
+        if (room.new_notifications)
+          count++
+      })
+      if (rooms && count > 0) {
+        icon = (
+          <div style={S('pl-10 absolute t-1 r-0')}>
+            <div style={S('font-15 bg-db3821 br-100 p-6 h-17 text-center')}>
+              <span style={S('color-fff font-10 relative t-9n')}>
+                { count }
+              </span>
+            </div>
+          </div>
+        )
+      }
     }
     return icon
   }
@@ -283,33 +314,34 @@ export default class SideBar extends Component {
       sidebar_height = window.innerHeight
     const sidebar_style = S(`w-70 fixed pl-8 t-0 z-100 bg-202A33 h-${sidebar_height}`)
     const path = data.path
-
     const active = {}
+
+    // if (path.indexOf('/dashboard/mls/listings/recommend') !== -1)
+    //   active.recommend = 'active'
+
+    // if (path.indexOf('/dashboard/mls/agents') !== -1)
+    //   active.agents = 'active'
+
+    // if (path.indexOf('/dashboard/website') !== -1)
+    //   active.store = 'active'
+
     if (path.indexOf('/dashboard/recents') !== -1)
       active.recents = 'active'
+
     if (path.indexOf('/dashboard/mls') !== -1)
       active.mls = 'active'
+
+    if (path.indexOf('/dashboard/concierge/deals') !== -1)
+      active.concierge = 'active'
+
+    if (path.indexOf('/dashboard/deals') !== -1)
+      active.deals = 'active'
 
     if (path.indexOf('/dashboard/contacts') !== -1)
       active.contacts = 'active'
 
-    if (path === '/dashboard/tasks')
-      active.tasks = 'active'
-
-    if (path.indexOf('/dashboard/transactions') !== -1)
-      active.transactions = 'active'
-
-    if (path.indexOf('/dashboard/mls/listings/recommend') !== -1)
-      active.recommend = 'active'
-
-    if (path.indexOf('/dashboard/mls/agents') !== -1)
-      active.agents = 'active'
-
-    if (path.indexOf('/dashboard/website') !== -1)
-      active.store = 'active'
-
-    if (path.indexOf('/dashboard/deals') !== -1)
-      active.deals = 'active'
+    if (path.indexOf('/dashboard/notifications') !== -1)
+      active.notifications = 'active'
 
     // User info
     const user = data.user
@@ -430,12 +462,12 @@ export default class SideBar extends Component {
         <Col xs={9} style={S('p-0')}>
           <Col xs={12} style={S('pr-0')}>
             <label>Current password</label>
-            <FormControl key="old_password" bsSize="large" style={S('font-15')} inputRef={ref => this.old_passwordInput = ref} type="password" placeholder="Current password" />
+            <FormControl key="old_password" bsSize="large" style={S('font-15 mb-10')} inputRef={ref => this.old_passwordInput = ref} type="password" placeholder="Current password" />
           </Col>
           <Col xs={12} style={S('pr-0')}>
             <label>New password</label>
             <div style={S('relative')}>
-              <FormControl key="new_password" inputRef={ref => this.new_passwordInput = ref} autoComplete={false} style={S('font-15')} bsSize="large" placeholder="New Password" type={data.settings && data.settings.show_password ? 'text' : 'password'} />
+              <FormControl key="new_password" inputRef={ref => this.new_passwordInput = ref} autoComplete={false} style={S('font-15 mb-10')} bsSize="large" placeholder="New Password" type={data.settings && data.settings.show_password ? 'text' : 'password'} />
               <i onClick={this.toggleShowPassword} style={S('absolute t-15 r-15 z-100 pointer color-666')} className={`fa fa-eye${data.settings && data.settings.show_password ? '-slash' : ''}`} />
             </div>
           </Col>
@@ -451,12 +483,11 @@ export default class SideBar extends Component {
       conversation: <Popover className="sidenav__popover" id="popover-conversations">Conversations</Popover>,
       map: <Popover className="sidenav__popover" id="popover-listing">Listings</Popover>,
       people: <Popover className="sidenav__popover" id="popover-people">People</Popover>,
-      tasks: <Popover className="sidenav__popover" id="popover-tasks">Tasks</Popover>,
       concierge: <Popover className="sidenav__popover" id="popover-tasks">Concierge</Popover>,
       deals: <Popover className="sidenav__popover" id="popover-tasks">Deals</Popover>,
-      transactions: <Popover className="sidenav__popover" id="popover-transactions">Transactions</Popover>,
-      support: <Popover className="sidenav__popover" id="popover-transactions">Need Help?</Popover>,
-      store: <Popover className="sidenav__popover" id="popover-transactions">Store</Popover>
+      support: <Popover className="sidenav__popover" id="popover-support">Need Help?</Popover>,
+      store: <Popover className="sidenav__popover" id="popover-store">Store</Popover>,
+      notifications: <Popover className="sidenav__popover" id="popover-notifications">Notifications</Popover>
     }
     if (data.errors && data.errors.type && data.errors.type === 'agent-not-found') {
       message = (
@@ -580,8 +611,8 @@ export default class SideBar extends Component {
           <OverlayTrigger placement="right" overlay={popover.conversation} delayShow={200} delayHide={0}>
             <LinkContainer onClick={this.handleChatNavClick.bind(this)} className={active.recents} to="/dashboard/recents">
               <NavItem style={S('w-85p')}>
+                {this.roomNotificationIcon()}
                 <SvgChat color={active.recents ? nav_active_color : '#4e5c6c'} />
-                {this.notificationIcon('room_notification_count')}
               </NavItem>
             </LinkContainer>
           </OverlayTrigger>
@@ -598,7 +629,7 @@ export default class SideBar extends Component {
             <OverlayTrigger placement="right" overlay={popover.concierge} delayShow={200} delayHide={0}>
               <LinkContainer onClick={this.hideListingViewer.bind(this)} className={active.concierge} to="/dashboard/concierge/deals">
                 <NavItem style={S('w-85p')}>
-                  <img src={active.concierge ? '/static/images/dashboard/sidenav/deals-active.svg' : '/static/images/dashboard/sidenav/deals.svg'} style={S('w-19 h-19')} />
+                  <SvgBriefCase color={active.concierge ? nav_active_color : '#4e5c6c'} />
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
@@ -609,40 +640,20 @@ export default class SideBar extends Component {
             <OverlayTrigger placement="right" overlay={popover.deals} delayShow={200} delayHide={0}>
               <LinkContainer onClick={this.hideListingViewer.bind(this)} className={active.deals} to="/dashboard/deals">
                 <NavItem style={S('w-85p')}>
-                  <img src={active.deals ? '/static/images/dashboard/sidenav/deals-active.svg' : '/static/images/dashboard/sidenav/deals.svg'} style={S('w-19 h-19')} />
+                  <SvgDeals color={active.deals ? nav_active_color : '#4e5c6c'} />
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
           }
 
-          { /*
-            <OverlayTrigger placement="right" overlay={ popover.people } delayShow={ 200 } delayHide={ 0 }>
-              <LinkContainer className={ active.contacts } to="/dashboard/contacts">
-                <NavItem style={ S('w-85p') }>
-                  <img src={ active.contacts ? '/static/images/dashboard/sidenav/people-active.svg' : '/static/images/dashboard/sidenav/people.svg' } style={ S('w-19 h-19') }/>
-                </NavItem>
-              </LinkContainer>
-            </OverlayTrigger>
-            */
-          }
-          { /*
-            <OverlayTrigger placement="right" overlay={ popover.tasks } delayShow={ 200 } delayHide={ 0 }>
-              <LinkContainer className={ active.tasks } to="/dashboard/tasks">
-                <NavItem style={ S('w-85p') }>
-                  <img src={ active.tasks ? '/static/images/dashboard/sidenav/task-active.svg' : '/static/images/dashboard/sidenav/task.svg' } style={ S('w-19 h-19') }/>
-                  {this.notificationIcon('task_notification_count')}
-                </NavItem>
-              </LinkContainer>
-            </OverlayTrigger>
-            <OverlayTrigger placement="right" overlay={ popover.transactions } delayShow={ 200 } delayHide={ 0 }>
-              <LinkContainer className={ active.transactions } to="/dashboard/transactions" onClick={ this.props.viewAllTransactions }>
-                <NavItem style={ S('w-85p') }>
-                  <img src={ active.transactions ? '/static/images/dashboard/sidenav/transactions-active.svg' : '/static/images/dashboard/sidenav/transactions.svg' } style={ S('w-19 h-19') }/>
-                  {this.notificationIcon('transaction_notification_count')}
-                </NavItem>
-              </LinkContainer>
-            </OverlayTrigger>
-            */
+          {
+            // <OverlayTrigger placement="right" overlay={ popover.people } delayShow={200} delayHide={0}>
+            //   <LinkContainer className={active.contacts} to="/dashboard/contacts">
+            //     <NavItem style={S('w-85p')}>
+            //       <SvgPeople color={active.contacts ? nav_active_color : '#4e5c6c'} />
+            //     </NavItem>
+            //   </LinkContainer>
+            // </OverlayTrigger>
           }
           { recommend }
           { agents }
@@ -657,12 +668,21 @@ export default class SideBar extends Component {
         </Nav>
         <div style={S('absolute b-10 l-15')}>
           <Nav className="sidebar__account">
-            <OverlayTrigger placement="right" overlay={popover.support} delayShow={200} delayHide={0}>
-              <div style={S('pointer relative t-15n')} onClick={this.showIntercom}>
-                <i className="fa fa-question" style={S('font-20 color-202A33 relative t-5n l-13 z-100')} />
-                <i className="fa fa-comment" style={S('font-35 relative l-10n color-4D5C6C')} />
-              </div>
+            <OverlayTrigger placement="right" overlay={popover.notifications} delayShow={200} delayHide={0}>
+              <LinkContainer to="/dashboard/notifications">
+                <NavItem style={ S('t-0 l-10n') }>
+                  {this.notificationIcon()}
+                  <SvgNotifications color={active.notifications ? nav_active_color : '#4e5c6c'} />
+                </NavItem>
+              </LinkContainer>
             </OverlayTrigger>
+            <NavItem style={ S('t-5n l-10n') }>
+              <OverlayTrigger placement="right" overlay={popover.support} delayShow={200} delayHide={0}>
+                <div style={S('pointer relative')}>
+                  <SvgSupport color={'#4e5c6c'} />
+                </div>
+              </OverlayTrigger>
+            </NavItem>
             <div style={S('absolute z-0 l-3n')}>
               <ProfileImage data={data} user={user} />
             </div>
@@ -713,7 +733,6 @@ export default class SideBar extends Component {
 }
 SideBar.propTypes = {
   data: React.PropTypes.object,
-  viewAllTransactions: React.PropTypes.func,
   location: React.PropTypes.object,
   history: React.PropTypes.object
 }

@@ -4,7 +4,7 @@ import { browserHistory } from 'react-router'
 import S from 'shorti'
 import _ from 'underscore'
 import AppStore from '../../../../../stores/AppStore'
-import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
+import DealDispatcher from '../../../../../dispatcher/DealDispatcher'
 
 export default class CollectSignatures extends React.Component {
 
@@ -17,13 +17,12 @@ export default class CollectSignatures extends React.Component {
   }
 
   componentDidMount() {
-    const deals = this.props.deals
-    const deal_id = this.props.params.id
-    const deal = _.find(deals, d => d.id === deal_id)
+    const { deals, params } = this.props
+    const deal = deals.list[params.id]
 
-    if (AppStore.data.deals_signatures && AppStore.data.deals_signatures.documents) {
+    if (AppStore.data.deals.signatures && AppStore.data.deals.signatures.documents) {
       this.setState({
-        selectedDocuments: AppStore.data.deals_signatures.documents || {}
+        selectedDocuments: AppStore.data.deals.signatures.documents || {}
       })
     }
 
@@ -39,15 +38,14 @@ export default class CollectSignatures extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { submissions } = this.state
     const { deals } = nextProps
-    const deal_id = this.props.params.id
-    const deal = _.find(deals, d => d.id === deal_id)
+    const deal = deals.list[this.props.params.id]
 
     if (!submissions && deals.submissions)
       this.setState({ submissions: deal.submissions })
   }
 
   getSubmissions() {
-    AppDispatcher.dispatch({
+    DealDispatcher.dispatch({
       action: 'get-submissions',
       user: this.props.user,
       id: this.props.params.id
@@ -67,7 +65,7 @@ export default class CollectSignatures extends React.Component {
 
   onSubmit() {
     const { selectedDocuments } = this.state
-    AppStore.data.deals_signatures = {
+    AppStore.data.deals.signatures = {
       documents: selectedDocuments
     }
 
@@ -127,19 +125,19 @@ export default class CollectSignatures extends React.Component {
           }
         </div>
 
-        <div className="right">
+        <div className="right" style={{ marginTop: '10px' }}>
 
           {
-            Object.keys(selectedDocuments).length > 0 &&
+            _.size(selectedDocuments) > 0 &&
             <span style={{ marginRight: '15px', color: 'gray' }}>
-              { Object.keys(selectedDocuments).length } documents selected
+              { _.size(selectedDocuments) } documents selected
             </span>
           }
 
           <Button
             bsStyle="primary"
             onClick={this.onSubmit.bind(this)}
-            disabled={Object.keys(selectedDocuments).length === 0}
+            disabled={_.size(selectedDocuments) === 0}
           >
             Next
           </Button>

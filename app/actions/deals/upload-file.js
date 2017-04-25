@@ -3,17 +3,17 @@ import _ from 'underscore'
 import Deals from '../../models/Deal'
 import AppStore from '../../stores/AppStore'
 
-export default (id, user, file) => {
-  const params = { id, user, file }
+export default async function (id, user, file) {
+  const params = {
+    id,
+    file,
+    access_token: user.access_token
+  }
 
-  // find deal index
-  const index = _.findIndex(AppStore.data.deals, deal => deal.id === id)
+  try {
+    const response = await Deals.uploadFile(params)
 
-  AppStore.data.deals[index].uploading = true
-  AppStore.emitChange()
-
-  Deals.uploadFile(params, (err, response) => {
-    let files = AppStore.data.deals[index].files
+    let files = AppStore.data.deals.list[id].files
 
     if (!files)
       files = []
@@ -21,12 +21,10 @@ export default (id, user, file) => {
     // Success
     if (response.status === 200) {
       files.push(response.body.data)
-      AppStore.data.deals[index].files = files
+      AppStore.data.deals.list[id].files = files
     }
 
-    // set uploading to false
-    AppStore.data.deals[index].uploading = false
-
     AppStore.emitChange()
-  })
+  }
+  catch(e) {}
 }

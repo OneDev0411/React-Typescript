@@ -11,20 +11,6 @@ export default class RoomsList extends Component {
     const current_room = _.find(rooms, { id })
     this.props.setCurrentRoom(current_room)
   }
-  roomHasNotifications(room_id) {
-    let result = false
-    const data = this.props.data
-    if (!data.notifications)
-      return false
-    const summaries = data.notifications.summary.room_notification_summaries
-    if (!summaries)
-      return false
-    summaries.forEach((summary) => {
-      if (summary.room_id === room_id)
-        result = true
-    })
-    return result
-  }
   render() {
     const data = this.props.data
     let rooms = data.rooms
@@ -118,15 +104,12 @@ export default class RoomsList extends Component {
         const latest_created = room.latest_message.created_at.toString().split('.')
         // Notifications
         let notification
-        if (data.notifications) {
-          const hasNotification = this.roomHasNotifications(room.id)
-          if (hasNotification) {
-            notification = (
-              <div style={S('absolute t-17n r-15 w-0 h-0')}>
-                <i className="fa fa-circle" style={S('font-8 color-3388FF z-10')} />
-              </div>
-            )
-          }
+        if (room.new_notifications) {
+          notification = (
+            <div style={S('absolute t-17n r-15 w-0 h-0')}>
+              <i className="fa fa-circle" style={S('font-8 color-3388FF z-10')} />
+            </div>
+          )
         }
         // Personal room
         if (room.users.length === 1)

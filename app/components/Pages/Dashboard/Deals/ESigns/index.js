@@ -25,12 +25,11 @@ export default class DealESigns extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { envelope } = this.state
     const { envelopes } = nextProps
 
-    if (!envelope && envelopes && envelopes.length > 0) {
+    if (!this.state.envelope && envelopes && envelopes.length > 0) {
       this.setState({
-        envelope: nextProps.envelopes[0]
+        envelope: envelopes[0]
       })
     }
   }
@@ -143,7 +142,7 @@ export default class DealESigns extends React.Component {
           sm={7}
           className="detail"
           style={{
-            minHeight: `${envelopes.length * 14}vh`
+            minHeight: `${_.size(envelopes) * 14}vh`
           }}
         >
           <h3>{ envelope.title }</h3>
@@ -151,16 +150,41 @@ export default class DealESigns extends React.Component {
           {
             envelope.documents &&
             <div>
-              <div className="hr" />
+              <div
+                className="hr"
+                style={{ marginBottom: '10px' }}
+              />
               {
                 envelope.documents.map((doc, key) => (
-                  <div key={`env_doc_${doc.id}`} className="documents">
-                    <img src="/static/images/deals/file.png" style={S('w-16 mr-10')} />
-                    <a target="_blank" href={this.displayEnvelopeDocument(envelope.id, key)}>
+                  <div
+                    key={`env_doc_${doc.id}`}
+                    className="documents"
+                    style={{ marginBottom: '15px' }}
+                  >
+                    <img
+                      src="/static/images/deals/file.png"
+                      style={{
+                        width: '16px',
+                        marginRight: '10px',
+                        marginTop: doc.review ? '20px' : 0
+                      }}
+                    />
+                    <a
+                      target="_blank"
+                      href={this.displayEnvelopeDocument(envelope.id, key)}
+                    >
                       { doc.title }
                     </a>
+                    {
+                      doc.review
+                      && <p
+                        className={`review-state--submit-request review-state--${doc.review.state.toLowerCase()}`}
+                      >
+                        {doc.review.state.toUpperCase()}
+                      </p>
+                    }
                   </div>
-                  ))
+                ))
               }
 
               <div className="hr" />

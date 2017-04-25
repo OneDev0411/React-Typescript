@@ -1,20 +1,16 @@
-// actions/concierge/get-deals.js
-import Concierge from '../../models/Concierge'
+
+import { getDeals } from '../../models/Concierge'
 import AppStore from '../../stores/AppStore'
 
-export default (user) => {
-  const params = {}
-
-  if (user) {
-    params.user = user.access_token
-    params.brand_id = user.brand
+export default async function (user) {
+  const params = {
+    brand: user.brand,
+    token: user.access_token
   }
-
-  Concierge.getDeals(params, (err, response) => {
-    // Success
-    if (response.status === 'success')
-      AppStore.data.concierge_deals = response.data
-
+  try {
+    AppStore.data.conciergeDeals = await getDeals(params)
     AppStore.emitChange()
-  })
+  } catch (error) {
+    throw error
+  }
 }

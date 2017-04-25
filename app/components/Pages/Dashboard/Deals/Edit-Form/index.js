@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { browserHistory } from 'react-router'
 import { Row, Col, Button } from 'react-bootstrap'
 import MessageModal from '../../../../Partials/MessageModal'
-import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
+import DealDispatcher from '../../../../../dispatcher/DealDispatcher'
 import config from '../../../../../../config/public'
 
 export default class EditForm extends React.Component {
@@ -26,9 +26,10 @@ export default class EditForm extends React.Component {
 
   componentDidMount() {
     const { deals, params } = this.props
+    let initial = this.state.initial
 
     // get deal
-    const deal = _.find(deals, deal => deal.id === params.id)
+    const deal = deals.list[params.id]
 
     // get submission
     const submission = _.find(deal.submissions, subm => subm.form === params.form)
@@ -44,30 +45,7 @@ export default class EditForm extends React.Component {
     this.connect()
 
     // set states
-    this.setState({ deal, submission })
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const deal = _.find(nextProps.deals, deal => deal.id === nextProps.params.id)
-    const submission = _.find(deal.submissions, subm => subm.form === nextProps.params.form)
-
-    if (deal.saving_form !== this.state.saving && deal.saving_form === false) {
-      this.setState({
-        saving: deal.saving_form,
-        showSuccessModal: true
-      })
-
-      setTimeout(() => {
-        this.setState({ showSuccessModal: false})
-
-        if (nextProps.params.type === 'create')
-          this.goback()
-
-      }, 2000)
-    }
-
-    if (submission && submission.form_data && !this.state.initial)
-      this.setState({ initial: submission.form_data })
+    this.setState({ deal, submission, initial })
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -88,8 +66,9 @@ export default class EditForm extends React.Component {
 
   onSetDeal() {
     const { initial } = this.state
+    const { params } = this.props
 
-    if (initial !== null)
+    if (initial !== null && params.type === 'update')
       this.sendMessage('setValues', [initial.values])
   }
 
@@ -157,14 +136,18 @@ export default class EditForm extends React.Component {
     })
   }
 
-  getSubmissionForm(last_revision) {
+  async getSubmissionForm(last_revision) {
     const { user, params } = this.props
-    AppDispatcher.dispatch({
+
+    const form_data = await DealDispatcher.dispatchSync({
       action: 'get-submission-form',
       user: user,
       deal: params.id,
       last_revision
     })
+
+    if (form_data)
+      this.setState({ initial: form_data })
   }
 
   async saveForm(values) {
@@ -176,7 +159,7 @@ export default class EditForm extends React.Component {
 
     await this.changeState({ saving: true }, true)
 
-    AppDispatcher.dispatch({
+    await DealDispatcher.dispatchSync({
       action: 'save-submission-form',
       user: user,
       type: params.type,
@@ -186,10 +169,26 @@ export default class EditForm extends React.Component {
       submission: submission ? submission.id : null,
       values
     })
+
+    this.setState({
+      saving: false,
+      showSuccessModal: true
+    })
+
+    setTimeout(() => {
+      this.setState({ showSuccessModal: false})
+      this.goback()
+    }, 2000)
   }
 
   goback() {
-    browserHistory.push(`/dashboard/deals/${this.props.params.id}`)
+    const { submission } = this.state
+    let url = `/dashboard/deals/${this.props.params.id}`
+
+    if (submission)
+      url += `?submission=${submission.id}`
+
+    browserHistory.push(url)
   }
 
   render() {

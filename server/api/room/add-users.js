@@ -4,24 +4,19 @@ const router = require('koa-router')()
 const app = new Koa()
 
 router.post('/rooms/add-users', bodyParser(), async (ctx, next) => {
-
   const headers = {}
-  const { brand, users, emails, phone_numbers } = ctx.request.body
-
+  const { room_id, brand, users, emails, phone_numbers } = ctx.request.body
   if (brand) {
     headers['x-rechat-brand'] = brand
   }
-
   try {
     const response = await ctx
       .fetch(`/rooms/${room_id}/users`, 'POST')
-      .set(headers)
       .send({
         users,
         emails,
         phone_numbers
       })
-
     ctx.body = response.body
   }
   catch(e) {}

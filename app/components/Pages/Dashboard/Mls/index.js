@@ -73,10 +73,6 @@ export default class Mls extends Component {
         this.getRoomsIndexedDB()
       this.getUserRooms()
     }
-    AppDispatcher.dispatch({
-      action: 'get-contacts',
-      user
-    })
     if (this.props.location && this.props.location.query.message && this.props.location.query.message === 'welcome') {
       AppStore.data.show_welcome_modal = true
       AppStore.emitChange()
@@ -455,7 +451,7 @@ export default class Mls extends Component {
     }
     let zoom_right = 'r-25'
     if (data.show_listing_panel)
-      zoom_right = 'r-860'
+      zoom_right = 'r-460'
     let zoom_bottom = ' b-25'
     if (data.is_mobile)
       zoom_bottom = ' b-75'
@@ -468,7 +464,7 @@ export default class Mls extends Component {
     let results_actions
     let create_alert_button
     if (data.show_search_map) {
-      let save_search_btn_style = S(`absolute r-20 t-70 z-1 w-200 h-50 font-18 color-fff border-1-solid-${Brand.color('primary', '2196f3')} bg-${Brand.color('primary', '2196f3')}`)
+      let save_search_btn_style = S(`absolute r-5 t-55 z-1 w-130 h-40 font-18 color-fff border-1-solid-${Brand.color('primary', '2196f3')} bg-${Brand.color('primary', '2196f3')}`)
 
       if (data.is_widget && !data.is_mobile) {
         save_search_btn_style = {
@@ -802,8 +798,11 @@ export default class Mls extends Component {
     content_area = <MlsMap data={ data } />
     // Show search
     if (data.listing_panel && data.listing_panel.size) {
+      let panel_width = 425
+      if (data.listing_panel.view === 'list')
+        panel_width = 850
       content_area = (
-        <div style={ S(`absolute h-100p w-${window.innerWidth - 850 - 70}`) }>
+        <div style={ S(`absolute h-100p w-${window.innerWidth - panel_width - 70}`) }>
           { content_area }
         </div>
       )

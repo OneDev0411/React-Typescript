@@ -3,7 +3,6 @@ import { browserHistory } from 'react-router'
 import { Grid, Row, Col, Button } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'underscore'
-import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
 import { addressTitle } from '../../../../../utils/listing'
 
 export default class DealsList extends React.Component {
@@ -11,26 +10,21 @@ export default class DealsList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      deals: [],
-      loading: true
+      deals: {}
     }
   }
   componentDidMount() {
     const { user, deals } = this.props
 
     if (deals)
-      this.setState({ deals })
+      this.setState({ deals: deals.list })
   }
 
   componentWillReceiveProps(nextProps) {
     const { deals } = nextProps
 
-    if (deals && this.state.deals.length === 0)
-      this.setState({ deals, loading: false })
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return true
+    if (deals && _.size(deals.list) > _.size(this.state.deals))
+      this.setState({ deals: deals.list })
   }
 
   create(type) {
@@ -94,10 +88,10 @@ export default class DealsList extends React.Component {
   }
 
   render() {
-    const { deals, loading } = this.state
+    const { deals } = this.state
 
     return (
-      <div className="deals-list">
+      <div className="list">
 
         <Row className="toolbar">
           <Col lg={2} md={2} sm={2} className="vcenter">
@@ -105,7 +99,7 @@ export default class DealsList extends React.Component {
           </Col>
 
           <Col lg={4} md={4} sm={4} className="vcenter">
-            { deals.length } total
+            { _.size(deals) } total
           </Col>
 
           <Col lg={6} md={6} sm={6} className="vcenter right">
@@ -126,7 +120,7 @@ export default class DealsList extends React.Component {
         </Row>
 
         {
-          deals.length > 0 &&
+          _.size(deals) > 0 &&
           <Grid className="table">
             <Row className="header">
               <Col md={4} sm={4} xs={4}>ADDRESS</Col>
@@ -142,7 +136,7 @@ export default class DealsList extends React.Component {
                 <Row
                   key={`DEAL_${deal.id}`}
                   onClick={() => browserHistory.push(`/dashboard/deals/${deal.id}`)}
-                  className={`deal type_${this.getStatus(deal)}`}
+                  className={`item type_${this.getStatus(deal)}`}
                 >
                   <Col md={4} sm={4} xs={4}>
                     { this.getCoverImage(deal) }

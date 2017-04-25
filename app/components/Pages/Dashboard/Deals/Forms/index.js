@@ -12,7 +12,6 @@ import config from '../../../../../../config/public'
 export default class DealForm extends React.Component {
   constructor(props) {
     super(props)
-    this.mounted = true
     this.state = {
       submission: null,
       documentUrl: null,
@@ -21,15 +20,23 @@ export default class DealForm extends React.Component {
   }
 
   componentDidMount() {
-    this.mounted = true
   }
 
   componentWillReceiveProps(nextProps) {
     const { submissions } = nextProps
-    const { submission } = this.state
 
-    if (submissions && !submission)
-      this.loadForm(submissions[submissions.length - 1])
+    if (submissions && !this.state.submission) {
+      let active = this.getActiveSubmission()
+
+      if (!active)
+        active = Object.keys(submissions)[_.size(submissions) - 1]
+
+      this.setState({
+        submission: submissions[active]
+      })
+
+      this.loadForm(submissions[active])
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -37,7 +44,6 @@ export default class DealForm extends React.Component {
   }
 
   componentWillUnmount() {
-    this.mounted = false
   }
 
   loadForm(submission) {
@@ -65,6 +71,15 @@ export default class DealForm extends React.Component {
   onAddForm(form) {
     const { deal_id } = this.props
     browserHistory.push(`/dashboard/deals/${deal_id}/edit-form/${form.id}/create`)
+  }
+
+  getActiveSubmission() {
+    const url = window.location.href
+    const regex = new RegExp("[?&]submission(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url)
+    if (!results) return null;
+    if (!results[2]) return ''
+    return decodeURIComponent(results[2].replace(/\+/g, " "))
   }
 
   render() {
@@ -108,16 +123,16 @@ export default class DealForm extends React.Component {
             }
 
             {
-              submissions && submissions.length === 0 &&
+              submissions && _.size(submissions) === 0 &&
               <div className="no-form">
-                There is no form
+                You currently have no forms added
               </div>
             }
           </Col>
 
           <Col xs={7}>
             {
-              submissions && submissions.length > 0 &&
+              submissions && _.size(submissions) > 0 &&
               <div style={{ textAlign: 'right' }}>
                 <a
                   target="_blank"
@@ -139,7 +154,7 @@ export default class DealForm extends React.Component {
 
             <PdfViewer
               uri={documentUrl}
-              scale={0.7}
+              scale={0.85}
               onLoad={() => this.setState({ documentLoaded: true }) }
             />
           </Col>

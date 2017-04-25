@@ -1,62 +1,41 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router'
+import React from 'react'
 import S from 'shorti'
-import AppDispatcher from '../../../../dispatcher/AppDispatcher'
-import AppStore from '../../../../stores/AppStore'
-import SideBar from '../Partials/SideBar'
-import MobileNav from '../Partials/MobileNav'
+import ConciergeDispatcher from '../../../../dispatcher/ConciergeDispatcher'
 
-export default class Concierge extends Component {
+export default class Concierge extends React.Component {
 
   componentDidMount() {
-    const { data } = this.props
-    const { user } = data
-
-    if (!user)
-      return
-
-    AppStore.data.user = user
-    AppStore.emitChange()
-
-    this.checkForMobile()
+    const getDealsAction = {
+      user: this.props.data.user,
+      type: 'GET_DEALS'
+    }
+    ConciergeDispatcher.dispatch(getDealsAction)
   }
-
-  checkForMobile() {
-    AppDispatcher.dispatch({
-      action: 'check-for-mobile'
-    })
-  }
-
 
   render() {
-    const { data } = this.props
-    const user = data.user
+    const { user, conciergeDeals } = this.props.data
 
-    let main_style = S('absolute l-70 w-100p')
-    let nav_area = <SideBar data={data} />
-
-    if (data.is_mobile) {
-      main_style = { ...main_style, ...S('l-0 w-100p') }
-
-      if (user)
-        nav_area = <MobileNav data={data} />
-    }
+    const children = React.Children.map(this.props.children, child =>
+      React.cloneElement(child, {
+        user,
+        conciergeDeals
+      })
+    )
 
     return (
-      <div>
-        <main>
-          { nav_area }
-          <div className="concierge" style={main_style}>
-            <Link to="/dashboard/concierge/deals">Deals</Link>
-          </div>
-        </main>
+      <div className="crm">
+        <div className="deals">
+          {
+            !conciergeDeals &&
+            <div className="loading-list">
+              <div><i className="fa fa-spinner fa-spin fa-2x fa-fw" /></div>
+              <b>Loading Deals ...</b>
+            </div>
+          }
+
+          { conciergeDeals && children }
+        </div>
       </div>
     )
   }
-}
-
-Concierge.propTypes = {
-  data: React.PropTypes.object,
-  params: React.PropTypes.object,
-  location: React.PropTypes.object
 }

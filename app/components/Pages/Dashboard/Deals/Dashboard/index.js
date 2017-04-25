@@ -3,75 +3,123 @@ import {
   Row,
   Col,
   Tabs,
-  Tab,
-  Button,
-  Overlay,
-  Tooltip,
-  Popover
+  Tab
 } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
-import { Link } from 'react-router'
 import S from 'shorti'
 import _ from 'underscore'
 import Avatar from 'react-avatar'
 import AppStore from '../../../../../stores/AppStore'
-import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
+import DealDispatcher from '../../../../../dispatcher/DealDispatcher'
+import ConciergeDispatcher from '../../../../../dispatcher/ConciergeDispatcher'
 import DealForms from '../Forms'
 import DealESigns from '../ESigns'
 import Uploads from '../Uploads'
+import SubmitReviewModal from './submit-review-modal'
+import MessageModal from '../../../../Partials/MessageModal'
+
+
+
+const serializeFormToObject = (form) => {
+  let obj = {}
+  let checkedCheckboxs = []
+  const file = form.elements.file
+  const envelopes = form.elements.envelope_document
+
+  if (envelopes) {
+    if (!envelopes.length)
+      checkedCheckboxs.push(envelopes)
+
+    if (envelopes.length > 1) {
+      checkedCheckboxs = [
+        ...checkedCheckboxs,
+        ...form.elements.envelopes
+      ]
+    }
+  }
+
+  if (file) {
+    if (file.length === 1)
+      checkedCheckboxs.push(file)
+
+    if (file.length > 1) {
+      checkedCheckboxs = [
+        ...checkedCheckboxs,
+        ...form.elements.file
+      ]
+    }
+  }
+
+  checkedCheckboxs = checkedCheckboxs.filter(
+    element => element.type === 'checkbox' && element.checked
+  )
+
+  return checkedCheckboxs.map((checkbox) => {
+    let obj = {}
+    obj[checkbox.name] = checkbox.id
+    obj.state = 'Pending'
+    return obj
+  })
+}
 
 export default class DealDashboard extends React.Component {
 
   constructor(props) {
     super(props)
+    this.reviews = {}
+    const { id } = props.params
+    this.deal = props.deals.list[id] || null
+    if (this.deal.reviews) {
+      this.fillreviews()
+      if (this.deal.files) this.mapReviewsToFiles()
+    }
+
     this.state = {
-      id: props.params.id,
-      deal: null,
       activeTab: props.params.tab || 'forms',
       submissions: null,
       envelopes: null,
-      files: null
+      showSuccessModal: false,
+      allReviewableDocs: null,
+      files: this.deal.files || null,
+      reviewRequestModalIsActive: false,
+      reviewRequestModalIsFreezed: false
     }
+
+    this.reviewRequestModalCloseHandler =
+      this.reviewRequestModalCloseHandler.bind(this)
+    this.reviewRequestModalShowHandler =
+      this.reviewRequestModalShowHandler.bind(this)
+    this.reviewRequestModalSubmitHandler =
+      this.reviewRequestModalSubmitHandler.bind(this)
   }
 
   componentDidMount() {
-    const { deals, params } = this.props
     const { activeTab } = this.state
-
-    // get deal
-    const deal = _.find(deals, deal => deal.id === params.id)
-
-    if (!deal)
-      return
-
-    this.setState({ deal })
+    if (!this.deal) return
 
     // load data based on active tab
     this.onTabChange(activeTab)
   }
 
   componentWillReceiveProps(nextProps) {
-    const { deals, params } = nextProps
+    const { id } = nextProps.params
+    const { deals } = nextProps
     const { submissions, envelopes, files } = this.state
 
     // load deal
-    const deal = _.find(deals, d => d.id === params.id)
+    const deal = deals.list[id]
+    if (!deal) return
 
-    if (!deal)
-      return
-
-    if (!this.state.deal)
-      this.setState({ deal })
-
-    if (!submissions)
-      this.setState({ submissions: deal.submissions })
-
-    if (!envelopes)
-      this.setState({ envelopes: deal.envelopes })
-
-    if (!files) {
+    if (!files && deal.files)
       this.setState({ files: deal.files })
+
+    if (!envelopes && deal.envelopes) {
+      const envelopes = this.mapReviewsToDocuments(deal.envelopes)
+      this.setState({ envelopes })
     }
+
+    if (!submissions && deal.submissions)
+      this.setState({ submissions: deal.submissions })
 
     if (deal.files && files && deal.files.length > files.length)
       this.setState({ files: deal.files })
@@ -81,40 +129,54 @@ export default class DealDashboard extends React.Component {
     return typeof nextProps.deals !== 'undefined'
   }
 
-  getCoverImage(deal) {
-    let src = '/static/images/deals/home.svg'
-
-    if (deal.listing)
-      src = deal.listing.cover_image_url
-
-    return <img style={S('mr-10 w-40 br-2')} src={src} />
-  }
-
-  getNumberWithCommas(number) {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-  }
-
-  onTabChange(id) {
-    this.setState({
-      activeTab: id
-    })
-
-    switch (id) {
-      case 'forms':
-        this.getSubmissions()
-        break
-
-      case 'esigns':
-        this.getEnvelopes()
-        break
-
-      case 'uploads':
-        break
+  fillreviews() {
+    const reviews = this.deal.reviews
+    if (reviews) {
+      this.deal.reviews.forEach((review) => {
+        const id = review.file || review.envelope_document
+        this.reviews[id] = {
+          ...review
+        }
+      })
     }
   }
 
+  mapReviewsToFiles() {
+    const newFiles = this.deal.files.map((file) => {
+      const review = this.reviews[file.id] || null
+      return {
+        ...file,
+        review
+      }
+    })
+    this.deal.files = newFiles
+    AppStore.data.deals.list[this.deal.id] = this.deal
+  }
+
+  mapReviewsToDocuments(envelopes) {
+    return envelopes.map((envelope) => {
+      if (!envelope.documents)
+        return envelope
+
+      const documents = envelope.documents.map((doc) => {
+        const review = (this.reviews && this.reviews[doc.id]) || null
+        return {
+          ...doc,
+          review
+        }
+      })
+      return {
+        ...envelope,
+        documents
+      }
+    })
+  }
+
   getSubmissions() {
-    AppDispatcher.dispatch({
+    if (this.state.submissions)
+      return
+
+    DealDispatcher.dispatch({
       action: 'get-submissions',
       user: this.props.user,
       id: this.props.params.id
@@ -122,68 +184,137 @@ export default class DealDashboard extends React.Component {
   }
 
   getEnvelopes() {
-    AppDispatcher.dispatch({
+    if (this.state.envelopes)
+      return
+
+    DealDispatcher.dispatch({
       action: 'get-envelopes',
       user: this.props.user,
       id: this.props.params.id
     })
   }
 
-  getAddress(deal) {
-    const address = this.getValue(deal, 'street_address')
 
-    if (address.endsWith(','))
-      return address.substring(0, address.length - 1)
-    return address
-  }
 
-  getFullAddress(deal) {
-    const city = this.getValue(deal, 'city')
-    const county = this.getValue(deal, 'county')
-    const postal_code = this.getValue(deal, 'postal_code')
-    return `${city}, ${county}, ${postal_code}`
-  }
 
-  getPrice(deal) {
-    const price = this.getValue(deal, 'list_price')
-
-    if (price === '-')
-      return price
-
-    return `$${this.getNumberWithCommas(price)}`
-  }
-
-  getStatus(deal) {
-    if (deal.listing)
-      return deal.listing.status
-
-    return '-'
-  }
-
-  getValue(deal, field) {
-    if (deal.context && deal.context[field])
-      return deal.context[field]
-    else if (deal.proposed_values && deal.proposed_values[field])
-      return deal.proposed_values[field]
-
-    return '-'
-  }
-
-  goBack() {
-    browserHistory.push('/dashboard/deals')
-  }
-
-  collectSignatures() {
-    if (AppStore.data.deals_signatures) {
-      AppStore.data.deals_signatures.documents = {}
-      AppStore.emitChange()
+  reviewRequestModalCloseHandler() {
+    if (!this.state.reviewRequestModalIsFreezed) {
+      browserHistory.push(`/dashboard/deals/${this.props.params.id}`)
+      this.setState({
+        reviewRequestModalIsActive: false
+      })
     }
+  }
+  reviewRequestModalShowHandler() {
+    // browserHistory.push(`/dashboard/deals/${this.props.params.id}/reviews`)
+    this.setState({
+      reviewRequestModalIsActive: true
+    })
+  }
 
-    browserHistory.push(`/dashboard/deals/${this.state.id}/collect-signatures/documents`)
+  async reviewRequestSubmit(docs) {
+    const token = this.props.user.access_token
+    const { id } = this.props.params
+    const body = {
+      reviews: docs
+    }
+    const action = {
+      id,
+      body,
+      token,
+      type: 'SUBMIT_REVIEW_REQUEST'
+    }
+    const reviews = await ConciergeDispatcher.dispatchSync(action)
+    reviews.forEach((review) => {
+      const type = review.file ? 'FILE' : 'ENVELOPE'
+      switch (type) {
+        case 'FILE':
+          if (this.state.files) {
+            const files = this.state.files.map((file) => {
+              if (file.id !== review.file) return file
+
+              file.review = review
+              return file
+            })
+            this.setState({ files })
+          }
+          break
+        case 'ENVELOPE':
+          if (this.state.envelopes) {
+            const envelopes = this.state.envelopes.map((envelope) => {
+              if (!envelope.documents) return envelope
+
+              const documents = envelope.documents.map((document) => {
+                document.review = review
+                return document
+              })
+              return {
+                ...envelope,
+                documents
+              }
+            })
+            this.setState({ envelopes })
+          }
+          break
+      }
+    })
+    this.setState({
+      showSuccessModal: true,
+      reviewRequestModalIsActive: false,
+      reviewRequestModalIsFreezed: false
+    })
+    setTimeout(() => {
+      this.setState({
+        showSuccessModal: false
+      })
+    }, 1500)
+  }
+
+  reviewRequestModalSubmitHandler(form) {
+    this.setState({
+      reviewRequestModalIsFreezed: true
+    })
+    const docs = serializeFormToObject(form)
+    this.reviewRequestSubmit(docs)
+  }
+
+  preparedEnvelopes(envelopes) {
+    let list = []
+    envelopes.map((envelope) => {
+      if (!envelope.documents)
+        return
+
+      envelope.documents.forEach((document, index) => {
+        document = {
+          ...document,
+          index
+        }
+        list.push(document)
+      })
+    })
+    return list
+  }
+
+  getAllReviewableDocs(envelopes, files) {
+    let allReviewableDocs = []
+    if (envelopes) {
+      allReviewableDocs = [
+        ...this.preparedEnvelopes(envelopes)
+      ]
+    }
+    if (files) {
+      allReviewableDocs = [
+        ...allReviewableDocs,
+        ...files
+      ]
+    }
+    return allReviewableDocs
   }
 
   render() {
-    const { deal, submissions, envelopes, files, activeTab } = this.state
+    const deal = this.deal
+    const { submissions, envelopes, files, activeTab } = this.state
+    const allReviewableDocs = this.getAllReviewableDocs(envelopes, files)
 
     if (deal === null)
       return false
@@ -201,10 +332,18 @@ export default class DealDashboard extends React.Component {
 
           <Col lg={7} md={7} sm={7}>
             <ul className="menu">
+              {
+                submissions &&
+                <li
+                  onClick={this.collectSignatures.bind(this)}
+                >
+                  <img src="/static/images/deals/pen.svg" />
+                </li>
+              }
               <li
-                onClick={this.collectSignatures.bind(this)}
+                onClick={this.reviewRequestModalShowHandler}
               >
-                <img src="/static/images/deals/pen.svg" />
+                <img src="/static/images/deals/glasses-round.svg" />
               </li>
             </ul>
           </Col>
@@ -264,7 +403,7 @@ export default class DealDashboard extends React.Component {
             </div>
           </Col>
 
-          <Col lg={8} md={8} sm={8}>
+          <Col lg={9} md={9} sm={9}>
             <div className="main">
               <Tabs
                 defaultActiveKey={activeTab}
@@ -276,7 +415,7 @@ export default class DealDashboard extends React.Component {
                   <DealForms
                     submissions={submissions}
                     user={this.props.user}
-                    forms={this.props.forms}
+                    forms={this.props.deals.forms}
                     deal_id={this.props.params.id}
                     activeTab={activeTab}
                   />
@@ -304,7 +443,104 @@ export default class DealDashboard extends React.Component {
           </Col>
 
         </Row>
+
+        <SubmitReviewModal
+          documents={allReviewableDocs}
+          token={this.props.user.access_token}
+          isActive={this.state.reviewRequestModalIsActive}
+          isFreezed={this.state.reviewRequestModalIsFreezed}
+          closeHandler={this.reviewRequestModalCloseHandler}
+          submitHandler={this.reviewRequestModalSubmitHandler}
+        />
+
+        <MessageModal
+          show={this.state.showSuccessModal}
+          text="Documents submitted for review!"
+        />
       </div>
     )
+  }
+
+  getCoverImage(deal) {
+    let src = '/static/images/deals/home.svg'
+
+    if (deal.listing)
+      src = deal.listing.cover_image_url
+
+    return <img style={S('mr-10 w-40 br-2')} src={src} />
+  }
+
+  getNumberWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  }
+
+  onTabChange(id) {
+    this.setState({ activeTab: id })
+
+    switch (id) {
+      case 'forms':
+        this.getSubmissions()
+        break
+
+      case 'esigns':
+        this.getEnvelopes()
+        break
+
+      case 'uploads':
+        break
+    }
+  }
+
+  getAddress(deal) {
+    const address = this.getValue(deal, 'street_address')
+
+    if (address.endsWith(','))
+      return address.substring(0, address.length - 1)
+    return address
+  }
+
+  getFullAddress(deal) {
+    const city = this.getValue(deal, 'city')
+    const state = this.getValue(deal, 'state')
+    const postal_code = this.getValue(deal, 'postal_code')
+    return `${city}, ${state}, ${postal_code}`.replace(/-,/ig, '')
+  }
+
+  getPrice(deal) {
+    const price = this.getValue(deal, 'list_price')
+
+    if (price === '-')
+      return price
+
+    return `$${this.getNumberWithCommas(price)}`
+  }
+
+  getStatus(deal) {
+    if (deal.listing)
+      return deal.listing.status
+
+    return '-'
+  }
+
+  getValue(deal, field) {
+    if (deal.context && deal.context[field])
+      return deal.context[field]
+    else if (deal.proposed_values && deal.proposed_values[field])
+      return deal.proposed_values[field]
+
+    return '-'
+  }
+
+  goBack() {
+    browserHistory.push('/dashboard/deals')
+  }
+
+  collectSignatures() {
+    if (AppStore.data.deals_signatures) {
+      AppStore.data.deals_signatures.documents = {}
+      AppStore.emitChange()
+    }
+
+    browserHistory.push(`/dashboard/deals/${this.props.params.id}/collect-signatures/documents`)
   }
 }

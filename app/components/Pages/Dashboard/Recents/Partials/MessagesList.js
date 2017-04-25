@@ -50,7 +50,9 @@ export default class MessagesList extends Component {
     const data = this.props.data
     if (!data.notifications)
       return false
-    const summaries = data.notifications.summary.room_notification_summaries
+    let summaries
+     if (data.notifications && data.notifications.summary)
+      summaries = data.notifications.summary.room_notification_summaries
     if (!summaries)
       return false
     summaries.forEach((summary) => {
@@ -335,13 +337,6 @@ export default class MessagesList extends Component {
     if (data.is_mobile)
       messages_mb = 'mb-80'
     let message
-    if (data.add_contacts_error) {
-      message = (
-        <div style={S('mt-10 text-left')}>
-          <Alert bsStyle="danger">There was an error with this request.</Alert>
-        </div>
-      )
-    }
     // List users
     let title_area
     if (!data.show_new_message_viewer) {

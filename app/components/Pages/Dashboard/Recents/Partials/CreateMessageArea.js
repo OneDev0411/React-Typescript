@@ -10,9 +10,6 @@ export default class CreateMessageArea extends Component {
     const active_contact = data.active_contact
     if (e.which === 9) { // tab
       e.preventDefault()
-      const contact = data.filtered_contacts[active_contact]
-      if (contact)
-        this.addContactToMessage(contact)
     } else
       this.props.handleMessageTyping()
   }
@@ -28,22 +25,12 @@ export default class CreateMessageArea extends Component {
         return this.props.handleContactFilterNav('down')
       if (e.which === 13) { // enter
         e.preventDefault()
-        const contact = data.filtered_contacts[active_contact]
-        if (contact)
-          this.addContactToMessage(contact)
-        else
-          this.createMessage(e)
+        this.createMessage(e)
         return ''
       }
       this.props.handleContactFilter(message_input, 'show')
     } else
       this.props.handleContactFilter(message_input, 'hide')
-    if (this.filter_contacts_scroll_area) {
-      setTimeout(() => {
-        if (this.filter_contacts_scroll_area)
-          this.filter_contacts_scroll_area.scrollTop = this.filter_contacts_scroll_area.scrollHeight
-      }, 10)
-    }
   }
   addContactToMessage(contact) {
     this.props.addContactToMessage()
@@ -120,44 +107,11 @@ export default class CreateMessageArea extends Component {
         </div>
       )
     }
-    let filtered_contacts_area
-    if (data.show_filtered_contacts && data.filtered_contacts) {
-      let filtered_contacts_list_items
-      const filtered_contacts = data.filtered_contacts
-      filtered_contacts_list_items = filtered_contacts.map((contact, i) => {
-        let active_contact_style = ''
-        const contact_added_style = ''
-        const active_contact = data.active_contact
-        if (active_contact === i)
-          active_contact_style = ' bg-EDF7FD'
-        if (!contact.added) {
-          return (
-            <div onClick={this.addContactToMessage.bind(this, contact)} className="add-contact-form__contact" key={`contact-${contact.id}`} style={S(`br-3 relative h-60 pointer mb-5 p-10${active_contact_style}${contact_added_style}`)}>
-              <ProfileImage data={data} user={contact} />
-              <div style={S('ml-50')}>
-                <span style={S('fw-600')}>{ contact.first_name } { contact.last_name }</span>{ contact.contact_user ? ',' : '' }&nbsp;
-                <span style={S('color-666')}>{ contact.contact_user ? contact.contact_user.user_type : '' }</span><br />
-                <span style={S('color-666 font-13')}>{ contact.email }</span><br />
-              </div>
-              <div className="clearfix" />
-            </div>
-          )
-        }
-      })
-      filtered_contacts_list_items = filtered_contacts_list_items.filter(n => n !== undefined)
-      filtered_contacts_area = (
-        <div ref={ref => this.filter_contacts_scroll_area = ref} style={{ overflowY: 'scroll', ...S('z-1000 absolute b-5 maxh-300 w-100p br-3 border-1-solid-ccc p-5 bg-fff') }}>
-          { filtered_contacts_list_items }
-        </div>
-      )
-    }
+
     return (
       <div style={footer_style}>
         <div>
           { is_reconnecting } { is_typing }
-        </div>
-        <div style={S('relative')}>
-          { filtered_contacts_area }
         </div>
         <form onSubmit={this.handleSubmit.bind(this)}>
           <div className="form-group" style={S('w-100p')}>

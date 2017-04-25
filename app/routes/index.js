@@ -4,17 +4,13 @@ import { Route, IndexRoute, Redirect } from 'react-router'
 
 // Main component
 import App from '../components/App'
+import Dashboard from '../components/Dashboard'
 
 // Pages
 import Landing from '../components/Pages/Landing'
 import Recents from '../components/Pages/Dashboard/Recents'
 import Mls from '../components/Pages/Dashboard/Mls'
 import Listing from '../components/Pages/Dashboard/Mls/Listing'
-import Contacts from '../components/Pages/Dashboard/Contacts'
-import Tasks from '../components/Pages/Dashboard/Tasks'
-import Transactions from '../components/Pages/Dashboard/Transactions'
-import SingleTransaction from '../components/Pages/Dashboard/Transactions/Single'
-import NewTransaction from '../components/Pages/Dashboard/Transactions/New'
 import SignUp from '../components/Pages/SignUp'
 import ConfirmAgent from '../components/Pages/SignUp/ConfirmAgent'
 import SignIn from '../components/Pages/SignIn'
@@ -38,6 +34,20 @@ import DealDashboard from '../components/Pages/Dashboard/Deals/Dashboard'
 import DealEditForm from '../components/Pages/Dashboard/Deals/Edit-Form'
 import CollectSignatures_Documents from '../components/Pages/Dashboard/Deals/CollectSignatures-Documents'
 import CollectSignatures_Recipients from '../components/Pages/Dashboard/Deals/CollectSignatures-Recipients'
+import SubmitReviewRequest from '../components/Pages/Dashboard/Deals/Dashboard/submit-review-modal'
+
+// Concierge
+import ConciergeLayout from '../components/Pages/Dashboard/Concierge'
+import ConciergeDealsList from '../components/Pages/Dashboard/Concierge/DealsList'
+import DealReview from '../components/Pages/Dashboard/Concierge/DealReview'
+
+// contacts
+import Contacts from '../components/Pages/Dashboard/Contacts'
+import ContactsList from '../components/Pages/Dashboard/Contacts/List'
+import ContactProfile from '../components/Pages/Dashboard/Contacts/Profile'
+
+// Notifications
+import NotificationsPage from '../components/Pages/Dashboard/Notifications'
 
 // Widgets
 import ListingsWidget from '../components/Pages/Widgets/Listings'
@@ -63,13 +73,6 @@ export default (
     <Route path="dashboard/mls/actives" component={Mls} />
     <Route path="dashboard/mls/:id" component={Listing} />
     <Route path="dashboard/mls/listing/recommend" component={Recommend} />
-    <Route path="dashboard/contacts" component={Contacts} />
-    <Route path="dashboard/contacts/:id" component={Contacts} />
-    <Route path="dashboard/tasks" component={Tasks} />
-    <Route path="dashboard/transactions" component={Transactions} />
-    <Route path="dashboard/transactions/new" component={NewTransaction} />
-    <Route path="dashboard/transactions/:id" component={SingleTransaction} />
-    <Route path="dashboard/transactions/:id/attachments/:id" component={SingleTransaction} />
     <Route path="dashboard/website" component={Website} />
     <Route path="dashboard/cards" component={Cards} />
     <Route path="dashboard/forms" component={Forms} />
@@ -79,14 +82,29 @@ export default (
     <Route path="widgets/map" component={MapWidget} />
     <Route path="widgets/search" component={SearchWidget} />
 
-    <Route path="/dashboard/deals" component={DealsLayout}>
-      <IndexRoute component={DealsList} />
-      <Route path="/dashboard/deals/create/:type" component={DealCreate} />
-      <Route path="/dashboard/deals/:id(/:tab)" component={DealDashboard} />
-      <Route path="/dashboard/deals/:id/edit-form/:form/:type" component={DealEditForm} />
-      <Route path="/dashboard/deals/:id/collect-signatures/documents" component={CollectSignatures_Documents} />
-      <Route path="/dashboard/deals/:id/collect-signatures/recipients" component={CollectSignatures_Recipients} />
+    <Route path="/dashboard" component={Dashboard}>
+      <Route path="/dashboard/deals" component={DealsLayout}>
+        <IndexRoute component={DealsList} />
+        <Route path="/dashboard/deals/create/:type" component={DealCreate} />
+        <Route path="/dashboard/deals/:id(/:tab)" component={DealDashboard} />
+        <Route path="/dashboard/deals/:id/edit-form/:form/:type" component={DealEditForm} />
+        <Route path="/dashboard/deals/:id/collect-signatures/documents" component={CollectSignatures_Documents} />
+        <Route path="/dashboard/deals/:id/collect-signatures/recipients" component={CollectSignatures_Recipients} />
+      </Route>
+
+      <Route path="/dashboard/concierge/deals" component={ConciergeLayout}>
+        <IndexRoute component={ConciergeDealsList} />
+        <Route path="/dashboard/concierge/deals/:id" component={DealReview} />
+      </Route>
+
+      <Route path="/dashboard/contacts" component={Contacts}>
+        <IndexRoute component={ContactsList} />
+        <Route path="/dashboard/contacts/:id" component={ContactProfile} />
+      </Route>
     </Route>
+
+    <Route path="/dashboard/notifications" component={NotificationsPage} />
+
     <Route path="*" component={NoMatch} />
   </Route>
 )

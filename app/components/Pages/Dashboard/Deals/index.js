@@ -1,22 +1,18 @@
 import React from 'react'
-import { Link } from 'react-router'
 import S from 'shorti'
-import AppDispatcher from '../../../../dispatcher/AppDispatcher'
-import AppStore from '../../../../stores/AppStore'
-import SideBar from '../Partials/SideBar'
-import MobileNav from '../Partials/MobileNav'
+import moment from 'moment'
+import DealDispatcher from '../../../../dispatcher/DealDispatcher'
 
 export default class Deals extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.reloadTimer = null
+  }
 
   componentDidMount() {
     const { data } = this.props
     const { user } = data
-
-    if (!user)
-      return
-
-    AppStore.data.user = user
-    AppStore.emitChange()
 
     // get deals
     this.getDeals(user)
@@ -24,67 +20,55 @@ export default class Deals extends React.Component {
     // get forms
     this.getForms(user)
 
-    // check for mobile
-    this.checkForMobile()
+    // create reload timer
+    this.reloadTimer = window.setInterval(this.reloadDeals.bind(this), 60 * 2 * 1000)
   }
 
-  checkForMobile() {
-    AppDispatcher.dispatch({
-      action: 'check-for-mobile'
-    })
+  componentWillUnmount() {
+    window.clearInterval(this.reloadTimer)
   }
 
   getForms(user) {
-    AppDispatcher.dispatch({
+    DealDispatcher.dispatch({
       action: 'get-deal-forms',
       user
     })
   }
 
   getDeals(user) {
-    this.setState({ loading: true })
-
-    AppDispatcher.dispatch({
+    DealDispatcher.dispatch({
       action: 'get-deals',
       user
     })
   }
 
+  reloadDeals() {
+    const { user, deals } = this.props.data
+
+    if (moment().isAfter(deals.expire_at))
+      this.getDeals(user)
+  }
+
   render() {
     const { data } = this.props
     const user = data.user
-
-    let main_style = S('ml-5p h-100p')
-    let nav_area = <SideBar data={data} />
-
-    if (data.is_mobile) {
-      main_style = { ...main_style, ...S('') }
-
-      if (user)
-        nav_area = <MobileNav data={data} />
-    }
-
+    const deals = data.deals || {}
     const children = React.Children.map(this.props.children, child =>
-      React.cloneElement(child, {
-        user,
-        deals: data.deals,
-        forms: data.deals_forms
-      })
+      React.cloneElement(child, { user, deals })
     )
 
     return (
-      <div>
-        { nav_area }
-        <div className="deals" style={main_style}>
+      <div className="crm">
+        <div className="deals">
           {
-            !data.deals &&
-            <div className="loading-deals">
-              <i className="fa fa-spinner fa-spin fa-2x fa-fw" />
-              <b>loading deals ...</b>
+            !deals.list &&
+            <div className="loading-list">
+              <div><i className="fa fa-spinner fa-spin fa-2x fa-fw" /></div>
+              <b>Loading deals ...</b>
             </div>
           }
 
-          { data.deals && children }
+          { deals.list && children }
         </div>
       </div>
     )

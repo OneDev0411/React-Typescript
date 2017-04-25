@@ -18,20 +18,21 @@ const routes = {
   area: [
     [ 'search' ]
   ],
-  contact: [
-    [ 'create' ],
-    [ 'delete' ],
-    [ 'edit' ],
-    [ 'get' ]
-  ],
   county: [
     [ 'search' ]
+  ],
+  contact: [
+    [ 'update-stage' ]
+  ],
+  concierge: [
+    [ 'put-review' ]
   ],
   deal: [
     [ 'envelope-document' ],
     [ 'envelope-sign' ],
     [ 'docusign-login' ],
-    [ 'save-submission-form' ]
+    [ 'save-submission-form' ],
+    [ 'submit-review-request' ]
   ],
   intercom: [
     [ 'signin' ],
@@ -47,7 +48,10 @@ const routes = {
     [ 'messages' ]
   ],
   notification: [
-    [ 'summary' ]
+    [ 'all' ],
+    [ 'delete' ],
+    [ 'delete-room-notifications' ],
+    [ 'mark-seen' ]
   ],
   rec: [
     [ 'actives' ],
@@ -76,32 +80,6 @@ const routes = {
   ],
   subdivision: [
     [ 'search' ]
-  ],
-  task: [
-    [ 'acknowledge-notifications' ],
-    [ 'add-contacts' ],
-    [ 'add-transaction' ],
-    [ 'create-task' ],
-    [ 'delete-task' ],
-    [ 'edit-date' ],
-    [ 'edit-status' ],
-    [ 'edit-title' ],
-    [ 'get-tasks' ],
-    [ 'remove-contact' ],
-  ],
-  tools: [
-    [ 'delete-phone' ],
-  ],
-  transaction: [
-    [ 'acknowledge-transaction-notifications' ],
-    [ 'add-role' ],
-    [ 'create-transaction' ],
-    [ 'delete-file' ],
-    [ 'delete-role' ],
-    [ 'delete-transaction' ],
-    [ 'edit-transaction' ],
-    [ 'get-transaction' ],
-    [ 'get-transactions' ]
   ],
   'user': [
     [ 'create-password' ],

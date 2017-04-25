@@ -128,10 +128,10 @@ export default class SideBar extends Component {
     AppStore.emitChange()
   }
 
-  notificationIcon(name) {
+  notificationIcon() {
     const data = this.props.data
     let icon
-    if (data.notifications && data.notifications.summary[name] > 0) {
+    if (data.new_notifications_count && data.new_notifications_count > 0) {
       icon = (
         <i className="fa fa-circle" style={S('pl-10 font-8 color-3388FF absolute')} />
       )
@@ -210,12 +210,6 @@ export default class SideBar extends Component {
 
     if (path.indexOf('/dashboard/contacts') !== -1)
       active.contacts = 'active'
-
-    if (path === '/dashboard/tasks')
-      active.tasks = 'active'
-
-    if (path.indexOf('/dashboard/transactions') !== -1)
-      active.transactions = 'active'
 
     if (path.indexOf('/dashboard/mls/listings/recommend') !== -1)
       active.recommend = 'active'
@@ -368,7 +362,6 @@ export default class SideBar extends Component {
           <img src="/static/images/dashboard/sidenav/map-active.svg" />
           <img src="/static/images/dashboard/sidenav/people-active.svg" />
           <img src="/static/images/dashboard/sidenav/task-active.svg" />
-          <img src="/static/images/dashboard/sidenav/transactions-active.svg" />
         </div>
         <Nav bsStyle="tabs" justified>
           <LinkContainer className={`main-nav ${active.recents}`} to="/dashboard/recents">
@@ -394,35 +387,6 @@ export default class SideBar extends Component {
             <li role="separator" className="divider" />
             <li><a href="/signout"><i className="fa fa-power-off" style={S('mr-15')} />Sign out</a></li>
           </NavDropdown>
-          { /*
-            <OverlayTrigger placement="right" overlay={ popover.people } delayShow={ 200 } delayHide={ 0 }>
-              <LinkContainer className={ active.contacts } to="/dashboard/contacts">
-                <NavItem style={ S('w-85p') }>
-                  <img src={ active.contacts ? '/static/images/dashboard/sidenav/people-active.svg' : '/static/images/dashboard/sidenav/people.svg' } style={ S('w-19 h-19') }/>
-                </NavItem>
-              </LinkContainer>
-            </OverlayTrigger>
-            */
-          }
-          { /*
-            <OverlayTrigger placement="right" overlay={ popover.tasks } delayShow={ 200 } delayHide={ 0 }>
-              <LinkContainer className={ active.tasks } to="/dashboard/tasks">
-                <NavItem style={ S('w-85p') }>
-                  <img src={ active.tasks ? '/static/images/dashboard/sidenav/task-active.svg' : '/static/images/dashboard/sidenav/task.svg' } style={ S('w-19 h-19') }/>
-                  {this.notificationIcon('task_notification_count')}
-                </NavItem>
-              </LinkContainer>
-            </OverlayTrigger>
-            <OverlayTrigger placement="right" overlay={ popover.transactions } delayShow={ 200 } delayHide={ 0 }>
-              <LinkContainer className={ active.transactions } to="/dashboard/transactions" onClick={ this.props.viewAllTransactions }>
-                <NavItem style={ S('w-85p') }>
-                  <img src={ active.transactions ? '/static/images/dashboard/sidenav/transactions-active.svg' : '/static/images/dashboard/sidenav/transactions.svg' } style={ S('w-19 h-19') }/>
-                  {this.notificationIcon('transaction_notification_count')}
-                </NavItem>
-              </LinkContainer>
-            </OverlayTrigger>
-            */
-          }
           { recommend }
           { agents }
         </Nav>
@@ -455,6 +419,5 @@ export default class SideBar extends Component {
   }
 }
 SideBar.propTypes = {
-  data: React.PropTypes.object,
-  viewAllTransactions: React.PropTypes.func
+  data: React.PropTypes.object
 }

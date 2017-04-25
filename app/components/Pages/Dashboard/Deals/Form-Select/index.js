@@ -1,6 +1,5 @@
 import React from 'react'
 import { Button, Modal, FormControl } from 'react-bootstrap'
-import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
 
 export default class FormSelect extends React.Component {
 

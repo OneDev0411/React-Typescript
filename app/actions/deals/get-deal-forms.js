@@ -12,13 +12,16 @@ export default async function (user) {
     const response = await Deals.getForms(params)
 
     if (response.status === 200) {
-      AppStore.data.deals_forms = _.map(response.body.data, f => ({
+      const forms = _.map(response.body.data, f => ({
         id: f.id,
         title: f.name,
         roles: f.roles,
         state: 'In Progress',
         created_at: f.created_at
       }))
+
+      const deals = Object.assign(AppStore.data.deals || {}, { forms })
+      AppStore.data.deals = deals
     }
 
     AppStore.emitChange()

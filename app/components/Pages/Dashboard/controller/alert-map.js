@@ -1,6 +1,7 @@
 // controller/alert-map.js
 import AppStore from '../../../../stores/AppStore'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
+import ContactDispatcher from '../../../../dispatcher/ContactDispatcher'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import Brand from '../../../../controllers/Brand'
 
@@ -10,7 +11,10 @@ const controller = {
     const data = AppStore.data
     if (!data.notifications)
       return false
-    const summaries = data.notifications.summary.room_notification_summaries
+    // TODO refactor notifications
+    let summaries
+    if (data.notifications && data.notifications.summary)
+      summaries = data.notifications.summary.room_notification_summaries
     if (!summaries)
       return false
     summaries.forEach((summary) => {
@@ -40,6 +44,15 @@ const controller = {
     return bound.getCenter()
   },
   showAlertOnMap(alert) {
+    // update user timeline
+    ContactDispatcher.dispatch({
+      action: 'update-user-timeline',
+      user: AppStore.data.user,
+      user_action: 'UserViewedAlert',
+      object_class: 'Alert',
+      object: alert.id
+    })
+
     let center_from_points
     let lat
     let lng
@@ -125,6 +138,8 @@ const controller = {
     history.default.push(`/dashboard/mls/alerts/${alert.id}`)
     if (AppStore.data.show_alert_viewer)
       controller.markAsRead(alert.id, alert.room)
+    // Go to gallery view
+    controller.showAlertViewer()
   },
   makePolygonAlert(points) {
     const paths = points.map(path => ({

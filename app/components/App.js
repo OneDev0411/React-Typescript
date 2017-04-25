@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import _ from 'lodash'
 import io from 'socket.io-client'
 import AppDispatcher from '../dispatcher/AppDispatcher'
+import NotificationDispatcher from '../dispatcher/NotificationDispatcher'
 import AppStore from '../stores/AppStore'
 import Brand from '../controllers/Brand'
 import ReactGA from 'react-ga'
@@ -69,7 +70,6 @@ export default class App extends Component {
     const data = AppStore.data
     if (data.user && !data.session_started) {
       this.initSockets()
-      this.getNotifications()
       AppStore.data.session_started = true
       AppStore.emitChange()
     }
@@ -83,6 +83,15 @@ export default class App extends Component {
       AppStore.emitChange()
     }
     this.setIntercom()
+    // get notifications once
+    if (data.user && !data.getting_notifications && !data.notifications_retrieved) {
+      AppStore.data.getting_notifications = true
+      AppStore.emitChange()
+      NotificationDispatcher.dispatch({
+        action: 'get-all',
+        user: data.user
+      })
+    }
   }
   // Remove change listeners from stores
   componentWillUnmount() {
@@ -150,12 +159,19 @@ export default class App extends Component {
     })
   }
 
-  getNotifications() {
+  getNotifications(notification) {
     const data = AppStore.data
-    AppDispatcher.dispatch({
-      action: 'get-notification-summary',
+    NotificationDispatcher.dispatch({
+      action: 'get-all',
       user: data.user
     })
+    // Add notification to count
+    if (notification.notification_type === 'UserSentMessage') {
+      const room = notification.room
+      const room_index = _.findIndex(data.rooms, { id: room })
+      AppStore.data.rooms[room_index].new_notifications = AppStore.data.rooms[room_index].new_notifications + 1
+      AppStore.emitChange()
+    }
   }
 
   updateRoomsIndexedDB() {
@@ -168,6 +184,7 @@ export default class App extends Component {
   }
 
   initSockets() {
+    window.socket_init = true
     const socket = window.socket
     const data = AppStore.data
     socket.emit('Authenticate', data.user.access_token)
@@ -230,9 +247,13 @@ export default class App extends Component {
       })
       const user_ids = _.map(users_online, 'user_id')
       AppStore.data.users_online = user_ids
+      delete window.socket_init
       AppStore.emitChange()
     })
     socket.on('User.State', (state, user_id) => {
+      // Prevent on init
+      if (window.socket_init)
+        return
       if (!AppStore.data.users_online)
         AppStore.data.users_online = []
       if (state === 'Online' || state === 'Background')
@@ -304,9 +325,6 @@ export default class App extends Component {
 
       AppStore.emitChange()
     })
-
-    // socket.on('Notification.Acknowledged', () => {
-    // })
 
     socket.on('Room.Acknowledged', (ack) => {
       const { type, user, room } = ack
@@ -386,11 +404,14 @@ export default class App extends Component {
   }
 
   _onChange() {
-    this.setState(AppStore)
+    this.setState({
+      AppStore
+    })
   }
 
   render() {
     let data = AppStore.data
+
     const path = this.props.location.pathname
     const location = this.props.location
     data.path = path

@@ -1,23 +1,30 @@
-// actions/concierge/get-deals.js
-import Concierge from '../../models/Concierge'
+
+
+import { getEnvelopes } from '../../models/Concierge'
 import AppStore from '../../stores/AppStore'
-import _ from 'underscore'
 
-export default (user, deal_id) => {
-  const params = {}
-
-  if (user) {
-    params.user = user.access_token
-    params.deal_id = deal_id
+export default async function (user, dealId) {
+  const params = {
+    dealId,
+    token: user.access_token
   }
+  try {
+    const deals = AppStore.data.conciergeDeals
+    const envelopes = await getEnvelopes(params) || []
 
-  Concierge.getEnvelopes(params, (err, response) => {
-    // Success
-    if (response.status === 'success') {
-      const index = _.findIndex(AppStore.data.concierge_deals, deal => deal.id === deal_id)
-      AppStore.data.concierge_deals[index].envelopes = response.data
-    }
+    const newDeals = deals.map((deal, index) => {
+      if (deal.id !== dealId)
+        return deal
 
-    AppStore.emitChange()
-  })
+      return {
+        ...deal,
+        envelopes
+      }
+    })
+    AppStore.data.conciergeDeals = newDeals
+    return envelopes
+  } catch (error) {
+    console.log(`getEnvelopes: ${error}`)
+    throw error
+  }
 }

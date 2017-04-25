@@ -1,12 +1,15 @@
 import React from 'react'
+import { browserHistory } from 'react-router'
 import { Modal, Button, FormControl } from 'react-bootstrap'
 import { parseLocation } from 'parse-address'
+import DealDispatcher from '../../../../../../dispatcher/DealDispatcher'
 
 export default class extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       show: false,
+      saving: false,
       street_number: '',
       street_address: '',
       unit_number: '',
@@ -23,9 +26,19 @@ export default class extends React.Component {
 
   showCreateModal() {
     const { address } = this.props
-    let { address_components } = this.props
+    const { item, side } = this.props
+    let { address_components } = item
 
-    console.log('>>>', address_components)
+    if (item.isListing) {
+      const data = {
+        context: {
+          deal_type: side
+        },
+        listing: item.id
+      }
+      return this.saveDeal(data)
+    }
+
     if (!address_components)
       address_components = this.parseAddress(address)
 
@@ -40,21 +53,54 @@ export default class extends React.Component {
     })
   }
 
-  save() {
+  onClickSave() {
+    const { side } = this.props
     const { street_number, street_address, unit_number, city, state, zipcode } = this.state
-    const full_address = this.props.address.trim()
 
-    const data = {
-      full_address,
+    // create full address
+    let full_address = [
       street_number,
       street_address,
-      unit_number,
       city,
       state,
       zipcode
+    ].join(' ')
+
+    const data = {
+      context: {
+        deal_type: side,
+        full_address,
+        street_number,
+        street_address,
+        unit_number,
+        city,
+        state,
+        zipcode
+      }
     }
 
-    console.log(data)
+    this.saveDeal(data)
+  }
+
+  async saveDeal(data) {
+
+    const { user } = this.props
+
+    // show loading
+    this.setState({ saving: true })
+
+    // save deal
+    const deal = await DealDispatcher.dispatchSync({
+      action: 'create-deal',
+      user: user,
+      data
+    })
+
+    // hide loading
+    this.setState({ saving: false })
+
+    // navigate to the deal
+    browserHistory.push(`/dashboard/deals/${deal.id}`)
   }
 
   parseAddress(address) {
@@ -93,7 +139,7 @@ export default class extends React.Component {
   }
 
   render() {
-    const { street_number, street_address, unit_number, city, state, zipcode } = this.state
+    const { street_number, street_address, unit_number, city, state, zipcode, saving } = this.state
 
     return (
       <div style={{ display: 'inline' }}>
@@ -101,8 +147,9 @@ export default class extends React.Component {
         <Button
           bsStyle="primary"
           onClick={() => this.showCreateModal()}
+          disabled={saving}
         >
-          Create
+          { saving ? 'Creating...' : 'Create' }
         </Button>
 
         <Modal
@@ -162,9 +209,10 @@ export default class extends React.Component {
                 <Button
                   bsStyle="primary"
                   style={{ margin: '20px' }}
-                  onClick={() => this.save()}
+                  onClick={() => this.onClickSave()}
+                  disabled={saving}
                 >
-                  Yes, create
+                  { saving ? 'Creating...' : 'Yes, create' }
                 </Button>
               </div>
             </div>

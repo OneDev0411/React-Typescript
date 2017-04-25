@@ -7,7 +7,6 @@ import config from '../config/private'
 // Get access token
 let access_token
 let room_id
-let contact_id
 let test = config.test
 
 /* User
@@ -37,5 +36,5 @@ describe('Testing User model', () => {
       expect(response.status).to.equal('success')
       done()
     })
-  })  
+  })
 })
