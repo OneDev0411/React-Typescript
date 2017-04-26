@@ -4,25 +4,38 @@ export default class extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      editMode: false
+      editMode: false,
+      text: props.text
     }
   }
 
-  onEditClick() {
-    this.setState({
-      editMode: true
+  onClickEdit() {
+    this.setState({ editMode: true }, () => {
+      // select all texts inside input
+      this.text_input.select()
     })
   }
 
-  cancelEditMode() {
-    this.setState({
-      editMode: false
-    })
+  onClickAdd() {
+    const { onAdd, type } = this.props
+
+    if (onAdd)
+      onAdd(type)
+  }
+
+  onCloseEdit() {
+    const { onChange, type, id } = this.props
+    const { text } = this.state
+
+    if (onChange && text.length > 0 && text !== this.props.text)
+      onChange(type, id, text)
+
+    this.setState({ editMode: false })
   }
 
   render() {
-    const { text, showAdd, showEdit } = this.props
-    const { editMode } = this.state
+    const { placeholder, showAdd, showEdit } = this.props
+    const { text, editMode } = this.state
 
     if (editMode) {
       return (
@@ -30,31 +43,43 @@ export default class extends React.Component {
           <input
             type="text"
             value={text}
+            placeholder={placeholder}
+            ref={ref => this.text_input = ref }
+            onChange={e => this.setState({ text: e.target.value })}
+            onBlur={() => this.onCloseEdit()}
+            onKeyPress={e => { if (e.key === 'Enter') this.onCloseEdit()}}
           />
-
-          <div className="control show">
-            <i className="fa fa-times" onClick={() => this.cancelEditMode()}></i>
-          </div>
         </div>
       )
     }
 
     return (
       <div className="contact-editable">
-        { text }
+        <span
+          onDoubleClick={() => this.onClickEdit()}
+        >
+          { text }
+        </span>
 
         <div className="control">
 
           {
-            showAdd &&
+            showEdit &&
             <i
               className="fa fa-pencil"
-              onClick={() => this.onEditClick()}
+              onClick={() => this.onClickEdit()}
             >
             </i>
           }
 
-          { showEdit && <i className="fa fa-plus-circle"></i> }
+          {
+            showAdd &&
+            <i
+              className="fa fa-plus-circle"
+              onClick={() => this.onClickAdd()}
+            >
+            </i>
+          }
         </div>
       </div>
     )

@@ -107,35 +107,12 @@ Contact.updateUserTimeline = async function(params) {
 }
 
 /**
-* update stage
+* create new attributes
 */
-Contact.updateStage = async function(params) {
-  const { id, stage, stage_id, access_token } = params
-  const attributes = [{
-    id: stage_id,
-    type: 'stage',
-    stage
-  }]
-
-  try {
-    const response = await agent
-      .post(`${proxy_host}/api/contacts/stage-update?access_token=${access_token}`)
-      .send({ contact_id: id })
-      .send({ attributes })
-
-    return response
-  } catch (e) {
-    throw e
-  }
-}
-
-/**
-* add tag
-*/
-Contact.addTags = async function(params) {
-  const { id, tags, access_token } = params
+Contact.createAttributes = async function(params) {
+  const { id, type, attributes, access_token } = params
   const endpoint = `${api_host}/contacts/${id}/attributes`
-  const payload = Contact.helper.addAttributes('tag', tags)
+  const payload = Contact.helper.populateAttributes(type, attributes)
 
   try {
     const response = await agent
@@ -148,6 +125,46 @@ Contact.addTags = async function(params) {
     throw e
   }
 }
+
+/**
+* update current attributes
+*/
+Contact.updateAttributes = async function(params) {
+  const { id, type, attributes, access_token } = params
+  const payload = Contact.helper.populateAttributes(type, attributes)
+
+  try {
+    const response = await agent
+      .post(`${proxy_host}/api/contacts/update-attributes?access_token=${access_token}`)
+      .set({ Authorization: `Bearer ${access_token}` })
+      .send({ contact_id: id })
+      .send({ attributes: payload.attributes })
+
+    return response
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
+* add tag
+*/
+// Contact.addTags = async function(params) {
+//   const { id, tags, access_token } = params
+//   const endpoint = `${api_host}/contacts/${id}/attributes`
+//   const payload = Contact.helper.addAttributes('tag', tags)
+
+//   try {
+//     const response = await agent
+//       .post(endpoint)
+//       .set({ Authorization: `Bearer ${access_token}` })
+//       .send(payload)
+
+//     return response
+//   } catch (e) {
+//     throw e
+//   }
+// }
 
 /**
 * get tags
@@ -170,18 +187,18 @@ Contact.addTags = async function(params) {
 * helpers functions
 */
 Contact.helper = {
-  addAttribute: (type, value) => {
+  populateAttributes: (type, attributes) => {
     return {
-      attributes: [{ type, [type]: value }]
-    }
-  },
-  addAttributes: (type, values) => {
-    return {
-      attributes: _.map(values, val => {
-        return {
-          type,
-          [type]: val
-        }
+      attributes: _.map(attributes, attr => {
+        const item =  { type }
+
+        if (attr[type])
+          item[type] = attr[type]
+
+        if (attr.id)
+          item.id = attr.id
+
+        return { ...item, ...attr }
       })
     }
   }
@@ -293,7 +310,7 @@ Contact.get = {
     _.each(context.sub_contacts, sub => {
       const item = Contact.get._sort(sub.attributes.birthdays)
       if (item)
-        list.push(moment.unix(item.birthday).format('MMMM DD, YYYY'))
+        list.push(item)
     })
 
     return list

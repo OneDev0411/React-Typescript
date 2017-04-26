@@ -1,8 +1,8 @@
 import { Dispatcher } from './flux'
 
 import addContact from '../actions/contacts/add-contact'
-import updateStage from '../actions/contacts/update-stage'
 import updateTags from '../actions/contacts/update-tags'
+import upsertAttributes from '../actions/contacts/upsert-attributes'
 import getContacts from '../actions/contacts/get-contacts'
 import getTimeline from '../actions/contacts/get-timeline'
 import addNote from '../actions/contacts/add-note'
@@ -30,8 +30,8 @@ ContactDispatcher.register(async (payload) => {
       updateTags(payload.user, payload.id, payload.new_tags, payload.remove_tags)
       break
 
-    case 'update-stage':
-      updateStage(payload.user, payload.id, payload.stage_id, payload.stage)
+    case 'upsert-attributes':
+      upsertAttributes(payload.user, payload.id, payload.type, payload.attributes)
       break
 
     case 'get-contacts':

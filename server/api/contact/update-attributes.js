@@ -3,7 +3,7 @@ import bodyParser from 'koa-bodyparser'
 const router = require('koa-router')()
 const app = new Koa()
 
-router.post('/contacts/stage-update', bodyParser(), async (ctx, next) => {
+router.post('/contacts/update-attributes', bodyParser(), async (ctx, next) => {
   const { contact_id, attributes } = ctx.request.body
 
   try {

@@ -25,22 +25,20 @@
 
 %contact-editable {
   div.contact-editable {
-    display: inline;
-    width: 100%;
     padding: 4px;
-    transition: border 0.4s ease-in;
     input {
       border: none;
-      &:focus {
+      width: 100%;
+      color: #000;
+      &:focus, &:hover {
+        outline: none;
         box-shadow: none;
+        border: none;
       }
     }
     .control {
       display: none;
-      margin-left: 12%;
-      &.show {
-        display: inline;
-      }
+      float: right;
       i {
         cursor: pointer;
         margin-left: 8px;
@@ -111,14 +109,18 @@
             padding: 0;
             width: 100%;
             li {
-              margin-bottom: 1%;
-              margin-right: 3%;
-              font-size: 13px;
-              color: #9b9b9b;
               .name {
-                display: inline-block;
                 color: #5b6469;
-                width: 30%;
+                width: 35%;
+                float: left;
+              }
+              .data {
+                margin-bottom: 15px;
+                margin-right: 3%;
+                font-size: 13px;
+                color: #9b9b9b;
+                width: 55%;
+                margin-left: 35%;
               }
             }
           }

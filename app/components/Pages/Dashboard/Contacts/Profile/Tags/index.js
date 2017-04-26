@@ -35,35 +35,26 @@ export default class Tags extends React.Component {
     const { showTagModal } = this.state
 
     return (
-      <Row>
-        <Col
-          xs={4}
-          className="name"
-          style={{ paddingLeft: '8%', color: '#5b6469' }}
-        >
-          Tags
-        </Col>
-        <Col xs={8}>
-          <ul className="tags">
-            {
-              _.map(tags, item =>
-                <li key={`tag_${item.id}`}>
-                  { item.tag }
-                </li>
-              )
-            }
-            <li className="new-item" onClick={() => this.createNewTag() }>
-              +
-            </li>
-          </ul>
-        </Col>
+      <div>
+        <ul className="tags">
+          {
+            _.map(tags, item =>
+              <li key={`tag_${item.id}`}>
+                { item.tag }
+              </li>
+            )
+          }
+          <li className="new-item" onClick={() => this.createNewTag() }>
+            +
+          </li>
+        </ul>
 
         <AddTag
           show={showTagModal}
           tags={tags}
           onChange={changes => this.onChange(changes)}
         />
-      </Row>
+      </div>
     )
   }
 }

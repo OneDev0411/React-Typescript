@@ -3,6 +3,7 @@ import { browserHistory } from 'react-router'
 import { Row, Col, Button, Tabs, Tab } from 'react-bootstrap'
 import Avatar from 'react-avatar'
 import moment from 'moment'
+import AppStore from '../../../../../stores/AppStore'
 import Dispatcher from '../../../../../dispatcher/ContactDispatcher'
 import Stepper from '../../../../Partials/Stepper'
 import Contact from '../../../../../models/Contact'
@@ -76,14 +77,67 @@ export default class ContactProfile extends React.Component {
     return list.indexOf(stage.name)
   }
 
+  onAddAttribute(type) {
+    const { contact } = this.state
+    const attributes = contact.sub_contacts[0].attributes
+    const entity = `${type}s`
+    attributes[entity].push({
+      type,
+      [type]: `Enter ${type} #${attributes[entity].length + 1}`
+    })
+    this.setState({ contact })
+  }
+
+  onChangeAttribute(type, id, text) {
+    const { user, params } = this.props
+    const attributes = [{
+      id,
+      type,
+      [type]: text
+    }]
+
+    this.dispatchAttributes(type, attributes)
+  }
+
   changeStage(stage, contact) {
     const { user, params } = this.props
+
+    const attributes = [{
+      id: Contact.get.stage(contact).id,
+      type: 'stage',
+      stage: stage.replace(/\s/g, '')
+    }]
+
+    this.dispatchAttributes('stage', attributes)
+  }
+
+  onChangeAddress(address, field, type, id, text) {
+    const { user, params } = this.props
+
+    const attributes = [{
+      id,
+      type: 'address',
+      street_name: address.street_name,
+      city: address.city,
+      state: address.state,
+      postal_code: address.postal_code
+    }]
+
+    // set field
+    attributes[0][field] = text
+
+    this.dispatchAttributes('address', attributes)
+  }
+
+  dispatchAttributes(type, attributes) {
+    const { user, params } = this.props
+
     Dispatcher.dispatch({
-      action: 'update-stage',
+      action: 'upsert-attributes',
       id: params.id,
-      stage_id: Contact.get.stage(contact).id,
-      user,
-      stage
+      type,
+      attributes,
+      user
     })
   }
 
@@ -137,40 +191,77 @@ export default class ContactProfile extends React.Component {
             <div className="card details">
               <div className="title">Details</div>
 
-              <Tags
-                contact_id={this.props.params.id}
-                user={this.props.user}
-                tags={Contact.get.tags(contact)}
-              />
-
               <ul className="table">
 
+                <li>
+                  <div className="name">Tags</div>
+                  <div className="data">
+                    <Tags
+                      contact_id={this.props.params.id}
+                      user={this.props.user}
+                      tags={Contact.get.tags(contact)}
+                    />
+                  </div>
+                </li>
+
                 {
-                  Contact.get.emails(contact).map(item => (
-                    <li key={`email_${item.id}`}>
-                      <span className="name">Email</span>
-                      <Editable
-                        type="email"
-                        showEdit={true}
-                        showAdd={true}
-                        text={ item.email }
-                      />
+                  Contact.get.emails(contact).map((item, key) => (
+                    <li key={`email_${key}`}>
+                      <div className="name">Email</div>
+                      <div className="data">
+                        <Editable
+                          type="email"
+                          id={item.id}
+                          showEdit={true}
+                          showAdd={true}
+                          text={item.email}
+                          onAdd={this.onAddAttribute.bind(this)}
+                          onChange={this.onChangeAttribute.bind(this)}
+                        />
+                      </div>
                     </li>
                   ))
                 }
 
                 {
-                  Contact.get.phones(contact).map(item => (
-                    <li key={`phone_${item.id}`}>
-                      <span className="name">Phone</span>{ item.phone_number }
+                  Contact.get.phones(contact).map((item, key) => (
+                    <li key={`phone_${key}`}>
+                      <div className="name">Phone</div>
+                      <div className="data">
+                        <Editable
+                          type="phone_number"
+                          id={item.id}
+                          showEdit={true}
+                          showAdd={true}
+                          text={item.phone_number}
+                          onAdd={this.onAddAttribute.bind(this)}
+                          onChange={this.onChangeAttribute.bind(this)}
+                        />
+                      </div>
                     </li>
                   ))
                 }
-                <li><span className="name">Original Source</span>{ Contact.get.source(contact) || '-' }</li>
+                <li>
+                  <div className="name">Original Source</div>
+                  <div className="data">
+                    { Contact.get.source(contact) || '-' }
+                  </div>
+                </li>
                 {
-                  Contact.get.birthdays(contact).map((birthday, key) => (
+                  Contact.get.birthdays(contact).map((item, key) => (
                     <li key={`birthday_${key}`}>
-                      <span className="name">Birthday</span>{ birthday }
+                      <div className="name">Birthday</div>
+                      <div className="data">
+                        <Editable
+                          type="birthday"
+                          id={item.id}
+                          placeholder="mm / dd / yyyy"
+                          showEdit={true}
+                          showAdd={false}
+                          text={item.birthday}
+                          onChange={this.onChangeAttribute.bind(this)}
+                        />
+                      </div>
                     </li>
                   ))
                 }
@@ -182,10 +273,54 @@ export default class ContactProfile extends React.Component {
               {
                 Contact.get.addresses(contact).map((address, key) => (
                   <ul key={`address_${key}`} className="table" style={{ marginBottom: '10px' }}>
-                    <li><span className="name">Address</span>{ address.street_name || '-' }</li>
-                    <li><span className="name">City</span>{ address.city || '-' }</li>
-                    <li><span className="name">State/region</span>{ address.state || '-' }</li>
-                    <li><span className="name">Zipcode</span>{ address.postal_code || '-' }</li>
+                    <li>
+                      <div className="name">Address</div>
+                      <div className="data">
+                        <Editable
+                          type="address"
+                          id={address.id}
+                          showEdit={true}
+                          text={address.street_name || '-'}
+                          onChange={this.onChangeAddress.bind(this, address, 'street_name')}
+                        />
+                      </div>
+                    </li>
+                    <li>
+                      <div className="name">City</div>
+                      <div className="data">
+                        <Editable
+                          type="address"
+                          id={address.id}
+                          showEdit={true}
+                          text={address.city || '-'}
+                          onChange={this.onChangeAddress.bind(this, address, 'city')}
+                        />
+                      </div>
+                    </li>
+                    <li>
+                      <div className="name">State/region</div>
+                      <div className="data">
+                        <Editable
+                          type="address"
+                          id={address.id}
+                          showEdit={true}
+                          text={address.state || '-'}
+                          onChange={this.onChangeAddress.bind(this, address, 'state')}
+                        />
+                      </div>
+                    </li>
+                    <li>
+                      <div className="name">Zipcode</div>
+                      <div className="data">
+                        <Editable
+                          type="address"
+                          id={address.id}
+                          showEdit={true}
+                          text={address.postal_code || '-'}
+                          onChange={this.onChangeAddress.bind(this, address, 'postal_code')}
+                        />
+                      </div>
+                    </li>
                   </ul>
                 ))
               }
