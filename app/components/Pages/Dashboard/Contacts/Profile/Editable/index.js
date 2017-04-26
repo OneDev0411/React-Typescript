@@ -27,7 +27,7 @@ export default class extends React.Component {
     const { onChange, type, id } = this.props
     const { text } = this.state
 
-    if (onChange)
+    if (onChange && text !== this.props.text)
       onChange(type, id, text)
 
     this.setState({ editMode: false })
