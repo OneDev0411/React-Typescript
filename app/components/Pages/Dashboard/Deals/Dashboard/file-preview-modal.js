@@ -1,5 +1,6 @@
 import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
+import PdfViewer from '../../../../Partials/Pdf/Viewer'
 
 export default ({
   file,
@@ -20,7 +21,11 @@ export default ({
         </button>
       </Modal.Header>
       <Modal.Body>
-        <img src={src} alt={name} className="c-file-preview-modal__image" />
+        {
+          file.type === 'pdf'
+          ? <PdfViewer uri={file.src} scale={1.25} />
+          : <img src={src} alt={name} className="c-file-preview-modal__image" />
+        }
       </Modal.Body>
     </Modal>
   )

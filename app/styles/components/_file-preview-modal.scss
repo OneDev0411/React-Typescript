@@ -1,5 +1,9 @@
 .c-file-preview-modal {
   @extend .c-concierge-modal;
+
+  .pdf-container {
+    margin: 0 auto;
+  }
    
   .modal-dialog {
     height: 100%;
@@ -12,7 +16,7 @@
   .modal-content {
     padding: 0;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     background-color: #eee;
   }
 

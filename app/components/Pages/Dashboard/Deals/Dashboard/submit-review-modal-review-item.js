@@ -8,15 +8,14 @@ const DocumentLink = ({
   onClickPreviewHandler
 }) => (
   <a
-    href={src}
-    target="_blank"
+    href="#"
     className="c-request-review__item__link"
     onClick={(e) => {
-      if (type === 'pdf') return
       e.preventDefault()
       onClickPreviewHandler({
         src,
-        name
+        name,
+        type
       })
     }}
   >
