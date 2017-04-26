@@ -133,7 +133,6 @@ Contact.updateAttributes = async function(params) {
   const { id, type, attributes, access_token } = params
   const payload = Contact.helper.populateAttributes(type, attributes)
 
-  console.log(payload.attributes)
   try {
     const response = await agent
       .post(`${proxy_host}/api/contacts/update-attributes?access_token=${access_token}`)
