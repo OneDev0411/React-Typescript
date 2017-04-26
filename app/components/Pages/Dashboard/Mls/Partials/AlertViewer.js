@@ -25,7 +25,7 @@ export default class AlertViewer extends Component {
         </div>
       )
     }
-    const alert_viewer_wrapper_style = S(`w-${window.innerWidth - 420} h-${window.innerHeight - 66} absolute z-3 t-66 l-350`)
+    const alert_viewer_wrapper_style = S(`w-${window.innerWidth - 420} h-${window.innerHeight - 66} absolute z-3 t-0 l-350`)
     const alert_viewer_style = {
       ...S(`absolute bg-f7f7f7 w-100p h-${window.innerHeight - 66} z-1 l-0 pl-20 pt-70`),
       overflowY: 'scroll'

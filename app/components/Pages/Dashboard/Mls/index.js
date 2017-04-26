@@ -801,8 +801,12 @@ export default class Mls extends Component {
       let panel_width = 425
       if (data.listing_panel.view === 'list')
         panel_width = 850
+      let map_width = window.innerWidth - panel_width - 70
+      // If user not logged in
+      if (!data.user)
+        map_width = map_width + 70
       content_area = (
-        <div style={ S(`absolute h-100p w-${window.innerWidth - panel_width - 70}`) }>
+        <div style={ S(`absolute h-100p w-${map_width}`) }>
           { content_area }
         </div>
       )
@@ -813,7 +817,7 @@ export default class Mls extends Component {
     let alert_viewer_area
     if (data.show_alerts_map) {
       const alert_header_style = {
-        ...S('h-42 absolute t-66 w-' + (window.innerWidth - 420))
+        ...S('h-42 absolute t-0 w-' + (window.innerWidth - 420))
       }
       const alert_header_bg = {
         ...alert_header_style,
