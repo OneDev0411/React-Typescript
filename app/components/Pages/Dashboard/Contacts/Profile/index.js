@@ -79,12 +79,19 @@ export default class ContactProfile extends React.Component {
 
   changeStage(stage, contact) {
     const { user, params } = this.props
+
+    const attributes = [{
+      id: Contact.get.stage(contact).id,
+      type: stage,
+      stage: stage.replace(/\s/g, '')
+    }]
+
     Dispatcher.dispatch({
-      action: 'update-stage',
+      action: 'upsert-attributes',
       id: params.id,
-      stage_id: Contact.get.stage(contact).id,
-      user,
-      stage
+      type: 'stage',
+      attributes,
+      user
     })
   }
 
@@ -100,7 +107,20 @@ export default class ContactProfile extends React.Component {
   }
 
   onChangeAttribute(type, id, text) {
-    console.log('>>>>>', text, id, text)
+    const { user, params } = this.props
+    const attributes = [{
+      id,
+      type,
+      [type]: text
+    }]
+
+    Dispatcher.dispatch({
+      action: 'upsert-attributes',
+      id: params.id,
+      type,
+      attributes,
+      user
+    })
   }
 
   render() {
@@ -108,8 +128,6 @@ export default class ContactProfile extends React.Component {
 
     if (!contact)
       return false
-
-    console.log(Contact.get.phones(contact))
 
     return (
       <div className="dashboard">
