@@ -3,6 +3,7 @@ import { browserHistory } from 'react-router'
 import { Row, Col, Button, Tabs, Tab } from 'react-bootstrap'
 import Avatar from 'react-avatar'
 import moment from 'moment'
+import AppStore from '../../../../../stores/AppStore'
 import Dispatcher from '../../../../../dispatcher/ContactDispatcher'
 import Stepper from '../../../../Partials/Stepper'
 import Contact from '../../../../../models/Contact'
@@ -87,11 +88,28 @@ export default class ContactProfile extends React.Component {
     })
   }
 
+  onAddAttribute(type) {
+    const { contact } = this.state
+    const attributes = contact.sub_contacts[0].attributes
+    const entity = `${type}s`
+    attributes[entity].push({
+      type,
+      [type]: `Enter ${type} #${attributes[entity].length + 1}`
+    })
+    this.setState({ contact })
+  }
+
+  onChangeAttribute(type, id, text) {
+    console.log('>>>>>', text, id, text)
+  }
+
   render() {
     const { contact, activeTab } = this.state
 
     if (!contact)
       return false
+
+    console.log(Contact.get.phones(contact))
 
     return (
       <div className="dashboard">
@@ -137,40 +155,67 @@ export default class ContactProfile extends React.Component {
             <div className="card details">
               <div className="title">Details</div>
 
-              <Tags
-                contact_id={this.props.params.id}
-                user={this.props.user}
-                tags={Contact.get.tags(contact)}
-              />
-
               <ul className="table">
 
+                <li>
+                  <div className="name">Tags</div>
+                  <div className="data">
+                    <Tags
+                      contact_id={this.props.params.id}
+                      user={this.props.user}
+                      tags={Contact.get.tags(contact)}
+                    />
+                  </div>
+                </li>
+
                 {
-                  Contact.get.emails(contact).map(item => (
-                    <li key={`email_${item.id}`}>
-                      <span className="name">Email</span>
-                      <Editable
-                        type="email"
-                        showEdit={true}
-                        showAdd={true}
-                        text={ item.email }
-                      />
+                  Contact.get.emails(contact).map((item, key) => (
+                    <li key={`email_${key}`}>
+                      <div className="name">Email</div>
+                      <div className="data">
+                        <Editable
+                          type="email"
+                          id={item.id}
+                          showEdit={true}
+                          showAdd={true}
+                          text={item.email}
+                          onAdd={this.onAddAttribute.bind(this)}
+                          onChange={this.onChangeAttribute.bind(this)}
+                        />
+                      </div>
                     </li>
                   ))
                 }
 
                 {
-                  Contact.get.phones(contact).map(item => (
-                    <li key={`phone_${item.id}`}>
-                      <span className="name">Phone</span>{ item.phone_number }
+                  Contact.get.phones(contact).map((item, key) => (
+                    <li key={`phone_${key}`}>
+                      <div className="name">Phone</div>
+                      <div className="data">
+                        <Editable
+                          type="phone_number"
+                          id={item.id}
+                          showEdit={true}
+                          showAdd={true}
+                          text={item.phone_number}
+                          onAdd={this.onAddAttribute.bind(this)}
+                          onChange={this.onChangeAttribute.bind(this)}
+                        />
+                      </div>
                     </li>
                   ))
                 }
-                <li><span className="name">Original Source</span>{ Contact.get.source(contact) || '-' }</li>
+                <li>
+                  <div className="name">Original Source</div>
+                  <div className="data">
+                    { Contact.get.source(contact) || '-' }
+                  </div>
+                </li>
                 {
                   Contact.get.birthdays(contact).map((birthday, key) => (
                     <li key={`birthday_${key}`}>
-                      <span className="name">Birthday</span>{ birthday }
+                      <div className="name">Birthday</div>
+                      <div className="data">{ birthday }</div>
                     </li>
                   ))
                 }
@@ -182,10 +227,22 @@ export default class ContactProfile extends React.Component {
               {
                 Contact.get.addresses(contact).map((address, key) => (
                   <ul key={`address_${key}`} className="table" style={{ marginBottom: '10px' }}>
-                    <li><span className="name">Address</span>{ address.street_name || '-' }</li>
-                    <li><span className="name">City</span>{ address.city || '-' }</li>
-                    <li><span className="name">State/region</span>{ address.state || '-' }</li>
-                    <li><span className="name">Zipcode</span>{ address.postal_code || '-' }</li>
+                    <li>
+                      <div className="name">Address</div>
+                      <div className="data">{ address.street_name || '-' }</div>
+                    </li>
+                    <li>
+                      <div className="name">City</div>
+                      <div className="data">{ address.city || '-' }</div>
+                    </li>
+                    <li>
+                      <div className="name">State/region</div>
+                      <div className="data">{ address.state || '-' }</div>
+                    </li>
+                    <li>
+                      <div className="name">Zipcode</div>
+                      <div className="data">{ address.postal_code || '-' }</div>
+                    </li>
                   </ul>
                 ))
               }
