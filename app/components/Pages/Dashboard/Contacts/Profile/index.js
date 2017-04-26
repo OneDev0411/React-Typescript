@@ -77,24 +77,6 @@ export default class ContactProfile extends React.Component {
     return list.indexOf(stage.name)
   }
 
-  changeStage(stage, contact) {
-    const { user, params } = this.props
-
-    const attributes = [{
-      id: Contact.get.stage(contact).id,
-      type: stage,
-      stage: stage.replace(/\s/g, '')
-    }]
-
-    Dispatcher.dispatch({
-      action: 'upsert-attributes',
-      id: params.id,
-      type: 'stage',
-      attributes,
-      user
-    })
-  }
-
   onAddAttribute(type) {
     const { contact } = this.state
     const attributes = contact.sub_contacts[0].attributes
@@ -115,6 +97,18 @@ export default class ContactProfile extends React.Component {
     }]
 
     this.dispatchAttributes(type, attributes)
+  }
+
+  changeStage(stage, contact) {
+    const { user, params } = this.props
+
+    const attributes = [{
+      id: Contact.get.stage(contact).id,
+      type: 'stage',
+      stage: stage.replace(/\s/g, '')
+    }]
+
+    this.dispatchAttributes('stage', attributes)
   }
 
   onChangeAddress(address, field, type, id, text) {
