@@ -103,12 +103,12 @@ export default class SubmitReviewModal extends React.Component {
 
                   if (doc.type === 'file') {
                     docUrl = doc.url
-                    title = doc.name.slice(0, -4)
+                    title = doc.name
                     avatar.type = doc.mime === 'application/pdf' ? 'pdf' : 'img'
                     avatar.src = avatar.type === 'img' ? doc.url : '#'
                   } else {
-                    title = doc.title.slice(0, -4)
-                    docUrl = getDocumentUrl(doc.id, doc.index, this.props.token)
+                    title = doc.title
+                    docUrl = getDocumentUrl(doc.envelope, doc.index, this.props.token)
                   }
 
                   return (
@@ -121,6 +121,7 @@ export default class SubmitReviewModal extends React.Component {
                       avatar={avatar}
                       fileUrl={docUrl}
                       onSelectedHandler={this.selectedHandler}
+                      onFilePreviewModalShowHandler={this.props.filePreviewModalShowHandler}
                     />
                   )
                 })
