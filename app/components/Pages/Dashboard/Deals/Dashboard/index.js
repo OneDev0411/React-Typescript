@@ -5,7 +5,6 @@ import {
   Tabs,
   Tab,
   Popover,
-  Tooltip,
   OverlayTrigger
 } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
@@ -18,9 +17,9 @@ import ConciergeDispatcher from '../../../../../dispatcher/ConciergeDispatcher'
 import DealForms from '../Forms'
 import DealESigns from '../ESigns'
 import Uploads from '../Uploads'
+import FilePreviewModal from './file-preview-modal'
 import SubmitReviewModal from './submit-review-modal'
 import MessageModal from '../../../../Partials/MessageModal'
-
 
 
 const serializeFormToObject = (form) => {
@@ -79,7 +78,9 @@ export default class DealDashboard extends React.Component {
       allReviewableDocs: null,
       files: this.deal.files || null,
       reviewRequestModalIsActive: false,
-      reviewRequestModalIsFreezed: false
+      reviewRequestModalIsFreezed: false,
+      filePreviewModalContent: '',
+      filePreviewModalIsActive: false
     }
 
     this.reviewRequestModalCloseHandler =
@@ -88,6 +89,10 @@ export default class DealDashboard extends React.Component {
       this.reviewRequestModalShowHandler.bind(this)
     this.reviewRequestModalSubmitHandler =
       this.reviewRequestModalSubmitHandler.bind(this)
+    this.filePreviewModalCloseHandler =
+      this.filePreviewModalCloseHandler.bind(this)
+    this.filePreviewModalShowHandler =
+      this.filePreviewModalShowHandler.bind(this)
   }
 
   componentDidMount() {
@@ -191,12 +196,22 @@ export default class DealDashboard extends React.Component {
     })
   }
 
+  filePreviewModalCloseHandler() {
+    this.setState({
+      filePreviewModalIsActive: false
+    })
+  }
 
-
+  filePreviewModalShowHandler(file) {
+    this.setState({
+      filePreviewModalIsActive: true,
+      filePreviewModalContent: file
+    })
+  }
 
   reviewRequestModalCloseHandler() {
     if (!this.state.reviewRequestModalIsFreezed) {
-      browserHistory.push(`/dashboard/deals/${this.props.params.id}`)
+      // browserHistory.push(`/dashboard/deals/${this.props.params.id}`)
       this.setState({
         reviewRequestModalIsActive: false
       })
@@ -306,6 +321,89 @@ export default class DealDashboard extends React.Component {
       ]
     }
     return allReviewableDocs
+  }
+
+  getCoverImage(deal) {
+    let src = '/static/images/deals/home.svg'
+
+    if (deal.listing)
+      src = deal.listing.cover_image_url
+
+    return <img style={S('mr-10 w-40 br-2')} src={src} />
+  }
+
+  getNumberWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  }
+
+  onTabChange(id) {
+    this.setState({ activeTab: id })
+
+    switch (id) {
+      case 'forms':
+        this.getSubmissions()
+        break
+
+      case 'esigns':
+        this.getEnvelopes()
+        break
+
+      case 'uploads':
+        break
+    }
+  }
+
+  getAddress(deal) {
+    const address = this.getValue(deal, 'street_address')
+
+    if (address.endsWith(','))
+      return address.substring(0, address.length - 1)
+    return address
+  }
+
+  getFullAddress(deal) {
+    const city = this.getValue(deal, 'city')
+    const state = this.getValue(deal, 'state')
+    const postal_code = this.getValue(deal, 'postal_code')
+    return `${city}, ${state}, ${postal_code}`.replace(/-,/ig, '')
+  }
+
+  getPrice(deal) {
+    const price = this.getValue(deal, 'list_price')
+
+    if (price === '-')
+      return price
+
+    return `$${this.getNumberWithCommas(price)}`
+  }
+
+  getStatus(deal) {
+    if (deal.listing)
+      return deal.listing.status
+
+    return '-'
+  }
+
+  getValue(deal, field) {
+    if (deal.context && deal.context[field])
+      return deal.context[field]
+    else if (deal.proposed_values && deal.proposed_values[field])
+      return deal.proposed_values[field]
+
+    return '-'
+  }
+
+  goBack() {
+    browserHistory.push('/dashboard/deals')
+  }
+
+  collectSignatures() {
+    if (AppStore.data.deals_signatures) {
+      AppStore.data.deals_signatures.documents = {}
+      AppStore.emitChange()
+    }
+
+    browserHistory.push(`/dashboard/deals/${this.props.params.id}/collect-signatures/documents`)
   }
 
   render() {
@@ -456,6 +554,13 @@ export default class DealDashboard extends React.Component {
           isFreezed={this.state.reviewRequestModalIsFreezed}
           closeHandler={this.reviewRequestModalCloseHandler}
           submitHandler={this.reviewRequestModalSubmitHandler}
+          filePreviewModalShowHandler={this.filePreviewModalShowHandler}
+        />
+
+        <FilePreviewModal
+          file={this.state.filePreviewModalContent}
+          isActive={this.state.filePreviewModalIsActive}
+          onCloseHandler={this.filePreviewModalCloseHandler}
         />
 
         <MessageModal
@@ -464,88 +569,5 @@ export default class DealDashboard extends React.Component {
         />
       </div>
     )
-  }
-
-  getCoverImage(deal) {
-    let src = '/static/images/deals/home.svg'
-
-    if (deal.listing)
-      src = deal.listing.cover_image_url
-
-    return <img style={S('mr-10 w-40 br-2')} src={src} />
-  }
-
-  getNumberWithCommas(number) {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-  }
-
-  onTabChange(id) {
-    this.setState({ activeTab: id })
-
-    switch (id) {
-      case 'forms':
-        this.getSubmissions()
-        break
-
-      case 'esigns':
-        this.getEnvelopes()
-        break
-
-      case 'uploads':
-        break
-    }
-  }
-
-  getAddress(deal) {
-    const address = this.getValue(deal, 'street_address')
-
-    if (address.endsWith(','))
-      return address.substring(0, address.length - 1)
-    return address
-  }
-
-  getFullAddress(deal) {
-    const city = this.getValue(deal, 'city')
-    const state = this.getValue(deal, 'state')
-    const postal_code = this.getValue(deal, 'postal_code')
-    return `${city}, ${state}, ${postal_code}`.replace(/-,/ig, '')
-  }
-
-  getPrice(deal) {
-    const price = this.getValue(deal, 'list_price')
-
-    if (price === '-')
-      return price
-
-    return `$${this.getNumberWithCommas(price)}`
-  }
-
-  getStatus(deal) {
-    if (deal.listing)
-      return deal.listing.status
-
-    return '-'
-  }
-
-  getValue(deal, field) {
-    if (deal.context && deal.context[field])
-      return deal.context[field]
-    else if (deal.proposed_values && deal.proposed_values[field])
-      return deal.proposed_values[field]
-
-    return '-'
-  }
-
-  goBack() {
-    browserHistory.push('/dashboard/deals')
-  }
-
-  collectSignatures() {
-    if (AppStore.data.deals_signatures) {
-      AppStore.data.deals_signatures.documents = {}
-      AppStore.emitChange()
-    }
-
-    browserHistory.push(`/dashboard/deals/${this.props.params.id}/collect-signatures/documents`)
   }
 }

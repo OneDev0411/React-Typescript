@@ -1,9 +1,10 @@
 import { Dispatcher } from './flux'
 
 import addContact from '../actions/contacts/add-contact'
-import updateTags from '../actions/contacts/update-tags'
+import deleteAttribute from '../actions/contacts/delete-attribute'
 import upsertAttributes from '../actions/contacts/upsert-attributes'
 import getContacts from '../actions/contacts/get-contacts'
+import getTags from '../actions/contacts/get-tags'
 import getTimeline from '../actions/contacts/get-timeline'
 import addNote from '../actions/contacts/add-note'
 import updateUserTimeline from '../actions/contacts/update-user-timeline'
@@ -26,8 +27,8 @@ ContactDispatcher.register(async (payload) => {
         payload.stage
       )
 
-    case 'update-tags':
-      updateTags(payload.user, payload.id, payload.new_tags, payload.remove_tags)
+    case 'delete-attribute':
+      deleteAttribute(payload.user, payload.id, payload.attribute_id)
       break
 
     case 'upsert-attributes':
@@ -36,6 +37,10 @@ ContactDispatcher.register(async (payload) => {
 
     case 'get-contacts':
       getContacts(payload.user)
+      break
+
+    case 'get-tags':
+      getTags(payload.user)
       break
 
     case 'get-timeline':

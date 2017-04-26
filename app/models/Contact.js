@@ -147,41 +147,40 @@ Contact.updateAttributes = async function(params) {
 }
 
 /**
-* add tag
+* delete attribute
 */
-// Contact.addTags = async function(params) {
-//   const { id, tags, access_token } = params
-//   const endpoint = `${api_host}/contacts/${id}/attributes`
-//   const payload = Contact.helper.addAttributes('tag', tags)
+Contact.deleteAttribute = async function(params) {
+  const { id, attribute_id, access_token } = params
 
-//   try {
-//     const response = await agent
-//       .post(endpoint)
-//       .set({ Authorization: `Bearer ${access_token}` })
-//       .send(payload)
+  try {
+    const response = await agent
+      .post(`${proxy_host}/api/contacts/delete-attribute?access_token=${access_token}`)
+      .set({ Authorization: `Bearer ${access_token}` })
+      .send({ contact_id: id })
+      .send({ attribute_id })
 
-//     return response
-//   } catch (e) {
-//     throw e
-//   }
-// }
+    return response
+  } catch (e) {
+    throw e
+  }
+}
 
 /**
 * get tags
 */
-// Contact.getTags = async function(params) {
-//   const { id, access_token } = params
+Contact.getTags = async function(params) {
+  const { access_token } = params
 
-//   try {
-//     const response = await agent
-//       .get(`${api_host}/contacts/tags`)
-//       .set({ Authorization: `Bearer ${access_token}` })
+  try {
+    const response = await agent
+      .get(`${api_host}/contacts/tags`)
+      .set({ Authorization: `Bearer ${access_token}` })
 
-//     return response
-//   } catch (e) {
-//     throw e
-//   }
-// }
+    return response
+  } catch (e) {
+    throw e
+  }
+}
 
 /**
 * helpers functions
@@ -326,14 +325,24 @@ Contact.get = {
     return _.sortBy(list, item => item.created_at * -1)
   },
   tags: context => {
-    let list = new Array()
+    let list = {}
+
     _.each(context.sub_contacts, sub => {
-      const tags = sub.attributes.tags
-      if (tags && tags.length > 0)
-        list = list.concat(tags)
+      _.each(sub.attributes.tags, item => {
+        list[item.tag] = {
+          ...item,
+          active: true
+        }
+      })
     })
 
-    return _.sortBy(list, item => item.created_at * 1)
+    // get default tags with current contact's tag
+    const default_tags = _.filter(context.default_tags, item => !list[item.name])
+
+    return {
+      ..._.indexBy(default_tags, 'tag'),
+      ...list
+    }
   }
 }
 

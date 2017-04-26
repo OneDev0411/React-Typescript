@@ -22,26 +22,35 @@ export default class ContactProfile extends React.Component {
   }
 
   componentDidMount() {
-    const { contacts, params } = this.props
+    const { contacts, tags, params } = this.props
     const contact = contacts[params.id]
 
     if (!contact)
       return
 
-    this.setState({ contact })
+    // set default tags
+    contact.default_tags = tags
 
-    if (!contact.timeline)
+    // set state
+    this.setState({
+      contact
+    })
+
+    if (!contacts[params.id].timeline)
       this.getTimeline()
   }
 
   componentWillReceiveProps(nextProps) {
-    const { contacts, params } = nextProps
+    const { contacts, tags, params } = nextProps
 
     // load deal
     const contact = contacts[params.id]
 
     if (!contact)
       return
+
+    // set default tags
+    contact.default_tags = tags
 
     this.setState({ contact })
   }
@@ -96,7 +105,7 @@ export default class ContactProfile extends React.Component {
       [type]: text
     }]
 
-    this.dispatchAttributes(type, attributes)
+    this.upsertAttributes(type, attributes)
   }
 
   changeStage(stage, contact) {
@@ -108,7 +117,7 @@ export default class ContactProfile extends React.Component {
       stage: stage.replace(/\s/g, '')
     }]
 
-    this.dispatchAttributes('stage', attributes)
+    this.upsertAttributes('stage', attributes)
   }
 
   onChangeAddress(address, field, type, id, text) {
@@ -126,10 +135,10 @@ export default class ContactProfile extends React.Component {
     // set field
     attributes[0][field] = text
 
-    this.dispatchAttributes('address', attributes)
+    this.upsertAttributes('address', attributes)
   }
 
-  dispatchAttributes(type, attributes) {
+  upsertAttributes(type, attributes) {
     const { user, params } = this.props
 
     Dispatcher.dispatch({

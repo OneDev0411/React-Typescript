@@ -22,7 +22,8 @@ const routes = {
     [ 'search' ]
   ],
   contact: [
-    [ 'update-attributes' ]
+    [ 'update-attributes' ],
+    [ 'delete-attribute' ]
   ],
   concierge: [
     [ 'put-review' ]
