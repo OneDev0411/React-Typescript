@@ -310,7 +310,7 @@ Contact.get = {
     _.each(context.sub_contacts, sub => {
       const item = Contact.get._sort(sub.attributes.birthdays)
       if (item)
-        list.push(moment.unix(item.birthday).format('MMMM DD, YYYY'))
+        list.push(item)
     })
 
     return list
