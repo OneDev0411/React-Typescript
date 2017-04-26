@@ -2,9 +2,8 @@ import _ from 'underscore'
 import Contact from '../../models/Contact'
 import AppStore from '../../stores/AppStore'
 
-export default async function (user, id) {
+export default async function (user) {
   const params = {
-    id,
     access_token: user.access_token
   }
 
@@ -12,9 +11,8 @@ export default async function (user, id) {
     const response = await Contact.getTags(params)
 
     if (response.status === 200)
-      AppStore.data.contacts[id].tags = response.body.data
-  }
-  catch(e) {
+      AppStore.data.contacts_tags = response.body.data
+  } catch(e) {
     console.log(e)
   }
 }

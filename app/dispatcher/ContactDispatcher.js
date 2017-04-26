@@ -4,6 +4,7 @@ import addContact from '../actions/contacts/add-contact'
 import updateTags from '../actions/contacts/update-tags'
 import upsertAttributes from '../actions/contacts/upsert-attributes'
 import getContacts from '../actions/contacts/get-contacts'
+import getTags from '../actions/contacts/get-tags'
 import getTimeline from '../actions/contacts/get-timeline'
 import addNote from '../actions/contacts/add-note'
 import updateUserTimeline from '../actions/contacts/update-user-timeline'
@@ -36,6 +37,10 @@ ContactDispatcher.register(async (payload) => {
 
     case 'get-contacts':
       getContacts(payload.user)
+      break
+
+    case 'get-tags':
+      getTags(payload.user)
       break
 
     case 'get-timeline':

@@ -12,11 +12,21 @@ export default class extends React.Component {
 
     // get deals
     this.getContacts(user)
+
+    // get shared tags
+    this.getTags(user)
   }
 
   getContacts(user) {
     Dispatcher.dispatch({
       action: 'get-contacts',
+      user
+    })
+  }
+
+  getTags(user) {
+    Dispatcher.dispatch({
+      action: 'get-tags',
       user
     })
   }
@@ -28,7 +38,8 @@ export default class extends React.Component {
     const children = React.Children.map(this.props.children, child =>
       React.cloneElement(child, {
         user,
-        contacts: data.contacts
+        contacts: data.contacts,
+        tags: data.contacts_tags
       })
     )
 

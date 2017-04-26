@@ -169,19 +169,19 @@ Contact.updateAttributes = async function(params) {
 /**
 * get tags
 */
-// Contact.getTags = async function(params) {
-//   const { id, access_token } = params
+Contact.getTags = async function(params) {
+  const { access_token } = params
 
-//   try {
-//     const response = await agent
-//       .get(`${api_host}/contacts/tags`)
-//       .set({ Authorization: `Bearer ${access_token}` })
+  try {
+    const response = await agent
+      .get(`${api_host}/contacts/tags`)
+      .set({ Authorization: `Bearer ${access_token}` })
 
-//     return response
-//   } catch (e) {
-//     throw e
-//   }
-// }
+    return response
+  } catch (e) {
+    throw e
+  }
+}
 
 /**
 * helpers functions
