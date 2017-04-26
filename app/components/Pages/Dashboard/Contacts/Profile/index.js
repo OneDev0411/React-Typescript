@@ -230,10 +230,20 @@ export default class ContactProfile extends React.Component {
                   </div>
                 </li>
                 {
-                  Contact.get.birthdays(contact).map((birthday, key) => (
+                  Contact.get.birthdays(contact).map((item, key) => (
                     <li key={`birthday_${key}`}>
                       <div className="name">Birthday</div>
-                      <div className="data">{ birthday }</div>
+                      <div className="data">
+                        <Editable
+                          type="birthday"
+                          id={item.id}
+                          placeholder="mm / dd / yyyy"
+                          showEdit={true}
+                          showAdd={false}
+                          text={item.birthday}
+                          onChange={this.onChangeAttribute.bind(this)}
+                        />
+                      </div>
                     </li>
                   ))
                 }
