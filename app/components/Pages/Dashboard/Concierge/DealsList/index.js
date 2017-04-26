@@ -70,28 +70,6 @@ export default class DealsList extends React.Component {
     return false
   }
 
-  getDealAddress(deal) {
-    const address = getFieldValue(deal, 'full_address')
-
-    if (address.endsWith(','))
-      return address.substring(0, address.length - 1)
-    return address
-  }
-
-  getCoverImage(deal) {
-    let src = '/static/images/deals/home.svg'
-
-    if (deal.listing)
-      src = deal.listing.cover_image_url
-
-    // if (deal.context && deal.context.photo)
-    //   src = deal.context.photo
-    // else if (deal.proposed_values && deal.proposed_values.photo)
-    //   src = deal.proposed_values.photo
-
-    return <img style={S('mr-10 w-20')} src={src} />
-  }
-
   getReview(deal) {
     if (!deal.reviews)
       return null
@@ -162,8 +140,11 @@ export default class DealsList extends React.Component {
                   className={'item'}
                 >
                   <Col md={6} sm={6} xs={6}>
-                    { this.getCoverImage(deal) }
-                    <span>{ this.getDealAddress(deal) }</span>
+                    <img
+                      style={S('mr-10 w-20')}
+                      src={ getFieldValue(deal, 'photo') || '/static/images/deals/home.svg' }
+                    />
+                    <span>{ getFieldValue(deal, 'full_address') || '-' }</span>
                   </Col>
                   <Col md={2} sm={2} xs={2}>
                     <span>{ deal.created_by.display_name || '-' }</span>

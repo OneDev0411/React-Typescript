@@ -2,6 +2,9 @@
 import AppStore from '../../stores/AppStore'
 import Room from '../../models/Room'
 export default (user, alert) => {
+  // TODO remove hack fix
+  if (alert.mls_areas === 'null')
+    alert.mls_areas = null
   AppStore.data.listing_map.saving_alert = true
   AppStore.emitChange()
   const params = {

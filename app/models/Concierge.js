@@ -34,7 +34,7 @@ const asyncRequest = async (request) => {
 
 export const getDeals = (params) => {
   const { token, brand = null } = params
-  const url = `${API_HOST}/brands/${brand}/deals?associations=deal.listing,deal.created_by`
+  const url = `${API_HOST}/brands/${brand}/deals?associations=deal.created_by`
   return asyncRequest(getRequest(url, token))
 }
 

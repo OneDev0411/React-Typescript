@@ -222,13 +222,14 @@ export default class ListingPanel extends Component {
     }
     // Go full (width) monty
     if (data.listing_panel && data.listing_panel.size === 'full') {
+      const panel_width = data.user ? (window.innerWidth - 70) : window.innerWidth
       listing_panel_style = {
         ...listing_panel_style,
-        ...S(`w-${window.innerWidth - 70}`)
+        ...S(`w-${panel_width}`)
       }
       listing_scroll_style = {
         ...listing_scroll_style,
-        ...S(`w-${window.innerWidth - 70}`)
+        ...S(`w-${panel_width}`)
       }
     }
     let panel_class = 'listing-panel'

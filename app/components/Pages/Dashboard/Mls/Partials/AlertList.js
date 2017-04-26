@@ -116,7 +116,7 @@ export default class AlertList extends Component {
         )
       }
     }
-    const drawer_style = S(`bg-fff w-350 h-${window.innerHeight - 66} absolute z-1 t-66 l-0 border-right-1-solid-d3d3d3`)
+    const drawer_style = S(`bg-fff w-350 h-${window.innerHeight - 66} absolute z-1 t-0 l-0 border-right-1-solid-d3d3d3`)
     return (
       <div className="alert-list" style={drawer_style}>
         {
