@@ -114,6 +114,30 @@ export default class ContactProfile extends React.Component {
       [type]: text
     }]
 
+    this.dispatchAttributes(type, attributes)
+  }
+
+  onChangeAddress(address, field, type, id, text) {
+    const { user, params } = this.props
+
+    const attributes = [{
+      id,
+      type: 'address',
+      street_name: address.street_name,
+      city: address.city,
+      state: address.state,
+      postal_code: address.postal_code
+    }]
+
+    // set field
+    attributes[0][field] = text
+
+    this.dispatchAttributes('address', attributes)
+  }
+
+  dispatchAttributes(type, attributes) {
+    const { user, params } = this.props
+
     Dispatcher.dispatch({
       action: 'upsert-attributes',
       id: params.id,
@@ -257,19 +281,51 @@ export default class ContactProfile extends React.Component {
                   <ul key={`address_${key}`} className="table" style={{ marginBottom: '10px' }}>
                     <li>
                       <div className="name">Address</div>
-                      <div className="data">{ address.street_name || '-' }</div>
+                      <div className="data">
+                        <Editable
+                          type="address"
+                          id={address.id}
+                          showEdit={true}
+                          text={address.street_name || '-'}
+                          onChange={this.onChangeAddress.bind(this, address, 'street_name')}
+                        />
+                      </div>
                     </li>
                     <li>
                       <div className="name">City</div>
-                      <div className="data">{ address.city || '-' }</div>
+                      <div className="data">
+                        <Editable
+                          type="address"
+                          id={address.id}
+                          showEdit={true}
+                          text={address.city || '-'}
+                          onChange={this.onChangeAddress.bind(this, address, 'city')}
+                        />
+                      </div>
                     </li>
                     <li>
                       <div className="name">State/region</div>
-                      <div className="data">{ address.state || '-' }</div>
+                      <div className="data">
+                        <Editable
+                          type="address"
+                          id={address.id}
+                          showEdit={true}
+                          text={address.state || '-'}
+                          onChange={this.onChangeAddress.bind(this, address, 'state')}
+                        />
+                      </div>
                     </li>
                     <li>
                       <div className="name">Zipcode</div>
-                      <div className="data">{ address.postal_code || '-' }</div>
+                      <div className="data">
+                        <Editable
+                          type="address"
+                          id={address.id}
+                          showEdit={true}
+                          text={address.postal_code || '-'}
+                          onChange={this.onChangeAddress.bind(this, address, 'postal_code')}
+                        />
+                      </div>
                     </li>
                   </ul>
                 ))
