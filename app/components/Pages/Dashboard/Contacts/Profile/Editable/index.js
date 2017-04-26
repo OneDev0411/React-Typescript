@@ -27,14 +27,14 @@ export default class extends React.Component {
     const { onChange, type, id } = this.props
     const { text } = this.state
 
-    if (onChange && text !== this.props.text)
+    if (onChange && text.length > 0 && text !== this.props.text)
       onChange(type, id, text)
 
     this.setState({ editMode: false })
   }
 
   render() {
-    const { showAdd, showEdit } = this.props
+    const { placeholder, showAdd, showEdit } = this.props
     const { text, editMode } = this.state
 
     if (editMode) {
@@ -43,6 +43,7 @@ export default class extends React.Component {
           <input
             type="text"
             value={text}
+            placeholder={placeholder}
             ref={ref => this.text_input = ref }
             onChange={e => this.setState({ text: e.target.value })}
             onBlur={() => this.onCloseEdit()}
