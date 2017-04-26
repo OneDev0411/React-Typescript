@@ -5,6 +5,9 @@ import _ from 'lodash'
 import async from 'async'
 import AppDispatcher from '../../dispatcher/AppDispatcher'
 export default (user, rooms, users, emails, phone_numbers, alert, message) => {
+  // TODO remove hack fix
+  if (alert.mls_areas === 'null')
+    alert.mls_areas = null
   AppStore.data.listing_map.saving_alert = true
   AppStore.emitChange()
   // Get a room
