@@ -44,7 +44,6 @@ export default class SideBar extends Component {
   showIntercom() {
     AppStore.data.show_intercom = true
     AppStore.emitChange()
-    console.log(window.intercomSettings)
     window.Intercom('show')
   }
 
