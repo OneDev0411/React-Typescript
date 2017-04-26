@@ -676,7 +676,7 @@ export default class SideBar extends Component {
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
-            <NavItem style={ S('t-5n l-10n') }>
+            <NavItem style={ S('t-5n l-10n') } onClick={this.showIntercom}>
               <OverlayTrigger placement="right" overlay={popover.support} delayShow={200} delayHide={0}>
                 <div style={S('pointer relative')}>
                   <SvgSupport color={'#4e5c6c'} />
