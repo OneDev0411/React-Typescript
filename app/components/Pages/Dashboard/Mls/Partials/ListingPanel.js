@@ -112,6 +112,15 @@ export default class ListingPanel extends Component {
             social_info += (commented_user.first_name.trim() ? commented_user.first_name : commented_user.email) + (comment_i === listing.commented_by.length - 1 ? '' : ', ')
         })
       }
+      let details_area = (
+        <div style={ S('font-14') }>
+          <span>{ property.bedroom_count } Beds</span>
+          &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+          <span>{ property.bathroom_count } Baths</span>
+          &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+          <span>{ square_feet } Sqft</span>
+        </div>
+      )
       return (
         <div onMouseOut={ this.props.removeActiveListing.bind(this) } onMouseOver={ this.props.setActiveListing.bind(this, listing) } key={ 'panel-listing-grid-' + listing.id + '-' + i } style={ S('relative pointer w-415 h-315 pb-10 pl-10 bg-fff pull-left br-3') }>
           <div style={ S('absolute r-0') }>
@@ -134,13 +143,7 @@ export default class ListingPanel extends Component {
               <div style={ S('font-17 fw-600') }>
                 ${ helpers.numberWithCommas(Math.floor(price)) }
               </div>
-              <div style={ S('font-14') }>
-                <span>{ property.bedroom_count } Beds</span>
-                &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-                <span>{ property.bathroom_count } Baths</span>
-                &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-                <span>{ square_feet } Sqft</span>
-              </div>
+              { details_area }
             </div>
           </div>
         </div>

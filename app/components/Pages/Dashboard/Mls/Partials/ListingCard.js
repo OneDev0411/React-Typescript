@@ -69,6 +69,44 @@ export default class ListingCard extends Component {
       ...S('bg-000 absolute w-100p h-100p br-3'),
       opacity: '.3'
     }
+    let details_area = (
+      <div style={{ opacity: '.9' }}>
+        <span>{ property.bedroom_count } Beds</span>
+        &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+        <span>{ property.bathroom_count } Baths</span>
+        &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+        <span>{ square_feet } Sqft</span>
+        &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+        <span>{ property.year_built ? `Built in ${property.year_built}` : '' }</span>
+      </div>
+    )
+    if (property.property_subtype === 'LND-Residential' || property.property_subtype === 'LND-Commercial') {
+      details_area = (
+        <div style={{ opacity: '.9' }}>
+          { property.lot_size_area ? <span>{ property.lot_size_area.toFixed(1) } Acres</span> : '' }
+          { property.lot_size_dimensions ? <span>&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;</span> : '' }
+          <span>{ property.lot_size_dimensions ? `Lot Dimensions ${property.lot_size_dimensions}` : '' }</span>
+        </div>
+      )
+    }
+    if (property.property_subtype === 'LSE-House' ||
+        property.property_subtype === 'LSE-Apartment' ||
+        property.property_subtype === 'LSE-Duplex' ||
+        property.property_subtype === 'Condo/Townhome') {
+      details_area = (
+        <div style={{ opacity: '.9' }}>
+          <span>{ property.bedroom_count } Beds</span>
+          &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+          <span>{ property.bathroom_count } Baths</span>
+          &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+          <span>{ square_feet } Sqft</span>
+          { property.pets_yn ? <span>&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;</span> : '' }
+          <span>{ property.pets_yn ? `Pet Friendly` : '' }</span>
+          { property.unit_count ? <span>&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;</span> : '' }
+          <span>{ property.unit_count ? `${property.unit_count} Units` : '' }</span>
+        </div>
+      )
+    }
     return (
       <div key={`listing-viewer-${listing.id}-${helpers.randomString(10)}`} style={listing_card_style}>
         {
@@ -88,15 +126,7 @@ export default class ListingCard extends Component {
           <div style={S('absolute b-0 p-10 color-fff')}>
             <div style={S('font-24 fw-500')}>${ helpers.numberWithCommas(listing.price) }</div>
             <div style={{ opacity: '.9' }}>{ listing_util.addressTitle(address) }</div>
-            <div style={{ opacity: '.9' }}>
-              <span>{ property.bedroom_count } Beds</span>
-              &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-              <span>{ property.bathroom_count } Baths</span>
-              &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-              <span>{ square_feet } Sqft</span>
-              &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-              <span>{ property.year_built ? `Built in ${property.year_built}` : '' }</span>
-            </div>
+            { details_area }
           </div>
         </div>
         {
