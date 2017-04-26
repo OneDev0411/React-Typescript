@@ -2,7 +2,7 @@ import _ from 'underscore'
 import Contact from '../../models/Contact'
 import AppStore from '../../stores/AppStore'
 
-function updateAppStore(response) {
+function updateAppStore(id, response) {
   if (response.status !== 200)
     return
 
@@ -37,7 +37,7 @@ export default async function (user, id, type, attributes) {
       response = await Contact.createAttributes(params)
 
       // update app store
-      updateAppStore(response)
+      updateAppStore(id, response)
     } catch(e) { /* nothing */}
   }
 
@@ -53,7 +53,7 @@ export default async function (user, id, type, attributes) {
       response = await Contact.updateAttributes(params)
 
       // update app store
-      updateAppStore(response)
+      updateAppStore(id, response)
 
     } catch(e) { /* nothing */}
   }
