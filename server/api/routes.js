@@ -22,7 +22,7 @@ const routes = {
     [ 'search' ]
   ],
   contact: [
-    [ 'update-stage' ]
+    [ 'update-attributes' ]
   ],
   concierge: [
     [ 'put-review' ]
