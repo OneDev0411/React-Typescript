@@ -133,6 +133,7 @@ Contact.updateAttributes = async function(params) {
   const { id, type, attributes, access_token } = params
   const payload = Contact.helper.populateAttributes(type, attributes)
 
+  console.log(payload.attributes)
   try {
     const response = await agent
       .post(`${proxy_host}/api/contacts/update-attributes?access_token=${access_token}`)
@@ -190,15 +191,15 @@ Contact.helper = {
   populateAttributes: (type, attributes) => {
     return {
       attributes: _.map(attributes, attr => {
-        const item =  {
-          type,
-          [type]: attr[type]
-        }
+        const item =  { type }
+
+        if (attr[type])
+          item[type] = attr[type]
 
         if (attr.id)
           item.id = attr.id
 
-        return item
+        return { ...item, ...attr }
       })
     }
   }
