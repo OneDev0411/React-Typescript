@@ -65,5 +65,8 @@ export default {
     //   return imgix_url
     // else
     //   return full_size_url
+  },
+  squareMetersToAcres(value){
+    return value * 0.000247105
   }
 }

@@ -71,39 +71,48 @@ export default class ListingCard extends Component {
     }
     let details_area = (
       <div style={{ opacity: '.9' }}>
-        <span>{ property.bedroom_count } Beds</span>
+        <span>{ property.bedroom_count ? property.bedroom_count : 0 } Beds</span>
         &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-        <span>{ property.bathroom_count } Baths</span>
+        <span>{ property.full_bathroom_count ? property.full_bathroom_count : 0 } Baths</span>
         &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
         <span>{ square_feet } Sqft</span>
         &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
         <span>{ property.year_built ? `Built in ${property.year_built}` : '' }</span>
       </div>
     )
-    if (property.property_subtype === 'LND-Residential' || property.property_subtype === 'LND-Commercial') {
+    if (property.property_type === 'Lots & Acreage') {
+      const lot_acres = listing_util.squareMetersToAcres(property.lot_square_meters).toFixed(1)
       details_area = (
         <div style={{ opacity: '.9' }}>
-          { property.lot_size_area ? <span>{ property.lot_size_area.toFixed(1) } Acres</span> : '' }
+          { lot_acres ? <span>{ lot_acres } Acres</span> : '' }
           { property.lot_size_dimensions ? <span>&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;</span> : '' }
           <span>{ property.lot_size_dimensions ? `Lot Dimensions ${property.lot_size_dimensions}` : '' }</span>
         </div>
       )
     }
-    if (property.property_subtype === 'LSE-House' ||
-        property.property_subtype === 'LSE-Apartment' ||
-        property.property_subtype === 'LSE-Duplex' ||
-        property.property_subtype === 'Condo/Townhome') {
+    if (property.property_type === 'Residential Lease') {
       details_area = (
         <div style={{ opacity: '.9' }}>
-          <span>{ property.bedroom_count } Beds</span>
+          <span>{ property.bedroom_count ? property.bedroom_count : 0 } Beds</span>
           &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-          <span>{ property.bathroom_count } Baths</span>
-          &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-          <span>{ square_feet } Sqft</span>
+          <span>{ property.full_bathroom_count ? property.full_bathroom_count : 0 } Baths</span>
+          { square_feet ? <span>&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;</span> : '' }
+          { square_feet ? <span>{ square_feet } Sqft</span> : '' }
           { property.pets_yn ? <span>&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;</span> : '' }
-          <span>{ property.pets_yn ? `Pet Friendly` : '' }</span>
-          { property.unit_count ? <span>&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;</span> : '' }
-          <span>{ property.unit_count ? `${property.unit_count} Units` : '' }</span>
+          { property.pets_yn ? <span>{ property.pets_yn ? `Pet Friendly` : '' }</span> : '' }
+        </div>
+      )
+    }
+    if (property.property_type === 'Multi-Family') {
+      details_area = (
+        <div style={{ opacity: '.9' }}>
+          <span>{ property.bedroom_count ? property.bedroom_count : 0 } Beds</span>
+          &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+          <span>{ property.full_bathroom_count ? property.full_bathroom_count : 0 } Baths</span>
+          { square_feet ? <span>&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;</span> : '' }
+          { square_feet ? <span>{ square_feet } Sqft</span> : '' }
+          { property.number_of_units ? <span>&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;</span> : '' }
+          <span>{ property.number_of_units ? `${property.number_of_units} Units` : '' }</span>
         </div>
       )
     }
