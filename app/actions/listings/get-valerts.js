@@ -3,6 +3,9 @@ import Listing from '../../models/Listing'
 import AppStore from '../../stores/AppStore'
 import { getParameterByName } from '../../utils/helpers'
 export default (user, options) => {
+  // Don't get listings if Mobile Splash page showing
+  if (AppStore.data.show_mobile_splash_viewer)
+    return
   const params = {
     options
   }
