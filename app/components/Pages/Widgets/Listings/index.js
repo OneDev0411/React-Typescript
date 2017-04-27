@@ -73,8 +73,6 @@ export default class Listings extends Component {
   initOptions(brokerage, agent) {
     const options = {
       limit: '75',
-      maximum_lot_square_meters: 100000000,
-      minimum_bathrooms: 0,
       location: {
         longitude: -96.79698789999998,
         latitude: 32.7766642
@@ -82,13 +80,9 @@ export default class Listings extends Component {
       horizontal_distance: 2830,
       property_types: ['Residential', 'Residential Lease', 'Lots & Acreage'],
       vertical_distance: 2830,
-      minimum_square_meters: 0,
       listing_statuses: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract', 'Pending'],
-      minimum_lot_square_meters: 0,
       currency: 'USD',
       points: null,
-      minimum_bedrooms: 0,
-      minimum_price: 0,
       open_house: false,
       property_subtypes: ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse', 'LSE-Apartment', 'LSE-Condo/Townhome', 'LSE-Duplex', 'LSE-Fourplex', 'LSE-House', 'LSE-Mobile', 'LSE-Triplex', 'LND-Commercial', 'LND-Farm/Ranch', 'LND-Residential']
     }

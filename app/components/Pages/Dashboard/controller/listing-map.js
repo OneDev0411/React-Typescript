@@ -13,9 +13,6 @@ const controller = {
     let zoom = 13
     const options = {
       limit: '75',
-      maximum_lot_square_meters: 100000000,
-      minimum_bathrooms: 0,
-      minimum_parking_spaces: 0,
       location: {
         longitude: -96.79698789999998,
         latitude: 32.7766642
@@ -23,12 +20,9 @@ const controller = {
       horizontal_distance: 2830,
       property_types: ['Residential'],
       vertical_distance: 2830,
-      minimum_square_meters: 0,
       listing_statuses: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract'],
-      minimum_lot_square_meters: 0,
       currency: 'USD',
       maximum_year_built: new Date().getFullYear(),
-      minimum_year_built: 0,
       points: [{
         latitude: 32.83938955111425,
         longitude: -96.89115626525879
@@ -45,8 +39,6 @@ const controller = {
         latitude: 32.83938955111425,
         longitude: -96.89115626525879
       }],
-      minimum_bedrooms: 0,
-      minimum_price: 0,
       open_house: false,
       property_subtypes: ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse']
     }
