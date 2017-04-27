@@ -54,18 +54,24 @@ export default class DealsList extends React.Component {
   }
 
   getCoverImage(deal) {
-    let src = '/static/images/deals/home.svg'
+    let src = null
 
     if (deal.listing)
-      src = deal.listing.cover_image_url
+      src = this.getValue(deal, 'photo')
 
-    return <img style={S('mr-10 w-20')} src={src} />
+    if (!src || src === '-')
+      src = '/static/images/deals/home.svg'
+
+    return <img
+      style={S('mr-10 w-20')}
+      src={src}
+    />
   }
 
   getStatus(deal) {
-    if (deal.listing)
-      return deal.listing.status
+    const status = this.getValue(deal, 'listing_status')
 
+    if (!status || status === '-')
     return 'Coming Soon'
   }
 
