@@ -10,8 +10,6 @@ export default class extends React.Component {
       title: '',
       tags: props.tags
     }
-
-    console.log(props.tags)
   }
 
   componentWillReceiveProps(nextProps) {
