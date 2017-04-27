@@ -4,42 +4,6 @@ import SubmitReviewModal from './submit-review-modal'
 import ConciergeDispatcher from '../../../../../dispatcher/ConciergeDispatcher'
 import MessageModal from '../../../../Partials/MessageModal'
 
-const serializeFormToObject = (form) => {
-  let obj = {}
-  let checkedCheckboxs = []
-  const files = form.elements.file
-  const envelopes = form.elements.envelope_document
-
-  if (envelopes) {
-    if (Array.isArray(envelopes)) {
-      checkedCheckboxs = [
-        ...checkedCheckboxs,
-        ...form.elements.envelopes
-      ]
-    } else checkedCheckboxs.push(envelopes)
-  }
-
-  if (files) {
-    if (Array.isArray(files)) {
-      checkedCheckboxs = [
-        ...checkedCheckboxs,
-        ...form.elements.files
-      ]
-    } else checkedCheckboxs.push(files)
-  }
-
-  checkedCheckboxs = checkedCheckboxs.filter(
-    element => element.type === 'checkbox' && element.checked
-  )
-
-  return checkedCheckboxs.map((checkbox) => {
-    let obj = {}
-    obj[checkbox.name] = checkbox.id
-    obj.state = 'Pending'
-    return obj
-  })
-}
-
 export default class extends React.Component {
 
   constructor(props) {

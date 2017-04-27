@@ -12,33 +12,33 @@ const getDocumentUrl = (id, index, token) => {
 
 const getSortedDocs = (docs) => {
   // temporary array holds objects with position and sort-value
-  // let sortedDocs = []
-  // let reviewedDocs = []
-  // let unreviewedDocs = []
-  // docs.forEach((doc) => {
-  //   if (doc.review) reviewedDocs.push(doc)
-  //   else unreviewedDocs.push(doc)
-  // })
+  let sortedDocs = []
+  let reviewedDocs = []
+  let unreviewedDocs = []
+  docs.forEach((doc) => {
+    if (doc.review) reviewedDocs.push(doc)
+    else unreviewedDocs.push(doc)
+  })
 
-  // // sorting the mapped array containing the reduced values
-  // sortedDocs = reviewedDocs.sort((a, b) => (a.review.state > b.review.state))
-  // sortedDocs = [
-  //   ...sortedDocs,
-  //   ...unreviewedDocs.sort((a, b) => (a.name || a.title > b.name || b.title))
-  // ]
-  // return sortedDocs
-  const reviewed = _.chain(docs)
-    .filter(doc => doc.review)
-    .sortBy(doc => doc.state)
-    .value()
+  // sorting the mapped array containing the reduced values
+  sortedDocs = reviewedDocs.sort((a, b) => (a.review.state > b.review.state))
+  sortedDocs = [
+    ...sortedDocs,
+    ...unreviewedDocs.sort((a, b) => (a.name || a.title > b.name || b.title))
+  ]
+  return sortedDocs
+  // const reviewed = _.chain(docs)
+  //   .filter(doc => doc.review)
+  //   .sortBy(doc => doc.state)
+  //   .value()
 
-  const unreviewed = _.chain(docs)
-    .filter(doc => !doc.review)
-    .sortBy(doc => doc.state)
-    .value()
+  // const unreviewed = _.chain(docs)
+  //   .filter(doc => !doc.review)
+  //   .sortBy(doc => doc.state)
+  //   .value()
 
-  console.log(reviewed.concat(unreviewed))
-  return reviewed.concat(unreviewed)
+  // console.log(reviewed.concat(unreviewed))
+  // return reviewed.concat(unreviewed)
 }
 
 export default class SubmitReviewModal extends React.Component {
@@ -77,7 +77,39 @@ export default class SubmitReviewModal extends React.Component {
 
   onSubmit(e) {
     e.preventDefault()
-    this.props.submitHandler(e.target)
+
+    let list = []
+
+    const form = e.target
+    const files = form.elements.file
+    const envelopes = form.elements.envelope_document
+
+    if (envelopes) {
+      if (_.isArray(envelopes))
+        list = form.elements.envelopes
+      else
+        list.push(envelopes)
+    }
+
+    if (files) {
+      if (_.isArray(files))
+        list = list.concat(form.elements.files)
+      else
+        list.push(files)
+    }
+
+    list = list.filter(
+      element => element.type === 'checkbox' && element.checked
+    )
+
+    const data = list.map(checkbox => {
+      return {
+        [checkbox.name]: checkbox.id,
+        state: 'Pending'
+      }
+    })
+
+    // this.props.submitHandler(data)
   }
 
   render() {
@@ -112,12 +144,11 @@ export default class SubmitReviewModal extends React.Component {
             >
               {
                 getSortedDocs(this.props.documents).map((doc) => {
-                  let type = ''
                   let title = ''
                   let docUrl = ''
                   let avatar = {}
                   let state = doc.review ? doc.review.state : 'unclear'
-
+                  console.log(doc.type)
                   if (doc.type === 'file') {
                     docUrl = doc.url
                     title = doc.name
