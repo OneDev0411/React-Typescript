@@ -25,58 +25,35 @@ export default class DealDashboard extends React.Component {
   }
 
   componentDidMount() {
-    // const { deals, params } = this.props
-    // const { activeTab } = this.state
-    this.populate()
-    // const deal = deals.list[params.id]
+    // load data based on active tab
+    this.onTabChange(this.state.activeTab)
 
-    // if (!deal)
-    //   return
-
-    // this.setState({ deal })
-
-    // // load data based on active tab
-    // this.onTabChange(activeTab)
+    // populate deal
+    this.initialize()
   }
 
   componentWillReceiveProps(nextProps) {
-    this.populate()
-    // const { id } = nextProps.params
-    // const { deals } = nextProps
-    // const { submissions, envelopes, files } = this.state
-
-    // // load deal
-    // const deal = deals.list[id]
-
-    // if (!deal)
-    //   return
-
-    // if (!files && deal.files)
-    //   this.setState({ files: deal.files })
+    this.initialize()
 
     // if (!envelopes && deal.envelopes) {
     //   // const envelopes = this.mapReviewsToDocuments(deal.envelopes)
     //   this.setState({ envelopes })
     // }
-
-    // if (!submissions && deal.submissions)
-    //   this.setState({ submissions: deal.submissions })
-
-    // if (deal.files && files && deal.files.length > files.length)
-    //   this.setState({ files: deal.files })
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     return typeof nextProps.deals !== 'undefined'
   }
 
-  async populate() {
+  async initialize() {
     const { deals, params } = this.props
     const deal = deals.list[params.id]
 
-    if (!deal)
+    if (!deal) {
       return browserHistory.goBack()
+    }
 
+    // set deal state
     this.setState({
       deal
     })
@@ -313,6 +290,7 @@ export default class DealDashboard extends React.Component {
 
         <Review
           show={this.state.showReviewModal}
+          onClose={() => this.setState({ showReviewModal: false })}
           user={this.props.user}
           files={deal.files}
           envelopes={deal.envelopes}

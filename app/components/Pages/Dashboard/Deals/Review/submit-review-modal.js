@@ -1,6 +1,7 @@
 import React from 'react'
 import Avatar from 'react-avatar'
 import { Modal, Button } from 'react-bootstrap'
+import _ from 'underscore'
 import config from '../../../../../../config/public'
 import Document from './submit-review-modal-review-item'
 
@@ -11,21 +12,33 @@ const getDocumentUrl = (id, index, token) => {
 
 const getSortedDocs = (docs) => {
   // temporary array holds objects with position and sort-value
-  let sortedDocs = []
-  let reviewedDocs = []
-  let unreviewedDocs = []
-  docs.forEach((doc) => {
-    if (doc.review) reviewedDocs.push(doc)
-    else unreviewedDocs.push(doc)
-  })
+  // let sortedDocs = []
+  // let reviewedDocs = []
+  // let unreviewedDocs = []
+  // docs.forEach((doc) => {
+  //   if (doc.review) reviewedDocs.push(doc)
+  //   else unreviewedDocs.push(doc)
+  // })
 
-  // sorting the mapped array containing the reduced values
-  sortedDocs = reviewedDocs.sort((a, b) => (a.review.state > b.review.state))
-  sortedDocs = [
-    ...sortedDocs,
-    ...unreviewedDocs.sort((a, b) => (a.name || a.title > b.name || b.title))
-  ]
-  return sortedDocs
+  // // sorting the mapped array containing the reduced values
+  // sortedDocs = reviewedDocs.sort((a, b) => (a.review.state > b.review.state))
+  // sortedDocs = [
+  //   ...sortedDocs,
+  //   ...unreviewedDocs.sort((a, b) => (a.name || a.title > b.name || b.title))
+  // ]
+  // return sortedDocs
+  const reviewed = _.chain(docs)
+    .filter(doc => doc.review)
+    .sortBy(doc => doc.state)
+    .value()
+
+  const unreviewed = _.chain(docs)
+    .filter(doc => !doc.review)
+    .sortBy(doc => doc.state)
+    .value()
+
+  console.log(reviewed.concat(unreviewed))
+  return reviewed.concat(unreviewed)
 }
 
 export default class SubmitReviewModal extends React.Component {

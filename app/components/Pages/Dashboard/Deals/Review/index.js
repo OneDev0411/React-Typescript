@@ -4,41 +4,41 @@ import SubmitReviewModal from './submit-review-modal'
 import ConciergeDispatcher from '../../../../../dispatcher/ConciergeDispatcher'
 import MessageModal from '../../../../Partials/MessageModal'
 
-// const serializeFormToObject = (form) => {
-//   let obj = {}
-//   let checkedCheckboxs = []
-//   const files = form.elements.file
-//   const envelopes = form.elements.envelope_document
+const serializeFormToObject = (form) => {
+  let obj = {}
+  let checkedCheckboxs = []
+  const files = form.elements.file
+  const envelopes = form.elements.envelope_document
 
-//   if (envelopes) {
-//     if (Array.isArray(envelopes)) {
-//       checkedCheckboxs = [
-//         ...checkedCheckboxs,
-//         ...form.elements.envelopes
-//       ]
-//     } else checkedCheckboxs.push(envelopes)
-//   }
+  if (envelopes) {
+    if (Array.isArray(envelopes)) {
+      checkedCheckboxs = [
+        ...checkedCheckboxs,
+        ...form.elements.envelopes
+      ]
+    } else checkedCheckboxs.push(envelopes)
+  }
 
-//   if (files) {
-//     if (Array.isArray(files)) {
-//       checkedCheckboxs = [
-//         ...checkedCheckboxs,
-//         ...form.elements.files
-//       ]
-//     } else checkedCheckboxs.push(files)
-//   }
+  if (files) {
+    if (Array.isArray(files)) {
+      checkedCheckboxs = [
+        ...checkedCheckboxs,
+        ...form.elements.files
+      ]
+    } else checkedCheckboxs.push(files)
+  }
 
-//   checkedCheckboxs = checkedCheckboxs.filter(
-//     element => element.type === 'checkbox' && element.checked
-//   )
+  checkedCheckboxs = checkedCheckboxs.filter(
+    element => element.type === 'checkbox' && element.checked
+  )
 
-//   return checkedCheckboxs.map((checkbox) => {
-//     let obj = {}
-//     obj[checkbox.name] = checkbox.id
-//     obj.state = 'Pending'
-//     return obj
-//   })
-// }
+  return checkedCheckboxs.map((checkbox) => {
+    let obj = {}
+    obj[checkbox.name] = checkbox.id
+    obj.state = 'Pending'
+    return obj
+  })
+}
 
 export default class extends React.Component {
 
@@ -55,12 +55,12 @@ export default class extends React.Component {
     // }
 
     this.state = {
-      // reviewRequestModalIsActive: false,
-      // reviewRequestModalIsFreezed: false,
-      // filePreviewModalContent: '',
-      // filePreviewModalIsActive: false,
-      // allReviewableDocs: null,
-      // showSuccessModal: false
+      isActive: false,
+      working: false,
+      filePreviewModalContent: '',
+      filePreviewModalIsActive: false,
+      reviewableDocs: null,
+      showSuccessModal: false
     }
   }
 
@@ -131,127 +131,125 @@ export default class extends React.Component {
   // }
 
   // reviewRequestModalCloseHandler() {
-  //   if (!this.state.reviewRequestModalIsFreezed) {
+  //   if (!this.state.working) {
   //     // browserHistory.push(`/dashboard/deals/${this.props.params.id}`)
   //     this.setState({
-  //       reviewRequestModalIsActive: false
+  //       isActive: false
   //     })
   //   }
   // }
+
   // reviewRequestModalShowHandler() {
   //   this.setState({
-  //     reviewRequestModalIsActive: true
+  //     isActive: true
   //   })
   // }
 
-  // async reviewRequestSubmit(docs) {
-  //   const token = this.props.user.access_token
-  //   const { id } = this.props.params
-  //   const body = {
-  //     reviews: docs
-  //   }
-  //   const action = {
-  //     id,
-  //     body,
-  //     token,
-  //     type: 'SUBMIT_REVIEW_REQUEST'
-  //   }
-  //   const reviews = await ConciergeDispatcher.dispatchSync(action)
-  //   reviews.forEach((review) => {
-  //     const type = review.file ? 'FILE' : 'ENVELOPE'
-  //     switch (type) {
-  //       case 'FILE':
-  //         if (this.state.files) {
-  //           const files = this.state.files.map((file) => {
-  //             if (file.id !== review.file) return file
+  async send(docs) {
+    const token = this.props.user.access_token
+    const { id } = this.props.params
 
-  //             file.review = review
-  //             return file
-  //           })
-  //           this.setState({ files })
-  //         }
-  //         break
-  //       case 'ENVELOPE':
-  //         if (this.state.envelopes) {
-  //           const envelopes = this.state.envelopes.map((envelope) => {
-  //             if (!envelope.documents) return envelope
+    const reviews = await ConciergeDispatcher.dispatchSync({
+      type: 'SUBMIT_REVIEW_REQUEST',
+      body: { reviews: docs },
+      id,
+      token
+    })
 
-  //             const documents = envelope.documents.map((document) => {
-  //               document.review = review
-  //               return document
-  //             })
-  //             return {
-  //               ...envelope,
-  //               documents
-  //             }
-  //           })
-  //           this.setState({ envelopes })
-  //         }
-  //         break
-  //     }
-  //   })
-  //   this.setState({
-  //     showSuccessModal: true,
-  //     reviewRequestModalIsActive: false,
-  //     reviewRequestModalIsFreezed: false
-  //   })
-  //   setTimeout(() => {
-  //     this.setState({
-  //       showSuccessModal: false
-  //     })
-  //   }, 1500)
-  // }
+    reviews.forEach((review) => {
+      const type = review.file ? 'FILE' : 'ENVELOPE'
+      switch (type) {
+        case 'FILE':
+          if (this.state.files) {
+            const files = this.state.files.map((file) => {
+              if (file.id !== review.file) return file
 
-  // reviewRequestModalSubmitHandler(form) {
-  //   this.setState({
-  //     reviewRequestModalIsFreezed: true
-  //   })
-  //   const docs = serializeFormToObject(form)
-  //   this.reviewRequestSubmit(docs)
-  // }
+              file.review = review
+              return file
+            })
+            this.setState({ files })
+          }
+          break
+        case 'ENVELOPE':
+          if (this.state.envelopes) {
+            const envelopes = this.state.envelopes.map((envelope) => {
+              if (!envelope.documents) return envelope
+
+              const documents = envelope.documents.map((document) => {
+                document.review = review
+                return document
+              })
+              return {
+                ...envelope,
+                documents
+              }
+            })
+            this.setState({ envelopes })
+          }
+          break
+      }
+    })
+
+    this.setState({
+      showSuccessModal: true,
+      isActive: false,
+      working: false
+    })
+
+    setTimeout(() => this.setState({ showSuccessModal: false }), 1500)
+  }
+
+  onSubmit(form) {
+    console.log(form)
+    return
+    this.setState({ working: true })
+    const docs = serializeFormToObject(form)
+    this.send(docs)
+  }
 
   preparedEnvelopes(envelopes) {
     let list = []
 
-    envelopes.map((envelope) => {
+    envelopes.forEach((envelope) => {
       if (!envelope.documents)
         return
 
-      envelope.documents.forEach((document, index) => {
-        document = {
-          ...document,
-          index
-        }
-        list.push(document)
-      })
+      envelope.documents.forEach((document, index) => list.push({ ...document, index }))
     })
+
     return list
   }
 
   getAllReviewableDocs(envelopes, files) {
-    let docs = []
+    let docs = new Array()
 
     if (envelopes) {
-      // allReviewableDocs = [
-      //   ...this.preparedEnvelopes(envelopes)
-      // ]
       docs = docs.concat(this.preparedEnvelopes(envelopes))
     }
 
     if (files) {
-      // allReviewableDocs = [
-      //   ...allReviewableDocs,
-      //   ...files
-      // ]
       docs = docs.concat(files)
     }
 
-    return docs
+    this.setState({
+      reviewableDocs: docs
+    })
   }
 
   render() {
+    const { reviewableDocs } = this.state
+
     return (
       <div>
+        <SubmitReviewModal
+          documents={reviewableDocs}
+          token={this.props.user.access_token}
+          isActive={this.props.show}
+          // isFreezed={this.state.reviewRequestModalIsFreezed}
+          closeHandler={this.props.onClose}
+          submitHandler={form => this.onSubmit(form)}
+        />
+
         <MessageModal
           show={this.state.showSuccessModal}
           text="Documents submitted for review!"
