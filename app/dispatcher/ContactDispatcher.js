@@ -28,20 +28,16 @@ ContactDispatcher.register(async (payload) => {
       )
 
     case 'delete-attribute':
-      deleteAttribute(payload.user, payload.id, payload.attribute_id)
-      break
+      return await deleteAttribute(payload.user, payload.id, payload.attribute_id)
 
     case 'upsert-attributes':
-      upsertAttributes(payload.user, payload.id, payload.type, payload.attributes)
-      break
+      return await upsertAttributes(payload.user, payload.id, payload.type, payload.attributes)
 
     case 'get-contacts':
-      getContacts(payload.user)
-      break
+      return await getContacts(payload.user)
 
     case 'get-tags':
-      getTags(payload.user)
-      break
+      return await getTags(payload.user)
 
     case 'get-timeline':
       return await getTimeline(payload.id, payload.user)
