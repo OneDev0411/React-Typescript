@@ -71,7 +71,11 @@ export default class SubmitReviewModal extends React.Component {
     const { isFreezed } = this.props
     const { selectedDocuments } = this.state
     return (
-      <Modal className="c-request-review-modal" show={this.props.isActive} onHide={this.onHidden}>
+      <Modal
+        className="c-request-review-modal"
+        show={this.props.isActive}
+        onHide={this.onHidden}
+      >
         <Modal.Header>
           <Modal.Title>{'Send docs for borker review'}</Modal.Title>
           <button

@@ -91,7 +91,6 @@ Deal.getForms = async function (params) {
   return response
 }
 
-
 Deal.getSubmissionForm = async function(params) {
   const response = await agent
     .get(`${config.api_url}/forms/submissions/revisions/${params.id}`)
