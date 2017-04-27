@@ -9,48 +9,52 @@ export default class Tags extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      tags: props.tags,
       showTagModal: false
     }
   }
 
-  async onDone({ inserts, deletes }) {
-
-    const newTags = _.map(inserts, item => {
-      return { type: 'tag', tag: item.tag }
-    })
-
-    // insert new tags
-    if (newTags.length > 0)
-      this.upsert(newTags)
-
-    // remove tags
-    _.each(deletes, item => this.remove(item))
-
-    this.reloadSharedTags()
-
+  componentWillReceiveProps(nextProps) {
     this.setState({
-      showTagModal: false
+      tags: nextProps.tags
     })
   }
 
-  // onRemoveTag(tag_id) {
-  //   const { user, contact_id } = this.props
+  async onDone({ inserts, deletes }) {
+    this.setState({
+      showTagModal: false
+    })
 
-  // }
+    // insert new tags
+    if (inserts.length > 0) {
+      const newTags = _.map(inserts, item => {
+        return { type: 'tag', tag: item.tag }
+      })
 
-  // onAddTag(tag) {
-  //   const attributes = [{
-  //     type: 'tag',
-  //     tag
-  //   }]
+      await this.upsert(newTags)
+    }
 
-  //   this.upsert(attributes)
-  // }
+    // remove tags
+    for (let item of deletes) {
+      await this.remove(item)
+    }
 
-  remove(item) {
+    if (inserts.length > 0 || deletes.length > 0)
+      await this.reloadSharedTags()
+  }
+
+  async onRemove(item) {
+    const newTags = _.omit(this.state.tags, item.tag)
+    this.setState({ tags: newTags })
+
+    // remove item
+    this.remove(item, 'dispatch')
+  }
+
+  async remove(item, fn = 'dispatchSync') {
     const { user, contact_id } = this.props
 
-    Dispatcher.dispatch({
+    await Dispatcher[fn]({
       action: 'delete-attribute',
       id: contact_id,
       user: user,
@@ -58,10 +62,10 @@ export default class Tags extends React.Component {
     })
   }
 
-  upsert(attributes) {
+  async upsert(attributes) {
     const { user, contact_id } = this.props
 
-    Dispatcher.dispatch({
+    await Dispatcher.dispatchSync({
       action: 'upsert-attributes',
       id: contact_id,
       type: 'tag',
@@ -70,18 +74,18 @@ export default class Tags extends React.Component {
     })
   }
 
-  reloadSharedTags() {
+  async reloadSharedTags() {
     const { user } = this.props
 
-    Dispatcher.dispatch({
+    await Dispatcher.dispatchSync({
       action: 'get-tags',
       user
     })
   }
 
   render(){
-    const { tags } = this.props
-    const { showTagModal } = this.state
+    const { tags } = this.state
+    const { showTagModal, saving } = this.state
 
     return (
       <div>
@@ -93,6 +97,7 @@ export default class Tags extends React.Component {
               <li
                 key={`tag_${item.id}`}
                 className="active"
+                onClick={() => this.onRemove(item)}
               >
                 { item.tag }
               </li>
@@ -107,6 +112,7 @@ export default class Tags extends React.Component {
         <ManageTags
           show={showTagModal}
           tags={tags}
+          saving={saving}
           onDone={changes => this.onDone(changes)}
         />
       </div>

@@ -9,7 +9,7 @@ const api_host = config.api_url
 
 Deal.getDeals = async function (params) {
   const { access_token } = params
-  const endpoint = `${api_host}/deals?associations=deal.listing`
+  const endpoint = `${api_host}/deals`
 
   try {
     const response = await agent
@@ -27,7 +27,7 @@ Deal.create = async function (params) {
 
   try {
     const response = await agent
-      .post(`${config.api_url}/deals?associations=deal.listing`)
+      .post(`${config.api_url}/deals`)
       .set({ Authorization: `Bearer ${access_token}` })
       .send(data)
 
