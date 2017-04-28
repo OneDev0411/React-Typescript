@@ -140,6 +140,8 @@ export default class Mls extends Component {
   }
   showHalfPanel() {
     const data = this.props.data
+    if (data.is_mobile)
+      return
     AppStore.data.listing_panel = {
       view: 'photos',
       size: 'half'
