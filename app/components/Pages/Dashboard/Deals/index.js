@@ -21,7 +21,8 @@ export default class Deals extends React.Component {
     this.getForms(user)
 
     // create reload timer
-    this.reloadTimer = window.setInterval(this.reloadDeals.bind(this), 60 * 2 * 1000)
+    this.reloadTimer =
+      window.setInterval(this.reloadDeals.bind(this), 60 * 2 * 1000)
   }
 
   componentWillUnmount() {
