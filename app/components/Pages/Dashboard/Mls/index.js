@@ -107,6 +107,20 @@ export default class Mls extends Component {
     Brand.checkBranding()
     this.checkQuery()
     this.showHalfPanel()
+    const data = this.props.data
+    const path = data.path
+    // Hide panel if coming to alert from room
+    if (path.indexOf('/dashboard/mls/alerts') !== -1) {
+      const alert_id = path.replace('/dashboard/mls/alerts/', '')
+      delete AppStore.data.listing_panel
+      delete AppStore.data.show_listing_panel
+      const alert = _.find(data.alerts, { id: alert_id })
+      if (alert) {
+        AppStore.data.current_alert = alert
+        controller.alert_map.showAlertOnMap.bind(this, alert)
+      }
+      AppStore.emitChange()
+    }
   }
   componentDidUpdate() {
     const data = this.props.data

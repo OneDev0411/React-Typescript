@@ -14,6 +14,7 @@ import FavoriteHeart from './FavoriteHeart'
 import controller from '../controller'
 import GoogleMap from 'google-map-react'
 import Brand from '../../../../controllers/Brand.js'
+import config from '../../../../../config/public'
 // import ChatModule from './ChatModule'
 // import ActionBubble from '../../Partials/ActionBubble'
 export default class ListingViewer extends Component {
@@ -287,12 +288,17 @@ export default class ListingViewer extends Component {
           lat: latitude,
           lng: longitude
         }
+        const bootstrap_url_keys = {
+          key: config.google.api_key,
+          libraries: ['drawing', 'places'].join(',')
+        }
         listing_map_small = (
           <GoogleMap
             key={'map'}
             center={center}
             zoom={12}
             options={{ scrollwheel: false }}
+            bootstrapURLKeys={ bootstrap_url_keys }
           >
             <ListingMapMarker
               onMouseOver={controller.listing_map.showListingPopup.bind(this, listing)}

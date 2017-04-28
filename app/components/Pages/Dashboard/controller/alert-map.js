@@ -45,13 +45,15 @@ const controller = {
   },
   showAlertOnMap(alert) {
     // update user timeline
-    ContactDispatcher.dispatch({
-      action: 'update-user-timeline',
-      user: AppStore.data.user,
-      user_action: 'UserViewedAlert',
-      object_class: 'Alert',
-      object: alert.id
-    })
+    if (AppStore.data.user) {
+      ContactDispatcher.dispatch({
+        action: 'update-user-timeline',
+        user: AppStore.data.user,
+        user_action: 'UserViewedAlert',
+        object_class: 'Alert',
+        object: alert.id
+      })
+    }
 
     let center_from_points
     let lat
