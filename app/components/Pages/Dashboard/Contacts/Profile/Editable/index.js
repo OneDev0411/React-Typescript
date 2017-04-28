@@ -54,12 +54,11 @@ export default class extends React.Component {
     }
 
     return (
-      <div className="contact-editable">
-        <span
-          onDoubleClick={() => this.onClickEdit()}
-        >
-          { text }
-        </span>
+      <div
+        className="contact-editable"
+        onClick={() => this.onClickEdit()}
+      >
+        { text }
 
         <div className="control">
 

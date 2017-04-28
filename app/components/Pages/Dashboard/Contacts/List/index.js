@@ -7,6 +7,7 @@ import MessageModal from '../../../../Partials/MessageModal'
 import Contact from '../../../../../models/Contact'
 import AddContact from '../Add-Contact'
 import Stage from '../components/Stage'
+import Dispatcher from '../../../../../dispatcher/ContactDispatcher'
 
 export default class ContactsList extends React.Component {
   constructor(props) {
@@ -40,6 +41,24 @@ export default class ContactsList extends React.Component {
   onNewContact() {
     this.setState({ showSavedModal: true })
     setTimeout(() => this.setState({ showSavedModal: false }), 3000)
+  }
+
+  onChangeStage(stage, contact) {
+    const { user } = this.props
+
+     const attributes = [{
+      id: Contact.get.stage(contact).id,
+      type: 'stage',
+      stage
+    }]
+
+    Dispatcher.dispatch({
+      action: 'upsert-attributes',
+      id: contact.id,
+      type: 'stage',
+      attributes,
+      user
+    })
   }
 
   render() {
@@ -85,10 +104,15 @@ export default class ContactsList extends React.Component {
               .map(contact => (
                 <Row
                   key={`CONTACT_${contact.id}`}
-                  onClick={() => browserHistory.push(`/dashboard/contacts/${contact.id}`)}
                   className="item"
                 >
-                  <Col md={3} sm={3} xs={3} className="vcenter">
+                  <Col
+                    md={3}
+                    sm={3}
+                    xs={3}
+                    className="vcenter"
+                    onClick={() => browserHistory.push(`/dashboard/contacts/${contact.id}`)}
+                  >
                     <Avatar
                       className="avatar"
                       round
@@ -109,6 +133,7 @@ export default class ContactsList extends React.Component {
                   <Col md={2} sm={2} xs={2} className="vcenter">
                     <Stage
                       default={Contact.get.stage(contact).name}
+                      onChange={stage => this.onChangeStage(stage, contact)}
                     />
                   </Col>
                   <Col md={2} sm={2} xs={2} className="vcenter">

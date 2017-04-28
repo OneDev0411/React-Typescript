@@ -53,7 +53,7 @@ export default class AddNote extends React.Component {
         ></textarea>
         <div className="footer">
           <Button
-            bsStyle="danger"
+            bsStyle="primary"
             onClick={() => this.onAddNote()}
             disabled={saving}
           >
