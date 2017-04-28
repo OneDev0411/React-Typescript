@@ -1,16 +1,21 @@
-import React from 'react'
-import { Row, Col, Tabs, Tab } from 'react-bootstrap'
-import { browserHistory } from 'react-router'
+
 import S from 'shorti'
+import React from 'react'
 import _ from 'underscore'
 import Avatar from 'react-avatar'
+import { browserHistory } from 'react-router'
+import { Row, Col, Tabs, Tab } from 'react-bootstrap'
 import AppStore from '../../../../../stores/AppStore'
+import { getFieldValue } from '../../../../../utils/helpers'
 import DealDispatcher from '../../../../../dispatcher/DealDispatcher'
+
 import Menu from './Menu'
+import DealDetail from './deal-detail'
 import DealForms from '../Forms'
 import DealESigns from '../ESigns'
 import Uploads from '../Uploads'
 import Review from '../Review'
+
 
 export default class DealDashboard extends React.Component {
 
@@ -18,61 +23,51 @@ export default class DealDashboard extends React.Component {
     super(props)
 
     this.state = {
-      activeTab: props.params.tab || 'forms',
       deal: null,
-      showReviewModal: false
+      submitReviewModalIsActive: false,
+      activeTab: props.params.tab || 'forms'
     }
+
+    this.onTabChange = this.onTabChange.bind(this)
+    this.reviewModalCloseHandler =
+      this.reviewModalCloseHandler.bind(this)
+    this.reviewModalOpenHandler =
+      this.reviewModalOpenHandler.bind(this)
   }
 
   componentDidMount() {
-    // load data based on active tab
+    // active tab when it's clicked
     this.onTabChange(this.state.activeTab)
-
-    // populate deal
-    this.initialize()
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.initialize()
-
-    // if (!envelopes && deal.envelopes) {
-    //   // const envelopes = this.mapReviewsToDocuments(deal.envelopes)
-    //   this.setState({ envelopes })
-    // }
+    this.setDeal()
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     return typeof nextProps.deals !== 'undefined'
   }
 
-  async initialize() {
+  async setDeal() {
     const { deals, params } = this.props
     const deal = deals.list[params.id]
 
-    if (!deal) {
-      return browserHistory.goBack()
-    }
-
-    // set deal state
-    this.setState({
-      deal
-    })
+    if (!deal) return browserHistory.goBack()
 
     if (!deal.submissions) {
       const submissions = await this.getSubmissions()
       deal.submissions = submissions
-      this.setState({ deal })
     }
 
     if (!deal.envelopes) {
       const envelopes = await this.getEnvelopes()
       deal.envelopes = envelopes
-      this.setState({ deal })
     }
+
+    this.setState({
+      deal
+    })
   }
 
   async getSubmissions() {
-    return await DealDispatcher.dispatchSync({
+    return DealDispatcher.dispatchSync({
       action: 'get-submissions',
       user: this.props.user,
       id: this.props.params.id
@@ -80,78 +75,11 @@ export default class DealDashboard extends React.Component {
   }
 
   async getEnvelopes() {
-    return await DealDispatcher.dispatchSync({
+    return DealDispatcher.dispatchSync({
       action: 'get-envelopes',
       user: this.props.user,
       id: this.props.params.id
     })
-  }
-
-  getCoverImage(deal) {
-    let src = null
-
-    if (deal.listing)
-      src = this.getValue(deal, 'photo')
-
-    if (!src || src === '-')
-      src = '/static/images/deals/home.svg'
-
-    return <img
-      style={S('mr-10 w-40 br-2')}
-      src={src}
-    />
-  }
-
-  getNumberWithCommas(number) {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-  }
-
-  onTabChange(id) {
-    this.setState({ activeTab: id })
-  }
-
-  getAddress(deal) {
-    const address = this.getValue(deal, 'street_address')
-
-    if (address.endsWith(','))
-      return address.substring(0, address.length - 1)
-    return address
-  }
-
-  getFullAddress(deal) {
-    const city = this.getValue(deal, 'city')
-    const state = this.getValue(deal, 'state')
-    const postal_code = this.getValue(deal, 'postal_code')
-    return `${city}, ${state}, ${postal_code}`.replace(/-,/ig, '')
-  }
-
-  getPrice(deal) {
-    const price = this.getValue(deal, 'list_price')
-
-    if (price === '-')
-      return price
-
-    return `$${this.getNumberWithCommas(price)}`
-  }
-
-  getStatus(deal) {
-    const status = this.getValue(deal, 'listing_status')
-
-    if (!status || status === '-')
-    return 'Coming Soon'
-  }
-
-  getValue(deal, field) {
-    if (deal.context && deal.context[field])
-      return deal.context[field]
-    else if (deal.proposed_values && deal.proposed_values[field])
-      return deal.proposed_values[field]
-
-    return '-'
-  }
-
-  goBack() {
-    browserHistory.push('/dashboard/deals')
   }
 
   collectSignatures() {
@@ -163,13 +91,31 @@ export default class DealDashboard extends React.Component {
     browserHistory.push(`/dashboard/deals/${this.props.params.id}/collect-signatures/documents`)
   }
 
+  onTabChange(id) {
+    this.setState({ activeTab: id })
+  }
+
+  reviewModalCloseHandler() {
+    this.setState({
+      submitReviewModalIsActive: false
+    })
+  }
+
+  reviewModalOpenHandler() {
+    this.setState({
+      submitReviewModalIsActive: false
+    })
+  }
+
+  goBack() {
+    browserHistory.push('/dashboard/deals')
+  }
+
   render() {
     const {
       deal,
       activeTab
     } = this.state
-
-    // const allReviewableDocs = this.getAllReviewableDocs(envelopes, files)
 
     if (!deal)
       return false
@@ -180,16 +126,21 @@ export default class DealDashboard extends React.Component {
         <Row className="header">
           <Col lg={5} md={5} sm={5}>
             <h4>
-              <i className="fa fa-angle-left" onClick={() => this.goBack()} />
-              { this.getAddress(deal) }
+              <i
+                className="fa fa-angle-left"
+                onClick={() => this.goBack()}
+              />
+              { getFieldValue(deal, 'street_address') || '-' }
             </h4>
           </Col>
 
           <Col lg={7} md={7} sm={7}>
             <Menu
               submissions={deal.submissions}
-              onCollectSignatures={() => this.collectSignatures()}
-              onReviewRequest={() => this.setState({ showReviewModal: true })}
+              onCollectSignatures={
+                () => this.collectSignatures()
+              }
+              onReviewRequest={this.reviewModalOpenHandler}
             />
           </Col>
         </Row>
@@ -197,55 +148,7 @@ export default class DealDashboard extends React.Component {
         <Row className="content">
 
           <Col lg={3} md={3} sm={3}>
-
-            <div className="sidebar">
-              <Row>
-                <Col xs={8}>
-                  <div className="street">{ this.getAddress(deal) }</div>
-                  <div className="address">{ this.getFullAddress(deal) }</div>
-                </Col>
-
-                <Col xs={4}>
-                  { this.getCoverImage(deal) }
-                </Col>
-              </Row>
-
-              <div className="hr" />
-
-              <div className="item">
-                Status: <span>{ this.getStatus(deal) }</span>
-              </div>
-
-              <div className="item">
-                Price: <span>{ this.getPrice(deal) }</span>
-              </div>
-
-              <div className="hr" />
-
-              {
-                deal.roles && deal.roles.map(role => (
-                  <Row
-                    key={`ROLE_${role.id}`}
-                    style={S('mb-15')}
-                  >
-                    <Col xs={8}>
-                      <div>{ role.user.display_name }</div>
-                      <div style={{ color: 'gray' }}>{ role.role }</div>
-                    </Col>
-
-                    <Col xs={4}>
-                      <Avatar
-                        round
-                        name={role.user.display_name}
-                        src={role.user.profile_image_url}
-                        size={35}
-                      />
-                    </Col>
-                  </Row>
-                ))
-              }
-
-            </div>
+            <DealDetail deal={deal} />
           </Col>
 
           <Col lg={9} md={9} sm={9}>
@@ -254,7 +157,7 @@ export default class DealDashboard extends React.Component {
                 defaultActiveKey={activeTab}
                 animation={false}
                 id="deals-dashboard"
-                onSelect={this.onTabChange.bind(this)}
+                onSelect={this.onTabChange}
               >
                 <Tab eventKey="forms" title="Forms" className="forms">
                   <DealForms
@@ -289,11 +192,10 @@ export default class DealDashboard extends React.Component {
         </Row>
 
         <Review
-          show={this.state.showReviewModal}
-          onClose={() => this.setState({ showReviewModal: false })}
+          deal={deal}
           user={this.props.user}
-          files={deal.files}
-          envelopes={deal.envelopes}
+          onClose={this.reviewModalCloseHandler}
+          show={this.state.submitReviewModalIsActive}
         />
       </div>
     )
