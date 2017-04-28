@@ -7,11 +7,12 @@ const DocumentLink = ({
   type,
   onClickPreviewHandler
 }) => (
-  <a
+  <button
     href="#"
-    className="c-request-review__item__link"
+    className="c-request-review__item__btn"
     onClick={(e) => {
       e.preventDefault()
+      e.stopPropagation()
       onClickPreviewHandler({
         src,
         name,
@@ -20,7 +21,7 @@ const DocumentLink = ({
     }}
   >
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="10" viewBox="0 0 18 10"><g fill="none" fillRule="evenodd"><g stroke="#9B9B9B"><path d="M16.92 5s-3.564 4.5-7.962 4.5C4.562 9.5.998 5 .998 5S4.56.5 8.958.5 16.92 5 16.92 5z" /><circle cx="8.958" cy="5" r="2.5" /></g><path d="M-3-7h24v24H-3z" /></g></svg>
-  </a>
+  </button>
 )
 
 const DocumentDetail = ({

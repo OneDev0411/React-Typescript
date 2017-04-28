@@ -1,125 +1,64 @@
 import React from 'react'
 import FilePreviewModal from './file-preview-modal'
 import SubmitReviewModal from './submit-review-modal'
-import ConciergeDispatcher from '../../../../../dispatcher/ConciergeDispatcher'
 import MessageModal from '../../../../Partials/MessageModal'
+import AppStore from '../../../../../stores/AppStore'
+import ConciergeDispatcher from '../../../../../dispatcher/ConciergeDispatcher'
 
-export default class extends React.Component {
+const serializeFormToObject = form => Object.keys(form)
+  .filter(key =>
+    form[key].type === 'checkbox'
+    && form[key].checked
+  )
+  .map(index => form[index])
+  .map((checkbox) => {
+    let doc = {
+      state: 'Pending'
+    }
+    doc[checkbox.name] = checkbox.id
+    return doc
+  })
+
+
+export default class DealDashboard extends React.Component {
 
   constructor(props) {
     super(props)
-    // const { id } = props.params
-
-    // this.reviews = {}
-    // this.deal = props.deals.list[id] || null
-
-    // if (this.deal.reviews) {
-    //   this.fillreviews()
-    //   if (this.deal.files) this.mapReviewsToFiles()
-    // }
+    this.deal = props.deal || null
 
     this.state = {
-      isActive: false,
-      working: false,
+      showSuccessModal: false,
+      allReviewableDocs: null,
       filePreviewModalContent: '',
+      files: this.deal.files || null,
       filePreviewModalIsActive: false,
-      reviewableDocs: null,
-      showSuccessModal: false
+      reviewRequestModalIsFreezed: false,
+      envelopes: this.deal.envelopes || null
     }
+
+    this.reviewRequestModalCloseHandler =
+      this.reviewRequestModalCloseHandler.bind(this)
+    this.reviewRequestModalSubmitHandler =
+      this.reviewRequestModalSubmitHandler.bind(this)
+    this.filePreviewModalCloseHandler =
+      this.filePreviewModalCloseHandler.bind(this)
+    this.filePreviewModalShowHandler =
+      this.filePreviewModalShowHandler.bind(this)
   }
 
-  componentDidMount() {
-    const { envelopes, files } = this.props
-    this.getAllReviewableDocs(envelopes, files)
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { envelopes, files } = nextProps
-    this.getAllReviewableDocs(envelopes, files)
-  }
-
-  // fillreviews() {
-  //   const reviews = this.deal.reviews
-  //   if (reviews) {
-  //     this.deal.reviews.forEach((review) => {
-  //       const id = review.file || review.envelope_document
-  //       this.reviews[id] = {
-  //         ...review
-  //       }
-  //     })
-  //   }
-  // }
-
-  // mapReviewsToFiles() {
-  //   const newFiles = this.deal.files.map((file) => {
-  //     const review = this.reviews[file.id] || null
-  //     return {
-  //       ...file,
-  //       review
-  //     }
-  //   })
-  //   this.deal.files = newFiles
-  //   AppStore.data.deals.list[this.deal.id] = this.deal
-  // }
-
-  // mapReviewsToDocuments(envelopes) {
-  //   return envelopes.map((envelope) => {
-  //     if (!envelope.documents)
-  //       return envelope
-
-  //     const documents = envelope.documents.map((doc) => {
-  //       const review = (this.reviews && this.reviews[doc.id]) || null
-  //       return {
-  //         ...doc,
-  //         review
-  //       }
-  //     })
-  //     return {
-  //       ...envelope,
-  //       documents
-  //     }
-  //   })
-  // }
-
-  // filePreviewModalCloseHandler() {
-  //   this.setState({
-  //     filePreviewModalIsActive: false
-  //   })
-  // }
-
-  // filePreviewModalShowHandler(file) {
-  //   this.setState({
-  //     filePreviewModalIsActive: true,
-  //     filePreviewModalContent: file
-  //   })
-  // }
-
-  // reviewRequestModalCloseHandler() {
-  //   if (!this.state.working) {
-  //     // browserHistory.push(`/dashboard/deals/${this.props.params.id}`)
-  //     this.setState({
-  //       isActive: false
-  //     })
-  //   }
-  // }
-
-  // reviewRequestModalShowHandler() {
-  //   this.setState({
-  //     isActive: true
-  //   })
-  // }
-
-  async send(docs) {
+  async postReview(docs) {
     const token = this.props.user.access_token
-    const { id } = this.props.params
-
-    const reviews = await ConciergeDispatcher.dispatchSync({
-      type: 'SUBMIT_REVIEW_REQUEST',
-      body: { reviews: docs },
+    const { id } = this.deal
+    const body = {
+      reviews: docs
+    }
+    const action = {
       id,
-      token
-    })
-
+      body,
+      token,
+      type: 'SUBMIT_REVIEW_REQUEST'
+    }
+    const reviews = await ConciergeDispatcher.dispatchSync(action)
     reviews.forEach((review) => {
       const type = review.file ? 'FILE' : 'ENVELOPE'
       switch (type) {
@@ -153,67 +92,97 @@ export default class extends React.Component {
           break
       }
     })
-
     this.setState({
       showSuccessModal: true,
-      isActive: false,
-      working: false
+      reviewRequestModalIsFreezed: false
     })
-
-    setTimeout(() => this.setState({ showSuccessModal: false }), 1500)
+    this.reviewRequestModalCloseHandler()
+    setTimeout(() => {
+      this.setState({
+        showSuccessModal: false
+      })
+    }, 1500)
   }
 
-  onSubmit(form) {
-    console.log(form)
-    return
-    this.setState({ working: true })
+  reviewRequestModalSubmitHandler(form) {
+    this.setState({
+      reviewRequestModalIsFreezed: true
+    })
     const docs = serializeFormToObject(form)
-    this.send(docs)
+    this.postReview(docs)
   }
 
   preparedEnvelopes(envelopes) {
     let list = []
-
-    envelopes.forEach((envelope) => {
+    envelopes.map((envelope) => {
       if (!envelope.documents)
         return
 
-      envelope.documents.forEach((document, index) => list.push({ ...document, index }))
+      envelope.documents.forEach((document, index) => {
+        document = {
+          ...document,
+          index
+        }
+        list.push(document)
+      })
     })
-
     return list
   }
 
   getAllReviewableDocs(envelopes, files) {
-    let docs = new Array()
-
+    let allReviewableDocs = []
     if (envelopes) {
-      docs = docs.concat(this.preparedEnvelopes(envelopes))
+      allReviewableDocs = [
+        ...this.preparedEnvelopes(envelopes)
+      ]
     }
-
     if (files) {
-      docs = docs.concat(files)
+      allReviewableDocs = [
+        ...allReviewableDocs,
+        ...files
+      ]
     }
+    return allReviewableDocs
+  }
 
+  filePreviewModalCloseHandler() {
     this.setState({
-      reviewableDocs: docs
+      filePreviewModalIsActive: false
     })
   }
 
+  filePreviewModalShowHandler(file) {
+    this.setState({
+      filePreviewModalIsActive: true,
+      filePreviewModalContent: file
+    })
+  }
+
+  reviewRequestModalCloseHandler() {
+    if (!this.state.reviewRequestModalIsFreezed)
+      this.props.onClose()
+  }
+
   render() {
-    const { reviewableDocs } = this.state
+    const { envelopes, files } = this.state
+    const allReviewableDocs = this.getAllReviewableDocs(envelopes, files)
 
     return (
       <div>
         <SubmitReviewModal
-          documents={reviewableDocs}
-          token={this.props.user.access_token}
           isActive={this.props.show}
-          // isFreezed={this.state.reviewRequestModalIsFreezed}
-          closeHandler={this.props.onClose}
-          submitHandler={form => this.onSubmit(form)}
+          documents={allReviewableDocs}
+          token={this.props.user.access_token}
+          closeHandler={this.reviewRequestModalCloseHandler}
+          isFreezed={this.state.reviewRequestModalIsFreezed}
+          submitHandler={this.reviewRequestModalSubmitHandler}
+          filePreviewModalShowHandler={this.filePreviewModalShowHandler}
         />
-
+        <FilePreviewModal
+          file={this.state.filePreviewModalContent}
+          isActive={this.state.filePreviewModalIsActive}
+          onCloseHandler={this.filePreviewModalCloseHandler}
+        />
         <MessageModal
           show={this.state.showSuccessModal}
           text="Documents submitted for review!"

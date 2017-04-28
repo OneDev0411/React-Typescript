@@ -1,7 +1,6 @@
 import React from 'react'
 import Avatar from 'react-avatar'
 import { Modal, Button } from 'react-bootstrap'
-import _ from 'underscore'
 import config from '../../../../../../config/public'
 import Document from './submit-review-modal-review-item'
 
@@ -12,7 +11,6 @@ const getDocumentUrl = (id, index, token) => {
 
 const getSortedDocs = (docs) => {
   // temporary array holds objects with position and sort-value
-  let sortedDocs = []
   let reviewedDocs = []
   let unreviewedDocs = []
   docs.forEach((doc) => {
@@ -21,24 +19,10 @@ const getSortedDocs = (docs) => {
   })
 
   // sorting the mapped array containing the reduced values
-  sortedDocs = reviewedDocs.sort((a, b) => (a.review.state > b.review.state))
-  sortedDocs = [
-    ...sortedDocs,
-    ...unreviewedDocs.sort((a, b) => (a.name || a.title > b.name || b.title))
+  return [
+    ...unreviewedDocs.sort((a, b) => (a.name || a.title > b.name || b.title)),
+    ...reviewedDocs.sort((a, b) => (a.review.state > b.review.state))
   ]
-  return sortedDocs
-  // const reviewed = _.chain(docs)
-  //   .filter(doc => doc.review)
-  //   .sortBy(doc => doc.state)
-  //   .value()
-
-  // const unreviewed = _.chain(docs)
-  //   .filter(doc => !doc.review)
-  //   .sortBy(doc => doc.state)
-  //   .value()
-
-  // console.log(reviewed.concat(unreviewed))
-  // return reviewed.concat(unreviewed)
 }
 
 export default class SubmitReviewModal extends React.Component {
@@ -69,58 +53,24 @@ export default class SubmitReviewModal extends React.Component {
   }
 
   onHidden() {
-    this.props.closeHandler()
-    this.setState({
-      selectedDocuments: 0
-    })
+    const isClosed = this.props.closeHandler()
+    if (isClosed) {
+      this.setState({
+        selectedDocuments: 0
+      })
+    }
   }
 
   onSubmit(e) {
     e.preventDefault()
-
-    let list = []
-
-    const form = e.target
-    const files = form.elements.file
-    const envelopes = form.elements.envelope_document
-
-    if (envelopes) {
-      if (_.isArray(envelopes))
-        list = form.elements.envelopes
-      else
-        list.push(envelopes)
-    }
-
-    if (files) {
-      if (_.isArray(files))
-        list = list.concat(form.elements.files)
-      else
-        list.push(files)
-    }
-
-    list = list.filter(
-      element => element.type === 'checkbox' && element.checked
-    )
-
-    const data = list.map(checkbox => {
-      return {
-        [checkbox.name]: checkbox.id,
-        state: 'Pending'
-      }
-    })
-
-    // this.props.submitHandler(data)
+    this.props.submitHandler(e.target)
   }
 
   render() {
     const { isFreezed } = this.props
     const { selectedDocuments } = this.state
     return (
-      <Modal
-        className="c-request-review-modal"
-        show={this.props.isActive}
-        onHide={this.onHidden}
-      >
+      <Modal className="c-request-review-modal" show={this.props.isActive} onHide={this.onHidden}>
         <Modal.Header>
           <Modal.Title>{'Send docs for borker review'}</Modal.Title>
           <button
@@ -144,11 +94,12 @@ export default class SubmitReviewModal extends React.Component {
             >
               {
                 getSortedDocs(this.props.documents).map((doc) => {
+                  let type = ''
                   let title = ''
                   let docUrl = ''
                   let avatar = {}
                   let state = doc.review ? doc.review.state : 'unclear'
-                  console.log(doc.type)
+
                   if (doc.type === 'file') {
                     docUrl = doc.url
                     title = doc.name
@@ -156,7 +107,11 @@ export default class SubmitReviewModal extends React.Component {
                     avatar.src = avatar.type === 'img' ? doc.url : '#'
                   } else {
                     title = doc.title
-                    docUrl = getDocumentUrl(doc.envelope, doc.index, this.props.token)
+                    docUrl = getDocumentUrl(
+                      doc.envelope,
+                      doc.index,
+                      this.props.token
+                    )
                   }
 
                   return (

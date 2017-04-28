@@ -2,7 +2,7 @@ import React from 'react'
 import S from 'shorti'
 import Avatar from 'react-avatar'
 import { Row, Col } from 'react-bootstrap'
-import { getFieldValue } from '../../../../../utils/helpers'
+import { getFieldValue } from '../../../../../../utils/helpers'
 
 const getFullAddress = (deal) => {
   const city = getFieldValue(deal, 'city')

@@ -9,8 +9,8 @@ import AppStore from '../../../../../stores/AppStore'
 import { getFieldValue } from '../../../../../utils/helpers'
 import DealDispatcher from '../../../../../dispatcher/DealDispatcher'
 
-import Menu from './Menu'
-import DealDetail from './deal-detail'
+import Menu from './Views/Menu'
+import DealDetail from './Views/DealDetail'
 import DealForms from '../Forms'
 import DealESigns from '../ESigns'
 import Uploads from '../Uploads'
@@ -46,21 +46,38 @@ export default class DealDashboard extends React.Component {
   }
 
   async setDeal() {
+    let indexedReviews = null
     const { deals, params } = this.props
     const deal = deals.list[params.id]
 
     if (!deal) return browserHistory.goBack()
 
+    if (deal.reviews && !deal.reviewsIsMapped) {
+      indexedReviews =
+        this.indexedReviewsByDocumentsId(deal.reviews)
+      // this flag prevent to next review mapping process
+      deal.reviewsIsMapped = true
+      if (deal.files) {
+        deal.files =
+          this.mapReviewsToFiles(indexedReviews, deal.files)
+      }
+    }
+
+
     if (!deal.submissions) {
+      console.log('firstttt')
       const submissions = await this.getSubmissions()
       deal.submissions = submissions
     }
 
     if (!deal.envelopes) {
       const envelopes = await this.getEnvelopes()
-      deal.envelopes = envelopes
+      deal.envelopes = indexedReviews
+        ? this.mapReviewsToDocuments(indexedReviews, envelopes)
+        : envelopes
     }
 
+    AppStore.data.deals.list[deal.id] = deal
     this.setState({
       deal
     })
@@ -79,6 +96,46 @@ export default class DealDashboard extends React.Component {
       action: 'get-envelopes',
       user: this.props.user,
       id: this.props.params.id
+    })
+  }
+
+  indexedReviewsByDocumentsId(reviews) {
+    let indexedReviews = {}
+    reviews.forEach((review) => {
+      const id = review.file || review.envelope_document
+      indexedReviews[id] = {
+        ...review
+      }
+    })
+    return indexedReviews
+  }
+
+  mapReviewsToFiles(reviews, files) {
+    return files.map((file) => {
+      const review = reviews[file.id] || null
+      return {
+        ...file,
+        review
+      }
+    })
+  }
+
+  mapReviewsToDocuments(reviews, envelopes) {
+    return envelopes.map((envelope) => {
+      if (!envelope.documents)
+        return envelope
+
+      const documents = envelope.documents.map((doc) => {
+        const review = (reviews && reviews[doc.id]) || null
+        return {
+          ...doc,
+          review
+        }
+      })
+      return {
+        ...envelope,
+        documents
+      }
     })
   }
 
@@ -103,7 +160,7 @@ export default class DealDashboard extends React.Component {
 
   reviewModalOpenHandler() {
     this.setState({
-      submitReviewModalIsActive: false
+      submitReviewModalIsActive: true
     })
   }
 
@@ -117,8 +174,14 @@ export default class DealDashboard extends React.Component {
       activeTab
     } = this.state
 
-    if (!deal)
-      return false
+    if (!deal) {
+      return (
+        <div className="loading-list">
+          <div><i className="fa fa-spinner fa-spin fa-2x fa-fw" /></div>
+          <b>Loading deals ...</b>
+        </div>
+      )
+    }
 
     return (
       <div className="dashboard">
