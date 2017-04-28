@@ -71,7 +71,7 @@ Contact.getTimeline = async function(params) {
 Contact.addNote = async function(params) {
   const { id, note, access_token } = params
   const endpoint = `${api_host}/contacts/${id}/attributes`
-  const payload = Contact.helper.addAttribute('note', note)
+  const payload = Contact.helper.populateAttributes('note', [{ note }])
 
   try {
     const response = await agent
