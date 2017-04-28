@@ -278,7 +278,9 @@ Contact.get = {
       }
     }
 
-    return {}
+    return {
+      name: 'General'
+    }
   },
   address: context => {
     const addresses = context.sub_contacts[0].attributes.addresses
