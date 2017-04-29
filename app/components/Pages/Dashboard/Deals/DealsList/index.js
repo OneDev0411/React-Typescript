@@ -5,21 +5,6 @@ import S from 'shorti'
 import _ from 'underscore'
 import { getFieldValue } from '../../../../../utils/helpers'
 
-
-const getPrice = (deal) => {
-  const price = getFieldValue(deal, 'list_price')
-
-  if (!price)
-    return '-'
-
-  const humanizedPrice =
-    price
-      .toString()
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-
-  return `${humanizedPrice}`
-}
-
 export default class DealsList extends React.Component {
 
   constructor(props) {
@@ -47,28 +32,22 @@ export default class DealsList extends React.Component {
   }
 
   getPrice(deal) {
-    const price = this.getValue(deal, 'list_price')
-    return this.getNumberWithCommas(price)
-  }
+    const price = getFieldValue(deal, 'list_price')
 
-  getValue(deal, field) {
-    if (deal.context && deal.context[field])
-      return deal.context[field]
-    else if (deal.proposed_values && deal.proposed_values[field])
-      return deal.proposed_values[field]
+    if (!price)
+      return '-'
 
-    return '-'
+    return '$' + price
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   }
 
   getStatus(deal) {
-    const status = this.getValue(deal, 'listing_status')
-
-    if (!status || status === '-')
-    return 'Coming Soon'
+    return getFieldValue(deal, 'listing_status') || 'Coming Soon'
   }
 
   getClosingDate(deal) {
-    return this.getValue(deal, 'closing_date')
+    return getFieldValue(deal, 'closing_date')
   }
 
   getSortOrder(deal) {
@@ -141,18 +120,15 @@ export default class DealsList extends React.Component {
                   <Col md={4} sm={4} xs={4}>
                     <img
                       style={S('mr-10 w-20')}
-                      src={
-                        getFieldValue(deal, 'photo')
-                        || '/static/images/deals/home.svg'
-                      }
+                      src={ getFieldValue(deal, 'photo') || '/static/images/deals/home.svg' }
                     />
                     { getFieldValue(deal, 'street_address') }
                   </Col>
                   <Col md={2} sm={2} xs={2}>
-                    { getFieldValue(deal, 'listing_status') || 'Coming Soon' }
+                    { this.getStatus(deal, 'listing_status') }
                   </Col>
                   <Col md={2} sm={2} xs={2}>
-                    { getPrice(deal) }
+                    { this.getPrice(deal) }
                   </Col>
                   <Col md={2} sm={2} xs={2}>
                     { getFieldValue(deal, 'deal_type') }
