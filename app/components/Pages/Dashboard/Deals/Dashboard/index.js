@@ -65,10 +65,10 @@ export default class DealDashboard extends React.Component {
   }
 
   collectSignatures() {
-    // if (AppStore.data.deals.signatures) {
-    //   AppStore.data.deals.signatures.documents = {}
-    //   AppStore.emitChange()
-    // }
+    if (AppStore.data.deals.signatures) {
+      AppStore.data.deals.signatures.documents = {}
+      AppStore.emitChange()
+    }
 
     browserHistory.push(`/dashboard/deals/${this.props.params.id}/collect-signatures/documents`)
   }
