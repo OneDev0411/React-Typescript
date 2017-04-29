@@ -1,7 +1,6 @@
 import S from 'shorti'
 import React from 'react'
 import _ from 'underscore'
-import Avatar from 'react-avatar'
 import { browserHistory } from 'react-router'
 import { Row, Col, Tabs, Tab } from 'react-bootstrap'
 import AppStore from '../../../../../stores/AppStore'

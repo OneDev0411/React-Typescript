@@ -2,7 +2,6 @@ import React from 'react'
 import FilePreviewModal from './file-preview-modal'
 import SubmitReviewModal from './submit-review-modal'
 import MessageModal from '../../../../Partials/MessageModal'
-import AppStore from '../../../../../stores/AppStore'
 import ConciergeDispatcher from '../../../../../dispatcher/ConciergeDispatcher'
 
 export default class DealDashboard extends React.Component {
