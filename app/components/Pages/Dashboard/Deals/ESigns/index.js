@@ -20,10 +20,18 @@ export default class DealESigns extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidMount() {
     const { envelopes } = this.props
+    this.init(envelopes)
+  }
 
-    if (_.isArray(envelopes) && !this.state.selectedEnvelope) {
+  componentWillReceiveProps(nextProps) {
+    const { envelopes } = nextProps
+    this.init(envelopes)
+  }
+
+  init(envelopes) {
+    if (envelopes && !this.state.selectedEnvelope) {
       this.setState({
         selectedEnvelope: envelopes[0]
       })
@@ -95,6 +103,15 @@ export default class DealESigns extends React.Component {
       )
     }
 
+    if (!envelopes) {
+      return (
+        <div className="loading left" style={{ padding: '2%' }}>
+          <i className="fa fa-spinner fa-spin fa-1x fa-fw" />
+          <div>Loading E-Signs</div>
+        </div>
+      )
+    }
+
     if (!selectedEnvelope)
       return false
 
@@ -141,7 +158,7 @@ export default class DealESigns extends React.Component {
                               : 0
                           }
                         </span>
-                        <span>docs | &nbsp;</span>
+                        <span> docs | &nbsp;</span>
                         <span>{ _signed_users.length } of &nbsp;</span>
                         <span>{ envelope.recipients.length } signed</span>
                       </div>
