@@ -12,13 +12,21 @@ import config from '../../../../../../config/public'
 export default class DealESigns extends React.Component {
   constructor(props) {
     super(props)
-    const envelopes = this.props.envelopes
-    const selectedEnvelope = Array.isArray(envelopes) ? envelopes[0] : null
     this.state = {
-      selectedEnvelope,
+      selectedEnvelope: null,
       docsResent: false,
       resendingDoc: false,
       docLastResent: null
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { envelopes } = this.props
+
+    if (_.isArray(envelopes) && !this.state.selectedEnvelope) {
+      this.setState({
+        selectedEnvelope: envelopes[0]
+      })
     }
   }
 
@@ -87,16 +95,14 @@ export default class DealESigns extends React.Component {
       )
     }
 
-    if (!selectedEnvelope) {
-      this.setState({
-        selectedEnvelope: envelopes[0]
-      })
-    }
+    if (!selectedEnvelope)
+      return false
 
     const signed_users = _.filter(
       selectedEnvelope.recipients,
       recp => recp.signed_at !== null
     )
+
     const not_signed_users = _.filter(
       selectedEnvelope.recipients,
       recp => recp.signed_at === null
@@ -295,7 +301,7 @@ export default class DealESigns extends React.Component {
                           }
                       </Col>
                     </Row>
-                    ))
+                  ))
                 }
               </div>
             </div>
