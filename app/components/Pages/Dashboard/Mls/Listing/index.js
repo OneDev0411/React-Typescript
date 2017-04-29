@@ -22,7 +22,10 @@ export default class Listing extends Component {
   }
 
   componentDidMount() {
-    this.updateUserTimeline()
+    const { data } = this.props
+    if (data.user) {
+      this.updateUserTimeline()
+    }
   }
 
   updateUserTimeline() {
