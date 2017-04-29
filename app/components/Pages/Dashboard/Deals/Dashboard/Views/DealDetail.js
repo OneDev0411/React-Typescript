@@ -17,12 +17,9 @@ const getPrice = (deal) => {
   if (!price)
     return '-'
 
-  const humanizedPrice =
-    price
-      .toString()
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-
-  return `$${humanizedPrice}`
+  return '$' + price
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
 export default ({
@@ -42,10 +39,7 @@ export default ({
       <Col xs={4}>
         <img
           style={S('mr-10 w-40 br-2')}
-          src={
-            getFieldValue(deal, 'photo')
-            || '/static/images/deals/home.svg'
-          }
+          src={ getFieldValue(deal, 'photo') || '/static/images/deals/home.svg' }
         />
       </Col>
     </Row>
