@@ -4,7 +4,6 @@ import { browserHistory } from 'react-router'
 import S from 'shorti'
 import _ from 'underscore'
 import cn from 'classnames'
-import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
 import PdfViewer from '../../../../Partials/Pdf/Viewer'
 import FormSelect from '../Form-Select'
 import config from '../../../../../../config/public'
@@ -118,8 +117,9 @@ export default class DealForm extends React.Component {
 
             {
               !submissions &&
-              <div className="loading center">
-                <i className="fa fa-spinner fa-spin fa-2x fa-fw" />
+              <div className="loading left">
+                <i className="fa fa-spinner fa-spin fa-1x fa-fw" />
+                <div>Loading forms</div>
               </div>
             }
 

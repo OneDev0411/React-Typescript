@@ -4,7 +4,6 @@ import getDeals from '../actions/deals/get-deals'
 import createDeal from '../actions/deals/create-deal'
 import createEnvelope from '../actions/deals/create-envelope'
 import getSubmissions from '../actions/deals/get-submissions'
-import addSubmission from '../actions/deals/add-submission'
 import getSubmissionForm from '../actions/deals/get-submission-form'
 import getEnvelopes from '../actions/deals/get-envelopes'
 import getDealForms from '../actions/deals/get-deal-forms'
@@ -21,10 +20,6 @@ DealDispatcher.register(async function (payload) {
 
     case 'get-deals':
       getDeals(payload.user)
-      break
-
-    case 'add-submission':
-      addSubmission(payload.id, payload.form)
       break
 
     case 'get-deal-forms':
