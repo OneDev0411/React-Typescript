@@ -63,7 +63,23 @@ export default class SubmitReviewModal extends React.Component {
 
   onSubmit(e) {
     e.preventDefault()
-    this.props.submitHandler(e.target)
+    const form = e.target
+
+    const docs = Object.keys(form)
+    .filter(key =>
+      form[key].type === 'checkbox'
+      && form[key].checked
+    )
+    .map(index => form[index])
+    .map((checkbox) => {
+      let doc = {
+        state: 'Pending'
+      }
+      doc[checkbox.name] = checkbox.id
+      return doc
+    })
+
+    this.props.submitHandler(docs)
   }
 
   render() {
