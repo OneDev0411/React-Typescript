@@ -21,9 +21,6 @@ export default class DealForm extends React.Component {
     }
   }
 
-  componentDidMount() {
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
     if (nextProps.activeTab !== 'uploads')
       return false
@@ -47,7 +44,6 @@ export default class DealForm extends React.Component {
     reader.onload = (e) => {
       this.setState({ preview: e.target.result })
     }
-
 
     await DealDispatcher.dispatchSync({
       action: 'upload-file',
@@ -125,7 +121,7 @@ export default class DealForm extends React.Component {
     )
   }
 
-  getFileType(mime) {
+  getFileType(mime = '') {
     if (mime.includes('image/'))
       return 'image'
 
@@ -206,7 +202,7 @@ export default class DealForm extends React.Component {
                               style={S('m-0')}
                               className={
                                 `review-state--${
-                                    file.review.state.toLowerCase()
+                                  file.review.state.toLowerCase()
                                 }`
                               }
                             >
@@ -242,7 +238,7 @@ export default class DealForm extends React.Component {
               </div>
 
               {
-                file &&
+                file && !preview &&
                 <div className="display">
                   { this.getDisplayComponent(file) }
                 </div>

@@ -151,11 +151,13 @@
 } // .c-request-review__item__title
 
 
-.c-request-review__item__link {
+.c-request-review__item__btn {
   position: absolute;
   top: 20px;
   right: 20px;
-  display: block;
+  padding: 0;
+  border-width: 0;
+  background-color: transparent;
 
   > svg {
      opacity: .4;
@@ -166,7 +168,7 @@
       opacity: 1;
     }
   }
-} // .c-request-review__item__link
+} // .c-request-review__item__btn
 
 
 

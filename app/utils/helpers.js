@@ -146,6 +146,21 @@ export function isValidUSZip(zip) {
  return /^\d{5}(-\d{4})?$/.test(zip);
 }
 
+/**
+ * Return requested field value from truth source
+ * @param {Object} deal
+ * @param {String} field
+ * @return {Any}
+ */
+export const getFieldValue = (deal, field) => {
+  if (deal.context && deal.context[field])
+    return deal.context[field]
+  else if (deal.proposed_values && deal.proposed_values[field])
+    return deal.proposed_values[field]
+
+  return null
+}
+
 export default {
   randomString,
   getParameterByName,

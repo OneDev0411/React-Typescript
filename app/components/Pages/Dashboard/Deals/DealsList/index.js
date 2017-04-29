@@ -3,7 +3,7 @@ import { browserHistory } from 'react-router'
 import { Grid, Row, Col, Button } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'underscore'
-import { addressTitle } from '../../../../../utils/listing'
+import { getFieldValue } from '../../../../../utils/helpers'
 
 export default class DealsList extends React.Component {
 
@@ -31,52 +31,23 @@ export default class DealsList extends React.Component {
     browserHistory.push(`/dashboard/deals/create/${type}`)
   }
 
-  getDealAddress(deal) {
-    const address = this.getValue(deal, 'street_address')
-
-    if (address.endsWith(','))
-      return address.substring(0, address.length - 1)
-    return address
-  }
-
   getPrice(deal) {
-    const price = this.getValue(deal, 'list_price')
-    return this.getNumberWithCommas(price)
-  }
+    const price = getFieldValue(deal, 'list_price')
 
-  getValue(deal, field) {
-    if (deal.context && deal.context[field])
-      return deal.context[field]
-    else if (deal.proposed_values && deal.proposed_values[field])
-      return deal.proposed_values[field]
+    if (!price)
+      return '-'
 
-    return '-'
-  }
-
-  getCoverImage(deal) {
-    let src = null
-
-    if (deal.listing)
-      src = this.getValue(deal, 'photo')
-
-    if (!src || src === '-')
-      src = '/static/images/deals/home.svg'
-
-    return <img
-      style={S('mr-10 w-20')}
-      src={src}
-    />
+    return '$' + price
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   }
 
   getStatus(deal) {
-    const status = this.getValue(deal, 'listing_status')
-
-    if (!status || status === '-')
-    return 'Coming Soon'
+    return getFieldValue(deal, 'listing_status') || 'Coming Soon'
   }
 
   getClosingDate(deal) {
-    return this.getValue(deal, 'closing_date')
+    return getFieldValue(deal, 'closing_date')
   }
 
   getSortOrder(deal) {
@@ -141,17 +112,30 @@ export default class DealsList extends React.Component {
               .map(deal => (
                 <Row
                   key={`DEAL_${deal.id}`}
-                  onClick={() => browserHistory.push(`/dashboard/deals/${deal.id}`)}
+                  onClick={
+                    () => browserHistory.push(`/dashboard/deals/${deal.id}`)
+                  }
                   className={`item type_${this.getStatus(deal)}`}
                 >
                   <Col md={4} sm={4} xs={4}>
-                    { this.getCoverImage(deal) }
-                    { this.getDealAddress(deal) }
+                    <img
+                      style={S('mr-10 w-20')}
+                      src={ getFieldValue(deal, 'photo') || '/static/images/deals/home.svg' }
+                    />
+                    { getFieldValue(deal, 'street_address') }
                   </Col>
-                  <Col md={2} sm={2} xs={2}>{ this.getStatus(deal) }</Col>
-                  <Col md={2} sm={2} xs={2}>{ this.getPrice(deal) } </Col>
-                  <Col md={2} sm={2} xs={2}>{ this.getValue(deal, 'deal_type') }</Col>
-                  <Col md={2} sm={2} xs={2}>{ this.getClosingDate(deal) }</Col>
+                  <Col md={2} sm={2} xs={2}>
+                    { this.getStatus(deal, 'listing_status') }
+                  </Col>
+                  <Col md={2} sm={2} xs={2}>
+                    { this.getPrice(deal) }
+                  </Col>
+                  <Col md={2} sm={2} xs={2}>
+                    { getFieldValue(deal, 'deal_type') }
+                  </Col>
+                  <Col md={2} sm={2} xs={2}>
+                    { getFieldValue(deal, 'closing_date') }
+                  </Col>
                 </Row>
                 ))
               .value()

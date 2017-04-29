@@ -2,8 +2,8 @@ import { Dispatcher } from './flux'
 
 import getDeals from '../actions/deals/get-deals'
 import createDeal from '../actions/deals/create-deal'
+import createEnvelope from '../actions/deals/create-envelope'
 import getSubmissions from '../actions/deals/get-submissions'
-import addSubmission from '../actions/deals/add-submission'
 import getSubmissionForm from '../actions/deals/get-submission-form'
 import getEnvelopes from '../actions/deals/get-envelopes'
 import getDealForms from '../actions/deals/get-deal-forms'
@@ -22,33 +22,34 @@ DealDispatcher.register(async function (payload) {
       getDeals(payload.user)
       break
 
-    case 'create-deal':
-      return await createDeal(payload.data, payload.user)
-
-    case 'get-submissions':
-      getSubmissions(payload.id, payload.user)
-      break
-
-    case 'add-submission':
-      addSubmission(payload.id, payload.form)
-      break
-
     case 'get-deal-forms':
       getDealForms(payload.user)
       break
 
+    case 'create-deal':
+      return await createDeal(payload.data, payload.user)
+
+    case 'create-envelope':
+      return await createEnvelope(
+        payload.user,
+        payload.deal_id,
+        payload.subject,
+        payload.documents,
+        payload.recipients
+      )
+
+    case 'get-submissions':
+      return await getSubmissions(payload.id, payload.user)
+
     case 'get-envelopes':
-      getEnvelopes(payload.id, payload.user)
-      break
+      return await getEnvelopes(payload.id, payload.user)
 
     case 'upload-file':
       return await uploadFile(payload.id, payload.user, payload.file)
-      break
 
     case 'save-submission-form':
       return await saveSubmissionForm(payload.user, payload.type, payload.deal,
         payload.form, payload.state, payload.values, payload.submission)
-      break
 
     case 'get-submission-form':
       return await getSubmissionForm(payload.user, payload.deal, payload.last_revision)

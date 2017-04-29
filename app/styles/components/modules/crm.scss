@@ -5,6 +5,9 @@
   button {
     font-size: 14px;
     padding: auto 20px !important;
+    &:focus {
+      outline: 0;
+    }
   }
   .hr {
     width: 96%;

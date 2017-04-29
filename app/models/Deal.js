@@ -91,7 +91,6 @@ Deal.getForms = async function (params) {
   return response
 }
 
-
 Deal.getSubmissionForm = async function(params) {
   const response = await agent
     .get(`${config.api_url}/forms/submissions/revisions/${params.id}`)
@@ -112,7 +111,9 @@ Deal.resendEnvelopeDocs = async function (id, access_token) {
   }
 }
 
-Deal.collectSignatures = async function(deal_id, subject, documents, recipients, access_token) {
+Deal.collectSignatures = async function(params) {
+  const { deal_id, subject, documents, recipients, access_token } = params
+
   const data = {
     deal: deal_id,
     title: subject,
@@ -126,7 +127,7 @@ Deal.collectSignatures = async function(deal_id, subject, documents, recipients,
       .set({ Authorization: `Bearer ${access_token}` })
       .send(data)
 
-    return response.body
+    return response
   } catch (e) {
     throw e
   }
@@ -145,7 +146,7 @@ Deal.saveSubmissionForm = async function(params) {
         submission: params.submission
       })
 
-    return response.body
+    return response
   } catch (e) {
     throw e
   }

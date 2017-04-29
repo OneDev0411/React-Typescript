@@ -12,9 +12,12 @@ export default async function (id, user) {
   try {
     const response = await Deals.getEnvelopes(params)
 
-    if (response.status === 200)
-      AppStore.data.deals.list[id].envelopes = response.body.data
+    if (response.status === 200) {
+      const envelopes = response.body.data
+      AppStore.data.deals.list[id].envelopes = envelopes
 
-    AppStore.emitChange()
+      return envelopes
+    }
+
   } catch (e) {}
 }

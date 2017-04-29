@@ -5,7 +5,7 @@ import S from 'shorti'
 import _ from 'underscore'
 import AddSigner from './add-signer'
 import AppStore from '../../../../../stores/AppStore'
-import Deals from '../../../../../models/Deal'
+import Dispatcher from '../../../../../dispatcher/DealDispatcher'
 import MessageModal from '../../../../Partials/MessageModal'
 import config from '../../../../../../config/public'
 
@@ -79,8 +79,8 @@ export default class CollectSignaturesRecipients extends React.Component {
 
   async onSubmit() {
     const { subject, documents, recipients, sending } = this.state
-    const deal_id = this.props.params.id
-    const token = this.props.user.access_token
+    const { user, params } = this.props
+    const deal_id = params.id
 
     if (sending)
       return
@@ -90,14 +90,22 @@ export default class CollectSignaturesRecipients extends React.Component {
     })
 
     try {
-      await Deals.collectSignatures(deal_id, subject, documents, recipients, token)
-    } catch (e) {
+      await Dispatcher.dispatchSync({
+        action: 'create-envelope',
+        deal_id,
+        subject,
+        documents,
+        recipients,
+        user
+      })
+    } catch(e) {
+      console.log(e)
       this.setState({ sending: false })
 
       if (~~e.status === 412)
         this.loginToDocusign()
 
-      return
+      return false
     }
 
     this.setState({

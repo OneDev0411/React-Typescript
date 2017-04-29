@@ -4,7 +4,6 @@ import { browserHistory } from 'react-router'
 import S from 'shorti'
 import _ from 'underscore'
 import cn from 'classnames'
-import AppDispatcher from '../../../../../dispatcher/AppDispatcher'
 import PdfViewer from '../../../../Partials/Pdf/Viewer'
 import FormSelect from '../Form-Select'
 import config from '../../../../../../config/public'
@@ -20,30 +19,31 @@ export default class DealForm extends React.Component {
   }
 
   componentDidMount() {
+    this.initialize(this.props.submissions)
   }
 
   componentWillReceiveProps(nextProps) {
-    const { submissions } = nextProps
+    this.initialize(nextProps.submissions)
+  }
 
-    if (submissions && !this.state.submission) {
-      let active = this.getActiveSubmission()
+  initialize(submissions) {
+    if (!submissions || this.state.submission)
+      return false
 
-      if (!active)
-        active = Object.keys(submissions)[_.size(submissions) - 1]
+    let active = this.getActiveSubmissionFromUrl()
 
-      this.setState({
-        submission: submissions[active]
-      })
+    if (!active)
+      active = Object.keys(submissions)[_.size(submissions) - 1]
 
-      this.loadForm(submissions[active])
-    }
+    this.setState({
+      submission: submissions[active]
+    })
+
+    this.loadForm(submissions[active])
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     return nextProps.activeTab === 'forms'
-  }
-
-  componentWillUnmount() {
   }
 
   loadForm(submission) {
@@ -73,7 +73,7 @@ export default class DealForm extends React.Component {
     browserHistory.push(`/dashboard/deals/${deal_id}/edit-form/${form.id}/create`)
   }
 
-  getActiveSubmission() {
+  getActiveSubmissionFromUrl() {
     const url = window.location.href
     const regex = new RegExp("[?&]submission(=([^&#]*)|&|#|$)"),
         results = regex.exec(url)
@@ -104,7 +104,7 @@ export default class DealForm extends React.Component {
               .map(subm => (
                 <div
                   key={`submission${subm.id}`}
-                  className={cn('doc-detail', { selected: submission.id === subm.id })}
+                  className={cn('doc-detail', { selected: submission && submission.id === subm.id })}
                   onClick={this.loadForm.bind(this, subm)}
                 >
                   <img src="/static/images/deals/file.png" />
@@ -117,8 +117,9 @@ export default class DealForm extends React.Component {
 
             {
               !submissions &&
-              <div className="loading center">
-                <i className="fa fa-spinner fa-spin fa-2x fa-fw" />
+              <div className="loading left">
+                <i className="fa fa-spinner fa-spin fa-1x fa-fw" />
+                <div>Loading forms</div>
               </div>
             }
 
