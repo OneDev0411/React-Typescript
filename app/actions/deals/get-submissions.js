@@ -11,7 +11,6 @@ export default async function (id, user) {
 
   try {
     const response = await Deals.getSubmissions(params)
-
     if (response.status === 200) {
       const submissions = _.indexBy(response.body.data, 'id')
       AppStore.data.deals.list[id].submissions = submissions
