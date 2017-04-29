@@ -5,143 +5,195 @@ import MessageModal from '../../../../Partials/MessageModal'
 import AppStore from '../../../../../stores/AppStore'
 import ConciergeDispatcher from '../../../../../dispatcher/ConciergeDispatcher'
 
-const serializeFormToObject = form => Object.keys(form)
-  .filter(key =>
-    form[key].type === 'checkbox'
-    && form[key].checked
-  )
-  .map(index => form[index])
-  .map((checkbox) => {
-    let doc = {
-      state: 'Pending'
-    }
-    doc[checkbox.name] = checkbox.id
-    return doc
-  })
-
-
 export default class DealDashboard extends React.Component {
 
   constructor(props) {
     super(props)
-    this.deal = props.deal || null
 
     this.state = {
+      deal: props.deal,
       showSuccessModal: false,
       allReviewableDocs: null,
       filePreviewModalContent: '',
-      files: this.deal.files || null,
       filePreviewModalIsActive: false,
-      reviewRequestModalIsFreezed: false,
-      envelopes: this.deal.envelopes || null
+      saving: false,
+    }
+  }
+
+  componentDidMount() {
+    const { deal } = this.props
+    this.initializeReviews(deal)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { deal } = nextProps
+    this.initializeReviews(deal)
+  }
+
+  initializeReviews(deal) {
+    if (deal.reviewsIsMapped)
+      return false
+
+    let indexedReviews = null
+
+    if (deal.reviews && !deal.reviewsIsMapped) {
+      indexedReviews = this.indexedReviewsByDocumentsId(deal.reviews)
+
+      // this flag prevent to next review mapping process
+      deal.reviewsIsMapped = true
+
+      if (deal.files) {
+        deal.files = this.mapReviewsToFiles(indexedReviews, deal.files)
+      }
     }
 
-    this.reviewRequestModalCloseHandler =
-      this.reviewRequestModalCloseHandler.bind(this)
-    this.reviewRequestModalSubmitHandler =
-      this.reviewRequestModalSubmitHandler.bind(this)
-    this.filePreviewModalCloseHandler =
-      this.filePreviewModalCloseHandler.bind(this)
-    this.filePreviewModalShowHandler =
-      this.filePreviewModalShowHandler.bind(this)
+    if (deal.envelopes && indexedReviews) {
+      deal.envelopes = this.mapReviewsToDocuments(indexedReviews, deal.envelopes)
+    }
+
+    if (deal.reviews) {
+      this.setState({ deal })
+      this.props.onChange(deal)
+    }
+  }
+
+  indexedReviewsByDocumentsId(reviews) {
+    let indexedReviews = {}
+
+    reviews.forEach((review) => {
+      const id = review.file || review.envelope_document
+      indexedReviews[id] = {
+        ...review
+      }
+    })
+
+    return indexedReviews
+  }
+
+  mapReviewsToFiles(reviews, files) {
+    return files.map((file) => {
+      const review = reviews[file.id] || null
+      return {
+        ...file,
+        review
+      }
+    })
+  }
+
+  mapReviewsToDocuments(reviews, envelopes) {
+    return envelopes.map((envelope) => {
+      if (!envelope.documents)
+        return envelope
+
+      const documents = envelope.documents.map((doc) => {
+        const review = (reviews && reviews[doc.id]) || null
+        return {
+          ...doc,
+          review
+        }
+      })
+
+      return {
+        ...envelope,
+        documents
+      }
+    })
   }
 
   async postReview(docs) {
     const token = this.props.user.access_token
-    const { id } = this.deal
-    const body = {
-      reviews: docs
-    }
-    const action = {
-      id,
-      body,
-      token,
-      type: 'SUBMIT_REVIEW_REQUEST'
-    }
-    const reviews = await ConciergeDispatcher.dispatchSync(action)
-    reviews.forEach((review) => {
+    const { deal } = this.state
+
+    const reviews = await ConciergeDispatcher.dispatchSync({
+      type: 'SUBMIT_REVIEW_REQUEST',
+      id: deal.id,
+      body: {
+        reviews: docs
+      },
+      token
+    })
+
+    reviews.forEach(review => {
       const type = review.file ? 'FILE' : 'ENVELOPE'
-      switch (type) {
-        case 'FILE':
-          if (this.state.files) {
-            const files = this.state.files.map((file) => {
-              if (file.id !== review.file) return file
 
-              file.review = review
-              return file
-            })
-            this.setState({ files })
-          }
-          break
-        case 'ENVELOPE':
-          if (this.state.envelopes) {
-            const envelopes = this.state.envelopes.map((envelope) => {
-              if (!envelope.documents) return envelope
+      if (type === 'FILE' && deal.files) {
 
-              const documents = envelope.documents.map((document) => {
-                document.review = review
-                return document
-              })
-              return {
-                ...envelope,
-                documents
-              }
-            })
-            this.setState({ envelopes })
+        deal.files = deal.files.map(file => {
+          if (file.id !== review.file)
+            return file
+
+          file.review = review
+          return file
+        })
+      }
+
+      if (type === 'ENVELOPE' && deal.envelopes) {
+
+        deal.envelopes = deal.envelopes.map(envelope => {
+          if (!envelope.documents)
+            return envelope
+
+          const documents = envelope.documents.map(document => {
+            document.review = review
+            return document
+          })
+
+          return {
+            ...envelope,
+            documents
           }
-          break
+        })
       }
     })
+
     this.setState({
+      deal,
       showSuccessModal: true,
-      reviewRequestModalIsFreezed: false
+      saving: false
     })
-    this.reviewRequestModalCloseHandler()
-    setTimeout(() => {
-      this.setState({
-        showSuccessModal: false
-      })
-    }, 1500)
+
+    setTimeout(() => this.setState({ showSuccessModal: false }), 1500)
+
+    this.onClose()
   }
 
-  reviewRequestModalSubmitHandler(form) {
+  reviewRequestModalSubmitHandler(docs) {
     this.setState({
-      reviewRequestModalIsFreezed: true
+      saving: true
     })
-    const docs = serializeFormToObject(form)
+
     this.postReview(docs)
   }
 
   preparedEnvelopes(envelopes) {
     let list = []
+
     envelopes.map((envelope) => {
       if (!envelope.documents)
         return
 
-      envelope.documents.forEach((document, index) => {
-        document = {
-          ...document,
-          index
-        }
-        list.push(document)
-      })
+      envelope.documents.forEach((document, index) => list.push({...document, index }))
     })
+
     return list
   }
 
   getAllReviewableDocs(envelopes, files) {
     let allReviewableDocs = []
+
     if (envelopes) {
       allReviewableDocs = [
         ...this.preparedEnvelopes(envelopes)
       ]
     }
+
     if (files) {
       allReviewableDocs = [
         ...allReviewableDocs,
         ...files
       ]
     }
+
     return allReviewableDocs
   }
 
@@ -158,14 +210,13 @@ export default class DealDashboard extends React.Component {
     })
   }
 
-  reviewRequestModalCloseHandler() {
-    if (!this.state.reviewRequestModalIsFreezed)
-      this.props.onClose()
+  onClose() {
+    this.props.onClose()
   }
 
   render() {
-    const { envelopes, files } = this.state
-    const allReviewableDocs = this.getAllReviewableDocs(envelopes, files)
+    const { deal } = this.state
+    const allReviewableDocs = this.getAllReviewableDocs(deal.envelopes, deal.files)
 
     return (
       <div>
@@ -173,16 +224,18 @@ export default class DealDashboard extends React.Component {
           isActive={this.props.show}
           documents={allReviewableDocs}
           token={this.props.user.access_token}
-          closeHandler={this.reviewRequestModalCloseHandler}
-          isFreezed={this.state.reviewRequestModalIsFreezed}
-          submitHandler={this.reviewRequestModalSubmitHandler}
-          filePreviewModalShowHandler={this.filePreviewModalShowHandler}
+          closeHandler={() => this.onClose()}
+          isFreezed={this.state.saving}
+          submitHandler={docs => this.reviewRequestModalSubmitHandler(docs)}
+          filePreviewModalShowHandler={file => this.filePreviewModalShowHandler(file)}
         />
+
         <FilePreviewModal
           file={this.state.filePreviewModalContent}
           isActive={this.state.filePreviewModalIsActive}
-          onCloseHandler={this.filePreviewModalCloseHandler}
+          onCloseHandler={() => this.filePreviewModalCloseHandler()}
         />
+
         <MessageModal
           show={this.state.showSuccessModal}
           text="Documents submitted for review!"
