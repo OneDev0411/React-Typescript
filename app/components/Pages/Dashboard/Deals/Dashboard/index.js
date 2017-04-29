@@ -27,7 +27,6 @@ export default class DealDashboard extends React.Component {
   }
 
   componentDidMount() {
-    // active tab when it's clicked
     this.onTabChange(this.state.activeTab)
     this.setDeal()
   }
@@ -41,37 +40,25 @@ export default class DealDashboard extends React.Component {
     const deal = deals.list[params.id]
 
     if (!deal)
-      return browserHistory.goBack()
+      return this.goBack()
 
-    // display initial deal
+    // update deal
     this.setState({ deal })
 
-    if (!deal.submissions)
-      deal.submissions = await this.getSubmissions()
-
-    if (!deal.envelopes) {
-      const x = await this.getEnvelopes()
-      console.log(x)
-      deal.envelopes = x
+    if (!deal.submissions) {
+      deal.submissions = await this.get('submissions')
+      this.setState({ deal })
     }
 
-    // update appstore
-    AppStore.data.deals.list[deal.id] = deal
-
-    this.setState({ deal })
+    if (!deal.envelopes) {
+      deal.envelopes = await this.get('envelopes')
+      this.setState({ deal })
+    }
   }
 
-  async getSubmissions() {
-    return DealDispatcher.dispatchSync({
-      action: 'get-submissions',
-      user: this.props.user,
-      id: this.props.params.id
-    })
-  }
-
-  async getEnvelopes() {
-    return DealDispatcher.dispatchSync({
-      action: 'get-envelopes',
+  async get(item) {
+    return await DealDispatcher.dispatchSync({
+      action: `get-${item}`,
       user: this.props.user,
       id: this.props.params.id
     })
@@ -99,6 +86,7 @@ export default class DealDashboard extends React.Component {
       deal,
       activeTab
     } = this.state
+
 
     if (!deal) {
       return (
