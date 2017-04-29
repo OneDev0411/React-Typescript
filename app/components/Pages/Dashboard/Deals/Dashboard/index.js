@@ -1,4 +1,3 @@
-
 import S from 'shorti'
 import React from 'react'
 import _ from 'underscore'
@@ -8,14 +7,12 @@ import { Row, Col, Tabs, Tab } from 'react-bootstrap'
 import AppStore from '../../../../../stores/AppStore'
 import { getFieldValue } from '../../../../../utils/helpers'
 import DealDispatcher from '../../../../../dispatcher/DealDispatcher'
-
 import Menu from './Views/Menu'
 import DealDetail from './Views/DealDetail'
 import DealForms from '../Forms'
 import DealESigns from '../ESigns'
 import Uploads from '../Uploads'
 import Review from '../Review'
-
 
 export default class DealDashboard extends React.Component {
 
@@ -24,15 +21,9 @@ export default class DealDashboard extends React.Component {
 
     this.state = {
       deal: null,
-      submitReviewModalIsActive: false,
+      showReviewModal: false,
       activeTab: props.params.tab || 'forms'
     }
-
-    this.onTabChange = this.onTabChange.bind(this)
-    this.reviewModalCloseHandler =
-      this.reviewModalCloseHandler.bind(this)
-    this.reviewModalOpenHandler =
-      this.reviewModalOpenHandler.bind(this)
   }
 
   componentDidMount() {
@@ -46,41 +37,28 @@ export default class DealDashboard extends React.Component {
   }
 
   async setDeal() {
-    let indexedReviews = null
     const { deals, params } = this.props
     const deal = deals.list[params.id]
 
-    if (!deal) return browserHistory.goBack()
+    if (!deal)
+      return browserHistory.goBack()
 
-    if (deal.reviews && !deal.reviewsIsMapped) {
-      indexedReviews =
-        this.indexedReviewsByDocumentsId(deal.reviews)
-      // this flag prevent to next review mapping process
-      deal.reviewsIsMapped = true
-      if (deal.files) {
-        deal.files =
-          this.mapReviewsToFiles(indexedReviews, deal.files)
-      }
-    }
+    // display initial deal
+    this.setState({ deal })
 
-
-    if (!deal.submissions) {
-      console.log('firstttt')
-      const submissions = await this.getSubmissions()
-      deal.submissions = submissions
-    }
+    if (!deal.submissions)
+      deal.submissions = await this.getSubmissions()
 
     if (!deal.envelopes) {
-      const envelopes = await this.getEnvelopes()
-      deal.envelopes = indexedReviews
-        ? this.mapReviewsToDocuments(indexedReviews, envelopes)
-        : envelopes
+      const x = await this.getEnvelopes()
+      console.log(x)
+      deal.envelopes = x
     }
 
+    // update appstore
     AppStore.data.deals.list[deal.id] = deal
-    this.setState({
-      deal
-    })
+
+    this.setState({ deal })
   }
 
   async getSubmissions() {
@@ -99,46 +77,6 @@ export default class DealDashboard extends React.Component {
     })
   }
 
-  indexedReviewsByDocumentsId(reviews) {
-    let indexedReviews = {}
-    reviews.forEach((review) => {
-      const id = review.file || review.envelope_document
-      indexedReviews[id] = {
-        ...review
-      }
-    })
-    return indexedReviews
-  }
-
-  mapReviewsToFiles(reviews, files) {
-    return files.map((file) => {
-      const review = reviews[file.id] || null
-      return {
-        ...file,
-        review
-      }
-    })
-  }
-
-  mapReviewsToDocuments(reviews, envelopes) {
-    return envelopes.map((envelope) => {
-      if (!envelope.documents)
-        return envelope
-
-      const documents = envelope.documents.map((doc) => {
-        const review = (reviews && reviews[doc.id]) || null
-        return {
-          ...doc,
-          review
-        }
-      })
-      return {
-        ...envelope,
-        documents
-      }
-    })
-  }
-
   collectSignatures() {
     // if (AppStore.data.deals.signatures) {
     //   AppStore.data.deals.signatures.documents = {}
@@ -150,18 +88,6 @@ export default class DealDashboard extends React.Component {
 
   onTabChange(id) {
     this.setState({ activeTab: id })
-  }
-
-  reviewModalCloseHandler() {
-    this.setState({
-      submitReviewModalIsActive: false
-    })
-  }
-
-  reviewModalOpenHandler() {
-    this.setState({
-      submitReviewModalIsActive: true
-    })
   }
 
   goBack() {
@@ -203,7 +129,7 @@ export default class DealDashboard extends React.Component {
               onCollectSignatures={
                 () => this.collectSignatures()
               }
-              onReviewRequest={this.reviewModalOpenHandler}
+              onReviewRequest={() => this.setState({ showReviewModal: true })}
             />
           </Col>
         </Row>
@@ -220,7 +146,7 @@ export default class DealDashboard extends React.Component {
                 defaultActiveKey={activeTab}
                 animation={false}
                 id="deals-dashboard"
-                onSelect={this.onTabChange}
+                onSelect={id => this.onTabChange(id)}
               >
                 <Tab eventKey="forms" title="Forms" className="forms">
                   <DealForms
@@ -257,8 +183,9 @@ export default class DealDashboard extends React.Component {
         <Review
           deal={deal}
           user={this.props.user}
-          onClose={this.reviewModalCloseHandler}
-          show={this.state.submitReviewModalIsActive}
+          onClose={() => this.setState({ showReviewModal: false })}
+          show={this.state.showReviewModal}
+          onChange={deal => this.setState({ deal })}
         />
       </div>
     )
