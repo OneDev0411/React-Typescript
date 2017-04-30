@@ -8,7 +8,6 @@ const DocumentLink = ({
   onClickPreviewHandler
 }) => (
   <button
-    href="#"
     className="c-request-review__item__btn"
     onClick={(e) => {
       e.preventDefault()
