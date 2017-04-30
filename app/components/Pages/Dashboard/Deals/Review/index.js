@@ -30,7 +30,7 @@ export default class DealDashboard extends React.Component {
   }
 
   initializeReviews(deal) {
-    if (deal.reviewsIsMapped)
+    if (deal.reviewsIsMapped || typeof deal.envelopes === 'undefined')
       return false
 
     let indexedReviews = null
