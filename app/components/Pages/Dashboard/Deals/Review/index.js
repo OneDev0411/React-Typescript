@@ -210,7 +210,8 @@ export default class DealDashboard extends React.Component {
   }
 
   onClose() {
-    this.props.onClose()
+    if (!this.state.saving)
+      this.props.onClose()
   }
 
   render() {
