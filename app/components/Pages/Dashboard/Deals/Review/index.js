@@ -133,7 +133,9 @@ export default class DealDashboard extends React.Component {
             return envelope
 
           const documents = envelope.documents.map(document => {
-            document.review = review
+            if (document.id === review.envelope_document)
+              document.review = review
+
             return document
           })
 
