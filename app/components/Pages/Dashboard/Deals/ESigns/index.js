@@ -13,7 +13,7 @@ export default class DealESigns extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      envelope: null,
+      selectedEnvelope: null,
       docsResent: false,
       resendingDoc: false,
       docLastResent: null
@@ -21,15 +21,19 @@ export default class DealESigns extends React.Component {
   }
 
   componentDidMount() {
-
+    const { envelopes } = this.props
+    this.init(envelopes)
   }
 
   componentWillReceiveProps(nextProps) {
     const { envelopes } = nextProps
+    this.init(envelopes)
+  }
 
-    if (!this.state.envelope && envelopes && envelopes.length > 0) {
+  init(envelopes) {
+    if (envelopes && !this.state.selectedEnvelope) {
       this.setState({
-        envelope: envelopes[0]
+        selectedEnvelope: envelopes[0]
       })
     }
   }
@@ -40,9 +44,9 @@ export default class DealESigns extends React.Component {
 
   displayEnvelope(envelope) {
     this.setState({
-      envelope,
       docsResent: false,
-      resendingDoc: false
+      resendingDoc: false,
+      selectedEnvelope: envelope
     })
   }
 
@@ -84,17 +88,14 @@ export default class DealESigns extends React.Component {
 
   render() {
     const { envelopes, user } = this.props
-    const { envelope, resendingDoc, docsResent, docLastResent } = this.state
+    const {
+      docsResent,
+      resendingDoc,
+      docLastResent,
+      selectedEnvelope
+    } = this.state
 
-    if (!envelopes) {
-      return (
-        <div className="loading center">
-          <i className="fa fa-spinner fa-spin fa-2x fa-fw" />
-        </div>
-      )
-    }
-
-    if (envelopes.length === 0) {
+    if (envelopes && envelopes.length === 0) {
       return (
         <div className="no-esign">
           You haven't sent any docs yet
@@ -102,32 +103,64 @@ export default class DealESigns extends React.Component {
       )
     }
 
-    const signed_users = _.filter(envelope.recipients, recp => recp.signed_at !== null)
-    const not_signed_users = _.filter(envelope.recipients, recp => recp.signed_at === null)
+    if (!envelopes) {
+      return (
+        <div className="loading left" style={{ padding: '2%' }}>
+          <i className="fa fa-spinner fa-spin fa-1x fa-fw" />
+          <div>Loading E-Signs</div>
+        </div>
+      )
+    }
+
+    if (!selectedEnvelope)
+      return false
+
+    const signed_users = _.filter(
+      selectedEnvelope.recipients,
+      recp => recp.signed_at !== null
+    )
+
+    const not_signed_users = _.filter(
+      selectedEnvelope.recipients,
+      recp => recp.signed_at === null
+    )
 
     return (
       <Row>
         <Col xs={5} sm={5} style={S('p-0')}>
           {
-            envelopes && envelopes.map((evlp) => {
-              const _signed_users = _.filter(evlp.recipients, recp => recp.signed_at !== null)
+            envelopes && envelopes.map((envelope) => {
+              const _signed_users = _.filter(
+                envelope.recipients,
+                recp => recp.signed_at !== null
+              )
 
               return (
                 <div
-                  key={`envelope${evlp.id}`}
-                  className={cn('esign-detail', { active: evlp.id === envelope.id })}
-                  onClick={this.displayEnvelope.bind(this, evlp)}
+                  key={`envelope${envelope.id}`}
+                  className={cn(
+                    'esign-detail',
+                    { active: envelope.id === selectedEnvelope.id }
+                  )}
+                  onClick={this.displayEnvelope.bind(this, envelope)}
                 >
                   <Row>
                     <Col xs={2}>
-                      <img src="/static/images/deals/esign.png" />
+                      <img src="/static/images/deals/file-pdf.svg" />
                     </Col>
                     <Col xs={10}>
-                      <div className="title">{ evlp.title }</div>
+                      <div className="title">{ envelope.title }</div>
                       <div className="info">
-                        { evlp.documents ? evlp.documents.length : 0 } docs | &nbsp;
-                        { _signed_users.length } of &nbsp;
-                        { evlp.recipients.length } signed
+                        <span>
+                          {
+                            envelope.documents
+                              ? envelope.documents.length
+                              : 0
+                          }
+                        </span>
+                        <span> docs | &nbsp;</span>
+                        <span>{ _signed_users.length } of &nbsp;</span>
+                        <span>{ envelope.recipients.length } signed</span>
                       </div>
                     </Col>
                   </Row>
@@ -145,17 +178,17 @@ export default class DealESigns extends React.Component {
             minHeight: `${_.size(envelopes) * 14}vh`
           }}
         >
-          <h3>{ envelope.title }</h3>
+          <h3>{ selectedEnvelope.title }</h3>
 
           {
-            envelope.documents &&
+            selectedEnvelope.documents &&
             <div>
               <div
                 className="hr"
                 style={{ marginBottom: '10px' }}
               />
               {
-                envelope.documents.map((doc, key) => (
+                selectedEnvelope.documents.map((doc, key) => (
                   <div
                     key={`env_doc_${doc.id}`}
                     className="documents"
@@ -171,7 +204,12 @@ export default class DealESigns extends React.Component {
                     />
                     <a
                       target="_blank"
-                      href={this.displayEnvelopeDocument(envelope.id, key)}
+                      href={
+                        this.displayEnvelopeDocument(
+                          selectedEnvelope.id,
+                          key
+                        )
+                      }
                     >
                       { doc.title }
                     </a>
@@ -230,7 +268,7 @@ export default class DealESigns extends React.Component {
                     bsStyle="primary"
                     bsSize="small"
                     disabled={resendingDoc || docsResent}
-                    onClick={this.resendDocs.bind(this, envelope.id)}
+                    onClick={this.resendDocs.bind(this, selectedEnvelope.id)}
                   >
                     { resendingDoc && 'Sending' }
                     { docsResent && 'Docs sent' }
@@ -272,7 +310,7 @@ export default class DealESigns extends React.Component {
                         {
                             this.props.user.id === recp.user.id &&
                             <a
-                              href={this.getSignLink(envelope.id)}
+                              href={this.getSignLink(selectedEnvelope.id)}
                               target="_blank"
                             >
                               Sign now
@@ -280,7 +318,7 @@ export default class DealESigns extends React.Component {
                           }
                       </Col>
                     </Row>
-                    ))
+                  ))
                 }
               </div>
             </div>

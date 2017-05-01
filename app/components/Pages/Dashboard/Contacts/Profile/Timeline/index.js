@@ -4,6 +4,7 @@ import moment from 'moment'
 import Avatar from 'react-avatar'
 import _ from 'underscore'
 import Contact from '../../../../../../models/Contact'
+import { getFieldValue } from '../../../../../../utils/helpers'
 
 export default class Timeline extends React.Component {
 
@@ -17,9 +18,6 @@ export default class Timeline extends React.Component {
 
   create(id, activity) {
     let attributes = {}
-
-    // action
-    // console.log('Action: ', activity.action)
 
     if (this[activity.action])
       attributes = this[activity.action](activity)
@@ -40,7 +38,8 @@ export default class Timeline extends React.Component {
   UserViewedListing(activity) {
     return {
       title: `${this.props.name} <b>viewed</b> ` + this.getListingTitle(activity),
-      image: activity.object.cover_image_url,
+      image: this.getListingPhoto(activity.object),
+      url: this.getListingUrl(activity.object),
       icon: 'group-142'
     }
   }
@@ -48,7 +47,8 @@ export default class Timeline extends React.Component {
   UserFavoritedListing(activity) {
     return {
       title: `${this.props.name} <b>favorited</b> ` + this.getListingTitle(activity),
-      image: activity.object.listing.cover_image_url,
+      image: this.getListingPhoto(activity.object),
+      url: this.getListingUrl(activity.object),
       icon: 'heart'
     }
   }
@@ -56,7 +56,8 @@ export default class Timeline extends React.Component {
   UserSharedListing(activity) {
     return {
       title: `${this.props.name} <b>share</b> ` + this.getListingTitle(activity),
-      image: activity.object.listing.cover_image_url,
+      image: this.getListingPhoto(activity.object),
+      url: this.getListingUrl(activity.object),
       icon: 'group-142'
     }
   }
@@ -163,6 +164,17 @@ export default class Timeline extends React.Component {
     return (title && title.length > 0) ? title : proposed_title
   }
 
+  getListingPhoto(listing) {
+    if (!listing || !listing.cover_image_url)
+      return '/static/images/deals/home.svg'
+
+    return listing.cover_image_url
+  }
+
+  getListingUrl(listing) {
+    return `/dashboard/mls/${listing.id}`
+  }
+
   renderItem(key, attributes) {
     const image = attributes.image ?
       <img src={attributes.image} /> :
@@ -173,8 +185,11 @@ export default class Timeline extends React.Component {
         size={34}
       />
 
-    return (
-      <Row className="event" key={`timeline_item_${key}`}>
+    const activity = (
+      <Row
+        className="event"
+        key={`timeline_item_${key}`}
+      >
         <Col sm={1} xs={1} className="image">
           { image }
         </Col>
@@ -190,6 +205,16 @@ export default class Timeline extends React.Component {
         </Col>
       </Row>
     )
+
+    if (attributes.url) {
+      return (
+        <a href={attributes.url} target="_blank">
+          { activity }
+        </a>
+      )
+    }
+
+    return activity
   }
 
   render() {

@@ -11,7 +11,6 @@ const getDocumentUrl = (id, index, token) => {
 
 const getSortedDocs = (docs) => {
   // temporary array holds objects with position and sort-value
-  let sortedDocs = []
   let reviewedDocs = []
   let unreviewedDocs = []
   docs.forEach((doc) => {
@@ -20,12 +19,10 @@ const getSortedDocs = (docs) => {
   })
 
   // sorting the mapped array containing the reduced values
-  sortedDocs = reviewedDocs.sort((a, b) => (a.review.state > b.review.state))
-  sortedDocs = [
-    ...sortedDocs,
-    ...unreviewedDocs.sort((a, b) => (a.name || a.title > b.name || b.title))
+  return [
+    ...unreviewedDocs.sort((a, b) => (a.name || a.title > b.name || b.title)),
+    ...reviewedDocs.sort((a, b) => (a.review.state > b.review.state))
   ]
-  return sortedDocs
 }
 
 export default class SubmitReviewModal extends React.Component {
@@ -56,15 +53,33 @@ export default class SubmitReviewModal extends React.Component {
   }
 
   onHidden() {
-    this.props.closeHandler()
-    this.setState({
-      selectedDocuments: 0
-    })
+    const isClosed = this.props.closeHandler()
+    if (isClosed) {
+      this.setState({
+        selectedDocuments: 0
+      })
+    }
   }
 
   onSubmit(e) {
     e.preventDefault()
-    this.props.submitHandler(e.target)
+    const form = e.target
+
+    const docs = Object.keys(form)
+    .filter(key =>
+      form[key].type === 'checkbox'
+      && form[key].checked
+    )
+    .map(index => form[index])
+    .map((checkbox) => {
+      let doc = {
+        state: 'Pending'
+      }
+      doc[checkbox.name] = checkbox.id
+      return doc
+    })
+
+    this.props.submitHandler(docs)
   }
 
   render() {
@@ -108,7 +123,11 @@ export default class SubmitReviewModal extends React.Component {
                     avatar.src = avatar.type === 'img' ? doc.url : '#'
                   } else {
                     title = doc.title
-                    docUrl = getDocumentUrl(doc.envelope, doc.index, this.props.token)
+                    docUrl = getDocumentUrl(
+                      doc.envelope,
+                      doc.index,
+                      this.props.token
+                    )
                   }
 
                   return (
