@@ -32,7 +32,10 @@ async function display(file, renderProps = {}) {
       })
     }
     else {
-      await this.render(file || 'app',  { data: this.locals })
+      await this.render(file || 'app',  {
+        data: this.locals,
+        store_data
+      })
     }
   } else {
     await this.render('development', {
