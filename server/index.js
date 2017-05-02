@@ -14,6 +14,7 @@ import render from './util/render'
 import request from './util/request'
 import webpackConfig from '../webpack.config.babel'
 import appConfig from '../config/webpack'
+import AppStore from '../app/stores/AppStore'
 
 const app = new Koa()
 
@@ -70,13 +71,9 @@ app.use(session({
  * middleware for time
  */
 app.use(async function(ctx, next) {
-  ctx.locals = {}
-
-  ctx.locals.time = (new Date).getTime()
-
-  if (ctx.session && ctx.session.branch_data) {
-    ctx.locals.branch_data = JSON.stringify(ctx.session.branch_data)
-    delete ctx.session.branch_data
+  ctx.locals = {
+    time: (new Date).getTime(),
+    AppStore
   }
 
   await next()
