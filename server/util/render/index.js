@@ -1,19 +1,33 @@
 import React from 'react'
+import xss from 'xss'
 import { renderToString } from 'react-dom/server'
 import { RouterContext } from 'react-router'
-import AppStore from '../../../app/stores/AppStore'
+import { createStore, applyMiddleware, compose } from 'redux'
+import { Provider } from 'react-redux'
+import thunk from 'redux-thunk'
+import reducers from '../../../app/reducers'
 import config from '../../../config/webpack'
 
 async function display(file, renderProps = {}) {
+
+  const initialState = {
+    data: this.locals.AppStore ? this.locals.AppStore.data : {}
+  }
+
+  // create store
+  const store = createStore(reducers, initialState, compose(applyMiddleware(thunk)))
+
+  // get store initial data
+  const store_data = encodeURIComponent(xss(JSON.stringify(store.getState())))
+
   if (['production', 'staging'].indexOf(process.env.NODE_ENV) > -1) {
     if (/\/dashboard\/mls\/(\w+)/.test(this.request.url)) {
       await this.render('app', {
-        data: this.locals,
+        store_data,
         body: renderToString(
-          <RouterContext
-            data={AppStore.data}
-            {...renderProps}
-          />
+          <Provider store={store}>
+            <RouterContext {...renderProps} />
+          </Provider>
         )
       })
     }
@@ -22,7 +36,7 @@ async function display(file, renderProps = {}) {
     }
   } else {
     await this.render('development', {
-      data: this.locals,
+      store_data,
       jsBundle: `${config.compile.publicPath}/${config.compile.jsBundle}`
     })
   }
