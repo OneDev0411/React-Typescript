@@ -26,6 +26,9 @@ import Website from '../components/Pages/Dashboard/Website'
 import Cards from '../components/Pages/Dashboard/Cards'
 import Forms from '../components/Pages/Dashboard/Forms'
 
+// cluster MLS
+import ClusterMLS from '../components/Pages/Dashboard/ClusterMap/'
+
 // deals
 import DealsLayout from '../components/Pages/Dashboard/Deals'
 import DealsList from '../components/Pages/Dashboard/Deals/DealsList'
@@ -82,6 +85,9 @@ export default (
     <Route path="widgets/search" component={SearchWidget} />
 
     <Route path="/dashboard" component={Dashboard}>
+
+      <Route path="/dashboard/cluster-mls" component={ClusterMLS} />
+
       <Route path="/dashboard/deals" component={DealsLayout}>
         <IndexRoute component={DealsList} />
         <Route path="/dashboard/deals/create/:type" component={DealCreate} />

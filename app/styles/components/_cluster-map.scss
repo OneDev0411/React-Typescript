@@ -1,0 +1,70 @@
+@function stripUnits($number) {
+  @return $number / ($number * 0 + 1);
+}
+
+$cluster-marker-width: 40px !default;
+$cluster-marker-height: 40px !default;
+$cluster-marker-border-width: 5px !default;
+$cluster-marker-font-size: 14px !default;
+
+
+$simple-marker-width: 49px;
+$simple-marker-height: 64px;
+
+$simple-marker-originX: $simple-marker-width * .5;
+$simple-marker-originY: $simple-marker-height;
+
+
+.c-cluster-map {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    margin: 0 1px 0 1px;
+
+    .header {
+    height: 2em;
+    background-color: #004336;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px 0 10px;
+    }
+
+    .main {
+    flex: 1;
+    display: flex;
+    }
+}
+
+.simple-marker {
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDkiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA0OSA2NCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+aWNvbnMgMjwvdGl0bGU+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNLjk1NSAyNC4yNmMwIDUuMjMyIDEuNzQ0IDEwLjA1NiA0LjY4OCAxMy45NDRMMjQuNDUgNjMuMDI3bDE4LjgwNS0yNC44MjNjMi45NDUtMy44ODggNC42ODgtOC43MTIgNC42ODgtMTMuOTQ0QzQ3Ljk0MyAxMS40MTUgMzcuNDIzIDEgMjQuNDUgMSAxMS40NzQgMSAuOTU0IDExLjQxNS45NTQgMjQuMjZ6IiBzdHJva2U9IiNGRkYiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0iIzQ5OTBFMiIvPjxwYXRoIGQ9Ik0yNC40NSAzOS43NjdjLTguNjUgMC0xNS42NjMtNi45NDMtMTUuNjYzLTE1LjUwNyAwLTguNTYzIDcuMDEyLTE1LjUwNyAxNS42NjItMTUuNTA3IDguNjUgMCAxNS42NjIgNi45NDQgMTUuNjYyIDE1LjUwNyAwIDguNTY0LTcuMDEzIDE1LjUwNy0xNS42NjMgMTUuNTA3eiIgZmlsbD0iI0ZGRiIvPjwvZz48L3N2Zz4=');
+    position: absolute;
+    cursor: pointer;
+    width: $simple-marker-width;
+    height: $simple-marker-height;
+    top: -$simple-marker-originY;
+    left: -$simple-marker-originX;
+    transform-origin: $simple-marker-originX $simple-marker-originY;
+    margin: 0;
+    padding: 0;
+}
+
+.cluster-marker {
+    position: absolute;
+    cursor: pointer;
+    width: $cluster-marker-width;
+    height: $cluster-marker-height;
+    left: -$cluster-marker-width / 2;
+    top: -$cluster-marker-height / 2;
+    border: $cluster-marker-border-width solid #004336;
+    border-radius: 50%;
+    background-color: white;
+    text-align: center;
+    color: #333;
+    font-size: $cluster-marker-font-size;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
