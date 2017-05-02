@@ -40,7 +40,7 @@ export default class Listing extends Component {
   }
 
   render() {
-    const data = this.props.data
+    const { data } = this.props
     const user = data.user
     let listing_viewer
     if (data.show_listing_viewer) {
