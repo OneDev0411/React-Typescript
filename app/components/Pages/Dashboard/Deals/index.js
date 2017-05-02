@@ -54,9 +54,7 @@ export default class Deals extends React.Component {
     const { data } = this.props
     const user = data.user
     const deals = data.deals || {}
-    const children = React.Children.map(this.props.children, child =>
-      React.cloneElement(child, { user, deals })
-    )
+    const children = React.cloneElement(this.props.children, { user, deals })
 
     return (
       <div className="crm">
