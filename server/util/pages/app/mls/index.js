@@ -1,5 +1,4 @@
 import Koa from 'koa'
-import AppStore from '../../../../../app/stores/AppStore'
 import Listing from '../../../../../app/models/Listing'
 import listing_util from '../../../../../app/utils/listing'
 const router = require('koa-router')()
@@ -48,8 +47,6 @@ router.get('/dashboard/mls/actives', async (ctx, next) => {
  * route for /mls
  */
 router.get('/dashboard/mls', async (ctx, next) => {
-  AppStore.data.user = ctx.session.user
-  ctx.locals.AppStore = JSON.stringify(AppStore)
   await ctx.display()
 })
 
@@ -67,21 +64,34 @@ router.get('/dashboard/mls/:id', async (ctx, next) => {
     const response = await getListing(ctx.config, id)
     const listing = response.data
 
-    AppStore.data.current_listing = listing
-    ctx.locals.has_og = true
-    ctx.locals.og_title = listing_util.addressTitle(listing.property.address)
-    ctx.locals.og_url = ctx.request.protocol + '://' + ctx.request.hostname + ctx.request.url
-    ctx.locals.og_description = listing.property.description
-    ctx.locals.og_image_url = listing.cover_image_url
-    ctx.locals.AppStore = JSON.stringify(AppStore)
+    const { AppStore } = ctx.locals
+
+    AppStore.data = {
+      ...AppStore.data,
+      ...{
+        current_listing: listing
+      }
+    }
+
+    const locals = {
+      has_og: true,
+      og_title: listing_util.addressTitle(listing.property.address),
+      og_url: `${ctx.request.protocol}://${ctx.request.hostname}${ctx.request.url}`,
+      og_description: listing.property.description,
+      og_image_url: listing.cover_image_url
+    }
+
+    ctx.locals = {
+      ...ctx.locals,
+      ...locals,
+      ...{AppStore}
+    }
 
     if (ctx.session.user && ctx.request.query.token) {
       ctx.session = null
     }
   }
-  catch(e) {
-
-  }
+  catch(e) {}
 
   await next()
 })
