@@ -157,6 +157,9 @@ const controller = {
       user,
       options: listing_map.options
     })
+    this.setState({
+      mapProps: { zoom, bounds, center }
+    })
   },
   hideModal() {
     if (AppStore.data.listing_map)

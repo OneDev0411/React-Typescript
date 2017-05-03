@@ -4,7 +4,8 @@ export const mapOptions = {
   center: {
     lat: 32.7767,
     lng: -96.7970
-  }
+  },
+  bounds: null
 }
 
 export const queryOptions = {
