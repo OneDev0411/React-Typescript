@@ -26,7 +26,8 @@ const routes = {
     [ 'delete-attribute' ]
   ],
   concierge: [
-    [ 'put-review' ]
+    [ 'put-review' ],
+    [ 'get-valerts' ]
   ],
   deal: [
     [ 'envelope-document' ],
