@@ -1,5 +1,4 @@
 import Koa from 'koa'
-import AppStore from '../../../../../app/stores/AppStore'
 import Crypto from '../../../../../app/models/Crypto'
 import listing_util from '../../../../../app/utils/listing'
 const router = require('koa-router')()

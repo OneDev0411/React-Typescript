@@ -186,10 +186,7 @@ export default class Timeline extends React.Component {
       />
 
     const activity = (
-      <Row
-        className="event"
-        key={`timeline_item_${key}`}
-      >
+      <Row className="event" >
         <Col sm={1} xs={1} className="image">
           { image }
         </Col>
@@ -208,13 +205,17 @@ export default class Timeline extends React.Component {
 
     if (attributes.url) {
       return (
-        <a href={attributes.url} target="_blank">
+        <a
+          href={attributes.url}
+          target="_blank"
+          key={`timeline_item_${key}`}
+        >
           { activity }
         </a>
       )
     }
 
-    return activity
+    return <activity key={`timeline_item_${key}`} />
   }
 
   render() {

@@ -1,6 +1,5 @@
 import Koa from 'koa'
 import super_agent from 'superagent'
-import AppStore from '../../../../../app/stores/AppStore'
 import Crypto from '../../../../../app/models/Crypto'
 const router = require('koa-router')()
 const app = new Koa()
@@ -64,19 +63,19 @@ router.get('/verify_email/submitted', async (ctx, next) => {
 router.get('/verify/email', async (ctx, next) => {
   // Logout user
   ctx.session = null
-  let AppStore = {}
+  const { AppStore } = ctx.locals
 
   AppStore.data = {
     status: 'success'
   }
 
-  if(ctx.request.query.status === 'error'){
+  if (ctx.request.query.status === 'error'){
     AppStore.data = {
       status: 'error'
     }
   }
 
-  ctx.locals.AppStore = JSON.stringify(AppStore)
+  ctx.locals.AppStore = AppStore
   await ctx.display()
 })
 

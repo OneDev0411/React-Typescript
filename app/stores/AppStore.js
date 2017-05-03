@@ -1,25 +1,10 @@
-// AppStore.js
-import { EventEmitter } from 'events'
-import _ from 'lodash'
+import store from '.'
+import { updateApp } from '../store_actions/data'
 
-export default _.extend({}, EventEmitter.prototype, {
-  // Initial data
-  data: {
-    ready: false
-  },
-
-  // Emit Change event
+// hack Flux store to use Redux reducers
+export default {
+  data: store.getState().data,
   emitChange() {
-    this.emit('change')
-  },
-
-  // Add change listener
-  addChangeListener(callback) {
-    this.on('change', callback)
-  },
-
-  // Remove change listener
-  removeChangeListener(callback) {
-    this.removeListener('change', callback)
+    store.dispatch(updateApp(this.data))
   }
-})
+}

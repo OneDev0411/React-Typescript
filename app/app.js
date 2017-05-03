@@ -1,17 +1,25 @@
 // app-client.js
 import React from 'react'
-import { render } from 'react-dom'
-import { Router } from 'react-router'
-import history from './utils/history'
+import { Router, browserHistory } from 'react-router'
+import { Provider } from 'react-redux'
+import { syncHistoryWithStore } from 'react-router-redux'
 
 // Routes config
 import routes from './routes'
+
+// store
+import store from './stores'
+
+// history
+const history = syncHistoryWithStore(browserHistory, store)
 
 // import styles
 import './styles/main.scss'
 
 export default () => (
-  <Router history={history}>
-    { routes }
-  </Router>
+  <Provider store={store}>
+    <Router history={history}>
+      { routes }
+    </Router>
+  </Provider>
 )

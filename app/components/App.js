@@ -1,6 +1,7 @@
 // App.js
 import React, { Component } from 'react'
 import _ from 'lodash'
+import { connect } from 'react-redux'
 import io from 'socket.io-client'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import NotificationDispatcher from '../dispatcher/NotificationDispatcher'
@@ -9,7 +10,7 @@ import Brand from '../controllers/Brand'
 import ReactGA from 'react-ga'
 import config from '../../config/public'
 
-export default class App extends Component {
+class App extends Component {
   componentWillMount() {
     if (typeof window !== 'undefined') {
       const reconnect_vars = {
@@ -24,7 +25,7 @@ export default class App extends Component {
   // Add change listeners to stores
   componentDidMount() {
     Brand.checkBranding()
-    AppStore.addChangeListener(this._onChange.bind(this))
+    // AppStore.addChangeListener(this._onChange.bind(this))
     window.socket.on('reconnecting', () => {
       AppStore.data.socket_reconnecting = true
       AppStore.emitChange()
@@ -93,10 +94,7 @@ export default class App extends Component {
       })
     }
   }
-  // Remove change listeners from stores
-  componentWillUnmount() {
-    AppStore.removeChangeListener(this._onChange.bind(this))
-  }
+
   setIntercom() {
     const data = AppStore.data
     if (!data.intercom_set && data.user) {
@@ -403,32 +401,17 @@ export default class App extends Component {
     }
   }
 
-  _onChange() {
-    this.setState({
-      AppStore
-    })
-  }
-
   render() {
-    let data = AppStore.data
+    const { data, location } = this.props
 
-    const path = this.props.location.pathname
-    const location = this.props.location
+    // don't remove below codes,
+    // because app is depended to `path` and `location` props in data store
+    const path = location.pathname
     data.path = path
     data.location = location
-    // Hydrate store if coming from server
-    if (typeof window !== 'undefined' && window.AppStore) {
-      const server_data = window.AppStore.data
-      // merge into client
-      data = { ...server_data, ...data }
-    }
-    const Routes = React.cloneElement(this.props.children, { data })
-    return Routes
+
+    return React.cloneElement(this.props.children, { data })
   }
 }
 
-// PropTypes
-App.propTypes = {
-  children: React.PropTypes.object.isRequired,
-  location: React.PropTypes.object.isRequired
-}
+export default connect(s => s)(App)

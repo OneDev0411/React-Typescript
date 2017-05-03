@@ -5,11 +5,19 @@ const app = new Koa()
 
 router.get(/^\/dashboard(?:\/|$)/, async (ctx, next) => {
 
-  if (ctx.session.user){
-    AppStore.data.user = ctx.session.user
-    AppStore.data.path = ctx.request.url
-    AppStore.data.location = { pathname: ctx.request.url }
-    ctx.locals.AppStore = JSON.stringify(AppStore)
+  if (ctx.session.user) {
+    const { AppStore } = ctx.locals
+    AppStore.data = {
+      ...AppStore.data,
+      ...{
+        user: ctx.session.user,
+        path: ctx.request.url,
+        location: { pathname: ctx.request.url }
+      }
+    }
+
+    ctx.locals.AppStore = AppStore
+
     return await ctx.display()
   } else {
     // If mls listing
