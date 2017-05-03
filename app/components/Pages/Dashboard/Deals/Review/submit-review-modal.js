@@ -88,7 +88,7 @@ export default class SubmitReviewModal extends React.Component {
     return (
       <Modal className="c-request-review-modal" show={this.props.isActive} onHide={this.onHidden}>
         <Modal.Header>
-          <Modal.Title>{'Send docs for borker review'}</Modal.Title>
+          <Modal.Title>{'Send docs for broker review'}</Modal.Title>
           <button
             onClick={this.onHidden}
             className="c-request-review-modal__close-btn"
