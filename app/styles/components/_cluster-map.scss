@@ -8,46 +8,50 @@ $cluster-marker-border-width: 5px !default;
 $cluster-marker-font-size: 14px !default;
 
 
-$simple-marker-width: 49px;
-$simple-marker-height: 64px;
-
-$simple-marker-originX: $simple-marker-width * .5;
-$simple-marker-originY: $simple-marker-height;
+$simple-marker-width: 48px;
+$simple-marker-height: 24px;
 
 
 .c-cluster-map {
     display: flex;
     min-height: 100vh;
+    margin-left: 10px;
     flex-direction: column;
-    margin: 0 1px 0 1px;
 
-    .header {
-    height: 2em;
-    background-color: #004336;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 10px 0 10px;
+    .banner {
+        padding: .5rem  1rem;
+        background-color: #fff;
     }
 
     .main {
-    flex: 1;
-    display: flex;
+        flex: 1;
+        display: flex;
     }
 }
 
 .simple-marker {
-    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDkiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA0OSA2NCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+aWNvbnMgMjwvdGl0bGU+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNLjk1NSAyNC4yNmMwIDUuMjMyIDEuNzQ0IDEwLjA1NiA0LjY4OCAxMy45NDRMMjQuNDUgNjMuMDI3bDE4LjgwNS0yNC44MjNjMi45NDUtMy44ODggNC42ODgtOC43MTIgNC42ODgtMTMuOTQ0QzQ3Ljk0MyAxMS40MTUgMzcuNDIzIDEgMjQuNDUgMSAxMS40NzQgMSAuOTU0IDExLjQxNS45NTQgMjQuMjZ6IiBzdHJva2U9IiNGRkYiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0iIzQ5OTBFMiIvPjxwYXRoIGQ9Ik0yNC40NSAzOS43NjdjLTguNjUgMC0xNS42NjMtNi45NDMtMTUuNjYzLTE1LjUwNyAwLTguNTYzIDcuMDEyLTE1LjUwNyAxNS42NjItMTUuNTA3IDguNjUgMCAxNS42NjIgNi45NDQgMTUuNjYyIDE1LjUwNyAwIDguNTY0LTcuMDEzIDE1LjUwNy0xNS42NjMgMTUuNTA3eiIgZmlsbD0iI0ZGRiIvPjwvZz48L3N2Zz4=');
     position: absolute;
     cursor: pointer;
-    width: $simple-marker-width;
-    height: $simple-marker-height;
-    top: -$simple-marker-originY;
-    left: -$simple-marker-originX;
-    transform-origin: $simple-marker-originX $simple-marker-originY;
+    top: -$simple-marker-height / 2;
+    left: -$simple-marker-width / 2;
+    text-align: center;
+    font-size: 2rem;
     margin: 0;
-    padding: 0;
+    padding: .5rem 1rem;
+    color: #fff;
+    background-color: #35b863;
+    letter-spacing: 1px;
+
+    &:before {
+        content: '';
+        position: absolute;
+        bottom: -9px;
+        left: 50%;
+        transform: translateX(-50%) rotate(45deg);
+        border-width: 10px;
+        border-style: solid;
+        border-color: transparent #35b863 #35b863 transparent;
+    }
 }
 
 .cluster-marker {

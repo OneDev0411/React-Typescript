@@ -4,16 +4,19 @@ import defaultProps from 'recompose/defaultProps'
 import GMap from './GMap'
 
 export default class ClusterMap extends Component {
+  constructor(props) {
+    super(props)
+  }
   render() {
     return (
       <div className="c-cluster-map">
-        <header className="header">
+        <header className="banner">
           <div>
-            Clustering example google-map-react (zoom, move to play with)
+            Clustering example (zoom, move to play with)
           </div>
         </header>
         <main className="main">
-          <GMap />
+          <GMap user={this.props.data.user} />
         </main>
       </div>
     )

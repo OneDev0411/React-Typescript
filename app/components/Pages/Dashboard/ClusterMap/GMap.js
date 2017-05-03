@@ -1,6 +1,7 @@
 import React from 'react'
 import compose from 'recompose/compose'
 import defaultProps from 'recompose/defaultProps'
+import lifecycle from 'recompose/lifecycle'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
@@ -9,23 +10,27 @@ import ClusterMarker from './Markers/ClusterMarker'
 import SimpleMarker from './Markers/SimpleMarker'
 import supercluster from 'points-cluster'
 import config from '../../../../../config/public'
+import { queryOptions, mapOptions, googleOptions } from './options'
+import ConciergeDispatcher from '../../../../dispatcher/ConciergeDispatcher'
 
-const TOTAL_COUNT = 200
+const { center } = mapOptions
 
-const susolvkaCoords = { lat: 60.814305, lng: 47.051773 }
+async function getMarkers(user) {
+  const action = {
+    user,
+    body: queryOptions,
+    type: 'GET_LISTING'
+  }
+  const listing =
+    await ConciergeDispatcher.dispatchSync(action)
 
-const markersData = [...Array(TOTAL_COUNT)].fill(0) // fill(0) for loose mode
-  .map((__, index) => ({
-    id: index,
-    lat: susolvkaCoords.lat +
-      0.01 * index *
-      Math.sin(30 * Math.PI * index / 180) *
-      Math.cos(50 * Math.PI * index / 180) + Math.sin(5 * index / 180),
-    lng: susolvkaCoords.lng +
-      0.01 * index *
-      Math.cos(70 + 23 * Math.PI * index / 180) *
-      Math.cos(50 * Math.PI * index / 180) + Math.sin(5 * index / 180)
+  return listing.map(list => ({
+    id: list.id,
+    lat: list.location.latitude,
+    lng: list.location.longitude,
+    ...list
   }))
+}
 
 export const gMap = ({
   bootstrapURLKeys,
@@ -65,8 +70,7 @@ export const gMapHOC = compose(
     clusterRadius: 60,
     hoverDistance: 30,
     options: {
-      minZoom: 3,
-      maxZoom: 15
+      ...googleOptions
     },
     style: {
       position: 'relative',
@@ -79,7 +83,7 @@ export const gMapHOC = compose(
   withState(
     'markers',
     'setMarkers',
-    markersData
+    []
   ),
   withState(
     'hoveredMarkerId',
@@ -90,10 +94,20 @@ export const gMapHOC = compose(
     'mapProps',
     'setMapProps',
     {
-      center: susolvkaCoords,
-      zoom: 10
+      center,
+      zoom: 13
     }
   ),
+  lifecycle({
+    componentDidMount() {
+      getMarkers(this.props.user)
+        .then((markers) => {
+          this.setState({
+            markers
+          })
+        })
+    }
+  }),
   // describe events
   withHandlers({
     onChange: ({ setMapProps }) => ({ center, zoom, bounds }) => {
@@ -131,8 +145,10 @@ export const gMapHOC = compose(
           .map(({ wx, wy, numPoints, points }) => ({
             lat: wy,
             lng: wx,
-            text: numPoints,
             numPoints,
+            text: numPoints === 1
+              ? `${Math.round(points[0].price / 1000)}k`
+              : numPoints,
             id: `${numPoints}_${points[0].id}`
           }))
         : []

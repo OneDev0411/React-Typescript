@@ -6,7 +6,7 @@ import { Motion } from 'react-motion'
 import { clusterMarkerHOC } from './ClusterMarker.js'
 
 export const simpleMarker = ({
-  defaultMotionStyle, motionStyle
+  defaultMotionStyle, motionStyle, text
 }) => (
   <Motion
     defaultStyle={defaultMotionStyle}
@@ -19,7 +19,9 @@ export const simpleMarker = ({
             style={{
               transform: `translate3D(0,0,0) scale(${scale}, ${scale})`
             }}
-          />
+          >
+           <span>{text}</span>
+          </div>
         )
     }
   </Motion>
@@ -29,7 +31,7 @@ export const simpleMarkerHOC = compose(
   defaultProps({
     initialScale: 0.3,
     defaultScale: 0.6,
-    hoveredScale: 0.7
+    hoveredScale: 0.9
   }),
   // resuse HOC
   clusterMarkerHOC
