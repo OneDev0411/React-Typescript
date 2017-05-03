@@ -140,17 +140,18 @@ export const gMapHOC = compose(
   withPropsOnChange(
     ['mapProps', 'getCluster'],
     ({ mapProps, getCluster }) => ({
-      clusters: mapProps.bounds
+      clusters:
+        mapProps.bounds
         ? getCluster(mapProps)
-          .map(({ wx, wy, numPoints, points }) => ({
-            lat: wy,
-            lng: wx,
-            numPoints,
-            text: numPoints === 1
-              ? `${Math.round(points[0].price / 1000)}k`
-              : numPoints,
-            id: `${numPoints}_${points[0].id}`
-          }))
+        .map(({ wx, wy, numPoints, points }) => ({
+          lat: wy,
+          lng: wx,
+          numPoints,
+          text: numPoints === 1
+            ? `${Math.round(points[0].price / 1000)}k`
+            : numPoints,
+          id: `${numPoints}_${points[0].id}`
+        }))
         : []
     })
   ),
