@@ -242,7 +242,7 @@ Contact.get = {
   },
   source: context => {
     const source_types = context.sub_contacts[0].attributes.source_types
-    const item = Contact.get._sort(source_types, 'created_at')
+    const item = Contact.get._sort(source_types, 'updated_at')
 
     if (item)
       return item.source_type
@@ -324,7 +324,7 @@ Contact.get = {
         list = list.concat(notes)
     })
 
-    return _.sortBy(list, item => item.created_at * -1)
+    return _.sortBy(list, item => item.updated_at * -1)
   },
   tags: context => {
     let list = {}
