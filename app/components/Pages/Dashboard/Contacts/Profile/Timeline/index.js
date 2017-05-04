@@ -112,9 +112,12 @@ export default class Timeline extends React.Component {
     }
   }
 
-  // UserCreatedNote(activity) {
-  //   return {}
-  // }
+  UserInvited(activity) {
+    return {
+      title: `${this.props.name} <b>was invited</b> to Rechat`,
+      icon: 'alert-fill'
+    }
+  }
 
   UserSignedUp(activity) {
     return {
@@ -215,7 +218,9 @@ export default class Timeline extends React.Component {
       )
     }
 
-    return <activity key={`timeline_item_${key}`} />
+    return React.cloneElement(activity, {
+      key: `timeline_item_${key}`
+    })
   }
 
   render() {
