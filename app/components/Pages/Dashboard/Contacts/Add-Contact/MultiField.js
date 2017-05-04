@@ -1,5 +1,5 @@
 import React from 'react'
-import MaskedInput from 'react-text-mask'
+import { FormControl } from 'react-bootstrap'
 
 export default ({
     list,
@@ -9,8 +9,8 @@ export default ({
     onChange,
     onAdd,
     onRemove,
-    maxItems = 3,
-    mask = false
+    validationErrors,
+    maxItems = 3
 }) => (
   <div className="multiple">
     {
@@ -19,14 +19,12 @@ export default ({
           className="m-row"
           key={`${prefix}_${key}`}
         >
-          <MaskedInput
-            className="form-control"
-            mask={mask}
-            guide={false}
+          <FormControl
             placeholder={placeholder}
             value={list[key]}
             onChange={e => onChange(e, attribute, key)}
           />
+
           {
             key === 0 && list.length <= maxItems &&
             <img
@@ -37,10 +35,10 @@ export default ({
 
           {
             key > 0 &&
-            <i
-              className="fa fa-times fa-2x"
+            <img
+              src="/static/images/contacts/remove.svg"
               onClick={e => onRemove(attribute, key)}
-            ></i>
+            />
           }
         </div>
       )

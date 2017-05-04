@@ -9,8 +9,9 @@ export default class AddContact extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      show: false,
+      showNewContactModal: false,
       saving: false,
+      validationErrors: {},
       firstName: '',
       lastName: '',
       stage: 'General',
@@ -20,7 +21,7 @@ export default class AddContact extends React.Component {
   }
 
   openDialog() {
-    this.setState({ show: true })
+    this.setState({ showNewContactModal: true })
   }
 
   onChangeAttribute(e, attribute, key) {
@@ -57,31 +58,50 @@ export default class AddContact extends React.Component {
 
     this.setState({ saving: true })
 
-    await ContactDispatcher.dispatchSync({
-      action: 'add-contact',
-      user: this.props.user,
-      emails: emails,
-      phone_numbers: phones,
-      first_name: firstName,
-      last_name: lastName,
-      stage: stage
-    })
+    try {
+      await ContactDispatcher.dispatchSync({
+        action: 'add-contact',
+        user: this.props.user,
+        emails: emails,
+        phone_numbers: phones,
+        first_name: firstName,
+        last_name: lastName,
+        stage: stage
+      })
 
-    this.setState({
-      saving: false,
-      show: false
-    })
+      this.setState({ showNewContactModal: false })
 
-    // trigger
-    onNewContact()
+      // trigger
+      onNewContact()
+    }
+    catch(e) {
+      if (e.response) {
+        alert(e.response.body.message)
+        // this.setState({
+        //   validationErrors: e.response.body.attributes
+        // })
+      }
+
+    } finally {
+      this.setState({ saving: false })
+    }
   }
 
   onHide() {
-    this.setState({ show: false })
+    this.setState({ showNewContactModal: false })
   }
 
   render() {
-    const { saving, firstName, lastName, emails, phones } = this.state
+    const {
+      saving,
+      showNewContactModal,
+      validationErrors,
+      firstName,
+      lastName,
+      emails,
+      phones
+    } = this.state
+
     return (
       <div>
         <Button
@@ -93,7 +113,7 @@ export default class AddContact extends React.Component {
 
         <Modal
           dialogClassName="modal-add-contact"
-          show={this.state.show}
+          show={showNewContactModal}
           onHide={() => this.onHide()}
         >
           <Modal.Body>
@@ -121,6 +141,7 @@ export default class AddContact extends React.Component {
 
             <Emails
               list={emails}
+              validationErrors={validationErrors}
               attribute="email"
               onAdd={this.addNewAttribute.bind(this)}
               onChange={this.onChangeAttribute.bind(this)}
@@ -129,8 +150,8 @@ export default class AddContact extends React.Component {
 
             <Phones
               list={phones}
+              validationErrors={validationErrors}
               attribute="phone"
-              mask={false}
               onAdd={this.addNewAttribute.bind(this)}
               onChange={this.onChangeAttribute.bind(this)}
               onRemove={this.onRemoveAttribute.bind(this)}

@@ -5,12 +5,6 @@ export default async function (user, emails, phone_numbers, first_name, last_nam
   const contact = {
     type: 'contact',
     attributes: {
-      emails: emails.map(email => {
-        return { type: 'email', email}
-      }),
-      phone_numbers: phone_numbers.map(phone_number => {
-        return { type: 'phone_number', phone_number}
-      }),
       names: [{
         type: 'name',
         first_name: first_name,
@@ -25,6 +19,21 @@ export default async function (user, emails, phone_numbers, first_name, last_nam
         source_type: 'ExplicitlyCreated'
       }]
     }
+  }
+
+  const filtered_phone_numbers = phone_numbers.filter(phone_number => phone_number)
+  const filtered_emails = emails.filter(email => email)
+
+  if (filtered_phone_numbers.length > 0) {
+    contact.attributes['phone_numbers'] = filtered_phone_numbers.map(phone_number => {
+      return { type: 'phone_number', phone_number}
+    })
+  }
+
+  if (filtered_emails.length > 0) {
+    contact.attributes['emails'] = filtered_emails.map(email => {
+      return { type: 'email', email}
+    })
   }
 
   const params = {
