@@ -34,7 +34,7 @@ Contact.add = async function(params) {
 */
 Contact.getContacts = async function(params) {
   const { access_token } = params
-  const endpoint = `${api_host}/contacts?limit=10000`
+  const endpoint = `${api_host}/contacts?limit=10000&sorting_value=Update`
 
   try {
     const response = await agent
