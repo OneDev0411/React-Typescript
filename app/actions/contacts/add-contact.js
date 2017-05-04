@@ -1,7 +1,7 @@
 import Contact from '../../models/Contact'
 import AppStore from '../../stores/AppStore'
-export default async function (user, emails, phone_numbers, first_name, last_name, stage) {
 
+export default async function (user, emails, phone_numbers, first_name, last_name, stage) {
   const contact = {
     type: 'contact',
     attributes: {
@@ -19,6 +19,10 @@ export default async function (user, emails, phone_numbers, first_name, last_nam
       stages: [{
         type: 'stage',
         stage
+      }],
+      source_types: [{
+        type: 'source_type',
+        source_type: 'ExplicitlyCreated'
       }]
     }
   }
@@ -41,6 +45,6 @@ export default async function (user, emails, phone_numbers, first_name, last_nam
     }
   }
   catch(e) {
-    console.log(e)
+    throw e
   }
 }
