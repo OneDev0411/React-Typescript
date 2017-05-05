@@ -137,7 +137,7 @@ export default class Timeline extends React.Component {
     let title
 
     if (type === 'message')
-      listing = activity.object.message.recommendation
+      listing = activity.object.recommendation.listing
     else if (type === 'recommendation')
       listing = activity.object.listing
     else if (type === 'listing')
