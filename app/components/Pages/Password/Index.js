@@ -20,7 +20,7 @@ export default class Password extends Component {
     const signup = data.signup
     const user = data.user
     // If user logged in on mount
-    if (user && !signup.form_submitted && !data.show_logout_message) {
+    if (user && user.id && !signup.form_submitted && !data.show_logout_message) {
       AppStore.data.show_logout_message = true
       AppStore.emitChange()
     }
