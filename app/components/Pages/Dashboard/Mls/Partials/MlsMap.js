@@ -1,14 +1,13 @@
 // Partials/MlsMap.js
-import React, { Component } from 'react'
 import S from 'shorti'
-import controller from '../../controller'
-import ListingMapMarker from '../../Partials/ListingMapMarker'
-import ListingMarker from '../../Partials/ListingMarker'
+import React, { Component } from 'react'
 import GoogleMap from 'google-map-react'
-import config from '../../../../../../config/public'
-import { mapOptions } from '../../ClusterMap/options' 
-import ClusterMarker from '../../ClusterMap/Markers/ClusterMarker'
+import controller from '../../controller'
 import supercluster from 'points-cluster'
+import config from '../../../../../../config/public'
+import { mapOptions } from '../../ClusterMap/options'
+import ListingMarker from '../../Partials/ListingMarker'
+import ClusterMarker from '../../ClusterMap/Markers/ClusterMarker'
 
 const SimpleMarker = ({
   list,
@@ -16,17 +15,14 @@ const SimpleMarker = ({
   markerPopupIsActive,
   onMouseOutHandler,
   onMouseOverHandler
-}) => {
-  return (<ListingMapMarker
-    key={`search-map--map-listing-${list.id}`}
-    lat={list.lat}
-    lng={list.lng}
+}) => (
+  <div
+    style={S('pointer mt-10')}
     onMouseOut={onMouseOutHandler}
     onMouseOver={onMouseOverHandler}
     onClick={controller.listing_viewer.showListingViewer.bind(this, list)}
   >
     <ListingMarker
-      key={`listing-marker-${list.id}`}
       data={data}
       listing={list}
       context={'map'}
@@ -34,8 +30,8 @@ const SimpleMarker = ({
       property={list.compact_property}
       popupIsActive={markerPopupIsActive}
     />
-  </ListingMapMarker>)
-}
+  </div>
+)
 
 
 export default class MlsMap extends Component {
@@ -96,6 +92,14 @@ export default class MlsMap extends Component {
       this.state.hoveredMarkerId
       !== nextState.hoveredMarkerId
     ) return true
+
+    if (
+      this.props.data.listing_map.active_listing
+      === nextProps.data.listing_map.active_listing
+    ) {
+      console.log('active listing')
+      return true
+    }
 
     return false
   }
