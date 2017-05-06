@@ -157,9 +157,6 @@ const controller = {
       user,
       options: listing_map.options
     })
-    this.setState({
-      mapProps: { zoom, bounds, center }
-    })
   },
   hideModal() {
     if (AppStore.data.listing_map)
@@ -300,7 +297,6 @@ const controller = {
     })
   },
   setActiveListing(listing) {
-    console.log('setActive')
     AppStore.data.listing_map.active_listing = listing.id
     AppStore.emitChange()
   },

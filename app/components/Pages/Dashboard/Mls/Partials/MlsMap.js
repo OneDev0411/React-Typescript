@@ -13,13 +13,13 @@ const SimpleMarker = ({
   list,
   data,
   markerPopupIsActive,
-  onMouseOutHandler,
-  onMouseOverHandler
+  onMouseLeaveHandler,
+  onMouseEnterHandler
 }) => (
   <div
     style={S('pointer mt-10')}
-    onMouseOut={onMouseOutHandler}
-    onMouseOver={onMouseOverHandler}
+    onMouseLeave={onMouseLeaveHandler}
+    onMouseEnter={onMouseEnterHandler}
     onClick={controller.listing_viewer.showListingViewer.bind(this, list)}
   >
     <ListingMarker
@@ -45,8 +45,8 @@ export default class MlsMap extends Component {
       },
       hoveredMarkerId: null
     }
-    this.onMouseOutHandler = this.onMouseOutHandler.bind(this)
-    this.onMouseOverHandler = this.onMouseOverHandler.bind(this)
+    this.onMouseLeaveHandler = this.onMouseLeaveHandler.bind(this)
+    this.onMouseEnterHandler = this.onMouseEnterHandler.bind(this)
   }
   componentWillReceiveProps(nextProps) {
     if (
@@ -62,6 +62,13 @@ export default class MlsMap extends Component {
           lng: list.location.longitude,
           ...list
         }))
+        const {
+          zoom,
+          bounds,
+          center } = nextProps.data.gmap
+        this.setState({
+          mapProps: { zoom, bounds, center }
+        })
         this.setClusters(newListings)
       }
       const currentZoom = this.state.mapProps.zoom
@@ -81,23 +88,33 @@ export default class MlsMap extends Component {
     if (
       this.state.listings.length
       !== nextState.listings.length
-    ) return true
+    ) {
+      console.log('update listings')
+      return true
+    }
 
     if (
       this.state.mapProps.zoom
       !== nextState.mapProps.zoom
-    ) return true
+    ) {
+      console.log('update zoom')
+      return true
+    }
 
     if (
       this.state.hoveredMarkerId
       !== nextState.hoveredMarkerId
-    ) return true
+    ) {
+      console.log('update hover mark')
+      return true
+    }
 
     if (
-      this.props.data.listing_map.active_listing
+      nextProps.data.listing_map.active_listing
+      && this.props.data.listing_map.active_listing
       === nextProps.data.listing_map.active_listing
     ) {
-      console.log('active listing')
+      console.log('update hover listing')
       return true
     }
 
@@ -129,13 +146,12 @@ export default class MlsMap extends Component {
       clusters
     })
   }
-  onMouseOverHandler(hoveredMarkerId) {
+  onMouseEnterHandler(hoveredMarkerId) {
     this.setState({
       hoveredMarkerId
     })
-    console.log(this.state.hoveredMarkerId)
   }
-  onMouseOutHandler(hoveredMarkerId) {
+  onMouseLeaveHandler(hoveredMarkerId) {
     if (hoveredMarkerId === this.state.hoveredMarkerId) {
       this.setState({
         hoveredMarkerId: null
@@ -155,8 +171,8 @@ export default class MlsMap extends Component {
       map_listing_markers = listings.map(listing => {
         return (
           <ListingMapMarker
-            onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) }
-            onMouseOut={ controller.listing_map.hideListingPopup.bind(this) }
+            onMouseEnter={ controller.listing_map.showListingPopup.bind(this, listing) }
+            onMouseLeave={ controller.listing_map.hideListingPopup.bind(this) }
             key={ 'alert-map--map-listing-' + listing.id }
             onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }
             style={ S('pointer mt-10') }
@@ -187,8 +203,8 @@ export default class MlsMap extends Component {
       map_listing_markers = listings.map((listing, i) => {
         return (
           <ListingMapMarker
-            onMouseOver={ controller.listing_map.showListingPopup.bind(this, listing) }
-            onMouseOut={ controller.listing_map.hideListingPopup.bind(this) }
+            onMouseEnter={ controller.listing_map.showListingPopup.bind(this, listing) }
+            onMouseLeave={ controller.listing_map.hideListingPopup.bind(this) }
             key={ 'actives-map--map-listing-' + listing.id + '-' + i }
             onClick={ controller.listing_viewer.showListingViewer.bind(this, listing) }
             style={ S('pointer mt-10') }
@@ -251,8 +267,8 @@ export default class MlsMap extends Component {
                     key={id}
                     data={data}
                     {...markerProps}
-                    onMouseOutHandler={() => this.onMouseOutHandler(id)}
-                    onMouseOverHandler={() => this.onMouseOverHandler(id)}
+                    onMouseLeaveHandler={() => this.onMouseLeaveHandler(id)}
+                    onMouseEnterHandler={() => this.onMouseEnterHandler(id)}
                     markerPopupIsActive={this.state.hoveredMarkerId === id}
                   />
                 : <ClusterMarker key={id} {...markerProps} />
