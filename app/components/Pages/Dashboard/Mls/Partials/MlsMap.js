@@ -6,27 +6,33 @@ import ListingMapMarker from '../../Partials/ListingMapMarker'
 import ListingMarker from '../../Partials/ListingMarker'
 import GoogleMap from 'google-map-react'
 import config from '../../../../../../config/public'
-import { mapOptions } from '../../ClusterMap/options.js' 
-import ClusterMarker from '../../ClusterMap/Markers/ClusterMarker.js'
+import { mapOptions } from '../../ClusterMap/options' 
+import ClusterMarker from '../../ClusterMap/Markers/ClusterMarker'
 import supercluster from 'points-cluster'
 
-const SimpleMarker = (props, data) => {
-  const { list } = props
+const SimpleMarker = ({
+  list,
+  data,
+  markerPopupIsActive,
+  onMouseOutHandler,
+  onMouseOverHandler
+}) => {
   return (<ListingMapMarker
-    key={`search-map--map-listing-&{list.id}`}
-    onMouseOver={controller.listing_map.showListingPopup.bind(this, list)}
-    onMouseOut={controller.listing_map.hideListingPopup.bind(this)}
+    key={`search-map--map-listing-${list.id}`}
+    lat={list.lat}
+    lng={list.lng}
+    onMouseOut={onMouseOutHandler}
+    onMouseOver={onMouseOverHandler}
     onClick={controller.listing_viewer.showListingViewer.bind(this, list)}
-    lat={list.location.latitude}
-    lng={list.location.longitude}
   >
     <ListingMarker
       key={`listing-marker-${list.id}`}
       data={data}
       listing={list}
-      property={list.compact_property}
-      address={list.address}
       context={'map'}
+      address={list.address}
+      property={list.compact_property}
+      popupIsActive={markerPopupIsActive}
     />
   </ListingMapMarker>)
 }
@@ -40,18 +46,18 @@ export default class MlsMap extends Component {
       cluster: [],
       mapProps: {
         ...mapOptions
-      }
+      },
+      hoveredMarkerId: null
     }
-  }
-  componentDidMount() {
-    console.log('did mount')
+    this.onMouseOutHandler = this.onMouseOutHandler.bind(this)
+    this.onMouseOverHandler = this.onMouseOverHandler.bind(this)
   }
   componentWillReceiveProps(nextProps) {
     if (
       nextProps.data.listing_map
       && nextProps.data.listing_map.listings
     ) {
-      console.log('recive1')
+      console.log('recive')
       const currentListings = this.state.listings
       let newListings = nextProps.data.listing_map.listings
       if (newListings && newListings.length !== currentListings.length) {
@@ -76,16 +82,20 @@ export default class MlsMap extends Component {
     }
   }
   shouldComponentUpdate(nextProps, nextState) {
-    if (this.state.listings.length !== nextState.listings.length) {
-      console.log('updated list')
-      return true
-    }
+    if (
+      this.state.listings.length
+      !== nextState.listings.length
+    ) return true
 
-    if (this.state.mapProps.zoom !== nextState.mapProps.zoom) {
-      console.log('updated zoom')
-      // this.setClusters()
-      return true
-    }
+    if (
+      this.state.mapProps.zoom
+      !== nextState.mapProps.zoom
+    ) return true
+
+    if (
+      this.state.hoveredMarkerId
+      !== nextState.hoveredMarkerId
+    ) return true
 
     return false
   }
@@ -93,8 +103,6 @@ export default class MlsMap extends Component {
     if (!this.state.mapProps.bounds)
       return
 
-    // const { listings } = this.state.listings
-    // console.log(listings)
     let getClusters = supercluster(
       listings,
       {
@@ -117,17 +125,24 @@ export default class MlsMap extends Component {
       clusters
     })
   }
+  onMouseOverHandler(hoveredMarkerId) {
+    this.setState({
+      hoveredMarkerId
+    })
+    console.log(this.state.hoveredMarkerId)
+  }
+  onMouseOutHandler(hoveredMarkerId) {
+    if (hoveredMarkerId === this.state.hoveredMarkerId) {
+      this.setState({
+        hoveredMarkerId: null
+      })
+    }
+  }
   render() {
     console.log('render')
     const data = this.props.data
     const listing_map = data.listing_map
     const clusters = this.state.cluster
-    console.log(this.state.mapProps.zoom)
-    // if (data.show_search_map && listings.length) {
-    //   map_listing_markers = listings.map(
-    //     listing => SimpleMarker(listing, data)
-    //   )
-    // }
     /*if (data.show_alerts_map && alerts_map && alerts_map.listings) {
       let listings = alerts_map.listings
       listings = listings.filter(listing => {
@@ -189,12 +204,7 @@ export default class MlsMap extends Component {
         )
       })
     }*/
-    const default_center = {
-      lat: 32.7767,
-      lng: -96.7970
-    }
-    const default_zoom = 10
-    const bootstrap_url_keys = {
+    const bootstrapURLKeys = {
       key: config.google.api_key,
       libraries: ['drawing', 'places'].join(',')
     }
@@ -218,21 +228,29 @@ export default class MlsMap extends Component {
     }*/
     return (
       <GoogleMap
-        key={ 'map-' + map_id }
-        bootstrapURLKeys={ bootstrap_url_keys }
-        center={ this.state.mapProps.center }
-        zoom={ this.state.mapProps.zoom }
-        onChange={ controller.listing_map.handleBoundsChange.bind(this) }
-        options={ controller.listing_map.createMapOptions.bind(this) }
+        key={`map-${map_id}`}
+        zoom={this.state.mapProps.zoom}
         yesIWantToUseGoogleMapApiInternals
-        onGoogleApiLoaded={ controller.listing_map.handleGoogleMapApi.bind(this) }
+        bootstrapURLKeys={bootstrapURLKeys}
+        center={this.state.mapProps.center}
+        options={controller.listing_map.createMapOptions.bind(this)}
+        onChange={controller.listing_map.handleBoundsChange.bind(this)}
+        onGoogleApiLoaded={controller.listing_map.handleGoogleMapApi.bind(this)}
       >
         {
           this.state.clusters
           && this.state.clusters
             .map(({ ...markerProps, id, numPoints }) => (
               numPoints === 1
-                ? <SimpleMarker key={id} {...markerProps} data={data} />
+                ?
+                  <SimpleMarker
+                    key={id}
+                    data={data}
+                    {...markerProps}
+                    onMouseOutHandler={() => this.onMouseOutHandler(id)}
+                    onMouseOverHandler={() => this.onMouseOverHandler(id)}
+                    markerPopupIsActive={this.state.hoveredMarkerId === id}
+                  />
                 : <ClusterMarker key={id} {...markerProps} />
             ))
         }
