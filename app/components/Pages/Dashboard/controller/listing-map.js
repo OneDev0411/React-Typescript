@@ -300,6 +300,7 @@ const controller = {
     })
   },
   setActiveListing(listing) {
+    console.log('setActive')
     AppStore.data.listing_map.active_listing = listing.id
     AppStore.emitChange()
   },
@@ -308,19 +309,19 @@ const controller = {
       delete AppStore.data.listing_map.active_listing
     AppStore.emitChange()
   },
-  showListingPopup(listing) {
-    const data = AppStore.data
-    const listing_map = data.listing_map
-    if (listing_map.no_popup)
-      return
-    controller.setActiveListing(listing)
-    AppStore.data.listing_map.listing_popup = listing.id
-    AppStore.emitChange()
-  },
-  hideListingPopup() {
-    controller.removeActiveListing()
-    delete AppStore.data.listing_map.listing_popup
-    AppStore.emitChange()
-  }
+  // showListingPopup(listing) {
+  //   const data = AppStore.data
+  //   const listing_map = data.listing_map
+  //   if (listing_map.no_popup)
+  //     return
+  //   controller.setActiveListing(listing)
+  //   AppStore.data.listing_map.listing_popup = listing.id
+  //   AppStore.emitChange()
+  // },
+  // hideListingPopup() {
+  //   controller.removeActiveListing()
+  //   delete AppStore.data.listing_map.listing_popup
+  //   AppStore.emitChange()
+  // }
 }
 export default controller
