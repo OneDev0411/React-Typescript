@@ -139,8 +139,8 @@ export default class ListingPanel extends Component {
       )
       return (
         <div
-          onMouseOut={this.props.removeActiveListing.bind(this)}
-          onMouseOver={this.props.setActiveListing.bind(this, listing)}
+          onMouseLeave={this.props.removeActiveListing.bind(this)}
+          onMouseEnter={this.props.setActiveListing.bind(this, listing)}
           key={'panel-listing-grid-' + listing.id + '-' + i}
           style={
             S('relative pointer w-415 h-315 pb-10 pl-10 bg-fff pull-left br-3')
@@ -191,7 +191,7 @@ export default class ListingPanel extends Component {
         price = listing.close_price
       const price_per_square_foot = Math.floor(price / listing_util.metersToFeet(property.square_meters))
       return (
-        <div onMouseOut={ this.props.removeActiveListing.bind(this) } onMouseOver={ this.props.setActiveListing.bind(this, listing) } className="listing-panel__list-item" key={ 'panel-listing-list-' + listing.id + '-' + i} onClick={ this.props.showListingViewer.bind(this, listing) } style={ listing_style }>
+        <div onMouseLeave={ this.props.removeActiveListing.bind(this) } onMouseEnter={ this.props.setActiveListing.bind(this, listing) } className="listing-panel__list-item" key={ 'panel-listing-list-' + listing.id + '-' + i} onClick={ this.props.showListingViewer.bind(this, listing) } style={ listing_style }>
           <div style={ S('pull-left') }>
             { data.show_listing_panel ? listing_image : '' }
           </div>
