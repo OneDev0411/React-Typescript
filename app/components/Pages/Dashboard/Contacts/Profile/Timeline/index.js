@@ -224,10 +224,21 @@ export default class Timeline extends React.Component {
   }
 
   render() {
+    const { activities, name } = this.props
+
+    if (_.size(activities) === 0) {
+      return (
+        <div className="no-activity">
+          <img src="/static/images/contacts/activity.svg" />
+          <p>{ name } has no activity right now</p>
+        </div>
+      )
+    }
+
     return (
       <div>
         {
-          _.map(this.props.activities, (activity, id) => {
+          _.map(activities, (activity, id) => {
             return this.create(id, activity)
           })
         }
