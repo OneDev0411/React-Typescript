@@ -77,12 +77,12 @@ export default class ContactsList extends React.Component {
         {
           _.size(contacts) > 0 &&
           <Row className="toolbar">
-            <Col lg={3} md={3} sm={3} className="vcenter">
+            <Col lg={6} md={6} sm={6} className="vcenter">
               <span className="title">All Contacts</span>
-            </Col>
 
-            <Col lg={3} md={3} sm={3} className="vcenter">
-              { _.size(contacts) } Contacts
+              <span className="count">
+                { _.size(contacts) } Contacts
+              </span>
             </Col>
 
             <Col lg={6} md={6} sm={6} className="vcenter right">
