@@ -7,6 +7,7 @@ import AppStore from '../../../../../stores/AppStore'
 import Dispatcher from '../../../../../dispatcher/ContactDispatcher'
 import Stepper from '../../../../Partials/Stepper'
 import Contact from '../../../../../models/Contact'
+import Notes from './Notes'
 import AddNote from './Add-Note'
 import Timeline from './Timeline'
 import Tags from './Tags'
@@ -156,13 +157,15 @@ export default class ContactProfile extends React.Component {
     if (!contact)
       return false
 
+    const notes = Contact.get.notes(contact)
+
     return (
       <div className="dashboard">
 
         <Row className="header">
           <Col lg={11} md={11} sm={11}>
-            <h4>
-              <i className="fa fa-angle-left" onClick={() => this.goBack()} />
+            <h4 onClick={() => this.goBack()} style={{ cursor: 'pointer' }}>
+              <i className="fa fa-angle-left" />
               All Contacts
             </h4>
           </Col>
@@ -361,22 +364,7 @@ export default class ContactProfile extends React.Component {
                 </Tab>
 
                 <Tab eventKey="notes" title="Notes" className="notes">
-                  {
-                    Contact.get.notes(contact).map(item => (
-                      <div key={`note_${item.id}`} className="item">
-                        {
-                          item.note.split('\n').map((text, key) => (
-                            <div key={`item_${item.id}_line_${key}`}>
-                              {text}
-                            </div>
-                          ))
-                        }
-                        <span className="time">
-                          { moment.unix(item.created_at ).format('MMMM DD, YYYY')}
-                        </span>
-                      </div>
-                    ))
-                  }
+                  <Notes notes={notes} />
                 </Tab>
               </Tabs>
             </div>
