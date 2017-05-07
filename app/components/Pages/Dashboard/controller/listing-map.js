@@ -12,7 +12,7 @@ const controller = {
     }
     let zoom = 13
     const options = {
-      limit: '75',
+      limit: '500',
       location: {
         longitude: -96.79698789999998,
         latitude: 32.7766642
