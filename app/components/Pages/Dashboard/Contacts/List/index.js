@@ -61,6 +61,10 @@ export default class ContactsList extends React.Component {
     })
   }
 
+  open (contact) {
+    browserHistory.push(`/dashboard/contacts/${contact.id}`)
+  }
+
   render() {
     const {
       contacts,
@@ -111,7 +115,7 @@ export default class ContactsList extends React.Component {
                     sm={3}
                     xs={3}
                     className="vcenter"
-                    onClick={() => browserHistory.push(`/dashboard/contacts/${contact.id}`)}
+                    onClick={() => this.open(contact) }
                   >
                     <Avatar
                       className="avatar"
@@ -124,19 +128,43 @@ export default class ContactsList extends React.Component {
                       { Contact.get.name(contact, 20) }
                     </span>
                   </Col>
-                  <Col md={3} sm={3} xs={3} className="vcenter" style={{ overflow: 'hidden' }}>
+                  <Col
+                    md={3}
+                    sm={3}
+                    xs={3}
+                    className="vcenter"
+                    style={{ overflow: 'hidden' }}
+                    onClick={() => this.open(contact) }
+                  >
                     { Contact.get.email(contact, 30) }
                   </Col>
-                  <Col md={2} sm={2} xs={2} className="vcenter">
+                  <Col
+                    md={2}
+                    sm={2}
+                    xs={2}
+                    className="vcenter"
+                    onClick={() => this.open(contact) }
+                  >
                     { Contact.get.phone(contact) }
                   </Col>
-                  <Col md={2} sm={2} xs={2} className="vcenter">
+                  <Col
+                    md={2}
+                    sm={2}
+                    xs={2}
+                    className="vcenter"
+                  >
                     <Stage
                       default={Contact.get.stage(contact).name}
                       onChange={stage => this.onChangeStage(stage, contact)}
                     />
                   </Col>
-                  <Col md={2} sm={2} xs={2} className="vcenter">
+                  <Col
+                    md={2}
+                    sm={2}
+                    xs={2}
+                    className="vcenter"
+                    onClick={() => this.open(contact) }
+                  >
                     { Contact.get.source(contact) }
                   </Col>
                 </Row>
