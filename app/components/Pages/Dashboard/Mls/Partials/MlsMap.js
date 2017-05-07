@@ -1,5 +1,6 @@
 // Partials/MlsMap.js
 import S from 'shorti'
+import _ from 'lodash'
 import React, { Component } from 'react'
 import GoogleMap from 'google-map-react'
 import controller from '../../controller'
@@ -9,6 +10,17 @@ import { mapOptions } from '../../ClusterMap/options'
 import ListingMarker from '../../Partials/ListingMarker'
 import ClusterMarker from '../../ClusterMap/Markers/ClusterMarker'
 
+
+const greatPlaceStyle = ({ left = 0, top = 0 }) => {
+  return {
+    position: 'absolute',
+    width: '45px',
+    height: '25px',
+    top,
+    left,
+    cursor: 'pointer'
+  }
+}
 const SimpleMarker = ({
   list,
   data,
@@ -17,7 +29,7 @@ const SimpleMarker = ({
   onMouseEnterHandler
 }) => (
   <div
-    style={S('pointer mt-10')}
+    style={list.position && greatPlaceStyle(list.position)}
     onMouseLeave={onMouseLeaveHandler}
     onMouseEnter={onMouseEnterHandler}
     onClick={controller.listing_viewer.showListingViewer.bind(this, list)}
@@ -80,6 +92,7 @@ export default class MlsMap extends Component {
             zoom: nextZoom
           }
         })
+        console.log('zoom: ', this.state.mapProps.zoom)
         this.setClusters(this.state.listings)
       }
     }
@@ -120,15 +133,74 @@ export default class MlsMap extends Component {
 
     return false
   }
+  setPositionToPointsWithSameCoordinate(clusters) {
+    const tmpObj = _.groupBy(clusters, 'lat')
+    const pwsc = []
+    const coordinator = (points) => {
+      let startX = 0
+      let startY = 0
+      let pointsLength = points.length
+      const col = Math.ceil(pointsLength / 4)
+      if (col === 1) {
+        startX = 45 / -2
+        startY = (((pointsLength * 25) + 45) / 2) * -1
+      } else {
+        startX = (((Math.ceil(pointsLength / 4) * 45) + 15) / 2) * -1
+        startY = ((4 * 25) + 45) / -2
+      }
+      if (col === 1) {
+        for (let i = 0; i < pointsLength; i++) {
+          points[i].list.position = {
+            left: 0,
+            top: 0
+          }
+          points[i].list.position.top = `${startY + (i * 40)}px`
+          points[i].list.position.left = `${startX}px`
+        }
+      } else {
+        for (let i = 0; i < col; i++) {
+          for (let j = 0; j < 4; j++) {
+            const index = j + (4 * i)
+            if (index < pointsLength) {
+              points[index].list.position = {
+                left: 0,
+                top: 0
+              }
+              points[index].list.position.top = `${startY + (j * 40)}px`
+              points[index].list.position.left = `${startX + (i * 60)}px`
+            }
+          }
+        }
+      }
+      return points
+    }
+
+    Object.keys(tmpObj)
+      .forEach((key) => {
+        if (tmpObj[key].length !== 1) {
+          const cor = coordinator(tmpObj[key])
+          console.log(cor)
+          cor.forEach(obj => pwsc.push(obj))
+        } else
+          pwsc.push(tmpObj[key][0])
+      })
+    console.log(pwsc)
+    return pwsc
+  }
   setClusters(listings) {
-    if (!this.state.mapProps.bounds)
-      return
+    if (
+      !this.state.mapProps.bounds
+    ) return []
+
+    if (
+      this.state.mapProps.zoom > 19
+    ) return this.state.clusters
 
     let getClusters = supercluster(
       listings,
       {
-        minZoom: 3, // min zoom to generate clusters on
-        maxZoom: 25, // max zoom level to cluster the points on
+        minZoom: 13, // min zoom to generate clusters on
+        maxZoom: 18, // max zoom level to cluster the points on
         radius: 60 // cluster radius in pixels
       }
     )
@@ -141,6 +213,8 @@ export default class MlsMap extends Component {
       text: numPoints !== 1 ? numPoints : '',
       id: `${numPoints}_${points[0].id}`
     }))
+    if (this.state.mapProps.zoom === 19)
+      clusters = this.setPositionToPointsWithSameCoordinate(clusters)
     this.setState({
       listings,
       clusters
@@ -246,6 +320,7 @@ export default class MlsMap extends Component {
       )
       map_listing_markers.push(pinpoint)
     }*/
+
     return (
       <GoogleMap
         key={`map-${map_id}`}
@@ -267,9 +342,9 @@ export default class MlsMap extends Component {
                     key={id}
                     data={data}
                     {...markerProps}
+                    markerPopupIsActive={this.state.hoveredMarkerId === id}
                     onMouseLeaveHandler={() => this.onMouseLeaveHandler(id)}
                     onMouseEnterHandler={() => this.onMouseEnterHandler(id)}
-                    markerPopupIsActive={this.state.hoveredMarkerId === id}
                   />
                 : <ClusterMarker key={id} {...markerProps} />
             ))

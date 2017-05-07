@@ -94,7 +94,7 @@ export default function ListingMarker({
     || popupIsActive
     ? '' : 'hidden'
   const listing_popup = (
-    <div className={markerPopupClassName} style={S('absolute w-240 t-110n l-35n z-1000 bg-fff border-1-solid-929292')}>
+    <div className={markerPopupClassName} style={S('absolute w-240 t-110n r-200n z-1000 bg-fff border-1-solid-929292')}>
       <div style={S('pull-left mr-10')}>
         <div style={S(`w-80 h-80 bg-url(${`${resize_url}?w=160`}) bg-cover bg-center`)} />
       </div>

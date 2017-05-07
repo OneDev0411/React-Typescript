@@ -32,14 +32,14 @@ $simple-marker-height: 24px;
 .simple-marker {
     position: absolute;
     cursor: pointer;
-    top: -$simple-marker-height / 2;
-    left: -$simple-marker-width / 2;
+    top: -$simple-marker-height / 2 !important;
+    left: -$simple-marker-width / 2 !important;
     text-align: center;
     font-size: 2rem;
     margin: 0;
     padding: .5rem 1rem;
     color: #fff;
-    background-color: #35b863;
+    background-color: brown;
     letter-spacing: 1px;
 
     &:before {
