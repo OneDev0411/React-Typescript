@@ -82,6 +82,18 @@
     min-height: 100vh;
     background-color: #f6f6f6;
 
+    .no-contacts {
+      color: #B1B1B1;
+      text-align: center;
+      margin-top: 30vh;
+      .title {
+        font-size: 19px;
+      }
+      button {
+        margin-top: 8px;
+      }
+    }
+
     .list {
       padding: 4%;
     }

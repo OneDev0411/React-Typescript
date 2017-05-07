@@ -74,25 +74,39 @@ export default class ContactsList extends React.Component {
     return (
       <div className="list">
 
-        <Row className="toolbar">
-          <Col lg={3} md={3} sm={3} className="vcenter">
-            <span className="title">All Contacts</span>
-          </Col>
+        {
+          _.size(contacts) > 0 &&
+          <Row className="toolbar">
+            <Col lg={3} md={3} sm={3} className="vcenter">
+              <span className="title">All Contacts</span>
+            </Col>
 
-          <Col lg={3} md={3} sm={3} className="vcenter">
-            { _.size(contacts) } Contacts
-          </Col>
+            <Col lg={3} md={3} sm={3} className="vcenter">
+              { _.size(contacts) } Contacts
+            </Col>
 
-          <Col lg={6} md={6} sm={6} className="vcenter right">
+            <Col lg={6} md={6} sm={6} className="vcenter right">
 
+              <AddContact
+                user={this.props.user}
+                onNewContact={() => this.onNewContact()}
+              />
+
+            </Col>
+          </Row>
+        }
+
+        {
+          _.size(contacts) === 0 &&
+          <div className="no-contacts">
+            <p className="title">You don't have contacts yet</p>
+            <p>To get started, click the blue button to add contact</p>
             <AddContact
               user={this.props.user}
               onNewContact={() => this.onNewContact()}
             />
-
-          </Col>
-        </Row>
-
+          </div>
+        }
         {
           _.size(contacts) > 0 &&
           <Grid className="table">
