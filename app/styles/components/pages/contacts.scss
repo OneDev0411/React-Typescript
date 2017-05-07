@@ -67,6 +67,16 @@
   }
 }
 
+%empty-state {
+  margin-top: 10vh;
+  text-align: center;
+  color: #c7c7c7;
+  img {
+    width: 32px;
+    margin-bottom: 10px;
+  }
+}
+
 .crm {
   .contacts {
     min-height: 100vh;
@@ -256,8 +266,11 @@
             padding: 0;
             .notes {
               padding: 0;
-              max-height: 40vh;
-              overflow: auto;
+              // max-height: 40vh;
+              // overflow: auto;
+              .no-note {
+                @extend %empty-state;
+              }
               .item {
                 border-bottom: 1px solid #f6f6f6;
                 font-size: 16px;
@@ -272,6 +285,9 @@
 
             .timeline {
               overflow: auto;
+              .no-activity {
+                @extend %empty-state;
+              }
               .event {
                 margin-bottom: 14px;
                 position: relative;
