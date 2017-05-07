@@ -20,6 +20,18 @@
       z-index: 1;
     }
 
+    &.completed {
+      &:after {
+        background: #2196f3;
+      }
+    }
+
+    &.active {
+      &:after {
+        background: #e3e3e3;
+      }
+    }
+
     &:last-child {
       &::after {
         background: transparent;
@@ -30,9 +42,15 @@
       font-size: 13px;
     }
 
+    &.active,
+    &.completed {
+      .name {
+        color: #4a4a4a;
+      }
+    }
+
     &.active {
       .name {
-        color: #2196f3;
         font-weight: bold;
       }
     }
@@ -78,27 +96,18 @@
     left: 0;
     text-align: center;
     font-size: 14px;
+
+    i {
+      color: #fff;
+    }
   }
 
-  .active .round-tab {
-    background: #fff;
+  .active .round-tab,
+  .completed .round-tab {
+    background: #2196f3;
     border: 2px solid #2196f3;
     &:hover {
-      background: #fff;
       border: 2px solid #2196f3;
-    }
-    &::after {
-      display: none;
-    }
-  }
-
-  .disabled .round-tab {
-    background: #fff;
-    color: #e3e3e3;
-    border-color: #e3e3e3;
-    &:hover {
-      color: #4dd3b6;
-      border: 2px solid #a6dfd3;
     }
     &::after {
       display: none;
