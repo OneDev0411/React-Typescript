@@ -57,8 +57,8 @@ webpackConfig.module.rules.push(
   {
     test: /\.css/,
     use: ExtractTextPlugin.extract({
-      fallbackLoader: 'style-loader',
-      loader: [
+      fallback: 'style-loader',
+      use: [
         { loader: 'css-loader' },
         {
           loader: 'postcss-loader',
@@ -72,8 +72,8 @@ webpackConfig.module.rules.push(
   {
     test: /\.scss/,
     use: ExtractTextPlugin.extract({
-      fallbackLoader: 'style-loader',
-      loader: [
+      fallback: 'style-loader',
+      use: [
         { loader: 'css-loader' },
         {
           loader: 'postcss-loader',
