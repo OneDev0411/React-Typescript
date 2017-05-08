@@ -61,9 +61,3 @@ export const submitReviewRequest = async (params) => {
   const url = `${PROXY_HOST}/api/deals/${id}/reviews?access_token=${token}`
   return asyncRequest(postRequest(url, body))
 }
-
-export const getListing = (params) => {
-  const { token, body } = params
-  const url = `${PROXY_HOST}/api/cluster-mls?access_token=${token}`
-  return asyncRequest(postRequest(url, body))
-}

@@ -12,8 +12,8 @@ export default function ListingMarker({
   popupIsActive
 }) {
   const { user } = data
-  const { address } = listing
-  const property = listing.compact_property
+  const property = listing.compact_property || listing.property
+  const address = listing.address || property.address
   const isFavorited = (listing) => {
     const mls_number = listing.mls_number
     if (user && user.favorite_listings && user.favorite_listings.indexOf(mls_number) !== -1)

@@ -6,44 +6,9 @@ import GoogleMap from 'google-map-react'
 import controller from '../../controller'
 import supercluster from 'points-cluster'
 import { mapOptions } from './MlsMapOptions'
+import SingleMarker from './Markers/SingleMarker'
 import ClusterMarker from './Markers/ClusterMarker'
 import config from '../../../../../../config/public'
-import ListingMarker from '../../Partials/ListingMarker'
-
-
-const singleMarkerStyle = ({
-  left = 0,
-  top = 0
-}) => ({
-  position: 'absolute',
-  width: '45px',
-  height: '25px',
-  top,
-  left,
-  cursor: 'pointer'
-})
-const SingleMarker = ({
-  list,
-  data,
-  markerPopupIsActive,
-  onMouseLeaveHandler,
-  onMouseEnterHandler
-}) => (
-  <div
-    onMouseLeave={onMouseLeaveHandler}
-    onMouseEnter={onMouseEnterHandler}
-    style={list.position && singleMarkerStyle(list.position)}
-    onClick={controller.listing_viewer.showListingViewer.bind(this, list)}
-  >
-    <ListingMarker
-      data={data}
-      listing={list}
-      context={'map'}
-      popupIsActive={markerPopupIsActive}
-    />
-  </div>
-)
-
 
 const coordinator = (points) => {
   let startX = 0
@@ -84,7 +49,6 @@ const coordinator = (points) => {
   return points
 }
 
-
 export default class MlsMap extends Component {
   constructor(props) {
     super(props)
@@ -104,7 +68,7 @@ export default class MlsMap extends Component {
       nextProps.data.listing_map
       && nextProps.data.listing_map.listings
     ) {
-      console.log('recive')
+      // console.log('recive')
       const currentListings = this.state.listings
       let newListings = nextProps.data.listing_map.listings
       if (newListings && newListings.length !== currentListings.length) {
@@ -131,7 +95,7 @@ export default class MlsMap extends Component {
             zoom: nextZoom
           }
         })
-        console.log('zoom: ', this.state.mapProps.zoom)
+        // console.log('zoom: ', this.state.mapProps.zoom)
         this.setClusters(this.state.listings)
       }
     }
@@ -141,7 +105,7 @@ export default class MlsMap extends Component {
       this.state.listings.length
       !== nextState.listings.length
     ) {
-      console.log('update listings')
+      // console.log('update listings')
       return true
     }
 
@@ -149,7 +113,7 @@ export default class MlsMap extends Component {
       this.state.mapProps.zoom
       !== nextState.mapProps.zoom
     ) {
-      console.log('update zoom')
+      // console.log('update zoom')
       return true
     }
 
@@ -157,7 +121,7 @@ export default class MlsMap extends Component {
       this.state.hoveredMarkerId
       !== nextState.hoveredMarkerId
     ) {
-      console.log('update hover mark')
+      // console.log('update hover mark')
       return true
     }
 
@@ -166,26 +130,23 @@ export default class MlsMap extends Component {
       && this.props.data.listing_map.active_listing
       === nextProps.data.listing_map.active_listing
     ) {
-      console.log('update hover listing')
+      // console.log('update hover listing')
       return true
     }
 
     return false
   }
   setPositionToPointsWithSameCoordinate(clusters) {
+    let pwsc = []
     const tmpObj = _.groupBy(clusters, 'lat')
-    const pwsc = []
-
     Object.keys(tmpObj)
       .forEach((key) => {
         if (tmpObj[key].length !== 1) {
-          const cor = coordinator(tmpObj[key])
-          console.log(cor)
-          cor.forEach(obj => pwsc.push(obj))
+          coordinator(tmpObj[key])
+            .forEach(obj => pwsc.push(obj))
         } else
           pwsc.push(tmpObj[key][0])
       })
-    console.log(pwsc)
     return pwsc
   }
   setClusters(listings) {
@@ -234,7 +195,7 @@ export default class MlsMap extends Component {
     }
   }
   render() {
-    console.log('render')
+    // console.log('render')
     const data = this.props.data
     const listing_map = data.listing_map
     const clusters = this.state.cluster
@@ -343,6 +304,10 @@ export default class MlsMap extends Component {
                     key={id}
                     data={data}
                     {...markerProps}
+                    onClickHandler={
+                      controller.listing_viewer
+                        .showListingViewer.bind(this)
+                    }
                     markerPopupIsActive={this.state.hoveredMarkerId === id}
                     onMouseLeaveHandler={() => this.onMouseLeaveHandler(id)}
                     onMouseEnterHandler={() => this.onMouseEnterHandler(id)}

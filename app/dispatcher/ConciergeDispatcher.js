@@ -7,8 +7,6 @@ import getEnvelopes from '../actions/concierge/get-envelopes'
 import getSubmissions from '../actions/concierge/get-submissions'
 import submitReviewRequest from '../actions/deals/submit-review-request'
 
-import getListing from '../actions/cluster-map/get-listing'
-
 
 
 const ConciergeDispatcher = new Dispatcher()
@@ -19,8 +17,6 @@ ConciergeDispatcher.register(async (payload) => {
     case 'GET_DEALS':
       getDeals(payload.user)
       break
-    case 'GET_LISTING':
-      return getListing(payload.user, payload.body)
     case 'GET_ENVELOPES':
       return getEnvelopes(payload.user, payload.dealId)
     case 'GET_SUBMISSIONS':
