@@ -179,7 +179,7 @@ export default class ContactsList extends React.Component {
                     className="vcenter"
                     onClick={() => this.open(contact) }
                   >
-                    { Contact.get.source(contact) }
+                    { Contact.get.source(contact).label }
                   </Col>
                 </Row>
               ))

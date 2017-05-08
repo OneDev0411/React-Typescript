@@ -91,7 +91,7 @@ export default class Timeline extends React.Component {
   }
 
   UserCreatedContact(activity) {
-    const sourceType = Contact.get.source(activity.object)
+    const sourceType = Contact.get.source(activity.object).name
     let title = 'Contact created'
 
     switch (sourceType) {
@@ -103,6 +103,9 @@ export default class Timeline extends React.Component {
         break
       case 'SharesRoom':
         title += ' because you shared a room with this user'
+        break
+      case 'ExplicitlyCreated':
+        title += ' by you'
         break
     }
 

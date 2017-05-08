@@ -256,7 +256,7 @@ export default class ContactProfile extends React.Component {
                 <li>
                   <div className="name">Original Source</div>
                   <div className="data">
-                    { Contact.get.source(contact) || '-' }
+                    { Contact.get.source(contact).label || '-' }
                   </div>
                 </li>
                 {

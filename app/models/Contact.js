@@ -244,8 +244,33 @@ Contact.get = {
     const source_types = context.sub_contacts[0].attributes.source_types
     const item = Contact.get._sort(source_types, 'updated_at')
 
-    if (item)
-      return item.source_type
+    if (!item)
+      return {}
+
+    let label
+
+    switch (item.source_type) {
+      case 'BrokerageWidget':
+        label = 'Created from a brokerage widget'
+        break
+      case 'ExplicitlyCreated':
+        label = 'Created by you'
+        break
+      case 'IOSAddressBook':
+        label = 'From your address book'
+        break
+      case 'SharesRoom':
+        label = 'Created because you share a room'
+        break
+      case 'Unknown':
+        label = 'Unknown'
+        break
+    }
+
+    return {
+      name: item.source_type,
+      label
+    }
   },
   email: (context, max = 1000) => {
     const emails = context.sub_contacts[0].attributes.emails
@@ -270,6 +295,7 @@ Contact.get = {
   stage: context => {
     const stages = context.sub_contacts[0].attributes.stages
     const item = Contact.get._sort(stages)
+
 
     if (item) {
       return {
