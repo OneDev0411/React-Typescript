@@ -55,7 +55,7 @@ export default class Timeline extends React.Component {
 
   UserSharedListing(activity) {
     return {
-      title: `${this.props.name} <b>share</b> ` + this.getListingTitle(activity),
+      title: `${this.props.name} <b>shared</b> ` + this.getListingTitle(activity),
       image: this.getListingPhoto(activity.object),
       url: this.getListingUrl(activity.object),
       icon: 'group-142'
