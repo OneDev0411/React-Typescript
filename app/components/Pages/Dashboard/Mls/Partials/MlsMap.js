@@ -5,23 +5,24 @@ import React, { Component } from 'react'
 import GoogleMap from 'google-map-react'
 import controller from '../../controller'
 import supercluster from 'points-cluster'
+import { mapOptions } from './MlsMapOptions'
+import ClusterMarker from './Markers/ClusterMarker'
 import config from '../../../../../../config/public'
-import { mapOptions } from '../../ClusterMap/options'
 import ListingMarker from '../../Partials/ListingMarker'
-import ClusterMarker from '../../ClusterMap/Markers/ClusterMarker'
 
 
-const greatPlaceStyle = ({ left = 0, top = 0 }) => {
-  return {
-    position: 'absolute',
-    width: '45px',
-    height: '25px',
-    top,
-    left,
-    cursor: 'pointer'
-  }
-}
-const SimpleMarker = ({
+const singleMarkerStyle = ({
+  left = 0,
+  top = 0
+}) => ({
+  position: 'absolute',
+  width: '45px',
+  height: '25px',
+  top,
+  left,
+  cursor: 'pointer'
+})
+const SingleMarker = ({
   list,
   data,
   markerPopupIsActive,
@@ -29,21 +30,59 @@ const SimpleMarker = ({
   onMouseEnterHandler
 }) => (
   <div
-    style={list.position && greatPlaceStyle(list.position)}
     onMouseLeave={onMouseLeaveHandler}
     onMouseEnter={onMouseEnterHandler}
+    style={list.position && singleMarkerStyle(list.position)}
     onClick={controller.listing_viewer.showListingViewer.bind(this, list)}
   >
     <ListingMarker
       data={data}
       listing={list}
       context={'map'}
-      address={list.address}
-      property={list.compact_property}
       popupIsActive={markerPopupIsActive}
     />
   </div>
 )
+
+
+const coordinator = (points) => {
+  let startX = 0
+  let startY = 0
+  let pointsLength = points.length
+  const col = Math.ceil(pointsLength / 4)
+  if (col === 1) {
+    startX = 45 / -2
+    startY = (((pointsLength * 25) + 45) / 2) * -0.5
+  } else {
+    startX = (((Math.ceil(pointsLength / 4) * 45) + 15) / 2) * -1
+    startY = ((4 * 25) + 45) * -0.5
+  }
+  if (col === 1) {
+    for (let i = 0; i < pointsLength; i++) {
+      points[i].list.position = {
+        left: 0,
+        top: 0
+      }
+      points[i].list.position.left = `${startX}px`
+      points[i].list.position.top = `${startY + (i * 40)}px`
+    }
+  } else {
+    for (let i = 0; i < col; i++) {
+      for (let j = 0; j < 4; j++) {
+        const index = j + (4 * i)
+        if (index < pointsLength) {
+          points[index].list.position = {
+            left: 0,
+            top: 0
+          }
+          points[index].list.position.top = `${startY + (j * 40)}px`
+          points[index].list.position.left = `${startX + (i * 60)}px`
+        }
+      }
+    }
+  }
+  return points
+}
 
 
 export default class MlsMap extends Component {
@@ -136,44 +175,6 @@ export default class MlsMap extends Component {
   setPositionToPointsWithSameCoordinate(clusters) {
     const tmpObj = _.groupBy(clusters, 'lat')
     const pwsc = []
-    const coordinator = (points) => {
-      let startX = 0
-      let startY = 0
-      let pointsLength = points.length
-      const col = Math.ceil(pointsLength / 4)
-      if (col === 1) {
-        startX = 45 / -2
-        startY = (((pointsLength * 25) + 45) / 2) * -1
-      } else {
-        startX = (((Math.ceil(pointsLength / 4) * 45) + 15) / 2) * -1
-        startY = ((4 * 25) + 45) / -2
-      }
-      if (col === 1) {
-        for (let i = 0; i < pointsLength; i++) {
-          points[i].list.position = {
-            left: 0,
-            top: 0
-          }
-          points[i].list.position.top = `${startY + (i * 40)}px`
-          points[i].list.position.left = `${startX}px`
-        }
-      } else {
-        for (let i = 0; i < col; i++) {
-          for (let j = 0; j < 4; j++) {
-            const index = j + (4 * i)
-            if (index < pointsLength) {
-              points[index].list.position = {
-                left: 0,
-                top: 0
-              }
-              points[index].list.position.top = `${startY + (j * 40)}px`
-              points[index].list.position.left = `${startX + (i * 60)}px`
-            }
-          }
-        }
-      }
-      return points
-    }
 
     Object.keys(tmpObj)
       .forEach((key) => {
@@ -338,7 +339,7 @@ export default class MlsMap extends Component {
             .map(({ ...markerProps, id, numPoints }) => (
               numPoints === 1
                 ?
-                  <SimpleMarker
+                  <SingleMarker
                     key={id}
                     data={data}
                     {...markerProps}
