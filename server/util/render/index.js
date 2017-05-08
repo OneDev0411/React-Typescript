@@ -24,6 +24,7 @@ async function display(file, renderProps = {}) {
     if (/\/dashboard\/mls\/(\w+)/.test(this.request.url)) {
       await this.render('app', {
         store_data,
+        data: this.locals,
         body: renderToString(
           <Provider store={store}>
             <RouterContext {...renderProps} />
