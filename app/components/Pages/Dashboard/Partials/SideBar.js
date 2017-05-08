@@ -647,6 +647,7 @@ export default class SideBar extends Component {
           }
 
           {
+            user.user_type !== 'Client' &&
             <OverlayTrigger placement="right" overlay={ popover.people } delayShow={200} delayHide={0}>
               <LinkContainer className={active.contacts} to="/dashboard/contacts">
                 <NavItem style={S('w-85p')}>
@@ -655,6 +656,7 @@ export default class SideBar extends Component {
               </LinkContainer>
             </OverlayTrigger>
           }
+
           { recommend }
           { agents }
           {
