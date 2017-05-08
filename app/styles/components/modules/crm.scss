@@ -61,8 +61,13 @@
     .table {
       .header {
         color: #8696a4;
-        margin-top: 20px;
-        margin-bottom: 20px;
+        margin: 20px 0 20px -5px;
+        div {
+          &:first-child {
+            padding-left: 16px;
+          }
+          padding-left: 10px;
+        }
       }
       .item {
         background: #fff;
@@ -80,6 +85,7 @@
           display: inline-block;
           vertical-align: middle;
           float: none;
+          padding-left: 8px;
         }
       }
     }

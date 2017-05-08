@@ -90,6 +90,11 @@
       padding: 4%;
       background-color: #f6f6f6;
       .table {
+        .item {
+          div {
+            padding-left: 7px;
+          }
+        }
         .type_Sold {
           margin-top: 40px;
         }

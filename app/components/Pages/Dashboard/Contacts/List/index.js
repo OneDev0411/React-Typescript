@@ -138,9 +138,9 @@ export default class ContactsList extends React.Component {
                       src={Contact.get.avatar(contact)}
                       size={35}
                     />
-                    <span style={{ marginLeft: '10px' }}>
+                    <a herf="" style={{ marginLeft: '10px' }}>
                       { Contact.get.name(contact, 20) }
-                    </span>
+                    </a>
                   </Col>
                   <Col
                     md={3}

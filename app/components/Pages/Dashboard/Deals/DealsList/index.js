@@ -71,12 +71,12 @@ export default class DealsList extends React.Component {
       <div className="list">
 
         <Row className="toolbar">
-          <Col lg={2} md={2} sm={2} className="vcenter">
+          <Col lg={6} md={6} sm={6} className="vcenter">
             <span className="title">Deals</span>
-          </Col>
 
-          <Col lg={4} md={4} sm={4} className="vcenter">
-            { _.size(deals) } total
+            <span className="count">
+              { _.size(deals) } total
+            </span>
           </Col>
 
           <Col lg={6} md={6} sm={6} className="vcenter right">
