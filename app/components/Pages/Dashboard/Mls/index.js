@@ -189,8 +189,10 @@ export default class Mls extends Component {
   checkQuery() {
     const data = this.props.data
     const q = data.location.query.q
-    if (q)
-      this.refs.search_input.value = q
+    if (q) {
+      AppStore.data.listing_map.search_input_text = q
+      AppStore.emitChange()
+    }
   }
   getRoomsIndexedDB() {
     const data = this.props.data
