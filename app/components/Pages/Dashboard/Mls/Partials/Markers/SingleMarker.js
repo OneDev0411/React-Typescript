@@ -1,37 +1,38 @@
 import React from 'react'
-import controller from '../../../controller'
 import ListingMarker from '../../../Partials/ListingMarker'
 
 
-const style = ({ left = 0, top = 0 }) => ({
+const singleMarkerStyle = ({
+  left = 0,
+  top = 0
+}) => ({
   position: 'absolute',
-  width: '45px',
-  height: '25px',
   top,
-  left,
-  cursor: 'pointer'
+  left
 })
 
-export default function SingleMarker({
+const SingleMarker = ({
   list,
   data,
+  onClickHandler,
   markerPopupIsActive,
   onMouseLeaveHandler,
   onMouseEnterHandler
-}) {
-  return (
-    <div
-      onMouseLeave={onMouseLeaveHandler}
-      onMouseEnter={onMouseEnterHandler}
-      style={list.position && style(list.position)}
-      onClick={controller.listing_viewer.showListingViewer.bind(this, list)}
-    >
-      <ListingMarker
-        data={data}
-        listing={list}
-        context={'map'}
-        popupIsActive={markerPopupIsActive}
-      />
-    </div>
-  )
-}
+}) => (
+  <div
+    className={'single-marker'}
+    onMouseLeave={onMouseLeaveHandler}
+    onMouseEnter={onMouseEnterHandler}
+    onClick={() => onClickHandler(list)}
+    style={list.position && singleMarkerStyle(list.position)}
+  >
+    <ListingMarker
+      data={data}
+      listing={list}
+      context={'map'}
+      popupIsActive={markerPopupIsActive}
+    />
+  </div>
+)
+
+export default SingleMarker

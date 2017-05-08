@@ -1,0 +1,31 @@
+@function stripUnits($number) {
+  @return $number / ($number * 0 + 1);
+}
+
+$cluster-marker-width: 40px !default;
+$cluster-marker-height: 40px !default;
+$cluster-marker-border-width: 5px !default;
+$cluster-marker-font-size: 14px !default;
+
+.single-marker {
+    cursor: pointer;
+}
+
+.cluster-marker {
+    position: absolute;
+    width: $cluster-marker-width;
+    height: $cluster-marker-height;
+    left: -$cluster-marker-width / 2;
+    top: -$cluster-marker-height / 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: bold;
+    font-size: $cluster-marker-font-size;
+    cursor: pointer;
+    color: #333;
+    border-radius: 50%;
+    background-color: #fff;
+    border: $cluster-marker-border-width solid #2196f3;
+}

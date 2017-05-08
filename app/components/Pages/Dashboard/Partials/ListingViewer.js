@@ -298,7 +298,7 @@ export default class ListingViewer extends Component {
             center={center}
             zoom={12}
             options={{ scrollwheel: false }}
-            bootstrapURLKeys={ bootstrap_url_keys }
+            bootstrapURLKeys={bootstrap_url_keys}
           >
             <ListingMapMarker
               onMouseOver={controller.listing_map.showListingPopup.bind(this, listing)}
