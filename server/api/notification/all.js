@@ -4,7 +4,7 @@ const app = new Koa()
 
 router.get('/get-notifications', async (ctx, next) => {
   try {
-    const response = await ctx.fetch('/notifications?limit=1000')
+    const response = await ctx.fetch('/notifications?limit=75')
     ctx.body = response.body
   }
   catch(e) {}
