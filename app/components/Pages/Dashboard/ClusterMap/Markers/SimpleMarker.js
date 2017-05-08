@@ -20,7 +20,7 @@ export const simpleMarker = ({
               transform: `translate3D(0,0,0) scale(${scale}, ${scale})`
             }}
           >
-           <span>{text}</span>
+            <span>{text}</span>
           </div>
         )
     }

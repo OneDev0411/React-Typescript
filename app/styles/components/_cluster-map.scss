@@ -12,47 +12,47 @@ $simple-marker-width: 48px;
 $simple-marker-height: 24px;
 
 
-.c-cluster-map {
-    display: flex;
-    min-height: 100vh;
-    margin-left: 10px;
-    flex-direction: column;
+// .c-cluster-map {
+//     display: flex;
+//     min-height: 100vh;
+//     margin-left: 10px;
+//     flex-direction: column;
 
-    .banner {
-        padding: .5rem  1rem;
-        background-color: #fff;
-    }
+//     .banner {
+//         padding: .5rem  1rem;
+//         background-color: #fff;
+//     }
 
-    .main {
-        flex: 1;
-        display: flex;
-    }
-}
+//     .main {
+//         flex: 1;
+//         display: flex;
+//     }
+// }
 
-.simple-marker {
-    position: absolute;
-    cursor: pointer;
-    top: -$simple-marker-height / 2 !important;
-    left: -$simple-marker-width / 2 !important;
-    text-align: center;
-    font-size: 2rem;
-    margin: 0;
-    padding: .5rem 1rem;
-    color: #fff;
-    background-color: brown;
-    letter-spacing: 1px;
+// .simple-marker {
+//     position: absolute;
+//     cursor: pointer;
+//     top: -$simple-marker-height / 2;
+//     left: -$simple-marker-width / 2;
+//     text-align: center;
+//     font-size: 2rem;
+//     margin: 0;
+//     padding: .5rem 1rem;
+//     color: #fff;
+//     background-color: #35b863;
+//     letter-spacing: 1px;
 
-    &:before {
-        content: '';
-        position: absolute;
-        bottom: -9px;
-        left: 50%;
-        transform: translateX(-50%) rotate(45deg);
-        border-width: 10px;
-        border-style: solid;
-        border-color: transparent #35b863 #35b863 transparent;
-    }
-}
+//     &:before {
+//         content: '';
+//         position: absolute;
+//         bottom: -9px;
+//         left: 50%;
+//         transform: translateX(-50%) rotate(45deg);
+//         border-width: 10px;
+//         border-style: solid;
+//         border-color: transparent #35b863 #35b863 transparent;
+//     }
+// }
 
 .cluster-marker {
     position: absolute;
