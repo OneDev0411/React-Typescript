@@ -3,8 +3,11 @@ import Brand from '../../models/Brand'
 import AppStore from '../../stores/AppStore'
 import ListingDispatcher from '../../dispatcher/ListingDispatcher'
 export default (hostname) => {
-  if (hostname === 'rechat.com' || hostname === 'localhost')
+  if (hostname === 'rechat.com' || hostname === 'localhost') {
+    AppStore.data.brand_queried = true
+    AppStore.emitChange()
     return
+  }
   const params = {
     hostname,
     user: AppStore.data.user
@@ -12,6 +15,7 @@ export default (hostname) => {
   Brand.getByHostname(params, (err, res) => {
     if (res && res.status === 'success') {
       AppStore.data.brand = res.data
+      AppStore.data.brand_queried = true
       // Auto move for the map when user loads map from search query
       if (AppStore.data.listing_map && !AppStore.data.listing_map.auto_move) {
         setTimeout(() => {
