@@ -8,7 +8,7 @@ export default (user) => {
     access_token: user.access_token
   }
   Notification.getAll(params, (err, response) => {
-    if (err && err.response.status === 401) {
+    if (user.access_token && err && err.response.status === 401) {
       window.location.href = '/signout'
       return
     }
