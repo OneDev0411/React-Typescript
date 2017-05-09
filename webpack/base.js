@@ -35,9 +35,6 @@ export default {
             'stage-0'
           ],
           env: {
-            production: {
-              presets: ['react-optimize']
-            },
             development: {
               plugins: [
                 ['react-hot-loader/babel'],
