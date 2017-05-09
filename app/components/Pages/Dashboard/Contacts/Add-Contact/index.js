@@ -59,7 +59,7 @@ export default class AddContact extends React.Component {
     this.setState({ saving: true })
 
     try {
-      await ContactDispatcher.dispatchSync({
+      const id = await ContactDispatcher.dispatchSync({
         action: 'add-contact',
         user: this.props.user,
         emails: emails,
@@ -72,7 +72,7 @@ export default class AddContact extends React.Component {
       this.setState({ showNewContactModal: false })
 
       // trigger
-      onNewContact()
+      onNewContact(id)
     }
     catch(e) {
       if (e.response) {

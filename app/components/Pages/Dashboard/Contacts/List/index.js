@@ -38,9 +38,14 @@ export default class ContactsList extends React.Component {
       (this.state.showSavedModal !== nextState.showSavedModal)
   }
 
-  onNewContact() {
+  onNewContact(id) {
     this.setState({ showSavedModal: true })
-    setTimeout(() => this.setState({ showSavedModal: false }), 3000)
+
+    setTimeout(() => {
+     this.setState({ showSavedModal: false })
+      // goto contact
+      this.open(id)
+    }, 2000)
   }
 
   onChangeStage(stage, contact) {
@@ -61,8 +66,8 @@ export default class ContactsList extends React.Component {
     })
   }
 
-  open (contact) {
-    browserHistory.push(`/dashboard/contacts/${contact.id}`)
+  open (id) {
+    browserHistory.push(`/dashboard/contacts/${id}`)
   }
 
   render() {
@@ -89,7 +94,7 @@ export default class ContactsList extends React.Component {
 
               <AddContact
                 user={this.props.user}
-                onNewContact={() => this.onNewContact()}
+                onNewContact={(id) => this.onNewContact(id)}
               />
 
             </Col>
@@ -103,7 +108,7 @@ export default class ContactsList extends React.Component {
             <p>To get started, click the blue button to add contact</p>
             <AddContact
               user={this.props.user}
-              onNewContact={() => this.onNewContact()}
+              onNewContact={(id) => this.onNewContact(id)}
             />
           </div>
         }
@@ -129,7 +134,7 @@ export default class ContactsList extends React.Component {
                     sm={3}
                     xs={3}
                     className="vcenter"
-                    onClick={() => this.open(contact) }
+                    onClick={() => this.open(contact.id) }
                   >
                     <Avatar
                       className="avatar"
@@ -148,7 +153,7 @@ export default class ContactsList extends React.Component {
                     xs={3}
                     className="vcenter"
                     style={{ overflow: 'hidden' }}
-                    onClick={() => this.open(contact) }
+                    onClick={() => this.open(contact.id) }
                   >
                     { Contact.get.email(contact, 30) }
                   </Col>
@@ -157,7 +162,7 @@ export default class ContactsList extends React.Component {
                     sm={2}
                     xs={2}
                     className="vcenter"
-                    onClick={() => this.open(contact) }
+                    onClick={() => this.open(contact.id) }
                   >
                     { Contact.get.phone(contact) }
                   </Col>
@@ -177,7 +182,7 @@ export default class ContactsList extends React.Component {
                     sm={2}
                     xs={2}
                     className="vcenter"
-                    onClick={() => this.open(contact) }
+                    onClick={() => this.open(contact.id) }
                   >
                     { Contact.get.source(contact).label }
                   </Col>
