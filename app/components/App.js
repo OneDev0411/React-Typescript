@@ -75,6 +75,7 @@ class App extends Component {
       AppStore.emitChange()
     }
     const brand = Brand.flatten(data.brand)
+    console.log(brand)
     if (brand && brand.assets.google_analytics_id) {
       const google_analytics_id = brand.assets.google_analytics_id
       console.log(google_analytics_id)
