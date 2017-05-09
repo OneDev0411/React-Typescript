@@ -364,7 +364,10 @@ export default class ContactProfile extends React.Component {
                 </Tab>
 
                 <Tab eventKey="notes" title="Notes" className="notes">
-                  <Notes notes={notes} />
+                  <Notes
+                    notes={notes}
+                    onNoteChange={this.onChangeAttribute.bind(this)}
+                  />
                 </Tab>
               </Tabs>
             </div>

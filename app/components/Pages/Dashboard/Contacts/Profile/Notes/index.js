@@ -4,13 +4,8 @@ import moment from 'moment'
 import Editable from '../Editable'
 
 export default class extends React.Component {
-
-  nl2br(item) {
-    return item.note.split('\n').map((text, key) => (
-      <div key={`item_${item.id}_line_${key}`}>
-        { text }
-      </div>
-    ))
+  onNoteChange(type, id, text) {
+    this.props.onNoteChange(type, id, text)
   }
 
   render() {
@@ -27,8 +22,6 @@ export default class extends React.Component {
         }
         {
           notes.map(item => {
-            // const text = this.nl2br(item)
-
             return (
               <div key={`note_${item.id}`} className="item">
                 <Editable
@@ -37,6 +30,8 @@ export default class extends React.Component {
                   showEdit={true}
                   showAdd={false}
                   text={item.note}
+                  multiline={true}
+                  onChange={(type, id, text) => this.onNoteChange(type, id, text)}
                 />
                 <span className="time">
                   { moment.unix(item.created_at ).format('MMMM DD, YYYY')}
