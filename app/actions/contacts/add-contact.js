@@ -51,6 +51,7 @@ export default async function (user, emails, phone_numbers, first_name, last_nam
       }
 
       AppStore.emitChange()
+      return newContact.id
     }
   }
   catch(e) {
