@@ -3,10 +3,10 @@ import Brand from '../../models/Brand'
 import AppStore from '../../stores/AppStore'
 import ListingDispatcher from '../../dispatcher/ListingDispatcher'
 export default (hostname) => {
-  if (hostname === 'rechat.com' || hostname === 'localhost')
-    return
+  // if (hostname === 'rechat.com' || hostname === 'localhost')
+  //   return
   const params = {
-    hostname,
+    hostname: 'app.claystapp.com',
     user: AppStore.data.user
   }
   Brand.getByHostname(params, (err, res) => {
