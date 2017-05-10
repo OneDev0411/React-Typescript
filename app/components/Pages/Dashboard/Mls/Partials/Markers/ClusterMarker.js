@@ -1,22 +1,25 @@
 import React from 'react'
 import compose from 'recompose/compose'
 import defaultProps from 'recompose/defaultProps'
+// import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 import pure from 'recompose/pure'
 import { Motion, spring } from 'react-motion'
 
 export const clusterMarker = ({
   text,
+  onClickHandler,
   defaultMotionStyle, motionStyle
 }) => (
   <Motion
-    defaultStyle={defaultMotionStyle}
     style={motionStyle}
+    defaultStyle={defaultMotionStyle}
   >
     {
       ({ scale }) => (
         <div
           className="cluster-marker"
+          onClick={onClickHandler}
           style={{
             transform: `translate3D(0,0,0) scale(${scale}, ${scale})`
           }}
