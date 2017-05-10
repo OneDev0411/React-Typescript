@@ -97,6 +97,7 @@ const controller = {
     return google_options
   },
   handleBoundsChange(gmap) {
+    if (AppStore.data.listing_map.is_loading) return
     const { bounds, center, zoom, size, marginBounds } = gmap
     const data = AppStore.data
     const user = data.user
@@ -152,6 +153,7 @@ const controller = {
     // }
     AppStore.data.gmap = gmap
     AppStore.emitChange()
+    AppStore.data.listing_map.is_loading = true
     ListingDispatcher.dispatch({
       action: 'get-valerts',
       user,
