@@ -1,12 +1,14 @@
 // Partials/MlsMap.js
 import S from 'shorti'
 import _ from 'lodash'
+
 import React, { Component } from 'react'
 import GoogleMap from 'google-map-react'
 import controller from '../../controller'
 import supercluster from 'points-cluster'
 import { mapOptions } from './MlsMapOptions'
 import SingleMarker from './Markers/SingleMarker'
+import { fitBounds } from 'google-map-react/utils'
 import ClusterMarker from './Markers/ClusterMarker'
 import config from '../../../../../../config/public'
 
@@ -48,6 +50,19 @@ const coordinator = (points) => {
   }
   return points
 }
+const setPositionToPointsWithSameCoordinate = (clusters) => {
+  let PointsWithSameCoordinate = []
+  const pointsGroupByLat = _.groupBy(clusters, 'lat')
+  Object.keys(pointsGroupByLat)
+    .forEach((key) => {
+      if (pointsGroupByLat[key].length !== 1) {
+        coordinator(pointsGroupByLat[key])
+          .forEach(obj => PointsWithSameCoordinate.push(obj))
+      } else
+        PointsWithSameCoordinate.push(pointsGroupByLat[key][0])
+    })
+  return PointsWithSameCoordinate
+}
 
 export default class MlsMap extends Component {
   constructor(props) {
@@ -66,6 +81,7 @@ export default class MlsMap extends Component {
       this.clusterMarkerOnClickHandler.bind(this)
   }
   componentWillReceiveProps(nextProps) {
+    console.log('recive')
     if (
       nextProps.data.listing_map
       && nextProps.data.listing_map.listings
@@ -140,43 +156,32 @@ export default class MlsMap extends Component {
 
     return false
   }
-  setPositionToPointsWithSameCoordinate(clusters) {
-    let pwsc = []
-    const tmpObj = _.groupBy(clusters, 'lat')
-    Object.keys(tmpObj)
-      .forEach((key) => {
-        if (tmpObj[key].length !== 1) {
-          coordinator(tmpObj[key])
-            .forEach(obj => pwsc.push(obj))
-        } else
-          pwsc.push(tmpObj[key][0])
-      })
-    return pwsc
-  }
-  setClusters(listings, mapProps) {
-    if (
-      mapProps.zoom > 19
-    ) return this.state.clusters
+  setClusters(listings, mapProps = this.state.mapProps) {
+    const { bounds, center, zoom } = mapProps
+    if (!bounds) return
+    if (zoom > 18) return this.state.clusters
 
     let getClusters = supercluster(
       listings,
       {
         minZoom: 13, // min zoom to generate clusters on
-        maxZoom: 18, // max zoom level to cluster the points on
+        maxZoom: 17, // max zoom level to cluster the points on
         radius: 60 // cluster radius in pixels
       }
     )
-    let clusters = getClusters(mapProps)
+    let clusters = getClusters({ bounds, center, zoom })
     clusters = clusters.map(({ wx, wy, numPoints, points }) => ({
       lat: wy,
       lng: wx,
       numPoints,
-      list: numPoints === 1 ? points[0] : null,
+      list: numPoints === 1 ? points[0] : points,
       text: numPoints !== 1 ? numPoints : '',
       id: `${numPoints}_${points[0].id}`
     }))
-    if (mapProps.zoom === 19)
-      clusters = this.setPositionToPointsWithSameCoordinate(clusters)
+
+    if (zoom >= 18)
+      clusters = setPositionToPointsWithSameCoordinate(clusters)
+
     this.setState({
       mapProps,
       listings,
@@ -195,14 +200,42 @@ export default class MlsMap extends Component {
       })
     }
   }
-  clusterMarkerOnClickHandler(center) {
+  clusterMarkerOnClickHandler(clusterCenter, points) {
+    if (points.length <= 16) {
+      this.setState({
+        mapProps: {
+          center: clusterCenter,
+          zoom: this.state.mapProps.zoom + 1
+        }
+      })
+      return
+    }
+    const googleMapsLatLngBounds = new google.maps.LatLngBounds()
+    points.forEach(point => googleMapsLatLngBounds.extend(point))
+    const bounds = {
+      ne: {
+        lat: googleMapsLatLngBounds.getNorthEast().lat(),
+        lng: googleMapsLatLngBounds.getNorthEast().lng()
+      },
+      sw: {
+        lat: googleMapsLatLngBounds.getSouthWest().lat(),
+        lng: googleMapsLatLngBounds.getSouthWest().lng()
+      }
+    }
+    const size = {
+      width: 827, // Map width in pixels
+      height: 685 // Map height in pixels
+    }
+    const { center, zoom } = fitBounds(bounds, size)
+    // console.log(points)
     this.setState({
       mapProps: {
-        ...this.state.mapProps,
+        bounds,
         center,
-        zoom: this.state.mapProps.zoom + 1
+        zoom
       }
     })
+    console.log('fitBounds zoom:', zoom)
   }
   render() {
     console.log('render')
@@ -307,7 +340,7 @@ export default class MlsMap extends Component {
         {
           this.state.clusters
           && this.state.clusters
-            .map(({ ...markerProps, id, lat, lng, numPoints }) => (
+            .map(({ ...markerProps, id, lat, lng, list, numPoints }) => (
               numPoints === 1
                 ?
                   <SingleMarker
@@ -330,7 +363,7 @@ export default class MlsMap extends Component {
                       () => this.clusterMarkerOnClickHandler({
                         lat,
                         lng
-                      })
+                      }, list)
                     }
                   />
             ))
