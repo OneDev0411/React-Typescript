@@ -81,7 +81,7 @@ export default class MlsMap extends Component {
       this.clusterMarkerOnClickHandler.bind(this)
   }
   componentWillReceiveProps(nextProps) {
-    console.log('recive')
+    // console.log('recive')
     if (
       nextProps.data.listing_map
       && nextProps.data.listing_map.listings
@@ -95,13 +95,13 @@ export default class MlsMap extends Component {
             zoom: nextZoom
           }
         })
-        console.log('rceive zoom', currentZoom, nextZoom)
+        // console.log('rceive zoom', currentZoom, nextZoom)
       }
 
       const currentListings = this.state.listings
       let newListings = nextProps.data.listing_map.listings
       if (newListings && newListings.length !== currentListings.length) {
-        console.log('recive list')
+        // console.log('recive list')
         newListings = newListings.map(list => ({
           lat: list.location.latitude,
           lng: list.location.longitude,
@@ -125,7 +125,7 @@ export default class MlsMap extends Component {
       this.state.listings.length
       !== nextState.listings.length
     ) {
-      console.log('update listings')
+      // console.log('update listings')
       return true
     }
 
@@ -133,7 +133,7 @@ export default class MlsMap extends Component {
       this.state.mapProps.zoom
       !== nextState.mapProps.zoom
     ) {
-      console.log('update zoom')
+      // console.log('update zoom')
       return true
     }
 
@@ -141,7 +141,7 @@ export default class MlsMap extends Component {
       this.state.hoveredMarkerId
       !== nextState.hoveredMarkerId
     ) {
-      console.log('update hover mark')
+      // console.log('update hover mark')
       return true
     }
 
@@ -150,7 +150,7 @@ export default class MlsMap extends Component {
       && this.props.data.listing_map.active_listing
       === nextProps.data.listing_map.active_listing
     ) {
-      console.log('update hover listing')
+      // console.log('update hover listing')
       return true
     }
 
@@ -235,10 +235,10 @@ export default class MlsMap extends Component {
         zoom
       }
     })
-    console.log('fitBounds zoom:', zoom)
+    // console.log('fitBounds zoom:', zoom)
   }
   render() {
-    console.log('render')
+    // console.log('render')
     const data = this.props.data
     const listing_map = data.listing_map
     const clusters = this.state.cluster
