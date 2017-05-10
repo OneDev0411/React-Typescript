@@ -62,30 +62,14 @@ export default class MlsMap extends Component {
     }
     this.onMouseLeaveHandler = this.onMouseLeaveHandler.bind(this)
     this.onMouseEnterHandler = this.onMouseEnterHandler.bind(this)
+    this.clusterMarkerOnClickHandler =
+      this.clusterMarkerOnClickHandler.bind(this)
   }
   componentWillReceiveProps(nextProps) {
     if (
       nextProps.data.listing_map
       && nextProps.data.listing_map.listings
     ) {
-      // console.log('recive')
-      const currentListings = this.state.listings
-      let newListings = nextProps.data.listing_map.listings
-      if (newListings && newListings.length !== currentListings.length) {
-        newListings = newListings.map(list => ({
-          lat: list.location.latitude,
-          lng: list.location.longitude,
-          ...list
-        }))
-        const {
-          zoom,
-          bounds,
-          center } = nextProps.data.gmap
-        this.setState({
-          mapProps: { zoom, bounds, center }
-        })
-        this.setClusters(newListings)
-      }
       const currentZoom = this.state.mapProps.zoom
       const nextZoom = nextProps.data.listing_map.zoom
       if (currentZoom !== nextZoom) {
@@ -95,8 +79,28 @@ export default class MlsMap extends Component {
             zoom: nextZoom
           }
         })
-        // console.log('zoom: ', this.state.mapProps.zoom)
-        this.setClusters(this.state.listings)
+        console.log('rceive zoom', currentZoom, nextZoom)
+      }
+
+      const currentListings = this.state.listings
+      let newListings = nextProps.data.listing_map.listings
+      if (newListings && newListings.length !== currentListings.length) {
+        console.log('recive list')
+        newListings = newListings.map(list => ({
+          lat: list.location.latitude,
+          lng: list.location.longitude,
+          ...list
+        }))
+        const {
+          zoom,
+          bounds,
+          center } = nextProps.data.gmap
+        const mapProps = {
+          zoom,
+          center,
+          bounds: bounds || this.state.mapProps.bounds
+        }
+        this.setClusters(newListings, mapProps)
       }
     }
   }
@@ -105,7 +109,7 @@ export default class MlsMap extends Component {
       this.state.listings.length
       !== nextState.listings.length
     ) {
-      // console.log('update listings')
+      console.log('update listings')
       return true
     }
 
@@ -113,7 +117,7 @@ export default class MlsMap extends Component {
       this.state.mapProps.zoom
       !== nextState.mapProps.zoom
     ) {
-      // console.log('update zoom')
+      console.log('update zoom')
       return true
     }
 
@@ -121,7 +125,7 @@ export default class MlsMap extends Component {
       this.state.hoveredMarkerId
       !== nextState.hoveredMarkerId
     ) {
-      // console.log('update hover mark')
+      console.log('update hover mark')
       return true
     }
 
@@ -130,7 +134,7 @@ export default class MlsMap extends Component {
       && this.props.data.listing_map.active_listing
       === nextProps.data.listing_map.active_listing
     ) {
-      // console.log('update hover listing')
+      console.log('update hover listing')
       return true
     }
 
@@ -149,13 +153,9 @@ export default class MlsMap extends Component {
       })
     return pwsc
   }
-  setClusters(listings) {
+  setClusters(listings, mapProps) {
     if (
-      !this.state.mapProps.bounds
-    ) return []
-
-    if (
-      this.state.mapProps.zoom > 19
+      mapProps.zoom > 19
     ) return this.state.clusters
 
     let getClusters = supercluster(
@@ -166,7 +166,7 @@ export default class MlsMap extends Component {
         radius: 60 // cluster radius in pixels
       }
     )
-    let clusters = getClusters(this.state.mapProps)
+    let clusters = getClusters(mapProps)
     clusters = clusters.map(({ wx, wy, numPoints, points }) => ({
       lat: wy,
       lng: wx,
@@ -175,9 +175,10 @@ export default class MlsMap extends Component {
       text: numPoints !== 1 ? numPoints : '',
       id: `${numPoints}_${points[0].id}`
     }))
-    if (this.state.mapProps.zoom === 19)
+    if (mapProps.zoom === 19)
       clusters = this.setPositionToPointsWithSameCoordinate(clusters)
     this.setState({
+      mapProps,
       listings,
       clusters
     })
@@ -194,8 +195,17 @@ export default class MlsMap extends Component {
       })
     }
   }
+  clusterMarkerOnClickHandler(center) {
+    this.setState({
+      mapProps: {
+        ...this.state.mapProps,
+        center,
+        zoom: this.state.mapProps.zoom + 1
+      }
+    })
+  }
   render() {
-    // console.log('render')
+    console.log('render')
     const data = this.props.data
     const listing_map = data.listing_map
     const clusters = this.state.cluster
@@ -297,7 +307,7 @@ export default class MlsMap extends Component {
         {
           this.state.clusters
           && this.state.clusters
-            .map(({ ...markerProps, id, numPoints }) => (
+            .map(({ ...markerProps, id, lat, lng, numPoints }) => (
               numPoints === 1
                 ?
                   <SingleMarker
@@ -312,7 +322,17 @@ export default class MlsMap extends Component {
                     onMouseLeaveHandler={() => this.onMouseLeaveHandler(id)}
                     onMouseEnterHandler={() => this.onMouseEnterHandler(id)}
                   />
-                : <ClusterMarker key={id} {...markerProps} />
+                :
+                  <ClusterMarker
+                    key={id}
+                    {...markerProps}
+                    onClickHandler={
+                      () => this.clusterMarkerOnClickHandler({
+                        lat,
+                        lng
+                      })
+                    }
+                  />
             ))
         }
       </GoogleMap>
