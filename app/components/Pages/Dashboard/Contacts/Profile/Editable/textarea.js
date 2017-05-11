@@ -1,4 +1,5 @@
 import React from 'react'
+import { Button } from 'react-bootstrap'
 
 export default ({
   value,
@@ -17,5 +18,16 @@ export default ({
       onChange={onChange}
       onBlur={onBlur}
     />
+
+    <div style={{ textAlign: 'right' }}>
+      <Button
+        bsStyle="primary"
+        onClick={onBlur}
+        bsSize="xsmall"
+        style={{ fontSize: '12px' }}
+      >
+        Save
+      </Button>
+    </div>
   </div>
 )
