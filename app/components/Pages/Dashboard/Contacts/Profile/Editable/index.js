@@ -56,6 +56,7 @@ export default class extends React.Component {
           <TextInput
             value={text}
             placeholder={placeholder}
+            lines={text.split('\n').length || 1}
             onChange={e => this.setState({ text: e.target.value })}
             onBlur={() => this.onCloseEdit()}
             onClose={() => this.onCloseEdit()}
