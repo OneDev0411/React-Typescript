@@ -243,7 +243,7 @@ export default class ContactProfile extends React.Component {
 
                 {
                   emails.length === 0 &&
-                  <li key={`email_${key}`}>
+                  <li>
                     <div className="name">Email</div>
                     <div className="data">
                       <Editable
