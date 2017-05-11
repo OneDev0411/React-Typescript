@@ -182,7 +182,7 @@ export default class Listings extends Component {
     const status_buttons_area_style = S('text-center mb-20')
     let title = 'Our Exclusive Listings'
     if (this.props.location.query.agent)
-      title = 'My Listings'
+      title = 'Listings'
     return (
       <div className="futurastd">
         <div style={header_style}>
