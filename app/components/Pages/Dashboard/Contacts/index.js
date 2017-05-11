@@ -1,7 +1,9 @@
-import React  from 'react'
+import React from 'react'
+import { connect } from 'react-redux'
+import { getContacts } from '../../../../store_actions/contact'
 import Dispatcher from '../../../../dispatcher/ContactDispatcher'
 
-export default class extends React.Component {
+class Contacts extends React.Component {
   constructor(props) {
     super(props)
   }
@@ -11,13 +13,16 @@ export default class extends React.Component {
     const { user } = data
 
     // get deals
-    this.getContacts(user)
+    this.loadContacts(user)
 
     // get shared tags
     this.getTags(user)
   }
 
-  getContacts(user) {
+  loadContacts(user) {
+    const { dispatch } = this.props
+    dispatch(getContacts(user))
+
     Dispatcher.dispatch({
       action: 'get-contacts',
       user
@@ -60,3 +65,7 @@ export default class extends React.Component {
     )
   }
 }
+
+export default connect(state => ({
+  contacts: state.contacts
+}))(Contacts)
