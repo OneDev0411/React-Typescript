@@ -3,7 +3,6 @@ import { Grid, Row, Col } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
 import Avatar from 'react-avatar'
 import _ from 'underscore'
-import MessageModal from '../../../../Partials/MessageModal'
 import Contact from '../../../../../models/Contact'
 import AddContact from '../Add-Contact'
 import Stage from '../components/Stage'
@@ -13,8 +12,7 @@ export default class ContactsList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      contacts: {},
-      showSavedModal: false
+      contacts: {}
     }
   }
 
@@ -34,18 +32,11 @@ export default class ContactsList extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const { contacts } = nextProps
-    return (contacts && _.size(contacts) > _.size(this.state.contacts)) ||
-      (this.state.showSavedModal !== nextState.showSavedModal)
+    return (contacts && _.size(contacts) > _.size(this.state.contacts))
   }
 
   onNewContact(id) {
-    this.setState({ showSavedModal: true })
-
-    setTimeout(() => {
-     this.setState({ showSavedModal: false })
-      // goto contact
-      this.open(id)
-    }, 2000)
+    this.open(id)
   }
 
   onChangeStage(stage, contact) {
@@ -71,10 +62,7 @@ export default class ContactsList extends React.Component {
   }
 
   render() {
-    const {
-      contacts,
-      showSavedModal
-    } = this.state
+    const { contacts } = this.state
 
     return (
       <div className="list">
@@ -192,11 +180,6 @@ export default class ContactsList extends React.Component {
             }
           </Grid>
         }
-
-        <MessageModal
-          show={showSavedModal}
-          text="New contact added!"
-        />
       </div>
     )
   }
