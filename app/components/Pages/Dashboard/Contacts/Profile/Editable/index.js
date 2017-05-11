@@ -68,9 +68,13 @@ export default class extends React.Component {
     return (
       <div
         className="contact-editable"
-        onClick={() => this.onClickEdit()}
       >
-        { multiline ? this.nl2br(text) : text }
+        <div
+          onClick={() => this.onClickEdit()}
+          style={{ display: 'inline-block' }}
+        >
+          { multiline ? this.nl2br(text) : text }
+        </div>
 
         <div
           className={`control${multiline ? ' multiline' : ''}`}
