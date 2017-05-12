@@ -322,7 +322,7 @@ export default class ListingPanel extends Component {
         <div style={ listing_panel_style } className={ panel_class }>
           <div>
             <div style={ S('pt-10 pl-15 pr-15 mb-10') }>
-              <div className="tempo" style={ S('color-444 fw-100 font-24') }>{ listings.length }{ listings_total } Homes</div>
+              <div className="sf" style={ S('color-444 font-24') }><span style={ S('fw-600') }>{ listings.length }</span>{ listings_total } Homes</div>
               <div>
                 Sorting by
                 <DropdownButton bsStyle="link" title={ sortby_title || '' } id="dropdown-size-large">
