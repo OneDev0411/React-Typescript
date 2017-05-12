@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import fs from 'fs-extra'
 import webpack from 'webpack'
-import minifier from 'minifier'
 import path from 'path'
 import colors from 'colors'
 import _ from 'underscore'
@@ -38,16 +37,6 @@ async function run() {
   )
 
   console.log('[ + ] Template files are copied'.magenta)
-
-  // minifying
-  console.log('[ + ] Start minifying'.magenta)
-  chunks.forEach(chunk => {
-    chunk.files.forEach(file => {
-      const filepath = `${appConfig.compile.output}/${file}`
-      minifier.minify(filepath, { output: filepath })
-      console.log(`[ + ] ${file} minified.`.green)
-    })
-  })
 }
 
 function compile() {
@@ -77,6 +66,5 @@ function compile() {
     })
   })
 }
-
 
 run()

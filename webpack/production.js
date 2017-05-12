@@ -38,6 +38,19 @@ webpackConfig.plugins.push(
     name: 'vendor',
     filename: appConfig.compile.jsVendorBundle
   }),
+  new webpack.optimize.UglifyJsPlugin({
+    // Eliminate comments
+    comments: true,
+    // Compression specific options
+    compress: {
+      // remove warnings
+      warnings: false,
+      // Drop console statements
+      drop_console: true,
+      // remove debugger; statements
+      drop_debugger: true
+    }
+  }),
   new ExtractTextPlugin({
     filename: appConfig.compile.cssBundle,
     allChunks: true
