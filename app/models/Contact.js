@@ -88,8 +88,8 @@ Contact.addNote = async function(params) {
 /**
 * add new item to user's timeline
 */
-Contact.updateUserTimeline = async function(params) {
-  const { user_action, object_class, object, access_token } = params
+Contact.updateUserTimeline = async function(user, user_action, object_class, object) {
+  const { access_token } = user
   const endpoint = `${api_host}/users/self/timeline`
 
   try {
