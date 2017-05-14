@@ -413,7 +413,10 @@ class App extends Component {
     data.path = path
     data.location = location
 
-    return React.cloneElement(this.props.children, { data })
+    return React.cloneElement(this.props.children, {
+      data,
+      user: data.user
+    })
   }
 }
 
