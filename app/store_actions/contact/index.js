@@ -1,27 +1,17 @@
-import Contact from '../../models/Contact'
+import addContact from './add-contact'
+import getContacts from './get-contacts'
+import getTimeline from './get-timeline'
+import getTags from './get-tags'
+import addNote from './add-note'
+import upsertAttributes from './upsert-attributes'
+import deleteAttribute from './delete-attribute'
 
-// constants
-export const types = {
-  GET_CONTACTS: 'GET_CONTACTS'
-}
-
-const provideContacts = function (contacts) {
-  return {
-    type: types.GET_CONTACTS,
-    contacts
-  }
-}
-
-export function getContacts(user) {
-  const params = {
-    access_token: user.access_token
-  }
-
-  return async (dispatch) => {
-    const response = await Contact.getContacts(params)
-    const contacts = response.body.data
-    dispatch(provideContacts(contacts))
-
-    return contacts
-  }
+export {
+  addContact,
+  getContacts,
+  getTimeline,
+  getTags,
+  addNote,
+  upsertAttributes,
+  deleteAttribute
 }
