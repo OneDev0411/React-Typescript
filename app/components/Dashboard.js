@@ -29,8 +29,7 @@ export default class Dashboard extends React.Component {
   }
 
   render() {
-    const { data } = this.props
-    const user = data.user
+    const { data, user } = this.props
 
     let main_style = { marginLeft: '60px', minHeight: '100vh' }
     let nav_area = <SideBar data={data} />
@@ -42,9 +41,10 @@ export default class Dashboard extends React.Component {
         nav_area = <MobileNav data={data} />
     }
 
-    const children = React.Children.map(this.props.children, child =>
-      React.cloneElement(child, { data })
-    )
+    const children = React.cloneElement(this.props.children, {
+      data,
+      user: data.user
+    })
 
     return (
       <div>
