@@ -1,7 +1,12 @@
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 import _ from 'underscore'
-import Dispatcher from '../../../../../../dispatcher/ContactDispatcher'
+import store from '../../../../../../stores'
+import {
+  getTags,
+  upsertAttributes,
+  deleteAttribute
+} from '../../../../../../store_actions/contact'
 import ManageTags from './Manage-Tag'
 
 export default class Tags extends React.Component {
@@ -48,39 +53,22 @@ export default class Tags extends React.Component {
     this.setState({ tags: newTags })
 
     // remove item
-    this.remove(item, 'dispatch')
+    this.remove(item)
   }
 
-  async remove(item, fn = 'dispatchSync') {
+  async remove(item) {
     const { user, contact_id } = this.props
-
-    await Dispatcher[fn]({
-      action: 'delete-attribute',
-      id: contact_id,
-      user: user,
-      attribute_id: item.id
-    })
+    store.dispatch(deleteAttribute(user, contact_id, item.id))
   }
 
   async upsert(attributes) {
     const { user, contact_id } = this.props
-
-    await Dispatcher.dispatchSync({
-      action: 'upsert-attributes',
-      id: contact_id,
-      type: 'tag',
-      attributes,
-      user
-    })
+    store.dispatch(upsertAttributes(user, contact_id, 'tag', attributes))
   }
 
   async reloadSharedTags() {
     const { user } = this.props
-
-    await Dispatcher.dispatchSync({
-      action: 'get-tags',
-      user
-    })
+    store.dispatch(getTags(user))
   }
 
   render(){
