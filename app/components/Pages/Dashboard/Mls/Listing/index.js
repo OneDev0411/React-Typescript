@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import ListingDispatcher from '../../../../../dispatcher/ListingDispatcher'
-import ContactDispatcher from '../../../../../dispatcher/ContactDispatcher'
+import ContactModel from '../../../../../models/Contact'
 import controller from '../../controller'
 import SideBar from '../../Partials/SideBar'
 import MobileNav from '../../Partials/MobileNav'
@@ -30,13 +30,7 @@ export default class Listing extends Component {
 
   updateUserTimeline() {
     const { data, params } = this.props
-    ContactDispatcher.dispatch({
-      action: 'update-user-timeline',
-      user: data.user,
-      user_action: 'UserViewedListing',
-      object_class: 'Listing',
-      object: params.id
-    })
+    ContactModel.updateUserTimeline(data.user, 'UserViewedListing', 'Listing', params.id)
   }
 
   render() {
