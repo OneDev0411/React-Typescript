@@ -1,7 +1,7 @@
 // controller/alert-map.js
 import AppStore from '../../../../stores/AppStore'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
-import ContactDispatcher from '../../../../dispatcher/ContactDispatcher'
+import ContactModel from '../../../../models/Contact'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import Brand from '../../../../controllers/Brand'
 
@@ -44,15 +44,10 @@ const controller = {
     return bound.getCenter()
   },
   showAlertOnMap(alert) {
+    const { user } = AppStore.data
     // update user timeline
     if (AppStore.data.user) {
-      ContactDispatcher.dispatch({
-        action: 'update-user-timeline',
-        user: AppStore.data.user,
-        user_action: 'UserViewedAlert',
-        object_class: 'Alert',
-        object: alert.id
-      })
+      ContactModel.updateUserTimeline(user, 'UserViewedAlert', 'Alert', alert.id)
     }
 
     let center_from_points
