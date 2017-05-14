@@ -3,7 +3,8 @@ import { Button, Modal, FormControl } from 'react-bootstrap'
 import Stage from '../components/Stage'
 import Emails from './Emails'
 import Phones from './Phones'
-import ContactDispatcher from '../../../../../dispatcher/ContactDispatcher'
+import store from '../../../../../stores'
+import { addContact } from '../../../../../store_actions/contact'
 
 export default class AddContact extends React.Component {
   constructor(props) {
@@ -54,20 +55,22 @@ export default class AddContact extends React.Component {
 
   async save() {
     const { firstName, lastName, stage, phones, emails } = this.state
-    const { onNewContact } = this.props
+    const { onNewContact, dispatch } = this.props
 
     this.setState({ saving: true })
 
     try {
-      const id = await ContactDispatcher.dispatchSync({
-        action: 'add-contact',
+
+      const contact = {
         user: this.props.user,
         emails: emails,
         phone_numbers: phones,
         first_name: firstName,
         last_name: lastName,
         stage: stage
-      })
+      }
+
+      const id = await store.dispatch(addContact(contact))
 
       this.setState({ showNewContactModal: false })
 
@@ -75,6 +78,7 @@ export default class AddContact extends React.Component {
       onNewContact(id)
     }
     catch(e) {
+      console.log(e)
       if (e.response) {
         alert(e.response.body.message)
         // this.setState({
