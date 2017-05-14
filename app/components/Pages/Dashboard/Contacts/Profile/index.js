@@ -3,10 +3,9 @@ import { browserHistory } from 'react-router'
 import { Row, Col, Button, Tabs, Tab } from 'react-bootstrap'
 import Avatar from 'react-avatar'
 import moment from 'moment'
-import AppStore from '../../../../../stores/AppStore'
-import Dispatcher from '../../../../../dispatcher/ContactDispatcher'
 import Stepper from '../../../../Partials/Stepper'
 import Contact from '../../../../../models/Contact'
+import { getTimeline, upsertAttributes } from '../../../../../store_actions/contact'
 import Notes from './Notes'
 import AddNote from './Add-Note'
 import Timeline from './Timeline'
@@ -61,13 +60,9 @@ export default class ContactProfile extends React.Component {
   }
 
   async getTimeline() {
-    const { user, params } = this.props
+    const { user, params, dispatch } = this.props
 
-    const timeline = await Dispatcher.dispatchSync({
-      action: 'get-timeline',
-      id: params.id,
-      user
-    })
+    const timeline = await dispatch(getTimeline(user, params.id))
 
     const contact = {
       ...this.state.contact,
@@ -144,15 +139,8 @@ export default class ContactProfile extends React.Component {
   }
 
   upsertAttributes(type, attributes) {
-    const { user, params } = this.props
-
-    Dispatcher.dispatch({
-      action: 'upsert-attributes',
-      id: params.id,
-      type,
-      attributes,
-      user
-    })
+    const { user, params, dispatch } = this.props
+    dispatch(upsertAttributes(user, params.id, type, attributes))
   }
 
   render() {
