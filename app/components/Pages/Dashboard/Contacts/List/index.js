@@ -4,9 +4,9 @@ import { browserHistory } from 'react-router'
 import Avatar from 'react-avatar'
 import _ from 'underscore'
 import Contact from '../../../../../models/Contact'
+import { upsertAttributes } from '../../../../../store_actions/contact'
 import AddContact from '../Add-Contact'
 import Stage from '../components/Stage'
-import Dispatcher from '../../../../../dispatcher/ContactDispatcher'
 
 export default class ContactsList extends React.Component {
   constructor(props) {
@@ -40,7 +40,7 @@ export default class ContactsList extends React.Component {
   }
 
   onChangeStage(stage, contact) {
-    const { user } = this.props
+    const { user, dispatch } = this.props
 
      const attributes = [{
       id: Contact.get.stage(contact).id,
@@ -48,13 +48,7 @@ export default class ContactsList extends React.Component {
       stage
     }]
 
-    Dispatcher.dispatch({
-      action: 'upsert-attributes',
-      id: contact.id,
-      type: 'stage',
-      attributes,
-      user
-    })
+    dispatch(upsertAttributes(user, contact.id, 'stage', attributes))
   }
 
   open (id) {
