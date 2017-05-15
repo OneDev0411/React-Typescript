@@ -36,7 +36,7 @@ async function run() {
     path.join(appConfig.compile.output, '/legal.html')
   )
 
-  console.log('[ + ] Template files are copied'.magenta)
+  console.log('[ + ] Template files copied'.magenta)
 }
 
 function compile() {
