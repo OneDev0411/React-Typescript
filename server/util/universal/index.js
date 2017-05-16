@@ -9,7 +9,7 @@ function matcher(location) {
   })
 }
 
-export default async function (ctx) {
+export default async function (ctx, next) {
   const { error, redirectLocation, renderProps } = await matcher(ctx.request.url)
 
   if (error) {
@@ -20,7 +20,8 @@ export default async function (ctx) {
     ctx.redirect(redirectLocation.pathname + redirectLocation.search)
   }
   else if (renderProps) {
-    await ctx.display(null, renderProps)
+    const file = ctx.render_file || 'app'
+    await ctx.display(file, renderProps)
   } else {
     ctx.status = 404
     ctx.body = 'Not found!'
