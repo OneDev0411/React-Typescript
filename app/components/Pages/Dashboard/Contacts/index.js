@@ -3,6 +3,11 @@ import { connect } from 'react-redux'
 import { getContacts, getTags } from '../../../../store_actions/contact'
 
 class Contacts extends React.Component {
+  static fetchData(dispatch, params) {
+    const { user } = params
+    return dispatch(getContacts(user))
+  }
+
   constructor(props) {
     super(props)
   }
@@ -12,13 +17,15 @@ class Contacts extends React.Component {
   }
 
   async init() {
-    const { dispatch, user } = this.props
+    const { dispatch, user, contacts } = this.props
 
     // get contacts
-    dispatch(getContacts(user))
+    if (!contacts.list)
+      dispatch(getContacts(user))
 
     // get tags
-    dispatch(getTags(user))
+    if (!contacts.tags)
+      dispatch(getTags(user))
   }
 
   render() {
