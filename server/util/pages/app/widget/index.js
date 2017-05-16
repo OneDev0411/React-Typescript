@@ -3,7 +3,7 @@ const router = require('koa-router')()
 const app = new Koa()
 
 router.get(/^\/widgets(?:\/|$)/, async (ctx, next) => {
-  await ctx.display()
+  await next()
 })
 
 module.exports = app.use(router.routes())
