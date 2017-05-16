@@ -47,7 +47,7 @@ router.get('/dashboard/mls/actives', async (ctx, next) => {
  * route for /mls
  */
 router.get('/dashboard/mls', async (ctx, next) => {
-  await ctx.display()
+  await next()
 })
 
 /**

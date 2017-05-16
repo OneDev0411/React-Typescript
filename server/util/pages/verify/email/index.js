@@ -76,7 +76,7 @@ router.get('/verify/email', async (ctx, next) => {
   }
 
   ctx.locals.AppStore = AppStore
-  await ctx.display()
+  await next()
 })
 
 

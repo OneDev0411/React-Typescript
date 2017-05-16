@@ -18,7 +18,8 @@ router.get('/terms', async (ctx, next) => {
   ctx.locals.title = page.title
   ctx.locals.content = page.content
 
-  await ctx.display('legal')
+  ctx.render_file = 'legal'
+  await next()
 })
 
 // mls terms
@@ -28,7 +29,8 @@ router.get('/terms/mls', async (ctx, next) => {
   ctx.locals.title = page.title
   ctx.locals.content = page.content
 
-  await ctx.display('legal')
+  ctx.render_file = 'legal'
+  await next()
 })
 
 // privacy
@@ -38,7 +40,8 @@ router.get('/privacy', async (ctx, next) => {
   ctx.locals.title = page.title
   ctx.locals.content = page.content
 
-  await ctx.display('legal')
+  ctx.render_file = 'legal'
+  await next()
 })
 
 module.exports = app.use(router.routes())
