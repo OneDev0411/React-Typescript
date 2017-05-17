@@ -9,13 +9,13 @@ export default (user, files) => {
     files
   }
   async.waterfall([
-    callback => {
+    (callback) => {
       User.uploadImage(params, (err, response) => {
         const data = response.body
         return callback(null, data)
       })
     },
-    data => {
+    (data) => {
       const response_params = {
         access_token: user.access_token,
         profile_image_url: data.url

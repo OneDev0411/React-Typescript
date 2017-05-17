@@ -1,0 +1,11 @@
+// Search Listings
+.search-listings{
+  &__listing{
+    &:hover{
+      background-color: #EDF7FD;
+    }
+  }
+}
+.geosuggest__suggests--hidden {
+  display: none;
+}

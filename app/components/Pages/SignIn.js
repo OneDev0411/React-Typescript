@@ -1,11 +1,12 @@
 // SignIn.js
 import React, { Component } from 'react'
-import { Link } from 'react-router'
-import { Button, Input, Alert, Modal } from 'react-bootstrap'
+import { Link, browserHistory } from 'react-router'
+import { Button, FormControl, Alert, Modal } from 'react-bootstrap'
 import S from 'shorti'
 import AppStore from '../../stores/AppStore'
 import AppDispatcher from '../../dispatcher/AppDispatcher'
 import helpers from '../../utils/helpers'
+import Brand from '../../controllers/Brand'
 
 export default class SignIn extends Component {
 
@@ -20,12 +21,25 @@ export default class SignIn extends Component {
   }
 
   componentDidMount() {
+    // this.refs.email.refs.input.focus()
     const message = helpers.getParameterByName('message')
     if (message && message === 'account-upgraded') {
       setTimeout(() => {
         AppStore.data.show_upgrade_confirm_modal = true
         AppStore.emitChange()
       }, 500)
+    }
+    if (message && message === 'phone-signup-success' || message && message === 'email-already-verified') {
+      setTimeout(() => {
+        AppStore.data.show_email_verified_modal = true
+        AppStore.emitChange()
+      }, 500)
+    }
+    const data = this.props.data
+    if (data.location && data.location.query && data.location.query.email) {
+      const email = decodeURIComponent(data.location.query.email)
+      if (email && email !== 'undefined')
+        this.emailInput.value = email
     }
   }
 
@@ -38,20 +52,22 @@ export default class SignIn extends Component {
       let redirect_to = '/dashboard/mls'
       if (data.location.query && data.location.query.redirect_to)
         redirect_to = data.location.query.redirect_to
-      this.props.history.pushState(null, redirect_to)
+
+      browserHistory.push(redirect_to)
     }
   }
 
   hideModal() {
     delete AppStore.data.show_upgrade_confirm_modal
+    delete AppStore.data.show_email_verified_modal
     AppStore.emitChange()
   }
 
   initFullStory(user) {
-    window.FS.identify(user.id, {
-      displayName: user.first_name + ' ' + user.last_name,
-      email: user.email
-    })
+    // window.FS.identify(user.id, {
+    //   displayName: user.first_name + ' ' + user.last_name,
+    //   email: user.email
+    // })
   }
 
   handleSubmit(e) {
@@ -59,8 +75,8 @@ export default class SignIn extends Component {
     AppStore.data.submitting = true
     AppStore.emitChange()
 
-    const email = this.refs.email.refs.input.value
-    const password = this.refs.password.refs.input.value
+    const email = this.emailInput.value
+    const password = this.passwordInput.value
     let invite
     if (this.props.location.query.message === 'invite-room') {
       invite = {
@@ -110,10 +126,15 @@ export default class SignIn extends Component {
       submitting_class = 'disabled'
 
     let message
+    if (data.location && data.location.query && data.location.query.email) {
+      message = (
+        <Alert bsStyle="warning">This email is already in use.  Please log in to continue.</Alert>
+      )
+    }
     if (data.show_message) {
       message = (
         <Alert bsStyle="danger">
-          There was an error with this request.
+          There was an error with this request. This email or password is incorrect.
         </Alert>
       )
       if (data.email_not_confirmed) {
@@ -121,19 +142,18 @@ export default class SignIn extends Component {
           <Alert bsStyle="danger">
             This email has not been verified yet.
             <div>
-              <a href="#" onClick={ this.sendEmailVerification.bind(this) }>Send email verification again</a>.
+              <a href="#" onClick={this.sendEmailVerification.bind(this)}>Send email verification again</a>.
               <div>{ data.verify_email_sent ? 'Email resent' : ''}</div>
             </div>
           </Alert>
         )
       }
     }
-
     let invite_message
     if (data.invite_room_message) {
       invite_message = (
         <Alert bsStyle="success">
-          You have been invited to join a chatroom!  Sign in or Sign up to complete the invite process.
+          You have been invited to join a chatroom!  Log in or Sign up to complete the invite process.
         </Alert>
       )
     }
@@ -146,21 +166,27 @@ export default class SignIn extends Component {
     const room_id = this.props.location.query.room_id
     const invite_token = this.props.location.query.invite_token
     if (room_id && invite_token)
-      signup_link += '?message=invite-room&room_id=' + room_id + '&invite_token=' + invite_token
+      signup_link += `?message=invite-room&room_id=${room_id}&invite_token=${invite_token}`
     return (
-      <div id="main-content" className="flex-center-wrap page-bg-video" style={ S('absolute h-100p w-100p') }>
-        <div className="text-center center-block box-shadow" style={ S('w-460 z-100 relative mt-60n bg-fff br-6 p-50') }>
-          <h1 className="tempo" style={ S('mb-20') }>Log in to Rechat</h1>
-          <div style={ S('color-555555 mb-20 font-18 mb-20') }>It’s nice to have you back!</div>
+      <div id="main-content" className="flex-center-wrap page-bg-video" style={S('absolute h-100p w-100p')}>
+        <div className="text-center center-block box-shadow" style={S('w-460 z-100 relative mt-60n bg-fff br-6 p-50')}>
+          <h1 className="tempo" style={S('mb-20')}>Log into { Brand.message('site_title', 'Rechat') }</h1>
+          <div style={S('color-555555 mb-20 font-18 mb-20')}>It’s nice to have you back!</div>
           { invite_message }
-          <form action="/signin" onSubmit={ this.handleSubmit.bind(this) }>
-            <Input bsSize="large" style={ input_style } bsStyle={ email_style } type="text" ref="email" placeholder="Email"/>
-            <Input bsSize="large" style={ input_style } bsStyle={ password_style } type={ data.signin && data.signin.password_is_visible ? 'text' : 'password' } ref="password" placeholder="Password"/>
-            <div style={ S('color-929292 font-13 mt-0 mb-10') } className="pull-right"><Link to="/password/forgot">Forgot Password</Link></div>
-            <div className="clearfix"></div>
+          <form action="/signin" onSubmit={this.handleSubmit.bind(this)}>
+            <FormControl bsSize="large" style={input_style} bsStyle={email_style} type="text" inputRef={ref => this.emailInput = ref} placeholder="Email" />
+            <FormControl bsSize="large" style={input_style} bsStyle={password_style} type={data.signin && data.signin.password_is_visible ? 'text' : 'password'} inputRef={ref => this.passwordInput = ref} placeholder="Password" />
+            <div style={S('color-929292 font-13 mt-0 mb-10')} className="pull-right"><Link to="/password/forgot">Forgot Password</Link></div>
+            <div className="clearfix" />
             { message }
-            <Button bsSize="large" type="submit" ref="submit" className={ submitting_class + 'btn btn-primary' } disabled={ submitting } style={ S('w-100p mb-20') }>
-              { submitting ? 'Signing in...' : 'Sign in' }
+            <Button
+              bsSize="large"
+              type="submit"
+              className={`${submitting_class}btn`}
+              disabled={submitting}
+              style={S(`w-100p mb-20 border-none color-fff bg-${Brand.color('primary', '3388ff')}`)}
+            >
+              { submitting ? 'Logging in...' : 'Log in' }
             </Button>
             {
               /*
@@ -168,17 +194,32 @@ export default class SignIn extends Component {
               */
             }
           </form>
+          <div style={S('mt-10 font-14 color-929292')}>
+            Don't have an account?&nbsp;&nbsp;<a href="/signup">Sign up</a>.
+          </div>
         </div>
-        <Modal dialogClassName={ data.is_mobile ? 'modal-mobile' : '' } show={ data.show_upgrade_confirm_modal } onHide={ this.hideModal }>
+        <Modal dialogClassName={data.is_mobile ? 'modal-mobile' : ''} show={data.show_upgrade_confirm_modal} onHide={this.hideModal}>
           <Modal.Body className="text-center">
-            <div style={ S('mb-20 mt-20') }>
-              <div style={ S('br-100 w-90 h-90 center-block bg-3388ff text-center') }>
-                <i style={ S('color-fff font-40 mt-25') } className="fa fa-check"></i>
+            <div style={S('mb-20 mt-20')}>
+              <div style={S('br-100 w-90 h-90 center-block bg-3388ff text-center')}>
+                <i style={S('color-fff font-40 mt-25')} className="fa fa-check" />
               </div>
             </div>
-            <div style={ S('font-24 mb-20') }>Account Upgraded</div>
-            <div style={ S('font-18 mb-20') }>You may now log in and use enhanced features.</div>
-            <Button style={ S('mb-20') } bsStyle="primary" onClick={ this.hideModal.bind(this) }>Ok</Button>
+            <div style={S('font-24 mb-20')}>Account Upgraded</div>
+            <div style={S('font-18 mb-20')}>You may now log in and use enhanced features.</div>
+            <Button style={S('mb-20')} bsStyle="primary" onClick={this.hideModal.bind(this)}>Ok</Button>
+          </Modal.Body>
+        </Modal>
+        <Modal dialogClassName={data.is_mobile ? 'modal-mobile' : ''} show={data.show_email_verified_modal} onHide={this.hideModal}>
+          <Modal.Body className="text-center">
+            <div style={S('mb-20 mt-20')}>
+              <div style={S('br-100 w-90 h-90 center-block bg-3388ff text-center')}>
+                <i style={S('color-fff font-40 mt-25')} className="fa fa-check" />
+              </div>
+            </div>
+            <div style={S('font-24 mb-20')}>Email Verified</div>
+            <div style={S('font-18 mb-20')}>You may now log in.</div>
+            <Button style={S('mb-20')} bsStyle="primary" onClick={this.hideModal.bind(this)}>Ok</Button>
           </Modal.Body>
         </Modal>
       </div>
@@ -189,6 +230,5 @@ export default class SignIn extends Component {
 // PropTypes
 SignIn.propTypes = {
   data: React.PropTypes.object,
-  location: React.PropTypes.object.isRequired,
-  history: React.PropTypes.object.isRequired
+  location: React.PropTypes.object.isRequired
 }

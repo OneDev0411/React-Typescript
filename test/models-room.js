@@ -8,7 +8,6 @@ import config from '../config/private'
 // Get access token
 let access_token
 let room_id
-let contact_id
 let test = config.test
 
 /* Room
@@ -29,41 +28,40 @@ describe('Testing Room model', () => {
     })
   })
   // Create room
-  it('Room.create should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
-    const params = {
-      title: 'test title',
-      owner: test.user.id,
-      access_token,
-      api_host: test.api_host
-    }
-    Room.create(params, (err, response) => {
-      room_id = response.data.id
-      expect(response.status).to.equal('success')
-      done()
-    })
-  })
+  // it('Room.create should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
+  //   const params = {
+  //     title: 'test title',
+  //     owner: test.user.id,
+  //     access_token,
+  //     api_host: test.api_host
+  //   }
+  //   Room.create(params, (err, response) => {
+  //     room_id = response.data.id
+  //     expect(response.status).to.equal('success')
+  //     done()
+  //   })
+  // })
 
-  // Create message
-  it('Message.create should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
-    const params = {
-      room_id: room_id,
-      comment: 'Test message',
-      message_type: 'TopLevel',
-      author: test.user.id,
-      access_token,
-      api_host: test.api_host
-    }
-    Message.create(params, (err, response) => {
-      expect(response.status).to.equal('success')
-      done()
-    })
-  })
+  // // Create message
+  // it('Message.create should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
+  //   const params = {
+  //     room_id: room_id,
+  //     comment: 'Test message',
+  //     message_type: 'TopLevel',
+  //     author: test.user.id,
+  //     access_token,
+  //     api_host: test.api_host
+  //   }
+  //   Message.create(params, (err, response) => {
+  //     expect(response.status).to.equal('success')
+  //     done()
+  //   })
+  // })
 
-  // Add user
+  // // Add user
   // it('Room.addUser should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
   //   const params = {
   //     room_id: room_id,
-  //     user: contact_id,
   //     access_token,
   //     api_host: test.api_host
   //   }
@@ -73,16 +71,42 @@ describe('Testing Room model', () => {
   //   })
   // })
 
-  // Add user
-  it('Room.createRec should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
+  // Add rec
+  // it('Room.createRec should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
+  //   const params = {
+  //     mls_number: '13315964',
+  //     id: '64ee70d2-f1ef-11e5-bc3e-0242ac110006',
+  //     access_token,
+  //     api_host: test.api_host
+  //   }
+  //   Room.createRec(params, (err, response) => {
+  //     console.log(err)
+  //     expect(response.status).to.equal('success')
+  //     done()
+  //   })
+  // })
+  // // Get actives
+  // it('Room.getActives should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
+  //   const params = {
+  //     room_id: test.room_id,
+  //     access_token,
+  //     api_host: test.api_host
+  //   }
+  //   Room.getActives(params, (err, response) => {
+  //     expect(response.status).to.equal('success')
+  //     done()
+  //   })
+  // })
+  // Get actives
+  it('Room.editFavorite should return successful for user UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
     const params = {
-      mls_number: '13315964',
-      id: '64ee70d2-f1ef-11e5-bc3e-0242ac110006',
+      room_id: test.room_id,
+      rec_id: test.rec_id,
+      favorite: test.favorite,
       access_token,
       api_host: test.api_host
     }
-    Room.createRec(params, (err, response) => {
-      console.log(err)
+    Room.editFavorite(params, (err, response) => {
       expect(response.status).to.equal('success')
       done()
     })

@@ -1,12 +1,14 @@
 // SignUp.js
 import React, { Component } from 'react'
-import { Col, Button, Input, Popover, OverlayTrigger } from 'react-bootstrap'
+import { Col, Button, FormControl, Popover, OverlayTrigger } from 'react-bootstrap'
 import S from 'shorti'
 import validator from 'validator'
 import { randomString } from '../../utils/helpers'
 import AppDispatcher from '../../dispatcher/AppDispatcher'
 import AppStore from '../../stores/AppStore'
 import CheckEmailModal from '../Partials/CheckEmailModal'
+import Brand from '../../controllers/Brand'
+
 export default class SignUp extends Component {
   componentWillMount() {
     // Reset data store before mounting
@@ -28,7 +30,14 @@ export default class SignUp extends Component {
     AppStore.emitChange()
   }
   componentDidMount() {
-    this.refs.email.refs.input.focus()
+    this.emailInput.focus()
+  }
+  componentDidUpdate() {
+    const data = this.props.data
+    if (data.errors && data.errors.type === 'email-in-use') {
+      const email = data.signup.email
+      window.location.href = `/signin?email=${encodeURIComponent(email)}`
+    }
   }
   showIntercom() {
     window.Intercom('show')
@@ -39,11 +48,17 @@ export default class SignUp extends Component {
     AppStore.emitChange()
   }
   handleEmailSubmit(e) {
+    // If clicked
+    setTimeout(() => {
+      this.emailInput.focus()
+    }, 100)
     e.preventDefault()
     delete AppStore.data.errors
     AppStore.emitChange()
     const data = this.props.data
     const signup = data.signup
+    if (!signup)
+      return
     const email = signup.email
     // If no email or double submit
     if (!email || data.submitting)
@@ -104,7 +119,7 @@ export default class SignUp extends Component {
     // Data
     const data = this.props.data
     let signup_input_style = {
-      ...S('h-52 w-260 font-16 bg-fafbfc border-1-solid-dfe6ee'),
+      ...S(`h-52 w-260 font-16 bg-fafbfc border-1-solid-${Brand.color('primary', 'dfe6ee')}`),
       borderTopRightRadius: 0,
       borderBottomRightRadius: 0
     }
@@ -113,6 +128,12 @@ export default class SignUp extends Component {
       borderTopLeftRadius: 0,
       borderBottomLeftRadius: 0
     }
+
+    if (Brand.color('primary')) {
+      signup_btn_style.backgroundColor = `#${Brand.color('primary')}`
+      signup_btn_style.borderColor = `#${Brand.color('primary')}`
+    }
+
     if (typeof window !== 'undefined' && window.innerWidth <= 768) {
       signup_input_style = {
         ...signup_input_style,
@@ -126,11 +147,6 @@ export default class SignUp extends Component {
           <Popover id="popover" title="">You must enter a valid email</Popover>
         )
       }
-      if (data.errors.type === 'email-in-use') {
-        popover = (
-          <Popover id="popover" title="">This email is already in use.  Follow the <a href="/password/forgot">forgot password process</a> or <a href="#" onClick={ this.showIntercom }>contact support</a>.</Popover>
-        )
-      }
       if (data.errors.type === 'bad-request') {
         popover = (
           <Popover id="popover" title="">Bad request.</Popover>
@@ -138,39 +154,39 @@ export default class SignUp extends Component {
       }
     }
     const main_content = (
-      <div style={ S('pt-50') }>
-        <Col xs={ 12 }>
-          <div style={ S('text-center') }>
-            <div className="din" style={ S('font-30 color-263445 mb-10') }>Hello, lets get started.</div>
-            <div style={ S('border-bottom-2-solid-d8d8d8 mb-20 w-50 center-block') }></div>
-            <form onSubmit={ this.handleEmailSubmit.bind(this) }>
-              <div style={ S('pull-left') }>
-                <OverlayTrigger trigger="focus" placement="bottom" overlay={ popover }>
-                  <Input ref="email" onChange={ this.setSignupEmail } style={ signup_input_style } type="text" placeholder="Enter email address" value={ data.signup_email } />
+      <div style={S('pt-50')}>
+        <Col xs={12}>
+          <div style={S('text-center')}>
+            <div className="din" style={S('font-30 color-263445 mb-10')}>Hello, lets get started.</div>
+            <div style={S('border-bottom-2-solid-d8d8d8 mb-20 w-50 center-block')} />
+            <form onSubmit={this.handleEmailSubmit.bind(this)}>
+              <div style={S('pull-left')}>
+                <OverlayTrigger trigger="focus" placement="bottom" overlay={popover}>
+                  <FormControl inputRef={ref => this.emailInput = ref} onChange={this.setSignupEmail} style={signup_input_style} type="text" placeholder="Enter email address" value={data.signup_email} />
                 </OverlayTrigger>
               </div>
-              <div style={ S('pull-left') }>
-                <Button className={ data.submitting ? 'disabled' : '' } bsStyle="primary" style={ signup_btn_style } type="submit">{ data.submitting ? 'Submitting...' : 'Lets go' }</Button>
+              <div style={S('pull-left')}>
+                <Button className={data.submitting ? 'disabled' : ''} bsStyle="primary" style={signup_btn_style} type="submit">{ data.submitting ? 'Submitting...' : 'Lets go' }</Button>
               </div>
             </form>
           </div>
-          <div className="clearfix"></div>
-          <div style={ S('mt-10 font-14 color-929292') }>
-            Already have an account? <a href="/signin">Login</a>.
+          <div className="clearfix" />
+          <div style={S('mt-10 font-14 color-929292')}>
+            Already have an account?&nbsp;&nbsp;<a href="/signin">Log in</a>.
           </div>
         </Col>
       </div>
     )
     return (
-      <div id="main-content" className="flex-center-wrap" style={ S('absolute h-100p w-100p') }>
-        <div className="text-center center-block" style={ S('w-100p maxw-470 z-100 relative mt-60n bg-fff br-6') }>
+      <div id="main-content" className="flex-center-wrap" style={S('absolute h-100p w-100p')}>
+        <div className="text-center center-block" style={S('w-100p maxw-470 z-100 relative mt-60n bg-fff br-6')}>
           { main_content }
         </div>
         <CheckEmailModal
-          data={ data }
-          hideModal={ this.hideModal }
-          showIntercom={ this.showIntercom }
-          resend={ this.resend }
+          data={data}
+          hideModal={this.hideModal}
+          showIntercom={this.showIntercom}
+          resend={this.resend}
         />
       </div>
     )

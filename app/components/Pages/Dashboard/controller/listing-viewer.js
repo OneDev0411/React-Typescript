@@ -1,16 +1,24 @@
 // controller/listing-viewer.js
+import { browserHistory } from 'react-router'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 const controller = {
   showListingViewer(listing) {
-    const history = require('../../../../utils/history')
-    history.replaceState(null, '/dashboard/mls/' + listing.id)
     const data = AppStore.data
+    // Check for hostname
+    if (data.is_widget && data.brand && data.brand.hostnames) {
+      window.open(`/dashboard/mls/${listing.id}`)
+      return
+    }
+
+    browserHistory.push(`/dashboard/mls/${listing.id}`)
     const user = data.user
     AppStore.data.show_listing_viewer = true
     AppStore.data.current_listing = listing
-    delete AppStore.data.show_alert_viewer
+    delete AppStore.data.show_alert_modal
     AppStore.emitChange()
+    if (!listing.id)
+      return
     ListingDispatcher.dispatch({
       action: 'get-listing',
       user,
@@ -21,18 +29,22 @@ const controller = {
   addToAlreadyViewed(id) {
     const data = AppStore.data
     const listing_map = data.listing_map
+    if (!listing_map)
+      return
     if (listing_map.listings_viewed) {
       if (listing_map.listings_viewed.indexOf(id) === -1)
         AppStore.data.listing_map.listings_viewed.push(id)
-    }
-    else
+    } else
       AppStore.data.listing_map.listings_viewed = [id]
     AppStore.emitChange()
   },
   hideListingViewer() {
     delete AppStore.data.show_listing_viewer
     delete AppStore.data.current_listing
-    history.pushState(null, null, '/dashboard/mls')
+    if (!AppStore.data.show_search_map || !AppStore.data.show_alerts_map || !AppStore.data.show_actives_map)
+      AppStore.data.show_search_map = true
+
+    browserHistory.push('/dashboard/mls')
     AppStore.emitChange()
   },
   showModalGallery(image_url) {

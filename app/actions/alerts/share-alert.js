@@ -1,121 +1,131 @@
 // actions/listings/share-alert.js
-import Room from '../../models/Room'
-import Alert from '../../models/Alert'
 import AppStore from '../../stores/AppStore'
+import Room from '../../models/Room'
+import _ from 'lodash'
 import async from 'async'
-import getMessages from '../messages/get-messages'
-
-export default (user, rooms, contacts, emails, phone_numbers, alert) => {
+import AppDispatcher from '../../dispatcher/AppDispatcher'
+export default (user, rooms, users, emails, phone_numbers, alert, message) => {
+  // TODO remove hack fix
+  if (alert.mls_areas === 'null')
+    alert.mls_areas = null
   AppStore.data.listing_map.saving_alert = true
   AppStore.emitChange()
-  // Share w/ emails
-  if (emails && emails.length) {
+  // Get a room
+  const available_rooms = AppStore.data.rooms
+  let room_found = null
+  if (users.length && !emails.length && !phone_numbers.length) {
+    available_rooms.forEach((room) => {
+      let user_ids_room = _.map(room.users, 'id')
+      user_ids_room = user_ids_room.filter(user_id => user_id !== AppStore.data.user.id)
+      if (_.isEqual(users.sort(), user_ids_room.sort()))
+        room_found = room
+    })
+  }
+  if (room_found) {
+    const room_id = room_found.id
     const params = {
       access_token: user.access_token,
       alert,
-      emails
+      room_id
     }
-    Alert.create(params, () => {
+    Room.createAlert(params, (err, res) => {
       delete AppStore.data.listing_map.saving_alert
       delete AppStore.data.listing_map.show_share_modal
       delete AppStore.data.share_list
-      AppStore.emitChange()
-    })
-  }
-  // Share w/ phone_numbers
-  if (phone_numbers && phone_numbers.length) {
-    const params = {
-      access_token: user.access_token,
-      alert,
-      phone_numbers
-    }
-    Alert.create(params, () => {
-      delete AppStore.data.listing_map.saving_alert
-      delete AppStore.data.listing_map.show_share_modal
-      delete AppStore.data.share_list
-      AppStore.emitChange()
-    })
-  }
-  // Share w/ room
-  if (rooms && rooms.length) {
-    async.eachSeries(rooms, (room, callback) => {
-      alert.room = room.id
-      const params = {
-        access_token: user.access_token,
-        alert
+      AppStore.data.show_alert_saved_modal = true
+      if (res.status === 'success') {
+        const new_alert = res.data
+        if (!AppStore.data.alerts)
+          AppStore.data.alerts = []
+        AppStore.data.alerts.unshift(new_alert)
       }
-      Alert.createRoomAlert(params, () => {
-        getMessages(user, room)
-        callback()
-      })
-    }, () => {
-      delete AppStore.data.listing_map.saving_alert
-      delete AppStore.data.listing_map.show_share_modal
-      delete AppStore.data.share_list
       AppStore.emitChange()
+      setTimeout(() => {
+        delete AppStore.data.show_alert_saved_modal
+        AppStore.emitChange()
+      }, 3000)
+      if (message) {
+        AppDispatcher.dispatch({
+          action: 'create-message',
+          user,
+          room: room_found,
+          comment: message
+        })
+      }
     })
+    return
   }
-  // Share w/ contacts
-  if (contacts && contacts.length) {
-    const locals = {}
-    async.series([
-      callback => {
-        // Create room
-        const params = {
-          title: alert.title,
-          owner: user.id,
-          access_token: user.access_token
-        }
-        Room.create(params, (err, response) => {
+  // Room not found, create room
+  const locals = {}
+
+  const brand = AppStore.data.brand ? AppStore.data.brand.id : null
+
+  async.series([
+    (callback) => {
+      // Create room
+      const params = {
+        title: '',
+        owner: user.id,
+        access_token: user.access_token,
+        users,
+        emails,
+        phone_numbers,
+        brand
+      }
+      Room.create(params, (err, response) => {
+        // Success
+        if (response.status === 'success') {
           const new_room = response.data
+          AppStore.data.status = 'success'
+          AppStore.data.show_message = true
+          AppStore.data.show_create_chat_modal = false
+          if (!AppStore.data.rooms)
+            AppStore.data.rooms = []
           AppStore.data.rooms.unshift(new_room)
           AppStore.data.current_room = new_room
-          AppStore.data.messages = [new_room.latest_message]
-          getMessages(user, new_room)
-          locals.room_id = new_room.id
-          callback()
-        })
-      },
-      callback => {
-        // Invite contacts
-        const invitations = contacts.map(contact => {
-          const invitation = {
-            room: locals.room_id
-          }
-          if (contact.first_name)
-            invitation.invitee_first_name = contact.first_name
-          if (contact.last_name)
-            invitation.invitee_last_name = contact.last_name
-          if (contact.email)
-            invitation.email = contact.email
-          if (contact.phone_number)
-            invitation.phone_number = contact.phone_number
-          return invitation
-        })
-        const params = {
-          access_token: user.access_token,
-          invitations
+          locals.current_room = new_room
+          AppStore.data.current_room.messages = [new_room.latest_message]
+        } else {
+          AppStore.data.status = 'error'
+          AppStore.data.submitting = false
+          AppStore.data.show_message = true
+          AppStore.data.request_error = true
         }
-        Room.inviteContacts(params, () => {
-          callback()
-        })
-      },
-      callback => {
-        // Create alert
-        alert.room = locals.room_id
-        const params = {
-          access_token: user.access_token,
-          alert
-        }
-        Alert.createRoomAlert(params, () => {
-          callback()
-        })
+        delete AppStore.data.loading
+        callback()
+      })
+    },
+    () => {
+      const params = {
+        access_token: user.access_token,
+        alert,
+        room_id: locals.current_room.id
       }
-    ], () => {
-      delete AppStore.data.listing_map.saving_alert
-      delete AppStore.data.listing_map.show_share_modal
-      delete AppStore.data.share_list
-      AppStore.emitChange()
-    })
-  }
+      Room.createAlert(params, (err, res) => {
+        delete AppStore.data.listing_map.saving_alert
+        delete AppStore.data.listing_map.show_share_modal
+        delete AppStore.data.share_list
+        AppStore.data.show_alert_saved_modal = true
+        if (res.status === 'success') {
+          const new_alert = res.data
+          if (!AppStore.data.alerts)
+            AppStore.data.alerts = []
+          AppStore.data.alerts.unshift(new_alert)
+        }
+        AppStore.emitChange()
+        setTimeout(() => {
+          delete AppStore.data.show_alert_saved_modal
+          AppStore.emitChange()
+        }, 3000)
+        if (message) {
+          AppDispatcher.dispatch({
+            action: 'create-message',
+            user,
+            room: locals.current_room,
+            comment: message
+          })
+        }
+      })
+    }
+  ])
 }

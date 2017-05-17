@@ -1,19 +1,23 @@
 // ProfileImage.js
 import React, { Component } from 'react'
 import S from 'shorti'
-// import helpers from '../../../../utils/helpers'
+import { getResizeAvatarUrl } from '../../../../utils/user'
 // helpers.imageExists(profile_image_url)
 
 export default class ProfileImage extends Component {
   render() {
+    const show_online_indicator = typeof this.props.show_online_indicator === 'undefined' ? true : this.props.show_online_indicator
     const user = this.props.user
+    if (!user)
+      return <div />
     const me = this.props.data.user
     const data = this.props.data
     let font = 17
     if (this.props.font)
       font = this.props.font
     const profile_image_url = user.profile_image_url
-    let background = `bg-url(${profile_image_url})`
+    const resize_image_url = `${getResizeAvatarUrl(profile_image_url)}?w=160`
+    let background = `bg-url(${resize_image_url})`
     let initials
     let top = 8
     if (this.props.top)
@@ -26,9 +30,12 @@ export default class ProfileImage extends Component {
       let last_initial = ''
       if (user.last_name)
         last_initial = user.last_name.substring(0, 1).toUpperCase()
+      let initials_area = first_initial + last_initial
+      if (!first_initial && !last_initial)
+        initials_area = <i className="fa fa-phone" />
       initials = (
-        <div className="text-center" style={ S(`w-100p t-${top} absolute color-fff ${font ? 'font-' + font : '17'}`) }>
-          { first_initial + last_initial }
+        <div className="text-center" style={S(`w-100p t-${top} absolute color-fff ${font ? `font-${font}` : '17'}`)}>
+          { initials_area }
         </div>
       )
     }
@@ -45,12 +52,12 @@ export default class ProfileImage extends Component {
       let bg_color = 'dddfe0'
       if (data.users_online.indexOf(user.id) !== -1)
         bg_color = '35b863'
-      online_indicator = <div style={ S('br-100 bg-' + bg_color + ' w-13 h-13 bw-2 solid bc-fff absolute z-100 t-3n r-1') }></div>
+      online_indicator = <div style={S(`br-100 bg-${bg_color} w-13 h-13 bw-2 solid bc-fff absolute z-100 t-3n r-1`)} />
     }
     return (
-      <div style={ S('inline') }>
-        <div className="img-circle" style={ profile_image_style }>
-          { online_indicator }
+      <div style={S('inline')}>
+        <div className="img-circle" style={profile_image_style}>
+          { show_online_indicator && online_indicator }
           { initials }
         </div>
       </div>
@@ -64,5 +71,6 @@ ProfileImage.propTypes = {
   top: React.PropTypes.number,
   font: React.PropTypes.number,
   user: React.PropTypes.object,
+  show_online_indicator: React.PropTypes.bool,
   data: React.PropTypes.object.isRequired
 }

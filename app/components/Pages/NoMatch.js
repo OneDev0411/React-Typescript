@@ -12,13 +12,13 @@ export default class NoMatch extends Component {
     return (
       <div>
         <div id="main-content" className="container text-center">
-          <h1 className="tk-calluna-sans" style={ headingStyle }>404 Error</h1>
+          <h1 className="tk-calluna-sans" style={headingStyle}>404 Error</h1>
           You look lost.  Need some help?
-          <br/>
-          <br/>
-          <img src="/images/goats/tongue.gif"/>
-          <br/>
-          <br/>
+          <br />
+          <br />
+          <img src="/static/images/goats/tongue.gif" />
+          <br />
+          <br />
           <Link to="/">Take me home</Link>
         </div>
       </div>

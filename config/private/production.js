@@ -1,10 +1,16 @@
 // config/private/production.js
+
 export default {
   app_url: process.env.APP_URL,
+  api_host_local: process.env.API_HOST_LOCAL,
+  app_name: process.env.APP_NAME,
   api: {
     url: process.env.RECHAT_API_URL,
     client_id: process.env.RECHAT_CLIENT_ID,
     client_secret: process.env.RECHAT_CLIENT_SECRET
+  },
+  forms: {
+    url: process.env.RECHAT_FORMS_URL
   },
   redis: {
     url: process.env.REDIS_URL

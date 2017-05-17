@@ -5,44 +5,18 @@ import ProfileImage from '../../Partials/ProfileImage'
 import helpers from '../../../../../utils/helpers'
 import _ from 'lodash'
 export default class RoomsList extends Component {
-  handleClick(i) {
+  handleClick(id) {
     const data = this.props.data
-    let rooms = data.rooms
-    // Sort by updates
-    if (rooms) {
-      rooms = _.sortBy(rooms, room => {
-        if (!room.latest_message && room.messages)
-          room.latest_message = room.messages[0]
-        if (room.latest_message)
-          return -room.latest_message.updated_at
-      })
-    }
-    const filtered_rooms = data.filtered_rooms
-    let room = rooms[i]
-    if (filtered_rooms)
-      room = filtered_rooms[i]
-    this.props.setCurrentRoom(room)
-  }
-  roomHasNotifications(room_id) {
-    let result = false
-    const data = this.props.data
-    if (!data.notifications)
-      return false
-    const summaries = data.notifications.summary.room_notification_summaries
-    if (!summaries)
-      return false
-    summaries.forEach(summary => {
-      if (summary.room_id === room_id)
-        result = true
-    })
-    return result
+    const rooms = data.rooms
+    const current_room = _.find(rooms, { id })
+    this.props.setCurrentRoom(current_room)
   }
   render() {
     const data = this.props.data
     let rooms = data.rooms
     // Sort by updates
     if (rooms) {
-      rooms = _.sortBy(rooms, room => {
+      rooms = _.sortBy(rooms, (room) => {
         if (!room.latest_message && room.messages)
           room.latest_message = room.messages[0]
         if (room.latest_message)
@@ -51,118 +25,126 @@ export default class RoomsList extends Component {
     }
     const current_room = data.current_room
     if (rooms && !rooms.length)
-      return <div style={ S('ml-20 mt-20') }>No rooms yet.</div>
+      return <div />
 
     const loading_style = {
-      ...S('absolute w-100p h-100p bg-url(/images/loading-states/rooms.svg)'),
+      ...S('absolute w-100p h-100p bg-url(/static/images/loading-states/rooms.svg)'),
       backgroundRepeat: 'repeat-y'
     }
-    let rooms_list = <div style={ loading_style } />
+    let rooms_list = <div style={loading_style} />
     if (data.is_filtering)
       rooms = data.filtered_rooms
     if (rooms) {
-      rooms_list = rooms.map((room, i) => {
+      rooms_list = rooms.map((room) => {
+        // Room title
+        let room_title = room.proposed_title
+        let title_area
         // Profile image
-        let author
         let profile_image_div
-        let list_style = S('pointer pt-10 pb-10 pl-10 pr-17 relative border-bottom-1-solid-e7e4e3')
-        if (current_room && current_room.id === room.id)
-          list_style = { ...list_style, ...S('bg-f5fafe') }
+        let list_style = S('pointer pt-15 pb-10 pl-10 pr-17 relative h-70 color-8696a4')
+        const not_current_user_users = room.users.filter((room_user) => {
+          if (room_user.id !== data.user.id)
+            return true
+        })
+        let is_current_room = false
+        if (current_room && current_room.id === room.id) {
+          is_current_room = true
+          list_style = { ...list_style, ...S('bg-465a71') }
+        }
         if (!room.latest_message) {
+          list_style = { ...list_style, ...S('h-60') }
           const time_updated = helpers.friendlyDate(room.updated_at)
+          let room_owner = room.owner
+          // One to one
+          if (!room_owner)
+            room_owner = not_current_user_users[0]
+          if (room.title) {
+            title_area = (
+              <div style={S('mt-10 color-ccc')}>{ room.title }</div>
+            )
+          }
           return (
-            <li className="room-list__item" style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, i) }>
-              <div className="text-right" style={ S('color-ccc w-50p absolute r-5 font-13') } >
-                { time_updated.month } { time_updated.date }, { time_updated.time_friendly }
+            <li className="room-list__item" style={list_style} key={room.id} onClick={this.handleClick.bind(this, room.id)}>
+              <div style={S('relative')}>
+                <ProfileImage data={data} user={room_owner} />
+                <div className="pull-left" style={S('ml-50 w-90p')}>
+                  <div className="room-list__item__title pull-left" style={S('w-60p')}>
+                    { room_title }
+                  </div>
+                </div>
+                <div className="text-right" style={S('color-ccc w-50p absolute r-10n font-13')} >
+                  { time_updated.month } { time_updated.date }, { time_updated.time_friendly }
+                </div>
+                { title_area }
+                <div className="clearfix" />
               </div>
-              <div style={ S('relative') }>
-                New Room
-              </div>
+              <div className="clearfix" />
             </li>
           )
         }
-        if (room.latest_message.author) {
-          author = room.latest_message.author
+        if (room.users.length === 1) {
           profile_image_div = (
-            <ProfileImage data={ data } user={ author }/>
+            <ProfileImage data={data} user={data.user} />
           )
         }
-        if (!room.latest_message.author) {
+        if (room.users.length === 2) {
+          const other_users = room.users.filter(user => user.id !== data.user.id)
           profile_image_div = (
-            <div style={ S('absolute w-35') }>
-              <img className="center-block" src="/images/dashboard/rebot@2x.png" style={ S('w-30') } />
+            <ProfileImage data={data} user={other_users[0]} />
+          )
+        }
+        if (room.users.length > 2) {
+          profile_image_div = (
+            <div style={S('absolute w-35 br-100 bg-2196f3 color-fff w-40 h-40 pt-11 text-center op-.7')}>
+              { room.users.length - 1 }
             </div>
           )
         }
-        // List users
-        const users = room.users
-        const first_names = _.pluck(users, 'first_name')
-        let first_name_list = ''
-        first_names.forEach((first_name, _i) => {
-          first_name_list += first_name
-          if (_i < first_names.length - 1) first_name_list += ', '
-        })
         // Time posted
         const latest_created = room.latest_message.created_at.toString().split('.')
-        const time_created = helpers.friendlyDate(latest_created[0])
-        let author_name
-        if (room.latest_message.author)
-          author_name = `${room.latest_message.author.first_name} ${room.latest_message.author.last_name}: `
-        let comment
-        if (room.latest_message.comment) {
-          comment = (
-            <div className="room-list__item__message" style={ S('w-90p color-808080') }>{ author_name }{ room.latest_message.comment.substring(0, 50) }{ room.latest_message.comment.length > 50 ? '...' : '' }</div>
-          )
-        }
-
-        if (room.latest_message.image_url) {
-          comment = (
-            <div style={ S('color-808080') }>{ author_name }Uploaded a file</div>
-          )
-        }
-
         // Notifications
         let notification
-        if (data.notifications) {
-          const hasNotification = this.roomHasNotifications(room.id)
-          if (hasNotification) {
-            notification = (
-              <div style={ S('absolute r-15 w-0 h-0') }>
-                <i className="fa fa-circle" style={ S('font-8 color-3388FF z-10') }></i>
-              </div>
-            )
-          }
+        if (room.new_notifications) {
+          notification = (
+            <div style={S('absolute t-17n r-15 w-0 h-0')}>
+              <i className="fa fa-circle" style={S('font-8 color-3388FF z-10')} />
+            </div>
+          )
+        }
+        // Personal room
+        if (room.users.length === 1)
+          room_title = 'You'
+        if (room.title) {
+          title_area = (
+            <div style={S('color-8696a4')}>{ room.title }</div>
+          )
         }
         return (
-          <li className="room-list__item" style={ list_style } key={ room.id } onClick={ this.handleClick.bind(this, i) }>
-            <div style={ S('relative') }>
+          <li className="room-list__item" style={list_style} key={room.id} onClick={this.handleClick.bind(this, room.id)}>
+            <div style={S('relative')}>
               { profile_image_div }
-              <div className="pull-left" style={ S('ml-50 w-90p') }>
-                <div className="room-list__item__title pull-left" style={ S('w-60p') }>
-                  <b>{ room.title }</b>
+              <div className="pull-left" style={S('ml-50 w-90p')}>
+                <div className="room-list__item__names" style={S(`color-${is_current_room ? 'fafafa' : '8696a4'} relative w-70p${(!title_area ? ' t-10' : '')}`)}>
+                  { room_title }
                 </div>
-                <div className="text-right" style={ S('color-ccc w-50p absolute r-10n font-13') } >
-                  { time_created.month } { time_created.date }, { time_created.time_friendly }
+                <div className="text-right" style={S(`color-${is_current_room ? 'fafafa' : '8696a4'} w-50p absolute r-10n t-10 font-13`)} >
+                  { helpers.getTimeAgo(latest_created[0]) }
                   &nbsp;
                   { notification }
                 </div>
-                <div className="clearfix"></div>
-                <div className="room-list__item__names" style={ S('color-aaaaaa w-74p relative t-3n') }>
-                  { first_name_list }
-                </div>
-                { comment }
+                { title_area }
               </div>
-              <div className="clearfix"></div>
+              <div className="clearfix" />
             </div>
           </li>
         )
       })
     }
     const rooms_scroll_area = {
-      ...S('mt-5'),
       overflowY: 'scroll',
       overflowX: 'hidden',
-      height: window.innerHeight - 70
+      height: window.innerHeight - 60,
+      backgroundColor: '#303e4d'
     }
     let list_style = S('pl-0')
     if (data.is_mobile) {
@@ -173,8 +155,8 @@ export default class RoomsList extends Component {
     }
     return (
       <div>
-        <div className="touch-scroll" style={ rooms_scroll_area }>
-          <ul style={ list_style }>{ rooms_list }</ul>
+        <div className="touch-scroll" style={rooms_scroll_area}>
+          <ul style={list_style}>{ rooms_list }</ul>
         </div>
       </div>
     )

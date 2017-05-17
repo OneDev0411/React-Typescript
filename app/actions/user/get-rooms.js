@@ -16,9 +16,11 @@ export default (user, room_id) => {
     // Success
     if (response.status === 'success') {
       let rooms = response.data
-      // sort my latest message
       if (rooms.length) {
-        rooms = _.sortBy(rooms, room => {
+        // remove personal room
+        rooms = rooms.filter(room => room.room_type !== 'Personal')
+        // sort by latest message
+        rooms = _.sortBy(rooms, (room) => {
           if (room.latest_message)
             return -room.latest_message.created_at
         })
@@ -26,13 +28,15 @@ export default (user, room_id) => {
         if (room_id)
           current_room = _.find(rooms, { id: room_id })
         AppStore.data.rooms = rooms
-        AppStore.data.current_room = current_room
+        // Don't show default room if creating new message view
+        if (!AppStore.data.show_new_message_viewer)
+          AppStore.data.current_room = current_room
         // If going to show alert
         const alert = helpers.getParameterByName('alert')
         if (alert) {
-          AppStore.data.show_alert_viewer = true
+          AppStore.data.show_alert_modal = true
           ListingDispatcher.dispatch({
-            action: 'get-alert',
+            action: 'get-alert-room',
             user,
             room_id: current_room.id,
             alert_id: alert
@@ -42,12 +46,16 @@ export default (user, room_id) => {
         getAllMessages(user, rooms)
       } else {
         // Delete last room
+        AppStore.data.rooms_loaded = true
         delete AppStore.data.rooms
         delete AppStore.data.current_room
-        delete AppStore.data.messages
       }
+      if (!rooms.length)
+        AppStore.data.show_create_chat_viewer = true
     }
     delete AppStore.data.loading
     AppStore.emitChange()
   })
 }
+
+// spirony+101@gmail.com

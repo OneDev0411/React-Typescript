@@ -2,6 +2,7 @@
 import Room from '../../models/Room'
 import AppStore from '../../stores/AppStore'
 import async from 'async'
+import setRoomsIndexedDB from '../indexeddb/set-rooms'
 export default (user, rooms) => {
   if (!rooms) return
   const new_rooms = []
@@ -9,7 +10,7 @@ export default (user, rooms) => {
     const params = {
       access_token: user.access_token,
       room_id: room.id,
-      limit: 20,
+      limit: 40,
       max_value: null
     }
     Room.getMessages(params, (err, response) => {
@@ -21,15 +22,22 @@ export default (user, rooms) => {
         new_rooms.push(room)
         // Set messages on current room
         const current_room = AppStore.data.current_room
+        if (!current_room)
+          return callback()
         if (current_room.id === room.id) {
           delete AppStore.data.messages_loading
-          AppStore.data.current_room.message_count = 20
+          AppStore.data.current_room.message_count = 40
           AppStore.data.scroll_bottom = true
-          AppStore.data.messages = messages
+          AppStore.data.current_room.messages = messages
           AppStore.emitChange()
         }
       }
       callback()
     })
+  }, () => {
+    // console.log('done')
+    AppStore.data.rooms_loaded = true
+    AppStore.emitChange()
+    setRoomsIndexedDB(user.id, rooms)
   })
 }

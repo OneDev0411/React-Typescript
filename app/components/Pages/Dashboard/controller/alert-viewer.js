@@ -1,38 +1,22 @@
 // controller/alert-viewer.js
-import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
+import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 const controller = {
-  showAlertViewer(alert_id) {
-    delete AppStore.data.error
-    AppStore.emitChange()
+  handleMoreResultsClick() {
     const data = AppStore.data
-    const current_room = data.current_room
     const user = data.user
-    AppStore.data.show_alert_viewer = true
-    const history = require('../../../../utils/history')
-    history.replaceState(null, '/dashboard/recents/' + current_room.id + '?alert=' + alert_id)
+    const current_alert = data.current_alert
+    const feed = current_alert.feed
+    if (!feed || feed.length === 0)
+      return
+    AppStore.data.current_alert.loading_more_feed_results = true
+    AppStore.emitChange()
     ListingDispatcher.dispatch({
-      action: 'get-alert',
+      action: 'get-paged-recs',
       user,
-      room_id: current_room.id,
-      alert_id
+      alert: current_alert,
+      timestamp: feed[feed.length - 1].created_at
     })
-  },
-  hideAlertViewer() {
-    delete AppStore.data.show_alert_viewer
-    delete AppStore.data.alert_viewer
-    delete AppStore.data.listing_alerts
-    const data = AppStore.data
-    const current_room = data.current_room
-    const history = require('../../../../utils/history')
-    history.replaceState(null, '/dashboard/recents/' + current_room.id)
-    AppStore.emitChange()
-  },
-  setAlertGalleryActiveIndex(active_index) {
-    if (!AppStore.data.alert_viewer)
-      AppStore.data.alert_viewer = {}
-    AppStore.data.alert_viewer.active_index = active_index
-    AppStore.emitChange()
   }
 }
 export default controller

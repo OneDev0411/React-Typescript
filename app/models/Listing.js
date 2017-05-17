@@ -9,9 +9,9 @@ export default {
   get: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/listings/' + params.id + '?access_token=' + params.access_token
+    const endpoint = `${api_host}/api/listings/${params.id}?access_token=${params.access_token}`
     fetch(endpoint)
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -21,16 +21,14 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   search: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/listings/search?q=' + params.q + '&access_token=' + params.access_token
+    const endpoint = `${api_host}/api/listings/search?q=${params.q}&access_token=${params.access_token}`
     fetch(endpoint)
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -40,16 +38,14 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   getSimilars: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/listings/similars?mls_number=' + params.mls_number + '&access_token=' + params.access_token
+    const endpoint = `${api_host}/api/listings/similars?mls_number=${params.mls_number}&access_token=${params.access_token}`
     fetch(endpoint)
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -59,18 +55,19 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   getValerts: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/listings/valerts'
+    const endpoint = `${api_host}/api/listings/valerts?access_token=${params.access_token}`
     const request_object = {
-      options: params.options,
-      access_token: params.access_token
+      options: params.options
     }
+    if (params.office)
+      request_object.office = params.office
+    if (params.offset)
+      request_object.offset = params.offset
     fetch(endpoint, {
       method: 'post',
       headers: {
@@ -78,7 +75,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -88,8 +85,6 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   }
 }

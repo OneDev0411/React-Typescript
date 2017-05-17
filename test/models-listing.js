@@ -7,7 +7,6 @@ import config from '../config/private'
 // Get access token
 let access_token
 let room_id
-let contact_id
 let test = config.test
 const test_options = {
   "maximum_price": 9.223372036854776e+18,
@@ -20,7 +19,7 @@ const test_options = {
     "latitude": 32.7766642
   },
   "horizontal_distance": 2830,
-  "property_type": "Residential",
+  "property_type": ["Residential"],
   "vertical_distance": 2830,
   "minimum_square_meters": 0,
   "listing_statuses": ["Active", "Active Contingent", "Active Kick Out", "Active Option Contract"],
@@ -52,8 +51,8 @@ const test_options = {
 
 /* Listing
 ==================== */
-describe('Testing Listing model', () => { 
-  
+describe('Testing Listing model', () => {
+
   // Signin
   it('User.signin should return access token from UN:' + test.user.email + ' PW:' + test.user.password, function(done) {
     const params = {

@@ -10,12 +10,15 @@ export default {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
 
-    const create_room_url = api_host + '/api/create-room'
+    const create_room_url = `${api_host}/api/create-room?access_token=${params.access_token}`
 
     const request_object = {
       title: params.title,
       owner: params.owner,
-      access_token: params.access_token
+      users: params.users,
+      emails: params.emails,
+      phone_numbers: params.phone_numbers,
+      brand: params.brand
     }
     fetch(create_room_url, {
       method: 'post',
@@ -24,7 +27,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -34,14 +37,38 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
+    .then(response => callback(false, response))
+  },
+  createAlert: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const endpoint = `${api_host}/api/rooms/create-alert?access_token=${params.access_token}`
+    const request_object = {
+      alert: params.alert,
+      room_id: params.room_id,
+      message: params.message
+    }
+    fetch(endpoint, {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(request_object)
     })
+    .then((response) => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          response
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then(response => callback(false, response))
   },
   delete: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host)
-      api_host = config.app.url
+    const api_host = params.api_host || config.app.url
     const url = `${api_host}/api/delete-room/?id=${params.id}&access_token=${params.access_token}`
     fetch(url, {
       method: 'get',
@@ -49,7 +76,7 @@ export default {
         'Content-type': 'application/json'
       }
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -59,9 +86,7 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   getMessages: (params, callback) => {
     let api_host = params.api_host
@@ -73,7 +98,7 @@ export default {
       `&max_value=${params.max_value}`
 
     fetch(get_messages_url)
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -83,11 +108,8 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
-
   getPrevious: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
@@ -98,7 +120,7 @@ export default {
       `&max_value=${params.max_value}`
 
     fetch(get_messages_url)
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -108,20 +130,18 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   addUser: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
 
-    const add_user_to_room_url = api_host + '/api/add-user-to-room'
+    const add_user_to_room_url = `${api_host}/api/add-user-to-room?access_token=${params.access_token}`
 
     const request_object = {
       room_id: params.room_id,
       user: params.user,
-      access_token: params.access_token
+      brand: params.brand
     }
 
     fetch(add_user_to_room_url, {
@@ -131,7 +151,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -141,17 +161,20 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
-  inviteContacts: (params, callback) => {
+  addUsers: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/invite-contacts'
+
+    const endpoint = `${api_host}/api/rooms/add-users?access_token=${params.access_token}`
+
     const request_object = {
-      invitations: params.invitations,
-      access_token: params.access_token
+      room_id: params.room_id,
+      users: params.users,
+      emails: params.emails,
+      phone_numbers: params.phone_numbers,
+      brand: params.brand
     }
     fetch(endpoint, {
       method: 'post',
@@ -160,7 +183,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -170,17 +193,37 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
+    .then(response => callback(false, response))
+  },
+  removeUser: (params, callback) => {
+    const api_host = params.api_host || config.app.url
+    const url = `${api_host}/api/remove-user-from-room?user=${params.user}&room_id=${params.room}&access_token=${params.access_token}`
+
+    fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-type': 'application/json'
+      }
     })
+    .then((response) => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          response
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then(response => callback(false, response))
   },
   uploadFiles: (params, callback) => {
     const api_url = config.api_url
-    const endpoint = api_url + '/attachments'
+    const endpoint = `${api_url}/attachments`
     const request = superagent.post(endpoint)
     const files = params.files
-    request.set('authorization', 'Bearer ' + params.access_token)
-    files.forEach(file => {
+    request.set('authorization', `Bearer ${params.access_token}`)
+    files.forEach((file) => {
       const info = {
         name: file.name,
         original_name: file.name,
@@ -196,11 +239,10 @@ export default {
     if (!api_host) api_host = config.app.url
     const id = params.id
     const notification = params.notification
-    const endpoint = api_host + '/api/notifications'
+    const endpoint = `${api_host}/api/notifications?access_token=${params.access_token}`
     const request_object = {
       id,
-      notification,
-      access_token: params.access_token
+      notification
     }
     fetch(endpoint, {
       method: 'post',
@@ -209,7 +251,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -219,18 +261,15 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   acknowledgeNotifications: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
     const room = params.room
-    const endpoint = api_host + '/api/acknowledge-room-notifications'
+    const endpoint = `${api_host}/api/acknowledge-room-notifications?access_token=${params.access_token}`
     const request_object = {
-      room,
-      access_token: params.access_token
+      room
     }
     fetch(endpoint, {
       method: 'post',
@@ -239,7 +278,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -249,25 +288,16 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
-    })
+    .then(response => callback(false, response))
   },
   createRec: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url
-    const endpoint = api_host + '/api/create-rec'
-    const rooms = params.rooms
-    const users = params.users
-    const emails = params.emails
-    const phone_numbers = params.phone_numbers
+    const endpoint = `${api_host}/api/create-rec?access_token=${params.access_token}`
+    const room = params.room
     const mls_number = params.mls_number
     const request_object = {
-      access_token: params.access_token,
-      rooms,
-      users,
-      emails,
-      phone_numbers,
+      room,
       mls_number,
       notification: params.notification,
       message: params.message
@@ -279,7 +309,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then(response => {
+    .then((response) => {
       if (response.status >= 400) {
         const error = {
           status: 'error',
@@ -289,8 +319,55 @@ export default {
       }
       return response.json()
     })
-    .then(response => {
-      return callback(false, response)
+    .then(response => callback(false, response))
+  },
+  getActives: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const room_id = params.room_id
+    const endpoint = `${api_host}/api/get-actives?room_id=${room_id}&access_token=${params.access_token}`
+    fetch(endpoint)
+    .then((response) => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          response
+        }
+        return callback(error, false)
+      }
+      return response.json()
     })
+    .then(response => callback(false, response))
+  },
+  editFavorite: (params, callback) => {
+    let api_host = params.api_host
+    if (!api_host) api_host = config.app.url
+    const room_id = params.room_id
+    const rec_id = params.rec_id
+    const favorite = params.favorite
+    const endpoint = `${api_host}/api/edit-favorite?access_token=${params.access_token}`
+    const request_object = {
+      room_id,
+      rec_id,
+      favorite
+    }
+    fetch(endpoint, {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(request_object)
+    })
+    .then((response) => {
+      if (response.status >= 400) {
+        const error = {
+          status: 'error',
+          response
+        }
+        return callback(error, false)
+      }
+      return response.json()
+    })
+    .then(response => callback(false, response))
   }
 }

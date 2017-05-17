@@ -1,7 +1,8 @@
 // Sidebar.js
 import React, { Component } from 'react'
+import { browserHistory } from 'react-router'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Nav, NavItem, NavDropdown, Modal, Col, Input, Button, Alert, DropdownButton, MenuItem } from 'react-bootstrap'
+import { Nav, NavItem, NavDropdown, Modal, Col, FormControl, Button, Alert, DropdownButton, MenuItem } from 'react-bootstrap'
 import S from 'shorti'
 import _ from 'lodash'
 import Dropzone from 'react-dropzone'
@@ -43,14 +44,14 @@ export default class SideBar extends Component {
     AppStore.emitChange()
     const data = this.props.data
     const user = data.user
-    const first_name = this.refs.first_name.refs.input.value.trim()
-    const last_name = this.refs.last_name.refs.input.value.trim()
-    const email = this.refs.email.refs.input.value.trim()
-    const phone_number_input = this.refs.phone_number.refs.input.value.replace(/\D/g, '').trim()
+    const first_name = this.first_nameInput.value.trim()
+    const last_name = this.last_nameInput.value.trim()
+    const email = this.emailInput.value.trim()
+    const phone_number_input = this.phone_numberInput.value.replace(/\D/g, '').trim()
     let country_code = 1
     if (data.phone_country)
       country_code = data.phone_country.dialCode
-    const phone_number = '+' + country_code + phone_number_input
+    const phone_number = `+${country_code}${phone_number_input}`
     if (phone_number_input && !phoneUtil.isPossibleNumberString(phone_number)) {
       AppStore.data.error = {
         message: 'You must use a valid phone number'
@@ -77,9 +78,9 @@ export default class SideBar extends Component {
   changePassword() {
     const data = this.props.data
     const user = data.user
-    const old_password = this.refs.old_password.refs.input.value.trim()
-    const new_password = this.refs.new_password.refs.input.value.trim()
-    const new_password_confirm = this.refs.new_password_confirm.refs.input.value.trim()
+    const old_password = this.old_passwordInput.value.trim()
+    const new_password = this.new_passwordInput.value.trim()
+    const new_password_confirm = this.new_password_confirmInput.value.trim()
     AppStore.data.saving_account_settings = true
     delete AppStore.data.error
     delete AppStore.data.password_changed
@@ -87,7 +88,7 @@ export default class SideBar extends Component {
     // Check for values
     if (!old_password) {
       AppStore.data.error = {
-        message: `You must add a password`
+        message: 'You must add a password'
       }
       delete AppStore.data.saving_account_settings
       AppStore.emitChange()
@@ -95,7 +96,7 @@ export default class SideBar extends Component {
     }
     if (!new_password) {
       AppStore.data.error = {
-        message: `You must add a new password`
+        message: 'You must add a new password'
       }
       delete AppStore.data.saving_account_settings
       AppStore.emitChange()
@@ -104,7 +105,7 @@ export default class SideBar extends Component {
     // Check values match
     if (new_password !== new_password_confirm) {
       AppStore.data.error = {
-        message: `Your passwords don't match`
+        message: 'Your passwords don\'t match'
       }
       delete AppStore.data.saving_account_settings
       AppStore.emitChange()
@@ -127,12 +128,12 @@ export default class SideBar extends Component {
     AppStore.emitChange()
   }
 
-  notificationIcon(name) {
+  notificationIcon() {
     const data = this.props.data
     let icon
-    if (data.notifications && data.notifications.summary[name] > 0) {
+    if (data.new_notifications_count && data.new_notifications_count > 0) {
       icon = (
-        <i className="fa fa-circle" style={ S('pl-10 font-8 color-3388FF absolute') }></i>
+        <i className="fa fa-circle" style={S('pl-10 font-8 color-3388FF absolute')} />
       )
     }
     return icon
@@ -187,13 +188,14 @@ export default class SideBar extends Component {
     const data = this.props.data
     const current_room = data.current_room
     delete AppStore.data.current_room_mobile
+    delete AppStore.data.show_new_message_viewer
     AppStore.emitChange()
     if (data.current_listing)
       this.hideListingViewer()
     if (current_room)
-      history.pushState(null, null, '/dashboard/recents/' + current_room.id)
+      browserHistory.push(`/dashboard/recents/${current_room.id}`)
     else
-      history.pushState(null, null, '/dashboard/recents/')
+      browserHistory.push('/dashboard/recents/')
   }
   render() {
     // Data
@@ -209,12 +211,6 @@ export default class SideBar extends Component {
     if (path.indexOf('/dashboard/contacts') !== -1)
       active.contacts = 'active'
 
-    if (path === '/dashboard/tasks')
-      active.tasks = 'active'
-
-    if (path.indexOf('/dashboard/transactions') !== -1)
-      active.transactions = 'active'
-
     if (path.indexOf('/dashboard/mls/listings/recommend') !== -1)
       active.recommend = 'active'
 
@@ -227,16 +223,16 @@ export default class SideBar extends Component {
     let agents
     if (data.user.user_type === 'Brokerage') {
       recommend = (
-        <LinkContainer className={ active.recommend } to="/dashboard/mls/listing/recommend">
-          <NavItem style={ S('w-85p') }>
-            <i className="fa fa-tasks"> </i>
+        <LinkContainer className={active.recommend} to="/dashboard/mls/listing/recommend">
+          <NavItem style={S('w-85p')}>
+            <i className="fa fa-tasks" />
           </NavItem>
         </LinkContainer>
       )
       agents = (
-        <LinkContainer className={ active.agents } to="/dashboard/mls/agents">
-          <NavItem style={ S('w-85p') }>
-            <i className="fa fa-group"> </i>
+        <LinkContainer className={active.agents} to="/dashboard/mls/agents">
+          <NavItem style={S('w-85p')}>
+            <i className="fa fa-group" />
           </NavItem>
         </LinkContainer>
       )
@@ -248,44 +244,44 @@ export default class SideBar extends Component {
     if (data.show_pic_overlay)
       overlay_class = ''
     let profile_image_area = (
-      <Dropzone onMouseLeave={ this.hidePicOverlay.bind(this) } onMouseEnter={ this.showPicOverlay.bind(this) } multiple={ false } onDrop={ this.uploadProfilePic.bind(this) } type="button" style={ dropzone_style }>
-        <div className={ overlay_class } style={ S('pointer') }>
-          <div style={ { ...S('absolute z-101 color-fff text-center t-20 w-80') } }>
+      <Dropzone onMouseLeave={this.hidePicOverlay.bind(this)} onMouseEnter={this.showPicOverlay.bind(this)} multiple={false} onDrop={this.uploadProfilePic.bind(this)} type="button" style={dropzone_style}>
+        <div className={overlay_class} style={S('pointer')}>
+          <div style={{ ...S('absolute z-101 color-fff text-center t-20 w-80') }}>
             Edit<br />picture
           </div>
-          <div style={ { ...S('bg-100 br-100 absolute w-80 h-80 z-100 color-fff'), opacity: '.3' } }></div>
+          <div style={{ ...S('bg-100 br-100 absolute w-80 h-80 z-100 color-fff'), opacity: '.3' }} />
         </div>
         <ProfileImage
-          size={ 80 }
-          data={ data }
-          user={ user }
-          font={ 40 }
-          top={ 15 }
+          size={80}
+          data={data}
+          user={user}
+          font={40}
+          top={15}
         />
       </Dropzone>
     )
     if (data.uploading_profile_pic) {
       profile_image_area = (
-        <div style={ S('absolute t-60n l-42') }>
+        <div style={S('absolute t-60n l-42')}>
           <Loading />
         </div>
       )
     }
     let change_password_area = (
-      <a style={ S('mt-7') } className="pull-left" href="#" onClick={ this.showChangePassword.bind(this) }>Change password</a>
+      <a style={S('mt-7')} className="pull-left" href="#" onClick={this.showChangePassword.bind(this)}>Change password</a>
     )
     const phone_number_parsed = helpers.parsePhoneNumber(user.phone_number)
     const current_country_code = phone_number_parsed.country_code
-    let phone_country = '+' + current_country_code
+    let phone_country = `+${current_country_code}`
     if (data.phone_country)
       phone_country = `+${data.phone_country.dialCode}`
     const country_codes = (
-      <DropdownButton title={ phone_country } id="input-dropdown-country-codes" style={ S('pb-9') }>
-        <MenuItem key={ 1 } onClick={ this.handleCountryCodeSelect.bind(this, _.find(all_countries, { iso2: 'us' })) }>United States +1</MenuItem>
+      <DropdownButton title={phone_country} id="input-dropdown-country-codes" style={S('pb-9')}>
+        <MenuItem key={1} onClick={this.handleCountryCodeSelect.bind(this, _.find(all_countries, { iso2: 'us' }))}>United States +1</MenuItem>
         {
           all_countries.map((country, i) => {
             if (country.dialCode !== 1)
-              return <MenuItem onClick={ this.handleCountryCodeSelect.bind(this, country) } key={ country.iso2 + country.dialCode + i }>{ country.name } +{ country.dialCode }</MenuItem>
+              return <MenuItem onClick={this.handleCountryCodeSelect.bind(this, country)} key={country.iso2 + country.dialCode + i}>{ country.name } +{ country.dialCode }</MenuItem>
           })
         }
       </DropdownButton>
@@ -299,18 +295,18 @@ export default class SideBar extends Component {
       )
     }
     let form_fields = (
-      <Col xs={ 9 }>
+      <Col xs={9}>
         <div>
           <label>First name</label>
-          <Input ref="first_name" type="text" defaultValue={ user.first_name }/>
+          <FormControl inputRef={ref => this.first_nameInput = ref} type="text" defaultValue={user.first_name} />
         </div>
         <div>
           <label>Last name</label>
-          <Input ref="last_name" type="text" defaultValue={ user.last_name }/>
+          <FormControl inputRef={ref => this.last_nameInput = ref} type="text" defaultValue={user.last_name} />
         </div>
         <div>
           <label>Email</label>
-          <Input ref="email" type="text" defaultValue={ user.email }/>
+          <FormControl inputRef={ref => this.emailInput = ref} type="text" defaultValue={user.email} />
         </div>
         <div>
           <label>Phone number</label>
@@ -318,11 +314,11 @@ export default class SideBar extends Component {
             <div className="input-group-btn input-dropdown--country-codes">
               { country_codes }
             </div>
-            <MaskedInput className="form-control" ref="phone_number" type="text" defaultValue={ user.phone_number ? phone_number_parsed.phone_number : '' } mask="(999)-999-9999" maskChar="_"/>
+            <MaskedInput className="form-control" ref={ref => this.phone_numberInput = ref} type="text" defaultValue={user.phone_number ? phone_number_parsed.phone_number : ''} mask="(999)-999-9999" maskChar="_" />
           </div>
         </div>
-        <div className="clearfix"></div>
-        <Col style={ S('pr-0') } xs={ 12 }>{ message }</Col>
+        <div className="clearfix" />
+        <Col style={S('pr-0')} xs={12}>{ message }</Col>
       </Col>
     )
     if (data.password_changed) {
@@ -334,24 +330,24 @@ export default class SideBar extends Component {
     }
     if (data.show_change_password) {
       form_fields = (
-        <Col xs={ 9 } style={ S('p-0') }>
-          <Col xs={ 12 } style={ S('pr-0') }>
+        <Col xs={9} style={S('p-0')}>
+          <Col xs={12} style={S('pr-0')}>
             <label>Current password</label>
-            <Input key={'password'} ref="old_password" type="password" defaultValue=""/>
+            <FormControl key={'password'} inputRef={ref => this.old_passwordInput = ref} type="password" defaultValue="" />
           </Col>
-          <Col xs={ 12 } style={ S('pr-0') }>
+          <Col xs={12} style={S('pr-0')}>
             <label>New password</label>
-            <Input key={'new_password'} ref="new_password" type="password" defaultValue=""/>
+            <FormControl key={'new_password'} inputRef={ref => this.new_passwordInput = ref} type="password" defaultValue="" />
           </Col>
-          <Col xs={ 12 } style={ S('pr-0') }>
+          <Col xs={12} style={S('pr-0')}>
             <label>Confirm new password</label>
-            <Input key={'new_password_confirm'} ref="new_password_confirm" type="password" defaultValue=""/>
+            <FormControl key={'new_password_confirm'} inputRef={ref => this.new_password_confirmInput = ref} type="password" defaultValue="" />
             { message }
           </Col>
         </Col>
       )
       change_password_area = (
-        <a style={ S('mt-7') } className="pull-left" href="#" onClick={ this.hideChangePassword.bind(this) }>Cancel change password</a>
+        <a style={S('mt-7')} className="pull-left" href="#" onClick={this.hideChangePassword.bind(this)}>Cancel change password</a>
       )
     }
     const title_area = (
@@ -359,89 +355,59 @@ export default class SideBar extends Component {
     )
     const mobile_nav_style = S('b-0 h-60 pt-10 w-100p fixed z-100 bg-263445')
     return (
-      <aside className="mobile-nav" style={ mobile_nav_style }>
+      <aside className="mobile-nav" style={mobile_nav_style}>
         { /* cache images */ }
-        <div style={ S('w-0 h-0 absolute l-1000n t-1000n') }>
-          <img src="/images/dashboard/sidenav/chat-active.svg"/>
-          <img src="/images/dashboard/sidenav/map-active.svg"/>
-          <img src="/images/dashboard/sidenav/people-active.svg"/>
-          <img src="/images/dashboard/sidenav/task-active.svg"/>
-          <img src="/images/dashboard/sidenav/transactions-active.svg"/>
+        <div style={S('w-0 h-0 absolute l-1000n t-1000n')}>
+          <img src="/static/images/dashboard/sidenav/chat-active.svg" />
+          <img src="/static/images/dashboard/sidenav/map-active.svg" />
+          <img src="/static/images/dashboard/sidenav/people-active.svg" />
+          <img src="/static/images/dashboard/sidenav/task-active.svg" />
         </div>
         <Nav bsStyle="tabs" justified>
-          <LinkContainer className={ 'main-nav ' + active.recents } to="/dashboard/recents">
-            <NavItem style={ S('w-60 pull-left') } onClick={ this.handleChatNavClick.bind(this) }>
-              <img src={ active.recents ? '/images/dashboard/sidenav/chat-active.svg' : '/images/dashboard/sidenav/chat.svg' } style={ S('w-19 h-19') }/>
+          <LinkContainer className={`main-nav ${active.recents}`} to="/dashboard/recents">
+            <NavItem style={S('w-60 pull-left')} onClick={this.handleChatNavClick.bind(this)}>
+              <img src={active.recents ? '/static/images/dashboard/sidenav/chat-active.svg' : '/static/images/dashboard/sidenav/chat.svg'} style={S('w-19 h-19')} />
               {this.notificationIcon('room_notification_count')}
             </NavItem>
           </LinkContainer>
-          <LinkContainer className={ 'main-nav ' + active.mls } to="/dashboard/mls">
-            <NavItem style={ S('w-60 pull-left') }>
-              <img src={ active.mls ? '/images/dashboard/sidenav/map-active.svg' : '/images/dashboard/sidenav/map.svg' } style={ S('w-19 h-19') }/>
+          <LinkContainer className={`main-nav ${active.mls}`} to="/dashboard/mls">
+            <NavItem style={S('w-60 pull-left')}>
+              <img src={active.mls ? '/static/images/dashboard/sidenav/map-active.svg' : '/static/images/dashboard/sidenav/map.svg'} style={S('w-19 h-19')} />
             </NavItem>
           </LinkContainer>
-          <NavItem className="main-nav" style={ S('w-60 absolute t-5 r-80') } onClick={ this.showIntercom }>
-            <i className="fa fa-question" style={ S('font-20 color-263445 absolute t-12 l-26 z-100') }></i>
-            <i className="fa fa-comment" style={ S('font-35 relative t-5n color-4D5C6C') }></i>
+          <NavItem className="main-nav" style={S('w-60 absolute t-5 r-80')} onClick={this.showIntercom}>
+            <i className="fa fa-question" style={S('font-20 color-263445 absolute t-12 l-26 z-100')} />
+            <i className="fa fa-comment" style={S('font-35 relative t-5n color-4D5C6C')} />
           </NavItem>
-          <div style={ S('w-20p absolute t-10 r-20n z-1') }>
-            <ProfileImage data={ data } user={ user } />
+          <div style={S('w-20p absolute t-10 r-20n z-1')}>
+            <ProfileImage data={data} user={user} />
           </div>
-          <NavDropdown style={ S('w-60 h-60 absolute b-0 r-0 z-2 bg-000') } title={ title_area } dropup id="account-dropdown" className="account-dropdown account-dropdown--mobile" eventKey={3} noCaret>
-            <li><a href="#" style={ S('pointer') } onClick={ this.showSettingsModal }><i className="fa fa-cog" style={ S('mr-15') }></i>Settings</a></li>
-            <li role="separator" className="divider"></li>
-            <li><a href="/signout"><i className="fa fa-power-off" style={ S('mr-15') }></i>Sign out</a></li>
+          <NavDropdown style={S('w-60 h-60 absolute b-0 r-0 z-2 bg-000')} title={title_area} dropup id="account-dropdown" className="account-dropdown account-dropdown--mobile" eventKey={3} noCaret>
+            <li><a href="#" style={S('pointer')} onClick={this.showSettingsModal}><i className="fa fa-cog" style={S('mr-15')} />Settings</a></li>
+            <li role="separator" className="divider" />
+            <li><a href="/signout"><i className="fa fa-power-off" style={S('mr-15')} />Sign out</a></li>
           </NavDropdown>
-          { /*
-            <OverlayTrigger placement="right" overlay={ popover.people } delayShow={ 200 } delayHide={ 0 }>
-              <LinkContainer className={ active.contacts } to="/dashboard/contacts">
-                <NavItem style={ S('w-85p') }>
-                  <img src={ active.contacts ? '/images/dashboard/sidenav/people-active.svg' : '/images/dashboard/sidenav/people.svg' } style={ S('w-19 h-19') }/>
-                </NavItem>
-              </LinkContainer>
-            </OverlayTrigger>
-            */
-          }
-          { /*
-            <OverlayTrigger placement="right" overlay={ popover.tasks } delayShow={ 200 } delayHide={ 0 }>
-              <LinkContainer className={ active.tasks } to="/dashboard/tasks">
-                <NavItem style={ S('w-85p') }>
-                  <img src={ active.tasks ? '/images/dashboard/sidenav/task-active.svg' : '/images/dashboard/sidenav/task.svg' } style={ S('w-19 h-19') }/>
-                  {this.notificationIcon('task_notification_count')}
-                </NavItem>
-              </LinkContainer>
-            </OverlayTrigger>
-            <OverlayTrigger placement="right" overlay={ popover.transactions } delayShow={ 200 } delayHide={ 0 }>
-              <LinkContainer className={ active.transactions } to="/dashboard/transactions" onClick={ this.props.viewAllTransactions }>
-                <NavItem style={ S('w-85p') }>
-                  <img src={ active.transactions ? '/images/dashboard/sidenav/transactions-active.svg' : '/images/dashboard/sidenav/transactions.svg' } style={ S('w-19 h-19') }/>
-                  {this.notificationIcon('transaction_notification_count')}
-                </NavItem>
-              </LinkContainer>
-            </OverlayTrigger>
-            */
-          }
           { recommend }
           { agents }
         </Nav>
-        <Modal dialogClassName="modal-mobile" show={ data.show_account_settings_modal } onHide={ this.hideModal.bind(this) }>
-          <form onSubmit={ this.handleSubmit.bind(this) }>
-            <Modal.Header closeButton style={ S('h-45 bc-f3f3f3') }>
-              <Modal.Title style={ S('font-14') }>Edit Account Settings</Modal.Title>
+        <Modal dialogClassName="modal-mobile" show={data.show_account_settings_modal} onHide={this.hideModal.bind(this)}>
+          <form onSubmit={this.handleSubmit.bind(this)}>
+            <Modal.Header closeButton style={S('h-45 bc-f3f3f3')}>
+              <Modal.Title style={S('font-14')}>Edit Account Settings</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <Col xs={ 3 } style={ S('pl-0') }>
+              <Col xs={3} style={S('pl-0')}>
                 <div className="pull-left">
                   { profile_image_area }
                 </div>
               </Col>
               { form_fields }
             </Modal.Body>
-            <Modal.Footer style={ { border: 'none' } }>
-              <Col xs={ 9 } style={ S('pr-0 pull-right') }>
+            <Modal.Footer style={{ border: 'none' }}>
+              <Col xs={9} style={S('pr-0 pull-right')}>
                 { change_password_area }
-                <Button bsStyle="link" onClick={ this.hideModal.bind(this) }>Cancel</Button>
-                <Button style={ S('h-30 pt-5 pl-30 pr-30') } className={ data.saving_account_settings ? 'disabled' : '' } type="submit" bsStyle="primary">
+                <Button bsStyle="link" onClick={this.hideModal.bind(this)}>Cancel</Button>
+                <Button style={S('h-30 pt-5 pl-30 pr-30')} className={data.saving_account_settings ? 'disabled' : ''} type="submit" bsStyle="primary">
                   { data.saving_account_settings ? 'Saving...' : 'Save' }
                 </Button>
               </Col>
@@ -453,6 +419,5 @@ export default class SideBar extends Component {
   }
 }
 SideBar.propTypes = {
-  data: React.PropTypes.object,
-  viewAllTransactions: React.PropTypes.func
+  data: React.PropTypes.object
 }

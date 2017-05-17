@@ -3,21 +3,33 @@ import Listing from '../../models/Listing'
 import AppStore from '../../stores/AppStore'
 
 export default (user, q, status) => {
-  const q_commas = q.replace(/\s+/g, ',')
   const params = {
     status,
-    q: q_commas,
-    access_token: user.access_token
+    q: q.replace(/\s+/g, ',')
   }
+  if (user)
+    params.access_token = user.access_token
   Listing.search(params, (err, response) => {
     // Listing map
     const listings = response.data
+    // If mls_number, put in array
     const google = window.google
     const map = window.map
     delete AppStore.data.listing_map.is_loading
     AppStore.data.listing_map.listings = listings
+    if (listings && listings.length) {
+      AppStore.data.listing_map.listings_info = {
+        total: listings.length
+      }
+    }
     const zoom = 13
     AppStore.data.listing_map.auto_move = true
+    if (!listings || !listings.length) {
+      delete AppStore.data.listing_map.auto_move
+      AppStore.data.listing_map.no_listings_found = true
+      AppStore.emitChange()
+      return
+    }
     // Center and zoom map on single listing MLS
     if (listings.length === 1) {
       const listing = listings[0]
@@ -34,7 +46,7 @@ export default (user, q, status) => {
     } else {
       // Multiple listings
       const bounds = new google.maps.LatLngBounds()
-      listings.forEach(listing => {
+      listings.forEach((listing) => {
         if (listing && listing.location) {
           const location = new google.maps.LatLng(listing.location.latitude, listing.location.longitude)
           bounds.extend(location)
@@ -51,6 +63,7 @@ export default (user, q, status) => {
       delete AppStore.data.listing_map.auto_move
       AppStore.emitChange()
     }, 4000)
+    delete AppStore.data.listing_map.no_listings_found
     AppStore.data.listing_map.has_search_input = true
     AppStore.emitChange()
   })

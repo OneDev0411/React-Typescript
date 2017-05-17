@@ -1,0 +1,109 @@
+.map__listing-marker {
+  background: #ccc;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 2px 1px -1px rgba(0,0,0,.12);
+  margin-left: -35px;
+  margin-top: -35px;
+  &:after {
+    content: "";
+    position: absolute;
+    box-shadow: rgba(0, 0, 0, 0.3) 2px 2px 2px;
+    transform: rotate(45deg);
+    bottom: -5px;
+    right: 40%;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent #FFF #FFF transparent;
+  }
+  &.green {
+    background-color: #35b863;
+    &:after {
+      border-color: transparent #35b863 #35b863 transparent !important;   
+    }
+  }
+  &.orange {
+    background-color: #f5a623;
+    &:after {
+      border-color: transparent #f5a623 #f5a623 transparent !important;   
+    }
+  }
+  &.red {
+    background-color: #fe3824;
+    &:after {
+      border-color: transparent #fe3824 #fe3824 transparent !important;   
+    }
+  }
+  &.brown {
+    background-color: #835833;
+    &:after {
+      border-color: transparent #835833 #835833 transparent !important;   
+    }
+  }
+  &.active {
+    background: #006aff !important;
+    color: #fff;
+    z-index: 100000;
+    &:after {
+      border-color: transparent #006aff #006aff transparent !important;   
+    }
+  }
+  &.viewed {
+    background-color: #dfe3e8;
+    &:after {
+      border-color: #dfe3e8;
+    }
+  }
+}
+.listing-map__marker__popup__title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: bold;
+}
+.listing-map {
+  transition: 150ms;
+  right: 0;
+}
+.listing-map__filter-form {
+  transition: 150ms;
+  left: -345px;
+  &.active {
+    left: 70px;
+  }
+  &.active--non-logged-in {
+    left: 0px;
+  }
+}
+.listing-panel {
+  transition: 150ms;
+  right: -850px;
+  &.active {
+    right: 0;
+  }
+}
+.listing-panel__button {
+  outline: none !important;
+  margin-top: 10px;
+  margin-right: 10px;
+  transition: 150ms;
+  right: 0px;
+  border: none !important;
+  background: #fff !important;
+  box-shadow: none !important;
+  border-radius: 0;
+}
+.listing-panel__list-item {
+  &:hover {
+    background-color: #f3f8ff
+  }
+}
+.share-item{
+  &:hover{
+    background-color: #EDF7FD;
+  }
+}
+.listing-carousel__item {
+  cursor: zoom-in;
+}

@@ -1,5 +1,5 @@
 // AppDispatcher.js
-import { Dispatcher } from 'flux'
+import { Dispatcher } from './flux'
 
 // User
 import signup from '../actions/user/signup'
@@ -14,24 +14,28 @@ import verifyPhone from '../actions/user/verify-phone'
 import sendVerifyEmail from '../actions/user/send-verify-email'
 import addUserToStore from '../actions/user/add-user-to-store'
 import getRooms from '../actions/user/get-rooms'
-import getContacts from '../actions/user/get-contacts'
-import createContacts from '../actions/user/create-contacts'
-import editContact from '../actions/user/edit-contact'
-import deleteContact from '../actions/user/delete-contact'
+import getRoomsIndexedDB from '../actions/indexeddb/get-rooms'
 import editProfilePic from '../actions/user/edit-profile-pic'
 import editPassword from '../actions/user/edit-password'
 import upgradeAccount from '../actions/user/upgrade-account'
-
+import listingInquiry from '../actions/user/listing-inquiry'
+import searchUsersNewMessage from '../actions/user/search-new-message'
+import searchUsersShare from '../actions/user/search-share'
+import searchUsersAddMembers from '../actions/user/search-add-members'
+import getReceivingUser from '../actions/user/get-receiving-user'
 // Rooms
 import createRoom from '../actions/rooms/create-room'
 import deleteRoom from '../actions/rooms/delete-room'
-import inviteContacts from '../actions/rooms/invite-contacts'
+import addUsers from '../actions/rooms/add-users'
 import uploadFilesToRoom from '../actions/rooms/upload-files'
 import setNotification from '../actions/rooms/notifications'
 import acknowledgeRoomNotifications from '../actions/rooms/acknowledge-notifications'
+import getRoomAndMessages from '../actions/rooms/get-room-and-messages'
+import leaveRoom from '../actions/rooms/leave-room'
 
 // Messages
 import createMessage from '../actions/messages/create-message'
+import updateRoomsIndexedDB from '../actions/indexeddb/update-rooms'
 import getMessages from '../actions/messages/get-messages'
 import getAllMessages from '../actions/messages/get-all-messages'
 import getPreviousMessages from '../actions/messages/get-previous-messages'
@@ -39,13 +43,6 @@ import getPreviousMessages from '../actions/messages/get-previous-messages'
 // Pages
 import landingPage from '../actions/pages/landing'
 import getContent from '../actions/pages/get-content'
-
-// Modules
-import addContacts from '../actions/modules/add-contacts'
-import removeContact from '../actions/modules/remove-contact'
-
-// Notifications
-import getNotificationSummery from '../actions/notifications/get-summary'
 
 // Agents
 import getAgentReport from '../actions/agents/get-report'
@@ -55,11 +52,24 @@ import searchAgentSettings from '../actions/agents/search-agent-settings'
 // Device
 import checkForMobile from '../actions/device/check-for-mobile'
 
+// Alerts
+import acknowledgeAlertNotifications from '../actions/alerts/acknowledge-notifications'
+
+// Branding
+import getBranding from '../actions/branding/get-branding'
+
+// Google geocodeAddress
+import geocodeAddress from '../actions/google/geocode-address'
+
+// Chat module
+import sendChatModuleMessage from '../actions/chat-module/send-message'
+
 const AppDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
-AppDispatcher.register(payload => {
+AppDispatcher.register(async function (payload) {
   const action = payload.action
+
   switch (action) {
 
     case 'get-content':
@@ -103,7 +113,7 @@ AppDispatcher.register(payload => {
       break
 
     case 'create-password':
-      createPassword(payload.email, payload.password, payload.first_name, payload.last_name, payload.token)
+      createPassword(payload.email, payload.password, payload.first_name, payload.last_name, payload.token, payload.agent, payload.new_email, payload.phone_number)
       break
 
     case 'send-verify-email':
@@ -119,27 +129,39 @@ AppDispatcher.register(payload => {
       break
 
     case 'create-room':
-      createRoom(payload.user, payload.title)
+      createRoom(payload.user, payload.users, payload.emails, payload.phone_numbers, payload.comment)
       break
 
     case 'get-rooms':
       getRooms(payload.user, payload.room_id)
       break
 
+    case 'get-room-and-messages':
+      getRoomAndMessages(payload.user, payload.room)
+      break
+
+    case 'get-rooms-indexeddb':
+      getRoomsIndexedDB(payload.user_id)
+      break
+
     case 'delete-room':
       deleteRoom(payload.user, payload.id)
       break
 
-    case 'get-contacts':
-      getContacts(payload.user)
+    case 'leave-room':
+      leaveRoom(payload.user, payload.id)
       break
 
-    case 'invite-contacts':
-      inviteContacts(payload.user, payload.room, payload.contacts)
+    case 'add-users':
+      addUsers(payload.user, payload.room, payload.users, payload.emails, payload.phone_numbers)
       break
 
     case 'create-message':
-      createMessage(payload.user, payload.room, payload.comment, payload.image_url, payload.attachment)
+      createMessage(payload.user, payload.room, payload.comment, payload.image_url, payload.attachment, payload.recommendation)
+      break
+
+    case 'update-rooms-indexeddb':
+      updateRoomsIndexedDB(payload.user_id)
       break
 
     case 'get-messages':
@@ -154,26 +176,6 @@ AppDispatcher.register(payload => {
       getPreviousMessages(payload.user, payload.room, payload.scroll_height)
       break
 
-    case 'create-contacts':
-      createContacts(payload.user, payload.contacts, payload.module_type)
-      break
-
-    case 'edit-contact':
-      editContact(payload.user, payload.contact, payload.module_type)
-      break
-
-    case 'delete-contact':
-      deleteContact(payload.user, payload.contact_id)
-      break
-
-    case 'add-contacts':
-      addContacts(payload.contacts, payload.module_type)
-      break
-
-    case 'remove-contact':
-      removeContact(payload.contact_id, payload.module_type)
-      break
-
     case 'room-notifications':
       setNotification(payload.user, payload.id, payload.notification)
       break
@@ -182,16 +184,16 @@ AppDispatcher.register(payload => {
       uploadFilesToRoom(payload.user, payload.room, payload.files)
       break
 
-    case 'get-notification-summary':
-      getNotificationSummery(payload.user)
-      break
-
     case 'edit-profile-pic':
       editProfilePic(payload.user, payload.files)
       break
 
     case 'edit-password':
       editPassword(payload.user, payload.old_password, payload.new_password)
+      break
+
+    case 'acknowledge-alert-notifications':
+      acknowledgeAlertNotifications(payload.user, payload.alert_id)
       break
 
     case 'acknowledge-room-notifications':
@@ -216,6 +218,38 @@ AppDispatcher.register(payload => {
 
     case 'upgrade-account':
       upgradeAccount(payload.user, payload.agent, payload.secret)
+      break
+
+    case 'get-branding':
+      getBranding(payload.hostname)
+      break
+
+    case 'listing-inquiry':
+      listingInquiry(payload.user, payload.agent, payload.listing)
+      break
+
+    case 'geocode-address':
+      geocodeAddress(payload.address)
+      break
+
+    case 'send-chat-module-message':
+      sendChatModuleMessage(payload.user, payload.agent, payload.message)
+      break
+
+    case 'search-users-new-message':
+      searchUsersNewMessage(payload.user, payload.q)
+      break
+
+    case 'search-users-share':
+      searchUsersShare(payload.user, payload.q)
+      break
+
+    case 'search-users-add-members':
+      searchUsersAddMembers(payload.user, payload.q)
+      break
+
+    case 'get-receiving-user':
+      getReceivingUser(payload.user_id)
       break
 
     default:

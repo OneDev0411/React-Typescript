@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment'
-import { Input } from 'react-bootstrap'
+import { FormControl } from 'react-bootstrap'
 import DayPicker, { DateUtils } from 'react-day-picker'
 
 export default class InputField extends React.Component {
@@ -25,8 +25,7 @@ export default class InputField extends React.Component {
         month: moment(value, 'll').toDate(),
         value
       }, this.showCurrentDate)
-    }
-    else
+    } else
       this.setState({ value }, this.showCurrentDate)
   }
 
@@ -47,7 +46,7 @@ export default class InputField extends React.Component {
   }
 
   handleFocus() {
-    this.refs.daypicker.showMonth(this.state.month)
+    this.daypicker.showMonth(this.state.month)
     this.setState({ showCalendar: true })
   }
 
@@ -66,25 +65,25 @@ export default class InputField extends React.Component {
 
     return (
       <div>
-        <Input
+        <FormControl
           bsSize="small"
-          ref="input"
+          inputRef={ref => this.inputInput = ref}
           type="text"
-          value={ this.state.value }
-          placeholder={ this.props.placeholder }
-          onChange={ this.handleInputChange.bind(this) }
-          onFocus={ this.handleFocus.bind(this) }
-          onBlur={ this.handleBlur.bind(this) }
+          value={this.state.value}
+          placeholder={this.props.placeholder}
+          onChange={this.handleInputChange.bind(this)}
+          onFocus={this.handleFocus.bind(this)}
+          onBlur={this.handleBlur.bind(this)}
         />
 
-        <div style={ calendarStyle }>
+        <div style={calendarStyle}>
           <DayPicker
-            ref="daypicker"
-            initialMonth={ this.state.month }
+            ref={ref => this.daypicker = ref}
+            initialMonth={this.state.month}
             modifiers={{
               selected: day => DateUtils.isSameDay(selectedDay, day)
             }}
-            onDayClick={ this.handleDayClick.bind(this) }
+            onDayClick={this.handleDayClick.bind(this)}
           />
         </div>
       </div>
