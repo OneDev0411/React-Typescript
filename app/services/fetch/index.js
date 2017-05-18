@@ -71,7 +71,7 @@ export default class Fetch {
     _.each(this._middlewares, (options, name) => {
       try {
         const handler = require('./middlewares/' + name).default
-        response.body = handler(response.body)
+        response.body = handler(response.body, options)
       } catch(e) {
         console.warn(e)
       }
