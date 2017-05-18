@@ -2,14 +2,22 @@ import React from 'react'
 import ListingMarker from '../../../Partials/ListingMarker'
 
 
-const singleMarkerStyle = ({
-  left = 0,
-  top = 0
-}) => ({
-  position: 'absolute',
-  top,
-  left
-})
+const singleMarkerStyle = (list) => {
+  if (list.position) {
+    const { left, top } = list.position
+    return {
+      position: 'absolute',
+      top,
+      left
+    }
+  }
+
+  return {
+    position: 'absolute',
+    top: 0,
+    left: 0
+  }
+}
 
 const SingleMarker = ({
   list,
@@ -24,7 +32,7 @@ const SingleMarker = ({
     onMouseLeave={onMouseLeaveHandler}
     onMouseEnter={onMouseEnterHandler}
     onClick={() => onClickHandler(list)}
-    style={list.position && singleMarkerStyle(list.position)}
+    style={singleMarkerStyle(list)}
   >
     <ListingMarker
       data={data}

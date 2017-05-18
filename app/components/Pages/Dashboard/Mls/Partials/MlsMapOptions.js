@@ -5,6 +5,10 @@ export const mapOptions = {
   center: {
     lat: 32.7767,
     lng: -96.7970
+  },
+  dimensions: {
+    width: -1,
+    height: -1
   }
 }
 
