@@ -10,6 +10,7 @@ import { mapOptions } from './MlsMapOptions'
 import SingleMarker from './Markers/SingleMarker'
 import { fitBounds } from 'google-map-react/utils'
 import ClusterMarker from './Markers/ClusterMarker'
+import AppStore from '../../../../../stores/AppStore'
 import config from '../../../../../../config/public'
 
 const coordinator = (points) => {
@@ -109,28 +110,41 @@ export default class MlsMap extends Component {
       nextProps.data.show_actives_map &&
       nextProps.data.favorite_listings.length
     ) {
-      const listings = nextProps.data.favorite_listings
-      const newListings = listings.map((list) => {
-        if (list.property && list.property.address) {
-          return {
-            numPoints: 1,
-            list: { ...list },
-            lat: list.property.address.location.latitude,
-            lng: list.property.address.location.longitude,
-            ...list
-          }
+      if (!nextProps.data.show_listing_panel) {
+        AppStore.data.listing_panel = {
+          view: 'photos',
+          size: 'half'
         }
-      })
+        AppStore.data.show_listing_panel = true
+        AppStore.emitChange()
+        return
+      }
 
-      this.setState({
-        listings: {
-          data: newListings,
-          listingsLength: newListings.length
-        },
-        mapProps: { ...mapOptions }
-      })
-      console.log('rceive favorite')
-      return
+      const listings = nextProps.data.favorite_listings
+      if (listings.length !== this.state.listings.listingsLength) {
+        const newListings = listings.map((list) => {
+          if (list.property && list.property.address) {
+            return {
+              numPoints: 1,
+              list: { ...list },
+              lat: list.property.address.location.latitude,
+              lng: list.property.address.location.longitude,
+              ...list
+            }
+          }
+        })
+
+        this.setState({
+          listings: {
+            data: newListings,
+            total: newListings.length,
+            listingsLength: newListings.length
+          },
+          mapProps: { ...mapOptions }
+        })
+        console.log('rceive favorite')
+        return
+      }
     }
 
 
@@ -158,6 +172,7 @@ export default class MlsMap extends Component {
           this.setState({
             listings: {
               data: newListings,
+              total: newListings.length,
               listingsLength: newListings.length
             }
           })
@@ -175,20 +190,21 @@ export default class MlsMap extends Component {
       return
     }
 
-    if (
-      nextProps.data.listing_map
-      && nextProps.data.listing_map.listings
-    ) {
+    if ((
+      nextProps.data.listing_map &&
+      nextProps.data.listing_map.listings
+    ) && (
+      !nextProps.data.show_actives_map &&
+      !nextProps.data.show_alerts_map
+    )) {
       const newListings = nextProps.data.listing_map.listings
-      if (
-        (
-          newListings.length !==
-          this.state.listings.listingsLength
-        ) || (
-          this.state.listings.total !==
-          nextProps.data.listing_map.listings_info.total
-        )
-      ) {
+      if ((
+        newListings.length !==
+        this.state.listings.listingsLength
+      ) || (
+        this.state.listings.total !==
+        nextProps.data.listing_map.listings_info.total
+      )) {
         console.log('recive list')
         const data = newListings.map(list => ({
           lat: list.location.latitude,
@@ -213,12 +229,13 @@ export default class MlsMap extends Component {
       return 1
     }
 
-    if (
-      (this.state.mapProps.center.lat !==
-      nextState.mapProps.center.lat) ||
-      (this.state.mapProps.center.lng !==
-      nextState.mapProps.center.lng)
-    ) {
+    if ((
+      this.state.mapProps.center.lat !==
+      nextState.mapProps.center.lat
+    ) || (
+      this.state.mapProps.center.lng !==
+      nextState.mapProps.center.lng
+    )) {
       console.log('update center')
       return 1
     }
@@ -230,26 +247,36 @@ export default class MlsMap extends Component {
       }
 
       if (
-        this.state.listings.listingsLength
-        !== nextProps.data.listing_map.listings.length
+          !nextProps.data.show_actives_map &&
+          !nextProps.data.show_alerts_map
       ) {
-        console.log('update listings')
-        return 1
-      }
+        if (
+          this.state.listings.listingsLength
+          !== nextProps.data.listing_map.listings.length
+        ) {
+          console.log('update listings')
+          return 1
+        }
 
-      if (
-        this.state.listings.total !==
-        nextProps.data.listing_map.listings_info.total
-      ) {
-        console.log('update listings by totals')
-        return 1
+        if (
+          this.state.listings.total !==
+          nextProps.data.listing_map.listings_info.total
+        ) {
+          console.log('update listings by totals')
+          return 1
+        }
       }
     }
 
-    if (
-      nextProps.data.show_actives_map ||
-      nextProps.data.show_alerts_map
-    ) {
+    if ((
+      nextProps.data.show_actives_map &&
+      nextProps.data.show_actives_map !==
+      this.props.data.show_actives_map
+    ) || (
+      nextProps.data.show_alerts_map &&
+      nextProps.data.show_alerts_map !==
+      this.props.data.show_alerts_map
+    )) {
       console.log('update alerts or actives')
       return 1
     }
@@ -264,8 +291,8 @@ export default class MlsMap extends Component {
 
     if (
       nextProps.data.listing_map.active_listing &&
-      (this.props.data.listing_map.active_listing ===
-      nextProps.data.listing_map.active_listing)
+      this.props.data.listing_map.active_listing ===
+      nextProps.data.listing_map.active_listing
     ) {
       console.log('update hover listing')
       return 1

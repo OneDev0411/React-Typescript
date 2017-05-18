@@ -60,7 +60,7 @@ const controller = {
     }
     const options = {
       maximum_price: alert.maximum_price,
-      limit: '75',
+      limit: '500',
       maximum_lot_square_meters: alert.maximum_lot_square_meters,
       minimum_bathrooms: alert.minimum_bathrooms,
       maximum_square_meters: alert.maximum_square_meters,

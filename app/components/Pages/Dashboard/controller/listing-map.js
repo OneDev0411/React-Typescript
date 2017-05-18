@@ -97,17 +97,22 @@ const controller = {
     return google_options
   },
   handleBoundsChange(gmap) {
-    const { bounds, center, zoom, size, marginBounds } = gmap
     const data = AppStore.data
+
     const user = data.user
     const listing_map = data.listing_map
+    const { bounds, center, zoom, size, marginBounds } = gmap
+
     if (!listing_map)
       return
+
+    if (!bounds)
+      return
+
     const auto_move = listing_map.auto_move
     if (auto_move)
       return
-    if (!bounds)
-      return
+
     const points = [
       {
         latitude: bounds.ne.lat,
@@ -132,11 +137,13 @@ const controller = {
     ]
     AppStore.data.listing_map.center = center
     AppStore.data.listing_map.zoom = zoom
+
     // Don't get more results if polygon on map
-    if (!window.poly) {
-      AppStore.data.listing_map.is_loading = true
-      AppStore.data.listing_map.options.points = points
-    }
+    // if (!window.poly) {
+    //   AppStore.data.listing_map.is_loading = true
+    //   AppStore.data.listing_map.options.points = points
+    // }
+
     // Get options
     // Zoom fix
     // if (listing_map.options.mls_areas || listing_map.options.school_districts || listing_map.options.counties) {
@@ -152,11 +159,16 @@ const controller = {
     // }
     AppStore.data.gmap = gmap
     AppStore.emitChange()
-    ListingDispatcher.dispatch({
-      action: 'get-valerts',
-      user,
-      options: listing_map.options
-    })
+
+    if (!data.show_actives_map && !data.show_alerts_map && !window.poly) {
+      AppStore.data.listing_map.is_loading = true
+      AppStore.data.listing_map.options.points = points
+      ListingDispatcher.dispatch({
+        action: 'get-valerts',
+        user,
+        options: listing_map.options
+      })
+    }
   },
   hideModal() {
     if (AppStore.data.listing_map)
