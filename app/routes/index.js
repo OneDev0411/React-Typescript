@@ -8,7 +8,7 @@ import Dashboard from '../components/Dashboard'
 
 // Pages
 import Landing from '../components/Pages/Landing'
-import Recents from '../components/Pages/Dashboard/Recents'
+// import Recents from '../components/Pages/Dashboard/Recents'
 import Mls from '../components/Pages/Dashboard/Mls'
 import Listing from '../components/Pages/Dashboard/Mls/Listing'
 import SignUp from '../components/Pages/SignUp'
@@ -45,6 +45,9 @@ import Contacts from '../components/Pages/Dashboard/Contacts'
 import ContactsList from '../components/Pages/Dashboard/Contacts/List'
 import ContactProfile from '../components/Pages/Dashboard/Contacts/Profile'
 
+// chat room
+import Recents from '../components/Pages/Dashboard/Chatroom'
+
 // Notifications
 import NotificationsPage from '../components/Pages/Dashboard/Notifications'
 
@@ -52,6 +55,10 @@ import NotificationsPage from '../components/Pages/Dashboard/Notifications'
 import ListingsWidget from '../components/Pages/Widgets/Listings'
 import MapWidget from '../components/Pages/Widgets/Map'
 import SearchWidget from '../components/Pages/Widgets/Search'
+
+// <Redirect from="dashboard" to="dashboard/recents" />
+// <Route path="dashboard/recents" component={Recents} />
+// <Route path="dashboard/recents/:room_id" component={Recents} />
 
 export default (
   <Route path="/" component={App}>
@@ -62,9 +69,6 @@ export default (
     <Route path="branch" component={Branch} />
     <Route path="account/settings" component={Settings} />
     <Route path="account/notifications" component={Notifications} />
-    <Redirect from="dashboard" to="dashboard/recents" />
-    <Route path="dashboard/recents" component={Recents} />
-    <Route path="dashboard/recents/:room_id" component={Recents} />
     <Route path="dashboard/mls" component={Mls} />
     <Route path="dashboard/mls/agents" component={Agents} />
     <Route path="dashboard/mls/alerts" component={Mls} />
@@ -82,6 +86,10 @@ export default (
     <Route path="widgets/search" component={SearchWidget} />
 
     <Route path="/dashboard" component={Dashboard}>
+
+      <Route path="/dashboard/recents">
+        <IndexRoute component={Recents} />
+      </Route>
 
       <Route path="/dashboard/deals" component={DealsLayout}>
         <IndexRoute component={DealsList} />
