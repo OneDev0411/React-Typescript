@@ -1,5 +1,6 @@
 import agent from 'superagent'
 import _ from 'underscore'
+import Fetch from '../services/fetch'
 import config from '../../config/public'
 
 const Deal = {}
@@ -134,17 +135,25 @@ Deal.collectSignatures = async function(params) {
 }
 
 Deal.saveSubmissionForm = async function(params) {
+  let endpoint
+  const { deal_id, state, values, form, type, submission } = params
+
+  // ge method
+  const method = (type === 'update') ? 'put' : 'post'
+
+  // initialize data to send
+  const data = { state, values }
+
+  if (type === 'create') {
+    data.form = form
+    endpoint = `${api_host}/deals/${deal_id}/submissions`
+  } else {
+    endpoint = `${api_host}/forms/submissions/${submission}`
+  }
+
   try {
-    const response = await agent
-      .post(`${config.app.url}/api/deals/submission/form?access_token=${params.access_token}`)
-      .send({
-        deal: params.deal_id,
-        state: params.state,
-        values: params.values,
-        form: params.form,
-        type: params.type,
-        submission: params.submission
-      })
+    const request = new Fetch()
+    const response = await request[method](endpoint).send(data)
 
     return response
   } catch (e) {

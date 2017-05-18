@@ -2,6 +2,7 @@ import agent from 'superagent'
 import _ from 'underscore'
 import moment from 'moment'
 import config from '../../config/public'
+import Fetch from '../services/fetch'
 
 const Contact = {
   get: {},
@@ -37,9 +38,8 @@ Contact.getContacts = async function(params) {
   const endpoint = `${api_host}/contacts?limit=10000&sorting_value=Update`
 
   try {
-    const response = await agent
+    const response = await new Fetch()
       .get(endpoint)
-      .set({ Authorization: `Bearer ${access_token}` })
 
     return response
   } catch (e) {
