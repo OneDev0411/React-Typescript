@@ -23,7 +23,7 @@ export default class Fetch {
         .set('X-Method', method)
         .set('X-Endpoint', endpoint)
     } else {
-      agent = SuperAgent[method](endpoint)
+      agent = SuperAgent[method](`${config.app.url}${endpoint}`)
     }
 
     // auto append access-token
