@@ -3,6 +3,9 @@ const _ = require('underscore')
 const list = []
 
 const routes = {
+  proxifier: [
+    [ 'passthrough' ]
+  ],
   agent: [
     ['get-report'],
     ['search-agent']
@@ -32,7 +35,6 @@ const routes = {
     ['envelope-document'],
     ['envelope-sign'],
     ['docusign-login'],
-    ['save-submission-form'],
     ['submit-review-request']
   ],
   intercom: [
