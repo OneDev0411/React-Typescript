@@ -159,7 +159,7 @@ export default class SignIn extends Component {
     }
     const input_style = {
       border: 'none',
-      ...S('border-bottom-1-solid-ccc br-0 p-0')
+      ...S('border-bottom-1-solid-ccc br-0 p-0 pl-10 mb-20')
     }
     // Signup link
     let signup_link = '/signup'
@@ -170,15 +170,26 @@ export default class SignIn extends Component {
     return (
       <div id="main-content" className="flex-center-wrap page-bg-video" style={S('absolute h-100p w-100p')}>
         <div className="text-center center-block box-shadow" style={S('w-460 z-100 relative mt-60n bg-fff br-6 p-50')}>
+          
           <h1 className="tempo" style={S('mb-20')}>Log into { Brand.message('site_title', 'Rechat') }</h1>
-          <div style={S('color-555555 mb-20 font-18 mb-20')}>It’s nice to have you back!</div>
+
+          <div style={S('color-555555 mb-20 font-18 mb-40')}>It’s nice to have you back!</div>
+
           { invite_message }
+
           <form action="/signin" onSubmit={this.handleSubmit.bind(this)}>
-            <FormControl bsSize="large" style={input_style} bsStyle={email_style} type="text" inputRef={ref => this.emailInput = ref} placeholder="Email" />
-            <FormControl bsSize="large" style={input_style} bsStyle={password_style} type={data.signin && data.signin.password_is_visible ? 'text' : 'password'} inputRef={ref => this.passwordInput = ref} placeholder="Password" />
-            <div style={S('color-929292 font-13 mt-0 mb-10')} className="pull-right"><Link to="/password/forgot">Forgot Password</Link></div>
+            <FormControl bsSize="large" style={input_style} bsStyle={email_style} type="text" inputRef={node => this.emailInput = node} placeholder="Email" />
+
+            <FormControl bsSize="large" style={input_style} bsStyle={password_style} type={data.signin && data.signin.password_is_visible ? 'text' : 'password'} inputRef={node => this.passwordInput = node} placeholder="Password" />
+
+            <div style={S('color-929292 font-13 mt-0 mb-20')} className="pull-right">
+              <Link to="/password/forgot">Forgot Password</Link>
+            </div>
+
             <div className="clearfix" />
+
             { message }
+
             <Button
               bsSize="large"
               type="submit"

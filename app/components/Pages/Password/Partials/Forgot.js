@@ -9,7 +9,7 @@ import AppStore from '../../../../stores/AppStore'
 
 export default class Forgot extends Component {
   componentDidMount() {
-    this.refs.email.refs.input.focus()
+    this.emailInput.focus()
   }
 
   handleSubmit(e) {
@@ -17,12 +17,10 @@ export default class Forgot extends Component {
     AppStore.data.submitting = true
     AppStore.emitChange()
 
-    const email = this.emailInput.value
-    const form_data = {
-      email
+    const formData = {
+      email: this.emailInput.value
     }
-
-    this.props.handleSubmit('forgot-password', form_data)
+    this.props.handleSubmit('forgot-password', formData)
   }
 
   handleSendVerificationAgain() {
@@ -30,7 +28,7 @@ export default class Forgot extends Component {
   }
 
   render() {
-    const data = this.props.data
+    const { data } = this.props
     const errors = data.errors
 
     let email_style
@@ -84,34 +82,46 @@ export default class Forgot extends Component {
             { message_text }
           </Alert>
         )
-      }
+      } // if
     }
 
-    const submitting = data.submitting
+    const { submitting } = data
     let submitting_class = ''
     if (submitting)
       submitting_class = 'disabled'
+
     const input_style = {
       border: 'none',
-      ...S('border-bottom-1-solid-ccc br-0 p-0 mb-10')
+      ...S('border-bottom-1-solid-ccc br-0 p-0 mb-40 pl-10')
     }
+
     let main_content = (
       <div>
-        <div style={S('color-929292 mb-20')}>Forgot your password?</div>
+        <div style={S('color-929292 mb-40')}>Forgot your password?</div>
+
         <form onSubmit={this.handleSubmit.bind(this)}>
-          <FormControl bsSize="large" style={input_style} bsStyle={email_style} inputRef={ref => this.emailInput = ref} placeholder="Email address" type="text" />
+          <FormControl bsSize="large" style={input_style} bsStyle={email_style} inputRef={node => this.emailInput = node} placeholder="Email address" type="text" />
+
           { message }
+
           <Col sm={4} className="forgot__password-btn--cancel" style={S('p-0 pr-10')}>
-            <Link className="btn btn-link" style={S('w-100p')} to="/signin">Cancel</Link>
+            <Link className="btn btn-link" style={S('w-100p mt-5')} to="/signin">Cancel</Link>
           </Col>
+
           <Col sm={8} style={S('p-0')}>
             <Button bsSize="large" type="submit" className={`${submitting_class}btn btn-primary`} disabled={submitting} style={S('w-100p')}>
               { submitting ? 'Submitting...' : 'Reset Password' }
             </Button>
           </Col>
+
           <div className="clearfix" />
-          <div style={S('mt-20 color-929292 font-13')}>Change your mind? <Link to="/signin">Log in</Link></div>
+
+          <div style={S('mt-20 color-929292 font-13')}>
+            <span>Change your mind? </span>
+            <Link to="/signin">Log in</Link>
+          </div>
         </form>
+
       </div>
     )
 
