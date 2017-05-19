@@ -14,25 +14,23 @@ export default class Reset extends Component {
     e.preventDefault()
     AppStore.data.submitting = true
     AppStore.emitChange()
-
     // Get token
     const password = this.passwordInput.value.trim()
     const confirm_password = this.confirm_passwordInput.value.trim()
     const decoded_token = decodeURIComponent(helpers.getParameterByName('token'))
     const encoded_token = encodeURIComponent(decoded_token)
 
-    const form_data = {
+    const formData = {
       password,
       confirm_password,
       token: encoded_token
     }
-
-    this.props.handleSubmit('reset-password', form_data)
+    this.props.handleSubmit('reset-password', formData)
   }
 
   render() {
-    const data = this.props.data
-    const errors = data.errors
+    const { data } = this.props
+    const { errors } = data
 
     let password_style
     let password_error
