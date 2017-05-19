@@ -173,25 +173,31 @@ export default class Password extends Component {
   render() {
     // Data
     const data = AppStore.data
-    const slug = this.props.params.slug
-    let email_area
-    if (data.location.query.email && !data.location.query.phone_number) {
-      email_area = (
-        <div>
-          <div style={S('font-20')}>Email:</div>
-          <div style={S('color-2196f3 font-20')}>{ decodeURIComponent(data.location.query.email) }</div>
-        </div>
-      )
+    const { location } = this.props
+    const { slug } = this.props.params
+
+    if (location && location.query) {
+      let email_area
+      if (location.query.email && !location.query.phone_number) {
+        email_area = (
+          <div>
+            <div style={S('font-20')}>Email:</div>
+            <div style={S('color-2196f3 font-20')}>{ decodeURIComponent(location.query.email) }</div>
+          </div>
+        )
+      }
+
+      let phone_number_area
+      if (location.query.phone_number) {
+        phone_number_area = (
+          <div>
+            <div style={S('font-20')}>Phone number:</div>
+            <div style={S('color-2196f3 font-20')}>{ decodeURIComponent(location.query.phone_number) }</div>
+          </div>
+        )
+      }
     }
-    let phone_number_area
-    if (data.location.query.phone_number) {
-      phone_number_area = (
-        <div>
-          <div style={S('font-20')}>Phone number:</div>
-          <div style={S('color-2196f3 font-20')}>{ decodeURIComponent(data.location.query.phone_number) }</div>
-        </div>
-      )
-    }
+
     if (data.show_logout_message) {
       return (
         <Modal dialogClassName={data.is_mobile ? 'modal-mobile' : ''} show={data.show_logout_message}>
@@ -251,5 +257,5 @@ export default class Password extends Component {
 Password.propTypes = {
   data: React.PropTypes.object,
   params: React.PropTypes.object.isRequired,
-  history: React.PropTypes.object.isRequired
+  location: React.PropTypes.object.isRequired
 }
