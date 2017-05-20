@@ -34,6 +34,7 @@ export default class Fetch {
     if (this._autoLogin && user && user.access_token)
       agent.set({ Authorization: `Bearer ${user.access_token}` })
 
+    // register events
     agent.on('response', response => this.onResponse(response))
 
     return agent
