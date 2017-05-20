@@ -24,10 +24,6 @@ const routes = {
   county: [
     ['search']
   ],
-  contact: [
-    ['update-attributes'],
-    ['delete-attribute']
-  ],
   concierge: [
     ['put-review']
   ],
