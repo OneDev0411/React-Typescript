@@ -128,8 +128,7 @@ Contact.updateAttributes = async function(params) {
 
   try {
     const response = await new Fetch()
-      .put(`/contacts/update-attributes`)
-      .send({ contact_id: id })
+      .patch(`/contacts/${id}`)
       .send({ attributes: payload.attributes })
 
     return response
@@ -146,9 +145,7 @@ Contact.deleteAttribute = async function(params) {
 
   try {
     const response = await new Fetch()
-      .delete(`/contacts/delete-attribute`)
-      .send({ contact_id: id })
-      .send({ attribute_id })
+      .delete(`/contacts/${id}/attributes/${attribute_id}`)
 
     return response
   } catch (e) {
