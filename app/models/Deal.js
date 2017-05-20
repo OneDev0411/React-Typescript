@@ -146,9 +146,9 @@ Deal.saveSubmissionForm = async function(params) {
 
   if (type === 'create') {
     data.form = form
-    endpoint = `${api_host}/deals/${deal_id}/submissions`
+    endpoint = `/deals/${deal_id}/submissions`
   } else {
-    endpoint = `${api_host}/forms/submissions/${submission}`
+    endpoint = `/forms/submissions/${submission}`
   }
 
   try {

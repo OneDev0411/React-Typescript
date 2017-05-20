@@ -10,11 +10,10 @@ function upsertAttributes (id, contact) {
   }
 }
 
-export default function (user, id, type, attributes) {
+export default function (id, type, attributes) {
   const defaultParams = {
     id,
-    type,
-    access_token: user.access_token
+    type
   }
 
   const updates = _.filter(attributes, attr => attr.id)

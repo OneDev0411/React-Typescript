@@ -10,11 +10,10 @@ function deleteAttribute (id, contact) {
   }
 }
 
-export default function (user, id, attribute_id) {
+export default function (id, attribute_id) {
   const params = {
     id,
-    attribute_id,
-    access_token: user.access_token,
+    attribute_id
   }
 
   return async (dispatch) => {

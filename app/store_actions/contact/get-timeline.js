@@ -10,14 +10,9 @@ function getTimeline (id, timeline) {
   }
 }
 
-export default function (user, id) {
-  const params = {
-    id,
-    access_token: user.access_token
-  }
-
+export default function (id) {
   return async (dispatch) => {
-    const response = await Contact.getTimeline(params)
+    const response = await Contact.getTimeline(id)
     const timeline = _.indexBy(response.body.data, 'id')
     dispatch(getTimeline(id, timeline))
 

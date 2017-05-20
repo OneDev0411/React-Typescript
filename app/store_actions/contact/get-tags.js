@@ -9,13 +9,9 @@ function getTags (tags) {
   }
 }
 
-export default function (user) {
-  const params = {
-    access_token: user.access_token
-  }
-
+export default function () {
   return async (dispatch) => {
-    const response = await Contact.getTags(params)
+    const response = await Contact.getTags()
     const tags = _.indexBy(response.body.data, 'tag')
     dispatch(getTags(tags))
   }

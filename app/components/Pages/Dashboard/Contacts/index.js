@@ -17,15 +17,15 @@ class Contacts extends React.Component {
   }
 
   async init() {
-    const { dispatch, user, contacts } = this.props
+    const { dispatch, contacts } = this.props
 
     // get contacts
     if (!contacts.list)
-      dispatch(getContacts(user))
+      dispatch(getContacts())
 
     // get tags
     if (!contacts.tags)
-      dispatch(getTags(user))
+      dispatch(getTags())
   }
 
   render() {

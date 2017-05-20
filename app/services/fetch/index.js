@@ -8,6 +8,7 @@ export default class Fetch {
     this._middlewares = {}
     this._autoLogin = true
     this._useProxy = false
+    this._endpoint = null
   }
 
   _create(method, endpoint) {
@@ -17,30 +18,34 @@ export default class Fetch {
     // create superagent instance
     let agent
 
+    // set endpoint
+    this._endpoint = `${config.api_url}${endpoint}`
+
     if (this._useProxy) {
       agent = SuperAgent
         .post(`${config.app.url}/api/proxifier`)
         .set('X-Method', method)
-        .set('X-Endpoint', endpoint)
+        .set('X-Endpoint', this._endpoint)
     } else {
-      agent = SuperAgent[method](`${config.app.url}${endpoint}`)
+      agent = SuperAgent[method](this._endpoint)
     }
 
     // auto append access-token
     if (this._autoLogin && user && user.access_token)
       agent.set({ Authorization: `Bearer ${user.access_token}` })
 
-    agent.on('error', this.onError)
     agent.on('response', response => this.onResponse(response))
 
     return agent
   }
 
   get(endpoint) {
+    this._useProxy = false
     return this._create('get', endpoint)
   }
 
   post(endpoint) {
+    this._useProxy = false
     return this._create('post', endpoint)
   }
 
@@ -59,10 +64,6 @@ export default class Fetch {
     return this._create('delete', endpoint)
   }
 
-  onError(err) {
-    throw err
-  }
-
   onResponse(response) {
     if (~~response.status < 200 || ~~response.status > 207) {
       return response
@@ -71,7 +72,7 @@ export default class Fetch {
     _.each(this._middlewares, (options, name) => {
       try {
         const handler = require('./middlewares/' + name).default
-        response.body = handler(response.body)
+        response.body = handler(response.body, options)
       } catch(e) {
         console.warn(e)
       }
