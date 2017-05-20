@@ -25,6 +25,11 @@ router.post('/proxifier', bodyParser(), async ctx => {
     ctx.body = response.body
 
   } catch(e) {
+    e.response = e.response || {
+      status: 500,
+      text: e.message
+    }
+
     ctx.status = e.response.status
     ctx.body = e.response.text
   }
