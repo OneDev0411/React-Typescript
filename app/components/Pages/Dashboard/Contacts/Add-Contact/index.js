@@ -62,7 +62,6 @@ export default class AddContact extends React.Component {
     try {
 
       const contact = {
-        user: this.props.user,
         emails: emails,
         phone_numbers: phones,
         first_name: firstName,

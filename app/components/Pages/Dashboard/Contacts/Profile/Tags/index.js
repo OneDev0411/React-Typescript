@@ -57,13 +57,13 @@ export default class Tags extends React.Component {
   }
 
   async remove(item) {
-    const { user, contact_id } = this.props
-    store.dispatch(deleteAttribute(user, contact_id, item.id))
+    const { contact_id } = this.props
+    store.dispatch(deleteAttribute(contact_id, item.id))
   }
 
   async upsert(attributes) {
-    const { user, contact_id } = this.props
-    store.dispatch(upsertAttributes(user, contact_id, 'tag', attributes))
+    const { contact_id } = this.props
+    store.dispatch(upsertAttributes(contact_id, 'tag', attributes))
   }
 
   async reloadSharedTags() {
