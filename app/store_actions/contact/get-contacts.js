@@ -9,13 +9,9 @@ function getContacts (contacts) {
   }
 }
 
-export default function (user) {
-  const params = {
-    access_token: user.access_token
-  }
-
+export default function (user = {}) {
   return async (dispatch) => {
-    const response = await Contact.getContacts(params)
+    const response = await Contact.getContacts(user)
     const contacts = _.indexBy(response.body.data, 'id')
     dispatch(getContacts(contacts))
   }

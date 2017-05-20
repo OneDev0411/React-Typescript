@@ -9,7 +9,7 @@ function addContact (contact) {
 }
 
 export default function (args) {
-  const { user, emails, phone_numbers, first_name, last_name, stage } = args
+  const { emails, phone_numbers, first_name, last_name, stage } = args
 
   const contact = {
     type: 'contact',
@@ -46,8 +46,7 @@ export default function (args) {
   }
 
   const params = {
-    contacts: [contact],
-    access_token: user.access_token
+    contacts: [contact]
   }
 
   return async (dispatch) => {
