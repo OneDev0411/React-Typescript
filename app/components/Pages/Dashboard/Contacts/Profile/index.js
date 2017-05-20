@@ -62,7 +62,7 @@ export default class ContactProfile extends React.Component {
   async getTimeline() {
     const { user, params, dispatch } = this.props
 
-    const timeline = await dispatch(getTimeline(user, params.id))
+    const timeline = await dispatch(getTimeline(params.id))
 
     const contact = {
       ...this.state.contact,
@@ -139,8 +139,8 @@ export default class ContactProfile extends React.Component {
   }
 
   upsertAttributes(type, attributes) {
-    const { user, params, dispatch } = this.props
-    dispatch(upsertAttributes(user, params.id, type, attributes))
+    const { params, dispatch } = this.props
+    dispatch(upsertAttributes(params.id, type, attributes))
   }
 
   render() {

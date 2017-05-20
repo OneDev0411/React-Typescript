@@ -40,7 +40,7 @@ export default class ContactsList extends React.Component {
   }
 
   onChangeStage(stage, contact) {
-    const { user, dispatch } = this.props
+    const { dispatch } = this.props
 
      const attributes = [{
       id: Contact.get.stage(contact).id,
@@ -48,7 +48,7 @@ export default class ContactsList extends React.Component {
       stage
     }]
 
-    dispatch(upsertAttributes(user, contact.id, 'stage', attributes))
+    dispatch(upsertAttributes(contact.id, 'stage', attributes))
   }
 
   open (id) {

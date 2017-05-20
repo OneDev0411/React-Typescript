@@ -14,7 +14,7 @@ export default class AddNote extends React.Component {
 
   async onAddNote() {
     const { note } = this.state
-    const { user, contact_id } = this.props
+    const { contact_id } = this.props
 
     if (note.trim().length === 0)
       return
@@ -22,7 +22,7 @@ export default class AddNote extends React.Component {
     this.setState({ saving: true })
 
     // save note
-    await store.dispatch(addNote(user, contact_id, note))
+    await store.dispatch(addNote(contact_id, note))
 
     this.setState({
       saving: false,
