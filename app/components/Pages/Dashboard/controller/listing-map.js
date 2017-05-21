@@ -165,18 +165,7 @@ const controller = {
 
       const options = {
         ...listing_map.options,
-        points,
-        location: {
-          latitude: center.lat,
-          longitude: center.lng
-        }
-      }
-
-      AppStore.data.listing_map = {
-        ...AppStore.data.listing_map,
-        zoom,
-        center,
-        options
+        points
       }
 
       if (!mapBoundsOnChangeDelay) {
@@ -194,6 +183,7 @@ const controller = {
 
         mapBoundsOnChangeDelay = setTimeout(() => {
           console.log('set timeout for valert req')
+
           ListingDispatcher.dispatch({
             user,
             options,

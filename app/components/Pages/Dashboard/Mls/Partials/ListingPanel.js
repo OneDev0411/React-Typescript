@@ -78,7 +78,7 @@ export default class ListingPanel extends Component {
         const status_color = listing_util.getStatusColor(listing.status)
         let property = listing.compact_property
         let address = listing.address
-      
+
         if (!property)
           property = listing.property
 
