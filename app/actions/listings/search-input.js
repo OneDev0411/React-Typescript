@@ -9,12 +9,31 @@ export default (user, q) => {
   }
   if (user)
     params.access_token = user.access_token
-  Listing.search(params, (err, response) => {
-    // Success
-    if (response && response.status === 'success' && response.data.length === 1) {
-      AppStore.data.listing_map.listings = response.data
-      AppStore.data.listing_map.active_listing = response.data[0].id
+
+  Listing.search(params, async (err, response) => {
+    try {
+      const listings = await response
+      if (Array.isArray(listings)) {
+        const listings_info = {
+          ...AppStore.data.listing_map.listings_info,
+          type: 'search',
+          count: listings.length,
+          total: listings.length
+        }
+        const listing_map = {
+          ...AppStore.data.listing_map,
+          listings,
+          listings_info,
+          active_listing: listings[0].id
+        }
+        AppStore.data = {
+          ...AppStore.data,
+          listing_map
+        }
+        AppStore.emitChange()
+      }
+    } catch (error) {
+      throw error
     }
-    AppStore.emitChange()
   })
 }

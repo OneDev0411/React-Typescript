@@ -2,7 +2,7 @@
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import Brand from '../../../../controllers/Brand'
-
+let mapBoundsOnChangeDelay = null
 const controller = {
   initMap() {
     const data = AppStore.data
@@ -103,15 +103,15 @@ const controller = {
     const listing_map = data.listing_map
     const { bounds, center, zoom, size, marginBounds } = gmap
 
-    if (!listing_map)
-      return
+    // if (!listing_map)
+    //   return
 
-    if (!bounds)
-      return
+    // if (!bounds)
+    //   return
 
-    const auto_move = listing_map.auto_move
-    if (auto_move)
-      return
+    // const auto_move = listing_map.auto_move
+    // if (auto_move)
+    //   return
 
     const points = [
       {
@@ -135,8 +135,8 @@ const controller = {
         longitude: bounds.ne.lng
       }
     ]
-    AppStore.data.listing_map.center = center
-    AppStore.data.listing_map.zoom = zoom
+    // AppStore.data.listing_map.center = center
+    // AppStore.data.listing_map.zoom = zoom
 
     // Don't get more results if polygon on map
     // if (!window.poly) {
@@ -157,18 +157,44 @@ const controller = {
     //   }
     //   AppStore.emitChange()
     // }
-    AppStore.data.gmap = gmap
-    AppStore.emitChange()
+    // AppStore.data.gmap = gmap
+    // AppStore.emitChange()
+
+    console.log('changeeeeeeeeeeeeeeeeee')
 
     if (!data.show_actives_map && !data.show_alerts_map && !window.poly) {
       AppStore.data.listing_map.is_loading = true
-      AppStore.data.listing_map.options.points = points
-      ListingDispatcher.dispatch({
-        action: 'get-valerts',
-        user,
-        options: listing_map.options
-      })
-    }
+
+      const options = {
+        ...listing_map.options,
+        points
+      }
+
+      if (!mapBoundsOnChangeDelay) {
+        console.log('empty timeout')
+        mapBoundsOnChangeDelay = 1
+
+        ListingDispatcher.dispatch({
+          action: 'get-valerts',
+          user,
+          options: listing_map.options
+        })
+      } else {
+        clearTimeout(mapBoundsOnChangeDelay)
+        console.log('dealy cleared', mapBoundsOnChangeDelay)
+
+        mapBoundsOnChangeDelay = setTimeout(() => {
+          console.log('set timeout for valert req')
+
+          ListingDispatcher.dispatch({
+            user,
+            options,
+            action: 'get-valerts'
+          })
+          clearTimeout(mapBoundsOnChangeDelay)
+        }, 300)
+      } // else
+    } // if
   },
   hideModal() {
     if (AppStore.data.listing_map)

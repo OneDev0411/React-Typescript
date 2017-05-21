@@ -941,7 +941,7 @@ export default class Mls extends Component {
         <div className={ main_class } style={ main_style }>
           { /* this.cacheImages() */ }
           { toolbar }
-          { loading }
+          {/*{ loading }*/}
           <div style={ map_wrapper_style }>
             { remove_drawing_button }
             { content_area }
@@ -982,7 +982,7 @@ export default class Mls extends Component {
           showSubdivisionsList={ controller.listing_filter.showSubdivisionsList }
           changeSubdivisionsSelected={ controller.listing_filter.changeSubdivisionsSelected }
         />
-        { zoom_controls }
+        {/*{ zoom_controls }*/}
         { listing_map && listing_map.show_share_type_modal ? share_type_modal_area : '' }
         { listing_map && listing_map.show_share_alert_error_tooltip ? share_alert_error_tooltip : '' }
         <ShareAlertModal
