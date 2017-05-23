@@ -45,7 +45,7 @@ const requestMiddleware = async function (ctx, next) {
           responseText = JSON.parse(responseText)
         } catch(e) {}
 
-        const status = status = err.response ? err.response.status : 500
+        const status = err.response ? err.response.status : 500
 
         if (status === 490)
           return false
