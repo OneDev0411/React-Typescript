@@ -63,7 +63,6 @@ const requestMiddleware = async function (ctx, next) {
     }
     catch(e) {
       console.log(e)
-      throw e
     }
   }
 
