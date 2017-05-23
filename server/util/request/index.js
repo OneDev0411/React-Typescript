@@ -43,10 +43,14 @@ const requestMiddleware = async function (ctx, next) {
         // try to parse encoded json
         try {
           responseText = JSON.parse(responseText)
-        }
-        catch(e) {}
+        } catch(e) {}
 
-        ctx.status = err.response ? err.response.status : 500
+        const status = status = err.response ? err.response.status : 500
+
+        if (status === 490)
+          return false
+
+        ctx.status = status
         ctx.body = {
           status: 'error',
           response: {
@@ -63,6 +67,7 @@ const requestMiddleware = async function (ctx, next) {
     }
     catch(e) {
       console.log(e)
+      throw e
     }
   }
 
