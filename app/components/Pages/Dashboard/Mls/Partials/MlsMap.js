@@ -102,7 +102,26 @@ export default class MlsMap extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('recive', nextProps.data)
+    console.log('recive', this.props.data.listing_map, nextProps.data.listing_map)
+
+    const hasLocationSearch = nextProps.data.listing_map &&
+      nextProps.data.listing_map.has_location_search
+
+    if (
+      hasLocationSearch
+    ) {
+      const { center, zoom } = AppStore.data.listing_map
+      this.setState({
+        mapProps: {
+          ...this.state.mapProps,
+          center,
+          zoom
+        }
+      })
+      AppStore.data.listing_map.has_location_search = false
+      console.log('hasLocationSearch')
+      return
+    }
 
     if (nextProps.data.path !== this.props.data.path) {
       if (
@@ -298,8 +317,9 @@ export default class MlsMap extends Component {
           !nextProps.data.show_alerts_map
       ) {
         if (
-          this.state.listings.listingsLength
-          !== nextProps.data.listing_map.listings.length
+          nextProps.data.listing_map.listings &&
+          (this.state.listings.listingsLength
+          !== nextProps.data.listing_map.listings.length)
         ) {
           console.log('update listings')
           return 1

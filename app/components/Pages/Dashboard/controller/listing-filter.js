@@ -227,8 +227,8 @@ const controller = {
     })
   },
   showFilterForm() {
-    delete AppStore.data.listing_panel
-    delete AppStore.data.show_listing_panel
+    // delete AppStore.data.listing_panel
+    // delete AppStore.data.show_listing_panel
     if (AppStore.data.show_filter_form)
       delete AppStore.data.show_filter_form
     else

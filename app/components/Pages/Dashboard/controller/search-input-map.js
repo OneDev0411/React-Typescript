@@ -30,7 +30,10 @@ const controller = {
   },
   initGoogleSearch() {
     const google = window.google
-    const autocomplete = new google.maps.places.Autocomplete(document.getElementById('google_search'))
+    const autocomplete = new google.maps
+      .places
+      .Autocomplete(document.getElementById('google_search'))
+
     const geolocation = {
       lat: AppStore.data.listing_map.center.lat,
       lng: AppStore.data.listing_map.center.lng
@@ -39,15 +42,18 @@ const controller = {
       center: geolocation,
       radius: 500
     })
+
     autocomplete.setBounds(circle.getBounds())
+
     autocomplete.addListener('place_changed', () => {
+      console.log('changeeee palce')
       const place = autocomplete.getPlace()
       // Do async search for single listing
-      ListingDispatcher.dispatch({
-        action: 'search-listing-input',
-        user: AppStore.data.user,
-        q: place.name
-      })
+      // ListingDispatcher.dispatch({
+      //   action: 'search-listing-input',
+      //   user: AppStore.data.user,
+      //   q: place.name
+      // })
       // Check if MLS number
       if (!isNaN(place.name) && place.name.length > 7) {
         AppStore.data.listing_map.is_loading = true
