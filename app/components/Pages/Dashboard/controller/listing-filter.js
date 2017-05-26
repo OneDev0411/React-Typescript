@@ -220,6 +220,7 @@ const controller = {
       })
       return
     }
+    console.log('set filter')
     ListingDispatcher.dispatch({
       action: 'get-valerts',
       user,

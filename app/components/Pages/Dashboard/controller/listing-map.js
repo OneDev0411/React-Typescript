@@ -135,8 +135,6 @@ const controller = {
         longitude: bounds.ne.lng
       }
     ]
-    // AppStore.data.listing_map.center = center
-    // AppStore.data.listing_map.zoom = zoom
 
     // Don't get more results if polygon on map
     // if (!window.poly) {
@@ -167,7 +165,18 @@ const controller = {
 
       const options = {
         ...listing_map.options,
-        points
+        points,
+        location: {
+          latitude: center.lat,
+          longitude: center.lng
+        }
+      }
+
+      AppStore.data.listing_map = {
+        ...AppStore.data.listing_map,
+        zoom,
+        center,
+        options
       }
 
       if (!mapBoundsOnChangeDelay) {
@@ -185,7 +194,6 @@ const controller = {
 
         mapBoundsOnChangeDelay = setTimeout(() => {
           console.log('set timeout for valert req')
-
           ListingDispatcher.dispatch({
             user,
             options,

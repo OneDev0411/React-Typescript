@@ -73,14 +73,32 @@ export default class MlsMap extends Component {
   constructor(props) {
     super(props)
     let data = null
+    let oldState = store[this.props.data.path]
+
+    if (oldState) {
+      oldState = {
+        ...oldState,
+        isRecovered: true
+      }
+    }
 
     const favoriteListings = props.data.favorite_listings
-    if (favoriteListings && props.data.show_actives_map)
+    if (favoriteListings && props.data.show_actives_map) {
       data = this.getFavorateListingsData(favoriteListings)
+      if (oldState) {
+        oldState = {
+          ...oldState,
+          listings: {
+            ...oldState.listings,
+            data
+          }
+        }
+      }
+    }
 
     this.declusterZoomLevel = 17
 
-    this.state = {
+    this.state = oldState || {
       listings: {
         data,
         total: 0,
@@ -89,7 +107,9 @@ export default class MlsMap extends Component {
       mapProps: {
         ...mapOptions
       },
+      isResized: false,
       isFetching: false,
+      isRecovered: false,
       hoveredMarkerId: null
     }
 
@@ -101,8 +121,29 @@ export default class MlsMap extends Component {
       this.clusterMarkerOnClickHandler.bind(this)
   }
 
+  componentDidMount() {
+    if (window.google) {
+      window.google.maps.event.addDomListener(window, 'resize', () => {
+        if (this.state.isResized)
+          return
+
+        this.setState({
+          isResized: true
+        })
+      })
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
-    console.log('recive', this.props.data.listing_map, nextProps.data.listing_map)
+    console.log('recive')
+
+    const isLoading = nextProps.data.listing_map.is_loading
+    if (!this.state.isFetching && isLoading) {
+      this.setState({
+        isFetching: true
+      })
+      console.log('recive is loading')
+    }
 
     const hasLocationSearch = nextProps.data.listing_map &&
       nextProps.data.listing_map.has_location_search
@@ -278,10 +319,32 @@ export default class MlsMap extends Component {
           { data, total },
           mapProps
         )
+      } else {
+        console.log('recive empty list')
+        if (this.state.isFetching) {
+          this.setState({
+            isFetching: false
+          })
+        }
       }
     }
   }
   shouldComponentUpdate(nextProps, nextState) {
+    if (this.state.isResized) {
+      this.setState({
+        isResized: false
+      })
+      return 0
+    }
+
+    if (
+      this.state.isFetching !==
+      nextState.isFetching
+    ) {
+      console.log('is fetching')
+      return 1
+    }
+
     if (
       this.state.mapProps.zoom !==
       nextState.mapProps.zoom
@@ -367,7 +430,11 @@ export default class MlsMap extends Component {
 
     return 0
   }
-
+  componentWillUnmount() {
+    console.log('cwum')
+    if (this.state.listings.data)
+      store[this.props.data.path] = this.state
+  }
   getFavorateListingsData(listings) {
     return listings.map((list) => {
       if (list.property && list.property.address) {
@@ -508,18 +575,18 @@ export default class MlsMap extends Component {
   mapOnChangeHandler(gmap) {
     const { data } = this.props
 
+    if (this.state.isResized) {
+      console.log('map resized')
+      return
+    }
+
     if (this.state.isRecovered) {
       this.setState({
         isRecovered: false
       })
+      console.log('is recovered')
       return
     }
-
-    if (
-      this.props.data.listing_map.listings_info &&
-      this.props.data.listing_map.listings_info.type &&
-      this.props.data.listing_map.listings_info.type === 'search'
-    ) return
 
     if (
       window.poly ||
