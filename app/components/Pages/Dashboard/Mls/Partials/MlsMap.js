@@ -113,7 +113,7 @@ export default class MlsMap extends Component {
       }
     }
 
-    this.declusterZoomLevel = 18
+    this.declusterZoomLevel = 17
 
     this.state = oldState || setInitialState(data)
 
@@ -254,10 +254,6 @@ export default class MlsMap extends Component {
           return
         }
       }
-
-      console.log('alert tab: set initial state')
-      this.setState(setInitialState())
-      return
     }
 
     if ((
@@ -319,6 +315,7 @@ export default class MlsMap extends Component {
       }
     }
   }
+
   shouldComponentUpdate(nextProps, nextState) {
     if (this.state.isResized) {
       this.setState({ isResized: false })
