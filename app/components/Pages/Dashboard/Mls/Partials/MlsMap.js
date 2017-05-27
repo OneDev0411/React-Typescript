@@ -14,6 +14,7 @@ import config from '../../../../../../config/public'
 import Brand from '../../../../../controllers/Brand'
 import AppStore from '../../../../../stores/AppStore'
 import { Button, ButtonGroup } from 'react-bootstrap'
+import SearchPinMarker from './Markers/SearchPinMarker'
 
 let store = {}
 
@@ -77,6 +78,7 @@ const setInitialState = (data = null) => ({
   mapProps: {
     ...mapOptions
   },
+  searchPin: null,
   isResized: false,
   isFetching: false,
   isRecovered: false,
@@ -111,7 +113,7 @@ export default class MlsMap extends Component {
       }
     }
 
-    this.declusterZoomLevel = 17
+    this.declusterZoomLevel = 18
 
     this.state = oldState || setInitialState(data)
 
@@ -152,14 +154,15 @@ export default class MlsMap extends Component {
 
     if (hasLocationSearch) {
       const { center, zoom } = AppStore.data.listing_map
+      const searchPin = nextProps.data.listing_map.location_search.center
       this.setState({
+        searchPin,
         mapProps: {
           ...this.state.mapProps,
           center,
           zoom
         }
       })
-      AppStore.data.listing_map.has_location_search = false
       console.log('hasLocationSearch')
       return
     }
@@ -564,6 +567,20 @@ export default class MlsMap extends Component {
   mapOnChangeHandler(gmap) {
     const { data } = this.props
 
+    const hasLocationSearch = data.listing_map &&
+      data.listing_map.has_location_search
+
+    if (hasLocationSearch) {
+      AppStore.data.listing_map.has_location_search = false
+      console.log('mapChanged: falsed has_location_search')
+    } else if (this.state) {
+      this.setState({
+        searchPin: null
+      })
+      AppStore.data.listing_map.search_input_text = ''
+      console.log('mapChanged: remove searchPin')
+    }
+
     if (this.state.isResized) {
       console.log('mapChanged: resized')
       return
@@ -617,9 +634,58 @@ export default class MlsMap extends Component {
     })
   }
 
-  showMap() {
+  getMarkers() {
     const appData = this.props.data
     const { data } = this.state.listings
+
+    let markers = data &&
+      !this.state.isFetching
+      ? data.map(({
+            ...markerProps,
+            numPoints,
+            list,
+            lat,
+            lng,
+            id
+        }) => (
+          numPoints === 1
+            ?
+              <SingleMarker
+                key={id}
+                data={appData}
+                {...markerProps}
+                onClickHandler={
+                  controller.listing_viewer
+                    .showListingViewer.bind(this)
+                }
+                markerPopupIsActive={this.state.hoveredMarkerId === id}
+                onMouseLeaveHandler={() => this.onMouseLeaveHandler(id)}
+                onMouseEnterHandler={() => this.onMouseEnterHandler(id)}
+              />
+            :
+              <ClusterMarker
+                key={id}
+                {...markerProps}
+                onClickHandler={
+                  () => this.clusterMarkerOnClickHandler({
+                    lat,
+                    lng
+                  }, list)
+                }
+              />
+          )
+        ) // map
+      : []
+
+    const searchPin = this.state.searchPin
+    if (searchPin)
+      markers.push(<SearchPinMarker {...searchPin} />)
+
+    return markers
+  }
+
+  showMap() {
+    const appData = this.props.data
 
     const bootstrapURLKeys = {
       key: config.google.api_key,
@@ -672,45 +738,7 @@ export default class MlsMap extends Component {
           options={controller.listing_map.createMapOptions.bind(this)}
           onGoogleApiLoaded={controller.listing_map.handleGoogleMapApi.bind(this)}
         >
-          {
-            data &&
-            !this.state.isFetching &&
-            data.map(({
-                ...markerProps,
-                numPoints,
-                list,
-                lat,
-                lng,
-                id
-            }) => (
-              numPoints === 1
-                ?
-                  <SingleMarker
-                    key={id}
-                    data={appData}
-                    {...markerProps}
-                    onClickHandler={
-                      controller.listing_viewer
-                        .showListingViewer.bind(this)
-                    }
-                    markerPopupIsActive={this.state.hoveredMarkerId === id}
-                    onMouseLeaveHandler={() => this.onMouseLeaveHandler(id)}
-                    onMouseEnterHandler={() => this.onMouseEnterHandler(id)}
-                  />
-                :
-                  <ClusterMarker
-                    key={id}
-                    {...markerProps}
-                    onClickHandler={
-                      () => this.clusterMarkerOnClickHandler({
-                        lat,
-                        lng
-                      }, list)
-                    }
-                  />
-              )
-            ) // map
-          }
+          {this.getMarkers()}
         </GoogleMap>
 
         <ButtonGroup
