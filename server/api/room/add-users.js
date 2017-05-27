@@ -12,6 +12,7 @@ router.post('/rooms/add-users', bodyParser(), async (ctx, next) => {
   try {
     const response = await ctx
       .fetch(`/rooms/${room_id}/users`, 'POST')
+      .set(headers)
       .send({
         users,
         emails,
