@@ -68,13 +68,27 @@ const setPositionToPointsWithSameCoordinate = (clusters) => {
     })
   return PointsWithSameCoordinate
 }
+const setInitialState = (data = null) => ({
+  listings: {
+    data,
+    total: 0,
+    listingsLength: 0
+  },
+  mapProps: {
+    ...mapOptions
+  },
+  isResized: false,
+  isFetching: false,
+  isRecovered: false,
+  hoveredMarkerId: null
+})
 
 export default class MlsMap extends Component {
   constructor(props) {
     super(props)
-    let data = null
-    let oldState = store[this.props.data.path]
+    const path = props.data
 
+    let oldState = store[this.props.data.path]
     if (oldState) {
       oldState = {
         ...oldState,
@@ -82,6 +96,7 @@ export default class MlsMap extends Component {
       }
     }
 
+    let data = null
     const favoriteListings = props.data.favorite_listings
     if (favoriteListings && props.data.show_actives_map) {
       data = this.getFavorateListingsData(favoriteListings)
@@ -98,20 +113,7 @@ export default class MlsMap extends Component {
 
     this.declusterZoomLevel = 17
 
-    this.state = oldState || {
-      listings: {
-        data,
-        total: 0,
-        listingsLength: 0
-      },
-      mapProps: {
-        ...mapOptions
-      },
-      isResized: false,
-      isFetching: false,
-      isRecovered: false,
-      hoveredMarkerId: null
-    }
+    this.state = oldState || setInitialState(data)
 
     this.mapZoomHandler = this.mapZoomHandler.bind(this)
     this.mapOnChangeHandler = this.mapOnChangeHandler.bind(this)
@@ -148,9 +150,7 @@ export default class MlsMap extends Component {
     const hasLocationSearch = nextProps.data.listing_map &&
       nextProps.data.listing_map.has_location_search
 
-    if (
-      hasLocationSearch
-    ) {
+    if (hasLocationSearch) {
       const { center, zoom } = AppStore.data.listing_map
       this.setState({
         mapProps: {
@@ -164,23 +164,25 @@ export default class MlsMap extends Component {
       return
     }
 
-    if (nextProps.data.path !== this.props.data.path) {
+
+    const nextPath = nextProps.data.path
+    if (nextPath !== this.props.data.path) {
       if (
         !nextProps.data.show_listing_panel &&
-        nextProps.data.path.indexOf('actives') !== -1
+        (nextPath === '/dashboard/mls' ||
+        nextPath === '/dashboard/mls/actives')
       ) {
-        console.log('receive fav path -> active listing panel')
+        console.log('receive path -> active listing panel')
         AppStore.data.listing_panel = {
           view: 'photos',
           size: 'half'
         }
         AppStore.data.show_listing_panel = true
         AppStore.emitChange()
-        return
       }
 
       store[this.props.data.path] = this.state
-      console.log('store', store)
+      console.log('receive, save store')
 
       if (store[nextProps.data.path]) {
         const newState = {
@@ -191,7 +193,7 @@ export default class MlsMap extends Component {
         this.setState(newState)
         delete store[nextProps.data.path]
 
-        console.log('set path in recive', store)
+        console.log('recive, load store')
         return
       }
     }
@@ -199,19 +201,10 @@ export default class MlsMap extends Component {
     if (
       nextProps.data.show_actives_map &&
       nextProps.data.favorite_listings &&
-      nextProps.data.favorite_listings.length
+      nextProps.data.favorite_listings.length &&
+      nextProps.data.favorite_listings.length !==
+      this.state.listings.listingsLength
     ) {
-      if (!nextProps.data.show_listing_panel) {
-        console.log('receive fav -> active listing panel')
-        AppStore.data.listing_panel = {
-          view: 'photos',
-          size: 'half'
-        }
-        AppStore.data.show_listing_panel = true
-        AppStore.emitChange()
-        return
-      }
-
       const listings = nextProps.data.favorite_listings
       const newListings = this.getFavorateListingsData(listings)
       this.setState({
@@ -222,7 +215,7 @@ export default class MlsMap extends Component {
         },
         mapProps: { ...mapOptions }
       })
-      console.log('rceive favorite set')
+      console.log('rceive, initial favorite load')
       return
     }
 
@@ -257,14 +250,10 @@ export default class MlsMap extends Component {
           console.log('rceive and set alerts')
           return
         }
-
-        return
       }
 
-      this.setState({
-        mapProps: { ...mapOptions }
-      })
-      console.log('alert tab')
+      console.log('alert tab: set initial state')
+      this.setState(setInitialState())
       return
     }
 
@@ -319,21 +308,17 @@ export default class MlsMap extends Component {
           { data, total },
           mapProps
         )
-      } else {
+      } else if (this.state.isFetching) {
         console.log('recive empty list')
-        if (this.state.isFetching) {
-          this.setState({
-            isFetching: false
-          })
-        }
+        this.setState({
+          isFetching: false
+        })
       }
     }
   }
   shouldComponentUpdate(nextProps, nextState) {
     if (this.state.isResized) {
-      this.setState({
-        isResized: false
-      })
+      this.setState({ isResized: false })
       return 0
     }
 
@@ -430,11 +415,15 @@ export default class MlsMap extends Component {
 
     return 0
   }
+
   componentWillUnmount() {
     console.log('cwum')
-    if (this.state.listings.data)
+    if (this.state.listings.data &&
+      this.props.data.path !== '/dashboard/mls/alerts'
+    )
       store[this.props.data.path] = this.state
   }
+
   getFavorateListingsData(listings) {
     return listings.map((list) => {
       if (list.property && list.property.address) {
@@ -576,7 +565,7 @@ export default class MlsMap extends Component {
     const { data } = this.props
 
     if (this.state.isResized) {
-      console.log('map resized')
+      console.log('mapChanged: resized')
       return
     }
 
@@ -584,7 +573,7 @@ export default class MlsMap extends Component {
       this.setState({
         isRecovered: false
       })
-      console.log('is recovered')
+      console.log('mapChanged: recovered')
       return
     }
 
