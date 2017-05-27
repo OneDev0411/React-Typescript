@@ -201,25 +201,36 @@ export default class MlsMap extends Component {
       }
     }
 
-    if (
-      nextProps.data.show_actives_map &&
-      nextProps.data.favorite_listings &&
-      nextProps.data.favorite_listings.length &&
-      nextProps.data.favorite_listings.length !==
-      this.state.listings.listingsLength
-    ) {
-      const listings = nextProps.data.favorite_listings
-      const newListings = this.getFavorateListingsData(listings)
+    if (nextProps.data.show_actives_map) {
+      if (
+        nextProps.data.favorite_listings &&
+        nextProps.data.favorite_listings.length &&
+        nextProps.data.favorite_listings.length !==
+        this.state.listings.listingsLength
+      ) {
+        const listings = nextProps.data.favorite_listings
+        const newListings = this.getFavorateListingsData(listings)
+        this.setState({
+          listings: {
+            data: newListings,
+            total: newListings.length,
+            listingsLength: newListings.length
+          },
+          mapProps: { ...mapOptions }
+        })
+        console.log('rceive, initial favorite list load')
+        return
+      }
+
       this.setState({
         listings: {
-          data: newListings,
-          total: newListings.length,
-          listingsLength: newListings.length
+          data: null,
+          total: 0,
+          listingsLength: 0
         },
         mapProps: { ...mapOptions }
       })
-      console.log('rceive, initial favorite load')
-      return
+      console.log('rceive, favorite tab with zero listing')
     }
 
     if (nextProps.data.show_alerts_map) {
@@ -570,7 +581,7 @@ export default class MlsMap extends Component {
     if (hasLocationSearch) {
       AppStore.data.listing_map.has_location_search = false
       console.log('mapChanged: falsed has_location_search')
-    } else if (this.state) {
+    } else if (this.state.searchPin) {
       this.setState({
         searchPin: null
       })
@@ -676,7 +687,7 @@ export default class MlsMap extends Component {
 
     const searchPin = this.state.searchPin
     if (searchPin)
-      markers.push(<SearchPinMarker {...searchPin} />)
+      markers.push(<SearchPinMarker key="pinMarker" {...searchPin} />)
 
     return markers
   }

@@ -7,7 +7,6 @@ const SearchPinMarker = ({
   <div
     lat={lat}
     lng={lng}
-    key="center-marker"
   >
     <img
       style={{ height: '36px' }}
