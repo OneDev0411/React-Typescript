@@ -5,6 +5,7 @@ import _ from 'underscore'
 import moment from 'moment'
 import { getMessages } from '../../../../../store_actions/chatroom'
 import Toolbar from './toolbar'
+import Message from './message-types'
 
 class Messages extends React.Component {
   componentDidMount() {
@@ -37,6 +38,8 @@ class Messages extends React.Component {
 
   async loadMessages(roomId, limit = 20, max_value = null, scroll_to = null) {
     const { dispatch } = this.props
+
+    // fetch
     await dispatch(getMessages(roomId, limit, max_value))
 
     // move to end of div
@@ -63,7 +66,8 @@ class Messages extends React.Component {
   }
 
   render() {
-    const { roomId } = this.props
+    const { roomId, user } = this.props
+    console.log('[ x ] RENDER message cmp.')
 
     // get messages of current room
     const messages = roomId ? this.props.messages[roomId] : null
@@ -82,25 +86,27 @@ class Messages extends React.Component {
             src="/static/images/loading-states/messages.svg"
           />
         }
-
         <div
           className="messages-list"
           ref={ref => this.messagesList = ref}
         >
+
           {
-            messages && _.map(messages, msg =>
-              <div
-                className="message-item"
+            messages &&
+            _.map(messages, msg =>
+              <Message
                 key={`MESSAGE_${msg.id}`}
-              >
-                <div className="title">
-                  { msg.author && msg.author.abbreviated_display_name }
-                </div>
-                { msg.comment}
-                <p>{ moment.unix(msg.created_at).format('Y/M/D HH:mm:ss') }</p>
-              </div>
+                user={user}
+                message={msg}
+              />
             )
           }
+        </div>
+
+        <div
+          className="message-create"
+        >
+          ----
         </div>
       </div>
     )
