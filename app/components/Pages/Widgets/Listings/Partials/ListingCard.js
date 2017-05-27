@@ -76,11 +76,13 @@ export default class ListingCard extends Component {
       )
     }
     let agent_image_area
-    if (listing.list_agent) {
+
+    const agent_user = listing.proposed_agent
+    if (agent_user) {
       let avatar = (
         <div style={S(`bg-url(${Brand.asset('default_avatar')}) w-50 h-50 bg-center bg-cover br-100`)} />
       )
-      const profile_image_url = listing.list_agent.profile_image_url
+      const profile_image_url = agent_user.profile_image_url
       if (profile_image_url) {
         avatar = (
           <div style={S(`bg-url(${profile_image_url}) w-50 h-50 bg-center bg-cover br-100`)} />
@@ -88,8 +90,8 @@ export default class ListingCard extends Component {
       }
       let online_indicator
       let bg_color = 'dddfe0'
-      if (listing.list_agent.online_state) {
-        if (listing.list_agent.online_state === 'Online' || listing.list_agent.online_state === 'Background')
+      if (agent_user.agent && agent_user.agent.online_state) {
+        if (agent_user.agent && agent_user.agent.online_state === 'Online' || agent_user.agent.online_state === 'Background')
           bg_color = '35b863'
       }
       online_indicator = <div style={S(`br-100 bg-${bg_color} w-13 h-13 bw-2 solid bc-fff absolute z-2 t-2n r-2`)} />
