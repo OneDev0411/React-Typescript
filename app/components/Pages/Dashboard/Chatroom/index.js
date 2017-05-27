@@ -43,6 +43,7 @@ export default class Recents extends React.Component {
 
   render() {
     const { activeRoom } = this.state
+    const { user } = this.props
 
     return (
       <Row className="chatroom">
@@ -55,6 +56,7 @@ export default class Recents extends React.Component {
 
         <Col lg={9} md={8} sm={6} xs={6} className="no-padding">
           <Messages
+            user={user}
             roomId={activeRoom}
           />
         </Col>
