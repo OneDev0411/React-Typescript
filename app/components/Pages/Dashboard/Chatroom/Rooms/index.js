@@ -29,14 +29,9 @@ const Rooms = ({
   filter
 }) => {
 
-  const render = (list, type, filter = '') => (
+  const render = (list, filter = '') => (
     _.chain(list)
-    // .filter(room => {
-    //   if (room.room_type !== type)
-    //     return false
-
-    //   return (filter === '') ? true : room.proposed_title.startsWith(filter)
-    // })
+    .filter(room => room.proposed_title.toLowerCase().startsWith(filter.toLowerCase()))
     .map(room =>
       <div
         onClick={() => onSelectRoom(room.id)}
@@ -70,7 +65,7 @@ const Rooms = ({
         <div className="section-title">
         </div>
         <div className="list">
-          { render(rooms, 'Direct', filter) }
+          { render(rooms, filter) }
         </div>
       </div>
     </div>
