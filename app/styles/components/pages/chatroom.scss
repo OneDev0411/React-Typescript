@@ -30,6 +30,9 @@ $rooms-padding: 4vw;
     padding-top: 3vh;
     .message-item {
       @extend %message-item;
+      &.recommendation {
+        @extend %message-item-recommendation;
+      }
     }
   }
 
@@ -47,6 +50,23 @@ $rooms-padding: 4vw;
   padding: 0 2vw 0 3vw;
   .title {
     font-weight: bold;
+  }
+}
+
+%message-item-recommendation{
+  width: 70%;
+  img {
+    width: 100%;
+  }
+  .card {
+    border: 1px solid #eee;
+    .info {
+      padding: 10px;
+    }
+    .message {
+      margin: 30px 2px 8px 2px;
+      color: gray;
+    }
   }
 }
 
