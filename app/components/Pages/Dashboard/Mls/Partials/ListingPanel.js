@@ -68,7 +68,8 @@ export default class ListingPanel extends Component {
     if (data.show_actives_map && data.favorite_listings)
       listings = data.favorite_listings
 
-    const listingsIsSmall = listings && listings.length < 21
+    const listingsIsSmall = true
+    // const listingsIsSmall = listings && listings.length < 21
 
     let listing_panel_cards = null
     let listing_panel_list = null
