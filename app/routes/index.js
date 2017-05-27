@@ -19,7 +19,6 @@ import Password from '../components/Pages/Password'
 import NoMatch from '../components/Pages/NoMatch'
 import Settings from '../components/Pages/Account/Settings'
 import Notifications from '../components/Pages/Account/Notifications'
-import Recommend from '../components/Pages/Dashboard/Mls/Listing/Recommend'
 import Agents from '../components/Pages/Dashboard/Mls/Agents'
 import Branch from '../components/Pages/Branch'
 import Website from '../components/Pages/Dashboard/Website'
@@ -75,7 +74,6 @@ export default (
     <Route path="dashboard/mls/alerts/:alert_id" component={Mls} />
     <Route path="dashboard/mls/actives" component={Mls} />
     <Route path="dashboard/mls/:id" component={Listing} />
-    <Route path="dashboard/mls/listing/recommend" component={Recommend} />
     <Route path="dashboard/website" component={Website} />
     <Route path="dashboard/cards" component={Cards} />
     <Route path="dashboard/forms" component={Forms} />

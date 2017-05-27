@@ -40,7 +40,6 @@ const routes = {
   listing: [
     ['search'],
     ['listings'],
-    ['similars'],
     ['valert']
   ],
   message: [
