@@ -16,16 +16,36 @@ export default (state = initialState, action) => {
       }
 
     case types.GET_MESSAGES:
-      const messages = {
-        ...action.messages,
-        ...state.messages[action.id]
+    case types.CREATE_MESSAGE:
+
+      const messages = state.messages[action.id]
+
+      // get list of messages of current room
+      let list = messages && messages.list ? messages.list : {}
+
+      if (action.append)
+        list = { ...list, ...action.messages }
+      else
+        list = { ...action.messages, ...list }
+
+      // remove queued message
+      if (action.queueId) {
+        list = _.omit(list, msg => msg.id === action.queueId)
       }
+
+      // total += 1
+      if (action.increaseTotal)
+        messages.total += 1
 
       return {
         ...state,
         ...{messages: {
           ...state.messages,
-          ...{[action.id]: messages}
+          ...{[action.id]: {
+            ...state.messages[action.id],
+            ...action.info,
+            ...{ list }
+          }}
         }}
       }
 
