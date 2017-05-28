@@ -49,8 +49,13 @@ export default {
     }
     if (params.office)
       request_object.office = params.office
+
     if (params.offset)
       request_object.offset = params.offset
+
+    if (params.brand)
+      request_object.brand = params.brand
+
     fetch(endpoint, {
       method: 'post',
       headers: {

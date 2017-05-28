@@ -23,7 +23,8 @@ export default class Listings extends Component {
     const location = data.location
     const brokerage = location.query.brokerage
     const agent = location.query.agent
-    const options = this.initOptions(brokerage, agent)
+    const brand = location.query.brand
+    const options = this.initOptions(brokerage, agent, brand)
     AppStore.data.widget = {
       options
     }
@@ -70,26 +71,19 @@ export default class Listings extends Component {
       options
     })
   }
-  initOptions(brokerage, agent) {
+  initOptions(brokerage, agent, brand) {
     const options = {
       limit: '75',
-      location: {
-        longitude: -96.79698789999998,
-        latitude: 32.7766642
-      },
-      horizontal_distance: 2830,
       property_types: ['Residential', 'Residential Lease', 'Lots & Acreage'],
-      vertical_distance: 2830,
       listing_statuses: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract', 'Pending'],
-      currency: 'USD',
-      points: null,
-      open_house: false,
       property_subtypes: ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse', 'LSE-Apartment', 'LSE-Condo/Townhome', 'LSE-Duplex', 'LSE-Fourplex', 'LSE-House', 'LSE-Mobile', 'LSE-Triplex', 'LND-Commercial', 'LND-Farm/Ranch', 'LND-Residential']
     }
     if (brokerage)
       options.list_offices = [brokerage]
     if (agent)
       options.agents = [agent]
+    if (brand)
+      options.brand = brand
     return options
   }
   handleButtonClick(type) {
@@ -116,6 +110,11 @@ export default class Listings extends Component {
     const agent = data.location.query.agent
     if (agent)
       options.agents = [agent]
+
+    const brand = data.location.query.brand
+    if (brand)
+      options.brand = brand
+
     AppStore.emitChange()
     ListingDispatcher.dispatch({
       action: 'get-valerts-widget',

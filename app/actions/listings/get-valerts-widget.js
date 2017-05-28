@@ -26,7 +26,7 @@ export default (user, options) => {
 
         Brand.getByHostname({ hostname }, (err, res) => {
           AppStore.data.brand = res.data
-          params.options.brand = AppStore.data.brand.id
+          params.brand = AppStore.data.brand.id
           AppStore.emitChange()
           callback()
         })

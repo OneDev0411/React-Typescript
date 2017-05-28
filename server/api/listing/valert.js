@@ -17,7 +17,7 @@ router.post('/listings/valerts', async (ctx, next) => {
   }
 
   // From listing widget
-  if (options.list_offices && options.list_offices.length) {
+  if (options.list_offices && options.list_offices.length || options.brand) {
     endpoint += '?associations=compact_listing.proposed_agent'
 
     if (options.listing_statuses[0] === 'Sold') {
@@ -25,10 +25,11 @@ router.post('/listings/valerts', async (ctx, next) => {
     }
   }
 
+
   const headers = {}
 
-  if (req.body.options.brand) {
-    headers['x-rechat-brand'] = req.body.options.brand
+  if (req.body.brand) {
+    headers['x-rechat-brand'] = req.body.brand
   }
 
   // Offset
