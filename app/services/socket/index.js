@@ -6,7 +6,6 @@ import config from '../../../config/public'
 
 export default class Socket {
   constructor(user) {
-    this.user = user
     const socket = io(config.socket.server, {
       reconnection: true,
       reconnectionDelay: 1000,
@@ -18,11 +17,8 @@ export default class Socket {
     window.socket = socket
 
     // create authentication
-    if (!user)
-      return false
-
-    // authenticate user
-    Socket.authenicate(user.access_token)
+    if (user)
+      Socket.authenicate(user.access_token)
 
     // bind User.Typing
     socket.on('User.Typing', this.onUserTyping)
