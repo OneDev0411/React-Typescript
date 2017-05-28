@@ -58,25 +58,6 @@ class Brand {
     return def
   }
 
-  side(listing) {
-    const brand = AppStore.data.brand
-    const agent_ids = brand && brand.agents ? brand.agents.map(a => a.id) : []
-
-    const is_list_agent = listing.list_agent && agent_ids.indexOf(listing.list_agent.id) > -1
-    const is_selling_agent = listing.list_agent && agent_ids.indexOf(listing.selling_agent) > -1
-
-    if (is_list_agent && is_selling_agent)
-      return 'Listing & Buyer Agent'
-
-    if (is_list_agent && !is_selling_agent)
-      return 'Listing Agent'
-
-    if (!is_list_agent && is_selling_agent)
-      return 'Buyer Agent'
-
-    return ''
-  }
-
   checkBranding() {
     if (typeof window === 'undefined')
       return

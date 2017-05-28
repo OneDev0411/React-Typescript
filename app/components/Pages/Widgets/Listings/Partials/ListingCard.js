@@ -7,6 +7,35 @@ import FavoriteHeart from '../../../Dashboard/Partials/FavoriteHeart'
 import Brand from '../../../../../controllers/Brand'
 import ActionBubble from '../../../Partials/ActionBubble'
 export default class ListingCard extends Component {
+  side(listing) {
+    if (!listing.proposed_agent)
+      return
+
+    if (!listing.proposed_agent.agent)
+      return
+
+    const agent = listing.proposed_agent.agent
+
+    const is_list_agent = (
+      agent.mlsid === listing.list_agent_mls_id || agent.mlsid === listing.co_list_agent_mls_id
+    )
+
+    const is_selling_agent = (
+      agent.mlsid === listing.selling_agent_mls_id || agent.mlsid === listing.co_selling_agent_mls_id
+    )
+
+    if (is_list_agent && is_selling_agent)
+      return 'Listing & Buyer Agent'
+
+    if (is_list_agent && !is_selling_agent)
+      return 'Listing Agent'
+
+    if (!is_list_agent && is_selling_agent)
+      return 'Buyer Agent'
+
+    return ''
+  }
+
   render() {
     const listing = this.props.listing
     const data = this.props.data
@@ -230,7 +259,7 @@ export default class ListingCard extends Component {
             </div>
             <div style={S('pull-left relative t-17 w-1 h-14 bg-e5e5e5 mr-15')} />
             <div style={S('pull-left mr-10 mt-13 color-8696a4')}>
-              { Brand.side(listing) }
+              { this.side(listing) }
             </div>
           </div>
         </div>
