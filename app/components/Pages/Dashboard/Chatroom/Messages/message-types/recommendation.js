@@ -22,7 +22,7 @@ export default ({
   const { property } = listing
 
   return (
-    <div className="message-item recommendation">
+    <div className="recommendation">
       <strong>
         { author ? 'Shared a Home' : '' }:
         { util.addressTitle(property.address) },
