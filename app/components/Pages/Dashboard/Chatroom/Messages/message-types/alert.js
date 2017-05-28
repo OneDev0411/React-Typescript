@@ -5,7 +5,7 @@ export default ({
   alert
 }) => {
   return (
-    <div className="message-item alert">
+    <div className="alert">
       Created an alert: { alert.title ? alert.title : alert.proposed_title }
       <div>
         <img src="/static/images/dashboard/mls/map-tile.jpg" />
