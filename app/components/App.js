@@ -12,12 +12,11 @@ import { getRooms } from '../store_actions/chatroom'
 // import config from '../../config/public'
 
 class App extends Component {
-  componentDidMount() {
-    this.initializeApplication()
+  componentWillMount() {
+    this.initializeWebSocket()
   }
 
-  initializeApplication() {
-    this.initializeWebSocket()
+  componentDidMount() {
     this.initialRooms()
   }
 
