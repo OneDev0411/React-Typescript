@@ -13,19 +13,10 @@ emojify.setConfig({
  * get message's author
  */
 const getAuthor = (message) => {
-
-  let alert
-
-  if (message.notification &&
-    message.notification.object_class === 'Alert' &&
-    message.notification.objects
-  ) {
-    alert = message.notification.objects[0]
-  }
-
   if (message.author)
     return message.author
 
+  const alert = isAlert(message)
   if (alert)
     return alert.created_by
 
@@ -38,6 +29,20 @@ const getAuthor = (message) => {
   }
 
   return null
+}
+
+/**
+ * check message is alert
+ */
+const isAlert = (message) => {
+  if (message.notification &&
+    message.notification.object_class === 'Alert' &&
+    message.notification.objects
+  ) {
+    return message.notification.objects[0]
+  }
+
+  return false
 }
 
 /**
@@ -85,10 +90,19 @@ export default ({
   // get user author
   const author = getAuthor(message)
 
+  // check message is alert
+  const alert = isAlert(message)
+
   // const comment
   const comment = <div
     dangerouslySetInnerHTML={{ __html: getMessageText(message) }}
   />
+
+  if (alert) {
+    return <AlertMessage
+      alert={alert}
+    />
+  }
 
   if (message.recommendation) {
     return <RecommendationMessage
@@ -97,15 +111,6 @@ export default ({
       recommendation={message.recommendation}
       message={message}
       comment={comment}
-    />
-  }
-
-  if (message.notification &&
-    message.notification.object_class === 'Alert' &&
-    message.notification.objects
-  ) {
-    return <AlertMessage
-      alert={message.notification.objects[0]}
     />
   }
 
