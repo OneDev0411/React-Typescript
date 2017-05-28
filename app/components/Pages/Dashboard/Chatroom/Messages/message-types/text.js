@@ -8,7 +8,7 @@ export default ({
 }) => {
 
   return (
-    <div className="message-item">
+    <div>
       <div className="title">
         { author && author.abbreviated_display_name }
       </div>
