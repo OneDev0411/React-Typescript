@@ -43,10 +43,11 @@ export default class ListingPanel extends Component {
         default:
           return true
       }
-      if (listing_map.sorting_direction === -1)
+      if (listing_map.sorting_direction === -1) {
         sortby_title += ' high to low'
-      else
+      } else {
         sortby_title += ' low to high'
+      }
     }
     return sortby_title
   }
@@ -55,21 +56,27 @@ export default class ListingPanel extends Component {
     const user = data.user
     const listing_map = data.listing_map
 
-    if (!listing_map || listing_map && !listing_map.listings)
+    if (!listing_map || listing_map && !listing_map.listings) {
       return <div />
+    }
 
     let listings
-    if (listing_map && listing_map.listings)
+    if (listing_map && listing_map.listings) {
       listings = listing_map.listings
+    }
 
-    if (data.show_alerts_map && data.alerts_map && data.alerts_map.listings)
+    if (data.show_alerts_map && data.alerts_map && data.alerts_map.listings) {
       listings = data.alerts_map.listings
+    }
 
-    if (data.show_actives_map && data.favorite_listings)
+    if (data.show_actives_map && data.favorite_listings) {
       listings = data.favorite_listings
+    }
 
-    const listingsIsSmall = true
-    // const listingsIsSmall = listings && listings.length < 21
+    let listingsIsSmall = true
+    if (process.env.NODE_ENV === 'development') {
+      listingsIsSmall = listings && listings.length < 21
+    }
 
     let listing_panel_cards = null
     let listing_panel_list = null
@@ -128,14 +135,15 @@ export default class ListingPanel extends Component {
         if (listing.commented_by && listing.commented_by.length) {
           social_info = 'Commented by '
           listing.commented_by.forEach((commented_user, comment_i) => {
-            if (commented_user.id === user.id)
+            if (commented_user.id === user.id) {
               social_info += 'You' + (comment_i === listing.commented_by.length - 1 ? '' : ', ')
-            else
+            } else {
               social_info += (commented_user.first_name.trim() ? commented_user.first_name : commented_user.email) + (comment_i === listing.commented_by.length - 1 ? '' : ', ')
+            }
           })
         }
         let details_area = (
-          <div style={ S('font-14') }>
+          <div style={S('font-14')} >
             <span>{ property.bedroom_count } Beds</span>
             &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
             <span>{ property.bathroom_count } Baths</span>
@@ -157,11 +165,11 @@ export default class ListingPanel extends Component {
                 listing={listing}
               />
             </div>
-            <div onClick={ this.props.showListingViewer.bind(this, listing) } style={ S('relative') }>
-              <div style={ image_overlay } />
+            <div onClick={ this.props.showListingViewer.bind(this, listing)} style={S('relative')}>
+              <div style={image_overlay} />
               { data.show_listing_panel ? listing_image : '' }
-              <div style={ S('absolute color-fff l-15 b-15') }>
-                <div style={ S('mb-10') }>
+              <div style={ S('absolute color-fff l-15 b-15')}>
+                <div style={ S('mb-10')}>
                   <span style={ S(`bg-${status_color} pt-6 pr-10 pb-6 pl-10 br-3`) }>
                     { listing.status }
                   </span>
@@ -249,7 +257,7 @@ export default class ListingPanel extends Component {
     let listing_panel_style = S(`absolute t-0 w-${panel_width} bg-fff h-${window.innerHeight}`)
     let listing_scroll_style = {
       ...listing_panel_style,
-      top: panel_top + 'px',
+      top: `${panel_top}px`,
       height: window.innerHeight - heading_height + 10,
       overflowY: 'scroll'
     }
@@ -271,7 +279,7 @@ export default class ListingPanel extends Component {
       <span className="close">&times;</span>
     )
     if (data.show_listing_panel) {
-      panel_class = panel_class + ' active'
+      panel_class += ' active'
       button_class = 'listing-panel__button'
     }
     let panel_content_items = listing_panel_cards
