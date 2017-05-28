@@ -11,12 +11,15 @@ export default (user, options) => {
   }
   if (user)
     params.access_token = user.access_token
+
   if (AppStore.data.brand) {
     let brokerage = getParameterByName('brokerage')
     if (!brokerage && AppStore.data.brand.offices)
-      brokerage = AppStore.data.brand.offices[0].mls_id
+      brokerage = AppStore.data.brand.offices[0]
     params.office = brokerage
+    params.brand = AppStore.data.brand.id
   }
+
   Listing.getValerts(params, (err, response) => {
     // Success
     if (response.status === 'success') {

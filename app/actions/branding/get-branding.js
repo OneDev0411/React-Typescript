@@ -3,8 +3,9 @@ import Brand from '../../models/Brand'
 import AppStore from '../../stores/AppStore'
 import ListingDispatcher from '../../dispatcher/ListingDispatcher'
 import config from '../../../config/public'
+import URL from 'url'
 
-const app_hostname = new URL(config.app.url).hostname
+const app_hostname = URL.parse(config.app.url).hostname
 
 export default (hostname) => {
   if (app_hostname === hostname)

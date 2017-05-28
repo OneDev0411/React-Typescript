@@ -122,9 +122,9 @@ export default function ListingMarker({
   // Brand badge
   let brand_badge
   if (data.brand) {
-    const offices = data.brand.offices
-    const current_brand_ids = _.map(offices, 'id')
-    if (listing && listing.list_office && current_brand_ids.indexOf(listing.list_office.id) !== -1 && !isFavorited(listing) && !listing.commented_by) {
+    const agent = listing.proposed_agent && listing.proposed_agent.agent ? listing.proposed_agent.agent : null
+
+    if (listing && agent && agent.mlsid === listing.list_agent_mls_id && !isFavorited(listing) && !listing.commented_by) {
       brand_badge = (
         <div style={S(`bg-url(${data.brand.assets.default_avatar}) w-21 h-21 bg-center bg-cover pull-left inline-block`)} />
       )

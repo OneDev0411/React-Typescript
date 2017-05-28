@@ -12,8 +12,8 @@ router.post('/listings/valerts', async (ctx, next) => {
   let endpoint = '/valerts'
 
   // From map widget
-  if (req.body.office && !options.list_offices.length) {
-    endpoint += '?associations=compact_listing.proposed_agent&order_by=office,status&office=' + req.body.office
+  if (req.body.office && !options.list_offices) {
+    endpoint += '?associations=compact_listing.proposed_agent&order_by[]=office&order_by[]=status&office=' + req.body.office
   }
 
   // From listing widget
@@ -21,7 +21,7 @@ router.post('/listings/valerts', async (ctx, next) => {
     endpoint += '?associations=compact_listing.proposed_agent'
 
     if (options.listing_statuses[0] === 'Sold') {
-      endpoint += '&order_by=price'
+      endpoint += '&order_by[]=price'
     }
   }
 
