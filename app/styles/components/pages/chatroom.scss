@@ -20,18 +20,45 @@ $rooms-padding: 4vw;
 */
 %messages {
   $height: 91vh;
+  $height-of-create-message: 6vh;
+
   padding: 0;
   position: relative;
+  height: 100vh;
   padding-top: 100vh - $height;
 
   .messages-list {
-    max-height: $height;
+    $hg: $height - $height-of-create-message;
+    min-height: $hg;
+    max-height: $hg;
     overflow: auto;
     padding-top: 3vh;
     .message-item {
       @extend %message-item;
       &.recommendation {
         @extend %message-item-recommendation;
+      }
+    }
+  }
+
+  .message-create {
+    $mrgn: 2%;
+
+    position: absolute;
+    height: $height-of-create-message;
+    bottom: $mrgn;
+    left: $mrgn;
+    right: $mrgn;
+    overflow: hidden;
+    border: 2px solid #ccc;
+    border-radius: 3px;
+    input {
+      width: 100%;
+      height: $height-of-create-message - 0.2vh;
+      border: none;
+      padding-left: 10px;
+      &:focus {
+        outline: none;
       }
     }
   }
