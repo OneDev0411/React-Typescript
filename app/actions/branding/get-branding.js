@@ -2,9 +2,14 @@
 import Brand from '../../models/Brand'
 import AppStore from '../../stores/AppStore'
 import ListingDispatcher from '../../dispatcher/ListingDispatcher'
+import config from '../../../config/public'
+
+const app_hostname = new URL(config.app.url).hostname
+
 export default (hostname) => {
-  if (hostname === 'rechat.com' || hostname === 'localhost')
+  if (app_hostname === hostname)
     return
+
   const params = {
     hostname,
     user: AppStore.data.user
