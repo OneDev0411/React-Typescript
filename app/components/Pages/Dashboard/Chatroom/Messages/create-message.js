@@ -24,7 +24,7 @@ export default class CreateMessage extends React.Component {
   }
 
   onUserTyping() {
-    console.log('>> TYPING ...', new Date())
+
   }
 
   sendMessage() {
