@@ -6,6 +6,7 @@ import moment from 'moment'
 import { getMessages } from '../../../../../store_actions/chatroom'
 import Toolbar from './toolbar'
 import Message from './message-types'
+import CreateMessage from './create-message'
 
 class Messages extends React.Component {
   componentDidMount() {
@@ -106,7 +107,7 @@ class Messages extends React.Component {
         <div
           className="message-create"
         >
-          ----
+          <CreateMessage />
         </div>
       </div>
     )
