@@ -47,14 +47,14 @@ export default class Recents extends React.Component {
 
     return (
       <Row className="chatroom">
-        <Col lg={3} md={4} sm={6} xs={6} className="no-padding">
+        <Col lg={3} md={4} sm={4} xs={5} className="no-padding">
           <Rooms
             onSelectRoom={id => this.onChangeRoom(id)}
             activeRoom={activeRoom}
           />
         </Col>
 
-        <Col lg={9} md={8} sm={6} xs={6} className="no-padding">
+        <Col lg={9} md={8} sm={8} xs={7} className="no-padding">
           <Messages
             user={user}
             roomId={activeRoom}
