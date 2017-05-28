@@ -118,6 +118,7 @@
     "redux-devtools-extension": "^2.13.0",
     "redux-thunk": "^2.2.0",
     "rimraf": "^2.6.1",
+    "rxjs": "^5.4.0",
     "sass-loader": "^6.0.3",
     "shorti": "^1.2.6",
     "socket.io": "^1.7.3",
