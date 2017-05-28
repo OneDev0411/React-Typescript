@@ -33,10 +33,18 @@ $rooms-padding: 4vw;
     max-height: $hg;
     overflow: auto;
     padding-top: 3vh;
+    padding-bottom: 5vh;
     .message-item {
+      &.queued {
+        opacity: 0.4;
+      }
       @extend %message-item;
-      &.recommendation {
+      .recommendation {
         @extend %message-item-recommendation;
+      }
+
+      .alert {
+
       }
     }
   }
