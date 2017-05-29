@@ -1,0 +1,248 @@
+$rooms-padding: 4vw;
+
+.chatroom {
+  margin-left: 0;
+  margin-right: 0;
+
+  .no-padding {
+    padding: 0;
+  }
+  .rooms {
+    @extend %rooms;
+  }
+  .messages {
+    @extend %messages;
+  }
+}
+
+/**
+* Messages
+*/
+%messages {
+  $height: 91vh;
+  $height-of-create-message: 6vh;
+
+  padding: 0;
+  position: relative;
+  height: 100vh;
+  padding-top: 100vh - $height;
+
+  .messages-list {
+    $hg: $height - $height-of-create-message;
+    min-height: $hg;
+    max-height: $hg;
+    overflow: auto;
+    padding-top: 3vh;
+    padding-bottom: 5vh;
+    .message-item {
+      &.queued {
+        opacity: 0.4;
+      }
+      @extend %message-item;
+      .recommendation {
+        @extend %message-item-recommendation;
+      }
+
+      .alert {
+
+      }
+    }
+  }
+
+  .message-create {
+    $mrgn: 2%;
+
+    position: absolute;
+    height: $height-of-create-message;
+    bottom: $mrgn;
+    left: $mrgn;
+    right: $mrgn;
+    overflow: hidden;
+    border: 2px solid #ccc;
+    border-radius: 3px;
+    input {
+      width: 100%;
+      height: $height-of-create-message - 0.2vh;
+      border: none;
+      padding-left: 10px;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  .toolbar {
+    @extend %messages-toolbar;
+  }
+
+  .loading {
+    margin: 5px 15px;
+  }
+}
+
+%message-item {
+  margin-bottom: 20px;
+  padding: 0 2vw 0 3vw;
+  .title {
+    font-weight: bold;
+  }
+}
+
+%message-item-recommendation{
+  width: 70%;
+  img {
+    width: 100%;
+  }
+  .card {
+    border: 1px solid #eee;
+    .info {
+      padding: 10px;
+    }
+    .message {
+      margin: 30px 2px 8px 2px;
+      color: gray;
+    }
+  }
+}
+
+%messages-toolbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #303E4D;
+  padding: 3% 1% 1% 3vw;
+  margin-bottom: 2vh;
+  height: 8vh;
+  color: #fff;
+  border-left: 1px solid #fff;
+}
+
+/**
+* Rooms
+*/
+%rooms {
+  background-color: #303E4D;
+  .section-title {
+    color: yellow;
+    font-weight: bold;
+    padding: 2vh 0 2vh $rooms-padding;
+  }
+
+  .list-container {
+    max-height: 92.1vh;
+    min-height: 92.1vh;
+    overflow: auto;
+
+    .list {
+      @extend %rooms-list;
+    }
+  }
+
+  .toolbar {
+    @extend %rooms-toolbar;
+  }
+}
+
+%rooms-list {
+  color: #fff;
+  .item {
+    @extend %room-item;
+  }
+}
+
+%rooms-toolbar {
+  padding: 10px $rooms-padding 10px $rooms-padding;
+}
+
+%room-item {
+  padding: 10px 4px 10px $rooms-padding;
+  cursor: pointer;
+  &:hover {
+    background-color: #465A71;
+  }
+  &.active {
+    background-color: green;
+  }
+}
+
+.bm-menu-wrap {
+  z-index: 99999 !important;
+  background-color: #fff;
+  padding: 3vh 2vw;
+}
+// .room-list__item {
+//   &:hover {
+//     background-color: #465a71;
+//   }
+//   &__title,
+//   &__names,
+//   &__message {
+//     white-space: nowrap;
+//     overflow: hidden;
+//     text-overflow: ellipsis;
+//   }
+// }
+// .create-message__btn {
+//   color: #ccc;
+//   border-top-right-radius: 0;
+//   border-bottom-right-radius: 0;
+//   transition: all 0ms !important;
+//   &:hover,
+//   &:active,
+//   &:focus {
+//     border-color: #3388ff !important;
+//     background-color: #3388ff !important;
+//     color: #fff !important;
+//   }
+// }
+// #popover-message-info {
+//   width: 380px;
+//   max-width: 380px;
+//   .popover-title {
+//     height: 49px;
+//     margin: 0;
+//     font-size: 17px;
+//     padding-top: 4.5%;
+//     background-color: rgba(250, 250, 250, 0.9);
+//   }
+//   .popover-content {
+//     padding: 8px 0;
+//     .content {
+//       margin-top: 5px;
+//       &.read-by {
+//         margin-bottom: 10px;
+//       }
+//       &.delivered-to {
+//       }
+//       .title {
+//         color: #9b9b9b;
+//         font-size: 14px;
+//         margin-left: 15px;
+//         margin-bottom: 10px;
+//       }
+//       .report {
+//         overflow: auto;
+//         max-height: 240px;
+//         .item {
+//           &:first-child {
+//             border-top : 1px solid #e9e9e9;
+//           }
+//           position: relative;
+//           padding-left: 10px;
+//           height: 42px;
+//           border-bottom: 1px solid #e9e9e9;
+//           padding-top: 4px;
+//           .name {
+//             float: left;
+//             margin: 2% 0 0px 13%;
+//           }
+//           .time {
+//             float: right;
+//             margin: 2% 6% 0 0;
+//           }
+//         }
+//       }
+//     }
+//   }
+// }

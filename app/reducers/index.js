@@ -6,6 +6,7 @@ import contact from './contact'
 const appReducer = combineReducers({
   data,
   contact,
+  chatroom,
   routing: routerReducer
 })
 

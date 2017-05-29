@@ -5,8 +5,16 @@ import AppDispatcher from '../dispatcher/AppDispatcher'
 import AppStore from '../stores/AppStore'
 import SideBar from './Pages/Dashboard/Partials/SideBar'
 import MobileNav from './Pages/Dashboard/Partials/MobileNav'
+import { slide as Menu } from 'react-burger-menu'
+import Rooms from './Pages/Dashboard/Chatroom/Rooms'
 
 export default class Dashboard extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      showChatbar: false
+    }
+  }
 
   componentDidMount() {
     const { data } = this.props
@@ -32,7 +40,10 @@ export default class Dashboard extends React.Component {
     const { data, user } = this.props
 
     let main_style = { marginLeft: '60px', minHeight: '100vh' }
-    let nav_area = <SideBar data={data} />
+    let nav_area = <SideBar
+      data={data}
+      onShowChatroomSidebar={() => this.setState({ showChatbar: true })}
+    />
 
     if (data.is_mobile) {
       main_style = { ...main_style, ...S('') }
@@ -49,6 +60,16 @@ export default class Dashboard extends React.Component {
     return (
       <div>
         { nav_area }
+        <Menu
+          isOpen={this.state.showChatbar}
+          onStateChange={({ isOpen }) => {
+            if (this.state.showChatbar !== isOpen)
+              this.setState({ showChatbar: isOpen })
+          }}
+        >
+          <Rooms isSidebar={true} />
+        </Menu>
+
         <div style={main_style}>
           { children }
         </div>
