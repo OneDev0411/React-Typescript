@@ -2,21 +2,27 @@
 import Listing from '../../models/Listing'
 import AppStore from '../../stores/AppStore'
 import { getParameterByName } from '../../utils/helpers'
+
 export default (user, options) => {
   // Don't get listings if Mobile Splash page showing or no first points added
-  if (AppStore.data.show_mobile_splash_viewer || !options.points[0].latitude)
+  if (AppStore.data.show_mobile_splash_viewer) {
     return
-  const params = {
-    options
   }
-  if (user)
+
+  const params = { options }
+
+  if (user) {
     params.access_token = user.access_token
+  }
+
   if (AppStore.data.brand) {
     let brokerage = getParameterByName('brokerage')
-    if (!brokerage && AppStore.data.brand.offices)
+    if (!brokerage && AppStore.data.brand.offices) {
       brokerage = AppStore.data.brand.offices[0].mls_id
+    }
     params.office = brokerage
   }
+
   Listing.getValerts(params, (err, response) => {
     // Success
     if (response.status === 'success') {

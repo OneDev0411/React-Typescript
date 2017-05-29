@@ -45,6 +45,11 @@ export default {
     })
     .then(response => callback(false, response))
   },
+  getMlsNumber: (params, callback) => {
+    const { access_token, q } = params
+    const url = `${API_HOST}/listings/search?mls_number=${q}`
+    callback(false, asyncRequest(getRequest(url, access_token)))
+  },
   search: (params, callback) => {
     const { access_token, q } = params
     const url = `${API_HOST}/listings/search?q=${q}`
@@ -52,15 +57,19 @@ export default {
   },
   getValerts: (params, callback) => {
     let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
+    if (!api_host) {
+      api_host = config.app.url
+    }
     const endpoint = `${api_host}/api/listings/valerts?access_token=${params.access_token}`
     const request_object = {
       options: params.options
     }
-    if (params.office)
+    if (params.office) {
       request_object.office = params.office
-    if (params.offset)
+    }
+    if (params.offset) {
       request_object.offset = params.offset
+    }
     fetch(endpoint, {
       method: 'post',
       headers: {

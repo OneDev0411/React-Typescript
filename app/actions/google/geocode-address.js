@@ -8,8 +8,9 @@ export default (address) => {
   }
   Google.geocodeAddress(params, (err, res) => {
     const geocode = res.results[0]
-    if (!geocode)
+    if (!geocode) {
       return
+    }
     const center = {
       lat: geocode.geometry.location.lat,
       lng: geocode.geometry.location.lng

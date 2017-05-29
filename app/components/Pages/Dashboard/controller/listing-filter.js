@@ -294,6 +294,7 @@ const controller = {
     AppStore.emitChange()
   },
   resetFilterOptions() {
+    console.log('reset filter Options')
     const data = AppStore.data
     const user = data.user
     const listing_map = data.listing_map

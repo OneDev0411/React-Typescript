@@ -7,8 +7,10 @@ export default (user, q) => {
   const params = {
     q: q_commas
   }
-  if (user)
+
+  if (user) {
     params.access_token = user.access_token
+  }
 
   Listing.search(params, async (err, response) => {
     try {

@@ -64,8 +64,9 @@ const setPositionToPointsWithSameCoordinate = (clusters) => {
       if (pointsGroupByLat[key].length !== 1) {
         coordinator(pointsGroupByLat[key])
           .forEach(obj => PointsWithSameCoordinate.push(obj))
-      } else
+      } else {
         PointsWithSameCoordinate.push(pointsGroupByLat[key][0])
+      }
     })
   return PointsWithSameCoordinate
 }
@@ -128,8 +129,9 @@ export default class MlsMap extends Component {
   componentDidMount() {
     if (window.google) {
       window.google.maps.event.addDomListener(window, 'resize', () => {
-        if (this.state.isResized)
+        if (this.state.isResized) {
           return
+        }
 
         this.setState({
           isResized: true
@@ -431,8 +433,9 @@ export default class MlsMap extends Component {
     console.log('cwum')
     if (this.state.listings.data &&
       this.props.data.path !== '/dashboard/mls/alerts'
-    )
+    ) {
       store[this.props.data.path] = this.state
+    }
   }
 
   getFavorateListingsData(listings) {
@@ -465,8 +468,9 @@ export default class MlsMap extends Component {
 
   setClusters(listings, mapProps) {
     const { bounds, center, zoom } = mapProps || this.state.mapProps
-    if (!bounds)
+    if (!bounds) {
       return
+    }
 
     const { total, data } = listings
 
@@ -492,8 +496,9 @@ export default class MlsMap extends Component {
       id: `${numPoints}_${points[0].id}`
     }))
 
-    if (zoom >= this.declusterZoomLevel)
+    if (zoom >= this.declusterZoomLevel) {
       clusters = setPositionToPointsWithSameCoordinate(clusters)
+    }
 
     this.setState({
       isFetching: false,
@@ -518,7 +523,9 @@ export default class MlsMap extends Component {
     if (
       googleMapsLatLngBounds.getSouthWest().toString()
       === googleMapsLatLngBounds.getNorthEast().toString()
-    ) return false
+    ) {
+      return false
+    }
 
     const ne = {
       lat: googleMapsLatLngBounds.getNorthEast().lat(),
@@ -544,9 +551,9 @@ export default class MlsMap extends Component {
     const { size } = this.state.mapProps
     let { zoom, center } = fitBounds({ ne, sw }, size)
 
-    if (
-      zoom === this.state.mapProps.zoom
-    ) zoom++
+    if (zoom === this.state.mapProps.zoom) {
+      zoom++
+    }
 
     return {
       bounds: { nw, se },
@@ -686,9 +693,9 @@ export default class MlsMap extends Component {
       : []
 
     const searchPin = this.state.searchPin
-    if (searchPin)
+    if (searchPin) {
       markers.push(<SearchPinMarker key="pinMarker" {...searchPin} />)
-
+    }
     return markers
   }
 
@@ -701,8 +708,9 @@ export default class MlsMap extends Component {
     }
 
     let mapId
-    if (appData.listing_map)
+    if (appData.listing_map) {
       mapId = appData.listing_map.map_id || Math.random()
+    }
 
     let loading = null
     let loading_style = null
@@ -726,12 +734,14 @@ export default class MlsMap extends Component {
     }
 
     let zoom_right = 'r-25'
-    if (appData.show_listing_panel)
+    if (appData.show_listing_panel) {
       zoom_right = 'r-460'
+    }
 
     let zoom_bottom = ' b-25'
-    if (appData.is_mobile)
+    if (appData.is_mobile) {
       zoom_bottom = ' b-75'
+    }
 
     return (
       <div style={{ width: '100%', height: '100%' }}>

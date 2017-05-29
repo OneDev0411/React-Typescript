@@ -654,16 +654,24 @@ export default class Mls extends Component {
     }
     let search_area = (
       <div>
-        <form onSubmit={ controller.search_input_map.handleSearchSubmit.bind(this) }>
+        <form
+          onSubmit={
+            controller.search_input_map.handleSearchSubmit.bind(this)
+          }
+        >
           <input
-            id="google_search"
-            onKeyDown={ controller.search_input_map.handleKeyDown.bind(this) }
-            onChange={ controller.search_input_map.handleSearchInputChange.bind(this) }
-            className="form-control"
             type="text"
-            style={ search_input_style }
-            value={ search_input_text }
+            id="google_search"
+            className="form-control"
+            value={search_input_text}
+            style={search_input_style}
             placeholder="Search location or MLS#"
+            onKeyDown={
+              controller.search_input_map.handleKeyDown.bind(this)
+            }
+            onChange={
+              controller.search_input_map.handleSearchInputChange.bind(this)
+            }
           />
         </form>
       </div>

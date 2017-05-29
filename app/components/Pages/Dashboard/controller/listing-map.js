@@ -2,7 +2,9 @@
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import Brand from '../../../../controllers/Brand'
+
 let mapBoundsOnChangeDelay = null
+
 const controller = {
   initMap() {
     const data = AppStore.data
@@ -75,6 +77,7 @@ const controller = {
     AppStore.data.listing_map = listing_map
     AppStore.emitChange()
   },
+
   createMapOptions() {
     const data = AppStore.data
     const listing_map = data.listing_map
@@ -84,8 +87,9 @@ const controller = {
       draggable: true
     }
 
-    if (!listing_map)
+    if (!listing_map) {
       return google_options
+    }
 
 
     // set disable default ui
@@ -96,6 +100,7 @@ const controller = {
 
     return google_options
   },
+
   handleBoundsChange(gmap) {
     const data = AppStore.data
 
@@ -109,9 +114,9 @@ const controller = {
     // if (!bounds)
     //   return
 
-    // const auto_move = listing_map.auto_move
-    // if (auto_move)
+    // if (listing_map.auto_move) {
     //   return
+    // }
 
     const points = [
       {
@@ -194,23 +199,31 @@ const controller = {
       } // else
     } // if
   },
+
   hideModal() {
-    if (AppStore.data.listing_map)
+    if (AppStore.data.listing_map) {
       delete AppStore.data.listing_map.saving_alert
+    }
+
     delete AppStore.data.show_share_listing_modal
     delete AppStore.data.show_alert_saved_modal
     delete AppStore.data.show_listing_shared_modal
+
     if (AppStore.data.listing_map) {
       delete AppStore.data.listing_map.show_share_modal
       delete AppStore.data.listing_map.show_share_type_modal
       delete AppStore.data.listing_map.show_share_alert_error_tooltip
     }
+
     delete AppStore.data.show_modal_gallery
+
     setTimeout(() => {
       delete AppStore.data.share_modal
     }, 500)
+
     AppStore.emitChange()
   },
+
   toggleDrawable() {
     if (AppStore.data.listing_map.drawable) {
       delete AppStore.data.listing_map.drawable
@@ -222,20 +235,28 @@ const controller = {
     }
     AppStore.emitChange()
   },
+
   handleZoomClick(type) {
     const current_zoom = AppStore.data.listing_map.zoom
-    if (type === 'in')
+
+    if (type === 'in') {
       AppStore.data.listing_map.zoom = current_zoom + 1
-    if (type === 'out')
+    }
+
+    if (type === 'out') {
       AppStore.data.listing_map.zoom = current_zoom - 1
+    }
+
     AppStore.emitChange()
   },
+
   handleRemoveListings() {
     delete AppStore.data.listing_map.listings
     delete AppStore.data.listing_map.has_search_input
     AppStore.emitChange()
     controller.removeDrawing()
   },
+
   getValertsInArea(points) {
     const data = AppStore.data
     const user = data.user
@@ -249,6 +270,7 @@ const controller = {
       options
     })
   },
+
   makePolygon() {
     const google = window.google
     const map = window.map
@@ -264,6 +286,7 @@ const controller = {
     })
     window.poly_search = window.poly
   },
+
   getPolygonBounds(google, polygon) {
     const polygon_bounds = polygon.getPath()
     const coordinates = []
@@ -281,27 +304,38 @@ const controller = {
     ]
     return points
   },
+
   removeDrawing() {
-    if (!window.poly)
+    if (!window.poly) {
       return
+    }
+
     window.poly.setMap(null)
     delete AppStore.data.listing_map.drawable
     AppStore.emitChange()
+
     delete window.poly
     delete window.poly_search
     controller.handleBoundsChange(AppStore.data.gmap)
   },
+
   handleGoogleMapApi(google) {
     const map = google.map
     window.map = map
     window.map.set('mapTypeControl', false)
     const data = AppStore.data
     const listing_map = data.listing_map
-    if (listing_map.drawable && window.poly)
+
+    if (listing_map.drawable && window.poly) {
       controller.makePolygon()
+    }
+
     google.maps.event.addDomListener(map.getDiv(), 'mousedown', () => {
-      if (!listing_map.drawable || listing_map.drawable && window.poly)
+      if (!listing_map.drawable ||
+        listing_map.drawable && window.poly
+      ) {
         return
+      }
 
       window.poly = new google.maps.Polyline({
         map,
@@ -309,8 +343,10 @@ const controller = {
         strokeColor: `#${Brand.color('primary', '3388ff')}`,
         strokeWeight: 10
       })
+
       AppStore.data.listing_map.no_popup = true
       AppStore.emitChange()
+
       const move = google.maps.event.addListener(map, 'mousemove', (e) => {
         if (!listing_map.drawable) {
           window.poly.setMap(null)
@@ -319,11 +355,13 @@ const controller = {
         window.poly.getPath().push(e.latLng)
         return false
       })
+
       google.maps.event.addListenerOnce(map, 'mouseup', () => {
         delete AppStore.data.listing_map.no_popup
         AppStore.emitChange()
-        if (!listing_map.drawable)
+        if (!listing_map.drawable) {
           return
+        }
         map.set('draggable', true)
         google.maps.event.removeListener(move)
         controller.makePolygon()
@@ -332,28 +370,35 @@ const controller = {
       })
     })
   },
+
   setActiveListing(listing) {
     AppStore.data.listing_map.active_listing = listing.id
     AppStore.emitChange()
   },
+
   removeActiveListing() {
-    if (AppStore.data.listing_map)
+    if (AppStore.data.listing_map) {
       delete AppStore.data.listing_map.active_listing
+    }
     AppStore.emitChange()
   },
+
   showListingPopup(listing) {
     const data = AppStore.data
     const listing_map = data.listing_map
-    if (listing_map.no_popup)
+    if (listing_map.no_popup) {
       return
+    }
     controller.setActiveListing(listing)
     AppStore.data.listing_map.listing_popup = listing.id
     AppStore.emitChange()
   },
+
   hideListingPopup() {
     controller.removeActiveListing()
     delete AppStore.data.listing_map.listing_popup
     AppStore.emitChange()
   }
 }
+
 export default controller
