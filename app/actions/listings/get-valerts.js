@@ -26,9 +26,15 @@ export default (user, options) => {
   Listing.getValerts(params, (err, response) => {
     // Success
     if (response.status === 'success') {
-      AppStore.data.listing_map.listings = response.data
-      AppStore.data.listing_map.listings_info = response.info
+      const listings = response.data
+      const listings_info = response.info
+      AppStore.data.listing_map = {
+        ...AppStore.data.listing_map,
+        listings,
+        listings_info
+      }
     }
+
     delete AppStore.data.listing_map.is_loading
     // // If postal code search
     // if (options.postal_codes && options.postal_codes.length) {

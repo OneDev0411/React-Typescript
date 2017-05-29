@@ -102,10 +102,8 @@ const controller = {
   },
 
   handleBoundsChange(gmap) {
-    const data = AppStore.data
-
-    const user = data.user
-    const listing_map = data.listing_map
+    const { data } = AppStore
+    const { user, listing_map } = data
     const { bounds, center, zoom, size, marginBounds } = gmap
 
     // if (!listing_map)
@@ -160,10 +158,7 @@ const controller = {
     //   }
     //   AppStore.emitChange()
     // }
-    // AppStore.data.gmap = gmap
     // AppStore.emitChange()
-
-    console.log('changeeeeeeeeeeeeeeeeee')
 
     if (!data.show_actives_map && !data.show_alerts_map && !window.poly) {
       AppStore.data.listing_map.is_loading = true
@@ -173,14 +168,28 @@ const controller = {
         points
       }
 
+      AppStore.data.listing_map = {
+        ...listing_map,
+        options,
+        center,
+        zoom
+      }
+
+      AppStore.data.gmap = {
+        ...AppStore.data.gmap,
+        ...gmap
+      }
+
+      console.log('changeeeeeeeeeeeeeeeeee')
+
       if (!mapBoundsOnChangeDelay) {
         console.log('empty timeout')
         mapBoundsOnChangeDelay = 1
 
         ListingDispatcher.dispatch({
-          action: 'get-valerts',
           user,
-          options: listing_map.options
+          options,
+          action: 'get-valerts'
         })
       } else {
         clearTimeout(mapBoundsOnChangeDelay)
