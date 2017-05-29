@@ -13,7 +13,9 @@ import { getRooms } from '../store_actions/chatroom'
 
 class App extends Component {
   componentWillMount() {
-    this.initializeWebSocket()
+
+    if (typeof window !== 'undefined')
+      this.initializeWebSocket()
   }
 
   componentDidMount() {
