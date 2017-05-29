@@ -37,7 +37,7 @@ app.use(async (ctx, next) => {
 
     ctx.status = e.status || 500
     ctx.body = e.message || 'Internal Server Error'
-    ctx.app.emit('error', err, ctx)
+    ctx.app.emit('error', e, ctx)
   }
 })
 
