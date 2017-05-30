@@ -26,30 +26,26 @@ const Rooms = ({
   activeRoom,
   onSelectRoom,
   changeFilter,
-  filter
+  filter,
+  onFullScreen
 }) => {
 
-  const render = (list, filter = '') => (
-    _.chain(list)
-    .filter(room => room.proposed_title.toLowerCase().startsWith(filter.toLowerCase()))
-    .map(room =>
-      <div
-        onClick={() => onSelectRoom(room.id)}
-        key={`ROOM_CHANNEL_${room.id}`}
-        className={cn('item', { active: room.id === activeRoom })}
-      >
-        { room.proposed_title }
-      </div>
-    )
-    .value()
-  )
+  const fullScreen = function(e) {
+    e.preventDefault()
+    onFullScreen()
+  }
 
   return (
     <div className="rooms">
       <div className="toolbar">
         {
           isSidebar &&
-          <Link to="/dashboard/recents">Full screen</Link>
+          <a
+            href="/dashboard/recents"
+            onClick={e => fullScreen(e)}
+          >
+            Full screen
+          </a>
         }
 
         <input
@@ -65,7 +61,20 @@ const Rooms = ({
         <div className="section-title">
         </div>
         <div className="list">
-          { render(rooms, filter) }
+          {
+            _.chain(rooms)
+            .filter(room => room.proposed_title.toLowerCase().startsWith(filter.toLowerCase()))
+            .map(room =>
+              <div
+                onClick={() => onSelectRoom(room.id)}
+                key={`ROOM_CHANNEL_${room.id}`}
+                className={cn('item', { active: room.id === activeRoom })}
+              >
+                { room.proposed_title }
+              </div>
+            )
+            .value()
+          }
         </div>
       </div>
     </div>
