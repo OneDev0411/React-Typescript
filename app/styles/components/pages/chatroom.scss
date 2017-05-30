@@ -169,8 +169,11 @@ $rooms-padding: 4vw;
 
 .bm-menu-wrap {
   z-index: 99999 !important;
-  background-color: #fff;
-  padding: 3vh 2vw;
+  background-color: #303E4D;
+  color: #fff;
+  .rooms {
+    @extend %rooms;
+  }
 }
 // .room-list__item {
 //   &:hover {
