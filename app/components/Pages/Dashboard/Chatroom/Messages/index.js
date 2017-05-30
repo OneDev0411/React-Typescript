@@ -108,7 +108,7 @@ class Messages extends React.Component {
   }
 
   render() {
-    const { roomId, user } = this.props
+    const { roomId, user, showToolbar } = this.props
 
     // get messages of current room
     const messages = roomId ? this.props.messages[roomId] : null
@@ -116,9 +116,12 @@ class Messages extends React.Component {
     return (
       <div className="messages">
 
-        <Toolbar
-          roomId={roomId}
-        />
+        {
+          showToolbar &&
+          <Toolbar
+            roomId={roomId}
+          />
+        }
 
         {
           !messages &&
