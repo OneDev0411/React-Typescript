@@ -141,14 +141,14 @@ export default class MlsMap extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('recive')
+    console.log('receive')
 
     const isLoading = nextProps.data.listing_map.is_loading
     if (!this.state.isFetching && isLoading) {
       this.setState({
         isFetching: true
       })
-      console.log('recive is loading')
+      console.log('receive is loading')
     }
 
     const hasLocationSearch = nextProps.data.listing_map &&
@@ -165,7 +165,7 @@ export default class MlsMap extends Component {
           zoom
         }
       })
-      console.log('hasLocationSearch')
+      console.log('receive: hasLocationSearch')
       return
     }
 
@@ -198,42 +198,70 @@ export default class MlsMap extends Component {
         this.setState(newState)
         delete store[nextProps.data.path]
 
-        console.log('recive, load store')
+        console.log('receive, load store')
         return
       }
     }
 
+
+    if (nextProps.data.listing_map.active_listing &&
+      this.state.hoveredMarkerId !== 'listing-hover'
+    ) {
+      this.setState({
+        hoveredMarkerId: 'listing-hover'
+      })
+
+      console.log('receive: hover listing enter')
+      return
+    }
+
+    if (!nextProps.data.listing_map.active_listing &&
+      this.state.hoveredMarkerId === 'listing-hover'
+    ) {
+      this.setState({
+        hoveredMarkerId: null
+      })
+
+      console.log('receive: hover listing leave')
+      return
+    }
+
+
     if (nextProps.data.show_actives_map) {
-      if (
-        nextProps.data.favorite_listings &&
-        nextProps.data.favorite_listings.length &&
-        nextProps.data.favorite_listings.length !==
-        this.state.listings.listingsLength
+      if (nextProps.data.favorite_listings &&
+        nextProps.data.favorite_listings.length
       ) {
-        const listings = nextProps.data.favorite_listings
-        const newListings = this.getFavorateListingsData(listings)
+        if (nextProps.data.favorite_listings.length !==
+          this.state.listings.listingsLength
+        ) {
+          const listings = nextProps.data.favorite_listings
+          const newListings = this.getFavorateListingsData(listings)
+          this.setState({
+            listings: {
+              data: newListings,
+              total: newListings.length,
+              listingsLength: newListings.length
+            },
+            mapProps: { ...mapOptions }
+          })
+          console.log('rceive, initial favorite list load')
+          return
+        }
+      } else {
         this.setState({
           listings: {
-            data: newListings,
-            total: newListings.length,
-            listingsLength: newListings.length
+            data: null,
+            total: 0,
+            listingsLength: 0
           },
           mapProps: { ...mapOptions }
         })
-        console.log('rceive, initial favorite list load')
+        console.log('rceive, favorite tab with zero listing')
         return
       }
-
-      this.setState({
-        listings: {
-          data: null,
-          total: 0,
-          listingsLength: 0
-        },
-        mapProps: { ...mapOptions }
-      })
-      console.log('rceive, favorite tab with zero listing')
     }
+
+
 
     if (nextProps.data.show_alerts_map) {
       if (nextProps.data.alerts_map) {
@@ -269,6 +297,8 @@ export default class MlsMap extends Component {
       }
     }
 
+
+
     if ((
       nextProps.data.listing_map &&
       nextProps.data.listing_map.listings &&
@@ -284,8 +314,10 @@ export default class MlsMap extends Component {
       ) || (
         this.state.listings.total !==
         nextProps.data.listing_map.listings_info.total
+      ) || (
+        window.poly_search
       )) {
-        console.log('recive list')
+        console.log('receive list')
 
         const data = newListings.map(list => ({
           lat: list.location.latitude,
@@ -321,7 +353,7 @@ export default class MlsMap extends Component {
           mapProps
         )
       } else if (this.state.isFetching) {
-        console.log('recive empty list')
+        console.log('receive empty list')
         this.setState({
           isFetching: false
         })
@@ -393,6 +425,14 @@ export default class MlsMap extends Component {
           console.log('update listings by totals')
           return 1
         }
+
+        if (window.poly_search &&
+          this.state.listings.data.length !==
+          nextState.listings.data.length
+        ) {
+          console.log('update listings by poly_search')
+          return 1
+        }
       }
     }
 
@@ -417,10 +457,8 @@ export default class MlsMap extends Component {
       return 1
     }
 
-    if (
-      nextProps.data.listing_map.active_listing &&
-      this.props.data.listing_map.active_listing ===
-      nextProps.data.listing_map.active_listing
+    if (nextProps.data.listing_map.active_listing !==
+      this.props.data.listing_map.active_listing
     ) {
       console.log('update hover listing')
       return 1
@@ -440,13 +478,26 @@ export default class MlsMap extends Component {
 
   getFavorateListingsData(listings) {
     return listings.map((list) => {
+      let lat
+      let lng
+
+      if (list.location) {
+        lat = list.location.latitude
+        lng = list.location.longitude
+      }
+
       if (list.property && list.property.address) {
+        lat = list.property.address.location.latitude
+        lng = list.property.address.location.longitude
+      }
+
+      if (lat && lng) {
         return {
+          ...list,
           numPoints: 1,
           list: { ...list },
-          lat: list.property.address.location.latitude,
-          lng: list.property.address.location.longitude,
-          ...list
+          lat,
+          lng
         }
       }
     })
@@ -696,6 +747,7 @@ export default class MlsMap extends Component {
     if (searchPin) {
       markers.push(<SearchPinMarker key="pinMarker" {...searchPin} />)
     }
+
     return markers
   }
 

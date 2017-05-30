@@ -7,24 +7,32 @@ let mapBoundsOnChangeDelay = null
 
 const controller = {
   initMap() {
-    const data = AppStore.data
+    const { data } = AppStore
+
     let center = {
       lat: 32.7767,
       lng: -96.7970
     }
+
     let zoom = 13
+
     const options = {
       limit: '500',
+      currency: 'USD',
+      open_house: false,
+      vertical_distance: 2830,
+      horizontal_distance: 2830,
+      property_types: ['Residential'],
+      listing_statuses: [
+        'Active',
+        'Active Kick Out',
+        'Active Contingent',
+        'Active Option Contract'
+      ],
       location: {
         longitude: -96.79698789999998,
         latitude: 32.7766642
       },
-      horizontal_distance: 2830,
-      property_types: ['Residential'],
-      vertical_distance: 2830,
-      listing_statuses: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract'],
-      currency: 'USD',
-      maximum_year_built: new Date().getFullYear(),
       points: [{
         latitude: 32.83938955111425,
         longitude: -96.89115626525879
@@ -41,24 +49,35 @@ const controller = {
         latitude: 32.83938955111425,
         longitude: -96.89115626525879
       }],
-      open_house: false,
-      property_subtypes: ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse']
+      property_subtypes: [
+        'RES-Single Family',
+        'RES-Half Duplex',
+        'RES-Farm\/Ranch',
+        'RES-Condo',
+        'RES-Townhouse'
+      ],
+      maximum_year_built: new Date().getFullYear()
     }
-    if (data.listing_map && data.listing_map.center) {
+
+    if (
+      data.listing_map !== undefined &&
+      data.listing_map.center !== undefined
+    ) {
       center = data.listing_map.center
-      zoom = data.listing_map.center
+      zoom = data.listing_map.zoom
     }
+
     const listing_map = {
-      map_id: new Date().getTime(),
-      default_options: { ...options },
+      zoom,
+      center,
       options,
       is_loading: true,
-      center,
-      zoom,
       google_options: {
         mapTypeControl: false,
         draggable: true
       },
+      map_id: new Date().getTime(),
+      default_options: { ...options },
       filter_options: {
         sold: false,
         active: true,
@@ -74,29 +93,35 @@ const controller = {
         pool: 'either'
       }
     }
-    AppStore.data.listing_map = listing_map
+
+    AppStore.data = {
+      ...AppStore.data,
+      listing_map
+    }
     AppStore.emitChange()
   },
 
   createMapOptions() {
-    const data = AppStore.data
-    const listing_map = data.listing_map
+    const { data } = AppStore
+    const { listing_map } = data
 
     const google_options = {
       mapTypeControl: false,
       draggable: true
     }
 
-    if (!listing_map) {
+    if (listing_map == null) {
       return google_options
     }
-
 
     // set disable default ui
     google_options.disableDefaultUI = true
 
-    // AppStore.data.listing_map.google_options = google_options
-    // AppStore.emitChange()
+    AppStore.data.listing_map = {
+      ...AppStore.data.listing_map,
+      google_options
+    }
+    AppStore.emitChange()
 
     return google_options
   },
@@ -106,15 +131,17 @@ const controller = {
     const { user, listing_map } = data
     const { bounds, center, zoom, size, marginBounds } = gmap
 
-    // if (!listing_map)
-    //   return
+    if (!listing_map) {
+      return
+    }
 
-    // if (!bounds)
-    //   return
+    if (!bounds) {
+      return
+    }
 
-    // if (listing_map.auto_move) {
-    //   return
-    // }
+    if (listing_map.auto_move) {
+      return
+    }
 
     const points = [
       {
@@ -139,28 +166,10 @@ const controller = {
       }
     ]
 
-    // Don't get more results if polygon on map
-    // if (!window.poly) {
-    //   AppStore.data.listing_map.is_loading = true
-    //   AppStore.data.listing_map.options.points = points
-    // }
-
-    // Get options
-    // Zoom fix
-    // if (listing_map.options.mls_areas || listing_map.options.school_districts || listing_map.options.counties) {
-    //   if (!listing_map.search_area_on_move)
-    //     AppStore.data.listing_map.search_area_on_move = true
-    //   else {
-    //     delete listing_map.options.mls_areas
-    //     delete listing_map.options.school_districts
-    //     delete listing_map.options.counties
-    //     delete AppStore.data.listing_map.search_area_on_move
-    //   }
-    //   AppStore.emitChange()
-    // }
-    // AppStore.emitChange()
-
-    if (!data.show_actives_map && !data.show_alerts_map && !window.poly) {
+    if (!window.poly &&
+      !data.show_alerts_map &&
+      !data.show_actives_map
+    ) {
       AppStore.data.listing_map.is_loading = true
 
       const options = {
@@ -267,12 +276,30 @@ const controller = {
   },
 
   getValertsInArea(points) {
-    const data = AppStore.data
-    const user = data.user
-    const options = AppStore.data.listing_map.options
-    options.points = points
-    AppStore.data.listing_map.google_options.draggable = true
-    AppStore.data.listing_map.is_loading = true
+    const { data } = AppStore
+    const { user, listing_map } = data
+
+    const options = {
+      ...listing_map.options,
+      points
+    }
+
+    const google_options = {
+      ...listing_map.google_options,
+      draggable: true
+    }
+
+    const is_loading = true
+
+    AppStore.data.listing_map = {
+      ...listing_map,
+      google_options,
+      is_loading,
+      options
+    }
+
+    AppStore.emitChange()
+
     ListingDispatcher.dispatch({
       action: 'get-valerts',
       user,
@@ -329,19 +356,24 @@ const controller = {
   },
 
   handleGoogleMapApi(google) {
-    const map = google.map
+    const { data } = AppStore
+    const { listing_map } = data
+
+    const { map } = google
     window.map = map
     window.map.set('mapTypeControl', false)
-    const data = AppStore.data
-    const listing_map = data.listing_map
 
-    if (listing_map.drawable && window.poly) {
+    if (listing_map && listing_map.drawable && window.poly) {
       controller.makePolygon()
     }
 
     google.maps.event.addDomListener(map.getDiv(), 'mousedown', () => {
-      if (!listing_map.drawable ||
-        listing_map.drawable && window.poly
+      const { listing_map } = AppStore.data
+      const mapIsDrawable = listing_map && listing_map.drawable
+
+      if (
+        !mapIsDrawable ||
+        (mapIsDrawable && window.poly)
       ) {
         return
       }
@@ -349,18 +381,19 @@ const controller = {
       window.poly = new google.maps.Polyline({
         map,
         clickable: false,
-        strokeColor: `#${Brand.color('primary', '3388ff')}`,
-        strokeWeight: 10
+        strokeWeight: 10,
+        strokeColor: `#${Brand.color('primary', '3388ff')}`
       })
 
       AppStore.data.listing_map.no_popup = true
       AppStore.emitChange()
 
       const move = google.maps.event.addListener(map, 'mousemove', (e) => {
-        if (!listing_map.drawable) {
+        if (!mapIsDrawable) {
           window.poly.setMap(null)
           return false
         }
+
         window.poly.getPath().push(e.latLng)
         return false
       })
@@ -368,11 +401,14 @@ const controller = {
       google.maps.event.addListenerOnce(map, 'mouseup', () => {
         delete AppStore.data.listing_map.no_popup
         AppStore.emitChange()
-        if (!listing_map.drawable) {
+
+        if (!mapIsDrawable) {
           return
         }
+
         map.set('draggable', true)
         google.maps.event.removeListener(move)
+
         controller.makePolygon()
         const points = controller.getPolygonBounds(google, window.poly)
         controller.getValertsInArea(points)
@@ -381,7 +417,11 @@ const controller = {
   },
 
   setActiveListing(listing) {
-    AppStore.data.listing_map.active_listing = listing.id
+    const active_listing = listing && listing.id
+    AppStore.data.listing_map = {
+      ...AppStore.data.listing_map,
+      active_listing
+    }
     AppStore.emitChange()
   },
 

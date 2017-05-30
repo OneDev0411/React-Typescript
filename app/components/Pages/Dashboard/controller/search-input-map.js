@@ -37,6 +37,16 @@ const autoCompleteHandler = (place) => {
   AppStore.emitChange()
 }
 
+const removePoly = () => {
+  if (window.poly_search) {
+    window.poly.setMap(null)
+    delete AppStore.data.listing_map.drawable
+    delete window.poly
+    delete window.poly_search
+    AppStore.emitChange()
+  }
+}
+
 const controller = {
   handleSearchInputChange(e) {
     const input = e.target.value
@@ -75,6 +85,8 @@ const controller = {
 
   handleSearchSubmit(e) {
     e.preventDefault()
+    removePoly()
+
     const input = AppStore.data.listing_map.search_input_text
 
     if (!input) {

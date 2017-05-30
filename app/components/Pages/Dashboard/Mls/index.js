@@ -595,6 +595,7 @@ export default class Mls extends Component {
         <Button
           bsStyle="danger"
           className="transition"
+          onClick={controller.listing_map.removeDrawing.bind(this)}
           style={S(`absolute z-10 t-160 br-100 w-50 h-50 color-fff pt-1 font-30 text-center r-${right_value}`)}
         >
           &times;
@@ -946,13 +947,18 @@ export default class Mls extends Component {
     }
 
     let options_text
-    if (listing_map && listing_map.listings_info) {
-      options_text = listing_map.listings
-      ?
-        `${listing_map.listings.length} showing of ${listing_map.listings_info.total}`
-      :
-        ''
-      + ` homes. ${listing_map.listings_info.proposed_title}`
+    if (listing_map !== undefined &&
+      listing_map.listings_info !== undefined
+    ) {
+      const listingsNumber = listing_map.listings
+        ?
+          `${listing_map.listings.length} showing of ${listing_map.listings_info.total}`
+        :
+          ''
+
+      const listingsProposedTitleList = ` homes. ${listing_map.listings_info.proposed_title}`
+
+      options_text = listingsNumber + listingsProposedTitleList
     }
 
     if (listing_map &&
