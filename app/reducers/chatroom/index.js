@@ -3,6 +3,7 @@ import _ from 'underscore'
 
 const initialState = {
   showChatbar: false,
+  popups: {},
   rooms: null,
   messages: {}
 }
@@ -54,6 +55,17 @@ export default (state = initialState, action) => {
             ...{ list }
           }}
         }}
+      }
+
+    case types.ADD_POPUP:
+      return {
+        ...state,
+        popups: {
+          ...state.popups,
+          ...{[action.roomId]: {
+            minimize: false
+          }}
+        }
       }
 
     default:
