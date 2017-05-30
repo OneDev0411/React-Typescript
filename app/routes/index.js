@@ -4,7 +4,6 @@ import { Route, IndexRoute, Redirect } from 'react-router'
 
 // Main component
 import App from '../components/App'
-import Dashboard from '../components/Dashboard'
 
 // Pages
 import Landing from '../components/Pages/Landing'
@@ -96,30 +95,27 @@ export default (
     <Route path="widgets/search" component={SearchWidget} />
     <Route path="widgets/listings" component={ListingsWidget} />
 
-    <Route path="/dashboard" component={Dashboard}>
+    <Route path="/dashboard/recents">
+      <IndexRoute component={Recents} />
+    </Route>
 
-      <Route path="/dashboard/recents">
-        <IndexRoute component={Recents} />
-      </Route>
+    <Route path="/dashboard/deals" component={DealsLayout}>
+      <IndexRoute component={DealsList} />
+      <Route path="/dashboard/deals/create/:type" component={DealCreate} />
+      <Route path="/dashboard/deals/:id(/:tab)" component={DealDashboard} />
+      <Route path="/dashboard/deals/:id/edit-form/:form/:type" component={DealEditForm} />
+      <Route path="/dashboard/deals/:id/collect-signatures/documents" component={CollectSignatures_Documents} />
+      <Route path="/dashboard/deals/:id/collect-signatures/recipients" component={CollectSignatures_Recipients} />
+    </Route>
 
-      <Route path="/dashboard/deals" component={DealsLayout}>
-        <IndexRoute component={DealsList} />
-        <Route path="/dashboard/deals/create/:type" component={DealCreate} />
-        <Route path="/dashboard/deals/:id(/:tab)" component={DealDashboard} />
-        <Route path="/dashboard/deals/:id/edit-form/:form/:type" component={DealEditForm} />
-        <Route path="/dashboard/deals/:id/collect-signatures/documents" component={CollectSignatures_Documents} />
-        <Route path="/dashboard/deals/:id/collect-signatures/recipients" component={CollectSignatures_Recipients} />
-      </Route>
+    <Route path="/dashboard/concierge/deals" component={ConciergeLayout}>
+      <IndexRoute component={ConciergeDealsList} />
+      <Route path="/dashboard/concierge/deals/:id" component={DealReview} />
+    </Route>
 
-      <Route path="/dashboard/concierge/deals" component={ConciergeLayout}>
-        <IndexRoute component={ConciergeDealsList} />
-        <Route path="/dashboard/concierge/deals/:id" component={DealReview} />
-      </Route>
-
-      <Route path="/dashboard/contacts" component={Contacts}>
-        <IndexRoute component={ContactsList} />
-        <Route path="/dashboard/contacts/:id" component={ContactProfile} />
-      </Route>
+    <Route path="/dashboard/contacts" component={Contacts}>
+      <IndexRoute component={ContactsList} />
+      <Route path="/dashboard/contacts/:id" component={ContactProfile} />
     </Route>
 
     <Route path="/dashboard/notifications" component={NotificationsPage} />
