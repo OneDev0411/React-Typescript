@@ -10,9 +10,14 @@ const enhance = compose(
   withState('filter', 'changeFilter', ''),
   lifecycle({
     componentDidMount() {
-      const { rooms, activeRoom, onSelectRoom } = this.props
+      const { rooms, activeRoom, onSelectRoom, isSidebar } = this.props
 
-      if (rooms && onSelectRoom && !activeRoom) {
+      if (
+        isSidebar !== true &&
+        !activeRoom &&
+        rooms &&
+        onSelectRoom
+      ) {
         const room = _.find(rooms, r => r.room_type === 'Direct')
         onSelectRoom(room.id)
       }
