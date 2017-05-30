@@ -1,5 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import S from 'shorti'
+import AppDispatcher from '../dispatcher/AppDispatcher'
+import SideBar from './Pages/Dashboard/Partials/SideBar'
+import MobileNav from './Pages/Dashboard/Partials/MobileNav'
 import Socket from '../services/socket'
 import { getRooms } from '../store_actions/chatroom'
 // import _ from 'lodash'
@@ -20,6 +24,9 @@ class App extends Component {
 
   componentDidMount() {
     this.initialRooms()
+
+    // check user is mobile device or not
+    this.checkForMobile()
   }
 
   initializeWebSocket() {
@@ -32,6 +39,12 @@ class App extends Component {
 
     if (data.user && !chatroom.rooms)
       dispatch(getRooms())
+  }
+
+  checkForMobile() {
+    AppDispatcher.dispatch({
+      action: 'check-for-mobile'
+    })
   }
 
   // componentWillMount() {
@@ -177,13 +190,6 @@ class App extends Component {
   //     }
   //   })
   // }
-
-  checkForMobile() {
-    // Check for mobile
-    AppDispatcher.dispatch({
-      action: 'check-for-mobile'
-    })
-  }
 
   // getNotifications(notification) {
   //   const data = AppStore.data
@@ -443,9 +449,23 @@ class App extends Component {
       user: data.user
     })
 
+    // render sidebar
+    let main_style = { marginLeft: '60px', minHeight: '100vh' }
+    let nav_area = <SideBar data={data} />
+
+    if (data.is_mobile) {
+      main_style = { ...main_style, ...S('') }
+
+      if (data.user)
+        nav_area = <MobileNav data={data} />
+    }
+
     return (
       <div>
-        { children }
+        { nav_area }
+        <div style={main_style}>
+          { children }
+        </div>
       </div>
     )
   }
