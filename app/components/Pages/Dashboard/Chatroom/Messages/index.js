@@ -79,13 +79,14 @@ class Messages extends React.Component {
 
   onNewMessage(room, message) {
     const { user, roomId } = this.props
+
     const count = this.messagesList.children.length
 
-    if (count < 3)
+    if (count < 4)
       return false
 
     // get element
-    const el = this.messagesList.children[count - 3]
+    const el = this.messagesList.children[count - 4]
 
     // scroll end when receive new message and in visible area
     if (this.elementInViewport(el) && room.id === roomId)

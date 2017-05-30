@@ -34,7 +34,7 @@ $rooms-padding: 4vw;
     max-height: $hg;
     overflow: auto;
     padding-top: 3vh;
-    padding-bottom: 5vh;
+    padding-bottom: 2vh;
     .message-item {
       &.queued {}
       @extend %message-item;
@@ -95,10 +95,26 @@ $rooms-padding: 4vw;
     min-height: $hg;
     max-height: $hg;
     overflow: auto;
+    .message-item {
+      padding: 0 10px 0 15px !important;
+    }
+  }
+
+  .message-create {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    border: none;
+    border-radius: 0;
   }
 
   .toolbar {
     display: none;
+  }
+
+  .loading {
+    height: 44vh;
   }
 }
 
