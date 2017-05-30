@@ -54,7 +54,7 @@ export default class Socket {
   /**
    * send new message
    */
-  static sendMessage(roomId, message) {
+  static sendMessage(roomId, message, authorName = '') {
     return new Promise((resolve, reject) => {
       const unixtime = moment().unix()
       const qid = 'queued_' + unixtime
@@ -63,6 +63,9 @@ export default class Socket {
         ...message,
         ...{
           id: qid,
+          author: {
+            abbreviated_display_name: authorName
+          },
           queued: true,
           created_at: unixtime,
           updated_at: unixtime,
