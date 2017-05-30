@@ -58,6 +58,7 @@ export default class Recents extends React.Component {
           <Messages
             user={user}
             roomId={activeRoom}
+            showToolbar={true}
           />
         </Col>
       </Row>
