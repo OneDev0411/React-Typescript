@@ -36,9 +36,7 @@ $rooms-padding: 4vw;
     padding-top: 3vh;
     padding-bottom: 5vh;
     .message-item {
-      &.queued {
-        opacity: 0.4;
-      }
+      &.queued {}
       @extend %message-item;
       .recommendation {
         @extend %message-item-recommendation;
