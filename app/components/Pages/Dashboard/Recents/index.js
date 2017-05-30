@@ -640,14 +640,6 @@ export default class Dashboard extends Component {
         </div>
       )
     }
-    let nav_area = (
-      <SideBar data={data} />
-    )
-    if (data.is_mobile && data.user) {
-      nav_area = (
-        <MobileNav data={data} />
-      )
-    }
     let main_style = S('minw-1000')
     if (data.is_mobile)
       main_style = S(`w-${window.innerWidth}`)
@@ -665,7 +657,6 @@ export default class Dashboard extends Component {
     return (
       <div style={main_style}>
         <main>
-          { nav_area }
           { main_content }
         </main>
         <audio ref={ref => this.notif_sound = ref} id="notif-sound">
