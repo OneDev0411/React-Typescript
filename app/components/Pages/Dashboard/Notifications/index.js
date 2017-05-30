@@ -114,30 +114,17 @@ export default class extends React.Component {
     return <div style={ S('text-center mt-40') }>Loading...</div>
   }
   render() {
-    const { data } = this.props
-    let nav_area = (
-      <SideBar data={ data }/>
-    )
-    if (data.is_mobile && user) {
-      nav_area = (
-        <MobileNav data={ data }/>
-      )
-    }
-    const user = data.user
     const title_style = {
       boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.05)',
       ...S('w-100p pl-20 pb-20 font-21')
     }
     return (
-      <main>
-        { nav_area }
-        <div style={ S('absolute l-70 w-100p') }>
-          <h1 style={ title_style }>Notifications</h1>
-          <div style={ S('w-100p') }>
-            { this.getNotifications() }
-          </div>
+      <div style={ S('absolute l-70 w-100p') }>
+        <h1 style={ title_style }>Notifications</h1>
+        <div style={ S('w-100p') }>
+          { this.getNotifications() }
         </div>
-      </main>
+      </div>
     )
   }
 }

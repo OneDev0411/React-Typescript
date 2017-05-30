@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import ListingDispatcher from '../../../../../dispatcher/ListingDispatcher'
 import ContactModel from '../../../../../models/Contact'
 import controller from '../../controller'
-import SideBar from '../../Partials/SideBar'
-import MobileNav from '../../Partials/MobileNav'
 import Brand from '../../../../../controllers/Brand'
 import S from 'shorti'
 import ListingViewer from '../../Partials/ListingViewer'
@@ -75,18 +73,9 @@ export default class Listing extends Component {
         </div>
       )
     }
-    let nav_area = (
-      <SideBar data={data} />
-    )
-    if (data.is_mobile && user) {
-      nav_area = (
-        <MobileNav data={data} />
-      )
-    }
     return (
       <main>
         { brand_logo }
-        { user && !data.is_widget ? nav_area : '' }
         { listing_viewer }
       </main>
     )

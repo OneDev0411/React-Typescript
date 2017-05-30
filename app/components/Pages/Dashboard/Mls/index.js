@@ -8,8 +8,6 @@ import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import controller from '../controller'
-import SideBar from '../Partials/SideBar'
-import MobileNav from '../Partials/MobileNav'
 import ShareAlertModal from './Partials/ShareAlertModal'
 import ShareTypeModal from './Partials/ShareTypeModal'
 import ListingViewer from '../Partials/ListingViewer'
@@ -670,14 +668,6 @@ export default class Mls extends Component {
         </form>
       </div>
     )
-    let nav_area = (
-      <SideBar data={ data }/>
-    )
-    if (data.is_mobile && user) {
-      nav_area = (
-        <MobileNav data={ data }/>
-      )
-    }
     const draw_button_style = {
       ...S('mr-10 bg-fff h-52 w-50 br-5'),
       outline: 'none',
@@ -937,7 +927,6 @@ export default class Mls extends Component {
     const main_content = (
       <main>
         { brand_logo }
-        { user && !data.is_widget ? nav_area : '' }
         <div className={ main_class } style={ main_style }>
           { /* this.cacheImages() */ }
           { toolbar }
