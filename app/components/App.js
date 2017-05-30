@@ -6,6 +6,8 @@ import SideBar from './Pages/Dashboard/Partials/SideBar'
 import MobileNav from './Pages/Dashboard/Partials/MobileNav'
 import Socket from '../services/socket'
 import { getRooms } from '../store_actions/chatroom'
+import Chatbar from './Pages/Dashboard/Chatroom/Chatbar'
+
 // import _ from 'lodash'
 // import io from 'socket.io-client'
 // import AppDispatcher from '../dispatcher/AppDispatcher'
@@ -35,9 +37,9 @@ class App extends Component {
   }
 
   initialRooms() {
-    const { dispatch, data, chatroom } = this.props
+    const { dispatch, data, rooms } = this.props
 
-    if (data.user && !chatroom.rooms)
+    if (data.user && !rooms)
       dispatch(getRooms())
   }
 
@@ -463,6 +465,7 @@ class App extends Component {
     return (
       <div>
         { nav_area }
+        <Chatbar />
         <div style={main_style}>
           { children }
         </div>
@@ -471,4 +474,7 @@ class App extends Component {
   }
 }
 
-export default connect(s => s)(App)
+export default connect(s => ({
+  data: s.data,
+  rooms: s.chatroom.rooms
+}))(App)
