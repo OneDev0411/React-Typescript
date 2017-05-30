@@ -26,6 +26,7 @@ $rooms-padding: 4vw;
   position: relative;
   height: 100vh;
   padding-top: 100vh - $height;
+  overflow: hidden;
 
   .messages-list {
     $hg: $height - $height-of-create-message;
