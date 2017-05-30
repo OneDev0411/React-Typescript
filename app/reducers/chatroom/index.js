@@ -2,12 +2,19 @@ import types from '../../constants/chatroom'
 import _ from 'underscore'
 
 const initialState = {
+  showChatbar: false,
   rooms: null,
   messages: {}
 }
 
 export default (state = initialState, action) => {
   switch (action.type) {
+
+    case types.TOGGLE_CHATBAR:
+      return {
+        ...state,
+        ...{ showChatbar: !state.showChatbar }
+      }
 
     case types.GET_ROOMS:
       return {
