@@ -19,17 +19,17 @@ $rooms-padding: 4vw;
 * Messages
 */
 %messages {
-  $height: 91vh;
+  $messages-height: 91vh;
   $height-of-create-message: 6vh;
 
   padding: 0;
   position: relative;
   height: 100vh;
-  padding-top: 100vh - $height;
+  padding-top: 100vh - $messages-height;
   overflow: hidden;
 
   .messages-list {
-    $hg: $height - $height-of-create-message;
+    $hg: $messages-height - $height-of-create-message;
     min-height: $hg;
     max-height: $hg;
     overflow: auto;
@@ -66,6 +66,7 @@ $rooms-padding: 4vw;
       height: $height-of-create-message - 0.2vh;
       border: none;
       padding-left: 10px;
+      color: #000;
       &:focus {
         outline: none;
       }
@@ -78,6 +79,28 @@ $rooms-padding: 4vw;
 
   .loading {
     margin: 5px 15px;
+  }
+}
+
+/*
+ * Messages popup
+ */
+%messages-popup {
+  @extend %messages;
+  $messages-height: 50vh;
+  $height-of-create-message: 6vh;
+  height: 50vh;
+  padding-top: 0;
+
+  .messages-list {
+    $hg: $messages-height - $height-of-create-message;
+    min-height: $hg;
+    max-height: $hg;
+    overflow: auto;
+  }
+
+  .toolbar {
+    display: none;
   }
 }
 
@@ -168,85 +191,27 @@ $rooms-padding: 4vw;
 }
 
 .bm-menu-wrap {
-  z-index: 99999 !important;
+  z-index: 101 !important;
   background-color: #303E4D;
   color: #fff;
   .rooms {
     @extend %rooms;
   }
 }
-// .room-list__item {
-//   &:hover {
-//     background-color: #465a71;
-//   }
-//   &__title,
-//   &__names,
-//   &__message {
-//     white-space: nowrap;
-//     overflow: hidden;
-//     text-overflow: ellipsis;
-//   }
-// }
-// .create-message__btn {
-//   color: #ccc;
-//   border-top-right-radius: 0;
-//   border-bottom-right-radius: 0;
-//   transition: all 0ms !important;
-//   &:hover,
-//   &:active,
-//   &:focus {
-//     border-color: #3388ff !important;
-//     background-color: #3388ff !important;
-//     color: #fff !important;
-//   }
-// }
-// #popover-message-info {
-//   width: 380px;
-//   max-width: 380px;
-//   .popover-title {
-//     height: 49px;
-//     margin: 0;
-//     font-size: 17px;
-//     padding-top: 4.5%;
-//     background-color: rgba(250, 250, 250, 0.9);
-//   }
-//   .popover-content {
-//     padding: 8px 0;
-//     .content {
-//       margin-top: 5px;
-//       &.read-by {
-//         margin-bottom: 10px;
-//       }
-//       &.delivered-to {
-//       }
-//       .title {
-//         color: #9b9b9b;
-//         font-size: 14px;
-//         margin-left: 15px;
-//         margin-bottom: 10px;
-//       }
-//       .report {
-//         overflow: auto;
-//         max-height: 240px;
-//         .item {
-//           &:first-child {
-//             border-top : 1px solid #e9e9e9;
-//           }
-//           position: relative;
-//           padding-left: 10px;
-//           height: 42px;
-//           border-bottom: 1px solid #e9e9e9;
-//           padding-top: 4px;
-//           .name {
-//             float: left;
-//             margin: 2% 0 0px 13%;
-//           }
-//           .time {
-//             float: right;
-//             margin: 2% 6% 0 0;
-//           }
-//         }
-//       }
-//     }
-//   }
-// }
+
+.chat-popup {
+  position: fixed;
+  height: 50vh;
+  bottom: 0;
+  background-color: #202A33;
+  border-radius: 3px 3px 0 0;
+  z-index: 100;
+  color: #fff;
+  @media (max-width : 738px) {
+    display: none !important;
+  }
+
+  .messages {
+    @extend %messages-popup;
+  }
+}
