@@ -2,15 +2,20 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import S from 'shorti'
 import AppDispatcher from '../dispatcher/AppDispatcher'
+
+// services
+import Socket from '../services/socket'
+
+// navs
 import SideBar from './Pages/Dashboard/Partials/SideBar'
 import MobileNav from './Pages/Dashboard/Partials/MobileNav'
-import Socket from '../services/socket'
+
+// global chat components
 import { getRooms } from '../store_actions/chatroom'
 import Chatbar from './Pages/Dashboard/Chatroom/Chatbar'
+import ChatPopups from './Pages/Dashboard/Chatroom/Popups'
 
 // import _ from 'lodash'
-// import io from 'socket.io-client'
-// import AppDispatcher from '../dispatcher/AppDispatcher'
 // import NotificationDispatcher from '../dispatcher/NotificationDispatcher'
 // import AppStore from '../stores/AppStore'
 // import Brand from '../controllers/Brand'
@@ -465,10 +470,14 @@ class App extends Component {
     return (
       <div>
         { nav_area }
+        <ChatPopups
+          user={data.user}
+        />
         <Chatbar />
-        <div style={main_style}>
+
+        <main style={main_style}>
           { children }
-        </div>
+        </main>
       </div>
     )
   }
