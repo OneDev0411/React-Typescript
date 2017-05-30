@@ -23,6 +23,8 @@ import SvgBriefCase from './Svgs/BriefCase'
 import SvgSupport from './Svgs/Support'
 import SvgNotifications from './Svgs/Notifications'
 import Brand from '../../../../controllers/Brand'
+import store from '../../../../stores'
+import { toggleChatbar } from '../../../../store_actions/chatroom'
 
 const phoneUtil = PhoneNumberUtil.getInstance()
 
@@ -302,14 +304,17 @@ export default class SideBar extends Component {
   goToStore() {
     window.location = '/dashboard/website'
   }
+
+  onShowChatroomSidebar() {
+    store.dispatch(toggleChatbar())
+  }
+
   render() {
     // Data
     const data = this.props.data
 
     if (!data.user)
       return false
-
-    const {onShowChatroomSidebar} = this.props
 
     let sidebar_height = 0
     if (typeof window !== 'undefined')
@@ -613,7 +618,7 @@ export default class SideBar extends Component {
           { branding_logo }
 
           <div
-            onClick={() => onShowChatroomSidebar()}
+            onClick={() => this.onShowChatroomSidebar()}
           >
             <SvgChat color={active.recents ? nav_active_color : '#4e5c6c'} />
           </div>
@@ -739,5 +744,4 @@ export default class SideBar extends Component {
 //   data: React.PropTypes.object,
 //   location: React.PropTypes.object,
 //   history: React.PropTypes.object,
-//   onShowChatroomSidebar: React.PropTypes.fn
 // }
