@@ -3,10 +3,10 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { slide as Menu } from 'react-burger-menu'
 import Rooms from '../Rooms'
-import { toggleChatbar } from '../../../../../store_actions/chatroom'
+import { toggleChatbar, addChatPopup } from '../../../../../store_actions/chatroom'
 
 const Chatbar = ({
-  show,
+  showChatbar,
   dispatch,
   location
 }) => {
@@ -19,14 +19,17 @@ const Chatbar = ({
   }
 
   const onSelectRoom = (roomId) => {
-    console.log(roomId)
+    dispatch(toggleChatbar())
+    dispatch(addChatPopup(roomId))
   }
 
   return (
     <Menu
-      isOpen={show}
+      isOpen={showChatbar}
+      customBurgerIcon={false}
+      customCrossIcon={false}
       onStateChange={({ isOpen }) => {
-        if (show !== isOpen) {
+        if (showChatbar !== isOpen) {
           dispatch(toggleChatbar())
         }
       }}
@@ -41,6 +44,6 @@ const Chatbar = ({
 }
 
 export default connect(s => ({
-  show: s.chatroom.showChatbar,
+  showChatbar: s.chatroom.showChatbar,
   location: s.data.location
 }))(Chatbar)
