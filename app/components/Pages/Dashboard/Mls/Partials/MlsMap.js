@@ -154,7 +154,12 @@ export default class MlsMap extends Component {
     const hasLocationSearch = nextProps.data.listing_map &&
       nextProps.data.listing_map.has_location_search
 
-    if (hasLocationSearch) {
+    if (hasLocationSearch &&
+      (this.state.mapProps.center.lat !==
+      nextProps.data.listing_map.center.lat ||
+      this.state.mapProps.center.lng !==
+      nextProps.data.listing_map.center.lng)
+    ) {
       const { center, zoom } = AppStore.data.listing_map
       const searchPin = nextProps.data.listing_map.location_search.center
       this.setState({
