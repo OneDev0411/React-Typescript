@@ -205,6 +205,9 @@ export default class MlsMap extends Component {
 
         console.log('receive, load store')
         return
+      } else if (nextPath === '/dashboard/mls/alerts') {
+        this.setState(setInitialState())
+        return
       }
     }
 
@@ -466,8 +469,10 @@ export default class MlsMap extends Component {
       this.props.data.show_actives_map
     ) || (
       nextProps.data.show_alerts_map &&
-      nextProps.data.show_alerts_map !==
-      this.props.data.show_alerts_map
+      (nextProps.data.show_alerts_map !==
+      this.props.data.show_alerts_map ||
+      this.props.data.show_alert_viewer !==
+      nextProps.data.show_alert_viewer)
     )) {
       console.log('update alerts or actives')
       return 1
