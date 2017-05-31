@@ -595,14 +595,8 @@ export default class Mls extends Component {
         <Button
           bsStyle="danger"
           className="transition"
-<<<<<<< HEAD
           onClick={controller.listing_map.removeDrawing.bind(this)}
-          style={S(`absolute z-10 t-160 br-100 w-50 h-50 color-fff pt-1 font-30 text-center r-${right_value}`)}
-||||||| merged common ancestors
-          style={ S('absolute z-10 t-160 br-100 w-50 h-50 color-fff pt-1 font-30 text-center r-' + right_value) }
-=======
-          style={S(`absolute z-10 t-160 br-100 w-50 h-50 color-fff pt-1 font-30 text-center r-${right_value}`)}
->>>>>>> clean [MLS]: mls index
+          style={S(`absolute z-1 t-160 br-100 w-50 h-50 color-fff pt-1 font-30 text-center r-${right_value}`)}
         >
           &times;
         </Button>
@@ -932,30 +926,7 @@ export default class Mls extends Component {
         </form>
       </div>
     )
-<<<<<<< HEAD
-    
-||||||| merged common ancestors
-    let nav_area = (
-      <SideBar data={ data }/>
-    )
-    if (data.is_mobile && user) {
-      nav_area = (
-        <MobileNav data={ data }/>
-      )
-    }
-=======
 
-    let nav_area = (
-      <SideBar data={data} />
-    )
-
-    if (data.is_mobile && user) {
-      nav_area = (
-        <MobileNav data={data} />
-      )
-    }
-
->>>>>>> clean [MLS]: mls index
     const draw_button_style = {
       ...S('mr-10 bg-fff h-52 w-50 br-5'),
       outline: 'none',
@@ -976,7 +947,6 @@ export default class Mls extends Component {
     }
 
     let options_text
-<<<<<<< HEAD
     if (listing_map !== undefined &&
       listing_map.listings_info !== undefined
     ) {
@@ -995,25 +965,6 @@ export default class Mls extends Component {
       data.listing_map.search_input_text &&
       listing_map.no_listings_found
     ) {
-||||||| merged common ancestors
-    if (listing_map && listing_map.listings_info)
-      options_text = (listing_map.listings ? (listing_map.listings.length + ' showing of ' + listing_map.listings_info.total) : '') + ' homes. ' + listing_map.listings_info.proposed_title
-    if (listing_map && data.listing_map.search_input_text && listing_map.no_listings_found)
-=======
-    if (listing_map && listing_map.listings_info) {
-      options_text = listing_map.listings
-      ?
-        `${listing_map.listings.length} showing of ${listing_map.listings_info.total}`
-      :
-        ''
-      + ` homes. ${listing_map.listings_info.proposed_title}`
-    }
-
-    if (listing_map &&
-      data.listing_map.search_input_text &&
-      listing_map.no_listings_found
-    ) {
->>>>>>> clean [MLS]: mls index
       options_text = 'No listings found'
     }
 
@@ -1383,24 +1334,11 @@ export default class Mls extends Component {
     const main_content = (
       <main>
         { brand_logo }
-<<<<<<< HEAD
 
         <div
           style={main_style}
           className={main_class}
         >
-||||||| merged common ancestors
-        { user && !data.is_widget ? nav_area : '' }
-        <div className={ main_class } style={ main_style }>
-=======
-
-        { user && !data.is_widget ? nav_area : '' }
-
-        <div
-          style={main_style}
-          className={main_class}
-        >
->>>>>>> clean [MLS]: mls index
           { /* this.cacheImages() */ }
 
           { toolbar }

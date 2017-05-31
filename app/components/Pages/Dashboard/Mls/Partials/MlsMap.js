@@ -314,17 +314,36 @@ export default class MlsMap extends Component {
       ) || (
         this.state.listings.total !==
         nextProps.data.listing_map.listings_info.total
-      ) || (
-        window.poly_search
       )) {
         console.log('receive list')
+
+        if (window.poly_search) {
+          const data = newListings.map(list => ({
+            numPoints: 1,
+            list: { ...list },
+            lat: list.location.latitude,
+            lng: list.location.longitude,
+            ...list
+          }))
+
+          this.setState({
+            listings: {
+              data,
+              total: newListings.length,
+              listingsLength: newListings.length
+            }
+          })
+
+          return
+        }
+
+        const { total } = nextProps.data.listing_map.listings_info
 
         const data = newListings.map(list => ({
           lat: list.location.latitude,
           lng: list.location.longitude,
           ...list
         }))
-        const { total } = nextProps.data.listing_map.listings_info
 
         let mapProps = this.state.mapProps
         if (nextProps.data.listing_map.search_input_text) {
@@ -470,7 +489,7 @@ export default class MlsMap extends Component {
   componentWillUnmount() {
     console.log('cwum')
     if (this.state.listings.data &&
-      this.props.data.path !== '/dashboard/mls/alerts'
+      this.props.data.path.indexOf('/dashboard/mls/alerts') === -1
     ) {
       store[this.props.data.path] = this.state
     }
