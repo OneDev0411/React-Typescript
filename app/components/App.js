@@ -24,9 +24,9 @@ import ChatPopups from './Pages/Dashboard/Chatroom/Popups'
 
 class App extends Component {
   componentWillMount() {
-
-    if (typeof window !== 'undefined')
+    if (typeof window !== 'undefined') {
       this.initializeWebSocket()
+    }
   }
 
   componentDidMount() {
@@ -44,8 +44,9 @@ class App extends Component {
   initialRooms() {
     const { dispatch, data, rooms } = this.props
 
-    if (data.user && !rooms)
+    if (data.user && !rooms) {
       dispatch(getRooms())
+    }
   }
 
   checkForMobile() {
@@ -457,7 +458,7 @@ class App extends Component {
     })
 
     // render sidebar
-    let main_style = { marginLeft: '60px', minHeight: '100vh' }
+    let main_style = { minHeight: '100vh' }
     let nav_area = <SideBar data={data} />
 
     if (data.is_mobile) {
