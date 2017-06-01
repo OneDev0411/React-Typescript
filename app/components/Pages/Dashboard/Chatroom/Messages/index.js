@@ -14,10 +14,17 @@ class Messages extends React.Component {
   componentDidMount() {
     const { roomId, messages } = this.props
 
+    /**
+     * create a reference for onNewMessage function
+     * more info in https://stackoverflow.com/questions/11565471
+    */
+    this.messageListener = this.onNewMessage.bind(this)
+
+    // create listener for new messages
+    window.socket.addEventListener('Message.Sent', this.messageListener)
+
     // bind chat's scroll event
     this.initializeScroller()
-
-    window.socket.on('Message.Sent', this.onNewMessage.bind(this))
 
     // initialize chatroom with latest room
     if (roomId && !messages[roomId])
@@ -29,6 +36,10 @@ class Messages extends React.Component {
 
     if (roomId && !messages[roomId])
       return this.loadMessages(roomId)
+  }
+
+  componentWillUnmount() {
+    window.socket.removeEventListener('Message.Sent', this.messageListener)
   }
 
   initializeScroller() {
@@ -79,6 +90,9 @@ class Messages extends React.Component {
 
   onNewMessage(room, message) {
     const { user, roomId } = this.props
+
+    if (!this.messagesList)
+      return false
 
     const count = this.messagesList.children.length
 
@@ -131,6 +145,7 @@ class Messages extends React.Component {
             src="/static/images/loading-states/messages.svg"
           />
         }
+
         <div
           className="messages-list"
           ref={ref => this.messagesList = ref}
