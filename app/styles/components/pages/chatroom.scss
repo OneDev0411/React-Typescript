@@ -1,7 +1,7 @@
 $rooms-padding: 4vw;
 
 .chatroom {
-  margin-left: 0;
+  margin-left: 50px;
   margin-right: 0;
 
   .no-padding {
@@ -12,6 +12,25 @@ $rooms-padding: 4vw;
   }
   .messages {
     @extend %messages;
+  }
+}
+
+.chatroom-fullscreen {
+  position: absolute;
+  z-index: 200;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  background-color: #fff;
+  .chatroom {
+    margin-left: 0;
+  }
+  .rooms {
+    .list {
+      padding-bottom: 4vh;
+    }
   }
 }
 
@@ -214,18 +233,49 @@ $rooms-padding: 4vw;
 }
 
 .chat-popup {
+  $height: 54vh;
+  $bar-height: 4vh;
   position: fixed;
-  height: 50vh;
+  height: $height;
   bottom: 0;
   background-color: #202A33;
-  border-radius: 3px 3px 0 0;
+  border-radius: 4px;
   z-index: 100;
   color: #fff;
   @media (max-width : 738px) {
     display: none !important;
   }
 
-  .messages {
-    @extend %messages-popup;
+  &.minimize {
+    bottom: ($height - $bar-height) * -1;
+  }
+
+  .bar {
+    text-align: right;
+    padding: 4px 10px;
+    background-color: gray;
+    border-radius: 4px 4px 0 0;
+    height: $bar-height;
+    color: #000;
+    &.isActive {
+      background-color: skyblue;
+    }
+    .icon {
+      cursor: pointer;
+      margin-left: 6px;
+      &.fa-times {
+        font-size: 16px;
+      }
+    }
+    .room-title {
+      float: left;
+      padding-top: 2px;
+      cursor: pointer;
+    }
+  }
+  .content {
+    .messages {
+      @extend %messages-popup;
+    }
   }
 }
