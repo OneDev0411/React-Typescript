@@ -43,8 +43,7 @@ export default class ListingCard extends Component {
       listing_image_style.height = listing_card_style.height - 130
     }
     const overlay_style = {
-      ...S('bg-000 absolute w-100p h-100p br-3'),
-      opacity: '.3'
+      ...S('absolute w-100p h-100p br-3')
     }
     const price = helpers.numberWithCommas(listing.price)
     const price_tag_style = {
