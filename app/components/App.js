@@ -444,7 +444,7 @@ class App extends Component {
   // }
 
   render() {
-    const { data, location } = this.props
+    const { data, rooms, location } = this.props
 
     // don't remove below codes,
     // because app is depended to `path` and `location` props in data store
@@ -473,8 +473,11 @@ class App extends Component {
         { nav_area }
         <ChatPopups
           user={data.user}
+          rooms={rooms}
         />
-        <Chatbar />
+        <Chatbar
+          user={data.user}
+        />
 
         <main style={main_style}>
           { children }
