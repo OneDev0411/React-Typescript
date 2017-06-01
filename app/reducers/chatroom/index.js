@@ -3,6 +3,7 @@ import _ from 'underscore'
 
 const initialState = {
   showChatbar: false,
+  fullscreen: false,
   popups: {},
   rooms: null,
   messages: {}
@@ -15,6 +16,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         ...{ showChatbar: !state.showChatbar }
+      }
+
+    case types.TOGGLE_FULLSCREEN:
+      return {
+        ...state,
+        ...{ fullscreen: !state.fullscreen }
       }
 
     case types.GET_ROOMS:
@@ -63,9 +70,60 @@ export default (state = initialState, action) => {
         popups: {
           ...state.popups,
           ...{[action.roomId]: {
-            minimize: false
+            minimize: false,
+            isActive: _.size(state.popups) === 0
           }}
         }
+      }
+
+    case types.MINIMIZE_POPUP:
+      return {
+        ...state,
+        popups: {
+          ...state.popups,
+          ...{[action.roomId]: {
+            minimize: !state.popups[action.roomId].minimize
+          }}
+        }
+      }
+
+    case types.MAXIMIZE_POPUP:
+      return {
+        ...state,
+        ...{
+          activePopup: action.roomId,
+          fullscreen: true
+        },
+        popups: {
+          ...state.popups,
+          ...{[action.roomId]: {
+            minimize: false,
+            maximize: true
+          }}
+        }
+      }
+
+    case types.REMOVE_POPUP:
+      const r_popups = _.omit(state.popups, (settings, roomId) => roomId === action.roomId)
+
+      return {
+        ...state,
+        ...{popups: r_popups}
+      }
+
+    case types.CHANGE_ACTIVE_POPUP:
+      const c_popups = {}
+
+      _.each(state.popups, (settings, roomId) => {
+        c_popups[roomId] = {
+          ...state.popups[roomId],
+          ...{isActive: roomId === action.roomId}
+        }
+      })
+
+      return {
+        ...state,
+        ...{popups: c_popups}
       }
 
     default:
