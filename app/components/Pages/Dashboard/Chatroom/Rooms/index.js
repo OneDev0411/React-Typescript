@@ -4,54 +4,53 @@ import { Link } from 'react-router'
 import { compose,  withState, lifecycle, pure } from 'recompose'
 import _ from 'underscore'
 import cn from 'classnames'
+import store from '../../../../../stores'
+import { toggleFullScreen } from '../../../../../store_actions/chatroom'
 
 const enhance = compose(
   pure,
   withState('filter', 'changeFilter', ''),
-  lifecycle({
-    componentDidMount() {
-      const { rooms, activeRoom, onSelectRoom, isSidebar } = this.props
-
-      if (
-        isSidebar !== true &&
-        !activeRoom &&
-        rooms &&
-        onSelectRoom
-      ) {
-        const room = _.find(rooms, r => r.room_type === 'Direct')
-        onSelectRoom(room.id)
-      }
-    }
-  })
+  // lifecycle({
+  //   componentDidMount() {
+  //     const { rooms, activeRoom, onSelectRoom, isSidebar } = this.props
+  //     if (
+  //       isSidebar !== true &&
+  //       !activeRoom &&
+  //       rooms &&
+  //       onSelectRoom
+  //     ) {
+  //       const room = _.find(rooms, r => r.room_type === 'Direct')
+  //       onSelectRoom(room.id)
+  //     }
+  //   }
+  // })
 )
 
 const Rooms = ({
   isSidebar,
+  isFullscreen,
   rooms,
   activeRoom,
   onSelectRoom,
   changeFilter,
-  filter,
-  onFullScreen
+  filter
 }) => {
 
   const fullScreen = function(e) {
     e.preventDefault()
-    onFullScreen()
+    store.dispatch(toggleFullScreen())
   }
 
   return (
     <div className="rooms">
       <div className="toolbar">
-        {
-          isSidebar &&
-          <a
-            href="/dashboard/recents"
-            onClick={e => fullScreen(e)}
-          >
-            Full screen
-          </a>
-        }
+
+        <a
+          href="/dashboard/recents"
+          onClick={e => fullScreen(e)}
+        >
+          { isFullscreen ? 'Exit Fullscreen' : 'Fullscreen' }
+        </a>
 
         <input
           className="form-control filter"
@@ -87,5 +86,6 @@ const Rooms = ({
 }
 
 export default connect(s => ({
+  isFullscreen: s.chatroom.fullscreen,
   rooms: s.chatroom.rooms
 }))(enhance(Rooms))
