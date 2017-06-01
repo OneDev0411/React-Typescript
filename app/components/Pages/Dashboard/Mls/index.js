@@ -869,7 +869,10 @@ export default class Mls extends Component {
         :
           ''
 
-      const listingsProposedTitleList = ` homes. ${listing_map.listings_info.proposed_title}`
+      const { proposed_title } = listing_map.listings_info
+      const listingsProposedTitleList = proposed_title
+        ? ` homes. ${proposed_title}`
+        : ''
 
       options_text = listingsNumber + listingsProposedTitleList
     }
