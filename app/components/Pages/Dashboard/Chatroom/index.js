@@ -13,10 +13,19 @@ export default class Recents extends React.Component {
 
   constructor(props) {
     super(props)
-    const { hash } = props.location
+    const { activePopup, location } = props
+
+    console.log('>>>>>>>>>>>>')
+    let activeRoom = null
+
+    if (location)
+      activeRoom = location.hash.substr(1)
+
+    if (activePopup)
+      activeRoom = activePopup
 
     this.state = {
-      activeRoom: hash ? hash.substr(1) : null
+      activeRoom
     }
   }
 
@@ -28,6 +37,10 @@ export default class Recents extends React.Component {
     this.setState({
       activeRoom: id
     })
+
+    // don't update url hash on fullscreen mode
+    if (!this.props.location)
+      return false
 
     this.updateHash(id)
   }
@@ -47,14 +60,14 @@ export default class Recents extends React.Component {
 
     return (
       <Row className="chatroom">
-        <Col lg={3} md={4} sm={4} xs={5} className="no-padding">
+        <Col lg={3} md={3} sm={4} xs={5} className="no-padding">
           <Rooms
             onSelectRoom={id => this.onChangeRoom(id)}
             activeRoom={activeRoom}
           />
         </Col>
 
-        <Col lg={9} md={8} sm={8} xs={7} className="no-padding">
+        <Col lg={9} md={9} sm={8} xs={7} className="no-padding">
           <Messages
             user={user}
             roomId={activeRoom}
