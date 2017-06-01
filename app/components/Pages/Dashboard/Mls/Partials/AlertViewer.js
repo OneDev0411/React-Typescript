@@ -49,9 +49,14 @@ export default class AlertViewer extends Component {
     return (
       <div className="alert-viewer" style={alert_viewer_wrapper_style}>
         <div style={alert_viewer_header_style}>
-          <span style={S('color-263445 font-15 fw-500')}>
-            New listings ({ current_alert.feed_info ? current_alert.feed_info.total : '' })
-          </span>
+          {
+            current_alert.feed_info &&
+            current_alert.feed_info.total > 0 &&
+            <span style={S('color-263445 font-15 fw-500')}>
+              <b>{current_alert.feed_info.total} </b>
+              new listings
+            </span>
+          }
           <div className="close pull-right" onClick={controller.alert_map.hideAlertViewer.bind(this)}>
             Close &times;
           </div>

@@ -403,93 +403,6 @@ export default class Mls extends Component {
     controller.listing_map.handleBoundsChange(data.listing_map.center, data.listing_map.zoom, bounds)
   }
 
-  handleCloseSignupForm() {
-    delete AppStore.data.show_signup_form
-    AppStore.emitChange()
-  }
-
-  handleEmailSubmit(e) {
-    // If clicked
-    setTimeout(() => {
-      this.refs.email.refs.input.focus()
-    }, 100)
-    e.preventDefault()
-
-    delete AppStore.data.errors
-    AppStore.emitChange()
-
-    const data = this.props.data
-    const email = this.emailInput.value
-
-    // If no email or double submit
-    if (!email || data.submitting) {
-      return
-    }
-
-    const random_password = randomString(9)
-
-    if (!email.trim()) {
-      return
-    }
-
-    if (!validator.isEmail(email)) {
-      AppStore.data.errors = {
-        type: 'email-invalid'
-      }
-      AppStore.emitChange()
-      setTimeout(() => {
-        delete AppStore.data.errors
-        AppStore.emitChange()
-      }, 3000)
-      return
-    }
-
-    AppStore.data.submitting = true
-    AppStore.emitChange()
-
-    const user = {
-      first_name: email,
-      email,
-      user_type: 'Client',
-      password: random_password,
-      grant_type: 'password',
-      is_shadow: true
-    }
-
-    AppDispatcher.dispatch({
-      action: 'sign-up-shadow',
-      user,
-      redirect_to: ''
-    })
-  }
-
-  hideModal() {
-    delete AppStore.data.show_signup_confirm_modal
-    AppStore.emitChange()
-  }
-
-  resend() {
-    const data = this.props.data
-    const new_user = data.new_user
-
-    const user = {
-      first_name: new_user.email,
-      email: new_user.email,
-      user_type: 'Client',
-      password: new_user.random_password,
-      grant_type: 'password',
-      is_shadow: true
-    }
-
-    AppStore.data.resent_email_confirmation = true
-
-    AppDispatcher.dispatch({
-      action: 'sign-up-shadow',
-      user,
-      redirect_to: ''
-    })
-  }
-
   hideFilterErrorModal() {
     delete AppStore.data.show_filter_error_modal
     AppStore.emitChange()
@@ -596,7 +509,7 @@ export default class Mls extends Component {
           bsStyle="danger"
           className="transition"
           onClick={controller.listing_map.removeDrawing.bind(this)}
-          style={S(`absolute z-10 t-160 br-100 w-50 h-50 color-fff pt-1 font-30 text-center r-${right_value}`)}
+          style={S(`absolute z-1 t-160 br-100 w-50 h-50 color-fff pt-1 font-30 text-center r-${right_value}`)}
         >
           &times;
         </Button>
@@ -643,7 +556,7 @@ export default class Mls extends Component {
       )
     }
 
-    let signup_form
+    /*let signup_form
     if (data.show_signup_form) {
       let popover = <Popover id="popover" className="hidden" />
 
@@ -738,7 +651,7 @@ export default class Mls extends Component {
           <div style={S('color-9b9b9b text-center')}>Already have an account? <a href="/signin" target="_parent">Log in</a></div>
         </div>
       )
-    }
+    }*/
 
     if (listing_map && listing_map.listings) {
       let viewing_type_button_group_style = S('absolute t-9 r-0 mr-10 z-10')
@@ -777,7 +690,7 @@ export default class Mls extends Component {
         <div>
           <div style={S('absolute r-5 mt-2 t-15 z-10')}>
             { create_alert_button }
-            { signup_form }
+            {/*{ signup_form }*/}
           </div>
           <ButtonGroup style={viewing_type_button_group_style}>
             <Button
@@ -926,7 +839,7 @@ export default class Mls extends Component {
         </form>
       </div>
     )
-    
+
     const draw_button_style = {
       ...S('mr-10 bg-fff h-52 w-50 br-5'),
       outline: 'none',
@@ -956,7 +869,10 @@ export default class Mls extends Component {
         :
           ''
 
-      const listingsProposedTitleList = ` homes. ${listing_map.listings_info.proposed_title}`
+      const { proposed_title } = listing_map.listings_info
+      const listingsProposedTitleList = proposed_title
+        ? ` homes. ${proposed_title}`
+        : ''
 
       options_text = listingsNumber + listingsProposedTitleList
     }
@@ -1143,7 +1059,7 @@ export default class Mls extends Component {
 
           { create_alert_button }
 
-          { signup_form }
+          {/*{ signup_form }*/}
         </nav>
       )
     }
@@ -1498,12 +1414,12 @@ export default class Mls extends Component {
           </Modal.Body>
         </Modal>
 
-        <CheckEmailModal
+        {/*<CheckEmailModal
           data={data}
           resend={this.resend}
           hideModal={this.hideModal}
           showIntercom={this.showIntercom}
-        />
+        />*/}
 
         <Modal
           dialogClassName={data.is_mobile ? 'modal-mobile' : ''}
@@ -1525,6 +1441,93 @@ export default class Mls extends Component {
       </div>
     )
   }
+
+  // handleCloseSignupForm() {
+  //   delete AppStore.data.show_signup_form
+  //   AppStore.emitChange()
+  // }
+
+  // handleEmailSubmit(e) {
+  //   // If clicked
+  //   setTimeout(() => {
+  //     this.refs.email.refs.input.focus()
+  //   }, 100)
+  //   e.preventDefault()
+
+  //   delete AppStore.data.errors
+  //   AppStore.emitChange()
+
+  //   const data = this.props.data
+  //   const email = this.emailInput.value
+
+  //   // If no email or double submit
+  //   if (!email || data.submitting) {
+  //     return
+  //   }
+
+  //   const random_password = randomString(9)
+
+  //   if (!email.trim()) {
+  //     return
+  //   }
+
+  //   if (!validator.isEmail(email)) {
+  //     AppStore.data.errors = {
+  //       type: 'email-invalid'
+  //     }
+  //     AppStore.emitChange()
+  //     setTimeout(() => {
+  //       delete AppStore.data.errors
+  //       AppStore.emitChange()
+  //     }, 3000)
+  //     return
+  //   }
+
+  //   AppStore.data.submitting = true
+  //   AppStore.emitChange()
+
+  //   const user = {
+  //     first_name: email,
+  //     email,
+  //     user_type: 'Client',
+  //     password: random_password,
+  //     grant_type: 'password',
+  //     is_shadow: true
+  //   }
+
+  //   AppDispatcher.dispatch({
+  //     action: 'sign-up-shadow',
+  //     user,
+  //     redirect_to: ''
+  //   })
+  // }
+
+  // hideModal() {
+  //   delete AppStore.data.show_signup_confirm_modal
+  //   AppStore.emitChange()
+  // }
+
+  // resend() {
+  //   const data = this.props.data
+  //   const new_user = data.new_user
+
+  //   const user = {
+  //     first_name: new_user.email,
+  //     email: new_user.email,
+  //     user_type: 'Client',
+  //     password: new_user.random_password,
+  //     grant_type: 'password',
+  //     is_shadow: true
+  //   }
+
+  //   AppStore.data.resent_email_confirmation = true
+
+  //   AppDispatcher.dispatch({
+  //     action: 'sign-up-shadow',
+  //     user,
+  //     redirect_to: ''
+  //   })
+  // }
 }
 
 Mls.propTypes = {
