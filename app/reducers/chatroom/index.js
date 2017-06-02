@@ -12,6 +12,12 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
 
+    case types.CHANGE_ACTIVE_ROOM:
+      return {
+        ...state,
+        ...{ activeRoom: action.roomId }
+      }
+
     case types.TOGGLE_CHATBAR:
       return {
         ...state,
@@ -120,11 +126,6 @@ export default (state = initialState, action) => {
           ...{isActive: roomId === action.roomId}
         }
       })
-
-      return {
-        ...state,
-        ...{popups: c_popups}
-      }
 
     default:
       return state
