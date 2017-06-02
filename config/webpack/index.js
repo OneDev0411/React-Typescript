@@ -38,7 +38,8 @@ const config = {
       APP_SHARE_URL: JSON.stringify(process.env.APP_SHARE_URL),
       GOOGLE_API_KEY: JSON.stringify(process.env.GOOGLE_API_KEY),
       ITUNES_URL: JSON.stringify(process.env.ITUNES_URL),
-      RECHAT_FORMS_URL: JSON.stringify(process.env.RECHAT_FORMS_URL)
+      RECHAT_FORMS_URL: JSON.stringify(process.env.RECHAT_FORMS_URL),
+      RECHAT_STORE_URL: JSON.stringify(process.env.RECHAT_STORE_URL)
     },
     __DEV__: __DEV__,
     NODE_ENV: env,
