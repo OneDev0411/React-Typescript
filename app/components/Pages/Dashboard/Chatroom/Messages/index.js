@@ -36,6 +36,10 @@ class Messages extends React.Component {
 
     if (roomId && !messages[roomId])
       return this.loadMessages(roomId)
+
+    // room is changed
+    if (roomId !== this.props.roomId)
+      this.scrollEnd()
   }
 
   componentWillUnmount() {
@@ -60,12 +64,9 @@ class Messages extends React.Component {
 
     // move to end of div
     if (scroll_to === null)
-      scroll_to = this.messagesList.scrollHeight
-    else {
-      scroll_to = scroll_to.offsetTop - this.messagesList.offsetTop
-    }
-
-    this.messagesList.scrollTop = scroll_to
+      this.scrollEnd()
+    else
+      this.messagesList.scrollTop = scroll_to.offsetTop - this.messagesList.offsetTop
   }
 
   loadPreviousMessages(top) {
@@ -118,8 +119,15 @@ class Messages extends React.Component {
     )
   }
 
+  /**
+   * scroll message area to the end
+   * this timeout is a kind of hack, scrolling should start after render complete
+   * and the timeout function do this
+   */
   scrollEnd() {
-    this.messagesList.scrollTop = this.messagesList.scrollHeight
+    setTimeout(() => {
+      this.messagesList.scrollTop = this.messagesList.scrollHeight
+    }, 50)
   }
 
   render() {
