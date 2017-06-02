@@ -98,6 +98,7 @@ export default (state = initialState, action) => {
         ...state,
         ...{
           activePopup: action.roomId,
+          activeRoom: action.roomId,
           fullscreen: true
         },
         popups: {
