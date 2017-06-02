@@ -12,8 +12,7 @@ import MobileNav from './Pages/Dashboard/Partials/MobileNav'
 
 // global chat components
 import { getRooms } from '../store_actions/chatroom'
-import Chatbar from './Pages/Dashboard/Chatroom/Chatbar'
-import ChatPopups from './Pages/Dashboard/Chatroom/Popups'
+import InstantChat from './Pages/Dashboard/Chatroom/InstantChat'
 
 // import _ from 'lodash'
 // import NotificationDispatcher from '../dispatcher/NotificationDispatcher'
@@ -471,12 +470,10 @@ class App extends Component {
     return (
       <div>
         { nav_area }
-        <ChatPopups
+
+        <InstantChat
           user={data.user}
           rooms={rooms}
-        />
-        <Chatbar
-          user={data.user}
         />
 
         <main style={main_style}>
