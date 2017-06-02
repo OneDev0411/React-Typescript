@@ -3,46 +3,28 @@ import { connect } from 'react-redux'
 import { Grid, Row, Col } from 'react-bootstrap'
 import Rooms from './Rooms'
 import Messages from './Messages'
-import { getRooms } from '../../../../store_actions/chatroom'
+import { getRooms, changeActiveRoom } from '../../../../store_actions/chatroom'
 
-export default class Recents extends React.Component {
+class Chatroom extends React.Component {
   static fetchData(dispatch, params) {
     const { user } = params
     return dispatch(getRooms(user))
   }
 
-  constructor(props) {
-    super(props)
-    const { activePopup, location } = props
-
-    console.log('>>>>>>>>>>>>')
-    let activeRoom = null
-
-    if (location)
-      activeRoom = location.hash.substr(1)
-
-    if (activePopup)
-      activeRoom = activePopup
-
-    this.state = {
-      activeRoom
-    }
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
-    return this.state.activeRoom !== nextState.activeRoom
+    const { activeRoom } = this.props
+    return nextProps.activeRoom !== undefined && activeRoom !== nextProps.activeRoom
   }
 
   onChangeRoom(id) {
-    this.setState({
-      activeRoom: id
-    })
+    const { dispatch, activeRoom, location } = this.props
+
+    if (id !== activeRoom)
+      dispatch(changeActiveRoom(id))
 
     // don't update url hash on fullscreen mode
-    if (!this.props.location)
-      return false
-
-    this.updateHash(id)
+    if (this.props.location)
+      this.updateHash(id)
   }
 
   updateHash(roomId) {
@@ -55,8 +37,7 @@ export default class Recents extends React.Component {
   }
 
   render() {
-    const { activeRoom } = this.state
-    const { user } = this.props
+    const { user, activeRoom } = this.props
 
     return (
       <Row className="chatroom">
@@ -78,3 +59,7 @@ export default class Recents extends React.Component {
     )
   }
 }
+
+export default connect(s => ({
+  activeRoom: s.chatroom.activeRoom
+}))(Chatroom)
