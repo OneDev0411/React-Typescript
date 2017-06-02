@@ -24,6 +24,11 @@ import Settings from '../components/Pages/Account/Settings'
 
 import Notifications from '../components/Pages/Account/Notifications'
 
+// listings
+import ListingsLayout from '../components/Pages/Dashboard/Listings'
+import ListingsSearch from '../components/Pages/Dashboard/Listings/Search'
+import ListingsAlerts from '../components/Pages/Dashboard/Listings/Alerts'
+import ListingsBookmarks from '../components/Pages/Dashboard/Listings/Bookmarks'
 
 // mls
 import Mls from '../components/Pages/Dashboard/Mls'
@@ -107,19 +112,21 @@ export default (
     </Route>
 
     <Route path="/" component={App} onEnter={authenticate}>
-      <Route path="/dashboard/mls" component={Mls} />
+      <Route path="/account/settings" component={Settings} />
+      <Route path="/account/notifications" component={Notifications} />
+
+      <Route path="/dashboard/listings" component={ListingsLayout}>
+        <IndexRoute component={ListingsSearch} />
+        <Route path="/dashboard/listings/alerts" component={ListingsAlerts} />
+        <Route
+          path="/dashboard/listings/bookmarks"
+          component={ListingsBookmarks}
+        />
+      </Route>
+
       <Route path="/dashboard/mls/agents" component={Agents} />
       <Route path="/dashboard/mls/alerts(/:alert_id)" component={Mls} />
       <Route path="/dashboard/mls/actives" component={Mls} />
-      <Route path="/dashboard/mls/:id" component={Listing} />
-
-      <Route path="/branch" component={Branch} />
-      <Route path="/widgets/map" component={MapWidget} />
-      <Route path="/widgets/search" component={SearchWidget} />
-      <Route path="/widgets/listings" component={ListingsWidget} />
-
-      <Route path="/account/settings" component={Settings} />
-      <Route path="/account/notifications" component={Notifications} />
 
       <Route path="/dashboard/website" component={Website} />
       <Route path="/dashboard/cards" component={Cards} />
@@ -133,9 +140,18 @@ export default (
         <IndexRoute component={DealsList} />
         <Route path="/dashboard/deals/create/:type" component={DealCreate} />
         <Route path="/dashboard/deals/:id(/:tab)" component={DealDashboard} />
-        <Route path="/dashboard/deals/:id/edit-form/:form/:type" component={DealEditForm} />
-        <Route path="/dashboard/deals/:id/collect-signatures/documents" component={CollectSignatures_Documents} />
-        <Route path="/dashboard/deals/:id/collect-signatures/recipients" component={CollectSignatures_Recipients} />
+        <Route
+          path="/dashboard/deals/:id/edit-form/:form/:type"
+          component={DealEditForm}
+        />
+        <Route
+          path="/dashboard/deals/:id/collect-signatures/documents"
+          component={CollectSignatures_Documents}
+        />
+        <Route
+          path="/dashboard/deals/:id/collect-signatures/recipients"
+          component={CollectSignatures_Recipients}
+        />
       </Route>
 
       <Route path="/dashboard/concierge/deals" component={ConciergeLayout}>

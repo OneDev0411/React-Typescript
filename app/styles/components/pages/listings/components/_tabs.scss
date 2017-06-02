@@ -1,0 +1,36 @@
+.c-listings__tabs {
+  margin: 0;
+  padding: 0;
+}
+
+.c-listings__tabs__item {
+  display: inline-block;
+}
+
+.c-listings__tabs__link {
+  display: inline-block;
+  padding: 2rem 2rem;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+
+    > span {
+      color: #333;
+    }
+  }
+
+  &--active {
+    > span {
+      font-weight: 600;
+      color: #333 !important;
+      border-bottom: 3px solid #3388ff;
+    }
+  }
+
+  > span {
+    padding-bottom: 2rem;
+    font-size: 1.7rem;
+    color: #9b9b9b;
+  }
+}
