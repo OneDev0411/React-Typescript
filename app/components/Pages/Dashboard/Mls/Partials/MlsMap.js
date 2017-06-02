@@ -113,7 +113,7 @@ export default class MlsMap extends Component {
       }
     }
 
-    this.declusterZoomLevel = 17
+    this.declusterZoomLevel = 16
 
     this.state = oldState || setInitialState(data)
 
@@ -141,6 +141,7 @@ export default class MlsMap extends Component {
 
   componentWillReceiveProps(nextProps) {
     console.log('receive')
+    console.log(this.state.mapProps.zoom)
     const nextData = nextProps.data
     const currentState = this.state
 
@@ -559,11 +560,11 @@ export default class MlsMap extends Component {
       data,
       {
         // min zoom to generate clusters on
-        minZoom: 9,
+        minZoom: 12,
         // max zoom level to cluster the points on
         maxZoom: this.declusterZoomLevel - 1,
         // cluster radius in pixels
-        radius: zoom >= 13 ? 120 : 200
+        radius: 60
       }
     )
 
