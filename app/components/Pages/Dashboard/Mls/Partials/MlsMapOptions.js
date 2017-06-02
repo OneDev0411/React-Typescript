@@ -1,6 +1,6 @@
 
 export const mapOptions = {
-  zoom: 13,
+  zoom: 15,
   center: {
     lat: 32.7767,
     lng: -96.7970
