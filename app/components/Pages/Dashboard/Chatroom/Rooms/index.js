@@ -5,30 +5,20 @@ import { compose,  withState, lifecycle, pure } from 'recompose'
 import _ from 'underscore'
 import cn from 'classnames'
 import store from '../../../../../stores'
-import { toggleFullScreen } from '../../../../../store_actions/chatroom'
+import {
+  toggleFullScreen,
+  toggleChatbar,
+  changeActiveRoom
+} from '../../../../../store_actions/chatroom'
 
 const enhance = compose(
   pure,
-  withState('filter', 'changeFilter', ''),
-  // lifecycle({
-  //   componentDidMount() {
-  //     const { rooms, activeRoom, onSelectRoom, isSidebar } = this.props
-  //     if (
-  //       isSidebar !== true &&
-  //       !activeRoom &&
-  //       rooms &&
-  //       onSelectRoom
-  //     ) {
-  //       const room = _.find(rooms, r => r.room_type === 'Direct')
-  //       onSelectRoom(room.id)
-  //     }
-  //   }
-  // })
+  withState('filter', 'changeFilter', '')
 )
 
 const Rooms = ({
-  isSidebar,
   isFullscreen,
+  showChatbar,
   rooms,
   activeRoom,
   onSelectRoom,
@@ -38,7 +28,20 @@ const Rooms = ({
 
   const fullScreen = function(e) {
     e.preventDefault()
+
+    // toggle chatroom display
     store.dispatch(toggleFullScreen())
+
+    if (showChatbar) {
+      // display first room if there is no active room
+      if (!activeRoom) {
+        let firstRoomId = rooms[Object.keys(rooms)[0]].id
+        store.dispatch(changeActiveRoom(firstRoomId))
+      }
+
+      // toggle chatbar
+      store.dispatch(toggleChatbar())
+    }
   }
 
   return (
@@ -49,7 +52,7 @@ const Rooms = ({
           href="/dashboard/recents"
           onClick={e => fullScreen(e)}
         >
-          { isFullscreen ? 'Exit Fullscreen' : 'Fullscreen' }
+          { isFullscreen ? ' [ <<<< ] ' : ' [ >>>> ] ' }
         </a>
 
         <input
@@ -87,5 +90,6 @@ const Rooms = ({
 
 export default connect(s => ({
   isFullscreen: s.chatroom.fullscreen,
+  showChatbar: s.chatroom.showChatbar,
   rooms: s.chatroom.rooms
 }))(enhance(Rooms))
