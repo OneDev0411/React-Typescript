@@ -3,6 +3,7 @@ import getMessages from './get-messages'
 import createMessage from './create-message'
 import toggleChatbar from './toggle-chatbar'
 import toggleFullScreen from './toggle-fullscreen'
+import changeActiveRoom from './change-active-room'
 import {
   addChatPopup,
   closeChatPopup,
@@ -15,6 +16,7 @@ export {
   getRooms,
   getMessages,
   createMessage,
+  changeActiveRoom,
   toggleChatbar,
   toggleFullScreen,
 
