@@ -5,6 +5,8 @@ import { createMessage } from '../../store_actions/chatroom'
 import config from '../../../config/public'
 
 export default class Socket {
+  static authenicated = false
+
   constructor(user) {
     const socket = io(config.socket.server, {
       reconnection: true,
@@ -34,7 +36,12 @@ export default class Socket {
    * authenticate user
    */
   static authenicate(access_token) {
-    socket.emit('Authenticate', access_token)
+    socket.emit('Authenticate', access_token, (err, user) => {
+      if (err) return false
+
+      if (user && user.access_token === access_token)
+        Socket.authenicated = true
+    })
   }
 
   /**
