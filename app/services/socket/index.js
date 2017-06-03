@@ -30,6 +30,13 @@ export default class Socket {
 
     // bind Message.Sent
     socket.on('Message.Sent', this.onNewMessage)
+
+    // bind Reconnecting and Reconnect socket
+    socket.on('reconnecting', this.onReconnecting)
+    socket.on('reconnect', this.onReconnect)
+
+    // bind ping
+    socket.on('ping', this.onPing)
   }
 
   /**
@@ -107,6 +114,29 @@ export default class Socket {
   }
 
   /**
+   * on reconnecting
+   */
+  onReconnecting() {
+    console.log('RECONNECTING >>>>>>')
+  }
+
+  /**
+   * on reconnect
+   */
+  onReconnect() {
+    console.log('RECONNECTED =====>>>>>>')
+  }
+
+  /**
+   * on ping
+   */
+  onPing(callback) {
+    if (callback) {
+      callback(null, new Date())
+    }
+  }
+
+  /**
    * create new message and store
    */
   static createMessage(roomId, message, queueId) {
@@ -117,13 +147,13 @@ export default class Socket {
    * income event when a user started typing
    */
   onUserTyping({user_id, room_id}) {
-    // console.log('>>>> IS TYPING', user_id, room_id)
+    console.log('>>>> IS TYPING', user_id, room_id)
   }
 
   /**
    * income socket event when user typing has been ended
    */
   onUserTypingEnded({user_id, room_id}) {
-    // console.log('>>>> TYPING END', user_id, room_id)
+    console.log('>>>> TYPING END', user_id, room_id)
   }
 }
