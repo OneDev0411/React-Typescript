@@ -149,8 +149,7 @@ export default class Landing extends Component {
     // Content from data props
     // Styles
     const page_style = {
-      position: 'relative',
-      height: '100%',
+      height: '100vh',
       background: '#000',
       color: '#ffffff'
     }
