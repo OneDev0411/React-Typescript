@@ -27,28 +27,28 @@ export default ({
   // extract settings
   const { minimize, isActive } = settings
 
-  const width = 20 // percent
-  const defaultLeft = 7 // percent
+  const width = 270 // percent
+  const defaultLeft = 90 // percent
 
   let left = (width * (number - 1)) + defaultLeft
 
   // margin left
   if (number > 1)
-    left += 1 * (number - 1)
+    left += 20 * (number - 1)
 
   return (
     <div
       className={cn('chat-popup', { minimize })}
       onClick={() => onChangeActive(room.id)}
       style={{
-        width: `${width}%`,
-        left: `${left}%`
+        width: `${width}px`,
+        left: `${left}px`
       }}
     >
       <div className={cn('bar', { isActive })}>
         <span
           className="room-title"
-          // onClick={() => onMinimize(room.id)}
+          onClick={() => onMinimize(room.id)}
         >
           <b>{ getTitle(room.proposed_title) }</b>
         </span>
@@ -68,13 +68,11 @@ export default ({
           onClick={() => onClose(room.id)}
         ></i>
       </div>
-      <div className="content">
-        <Messages
-          user={user}
-          roomId={room.id}
-          showToolbar={false}
-        />
-      </div>
+      <Messages
+        user={user}
+        roomId={room.id}
+        showToolbar={false}
+      />
     </div>
   )
 }
