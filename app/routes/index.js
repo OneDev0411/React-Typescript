@@ -1,4 +1,3 @@
-// Config.js
 import React from 'react'
 import { Route, IndexRoute, Redirect } from 'react-router'
 import store from '../stores'
@@ -24,11 +23,8 @@ import Settings from '../components/Pages/Account/Settings'
 
 import Notifications from '../components/Pages/Account/Notifications'
 
-// listings
-import ListingsLayout from '../components/Pages/Dashboard/Listings'
-import ListingsSearch from '../components/Pages/Dashboard/Listings/Search'
-import ListingsAlerts from '../components/Pages/Dashboard/Listings/Alerts'
-import ListingsBookmarks from '../components/Pages/Dashboard/Listings/Bookmarks'
+// listings routers component
+import Listings from './listings'
 
 // mls
 import Mls from '../components/Pages/Dashboard/Mls'
@@ -115,14 +111,7 @@ export default (
       <Route path="/account/settings" component={Settings} />
       <Route path="/account/notifications" component={Notifications} />
 
-      <Route path="/dashboard/listings" component={ListingsLayout}>
-        <IndexRoute component={ListingsSearch} />
-        <Route path="/dashboard/listings/alerts" component={ListingsAlerts} />
-        <Route
-          path="/dashboard/listings/bookmarks"
-          component={ListingsBookmarks}
-        />
-      </Route>
+      {Listings}
 
       <Route path="/dashboard/mls/agents" component={Agents} />
       <Route path="/dashboard/mls/alerts(/:alert_id)" component={Mls} />

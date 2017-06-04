@@ -8,24 +8,14 @@ export default function Tabs({
 }) {
   return (
     <li className="c-listings__tabs__item">
-      {
-        indexed ?
-          <IndexLink
-            to={to}
-            className="c-listings__tabs__link"
-            activeClassName="c-listings__tabs__link--active"
-          >
-            <span>{text}</span>
-          </IndexLink>
-        :
-          <Link
-            to={to}
-            className="c-listings__tabs__link"
-            activeClassName="c-listings__tabs__link--active"
-          >
-            <span>{text}</span>
-          </Link>
-      }
+      <Link
+        to={to}
+        onlyActiveOnIndex={indexed}
+        className="c-listings__tabs__link"
+        activeClassName="c-listings__tabs__link--active"
+      >
+        <span>{text}</span>
+      </Link>
     </li>
   )
 }

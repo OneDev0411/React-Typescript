@@ -1,9 +1,7 @@
-import React from 'react'
-import { Link } from 'react-router'
-
+import React, { Component } from 'react'
 import Tabs from './components/Tabs'
 
-export default class Listings extends React.Component {
+export default class Listings extends Component {
   render() {
     return (
       <div className="c-listings">

@@ -85,6 +85,7 @@
     "moment-timezone": "^0.5.13",
     "node-sass": "^4.5.3",
     "nodemon": "^1.11.0",
+    "normalizr": "^3.2.3",
     "nunjucks": "^3.0.0",
     "parse-address": "^0.0.6",
     "pdfjs-dist": "^1.8.207",

@@ -1,6 +1,5 @@
 import React from 'react'
 import NavLink from './NavLink'
-import { Link, IndexLink } from 'react-router'
 
 export default function Tabs() {
   return (
@@ -15,8 +14,8 @@ export default function Tabs() {
         to="/dashboard/listings/alerts"
       />
       <NavLink
-        text="Bookmarks"
-        to="/dashboard/listings/bookmarks"
+        text="Favorites"
+        to="/dashboard/listings/favorites"
       />
     </ul>
   )
