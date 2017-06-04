@@ -126,6 +126,11 @@ export default class Listings extends Component {
     const url = `/dashboard/mls/${listing.id}`
     window.open(url, '_blank')
   }
+
+  componentDidUpdate() {
+    parent.postMessage({ height: this.parentDiv.scrollHeight }, '*')
+  }
+
   render() {
     // Data
     const data = this.props.data
@@ -183,7 +188,10 @@ export default class Listings extends Component {
     if (this.props.location.query.agent)
       title = 'My Listings'
     return (
-      <div className="futurastd">
+      <div
+        className="futurastd"
+        ref={ref => this.parentDiv = ref}
+      >
         <div style={header_style}>
           <h1 style={S(`font-50 color-263445 mb-0${data.is_mobile ? ' ml-10 mr-10' : ''}`)}>{ title }</h1>
           <span style={S('h-1 bg-e2e2e2 w-80 m-20 inline-block')} />
