@@ -12,6 +12,11 @@ import {
   changeActivePopup,
 } from './popups'
 
+import {
+  addMessageTyping,
+  removeMessageTyping
+} from './typing'
+
 export {
   getRooms,
   getMessages,
@@ -25,5 +30,9 @@ export {
   closeChatPopup,
   minimizeChatPopup,
   maximizeChatPopup,
-  changeActivePopup
+  changeActivePopup,
+
+  /* message typing */
+  addMessageTyping,
+  removeMessageTyping
 }
