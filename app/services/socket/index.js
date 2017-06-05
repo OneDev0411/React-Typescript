@@ -13,6 +13,10 @@ export default class Socket {
   static authenicated = false
 
   constructor(user) {
+    // set user
+    this.user = user
+
+    // create socket
     const socket = io(config.socket.server, {
       reconnection: true,
       reconnectionDelay: 1000,
@@ -24,14 +28,14 @@ export default class Socket {
     window.socket = socket
 
     // create authentication
-    if (user)
+    if (this.user)
       Socket.authenicate(user.access_token)
 
     // bind User.Typing
-    socket.on('User.Typing', this.onUserTyping)
+    socket.on('User.Typing', this.onUserTyping.bind(this))
 
     // bind User.TypingEnded
-    socket.on('User.TypingEnded', this.onUserTypingEnded)
+    socket.on('User.TypingEnded', this.onUserTypingEnded.bind(this))
 
     // bind Message.Sent
     socket.on('Message.Sent', this.onNewMessage)
@@ -152,13 +156,15 @@ export default class Socket {
    * income event when a user started typing
    */
   onUserTyping({room_id, user_id}) {
-    store.dispatch(addMessageTyping(room_id, user_id))
+    if (user_id !== this.user.id)
+      store.dispatch(addMessageTyping(room_id, user_id))
   }
 
   /**
    * income socket event when user typing has been ended
    */
   onUserTypingEnded({user_id, room_id}) {
-    store.dispatch(removeMessageTyping(room_id, user_id))
+    if (user_id !== this.user.id)
+      store.dispatch(removeMessageTyping(room_id, user_id))
   }
 }
