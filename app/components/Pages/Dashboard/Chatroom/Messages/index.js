@@ -176,7 +176,7 @@ class Messages extends React.Component {
           }
         </div>
 
-        <div className="message-typers">
+        <div className="message-typing">
           <MessageTyping
             roomId={roomId}
           />
