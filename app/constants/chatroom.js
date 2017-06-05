@@ -11,7 +11,9 @@ new Array(
   'MAXIMIZE_POPUP',
   'CHANGE_ACTIVE_ROOM',
   'CHANGE_ACTIVE_POPUP',
-  'REMOVE_POPUP'
+  'REMOVE_POPUP',
+  'ADD_MESSAGE_TYPING',
+  'REMOVE_MESSAGE_TYPING'
 )
 .forEach(action => {
   ActionTypes[action] = `CHATROOM___${action}`
