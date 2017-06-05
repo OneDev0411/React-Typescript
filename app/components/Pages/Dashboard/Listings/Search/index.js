@@ -1,7 +1,14 @@
+import { connect } from 'react-redux'
 import React, { Component } from 'react'
+import GMap from './GMap'
 
 export default class Search extends Component {
   render() {
-    return <h1 style={{ padding: '2rem' }}>Listings Search Page</h1>
+    console.log(this.props)
+    return (
+      <main className="c-lisitngs-layout__main">
+        <GMap />
+      </main>
+    )
   }
 }

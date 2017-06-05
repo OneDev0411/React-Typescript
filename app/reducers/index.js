@@ -4,6 +4,7 @@ import data from './data'
 import socket from './socket'
 import contact from './contact'
 import chatroom from './chatroom'
+import search from './listings/search'
 import favorites from './listings/favorites'
 
 const appReducer = combineReducers({
@@ -11,6 +12,7 @@ const appReducer = combineReducers({
   data,
   contact,
   chatroom,
+  search,
   favorites,
   routing: routerReducer
 })

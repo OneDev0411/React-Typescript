@@ -1,3 +1,9 @@
+import config from '../../../../../../config/public'
+
+export const bootstrapURLKeys = {
+  key: config.google.api_key,
+  libraries: ['drawing', 'places'].join(',')
+}
 
 export const mapOptions = {
   zoom: 15,
