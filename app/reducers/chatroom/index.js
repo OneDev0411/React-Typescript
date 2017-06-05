@@ -70,6 +70,37 @@ export default (state = initialState, action) => {
         }}
       }
 
+    case types.ADD_MESSAGE_TYPING:
+      return {
+        ...state,
+        ...{rooms: {
+          ...state.rooms,
+          ...{[action.roomId]: {
+            ...state.rooms[action.roomId],
+            typing: {
+              ...state.rooms[action.roomId].typing,
+              ...{[action.userId]:
+                _.find(state.rooms[action.roomId].users, user =>
+                  user.id === action.userId )}
+            }
+          }}
+        }}
+      }
+
+    case types.REMOVE_MESSAGE_TYPING:
+      let typing = _.omit(state.rooms[action.roomId].typing, user => user.id === action.userId)
+
+      return {
+        ...state,
+        ...{rooms: {
+          ...state.rooms,
+          ...{[action.roomId]: {
+            ...state.rooms[action.roomId],
+            ...{ typing }
+          }}
+        }}
+      }
+
     case types.ADD_POPUP:
       return {
         ...state,
@@ -111,22 +142,27 @@ export default (state = initialState, action) => {
       }
 
     case types.REMOVE_POPUP:
-      const r_popups = _.omit(state.popups, (settings, roomId) => roomId === action.roomId)
-
       return {
         ...state,
-        ...{popups: r_popups}
+        ...{
+          popups: _.omit(state.popups, (settings, roomId) => roomId === action.roomId)
+        }
       }
 
     case types.CHANGE_ACTIVE_POPUP:
-      const c_popups = {}
+      const popups = {}
 
       _.each(state.popups, (settings, roomId) => {
-        c_popups[roomId] = {
+        popups[roomId] = {
           ...state.popups[roomId],
           ...{isActive: roomId === action.roomId}
         }
       })
+
+      return {
+        ...state,
+        ...{ popups }
+      }
 
     default:
       return state
