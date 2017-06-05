@@ -7,6 +7,7 @@ import cn from 'classnames'
 import { getMessages } from '../../../../../store_actions/chatroom'
 import Toolbar from './toolbar'
 import Message from './message-types'
+import MessageTyping from './message-typing'
 import CreateMessage from './create-message'
 
 class Messages extends React.Component {
@@ -64,7 +65,7 @@ class Messages extends React.Component {
 
     // move to end of div
     if (scroll_to === null)
-      this.scrollEnd()
+      this.messagesList.scrollTop = this.messagesList.scrollHeight
     else
       this.messagesList.scrollTop = scroll_to.offsetTop - this.messagesList.offsetTop
   }
@@ -175,9 +176,13 @@ class Messages extends React.Component {
           }
         </div>
 
-        <div
-          className="message-create"
-        >
+        <div className="message-typers">
+          <MessageTyping
+            roomId={roomId}
+          />
+        </div>
+
+        <div className="message-create">
           <CreateMessage
             user={user}
             roomId={roomId}
