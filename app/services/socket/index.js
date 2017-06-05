@@ -1,7 +1,12 @@
 import io from 'socket.io-client'
 import moment from 'moment'
 import store from '../../stores'
-import { createMessage } from '../../store_actions/chatroom'
+import {
+  createMessage,
+  addMessageTyping,
+  removeMessageTyping
+} from '../../store_actions/chatroom'
+
 import config from '../../../config/public'
 
 export default class Socket {
@@ -146,14 +151,14 @@ export default class Socket {
   /**
    * income event when a user started typing
    */
-  onUserTyping({user_id, room_id}) {
-    console.log('>>>> IS TYPING', user_id, room_id)
+  onUserTyping({room_id, user_id}) {
+    store.dispatch(addMessageTyping(room_id, user_id))
   }
 
   /**
    * income socket event when user typing has been ended
    */
   onUserTypingEnded({user_id, room_id}) {
-    console.log('>>>> TYPING END', user_id, room_id)
+    store.dispatch(removeMessageTyping(room_id, user_id))
   }
 }
