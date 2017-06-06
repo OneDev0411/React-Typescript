@@ -1,9 +1,8 @@
 import { combineReducers } from 'redux'
+import { SET_MAP_PROPS } from '../../../constants/listings/search'
 import {
-  SET_MAP_PROPS
-} from '../../../constants/listings/search'
-import { mapOptions } from
-  '../../../components/Pages/Dashboard/Mls/Partials/MlsMapOptions'
+  mapInitialState
+} from '../../../components/Pages/Dashboard/Mls/Partials/MlsMapOptions'
 
 // initial map options(props) schema
 // {
@@ -15,10 +14,10 @@ import { mapOptions } from
 //   size: Object,
 //   bounds: Object
 // }
-export const mapProps = (state = {}, action) => {
+const mapProps = (state = mapInitialState, action) => {
   switch (action.type) {
     case SET_MAP_PROPS:
-      return action.options
+      return action.mapProps
     default:
       return state
   }
@@ -29,3 +28,5 @@ const search = combineReducers({
 })
 
 export default search
+
+export const getMapProps = state => state.mapProps

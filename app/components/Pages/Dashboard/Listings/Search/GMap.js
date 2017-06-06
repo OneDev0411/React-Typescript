@@ -3,27 +3,28 @@ import Map from 'google-map-react'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import supercluster from 'points-cluster'
-import withReducer from 'recompose/withReducer'
 import defaultProps from 'recompose/defaultProps'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
-import ClusterMarker from '../../Mls/Partials/Markers/ClusterMarker'
 import SimpleMarker from '../../Mls/Partials/Markers/SingleMarker'
-import { mapOptions, bootstrapURLKeys } from '../../Mls/Partials/MlsMapOptions'
-import { mapProps } from '../../../../../reducers/listings/search'
+import ClusterMarker from '../../Mls/Partials/Markers/ClusterMarker'
 import { SET_MAP_PROPS } from '../../../../../constants/listings/search'
+import { bootstrapURLKeys, mapOptions } from '../../Mls/Partials/MlsMapOptions'
+import { getMapProps } from '../../../../../reducers/listings/search'
+import * as actions from '../../../../../store_actions/listings/search'
 
 export const searchMap = ({
-  style, options,
+  style,
+  options,
+  onChange,
   bootstrapURLKeys,
-  mapProps: { center, zoom },
-  onChange
+  mapProps: { center, zoom }
 }) => (
   <Map
-    style={style}
-    options={options}
-    center={center}
     zoom={zoom}
+    style={style}
+    center={center}
+    options={options}
     onChange={onChange}
     yesIWantToUseGoogleMapApiInternals
     bootstrapURLKeys={bootstrapURLKeys}
@@ -33,10 +34,7 @@ export const searchMap = ({
 export const searchMapHOC = compose(
   defaultProps({
     clusterRadius: 60,
-    options: {
-      minZoom: 3,
-      maxZoom: 15
-    },
+    options: mapOptions,
     style: {
       position: 'relative',
       height: 'calc(100vh - 65px)',
@@ -46,19 +44,16 @@ export const searchMapHOC = compose(
     },
     bootstrapURLKeys
   }),
-  withReducer(
-    'mapProps',
-    'setMapProps',
-    mapProps,
-    mapOptions
+  connect(
+    ({ search }) => ({
+      mapProps: search.mapProps
+    }),
+    actions
   ),
   // describe events
   withHandlers({
-    onChange: ({ setMapProps }) => (options) => {
-      setMapProps({
-        type: SET_MAP_PROPS,
-        options
-      })
+    onChange: ({ setMapProps }) => (mapProps) => {
+      setMapProps(mapProps)
     }
   })
 )

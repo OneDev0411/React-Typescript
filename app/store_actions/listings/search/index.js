@@ -1,6 +1,6 @@
 import * as types from '../../../constants/listings/search'
 
-export const setMapProps = gmap => ({
+export const setMapProps = mapProps => ({
   type: types.SET_MAP_PROPS,
-  options: gmap
+  mapProps
 })

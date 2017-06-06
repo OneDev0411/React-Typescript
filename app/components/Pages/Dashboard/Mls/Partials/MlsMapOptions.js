@@ -5,7 +5,7 @@ export const bootstrapURLKeys = {
   libraries: ['drawing', 'places'].join(',')
 }
 
-export const mapOptions = {
+export const mapInitialState = {
   zoom: 15,
   center: {
     lat: 32.7767,
@@ -24,31 +24,47 @@ export const queryOptions = {
   horizontal_distance: 2830,
   property_types: ['Residential'],
   vertical_distance: 2830,
-  listing_statuses: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract'],
+  listing_statuses: [
+    'Active',
+    'Active Contingent',
+    'Active Kick Out',
+    'Active Option Contract'
+  ],
   currency: 'USD',
   maximum_year_built: 2015,
-  points: [{
-    latitude: 32.83938955111425,
-    longitude: -96.89115626525879
-  }, {
-    latitude: 32.83938955111425,
-    longitude: -96.70284373474121
-  }, {
-    latitude: 32.71396625328302,
-    longitude: -96.70284373474121
-  }, {
-    latitude: 32.71396625328302,
-    longitude: -96.89115626525879
-  }, {
-    latitude: 32.83938955111425,
-    longitude: -96.89115626525879
-  }],
+  points: [
+    {
+      latitude: 32.83938955111425,
+      longitude: -96.89115626525879
+    },
+    {
+      latitude: 32.83938955111425,
+      longitude: -96.70284373474121
+    },
+    {
+      latitude: 32.71396625328302,
+      longitude: -96.70284373474121
+    },
+    {
+      latitude: 32.71396625328302,
+      longitude: -96.89115626525879
+    },
+    {
+      latitude: 32.83938955111425,
+      longitude: -96.89115626525879
+    }
+  ],
   open_house: false,
-  property_subtypes: ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse']
+  property_subtypes: [
+    'RES-Single Family',
+    'RES-Half Duplex',
+    'RES-Farm\/Ranch',
+    'RES-Condo',
+    'RES-Townhouse'
+  ]
 }
 
-
-export const googleOptions = {
+export const mapOptions = {
   minZoom: 3,
   maxZoom: 25,
   mapTypeControl: false,
@@ -58,5 +74,5 @@ export const googleOptions = {
 export default {
   mapOptions,
   queryOptions,
-  googleOptions
+  mapInitialState
 }

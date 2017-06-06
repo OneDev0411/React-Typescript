@@ -37,12 +37,15 @@ import DealsList from '../components/Pages/Dashboard/Deals/DealsList'
 import DealCreate from '../components/Pages/Dashboard/Deals/DealCreate'
 import DealDashboard from '../components/Pages/Dashboard/Deals/Dashboard'
 import DealEditForm from '../components/Pages/Dashboard/Deals/Edit-Form'
-import CollectSignatures_Documents from '../components/Pages/Dashboard/Deals/CollectSignatures-Documents'
-import CollectSignatures_Recipients from '../components/Pages/Dashboard/Deals/CollectSignatures-Recipients'
+import CollectSignatures_Documents
+  from '../components/Pages/Dashboard/Deals/CollectSignatures-Documents'
+import CollectSignatures_Recipients
+  from '../components/Pages/Dashboard/Deals/CollectSignatures-Recipients'
 
 // Concierge
 import ConciergeLayout from '../components/Pages/Dashboard/Concierge'
-import ConciergeDealsList from '../components/Pages/Dashboard/Concierge/DealsList'
+import ConciergeDealsList
+  from '../components/Pages/Dashboard/Concierge/DealsList'
 import DealReview from '../components/Pages/Dashboard/Concierge/DealReview'
 
 // contacts
