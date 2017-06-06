@@ -25,9 +25,3 @@ export const fetchFavorites = user => (dispatch, getState) => {
     }
   )
 }
-
-export const addFavorite = id =>
-  ({ type: types.ADD_FAVORITE, id })
-
-export const deleteFavorite = id =>
-  ({ type: types.DELETE_FAVORITE, id })

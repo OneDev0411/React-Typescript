@@ -3,12 +3,6 @@ import config from '../../../../config/public'
 import { normalize } from 'normalizr'
 import * as schema from './schema'
 
-// Helper function
-const filterMarkedFavorites = (favorites, userId) =>
-  favorites.filter(favorite =>
-    favorite.read_by == null ||
-    !favorite.read_by.some(id => id === userId)
-  )
 
 export const fetchFavorites = async (user = {}) => {
   const { personal_room } = user
@@ -21,44 +15,25 @@ export const fetchFavorites = async (user = {}) => {
     const response = await new Fetch()
       .get(`/rooms/${personal_room}/recs/favorites`)
 
-    const favorites = filterMarkedFavorites(response.body.data, user.id)
-    return normalize(favorites, schema.favoritesList)
+    return normalize(response.body.data, schema.favoritesList)
   } catch (error) {
     throw error
   }
 }
 
-export const markFavorite = async (user = {}, id) => {
+export const toggleFavorite = async (user = {}, recId, favorite) => {
   const { personal_room } = user
 
-  if (!personal_room || !id) {
+  if (!personal_room || !recId || typeof favorite !== 'boolean') {
     return
   }
 
   try {
     const response = await new Fetch()
-      .patch(`/rooms/${personal_room}/recs/${id}/favorite`)
-      .send({ favorite: true })
+      .patch(`/rooms/${personal_room}/recs/${recId}/favorite`)
+      .send({ favorite })
 
-    return response.body.data.id
-  } catch (error) {
-    throw error
-  }
-}
-
-export const unmarkFavorite = async (user = {}, id) => {
-  const { personal_room } = user
-
-  if (!personal_room || !id) {
-    return
-  }
-
-  try {
-    const response = await new Fetch()
-      .delete(`/rooms/${personal_room}/recs/feed/${id}`)
-      .send({ read: true })
-
-    return response.body.data.id
+    return response.body.data.status
   } catch (error) {
     throw error
   }
