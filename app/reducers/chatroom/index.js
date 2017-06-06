@@ -1,3 +1,4 @@
+import { combineReducers } from 'redux'
 import types from '../../constants/chatroom'
 import _ from 'underscore'
 
@@ -9,162 +10,218 @@ const initialState = {
   messages: {}
 }
 
-export default (state = initialState, action) => {
-  switch (action.type) {
-
-    case types.CHANGE_ACTIVE_ROOM:
-      return {
-        ...state,
-        ...{ activeRoom: action.roomId }
-      }
-
-    case types.TOGGLE_CHATBAR:
-      return {
-        ...state,
-        ...{ showChatbar: !state.showChatbar }
-      }
-
-    case types.TOGGLE_FULLSCREEN:
-      return {
-        ...state,
-        ...{ fullscreen: !state.fullscreen }
-      }
-
-    case types.GET_ROOMS:
-      return {
-        ...state,
-        ...{rooms: action.rooms}
-      }
-
-    case types.GET_MESSAGES:
-    case types.CREATE_MESSAGE:
-
-      const messages = state.messages[action.id]
-
-      // get list of messages of current room
-      let list = messages && messages.list ? messages.list : {}
-
-      if (action.append)
-        list = { ...list, ...action.messages }
-      else
-        list = { ...action.messages, ...list }
-
-      // remove queued message
-      if (action.queueId) {
-        list = _.omit(list, msg => msg.id === action.queueId)
-      }
-
-      // total += 1
-      if (action.increaseTotal)
-        messages.total += 1
-
-      return {
-        ...state,
-        ...{messages: {
-          ...state.messages,
-          ...{[action.id]: {
-            ...state.messages[action.id],
-            ...action.info,
-            ...{ list }
-          }}
-        }}
-      }
-
-    case types.ADD_MESSAGE_TYPING:
-      return {
-        ...state,
-        ...{rooms: {
-          ...state.rooms,
-          ...{[action.roomId]: {
-            ...state.rooms[action.roomId],
-            typing: {
-              ...state.rooms[action.roomId].typing,
-              ...{[action.userId]:
-                _.find(state.rooms[action.roomId].users, user =>
-                  user.id === action.userId )}
-            }
-          }}
-        }}
-      }
-
-    case types.REMOVE_MESSAGE_TYPING:
-      let typing = _.omit(state.rooms[action.roomId].typing, user => user.id === action.userId)
-
-      return {
-        ...state,
-        ...{rooms: {
-          ...state.rooms,
-          ...{[action.roomId]: {
-            ...state.rooms[action.roomId],
-            ...{ typing }
-          }}
-        }}
-      }
-
-    case types.ADD_POPUP:
-      return {
-        ...state,
-        popups: {
-          ...state.popups,
-          ...{[action.roomId]: {
-            minimize: false,
-            isActive: _.size(state.popups) === 0
-          }}
-        }
-      }
-
-    case types.MINIMIZE_POPUP:
-      return {
-        ...state,
-        popups: {
-          ...state.popups,
-          ...{[action.roomId]: {
-            minimize: !state.popups[action.roomId].minimize
-          }}
-        }
-      }
-
-    case types.MAXIMIZE_POPUP:
-      return {
-        ...state,
-        ...{
-          activePopup: action.roomId,
-          activeRoom: action.roomId,
-          fullscreen: true
-        },
-        popups: {
-          ...state.popups,
-          ...{[action.roomId]: {
-            minimize: false,
-            maximize: true
-          }}
-        }
-      }
-
-    case types.REMOVE_POPUP:
-      return {
-        ...state,
-        ...{
-          popups: _.omit(state.popups, (settings, roomId) => roomId === action.roomId)
-        }
-      }
-
-    case types.CHANGE_ACTIVE_POPUP:
-      const popups = {}
-
-      _.each(state.popups, (settings, roomId) => {
-        popups[roomId] = {
-          ...state.popups[roomId],
-          ...{isActive: roomId === action.roomId}
-        }
-      })
-
-      return {
-        ...state,
-        ...{ popups }
-      }
-
-    default:
-      return state
+/**
+ * change active room
+ */
+function changeActiveRoom(state, action) {
+  return {
+    ...state,
+    ...{ activeRoom: action.roomId }
   }
+}
+
+/**
+ * open/close side bar
+ */
+function toggleChatbar(state, action) {
+  return {
+    ...state,
+    ...{ showChatbar: !state.showChatbar }
+  }
+}
+
+/**
+ * enter in or close from fullscreen mode
+ */
+function toggleFullscreen(state, action) {
+  return {
+    ...state,
+    ...{ fullscreen: !state.fullscreen }
+  }
+}
+
+/**
+ * get list of rooms
+ */
+function getRooms(state, action) {
+  return {
+    ...state,
+    ...{rooms: action.rooms}
+  }
+}
+
+/**
+ * get or create messages
+ */
+function createMessages(state, action) {
+  const messages = state.messages[action.id]
+
+  // get list of messages of current room
+  let list = messages && messages.list ? messages.list : {}
+
+  if (action.append)
+    list = { ...list, ...action.messages }
+  else
+    list = { ...action.messages, ...list }
+
+  // remove queued message
+  if (action.queueId) {
+    list = _.omit(list, msg => msg.id === action.queueId)
+  }
+
+  // total += 1
+  if (action.increaseTotal)
+    messages.total += 1
+
+  return {
+    ...state,
+    ...{messages: {
+      ...state.messages,
+      ...{[action.id]: {
+        ...state.messages[action.id],
+        ...action.info,
+        ...{ list }
+      }}
+    }}
+  }
+}
+
+/**
+ * add "user is typing" for a specific room
+ */
+function addMessageTyping(state, action) {
+  const user = _.find(state.rooms[action.roomId].users, user => user.id === action.userId )
+
+  return {
+    ...state,
+    ...{rooms: {
+      ...state.rooms,
+      ...{[action.roomId]: {
+        ...state.rooms[action.roomId],
+        typing: {
+          ...state.rooms[action.roomId].typing,
+          ...{[action.userId]: user}
+        }
+      }}
+    }}
+  }
+}
+
+/**
+ * remove "user is typing"
+ */
+function removeMessageTyping(state, action) {
+  const typing = _.omit(state.rooms[action.roomId].typing, user => user.id === action.userId)
+
+  return {
+    ...state,
+    ...{rooms: {
+      ...state.rooms,
+      ...{[action.roomId]: {
+        ...state.rooms[action.roomId],
+        ...{ typing }
+      }}
+    }}
+  }
+}
+/**
+ * add new chat popup
+ */
+function addPopup(state, action) {
+  return {
+    ...state,
+    popups: {
+      ...state.popups,
+      ...{[action.roomId]: {
+        minimize: false,
+        isActive: _.size(state.popups) === 0
+      }}
+    }
+  }
+}
+
+/**
+ * minimize chat popup
+ */
+function minimizePopup(state, action) {
+  return {
+    ...state,
+    popups: {
+      ...state.popups,
+      ...{[action.roomId]: {
+        minimize: !state.popups[action.roomId].minimize
+      }}
+    }
+  }
+}
+
+/**
+ * maximize chat popup
+ */
+function maximizePopup(state, action) {
+  return {
+    ...state,
+    ...{
+      activeRoom: action.roomId,
+      fullscreen: true
+    },
+    popups: {
+      ...state.popups,
+      ...{[action.roomId]: {
+        minimize: false,
+        maximize: true
+      }}
+    }
+  }
+}
+
+/**
+ * remove chat popup
+ */
+function removePopup(state, action) {
+  return {
+    ...state,
+    ...{
+      popups: _.omit(state.popups, (settings, roomId) => roomId === action.roomId)
+    }
+  }
+}
+
+/**
+ * change active popup window
+ */
+function changeActivePopup(state, action) {
+  const popups = {}
+
+  _.each(state.popups, (settings, roomId) => {
+    popups[roomId] = {
+      ...state.popups[roomId],
+      ...{isActive: roomId === action.roomId}
+    }
+  })
+
+  return {
+    ...state,
+    ...{ popups }
+  }
+}
+
+export default (state = initialState, action) => {
+  const handlers = {
+    [types.CHANGE_ACTIVE_ROOM]: changeActiveRoom,
+    [types.TOGGLE_CHATBAR]: toggleChatbar,
+    [types.TOGGLE_FULLSCREEN]: toggleFullscreen,
+    [types.GET_ROOMS]: getRooms,
+    [types.GET_MESSAGES]: createMessages,
+    [types.CREATE_MESSAGE]: createMessages,
+    [types.ADD_MESSAGE_TYPING]: addMessageTyping,
+    [types.REMOVE_MESSAGE_TYPING]: removeMessageTyping,
+    [types.ADD_POPUP]: addPopup,
+    [types.MINIMIZE_POPUP]: minimizePopup,
+    [types.MAXIMIZE_POPUP]: maximizePopup,
+    [types.REMOVE_POPUP]: removePopup,
+    [types.CHANGE_ACTIVE_POPUP]: changeActivePopup
+  }
+
+  return handlers[action.type] ? handlers[action.type](state, action) : state
 }
