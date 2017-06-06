@@ -3,6 +3,7 @@ import Map from 'google-map-react'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import supercluster from 'points-cluster'
+import withState from 'recompose/withState'
 import defaultProps from 'recompose/defaultProps'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
@@ -20,7 +21,10 @@ export const searchMap = ({
   options,
   onChange,
   listings,
+  hoveredMarkerId,
   bootstrapURLKeys,
+  onChildMouseEnter,
+  onChildMouseLeave,
   mapProps: {
     zoom = 11,
     center = mapInitialState.center
@@ -36,6 +40,8 @@ export const searchMap = ({
       onChange={onChange}
       yesIWantToUseGoogleMapApiInternals
       bootstrapURLKeys={bootstrapURLKeys}
+      onChildMouseEnter={onChildMouseEnter}
+      onChildMouseLeave={onChildMouseLeave}
     >
       {
         listings.length && listings.map(
@@ -44,6 +50,7 @@ export const searchMap = ({
               key={id}
               data={appData}
               {...markerProps}
+              markerPopupIsActive={hoveredMarkerId === id}
             />
           )
         )
@@ -78,10 +85,21 @@ export const searchMapHOC = compose(
     },
     actions
   ),
+  withState(
+    'hoveredMarkerId',
+    'setHoveredMarkerId',
+    -1
+  ),
   // describe events
   withHandlers({
     onChange: ({ setMapProps }) => (mapProps) => {
       setMapProps('FAVORITE', mapProps)
+    },
+    onChildMouseEnter: ({ setHoveredMarkerId }) => (hoverKey, { id }) => {
+      setHoveredMarkerId(id)
+    },
+    onChildMouseLeave: ({ setHoveredMarkerId }) => () => {
+      setHoveredMarkerId(-1)
     }
   })
 )

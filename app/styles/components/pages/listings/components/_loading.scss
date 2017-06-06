@@ -1,0 +1,15 @@
+
+.c-loading--text__inner {
+  position: absolute;
+  top: 95px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+
+.c-loading--text__inner {
+  padding: 1rem 2rem;
+  text-align: center;
+  color: #fff;
+  border-radius: 20px;
+}
