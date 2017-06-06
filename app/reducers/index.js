@@ -10,9 +10,9 @@ import favorites from './listings/favorites'
 const appReducer = combineReducers({
   socket,
   data,
+  search,
   contact,
   chatroom,
-  search,
   favorites,
   routing: routerReducer
 })

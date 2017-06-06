@@ -86,6 +86,32 @@ const setInitialState = (data = null) => ({
   hoveredMarkerId: null
 })
 
+export const getFavorateListingsData = listings =>
+  listings.map((list) => {
+    let lat
+    let lng
+
+    if (list.location) {
+      lat = list.location.latitude
+      lng = list.location.longitude
+    }
+
+    if (list.property && list.property.address) {
+      lat = list.property.address.location.latitude
+      lng = list.property.address.location.longitude
+    }
+
+    if (lat && lng) {
+      return {
+        ...list,
+        numPoints: 1,
+        list: { ...list },
+        lat,
+        lng
+      }
+    }
+  })
+
 export default class MlsMap extends Component {
   constructor(props) {
     super(props)
@@ -101,7 +127,7 @@ export default class MlsMap extends Component {
     let data = null
     const favoriteListings = props.data.favorite_listings
     if (favoriteListings && props.data.show_actives_map) {
-      data = this.getFavorateListingsData(favoriteListings)
+      data = getFavorateListingsData(favoriteListings)
       if (oldState) {
         oldState = {
           ...oldState,
@@ -242,7 +268,7 @@ export default class MlsMap extends Component {
           currentState.listings.listingsLength
         ) {
           const listings = nextData.favorite_listings
-          const newListings = this.getFavorateListingsData(listings)
+          const newListings = getFavorateListingsData(listings)
           this.setState({
             listings: {
               data: newListings,
@@ -471,33 +497,6 @@ export default class MlsMap extends Component {
     ) {
       store[this.props.data.path] = this.state
     }
-  }
-
-  getFavorateListingsData(listings) {
-    return listings.map((list) => {
-      let lat
-      let lng
-
-      if (list.location) {
-        lat = list.location.latitude
-        lng = list.location.longitude
-      }
-
-      if (list.property && list.property.address) {
-        lat = list.property.address.location.latitude
-        lng = list.property.address.location.longitude
-      }
-
-      if (lat && lng) {
-        return {
-          ...list,
-          numPoints: 1,
-          list: { ...list },
-          lat,
-          lng
-        }
-      }
-    })
   }
 
   onMouseEnterHandler(hoveredMarkerId) {

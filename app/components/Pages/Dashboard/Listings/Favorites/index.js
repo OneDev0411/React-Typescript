@@ -1,38 +1,19 @@
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
+
+import GMap from './GMap'
 import * as actions from
   '../../../../../store_actions/listings/favorites'
-import {
-  getFavorites,
-  getErrorMessage,
-  getIsFetchingStatus
-} from
-  '../../../../../reducers/listings/favorites'
-
-const FetchError = ({ message, onRetry }) => (
-  <div>
-    <p>Could not to fetch favorites, {message}</p>
-    <button onClick={onRetry}>Retry</button>
-  </div>
-)
-
-const FavoritesList = ({ list }) => (
-  <div style={{ padding: '2rem' }}>
-    <h1>Listings Favorites Page</h1>
-    <ul style={{ padding: 0 }}>
-      {list.map(b => <li key={b.id}>{b.id}</li>)}
-    </ul>
-  </div>
-)
+import { getListings } from '../../../../../reducers/listings'
 
 class Favorites extends Component {
   componentDidMount() {
     const {
-      favorites,
+      listings,
       isFetching
     } = this.props
 
-    if (!isFetching && !favorites.length) {
+    if (!isFetching && !listings.length) {
       this.fetchData()
     }
   }
@@ -48,37 +29,37 @@ class Favorites extends Component {
 
   render() {
     const {
-      favorites,
+      listings,
       isFetching,
       errorMessage
     } = this.props
 
-    if (isFetching && !favorites.length) {
-      return <p><b>Loading favorites...</b></p>
-    }
+    // if (isFetching && !listings.length) {
+    //   return <p><b>Loading listings...</b></p>
+    // }
 
-    if (errorMessage && !favorites.length) {
+    /*if (errorMessage && !listings.length) {
       return (
-        <FetchError
-          message={errorMessage}
-          onClick={() => { this.fetchData() }}
-        />
+        <FetchError />
       )
-    }
+    }*/
 
-    return <FavoritesList list={favorites} />
+    return <GMap listings={listings} />
   }
 }
 
 const mapStateToProps = ({
   data,
   favorites
-}) => ({
-  user: data.user,
-  favorites: getFavorites(favorites),
-  errorMessage: getErrorMessage(favorites),
-  isFetching: getIsFetchingStatus(favorites)
-})
+}) => {
+  const { listings } = favorites
+  return ({
+    user: data.user,
+    listings: getListings(listings),
+    errorMessage: listings.errorMessage,
+    isFetching: listings.isFetching
+  })
+}
 
 export default connect(
   mapStateToProps,

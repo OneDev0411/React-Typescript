@@ -1,0 +1,1 @@
+export const SET_MAP_PROPS = 'SET_MAP_PROPS'

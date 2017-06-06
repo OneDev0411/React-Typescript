@@ -1,25 +1,31 @@
-import { getFavorites, getIsFetchingStatus } from
-  '../../../reducers/listings/favorites'
-import * as types from '../../../constants/favorites'
+import { getIsFetchingStatus } from
+  '../../../reducers/listings'
+import * as listingsTypes from '../../../constants/listings'
+// import * as favoritesTypes from '../../../constants/listings/favorites'
 import * as api from '../../../models/listings/favorites'
 
 export const fetchFavorites = user => (dispatch, getState) => {
-  if (getIsFetchingStatus(getState().favorites)) {
+  if (getIsFetchingStatus(getState().favorites.listings)) {
     return Promise.resolve()
   }
 
-  dispatch({ type: types.FETCH_FAVORITES_REQUEST })
+  dispatch({
+    name: 'FAVORITE',
+    type: listingsTypes.FETCH_LISTINGS_REQUEST
+  })
 
   return api.fetchFavorites(user).then(
     (response) => {
       dispatch({
-        type: types.FETCH_FAVORITES_SUCCESS,
-        response
+        response,
+        name: 'FAVORITE',
+        type: listingsTypes.FETCH_LISTINGS_SUCCESS
       })
     },
     ({ message }) => {
       dispatch({
-        type: types.FETCH_FAVORITES_FAILURE,
+        name: 'FAVORITE',
+        type: listingsTypes.FETCH_LISTINGS_FAILURE,
         message: message || 'Something went wrong.'
       })
     }

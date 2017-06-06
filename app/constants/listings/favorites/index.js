@@ -1,0 +1,2 @@
+export const TOGGLE_FAVORITE = 'DELETE_FAVORITE'
+

@@ -6,39 +6,51 @@ import supercluster from 'points-cluster'
 import defaultProps from 'recompose/defaultProps'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
-
-import SimpleMarker from '../../Mls/Partials/Markers/SingleMarker'
-import ClusterMarker from '../../Mls/Partials/Markers/ClusterMarker'
+import Marker from '../../Mls/Partials/Markers/SingleMarker'
+import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../Mls/Partials/MlsMapOptions'
 import * as mapActions from '../../../../../store_actions/listings/map'
-import * as searchActions from '../../../../../store_actions/listings/search'
-import { bootstrapURLKeys, mapOptions, mapInitialState } from
-  '../../Mls/Partials/MlsMapOptions'
 
 const actions = {
-  ...mapActions,
-  ...searchActions
+  ...mapActions
 }
 
 export const searchMap = ({
   style,
+  appData,
   options,
   onChange,
+  listings,
   bootstrapURLKeys,
   mapProps: {
-    zoom = mapInitialState.zoom,
+    zoom = 11,
     center = mapInitialState.center
   }
-}) => (
-  <Map
-    zoom={zoom}
-    style={style}
-    center={center}
-    options={options}
-    onChange={onChange}
-    yesIWantToUseGoogleMapApiInternals
-    bootstrapURLKeys={bootstrapURLKeys}
-  />
-)
+}) => {
+  // console.log('map render favorite', zoom, listings)
+  return (
+    <Map
+      zoom={zoom}
+      style={style}
+      center={center}
+      options={options}
+      onChange={onChange}
+      yesIWantToUseGoogleMapApiInternals
+      bootstrapURLKeys={bootstrapURLKeys}
+    >
+      {
+        listings.length && listings.map(
+          ({ ...markerProps, numPoints, list, lat, lng, id }) => (
+            <Marker
+              key={id}
+              data={appData}
+              {...markerProps}
+            />
+          )
+        )
+      }
+    </Map>
+  )
+}
 
 export const searchMapHOC = compose(
   defaultProps({
@@ -54,10 +66,14 @@ export const searchMapHOC = compose(
     bootstrapURLKeys
   }),
   connect(
-    ({ search }) => {
-      // console.log('search map connect', search.mapProps)
+    ({ favorites, user, data }) => {
+      // console.log('gmap connect favorites', favorites)
       return ({
-        mapProps: search.mapProps
+        appData: {
+          ...data,
+          user
+        },
+        mapProps: favorites.mapProps
       })
     },
     actions
@@ -65,7 +81,7 @@ export const searchMapHOC = compose(
   // describe events
   withHandlers({
     onChange: ({ setMapProps }) => (mapProps) => {
-      setMapProps('SEARCH', mapProps)
+      setMapProps('FAVORITE', mapProps)
     }
   })
 )

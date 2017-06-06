@@ -1,8 +1,33 @@
 import Fetch from '../../../services/fetch'
-import config from '../../../../config/public'
 import { normalize } from 'normalizr'
-import * as schema from './schema'
+import * as schema from '../schema'
 
+const getFavorateListingsData = favorites =>
+  favorites.map((favorite) => {
+    const { listing } = favorite
+    let lat
+    let lng
+
+    if (listing.location) {
+      lat = listing.location.latitude
+      lng = listing.location.longitude
+    }
+
+    if (listing.property && listing.property.address) {
+      lat = listing.property.address.location.latitude
+      lng = listing.property.address.location.longitude
+    }
+
+    if (lat && lng) {
+      return {
+        ...listing,
+        numPoints: 1,
+        list: { ...listing },
+        lat,
+        lng
+      }
+    }
+  })
 
 export const fetchFavorites = async (user = {}) => {
   const { personal_room } = user
@@ -15,7 +40,8 @@ export const fetchFavorites = async (user = {}) => {
     const response = await new Fetch()
       .get(`/rooms/${personal_room}/recs/favorites`)
 
-    return normalize(response.body.data, schema.favoritesList)
+    const listings = getFavorateListingsData(response.body.data)
+    return normalize(listings, schema.listingsList)
   } catch (error) {
     throw error
   }
