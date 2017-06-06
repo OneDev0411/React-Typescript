@@ -36,6 +36,6 @@ const MessageTyping = ({
   return <div>{ message }</div>
 }
 
-export default connect(s => ({
-  rooms: s.chatroom.rooms
+export default connect(({ chatroom }) => ({
+  rooms: chatroom.rooms
 }))(MessageTyping)

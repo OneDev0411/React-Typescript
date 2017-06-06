@@ -4,16 +4,24 @@ import { Link } from 'react-router'
 import { compose,  withState, lifecycle, pure } from 'recompose'
 import _ from 'underscore'
 import cn from 'classnames'
-import store from '../../../../../stores'
 import {
   toggleFullScreen,
-  toggleChatbar,
-  changeActiveRoom
+  changeActiveRoom,
+  toggleChatbar
 } from '../../../../../store_actions/chatroom'
+
 
 const enhance = compose(
   pure,
-  withState('filter', 'changeFilter', '')
+  withState('filter', 'changeFilter', ''),
+  connect(
+    ({ chatroom }) => ({
+      isFullscreen: chatroom.fullscreen,
+      showChatbar: chatroom.showChatbar,
+      rooms: chatroom.rooms
+    }),
+    ({ toggleFullScreen, changeActiveRoom, toggleChatbar })
+  )
 )
 
 const Rooms = ({
@@ -23,24 +31,28 @@ const Rooms = ({
   activeRoom,
   onSelectRoom,
   changeFilter,
-  filter
+  filter,
+  /* mapped actions to dispatch */
+  toggleFullScreen,
+  changeActiveRoom,
+  toggleChatbar
 }) => {
 
   const fullScreen = function(e) {
     e.preventDefault()
 
     // toggle chatroom display
-    store.dispatch(toggleFullScreen())
+    toggleFullScreen()
 
     if (showChatbar) {
       // display first room if there is no active room
       if (!activeRoom) {
         let firstRoomId = rooms[Object.keys(rooms)[0]].id
-        store.dispatch(changeActiveRoom(firstRoomId))
+        changeActiveRoom(firstRoomId)
       }
 
       // toggle chatbar
-      store.dispatch(toggleChatbar())
+      toggleChatbar()
     }
   }
 
@@ -88,8 +100,4 @@ const Rooms = ({
   )
 }
 
-export default connect(s => ({
-  isFullscreen: s.chatroom.fullscreen,
-  showChatbar: s.chatroom.showChatbar,
-  rooms: s.chatroom.rooms
-}))(enhance(Rooms))
+export default enhance(Rooms)

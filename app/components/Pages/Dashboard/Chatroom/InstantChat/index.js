@@ -8,11 +8,13 @@ const InstantChat = ({
   user,
   rooms,
   fullscreen,
-  activePopup
+  activeRoom,
+  showChatbar
 }) => (
   <div>
     <Chatbar
       user={user}
+      showChatbar={showChatbar}
     />
     <ChatPopups
       user={user}
@@ -24,14 +26,15 @@ const InstantChat = ({
     >
       <Chatroom
         user={user}
-        activePopup={activePopup}
+        activeRoom={activeRoom}
       />
     </div>
-
   </div>
 )
 
-export default connect(s => ({
-  activePopup: s.chatroom.activePopup,
-  fullscreen: s.chatroom.fullscreen
+export default connect(({ chatroom }) => ({
+  showChatbar: chatroom.showChatbar,
+  rooms: chatroom.rooms,
+  activeRoom: chatroom.activeRoom,
+  fullscreen: chatroom.fullscreen
 }))(InstantChat)

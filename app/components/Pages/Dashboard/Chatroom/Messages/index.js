@@ -20,6 +20,7 @@ class Messages extends React.Component {
      * more info in https://stackoverflow.com/questions/11565471
     */
     this.messageListener = this.onNewMessage.bind(this)
+    this.messagesObservable = null
 
     // create listener for new messages
     window.socket.addEventListener('Message.Sent', this.messageListener)
@@ -45,10 +46,11 @@ class Messages extends React.Component {
 
   componentWillUnmount() {
     window.socket.removeEventListener('Message.Sent', this.messageListener)
+    this.messagesObservable.unsubscribe()
   }
 
   initializeScroller() {
-    Rx
+    this.messagesObservable = Rx
     .Observable
     .fromEvent(this.messagesList, 'scroll')
     .debounceTime(400)
@@ -58,10 +60,10 @@ class Messages extends React.Component {
   }
 
   async loadMessages(roomId, limit = 20, max_value = null, scroll_to = null) {
-    const { dispatch } = this.props
+    const { getMessages } = this.props
 
     // fetch
-    await dispatch(getMessages(roomId, limit, max_value))
+    await getMessages(roomId, limit, max_value)
 
     // move to end of div
     if (scroll_to === null)
@@ -71,7 +73,7 @@ class Messages extends React.Component {
   }
 
   loadPreviousMessages(top) {
-    const { dispatch, roomId } = this.props
+    const { roomId } = this.props
     const messages = this.props.messages[roomId]
 
     // check whether old messages are loaded or not
@@ -194,6 +196,6 @@ class Messages extends React.Component {
   }
 }
 
-export default connect(s => ({
-  messages: s.chatroom.messages
-}))(Messages)
+export default connect(({ chatroom }) => ({
+  messages: chatroom.messages
+}), ({ getMessages }))(Messages)

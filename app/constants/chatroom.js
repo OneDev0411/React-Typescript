@@ -13,7 +13,9 @@ new Array(
   'CHANGE_ACTIVE_POPUP',
   'REMOVE_POPUP',
   'ADD_MESSAGE_TYPING',
-  'REMOVE_MESSAGE_TYPING'
+  'REMOVE_MESSAGE_TYPING',
+  'INITIAL_USER_STATES',
+  'UPDATE_USER_STATE'
 )
 .forEach(action => {
   ActionTypes[action] = `CHATROOM___${action}`

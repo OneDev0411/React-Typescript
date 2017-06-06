@@ -19,6 +19,6 @@ const MessagesToolbar = ({
   )
 }
 
-export default connect(s => ({
-  rooms: s.chatroom.rooms
+export default connect(({ chatroom }) => ({
+  rooms: chatroom.rooms
 }))(MessagesToolbar)

@@ -17,10 +17,10 @@ class Chatroom extends React.Component {
   }
 
   onChangeRoom(id) {
-    const { dispatch, activeRoom, location } = this.props
+    const { changeActiveRoom, activeRoom, location } = this.props
 
     if (id !== activeRoom)
-      dispatch(changeActiveRoom(id))
+      changeActiveRoom(id)
 
     // don't update url hash on fullscreen mode
     if (this.props.location)
@@ -60,6 +60,6 @@ class Chatroom extends React.Component {
   }
 }
 
-export default connect(s => ({
-  activeRoom: s.chatroom.activeRoom
-}))(Chatroom)
+export default connect(({ chatroom }) => ({
+  activeRoom: chatroom.activeRoom
+}), ({ changeActiveRoom }))(Chatroom)

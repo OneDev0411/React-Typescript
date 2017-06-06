@@ -7,33 +7,34 @@ import { addChatPopup, toggleChatbar } from '../../../../../store_actions/chatro
 
 const Chatbar = ({
   showChatbar,
-  dispatch
+  /* mapped actions to dispatch */
+  addChatPopup,
+  toggleChatbar
 }) => {
 
-  const onSelectRoom = (roomId) => {
-    dispatch(addChatPopup(roomId))
-    dispatch(toggleChatbar())
-  }
-
   return (
-
     <Menu
+      noOverlay={false}
       isOpen={showChatbar}
       customBurgerIcon={false}
       customCrossIcon={false}
+      width={"26%"}
       onStateChange={({ isOpen }) => {
         if (showChatbar !== isOpen) {
-          dispatch(toggleChatbar())
+          toggleChatbar()
         }
       }}
     >
       <Rooms
-        onSelectRoom={roomId => onSelectRoom(roomId)}
+        onSelectRoom={roomId => {
+          addChatPopup(roomId)
+          toggleChatbar()
+        }}
       />
     </Menu>
   )
 }
 
-export default connect(s => ({
-  showChatbar: s.chatroom.showChatbar
-}))(Chatbar)
+export default connect(({ chatroom }) => ({
+  showChatbar: chatroom.showChatbar
+}), ({ addChatPopup, toggleChatbar }))(Chatbar)

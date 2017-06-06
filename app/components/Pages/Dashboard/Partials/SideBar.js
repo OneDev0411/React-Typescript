@@ -1,5 +1,6 @@
 // Sidebar.js
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Nav, NavItem, NavDropdown, Modal, Col, FormControl, Button, Alert, OverlayTrigger, Popover, DropdownButton, MenuItem } from 'react-bootstrap'
@@ -23,12 +24,11 @@ import SvgBriefCase from './Svgs/BriefCase'
 import SvgSupport from './Svgs/Support'
 import SvgNotifications from './Svgs/Notifications'
 import Brand from '../../../../controllers/Brand'
-import store from '../../../../stores'
-import { toggleChatbar } from '../../../../store_actions/chatroom'
+import * as actionCreators from '../../../../store_actions/chatroom'
 
 const phoneUtil = PhoneNumberUtil.getInstance()
 
-export default class SideBar extends Component {
+class SideBar extends Component {
 
   componentDidUpdate() {
     // Refresh page on agent update
@@ -306,7 +306,7 @@ export default class SideBar extends Component {
   }
 
   onShowChatroomSidebar() {
-    store.dispatch(toggleChatbar())
+    this.props.toggleChatbar()
   }
 
   render() {
@@ -745,3 +745,5 @@ export default class SideBar extends Component {
 //   location: React.PropTypes.object,
 //   history: React.PropTypes.object,
 // }
+
+export default connect(null, actionCreators)(SideBar)
