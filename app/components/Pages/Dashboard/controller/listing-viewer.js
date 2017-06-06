@@ -43,8 +43,9 @@ const controller = {
       !AppStore.data.show_actives_map
     ) { AppStore.data.show_search_map = true }
 
-    browserHistory.push('/dashboard/mls')
-    AppStore.emitChange()
+    // browserHistory.push('/dashboard/mls')
+    browserHistory.goBack()
+    // AppStore.emitChange()
   },
   showModalGallery(image_url) {
     if (!image_url) { return }

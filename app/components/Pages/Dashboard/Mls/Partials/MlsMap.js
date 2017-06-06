@@ -167,8 +167,8 @@ export default class MlsMap extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // console.log('receive')
-    // console.log(this.state.mapProps.zoom)
+    console.log('receive')
+
     const nextData = nextProps.data
     const currentState = this.state
 

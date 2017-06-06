@@ -7,6 +7,8 @@ import withState from 'recompose/withState'
 import defaultProps from 'recompose/defaultProps'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
+
+import controller from '../../controller'
 import Marker from '../../Mls/Partials/Markers/SingleMarker'
 import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../Mls/Partials/MlsMapOptions'
 import * as mapActions from '../../../../../store_actions/listings/map'
@@ -50,6 +52,9 @@ export const searchMap = ({
               key={id}
               data={appData}
               {...markerProps}
+              onClickHandler={
+                controller.listing_viewer.showListingViewer.bind(this)
+              }
               markerPopupIsActive={hoveredMarkerId === id}
             />
           )
