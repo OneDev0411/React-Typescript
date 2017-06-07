@@ -6,6 +6,7 @@ import Rooms from '../Rooms'
 import { addChatPopup, toggleChatbar } from '../../../../../store_actions/chatroom'
 
 const Chatbar = ({
+  user,
   showChatbar,
   /* mapped actions to dispatch */
   addChatPopup,
@@ -26,6 +27,7 @@ const Chatbar = ({
       }}
     >
       <Rooms
+        user={user}
         onSelectRoom={roomId => {
           addChatPopup(roomId)
           toggleChatbar()
