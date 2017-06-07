@@ -85,7 +85,7 @@ Contact.addNote = async function(params) {
 * add new item to user's timeline
 */
 Contact.updateUserTimeline = async function(user, user_action, object_class, object) {
-  const endpoint = `${api_host}/users/self/timeline`
+  const endpoint = `/users/self/timeline`
 
   try {
     const response = await new Fetch()
