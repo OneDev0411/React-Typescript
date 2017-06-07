@@ -33,6 +33,7 @@ async function display(file, renderProps) {
     await Promise.all(fetch(renderProps, store))
   } catch (e) { /* do nothing */ }
 
+  console.log('2=>', store.getState())
   // get store initial data
   const store_data = encodeURIComponent(xss(JSON.stringify(store.getState())))
 

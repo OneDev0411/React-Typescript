@@ -30,6 +30,7 @@ app.use(async function(ctx, next) {
   ctx.config = config
   const { AppStore } = ctx.locals
 
+  console.log('1=>', ctx.session.user)
   if(!ctx.session.user){
     delete AppStore.data.user
   } else {
