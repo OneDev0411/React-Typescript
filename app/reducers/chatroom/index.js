@@ -206,6 +206,35 @@ function changeActivePopup(state, action) {
   }
 }
 
+/**
+ * initial user statuses
+ */
+function initialUserStates(state, action) {
+  return {
+    ...state,
+    ...{ states: action.states }
+  }
+}
+
+/**
+ * update user state
+ */
+function updateUserState(state, action) {
+  if (!state.states)
+    return state
+
+  return {
+    ...state,
+    states: {
+      ...state.states,
+      ...{[action.userId]: {
+        ...state.states[action.userId],
+        ...{state: action.state}
+      }}
+    }
+  }
+}
+
 export default (state = initialState, action) => {
   const handlers = {
     [types.CHANGE_ACTIVE_ROOM]: changeActiveRoom,
@@ -220,7 +249,9 @@ export default (state = initialState, action) => {
     [types.MINIMIZE_POPUP]: minimizePopup,
     [types.MAXIMIZE_POPUP]: maximizePopup,
     [types.REMOVE_POPUP]: removePopup,
-    [types.CHANGE_ACTIVE_POPUP]: changeActivePopup
+    [types.CHANGE_ACTIVE_POPUP]: changeActivePopup,
+    [types.INITIAL_USER_STATES]: initialUserStates,
+    [types.UPDATE_USER_STATE]: updateUserState
   }
 
   return handlers[action.type] ? handlers[action.type](state, action) : state
