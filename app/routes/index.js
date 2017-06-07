@@ -109,7 +109,7 @@ export default (
       <Route path="/widgets/search" component={SearchWidget} />
       <Route path="/widgets/listings" component={ListingsWidget} />
 
-      <Route path="/dashboard/recents">
+      <Route path="/dashboard/recents(/:roomId)">
         <IndexRoute component={Recents} />
       </Route>
 
