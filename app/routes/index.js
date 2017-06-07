@@ -66,7 +66,10 @@ import Forms from '../components/Pages/Dashboard/Forms'
 
 function authenticate(nextState, replace) {
   const { data } = store.getState()
-  if (typeof window !== 'undefined' && !data.user) {
+  console.log('==> ', data)
+  const isLoggedIn = data.user && data.user.access_token
+
+  if (typeof window !== 'undefined' && !isLoggedIn) {
     replace({
       pathname: '/',
       state: { nextPathname: nextState.location.pathname }
@@ -96,8 +99,7 @@ export default (
       <Route path="/account/notifications" component={Notifications} />
 
       <Route path="/dashboard/mls/agents" component={Agents} />
-      <Route path="/dashboard/mls/alerts" component={Mls} />
-      <Route path="/dashboard/mls/alerts/:alert_id" component={Mls} />
+      <Route path="/dashboard/mls/alerts(/:alert_id)" component={Mls} />
       <Route path="/dashboard/mls/actives" component={Mls} />
 
       <Route path="/dashboard/website" component={Website} />
