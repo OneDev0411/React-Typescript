@@ -6,7 +6,7 @@ import cookie from 'koa-cookie'
 import path from 'path'
 import webpack from 'webpack'
 import session from 'koa-session'
-import RedisStore from 'koa2-session-redis'
+// import RedisStore from 'koa2-session-redis'
 import _ from 'underscore'
 
 import universalMiddleware from './util/universal'
@@ -62,7 +62,7 @@ app.use(render())
 app.keys = ['r3ch4t@re4ct_rocks!!!']
 app.use(session({
   key: 'rechat-webapp:session',
-  store: new RedisStore(),
+  // store: new RedisStore(),
   maxAge: 86400000,
   overwrite: true,
   httpOnly: true,
