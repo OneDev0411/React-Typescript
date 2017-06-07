@@ -10,6 +10,10 @@ router.get('/activate', async (ctx, next) => {
   const decrypted_obj = JSON.parse(Crypto.decrypt(decoded_token))
   const { email, token, agemt, phone_number, inviting_user, room } = decrypted_obj
 
+  console.log('--------')
+  console.log(decoded_token)
+  console.log(decrypted_obj)
+
   // Reset session and save branch data
   const branch_data = decrypted_obj
 
