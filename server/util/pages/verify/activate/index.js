@@ -10,16 +10,7 @@ router.get('/activate', async (ctx, next) => {
   const decrypted_obj = JSON.parse(Crypto.decrypt(decoded_token))
   const { email, token, agent, phone_number, inviting_user, room } = decrypted_obj
 
-  console.log('--------')
-  console.log(decoded_token)
-  console.log(decrypted_obj)
-
   // Reset session and save branch data
-  console.log(ctx.session)
-
-  // ctx.session.user = null
-  // ctx.session.branch_data = decrypted_obj
-
   ctx.session = {
     ...ctx.session,
     ...{
@@ -27,10 +18,6 @@ router.get('/activate', async (ctx, next) => {
       branch_data: decrypted_obj
     }
   }
-
-  console.log(ctx.session)
-
-  console.log(agent, token, email)
 
   // Agent
   if (agent) {
@@ -66,7 +53,6 @@ router.get('/activate', async (ctx, next) => {
       url += '&alert_id=' + alert_id
     }
 
-    console.log(url)
     return ctx.redirect(url)
   }
 
