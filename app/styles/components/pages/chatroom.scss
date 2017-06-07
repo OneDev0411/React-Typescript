@@ -1,4 +1,4 @@
-$rooms-padding: 4vw;
+$rooms-padding: 2.5vw;
 
 .chatroom {
   margin-left: 50px;
@@ -104,6 +104,7 @@ $rooms-padding: 4vw;
   padding: 0 2vw 0 3vw;
   .title {
     font-weight: bold;
+    font-size: 15px;
   }
 }
 
@@ -176,7 +177,18 @@ $rooms-padding: 4vw;
 
 %room-item {
   padding: 10px 4px 10px $rooms-padding;
+  margin-right: 0;
+  margin-left: 0;
   cursor: pointer;
+  vertical-align: middle;
+  .avatar {
+    padding-left: 0;
+    padding-right: 0;
+    margin-right: 10px;
+  }
+  .title {
+    padding: 6px 0 0 0;
+  }
   &:hover {
     background-color: #465A71;
   }
@@ -191,6 +203,10 @@ $rooms-padding: 4vw;
   color: #fff;
   .rooms {
     @extend %rooms;
+    .list-container {
+      max-height: 88vh;
+      min-height: 88vh;
+    }
   }
 }
 
