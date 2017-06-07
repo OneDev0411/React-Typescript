@@ -1,9 +1,11 @@
 import React from 'react'
 import emojify from 'emojify.js'
 import linkifyString from 'linkifyjs/string'
+import { Row, Col } from 'react-bootstrap'
 import TextMessage from './text'
 import RecommendationMessage from './recommendation'
 import AlertMessage from './alert'
+import UserAvatar from '../../../../../Partials/UserAvatar'
 
 emojify.setConfig({
   img_dir: '/static/images/emoji'
@@ -98,25 +100,45 @@ export default ({
     dangerouslySetInnerHTML={{ __html: getMessageText(message) }}
   />
 
-  if (alert) {
-    return <AlertMessage
-      alert={alert}
-    />
-  }
+  return (
+    <Row>
+      <Col md={2} sm={4} xs={6}>
+        <UserAvatar
+          userId={author.id}
+          name={author.display_name}
+          image={author.profile_image_url}
+          size={35}
+        />
+      </Col>
 
-  if (message.recommendation) {
-    return <RecommendationMessage
-      author={author}
-      user={user}
-      recommendation={message.recommendation}
-      message={message}
-      comment={comment}
-    />
-  }
+      <Col md={9} sm={8} xs={6}>
+        <div className="title">
+          { author && author.abbreviated_display_name }
+        </div>
+        { comment }
+      </Col>
+    </Row>
+  )
 
-  return <TextMessage
-    author={author}
-    message={message}
-    comment={comment}
-  />
+  // if (alert) {
+  //   return <AlertMessage
+  //     alert={alert}
+  //   />
+  // }
+
+  // if (message.recommendation) {
+  //   return <RecommendationMessage
+  //     author={author}
+  //     user={user}
+  //     recommendation={message.recommendation}
+  //     message={message}
+  //     comment={comment}
+  //   />
+  // }
+
+  // return <TextMessage
+  //   author={author}
+  //   message={message}
+  //   comment={comment}
+  // />
 }
