@@ -1248,7 +1248,7 @@ export default class Mls extends Component {
     }
 
     const main_content = (
-      <main>
+      <div>
         { brand_logo }
 
         <div
@@ -1380,7 +1380,7 @@ export default class Mls extends Component {
 
         { powered_by }
 
-      </main>
+      </div>
     )
 
     let mobile_splash_viewer
