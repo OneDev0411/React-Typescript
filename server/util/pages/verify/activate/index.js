@@ -28,6 +28,8 @@ router.get('/activate', async (ctx, next) => {
     }
   }
 
+  console.log(ctx.session)
+
   console.log(agent, token, email)
 
   // Agent
