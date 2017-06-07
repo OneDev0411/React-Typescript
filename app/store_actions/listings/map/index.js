@@ -5,3 +5,8 @@ export const setMapProps = (name, mapProps) => ({
   mapProps,
   type: types.SET_MAP_PROPS
 })
+
+export const updateMapZoom = (name, zoomType) => ({
+  name,
+  type: `${types.SET_MAP_ZOOM}_${zoomType}`
+})

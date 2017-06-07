@@ -68,7 +68,8 @@ export const mapOptions = {
   minZoom: 3,
   maxZoom: 25,
   mapTypeControl: false,
-  draggable: true
+  draggable: true,
+  disableDefaultUI: true
 }
 
 export default {

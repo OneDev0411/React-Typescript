@@ -9,6 +9,7 @@ import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 
 import controller from '../../controller'
+import ZoomController from '../components/ZoomController'
 import Marker from '../../Mls/Partials/Markers/SingleMarker'
 import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../Mls/Partials/MlsMapOptions'
 import * as mapActions from '../../../../../store_actions/listings/map'
@@ -23,49 +24,54 @@ export const searchMap = ({
   options,
   onChange,
   listings,
+  defaultZoom,
+  defaultCenter,
   hoveredMarkerId,
   bootstrapURLKeys,
   onChildMouseEnter,
   onChildMouseLeave,
-  mapProps: {
-    zoom = 11,
-    center = mapInitialState.center
-  }
+  onClickZoomHandler,
+  mapProps: { zoom, center }
 }) => {
   // console.log('map render favorite', zoom, listings)
   return (
-    <Map
-      zoom={zoom}
-      style={style}
-      center={center}
-      options={options}
-      onChange={onChange}
-      yesIWantToUseGoogleMapApiInternals
-      bootstrapURLKeys={bootstrapURLKeys}
-      onChildMouseEnter={onChildMouseEnter}
-      onChildMouseLeave={onChildMouseLeave}
-    >
-      {
-        listings.length && listings.map(
-          ({ ...markerProps, numPoints, list, lat, lng, id }) => (
-            <Marker
-              key={id}
-              data={appData}
-              {...markerProps}
-              onClickHandler={
-                controller.listing_viewer.showListingViewer.bind(this)
-              }
-              markerPopupIsActive={hoveredMarkerId === id}
-            />
+    <div>
+      <Map
+        zoom={zoom}
+        style={style}
+        center={center}
+        options={options}
+        onChange={onChange}
+        defaultZoom={defaultZoom}
+        defaultCenter={defaultCenter}
+        bootstrapURLKeys={bootstrapURLKeys}
+        onChildMouseEnter={onChildMouseEnter}
+        onChildMouseLeave={onChildMouseLeave}
+      >
+        {
+          listings.length && listings.map(
+            ({ ...markerProps, numPoints, list, lat, lng, id }) => (
+              <Marker
+                key={id}
+                data={appData}
+                {...markerProps}
+                onClickHandler={
+                  controller.listing_viewer.showListingViewer.bind(this)
+                }
+                markerPopupIsActive={hoveredMarkerId === id}
+              />
+            )
           )
-        )
-      }
-    </Map>
+        }
+      </Map>
+      <ZoomController onClickZoomHandler={onClickZoomHandler} />
+    </div>
   )
 }
 
 export const searchMapHOC = compose(
   defaultProps({
+    defaultZoom: 11,
     clusterRadius: 60,
     options: mapOptions,
     style: {
@@ -75,7 +81,8 @@ export const searchMapHOC = compose(
       padding: 0,
       flex: 1
     },
-    bootstrapURLKeys
+    bootstrapURLKeys,
+    defaultCenter: mapInitialState.center
   }),
   connect(
     ({ favorites, user, data }) => {
@@ -99,6 +106,9 @@ export const searchMapHOC = compose(
   withHandlers({
     onChange: ({ setMapProps }) => (mapProps) => {
       setMapProps('FAVORITE', mapProps)
+    },
+    onClickZoomHandler: ({ updateMapZoom }) => (zoomType) => {
+      updateMapZoom('FAVORITE', zoomType)
     },
     onChildMouseEnter: ({ setHoveredMarkerId }) => (hoverKey, { id }) => {
       setHoveredMarkerId(id)

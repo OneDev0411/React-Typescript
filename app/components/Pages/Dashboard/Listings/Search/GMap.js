@@ -7,6 +7,7 @@ import defaultProps from 'recompose/defaultProps'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 
+import ZoomController from '../components/ZoomController'
 import SimpleMarker from '../../Mls/Partials/Markers/SingleMarker'
 import ClusterMarker from '../../Mls/Partials/Markers/ClusterMarker'
 import * as mapActions from '../../../../../store_actions/listings/map'
@@ -23,21 +24,26 @@ export const searchMap = ({
   style,
   options,
   onChange,
+  defaultZoom,
+  defaultCenter,
   bootstrapURLKeys,
-  mapProps: {
-    zoom = mapInitialState.zoom,
-    center = mapInitialState.center
-  }
+  onClickZoomHandler,
+  mapProps: { zoom, center }
 }) => (
-  <Map
-    zoom={zoom}
-    style={style}
-    center={center}
-    options={options}
-    onChange={onChange}
-    yesIWantToUseGoogleMapApiInternals
-    bootstrapURLKeys={bootstrapURLKeys}
-  />
+  <div>
+    <Map
+      zoom={zoom}
+      style={style}
+      center={center}
+      options={options}
+      onChange={onChange}
+      defaultZoom={defaultZoom}
+      defaultCenter={defaultCenter}
+      yesIWantToUseGoogleMapApiInternals
+      bootstrapURLKeys={bootstrapURLKeys}
+    />
+    <ZoomController onClickZoomHandler={onClickZoomHandler} />
+  </div>
 )
 
 export const searchMapHOC = compose(
@@ -51,7 +57,9 @@ export const searchMapHOC = compose(
       padding: 0,
       flex: 1
     },
-    bootstrapURLKeys
+    bootstrapURLKeys,
+    defaultZoom: mapInitialState.zoom,
+    defaultCenter: mapInitialState.center
   }),
   connect(
     ({ search }) => {
@@ -66,6 +74,9 @@ export const searchMapHOC = compose(
   withHandlers({
     onChange: ({ setMapProps }) => (mapProps) => {
       setMapProps('SEARCH', mapProps)
+    },
+    onClickZoomHandler: ({ updateMapZoom }) => (zoomType) => {
+      updateMapZoom('SEARCH', zoomType)
     }
   })
 )
