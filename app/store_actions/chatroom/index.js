@@ -4,6 +4,7 @@ import createMessage from './create-message'
 import toggleChatbar from './toggle-chatbar'
 import toggleFullScreen from './toggle-fullscreen'
 import changeActiveRoom from './change-active-room'
+
 import {
   addChatPopup,
   closeChatPopup,
@@ -16,6 +17,11 @@ import {
   addMessageTyping,
   removeMessageTyping
 } from './typing'
+
+import {
+  initialStates,
+  updateState
+} from './state'
 
 export {
   getRooms,
@@ -34,5 +40,9 @@ export {
 
   /* message typing */
   addMessageTyping,
-  removeMessageTyping
+  removeMessageTyping,
+
+  /* user states */
+  initialStates,
+  updateState
 }
