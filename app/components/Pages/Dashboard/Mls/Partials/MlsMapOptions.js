@@ -18,21 +18,13 @@ export const mapInitialState = {
 
 export const queryOptions = {
   limit: '250',
-  location: {
-    longitude: -96.79698789999998,
-    latitude: 32.7766642
-  },
-  horizontal_distance: 2830,
   property_types: ['Residential'],
-  vertical_distance: 2830,
   listing_statuses: [
     'Active',
     'Active Contingent',
     'Active Kick Out',
     'Active Option Contract'
   ],
-  currency: 'USD',
-  maximum_year_built: 2015,
   points: [
     {
       latitude: 32.83938955111425,
@@ -55,7 +47,6 @@ export const queryOptions = {
       longitude: -96.89115626525879
     }
   ],
-  open_house: false,
   property_subtypes: [
     'RES-Single Family',
     'RES-Half Duplex',

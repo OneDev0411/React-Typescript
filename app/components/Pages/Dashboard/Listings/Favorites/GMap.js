@@ -108,11 +108,11 @@ export const searchMapHOC = compose(
     onClickZoomHandler: ({ updateMapZoom }) => (zoomType) => {
       updateMapZoom('FAVORITE', zoomType)
     },
-    onChildMouseEnter: ({ setMapHoveredMarkerId }) => (hoverKey, { id }) => {
-      setMapHoveredMarkerId('FAVORITE', id)
-    },
     onChildMouseLeave: ({ setMapHoveredMarkerId }) => () => {
       setMapHoveredMarkerId('FAVORITE', -1)
+    },
+    onChildMouseEnter: ({ setMapHoveredMarkerId }) => (hoverKey, { id }) => {
+      setMapHoveredMarkerId('FAVORITE', id)
     }
   })
 )
