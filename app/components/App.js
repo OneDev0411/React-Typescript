@@ -462,14 +462,11 @@ class App extends Component {
     })
 
     // render sidebar
-    let main_style = { minHeight: '100vh' }
+    const main_style = { minHeight: '100vh' }
     let nav_area = <SideBar data={data} />
 
     if (data.is_mobile && user) {
-      main_style = { ...main_style, ...S('') }
-
-      if (user)
-        nav_area = <MobileNav data={data} />
+      nav_area = <MobileNav data={data} />
     }
 
     return (
