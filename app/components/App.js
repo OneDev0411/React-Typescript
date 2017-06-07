@@ -34,6 +34,7 @@ class App extends Component {
     const { data } = this.props
     const { user } = data
 
+    console.log('>>>>', user)
     // check branding
     Brand.checkBranding()
 
