@@ -7,7 +7,7 @@ const Loading = ({ text }) => (
   <div className="c-loading--text">
     <div
       className="c-loading--text__inner"
-      style={{ backgroundColor: brandColor }}
+      style={{ backgroundColor: `#${brandColor}` }}
     >
       Loading {text} Listings...
     </div>
