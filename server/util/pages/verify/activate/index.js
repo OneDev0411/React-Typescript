@@ -15,10 +15,10 @@ router.get('/activate', async (ctx, next) => {
   console.log(decrypted_obj)
 
   // Reset session and save branch data
-  const branch_data = decrypted_obj
-
   ctx.session.user = null
-  ctx.session.branch_data = branch_data
+  ctx.session.branch_data = decrypted_obj
+
+  console.log(agent, token, email)
 
   // Agent
   if (agent) {
@@ -54,6 +54,7 @@ router.get('/activate', async (ctx, next) => {
       url += '&alert_id=' + alert_id
     }
 
+    console.log(url)
     return ctx.redirect(url)
   }
 
