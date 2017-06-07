@@ -66,7 +66,6 @@ import Forms from '../components/Pages/Dashboard/Forms'
 
 function authenticate(nextState, replace) {
   const { data } = store.getState()
-  console.log('==> ', data)
   const isLoggedIn = data.user && data.user.access_token
 
   if (typeof window !== 'undefined' && !isLoggedIn) {
@@ -91,10 +90,10 @@ export default (
     <Route path="/" component={App}>
       <Route path="/dashboard/mls" component={Mls} />
       <Route path="/dashboard/mls/:id" component={Listing} />
+      <Route path="/branch" component={Branch} />
     </Route>
 
     <Route path="/" component={App} onEnter={authenticate}>
-      <Route path="/branch" component={Branch} />
       <Route path="/account/settings" component={Settings} />
       <Route path="/account/notifications" component={Notifications} />
 
