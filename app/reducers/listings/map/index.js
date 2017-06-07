@@ -2,7 +2,8 @@
 import {
   SET_MAP_PROPS,
   SET_MAP_ZOOM_IN,
-  SET_MAP_ZOOM_OUT } from '../../../constants/listings/map'
+  SET_MAP_ZOOM_OUT,
+  SET_MAP_HOVERED_MARKER_ID } from '../../../constants/listings/map'
 
 // initial map options(props) schema
 // {
@@ -28,6 +29,11 @@ const mapProps = (state = {}, action) => {
       return {
         ...state,
         zoom: --state.zoom
+      }
+    case SET_MAP_HOVERED_MARKER_ID:
+      return {
+        ...state,
+        hoveredMarkerId: action.id
       }
     default:
       return state

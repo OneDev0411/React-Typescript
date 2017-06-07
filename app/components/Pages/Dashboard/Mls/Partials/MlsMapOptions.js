@@ -12,7 +12,8 @@ export const mapInitialState = {
     lng: -96.7970
   },
   size: null,
-  bounds: null
+  bounds: null,
+  hoveredMarkerId: -1
 }
 
 export const queryOptions = {

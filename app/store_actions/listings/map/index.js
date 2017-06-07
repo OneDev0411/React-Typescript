@@ -10,3 +10,9 @@ export const updateMapZoom = (name, zoomType) => ({
   name,
   type: `${types.SET_MAP_ZOOM}_${zoomType}`
 })
+
+export const setMapHoveredMarkerId = (name, id) => ({
+  id,
+  name,
+  type: types.SET_MAP_HOVERED_MARKER_ID
+})

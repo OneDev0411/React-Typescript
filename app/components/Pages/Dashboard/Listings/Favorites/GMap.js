@@ -26,12 +26,15 @@ export const searchMap = ({
   listings,
   defaultZoom,
   defaultCenter,
-  hoveredMarkerId,
   bootstrapURLKeys,
   onChildMouseEnter,
   onChildMouseLeave,
   onClickZoomHandler,
-  mapProps: { zoom, center }
+  mapProps: {
+    zoom,
+    center,
+    hoveredMarkerId
+  }
 }) => {
   // console.log('map render favorite', zoom, listings)
   return (
@@ -97,11 +100,6 @@ export const searchMapHOC = compose(
     },
     actions
   ),
-  withState(
-    'hoveredMarkerId',
-    'setHoveredMarkerId',
-    -1
-  ),
   // describe events
   withHandlers({
     onChange: ({ setMapProps }) => (mapProps) => {
@@ -110,11 +108,11 @@ export const searchMapHOC = compose(
     onClickZoomHandler: ({ updateMapZoom }) => (zoomType) => {
       updateMapZoom('FAVORITE', zoomType)
     },
-    onChildMouseEnter: ({ setHoveredMarkerId }) => (hoverKey, { id }) => {
-      setHoveredMarkerId(id)
+    onChildMouseEnter: ({ setMapHoveredMarkerId }) => (hoverKey, { id }) => {
+      setMapHoveredMarkerId('FAVORITE', id)
     },
-    onChildMouseLeave: ({ setHoveredMarkerId }) => () => {
-      setHoveredMarkerId(-1)
+    onChildMouseLeave: ({ setMapHoveredMarkerId }) => () => {
+      setMapHoveredMarkerId('FAVORITE', -1)
     }
   })
 )
