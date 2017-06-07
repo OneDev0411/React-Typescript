@@ -43,6 +43,7 @@ class Chatroom extends React.Component {
       <Row className="chatroom">
         <Col lg={3} md={3} sm={4} xs={5} className="no-padding">
           <Rooms
+            user={user}
             onSelectRoom={id => this.onChangeRoom(id)}
             activeRoom={activeRoom}
           />
