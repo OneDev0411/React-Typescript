@@ -17,11 +17,13 @@ import InstantChat from './Pages/Dashboard/Chatroom/InstantChat'
 // import _ from 'lodash'
 // import NotificationDispatcher from '../dispatcher/NotificationDispatcher'
 import AppStore from '../stores/AppStore'
-// import Brand from '../controllers/Brand'
-// import ReactGA from 'react-ga'
-// import config from '../../config/public'
+import Brand from '../controllers/Brand'
+import ReactGA from 'react-ga'
+import config from '../../config/public'
+import MobileDetect from 'mobile-detect'
 
 class App extends Component {
+
   componentWillMount() {
     if (typeof window !== 'undefined') {
       this.initializeWebSocket()
@@ -29,6 +31,13 @@ class App extends Component {
   }
 
   componentDidMount() {
+    const { data } = this.props
+    const { user } = data
+
+    // check branding
+    Brand.checkBranding()
+
+    // load rooms
     this.initialRooms()
 
     // check user is mobile device or not
@@ -36,6 +45,16 @@ class App extends Component {
 
     // set intercom
     this.setIntercom()
+
+    if (user)
+      this.triggerBranchBanner()
+
+    if (typeof window !== 'undefined') {
+      let md = new MobileDetect(window.navigator.userAgent)
+
+      if (md.is('iPhone') && !data.is_widget)
+        this.showMobileSplashViewer()
+    }
   }
 
   initializeWebSocket() {
@@ -56,18 +75,6 @@ class App extends Component {
       action: 'check-for-mobile'
     })
   }
-
-  // componentWillMount() {
-  //   if (typeof window !== 'undefined') {
-  //     const reconnect_vars = {
-  //       reconnection: true,
-  //       reconnectionDelay: 1000,
-  //       reconnectionDelayMax: 5000,
-  //       reconnectionAttempts: 99999
-  //     }
-  //     window.socket = io(config.socket.server, reconnect_vars)
-  //   }
-  // }
 
   // Add change listeners to stores
   // componentDidMount() {
@@ -156,50 +163,50 @@ class App extends Component {
     }
   }
 
-  // showMobileSplashViewer() {
-  //   AppStore.data.show_mobile_splash_viewer = true
-  //   // this.createBranchLink()
-  //   AppStore.emitChange()
-  // }
+  showMobileSplashViewer() {
+    AppStore.data.show_mobile_splash_viewer = true
+    // this.createBranchLink()
+    AppStore.emitChange()
+  }
 
-  // createBranchLink() {
-  //   const branch = require('branch-sdk')
-  //   branch.init(config.branch.key)
-  //   let branch_data = window.branchData
-  //   if (!branch_data) {
-  //     branch_data = {
-  //       '$always_deeplink': true
-  //     }
-  //   }
-  //   branch.link({
-  //     data: branch_data
-  //   }, (err, link) => {
-  //     // console.log(err, link)
-  //     AppStore.data.branch_link = link
-  //     AppStore.emitChange()
-  //   })
-  // }
+  createBranchLink() {
+    const branch = require('branch-sdk')
+    branch.init(config.branch.key)
+    let branch_data = window.branchData
+    if (!branch_data) {
+      branch_data = {
+        '$always_deeplink': true
+      }
+    }
+    branch.link({
+      data: branch_data
+    }, (err, link) => {
+      // console.log(err, link)
+      AppStore.data.branch_link = link
+      AppStore.emitChange()
+    })
+  }
 
-  // triggerBranchBanner() {
-  //   const branch = require('branch-sdk')
-  //   branch.init(config.branch.key)
-  //   branch.banner({
-  //     icon: '/static/images/logo-big.png',
-  //     title: 'Download the Rechat iOS app',
-  //     description: 'For a better mobile experience',
-  //     showDesktop: false,
-  //     showAndroid: false,
-  //     forgetHide: false,
-  //     downloadAppButtonText: 'GET',
-  //     openAppButtonText: 'OPEN',
-  //     customCSS: '#branch-banner .button { color:  #3388ff; border-color: #3388ff; }'
-  //   }, {
-  //     data: {
-  //       type: (AppStore.data.user ? 'WebBranchBannerClickedUser' : 'WebBranchBannerClickedShadowUser'),
-  //       access_token: (AppStore.data.user ? AppStore.data.user.access_token : null)
-  //     }
-  //   })
-  // }
+  triggerBranchBanner() {
+    const branch = require('branch-sdk')
+    branch.init(config.branch.key)
+    branch.banner({
+      icon: '/static/images/logo-big.png',
+      title: 'Download the Rechat iOS app',
+      description: 'For a better mobile experience',
+      showDesktop: false,
+      showAndroid: false,
+      forgetHide: false,
+      downloadAppButtonText: 'GET',
+      openAppButtonText: 'OPEN',
+      customCSS: '#branch-banner .button { color:  #3388ff; border-color: #3388ff; }'
+    }, {
+      data: {
+        type: (AppStore.data.user ? 'WebBranchBannerClickedUser' : 'WebBranchBannerClickedShadowUser'),
+        access_token: (AppStore.data.user ? AppStore.data.user.access_token : null)
+      }
+    })
+  }
 
   // getNotifications(notification) {
   //   const data = AppStore.data
@@ -448,7 +455,6 @@ class App extends Component {
   render() {
     const { data, rooms, location } = this.props
     const { user } = data
-    console.log('=> ', user)
 
     // don't remove below codes,
     // because app is depended to `path` and `location` props in data store
