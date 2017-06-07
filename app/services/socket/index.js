@@ -1,10 +1,13 @@
 import io from 'socket.io-client'
 import moment from 'moment'
+import Rx from 'rxjs/Rx'
 import store from '../../stores'
 import {
   createMessage,
   addMessageTyping,
-  removeMessageTyping
+  removeMessageTyping,
+  initialStates,
+  updateState
 } from '../../store_actions/chatroom'
 
 import config from '../../../config/public'
@@ -43,6 +46,18 @@ export default class Socket {
     // bind Reconnecting and Reconnect socket
     socket.on('reconnecting', this.onReconnecting)
     socket.on('reconnect', this.onReconnect)
+
+    // get all user states
+    socket.on('Users.States', this.onUserStates)
+
+    // update user state
+    Rx
+    .Observable
+    .fromEvent(socket, 'User.State', (state, user_id) => {
+      return { state, user_id }
+    })
+    .distinctUntilChanged((p, c) => p.user_id === c.user_id && p.state === c.state )
+    .subscribe(this.onUserState)
 
     // bind ping
     socket.on('ping', this.onPing)
@@ -123,17 +138,31 @@ export default class Socket {
   }
 
   /**
+   * get all states
+   */
+  onUserStates(states) {
+    store.dispatch(initialStates(states))
+  }
+
+  /**
+   * on change user state
+   */
+  onUserState({ state, user_id }) {
+    store.dispatch(updateState(user_id, state))
+  }
+
+  /**
    * on reconnecting
    */
   onReconnecting() {
-    console.log('RECONNECTING >>>>>>')
+    console.log('--- ON RECONNECTING ---')
   }
 
   /**
    * on reconnect
    */
   onReconnect() {
-    console.log('RECONNECTED =====>>>>>>')
+    console.log('--- ON RECONNECTED ---')
   }
 
   /**
