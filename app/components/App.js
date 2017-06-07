@@ -34,7 +34,6 @@ class App extends Component {
     const { data } = this.props
     const { user } = data
 
-    console.log('>>>>', user)
     // check branding
     Brand.checkBranding()
 
@@ -166,7 +165,7 @@ class App extends Component {
 
   showMobileSplashViewer() {
     AppStore.data.show_mobile_splash_viewer = true
-    // this.createBranchLink()
+    this.createBranchLink()
     AppStore.emitChange()
   }
 
@@ -174,15 +173,16 @@ class App extends Component {
     const branch = require('branch-sdk')
     branch.init(config.branch.key)
     let branch_data = window.branchData
+
     if (!branch_data) {
       branch_data = {
         '$always_deeplink': true
       }
     }
+
     branch.link({
       data: branch_data
     }, (err, link) => {
-      // console.log(err, link)
       AppStore.data.branch_link = link
       AppStore.emitChange()
     })
