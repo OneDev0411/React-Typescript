@@ -9,9 +9,6 @@ export default ({
 
   return (
     <div>
-      <div className="title">
-        { author && author.abbreviated_display_name }
-      </div>
 
       { comment }
 
