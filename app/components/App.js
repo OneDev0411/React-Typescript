@@ -16,7 +16,7 @@ import InstantChat from './Pages/Dashboard/Chatroom/InstantChat'
 
 // import _ from 'lodash'
 // import NotificationDispatcher from '../dispatcher/NotificationDispatcher'
-// import AppStore from '../stores/AppStore'
+import AppStore from '../stores/AppStore'
 // import Brand from '../controllers/Brand'
 // import ReactGA from 'react-ga'
 // import config from '../../config/public'
@@ -33,6 +33,9 @@ class App extends Component {
 
     // check user is mobile device or not
     this.checkForMobile()
+
+    // set intercom
+    this.setIntercom()
   }
 
   initializeWebSocket() {
@@ -140,18 +143,18 @@ class App extends Component {
   //   }
   // }
 
-  // setIntercom() {
-  //   const data = AppStore.data
-  //   if (!data.intercom_set && data.user) {
-  //     window.intercomSettings = {
-  //       app_id: 'pkzkvg9a',
-  //       name: `${data.user.first_name} ${data.user.last_name}`, // Full name
-  //       email: `${data.user.email}` // Email address
-  //     }
-  //     AppStore.data.intercom_set = true
-  //     AppStore.emitChange()
-  //   }
-  // }
+  setIntercom() {
+    const { data } = this.props
+    if (!data.intercom_set && data.user) {
+      window.intercomSettings = {
+        app_id: 'pkzkvg9a',
+        name: `${data.user.first_name} ${data.user.last_name}`, // Full name
+        email: `${data.user.email}` // Email address
+      }
+      AppStore.data.intercom_set = true
+      AppStore.emitChange()
+    }
+  }
 
   // showMobileSplashViewer() {
   //   AppStore.data.show_mobile_splash_viewer = true
@@ -444,6 +447,8 @@ class App extends Component {
 
   render() {
     const { data, rooms, location } = this.props
+    const { user } = data
+    console.log('=> ', user)
 
     // don't remove below codes,
     // because app is depended to `path` and `location` props in data store
@@ -453,28 +458,34 @@ class App extends Component {
 
     const children = React.cloneElement(this.props.children, {
       data,
-      user: data.user
+      user
     })
 
     // render sidebar
     let main_style = { minHeight: '100vh' }
     let nav_area = <SideBar data={data} />
 
-    if (data.is_mobile) {
+    if (data.is_mobile && user) {
       main_style = { ...main_style, ...S('') }
 
-      if (data.user)
+      if (user)
         nav_area = <MobileNav data={data} />
     }
 
     return (
       <div>
-        { nav_area }
+        {
+          user && !data.is_widget &&
+          nav_area
+        }
 
-        <InstantChat
-          user={data.user}
-          rooms={rooms}
-        />
+        {
+          user &&
+          <InstantChat
+            user={user}
+            rooms={rooms}
+          />
+        }
 
         <main style={main_style}>
           { children }
