@@ -22,7 +22,7 @@ const InstantChat = ({
     />
     <div
       className="chatroom-fullscreen"
-      style={{ display: instanceMode ? 'block' : 'none' }}
+      style={ !instanceMode ? { display: 'none' } : {} }
     >
       <Chatroom
         user={user}
