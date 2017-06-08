@@ -55,28 +55,27 @@ class Chatroom extends React.Component {
   render() {
     const { user, activeRoom } = this.props
 
-    console.log('>RENDER')
     if (!activeRoom)
       return false
 
     return (
-      <Row className="chatroom">
-        <Col lg={3} md={3} sm={4} xs={5} className="no-padding">
+      <div className="chatroom">
+        <div className="col-md-1 no-padding" style={{ width: '340px' }}>
           <Rooms
             user={user}
             onSelectRoom={id => this.changeRoom(id)}
             activeRoom={activeRoom}
           />
-        </Col>
+        </div>
 
-        <Col lg={9} md={9} sm={8} xs={7} className="no-padding">
+        <div className="col-md-1 no-padding" style={{ width: 'calc(100vw - 340px)' }}>
           <Messages
             user={user}
             roomId={activeRoom}
             showToolbar={true}
           />
-        </Col>
-      </Row>
+        </div>
+      </div>
     )
   }
 }
