@@ -4,7 +4,7 @@ import _ from 'underscore'
 
 const initialState = {
   showChatbar: false,
-  fullscreen: false,
+  instanceMode: false,
   popups: {},
   rooms: null,
   messages: {}
@@ -31,12 +31,12 @@ function toggleChatbar(state, action) {
 }
 
 /**
- * enter in or close from fullscreen mode
+ * enter in or close from instance mode
  */
-function toggleFullscreen(state, action) {
+function toggleInstanceMode(state, action) {
   return {
     ...state,
-    ...{ fullscreen: !state.fullscreen }
+    ...{ instanceMode: !state.instanceMode }
   }
 }
 
@@ -163,7 +163,7 @@ function maximizePopup(state, action) {
     ...state,
     ...{
       activeRoom: action.roomId,
-      fullscreen: true
+      instanceMode: true
     },
     popups: {
       ...state.popups,
@@ -239,7 +239,7 @@ export default (state = initialState, action) => {
   const handlers = {
     [types.CHANGE_ACTIVE_ROOM]: changeActiveRoom,
     [types.TOGGLE_CHATBAR]: toggleChatbar,
-    [types.TOGGLE_FULLSCREEN]: toggleFullscreen,
+    [types.TOGGLE_INSTANCE_MODE]: toggleInstanceMode,
     [types.GET_ROOMS]: getRooms,
     [types.GET_MESSAGES]: createMessages,
     [types.CREATE_MESSAGE]: createMessages,

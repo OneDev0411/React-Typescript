@@ -30,7 +30,7 @@ class Chatroom extends React.Component {
 
     if (isInstance) {
       return nextProps.activeRoom !== undefined &&
-        nextProps.isFullscreen === true &&
+        nextProps.instanceMode === true &&
         activeRoom !== nextProps.activeRoom
     }
 
@@ -82,6 +82,6 @@ class Chatroom extends React.Component {
 }
 
 export default connect(({ chatroom }) => ({
-  isFullscreen: chatroom.fullscreen,
+  instanceMode: chatroom.instanceMode,
   activeRoom: chatroom.activeRoom
 }), ({ changeActiveRoom }))(Chatroom)

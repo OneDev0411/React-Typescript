@@ -2,7 +2,7 @@ import getRooms from './get-rooms'
 import getMessages from './get-messages'
 import createMessage from './create-message'
 import toggleChatbar from './toggle-chatbar'
-import toggleFullScreen from './toggle-fullscreen'
+import toggleInstanceMode from './toggle-instance-mode'
 import changeActiveRoom from './change-active-room'
 
 import {
@@ -29,7 +29,7 @@ export {
   createMessage,
   changeActiveRoom,
   toggleChatbar,
-  toggleFullScreen,
+  toggleInstanceMode,
 
   /* actions for popup */
   addChatPopup,

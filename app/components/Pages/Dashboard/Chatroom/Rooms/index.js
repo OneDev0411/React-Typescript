@@ -7,7 +7,7 @@ import _ from 'underscore'
 import cn from 'classnames'
 import UserAvatar from '../../../../Partials/UserAvatar'
 import {
-  toggleFullScreen,
+  toggleInstanceMode,
   changeActiveRoom,
   toggleChatbar
 } from '../../../../../store_actions/chatroom'
@@ -18,17 +18,17 @@ const enhance = compose(
   withState('filter', 'changeFilter', ''),
   connect(
     ({ chatroom }) => ({
-      isFullscreen: chatroom.fullscreen,
+      instanceMode: chatroom.instanceMode,
       showChatbar: chatroom.showChatbar,
       rooms: chatroom.rooms
     }),
-    ({ toggleFullScreen, changeActiveRoom, toggleChatbar })
+    ({ toggleInstanceMode, changeActiveRoom, toggleChatbar })
   )
 )
 
 const Rooms = ({
   user,
-  isFullscreen,
+  instanceMode,
   showChatbar,
   rooms,
   activeRoom,
@@ -36,7 +36,7 @@ const Rooms = ({
   changeFilter,
   filter,
   /* mapped actions to dispatch */
-  toggleFullScreen,
+  toggleInstanceMode,
   changeActiveRoom,
   toggleChatbar
 }) => {
@@ -48,7 +48,7 @@ const Rooms = ({
     e.preventDefault()
 
     // toggle chatroom display
-    toggleFullScreen()
+    toggleInstanceMode()
 
     if (showChatbar) {
       // display first room if there is no active room
@@ -100,7 +100,7 @@ const Rooms = ({
           href="/dashboard/recents"
           onClick={e => fullScreen(e)}
         >
-          { isFullscreen ? ' [ <<<< ] ' : ' [ >>>> ] ' }
+          { instanceMode ? ' [ <<<< ] ' : ' [ >>>> ] ' }
         </a>
 
         <input

@@ -7,7 +7,7 @@ import Chatroom from '..'
 const InstantChat = ({
   user,
   rooms,
-  fullscreen,
+  instanceMode,
   activeRoom,
   showChatbar
 }) => (
@@ -22,7 +22,7 @@ const InstantChat = ({
     />
     <div
       className="chatroom-fullscreen"
-      style={{ display: fullscreen ? 'block' : 'none' }}
+      style={{ display: instanceMode ? 'block' : 'none' }}
     >
       <Chatroom
         user={user}
@@ -37,5 +37,5 @@ export default connect(({ chatroom }) => ({
   showChatbar: chatroom.showChatbar,
   rooms: chatroom.rooms,
   activeRoom: chatroom.activeRoom,
-  fullscreen: chatroom.fullscreen
+  instanceMode: chatroom.instanceMode
 }))(InstantChat)
