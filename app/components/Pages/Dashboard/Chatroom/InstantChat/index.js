@@ -26,6 +26,7 @@ const InstantChat = ({
     >
       <Chatroom
         user={user}
+        isInstance={true}
         activeRoom={activeRoom}
       />
     </div>

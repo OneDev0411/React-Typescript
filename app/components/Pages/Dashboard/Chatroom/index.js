@@ -26,8 +26,18 @@ class Chatroom extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { activeRoom } = this.props
-    return nextProps.activeRoom !== undefined && activeRoom !== nextProps.activeRoom
+    const { activeRoom, location, isInstance } = this.props
+
+    if (isInstance) {
+      return nextProps.activeRoom !== undefined &&
+        nextProps.isFullscreen === true &&
+        activeRoom !== nextProps.activeRoom
+    }
+
+    return nextProps.activeRoom !== undefined &&
+      nextProps.location !== undefined &&
+      activeRoom !== nextProps.activeRoom &&
+      location.key !== nextProps.location.key
   }
 
   changeRoom(id) {
@@ -36,14 +46,16 @@ class Chatroom extends React.Component {
     if (id !== activeRoom)
       changeActiveRoom(id)
 
-    // don't change url on fullscreen mode
-    if (this.props.location)
+    // don't change url on instance mode
+    if (this.props.location) {
       browserHistory.push(`/dashboard/recents/${id}`)
+    }
   }
 
   render() {
     const { user, activeRoom } = this.props
 
+    console.log('>RENDER')
     if (!activeRoom)
       return false
 
@@ -70,5 +82,6 @@ class Chatroom extends React.Component {
 }
 
 export default connect(({ chatroom }) => ({
+  isFullscreen: chatroom.fullscreen,
   activeRoom: chatroom.activeRoom
 }), ({ changeActiveRoom }))(Chatroom)
