@@ -20,38 +20,12 @@ let store = {}
 
 const coordinator = (points) => {
   let pointsLength = points.length
-  const col = Math.ceil(pointsLength / 4)
-  if (col === 1) {
-    startX = 45 / -2
-    startY = (pointsLength * 25 + 45) / 2 * -0.5
-  } else {
-    startX = (Math.ceil(pointsLength / 4) * 45 + 15) / 2 * -1
-    startY = (4 * 25 + 45) * -0.5
-  }
-  if (col === 1) {
-    for (let i = 0; i < pointsLength; i++) {
-      points[i].list.position = {
-        left: 0,
-        top: 0
-      }
-      points[i].list.position.left = `${startX}px`
-      points[i].list.position.top = `${startY + i * 40}px`
+  for (let i = 0; i < pointsLength; i++) {
+    points[i].list.position = {
+      left: 0,
+      top: 0
     }
-  } else {
-    for (let i = 0; i < col; i++) {
-      for (let j = 0; j < 4; j++) {
-        const index = j + 4 * i
-        if (index < pointsLength) {
-          points[index].list.position = {
-            left: 0,
-            top: 0
-          }
-          points[index].list.position.top = `${startY + j * 40}px`
-          points[index].list.position.left = `${startX + i * 60}px`
-        }
-      }
-    }
-    points[i].list.position.top = `${i * 21}px`
+    points[i].list.position.top = `${i * 25}px`
   }
   return points
 }
