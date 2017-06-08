@@ -7,7 +7,10 @@ import {
 
 const byId = (state = {}, action) => {
   if (action.response) {
-    return action.response.entities.listings
+    return {
+      ...state,
+      ...action.response.entities.listings
+    }
   }
   return state
 }
