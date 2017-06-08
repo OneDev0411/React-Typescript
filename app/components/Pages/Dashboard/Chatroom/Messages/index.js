@@ -165,10 +165,7 @@ class Messages extends React.Component {
           {
             messages &&
             _.map(messages.list, msg =>
-              <div
-                className={cn('message-item', { queued: msg.queued })}
-                key={`MESSAGE_${msg.id}`}
-              >
+              <div key={`MESSAGE_${msg.id}`}>
                 <Message
                   user={user}
                   message={msg}
