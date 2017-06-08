@@ -81,9 +81,7 @@ app.use(async function(ctx, next) {
   await next()
 })
 
-// console.log(app.middleware)
 // add request middleware
-// app.use(mount('/api', request(app.session)))
 app.use(request())
 
 // eslint-disable-next-line
