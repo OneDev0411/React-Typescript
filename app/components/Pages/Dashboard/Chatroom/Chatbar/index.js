@@ -15,11 +15,10 @@ const Chatbar = ({
 
   return (
     <Menu
-      noOverlay={false}
       isOpen={showChatbar}
       customBurgerIcon={false}
       customCrossIcon={false}
-      width={"26%"}
+      width={"340px"}
       onStateChange={({ isOpen }) => {
         if (showChatbar !== isOpen) {
           toggleChatbar()
