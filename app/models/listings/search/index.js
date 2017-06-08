@@ -3,30 +3,12 @@ import { normalize } from 'normalizr'
 import * as schema from '../schema'
 
 const prepareListignsForMap = listings =>
-  listings.map((listing) => {
-    let lat
-    let lng
-
-    if (listing.location) {
-      lat = listing.location.latitude
-      lng = listing.location.longitude
-    }
-
-    if (listing.property && listing.property.address) {
-      lat = listing.property.address.location.latitude
-      lng = listing.property.address.location.longitude
-    }
-
-    if (lat && lng) {
-      return {
-        ...listing,
-        numPoints: 1,
-        list: { ...listing },
-        lat,
-        lng
-      }
-    }
-  })
+  listings.map(list => ({
+    ...list,
+    list,
+    lat: list.location.latitude,
+    lng: list.location.longitude
+  }))
 
 
 export const fetchListings = async (options) => {

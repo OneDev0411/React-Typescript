@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
 
@@ -7,34 +8,33 @@ import * as actions from
   '../../../../../store_actions/listings/search'
 import { getListings } from '../../../../../reducers/listings'
 
-class Search extends Component {
-  componentDidMount() {
-    const { listings, isFetching } = this.props
+let mapOnChangeDebounce = 0
 
-    if (!isFetching && !listings.length) {
-      this.fetchData()
+class Search extends Component {
+
+  componentWillReceiveProps(nextProps) {
+    const { mapProps: nextMapProps } = nextProps
+    const { mapProps, fetchListings } = this.props
+
+    if (!_.isEqual(mapProps, nextMapProps)) {
+      if (!mapOnChangeDebounce) {
+        mapOnChangeDebounce = 1
+        fetchListings(nextMapProps)
+      } else {
+        clearTimeout(mapOnChangeDebounce)
+        mapOnChangeDebounce = setTimeout(() => {
+          fetchListings(nextMapProps)
+          clearTimeout(mapOnChangeDebounce)
+        }, 300)
+      }
     }
   }
 
-  fetchData() {
-    const {
-      mapProps,
-      fetchListings
-    } = this.props
-
-    fetchListings(mapProps)
-  }
-
   render() {
-    const {
-      listings,
-      isFetching
-    } = this.props
-
     return (
       <div>
-        {isFetching && <Loading text="MLS®" />}
-        <GMap />
+        {this.props.isFetching && <Loading text="MLS®" />}
+        <GMap {...this.props} />
       </div>
     )
   }
@@ -43,10 +43,11 @@ class Search extends Component {
 const mapStateToProps = ({
   search
 }) => {
-  const { listings } = search
+  const { listings, map } = search
   return ({
-    mapProps: search.mapProps,
-    listings: getListings(listings),
+    map,
+    mapProps: map.props,
+    markers: getListings(listings),
     isFetching: listings.isFetching
   })
 }

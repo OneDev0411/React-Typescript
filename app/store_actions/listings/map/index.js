@@ -1,5 +1,12 @@
 import * as types from '../../../constants/listings/map'
 
+
+export const setMapAutoMove = (name, move) => ({
+  name,
+  move,
+  type: types.SET_MAP_AUTO_MOVE
+})
+
 export const setMapProps = (name, mapProps) => ({
   name,
   mapProps,

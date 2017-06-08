@@ -55,8 +55,7 @@ const coordinator = (points) => {
   }
   return points
 }
-
-const setPositionToPointsWithSameCoordinate = (clusters) => {
+export const setPositionToPointsWithSameCoordinate = (clusters) => {
   let PointsWithSameCoordinate = []
   const pointsGroupByLat = _.groupBy(clusters, 'lat')
   Object.keys(pointsGroupByLat).forEach((key) => {

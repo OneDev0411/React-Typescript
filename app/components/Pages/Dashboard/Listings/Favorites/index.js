@@ -10,34 +10,24 @@ import { getListings } from '../../../../../reducers/listings'
 class Favorites extends Component {
   componentDidMount() {
     const {
-      listings,
-      isFetching
-    } = this.props
-
-    if (!isFetching && !listings.length) {
-      this.fetchData()
-    }
-  }
-
-  fetchData() {
-    const {
       user,
+      listings,
+      isFetching,
       fetchFavorites
     } = this.props
 
-    fetchFavorites(user)
+    if (!isFetching && !listings.length) {
+      fetchFavorites(user)
+    }
   }
 
   render() {
-    const {
-      listings,
-      isFetching
-    } = this.props
+    const { listings, isFetching } = this.props
 
     return (
       <div>
         {isFetching && <Loading text="Favorites" />}
-        <GMap listings={listings} />
+        <GMap markers={listings} />
       </div>
     )
   }
