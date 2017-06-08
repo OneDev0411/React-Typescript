@@ -100,45 +100,44 @@ export default ({
     dangerouslySetInnerHTML={{ __html: getMessageText(message) }}
   />
 
+  let alert_message
+  let recommendation_message
+
+  if (alert) {
+    alert_message = <AlertMessage
+      alert={alert}
+    />
+  }
+
+  if (message.recommendation) {
+    recommendation_message = <RecommendationMessage
+      author={author}
+      user={user}
+      recommendation={message.recommendation}
+      message={message}
+      comment={comment}
+    />
+  }
+
   return (
-    <Row>
-      <Col md={2} sm={4} xs={6}>
+    <div className="message-item">
+      <div className="avatar">
         <UserAvatar
           userId={author.id}
           name={author.display_name}
           image={author.profile_image_url}
           size={35}
         />
-      </Col>
+      </div>
 
-      <Col md={9} sm={8} xs={6}>
+      <div className="content">
         <div className="title">
           { author && author.abbreviated_display_name }
         </div>
         { comment }
-      </Col>
-    </Row>
+        { alert_message }
+        { recommendation_message }
+      </div>
+    </div>
   )
-
-  // if (alert) {
-  //   return <AlertMessage
-  //     alert={alert}
-  //   />
-  // }
-
-  // if (message.recommendation) {
-  //   return <RecommendationMessage
-  //     author={author}
-  //     user={user}
-  //     recommendation={message.recommendation}
-  //     message={message}
-  //     comment={comment}
-  //   />
-  // }
-
-  // return <TextMessage
-  //   author={author}
-  //   message={message}
-  //   comment={comment}
-  // />
 }
