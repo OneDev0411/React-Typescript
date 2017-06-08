@@ -3,12 +3,12 @@ import mount from 'koa-mount'
 import serve from 'koa-static'
 import views from 'koa-views'
 import cookie from 'koa-cookie'
+import session from 'koa-session'
 import path from 'path'
 import webpack from 'webpack'
-import session from 'koa-session'
-// import RedisStore from 'koa2-session-redis'
 import _ from 'underscore'
 
+// import createSession from './util/session'
 import universalMiddleware from './util/universal'
 import pagesMiddleware from './util/pages'
 import render from './util/render'
@@ -60,9 +60,9 @@ app.use(render())
  * middleware for session
  */
 app.keys = ['r3ch4t@re4ct_rocks!!!']
+
 app.use(session({
   key: 'rechat-webapp:session',
-  // store: new RedisStore(),
   maxAge: 86400000,
   overwrite: true,
   httpOnly: true,
@@ -81,8 +81,10 @@ app.use(async function(ctx, next) {
   await next()
 })
 
+// console.log(app.middleware)
 // add request middleware
-app.use(mount('/api', request))
+// app.use(mount('/api', request(app.session)))
+app.use(request())
 
 // eslint-disable-next-line
 _.each(require('./api/routes'), function(r) {

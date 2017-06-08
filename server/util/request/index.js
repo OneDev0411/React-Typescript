@@ -1,11 +1,12 @@
 import Koa from 'koa'
 import superagent from 'superagent'
 import request from 'request'
+import createSession from '../session'
 import config from '../../../config/private'
 
-const app = new Koa()
-
 const requestMiddleware = async function (ctx, next) {
+  if (ctx.req.url.startsWith('/api') === false)
+    return await next()
 
   ctx.config = config
   const api_url = config.api.url
@@ -32,7 +33,7 @@ const requestMiddleware = async function (ctx, next) {
       url = `${url}?hostname=${host_name}`
     }
 
-    console.log(`[ + ] ${method.toUpperCase()} ${api_url}${url}`)
+    // console.log(`[ + ] ${method.toUpperCase()} ${api_url}${url}`)
 
     try {
       return agent[method.toLowerCase()](`${api_url}${url}`)
@@ -93,4 +94,6 @@ const requestMiddleware = async function (ctx, next) {
   await next()
 }
 
-module.exports = app.use(requestMiddleware)
+export default function() {
+  return requestMiddleware
+}
