@@ -16,20 +16,23 @@ $rooms-padding: 2.5vw;
 }
 
 .chatroom-fullscreen {
-  position: absolute;
+  position: fixed;
   z-index: 200;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   overflow: hidden;
+  transition: 0.5s;
   background-color: #fff;
+
   .chatroom {
     margin-left: 0;
-  }
-  .rooms {
-    .list {
-      padding-bottom: 4vh;
+    position: relative !important;
+    .rooms {
+      .list {
+        padding-bottom: 4vh;
+      }
     }
   }
 }
@@ -55,15 +58,7 @@ $rooms-padding: 2.5vw;
     padding-top: 3vh;
     padding-bottom: 2vh;
     .message-item {
-      &.queued {}
       @extend %message-item;
-      .recommendation {
-        @extend %message-item-recommendation;
-      }
-
-      .alert {
-
-      }
     }
   }
 
@@ -100,21 +95,37 @@ $rooms-padding: 2.5vw;
 }
 
 %message-item {
-  margin-bottom: 20px;
-  padding: 0 2vw 0 3vw;
-  .title {
-    font-weight: bold;
-    font-size: 15px;
+  $left-w: 50px;
+  margin: 0 10px 15px 26px;
+  min-height: 40px;
+  .avatar {
+    float: left;
+    width: $left-w;
+  }
+  .content {
+    margin-left: $left-w;
+    .title {
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .recommendation {
+      @extend %message-item-recommendation;
+    }
+
+    .alert {
+
+    }
   }
 }
 
 %message-item-recommendation{
-  width: 70%;
+  width: 30%;
   img {
     width: 100%;
+    border-radius: 4px;
   }
   .card {
-    border: 1px solid #eee;
     .info {
       padding: 10px;
     }
@@ -130,19 +141,22 @@ $rooms-padding: 2.5vw;
   top: 0;
   left: 0;
   width: 100%;
-  background-color: #303E4D;
-  padding: 3% 1% 1% 3vw;
+  background-color: #edeff2;
+  padding: 20px 0 24px 26px;
   margin-bottom: 2vh;
-  height: 8vh;
-  color: #fff;
+  height: 66px;
+  color: #4a494a;
   border-left: 1px solid #fff;
+  font-weight: bold;
+  font-size: 17px;
 }
 
 /**
 * Rooms
 */
 %rooms {
-  background-color: #303E4D;
+  background-color: #263445;
+  min-height: 100vh;
   .section-title {
     color: yellow;
     font-weight: bold;
@@ -172,7 +186,34 @@ $rooms-padding: 2.5vw;
 }
 
 %rooms-toolbar {
-  padding: 10px $rooms-padding 10px $rooms-padding;
+  padding: 20px $rooms-padding 0 $rooms-padding;
+  .toggle-bar {
+    margin-left: 5px;
+    color: #b2b2b2;
+    float: right;
+    background-color: #394553;
+    height: 30px;
+    padding: 0px 4px;
+    border-radius: 4px;
+    width: 30px;
+    text-align: center;
+  }
+  input {
+    background-color: #394553;
+    color: #fff;
+    border-radius: 4px;
+    border: none;
+    width: 230px;
+    height: 30px;
+    &::-webkit-input-placeholder{
+      text-align: center;
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
+  }
 }
 
 %room-item {
@@ -187,25 +228,31 @@ $rooms-padding: 2.5vw;
     margin-right: 10px;
   }
   .title {
-    padding: 6px 0 0 0;
+    padding: 6px 0 0 8px;
+    opacity: 0.5;
+  }
+  .notifications {
+    text-align: center;
+    padding-top: 4px;
+    .count {
+      padding: 2px;
+      border-radius: 10px;
+      font-size: 11px;
+      min-width: 30px;
+      display: inline-block;
+      background-color: #2196f3;
+    }
   }
   &:hover {
-    background-color: #465A71;
+    background-color: rgba(0, 0, 0, 0.3);
   }
   &.active {
-    background-color: green;
-  }
-}
-
-.bm-menu-wrap {
-  z-index: 101 !important;
-  background-color: #303E4D;
-  color: #fff;
-  .rooms {
-    @extend %rooms;
-    .list-container {
-      max-height: 88vh;
-      min-height: 88vh;
+    background-color: #2196f3;
+    .title {
+      opacity: 1;
+    }
+    .notifications {
+      display: none;
     }
   }
 }
@@ -275,7 +322,7 @@ $rooms-padding: 2.5vw;
     overflow: auto;
     padding-bottom: 0;
     .message-item {
-      padding: 0 10px 0 15px !important;
+      margin: 0 10px 10px 15px !important;
       margin-bottom: 0;
     }
   }
@@ -304,4 +351,22 @@ $rooms-padding: 2.5vw;
   .loading {
     height: 44vh;
   }
+}
+
+/* bm-menu */
+.bm-menu-wrap {
+  z-index: 101 !important;
+  background-color: #263445;
+  color: #fff;
+  .rooms {
+    @extend %rooms;
+    .list-container {
+      max-height: 88vh;
+      min-height: 88vh;
+    }
+  }
+}
+
+.bm-overlay {
+  z-index: 99 !important;
 }
