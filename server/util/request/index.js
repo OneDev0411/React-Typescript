@@ -1,7 +1,6 @@
 import Koa from 'koa'
 import superagent from 'superagent'
 import request from 'request'
-import createSession from '../session'
 import config from '../../../config/private'
 
 const requestMiddleware = async function (ctx, next) {

@@ -8,7 +8,6 @@ import path from 'path'
 import webpack from 'webpack'
 import _ from 'underscore'
 
-// import createSession from './util/session'
 import universalMiddleware from './util/universal'
 import pagesMiddleware from './util/pages'
 import render from './util/render'
