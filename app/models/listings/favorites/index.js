@@ -40,8 +40,16 @@ export const fetchFavorites = async (user = {}) => {
     const response = await new Fetch()
       .get(`/rooms/${personal_room}/recs/favorites`)
 
-    const listings = getFavorateListingsData(response.body.data)
-    return normalize(listings, schema.listingsList)
+    const { code, info, data } = response.body
+    const listings = getFavorateListingsData(data)
+    const normilizedListings = normalize(listings, schema.listingsList)
+    return {
+      ...normilizedListings,
+      status: {
+        code,
+        ...info
+      }
+    }
   } catch (error) {
     throw error
   }

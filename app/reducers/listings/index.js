@@ -24,6 +24,15 @@ const allIds = (state = [], action) => {
   }
 }
 
+const status = (state = {}, action) => {
+  switch (action.type) {
+    case FETCH_LISTINGS_SUCCESS:
+      return action.response.status
+    default:
+      return state
+  }
+}
+
 const isFetching = (state = false, action) => {
   switch (action.type) {
     case FETCH_LISTINGS_REQUEST:
@@ -51,6 +60,7 @@ const errorMessage = (state = null, action) => {
 const listings = combineReducers({
   byId,
   allIds,
+  status,
   isFetching,
   errorMessage
 })

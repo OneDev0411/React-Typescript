@@ -21,8 +21,16 @@ export const fetchListings = async (options) => {
       .post('/valerts')
       .send(options)
 
-    const listings = prepareListignsForMap(response.body.data)
-    return normalize(listings, schema.listingsList)
+    const { code, info, data } = response.body
+    const listings = prepareListignsForMap(data)
+    const normilizedListings = normalize(listings, schema.listingsList)
+    return {
+      ...normilizedListings,
+      status: {
+        code,
+        ...info
+      }
+    }
   } catch (error) {
     throw error
   }
