@@ -4,9 +4,6 @@ import request from 'request'
 import config from '../../../config/private'
 
 const requestMiddleware = async function (ctx, next) {
-  if (ctx.req.url.startsWith('/api') === false)
-    return await next()
-
   ctx.config = config
   const api_url = config.api.url
   const access_token = ctx.request.query.access_token

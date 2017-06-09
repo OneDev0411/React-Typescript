@@ -1,6 +1,8 @@
 import Koa from 'koa'
 import mount from 'koa-mount'
 import config from '../../../config/private'
+import handle490 from './490.js'
+
 const _ = require('underscore')
 
 const app = new Koa()
@@ -25,6 +27,8 @@ const routes = {
     [ 'phone' ]
   ]
 }
+
+app.use(handle490)
 
 app.use(async function(ctx, next) {
   ctx.config = config
