@@ -9,7 +9,7 @@ const ZoomButton = ({
   return (
     <Button
       bsSize="large"
-      className="c-map__zoom-controller__button"
+      className="c-zoom-controller__button"
       onClick={(e) => {
         onClick(type)
         e.currentTarget.blur()
@@ -25,7 +25,7 @@ const ZoomController = ({
 }) => (
   <ButtonGroup
     vertical
-    className="c-map__zoom-controller"
+    className="c-zoom-controller"
   >
     <ZoomButton onClick={onClickZoomHandler} type="IN" />
     <ZoomButton onClick={onClickZoomHandler} type="OUT" />

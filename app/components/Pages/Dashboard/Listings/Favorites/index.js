@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
 
-import GMap from './GMap'
+import GMap from './components/GMap'
 import Loading from '../components/Loading'
 import * as actions from
   '../../../../../store_actions/listings/favorites'

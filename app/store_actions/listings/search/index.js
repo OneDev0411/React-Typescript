@@ -4,7 +4,7 @@ import { getIsFetchingStatus } from '../../../reducers/listings'
 import { queryOptions } from
   '../../../components/Pages/Dashboard/Mls/Partials/MlsMapOptions'
 
-const QUERY_LIMIT = 150
+const QUERY_LIMIT = 50
 
 const getQueryPoints = bounds => ([
   {

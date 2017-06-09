@@ -9,16 +9,16 @@ import withHandlers from 'recompose/withHandlers'
 import { fitBounds } from 'google-map-react/utils'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 
-import controller from '../../controller'
-import ZoomController from '../components/ZoomController'
-import { getListings } from '../../../../../reducers/listings'
-import SimpleMarker from '../../Mls/Partials/Markers/SingleMarker'
-import ClusterMarker from '../../Mls/Partials/Markers/ClusterMarker'
-import * as actions from '../../../../../store_actions/listings/map'
+import controller from '../../../controller'
+import ZoomController from '../../components/ZoomController'
+import { getListings } from '../../../../../../reducers/listings'
+import SimpleMarker from '../../../Mls/Partials/Markers/SingleMarker'
+import ClusterMarker from '../../../Mls/Partials/Markers/ClusterMarker'
+import * as actions from '../../../../../../store_actions/listings/map'
 import { setPositionToPointsWithSameCoordinate } from
-  '../../Mls/Partials/MlsMap'
+  '../../../Mls/Partials/MlsMap'
 import { bootstrapURLKeys, mapOptions, mapInitialState } from
-  '../../Mls/Partials/MlsMapOptions'
+  '../../../Mls/Partials/MlsMapOptions'
 
 const DECLUSTER_ZOOM_LEVEL = 16
 
@@ -133,21 +133,18 @@ export const searchMap = ({
 export const searchMapHOC = compose(
   defaultProps({
     clusterRadius: 60,
-    clusterOptions: {
-      minZoom: 12,
-      maxZoom: DECLUSTER_ZOOM_LEVEL - 1
-    },
-    style: {
-      position: 'relative',
-      height: 'calc(100vh - 65px)',
-      margin: 0,
-      padding: 0,
-      flex: 1
-    },
     bootstrapURLKeys,
     options: mapOptions,
     defaultZoom: mapInitialState.zoom,
-    defaultCenter: mapInitialState.center
+    defaultCenter: mapInitialState.center,
+    style: {
+      position: 'relative',
+      height: 'calc(100vh - 55px)'
+    },
+    clusterOptions: {
+      minZoom: 12,
+      maxZoom: DECLUSTER_ZOOM_LEVEL - 1
+    }
   }),
   connect(
     ({ data }) => ({

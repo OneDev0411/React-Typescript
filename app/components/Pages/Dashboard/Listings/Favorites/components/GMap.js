@@ -8,11 +8,11 @@ import defaultProps from 'recompose/defaultProps'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 
-import controller from '../../controller'
-import ZoomController from '../components/ZoomController'
-import Marker from '../../Mls/Partials/Markers/SingleMarker'
-import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../Mls/Partials/MlsMapOptions'
-import * as actions from '../../../../../store_actions/listings/map'
+import controller from '../../../controller'
+import ZoomController from '../../components/ZoomController'
+import Marker from '../../../Mls/Partials/Markers/SingleMarker'
+import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../../Mls/Partials/MlsMapOptions'
+import * as actions from '../../../../../../store_actions/listings/map'
 
 export const searchMap = ({
   style,
@@ -73,10 +73,7 @@ export const searchMapHOC = compose(
     defaultCenter: mapInitialState.center,
     style: {
       position: 'relative',
-      height: 'calc(100vh - 65px)',
-      margin: 0,
-      padding: 0,
-      flex: 1
+      height: 'calc(100vh - 55px)'
     }
   }),
   connect(
