@@ -2,13 +2,15 @@ import _ from 'lodash'
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
 
-import GMap from './components/GMap'
+import Map from './components/Map'
 import Loading from '../components/Loading'
+import SearchToolbar from './components/SearchToolbar'
+import { getListings } from '../../../../../reducers/listings'
+
 import * as searchActions from
   '../../../../../store_actions/listings/search'
 import * as favoritesActions from
   '../../../../../store_actions/listings/favorites'
-import { getListings } from '../../../../../reducers/listings'
 
 if (typeof window !== 'undefined') {
   window.requestIdleCallback = window.requestIdleCallback ||
@@ -39,6 +41,10 @@ class Search extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    this._fetchSearchListings(nextProps)
+  }
+
+  _fetchSearchListings(nextProps) {
     const { mapProps: nextMapProps } = nextProps
     const { mapProps, fetchListings } = this.props
 
@@ -74,7 +80,8 @@ class Search extends Component {
     return (
       <div>
         {this.props.isFetching && <Loading text="MLS®" />}
-        <GMap {...this.props} />
+        <Map {...this.props} />
+        <SearchToolbar />
       </div>
     )
   }

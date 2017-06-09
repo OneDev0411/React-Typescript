@@ -14,7 +14,7 @@ import Marker from '../../../Mls/Partials/Markers/SingleMarker'
 import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../../Mls/Partials/MlsMapOptions'
 import * as actions from '../../../../../../store_actions/listings/map'
 
-export const searchMap = ({
+const map = ({
   style,
   markers,
   appData,
@@ -65,7 +65,7 @@ export const searchMap = ({
   </div>
 )
 
-export const searchMapHOC = compose(
+const mapHOC = compose(
   defaultProps({
     defaultZoom: 11,
     bootstrapURLKeys,
@@ -105,4 +105,4 @@ export const searchMapHOC = compose(
   })
 )
 
-export default searchMapHOC(searchMap)
+export default mapHOC(map)

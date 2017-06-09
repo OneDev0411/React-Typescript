@@ -71,7 +71,7 @@ const extendedBounds = (points, mapProps) => {
   }
 }
 
-export const searchMap = ({
+const map = ({
   style,
   appData,
   options,
@@ -130,7 +130,7 @@ export const searchMap = ({
   </div>
 )
 
-export const searchMapHOC = compose(
+const mapHOC = compose(
   defaultProps({
     clusterRadius: 60,
     bootstrapURLKeys,
@@ -229,4 +229,4 @@ export const searchMapHOC = compose(
   ),
 )
 
-export default searchMapHOC(searchMap)
+export default mapHOC(map)

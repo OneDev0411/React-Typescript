@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
 
-import GMap from './components/GMap'
+import Map from './components/Map'
 import Loading from '../components/Loading'
 import * as actions from
   '../../../../../store_actions/listings/favorites'
@@ -27,7 +27,7 @@ class Favorites extends Component {
     return (
       <div>
         {isFetching && <Loading text="Favorites" />}
-        <GMap markers={listings} />
+        <Map markers={listings} />
       </div>
     )
   }
