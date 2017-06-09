@@ -1,4 +1,4 @@
-$rooms-padding: 2.5vw;
+$rooms-padding: 20px;
 
 .chatroom {
   margin-left: 50px;
@@ -157,10 +157,10 @@ $rooms-padding: 2.5vw;
 %rooms {
   background-color: #263445;
   min-height: 100vh;
-  .section-title {
-    color: yellow;
-    font-weight: bold;
-    padding: 2vh 0 2vh $rooms-padding;
+  position: relative;
+
+  .toolbar {
+    @extend %rooms-toolbar;
   }
 
   .list-container {
@@ -173,8 +173,8 @@ $rooms-padding: 2.5vw;
     }
   }
 
-  .toolbar {
-    @extend %rooms-toolbar;
+  .new-room {
+    @extend %room-new;
   }
 }
 
@@ -185,33 +185,67 @@ $rooms-padding: 2.5vw;
   }
 }
 
-%rooms-toolbar {
-  padding: 20px $rooms-padding 0 $rooms-padding;
-  .toggle-bar {
-    margin-left: 5px;
-    color: #b2b2b2;
-    float: right;
-    background-color: #394553;
-    height: 30px;
-    padding: 0px 4px;
-    border-radius: 4px;
-    width: 30px;
-    text-align: center;
+%room-new {
+  background-color: #394553;
+  position: absolute;
+  width: 290px;
+  height: 40px;
+  border-radius: 4px;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 40px;
+  color: #b2b2b2;
+  transition: 0.5s all ease-in;
+  i {
+    margin-right: 5px;
+    font-size: 18px;
+    vertical-align: middle;
   }
-  input {
-    background-color: #394553;
+  &:hover {
+    cursor: pointer;
     color: #fff;
-    border-radius: 4px;
-    border: none;
-    width: 230px;
-    height: 30px;
-    &::-webkit-input-placeholder{
-      text-align: center;
-    }
+  }
+}
 
-    &:focus {
-      outline: none;
-      box-shadow: none;
+%rooms-toolbar {
+  $search-width: 234px;
+  padding: 20px $rooms-padding 0 $rooms-padding;
+  height: 80px;
+  .search {
+    float: left;
+    width: $search-width;
+
+    input {
+      background-color: #394553;
+      color: #fff;
+      border-radius: 4px;
+      border: none;
+      height: 30px;
+      &::-webkit-input-placeholder{
+        text-align: center;
+      }
+      &:focus {
+        outline: none;
+        box-shadow: none;
+      }
+    }
+  }
+
+  .toggle-sidebar {
+    margin-left: $search-width + 20px;
+    height: 30px;
+    width: 30px;
+    background-color: #394553;
+    text-align: center;
+    border-radius: 4px;
+    padding: 0px 4px;
+
+    .btn-tgl {
+      color: #b2b2b2;
     }
   }
 }
