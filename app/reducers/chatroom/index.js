@@ -34,6 +34,9 @@ function toggleChatbar(state, action) {
  * enter in or close from instance mode
  */
 function toggleInstanceMode(state, action) {
+  // make under layer scroll hidden on fullscreen mode
+  document.body.style.overflow = state.instanceMode ? '' : 'hidden'
+
   return {
     ...state,
     ...{ instanceMode: !state.instanceMode }

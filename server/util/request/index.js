@@ -3,9 +3,9 @@ import superagent from 'superagent'
 import request from 'request'
 import config from '../../../config/private'
 
-const app = new Koa()
-
 const requestMiddleware = async function (ctx, next) {
+  if (ctx.req.url.startsWith('/api') === false)
+    return await next()
 
   ctx.config = config
   const api_url = config.api.url
@@ -93,4 +93,6 @@ const requestMiddleware = async function (ctx, next) {
   await next()
 }
 
-module.exports = app.use(requestMiddleware)
+export default function() {
+  return requestMiddleware
+}
