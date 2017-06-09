@@ -100,31 +100,33 @@ const Rooms = ({
   return (
     <div className="rooms">
       <div className="toolbar">
+        <div className="search">
+          <input
+            className="form-control filter"
+            type="text"
+            placeholder="Search"
+            onChange={e => changeFilter(e.target.value)}
+            value={filter}
+          />
+        </div>
 
-        <a
-          href="/dashboard/recents"
-          onClick={e => fullScreen(e)}
-          className="toggle-bar"
-        >
-          {
-            instanceMode ?
-            <i className="fa fa-angle-double-left fa-2x"></i> :
-            <i className="fa fa-angle-double-right fa-2x"></i>
-          }
-        </a>
+        <div className="toggle-sidebar">
+          <a
+            href="/dashboard/recents"
+            onClick={e => fullScreen(e)}
+            className="btn-tgl"
+          >
+            {
+              instanceMode ?
+              <i className="fa fa-angle-double-left fa-2x"></i> :
+              <i className="fa fa-angle-double-right fa-2x"></i>
+            }
+          </a>
+        </div>
 
-        <input
-          className="form-control filter"
-          type="text"
-          placeholder="Search"
-          onChange={e => changeFilter(e.target.value)}
-          value={filter}
-        />
       </div>
 
       <div className="list-container">
-        <div className="section-title">
-        </div>
         <div className="list">
           {
             _.chain(rooms)
@@ -155,6 +157,10 @@ const Rooms = ({
             .value()
           }
         </div>
+      </div>
+
+      <div className="new-room">
+        <i className="fa fa-edit"></i> New Message
       </div>
     </div>
   )
