@@ -18,7 +18,7 @@ const Chatbar = ({
       isOpen={showChatbar}
       customBurgerIcon={false}
       customCrossIcon={false}
-      width={"340px"}
+      width={"330px"}
       onStateChange={({ isOpen }) => {
         if (showChatbar !== isOpen) {
           toggleChatbar()

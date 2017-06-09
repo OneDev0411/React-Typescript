@@ -60,7 +60,7 @@ class Chatroom extends React.Component {
 
     return (
       <div className="chatroom">
-        <div className="col-md-1 no-padding" style={{ width: '340px' }}>
+        <div className="col-md-1 no-padding" style={{ width: '330px' }}>
           <Rooms
             user={user}
             onSelectRoom={id => this.changeRoom(id)}
@@ -68,7 +68,7 @@ class Chatroom extends React.Component {
           />
         </div>
 
-        <div className="col-md-1 no-padding" style={{ width: 'calc(100vw - 340px)' }}>
+        <div className="col-md-1 no-padding" style={{ width: 'calc(100vw - 330px)' }}>
           <Messages
             user={user}
             roomId={activeRoom}
