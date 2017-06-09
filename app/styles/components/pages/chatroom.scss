@@ -164,10 +164,9 @@ $rooms-padding: 20px;
   }
 
   .list-container {
-    max-height: 92.1vh;
-    min-height: 92.1vh;
     overflow: auto;
-
+    min-height: 81vh;
+    max-height: 81vh;
     .list {
       @extend %rooms-list;
     }
@@ -395,8 +394,8 @@ $rooms-padding: 20px;
   .rooms {
     @extend %rooms;
     .list-container {
-      max-height: 88vh;
-      min-height: 88vh;
+      max-height: 81vh;
+      min-height: 81vh;
     }
   }
 }
