@@ -213,7 +213,9 @@ $rooms-padding: 20px;
 %rooms-toolbar {
   $search-width: 234px;
   padding: 20px $rooms-padding 0 $rooms-padding;
-  height: 80px;
+  height: 70px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #212e3d;
   .search {
     float: left;
     width: $search-width;
