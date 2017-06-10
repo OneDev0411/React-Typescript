@@ -6,6 +6,8 @@ import { compose,  withState, lifecycle, pure } from 'recompose'
 import _ from 'underscore'
 import cn from 'classnames'
 import UserAvatar from '../../../../Partials/UserAvatar'
+import Compose from '../../../../Partials/Compose'
+
 import {
   toggleInstanceMode,
   changeActiveRoom,
@@ -15,7 +17,8 @@ import {
 
 const enhance = compose(
   pure,
-  withState('filter', 'changeFilter', ''),
+  withState('filter', 'onChangeFilter', ''),
+  withState('showComposeModal', 'onChangeCompose', false),
   connect(
     ({ chatroom }) => ({
       instanceMode: chatroom.instanceMode,
@@ -33,8 +36,12 @@ const Rooms = ({
   rooms,
   activeRoom,
   onSelectRoom,
-  changeFilter,
+  /* rooms filter */
+  onChangeFilter,
   filter,
+  /* show compose view */
+  onChangeCompose,
+  showComposeModal,
   /* mapped actions to dispatch */
   toggleInstanceMode,
   changeActiveRoom,
@@ -105,24 +112,27 @@ const Rooms = ({
             className="form-control filter"
             type="text"
             placeholder="Search"
-            onChange={e => changeFilter(e.target.value)}
+            onChange={e => onChangeFilter(e.target.value)}
             value={filter}
           />
         </div>
 
-        <div className="toggle-sidebar">
-          <a
-            href="/dashboard/recents"
-            onClick={e => fullScreen(e)}
-            className="btn-tgl"
-          >
-            {
-              instanceMode ?
-              <i className="fa fa-angle-double-left fa-2x"></i> :
-              <i className="fa fa-angle-double-right fa-2x"></i>
-            }
-          </a>
-        </div>
+        {
+          showChatbar &&
+          <div className="toggle-sidebar">
+            <a
+              href="/dashboard/recents"
+              onClick={e => fullScreen(e)}
+              className="btn-tgl"
+            >
+              {
+                instanceMode ?
+                <i className="fa fa-angle-double-left fa-2x"></i> :
+                <i className="fa fa-angle-double-right fa-2x"></i>
+              }
+            </a>
+          </div>
+        }
 
       </div>
 
@@ -159,9 +169,17 @@ const Rooms = ({
         </div>
       </div>
 
-      <div className="new-room">
+      <div
+        className="new-room"
+        onClick={() => onChangeCompose(!showComposeModal)}
+      >
         <i className="fa fa-edit"></i> New Message
       </div>
+
+      <Compose
+        show={true}
+        onHide={() => onChangeCompose(false)}
+      />
     </div>
   )
 }
