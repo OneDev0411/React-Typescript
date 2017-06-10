@@ -5,6 +5,10 @@ export default class Branch extends Component {
   componentDidMount() {
     const branch = require('branch-sdk')
     branch.init(config.branch.key, (err, data) => {
+
+      if (err)
+        data.data_parsed = {}
+
       let redirect = `/password/create?token=${data.data_parsed.token}`
       if (data.data_parsed.listing && data.data_parsed.listing !== 'undefined')
         redirect = `/dashboard/mls/${encodeURIComponent(data.data_parsed.listing)}?token=${data.data_parsed.token}`
