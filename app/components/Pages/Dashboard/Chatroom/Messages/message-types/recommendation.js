@@ -24,9 +24,7 @@ export default ({
   return (
     <div className="recommendation">
       <strong>
-        { author ? 'Shared a Home' : '' }:
-        { util.addressTitle(property.address) },
-        { property.address.postal_code }
+        Shared a Home
       </strong>
 
       <div className="card">
@@ -35,17 +33,7 @@ export default ({
           <img src={listing.cover_image_url} />
         }
 
-        <div className="info">
-          <div>price: ${ getPrice(listing, user) }</div>
 
-          { property.bedroom_count } Beds<br/>
-          { property.bathroom_count } Bath<br/>
-          { util.metersToFeet(property.square_meters) } Sqft<br />
-          Built in { property.year_built }
-          <div className="message">
-            "{comment}"
-          </div>
-        </div>
       </div>
     </div>
   )
