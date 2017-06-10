@@ -8,6 +8,9 @@ import Messages from './Messages'
 import { getRooms, changeActiveRoom } from '../../../../store_actions/chatroom'
 import store from '../../../../stores'
 
+// set rooms container width
+const roomsWidth = '330px'
+
 class Chatroom extends React.Component {
   static fetchData(dispatch, params) {
     const { user } = params
@@ -41,26 +44,33 @@ class Chatroom extends React.Component {
   }
 
   changeRoom(id) {
-    const { changeActiveRoom, activeRoom, location } = this.props
+    const { instanceMode, changeActiveRoom, activeRoom, location } = this.props
 
     if (id !== activeRoom)
       changeActiveRoom(id)
 
     // don't change url on instance mode
-    if (this.props.location) {
+    if (!instanceMode) {
       browserHistory.push(`/dashboard/recents/${id}`)
     }
+  }
+
+  getMessagesWidth() {
+    const { instanceMode } = this.props
+    const width = instanceMode ? roomsWidth : `calc(65px + ${roomsWidth})`
+
+    return `calc(100vw - ${width})`
   }
 
   render() {
     const { user, activeRoom } = this.props
 
-    if (!activeRoom)
-      return false
+    // if (!activeRoom)
+      // return false
 
     return (
       <div className="chatroom">
-        <div className="col-md-1 no-padding" style={{ width: '330px' }}>
+        <div className="col-md-1 no-padding" style={{ width: roomsWidth }}>
           <Rooms
             user={user}
             onSelectRoom={id => this.changeRoom(id)}
@@ -68,7 +78,10 @@ class Chatroom extends React.Component {
           />
         </div>
 
-        <div className="col-md-1 no-padding" style={{ width: 'calc(100vw - 330px)' }}>
+        <div
+          className="col-md-1 no-padding"
+          style={{ width: this.getMessagesWidth() }}
+        >
           <Messages
             user={user}
             roomId={activeRoom}
