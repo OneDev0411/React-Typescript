@@ -5,14 +5,14 @@ import config from '../../config/public'
 const API_HOST = config.api_url
 const PROXY_HOST = config.app.url
 
-const getRequest = (url, token) => new Request(url, {
+export const getRequest = (url, token) => new Request(url, {
   method: 'GET',
   headers: new Headers({
     Authorization: `Bearer ${token}`,
     'Content-Type': 'application/json'
   })
 })
-const postRequest = (url, body) => new Request(url, {
+export const postRequest = (url, body) => new Request(url, {
   method: 'POST',
   headers: new Headers({
     'Content-Type': 'application/json'
@@ -20,7 +20,7 @@ const postRequest = (url, body) => new Request(url, {
   body: JSON.stringify(body)
 })
 
-const asyncRequest = async (request) => {
+export const asyncRequest = async (request) => {
   try {
     const response = await fetch(request)
     if (response.status >= 200 && response.status < 300) {

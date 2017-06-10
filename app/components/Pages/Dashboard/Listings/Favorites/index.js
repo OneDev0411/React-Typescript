@@ -5,7 +5,7 @@ import Map from './components/Map'
 import Loading from '../components/Loading'
 import * as actions from
   '../../../../../store_actions/listings/favorites'
-import { getListings } from '../../../../../reducers/listings'
+import { selectListings } from '../../../../../reducers/listings'
 
 class Favorites extends Component {
   componentDidMount() {
@@ -40,7 +40,7 @@ const mapStateToProps = ({
   const { listings } = favorites
   return ({
     user: data.user,
-    listings: getListings(listings),
+    listings: selectListings(listings),
     isFetching: listings.isFetching
   })
 }

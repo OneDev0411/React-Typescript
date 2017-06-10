@@ -67,7 +67,7 @@ const listings = combineReducers({
 
 export default listings
 
-export const getListings = state =>
+export const selectListings = state =>
   state.allIds.map(id => state.byId[id])
 
 export const getIsFetchingStatus = state => state.isFetching

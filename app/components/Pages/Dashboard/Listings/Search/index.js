@@ -5,32 +5,16 @@ import React, { Component } from 'react'
 import Map from './components/Map'
 import Loading from '../components/Loading'
 import SearchToolbar from './components/SearchToolbar'
-import { getListings } from '../../../../../reducers/listings'
+import { selectListings } from '../../../../../reducers/listings'
 
-import * as searchActions from
-  '../../../../../store_actions/listings/search'
-import * as favoritesActions from
-  '../../../../../store_actions/listings/favorites'
-
-if (typeof window !== 'undefined') {
-  window.requestIdleCallback = window.requestIdleCallback ||
-    function rIC(cb) {
-      return setTimeout(() => {
-        const start = Date.now()
-        cb({
-          didTimeout: false,
-          timeRemaining: () => Math.max(0, 50 - (Date.now() - start))
-        })
-      }, 1)
-    }
-
-  window.cancelIdleCallback = window.cancelIdleCallback ||
-    function rIC(cb) { return clearTimeout(id) }
-}
+import getFavorites from
+  '../../../../../store_actions/listings/favorites/get-favorites'
+import getListings from
+  '../../../../../store_actions/listings/search/get-listings'
 
 const actions = {
-  ...searchActions,
-  ...favoritesActions
+  getListings,
+  getFavorites
 }
 
 let mapOnChangeDebounce = 0
@@ -46,16 +30,16 @@ class Search extends Component {
 
   _fetchSearchListings(nextProps) {
     const { mapProps: nextMapProps } = nextProps
-    const { mapProps, fetchListings } = this.props
+    const { mapProps, getListings } = this.props
 
     if (!_.isEqual(mapProps, nextMapProps)) {
       if (!mapOnChangeDebounce) {
         mapOnChangeDebounce = 1
-        fetchListings(nextMapProps)
+        getListings(nextMapProps)
       } else {
         clearTimeout(mapOnChangeDebounce)
         mapOnChangeDebounce = setTimeout(() => {
-          fetchListings(nextMapProps)
+          getListings(nextMapProps)
           clearTimeout(mapOnChangeDebounce)
         }, 300)
       }
@@ -63,16 +47,14 @@ class Search extends Component {
   }
 
   _fetchFavorites() {
-    if ('requestIdleCallback' in window) {
-      const {
-        user,
-        fetchFavorites,
-        favoritesListings
-      } = this.props
+    const {
+      user,
+      getFavorites,
+      favoritesListings
+    } = this.props
 
-      if (!favoritesListings.length) {
-        fetchFavorites(user)
-      }
+    if (!favoritesListings.length) {
+      getFavorites(user)
     }
   }
 
@@ -98,9 +80,9 @@ const mapStateToProps = ({
     map,
     user: data.user,
     mapProps: map.props,
-    markers: getListings(searchListings),
     isFetching: searchListings.isFetching,
-    favoritesListings: getListings(favoritesListings)
+    markers: selectListings(searchListings),
+    favoritesListings: selectListings(favoritesListings)
   })
 }
 

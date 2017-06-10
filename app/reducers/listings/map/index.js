@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux'
 import {
+  MOVE_MAP,
   SET_MAP_PROPS,
   SET_MAP_ZOOM_IN,
   SET_MAP_ZOOM_OUT,
-  SET_MAP_AUTO_MOVE,
+  SET_ON_MAP_AUTO_MOVE,
+  SET_OFF_MAP_AUTO_MOVE,
   SET_MAP_HOVERED_MARKER_ID } from '../../../constants/listings/map'
 
 // initial map options(props) schema
@@ -43,8 +45,10 @@ const props = (state = {}, action) => {
 
 const autoMove = (state = false, action) => {
   switch (action.type) {
-    case SET_MAP_AUTO_MOVE:
-      return !state.autoMove
+    case SET_ON_MAP_AUTO_MOVE:
+      return true
+    case SET_OFF_MAP_AUTO_MOVE:
+      return false
     default:
       return state
   }
@@ -66,3 +70,5 @@ const map = combineReducers({
 })
 
 export default map
+
+export const isAutoMove = state => state.autoMove

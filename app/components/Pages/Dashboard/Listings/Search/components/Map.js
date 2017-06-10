@@ -154,7 +154,10 @@ const mapHOC = compose(
   ),
   // describe events
   withHandlers({
-    onChange: ({ setMapProps }) => (gmap) => {
+    onChange: ({ setOffMapAutoMove, setMapProps, map }) => (gmap) => {
+      if (map.autoMove) {
+        setOffMapAutoMove()
+      }
       setMapProps('SEARCH', gmap)
     },
     onClickZoomHandler: ({ updateMapZoom }) => (zoomType) => {
