@@ -137,14 +137,17 @@ $rooms-padding: 20px;
 }
 
 %messages-toolbar {
+  $el-height: 66px;
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   background-color: #edeff2;
-  padding: 20px 0 24px 26px;
+  padding-left: 26px;
   margin-bottom: 2vh;
-  height: 66px;
+  height: $el-height;
+  line-height: $el-height;
+  vertical-align: middle;
   color: #4a494a;
   border-left: 1px solid #fff;
   font-weight: bold;
