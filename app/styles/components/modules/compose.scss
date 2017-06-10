@@ -1,0 +1,51 @@
+.compose-modal {
+  .modal-body {
+    @extend %compose-modal-body;
+  }
+}
+
+%compose-modal-body {
+  min-height: 350px;
+  max-height: 350px;
+  overflow: auto;
+  .tags-container {
+    @extend %compose-modal--tags-container;
+  }
+}
+
+%compose-modal--tags-container {
+  min-height: 50px;
+  padding: 10px 16.5px;
+  border-radius: 3px;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  background-color: rgba(250, 250, 250, 0.9);
+  border: solid 1px #e2e2e2;
+  .to {
+    letter-spacing: -0.2px;
+    color: #8e8e93;
+    margin-right: 5px;
+  }
+  .tag {
+    background-color: #2196f3;
+    border-radius: 3px;
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    vertical-align: middle;
+    margin: 0 5px 8px 0;
+    padding: 0 7px;
+    color: #fff;
+  }
+
+  input {
+    height: 23px;
+    max-width: 240px;
+    margin-left: 15px;
+    background-color: transparent;
+    border: none;
+    &:focus {
+      outline: 0;
+    }
+  }
+}
