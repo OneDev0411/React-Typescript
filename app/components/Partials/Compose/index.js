@@ -8,7 +8,8 @@ class Compose extends React.Component {
     super(props)
     this.state = {
       criteria: '',
-      viewList: {}
+      viewList: {},
+      members: {}
     }
   }
 
@@ -30,14 +31,42 @@ class Compose extends React.Component {
     })
   }
 
+  onAdd(item) {
+    const members = {
+      ...this.state.members,
+      ...{[item.id]: item}
+    }
+
+    this.setState({ members })
+  }
+
+  onRemove(item) {
+    const members = _.omit(this.state.members, (member, id) => id === item.id)
+    this.setState({ members })
+  }
+
   render() {
-    const { criteria, viewList } = this.state
+    const { criteria, viewList, members } = this.state
 
     return (
       <div className="compose">
         <div className="tags-container">
           <span className="to">To: </span>
-          <span className="tag">ABCDEFG</span>
+
+          {
+            _.map(members, member =>
+              <span
+                key={`MBMR_${member.id}`}
+                className="tag"
+              >
+                { member.display_name }
+                <i
+                  className="fa fa-times"
+                  onClick={() => this.onRemove(member)}
+                ></i>
+              </span>
+            )
+          }
 
           <AutosizeInput
             value={criteria}
@@ -52,8 +81,9 @@ class Compose extends React.Component {
           {
             _.map(viewList, item =>
               <div
-                className="item"
                 key={`ITEM_SUG_${item.id}`}
+                className="item"
+                onClick={() => this.onAdd(item)}
               >
                 { item.display_name }
               </div>
