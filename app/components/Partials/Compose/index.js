@@ -3,6 +3,7 @@ import AutosizeInput from 'react-input-autosize'
 import Rx from 'rxjs/Rx'
 import _ from 'underscore'
 import Fetch from '../../../services/fetch'
+import UserAvatar from '../UserAvatar'
 
 class Compose extends React.Component {
   constructor(props) {
@@ -51,13 +52,14 @@ class Compose extends React.Component {
       return this.setState({ viewList })
 
     const users = await this.searchInUsers(this.criteria)
-    _.each(users, user => {
+    users.forEach(user => {
       viewList = {
         ...viewList,
         ...{[user.id]: {
           type: 'user',
           id: user.id,
           display_name: user.display_name,
+          image: user.profile_image_url,
           email: user.email,
           phone_number: user.email
         }}
@@ -68,13 +70,14 @@ class Compose extends React.Component {
     this.setState({ viewList })
 
     const contacts = await this.searchInContacts(this.criteria)
-    _.each(contacts, contact => {
-      _.each(contact.users, user => {
+    contacts.forEach(contact => {
+      contact.users.forEach(user => {
         viewList = {
           ...{[user.id]: {
             type: 'user',
             id: user.id,
             display_name: user.display_name,
+            image: user.profile_image_url,
             email: user.email,
             phone_number: user.email
           }},
@@ -119,6 +122,9 @@ class Compose extends React.Component {
 
     // reset search input text
     this.getSearchInput().value = ''
+
+    // set focus on search
+    this.getSearchInput().focus()
   }
 
   onRemove(recipient) {
@@ -131,6 +137,9 @@ class Compose extends React.Component {
 
     // change recipients
     onChangeRecipients(recipients)
+
+    // set focus on search
+    this.getSearchInput().focus()
   }
 
   render() {
@@ -143,16 +152,23 @@ class Compose extends React.Component {
 
           {
             _.map(recipients, recipient =>
-              <span
+              <div
                 key={`ITEM_${recipient.id}`}
                 className="tag"
               >
-                { recipient.display_name }
+                <UserAvatar
+                  showStateIndicator={false}
+                  name={recipient.display_name}
+                  image={recipient.image}
+                  size={22}
+                />
+
+                <span>{ recipient.display_name }</span>
                 <i
                   className="fa fa-times"
                   onClick={() => this.onRemove(recipient)}
                 ></i>
-              </span>
+              </div>
             )
           }
 
@@ -172,6 +188,14 @@ class Compose extends React.Component {
                 className="item"
                 onClick={() => this.onAdd(recp)}
               >
+                <div className="avatar">
+                  <UserAvatar
+                    showStateIndicator={false}
+                    name={recp.display_name}
+                    image={recp.image}
+                    size={30}
+                  />
+                </div>
                 <strong>{ recp.display_name }</strong>
                 <span style={{ fontSize: '12px', marginLeft: '5px' }}>{ recp.email || recp.phone_number }</span>
               </div>
