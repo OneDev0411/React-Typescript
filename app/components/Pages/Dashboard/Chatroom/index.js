@@ -65,9 +65,6 @@ class Chatroom extends React.Component {
   render() {
     const { user, activeRoom } = this.props
 
-    // if (!activeRoom)
-      // return false
-
     return (
       <div className="chatroom">
         <div className="col-md-1 no-padding" style={{ width: roomsWidth }}>
