@@ -25,7 +25,7 @@ const coordinator = (points) => {
       left: 0,
       top: 0
     }
-    points[i].list.position.top = `${i * 25}px`
+    points[i].list.position.top = `${i * 21}px`
   }
   return points
 }
