@@ -1,48 +1,61 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import AutosizeInput from 'react-input-autosize'
+import Rx from 'rxjs/Rx'
 import _ from 'underscore'
 
 class Compose extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      criteria: '',
       viewList: {},
-      items: {}
+      recipients: {}
     }
   }
 
-  onSearch(e) {
-    const { contacts } = this.props
-    const criteria = e.target.value
+  componentDidMount() {
 
-    const viewList = _.filter(contacts, contact => {
-      return contact.display_name.includes(criteria)
-    })
+    const { Observable } = Rx
 
-    this.setState({
-      criteria,
-      viewList
-    })
+    this.inputHandler = Observable
+      .fromEvent(this.autosize.getInput(), 'keyup')
+      .map(e => e.target.value)
+      .filter(text => text.length >= 3)
+      .debounceTime(500)
+      .subscribe(text => this.onSearch(text))
   }
 
-  onAdd(item) {
-    const items = {
-      ...this.state.items,
-      ...{[item.id]: item}
+  componentWillUnmount() {
+    this.inputHandler.unsubscribe()
+  }
+
+  onSearch(text) {
+    console.log(text)
+  }
+
+  searchInContacts(q) {
+
+  }
+
+  searchInUsers(q) {
+
+  }
+
+  onAdd(recipient) {
+    const recipients = {
+      ...this.state.recipients,
+      ...{[recipient.id]: recipient}
     }
 
-    this.setState({ items })
+    this.setState({ recipients })
   }
 
-  onRemove(item) {
-    const items = _.omit(this.state.items, (obj, id) => id === item.id)
-    this.setState({ items })
+  onRemove(recipient) {
+    const recipients = _.omit(this.state.recipients, (item, id) => id === recipient.id)
+    this.setState({ recipients })
   }
 
   render() {
-    const { criteria, viewList, items } = this.state
+    const { viewList, recipients } = this.state
 
     return (
       <div className="compose">
@@ -50,23 +63,22 @@ class Compose extends React.Component {
           <span className="to">To: </span>
 
           {
-            _.map(items, item =>
+            _.map(recipients, recipient =>
               <span
-                key={`ITEM_${item.id}`}
+                key={`ITEM_${recipient.id}`}
                 className="tag"
               >
-                { item.display_name }
+                { recipient.display_name }
                 <i
                   className="fa fa-times"
-                  onClick={() => this.onRemove(item)}
+                  onClick={() => this.onRemove(recipient)}
                 ></i>
               </span>
             )
           }
 
           <AutosizeInput
-            value={criteria}
-            onChange={e => this.onSearch(e) }
+            ref={ref => this.autosize = ref}
             placeholder="Enter name, email or phone"
             maxLength={30}
             placeholderIsMinWidth
@@ -75,13 +87,13 @@ class Compose extends React.Component {
 
         <div className="suggestions">
           {
-            _.map(viewList, item =>
+            _.map(viewList, recipient =>
               <div
-                key={`ITEM_SUG_${item.id}`}
+                key={`RECP_SUG_${recipient.id}`}
                 className="item"
-                onClick={() => this.onAdd(item)}
+                onClick={() => this.onAdd(recipient)}
               >
-                { item.display_name }
+                { recipient.display_name }
               </div>
             )
           }
@@ -91,6 +103,4 @@ class Compose extends React.Component {
   }
 }
 
-export default connect(s => ({
-  contacts: s.contact.list
-}))(Compose)
+export default Compose
