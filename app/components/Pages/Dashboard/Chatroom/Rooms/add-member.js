@@ -5,12 +5,15 @@ import Compose from '../../../../Partials/Compose'
 
 const enhance = compose(
   pure,
-  withState('showComposeModal', 'onChangeCompose', false)
+  withState('showComposeModal', 'onChangeCompose', false),
+  withState('recipients', 'onChangeRecipients', {})
 )
 
 const AddMember = ({
   showComposeModal,
-  onChangeCompose
+  recipients,
+  onChangeCompose,
+  onChangeRecipients
 }) => (
   <div>
     <div
@@ -33,11 +36,19 @@ const AddMember = ({
         <Compose
           show={true}
           onHide={() => onChangeCompose(false)}
+          onChangeRecipients={recipients => onChangeRecipients(recipients)}
         />
       </Modal.Body>
 
       <Modal.Footer>
-        <Button bsStyle="primary">Add</Button>
+        <Button
+          bsStyle="primary"
+          onClick={() => {
+            alert(recipients.toString())
+          }}
+        >
+          Add
+        </Button>
       </Modal.Footer>
 
     </Modal>
