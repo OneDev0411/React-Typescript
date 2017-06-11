@@ -37,7 +37,7 @@ class Compose extends React.Component {
   }
 
   onRemove(item) {
-    const items = _.omit(this.state.items, (item, id) => id === item.id)
+    const items = _.omit(this.state.items, (obj, id) => id === item.id)
     this.setState({ items })
   }
 
