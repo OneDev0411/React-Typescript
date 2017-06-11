@@ -26,12 +26,17 @@
     background-color: #2196f3;
     border-radius: 3px;
     display: inline-block;
-    height: 30px;
-    line-height: 30px;
-    vertical-align: middle;
+    height: 33px;
+    line-height: 33px;
     margin: 0px 5px 3px 0;
-    padding: 0 7px;
+    padding: 0px 7px;
     color: #fff;
+    font-size: 13px;
+    vertical-align: middle;
+    .user-avatar {
+      float: left;
+      margin-right: 5px;
+    }
     i {
       margin-left: 5px;
       cursor: pointer;
@@ -65,6 +70,13 @@
     margin-bottom: 10px;
     cursor: pointer;
     transition: 0.2s ease-in all;
+    .avatar {
+      display: inline;
+      margin-right: 10px;
+      .user-avatar {
+        display: inline;
+      }
+    }
     &:hover {
       color: rgba(0, 0, 0, 0.7);
     }
