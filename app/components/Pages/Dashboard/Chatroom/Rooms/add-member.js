@@ -21,7 +21,7 @@ const AddMember = ({
     </div>
 
     <Modal
-      show={true}
+      show={showComposeModal}
       dialogClassName="chatroom-add-member"
       onHide={() => onChangeCompose(false)}
     >
