@@ -14,6 +14,9 @@ import MobileNav from './Pages/Dashboard/Partials/MobileNav'
 import { getRooms } from '../store_actions/chatroom'
 import InstantChat from './Pages/Dashboard/Chatroom/InstantChat'
 
+// contacts
+import { getContacts } from '../store_actions/contact'
+
 // import _ from 'lodash'
 // import NotificationDispatcher from '../dispatcher/NotificationDispatcher'
 import AppStore from '../stores/AppStore'
@@ -39,6 +42,9 @@ class App extends Component {
 
     // load rooms
     this.initialRooms()
+
+    // load contacts
+    this.initialContacts()
 
     // check user is mobile device or not
     this.checkForMobile()
@@ -67,6 +73,14 @@ class App extends Component {
 
     if (data.user && !rooms) {
       dispatch(getRooms())
+    }
+  }
+
+  initialContacts() {
+    const { dispatch, contacts } = this.props
+
+    if (!contacts) {
+      dispatch(getContacts())
     }
   }
 
@@ -501,5 +515,6 @@ class App extends Component {
 
 export default connect(s => ({
   data: s.data,
-  rooms: s.chatroom.rooms
+  rooms: s.chatroom.rooms,
+  contacts: s.chatroom.contact
 }))(App)
