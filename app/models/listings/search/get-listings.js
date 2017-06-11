@@ -17,7 +17,7 @@ const normilizedResponse = (response) => {
 
   return {
     ...normilizedListings,
-    status: {
+    info: {
       code,
       ...info
     }

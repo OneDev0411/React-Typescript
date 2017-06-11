@@ -135,11 +135,15 @@
 .c-mls-toolbar__status-bar {
   position: absolute;
   top: 58px;
-  width: 475px;
+  width: 370px;
   padding: 1rem;
   color: #fff;
   border-radius: 3px;
   background-color: rgba(0, 0, 0, 0.4); 
+}
+
+.c-mls-toolbar__status-bar--empty {
+  height: 39px;
 }
 
 

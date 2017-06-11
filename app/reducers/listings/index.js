@@ -24,10 +24,13 @@ const allIds = (state = [], action) => {
   }
 }
 
-const status = (state = {}, action) => {
+const info = (state = {}, action) => {
   switch (action.type) {
     case FETCH_LISTINGS_SUCCESS:
-      return action.response.status
+      return {
+        ...state,
+        ...action.response.info
+      }
     default:
       return state
   }
@@ -59,8 +62,8 @@ const errorMessage = (state = null, action) => {
 
 const listings = combineReducers({
   byId,
+  info,
   allIds,
-  status,
   isFetching,
   errorMessage
 })
@@ -73,3 +76,5 @@ export const selectListings = state =>
 export const getIsFetchingStatus = state => state.isFetching
 
 export const getErrorMessage = state => state.errorMessage
+
+export const getListingsInfo = state => state.info
