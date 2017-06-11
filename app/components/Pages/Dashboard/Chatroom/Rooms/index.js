@@ -5,15 +5,14 @@ import { Row, Col } from 'react-bootstrap'
 import { compose,  withState, lifecycle, pure } from 'recompose'
 import _ from 'underscore'
 import cn from 'classnames'
+import AddMember from './add-member'
 import UserAvatar from '../../../../Partials/UserAvatar'
-import Compose from '../../../../Partials/Compose'
 
 import {
   toggleInstanceMode,
   changeActiveRoom,
   toggleChatbar
 } from '../../../../../store_actions/chatroom'
-
 
 const enhance = compose(
   pure,
@@ -169,17 +168,7 @@ const Rooms = ({
         </div>
       </div>
 
-      <div
-        className="new-room"
-        onClick={() => onChangeCompose(!showComposeModal)}
-      >
-        <i className="fa fa-edit"></i> New Message
-      </div>
-
-      <Compose
-        show={showComposeModal}
-        onHide={() => onChangeCompose(false)}
-      />
+      <AddMember />
     </div>
   )
 }
