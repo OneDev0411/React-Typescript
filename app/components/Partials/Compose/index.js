@@ -9,12 +9,8 @@ class Compose extends React.Component {
     this.state = {
       criteria: '',
       viewList: {},
-      members: {}
+      items: {}
     }
-  }
-
-  componentDidMount() {
-
   }
 
   onSearch(e) {
@@ -32,21 +28,21 @@ class Compose extends React.Component {
   }
 
   onAdd(item) {
-    const members = {
-      ...this.state.members,
+    const items = {
+      ...this.state.items,
       ...{[item.id]: item}
     }
 
-    this.setState({ members })
+    this.setState({ items })
   }
 
   onRemove(item) {
-    const members = _.omit(this.state.members, (member, id) => id === item.id)
-    this.setState({ members })
+    const items = _.omit(this.state.items, (item, id) => id === item.id)
+    this.setState({ items })
   }
 
   render() {
-    const { criteria, viewList, members } = this.state
+    const { criteria, viewList, items } = this.state
 
     return (
       <div className="compose">
@@ -54,15 +50,15 @@ class Compose extends React.Component {
           <span className="to">To: </span>
 
           {
-            _.map(members, member =>
+            _.map(items, item =>
               <span
-                key={`MBMR_${member.id}`}
+                key={`ITEM_${item.id}`}
                 className="tag"
               >
-                { member.display_name }
+                { item.display_name }
                 <i
                   className="fa fa-times"
-                  onClick={() => this.onRemove(member)}
+                  onClick={() => this.onRemove(item)}
                 ></i>
               </span>
             )
