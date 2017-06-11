@@ -14,15 +14,23 @@ const UserAvatar = ({
   image,
   state,
   color,
+  style,
   size = 50,
   borderColor = '#fff',
   showStateIndicator = true
 }) => {
+  const defaultStyles = showStateIndicator ? {position: 'relative', width: `${size}px`} : {}
+
   return (
     <div
-      style={showStateIndicator ? {position: 'relative', width: `${size}px`} : {}}
+      className="user-avatar"
+      style={{
+        ...defaultStyles,
+        ...style
+      }}
     >
       <Avatar
+        style={{ verticalAlign: 'middle' }}
         round
         name={name}
         src={image}
@@ -32,6 +40,7 @@ const UserAvatar = ({
       {
         showStateIndicator &&
         <div
+          className="user-avatar-indicator"
           style={{
             position: 'absolute',
             width: `${size / 4}px`,
