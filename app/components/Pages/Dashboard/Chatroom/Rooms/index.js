@@ -177,7 +177,7 @@ const Rooms = ({
       </div>
 
       <Compose
-        show={true}
+        show={showComposeModal}
         onHide={() => onChangeCompose(false)}
       />
     </div>
