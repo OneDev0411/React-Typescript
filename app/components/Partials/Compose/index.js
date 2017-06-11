@@ -1,12 +1,15 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Modal, Button } from 'react-bootstrap'
 import AutosizeInput from 'react-input-autosize'
+import _ from 'underscore'
 
-export default class Compose extends React.Component {
+class Compose extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      input: ''
+      criteria: '',
+      viewList: {}
     }
   }
 
@@ -14,12 +17,23 @@ export default class Compose extends React.Component {
 
   }
 
-  onChange(e) {
-    console.log(e)
+  onSearch(e) {
+    const { contacts } = this.props
+    const criteria = e.target.value
+
+    const viewList = _.filter(contacts, contact => {
+      return contact.display_name.includes(criteria)
+    })
+
+    this.setState({
+      criteria,
+      viewList
+    })
   }
 
   render() {
     const { show, onHide } = this.props
+    const { criteria, viewList } = this.state
 
     return (
       <Modal
@@ -35,18 +49,28 @@ export default class Compose extends React.Component {
           <div className="tags-container">
             <span className="to">To: </span>
             <span className="tag">ABCDEFG</span>
-            <span className="tag">ABCDEFG</span>
-            <span className="tag">ABCDEFG</span>
-            <span className="tag">ABCDEFG</span>
-            <span className="tag">ABCDEFG</span>
-            <span className="tag">ABCDEFG</span>
+
+
             <AutosizeInput
-              value={this.state.input}
-              onChange={e => this.setState({ input: e.target.value })}
+              value={criteria}
+              onChange={e => this.onSearch(e) }
               placeholder="Enter name, email or phone"
               maxLength={30}
               placeholderIsMinWidth
             />
+          </div>
+
+          <div className="suggestions">
+            {
+              _.map(viewList, item =>
+                <div
+                  className="item"
+                  key={`ITEM_SUG_${item.id}`}
+                >
+                  { item.display_name }
+                </div>
+              )
+            }
           </div>
         </Modal.Body>
 
@@ -58,3 +82,7 @@ export default class Compose extends React.Component {
     )
   }
 }
+
+export default connect(s => ({
+  contacts: s.contact.list
+}))(Compose)
