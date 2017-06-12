@@ -6,13 +6,12 @@ export default ({
 }) => {
   return (
     <div className="alert">
-      Created an alert: { alert.title ? alert.title : alert.proposed_title }
-      <div>
-        <img src="/static/images/dashboard/mls/map-tile.jpg" />
-      </div>
+      <strong style={{ color: '#9b9a9b' }}>
+        Shared a saved search:
+      </strong>
 
       <div>
-        We'll keep you updated with new listings
+        <img src="/static/images/dashboard/mls/map-tile.jpg" />
       </div>
     </div>
   )
