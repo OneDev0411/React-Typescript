@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import AutosizeInput from 'react-input-autosize'
 import Rx from 'rxjs/Rx'
 import _ from 'underscore'
@@ -34,11 +35,19 @@ class Compose extends React.Component {
     this.inputHandler.unsubscribe()
   }
 
+  /**
+   * get search input ref
+   */
   getSearchInput() {
     return this.autosize.getInput()
   }
 
+  /**
+   * search recipients
+   */
   async onSearch(text) {
+    const { searchInRooms } = this.props
+
     let viewList = {}
 
     // prevent effecting non alphabetical characters
@@ -51,53 +60,67 @@ class Compose extends React.Component {
     if (this.criteria.length === 0)
       return this.setState({ viewList })
 
-    const users = await this.searchInUsers(this.criteria)
-    users.forEach(user => {
-      viewList = {
-        ...viewList,
-        ...{[user.id]: {
-          type: 'user',
-          id: user.id,
-          display_name: user.display_name,
-          image: user.profile_image_url,
-          email: user.email,
-          phone_number: user.email
-        }}
-      }
-    })
+    if (searchInRooms === true) {
+      let rooms = await this.searchInRooms(this.criteria)
+      let roomsList = this.prepare(rooms, 'room')
+      viewList = Object.assign(viewList, roomsList)
+      this.setState({ viewList })
+    }
 
-    // render page
+    const users = await this.searchInUsers(this.criteria)
+    const usersList = this.prepare(users, 'user')
+    viewList = Object.assign(viewList, usersList)
     this.setState({ viewList })
 
     const contacts = await this.searchInContacts(this.criteria)
-    contacts.forEach(contact => {
-      contact.users.forEach(user => {
-        viewList = {
-          ...{[user.id]: {
-            type: 'user',
-            id: user.id,
-            display_name: user.display_name,
-            image: user.profile_image_url,
-            email: user.email,
-            phone_number: user.email
-          }},
-          ...viewList
-        }
-      })
-    })
-
-    // render again
+    const contactsList = this.prepare(contacts, 'contact')
+    viewList = Object.assign(contactsList, viewList)
     this.setState({ viewList })
+
+    console.log(viewList)
   }
 
+  /**
+   * prepare view list
+   */
+  prepare(list, type) {
+    if (list === null)
+      return {}
+
+    return list.map(item => ({
+      type,
+      id: item.id,
+      display_name: item.display_name,
+      image: item.profile_image_url,
+      email: item.email,
+      phone_number: item.email
+    }))
+  }
+
+  /**
+   * search recipients in rooms
+   */
+  searchInRooms(q) {
+    return this.askServer(`/rooms/search?q[]=${q}&room_types[]=Direct&room_types[]=Group`)
+  }
+
+  /**
+   * search recipients in contacts
+   */
   searchInContacts(q) {
     return this.askServer(`/contacts/search?q[]=${q}`)
   }
 
+  /**
+   * search in users
+   */
   searchInUsers(q) {
     return this.askServer(`/users/search?q[]=${q}`)
   }
 
+  /**
+   * api call
+   */
   async askServer(url) {
     try {
       const response = await new Fetch().get(url)
@@ -107,6 +130,9 @@ class Compose extends React.Component {
     }
   }
 
+  /**
+   * on add new recipient
+   */
   onAdd(recipient) {
     const { onChangeRecipients } = this.props
 
@@ -127,6 +153,9 @@ class Compose extends React.Component {
     this.getSearchInput().focus()
   }
 
+  /**
+   * on remove recipient
+   */
   onRemove(recipient) {
     const { onChangeRecipients } = this.props
 
@@ -142,6 +171,18 @@ class Compose extends React.Component {
     this.getSearchInput().focus()
   }
 
+  /**
+   * get recipient avatar
+   */
+  getAvatar(user, size) {
+    return <UserAvatar
+      showStateIndicator={false}
+      name={user.display_name}
+      image={user.image}
+      size={size}
+    />
+  }
+
   render() {
     const { viewList, recipients } = this.state
 
@@ -151,22 +192,16 @@ class Compose extends React.Component {
           <span className="to">To: </span>
 
           {
-            _.map(recipients, recipient =>
+            _.map(recipients, recp =>
               <div
-                key={`ITEM_${recipient.id}`}
+                key={`ITEM_${recp.id}`}
                 className="tag"
               >
-                <UserAvatar
-                  showStateIndicator={false}
-                  name={recipient.display_name}
-                  image={recipient.image}
-                  size={22}
-                />
-
-                <span>{ recipient.display_name }</span>
+                { this.getAvatar(recp, 22) }
+                <span>{ recp.display_name }</span>
                 <i
                   className="fa fa-times"
-                  onClick={() => this.onRemove(recipient)}
+                  onClick={() => this.onRemove(recp)}
                 ></i>
               </div>
             )
@@ -174,7 +209,7 @@ class Compose extends React.Component {
 
           <AutosizeInput
             ref={ref => this.autosize = ref}
-            placeholder="Enter name, email or phone"
+            placeholder={_.size(recipients) === 0 ? "Enter name, email or phone" : "Enter another recipient" }
             maxLength={30}
             placeholderIsMinWidth
           />
@@ -188,14 +223,7 @@ class Compose extends React.Component {
                 className="item"
                 onClick={() => this.onAdd(recp)}
               >
-                <div className="avatar">
-                  <UserAvatar
-                    showStateIndicator={false}
-                    name={recp.display_name}
-                    image={recp.image}
-                    size={30}
-                  />
-                </div>
+                { this.getAvatar(recp, 30 )}
                 <strong>{ recp.display_name }</strong>
                 <span style={{ fontSize: '12px', marginLeft: '5px' }}>{ recp.email || recp.phone_number }</span>
               </div>
@@ -205,6 +233,13 @@ class Compose extends React.Component {
       </div>
     )
   }
+}
+
+Compose.propTypes = {
+  show: PropTypes.bool.isRequired,
+  searchInRooms: PropTypes.bool,
+  onHide: PropTypes.func.isRequired,
+  onChangeRecipients: PropTypes.func.isRequired
 }
 
 export default Compose
