@@ -9,13 +9,8 @@ import { selectListings } from '../../../../../reducers/listings'
 
 import getFavorites from
   '../../../../../store_actions/listings/favorites/get-favorites'
-import getListings from
-  '../../../../../store_actions/listings/search/get-listings'
-
-const actions = {
-  getListings,
-  getFavorites
-}
+import getListingsByMapBounds from
+  '../../../../../store_actions/listings/search/get-listings/by-map-bounds'
 
 let mapOnChangeDebounce = 0
 
@@ -30,16 +25,16 @@ class Search extends Component {
 
   _fetchSearchListings(nextProps) {
     const { mapProps: nextMapProps } = nextProps
-    const { mapProps, getListings } = this.props
+    const { mapProps, getListingsByMapBounds } = this.props
 
     if (!_.isEqual(mapProps, nextMapProps)) {
       if (!mapOnChangeDebounce) {
         mapOnChangeDebounce = 1
-        getListings(nextMapProps)
+        getListingsByMapBounds(nextMapProps.bounds)
       } else {
         clearTimeout(mapOnChangeDebounce)
         mapOnChangeDebounce = setTimeout(() => {
-          getListings(nextMapProps)
+          getListingsByMapBounds(nextMapProps.bounds)
           clearTimeout(mapOnChangeDebounce)
         }, 300)
       }
@@ -88,5 +83,5 @@ const mapStateToProps = ({
 
 export default connect(
   mapStateToProps,
-  actions
+  { getFavorites, getListingsByMapBounds }
 )(Search)

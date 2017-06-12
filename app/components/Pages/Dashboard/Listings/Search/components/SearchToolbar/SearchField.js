@@ -15,40 +15,31 @@ const actions = {
   ...searchActions
 }
 
-// const removePoly = () => {
-//   if (window.poly_search) {
-//     window.poly.setMap(null)
-//     delete window.poly
-//     delete window.poly_search
-//   }
-// }
-
-const goToPlace = (dispatch, input) => {
-  // removePoly()
-
-  if (!input) {
+const findPlace = address => (dispatch) => {
+  if (!address) {
     return
   }
 
-  if (/^\d{5}(?:[-\s]\d{4})?$/.test(input)) {
-    console.log('click search: post code', input)
-    dispatch(actions.getPlace(input))
+  if (/^\d{5}(?:[-\s]\d{4})?$/.test(address)) {
+    console.log('click search: post code', address)
+    dispatch(actions.getPlace(address))
     return
   }
 
-  // if (!isNaN(input) && input.length > 7) {
-  //   console.log('click search: MLS Number', input)
-  //   dispatch(actions.getMlsNumber(input))
-  //   return
-  // }
+  if (!isNaN(address) && address.length > 7) {
+    console.log('click search: MLS Number', address)
+    dispatch(actions.searchByMlsNumber(address))
+    return
+  }
 
-  console.log('click search: place', input)
-  dispatch(actions.getPlace(input))
+  console.log('click search: place', address)
+  dispatch(actions.getPlace(address))
 }
 
-const autoCompletePlaceChanged = (dispatch, address) => {
+const autoCompletePlaceChanged = address => (dispatch) => {
   if (!address.formatted_address) {
-    dispatch(actions.getPlace(address.name))
+    console.log('unformated')
+    findPlace(address.name)(dispatch)
     return
   }
 
@@ -58,7 +49,7 @@ const autoCompletePlaceChanged = (dispatch, address) => {
     lng: address.geometry.location.lng()
   }
 
-  dispatch(actions.changePlace({ center, zoom }))
+  dispatch(actions.goToPlace({ center, zoom }))
 }
 
 let inputNode
@@ -169,7 +160,7 @@ const fieldHOC = compose(
         autocomplete.addListener('place_changed', () => {
           updateValue(inputNode.value)
           updateSubmitedValue(inputNode.value)
-          autoCompletePlaceChanged(dispatch, autocomplete.getPlace())
+          autoCompletePlaceChanged(autocomplete.getPlace())(dispatch)
         })
 
         inputNode.addEventListener('keypress', formPreventDefaultHandler)
@@ -188,7 +179,7 @@ const fieldHOC = compose(
       updateSubmitedValue
     }) => (event) => {
       updateSubmitedValue(value)
-      goToPlace(dispatch, value)
+      findPlace(value)(dispatch)
     }
   })
 )

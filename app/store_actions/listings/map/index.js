@@ -29,8 +29,9 @@ export const setMapHoveredMarkerId = (name, id) => ({
   type: types.SET_MAP_HOVERED_MARKER_ID
 })
 
-export const changePlace = mapProps => (dispatch, getState) => {
+export const goToPlace = mapProps => (dispatch, getState) => {
   const { listings, map } = getState().search
+
   if (getIsFetchingStatus(listings) || isAutoMove(map)) {
     return Promise.resolve()
   }

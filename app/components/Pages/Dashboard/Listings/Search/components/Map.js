@@ -80,6 +80,7 @@ const map = ({
   defaultZoom,
   defaultCenter,
   bootstrapURLKeys,
+  onGoogleApiLoaded,
   onMarkerMouseEnter,
   onMarkerMouseLeave,
   onClickZoomHandler,
@@ -101,6 +102,7 @@ const map = ({
       defaultCenter={defaultCenter}
       yesIWantToUseGoogleMapApiInternals
       bootstrapURLKeys={bootstrapURLKeys}
+      onGoogleApiLoaded={onGoogleApiLoaded}
     >
       {
         clusters.map(
@@ -154,12 +156,6 @@ const mapHOC = compose(
   ),
   // describe events
   withHandlers({
-    onChange: ({ setOffMapAutoMove, setMapProps, map }) => (gmap) => {
-      if (map.autoMove) {
-        setOffMapAutoMove()
-      }
-      setMapProps('SEARCH', gmap)
-    },
     onClickZoomHandler: ({ updateMapZoom }) => (zoomType) => {
       updateMapZoom('SEARCH', zoomType)
     },
@@ -183,7 +179,18 @@ const mapHOC = compose(
       }
 
       setMapProps('SEARCH', extendedMapProps)
-    }
+    },
+    onGoogleApiLoaded: () => ({ map }) => {
+      window.currentMap = map
+    },
+    onChange: ({ setOffMapAutoMove, setMapProps, map }) =>
+      (gmap) => {
+        if (map.autoMove) {
+          setOffMapAutoMove()
+        }
+
+        setMapProps('SEARCH', gmap)
+      }
   }),
   // precalculate clusters if markers data has changed
   withPropsOnChange(

@@ -1,8 +1,8 @@
-import api from '../../../models/listings/search'
-import * as listingsTypes from '../../../constants/listings'
-import { getIsFetchingStatus } from '../../../reducers/listings'
+import api from '../../../../models/listings/search'
+import * as listingsTypes from '../../../../constants/listings'
+import { getIsFetchingStatus } from '../../../../reducers/listings'
 
-const getMlsNumber = mlsNumber => (dispatch, getState) => {
+const getListingsByMlsNumber = mlsNumber => (dispatch, getState) => {
   if (getIsFetchingStatus(getState().search.listings)) {
     return Promise.resolve()
   }
@@ -19,6 +19,7 @@ const getMlsNumber = mlsNumber => (dispatch, getState) => {
         name: 'SEARCH',
         type: listingsTypes.FETCH_LISTINGS_SUCCESS
       })
+      return Promise.resolve(response)
     },
     ({ message }) => {
       dispatch({
@@ -26,8 +27,9 @@ const getMlsNumber = mlsNumber => (dispatch, getState) => {
         type: listingsTypes.FETCH_LISTINGS_FAILURE,
         message: message || 'Something went wrong.'
       })
+      return Promise.reject(message)
     }
   )
 }
 
-export default getMlsNumber
+export default getListingsByMlsNumber

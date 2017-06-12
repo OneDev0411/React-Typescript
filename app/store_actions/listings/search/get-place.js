@@ -1,4 +1,4 @@
-import { changePlace } from '../map'
+import { goToPlace } from '../map'
 import api from '../../../models/listings/search'
 import * as actionsType from '../../../constants/listings/search'
 
@@ -12,7 +12,7 @@ const getPlace = address => (dispatch, getState) => {
   return api.getPlace(address).then(
     (response) => {
       dispatch({ type: actionsType.GET_PLACE_SUCCESS })
-      dispatch(changePlace(response))
+      dispatch(goToPlace(response))
     },
     ({ message }) => {
       dispatch({

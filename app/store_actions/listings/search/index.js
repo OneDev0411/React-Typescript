@@ -1,9 +1,9 @@
 import getPlace from './get-place'
 import getListings from './get-listings'
-import getMlsNumber from './get-mls-number'
+import searchByMlsNumber from './search-mls-number'
 
 export default {
   getPlace,
   getListings,
-  getMlsNumber
+  searchByMlsNumber
 }

@@ -1,0 +1,58 @@
+import getListingsByValert from './by-valert'
+import { isAutoMove } from '../../../../reducers/listings/map'
+import { getIsFetchingStatus } from '../../../../reducers/listings'
+import { queryOptions } from
+  '../../../../components/Pages/Dashboard/Mls/Partials/MlsMapOptions'
+import { SEARCH_BY_MAP_BOUNDS } from '../../../../constants/listings/search'
+
+const QUERY_LIMIT = 50
+
+const getQueryPoints = bounds => ([
+  {
+    latitude: bounds.ne.lat,
+    longitude: bounds.ne.lng
+  },
+  {
+    latitude: bounds.nw.lat,
+    longitude: bounds.nw.lng
+  },
+  {
+    latitude: bounds.sw.lat,
+    longitude: bounds.sw.lng
+  },
+  {
+    latitude: bounds.se.lat,
+    longitude: bounds.se.lng
+  },
+  {
+    latitude: bounds.ne.lat,
+    longitude: bounds.ne.lng
+  }
+])
+
+const getListingsByMapBounds = bounds => (dispatch, getState) => {
+  const { listings, map, type } = getState().search
+
+  if (
+    getIsFetchingStatus(listings) ||
+    type !== 'by_map_bounds' ||
+    isAutoMove(map)
+  ) {
+    return Promise.resolve()
+  }
+
+  dispatch({ type: SEARCH_BY_MAP_BOUNDS })
+
+  const limit = QUERY_LIMIT
+  const points = getQueryPoints(bounds)
+
+  const options = {
+    ...queryOptions,
+    limit,
+    points
+  }
+
+  return getListingsByValert(options)(dispatch, getState)
+}
+
+export default getListingsByMapBounds

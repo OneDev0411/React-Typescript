@@ -1,12 +1,22 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import branch from 'recompose/branch'
+import compose from 'recompose/compose'
 import renderNothing from 'recompose/renderNothing'
 import { getListingsInfo } from '../../../../../../../reducers/listings'
 
 const emptyStatus = () =>
   () => (
-    <p className="c-mls-toolbar__status-bar c-mls-toolbar__status-bar--empty" />
+    <p className="c-mls-toolbar__status-bar c-mls-toolbar__status-bar--empty">
+      No listings found
+    </p>
+  )
+
+const loadingStatus = () =>
+  () => (
+    <p className="c-mls-toolbar__status-bar">
+      Searching...
+    </p>
   )
 
 const hideIfNoDataOrFetchings = hasNoData =>
@@ -15,9 +25,20 @@ const hideIfNoDataOrFetchings = hasNoData =>
     emptyStatus
   )
 
-const enhance = hideIfNoDataOrFetchings(
-  props => props.isFetching ||
-    !(props.count && props.total && props.proposed_title)
+const hideIfIsFetchings = hasNoData =>
+  branch(
+    hasNoData,
+    loadingStatus
+  )
+
+const enhance = compose(
+  hideIfNoDataOrFetchings(
+    props =>
+      !(props.count && props.total || props.proposed_title)
+  ),
+  hideIfIsFetchings(
+    props => props.isFetching
+  )
 )
 
 const StatusBar = enhance(({ isFetching, count, total, proposed_title }) => (

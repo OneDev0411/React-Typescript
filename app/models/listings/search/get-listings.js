@@ -2,28 +2,6 @@ import Fetch from '../../../services/fetch'
 import { normalize } from 'normalizr'
 import * as schema from '../schema'
 
-const prepareListignsForMap = listings =>
-  listings.map(list => ({
-    ...list,
-    list,
-    lat: list.location.latitude,
-    lng: list.location.longitude
-  }))
-
-const normilizedResponse = (response) => {
-  const { code, info, data } = response.body
-  const listings = prepareListignsForMap(data)
-  const normilizedListings = normalize(listings, schema.listingsList)
-
-  return {
-    ...normilizedListings,
-    info: {
-      code,
-      ...info
-    }
-  }
-}
-
 export const byValert = async (options) => {
   if (!options) {
     return
@@ -34,7 +12,26 @@ export const byValert = async (options) => {
       .post('/valerts')
       .send(options)
 
-    return normilizedResponse(response)
+    const { code, info, data } = response.body
+
+    const listings = data.map(
+      list => ({
+        ...list,
+        list,
+        lat: list.location.latitude,
+        lng: list.location.longitude
+      })
+    )
+
+    const normilizedListings = normalize(listings, schema.listingsList)
+
+    return {
+      ...normilizedListings,
+      info: {
+        code,
+        ...info
+      }
+    }
   } catch (error) {
     throw error
   }
@@ -47,10 +44,32 @@ export const byMlsNumber = async (mlsNumber) => {
 
   try {
     const response = await new Fetch()
-      .post(`/listings/search?mls_number=${mlsNumber}`)
-      .send(options)
+      .get(`/listings/search?mls_number=${mlsNumber}`)
 
-    return normilizedResponse(response)
+    const { code, data } = response.body
+
+    const lat = data.property.address.location.latitude
+    const lng = data.property.address.location.longitude
+
+    const listing = {
+      ...data,
+      numPoints: 1,
+      list: data,
+      lat,
+      lng
+    }
+
+    const normilizedListings = normalize([listing], schema.listingsList)
+
+    return {
+      ...normilizedListings,
+      info: {
+        code,
+        total: 1,
+        count: 1,
+        proposed_title: ''
+      }
+    }
   } catch (error) {
     throw error
   }

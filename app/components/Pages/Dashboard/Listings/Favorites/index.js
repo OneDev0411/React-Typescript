@@ -3,8 +3,8 @@ import React, { Component } from 'react'
 
 import Map from './components/Map'
 import Loading from '../components/Loading'
-import * as actions from
-  '../../../../../store_actions/listings/favorites'
+import getFavorites from
+  '../../../../../store_actions/listings/favorites/get-favorites'
 import { selectListings } from '../../../../../reducers/listings'
 
 class Favorites extends Component {
@@ -13,11 +13,11 @@ class Favorites extends Component {
       user,
       listings,
       isFetching,
-      fetchFavorites
+      getFavorites
     } = this.props
 
     if (!isFetching && !listings.length) {
-      fetchFavorites(user)
+      getFavorites(user)
     }
   }
 
@@ -47,5 +47,5 @@ const mapStateToProps = ({
 
 export default connect(
   mapStateToProps,
-  actions
+  { getFavorites }
 )(Favorites)
