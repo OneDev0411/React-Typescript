@@ -10,7 +10,7 @@ const getOptions = (postalCode) => {
     counties: null,
     mls_areas: null,
     school_districts: null,
-    postal_codes: postalCode
+    postal_codes: [postalCode]
   }
 
   return {

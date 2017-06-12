@@ -5,15 +5,10 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
+import { goToPlace } from
+  '../../../../../../../store_actions/listings/map'
 import searchActions from
   '../../../../../../../store_actions/listings/search'
-import * as mapActions from
-  '../../../../../../../store_actions/listings/map'
-
-const actions = {
-  ...mapActions,
-  ...searchActions
-}
 
 const findPlace = address => (dispatch) => {
   if (!address) {
@@ -22,18 +17,18 @@ const findPlace = address => (dispatch) => {
 
   if (/^\d{5}(?:[-\s]\d{4})?$/.test(address)) {
     console.log('click search: post code', address)
-    dispatch(actions.getPlace(address))
+    dispatch(searchActions.searchByPostalCode(address))
     return
   }
 
   if (!isNaN(address) && address.length > 7) {
     console.log('click search: MLS Number', address)
-    dispatch(actions.searchByMlsNumber(address))
+    dispatch(searchActions.searchByMlsNumber(address))
     return
   }
 
   console.log('click search: place', address)
-  dispatch(actions.getPlace(address))
+  dispatch(searchActions.getPlace(address))
 }
 
 const autoCompletePlaceChanged = address => (dispatch) => {
@@ -49,7 +44,7 @@ const autoCompletePlaceChanged = address => (dispatch) => {
     lng: address.geometry.location.lng()
   }
 
-  dispatch(actions.goToPlace({ center, zoom }))
+  dispatch(goToPlace({ center, zoom }))
 }
 
 let inputNode

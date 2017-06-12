@@ -8,6 +8,7 @@ import defaultProps from 'recompose/defaultProps'
 import withHandlers from 'recompose/withHandlers'
 import { fitBounds } from 'google-map-react/utils'
 import withPropsOnChange from 'recompose/withPropsOnChange'
+import extendedBounds from '../../../../../../utils/extendedBounds'
 
 import controller from '../../../controller'
 import ZoomController from '../../components/ZoomController'
@@ -21,55 +22,6 @@ import { bootstrapURLKeys, mapOptions, mapInitialState } from
   '../../../Mls/Partials/MlsMapOptions'
 
 const DECLUSTER_ZOOM_LEVEL = 16
-
-const extendedBounds = (points, mapProps) => {
-  const googleMapsLatLngBounds = new google.maps.LatLngBounds()
-  points.forEach(point => googleMapsLatLngBounds.extend(point))
-
-  // The condition checked that if all points have the same coordinates,
-  // the map transferred to a decluster zoom level.
-  if (
-    googleMapsLatLngBounds.getSouthWest().toString() ===
-    googleMapsLatLngBounds.getNorthEast().toString()
-  ) {
-    return false
-  }
-
-  const ne = {
-    lat: googleMapsLatLngBounds.getNorthEast().lat(),
-    lng: googleMapsLatLngBounds.getNorthEast().lng()
-  }
-  const sw = {
-    lat: googleMapsLatLngBounds.getSouthWest().lat(),
-    lng: googleMapsLatLngBounds.getSouthWest().lng()
-  }
-
-  const getNw = new google.maps.LatLng(ne.lat.toString(), sw.lng.toString())
-  const getSe = new google.maps.LatLng(sw.lat, ne.lng)
-
-  const nw = {
-    lat: getNw.lat(),
-    lng: getNw.lng()
-  }
-  const se = {
-    lat: getSe.lat(),
-    lng: getSe.lng()
-  }
-
-  const { size } = mapProps
-  let { zoom, center } = fitBounds({ ne, sw }, size)
-
-  if (zoom === mapProps.zoom) {
-    zoom++
-  }
-
-  return {
-    bounds: { nw, se },
-    center,
-    zoom,
-    autoMove: true
-  }
-}
 
 const map = ({
   style,
@@ -156,6 +108,19 @@ const mapHOC = compose(
   ),
   // describe events
   withHandlers({
+    onGoogleApiLoaded: () => ({ map }) => {
+      window.currentMap = map
+    },
+    // eslint-disable-next-line
+    onChange: ({ setOffMapAutoMove, setMapProps, map }) => {
+      return (gmap) => {
+        if (map.autoMove) {
+          setOffMapAutoMove()
+        }
+
+        setMapProps('SEARCH', gmap)
+      }
+    },
     onClickZoomHandler: ({ updateMapZoom }) => (zoomType) => {
       updateMapZoom('SEARCH', zoomType)
     },
@@ -165,32 +130,23 @@ const mapHOC = compose(
     onMarkerMouseEnter: ({ setMapHoveredMarkerId }) => (id) => {
       setMapHoveredMarkerId('SEARCH', id)
     },
-    onClusterMarkerClick: ({ setMapProps, mapProps }) => (center, points) => {
-      const extendedMapProps = extendedBounds(points, mapProps)
+    // eslint-disable-next-line
+    onClusterMarkerClick: ({ setMapProps, mapProps }) => {
+      return (center, points) => { // esl
+        const extendedMapProps = extendedBounds(points, mapProps)
 
-      if (!extendedMapProps) {
-        setMapProps('SEARCH', {
-          ...mapProps,
-          center,
-          autoMove: true,
-          zoom: DECLUSTER_ZOOM_LEVEL + 1
-        })
-        return
-      }
-
-      setMapProps('SEARCH', extendedMapProps)
-    },
-    onGoogleApiLoaded: () => ({ map }) => {
-      window.currentMap = map
-    },
-    onChange: ({ setOffMapAutoMove, setMapProps, map }) =>
-      (gmap) => {
-        if (map.autoMove) {
-          setOffMapAutoMove()
+        if (!extendedMapProps) {
+          setMapProps('SEARCH', {
+            ...mapProps,
+            center,
+            zoom: DECLUSTER_ZOOM_LEVEL + 1
+          })
+          return
         }
 
-        setMapProps('SEARCH', gmap)
+        setMapProps('SEARCH', extendedMapProps)
       }
+    }
   }),
   // precalculate clusters if markers data has changed
   withPropsOnChange(

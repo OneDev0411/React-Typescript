@@ -13,7 +13,7 @@ const searchByMlsNumber = mlsNumber => async (dispatch, getState) => {
   dispatch(searchType.searchByMlsNumber())
 
   try {
-    const response = await getListingsByMlsNumber(mlsNumber)(dispatch, getState)
+    await getListingsByMlsNumber(mlsNumber)(dispatch, getState)
     const listing = selectListings(getState().search.listings)[0]
     if (listing) {
       const { id, lat, lng } = listing
