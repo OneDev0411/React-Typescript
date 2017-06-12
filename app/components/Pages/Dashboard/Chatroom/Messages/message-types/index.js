@@ -100,17 +100,17 @@ export default ({
     dangerouslySetInnerHTML={{ __html: getMessageText(message) }}
   />
 
-  let alert_message
-  let recommendation_message
+
+  let message_object = comment
 
   if (alert) {
-    alert_message = <AlertMessage
+    message_object = <AlertMessage
       alert={alert}
     />
   }
 
   if (message.recommendation) {
-    recommendation_message = <RecommendationMessage
+    message_object = <RecommendationMessage
       author={author}
       user={user}
       recommendation={message.recommendation}
@@ -134,9 +134,7 @@ export default ({
         <div className="title">
           { author && author.abbreviated_display_name }
         </div>
-        { comment }
-        { alert_message }
-        { recommendation_message }
+        { message_object }
       </div>
     </div>
   )
