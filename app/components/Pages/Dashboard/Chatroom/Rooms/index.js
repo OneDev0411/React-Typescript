@@ -95,6 +95,9 @@ const Rooms = ({
     />
   }
 
+  /**
+   * get room title, trim long titles
+   */
   const getRoomTitle = title => {
     const len = 30
     if (title.length <= len)
