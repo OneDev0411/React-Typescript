@@ -5,6 +5,7 @@ import { browserHistory } from 'react-router'
 import _ from 'underscore'
 import Rooms from './Rooms'
 import Messages from './Messages'
+import Socket from '../../../../services/socket'
 import { getRooms, changeActiveRoom } from '../../../../store_actions/chatroom'
 import store from '../../../../stores'
 
@@ -46,8 +47,12 @@ class Chatroom extends React.Component {
   changeRoom(id) {
     const { instanceMode, changeActiveRoom, activeRoom, location } = this.props
 
-    if (id !== activeRoom)
+    if (id !== activeRoom) {
       changeActiveRoom(id)
+
+      // ack rooms notifications
+      Socket.clearNotifications(id)
+    }
 
     // don't change url on instance mode
     if (!instanceMode) {

@@ -90,6 +90,13 @@ export default class Socket {
   }
 
   /**
+   * clear room notifications
+   */
+  static clearNotifications(roomId) {
+    window.socket.emit('Room.Acknowledged', roomId)
+  }
+
+  /**
    * send new message
    */
   static sendMessage(roomId, message, authorName = '') {
@@ -127,8 +134,11 @@ export default class Socket {
    * on send / receive new message
    */
   onNewMessage(room, message) {
-    const { messages } = store.getState().chatroom
+    const { messages, activeRoom } = store.getState().chatroom
     const list = messages[room.id].list
+
+    if (activeRoom && room.id === activeRoom)
+      Socket.clearNotifications(room.id)
 
     // do not dispatch when message is created
     if (list && list[message.id])
