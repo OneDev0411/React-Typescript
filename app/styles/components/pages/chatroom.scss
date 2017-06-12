@@ -119,19 +119,61 @@ $rooms-padding: 20px;
   }
 }
 
-%message-item-recommendation{
-  width: 30%;
-  img {
-    width: 100%;
-    border-radius: 4px;
-  }
-  .card {
-    .info {
-      padding: 10px;
+%message-item-recommendation {
+  .listing {
+    position: relative;
+    margin: 10px 0;
+    width: 360px;
+    max-height: 260px;
+    img {
+      width: 100%;
+      border-radius: 4px;
     }
-    .message {
-      margin: 30px 2px 8px 2px;
-      color: gray;
+    .info {
+      position: absolute;
+      left: 12px;
+      bottom: 10px;
+      color: #fff;
+      .status {
+        width: 50px;
+        height: 24px;
+        line-height: 24px;
+        vertical-align: middle;
+        text-align: center;
+        font-size: 15px;
+        border-radius: 3px;
+        margin-bottom: 10px;
+      }
+      .address-title {
+        font-size: 21px;
+        font-weight: 900;
+        text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
+        margin-bottom: 10px;
+      }
+      .price {
+        font-size: 17px;
+        font-weight: bold;
+        text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+        letter-spacing: 1px;
+      }
+      .details {
+        margin: 0;
+        padding: 0;
+        font-size: 16px;
+        li {
+          display: inline-block;
+          margin-right: 5px;
+          text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+          &:before {
+            content: " •  "
+          }
+          &:first-child {
+            &:before {
+              content: ""
+            }
+          }
+        }
+      }
     }
   }
 }
