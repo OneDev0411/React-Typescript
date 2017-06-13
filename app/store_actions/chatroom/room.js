@@ -24,6 +24,10 @@ export function changeActiveRoom(roomId) {
   }
 }
 
-export function updateRoomNotifications(roomId) {
-
+export function updateRoomNotifications(roomId, message) {
+  return {
+    type: types.UPDATE_ROOM_NOTIFICATIONS,
+    roomId,
+    message
+  }
 }
