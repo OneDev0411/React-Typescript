@@ -27,6 +27,7 @@ const Chatbar = ({
     >
       <Rooms
         user={user}
+        handler="Chatbar"
         onSelectRoom={roomId => {
           addChatPopup(roomId)
           toggleChatbar()
