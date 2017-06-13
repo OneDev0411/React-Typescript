@@ -6,7 +6,12 @@ import _ from 'underscore'
 import Rooms from './Rooms'
 import Messages from './Messages'
 import Socket from '../../../../services/socket'
-import { getRooms, changeActiveRoom } from '../../../../store_actions/chatroom'
+import {
+  getRooms,
+  changeActiveRoom,
+  resetRoomNotificationsCounter
+} from '../../../../store_actions/chatroom'
+
 import store from '../../../../stores'
 
 // set rooms container width
@@ -45,13 +50,15 @@ class Chatroom extends React.Component {
   }
 
   changeRoom(id) {
-    const { instanceMode, changeActiveRoom, activeRoom, location } = this.props
+    const { instanceMode, changeActiveRoom, activeRoom, resetRoomNotificationsCounter }
+      = this.props
 
     if (id !== activeRoom) {
       changeActiveRoom(id)
 
       // ack rooms notifications
       Socket.clearNotifications(id)
+      resetRoomNotificationsCounter(id)
     }
 
     // don't change url on instance mode
@@ -68,12 +75,18 @@ class Chatroom extends React.Component {
   }
 
   render() {
-    const { user, activeRoom } = this.props
+    const { user, activeRoom, isInstance } = this.props
 
     return (
       <div className="chatroom">
+        <audio id="chatroom-new-message">
+          <soruce src="/static/audio/ding.wav" type="audio/wav" />
+          <source src="/static/audio/ding.mp3" type="audio/mpeg" />
+        </audio>
+
         <div className="col-md-1 no-padding" style={{ width: roomsWidth }}>
           <Rooms
+            handler={isInstance ? 'Instance': 'Router'}
             user={user}
             onSelectRoom={id => this.changeRoom(id)}
             activeRoom={activeRoom}
@@ -98,4 +111,4 @@ class Chatroom extends React.Component {
 export default connect(({ chatroom }) => ({
   instanceMode: chatroom.instanceMode,
   activeRoom: chatroom.activeRoom
-}), ({ changeActiveRoom }))(Chatroom)
+}), ({ changeActiveRoom, resetRoomNotificationsCounter }))(Chatroom)
