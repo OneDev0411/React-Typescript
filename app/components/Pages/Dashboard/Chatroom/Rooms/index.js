@@ -144,6 +144,7 @@ class Rooms extends React.Component {
             {
               _.chain(rooms)
               .filter(room => room.proposed_title.toLowerCase().startsWith(filter.toLowerCase()))
+              .sortBy(room => room.updated_at * -1)
               .map(room =>
                 <Row
                   onClick={() => this.props.onSelectRoom(room.id)}
