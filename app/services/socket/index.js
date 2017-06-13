@@ -6,6 +6,7 @@ import {
   createMessage,
   addMessageTyping,
   removeMessageTyping,
+  updateRoomNotifications,
   initialStates,
   updateState
 } from '../../store_actions/chatroom'
@@ -33,6 +34,9 @@ export default class Socket {
     // create authentication
     if (this.user)
       Socket.authenicate(user.access_token)
+
+    // bind Notification
+    socket.on('Notification', this.onNotification.bind(this))
 
     // bind User.Typing
     socket.on('User.Typing', this.onUserTyping.bind(this))
@@ -93,7 +97,19 @@ export default class Socket {
    * clear room notifications
    */
   static clearNotifications(roomId) {
-    window.socket.emit('Room.Acknowledged', roomId)
+    window.socket.emit('Room.Acknowledge', roomId)
+  }
+
+  /**
+   * create new notification
+   */
+  static createNotification(roomId, message) {
+    store.dispatch(updateRoomNotifications(roomId, message))
+
+    // play sound
+    const audio = document.getElementById('chatroom-new-message')
+    if (audio)
+      audio.play()
   }
 
   /**
@@ -131,14 +147,24 @@ export default class Socket {
   }
 
   /**
+   * on receive new notification
+   */
+  onNotification(notification) {
+
+  }
+
+  /**
    * on send / receive new message
    */
   onNewMessage(room, message) {
     const { messages, activeRoom } = store.getState().chatroom
-    const list = messages[room.id].list
+    const list = messages[room.id] ? messages[room.id].list : null
 
     if (activeRoom && room.id === activeRoom)
       Socket.clearNotifications(room.id)
+    else {
+      Socket.createNotification(room.id, message)
+    }
 
     // do not dispatch when message is created
     if (list && list[message.id])
