@@ -10,48 +10,44 @@ import UserAvatar from '../../../../Partials/UserAvatar'
 
 import {
   toggleInstanceMode,
-  changeActiveRoom,
-  toggleChatbar
+  changeActiveRoom
 } from '../../../../../store_actions/chatroom'
 
-const enhance = compose(
-  pure,
-  withState('filter', 'onChangeFilter', ''),
-  withState('showComposeModal', 'onChangeCompose', false),
-  connect(
-    ({ chatroom }) => ({
-      instanceMode: chatroom.instanceMode,
-      showChatbar: chatroom.showChatbar,
-      rooms: chatroom.rooms
-    }),
-    ({ toggleInstanceMode, changeActiveRoom, toggleChatbar })
-  )
-)
+class Rooms extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      filter: '',
+      showComposeModal: false
+    }
+  }
 
-const Rooms = ({
-  user,
-  instanceMode,
-  showChatbar,
-  rooms,
-  activeRoom,
-  onSelectRoom,
-  /* rooms filter */
-  onChangeFilter,
-  filter,
-  /* show compose view */
-  onChangeCompose,
-  showComposeModal,
-  /* mapped actions to dispatch */
-  toggleInstanceMode,
-  changeActiveRoom,
-  toggleChatbar
-}) => {
+  shouldComponentUpdate(nextProps, nextState) {
+    const { showChatbar, instanceMode } = nextProps
+
+    if (nextProps.handler === 'Instance' && !instanceMode)
+      return false
+
+    if (nextProps.handler === 'Chatbar' && !showChatbar)
+      return false
+
+    return true
+  }
+
+  onChangeFilter(filter) {
+    this.setState({ filter })
+  }
+
+  onChangeCompose(showComposeModal) {
+    this.setState({ showComposeModal })
+  }
 
   /**
    * toggle full screen chatroom
    */
-  const fullScreen = e => {
+  fullScreen(e) {
     e.preventDefault()
+    const { activeRoom, changeActiveRoom, toggleInstanceMode, showChatbar, rooms } = this.props
 
     // toggle chatroom display
     toggleInstanceMode()
@@ -68,7 +64,8 @@ const Rooms = ({
   /**
    * create room's avatar image
    */
-  const getRoomAvatar = room => {
+  getRoomAvatar(room) {
+    const { user, activeRoom } = this.props
     const size = 30
     const color = '#d7d7d7'
     const { users } = room
@@ -98,7 +95,7 @@ const Rooms = ({
   /**
    * get room title, trim long titles
    */
-  const getRoomTitle = title => {
+  getRoomTitle(title) {
     const len = 30
     if (title.length <= len)
       return title
@@ -106,74 +103,90 @@ const Rooms = ({
     return title.substr(0, len) + '...'
   }
 
-  return (
-    <div className="rooms">
-      <div className="toolbar">
-        <div className="search">
-          <input
-            className="form-control filter"
-            type="text"
-            placeholder="Search"
-            onChange={e => onChangeFilter(e.target.value)}
-            value={filter}
-          />
-        </div>
+  render() {
+    const { filter, showComposeModal } = this.state
+    const { showChatbar, instanceMode, rooms, activeRoom } = this.props
 
-        {
-          showChatbar &&
-          <div className="toggle-sidebar">
-            <a
-              href="/dashboard/recents"
-              onClick={e => fullScreen(e)}
-              className="btn-tgl"
-            >
-              {
-                instanceMode ?
-                <i className="fa fa-angle-double-left fa-2x"></i> :
-                <i className="fa fa-angle-double-right fa-2x"></i>
-              }
-            </a>
+    return (
+      <div className="rooms">
+        <div className="toolbar">
+          <div className="search">
+            <input
+              className="form-control filter"
+              type="text"
+              placeholder="Search"
+              onChange={e => this.onChangeFilter(e.target.value)}
+              value={filter}
+            />
           </div>
-        }
 
-      </div>
-
-      <div className="list-container">
-        <div className="list">
           {
-            _.chain(rooms)
-            .filter(room => room.proposed_title.toLowerCase().startsWith(filter.toLowerCase()))
-            .map(room =>
-              <Row
-                onClick={() => onSelectRoom(room.id)}
-                key={`ROOM_CHANNEL_${room.id}`}
-                className={cn('item', { active: room.id === activeRoom })}
+            showChatbar &&
+            <div className="toggle-sidebar">
+              <a
+                href="/dashboard/recents"
+                onClick={e => this.fullScreen(e)}
+                className="btn-tgl"
               >
-                <Col sm={1} xs={1} className="avatar">
-                  { getRoomAvatar(room) }
-                </Col>
-                <Col sm={8} xs={8} className="title">
-                  { getRoomTitle(room.proposed_title) }
-                </Col>
-
-                <Col sm={2} xs={2} className="notifications">
-                  {
-                    room.new_notifications > 0 &&
-                    <span className="count">
-                      { room.new_notifications }
-                    </span>
-                  }
-                </Col>
-              </Row>
-            )
-            .value()
+                {
+                  instanceMode ?
+                  <i className="fa fa-angle-double-left fa-2x"></i> :
+                  <i className="fa fa-angle-double-right fa-2x"></i>
+                }
+              </a>
+            </div>
           }
-        </div>
-      </div>
 
-      <AddMember />
-    </div>
-  )
+        </div>
+
+        <div className="list-container">
+          <div className="list">
+            {
+              _.chain(rooms)
+              .filter(room => room.proposed_title.toLowerCase().startsWith(filter.toLowerCase()))
+              .map(room =>
+                <Row
+                  onClick={() => this.props.onSelectRoom(room.id)}
+                  key={`ROOM_CHANNEL_${room.id}`}
+                  className={cn('item', { active: room.id === activeRoom })}
+                >
+                  <Col sm={1} xs={1} className="avatar">
+                    { this.getRoomAvatar(room) }
+                  </Col>
+                  <Col sm={8} xs={8} className="title">
+                    { this.getRoomTitle(room.proposed_title) }
+                  </Col>
+
+                  <Col sm={2} xs={2} className="notifications">
+                    {
+                      room.new_notifications > 0 &&
+                      <span className="count">
+                        { room.new_notifications }
+                      </span>
+                    }
+                  </Col>
+                </Row>
+              )
+              .value()
+            }
+          </div>
+        </div>
+
+        <AddMember />
+      </div>
+    )
+  }
 }
 
-export default enhance(Rooms)
+function mapStateToProps({ chatroom }) {
+  return {
+    instanceMode: chatroom.instanceMode,
+    showChatbar: chatroom.showChatbar,
+    rooms: chatroom.rooms
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  ({ toggleInstanceMode, changeActiveRoom })
+)(Rooms)
