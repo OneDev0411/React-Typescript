@@ -3,6 +3,7 @@ import types from '../../constants/chatroom'
 import _ from 'underscore'
 
 const initialState = {
+  status: 'disconnected',
   showChatbar: false,
   instanceMode: false,
   popups: {},
@@ -17,6 +18,16 @@ function updateRoom(state, roomId, attributes) {
       ...state.rooms[roomId],
       ...attributes
     }}
+  }
+}
+
+/**
+ * change room status
+ */
+function changeStatus(state, action) {
+  return {
+    ...state,
+    ...{ status: action.status }
   }
 }
 
@@ -290,6 +301,7 @@ function updateUserState(state, action) {
 
 export default (state = initialState, action) => {
   const handlers = {
+    [types.CHANGE_STATUS]: changeStatus,
     [types.CHANGE_ACTIVE_ROOM]: changeActiveRoom,
     [types.TOGGLE_CHATBAR]: toggleChatbar,
     [types.TOGGLE_INSTANCE_MODE]: toggleInstanceMode,

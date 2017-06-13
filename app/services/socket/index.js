@@ -9,7 +9,8 @@ import {
   updateRoomNotifications,
   resetRoomNotificationsCounter,
   initialStates,
-  updateState
+  updateState,
+  changeSocketStatus
 } from '../../store_actions/chatroom'
 
 import config from '../../../config/public'
@@ -196,6 +197,7 @@ export default class Socket {
    * on reconnecting
    */
   onReconnecting() {
+    store.dispatch(changeSocketStatus('reconnecting'))
     console.log('--- ON RECONNECTING ---')
   }
 
@@ -203,6 +205,7 @@ export default class Socket {
    * on reconnect
    */
   onReconnect() {
+    store.dispatch(changeSocketStatus('connected'))
     console.log('--- ON RECONNECTED ---')
   }
 

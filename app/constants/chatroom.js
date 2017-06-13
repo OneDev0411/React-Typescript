@@ -1,6 +1,7 @@
 const ActionTypes = {}
 
 new Array(
+  'CHANGE_STATUS',
   'GET_ROOMS',
   'GET_MESSAGES',
   'CREATE_MESSAGE',
