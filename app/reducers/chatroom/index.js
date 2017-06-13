@@ -10,6 +10,16 @@ const initialState = {
   messages: {}
 }
 
+function updateRoom(state, roomId, attributes) {
+  return {
+    ...state.rooms,
+    ...{[roomId]: {
+      ...state.rooms[roomId],
+      ...attributes
+    }}
+  }
+}
+
 /**
  * change active room
  */
@@ -59,19 +69,29 @@ function getRooms(state, action) {
 function updateRoomNotifications(state, action) {
   const { new_notifications } = state.rooms[action.roomId]
 
+  const rooms = updateRoom(state, action.roomId, {
+    new_notifications: new_notifications + 1,
+    updated_at: (new Date).getTime(),
+    latest_message: action.message
+  })
+
   return {
     ...state,
-    ...{rooms: {
-      ...state.rooms,
-      ...{[action.roomId]: {
-        ...state.rooms[action.roomId],
-        ...{
-          new_notifications: new_notifications + 1,
-          updated_at: (new Date).getTime(),
-          latest_message: action.message
-        }
-      }}
-    }}
+    ...{rooms}
+  }
+}
+
+/**
+ * reset room notification counter when read all messages
+ */
+function resetRoomNotificationsCounter(state, action) {
+  const rooms = updateRoom(state, action.roomId, {
+    new_notifications: 0
+  })
+
+  return {
+    ...state,
+    ...{rooms}
   }
 }
 
@@ -82,13 +102,24 @@ function updateRoomNotifications(state, action) {
 function createMessages(state, action) {
   const messages = state.messages[action.id]
 
+  let rooms = state.rooms
+
   // get list of messages of current room
   let list = messages && messages.list ? messages.list : {}
 
-  if (action.append)
+  // create new message
+  if (action.append) {
     list = { ...list, ...action.messages }
-  else
+
+    // update room's updated_at flag
+    rooms = updateRoom(state, action.id, {
+      updated_at: (new Date).getTime()
+    })
+  }
+  // load previous messages into store
+  else {
     list = { ...action.messages, ...list }
+  }
 
   // remove queued message
   if (action.queueId) {
@@ -101,6 +132,7 @@ function createMessages(state, action) {
 
   return {
     ...state,
+    ...{rooms},
     ...{messages: {
       ...state.messages,
       ...{[action.id]: {
@@ -117,19 +149,16 @@ function createMessages(state, action) {
  */
 function addMessageTyping(state, action) {
   const user = _.find(state.rooms[action.roomId].users, user => user.id === action.userId )
+  const rooms = updateRoom(state, action.roomId, {
+    typing: {
+      ...state.rooms[action.roomId].typing,
+      ...{[action.userId]: user}
+    }
+  })
 
   return {
     ...state,
-    ...{rooms: {
-      ...state.rooms,
-      ...{[action.roomId]: {
-        ...state.rooms[action.roomId],
-        typing: {
-          ...state.rooms[action.roomId].typing,
-          ...{[action.userId]: user}
-        }
-      }}
-    }}
+    ...{rooms}
   }
 }
 
@@ -139,17 +168,14 @@ function addMessageTyping(state, action) {
 function removeMessageTyping(state, action) {
   const typing = _.omit(state.rooms[action.roomId].typing, user => user.id === action.userId)
 
+  const rooms = updateRoom(state, action.roomId, { typing })
+
   return {
     ...state,
-    ...{rooms: {
-      ...state.rooms,
-      ...{[action.roomId]: {
-        ...state.rooms[action.roomId],
-        ...{ typing }
-      }}
-    }}
+    ...{rooms}
   }
 }
+
 /**
  * add new chat popup
  */
@@ -278,7 +304,8 @@ export default (state = initialState, action) => {
     [types.CHANGE_ACTIVE_POPUP]: changeActivePopup,
     [types.INITIAL_USER_STATES]: initialUserStates,
     [types.UPDATE_USER_STATE]: updateUserState,
-    [types.UPDATE_ROOM_NOTIFICATIONS]: updateRoomNotifications
+    [types.UPDATE_ROOM_NOTIFICATIONS]: updateRoomNotifications,
+    [types.RESET_ROOM_NOTIFICATIONS]: resetRoomNotificationsCounter
   }
 
   return handlers[action.type] ? handlers[action.type](state, action) : state
