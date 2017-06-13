@@ -31,3 +31,10 @@ export function updateRoomNotifications(roomId, message) {
     message
   }
 }
+
+export function resetRoomNotificationsCounter(roomId) {
+  return {
+    type: types.RESET_ROOM_NOTIFICATIONS,
+    roomId
+  }
+}
