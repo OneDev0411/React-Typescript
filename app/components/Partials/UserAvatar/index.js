@@ -30,7 +30,7 @@ const UserAvatar = ({
       }}
     >
       <Avatar
-        style={{ verticalAlign: 'middle' }}
+        style={image ? {} : {verticalAlign: 'middle'}}
         round
         name={name}
         src={image}
