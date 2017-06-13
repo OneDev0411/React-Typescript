@@ -3,6 +3,7 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { slide as Menu } from 'react-burger-menu'
 import Rooms from '../Rooms'
+import Socket from '../../../../../services/socket'
 import { addChatPopup, toggleChatbar } from '../../../../../store_actions/chatroom'
 
 const Chatbar = ({
@@ -29,6 +30,7 @@ const Chatbar = ({
         user={user}
         handler="Chatbar"
         onSelectRoom={roomId => {
+          Socket.clearNotifications(roomId)
           addChatPopup(roomId)
           toggleChatbar()
         }}
