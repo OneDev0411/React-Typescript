@@ -7,6 +7,7 @@ import {
   addMessageTyping,
   removeMessageTyping,
   updateRoomNotifications,
+  resetRoomNotificationsCounter,
   initialStates,
   updateState
 } from '../../store_actions/chatroom'
@@ -45,7 +46,7 @@ export default class Socket {
     socket.on('User.TypingEnded', this.onUserTypingEnded.bind(this))
 
     // bind Message.Sent
-    socket.on('Message.Sent', this.onNewMessage)
+    socket.on('Message.Sent', this.onNewMessage.bind(this))
 
     // bind Reconnecting and Reconnect socket
     socket.on('reconnecting', this.onReconnecting)
@@ -98,6 +99,7 @@ export default class Socket {
    */
   static clearNotifications(roomId) {
     window.socket.emit('Room.Acknowledge', roomId)
+    store.dispatch(resetRoomNotificationsCounter(roomId))
   }
 
   /**
@@ -108,8 +110,10 @@ export default class Socket {
 
     // play sound
     const audio = document.getElementById('chatroom-new-message')
-    if (audio)
+
+    if (audio) {
       audio.play()
+    }
   }
 
   /**
@@ -150,7 +154,7 @@ export default class Socket {
    * on receive new notification
    */
   onNotification(notification) {
-
+    // TODO:
   }
 
   /**
@@ -162,12 +166,13 @@ export default class Socket {
 
     if (activeRoom && room.id === activeRoom)
       Socket.clearNotifications(room.id)
-    else {
+
+    if (room.id !== activeRoom && this.user.id !== message.author.id) {
       Socket.createNotification(room.id, message)
     }
 
     // do not dispatch when message is created
-    if (list && list[message.id])
+    if (!list || (list && list[message.id]))
       return false
 
     Socket.createMessage(room.id, message)
