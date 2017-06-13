@@ -72,7 +72,7 @@ function updateRoomNotifications(state, action) {
   const rooms = updateRoom(state, action.roomId, {
     new_notifications: new_notifications + 1,
     updated_at: (new Date).getTime(),
-    // latest_message: action.message
+    latest_message: action.message
   })
 
   return {
