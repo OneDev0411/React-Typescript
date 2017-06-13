@@ -15,7 +15,8 @@ new Array(
   'ADD_MESSAGE_TYPING',
   'REMOVE_MESSAGE_TYPING',
   'INITIAL_USER_STATES',
-  'UPDATE_USER_STATE'
+  'UPDATE_USER_STATE',
+  'UPDATE_ROOM_NOTIFICATIONS'
 )
 .forEach(action => {
   ActionTypes[action] = `CHATROOM___${action}`

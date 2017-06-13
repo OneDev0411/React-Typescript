@@ -54,6 +54,29 @@ function getRooms(state, action) {
 }
 
 /**
+ * update room notification counter when receive a new message
+ */
+function updateRoomNotifications(state, action) {
+  const { new_notifications } = state.rooms[action.roomId]
+
+  return {
+    ...state,
+    ...{rooms: {
+      ...state.rooms,
+      ...{[action.roomId]: {
+        ...state.rooms[action.roomId],
+        ...{
+          new_notifications: new_notifications + 1,
+          updated_at: (new Date).getTime(),
+          latest_message: action.message
+        }
+      }}
+    }}
+  }
+}
+
+
+/**
  * get or create messages
  */
 function createMessages(state, action) {
@@ -73,7 +96,7 @@ function createMessages(state, action) {
   }
 
   // total += 1
-  if (action.increaseTotal)
+  if (messages && action.increaseTotal)
     messages.total += 1
 
   return {
@@ -254,7 +277,8 @@ export default (state = initialState, action) => {
     [types.REMOVE_POPUP]: removePopup,
     [types.CHANGE_ACTIVE_POPUP]: changeActivePopup,
     [types.INITIAL_USER_STATES]: initialUserStates,
-    [types.UPDATE_USER_STATE]: updateUserState
+    [types.UPDATE_USER_STATE]: updateUserState,
+    [types.UPDATE_ROOM_NOTIFICATIONS]: updateRoomNotifications
   }
 
   return handlers[action.type] ? handlers[action.type](state, action) : state
