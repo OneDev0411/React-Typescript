@@ -6,12 +6,7 @@ import _ from 'underscore'
 import Rooms from './Rooms'
 import Messages from './Messages'
 import Socket from '../../../../services/socket'
-import {
-  getRooms,
-  changeActiveRoom,
-  resetRoomNotificationsCounter
-} from '../../../../store_actions/chatroom'
-
+import { getRooms, changeActiveRoom } from '../../../../store_actions/chatroom'
 import store from '../../../../stores'
 
 // set rooms container width
@@ -50,15 +45,13 @@ class Chatroom extends React.Component {
   }
 
   changeRoom(id) {
-    const { instanceMode, changeActiveRoom, activeRoom, resetRoomNotificationsCounter }
-      = this.props
+    const { instanceMode, changeActiveRoom, activeRoom, location } = this.props
 
     if (id !== activeRoom) {
       changeActiveRoom(id)
 
       // ack rooms notifications
       Socket.clearNotifications(id)
-      resetRoomNotificationsCounter(id)
     }
 
     // don't change url on instance mode
@@ -111,4 +104,4 @@ class Chatroom extends React.Component {
 export default connect(({ chatroom }) => ({
   instanceMode: chatroom.instanceMode,
   activeRoom: chatroom.activeRoom
-}), ({ changeActiveRoom, resetRoomNotificationsCounter }))(Chatroom)
+}), ({ changeActiveRoom }))(Chatroom)
