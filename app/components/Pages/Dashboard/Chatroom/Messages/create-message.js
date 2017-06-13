@@ -53,11 +53,16 @@ export default class CreateMessage extends React.Component {
   async sendMessage() {
     const { user, roomId } = this.props
 
+    const comment = this.text_message.value.trim()
+
+    if (comment.length === 0)
+      return false
+
     // send TypingEnded signal
     this.onTypingEnded()
 
     const message = {
-      comment: this.text_message.value,
+      comment,
       author: user.id,
       room: roomId,
       message_type: 'TopLevel',
