@@ -258,7 +258,7 @@ $rooms-padding: 20px;
 %rooms-toolbar {
   $search-width: 234px;
   padding: 20px $rooms-padding 0 $rooms-padding;
-  height: 70px;
+  min-height: 70px;
   margin-bottom: 10px;
   border-bottom: 1px solid #212e3d;
   .search {
@@ -292,6 +292,15 @@ $rooms-padding: 20px;
 
     .btn-tgl {
       color: #b2b2b2;
+    }
+  }
+
+  .socket-status {
+    margin: 10px 0;
+    color: #fff;
+    img {
+      width: 30px;
+      margin-left: 5px;
     }
   }
 }
@@ -410,7 +419,11 @@ $rooms-padding: 20px;
     color: #fff;
     padding-left: 10px;
     font-size: 13px;
-    color: green;
+    color: gray;
+    img {
+      width: 20px;
+      margin: 0 5px;
+    }
   }
 
   .message-create {
