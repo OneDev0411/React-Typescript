@@ -3,6 +3,8 @@ import moment from 'moment'
 import Rx from 'rxjs/Rx'
 import store from '../../stores'
 import {
+  getRooms,
+  getMessages,
   createMessage,
   addMessageTyping,
   removeMessageTyping,
@@ -74,10 +76,11 @@ export default class Socket {
    */
   static authenicate(access_token) {
     socket.emit('Authenticate', access_token, (err, user) => {
-      if (err) return false
+      if (err || !user)
+        return false
 
-      if (user && user.access_token === access_token)
-        Socket.authenicated = true
+      store.dispatch(changeSocketStatus('connected'))
+      Socket.authenicated = true
     })
   }
 
@@ -198,15 +201,22 @@ export default class Socket {
    */
   onReconnecting() {
     store.dispatch(changeSocketStatus('reconnecting'))
-    console.log('--- ON RECONNECTING ---')
   }
 
   /**
    * on reconnect
    */
   onReconnect() {
+    const { activeRoom } = store.getState().chatroom
+
+    // get rooms again
+    store.dispatch(getRooms())
+
+    // get messages of active rooms
+    store.dispatch(getMessages(activeRoom))
+
+    // emit connected message
     store.dispatch(changeSocketStatus('connected'))
-    console.log('--- ON RECONNECTED ---')
   }
 
   /**
