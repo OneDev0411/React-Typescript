@@ -3,7 +3,7 @@ import types from '../../constants/chatroom'
 import _ from 'underscore'
 
 const initialState = {
-  status: 'disconnected',
+  status: 'connecting',
   showChatbar: false,
   instanceMode: false,
   popups: {},
