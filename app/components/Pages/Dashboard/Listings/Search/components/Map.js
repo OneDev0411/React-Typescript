@@ -66,9 +66,6 @@ const map = ({
                 {...markerProps}
                 onMouseEnterHandler={() => onMarkerMouseEnter(id)}
                 onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
-                onClickHandler={
-                  controller.listing_viewer.showListingViewer.bind(this)
-                }
                 markerPopupIsActive={hoveredMarkerId === id}
               />
               : <ClusterMarker

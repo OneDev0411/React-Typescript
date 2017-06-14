@@ -73,7 +73,9 @@ export default listings
 export const selectListings = state =>
   state.allIds.map(id => state.byId[id])
 
-export const getIsFetchingStatus = state => state.isFetching
+export const selectListing = (state, id) => state.byId[id]
+
+export const getFetchingStatus = state => state.isFetching
 
 export const getErrorMessage = state => state.errorMessage
 

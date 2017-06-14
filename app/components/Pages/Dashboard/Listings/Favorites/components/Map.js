@@ -50,9 +50,6 @@ const map = ({
               key={id}
               data={appData}
               {...markerProps}
-              onClickHandler={
-                controller.listing_viewer.showListingViewer.bind(this)
-              }
               onMouseEnterHandler={() => onMarkerMouseEnter(id)}
               onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
               markerPopupIsActive={hoveredMarkerId === id}

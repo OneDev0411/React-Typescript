@@ -1,9 +1,9 @@
 import api from '../../../../models/listings/search'
 import * as listingsTypes from '../../../../constants/listings'
-import { getIsFetchingStatus } from '../../../../reducers/listings'
+import { getFetchingStatus } from '../../../../reducers/listings'
 
 const getListingsByMlsNumber = mlsNumber => (dispatch, getState) => {
-  if (getIsFetchingStatus(getState().search.listings)) {
+  if (getFetchingStatus(getState().search.listings)) {
     return Promise.resolve()
   }
 

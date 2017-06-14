@@ -24,9 +24,16 @@ import Settings from '../components/Pages/Account/Settings'
 import Notifications from '../components/Pages/Account/Notifications'
 
 // listings routers component
-import Listings from './listings'
+import ListingsLayout from '../components/Pages/Dashboard/Listings'
+import ListingsSearch from '../components/Pages/Dashboard/Listings/Search'
+import ListingsAlerts from '../components/Pages/Dashboard/Listings/Alerts'
+import ListingsFavorites from
+  '../components/Pages/Dashboard/Listings/Favorites'
 
-// mls
+import ListingSinglePage from
+  '../components/Pages/Dashboard/Listings/Listing'
+
+// // mls
 import Mls from '../components/Pages/Dashboard/Mls'
 import Agents from '../components/Pages/Dashboard/Mls/Agents'
 import Listing from '../components/Pages/Dashboard/Mls/Listing'
@@ -114,7 +121,11 @@ export default (
       <Route path="/account/settings" component={Settings} />
       <Route path="/account/notifications" component={Notifications} />
 
-      {Listings}
+      <Route path="dashboard/listings" component={ListingsLayout}>
+        <IndexRoute component={ListingsSearch} />
+        <Route path="alerts" component={ListingsAlerts} />
+        <Route path="favorites" component={ListingsFavorites} />
+      </Route>
 
       <Route path="/dashboard/mls/agents" component={Agents} />
       <Route path="/dashboard/mls/alerts(/:alert_id)" component={Mls} />
@@ -166,6 +177,7 @@ export default (
       <Route path="/widgets/map" component={MapWidget} />
       <Route path="/widgets/search" component={SearchWidget} />
       <Route path="/widgets/listings" component={ListingsWidget} />
+      <Route path="dashboard/listings/:id" component={ListingSinglePage} />
     </Route>
 
     <Route path="*" component={NoMatch} />

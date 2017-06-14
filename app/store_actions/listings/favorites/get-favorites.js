@@ -1,10 +1,10 @@
-import { getIsFetchingStatus } from
+import { getFetchingStatus } from
   '../../../reducers/listings'
 import * as listingsTypes from '../../../constants/listings'
 import api from '../../../models/listings/favorites'
 
 const getFavorites = user => (dispatch, getState) => {
-  if (getIsFetchingStatus(getState().favorites.listings)) {
+  if (getFetchingStatus(getState().favorites.listings)) {
     return Promise.resolve()
   }
 

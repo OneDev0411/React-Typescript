@@ -9,6 +9,12 @@ $cluster-marker-font-size: 14px !default;
 
 .single-marker {
     cursor: pointer;
+    color: #333;
+
+    &:hover {
+      color: inherit;
+      text-decoration: none;
+    }
 }
 
 .cluster-marker {

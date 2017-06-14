@@ -1,6 +1,6 @@
 import * as types from '../../../constants/listings/map'
 import { isAutoMove } from '../../../reducers/listings/map'
-import { getIsFetchingStatus } from '../../../reducers/listings'
+import { getFetchingStatus } from '../../../reducers/listings'
 
 export const setOffMapAutoMove = () => ({
   name: 'SEARCH',
@@ -32,7 +32,7 @@ export const setMapHoveredMarkerId = (name, id) => ({
 export const goToPlace = mapProps => (dispatch, getState) => {
   const { listings, map } = getState().search
 
-  if (getIsFetchingStatus(listings) || isAutoMove(map)) {
+  if (getFetchingStatus(listings) || isAutoMove(map)) {
     return Promise.resolve()
   }
 
