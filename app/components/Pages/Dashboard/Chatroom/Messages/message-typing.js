@@ -24,16 +24,21 @@ const MessageTyping = ({
   let message = ''
 
   if (count === 0) {
-    message = ''
+    return false
   } else if (count === 1) {
-    message = `${getUser(typing, 0)} is typing ...`
+    message = `${getUser(typing, 0)} is typing`
   } else if (count === 2) {
-    message = `${getUser(typing, 0)} and ${getUser(typing, 1)} are typing ...`
+    message = `${getUser(typing, 0)} and ${getUser(typing, 1)} are typing`
   } else {
-    message = 'Several people are typing ...'
+    message = 'Several people are typing'
   }
 
-  return <div>{ message }</div>
+  return (
+    <div>
+      { message }
+      <img src="/static/images/loading-states/three-dots.svg" />
+    </div>
+  )
 }
 
 export default connect(({ chatroom }) => ({
