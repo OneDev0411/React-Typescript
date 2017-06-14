@@ -5,6 +5,7 @@ import { Row, Col } from 'react-bootstrap'
 import { compose,  withState, lifecycle, pure } from 'recompose'
 import _ from 'underscore'
 import cn from 'classnames'
+import SocketStatus from '../SocketStatus'
 import AddMember from './add-member'
 import UserAvatar from '../../../../Partials/UserAvatar'
 
@@ -20,18 +21,6 @@ class Rooms extends React.Component {
       filter: '',
       showComposeModal: false
     }
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    const { showChatbar, instanceMode } = nextProps
-
-    if (nextProps.handler === 'Instance' && !instanceMode)
-      return false
-
-    if (nextProps.handler === 'Chatbar' && !showChatbar)
-      return false
-
-    return true
   }
 
   onChangeFilter(filter) {
@@ -110,7 +99,10 @@ class Rooms extends React.Component {
     return (
       <div className="rooms">
         <div className="toolbar">
-          <div className="search">
+          <div
+            className="search"
+            style={{ float: showChatbar ? 'left': 'none' }}
+          >
             <input
               className="form-control filter"
               type="text"
@@ -120,23 +112,24 @@ class Rooms extends React.Component {
             />
           </div>
 
-          {
-            showChatbar &&
-            <div className="toggle-sidebar">
-              <a
-                href="/dashboard/recents"
-                onClick={e => this.fullScreen(e)}
-                className="btn-tgl"
-              >
-                {
-                  instanceMode ?
-                  <i className="fa fa-angle-double-left fa-2x"></i> :
-                  <i className="fa fa-angle-double-right fa-2x"></i>
-                }
-              </a>
-            </div>
-          }
+          <div
+            className="toggle-sidebar"
+            style={{ display: showChatbar ? 'block': 'none' }}
+          >
+            <a
+              href="/dashboard/recents"
+              onClick={e => this.fullScreen(e)}
+              className="btn-tgl"
+            >
+              {
+                instanceMode ?
+                <i className="fa fa-angle-double-left fa-2x"></i> :
+                <i className="fa fa-angle-double-right fa-2x"></i>
+              }
+            </a>
+          </div>
 
+          <SocketStatus />
         </div>
 
         <div className="list-container">
