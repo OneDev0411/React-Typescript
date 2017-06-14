@@ -1,19 +1,12 @@
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
-import { withRouter } from 'react-router'
-
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
 
 import BrandLogo from './components/BrandLogo'
 import ListingModal from './components/ListingModal'
 import ContactModel from '../../../../../models/Contact'
-import getListing from
-  '../../../../../store_actions/listings/listing/get-listing'
+import getListing from '../../../../../store_actions/listings/listing/get-listing'
 
 class Listing extends Component {
-
   componentDidMount() {
     const { user, id } = this.props
 
@@ -34,12 +27,7 @@ class Listing extends Component {
   }
 
   _updateUserTimeline(user, id) {
-    ContactModel.updateUserTimeline(
-      user,
-      'UserViewedListing',
-      'Listing',
-      id
-    )
+    ContactModel.updateUserTimeline(user, 'UserViewedListing', 'Listing', id)
   }
 
   render() {
@@ -47,11 +35,7 @@ class Listing extends Component {
 
     return (
       <div>
-        <ListingModal
-          data={data}
-          listing={listing}
-          isFetching={isFetching}
-        />
+        <ListingModal data={data} listing={listing} isFetching={isFetching} />
         <BrandLogo data={data} />
       </div>
     )

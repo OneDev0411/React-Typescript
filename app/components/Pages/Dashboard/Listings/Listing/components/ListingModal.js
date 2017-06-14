@@ -1,31 +1,17 @@
 import React from 'react'
-import TonyListing from './TonyListing'
-import ListingViewerMobile from '../../../Partials/ListingViewerMobile'
+import ListingMobileView from './ListingMobileView'
+import ListingDesktopView from './ListingDesktopView'
 
-const ListingModal = ({
-  data,
-  listing,
-  isFetching
-}) => {
-  let modal = (
-    <TonyListing
-      listing={listing}
-      isFetching={isFetching}
-    />
-  )
+const ListingModal = ({ data, listing, isFetching }) => {
+  let content = <ListingDesktopView listing={listing} isFetching={isFetching} />
 
   // Check for mobile
   if (data.is_mobile) {
-    listing_viewer = (
-      <ListingViewerMobile
-        data={data}
-        listing={listing}
-        isFetching={isFetching}
-      />
-    )
+    console.log('mobile')
+    content = <ListingMobileView listing={listing} isFetching={isFetching} />
   }
 
-  return modal
+  return content
 }
 
 export default ListingModal

@@ -2,8 +2,7 @@ import React from 'react'
 import { Link } from 'react-router'
 import ListingMarker from '../../../Partials/ListingMarker'
 
-
-const singleMarkerStyle = (list) => {
+const singleMarkerStyle = list => {
   if (list.position) {
     const { left, top } = list.position
     return {
@@ -27,9 +26,9 @@ const SingleMarker = ({
   markerPopupIsActive,
   onMouseLeaveHandler,
   onMouseEnterHandler
-}) => (
+}) =>
   <Link
-    to={`/dashboard/listings/${list.id}`}
+    to={`/listings/${list.id}`}
     className={'single-marker'}
     onMouseLeave={onMouseLeaveHandler}
     onMouseEnter={onMouseEnterHandler}
@@ -42,6 +41,5 @@ const SingleMarker = ({
       popupIsActive={markerPopupIsActive}
     />
   </Link>
-)
 
 export default SingleMarker

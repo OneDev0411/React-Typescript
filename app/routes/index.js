@@ -27,11 +27,9 @@ import Notifications from '../components/Pages/Account/Notifications'
 import ListingsLayout from '../components/Pages/Dashboard/Listings'
 import ListingsSearch from '../components/Pages/Dashboard/Listings/Search'
 import ListingsAlerts from '../components/Pages/Dashboard/Listings/Alerts'
-import ListingsFavorites from
-  '../components/Pages/Dashboard/Listings/Favorites'
+import ListingsFavorites from '../components/Pages/Dashboard/Listings/Favorites'
 
-import ListingSinglePage from
-  '../components/Pages/Dashboard/Listings/Listing'
+import ListingSinglePage from '../components/Pages/Dashboard/Listings/Listing'
 
 // // mls
 import Mls from '../components/Pages/Dashboard/Mls'
@@ -44,15 +42,12 @@ import DealsList from '../components/Pages/Dashboard/Deals/DealsList'
 import DealCreate from '../components/Pages/Dashboard/Deals/DealCreate'
 import DealDashboard from '../components/Pages/Dashboard/Deals/Dashboard'
 import DealEditForm from '../components/Pages/Dashboard/Deals/Edit-Form'
-import CollectSignatures_Documents
-  from '../components/Pages/Dashboard/Deals/CollectSignatures-Documents'
-import CollectSignatures_Recipients
-  from '../components/Pages/Dashboard/Deals/CollectSignatures-Recipients'
+import CollectSignatures_Documents from '../components/Pages/Dashboard/Deals/CollectSignatures-Documents'
+import CollectSignatures_Recipients from '../components/Pages/Dashboard/Deals/CollectSignatures-Recipients'
 
 // Concierge
 import ConciergeLayout from '../components/Pages/Dashboard/Concierge'
-import ConciergeDealsList
-  from '../components/Pages/Dashboard/Concierge/DealsList'
+import ConciergeDealsList from '../components/Pages/Dashboard/Concierge/DealsList'
 import DealReview from '../components/Pages/Dashboard/Concierge/DealReview'
 
 // contacts
@@ -121,7 +116,7 @@ export default (
       <Route path="/account/settings" component={Settings} />
       <Route path="/account/notifications" component={Notifications} />
 
-      <Route path="dashboard/listings" component={ListingsLayout}>
+      <Route path="listings" component={ListingsLayout}>
         <IndexRoute component={ListingsSearch} />
         <Route path="alerts" component={ListingsAlerts} />
         <Route path="favorites" component={ListingsFavorites} />
@@ -177,7 +172,7 @@ export default (
       <Route path="/widgets/map" component={MapWidget} />
       <Route path="/widgets/search" component={SearchWidget} />
       <Route path="/widgets/listings" component={ListingsWidget} />
-      <Route path="dashboard/listings/:id" component={ListingSinglePage} />
+      <Route path="listings/:id" component={ListingSinglePage} />
     </Route>
 
     <Route path="*" component={NoMatch} />

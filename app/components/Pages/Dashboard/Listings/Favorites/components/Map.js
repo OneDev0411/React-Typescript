@@ -11,8 +11,12 @@ import withPropsOnChange from 'recompose/withPropsOnChange'
 import controller from '../../../controller'
 import ZoomController from '../../components/ZoomController'
 import Marker from '../../../Mls/Partials/Markers/SingleMarker'
-import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../../Mls/Partials/MlsMapOptions'
 import * as actions from '../../../../../../store_actions/listings/map'
+import {
+  bootstrapURLKeys,
+  mapOptions,
+  mapInitialState
+} from '../../../Mls/Partials/MlsMapOptions'
 
 const map = ({
   style,
@@ -27,11 +31,8 @@ const map = ({
   onMarkerMouseLeave,
   onClickZoomHandler,
   map: { hoveredMarkerId },
-  mapProps: {
-    zoom,
-    center
-  }
-}) => (
+  mapProps: { zoom, center }
+}) =>
   <div>
     <Map
       zoom={zoom}
@@ -43,24 +44,19 @@ const map = ({
       defaultCenter={defaultCenter}
       bootstrapURLKeys={bootstrapURLKeys}
     >
-      {
-        markers.map(
-          ({ ...markerProps, numPoints, list, lat, lng, id }) => (
-            <Marker
-              key={id}
-              data={appData}
-              {...markerProps}
-              onMouseEnterHandler={() => onMarkerMouseEnter(id)}
-              onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
-              markerPopupIsActive={hoveredMarkerId === id}
-            />
-          )
-        )
-      }
+      {markers.map(({ ...markerProps, numPoints, list, lat, lng, id }) =>
+        <Marker
+          key={id}
+          data={appData}
+          {...markerProps}
+          onMouseEnterHandler={() => onMarkerMouseEnter(id)}
+          onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
+          markerPopupIsActive={hoveredMarkerId === id}
+        />
+      )}
     </Map>
     <ZoomController onClickZoomHandler={onClickZoomHandler} />
   </div>
-)
 
 const mapHOC = compose(
   defaultProps({
@@ -73,30 +69,27 @@ const mapHOC = compose(
       height: 'calc(100vh - 55px)'
     }
   }),
-  connect(
-    ({ data, favorites }) => {
-      const { map } = favorites
-      return {
-        map,
-        user: data.user,
-        mapProps: map.props,
-        appData: { ...data }
-      }
-    },
-    actions
-  ),
+  connect(({ data, favorites }) => {
+    const { map } = favorites
+    return {
+      map,
+      user: data.user,
+      mapProps: map.props,
+      appData: { ...data }
+    }
+  }, actions),
   // describe events
   withHandlers({
-    onChange: ({ setMapProps }) => (mapProps) => {
+    onChange: ({ setMapProps }) => mapProps => {
       setMapProps('FAVORITE', mapProps)
     },
-    onClickZoomHandler: ({ updateMapZoom }) => (zoomType) => {
+    onClickZoomHandler: ({ updateMapZoom }) => zoomType => {
       updateMapZoom('FAVORITE', zoomType)
     },
     onMarkerMouseLeave: ({ setMapHoveredMarkerId }) => () => {
       setMapHoveredMarkerId('FAVORITE', -1)
     },
-    onMarkerMouseEnter: ({ setMapHoveredMarkerId }) => (id) => {
+    onMarkerMouseEnter: ({ setMapHoveredMarkerId }) => id => {
       setMapHoveredMarkerId('FAVORITE', id)
     }
   })
