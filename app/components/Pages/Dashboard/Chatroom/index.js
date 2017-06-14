@@ -79,7 +79,6 @@ class Chatroom extends React.Component {
 
         <div className="col-md-1 no-padding" style={{ width: roomsWidth }}>
           <Rooms
-            handler={isInstance ? 'Instance': 'Router'}
             user={user}
             onSelectRoom={id => this.changeRoom(id)}
             activeRoom={activeRoom}

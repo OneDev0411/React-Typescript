@@ -28,7 +28,6 @@ const Chatbar = ({
     >
       <Rooms
         user={user}
-        handler="Chatbar"
         onSelectRoom={roomId => {
           Socket.clearNotifications(roomId)
           addChatPopup(roomId)
