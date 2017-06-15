@@ -227,6 +227,7 @@ function maximizePopup(state, action) {
     ...state,
     ...{
       activeRoom: action.roomId,
+      activePopup: action.roomId,
       instanceMode: true
     },
     popups: {
