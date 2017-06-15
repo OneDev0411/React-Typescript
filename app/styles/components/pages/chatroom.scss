@@ -424,6 +424,11 @@ $rooms-padding: 20px;
     .message-item {
       margin: 0 10px 10px 15px !important;
       margin-bottom: 0;
+      .content {
+        .recommendation {
+          @extend %popup-message-recommendation;
+        }
+      }
     }
   }
 
@@ -454,6 +459,28 @@ $rooms-padding: 20px;
 
   .loading {
     height: 44vh;
+  }
+}
+
+%popup-message-recommendation {
+  .listing {
+    width: 160px;
+    .info {
+      bottom: 2px;
+      .status {
+        font-size: 13px;
+      }
+      .address-title {
+        font-size: 15px;
+        margin-bottom: 0;
+      }
+      .price {
+        font-size: 14px;
+      }
+      .details {
+        display: none;
+      }
+    }
   }
 }
 
