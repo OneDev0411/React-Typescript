@@ -7,7 +7,7 @@ import cn from 'classnames'
 import { getMessages } from '../../../../../store_actions/chatroom'
 import Toolbar from './toolbar'
 import Message from './message-types'
-import MessageTyping from './message-typing'
+import UserTyping from '../UserTyping'
 import CreateMessage from './create-message'
 
 class Messages extends React.Component {
@@ -175,11 +175,9 @@ class Messages extends React.Component {
           }
         </div>
 
-        <div className="message-typing">
-          <MessageTyping
-            roomId={roomId}
-          />
-        </div>
+        <UserTyping
+          roomId={roomId}
+        />
 
         <div className="message-create">
           <CreateMessage
