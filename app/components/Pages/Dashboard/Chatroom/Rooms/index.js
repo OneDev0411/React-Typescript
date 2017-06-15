@@ -8,6 +8,7 @@ import cn from 'classnames'
 import SocketStatus from '../SocketStatus'
 import AddMember from './add-member'
 import UserAvatar from '../../../../Partials/UserAvatar'
+import UserTyping from '../UserTyping'
 
 import {
   toggleInstanceMode,
@@ -149,6 +150,7 @@ class Rooms extends React.Component {
                   </Col>
                   <Col sm={8} xs={8} className="title">
                     { this.getRoomTitle(room.proposed_title) }
+                    <UserTyping roomId={room.id} />
                   </Col>
 
                   <Col sm={2} xs={2} className="notifications">

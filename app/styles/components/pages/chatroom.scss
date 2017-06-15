@@ -317,6 +317,16 @@ $rooms-padding: 20px;
   .title {
     padding: 6px 0 0 8px;
     opacity: 0.5;
+    .message-typing {
+      display: inline;
+      margin-left: 5px;
+      .message {
+        display: none;
+      }
+      img {
+        width: 30px;
+      }
+    }
   }
   .notifications {
     text-align: center;
