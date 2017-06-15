@@ -8,15 +8,8 @@ const getUser = function (list, index = 0) {
 }
 
 const MessageTyping = ({
-  roomId,
-  rooms
+  typing = {}
 }) => {
-
-  if (!roomId)
-    return false
-
-  // get user typing
-  const { typing } = rooms[roomId]
 
   // get count of typers
   const count = _.size(typing)
@@ -34,13 +27,23 @@ const MessageTyping = ({
   }
 
   return (
-    <div>
-      { message }
+    <div className="message-typing">
+      <span className="message">{ message }</span>
       <img src="/static/images/loading-states/three-dots.svg" />
     </div>
   )
 }
 
-export default connect(({ chatroom }) => ({
-  rooms: chatroom.rooms
-}))(MessageTyping)
+function mapStateToProps({ chatroom }, ownProps) {
+  const { roomId } = ownProps
+  const { rooms } = chatroom
+
+  if (!roomId || !rooms)
+    return null
+
+  return {
+    typing: rooms[roomId].typing
+  }
+}
+
+export default connect(mapStateToProps)(MessageTyping)
