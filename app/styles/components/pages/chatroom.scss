@@ -183,7 +183,7 @@ $rooms-padding: 20px;
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
+  right: 0;
   background-color: #edeff2;
   padding-left: 26px;
   margin-bottom: 2vh;
@@ -194,6 +194,9 @@ $rooms-padding: 20px;
   border-left: 1px solid #fff;
   font-weight: bold;
   font-size: 17px;
+  .close-instance {
+    cursor: pointer;
+  }
 }
 
 /**
