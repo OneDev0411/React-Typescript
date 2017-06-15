@@ -91,6 +91,9 @@ export default (
       <Route path="/dashboard/mls" component={Mls} />
       <Route path="/dashboard/mls/:id" component={Listing} />
       <Route path="/branch" component={Branch} />
+      <Route path="/widgets/map" component={MapWidget} />
+      <Route path="/widgets/search" component={SearchWidget} />
+      <Route path="/widgets/listings" component={ListingsWidget} />
     </Route>
 
     <Route path="/" component={App} onEnter={authenticate}>
@@ -104,10 +107,6 @@ export default (
       <Route path="/dashboard/website" component={Website} />
       <Route path="/dashboard/cards" component={Cards} />
       <Route path="/dashboard/forms" component={Forms} />
-
-      <Route path="/widgets/map" component={MapWidget} />
-      <Route path="/widgets/search" component={SearchWidget} />
-      <Route path="/widgets/listings" component={ListingsWidget} />
 
       <Route path="/dashboard/recents(/:roomId)">
         <IndexRoute component={Recents} />
