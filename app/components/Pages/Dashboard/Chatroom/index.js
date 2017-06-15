@@ -30,14 +30,22 @@ class Chatroom extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { activeRoom, location, isInstance } = this.props
+    const { activeRoom, location, isInstance, instanceMode } = this.props
 
-    if (isInstance) {
+    // when user switch from popup to full screen (= instance) chat
+    if (isInstance && instanceMode !== nextProps.instanceMode) {
+      return nextProps.activeRoom !== undefined &&
+        nextProps.instanceMode === true
+    }
+
+    // when user works in full screen mode
+    if (isInstance && instanceMode === nextProps.instanceMode) {
       return nextProps.activeRoom !== undefined &&
         nextProps.instanceMode === true &&
         activeRoom !== nextProps.activeRoom
     }
 
+    // when user works in router mode
     return nextProps.activeRoom !== undefined &&
       nextProps.location !== undefined &&
       activeRoom !== nextProps.activeRoom &&
