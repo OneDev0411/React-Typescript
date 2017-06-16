@@ -213,7 +213,8 @@ export default class Socket {
     store.dispatch(getRooms())
 
     // get messages of active rooms
-    store.dispatch(getMessages(activeRoom))
+    if (activeRoom)
+      store.dispatch(getMessages(activeRoom))
 
     // emit connected message
     store.dispatch(changeSocketStatus('connected'))
@@ -223,9 +224,10 @@ export default class Socket {
    * on ping
    */
   onPing(callback) {
-    if (callback) {
-      callback(null, new Date())
-    }
+    if (!callback)
+      return false
+
+    callback(null, new Date())
   }
 
   /**
