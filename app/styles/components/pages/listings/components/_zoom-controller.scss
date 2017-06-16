@@ -1,29 +1,24 @@
-
 .c-zoom-controller {
-  position: fixed;
-  right: 2rem;
-  bottom: 2rem;
+    position: absolute;
+    right: 2rem;
+    bottom: 2rem;
 }
 
 .c-zoom-controller__button {
-  color : #929292;
-
-  > .fa {
-    color: inherit;
-  }
-
-  &:focus,
-  &:hover {
-    color: #333;
-    border-color: #ccc;
-    background-color: #fff;
-    
-    > .fa {
-      color: inherit;
+    color: #929292;
+    >.fa {
+        color: inherit;
     }
-  }
-
-  &:focus {
-    outline: none;
-  }
+    &:focus,
+    &:hover {
+        color: #333;
+        border-color: #ccc;
+        background-color: #fff;
+        >.fa {
+            color: inherit;
+        }
+    }
+    &:focus {
+        outline: none;
+    }
 }

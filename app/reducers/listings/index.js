@@ -70,8 +70,7 @@ const listings = combineReducers({
 
 export default listings
 
-export const selectListings = state =>
-  state.allIds.map(id => state.byId[id])
+export const selectListings = state => state.allIds.map(id => state.byId[id])
 
 export const selectListing = (state, id) => state.byId[id]
 

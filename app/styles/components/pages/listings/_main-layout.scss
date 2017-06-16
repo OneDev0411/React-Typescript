@@ -1,3 +1,21 @@
 .l-listings {
-  margin-left: 70px;
+    margin-left: 70px;
+}
+
+.l-listings__map {
+    position: relative;
+    @media screen and (min-width: 1024px) {
+        width: calc(100% - 320px);
+        float: left;
+    }
+}
+
+.l-listings__panel {
+    display: none;
+    @media screen and (min-width: 1024px) {
+        position: relative;
+        display: block;
+        float: left;
+        border-left: 1px solid #ccc;
+    }
 }

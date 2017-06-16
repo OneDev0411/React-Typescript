@@ -1,9 +1,10 @@
+export const createNamedWrapperReducer = (reducerFunction, reducerName) => (
+  state,
+  action
+) => {
+  const { tabName } = action
+  const isInitializationCall = state === undefined
+  if (tabName !== reducerName && !isInitializationCall) return state
 
-export const createNamedWrapperReducer = (reducerFunction, reducerName) =>
-  (state, action) => {
-    const {name} = action;
-    const isInitializationCall = state === undefined;
-    if(name !== reducerName && !isInitializationCall) return state;
-
-    return reducerFunction(state, action);
-  }
+  return reducerFunction(state, action)
+}

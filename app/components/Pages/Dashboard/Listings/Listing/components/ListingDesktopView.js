@@ -118,8 +118,7 @@ const ListingDesktopView = ({
     <div
       style={S(
         'bg-eff1f2 w-100p h-300 font-22 text-center pt-125 color-929292'
-      )}
-    >
+      )}>
       No image
     </div>
   )
@@ -165,13 +164,11 @@ const ListingDesktopView = ({
         indicators={false}
         prevIcon={prev_icon}
         nextIcon={next_icon}
-        className="listing-viewer__carousel"
-      >
+        className="listing-viewer__carousel">
         {gallery_chunks.map((gallery_image_url, i) =>
           <CarouselItem
             className="listing-carousel__item"
-            key={`gallery-images-chunked-${gallery_image_url[0]}${i}`}
-          >
+            key={`gallery-images-chunked-${gallery_image_url[0]}${i}`}>
             <div
               onClick={() => showModalGallery(gallery_image_url[0])}
               style={S(
@@ -237,8 +234,7 @@ const ListingDesktopView = ({
         className="pull-left"
         style={S(
           `border-1-solid-${status_color} font-14 color-fff relative br-3 pt-5 pb-5 pl-10 pr-10 mt-3 bg-${status_color}`
-        )}
-      >
+        )}>
         {listing.status} {sold_date}
       </div>
     )
@@ -251,8 +247,7 @@ const ListingDesktopView = ({
           className="pull-left"
           style={S(
             'border-1-solid-263445 br-3 pt-5 pb-5 pl-10 pr-10 mt-3 font-14'
-          )}
-        >
+          )}>
           {days_on_market} days ago
         </div>
       )
@@ -273,13 +268,11 @@ const ListingDesktopView = ({
             rootClose
             trigger="click"
             placement="bottom"
-            overlay={tooltip}
-          >
+            overlay={tooltip}>
             <span
               style={S('color-8ba8d1 pointer')}
               className="copy-mls"
-              data-clipboard-text={mls_number}
-            >
+              data-clipboard-text={mls_number}>
               {mls_number}
             </span>
           </OverlayTrigger>
@@ -360,8 +353,7 @@ const ListingDesktopView = ({
         <div
           style={S(
             'mt-20 color-748090 w-100p border-1-solid-ededed br-3 p-20 text-center'
-          )}
-        >
+          )}>
           <div style={S('font-18 mb-5 color-3388ff')}>
             <span style={S('fw-400')}>
               {listing.list_agent_full_name}, Seller Agent
@@ -375,8 +367,7 @@ const ListingDesktopView = ({
           <div style={email_style}>
             <a
               href={`mailto:${listing.list_agent_email}?subject=Your listing on Rechat.com&body=I saw your listing (${listing_title}) on Rechat.com and I'm interested in getting more information.`}
-              style={S('color-748090')}
-            >
+              style={S('color-748090')}>
               {listing.list_agent_email}
             </a>
           </div>
@@ -405,13 +396,11 @@ const ListingDesktopView = ({
           key={'map'}
           center={center}
           options={{ scrollwheel: false }}
-          bootstrapURLKeys={bootstrap_url_keys}
-        >
+          bootstrapURLKeys={bootstrap_url_keys}>
           <ListingMapMarker
             style={S('pointer mt-10')}
             lat={center.lat}
-            lng={center.lng}
-          >
+            lng={center.lng}>
             <ListingMarker
               data={data}
               listing={listing}
@@ -474,8 +463,7 @@ const ListingDesktopView = ({
                         <a
                           target="_blank"
                           href={`http://maps.google.com/?q=${listing.property
-                            .address.geo_source_formatted_address_google}`}
-                        >
+                            .address.geo_source_formatted_address_google}`}>
                           Google Maps
                         </a>
                         <div style={S('bg-ebebeb w-1 h-16 pull-right')} />
@@ -487,8 +475,7 @@ const ListingDesktopView = ({
                             .address
                             .geo_source_formatted_address_google}&layer=c&cbll=${listing
                             .property.address.location.latitude},${listing
-                            .property.address.location.longitude}`}
-                        >
+                            .property.address.location.longitude}`}>
                           Street View
                         </a>
                       </div>
@@ -508,8 +495,7 @@ const ListingDesktopView = ({
                   <div style={S('mb-20')}>
                     <div
                       className="lato"
-                      style={S('pull-left font-24 color-8696a4 mr-20')}
-                    >
+                      style={S('pull-left font-24 color-8696a4 mr-20')}>
                       {listing_title}
                     </div>
                     <div style={S('pull-left font-15 mb-10 mr-10')}>
@@ -860,8 +846,7 @@ const ListingDesktopView = ({
         prevIcon={prev_icon}
         nextIcon={next_icon}
         onSelect={onSelectHandler}
-        activeIndex={galleryModalActiveIndex}
-      >
+        activeIndex={galleryModalActiveIndex}>
         {gallery_image_urls.map((gallery_image_url, i) =>
           <CarouselItem key={`gallery-image-${gallery_image_url[0]}${i}`}>
             <div
@@ -888,13 +873,11 @@ const ListingDesktopView = ({
           borderWidth: 0,
           padding: 0,
           backgroundColor: 'transparent'
-        }}
-      >
+        }}>
         <span
           href="#"
           style={S('relative pull-left font-30 mr-10 t-5n')}
-          className="close"
-        >
+          className="close">
           &times;
         </span>
         Close
@@ -908,7 +891,7 @@ const ListingDesktopView = ({
 
     right_area = (
       <div style={nav_bar_style}>
-        <div style={S('pull-right relative r-110 t-14n')}>
+        <div style={S('pull-right relative r-110 t-4n')}>
           <FavoriteHeart listing={listing} />
         </div>
         <Button
@@ -916,8 +899,7 @@ const ListingDesktopView = ({
           style={S(
             `absolute color-fff r-20 t-15 bg-${login_btn_color} border-1-solid-${login_btn_color}`
           )}
-          type="button"
-        >
+          type="button">
           Share
           &nbsp;&nbsp;<i className="fa fa-share" />
         </Button>
@@ -959,8 +941,7 @@ const ListingDesktopView = ({
               )} border-1-solid-${Brand.color('primary', 'a1bde4')}`
             )}
             className="btn btn-primary"
-            href={`/signin?redirect_to=/listings/${listing.id}`}
-          >
+            href={`/signin?redirect_to=/listings/${listing.id}`}>
             Log in
           </a>
           {/* <a className="btn btn-primary" href="/signup">Sign up</a> */}
@@ -991,8 +972,7 @@ const ListingDesktopView = ({
 
     const brand_agent_area = (
       <div
-        style={S('mt-50 color-fff w-100p text-left center-block text-center')}
-      >
+        style={S('mt-50 color-fff w-100p text-left center-block text-center')}>
         {profile_image_area}
         <div style={S('p-20 w-100p')}>
           <div style={S('font-18 mb-5 color-fff')}>
@@ -1049,8 +1029,7 @@ const ListingDesktopView = ({
         <Button
           bsSize="large"
           style={S('bg-fff color-2196f3 border-none')}
-          onClick={handleActivateAccountClick}
-        >
+          onClick={handleActivateAccountClick}>
           Activate your account
         </Button>
       </div>
@@ -1069,14 +1048,12 @@ const ListingDesktopView = ({
       <Modal
         bsSize="large"
         onHide={() => setGalleryModalState(false)}
-        show={galleryModalIsActive}
-      >
+        show={galleryModalIsActive}>
         <div style={S('relative')}>
           <div
             className="close"
             onClick={() => setGalleryModalState(false)}
-            style={S('absolute r-0 t-60n font-60 z-1000 fw-100')}
-          >
+            style={S('absolute r-0 t-60n font-60 z-1000 fw-100')}>
             &times;
           </div>
         </div>

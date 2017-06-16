@@ -16,10 +16,12 @@ import { getListings } from '../../../../../../reducers/listings'
 import SimpleMarker from '../../../Mls/Partials/Markers/SingleMarker'
 import ClusterMarker from '../../../Mls/Partials/Markers/ClusterMarker'
 import * as actions from '../../../../../../store_actions/listings/map'
-import { setPositionToPointsWithSameCoordinate } from
-  '../../../Mls/Partials/MlsMap'
-import { bootstrapURLKeys, mapOptions, mapInitialState } from
-  '../../../Mls/Partials/MlsMapOptions'
+import { setPositionToPointsWithSameCoordinate } from '../../../Mls/Partials/MlsMap'
+import {
+  bootstrapURLKeys,
+  mapOptions,
+  mapInitialState
+} from '../../../Mls/Partials/MlsMapOptions'
 
 const DECLUSTER_ZOOM_LEVEL = 16
 
@@ -37,12 +39,9 @@ const map = ({
   onMarkerMouseLeave,
   onClickZoomHandler,
   onClusterMarkerClick,
-  mapProps: {
-    zoom,
-    center
-  },
+  mapProps: { zoom, center },
   map: { hoveredMarkerId }
-}) => (
+}) =>
   <div>
     <Map
       zoom={zoom}
@@ -54,13 +53,11 @@ const map = ({
       defaultCenter={defaultCenter}
       yesIWantToUseGoogleMapApiInternals
       bootstrapURLKeys={bootstrapURLKeys}
-      onGoogleApiLoaded={onGoogleApiLoaded}
-    >
-      {
-        clusters.map(
-          ({ ...markerProps, numPoints, list, lat, lng, id }) =>
-            (numPoints === 1
-              ? <SimpleMarker
+      onGoogleApiLoaded={onGoogleApiLoaded}>
+      {clusters.map(
+        ({ ...markerProps, numPoints, list, lat, lng, id }) =>
+          numPoints === 1
+            ? <SimpleMarker
                 key={id}
                 data={appData}
                 {...markerProps}
@@ -68,18 +65,15 @@ const map = ({
                 onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
                 markerPopupIsActive={hoveredMarkerId === id}
               />
-              : <ClusterMarker
+            : <ClusterMarker
                 key={id}
                 {...markerProps}
                 onClickHandler={() => onClusterMarkerClick({ lat, lng }, list)}
               />
-            )
-        )
-      }
+      )}
     </Map>
     <ZoomController onClickZoomHandler={onClickZoomHandler} />
   </div>
-)
 
 const mapHOC = compose(
   defaultProps({
@@ -98,8 +92,9 @@ const mapHOC = compose(
     }
   }),
   connect(
-    ({ data }) => ({
-      appData: { ...data }
+    ({ data }, { searchListings }) => ({
+      appData: data,
+      markers: searchListings.data
     }),
     actions
   ),
@@ -110,7 +105,7 @@ const mapHOC = compose(
     },
     // eslint-disable-next-line
     onChange: ({ setOffMapAutoMove, setMapProps, map }) => {
-      return (gmap) => {
+      return gmap => {
         if (map.autoMove) {
           setOffMapAutoMove()
         }
@@ -118,18 +113,19 @@ const mapHOC = compose(
         setMapProps('SEARCH', gmap)
       }
     },
-    onClickZoomHandler: ({ updateMapZoom }) => (zoomType) => {
+    onClickZoomHandler: ({ updateMapZoom }) => zoomType => {
       updateMapZoom('SEARCH', zoomType)
     },
     onMarkerMouseLeave: ({ setMapHoveredMarkerId }) => () => {
       setMapHoveredMarkerId('SEARCH', -1)
     },
-    onMarkerMouseEnter: ({ setMapHoveredMarkerId }) => (id) => {
+    onMarkerMouseEnter: ({ setMapHoveredMarkerId }) => id => {
       setMapHoveredMarkerId('SEARCH', id)
     },
     // eslint-disable-next-line
     onClusterMarkerClick: ({ setMapProps, mapProps }) => {
-      return (center, points) => { // esl
+      return (center, points) => {
+        // esl
         const extendedMapProps = extendedBounds(points, mapProps)
 
         if (!extendedMapProps) {
@@ -147,19 +143,17 @@ const mapHOC = compose(
   }),
   // precalculate clusters if markers data has changed
   withPropsOnChange(
-    ['markers'], ({
+    ['markers'],
+    ({
       markers = [],
       clusterRadius,
       clusterOptions: { minZoom, maxZoom }
     }) => ({
-      getCluster: supercluster(
-        markers,
-        {
-          minZoom, // min zoom to generate clusters on
-          maxZoom, // max zoom level to cluster the points on
-          radius: clusterRadius // cluster radius in pixels
-        }
-      )
+      getCluster: supercluster(markers, {
+        minZoom, // min zoom to generate clusters on
+        maxZoom, // max zoom level to cluster the points on
+        radius: clusterRadius // cluster radius in pixels
+      })
     })
   ),
   // get clusters specific for current bounds and zoom
@@ -173,15 +167,14 @@ const mapHOC = compose(
         return { clusters }
       }
 
-      clusters = getCluster(mapProps)
-        .map(({ wx, wy, numPoints, points }) => ({
-          lat: wy,
-          lng: wx,
-          numPoints,
-          id: `${numPoints}_${points[0].id}`,
-          text: numPoints !== 1 ? numPoints : '',
-          list: numPoints === 1 ? points[0] : points
-        }))
+      clusters = getCluster(mapProps).map(({ wx, wy, numPoints, points }) => ({
+        lat: wy,
+        lng: wx,
+        numPoints,
+        id: `${numPoints}_${points[0].id}`,
+        text: numPoints !== 1 ? numPoints : '',
+        list: numPoints === 1 ? points[0] : points
+      }))
 
       if (mapProps.zoom >= DECLUSTER_ZOOM_LEVEL) {
         clusters = setPositionToPointsWithSameCoordinate(clusters)
@@ -189,7 +182,7 @@ const mapHOC = compose(
 
       return { clusters }
     }
-  ),
+  )
 )
 
 export default mapHOC(map)

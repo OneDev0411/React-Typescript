@@ -4,21 +4,21 @@ import * as listingsTypes from '../../../../constants/listings'
 const getListingsByValert = options => (dispatch, getState) => {
   try {
     dispatch({
-      name: 'SEARCH',
+      tabName: 'SEARCH',
       type: listingsTypes.FETCH_LISTINGS_REQUEST
     })
 
     return api.getListings.byValert(options).then(
-      (response) => {
+      response => {
         dispatch({
           response,
-          name: 'SEARCH',
+          tabName: 'SEARCH',
           type: listingsTypes.FETCH_LISTINGS_SUCCESS
         })
       },
       ({ message }) => {
         dispatch({
-          name: 'SEARCH',
+          tabName: 'SEARCH',
           type: listingsTypes.FETCH_LISTINGS_FAILURE,
           message: message || 'Something went wrong.'
         })
@@ -26,7 +26,7 @@ const getListingsByValert = options => (dispatch, getState) => {
     )
   } catch (error) {
     dispatch({
-      name: 'SEARCH',
+      tabName: 'SEARCH',
       type: listingsTypes.FETCH_LISTINGS_FAILURE,
       message: error.message || 'Something went wrong.'
     })

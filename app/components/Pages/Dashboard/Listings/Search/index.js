@@ -2,15 +2,16 @@ import _ from 'lodash'
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
 
+import controller from '../../controller'
+import ListingsPanel from '../components/ListingsPanels'
+
 import Map from './components/Map'
 import Loading from '../components/Loading'
 import SearchToolbar from './components/SearchToolbar'
 import { selectListings } from '../../../../../reducers/listings'
 
-import getFavorites from
-  '../../../../../store_actions/listings/favorites/get-favorites'
-import getListingsByMapBounds from
-  '../../../../../store_actions/listings/search/get-listings/by-map-bounds'
+import getFavorites from '../../../../../store_actions/listings/favorites/get-favorites'
+import getListingsByMapBounds from '../../../../../store_actions/listings/search/get-listings/by-map-bounds'
 
 let mapOnChangeDebounce = 0
 
@@ -42,46 +43,54 @@ class Search extends Component {
   }
 
   _fetchFavorites() {
-    const {
-      user,
-      getFavorites,
-      favoritesListings
-    } = this.props
+    const { user, getFavorites, favoritesListings } = this.props
 
-    if (!favoritesListings.length) {
+    if (user && !favoritesListings.length) {
       getFavorites(user)
     }
   }
 
   render() {
+    const { data, searchListings, activePanel } = this.props
     return (
-      <div>
+      <div className="l-listings__main clearfix">
+        <div className="l-listings__map">
+          <Map {...this.props} />
+          <SearchToolbar />
+        </div>
+        <div className="l-listings__panel">
+          <ListingsPanel
+            data={data}
+            tabName="SEARCH"
+            listings={searchListings}
+            activePanel={activePanel}
+          />
+        </div>
         {this.props.isFetching && <Loading text="MLS®" />}
-        <Map {...this.props} />
-        <SearchToolbar />
       </div>
     )
   }
 }
 
-const mapStateToProps = ({
-  data,
-  search,
-  favorites
-}) => {
-  const { listings: searchListings, map } = search
+const mapStateToProps = ({ data, search, favorites }) => {
+  const { listings: searchListings, map, panels } = search
   const { listings: favoritesListings } = favorites
-  return ({
+  return {
     map,
+    data,
     user: data.user,
     mapProps: map.props,
+    activePanel: panels.activePanel,
     isFetching: searchListings.isFetching,
-    markers: selectListings(searchListings),
-    favoritesListings: selectListings(favoritesListings)
-  })
+    favoritesListings: selectListings(favoritesListings),
+    searchListings: {
+      data: selectListings(searchListings),
+      info: searchListings.info
+    }
+  }
 }
 
-export default connect(
-  mapStateToProps,
-  { getFavorites, getListingsByMapBounds }
-)(Search)
+export default connect(mapStateToProps, {
+  getFavorites,
+  getListingsByMapBounds
+})(Search)

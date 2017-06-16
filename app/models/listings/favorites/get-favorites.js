@@ -3,7 +3,7 @@ import { normalize } from 'normalizr'
 import * as schema from '../schema'
 
 const getFavorateListingsData = favorites =>
-  favorites.map((favorite) => {
+  favorites.map(favorite => {
     const { listing } = favorite
     let lat
     let lng
@@ -37,8 +37,9 @@ const getFavorites = async (user = {}) => {
   }
 
   try {
-    const response = await new Fetch()
-      .get(`/rooms/${personal_room}/recs/favorites`)
+    const response = await new Fetch().get(
+      `/rooms/${personal_room}/recs/favorites`
+    )
 
     const { code, info, data } = response.body
     const listings = getFavorateListingsData(data)

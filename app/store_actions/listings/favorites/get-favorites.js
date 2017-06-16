@@ -1,5 +1,4 @@
-import { getFetchingStatus } from
-  '../../../reducers/listings'
+import { getFetchingStatus } from '../../../reducers/listings'
 import * as listingsTypes from '../../../constants/listings'
 import api from '../../../models/listings/favorites'
 
@@ -9,21 +8,21 @@ const getFavorites = user => (dispatch, getState) => {
   }
 
   dispatch({
-    name: 'FAVORITE',
+    tabName: 'FAVORITE',
     type: listingsTypes.FETCH_LISTINGS_REQUEST
   })
 
   return api.getFavorites(user).then(
-    (response) => {
+    response => {
       dispatch({
         response,
-        name: 'FAVORITE',
+        tabName: 'FAVORITE',
         type: listingsTypes.FETCH_LISTINGS_SUCCESS
       })
     },
     ({ message }) => {
       dispatch({
-        name: 'FAVORITE',
+        tabName: 'FAVORITE',
         type: listingsTypes.FETCH_LISTINGS_FAILURE,
         message: message || 'Something went wrong.'
       })

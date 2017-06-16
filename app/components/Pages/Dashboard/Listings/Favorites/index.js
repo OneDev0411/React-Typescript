@@ -3,20 +3,14 @@ import React, { Component } from 'react'
 
 import Map from './components/Map'
 import Loading from '../components/Loading'
-import getFavorites from
-  '../../../../../store_actions/listings/favorites/get-favorites'
+import getFavorites from '../../../../../store_actions/listings/favorites/get-favorites'
 import { selectListings } from '../../../../../reducers/listings'
 
 class Favorites extends Component {
   componentDidMount() {
-    const {
-      user,
-      listings,
-      isFetching,
-      getFavorites
-    } = this.props
+    const { user, listings, isFetching, getFavorites } = this.props
 
-    if (!isFetching && !listings.length) {
+    if (user && !isFetching && !listings.length) {
       getFavorites(user)
     }
   }
@@ -33,19 +27,13 @@ class Favorites extends Component {
   }
 }
 
-const mapStateToProps = ({
-  data,
-  favorites
-}) => {
+const mapStateToProps = ({ data, favorites }) => {
   const { listings } = favorites
-  return ({
+  return {
     user: data.user,
     listings: selectListings(listings),
     isFetching: listings.isFetching
-  })
+  }
 }
 
-export default connect(
-  mapStateToProps,
-  { getFavorites }
-)(Favorites)
+export default connect(mapStateToProps, { getFavorites })(Favorites)

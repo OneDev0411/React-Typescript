@@ -1,109 +1,102 @@
-
 .c-mls-toolbar {
-  position: absolute;
-  top: 75px;
-  left: 90px;
+    position: absolute;
+    top: 20px;
+    left: 20px;
 }
 
 .c-mls-toolbar__drawing-btn,
 .c-mls-toolbar__search-box {
-  display: inline-block;
-  border-radius: 5px;
-  background-color: #fff;
-  border: 1px solid #d7d6d6;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.12), 0 0 4px 0 rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    border-radius: 5px;
+    background-color: #fff;
+    border: 1px solid #d7d6d6;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.12), 0 0 4px 0 rgba(0, 0, 0, 0.1);
 }
 
 .c-mls-toolbar__search-box__divider {
-  display: inline-block;
-  vertical-align: middle;
-  width: 1px;
-  height: 3rem;
-  margin: 0 1rem;
-  background-color: #ccc
+    display: inline-block;
+    vertical-align: middle;
+    width: 1px;
+    height: 3rem;
+    margin: 0 1rem;
+    background-color: #ccc
 }
 
 .c-mls-toolbar__search-box__field {
-  position: relative;
-  width: 360px;
-  display: inline-block;
-  color: #222;
+    position: relative;
+    width: 360px;
+    display: inline-block;
+    color: #222;
 }
 
 .c-mls-toolbar__search-box__field__input {
-  width: 100%;
-  height: 4.6rem;
-  padding: 0.5rem 8.3rem .5rem 1rem;
-  font-size: 1.6rem;
-  display: inline-block;
-  border-width: 0;
-  border-radius: 5px;
-  background-color: #fff;
+    width: 100%;
+    height: 4.6rem;
+    padding: 0.5rem 8.3rem .5rem 1rem;
+    font-size: 1.6rem;
+    display: inline-block;
+    border-width: 0;
+    border-radius: 5px;
+    background-color: #fff;
 }
 
 .c-mls-toolbar__search-box__field-buttons {
-  position: absolute;
-  top: .7rem;
-  right: 0;
-  height: 34px;
-  display: inline-block
+    position: absolute;
+    top: .7rem;
+    right: 0;
+    height: 34px;
+    display: inline-block
 }
 
 .c-mls-toolbar__search-box__field__clear-btn,
 .c-mls-toolbar__search-box__field__submit-btn {
-  width: 34px;
-  height: 100%;
-  float: right; 
-  padding: .5rem;
-  display: block;
-  border-width: 0;
-  background-color: transparent;
-
-  > svg {
-    width: 24px;
-    height: 24px;
-    display: inline-block;
-    vertical-align: middle;
-  }
-
-  &:hover,
-  &:focus {
-    background-color: #f5f5f5;
-
-    > svg {
-      fill: #444;
+    width: 34px;
+    height: 100%;
+    float: right;
+    padding: .5rem;
+    display: block;
+    border-width: 0;
+    background-color: transparent;
+    >svg {
+        width: 24px;
+        height: 24px;
+        display: inline-block;
+        vertical-align: middle;
     }
-  }
+    &:hover,
+    &:focus {
+        background-color: #f5f5f5;
+        >svg {
+            fill: #444;
+        }
+    }
 }
 
 .c-mls-toolbar__search-box__field__submit-btn {
-  margin-left: .5rem;
+    margin-left: .5rem;
 }
 
 .c-mls-toolbar__search-box__filter-btn {
-  height: 100%;
-  padding: 1rem;
-  margin-right: 1rem;
-  margin-bottom: 2px;
-  display: inline-block;
-  vertical-align: middle;
-  border-width: 0;
-  outline-width: 0;
-  background-color: transparent;
-
-  &:hover {
-    background-color: #f5f5f5;
-  }
-
-  > span,
-  > svg {
+    height: 100%;
+    padding: 1rem;
+    margin-right: 1rem;
+    margin-bottom: 2px;
     display: inline-block;
     vertical-align: middle;
-  }
-
-  > svg {
-    margin-right: .5rem;
-  }
+    border-width: 0;
+    outline-width: 0;
+    background-color: transparent;
+    &:hover {
+        background-color: #f5f5f5;
+    }
+    >span,
+    >svg {
+        display: inline-block;
+        vertical-align: middle;
+    }
+    >svg {
+        margin-right: .5rem;
+    }
 }
 
 .c-mls-toolbar__drawing-btn,
@@ -111,45 +104,39 @@
 .c-mls-toolbar__search-box__field__input,
 .c-mls-toolbar__search-box__field__clear-btn,
 .c-mls-toolbar__search-box__field__submit-btn {
-  &:focus {
-    outline-width: 0;
-  }
+    &:focus {
+        outline-width: 0;
+    }
 }
-
 
 .c-mls-toolbar__drawing-btn {
-  height: 4.6rem;
-  width: 4.6rem;
-  margin-left: 1rem;
-  padding: 0;
-  background-color: #fff;
-  vertical-align: middle;
-
-  > svg {
-    display: inline-block;
+    height: 4.6rem;
+    width: 4.6rem;
+    margin-left: 1rem;
+    padding: 0;
+    background-color: #fff;
     vertical-align: middle;
-  }
+    >svg {
+        display: inline-block;
+        vertical-align: middle;
+    }
 }
 
-
 .c-mls-toolbar__status-bar {
-  position: absolute;
-  top: 58px;
-  width: 100%;
-  padding: 1rem;
-  color: #fff;
-  border-radius: 3px;
-  background-color: rgba(0, 0, 0, 0.4); 
+    position: absolute;
+    top: 58px;
+    width: 100%;
+    padding: 1rem;
+    color: #fff;
+    border-radius: 3px;
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .c-mls-toolbar__status-bar--empty {
-  height: 39px;
+    height: 39px;
 }
 
-
-
 // google place search autocomplete styles
-
 .pac-container {
-  top: 127px !important;
+    top: 127px !important;
 }

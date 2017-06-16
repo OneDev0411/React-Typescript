@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 import map from '../map'
+import panels from '../panels'
 import listings from '../index.js'
 import { createNamedWrapperReducer } from '../../../utils/redux-utils'
 import {
@@ -8,7 +9,6 @@ import {
   SEARCH_BY_MLS_NUMBER,
   SEARCH_BY_POSTAL_CODE
 } from '../../../constants/listings/search'
-
 
 const type = (state = 'by_map_bounds', action) => {
   switch (action.type) {
@@ -30,6 +30,7 @@ const type = (state = 'by_map_bounds', action) => {
 const search = combineReducers({
   type,
   map: createNamedWrapperReducer(map, 'SEARCH'),
+  panels: createNamedWrapperReducer(panels, 'SEARCH'),
   listings: createNamedWrapperReducer(listings, 'SEARCH')
 })
 

@@ -8,22 +8,22 @@ const getListingsByMlsNumber = mlsNumber => (dispatch, getState) => {
   }
 
   dispatch({
-    name: 'SEARCH',
+    tabName: 'SEARCH',
     type: listingsTypes.FETCH_LISTINGS_REQUEST
   })
 
   return api.getListings.byMlsNumber(mlsNumber).then(
-    (response) => {
+    response => {
       dispatch({
         response,
-        name: 'SEARCH',
+        tabName: 'SEARCH',
         type: listingsTypes.FETCH_LISTINGS_SUCCESS
       })
       return Promise.resolve(response)
     },
     ({ message }) => {
       dispatch({
-        name: 'SEARCH',
+        tabName: 'SEARCH',
         type: listingsTypes.FETCH_LISTINGS_FAILURE,
         message: message || 'Something went wrong.'
       })

@@ -3,29 +3,29 @@ import { isAutoMove } from '../../../reducers/listings/map'
 import { getFetchingStatus } from '../../../reducers/listings'
 
 export const setOffMapAutoMove = () => ({
-  name: 'SEARCH',
+  tabName: 'SEARCH',
   type: types.SET_OFF_MAP_AUTO_MOVE
 })
 
 export const setOnMapAutoMove = () => ({
-  name: 'SEARCH',
+  tabName: 'SEARCH',
   type: types.SET_ON_MAP_AUTO_MOVE
 })
 
-export const setMapProps = (name, mapProps) => ({
-  name,
+export const setMapProps = (tabName, mapProps) => ({
+  tabName,
   mapProps,
   type: types.SET_MAP_PROPS
 })
 
-export const updateMapZoom = (name, zoomType) => ({
-  name,
+export const updateMapZoom = (tabName, zoomType) => ({
+  tabName,
   type: `${types.SET_MAP_ZOOM}_${zoomType}`
 })
 
-export const setMapHoveredMarkerId = (name, id) => ({
+export const setMapHoveredMarkerId = (tabName, id) => ({
   id,
-  name,
+  tabName,
   type: types.SET_MAP_HOVERED_MARKER_ID
 })
 
