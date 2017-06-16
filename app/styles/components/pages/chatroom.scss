@@ -50,6 +50,17 @@ $rooms-padding: 20px;
   padding-top: 100vh - $messages-height;
   overflow: hidden;
 
+  .no-room {
+    text-align: center;
+    margin: 5% auto;
+    width: 50%;
+    background-color: skyblue;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 17px;
+  }
+
   .messages-list {
     $hg: $messages-height - $height-of-create-message;
     min-height: $hg;

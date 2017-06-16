@@ -130,7 +130,7 @@ class Messages extends React.Component {
   scrollEnd() {
     setTimeout(() => {
       this.messagesList.scrollTop = this.messagesList.scrollHeight
-    }, 50)
+    }, 100)
   }
 
   render() {
@@ -143,14 +143,21 @@ class Messages extends React.Component {
       <div className="messages">
 
         {
-          showToolbar &&
+          !roomId &&
+          <div className="no-room">
+            Please select a chat to start messaging
+          </div>
+        }
+
+        {
+          roomId && showToolbar &&
           <Toolbar
             roomId={roomId}
           />
         }
 
         {
-          !messages &&
+          roomId && !messages &&
           <img
             className="loading"
             src="/static/images/loading-states/messages.svg"
@@ -161,7 +168,6 @@ class Messages extends React.Component {
           className="messages-list"
           ref={ref => this.messagesList = ref}
         >
-
           {
             messages &&
             _.map(messages.list, msg =>
@@ -179,13 +185,16 @@ class Messages extends React.Component {
           roomId={roomId}
         />
 
-        <div className="message-create">
-          <CreateMessage
-            user={user}
-            roomId={roomId}
-            onCreateNewMessage={() => this.scrollEnd()}
-          />
-        </div>
+        {
+          roomId &&
+          <div className="message-create">
+            <CreateMessage
+              user={user}
+              roomId={roomId}
+              onCreateNewMessage={() => this.scrollEnd()}
+            />
+          </div>
+        }
       </div>
     )
   }
