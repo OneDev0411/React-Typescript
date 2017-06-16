@@ -109,6 +109,8 @@ $rooms-padding: 20px;
   $left-w: 50px;
   margin: 0 10px 15px 26px;
   min-height: 40px;
+  word-wrap: break-word;
+  overflow: hidden;
   .avatar {
     float: left;
     width: $left-w;
