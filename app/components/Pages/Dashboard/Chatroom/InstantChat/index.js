@@ -6,36 +6,28 @@ import Chatroom from '..'
 
 const InstantChat = ({
   user,
-  rooms,
-  instanceMode,
-  activeRoom,
-  showChatbar
+  chatroom
 }) => (
   <div>
     <Chatbar
       user={user}
-      showChatbar={showChatbar}
+      showChatbar={chatroom.showChatbar}
     />
     <ChatPopups
       user={user}
-      rooms={rooms}
+      rooms={chatroom.rooms}
     />
     <div
       className="chatroom-fullscreen"
-      style={ !instanceMode ? { display: 'none' } : {} }
+      style={ !chatroom.instanceMode ? { display: 'none' } : {} }
     >
       <Chatroom
         user={user}
         isInstance={true}
-        activeRoom={activeRoom}
+        activeRoom={chatroom.activeRoom}
       />
     </div>
   </div>
 )
 
-export default connect(({ chatroom }) => ({
-  showChatbar: chatroom.showChatbar,
-  rooms: chatroom.rooms,
-  activeRoom: chatroom.activeRoom,
-  instanceMode: chatroom.instanceMode
-}))(InstantChat)
+export default connect(({ chatroom }) => ({ chatroom }))(InstantChat)
