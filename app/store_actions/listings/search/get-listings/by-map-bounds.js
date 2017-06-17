@@ -30,12 +30,13 @@ const getQueryPoints = bounds => [
 ]
 
 const getListingsByMapBounds = bounds => (dispatch, getState) => {
-  const { listings, map, type } = getState().search
+  const { listings, map, type, panels } = getState().search
 
   if (
     getFetchingStatus(listings) ||
     type !== 'by_map_bounds' ||
-    isAutoMove(map)
+    isAutoMove(map) ||
+    panels.activePanel !== 'map'
   ) {
     return Promise.resolve()
   }

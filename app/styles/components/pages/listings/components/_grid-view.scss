@@ -1,0 +1,79 @@
+.c-listing-card {
+    position: relative;
+    margin-bottom: 2rem;
+    height: 240px;
+    cursor: pointer;
+    border-radius: 3px;
+    background-color: #6d6d6d;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    &:hover {
+        &:before {
+            background: rgba(0, 0, 0, .3);
+        }
+    }
+    @media screen and (min-width: 1600px) {
+        width: calc((100% / 2) - 10px);
+        margin-right: 20px;
+        &:nth-child(2n + 1) {
+            float: right;
+            margin-right: 0px;
+        }
+    }
+    .l-listings__panel__container--full & {
+        float: left;
+        width: calc((100% / 3) - (40px / 3));
+        margin-right: 20px;
+        &:nth-child(3n) {
+            float: right;
+            margin-right: 0;
+        }
+        @media screen and (min-width: 1400px) {
+            width: calc((100% / 4) - 15px);
+            &:nth-child(2n),
+            &:nth-child(3n) {
+                float: left;
+                margin-right: 20px;
+            }
+            &:nth-child(4n) {
+                float: right;
+                margin-right: 0;
+            }
+        }
+    }
+}
+
+.c-listing-card:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 3px;
+    background: rgba(0, 0, 0, .2);
+}
+
+.c-listing-card__content-wrapper {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+    color: #fff;
+}
+
+.c-listing-card__status {
+    display: inline-block;
+    padding: .5rem 1rem;
+    border-radius: 3px;
+}
+
+.c-listing-card__title {
+    font-size: 2.1rem; // text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.c-listing-card__price {
+    font-size: 1.7rem;
+}

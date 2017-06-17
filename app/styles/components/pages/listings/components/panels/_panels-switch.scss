@@ -1,16 +1,17 @@
 .c-panels-switch {
     display: none;
-    @media screen and (min-width: 1024px) {
+    @media screen and (min-width: 64em) {
         position: absolute;
-        top: -45px;
-        left: 185px;
-        width: 125px;
+        top: -4.5rem;
+        right: 2rem;
+        width: 12.5rem;
         display: block;
     }
 }
 
 .c-panels-switch__btn {
     height: 36px;
+    float: right;
     padding: 0 10px;
     border-radius: 5px;
     border-color: #d7d6d6;

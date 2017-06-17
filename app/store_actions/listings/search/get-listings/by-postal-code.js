@@ -1,10 +1,10 @@
 import getListingsByValert from './by-valert'
-import { queryOptions } from
-  '../../../../components/Pages/Dashboard/Mls/Partials/MlsMapOptions'
+import { getFetchingStatus } from '../../../../reducers/listings'
+import { queryOptions } from '../../../../components/Pages/Dashboard/Mls/Partials/MlsMapOptions'
 
 const QUERY_LIMIT = 50
 
-const getOptions = (postalCode) => {
+const getOptions = postalCode => {
   const _options = {
     points: null,
     counties: null,
@@ -20,7 +20,11 @@ const getOptions = (postalCode) => {
   }
 }
 
-const getListingsByPostalCode = postalCode => (dispatch, getState) =>
-  getListingsByValert(getOptions(postalCode))(dispatch, getState)
+const getListingsByPostalCode = postalCode => (dispatch, getState) => {
+  if (getFetchingStatus(getState().search.listings)) {
+    return Promise.resolve()
+  }
+  return getListingsByValert(getOptions(postalCode))(dispatch, getState)
+}
 
 export default getListingsByPostalCode
