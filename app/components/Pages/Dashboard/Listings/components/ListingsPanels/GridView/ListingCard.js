@@ -1,10 +1,22 @@
 import React from 'react'
+import { Link } from 'react-router'
+import { connect } from 'react-redux'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 import helpers from '../../../../../../../utils/helpers'
 import listing_util from '../../../../../../../utils/listing'
 import FavoriteHeart from '../../../../Partials/FavoriteHeart'
 import { Button, DropdownButton, MenuItem } from 'react-bootstrap'
 
-const ListingCard = ({ listing, user }) => {
+import { setMapHoveredMarkerId } from '../../../../../../../store_actions/listings/map'
+
+const ListingCard = ({
+  listing,
+  user,
+  activePanel,
+  onMouseEnter,
+  onMouseLeave
+}) => {
   const statusColor = listing_util.getStatusColor(listing.status)
   let property = listing.compact_property
   let address = listing.address
@@ -31,7 +43,12 @@ const ListingCard = ({ listing, user }) => {
   }
 
   return (
-    <div className="c-listing-card" style={backgroundImage}>
+    <div
+      className="c-listing-card"
+      style={backgroundImage}
+      onMouseEnter={activePanel === 'map' ? () => onMouseEnter(listing.id) : ''}
+      onMouseLeave={activePanel === 'map' ? onMouseLeave : ''}>
+      <Link to={`listings/${listing.id}`} className="c-listing-card__link" />
       <div className="c-listing-card__content-wrapper">
         {statusColor &&
           <div>
@@ -63,4 +80,14 @@ const ListingCard = ({ listing, user }) => {
   )
 }
 
-export default ListingCard
+export default compose(
+  connect(({ data }) => ({ user: data.user }), { setMapHoveredMarkerId }),
+  withHandlers({
+    onMouseEnter: ({ setMapHoveredMarkerId, tabName }) => id => {
+      setMapHoveredMarkerId(tabName, id)
+    },
+    onMouseLeave: ({ setMapHoveredMarkerId, tabName }) => () => {
+      setMapHoveredMarkerId(tabName, -1)
+    }
+  })
+)(ListingCard)

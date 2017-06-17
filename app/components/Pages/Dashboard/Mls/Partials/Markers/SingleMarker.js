@@ -32,8 +32,7 @@ const SingleMarker = ({
     className={'single-marker'}
     onMouseLeave={onMouseLeaveHandler}
     onMouseEnter={onMouseEnterHandler}
-    style={singleMarkerStyle(list)}
-  >
+    style={singleMarkerStyle(list)}>
     <ListingMarker
       data={data}
       listing={list}

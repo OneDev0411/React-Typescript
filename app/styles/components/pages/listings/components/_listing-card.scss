@@ -1,8 +1,19 @@
+%full-absolute {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}
+
 .c-listing-card {
     position: relative;
-    margin-bottom: 2rem;
     height: 240px;
+    display: block;
     cursor: pointer;
+    margin-bottom: 2rem;
     border-radius: 3px;
     background-color: #6d6d6d;
     background-size: cover;
@@ -45,16 +56,15 @@
 }
 
 .c-listing-card:before {
+    @extend %full-absolute;
     content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
     border-radius: 3px;
     background: rgba(0, 0, 0, .2);
+}
+
+.c-listing-card__link {
+    @extend %full-absolute;
+    display: block;
 }
 
 .c-listing-card__content-wrapper {

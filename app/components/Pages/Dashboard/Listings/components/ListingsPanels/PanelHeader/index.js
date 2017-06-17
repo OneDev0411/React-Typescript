@@ -32,6 +32,7 @@ const PanelHeader = ({
           noCaret
           bsStyle="link"
           title={activeSorting}
+          id="listings-sort-dropdown"
           className="c-panel__header__sorting__dropdown">
           <MenuItem onClick={e => onClickMenuItem(getText(e))}>
             Area

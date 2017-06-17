@@ -171,7 +171,7 @@ const mapHOC = compose(
         lat: wy,
         lng: wx,
         numPoints,
-        id: `${numPoints}_${points[0].id}`,
+        id: points[0].id,
         text: numPoints !== 1 ? numPoints : '',
         list: numPoints === 1 ? points[0] : points
       }))
