@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, DropdownButton, MenuItem } from 'react-bootstrap'
+import { Button, Checkbox, DropdownButton, MenuItem } from 'react-bootstrap'
 import Brand from '../../../../../../../controllers/Brand'
 
 const getBrandColor = () => Brand.color('primary', '3388ff')
@@ -11,16 +11,17 @@ const ButtonStyle = {
 
 const PanelHeader = ({
   info,
-  onClickMenuItem = type => {
-    console.log(type)
-  },
+  sortingIndex,
   onClickShare,
-  activeSorting = 'Most Relevant'
+  onClickDropdownItem,
+  onClickSortingDirection
 }) =>
   <div className="c-panel__header">
     <p className="c-panel__header__title">
       {info.count
-        ? <span><strong>{info.count}</strong> {` of ${info.total} Homes`}</span>
+        ? <span>
+            <strong>{info.count}</strong> {` of ${info.total} Homes`}
+          </span>
         : <span>0 Homes</span>}
     </p>
     <div className="c-panel__header__sorting">
@@ -31,46 +32,38 @@ const PanelHeader = ({
         <DropdownButton
           noCaret
           bsStyle="link"
-          title={activeSorting}
+          title={sortingIndex.charAt(0).toUpperCase() + sortingIndex.substr(1)}
           id="listings-sort-dropdown"
           className="c-panel__header__sorting__dropdown">
-          <MenuItem onClick={e => onClickMenuItem(getText(e))}>
+          { sortingIndex !== 'area' && <MenuItem onClick={e => onClickDropdownItem(getText(e))}>
             Area
-          </MenuItem>
-          <MenuItem onClick={e => onClickMenuItem(getText(e))}>Price</MenuItem>
-          <MenuItem onClick={e => onClickMenuItem(getText(e))}>
-            Beds
-          </MenuItem>
-          <MenuItem onClick={e => onClickMenuItem(getText(e))}>
+          </MenuItem> }
+          { sortingIndex !== 'price' && <MenuItem onClick={e => onClickDropdownItem(getText(e))}>
+            Price
+          </MenuItem>}
+          { sortingIndex !== 'bedrooms' && <MenuItem onClick={e => onClickDropdownItem(getText(e))}>
+            Bedrooms
+          </MenuItem>}
+          { sortingIndex !== 'baths' && <MenuItem onClick={e => onClickDropdownItem(getText(e))}>
             Baths
-          </MenuItem>
-          <MenuItem onClick={e => onClickMenuItem(getText(e))}>
+          </MenuItem>}
+          { sortingIndex !== 'sqft' && <MenuItem onClick={e => onClickDropdownItem(getText(e))}>
             Sqft
-          </MenuItem>
-          <MenuItem onClick={e => onClickMenuItem(getText(e))}>
+          </MenuItem>}
+          { sortingIndex !== '$/sqft' && <MenuItem onClick={e => onClickDropdownItem(getText(e))}>
             $/Sqft
-          </MenuItem>
-          <MenuItem onClick={e => onClickMenuItem(getText(e))}>
+          </MenuItem>}
+          { sortingIndex !== 'built' && <MenuItem onClick={e => onClickDropdownItem(getText(e))}>
             Built
-          </MenuItem>
-          <MenuItem onClick={e => onClickMenuItem(getText(e))}>Dom</MenuItem>
-          <MenuItem onClick={e => onClickMenuItem(getText(e))}>
+          </MenuItem>}
+          { sortingIndex !== 'distance' && <MenuItem onClick={e => onClickDropdownItem('distance')}>
             Distance to map center
-          </MenuItem>
+          </MenuItem>}
         </DropdownButton>
-        <span className="c-panel__header__sorting__dropdown-caret">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="12"
-            height="7"
-            viewBox="0 0 12 7">
-            <path
-              fill="#2196F3"
-              d="M10.725.12a.38.38 0 0 1 .553 0l.602.601a.38.38 0 0 1 0 .553L6.277 6.878a.38.38 0 0 1-.554 0L.12 1.275a.38.38 0 0 1 0-.553L.721.12a.38.38 0 0 1 .553 0L6 4.846 10.725.12z"
-            />
-          </svg>
-        </span>
       </span>
+      <Checkbox onClick={onClickSortingDirection} className="c-panel__header__sorting__checkbox">
+        Reverse
+      </Checkbox>
     </div>
     <Button
       bsStyle="primary"

@@ -24,6 +24,10 @@
     border-radius: 5px;
 }
 
+.c-panel__header__sorting {
+    position: relative
+}
+
 .c-panel__header__sorting__title {
     margin-right: 1rem;
     color: #9b9b9b;
@@ -36,16 +40,26 @@
 .c-panel__header__sorting__dropdown {
     padding: 0;
     font-size: 1.5rem;
-    color: #2196F3;
+    color: #46adff;
     letter-spacing: 1px;
     &:focus,
     &:hover {
+        color: #46adff;
         text-decoration: none;
+    }
+    &:after {
+        content: '';
+        position: absolute;
+        right: -18px;
+        top: 8px;
+        width: 12px;
+        height: 7px;
+        background: transparent url('data:image/svg+xml;base64,PHN2ZwogICAgICAgICAgICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICAgICAgICAgIHdpZHRoPSIxMiIKICAgICAgICAgICAgaGVpZ2h0PSI3IgogICAgICAgICAgICB2aWV3Qm94PSIwIDAgMTIgNyI+CiAgICAgICAgICAgIDxwYXRoCiAgICAgICAgICAgICAgZmlsbD0iIzIxOTZGMyIKICAgICAgICAgICAgICBkPSJNMTAuNzI1LjEyYS4zOC4zOCAwIDAgMSAuNTUzIDBsLjYwMi42MDFhLjM4LjM4IDAgMCAxIDAgLjU1M0w2LjI3NyA2Ljg3OGEuMzguMzggMCAwIDEtLjU1NCAwTC4xMiAxLjI3NWEuMzguMzggMCAwIDEgMC0uNTUzTC43MjEuMTJhLjM4LjM4IDAgMCAxIC41NTMgMEw2IDQuODQ2IDEwLjcyNS4xMnoiCiAgICAgICAgICAgIC8+CiAgICAgICAgICA8L3N2Zz4=') no-repeat center center;
     }
 }
 
-.c-panel__header__sorting__dropdown-caret {
+.c-panel__header__sorting__checkbox {
     position: absolute;
-    right: -1.7rem;
-    top: 0;
+    right: 0;
+    top: -7px;
 }

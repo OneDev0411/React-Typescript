@@ -2,14 +2,14 @@ import config from '../../../../../../config/public'
 
 export const bootstrapURLKeys = {
   key: config.google.api_key,
-  libraries: ['drawing', 'places'].join(',')
+  libraries: ['drawing', 'places', 'geometry'].join(',')
 }
 
 export const mapInitialState = {
   zoom: 15,
   center: {
     lat: 32.7767,
-    lng: -96.7970
+    lng: -96.797
   },
   size: null,
   bounds: null
@@ -49,7 +49,7 @@ export const queryOptions = {
   property_subtypes: [
     'RES-Single Family',
     'RES-Half Duplex',
-    'RES-Farm\/Ranch',
+    'RES-Farm/Ranch',
     'RES-Condo',
     'RES-Townhouse'
   ]

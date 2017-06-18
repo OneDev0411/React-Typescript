@@ -71,6 +71,8 @@ const ListingCard = ({
           <span>{property.bathroom_count} Baths</span>
           &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
           <span>{square_feet} Sqft</span>
+          &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+          <span>{property.year_built}</span>
         </div>
       </div>
       <div className="c-listing-card__favorite-heart">
