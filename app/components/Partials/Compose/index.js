@@ -1,10 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import AutosizeInput from 'react-input-autosize'
 import Rx from 'rxjs/Rx'
+import validator from 'validator'
+import { PhoneNumberUtil } from 'google-libphonenumber'
 import _ from 'underscore'
 import Fetch from '../../../services/fetch'
 import UserAvatar from '../UserAvatar'
+import AutoSizeInput from '../AutoSizeInput'
+import Contact from '../../../models/Contact'
 
 class Compose extends React.Component {
   constructor(props) {
@@ -47,75 +50,126 @@ class Compose extends React.Component {
    */
   async onSearch(text) {
     const { searchInRooms } = this.props
-
-    let viewList = {}
-
-    // prevent effecting non alphabetical characters
     if (text === this.criteria)
       return false
 
-    // set search criteria
+    // set this variable to detect non characters like shift, ctrl, ...
     this.criteria = text
 
-    if (this.criteria.length === 0)
-      return this.setState({ viewList })
-
-    if (searchInRooms === true) {
-      let rooms = await this.searchInRooms(this.criteria)
-      let roomsList = this.prepare(rooms, 'room')
-      viewList = Object.assign(viewList, roomsList)
-      this.setState({ viewList })
+    let rooms = []
+    if (searchInRooms) {
+      rooms = await this.searchInRooms(this.criteria)
     }
 
     const users = await this.searchInUsers(this.criteria)
-    const usersList = this.prepare(users, 'user')
-    viewList = Object.assign(viewList, usersList)
-    this.setState({ viewList })
-
     const contacts = await this.searchInContacts(this.criteria)
-    const contactsList = this.prepare(contacts, 'contact')
-    viewList = Object.assign(contactsList, viewList)
-    this.setState({ viewList })
 
-    console.log(viewList)
+    this.createListView(users, rooms, contacts)
   }
 
   /**
-   * prepare view list
+   * create list view
    */
-  prepare(list, type) {
-    if (list === null)
-      return {}
+  createListView(...sources) {
+    // flatten sources
+    const entries = [].concat.apply([], sources)
 
-    return list.map(item => ({
-      type,
-      id: item.id,
-      display_name: item.display_name,
-      image: item.profile_image_url,
-      email: item.email,
-      phone_number: item.email
-    }))
+    // remove duplicates
+    let viewList = _.chain(entries)
+      .sortBy(entry => ['user', 'email', 'phone_number'].indexOf(entry.type))
+      .uniq(entry => entry.email || entry.phone_number || entry.id)
+      .value()
+
+    if (_.size(viewList) === 0)
+      viewList = this.createNewEntry()
+
+    this.setState({ viewList })
+  }
+
+  /**
+   * create new entry to display in viewlist
+   */
+  createNewEntry() {
+    const id = this.criteria
+
+    if (validator.isEmail(id)) {
+      return {
+        [id]: this.createListItem('email', { id, email: id })
+      }
+    }
+
+    const phoneUtil = PhoneNumberUtil.getInstance()
+    if (phoneUtil.isPossibleNumberString(id)) {
+      return {
+        [id]: this.createListItem('phone_number', { id, phone_number: id })
+      }
+    }
+
+    return null
   }
 
   /**
    * search recipients in rooms
    */
-  searchInRooms(q) {
-    return this.askServer(`/rooms/search?q[]=${q}&room_types[]=Direct&room_types[]=Group`)
+  async searchInRooms(q) {
+    const rooms = await this.askServer(`/rooms/search?q[]=${q}&room_types[]=Direct&room_types[]=Group`)
+    // return users.map(user => this.createListItem('user', user))
+
+    console.log(rooms)
+    return []
   }
 
   /**
    * search recipients in contacts
    */
-  searchInContacts(q) {
-    return this.askServer(`/contacts/search?q[]=${q}`)
+  async searchInContacts(q) {
+    const data = await this.askServer(`/contacts/search?q[]=${q}`)
+
+    const contacts = data.map(contact => {
+      // search in contact's users
+      const users = contact
+        .users
+        .map(user => this.createListItem('user', user))
+
+      // search in contact's emails
+      const emails = Contact
+        .get
+        .emails(contact)
+        .map(email => this.createListItem('email', email))
+
+      // search in contact's phone
+      const phones = Contact
+        .get
+        .phones(contact)
+        .map(phone => this.createListItem('phone_number', phone))
+
+      return [].concat(users, emails, phones)
+    })
+
+    // flatten arrays
+    return [].concat.apply([], contacts)
   }
 
   /**
    * search in users
    */
-  searchInUsers(q) {
-    return this.askServer(`/users/search?q[]=${q}`)
+  async searchInUsers(q) {
+    const users = await this.askServer(`/users/search?q[]=${q}`)
+    return users.map(user => this.createListItem('user', user))
+  }
+
+  /**
+   * create list item
+   */
+  createListItem(type, item) {
+    return {
+      type,
+      id: item.id,
+      display_name: item.display_name || item[type] || '-',
+      image: item.profile_image_url,
+      email: item.email,
+      phone_number: item.phone_number
+    }
   }
 
   /**
@@ -183,6 +237,15 @@ class Compose extends React.Component {
     />
   }
 
+  getSubTitle({ email, phone_number, display_name }) {
+    if (email && email !== display_name)
+      return email
+    else if (phone_number && phone_number !== display_name)
+      return phone_number
+    else
+      return ''
+  }
+
   render() {
     const { viewList, recipients } = this.state
 
@@ -207,11 +270,11 @@ class Compose extends React.Component {
             )
           }
 
-          <AutosizeInput
+          <AutoSizeInput
+            type="text"
             ref={ref => this.autosize = ref}
-            placeholder={_.size(recipients) === 0 ? "Enter name, email or phone" : "Enter another recipient" }
+            placeholder={_.size(recipients) === 0 ? 'Enter name, email or phone' : '' }
             maxLength={30}
-            placeholderIsMinWidth
           />
         </div>
 
@@ -223,9 +286,9 @@ class Compose extends React.Component {
                 className="item"
                 onClick={() => this.onAdd(recp)}
               >
-                { this.getAvatar(recp, 30 )}
+                { this.getAvatar(recp, 30) }
                 <strong>{ recp.display_name }</strong>
-                <span style={{ fontSize: '12px', marginLeft: '5px' }}>{ recp.email || recp.phone_number }</span>
+                <span style={{ fontSize: '12px', marginLeft: '5px' }}> { this.getSubTitle(recp) }</span>
               </div>
             )
           }
