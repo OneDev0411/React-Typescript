@@ -1,18 +1,26 @@
 import Fetch from '../../../services/fetch'
 
-const toggleFavorite = async (user = {}, recId, favorite) => {
-  const { personal_room } = user
-
-  if (!personal_room || !recId || typeof favorite !== 'boolean') {
+const toggleFavorite = async ({ roomId, recId, mlsNumber, isFavorite }) => {
+  if (!roomId) {
     return
   }
 
   try {
-    const response = await new Fetch()
-      .patch(`/rooms/${personal_room}/recs/${recId}/favorite`)
-      .send({ favorite })
+    if (!recId) {
+      const rec = await new Fetch()
+        .post(`/rooms/${roomId}/recs`)
+        .send({ mls_number: mlsNumber })
 
-    return response.body.data.status
+      recId = rec.body.data.id
+    }
+
+    const response = await new Fetch()
+      .patch(`/rooms/${roomId}/recs/${recId}/favorite`)
+      .send({
+        favorite: !isFavorite
+      })
+
+    return response.body.code
   } catch (error) {
     throw error
   }

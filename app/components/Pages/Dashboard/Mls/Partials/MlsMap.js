@@ -18,7 +18,7 @@ import { bootstrapURLKeys, mapInitialState } from './MlsMapOptions'
 
 let store = {}
 
-const coordinator = (points) => {
+const coordinator = points => {
   let pointsLength = points.length
   for (let i = 0; i < pointsLength; i++) {
     points[i].list.position = {
@@ -29,10 +29,10 @@ const coordinator = (points) => {
   }
   return points
 }
-export const setPositionToPointsWithSameCoordinate = (clusters) => {
+export const setPositionToPointsWithSameCoordinate = clusters => {
   let PointsWithSameCoordinate = []
   const pointsGroupByLat = _.groupBy(clusters, 'lat')
-  Object.keys(pointsGroupByLat).forEach((key) => {
+  Object.keys(pointsGroupByLat).forEach(key => {
     if (pointsGroupByLat[key].length !== 1) {
       coordinator(pointsGroupByLat[key]).forEach(obj =>
         PointsWithSameCoordinate.push(obj)
@@ -60,7 +60,7 @@ const setInitialState = (data = null) => ({
 })
 
 export const getFavorateListingsData = listings =>
-  listings.map((list) => {
+  listings.map(list => {
     let lat
     let lng
 
@@ -276,7 +276,7 @@ export default class MlsMap extends Component {
             currentState.listings.listingsLength
         ) {
           const listings = nextData.alerts_map.listings
-          const newListings = listings.map((list) => {
+          const newListings = listings.map(list => {
             if (list.location) {
               return {
                 numPoints: 1,
@@ -347,13 +347,13 @@ export default class MlsMap extends Component {
           const newMapProps = this.extendedBounds(data)
           mapProps = newMapProps
             ? {
-              ...currentState.mapProps,
-              ...newMapProps
-            }
+                ...currentState.mapProps,
+                ...newMapProps
+              }
             : {
-              ...currentState.mapProps,
-              zoom: this.declusterZoomLevel + 1
-            }
+                ...currentState.mapProps,
+                zoom: this.declusterZoomLevel + 1
+              }
         }
 
         const { bounds } = mapProps
@@ -672,22 +672,22 @@ export default class MlsMap extends Component {
     let markers = data && !this.state.isFetching
       ? data.map(
           ({ ...markerProps, numPoints, list, lat, lng, id }) =>
-            (numPoints === 1
+            numPoints === 1
               ? <SingleMarker
-                key={id}
-                data={appData}
-                {...markerProps}
-                onClickHandler={controller.listing_viewer.showListingViewer.bind(
+                  key={id}
+                  data={appData}
+                  {...markerProps}
+                  onClickHandler={controller.listing_viewer.showListingViewer.bind(
                     this
                   )}
-                markerPopupIsActive={this.state.hoveredMarkerId === id}
-                onMouseLeaveHandler={() => this.onMouseLeaveHandler(id)}
-                onMouseEnterHandler={() => this.onMouseEnterHandler(id)}
-              />
+                  markerPopupIsActive={this.state.hoveredMarkerId === id}
+                  onMouseLeaveHandler={() => this.onMouseLeaveHandler(id)}
+                  onMouseEnterHandler={() => this.onMouseEnterHandler(id)}
+                />
               : <ClusterMarker
-                key={id}
-                {...markerProps}
-                onClickHandler={() =>
+                  key={id}
+                  {...markerProps}
+                  onClickHandler={() =>
                     this.clusterMarkerOnClickHandler(
                       {
                         lat,
@@ -695,7 +695,7 @@ export default class MlsMap extends Component {
                       },
                       list
                     )}
-              />)
+                />
         ) // map
       : []
 
@@ -732,9 +732,11 @@ export default class MlsMap extends Component {
         <div id="loading" style={loading_style}>
           <div
             style={S(
-              `br-20 color-fff w-190 h-29 pt-5 center-block text-center bg-${Brand.color('primary', '3388ff')}`
-            )}
-          >
+              `br-20 color-fff w-190 h-29 pt-5 center-block text-center bg-${Brand.color(
+                'primary',
+                '3388ff'
+              )}`
+            )}>
             Loading MLS® Listings...
           </div>
         </div>
@@ -764,16 +766,14 @@ export default class MlsMap extends Component {
           options={controller.listing_map.createMapOptions.bind(this)}
           onGoogleApiLoaded={controller.listing_map.handleGoogleMapApi.bind(
             this
-          )}
-        >
+          )}>
           {this.getMarkers()}
         </GoogleMap>
 
         <ButtonGroup
           vertical
           className="transition"
-          style={S(`fixed ${zoom_right} ${zoom_bottom}`)}
-        >
+          style={S(`fixed ${zoom_right} ${zoom_bottom}`)}>
           <Button bsSize="large" onClick={() => this.mapZoomHandler('IN')}>
             <i style={S('color-929292')} className="fa fa-plus" />
           </Button>

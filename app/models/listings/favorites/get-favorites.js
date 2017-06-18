@@ -4,7 +4,7 @@ import * as schema from '../schema'
 
 const getFavorateListingsData = favorites =>
   favorites.map(favorite => {
-    const { listing } = favorite
+    const { listing, id: recId } = favorite
     let lat
     let lng
 
@@ -21,6 +21,7 @@ const getFavorateListingsData = favorites =>
     if (lat && lng) {
       return {
         ...listing,
+        recId,
         numPoints: 1,
         list: { ...listing },
         lat,
@@ -42,11 +43,12 @@ const getFavorites = async (user = {}) => {
     )
 
     const { code, info, data } = response.body
+
     const listings = getFavorateListingsData(data)
     const normilizedListings = normalize(listings, schema.listingsList)
     return {
       ...normilizedListings,
-      status: {
+      info: {
         code,
         ...info
       }

@@ -17,7 +17,7 @@ import Brand from '../../../../../../controllers/Brand'
 import listing_util from '../../../../../../utils/listing'
 
 import Loading from '../../../../../Partials/Loading'
-import FavoriteHeart from '../../../Partials/FavoriteHeart'
+import FavoriteHeart from '../../components/FavoriteHeart'
 import ListingMarker from '../../../Partials/ListingMarker'
 import ListingMapMarker from '../../../Partials/ListingMapMarker'
 
@@ -891,7 +891,7 @@ const ListingDesktopView = ({
 
     right_area = (
       <div style={nav_bar_style}>
-        <div style={S('pull-right relative r-110 t-4n')}>
+        <div style={S('pull-right relative r-110 t-7')}>
           <FavoriteHeart listing={listing} />
         </div>
         <Button

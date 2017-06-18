@@ -11,3 +11,5 @@ const favorites = combineReducers({
 })
 
 export default favorites
+
+export const getIsFavorite = (state, id) => state.allIds.indexOf(id) !== -1

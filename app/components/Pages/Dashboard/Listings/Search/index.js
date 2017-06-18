@@ -2,12 +2,10 @@ import _ from 'lodash'
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
 
-import controller from '../../controller'
-import ListingsPanel from '../components/ListingsPanels'
-
 import Map from './components/Map'
 import Loading from '../components/Loading'
 import SearchToolbar from './components/SearchToolbar'
+import ListingsPanel from '../components/ListingsPanels'
 import { selectListings } from '../../../../../reducers/listings'
 
 import getFavorites from '../../../../../store_actions/listings/favorites/get-favorites'

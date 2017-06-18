@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import { TOGGLE_FAVORITE } from '../../constants/listings/favorites'
 import {
   FETCH_LISTINGS_SUCCESS,
   FETCH_LISTINGS_REQUEST,
@@ -17,6 +18,7 @@ const byId = (state = {}, action) => {
 
 const allIds = (state = [], action) => {
   switch (action.type) {
+    case TOGGLE_FAVORITE:
     case FETCH_LISTINGS_SUCCESS:
       return action.response.result
     default:

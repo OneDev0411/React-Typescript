@@ -3,36 +3,52 @@ import React, { Component } from 'react'
 
 import Map from './components/Map'
 import Loading from '../components/Loading'
+import ListingsPanel from '../components/ListingsPanels'
 import getFavorites from '../../../../../store_actions/listings/favorites/get-favorites'
 import { selectListings } from '../../../../../reducers/listings'
 
 class Favorites extends Component {
   componentDidMount() {
-    const { user, listings, isFetching, getFavorites } = this.props
+    const { data, listings, isFetching, getFavorites } = this.props
+    const { user } = data
 
-    if (user && !isFetching && !listings.length) {
+    if (user && !isFetching && !listings.data.length) {
       getFavorites(user)
     }
   }
 
   render() {
-    const { listings, isFetching } = this.props
+    const { data, listings, activePanel, isFetching } = this.props
 
     return (
-      <div>
+      <div className="l-listings__main clearfix">
+        <div className="l-listings__map">
+          <Map markers={listings.data} />
+        </div>
+        <div className="l-listings__panel">
+          <ListingsPanel
+            data={data}
+            tabName="FAVORITE"
+            listings={listings}
+            activePanel={activePanel}
+          />
+        </div>
         {isFetching && <Loading text="Favorites" />}
-        <Map markers={listings} />
       </div>
     )
   }
 }
 
 const mapStateToProps = ({ data, favorites }) => {
-  const { listings } = favorites
+  const { listings, panels } = favorites
   return {
-    user: data.user,
-    listings: selectListings(listings),
-    isFetching: listings.isFetching
+    data,
+    activePanel: panels.activePanel,
+    isFetching: listings.isFetching,
+    listings: {
+      data: selectListings(listings),
+      info: listings.info
+    }
   }
 }
 

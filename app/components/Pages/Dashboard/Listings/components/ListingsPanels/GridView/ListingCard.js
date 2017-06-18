@@ -5,7 +5,8 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import helpers from '../../../../../../../utils/helpers'
 import listing_util from '../../../../../../../utils/listing'
-import FavoriteHeart from '../../../../Partials/FavoriteHeart'
+
+import FavoriteHeart from '../../FavoriteHeart'
 import { Button, DropdownButton, MenuItem } from 'react-bootstrap'
 
 import { setMapHoveredMarkerId } from '../../../../../../../store_actions/listings/map'
@@ -48,7 +49,7 @@ const ListingCard = ({
       style={backgroundImage}
       onMouseEnter={activePanel === 'map' ? () => onMouseEnter(listing.id) : ''}
       onMouseLeave={activePanel === 'map' ? onMouseLeave : ''}>
-      <Link to={`listings/${listing.id}`} className="c-listing-card__link" />
+      <Link to={`/listings/${listing.id}`} className="c-listing-card__link" />
       <div className="c-listing-card__content-wrapper">
         {statusColor &&
           <div>
@@ -72,10 +73,9 @@ const ListingCard = ({
           <span>{square_feet} Sqft</span>
         </div>
       </div>
-      <FavoriteHeart
-        listing={listing}
-        className="c-listing-card__favarite-icon"
-      />
+      <div className="c-listing-card__favorite-heart">
+        <FavoriteHeart listing={listing} />
+      </div>
     </div>
   )
 }
