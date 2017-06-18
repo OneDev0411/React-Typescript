@@ -52,7 +52,7 @@
     "file-type": "^4.1.0",
     "flux": "^3.1.2",
     "fs-extra": "^2.1.2",
-    "google-libphonenumber": "^2.0.14",
+    "google-libphonenumber": "^2.0.18",
     "google-map-react": "^0.24.0",
     "google-maps": "^3.2.1",
     "history": "^4.6.1",
