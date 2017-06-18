@@ -5,20 +5,15 @@ import S from 'shorti'
 
 export default class NoMatch extends Component {
 
-  render() {
+  render () {
     // Styles
     const headingStyle = S('font-60 color-3388ff')
 
     return (
-      <div>
+      <div className="noMatch">
+        <h1 className="logo">Rechat</h1>
         <div id="main-content" className="container text-center">
-          <h1 className="tk-calluna-sans" style={headingStyle}>404 Error</h1>
-          You look lost.  Need some help?
-          <br />
-          <br />
-          <img src="/static/images/goats/tongue.gif" />
-          <br />
-          <br />
+          <h1 className="tk-calluna-sans" >Oops. The page you were looking for doesn’t exist. Beautiful skyline, though.</h1>
           <Link to="/">Take me home</Link>
         </div>
       </div>
