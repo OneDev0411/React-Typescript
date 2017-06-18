@@ -113,10 +113,18 @@ class Compose extends React.Component {
    */
   async searchInRooms(q) {
     const rooms = await this.askServer(`/rooms/search?q[]=${q}&room_types[]=Direct&room_types[]=Group`)
-    // return users.map(user => this.createListItem('user', user))
 
-    console.log(rooms)
-    return []
+    return rooms
+      // .filter(room => room.users.length > 2)
+      .map(room => {
+        return this.createListItem('room', {
+          ...room,
+          ...{
+            users: _.pluck(room.users, 'id'),
+            display_name: `${room.proposed_title}(room)`
+          }
+        })
+      })
   }
 
   /**
@@ -168,7 +176,8 @@ class Compose extends React.Component {
       display_name: item.display_name || item[type] || '-',
       image: item.profile_image_url,
       email: item.email,
-      phone_number: item.phone_number
+      phone_number: item.phone_number,
+      users: item.users
     }
   }
 
@@ -188,17 +197,12 @@ class Compose extends React.Component {
    * on add new recipient
    */
   onAdd(recipient) {
-    const { onChangeRecipients } = this.props
-
     const recipients = {
       ...this.state.recipients,
       ...{[recipient.id]: recipient}
     }
 
-    this.setState({ recipients })
-
-    // change recipients
-    onChangeRecipients(recipients)
+    this.setState({ recipients }, this.onChangeRecipients)
 
     // reset search input text
     this.getSearchInput().value = ''
@@ -211,18 +215,43 @@ class Compose extends React.Component {
    * on remove recipient
    */
   onRemove(recipient) {
-    const { onChangeRecipients } = this.props
-
     // remove selected recipient
     const recipients = _.omit(this.state.recipients, (item, id) => id === recipient.id)
 
-    this.setState({ recipients })
-
-    // change recipients
-    onChangeRecipients(recipients)
+    this.setState({ recipients }, this.onChangeRecipients)
 
     // set focus on search
     this.getSearchInput().focus()
+  }
+
+  /**
+   * on change recipients
+   */
+  onChangeRecipients() {
+    const recipients = {
+      users: [],
+      emails: [],
+      phone_numbers: []
+    }
+
+    _.each(this.state.recipients, recp => {
+      switch(recp.type) {
+        case 'user':
+          recipients.users.push(recp.id)
+          break
+        case 'room':
+          recipients.users = recipients.users.concat(recp.users)
+          break
+        case 'email':
+          recipients.emails.push(recp.email)
+          break
+        case 'phone_number':
+          recipients.phone_numbers.push(recp.phone_number)
+          break
+      }
+    })
+
+    this.props.onChangeRecipients(recipients)
   }
 
   /**
