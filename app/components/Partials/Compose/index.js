@@ -64,6 +64,9 @@ class Compose extends React.Component {
     if (this.criteria.length === 0)
       return false
 
+    // show searching loader
+    this.setState({ searching: true })
+
     let rooms = []
     if (searchInRooms) {
       rooms = await this.searchInRooms(this.criteria)
@@ -75,6 +78,9 @@ class Compose extends React.Component {
 
     const contacts = await this.searchInContacts(this.criteria)
     this.createListView(users, rooms, contacts)
+
+    // hide loader
+    this.setState({ searching: false })
   }
 
   /**
@@ -195,21 +201,12 @@ class Compose extends React.Component {
    * api call
    */
   async askServer(url) {
-    let data = null
-
     try {
-      // show search icon
-      this.setState({ searching: true })
-
-      // fetch data
       const response = await new Fetch().get(url)
-
-      // set data
-      data = response.body.data
-    } catch(e) {}
-
-    this.setState({ searching: false })
-    return data
+      return response.body.data
+    } catch(e) {
+      return null
+    }
   }
 
   /**
