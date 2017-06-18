@@ -4,6 +4,7 @@ import Rx from 'rxjs/Rx'
 import validator from 'validator'
 import { PhoneNumberUtil } from 'google-libphonenumber'
 import _ from 'underscore'
+import cn from 'classnames'
 import Fetch from '../../../services/fetch'
 import UserAvatar from '../UserAvatar'
 import AutoSizeInput from '../AutoSizeInput'
@@ -17,6 +18,7 @@ class Compose extends React.Component {
     this.criteria = ''
 
     this.state = {
+      searching: false,
       viewList: {},
       recipients: {}
     }
@@ -30,7 +32,7 @@ class Compose extends React.Component {
       .fromEvent(this.getSearchInput(), 'keyup')
       .map(e => e.target.value)
       .filter(text => text.length === 0 || text.length >= 3)
-      .debounceTime(500)
+      .debounceTime(300)
       .subscribe(text => this.onSearch(text))
   }
 
@@ -50,20 +52,28 @@ class Compose extends React.Component {
    */
   async onSearch(text) {
     const { searchInRooms } = this.props
+
     if (text === this.criteria)
       return false
 
     // set this variable to detect non characters like shift, ctrl, ...
     this.criteria = text
+    this.setState({ viewList: {} })
+
+    // dont search when there is no criteria
+    if (this.criteria.length === 0)
+      return false
 
     let rooms = []
     if (searchInRooms) {
       rooms = await this.searchInRooms(this.criteria)
+      this.createListView(rooms)
     }
 
     const users = await this.searchInUsers(this.criteria)
-    const contacts = await this.searchInContacts(this.criteria)
+    this.createListView(users, rooms)
 
+    const contacts = await this.searchInContacts(this.criteria)
     this.createListView(users, rooms, contacts)
   }
 
@@ -185,12 +195,21 @@ class Compose extends React.Component {
    * api call
    */
   async askServer(url) {
+    let data = null
+
     try {
+      // show search icon
+      this.setState({ searching: true })
+
+      // fetch data
       const response = await new Fetch().get(url)
-      return response.body.data
-    } catch(e) {
-      return null
-    }
+
+      // set data
+      data = response.body.data
+    } catch(e) {}
+
+    this.setState({ searching: false })
+    return data
   }
 
   /**
@@ -266,6 +285,9 @@ class Compose extends React.Component {
     />
   }
 
+  /**
+   * get entry hint
+   */
   getSubTitle({ email, phone_number, display_name }) {
     if (email && email !== display_name)
       return email
@@ -275,14 +297,38 @@ class Compose extends React.Component {
       return ''
   }
 
+  /**
+   * get styles of suggestions
+   */
+  getStyles() {
+    const { dropDownBox } = this.props
+    const { viewList, searching } = this.state
+    const style = {}
+
+    if (dropDownBox === true && _.size(viewList) === 0 && !searching)
+      style.display = 'none'
+
+    return style
+  }
+
+  /**
+   * triggers when dropdown lose focus
+   */
+  onBlurDropDownBox() {
+    const { dropDownBox } = this.props
+
+    if (dropDownBox === true)
+      this.setState({ viewList: {}})
+  }
+
   render() {
-    const { viewList, recipients } = this.state
+    const { dropDownBox } = this.props
+    const { searching, viewList, recipients } = this.state
 
     return (
       <div className="compose">
         <div className="tags-container">
           <span className="to">To: </span>
-
           {
             _.map(recipients, recp =>
               <div
@@ -307,21 +353,38 @@ class Compose extends React.Component {
           />
         </div>
 
-        <div className="suggestions">
-          {
-            _.map(viewList, recp =>
-              <div
-                key={`RECP_SUG_${recp.id}`}
-                className="item"
-                onClick={() => this.onAdd(recp)}
-              >
-                { this.getAvatar(recp, 30) }
-                <strong>{ recp.display_name }</strong>
-                <span style={{ fontSize: '12px', marginLeft: '5px' }}> { this.getSubTitle(recp) }</span>
-              </div>
-            )
-          }
+        <div className="sg-container">
+
+          <div
+            className={cn('suggestions', { dropdown: dropDownBox === true })}
+            style={this.getStyles()}
+            tabIndex="1"
+            onBlur={() => this.onBlurDropDownBox()}
+          >
+            {
+              searching &&
+              <img
+                className="loader"
+                src="/static/images/loading-states/three-dots-blue.svg"
+              />
+            }
+
+            {
+              _.map(viewList, recp =>
+                <div
+                  key={`RECP_SUG_${recp.id}`}
+                  className="item"
+                  onClick={() => this.onAdd(recp)}
+                >
+                  { this.getAvatar(recp, 30) }
+                  <strong>{ recp.display_name }</strong>
+                  <span style={{ fontSize: '12px', marginLeft: '5px' }}> { this.getSubTitle(recp) }</span>
+                </div>
+              )
+            }
+          </div>
         </div>
+
       </div>
     )
   }
@@ -330,6 +393,7 @@ class Compose extends React.Component {
 Compose.propTypes = {
   show: PropTypes.bool.isRequired,
   searchInRooms: PropTypes.bool,
+  dropDownBox: PropTypes.bool,
   onHide: PropTypes.func.isRequired,
   onChangeRecipients: PropTypes.func.isRequired
 }
