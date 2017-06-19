@@ -6,7 +6,7 @@ import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 
 import GridView from './GridView'
-import ListView from './ListView'
+import TableView from './TableView'
 import PanelHeader from './PanelHeader'
 import PanelsSwitch from './PanelsSwitch'
 import listingUtils from '../../../../../../utils/listing'
@@ -14,19 +14,21 @@ import listingUtils from '../../../../../../utils/listing'
 const ListingPanel = props => {
   const { tabName, listings, activePanel } = props
 
+  const panelClassName = `c-listings-panel--${activePanel}`
+
   let panelContainerClassName = 'l-listings__panel__container'
-  if (activePanel !== 'map') {
+  if (activePanel === 'grid') {
     panelContainerClassName += ` ${panelContainerClassName}--full`
   }
 
   return (
-    <div>
+    <div className={panelClassName}>
       <PanelsSwitch activePanel={activePanel} tabName={tabName} />
       <div className={panelContainerClassName}>
         <PanelHeader {...props} info={listings.info} />
         <div className="c-panel__list-container">
-          {activePanel === 'list'
-            ? <ListView {...props} />
+          {activePanel === 'table'
+            ? <TableView {...props} />
             : <GridView {...props} />}
         </div>
       </div>
@@ -42,7 +44,6 @@ const ListingPanelHOC = compose(
       setSortingIndex(index)
     },
     onClickSortingDirection: ({ setSortingDirection }) => event => {
-      console.log(event.target.checked)
       const dir = event.target.checked ? -1 : 1
       setSortingDirection(dir)
     }

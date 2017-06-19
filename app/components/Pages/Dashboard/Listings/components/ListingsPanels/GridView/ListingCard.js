@@ -4,75 +4,51 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import helpers from '../../../../../../../utils/helpers'
-import listing_util from '../../../../../../../utils/listing'
+import listingUtils from '../../../../../../../utils/listing'
 
 import FavoriteHeart from '../../FavoriteHeart'
-import { Button, DropdownButton, MenuItem } from 'react-bootstrap'
-
+import prepareProps from '../prepareListingViewItemProps'
 import { setMapHoveredMarkerId } from '../../../../../../../store_actions/listings/map'
 
 const ListingCard = ({
-  listing,
   user,
+  listing,
   activePanel,
   onMouseEnter,
   onMouseLeave
 }) => {
-  const statusColor = listing_util.getStatusColor(listing.status)
-  let property = listing.compact_property
-  let address = listing.address
-
-  if (!property) {
-    property = listing.property
-  }
-
-  if (!address) {
-    address = property.address
-  }
-
-  const square_feet = helpers.numberWithCommas(
-    Math.floor(listing_util.metersToFeet(property.square_meters))
-  )
-
-  let price = listing.price
-  if (listing.close_price && user && user.user_type === 'Agent') {
-    price = listing.close_price
-  }
-
-  const backgroundImage = listing.cover_image_url && {
-    backgroundImage: `url('${listing.cover_image_url}')`
-  }
+  const props = prepareProps(user, listing)
 
   return (
     <div
       className="c-listing-card"
-      style={backgroundImage}
+      style={props.backgroundImage}
       onMouseEnter={activePanel === 'map' ? () => onMouseEnter(listing.id) : ''}
       onMouseLeave={activePanel === 'map' ? onMouseLeave : ''}>
       <Link to={`/listings/${listing.id}`} className="c-listing-card__link" />
       <div className="c-listing-card__content-wrapper">
-        {statusColor &&
+        {props.statusColor &&
           <div>
             <span
               className="c-listing-card__status"
-              style={{ background: `#${statusColor}` }}>
+              style={{ background: `#${props.statusColor}` }}>
               {listing.status}
             </span>
           </div>}
         <h4 className="c-listing-card__title">
-          {listing_util.addressTitle(address)}
+          {props.address}
         </h4>
         <h5 className="c-listing-card__price">
-          ${helpers.numberWithCommas(Math.floor(price))}
+          {props.price}
         </h5>
         <div className="c-listing-card__details">
-          <span>{property.bedroom_count} Beds</span>
+          <span>{props.beds} Beds</span>
           &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-          <span>{property.bathroom_count} Baths</span>
+          <span>{props.baths} Baths</span>
           &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-          <span>{square_feet} Sqft</span>
+          <span>{props.sqft} Sqft</span>
           &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-          <span>{property.year_built}</span>
+          <span>{props.builtYear}</span>
         </div>
       </div>
       <div className="c-listing-card__favorite-heart">

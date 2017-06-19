@@ -62,4 +62,9 @@
     position: absolute;
     right: 0;
     top: -7px;
+    .c-listings-panel--table &,
+    .l-listings__panel__container--full & {
+        right: auto;
+        left: 200px;
+    }
 }

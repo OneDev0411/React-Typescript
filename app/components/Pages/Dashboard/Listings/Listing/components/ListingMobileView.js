@@ -645,7 +645,7 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
     right_area = (
       <div style={nav_bar_style}>
         <div style={S('pull-right relative r-110 t-14n')}>
-          <FavoriteHeart listing={listing} />
+          <FavoriteHeart listing={listing} width="40px" height="40px" />
         </div>
         <Button
           onClick={e => e.preventDefault()}

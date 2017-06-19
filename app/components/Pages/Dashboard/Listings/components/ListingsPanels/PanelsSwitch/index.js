@@ -17,8 +17,8 @@ const PanelsSwitch = ({ activePanel, setActivePanel, tabName }) => {
       />
       <SwitchButton
         icon="LIST"
-        active={activePanel === 'list'}
-        clickHandler={onClickHandler('list')}
+        active={activePanel === 'table'}
+        clickHandler={onClickHandler('table')}
       />
       <SwitchButton
         icon="GRID"

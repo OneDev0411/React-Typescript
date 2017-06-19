@@ -11,6 +11,7 @@ const ButtonStyle = {
 
 const PanelHeader = ({
   info,
+  activePanel,
   sortingIndex,
   onClickShare,
   onClickDropdownItem,
@@ -24,6 +25,7 @@ const PanelHeader = ({
           </span>
         : <span>0 Homes</span>}
     </p>
+
     <div className="c-panel__header__sorting">
       <span className="c-panel__header__sorting__title">
         Sorting by
@@ -65,6 +67,7 @@ const PanelHeader = ({
         Reverse
       </Checkbox>
     </div>
+
     <Button
       bsStyle="primary"
       onClick={onClickShare}
@@ -72,6 +75,21 @@ const PanelHeader = ({
       className="c-panel__header__button">
       save search
     </Button>
+
+    { activePanel === 'table' && <table className="c-tableview__table" style={{ marginTop: '1.7rem' }}>
+      <thead className="c-tableview__table__header">
+        <tr>
+          <th style={{ paddingLeft: '1rem', width: '30%' }}>Address</th>
+          <th >Area</th>
+          <th style={{ width: '12%' }}>Price</th>
+          <th>Beds</th>
+          <th>Baths</th>
+          <th>Sqft</th>
+          <th>$/Sqft</th>
+          <th>Built Year</th>
+        </tr>
+      </thead>
+    </table> }
   </div>
 
 export default PanelHeader

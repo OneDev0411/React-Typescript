@@ -7,14 +7,12 @@ import toggleFavorite from '../../../../../../store_actions/listings/favorites/t
 import { getIsFavorite } from '../../../../../../reducers/listings/favorites'
 
 const style = {
-  width: '44px',
-  height: '40px',
   cursor: 'pointer'
 }
 
-const Heart = ({ isFavorited, onClick }) =>
+const Heart = ({ isFavorited, onClick, width = '100%', height = '100%' }) =>
   <img
-    style={style}
+    style={{ ...style, width, height }}
     onClick={onClick}
     src={`/static/images/dashboard/mls/heart${isFavorited
       ? '-red'
