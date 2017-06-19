@@ -38,7 +38,7 @@ function mapStateToProps({ chatroom }, ownProps) {
   const { roomId } = ownProps
   const { rooms } = chatroom
 
-  if (!roomId || !rooms)
+  if (!roomId || !rooms || !rooms[roomId])
     return { typing: {} }
 
   return {
