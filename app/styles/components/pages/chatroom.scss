@@ -333,6 +333,13 @@ $rooms-padding: 20px;
   .title {
     padding: 6px 0 0 8px;
     opacity: 0.5;
+
+    &.hasNotification {
+      opacity: 1;
+      span {
+        font-weight: bold;
+      }
+    }
     .message-typing {
       display: inline;
       margin-left: 5px;
