@@ -9,11 +9,26 @@ function _getRooms (rooms) {
   }
 }
 
+function _addNewRoom (room) {
+  return {
+    type: types.CREATE_ROOM,
+    room
+  }
+}
+
+
 export function getRooms(user) {
   return async (dispatch) => {
     const response = await Chatroom.getRooms(user)
     const rooms = _.indexBy(response.body.data, 'id')
     dispatch(_getRooms(rooms))
+  }
+}
+
+export function createRoom(recipients) {
+  return async (dispatch) => {
+    const response = await Chatroom.createRoom(recipients)
+    dispatch(_addNewRoom(response.body.data))
   }
 }
 

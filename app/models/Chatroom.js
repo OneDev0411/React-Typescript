@@ -23,6 +23,20 @@ Chatroom.getRooms = async function(user = {}) {
   } catch (e) {}
 }
 
+/**
+* add new room
+*/
+Chatroom.createRoom = async function(recipients) {
+  try {
+    return await new Fetch()
+      .post('/rooms')
+      .send(recipients)
+
+  } catch (e) {
+    return null
+  }
+}
+
 Chatroom.getMessages = async function(id, limit = 20, max_value = null) {
   let endpoint = `/rooms/${id}/messages?limit=${limit}&sorting_value=Creation`
 

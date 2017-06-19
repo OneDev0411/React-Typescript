@@ -3,6 +3,7 @@ const ActionTypes = {}
 new Array(
   'CHANGE_STATUS',
   'GET_ROOMS',
+  'CREATE_ROOM',
   'GET_MESSAGES',
   'CREATE_MESSAGE',
   'TOGGLE_CHATBAR',

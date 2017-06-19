@@ -75,6 +75,19 @@ function getRooms(state, action) {
 }
 
 /**
+ * create new room
+ */
+function createRoom(state, action) {
+  return {
+    ...state,
+    ...{rooms: {
+      ...state.rooms,
+      ...{[action.room.id]: action.room}
+    }}
+  }
+}
+
+/**
  * update room notification counter when receive a new message
  */
 function updateRoomNotifications(state, action) {
@@ -307,6 +320,7 @@ export default (state = initialState, action) => {
     [types.TOGGLE_CHATBAR]: toggleChatbar,
     [types.TOGGLE_INSTANCE_MODE]: toggleInstanceMode,
     [types.GET_ROOMS]: getRooms,
+    [types.CREATE_ROOM]: createRoom,
     [types.GET_MESSAGES]: createMessages,
     [types.CREATE_MESSAGE]: createMessages,
     [types.ADD_MESSAGE_TYPING]: addMessageTyping,

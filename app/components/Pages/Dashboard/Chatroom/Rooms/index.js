@@ -6,7 +6,7 @@ import { compose,  withState, lifecycle, pure } from 'recompose'
 import _ from 'underscore'
 import cn from 'classnames'
 import SocketStatus from '../SocketStatus'
-import AddMember from './add-member'
+import CreateRoom from './create-room'
 import UserAvatar from '../../../../Partials/UserAvatar'
 import UserTyping from '../UserTyping'
 
@@ -168,7 +168,7 @@ class Rooms extends React.Component {
           </div>
         </div>
 
-        <AddMember />
+        <CreateRoom />
       </div>
     )
   }
