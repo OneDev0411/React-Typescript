@@ -5,6 +5,7 @@ import Fetch from '../services/fetch'
 
 const Chatroom = {}
 
+
 /**
 * returns rooms list
 */
@@ -35,6 +36,21 @@ Chatroom.createRoom = async function(recipients) {
     return await new Fetch()
       .post('/rooms')
       .send({ room_type })
+      .send(recipients)
+
+  } catch (e) {
+    return null
+  }
+}
+
+/**
+* add members to a room
+*/
+Chatroom.addMembers = async function(roomId, recipients) {
+
+  try {
+    return await new Fetch()
+      .post(`/rooms/${roomId}/users`)
       .send(recipients)
 
   } catch (e) {
