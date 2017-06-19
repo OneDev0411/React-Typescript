@@ -1,19 +1,23 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Modal, Button } from 'react-bootstrap'
 import { compose,  withState, lifecycle, pure } from 'recompose'
 import Compose from '../../../../Partials/Compose'
+import { createRoom } from '../../../../../store_actions/chatroom'
 
 const enhance = compose(
   pure,
   withState('showComposeModal', 'onChangeCompose', false),
-  withState('recipients', 'onChangeRecipients', {})
+  withState('recipients', 'onChangeRecipients', {}),
+  connect(null, { createRoom })
 )
 
 const AddMember = ({
   showComposeModal,
   recipients,
   onChangeCompose,
-  onChangeRecipients
+  onChangeRecipients,
+  createRoom
 }) => (
   <div>
     <div
@@ -34,7 +38,6 @@ const AddMember = ({
 
       <Modal.Body>
         <Compose
-          show={true}
           onHide={() => onChangeCompose(false)}
           onChangeRecipients={recipients => onChangeRecipients(recipients)}
         />
@@ -43,11 +46,11 @@ const AddMember = ({
       <Modal.Footer>
         <Button
           bsStyle="primary"
-          onClick={() => {
-            alert(recipients.toString())
+          onClick={async () => {
+            await createRoom(recipients)
           }}
         >
-          Add
+          Create room
         </Button>
       </Modal.Footer>
 
