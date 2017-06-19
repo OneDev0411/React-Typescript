@@ -24,6 +24,12 @@ function _addMembers (roomId, room) {
   }
 }
 
+function _leaveRoom(roomId) {
+  return {
+    type: types.LEAVE_ROOM,
+    roomId
+  }
+}
 
 export function getRooms(user) {
   return async (dispatch) => {
@@ -44,6 +50,13 @@ export function addMembers(roomId, recipients) {
   return async (dispatch) => {
     const response = await Chatroom.addMembers(roomId, recipients)
     dispatch(_addMembers(roomId, response.body.data))
+  }
+}
+
+export function leaveRoom(userId, roomId) {
+  return async (dispatch) => {
+    const response = await Chatroom.leaveRoom(userId, roomId)
+    dispatch(_leaveRoom(roomId))
   }
 }
 

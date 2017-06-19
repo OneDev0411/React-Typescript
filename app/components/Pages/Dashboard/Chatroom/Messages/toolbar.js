@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
 import { toggleInstanceMode } from '../../../../../store_actions/chatroom'
 import Members from '../Rooms/members'
+import RoomSettings from '../Rooms/settings'
 
 const MessagesToolbar = ({
   toggleInstanceMode,
@@ -16,6 +17,7 @@ const MessagesToolbar = ({
 
     <Col md={3} lg={3} sm={3} xs={3} className="buttons">
       <Members room={room} />
+      <RoomSettings room={room} />
 
       {
         instanceMode &&

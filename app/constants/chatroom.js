@@ -4,6 +4,7 @@ new Array(
   'CHANGE_STATUS',
   'GET_ROOMS',
   'CREATE_ROOM',
+  'LEAVE_ROOM',
   'ADD_MEMBERS',
   'GET_MESSAGES',
   'CREATE_MESSAGE',

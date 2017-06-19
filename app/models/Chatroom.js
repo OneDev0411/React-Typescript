@@ -44,6 +44,19 @@ Chatroom.createRoom = async function(recipients) {
 }
 
 /**
+* leave or delete a room
+*/
+Chatroom.leaveRoom = async function(userId, roomId) {
+  try {
+    return await new Fetch()
+      .delete(`/rooms/${roomId}/users/${userId}`)
+
+  } catch (e) {
+    return null
+  }
+}
+
+/**
 * add members to a room
 */
 Chatroom.addMembers = async function(roomId, recipients) {

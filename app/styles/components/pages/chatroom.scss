@@ -215,6 +215,31 @@ $rooms-padding: 20px;
       margin-left: 15px;
     }
   }
+
+  // fix setting dropdown
+  .btn-group {
+    &.open {
+      .dropdown-toggle { box-shadow: none }
+    }
+    &.dropdown-toggle {
+      box-shadow: none;
+    }
+
+    .dropdown-menu {
+      border: none;
+      color: #4a494a;
+      li {
+        i {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+
+  .room-settings {
+    background-color: transparent;
+    border: none;
+  }
 }
 
 /**
@@ -509,6 +534,15 @@ $rooms-padding: 20px;
   }
 }
 
+.chatroom-members {
+  .members-list {
+    margin: 20px 0 10px 0;
+    .item {
+      margin: 10px 0;
+    }
+  }
+}
+
 /* bm-menu */
 .bm-menu-wrap {
   z-index: 101 !important;
@@ -525,13 +559,4 @@ $rooms-padding: 20px;
 
 .bm-overlay {
   z-index: 99 !important;
-}
-
-.chatroom-members {
-  .members-list {
-    margin: 20px 0 10px 0;
-    .item {
-      margin: 10px 0;
-    }
-  }
 }

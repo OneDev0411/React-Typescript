@@ -93,6 +93,9 @@ function createRoom(state, action) {
   })
 }
 
+/**
+ * add new member(s) to specific room
+ */
 function addRoomMembers(state, action) {
   return {
     ...state,
@@ -100,6 +103,18 @@ function addRoomMembers(state, action) {
       ...state.rooms,
       ...{[action.roomId]: action.room}
     }}
+  }
+}
+
+/**
+ * leave or delete a room
+ */
+function leaveRoom(state, action) {
+  const rooms = _.omit(rooms, room => room.id === action.roomId)
+
+  return {
+    ...state,
+    ...{rooms}
   }
 }
 
@@ -338,6 +353,7 @@ export default (state = initialState, action) => {
     [types.GET_ROOMS]: getRooms,
     [types.CREATE_ROOM]: createRoom,
     [types.ADD_MEMBERS]: addRoomMembers,
+    [types.LEAVE_ROOM]: leaveRoom,
     [types.GET_MESSAGES]: createMessages,
     [types.CREATE_MESSAGE]: createMessages,
     [types.ADD_MESSAGE_TYPING]: addMessageTyping,
