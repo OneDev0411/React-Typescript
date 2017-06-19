@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
 import { toggleInstanceMode } from '../../../../../store_actions/chatroom'
+import Members from '../Rooms/members'
 
 const MessagesToolbar = ({
   toggleInstanceMode,
@@ -9,15 +10,18 @@ const MessagesToolbar = ({
   room
 }) => (
   <Row className="toolbar">
-    <Col md={11} lg={11} sm={11} xs={11}>
+    <Col md={9} lg={9} sm={9} xs={9}>
       { room.proposed_title }
     </Col>
 
-    <Col md={1} lg={1} sm={1} xs={1}>
+    <Col md={3} lg={3} sm={3} xs={3} className="buttons">
+      <Members room={room} />
+
       {
         instanceMode &&
-        <i
-          className="close-instance fa fa-window-close"
+        <img
+          className="close-instance"
+          src="/static/images/chatroom/exit-fullscreen.svg"
           onClick={() => toggleInstanceMode()}
         />
       }
