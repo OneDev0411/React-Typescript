@@ -171,7 +171,7 @@ export default class Socket {
     if (activeRoom && room.id === activeRoom)
       Socket.clearNotifications(room.id)
 
-    if (room.id !== activeRoom && this.user.id !== message.author.id) {
+    if (room.id !== activeRoom && message.author && message.author.id !== this.user.id) {
       Socket.createNotification(room.id, message)
     }
 
