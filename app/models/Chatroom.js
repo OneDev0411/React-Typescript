@@ -27,9 +27,14 @@ Chatroom.getRooms = async function(user = {}) {
 * add new room
 */
 Chatroom.createRoom = async function(recipients) {
+
+  const members = [].concat(recipients.users, recipients.emails, recipients.phone_numbers)
+  const room_type = members.length > 1 ? 'Group' : 'Direct'
+
   try {
     return await new Fetch()
       .post('/rooms')
+      .send({ room_type })
       .send(recipients)
 
   } catch (e) {
