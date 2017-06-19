@@ -148,8 +148,14 @@ class Rooms extends React.Component {
                   <Col sm={1} xs={1} className="avatar">
                     { this.getRoomAvatar(room) }
                   </Col>
-                  <Col sm={8} xs={8} className="title">
-                    { this.getRoomTitle(room.proposed_title) }
+                  <Col
+                    sm={8}
+                    xs={8}
+                    className={cn('title', { hasNotification: room.new_notifications > 0 })}
+                  >
+                    <span>
+                      { this.getRoomTitle(room.proposed_title) }
+                    </span>
                     <UserTyping roomId={room.id} />
                   </Col>
 
