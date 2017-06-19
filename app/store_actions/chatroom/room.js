@@ -16,6 +16,14 @@ function _addNewRoom (room) {
   }
 }
 
+function _addMembers (roomId, room) {
+  return {
+    type: types.ADD_MEMBERS,
+    roomId,
+    room
+  }
+}
+
 
 export function getRooms(user) {
   return async (dispatch) => {
@@ -29,6 +37,13 @@ export function createRoom(recipients) {
   return async (dispatch) => {
     const response = await Chatroom.createRoom(recipients)
     dispatch(_addNewRoom(response.body.data))
+  }
+}
+
+export function addMembers(roomId, recipients) {
+  return async (dispatch) => {
+    const response = await Chatroom.addMembers(roomId, recipients)
+    dispatch(_addMembers(roomId, response.body.data))
   }
 }
 

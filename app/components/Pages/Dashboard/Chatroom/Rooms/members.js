@@ -80,7 +80,7 @@ const ManageMembers = ({
         <Button
           bsStyle="primary"
           onClick={() => {
-            addMembers(recipients)
+            addMembers(room.id, recipients)
             onChangeComposeModal(false)
           }}
         >

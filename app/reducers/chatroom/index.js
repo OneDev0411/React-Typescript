@@ -93,6 +93,16 @@ function createRoom(state, action) {
   })
 }
 
+function addRoomMembers(state, action) {
+  return {
+    ...state,
+    ...{rooms: {
+      ...state.rooms,
+      ...{[action.roomId]: action.room}
+    }}
+  }
+}
+
 /**
  * update room notification counter when receive a new message
  */
@@ -327,6 +337,7 @@ export default (state = initialState, action) => {
     [types.TOGGLE_INSTANCE_MODE]: toggleInstanceMode,
     [types.GET_ROOMS]: getRooms,
     [types.CREATE_ROOM]: createRoom,
+    [types.ADD_MEMBERS]: addRoomMembers,
     [types.GET_MESSAGES]: createMessages,
     [types.CREATE_MESSAGE]: createMessages,
     [types.ADD_MESSAGE_TYPING]: addMessageTyping,
