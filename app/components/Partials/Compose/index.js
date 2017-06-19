@@ -388,7 +388,6 @@ class Compose extends React.Component {
 }
 
 Compose.propTypes = {
-  show: PropTypes.bool.isRequired,
   searchInRooms: PropTypes.bool,
   dropDownBox: PropTypes.bool,
   onHide: PropTypes.func.isRequired,
