@@ -78,13 +78,19 @@ function getRooms(state, action) {
  * create new room
  */
 function createRoom(state, action) {
-  return {
+  const newState = {
     ...state,
+    ...{showChatbar: false},
     ...{rooms: {
       ...state.rooms,
       ...{[action.room.id]: action.room}
     }}
   }
+
+  return addPopup(newState, {
+    ...action,
+    ...{roomId: action.room.id}
+  })
 }
 
 /**
