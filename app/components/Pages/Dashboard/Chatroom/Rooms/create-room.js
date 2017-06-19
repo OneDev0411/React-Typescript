@@ -7,7 +7,7 @@ import { createRoom } from '../../../../../store_actions/chatroom'
 
 const enhance = compose(
   pure,
-  withState('showComposeModal', 'onChangeCompose', false),
+  withState('showComposeModal', 'onChangeComposeModal', false),
   withState('recipients', 'onChangeRecipients', {}),
   connect(null, { createRoom })
 )
@@ -15,14 +15,14 @@ const enhance = compose(
 const AddMember = ({
   showComposeModal,
   recipients,
-  onChangeCompose,
+  onChangeComposeModal,
   onChangeRecipients,
   createRoom
 }) => (
   <div>
     <div
       className="new-room"
-      onClick={() => onChangeCompose(!showComposeModal)}
+      onClick={() => onChangeComposeModal(!showComposeModal)}
     >
       <i className="fa fa-edit"></i> New Message
     </div>
@@ -30,7 +30,7 @@ const AddMember = ({
     <Modal
       show={showComposeModal}
       dialogClassName="chatroom-add-member"
-      onHide={() => onChangeCompose(false)}
+      onHide={() => onChangeComposeModal(false)}
     >
       <Modal.Header closeButton>
         <Modal.Title>Add Members</Modal.Title>
@@ -38,7 +38,7 @@ const AddMember = ({
 
       <Modal.Body>
         <Compose
-          onHide={() => onChangeCompose(false)}
+          onHide={() => onChangeComposeModal(false)}
           onChangeRecipients={recipients => onChangeRecipients(recipients)}
         />
       </Modal.Body>
@@ -46,8 +46,10 @@ const AddMember = ({
       <Modal.Footer>
         <Button
           bsStyle="primary"
+          disabled={([].concat(recipients.users, recipients.emails, recipients.phone_numbers)).length === 0}
           onClick={async () => {
             await createRoom(recipients)
+            onChangeComposeModal(false)
           }}
         >
           Create room
