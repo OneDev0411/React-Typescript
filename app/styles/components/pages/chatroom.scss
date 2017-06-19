@@ -207,8 +207,13 @@ $rooms-padding: 20px;
   border-left: 1px solid #fff;
   font-weight: bold;
   font-size: 17px;
-  .close-instance {
-    cursor: pointer;
+  .buttons {
+    text-align: right;
+    padding-right: 50px;
+    img {
+      cursor: pointer;
+      margin-left: 15px;
+    }
   }
 }
 
@@ -520,4 +525,13 @@ $rooms-padding: 20px;
 
 .bm-overlay {
   z-index: 99 !important;
+}
+
+.chatroom-members {
+  .members-list {
+    margin: 20px 0 10px 0;
+    .item {
+      margin: 10px 0;
+    }
+  }
 }

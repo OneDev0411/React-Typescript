@@ -95,6 +95,7 @@
 
 %compose--suggestions-dropdown {
   position: absolute;
+  z-index: 1000;
   min-height: 0px;
   top: -5px;
   left: 0;
