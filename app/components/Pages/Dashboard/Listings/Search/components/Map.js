@@ -82,8 +82,7 @@ const map = ({
       )}
     </Map>
     {/*<ZoomController onClickZoomHandler={onClickZoomHandler} />*/}
-    {drawing.points.length &&
-      <DrawingRemoveButton onClick={onClickRemovePolygon} />}
+    <DrawingRemoveButton onClick={onClickRemovePolygon} points={drawing.points} />
   </div>
 
 const mapHOC = compose(

@@ -2,12 +2,8 @@ import React from 'react'
 import { Button, Checkbox, DropdownButton, MenuItem } from 'react-bootstrap'
 import Brand from '../../../../../../../controllers/Brand'
 
-const getBrandColor = () => Brand.color('primary', '3388ff')
-const getText = node => node.target.text.toLowerCase()
 
-const ButtonStyle = {
-  backgroundColor: `#${getBrandColor()}`
-}
+const getText = node => node.target.text.toLowerCase()
 
 const PanelHeader = ({
   info,
@@ -71,7 +67,7 @@ const PanelHeader = ({
     <Button
       bsStyle="primary"
       onClick={onClickShare}
-      style={ButtonStyle}
+      style={{ backgroundColor: `#${Brand.color('primary', '3388ff')}` }}
       className="c-panel__header__button">
       save search
     </Button>

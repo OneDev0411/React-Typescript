@@ -1,11 +1,8 @@
 import React from 'react'
 import { Link, IndexLink } from 'react-router'
+import Brand from '../../../../../controllers/Brand'
 
-export default function Tabs({
-  to,
-  text,
-  indexed
-}) {
+export default function Tabs({ to, text, indexed }) {
   return (
     <li className="c-listings__tabs__item">
       <Link
@@ -13,7 +10,9 @@ export default function Tabs({
         onlyActiveOnIndex={indexed}
         className="c-listings__tabs__link"
         activeClassName="c-listings__tabs__link--active"
-      >
+        activeStyle={{
+          borderBottomColor: `#${Brand.color('primary', '3388ff')}`
+        }}>
         <span>{text}</span>
       </Link>
     </li>
