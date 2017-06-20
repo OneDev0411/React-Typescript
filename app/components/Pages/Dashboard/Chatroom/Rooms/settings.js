@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
 import { leaveRoom } from '../../../../../store_actions/chatroom'
+import MoreIcon from '../../Partials/Svgs/MoreIcon'
 
 const RoomSettings = ({
   user,
@@ -14,15 +15,7 @@ const RoomSettings = ({
       className="room-settings"
       noCaret
       pullRight
-      title={
-        <svg xmlns="http://www.w3.org/2000/svg" width="4" height="20" viewBox="0 0 4 20">
-          <g fill="#B2B2B2" fillRule="evenodd">
-            <circle cx="2" cy="2" r="2"/>
-            <circle cx="2" cy="10" r="2"/>
-            <circle cx="2" cy="18" r="2"/>
-          </g>
-        </svg>
-      }
+      title={<MoreIcon />}
     >
       <MenuItem
         eventKey="1"

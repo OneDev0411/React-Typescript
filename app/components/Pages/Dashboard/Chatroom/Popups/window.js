@@ -1,13 +1,18 @@
 import React from 'react'
 import cn from 'classnames'
 import Messages from '../Messages'
+import Members from '../Rooms/members'
+import RoomSettings from '../Rooms/settings'
+import CloseIcon from '../../Partials/Svgs/CloseIcon'
+import FullscreenIcon from '../../Partials/Svgs/FullscreenIcon'
+import MinimizeIcon from '../../Partials/Svgs/MinimizeIcon'
 
 const getTitle = function(title) {
-  const len = 15
+  const len = 14
   if (title.length < len)
     return title
   else
-    return title.substr(0, 15) + ' ...'
+    return title.substr(0, len) + '...'
 }
 
 export default ({
@@ -27,8 +32,8 @@ export default ({
   // extract settings
   const { minimize, isActive } = settings
 
-  const width = 270 // percent
-  const defaultLeft = 90 // percent
+  const width = 270 // pixels
+  const defaultLeft = 90 // pixel
 
   let left = (width * (number - 1)) + defaultLeft
 
@@ -50,24 +55,33 @@ export default ({
           className="room-title"
           onClick={() => onMinimize(room.id)}
         >
-          <b>{ getTitle(room.proposed_title) }</b>
+          { getTitle(room.proposed_title) }
         </span>
 
-        <i
-          className="fa icon fa-window-minimize"
-          onClick={() => onMinimize(room.id)}
-        ></i>
+        <Members room={room} />
+        <RoomSettings room={room} />
 
-        <i
-          className="fa icon fa-window-maximize"
+        <span
+          className="icon minimize"
+          onClick={() => onMinimize(room.id)}>
+          <MinimizeIcon />
+        </span>
+
+        <span
+          className="icon maximize"
           onClick={() => onMaximize(room.id)}
-        ></i>
+        >
+          <FullscreenIcon />
+        </span>
 
-        <i
-          className="fa icon fa-times"
+        <span
+          className="icon close"
           onClick={() => onClose(room.id)}
-        ></i>
+        >
+          <CloseIcon />
+        </span>
       </div>
+
       <Messages
         user={user}
         roomId={room.id}

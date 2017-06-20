@@ -59,6 +59,19 @@ $rooms-padding: 20px;
   }
 }
 
+.room-settings {
+  margin-left: 15px;
+  background-color: transparent;
+  border: none;
+  &:hover {
+    background-color: transparent;
+  }
+
+  &:hover svg > g{
+    fill: #2196f3;
+  }
+}
+
 /**
 * Messages
 */
@@ -259,6 +272,32 @@ $rooms-padding: 20px;
       }
     }
 
+    // fix setting dropdown
+    .btn-group {
+      &.open {
+        .dropdown-toggle { box-shadow: none }
+      }
+      &.dropdown-toggle {
+        box-shadow: none;
+      }
+
+      .dropdown-menu {
+        border: none;
+        color: #4a494a;
+        li {
+          min-height: 40px;
+          a {
+            line-height: 40px;
+            vertical-align: middle;
+            font-size: 16px;
+          }
+          i {
+            margin-right: 10px;
+          }
+        }
+      }
+    }
+
     .members {
       .bdg {
         color: #b2b2b2;
@@ -266,38 +305,6 @@ $rooms-padding: 20px;
         font-weight: 500;
       }
     }
-  }
-
-  // fix setting dropdown
-  .btn-group {
-    &.open {
-      .dropdown-toggle { box-shadow: none }
-    }
-    &.dropdown-toggle {
-      box-shadow: none;
-    }
-
-    .dropdown-menu {
-      border: none;
-      color: #4a494a;
-      li {
-        min-height: 40px;
-        a {
-          line-height: 40px;
-          vertical-align: middle;
-          font-size: 16px;
-        }
-        i {
-          margin-right: 10px;
-        }
-      }
-    }
-  }
-
-  .room-settings {
-    margin-left: 15px;
-    background-color: transparent;
-    border: none;
   }
 }
 
@@ -472,10 +479,11 @@ $rooms-padding: 20px;
   position: fixed;
   height: $height;
   bottom: 0;
-  background-color: #202A33;
-  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.15);
+  border-radius: 4px 4px 0 0;
   z-index: 100;
-  color: #fff;
+  color: #4a494a;
   @media (max-width : 738px) {
     display: none !important;
   }
@@ -487,24 +495,25 @@ $rooms-padding: 20px;
   .bar {
     text-align: right;
     padding: 4px 10px;
-    background-color: gray;
+    background-color: #dcdcdc;
     border-radius: 4px 4px 0 0;
     height: $bar-height;
     color: #000;
+    .icon {
+      margin-left: 8px;
+      cursor: pointer;
+    }
     &.isActive {
       background-color: skyblue;
-    }
-    .icon {
-      cursor: pointer;
-      margin-left: 6px;
-      &.fa-times {
-        font-size: 16px;
+      .icon {
+        svg g, svg path { fill: #fff; }
       }
     }
     .room-title {
       float: left;
       padding-top: 2px;
       cursor: pointer;
+      font-weight: 600;
     }
   }
   .messages {
@@ -519,7 +528,7 @@ $rooms-padding: 20px;
   @extend %messages;
   $messages-height: 330px;
   $height-of-create-message: 40px;
-  $height-of-typing-area: 23px;
+  $height-of-typing-area: 33px;
   height: $messages-height;
   position: relative;
   padding-top: 0;
@@ -531,7 +540,7 @@ $rooms-padding: 20px;
     overflow: auto;
     padding-bottom: 0;
     .message-item {
-      margin: 0 10px 10px 15px !important;
+      margin: 0 10px 10px 10px !important;
       margin-bottom: 0;
       .content {
         .recommendation {
@@ -555,11 +564,11 @@ $rooms-padding: 20px;
 
   .message-create {
     position: absolute;
-    bottom: -1px;
-    left: 0;
-    right: 0;
-    border: none;
-    border-radius: 0;
+    bottom: 9px;
+    left: 9px;
+    right: 9px;
+    border-radius: 5px;
+    border: solid 2px #e3e3e3;
   }
 
   .toolbar {
