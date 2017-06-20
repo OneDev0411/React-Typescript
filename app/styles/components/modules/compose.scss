@@ -36,16 +36,18 @@
     margin-right: 5px;
   }
   .tag {
-    background-color: #2196f3;
-    border-radius: 3px;
     display: inline-block;
-    height: 40px;
-    line-height: 40px;
+    height: 43px;
+    line-height: 43px;
     margin: 0px 5px 3px 0;
     padding: 0px 7px;
-    color: #fff;
-    font-size: 13px;
     vertical-align: middle;
+    border-radius: 3px;
+    background-color: #e5e5e5;
+    border: solid 1px #c2c2c2;
+    font-size: 14px;
+    font-weight: bold;
+    color: #4a494a;
     .user-avatar {
       float: left;
       margin-right: 5px;
@@ -54,8 +56,9 @@
       margin-left: 5px;
       cursor: pointer;
       transition: 0.3s ease-in all;
+      color: #9a9b9a;
       &:hover {
-        color: rgba(255, 255, 255, 0.5);
+        color: rgba(0, 0, 0, 0.5);
       }
     }
   }
@@ -76,13 +79,18 @@
   min-height: 220px;
   max-height: 220px;
   overflow: auto;
-  margin-top: 5px;
+  margin-top: 10px;
   padding-left: 2px;
 
   .item {
-    margin-bottom: 10px;
+    margin: 0 0 10px 0;
     cursor: pointer;
     transition: 0.2s ease-in all;
+    .vcenter {
+      display: inline-block;
+      vertical-align: middle;
+      float: none;
+    }
     .user-avatar {
       display: inline;
       margin-right: 10px;

@@ -33,7 +33,7 @@ const AddMember = ({
       onHide={() => onChangeComposeModal(false)}
     >
       <Modal.Header closeButton>
-        <Modal.Title>Add Members</Modal.Title>
+        <Modal.Title>New Message</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
@@ -52,7 +52,7 @@ const AddMember = ({
             onChangeComposeModal(false)
           }}
         >
-          Create room
+          Create
         </Button>
       </Modal.Footer>
 

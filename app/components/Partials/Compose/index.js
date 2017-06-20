@@ -1,4 +1,5 @@
 import React from 'react'
+import { Row, Col } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs/Rx'
 import validator from 'validator'
@@ -368,15 +369,22 @@ class Compose extends React.Component {
 
             {
               _.map(viewList, recp =>
-                <div
+                <Row
                   key={`RECP_SUG_${recp.id}`}
                   className="item"
                   onClick={() => this.onAdd(recp)}
                 >
-                  { this.getAvatar(recp, 30) }
-                  <strong>{ recp.display_name }</strong>
-                  <span style={{ fontSize: '12px', marginLeft: '5px' }}> { this.getSubTitle(recp) }</span>
-                </div>
+                  <Col sm={1} xs={1} md={1} className="vcenter" style={{ padding: 0 }}>
+                    { this.getAvatar(recp, 35) }
+                  </Col>
+
+                  <Col sm={8} xs={8} md={8} className="vcenter">
+                    <strong>{ recp.display_name }</strong>
+                    <div style={{ color: '#9b9a9b' }}>
+                      { this.getSubTitle(recp) }
+                    </div>
+                  </Col>
+                </Row>
               )
             }
           </div>
