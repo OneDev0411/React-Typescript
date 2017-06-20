@@ -319,7 +319,7 @@ class SideBar extends Component {
     let sidebar_height = 0
     if (typeof window !== 'undefined')
       sidebar_height = window.innerHeight
-    const sidebar_style = S(`w-70 fixed pl-8 t-0 z-100 bg-202A33 h-${sidebar_height}`)
+    const sidebar_style = S(`w-70 fixed t-0 z-100 bg-202A33 h-${sidebar_height}`)
     const path = data.path
     const active = {}
 
@@ -614,15 +614,23 @@ class SideBar extends Component {
 
     return (
       <aside style={sidebar_style} className="sidebar__nav-list pull-left">
-        <Nav bsStyle="pills" stacked style={S('mt-10')}>
-          { branding_logo }
 
-          <div
-            onClick={() => this.onShowChatroomSidebar()}
-          >
-            <SvgChat color={active.recents ? nav_active_color : '#4e5c6c'} />
-          </div>
+        { branding_logo }
 
+        <div
+          style={{
+            textAlign: 'center',
+            cursor: 'pointer',
+            backgroundColor: '#2196f3',
+            height: '65px',
+            paddingTop: '18px'
+          }}
+          onClick={() => this.onShowChatroomSidebar()}
+        >
+          <SvgChat color='#fff'/>
+        </div>
+
+        <Nav bsStyle="pills" stacked style={S('mt-10 pl-8')}>
           <OverlayTrigger placement="right" overlay={popover.map} delayShow={200} delayHide={0}>
             <LinkContainer onClick={this.hideListingViewer.bind(this)} className={active.mls} to="/dashboard/mls">
               <NavItem style={S('w-85p')}>
