@@ -391,13 +391,18 @@ $rooms-padding: 20px;
   padding: 7px 4px 7px $rooms-padding;
   margin: 0;
   cursor: pointer;
+  .vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+  }
   .avatar {
     padding-left: 0;
     padding-right: 0;
     margin-right: 10px;
   }
   .title {
-    padding: 6px 0 0 8px;
+    padding: 0 0 0 10px;
     opacity: 0.5;
 
     &.hasNotification {

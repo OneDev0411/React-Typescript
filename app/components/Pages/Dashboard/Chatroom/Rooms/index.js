@@ -56,7 +56,7 @@ class Rooms extends React.Component {
    */
   getRoomAvatar(room) {
     const { user, activeRoom } = this.props
-    const size = 30
+    const size = 35
     const color = '#d7d7d7'
     const { users } = room
 
@@ -86,7 +86,7 @@ class Rooms extends React.Component {
    * get room title, trim long titles
    */
   getRoomTitle(title) {
-    const len = 30
+    const len = 20
     if (title.length <= len)
       return title
 
@@ -145,13 +145,13 @@ class Rooms extends React.Component {
                   key={`ROOM_CHANNEL_${room.id}`}
                   className={cn('item', { active: room.id === activeRoom })}
                 >
-                  <Col sm={1} xs={1} className="avatar">
+                  <Col sm={1} xs={1} className="avatar vcenter">
                     { this.getRoomAvatar(room) }
                   </Col>
                   <Col
                     sm={8}
                     xs={8}
-                    className={cn('title', { hasNotification: room.new_notifications > 0 })}
+                    className={cn('title vcenter', { hasNotification: room.new_notifications > 0 })}
                   >
                     <span>
                       { this.getRoomTitle(room.proposed_title) }
@@ -159,7 +159,7 @@ class Rooms extends React.Component {
                     <UserTyping roomId={room.id} />
                   </Col>
 
-                  <Col sm={2} xs={2} className="notifications">
+                  <Col sm={2} xs={2} className="notifications vcenter">
                     {
                       room.new_notifications > 0 &&
                       <span className="count">
