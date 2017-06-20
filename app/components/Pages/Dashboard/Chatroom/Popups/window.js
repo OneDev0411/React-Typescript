@@ -61,6 +61,7 @@ export default ({
         <div className="icons">
           <Members
             room={room}
+            iconSize={14}
           />
 
           <RoomSettings

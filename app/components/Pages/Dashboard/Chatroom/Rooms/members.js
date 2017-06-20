@@ -21,7 +21,8 @@ const ManageMembers = ({
   recipients,
   onChangeComposeModal,
   onChangeRecipients,
-  addMembers
+  addMembers,
+  iconSize = 16
 }) => {
 
   function getLastSeen(user) {
@@ -39,7 +40,7 @@ const ManageMembers = ({
         className="icon members"
         onClick={() => onChangeComposeModal(!showComposeModal)}
       >
-        <MembersIcon />
+        <MembersIcon width={iconSize} height={iconSize} />
 
         <span className="bdg">
           { room.users.length }
