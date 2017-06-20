@@ -1,11 +1,12 @@
 
 export const mapOptions = {
-  bounds: null,
-  zoom: 13,
+  zoom: 15,
   center: {
     lat: 32.7767,
     lng: -96.7970
-  }
+  },
+  size: null,
+  bounds: null
 }
 
 export const queryOptions = {

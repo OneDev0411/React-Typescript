@@ -19,9 +19,12 @@ router.post('/edit-user', bodyParser(), async (ctx, next) => {
       })
 
     const user = response.data
-    ctx.session.user = {
-      ...user,
-      access_token
+
+    if (user) {
+      ctx.session.user = {
+        ...user,
+        ...{access_token}
+      }
     }
 
     ctx.body = response.body

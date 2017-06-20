@@ -46,9 +46,9 @@ webpackConfig.plugins.push(
       // remove warnings
       warnings: false,
       // Drop console statements
-      drop_console: true,
+      drop_console: false,
       // remove debugger; statements
-      drop_debugger: true
+      drop_debugger: false
     }
   }),
   new ExtractTextPlugin({

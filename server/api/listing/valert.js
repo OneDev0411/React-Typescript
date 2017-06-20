@@ -33,7 +33,7 @@ router.post('/listings/valerts', async (ctx, next) => {
 
   // Offset
   if (req.body.offset) {
-    endpoint = endpoint + '&limit=75&offset=' + req.body.offset
+    endpoint = endpoint + '&limit=500&offset=' + req.body.offset
   }
 
   try {

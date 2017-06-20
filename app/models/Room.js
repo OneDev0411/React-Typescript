@@ -88,50 +88,50 @@ export default {
     })
     .then(response => callback(false, response))
   },
-  getMessages: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
+  // getMessages: (params, callback) => {
+  //   let api_host = params.api_host
+  //   if (!api_host) api_host = config.app.url
 
-    const get_messages_url = `${api_host}/api/messages/?room_id=${params.room_id}` +
-      `&access_token=${params.access_token}` +
-      `&limit=${params.limit}` +
-      `&max_value=${params.max_value}`
+  //   const get_messages_url = `${api_host}/api/messages/?room_id=${params.room_id}` +
+  //     `&access_token=${params.access_token}` +
+  //     `&limit=${params.limit}` +
+  //     `&max_value=${params.max_value}`
 
-    fetch(get_messages_url)
-    .then((response) => {
-      if (response.status >= 400) {
-        const error = {
-          status: 'error',
-          response
-        }
-        return callback(error, false)
-      }
-      return response.json()
-    })
-    .then(response => callback(false, response))
-  },
-  getPrevious: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
+  //   fetch(get_messages_url)
+  //   .then((response) => {
+  //     if (response.status >= 400) {
+  //       const error = {
+  //         status: 'error',
+  //         response
+  //       }
+  //       return callback(error, false)
+  //     }
+  //     return response.json()
+  //   })
+  //   .then(response => callback(false, response))
+  // },
+  // getPrevious: (params, callback) => {
+  //   let api_host = params.api_host
+  //   if (!api_host) api_host = config.app.url
 
-    const get_messages_url = `${api_host}/api/messages/?room_id=${params.room_id}` +
-      `&access_token=${params.access_token}` +
-      `&limit=${params.limit}` +
-      `&max_value=${params.max_value}`
+  //   const get_messages_url = `${api_host}/api/messages/?room_id=${params.room_id}` +
+  //     `&access_token=${params.access_token}` +
+  //     `&limit=${params.limit}` +
+  //     `&max_value=${params.max_value}`
 
-    fetch(get_messages_url)
-    .then((response) => {
-      if (response.status >= 400) {
-        const error = {
-          status: 'error',
-          response
-        }
-        return callback(error, false)
-      }
-      return response.json()
-    })
-    .then(response => callback(false, response))
-  },
+  //   fetch(get_messages_url)
+  //   .then((response) => {
+  //     if (response.status >= 400) {
+  //       const error = {
+  //         status: 'error',
+  //         response
+  //       }
+  //       return callback(error, false)
+  //     }
+  //     return response.json()
+  //   })
+  //   .then(response => callback(false, response))
+  // },
   addUser: (params, callback) => {
     let api_host = params.api_host
     if (!api_host) api_host = config.app.url

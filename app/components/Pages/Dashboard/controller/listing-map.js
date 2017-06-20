@@ -3,26 +3,36 @@ import ListingDispatcher from '../../../../dispatcher/ListingDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import Brand from '../../../../controllers/Brand'
 
+let mapBoundsOnChangeDelay = null
+
 const controller = {
   initMap() {
-    const data = AppStore.data
+    const { data } = AppStore
+
     let center = {
       lat: 32.7767,
       lng: -96.7970
     }
+
     let zoom = 13
+
     const options = {
       limit: '500',
+      currency: 'USD',
+      open_house: false,
+      vertical_distance: 2830,
+      horizontal_distance: 2830,
+      property_types: ['Residential'],
+      listing_statuses: [
+        'Active',
+        'Active Kick Out',
+        'Active Contingent',
+        'Active Option Contract'
+      ],
       location: {
         longitude: -96.79698789999998,
         latitude: 32.7766642
       },
-      horizontal_distance: 2830,
-      property_types: ['Residential'],
-      vertical_distance: 2830,
-      listing_statuses: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract'],
-      currency: 'USD',
-      maximum_year_built: new Date().getFullYear(),
       points: [{
         latitude: 32.83938955111425,
         longitude: -96.89115626525879
@@ -39,24 +49,35 @@ const controller = {
         latitude: 32.83938955111425,
         longitude: -96.89115626525879
       }],
-      open_house: false,
-      property_subtypes: ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse']
+      property_subtypes: [
+        'RES-Single Family',
+        'RES-Half Duplex',
+        'RES-Farm\/Ranch',
+        'RES-Condo',
+        'RES-Townhouse'
+      ],
+      maximum_year_built: new Date().getFullYear()
     }
-    if (data.listing_map && data.listing_map.center) {
+
+    if (
+      data.listing_map !== undefined &&
+      data.listing_map.center !== undefined
+    ) {
       center = data.listing_map.center
-      zoom = data.listing_map.center
+      zoom = data.listing_map.zoom
     }
+
     const listing_map = {
-      map_id: new Date().getTime(),
-      default_options: { ...options },
+      zoom,
+      center,
       options,
       is_loading: true,
-      center,
-      zoom,
       google_options: {
         mapTypeControl: false,
         draggable: true
       },
+      map_id: new Date().getTime(),
+      default_options: { ...options },
       filter_options: {
         sold: false,
         active: true,
@@ -72,42 +93,56 @@ const controller = {
         pool: 'either'
       }
     }
-    AppStore.data.listing_map = listing_map
+
+    AppStore.data = {
+      ...AppStore.data,
+      listing_map
+    }
     AppStore.emitChange()
   },
+
   createMapOptions() {
-    const data = AppStore.data
-    const listing_map = data.listing_map
+    const { data } = AppStore
+    const { listing_map } = data
 
     const google_options = {
       mapTypeControl: false,
       draggable: true
     }
 
-    if (!listing_map)
+    if (listing_map == null) {
       return google_options
-
+    }
 
     // set disable default ui
     google_options.disableDefaultUI = true
 
-    // AppStore.data.listing_map.google_options = google_options
-    // AppStore.emitChange()
+    AppStore.data.listing_map = {
+      ...AppStore.data.listing_map,
+      google_options
+    }
+    AppStore.emitChange()
 
     return google_options
   },
+
   handleBoundsChange(gmap) {
+    const { data } = AppStore
+    const { user, listing_map } = data
     const { bounds, center, zoom, size, marginBounds } = gmap
-    const data = AppStore.data
-    const user = data.user
-    const listing_map = data.listing_map
-    if (!listing_map)
+
+    if (!listing_map) {
       return
-    const auto_move = listing_map.auto_move
-    if (auto_move)
+    }
+
+    if (!bounds) {
       return
-    if (!bounds)
+    }
+
+    if (listing_map.auto_move) {
       return
+    }
+
     const points = [
       {
         latitude: bounds.ne.lat,
@@ -130,51 +165,83 @@ const controller = {
         longitude: bounds.ne.lng
       }
     ]
-    AppStore.data.listing_map.center = center
-    AppStore.data.listing_map.zoom = zoom
-    // Don't get more results if polygon on map
-    if (!window.poly) {
+
+    if (!window.poly &&
+      !data.show_alerts_map &&
+      !data.show_actives_map
+    ) {
       AppStore.data.listing_map.is_loading = true
-      AppStore.data.listing_map.options.points = points
-    }
-    // Get options
-    // Zoom fix
-    // if (listing_map.options.mls_areas || listing_map.options.school_districts || listing_map.options.counties) {
-    //   if (!listing_map.search_area_on_move)
-    //     AppStore.data.listing_map.search_area_on_move = true
-    //   else {
-    //     delete listing_map.options.mls_areas
-    //     delete listing_map.options.school_districts
-    //     delete listing_map.options.counties
-    //     delete AppStore.data.listing_map.search_area_on_move
-    //   }
-    //   AppStore.emitChange()
-    // }
-    AppStore.data.gmap = gmap
-    AppStore.emitChange()
-    ListingDispatcher.dispatch({
-      action: 'get-valerts',
-      user,
-      options: listing_map.options
-    })
+
+      const options = {
+        ...listing_map.options,
+        points
+      }
+
+      AppStore.data.listing_map = {
+        ...listing_map,
+        options,
+        center,
+        zoom
+      }
+
+      AppStore.data.gmap = {
+        ...AppStore.data.gmap,
+        ...gmap
+      }
+
+      console.log('changeeeeeeeeeeeeeeeeee')
+
+      if (!mapBoundsOnChangeDelay) {
+        console.log('empty timeout')
+        mapBoundsOnChangeDelay = 1
+
+        ListingDispatcher.dispatch({
+          user,
+          options,
+          action: 'get-valerts'
+        })
+      } else {
+        clearTimeout(mapBoundsOnChangeDelay)
+        console.log('dealy cleared', mapBoundsOnChangeDelay)
+
+        mapBoundsOnChangeDelay = setTimeout(() => {
+          console.log('set timeout for valert req')
+
+          ListingDispatcher.dispatch({
+            user,
+            options,
+            action: 'get-valerts'
+          })
+          clearTimeout(mapBoundsOnChangeDelay)
+        }, 300)
+      } // else
+    } // if
   },
+
   hideModal() {
-    if (AppStore.data.listing_map)
+    if (AppStore.data.listing_map) {
       delete AppStore.data.listing_map.saving_alert
+    }
+
     delete AppStore.data.show_share_listing_modal
     delete AppStore.data.show_alert_saved_modal
     delete AppStore.data.show_listing_shared_modal
+
     if (AppStore.data.listing_map) {
       delete AppStore.data.listing_map.show_share_modal
       delete AppStore.data.listing_map.show_share_type_modal
       delete AppStore.data.listing_map.show_share_alert_error_tooltip
     }
+
     delete AppStore.data.show_modal_gallery
+
     setTimeout(() => {
       delete AppStore.data.share_modal
     }, 500)
+
     AppStore.emitChange()
   },
+
   toggleDrawable() {
     if (AppStore.data.listing_map.drawable) {
       delete AppStore.data.listing_map.drawable
@@ -186,33 +253,60 @@ const controller = {
     }
     AppStore.emitChange()
   },
+
   handleZoomClick(type) {
     const current_zoom = AppStore.data.listing_map.zoom
-    if (type === 'in')
+
+    if (type === 'in') {
       AppStore.data.listing_map.zoom = current_zoom + 1
-    if (type === 'out')
+    }
+
+    if (type === 'out') {
       AppStore.data.listing_map.zoom = current_zoom - 1
+    }
+
     AppStore.emitChange()
   },
+
   handleRemoveListings() {
     delete AppStore.data.listing_map.listings
     delete AppStore.data.listing_map.has_search_input
     AppStore.emitChange()
     controller.removeDrawing()
   },
+
   getValertsInArea(points) {
-    const data = AppStore.data
-    const user = data.user
-    const options = AppStore.data.listing_map.options
-    options.points = points
-    AppStore.data.listing_map.google_options.draggable = true
-    AppStore.data.listing_map.is_loading = true
+    const { data } = AppStore
+    const { user, listing_map } = data
+
+    const options = {
+      ...listing_map.options,
+      points
+    }
+
+    const google_options = {
+      ...listing_map.google_options,
+      draggable: true
+    }
+
+    const is_loading = true
+
+    AppStore.data.listing_map = {
+      ...listing_map,
+      google_options,
+      is_loading,
+      options
+    }
+
+    AppStore.emitChange()
+
     ListingDispatcher.dispatch({
       action: 'get-valerts',
       user,
       options
     })
   },
+
   makePolygon() {
     const google = window.google
     const map = window.map
@@ -228,6 +322,7 @@ const controller = {
     })
     window.poly_search = window.poly
   },
+
   getPolygonBounds(google, polygon) {
     const polygon_bounds = polygon.getPath()
     const coordinates = []
@@ -245,79 +340,114 @@ const controller = {
     ]
     return points
   },
+
   removeDrawing() {
-    if (!window.poly)
+    if (!window.poly) {
       return
+    }
+
     window.poly.setMap(null)
     delete AppStore.data.listing_map.drawable
     AppStore.emitChange()
+
     delete window.poly
     delete window.poly_search
     controller.handleBoundsChange(AppStore.data.gmap)
   },
+
   handleGoogleMapApi(google) {
-    const map = google.map
+    const { data } = AppStore
+    const { listing_map } = data
+
+    const { map } = google
     window.map = map
     window.map.set('mapTypeControl', false)
-    const data = AppStore.data
-    const listing_map = data.listing_map
-    if (listing_map.drawable && window.poly)
+
+    if (listing_map && listing_map.drawable && window.poly) {
       controller.makePolygon()
+    }
+
     google.maps.event.addDomListener(map.getDiv(), 'mousedown', () => {
-      if (!listing_map.drawable || listing_map.drawable && window.poly)
+      const { listing_map } = AppStore.data
+      const mapIsDrawable = listing_map && listing_map.drawable
+
+      if (
+        !mapIsDrawable ||
+        (mapIsDrawable && window.poly)
+      ) {
         return
+      }
 
       window.poly = new google.maps.Polyline({
         map,
         clickable: false,
-        strokeColor: `#${Brand.color('primary', '3388ff')}`,
-        strokeWeight: 10
+        strokeWeight: 10,
+        strokeColor: `#${Brand.color('primary', '3388ff')}`
       })
+
       AppStore.data.listing_map.no_popup = true
       AppStore.emitChange()
+
       const move = google.maps.event.addListener(map, 'mousemove', (e) => {
-        if (!listing_map.drawable) {
+        if (!mapIsDrawable) {
           window.poly.setMap(null)
           return false
         }
+
         window.poly.getPath().push(e.latLng)
         return false
       })
+
       google.maps.event.addListenerOnce(map, 'mouseup', () => {
         delete AppStore.data.listing_map.no_popup
         AppStore.emitChange()
-        if (!listing_map.drawable)
+
+        if (!mapIsDrawable) {
           return
+        }
+
         map.set('draggable', true)
         google.maps.event.removeListener(move)
+
         controller.makePolygon()
         const points = controller.getPolygonBounds(google, window.poly)
         controller.getValertsInArea(points)
       })
     })
   },
+
   setActiveListing(listing) {
-    AppStore.data.listing_map.active_listing = listing.id
+    const active_listing = listing && listing.id
+    AppStore.data.listing_map = {
+      ...AppStore.data.listing_map,
+      active_listing
+    }
     AppStore.emitChange()
   },
+
   removeActiveListing() {
-    if (AppStore.data.listing_map)
+    if (AppStore.data.listing_map) {
       delete AppStore.data.listing_map.active_listing
+    }
     AppStore.emitChange()
   },
+
   showListingPopup(listing) {
     const data = AppStore.data
     const listing_map = data.listing_map
-    if (listing_map.no_popup)
+    if (listing_map.no_popup) {
       return
+    }
     controller.setActiveListing(listing)
     AppStore.data.listing_map.listing_popup = listing.id
     AppStore.emitChange()
   },
+
   hideListingPopup() {
     controller.removeActiveListing()
     delete AppStore.data.listing_map.listing_popup
     AppStore.emitChange()
   }
 }
+
 export default controller

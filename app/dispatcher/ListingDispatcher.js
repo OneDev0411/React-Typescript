@@ -2,7 +2,7 @@
 import { Dispatcher } from './flux'
 
 // Listings
-import searchListingMap from '../actions/listings/search-map'
+import searchMlsNumber from '../actions/listings/search-mls-number'
 import searchListingWidget from '../actions/listings/search-widget'
 import searchListingInput from '../actions/listings/search-input'
 import getValerts from '../actions/listings/get-valerts'
@@ -34,8 +34,8 @@ ListingDispatcher.register((payload) => {
   const action = payload.action
   switch (action) {
 
-    case 'search-listing-map':
-      searchListingMap(payload.user, payload.q, payload.status)
+    case 'search-mls-number':
+      searchMlsNumber(payload.user, payload.q, payload.status)
       break
 
     case 'search-listing-input':

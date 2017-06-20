@@ -9,32 +9,48 @@ const controller = {
   alertHasNotifications(alert_id) {
     let result = false
     const data = AppStore.data
-    if (!data.notifications)
+
+    if (!data.notifications) {
       return false
+    }
+
     // TODO refactor notifications
     let summaries
-    if (data.notifications && data.notifications.summary)
+    if (data.notifications && data.notifications.summary) {
       summaries = data.notifications.summary.room_notification_summaries
-    if (!summaries)
+    }
+
+    if (!summaries) {
       return false
+    }
+
     summaries.forEach((summary) => {
       const user_created_alert_ids = summary.user_created_alert_ids
-      if (user_created_alert_ids && user_created_alert_ids.indexOf(alert_id) !== -1)
+      if (user_created_alert_ids &&
+        user_created_alert_ids.indexOf(alert_id) !== -1
+      ) {
         result = true
+      }
     })
+
     return result
   },
+
   acknowledgeNotifications(alert_id) {
-    if (!this.alertHasNotifications(alert_id))
+    if (!this.alertHasNotifications(alert_id)) {
       return
+    }
+
     const data = AppStore.data
     const user = data.user
+
     AppDispatcher.dispatch({
       action: 'acknowledge-alert-notifications',
       user,
       alert_id
     })
   },
+
   getBounds(points) {
     const google = window.google
     const bound = new google.maps.LatLngBounds()
@@ -43,8 +59,10 @@ const controller = {
     })
     return bound.getCenter()
   },
+
   showAlertOnMap(alert) {
     const { user } = AppStore.data
+
     // update user timeline
     if (AppStore.data.user) {
       ContactModel.updateUserTimeline(user, 'UserViewedAlert', 'Alert', alert.id)
@@ -53,14 +71,16 @@ const controller = {
     let center_from_points
     let lat
     let lng
+
     if (alert.points) {
       center_from_points = controller.getBounds(alert.points)
       lat = center_from_points.lat()
       lng = center_from_points.lng()
     }
+
     const options = {
       maximum_price: alert.maximum_price,
-      limit: '75',
+      limit: '500',
       maximum_lot_square_meters: alert.maximum_lot_square_meters,
       minimum_bathrooms: alert.minimum_bathrooms,
       maximum_square_meters: alert.maximum_square_meters,
@@ -79,12 +99,14 @@ const controller = {
       open_house: alert.open_house,
       property_subtypes: alert.property_subtypes
     }
+
     if (center_from_points) {
       options.location = {
         longitude: lng,
         latitude: lat
       }
     }
+
     if (alert.mls_areas) {
       const mls_areas = []
       alert.mls_areas.forEach((mls_area) => {
@@ -93,18 +115,22 @@ const controller = {
       options.mls_areas = mls_areas
       options.points = null
     }
+
     ListingDispatcher.dispatch({
       action: 'get-valerts-alert',
       user: AppStore.data.user,
       options
     })
+
     ListingDispatcher.dispatch({
       action: 'get-alert-map',
       user: AppStore.data.user,
       room_id: alert.room,
       alert_id: alert.id
     })
+
     controller.acknowledgeNotifications(alert.id)
+
     // Fit points on map
     const google = window.google
     const bounds = new google.maps.LatLngBounds()
@@ -113,40 +139,55 @@ const controller = {
       window.poly.setMap(null)
       delete window.poly
     }
+
     if (alert.points) {
       alert.points.forEach((point) => {
-        const location = new google.maps.LatLng(point.latitude, point.longitude)
+        const location = new google.maps
+          .LatLng(point.latitude, point.longitude)
         bounds.extend(location)
       })
+
       window.map.fitBounds(bounds)
+
       const center = {
         lat: window.map.center.lat(),
         lng: window.map.center.lng()
       }
+
       AppStore.data.listing_map.center = center
     }
+
     AppStore.data.listing_map.options = options
     AppStore.data.listing_map.auto_move = true
     AppStore.data.current_alert = alert
     AppStore.emitChange()
-    if (alert.points)
+
+    if (alert.points) {
       controller.makePolygonAlert(alert.points)
+    }
+
     const history = require('../../../../utils/history')
     history.default.push(`/dashboard/mls/alerts/${alert.id}`)
-    if (AppStore.data.show_alert_viewer)
+
+    if (AppStore.data.show_alert_viewer) {
       controller.markAsRead(alert.id, alert.room)
+    }
+
     // Go to gallery view
     controller.showAlertViewer()
   },
+
   makePolygonAlert(points) {
     const paths = points.map(path => ({
       lat: path.latitude,
       lng: path.longitude
     }))
+
     if (window.poly) {
       window.poly.setMap(null)
       delete window.poly
     }
+
     const google = window.google
 
     window.poly = new google.maps.Polygon({
@@ -158,6 +199,7 @@ const controller = {
     })
     window.poly_alerts = window.poly
   },
+
   markAsRead(alert_id, room_id) {
     const data = AppStore.data
     const user = data.user
@@ -168,16 +210,20 @@ const controller = {
       user
     })
   },
+
   showAlertViewer() {
     AppStore.data.show_alert_viewer = true
     const data = AppStore.data
     const current_alert = data.current_alert
+
     controller.markAsRead(current_alert.id, current_alert.room)
     AppStore.emitChange()
   },
+
   hideAlertViewer() {
-    delete AppStore.data.show_alert_viewer
+    AppStore.data.show_alert_viewer = false
     AppStore.emitChange()
   }
 }
+
 export default controller

@@ -39,7 +39,8 @@ export default class AlertList extends Component {
   getBadge(new_recommendations) {
     // Badge
     let new_badge
-    if (new_recommendations) {
+    console.log(new_recommendations)
+    if (new_recommendations && new_recommendations > 0) {
       new_badge = (
         <div style={ S('absolute w-100p h-100p t-0 l-0') }>
           <div style={ S('absolute t-30 r-20 bg-2196f3 br-100 color-fff w-26 h-26 text-center pt-4') }>
@@ -89,7 +90,7 @@ export default class AlertList extends Component {
                 <li key={`alert-list-${alert.id}`} style={S(`relative minh-100 border-bottom-1-solid-dedede p-20 pointer${current_alert && current_alert.id === alert.id ? ' bg-f7f7f7' : ''}`)} onClick={controller.alert_map.showAlertOnMap.bind(this, alert)}>
                   { this.getThumb(alert) }
                   <div style={S(`maxw-240 font-18${has_notification ? ' fw-500' : ''}`)}>{ this.truncateTitle(alert.title ? alert.title : alert.proposed_title) }</div>
-                  { notification }
+                  {/*{ notification }*/}
                   <div style={S(`font-14${has_notification ? ' fw-500' : ' color-9b9b9b'}`)}>Shared with: { users_area }</div>
                   {
                     /*

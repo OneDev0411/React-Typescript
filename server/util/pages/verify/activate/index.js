@@ -8,18 +8,16 @@ router.get('/activate', async (ctx, next) => {
   const { action, listing_id, room_id, alert_id } = ctx.request.query
   const decoded_token = decodeURIComponent(ctx.request.query.token)
   const decrypted_obj = JSON.parse(Crypto.decrypt(decoded_token))
-  const email = decrypted_obj.email
-  const token = decrypted_obj.token
-  const agent = decrypted_obj.agent
-  const phone_number = decrypted_obj.phone_number
-  const inviting_user = decrypted_obj.inviting_user
-  const room = decrypted_obj.room
+  const { email, token, agent, phone_number, inviting_user, room } = decrypted_obj
 
   // Reset session and save branch data
-  const branch_data = decrypted_obj
-
-  ctx.session.user = {}
-  ctx.session.branch_data = branch_data
+  ctx.session = {
+    ...ctx.session,
+    ...{
+      user: null,
+      branch_data: decrypted_obj
+    }
+  }
 
   // Agent
   if (agent) {
