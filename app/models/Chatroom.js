@@ -46,11 +46,13 @@ Chatroom.createRoom = async function(recipients) {
 /**
 * leave or delete a room
 */
-Chatroom.leaveRoom = async function(userId, roomId) {
-  try {
-    return await new Fetch()
-      .delete(`/rooms/${roomId}/users/${userId}`)
+Chatroom.leaveRoom = async function(userId, room) {
+  const endpoint = room.room_type === 'Direct' ?
+    `/rooms/${room.id}` :
+    `/rooms/${room.id}/users/${userId}`
 
+  try {
+    return await new Fetch().delete(endpoint)
   } catch (e) {
     return null
   }

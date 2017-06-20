@@ -23,7 +23,7 @@ const RoomSettings = ({
     >
       <MenuItem
         eventKey="1"
-        onClick={() => leaveRoom(user.id, room.id) }
+        onClick={() => leaveRoom(user.id, room) }
       >
         <i className="fa fa-sign-out" />
         { room.users.length <= 2 ? 'Delete this chat' : 'Leave this chat' }

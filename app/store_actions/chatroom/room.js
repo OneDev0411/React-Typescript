@@ -53,10 +53,10 @@ export function addMembers(roomId, recipients) {
   }
 }
 
-export function leaveRoom(userId, roomId) {
+export function leaveRoom(userId, room) {
   return async (dispatch) => {
-    const response = await Chatroom.leaveRoom(userId, roomId)
-    dispatch(_leaveRoom(roomId))
+    await Chatroom.leaveRoom(userId, room)
+    dispatch(_leaveRoom(room.id))
   }
 }
 

@@ -110,10 +110,14 @@ function addRoomMembers(state, action) {
  * leave or delete a room
  */
 function leaveRoom(state, action) {
-  const rooms = _.omit(rooms, room => room.id === action.roomId)
+  const rooms = _.omit(state.rooms, room => room.id === action.roomId)
+  const popups = _.omit(state.popups, (settings, roomId) => roomId === action.roomId)
 
   return {
     ...state,
+    ...{activeRoom: null},
+    ...{activePopup: state.activePopup === action.roomId ? null : state.activePopup},
+    ...{popups},
     ...{rooms}
   }
 }
