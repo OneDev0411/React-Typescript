@@ -9,7 +9,7 @@ import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 
 import controller from '../../../controller'
-import ZoomController from '../../components/ZoomController'
+// import ZoomController from '../../components/ZoomController'
 import Marker from '../../../Mls/Partials/Markers/SingleMarker'
 import * as actions from '../../../../../../store_actions/listings/map'
 import {
@@ -33,30 +33,26 @@ const map = ({
   map: { hoveredMarkerId },
   mapProps: { zoom, center }
 }) =>
-  <div>
-    <Map
-      zoom={zoom}
-      style={style}
-      center={center}
-      options={options}
-      onChange={onChange}
-      defaultZoom={defaultZoom}
-      defaultCenter={defaultCenter}
-      bootstrapURLKeys={bootstrapURLKeys}
-    >
-      {markers.map(({ ...markerProps, numPoints, list, lat, lng, id }) =>
-        <Marker
-          key={id}
-          data={appData}
-          {...markerProps}
-          onMouseEnterHandler={() => onMarkerMouseEnter(id)}
-          onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
-          markerPopupIsActive={hoveredMarkerId === id}
-        />
-      )}
-    </Map>
-    <ZoomController onClickZoomHandler={onClickZoomHandler} />
-  </div>
+  <Map
+    zoom={zoom}
+    style={style}
+    center={center}
+    options={options}
+    onChange={onChange}
+    defaultZoom={defaultZoom}
+    defaultCenter={defaultCenter}
+    bootstrapURLKeys={bootstrapURLKeys}>
+    {markers.map(({ ...markerProps, numPoints, list, lat, lng, id }) =>
+      <Marker
+        key={id}
+        data={appData}
+        {...markerProps}
+        onMouseEnterHandler={() => onMarkerMouseEnter(id)}
+        onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
+        markerPopupIsActive={hoveredMarkerId === id}
+      />
+    )}
+  </Map>
 
 const mapHOC = compose(
   defaultProps({

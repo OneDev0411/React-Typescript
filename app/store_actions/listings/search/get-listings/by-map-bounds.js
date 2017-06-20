@@ -36,7 +36,8 @@ const getListingsByMapBounds = bounds => (dispatch, getState) => {
     getFetchingStatus(listings) ||
     type !== 'by_map_bounds' ||
     isAutoMove(map) ||
-    panels.activePanel !== 'map'
+    panels.activePanel !== 'map' ||
+    map.drawing.points.length
   ) {
     return Promise.resolve()
   }

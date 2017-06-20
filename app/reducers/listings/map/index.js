@@ -1,12 +1,6 @@
 import { combineReducers } from 'redux'
-import {
-  MOVE_MAP,
-  SET_MAP_PROPS,
-  SET_MAP_ZOOM_IN,
-  SET_MAP_ZOOM_OUT,
-  SET_ON_MAP_AUTO_MOVE,
-  SET_OFF_MAP_AUTO_MOVE,
-  SET_MAP_HOVERED_MARKER_ID } from '../../../constants/listings/map'
+import drawing from './drawing'
+import * as actionsType from '../../../constants/listings/map'
 
 // initial map options(props) schema
 // {
@@ -22,18 +16,18 @@ import {
 // }
 const props = (state = {}, action) => {
   switch (action.type) {
-    case SET_MAP_PROPS:
+    case actionsType.SET_MAP_PROPS:
       return {
         ...state,
         ...action.mapProps
       }
-    case SET_MAP_ZOOM_IN:
+    case actionsType.SET_MAP_ZOOM_IN:
       const result = {
         ...state,
         zoom: ++state.zoom
       }
       return result
-    case SET_MAP_ZOOM_OUT:
+    case actionsType.SET_MAP_ZOOM_OUT:
       return {
         ...state,
         zoom: --state.zoom
@@ -45,9 +39,9 @@ const props = (state = {}, action) => {
 
 const autoMove = (state = false, action) => {
   switch (action.type) {
-    case SET_ON_MAP_AUTO_MOVE:
+    case actionsType.SET_ON_MAP_AUTO_MOVE:
       return true
-    case SET_OFF_MAP_AUTO_MOVE:
+    case actionsType.SET_OFF_MAP_AUTO_MOVE:
       return false
     default:
       return state
@@ -56,7 +50,7 @@ const autoMove = (state = false, action) => {
 
 const hoveredMarkerId = (state = -1, action) => {
   switch (action.type) {
-    case SET_MAP_HOVERED_MARKER_ID:
+    case actionsType.SET_MAP_HOVERED_MARKER_ID:
       return action.id
     default:
       return state
@@ -65,6 +59,7 @@ const hoveredMarkerId = (state = -1, action) => {
 
 const map = combineReducers({
   props,
+  drawing,
   autoMove,
   hoveredMarkerId
 })

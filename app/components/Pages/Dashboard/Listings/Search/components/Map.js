@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import cuid from 'cuid'
 import React from 'react'
 import Map from 'google-map-react'
 import { connect } from 'react-redux'
@@ -11,17 +12,24 @@ import withPropsOnChange from 'recompose/withPropsOnChange'
 import extendedBounds from '../../../../../../utils/extendedBounds'
 
 import controller from '../../../controller'
-import ZoomController from '../../components/ZoomController'
+// import ZoomController from '../../components/ZoomController'
 import { getListings } from '../../../../../../reducers/listings'
 import SimpleMarker from '../../../Mls/Partials/Markers/SingleMarker'
+import DrawingRemoveButton from '../../components/DrawingRemoveButton'
 import ClusterMarker from '../../../Mls/Partials/Markers/ClusterMarker'
-import * as actions from '../../../../../../store_actions/listings/map'
+import * as mapActions from '../../../../../../store_actions/listings/map'
+import * as drawingActions from '../../../../../../store_actions/listings/map/drawing'
 import { setPositionToPointsWithSameCoordinate } from '../../../Mls/Partials/MlsMap'
 import {
   bootstrapURLKeys,
   mapOptions,
   mapInitialState
 } from '../../../Mls/Partials/MlsMapOptions'
+
+const actions = {
+  ...mapActions,
+  ...drawingActions
+}
 
 const DECLUSTER_ZOOM_LEVEL = 16
 
@@ -38,9 +46,10 @@ const map = ({
   onMarkerMouseEnter,
   onMarkerMouseLeave,
   onClickZoomHandler,
+  onClickRemovePolygon,
   onClusterMarkerClick,
   mapProps: { zoom, center },
-  map: { hoveredMarkerId }
+  map: { hoveredMarkerId, drawing }
 }) =>
   <div>
     <Map
@@ -72,7 +81,9 @@ const map = ({
               />
       )}
     </Map>
-    <ZoomController onClickZoomHandler={onClickZoomHandler} />
+    {/*<ZoomController onClickZoomHandler={onClickZoomHandler} />*/}
+    {drawing.points.length &&
+      <DrawingRemoveButton onClick={onClickRemovePolygon} />}
   </div>
 
 const mapHOC = compose(
@@ -100,18 +111,21 @@ const mapHOC = compose(
   ),
   // describe events
   withHandlers({
-    onGoogleApiLoaded: () => ({ map }) => {
-      window.currentMap = map
-    },
-    // eslint-disable-next-line
-    onChange: ({ setOffMapAutoMove, setMapProps, map }) => {
-      return gmap => {
-        if (map.autoMove) {
-          setOffMapAutoMove()
-        }
+    onGoogleApiLoaded: ({ map }) => ({ map: googleMap }) => {
+      googleMap.id = cuid()
+      window.currentMap = googleMap
 
-        setMapProps('SEARCH', gmap)
+      const { shape, points } = map.drawing
+      if (points.length) {
+        shape.setMap(googleMap)
       }
+    },
+    onChange: ({ setOffMapAutoMove, setMapProps, map }) => gmap => {
+      if (map.autoMove) {
+        setOffMapAutoMove()
+      }
+
+      setMapProps('SEARCH', gmap)
     },
     onClickZoomHandler: ({ updateMapZoom }) => zoomType => {
       updateMapZoom('SEARCH', zoomType)
@@ -121,6 +135,9 @@ const mapHOC = compose(
     },
     onMarkerMouseEnter: ({ setMapHoveredMarkerId }) => id => {
       setMapHoveredMarkerId('SEARCH', id)
+    },
+    onClickRemovePolygon: ({ removePolygon, map }) => () => {
+      removePolygon(map.drawing.shape)
     },
     // eslint-disable-next-line
     onClusterMarkerClick: ({ setMapProps, mapProps }) => {

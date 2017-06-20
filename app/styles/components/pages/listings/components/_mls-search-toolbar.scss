@@ -110,6 +110,7 @@
 }
 
 .c-mls-toolbar__drawing-btn {
+    position: relative;
     height: 4.6rem;
     width: 4.6rem;
     margin-left: 1rem;
@@ -119,6 +120,19 @@
     >svg {
         display: inline-block;
         vertical-align: middle;
+    }
+    &[disabled] {
+        cursor: not-allowed;
+        &:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            border-radius: inherit;
+            background: rgba(0, 0, 0, 0.1);
+        }
     }
 }
 
@@ -139,4 +153,26 @@
 // google place search autocomplete styles
 .pac-container {
     top: 127px !important;
+}
+
+.c-mls-toolbar__drawing-remove-btn {
+    position: absolute;
+    top: 140px;
+    left: 33%;
+    width: 4.8rem;
+    height: 4.8rem;
+    font-size: 0;
+    padding: 0;
+    text-align: center;
+    border-radius: 50%;
+    >span {
+        display: inline-block;
+        margin-bottom: 7px;
+        font-size: 4rem;
+        line-height: 1;
+        color: #fff;
+    }
+    &:focus {
+        outline: 'none'
+    }
 }

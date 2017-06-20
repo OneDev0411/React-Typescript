@@ -9,6 +9,16 @@ import { goToPlace } from
   '../../../../../../../store_actions/listings/map'
 import searchActions from
   '../../../../../../../store_actions/listings/search'
+import { removePolygon } from '../../../../../../../store_actions/listings/map/drawing'
+
+const mapHasPolygon = drawing => dispatch => {
+  const { points, shape } = drawing
+  if (points.length) {
+    return Promise.resolve(dispatch(removePolygon(shape)))
+  }
+
+  return Promise.resolve()
+}
 
 const findPlace = address => (dispatch) => {
   if (!address) {
@@ -101,6 +111,7 @@ const fieldHOC = compose(
   pure,
   connect(
     ({ search }) => ({
+      drawing: search.map.drawing,
       center: search.map.props.center
     })
   ),
@@ -123,6 +134,7 @@ const fieldHOC = compose(
   withHandlers({
     onFocus: ({
       center,
+      drawing,
       dispatch,
       updateValue,
       updateSubmitedValue,
@@ -155,7 +167,10 @@ const fieldHOC = compose(
         autocomplete.addListener('place_changed', () => {
           updateValue(inputNode.value)
           updateSubmitedValue(inputNode.value)
-          autoCompletePlaceChanged(autocomplete.getPlace())(dispatch)
+
+          mapHasPolygon(drawing)(dispatch).then(() => {
+            autoCompletePlaceChanged(autocomplete.getPlace())(dispatch)
+          })
         })
 
         inputNode.addEventListener('keypress', formPreventDefaultHandler)
@@ -170,11 +185,14 @@ const fieldHOC = compose(
     },
     onClick: ({
       value,
+      drawing,
       dispatch,
       updateSubmitedValue
     }) => (event) => {
       updateSubmitedValue(value)
-      findPlace(value)(dispatch)
+      mapHasPolygon(drawing)(dispatch).then(() => {
+        findPlace(value)(dispatch)
+      })
     }
   })
 )

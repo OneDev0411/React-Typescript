@@ -58,9 +58,9 @@ export const queryOptions = {
 export const mapOptions = {
   minZoom: 3,
   maxZoom: 25,
-  mapTypeControl: false,
-  draggable: true,
-  disableDefaultUI: true
+  mapTypeControl: false
+  // draggable: true,
+  // disableDefaultUI: true
 }
 
 export default {
