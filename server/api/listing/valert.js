@@ -12,23 +12,24 @@ router.post('/listings/valerts', async (ctx, next) => {
   let endpoint = '/valerts'
 
   // From map widget
-  if (req.body.office && !options.list_offices.length) {
-    endpoint += '?associations=compact_listing.proposed_agent&order_by=office,status&office=' + req.body.office
+  if (req.body.office && !options.list_offices) {
+    endpoint += '?associations=compact_listing.proposed_agent&order_by[]=office&order_by[]=status&office=' + req.body.office
   }
 
   // From listing widget
-  if (options.list_offices && options.list_offices.length) {
+  if (options.list_offices && options.list_offices.length || options.brand) {
     endpoint += '?associations=compact_listing.proposed_agent'
 
     if (options.listing_statuses[0] === 'Sold') {
-      endpoint += '&order_by=price'
+      endpoint += '&order_by[]=price'
     }
   }
 
+
   const headers = {}
 
-  if (req.body.options.brand) {
-    headers['x-rechat-brand'] = req.body.options.brand
+  if (req.body.brand) {
+    headers['x-rechat-brand'] = req.body.brand
   }
 
   // Offset

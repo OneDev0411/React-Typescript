@@ -8,11 +8,8 @@ import URL from 'url'
 const app_hostname = URL.parse(config.app.url).hostname
 
 export default (hostname) => {
-  if (app_hostname === hostname) {
-    AppStore.data.brand_queried = true
-    AppStore.emitChange()
+  if (app_hostname === hostname)
     return
-  }
 
   const params = {
     hostname,

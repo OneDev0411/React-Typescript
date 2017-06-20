@@ -2,6 +2,10 @@
 import React, { Component } from 'react'
 import SideBar from '../Partials/SideBar'
 import S from 'shorti'
+import config from '../../../../../config/public'
+
+const API_URL = config.store.url
+
 export default class Website extends Component {
   render() {
     // Data
@@ -21,7 +25,7 @@ export default class Website extends Component {
             data={data}
           />
           <div style={main_style}>
-            <iframe style={S('w-100p h-100p absolute')} src={`https://rechat.site/store?access_token=${user.access_token}${brand_id ? `&brand=${brand_id}` : ''}`} frameBorder="0" />
+            <iframe style={S('w-100p h-100p absolute')} src={`${API_URL}/store?access_token=${user.access_token}${brand_id ? `&brand=${brand_id}` : ''}`} frameBorder="0" />
           </div>
         </main>
       </div>

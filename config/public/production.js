@@ -8,6 +8,9 @@ export default {
   socket: {
     server: process.env.SOCKET_SERVER
   },
+  store: {
+    url: process.env.RECHAT_STORE_URL
+  },
   forms: {
     url: process.env.RECHAT_FORMS_URL
   },
