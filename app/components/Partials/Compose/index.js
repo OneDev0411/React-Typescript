@@ -152,21 +152,16 @@ class Compose extends React.Component {
 
     const contacts = data.map(contact => {
       // search in contact's users
-      const users = contact
-        .users
-        .map(user => this.createListItem('user', user))
+      const users_list = contact.users || []
+      const users = users_list.map(user => this.createListItem('user', user))
 
       // search in contact's emails
-      const emails = Contact
-        .get
-        .emails(contact)
-        .map(email => this.createListItem('email', email))
+      const emails_list = Contact.get.emails(contact) || []
+      const emails = emails_list.map(email => this.createListItem('email', email))
 
       // search in contact's phone
-      const phones = Contact
-        .get
-        .phones(contact)
-        .map(phone => this.createListItem('phone_number', phone))
+      const phone_list = Contact.get.phones(contact) || []
+      const phones = phone_list.map(phone => this.createListItem('phone_number', phone))
 
       return [].concat(users, emails, phones)
     })
