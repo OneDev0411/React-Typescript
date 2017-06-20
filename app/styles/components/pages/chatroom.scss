@@ -210,9 +210,38 @@ $rooms-padding: 20px;
   .buttons {
     text-align: right;
     padding-right: 50px;
-    img {
+
+    svg {
       cursor: pointer;
+      &:hover g {
+        fill: #2196f3;
+      }
+    }
+
+    .exit-fullscreen {
+      background-color: #d7d7d7;
+      border-radius: 4px;
+      padding: 5px;
+      display: inline;
+      width: 30px;
       margin-left: 15px;
+      svg {
+        margin: -4px auto;
+      }
+      &:hover {
+        background: #2196f3;
+      }
+      &:hover svg > g {
+        fill: #fff;
+      }
+    }
+
+    .members {
+      .bdg {
+        color: #b2b2b2;
+        margin-left: 8px;
+        font-weight: 500;
+      }
     }
   }
 
@@ -229,6 +258,12 @@ $rooms-padding: 20px;
       border: none;
       color: #4a494a;
       li {
+        min-height: 40px;
+        a {
+          line-height: 40px;
+          vertical-align: middle;
+          font-size: 16px;
+        }
         i {
           margin-right: 10px;
         }
@@ -237,6 +272,7 @@ $rooms-padding: 20px;
   }
 
   .room-settings {
+    margin-left: 15px;
     background-color: transparent;
     border: none;
   }
