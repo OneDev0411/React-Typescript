@@ -61,6 +61,7 @@ $rooms-padding: 20px;
 
 .room-settings {
   margin-left: 15px;
+  padding: 0;
   background-color: transparent;
   border: none;
   &:hover {
@@ -273,38 +274,7 @@ $rooms-padding: 20px;
     }
 
     // fix setting dropdown
-    .btn-group {
-      &.open {
-        .dropdown-toggle { box-shadow: none }
-      }
-      &.dropdown-toggle {
-        box-shadow: none;
-      }
-
-      .dropdown-menu {
-        border: none;
-        color: #4a494a;
-        li {
-          min-height: 40px;
-          a {
-            line-height: 40px;
-            vertical-align: middle;
-            font-size: 16px;
-          }
-          i {
-            margin-right: 10px;
-          }
-        }
-      }
-    }
-
-    .members {
-      .bdg {
-        color: #b2b2b2;
-        margin-left: 8px;
-        font-weight: 500;
-      }
-    }
+    @extend %fix--btn-group;
   }
 }
 
@@ -475,7 +445,7 @@ $rooms-padding: 20px;
 
 .chat-popup {
   $height: 360px;
-  $bar-height: 30px;
+  $bar-height: 33px;
   position: fixed;
   height: $height;
   bottom: 0;
@@ -494,26 +464,51 @@ $rooms-padding: 20px;
 
   .bar {
     text-align: right;
-    padding: 4px 10px;
+    padding: 7px 4px 0 8px;
     background-color: #dcdcdc;
     border-radius: 4px 4px 0 0;
     height: $bar-height;
     color: #000;
-    .icon {
-      margin-left: 8px;
+    text-align: left;
+
+    .room-title {
       cursor: pointer;
+      font-weight: 600;
+      display: inline-block;
+      min-width: 105px;
     }
+
+    .icons {
+      display: inline-block;
+      vertical-align: middle;
+      @extend %fix--btn-group;
+      .icon {
+        margin-left: 15px;
+        cursor: pointer;
+        opacity: 0.6;
+        .bdg {
+          font-size: 12px;
+          margin-left: 3px !important;
+        }
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+
     &.isActive {
       background-color: skyblue;
       .icon {
-        svg g, svg path { fill: #fff; }
+        svg g, svg path {
+          fill: #fff;
+        }
+        .bdg {
+          color: #fff !important;
+        }
       }
-    }
-    .room-title {
-      float: left;
-      padding-top: 2px;
-      cursor: pointer;
-      font-weight: 600;
+      .room-title {
+        color: #fff;
+      }
     }
   }
   .messages {
@@ -598,6 +593,46 @@ $rooms-padding: 20px;
       .details {
         display: none;
       }
+    }
+  }
+}
+
+%fix--btn-group {
+  .btn-group {
+    height: 20px;
+    &.open {
+      .dropdown-toggle {
+        box-shadow: none;
+        background-color: transparent !important;
+      }
+    }
+    &.dropdown-toggle {
+      box-shadow: none;
+      background-color: transparent !important;
+    }
+
+    .dropdown-menu {
+      border: none;
+      color: #4a494a;
+      li {
+        min-height: 40px;
+        a {
+          line-height: 40px;
+          vertical-align: middle;
+          font-size: 16px;
+        }
+        i {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+
+  .members {
+    .bdg {
+      color: #b2b2b2;
+      margin-left: 8px;
+      font-weight: 500;
     }
   }
 }

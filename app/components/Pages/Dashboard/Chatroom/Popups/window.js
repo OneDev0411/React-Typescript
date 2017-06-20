@@ -58,28 +58,36 @@ export default ({
           { getTitle(room.proposed_title) }
         </span>
 
-        <Members room={room} />
-        <RoomSettings room={room} />
+        <div className="icons">
+          <Members
+            room={room}
+          />
 
-        <span
-          className="icon minimize"
-          onClick={() => onMinimize(room.id)}>
-          <MinimizeIcon />
-        </span>
+          <RoomSettings
+            room={room}
+            iconSize={14}
+          />
 
-        <span
-          className="icon maximize"
-          onClick={() => onMaximize(room.id)}
-        >
-          <FullscreenIcon />
-        </span>
+          <span
+            className="icon minimize"
+            onClick={() => onMinimize(room.id)}>
+            <MinimizeIcon />
+          </span>
 
-        <span
-          className="icon close"
-          onClick={() => onClose(room.id)}
-        >
-          <CloseIcon />
-        </span>
+          <span
+            className="icon maximize"
+            onClick={() => onMaximize(room.id)}
+          >
+            <FullscreenIcon />
+          </span>
+
+          <span
+            className="icon times"
+            onClick={() => onClose(room.id)}
+          >
+            <CloseIcon />
+          </span>
+        </div>
       </div>
 
       <Messages

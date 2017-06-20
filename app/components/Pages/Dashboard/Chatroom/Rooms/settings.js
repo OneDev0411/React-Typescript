@@ -7,7 +7,8 @@ import MoreIcon from '../../Partials/Svgs/MoreIcon'
 const RoomSettings = ({
   user,
   room,
-  leaveRoom
+  leaveRoom,
+  iconSize = 20
 }) => (
   <span>
     <DropdownButton
@@ -15,14 +16,18 @@ const RoomSettings = ({
       className="room-settings"
       noCaret
       pullRight
-      title={<MoreIcon />}
+      title={
+        <span className="icon settings">
+          <MoreIcon height={iconSize} />
+        </span>
+      }
     >
       <MenuItem
         eventKey="1"
         onClick={() => leaveRoom(user.id, room) }
       >
         <i className="fa fa-sign-out" />
-        { room.users.length <= 2 ? 'Delete this chat' : 'Leave this chat' }
+        Leave this chat
       </MenuItem>
 
     </DropdownButton>
