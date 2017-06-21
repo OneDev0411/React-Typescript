@@ -20,13 +20,14 @@
   .bar {
     text-align: right;
     padding: 8px 4px 0 8px;
-    background-color: #dcdcdc;
+    background-color: #f6f7f9;
     border-radius: 4px 4px 0 0;
     height: $bar-height;
     color: #000;
     text-align: left;
 
     .room-title {
+      font-size: 15px;
       cursor: pointer;
       font-weight: 600;
       display: inline-block;
@@ -52,7 +53,7 @@
     }
 
     &.isActive {
-      background-color: skyblue;
+      background-color: #2196f3;
       .icon {
         svg g, svg path {
           fill: #fff;
