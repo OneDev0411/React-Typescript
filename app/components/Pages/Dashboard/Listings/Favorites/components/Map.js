@@ -69,9 +69,9 @@ const mapHOC = compose(
     const { map } = favorites
     return {
       map,
+      appData: data,
       user: data.user,
-      mapProps: map.props,
-      appData: { ...data }
+      mapProps: map.props
     }
   }, actions),
   // describe events

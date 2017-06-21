@@ -9,8 +9,7 @@ import { selectListings } from '../../../../../reducers/listings'
 
 class Favorites extends Component {
   componentDidMount() {
-    const { data, listings, isFetching, getFavorites } = this.props
-    const { user } = data
+    const { user, listings, isFetching, getFavorites } = this.props
 
     if (user && !isFetching && !listings.data.length) {
       getFavorites(user)
@@ -18,7 +17,8 @@ class Favorites extends Component {
   }
 
   render() {
-    const { data, listings, activePanel, isFetching } = this.props
+    const { user, listings, activePanel, isFetching } = this.props
+    const isLoggedIn = user || false
 
     return (
       <div className="l-listings__main clearfix">
@@ -28,9 +28,9 @@ class Favorites extends Component {
         </div>
         <div className="l-listings__panel">
           <ListingsPanel
-            data={data}
             tabName="FAVORITE"
             listings={listings}
+            isLoggedIn={isLoggedIn}
             activePanel={activePanel}
           />
         </div>
@@ -41,8 +41,9 @@ class Favorites extends Component {
 
 const mapStateToProps = ({ data, favorites }) => {
   const { listings, panels } = favorites
+
   return {
-    data,
+    user: data.user,
     activePanel: panels.activePanel,
     isFetching: listings.isFetching,
     listings: {
