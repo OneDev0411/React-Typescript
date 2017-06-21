@@ -68,7 +68,7 @@ const ManageMembers = ({
   return (
     <Compose
       TriggerButton={Button}
-      InitialState={RoomMembers}
+      InitialValues={RoomMembers}
       dropDownBox={true}
       inline={true}
       title="Members"

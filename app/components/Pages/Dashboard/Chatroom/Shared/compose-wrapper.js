@@ -20,7 +20,7 @@ function hasRecipients(recipients) {
 
 const ComposeWrapper = ({
   TriggerButton,
-  InitialState,
+  InitialValues,
   title,
   buttonTitle,
   onButtonClick,
@@ -36,7 +36,6 @@ const ComposeWrapper = ({
   <div
     style={{ display: inline ? 'inline' : 'block' }}
   >
-
     <TriggerButton
       clickHandler={() => onChangeComposeModal(!showComposeModal)}
     />
@@ -56,7 +55,7 @@ const ComposeWrapper = ({
           onHide={() => onChangeComposeModal(false)}
           onChangeRecipients={recipients => onChangeRecipients(recipients)}
         />
-        { InitialState && <InitialState /> }
+        { InitialValues && <InitialValues /> }
       </Modal.Body>
 
       <Modal.Footer>
