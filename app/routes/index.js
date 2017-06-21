@@ -88,15 +88,6 @@ export default (
       <Route path="/password/:slug" component={Password} />
     </Route>
 
-    <Route path="/" component={App}>
-      <Route path="/dashboard/mls" component={Mls} />
-      <Route path="/dashboard/mls/:id" component={Listing} />
-      <Route path="/branch" component={Branch} />
-      <Route path="/widgets/map" component={MapWidget} />
-      <Route path="/widgets/search" component={SearchWidget} />
-      <Route path="/widgets/listings" component={ListingsWidget} />
-    </Route>
-
     <Route path="/" component={App} onEnter={authenticate}>
       <Route path="/account/settings" component={Settings} />
       <Route path="/account/notifications" component={Notifications} />
@@ -133,6 +124,15 @@ export default (
       </Route>
 
       <Route path="/dashboard/notifications" component={NotificationsPage} />
+    </Route>
+
+    <Route path="/" component={App}>
+      <Route path="/dashboard/mls" component={Mls} />
+      <Route path="/dashboard/mls/:id" component={Listing} />
+      <Route path="/branch" component={Branch} />
+      <Route path="/widgets/map" component={MapWidget} />
+      <Route path="/widgets/search" component={SearchWidget} />
+      <Route path="/widgets/listings" component={ListingsWidget} />
     </Route>
 
     <Route path="*" component={NoMatch} />
