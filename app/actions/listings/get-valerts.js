@@ -11,7 +11,7 @@ export default (user, options) => {
 
   const params = { options }
 
-  if (user) {
+  if (user)
     params.access_token = user.access_token
 
   if (AppStore.data.brand) {

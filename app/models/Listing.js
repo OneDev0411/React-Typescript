@@ -64,7 +64,8 @@ export default {
     const request_object = {
       options: params.options
     }
-    if (params.office) {
+
+    if (params.office)
       request_object.office = params.office
 
     if (params.offset)
