@@ -15,6 +15,14 @@ const enhance = compose(
   connect(null, { addMembers })
 )
 
+function hasRecipients(recipients) {
+  const recps = []
+    .concat(recipients.users, recipients.emails, recipients.phone_numbers)
+    .filter(recp => recp !== undefined)
+
+  return recps.length > 0
+}
+
 const ManageMembers = ({
   room,
   showComposeModal,
@@ -91,6 +99,7 @@ const ManageMembers = ({
         <Modal.Footer>
           <Button
             bsStyle="primary"
+            disabled={!hasRecipients(recipients)}
             onClick={() => {
               addMembers(room.id, recipients)
               onChangeComposeModal(false)

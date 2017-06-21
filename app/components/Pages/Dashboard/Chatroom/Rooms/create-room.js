@@ -12,6 +12,14 @@ const enhance = compose(
   connect(null, { createRoom })
 )
 
+function hasRecipients(recipients) {
+  const recps = []
+    .concat(recipients.users, recipients.emails, recipients.phone_numbers)
+    .filter(recp => recp !== undefined)
+
+  return recps.length > 0
+}
+
 const AddMember = ({
   showComposeModal,
   recipients,
@@ -46,7 +54,7 @@ const AddMember = ({
       <Modal.Footer>
         <Button
           bsStyle="primary"
-          disabled={([].concat(recipients.users, recipients.emails, recipients.phone_numbers)).length === 0}
+          disabled={!hasRecipients(recipients)}
           onClick={async () => {
             await createRoom(recipients)
             onChangeComposeModal(false)
