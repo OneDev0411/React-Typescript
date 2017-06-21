@@ -9,21 +9,10 @@
 }
 
 .c-listing-card {
-    position: relative;
     height: 240px;
-    display: block;
-    cursor: pointer;
     margin-bottom: 2rem;
     border-radius: 3px;
-    background-color: #6d6d6d;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-    &:hover {
-        &:before {
-            background: rgba(0, 0, 0, .3);
-        }
-    }
+    cursor: pointer;
     @media screen and (min-width: 1600px) {
         width: calc((100% / 2) - 10px);
         margin-right: 20px;
@@ -55,7 +44,22 @@
     }
 }
 
-.c-listing-card:before {
+.c-listing-card__inner {
+    position: relative;
+    height: 100%;
+    border-radius: inherit;
+    background-size: cover;
+    background-color: #6d6d6d;
+    background-repeat: no-repeat;
+    background-position: center center;
+    &:hover {
+        &:before {
+            background: rgba(0, 0, 0, .3);
+        }
+    }
+}
+
+.c-listing-card__inner:before {
     @extend %full-absolute;
     content: '';
     border-radius: 3px;

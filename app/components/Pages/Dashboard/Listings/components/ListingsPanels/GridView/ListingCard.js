@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import helpers from '../../../../../../../utils/helpers'
+import LazyLoad from 'react-lazy-load'
 import listingUtils from '../../../../../../../utils/listing'
 
 import FavoriteHeart from '../../FavoriteHeart'
@@ -18,43 +19,47 @@ const ListingCard = ({
   onMouseLeave
 }) => {
   const props = prepareProps(user, listing)
-
   return (
-    <div
-      className="c-listing-card"
-      style={props.backgroundImage}
-      onMouseEnter={activePanel === 'map' ? () => onMouseEnter(listing.id) : ''}
-      onMouseLeave={activePanel === 'map' ? onMouseLeave : ''}>
-      <Link to={`/listings/${listing.id}`} className="c-listing-card__link" />
-      <div className="c-listing-card__content-wrapper">
-        {props.statusColor &&
-          <div>
-            <span
-              className="c-listing-card__status"
-              style={{ background: `#${props.statusColor}` }}>
-              {listing.status}
-            </span>
-          </div>}
-        <h4 className="c-listing-card__title">
-          {props.address}
-        </h4>
-        <h5 className="c-listing-card__price">
-          {props.price}
-        </h5>
-        <div className="c-listing-card__details">
-          <span>{props.beds} Beds</span>
-          &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-          <span>{props.baths} Baths</span>
-          &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-          <span>{props.sqft} Sqft</span>
-          &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-          <span>{props.builtYear}</span>
+    <LazyLoad className="c-listing-card" height={260} offsetBottom={900}>
+      <div
+        className="c-listing-card__inner"
+        style={props.backgroundImage}
+        onMouseEnter={
+          activePanel === 'map' ? () => onMouseEnter(listing.id) : ''
+        }
+        onMouseLeave={activePanel === 'map' ? onMouseLeave : ''}>
+        <Link to={`/listings/${listing.id}`} className="c-listing-card__link" />
+        <div className="c-listing-card__content-wrapper">
+          {props.statusColor &&
+            <div>
+              <span
+                className="c-listing-card__status"
+                style={{ background: `#${props.statusColor}` }}>
+                {listing.status}
+              </span>
+            </div>}
+          <h4 className="c-listing-card__title">
+            {props.address}
+          </h4>
+          <h5 className="c-listing-card__price">
+            {props.price}
+          </h5>
+          <div className="c-listing-card__details">
+            <span>{props.beds} Beds</span>
+            &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+            <span>{props.baths} Baths</span>
+            &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+            <span>{props.sqft} Sqft</span>
+            &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+            <span>{props.builtYear}</span>
+          </div>
         </div>
+        {user &&
+          <div className="c-listing-card__favorite-heart">
+            <FavoriteHeart listing={listing} />
+          </div>}
       </div>
-      <div className="c-listing-card__favorite-heart">
-        <FavoriteHeart listing={listing} />
-      </div>
-    </div>
+    </LazyLoad>
   )
 }
 

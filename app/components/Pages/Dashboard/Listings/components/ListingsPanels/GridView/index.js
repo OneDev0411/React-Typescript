@@ -4,8 +4,12 @@ import ListingCard from './ListingCard'
 const GridView = ({ listings, ...rest }) =>
   <div>
     {(listings.data.length &&
-      listings.data.map(listing =>
-        <ListingCard key={listing.id} listing={listing} {...rest} />
+      listings.data.map((listing, index) =>
+        <ListingCard
+          key={`${rest.activePanel}_PANEL_LIST_ITEM_${index}`}
+          listing={listing}
+          {...rest}
+        />
       )) ||
       ''}
   </div>

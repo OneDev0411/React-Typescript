@@ -31,7 +31,7 @@ const getQueryPoints = bounds => [
 
 const getListingsByMapBounds = bounds => (dispatch, getState) => {
   const { listings, map, type, panels } = getState().search
-  console.log(window.innerWidth)
+
   if (
     getFetchingStatus(listings) ||
     type !== 'by_map_bounds' ||

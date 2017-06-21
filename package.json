@@ -108,6 +108,7 @@
     "react-images": "^0.5.2",
     "react-input-mask": "^0.8.0",
     "react-ios-switch": "0.1.10",
+    "react-lazy-load": "^3.0.12",
     "react-maskedinput": "^3.3.4",
     "react-motion": "^0.5.0",
     "react-redux": "^5.0.4",
