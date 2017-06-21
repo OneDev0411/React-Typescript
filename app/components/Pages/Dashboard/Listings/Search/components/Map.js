@@ -11,9 +11,8 @@ import { fitBounds } from 'google-map-react/utils'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 import extendedBounds from '../../../../../../utils/extendedBounds'
 
-import controller from '../../../controller'
-// import ZoomController from '../../components/ZoomController'
 import { getListings } from '../../../../../../reducers/listings'
+import NotLoggedInMessage from '../../components/NotLoggedInMessage'
 import SimpleMarker from '../../../Mls/Partials/Markers/SingleMarker'
 import DrawingRemoveButton from '../../components/DrawingRemoveButton'
 import ClusterMarker from '../../../Mls/Partials/Markers/ClusterMarker'
@@ -81,8 +80,11 @@ const map = ({
               />
       )}
     </Map>
-    {/*<ZoomController onClickZoomHandler={onClickZoomHandler} />*/}
-    <DrawingRemoveButton onClick={onClickRemovePolygon} points={drawing.points} />
+    <NotLoggedInMessage isLoggedIn={appData.user ? true : ''} />
+    <DrawingRemoveButton
+      onClick={onClickRemovePolygon}
+      points={drawing.points}
+    />
   </div>
 
 const mapHOC = compose(
