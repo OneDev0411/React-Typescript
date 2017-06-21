@@ -1,15 +1,14 @@
 import React from 'react'
-import { Row, Col } from 'react-bootstrap'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import Rx from 'rxjs/Rx'
 import validator from 'validator'
 import { PhoneNumberUtil } from 'google-libphonenumber'
 import _ from 'underscore'
 import cn from 'classnames'
 import Fetch from '../../../services/fetch'
-import UserAvatar from '../UserAvatar'
-import AutoSizeInput from '../AutoSizeInput'
 import Contact from '../../../models/Contact'
+import Recipients from './recipients'
+import Suggestions from './suggestions'
 
 class Compose extends React.Component {
   constructor(props) {
@@ -23,29 +22,6 @@ class Compose extends React.Component {
       viewList: {},
       recipients: {}
     }
-  }
-
-  componentDidMount() {
-
-    const { Observable } = Rx
-
-    this.inputHandler = Observable
-      .fromEvent(this.getSearchInput(), 'keyup')
-      .map(e => e.target.value)
-      .filter(text => text.length === 0 || text.length >= 3)
-      .debounceTime(300)
-      .subscribe(text => this.onSearch(text))
-  }
-
-  componentWillUnmount() {
-    this.inputHandler.unsubscribe()
-  }
-
-  /**
-   * get search input ref
-   */
-  getSearchInput() {
-    return this.autosize.getInput()
   }
 
   /**
@@ -148,26 +124,29 @@ class Compose extends React.Component {
    * search recipients in contacts
    */
   async searchInContacts(q) {
-    const data = await this.askServer(`/contacts/search?q[]=${q}`)
+    const { contacts } = this.props
+    console.log(contacts)
+    return []
+    // const data = await this.askServer(`/contacts/search?q[]=${q}`)
 
-    const contacts = data.map(contact => {
-      // search in contact's users
-      const users_list = contact.users || []
-      const users = users_list.map(user => this.createListItem('user', user))
+    // const contacts = data.map(contact => {
+    //   // search in contact's users
+    //   const users_list = contact.users || []
+    //   const users = users_list.map(user => this.createListItem('user', user))
 
-      // search in contact's emails
-      const emails_list = Contact.get.emails(contact) || []
-      const emails = emails_list.map(email => this.createListItem('email', email))
+    //   // search in contact's emails
+    //   const emails_list = Contact.get.emails(contact) || []
+    //   const emails = emails_list.map(email => this.createListItem('email', email))
 
-      // search in contact's phone
-      const phone_list = Contact.get.phones(contact) || []
-      const phones = phone_list.map(phone => this.createListItem('phone_number', phone))
+    //   // search in contact's phone
+    //   const phone_list = Contact.get.phones(contact) || []
+    //   const phones = phone_list.map(phone => this.createListItem('phone_number', phone))
 
-      return [].concat(users, emails, phones)
-    })
+    //   return [].concat(users, emails, phones)
+    // })
 
-    // flatten arrays
-    return [].concat.apply([], contacts)
+    // // flatten arrays
+    // return [].concat.apply([], contacts)
   }
 
   /**
@@ -217,10 +196,10 @@ class Compose extends React.Component {
     this.setState({ recipients }, this.onChangeRecipients)
 
     // reset search input text
-    this.getSearchInput().value = ''
+    this.searchInput.value = ''
 
     // set focus on search
-    this.getSearchInput().focus()
+    this.searchInput.focus()
   }
 
   /**
@@ -233,7 +212,7 @@ class Compose extends React.Component {
     this.setState({ recipients }, this.onChangeRecipients)
 
     // set focus on search
-    this.getSearchInput().focus()
+    this.searchInput.focus()
   }
 
   /**
@@ -267,44 +246,6 @@ class Compose extends React.Component {
   }
 
   /**
-   * get recipient avatar
-   */
-  getAvatar(user, size) {
-    return <UserAvatar
-      showStateIndicator={false}
-      name={user.display_name}
-      image={user.image}
-      size={size}
-    />
-  }
-
-  /**
-   * get entry hint
-   */
-  getSubTitle({ email, phone_number, display_name }) {
-    if (email && email !== display_name)
-      return email
-    else if (phone_number && phone_number !== display_name)
-      return phone_number
-    else
-      return ''
-  }
-
-  /**
-   * get styles of suggestions
-   */
-  getStyles() {
-    const { dropDownBox } = this.props
-    const { viewList, searching } = this.state
-    const style = {}
-
-    if (dropDownBox === true && _.size(viewList) === 0 && !searching)
-      style.display = 'none'
-
-    return style
-  }
-
-  /**
    * triggers when dropdown lose focus
    */
   onBlurDropDownBox() {
@@ -315,76 +256,25 @@ class Compose extends React.Component {
   }
 
   render() {
-    const { dropDownBox } = this.props
     const { searching, viewList, recipients } = this.state
 
     return (
       <div className="compose">
-        <div className="tags-container">
-          <span className="to">To: </span>
-          {
-            _.map(recipients, recp =>
-              <div
-                key={`ITEM_${recp.id}`}
-                className="tag"
-              >
-                { this.getAvatar(recp, 22) }
-                <span>{ recp.display_name }</span>
-                <i
-                  className="fa fa-times"
-                  onClick={() => this.onRemove(recp)}
-                ></i>
-              </div>
-            )
-          }
 
-          <AutoSizeInput
-            type="text"
-            ref={ref => this.autosize = ref}
-            placeholder={_.size(recipients) === 0 ? 'Enter name, email or phone' : '' }
-            maxLength={30}
-          />
-        </div>
+        <Recipients
+          recipients={recipients}
+          onSearch={text => this.onSearch(text)}
+          onRemove={recipient => this.onRemove(recipient)}
+          inputRef={el => this.searchInput = el}
+        />
 
-        <div className="sg-container">
-
-          <div
-            className={cn('suggestions', { dropdown: dropDownBox === true })}
-            style={this.getStyles()}
-            tabIndex="1"
-            onBlur={() => this.onBlurDropDownBox()}
-          >
-            {
-              searching &&
-              <img
-                className="loader"
-                src="/static/images/loading-states/three-dots-blue.svg"
-              />
-            }
-
-            {
-              _.map(viewList, recp =>
-                <Row
-                  key={`RECP_SUG_${recp.id}`}
-                  className="item"
-                  onClick={() => this.onAdd(recp)}
-                >
-                  <Col sm={1} xs={1} md={1} className="vcenter" style={{ padding: 0 }}>
-                    { this.getAvatar(recp, 35) }
-                  </Col>
-
-                  <Col sm={8} xs={8} md={8} className="vcenter">
-                    <strong>{ recp.display_name }</strong>
-                    <div style={{ color: '#9b9a9b' }}>
-                      { this.getSubTitle(recp) }
-                    </div>
-                  </Col>
-                </Row>
-              )
-            }
-          </div>
-        </div>
-
+        <Suggestions
+          dropDownBox={this.props.dropDownBox}
+          searching={searching}
+          viewList={viewList}
+          onAdd={recipient => this.onAdd(recipient)}
+          onBlurDropDownBox={() => this.onBlurDropDownBox()}
+        />
       </div>
     )
   }
@@ -397,4 +287,6 @@ Compose.propTypes = {
   onChangeRecipients: PropTypes.func.isRequired
 }
 
-export default Compose
+export default connect(({ contact }) => ({
+  contacts: contact.list
+}))(Compose)
