@@ -1,0 +1,153 @@
+/**
+* Messages
+*/
+%messages {
+  $messages-height: 91vh;
+  $height-of-create-message: 6vh;
+
+  padding: 0;
+  position: relative;
+  height: 100vh;
+  padding-top: 100vh - $messages-height;
+  overflow: hidden;
+
+  .no-room {
+    text-align: center;
+    margin: 5% auto;
+    width: 50%;
+    background-color: skyblue;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 17px;
+  }
+
+  .messages-list {
+    $hg: $messages-height - $height-of-create-message;
+    min-height: $hg;
+    max-height: $hg;
+    overflow: auto;
+    padding-top: 3vh;
+    padding-bottom: 30px;
+    .message-item {
+      @extend %message-item;
+    }
+  }
+
+  .message-create {
+    $mrgn: 2%;
+
+    position: absolute;
+    height: $height-of-create-message;
+    bottom: $mrgn;
+    left: $mrgn;
+    right: $mrgn;
+    overflow: hidden;
+    border: 2px solid #ccc;
+    border-radius: 3px;
+    input {
+      width: 100%;
+      height: $height-of-create-message - 0.2vh;
+      border: none;
+      padding-left: 10px;
+      color: #000;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  .toolbar {
+    @extend %room-toolbar;
+  }
+
+  .loading {
+    margin: 5px 15px;
+  }
+}
+
+%message-item {
+  $left-w: 50px;
+  margin: 0 10px 15px 26px;
+  min-height: 40px;
+  word-wrap: break-word;
+  overflow: hidden;
+  .avatar {
+    float: left;
+    width: $left-w;
+  }
+  .content {
+    margin-left: $left-w;
+    .title {
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .recommendation {
+      @extend %message-item-recommendation;
+    }
+
+    .alert {
+
+    }
+  }
+}
+
+%message-item-recommendation {
+  .listing {
+    position: relative;
+    margin: 10px 0;
+    width: 360px;
+    max-height: 260px;
+    img {
+      width: 100%;
+      border-radius: 4px;
+    }
+    .info {
+      position: absolute;
+      left: 12px;
+      bottom: 10px;
+      color: #fff;
+      .status {
+        width: 50px;
+        height: 24px;
+        line-height: 24px;
+        vertical-align: middle;
+        text-align: center;
+        font-size: 15px;
+        border-radius: 3px;
+        margin-bottom: 10px;
+      }
+      .address-title {
+        font-size: 21px;
+        font-weight: 900;
+        text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
+        margin-bottom: 10px;
+      }
+      .price {
+        font-size: 17px;
+        font-weight: bold;
+        text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+        letter-spacing: 1px;
+      }
+      .details {
+        margin: 0;
+        padding: 0;
+        font-size: 16px;
+        li {
+          display: inline-block;
+          margin-right: 5px;
+          text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+          &:before {
+            content: " •  "
+          }
+          &:first-child {
+            &:before {
+              content: ""
+            }
+          }
+        }
+      }
+    }
+  }
+}

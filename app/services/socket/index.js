@@ -176,7 +176,7 @@ export default class Socket {
     }
 
     // do not dispatch when message is created
-    if (!list || (list && list[message.id]))
+    if (!list || list[message.id])
       return false
 
     Socket.createMessage(room.id, message)
