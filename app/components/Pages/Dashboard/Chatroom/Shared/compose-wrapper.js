@@ -20,16 +20,22 @@ function hasRecipients(recipients) {
 
 const ComposeWrapper = ({
   TriggerButton,
+  InitialState,
   title,
   buttonTitle,
   onButtonClick,
+  room = null,
+  inline = false,
+  dropDownBox = false,
   /* internal props and states */
   showComposeModal,
   recipients,
   onChangeComposeModal,
   onChangeRecipients
 }) => (
-  <div>
+  <div
+    style={{ display: inline ? 'inline' : 'block' }}
+  >
 
     <TriggerButton
       clickHandler={() => onChangeComposeModal(!showComposeModal)}
@@ -46,9 +52,11 @@ const ComposeWrapper = ({
 
       <Modal.Body>
         <Compose
+          dropDownBox={dropDownBox}
           onHide={() => onChangeComposeModal(false)}
           onChangeRecipients={recipients => onChangeRecipients(recipients)}
         />
+        { InitialState && <InitialState /> }
       </Modal.Body>
 
       <Modal.Footer>
