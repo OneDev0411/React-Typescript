@@ -7,6 +7,7 @@ const getText = node => node.target.text.toLowerCase()
 
 const PanelHeader = ({
   info,
+  isLoggedIn,
   activePanel,
   sortingIndex,
   onClickShare,
@@ -64,13 +65,13 @@ const PanelHeader = ({
       </Checkbox>
     </div>
 
-    <Button
+    { isLoggedIn && <Button
       bsStyle="primary"
       onClick={onClickShare}
       style={{ backgroundColor: `#${Brand.color('primary', '3388ff')}` }}
       className="c-panel__header__button">
       save search
-    </Button>
+    </Button>}
 
     { activePanel === 'table' && <table className="c-tableview__table" style={{ marginTop: '1.7rem' }}>
       <thead className="c-tableview__table__header">

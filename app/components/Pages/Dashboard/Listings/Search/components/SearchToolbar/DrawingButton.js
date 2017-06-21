@@ -10,7 +10,14 @@ import {
   inactiveDrawing
 } from '../../../../../../../store_actions/listings/map/drawing'
 
-const DrawingButton = ({ onClick, isDrawing, isFetching, hasPolygon = [] }) =>
+const DrawingButton = ({
+  isLoggedIn,
+  onClick,
+  isDrawing,
+  isFetching,
+  hasPolygon = []
+}) =>
+  isLoggedIn &&
   <button
     onClick={onClick}
     className="c-mls-toolbar__drawing-btn"
@@ -22,7 +29,8 @@ const DrawingButton = ({ onClick, isDrawing, isFetching, hasPolygon = [] }) =>
 
 export default compose(
   connect(
-    ({ search }) => ({
+    ({ data, search }) => ({
+      isLoggedIn: data.user || false,
       isDrawing: search.map.drawing.isDrawing,
       hasPolygon: search.map.drawing.points,
       isFetching: search.listings.isFetching

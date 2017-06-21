@@ -49,7 +49,8 @@ class Search extends Component {
   }
 
   render() {
-    const { data, searchListings, activePanel } = this.props
+    const { user, searchListings, activePanel } = this.props
+    const isLoggedIn = user || false
     return (
       <div className="l-listings__main clearfix">
         <div className="l-listings__map">
@@ -59,8 +60,8 @@ class Search extends Component {
         </div>
         <div className="l-listings__panel">
           <ListingsPanel
-            data={data}
             tabName="SEARCH"
+            isLoggedIn={isLoggedIn}
             listings={searchListings}
             activePanel={activePanel}
           />

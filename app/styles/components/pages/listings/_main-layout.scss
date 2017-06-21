@@ -1,7 +1,7 @@
 $panel-width: 380px;
 $sidebar-width: 70px;
 $header-height: 55px;
-.l-listings {
+.l-listings--logged {
     margin-left: $sidebar-width;
 }
 
@@ -34,7 +34,7 @@ $header-height: 55px;
     position: fixed;
     right: 0;
     bottom: 0;
-    top: 55px;
+    top: $header-height - 1;
     width: $panel-width;
     height: calc(100vh - #{$header-height});
     overflow: hidden;
@@ -51,11 +51,22 @@ $header-height: 55px;
     .c-listings-panel--table & {
         @media screen and (min-width: 1024px) and (max-width: 1600px) {
             border-width: 0;
+            width: 100%;
+        }
+    }
+    .l-listings--logged .c-listings-panel--table & {
+        @media screen and (min-width: 1024px) and (max-width: 1600px) {
             width: calc(100% - #{$sidebar-width});
         }
     }
     &.l-listings__panel__container--full {
+        width: 100%;
         border-width: 0;
+        @media screen and (min-width: 1600px) {
+            width: 100%;
+        }
+    }
+    .l-listings--logged &.l-listings__panel__container--full {
         width: calc(100% - #{$sidebar-width});
         @media screen and (min-width: 1600px) {
             width: calc(100% - #{$sidebar-width});
