@@ -7,7 +7,7 @@ import FullscreenIcon from '../../Partials/Svgs/FullscreenIcon'
 import MinimizeIcon from '../../Partials/Svgs/MinimizeIcon'
 
 const getTitle = function(title) {
-  const len = 14
+  const len = 13
   if (title.length < len)
     return title
   else
