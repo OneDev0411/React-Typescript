@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
-import ExitFullscreenIcon from '../../Partials/Svgs/ExitFullscreenIcon'
 import { toggleInstanceMode } from '../../../../../store_actions/chatroom'
-import Members from '../Rooms/members'
-import RoomSettings from '../Rooms/settings'
+import Members from './members'
+import RoomSettings from './settings'
+import ExitFullscreenIcon from '../../Partials/Svgs/ExitFullscreenIcon'
 
 const MessagesToolbar = ({
   toggleInstanceMode,
