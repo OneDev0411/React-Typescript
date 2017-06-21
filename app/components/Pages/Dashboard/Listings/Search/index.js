@@ -55,6 +55,7 @@ class Search extends Component {
         <div className="l-listings__map">
           <Map {...this.props} />
           <SearchToolbar />
+          {this.props.isFetching && <Loading text="MLS®" />}
         </div>
         <div className="l-listings__panel">
           <ListingsPanel
@@ -64,7 +65,6 @@ class Search extends Component {
             activePanel={activePanel}
           />
         </div>
-        {this.props.isFetching && <Loading text="MLS®" />}
       </div>
     )
   }
