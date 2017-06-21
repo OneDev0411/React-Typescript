@@ -13,6 +13,10 @@
         margin: 10px 0;
       }
 
+      &:focus {
+        outline: none;
+      }
+
       @extend %compose--suggestions;
 
       &.dropdown {
