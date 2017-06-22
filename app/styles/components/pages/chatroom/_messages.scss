@@ -105,6 +105,8 @@ $left-w: 50px;
 
 %message-subitem {
   margin: 5px 10px 5px 26px;
+  word-wrap: break-word;
+  overflow: hidden;
   .content {
     line-height: 20px;
     vertical-align: middle;
