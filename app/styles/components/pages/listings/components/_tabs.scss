@@ -20,12 +20,12 @@
     > span {
       font-weight: 600;
       color: #333 !important;
-      border-top: 3px solid;
-      border-top-color: inherit;
+      border-bottom: 3px solid;
+      border-bottom-color: inherit;
     }
   }
   > span {
-    padding-top: calc(1.5rem - 1px);
+    padding-bottom: calc(1.5rem - 1px);
     font-size: 1.7rem;
     color: #9b9b9b;
   }

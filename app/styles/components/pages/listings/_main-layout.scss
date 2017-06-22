@@ -1,6 +1,6 @@
 $panel-width: 380px;
 $sidebar-width: 70px;
-$header-height: 55px;
+$header-height: 54px;
 .l-listings--logged {
     margin-left: $sidebar-width;
 }
@@ -44,9 +44,9 @@ $header-height: 55px;
     position: fixed;
     right: 0;
     bottom: 0;
-    top: $header-height + 1;
+    top: $header-height + 2px;
     width: $panel-width;
-    height: calc(100vh - #{$header-height});
+    height: calc(100vh - #{$header-height} - 2px);
     overflow: hidden;
     padding: 2rem;
     background-color: #fff;

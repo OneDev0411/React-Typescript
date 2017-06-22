@@ -11,7 +11,7 @@ export default function Tabs({ to, text, indexed }) {
         className="c-listings__tabs__link"
         activeClassName="c-listings__tabs__link--active"
         activeStyle={{
-          borderTopColor: `#${Brand.color('primary', '3388ff')}`
+          borderBottomColor: `#${Brand.color('primary', '3388ff')}`
         }}>
         <span>{text}</span>
       </Link>
