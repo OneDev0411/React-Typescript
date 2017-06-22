@@ -65,9 +65,27 @@ import Website from '../components/Pages/Dashboard/Website'
 import Cards from '../components/Pages/Dashboard/Cards'
 import Forms from '../components/Pages/Dashboard/Forms'
 
+const uuidPattern = '\w+'
+
 function authenticate(nextState, replace) {
   const { data } = store.getState()
   const isLoggedIn = data.user && data.user.access_token
+
+  const noAuthList = [
+    '/dashboard/mls',
+    '/dashboard/mls/:id',
+    '/listings',
+    '/listings/:id',
+    '/branch',
+    '/widgets/map',
+    '/widgets/search',
+    '/widgets/listings'
+  ]
+
+  for (let url of noAuthList)
+    for (let route of nextState.routes)
+      if (route.path && route.path !== '/' && route.path === url)
+        return true
 
   if (typeof window !== 'undefined' && !isLoggedIn) {
     replace({
