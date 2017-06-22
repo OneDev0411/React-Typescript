@@ -8,7 +8,7 @@ const RoomSettings = ({
   user,
   room,
   leaveRoom,
-  iconSize = 20
+  iconSize = 17
 }) => (
   <span>
     <DropdownButton
