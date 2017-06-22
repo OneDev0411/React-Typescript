@@ -5,9 +5,10 @@ import withHandlers from 'recompose/withHandlers'
 import Brand from '../../../../../../../controllers/Brand'
 import setSelectedAlert from '../../../../../../../store_actions/listings/alerts/setSelectedAlert'
 
-const SheredByUsers = ({ users }) =>
-  <p className="c-alertList__item__shared-by">
-    {users.map((user, index) => user.first_name || user.email).join(', ')}
+const SheredBy = ({ users }) =>
+  <p className="c-alertList__item__shared-by san-fran">
+    <span>{'Shared By: '}</span>
+    {users.map((user, index) => user.first_name).join(', ')}
   </p>
 
 const AlertListRow = ({ alert, isSelected, onClick }) =>
@@ -23,7 +24,7 @@ const AlertListRow = ({ alert, isSelected, onClick }) =>
       <h3 className="c-alertList__item__title san-fran ellipses">
         {alert.title || alert.proposed_title || 'without title'}
       </h3>
-      {alert.users && <SheredByUsers users={users} />}
+      {alert.users && <SheredBy users={alert.users} />}
     </div>
     <span
       className="c-alertList__item__badge"
