@@ -124,29 +124,31 @@ class Compose extends React.Component {
    * search recipients in contacts
    */
   async searchInContacts(q) {
-    const { contacts } = this.props
-    console.log(contacts)
-    return []
-    // const data = await this.askServer(`/contacts/search?q[]=${q}`)
+    let contacts = []
 
-    // const contacts = data.map(contact => {
-    //   // search in contact's users
-    //   const users_list = contact.users || []
-    //   const users = users_list.map(user => this.createListItem('user', user))
+    _.each(this.props.contacts, contact => {
+      // search in contact's users
+      const users_list = contact.users || []
+      const users = users_list
+        .filter(user => user.display_name.includes(q))
+        .map(user => this.createListItem('user', user))
 
-    //   // search in contact's emails
-    //   const emails_list = Contact.get.emails(contact) || []
-    //   const emails = emails_list.map(email => this.createListItem('email', email))
+      // search in contact's emails
+      const emails_list = Contact.get.emails(contact) || []
+      const emails = emails_list
+        .filter(item => item.email.includes(q))
+        .map(email => this.createListItem('email', email))
 
-    //   // search in contact's phone
-    //   const phone_list = Contact.get.phones(contact) || []
-    //   const phones = phone_list.map(phone => this.createListItem('phone_number', phone))
+      // search in contact's phone
+      const phone_list = Contact.get.phones(contact) || []
+      const phones = phone_list
+        .filter(item => item.phone_number.includes(q))
+        .map(phone => this.createListItem('phone_number', phone))
 
-    //   return [].concat(users, emails, phones)
-    // })
+      contacts = contacts.concat(users, emails, phones)
+    })
 
-    // // flatten arrays
-    // return [].concat.apply([], contacts)
+    return contacts
   }
 
   /**
