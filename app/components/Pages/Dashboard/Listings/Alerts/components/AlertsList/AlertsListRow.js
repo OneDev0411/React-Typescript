@@ -26,11 +26,14 @@ const AlertListRow = ({ alert, isSelected, onClick }) =>
       </h3>
       {alert.users && <SheredBy users={alert.users} />}
     </div>
-    <span
-      className="c-alertList__item__badge"
-      style={{ backgroundColor: `#${Brand.color('primary', '3388ff')}` }}>
-      19
-    </span>
+    {alert.new_recommendations &&
+      // eslint-disable-next-line
+      parseInt(alert.new_recommendations) !== 0 &&
+      <span
+        className="c-alertList__item__badge"
+        style={{ backgroundColor: `#${Brand.color('primary', '3388ff')}` }}>
+        {alert.new_recommendations}
+      </span>}
   </div>
 
 export default compose(
