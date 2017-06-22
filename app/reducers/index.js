@@ -5,6 +5,7 @@ import socket from './socket'
 import contact from './contact'
 import chatroom from './chatroom'
 import search from './listings/search'
+import alerts from './listings/alerts'
 import listing from './listings/listing'
 import favorites from './listings/favorites'
 
@@ -12,6 +13,7 @@ const appReducer = combineReducers({
   socket,
   data,
   search,
+  alerts,
   listing,
   contact,
   chatroom,

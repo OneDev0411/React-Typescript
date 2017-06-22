@@ -6,7 +6,6 @@ import supercluster from 'points-cluster'
 import withState from 'recompose/withState'
 import defaultProps from 'recompose/defaultProps'
 import withHandlers from 'recompose/withHandlers'
-import withPropsOnChange from 'recompose/withPropsOnChange'
 
 import Marker from '../../../Mls/Partials/Markers/SingleMarker'
 import * as actions from '../../../../../../store_actions/listings/map'
@@ -28,7 +27,6 @@ const map = ({
   onMarkerMouseEnter,
   onMarkerMouseLeave,
   onClickZoomHandler,
-  map: { hoveredMarkerId },
   mapProps: { zoom, center }
 }) =>
   <Map
@@ -47,7 +45,6 @@ const map = ({
         {...markerProps}
         onMouseEnterHandler={() => onMarkerMouseEnter(id)}
         onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
-        markerPopupIsActive={hoveredMarkerId === id}
       />
     )}
   </Map>
@@ -63,8 +60,8 @@ const mapHOC = compose(
       height: 'calc(100vh - 55px)'
     }
   }),
-  connect(({ data, favorites }) => {
-    const { map } = favorites
+  connect(({ data, alerts }) => {
+    const { map } = alerts
     return {
       map,
       appData: data,
@@ -75,16 +72,16 @@ const mapHOC = compose(
   // describe events
   withHandlers({
     onChange: ({ setMapProps }) => mapProps => {
-      setMapProps('FAVORITE', mapProps)
+      setMapProps('ALERTS', mapProps)
     },
     onClickZoomHandler: ({ updateMapZoom }) => zoomType => {
-      updateMapZoom('FAVORITE', zoomType)
+      updateMapZoom('ALERTS', zoomType)
     },
     onMarkerMouseLeave: ({ setMapHoveredMarkerId }) => () => {
-      setMapHoveredMarkerId('FAVORITE', -1)
+      setMapHoveredMarkerId('ALERTS', -1)
     },
     onMarkerMouseEnter: ({ setMapHoveredMarkerId }) => id => {
-      setMapHoveredMarkerId('FAVORITE', id)
+      setMapHoveredMarkerId('ALERTS', id)
     }
   })
 )

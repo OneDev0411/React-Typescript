@@ -7,7 +7,9 @@ class Listings extends Component {
     const isLoggedIn = this.props.user
     return (
       <div className={`l-listings ${isLoggedIn ? 'l-listings--logged' : ''}`}>
-        <Tabs isLoggedIn={isLoggedIn} />
+        <header className="l-listings__header">
+          <Tabs isLoggedIn={isLoggedIn} />
+        </header>
         {this.props.children}
       </div>
     )

@@ -48,6 +48,3 @@ const listing = combineReducers({
 })
 
 export default listing
-
-export const getFetchingStatus = state => state.isFetching
-export const getErrorMessage = state => state.errorMessage

@@ -25,7 +25,8 @@ const ListingPanel = props => {
     <div className={panelClassName}>
       <PanelsSwitch activePanel={activePanel} tabName={tabName} />
       <div className={panelContainerClassName}>
-        <PanelHeader {...props} info={listings.info} />
+        {tabName !== 'ALERTS' &&
+          <PanelHeader {...props} info={listings.info} />}
         <div className="c-panel__list-container">
           {activePanel === 'table'
             ? <TableView {...props} />
