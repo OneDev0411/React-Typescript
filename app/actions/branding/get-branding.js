@@ -2,19 +2,14 @@
 import Brand from '../../models/Brand'
 import AppStore from '../../stores/AppStore'
 import ListingDispatcher from '../../dispatcher/ListingDispatcher'
-// import config from '../../../config/public'
-// import URL from 'url'
+import config from '../../../config/public'
+import URL from 'url'
 
-// const app_hostname = URL.parse(config.app.url).hostname
+const app_hostname = URL.parse(config.app.url).hostname
 
 export default hostname => {
-  // if (app_hostname === hostname)
-  //   return
-  if (hostname === 'rechat.com' || hostname === 'localhost') {
-    AppStore.data.brand_queried = true
-    AppStore.emitChange()
+  if (app_hostname === hostname)
     return
-  }
 
   const params = {
     hostname,
