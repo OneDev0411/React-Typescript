@@ -1,5 +1,6 @@
 import React from 'react'
 import emojify from 'emojify.js'
+import moment from 'moment'
 import linkifyString from 'linkifyjs/string'
 import { Row, Col } from 'react-bootstrap'
 import TextMessage from './text'
@@ -64,6 +65,13 @@ const getMessageText = (message) => {
   return text
 }
 
+const getMessageYMD = (message) => {
+  if (!message)
+    return null
+
+  return moment.unix(message.created_at).format('YMMD')
+}
+
 export default ({
   user,
   message,
@@ -100,10 +108,20 @@ export default ({
     />
   }
 
-  const isHeadingMessage = !previousMessage ||
+  const previousMessageYMD = getMessageYMD(previousMessage)
+  const messageYMD = getMessageYMD(message)
+
+  const dateSplitter = previousMessageYMD === messageYMD ?
+    <div></div> :
+    <div className="date-splitter">
+      <span>{ moment.unix(message.created_at).format('dddd, MMMM YYYY') }</span>
+    </div>
+
+  const isHeadingMessage = previousMessage === null ||
     message.recommendation ||
     alert ||
-    previousAuthor.id !== author.id
+    previousAuthor.id !== author.id ||
+    previousMessageYMD !== messageYMD
 
   if (!isHeadingMessage) {
     return (
@@ -116,24 +134,27 @@ export default ({
   }
 
   return (
-    <div className="message-item">
-      <div className="avatar">
-        <UserAvatar
-          userId={author.id}
-          name={author.display_name}
-          image={author.profile_image_url}
-          size={35}
-        />
-      </div>
-
-      <div className="content">
-        <div>
-          <span className="title">
-            { author && author.abbreviated_display_name }
-          </span>
+    <div className="message-group">
+      { dateSplitter }
+      <div className="message-item">
+        <div className="avatar">
+          <UserAvatar
+            userId={author.id}
+            name={author.display_name}
+            image={author.profile_image_url}
+            size={35}
+          />
         </div>
 
-        { message_object }
+        <div className="content">
+          <div>
+            <span className="title">
+              { author && author.abbreviated_display_name }
+            </span>
+          </div>
+
+          { message_object }
+        </div>
       </div>
     </div>
   )
