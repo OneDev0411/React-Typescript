@@ -90,14 +90,23 @@
     max-height: $hg;
     overflow: auto;
     padding-bottom: 0;
+
     .message-item {
-      margin: 0 10px 10px 10px !important;
+      margin: 0 10px 0px 10px !important;
       margin-bottom: 0;
       .content {
         .recommendation {
           @extend %popup-message-recommendation;
         }
       }
+    }
+
+    .message-subitem {
+      margin-left: 10px;
+    }
+
+    .date-splitter {
+      margin: 15px 5%;
     }
   }
 
