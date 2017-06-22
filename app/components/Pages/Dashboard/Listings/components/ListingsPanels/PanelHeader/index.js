@@ -70,7 +70,7 @@ const PanelHeader = ({
       onClick={onClickShare}
       style={{ backgroundColor: `#${Brand.color('primary', '3388ff')}` }}
       className="c-panel__header__button">
-      save search
+      Save Search
     </Button>}
 
     { activePanel === 'table' && <table className="c-tableview__table" style={{ marginTop: '1.7rem' }}>
