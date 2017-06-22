@@ -123,7 +123,9 @@ export default class Socket {
   /**
    * send new message
    */
-  static sendMessage(roomId, message, authorName = '') {
+  static sendMessage(roomId, message, author = {}) {
+    const { abbreviated_display_name } = author
+
     return new Promise((resolve, reject) => {
       const unixtime = moment().unix()
       const qid = 'queued_' + unixtime
@@ -133,7 +135,8 @@ export default class Socket {
         ...{
           id: qid,
           author: {
-            abbreviated_display_name: authorName
+            abbreviated_display_name: abbreviated_display_name,
+            ...author
           },
           queued: true,
           created_at: unixtime,

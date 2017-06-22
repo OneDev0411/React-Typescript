@@ -77,7 +77,7 @@ export default class CreateMessage extends React.Component {
       // recommendation: "edac34f8-2c28-11e7-af80-0242ac110003",
     }
 
-    Socket.sendMessage(roomId, message, user.abbreviated_display_name)
+    Socket.sendMessage(roomId, message, user)
     .then(() => this.props.onCreateNewMessage())
 
     // clear message box
