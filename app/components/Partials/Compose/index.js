@@ -285,7 +285,6 @@ class Compose extends React.Component {
 Compose.propTypes = {
   searchInRooms: PropTypes.bool,
   dropDownBox: PropTypes.bool,
-  onHide: PropTypes.func.isRequired,
   onChangeRecipients: PropTypes.func.isRequired
 }
 

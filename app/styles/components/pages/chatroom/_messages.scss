@@ -1,6 +1,8 @@
 /**
 * Messages
 */
+$left-w: 50px;
+
 %messages {
   $messages-height: 91vh;
   $height-of-create-message: 6vh;
@@ -24,6 +26,7 @@
 
   .messages-list {
     $hg: $messages-height - $height-of-create-message;
+    // font-family: "SFUIText-Light";
     min-height: $hg;
     max-height: $hg;
     overflow: auto;
@@ -31,6 +34,10 @@
     padding-bottom: 30px;
     .message-item {
       @extend %message-item;
+    }
+
+    .message-subitem {
+      @extend %message-subitem;
     }
   }
 
@@ -67,8 +74,7 @@
 }
 
 %message-item {
-  $left-w: 50px;
-  margin: 0 10px 15px 26px;
+  margin: 15px 10px 0px 26px;
   min-height: 40px;
   word-wrap: break-word;
   overflow: hidden;
@@ -81,6 +87,8 @@
     .title {
       font-weight: bold;
       font-size: 15px;
+      display: block;
+      margin-bottom: 2px;
     }
 
     .recommendation {
@@ -88,8 +96,17 @@
     }
 
     .alert {
-
+      // TODO
     }
+  }
+}
+
+%message-subitem {
+  margin: 5px 10px 5px 26px;
+  .content {
+    line-height: 20px;
+    vertical-align: middle;
+    margin-left: $left-w;
   }
 }
 

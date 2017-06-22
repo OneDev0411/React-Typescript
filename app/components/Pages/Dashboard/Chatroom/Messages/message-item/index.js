@@ -38,7 +38,7 @@ const getAuthor = (message) => {
 }
 
 /**
- * check message is alert
+ * check message is alert and then return the alert object
  */
 const isAlert = (message) => {
   if (message.notification &&
@@ -100,27 +100,37 @@ export default ({
     />
   }
 
-  let avatar
-  if (!previousMessage || message.recommendation || alert || previousAuthor.id !== author.id) {
-    avatar = (
-      <UserAvatar
-        userId={author.id}
-        name={author.display_name}
-        image={author.profile_image_url}
-        size={35}
-      />
+  const isHeadingMessage = !previousMessage ||
+    message.recommendation ||
+    alert ||
+    previousAuthor.id !== author.id
+
+  if (!isHeadingMessage) {
+    return (
+      <div className="message-subitem">
+        <div className="content">
+          { message_object }
+        </div>
+      </div>
     )
   }
 
   return (
     <div className="message-item">
       <div className="avatar">
-        { avatar }
+        <UserAvatar
+          userId={author.id}
+          name={author.display_name}
+          image={author.profile_image_url}
+          size={35}
+        />
       </div>
 
       <div className="content">
         <div>
-          <span className="title">{ author && author.abbreviated_display_name }</span>
+          <span className="title">
+            { author && author.abbreviated_display_name }
+          </span>
         </div>
 
         { message_object }

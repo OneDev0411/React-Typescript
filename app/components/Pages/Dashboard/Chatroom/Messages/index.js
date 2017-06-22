@@ -6,7 +6,7 @@ import moment from 'moment'
 import cn from 'classnames'
 import { getMessages } from '../../../../../store_actions/chatroom'
 import Toolbar from '../Rooms/toolbar'
-import Message from './message-types'
+import Message from './message-item'
 import UserTyping from '../UserTyping'
 import CreateMessage from './create-message'
 

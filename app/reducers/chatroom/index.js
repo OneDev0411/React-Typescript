@@ -154,7 +154,6 @@ function resetRoomNotificationsCounter(state, action) {
   }
 }
 
-
 /**
  * get or create messages
  */
