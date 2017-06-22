@@ -27,6 +27,10 @@ export default class CreateMessage extends React.Component {
     .subscribe(() => this.sendMessage())
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.text_message.focus()
+  }
+
   onTyping() {
     if (this.isTyping)
       return false
@@ -84,6 +88,8 @@ export default class CreateMessage extends React.Component {
     return (
       <div>
         <input
+          autoFocus
+          dir="auto"
           placeholder="Write a message ..."
           ref={ref => this.text_message = ref}
         />
