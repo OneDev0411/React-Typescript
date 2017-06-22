@@ -6,6 +6,7 @@ import TextMessage from './text'
 import RecommendationMessage from './recommendation'
 import AlertMessage from './alert'
 import UserAvatar from '../../../../../Partials/UserAvatar'
+import DeliveryReport from '../delivery-report'
 
 emojify.setConfig({
   img_dir: '/static/images/emoji'
@@ -53,36 +54,13 @@ const isAlert = (message) => {
 const getMessageText = (message) => {
   let text = message.comment
 
-  // if (!message_image && message.comment) {
-  //   text = emojify.replace(linkifyString(message.comment))
-  //   text = makeMentionBlue(text)
-  // }
   if (message.comment) {
     text = emojify.replace(linkifyString(message.comment))
-    text = makeMentionBlue(text)
   }
 
   return text
 }
 
-/**
- *
- */
-const makeMentionBlue = (text) => {
-  // TODO (needs to refactor Tony's codes)
-
-  // const data = this.props.data
-  // const current_room = data.current_room
-  // const users = current_room.users
-  // let filterd_text = text
-  // users.forEach((user) => {
-  //   const full_name = `${user.first_name} ${user.last_name}`
-  //   if (text.trim().indexOf(full_name.trim()) !== -1)
-  //     filterd_text = text.replace(new RegExp(full_name, 'g'), `<span class="text-primary">${user.first_name}</span>`)
-  // })
-  // return filterd_text
-  return text
-}
 
 export default ({
   user,
@@ -131,9 +109,10 @@ export default ({
       </div>
 
       <div className="content">
-        <div className="title">
-          { author && author.abbreviated_display_name }
+        <div>
+          <span className="title">{ author && author.abbreviated_display_name }</span>
         </div>
+
         { message_object }
       </div>
     </div>
