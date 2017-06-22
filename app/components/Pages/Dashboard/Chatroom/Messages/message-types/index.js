@@ -16,6 +16,9 @@ emojify.setConfig({
  * get message's author
  */
 const getAuthor = (message) => {
+  if (!message)
+    return null
+
   if (message.author)
     return message.author
 
@@ -61,14 +64,15 @@ const getMessageText = (message) => {
   return text
 }
 
-
 export default ({
   user,
-  message
+  message,
+  previousMessage
 }) => {
 
   // get user author
   const author = getAuthor(message)
+  const previousAuthor = getAuthor(previousMessage)
 
   // check message is alert
   const alert = isAlert(message)
@@ -77,7 +81,6 @@ export default ({
   const comment = <div
     dangerouslySetInnerHTML={{ __html: getMessageText(message) }}
   />
-
 
   let message_object = comment
 
@@ -97,15 +100,22 @@ export default ({
     />
   }
 
+  let avatar
+  if (!previousMessage || message.recommendation || alert || previousAuthor.id !== author.id) {
+    avatar = (
+      <UserAvatar
+        userId={author.id}
+        name={author.display_name}
+        image={author.profile_image_url}
+        size={35}
+      />
+    )
+  }
+
   return (
     <div className="message-item">
       <div className="avatar">
-        <UserAvatar
-          userId={author.id}
-          name={author.display_name}
-          image={author.profile_image_url}
-          size={35}
-        />
+        { avatar }
       </div>
 
       <div className="content">
