@@ -59,6 +59,9 @@ class Messages extends React.Component {
     .subscribe((top) => this.loadPreviousMessages(top))
   }
 
+  /**
+   * fetch messages
+   */
   async loadMessages(roomId, limit = 20, max_value = null, scroll_to = null) {
     const { getMessages } = this.props
 
@@ -72,6 +75,10 @@ class Messages extends React.Component {
       this.messagesList.scrollTop = scroll_to.offsetTop - this.messagesList.offsetTop
   }
 
+  /**
+   * load previous messages of chat by scrolling to top
+   * this function is a subscriber of Rxjs
+   */
   loadPreviousMessages(top) {
     const { roomId } = this.props
     const messages = this.props.messages[roomId]
@@ -90,6 +97,19 @@ class Messages extends React.Component {
     const lastChild = this.messagesList.children[0]
 
     this.loadMessages(roomId, 20, max_value, lastChild)
+  }
+
+  /**
+   * returns previous message of desired message
+   */
+  getPreviousMessage(messages, msg) {
+    const keys = Object.keys(messages)
+    const index = keys.indexOf(msg.id)
+
+    if (index === -1 || !keys[index - 1])
+      return null
+
+    return messages[keys[index - 1]]
   }
 
   onNewMessage(room, message) {
@@ -175,6 +195,7 @@ class Messages extends React.Component {
                 <Message
                   user={user}
                   message={msg}
+                  previousMessage={this.getPreviousMessage(messages.list, msg)}
                 />
               </div>
             )
