@@ -52,8 +52,8 @@ export default class Socket {
     socket.on('Message.Sent', this.onNewMessage.bind(this))
 
     // bind Reconnecting and Reconnect socket
-    socket.on('reconnecting', this.onReconnecting)
-    socket.on('reconnect', this.onReconnect)
+    socket.on('reconnecting', this.onReconnecting.bind(this))
+    socket.on('reconnect', this.onReconnect.bind(this))
 
     // get all user states
     socket.on('Users.States', this.onUserStates)
@@ -208,6 +208,9 @@ export default class Socket {
    */
   onReconnect() {
     const { activeRoom } = store.getState().chatroom
+
+    // authenticate again
+    Socket.authenicate(this.user.access_token)
 
     // get rooms again
     store.dispatch(getRooms())
