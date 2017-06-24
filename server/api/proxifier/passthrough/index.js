@@ -6,13 +6,26 @@ import config from '../../../../config/private'
 
 const app = new Koa()
 
+const serialize = obj => {
+  const str = []
+  Object.keys(obj).forEach(key => {
+    str.push(`${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`)
+  })
+  return str.join('&')
+}
+
 router.post('/proxifier', bodyParser(), async ctx => {
   const headers = ctx.headers
   const data = ctx.request.body
+  const queryString = serialize(ctx.query)
 
   try {
     // remove base_url because current fetcher middleware add it by itself
-    const endpoint = headers['x-endpoint'].replace(config.api.url, '')
+    let endpoint = headers['x-endpoint'].replace(config.api.url, '')
+
+    if (queryString) {
+      endpoint += `?${queryString}`
+    }
 
     // get method
     const method = headers['x-method']
