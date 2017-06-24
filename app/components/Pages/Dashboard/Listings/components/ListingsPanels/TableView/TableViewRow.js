@@ -8,8 +8,17 @@ import FavoriteHeart from '../../FavoriteHeart'
 import prepareListingViewItemProps from '../prepareListingViewItemProps'
 import { setMapHoveredMarkerId } from '../../../../../../../store_actions/listings/map'
 
-const TableViewRow = ({ user, listing, onMouseEnter, onMouseLeave }) => {
+const TableViewRow = ({
+  user,
+  tabName,
+  listing,
+  activePanel,
+  onMouseEnter,
+  onMouseLeave
+}) => {
   const props = prepareListingViewItemProps(user, listing)
+  const mouseEventIsActive =
+    tabName !== 'ALERTS' && activePanel === 'table' && window.innerWidth >= 1600
 
   return (
     <tr
@@ -17,8 +26,8 @@ const TableViewRow = ({ user, listing, onMouseEnter, onMouseLeave }) => {
       onClick={() => {
         browserHistory.push(`/listings/${listing.id}`)
       }}
-      onMouseEnter={() => onMouseEnter(listing.id)}
-      onMouseLeave={onMouseLeave}>
+      onMouseEnter={mouseEventIsActive ? () => onMouseEnter(listing.id) : ''}
+      onMouseLeave={mouseEventIsActive ? onMouseLeave : ''}>
       <td className="c-tableview__address-cell">
         <div className="c-tableview__address-cell__img">
           {listing.cover_image_url && <img src={listing.cover_image_url} />}

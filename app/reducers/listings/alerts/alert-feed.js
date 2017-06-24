@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
 import { isFetching, errorMessage } from '../shared'
-import { FETCH_LISTING_SUCCESS } from '../../../constants/listings/listing'
+import { FETCH_ALERT_LISTINGS_SUCCESS } from '../../../constants/listings/alerts'
 
-const data = (state = {}, action) => {
+const byAlertId = (state = {}, action) => {
   switch (action.type) {
-    case FETCH_LISTING_SUCCESS:
+    case FETCH_ALERT_LISTINGS_SUCCESS:
       return {
         ...state,
         ...action.response
@@ -14,10 +14,10 @@ const data = (state = {}, action) => {
   }
 }
 
-const listing = combineReducers({
-  data,
+const feed = combineReducers({
+  byAlertId,
   isFetching,
   errorMessage
 })
 
-export default listing
+export default feed

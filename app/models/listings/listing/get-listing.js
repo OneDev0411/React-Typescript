@@ -1,15 +1,23 @@
 import Fetch from '../../../services/fetch'
 
-const getListing = async (id) => {
+const getListing = async id => {
   if (!id) {
     return
   }
 
   try {
-    const response = await new Fetch()
-      .get(`/listings/${id}`)
+    const response = await new Fetch().get(`/listings/${id}`)
 
-    return response.body.data
+    let listing = response.body.data
+    listing = {
+      ...listing,
+      numPoints: 1,
+      list: listing,
+      lat: listing.property.address.location.latitude,
+      lng: listing.property.address.location.longitude
+    }
+
+    return listing
   } catch (error) {
     throw error
   }

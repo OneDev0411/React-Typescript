@@ -16,23 +16,21 @@ const ListingPanel = props => {
 
   const panelClassName = `c-listings-panel--${activePanel}`
 
-  let panelContainerClassName = 'l-listings__panel__container'
-  if (activePanel === 'grid') {
-    panelContainerClassName += ` ${panelContainerClassName}--full`
-  }
-
   return (
     <div className={panelClassName}>
       <PanelsSwitch activePanel={activePanel} tabName={tabName} />
-      <div className={panelContainerClassName}>
-        {tabName !== 'ALERTS' &&
-          <PanelHeader {...props} info={listings.info} />}
-        <div className="c-panel__list-container">
-          {activePanel === 'table'
-            ? <TableView {...props} />
-            : <GridView {...props} />}
-        </div>
-      </div>
+      {(tabName !== 'ALERTS' ||
+        (tabName === 'ALERTS' && activePanel !== 'map')) &&
+        <div className="l-listings__panel__container">
+          {(tabName !== 'ALERTS' ||
+            (tabName === 'ALERTS' && activePanel === 'table')) &&
+            <PanelHeader {...props} info={listings.info} />}
+          <div className="c-panel__list-container">
+            {activePanel === 'table'
+              ? <TableView {...props} />
+              : <GridView {...props} />}
+          </div>
+        </div>}
     </div>
   )
 }

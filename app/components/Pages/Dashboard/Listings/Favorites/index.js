@@ -11,7 +11,7 @@ class Favorites extends Component {
   componentDidMount() {
     const { user, listings, isFetching, getFavorites } = this.props
 
-    if (user && !isFetching && !listings.data.length) {
+    if (user && !isFetching) {
       getFavorites(user)
     }
   }

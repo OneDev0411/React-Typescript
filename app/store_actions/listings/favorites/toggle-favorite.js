@@ -18,22 +18,33 @@ const toggleFavorite = listing => (dispatch, getState) => {
   const handleToggle = listing => {
     const { id } = listing
     const { favorites } = getState()
-    const listings = selectListings(favorites.listings)
+    let listings = selectListings(favorites.listings)
 
     if (getIsFavorite(favorites.listings, id)) {
-      return listings.filter(list => list.id !== id)
+      listings = listings.filter(list => list.id !== id)
+    } else {
+      listings = [...listings, listing]
+    }
+
+    const total = listings.length
+
+    const normilizedListings = normalize(listings, schema.listingsList)
+
+    const info = {
+      total,
+      count: total
     }
 
     return {
-      ...listings,
-      listing
+      ...normilizedListings,
+      info
     }
   }
 
   dispatch({
     tabName: 'FAVORITE',
     type: actionsType.TOGGLE_FAVORITE,
-    response: normalize(handleToggle(listing), schema.listingsList)
+    response: handleToggle(listing)
   })
 
   dispatch({
@@ -63,7 +74,7 @@ const toggleFavorite = listing => (dispatch, getState) => {
       dispatch({
         tabName: 'FAVORITE',
         type: actionsType.TOGGLE_FAVORITE,
-        response: normalize(handleToggle(listing), schema.listingsList)
+        response: handleToggle(listing)
       })
     }
   )

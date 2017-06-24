@@ -2,109 +2,110 @@ $panel-width: 380px;
 $sidebar-width: 70px;
 $header-height: 54px;
 .l-listings--logged {
-    margin-left: $sidebar-width;
+  margin-left: $sidebar-width;
 }
 
 .l-listings__header {
-    border-bottom: 1px solid #ececec;
+  border-bottom: 1px solid #ececec;
 }
 
 .l-listings__map {
-    position: relative;
-    @media screen and (min-width: 1024px) {
-        width: calc(100% - #{$panel-width});
-        float: left;
-    }
+  position: relative;
+  @media screen and (min-width: 1024px) {
+    width: calc(100% - #{$panel-width});
+    float: left;
+  }
+  @media screen and (min-width: 1600px) {
+    width: calc(100% - #{$panel-width * 2.4});
+  }
+  .l-listings__main--alert & {
+    float: right;
     @media screen and (min-width: 1600px) {
-        width: calc(100% - #{$panel-width * 2.4});
+      width: calc(100% - #{$panel-width});
     }
-    .l-listings__main--alert & {
-        float: right;
-        @media screen and (min-width: 1600px) {
-            width: calc(100% - #{$panel-width});
-        }
-    }
+  }
 }
 
 .l-listings__panel {
-    display: none;
-    @media screen and (min-width: 1024px) {
-        position: relative;
-        width: $panel-width;
-        display: block;
-        float: left;
-        border-left: 1px solid #ccc;
-    }
-    @media screen and (min-width: 1600px) {
-        width: $panel-width * 2.4;
-    }
+  display: none;
+  @media screen and (min-width: 1024px) {
+    position: relative;
+    width: $panel-width;
+    display: block;
+    float: left;
+    border-left: 1px solid #ccc;
+  }
+  @media screen and (min-width: 1600px) {
+    width: $panel-width * 2.4;
+  }
 }
 
 .l-listings__panel__container {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    top: $header-height + 2px;
-    width: $panel-width;
-    height: calc(100vh - #{$header-height} - 2px);
-    overflow: hidden;
-    padding: 2rem;
-    background-color: #fff;
-    border-left: 1px solid #ccc;
-    transition: width 0.3s ease-in-out;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  top: $header-height + 2px;
+  width: $panel-width;
+  height: calc(100vh - #{$header-height} - 2px);
+  overflow: hidden;
+  padding: 2rem;
+  background-color: #fff;
+  border-left: 1px solid #ccc;
+  transition: width 0.3s ease-in-out;
+  @media screen and (min-width: 1600px) {
+    width: $panel-width * 2.4;
+  }
+  .c-listings-panel--table & {
+    @media screen and (min-width: 1024px) and (max-width: 1600px) {
+      border-width: 0;
+      width: 100%;
+    }
+  }
+  .l-listings--logged .c-listings-panel--table & {
+    @media screen and (min-width: 1024px) and (max-width: 1600px) {
+      width: calc(100% - #{$sidebar-width});
+    }
+  }
+  .c-listings-panel--grid & {
+    width: 100%;
+    border-width: 0;
     @media screen and (min-width: 1600px) {
-        width: $panel-width * 2.4;
+      width: 100%;
     }
-    .c-listings-panel--table & {
-        @media screen and (min-width: 1024px) and (max-width: 1600px) {
-            border-width: 0;
-            width: 100%;
-        }
+  }
+  .l-listings--logged .c-listings-panel--grid & {
+    width: calc(100% - #{$sidebar-width});
+    @media screen and (min-width: 1600px) {
+      width: calc(100% - #{$sidebar-width});
     }
-    .l-listings--logged .c-listings-panel--table & {
-        @media screen and (min-width: 1024px) and (max-width: 1600px) {
-            width: calc(100% - #{$sidebar-width});
-        }
+  }
+  .l-listings__main--alert & {
+    width: 100%;
+    display: none;
+    border-left-width: 0;
+    @media screen and (min-width: 1024px) {
+      display: block;
+      width: calc(100% - #{$sidebar-width} - #{$panel-width});
     }
-    &.l-listings__panel__container--full {
-        width: 100%;
-        border-width: 0;
-        @media screen and (min-width: 1600px) {
-            width: 100%;
-        }
+  }
+  .l-listings__main--alert .c-listings-panel--grid & {
+    width: calc(100% - #{$sidebar-width} - #{$panel-width});
+    @media screen and (min-width: 1600px) {
+      width: calc(100% - #{$sidebar-width} - #{$panel-width});
     }
-    .l-listings--logged &.l-listings__panel__container--full {
-        width: calc(100% - #{$sidebar-width});
-        @media screen and (min-width: 1600px) {
-            width: calc(100% - #{$sidebar-width});
-        }
+  }
+  .l-listings__main--alert .c-listings-panel--table & {
+    border-width: 0;
+    @media screen and (min-width: 1024px) and (max-width: 1600px) {
+      width: calc(100% - #{$sidebar-width} - #{$panel-width});
     }
-    .l-listings__main--alert & {
-        width: 100%;
-        display: none;
-        @media screen and (min-width: 1024px) {
-            display: block;
-            width: calc(100% - #{$sidebar-width} - #{$panel-width});
-        }
-        .l-listings--logged .c-listings-panel--table & {
-            border-width: 0;
-            @media screen and (min-width: 1024px) and (max-width: 1600px) {
-                width: calc(100% - #{$sidebar-width} - #{$panel-width});
-            }
-        }
-        .l-listings--logged &.l-listings__panel__container--full {
-            width: calc(100% - #{$sidebar-width} - #{$panel-width});
-            @media screen and (min-width: 1600px) {
-                width: calc(100% - #{$sidebar-width} - #{$panel-width});
-            }
-        }
-    }
+  }
 }
 
 .l-listings__alert-list {
-    position: relative;
-    height: calc(100vh - #{$header-height + 1});
-    width: $panel-width;
-    float: left;
-    border-right: 1px solid #ececec;
+  position: relative;
+  height: calc(100vh - #{$header-height + 2});
+  width: $panel-width;
+  float: left;
+  border-right: 1px solid #ececec;
 }

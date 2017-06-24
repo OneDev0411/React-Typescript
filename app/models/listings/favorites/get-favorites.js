@@ -23,7 +23,7 @@ const getFavorateListingsData = favorites =>
         ...listing,
         recId,
         numPoints: 1,
-        list: { ...listing },
+        list: listing,
         lat,
         lng
       }
@@ -42,16 +42,13 @@ const getFavorites = async (user = {}) => {
       `/rooms/${personal_room}/recs/favorites`
     )
 
-    const { code, info, data } = response.body
+    const { info, data } = response.body
 
     const listings = getFavorateListingsData(data)
     const normilizedListings = normalize(listings, schema.listingsList)
     return {
       ...normilizedListings,
-      info: {
-        code,
-        ...info
-      }
+      info
     }
   } catch (error) {
     throw error

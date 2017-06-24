@@ -2,10 +2,9 @@ import React from 'react'
 import Map from 'google-map-react'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
-import supercluster from 'points-cluster'
-import withState from 'recompose/withState'
 import defaultProps from 'recompose/defaultProps'
 import withHandlers from 'recompose/withHandlers'
+import withPropsOnChange from 'recompose/withPropsOnChange'
 
 import Marker from '../../../Mls/Partials/Markers/SingleMarker'
 import * as actions from '../../../../../../store_actions/listings/map'
@@ -24,9 +23,10 @@ const map = ({
   defaultZoom,
   defaultCenter,
   bootstrapURLKeys,
+  onGoogleApiLoaded,
   onMarkerMouseEnter,
   onMarkerMouseLeave,
-  onClickZoomHandler,
+  map: { hoveredMarkerId },
   mapProps: { zoom, center }
 }) =>
   <Map
@@ -37,27 +37,30 @@ const map = ({
     onChange={onChange}
     defaultZoom={defaultZoom}
     defaultCenter={defaultCenter}
-    bootstrapURLKeys={bootstrapURLKeys}>
-    {markers.map(({ ...markerProps, numPoints, list, lat, lng, id }) =>
+    yesIWantToUseGoogleMapApiInternals
+    bootstrapURLKeys={bootstrapURLKeys}
+    onGoogleApiLoaded={onGoogleApiLoaded}>
+    {markers.map(({ id, ...markerProps }) =>
       <Marker
-        key={id}
         data={appData}
         {...markerProps}
+        key={`ALERTS_MAP__MARKER_${id}`}
         onMouseEnterHandler={() => onMarkerMouseEnter(id)}
         onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
+        markerPopupIsActive={hoveredMarkerId === id}
       />
     )}
   </Map>
 
 const mapHOC = compose(
   defaultProps({
-    defaultZoom: 11,
+    defaultZoom: 13,
     bootstrapURLKeys,
     options: mapOptions,
     defaultCenter: mapInitialState.center,
     style: {
       position: 'relative',
-      height: 'calc(100vh - 55px)'
+      height: 'calc(100vh - 56px)'
     }
   }),
   connect(({ data, alerts }) => {
@@ -69,13 +72,12 @@ const mapHOC = compose(
       mapProps: map.props
     }
   }, actions),
-  // describe events
   withHandlers({
+    onGoogleApiLoaded: () => ({ map }) => {
+      window.currentMap = map
+    },
     onChange: ({ setMapProps }) => mapProps => {
       setMapProps('ALERTS', mapProps)
-    },
-    onClickZoomHandler: ({ updateMapZoom }) => zoomType => {
-      updateMapZoom('ALERTS', zoomType)
     },
     onMarkerMouseLeave: ({ setMapHoveredMarkerId }) => () => {
       setMapHoveredMarkerId('ALERTS', -1)
@@ -83,6 +85,23 @@ const mapHOC = compose(
     onMarkerMouseEnter: ({ setMapHoveredMarkerId }) => id => {
       setMapHoveredMarkerId('ALERTS', id)
     }
+  }),
+  withPropsOnChange(['selectedAlert'], ({ selectedAlert, mapProps }) => {
+    if (!window.google || !selectedAlert || !mapProps.bounds) {
+      return {}
+    }
+
+    const googleMaps = window.google.maps
+
+    const bounds = new googleMaps.LatLngBounds()
+    selectedAlert.points
+      .map(point => ({
+        lat: point.latitude,
+        lng: point.longitude
+      }))
+      .forEach(point => bounds.extend(point))
+
+    window.currentMap.fitBounds(bounds)
   })
 )
 

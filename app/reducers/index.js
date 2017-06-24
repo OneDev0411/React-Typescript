@@ -8,17 +8,18 @@ import search from './listings/search'
 import alerts from './listings/alerts'
 import listing from './listings/listing'
 import favorites from './listings/favorites'
+import { createNamedWrapperReducer } from '../utils/redux-utils'
 
 const appReducer = combineReducers({
   socket,
   data,
   search,
   alerts,
-  listing,
   contact,
   chatroom,
   favorites,
-  routing: routerReducer
+  routing: routerReducer,
+  listing: createNamedWrapperReducer(listing, 'LISTING')
 })
 
 export default (state, action) => appReducer(state, action)

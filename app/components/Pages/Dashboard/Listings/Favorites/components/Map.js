@@ -2,8 +2,6 @@ import React from 'react'
 import Map from 'google-map-react'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
-import supercluster from 'points-cluster'
-import withState from 'recompose/withState'
 import defaultProps from 'recompose/defaultProps'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
@@ -25,6 +23,7 @@ const map = ({
   defaultZoom,
   defaultCenter,
   bootstrapURLKeys,
+  onGoogleApiLoaded,
   onMarkerMouseEnter,
   onMarkerMouseLeave,
   onClickZoomHandler,
@@ -39,12 +38,15 @@ const map = ({
     onChange={onChange}
     defaultZoom={defaultZoom}
     defaultCenter={defaultCenter}
-    bootstrapURLKeys={bootstrapURLKeys}>
-    {markers.map(({ ...markerProps, numPoints, list, lat, lng, id }) =>
+    yesIWantToUseGoogleMapApiInternals
+    bootstrapURLKeys={bootstrapURLKeys}
+    onGoogleApiLoaded={onGoogleApiLoaded}>
+
+    {markers.map(({ id, ...markerProps }) =>
       <Marker
-        key={id}
         data={appData}
         {...markerProps}
+        key={`ALERTS_MAP__MARKER_${id}`}
         onMouseEnterHandler={() => onMarkerMouseEnter(id)}
         onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
         markerPopupIsActive={hoveredMarkerId === id}
@@ -60,7 +62,7 @@ const mapHOC = compose(
     defaultCenter: mapInitialState.center,
     style: {
       position: 'relative',
-      height: 'calc(100vh - 55px)'
+      height: 'calc(100vh - 56px)'
     }
   }),
   connect(({ data, favorites }) => {
@@ -74,11 +76,11 @@ const mapHOC = compose(
   }, actions),
   // describe events
   withHandlers({
+    onGoogleApiLoaded: () => ({ map }) => {
+      window.currentMap = map
+    },
     onChange: ({ setMapProps }) => mapProps => {
       setMapProps('FAVORITE', mapProps)
-    },
-    onClickZoomHandler: ({ updateMapZoom }) => zoomType => {
-      updateMapZoom('FAVORITE', zoomType)
     },
     onMarkerMouseLeave: ({ setMapHoveredMarkerId }) => () => {
       setMapHoveredMarkerId('FAVORITE', -1)
@@ -86,7 +88,22 @@ const mapHOC = compose(
     onMarkerMouseEnter: ({ setMapHoveredMarkerId }) => id => {
       setMapHoveredMarkerId('FAVORITE', id)
     }
-  })
+  }),
+  withPropsOnChange(
+    (props, nextProps) => props.markers.length !== nextProps.markers.length,
+    ({ markers, mapProps }) => {
+      if (!window.google || !markers.length || !mapProps.bounds) {
+        return {}
+      }
+
+      const googleMaps = window.google.maps
+
+      const bounds = new googleMaps.LatLngBounds()
+      markers.forEach(point => bounds.extend(point))
+
+      window.currentMap.fitBounds(bounds)
+    }
+  )
 )
 
 export default mapHOC(map)

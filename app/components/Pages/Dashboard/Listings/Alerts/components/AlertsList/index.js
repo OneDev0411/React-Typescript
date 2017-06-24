@@ -11,19 +11,17 @@ const AlertsList = ({ alertsList, selectedAlert }) =>
         <AlertsListRow
           key={`ALERT_LIST_ITEM_${index}`}
           alert={alert}
-          isSelected={selectedAlert === alert.id}
+          isSelected={selectedAlert.id === alert.id}
         />
       )) ||
       ''}
   </div>
 
 export default compose(
-  connect(({ alerts, chatroom }, { alertsList }) => {
-    const selectedAlert =
-      alerts.selectedAlert || (alertsList.data.length && alertsList.data[0].id)
-
-    return { selectedAlert, rooms: chatroom.rooms }
-  }),
+  connect(({ alerts, chatroom }, { alertsList }) => ({
+    rooms: chatroom.rooms,
+    selectedAlert: alerts.selectedAlert
+  })),
   withPropsOnChange(['alertsList', 'rooms'], ({ alertsList, rooms }) => {
     if (!rooms) {
       return

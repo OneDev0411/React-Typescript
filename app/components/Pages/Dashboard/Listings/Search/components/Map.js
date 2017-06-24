@@ -5,11 +5,10 @@ import Map from 'google-map-react'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import supercluster from 'points-cluster'
+import shallowEqual from 'recompose/shallowEqual'
 import defaultProps from 'recompose/defaultProps'
 import withHandlers from 'recompose/withHandlers'
-import { fitBounds } from 'google-map-react/utils'
 import withPropsOnChange from 'recompose/withPropsOnChange'
-import extendedBounds from '../../../../../../utils/extendedBounds'
 
 import { getListings } from '../../../../../../reducers/listings'
 import NotLoggedInMessage from '../../components/NotLoggedInMessage'
@@ -44,7 +43,6 @@ const map = ({
   onGoogleApiLoaded,
   onMarkerMouseEnter,
   onMarkerMouseLeave,
-  onClickZoomHandler,
   onClickRemovePolygon,
   onClusterMarkerClick,
   mapProps: { zoom, center },
@@ -63,20 +61,20 @@ const map = ({
       bootstrapURLKeys={bootstrapURLKeys}
       onGoogleApiLoaded={onGoogleApiLoaded}>
       {clusters.map(
-        ({ ...markerProps, numPoints, list, lat, lng, id }) =>
+        ({ ...markerProps, numPoints, list, id }, index) =>
           numPoints === 1
             ? <SimpleMarker
-                key={id}
                 data={appData}
                 {...markerProps}
+                key={`SEARCH_MAP__MARKER_${id}`}
                 onMouseEnterHandler={() => onMarkerMouseEnter(id)}
                 onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
                 markerPopupIsActive={hoveredMarkerId === id}
               />
             : <ClusterMarker
-                key={id}
                 {...markerProps}
-                onClickHandler={() => onClusterMarkerClick({ lat, lng }, list)}
+                key={`FAVORITES_MAP__CLUSTER_MARKER_${index}`}
+                onClickHandler={() => onClusterMarkerClick(list)}
               />
       )}
     </Map>
@@ -96,7 +94,7 @@ const mapHOC = compose(
     defaultCenter: mapInitialState.center,
     style: {
       position: 'relative',
-      height: 'calc(100vh - 55px)'
+      height: 'calc(100vh - 56px)'
     },
     clusterOptions: {
       minZoom: 12,
@@ -128,9 +126,6 @@ const mapHOC = compose(
 
       setMapProps('SEARCH', gmap)
     },
-    onClickZoomHandler: ({ updateMapZoom }) => zoomType => {
-      updateMapZoom('SEARCH', zoomType)
-    },
     onMarkerMouseLeave: ({ setMapHoveredMarkerId }) => () => {
       setMapHoveredMarkerId('SEARCH', -1)
     },
@@ -140,28 +135,18 @@ const mapHOC = compose(
     onClickRemovePolygon: ({ removePolygon, map }) => () => {
       removePolygon(map.drawing.shape)
     },
-    // eslint-disable-next-line
-    onClusterMarkerClick: ({ setMapProps, mapProps }) => {
-      return (center, points) => {
-        // esl
-        const extendedMapProps = extendedBounds(points, mapProps)
+    onClusterMarkerClick: () => points => {
+      const googleMaps = window.google.maps
 
-        if (!extendedMapProps) {
-          setMapProps('SEARCH', {
-            ...mapProps,
-            center,
-            zoom: DECLUSTER_ZOOM_LEVEL + 1
-          })
-          return
-        }
+      const bounds = new googleMaps.LatLngBounds()
+      points.forEach(point => bounds.extend(point))
 
-        setMapProps('SEARCH', extendedMapProps)
-      }
+      window.currentMap.fitBounds(bounds)
     }
   }),
   // precalculate clusters if markers data has changed
   withPropsOnChange(
-    ['markers'],
+    (props, nextProps) => !_.isEqual(props.markers, nextProps.markers),
     ({
       markers = [],
       clusterRadius,

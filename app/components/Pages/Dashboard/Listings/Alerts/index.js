@@ -3,7 +3,8 @@ import React, { Component } from 'react'
 
 import Map from './components/Map'
 import AlertsList from './components/AlertsList'
-import Loading from '../../../../Partials/Loading'
+import Loading from '../components/Loading'
+import { Spinner } from '../../../../Partials/Loading'
 import ListingsPanel from '../components/ListingsPanels'
 import getAlerts from '../../../../../store_actions/listings/alerts/get-alerts'
 import { selectListings as selectAlerts } from '../../../../../reducers/listings'
@@ -13,41 +14,59 @@ class Alerts extends Component {
     const { alertsList, isFetching, getAlerts } = this.props
 
     if (!isFetching && !alertsList.data.length) {
-      console.log('get alerts')
       getAlerts()
     }
   }
 
   render() {
-    const { isLoggedIn, alertsList, activePanel, isFetching } = this.props
+    const {
+      feed,
+      isLoggedIn,
+      alertsList,
+      activePanel,
+      selectedAlert,
+      feedIsFetching,
+      alertsListIsFetching
+    } = this.props
 
     return (
       <div className="l-listings__main l-listings__main--alert clearfix">
         <div className="l-listings__alert-list">
           <AlertsList alertsList={alertsList} />
-          {isFetching && <Loading />}
+          {alertsListIsFetching && <Spinner />}
         </div>
-        {/*<div className="l-listings__map">
-          <Map markers={[]} />
+        <div className="l-listings__map">
+          <Map markers={feed} selectedAlert={selectedAlert} />
           <ListingsPanel
             tabName="ALERTS"
-            listings={alertsList}
+            listings={{ data: feed }}
             isLoggedIn={isLoggedIn}
             activePanel={activePanel}
           />
-        </div>*/}
+          {feedIsFetching && <Loading text="Alert" />}
+        </div>
       </div>
     )
   }
 }
 
 const mapStateToProps = ({ data, alerts }) => {
-  const { list, panels } = alerts
+  const { list, panels, feed, selectedAlert } = alerts
+
+  let selectedAlertListings = []
+  const feedIsFetching = feed.isFetching
+  const feedIsLoaded = Object.keys(feed.byAlertId).length > 0
+  if (selectedAlert && feedIsLoaded && !feedIsFetching) {
+    selectedAlertListings = feed.byAlertId[selectedAlert.id]
+  }
 
   return {
-    isFetching: list.isFetching,
+    selectedAlert,
+    feedIsFetching,
+    feed: selectedAlertListings,
     isLoggedIn: data.user || false,
     activePanel: panels.activePanel,
+    alertsListIsFetching: list.isFetching,
     alertsList: { data: selectAlerts(list) }
   }
 }

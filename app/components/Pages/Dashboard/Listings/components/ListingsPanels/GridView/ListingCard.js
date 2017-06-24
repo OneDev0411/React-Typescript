@@ -14,20 +14,21 @@ import { setMapHoveredMarkerId } from '../../../../../../../store_actions/listin
 const ListingCard = ({
   user,
   listing,
+  tabName,
   activePanel,
   onMouseEnter,
   onMouseLeave
 }) => {
   const props = prepareProps(user, listing)
+  const mouseEventIsActive = tabName !== 'ALERTS' && activePanel === 'map'
+
   return (
     <LazyLoad className="c-listing-card" height={260} offsetBottom={900}>
       <div
         className="c-listing-card__inner"
         style={props.backgroundImage}
-        onMouseEnter={
-          activePanel === 'map' ? () => onMouseEnter(listing.id) : ''
-        }
-        onMouseLeave={activePanel === 'map' ? onMouseLeave : ''}>
+        onMouseEnter={mouseEventIsActive ? () => onMouseEnter(listing.id) : ''}
+        onMouseLeave={mouseEventIsActive ? onMouseLeave : ''}>
         <Link to={`/listings/${listing.id}`} className="c-listing-card__link" />
         <div className="c-listing-card__content-wrapper">
           {props.statusColor &&
@@ -42,7 +43,7 @@ const ListingCard = ({
             {props.address}
           </h4>
           <h5 className="c-listing-card__price">
-            {props.price}
+            $ {props.price}
           </h5>
           <div className="c-listing-card__details">
             <span>{props.beds} Beds</span>
@@ -54,6 +55,7 @@ const ListingCard = ({
             <span>{props.builtYear}</span>
           </div>
         </div>
+        {listing.new && <div className="c-listing-card__alertStatus">{listing.new}</div>}
         {user &&
           <div className="c-listing-card__favorite-heart">
             <FavoriteHeart listing={listing} />

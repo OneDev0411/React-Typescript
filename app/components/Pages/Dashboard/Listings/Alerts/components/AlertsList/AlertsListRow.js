@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import Brand from '../../../../../../../controllers/Brand'
-import setSelectedAlert from '../../../../../../../store_actions/listings/alerts/setSelectedAlert'
+import getAlertListings from '../../../../../../../store_actions/listings/alerts/get-alert-listings'
+import clearAlertNotification from '../../../../../../../store_actions/listings/alerts/clear-alert-notif'
 
 const SheredBy = ({ users }) =>
   <p className="c-alertList__item__shared-by san-fran">
@@ -16,7 +17,7 @@ const AlertListRow = ({ alert, isSelected, onClick }) =>
     className={`c-alertList__item ${isSelected
       ? 'c-alertList__item--selected'
       : ''}`}
-    onClick={() => onClick(alert.id)}>
+    onClick={() => onClick(alert)}>
     <div className="c-alertList__item__thumbnail">
       <img src={alert.cover_image_url} alt="mls alert list item - rechat" />
     </div>
@@ -27,8 +28,7 @@ const AlertListRow = ({ alert, isSelected, onClick }) =>
       {alert.users && <SheredBy users={alert.users} />}
     </div>
     {alert.new_recommendations &&
-      // eslint-disable-next-line
-      parseInt(alert.new_recommendations) !== 0 &&
+      parseInt(alert.new_recommendations, 10) > 0 &&
       <span
         className="c-alertList__item__badge"
         style={{ backgroundColor: `#${Brand.color('primary', '3388ff')}` }}>
@@ -37,10 +37,14 @@ const AlertListRow = ({ alert, isSelected, onClick }) =>
   </div>
 
 export default compose(
-  connect(null, { setSelectedAlert }),
+  connect(null, { getAlertListings, clearAlertNotification }),
   withHandlers({
-    onClick: ({ setSelectedAlert }) => item => {
-      setSelectedAlert(item)
+    onClick: ({ getAlertListings, clearAlertNotification }) => alert => {
+      getAlertListings(alert)
+      if (parseInt(alert.new_recommendations, 10) > 0) {
+        console.log('notif')
+        clearAlertNotification(alert)
+      }
     }
   })
 )(AlertListRow)
