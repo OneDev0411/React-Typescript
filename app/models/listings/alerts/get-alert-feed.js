@@ -7,27 +7,28 @@ const __SORTING_VALUE__ = 'Update'
 
 const mappingStatus = status => {
   switch (status) {
-    case 'NEW':
+    case 'New':
       return 'NEW LISTING'
     case 'PriceDrop':
       return 'PRICE DROP'
     case 'StatusChange':
       return 'STATUS CHANGE'
     case 'OpenHouseAvailable':
-    default:
       return 'OPEN HOUSE'
+    default:
+      return ''
   }
 }
 
-const getAlertListings = async ({ id, room }) => {
-  if (!room || !id) {
+const getAlertFeed = async (alertId, roomId) => {
+  if (!roomId || !alertId) {
     return
   }
 
   try {
     const response = await new Fetch()
-      .get(`/rooms/${room}/recs/feed`)
-      .query({ filter: id })
+      .get(`/rooms/${roomId}/recs/feed`)
+      .query({ filter: alertId })
       .query({ sorting_value: __SORTING_VALUE__ })
       .query({ limit: __LIMIT__ })
 
@@ -37,14 +38,15 @@ const getAlertListings = async ({ id, room }) => {
       ...rec.listing,
       numPoints: 1,
       recId: rec.id,
+      recRoom: rec.room,
       list: rec.listing,
-      new: mappingStatus(rec.new),
+      new: mappingStatus(rec.last_update),
       lat: rec.listing.property.address.location.latitude,
       lng: rec.listing.property.address.location.longitude
     }))
 
     let feed = {}
-    feed[id] = listings
+    feed[alertId] = listings
 
     return feed
   } catch (error) {
@@ -52,4 +54,4 @@ const getAlertListings = async ({ id, room }) => {
   }
 }
 
-export default getAlertListings
+export default getAlertFeed

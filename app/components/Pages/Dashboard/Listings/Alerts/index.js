@@ -51,13 +51,14 @@ class Alerts extends Component {
 }
 
 const mapStateToProps = ({ data, alerts }) => {
-  const { list, panels, feed, selectedAlert } = alerts
+  const { list, panels, feed, selectedAlertId } = alerts
+  const selectedAlert = list.byId[selectedAlertId]
 
   let selectedAlertListings = []
   const feedIsFetching = feed.isFetching
   const feedIsLoaded = Object.keys(feed.byAlertId).length > 0
-  if (selectedAlert && feedIsLoaded && !feedIsFetching) {
-    selectedAlertListings = feed.byAlertId[selectedAlert.id]
+  if (selectedAlertId && feedIsLoaded && !feedIsFetching) {
+    selectedAlertListings = feed.byAlertId[selectedAlertId] || []
   }
 
   return {

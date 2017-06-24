@@ -4,7 +4,7 @@ import * as schema from '../schema'
 
 const getFavorateListingsData = favorites =>
   favorites.map(favorite => {
-    const { listing, id: recId } = favorite
+    const { listing, id: recId, room: recRoom } = favorite
     let lat
     let lng
 
@@ -22,6 +22,7 @@ const getFavorateListingsData = favorites =>
       return {
         ...listing,
         recId,
+        recRoom,
         numPoints: 1,
         list: listing,
         lat,

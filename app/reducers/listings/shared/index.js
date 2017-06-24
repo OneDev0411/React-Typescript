@@ -13,11 +13,16 @@ import {
   FETCH_ALERTS_REQUEST,
   FETCH_ALERTS_FAILURE,
   CLEAR_ALERT_NOTIFICATION,
-  FETCH_ALERT_LISTINGS_SUCCESS,
-  FETCH_ALERT_LISTINGS_REQUEST,
-  FETCH_ALERT_LISTINGS_FAILURE
+  FETCH_ALERT_FEED_SUCCESS,
+  FETCH_ALERT_FEED_REQUEST,
+  FETCH_ALERT_FEED_FAILURE
 } from '../../../constants/listings/alerts'
-import { TOGGLE_FAVORITE } from '../../../constants/listings/favorites'
+import {
+  TOGGLE_FAVORITE,
+  TOGGLE_FAVORITE_REQUEST,
+  TOGGLE_FAVORITE_SUCCESS,
+  TOGGLE_FAVORITE_FAILURE
+} from '../../../constants/listings/favorites'
 
 export const byId = (state = {}, action) => {
   if (action.response) {
@@ -59,7 +64,8 @@ export const isFetching = (state = false, action) => {
     case FETCH_ALERTS_REQUEST:
     case FETCH_LISTING_REQUEST:
     case FETCH_LISTINGS_REQUEST:
-    case FETCH_ALERT_LISTINGS_REQUEST:
+    case TOGGLE_FAVORITE_REQUEST:
+    case FETCH_ALERT_FEED_REQUEST:
       return true
     case FETCH_ALERTS_SUCCESS:
     case FETCH_ALERTS_FAILURE:
@@ -67,8 +73,10 @@ export const isFetching = (state = false, action) => {
     case FETCH_LISTING_FAILURE:
     case FETCH_LISTINGS_SUCCESS:
     case FETCH_LISTINGS_FAILURE:
-    case FETCH_ALERT_LISTINGS_SUCCESS:
-    case FETCH_ALERT_LISTINGS_FAILURE:
+    case TOGGLE_FAVORITE_SUCCESS:
+    case TOGGLE_FAVORITE_FAILURE:
+    case FETCH_ALERT_FEED_SUCCESS:
+    case FETCH_ALERT_FEED_FAILURE:
       return false
     default:
       return state
@@ -80,7 +88,8 @@ export const errorMessage = (state = null, action) => {
     case FETCH_ALERTS_FAILURE:
     case FETCH_LISTING_FAILURE:
     case FETCH_LISTINGS_FAILURE:
-    case FETCH_ALERT_LISTINGS_FAILURE:
+    case TOGGLE_FAVORITE_FAILURE:
+    case FETCH_ALERT_FEED_FAILURE:
       return action.message
     case FETCH_ALERTS_REQUEST:
     case FETCH_ALERTS_SUCCESS:
@@ -88,8 +97,10 @@ export const errorMessage = (state = null, action) => {
     case FETCH_LISTING_SUCCESS:
     case FETCH_LISTINGS_REQUEST:
     case FETCH_LISTINGS_SUCCESS:
-    case FETCH_ALERT_LISTINGS_REQUEST:
-    case FETCH_ALERT_LISTINGS_SUCCESS:
+    case TOGGLE_FAVORITE_REQUEST:
+    case TOGGLE_FAVORITE_SUCCESS:
+    case FETCH_ALERT_FEED_REQUEST:
+    case FETCH_ALERT_FEED_SUCCESS:
       return null
     default:
       return state

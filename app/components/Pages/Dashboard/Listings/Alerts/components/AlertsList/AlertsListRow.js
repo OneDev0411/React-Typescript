@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import Brand from '../../../../../../../controllers/Brand'
-import getAlertListings from '../../../../../../../store_actions/listings/alerts/get-alert-listings'
-import clearAlertNotification from '../../../../../../../store_actions/listings/alerts/clear-alert-notif'
+import getAlertFeed from '../../../../../../../store_actions/listings/alerts/get-alert-feed'
+import clearAlertNotification from '../../../../../../../store_actions/listings/alerts/clear-alert-notification'
 
 const SheredBy = ({ users }) =>
   <p className="c-alertList__item__shared-by san-fran">
@@ -37,13 +37,16 @@ const AlertListRow = ({ alert, isSelected, onClick }) =>
   </div>
 
 export default compose(
-  connect(null, { getAlertListings, clearAlertNotification }),
+  connect(null, { getAlertFeed, clearAlertNotification }),
   withHandlers({
-    onClick: ({ getAlertListings, clearAlertNotification }) => alert => {
-      getAlertListings(alert)
-      if (parseInt(alert.new_recommendations, 10) > 0) {
+    onClick: ({ getAlertFeed, clearAlertNotification }) => alert => {
+      const { id, room, new_recommendations } = alert
+
+      getAlertFeed(id, room)
+
+      if (parseInt(new_recommendations, 10) > 0) {
         console.log('notif')
-        clearAlertNotification(alert)
+        clearAlertNotification(id, room)
       }
     }
   })

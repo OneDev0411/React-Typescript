@@ -48,26 +48,35 @@ const toggleFavorite = listing => (dispatch, getState) => {
   })
 
   dispatch({
+    tabName: 'FAVORITE',
     type: actionsType.TOGGLE_FAVORITE_REQUEST
   })
 
-  const { personal_room: roomId } = user
-  const { recId, mls_number: mlsNumber } = listing
+  const { personal_room } = user
+  let { recId } = listing
+  const { recRoom, mls_number: mlsNumber } = listing
+
+  if (personal_room !== recRoom) {
+    recId = ''
+  }
+
   const params = {
     recId,
-    roomId,
     mlsNumber,
-    isFavorite
+    isFavorite,
+    roomId: personal_room
   }
 
   return api.toggleFavorites(params).then(
     response => {
       dispatch({
+        tabName: 'FAVORITE',
         type: actionsType.TOGGLE_FAVORITE_SUCCESS
       })
     },
     ({ message }) => {
       dispatch({
+        tabName: 'FAVORITE',
         type: actionsType.TOGGLE_FAVORITE_FAILURE,
         message: message || 'Something went wrong.'
       })

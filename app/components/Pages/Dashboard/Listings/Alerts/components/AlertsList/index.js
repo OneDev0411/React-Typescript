@@ -4,14 +4,14 @@ import compose from 'recompose/compose'
 import AlertsListRow from './AlertsListRow'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 
-const AlertsList = ({ alertsList, selectedAlert }) =>
+const AlertsList = ({ alertsList, selectedAlertId }) =>
   <div className="c-alerts-list">
     {(alertsList.data.length &&
       alertsList.data.map((alert, index) =>
         <AlertsListRow
           key={`ALERT_LIST_ITEM_${index}`}
           alert={alert}
-          isSelected={selectedAlert.id === alert.id}
+          isSelected={selectedAlertId === alert.id}
         />
       )) ||
       ''}
@@ -20,7 +20,7 @@ const AlertsList = ({ alertsList, selectedAlert }) =>
 export default compose(
   connect(({ alerts, chatroom }, { alertsList }) => ({
     rooms: chatroom.rooms,
-    selectedAlert: alerts.selectedAlert
+    selectedAlertId: alerts.selectedAlertId
   })),
   withPropsOnChange(['alertsList', 'rooms'], ({ alertsList, rooms }) => {
     if (!rooms) {

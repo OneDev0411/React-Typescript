@@ -4,15 +4,15 @@ import * as schema from '../../../models/listings/schema'
 import { selectListings } from '../../../reducers/listings'
 import * as actionsType from '../../../constants/listings/alerts'
 
-const clearAlertNotification = alert => (dispatch, getState) => {
+const clearAlertNotification = (alertId, roomId) => (dispatch, getState) => {
   const { alerts } = getState()
 
-  const alertsList = selectListings(alerts.list).map(item => {
-    if (item.id !== alert.id) {
-      return item
+  const alertsList = selectListings(alerts.list).map(alert => {
+    if (alert.id !== alertId) {
+      return alert
     }
     return {
-      ...item,
+      ...alert,
       new_recommendations: '0'
     }
   })
@@ -29,16 +29,7 @@ const clearAlertNotification = alert => (dispatch, getState) => {
     type: actionsType.CLEAR_ALERT_NOTIFICATION_REQUEST
   })
 
-  const { id, room } = alert
-  const params = {
-    id,
-    room,
-    body: {
-      new_recommendations: 0
-    }
-  }
-
-  return api.updateAlert(params).then(
+  return api.clearAlertNotification(alertId, roomId).then(
     response => {
       dispatch({
         type: actionsType.CLEAR_ALERT_NOTIFICATION_SUCCESS

@@ -1,9 +1,9 @@
 import getAlerts from './get-alerts'
-import updateAlert from './update-alert'
-import getAlertListings from './get-alert-listings'
+import getAlertFeed from './get-alert-feed'
+import clearAlertNotification from './clear-alert-notification'
 
 export default {
   getAlerts,
-  updateAlert,
-  getAlertListings
+  getAlertFeed,
+  clearAlertNotification
 }

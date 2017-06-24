@@ -102,9 +102,9 @@ const mapHOC = compose(
     }
   }),
   connect(
-    ({ data }, { searchListings }) => ({
+    ({ data }, { listings }) => ({
       appData: data,
-      markers: searchListings.data
+      markers: listings.data
     }),
     actions
   ),
