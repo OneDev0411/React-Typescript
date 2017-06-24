@@ -17,10 +17,14 @@ router.post('/proxifier', bodyParser(), async ctx => {
     // get method
     const method = headers['x-method']
 
-    const response = await ctx
+    const request = ctx
       .fetch(endpoint, method)
-      .set({ Authorization: headers['authorization'] })
       .send(data)
+
+    if (headers.authorization)
+      request.set({ Authorization: headers.authorization })
+
+    const response = await request
 
     ctx.body = response.body
 
