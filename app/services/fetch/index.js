@@ -1,18 +1,22 @@
 import _ from 'underscore'
 import store from '../../stores'
 import SuperAgent from 'superagent'
+import config from '../../../config/public'
 
 export default class Fetch {
-  constructor() {
+  constructor(options = {}) {
+    const isServerSide = typeof window === 'undefined'
+
     this._middlewares = {}
     this._autoLogin = true
+    this._baseUrl = isServerSide ? config.app.url : ''
   }
 
   _create(method, endpoint) {
     const state = store.getState()
     const { user } = state.data
 
-    const agent = SuperAgent.post('/api/proxifier')
+    const agent = SuperAgent.post(`${this._baseUrl}/api/proxifier`)
       .set('X-Method', method)
       .set('X-Endpoint', endpoint)
 
