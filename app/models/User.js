@@ -7,9 +7,7 @@ import config from '../../config/public'
 
 export default {
   get: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-    const endpoint = `${api_host}/api/users/get-user/${params.id}?access_token=${params.access_token}`
+    const endpoint = `/api/users/get-user/${params.id}?access_token=${params.access_token}`
     fetch(endpoint, {
       method: 'get',
       headers: {
@@ -29,9 +27,7 @@ export default {
     .then(response => callback(false, response))
   },
   getSelf: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-    const endpoint = `${api_host}/api/users/get-user/self?access_token=${params.access_token}`
+    const endpoint = `/api/users/get-user/self?access_token=${params.access_token}`
     fetch(endpoint)
     .then((response) => {
       if (response.status >= 400) {
@@ -46,9 +42,7 @@ export default {
     .then(response => callback(false, response))
   },
   search: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-    const endpoint = `${api_host}/api/users/search?access_token=${params.access_token}&q=${params.q}`
+    const endpoint = `/api/users/search?access_token=${params.access_token}&q=${params.q}`
     fetch(endpoint)
     .then((response) => {
       if (response.status >= 400) {
@@ -63,9 +57,7 @@ export default {
     .then(response => callback(false, response))
   },
   create: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-    const endpoint = `${api_host}/api/signup`
+    const endpoint = '/api/signup'
     const request_object = params.user
     fetch(endpoint, {
       method: 'post',
@@ -87,9 +79,7 @@ export default {
     .then(response => callback(false, response))
   },
   async createShadow(params, callback) {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-    const endpoint = `${api_host}/api/signup-shadow`
+    const endpoint = '/api/signup-shadow'
 
     try {
       const response = await superagent.post(endpoint).send(params.user)
@@ -104,9 +94,7 @@ export default {
     }
   },
   sendVerifyEmail: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-    const endpoint = `${api_host}/api/email-verifications?access_token=${params.access_token}`
+    const endpoint = `/api/email-verifications?access_token=${params.access_token}`
     const access_token = params.access_token
     const request_object = {
       access_token
@@ -131,9 +119,7 @@ export default {
     .then(response => callback(false, response))
   },
   sendVerifyPhone: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-    const endpoint = `${api_host}/api/phone-verifications?access_token=${params.access_token}`
+    const endpoint = `/api/phone-verifications?access_token=${params.access_token}`
     const access_token = params.access_token
     const request_object = {
       access_token
@@ -158,9 +144,7 @@ export default {
     .then(response => callback(false, response))
   },
   signin: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-    const endpoint = `${api_host}/api/signin`
+    const endpoint = '/api/signin'
     const request_object = {
       email: params.email,
       password: params.password
@@ -188,8 +172,7 @@ export default {
     .then(response => callback(false, response))
   },
   signout: (params, callback) => {
-    const api_host_local = config.api_host_local
-    const endpoint = `${api_host_local}/signout`
+    const endpoint = '/signout'
     fetch(endpoint)
     .then((response) => {
       if (response.status >= 400) {
@@ -204,10 +187,7 @@ export default {
     .then(response => callback(false, response))
   },
   forgotPassword: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-
-    const endpoint = `${api_host}/api/forgot-password`
+    const endpoint = '/api/forgot-password'
     const request_object = {
       email: params.email
     }
@@ -232,10 +212,7 @@ export default {
     .then(response => callback(false, response))
   },
   resetPassword: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-
-    const endpoint = `${api_host}/api/reset-password`
+    const endpoint = '/api/reset-password'
     const request_object = {
       token: params.token,
       password: params.password
@@ -261,9 +238,7 @@ export default {
     .then(response => callback(false, response))
   },
   createPassword: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-    const endpoint = `${api_host}/api/create-password`
+    const endpoint = '/api/create-password'
     const request_object = {
       phone_number: params.phone_number,
       email: params.email,
@@ -291,10 +266,7 @@ export default {
     .then(response => callback(false, response))
   },
   verifyPhone: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-
-    const endpoint = `${api_host}/api/verify-phone`
+    const endpoint = '/api/verify-phone'
 
     const request_object = {
       code: params.code,
@@ -340,9 +312,7 @@ export default {
   //   .then(response => callback(false, response))
   // },
   edit: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-    const endpoint = `${api_host}/api/edit-user?access_token=${params.access_token}`
+    const endpoint = `/api/edit-user?access_token=${params.access_token}`
     const request_object = {
       user: params.user,
       access_token: params.access_token
@@ -368,8 +338,7 @@ export default {
     .then(response => callback(false, response))
   },
   uploadImage: (params, callback) => {
-    const api_url = config.api_url
-    const endpoint = `${api_url}/attachments`
+    const endpoint = '/attachments'
     const request = superagent.post(endpoint)
     const file = params.files[0]
     request.set('authorization', `Bearer ${params.access_token}`)
@@ -377,9 +346,7 @@ export default {
     request.end((err, response) => callback(false, response))
   },
   editProfilePic: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-    const endpoint = `${api_host}/api/edit-profile-pic?access_token=${params.access_token}`
+    const endpoint = `/api/edit-profile-pic?access_token=${params.access_token}`
     const request_object = {
       profile_image_url: params.profile_image_url,
       access_token: params.access_token
@@ -404,9 +371,7 @@ export default {
     .then(response => callback(false, response))
   },
   editPassword: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-    const endpoint = `${api_host}/api/edit-password?access_token=${params.access_token}`
+    const endpoint = `/api/edit-password?access_token=${params.access_token}`
     const request_object = {
       old_password: params.old_password,
       new_password: params.new_password,
@@ -432,9 +397,7 @@ export default {
     .then(response => callback(false, response))
   },
   upgradeAccount: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-    const endpoint = `${api_host}/api/upgrade-account?access_token=${params.access_token}`
+    const endpoint = `/api/upgrade-account?access_token=${params.access_token}`
     const request_object = {
       agent: params.agent,
       secret: params.secret,
@@ -460,9 +423,7 @@ export default {
     .then(response => callback(false, response))
   },
   getFavorites: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-    const endpoint = `${api_host}/api/user/get-favorites?access_token=${params.access_token}`
+    const endpoint = `/api/user/get-favorites?access_token=${params.access_token}`
     fetch(endpoint)
     .then((response) => {
       if (response.status >= 400) {
@@ -477,9 +438,7 @@ export default {
     .then(response => callback(false, response))
   },
   listingInquiry: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-    const endpoint = `${api_host}/api/user/listing-inquiry?access_token=${params.access_token}`
+    const endpoint = `/api/user/listing-inquiry?access_token=${params.access_token}`
     const request_object = {
       access_token: params.access_token,
       agent: params.agent,

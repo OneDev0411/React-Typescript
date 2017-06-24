@@ -17,18 +17,16 @@ router.post('/proxifier', bodyParser(), async ctx => {
     // get method
     const method = headers['x-method']
 
-    const request = ctx
-      .fetch(endpoint, method)
-      .send(data)
+    const request = ctx.fetch(endpoint, method).send(data)
 
-    if (headers.authorization)
+    if (headers.authorization) {
       request.set({ Authorization: headers.authorization })
+    }
 
     const response = await request
 
     ctx.body = response.body
-
-  } catch(e) {
+  } catch (e) {
     e.response = e.response || {
       status: 500,
       text: e.message

@@ -44,7 +44,7 @@ class App extends Component {
     this.initialRooms()
 
     // load contacts
-    this.initialContacts()
+    this.initialContacts(user)
 
     // check user is mobile device or not
     this.checkForMobile()
@@ -76,10 +76,10 @@ class App extends Component {
     }
   }
 
-  initialContacts() {
+  initialContacts(user) {
     const { dispatch, contacts } = this.props
 
-    if (!contacts) {
+    if (user && !contacts) {
       dispatch(getContacts())
     }
   }

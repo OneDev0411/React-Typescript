@@ -107,12 +107,27 @@ export default (
     </Route>
 
     <Route path="/" component={App} onEnter={authenticate}>
-      <Route path="/account/settings" component={Settings} />
-      <Route path="/account/notifications" component={Notifications} />
-
+      <Route path="/dashboard/mls" component={Mls} />
       <Route path="/dashboard/mls/agents" component={Agents} />
       <Route path="/dashboard/mls/alerts(/:alert_id)" component={Mls} />
       <Route path="/dashboard/mls/actives" component={Mls} />
+      <Route path="/dashboard/mls/:id" component={Listing} />
+
+      <Route path="/branch" component={Branch} />
+      <Route path="/widgets/map" component={MapWidget} />
+      <Route path="/widgets/search" component={SearchWidget} />
+      <Route path="/widgets/listings" component={ListingsWidget} />
+
+      <Route path="/account/settings" component={Settings} />
+      <Route path="/account/notifications" component={Notifications} />
+
+      <Route path="listings" component={ListingsLayout}>
+        <IndexRoute component={ListingsSearch} />
+        <Route path="alerts" component={ListingsAlerts} />
+        <Route path="favorites" component={ListingsFavorites} />
+      </Route>
+
+      <Route path="listings/:id" component={ListingSinglePage} />
 
       <Route path="/dashboard/website" component={Website} />
       <Route path="/dashboard/cards" component={Cards} />

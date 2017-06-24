@@ -6,9 +6,7 @@ import config from '../../config/public'
 
 export default {
   signup: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-    const endpoint = `${api_host}/api/intercom/signup`
+    const endpoint = '/api/intercom/signup'
     const request_object = {
       user: params.user
     }
@@ -19,22 +17,20 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then((response) => {
-      if (response.status >= 400) {
-        const error = {
-          status: 'error',
-          response
+      .then(response => {
+        if (response.status >= 400) {
+          const error = {
+            status: 'error',
+            response
+          }
+          return callback(error, false)
         }
-        return callback(error, false)
-      }
-      return response.json()
-    })
-    .then(response => callback(false, response))
+        return response.json()
+      })
+      .then(response => callback(false, response))
   },
   signin: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-    const endpoint = `${api_host}/api/intercom/signin`
+    const endpoint = '/api/intercom/signin'
     const request_object = {
       user: params.user
     }
@@ -45,16 +41,16 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then((response) => {
-      if (response.status >= 400) {
-        const error = {
-          status: 'error',
-          response
+      .then(response => {
+        if (response.status >= 400) {
+          const error = {
+            status: 'error',
+            response
+          }
+          return callback(error, false)
         }
-        return callback(error, false)
-      }
-      return response.json()
-    })
-    .then(response => callback(false, response))
+        return response.json()
+      })
+      .then(response => callback(false, response))
   }
 }
