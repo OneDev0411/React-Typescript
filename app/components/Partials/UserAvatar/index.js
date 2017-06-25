@@ -19,7 +19,9 @@ const UserAvatar = ({
   borderColor = '#fff',
   showStateIndicator = true
 }) => {
-  const defaultStyles = showStateIndicator ? {position: 'relative', width: `${size}px`} : {}
+  const defaultStyles = showStateIndicator ?
+    {position: 'relative', width: `${size}px`} :
+    {}
 
   return (
     <div
@@ -30,7 +32,7 @@ const UserAvatar = ({
       }}
     >
       <Avatar
-        style={image ? {} : {verticalAlign: 'middle'}}
+        style={!image ? {verticalAlign: 'middle'} : {}} // fix vertical bug when there is no image
         round
         name={name}
         src={image}
