@@ -60,6 +60,14 @@ export function leaveRoom(userId, room) {
   }
 }
 
+export function acknowledgeRoom(roomId, userId) {
+  return {
+    type: types.ACKNOWLEDGE_ROOM,
+    roomId,
+    userId
+  }
+}
+
 export function changeActiveRoom(roomId) {
   return {
     type: types.CHANGE_ACTIVE_ROOM,
