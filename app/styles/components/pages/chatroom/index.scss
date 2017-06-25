@@ -4,10 +4,10 @@ $rooms-padding: 20px;
 @import './rooms';
 @import './room-toolbar';
 @import './messages';
-@import './popups';
 @import './sidebar';
 @import './members';
 @import './delivery-report';
+@import './popups';
 
 .chatroom {
   margin-left: 65px;
@@ -29,6 +29,10 @@ $rooms-padding: 20px;
  */
 .inline {
   display: inline;
+}
+
+.inline-block {
+  display: inline-block;
 }
 
 .vcenter {
