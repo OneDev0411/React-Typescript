@@ -6,9 +6,9 @@ import moment from 'moment'
 import cn from 'classnames'
 import { getMessages } from '../../../../../store_actions/chatroom'
 import Toolbar from '../Rooms/toolbar'
-import Message from './message-item'
+import MessageItem from './message-item'
 import UserTyping from '../UserTyping'
-import CreateMessage from './create-message'
+import ComposeMessage from './compose-message'
 
 class Messages extends React.Component {
 
@@ -192,7 +192,7 @@ class Messages extends React.Component {
             messages &&
             _.map(messages.list, msg =>
               <div key={`MESSAGE_${msg.id}`}>
-                <Message
+                <MessageItem
                   user={user}
                   message={msg}
                   previousMessage={this.getPreviousMessage(messages.list, msg)}
@@ -209,10 +209,10 @@ class Messages extends React.Component {
         {
           roomId &&
           <div className="message-create">
-            <CreateMessage
+            <ComposeMessage
               user={user}
               roomId={roomId}
-              onCreateNewMessage={() => this.scrollEnd()}
+              onComposeMessage={() => this.scrollEnd()}
             />
           </div>
         }
