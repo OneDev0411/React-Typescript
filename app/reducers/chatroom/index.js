@@ -155,6 +155,41 @@ function resetRoomNotificationsCounter(state, action) {
 }
 
 /**
+ * acknowledge room for an specific user
+ */
+function acknowledgeRoom(state, action) {
+  const messages = state.messages[action.roomId]
+
+  const list = {}
+  _.each(messages.list, message => {
+
+    let acked_by = message.acked_by
+
+    if (!acked_by)
+      acked_by = [action.userId]
+
+    if (message.acked_by && message.acked_by.indexOf(action.userId) === -1)
+      acked_by.push(action.userId)
+
+    list[message.id] = {
+      ...message,
+      ...{acked_by}
+    }
+  })
+
+  return {
+    ...state,
+    ...{messages: {
+      ...state.messages,
+      ...{[action.roomId]: {
+        ...messages,
+        ...{list}
+      }}
+    }}
+  }
+}
+
+/**
  * get or create messages
  */
 function createMessages(state, action) {
@@ -197,6 +232,37 @@ function createMessages(state, action) {
         ...state.messages[action.id],
         ...action.info,
         ...{ list }
+      }}
+    }}
+  }
+}
+
+/**
+ * update message deliveries that come from socket [Notification.Delivered]
+ */
+function updateMessageDeliveries(state, action) {
+  const messages = state.messages[action.roomId]
+  const message = messages.list[action.messageId]
+
+  let deliveries = message.deliveries
+  if (!deliveries)
+    deliveries = [action.deliveryInfo]
+  else
+    deliveries.push(action.deliveryInfo)
+
+  return {
+    ...state,
+    ...{messages: {
+      ...state.messages,
+      ...{[action.roomId]: {
+        ...messages,
+        ...{list: {
+          ...messages.list,
+          ...{[action.messageId]: {
+            ...messages.list[action.messageId],
+            ...{deliveries}
+          }}
+        }}
       }}
     }}
   }
@@ -357,6 +423,7 @@ export default (state = initialState, action) => {
     [types.CREATE_ROOM]: createRoom,
     [types.ADD_MEMBERS]: addRoomMembers,
     [types.LEAVE_ROOM]: leaveRoom,
+    [types.ACKNOWLEDGE_ROOM]: acknowledgeRoom,
     [types.GET_MESSAGES]: createMessages,
     [types.CREATE_MESSAGE]: createMessages,
     [types.ADD_MESSAGE_TYPING]: addMessageTyping,
@@ -369,7 +436,8 @@ export default (state = initialState, action) => {
     [types.INITIAL_USER_STATES]: initialUserStates,
     [types.UPDATE_USER_STATE]: updateUserState,
     [types.UPDATE_ROOM_NOTIFICATIONS]: updateRoomNotifications,
-    [types.RESET_ROOM_NOTIFICATIONS]: resetRoomNotificationsCounter
+    [types.RESET_ROOM_NOTIFICATIONS]: resetRoomNotificationsCounter,
+    [types.UPDATE_MESSAGE_DELIVERIES]: updateMessageDeliveries
   }
 
   return handlers[action.type] ? handlers[action.type](state, action) : state
