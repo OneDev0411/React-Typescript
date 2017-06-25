@@ -24,7 +24,7 @@ class Favorites extends Component {
       <div className="l-listings__main clearfix">
         <div className="l-listings__map">
           <Map markers={listings.data} />
-          {isFetching && <Loading text="Favorites" />}
+          {isFetching && !listings.data.length && <Loading text="Favorites" />}
         </div>
         <div className="l-listings__panel">
           <ListingsPanel
