@@ -7,6 +7,7 @@ $rooms-padding: 20px;
 @import './popups';
 @import './sidebar';
 @import './members';
+@import './delivery-report';
 
 .chatroom {
   margin-left: 65px;
@@ -21,4 +22,17 @@ $rooms-padding: 20px;
   .messages {
     @extend %messages;
   }
+}
+
+/**
+ * helpers
+ */
+.inline {
+  display: inline;
+}
+
+.vcenter {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
 }

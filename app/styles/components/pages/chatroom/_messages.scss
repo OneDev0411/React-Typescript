@@ -89,8 +89,13 @@ $left-w: 50px;
     .title {
       font-weight: bold;
       font-size: 15px;
-      display: block;
+      display: inline;
       margin-bottom: 2px;
+    }
+
+    .date {
+      margin-left: 10px;
+      color: #c3c3c3;
     }
 
     .recommendation {
@@ -107,11 +112,29 @@ $left-w: 50px;
   margin: 5px 10px 5px 26px;
   word-wrap: break-word;
   overflow: hidden;
+
+  .date {
+    font-size: 11px;
+    display: inline-block;
+    color: #c3c3c3;
+    opacity: 0.1;
+    transition: 0.2s opacity ease-in;
+    width: $left-w;
+    vertical-align: top;
+    padding-top: 2px;
+  }
+
+  &:hover .date{
+    opacity: 1;
+  }
+
   .content {
     line-height: 20px;
     vertical-align: middle;
-    margin-left: $left-w;
     display: inline-block;
+    width: -webkit-calc(100% - #{$left-w});
+    width: -moz-calc(100% - #{$left-w});
+    width: calc(100% - #{$left-w});
   }
 }
 
