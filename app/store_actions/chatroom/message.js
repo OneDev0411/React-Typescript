@@ -1,4 +1,5 @@
 import _ from 'underscore'
+import moment from 'moment'
 import types from '../../constants/chatroom'
 import Chatroom from '../../models/Chatroom'
 
@@ -45,5 +46,23 @@ export function removeMessageTyping(roomId, userId) {
     type: types.REMOVE_MESSAGE_TYPING,
     roomId,
     userId
+  }
+}
+
+export function updateMessageDeliveries(user, delivery_type, notification) {
+  const { room, object, notification_type } = notification
+
+  const deliveryInfo = {
+    user,
+    delivery_type,
+    created_at: moment.unix(notification.created_at).format(),
+    type: notification_type
+  }
+
+  return {
+    type: types.UPDATE_MESSAGE_DELIVERIES,
+    roomId: room,
+    messageId: object,
+    deliveryInfo
   }
 }
