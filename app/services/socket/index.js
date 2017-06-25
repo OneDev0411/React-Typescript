@@ -10,6 +10,8 @@ import {
   removeMessageTyping,
   updateRoomNotifications,
   resetRoomNotificationsCounter,
+  updateMessageDeliveries,
+  acknowledgeRoom,
   initialStates,
   updateState,
   changeSocketStatus
@@ -57,6 +59,10 @@ export default class Socket {
 
     // get all user states
     socket.on('Users.States', this.onUserStates)
+
+    // on message notifications
+    socket.on('Notification.Delivered', this.onNotificationDelivered.bind(this))
+    socket.on('Room.Acknowledged', this.onNotificationAcknowledged.bind(this))
 
     // update user state
     Rx
@@ -234,6 +240,29 @@ export default class Socket {
       return false
 
     callback(null, new Date())
+  }
+
+  /**
+   * on notification delivers to a user
+   */
+  onNotificationDelivered(response) {
+    const { user, delivery_type, notification } = response
+    store.dispatch(updateMessageDeliveries(
+      user,
+      delivery_type,
+      notification
+    ))
+  }
+
+  /**
+   * on notification acknowledge by a user
+   */
+  onNotificationAcknowledged(ack) {
+    if (ack.user === this.user.id)
+      return false
+
+    const { room, user } = ack
+    store.dispatch(acknowledgeRoom(room, user))
   }
 
   /**
