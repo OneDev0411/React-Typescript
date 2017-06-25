@@ -85,11 +85,16 @@
   padding-top: 0;
 
   .messages-list {
+    $left-w: 10px;
     $hg: $messages-height - $height-of-create-message - $height-of-typing-area;
     min-height: $hg;
     max-height: $hg;
     overflow: auto;
     padding-bottom: 0;
+
+    .delivery-report {
+      float: right !important;
+    }
 
     .message-item {
       margin: 0 10px 0px 10px !important;
@@ -102,7 +107,16 @@
     }
 
     .message-subitem {
-      margin-left: 10px;
+      margin-left: $left-w;
+      .content {
+        .comment {
+          width: 170px;
+        }
+
+        .delivery-report {
+          margin-top: -2px;
+        }
+      }
     }
 
     .date-splitter {
