@@ -8,6 +8,7 @@ export default ({
   settings,
   number,
   user,
+  isActive,
   onMinimize,
   onMaximize,
   onClose,
@@ -18,7 +19,7 @@ export default ({
     return false
 
   // extract settings
-  const { minimize, isActive } = settings
+  const { minimize } = settings
 
   const width = 270 // pixels
   const defaultLeft = 90 // pixel
@@ -32,7 +33,10 @@ export default ({
   return (
     <div
       className={cn('chat-popup', { minimize })}
-      onClick={() => onChangeActive(room.id)}
+      onClick={e => {
+        if (e.target.id && e.target.id.includes('close-icon')) return false
+        onChangeActive(room.id)
+      }}
       style={{
         width: `${width}px`,
         left: `${left}px`
