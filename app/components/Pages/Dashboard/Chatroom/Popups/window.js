@@ -50,6 +50,7 @@ export default ({
         user={user}
         roomId={room.id}
         showToolbar={false}
+        isPopup={true}
       />
     </div>
   )
