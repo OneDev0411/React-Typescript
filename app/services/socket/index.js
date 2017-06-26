@@ -1,6 +1,7 @@
 import io from 'socket.io-client'
 import moment from 'moment'
 import Rx from 'rxjs/Rx'
+import NotificationService from '../notification'
 import store from '../../stores'
 import {
   getRooms,
@@ -8,10 +9,6 @@ import {
   createMessage,
   addMessageTyping,
   removeMessageTyping,
-  updateRoomNotifications,
-  resetRoomNotificationsCounter,
-  updateMessageDeliveries,
-  acknowledgeRoom,
   initialStates,
   updateState,
   changeSocketStatus
@@ -19,7 +16,7 @@ import {
 
 import config from '../../../config/public'
 
-export default class Socket {
+export default class Socket{
   static authenicated = false
 
   constructor(user) {
@@ -41,8 +38,13 @@ export default class Socket {
     if (this.user)
       Socket.authenicate(user.access_token)
 
-    // bind Notification
-    socket.on('Notification', this.onNotification.bind(this))
+    // create notification instance
+    const notification = new NotificationService(user)
+
+    // bind Notification events
+    socket.on('Notification', notification.onNotification.bind(notification))
+    socket.on('Notification.Delivered', notification.onNotificationDelivered.bind(notification))
+    socket.on('Room.Acknowledged', notification.onNotificationAcknowledged.bind(notification))
 
     // bind User.Typing
     socket.on('User.Typing', this.onUserTyping.bind(this))
@@ -59,10 +61,6 @@ export default class Socket {
 
     // get all user states
     socket.on('Users.States', this.onUserStates)
-
-    // on message notifications
-    socket.on('Notification.Delivered', this.onNotificationDelivered.bind(this))
-    socket.on('Room.Acknowledged', this.onNotificationAcknowledged.bind(this))
 
     // update user state
     Rx
@@ -105,28 +103,6 @@ export default class Socket {
   }
 
   /**
-   * clear room notifications
-   */
-  static clearNotifications(roomId) {
-    window.socket.emit('Room.Acknowledge', roomId)
-    store.dispatch(resetRoomNotificationsCounter(roomId))
-  }
-
-  /**
-   * create new notification
-   */
-  static createNotification(roomId, message) {
-    store.dispatch(updateRoomNotifications(roomId, message))
-
-    // play sound
-    const audio = document.getElementById('chatroom-new-message')
-
-    if (audio) {
-      audio.play()
-    }
-  }
-
-  /**
    * send new message
    */
   static sendMessage(roomId, message, author = {}) {
@@ -164,25 +140,11 @@ export default class Socket {
   }
 
   /**
-   * on receive new notification
-   */
-  onNotification(notification) {
-    // TODO:
-  }
-
-  /**
    * on send / receive new message
    */
   onNewMessage(room, message) {
-    const { messages, activeRoom } = store.getState().chatroom
+    const { messages } = store.getState().chatroom
     const list = messages[room.id] ? messages[room.id].list : null
-
-    if (activeRoom && room.id === activeRoom)
-      Socket.clearNotifications(room.id)
-
-    if (room.id !== activeRoom && message.author && message.author.id !== this.user.id) {
-      Socket.createNotification(room.id, message)
-    }
 
     // do not dispatch when message is created
     if (!list || list[message.id])
@@ -236,33 +198,8 @@ export default class Socket {
    * on ping
    */
   onPing(callback) {
-    if (!callback)
-      return false
-
+    if (!callback) return false
     callback(null, new Date())
-  }
-
-  /**
-   * on notification delivers to a user
-   */
-  onNotificationDelivered(response) {
-    const { user, delivery_type, notification } = response
-    store.dispatch(updateMessageDeliveries(
-      user,
-      delivery_type,
-      notification
-    ))
-  }
-
-  /**
-   * on notification acknowledge by a user
-   */
-  onNotificationAcknowledged(ack) {
-    if (ack.user === this.user.id)
-      return false
-
-    const { room, user } = ack
-    store.dispatch(acknowledgeRoom(room, user))
   }
 
   /**
