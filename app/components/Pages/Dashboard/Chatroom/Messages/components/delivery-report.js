@@ -138,8 +138,6 @@ const DeliveryReport = ({
   if (ackedUsers.length === 0 && deliveredUsers.length === 0)
     return false
 
-  console.log(ackedUsers, deliveredUsers)
-
   const MessageInfo = (
     <Popover
       id="popover-delivery-report"
