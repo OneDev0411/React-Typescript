@@ -13,7 +13,7 @@ import ComposeMessage from './compose-message'
 class Messages extends React.Component {
 
   componentDidMount() {
-    const { roomId, messages } = this.props
+    const { roomId, messages, isPopup } = this.props
 
     /**
      * create a reference for onNewMessage function
@@ -31,6 +31,10 @@ class Messages extends React.Component {
     // initialize chatroom with latest room
     if (roomId && !messages[roomId])
       this.loadMessages(roomId)
+
+    // scroll to end of messages while re-loading a pop
+    if (isPopup)
+      this.scrollEnd()
   }
 
   componentWillReceiveProps(nextProps) {
