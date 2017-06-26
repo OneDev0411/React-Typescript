@@ -80,8 +80,8 @@ function authenticate(nextState, replace) {
   const noAuthList = [
     '/dashboard/mls',
     '/dashboard/mls/:id',
-    '/listings',
-    '/listings/:id',
+    'listings',
+    'listings/:id',
     '/branch',
     '/widgets/map',
     '/widgets/search',

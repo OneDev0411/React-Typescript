@@ -1,16 +1,25 @@
 import React from 'react'
-import SvgFilters from '../../../../Partials/Svgs/Filters'
+import { connect } from 'react-redux'
+import toggleFilterArea from '../../../../../../../store_actions/listings/search/filters/toggle-filters-area'
 
-const FilterButton = ({
-  onClickHandler = () => {}
-}) => (
+const FilterButton = ({ isOpen, toggleFilterArea }) =>
   <button
-    onClick={onClickHandler}
-    className="c-mls-toolbar__search-box__filter-btn"
-  >
-    <SvgFilters color="#929292" />
-    <span>Filters</span>
+    onClick={toggleFilterArea}
+    className={`c-mls-toolbar__search-box__filter-btn ${isOpen
+      ? 'is-open'
+      : ''}`}>
+    Filters
+    <svg
+      fill="#9b9b9b"
+      height="24"
+      viewBox="0 0 24 24"
+      width="24"
+      xmlns="http://www.w3.org/2000/svg">
+      <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z" />
+      <path d="M0-.75h24v24H0z" fill="none" />
+    </svg>
   </button>
-)
 
-export default FilterButton
+export default connect(({ search }) => ({ isOpen: search.filters.isOpen }), {
+  toggleFilterArea
+})(FilterButton)

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import React, { Component } from 'react'
 
 import Map from './components/Map'
+import Filters from './components/Filters'
 import Loading from '../components/Loading'
 import SearchToolbar from './components/SearchToolbar'
 import ListingsPanel from '../components/ListingsPanels'
@@ -35,13 +36,20 @@ class Search extends Component {
   }
 
   render() {
-    const { isLoggedIn, listings, activePanel, isFetching } = this.props
-    console.log(this.props)
+    const {
+      isLoggedIn,
+      listings,
+      activePanel,
+      isFetching,
+      filterAreaIsOpen
+    } = this.props
+
     return (
       <div className="l-listings__main clearfix">
         <div className="l-listings__map">
           <Map {...this.props} />
           <SearchToolbar />
+          <Filters isOpen={filterAreaIsOpen} />
           {isFetching && <Loading text="MLS®" />}
         </div>
         <div className="l-listings__panel">
@@ -58,7 +66,7 @@ class Search extends Component {
 }
 
 const mapStateToProps = ({ data, search }) => {
-  const { listings, map, panels } = search
+  const { listings, map, panels, filters } = search
 
   return {
     map,
@@ -67,6 +75,7 @@ const mapStateToProps = ({ data, search }) => {
     isLoggedIn: data.user || false,
     activePanel: panels.activePanel,
     isFetching: listings.isFetching,
+    filterAreaIsOpen: filters.isOpen,
     listings: {
       data: selectListings(listings),
       info: listings.info
