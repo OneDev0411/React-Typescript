@@ -160,22 +160,39 @@ function resetRoomNotificationsCounter(state, action) {
 function acknowledgeRoom(state, action) {
   const messages = state.messages[action.roomId]
 
-  const list = {}
-  _.each(messages.list, message => {
+  const ackList = {}
 
+  const reversed = Object.keys(messages.list).reverse()
+  for (let id in reversed) {
+
+    // get message
+    const key = reversed[id]
+    const message = messages.list[key]
+
+    // get acked field
     let acked_by = message.acked_by
+
+    // break loop on first occurance
+    if (message.acked_by && message.acked_by.indexOf(action.userId) > -1) {
+      break
+    }
 
     if (!acked_by)
       acked_by = [action.userId]
-
-    if (message.acked_by && message.acked_by.indexOf(action.userId) === -1)
+    else
       acked_by.push(action.userId)
 
-    list[message.id] = {
+    ackList[message.id] = {
       ...message,
       ...{acked_by}
     }
-  })
+  }
+
+  // contact messages
+  const messagesList = {
+    ...messages.list,
+    ...ackList
+  }
 
   return {
     ...state,
@@ -183,7 +200,7 @@ function acknowledgeRoom(state, action) {
       ...state.messages,
       ...{[action.roomId]: {
         ...messages,
-        ...{list}
+        ...{list: messagesList}
       }}
     }}
   }
