@@ -3,8 +3,9 @@ import {
   updateRoomNotifications,
   resetRoomNotificationsCounter,
   updateMessageDeliveries,
-  acknowledgeRoom
+  acknowledgeRoom,
 } from '../../store_actions/chatroom'
+import Chatroom from '../../components/Pages/Dashboard/Chatroom/Util/chatroom'
 import config from '../../../config/public'
 
 export default class NotificationService {
@@ -37,7 +38,7 @@ export default class NotificationService {
   }
 
   /**
-   * on receive new notification
+   * on receive new notification [socket.on('Notification')]
    */
   onNotification(notification) {
     const { notification_type } = notification
@@ -45,7 +46,7 @@ export default class NotificationService {
 
     // notification's events
     const events = {
-      'UserSentMessage': this.onNewMessageEvent.bind(this)
+      'UserSentMessage': this.onReceiveMessageEvent.bind(this)
     }
 
     if (events[notification_type])
@@ -55,28 +56,26 @@ export default class NotificationService {
   /**
    * On new message event [UserSentMessage]
    */
-  onNewMessageEvent(chatroom, notification) {
+  onReceiveMessageEvent(chatroom, notification) {
     const { room, subjects, objects } = notification
     const { activeRoom } = chatroom
     const message = objects[0]
     const isWindowActive = this.isWindowActive()
+
+    // send browser notification if tab is not active
+    if (!isWindowActive) {
+      this.sendBrowserNotification({
+        title: `New message from ${message.author.display_name}`,
+        image: message.author.profile_image_url,
+        body: message.comment
+      }, () => Chatroom.openChat(room))
+    }
 
     if (isWindowActive && activeRoom && room === activeRoom)
       return NotificationService.clear(room)
 
     if (room !== activeRoom && message.author && message.author.id !== this.user.id) {
       store.dispatch(updateRoomNotifications(room, message))
-
-      // send browser notification if tab is not active
-      if (!isWindowActive) {
-        this.sendBrowserNotification({
-          title: `New message from ${message.author.display_name}`,
-          image: message.author.profile_image_url,
-          body: message.comment
-        })
-      }
-
-      // play ding sound
       NotificationService.playSound()
     }
   }
@@ -114,19 +113,19 @@ export default class NotificationService {
   /**
    * start sending a browser notification
    */
-  sendBrowserNotification(message) {
+  sendBrowserNotification(message, onShow) {
     if (!('Notification' in window))
       return false
 
     const Notification = window.Notification || window.mozNotification || window.webkitNotification
 
     if (Notification.permission === 'granted') {
-      this.sendBrowserMessage(message)
+      this.sendBrowserMessage(message, onShow)
     }
     else {
       Notification.requestPermission(permission => {
         if (permission === 'granted')
-          this.sendBrowserMessage(message)
+          this.sendBrowserMessage(message, onShow)
       })
     }
   }
@@ -135,7 +134,7 @@ export default class NotificationService {
   /**
    * send browser notification
    */
-  sendBrowserMessage(message) {
+  sendBrowserMessage(message, onShow) {
     const title = message.title || 'You have new Rechat notification'
     const icon = message.image || `${config.app.url}/static/images/dashboard/rebot@2x.png`
     const body = message.body || 'You have new message'
@@ -150,8 +149,7 @@ export default class NotificationService {
       window.focus()
     }
 
-    instance.onshow = () => {
-    }
+    instance.onshow = onShow || function() {}
   }
 
   isWindowActive() {
