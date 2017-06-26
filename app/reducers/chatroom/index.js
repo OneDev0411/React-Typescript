@@ -259,11 +259,6 @@ function createMessages(state, action) {
  */
 function updateMessageDeliveries(state, action) {
   const messages = state.messages[action.roomId]
-
-  // this happens when user reloaded chatroom and receives notification after a while
-  if (!messages)
-    return state
-
   const message = messages.list[action.messageId]
 
   let deliveries = message.deliveries
