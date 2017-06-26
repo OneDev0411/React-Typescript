@@ -4,6 +4,7 @@ import {
   resetRoomNotificationsCounter,
   updateMessageDeliveries,
   acknowledgeRoom,
+  addChatPopup
 } from '../../store_actions/chatroom'
 import Chatroom from '../../components/Pages/Dashboard/Chatroom/Util/chatroom'
 import config from '../../../config/public'
@@ -76,6 +77,8 @@ export default class NotificationService {
 
     if (room !== activeRoom && message.author && message.author.id !== this.user.id) {
       store.dispatch(updateRoomNotifications(room, message))
+      store.dispatch(addChatPopup(room))
+
       NotificationService.playSound()
     }
   }
@@ -113,19 +116,19 @@ export default class NotificationService {
   /**
    * start sending a browser notification
    */
-  sendBrowserNotification(message, onShow) {
+  sendBrowserNotification(message, onClick) {
     if (!('Notification' in window))
       return false
 
     const Notification = window.Notification || window.mozNotification || window.webkitNotification
 
     if (Notification.permission === 'granted') {
-      this.sendBrowserMessage(message, onShow)
+      this.sendBrowserMessage(message, onClick)
     }
     else {
       Notification.requestPermission(permission => {
         if (permission === 'granted')
-          this.sendBrowserMessage(message, onShow)
+          this.sendBrowserMessage(message, onClick)
       })
     }
   }
@@ -134,7 +137,7 @@ export default class NotificationService {
   /**
    * send browser notification
    */
-  sendBrowserMessage(message, onShow) {
+  sendBrowserMessage(message, onClick) {
     const title = message.title || 'You have new Rechat notification'
     const icon = message.image || `${config.app.url}/static/images/dashboard/rebot@2x.png`
     const body = message.body || 'You have new message'
@@ -147,9 +150,10 @@ export default class NotificationService {
 
     instance.onclick = () => {
       window.focus()
+      if (onClick) {
+        onClick()
+      }
     }
-
-    instance.onshow = onShow || function() {}
   }
 
   isWindowActive() {
