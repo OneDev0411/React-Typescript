@@ -54,8 +54,7 @@ export default ({
       </span>
 
       <span
-        id="close-icon"
-        className="icon times"
+        className="icon times close-icon"
         onClick={() => onClose(room.id)}
       >
         <CloseIcon />

@@ -34,7 +34,10 @@ export default ({
     <div
       className={cn('chat-popup', { minimize })}
       onClick={e => {
-        if (e.target.id && e.target.id.includes('close-icon')) return false
+        const className = e.target.getAttribute('class')
+        if (className && className.includes('close-icon'))
+          return false
+
         onChangeActive(room.id)
       }}
       style={{
