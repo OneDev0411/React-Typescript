@@ -29,7 +29,6 @@ const Chatbar = ({
       <Rooms
         user={user}
         onSelectRoom={roomId => {
-          NotificationService.clear(roomId)
           addChatPopup(roomId)
           toggleChatbar()
         }}
