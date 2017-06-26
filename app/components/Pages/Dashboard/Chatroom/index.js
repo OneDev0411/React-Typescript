@@ -49,7 +49,7 @@ class Chatroom extends React.Component {
     return nextProps.activeRoom !== undefined &&
       nextProps.location !== undefined &&
       activeRoom !== nextProps.activeRoom &&
-      location.key !== nextProps.location.key
+      (nextProps.location.query.redirect !== undefined || location.key !== nextProps.location.key)
   }
 
   changeRoom(id) {
