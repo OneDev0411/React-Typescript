@@ -332,8 +332,7 @@ function addPopup(state, action) {
     popups: {
       ...state.popups,
       ...{[action.roomId]: {
-        minimize: false,
-        isActive: _.size(state.popups) === 0
+        minimize: false
       }}
     }
   }
@@ -362,7 +361,6 @@ function maximizePopup(state, action) {
     ...state,
     ...{
       activeRoom: action.roomId,
-      activePopup: action.roomId,
       instanceMode: true
     },
     popups: {
@@ -379,8 +377,24 @@ function maximizePopup(state, action) {
  * remove chat popup
  */
 function removePopup(state, action) {
+  let activeRoom = state.activeRoom === action.roomId ? null : state.activeRoom
+
+  /**
+  * when user closes a popup:
+  * if the room was active and there are more that one popups then
+  * make first popup active
+  */
+  if (activeRoom === null && _.size(state.popups) >= 2) {
+    const rooms = Object
+      .keys(state.popups)
+      .filter(room => room !== action.roomId)
+
+    activeRoom = rooms[0]
+  }
+
   return {
     ...state,
+    ...{ activeRoom },
     ...{
       popups: _.omit(state.popups, (settings, roomId) => roomId === action.roomId)
     }
@@ -391,18 +405,11 @@ function removePopup(state, action) {
  * change active popup window
  */
 function changeActivePopup(state, action) {
-  const popups = {}
-
-  _.each(state.popups, (settings, roomId) => {
-    popups[roomId] = {
-      ...state.popups[roomId],
-      ...{isActive: roomId === action.roomId}
-    }
-  })
-
   return {
     ...state,
-    ...{ popups }
+    ...{
+      activeRoom: action.roomId
+    }
   }
 }
 
