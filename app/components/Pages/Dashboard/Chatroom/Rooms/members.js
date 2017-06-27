@@ -1,20 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import moment from 'moment'
 import { Row, Col } from 'react-bootstrap'
 import Compose from '../Shared/compose-wrapper'
 import UserAvatar from '../../../../Partials/UserAvatar'
 import MembersIcon from '../../Partials/Svgs/MembersIcon'
 import { addMembers } from '../../../../../store_actions/chatroom'
-
-function getLastSeen(user) {
-  const { last_seen_at } = user
-
-  if (!last_seen_at)
-    return 'Offline'
-
-  return moment.unix(last_seen_at).fromNow()
-}
+import LastSeen from './components/last-seen'
 
 const ManageMembers = ({
   addMembers,
@@ -59,7 +50,7 @@ const ManageMembers = ({
               </Col>
               <Col sm={8} md={8} className="vcenter" style={{ padding: 0 }}>
                 <div className="title">{ user.display_name }</div>
-                <div className="status">{ getLastSeen(user) }</div>
+                <LastSeen user={user} />
               </Col>
             </Row>
           )
