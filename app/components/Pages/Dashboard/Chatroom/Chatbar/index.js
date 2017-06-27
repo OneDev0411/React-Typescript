@@ -4,13 +4,13 @@ import { connect } from 'react-redux'
 import { slide as Menu } from 'react-burger-menu'
 import Rooms from '../Rooms'
 import NotificationService from '../../../../../services/notification'
-import { addChatPopup, toggleChatbar } from '../../../../../store_actions/chatroom'
+import { toggleChatbar } from '../../../../../store_actions/chatroom'
+import Chatroom from '../Util/chatroom'
 
 const Chatbar = ({
   user,
   showChatbar,
   /* mapped actions to dispatch */
-  addChatPopup,
   toggleChatbar
 }) => {
 
@@ -29,7 +29,9 @@ const Chatbar = ({
       <Rooms
         user={user}
         onSelectRoom={roomId => {
-          addChatPopup(roomId)
+          // open chat
+          Chatroom.openChat(roomId)
+          // close chatbar
           toggleChatbar()
         }}
       />
@@ -39,4 +41,4 @@ const Chatbar = ({
 
 export default connect(({ chatroom }) => ({
   showChatbar: chatroom.showChatbar
-}), ({ addChatPopup, toggleChatbar }))(Chatbar)
+}), ({ toggleChatbar }))(Chatbar)
