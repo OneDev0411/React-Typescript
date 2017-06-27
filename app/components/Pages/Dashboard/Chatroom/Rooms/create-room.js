@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Compose from '../Shared/compose-wrapper'
 import { createRoom } from '../../../../../store_actions/chatroom'
+import Chatroom from '../Util/chatroom'
 
 const Button = ({
   clickHandler
@@ -18,7 +19,10 @@ const CreateRoom = ({
     TriggerButton={Button}
     title="New Message"
     buttonTitle="Create"
-    onButtonClick={async recipients => await createRoom(recipients)}
+    onButtonClick={async recipients => {
+      const roomId = await createRoom(recipients)
+      Chatroom.openChat(roomId)
+    }}
   />
 )
 
