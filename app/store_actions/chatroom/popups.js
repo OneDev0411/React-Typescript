@@ -1,13 +1,10 @@
-import NotificationService from '../../services/notification'
 import types from '../../constants/chatroom'
 
-export function addChatPopup(roomId) {
-  // clear notifications of this room
-  NotificationService.clear(roomId)
-
+export function addChatPopup(roomId, activate = true) {
   return {
     type: types.ADD_POPUP,
-    roomId
+    roomId,
+    activate
   }
 }
 
