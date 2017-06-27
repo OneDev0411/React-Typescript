@@ -8,13 +8,8 @@ import NotificationService from '../../../../../services/notification'
  * on focus popup
  */
 const onFocus = (e, room, onChangeActive) => {
-  const className = e.target.getAttribute('class')
-
-  if (className && className.includes('icon')) {
-    return false
-  }
-
   onChangeActive(room.id)
+  resetNotifications(room)
 }
 
 /**
@@ -55,7 +50,6 @@ export default ({
   return (
     <div
       className={cn('chat-popup', { minimize })}
-      onClick={e => onFocus(e, room, onChangeActive)}
       style={{
         width: `${width}px`,
         left: `${left}px`
@@ -74,7 +68,7 @@ export default ({
         roomId={room.id}
         showToolbar={false}
         isPopup={true}
-        onClick={() => resetNotifications(room)}
+        onClick={e => onFocus(e, room, onChangeActive)}
       />
     </div>
   )
