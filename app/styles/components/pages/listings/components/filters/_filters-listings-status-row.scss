@@ -1,0 +1,131 @@
+// Accessibly hide content:
+// snook.ca/archives/html_and_css/hiding-content-for-accessibility
+@mixin visually-hidden($state: hidden) {
+    @if ($state==undo) {
+        position: static;
+        overflow: visible;
+        width: auto;
+        height: auto;
+        margin: auto;
+        clip: auto;
+    }
+    @else {
+        border: 0;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+}
+
+.c-filters-listings-status {
+    position: relative;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    background: #fff;
+}
+
+.c-filters-listings-status,
+.c-filters-listings-status__dropdown {
+    border-bottom: 1px solid #e9e9e9;
+}
+
+.c-filters-listings-status__color,
+.c-filters-listings-status__text-icon {
+    height: 12px;
+    width: 24px;
+    display: inline-block;
+    margin-right: 1rem;
+    margin-bottom: 2px;
+    border-radius: 3px;
+}
+
+.c-filters-listings-status__text-icon {
+    line-height: 1;
+}
+
+.c-filters-listings-status__title {
+    width: 20rem;
+    font-size: 1.5rem;
+    line-height: 1;
+    margin-right: 2rem;
+}
+
+.c-filters-listings-status__dropdown-btn {
+    position: relative;
+    width: 48px;
+    height: 24px;
+    padding: 0;
+    margin-right: 2rem;
+    font-size: 0;
+    border-width: 0;
+    border-right: 1px solid #e9e9e9;
+    background: transparent;
+    &:focus {
+        outline: none;
+    }
+}
+
+.c-filters-listings-status__dropdown-btn__icon {
+    position: absolute;
+    top: -12px;
+    right: 0;
+    transition: transform .2s;
+    transform: rotate(0);
+    &:hover {
+        fill: #333;
+    }
+    .is-active>& {
+        fill: #333;
+        transform: rotate(180deg);
+    }
+}
+
+.c-filters-listings-status__switch-toggle.c-filters-listings-status__switch-toggle {
+    margin-top: 4px;
+}
+
+.c-filters-listings-status__dropdown {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background: #f8f8f8;
+    transition: all .3s;
+    @include visually-hidden();
+    &.is-active {
+        @include visually-hidden(undo);
+        padding: 1rem 0;
+    }
+}
+
+.c-filters-listings-status__dropdown__item {
+    >input[type="checkbox"] {
+        @include visually-hidden();
+        &:checked+label {
+            padding-left: 2rem;
+            >svg {
+                display: inline-block;
+                vertical-align: middle;
+                margin-right: 1.4rem;
+            }
+        }
+    }
+    >label {
+        height: 30px;
+        display: block;
+        margin: 0;
+        padding: .5rem 2rem .5rem 5.4rem;
+        cursor: pointer;
+        font-size: 1.5rem;
+        font-weight: normal;
+        color: #333;
+        >svg {
+            display: none;
+        }
+    }
+}
