@@ -158,13 +158,16 @@ class Messages extends React.Component {
   }
 
   render() {
-    const { roomId, user, showToolbar } = this.props
+    const { roomId, user, showToolbar, onClick } = this.props
 
     // get messages of current room
     const messages = roomId ? this.props.messages[roomId] : null
 
     return (
-      <div className="messages">
+      <div
+        className="messages"
+        onClick={onClick}
+      >
 
         {
           !roomId &&
