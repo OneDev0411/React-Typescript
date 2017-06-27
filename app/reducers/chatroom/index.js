@@ -78,7 +78,7 @@ function getRooms(state, action) {
  * create new room
  */
 function createRoom(state, action) {
-  const newState = {
+  return {
     ...state,
     ...{showChatbar: false},
     ...{rooms: {
@@ -86,11 +86,6 @@ function createRoom(state, action) {
       ...{[action.room.id]: action.room}
     }}
   }
-
-  return addPopup(newState, {
-    ...action,
-    ...{roomId: action.room.id}
-  })
 }
 
 /**
@@ -321,9 +316,11 @@ function removeMessageTyping(state, action) {
  * add new chat popup
  */
 function addPopup(state, action) {
+  const activeRoom = action.activate ? action.roomId : state.activeRoom
+
   return {
     ...state,
-    ...{activeRoom: action.roomId},
+    ...{activeRoom},
     popups: {
       ...state.popups,
       ...{[action.roomId]: {
@@ -337,12 +334,21 @@ function addPopup(state, action) {
  * minimize chat popup
  */
 function minimizePopup(state, action) {
+  let activeRoom = state.activeRoom
+  const { minimize } = state.popups[action.roomId]
+
+  // minimizing a popup
+  if (minimize === false && action.roomId === activeRoom) {
+    activeRoom = null
+  }
+
   return {
     ...state,
+    ...{activeRoom},
     popups: {
       ...state.popups,
       ...{[action.roomId]: {
-        minimize: !state.popups[action.roomId].minimize
+        minimize: !minimize
       }}
     }
   }
