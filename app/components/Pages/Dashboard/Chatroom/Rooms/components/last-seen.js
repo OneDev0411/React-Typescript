@@ -23,7 +23,7 @@ class LastSeen extends React.Component {
     this.setState({ counter: counter + 1 })
   }
 
-  getLastSeen(states, user) {
+  getLastSeenAt(states, user) {
 
     console.log(user)
     const userStatus = states[user.id]
@@ -40,6 +40,16 @@ class LastSeen extends React.Component {
     return this.agoTime(user.last_seen_at)
   }
 
+  getIcon(user) {
+    const { client_type } = user.last_seen_by
+    const iconName = client_type === 'Mobile' ? 'mobile' : 'globe'
+
+    return <i
+      className={`fa fa-${iconName}`}
+      style={{ fontSize: '16px', marginRight: '5px' }}
+    />
+  }
+
   agoTime(time) {
     return moment.unix(time).fromNow()
   }
@@ -50,7 +60,8 @@ class LastSeen extends React.Component {
     return (
       <div>
         <div className="status">
-          { this.getLastSeen(states, user) }
+          { this.getIcon(user) }
+          { this.getLastSeenAt(states, user) }
         </div>
       </div>
     )
