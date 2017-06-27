@@ -68,11 +68,9 @@ class Chatroom extends React.Component {
     }
   }
 
-  getMessagesWidth() {
+  getLeft() {
     const { instanceMode } = this.props
-    const width = instanceMode ? roomsWidth : `calc(65px + ${roomsWidth})`
-
-    return `calc(100vw - ${width})`
+    return instanceMode ? roomsWidth : `calc(65px + ${roomsWidth})`
   }
 
   render() {
@@ -85,7 +83,10 @@ class Chatroom extends React.Component {
           <source src="/static/audio/ding.mp3" type="audio/mpeg" />
         </audio>
 
-        <div className="col-md-1 no-padding" style={{ width: roomsWidth }}>
+        <div
+          className="col-md-1 no-padding"
+          style={{ width: roomsWidth }}
+        >
           <Rooms
             user={user}
             onSelectRoom={id => this.changeRoom(id)}
@@ -94,8 +95,13 @@ class Chatroom extends React.Component {
         </div>
 
         <div
-          className="col-md-1 no-padding"
-          style={{ width: this.getMessagesWidth() }}
+          className="messages-container no-padding"
+          style={{
+            position: 'absolute',
+            width: `calc(100vw - ${this.getLeft()})`,
+            left: this.getLeft(),
+            right: 0
+          }}
         >
           <Messages
             user={user}
