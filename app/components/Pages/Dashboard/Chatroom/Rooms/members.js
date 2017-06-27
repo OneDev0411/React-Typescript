@@ -22,6 +22,9 @@ const ManageMembers = ({
   room
 }) => {
 
+  // can user add member to this room
+  const canAddMember = room.room_type !== 'Direct'
+
   const Button = ({
     clickHandler
   }) => (
@@ -69,6 +72,7 @@ const ManageMembers = ({
     <Compose
       TriggerButton={Button}
       InitialValues={RoomMembers}
+      disabled={canAddMember === false}
       dropDownBox={true}
       inline={true}
       title="Members"
