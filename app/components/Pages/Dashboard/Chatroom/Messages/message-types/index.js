@@ -12,7 +12,7 @@ export default ({
 }) => {
 
   const comment = <div
-    className="comment inline-block"
+    className="comment inline"
     dangerouslySetInnerHTML={{ __html: Message.getText(message) }}
   />
 
