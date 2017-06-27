@@ -18,6 +18,12 @@ export default class NotificationService {
    * clear room notifications
    */
   static clear(roomId) {
+    const { chatroom } = store.getState()
+    const { rooms } = chatroom
+
+    if (rooms[roomId] && ~~rooms[roomId].new_notifications === 0)
+      return false
+
     window.socket.emit('Room.Acknowledge', roomId)
     store.dispatch(resetRoomNotificationsCounter(roomId))
   }
@@ -61,6 +67,10 @@ export default class NotificationService {
     const { room, subjects, objects } = notification
     const { activeRoom } = chatroom
     const message = objects[0]
+
+    if (message.author && message.author.id === this.user.id)
+      return false
+
     const isWindowActive = this.isWindowActive()
 
     // send browser notification if tab is not active
@@ -69,7 +79,9 @@ export default class NotificationService {
         title: `New message from ${message.author.display_name}`,
         image: message.author.profile_image_url,
         body: message.comment
-      }, () => Chatroom.openChat(room))
+      }, () => {
+        Chatroom.openChat(room)
+      })
     }
 
     if (isWindowActive && activeRoom && room === activeRoom)
@@ -77,7 +89,9 @@ export default class NotificationService {
 
     if (room !== activeRoom && message.author && message.author.id !== this.user.id) {
       store.dispatch(updateRoomNotifications(room, message))
-      store.dispatch(addChatPopup(room))
+
+      // open chat popup but make it inactive
+      Chatroom.openChat(room, false)
 
       NotificationService.playSound()
     }
@@ -149,7 +163,13 @@ export default class NotificationService {
     })
 
     instance.onclick = () => {
+      // close notification
+      instance.close()
+
+      // focus tab
       window.focus()
+
+      // trigger callback
       if (onClick) {
         onClick()
       }
