@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
 import _ from 'underscore'
+import cn from 'classnames'
 import moment from 'moment'
 import { Popover, OverlayTrigger } from 'react-bootstrap'
 import UserAvatar from '../../../../../Partials/UserAvatar'
@@ -157,6 +158,7 @@ const DeliveryReport = ({
       />
     </Popover>
   )
+
   return (
     <OverlayTrigger
       trigger="click"
@@ -164,7 +166,9 @@ const DeliveryReport = ({
       placement="right"
       overlay={MessageInfo}
     >
-      <span className="delivery-report">
+      <span
+        className={cn('delivery-report', { blue: ackedUsers.length > 0 })}
+      >
         <i className="fa fa-check" />
         <i className="fa fa-check" />
       </span>
