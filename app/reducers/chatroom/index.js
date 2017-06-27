@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
 import types from '../../constants/chatroom'
 import _ from 'underscore'
+import moment from 'moment'
 
 const initialState = {
   status: 'connecting',
@@ -22,7 +23,7 @@ function updateRoom(state, roomId, attributes) {
 }
 
 /**
- * change room status
+ * change chatroom status
  */
 function changeStatus(state, action) {
   return {
@@ -437,7 +438,10 @@ function updateUserState(state, action) {
       ...state.states,
       ...{[action.userId]: {
         ...state.states[action.userId],
-        ...{state: action.state}
+        ...{
+          state: action.state,
+          last_seen_at: action.state === 'Offline' ? moment().format('X') : null
+        }
       }}
     }
   }
