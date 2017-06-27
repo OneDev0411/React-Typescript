@@ -2,6 +2,28 @@ import React from 'react'
 import cn from 'classnames'
 import Messages from '../Messages'
 import Toolbar from './toolbar'
+import NotificationService from '../../../../../services/notification'
+
+/**
+ * on focus popup
+ */
+const onFocus = (e, room, onChangeActive) => {
+  const className = e.target.getAttribute('class')
+
+  if (className && className.includes('icon')) {
+    return false
+  }
+
+  onChangeActive(room.id)
+}
+
+/**
+ * reset room's notifications
+ */
+const resetNotifications = (room) => {
+  if (~~room.new_notifications > 0)
+    NotificationService.clear(room.id)
+}
 
 export default ({
   room,
@@ -33,13 +55,7 @@ export default ({
   return (
     <div
       className={cn('chat-popup', { minimize })}
-      onClick={e => {
-        const className = e.target.getAttribute('class')
-        if (className && className.includes('close-icon'))
-          return false
-
-        onChangeActive(room.id)
-      }}
+      onClick={e => onFocus(e, room, onChangeActive)}
       style={{
         width: `${width}px`,
         left: `${left}px`
@@ -58,6 +74,7 @@ export default ({
         roomId={room.id}
         showToolbar={false}
         isPopup={true}
+        onClick={() => resetNotifications(room)}
       />
     </div>
   )
