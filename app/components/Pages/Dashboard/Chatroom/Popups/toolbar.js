@@ -21,7 +21,12 @@ export default ({
   onMaximize,
   onClose,
 }) => (
-  <div className={cn('bar', { isActive })}>
+  <div
+    className={cn('bar', {
+      blinking: room.new_notifications > 0,
+      isActive
+    })}
+  >
     <span
       className="room-title"
       onClick={() => onMinimize(room.id)}
@@ -41,13 +46,13 @@ export default ({
       />
 
       <span
-        className="icon minimize"
+        className="icon minimize minimize-icon"
         onClick={() => onMinimize(room.id)}>
         <MinimizeIcon />
       </span>
 
       <span
-        className="icon maximize"
+        className="icon maximize maximize-icon"
         onClick={() => onMaximize(room.id)}
       >
         <FullscreenIcon />
