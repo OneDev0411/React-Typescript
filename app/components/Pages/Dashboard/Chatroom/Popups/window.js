@@ -50,6 +50,7 @@ export default ({
   return (
     <div
       className={cn('chat-popup', { minimize })}
+      id={`CHAT_POPUP_${room.id}`}
       style={{
         width: `${width}px`,
         left: `${left}px`

@@ -36,6 +36,17 @@ export default class Chatroom {
   }
 
   /**
+   * set focus on specific popup
+   */
+  static focusOnPopupInput(room) {
+    const el = document.getElementById(`CHAT_POPUP_${room}`)
+
+    if (el) {
+      el.getElementsByTagName('input')[0].focus()
+    }
+  }
+
+  /**
    * open new chat
    */
   static openChat(room, activate = true) {
@@ -52,6 +63,7 @@ export default class Chatroom {
       // open popup if not minimized (if activate=true open it anyway)
       if (!Chatroom.isMinimized(room) || activate) {
         store.dispatch(addChatPopup(room, activate))
+        Chatroom.focusOnPopupInput(room)
       }
     }
   }
