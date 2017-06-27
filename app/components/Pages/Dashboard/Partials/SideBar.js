@@ -15,7 +15,6 @@ import { PhoneNumberUtil } from 'google-libphonenumber'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import ProfileImage from './ProfileImage'
-import SvgChat from './Svgs/Chat'
 import SvgMap from './Svgs/Map'
 import SvgStore from './Svgs/Store'
 import SvgPeople from './Svgs/People'
@@ -24,11 +23,13 @@ import SvgBriefCase from './Svgs/BriefCase'
 import SvgSupport from './Svgs/Support'
 import SvgNotifications from './Svgs/Notifications'
 import Brand from '../../../../controllers/Brand'
-import * as actionCreators from '../../../../store_actions/chatroom'
+
+// chatroom stuff
+import InstantTrigger from '../Chatroom/Shared/instant-trigger'
 
 const phoneUtil = PhoneNumberUtil.getInstance()
 
-class SideBar extends Component {
+export default class SideBar extends Component {
 
   componentDidUpdate() {
     // Refresh page on agent update
@@ -303,10 +304,6 @@ class SideBar extends Component {
   }
   goToStore() {
     window.location = '/dashboard/website'
-  }
-
-  onShowChatroomSidebar() {
-    this.props.toggleChatbar()
   }
 
   render() {
@@ -617,18 +614,7 @@ class SideBar extends Component {
 
         { branding_logo }
 
-        <div
-          style={{
-            textAlign: 'center',
-            cursor: 'pointer',
-            backgroundColor: '#2196f3',
-            height: '65px',
-            paddingTop: '18px'
-          }}
-          onClick={() => this.onShowChatroomSidebar()}
-        >
-          <SvgChat color='#fff'/>
-        </div>
+        <InstantTrigger />
 
         <Nav bsStyle="pills" stacked style={S('mt-10 pl-8')}>
           <OverlayTrigger placement="right" overlay={popover.map} delayShow={200} delayHide={0}>
@@ -753,5 +739,3 @@ class SideBar extends Component {
 //   location: React.PropTypes.object,
 //   history: React.PropTypes.object,
 // }
-
-export default connect(null, actionCreators)(SideBar)
