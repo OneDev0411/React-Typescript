@@ -2,7 +2,16 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 import PopupWindow from './window'
+import NotificationService from '../../../../../services/notification'
 import * as actionCreators from '../../../../../store_actions/chatroom/popups'
+
+const onToggleMinimize = (roomId, settings, minimizeChatPopup) => {
+  minimizeChatPopup(roomId)
+
+  if (settings.minimize === true) {
+    NotificationService.clear(roomId)
+  }
+}
 
 const ChatPopups = ({
   user,
@@ -33,7 +42,7 @@ const ChatPopups = ({
             settings={settings}
             isActive={activeRoom === roomId}
             room={rooms[roomId]}
-            onMinimize={roomId => minimizeChatPopup(roomId)}
+            onMinimize={roomId => onToggleMinimize(roomId, settings, minimizeChatPopup)}
             onMaximize={roomId => maximizeChatPopup(roomId)}
             onClose={roomId => closeChatPopup(roomId)}
             onChangeActive={roomId => changeActivePopup(roomId)}

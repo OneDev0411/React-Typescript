@@ -343,6 +343,10 @@ function minimizePopup(state, action) {
     activeRoom = null
   }
 
+  // make room active on exiting minimize
+  if (minimize === true)
+    activeRoom = action.roomId
+
   return {
     ...state,
     ...{activeRoom},
