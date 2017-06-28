@@ -23,6 +23,8 @@ export function minimizeChatPopup(roomId) {
 }
 
 export function maximizeChatPopup(roomId) {
+  document.body.style.overflow = 'hidden'
+
   return {
     type: types.MAXIMIZE_POPUP,
     roomId
