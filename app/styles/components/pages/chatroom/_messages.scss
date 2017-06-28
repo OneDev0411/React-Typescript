@@ -4,8 +4,9 @@
 $left-w: 50px;
 
 %messages {
-  $messages-height: 91vh;
+  $messages-height: 89vh;
   $height-of-create-message: 6vh;
+  $height-of-typing-area: 5vh;
 
   padding: 0;
   position: relative;
@@ -25,8 +26,7 @@ $left-w: 50px;
   }
 
   .messages-list {
-    $hg: $messages-height - $height-of-create-message;
-    // font-family: "SFUIText-Light";
+    $hg: $messages-height - $height-of-create-message - $height-of-typing-area;
     min-height: $hg;
     max-height: $hg;
     overflow: auto;
@@ -40,6 +40,18 @@ $left-w: 50px;
     }
     .date-splitter {
       @extend %date-splitter;
+    }
+  }
+
+  .message-typing {
+    height: $height-of-typing-area;
+    color: #fff;
+    padding-left: 15px;
+    font-size: 13px;
+    color: gray;
+    img {
+      width: 20px;
+      margin: 0 5px;
     }
   }
 

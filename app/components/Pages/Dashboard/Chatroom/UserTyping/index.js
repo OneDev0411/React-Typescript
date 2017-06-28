@@ -29,7 +29,7 @@ const MessageTyping = ({
   return (
     <div className="message-typing">
       <span className="message">{ message }</span>
-      <img src="/static/images/loading-states/three-dots.svg" />
+      <img src="/static/images/loading-states/three-dots-blue.svg" />
     </div>
   )
 }
