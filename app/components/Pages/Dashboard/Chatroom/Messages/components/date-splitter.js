@@ -8,7 +8,7 @@ export default ({
 }) => {
 
   const messageDate = messageUtil.getYMD(message)
-  const previousMessageDate = messageUtil.getYMD(message)
+  const previousMessageDate = messageUtil.getYMD(previousMessage)
 
   // dont show date-splitter when loading previous messages or when
   // messages are in the same day
