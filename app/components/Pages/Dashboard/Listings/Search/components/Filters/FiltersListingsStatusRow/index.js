@@ -1,61 +1,91 @@
 import React from 'react'
 import pure from 'recompose/pure'
+import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
+import { formValueSelector } from 'redux-form'
 import withHandlers from 'recompose/withHandlers'
 
 import Flag from './Flag'
-import Dropdown from './Dropdown'
+import Accordion from './Accordion'
 import SwitchToggle from './SwitchToggle'
-import DropdownTrigger from './DropdownTrigger'
+import AccordionTrigger from './AccordionTrigger'
+
+const selector = formValueSelector('filters')
 
 const FiltersListingsStatus = ({
   name,
-  title,
   icon,
+  title,
   color,
   active,
-  onClickDropdown,
-  dropdownIsActive,
-  dropdownItems = {}
+  children,
+  hasAccordion,
+  statusIsActive,
+  hasSwitchToggle,
+  accordionIsActive,
+  onChangeSwitchToggle = () => {},
+  onClickAccordionTriggger
 }) => {
-  const hasDropdown = Object.keys(dropdownItems).length || false
+  accordionIsActive = accordionIsActive && statusIsActive
+
+  const getTitleStyle = () => {
+    if (hasAccordion) {
+      if (hasSwitchToggle) {
+        return { width: '200px' }
+      }
+      return { width: '340px' }
+    }
+
+    return { width: '288px' }
+  }
   return (
     <div>
-      <div className="c-filters-listings-status">
+      <div
+        className={`c-filters-listings-status ${statusIsActive
+          ? 'is-active'
+          : ''}`}>
         <Flag icon={icon} color={color} />
         <span
           className="c-filters-listings-status__title"
-          style={{ width: hasDropdown ? '200px' : '288px' }}>
+          style={getTitleStyle()}>
           {title}
         </span>
-        {hasDropdown &&
-          <DropdownTrigger
-            onClick={onClickDropdown}
-            active={dropdownIsActive}
+        {hasAccordion &&
+          <AccordionTrigger
+            onClick={statusIsActive && onClickAccordionTriggger}
+            active={accordionIsActive}
           />}
-        <SwitchToggle
-          name={name}
-          checked={active === 'true' || false}
-          className="c-filters-listings-status__switch-toggle"
-        />
+        {hasSwitchToggle &&
+          <SwitchToggle
+            name={name}
+            onChangeHandler={onChangeSwitchToggle}
+            className="c-filters-listings-status__switch-toggle"
+          />}
       </div>
-      {hasDropdown &&
-        <Dropdown
-          name={name}
-          items={dropdownItems}
-          active={dropdownIsActive}
-        />}
+      {hasAccordion &&
+        <Accordion active={accordionIsActive}>
+          {children}
+        </Accordion>}
     </div>
   )
 }
 
 export default compose(
   pure,
-  withState('dropdownIsActive', 'toggleDropdown', false),
+  connect(({ search }, { name }) => {
+    const formState = search.filters
+    return {
+      statusIsActive: selector(formState, name)
+    }
+  }),
+  withState('accordionIsActive', 'triggerAccordion', true),
   withHandlers({
-    onClickDropdown: ({ dropdownIsActive, toggleDropdown }) => () => {
-      toggleDropdown(!dropdownIsActive)
+    onClickAccordionTriggger: ({
+      accordionIsActive,
+      triggerAccordion
+    }) => () => {
+      triggerAccordion(!accordionIsActive)
     }
   })
 )(FiltersListingsStatus)
