@@ -84,11 +84,16 @@ export default class NotificationService {
       })
     }
 
-    if (isWindowActive && activeRoom && room === activeRoom)
+    if (isWindowActive && activeRoom && room === activeRoom) {
       return NotificationService.clear(room)
+    }
+
+    if (!isWindowActive && activeRoom && room === activeRoom) {
+      this.updateRoomNotifications(room, message)
+    }
 
     if (room !== activeRoom && message.author && message.author.id !== this.user.id) {
-      store.dispatch(updateRoomNotifications(room, message))
+      this.updateRoomNotifications(room, message)
 
       // open chat popup but make it inactive
       Chatroom.openChat(room, false)
@@ -112,6 +117,13 @@ export default class NotificationService {
       delivery_type,
       notification
     ))
+  }
+
+  /**
+   * update notifications of specific room
+   */
+  updateRoomNotifications(room, message) {
+    store.dispatch(updateRoomNotifications(room, message))
   }
 
   /**
