@@ -32,9 +32,6 @@ export default ({
   onChangeActive
 }) => {
 
-  if (number > 4)
-    return false
-
   // extract settings
   const { minimize } = settings
 
@@ -42,6 +39,10 @@ export default ({
   const defaultLeft = 90 // pixel
 
   let left = (width * (number - 1)) + defaultLeft
+
+  // limit popups count based on screen width
+  if (left + defaultLeft + width > window.innerWidth)
+    return false
 
   // margin left
   if (number > 1)
