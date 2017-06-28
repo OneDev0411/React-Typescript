@@ -42,7 +42,7 @@ export default class Chatroom {
     const el = document.getElementById(`CHAT_POPUP_${room}`)
 
     if (el) {
-      el.getElementsByTagName('input')[0].focus()
+      el.getElementsByTagName('textarea')[0].focus()
     }
   }
 
