@@ -21,10 +21,11 @@ export default class NotificationService {
     const { chatroom } = store.getState()
     const { rooms } = chatroom
 
+    window.socket.emit('Room.Acknowledge', roomId)
+
     if (rooms[roomId] && ~~rooms[roomId].new_notifications === 0)
       return false
 
-    window.socket.emit('Room.Acknowledge', roomId)
     store.dispatch(resetRoomNotificationsCounter(roomId))
   }
 
