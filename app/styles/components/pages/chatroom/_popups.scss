@@ -102,6 +102,10 @@
 
     .message-item {
       margin: 10px 10px 0px 10px !important;
+      &:first-child {
+        margin-top: 0 !important;
+      }
+
       .content {
         .recommendation {
           @extend %popup-message-recommendation;
