@@ -54,12 +54,16 @@ $left-w: 50px;
     overflow: hidden;
     border: 2px solid #ccc;
     border-radius: 3px;
-    input {
+    textarea {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
       width: 100%;
-      height: $height-of-create-message - 0.2vh;
       border: none;
-      padding: 0 10px;
+      padding: 10px 10px;
       color: #000;
+      resize: none;
       &:focus {
         outline: none;
       }

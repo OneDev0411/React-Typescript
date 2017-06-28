@@ -1,5 +1,6 @@
 import React from 'react'
 import Rx from 'rxjs/Rx'
+import Textarea from 'react-textarea-autosize'
 import Socket from '../../../../../services/socket'
 
 export default class ComposeMessage extends React.Component {
@@ -86,12 +87,18 @@ export default class ComposeMessage extends React.Component {
 
   render() {
     return (
-      <div>
-        <input
+      <div
+        className="message-create"
+      >
+        <Textarea
           autoFocus
           dir="auto"
           placeholder="Write a message ..."
-          ref={ref => this.text_message = ref}
+          maxRows={2}
+          inputRef={ref => this.text_message = ref}
+          onKeyPress={e => {
+            if (e.key === 'Enter') e.preventDefault()
+          }}
         />
       </div>
     )

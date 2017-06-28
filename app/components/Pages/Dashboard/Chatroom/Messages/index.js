@@ -215,13 +215,11 @@ class Messages extends React.Component {
 
         {
           roomId &&
-          <div className="message-create">
-            <ComposeMessage
-              user={user}
-              roomId={roomId}
-              onComposeMessage={() => this.scrollEnd()}
-            />
-          </div>
+          <ComposeMessage
+            user={user}
+            roomId={roomId}
+            onComposeMessage={() => this.scrollEnd()}
+          />
         }
       </div>
     )
