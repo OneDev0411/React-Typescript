@@ -2,7 +2,7 @@ import React from 'react'
 import cn from 'classnames'
 import Messages from '../Messages'
 import Toolbar from './toolbar'
-import NotificationService from '../../../../../services/notification'
+import ChatNotification from '../Services/notification'
 
 /**
  * on focus popup
@@ -17,7 +17,7 @@ const onFocus = (e, room, onChangeActive) => {
  */
 const resetNotifications = (room) => {
   if (~~room.new_notifications > 0)
-    NotificationService.clear(room.id)
+    ChatNotification.clear(room.id)
 }
 
 export default ({

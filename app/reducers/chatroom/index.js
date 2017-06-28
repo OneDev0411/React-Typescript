@@ -4,7 +4,6 @@ import _ from 'underscore'
 import moment from 'moment'
 
 const initialState = {
-  status: 'connecting',
   showChatbar: false,
   instanceMode: false,
   popups: {},
@@ -19,16 +18,6 @@ function updateRoom(state, roomId, attributes) {
       ...state.rooms[roomId],
       ...attributes
     }}
-  }
-}
-
-/**
- * change chatroom status
- */
-function changeStatus(state, action) {
-  return {
-    ...state,
-    ...{ status: action.status }
   }
 }
 
@@ -453,7 +442,6 @@ function updateUserState(state, action) {
 
 export default (state = initialState, action) => {
   const handlers = {
-    [types.CHANGE_STATUS]: changeStatus,
     [types.CHANGE_ACTIVE_ROOM]: changeActiveRoom,
     [types.TOGGLE_CHATBAR]: toggleChatbar,
     [types.TOGGLE_INSTANCE_MODE]: toggleInstanceMode,

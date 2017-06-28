@@ -1,4 +1,4 @@
-import types from '../../constants/chatroom'
+import types from '../../constants/socket'
 
 /**
  * change socket status

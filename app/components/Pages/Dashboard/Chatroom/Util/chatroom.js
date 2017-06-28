@@ -1,7 +1,7 @@
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
 import store from '../../../../../stores'
-import NotificationService from '../../../../../services/notification'
+import ChatNotification from '../Services/notification'
 import {
   addChatPopup,
   changeActiveRoom
@@ -52,7 +52,7 @@ export default class Chatroom {
   static openChat(room, activate = true) {
 
     if (activate) {
-      NotificationService.clear(room)
+      ChatNotification.clear(room)
     }
 
     if (window && window.location.pathname.includes('/recents/')) {

@@ -5,7 +5,7 @@ import { browserHistory } from 'react-router'
 import _ from 'underscore'
 import Rooms from './Rooms'
 import Messages from './Messages'
-import NotificationService from '../../../../services/notification'
+import ChatNotification from './Services/notification'
 import { getRooms, changeActiveRoom } from '../../../../store_actions/chatroom'
 import store from '../../../../stores'
 
@@ -59,7 +59,7 @@ class Chatroom extends React.Component {
       changeActiveRoom(id)
 
       // ack rooms notifications
-      NotificationService.clear(id)
+      ChatNotification.clear(id)
     }
 
     // don't change url on instance mode

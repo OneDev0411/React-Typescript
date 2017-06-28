@@ -14,6 +14,6 @@ const SocketStatus = ({
   )
 }
 
-export default connect(({ chatroom }) => ({
-  status: chatroom.status
+export default connect(({ socket }) => ({
+  status: socket.status
 }))(SocketStatus)

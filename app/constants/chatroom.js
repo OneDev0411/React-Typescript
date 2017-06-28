@@ -1,7 +1,6 @@
 const ActionTypes = {}
 
 new Array(
-  'CHANGE_STATUS',
   'TOGGLE_CHATBAR',
   'TOGGLE_INSTANCE_MODE',
 

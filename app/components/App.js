@@ -4,7 +4,7 @@ import S from 'shorti'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 
 // services
-import Socket from '../services/socket'
+import ChatSocket from './Pages/Dashboard/Chatroom/Services/socket'
 
 // navs
 import SideBar from './Pages/Dashboard/Partials/SideBar'
@@ -29,7 +29,7 @@ class App extends Component {
 
   componentWillMount() {
     if (typeof window !== 'undefined') {
-      this.initializeWebSocket()
+      this.initializeChatSocket()
     }
   }
 
@@ -63,9 +63,9 @@ class App extends Component {
     }
   }
 
-  initializeWebSocket() {
+  initializeChatSocket() {
     const { user } = this.props.data
-    const socket = new Socket(user)
+    new ChatSocket(user)
   }
 
   initialRooms() {

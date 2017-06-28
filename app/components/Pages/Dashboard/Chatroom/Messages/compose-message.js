@@ -1,7 +1,8 @@
 import React from 'react'
 import Rx from 'rxjs/Rx'
 import Textarea from 'react-textarea-autosize'
-import Socket from '../../../../../services/socket'
+import Message from '../Util/message'
+import Socket from '../Services/socket'
 
 export default class ComposeMessage extends React.Component {
   constructor(props) {
@@ -78,7 +79,7 @@ export default class ComposeMessage extends React.Component {
       // recommendation: "edac34f8-2c28-11e7-af80-0242ac110003",
     }
 
-    Socket.sendMessage(roomId, message, user)
+    Message.send(roomId, message, user)
     .then(() => this.props.onComposeMessage())
 
     // clear message box
