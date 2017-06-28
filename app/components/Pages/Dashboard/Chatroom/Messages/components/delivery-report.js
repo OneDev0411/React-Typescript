@@ -142,7 +142,7 @@ const DeliveryReport = ({
   const MessageInfo = (
     <Popover
       id="popover-delivery-report"
-      title="Delivery Status"
+      title=""
       style={{ width: '400px' }}
     >
       <RenderList
