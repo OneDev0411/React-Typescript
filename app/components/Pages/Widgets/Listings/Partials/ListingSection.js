@@ -10,16 +10,20 @@ import AppStore from '../../../../../stores/AppStore'
 import Brand from '../../../../../controllers/Brand'
 
 export default class Section extends Component {
+
   constructor() {
     super()
     this.state = {
-      listings: []
+      listings: [],
+      isLoading: true
     }
   }
+
   componentWillMount() {
     AppStore.data.is_widget = true
     AppStore.emitChange()
   }
+
   componentDidMount() {
     const data = this.props.data
     const user = data.user
@@ -53,18 +57,21 @@ export default class Section extends Component {
       })
     }
   }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.data.widget[this.options.type]
       && nextProps.data.widget[this.options.type].listings
-  ) {
+    ) {
       this.setState({
-        listings: nextProps.data.widget[this.options.type].listings
+        listings: nextProps.data.widget[this.options.type].listings,
+        isLoading: nextProps.data.widget[nextProps.type].is_loading_listings
       })
     }
   }
+
   shouldComponentUpdate(nextProps, nextStates) {
     return (
-      (nextProps.data.widget && nextProps.data.widget[nextProps.type] && nextProps.data.widget[nextProps.type].is_loading_listings)
+      nextStates.isLoading !== this.state.isLoading
       || nextStates.listings.length !== this.state.listings.length
     )
   }
@@ -89,6 +96,7 @@ export default class Section extends Component {
       options.brand = brand
     return options
   }
+
   triggerNextPage() {
     const data = this.props.data
     const user = data.user
@@ -149,7 +157,9 @@ export default class Section extends Component {
             width: '100%'
           }}
         >
-          <h1 style={S(`font-50 color-263445 mb-0${this.props.data.is_mobile ? ' ml-10 mr-10' : ''}`)}>{this.props.title}</h1>
+          <h1
+            style={S(`font-50 color-263445 mb-0${this.props.data.is_mobile ? ' ml-10 mr-10' : ''}`)}
+          >{this.props.title}</h1>
           <span style={S('h-1 bg-e2e2e2 w-80 m-20 inline-block')} />
         </div>
         {this.state.listings && this.state.listings.map((listing, i) => (
@@ -172,7 +182,7 @@ export default class Section extends Component {
         }
         <div className="clearfix" />
         {
-          (!this.props.data.widget || !this.props.data.widget[this.props.type] || this.props.data.widget[this.props.type].is_loading_listings) &&
+          this.state.isLoading &&
           <div style={S('text-center')}>
             <Loading />
           </div>
