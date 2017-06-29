@@ -131,7 +131,11 @@ export default class ChatNotification extends NotificationService {
     const { user, delivery_type, notification } = response
     const { messages } = this.getChatroomStore()
 
-    if (!messages[notification.room])
+    // get room messages
+    const roomMessages = messages[notification.room]
+
+    const messageId = notification.object
+    if (!roomMessages || roomMessages.list[messageId])
       return false
 
     store.dispatch(updateMessageDeliveries(
