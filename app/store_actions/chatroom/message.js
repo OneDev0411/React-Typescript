@@ -3,21 +3,28 @@ import moment from 'moment'
 import types from '../../constants/chatroom'
 import Chatroom from '../../models/Chatroom'
 
-function _getMessages (id, messages, { total }) {
+function _getMessages (id, messages, { total }, append = null) {
   return {
     type: types.GET_MESSAGES,
     id,
     messages,
+    append,
     info: { total }
   }
 }
 
-export function getMessages (id, limit, max_value) {
+export function getMessages (id, limit, value, value_type) {
   return async (dispatch) => {
-    const response = await Chatroom.getMessages(id, limit, max_value)
+    const response = await Chatroom.getMessages(id, limit, value, value_type)
     const { info, data } = response.body
+
+    // append messages to the end of list if using since_value
+    const append = value_type === 'since'
+
+    // reverse messages because we are displaying newest messages first
     const messages = _.indexBy(data.reverse(), 'id')
-    dispatch(_getMessages(id, messages, info))
+
+    dispatch(_getMessages(id, messages, info, append))
   }
 }
 

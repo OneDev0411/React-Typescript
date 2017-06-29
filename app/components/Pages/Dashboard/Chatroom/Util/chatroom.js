@@ -3,12 +3,50 @@ import _ from 'underscore'
 import store from '../../../../../stores'
 import ChatNotification from '../Services/notification'
 import {
+  getRooms,
+  getMessages,
   addChatPopup,
   changeActiveRoom
 } from '../../../../../store_actions/chatroom'
 
 export default class Chatroom {
   constructor() {
+  }
+
+  /**
+   * synchronize chatroom with new data
+   */
+  static synchronize() {
+    const { chatroom } = store.getState()
+    const { popups, activeRoom } = chatroom
+
+    // sync rooms
+    store.dispatch(getRooms())
+
+    // check are there any messages to sync or not
+    if (_.size(chatroom.messages) === 0)
+      return false
+
+    // create a priority list for fetching
+    const priorityList = Object.keys(popups || {})
+    if (activeRoom) {
+      priorityList.unshift(activeRoom)
+    }
+
+    // sort messages list based on
+    const messages = _.sortBy(chatroom.messages,
+      (list, roomId) => priorityList.indexOf(roomId))
+
+    messages.forEach(async object => {
+      const { list } = object
+      const messagesKeys = Object.keys(list)
+      const lastMessageKey = messagesKeys[messagesKeys.length - 1]
+      const lastMessage = list[lastMessageKey]
+      const roomId = lastMessage.room
+      const created_at = lastMessage.created_at
+
+      await store.dispatch(getMessages(roomId, 1000000, created_at, 'since'))
+    })
   }
 
   /**

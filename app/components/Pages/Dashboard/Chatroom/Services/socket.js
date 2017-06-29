@@ -2,15 +2,15 @@ import Rx from 'rxjs/Rx'
 import Socket from '../../../../../services/socket'
 import ChatNotification from './notification'
 import Message from '../Util/message'
+import Chatroom from '../Util/chatroom'
 import store from '../../../../../stores'
 import {
-  getRooms,
-  getMessages,
   addMessageTyping,
   removeMessageTyping,
   initialStates,
   updateState
 } from '../../../../../store_actions/chatroom'
+import { changeSocketStatus } from '../../../../../store_actions/socket'
 
 export default class ChatSocket extends Socket {
 
@@ -40,7 +40,7 @@ export default class ChatSocket extends Socket {
     socket.on('Users.States', this.onUserStates)
 
     // on reconnect
-    socket.on('reconnect', this.onReconnect.bind(this))
+    socket.on('reconnect', this.onReconnected.bind(this))
 
     // update user state
     Rx
@@ -112,14 +112,14 @@ export default class ChatSocket extends Socket {
   /**
    * on reconnect
    */
-  onReconnect() {
-    const { activeRoom } = store.getState().chatroom
+  onReconnected() {
+    // change socket status
+    store.dispatch(changeSocketStatus('synchronizing'))
 
-    // get rooms again
-    store.dispatch(getRooms())
+    // synchronize chatroom
+    Chatroom.synchronize()
 
-    // get messages of active rooms
-    if (activeRoom)
-      store.dispatch(getMessages(activeRoom))
+    // change socket status again
+    store.dispatch(changeSocketStatus('connected'))
   }
 }

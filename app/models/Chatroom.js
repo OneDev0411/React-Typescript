@@ -79,11 +79,13 @@ Chatroom.addMembers = async function(roomId, recipients) {
   }
 }
 
-Chatroom.getMessages = async function(id, limit = 20, max_value = null) {
+Chatroom.getMessages = async function(id, limit = 20, value = null, value_type = 'max') {
   let endpoint = `/rooms/${id}/messages?limit=${limit}&sorting_value=Creation`
 
-  if (max_value)
-    endpoint += `&max_value=${max_value}`
+  if (value) {
+    let type = `${value_type}_value`
+    endpoint += `&${type}=${value}`
+  }
 
   try {
     return await new Fetch().get(endpoint)
