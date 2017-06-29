@@ -24,7 +24,7 @@ class LastSeen extends React.Component {
   }
 
   getLastSeenAt(states, user) {
-    const userStatus = states[user.id]
+    const userStatus = states[user.id] || {}
 
     if (userStatus.state === 'Online')
       return 'Online'
