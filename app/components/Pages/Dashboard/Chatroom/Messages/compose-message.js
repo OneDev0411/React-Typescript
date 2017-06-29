@@ -95,7 +95,7 @@ export default class ComposeMessage extends React.Component {
           autoFocus
           dir="auto"
           placeholder="Write a message ..."
-          maxRows={2}
+          maxRows={1}
           inputRef={ref => this.text_message = ref}
           onKeyPress={e => {
             if (e.key === 'Enter') e.preventDefault()
