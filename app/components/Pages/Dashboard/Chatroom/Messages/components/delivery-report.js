@@ -84,9 +84,9 @@ const RenderList = ({
                   style={ !info ? {lineHeight: `${avatarSize}px`} : {} }
                 >
                   {
-                    user.display_name.length <= 14 ?
+                    user.display_name.length <= 10 ?
                     user.display_name :
-                    user.display_name.substr(0, 14) + '...'
+                    user.display_name.substr(0, 10) + '...'
                   }
                 </div>
                 {
