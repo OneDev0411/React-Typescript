@@ -100,11 +100,12 @@
       float: right !important;
     }
 
+    .message-group {
+      margin-bottom: 10px;
+    }
+
     .message-item {
-      margin: 10px 10px 0px 10px !important;
-      &:first-child {
-        margin-top: 0 !important;
-      }
+      margin: 0px 10px 0px 10px !important;
 
       .content {
         .recommendation {
