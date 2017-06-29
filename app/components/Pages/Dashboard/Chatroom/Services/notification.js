@@ -117,7 +117,9 @@ export default class ChatNotification extends NotificationService {
       this.updateRoomNotifications(room, message)
 
       // open chat popup but make it inactive
-      Chatroom.openChat(room, false)
+      if (!chatroom.popups[room]) {
+        Chatroom.openChat(room, false)
+      }
 
       // play sound
       ChatNotification.playSound()
