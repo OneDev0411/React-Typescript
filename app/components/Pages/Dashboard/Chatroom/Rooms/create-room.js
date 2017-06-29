@@ -1,4 +1,5 @@
 import React from 'react'
+import { compose,  withState, pure } from 'recompose'
 import { connect } from 'react-redux'
 import Compose from '../Shared/compose-wrapper'
 import { createRoom } from '../../../../../store_actions/chatroom'
@@ -17,15 +18,32 @@ const Button = ({
   </div>
 )
 
+const enhance = compose(
+  pure,
+  withState('creating', 'onCreating', false),
+  connect(null, { createRoom })
+)
+
 const CreateRoom = ({
-  createRoom
+  createRoom,
+  /* internal states */
+  onCreating,
+  creating
 }) => (
   <Compose
     TriggerButton={Button}
     title="New Message"
-    buttonTitle="Create"
-    onButtonClick={async recps => await createNewRoom(recps, createRoom)}
+    working={creating === true}
+    buttonTitle={creating ? "Creating" : "Create"}
+    onButtonClick={async recps => {
+      // change state to creating
+      onCreating(true)
+      // create room
+      await createNewRoom(recps, createRoom)
+      // remove creating satet
+      onCreating(false)
+    }}
   />
 )
 
-export default connect(null, { createRoom })(CreateRoom)
+export default enhance(CreateRoom)
