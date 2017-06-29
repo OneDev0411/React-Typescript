@@ -63,7 +63,7 @@ const ManageMembers = ({
     <Compose
       TriggerButton={Button}
       InitialValues={RoomMembers}
-      disabled={canAddMember === false}
+      showOnly={canAddMember === false}
       dropDownBox={true}
       inline={true}
       title="Members"

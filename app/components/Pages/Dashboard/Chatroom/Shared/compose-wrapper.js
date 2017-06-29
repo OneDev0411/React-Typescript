@@ -27,7 +27,8 @@ const ComposeWrapper = ({
   room = null,
   inline = false,
   dropDownBox = false,
-  disabled = false,
+  showOnly = false,
+  working = false,
   /* internal props and states */
   showComposeModal,
   recipients,
@@ -52,7 +53,7 @@ const ComposeWrapper = ({
 
       <Modal.Body>
         {
-          !disabled &&
+          !showOnly &&
           <Compose
             dropDownBox={dropDownBox}
             onHide={() => onChangeComposeModal(false)}
@@ -64,11 +65,11 @@ const ComposeWrapper = ({
       </Modal.Body>
 
       {
-        !disabled &&
+        !showOnly &&
         <Modal.Footer>
           <Button
             bsStyle="primary"
-            disabled={!hasRecipients(recipients)}
+            disabled={working || !hasRecipients(recipients)}
             onClick={async () => {
               await onButtonClick(recipients)
               // reset states
