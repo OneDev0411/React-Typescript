@@ -18,7 +18,6 @@ const FiltersListingsStatus = ({
   icon,
   title,
   color,
-  active,
   children,
   hasAccordion,
   statusIsActive,
@@ -27,36 +26,29 @@ const FiltersListingsStatus = ({
   onChangeSwitchToggle = () => {},
   onClickAccordionTriggger
 }) => {
-  accordionIsActive = accordionIsActive && statusIsActive
+  accordionIsActive = hasSwitchToggle
+    ? accordionIsActive && statusIsActive
+    : accordionIsActive
 
-  const getTitleStyle = () => {
-    if (hasAccordion) {
-      if (hasSwitchToggle) {
-        return { width: '200px' }
-      }
-      return { width: '340px' }
-    }
+  const AccordionTriggerIsActive = hasSwitchToggle ? statusIsActive : true
 
-    return { width: '288px' }
-  }
   return (
     <div>
-      <div
-        className="c-filters-listings-status">
+      <div className="c-filters-listings-status">
         <div className="c-filters-listings-status__left-side">
           <Flag icon={icon} color={color} />
-          <span
-            className="c-filters-listings-status__title">
+          <span className="c-filters-listings-status__title">
             {title}
           </span>
         </div>
 
-        <div className={`c-filters-listings-status__right-side ${statusIsActive
-          ? 'is-active'
-          : ''}`}>
+        <div
+          className={`c-filters-listings-status__right-side ${statusIsActive
+            ? 'is-active'
+            : ''}`}>
           {hasAccordion &&
             <AccordionTrigger
-              onClick={statusIsActive && onClickAccordionTriggger}
+              onClick={AccordionTriggerIsActive && onClickAccordionTriggger}
               active={accordionIsActive}
             />}
 
@@ -89,7 +81,11 @@ export default compose(
       statusIsActive: selector(formState, name)
     }
   }),
-  withState('accordionIsActive', 'triggerAccordion', true),
+  withState(
+    'accordionIsActive',
+    'triggerAccordion',
+    ({ hasSwitchToggle }) => hasSwitchToggle
+  ),
   withHandlers({
     onClickAccordionTriggger: ({
       accordionIsActive,

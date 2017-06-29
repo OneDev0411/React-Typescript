@@ -6,7 +6,6 @@ const checkbox = field =>
   <input
     {...field.input}
     type={field.type}
-    className="checkbox"
     id={`${field.input.name}_checkbox`}
   />
 

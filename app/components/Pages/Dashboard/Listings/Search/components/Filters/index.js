@@ -27,21 +27,21 @@ const Filters = ({
           title="Sold"
           hasAccordion
           hasSwitchToggle
-          onChangeSwitchToggle={activeSold}
-          color="#d00023">
+          color="#d00023"
+          onChangeSwitchToggle={activeSold}>
           <SoldStatusChildrens name="soldListingsDate" />
         </FiltersListingsStatusRow>
 
         <FiltersListingsStatusRow
+          name="activeListings"
           title="Active"
           color="#32b86d"
           hasSwitchToggle
-          name="activeListings"
           onChangeSwitchToggle={activeActiveListings}
         />
 
         <FiltersListingsStatusRow
-          name="openHousesOnlyListings"
+          name="open_house"
           title="Open House Only"
           icon="OH"
           hasSwitchToggle
@@ -53,7 +53,6 @@ const Filters = ({
           name="otherListingStatuses"
           title="Other Listing Statuses"
           hasAccordion
-          hasSwitchToggle
           color="#f5a544">
           <OtherStatusesChildrens name="otherListingStatuses" />
         </FiltersListingsStatusRow>
@@ -77,17 +76,17 @@ export default compose(
       soldListingsDate: 'lastThreeMonth',
       activeListings: true,
       otherListingStatuses: {
-        canclled: true,
-        expired: true,
-        contingent: true,
-        kickOut: true,
-        optionContract: true,
-        pending: true,
-        tempOffMarket: true,
-        withdrawn: true,
-        withdrawnSublisting: true
+        canclled: false,
+        expired: false,
+        contingent: false,
+        kickOut: false,
+        optionContract: false,
+        pending: false,
+        tempOffMarket: false,
+        withdrawn: false,
+        withdrawnSublisting: false
       },
-      openHousesOnlyListings: false
+      open_house: false
     },
     getFormState: ({ search }) => search.filters.form
   })

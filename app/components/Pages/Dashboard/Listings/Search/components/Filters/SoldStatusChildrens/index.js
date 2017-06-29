@@ -15,7 +15,6 @@ const Radio = field =>
     type={field.type}
     className="c-radio__input"
   />
-// defaultChecked={field.input.value === field.input.name}
 
 const SoldStatusChildrens = ({ name }) =>
   <ul className="c-filters-sold-status-childrens">

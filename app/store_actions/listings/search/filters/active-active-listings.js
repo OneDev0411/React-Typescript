@@ -6,10 +6,10 @@ const selector = formValueSelector(formName)
 
 const activeActiveListings = (event, nextState) => (dispatch, getState) => {
   const formState = getState().search.filters
+  const openHouses = selector(formState, 'open_house')
   const soldListings = selector(formState, 'soldListings')
-  const openHousesOnlyListings = selector(formState, 'openHousesOnlyListings')
 
-  if ((!nextState, openHousesOnlyListings)) {
+  if ((!nextState, openHouses)) {
     event.preventDefault()
     return Promise.resolve()
   }
