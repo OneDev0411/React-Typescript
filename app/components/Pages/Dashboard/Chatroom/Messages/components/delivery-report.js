@@ -84,15 +84,20 @@ const RenderList = ({
                   style={ !info ? {lineHeight: `${avatarSize}px`} : {} }
                 >
                   {
-                    user.display_name.length <= 10 ?
+                    user.display_name.length <= 12 ?
                     user.display_name :
-                    user.display_name.substr(0, 10) + '...'
+                    user.display_name.substr(0, 12) + '...'
                   }
                 </div>
                 {
                   info &&
                   <div className="via">
-                    Delivered via { info.delivery_type }
+                    Delivered via&nbsp;
+                    {
+                      info
+                      .delivery_type
+                      .replace('airship', 'mobile notification')
+                    }
                   </div>
                 }
               </Col>
