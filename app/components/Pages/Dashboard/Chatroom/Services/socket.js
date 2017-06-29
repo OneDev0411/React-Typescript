@@ -121,8 +121,5 @@ export default class ChatSocket extends Socket {
     // get messages of active rooms
     if (activeRoom)
       store.dispatch(getMessages(activeRoom))
-
-    // emit connected message
-    store.dispatch(changeSocketStatus('connected'))
   }
 }
