@@ -16,24 +16,27 @@ const Filters = ({
   submitting,
   activeSold,
   handleSubmit,
+  onSubmitHandler,
   activeOpenHouses,
   activeActiveListings
 }) =>
   <div className={`c-filters ${isOpen ? 'c-filters--isOpen' : ''}`}>
     <div className="c-filters__inner-wrapper">
-      <form onSubmit={handleSubmit} className="c-filters__content">
+      <form
+        onSubmit={handleSubmit(onSubmitHandler)}
+        className="c-filters__content">
         <FiltersListingsStatusRow
-          name="soldListings"
+          name="listing_statuses.sold"
           title="Sold"
           hasAccordion
           hasSwitchToggle
           color="#d00023"
           onChangeSwitchToggle={activeSold}>
-          <SoldStatusChildrens name="soldListingsDate" />
+          <SoldStatusChildrens name="sold_listings_date" />
         </FiltersListingsStatusRow>
 
         <FiltersListingsStatusRow
-          name="activeListings"
+          name="listing_statuses.active"
           title="Active"
           color="#32b86d"
           hasSwitchToggle
@@ -50,15 +53,15 @@ const Filters = ({
         />
 
         <FiltersListingsStatusRow
-          name="otherListingStatuses"
+          name="listing_statuses"
           title="Other Listing Statuses"
           hasAccordion
           color="#f5a544">
-          <OtherStatusesChildrens name="otherListingStatuses" />
+          <OtherStatusesChildrens name="listing_statuses" />
         </FiltersListingsStatusRow>
       </form>
       <button
-        onClick={handleSubmit}
+        onClick={handleSubmit(onSubmitHandler)}
         className="c-filters__submit-btn"
         disabled={pristine || submitting}
         style={{ backgroundColor: `#${Brand.color('primary', '#2196f3')}` }}>
@@ -72,22 +75,27 @@ export default compose(
   reduxForm({
     form: 'filters',
     initialValues: {
-      soldListings: false,
-      soldListingsDate: 'lastThreeMonth',
-      activeListings: true,
-      otherListingStatuses: {
+      open_house: false,
+      listing_statuses: {
+        sold: false,
+        active: true,
         canclled: false,
         expired: false,
         contingent: false,
-        kickOut: false,
-        optionContract: false,
+        kick_out: false,
+        option_contract: false,
         pending: false,
-        tempOffMarket: false,
+        temp_off_market: false,
         withdrawn: false,
-        withdrawnSublisting: false
+        withdrawn_sublisting: false
       },
-      open_house: false
+      sold_listings_date: 'last_3_month'
     },
     getFormState: ({ search }) => search.filters.form
+  }),
+  withHandlers({
+    onSubmitHandler: () => values => {
+      console.log(values)
+    }
   })
 )(Filters)

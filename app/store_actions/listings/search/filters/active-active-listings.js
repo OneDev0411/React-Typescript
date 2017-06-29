@@ -7,7 +7,7 @@ const selector = formValueSelector(formName)
 const activeActiveListings = (event, nextState) => (dispatch, getState) => {
   const formState = getState().search.filters
   const openHouses = selector(formState, 'open_house')
-  const soldListings = selector(formState, 'soldListings')
+  const soldListings = selector(formState, 'listing_statuses.sold')
 
   if ((!nextState, openHouses)) {
     event.preventDefault()
@@ -23,7 +23,7 @@ const activeActiveListings = (event, nextState) => (dispatch, getState) => {
   })
 
   if (soldListings) {
-    dispatch(change(formName, 'soldListings', false))
+    dispatch(change(formName, 'listing_statuses.sold', false))
   }
 }
 

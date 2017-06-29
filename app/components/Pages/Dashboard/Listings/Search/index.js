@@ -49,12 +49,7 @@ class Search extends Component {
         <div className="l-listings__map">
           <Map {...this.props} />
           <SearchToolbar />
-          <Filters
-            isOpen={filterAreaIsOpen}
-            onSubmit={values => {
-              console.log(values)
-            }}
-          />
+          <Filters isOpen={filterAreaIsOpen} />
           {isFetching && <Loading text="MLS®" />}
         </div>
         <div className="l-listings__panel">

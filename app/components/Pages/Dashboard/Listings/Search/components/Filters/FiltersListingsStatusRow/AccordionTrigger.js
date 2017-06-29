@@ -10,9 +10,9 @@ const AccordionTrigger = ({ onClick, active }) =>
       : ''}`}>
     <svg
       fill="#e9e9e9"
-      height="48"
+      height="40.5"
       viewBox="0 0 24 24"
-      width="48"
+      width="40.5"
       xmlns="http://www.w3.org/2000/svg"
       className="c-filters-listings-status__accordion-trigger__icon">
       <path d="M7 10l5 5 5-5z" />

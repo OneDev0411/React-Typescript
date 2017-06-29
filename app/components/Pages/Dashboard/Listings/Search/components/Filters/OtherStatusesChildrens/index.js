@@ -2,24 +2,23 @@ import React from 'react'
 import pure from 'recompose/pure'
 import { Field } from 'redux-form'
 
-const checkboxs = {
-  canclled: 'Canclled',
-  expired: 'Expired',
-  contingent: 'Contingent',
-  kickOut: 'Kick Out',
-  optionContract: 'Option Contract',
-  pending: 'Pending',
-  tempOffMarket: 'Temp Off Market',
-  withdrawn: 'Withdrawn',
-  withdrawnSublisting: 'Withdrawn Sublisting'
-}
+const fields = [
+  'canclled',
+  'expired',
+  'contingent',
+  'kick_out',
+  'option_contract',
+  'pending',
+  'temp_off_market',
+  'withdrawn',
+  'withdrawn_sublisting'
+]
 
-const Checkbox = field =>
-  <input {...field.input} type={field.type} id={field.id} />
+const name = 'listing_statuses'
 
-const OtherStatusesChildrens = ({ name }) =>
+const OtherStatusesChildrens = () =>
   <ul className="c-filters-other-statuses-childrens">
-    {Object.keys(checkboxs).map(field => {
+    {fields.map(field => {
       const id = `${name}__${field}`
 
       return (
@@ -27,7 +26,7 @@ const OtherStatusesChildrens = ({ name }) =>
           <Field
             id={id}
             type="checkbox"
-            component={Checkbox}
+            component="input"
             name={`${name}.${field}`}
           />
           <label htmlFor={id}>
@@ -40,7 +39,10 @@ const OtherStatusesChildrens = ({ name }) =>
               <path d="M0 0h24v24H0z" fill="none" />
               <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
             </svg>
-            {checkboxs[field]}
+            {field
+              .split('_')
+              .map(f => f.charAt(0).toUpperCase() + f.substr(1))
+              .join(' ')}
           </label>
         </li>
       )

@@ -10,19 +10,19 @@ const activeOpenHouses = (event, nextState) => (dispatch, getState) => {
   }
 
   const formState = getState().search.filters
-  const soldListings = selector(formState, 'soldListings')
-  const activeListings = selector(formState, 'activeListings')
+  const soldListings = selector(formState, 'listing_statuses.sold')
+  const activeListings = selector(formState, 'listing_statuses.active')
 
   dispatch({
     type: ACTIVE_OPEN_HOUSES_STATUS
   })
 
   if (soldListings) {
-    dispatch(change(formName, 'soldListings', false))
+    dispatch(change(formName, 'listing_statuses.sold', false))
   }
 
   if (!activeListings) {
-    dispatch(change(formName, 'activeListings', true))
+    dispatch(change(formName, 'listing_statuses.active', true))
   }
 }
 
