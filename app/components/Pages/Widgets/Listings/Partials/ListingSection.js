@@ -3,23 +3,18 @@ import ListingCard from './ListingCard'
 import S from 'shorti'
 import controller from '../../../Dashboard/controller'
 
-import { ButtonGroup, Button } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 import ListingDispatcher from '../../../../../dispatcher/ListingDispatcher'
 import Loading from '../../../../Partials/Loading'
 import AppStore from '../../../../../stores/AppStore'
 import Brand from '../../../../../controllers/Brand'
 
 export default class Section extends Component {
-  // console.log('props.title: ', props.title)
   constructor() {
     super()
     this.state = {
       listings: []
     }
-  }
-  handleListingClick(listing) {
-    const url = `/dashboard/mls/${listing.id}`
-    window.open(url, '_blank')
   }
   componentWillMount() {
     AppStore.data.is_widget = true
@@ -58,6 +53,27 @@ export default class Section extends Component {
       })
     }
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.data.widget[this.options.type]
+      && nextProps.data.widget[this.options.type].listings
+  ) {
+      this.setState({
+        listings: nextProps.data.widget[this.options.type].listings
+      })
+    }
+  }
+  shouldComponentUpdate(nextProps, nextStates) {
+    return (
+      (nextProps.data.widget && nextProps.data.widget[nextProps.type] && nextProps.data.widget[nextProps.type].is_loading_listings)
+      || nextStates.listings.length !== this.state.listings.length
+    )
+  }
+
+  handleListingClick(listing) {
+    const url = `/dashboard/mls/${listing.id}`
+    window.open(url, '_blank')
+  }
+
   initOptions(brokerage, agent, type, brand) {
     const options = {
       limit: '75',
@@ -72,39 +88,6 @@ export default class Section extends Component {
     if (brand)
       options.brand = brand
     return options
-  }
-  handleButtonClick(type) {
-    const data = this.props.data
-    const user = data.user
-    const options = data.widget.options
-    AppStore.data.widget.is_loading_listings = true
-    if (type === 'sold') {
-      options.listing_statuses = ['Sold', 'Leased']
-      AppStore.data.widget.is_showing_sold = true
-    } else {
-      options.listing_statuses = ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract', 'Pending']
-      delete AppStore.data.widget.is_showing_sold
-    }
-    delete AppStore.data.signup_tooltip
-    AppStore.data.widget.options = options
-    // Get brokerage listings
-    delete options.list_offices
-    const brokerage = data.location.query.brokerage
-    if (brokerage) {
-      options.list_offices = [brokerage]
-    }
-    // Get agent listings
-    delete options.agents
-    const agent = data.location.query.agent
-    if (agent) {
-      options.agents = [agent]
-    }
-    AppStore.emitChange()
-    ListingDispatcher.dispatch({
-      action: 'get-valerts-widget',
-      user,
-      options
-    })
   }
   triggerNextPage() {
     const data = this.props.data
@@ -144,10 +127,6 @@ export default class Section extends Component {
   }
 
   render() {
-    // let listings
-    // if (this.props.data.widget) {
-    //   listings = this.props.data.widget.listings
-    // }
     let showLoadMore = false
     console.log(this.props.type, showLoadMore)
 
@@ -162,7 +141,14 @@ export default class Section extends Component {
     }
     return (
       <div className="futurastd listing-section">
-        <div style={S('text-center')}>
+        <div
+          style={{
+            textAlign: 'center',
+            backgroundColor: '#fbfbfb',
+            display: 'table',
+            width: '100%'
+          }}
+        >
           <h1 style={S(`font-50 color-263445 mb-0${this.props.data.is_mobile ? ' ml-10 mr-10' : ''}`)}>{this.props.title}</h1>
           <span style={S('h-1 bg-e2e2e2 w-80 m-20 inline-block')} />
         </div>
@@ -198,8 +184,9 @@ export default class Section extends Component {
               style={{
                 backgroundColor: `#${Brand.color('primary')}`,
                 borderColor: `#${Brand.color('primary')}`,
-                paddingLeft: '2em',
-                paddingRight: '2em'
+                paddingLeft: '3em',
+                paddingRight: '3em',
+                fontSize: '1.2em'
               }}
               bsStyle="primary"
             >
