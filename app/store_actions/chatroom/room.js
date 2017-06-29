@@ -41,8 +41,7 @@ export function getRooms(user) {
 
 export function createRoom(recipients) {
   return async (dispatch) => {
-    const response = await Chatroom.createRoom(recipients)
-    const room = response.body.data
+    const room = await Chatroom.createRoom(recipients)
     dispatch(_addNewRoom(room))
     return room.id
   }

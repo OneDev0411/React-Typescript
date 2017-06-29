@@ -28,16 +28,22 @@ Chatroom.getRooms = async function(user = {}) {
 * add new room
 */
 Chatroom.createRoom = async function(recipients) {
-
   const members = [].concat(recipients.users, recipients.emails, recipients.phone_numbers)
   const room_type = members.length > 1 ? 'Group' : 'Direct'
 
+  // search room is created before or not
+  const room = await Chatroom.searchRoom(recipients)
+
+  if (room)
+    return room
+
   try {
-    return await new Fetch()
+    const response = await new Fetch()
       .post('/rooms')
       .send({ room_type })
       .send(recipients)
 
+    return response.body.data
   } catch (e) {
     return null
   }
@@ -80,9 +86,28 @@ Chatroom.getMessages = async function(id, limit = 20, max_value = null) {
     endpoint += `&max_value=${max_value}`
 
   try {
-    const response = await new Fetch().get(endpoint)
-    return await response
+    return await new Fetch().get(endpoint)
   } catch (e) {}
+}
+
+Chatroom.searchRoom = async function(recipients) {
+  let qs = []
+  _.each(recipients, (recp, key) => {
+    _.each(recp, item => {
+      qs.push(`${key}[]=${item}`)
+    })
+  })
+
+  // create query string
+  const query = qs.join('&')
+
+  try {
+    const response = await new Fetch().get(`/rooms/search?${query}`)
+    const rooms = response.body.data
+    return rooms.length > 0 ? rooms[0] : null
+  } catch (e) {
+    return null
+  }
 }
 
 export default Chatroom

@@ -4,6 +4,11 @@ import Compose from '../Shared/compose-wrapper'
 import { createRoom } from '../../../../../store_actions/chatroom'
 import Chatroom from '../Util/chatroom'
 
+async function createNewRoom(recipients, createRoom) {
+  const roomId = await createRoom(recipients)
+  Chatroom.openChat(roomId)
+}
+
 const Button = ({
   clickHandler
 }) => (
@@ -19,10 +24,7 @@ const CreateRoom = ({
     TriggerButton={Button}
     title="New Message"
     buttonTitle="Create"
-    onButtonClick={async recipients => {
-      const roomId = await createRoom(recipients)
-      Chatroom.openChat(roomId)
-    }}
+    onButtonClick={async recps => await createNewRoom(recps, createRoom)}
   />
 )
 
