@@ -42,27 +42,37 @@ const FiltersListingsStatus = ({
   return (
     <div>
       <div
-        className={`c-filters-listings-status ${statusIsActive
+        className="c-filters-listings-status">
+        <div className="c-filters-listings-status__left-side">
+          <Flag icon={icon} color={color} />
+          <span
+            className="c-filters-listings-status__title">
+            {title}
+          </span>
+        </div>
+
+        <div className={`c-filters-listings-status__right-side ${statusIsActive
           ? 'is-active'
           : ''}`}>
-        <Flag icon={icon} color={color} />
-        <span
-          className="c-filters-listings-status__title"
-          style={getTitleStyle()}>
-          {title}
-        </span>
-        {hasAccordion &&
-          <AccordionTrigger
-            onClick={statusIsActive && onClickAccordionTriggger}
-            active={accordionIsActive}
-          />}
-        {hasSwitchToggle &&
-          <SwitchToggle
-            name={name}
-            onChangeHandler={onChangeSwitchToggle}
-            className="c-filters-listings-status__switch-toggle"
-          />}
+          {hasAccordion &&
+            <AccordionTrigger
+              onClick={statusIsActive && onClickAccordionTriggger}
+              active={accordionIsActive}
+            />}
+
+          {hasAccordion &&
+            hasSwitchToggle &&
+            <span className="c-filters-listings-status__separator" />}
+
+          {hasSwitchToggle &&
+            <SwitchToggle
+              name={name}
+              onChangeHandler={onChangeSwitchToggle}
+              className="c-filters-listings-status__switch-toggle"
+            />}
+        </div>
       </div>
+
       {hasAccordion &&
         <Accordion active={accordionIsActive}>
           {children}
