@@ -227,7 +227,11 @@ export default class ListingCard extends Component {
     }
 
     return (
-      <div key={`listing-viewer-${listing.id}-${helpers.randomString(10)}`} style={listing_card_style}>
+      <div
+        key={`listing-viewer-${listing.id}-${helpers.randomString(10)}`}
+        style={listing_card_style}
+        className={this.props.className}
+      >
         <FavoriteHeart
           listing={listing}
         />
