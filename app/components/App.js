@@ -68,11 +68,14 @@ class App extends Component {
     new ChatSocket(user)
   }
 
-  initialRooms() {
+  async initialRooms() {
     const { dispatch, data, rooms } = this.props
 
     if (data.user && !rooms) {
-      dispatch(getRooms())
+      const rooms = await dispatch(getRooms())
+
+      // hack for share alert modal -> prepare rooms for it
+      AppStore.data.rooms = response.body.data
     }
   }
 

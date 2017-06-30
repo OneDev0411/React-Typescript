@@ -35,12 +35,10 @@ function _leaveRoom(roomId) {
 export function getRooms(user) {
   return async dispatch => {
     const response = await Chatroom.getRooms(user)
-
-    // hack for share alert modal -> prepare rooms for it
-    AppStore.data.rooms = response.body.data
-
     const rooms = _.indexBy(response.body.data, 'id')
+
     dispatch(_getRooms(rooms))
+    return rooms
   }
 }
 
