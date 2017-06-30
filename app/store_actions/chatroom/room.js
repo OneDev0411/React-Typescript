@@ -1,22 +1,23 @@
 import _ from 'underscore'
 import Chatroom from '../../models/Chatroom'
 import types from '../../constants/chatroom'
+import AppStore from '../../stores/AppStore'
 
-function _getRooms (rooms) {
+function _getRooms(rooms) {
   return {
     type: types.GET_ROOMS,
     rooms
   }
 }
 
-function _addNewRoom (room) {
+function _addNewRoom(room) {
   return {
     type: types.CREATE_ROOM,
     room
   }
 }
 
-function _addMembers (roomId, room) {
+function _addMembers(roomId, room) {
   return {
     type: types.ADD_MEMBERS,
     roomId,
@@ -32,15 +33,19 @@ function _leaveRoom(roomId) {
 }
 
 export function getRooms(user) {
-  return async (dispatch) => {
+  return async dispatch => {
     const response = await Chatroom.getRooms(user)
+
+    // hack for share alert modal -> prepare rooms for it
+    AppStore.data.rooms = response.body.data
+
     const rooms = _.indexBy(response.body.data, 'id')
     dispatch(_getRooms(rooms))
   }
 }
 
 export function createRoom(recipients) {
-  return async (dispatch) => {
+  return async dispatch => {
     const room = await Chatroom.createRoom(recipients)
     dispatch(_addNewRoom(room))
     return room.id
@@ -48,14 +53,14 @@ export function createRoom(recipients) {
 }
 
 export function addMembers(roomId, recipients) {
-  return async (dispatch) => {
+  return async dispatch => {
     const response = await Chatroom.addMembers(roomId, recipients)
     dispatch(_addMembers(roomId, response.body.data))
   }
 }
 
 export function leaveRoom(userId, room) {
-  return async (dispatch) => {
+  return async dispatch => {
     await Chatroom.leaveRoom(userId, room)
     dispatch(_leaveRoom(room.id))
   }
