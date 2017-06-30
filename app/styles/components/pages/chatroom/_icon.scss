@@ -1,15 +1,14 @@
 .chatroom-icon {
   text-align: center;
   cursor: pointer;
-  background-color: #4E5C6C;
-  height: 55px;
-  padding-top: 16px;
-
+  background-color: #4e5c6c;
+  height: 65px;
+  padding-top: 22px;
   .count {
     $size: 17px;
     position: absolute;
     right: 15px;
-    top: 12px;
+    top: 18px;
     background-color: red;
     min-width: $size;
     min-height: $size;
