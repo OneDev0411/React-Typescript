@@ -94,18 +94,14 @@
     min-height: $hg;
     max-height: $hg;
     overflow: auto;
-    padding-bottom: 0;
+    padding: 8px 0 0 0;
 
     .delivery-report {
       float: right !important;
     }
 
-    .message-group {
-      margin-bottom: 10px;
-    }
-
     .message-item {
-      margin: 0px 10px 0px 10px !important;
+      margin: 10px 10px 0px 10px !important;
 
       .content {
         .recommendation {
