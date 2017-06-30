@@ -46,12 +46,12 @@ export default (user, mls_number, message, users, emails, phone_numbers, notific
           recommendation: res.data.id
         })
       }
-      User.getRooms(params, (error, response) => {
-        const updated_rooms = response.data
-        AppStore.data.rooms = updated_rooms
-        getAllMessages(user, updated_rooms)
-        AppStore.emitChange()
-      })
+      // User.getRooms(params, (error, response) => {
+      //   const updated_rooms = response.data
+      //   AppStore.data.rooms = updated_rooms
+      //   getAllMessages(user, updated_rooms)
+      //   AppStore.emitChange()
+      // })
     })
     return
   }
