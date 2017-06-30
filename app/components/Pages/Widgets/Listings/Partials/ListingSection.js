@@ -100,8 +100,6 @@ export default class Section extends Component {
   triggerNextPage() {
     const data = this.props.data
     const user = data.user
-    // const options = data.widget.options
-    // this.options.limit = +this.options.limit + 10
     AppStore.data.widget.options = this.options
     AppStore.data.widget[this.props.type].is_loading_listings = true
     AppStore.emitChange()
@@ -154,11 +152,13 @@ export default class Section extends Component {
             textAlign: 'center',
             backgroundColor: '#fbfbfb',
             display: 'table',
-            width: '100%'
+            width: '100%',
+            padding: '40px',
+            marginBottom: '40px'
           }}
         >
           <h1
-            style={S(`font-50 color-263445 mb-0${this.props.data.is_mobile ? ' ml-10 mr-10' : ''}`)}
+            style={S(`font-17 color-263445 mb-0${this.props.data.is_mobile ? ' ml-10 mr-10' : ''}`)}
           >{this.props.title}</h1>
           <span style={S('h-1 bg-e2e2e2 w-80 m-20 inline-block')} />
         </div>
