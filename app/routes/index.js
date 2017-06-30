@@ -121,14 +121,6 @@ export default (
       <Route path="/account/settings" component={Settings} />
       <Route path="/account/notifications" component={Notifications} />
 
-      <Route path="listings" component={ListingsLayout}>
-        <IndexRoute component={ListingsSearch} />
-        <Route path="alerts" component={ListingsAlerts} />
-        <Route path="favorites" component={ListingsFavorites} />
-      </Route>
-
-      <Route path="listings/:id" component={ListingSinglePage} />
-
       <Route path="/dashboard/website" component={Website} />
       <Route path="/dashboard/cards" component={Cards} />
       <Route path="/dashboard/forms" component={Forms} />
