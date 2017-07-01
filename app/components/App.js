@@ -75,7 +75,7 @@ class App extends Component {
       const rooms = await dispatch(getRooms())
 
       // hack for share alert modal -> prepare rooms for it
-      AppStore.data.rooms = response.body.data
+      AppStore.data.rooms = rooms
     }
   }
 
