@@ -35,10 +35,10 @@ function _leaveRoom(roomId) {
 export function getRooms(user) {
   return async dispatch => {
     const response = await Chatroom.getRooms(user)
-    const rooms = _.indexBy(response.body.data, 'id')
+    const { data } = response.body
 
-    dispatch(_getRooms(rooms))
-    return rooms
+    dispatch(_getRooms(_.indexBy(data, 'id')))
+    return data
   }
 }
 
