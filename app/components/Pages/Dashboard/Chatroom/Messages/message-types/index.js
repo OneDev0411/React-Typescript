@@ -2,6 +2,7 @@ import React from 'react'
 import TextMessage from './text'
 import RecommendationMessage from './recommendation'
 import AlertMessage from './alert'
+import AttachementMessage from './attachment'
 import Message from '../../Util/message'
 
 export default ({
@@ -17,6 +18,13 @@ export default ({
   />
 
   let message_object = comment
+
+  if (message.attachments.length > 0) {
+    return <AttachementMessage
+      message={message}
+      attachments={message.attachments}
+    />
+  }
 
   // check message is alert
   const alert = Message.isAlert(message)

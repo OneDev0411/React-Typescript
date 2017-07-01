@@ -23,6 +23,7 @@ export default ({
   const isLeadMessage = previousMessage === null ||
     message.recommendation ||
     isAlert ||
+    message.attachments.length > 0 ||
     messageUtil.getAuthor(previousMessage).id !== author.id ||
     messageUtil.getYMD(previousMessage) !== messageUtil.getYMD(message)
 
