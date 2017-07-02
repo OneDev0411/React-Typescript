@@ -50,6 +50,13 @@ export function createRoom(recipients) {
   }
 }
 
+export function createExistingRoom(roomId) {
+  return async dispatch => {
+    const room = await Chatroom.getRoomById(roomId)
+    dispatch(_addNewRoom(room))
+  }
+}
+
 export function addMembers(roomId, recipients) {
   return async dispatch => {
     const response = await Chatroom.addMembers(roomId, recipients)

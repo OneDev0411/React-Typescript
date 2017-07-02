@@ -2,6 +2,7 @@ import store from '../../../../../stores'
 import Chatroom from '../Util/chatroom'
 import NotificationService from '../../../../../services/notification'
 import {
+  createExistingRoom,
   updateRoomNotifications,
   resetRoomNotificationsCounter,
   updateMessageDeliveries,
@@ -21,7 +22,9 @@ export default class ChatNotification extends NotificationService {
     socket.on('Notification.Delivered', this.onNotificationDelivered.bind(this))
     socket.on('Room.Acknowledged', this.onNotificationAcknowledged.bind(this))
 
+    // subscribe to notification events
     this.subscribe('UserSentMessage', this.onReceiveMessage.bind(this))
+    this.subscribe('UserInvitedRoom', this.onInviteRoom.bind(this))
 
     // bind window focus
     if (typeof window !== 'undefined') {
@@ -35,6 +38,13 @@ export default class ChatNotification extends NotificationService {
   getChatroomStore() {
     const { chatroom } = store.getState()
     return chatroom
+  }
+
+  /**
+   * check chatroom is in router mode or not
+   */
+  isRouterMode() {
+    return window.location.pathname.includes('/recents/')
   }
 
   /**
@@ -82,12 +92,12 @@ export default class ChatNotification extends NotificationService {
    * On new message event [UserSentMessage]
    */
   onReceiveMessage(chatroom, notification) {
-    const { room, subjects, objects } = notification
+    const { room: roomId, subjects, objects } = notification
     const { activeRoom } = chatroom
     const message = objects[0]
 
     // set value
-    this._lastRoomGotNotification = room
+    this._lastRoomGotNotification = roomId
 
     if (message.author && message.author.id === this.user.id)
       return false
@@ -101,24 +111,24 @@ export default class ChatNotification extends NotificationService {
         image: message.author.profile_image_url,
         body: message.comment
       }, () => {
-        Chatroom.openChat(room)
+        Chatroom.openChat(roomId)
       })
     }
 
-    if (isWindowActive && activeRoom && room === activeRoom) {
-      return ChatNotification.clear(room)
+    if (isWindowActive && activeRoom && roomId === activeRoom) {
+      return ChatNotification.clear(roomId)
     }
 
-    if (!isWindowActive && activeRoom && room === activeRoom) {
-      this.updateRoomNotifications(room, message)
+    if (!isWindowActive && activeRoom && roomId === activeRoom) {
+      this.updateRoomNotifications(roomId, message)
     }
 
-    if (room !== activeRoom && message.author && message.author.id !== this.user.id) {
-      this.updateRoomNotifications(room, message)
+    if (roomId !== activeRoom && message.author && message.author.id !== this.user.id) {
+      this.updateRoomNotifications(roomId, message)
 
       // open chat popup but make it inactive
-      if (!chatroom.popups[room]) {
-        Chatroom.openChat(room, false)
+      if (!this.isRouterMode() && !chatroom.popups[roomId]) {
+        Chatroom.openChat(roomId, false)
       }
 
       // play sound
@@ -126,6 +136,17 @@ export default class ChatNotification extends NotificationService {
     }
   }
 
+  /**
+   * On user invited to a new room
+   */
+  onInviteRoom(chatroom, notification) {
+    const { room: roomId, subjects, objects, auxiliary_object: user } = notification
+
+    if (user.id !== this.user.id)
+      return false
+
+    store.dispatch(createExistingRoom(roomId))
+  }
   /**
    * on notification delivers to a user
    */
@@ -163,7 +184,12 @@ export default class ChatNotification extends NotificationService {
   /**
    * update notifications of specific room
    */
-  updateRoomNotifications(room, message) {
-    store.dispatch(updateRoomNotifications(room, message))
+  updateRoomNotifications(roomId, message) {
+    const { rooms } = this.getChatroomStore()
+
+    if (!rooms[roomId])
+      return false
+
+    store.dispatch(updateRoomNotifications(roomId, message))
   }
 }

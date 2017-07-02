@@ -25,6 +25,18 @@ Chatroom.getRooms = async function(user = {}) {
 }
 
 /**
+* get room by id
+*/
+Chatroom.getRoomById = async function(roomId) {
+  try {
+    const response = await new Fetch()
+      .get(`/rooms/${roomId}?associations=user.last_seen_by`)
+
+    return response.body.data
+  } catch (e) {}
+}
+
+/**
 * add new room
 */
 Chatroom.createRoom = async function(recipients) {
