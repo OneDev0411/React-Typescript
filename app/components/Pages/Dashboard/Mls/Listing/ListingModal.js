@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import AppStore from '../../../../../stores/AppStore'
 import ListingDispatcher from '../../../../../dispatcher/ListingDispatcher'
 import ContactModel from '../../../../../models/Contact'
 import controller from '../../controller'
@@ -8,14 +10,23 @@ import ListingViewer from '../../Partials/ListingViewer'
 import ListingViewerMobile from '../../Partials/ListingViewerMobile'
 import { Modal } from 'react-bootstrap'
 
-export default class ListingModal extends Component {
+class ListingModal extends Component {
+  componentWillReceiveProps(nextProps) {
+    const { show, listing, data } = nextProps
+    const { current_listing } = data
+
+    if (show === true && !current_listing) {
+      AppStore.data.current_listing = listing
+      AppStore.emitChange()
+    }
+  }
+
   render() {
     const { data, show, onHide, listing } = this.props
-    const user = data.user
+    const { user, current_listing } = data
 
-    if (!listing) {
-      return <div />
-    }
+    if (!show || !listing || !current_listing)
+      return false
 
     let modalBody = (
       <ListingViewer
@@ -49,7 +60,11 @@ export default class ListingModal extends Component {
 
     return (
       <div className="c-listing-modal">
-        <Modal show={show} onHide={onHide}>
+        <Modal
+          dialogClassName="c-listing-modal--box"
+          show={show}
+          onHide={onHide}
+        >
           <Modal.Body>
             {modalBody}
           </Modal.Body>
@@ -58,9 +73,12 @@ export default class ListingModal extends Component {
     )
   }
 }
+
 ListingModal.propTypes = {
   data: React.PropTypes.object,
   id: React.PropTypes.string,
   show: React.PropTypes.bool,
   onHide: React.PropTypes.func
 }
+
+export default connect(({ data }) => ({ data }))(ListingModal)
