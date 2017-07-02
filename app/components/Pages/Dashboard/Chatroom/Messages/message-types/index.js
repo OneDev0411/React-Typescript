@@ -19,7 +19,9 @@ export default ({
 
   let message_object = comment
 
-  if (message.attachments.length > 0) {
+  // check message has attachment
+  const hasAttachments = message.attachments && message.attachments.length > 0
+  if (hasAttachments) {
     return <AttachementMessage
       message={message}
       attachments={message.attachments}

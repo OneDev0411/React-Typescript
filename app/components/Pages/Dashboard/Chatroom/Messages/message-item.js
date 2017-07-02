@@ -15,6 +15,9 @@ export default ({
   // check message is alert
   const isAlert = messageUtil.isAlert(alert)
 
+  // check message has attachment
+  const hasAttachments = message.attachments && message.attachments.length > 0
+
   /*
    * check message is a lead message or not
    * lead message has avatar and date
@@ -23,7 +26,7 @@ export default ({
   const isLeadMessage = previousMessage === null ||
     message.recommendation ||
     isAlert ||
-    message.attachments.length > 0 ||
+    hasAttachments ||
     messageUtil.getAuthor(previousMessage).id !== author.id ||
     messageUtil.getYMD(previousMessage) !== messageUtil.getYMD(message)
 
