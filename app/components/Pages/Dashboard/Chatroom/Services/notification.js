@@ -1,8 +1,10 @@
+import _ from 'underscore'
 import store from '../../../../../stores'
 import Chatroom from '../Util/chatroom'
 import NotificationService from '../../../../../services/notification'
 import {
   createExistingRoom,
+  addMembersToRoom,
   updateRoomNotifications,
   resetRoomNotificationsCounter,
   updateMessageDeliveries,
@@ -140,13 +142,21 @@ export default class ChatNotification extends NotificationService {
    * On user invited to a new room
    */
   onInviteRoom(chatroom, notification) {
+    const { rooms } = chatroom
     const { room: roomId, subjects, objects, auxiliary_object: user } = notification
 
-    if (user.id !== this.user.id)
-      return false
+    // if current user is invited to a new room then create that room
+    if (user.id === this.user.id) {
+      return store.dispatch(createExistingRoom(roomId))
+    }
 
-    store.dispatch(createExistingRoom(roomId))
+    // when new user invites to a existant room
+    const isExists = _.find(rooms[roomId].users, u => u.id === user.id)
+    if (!isExists) {
+      store.dispatch(addMembersToRoom(roomId, [user]))
+    }
   }
+
   /**
    * on notification delivers to a user
    */
@@ -158,7 +168,7 @@ export default class ChatNotification extends NotificationService {
     const roomMessages = messages[notification.room]
 
     const messageId = notification.object
-    if (!roomMessages || roomMessages.list[messageId])
+    if (!roomMessages || !roomMessages.list[messageId])
       return false
 
     store.dispatch(updateMessageDeliveries(

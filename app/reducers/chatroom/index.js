@@ -82,11 +82,19 @@ function createRoom(state, action) {
  * add new member(s) to specific room
  */
 function addRoomMembers(state, action) {
+  const room = state.rooms[action.roomId]
+
+  // merge current users and new users and then remove dulicates
+  const users = _.uniq(room.users.concat(action.users), user => user.id)
+
   return {
     ...state,
     ...{rooms: {
       ...state.rooms,
-      ...{[action.roomId]: action.room}
+      ...{[action.roomId]: {
+        ...room,
+        ...{users}
+      }}
     }}
   }
 }

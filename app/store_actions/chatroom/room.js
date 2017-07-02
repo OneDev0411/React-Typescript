@@ -17,18 +17,18 @@ function _addNewRoom(room) {
   }
 }
 
-function _addMembers(roomId, room) {
-  return {
-    type: types.ADD_MEMBERS,
-    roomId,
-    room
-  }
-}
-
 function _leaveRoom(roomId) {
   return {
     type: types.LEAVE_ROOM,
     roomId
+  }
+}
+
+export function addMembersToRoom(roomId, users) {
+  return {
+    type: types.ADD_MEMBERS,
+    roomId,
+    users
   }
 }
 
@@ -57,10 +57,11 @@ export function createExistingRoom(roomId) {
   }
 }
 
-export function addMembers(roomId, recipients) {
+export function addRecipients(roomId, recipients) {
   return async dispatch => {
     const response = await Chatroom.addMembers(roomId, recipients)
-    dispatch(_addMembers(roomId, response.body.data))
+    const room = response.body.data
+    dispatch(addMembersToRoom(roomId, room.users))
   }
 }
 
