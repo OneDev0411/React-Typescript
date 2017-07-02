@@ -1134,7 +1134,6 @@ export default class Mls extends Component {
             <div style={alert_header_bg} />
 
             <div style={S('relative ml-15 mt-10 color-fff z-1 font-15')}>
-              { data.listing_map.listings_info.proposed_title }
               <div
                 style={S('pull-right pointer')}
                 onClick={controller.alert_map.showAlertViewer.bind(this)}

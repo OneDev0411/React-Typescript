@@ -39,7 +39,6 @@ export default class AlertList extends Component {
   getBadge(new_recommendations) {
     // Badge
     let new_badge
-    console.log(new_recommendations)
     if (new_recommendations && new_recommendations > 0) {
       new_badge = (
         <div style={ S('absolute w-100p h-100p t-0 l-0') }>
