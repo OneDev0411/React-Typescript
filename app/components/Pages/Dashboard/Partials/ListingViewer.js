@@ -646,7 +646,7 @@ export default class ListingViewer extends Component {
       const login_btn_color = Brand.color('primary', '006aff')
 
       right_area = (
-        <div style={nav_bar_style}>
+        <div className="listing-viewer--navbar" style={nav_bar_style}>
           <div style={S('pull-right relative r-110 t-14n')}>
             <FavoriteHeart
               listing={listing}
@@ -736,7 +736,7 @@ export default class ListingViewer extends Component {
       )
     }
     return (
-      <div style={viewer_wrap_style}>
+      <div className="listing-viewer" style={viewer_wrap_style}>
         { claim_account_message }
         { join_area }
         { left_area }
