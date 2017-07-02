@@ -84,9 +84,9 @@ const RenderList = ({
                   style={ !info ? {lineHeight: `${avatarSize}px`} : {} }
                 >
                   {
-                    user.display_name.length <= 12 ?
+                    user.display_name.length <= 20 ?
                     user.display_name :
-                    user.display_name.substr(0, 12) + '...'
+                    user.display_name.substr(0, 20) + '...'
                   }
                 </div>
                 {
@@ -148,7 +148,7 @@ const DeliveryReport = ({
     <Popover
       id="popover-delivery-report"
       title=""
-      style={{ width: '400px' }}
+      style={{ maxWidth: '340px' }}
     >
       <RenderList
         list={ackedUsers}
