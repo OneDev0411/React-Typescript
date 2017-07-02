@@ -50,11 +50,8 @@ class Compose extends React.Component {
       this.createListView(rooms)
     }
 
-    const users = await this.searchInUsers(this.criteria)
-    this.createListView(users, rooms)
-
     const contacts = await this.searchInContacts(this.criteria)
-    this.createListView(users, rooms, contacts)
+    this.createListView(rooms, contacts)
 
     // hide loader
     this.setState({ searching: false })
@@ -149,14 +146,6 @@ class Compose extends React.Component {
     })
 
     return contacts
-  }
-
-  /**
-   * search in users
-   */
-  async searchInUsers(q) {
-    const users = await this.askServer(`/users/search?q[]=${q}`)
-    return users.map(user => this.createListItem('user', user))
   }
 
   /**
