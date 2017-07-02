@@ -15,7 +15,7 @@ class ListingModal extends Component {
     const { show, listing, data } = nextProps
     const { current_listing } = data
 
-    if (show === true && !current_listing) {
+    if (!current_listing) {
       AppStore.data.current_listing = listing
       AppStore.emitChange()
     }
