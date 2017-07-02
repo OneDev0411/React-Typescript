@@ -121,6 +121,11 @@ export default class Message {
    * get message date
    */
   static getDate(message, format = '') {
-    return moment.unix(message.created_at).format(format)
+    return moment.unix(message.created_at).calendar(null, {
+      sameDay: '[Today]',
+      lastDay: '[Yesterday]',
+      lastWeek: format,
+      sameElse: format
+    })
   }
 }
