@@ -25,8 +25,9 @@ class ListingModal extends Component {
     const { data, show, onHide, listing } = this.props
     const { user, current_listing } = data
 
-    if (!show || !listing || !current_listing)
+    if (!show || !listing || !current_listing) {
       return false
+    }
 
     let modalBody = (
       <ListingViewer
