@@ -4,11 +4,11 @@ import { Row, Col } from 'react-bootstrap'
 import Compose from '../Shared/compose-wrapper'
 import UserAvatar from '../../../../Partials/UserAvatar'
 import MembersIcon from '../../Partials/Svgs/MembersIcon'
-import { addMembers } from '../../../../../store_actions/chatroom'
+import { addRecipients } from '../../../../../store_actions/chatroom'
 import LastSeen from './components/last-seen'
 
 const ManageMembers = ({
-  addMembers,
+  addRecipients,
   iconSize = 16,
   room
 }) => {
@@ -68,9 +68,9 @@ const ManageMembers = ({
       inline={true}
       title="Members"
       buttonTitle="Add Members"
-      onButtonClick={async recipients => await addMembers(room.id, recipients)}
+      onButtonClick={async recipients => await addRecipients(room.id, recipients)}
     />
   )
 }
 
-export default connect(null, { addMembers })(ManageMembers)
+export default connect(null, { addRecipients })(ManageMembers)
