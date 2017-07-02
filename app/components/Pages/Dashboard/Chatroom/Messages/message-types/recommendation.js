@@ -1,30 +1,46 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import moment from 'moment'
+import { compose,  withState, withHandlers, lifecycle, pure } from 'recompose'
 import util from '../../../../../../utils/listing'
+import ListingModal from '../../../Mls/Listing/ListingModal'
 
-// get listing price
-const getPrice = (listing, user = {}) => {
-  let price = 0
 
-  if (listing.close_price && user.user_type === 'Agent')
-    price = listing.close_price
+const enhance = compose(
+  pure,
+  withState('showListingModal', 'toggleModal', false),
+  withHandlers({
+    getPrice: props => () => {
+      const { user, recommendation } = props
+      const { listing } = recommendation
 
-  price = listing.price
+      let price = 0
 
-  return price
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-}
+      if (listing.close_price && user.user_type === 'Agent')
+        price = listing.close_price
+
+      price = listing.price
+
+      return price
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    }
+  })
+)
 
 /**
  * renders a recommendation(== listing) message
  */
-export default ({
+const Listing = ({
   user,
   author,
   message,
   comment,
-  recommendation
+  recommendation,
+  /* internal props and states */
+  getPrice,
+  toggleModal,
+  showListingModal,
 }) => {
   // get listing
   const { listing } = recommendation
@@ -39,7 +55,16 @@ export default ({
         { comment }
       </div>
 
-      <div className="listing">
+      <ListingModal
+        listing={listing}
+        show={showListingModal}
+        onHide={() => toggleModal(false)}
+      />
+
+      <div
+        className="listing"
+        onClick={() => toggleModal(true)}
+      >
         {
           listing.cover_image_url &&
           <img src={listing.cover_image_url} />
@@ -57,7 +82,7 @@ export default ({
           </div>
 
           <div className="price">
-            ${ getPrice(listing, user) }
+            ${ getPrice() }
           </div>
 
           <ul className="details">
@@ -71,3 +96,5 @@ export default ({
     </div>
   )
 }
+
+export default enhance(Listing)
