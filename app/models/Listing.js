@@ -2,7 +2,7 @@
 import es6Promise from 'es6-promise'
 es6Promise.polyfill()
 import 'isomorphic-fetch'
-
+import Fetch from '../services/fetch'
 import config from '../../config/public'
 
 const API_HOST = config.api_url
@@ -29,6 +29,16 @@ const asyncRequest = async request => {
 }
 
 export default {
+  fetch: async (id, access_token) => {
+    const endpoint = `/listings/${id}`
+    const fetchListing = new Fetch().get(endpoint)
+
+    // required on ssr
+    if (access_token)
+      fetchListing.set({ Authorization: `Bearer ${access_token}` })
+
+    return await fetchListing
+  },
   get: (params, callback) => {
     const endpoint = `/api/listings/${params.id}?access_token=${params.access_token}`
     fetch(endpoint)
