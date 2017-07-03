@@ -9,6 +9,7 @@ import {
   resetRoomNotificationsCounter,
   updateMessageDeliveries,
   acknowledgeRoom,
+  updateRoomTime,
   addChatPopup
 } from '../../../../../store_actions/chatroom'
 
@@ -25,8 +26,10 @@ export default class ChatNotification extends NotificationService {
     socket.on('Room.Acknowledged', this.onNotificationAcknowledged.bind(this))
 
     // subscribe to notification events
-    this.subscribe('UserSentMessage', this.onReceiveMessage.bind(this))
     this.subscribe('UserInvitedRoom', this.onInviteRoom.bind(this))
+    this.subscribe('UserSentMessage', this.onReceiveMessage.bind(this))
+    this.subscribe('UserSharedListing', this.onShareSomething.bind(this))
+    this.subscribe('UserCreatedAlert', this.onShareSomething.bind(this))
 
     // bind window focus
     if (typeof window !== 'undefined') {
@@ -91,20 +94,32 @@ export default class ChatNotification extends NotificationService {
   }
 
   /**
-   * On new message event [UserSentMessage]
+   * create message
    */
-  onReceiveMessage(chatroom, notification) {
-    const { room: roomId, subjects, objects } = notification
+  createMessage(chatroom, notification, message) {
+    const { room: roomId, notification_type } = notification
+
+    // don't anything when message.author is eqaual to current user
+    if (message.author && message.author.id === this.user.id) {
+
+      // when user search a listing/alert,
+      // the relevant room should go to top of rooms list
+      if (['UserSharedListing', 'UserCreatedAlert'].indexOf(notification_type) > -1) {
+        store.dispatch(updateRoomTime(roomId))
+      }
+
+      return false
+    }
+
+    // get active room
     const { activeRoom } = chatroom
-    const message = objects[0]
 
     // set value
     this._lastRoomGotNotification = roomId
 
-    if (message.author && message.author.id === this.user.id)
-      return false
-
+    // check window is active or not
     const isWindowActive = this.isWindowActive()
+
 
     // send browser notification if tab is not active
     if (!isWindowActive) {
@@ -136,6 +151,28 @@ export default class ChatNotification extends NotificationService {
       // play sound
       ChatNotification.playSound()
     }
+  }
+
+  /**
+   * On new message event [UserSentMessage]
+   */
+  onReceiveMessage(chatroom, notification) {
+    const { objects } = notification
+    this.createMessage(chatroom, notification, objects[0])
+  }
+
+  /**
+   * On user share something (listing or alert)
+   */
+  onShareSomething(chatroom, notification) {
+    const { subjects, objects } = notification
+
+    const message = {
+      ...objects[0],
+      ...{ author: subjects[0] }
+    }
+
+    this.createMessage(chatroom, notification, message)
   }
 
   /**
