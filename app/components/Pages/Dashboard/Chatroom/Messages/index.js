@@ -173,7 +173,6 @@ class Messages extends React.Component {
     const { isPopup } = this.props
     const baseHeight = isPopup ? '297px' : '95vh'
 
-    console.log(`calc(${baseHeight} - ${composeMessageHeight}px)`)
     return `calc(${baseHeight} - ${composeMessageHeight}px)`
   }
 
