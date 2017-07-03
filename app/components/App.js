@@ -18,7 +18,7 @@ import InstantChat from './Pages/Dashboard/Chatroom/InstantChat'
 import { getContacts } from '../store_actions/contact'
 
 // import _ from 'lodash'
-// import NotificationDispatcher from '../dispatcher/NotificationDispatcher'
+import NotificationDispatcher from '../dispatcher/NotificationDispatcher'
 import AppStore from '../stores/AppStore'
 import Brand from '../controllers/Brand'
 import ReactGA from 'react-ga'
@@ -48,6 +48,12 @@ class App extends Component {
 
     // check user is mobile device or not
     this.checkForMobile()
+
+    // get notifications
+    NotificationDispatcher.dispatch({
+      action: 'get-all',
+      user
+    })
 
     // set intercom
     this.setIntercom()
