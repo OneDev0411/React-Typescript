@@ -33,22 +33,28 @@ const controller = {
         longitude: -96.79698789999998,
         latitude: 32.7766642
       },
-      points: [{
-        latitude: 32.83938955111425,
-        longitude: -96.89115626525879
-      }, {
-        latitude: 32.83938955111425,
-        longitude: -96.70284373474121
-      }, {
-        latitude: 32.71396625328302,
-        longitude: -96.70284373474121
-      }, {
-        latitude: 32.71396625328302,
-        longitude: -96.89115626525879
-      }, {
-        latitude: 32.83938955111425,
-        longitude: -96.89115626525879
-      }],
+      points: [
+        {
+          latitude: 32.83938955111425,
+          longitude: -96.89115626525879
+        },
+        {
+          latitude: 32.83938955111425,
+          longitude: -96.70284373474121
+        },
+        {
+          latitude: 32.71396625328302,
+          longitude: -96.70284373474121
+        },
+        {
+          latitude: 32.71396625328302,
+          longitude: -96.89115626525879
+        },
+        {
+          latitude: 32.83938955111425,
+          longitude: -96.89115626525879
+        }
+      ],
       property_subtypes: [
         'RES-Single Family',
         'RES-Half Duplex',
@@ -60,8 +66,7 @@ const controller = {
     }
 
     if (
-      data.listing_map !== undefined &&
-      data.listing_map.center !== undefined
+      data.listing_map !== undefined && data.listing_map.center !== undefined
     ) {
       center = data.listing_map.center
       zoom = data.listing_map.zoom
@@ -85,7 +90,12 @@ const controller = {
         open_houses: false,
         listing_types: ['any'],
         status_options: {
-          active: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract']
+          active: [
+            'Active',
+            'Active Contingent',
+            'Active Kick Out',
+            'Active Option Contract'
+          ]
         },
         minimum_bedrooms: 0,
         minimum_bathrooms: 0,
@@ -166,10 +176,7 @@ const controller = {
       }
     ]
 
-    if (!window.poly &&
-      !data.show_alerts_map &&
-      !data.show_actives_map
-    ) {
+    if (!window.poly && !data.show_alerts_map && !data.show_actives_map) {
       AppStore.data.listing_map.is_loading = true
 
       const options = {
@@ -189,10 +196,10 @@ const controller = {
         ...gmap
       }
 
-      console.log('changeeeeeeeeeeeeeeeeee')
+      // console.log('changeeeeeeeeeeeeeeeeee')
 
       if (!mapBoundsOnChangeDelay) {
-        console.log('empty timeout')
+        // console.log('empty timeout')
         mapBoundsOnChangeDelay = 1
 
         ListingDispatcher.dispatch({
@@ -202,10 +209,10 @@ const controller = {
         })
       } else {
         clearTimeout(mapBoundsOnChangeDelay)
-        console.log('dealy cleared', mapBoundsOnChangeDelay)
+        // console.log('dealy cleared', mapBoundsOnChangeDelay)
 
         mapBoundsOnChangeDelay = setTimeout(() => {
-          console.log('set timeout for valert req')
+          // console.log('set timeout for valert req')
 
           ListingDispatcher.dispatch({
             user,
@@ -334,10 +341,7 @@ const controller = {
       }
       coordinates.push(lat_lng)
     }
-    const points = [
-      ...coordinates,
-      coordinates[0]
-    ]
+    const points = [...coordinates, coordinates[0]]
     return points
   },
 
@@ -371,10 +375,7 @@ const controller = {
       const { listing_map } = AppStore.data
       const mapIsDrawable = listing_map && listing_map.drawable
 
-      if (
-        !mapIsDrawable ||
-        (mapIsDrawable && window.poly)
-      ) {
+      if (!mapIsDrawable || (mapIsDrawable && window.poly)) {
         return
       }
 
