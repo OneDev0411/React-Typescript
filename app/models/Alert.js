@@ -5,28 +5,11 @@ import 'isomorphic-fetch'
 import Fetch from '../services/fetch'
 import config from '../../config/public'
 
-
-const mappingStatus = status => {
-  switch (status) {
-    case 'New':
-      return 'NEW LISTING'
-    case 'PriceDrop':
-      return 'PRICE DROP'
-    case 'StatusChange':
-      return 'STATUS CHANGE'
-    case 'OpenHouseAvailable':
-      return 'OPEN HOUSE'
-    default:
-      return ''
-  }
-}
-
-
 export default {
   get: (params, callback) => {
     const endpoint = `/api/alerts/get-alert-room?room_id=${params.room_id}&alert_id=${params.alert_id}&access_token=${params.access_token}`
     fetch(endpoint)
-      .then(response => {
+      .then((response) => {
         if (response.status >= 400) {
           const error = {
             status: 'error',
@@ -41,7 +24,7 @@ export default {
   getPaged: (params, callback) => {
     const endpoint = `/api/alerts/get-alert-room?room_id=${params.room_id}&alert_id=${params.alert_id}&access_token=${params.access_token}&timestamp=${params.timestamp}`
     fetch(endpoint)
-      .then(response => {
+      .then((response) => {
         if (response.status >= 400) {
           const error = {
             status: 'error',
@@ -56,7 +39,7 @@ export default {
   getAll: (params, callback) => {
     const endpoint = `/api/alerts/get-alerts?access_token=${params.access_token}`
     fetch(endpoint)
-      .then(response => {
+      .then((response) => {
         if (response.status >= 400) {
           const error = {
             status: 'error',
@@ -81,7 +64,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-      .then(response => {
+      .then((response) => {
         if (response.status >= 400) {
           const error = {
             status: 'error',
@@ -105,23 +88,7 @@ export default {
         .query({ sorting_value: 'Update' })
         .query({ limit: 200 })
 
-      const { data } = response.body
-
-      const listings = data.map(rec => ({
-        ...rec.listing,
-        numPoints: 1,
-        recId: rec.id,
-        recRoom: rec.room,
-        list: rec.listing,
-        new: mappingStatus(rec.last_update),
-        lat: rec.listing.property.address.location.latitude,
-        lng: rec.listing.property.address.location.longitude
-      }))
-
-      let feed = {}
-      feed[alertId] = listings
-
-      return feed
+      return response.body.data
     } catch (error) {
       throw error
     }
