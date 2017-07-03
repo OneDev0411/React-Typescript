@@ -6,6 +6,7 @@ new Array(
 
   'GET_ROOMS',
   'CREATE_ROOM',
+  'UPDATE_ROOM_TIME',
   'LEAVE_ROOM',
   'CHANGE_ACTIVE_ROOM',
   'ADD_MEMBERS',

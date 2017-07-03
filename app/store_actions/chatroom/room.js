@@ -50,6 +50,13 @@ export function createRoom(recipients) {
   }
 }
 
+export function updateRoomTime(roomId) {
+  return {
+    type: types.UPDATE_ROOM_TIME,
+    roomId
+  }
+}
+
 export function createExistingRoom(roomId) {
   return async dispatch => {
     const room = await Chatroom.getRoomById(roomId)

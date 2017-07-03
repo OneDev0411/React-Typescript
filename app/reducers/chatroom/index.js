@@ -136,6 +136,20 @@ function updateRoomNotifications(state, action) {
 }
 
 /**
+ * update room's last modified time
+ */
+function updateRoomTime(state, action) {
+  const rooms = updateRoom(state, action.roomId, {
+    updated_at: (new Date).getTime(),
+  })
+
+  return {
+    ...state,
+    ...{rooms}
+  }
+}
+
+/**
  * reset room notification counter when read all messages
  */
 function resetRoomNotificationsCounter(state, action) {
@@ -457,6 +471,7 @@ export default (state = initialState, action) => {
     [types.TOGGLE_INSTANCE_MODE]: toggleInstanceMode,
     [types.GET_ROOMS]: getRooms,
     [types.CREATE_ROOM]: createRoom,
+    [types.UPDATE_ROOM_TIME]: updateRoomTime,
     [types.ADD_MEMBERS]: addRoomMembers,
     [types.LEAVE_ROOM]: leaveRoom,
     [types.ACKNOWLEDGE_ROOM]: acknowledgeRoom,
