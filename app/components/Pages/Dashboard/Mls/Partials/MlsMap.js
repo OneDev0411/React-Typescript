@@ -605,6 +605,11 @@ export default class MlsMap extends Component {
     }
 
     const { size } = this.state.mapProps
+
+    if (size == null) {
+      return false
+    }
+
     let { zoom, center } = fitBounds({ ne, sw }, size)
 
     if (zoom === this.state.mapProps.zoom) {
