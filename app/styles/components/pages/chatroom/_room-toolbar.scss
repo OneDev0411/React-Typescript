@@ -1,5 +1,6 @@
+$room-toolbar-height: 69px;
+
 %room-toolbar {
-  $el-height: 69px;
   position: absolute;
   top: 0;
   left: 0;
@@ -8,8 +9,8 @@
   background-color: #fff;
   padding-left: 26px;
   margin-bottom: 2vh;
-  height: $el-height;
-  line-height: $el-height;
+  height: $room-toolbar-height;
+  line-height: $room-toolbar-height;
   vertical-align: middle;
   color: #4a494a;
   box-shadow: 0 1px 0 0 #edeff2;
