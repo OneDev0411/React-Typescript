@@ -16,7 +16,7 @@ const getRequest = (url, token) =>
     })
   })
 
-const asyncRequest = async request => {
+const asyncRequest = async (request) => {
   try {
     const response = await fetch(request)
     if (response.status >= 200 && response.status < 300) {
@@ -42,7 +42,7 @@ export default {
   get: (params, callback) => {
     const endpoint = `/api/listings/${params.id}?access_token=${params.access_token}`
     fetch(endpoint)
-      .then(response => {
+      .then((response) => {
         if (response.status >= 400) {
           const error = {
             status: 'error',
@@ -89,7 +89,7 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-      .then(response => {
+      .then((response) => {
         if (response.status >= 400) {
           const error = {
             status: 'error',
@@ -100,5 +100,18 @@ export default {
         return response.json()
       })
       .then(response => callback(false, response))
+  },
+  getListing: async (id) => {
+    if (!id) {
+      return
+    }
+
+    try {
+      const response = await new Fetch().get(`/listings/${id}`)
+
+      return response.body.data
+    } catch (error) {
+      throw error
+    }
   }
 }

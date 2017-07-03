@@ -20,8 +20,8 @@ import config from '../../../../../config/public'
 export default class ListingViewer extends Component {
   componentDidMount() {
     document.onkeydown = (e) => {
-      const data = this.props.data
-      if (e.keyCode === 27 && !this.props.data.show_share_listing_modal) {
+      const { data } = this.props
+      if (e.keyCode === 27 && !data.show_share_listing_modal && !data.fucking_listing_modal_is_active) {
         if (!data.show_modal_gallery)
           this.props.hideListingViewer()
         this.props.hideModal()

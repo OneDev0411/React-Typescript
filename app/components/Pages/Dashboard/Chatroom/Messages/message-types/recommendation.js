@@ -1,10 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { compose,  withState, withHandlers, lifecycle, pure } from 'recompose'
+import { compose, withState, withHandlers, lifecycle, pure } from 'recompose'
 import util from '../../../../../../utils/listing'
 import ListingModal from '../../../Mls/Listing/ListingModal'
-
 
 const enhance = compose(
   pure,
@@ -16,8 +15,9 @@ const enhance = compose(
 
       let price = 0
 
-      if (listing.close_price && user.user_type === 'Agent')
+      if (listing.close_price && user.user_type === 'Agent') {
         price = listing.close_price
+      }
 
       price = listing.price
 
@@ -40,7 +40,7 @@ const Listing = ({
   /* internal props and states */
   getPrice,
   toggleModal,
-  showListingModal,
+  showListingModal
 }) => {
   // get listing
   const { listing } = recommendation
@@ -52,7 +52,7 @@ const Listing = ({
         Shared a listing:
       </strong>
       <div>
-        { comment }
+        {comment}
       </div>
 
       <ListingModal
@@ -74,22 +74,22 @@ const Listing = ({
             className="status"
             style={{ backgroundColor: `#${util.getStatusColor(status)}` }}
           >
-            { status}
+            {status}
           </div>
 
           <div className="address-title">
-            { util.addressTitle(property.address) }
+            {util.addressTitle(property.address)}
           </div>
 
           <div className="price">
-            ${ getPrice() }
+            ${getPrice()}
           </div>
 
           <ul className="details">
-            <li>{ property.bedroom_count } Beds</li>
-            <li>{ property.bathroom_count } Baths</li>
-            <li>{ util.metersToFeet(property.square_meters) } Sqft</li>
-            <li>{ property.lot_square_meters.toFixed(0) } Lot</li>
+            <li>{property.bedroom_count} Beds</li>
+            <li>{property.bathroom_count} Baths</li>
+            <li>{util.metersToFeet(property.square_meters)} Sqft</li>
+            <li>{property.lot_square_meters.toFixed(0)} Lot</li>
           </ul>
         </div>
       </div>
