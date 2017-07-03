@@ -8,25 +8,18 @@ import Message from '../../Util/message'
 export default ({
   author,
   user,
+  roomId,
   message,
   previousMessage
 }) => {
 
-  const comment = <div
+  const comment = Message.getText(message)
+
+  // simple comment
+  let message_object = <div
     className="comment inline"
-    dangerouslySetInnerHTML={{ __html: Message.getText(message) }}
+    dangerouslySetInnerHTML={{ __html: comment }}
   />
-
-  let message_object = comment
-
-  // check message has attachment
-  const hasAttachments = message.attachments && message.attachments.length > 0
-  if (hasAttachments) {
-    return <AttachementMessage
-      message={message}
-      attachments={message.attachments}
-    />
-  }
 
   // check message is alert
   const alert = Message.isAlert(message)
@@ -43,6 +36,15 @@ export default ({
       recommendation={message.recommendation}
       message={message}
       comment={comment}
+    />
+  }
+
+  // check message has attachment
+  const hasAttachments = message.attachments && message.attachments.length > 0
+  if (hasAttachments) {
+    message_object = <AttachementMessage
+      comment={comment}
+      attachments={message.attachments}
     />
   }
 
