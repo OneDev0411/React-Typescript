@@ -14,6 +14,19 @@
     overflow: auto;
     min-height: 81vh;
     max-height: 81vh;
+
+    &::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    &::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px #263445;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #1A2430;
+    }
+
     .list {
       @extend %rooms-list;
     }
