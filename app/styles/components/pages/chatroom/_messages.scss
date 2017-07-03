@@ -1,12 +1,14 @@
+@import './room-toolbar';
+
 /**
 * Messages
 */
 $left-w: 50px;
 
 %messages {
-  $messages-height: 89vh;
   $height-of-create-message: 45px;
   $height-of-typing-area: 5vh;
+  $messages-height: calc(100vh - #{$height-of-typing-area} - #{$height-of-create-message});
 
   padding: 0;
   position: relative;
@@ -26,7 +28,7 @@ $left-w: 50px;
   }
 
   .messages-list {
-    $hg: calc(#{$messages-height} - #{$height-of-create-message} - #{$height-of-typing-area});
+    $hg: $messages-height;
     min-height: $hg;
     max-height: $hg;
     overflow: auto;

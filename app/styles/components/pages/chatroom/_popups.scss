@@ -81,9 +81,9 @@
  */
 %messages-popup {
   @extend %messages;
-  $messages-height: 330px;
   $height-of-create-message: 45px;
   $height-of-typing-area: 33px;
+  $messages-height: 330px;
   height: $messages-height;
   position: relative;
   padding-top: 0;
