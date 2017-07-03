@@ -5,6 +5,7 @@ import MessageDate from '../components/message-date'
 
 export default ({
   user,
+  roomId,
   author,
   message,
   previousMessage
@@ -16,6 +17,7 @@ export default ({
       className="content">
       <Message
         user={user}
+        roomId={roomId}
         author={author}
         message={message}
         previousMessage={previousMessage}

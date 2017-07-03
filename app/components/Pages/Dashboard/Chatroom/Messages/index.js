@@ -201,6 +201,7 @@ class Messages extends React.Component {
               <div key={`MESSAGE_${msg.id}`}>
                 <MessageItem
                   user={user}
+                  roomId={roomId}
                   message={msg}
                   previousMessage={this.getPreviousMessage(messages.list, msg)}
                 />

@@ -5,6 +5,7 @@ import SubMessage from './message-kinds/sub'
 
 export default ({
   user,
+  roomId,
   message,
   previousMessage
 }) => {
@@ -13,7 +14,7 @@ export default ({
   const author = messageUtil.getAuthor(message)
 
   // check message is alert
-  const isAlert = messageUtil.isAlert(alert)
+  const isAlert = messageUtil.isAlert(message)
 
   // check message has attachment
   const hasAttachments = message.attachments && message.attachments.length > 0
@@ -30,6 +31,6 @@ export default ({
     messageUtil.getAuthor(previousMessage).id !== author.id ||
     messageUtil.getYMD(previousMessage) !== messageUtil.getYMD(message)
 
-  const props = { user, author, message, previousMessage }
+  const props = { user, roomId, author, message, previousMessage }
   return isLeadMessage ? <LeadMessage {...props} /> : <SubMessage {...props} />
 }
