@@ -12,6 +12,24 @@ export default class Message {
   }
 
   /**
+   * make mention blue
+   */
+  static _makeMentionsBlue(text, users = []) {
+    let filterd_text = text
+
+    users.forEach((user) => {
+      const full_name = `${user.first_name} ${user.last_name}`
+
+      if (text.trim().indexOf(full_name.trim()) !== -1) {
+        const replace = `<span class="text-primary">${user.first_name}</span>`
+        filterd_text = text.replace(new RegExp(full_name, 'g'), replace)
+      }
+    })
+
+    return filterd_text
+  }
+
+  /**
    * send new message
    */
   static send(roomId, message, author = {}) {
@@ -58,11 +76,12 @@ export default class Message {
   /**
    * get message text
    */
-  static getText(message) {
+  static getText(message, users) {
     let text = message.comment
 
     if (message.comment) {
       text = emojify.replace(linkifyString(message.comment))
+      text = Message._makeMentionsBlue(text, users)
     }
 
     return text
@@ -72,11 +91,10 @@ export default class Message {
    * check message is alert and then return the alert object
    */
   static isAlert(message) {
-    if (message.notification &&
-      message.notification.object_class === 'Alert' &&
-      message.notification.objects
-    ) {
-      return message.notification.objects[0]
+    const { notification } = message
+
+    if (notification && notification.objects && notification.object_class === 'Alert') {
+      return notification.objects[0]
     }
 
     return false
