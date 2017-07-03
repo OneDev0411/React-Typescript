@@ -32,7 +32,7 @@ $left-w: 50px;
     min-height: $hg;
     max-height: $hg;
     overflow: auto;
-    padding-top: 3vh;
+    margin-top: $room-toolbar-height;
     padding-bottom: 30px;
 
     &::-webkit-scrollbar {
