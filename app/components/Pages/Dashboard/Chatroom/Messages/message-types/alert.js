@@ -7,15 +7,16 @@ export default class Alert extends React.Component {
     super(props)
     this.state = {
       loading: false,
-      feed: null
+      feed: []
     }
   }
 
   async loadAlert(alert) {
-    if (this.state.loading)
+    if (this.state.loading) {
       return false
+    }
 
-    let feed = null
+    let feed = []
     const { room: roomId, id: alertId } = alert
 
     // set loading
@@ -23,7 +24,9 @@ export default class Alert extends React.Component {
 
     try {
       feed = await AlertModel.getFeed(alertId, roomId)
-    } catch(e) { /* nothing */ }
+    } catch (e) {
+      /* nothing */
+    }
 
     this.setState({
       feed,
@@ -35,7 +38,6 @@ export default class Alert extends React.Component {
     const { alert } = this.props
     const { feed, loading } = this.state
 
-    console.log(feed)
     return (
       <div className="alert">
         <strong style={{ color: '#9b9a9b' }}>
@@ -45,27 +47,24 @@ export default class Alert extends React.Component {
         <AlertViewerModal
           show={!loading && feed !== null}
           feed={feed}
-          onHide={() => this.setState({ feed: null })}
+          onHide={() => this.setState({ feed: [] })}
         />
 
-        <div
-          className="alert-widget"
-          onClick={() => this.loadAlert(alert)}
-        >
+        <div className="alert-widget" onClick={() => this.loadAlert(alert)}>
           <div className="icon">
             <img
               src={
-                loading ?
-                '/static/images/loading-states/grid-blue.svg':
-                '/static/images/chatroom/alert.svg'
+                loading
+                  ? '/static/images/loading-states/grid-blue.svg'
+                  : '/static/images/chatroom/alert.svg'
               }
             />
           </div>
 
           <div className="heading">
-            <div className="title">{ alert.title }</div>
+            <div className="title">{alert.title}</div>
             <div className="proposed">
-              { alert.proposed_title }
+              {alert.proposed_title}
               <i className="fa fa-angle-right" />
             </div>
           </div>
