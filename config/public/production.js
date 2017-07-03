@@ -1,7 +1,7 @@
 // config/public/production.js
 export default {
   app: {
-    url: '',
+    url: process.env.APP_URL,
     share_url: process.env.APP_SHARE_URL
   },
   api_url: process.env.RECHAT_API_URL,
