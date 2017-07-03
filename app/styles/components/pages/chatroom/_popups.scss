@@ -107,6 +107,9 @@
         .recommendation {
           @extend %popup-message-recommendation;
         }
+        .alert {
+          @extend %popup-message-alert;
+        }
       }
     }
 
@@ -157,6 +160,29 @@
 
   .loading {
     height: 44vh;
+  }
+}
+
+%popup-message-alert {
+  $hg: 60px;
+  $wd: 180px;
+  $icon-width: 40px;
+  .alert-widget {
+    width: $wd;
+    .icon {
+      width: $icon-width;
+    }
+    .heading {
+      margin-left: $icon-width;
+      padding-left: 5px;
+      width: $wd - $icon-width;
+      .title {
+        display: none;
+      }
+      .proposed {
+        font-size: 13px;
+      }
+    }
   }
 }
 
