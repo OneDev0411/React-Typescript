@@ -16,12 +16,12 @@ const getGeoCode = (place) => {
 
 const autoCompleteHandler = (place) => {
   if (!place.formatted_address) {
-    console.log('submit search: place_changed: unformated', place)
+    // console.log('submit search: place_changed: unformated', place)
     getGeoCode(place)
     return
   }
 
-  console.log('submit search: place_changed formated', place)
+  // console.log('submit search: place_changed formated', place)
 
   AppStore.data.listing_map.search_input_text = place.formatted_address
   const center = {
@@ -94,13 +94,13 @@ const controller = {
     }
 
     if (/^\d{5}(?:[-\s]\d{4})?$/.test(input)) {
-      console.log('submit search: post code', input)
+      // console.log('submit search: post code', input)
       getGeoCode({ name: input })
       return
     }
 
     if (!isNaN(input) && input.length > 7) {
-      console.log('submit search: MLS Number', input)
+      // console.log('submit search: MLS Number', input)
       AppStore.data.listing_map.is_loading = true
       AppStore.emitChange()
 
