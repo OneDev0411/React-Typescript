@@ -17,7 +17,7 @@ const postcss = function() {
   ]
 }
 
-webpackConfig.devtool = ''
+webpackConfig.devtool = 'eval-source-map'
 
 webpackConfig.performance = {
   hints: 'warning',
