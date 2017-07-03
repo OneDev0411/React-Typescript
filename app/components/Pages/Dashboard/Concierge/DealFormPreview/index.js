@@ -50,31 +50,16 @@ export default class DealFormPreview extends Component {
     const { url } = this.state
     const user = data.user
 
-    let main_style = S('absolute l-70 r-0')
-    let nav_area = <SideBar data={data} />
-
-    if (data.is_mobile) {
-      main_style = { ...main_style, ...S('l-0 w-100p') }
-
-      if (user)
-        nav_area = <MobileNav data={data} />
-    }
-
     return (
-      <div style={S('minw-1000')}>
-        <main>
-          { nav_area }
-          <div className="deals" style={main_style}>
-            {
-              url &&
-              <iframe
-                frameBorder="0"
-                src={`${url}`}
-                style={{ width: '100%', minHeight: '85vh' }}
-              />
-            }
-          </div>
-        </main>
+      <div className="deals" style={main_style}>
+        {
+          url &&
+          <iframe
+            frameBorder="0"
+            src={`${url}`}
+            style={{ width: '100%', minHeight: '85vh' }}
+          />
+        }
       </div>
     )
   }

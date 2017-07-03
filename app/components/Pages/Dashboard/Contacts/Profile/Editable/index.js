@@ -1,4 +1,6 @@
 import React from 'react'
+import TextInput from './textinput'
+import TextArea from './textarea'
 
 export default class extends React.Component {
   constructor(props) {
@@ -7,6 +9,8 @@ export default class extends React.Component {
       editMode: false,
       text: props.text
     }
+
+    this.input = props.multiline ? TextArea : TextInput
   }
 
   onClickEdit() {
@@ -33,21 +37,30 @@ export default class extends React.Component {
     this.setState({ editMode: false })
   }
 
+  nl2br (input) {
+    return input.split('\n').map((text, key) => (
+      <div key={`editable_item___line_${key}`}>
+        { text }
+      </div>
+    ))
+  }
+
   render() {
-    const { placeholder, showAdd, showEdit } = this.props
+    const { multiline, placeholder, showAdd, showEdit } = this.props
     const { text, editMode } = this.state
+    const TextInput = this.input
 
     if (editMode) {
       return (
         <div className="contact-editable">
-          <input
-            type="text"
+          <TextInput
             value={text}
             placeholder={placeholder}
-            ref={ref => this.text_input = ref }
+            lines={text.split('\n').length || 1}
             onChange={e => this.setState({ text: e.target.value })}
             onBlur={() => this.onCloseEdit()}
-            onKeyPress={e => { if (e.key === 'Enter') this.onCloseEdit()}}
+            onClose={() => this.onCloseEdit()}
+            inputRef={el => this.text_input = el}
           />
         </div>
       )
@@ -56,11 +69,17 @@ export default class extends React.Component {
     return (
       <div
         className="contact-editable"
-        onClick={() => this.onClickEdit()}
       >
-        { text }
+        <div
+          onClick={() => this.onClickEdit()}
+          style={{ display: 'inline-block' }}
+        >
+          { multiline ? this.nl2br(text) : text }
+        </div>
 
-        <div className="control">
+        <div
+          className={`control${multiline ? ' multiline' : ''}`}
+        >
 
           {
             showEdit &&

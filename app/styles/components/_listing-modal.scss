@@ -1,0 +1,15 @@
+.c-listing-modal--box {
+  width: 100%;
+  min-height: 88vh;
+  bottom: 0;
+  .modal-body {
+    .listing-viewer--navbar {
+      background-color: #fff;
+    }
+    .listing-viewer {
+      margin: -2px !important;
+      width: 100% !important;
+      z-index: 10101!important;
+    }
+  }
+}

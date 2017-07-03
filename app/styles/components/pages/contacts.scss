@@ -32,10 +32,12 @@
 %contact-editable {
   div.contact-editable {
     padding: 4px;
-    input {
+    position: relative;
+    input, textarea {
       border: none;
       width: 100%;
       color: #000;
+      resize: none;
       &:focus, &:hover {
         outline: none;
         box-shadow: none;
@@ -51,6 +53,13 @@
         color: #2196f3;
         &:hover {
           color: green;
+        }
+      }
+      &.multiline {
+        i {
+          position: absolute;
+          right: 5px;
+          top: 5px;
         }
       }
     }
@@ -299,6 +308,7 @@
                   display: block;
                   color: gray;
                   font-size: 14px;
+                  padding-left: 4px;
                 }
               }
             }

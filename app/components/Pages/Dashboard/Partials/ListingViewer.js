@@ -20,8 +20,8 @@ import config from '../../../../../config/public'
 export default class ListingViewer extends Component {
   componentDidMount() {
     document.onkeydown = (e) => {
-      const data = this.props.data
-      if (e.keyCode === 27 && !this.props.data.show_share_listing_modal) {
+      const { data } = this.props
+      if (e.keyCode === 27 && !data.show_share_listing_modal && !data.fucking_listing_modal_is_active) {
         if (!data.show_modal_gallery)
           this.props.hideListingViewer()
         this.props.hideModal()
@@ -298,7 +298,7 @@ export default class ListingViewer extends Component {
             center={center}
             zoom={12}
             options={{ scrollwheel: false }}
-            bootstrapURLKeys={ bootstrap_url_keys }
+            bootstrapURLKeys={bootstrap_url_keys}
           >
             <ListingMapMarker
               onMouseOver={controller.listing_map.showListingPopup.bind(this, listing)}
@@ -646,7 +646,7 @@ export default class ListingViewer extends Component {
       const login_btn_color = Brand.color('primary', '006aff')
 
       right_area = (
-        <div style={nav_bar_style}>
+        <div className="listing-viewer--navbar" style={nav_bar_style}>
           <div style={S('pull-right relative r-110 t-14n')}>
             <FavoriteHeart
               listing={listing}
@@ -736,7 +736,7 @@ export default class ListingViewer extends Component {
       )
     }
     return (
-      <div style={viewer_wrap_style}>
+      <div className="listing-viewer" style={viewer_wrap_style}>
         { claim_account_message }
         { join_area }
         { left_area }

@@ -7,10 +7,8 @@ import config from '../../config/public'
 
 export default {
   create: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
 
-    const create_room_url = `${api_host}/api/create-room?access_token=${params.access_token}`
+    const create_room_url = `/api/create-room?access_token=${params.access_token}`
 
     const request_object = {
       title: params.title,
@@ -40,9 +38,7 @@ export default {
     .then(response => callback(false, response))
   },
   createAlert: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-    const endpoint = `${api_host}/api/rooms/create-alert?access_token=${params.access_token}`
+    const endpoint = `/api/rooms/create-alert?access_token=${params.access_token}`
     const request_object = {
       alert: params.alert,
       room_id: params.room_id,
@@ -68,8 +64,7 @@ export default {
     .then(response => callback(false, response))
   },
   delete: (params, callback) => {
-    const api_host = params.api_host || config.app.url
-    const url = `${api_host}/api/delete-room/?id=${params.id}&access_token=${params.access_token}`
+    const url = `/api/delete-room/?id=${params.id}&access_token=${params.access_token}`
     fetch(url, {
       method: 'get',
       headers: {
@@ -88,55 +83,53 @@ export default {
     })
     .then(response => callback(false, response))
   },
-  getMessages: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
+  // getMessages: (params, callback) => {
+  //   let api_host = params.api_host
+  //   if (!api_host) api_host = config.app.url
 
-    const get_messages_url = `${api_host}/api/messages/?room_id=${params.room_id}` +
-      `&access_token=${params.access_token}` +
-      `&limit=${params.limit}` +
-      `&max_value=${params.max_value}`
+  //   const get_messages_url = `/api/messages/?room_id=${params.room_id}` +
+  //     `&access_token=${params.access_token}` +
+  //     `&limit=${params.limit}` +
+  //     `&max_value=${params.max_value}`
 
-    fetch(get_messages_url)
-    .then((response) => {
-      if (response.status >= 400) {
-        const error = {
-          status: 'error',
-          response
-        }
-        return callback(error, false)
-      }
-      return response.json()
-    })
-    .then(response => callback(false, response))
-  },
-  getPrevious: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
+  //   fetch(get_messages_url)
+  //   .then((response) => {
+  //     if (response.status >= 400) {
+  //       const error = {
+  //         status: 'error',
+  //         response
+  //       }
+  //       return callback(error, false)
+  //     }
+  //     return response.json()
+  //   })
+  //   .then(response => callback(false, response))
+  // },
+  // getPrevious: (params, callback) => {
+  //   let api_host = params.api_host
+  //   if (!api_host) api_host = config.app.url
 
-    const get_messages_url = `${api_host}/api/messages/?room_id=${params.room_id}` +
-      `&access_token=${params.access_token}` +
-      `&limit=${params.limit}` +
-      `&max_value=${params.max_value}`
+  //   const get_messages_url = `/api/messages/?room_id=${params.room_id}` +
+  //     `&access_token=${params.access_token}` +
+  //     `&limit=${params.limit}` +
+  //     `&max_value=${params.max_value}`
 
-    fetch(get_messages_url)
-    .then((response) => {
-      if (response.status >= 400) {
-        const error = {
-          status: 'error',
-          response
-        }
-        return callback(error, false)
-      }
-      return response.json()
-    })
-    .then(response => callback(false, response))
-  },
+  //   fetch(get_messages_url)
+  //   .then((response) => {
+  //     if (response.status >= 400) {
+  //       const error = {
+  //         status: 'error',
+  //         response
+  //       }
+  //       return callback(error, false)
+  //     }
+  //     return response.json()
+  //   })
+  //   .then(response => callback(false, response))
+  // },
   addUser: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
 
-    const add_user_to_room_url = `${api_host}/api/add-user-to-room?access_token=${params.access_token}`
+    const add_user_to_room_url = `/api/add-user-to-room?access_token=${params.access_token}`
 
     const request_object = {
       room_id: params.room_id,
@@ -164,10 +157,8 @@ export default {
     .then(response => callback(false, response))
   },
   addUsers: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
 
-    const endpoint = `${api_host}/api/rooms/add-users?access_token=${params.access_token}`
+    const endpoint = `/api/rooms/add-users?access_token=${params.access_token}`
 
     const request_object = {
       room_id: params.room_id,
@@ -196,8 +187,7 @@ export default {
     .then(response => callback(false, response))
   },
   removeUser: (params, callback) => {
-    const api_host = params.api_host || config.app.url
-    const url = `${api_host}/api/remove-user-from-room?user=${params.user}&room_id=${params.room}&access_token=${params.access_token}`
+    const url = `/api/remove-user-from-room?user=${params.user}&room_id=${params.room}&access_token=${params.access_token}`
 
     fetch(url, {
       method: 'get',
@@ -235,11 +225,9 @@ export default {
     return callback(request)
   },
   setNotifications: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
     const id = params.id
     const notification = params.notification
-    const endpoint = `${api_host}/api/notifications?access_token=${params.access_token}`
+    const endpoint = `/api/notifications?access_token=${params.access_token}`
     const request_object = {
       id,
       notification
@@ -264,10 +252,8 @@ export default {
     .then(response => callback(false, response))
   },
   acknowledgeNotifications: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
     const room = params.room
-    const endpoint = `${api_host}/api/acknowledge-room-notifications?access_token=${params.access_token}`
+    const endpoint = `/api/acknowledge-room-notifications?access_token=${params.access_token}`
     const request_object = {
       room
     }
@@ -291,9 +277,7 @@ export default {
     .then(response => callback(false, response))
   },
   createRec: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
-    const endpoint = `${api_host}/api/create-rec?access_token=${params.access_token}`
+    const endpoint = `/api/create-rec?access_token=${params.access_token}`
     const room = params.room
     const mls_number = params.mls_number
     const request_object = {
@@ -322,10 +306,8 @@ export default {
     .then(response => callback(false, response))
   },
   getActives: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
     const room_id = params.room_id
-    const endpoint = `${api_host}/api/get-actives?room_id=${room_id}&access_token=${params.access_token}`
+    const endpoint = `/api/get-actives?room_id=${room_id}&access_token=${params.access_token}`
     fetch(endpoint)
     .then((response) => {
       if (response.status >= 400) {
@@ -340,12 +322,10 @@ export default {
     .then(response => callback(false, response))
   },
   editFavorite: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
     const room_id = params.room_id
     const rec_id = params.rec_id
     const favorite = params.favorite
-    const endpoint = `${api_host}/api/edit-favorite?access_token=${params.access_token}`
+    const endpoint = `/api/edit-favorite?access_token=${params.access_token}`
     const request_object = {
       room_id,
       rec_id,

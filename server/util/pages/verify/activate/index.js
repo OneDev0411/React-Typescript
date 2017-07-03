@@ -11,8 +11,13 @@ router.get('/activate', async (ctx, next) => {
   const { email, token, agent, phone_number, inviting_user, room } = decrypted_obj
 
   // Reset session and save branch data
-  ctx.session.user = null
-  ctx.session.branch_data = decrypted_obj
+  ctx.session = {
+    ...ctx.session,
+    ...{
+      user: null,
+      branch_data: decrypted_obj
+    }
+  }
 
   // Agent
   if (agent) {

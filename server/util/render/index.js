@@ -8,7 +8,14 @@ import thunk from 'redux-thunk'
 import reducers from '../../../app/reducers'
 import config from '../../../config/webpack'
 
-async function display(file, renderProps = {}) {
+function fetch(renderProps, store) {
+  return renderProps.components.map((c) => {
+    if (c && c.fetchData) { return c.fetchData(store.dispatch, renderProps.params) }
+    return Promise.reslove
+  })
+}
+
+async function display(file, renderProps) {
 
   const initialState = {
     data: this.locals.AppStore ? this.locals.AppStore.data : {}
@@ -16,6 +23,15 @@ async function display(file, renderProps = {}) {
 
   // create store
   const store = createStore(reducers, initialState, compose(applyMiddleware(thunk)))
+
+  // append user data to render props params
+  if (initialState.data.user) {
+    renderProps.params.user = initialState.data.user
+  }
+
+  try {
+    await Promise.all(fetch(renderProps, store))
+  } catch (e) { /* do nothing */ }
 
   // get store initial data
   const store_data = encodeURIComponent(xss(JSON.stringify(store.getState())))
@@ -33,7 +49,7 @@ async function display(file, renderProps = {}) {
       })
     }
     else {
-      await this.render(file || 'app',  {
+      await this.render(file,  {
         data: this.locals,
         store_data
       })

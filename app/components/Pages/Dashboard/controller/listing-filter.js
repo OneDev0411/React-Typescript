@@ -220,6 +220,8 @@ const controller = {
       })
       return
     }
+    console.log('set filter')
+
     ListingDispatcher.dispatch({
       action: 'get-valerts',
       user,
@@ -227,12 +229,13 @@ const controller = {
     })
   },
   showFilterForm() {
-    delete AppStore.data.listing_panel
-    delete AppStore.data.show_listing_panel
-    if (AppStore.data.show_filter_form)
+    // delete AppStore.data.listing_panel
+    // delete AppStore.data.show_listing_panel
+    if (AppStore.data.show_filter_form) {
       delete AppStore.data.show_filter_form
-    else
+    } else {
       AppStore.data.show_filter_form = true
+    }
     AppStore.emitChange()
   },
   handleFilterSwitch(key) {
@@ -293,6 +296,7 @@ const controller = {
     AppStore.emitChange()
   },
   resetFilterOptions() {
+    console.log('reset filter Options')
     const data = AppStore.data
     const user = data.user
     const listing_map = data.listing_map

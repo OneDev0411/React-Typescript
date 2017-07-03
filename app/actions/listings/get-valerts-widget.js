@@ -26,6 +26,7 @@ export default (user, options) => {
 
         Brand.getByHostname({ hostname }, (err, res) => {
           AppStore.data.brand = res.data
+          params.brand = AppStore.data.brand.id
           AppStore.emitChange()
           callback()
         })
@@ -53,9 +54,9 @@ export default (user, options) => {
           const offlines = []
 
           AppStore.data.widget.listings.forEach((l) => {
-            const agent = l.list_agent
+            const agent_user = l.proposed_agent
 
-            if (!agent || agent.online_state === 'Offline') {
+            if (!agent_user || agent_user.agent || agent_user.agent.online_state === 'Offline') {
               offlines.push(l)
               return
             }

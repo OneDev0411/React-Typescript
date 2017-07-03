@@ -10,6 +10,10 @@ export default class Branch extends Component {
         data.data_parsed = {}
 
       let redirect = `/password/create?token=${data.data_parsed.token}`
+
+      if (err)
+        data.data_parsed = {}
+
       if (data.data_parsed.listing && data.data_parsed.listing !== 'undefined')
         redirect = `/dashboard/mls/${encodeURIComponent(data.data_parsed.listing)}?token=${data.data_parsed.token}`
       if (data.data_parsed.email)

@@ -43,10 +43,11 @@ export default class ListingPanel extends Component {
         default:
           return true
       }
-      if (listing_map.sorting_direction === -1)
+      if (listing_map.sorting_direction === -1) {
         sortby_title += ' high to low'
-      else
+      } else {
         sortby_title += ' low to high'
+      }
     }
     return sortby_title
   }
@@ -54,158 +55,195 @@ export default class ListingPanel extends Component {
     const data = this.props.data
     const user = data.user
     const listing_map = data.listing_map
-    if (!listing_map || listing_map && !listing_map.listings)
-      return <div></div>
+
+    if (!listing_map || listing_map && !listing_map.listings) {
+      return <div />
+    }
+
     let listings
-    if (data.listing_map)
-      listings = data.listing_map.listings
-    if (data.show_alerts_map && data.alerts_map && data.alerts_map.listings)
+    if (listing_map && listing_map.listings) {
+      listings = listing_map.listings
+    }
+
+    if (data.show_alerts_map && data.alerts_map && data.alerts_map.listings) {
       listings = data.alerts_map.listings
-    if (data.show_actives_map && data.favorite_listings)
+    }
+
+    if (data.show_actives_map && data.favorite_listings) {
       listings = data.favorite_listings
-    const listing_panel_cards = listings.map((listing, i) => {
-      const status_color = listing_util.getStatusColor(listing.status)
-      let property = listing.compact_property
-      let address = listing.address
-      if (!property)
-        property = listing.property
-      if (!address)
-        address = property.address
-      let listing_image = <div style={ S('w-405 h-300 bg-efefef') }/>
-      if (listing.cover_image_url)
-        listing_image = <div style={ S('w-405 h-300 bg-url(' + listing.cover_image_url + ') bg-cover bg-center br-3') } />
-      const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
-      const image_overlay = {
-        ...S('bg-000 absolute w-100p h-100p br-3'),
-        opacity: '.2'
-      }
-      let open_houses
-      if (listing.open_houses) {
-        const num_open_houses = listing.open_houses.length
-        open_houses = (
-          <div>
-          &nbsp;|&nbsp;<span className="text-success">{ num_open_houses } Open Houses</span>
+    }
+
+    let listingsIsSmall = true
+    if (process.env.NODE_ENV === 'development') {
+      listingsIsSmall = listings && listings.length < 21
+    }
+
+    let listing_panel_cards = null
+    let listing_panel_list = null
+    if (listingsIsSmall) {
+      listing_panel_cards = listings.map((listing, i) => {
+        const status_color = listing_util.getStatusColor(listing.status)
+        let property = listing.compact_property
+        let address = listing.address
+
+        if (!property)
+          property = listing.property
+
+        if (!address)
+          address = property.address
+
+        let listing_image = <div style={ S('w-405 h-300 bg-efefef') }/>
+
+        if (listing.cover_image_url)
+          listing_image = <div style={ S('w-405 h-300 bg-url(' + listing.cover_image_url + ') bg-cover bg-center br-3') } />
+
+        const square_feet = helpers.numberWithCommas(
+            Math.floor(
+                listing_util.metersToFeet(
+                    property.square_meters
+                )
+            )
+        )
+        const image_overlay = {
+          ...S('bg-000 absolute w-100p h-100p br-3'),
+          opacity: '.2'
+        }
+        let open_houses
+        if (listing.open_houses) {
+          const num_open_houses = listing.open_houses.length
+          open_houses = (
+            <div>
+            &nbsp;|&nbsp;<span className="text-success">{ num_open_houses } Open Houses</span>
+            </div>
+          )
+        }
+        // Price
+        let price = listing.price
+        if (listing.close_price && user && user.user_type === 'Agent')
+          price = listing.close_price
+        // Social info
+        let social_info
+        if (listing.shared_by && listing.shared_by.length) {
+          social_info = 'Shared by '
+          listing.shared_by.forEach((shared_user, shared_i) => {
+            if (shared_user.id === user.id)
+              social_info += 'You' + (shared_i === listing.shared_by.length - 1 ? '' : ', ')
+            else
+              social_info += (shared_user.first_name.trim() ? shared_user.first_name : shared_user.email) + (shared_i === listing.shared_by.length - 1 ? '' : ', ')
+          })
+        }
+        if (listing.commented_by && listing.commented_by.length) {
+          social_info = 'Commented by '
+          listing.commented_by.forEach((commented_user, comment_i) => {
+            if (commented_user.id === user.id) {
+              social_info += 'You' + (comment_i === listing.commented_by.length - 1 ? '' : ', ')
+            } else {
+              social_info += (commented_user.first_name.trim() ? commented_user.first_name : commented_user.email) + (comment_i === listing.commented_by.length - 1 ? '' : ', ')
+            }
+          })
+        }
+        let details_area = (
+          <div style={S('font-14')} >
+            <span>{ property.bedroom_count } Beds</span>
+            &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+            <span>{ property.bathroom_count } Baths</span>
+            &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+            <span>{ square_feet } Sqft</span>
           </div>
         )
-      }
-      // Price
-      let price = listing.price
-      if (listing.close_price && user && user.user_type === 'Agent')
-        price = listing.close_price
-      // Social info
-      let social_info
-      if (listing.shared_by && listing.shared_by.length) {
-        social_info = 'Shared by '
-        listing.shared_by.forEach((shared_user, shared_i) => {
-          if (shared_user.id === user.id)
-            social_info += 'You' + (shared_i === listing.shared_by.length - 1 ? '' : ', ')
-          else
-            social_info += (shared_user.first_name.trim() ? shared_user.first_name : shared_user.email) + (shared_i === listing.shared_by.length - 1 ? '' : ', ')
-        })
-      }
-      if (listing.commented_by && listing.commented_by.length) {
-        social_info = 'Commented by '
-        listing.commented_by.forEach((commented_user, comment_i) => {
-          if (commented_user.id === user.id)
-            social_info += 'You' + (comment_i === listing.commented_by.length - 1 ? '' : ', ')
-          else
-            social_info += (commented_user.first_name.trim() ? commented_user.first_name : commented_user.email) + (comment_i === listing.commented_by.length - 1 ? '' : ', ')
-        })
-      }
-      let details_area = (
-        <div style={ S('font-14') }>
-          <span>{ property.bedroom_count } Beds</span>
-          &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-          <span>{ property.bathroom_count } Baths</span>
-          &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
-          <span>{ square_feet } Sqft</span>
-        </div>
-      )
-      return (
-        <div onMouseOut={ this.props.removeActiveListing.bind(this) } onMouseOver={ this.props.setActiveListing.bind(this, listing) } key={ 'panel-listing-grid-' + listing.id + '-' + i } style={ S('relative pointer w-415 h-315 pb-10 pl-10 bg-fff pull-left br-3') }>
-          <div style={ S('absolute r-0') }>
-            <FavoriteHeart
-              listing={ listing }
-            />
-          </div>
-          <div onClick={ this.props.showListingViewer.bind(this, listing) } style={ S('relative') }>
-            <div style={ image_overlay } />
-            { data.show_listing_panel ? listing_image : '' }
-            <div style={ S('absolute color-fff l-15 b-15') }>
-              <div style={ S('mb-10') }>
-                <span style={ S(`bg-${status_color} pt-6 pr-10 pb-6 pl-10 br-3`) }>
-                  { listing.status }
-                </span>
+        return (
+          <div
+            onMouseLeave={this.props.removeActiveListing.bind(this)}
+            onMouseEnter={this.props.setActiveListing.bind(this, listing)}
+            key={'panel-listing-grid-' + listing.id + '-' + i}
+            style={
+              S('relative pointer w-415 h-315 pb-10 pl-10 bg-fff pull-left br-3')
+            }
+          >
+            <div style={S('absolute r-0')}>
+              <FavoriteHeart
+                listing={listing}
+              />
+            </div>
+            <div onClick={ this.props.showListingViewer.bind(this, listing)} style={S('relative')}>
+              <div style={image_overlay} />
+              { data.show_listing_panel ? listing_image : '' }
+              <div style={ S('absolute color-fff l-15 b-15')}>
+                <div style={ S('mb-10')}>
+                  <span style={ S(`bg-${status_color} pt-6 pr-10 pb-6 pl-10 br-3`) }>
+                    { listing.status }
+                  </span>
+                </div>
+                <div style={ { ...S('font-21 fw-600 mb-5'), textShadow: '0 1px 4px rgba(0, 0, 0, 0.2)' } }>
+                  { listing_util.addressTitle(address) }
+                </div>
+                <div style={ S('font-17 fw-600') }>
+                  ${ helpers.numberWithCommas(Math.floor(price)) }
+                </div>
+                { details_area }
               </div>
-              <div style={ { ...S('font-21 fw-600 mb-5'), textShadow: '0 1px 4px rgba(0, 0, 0, 0.2)' } }>
-                { listing_util.addressTitle(address) }
-              </div>
-              <div style={ S('font-17 fw-600') }>
-                ${ helpers.numberWithCommas(Math.floor(price)) }
-              </div>
-              { details_area }
             </div>
           </div>
-        </div>
-      )
-    })
-    // Listing list
-    const listing_panel_list = listings.map((listing, i) => {
-      const status_color = listing_util.getStatusColor(listing.status)
-      let property = listing.compact_property
-      let address = listing.address
-      if (!property)
-        property = listing.property
-      if (!address)
-        address = property.address
-      let listing_image = <div style={ S('w-40 h-40 bg-efefef') }/>
-      if (listing.cover_image_url)
-        listing_image = <div style={ S('w-40 h-40 br-3 bg-url(' + listing.cover_image_url + ') bg-cover bg-center') } />
-      const listing_style = S('pointer pl-10 h-60 pt-10 border-bottom-1-solid-f5fafe')
-      const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
-      let price = listing.price
-      if (listing.close_price && user && user.user_type === 'Agent')
-        price = listing.close_price
-      const price_per_square_foot = Math.floor(price / listing_util.metersToFeet(property.square_meters))
-      return (
-        <div onMouseOut={ this.props.removeActiveListing.bind(this) } onMouseOver={ this.props.setActiveListing.bind(this, listing) } className="listing-panel__list-item" key={ 'panel-listing-list-' + listing.id + '-' + i} onClick={ this.props.showListingViewer.bind(this, listing) } style={ listing_style }>
-          <div style={ S('pull-left') }>
-            { data.show_listing_panel ? listing_image : '' }
-          </div>
-          <div style={ S('ml-10 pull-left w-220') }>
-            <div style={ S('mb-5') }>{ listing_util.addressTitle(address) }</div>
-            <div className="pull-left" style={ S('w-10 h-10 br-100 mr-8 bg-' + status_color) }></div>
-            <div className="pull-left" style={ S('mt-4n font-12') }>
-              { listing.status }
+        )
+      })
+      // Listing list
+      listing_panel_list = listings.map((listing, i) => {
+        const status_color = listing_util.getStatusColor(listing.status)
+        let property = listing.compact_property
+        let address = listing.address
+        if (!property)
+          property = listing.property
+        if (!address)
+          address = property.address
+        let listing_image = <div style={ S('w-40 h-40 bg-efefef') }/>
+        if (listing.cover_image_url)
+          listing_image = <div style={ S('w-40 h-40 br-3 bg-url(' + listing.cover_image_url + ') bg-cover bg-center') } />
+        const listing_style = S('pointer pl-10 h-60 pt-10 border-bottom-1-solid-f5fafe')
+        const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
+        let price = listing.price
+        if (listing.close_price && user && user.user_type === 'Agent')
+          price = listing.close_price
+        const price_per_square_foot = Math.floor(price / listing_util.metersToFeet(property.square_meters))
+        return (
+          <div onMouseLeave={ this.props.removeActiveListing.bind(this) } onMouseEnter={ this.props.setActiveListing.bind(this, listing) } className="listing-panel__list-item" key={ 'panel-listing-list-' + listing.id + '-' + i} onClick={ this.props.showListingViewer.bind(this, listing) } style={ listing_style }>
+            <div style={ S('pull-left') }>
+              { data.show_listing_panel ? listing_image : '' }
+            </div>
+            <div style={ S('ml-10 pull-left w-220') }>
+              <div style={ S('mb-5') }>{ listing_util.addressTitle(address) }</div>
+              <div className="pull-left" style={ S('w-10 h-10 br-100 mr-8 bg-' + status_color) }></div>
+              <div className="pull-left" style={ S('mt-4n font-12') }>
+                { listing.status }
+              </div>
+            </div>
+            <div className="pull-left" style={ S('mt-10 w-80') }>
+              <div>{ address.postal_code }</div>
+            </div>
+            <div className="pull-left" style={ S('mt-10 w-100') }>
+              <div>${ helpers.numberWithCommas(Math.floor(price)) }</div>
+            </div>
+            <div className="pull-left" style={ S('mt-10 w-60') }>
+              <div>{ property.bedroom_count }</div>
+            </div>
+            <div className="pull-left" style={ S('mt-10 w-60') }>
+              <div>{ property.bathroom_count }</div>
+            </div>
+            <div className="pull-left" style={ S('mt-10 w-60') }>
+              <div>{ square_feet }</div>
+            </div>
+            <div className="pull-left" style={ S('mt-10 w-70') }>
+              <div>${ price_per_square_foot }</div>
+            </div>
+            <div className="pull-left" style={ S('mt-10 w-70') }>
+              <div>{ property.year_built }</div>
+            </div>
+            <div className="pull-left" style={ S('mt-10 w-70') }>
+              <div>{ listing_util.getDOM(listing.dom) }</div>
             </div>
           </div>
-          <div className="pull-left" style={ S('mt-10 w-80') }>
-            <div>{ address.postal_code }</div>
-          </div>
-          <div className="pull-left" style={ S('mt-10 w-100') }>
-            <div>${ helpers.numberWithCommas(Math.floor(price)) }</div>
-          </div>
-          <div className="pull-left" style={ S('mt-10 w-60') }>
-            <div>{ property.bedroom_count }</div>
-          </div>
-          <div className="pull-left" style={ S('mt-10 w-60') }>
-            <div>{ property.bathroom_count }</div>
-          </div>
-          <div className="pull-left" style={ S('mt-10 w-60') }>
-            <div>{ square_feet }</div>
-          </div>
-          <div className="pull-left" style={ S('mt-10 w-70') }>
-            <div>${ price_per_square_foot }</div>
-          </div>
-          <div className="pull-left" style={ S('mt-10 w-70') }>
-            <div>{ property.year_built }</div>
-          </div>
-          <div className="pull-left" style={ S('mt-10 w-70') }>
-            <div>{ listing_util.getDOM(listing.dom) }</div>
-          </div>
-        </div>
-      )
-    })
+        )
+      })
+    }
     // Listing panel
     let heading_height = 150
     let panel_top = 90
@@ -219,7 +257,7 @@ export default class ListingPanel extends Component {
     let listing_panel_style = S(`absolute t-0 w-${panel_width} bg-fff h-${window.innerHeight}`)
     let listing_scroll_style = {
       ...listing_panel_style,
-      top: panel_top + 'px',
+      top: `${panel_top}px`,
       height: window.innerHeight - heading_height + 10,
       overflowY: 'scroll'
     }
@@ -241,7 +279,7 @@ export default class ListingPanel extends Component {
       <span className="close">&times;</span>
     )
     if (data.show_listing_panel) {
-      panel_class = panel_class + ' active'
+      panel_class += ' active'
       button_class = 'listing-panel__button'
     }
     let panel_content_items = listing_panel_cards
@@ -322,7 +360,7 @@ export default class ListingPanel extends Component {
         <div style={ listing_panel_style } className={ panel_class }>
           <div>
             <div style={ S('pt-10 pl-15 pr-15 mb-10') }>
-              <div className="tempo" style={ S('color-444 fw-100 font-24') }>{ listings.length }{ listings_total } Homes</div>
+              <div className="sf" style={ S('color-444 font-24') }><span style={ S('fw-600') }>{ listings.length }</span>{ listings_total } Homes</div>
               <div>
                 Sorting by
                 <DropdownButton bsStyle="link" title={ sortby_title || '' } id="dropdown-size-large">
@@ -340,12 +378,14 @@ export default class ListingPanel extends Component {
             </div>
             { items_heading }
           </div>
-          <div style={ listing_scroll_style }>
-            <div style={ S('m-0 p-0') }>
-              { panel_content_items }
-              <div className="clearfix"></div>
+          {
+            <div style={listing_scroll_style}>
+              <div style={S('m-0 p-0')}>
+                { panel_content_items }
+                <div className="clearfix" />
+              </div>
             </div>
-          </div>
+          }
         </div>
       </div>
     )

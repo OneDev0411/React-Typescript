@@ -10,15 +10,21 @@ const controller = {
       listing: listing.id,
       list_agent: listing.list_agent
     }
+
     AppStore.emitChange()
   },
+
   isFavorited(mls_number) {
     const data = AppStore.data
     const user = data.user
-    if (user && user.favorite_listings && user.favorite_listings.length && user.favorite_listings.indexOf(mls_number) !== -1)
+
+    if (user && user.favorite_listings && user.favorite_listings.length && user.favorite_listings.indexOf(mls_number) !== -1) {
       return true
+    }
+
     return false
   },
+
   handleFavoriteAction(listing) {
     const data = AppStore.data
     const user = data.user
@@ -30,28 +36,33 @@ const controller = {
     }
     // Do instant heart
     let favorite = true
-    if (!AppStore.data.user.favorite_listings)
+    if (!AppStore.data.user.favorite_listings) {
       AppStore.data.user.favorite_listings = []
+    }
     if (controller.isFavorited(mls_number)) {
       AppStore.data.user.favorite_listings = AppStore.data.user.favorite_listings.filter((mls_number_loop) => {
-        if (mls_number_loop !== mls_number)
+        if (mls_number_loop !== mls_number) {
           return mls_number_loop
+        }
       })
       // Edit actives
       if (AppStore.data.favorite_listings) {
         AppStore.data.favorite_listings = AppStore.data.favorite_listings.filter((listing_loop) => {
-          if (listing_loop.id !== listing.id)
+          if (listing_loop.id !== listing.id) {
             return listing_loop
+          }
         })
       }
       favorite = false
     } else {
       AppStore.data.user.favorite_listings.push(mls_number)
       // Edit actives
-      if (!AppStore.data.favorite_listings)
+      if (!AppStore.data.favorite_listings) {
         AppStore.data.favorite_listings = []
-      if (!_.find(AppStore.data.favorite_listings, { id: listing.id }))
+      }
+      if (!_.find(AppStore.data.favorite_listings, { id: listing.id })) {
         AppStore.data.favorite_listings.push(listing)
+      }
     }
     AppStore.emitChange()
     // Handle DB later

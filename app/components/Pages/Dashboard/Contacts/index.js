@@ -1,62 +1,61 @@
-import React  from 'react'
-import Dispatcher from '../../../../dispatcher/ContactDispatcher'
+import React from 'react'
+import { connect } from 'react-redux'
+import { getContacts, getTags } from '../../../../store_actions/contact'
 
-export default class extends React.Component {
+class Contacts extends React.Component {
+  static fetchData(dispatch, params) {
+    const { user } = params
+    return dispatch(getContacts(user))
+  }
+
   constructor(props) {
     super(props)
   }
 
   componentDidMount() {
-    const { data } = this.props
-    const { user } = data
-
-    // get deals
-    this.getContacts(user)
-
-    // get shared tags
-    this.getTags(user)
+    this.init()
   }
 
-  getContacts(user) {
-    Dispatcher.dispatch({
-      action: 'get-contacts',
-      user
-    })
-  }
+  async init() {
+    const { dispatch, contacts } = this.props
 
-  getTags(user) {
-    Dispatcher.dispatch({
-      action: 'get-tags',
-      user
-    })
+    // get contacts
+    if (!contacts.list)
+      dispatch(getContacts())
+
+    // get tags
+    if (!contacts.tags)
+      dispatch(getTags())
   }
 
   render() {
-    const { data } = this.props
-    const user = data.user
+    const { user, contacts, dispatch } = this.props
 
-    const children = React.Children.map(this.props.children, child =>
-      React.cloneElement(child, {
-        user,
-        contacts: data.contacts,
-        tags: data.contacts_tags
-      })
-    )
+    const children = React.cloneElement(this.props.children, {
+      dispatch,
+      user,
+      contacts: contacts.list,
+      tags: contacts.tags
+    })
 
     return (
       <div className="crm">
         <div className="contacts">
           {
-            !data.contacts &&
+            !contacts.list &&
             <div className="loading-list">
               <div><i className="fa fa-spinner fa-spin fa-2x fa-fw" /></div>
               <b>Loading contacts ...</b>
             </div>
           }
 
-          { data.contacts && children }
+          { contacts.list && children }
         </div>
       </div>
     )
   }
 }
+
+export default connect(state => ({
+  contacts: state.contact
+}))(Contacts)

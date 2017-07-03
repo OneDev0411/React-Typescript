@@ -1,5 +1,6 @@
 // Sidebar.js
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Nav, NavItem, NavDropdown, Modal, Col, FormControl, Button, Alert, OverlayTrigger, Popover, DropdownButton, MenuItem } from 'react-bootstrap'
@@ -11,11 +12,9 @@ import MaskedInput from 'react-input-mask'
 import { all_countries } from '../../../../utils/country-data'
 import helpers from '../../../../utils/helpers'
 import { PhoneNumberUtil } from 'google-libphonenumber'
-const phoneUtil = PhoneNumberUtil.getInstance()
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import ProfileImage from './ProfileImage'
-import SvgChat from './Svgs/Chat'
 import SvgMap from './Svgs/Map'
 import SvgStore from './Svgs/Store'
 import SvgPeople from './Svgs/People'
@@ -24,6 +23,11 @@ import SvgBriefCase from './Svgs/BriefCase'
 import SvgSupport from './Svgs/Support'
 import SvgNotifications from './Svgs/Notifications'
 import Brand from '../../../../controllers/Brand'
+
+// chatroom stuff
+import InstantTrigger from '../Chatroom/Shared/instant-trigger'
+
+const phoneUtil = PhoneNumberUtil.getInstance()
 
 export default class SideBar extends Component {
 
@@ -213,31 +217,31 @@ export default class SideBar extends Component {
     return icon
   }
 
-  roomNotificationIcon() {
-    const data = this.props.data
-    const rooms = data.rooms
-    let room_notifications_sum = 0
-    let icon
-    if (rooms) {
-      let count = 0
-      room_notifications_sum = rooms.forEach(room => {
-        if (room.new_notifications)
-          count++
-      })
-      if (rooms && count > 0) {
-        icon = (
-          <div style={S('pl-10 absolute t-1 r-0')}>
-            <div style={S('font-15 bg-db3821 br-100 p-6 h-17 text-center')}>
-              <span style={S('color-fff font-10 relative t-9n')}>
-                { count }
-              </span>
-            </div>
-          </div>
-        )
-      }
-    }
-    return icon
-  }
+  // roomNotificationIcon() {
+  //   const data = this.props.data
+  //   const rooms = data.rooms
+  //   let room_notifications_sum = 0
+  //   let icon
+  //   if (rooms) {
+  //     let count = 0
+  //     room_notifications_sum = rooms.forEach(room => {
+  //       if (room.new_notifications)
+  //         count++
+  //     })
+  //     if (rooms && count > 0) {
+  //       icon = (
+  //         <div style={S('pl-10 absolute t-1 r-0')}>
+  //           <div style={S('font-15 bg-db3821 br-100 p-6 h-17 text-center')}>
+  //             <span style={S('color-fff font-10 relative t-9n')}>
+  //               { count }
+  //             </span>
+  //           </div>
+  //         </div>
+  //       )
+  //     }
+  //   }
+  //   return icon
+  // }
 
   uploadProfilePic(files) {
     const data = this.props.data
@@ -284,11 +288,11 @@ export default class SideBar extends Component {
     delete AppStore.data.current_listing
     AppStore.emitChange()
   }
-  handleChatNavClick() {
-    const data = this.props.data
-    if (data.current_listing)
-      this.hideListingViewer()
-  }
+  // handleChatNavClick() {
+  //   const data = this.props.data
+  //   if (data.current_listing)
+  //     this.hideListingViewer()
+  // }
   toggleShowPassword() {
     if (!AppStore.data.settings)
       AppStore.data.settings = {}
@@ -301,6 +305,7 @@ export default class SideBar extends Component {
   goToStore() {
     window.location = '/dashboard/website'
   }
+
   render() {
     // Data
     const data = this.props.data
@@ -308,11 +313,10 @@ export default class SideBar extends Component {
     if (!data.user)
       return false
 
-
     let sidebar_height = 0
     if (typeof window !== 'undefined')
       sidebar_height = window.innerHeight
-    const sidebar_style = S(`w-70 fixed pl-8 t-0 z-100 bg-202A33 h-${sidebar_height}`)
+    const sidebar_style = S(`w-70 fixed t-0 z-100 bg-202A33 h-${sidebar_height}`)
     const path = data.path
     const active = {}
 
@@ -479,6 +483,7 @@ export default class SideBar extends Component {
     const title_area = (
       <div>&nbsp;</div>
     )
+
     const popover = {
       conversation: <Popover className="sidenav__popover" id="popover-conversations">Conversations</Popover>,
       map: <Popover className="sidenav__popover" id="popover-listing">Listings</Popover>,
@@ -573,16 +578,16 @@ export default class SideBar extends Component {
       )
     }
 
-    let branding_logo
-    if (Brand.asset('site_logo')) {
-      branding_logo = (
-        <div style={S('mb-10 mt-10')}>
-          <a target="_blank" href={'http://' + data.brand.hostnames[0]}>
-            <div style={S(`bg-url(${Brand.asset('site_logo')}) bg-cover bg-center w-30 h-30 ml-10 br-3`)} />
-          </a>
-        </div>
-      )
-    }
+    // let branding_logo
+    // if (Brand.asset('site_logo')) {
+    //   branding_logo = (
+    //     <div style={S('mb-10 mt-10')}>
+    //       <a target="_blank" href={'http://' + data.brand.hostnames[0]}>
+    //         <div style={S(`bg-url(${Brand.asset('site_logo')}) bg-cover bg-center w-30 h-30 ml-10 br-3`)} />
+    //       </a>
+    //     </div>
+    //   )
+    // }
     const nav_active_color = `#${Brand.color('primary', '3388ff')}`
     let close_intercom
     if (data.show_intercom) {
@@ -606,16 +611,10 @@ export default class SideBar extends Component {
 
     return (
       <aside style={sidebar_style} className="sidebar__nav-list pull-left">
-        <Nav bsStyle="pills" stacked style={S('mt-10')}>
-          { branding_logo }
-          <OverlayTrigger placement="right" overlay={popover.conversation} delayShow={200} delayHide={0}>
-            <LinkContainer onClick={this.handleChatNavClick.bind(this)} className={active.recents} to="/dashboard/recents">
-              <NavItem style={S('w-85p')}>
-                {this.roomNotificationIcon()}
-                <SvgChat color={active.recents ? nav_active_color : '#4e5c6c'} />
-              </NavItem>
-            </LinkContainer>
-          </OverlayTrigger>
+
+        <InstantTrigger />
+
+        <Nav bsStyle="pills" stacked style={S('mt-10 pl-8')}>
           <OverlayTrigger placement="right" overlay={popover.map} delayShow={200} delayHide={0}>
             <LinkContainer onClick={this.hideListingViewer.bind(this)} className={active.mls} to="/dashboard/mls">
               <NavItem style={S('w-85p')}>
@@ -733,8 +732,8 @@ export default class SideBar extends Component {
     )
   }
 }
-SideBar.propTypes = {
-  data: React.PropTypes.object,
-  location: React.PropTypes.object,
-  history: React.PropTypes.object
-}
+// SideBar.propTypes = {
+//   data: React.PropTypes.object,
+//   location: React.PropTypes.object,
+//   history: React.PropTypes.object,
+// }

@@ -5,12 +5,12 @@ import 'isomorphic-fetch'
 import config from '../../config/public'
 export default {
   create: (params, callback) => {
-    let api_host = params.api_host
-    if (!api_host) api_host = config.app.url
     // If no comment
-    if (!params.comment.trim())
+    if (!params.comment.trim()) {
       return false
-    const create_room_url = `${api_host}/api/create-message?access_token=${params.access_token}`
+    }
+
+    const create_room_url = `/api/create-message?access_token=${params.access_token}`
     const request_object = {
       room_id: params.room_id,
       comment: params.comment,
@@ -24,16 +24,16 @@ export default {
       },
       body: JSON.stringify(request_object)
     })
-    .then((response) => {
-      if (response.status >= 400) {
-        const error = {
-          status: 'error',
-          response
+      .then(response => {
+        if (response.status >= 400) {
+          const error = {
+            status: 'error',
+            response
+          }
+          return callback(error, false)
         }
-        return callback(error, false)
-      }
-      return response.json()
-    })
-    .then(response => callback(false, response))
+        return response.json()
+      })
+      .then(response => callback(false, response))
   }
 }

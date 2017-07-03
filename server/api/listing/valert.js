@@ -13,25 +13,32 @@ router.post('/listings/valerts', async (ctx, next) => {
 
   // From map widget
   if (req.body.office && !options.list_offices) {
-    endpoint = endpoint + '?associations=compact_listing.list_agent,compact_listing.list_office,compact_listing.selling_office,compact_listing.selling_agent&order_by=office,status&office=' + req.body.office
+    endpoint += '?associations=compact_listing.proposed_agent&order_by[]=office&order_by[]=status&office=' + req.body.office
   }
 
   // From listing widget
-  if (options.list_offices && options.list_offices.length) {
-    endpoint = endpoint + '?associations=compact_listing.list_agent'
+  if (options.list_offices && options.list_offices.length || options.brand) {
+    endpoint += '?associations=compact_listing.proposed_agent'
 
     if (options.listing_statuses[0] === 'Sold') {
-      endpoint = endpoint + '&order_by=price'
+      endpoint += '&order_by[]=price'
     }
+  }
+
+
+  const headers = {}
+
+  if (req.body.brand) {
+    headers['x-rechat-brand'] = req.body.brand
   }
 
   // Offset
   if (req.body.offset) {
-    endpoint = endpoint + '&limit=75&offset=' + req.body.offset
+    endpoint = endpoint + '&limit=500&offset=' + req.body.offset
   }
 
   try {
-    const response = await ctx.fetch(endpoint, 'POST').send(options)
+    const response = await ctx.fetch(endpoint, 'POST').set(headers).send(options)
     ctx.body = response.body
   }
   catch(e) {}

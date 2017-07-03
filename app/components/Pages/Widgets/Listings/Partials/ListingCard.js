@@ -7,6 +7,35 @@ import FavoriteHeart from '../../../Dashboard/Partials/FavoriteHeart'
 import Brand from '../../../../../controllers/Brand'
 import ActionBubble from '../../../Partials/ActionBubble'
 export default class ListingCard extends Component {
+  side(listing) {
+    if (!listing.proposed_agent)
+      return
+
+    if (!listing.proposed_agent.agent)
+      return
+
+    const agent = listing.proposed_agent.agent
+
+    const is_list_agent = (
+      agent.mlsid === listing.list_agent_mls_id || agent.mlsid === listing.co_list_agent_mls_id
+    )
+
+    const is_selling_agent = (
+      agent.mlsid === listing.selling_agent_mls_id || agent.mlsid === listing.co_selling_agent_mls_id
+    )
+
+    if (is_list_agent && is_selling_agent)
+      return 'Listing & Buyer Agent'
+
+    if (is_list_agent && !is_selling_agent)
+      return 'Listing Agent'
+
+    if (!is_list_agent && is_selling_agent)
+      return 'Buyer Agent'
+
+    return ''
+  }
+
   render() {
     const listing = this.props.listing
     const data = this.props.data
@@ -75,11 +104,13 @@ export default class ListingCard extends Component {
       )
     }
     let agent_image_area
-    if (listing.list_agent) {
+
+    const agent_user = listing.proposed_agent
+    if (agent_user) {
       let avatar = (
         <div style={S(`bg-url(${Brand.asset('default_avatar')}) w-50 h-50 bg-center bg-cover br-100`)} />
       )
-      const profile_image_url = listing.list_agent.profile_image_url
+      const profile_image_url = agent_user.profile_image_url
       if (profile_image_url) {
         avatar = (
           <div style={S(`bg-url(${profile_image_url}) w-50 h-50 bg-center bg-cover br-100`)} />
@@ -87,8 +118,8 @@ export default class ListingCard extends Component {
       }
       let online_indicator
       let bg_color = 'dddfe0'
-      if (listing.list_agent.online_state) {
-        if (listing.list_agent.online_state === 'Online' || listing.list_agent.online_state === 'Background')
+      if (agent_user.agent && agent_user.agent.online_state) {
+        if (agent_user.agent && agent_user.agent.online_state === 'Online' || agent_user.agent.online_state === 'Background')
           bg_color = '35b863'
       }
       online_indicator = <div style={S(`br-100 bg-${bg_color} w-13 h-13 bw-2 solid bc-fff absolute z-2 t-2n r-2`)} />
@@ -227,7 +258,7 @@ export default class ListingCard extends Component {
             </div>
             <div style={S('pull-left relative t-17 w-1 h-14 bg-e5e5e5 mr-15')} />
             <div style={S('pull-left mr-10 mt-13 color-8696a4')}>
-              { Brand.side(listing) }
+              { this.side(listing) }
             </div>
           </div>
         </div>

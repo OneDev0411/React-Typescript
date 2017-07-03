@@ -17,11 +17,9 @@ router.get(/^\/dashboard(?:\/|$)/, async (ctx, next) => {
     }
 
     ctx.locals.AppStore = AppStore
-
-    return await ctx.display()
   } else {
     // If mls listing
-    if (ctx.request.url.indexOf('/dashboard/mls/') === -1) {
+    if (ctx.request.url.indexOf('/dashboard/mls') === -1) {
       return ctx.redirect(`/signin?redirect_to=${ctx.request.path}`)
     }
   }

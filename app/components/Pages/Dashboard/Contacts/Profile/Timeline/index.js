@@ -12,10 +12,6 @@ export default class Timeline extends React.Component {
     super(props)
   }
 
-  componentDidMount() {
-
-  }
-
   create(id, activity) {
     let attributes = {}
 

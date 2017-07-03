@@ -1,0 +1,17 @@
+/* bm-menu */
+.bm-menu-wrap {
+  z-index: 101 !important;
+  background-color: #263445;
+  color: #fff;
+  .rooms {
+    @extend %rooms;
+    .list-container {
+      max-height: 81vh;
+      min-height: 81vh;
+    }
+  }
+}
+
+.bm-overlay {
+  z-index: 99 !important;
+}

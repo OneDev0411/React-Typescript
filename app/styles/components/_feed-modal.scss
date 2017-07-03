@@ -1,0 +1,67 @@
+.c-feed-modal {
+    .modal-dialog {
+        position: relative;
+        top: auto;
+        left: auto;
+        transition: none !important;
+        transform: none !important;
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .modal-content {
+        height: 100vh;
+        width: 100vw;
+        border-radius: 0;
+        border-width: 0;
+        box-shadow: none;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+.c-feed-modal__header {
+    height: 65px;
+    padding: 1.55rem 2rem;
+}
+
+.c-feed-modal__title {
+    font-size: 1.8rem;
+    line-height: 1;
+    margin: .7rem 0 0;
+    float: left;
+}
+
+.c-feed-modal__close-btn {
+    padding: .8rem 1rem;
+    font-size: 1.8rem;
+    line-height: 1;
+    border-radius: 3px;
+    border: 1px solid #e9e9e9;
+    background: #e9e9e9;
+    float: right;
+}
+
+.c-feed-modal__body {
+    position: absolute;
+    top: 65px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: calc(100vh - 66px);
+    overflow-y: scroll;
+    padding: 2rem 2rem 0;
+    color: #fff;
+}
+
+.c-feed-moda-listing-card__loading {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(255,255,255,0.7);
+    z-index: 100;
+}

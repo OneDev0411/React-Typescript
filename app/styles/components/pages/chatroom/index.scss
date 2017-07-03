@@ -1,0 +1,42 @@
+$rooms-padding: 20px;
+
+@import './icon';
+@import './fullscreen';
+@import './rooms';
+@import './messages';
+@import './sidebar';
+@import './members';
+@import './delivery-report';
+@import './popups';
+
+.chatroom {
+  margin-left: 65px;
+  margin-right: 0;
+
+  .no-padding {
+    padding: 0;
+  }
+  .rooms {
+    @extend %rooms;
+  }
+  .messages {
+    @extend %messages;
+  }
+}
+
+/**
+ * helpers
+ */
+.inline {
+  display: inline;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.vcenter {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
+}

@@ -2,7 +2,7 @@ import webpack from 'webpack'
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
 
-const postcss = function() {
+const postcss = function postcss() {
   return [
     require('postcss-cssnext')({}),
     require('postcss-browser-reporter')({}),
@@ -25,7 +25,7 @@ webpackConfig.plugins.push(
 webpackConfig.module.rules.push(
   {
     test: /\.css/,
-    use:[
+    use: [
       'style-loader',
       'css-loader',
       {

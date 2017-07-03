@@ -4,21 +4,6 @@ import listing_util from '../../../../../app/utils/listing'
 const router = require('koa-router')()
 const app = new Koa()
 
-async function getListing(config, id){
-  return new Promise((resolve, reject) => {
-    Listing.get({
-      id,
-      api_host: config.api_host_local
-    }, (err, response) => {
-      if (err) {
-        return reject(err)
-      }
-
-      return resolve(response)
-    })
-  })
-}
-
 /**
  * route for /mls/alerts
  */
@@ -47,7 +32,7 @@ router.get('/dashboard/mls/actives', async (ctx, next) => {
  * route for /mls
  */
 router.get('/dashboard/mls', async (ctx, next) => {
-  await ctx.display()
+  await next()
 })
 
 /**
@@ -61,10 +46,11 @@ router.get('/dashboard/mls/:id', async (ctx, next) => {
   }
 
   try {
-    const response = await getListing(ctx.config, id)
-    const listing = response.data
-
     const { AppStore } = ctx.locals
+
+    const access_token = AppStore.data.user ? AppStore.data.user.access_token : null
+    const response = await Listing.fetch(id, access_token)
+    const listing = response.body.data
 
     AppStore.data = {
       ...AppStore.data,

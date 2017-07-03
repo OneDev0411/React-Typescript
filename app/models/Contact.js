@@ -1,7 +1,7 @@
-import agent from 'superagent'
 import _ from 'underscore'
 import moment from 'moment'
 import config from '../../config/public'
+import Fetch from '../services/fetch'
 
 const Contact = {
   get: {},
@@ -15,12 +15,11 @@ const proxy_host = config.app.url
 * add new contact
 */
 Contact.add = async function(params) {
-  const { contacts, access_token } = params
+  const { contacts } = params
 
   try {
-    const response = await agent
-      .post(`${api_host}/contacts`)
-      .set({ Authorization: `Bearer ${access_token}` })
+    const response = await new Fetch()
+      .post('/contacts')
       .send({contacts})
 
     return response
@@ -32,32 +31,32 @@ Contact.add = async function(params) {
 /**
 * returns contacts list
 */
-Contact.getContacts = async function(params) {
-  const { access_token } = params
-  const endpoint = `${api_host}/contacts?limit=10000&sorting_value=Update`
+Contact.getContacts = async function(user) {
+  const { access_token } = user
 
   try {
-    const response = await agent
-      .get(endpoint)
-      .set({ Authorization: `Bearer ${access_token}` })
+    const fetchContacts = new Fetch()
+      .get('/contacts?limit=10000&sorting_value=Update')
 
-    return response
+    // required on ssr
+    if (access_token)
+      fetchContacts.set({ Authorization: `Bearer ${access_token}` })
+
+    return await fetchContacts
   } catch (e) {
-    throw e
+    // throw e.message
   }
 }
 
 /**
 * returns contact's timeline
 */
-Contact.getTimeline = async function(params) {
-  const { id, access_token } = params
-  const endpoint = `${api_host}/contacts/${id}/timeline`
+Contact.getTimeline = async function(id) {
+  const endpoint = `/contacts/${id}/timeline`
 
   try {
-    const response = await agent
+    const response = await new Fetch()
       .get(endpoint)
-      .set({ Authorization: `Bearer ${access_token}` })
 
     return response
   } catch (e) {
@@ -69,14 +68,13 @@ Contact.getTimeline = async function(params) {
 * add note
 */
 Contact.addNote = async function(params) {
-  const { id, note, access_token } = params
-  const endpoint = `${api_host}/contacts/${id}/attributes`
+  const { id, note } = params
+  const endpoint = `/contacts/${id}/attributes`
   const payload = Contact.helper.populateAttributes('note', [{ note }])
 
   try {
-    const response = await agent
+    const response = await new Fetch()
       .post(endpoint)
-      .set({ Authorization: `Bearer ${access_token}` })
       .send(payload)
 
     return response
@@ -88,14 +86,12 @@ Contact.addNote = async function(params) {
 /**
 * add new item to user's timeline
 */
-Contact.updateUserTimeline = async function(params) {
-  const { user_action, object_class, object, access_token } = params
-  const endpoint = `${api_host}/users/self/timeline`
+Contact.updateUserTimeline = async function(user, user_action, object_class, object) {
+  const endpoint = `/users/self/timeline`
 
   try {
-    const response = await agent
+    const response = await new Fetch()
       .post(endpoint)
-      .set({ Authorization: `Bearer ${access_token}` })
       .send({ action: user_action })
       .send({ object_class })
       .send({ object })
@@ -110,14 +106,13 @@ Contact.updateUserTimeline = async function(params) {
 * create new attributes
 */
 Contact.createAttributes = async function(params) {
-  const { id, type, attributes, access_token } = params
-  const endpoint = `${api_host}/contacts/${id}/attributes`
+  const { id, type, attributes } = params
+  const endpoint = `/contacts/${id}/attributes`
   const payload = Contact.helper.populateAttributes(type, attributes)
 
   try {
-    const response = await agent
+    const response = await new Fetch()
       .post(endpoint)
-      .set({ Authorization: `Bearer ${access_token}` })
       .send(payload)
 
     return response
@@ -130,14 +125,12 @@ Contact.createAttributes = async function(params) {
 * update current attributes
 */
 Contact.updateAttributes = async function(params) {
-  const { id, type, attributes, access_token } = params
+  const { id, type, attributes } = params
   const payload = Contact.helper.populateAttributes(type, attributes)
 
   try {
-    const response = await agent
-      .post(`${proxy_host}/api/contacts/update-attributes?access_token=${access_token}`)
-      .set({ Authorization: `Bearer ${access_token}` })
-      .send({ contact_id: id })
+    const response = await new Fetch()
+      .patch(`/contacts/${id}`)
       .send({ attributes: payload.attributes })
 
     return response
@@ -150,14 +143,11 @@ Contact.updateAttributes = async function(params) {
 * delete attribute
 */
 Contact.deleteAttribute = async function(params) {
-  const { id, attribute_id, access_token } = params
+  const { id, attribute_id } = params
 
   try {
-    const response = await agent
-      .post(`${proxy_host}/api/contacts/delete-attribute?access_token=${access_token}`)
-      .set({ Authorization: `Bearer ${access_token}` })
-      .send({ contact_id: id })
-      .send({ attribute_id })
+    const response = await new Fetch()
+      .delete(`/contacts/${id}/attributes/${attribute_id}`)
 
     return response
   } catch (e) {
@@ -168,13 +158,10 @@ Contact.deleteAttribute = async function(params) {
 /**
 * get tags
 */
-Contact.getTags = async function(params) {
-  const { access_token } = params
-
+Contact.getTags = async function() {
   try {
-    const response = await agent
-      .get(`${api_host}/contacts/tags`)
-      .set({ Authorization: `Bearer ${access_token}` })
+    const response = await new Fetch()
+      .get(`/contacts/tags`)
 
     return response
   } catch (e) {

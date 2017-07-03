@@ -3,10 +3,9 @@ import { browserHistory } from 'react-router'
 import { Row, Col, Button, Tabs, Tab } from 'react-bootstrap'
 import Avatar from 'react-avatar'
 import moment from 'moment'
-import AppStore from '../../../../../stores/AppStore'
-import Dispatcher from '../../../../../dispatcher/ContactDispatcher'
 import Stepper from '../../../../Partials/Stepper'
 import Contact from '../../../../../models/Contact'
+import { getTimeline, upsertAttributes } from '../../../../../store_actions/contact'
 import Notes from './Notes'
 import AddNote from './Add-Note'
 import Timeline from './Timeline'
@@ -61,13 +60,9 @@ export default class ContactProfile extends React.Component {
   }
 
   async getTimeline() {
-    const { user, params } = this.props
+    const { user, params, dispatch } = this.props
 
-    const timeline = await Dispatcher.dispatchSync({
-      action: 'get-timeline',
-      id: params.id,
-      user
-    })
+    const timeline = await dispatch(getTimeline(params.id))
 
     const contact = {
       ...this.state.contact,
@@ -91,6 +86,10 @@ export default class ContactProfile extends React.Component {
     const { contact } = this.state
     const attributes = contact.sub_contacts[0].attributes
     const entity = `${type}s`
+
+    if (!attributes[entity])
+      attributes[entity] = new Array()
+
     attributes[entity].push({
       type,
       [type]: `Enter ${type} #${attributes[entity].length + 1}`
@@ -140,15 +139,8 @@ export default class ContactProfile extends React.Component {
   }
 
   upsertAttributes(type, attributes) {
-    const { user, params } = this.props
-
-    Dispatcher.dispatch({
-      action: 'upsert-attributes',
-      id: params.id,
-      type,
-      attributes,
-      user
-    })
+    const { params, dispatch } = this.props
+    dispatch(upsertAttributes(params.id, type, attributes))
   }
 
   render() {
@@ -158,6 +150,8 @@ export default class ContactProfile extends React.Component {
       return false
 
     const notes = Contact.get.notes(contact)
+    const emails = Contact.get.emails(contact)
+    const phones = Contact.get.phones(contact)
 
     return (
       <div className="dashboard">
@@ -217,7 +211,7 @@ export default class ContactProfile extends React.Component {
                 </li>
 
                 {
-                  Contact.get.emails(contact).map((item, key) => (
+                  emails.map((item, key) => (
                     <li key={`email_${key}`}>
                       <div className="name">Email</div>
                       <div className="data">
@@ -236,7 +230,25 @@ export default class ContactProfile extends React.Component {
                 }
 
                 {
-                  Contact.get.phones(contact).map((item, key) => (
+                  emails.length === 0 &&
+                  <li>
+                    <div className="name">Email</div>
+                    <div className="data">
+                      <Editable
+                        type="email"
+                        id={null}
+                        showEdit={true}
+                        showAdd={true}
+                        text=""
+                        onAdd={this.onAddAttribute.bind(this)}
+                        onChange={this.onChangeAttribute.bind(this)}
+                      />
+                    </div>
+                  </li>
+                }
+
+                {
+                  phones.map((item, key) => (
                     <li key={`phone_${key}`}>
                       <div className="name">Phone</div>
                       <div className="data">
@@ -253,6 +265,25 @@ export default class ContactProfile extends React.Component {
                     </li>
                   ))
                 }
+
+                {
+                  phones.length === 0 &&
+                  <li>
+                    <div className="name">Phone</div>
+                    <div className="data">
+                      <Editable
+                        type="phone_number"
+                        id={null}
+                        showEdit={true}
+                        showAdd={true}
+                        text="-"
+                        onAdd={this.onAddAttribute.bind(this)}
+                        onChange={this.onChangeAttribute.bind(this)}
+                      />
+                    </div>
+                  </li>
+                }
+
                 <li>
                   <div className="name">Original Source</div>
                   <div className="data">
@@ -364,7 +395,10 @@ export default class ContactProfile extends React.Component {
                 </Tab>
 
                 <Tab eventKey="notes" title="Notes" className="notes">
-                  <Notes notes={notes} />
+                  <Notes
+                    notes={notes}
+                    onNoteChange={this.onChangeAttribute.bind(this)}
+                  />
                 </Tab>
               </Tabs>
             </div>

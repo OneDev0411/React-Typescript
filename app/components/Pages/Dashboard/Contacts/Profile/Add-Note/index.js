@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from 'react-bootstrap'
-import Dispatcher from '../../../../../../dispatcher/ContactDispatcher'
+import store from '../../../../../../stores'
+import { addNote } from '../../../../../../store_actions/contact'
 
 export default class AddNote extends React.Component {
   constructor(props) {
@@ -13,7 +14,7 @@ export default class AddNote extends React.Component {
 
   async onAddNote() {
     const { note } = this.state
-    const { user, contact_id } = this.props
+    const { contact_id } = this.props
 
     if (note.trim().length === 0)
       return
@@ -21,12 +22,7 @@ export default class AddNote extends React.Component {
     this.setState({ saving: true })
 
     // save note
-    await Dispatcher.dispatchSync({
-      action: 'add-note',
-      id: contact_id,
-      user,
-      note
-    })
+    await store.dispatch(addNote(contact_id, note))
 
     this.setState({
       saving: false,

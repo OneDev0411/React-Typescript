@@ -38,6 +38,19 @@ webpackConfig.plugins.push(
     name: 'vendor',
     filename: appConfig.compile.jsVendorBundle
   }),
+  new webpack.optimize.UglifyJsPlugin({
+    // Eliminate comments
+    comments: true,
+    // Compression specific options
+    compress: {
+      // remove warnings
+      warnings: false,
+      // Drop console statements
+      drop_console: false,
+      // remove debugger; statements
+      drop_debugger: false
+    }
+  }),
   new ExtractTextPlugin({
     filename: appConfig.compile.cssBundle,
     allChunks: true
@@ -57,8 +70,8 @@ webpackConfig.module.rules.push(
   {
     test: /\.css/,
     use: ExtractTextPlugin.extract({
-      fallbackLoader: 'style-loader',
-      loader: [
+      fallback: 'style-loader',
+      use: [
         { loader: 'css-loader' },
         {
           loader: 'postcss-loader',
@@ -72,8 +85,8 @@ webpackConfig.module.rules.push(
   {
     test: /\.scss/,
     use: ExtractTextPlugin.extract({
-      fallbackLoader: 'style-loader',
-      loader: [
+      fallback: 'style-loader',
+      use: [
         { loader: 'css-loader' },
         {
           loader: 'postcss-loader',

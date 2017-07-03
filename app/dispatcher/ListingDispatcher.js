@@ -2,10 +2,9 @@
 import { Dispatcher } from './flux'
 
 // Listings
-import searchListingMap from '../actions/listings/search-map'
+import searchMlsNumber from '../actions/listings/search-mls-number'
 import searchListingWidget from '../actions/listings/search-widget'
 import searchListingInput from '../actions/listings/search-input'
-import getSimilarListings from '../actions/listings/get-similars'
 import getValerts from '../actions/listings/get-valerts'
 import getValertsAlert from '../actions/listings/get-valerts-alert'
 import getValertsNoGeo from '../actions/listings/get-valerts-no-geo'
@@ -35,8 +34,8 @@ ListingDispatcher.register((payload) => {
   const action = payload.action
   switch (action) {
 
-    case 'search-listing-map':
-      searchListingMap(payload.user, payload.q, payload.status)
+    case 'search-mls-number':
+      searchMlsNumber(payload.user, payload.q, payload.status)
       break
 
     case 'search-listing-input':
@@ -45,10 +44,6 @@ ListingDispatcher.register((payload) => {
 
     case 'search-listing-widget':
       searchListingWidget(payload.user, payload.q)
-      break
-
-    case 'get-similar-listings':
-      getSimilarListings(payload.user, payload.mls_number)
       break
 
     case 'get-valerts':

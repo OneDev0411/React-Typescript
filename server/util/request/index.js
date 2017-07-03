@@ -3,10 +3,7 @@ import superagent from 'superagent'
 import request from 'request'
 import config from '../../../config/private'
 
-const app = new Koa()
-
 const requestMiddleware = async function (ctx, next) {
-
   ctx.config = config
   const api_url = config.api.url
   const access_token = ctx.request.query.access_token
@@ -43,10 +40,14 @@ const requestMiddleware = async function (ctx, next) {
         // try to parse encoded json
         try {
           responseText = JSON.parse(responseText)
-        }
-        catch(e) {}
+        } catch(e) {}
 
-        ctx.status = err.response ? err.response.status : 500
+        const status = err.response ? err.response.status : 500
+
+        if (status === 490)
+          return false
+
+        ctx.status = status
         ctx.body = {
           status: 'error',
           response: {
@@ -89,4 +90,6 @@ const requestMiddleware = async function (ctx, next) {
   await next()
 }
 
-module.exports = app.use(requestMiddleware)
+export default function() {
+  return requestMiddleware
+}

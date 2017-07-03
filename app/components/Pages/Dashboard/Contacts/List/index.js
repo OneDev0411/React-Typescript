@@ -3,18 +3,16 @@ import { Grid, Row, Col } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
 import Avatar from 'react-avatar'
 import _ from 'underscore'
-import MessageModal from '../../../../Partials/MessageModal'
 import Contact from '../../../../../models/Contact'
+import { upsertAttributes } from '../../../../../store_actions/contact'
 import AddContact from '../Add-Contact'
 import Stage from '../components/Stage'
-import Dispatcher from '../../../../../dispatcher/ContactDispatcher'
 
 export default class ContactsList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      contacts: {},
-      showSavedModal: false
+      contacts: {}
     }
   }
 
@@ -34,17 +32,15 @@ export default class ContactsList extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const { contacts } = nextProps
-    return (contacts && _.size(contacts) > _.size(this.state.contacts)) ||
-      (this.state.showSavedModal !== nextState.showSavedModal)
+    return (contacts && _.size(contacts) > _.size(this.state.contacts))
   }
 
-  onNewContact() {
-    this.setState({ showSavedModal: true })
-    setTimeout(() => this.setState({ showSavedModal: false }), 3000)
+  onNewContact(id) {
+    this.open(id)
   }
 
   onChangeStage(stage, contact) {
-    const { user } = this.props
+    const { dispatch } = this.props
 
      const attributes = [{
       id: Contact.get.stage(contact).id,
@@ -52,24 +48,15 @@ export default class ContactsList extends React.Component {
       stage
     }]
 
-    Dispatcher.dispatch({
-      action: 'upsert-attributes',
-      id: contact.id,
-      type: 'stage',
-      attributes,
-      user
-    })
+    dispatch(upsertAttributes(contact.id, 'stage', attributes))
   }
 
-  open (contact) {
-    browserHistory.push(`/dashboard/contacts/${contact.id}`)
+  open (id) {
+    browserHistory.push(`/dashboard/contacts/${id}`)
   }
 
   render() {
-    const {
-      contacts,
-      showSavedModal
-    } = this.state
+    const { contacts } = this.state
 
     return (
       <div className="list">
@@ -89,7 +76,7 @@ export default class ContactsList extends React.Component {
 
               <AddContact
                 user={this.props.user}
-                onNewContact={() => this.onNewContact()}
+                onNewContact={(id) => this.onNewContact(id)}
               />
 
             </Col>
@@ -103,7 +90,7 @@ export default class ContactsList extends React.Component {
             <p>To get started, click the blue button to add contact</p>
             <AddContact
               user={this.props.user}
-              onNewContact={() => this.onNewContact()}
+              onNewContact={(id) => this.onNewContact(id)}
             />
           </div>
         }
@@ -129,7 +116,7 @@ export default class ContactsList extends React.Component {
                     sm={3}
                     xs={3}
                     className="vcenter"
-                    onClick={() => this.open(contact) }
+                    onClick={() => this.open(contact.id) }
                   >
                     <Avatar
                       className="avatar"
@@ -148,7 +135,7 @@ export default class ContactsList extends React.Component {
                     xs={3}
                     className="vcenter"
                     style={{ overflow: 'hidden' }}
-                    onClick={() => this.open(contact) }
+                    onClick={() => this.open(contact.id) }
                   >
                     { Contact.get.email(contact, 30) }
                   </Col>
@@ -157,7 +144,7 @@ export default class ContactsList extends React.Component {
                     sm={2}
                     xs={2}
                     className="vcenter"
-                    onClick={() => this.open(contact) }
+                    onClick={() => this.open(contact.id) }
                   >
                     { Contact.get.phone(contact) }
                   </Col>
@@ -177,7 +164,7 @@ export default class ContactsList extends React.Component {
                     sm={2}
                     xs={2}
                     className="vcenter"
-                    onClick={() => this.open(contact) }
+                    onClick={() => this.open(contact.id) }
                   >
                     { Contact.get.source(contact).label }
                   </Col>
@@ -187,11 +174,6 @@ export default class ContactsList extends React.Component {
             }
           </Grid>
         }
-
-        <MessageModal
-          show={showSavedModal}
-          text="New contact added!"
-        />
       </div>
     )
   }

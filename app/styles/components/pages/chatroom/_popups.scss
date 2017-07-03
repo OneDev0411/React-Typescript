@@ -1,0 +1,254 @@
+.chat-popup {
+  $height: 360px;
+  $bar-height: 33px;
+  position: fixed;
+  height: $height;
+  bottom: 0;
+  background-color: #fff;
+  box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.15);
+  border-radius: 4px 4px 0 0;
+  z-index: 100;
+  color: #4a494a;
+  @media (max-width : 738px) {
+    display: none !important;
+  }
+
+  &.minimize {
+    bottom: ($height - $bar-height) * -1;
+  }
+
+  .bar {
+    text-align: right;
+    padding: 8px 4px 0 8px;
+    background-color: #f6f7f9;
+    border-radius: 4px 4px 0 0;
+    height: $bar-height;
+    color: #000;
+    text-align: left;
+
+    &.blinking {
+      @extend %blinker;
+    }
+
+    .room-title {
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: 600;
+      display: inline-block;
+      min-width: 115px;
+    }
+
+    .icons {
+      display: inline-block;
+      vertical-align: middle;
+      @extend %fix--btn-group;
+      .icon {
+        margin-left: 15px;
+        cursor: pointer;
+        opacity: 0.6;
+        .bdg {
+          font-size: 12px;
+          margin-left: 3px !important;
+        }
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+
+    &.isActive {
+      background-color: #2196f3;
+      .icon {
+        svg g, svg path {
+          fill: #fff;
+        }
+        .bdg {
+          color: #fff !important;
+        }
+      }
+      .room-title {
+        color: #fff;
+      }
+    }
+  }
+  .messages {
+    @extend %messages-popup;
+  }
+}
+
+/*
+ * Messages popup
+ */
+%messages-popup {
+  @extend %messages;
+  $height-of-create-message: 45px;
+  $height-of-typing-area: 33px;
+  $messages-height: 330px;
+  height: $messages-height;
+  position: relative;
+  padding-top: 0;
+
+  .messages-list {
+    $left-w: 10px;
+    $hg: $messages-height - $height-of-create-message - $height-of-typing-area;
+    min-height: $hg;
+    max-height: $hg;
+    overflow: auto;
+    padding: 8px 0 0 0;
+
+    .delivery-report {
+      float: right !important;
+    }
+
+    .message-item {
+      margin: 10px 10px 0px 10px !important;
+
+      .content {
+        .attachment {
+          @extend %popup-message-attachment;
+        }
+        .recommendation {
+          @extend %popup-message-recommendation;
+        }
+        .alert {
+          @extend %popup-message-alert;
+        }
+      }
+    }
+
+    .message-subitem {
+      margin-left: $left-w;
+      .content {
+        .comment {
+          width: 155px;
+          word-wrap: break-word;
+        }
+
+        .delivery-report {
+          margin-top: -2px;
+        }
+      }
+    }
+
+    .date-splitter {
+      margin: 15px 5%;
+    }
+  }
+
+  .message-typing {
+    height: $height-of-typing-area;
+    color: #fff;
+    padding-left: 10px;
+    font-size: 13px;
+    color: gray;
+    img {
+      width: 20px;
+      margin: 0 5px;
+    }
+  }
+
+  .message-create {
+    min-height: $height-of-create-message;
+    position: absolute;
+    bottom: 9px;
+    left: 9px;
+    right: 9px;
+    border-radius: 5px;
+    border: solid 2px #e3e3e3;
+  }
+
+  .toolbar {
+    display: none;
+  }
+
+  .loading {
+    height: 44vh;
+  }
+}
+
+%popup-message-attachment {
+  .list {
+    .item {
+      img {
+        max-width: 170px;
+      }
+    }
+  }
+}
+
+%popup-message-alert {
+  $hg: 60px;
+  $wd: 180px;
+  $icon-width: 40px;
+  .alert-widget {
+    width: $wd;
+    .icon {
+      width: $icon-width;
+    }
+    .heading {
+      margin-left: $icon-width;
+      padding-left: 5px;
+      width: $wd - $icon-width;
+      .title {
+        display: none;
+      }
+      .proposed {
+        font-size: 13px;
+      }
+    }
+  }
+}
+
+%popup-message-recommendation {
+  .listing {
+    width: 160px;
+    min-height: 150px;
+    .info {
+      bottom: 2px;
+      .status {
+        font-size: 13px;
+      }
+      .address-title {
+        font-size: 15px;
+        margin-bottom: 0;
+      }
+      .price {
+        font-size: 14px;
+      }
+      .details {
+        display: none;
+      }
+    }
+  }
+}
+
+%blinker {
+  background-color: #ed8bb4;
+  background: linear-gradient(270deg, #f6f7f9, #2196f3);
+  background-size: 400% 400%;
+  -webkit-animation: blinkerAnimation 2s ease infinite;
+  -moz-animation: blinkerAnimation 2s ease infinite;
+  -o-animation: blinkerAnimation 2s ease infinite;
+  animation: blinkerAnimation 2s ease infinite;
+}
+
+@-webkit-keyframes blinkerAnimation {
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+@-moz-keyframes blinkerAnimation {
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+@-o-keyframes blinkerAnimation {
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+@keyframes blinkerAnimation {
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}

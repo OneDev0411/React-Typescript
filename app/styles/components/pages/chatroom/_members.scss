@@ -1,0 +1,21 @@
+.chatroom-members {
+  .members-list {
+    margin: 20px 0 10px 0;
+    .item {
+      margin: 10px 0;
+      .vcenter {
+        display: inline-block;
+        vertical-align: middle;
+        float: none;
+      }
+      .title {
+        color: #4a494a;
+        font-size: 15px;
+      }
+      .status {
+        color: #9b9a9b;
+        font-size: 13px;
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+.chatroom-fullscreen {
+  position: fixed;
+  z-index: 200;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  transition: 0.5s;
+  background-color: #fff;
+
+  .chatroom {
+    margin-left: 0;
+    position: relative !important;
+    .rooms {
+      .list {
+        padding-bottom: 4vh;
+      }
+    }
+  }
+}
