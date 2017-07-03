@@ -8,9 +8,16 @@ import { getMessages } from '../../../../../store_actions/chatroom'
 import Toolbar from '../Rooms/toolbar'
 import MessageItem from './message-item'
 import UserTyping from '../UserTyping'
-import ComposeMessage from './compose-message'
+import ComposeMessage from '../ComposeMessage'
 
 class Messages extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      composeMessageHeight: 45
+    }
+  }
 
   componentDidMount() {
     const { roomId, messages, isPopup } = this.props
@@ -157,6 +164,19 @@ class Messages extends React.Component {
     }, 100)
   }
 
+  /**
+   * get height of messages list
+   * the height calculates based on compose-message height
+   */
+  getHeight() {
+    const { composeMessageHeight } = this.state
+    const { isPopup } = this.props
+    const baseHeight = isPopup ? '297px' : '95vh'
+
+    console.log(`calc(${baseHeight} - ${composeMessageHeight}px)`)
+    return `calc(${baseHeight} - ${composeMessageHeight}px)`
+  }
+
   render() {
     const { roomId, user, showToolbar, onClick } = this.props
 
@@ -193,6 +213,10 @@ class Messages extends React.Component {
 
         <div
           className="messages-list"
+          style={{
+            minHeight: this.getHeight(),
+            maxHeight: this.getHeight()
+          }}
           ref={ref => this.messagesList = ref}
         >
           {
@@ -219,6 +243,7 @@ class Messages extends React.Component {
           <ComposeMessage
             user={user}
             roomId={roomId}
+            onHeightChange={(height) => this.setState({ composeMessageHeight: height })}
             onComposeMessage={() => this.scrollEnd()}
           />
         }
