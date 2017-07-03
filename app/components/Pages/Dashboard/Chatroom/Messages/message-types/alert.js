@@ -63,7 +63,7 @@ export default class Alert extends React.Component {
           </div>
 
           <div className="heading">
-            <div className="title">{ alert.title }</div>
+            <div className="title">{ alert.title || 'Saved Search' }</div>
             <div className="proposed">
               { alert.proposed_title }
               <i className="fa fa-angle-right" />
