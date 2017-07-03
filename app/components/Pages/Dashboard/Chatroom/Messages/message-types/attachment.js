@@ -9,7 +9,7 @@ export default class Attachments extends React.Component {
   }
 
   render() {
-    const { message, attachments } = this.props
+    const { comment, attachments } = this.props
 
     return (
       <div className="attachment">
@@ -17,7 +17,7 @@ export default class Attachments extends React.Component {
           Uploaded an image:
         </strong>
         <div>
-          { message.comment }
+          { comment }
         </div>
 
         <div className="list">
