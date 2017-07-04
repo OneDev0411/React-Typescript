@@ -1,6 +1,6 @@
 import Koa from 'koa'
 import mount from 'koa-mount'
-import url from 'url'
+import urlParser from 'url'
 import config from '../../../config/private'
 import handle490 from './490.js'
 import Brand from '../../../app/models/Brand'
@@ -9,9 +9,9 @@ const _ = require('underscore')
 
 const app = new Koa()
 
-async function getBrand(user) {
+async function getBrand(user, url) {
   return new Promise((resolve, reject) => {
-    const hostname = url.parse(config.app_url).hostname
+    const hostname = urlParser.parse(url).hostname
 
     Brand.getByHostname({ hostname, user }, function(err, res) {
       if (err) return reject(err)
@@ -48,6 +48,9 @@ app.use(async function(ctx, next) {
   const { AppStore } = ctx.locals
   const { user } = AppStore.data
 
+  if (ctx.request.url.includes('.map//'))
+    return await next()
+
   if (!ctx.session.user){
     delete AppStore.data.user
   } else {
@@ -61,7 +64,7 @@ app.use(async function(ctx, next) {
 
   try {
     if (!AppStore.data.brand_checked) {
-      const response = await getBrand(user)
+      const response = await getBrand(user, ctx.request.origin)
       AppStore.data = {
         ...AppStore.data,
         ...{
