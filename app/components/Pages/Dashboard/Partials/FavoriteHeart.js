@@ -10,6 +10,9 @@ export default class FavoriteHeart extends Component {
 
   render() {
     const listing = this.props.listing
+    if (!listing)
+      return false
+
     const mls_number = listing.mls_number
     const heart_style = S('pointer absolute r-20 t-20 w-44 h-40 mr-5 z-2')
     const heartColor = this.isFavorited(mls_number) ? '-red' : '-white'
