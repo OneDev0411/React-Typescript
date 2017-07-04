@@ -67,16 +67,8 @@ export default class ListingViewer extends Component {
     const data = this.props.data
     const listing = this.props.listing
     const user = data.user
-    let brand_agent
-    if (data.brand && data.brand.users) {
-      brand_agent = data.brand.users[0]
-      // Check if listing agent is agent
-      if (listing.list_agent && listing.list_agent.user_id && _.find(data.brand.users, { id: listing.list_agent.user_id }))
-        brand_agent = _.find(data.brand.users, { id: listing.list_agent.user_id })
-      // Check for user is agent in branding
-      if (user && _.find(data.brand.users, { id: user.id }))
-        brand_agent = _.find(data.brand.users, { id: user.id })
-    }
+    const brand_agent = listing.proposed_agent
+
     let viewer_width = 0
     if (typeof window !== 'undefined') {
       viewer_width = window.innerWidth - 70
@@ -208,25 +200,7 @@ export default class ListingViewer extends Component {
         let phone_area
         if (brand_agent.phone_number)
           phone_area = <div style={S('font-15 mb-5')}>M: { brand_agent.phone_number }</div>
-        // const chat_button_style = {
-        //   ...S('w-100p'),
-        //   backgroundColor: '#' + Brand.color('primary', '006aff'),
-        //   borderColor: '#' + Brand.color('primary', '006aff')
-        // }
-        // let action_bubble
-        // if (data.signup_tooltip) {
-        //   action_bubble = (
-        //     <ActionBubble
-        //       data={ data }
-        //       listing={ listing }
-        //       handleEmailSubmit={ controller.action_bubble.handleEmailSubmit }
-        //       handleListingInquirySubmit={ controller.action_bubble.handleListingInquirySubmit }
-        //       handleCloseSignupForm={ controller.action_bubble.handleCloseSignupForm }
-        //       handleLoginClick={ controller.action_bubble.handleLoginClick }
-        //       showIntercom={ controller.action_bubble.showIntercom }
-        //     />
-        //   )
-        // }
+
         brand_agent_area = (
           <div style={S('mt-50 color-bfc3c7 w-100p text-left relative')}>
             { profile_image_area }
@@ -240,16 +214,6 @@ export default class ListingViewer extends Component {
               { phone_area }
               <div style={S('font-15 mb-5')}>E: { brand_agent.email }</div>
             </div>
-            {
-              /*
-              <div style={ S('mt-10 relative') }>
-                <Button onClick={ controller.action_bubble.handleBrandAgentClick.bind(this, listing, brand_agent) } bsStyle="primary" style={ chat_button_style } type="submit">Chat With Me</Button>
-                <div style={ S('absolute l-150n t-170n') }>
-                  { action_bubble }
-                </div>
-              </div>
-              */
-            }
           </div>
         )
       }
