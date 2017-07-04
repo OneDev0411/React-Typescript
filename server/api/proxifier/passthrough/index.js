@@ -20,6 +20,9 @@ router.post('/proxifier', bodyParser(), async ctx => {
   const queryString = serialize(ctx.query)
 
   try {
+    // get brand
+    const brand = headers['x-rechat-brand']
+
     // remove base_url because current fetcher middleware add it by itself
     let endpoint = headers['x-endpoint'].replace(config.api.url, '')
 
@@ -34,6 +37,10 @@ router.post('/proxifier', bodyParser(), async ctx => {
 
     if (headers.authorization) {
       request.set({ Authorization: headers.authorization })
+    }
+
+    if (brand) {
+      request.set('X-RECHAT-BRAND', brand)
     }
 
     const response = await request
