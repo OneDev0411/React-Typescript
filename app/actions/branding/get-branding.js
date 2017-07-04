@@ -17,6 +17,7 @@ export default (hostname) => {
   }
 
   Brand.getByHostname(params, (err, res) => {
+    console.log('>GET Brand', err, res)
     if (res && res.status === 'success') {
       AppStore.data.brand = res.data
       AppStore.data.brand_queried = true

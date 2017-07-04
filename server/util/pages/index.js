@@ -65,6 +65,7 @@ app.use(async function(ctx, next) {
   try {
     if (!AppStore.data.brand_checked) {
       const response = await getBrand(user, ctx.request.origin)
+      console.log('>>SERV BRAND', response.body.data)
       AppStore.data = {
         ...AppStore.data,
         ...{
@@ -73,6 +74,7 @@ app.use(async function(ctx, next) {
       }
     }
   } catch(e) {
+    console.log(e)
     /* nothing */
   } finally {
     AppStore.data.brand_checked = true
