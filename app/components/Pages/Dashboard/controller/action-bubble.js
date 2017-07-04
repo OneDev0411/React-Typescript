@@ -78,7 +78,7 @@ const controller = {
     delete AppStore.data.show_signup_confirm_modal
     AppStore.data.signup_tooltip = {
       action: 'listing_inquiry',
-      list_agent: listing.list_agent,
+      list_agent: listing.proposed_agent,
       listing: listing.id
     }
     AppStore.emitChange()
