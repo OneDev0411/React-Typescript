@@ -1,6 +1,7 @@
 // models/Listing.js
 import es6Promise from 'es6-promise'
 es6Promise.polyfill()
+import validate from 'uuid-validate'
 import 'isomorphic-fetch'
 import Fetch from '../services/fetch'
 import config from '../../config/public'
@@ -40,19 +41,21 @@ export default {
     return await fetchListing
   },
   get: (params, callback) => {
-    const endpoint = `/api/listings/${params.id}?access_token=${params.access_token}`
-    fetch(endpoint)
-      .then((response) => {
-        if (response.status >= 400) {
-          const error = {
-            status: 'error',
-            response
-          }
-          return callback(error, false)
+
+    new Fetch()
+      .get(`/listings/${params.id}?associations=compact_listing.proposed_agent`)
+      .end(function(err, res) {
+        if (err) {
+          return callback(err, false)
         }
-        return response.json()
+
+        console.log(res)
+        res.status = 'success'
+        res.data = res.body.data
+        res.info = res.body.info
+
+        return callback(false, res)
       })
-      .then(response => callback(false, response))
   },
   getMlsNumber: (params, callback) => {
     const { access_token, q } = params
@@ -65,41 +68,80 @@ export default {
     callback(false, asyncRequest(getRequest(url, access_token)))
   },
   getValerts: (params, callback) => {
-    const endpoint = `/api/listings/valerts?access_token=${params.access_token}`
-    const request_object = {
-      options: params.options
+    const { options, office, offset, brand } = params
+
+    // base endpoint
+    let endpoint = '/valerts'
+
+    // From map widget
+    if (office && !options.list_offices) {
+      endpoint += '?associations=compact_listing.proposed_agent&order_by[]=office&order_by[]=status&office=' + office
     }
 
-    if (params.office) {
-      request_object.office = params.office
+    // From listing widget
+    if (options.list_offices && options.list_offices.length || options.brand) {
+      endpoint += '?associations=compact_listing.proposed_agent'
+
+      if (options.listing_statuses[0] === 'Sold') {
+        endpoint += '&order_by[]=price'
+      }
     }
 
-    if (params.offset) {
-      request_object.offset = params.offset
+    // Offset
+    if (offset) {
+      endpoint = endpoint + '&limit=500&offset=' + offset
     }
 
-    if (params.brand) {
-      request_object.brand = params.brand
-    }
-
-    fetch(endpoint, {
-      method: 'post',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(request_object)
-    })
-      .then((response) => {
-        if (response.status >= 400) {
-          const error = {
-            status: 'error',
-            response
-          }
-          return callback(error, false)
+    new Fetch()
+      .post(endpoint)
+      .send(options)
+      .end(function(err, res) {
+        if (err) {
+          return callback(err, false)
         }
-        return response.json()
+
+        res.status = 'success'
+        res.data = res.body.data
+        res.info = res.body.info
+
+        return callback(false, res)
       })
-      .then(response => callback(false, response))
+
+    // const endpoint = `/api/listings/valerts?access_token=${params.access_token}`
+    // const request_object = {
+    //   options: params.options
+    // }
+
+    // if (params.office) {
+    //   request_object.office = params.office
+    // }
+
+    // if (params.offset) {
+    //   request_object.offset = params.offset
+    // }
+
+    // if (params.brand) {
+    //   request_object.brand = params.brand
+    // }
+
+    // fetch(endpoint, {
+    //   method: 'post',
+    //   headers: {
+    //     'Content-type': 'application/json'
+    //   },
+    //   body: JSON.stringify(request_object)
+    // })
+    //   .then((response) => {
+    //     if (response.status >= 400) {
+    //       const error = {
+    //         status: 'error',
+    //         response
+    //       }
+    //       return callback(error, false)
+    //     }
+    //     return response.json()
+    //   })
+    //   .then(response => callback(false, response))
   },
   getListing: async (id) => {
     if (!id) {
