@@ -30,13 +30,19 @@ const asyncRequest = async (request) => {
 }
 
 export default {
-  fetch: async (id, access_token) => {
-    const endpoint = `/listings/${id}`
+  fetch: async (id, brand, access_token) => {
+    const endpoint = `/listings/${id}?associations=compact_listing.proposed_agent`
+
     const fetchListing = new Fetch().get(endpoint)
 
     // required on ssr
-    if (access_token)
+    if (access_token) {
       fetchListing.set({ Authorization: `Bearer ${access_token}` })
+    }
+
+    if (brand) {
+      fetchListing.set('X-RECHAT-BRAND', brand.id)
+    }
 
     return await fetchListing
   },
@@ -49,7 +55,6 @@ export default {
           return callback(err, false)
         }
 
-        console.log(res)
         res.status = 'success'
         res.data = res.body.data
         res.info = res.body.info
