@@ -54,13 +54,17 @@ export default class ListingViewer extends Component {
       return
 
     elem.style.opacity = 0
-    window.requestAnimationFrame(() => {
-      elem.style.transition = 'opacity 150ms'
-      elem.style.opacity = 1
-    })
+    if (typeof window !== 'undefined') {
+      window.requestAnimationFrame(() => {
+        elem.style.transition = 'opacity 150ms'
+        elem.style.opacity = 1
+      })
+    }
   }
   handleActivateAccountClick() {
-    window.location.href = `/password/create${window.location.search}`
+    if (typeof window !== 'undefined') {
+      window.location.href = `/password/create${window.location.search}`
+    }
   }
   render() {
     // Listing modal
@@ -630,7 +634,7 @@ export default class ListingViewer extends Component {
       </a>
     )
     if (Brand.asset('site_logo_wide')) {
-      const host = `https://${window.location.host}`
+      const host = (typeof window !== 'undefined') ? `https://${window.location.host}` : '#'
       brand_logo = (
         <a href={host}>
           <img style={S('maxw-200 maxh-35')} src={Brand.asset('site_logo_wide')} />
