@@ -71,7 +71,7 @@ export default class ListingViewer extends Component {
     const data = this.props.data
     const listing = this.props.listing
     const user = data.user
-    const brand_agent = listing ? listing.proposed_agent : null
+    const brand_agent = listing.proposed_agent
 
     let viewer_width = 0
     if (typeof window !== 'undefined') {
