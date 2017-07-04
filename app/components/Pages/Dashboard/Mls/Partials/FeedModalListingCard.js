@@ -178,7 +178,7 @@ export default class ListingCard extends Component {
           </div>}
         <FavoriteHeart listing={listing} />
         {this.props.isFetching === listing.id &&
-          <div className="c-feed-moda-listing-card__loading">
+          <div className="c-feed-modal__listing-card__loading">
             <Loading />
           </div>}
       </div>

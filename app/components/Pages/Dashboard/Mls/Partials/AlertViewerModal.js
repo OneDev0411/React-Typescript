@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { compose, withState, withHandlers, pure } from 'recompose'
-import { Modal } from 'react-bootstrap'
+import { Modal, Button } from 'react-bootstrap'
 import ListingCard from './FeedModalListingCard'
 import ListingModal from '../Listing/ListingModal'
 import api from '../../../../../../app/models/Listing'
@@ -13,37 +13,48 @@ class AlertViewerModal extends Component {
       data,
       show,
       onHide,
-      feed = [],
+      feed,
       isFetching,
       getListing,
+      loadMore,
       selectedListing,
       showListingModal,
+      loadMoreLoading,
       toggleListingModal
     } = this.props
 
-    if (!show || !feed.length) {
+    if (!show || !feed.data.length) {
       return false
     }
 
     return (
       <Modal show={show} onHide={onHide} className="c-feed-modal">
         <Modal.Header className="c-feed-modal__header">
-          <h3 className="c-feed-modal__title">{`Shared Listings (${feed.length})`}</h3>
+          <h3 className="c-feed-modal__title">{`Shared Listings (${feed.data.length} of ${feed.total})`}</h3>
           <button className="c-feed-modal__close-btn" onClick={onHide}>
             Close
           </button>
         </Modal.Header>
         <Modal.Body className="c-feed-modal__body">
-          {feed.length &&
-            feed.map(feed_item => (
-              <ListingCard
-                isFetching={isFetching}
-                key={feed_item.id}
-                listing={feed_item.listing}
-                last_update={feed_item.last_update}
-                onClick={() => getListing(feed_item.listing.id)}
-              />
-            ))}
+          {feed.data.map((feed_item, index) => (
+            <ListingCard
+              isFetching={isFetching}
+              key={`FEED_${feed_item.id}_${index}`}
+              listing={feed_item.listing}
+              last_update={feed_item.last_update}
+              onClick={() => getListing(feed_item.listing.id)}
+            />
+          ))}
+          {loadMore &&
+            <div className="c-feed-modal__loadmore">
+              <Button
+                bsStyle="primary"
+                onClick={loadMore}
+                disabled={loadMoreLoading}
+              >
+                Load More
+              </Button>
+            </div>}
           <ListingModal
             listing={selectedListing}
             show={showListingModal}
@@ -60,7 +71,6 @@ class AlertViewerModal extends Component {
 }
 
 const enhance = compose(
-  pure,
   connect(({ data }) => ({ data })),
   withState('isFetching', 'setIsFetching', ''),
   withState('selectedListing', 'setSelectedListing', null),

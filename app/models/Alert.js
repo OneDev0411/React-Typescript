@@ -76,7 +76,7 @@ export default {
       })
       .then(response => callback(false, response))
   },
-  getFeed: async (alertId, roomId) => {
+  getFeed: async (alertId, roomId, updateAt) => {
     if (!roomId || !alertId) {
       return
     }
@@ -86,9 +86,10 @@ export default {
         .get(`/rooms/${roomId}/recs/feed`)
         .query({ filter: alertId })
         .query({ sorting_value: 'Update' })
-        .query({ limit: 200 })
+        .query({ limit: 10 })
+        .query({ max_value: updateAt })
 
-      return response.body.data
+      return response.body
     } catch (error) {
       throw error
     }

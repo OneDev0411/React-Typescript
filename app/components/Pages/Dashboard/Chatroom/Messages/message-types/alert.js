@@ -1,36 +1,87 @@
 import React from 'react'
-import AlertModel from '../../../../../../models/Alert'
+import api from '../../../../../../models/Alert'
 import AlertViewerModal from '../../../Mls/Partials/AlertViewerModal'
 
 export default class Alert extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      feed: {
+        data: [],
+        total: 0
+      },
       loading: false,
-      feed: []
+      updated_at: '',
+      loadMoreLoading: false
     }
+
+    this._getAlertFeed = this._getAlertFeed.bind(this)
+    this.loadMoreFeed = this.loadMoreFeed.bind(this)
   }
 
-  async loadAlert(alert) {
+  async _getAlertFeed() {
     if (this.state.loading) {
       return false
     }
 
-    let feed = []
-    const { room: roomId, id: alertId } = alert
+    let updated_at
+    let { feed } = this.state
+    const { alert } = this.props
 
     // set loading
     this.setState({ loading: true })
 
     try {
-      feed = await AlertModel.getFeed(alertId, roomId)
+      const response = await api.getFeed(alert.id, alert.room)
+      const { data, info } = response
+      updated_at = data[data.length - 1].updated_at
+
+      feed = {
+        data,
+        total: info.total
+      }
     } catch (e) {
       /* nothing */
     }
 
     this.setState({
       feed,
+      updated_at,
       loading: false
+    })
+  }
+
+  async loadMoreFeed() {
+    if (this.state.loadMoreLoading) {
+      return false
+    }
+
+    const { alert } = this.props
+    let { feed, updated_at } = this.state
+
+    if (!alert || !updated_at) {
+      return false
+    }
+
+    // set loading
+    this.setState({ loadMoreLoading: true })
+
+    try {
+      const response = await api.getFeed(alert.id, alert.room, updated_at)
+      const { data } = response
+      updated_at = data[data.length - 1].updated_at
+      feed = {
+        ...feed,
+        data: [...feed.data, ...data]
+      }
+    } catch (e) {
+      /* nothing */
+    }
+
+    this.setState({
+      feed,
+      updated_at,
+      loadMoreLoading: false
     })
   }
 
@@ -44,13 +95,7 @@ export default class Alert extends React.Component {
           Shared a saved search:
         </strong>
 
-        <AlertViewerModal
-          show={!loading && feed !== null}
-          feed={feed}
-          onHide={() => this.setState({ feed: [] })}
-        />
-
-        <div className="alert-widget" onClick={() => this.loadAlert(alert)}>
+        <div className="alert-widget" onClick={this._getAlertFeed}>
           <div className="icon">
             <img
               src={
@@ -69,6 +114,14 @@ export default class Alert extends React.Component {
             </div>
           </div>
         </div>
+
+        <AlertViewerModal
+          feed={feed}
+          show={!loading && feed.total}
+          onHide={() => this.setState({ feed: { data: [], total: 0 } })}
+          loadMoreLoading={this.state.loadMoreLoading}
+          loadMore={feed.data.length < feed.total && this.loadMoreFeed}
+        />
       </div>
     )
   }
