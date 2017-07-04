@@ -55,7 +55,6 @@ export default {
           return callback(err, false)
         }
 
-        console.log(res)
         res.status = 'success'
         res.data = res.body.data
         res.info = res.body.info
