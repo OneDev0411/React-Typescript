@@ -5,11 +5,11 @@ export default {
   getByHostname: (params, callback) => {
     const { hostname, user } = params
 
-    let hn = typeof window !== 'undefined' ? window.location.hostname : null
+    // let hn = typeof window !== 'undefined' ? window.location.hostname : null
 
-    console.log(hn, hostname)
-    if (hostname === hn)
-      return false
+    // console.log(hn, hostname)
+    // if (hostname === hn)
+    //   return false
 
     let endpoint = `/brands/search?hostname=${hostname}`
     if (params.user) endpoint += `&access_token=${user.access_token}`
