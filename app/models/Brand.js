@@ -7,6 +7,7 @@ export default {
 
     let hn = typeof window !== 'undefined' ? window.location.hostname : null
 
+    console.log(hn, hostname)
     if (hostname === hn)
       return false
 
