@@ -122,7 +122,7 @@ export default class ShareListingModal extends Component {
   }
   render() {
     const data = this.props.data
-    const current_listing = data.current_listing
+    const current_listing = data.current_listing || {}
     const share_modal = data.share_modal
     let users_select_options = []
     // Get users selected
