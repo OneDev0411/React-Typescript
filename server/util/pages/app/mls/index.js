@@ -41,7 +41,7 @@ router.get('/dashboard/mls', async (ctx, next) => {
 router.get('/dashboard/mls/:id', async (ctx, next) => {
   const id = ctx.params.id
 
-  if (!id) {
+  if (!id || id === 'undefined') {
     return await next()
   }
 
@@ -49,7 +49,9 @@ router.get('/dashboard/mls/:id', async (ctx, next) => {
     const { AppStore } = ctx.locals
 
     const access_token = AppStore.data.user ? AppStore.data.user.access_token : null
-    const response = await Listing.fetch(id, access_token)
+    const brand = AppStore.data.brand
+
+    const response = await Listing.fetch(id, brand, access_token)
     const listing = response.body.data
 
     AppStore.data = {
