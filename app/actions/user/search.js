@@ -9,8 +9,8 @@ export default (user, q) => {
   }
   User.search(params, (err, response) => {
     // Success
-    if (response.status === 'success')
-      console.log(response)
+    // if (response.status === 'success')
+      // console.log(response)
 
     AppStore.emitChange()
   })

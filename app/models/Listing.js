@@ -47,7 +47,6 @@ export default {
     return await fetchListing
   },
   get: (params, callback) => {
-
     new Fetch()
       .get(`/listings/${params.id}?associations=compact_listing.proposed_agent`)
       .end(function(err, res) {
