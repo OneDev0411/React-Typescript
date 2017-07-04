@@ -63,6 +63,7 @@ class Brand {
       return
 
     const hostname = window.location.hostname
+    console.log('>HOSTNAME:', hostname)
     AppDispatcher.dispatch({
       action: 'get-branding',
       hostname
