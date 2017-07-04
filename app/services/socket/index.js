@@ -59,7 +59,9 @@ export default class Socket {
    */
   onReconnect() {
     // authenticate again
-    Socket.authenicate(this.user.access_token)
+    if (this.user) {
+      Socket.authenicate(this.user.access_token)
+    }
 
     // emit connected message
     store.dispatch(changeSocketStatus('connected'))

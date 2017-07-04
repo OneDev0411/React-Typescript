@@ -38,9 +38,7 @@ const routes = {
     ['signup']
   ],
   listing: [
-    ['search'],
-    ['listings'],
-    ['valert']
+    ['search']
   ],
   message: [
     ['messages']

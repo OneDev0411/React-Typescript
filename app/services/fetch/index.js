@@ -14,7 +14,7 @@ export default class Fetch {
 
   _create(method, endpoint) {
     const state = store.getState()
-    const { user } = state.data
+    const { user, brand } = state.data
 
     const agent = SuperAgent.post(`${this._baseUrl}/api/proxifier`)
       .set('X-Method', method)
@@ -22,7 +22,11 @@ export default class Fetch {
 
     // auto append access-token
     if (this._autoLogin && user && user.access_token) {
-      agent.set({ Authorization: `Bearer ${user.access_token}` })
+      agent.set('Authorization', `Bearer ${user.access_token}`)
+    }
+
+    if (brand) {
+      agent.set('X-RECHAT-BRAND', brand.id)
     }
 
     // register events

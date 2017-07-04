@@ -4,9 +4,13 @@ import Notification from '../../models/Notification'
 import AppStore from '../../stores/AppStore'
 import _ from 'lodash'
 export default (user) => {
+  if (!user || !user.access_token)
+    return false
+
   const params = {
     access_token: user.access_token
   }
+
   Notification.getAll(params, (err, response) => {
     if (user.access_token && err && err.response.status === 401) {
       window.location.href = '/signout'
