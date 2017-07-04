@@ -30,22 +30,23 @@ async function getBrand(user, url) {
 
 async function display(file, renderProps) {
 
-  const initialState = {
+  let initialState = {
     data: this.locals.AppStore ? this.locals.AppStore.data : {}
   }
 
-  // reset branding
-  if (initialState.data.brand)
-    delete initialState.data.brand
-
   try {
     const response = await getBrand(this.session.user, this.request.origin)
-    initialState.data.brand = response.body.data
+    initialState = {
+      ...initialState,
+      ...{data: {
+        ...initialState.data,
+        ...{brand: response.body.data}
+      }}
+    }
   } catch(e) {
     /* nothing */
   }
 
-  console.log(initialState)
   // create store
   const store = createStore(reducers, initialState, compose(applyMiddleware(thunk)))
 
