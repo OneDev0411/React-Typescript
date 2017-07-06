@@ -5,6 +5,8 @@ import { Field, reduxForm } from 'redux-form'
 import withHandlers from 'recompose/withHandlers'
 
 import Brand from '../../../../../../../controllers/Brand'
+
+import MlsAreaSelects from './MlsAreaSelects'
 import SoldStatusChildrens from './SoldStatusChildrens'
 import OtherStatusesChildrens from './OtherStatusesChildrens'
 import FiltersListingsStatusRow from './FiltersListingsStatusRow'
@@ -19,19 +21,21 @@ const Filters = ({
   onSubmitHandler,
   activeOpenHouses,
   activeActiveListings
-}) =>
+}) => (
   <div className={`c-filters ${isOpen ? 'c-filters--isOpen' : ''}`}>
     <div className="c-filters__inner-wrapper">
       <form
         onSubmit={handleSubmit(onSubmitHandler)}
-        className="c-filters__content">
+        className="c-filters__content"
+      >
         <FiltersListingsStatusRow
           name="listing_statuses.sold"
           title="Sold"
           hasAccordion
           hasSwitchToggle
           color="#d00023"
-          onChangeSwitchToggle={activeSold}>
+          onChangeSwitchToggle={activeSold}
+        >
           <SoldStatusChildrens name="sold_listings_date" />
         </FiltersListingsStatusRow>
 
@@ -56,19 +60,24 @@ const Filters = ({
           name="listing_statuses"
           title="Other Listing Statuses"
           hasAccordion
-          color="#f5a544">
+          color="#f5a544"
+        >
           <OtherStatusesChildrens name="listing_statuses" />
         </FiltersListingsStatusRow>
+
+        <MlsAreaSelects />
       </form>
       <button
         onClick={handleSubmit(onSubmitHandler)}
         className="c-filters__submit-btn"
         disabled={submitting}
-        style={{ backgroundColor: `#${Brand.color('primary', '#2196f3')}` }}>
+        style={{ backgroundColor: `#${Brand.color('primary', '#2196f3')}` }}
+      >
         Update Filters
       </button>
     </div>
   </div>
+)
 
 export default compose(
   connect(null, { ...actions }),
