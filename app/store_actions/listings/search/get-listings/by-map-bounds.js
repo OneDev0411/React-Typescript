@@ -1,10 +1,9 @@
 import getListingsByValert from './by-valert'
 import { isAutoMove } from '../../../../reducers/listings/map'
 import { getFetchingStatus } from '../../../../reducers/listings'
-import { queryOptions } from '../../../../components/Pages/Dashboard/Mls/Partials/MlsMapOptions'
 import { SEARCH_BY_MAP_BOUNDS } from '../../../../constants/listings/search'
 
-const QUERY_LIMIT = 100
+const QUERY_LIMIT = 50
 
 const getQueryPoints = bounds => [
   {
@@ -30,7 +29,7 @@ const getQueryPoints = bounds => [
 ]
 
 const getListingsByMapBounds = bounds => (dispatch, getState) => {
-  const { listings, map, type, panels } = getState().search
+  const { listings, map, type, panels, options } = getState().search
 
   if (
     getFetchingStatus(listings) ||
@@ -48,13 +47,13 @@ const getListingsByMapBounds = bounds => (dispatch, getState) => {
   const limit = QUERY_LIMIT
   const points = getQueryPoints(bounds)
 
-  const options = {
-    ...queryOptions,
+  const queryOptions = {
+    ...options,
     limit,
     points
   }
 
-  return getListingsByValert(options)(dispatch, getState)
+  return getListingsByValert(queryOptions)(dispatch, getState)
 }
 
 export default getListingsByMapBounds

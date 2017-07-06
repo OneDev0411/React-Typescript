@@ -1,4 +1,5 @@
 import { submit } from 'redux-form'
+import getListingsByValert from '../get-listings/by-valert'
 
 // Initial valert options {
 //   limit: '250',
@@ -53,8 +54,8 @@ import { submit } from 'redux-form'
 //     temp_off_market: false,
 //     withdrawn: false,
 //     withdrawn_sublisting: false
-//     open_house: false
 //   },
+//   open_house: false,
 //   soldListingsDate: 'lastThreeMonth'
 // }
 
@@ -78,19 +79,26 @@ import { submit } from 'redux-form'
 //   "Coming Soon"
 // ]
 const prepareStatuses = statuses =>
-  statuses.map(status =>
-    status
-      .split('_')
-      .map(f => f.charAt(0).toUpperCase() + f.substr(1))
-      .join(' ')
-  )
+  Object.keys(statuses).filter(status => statuses[status])
+    .map(status => status
+        .split('_')
+        .map(f => f.charAt(0).toUpperCase() + f.substr(1))
+        .join(' ')
+    )
 
 const submitFiltersForm = values => (dispatch, getState) => {
   const { options, filters: formState } = getState().search
-  const { open_house } = values
+
+  const open_house = values.open_house || false
   const listing_statuses = prepareStatuses(values.listing_statuses)
 
-  dispatch(submit(formName))
+  const queryOptions = {
+    ...options,
+    open_house,
+    listing_statuses
+  }
+
+  return getListingsByValert(queryOptions)(dispatch, getState)
 }
 
 export default submitFiltersForm

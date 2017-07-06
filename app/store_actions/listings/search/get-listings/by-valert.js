@@ -1,8 +1,11 @@
 import api from '../../../../models/listings/search'
+import setSearchListingsOptions from '../set-options'
 import * as listingsTypes from '../../../../constants/listings'
 
 const getListingsByValert = options => (dispatch, getState) => {
   try {
+    dispatch(setSearchListingsOptions(options))
+
     dispatch({
       tabName: 'SEARCH',
       type: listingsTypes.FETCH_LISTINGS_REQUEST

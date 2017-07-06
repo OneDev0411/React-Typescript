@@ -63,7 +63,7 @@ const Filters = ({
       <button
         onClick={handleSubmit(onSubmitHandler)}
         className="c-filters__submit-btn"
-        disabled={pristine || submitting}
+        disabled={submitting}
         style={{ backgroundColor: `#${Brand.color('primary', '#2196f3')}` }}>
         Update Filters
       </button>
@@ -74,6 +74,7 @@ export default compose(
   connect(null, { ...actions }),
   reduxForm({
     form: 'filters',
+    destroyOnUnmount: false,
     initialValues: {
       open_house: false,
       listing_statuses: {
@@ -94,8 +95,8 @@ export default compose(
     getFormState: ({ search }) => search.filters.form
   }),
   withHandlers({
-    onSubmitHandler: () => values => {
-      console.log(values)
+    onSubmitHandler: ({ submitFiltersForm }) => values => {
+      submitFiltersForm(values)
     }
   })
 )(Filters)

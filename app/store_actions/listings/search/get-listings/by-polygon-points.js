@@ -4,7 +4,7 @@ import { getFetchingStatus } from '../../../../reducers/listings'
 import { queryOptions } from '../../../../components/Pages/Dashboard/Mls/Partials/MlsMapOptions'
 import { SEARCH_BY_POLYGON_POINTS } from '../../../../constants/listings/search'
 
-const QUERY_LIMIT = 500
+const QUERY_LIMIT = 50
 
 const getListingsByPolygonPoints = (points = []) => (dispatch, getState) => {
   if (!points.length) {
@@ -16,7 +16,7 @@ const getListingsByPolygonPoints = (points = []) => (dispatch, getState) => {
   const limit = QUERY_LIMIT
 
   const options = {
-    ...queryOptions,
+    ...getState().search.options,
     limit,
     points
   }
