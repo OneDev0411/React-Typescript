@@ -1,93 +1,24 @@
 import React from 'react'
-import api from '../../../../../../models/Alert'
 import AlertViewerModal from '../../../Mls/Partials/AlertViewerModal'
 
 export default class Alert extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      feed: {
-        data: [],
-        total: 0
-      },
       loading: false,
-      updated_at: '',
-      loadMoreLoading: false
+      showModal: false
     }
-
-    this._getAlertFeed = this._getAlertFeed.bind(this)
-    this.loadMoreFeed = this.loadMoreFeed.bind(this)
   }
 
-  async _getAlertFeed() {
-    if (this.state.loading) {
-      return false
-    }
-
-    let updated_at
-    let { feed } = this.state
-    const { alert } = this.props
-
-    // set loading
-    this.setState({ loading: true })
-
-    try {
-      const response = await api.getFeed(alert.id, alert.room)
-      const { data, info } = response
-      updated_at = data[data.length - 1].updated_at
-
-      feed = {
-        data,
-        total: info.total
-      }
-    } catch (e) {
-      /* nothing */
-    }
-
+  setShowModal(state = true) {
     this.setState({
-      feed,
-      updated_at,
-      loading: false
-    })
-  }
-
-  async loadMoreFeed() {
-    if (this.state.loadMoreLoading) {
-      return false
-    }
-
-    const { alert } = this.props
-    let { feed, updated_at } = this.state
-
-    if (!alert || !updated_at) {
-      return false
-    }
-
-    // set loading
-    this.setState({ loadMoreLoading: true })
-
-    try {
-      const response = await api.getFeed(alert.id, alert.room, updated_at)
-      const { data } = response
-      updated_at = data[data.length - 1].updated_at
-      feed = {
-        ...feed,
-        data: [...feed.data, ...data]
-      }
-    } catch (e) {
-      /* nothing */
-    }
-
-    this.setState({
-      feed,
-      updated_at,
-      loadMoreLoading: false
+      showModal: state
     })
   }
 
   render() {
     const { alert } = this.props
-    const { feed, loading } = this.state
+    const { showModal, loading } = this.state
 
     return (
       <div className="alert">
@@ -95,7 +26,7 @@ export default class Alert extends React.Component {
           Shared a saved search:
         </strong>
 
-        <div className="alert-widget" onClick={this._getAlertFeed}>
+        <div className="alert-widget" onClick={() => this.setShowModal()}>
           <div className="icon">
             <img
               src={
@@ -116,11 +47,10 @@ export default class Alert extends React.Component {
         </div>
 
         <AlertViewerModal
-          feed={feed}
-          show={!loading && feed.total}
-          onHide={() => this.setState({ feed: { data: [], total: 0 } })}
-          loadMoreLoading={this.state.loadMoreLoading}
-          loadMore={feed.data.length < feed.total && this.loadMoreFeed}
+          alert={alert}
+          show={showModal}
+          onChangeLoading={loading => this.setState({ loading })}
+          onHide={() => this.setShowModal(false)}
         />
       </div>
     )
