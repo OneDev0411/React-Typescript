@@ -6,16 +6,16 @@ import path from 'path'
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
 
-const postcss = function() {
-  return [
-    require('postcss-cssnext')({
-      browsers: [
-        'last 10 versions',
-        '> 1%'
-      ]
-    })
-  ]
-}
+const postcss = () => ([
+  require('autoprefixer')({
+    browserslist: [
+      '> 1%',
+      'IE 10',
+      'Last 2 versions'
+    ]
+  }),
+  require('cssnano')()
+])
 
 webpackConfig.devtool = ''
 
@@ -39,17 +39,7 @@ webpackConfig.plugins.push(
     filename: appConfig.compile.jsVendorBundle
   }),
   new webpack.optimize.UglifyJsPlugin({
-    // Eliminate comments
-    comments: true,
-    // Compression specific options
-    compress: {
-      // remove warnings
-      warnings: false,
-      // Drop console statements
-      drop_console: false,
-      // remove debugger; statements
-      drop_debugger: false
-    }
+    output: { comments: false }
   }),
   new ExtractTextPlugin({
     filename: appConfig.compile.cssBundle,
@@ -72,7 +62,10 @@ webpackConfig.module.rules.push(
     use: ExtractTextPlugin.extract({
       fallback: 'style-loader',
       use: [
-        { loader: 'css-loader' },
+        {
+          loader: 'css-loader',
+          options: { minimize: true }
+        },
         {
           loader: 'postcss-loader',
           options: {
@@ -87,7 +80,10 @@ webpackConfig.module.rules.push(
     use: ExtractTextPlugin.extract({
       fallback: 'style-loader',
       use: [
-        { loader: 'css-loader' },
+        {
+          loader: 'css-loader',
+          options: { minimize: true }
+        },
         {
           loader: 'postcss-loader',
           options: {

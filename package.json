@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "async": "^2.3.0",
+    "autoprefixer": "^7.1.2",
     "autoprefixer-loader": "^3.2.0",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",
@@ -38,6 +39,7 @@
     "copy-webpack-plugin": "^4.0.1",
     "cosmicjs": "^2.39.0",
     "css-loader": "^0.28.0",
+    "cssnano": "^3.10.0",
     "debounce": "^1.0.0",
     "emojify.js": "^1.1.0",
     "emojione": "^2.2.7",
