@@ -47,6 +47,7 @@ export default class Search extends Component {
   render() {
     const data = this.props.data
     const widget = data.widget
+    console.log(data)
     let listing_list
     if (widget && widget.listings) {
       const listings = widget.listings

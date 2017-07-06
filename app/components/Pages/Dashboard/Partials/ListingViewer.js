@@ -54,20 +54,24 @@ export default class ListingViewer extends Component {
       return
 
     elem.style.opacity = 0
-    window.requestAnimationFrame(() => {
-      elem.style.transition = 'opacity 150ms'
-      elem.style.opacity = 1
-    })
+    if (typeof window !== 'undefined') {
+      window.requestAnimationFrame(() => {
+        elem.style.transition = 'opacity 150ms'
+        elem.style.opacity = 1
+      })
+    }
   }
   handleActivateAccountClick() {
-    window.location.href = `/password/create${window.location.search}`
+    if (typeof window !== 'undefined') {
+      window.location.href = `/password/create${window.location.search}`
+    }
   }
   render() {
     // Listing modal
     const data = this.props.data
     const listing = this.props.listing
     const user = data.user
-    const brand_agent = listing.proposed_agent
+    const brand_agent = listing ? listing.proposed_agent : null
 
     let viewer_width = 0
     if (typeof window !== 'undefined') {
@@ -630,7 +634,7 @@ export default class ListingViewer extends Component {
       </a>
     )
     if (Brand.asset('site_logo_wide')) {
-      const host = `https://${window.location.host}`
+      const host = (typeof window !== 'undefined') ? `https://${window.location.host}` : '#'
       brand_logo = (
         <a href={host}>
           <img style={S('maxw-200 maxh-35')} src={Brand.asset('site_logo_wide')} />
@@ -638,13 +642,14 @@ export default class ListingViewer extends Component {
       )
     }
     if (!user) {
+      let listingId = listing ? listing.id : ''
       join_area = (
         <div style={S('h-70')}>
           <div style={S('pull-left p-16 h-35')}>
             { brand_logo }
           </div>
           <div style={S('pull-right p-16')}>
-            <a style={S(`mr-15 bg-${Brand.color('primary', 'a1bde4')} border-1-solid-${Brand.color('primary', 'a1bde4')}`)} className="btn btn-primary" href={`/signin?redirect_to=/dashboard/mls/${listing.id}`}>Log in</a>
+            <a style={S(`mr-15 bg-${Brand.color('primary', 'a1bde4')} border-1-solid-${Brand.color('primary', 'a1bde4')}`)} className="btn btn-primary" href={`/signin?redirect_to=/dashboard/mls/${listingId}`}>Log in</a>
             { /* <a className="btn btn-primary" href="/signup">Sign up</a> */ }
           </div>
         </div>

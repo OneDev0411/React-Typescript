@@ -48,6 +48,9 @@ app.use(async function(ctx, next) {
   const { AppStore } = ctx.locals
   const { user } = AppStore.data
 
+  if (ctx.request.url.includes('.map//'))
+    return await next()
+
   if (!ctx.session.user){
     delete AppStore.data.user
   } else {

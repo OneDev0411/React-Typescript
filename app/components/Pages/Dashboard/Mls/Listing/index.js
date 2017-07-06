@@ -64,7 +64,7 @@ export default class Listing extends Component {
     }
     let brand_logo
     if (!data.is_widget && !data.user && Brand.asset('site_logo_wide')) {
-      const host = `https://${window.location.host}`
+      const host = typeof window !== 'undefined' ? `https://${window.location.host}` : '#'
       brand_logo = (
         <div style={S('pull-left z-3 absolute p-16')}>
           <a href={host}>

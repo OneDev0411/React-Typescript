@@ -1,10 +1,12 @@
 import React from 'react'
 import xss from 'xss'
+import urlParser from 'url'
 import { renderToString } from 'react-dom/server'
 import { RouterContext } from 'react-router'
 import { createStore, applyMiddleware, compose } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
+import Brand from '../../../app/models/Brand'
 import reducers from '../../../app/reducers'
 import config from '../../../config/webpack'
 
@@ -15,10 +17,34 @@ function fetch(renderProps, store) {
   })
 }
 
+async function getBrand(user, url) {
+  return new Promise((resolve, reject) => {
+    const hostname = urlParser.parse(url).hostname
+
+    Brand.getByHostname({ hostname, user }, function(err, res) {
+      if (err) return reject(err)
+      return resolve(res)
+    })
+  })
+}
+
 async function display(file, renderProps) {
 
-  const initialState = {
+  let initialState = {
     data: this.locals.AppStore ? this.locals.AppStore.data : {}
+  }
+
+  try {
+    const response = await getBrand(this.session.user, this.request.origin)
+    initialState = {
+      ...initialState,
+      ...{data: {
+        ...initialState.data,
+        ...{brand: response.body.data}
+      }}
+    }
+  } catch(e) {
+    /* nothing */
   }
 
   // create store

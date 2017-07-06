@@ -1,7 +1,25 @@
 import Koa from 'koa'
 import superagent from 'superagent'
 import request from 'request'
+import colors from 'colors'
 import config from '../../../config/private'
+
+function logger(url, method, headers, ctx) {
+  const api_url = config.api.url
+  const { user } = ctx.session
+  const endpoint = `${method.toUpperCase()} ${api_url}${url}`.green
+  const username = user ? user.email : 'GUEST'
+  let text = `[ ${colors.gray.bold(username)} ] ${endpoint}`
+
+  if (user) {
+    text += ` (${user.access_token})`.yellow
+  }
+
+  text += "\n" + (JSON.stringify(headers)).cyan
+  text += "\n"
+
+  console.log(text)
+}
 
 const requestMiddleware = async function (ctx, next) {
   ctx.config = config
@@ -29,7 +47,8 @@ const requestMiddleware = async function (ctx, next) {
       url = `${url}?hostname=${host_name}`
     }
 
-    console.log(`[ + ] ${method.toUpperCase()} ${api_url}${url}`)
+    // log
+    logger(url, method, headers, ctx)
 
     try {
       return agent[method.toLowerCase()](`${api_url}${url}`)
