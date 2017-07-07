@@ -4,8 +4,13 @@ import { FormControl } from 'react-bootstrap'
 import S from 'shorti'
 import listing_util from '../../../../utils/listing'
 import config from '../../../../../config/public'
+import AppStore from '../../../../stores/AppStore'
 
 export default class Search extends Component {
+  componentWillMount() {
+    AppStore.data.is_widget = true
+    AppStore.emitChange()
+  }
   componentDidMount() {
     const GoogleMapsLoader = require('google-maps')
     GoogleMapsLoader.LIBRARIES = ['places']
@@ -46,8 +51,8 @@ export default class Search extends Component {
   }
   render() {
     const data = this.props.data
-    const widget = data.widget
-    console.log(data)
+    const widget = true
+
     let listing_list
     if (widget && widget.listings) {
       const listings = widget.listings
