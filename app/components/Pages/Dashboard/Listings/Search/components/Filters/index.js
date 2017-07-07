@@ -28,44 +28,47 @@ const Filters = ({
         onSubmit={handleSubmit(onSubmitHandler)}
         className="c-filters__content"
       >
-        <FiltersListingsStatusRow
-          name="listing_statuses.sold"
-          title="Sold"
-          hasAccordion
-          hasSwitchToggle
-          color="#d00023"
-          onChangeSwitchToggle={activeSold}
-        >
-          <SoldStatusChildrens name="sold_listings_date" />
-        </FiltersListingsStatusRow>
+        <div>
+          <FiltersListingsStatusRow
+            name="listing_statuses.sold"
+            title="Sold"
+            hasAccordion
+            hasSwitchToggle
+            color="#d00023"
+            onChangeSwitchToggle={activeSold}
+          >
+            <SoldStatusChildrens name="sold_listings_date" />
+          </FiltersListingsStatusRow>
 
-        <FiltersListingsStatusRow
-          name="listing_statuses.active"
-          title="Active"
-          color="#32b86d"
-          hasSwitchToggle
-          onChangeSwitchToggle={activeActiveListings}
-        />
+          <FiltersListingsStatusRow
+            name="listing_statuses.active"
+            title="Active"
+            color="#32b86d"
+            hasSwitchToggle
+            onChangeSwitchToggle={activeActiveListings}
+          />
 
-        <FiltersListingsStatusRow
-          name="open_house"
-          title="Open House Only"
-          icon="OH"
-          hasSwitchToggle
-          color="#32b86d"
-          onChangeSwitchToggle={activeOpenHouses}
-        />
+          <FiltersListingsStatusRow
+            name="open_house"
+            title="Open House Only"
+            icon="OH"
+            hasSwitchToggle
+            color="#32b86d"
+            onChangeSwitchToggle={activeOpenHouses}
+          />
 
-        <FiltersListingsStatusRow
-          name="listing_statuses"
-          title="Other Listing Statuses"
-          hasAccordion
-          color="#f5a544"
-        >
-          <OtherStatusesChildrens name="listing_statuses" />
-        </FiltersListingsStatusRow>
-
-        <MlsAreaSelects />
+          <FiltersListingsStatusRow
+            name="listing_statuses"
+            title="Other Listing Statuses"
+            hasAccordion
+            color="#f5a544"
+          >
+            <OtherStatusesChildrens name="listing_statuses" />
+          </FiltersListingsStatusRow>
+        </div>
+        <div style={{ padding: '3rem 2rem', backgroundColor: '#fff' }}>
+          <MlsAreaSelects />
+        </div>
       </form>
       <button
         onClick={handleSubmit(onSubmitHandler)}

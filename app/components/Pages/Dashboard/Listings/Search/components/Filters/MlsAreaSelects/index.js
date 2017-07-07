@@ -8,46 +8,7 @@ import defaultProps from 'recompose/defaultProps'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 
 import Select from 'react-select'
-
-const getAreas = async () => {
-  try {
-    const response = await fetch(
-      'https://boer.d.rechat.com/areas/search?parents[]=0'
-    )
-
-    const responseData = await response.json()
-    return responseData.data.map(({ title, number }) => ({
-      label: title,
-      value: number
-    }))
-  } catch (error) {
-    // console.log(error.message)
-  }
-}
-
-const getSubareas = async areas => {
-  console.log(areas)
-  const query = areas.map(({ value }) => `parents[]=${value}`).join('&')
-
-  if (!query) {
-    return Promise.resolve()
-  }
-
-  try {
-    const response = await fetch(
-      `https://boer.d.rechat.com/areas/search?${query}`
-    )
-
-    const responseData = await response.json()
-    console.log(responseData)
-    return responseData.data.map(({ title, number }) => ({
-      value: number,
-      label: `${title}: #${number}`
-    }))
-  } catch (error) {
-    // console.log(error.message)
-  }
-}
+import api from '../../../../../../../../models/listings/search'
 
 const MlsAreaSelects = (
   {
@@ -59,7 +20,8 @@ const MlsAreaSelects = (
     onChangeSubareas
   } // console.log(subareas)
 ) => (
-  <div>
+  <div style={{ margninBottom: '3rem' }}>
+    <label className="c-filters-label">MLS Areas</label>
     <Select
       multi
       name="mls_areas"
@@ -67,25 +29,30 @@ const MlsAreaSelects = (
       value={selectedAreas}
       placeholder="Area #..."
       onChange={onChangeAreas}
-      className="c-filters__multi-select"
+      className="c-filters__select"
     />
     {subareas.length > 0 &&
-      <Select
-        multi
-        name="subareas"
-        options={subareas}
-        placeholder="Subarea #..."
-        onChange={onChangeSubareas}
-        value={selectedSubareas}
-        className="c-filters__multi-select"
-      />}
+      <div>
+        <label className="c-filters-label">MLS Subareas</label>
+        <Select
+          multi
+          name="subareas"
+          options={subareas}
+          addLabelText="MLS Subareas"
+          placeholder="Subarea #..."
+          onChange={onChangeSubareas}
+          value={selectedSubareas}
+          className="c-filters__select"
+          style={{ margninBottom: '2rem' }}
+        />
+      </div>}
   </div>
 )
 
 export default compose(
   lifecycle({
     componentDidMount() {
-      getAreas().then(areas => {
+      api.getMlsAreas().then(areas => {
         this.setState({
           areas
         })
@@ -97,19 +64,24 @@ export default compose(
   withState('selectedSubareas', 'setSelectedSubareas', []),
   withHandlers({
     getSubareas: ({ setSubareas }) => areas => {
-      getSubareas(areas).then(subareas => {
+      api.getMlsSubareas(areas).then(subareas => {
         setSubareas(subareas)
       })
     }
   }),
   withHandlers({
     onChangeAreas: ({
-      setSelectedAreas,
       selectedAreas,
       getSubareas,
-      setSubareas
+      setSubareas,
+      setSelectedAreas,
+      selectedSubareas,
+      setSelectedSubareas
     }) => areas => {
       setSelectedAreas(areas, getSubareas(areas))
+      if (areas.length === 0 && selectedSubareas.length > 0) {
+        setSelectedSubareas([])
+      }
     },
     onChangeSubareas: ({ setSelectedSubareas, selectedSubareas }) => areas => {
       setSelectedSubareas(areas)
