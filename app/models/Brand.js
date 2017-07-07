@@ -1,4 +1,3 @@
-// models/Brand.js
 import Fetch from '../services/fetch'
 
 export default {
@@ -6,20 +5,22 @@ export default {
     const { hostname, user } = params
 
     let endpoint = `/brands/search?hostname=${hostname}`
-    if (params.user) endpoint += `&access_token=${user.access_token}`
+    if (params.user) {
+      endpoint += `&access_token=${user.access_token}`
+    }
 
     new Fetch()
-    .get(endpoint)
-    .end((err, res) => {
-      if (err) {
-        return callback(err, false)
-      }
+      .get(endpoint)
+      .end((err, res) => {
+        if (err) {
+          return callback(err, false)
+        }
 
-      res.status = 'success'
-      res.data = res.body.data
-      res.info = res.body.info
+        res.status = 'success'
+        res.data = res.body.data
+        res.info = res.body.info
 
-      return callback(false, res)
-    })
+        return callback(false, res)
+      })
   }
 }

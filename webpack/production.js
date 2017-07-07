@@ -6,16 +6,19 @@ import path from 'path'
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
 
-const postcss = () => ([
-  require('autoprefixer')({
-    browserslist: [
-      '> 1%',
-      'IE 10',
-      'Last 2 versions'
-    ]
-  }),
-  require('cssnano')()
-])
+const postcss = function () {
+  return [
+    require('postcss-cssnext')(),
+    require('autoprefixer')({
+      'browserslist': [
+        '> 1%',
+        'IE 10',
+        'Last 2 versions'
+      ]
+    }),
+    require('cssnano')()
+  ]
+}
 
 webpackConfig.devtool = 'eval-source-map'
 

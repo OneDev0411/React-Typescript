@@ -11,7 +11,7 @@ const app = new Koa()
 
 async function getBrand(user) {
   return new Promise((resolve, reject) => {
-    const hostname = url.parse(config.app_url).hostname
+    const hostname = 'katie.app.claystapp.com'//url.parse(config.app_url).hostname
 
     Brand.getByHostname({ hostname, user }, function(err, res) {
       if (err) return reject(err)
@@ -47,9 +47,6 @@ app.use(async function(ctx, next) {
   ctx.config = config
   const { AppStore } = ctx.locals
   const { user } = AppStore.data
-
-  if (ctx.request.url.includes('.map//'))
-    return await next()
 
   if (!ctx.session.user){
     delete AppStore.data.user

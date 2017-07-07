@@ -12,7 +12,7 @@ const config = {
     output: path.resolve(__dirname, '../../dist'),
     publicDirName: 'static',
     publicPath: __DEV__ ? '/static' : '/',
-    jsBundle: __DEV__ ? 'app.js' : 'app.[hash].js?rand=[hash]',
+    jsBundle: __DEV__ ? 'app.js' : 'app.[hash].js',
     jsVendorBundle: 'core.[hash].js',
     cssBundle: 'app.[hash].css',
     template: path.resolve(__dirname, '../../app/templates/app.html'),

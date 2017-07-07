@@ -101,7 +101,9 @@ if (__DEV__) {
 
   app.use(mount(publicPath, serve(path.join(entry, publicPath))))
 } else {
-  app.use(mount(serve(path.join(output))))
+  app.use(mount(serve(path.join(output), {
+    maxage: 86400000
+  })))
 }
 
 // parse pages
