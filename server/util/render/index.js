@@ -62,9 +62,9 @@ async function display(file, renderProps) {
   // get store initial data
   const store_data = encodeURIComponent(xss(JSON.stringify(store.getState())))
 
-  await this.render('development', {
-    store_data,
-    jsBundle: `${config.compile.publicPath}/${config.compile.jsBundle}`
+  await this.render(file || 'app',  {
+    data: this.locals,
+    store_data
   })
 
   // if (['production', 'staging'].indexOf(process.env.NODE_ENV) > -1) {
