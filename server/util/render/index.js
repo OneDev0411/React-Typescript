@@ -62,35 +62,35 @@ async function display(file, renderProps) {
   // get store initial data
   const store_data = encodeURIComponent(xss(JSON.stringify(store.getState())))
 
-  await this.render(file || 'app',  {
-    data: this.locals,
-    store_data
-  })
+  if (['production', 'staging'].indexOf(process.env.NODE_ENV) > -1) {
+    await this.render(file || 'app',  {
+      data: this.locals,
+      store_data
+    })
 
-  // if (['production', 'staging'].indexOf(process.env.NODE_ENV) > -1) {
-  //   if (/\/dashboard\/mls\/(\w+)/.test(this.request.url)) {
-  //     await this.render('app', {
-  //       store_data,
-  //       data: this.locals,
-  //       body: renderToString(
-  //         <Provider store={store}>
-  //           <RouterContext {...renderProps} />
-  //         </Provider>
-  //       )
-  //     })
-  //   }
-  //   else {
-  //     await this.render(file,  {
-  //       data: this.locals,
-  //       store_data
-  //     })
-  //   }
-  // } else {
-  //   await this.render('development', {
-  //     store_data,
-  //     jsBundle: `${config.compile.publicPath}/${config.compile.jsBundle}`
-  //   })
-  // }
+    // if (/\/dashboard\/mls\/(\w+)/.test(this.request.url)) {
+    //   await this.render('app', {
+    //     store_data,
+    //     data: this.locals,
+    //     body: renderToString(
+    //       <Provider store={store}>
+    //         <RouterContext {...renderProps} />
+    //       </Provider>
+    //     )
+    //   })
+    // }
+    // else {
+    //   await this.render(file,  {
+    //     data: this.locals,
+    //     store_data
+    //   })
+    // }
+  } else {
+    await this.render('development', {
+      store_data,
+      jsBundle: `${config.compile.publicPath}/${config.compile.jsBundle}`
+    })
+  }
 }
 
 module.exports = function() {
