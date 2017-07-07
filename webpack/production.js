@@ -17,7 +17,7 @@ const postcss = () => ([
   require('cssnano')()
 ])
 
-webpackConfig.devtool = ''
+webpackConfig.devtool = 'eval-source-map'
 
 webpackConfig.performance = {
   hints: 'warning',
