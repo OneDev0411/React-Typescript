@@ -86,16 +86,28 @@ const prepareStatuses = statuses =>
         .join(' ')
     )
 
+
+const getSoldDate = (selectedMonth = 3) => {
+  const date = new Date(Date.now())
+  return date.setMonth(date.getMonth() - selectedMonth) / 1000
+}
+
 const submitFiltersForm = values => (dispatch, getState) => {
   const { options, filters: formState } = getState().search
 
+  let minimum_sold_date
   const open_house = values.open_house || false
   const listing_statuses = prepareStatuses(values.listing_statuses)
+
+  if (values.listing_statuses.sold) {
+    minimum_sold_date = getSoldDate(parseInt(values.minimum_sold_date, 10))
+  }
 
   const queryOptions = {
     ...options,
     open_house,
-    listing_statuses
+    listing_statuses,
+    minimum_sold_date
   }
 
   return getListingsByValert(queryOptions)(dispatch, getState)

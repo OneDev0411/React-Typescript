@@ -2,11 +2,16 @@ import React from 'react'
 import pure from 'recompose/pure'
 import { Field } from 'redux-form'
 
-const fields = ['last_3_month', 'last_6_month', 'last_year']
+// each index represent month period for minimum_sold_date
+const fields = {
+  last_3_month: '3',
+  last_6_month: '6',
+  last_year: '12'
+}
 
 const SoldStatusChildrens = ({ name }) =>
   <ul className="c-filters-sold-status-childrens">
-    {fields.map(field => {
+    {Object.keys(fields).map(field => {
       const id = `${name}__${field}`
 
       return (
@@ -15,7 +20,7 @@ const SoldStatusChildrens = ({ name }) =>
             id={id}
             name={name}
             type="radio"
-            value={field}
+            value={fields[field]}
             component="input"
             className="c-radio__input"
           />

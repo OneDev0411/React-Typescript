@@ -37,7 +37,7 @@ const Filters = ({
             color="#d00023"
             onChangeSwitchToggle={activeSold}
           >
-            <SoldStatusChildrens name="sold_listings_date" />
+            <SoldStatusChildrens name="minimum_sold_date" />
           </FiltersListingsStatusRow>
 
           <FiltersListingsStatusRow
@@ -102,7 +102,7 @@ export default compose(
         withdrawn: false,
         withdrawn_sublisting: false
       },
-      sold_listings_date: 'last_3_month'
+      minimum_sold_date: '3' // unit is month but it need to timestamp
     },
     getFormState: ({ search }) => search.filters.form
   }),
