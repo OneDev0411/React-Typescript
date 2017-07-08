@@ -59,6 +59,11 @@ export default class ComposeMessage extends React.Component {
   async sendMessage() {
     const { user, roomId } = this.props
 
+    const isLocked = this.text_message.getAttribute('locked')
+
+    if (isLocked === 'true')
+      return false
+
     const comment = this.text_message.value.trim()
 
     if (comment.length === 0)
@@ -89,6 +94,7 @@ export default class ComposeMessage extends React.Component {
   render() {
     return (
       <MessageInput
+        roomId={this.props.roomId}
         inputRef={ref => this.text_message = ref}
         onHeightChange={this.props.onHeightChange}
       />
