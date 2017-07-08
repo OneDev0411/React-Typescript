@@ -157,6 +157,18 @@
     right: 9px;
     border-radius: 5px;
     border: solid 2px #e3e3e3;
+    .suggestions {
+      .heading {
+        .hint {
+          display: none;
+        }
+      }
+      .item {
+        .name {
+          font-size: 10px;
+        }
+      }
+    }
   }
 
   .toolbar {
