@@ -221,7 +221,11 @@ export default class Mentions extends React.Component {
       suggestions: result
     })
 
-    this.showSuggestion()
+    if (result.length > 0) {
+      this.showSuggestions()
+    } else {
+      this.clearSuggestions()
+    }
   }
 
   /**
@@ -270,7 +274,7 @@ export default class Mentions extends React.Component {
   /**
    * show suggestions list
    */
-  showSuggestion() {
+  showSuggestions() {
     this.setState({
       showSuggestions: true
     })
