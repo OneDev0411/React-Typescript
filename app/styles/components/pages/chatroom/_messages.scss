@@ -78,9 +78,46 @@ $left-w: 50px;
     bottom: $mrgn;
     left: $mrgn;
     right: $mrgn;
-    overflow: hidden;
+    // overflow: hidden;
     border: 2px solid #ccc;
     border-radius: 3px;
+    .suggestions {
+      position: absolute;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 15px;
+      left: -1px;
+      right: -1px;
+      max-height: 300px;
+      transition: all 0.4s ease-in;
+      .heading {
+        background-color: rgb(250, 248, 246);
+        padding: 5px;
+        color: gray;
+        font-size: 12px;
+        .hint {
+          display: inline;
+          float: right;
+        }
+      }
+      .item {
+        cursor: pointer;
+        padding: 5px 10px;
+        .name {
+          font-size: 14px;
+          color: gray;
+        }
+
+        &.selected, &:hover {
+          background-color: #2196F3;
+          color: #fff;
+          .name {
+            color: #fff;
+          }
+        }
+      }
+    }
     textarea {
       position: absolute;
       bottom: 0;
