@@ -50,6 +50,10 @@ export default class Mentions extends React.Component {
       .fromEvent(this.input, 'keydown')
       .subscribe(e => this.onKeyDown(e))
 
+    this.blurHandler = Observable
+      .fromEvent(this.input, 'blur')
+      .subscribe(e => this.clearSuggestions())
+
     this.suggestionsHandler = Observable
       .fromEvent(window, 'keyup')
       .subscribe(e => this.handleSuggestionsKeyEvents(e))
@@ -58,6 +62,7 @@ export default class Mentions extends React.Component {
   componentWillUnmount() {
     this.inputHandler.unsubscribe()
     this.cursorHandler.unsubscribe()
+    this.blurHandler.unsubscribe()
     this.suggestionsHandler.unsubscribe()
   }
 
