@@ -8,7 +8,7 @@
   "license": "ISC",
   "scripts": {
     "develop": "NODE_ENV=development nodemon ./bin/server --ignore ./app --exec babel-node",
-    "build": "rimraf dist && NODE_ENV=staging babel-node ./build",
+    "build": "rimraf dist && NODE_ENV=production babel-node ./build",
     "serve": "NODE_ENV=production babel-node ./bin/server",
     "stage": "NODE_ENV=staging babel-node ./bin/server",
     "lint": "npm run lint:app && npm run lint:server",
