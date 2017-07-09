@@ -56,7 +56,6 @@ const ComposeWrapper = ({
           !showOnly &&
           <Compose
             dropDownBox={dropDownBox}
-            onHide={() => onChangeComposeModal(false)}
             onChangeRecipients={recipients => onChangeRecipients(recipients)}
           />
         }
