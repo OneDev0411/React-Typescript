@@ -140,9 +140,6 @@ export default class ChatNotification extends NotificationService {
       if (!this.isRouterMode() && !chatroom.popups[roomId]) {
         Chatroom.openChat(roomId, false)
       }
-
-      // play sound
-      ChatNotification.playSound()
     }
   }
 
@@ -166,6 +163,9 @@ export default class ChatNotification extends NotificationService {
     if (!shouldSendNotification) {
       return false
     }
+
+    // play sound
+    ChatNotification.playSound()
 
     // send browser notification if tab is not active
     this.sendBrowserNotification({
