@@ -2,6 +2,8 @@ import React from 'react'
 import pure from 'recompose/pure'
 import { Field } from 'redux-form'
 
+import Label from './Label'
+
 const getItemWidth = length =>
   `calc(100% / ${length} - (${length - 1}px / ${length}))`
 
@@ -19,8 +21,7 @@ const GroupRadios = ({
   label,
   fields = _fields
 }) => (
-  <div style={{ marginBottom: '3rem' }}>
-    <label className="c-filters-label">{label}</label>
+  <Label label={label}>
     <div className="c-group-radios">
       {fields.map(field => {
         const { value, title } = field
@@ -46,7 +47,7 @@ const GroupRadios = ({
         )
       })}
     </div>
-  </div>
+  </Label>
 )
 
 export default GroupRadios

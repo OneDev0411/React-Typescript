@@ -94,6 +94,8 @@ const getSoldDate = (selectedMonth = 3) => {
 
 const submitFiltersForm = values => (dispatch, getState) => {
   const { options, filters: formState } = getState().search
+  
+  console.log(values)
 
   let minimum_sold_date
   const open_house = values.open_house || false

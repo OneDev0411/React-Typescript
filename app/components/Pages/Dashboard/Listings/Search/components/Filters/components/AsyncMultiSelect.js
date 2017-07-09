@@ -5,7 +5,7 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
-import MultiSelect from './MultiSelect'
+import Label from './Label'
 
 const AsyncMultiSelect = ({
   name,
@@ -15,9 +15,7 @@ const AsyncMultiSelect = ({
   placeholder,
   selectedOptions
 }) =>
-  <MultiSelect
-    label={label}
-  >
+  <Label label={label}>
     <Select.Async
       multi
       name={name}
@@ -27,7 +25,7 @@ const AsyncMultiSelect = ({
       placeholder={placeholder}
       className="c-filters__select"
     />
-  </MultiSelect>
+  </Label>
 
 export default compose(
   pure,

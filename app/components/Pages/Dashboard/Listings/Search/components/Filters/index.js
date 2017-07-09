@@ -9,6 +9,7 @@ import Brand from '../../../../../../../controllers/Brand'
 import Counties from './Counties'
 import Subdivision from './Subdivision'
 import MlsAreaSelects from './MlsAreaSelects'
+import PropertySubtypes from './PropertySubtypes'
 import GroupRadios from './components/GroupRadios'
 import SoldStatusChildrens from './SoldStatusChildrens'
 import OtherStatusesChildrens from './OtherStatusesChildrens'
@@ -72,6 +73,7 @@ const Filters = ({
         <div style={{ padding: '3rem 2rem', backgroundColor: '#fff' }}>
           <MlsAreaSelects />
           <Counties />
+          <PropertySubtypes />
           <GroupRadios name="minimum_bedrooms" label="Bedrooms" />
           <GroupRadios name="minimum_bathrooms" label="Bathrooms" />
           <GroupRadios name="minimum_parking_spaces" label="Garage Space" />
@@ -125,7 +127,14 @@ export default compose(
       minimum_sold_date: '3', // unit is month but it need to timestamp
       minimum_bedrooms: 'any',
       minimum_bathrooms: 'any',
-      minimum_parking_spaces: 'any'
+      minimum_parking_spaces: 'any',
+      property_subtypes: {
+        farm: true,
+        condo: true,
+        duplex: true,
+        townhouse: true,
+        single_family: true
+      }
     },
     getFormState: ({ search }) => search.filters.form
   }),

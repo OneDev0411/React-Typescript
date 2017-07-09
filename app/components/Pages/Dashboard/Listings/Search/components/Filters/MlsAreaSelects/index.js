@@ -5,6 +5,7 @@ import lifecycle from 'recompose/lifecycle'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
+import Label from '../components/Label'
 import api from '../../../../../../../../models/listings/search'
 
 const MlsAreaSelects = (
@@ -17,20 +18,20 @@ const MlsAreaSelects = (
     onChangeSubareas
   } // console.log(subareas)
 ) => (
-  <div style={{ margninBottom: '3rem' }}>
-    <label className="c-filters-label">MLS Areas</label>
-    <Select
-      multi
-      name="mls_areas"
-      options={areas}
-      value={selectedAreas}
-      placeholder="Area #..."
-      onChange={onChangeAreas}
-      className="c-filters__select"
-    />
+  <div style={{ marginBottom: '3rem' }}>
+    <Label label="MLS Areas">
+      <Select
+        multi
+        name="mls_areas"
+        options={areas}
+        value={selectedAreas}
+        placeholder="Area #..."
+        onChange={onChangeAreas}
+        className="c-filters__select"
+      />
+    </Label>
     {subareas.length > 0 &&
-      <div>
-        <label className="c-filters-label">MLS Subareas</label>
+      <Label label="MLS Subareas">
         <Select
           multi
           name="subareas"
@@ -42,7 +43,8 @@ const MlsAreaSelects = (
           className="c-filters__select"
           style={{ margninBottom: '2rem' }}
         />
-      </div>}
+      </Label>
+    }
   </div>
 )
 
