@@ -1,4 +1,5 @@
 import React from 'react'
+import pure from 'recompose/pure'
 
 const MultiSelect = ({
   label,
@@ -10,4 +11,4 @@ const MultiSelect = ({
   </div>
 )
 
-export default MultiSelect
+export default pure(MultiSelect)

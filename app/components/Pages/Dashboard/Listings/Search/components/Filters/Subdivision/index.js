@@ -5,12 +5,12 @@ import Select from 'react-select'
 import AsyncMultiSelect from '../components/AsyncMultiSelect'
 import api from '../../../../../../../../models/listings/search'
 
-const Counties = () =>
+const Subdivisions = () =>
   <AsyncMultiSelect
-    name="counties"
-    label="Counties"
-    placeholder="Counties #..."
-    loadOptions={api.getCounties}
+    name="subdivisions"
+    label="Subdivisions"
+    placeholder="Subdivisions #..."
+    loadOptions={api.getSubdivisions}
   />
 
-export default pure(Counties)
+export default pure(Subdivisions)
