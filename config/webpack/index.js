@@ -17,11 +17,9 @@ const config = {
     cssBundle: 'app.[hash].css',
     template: path.resolve(__dirname, '../../app/templates/app.html'),
     vendors: [
-      'react',
       'moment',
       'lodash',
       'whatwg-fetch',
-      'react-bootstrap'
     ]
   },
   globals: {
