@@ -6,6 +6,7 @@ import withHandlers from 'recompose/withHandlers'
 
 import Brand from '../../../../../../../controllers/Brand'
 
+import Counties from './Counties'
 import MlsAreaSelects from './MlsAreaSelects'
 import GroupRadios from './components/GroupRadios'
 import SoldStatusChildrens from './SoldStatusChildrens'
@@ -69,6 +70,7 @@ const Filters = ({
         </div>
         <div style={{ padding: '3rem 2rem', backgroundColor: '#fff' }}>
           <MlsAreaSelects />
+          <Counties />
           <GroupRadios name="minimum_bedrooms" label="Bedrooms" />
           <GroupRadios name="minimum_bathrooms" label="Bathrooms" />
           <GroupRadios name="minimum_parking_spaces" label="Garage Space" />
@@ -116,6 +118,7 @@ export default compose(
         withdrawn: false,
         withdrawn_sublisting: false
       },
+      counties: null,
       minimum_sold_date: '3', // unit is month but it need to timestamp
       minimum_bedrooms: 'any',
       minimum_bathrooms: 'any',

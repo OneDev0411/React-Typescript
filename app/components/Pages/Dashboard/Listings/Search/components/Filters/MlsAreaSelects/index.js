@@ -1,13 +1,10 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import Select from 'react-select'
 import compose from 'recompose/compose'
 import lifecycle from 'recompose/lifecycle'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
-import defaultProps from 'recompose/defaultProps'
-import withPropsOnChange from 'recompose/withPropsOnChange'
 
-import Select from 'react-select'
 import api from '../../../../../../../../models/listings/search'
 
 const MlsAreaSelects = (
