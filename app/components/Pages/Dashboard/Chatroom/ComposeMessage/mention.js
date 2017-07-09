@@ -240,7 +240,7 @@ export default class Mentions extends React.Component {
     input.value = input.value.substr(0, index) + text + ' ' + input.value.substr(index + text.length)
 
     // change cursor position
-    this.setCursorPosition(index + text.length)
+    this.setCursorPosition(index + text.length + 1)
   }
 
   /**
