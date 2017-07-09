@@ -7,6 +7,7 @@ import withHandlers from 'recompose/withHandlers'
 import Brand from '../../../../../../../controllers/Brand'
 
 import MlsAreaSelects from './MlsAreaSelects'
+import GroupRadios from './components/GroupRadios'
 import SoldStatusChildrens from './SoldStatusChildrens'
 import OtherStatusesChildrens from './OtherStatusesChildrens'
 import FiltersListingsStatusRow from './FiltersListingsStatusRow'
@@ -68,6 +69,18 @@ const Filters = ({
         </div>
         <div style={{ padding: '3rem 2rem', backgroundColor: '#fff' }}>
           <MlsAreaSelects />
+          <GroupRadios name="minimum_bedrooms" label="Bedrooms" />
+          <GroupRadios name="minimum_bathrooms" label="Bathrooms" />
+          <GroupRadios name="minimum_parking_spaces" label="Garage Space" />
+          <GroupRadios
+            label="Pool"
+            name="pool"
+            fields={[
+              { title: 'Yes', value: 'yes' },
+              { title: 'No', value: 'no' },
+              { title: 'Either', value: 'either' }
+            ]}
+          />
         </div>
       </form>
       <button
@@ -88,6 +101,7 @@ export default compose(
     form: 'filters',
     destroyOnUnmount: false,
     initialValues: {
+      pool: 'either',
       open_house: false,
       listing_statuses: {
         sold: false,
@@ -102,7 +116,10 @@ export default compose(
         withdrawn: false,
         withdrawn_sublisting: false
       },
-      minimum_sold_date: '3' // unit is month but it need to timestamp
+      minimum_sold_date: '3', // unit is month but it need to timestamp
+      minimum_bedrooms: 'any',
+      minimum_bathrooms: 'any',
+      minimum_parking_spaces: 'any'
     },
     getFormState: ({ search }) => search.filters.form
   }),
