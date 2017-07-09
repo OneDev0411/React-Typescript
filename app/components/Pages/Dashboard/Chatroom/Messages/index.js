@@ -178,7 +178,7 @@ class Messages extends React.Component {
   }
 
   render() {
-    const { roomId, user, showToolbar, onClick } = this.props
+    const { roomId, user, isInstanceChat, showToolbar, onClick } = this.props
 
     // get messages of current room
     const messages = roomId ? this.props.messages[roomId] : null
@@ -243,6 +243,7 @@ class Messages extends React.Component {
           <ComposeMessage
             user={user}
             roomId={roomId}
+            isInstanceChat={isInstanceChat}
             onHeightChange={(height) => this.setState({ composeMessageHeight: height })}
             onComposeMessage={() => this.scrollEnd()}
           />

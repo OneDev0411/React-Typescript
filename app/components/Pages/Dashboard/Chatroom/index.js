@@ -107,6 +107,7 @@ class Chatroom extends React.Component {
             user={user}
             roomId={activeRoom}
             showToolbar={true}
+            isInstanceChat={isInstance}
           />
         </div>
       </div>

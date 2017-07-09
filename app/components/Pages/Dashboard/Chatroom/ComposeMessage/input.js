@@ -47,7 +47,10 @@ export default class MessageInput extends React.Component {
 
   render() {
     const { height, rows } = this.state
-    const { mentionsSource, roomId } = this.props
+    const { isInstanceChat, mentionsSource, roomId } = this.props
+
+    const instanceId = isInstanceChat ? 'instance-chat' : ''
+    const handlerId = `compose-message-${instanceId}--${roomId}`
 
     return (
       <div
@@ -55,7 +58,7 @@ export default class MessageInput extends React.Component {
         style={{ height: `${height}px` }}
       >
         <Mentions
-          handler={`compose-message-${roomId}`}
+          handler={handlerId}
           source={mentionsSource}
           position={height}
           trigger="@"
@@ -63,7 +66,7 @@ export default class MessageInput extends React.Component {
 
         <Textarea
           autoFocus
-          id={`compose-message-${roomId}`}
+          id={handlerId}
           dir="auto"
           placeholder="Write a message ..."
           rows={rows}
