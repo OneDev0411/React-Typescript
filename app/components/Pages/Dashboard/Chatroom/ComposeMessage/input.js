@@ -29,6 +29,7 @@ export default class MessageInput extends React.Component {
     const el = this.text_message
 
     if (e.key === 'Enter') {
+      this.setState({ rows: 1 })
       e.preventDefault()
     }
 
