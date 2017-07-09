@@ -294,22 +294,23 @@ export default class Mentions extends React.Component {
 
     return (
       <div
-          className="suggestions"
-          ref={ref => this.suggestions = ref}
-          style={{
-            bottom: `${position}px`,
-          }}
-        >
-          <div className="heading">
-            Users matching {query}
-            <div className="hint">
-              <i className="fa fa-long-arrow-up" /><i className="fa fa-long-arrow-down" /> to navigate
-              &nbsp;&nbsp;&nbsp;
-              ↵ to select
-              &nbsp;&nbsp;&nbsp;
-              <b>esc</b> to dismiss
-            </div>
+        className="suggestions"
+        ref={ref => this.suggestions = ref}
+        style={{
+          bottom: `${position}px`,
+        }}
+      >
+        <div className="heading">
+          Users matching {query}
+          <div className="hint">
+            <i className="fa fa-long-arrow-up" /><i className="fa fa-long-arrow-down" /> to navigate
+            &nbsp;&nbsp;&nbsp;
+            ↵ to select
+            &nbsp;&nbsp;&nbsp;
+            <b>esc</b> to dismiss
           </div>
+        </div>
+        <div className="items">
           {
             suggestions.map((user, index) =>
               <div
@@ -333,6 +334,7 @@ export default class Mentions extends React.Component {
               </div>
             )
           }
+        </div>
       </div>
     )
   }

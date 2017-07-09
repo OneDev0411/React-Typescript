@@ -88,7 +88,6 @@ $left-w: 50px;
       font-size: 15px;
       left: -1px;
       right: -1px;
-      max-height: 300px;
       transition: all 0.4s ease-in;
       .heading {
         background-color: rgb(250, 248, 246);
@@ -99,6 +98,10 @@ $left-w: 50px;
           display: inline;
           float: right;
         }
+      }
+      .items {
+        max-height: 300px;
+        overflow: auto;
       }
       .item {
         cursor: pointer;
