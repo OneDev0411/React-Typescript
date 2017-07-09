@@ -66,9 +66,18 @@ export default class Message {
     if (message.comment) {
       text = emojify.replace(linkifyString(message.comment))
       text = Mention.highlight(text, message.mentions, members, user)
+      text = Message.nl2br(text)
     }
 
     return text
+  }
+
+  /**
+   * convert new line to break line
+   */
+  static nl2br(str, is_xhtml = false) {
+    const breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>'
+    return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2')
   }
 
   /**
