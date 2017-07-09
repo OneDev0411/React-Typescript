@@ -13,7 +13,7 @@ export default class Mention {
     }
 
     let filterd_text = text
-    const mentionsList = Mention.getList(members, me)
+    const mentionsList = Mention.getList(members)
 
     // replacer
     let replacer = (text, user) => {
@@ -25,6 +25,7 @@ export default class Mention {
     // search in mentions and highligh chat owner
     mentions.forEach(id => {
       const user = _.find(mentionsList, member => member.id.join('') === id)
+
       if (user && user.id.join('') === me.id) {
         filterd_text = replacer(filterd_text, user)
       }
