@@ -15,8 +15,7 @@ const postcss = function () {
         'IE 10',
         'Last 2 versions'
       ]
-    }),
-    require('cssnano')()
+    })
   ]
 }
 
