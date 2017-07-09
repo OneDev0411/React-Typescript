@@ -1,12 +1,12 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import Textarea from 'react-textarea-autosize'
 import Mentions from './mention'
 
-class MessageInput extends React.Component {
+export default class MessageInput extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      rows: 1,
       height: 40,
     }
   }
@@ -26,34 +26,27 @@ class MessageInput extends React.Component {
   }
 
   onKeyPress(e) {
+    const el = this.text_message
+
     if (e.key === 'Enter') {
+      e.preventDefault()
+    }
+
+    if (e.key === 'Enter' && e.ctrlKey) {
+      el.value += "\n"
+
+      const rows = el.value.split("\n")
+      this.setState({
+        rows: rows.length <= 5 ? rows.length : 5
+      })
+
       e.preventDefault()
     }
   }
 
-  getUsersList() {
-    const { users } = this.props
-
-    const usersList = users.map(user => ({
-      id: user.id,
-      avatar: user.profile_image_url,
-      name: user.display_name,
-      email: user.email,
-      username: user.username || user.abbreviated_display_name
-    }))
-
-    usersList.unshift({
-      id: -1,
-      avatar: '/static/images/dashboard/rebot@2x.png',
-      username: 'Room',
-      name: 'Notify every member in this room'
-    })
-
-    return usersList
-  }
-
   render() {
-    const { height } = this.state
+    const { height, rows } = this.state
+    const { mentionsSource, roomId } = this.props
 
     return (
       <div
@@ -61,17 +54,18 @@ class MessageInput extends React.Component {
         style={{ height: `${height}px` }}
       >
         <Mentions
-          handler="compose-message"
-          source={this.getUsersList()}
+          handler={`compose-message-${roomId}`}
+          source={mentionsSource}
           position={height}
           trigger="@"
         />
 
         <Textarea
           autoFocus
-          id="compose-message"
+          id={`compose-message-${roomId}`}
           dir="auto"
           placeholder="Write a message ..."
+          rows={rows}
           maxRows={5}
           inputRef={ref => this.setReference(ref)}
           onHeightChange={height => this.onHeightChangeHandler(height)}
@@ -81,12 +75,3 @@ class MessageInput extends React.Component {
     )
   }
 }
-
-function mapStateToProps({ chatroom }, props) {
-  const room = chatroom.rooms[props.roomId]
-
-  return {
-    users: room ? room.users : null
-  }
-}
-export default connect(mapStateToProps)(MessageInput)
