@@ -120,16 +120,9 @@ export default class ChatNotification extends NotificationService {
     // check window is active or not
     const isWindowActive = this.isWindowActive()
 
-
-    // send browser notification if tab is not active
+    // send notification
     if (!isWindowActive) {
-      this.sendBrowserNotification({
-        title: `New message from ${message.author.display_name}`,
-        image: message.author.profile_image_url,
-        body: message.comment
-      }, () => {
-        Chatroom.openChat(roomId)
-      })
+      this.sendNotification(message, roomId)
     }
 
     if (isWindowActive && activeRoom && roomId === activeRoom) {
@@ -151,6 +144,37 @@ export default class ChatNotification extends NotificationService {
       // play sound
       ChatNotification.playSound()
     }
+  }
+
+  /**
+   * decide to send browser notification or not
+   */
+  sendNotification(message, roomId) {
+    let shouldSendNotification = true
+
+    const { chatroom, data } = store.getState()
+    const { user } = data
+    const room = chatroom.rooms[roomId]
+
+    if (room.room_type === 'Group') {
+      const isMentioned = _.find(message.mentions, id => id === user.id)
+      if (!isMentioned) {
+        shouldSendNotification = false
+      }
+    }
+
+    if (!shouldSendNotification) {
+      return false
+    }
+
+    // send browser notification if tab is not active
+    this.sendBrowserNotification({
+      title: `New message from ${message.author.display_name}`,
+      image: message.author.profile_image_url,
+      body: message.comment
+    }, () => {
+      Chatroom.openChat(roomId)
+    })
   }
 
   /**

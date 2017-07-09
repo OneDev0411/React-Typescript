@@ -213,7 +213,8 @@ export default class Mentions extends React.Component {
     let result = source
 
     if (text.length > 0) {
-      result = source.filter(user => user.username.toLowerCase().includes(text))
+      result = source
+        .filter(user => user.username.toLowerCase().includes(text.toLowerCase()))
     }
 
     this.setState({
@@ -264,7 +265,8 @@ export default class Mentions extends React.Component {
    */
   clearSuggestions() {
     this.setState({
-      showSuggestions: false
+      showSuggestions: false,
+      selectedIndex: 0
     })
 
     // free-up input

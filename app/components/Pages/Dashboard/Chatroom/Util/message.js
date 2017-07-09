@@ -1,32 +1,16 @@
 import moment from 'moment'
 import emojify from 'emojify.js'
+import _ from 'underscore'
 import linkifyString from 'linkifyjs/string'
 import store from '../../../../../stores'
 import { createMessage } from '../../../../../store_actions/chatroom'
+import Mention from './mention'
 
 export default class Message {
   constructor() {
     emojify.setConfig({
       img_dir: '/static/images/emoji'
     })
-  }
-
-  /**
-   * make mention blue
-   */
-  static _makeMentionsBlue(text, users = []) {
-    let filterd_text = text
-
-    users.forEach((user) => {
-      const full_name = `${user.first_name} ${user.last_name}`
-
-      if (text.trim().indexOf(full_name.trim()) !== -1) {
-        const replace = `<span class="text-primary">${user.first_name}</span>`
-        filterd_text = text.replace(new RegExp(full_name, 'g'), replace)
-      }
-    })
-
-    return filterd_text
   }
 
   /**
@@ -76,12 +60,12 @@ export default class Message {
   /**
    * get message text
    */
-  static getText(message, users) {
+  static getText(message, members, user) {
     let text = message.comment
 
     if (message.comment) {
       text = emojify.replace(linkifyString(message.comment))
-      text = Message._makeMentionsBlue(text, users)
+      text = Mention.highlight(text, message.mentions, members, user)
     }
 
     return text

@@ -1,19 +1,21 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import TextMessage from './text'
 import RecommendationMessage from './recommendation'
 import AlertMessage from './alert'
 import AttachementMessage from './attachment'
 import Message from '../../Util/message'
 
-export default ({
+const MessageTypes = ({
   author,
   user,
   roomId,
+  members,
   message,
   previousMessage
 }) => {
 
-  const comment = Message.getText(message)
+  const comment = Message.getText(message, members, user)
 
   // simple comment
   let message_object = <div
@@ -50,3 +52,13 @@ export default ({
 
   return message_object
 }
+
+function mapStateToProps({ chatroom, data }, props) {
+  const room = chatroom.rooms[props.roomId]
+
+  return {
+    members: room ? room.users : null
+  }
+}
+
+export default connect(mapStateToProps)(MessageTypes)
