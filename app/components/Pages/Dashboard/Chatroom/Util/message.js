@@ -3,7 +3,7 @@ import emojify from 'emojify.js'
 import _ from 'underscore'
 import linkifyString from 'linkifyjs/string'
 import store from '../../../../../stores'
-import { createMessage } from '../../../../../store_actions/chatroom'
+import { createMessage, updateMessage} from '../../../../../store_actions/chatroom'
 import Mention from './mention'
 
 export default class Message {
@@ -17,25 +17,9 @@ export default class Message {
    * send new message
    */
   static send(roomId, message, author = {}) {
-    const { abbreviated_display_name } = author
-
     return new Promise((resolve, reject) => {
-      const unixtime = moment().unix()
-      const qid = 'queued_' + unixtime
-
-      const tempMessage = {
-        ...message,
-        ...{
-          id: qid,
-          author: {
-            abbreviated_display_name: abbreviated_display_name,
-            ...author
-          },
-          queued: true,
-          created_at: unixtime,
-          updated_at: unixtime,
-        }
-      }
+      // create temp message
+      const { qid, tempMessage } = Message.createTemporaryMessage(roomId, message, author)
 
       // create temporary message
       Message.create(roomId, tempMessage)
@@ -43,11 +27,49 @@ export default class Message {
       // resolve
       resolve(tempMessage)
 
-      window.socket.emit('Message.Send', roomId, message, (err, message) => {
-        if (err) return reject(err)
-        Message.create(roomId, message, qid)
-      })
+      // post message to socket
+      Message.postMessage(roomId, message, qid)
     })
+  }
+
+  /**
+   * post message via socket
+   */
+  static postMessage(roomId, message, qid) {
+    window.socket.emit('Message.Send', roomId, message, (err, message) => {
+      if (err) return reject(err)
+      Message.create(roomId, message, qid)
+    })
+  }
+
+  /**
+   * create temporary message
+   */
+  static createTemporaryMessage(roomId, message, author = {}) {
+    const unixtime = moment().unix()
+    const qid = 'queued_' + unixtime
+
+    const { abbreviated_display_name } = author
+
+    const tempMessage = {
+      ...message,
+      ...{
+        id: qid,
+        room: roomId,
+        author: {
+          abbreviated_display_name: abbreviated_display_name,
+          ...author
+        },
+        queued: true,
+        created_at: unixtime,
+        updated_at: unixtime,
+      }
+    }
+
+    return {
+      qid,
+      tempMessage
+    }
   }
 
   /**
@@ -55,6 +77,13 @@ export default class Message {
    */
   static create(roomId, message, queueId = null) {
     store.dispatch(createMessage(roomId, { [message.id]: message }, queueId))
+  }
+
+   /**
+   * update message
+   */
+  static update(roomId, message) {
+    store.dispatch(updateMessage(roomId, message))
   }
 
   /**
