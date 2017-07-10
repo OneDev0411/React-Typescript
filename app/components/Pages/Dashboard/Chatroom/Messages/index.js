@@ -9,11 +9,13 @@ import Toolbar from '../Rooms/toolbar'
 import MessageItem from './message-item'
 import UserTyping from '../UserTyping'
 import ComposeMessage from '../ComposeMessage'
+import UploadHandler from '../ComposeMessage/upload'
 
 class Messages extends React.Component {
 
   constructor(props) {
     super(props)
+    this.lastScrollTop = 0
     this.state = {
       composeMessageHeight: 45
     }
@@ -47,12 +49,17 @@ class Messages extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { roomId, messages } = nextProps
 
-    if (roomId && !messages[roomId])
+    if (roomId && !messages[roomId]) {
       return this.loadMessages(roomId)
+    }
 
     // room is changed
-    if (roomId !== this.props.roomId)
+    if (roomId !== this.props.roomId) {
       this.scrollEnd()
+    }
+
+    // check if new message is received or not
+    this.isNewMessageReceived(nextProps)
   }
 
   componentWillUnmount() {
@@ -64,9 +71,17 @@ class Messages extends React.Component {
     this.messagesObservable = Rx
     .Observable
     .fromEvent(this.messagesList, 'scroll')
-    .debounceTime(400)
+    .debounceTime(500)
     .scan(top => this.messagesList.scrollTop - this.messagesList.clientTop, 10000)
-    .filter(top => top < 120)
+    .filter(top => {
+      // check scroll direction
+      const isScrolledToTop = top < this.lastScrollTop
+
+      // set last scroll pos
+      this.lastScrollTop = top
+
+      return isScrolledToTop && top < 90
+    })
     .subscribe((top) => this.loadPreviousMessages(top))
   }
 
@@ -75,6 +90,10 @@ class Messages extends React.Component {
    */
   async loadMessages(roomId, limit = 20, max_value = null, scroll_to = null) {
     const { getMessages } = this.props
+
+    if (!roomId) {
+      return false
+    }
 
     // fetch
     await getMessages(roomId, limit, max_value)
@@ -142,6 +161,9 @@ class Messages extends React.Component {
       this.scrollEnd()
   }
 
+  /**
+   * check element is in viewport or not
+   */
   elementInViewport(el) {
     const top = el.offsetTop
     const height = el.offsetHeight
@@ -161,7 +183,7 @@ class Messages extends React.Component {
   scrollEnd() {
     setTimeout(() => {
       this.messagesList.scrollTop = this.messagesList.scrollHeight
-    }, 100)
+    }, 200)
   }
 
   /**
@@ -175,6 +197,40 @@ class Messages extends React.Component {
     const baseHeight = isPopup ? '297px' : '95vh'
 
     return `calc(${baseHeight} - ${toolbarHeight} - ${composeMessageHeight}px)`
+  }
+
+  /**
+   * check if new message is received or not
+   */
+  isNewMessageReceived(nextProps) {
+    const { messages, roomId } = this.props
+
+    // scroll to end if new message received
+    const messageId = this.getLastMessageId(messages[roomId])
+    const nextMessageId = this.getLastMessageId(nextProps.messages[roomId])
+
+    if (messageId && messageId !== nextMessageId) {
+      this.scrollEnd()
+    }
+  }
+
+  /**
+   * get last message id
+   */
+  getLastMessageId(messages) {
+    if (!messages) {
+      return null
+    }
+
+    const keys = Object.keys(messages.list)
+
+    if (keys.length === 0) {
+      return null
+    }
+
+    const last = keys[keys.length - 1]
+    const message = messages.list[last]
+    return message.id
   }
 
   render() {
@@ -211,28 +267,39 @@ class Messages extends React.Component {
           />
         }
 
-        <div
-          className="messages-list"
-          style={{
-            minHeight: this.getHeight(),
-            maxHeight: this.getHeight()
+        <UploadHandler
+          disableClick={true}
+          roomId={roomId}
+          author={user}
+          dropZoneStyle={{
+            width: '100%',
+            height: '100%'
           }}
-          ref={ref => this.messagesList = ref}
         >
-          {
-            messages &&
-            _.map(messages.list, msg =>
-              <div key={`MESSAGE_${msg.id}`}>
-                <MessageItem
-                  user={user}
-                  roomId={roomId}
-                  message={msg}
-                  previousMessage={this.getPreviousMessage(messages.list, msg)}
-                />
-              </div>
-            )
-          }
-        </div>
+          <div
+            id={`messages-list-${roomId}`}
+            className="messages-list"
+            ref={ref => this.messagesList = ref}
+            style={{
+              minHeight: this.getHeight(),
+              maxHeight: this.getHeight()
+            }}
+          >
+            {
+              messages &&
+              _.map(messages.list, msg =>
+                <div key={`MESSAGE_${msg.id}`}>
+                  <MessageItem
+                    user={user}
+                    roomId={roomId}
+                    message={msg}
+                    previousMessage={this.getPreviousMessage(messages.list, msg)}
+                  />
+                </div>
+              )
+            }
+          </div>
+        </UploadHandler>
 
         <UserTyping
           roomId={roomId}
@@ -248,6 +315,7 @@ class Messages extends React.Component {
             onComposeMessage={() => this.scrollEnd()}
           />
         }
+
       </div>
     )
   }
