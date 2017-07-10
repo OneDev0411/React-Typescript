@@ -4,6 +4,7 @@ import TextMessage from './text'
 import RecommendationMessage from './recommendation'
 import AlertMessage from './alert'
 import AttachementMessage from './attachment'
+import UploadingFile from './uploading'
 import Message from '../../Util/message'
 
 const MessageTypes = ({
@@ -47,6 +48,14 @@ const MessageTypes = ({
     message_object = <AttachementMessage
       comment={comment}
       attachments={message.attachments}
+    />
+  }
+
+  if (message.uploading) {
+    message_object = <UploadingFile
+      author={author}
+      user={user}
+      message={message}
     />
   }
 

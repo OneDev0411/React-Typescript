@@ -28,6 +28,7 @@ export default ({
     message.recommendation ||
     isAlert ||
     hasAttachments ||
+    message.uploading ||
     messageUtil.getAuthor(previousMessage).id !== author.id ||
     messageUtil.getYMD(previousMessage) !== messageUtil.getYMD(message)
 
