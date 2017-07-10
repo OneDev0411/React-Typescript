@@ -7,6 +7,7 @@ import withHandlers from 'recompose/withHandlers'
 import Brand from '../../../../../../../controllers/Brand'
 
 import Counties from './Counties'
+import PriceRange from './PriceRange'
 import Subdivision from './Subdivision'
 import MlsAreaSelects from './MlsAreaSelects'
 import PropertySubtypes from './PropertySubtypes'
@@ -74,6 +75,7 @@ const Filters = ({
         <div style={{ padding: '3rem 2rem', backgroundColor: '#fff' }}>
           <MlsAreaSelects />
           <Counties />
+          <PriceRange />
           <PropertySubtypes />
           <ArchitecturalStyles />
           <GroupRadios name="minimum_bedrooms" label="Bedrooms" />
@@ -106,7 +108,6 @@ export default compose(
   connect(null, { ...actions }),
   reduxForm({
     form: 'filters',
-    destroyOnUnmount: false,
     initialValues: {
       pool: 'either',
       open_house: false,
@@ -125,6 +126,8 @@ export default compose(
       },
       counties: null,
       subdivision: null,
+      minimum_price: null,
+      maximum_price: null,
       minimum_sold_date: '3', // unit is month but it need to timestamp
       minimum_bedrooms: 'any',
       minimum_bathrooms: 'any',

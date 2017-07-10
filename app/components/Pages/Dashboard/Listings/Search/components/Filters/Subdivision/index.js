@@ -9,7 +9,7 @@ const Subdivisions = () =>
   <AsyncMultiSelect
     name="subdivisions"
     label="Subdivisions"
-    placeholder="Subdivisions #..."
+    placeholder="Subdivision name..."
     loadOptions={api.getSubdivisions}
   />
 

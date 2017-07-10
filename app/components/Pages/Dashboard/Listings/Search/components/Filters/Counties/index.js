@@ -9,8 +9,8 @@ const Counties = () =>
   <AsyncMultiSelect
     name="counties"
     label="Counties"
-    placeholder="Counties #..."
     loadOptions={api.getCounties}
+    placeholder="type in county name..."
   />
 
 export default pure(Counties)

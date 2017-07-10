@@ -16,11 +16,7 @@ const _fields = [
   { title: '+5', value: '5' }
 ]
 
-const GroupRadios = ({
-  name,
-  label,
-  fields = _fields
-}) => (
+const GroupRadios = ({ name, label, fields = _fields }) =>
   <Label label={label}>
     <div className="c-group-radios">
       {fields.map(field => {
@@ -31,7 +27,8 @@ const GroupRadios = ({
             key={id}
             htmlFor={id}
             className="c-group-radios__item-label"
-            style={{ width: getItemWidth(fields.length) }}>
+            style={{ width: getItemWidth(fields.length) }}
+          >
             <Field
               id={id}
               name={name}
@@ -48,6 +45,5 @@ const GroupRadios = ({
       })}
     </div>
   </Label>
-)
 
-export default GroupRadios
+export default pure(GroupRadios)
