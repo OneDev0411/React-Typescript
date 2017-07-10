@@ -1,6 +1,7 @@
 import React from 'react'
 import Textarea from 'react-textarea-autosize'
 import Mentions from './mention'
+import Uploader from './upload'
 
 export default class MessageInput extends React.Component {
   constructor(props) {
@@ -47,7 +48,7 @@ export default class MessageInput extends React.Component {
 
   render() {
     const { height, rows } = this.state
-    const { isInstanceChat, mentionsSource, roomId } = this.props
+    const { isInstanceChat, mentionsSource, roomId, user } = this.props
 
     const instanceId = isInstanceChat ? 'instance-chat' : ''
     const handlerId = `compose-message-${instanceId}--${roomId}`
@@ -62,6 +63,12 @@ export default class MessageInput extends React.Component {
           source={mentionsSource}
           position={height}
           trigger="@"
+        />
+
+        <Uploader
+          roomId={roomId}
+          author={user}
+          dropZoneStyle={{ width: '100%', height: '100%' }}
         />
 
         <Textarea
