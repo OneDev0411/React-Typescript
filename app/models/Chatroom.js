@@ -80,7 +80,6 @@ Chatroom.leaveRoom = async function(userId, room) {
 * add members to a room
 */
 Chatroom.addMembers = async function(roomId, recipients) {
-
   try {
     return await new Fetch()
       .post(`/rooms/${roomId}/users`)
@@ -102,6 +101,20 @@ Chatroom.getMessages = async function(id, limit = 20, value = null, value_type =
   try {
     return await new Fetch().get(endpoint)
   } catch (e) {}
+}
+
+
+Chatroom.uploadAttachment = async function(roomId, file) {
+  let endpoint = `/rooms/${roomId}/attachments`
+
+  try {
+    return await new Fetch()
+      .upload(endpoint)
+      .attach(file.name, file)
+
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 Chatroom.searchRoom = async function(recipients) {
