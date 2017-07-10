@@ -7,7 +7,8 @@ import withHandlers from 'recompose/withHandlers'
 import Brand from '../../../../../../../controllers/Brand'
 
 import Counties from './Counties'
-import PriceRange from './PriceRange'
+import YearBuilt from './YearBuilt'
+import NumberRange from './NumberRange'
 import Subdivision from './Subdivision'
 import MlsAreaSelects from './MlsAreaSelects'
 import PropertySubtypes from './PropertySubtypes'
@@ -72,16 +73,18 @@ const Filters = ({
             <OtherStatusesChildrens name="listing_statuses" />
           </FiltersListingsStatusRow>
         </div>
-        <div style={{ padding: '3rem 2rem', backgroundColor: '#fff' }}>
+        <div style={{ padding: '3rem 2rem 0', backgroundColor: '#fff' }}>
           <MlsAreaSelects />
           <Counties />
-          <PriceRange />
+          <NumberRange name="price" placeholder="$Any" label="Price Range" />
           <PropertySubtypes />
           <ArchitecturalStyles />
           <GroupRadios name="minimum_bedrooms" label="Bedrooms" />
           <GroupRadios name="minimum_bathrooms" label="Bathrooms" />
           <GroupRadios name="minimum_parking_spaces" label="Garage Space" />
           <Subdivision />
+          <NumberRange name="square_meters" label="Square Footage" />
+          <NumberRange name="lot_square_meters" label="Lot Square Footage" />
           <GroupRadios
             label="Pool"
             name="pool"
@@ -91,6 +94,7 @@ const Filters = ({
               { title: 'Either', value: 'either' }
             ]}
           />
+          <YearBuilt />
         </div>
       </form>
       <button
@@ -108,6 +112,7 @@ export default compose(
   connect(null, { ...actions }),
   reduxForm({
     form: 'filters',
+    destroyOnUnmount: false,
     initialValues: {
       pool: 'either',
       open_house: false,
@@ -124,10 +129,6 @@ export default compose(
         withdrawn: false,
         withdrawn_sublisting: false
       },
-      counties: null,
-      subdivision: null,
-      minimum_price: null,
-      maximum_price: null,
       minimum_sold_date: '3', // unit is month but it need to timestamp
       minimum_bedrooms: 'any',
       minimum_bathrooms: 'any',
@@ -140,24 +141,7 @@ export default compose(
         single_family: true
       },
       architectural_styles: {
-        everything: true,
-        loft: false,
-        mediterranean: false,
-        oriental: false,
-        midCentry_modern: false,
-        prairie: false,
-        ranch: false,
-        southwestern: false,
-        spanish: false,
-        split_level: false,
-        tudor: false,
-        studio_apartment: false,
-        traditional: false,
-        victorian: false,
-        french: false,
-        colonial: false,
-        aFrame: false,
-        contemporary: false
+        everything: true
       }
     },
     getFormState: ({ search }) => search.filters.form

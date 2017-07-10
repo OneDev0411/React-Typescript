@@ -6,7 +6,7 @@ import Tags from '../components/Tags'
 const property_subtypes = {
   condo: 'RES-Condo',
   farm: 'RES-Farm/Ranch',
-  duples: 'RES-Half Duplex',
+  duplex: 'RES-Half Duplex',
   townhouse: 'RES-Townhouse',
   single_family: 'RES-Single Family'
 }
