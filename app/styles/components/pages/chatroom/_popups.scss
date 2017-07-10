@@ -169,6 +169,16 @@
         }
       }
     }
+
+    .upload {
+      width: 15%;
+      border-right-color: #e3e3e3;
+    }
+
+    textarea {
+      margin-left: 15%;
+      width: 85%;
+    }
   }
 
   .toolbar {
@@ -233,6 +243,12 @@
         display: none;
       }
     }
+  }
+}
+
+.upload-guide {
+  .upload-area {
+    bottom: 4px;
   }
 }
 

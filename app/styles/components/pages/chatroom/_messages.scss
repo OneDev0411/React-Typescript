@@ -34,6 +34,7 @@ $left-w: 50px;
     overflow: auto;
     margin-top: $room-toolbar-height;
     padding-bottom: 30px;
+    position: relative;
 
     &::-webkit-scrollbar {
       width: 7px;
@@ -73,6 +74,7 @@ $left-w: 50px;
 
   .message-create {
     $mrgn: 2%;
+    background-color: #fff;
     position: absolute;
     height: $height-of-create-message;
     bottom: $mrgn;
@@ -80,52 +82,21 @@ $left-w: 50px;
     right: $mrgn;
     border: 2px solid #ccc;
     border-radius: 3px;
-    .suggestions {
-      position: absolute;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-      font-size: 15px;
-      left: -1px;
-      right: -1px;
-      transition: all 0.4s ease-in;
-      .heading {
-        background-color: rgb(250, 248, 246);
-        padding: 5px;
-        color: gray;
-        font-size: 12px;
-        .hint {
-          display: inline;
-          float: right;
-        }
-      }
-      .items {
-        max-height: 300px;
-        overflow: auto;
-      }
-      .item {
-        cursor: pointer;
-        padding: 5px 10px;
-        .name {
-          font-size: 14px;
-          color: gray;
-        }
-
-        &.selected, &:hover {
-          background-color: #2196F3;
-          color: #fff;
-          .name {
-            color: #fff;
-          }
-        }
-      }
+    .upload {
+      @extend %uploader;
     }
+
+    .suggestions {
+      @extend %suggestions;
+    }
+
     textarea {
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
-      width: 100%;
+      margin-left: 7%;
+      width: 93%;
       border: none;
       padding: 10px 10px;
       color: #000;
@@ -178,6 +149,10 @@ $left-w: 50px;
 
     .alert {
       @extend %message-item-alert;
+    }
+
+    .uploading {
+      @extend %messages-item-uploading;
     }
   }
 }
@@ -299,6 +274,14 @@ $left-w: 50px;
   }
 }
 
+%messages-item-uploading {
+  .progress {
+    margin-top: 5px;
+    width: 50%;
+    height: 10px;
+  }
+}
+
 %message-item-recommendation {
   .listing {
     position: relative;
@@ -357,6 +340,91 @@ $left-w: 50px;
           }
         }
       }
+    }
+  }
+}
+
+%suggestions {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 15px;
+  left: -1px;
+  right: -1px;
+  transition: all 0.4s ease-in;
+  .heading {
+    background-color: rgb(250, 248, 246);
+    padding: 5px;
+    color: gray;
+    font-size: 12px;
+    .hint {
+      display: inline;
+      float: right;
+    }
+  }
+  .items {
+    max-height: 300px;
+    overflow: auto;
+  }
+  .item {
+    cursor: pointer;
+    padding: 5px 10px;
+    .name {
+      font-size: 14px;
+      color: gray;
+    }
+
+    &.selected, &:hover {
+      background-color: #2196F3;
+      color: #fff;
+      .name {
+        color: #fff;
+      }
+    }
+  }
+}
+
+%uploader {
+  position: relative;
+  width: 7%;
+  border-right: 2px solid #ccc;
+  text-align: center;
+  line-height: 100%;
+  height: 100%;
+  cursor: pointer;
+  &:hover {
+    background-color: #eee;
+  }
+
+  i {
+    margin-top: 15px;
+    color: rgb(113, 114, 116);
+  }
+}
+
+.upload-guide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 500;
+  .upload-area {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    font-size: 22px;
+    padding-top: 40%;
+    background-color: rgba(255, 255, 255, 0.9);
+    z-index: 501;
+    text-align: center;
+    color: #2196f3;
+    border: 2px dashed #2196f3;
+    i {
+      margin-bottom: 10px;
     }
   }
 }
