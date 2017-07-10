@@ -81,13 +81,7 @@ class ComposeMessage extends React.Component {
       comment,
       mentions,
       author: user.id,
-      room: roomId,
-      message_type: 'TopLevel',
-      // image_url: "http://rechat.com/image_url/image_url.png",
-      // document_url: "http://rechat.com/document_url/document_url.png",
-      // video_url: "http://rechat.com/video_url/video_url.png",
-      // image_thumbnail_url: "http://rechat.com/image_thumbnail_url/image_thumbnail_url.png",
-      // recommendation: "edac34f8-2c28-11e7-af80-0242ac110003",
+      room: roomId
     }
 
     Message.send(roomId, message, user)
@@ -103,6 +97,7 @@ class ComposeMessage extends React.Component {
     return (
       <MessageInput
         roomId={this.props.roomId}
+        user={user}
         mentionsSource={Mention.getList(members, user)}
         isInstanceChat={isInstanceChat}
         inputRef={ref => this.text_message = ref}
