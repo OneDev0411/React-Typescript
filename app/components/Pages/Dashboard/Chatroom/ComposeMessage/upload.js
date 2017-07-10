@@ -65,6 +65,10 @@ export default class Upload extends React.Component {
       dropzoneActive: false
     })
 
+    if (files.length === 0) {
+      return false
+    }
+
     // list of ids of attachments
     const attachments = []
 
