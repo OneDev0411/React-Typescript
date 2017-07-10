@@ -4,7 +4,8 @@ const list = []
 
 const routes = {
   proxifier: [
-    [ 'passthrough' ]
+    ['passthrough'],
+    ['upload']
   ],
   agent: [
     ['get-report'],
