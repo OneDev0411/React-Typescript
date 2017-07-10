@@ -264,6 +264,32 @@ function createMessages(state, action) {
 }
 
 /**
+ * update specific message
+ */
+function updateMessage(state, action) {
+  const messages = state.messages[action.roomId]
+  const message = messages[action.message.id]
+
+  return {
+    ...state,
+    ...{messages: {
+      ...state.messages,
+      ...{[action.roomId]: {
+        ...messages,
+        ...{list: {
+          ...messages.list,
+          ...{[action.message.id]: {
+            ...message,
+            ...action.message,
+            ...{updated_at: (new Date).getTime()}
+          }}
+        }}
+      }}
+    }}
+  }
+}
+
+/**
  * update message deliveries that come from socket [Notification.Delivered]
  */
 function updateMessageDeliveries(state, action) {
@@ -477,6 +503,7 @@ export default (state = initialState, action) => {
     [types.ACKNOWLEDGE_ROOM]: acknowledgeRoom,
     [types.GET_MESSAGES]: createMessages,
     [types.CREATE_MESSAGE]: createMessages,
+    [types.UPDATE_MESSAGE]: updateMessage,
     [types.ADD_MESSAGE_TYPING]: addMessageTyping,
     [types.REMOVE_MESSAGE_TYPING]: removeMessageTyping,
     [types.ADD_POPUP]: addPopup,

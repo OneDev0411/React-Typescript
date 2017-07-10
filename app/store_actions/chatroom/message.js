@@ -29,7 +29,7 @@ export function getMessages (id, limit, value, value_type) {
 }
 
 
-export function createMessage (id, message, queueId) {
+export function createMessage(id, message, queueId) {
   return {
     type: types.CREATE_MESSAGE,
     append: true,
@@ -37,6 +37,14 @@ export function createMessage (id, message, queueId) {
     id,
     messages: message,
     queueId
+  }
+}
+
+export function updateMessage(roomId, message) {
+  return {
+    type: types.UPDATE_MESSAGE,
+    message,
+    roomId
   }
 }
 
