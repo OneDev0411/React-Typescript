@@ -11,6 +11,7 @@ import Subdivision from './Subdivision'
 import MlsAreaSelects from './MlsAreaSelects'
 import PropertySubtypes from './PropertySubtypes'
 import GroupRadios from './components/GroupRadios'
+import ArchitecturalStyles from './ArchitecturalStyles'
 import SoldStatusChildrens from './SoldStatusChildrens'
 import OtherStatusesChildrens from './OtherStatusesChildrens'
 import FiltersListingsStatusRow from './FiltersListingsStatusRow'
@@ -25,7 +26,7 @@ const Filters = ({
   onSubmitHandler,
   activeOpenHouses,
   activeActiveListings
-}) => (
+}) =>
   <div className={`c-filters ${isOpen ? 'c-filters--isOpen' : ''}`}>
     <div className="c-filters__inner-wrapper">
       <form
@@ -74,6 +75,7 @@ const Filters = ({
           <MlsAreaSelects />
           <Counties />
           <PropertySubtypes />
+          <ArchitecturalStyles />
           <GroupRadios name="minimum_bedrooms" label="Bedrooms" />
           <GroupRadios name="minimum_bathrooms" label="Bathrooms" />
           <GroupRadios name="minimum_parking_spaces" label="Garage Space" />
@@ -99,7 +101,6 @@ const Filters = ({
       </button>
     </div>
   </div>
-)
 
 export default compose(
   connect(null, { ...actions }),
@@ -134,6 +135,26 @@ export default compose(
         duplex: true,
         townhouse: true,
         single_family: true
+      },
+      architectural_styles: {
+        everything: true,
+        loft: false,
+        mediterranean: false,
+        oriental: false,
+        midCentry_modern: false,
+        prairie: false,
+        ranch: false,
+        southwestern: false,
+        spanish: false,
+        split_level: false,
+        tudor: false,
+        studio_apartment: false,
+        traditional: false,
+        victorian: false,
+        french: false,
+        colonial: false,
+        aFrame: false,
+        contemporary: false
       }
     },
     getFormState: ({ search }) => search.filters.form
