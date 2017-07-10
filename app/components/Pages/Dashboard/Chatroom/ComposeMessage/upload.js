@@ -1,5 +1,6 @@
 import React from 'react'
 import Dropzone from 'react-dropzone'
+import Rx from 'rxjs/Rx'
 import Message from '../Util/message'
 import Model from '../../../../../models/Chatroom'
 
@@ -7,15 +8,54 @@ export default class Upload extends React.Component {
 
   constructor(props) {
     super(props)
+    this.pasteHandler = null
     this.state = {
       dropzoneActive: false
     }
   }
 
   componentDidMount() {
+    const { inputHandler } = this.props
+    const { Observable } = Rx
 
+    if (!inputHandler) {
+      return false
+    }
+
+    // subscribe to paste
+    this.pasteHandler = Observable
+      .fromEvent(document.getElementById(inputHandler), 'paste')
+      .subscribe(e => this.onPasteFile(e))
   }
 
+  componentWillUnmount() {
+    if (this.pasteHandler) {
+      this.pasteHandler.unsubscribe()
+    }
+  }
+
+  /**
+   * handle paste file from clipboard
+   */
+  onPasteFile(event) {
+    const items = (event.clipboardData || event.originalEvent.clipboardData).items
+    const files = []
+
+    for (let index in items) {
+      const item = items[index]
+
+      if (item.kind === 'file') {
+        const blob = item.getAsFile()
+        files.push(blob)
+      }
+    }
+
+    this.onDrop(files)
+  }
+
+  /**
+   * on drop/upload files into area
+   */
   async onDrop(files) {
     const { roomId } = this.props
 
@@ -51,9 +91,13 @@ export default class Upload extends React.Component {
       current: null
     })
 
+    // post message to server
     this.postMessage(attachments, qid)
   }
 
+  /**
+   * upload a file to room
+   */
   async uploadFile(file) {
     const { roomId } = this.props
 
@@ -65,6 +109,9 @@ export default class Upload extends React.Component {
     }
   }
 
+  /**
+   * update message data
+   */
   updateMessage(message, attributes) {
     const { roomId } = this.props
 
@@ -80,6 +127,9 @@ export default class Upload extends React.Component {
     return message
   }
 
+  /**
+   * create uploading message
+   */
   createTemporaryMessage(files) {
     const { roomId, author } = this.props
 
@@ -99,6 +149,9 @@ export default class Upload extends React.Component {
     return { qid, message: tempMessage }
   }
 
+  /**
+   * save message on server
+   */
   postMessage(attachments, qid) {
     const { roomId, author } = this.props
 

@@ -68,6 +68,7 @@ export default class MessageInput extends React.Component {
         <Uploader
           roomId={roomId}
           author={user}
+          inputHandler={handlerId}
           dropZoneStyle={{ width: '100%', height: '100%' }}
         />
 
