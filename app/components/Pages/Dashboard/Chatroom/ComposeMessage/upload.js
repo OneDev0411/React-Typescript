@@ -46,7 +46,9 @@ export default class Upload extends React.Component {
 
       if (item.kind === 'file') {
         const blob = item.getAsFile()
-        files.push(blob)
+        if (blob) {
+          files.push(blob)
+        }
       }
     }
 
