@@ -87,7 +87,7 @@ export default class ChatNotification extends NotificationService {
 
     window.socket.emit('Room.Acknowledge', roomId)
 
-    if (rooms[roomId] && ~~rooms[roomId].new_notifications === 0)
+    if (rooms && rooms[roomId] && ~~rooms[roomId].new_notifications === 0)
       return false
 
     store.dispatch(resetRoomNotificationsCounter(roomId))
