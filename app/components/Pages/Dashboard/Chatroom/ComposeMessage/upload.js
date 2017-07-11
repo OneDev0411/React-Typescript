@@ -73,39 +73,38 @@ export default class Upload extends React.Component {
     const attachments = []
 
     // create temporary message
-    let { qid, message } = this.createTemporaryMessage(files)
+    let { qid, message } = this.createTemporaryMessage(roomId, files)
 
     for (let index in files) {
       const file = files[index]
 
       // update message
-      message = this.updateMessage(message, {
+      message = this.updateMessage(roomId, message, {
         index,
         current: file
       })
 
       // upload file
-      const fileId = await this.uploadFile(file)
+      const fileId = await this.uploadFile(roomId, file)
       if (fileId) {
         attachments.push(fileId)
       }
     }
 
     // update message
-    this.updateMessage(message, {
+    this.updateMessage(roomId, message, {
       index: ~~message.index + 1,
       current: null
     })
 
     // post message to server
-    this.postMessage(attachments, qid)
+    this.postMessage(roomId, attachments, qid)
   }
 
   /**
    * upload a file to room
    */
-  async uploadFile(file) {
-    const { roomId } = this.props
+  async uploadFile(roomId, file) {
 
     try {
       const response = await Model.uploadAttachment(roomId, file)
@@ -118,9 +117,7 @@ export default class Upload extends React.Component {
   /**
    * update message data
    */
-  updateMessage(message, attributes) {
-    const { roomId } = this.props
-
+  updateMessage(roomId, message, attributes) {
     // update message
     message = {
       ...message,
@@ -136,8 +133,8 @@ export default class Upload extends React.Component {
   /**
    * create uploading message
    */
-  createTemporaryMessage(files) {
-    const { roomId, author } = this.props
+  createTemporaryMessage(roomId, files) {
+    const { author } = this.props
 
     const message = {
       comment: '',
@@ -158,8 +155,8 @@ export default class Upload extends React.Component {
   /**
    * save message on server
    */
-  postMessage(attachments, qid) {
-    const { roomId, author } = this.props
+  postMessage(roomId, attachments, qid) {
+    const { author } = this.props
 
     const message = {
       attachments,
