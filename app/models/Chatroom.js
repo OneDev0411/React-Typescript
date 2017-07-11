@@ -14,7 +14,13 @@ Chatroom.getRooms = async function(user = {}) {
 
   try {
     const fetchRooms = new Fetch()
-      .get('/rooms?associations=user.last_seen_by&limit=1000&sorting_value=Update')
+      .get('/rooms')
+      .query({'room_types[]': 'Direct'})
+      .query({'room_types[]': 'Group'})
+      .query({'associations': 'user.last_seen_by'})
+      .query({'limit': '1000'})
+      .query({'sorting_value': 'Update'})
+
 
     // required on ssr
     if (access_token)
