@@ -8,10 +8,10 @@ const getMlsSubareas = async areas => {
   }
 
   try {
-    const response = await new Fetch()
-      .get(`/areas/search?${query}`)
+    const response = await new Fetch().get(`/areas/search?${query}`)
 
-    return response.body.data.map(({ title, number }) => ({
+    return response.body.data.map(({ title, number, parent }) => ({
+      parent,
       value: number,
       label: `${title}: #${number}`
     }))
