@@ -1,10 +1,10 @@
 import React from 'react'
 import Select from 'react-select'
-import { change as updateField } from 'redux-form'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
+import { change as updateField } from 'redux-form'
 
 import Label from '../components/Label'
 import api from '../../../../../../../../models/listings/search'
