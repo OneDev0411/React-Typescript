@@ -71,14 +71,16 @@ class ImageAttachments extends React.Component {
             <div
               key={`FILE_${file.id}`}
               className="item"
-              onClick={() => {
-                this.setState({
-                  currentImage: key,
-                  showLightbox: true,
-                })
-              }}
             >
-              <img src={file.preview_url} />
+              <img
+                onClick={() => {
+                  this.setState({
+                    currentImage: key,
+                    showLightbox: true,
+                  })
+                }}
+                src={file.preview_url}
+              />
             </div>
           )
         }

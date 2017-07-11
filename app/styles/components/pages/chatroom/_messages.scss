@@ -205,11 +205,12 @@ $left-w: 50px;
     .item {
       display: inline-block;
       margin: 0 10px 10px 0;
-      background-color: #eaeaea;
       border-radius: 5px;
+      min-height: 140px;
       img {
         min-width: 140px;
         max-width: 240px;
+        min-height: 20px;
         max-height: 140px;
         border-radius: 5px;
         cursor: pointer;
