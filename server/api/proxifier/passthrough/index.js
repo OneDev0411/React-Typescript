@@ -1,23 +1,16 @@
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
+import _ from 'underscore'
 const router = require('koa-router')()
 
 import config from '../../../../config/private'
 
 const app = new Koa()
 
-const serialize = obj => {
-  const str = []
-  Object.keys(obj).forEach(key => {
-    str.push(`${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`)
-  })
-  return str.join('&')
-}
-
 router.post('/proxifier', bodyParser(), async ctx => {
   const headers = ctx.headers
   const data = ctx.request.body
-  const queryString = serialize(ctx.query)
+  const queryString = ctx.request.querystring
 
   try {
     // get brand
