@@ -13,9 +13,6 @@ export default class Attachments extends React.Component {
 
     return (
       <div className="attachment">
-        <strong style={{ color: '#9b9a9b' }}>
-          Uploaded:
-        </strong>
         <div>
           { comment }
         </div>
