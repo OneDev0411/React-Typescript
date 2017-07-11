@@ -6,6 +6,7 @@ import withHandlers from 'recompose/withHandlers'
 
 import Brand from '../../../../../../../controllers/Brand'
 
+import Schools from './Schools'
 import Counties from './Counties'
 import YearBuilt from './YearBuilt'
 import NumberRange from './NumberRange'
@@ -83,6 +84,7 @@ const Filters = ({
           <GroupRadios name="minimum_bathrooms" label="Bathrooms" />
           <GroupRadios name="minimum_parking_spaces" label="Garage Space" />
           <Subdivision />
+          <Schools />
           <NumberRange name="square_meters" label="Square Footage" />
           <NumberRange name="lot_square_meters" label="Lot Square Footage" />
           <GroupRadios
