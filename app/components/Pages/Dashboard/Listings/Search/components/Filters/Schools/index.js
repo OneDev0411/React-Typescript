@@ -1,12 +1,15 @@
 import React from 'react'
 import Select from 'react-select'
+import { change as updateField } from 'redux-form'
+import { connect } from 'react-redux'
 import compose from 'recompose/compose'
-import lifecycle from 'recompose/lifecycle'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 import Label from '../components/Label'
 import api from '../../../../../../../../models/listings/search'
+
+const formName = 'filters'
 
 const Schools = ({
   schools = {},
@@ -52,7 +55,7 @@ const Schools = ({
             .join(' ')
 
           return (
-            <Label label={title}>
+            <Label label={title} key={school}>
               <Select
                 multi
                 name={`${school}s`}
@@ -70,6 +73,7 @@ const Schools = ({
   </div>
 
 export default compose(
+  connect(null, { updateField }),
   withState('schools', 'setSchools', []),
   withState('selectedSchools', 'setSelectedSchools', []),
   withState('loadingSchools', 'setLoadingSchools', false),
@@ -77,6 +81,7 @@ export default compose(
   withHandlers({
     getSchools: ({
       setSchools,
+      updateField,
       loadingSchools,
       setLoadingSchools
     }) => districts => {
@@ -92,14 +97,22 @@ export default compose(
             ? [name]
             : [...schoolsByTypes[type], name]
         })
+
         setSchools(schoolsByTypes)
       })
+
+      updateField(
+        formName,
+        'school_districts',
+        districts.map(({ value }) => value)
+      )
     }
   }),
   withHandlers({
     onChangeDistricts: ({
       getSchools,
       setSchools,
+      updateField,
       loadingSchools,
       selectedSchools,
       setSelectedSchools,
@@ -112,8 +125,12 @@ export default compose(
       if (districts.length === 0) {
         setSchools([])
         setSelectedDistricts([])
+        updateField(formName, 'school_districts', null)
 
         if (Object.keys(selectedSchools).length > 0) {
+          Object.keys(selectedSchools).forEach(school =>
+            updateField(formName, `${school}s`, null)
+          )
           setSelectedSchools([])
         }
       } else {
@@ -123,29 +140,22 @@ export default compose(
       }
     },
     onChangeSchools: ({
-      setSelectedSchools,
+      updateField,
+      loadingSchools,
       selectedSchools,
-      loadingSchools
+      setSelectedSchools
     }) => (type, schools) => {
       if (loadingSchools) {
         return
       }
 
-      const nextState = {}
-      schools.forEach(
-        ({ value: name }) =>
-          (nextState[type] = !selectedSchools[type]
-            ? [name]
-            : [...selectedSchools[type], name])
-      )
-
-      selectedSchools = {
-        ...selectedSchools,
-        ...nextState
-      }
+      selectedSchools[type] =
+        schools.length === 0 ? [] : schools.map(({ value }) => value)
 
       setSelectedSchools(selectedSchools, () => {
-        console.log(selectedSchools)
+        Object.keys(selectedSchools).forEach(school =>
+          updateField(formName, `${school}s`, selectedSchools[school])
+        )
       })
     }
   })
