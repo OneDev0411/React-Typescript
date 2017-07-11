@@ -51,6 +51,10 @@
     /* Firefox 18- */
     color: #2196f3;
   }
+
+  .c-min-max-inputs__alert + & {
+    padding-top: 1rem;
+  }
 }
 
 .c-min-max-inputs__alert {

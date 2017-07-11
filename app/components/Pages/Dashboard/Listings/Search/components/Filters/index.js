@@ -74,7 +74,7 @@ const Filters = ({
             <OtherStatusesChildrens name="listing_statuses" />
           </FiltersListingsStatusRow>
         </div>
-        <div style={{ padding: '3rem 2rem 0', backgroundColor: '#fff' }}>
+        <div style={{ padding: '3rem 2rem 6rem', backgroundColor: '#fff' }}>
           <MlsAreaSelects />
           <Counties />
           <NumberRange name="price" placeholder="$Any" label="Price Range" />

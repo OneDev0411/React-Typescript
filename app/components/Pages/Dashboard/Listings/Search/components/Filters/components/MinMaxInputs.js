@@ -20,12 +20,6 @@ const renderField = ({
     <label htmlFor={input.name} className="c-min-max-inputs__label">
       {label}
     </label>
-    <input
-      {...input}
-      type={type}
-      className={className}
-      placeholder={placeholder}
-    />
     {touched &&
       (error &&
         <div className="c-min-max-inputs__alert has-error">
@@ -36,6 +30,12 @@ const renderField = ({
         <div className="c-min-max-inputs__alert has-warning">
           {warning}
         </div>)}
+    <input
+      {...input}
+      type={type}
+      className={className}
+      placeholder={placeholder}
+    />
   </div>
 
 const MinMaxInputs = ({
