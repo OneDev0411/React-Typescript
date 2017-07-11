@@ -1,12 +1,18 @@
 import { browserHistory } from 'react-router'
+import { batchActions } from 'redux-batched-actions'
 import _ from 'underscore'
+
 import store from '../../../../../stores'
+import ChatroomModel from '../../../../../models/Chatroom'
 import ChatNotification from '../Services/notification'
 import {
   getRooms,
   getMessages,
   addChatPopup,
-  changeActiveRoom
+  changeActiveRoom,
+  removeRoom,
+  removeRoomMessages,
+  closeChatPopup
 } from '../../../../../store_actions/chatroom'
 
 export default class Chatroom {
@@ -50,6 +56,21 @@ export default class Chatroom {
   }
 
   /**
+   * remove a specific room
+   */
+  static leaveRoom(userId, room) {
+    // send request server to remove this room
+    ChatroomModel.leaveRoom(userId, room)
+
+    store.dispatch(batchActions([
+      removeRoom(room.id),
+      removeRoomMessages(room.id),
+      closeChatPopup(room.id),
+      changeActiveRoom(null)
+    ]))
+  }
+
+  /**
    * get all popup instances
    */
   static getPopups() {
@@ -63,6 +84,18 @@ export default class Chatroom {
   static getPopupInstance(room) {
     const popups = Chatroom.getPopups()
     return popups ? popups[room] : null
+  }
+
+  /**
+   * open chat popup
+   */
+  static openPopup(room, activate = true) {
+    store.dispatch(addChatPopup(room))
+
+    if (activate) {
+      store.dispatch(changeActiveRoom(room))
+      Chatroom.focusOnPopupInput(room)
+    }
   }
 
   /**
@@ -88,7 +121,6 @@ export default class Chatroom {
    * open new chat
    */
   static openChat(room, activate = true) {
-
     if (activate) {
       ChatNotification.clear(room)
     }
@@ -100,8 +132,7 @@ export default class Chatroom {
     else {
       // open popup if not minimized (if activate=true open it anyway)
       if (!Chatroom.isMinimized(room) || activate) {
-        store.dispatch(addChatPopup(room, activate))
-        Chatroom.focusOnPopupInput(room)
+        Chatroom.openPopup(room, activate)
       }
     }
   }

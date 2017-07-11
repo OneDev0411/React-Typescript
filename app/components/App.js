@@ -81,7 +81,7 @@ class App extends Component {
   async initialRooms() {
     const { dispatch, data, rooms } = this.props
 
-    if (data.user && !rooms) {
+    if (data.user) {
       const rooms = await dispatch(getRooms())
 
       // hack for share alert modal -> prepare rooms for it

@@ -30,18 +30,18 @@ class Chatroom extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { activeRoom, location, isInstance, instanceMode } = this.props
+    const { activeRoom, location, isInstant, instantMode } = this.props
 
-    // when user switch from popup to full screen (= instance) chat
-    if (isInstance && instanceMode !== nextProps.instanceMode) {
+    // when user switch from popup to full screen (= instant) chat
+    if (isInstant && instantMode !== nextProps.instantMode) {
       return nextProps.activeRoom !== undefined &&
-        nextProps.instanceMode === true
+        nextProps.instantMode === true
     }
 
     // when user works in full screen mode
-    if (isInstance && instanceMode === nextProps.instanceMode) {
+    if (isInstant && instantMode === nextProps.instantMode) {
       return nextProps.activeRoom !== undefined &&
-        nextProps.instanceMode === true &&
+        nextProps.instantMode === true &&
         activeRoom !== nextProps.activeRoom
     }
 
@@ -53,7 +53,7 @@ class Chatroom extends React.Component {
   }
 
   changeRoom(id) {
-    const { instanceMode, changeActiveRoom, activeRoom, location } = this.props
+    const { instantMode, changeActiveRoom, activeRoom, location } = this.props
 
     if (id !== activeRoom) {
       changeActiveRoom(id)
@@ -62,19 +62,19 @@ class Chatroom extends React.Component {
       ChatNotification.clear(id)
     }
 
-    // don't change url on instance mode
-    if (!instanceMode) {
+    // don't change url on instant mode
+    if (!instantMode) {
       browserHistory.push(`/dashboard/recents/${id}`)
     }
   }
 
   getLeft() {
-    const { instanceMode } = this.props
-    return instanceMode ? roomsWidth : `calc(65px + ${roomsWidth})`
+    const { instantMode } = this.props
+    return instantMode ? roomsWidth : `calc(65px + ${roomsWidth})`
   }
 
   render() {
-    const { user, activeRoom, isInstance } = this.props
+    const { user, activeRoom, isInstant } = this.props
 
     return (
       <div className="chatroom">
@@ -107,7 +107,7 @@ class Chatroom extends React.Component {
             user={user}
             roomId={activeRoom}
             showToolbar={true}
-            isInstanceChat={isInstance}
+            isInstantChat={isInstant}
           />
         </div>
       </div>
@@ -116,6 +116,6 @@ class Chatroom extends React.Component {
 }
 
 export default connect(({ chatroom }) => ({
-  instanceMode: chatroom.instanceMode,
+  instantMode: chatroom.instantMode,
   activeRoom: chatroom.activeRoom
 }), ({ changeActiveRoom }))(Chatroom)

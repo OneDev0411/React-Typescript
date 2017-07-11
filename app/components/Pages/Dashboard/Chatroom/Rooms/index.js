@@ -11,7 +11,7 @@ import UserAvatar from '../../../../Partials/UserAvatar'
 import UserTyping from '../UserTyping'
 
 import {
-  toggleInstanceMode,
+  toggleInstantMode,
   changeActiveRoom
 } from '../../../../../store_actions/chatroom'
 
@@ -37,10 +37,10 @@ class Rooms extends React.Component {
    */
   fullScreen(e) {
     e.preventDefault()
-    const { activeRoom, changeActiveRoom, toggleInstanceMode, showChatbar, rooms } = this.props
+    const { activeRoom, changeActiveRoom, toggleInstantMode, showChatbar, rooms } = this.props
 
     // toggle chatroom display
-    toggleInstanceMode()
+    toggleInstantMode()
 
     if (showChatbar) {
       // display first room if there is no active room
@@ -95,7 +95,7 @@ class Rooms extends React.Component {
 
   render() {
     const { filter, showComposeModal } = this.state
-    const { showChatbar, instanceMode, rooms, activeRoom } = this.props
+    const { showChatbar, instantMode, rooms, activeRoom } = this.props
 
     return (
       <div className="rooms">
@@ -123,7 +123,7 @@ class Rooms extends React.Component {
               className="btn-tgl"
             >
               {
-                instanceMode ?
+                instantMode ?
                 <i className="fa fa-angle-double-left fa-2x"></i> :
                 <i className="fa fa-angle-double-right fa-2x"></i>
               }
@@ -182,7 +182,7 @@ class Rooms extends React.Component {
 
 function mapStateToProps({ chatroom }) {
   return {
-    instanceMode: chatroom.instanceMode,
+    instantMode: chatroom.instantMode,
     showChatbar: chatroom.showChatbar,
     rooms: chatroom.rooms
   }
@@ -190,5 +190,5 @@ function mapStateToProps({ chatroom }) {
 
 export default connect(
   mapStateToProps,
-  ({ toggleInstanceMode, changeActiveRoom })
+  ({ toggleInstantMode, changeActiveRoom })
 )(Rooms)

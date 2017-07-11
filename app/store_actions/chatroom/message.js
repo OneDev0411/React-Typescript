@@ -64,6 +64,13 @@ export function removeMessageTyping(roomId, userId) {
   }
 }
 
+export function removeRoomMessages(roomId) {
+  return {
+    type: types.REMOVE_ROOM_MESSAGES,
+    roomId
+  }
+}
+
 export function updateMessageDeliveries(user, delivery_type, notification) {
   const { room, object, notification_type } = notification
 

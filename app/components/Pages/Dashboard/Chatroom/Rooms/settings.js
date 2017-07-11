@@ -1,13 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
-import { leaveRoom } from '../../../../../store_actions/chatroom'
+import Chatroom from '../Util/chatroom'
 import MoreIcon from '../../Partials/Svgs/MoreIcon'
 
 const RoomSettings = ({
   user,
   room,
-  leaveRoom,
   iconSize = 17
 }) => (
   <span>
@@ -24,7 +23,7 @@ const RoomSettings = ({
     >
       <MenuItem
         eventKey="1"
-        onClick={() => leaveRoom(user.id, room) }
+        onClick={() => Chatroom.leaveRoom(user.id, room) }
       >
         <i className="fa fa-sign-out" />
         Leave this chat
@@ -36,4 +35,4 @@ const RoomSettings = ({
 
 export default connect(s => ({
   user: s.data.user
-}), { leaveRoom })(RoomSettings)
+}))(RoomSettings)

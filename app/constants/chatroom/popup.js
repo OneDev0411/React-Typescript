@@ -1,0 +1,7 @@
+export default [
+  'ADD_POPUP',
+  'MINIMIZE_POPUP',
+  'MAXIMIZE_POPUP',
+  'CHANGE_ACTIVE_POPUP',
+  'REMOVE_POPUP'
+]

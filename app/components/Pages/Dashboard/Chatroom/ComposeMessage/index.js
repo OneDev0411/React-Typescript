@@ -92,14 +92,14 @@ class ComposeMessage extends React.Component {
   }
 
   render() {
-    const { members, isInstanceChat, user } = this.props
+    const { members, isInstantChat, user } = this.props
 
     return (
       <MessageInput
         roomId={this.props.roomId}
         user={user}
         mentionsSource={Mention.getList(members, user)}
-        isInstanceChat={isInstanceChat}
+        isInstantChat={isInstantChat}
         inputRef={ref => this.text_message = ref}
         onHeightChange={this.props.onHeightChange}
       />

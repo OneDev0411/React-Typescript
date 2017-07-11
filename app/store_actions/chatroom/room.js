@@ -17,13 +17,6 @@ function _addNewRoom(room) {
   }
 }
 
-function _leaveRoom(roomId) {
-  return {
-    type: types.LEAVE_ROOM,
-    roomId
-  }
-}
-
 export function addMembersToRoom(roomId, users) {
   return {
     type: types.ADD_MEMBERS,
@@ -72,10 +65,10 @@ export function addRecipients(roomId, recipients) {
   }
 }
 
-export function leaveRoom(userId, room) {
-  return async dispatch => {
-    await Chatroom.leaveRoom(userId, room)
-    dispatch(_leaveRoom(room.id))
+export function removeRoom(roomId) {
+  return {
+    type: types.REMOVE_ROOM,
+    roomId
   }
 }
 

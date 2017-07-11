@@ -1,10 +1,9 @@
 import types from '../../constants/chatroom'
 
-export function addChatPopup(roomId, activate = true) {
+export function addChatPopup(roomId) {
   return {
     type: types.ADD_POPUP,
-    roomId,
-    activate
+    roomId
   }
 }
 
@@ -27,13 +26,6 @@ export function maximizeChatPopup(roomId) {
 
   return {
     type: types.MAXIMIZE_POPUP,
-    roomId
-  }
-}
-
-export function changeActivePopup(roomId) {
-  return {
-    type: types.CHANGE_ACTIVE_POPUP,
     roomId
   }
 }

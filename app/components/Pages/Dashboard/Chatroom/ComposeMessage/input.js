@@ -48,10 +48,10 @@ export default class MessageInput extends React.Component {
 
   render() {
     const { height, rows } = this.state
-    const { isInstanceChat, mentionsSource, roomId, user } = this.props
+    const { isInstantChat, mentionsSource, roomId, user } = this.props
 
-    const instanceId = isInstanceChat ? 'instance-chat' : ''
-    const handlerId = `compose-message-${instanceId}--${roomId}`
+    const instantId = isInstantChat ? 'instant' : ''
+    const handlerId = `compose-message-${instantId}--${roomId}`
 
     return (
       <div

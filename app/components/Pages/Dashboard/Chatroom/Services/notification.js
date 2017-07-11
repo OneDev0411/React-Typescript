@@ -9,8 +9,7 @@ import {
   resetRoomNotificationsCounter,
   updateMessageDeliveries,
   acknowledgeRoom,
-  updateRoomTime,
-  addChatPopup
+  updateRoomTime
 } from '../../../../../store_actions/chatroom'
 
 export default class ChatNotification extends NotificationService {
