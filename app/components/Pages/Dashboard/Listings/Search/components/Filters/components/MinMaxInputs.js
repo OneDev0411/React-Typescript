@@ -1,8 +1,13 @@
 import React from 'react'
 import pure from 'recompose/pure'
 import { Field } from 'redux-form'
+import compose from 'recompose/compose'
+import withState from 'recompose/withState'
+import withHandlers from 'recompose/withHandlers'
 
 import Label from './Label'
+
+const turnToNumber = value => Number(value.replace(/[^0-9]/g, ''))
 
 const renderField = ({
   type,
@@ -20,6 +25,12 @@ const renderField = ({
     <label htmlFor={input.name} className="c-min-max-inputs__label">
       {label}
     </label>
+    <input
+      {...input}
+      type={type}
+      className={className}
+      placeholder={placeholder}
+    />
     {touched &&
       (error &&
         <div className="c-min-max-inputs__alert has-error">
@@ -30,21 +41,20 @@ const renderField = ({
         <div className="c-min-max-inputs__alert has-warning">
           {warning}
         </div>)}
-    <input
-      {...input}
-      type={type}
-      className={className}
-      placeholder={placeholder}
-    />
   </div>
 
 const MinMaxInputs = ({
-  warn,
   name,
   label,
-  validate,
   formatHandler,
-  placeholder = 'Any'
+  humanNumber,
+  onChangeMin,
+  validateMin = [],
+  validateMax = [],
+  validateMinValue,
+  placeholder = 'Any',
+  warnMin,
+  warnMax
 }) => {
   const minName = `minimum_${name}`
   const maxName = `maximum_${name}`
@@ -58,10 +68,11 @@ const MinMaxInputs = ({
           id={minName}
           label="Min."
           component={renderField}
-          warn={warn}
-          validate={validate}
+          warn={warnMin}
+          validate={validateMin}
           format={formatHandler}
           placeholder={placeholder}
+          onChange={(e, value) => onChangeMin(value)}
           className="c-min-max-inputs__field"
         />
         <Field
@@ -70,15 +81,29 @@ const MinMaxInputs = ({
           id={maxName}
           label="Max."
           component={renderField}
-          warn={warn}
-          validate={validate}
+          warn={warnMax}
           format={formatHandler}
           placeholder={placeholder}
           className="c-min-max-inputs__field"
+          validate={[...validateMax, validateMinValue]}
         />
       </div>
     </Label>
   )
 }
 
-export default pure(MinMaxInputs)
+export default compose(
+  pure,
+  withState('minimumValue', 'setMinimumValue', 0),
+  withHandlers({
+    onChangeMin: ({ setMinimumValue }) => value => {
+      setMinimumValue(turnToNumber(value))
+    },
+    validateMinValue: ({ minimumValue, humanNumber }) => value =>
+      value && minimumValue && turnToNumber(value) < minimumValue
+        ? `Must be minimum ${humanNumber
+            ? (minimumValue + 1).toLocaleString()
+            : minimumValue + 1}`
+        : undefined
+  })
+)(MinMaxInputs)

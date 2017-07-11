@@ -13,7 +13,7 @@ const maxValue = year =>
     : undefined
 
 const minLength = limit => value =>
-  value && value.length !== limit ? `Must be ${limit} numbers` : undefined
+  value && value.length < limit ? `Must be ${limit} numbers` : undefined
 const minLength4 = minLength(4)
 
 const tooOld = year =>
@@ -22,15 +22,17 @@ const tooOld = year =>
     : undefined
 
 const formatHandler = value =>
-  value == null ? '' : Number(value.replace(/[^0-9]/g, '').substr(0, 4))
+  value == null ? '' : Number(value.replace(/[^0-9]/g, ''))
 
 const YearBuilt = () =>
   <MinMaxInputs
     name="year_built"
     label="Year Built"
     formatHandler={formatHandler}
-    validate={(minLength4, maxValue)}
-    warn={tooOld}
+    validateMin={[minLength4, maxValue]}
+    validateMax={[minLength4, maxValue]}
+    warnMin={tooOld}
+    humanNumber={false}
   />
 
 export default pure(YearBuilt)
