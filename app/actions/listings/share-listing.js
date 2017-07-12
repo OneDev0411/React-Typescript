@@ -4,7 +4,6 @@ import User from '../../models/User'
 import AppStore from '../../stores/AppStore'
 import _ from 'lodash'
 import async from 'async'
-import getAllMessages from '../messages/get-all-messages'
 import AppDispatcher from '../../dispatcher/AppDispatcher'
 export default (user, mls_number, message, users, emails, phone_numbers, notification) => {
   // Get a room
@@ -46,12 +45,6 @@ export default (user, mls_number, message, users, emails, phone_numbers, notific
           recommendation: res.data.id
         })
       }
-      // User.getRooms(params, (error, response) => {
-      //   const updated_rooms = response.data
-      //   AppStore.data.rooms = updated_rooms
-      //   getAllMessages(user, updated_rooms)
-      //   AppStore.emitChange()
-      // })
     })
     return
   }
