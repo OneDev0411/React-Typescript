@@ -45,7 +45,8 @@ const FiltersListingsStatus = ({
         <div
           className={`c-filters-listings-status__right-side ${statusIsActive
             ? 'is-active'
-            : ''}`}>
+            : ''}`}
+        >
           {hasAccordion &&
             <AccordionTrigger
               onClick={AccordionTriggerIsActive && onClickAccordionTriggger}
@@ -59,6 +60,7 @@ const FiltersListingsStatus = ({
           {hasSwitchToggle &&
             <SwitchToggle
               name={name}
+              value={title}
               onChangeHandler={onChangeSwitchToggle}
               className="c-filters-listings-status__switch-toggle"
             />}

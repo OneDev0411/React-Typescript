@@ -78,39 +78,127 @@ import getListingsByValert from '../get-listings/by-valert'
 //   Incoming,
 //   "Coming Soon"
 // ]
-const prepareStatuses = statuses =>
-  Object.keys(statuses).filter(status => statuses[status])
-    .map(status => status
-        .split('_')
-        .map(f => f.charAt(0).toUpperCase() + f.substr(1))
-        .join(' ')
-    )
 
+const turnToNumber = value => Number(value.replace(/[^0-9]/g, ''))
 
 const getSoldDate = (selectedMonth = 3) => {
   const date = new Date(Date.now())
   return date.setMonth(date.getMonth() - selectedMonth) / 1000
 }
 
+const normalizeNumberValues = values => {
+  const numberValues = Object.keys(values).filter(
+    v =>
+      (v.indexOf('minimum') === 0 || v.indexOf('maximum') === 0) &&
+      v.indexOf('sold') === -1
+  )
+
+  const normalizedValues = {}
+  numberValues.forEach(v => {
+    const value = turnToNumber(values[v])
+
+    if (!value) {
+      return
+    }
+
+    normalizedValues[v] = value
+  })
+
+  return normalizedValues
+}
+
+const normalizPoolValue = value => {
+  switch (value) {
+    case 'NO':
+      return false
+    case 'YES':
+      return true
+    default:
+      return null
+  }
+}
+
+const ignoreNullValues = values => {
+  const withoutNullValues = {}
+
+  Object.keys(values).forEach(v => {
+    const value = values[v]
+    if (value == null) {
+      return
+    }
+    withoutNullValues[v] = value
+  })
+
+  return withoutNullValues
+}
+
+const obiectPropsValueToArray = obj =>
+  Object.keys(obj)
+    .map(p => {
+      const value = obj[p]
+      if (!value) {
+        return
+      }
+      return value
+    })
+    .filter(v => v)
+
 const submitFiltersForm = values => (dispatch, getState) => {
   const { options, filters: formState } = getState().search
-  
-  console.log(values)
 
   let minimum_sold_date
-  const open_house = values.open_house || false
-  const listing_statuses = prepareStatuses(values.listing_statuses)
+  const pool = normalizPoolValue(values.pool)
+  const open_house = values.open_house ? true : null
 
   if (values.listing_statuses.sold) {
-    minimum_sold_date = getSoldDate(parseInt(values.minimum_sold_date, 10))
+    minimum_sold_date = getSoldDate(Number(values.minimum_sold_date))
   }
+
+  const listing_statuses = obiectPropsValueToArray(values.listing_statuses)
+  const property_subtypes = obiectPropsValueToArray(values.property_subtypes)
+  const architectural_styles = obiectPropsValueToArray(
+    values.architectural_styles
+  )
+
+  const {
+    counties,
+    mls_areas,
+    subdivisions,
+    high_schools,
+    middle_schools,
+    primary_schools,
+    elementary_schools,
+    senior_high_schools,
+    junior_high_schools,
+    intermediate_schools
+  } = values
+
+  const withoutNullValues = ignoreNullValues({
+    open_house,
+    counties,
+    mls_areas,
+    subdivisions,
+    high_schools,
+    middle_schools,
+    primary_schools,
+    elementary_schools,
+    senior_high_schools,
+    junior_high_schools,
+    intermediate_schools,
+    pool,
+    minimum_sold_date
+  })
 
   const queryOptions = {
     ...options,
-    open_house,
     listing_statuses,
-    minimum_sold_date
+    property_subtypes,
+    architectural_styles,
+    ...withoutNullValues,
+    ...normalizeNumberValues(values)
   }
+
+  console.log(values, queryOptions)
 
   return getListingsByValert(queryOptions)(dispatch, getState)
 }

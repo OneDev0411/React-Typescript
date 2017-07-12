@@ -20,6 +20,26 @@ import OtherStatusesChildrens from './OtherStatusesChildrens'
 import FiltersListingsStatusRow from './FiltersListingsStatusRow'
 import actions from '../../../../../../../store_actions/listings/search/filters'
 
+const property_subtypes = {
+  condo: 'RES-Condo',
+  farm: 'RES-Farm/Ranch',
+  duplex: 'RES-Half Duplex',
+  townhouse: 'RES-Townhouse',
+  single_family: 'RES-Single Family'
+}
+
+const otherStatuses = {
+  canclled: 'Canclled',
+  expired: 'Expired',
+  contingent: 'Contingent',
+  kick_out: 'Kick Out',
+  option_contract: 'Option Contract',
+  pending: 'Pending',
+  temp_off_market: 'Temp Off Market',
+  withdrawn: 'Withdrawn',
+  withdrawn_sublistin: 'Withdrawn Sublisting'
+}
+
 const Filters = ({
   isOpen,
   pristine,
@@ -71,14 +91,17 @@ const Filters = ({
             hasAccordion
             color="#f5a544"
           >
-            <OtherStatusesChildrens name="listing_statuses" />
+            <OtherStatusesChildrens
+              name="listing_statuses"
+              fields={otherStatuses}
+            />
           </FiltersListingsStatusRow>
         </div>
         <div style={{ padding: '3rem 2rem 6rem', backgroundColor: '#fff' }}>
           <MlsAreaSelects />
           <Counties />
           <NumberRange name="price" placeholder="$Any" label="Price Range" />
-          <PropertySubtypes />
+          <PropertySubtypes fields={property_subtypes} />
           <ArchitecturalStyles />
           <GroupRadios name="minimum_bedrooms" label="Bedrooms" />
           <GroupRadios name="minimum_bathrooms" label="Bathrooms" />
@@ -91,8 +114,8 @@ const Filters = ({
             label="Pool"
             name="pool"
             fields={[
-              { title: 'Yes', value: 'yes' },
-              { title: 'No', value: 'no' },
+              { title: 'Yes', value: 'YES' },
+              { title: 'No', value: 'NO' },
               { title: 'Either', value: 'either' }
             ]}
           />
@@ -119,31 +142,15 @@ export default compose(
       pool: 'either',
       open_house: false,
       listing_statuses: {
-        sold: false,
-        active: true,
-        canclled: false,
-        expired: false,
-        contingent: false,
-        kick_out: false,
-        option_contract: false,
-        pending: false,
-        temp_off_market: false,
-        withdrawn: false,
-        withdrawn_sublisting: false
+        active: 'Active'
       },
+      property_subtypes,
       minimum_sold_date: '3', // unit is month but it need to timestamp
       minimum_bedrooms: 'any',
       minimum_bathrooms: 'any',
       minimum_parking_spaces: 'any',
-      property_subtypes: {
-        farm: true,
-        condo: true,
-        duplex: true,
-        townhouse: true,
-        single_family: true
-      },
       architectural_styles: {
-        everything: true
+        everything: 'Everything'
       }
     },
     getFormState: ({ search }) => search.filters.form

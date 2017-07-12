@@ -72,7 +72,7 @@ const MinMaxInputs = ({
           validate={validateMin}
           format={formatHandler}
           placeholder={placeholder}
-          onChange={(e, value) => onChangeMin(value)}
+          onChange={(e, value, nextValue) => onChangeMin(value)}
           className="c-min-max-inputs__field"
         />
         <Field

@@ -12,9 +12,9 @@ const maxValue = year =>
     ? `Must be maximum ${currentYear()}`
     : undefined
 
-const minLength = limit => value =>
-  value && value.length < limit ? `Must be ${limit} numbers` : undefined
-const minLength4 = minLength(4)
+const exactLength = limit => value =>
+  value && value.length !== limit ? `Must be ${limit} numbers` : undefined
+const exactLength4 = exactLength(4)
 
 const tooOld = year =>
   year && Number(year) < 1889
@@ -29,8 +29,8 @@ const YearBuilt = () =>
     name="year_built"
     label="Year Built"
     formatHandler={formatHandler}
-    validateMin={[minLength4, maxValue]}
-    validateMax={[minLength4, maxValue]}
+    validateMin={[exactLength4, maxValue]}
+    validateMax={[exactLength4, maxValue]}
     warnMin={tooOld}
     humanNumber={false}
   />

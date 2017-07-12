@@ -3,19 +3,7 @@ import pure from 'recompose/pure'
 
 import Tags from '../components/Tags'
 
-const property_subtypes = {
-  condo: 'RES-Condo',
-  farm: 'RES-Farm/Ranch',
-  duplex: 'RES-Half Duplex',
-  townhouse: 'RES-Townhouse',
-  single_family: 'RES-Single Family'
-}
-
-const PropertySubtypes = () =>
-  <Tags
-    name="property_subtypes"
-    label="Property Subtypes"
-    fields={property_subtypes}
-  />
+const PropertySubtypes = ({ fields }) =>
+  <Tags name="property_subtypes" label="Property Subtypes" fields={fields} />
 
 export default pure(PropertySubtypes)
