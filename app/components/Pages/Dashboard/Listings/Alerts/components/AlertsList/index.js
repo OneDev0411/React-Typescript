@@ -18,19 +18,25 @@ const AlertsList = ({ alertsList, selectedAlertId }) =>
   </div>
 
 export default compose(
-  connect(({ alerts, chatroom }, { alertsList }) => ({
+  connect(({ data, alerts, chatroom }, { alertsList }) => ({
+    user: data.user,
     rooms: chatroom.rooms,
     selectedAlertId: alerts.selectedAlertId
   })),
-  withPropsOnChange(['alertsList', 'rooms'], ({ alertsList, rooms }) => {
+  withPropsOnChange(['alertsList', 'rooms'], ({ alertsList, rooms, user }) => {
     if (!rooms) {
       return
     }
 
-    const data = alertsList.data.map(alert => ({
-      ...alert,
-      users: rooms[alert.room].users
-    }))
+    const data = alertsList.data.map(
+      alert =>
+        !rooms[alert.room]
+          ? alert
+          : {
+            ...alert,
+            users: rooms[alert.room].users
+          }
+    )
 
     return { alertsList: { data } }
   })
