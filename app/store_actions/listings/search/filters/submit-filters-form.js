@@ -79,7 +79,8 @@ import getListingsByValert from '../get-listings/by-valert'
 //   "Coming Soon"
 // ]
 
-const turnToNumber = value => Number(value.replace(/[^0-9]/g, ''))
+const turnToNumber = value =>
+  value ? Number(value.replace(/[^0-9]/g, '')) : null
 
 const getSoldDate = (selectedMonth = 3) => {
   const date = new Date(Date.now())
@@ -95,13 +96,7 @@ const normalizeNumberValues = values => {
 
   const normalizedValues = {}
   numberValues.forEach(v => {
-    const value = turnToNumber(values[v])
-
-    if (!value) {
-      return
-    }
-
-    normalizedValues[v] = value
+    normalizedValues[v] = turnToNumber(values[v]) || null
   })
 
   return normalizedValues
@@ -133,15 +128,17 @@ const ignoreNullValues = values => {
 }
 
 const obiectPropsValueToArray = obj =>
-  Object.keys(obj)
-    .map(p => {
-      const value = obj[p]
-      if (!value) {
-        return
-      }
-      return value
-    })
-    .filter(v => v)
+  !obj
+    ? null
+    : Object.keys(obj)
+        .map(p => {
+          const value = obj[p]
+          if (!value) {
+            return
+          }
+          return value
+        })
+        .filter(v => v)
 
 const submitFiltersForm = values => (dispatch, getState) => {
   const { options, filters: formState } = getState().search
@@ -164,6 +161,7 @@ const submitFiltersForm = values => (dispatch, getState) => {
     counties,
     mls_areas,
     subdivisions,
+    school_districts,
     high_schools,
     middle_schools,
     primary_schools,
@@ -173,11 +171,22 @@ const submitFiltersForm = values => (dispatch, getState) => {
     intermediate_schools
   } = values
 
-  const withoutNullValues = ignoreNullValues({
+  const points =
+    mls_areas || school_districts || subdivisions || counties
+      ? null
+      : options.points
+
+  const queryOptions = ignoreNullValues({
+    ...options,
+    points,
+    listing_statuses,
+    property_subtypes,
+    architectural_styles,
     open_house,
     counties,
     mls_areas,
     subdivisions,
+    school_districts,
     high_schools,
     middle_schools,
     primary_schools,
@@ -186,19 +195,11 @@ const submitFiltersForm = values => (dispatch, getState) => {
     junior_high_schools,
     intermediate_schools,
     pool,
-    minimum_sold_date
+    minimum_sold_date,
+    ...normalizeNumberValues(values)
   })
 
-  const queryOptions = {
-    ...options,
-    listing_statuses,
-    property_subtypes,
-    architectural_styles,
-    ...withoutNullValues,
-    ...normalizeNumberValues(values)
-  }
-
-  console.log(values, queryOptions)
+  // console.log(values, queryOptions)
 
   return getListingsByValert(queryOptions)(dispatch, getState)
 }

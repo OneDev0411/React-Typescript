@@ -4,23 +4,22 @@ import pure from 'recompose/pure'
 import Tags from '../components/Tags'
 
 const architectural_styles = {
-  everything: 'Everything',
   mediterranean: 'Mediterranean',
   colonial: 'Colonial',
-  loft: 'Loft',
-  french: 'French',
   oriental: 'Oriental',
   midCentry_modern: 'Mid-Centry Modern',
   prairie: 'Prairie',
+  tudor: 'Tudor',
+  southwestern: 'Southwestern',
   ranch: 'Ranch',
   spanish: 'Spanish',
-  split_level: 'Split Level',
-  southwestern: 'Southwestern',
   studio_apartment: 'Studio Apartment',
   traditional: 'Traditional',
-  tudor: 'Tudor',
-  victorian: 'Victorian',
+  loft: 'Loft',
+  split_level: 'Split Level',
+  french: 'French',
   aFrame: 'A-Frame',
+  victorian: 'Victorian',
   contemporary: 'Contemporary/Modern, Traditional'
 }
 

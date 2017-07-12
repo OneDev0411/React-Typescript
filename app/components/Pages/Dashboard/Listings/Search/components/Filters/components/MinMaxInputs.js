@@ -7,7 +7,8 @@ import withHandlers from 'recompose/withHandlers'
 
 import Label from './Label'
 
-const turnToNumber = value => Number(value.replace(/[^0-9]/g, ''))
+const turnToNumber = value =>
+  value ? Number(value.replace(/[^0-9]/g, '')) : null
 
 const renderField = ({
   type,
@@ -72,6 +73,7 @@ const MinMaxInputs = ({
           validate={validateMin}
           format={formatHandler}
           placeholder={placeholder}
+          normalize={v => v || null}
           onChange={(e, value, nextValue) => onChangeMin(value)}
           className="c-min-max-inputs__field"
         />
@@ -84,8 +86,9 @@ const MinMaxInputs = ({
           warn={warnMax}
           format={formatHandler}
           placeholder={placeholder}
-          className="c-min-max-inputs__field"
+          normalize={v => v || null}
           validate={[...validateMax, validateMinValue]}
+          className="c-min-max-inputs__field"
         />
       </div>
     </Label>

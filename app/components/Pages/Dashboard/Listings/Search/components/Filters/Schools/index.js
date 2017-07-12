@@ -124,6 +124,7 @@ export default compose(
 
       if (districts.length === 0) {
         setSchools([])
+        setSelectedSchools([])
         setSelectedDistricts([])
         updateField(formName, 'school_districts', null)
 

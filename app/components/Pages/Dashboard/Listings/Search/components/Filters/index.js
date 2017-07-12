@@ -148,10 +148,7 @@ export default compose(
       minimum_sold_date: '3', // unit is month but it need to timestamp
       minimum_bedrooms: 'any',
       minimum_bathrooms: 'any',
-      minimum_parking_spaces: 'any',
-      architectural_styles: {
-        everything: 'Everything'
-      }
+      minimum_parking_spaces: 'any'
     },
     getFormState: ({ search }) => search.filters.form
   }),
