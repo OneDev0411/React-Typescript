@@ -2,7 +2,7 @@ import React from 'react'
 import FilePreviewModal from './file-preview-modal'
 import SubmitReviewModal from './submit-review-modal'
 import MessageModal from '../../../../Partials/MessageModal'
-import ConciergeDispatcher from '../../../../../dispatcher/ConciergeDispatcher'
+// import ConciergeDispatcher from '../../../../../dispatcher/ConciergeDispatcher'
 
 export default class DealDashboard extends React.Component {
 
@@ -100,62 +100,62 @@ export default class DealDashboard extends React.Component {
   }
 
   async postReview(docs) {
-    const token = this.props.user.access_token
-    const { deal } = this.state
+    // const token = this.props.user.access_token
+    // const { deal } = this.state
 
-    const reviews = await ConciergeDispatcher.dispatchSync({
-      type: 'SUBMIT_REVIEW_REQUEST',
-      id: deal.id,
-      body: {
-        reviews: docs
-      },
-      token
-    })
+    // const reviews = await ConciergeDispatcher.dispatchSync({
+    //   type: 'SUBMIT_REVIEW_REQUEST',
+    //   id: deal.id,
+    //   body: {
+    //     reviews: docs
+    //   },
+    //   token
+    // })
 
-    reviews.forEach(review => {
-      const type = review.file ? 'FILE' : 'ENVELOPE'
+    // reviews.forEach(review => {
+    //   const type = review.file ? 'FILE' : 'ENVELOPE'
 
-      if (type === 'FILE' && deal.files) {
+    //   if (type === 'FILE' && deal.files) {
 
-        deal.files = deal.files.map(file => {
-          if (file.id !== review.file)
-            return file
+    //     deal.files = deal.files.map(file => {
+    //       if (file.id !== review.file)
+    //         return file
 
-          file.review = review
-          return file
-        })
-      }
+    //       file.review = review
+    //       return file
+    //     })
+    //   }
 
-      if (type === 'ENVELOPE' && deal.envelopes) {
+    //   if (type === 'ENVELOPE' && deal.envelopes) {
 
-        deal.envelopes = deal.envelopes.map(envelope => {
-          if (!envelope.documents)
-            return envelope
+    //     deal.envelopes = deal.envelopes.map(envelope => {
+    //       if (!envelope.documents)
+    //         return envelope
 
-          const documents = envelope.documents.map(document => {
-            if (document.id === review.envelope_document)
-              document.review = review
+    //       const documents = envelope.documents.map(document => {
+    //         if (document.id === review.envelope_document)
+    //           document.review = review
 
-            return document
-          })
+    //         return document
+    //       })
 
-          return {
-            ...envelope,
-            documents
-          }
-        })
-      }
-    })
+    //       return {
+    //         ...envelope,
+    //         documents
+    //       }
+    //     })
+    //   }
+    // })
 
-    this.setState({
-      deal,
-      showSuccessModal: true,
-      saving: false
-    })
+    // this.setState({
+    //   deal,
+    //   showSuccessModal: true,
+    //   saving: false
+    // })
 
-    setTimeout(() => this.setState({ showSuccessModal: false }), 1500)
+    // setTimeout(() => this.setState({ showSuccessModal: false }), 1500)
 
-    this.onClose()
+    // this.onClose()
   }
 
   reviewRequestModalSubmitHandler(docs) {

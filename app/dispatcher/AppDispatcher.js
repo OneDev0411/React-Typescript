@@ -13,8 +13,6 @@ import createPassword from '../actions/user/create-password'
 import verifyPhone from '../actions/user/verify-phone'
 import sendVerifyEmail from '../actions/user/send-verify-email'
 import addUserToStore from '../actions/user/add-user-to-store'
-import getRooms from '../actions/user/get-rooms'
-import getRoomsIndexedDB from '../actions/indexeddb/get-rooms'
 import editProfilePic from '../actions/user/edit-profile-pic'
 import editPassword from '../actions/user/edit-password'
 import upgradeAccount from '../actions/user/upgrade-account'
@@ -24,21 +22,8 @@ import searchUsersShare from '../actions/user/search-share'
 import searchUsersAddMembers from '../actions/user/search-add-members'
 import getReceivingUser from '../actions/user/get-receiving-user'
 // Rooms
-import createRoom from '../actions/rooms/create-room'
-import deleteRoom from '../actions/rooms/delete-room'
-import addUsers from '../actions/rooms/add-users'
-import uploadFilesToRoom from '../actions/rooms/upload-files'
 import setNotification from '../actions/rooms/notifications'
-import acknowledgeRoomNotifications from '../actions/rooms/acknowledge-notifications'
-import getRoomAndMessages from '../actions/rooms/get-room-and-messages'
-import leaveRoom from '../actions/rooms/leave-room'
 
-// Messages
-import createMessage from '../actions/messages/create-message'
-import updateRoomsIndexedDB from '../actions/indexeddb/update-rooms'
-import getMessages from '../actions/messages/get-messages'
-import getAllMessages from '../actions/messages/get-all-messages'
-import getPreviousMessages from '../actions/messages/get-previous-messages'
 
 // Pages
 import landingPage from '../actions/pages/landing'
@@ -60,9 +45,6 @@ import getBranding from '../actions/branding/get-branding'
 
 // Google geocodeAddress
 import geocodeAddress from '../actions/google/geocode-address'
-
-// Chat module
-import sendChatModuleMessage from '../actions/chat-module/send-message'
 
 const AppDispatcher = new Dispatcher()
 
@@ -128,60 +110,8 @@ AppDispatcher.register(async function (payload) {
       addUserToStore(payload.user)
       break
 
-    case 'create-room':
-      createRoom(payload.user, payload.users, payload.emails, payload.phone_numbers, payload.comment)
-      break
-
-    case 'get-rooms':
-      getRooms(payload.user, payload.room_id)
-      break
-
-    case 'get-room-and-messages':
-      getRoomAndMessages(payload.user, payload.room)
-      break
-
-    case 'get-rooms-indexeddb':
-      getRoomsIndexedDB(payload.user_id)
-      break
-
-    case 'delete-room':
-      deleteRoom(payload.user, payload.id)
-      break
-
-    case 'leave-room':
-      leaveRoom(payload.user, payload.id)
-      break
-
-    case 'add-users':
-      addUsers(payload.user, payload.room, payload.users, payload.emails, payload.phone_numbers)
-      break
-
-    case 'create-message':
-      createMessage(payload.user, payload.room, payload.comment, payload.image_url, payload.attachment, payload.recommendation)
-      break
-
-    case 'update-rooms-indexeddb':
-      updateRoomsIndexedDB(payload.user_id)
-      break
-
-    case 'get-messages':
-      getMessages(payload.user, payload.room)
-      break
-
-    case 'get-all-messages':
-      getAllMessages(payload.user, payload.rooms)
-      break
-
-    case 'get-previous-messages':
-      getPreviousMessages(payload.user, payload.room, payload.scroll_height)
-      break
-
     case 'room-notifications':
       setNotification(payload.user, payload.id, payload.notification)
-      break
-
-    case 'upload-files-to-room':
-      uploadFilesToRoom(payload.user, payload.room, payload.files)
       break
 
     case 'edit-profile-pic':
@@ -194,10 +124,6 @@ AppDispatcher.register(async function (payload) {
 
     case 'acknowledge-alert-notifications':
       acknowledgeAlertNotifications(payload.user, payload.alert_id)
-      break
-
-    case 'acknowledge-room-notifications':
-      acknowledgeRoomNotifications(payload.user, payload.room)
       break
 
     case 'get-agent-report':
@@ -230,10 +156,6 @@ AppDispatcher.register(async function (payload) {
 
     case 'geocode-address':
       geocodeAddress(payload.address)
-      break
-
-    case 'send-chat-module-message':
-      sendChatModuleMessage(payload.user, payload.agent, payload.message)
       break
 
     case 'search-users-new-message':
