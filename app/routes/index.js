@@ -31,13 +31,13 @@ import Agents from '../components/Pages/Dashboard/Mls/Agents'
 import Listing from '../components/Pages/Dashboard/Mls/Listing'
 
 // deals
-import DealsLayout from '../components/Pages/Dashboard/Deals'
-import DealsList from '../components/Pages/Dashboard/Deals/DealsList'
-import DealCreate from '../components/Pages/Dashboard/Deals/DealCreate'
-import DealDashboard from '../components/Pages/Dashboard/Deals/Dashboard'
-import DealEditForm from '../components/Pages/Dashboard/Deals/Edit-Form'
-import CollectSignatures_Documents from '../components/Pages/Dashboard/Deals/CollectSignatures-Documents'
-import CollectSignatures_Recipients from '../components/Pages/Dashboard/Deals/CollectSignatures-Recipients'
+// import DealsLayout from '../components/Pages/Dashboard/Deals'
+// import DealsList from '../components/Pages/Dashboard/Deals/DealsList'
+// import DealCreate from '../components/Pages/Dashboard/Deals/DealCreate'
+// import DealDashboard from '../components/Pages/Dashboard/Deals/Dashboard'
+// import DealEditForm from '../components/Pages/Dashboard/Deals/Edit-Form'
+// import CollectSignatures_Documents from '../components/Pages/Dashboard/Deals/CollectSignatures-Documents'
+// import CollectSignatures_Recipients from '../components/Pages/Dashboard/Deals/CollectSignatures-Recipients'
 
 
 // contacts
@@ -123,15 +123,6 @@ export default (
 
       <Route path="/dashboard/recents(/:roomId)">
         <IndexRoute component={Recents} />
-      </Route>
-
-      <Route path="/dashboard/deals" component={DealsLayout}>
-        <IndexRoute component={DealsList} />
-        <Route path="/dashboard/deals/create/:type" component={DealCreate} />
-        <Route path="/dashboard/deals/:id(/:tab)" component={DealDashboard} />
-        <Route path="/dashboard/deals/:id/edit-form/:form/:type" component={DealEditForm} />
-        <Route path="/dashboard/deals/:id/collect-signatures/documents" component={CollectSignatures_Documents} />
-        <Route path="/dashboard/deals/:id/collect-signatures/recipients" component={CollectSignatures_Recipients} />
       </Route>
 
       <Route path="/dashboard/contacts" component={Contacts}>

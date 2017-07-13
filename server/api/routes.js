@@ -28,12 +28,6 @@ const routes = {
   concierge: [
     ['put-review']
   ],
-  deal: [
-    ['envelope-document'],
-    ['envelope-sign'],
-    ['docusign-login'],
-    ['submit-review-request']
-  ],
   intercom: [
     ['signin'],
     ['signup']
