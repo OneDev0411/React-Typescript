@@ -43,7 +43,7 @@ export default class ContactProfile extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { contacts, tags, params } = nextProps
 
-    // load deal
+    // load contact
     const contact = contacts[params.id]
 
     if (!contact)
