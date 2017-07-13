@@ -126,7 +126,7 @@ const Filters = ({
         onClick={handleSubmit(onSubmitHandler)}
         className="c-filters__submit-btn"
         disabled={submitting}
-        style={{ backgroundColor: `#${Brand.color('primary', '#2196f3')}` }}
+        style={{ background: `#${Brand.color('primary', '#2196f3')}` }}
       >
         Update Filters
       </button>
