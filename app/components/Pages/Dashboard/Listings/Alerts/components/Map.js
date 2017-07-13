@@ -7,6 +7,7 @@ import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 
 import Marker from '../../../Mls/Partials/Markers/SingleMarker'
+import { setPositionToPointsWithSameCoordinate } from '../../../Mls/Partials/MlsMap'
 import * as actions from '../../../../../../store_actions/listings/map'
 import {
   bootstrapURLKeys,
@@ -39,7 +40,8 @@ const map = ({
     defaultCenter={defaultCenter}
     yesIWantToUseGoogleMapApiInternals
     bootstrapURLKeys={bootstrapURLKeys}
-    onGoogleApiLoaded={onGoogleApiLoaded}>
+    onGoogleApiLoaded={onGoogleApiLoaded}
+  >
     {markers.map(({ id, ...markerProps }) =>
       <Marker
         data={appData}
@@ -86,23 +88,33 @@ const mapHOC = compose(
       setMapHoveredMarkerId('ALERTS', id)
     }
   }),
-  withPropsOnChange(['selectedAlert'], ({ selectedAlert, mapProps }) => {
-    if (!window.google || !selectedAlert || !mapProps.bounds) {
-      return {}
+  withPropsOnChange(
+    (props, nextProps) =>
+      !_.isEqual(props.selectedAlert, nextProps.selectedAlert),
+    ({ selectedAlert, mapProps }) => {
+      if (!window.google || !selectedAlert || !mapProps.bounds) {
+        return {}
+      }
+
+      const googleMaps = window.google.maps
+
+      const bounds = new googleMaps.LatLngBounds()
+      selectedAlert.points
+        .map(point => ({
+          lat: point.latitude,
+          lng: point.longitude
+        }))
+        .forEach(point => bounds.extend(point))
+
+      window.currentMap.fitBounds(bounds)
     }
-
-    const googleMaps = window.google.maps
-
-    const bounds = new googleMaps.LatLngBounds()
-    selectedAlert.points
-      .map(point => ({
-        lat: point.latitude,
-        lng: point.longitude
-      }))
-      .forEach(point => bounds.extend(point))
-
-    window.currentMap.fitBounds(bounds)
-  })
+  ),
+  withPropsOnChange(
+    (props, nextProps) => !_.isEqual(props.markers, nextProps.markers),
+    ({ markers = [] }) => ({
+      markers: setPositionToPointsWithSameCoordinate(markers)
+    })
+  )
 )
 
 export default mapHOC(map)
