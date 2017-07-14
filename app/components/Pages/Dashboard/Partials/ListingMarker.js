@@ -1,9 +1,10 @@
 // Partials/ListingMarker.js
-import React, { Component } from 'react'
-import S from 'shorti'
-import listing_util from '../../../../utils/listing'
-import helpers from '../../../../utils/helpers'
 import _ from 'lodash'
+import S from 'shorti'
+import React, { Component } from 'react'
+import helpers from '../../../../utils/helpers'
+import Brand from '../../../../controllers/Brand'
+import listing_util from '../../../../utils/listing'
 
 export default function ListingMarker({
   data,
@@ -176,7 +177,7 @@ export default function ListingMarker({
 
     if (listing && agent && agent.mlsid === listing.list_agent_mls_id && !isFavorited(listing) && !listing.commented_by) {
       brand_badge = (
-        <div style={S(`bg-url(${data.brand.assets.default_avatar}) w-21 h-21 bg-center bg-cover pull-left inline-block`)} />
+        <div style={S(`bg-url(${Brand.asset('default_avatar')}) w-21 h-21 bg-center bg-cover pull-left inline-block`)} />
       )
       marker_style = {
         ...marker_style,

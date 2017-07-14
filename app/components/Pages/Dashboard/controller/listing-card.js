@@ -8,7 +8,7 @@ const controller = {
     AppStore.data.signup_tooltip = {
       action: 'favorite_listing',
       listing: listing.id,
-      list_agent: listing.list_agent
+      list_agent: listing.proposed_agent.agent
     }
 
     AppStore.emitChange()
