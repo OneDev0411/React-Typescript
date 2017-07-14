@@ -6,18 +6,10 @@ import config from '../../../../config/private'
 
 const app = new Koa()
 
-const serialize = obj => {
-  const str = []
-  Object.keys(obj).forEach(key => {
-    str.push(`${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`)
-  })
-  return str.join('&')
-}
-
 router.post('/proxifier', bodyParser(), async ctx => {
   const headers = ctx.headers
   const data = ctx.request.body
-  const queryString = serialize(ctx.query)
+  const queryString = ctx.request.querystring
 
   try {
     // get brand
@@ -49,6 +41,8 @@ router.post('/proxifier', bodyParser(), async ctx => {
 
     ctx.body = response.body
   } catch (e) {
+    console.log('[ Error ] ', e.message)
+
     e.response = e.response || {
       status: 500,
       text: e.message
