@@ -5,12 +5,9 @@ import async from 'async'
 export default (user, redirect_to) => {
   // Check for inviting_user
   const signup = AppStore.data.signup
-  if (signup && signup.inviting_user)
-    user.user_connect = AppStore.data.signup.inviting_user
-  if (signup && signup.phone_number)
-    user.phone_number = AppStore.data.signup.phone_number
-  if (signup && signup.room)
-    user.room_connect = AppStore.data.signup.room
+  if (signup && signup.inviting_user) { user.user_connect = AppStore.data.signup.inviting_user }
+  if (signup && signup.phone_number) { user.phone_number = AppStore.data.signup.phone_number }
+  if (signup && signup.room) { user.room_connect = AppStore.data.signup.room }
   // Widgets and hostname signup
   if (AppStore.data.signup_tooltip) {
     user.actions = []
@@ -43,8 +40,7 @@ export default (user, redirect_to) => {
   }
 
   // Add brand
-  if (AppStore.data.brand)
-    user.brand = AppStore.data.brand.id
+  if (AppStore.data.brand) { user.brand = AppStore.data.brand.id }
 
   // console.log(user)
   const params = {

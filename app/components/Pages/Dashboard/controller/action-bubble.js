@@ -36,11 +36,13 @@ const controller = {
     const data = this.props.data
     const email = this.emailInput.value
     // If no email or double submit
-    if (!email || data.submitting)
+    if (!email || data.submitting) {
       return
+    }
     const random_password = randomString(9)
-    if (!email.trim())
+    if (!email.trim()) {
       return
+    }
     if (!validator.isEmail(email)) {
       AppStore.data.errors = {
         type: 'email-invalid'
@@ -78,7 +80,7 @@ const controller = {
     delete AppStore.data.show_signup_confirm_modal
     AppStore.data.signup_tooltip = {
       action: 'listing_inquiry',
-      list_agent: listing.proposed_agent,
+      list_agent: listing.proposed_agent.agent,
       listing: listing.id
     }
     AppStore.emitChange()
@@ -93,7 +95,8 @@ const controller = {
   },
   handleLoginClick(listing_id) {
     const data = this.props.data
-    const url = `https://${data.brand.hostnames[0]}/signin?redirect_to=dashboard/mls/${listing_id}`
+    const url = `https://${data.brand
+      .hostnames[0]}/signin?redirect_to=dashboard/mls/${listing_id}`
     window.top.location.href = url
   },
   resend(e) {

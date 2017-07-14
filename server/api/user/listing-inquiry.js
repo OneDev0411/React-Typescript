@@ -4,8 +4,7 @@ const router = require('koa-router')()
 const app = new Koa()
 
 router.post('/user/listing-inquiry', bodyParser(), async (ctx, next) => {
-
-  const { agent, brand, source_type, listing } = ctx.request.body.user
+  const { agent, brand, source_type, listing } = ctx.request.body
 
   try {
     const response = await ctx
@@ -17,8 +16,7 @@ router.post('/user/listing-inquiry', bodyParser(), async (ctx, next) => {
       })
 
     ctx.body = response.body
-  }
-  catch(e) {}
+  } catch (e) {}
 })
 
 module.exports = app.use(router.routes())
