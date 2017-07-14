@@ -9,7 +9,7 @@ function logger(url, method, headers, ctx) {
   const { user } = ctx.session
   const endpoint = `${method.toUpperCase()} ${api_url}${url}`.green
   const username = user ? user.email : 'GUEST'
-  let text = `[ ${colors.gray.bold(username)} ] ${endpoint}`
+  let text = `[ ${colors.white.bold(username)} ] ${endpoint}`
 
   if (user) {
     text += ` (${user.access_token})`.yellow
