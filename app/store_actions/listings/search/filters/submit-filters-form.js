@@ -1,4 +1,4 @@
-import { submit } from 'redux-form'
+import { submit, SubmissionError } from 'redux-form'
 import getListingsByValert from '../get-listings/by-valert'
 
 // Initial valert options {
@@ -125,20 +125,6 @@ export const obiectPropsValueToArray = obj =>
 const submitFiltersForm = values => (dispatch, getState) => {
   const { options, filters: formState } = getState().search
 
-  let minimum_sold_date
-  const pool = normalizPoolValue(values.pool)
-  const open_house = values.open_house ? true : null
-
-  if (values.listing_statuses.sold) {
-    minimum_sold_date = getSoldDate(Number(values.minimum_sold_date))
-  }
-
-  const listing_statuses = obiectPropsValueToArray(values.listing_statuses)
-  const property_subtypes = obiectPropsValueToArray(values.property_subtypes)
-  const architectural_styles = obiectPropsValueToArray(
-    values.architectural_styles
-  )
-
   const {
     counties,
     mls_areas,
@@ -152,6 +138,36 @@ const submitFiltersForm = values => (dispatch, getState) => {
     junior_high_schools,
     intermediate_schools
   } = values
+
+  const listing_statuses = obiectPropsValueToArray(values.listing_statuses)
+  const open_house = values.open_house ? true : null
+
+  if (listing_statuses.length === 0) {
+    let alertMsg = 'You must select at least one listing status'
+
+    if (open_house) {
+      alertMsg += ' "Open House" filter'
+    }
+
+    window.alert(alertMsg)
+
+    throw new SubmissionError({
+      listing_statuses: alertMsg,
+      _error: 'Filter Faild'
+    })
+  }
+
+  let minimum_sold_date
+  const pool = normalizPoolValue(values.pool)
+
+  if (values.listing_statuses.sold) {
+    minimum_sold_date = getSoldDate(Number(values.minimum_sold_date))
+  }
+
+  const property_subtypes = obiectPropsValueToArray(values.property_subtypes)
+  const architectural_styles = obiectPropsValueToArray(
+    values.architectural_styles
+  )
 
   const points =
     mls_areas || school_districts || subdivisions || counties
