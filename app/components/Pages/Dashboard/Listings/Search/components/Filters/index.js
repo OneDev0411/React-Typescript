@@ -9,6 +9,7 @@ import Brand from '../../../../../../../controllers/Brand'
 import Schools from './Schools'
 import Counties from './Counties'
 import YearBuilt from './YearBuilt'
+import SubStatuses from './SubStatuses'
 import NumberRange from './NumberRange'
 import Subdivision from './Subdivision'
 import MlsAreaSelects from './MlsAreaSelects'
@@ -16,7 +17,7 @@ import PropertySubtypes from './PropertySubtypes'
 import GroupRadios from './components/GroupRadios'
 import ArchitecturalStyles from './ArchitecturalStyles'
 import SoldStatusChildrens from './SoldStatusChildrens'
-import OtherStatusesChildrens from './OtherStatusesChildrens'
+import ActiveStatusesChildrens from './ActiveStatusesChildrens'
 import FiltersListingsStatusRow from './FiltersListingsStatusRow'
 import actions from '../../../../../../../store_actions/listings/search/filters'
 
@@ -29,15 +30,19 @@ const property_subtypes = {
 }
 
 const otherStatuses = {
-  canclled: 'Canclled',
+  cancelled: 'Cancelled',
   expired: 'Expired',
-  contingent: 'Contingent',
-  kick_out: 'Kick Out',
-  option_contract: 'Option Contract',
   pending: 'Pending',
   temp_off_market: 'Temp Off Market',
   withdrawn: 'Withdrawn',
   withdrawn_sublistin: 'Withdrawn Sublisting'
+}
+
+const activeStatuses = {
+  active: 'Active',
+  active_contingent: 'Active Contingent',
+  active_kick_out: 'Active Kick Out',
+  active_option_contract: 'Active Option Contract'
 }
 
 const Filters = ({
@@ -61,6 +66,7 @@ const Filters = ({
             name="listing_statuses.sold"
             title="Sold"
             hasAccordion
+            isField
             hasSwitchToggle
             color="#d00023"
             onChangeSwitchToggle={activeSold}
@@ -69,17 +75,21 @@ const Filters = ({
           </FiltersListingsStatusRow>
 
           <FiltersListingsStatusRow
-            name="listing_statuses.active"
             title="Active"
-            color="#32b86d"
+            hasAccordion
             hasSwitchToggle
+            color="#32b86d"
+            fields={activeStatuses}
             onChangeSwitchToggle={activeActiveListings}
-          />
+          >
+            <SubStatuses fields={activeStatuses} />
+          </FiltersListingsStatusRow>
 
           <FiltersListingsStatusRow
             name="open_house"
             title="Open House Only"
             icon="OH"
+            isField
             hasSwitchToggle
             color="#32b86d"
             onChangeSwitchToggle={activeOpenHouses}
@@ -91,10 +101,7 @@ const Filters = ({
             hasAccordion
             color="#f5a544"
           >
-            <OtherStatusesChildrens
-              name="listing_statuses"
-              fields={otherStatuses}
-            />
+            <SubStatuses fields={otherStatuses} />
           </FiltersListingsStatusRow>
         </div>
         <div style={{ padding: '3rem 2rem 6rem', backgroundColor: '#fff' }}>

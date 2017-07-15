@@ -4,7 +4,7 @@ import { Field } from 'redux-form'
 
 const name = 'listing_statuses'
 
-const OtherStatusesChildrens = ({ fields }) =>
+const SubStatuses = ({ fields }) =>
   <ul className="c-filters-other-statuses-childrens">
     {Object.keys(fields).map(field => {
       const id = `${name}__${field}`
@@ -37,4 +37,4 @@ const OtherStatusesChildrens = ({ fields }) =>
     })}
   </ul>
 
-export default pure(OtherStatusesChildrens)
+export default pure(SubStatuses)

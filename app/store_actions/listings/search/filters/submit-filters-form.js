@@ -41,41 +41,23 @@ import getListingsByValert from '../get-listings/by-valert'
 //   ]
 // }
 
-// Filters Form initialValues {
-//   statuses: {
-//     sold: false,
-//     active: true,
-//     canclled: false,
-//     expired: false,
-//     contingent: false,
-//     kick_out: false,
-//     option_contract: false,
-//     pending: false,
-//     temp_off_market: false,
-//     withdrawn: false,
-//     withdrawn_sublisting: false
-//   },
-//   open_house: false,
-//   soldListingsDate: 'lastThreeMonth'
-// }
-
 // listing_statuses
 // [
-//   Active,
-//   Sold,
-//   Pending,
+//   "Active",
+//   "Sold",
+//   "Pending",
 //   "Temp Off Market",
-//   Leased,
+//   "Leased",
 //   "Active Option Contract",
 //   "Active Contingent",
 //   "Active Kick Out",
-//   Withdrawn,
-//   Expired,
-//   Cancelled,
+//   "Withdrawn",
+//   "Expired",
+//   "Cancelled",
 //   "Withdrawn Sublisting",
-//   Incomplete,
-//   Unknown,
-//   Incoming,
+//   "Incomplete",
+//   "Unknown",
+//   "Incoming",
 //   "Coming Soon"
 // ]
 

@@ -4,14 +4,23 @@ import { ACTIVE_ACTIVE_STATUS } from '../../../../constants/listings/search/filt
 const formName = 'filters'
 const selector = formValueSelector(formName)
 
-const activeActiveListings = (event, nextState) => (dispatch, getState) => {
-  const formState = getState().search.filters
-  const openHouses = selector(formState, 'open_house')
+const activeStatuses = [
+  'active',
+  'active_kick_out',
+  'active_contingent',
+  'active_option_contract'
+]
 
-  if (!nextState && openHouses) {
-    event.preventDefault()
-    return Promise.resolve()
-  }
+const activeActiveListings = (event, nextState) => (dispatch, getState) => {
+  activeStatuses.forEach(status => {
+    const value = event.target.checked
+      ? status
+          .split('_')
+          .map(s => s.charAt(0).toUpperCase() + s.substr(1, s.length))
+          .join(' ')
+      : null
+    dispatch(change(formName, `listing_statuses.${status}`, value))
+  })
 }
 
 export default activeActiveListings
