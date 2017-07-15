@@ -4,12 +4,14 @@ import data from './data'
 import socket from './socket'
 import contact from './contact'
 import chatroom from './chatroom'
+import deals from './deals'
 
 const appReducer = combineReducers({
   socket,
   data,
   contact,
   chatroom,
+  deals,
   routing: routerReducer
 })
 
