@@ -1,5 +1,4 @@
 import React from 'react'
-import xss from 'xss'
 import urlParser from 'url'
 import { renderToString } from 'react-dom/server'
 import { RouterContext } from 'react-router'
@@ -15,6 +14,10 @@ function fetch(renderProps, store) {
     if (c && c.fetchData) { return c.fetchData(store.dispatch, renderProps.params) }
     return Promise.reslove
   })
+}
+
+function sanitize(state) {
+  return encodeURIComponent(JSON.stringify(state))
 }
 
 async function getBrand(user, url) {
@@ -60,7 +63,7 @@ async function display(file, renderProps) {
   } catch (e) { /* do nothing */ }
 
   // get store initial data
-  const store_data = encodeURIComponent(xss(JSON.stringify(store.getState())))
+  const store_data = sanitize(store.getState())
 
   if (['production', 'staging'].indexOf(process.env.NODE_ENV) > -1) {
     await this.render(file || 'app',  {
