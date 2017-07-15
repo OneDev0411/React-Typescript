@@ -13,11 +13,33 @@ import AccordionTrigger from './AccordionTrigger'
 
 const selector = formValueSelector('filters')
 
+const checkFieldsStatus = (state, fields) => {
+  let statusIndex = 0
+  let statusIsActive = false
+
+  if (typeof fields === 'string') {
+    return selector(state, fields) || false
+  }
+
+  const statuses = Object.keys(fields)
+  while (!statusIsActive && statusIndex < statuses.length) {
+    const status = selector(state, `listing_statuses.${statuses[statusIndex]}`)
+    if (status) {
+      statusIsActive = true
+    }
+    statusIndex++
+  }
+
+  return statusIsActive
+}
+
 const FiltersListingsStatus = ({
   name,
   icon,
   title,
   color,
+  fields,
+  isField,
   children,
   hasAccordion,
   statusIsActive,
@@ -60,7 +82,8 @@ const FiltersListingsStatus = ({
           {hasSwitchToggle &&
             <SwitchToggle
               name={name}
-              value={title}
+              isField={isField}
+              value={isField ? title : statusIsActive}
               onChangeHandler={onChangeSwitchToggle}
               className="c-filters-listings-status__switch-toggle"
             />}
@@ -77,11 +100,10 @@ const FiltersListingsStatus = ({
 
 export default compose(
   pure,
-  connect(({ search }, { name }) => {
+  connect(({ search }, { name, fields }) => {
     const formState = search.filters
-    return {
-      statusIsActive: selector(formState, name)
-    }
+    const statusIsActive = checkFieldsStatus(formState, fields || name) || false
+    return { statusIsActive }
   }),
   withState(
     'accordionIsActive',

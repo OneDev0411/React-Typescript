@@ -2,9 +2,12 @@ import React from 'react'
 import pure from 'recompose/pure'
 import { Field } from 'redux-form'
 
+import Flag from '../FiltersListingsStatusRow/Flag'
+import { getStatusColor } from '../../../../../../../../utils/listing'
+
 const name = 'listing_statuses'
 
-const OtherStatusesChildrens = ({ fields }) =>
+const SubStatuses = ({ fields }) =>
   <ul className="c-filters-other-statuses-childrens">
     {Object.keys(fields).map(field => {
       const id = `${name}__${field}`
@@ -30,6 +33,7 @@ const OtherStatusesChildrens = ({ fields }) =>
               <path d="M0 0h24v24H0z" fill="none" />
               <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
             </svg>
+            <Flag color={`#${getStatusColor(value)}`} />
             {value}
           </label>
         </li>
@@ -37,4 +41,4 @@ const OtherStatusesChildrens = ({ fields }) =>
     })}
   </ul>
 
-export default pure(OtherStatusesChildrens)
+export default pure(SubStatuses)
