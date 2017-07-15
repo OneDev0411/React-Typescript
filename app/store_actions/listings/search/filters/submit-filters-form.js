@@ -109,7 +109,7 @@ const ignoreNullValues = values => {
   return withoutNullValues
 }
 
-const obiectPropsValueToArray = obj =>
+export const obiectPropsValueToArray = obj =>
   !obj
     ? null
     : Object.keys(obj)

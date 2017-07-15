@@ -5,19 +5,20 @@ import { Field, reduxForm } from 'redux-form'
 import withHandlers from 'recompose/withHandlers'
 
 import Brand from '../../../../../../../controllers/Brand'
+import { getStatusColor } from '../../../../../../../utils/listing'
 
 import Schools from './Schools'
 import Counties from './Counties'
 import YearBuilt from './YearBuilt'
-import SubStatuses from './SubStatuses'
 import NumberRange from './NumberRange'
 import Subdivision from './Subdivision'
 import MlsAreaSelects from './MlsAreaSelects'
 import PropertySubtypes from './PropertySubtypes'
 import GroupRadios from './components/GroupRadios'
 import ArchitecturalStyles from './ArchitecturalStyles'
+import SubStatuses from './components/SubStatuses'
 import SoldStatusChildrens from './SoldStatusChildrens'
-import ActiveStatusesChildrens from './ActiveStatusesChildrens'
+import { activeStatuses, otherStatuses } from './statuses'
 import FiltersListingsStatusRow from './FiltersListingsStatusRow'
 import actions from '../../../../../../../store_actions/listings/search/filters'
 
@@ -29,22 +30,6 @@ const property_subtypes = {
   single_family: 'RES-Single Family'
 }
 
-const otherStatuses = {
-  cancelled: 'Cancelled',
-  expired: 'Expired',
-  pending: 'Pending',
-  temp_off_market: 'Temp Off Market',
-  withdrawn: 'Withdrawn',
-  withdrawn_sublistin: 'Withdrawn Sublisting'
-}
-
-const activeStatuses = {
-  active: 'Active',
-  active_contingent: 'Active Contingent',
-  active_kick_out: 'Active Kick Out',
-  active_option_contract: 'Active Option Contract'
-}
-
 const Filters = ({
   isOpen,
   pristine,
@@ -53,6 +38,7 @@ const Filters = ({
   handleSubmit,
   onSubmitHandler,
   activeOpenHouses,
+  activeOtherListings,
   activeActiveListings
 }) =>
   <div className={`c-filters ${isOpen ? 'c-filters--isOpen' : ''}`}>
@@ -68,7 +54,7 @@ const Filters = ({
             hasAccordion
             isField
             hasSwitchToggle
-            color="#d00023"
+            color={`#${getStatusColor('Sold')}`}
             onChangeSwitchToggle={activeSold}
           >
             <SoldStatusChildrens name="minimum_sold_date" />
@@ -78,8 +64,9 @@ const Filters = ({
             title="Active"
             hasAccordion
             hasSwitchToggle
-            color="#32b86d"
+            name="active-statuses"
             fields={activeStatuses}
+            color={`#${getStatusColor('Active')}`}
             onChangeSwitchToggle={activeActiveListings}
           >
             <SubStatuses fields={activeStatuses} />
@@ -91,15 +78,18 @@ const Filters = ({
             icon="OH"
             isField
             hasSwitchToggle
-            color="#32b86d"
+            color={`#${getStatusColor('Active')}`}
             onChangeSwitchToggle={activeOpenHouses}
           />
 
           <FiltersListingsStatusRow
-            name="listing_statuses"
             title="Other Listing Statuses"
             hasAccordion
-            color="#f5a544"
+            hasSwitchToggle
+            name="other-statuses"
+            fields={otherStatuses}
+            color={`#${getStatusColor('Pending')}`}
+            onChangeSwitchToggle={activeOtherListings}
           >
             <SubStatuses fields={otherStatuses} />
           </FiltersListingsStatusRow>

@@ -1,14 +1,29 @@
 import React from 'react'
 import pure from 'recompose/pure'
 import { Field } from 'redux-form'
+// import compose from 'recompose/compose'
+// import { connect } from 'react-redux'
+// import { formValueSelector } from 'redux-form'
+// import { obiectPropsValueToArray } from '../../../../../../../../store_actions/listings/search/filters/submit-filters-form'
 
-const SwitchToggle = ({ name, value, isField, className, onChangeHandler }) =>
+// const formName = 'filters'
+// const selector = formValueSelector(formName)
+
+const SwitchToggle = ({
+  name,
+  value,
+  isField,
+  disabled,
+  className,
+  onChangeHandler
+}) =>
   <div className={`c-switch-toggle ${className}`}>
     {isField
       ? <Field
         name={name}
         type="checkbox"
         component="input"
+        disabled={disabled}
         id={`${name}_checkbox`}
         normalize={v => (v ? value : null)}
         onChange={(event, newValue, previousValue) =>
@@ -26,3 +41,18 @@ const SwitchToggle = ({ name, value, isField, className, onChangeHandler }) =>
   </div>
 
 export default pure(SwitchToggle)
+
+// export default compose(
+//   pure,
+//   connect(({ search }, { name }) => {
+//     if (name === 'open_house') {
+//       const formState = search.filters
+//       const anyStatusIsNotSelected =
+//         obiectPropsValueToArray(selector(formState, 'listing_statuses'))
+//           .length === 0
+
+//       return { disabled: anyStatusIsNotSelected }
+//     }
+//     return null
+//   })
+// )(SwitchToggle)

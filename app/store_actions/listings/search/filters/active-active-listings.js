@@ -1,26 +1,18 @@
 import { formValueSelector, change } from 'redux-form'
+
+import toggleSubStatuses from './toggle-sub-statuses'
 import { ACTIVE_ACTIVE_STATUS } from '../../../../constants/listings/search/filters'
+import { activeStatuses } from '../../../../components/Pages/Dashboard/Listings/Search/components/Filters/statuses'
 
-const formName = 'filters'
-const selector = formValueSelector(formName)
+// const formName = 'filters'
+// const selector = formValueSelector(formName)
 
-const activeStatuses = [
-  'active',
-  'active_kick_out',
-  'active_contingent',
-  'active_option_contract'
-]
-
-const activeActiveListings = (event, nextState) => (dispatch, getState) => {
-  activeStatuses.forEach(status => {
-    const value = event.target.checked
-      ? status
-          .split('_')
-          .map(s => s.charAt(0).toUpperCase() + s.substr(1, s.length))
-          .join(' ')
-      : null
-    dispatch(change(formName, `listing_statuses.${status}`, value))
+const activeActiveListings = event => (dispatch, getState) => {
+  dispatch({
+    type: ACTIVE_ACTIVE_STATUS
   })
+
+  return toggleSubStatuses(activeStatuses, event.target.checked)(dispatch)
 }
 
 export default activeActiveListings
