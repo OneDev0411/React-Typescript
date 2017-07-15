@@ -139,7 +139,7 @@ export default compose(
       pool: 'either',
       open_house: false,
       listing_statuses: {
-        active: 'Active'
+        ...activeStatuses
       },
       property_subtypes,
       minimum_sold_date: '3', // unit is month but it need to timestamp

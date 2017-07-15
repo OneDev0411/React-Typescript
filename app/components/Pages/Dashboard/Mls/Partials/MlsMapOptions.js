@@ -18,7 +18,12 @@ export const mapInitialState = {
 export const queryOptions = {
   limit: '250',
   property_types: ['Residential'],
-  listing_statuses: ['Active'],
+  listing_statuses: [
+    'Active',
+    'Active Contingent',
+    'Active Kick Out',
+    'Active Option Contract'
+  ],
   points: [
     {
       latitude: 32.83938955111425,
