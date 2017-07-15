@@ -31,8 +31,8 @@ import Agents from '../components/Pages/Dashboard/Mls/Agents'
 import Listing from '../components/Pages/Dashboard/Mls/Listing'
 
 // deals
-// import DealsLayout from '../components/Pages/Dashboard/Deals'
-// import DealsList from '../components/Pages/Dashboard/Deals/DealsList'
+import DealsLayout from '../components/Pages/Dashboard/Deals'
+import DealsList from '../components/Pages/Dashboard/Deals/list'
 // import DealCreate from '../components/Pages/Dashboard/Deals/DealCreate'
 // import DealDashboard from '../components/Pages/Dashboard/Deals/Dashboard'
 // import DealEditForm from '../components/Pages/Dashboard/Deals/Edit-Form'
@@ -128,6 +128,10 @@ export default (
       <Route path="/dashboard/contacts" component={Contacts}>
         <IndexRoute component={ContactsList} />
         <Route path="/dashboard/contacts/:id" component={ContactProfile} />
+      </Route>
+
+      <Route path="/dashboard/deals" component={DealsLayout}>
+        <IndexRoute component={DealsList} />
       </Route>
 
       <Route path="/dashboard/notifications" component={NotificationsPage} />
