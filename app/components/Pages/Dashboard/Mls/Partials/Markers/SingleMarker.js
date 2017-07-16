@@ -28,11 +28,12 @@ const SingleMarker = ({
   onMouseEnterHandler
 }) =>
   <Link
-    to={`/listings/${list.id}`}
+    to={`/dashboard/mls/${list.id}`}
     className={'single-marker'}
     onMouseLeave={onMouseLeaveHandler}
     onMouseEnter={onMouseEnterHandler}
-    style={singleMarkerStyle(list)}>
+    style={singleMarkerStyle(list)}
+  >
     <ListingMarker
       data={data}
       listing={list}

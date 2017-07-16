@@ -24,7 +24,7 @@ const TableViewRow = ({
     <tr
       className="c-tableview__row"
       onClick={() => {
-        browserHistory.push(`/listings/${listing.id}`)
+        browserHistory.push(`/dashboard/mls/${listing.id}`)
       }}
       onMouseEnter={mouseEventIsActive ? () => onMouseEnter(listing.id) : ''}
       onMouseLeave={mouseEventIsActive ? onMouseLeave : ''}>

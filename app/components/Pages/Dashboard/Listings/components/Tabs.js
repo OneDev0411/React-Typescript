@@ -1,11 +1,11 @@
 import React from 'react'
 import NavLink from './NavLink'
 
-const Tabs = ({ isLoggedIn }) =>
+const Tabs = () =>
   <ul className="c-listings__tabs">
-    <NavLink indexed text="Search" to="/listings" />
-    {isLoggedIn && <NavLink text="Saved Search" to="/listings/alerts" />}
-    {isLoggedIn && <NavLink text="Saved Listings" to="/listings/favorites" />}
+    <NavLink indexed text="Search" to="/dashboard/mls" />
+    <NavLink text="Saved Search" to="/dashboard/mls/alerts" />
+    <NavLink text="Saved Listings" to="/dashboard/mls/actives" />
   </ul>
 
 export default Tabs

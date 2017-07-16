@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import React, { Component } from 'react'
 
 import BrandLogo from './components/BrandLogo'
-import ListingModal from './components/ListingModal'
+import ListingView from './components/ListingView'
 import ContactModel from '../../../../../models/Contact'
 import getListing from '../../../../../store_actions/listings/listing/get-listing'
 
@@ -35,7 +35,7 @@ class Listing extends Component {
 
     return (
       <div>
-        <ListingModal data={data} listing={listing} isFetching={isFetching} />
+        <ListingView data={data} listing={listing} isFetching={isFetching} />
         <BrandLogo data={data} />
       </div>
     )

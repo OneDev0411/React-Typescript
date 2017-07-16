@@ -29,7 +29,7 @@ const ListingCard = ({
         style={props.backgroundImage}
         onMouseEnter={mouseEventIsActive ? () => onMouseEnter(listing.id) : ''}
         onMouseLeave={mouseEventIsActive ? onMouseLeave : ''}>
-        <Link to={`/listings/${listing.id}`} className="c-listing-card__link" />
+        <Link to={`/dashboard/mls/${listing.id}`} className="c-listing-card__link" />
         <div className="c-listing-card__content-wrapper">
           {props.statusColor &&
             <div>

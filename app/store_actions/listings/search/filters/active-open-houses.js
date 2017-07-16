@@ -7,7 +7,6 @@ const selector = formValueSelector(formName)
 
 const activeOpenHouses = (event, nextState) => (dispatch, getState) => {
   if (!nextState) {
-    console.log('salam')
     return Promise.resolve()
   }
 

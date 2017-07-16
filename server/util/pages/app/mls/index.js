@@ -31,57 +31,57 @@ router.get('/dashboard/mls/actives', async (ctx, next) => {
 /**
  * route for /mls
  */
-router.get('/dashboard/mls', async (ctx, next) => {
-  await next()
-})
+// router.get('/dashboard/mls', async (ctx, next) => {
+//   await next()
+// })
 
 /**
  * route for /mls/:id
  */
-router.get('/dashboard/mls/:id', async (ctx, next) => {
-  const id = ctx.params.id
+// router.get('/dashboard/mls/:id', async (ctx, next) => {
+//   const id = ctx.params.id
 
-  if (!id || id === 'undefined') {
-    return await next()
-  }
+//   if (!id || id === 'undefined') {
+//     return await next()
+//   }
 
-  try {
-    const { AppStore } = ctx.locals
+//   try {
+//     const { AppStore } = ctx.locals
 
-    const access_token = AppStore.data.user ? AppStore.data.user.access_token : null
-    const brand = AppStore.data.brand
+//     const access_token = AppStore.data.user ? AppStore.data.user.access_token : null
+//     const brand = AppStore.data.brand
 
-    const response = await Listing.fetch(id, brand, access_token)
-    const listing = response.body.data
+//     const response = await Listing.fetch(id, brand, access_token)
+//     const listing = response.body.data
 
-    AppStore.data = {
-      ...AppStore.data,
-      ...{
-        current_listing: listing
-      }
-    }
+//     AppStore.data = {
+//       ...AppStore.data,
+//       ...{
+//         current_listing: listing
+//       }
+//     }
 
-    const locals = {
-      has_og: true,
-      og_title: listing_util.addressTitle(listing.property.address),
-      og_url: `${ctx.request.protocol}://${ctx.request.hostname}${ctx.request.url}`,
-      og_description: listing.property.description,
-      og_image_url: listing.cover_image_url
-    }
+//     const locals = {
+//       has_og: true,
+//       og_title: listing_util.addressTitle(listing.property.address),
+//       og_url: `${ctx.request.protocol}://${ctx.request.hostname}${ctx.request.url}`,
+//       og_description: listing.property.description,
+//       og_image_url: listing.cover_image_url
+//     }
 
-    ctx.locals = {
-      ...ctx.locals,
-      ...locals,
-      ...{AppStore}
-    }
+//     ctx.locals = {
+//       ...ctx.locals,
+//       ...locals,
+//       ...{AppStore}
+//     }
 
-    if (ctx.session.user && ctx.request.query.token) {
-      ctx.session = null
-    }
-  }
-  catch(e) {}
+//     if (ctx.session.user && ctx.request.query.token) {
+//       ctx.session = null
+//     }
+//   }
+//   catch(e) {}
 
-  await next()
-})
+//   await next()
+// })
 
 module.exports = app.use(router.routes())
