@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import Tabs from './components/Tabs'
 import { connect } from 'react-redux'
+
+import Tabs from './components/Tabs'
+import BrandLogo from './Listing/components/BrandLogo'
 import { selectListings } from '../../../../reducers/listings'
 import getFavorites from '../../../../store_actions/listings/favorites/get-favorites'
 
@@ -23,7 +25,12 @@ class Listings extends Component {
     return (
       <div className={`l-listings ${isLoggedIn ? 'l-listings--logged' : ''}`}>
         <header className="l-listings__header">
-          <Tabs isLoggedIn={isLoggedIn} />
+          {!isLoggedIn
+            ? <BrandLogo
+              data={this.props.appData}
+              styles={{ padding: '.9rem 2rem' }}
+            />
+            : <Tabs />}
         </header>
         {this.props.children}
       </div>
@@ -33,6 +40,7 @@ class Listings extends Component {
 
 export default connect(
   ({ data, favorites }) => ({
+    appData: data,
     user: data.user,
     favoritesListings: selectListings(favorites.listings)
   }),
