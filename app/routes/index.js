@@ -23,7 +23,7 @@ import Settings from '../components/Pages/Account/Settings'
 
 import Notifications from '../components/Pages/Account/Notifications'
 
-// listings routers component
+// listings [old mls]
 import ListingsLayout from '../components/Pages/Dashboard/Listings'
 import ListingsSearch from '../components/Pages/Dashboard/Listings/Search'
 import ListingsAlerts from '../components/Pages/Dashboard/Listings/Alerts'
@@ -32,9 +32,9 @@ import ListingsFavorites from '../components/Pages/Dashboard/Listings/Favorites'
 import ListingSinglePage from '../components/Pages/Dashboard/Listings/Listing'
 
 // // mls
-import Mls from '../components/Pages/Dashboard/Mls'
-import Agents from '../components/Pages/Dashboard/Mls/Agents'
-import Listing from '../components/Pages/Dashboard/Mls/Listing'
+// import Mls from '../components/Pages/Dashboard/Mls'
+// import Agents from '../components/Pages/Dashboard/Mls/Agents'
+// import Listing from '../components/Pages/Dashboard/Mls/Listing'
 
 // deals
 // import DealsLayout from '../components/Pages/Dashboard/Deals'
@@ -44,7 +44,6 @@ import Listing from '../components/Pages/Dashboard/Mls/Listing'
 // import DealEditForm from '../components/Pages/Dashboard/Deals/Edit-Form'
 // import CollectSignatures_Documents from '../components/Pages/Dashboard/Deals/CollectSignatures-Documents'
 // import CollectSignatures_Recipients from '../components/Pages/Dashboard/Deals/CollectSignatures-Recipients'
-
 
 // contacts
 import Contacts from '../components/Pages/Dashboard/Contacts'
@@ -67,7 +66,7 @@ import Website from '../components/Pages/Dashboard/Website'
 import Cards from '../components/Pages/Dashboard/Cards'
 import Forms from '../components/Pages/Dashboard/Forms'
 
-const uuidPattern = '\w+'
+const uuidPattern = 'w+'
 
 function authenticate(nextState, replace) {
   const { data } = store.getState()
@@ -84,10 +83,13 @@ function authenticate(nextState, replace) {
     '/widgets/listings'
   ]
 
-  for (let url of noAuthList)
-    for (let route of nextState.routes)
-      if (route.path && route.path !== '/' && route.path === url)
+  for (let url of noAuthList) {
+    for (let route of nextState.routes) {
+      if (route.path && route.path !== '/' && route.path === url) {
         return true
+      }
+    }
+  }
 
   if (typeof window !== 'undefined' && !isLoggedIn) {
     replace({
@@ -108,13 +110,18 @@ export default (
       <Route path="/password/:slug" component={Password} />
     </Route>
 
-    <Route path="/" component={App} onEnter={authenticate}>
-      <Route path="/dashboard/mls" component={Mls} />
-      <Route path="/dashboard/mls/agents" component={Agents} />
-      <Route path="/dashboard/mls/alerts(/:alert_id)" component={Mls} />
-      <Route path="/dashboard/mls/actives" component={Mls} />
-      <Route path="/dashboard/mls/:id" component={Listing} />
+    <Route path="/" component={App}>
+      <Route path="/branch" component={Branch} />
+      <Route path="/widgets/map" component={MapWidget} />
+      <Route path="/widgets/search" component={SearchWidget} />
+      <Route path="/widgets/listings" component={ListingsWidget} />
 
+      <Route path="dashboard/mls" component={ListingsLayout}>
+        <IndexRoute component={ListingsSearch} />
+      </Route>
+    </Route>
+
+    <Route path="/" component={App} onEnter={authenticate}>
       <Route path="/branch" component={Branch} />
       <Route path="/widgets/map" component={MapWidget} />
       <Route path="/widgets/search" component={SearchWidget} />
@@ -123,13 +130,13 @@ export default (
       <Route path="/account/settings" component={Settings} />
       <Route path="/account/notifications" component={Notifications} />
 
-      <Route path="listings" component={ListingsLayout}>
+      <Route path="dashboard/mls" component={ListingsLayout}>
         <IndexRoute component={ListingsSearch} />
         <Route path="alerts" component={ListingsAlerts} />
-        <Route path="favorites" component={ListingsFavorites} />
+        <Route path="actives" component={ListingsFavorites} />
       </Route>
 
-      <Route path="listings/:id" component={ListingSinglePage} />
+      <Route path="/dashboard/mls/:id" component={ListingSinglePage} />
 
       <Route path="/dashboard/website" component={Website} />
       <Route path="/dashboard/cards" component={Cards} />
@@ -145,16 +152,6 @@ export default (
       </Route>
 
       <Route path="/dashboard/notifications" component={NotificationsPage} />
-    </Route>
-
-    <Route path="/" component={App}>
-      <Route path="/dashboard/mls" component={Mls} />
-      <Route path="/dashboard/mls/:id" component={Listing} />
-      <Route path="/branch" component={Branch} />
-      <Route path="/widgets/map" component={MapWidget} />
-      <Route path="/widgets/search" component={SearchWidget} />
-      <Route path="/widgets/listings" component={ListingsWidget} />
-      <Route path="listings/:id" component={ListingSinglePage} />
     </Route>
 
     <Route path="*" component={NoMatch} />

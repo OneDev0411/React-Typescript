@@ -941,7 +941,7 @@ const ListingDesktopView = ({
               )} border-1-solid-${Brand.color('primary', 'a1bde4')}`
             )}
             className="btn btn-primary"
-            href={`/signin?redirect_to=/listings/${listing.id}`}>
+            href={`/signin?redirect_to=/dashboard/mls/${listing.id}`}>
             Log in
           </a>
           {/* <a className="btn btn-primary" href="/signup">Sign up</a> */}
