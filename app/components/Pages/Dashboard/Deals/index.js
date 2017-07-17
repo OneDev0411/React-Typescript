@@ -21,7 +21,8 @@ class DealsContainer extends React.Component {
   }
 
   render() {
-    const { children, user } = this.props
+    const { deals, user } = this.props
+    const children = React.cloneElement(this.props.children, { user, deals })
 
     return (
       <div className="deals">

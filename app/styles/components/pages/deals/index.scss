@@ -1,9 +1,14 @@
+@import './deals_list';
+
 .deals {
   margin-left: 70px;
   margin-right: 0;
   min-height: 100vh;
   background-color: #f5f5f5;
 
+  .deals-list {
+    @extend %deals-list;
+  }
 }
 
 /**

@@ -1,0 +1,16 @@
+%deals-list {
+  padding: 3% 2%;
+  .table {
+    .header {
+      color: #A4A4A4;
+      background: transparent;
+      font-weight: 200;
+      margin-bottom: 40px;
+    }
+
+    .item {
+      background: #fff;
+      cursor: pointer;
+    }
+  }
+}
