@@ -42,31 +42,29 @@ const routes = {
 
 app.use(handle490)
 
-app.use(async (ctx, next) => {
-  ctx.isMobile = new MobileDetect(ctx.req.headers['user-agent'])
-  return next()
-})
 
 app.use(async (ctx, next) => {
+  const isMobile = new MobileDetect(ctx.req.headers['user-agent'])
+
   const isListingPage = url =>
     new RegExp(
       /^\/dashboard\/mls\/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/
     ).test(url)
 
   if (isListingPage(ctx.url) || new RegExp(/\/mobile/).test(ctx.url)) {
-    return next()
+    return await next()
   }
 
   if (ctx.isMobile.phone()) {
+    let url = '/mobile'
     if (ctx.isMobile.is('iPhone')) {
-      ctx.redirect('/mobile?type=iphone')
-      return
+      url = '/mobile?type=iphone'
     }
-    ctx.redirect('/mobile')
-    return
+
+    return ctx.redirect(url)
   }
 
-  return next()
+  return await next()
 })
 
 app.use(async (ctx, next) => {
@@ -103,7 +101,7 @@ app.use(async (ctx, next) => {
 
   ctx.locals.AppStore = AppStore
 
-  await next()
+  await await next()
 })
 
 _.each(routes, (group, name) => {
