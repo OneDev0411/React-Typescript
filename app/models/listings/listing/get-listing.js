@@ -6,7 +6,9 @@ const getListing = async id => {
   }
 
   try {
-    const response = await new Fetch().get(`/listings/${id}`)
+    const response = await new Fetch().get(
+      `/listings/${id}/?associations=compact_listing.proposed_agent`
+    )
 
     let listing = response.body.data
     listing = {
