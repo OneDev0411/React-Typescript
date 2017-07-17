@@ -1,5 +1,6 @@
 import React from 'react'
 import { browserHistory } from 'react-router'
+import { Button } from 'react-bootstrap'
 import _ from 'underscore'
 
 export default class extends React.Component {
@@ -23,11 +24,31 @@ export default class extends React.Component {
     browserHistory.push(`/dashboard/deals/${id}`)
   }
 
+  create(type) {
+    browserHistory.push(`/dashboard/deals/create/${type}`)
+  }
+
   render() {
     const { deals } = this.props
-    console.log(deals)
+
     return (
       <div className="deals-list">
+
+        <div>
+          <Button
+            bsStyle="primary"
+            onClick={() => this.create('listing')}
+          >
+            New Listing
+          </Button>
+
+          <Button
+            bsStyle="primary"
+            onClick={() => this.create('offer')}
+          >
+            Make an Offer
+          </Button>
+        </div>
 
         <table className="table table-hover">
           <tbody>
