@@ -33,7 +33,7 @@ import Listing from '../components/Pages/Dashboard/Mls/Listing'
 // deals
 import DealsLayout from '../components/Pages/Dashboard/Deals'
 import DealsList from '../components/Pages/Dashboard/Deals/list'
-// import DealCreate from '../components/Pages/Dashboard/Deals/DealCreate'
+import DealCreate from '../components/Pages/Dashboard/Deals/create'
 // import DealDashboard from '../components/Pages/Dashboard/Deals/Dashboard'
 // import DealEditForm from '../components/Pages/Dashboard/Deals/Edit-Form'
 // import CollectSignatures_Documents from '../components/Pages/Dashboard/Deals/CollectSignatures-Documents'
@@ -132,6 +132,7 @@ export default (
 
       <Route path="/dashboard/deals" component={DealsLayout}>
         <IndexRoute component={DealsList} />
+        <Route path="/dashboard/deals/create/:type" component={DealCreate} />
       </Route>
 
       <Route path="/dashboard/notifications" component={NotificationsPage} />
