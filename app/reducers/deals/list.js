@@ -5,6 +5,12 @@ export default (state = null, action) => {
     case types.GET_DEALS:
       return action.deals
 
+    case types.CREATE_DEAL:
+      return {
+        [action.deal.id]: action.deal,
+        ...state
+      }
+
     default:
       return state
   }

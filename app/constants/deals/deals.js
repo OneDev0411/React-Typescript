@@ -1,3 +1,4 @@
 export default [
-  'GET_DEALS'
+  'GET_DEALS',
+  'CREATE_DEAL'
 ]

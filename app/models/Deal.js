@@ -65,14 +65,14 @@ Deal.searchListings = async function (address) {
 /**
 * create new deal
 */
-Deal.create = async function (deal) {
+Deal.create = async function (data) {
 
   try {
     const response = await new Fetch()
-      .post(`/deals`)
-      .send(deal)
+      .post('/deals')
+      .send(data)
 
-    return response
+    return response.body.data
   } catch (e) {
     throw e
   }
