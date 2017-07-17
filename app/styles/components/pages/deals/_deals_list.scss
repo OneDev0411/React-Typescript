@@ -1,6 +1,8 @@
 %deals-list {
   padding: 3% 2%;
   .table {
+    border-collapse: separate;
+    border-spacing: 0 10px;
     .header {
       color: #A4A4A4;
       background: transparent;
