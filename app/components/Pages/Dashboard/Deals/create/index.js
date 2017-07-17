@@ -6,6 +6,7 @@ import _ from 'underscore'
 import Deal from '../../../../../models/Deal'
 import listingsHelper from '../../../../../utils/listing'
 import Create from './modal'
+import { createDeal } from '../../../../../store_actions/deals'
 
 export default class DealCreate extends React.Component {
 
@@ -120,7 +121,7 @@ export default class DealCreate extends React.Component {
         <FormControl
           className="address"
           value={address}
-          onChange={() => this.onChangeAddress()}
+          onChange={(e) => this.onChangeAddress(e)}
           placeholder={
             params.type === 'listing' ?
             'Enter full listing address' :
