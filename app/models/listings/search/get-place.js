@@ -1,5 +1,3 @@
-import { asyncRequest } from '../../Concierge'
-
 const getPlace = async (address) => {
   if (!address) {
     return
