@@ -2,31 +2,9 @@ import getListingsByValert from './by-valert'
 import { isAutoMove } from '../../../../reducers/listings/map'
 import { getFetchingStatus } from '../../../../reducers/listings'
 import { SEARCH_BY_MAP_BOUNDS } from '../../../../constants/listings/search'
+import { generatePointsFromBounds } from '../../../../utils/map'
 
 const QUERY_LIMIT = 200
-
-const getQueryPoints = bounds => [
-  {
-    latitude: bounds.ne.lat,
-    longitude: bounds.ne.lng
-  },
-  {
-    latitude: bounds.nw.lat,
-    longitude: bounds.nw.lng
-  },
-  {
-    latitude: bounds.sw.lat,
-    longitude: bounds.sw.lng
-  },
-  {
-    latitude: bounds.se.lat,
-    longitude: bounds.se.lng
-  },
-  {
-    latitude: bounds.ne.lat,
-    longitude: bounds.ne.lng
-  }
-]
 
 const getListingsByMapBounds = bounds => (dispatch, getState) => {
   const { listings, map, type, panels, options } = getState().search
@@ -45,7 +23,7 @@ const getListingsByMapBounds = bounds => (dispatch, getState) => {
   dispatch({ type: SEARCH_BY_MAP_BOUNDS })
 
   const limit = QUERY_LIMIT
-  const points = getQueryPoints(bounds)
+  const points = generatePointsFromBounds(bounds)
 
   const queryOptions = {
     ...options,

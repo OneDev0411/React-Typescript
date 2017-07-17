@@ -1,5 +1,7 @@
 import { submit, SubmissionError } from 'redux-form'
 import getListingsByValert from '../get-listings/by-valert'
+import { generatePointsFromBounds } from '../../../../utils/map'
+import setSearchListingsOptions from '../../../../store_actions/listings/search/set-options'
 
 // Initial valert options {
 //   limit: '250',
@@ -174,7 +176,7 @@ const submitFiltersForm = values => (dispatch, getState) => {
       ? null
       : options.points
 
-  const queryOptions = ignoreNullValues({
+  const nextOptions = {
     ...options,
     points,
     listing_statuses,
@@ -195,9 +197,24 @@ const submitFiltersForm = values => (dispatch, getState) => {
     pool,
     minimum_sold_date,
     ...normalizeNumberValues(values)
+  }
+
+  const queryOptions = ignoreNullValues(nextOptions)
+
+  Object.keys(options).forEach(o => {
+    if (options[o] && typeof queryOptions[o] === 'undefined') {
+      queryOptions[o] = null
+    }
   })
 
-  // console.log(values, queryOptions)
+  if (typeof queryOptions.points === 'undefined') {
+    const { map } = getState().search
+    queryOptions.points = generatePointsFromBounds(map.props.bounds)
+  }
+
+  // console.log(options, values, queryOptions)
+
+  dispatch(setSearchListingsOptions(queryOptions))
 
   return getListingsByValert(queryOptions)(dispatch, getState)
 }
