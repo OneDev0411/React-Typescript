@@ -3,7 +3,7 @@ import { isAutoMove } from '../../../../reducers/listings/map'
 import { getFetchingStatus } from '../../../../reducers/listings'
 import { SEARCH_BY_MAP_BOUNDS } from '../../../../constants/listings/search'
 
-const QUERY_LIMIT = 50
+const QUERY_LIMIT = 200
 
 const getQueryPoints = bounds => [
   {
