@@ -1,11 +1,14 @@
 import React from 'react'
 import { browserHistory } from 'react-router'
 import { Grid, Row, Col, Button, FormControl, Modal } from 'react-bootstrap'
-import debounce from 'debounce'
+import Rx from 'rxjs/Rx'
 import _ from 'underscore'
+
 import Deal from '../../../../../models/Deal'
 import listingsHelper from '../../../../../utils/listing'
-import Create from './modal'
+import CreateModal from './modal'
+import PlacesView from './places_view'
+import ListingsView from './listings_view'
 import { createDeal } from '../../../../../store_actions/deals'
 
 export default class DealCreate extends React.Component {
@@ -22,9 +25,21 @@ export default class DealCreate extends React.Component {
   }
 
   componentDidMount() {
-    this.search = debounce(this.search, 1500)
+    const { Observable } = Rx
+
+    this.searchHandler = Observable
+      .fromEvent(this.search_input, 'keypress')
+      .debounceTime(1200)
+      .subscribe((e) => this.search(e.target.value))
   }
 
+  componentWillUnmount() {
+    this.searchHandler.unsubscribe()
+  }
+
+  /**
+   * triggers when user types address
+   */
   onChangeAddress(e) {
     const address = e.target.value
 
@@ -32,14 +47,16 @@ export default class DealCreate extends React.Component {
       address,
       selected: null
     })
-
-    if (address.length === 0)
-      return
-
-    this.search(address)
   }
 
+  /**
+   * search address inside google places and rechat listings
+   */
   async search(address) {
+    if (address.length === 0) {
+      return false
+    }
+
     const type = this.props.params.type
     let listings
     let places
@@ -73,6 +90,9 @@ export default class DealCreate extends React.Component {
     }
   }
 
+  /**
+   * normalize and integrate google places and rechat listings list
+   */
   createList(data, type) {
     const list = []
 
@@ -102,6 +122,9 @@ export default class DealCreate extends React.Component {
     return list
   }
 
+  /**
+   * on user selects a place or listing
+   */
   onPlaceSelect(item) {
     this.setState({
       selected: item,
@@ -118,10 +141,12 @@ export default class DealCreate extends React.Component {
         <span className="title">
           { params.type === 'listing' ? 'New listing' : 'Make an offer' }
         </span>
+
         <FormControl
           className="address"
           value={address}
           onChange={(e) => this.onChangeAddress(e)}
+          inputRef={ref => this.search_input = ref}
           placeholder={
             params.type === 'listing' ?
             'Enter full listing address' :
@@ -136,7 +161,7 @@ export default class DealCreate extends React.Component {
               <img src="/static/images/deals/home.svg" />
               <span className="address">“{ address }”</span>
 
-              <Create
+              <CreateModal
                 type={params.type}
                 side={params.type === 'offer' ? 'Buying' : 'Selling'}
                 user={this.props.user}
@@ -144,8 +169,13 @@ export default class DealCreate extends React.Component {
                 item={selected || {}}
               />
             </div>
-            <div className="help">Don’t see your listing? Create it as a Hip Pocket.</div>
+
+            <div className="help">
+              Don’t see your listing? Create it as a Hip Pocket.
+            </div>
+
             <div className="hr" style={{ width: '100%' }}></div>
+
             <div className="list">
 
               {
@@ -153,64 +183,16 @@ export default class DealCreate extends React.Component {
                 <i className="fa fa-spinner fa-spin fa-fw loader"></i>
               }
 
-              {
-                params.type === 'offer' &&
-                _.chain(listings)
-                .filter(item => {
-                  return item.status.startsWith('Active') || item.status === 'Pending'
-                })
-                .map((item, key) => {
-                  const c = item.address_components
-                  return (
-                    <div
-                      key={`PLACE_${key}`}
-                      className="item listing"
-                      onClick={() => this.onPlaceSelect(item)}
-                    >
-                      <img
-                        src={item.image || '/static/images/deals/home.svg'}
-                        className="listing-image"
-                      />
-                      <span
-                        className="status"
-                        style={{ backgroundColor: listingsHelper.getStatusColorClass(item.status) }}
-                      >
-                        { item.status }
-                      </span>
-                      <div style={{ color: '#5b6469' }}>
-                        {c.street_number} {c.street_name} {c.street_suffix}
-                      </div>
-                      <div style={{ color: '#a0a0a0' }}>
-                        { c.city }, {c.state}, {c.postal_code}, ${item.price}
-                      </div>
-                    </div>
-                  )
-                })
-                .value()
-              }
+              <ListingsView
+                params={params}
+                listings={listings}
+                onPlaceSelect={(item) => this.onPlaceSelect(item)}
+              />
 
-              {
-                _.size(places) > 0 &&
-                <div>
-                  <span className="title">Places</span>
-                  <img
-                    src="/static/images/deals/google.png"
-                    style={{ height: '20px', float: 'right' }}
-                  />
-                </div>
-              }
-
-              {
-                _.map(places, (item, key) => (
-                  <div
-                    key={`PLACE_${key}`}
-                    className="item"
-                    onClick={() => this.onPlaceSelect(item)}
-                  >
-                    { item.full_address }
-                  </div>
-                ))
-              }
+              <PlacesView
+                places={places}
+                onPlaceSelect={(item) => this.onPlaceSelect(item)}
+              />
             </div>
           </div>
         }

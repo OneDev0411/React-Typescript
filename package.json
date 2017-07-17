@@ -41,7 +41,6 @@
     "cosmicjs": "^2.39.0",
     "css-loader": "^0.28.0",
     "cssnano": "^3.10.0",
-    "debounce": "^1.0.0",
     "emojify.js": "^1.1.0",
     "emojione": "^2.2.7",
     "es6-promise": "^4.1.0",
