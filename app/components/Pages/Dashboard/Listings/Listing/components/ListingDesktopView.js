@@ -118,7 +118,8 @@ const ListingDesktopView = ({
     <div
       style={S(
         'bg-eff1f2 w-100p h-300 font-22 text-center pt-125 color-929292'
-      )}>
+      )}
+    >
       No image
     </div>
   )
@@ -164,11 +165,13 @@ const ListingDesktopView = ({
         indicators={false}
         prevIcon={prev_icon}
         nextIcon={next_icon}
-        className="listing-viewer__carousel">
+        className="listing-viewer__carousel"
+      >
         {gallery_chunks.map((gallery_image_url, i) =>
           <CarouselItem
             className="listing-carousel__item"
-            key={`gallery-images-chunked-${gallery_image_url[0]}${i}`}>
+            key={`gallery-images-chunked-${gallery_image_url[0]}${i}`}
+          >
             <div
               onClick={() => showModalGallery(gallery_image_url[0])}
               style={S(
@@ -234,7 +237,8 @@ const ListingDesktopView = ({
         className="pull-left"
         style={S(
           `border-1-solid-${status_color} font-14 color-fff relative br-3 pt-5 pb-5 pl-10 pr-10 mt-3 bg-${status_color}`
-        )}>
+        )}
+      >
         {listing.status} {sold_date}
       </div>
     )
@@ -247,17 +251,14 @@ const ListingDesktopView = ({
           className="pull-left"
           style={S(
             'border-1-solid-263445 br-3 pt-5 pb-5 pl-10 pr-10 mt-3 font-14'
-          )}>
+          )}
+        >
           {days_on_market} days ago
         </div>
       )
     }
 
-    const tooltip = (
-      <Tooltip id="copied-tooltip">
-        Copied
-      </Tooltip>
-    )
+    const tooltip = <Tooltip id="copied-tooltip">Copied</Tooltip>
 
     let mls_link
     if (mls_number) {
@@ -268,11 +269,13 @@ const ListingDesktopView = ({
             rootClose
             trigger="click"
             placement="bottom"
-            overlay={tooltip}>
+            overlay={tooltip}
+          >
             <span
               style={S('color-8ba8d1 pointer')}
               className="copy-mls"
-              data-clipboard-text={mls_number}>
+              data-clipboard-text={mls_number}
+            >
               {mls_number}
             </span>
           </OverlayTrigger>
@@ -303,7 +306,9 @@ const ListingDesktopView = ({
       let phone_area
       if (brand_agent.phone_number) {
         phone_area = (
-          <div style={S('font-15 mb-5')}>M: {brand_agent.phone_number}</div>
+          <div style={S('font-15 mb-5')}>
+            M: {brand_agent.phone_number}
+          </div>
         )
       }
 
@@ -324,11 +329,15 @@ const ListingDesktopView = ({
                   )}) bg-center w-20 h-20 pull-left mr-10`
                 )}
               />
-              <div style={S('pull-left')}>{Brand.message('office_title')}</div>
+              <div style={S('pull-left')}>
+                {Brand.message('office_title')}
+              </div>
               <div className="clearfix" />
             </div>
             {phone_area}
-            <div style={S('font-15 mb-5')}>E: {brand_agent.email}</div>
+            <div style={S('font-15 mb-5')}>
+              E: {brand_agent.email}
+            </div>
           </div>
         </div>
       )
@@ -345,7 +354,9 @@ const ListingDesktopView = ({
       let showing_instructions
       if (listing.showing_instructions) {
         showing_instructions = (
-          <div style={S('font-15 mb-5')}>{showing_instructions}</div>
+          <div style={S('font-15 mb-5')}>
+            {showing_instructions}
+          </div>
         )
       }
 
@@ -353,7 +364,8 @@ const ListingDesktopView = ({
         <div
           style={S(
             'mt-20 color-748090 w-100p border-1-solid-ededed br-3 p-20 text-center'
-          )}>
+          )}
+        >
           <div style={S('font-18 mb-5 color-3388ff')}>
             <span style={S('fw-400')}>
               {listing.list_agent_full_name}, Seller Agent
@@ -362,12 +374,15 @@ const ListingDesktopView = ({
           <div style={S('font-15 mb-5')}>
             {listing.list_agent_direct_work_phone}
           </div>
-          <div style={S('font-15 mb-5')}>{listing.list_office_name}</div>
+          <div style={S('font-15 mb-5')}>
+            {listing.list_office_name}
+          </div>
           {showing_instructions}
           <div style={email_style}>
             <a
               href={`mailto:${listing.list_agent_email}?subject=Your listing on Rechat.com&body=I saw your listing (${listing_title}) on Rechat.com and I'm interested in getting more information.`}
-              style={S('color-748090')}>
+              style={S('color-748090')}
+            >
               {listing.list_agent_email}
             </a>
           </div>
@@ -396,11 +411,13 @@ const ListingDesktopView = ({
           key={'map'}
           center={center}
           options={{ scrollwheel: false }}
-          bootstrapURLKeys={bootstrap_url_keys}>
+          bootstrapURLKeys={bootstrap_url_keys}
+        >
           <ListingMapMarker
             style={S('pointer mt-10')}
             lat={center.lat}
-            lng={center.lng}>
+            lng={center.lng}
+          >
             <ListingMarker
               data={data}
               listing={listing}
@@ -438,7 +455,6 @@ const ListingDesktopView = ({
 
     main_content = (
       <div style={S('bg-fff')}>
-
         <div style={S('p-0 relative')}>
           {listing.gallery_image_urls && listing.gallery_image_urls.length
             ? listing_images
@@ -463,7 +479,8 @@ const ListingDesktopView = ({
                         <a
                           target="_blank"
                           href={`http://maps.google.com/?q=${listing.property
-                            .address.geo_source_formatted_address_google}`}>
+                            .address.geo_source_formatted_address_google}`}
+                        >
                           Google Maps
                         </a>
                         <div style={S('bg-ebebeb w-1 h-16 pull-right')} />
@@ -475,7 +492,8 @@ const ListingDesktopView = ({
                             .address
                             .geo_source_formatted_address_google}&layer=c&cbll=${listing
                             .property.address.location.latitude},${listing
-                            .property.address.location.longitude}`}>
+                            .property.address.location.longitude}`}
+                        >
                           Street View
                         </a>
                       </div>
@@ -487,15 +505,16 @@ const ListingDesktopView = ({
                   <div style={S('fw-700 font-60')}>
                     ${price}
                     {listing.property &&
-                      listing.property.property_type === 'Residential Lease'
+                    listing.property.property_type === 'Residential Lease'
                       ? '/mo'
-                      : ''}
-                    {' '}{asking_price_area}
+                      : ''}{' '}
+                    {asking_price_area}
                   </div>
                   <div style={S('mb-20')}>
                     <div
                       className="lato"
-                      style={S('pull-left font-24 color-8696a4 mr-20')}>
+                      style={S('pull-left font-24 color-8696a4 mr-20')}
+                    >
                       {listing_title}
                     </div>
                     <div style={S('pull-left font-15 mb-10 mr-10')}>
@@ -533,15 +552,11 @@ const ListingDesktopView = ({
                         Cost Breakdown
                       </div>
                       <div style={S('color-aaaaaa mb-10')}>
-                        Price/sqt:
-                        {' '}
-                        <span style={S('color-777')}>
-                          ${price_sq_foot}
-                        </span>
+                        Price/sqt:{' '}
+                        <span style={S('color-777')}>${price_sq_foot}</span>
                       </div>
                       <div style={S('color-aaaaaa mb-10')}>
-                        Unexempt Taxes:
-                        {' '}
+                        Unexempt Taxes:{' '}
                         <span style={S('color-777')}>
                           ${listing.unexempt_taxes
                             ? helpers.numberWithCommas(listing.unexempt_taxes)
@@ -549,8 +564,7 @@ const ListingDesktopView = ({
                         </span>
                       </div>
                       <div style={S('color-aaaaaa mb-10')}>
-                        HOA Fees:
-                        {' '}
+                        HOA Fees:{' '}
                         <span style={S('color-777')}>
                           ${listing.association_fee
                             ? listing.association_fee
@@ -558,15 +572,13 @@ const ListingDesktopView = ({
                         </span>
                       </div>
                       <div style={S('color-aaaaaa mb-10')}>
-                        HOA Frequency:
-                        {' '}
+                        HOA Frequency:{' '}
                         <span style={S('color-777')}>
                           {listing.association_fee_frequency}
                         </span>
                       </div>
                       <div style={S('color-aaaaaa mb-10')}>
-                        HOA Includes:
-                        {' '}
+                        HOA Includes:{' '}
                         <span style={S('color-777')}>
                           {listing.association_fee_includes}
                         </span>
@@ -576,64 +588,49 @@ const ListingDesktopView = ({
                   <div style={S('w-33p pull-left pr-20')}>
                     <div style={S('fw-600 mb-10 font-18')}>Key Facts</div>
                     <div style={S('color-aaaaaa mb-10')}>
-                      Year Built:
-                      {' '}
-                      <span style={S('color-777')}>
-                        {property.year_built}
-                      </span>
+                      Year Built:{' '}
+                      <span style={S('color-777')}>{property.year_built}</span>
                     </div>
                     <div style={S('color-aaaaaa mb-10')}>
-                      Style of House:
-                      {' '}
+                      Style of House:{' '}
                       <span style={S('color-777')}>
                         {property.architectural_style}
                       </span>
                     </div>
                     <div style={S('color-aaaaaa mb-10')}>
-                      Subdivision:
-                      {' '}
+                      Subdivision:{' '}
                       <span style={S('color-777')}>
                         {property.subdivision_name}
                       </span>
                     </div>
                     <div style={S('color-aaaaaa mb-10')}>
-                      Acres:
-                      {' '}
+                      Acres:{' '}
                       <span style={S('color-777')}>
                         {property.lot_size_area}
                       </span>
                     </div>
                     <div style={S('color-aaaaaa mb-10')}>
-                      Stories:
-                      {' '}
+                      Stories:{' '}
                       <span style={S('color-777')}>
                         {property.number_of_stories}
                       </span>
                     </div>
                     <div style={S('color-aaaaaa mb-10')}>
-                      MLS#:
-                      {' '}
-                      <span style={S('color-777')}>
-                        {listing.mls_number}
-                      </span>
+                      MLS#:{' '}
+                      <span style={S('color-777')}>{listing.mls_number}</span>
                     </div>
                     <div style={S('color-aaaaaa mb-10')}>
-                      Possession:
-                      {' '}
-                      <span style={S('color-777')}>
-                        {listing.possession}
-                      </span>
+                      Possession:{' '}
+                      <span style={S('color-777')}>{listing.possession}</span>
                     </div>
                     <div style={S('color-aaaaaa mb-10')}>
-                      Days On Market:
-                      {' '}
+                      Days On Market:{' '}
                       <span style={S('color-777')}>
                         {listing_util.getDOM(listing.dom)}
                       </span>
                     </div>
                     <div style={S('color-aaaaaa')}>
-                      Current Days On Market:
-                      {' '}
+                      Current Days On Market:{' '}
                       <span style={S('color-777')}>
                         {listing_util.getDOM(listing.cdom)}
                       </span>
@@ -644,8 +641,7 @@ const ListingDesktopView = ({
                       Amenities & Utilities
                     </div>
                     <div style={S('color-aaaaaa mb-10')}>
-                      Pool:
-                      {' '}
+                      Pool:{' '}
                       <span style={S('color-777')}>
                         {property.pool_yn ? 'Yes' : 'No'}
                       </span>
@@ -654,13 +650,14 @@ const ListingDesktopView = ({
                       Pool Features:&nbsp;
                       <span style={S('color-777')}>
                         {property.pool_features.map(item =>
-                          <span key={item}>{item}, </span>
+                          <span key={item}>
+                            {item},{' '}
+                          </span>
                         )}
                       </span>
                     </div>
                     <div style={S('color-aaaaaa mb-10')}>
-                      Handicap Amenities:
-                      {' '}
+                      Handicap Amenities:{' '}
                       <span style={S('color-777')}>
                         {property.handicap_yn ? 'Yes' : 'No'}
                       </span>
@@ -669,7 +666,9 @@ const ListingDesktopView = ({
                       Heating/Cooling:&nbsp;
                       <span style={S('color-777')}>
                         {property.heating.map(item =>
-                          <span key={item}>{item}, </span>
+                          <span key={item}>
+                            {item},{' '}
+                          </span>
                         )}
                       </span>
                     </div>
@@ -677,7 +676,9 @@ const ListingDesktopView = ({
                       Other:&nbsp;
                       <span style={S('color-777')}>
                         {property.utilities.map(item =>
-                          <span key={item}>{item}, </span>
+                          <span key={item}>
+                            {item},{' '}
+                          </span>
                         )}
                       </span>
                     </div>
@@ -716,7 +717,9 @@ const ListingDesktopView = ({
                         Interior Features:&nbsp;
                         <span style={S('color-777')}>
                           {property.interior_features.map(item =>
-                            <span key={item}>{item}, </span>
+                            <span key={item}>
+                              {item},{' '}
+                            </span>
                           )}
                         </span>
                       </div>
@@ -724,7 +727,9 @@ const ListingDesktopView = ({
                         Alarm/Security:&nbsp;
                         <span style={S('color-777')}>
                           {property.security_features.map(item =>
-                            <span key={item}>{item}, </span>
+                            <span key={item}>
+                              {item},{' '}
+                            </span>
                           )}
                         </span>
                       </div>
@@ -732,7 +737,9 @@ const ListingDesktopView = ({
                         Flooring:&nbsp;
                         <span style={S('color-777')}>
                           {property.flooring.map(item =>
-                            <span key={item}>{item}, </span>
+                            <span key={item}>
+                              {item},{' '}
+                            </span>
                           )}
                         </span>
                       </div>
@@ -744,7 +751,9 @@ const ListingDesktopView = ({
                       Exterior Features:&nbsp;
                       <span style={S('color-777')}>
                         {property.exterior_features.map(item =>
-                          <span key={item}>{item}, </span>
+                          <span key={item}>
+                            {item},{' '}
+                          </span>
                         )}
                       </span>
                     </div>
@@ -762,44 +771,37 @@ const ListingDesktopView = ({
                     </div>
                     <div style={S('color-aaaaaa mb-10')}>
                       Roof:&nbsp;
-                      <span style={S('color-777')}>
-                        {property.roof}
-                      </span>
+                      <span style={S('color-777')}>{property.roof}</span>
                     </div>
                   </div>
                   <div style={S('w-33p pull-left pr-20')}>
                     <div style={S('fw-600 font-18 mb-10')}>Schools</div>
                     <div style={S('color-aaaaaa mb-10')}>
-                      School District:
-                      {' '}
+                      School District:{' '}
                       <span style={S('color-777')}>
                         {property.school_district}
                       </span>
                     </div>
                     <div style={S('color-aaaaaa mb-10')}>
-                      Elementary School:
-                      {' '}
+                      Elementary School:{' '}
                       <span style={S('color-777')}>
                         {property.elementary_school_name}
                       </span>
                     </div>
                     <div style={S('color-aaaaaa mb-10')}>
-                      Middle School:
-                      {' '}
+                      Middle School:{' '}
                       <span style={S('color-777')}>
                         {property.middle_school_name}
                       </span>
                     </div>
                     <div style={S('color-aaaaaa mb-10')}>
-                      Junior High School:
-                      {' '}
+                      Junior High School:{' '}
                       <span style={S('color-777')}>
                         {property.junior_high_school_name}
                       </span>
                     </div>
                     <div style={S('color-aaaaaa mb-10')}>
-                      Senior High School:
-                      {' '}
+                      Senior High School:{' '}
                       <span style={S('color-777')}>
                         {property.senior_high_school_name}
                       </span>
@@ -829,7 +831,7 @@ const ListingDesktopView = ({
     }
   }
 
-  const nav_bar_style = S('mb-0 p-0 h-65 pt-7 w-100p')
+  const nav_bar_style = S('mb-0 p-0 h-54 pt-7 w-100p')
 
   let modal_gallery_area
   if (galleryModalIsActive) {
@@ -846,7 +848,8 @@ const ListingDesktopView = ({
         prevIcon={prev_icon}
         nextIcon={next_icon}
         onSelect={onSelectHandler}
-        activeIndex={galleryModalActiveIndex}>
+        activeIndex={galleryModalActiveIndex}
+      >
         {gallery_image_urls.map((gallery_image_url, i) =>
           <CarouselItem key={`gallery-image-${gallery_image_url[0]}${i}`}>
             <div
@@ -868,16 +871,18 @@ const ListingDesktopView = ({
         style={{
           position: 'absolute',
           left: '20px',
-          top: '20px',
+          top: '15px',
           fontSize: '18px',
           borderWidth: 0,
           padding: 0,
           backgroundColor: 'transparent'
-        }}>
+        }}
+      >
         <span
           href="#"
           style={S('relative pull-left font-30 mr-10 t-5n')}
-          className="close">
+          className="close"
+        >
           &times;
         </span>
         Close
@@ -891,17 +896,17 @@ const ListingDesktopView = ({
 
     right_area = (
       <div style={nav_bar_style}>
-        <div style={S('pull-right relative r-110 t-7')}>
+        <div style={S('pull-right relative r-110 t-2')}>
           <FavoriteHeart listing={listing} width="40px" height="40px" />
         </div>
         <Button
           onClick={e => e.preventDefault()}
           style={S(
-            `absolute color-fff r-20 t-15 bg-${login_btn_color} border-1-solid-${login_btn_color}`
+            `absolute color-fff r-20 t-10 bg-${login_btn_color} border-1-solid-${login_btn_color}`
           )}
-          type="button">
-          Share
-          &nbsp;&nbsp;<i className="fa fa-share" />
+          type="button"
+        >
+          Share &nbsp;&nbsp;<i className="fa fa-share" />
         </Button>
       </div>
     )
@@ -941,7 +946,8 @@ const ListingDesktopView = ({
               )} border-1-solid-${Brand.color('primary', 'a1bde4')}`
             )}
             className="btn btn-primary"
-            href={`/signin?redirect_to=/dashboard/mls/${listing.id}`}>
+            href={`/signin?redirect_to=/dashboard/mls/${listing.id}`}
+          >
             Log in
           </a>
           {/* <a className="btn btn-primary" href="/signup">Sign up</a> */}
@@ -966,13 +972,16 @@ const ListingDesktopView = ({
     let phone_area
     if (brand_agent.phone_number) {
       phone_area = (
-        <div style={S('font-15 mb-5')}>M: {brand_agent.phone_number}</div>
+        <div style={S('font-15 mb-5')}>
+          M: {brand_agent.phone_number}
+        </div>
       )
     }
 
     const brand_agent_area = (
       <div
-        style={S('mt-50 color-fff w-100p text-left center-block text-center')}>
+        style={S('mt-50 color-fff w-100p text-left center-block text-center')}
+      >
         {profile_image_area}
         <div style={S('p-20 w-100p')}>
           <div style={S('font-18 mb-5 color-fff')}>
@@ -994,7 +1003,9 @@ const ListingDesktopView = ({
             <div className="clearfix" />
           </div>
           {phone_area}
-          <div style={S('font-15 mb-5')}>E: {brand_agent.email}</div>
+          <div style={S('font-15 mb-5')}>
+            E: {brand_agent.email}
+          </div>
         </div>
         <div style={S('font-32 color-fff')} className="lato">
           Love this home? I can help you.
@@ -1029,7 +1040,8 @@ const ListingDesktopView = ({
         <Button
           bsSize="large"
           style={S('bg-fff color-2196f3 border-none')}
-          onClick={handleActivateAccountClick}>
+          onClick={handleActivateAccountClick}
+        >
           Activate your account
         </Button>
       </div>
@@ -1048,12 +1060,14 @@ const ListingDesktopView = ({
       <Modal
         bsSize="large"
         onHide={() => setGalleryModalState(false)}
-        show={galleryModalIsActive}>
+        show={galleryModalIsActive}
+      >
         <div style={S('relative')}>
           <div
             className="close"
             onClick={() => setGalleryModalState(false)}
-            style={S('absolute r-0 t-60n font-60 z-1000 fw-100')}>
+            style={S('absolute r-0 t-60n font-60 z-1000 fw-100')}
+          >
             &times;
           </div>
         </div>

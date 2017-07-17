@@ -17,7 +17,7 @@ import Brand from '../../../../../../controllers/Brand'
 import listing_util from '../../../../../../utils/listing'
 
 import Loading from '../../../../../Partials/Loading'
-import FavoriteHeart from '../../../Partials/FavoriteHeart'
+import FavoriteHeart from '../../components/FavoriteHeart'
 import ListingMarker from '../../../Partials/ListingMarker'
 import ListingMapMarker from '../../../Partials/ListingMapMarker'
 
@@ -142,7 +142,9 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
           &#8226;
         </span>
         <span style={S('font-14 relative t-3n')}>
-          <b>{listing.status} {sold_date}</b>
+          <b>
+            {listing.status} {sold_date}
+          </b>
         </span>
       </div>
     )
@@ -158,7 +160,9 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
           )}
         >
           <span style={S('font-14 relative t-3n')}>
-            <b>{days_on_market} days ago</b>
+            <b>
+              {days_on_market} days ago
+            </b>
           </span>
         </div>
       )
@@ -195,7 +199,9 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
             {listing.list_agent_full_name}, Seller Agent
           </span>
         </div>
-        <div style={S('font-15 mb-5')}>{listing.list_office_name}</div>
+        <div style={S('font-15 mb-5')}>
+          {listing.list_office_name}
+        </div>
       </div>
     )
 
@@ -219,7 +225,9 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
           <div style={S('font-15 mb-5')}>
             {listing.list_agent_direct_work_phone}
           </div>
-          <div style={S('font-15 mb-5')}>{listing.list_office_name}</div>
+          <div style={S('font-15 mb-5')}>
+            {listing.list_office_name}
+          </div>
           <div style={email_style}>
             <a
               href={`mailto:${listing.list_agent_email}?subject=Your listing on Rechat.com&body=I saw your listing (${listing_title}) on Rechat.com and I'm interested in getting more information.`}
@@ -305,10 +313,10 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
             <div style={S('fw-700 font-30')}>
               ${price}
               {listing.property &&
-                listing.property.property_type === 'Residential Lease'
+              listing.property.property_type === 'Residential Lease'
                 ? '/mo'
-                : ''}
-              {' '}{asking_price_area}
+                : ''}{' '}
+              {asking_price_area}
             </div>
             <div>
               <div
@@ -361,12 +369,11 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
                 <div style={S('mb-20')}>
                   <div style={S('fw-600 font-18 mb-10')}>Cost Breakdown</div>
                   <div style={S('color-aaaaaa mb-10')}>
-                    Price/sqt:
-                    {' '}<span style={S('color-777')}>${price_sq_foot}</span>
+                    Price/sqt:{' '}
+                    <span style={S('color-777')}>${price_sq_foot}</span>
                   </div>
                   <div style={S('color-aaaaaa mb-10')}>
-                    Unexempt Taxes:
-                    {' '}
+                    Unexempt Taxes:{' '}
                     <span style={S('color-777')}>
                       ${listing.unexempt_taxes
                         ? helpers.numberWithCommas(listing.unexempt_taxes)
@@ -374,22 +381,19 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
                     </span>
                   </div>
                   <div style={S('color-aaaaaa mb-10')}>
-                    HOA Fees:
-                    {' '}
+                    HOA Fees:{' '}
                     <span style={S('color-777')}>
                       ${listing.association_fee ? listing.association_fee : 0}
                     </span>
                   </div>
                   <div style={S('color-aaaaaa mb-10')}>
-                    HOA Frequency:
-                    {' '}
+                    HOA Frequency:{' '}
                     <span style={S('color-777')}>
                       {listing.association_fee_frequency}
                     </span>
                   </div>
                   <div style={S('color-aaaaaa mb-10')}>
-                    HOA Includes:
-                    {' '}
+                    HOA Includes:{' '}
                     <span style={S('color-777')}>
                       {listing.association_fee_includes}
                     </span>
@@ -399,33 +403,27 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
               <div style={S('pr-20 mb-20')}>
                 <div style={S('fw-600 mb-10 font-18')}>Key Facts</div>
                 <div style={S('color-aaaaaa mb-10')}>
-                  Year Built:
-                  {' '}<span style={S('color-777')}>{property.year_built}</span>
+                  Year Built:{' '}
+                  <span style={S('color-777')}>{property.year_built}</span>
                 </div>
                 <div style={S('color-aaaaaa mb-10')}>
-                  Style of House:
-                  {' '}
+                  Style of House:{' '}
                   <span style={S('color-777')}>
                     {property.architectural_style}
                   </span>
                 </div>
                 <div style={S('color-aaaaaa mb-10')}>
-                  Subdivision:
-                  {' '}
+                  Subdivision:{' '}
                   <span style={S('color-777')}>
                     {property.subdivision_name}
                   </span>
                 </div>
                 <div style={S('color-aaaaaa mb-10')}>
-                  Acres:
-                  {' '}
-                  <span style={S('color-777')}>
-                    {property.lot_size_area}
-                  </span>
+                  Acres:{' '}
+                  <span style={S('color-777')}>{property.lot_size_area}</span>
                 </div>
                 <div style={S('color-aaaaaa mb-10')}>
-                  Stories:
-                  {' '}
+                  Stories:{' '}
                   <span style={S('color-777')}>
                     {property.number_of_stories}
                   </span>
@@ -434,19 +432,17 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
                   MLS#: <span style={S('color-777')}>{listing.mls_number}</span>
                 </div>
                 <div style={S('color-aaaaaa mb-10')}>
-                  Possession:
-                  {' '}<span style={S('color-777')}>{listing.possession}</span>
+                  Possession:{' '}
+                  <span style={S('color-777')}>{listing.possession}</span>
                 </div>
                 <div style={S('color-aaaaaa mb-10')}>
-                  Days On Market:
-                  {' '}
+                  Days On Market:{' '}
                   <span style={S('color-777')}>
                     {listing_util.getDOM(listing.dom)}
                   </span>
                 </div>
                 <div style={S('color-aaaaaa')}>
-                  Current Days On Market:
-                  {' '}
+                  Current Days On Market:{' '}
                   <span style={S('color-777')}>
                     {listing_util.getDOM(listing.cdom)}
                   </span>
@@ -457,8 +453,7 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
                   Amenities & Utilities
                 </div>
                 <div style={S('color-aaaaaa mb-10')}>
-                  Pool:
-                  {' '}
+                  Pool:{' '}
                   <span style={S('color-777')}>
                     {property.pool_yn ? 'Yes' : 'No'}
                   </span>
@@ -467,13 +462,14 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
                   Pool Features:&nbsp;
                   <span style={S('color-777')}>
                     {property.pool_features.map(item =>
-                      <span key={item}>{item}, </span>
+                      <span key={item}>
+                        {item},{' '}
+                      </span>
                     )}
                   </span>
                 </div>
                 <div style={S('color-aaaaaa mb-10')}>
-                  Handicap Amenities:
-                  {' '}
+                  Handicap Amenities:{' '}
                   <span style={S('color-777')}>
                     {property.handicap_yn ? 'Yes' : 'No'}
                   </span>
@@ -482,7 +478,9 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
                   Heating/Cooling:&nbsp;
                   <span style={S('color-777')}>
                     {property.heating.map(item =>
-                      <span key={item}>{item}, </span>
+                      <span key={item}>
+                        {item},{' '}
+                      </span>
                     )}
                   </span>
                 </div>
@@ -490,7 +488,9 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
                   Other:&nbsp;
                   <span style={S('color-777')}>
                     {property.utilities.map(item =>
-                      <span key={item}>{item}, </span>
+                      <span key={item}>
+                        {item},{' '}
+                      </span>
                     )}
                   </span>
                 </div>
@@ -517,7 +517,9 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
                   Interior Features:&nbsp;
                   <span style={S('color-777')}>
                     {property.interior_features.map(item =>
-                      <span key={item}>{item}, </span>
+                      <span key={item}>
+                        {item},{' '}
+                      </span>
                     )}
                   </span>
                 </div>
@@ -525,7 +527,9 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
                   Alarm/Security:&nbsp;
                   <span style={S('color-777')}>
                     {property.security_features.map(item =>
-                      <span key={item}>{item}, </span>
+                      <span key={item}>
+                        {item},{' '}
+                      </span>
                     )}
                   </span>
                 </div>
@@ -533,7 +537,9 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
                   Flooring:&nbsp;
                   <span style={S('color-777')}>
                     {property.flooring.map(item =>
-                      <span key={item}>{item}, </span>
+                      <span key={item}>
+                        {item},{' '}
+                      </span>
                     )}
                   </span>
                 </div>
@@ -543,7 +549,9 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
                   Exterior Features:&nbsp;
                   <span style={S('color-777')}>
                     {property.exterior_features.map(item =>
-                      <span key={item}>{item}, </span>
+                      <span key={item}>
+                        {item},{' '}
+                      </span>
                     )}
                   </span>
                 </div>
@@ -561,37 +569,29 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
                 </div>
                 <div style={S('color-aaaaaa mb-10')}>
                   Roof:&nbsp;
-                  <span style={S('color-777')}>
-                    {property.roof}
-                  </span>
+                  <span style={S('color-777')}>{property.roof}</span>
                 </div>
               </div>
               <div style={S('pr-20 mb-20')}>
                 <div style={S('fw-600 font-18 mb-10')}>Schools</div>
                 <div style={S('color-aaaaaa mb-10')}>
-                  School District:
-                  {' '}
-                  <span style={S('color-777')}>
-                    {property.school_district}
-                  </span>
+                  School District:{' '}
+                  <span style={S('color-777')}>{property.school_district}</span>
                 </div>
                 <div style={S('color-aaaaaa mb-10')}>
-                  Elementary School:
-                  {' '}
+                  Elementary School:{' '}
                   <span style={S('color-777')}>
                     {property.elementary_school_name}
                   </span>
                 </div>
                 <div style={S('color-aaaaaa mb-10')}>
-                  Middle School:
-                  {' '}
+                  Middle School:{' '}
                   <span style={S('color-777')}>
                     {property.middle_school_name}
                   </span>
                 </div>
                 <div style={S('color-aaaaaa mb-10')}>
-                  High School:
-                  {' '}
+                  High School:{' '}
                   <span style={S('color-777')}>
                     {property.high_school_name}
                   </span>
@@ -644,7 +644,7 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
 
     right_area = (
       <div style={nav_bar_style}>
-        <div style={S('pull-right relative r-110 t-14n')}>
+        <div style={S('pull-right relative r-120 t-6')}>
           <FavoriteHeart listing={listing} width="40px" height="40px" />
         </div>
         <Button
@@ -655,8 +655,7 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
           bsStyle="primary"
           type="button"
         >
-          Share
-          &nbsp;&nbsp;<i className="fa fa-share" />
+          Share &nbsp;&nbsp;<i className="fa fa-share" />
         </Button>
       </div>
     )
