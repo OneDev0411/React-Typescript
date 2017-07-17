@@ -221,7 +221,8 @@ class App extends Component {
     let nav_area = <SideBar data={data} />
 
     if (data.is_mobile && user) {
-      nav_area = <MobileNav data={data} />
+      // nav_area = <MobileNav data={data} />
+      nav_area = <div />
     }
 
     return (

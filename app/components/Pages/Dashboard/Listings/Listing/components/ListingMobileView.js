@@ -26,6 +26,7 @@ import { handleActivateAccountClick } from './ListingDesktopView'
 
 const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
   const { user } = data
+  const brand_agent = listing.proposed_agent
 
   let current_slide
   if (listing) {
@@ -48,6 +49,7 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
   let listing_title
   let bathroom_count
   let listing_subtitle
+  let brand_agent_area
 
   let listing_images = (
     <div
@@ -188,30 +190,73 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
       )
     }
 
-    let agent_area = (
-      <div
-        style={S(
-          'mt-20 color-748090 w-100p border-1-solid-ededed br-3 p-20 text-center'
-        )}
-      >
-        <div style={S('font-18 mb-5 color-3388ff')}>
-          <span style={S('fw-400')}>
-            {listing.list_agent_full_name}, Seller Agent
-          </span>
-        </div>
-        <div style={S('font-15 mb-5')}>
-          {listing.list_office_name}
-        </div>
-      </div>
-    )
+    // Agent info
+    if (brand_agent) {
+      let profile_image_area
+      if (brand_agent.cover_image_url) {
+        profile_image_area = (
+          <img style={S('w-100p')} src={brand_agent.cover_image_url} />
+        )
+      }
 
+      let phone_area
+      if (brand_agent.phone_number) {
+        phone_area = (
+          <div style={S('font-15 mb-5')}>
+            M: {brand_agent.phone_number}
+          </div>
+        )
+      }
+
+      brand_agent_area = (
+        <div style={S('mt-50 color-bfc3c7 w-100p text-left relative')}>
+          {profile_image_area}
+          <div style={S('bg-263445 p-20 w-100p')}>
+            <div style={S('font-18 mb-5 color-fff')}>
+              <span style={S('fw-400')}>
+                {brand_agent.first_name} {brand_agent.last_name}
+              </span>
+            </div>
+            <div style={S('font-14 mb-5 color-bfc3c7')}>
+              <div
+                style={S(
+                  `bg-cover bg-url(${Brand.asset(
+                    'office_logo'
+                  )}) bg-center w-20 h-20 pull-left mr-10`
+                )}
+              />
+              <div style={S('pull-left')}>
+                {Brand.message('office_title')}
+              </div>
+              <div className="clearfix" />
+            </div>
+            {phone_area}
+            <div style={S('font-15 mb-5')}>
+              E: {brand_agent.email}
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    let list_agent_area
     if (user && user.user_type === 'Agent') {
       const email_style = {
         ...S('font-15 mb-20'),
         wordWrap: 'break-word'
       }
 
-      agent_area = (
+      // TODO New Listing Info
+      let showing_instructions
+      if (listing.showing_instructions) {
+        showing_instructions = (
+          <div style={S('font-15 mb-5')}>
+            {showing_instructions}
+          </div>
+        )
+      }
+
+      list_agent_area = (
         <div
           style={S(
             'mt-20 color-748090 w-100p border-1-solid-ededed br-3 p-20 text-center'
@@ -228,6 +273,7 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
           <div style={S('font-15 mb-5')}>
             {listing.list_office_name}
           </div>
+          {showing_instructions}
           <div style={email_style}>
             <a
               href={`mailto:${listing.list_agent_email}?subject=Your listing on Rechat.com&body=I saw your listing (${listing_title}) on Rechat.com and I'm interested in getting more information.`}
@@ -347,7 +393,8 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
             </div>
           </Col>
           <Col xs={12} style={S('mb-15')}>
-            {agent_area}
+            {brand_agent_area}
+            {list_agent_area}
           </Col>
           <div className="clearfix" />
           <div style={S('mb-20')}>
@@ -700,6 +747,69 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
     )
   }
 
+  let brand_agent_footer
+  if (brand_agent) {
+    let profile_image_area
+    if (brand_agent.cover_image_url) {
+      profile_image_area = (
+        <div
+          style={S(
+            `w-300 h-300 center-block br-300 bg-cover bg-top bg-url(${brand_agent.cover_image_url})`
+          )}
+        />
+      )
+    }
+
+    let phone_area
+    if (brand_agent.phone_number) {
+      phone_area = (
+        <div style={S('font-15 mb-5')}>
+          M: {brand_agent.phone_number}
+        </div>
+      )
+    }
+
+    brand_agent_area = (
+      <div
+        style={S('color-fff w-100p text-left center-block text-center')}
+      >
+        {profile_image_area}
+        <div style={S('p-20 w-100p')}>
+          <div style={S('font-18 mb-5 color-fff')}>
+            <span style={S('fw-400')}>
+              {brand_agent.first_name} {brand_agent.last_name}
+            </span>
+          </div>
+          <div style={S('font-14 mb-15 relative')}>
+            <div
+              style={S(
+                `bg-cover bg-url(${Brand.asset(
+                  'office_logo'
+                )}) bg-center w-20 h-20 inline-block mr-10 mt-10`
+              )}
+            />
+            <div style={S('inline-block relative t-5n')}>
+              {Brand.message('office_title')}
+            </div>
+            <div className="clearfix" />
+          </div>
+          {phone_area}
+          <div style={S('font-15 mb-5')}>
+            E: {brand_agent.email}
+          </div>
+        </div>
+        <div style={S('font-22 color-fff')} className="lato">
+          Love this home? I can help you.
+        </div>
+      </div>
+    )
+    brand_agent_footer = (
+      <div style={S('w-100p pt-20 pb-20 bg-263445 text-center')}>
+        {brand_agent_area}
+      </div>
+    )
+  }
+
   // Claim account message
   let claim_account_message
   let token
@@ -736,6 +846,7 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
       {left_area}
       {right_area}
       {main_content}
+      {brand_agent_footer}
     </div>
   )
 }

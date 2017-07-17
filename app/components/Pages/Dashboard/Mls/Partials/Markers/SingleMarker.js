@@ -28,6 +28,7 @@ const SingleMarker = ({
   onMouseEnterHandler
 }) =>
   <Link
+    target={data.user ? '' : '_blank'}
     to={`/dashboard/mls/${list.id}`}
     className={'single-marker'}
     onMouseLeave={onMouseLeaveHandler}

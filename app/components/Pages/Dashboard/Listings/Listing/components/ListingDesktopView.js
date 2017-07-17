@@ -63,24 +63,7 @@ const ListingDesktopView = ({
   setGalleryModalActiveIndex
 }) => {
   const { user } = data
-
-  let brand_agent
-  if (data.brand && data.brand.users) {
-    brand_agent = data.brand.users[0]
-    // Check if listing agent is agent
-    if (
-      listing.list_agent &&
-      listing.list_agent.user_id &&
-      _.find(data.brand.users, { id: listing.list_agent.user_id })
-    ) {
-      brand_agent = _.find(data.brand.users, { id: listing.list_agent.user_id })
-    }
-
-    // Check for user is agent in branding
-    if (user && _.find(data.brand.users, { id: user.id })) {
-      brand_agent = _.find(data.brand.users, { id: user.id })
-    }
-  }
+  const brand_agent = listing.proposed_agent
 
   let viewer_width = 0
   if (typeof window !== 'undefined') {
@@ -113,6 +96,7 @@ const ListingDesktopView = ({
   let prev_icon = '<'
   let next_icon = '>'
   let listing_subtitle
+  let brand_agent_area
 
   let listing_images = (
     <div
@@ -294,7 +278,6 @@ const ListingDesktopView = ({
     }
 
     // Agent info
-    let brand_agent_area
     if (brand_agent) {
       let profile_image_area
       if (brand_agent.cover_image_url) {
@@ -864,6 +847,10 @@ const ListingDesktopView = ({
   }
 
   let left_area
+  const buttonCildernStyles = {
+    display: 'inline-block',
+    verticalAlign: 'middle'
+  }
   if (user) {
     left_area = (
       <button
@@ -871,21 +858,25 @@ const ListingDesktopView = ({
         style={{
           position: 'absolute',
           left: '20px',
-          top: '15px',
-          fontSize: '18px',
+          top: '12px',
+          fontSize: '20px',
           borderWidth: 0,
           padding: 0,
           backgroundColor: 'transparent'
         }}
       >
-        <span
-          href="#"
-          style={S('relative pull-left font-30 mr-10 t-5n')}
-          className="close"
+        <svg
+          style={buttonCildernStyles}
+          fill="#cecece"
+          height="24"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          &times;
-        </span>
-        Close
+          <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+          <path d="M0 0h24v24H0z" fill="none" />
+        </svg>
+        <span style={buttonCildernStyles}>Close</span>
       </button>
     )
   }
@@ -978,10 +969,8 @@ const ListingDesktopView = ({
       )
     }
 
-    const brand_agent_area = (
-      <div
-        style={S('mt-50 color-fff w-100p text-left center-block text-center')}
-      >
+    brand_agent_area = (
+      <div style={S('color-fff w-100p text-left center-block text-center')}>
         {profile_image_area}
         <div style={S('p-20 w-100p')}>
           <div style={S('font-18 mb-5 color-fff')}>
@@ -1013,7 +1002,7 @@ const ListingDesktopView = ({
       </div>
     )
     brand_agent_footer = (
-      <div style={S('w-100p pt-100 pb-100 bg-263445 text-center')}>
+      <div style={S('w-100p pt-40 pb-40 bg-263445 text-center')}>
         {brand_agent_area}
       </div>
     )
