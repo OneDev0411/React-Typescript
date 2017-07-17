@@ -16,17 +16,19 @@ export default function ListingMarker({
   const property = listing.compact_property || listing.property
   const address = listing.address || property.address
 
-  const isFavorited = (listing) => {
+  const isFavorited = listing => {
     const { mls_number } = listing
-    if (user &&
+    if (
+      user &&
       user.favorite_listings &&
       user.favorite_listings.indexOf(mls_number) !== -1
-    ) return true
+    )
+      return true
 
     return false
   }
 
-  const getSocialBadge = (listing) => {
+  const getSocialBadge = listing => {
     let social_icon
     let badge_style = {
       ...S('absolute t-0 pl-4 pr-4 pt-3 w-20 h-21 bg-fff'),
@@ -42,8 +44,7 @@ export default function ListingMarker({
       }
     }
 
-    if (isFavorited(listing))
-      social_icon = 'heart'
+    if (isFavorited(listing)) social_icon = 'heart'
 
     if (listing.open_houses) {
       badge_style = {
@@ -62,11 +63,7 @@ export default function ListingMarker({
   const status_color_class = listing_util.getStatusColorClass(listing.status)
 
   let price = listing.price
-  if (
-    user &&
-    listing.close_price &&
-    user.user_type === 'Agent'
-  ) {
+  if (user && listing.close_price && user.user_type === 'Agent') {
     price = listing.close_price
   }
 
@@ -75,8 +72,7 @@ export default function ListingMarker({
   let active_class = ''
   if (
     data.listing_map &&
-    (listing.id === data.listing_map.active_listing ||
-    context === 'single')
+    (listing.id === data.listing_map.active_listing || context === 'single')
   ) {
     active_class = ' active'
   }
@@ -86,7 +82,7 @@ export default function ListingMarker({
   //   popup_class = ''
 
   const square_feet = helpers.numberWithCommas(
-      Math.floor(listing_util.metersToFeet(property.square_meters))
+    Math.floor(listing_util.metersToFeet(property.square_meters))
   )
 
   let sold_date
@@ -104,9 +100,15 @@ export default function ListingMarker({
     social_info = 'Shared by '
     listing.shared_by.forEach((shared_user, shared_i) => {
       if (shared_user.id === user.id)
-        social_info += `You${shared_i === listing.shared_by.length - 1 ? '' : ', '}`
+        social_info += `You${shared_i === listing.shared_by.length - 1
+          ? ''
+          : ', '}`
       else
-        social_info += (shared_user.first_name.trim() ? shared_user.first_name : shared_user.email) + (shared_i === listing.shared_by.length - 1 ? '' : ', ')
+        social_info +=
+          (shared_user.first_name.trim()
+            ? shared_user.first_name
+            : shared_user.email) +
+          (shared_i === listing.shared_by.length - 1 ? '' : ', ')
     })
   }
 
@@ -114,43 +116,55 @@ export default function ListingMarker({
     social_info = 'Commented by '
     listing.commented_by.forEach((commented_user, comment_i) => {
       if (commented_user.id === user.id)
-        social_info += `You${comment_i === listing.commented_by.length - 1 ? '' : ', '}`
+        social_info += `You${comment_i === listing.commented_by.length - 1
+          ? ''
+          : ', '}`
       else
-        social_info += (commented_user.first_name.trim() ? commented_user.first_name : commented_user.email) + (comment_i === listing.commented_by.length - 1 ? '' : ', ')
+        social_info +=
+          (commented_user.first_name.trim()
+            ? commented_user.first_name
+            : commented_user.email) +
+          (comment_i === listing.commented_by.length - 1 ? '' : ', ')
     })
   }
 
-  const markerPopupClassName =
-    data.listing_map && data.listing_map.active_listing === listing.id ||
+  const markerPopupClassName = (data.listing_map &&
+    data.listing_map.active_listing === listing.id) ||
     popupIsActive
-    ? '' : 'hidden'
+    ? ''
+    : 'hidden'
 
   const listing_popup = (
     <div
       className={markerPopupClassName}
-      style={S('absolute w-240 t-110n l-5 t-110n z-3 bg-fff border-1-solid-929292')}
-    >
+      style={S(
+        'absolute w-240 t-110n l-5 t-110n z-3 bg-fff border-1-solid-929292'
+      )}>
       <div style={S('pull-left mr-10')}>
-        <div style={S(`w-80 h-80 bg-url(${`${resize_url}?w=160`}) bg-cover bg-center`)} />
+        <div
+          style={S(
+            `w-80 h-80 bg-url(${`${resize_url}?w=160`}) bg-cover bg-center`
+          )}
+        />
       </div>
       <div style={S('pull-left pt-10')}>
         <div
           className="listing-map__marker__popup__title"
-          style={S('font-12 w-140')}
-        >
-          { listing_util.addressTitle(address) }
+          style={S('font-12 w-140')}>
+          {listing_util.addressTitle(address)}
         </div>
         <div style={S('font-11')}>
-          { property.bedroom_count } Beds,&nbsp;
-          { property.bathroom_count } Baths,&nbsp;
-          { square_feet } Sqft
+          {property.bedroom_count} Beds,&nbsp;
+          {property.bathroom_count} Baths,&nbsp;
+          {square_feet} Sqft
         </div>
         <div
-          style={S(`font-11 color-${listing_util.getStatusColor(listing.status)}`)}
-        >
-          { listing.status } { sold_date }
+          style={S(
+            `font-11 color-${listing_util.getStatusColor(listing.status)}`
+          )}>
+          {listing.status} {sold_date}
         </div>
-        <div style={S('w-120 overflow-hidden pb-5')}>{ social_info }</div>
+        <div style={S('w-120 overflow-hidden pb-5')}>{social_info}</div>
       </div>
     </div>
   )
@@ -176,7 +190,12 @@ export default function ListingMarker({
 
     if (listing && agent && agent.mlsid === listing.list_agent_mls_id && !isFavorited(listing) && !listing.commented_by) {
       brand_badge = (
-        <div style={S(`bg-url(${data.brand.assets.default_avatar}) w-21 h-21 bg-center bg-cover pull-left inline-block`)} />
+        <div
+          style={S(
+            `bg-url(${data.brand.assets
+              .default_avatar}) w-21 h-21 bg-center bg-cover pull-left inline-block`
+          )}
+        />
       )
       marker_style = {
         ...marker_style,
@@ -188,7 +207,8 @@ export default function ListingMarker({
   if (
     listing_map &&
     listing_map.listings_viewed &&
-    listing_map.listings_viewed.indexOf(listing.id) !== -1 && !data.current_listing
+    listing_map.listings_viewed.indexOf(listing.id) !== -1 &&
+    !data.current_listing
   ) {
     viewed_class = ' viewed'
   }
@@ -196,19 +216,20 @@ export default function ListingMarker({
   let listing_marker = (
     <div
       className={`map__listing-marker${active_class}${viewed_class} ${status_color_class}`}
-      style={marker_style}
-    >
-      { brand_badge }
-      { social_badge }
+      style={marker_style}>
+      {brand_badge}
+      {social_badge}
       <div
-        style={S(`w-100p text-center pt-4${social_badge || brand_badge ? ' pl-22' : ''}`)}
-      >
-        { price_small }
-        {
-          listing.compact_property &&
+        style={S(
+          `w-100p text-center pt-4${social_badge || brand_badge
+            ? ' pl-22'
+            : ''}`
+        )}>
+        {price_small}
+        {listing.compact_property &&
           listing.compact_property.property_type === 'Residential Lease'
-          ? '/mo' : ''
-        }
+          ? '/mo'
+          : ''}
       </div>
     </div>
   )
@@ -217,7 +238,9 @@ export default function ListingMarker({
   if (listing.open_houses) {
     // Open house marker
     const open_style = {
-      ...S('bg-fff w-25 h-100p color-35b863 font-10 pt-8 inline-block pull-left bold'),
+      ...S(
+        'bg-fff w-25 h-100p color-35b863 font-10 pt-8 inline-block pull-left bold'
+      ),
       lineHeight: '5px'
     }
 
@@ -241,20 +264,26 @@ export default function ListingMarker({
     listing_marker = (
       <div
         className={`map__listing-marker${active_class}${viewed_class} ${status_color_class}`}
-        style={marker_style}
-      >
+        style={marker_style}>
         <div style={open_style}>OH</div>
-        { brand_badge }
-        { social_badge }
-        <div style={S(`w-100p text-center pt-4${social_badge || brand_badge ? ' pl-22' : ''}`)}>{ price_small }</div>
+        {brand_badge}
+        {social_badge}
+        <div
+          style={S(
+            `w-100p text-center pt-4${social_badge || brand_badge
+              ? ' pl-22'
+              : ''}`
+          )}>
+          {price_small}
+        </div>
       </div>
     )
   }
 
   return (
     <div>
-      { listing_popup }
-      { listing_marker }
+      {listing_popup}
+      {listing_marker}
     </div>
   )
 }
