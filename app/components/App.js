@@ -25,7 +25,6 @@ import ReactGA from 'react-ga'
 import config from '../../config/public'
 
 class App extends Component {
-
   componentWillMount() {
     if (typeof window !== 'undefined') {
       this.initializeChatSocket()
@@ -50,9 +49,6 @@ class App extends Component {
 
     // load notifications
     this.loadNotifications(data)
-
-    // set intercom
-    this.setIntercom()
 
     // branch banner
     this.triggerBranchBanner(user)
@@ -95,8 +91,9 @@ class App extends Component {
   }
 
   loadNotifications(data) {
-    if (data.getting_notifications || data.notifications_retrieved)
+    if (data.getting_notifications || data.notifications_retrieved) {
       return false
+    }
 
     NotificationDispatcher.dispatch({
       action: 'get-all',
@@ -119,7 +116,12 @@ class App extends Component {
       }
 
       ReactGA.initialize(google_analytics_id)
-      ReactGA.ga('create', google_analytics_id, 'auto', brand && brand.hostnames ? brand.hostnames[0] : 'rechat')
+      ReactGA.ga(
+        'create',
+        google_analytics_id,
+        'auto',
+        brand && brand.hostnames ? brand.hostnames[0] : 'rechat'
+      )
       ReactGA.set({ page: window.location.pathname })
       ReactGA.pageview(window.location.pathname)
     }
@@ -151,40 +153,52 @@ class App extends Component {
 
     if (!branch_data) {
       branch_data = {
-        '$always_deeplink': true
+        $always_deeplink: true
       }
     }
 
-    branch.link({
-      data: branch_data
-    }, (err, link) => {
-      AppStore.data.branch_link = link
-      AppStore.emitChange()
-    })
+    branch.link(
+      {
+        data: branch_data
+      },
+      (err, link) => {
+        AppStore.data.branch_link = link
+        AppStore.emitChange()
+      }
+    )
   }
 
   triggerBranchBanner(user) {
-    if (!user)
+    if (!user) {
       return false
+    }
 
     const branch = require('branch-sdk')
     branch.init(config.branch.key)
-    branch.banner({
-      icon: '/static/images/logo-big.png',
-      title: 'Download the Rechat iOS app',
-      description: 'For a better mobile experience',
-      showDesktop: false,
-      showAndroid: false,
-      forgetHide: false,
-      downloadAppButtonText: 'GET',
-      openAppButtonText: 'OPEN',
-      customCSS: '#branch-banner .button { color:  #3388ff; border-color: #3388ff; }'
-    }, {
-      data: {
-        type: (AppStore.data.user ? 'WebBranchBannerClickedUser' : 'WebBranchBannerClickedShadowUser'),
-        access_token: (AppStore.data.user ? AppStore.data.user.access_token : null)
+    branch.banner(
+      {
+        icon: '/static/images/logo-big.png',
+        title: 'Download the Rechat iOS app',
+        description: 'For a better mobile experience',
+        showDesktop: false,
+        showAndroid: false,
+        forgetHide: false,
+        downloadAppButtonText: 'GET',
+        openAppButtonText: 'OPEN',
+        customCSS:
+          '#branch-banner .button { color:  #3388ff; border-color: #3388ff; }'
+      },
+      {
+        data: {
+          type: AppStore.data.user
+            ? 'WebBranchBannerClickedUser'
+            : 'WebBranchBannerClickedShadowUser',
+          access_token: AppStore.data.user
+            ? AppStore.data.user.access_token
+            : null
+        }
       }
-    })
+    )
   }
 
   render() {
@@ -212,21 +226,12 @@ class App extends Component {
 
     return (
       <div>
-        {
-          user && !data.is_widget &&
-          nav_area
-        }
+        {user && !data.is_widget && nav_area}
 
-        {
-          user &&
-          <InstantChat
-            user={user}
-            rooms={rooms}
-          />
-        }
+        {user && <InstantChat user={user} rooms={rooms} />}
 
         <main style={main_style}>
-          { children }
+          {children}
         </main>
       </div>
     )

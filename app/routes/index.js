@@ -66,6 +66,8 @@ import Website from '../components/Pages/Dashboard/Website'
 import Cards from '../components/Pages/Dashboard/Cards'
 import Forms from '../components/Pages/Dashboard/Forms'
 
+import Mobile from '../components/Pages/Mobile'
+
 const uuidPattern = 'w+'
 
 function authenticate(nextState, replace) {
@@ -108,6 +110,8 @@ export default (
       <Route path="/signin" component={SignIn} />
       <Route path="/verify/:slug" component={Verify} />
       <Route path="/password/:slug" component={Password} />
+
+      <Route path="/mobile" component={Mobile} />
     </Route>
 
     <Route path="/" component={App}>
