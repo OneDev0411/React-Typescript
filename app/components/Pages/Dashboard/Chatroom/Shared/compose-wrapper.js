@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Modal, Button } from 'react-bootstrap'
-import { compose,  withState, lifecycle, pure } from 'recompose'
+import { compose, withState, pure } from 'recompose'
 import Compose from '../../../../Partials/Compose'
 
 const enhance = compose(
@@ -34,10 +34,8 @@ const ComposeWrapper = ({
   recipients,
   onChangeComposeModal,
   onChangeRecipients
-}) => (
-  <div
-    style={{ display: inline ? 'inline' : 'block' }}
-  >
+}) =>
+  <div style={{ display: inline ? 'inline' : 'block' }}>
     <TriggerButton
       clickHandler={() => onChangeComposeModal(!showComposeModal)}
     />
@@ -45,10 +43,9 @@ const ComposeWrapper = ({
     <Modal
       show={showComposeModal}
       dialogClassName="chatroom-add-member"
-      onHide={() => onChangeComposeModal(false)}
-    >
+      onHide={() => onChangeComposeModal(false)}>
       <Modal.Header closeButton>
-        <Modal.Title>{ title }</Modal.Title>
+        <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
@@ -80,9 +77,7 @@ const ComposeWrapper = ({
           </Button>
         </Modal.Footer>
       }
-
     </Modal>
   </div>
-)
 
 export default enhance(ComposeWrapper)

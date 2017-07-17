@@ -1,0 +1,3 @@
+const SET_ACTIVE_PANEL = 'SET_ACTIVE_PANEL'
+
+export default SET_ACTIVE_PANEL

@@ -1,6 +1,7 @@
 import Koa from 'koa'
 import mount from 'koa-mount'
 import url from 'url'
+import MobileDetect from 'mobile-detect'
 import config from '../../../config/private'
 import handle490 from './490.js'
 import Brand from '../../../app/models/Brand'
@@ -13,8 +14,10 @@ async function getBrand(user) {
   return new Promise((resolve, reject) => {
     const hostname = url.parse(config.app_url).hostname
 
-    Brand.getByHostname({ hostname, user }, function(err, res) {
-      if (err) return reject(err)
+    Brand.getByHostname({ hostname, user }, (err, res) => {
+      if (err) {
+        return reject(err)
+      }
       return resolve(res)
     })
   })
@@ -22,33 +25,56 @@ async function getBrand(user) {
 
 const routes = {
   app: [
-    [ 'home' ],
-    [ 'signin' ],
-    [ 'signup' ],
-    [ 'signout' ],
-    [ 'terms' ],
-    [ 'mls' ],
-    [ 'recent' ],
-    [ 'dashboard' ],
-    [ 'widget' ],
-    [ 'invite' ],
-    [ 'reset-password' ]
+    ['home'],
+    ['signin'],
+    ['signup'],
+    ['signout'],
+    ['terms'],
+    ['mls'],
+    ['recent'],
+    ['dashboard'],
+    ['widget'],
+    ['invite'],
+    ['reset-password']
   ],
-  verify: [
-    [ 'email' ],
-    [ 'activate' ],
-    [ 'phone' ]
-  ]
+  verify: [['email'], ['activate'], ['phone']]
 }
 
 app.use(handle490)
 
-app.use(async function(ctx, next) {
+app.use(async (ctx, next) => {
+  ctx.isMobile = new MobileDetect(ctx.req.headers['user-agent'])
+  return next()
+})
+
+app.use(async (ctx, next) => {
+  const isListingPage = url =>
+    new RegExp(
+      /^\/dashboard\/mls\/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/
+    ).test(url)
+
+  if (isListingPage(ctx.url) || new RegExp(/\/mobile/).test(ctx.url)) {
+    return next()
+  }
+
+  if (ctx.isMobile.phone()) {
+    if (ctx.isMobile.is('iPhone')) {
+      ctx.redirect('/mobile?type=iphone')
+      return
+    }
+    ctx.redirect('/mobile')
+    return
+  }
+
+  return next()
+})
+
+app.use(async (ctx, next) => {
   ctx.config = config
   const { AppStore } = ctx.locals
   const { user } = AppStore.data
 
-  if (!ctx.session.user){
+  if (!ctx.session.user) {
     delete AppStore.data.user
   } else {
     AppStore.data = {
@@ -69,7 +95,7 @@ app.use(async function(ctx, next) {
         }
       }
     }
-  } catch(e) {
+  } catch (e) {
     /* nothing */
   } finally {
     AppStore.data.brand_checked = true

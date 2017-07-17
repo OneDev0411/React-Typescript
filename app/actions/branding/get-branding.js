@@ -7,7 +7,7 @@ import URL from 'url'
 
 const app_hostname = URL.parse(config.app.url).hostname
 
-export default (hostname) => {
+export default hostname => {
   if (app_hostname === hostname)
     return
 
