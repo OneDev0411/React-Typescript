@@ -1,9 +1,11 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { Modal, Button, FormControl } from 'react-bootstrap'
 import { parseLocation } from 'parse-address'
+import { createDeal } from '../../../../../store_actions/deals'
 
-export default class extends React.Component {
+class CreateDealModal extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -82,18 +84,13 @@ export default class extends React.Component {
   }
 
   async saveDeal(data) {
-
-    const { user } = this.props
+    const { createDeal } = this.props
 
     // show loading
     this.setState({ saving: true })
 
-    // save deal
-    // const deal = await DealDispatcher.dispatchSync({
-    //   action: 'create-deal',
-    //   user: user,
-    //   data
-    // })
+    // create deal
+    const deal = await createDeal(data)
 
     // hide loading
     this.setState({ saving: false })
@@ -222,3 +219,5 @@ export default class extends React.Component {
     )
   }
 }
+
+export default connect(null, { createDeal })(CreateDealModal)
