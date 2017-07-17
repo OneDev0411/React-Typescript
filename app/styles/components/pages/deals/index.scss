@@ -1,4 +1,5 @@
 @import './deals_list';
+@import './create';
 
 .deals {
   margin-left: 70px;
@@ -8,6 +9,10 @@
 
   .deals-list {
     @extend %deals-list;
+  }
+
+  .deal-create {
+    @extend %deal-create;
   }
 }
 
