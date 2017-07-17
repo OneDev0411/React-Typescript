@@ -8,10 +8,6 @@ export default class extends React.Component {
     super(props)
   }
 
-  componentDidMount() {
-
-  }
-
   getAddress(deal) {
     const c = deal.context
     return c.street_name + ' ' + c.street_address
@@ -31,6 +27,7 @@ export default class extends React.Component {
   render() {
     const { deals } = this.props
 
+    console.log(deals)
     return (
       <div className="deals-list">
 
