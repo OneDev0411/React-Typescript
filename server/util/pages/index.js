@@ -1,6 +1,7 @@
 import Koa from 'koa'
 import mount from 'koa-mount'
 import url from 'url'
+import MobileDetect from 'mobile-detect'
 import config from '../../../config/private'
 import handle490 from './490.js'
 import Brand from '../../../app/models/Brand'
@@ -40,6 +41,16 @@ const routes = {
 }
 
 app.use(handle490)
+
+app.use(async (ctx, next) => {
+  const md = new MobileDetect(ctx.req.headers['user-agent'])
+
+  if (md.is('iPhone')) {
+    // here
+  }
+
+  await next()
+})
 
 app.use(async (ctx, next) => {
   ctx.config = config

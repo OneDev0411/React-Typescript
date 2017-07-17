@@ -23,7 +23,6 @@ import AppStore from '../stores/AppStore'
 import Brand from '../controllers/Brand'
 import ReactGA from 'react-ga'
 import config from '../../config/public'
-import MobileDetect from 'mobile-detect'
 
 class App extends Component {
 
@@ -63,14 +62,6 @@ class App extends Component {
 
     // Set intercom
     this.setIntercom()
-
-    if (typeof window !== 'undefined') {
-      let md = new MobileDetect(window.navigator.userAgent)
-
-      if (md.is('iPhone') && !data.is_widget) {
-        this.showMobileSplashViewer()
-      }
-    }
   }
 
   initializeChatSocket() {
