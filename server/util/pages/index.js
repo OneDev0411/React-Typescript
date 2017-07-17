@@ -42,7 +42,6 @@ const routes = {
 
 app.use(handle490)
 
-
 app.use(async (ctx, next) => {
   const isMobile = new MobileDetect(ctx.req.headers['user-agent'])
 
@@ -55,9 +54,9 @@ app.use(async (ctx, next) => {
     return await next()
   }
 
-  if (ctx.isMobile.phone()) {
+  if (isMobile.phone()) {
     let url = '/mobile'
-    if (ctx.isMobile.is('iPhone')) {
+    if (isMobile.is('iPhone')) {
       url = '/mobile?type=iphone'
     }
 
