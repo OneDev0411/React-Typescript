@@ -28,7 +28,8 @@ const getListingsByMapBounds = bounds => (dispatch, getState) => {
   const queryOptions = {
     ...options,
     limit,
-    points
+    points,
+    postal_codes: null
   }
 
   return getListingsByValert(queryOptions)(dispatch, getState)

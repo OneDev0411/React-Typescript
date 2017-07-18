@@ -18,7 +18,8 @@ const getListingsByPolygonPoints = (points = []) => (dispatch, getState) => {
   const options = {
     ...getState().search.options,
     limit,
-    points
+    points,
+    postal_codes: null
   }
 
   return getListingsByValert(options)(dispatch, getState)

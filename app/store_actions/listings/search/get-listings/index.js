@@ -1,11 +1,13 @@
-import getListingsByMapBounds from './by-map-bounds'
-import getListingsByMlsNumber from './by-mls-number'
-import getListingsByPostalCode from './by-postal-code'
-import getListingsByPolygonPoints from './by-polygon-points'
+import byValert from './by-valert'
+import byMapBounds from './by-map-bounds'
+import byMlsNumber from './by-mls-number'
+import byPostalCode from './by-postal-code'
+import byPolygonPoints from './by-polygon-points'
 
 export default {
-  getListingsByMapBounds,
-  getListingsByMlsNumber,
-  getListingsByPostalCode,
-  getListingsByPolygonPoints
+  byValert,
+  byMapBounds,
+  byMlsNumber,
+  byPostalCode,
+  byPolygonPoints
 }

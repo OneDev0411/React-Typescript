@@ -1,5 +1,5 @@
 import { submit, SubmissionError } from 'redux-form'
-import getListingsByValert from '../get-listings/by-valert'
+import getListings from '../get-listings'
 import { generatePointsFromBounds } from '../../../../utils/map'
 import setSearchListingsOptions from '../../../../store_actions/listings/search/set-options'
 
@@ -214,9 +214,14 @@ const submitFiltersForm = values => (dispatch, getState) => {
 
   // console.log(options, values, queryOptions)
 
-  dispatch(setSearchListingsOptions(queryOptions))
+  if (queryOptions.postal_codes) {
+    return getListings.byPostalCode(queryOptions.postal_codes, queryOptions)(
+      dispatch,
+      getState
+    )
+  }
 
-  return getListingsByValert(queryOptions)(dispatch, getState)
+  return getListings.byValert(queryOptions)(dispatch, getState)
 }
 
 export default submitFiltersForm

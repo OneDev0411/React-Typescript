@@ -4,22 +4,28 @@ import { queryOptions } from '../../../../components/Pages/Dashboard/Mls/Partial
 
 const QUERY_LIMIT = 100
 
-const getListingsByPostalCode = postalCode => (dispatch, getState) => {
+const getListingsByPostalCode = (postalCode, options = {}) => (
+  dispatch,
+  getState
+) => {
   if (getFetchingStatus(getState().search.listings)) {
     return Promise.resolve()
   }
 
-  const options = {
-    ...getState().search.options,
+  options =
+    Object.keys(options).length > 0 ? options : getState().search.options
+
+  const queryOptions = {
+    ...options,
     points: null,
     counties: null,
     mls_areas: null,
     school_districts: null,
-    postal_codes: [postalCode],
+    postal_codes: Array.isArray(postalCode) ? postalCode : [postalCode],
     limit: QUERY_LIMIT
   }
 
-  return getListingsByValert(options)(dispatch, getState)
+  return getListingsByValert(queryOptions)(dispatch, getState)
 }
 
 export default getListingsByPostalCode
