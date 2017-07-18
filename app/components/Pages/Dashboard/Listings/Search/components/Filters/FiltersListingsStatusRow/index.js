@@ -56,16 +56,16 @@ const FiltersListingsStatus = ({
 
   return (
     <div>
-      <div className="c-filters-listings-status">
-        <div className="c-filters-listings-status__left-side">
+      <div className="c-filters-status">
+        <div className="c-filters-status__left-side">
           <Flag icon={icon} color={color} />
-          <span className="c-filters-listings-status__title">
+          <span className="c-filters-status__title">
             {title}
           </span>
         </div>
 
         <div
-          className={`c-filters-listings-status__right-side ${statusIsActive
+          className={`c-filters-status__right-side ${statusIsActive
             ? 'is-active'
             : ''}`}
         >
@@ -77,7 +77,7 @@ const FiltersListingsStatus = ({
 
           {hasAccordion &&
             hasSwitchToggle &&
-            <span className="c-filters-listings-status__separator" />}
+            <span className="c-filters-status__separator" />}
 
           {hasSwitchToggle &&
             <SwitchToggle
@@ -85,7 +85,7 @@ const FiltersListingsStatus = ({
               isField={isField}
               value={isField ? title : statusIsActive}
               onChangeHandler={onChangeSwitchToggle}
-              className="c-filters-listings-status__switch-toggle"
+              className="c-filters-status__switch-toggle"
             />}
         </div>
       </div>

@@ -8,13 +8,13 @@ import { getStatusColor } from '../../../../../../../../utils/listing'
 const name = 'listing_statuses'
 
 const SubStatuses = ({ fields }) =>
-  <ul className="c-filters-other-statuses-childrens">
+  <ul className="c-filters-sub-statuses">
     {Object.keys(fields).map(field => {
       const id = `${name}__${field}`
       const value = fields[field]
 
       return (
-        <li key={id} className="c-filters-other-statuses-childrens__item">
+        <li key={id} className="c-filters-sub-statuses__item">
           <Field
             id={id}
             type="checkbox"
