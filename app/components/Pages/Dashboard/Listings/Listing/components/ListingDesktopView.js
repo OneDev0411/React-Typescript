@@ -296,7 +296,7 @@ const ListingDesktopView = ({
       }
 
       brand_agent_area = (
-        <div style={S('mt-50 color-bfc3c7 w-100p text-left relative')}>
+        <div style={S('color-bfc3c7 w-100p text-left relative')}>
           {profile_image_area}
           <div style={S('bg-263445 p-20 w-100p')}>
             <div style={S('font-18 mb-5 color-fff')}>
@@ -449,12 +449,12 @@ const ListingDesktopView = ({
         </div>
 
         <div>
-          <div style={S('pl-40 pr-40 relative')}>
-            <Col sm={8} md={9} style={S('pl-0')}>
-              <div style={S('pt-50 mb-20')}>
-                <div style={S('p-0 pull-left w-210')}>
-                  <div style={S('w-200 br-3 border-1-solid-f4f6f9')}>
-                    <div style={S('w-100p h-200')}>
+          <div style={S('pt-40 pl-20 pr-20')} className="clearfix">
+            <Col sm={9} style={S('pl-0')}>
+              <div style={S('mb-20')}>
+                <Col sm={4} style={S('pl-0')}>
+                  <div style={S('w-100p br-3 border-1-solid-f4f6f9')}>
+                    <div style={S('h-200')}>
                       {listing_map_small}
                     </div>
                     <div style={S('w-100p bg-fff p-5 font-13')}>
@@ -483,8 +483,8 @@ const ListingDesktopView = ({
                       <div className="clearfix" />
                     </div>
                   </div>
-                </div>
-                <div style={S('p-0 pl-20 pull-left')}>
+                </Col>
+                <Col sm={8} style={S('p-0 pull-right')}>
                   <div style={S('fw-700 font-60')}>
                     ${price}
                     {listing.property &&
@@ -493,13 +493,10 @@ const ListingDesktopView = ({
                       : ''}{' '}
                     {asking_price_area}
                   </div>
+                  <div className="lato" style={S('font-24 color-8696a4 mb-10')}>
+                    {listing_title}
+                  </div>
                   <div style={S('mb-20')}>
-                    <div
-                      className="lato"
-                      style={S('pull-left font-24 color-8696a4 mr-20')}
-                    >
-                      {listing_title}
-                    </div>
                     <div style={S('pull-left font-15 mb-10 mr-10')}>
                       {listing_status_indicator}
                     </div>
@@ -521,7 +518,7 @@ const ListingDesktopView = ({
                     <span>{year_built ? `Built in ${year_built}` : ''}</span>
                     {lot_size_area}
                   </div>
-                </div>
+                </Col>
                 <div className="clearfix" />
               </div>
               <div style={S('mb-70 font-15')}>
@@ -671,7 +668,7 @@ const ListingDesktopView = ({
                 <div className="clearfix" />
               </div>
             </Col>
-            <Col sm={4} md={3} style={S('pl-0 maxw-350')}>
+            <Col sm={3} style={S('p-0 pull-right')}>
               {brand_agent_area}
               {list_agent_area}
             </Col>
