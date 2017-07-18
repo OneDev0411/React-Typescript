@@ -80,7 +80,6 @@
   @include visually-hidden();
   &.is-active {
     @include visually-hidden(undo);
-    padding: 1rem 0;
   }
 }
 
@@ -95,18 +94,15 @@
 .c-filters-sub-statuses__item {
   > input[type="checkbox"] {
     @include visually-hidden();
-    &:checked + label {
-      display: flex;
-      align-items: center;
-      > svg {
-        visibility: visible;
-        opacity: 1;
-      }
+    &:checked + label > svg {
+      visibility: visible;
+      opacity: 1;
     }
   }
   > label {
-    display: block;
-    height: 3rem;
+    display: flex;
+    align-items: center;
+    height: 4rem;
     margin: 0;
     padding-left: 2rem;
     cursor: pointer;
