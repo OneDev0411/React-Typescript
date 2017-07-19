@@ -1,6 +1,6 @@
 @import './list';
 @import './create';
-@import './tasks';
+@import './dashboard';
 
 .deals {
   margin-left: 70px;
@@ -16,8 +16,8 @@
     @extend %deal-create;
   }
 
-  .deal-tasks {
-    @extend %deal-tasks;
+  .deal-dashboard {
+    @extend %deal-dashboard;
   }
 }
 
