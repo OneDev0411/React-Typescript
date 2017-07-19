@@ -1,0 +1,74 @@
+%deal-fact-sheet {
+  background: #f1f1f1;
+  min-height: 100vh;
+  padding: $col-padding 0;
+
+  @extend %list;
+
+  .listing {
+    @extend %factsheet-listing;
+  }
+
+  .critical-dates {
+    margin-top: 10px;
+  }
+
+  span.field {
+    color: gray;
+  }
+}
+
+%factsheet-listing {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  img {
+    max-width: 50px;
+    border-radius: 4px;
+    float: right;
+  }
+
+  .data {
+    display: inline-block;
+    max-width: 70%;
+    .title {
+      display: block;
+    }
+    .subtitle {
+      display: block;
+    }
+  }
+
+  .status {
+    font-size: 12px;
+    margin-top: 10px;
+  }
+}
+
+%list {
+  ul {
+    margin: 0 0 10px 0;
+    padding: 0 0 0 10px;
+    border-bottom: 1px solid #ccc;
+
+    li {
+      color: #A4A4A4;
+      margin-bottom: 8px;
+      font-size: 14px;
+      height: 20px;
+      line-height: 20px;
+      vertical-align: middle;
+
+      .status {
+        display: inline-block;
+        line-height: inherit;
+        vertical-align: middle;
+        margin-right: 5px;
+        width: 10px;
+        height: 10px;
+        background: #ccc;
+        border-radius: 40px;
+      }
+    }
+  }
+}
