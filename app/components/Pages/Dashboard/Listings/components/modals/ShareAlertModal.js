@@ -12,7 +12,7 @@ import { hasRecipients } from '../../../../../../utils/helpers'
 import { createRoom } from '../../../../../../store_actions/chatroom/room'
 import createAlert from '../../../../../../models/listings/alerts/create-alert'
 
-const CreateAlertModal = ({
+const ShareAlertModal = ({
   onHide,
   isActive,
   // internals
@@ -27,8 +27,9 @@ const CreateAlertModal = ({
     <Modal
       show={isActive}
       onHide={isSharing ? () => {} : onHide}
-      className="c-share-alert-modal"
+      className="c-share-modal"
     >
+      <Modal.Title className="c-share-modal__title">Share Alert</Modal.Title>
       <Modal.Body style={{ padding: 0 }}>
         <Compose onChangeRecipients={recps => setRecipients(recps)} />
       </Modal.Body>
@@ -100,4 +101,4 @@ export default compose(
       })
     }
   })
-)(CreateAlertModal)
+)(ShareAlertModal)

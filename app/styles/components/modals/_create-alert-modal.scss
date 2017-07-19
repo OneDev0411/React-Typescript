@@ -4,11 +4,23 @@
   }
 }
 
-.c-share-alert-modal,
+.c-share-modal,
 .c-create-alert-modal {
   .modal-content {
     border-width: 0;
   }
+
+  .tags-container.tags-container {
+    border-radius: 0;
+  }
+}
+
+.c-share-modal__title {
+  padding: 2rem;
+  font-size: 2.4rem;
+  line-height: 1;
+  color: #fff;
+  background: #52abf1;
 }
 
 .c-create-alert-modal__alert-title-input {
