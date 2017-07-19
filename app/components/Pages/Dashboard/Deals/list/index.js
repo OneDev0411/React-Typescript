@@ -23,7 +23,6 @@ export default class extends React.Component {
   render() {
     const { deals } = this.props
 
-    console.log(deals)
     return (
       <div className="deals-list">
 
