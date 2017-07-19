@@ -87,9 +87,9 @@ class Search extends Component {
           />
         </div>
         <CreateAlertModal
+          user={data.user}
           onHide={this.shareModalCloseHandler}
           isActive={this.state.shareModalIsActive}
-          userPersonalRoom={data.user.personal_room}
           alertProposedTitle={listings.info.proposed_title}
         />
       </div>

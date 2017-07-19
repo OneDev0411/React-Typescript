@@ -7,6 +7,8 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import { Modal } from 'react-bootstrap'
 
+import createAlert from '../../../../../models/listings/alerts/create-alert'
+
 const CreateAlertModal = ({
   onHide,
   isActive,
@@ -19,7 +21,11 @@ const CreateAlertModal = ({
   let $alertTilteInput
   return (
     <div>
-      <Modal show={isActive} onHide={onHide} className="c-create-alert-modal">
+      <Modal
+        show={isActive}
+        onHide={isSaving ? () => {} : onHide}
+        className="c-create-alert-modal"
+      >
         <Modal.Body style={{ padding: 0 }}>
           <div className="c-create-alert-modal__hero">
             <img
@@ -71,15 +77,38 @@ const CreateAlertModal = ({
 
 export default compose(
   pure,
+  connect(({ data, search }) => ({
+    user: data.user,
+    searchOptions: search.options
+  })),
   withState('isSaving', 'setIsSaving', false),
   withHandlers({
     saveAlertHandler: ({
+      user,
       isSaving,
       setIsSaving,
-      userPersonalRoom,
+      searchOptions,
       alertProposedTitle
     }) => title => {
-      title = title || alertProposedTitle
+      const alertOptions = {
+        ...searchOptions,
+        limit: null,
+        title: title || alertProposedTitle,
+        created_by: user.id,
+        room: user.personal_room
+      }
+
+      setIsSaving(true)
+
+      createAlert(alertOptions)
+        .then(alert => {
+          setIsSaving(false)
+          console.log(alert)
+        })
+        .catch(({ message }) => {
+          setIsSaving(false)
+          console.log(message)
+        })
     }
   })
 )(CreateAlertModal)
