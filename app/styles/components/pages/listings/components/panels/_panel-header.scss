@@ -3,6 +3,7 @@
 }
 
 .c-panel__header__title {
+  height: 4rem;
   font-size: 2rem;
   color: #4a4a4a;
   strong {
@@ -42,7 +43,8 @@
   font-size: 1.5rem;
   color: #46adff;
   letter-spacing: 1px;
-  &:focus, &:hover {
+  &:focus,
+  &:hover {
     color: #46adff;
     text-decoration: none;
   }
@@ -55,9 +57,7 @@
     height: 7px;
     background: transparent
       url('data:image/svg+xml;base64,PHN2ZwogICAgICAgICAgICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICAgICAgICAgIHdpZHRoPSIxMiIKICAgICAgICAgICAgaGVpZ2h0PSI3IgogICAgICAgICAgICB2aWV3Qm94PSIwIDAgMTIgNyI+CiAgICAgICAgICAgIDxwYXRoCiAgICAgICAgICAgICAgZmlsbD0iIzIxOTZGMyIKICAgICAgICAgICAgICBkPSJNMTAuNzI1LjEyYS4zOC4zOCAwIDAgMSAuNTUzIDBsLjYwMi42MDFhLjM4LjM4IDAgMCAxIDAgLjU1M0w2LjI3NyA2Ljg3OGEuMzguMzggMCAwIDEtLjU1NCAwTC4xMiAxLjI3NWEuMzguMzggMCAwIDEgMC0uNTUzTC43MjEuMTJhLjM4LjM4IDAgMCAxIC41NTMgMEw2IDQuODQ2IDEwLjcyNS4xMnoiCiAgICAgICAgICAgIC8+CiAgICAgICAgICA8L3N2Zz4=')
-      no-repeat
-      center
-      center;
+      no-repeat center center;
   }
 }
 
@@ -65,7 +65,8 @@
   position: absolute;
   right: 0;
   top: -7px;
-  .c-listings-panel--table &, .c-listings-panel--grid & {
+  .c-listings-panel--table &,
+  .c-listings-panel--grid & {
     right: auto;
     left: 200px;
   }
