@@ -7,7 +7,7 @@ import withHandlers from 'recompose/withHandlers'
 import { Modal } from 'react-bootstrap'
 
 import SuccessModal from './SuccessModal'
-import Compose from '../../../../../Partials/Compose'
+import Recipients from '../../../../../Partials/ShareView'
 import { hasRecipients } from '../../../../../../utils/helpers'
 import { createRoom } from '../../../../../../store_actions/chatroom/room'
 import createAlert from '../../../../../../models/listings/alerts/create-alert'
@@ -22,36 +22,40 @@ const ShareAlertModal = ({
   setRecipients,
   onChangeRecipients,
   successModalIsActive
-}) =>
-  <div>
-    <Modal
-      show={isActive}
-      onHide={isSharing ? () => {} : onHide}
-      className="c-share-modal"
-    >
-      <Modal.Title className="c-share-modal__title">Share Alert</Modal.Title>
-      <Modal.Body style={{ padding: 0 }}>
-        <Compose onChangeRecipients={recps => setRecipients(recps)} />
-      </Modal.Body>
-      <Modal.Footer className="c-create-alert-modal__footer">
-        <button
-          onClick={shareHandler}
-          className={`c-create-alert-modal__button ${isSharing
-            ? 'isSaving'
-            : ''}`}
-          disabled={isSharing || !hasRecipients(recipients)}
-          style={{ float: 'right' }}
-        >
-          Save &amp; Share
-        </button>
-      </Modal.Footer>
-    </Modal>
-    <SuccessModal
-      type="SAVED_ALERT"
-      text="Alert Shared"
-      isActive={successModalIsActive}
-    />
-  </div>
+}) => {
+  const disabled = isSharing || !hasRecipients(recipients)
+  return (
+    <div>
+      <Modal
+        show={isActive}
+        onHide={isSharing ? () => {} : onHide}
+        className="c-share-modal"
+      >
+        <Modal.Title className="c-share-modal__title">Share Alert</Modal.Title>
+        <Modal.Body style={{ padding: 0 }}>
+          <Recipients onChangeRecipients={recps => setRecipients(recps)} />
+        </Modal.Body>
+        <Modal.Footer className="c-create-alert-modal__footer">
+          <button
+            onClick={shareHandler}
+            className={`c-create-alert-modal__button ${disabled
+              ? 'isSaving'
+              : ''}`}
+            disabled={disabled}
+            style={{ float: 'right' }}
+          >
+            {isSharing ? 'Save and Sharing...' : 'Save & Share'}
+          </button>
+        </Modal.Footer>
+      </Modal>
+      <SuccessModal
+        type="SAVED_ALERT"
+        text="Alert Shared"
+        isActive={successModalIsActive}
+      />
+    </div>
+  )
+}
 
 export default compose(
   pure,
@@ -80,13 +84,17 @@ export default compose(
       setIsSharing(true)
 
       createRoom(recipients).then(room => {
+        const open_house = searchOptions.open_house || false
         const alertOptions = {
           ...searchOptions,
           room,
+          open_house,
           limit: null,
           title: alertTitle,
           created_by: user.id
         }
+
+        console.log(alertOptions)
 
         createAlert(alertOptions)
           .then(alert => {

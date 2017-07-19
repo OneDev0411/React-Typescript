@@ -33,12 +33,7 @@ class Listing extends Component {
   render() {
     const { data, listing, isFetching } = this.props
 
-    return (
-      <div>
-        <ListingView data={data} listing={listing} isFetching={isFetching} />
-        <BrandLogo data={data} />
-      </div>
-    )
+    return <ListingView data={data} listing={listing} isFetching={isFetching} />
   }
 }
 
