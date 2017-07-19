@@ -1,0 +1,79 @@
+.c-create-alert-modal {
+  > .modal-dialog {
+    width: 400px;
+  }
+}
+
+.c-share-modal,
+.c-create-alert-modal {
+  .modal-content {
+    border-width: 0;
+  }
+}
+
+.c-share-modal {
+  .tags-container.tags-container {
+    border-radius: 0;
+  }
+
+  .suggestions.suggestions.suggestions {
+    margin-top: 0;
+    padding: 1rem 2rem;
+  }
+}
+
+.c-share-modal__title {
+  padding: 2rem;
+  font-size: 2.4rem;
+  line-height: 1;
+  color: #fff;
+  background: #52abf1;
+}
+
+.c-create-alert-modal__alert-title-input {
+  display: block;
+  width: 100%;
+  height: 40px;
+  padding: .5rem;
+  line-height: 1;
+  border-radius: 3px;
+  border: 1px solid darken(#f8f8f8, 5%);
+}
+
+.c-create-alert-modal__hero {
+  padding: 2rem;
+  text-align: center;
+  font-size: 2.4rem;
+  color: #fff;
+  background: #52abf1;
+}
+
+.c-create-alert-modal__hero__logo {
+  width: 6rem;
+  height: 6rem;
+  display: inline-block;
+  margin-bottom: 2rem;
+}
+
+.c-create-alert-modal__footer {
+  padding: 1rem;
+  border-radius: 0 0 3px 3px;
+  background: #f8f8f8;
+}
+
+.c-create-alert-modal__button {
+  padding: .5rem 1rem;
+  border-width: 0;
+  color: #2196f3;
+  border-radius: 3px;
+  background: transparent;
+
+  &:hover,
+  &.isSaving {
+    background: darken(#f8f8f8, 3%);
+  }
+
+  &.isSaving {
+    color: darken(#f8f8f8, 30%);
+  }
+}

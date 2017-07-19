@@ -6,10 +6,11 @@ import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import { Col, Button } from 'react-bootstrap'
 
-import { connect } from 'react-redux'
-import compose from 'recompose/compose'
-import lifecycle from 'recompose/lifecycle'
-import withHandlers from 'recompose/withHandlers'
+// import { connect } from 'react-redux'
+// import compose from 'recompose/compose'
+// import lifecycle from 'recompose/lifecycle'
+// import withState from 'recompose/withState'
+// import withHandlers from 'recompose/withHandlers'
 
 import helpers from '../../../../../../utils/helpers'
 import config from '../../../../../../../config/public'
@@ -21,10 +22,19 @@ import FavoriteHeart from '../../components/FavoriteHeart'
 import ListingMarker from '../../../Partials/ListingMarker'
 import ListingMapMarker from '../../../Partials/ListingMapMarker'
 
-import { fadeIn } from './ListingDesktopView'
-import { handleActivateAccountClick } from './ListingDesktopView'
+// import { fadeIn } from './ListingDesktopView'
+// import { handleActivateAccountClick } from './ListingDesktopView'
 
-const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
+// import ShareModal from '../../components/modals/ShareListingModal'
+
+const ListingMobileView = ({
+  data,
+  listing,
+  isFetching,
+  // showShareModal,
+  // onHideShareModal,
+  // shareModalIsActive
+}) => {
   const { user } = data
   const brand_agent = listing.proposed_agent
 
@@ -658,94 +668,110 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
   )
   const nav_bar_style = S('mb-0 p-0 h-65 pt-7 w-100p')
 
-  let left_area
-  if (user) {
-    left_area = (
-      <button
-        onClick={() => hideModal()}
+  // let join_area
+  // let brand_logo = (
+  //   <span style={S('font-28')} className="tk-calluna-sans text-primary">
+  //     Rechat
+  //   </span>
+  // )
+  // if (Brand.asset('site_logo_wide')) {
+  //   const host = `https://${window.location.host}`
+  //   brand_logo = (
+  //     <span>
+  //       <img style={S('w-200')} src={Brand.asset('site_logo_wide')} />
+  //     </span>
+  //   )
+  // }
+
+  // let left_area
+  // if (user) {
+  let left_area = (
+    <div style={S('h-65 w-200')}>
+      <span
         style={{
-          position: 'absolute',
-          left: '20px',
-          top: '20px',
-          fontSize: '18px',
-          borderWidth: 0,
-          padding: 0,
-          backgroundColor: 'transparent'
+          ...S('font-28 pt-15 pl-15'),
+          display: 'block',
+          lineHeight: 1,
+          textDecoration: 'none'
         }}
+        className="tk-calluna-sans text-primary"
       >
-        <span
-          href="#"
-          style={S('relative pull-left font-30 mr-10 t-5n')}
-          className="close"
-        >
-          &times;
-        </span>
-        Close
-      </button>
-    )
-  }
-
-  let right_area
-  if (user) {
-    const login_btn_color = Brand.color('primary', '006aff')
-
-    right_area = (
-      <div style={nav_bar_style}>
-        <div style={S('pull-right relative r-120 t-6')}>
-          <FavoriteHeart listing={listing} width="40px" height="40px" />
-        </div>
-        <Button
-          onClick={e => e.preventDefault()}
-          style={S(
-            `absolute r-20 t-15 bg-${login_btn_color} border-1-solid-${login_btn_color}`
-          )}
-          bsStyle="primary"
-          type="button"
-        >
-          Share &nbsp;&nbsp;<i className="fa fa-share" />
-        </Button>
-      </div>
-    )
-  }
-
-  let join_area
-  let brand_logo = (
-    <a style={S('font-28')} href="/" className="tk-calluna-sans text-primary">
-      Rechat
-    </a>
+        {Brand.asset('site_logo_wide')
+          ? <img style={S('w-100p')} src={Brand.asset('site_logo_wide')} />
+          : 'Rechat'}
+      </span>
+    </div>
   )
-  if (Brand.asset('site_logo_wide')) {
-    const host = `https://${window.location.host}`
-    brand_logo = (
-      <a href={host}>
-        <img style={S('w-200')} src={Brand.asset('site_logo_wide')} />
-      </a>
-    )
-  }
+  // left_area = (
+  //   <button
+  //     onClick={() => hideModal()}
+  //     style={{
+  //       position: 'absolute',
+  //       left: '20px',
+  //       top: '20px',
+  //       fontSize: '18px',
+  //       borderWidth: 0,
+  //       padding: 0,
+  //       backgroundColor: 'transparent'
+  //     }}
+  //   >
+  //     <span
+  //       href="#"
+  //       style={S('relative pull-left font-30 mr-10 t-5n')}
+  //       className="close"
+  //     >
+  //       &times;
+  //     </span>
+  //     Close
+  //   </button>
+  // )
+  // }
 
-  if (!user) {
-    const login_btn_color = Brand.color('primary', '006aff')
+  // let right_area
+  // if (user && Object.keys(listing).length > 0) {
+  //   const login_btn_color = Brand.color('primary', '006aff')
 
-    join_area = (
-      <div style={S('h-70')}>
-        <div style={S('pull-left p-16')}>
-          {brand_logo}
-        </div>
-        <div style={S('pull-right p-16')}>
-          <a
-            style={S(
-              `color-fff mr-15 bg-${login_btn_color} border-1-solid-${login_btn_color}`
-            )}
-            className="btn"
-            href={`/signin?redirect_to=/dashboard/mls/${listing.id}`}
-          >
-            Log in
-          </a>
-          {/* <a className="btn btn-primary" href="/signup">Sign up</a> */}
-        </div>
-      </div>
-    )
-  }
+  //   right_area = (
+  //     <div style={{ ...nav_bar_style, ...S('pull-right w-60p') }}>
+  //       <div style={S('pull-right relative r-120 t-6')}>
+  //         <FavoriteHeart listing={listing} width="40px" height="40px" />
+  //       </div>
+  //       <Button
+  //         onClick={showShareModal}
+  //         style={S(
+  //           `absolute r-20 t-15 bg-${login_btn_color} border-1-solid-${login_btn_color}`
+  //         )}
+  //         bsStyle="primary"
+  //         type="button"
+  //       >
+  //         Share &nbsp;&nbsp;<i className="fa fa-share" />
+  //       </Button>
+  //     </div>
+  //   )
+  // }
+
+  // if (!user) {
+  //   const login_btn_color = Brand.color('primary', '006aff')
+
+  //   join_area = (
+  //     <div style={S('h-70')}>
+  //       <div style={S('pull-left p-16')}>
+  //         {brand_logo}
+  //       </div>
+  //       <div style={S('pull-right pt-16')}>
+  //         <a
+  //           style={S(
+  //             `color-fff mr-15 bg-${login_btn_color} border-1-solid-${login_btn_color}`
+  //           )}
+  //           className="btn"
+  //           href={`/signin?redirect_to=/dashboard/mls/${listing.id}`}
+  //         >
+  //           Log in
+  //         </a>
+  //       </div>
+  //     </div>
+  //   )
+  // }
 
   let brand_agent_footer
   if (brand_agent) {
@@ -770,9 +796,7 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
     }
 
     brand_agent_area = (
-      <div
-        style={S('color-fff w-100p text-left center-block text-center')}
-      >
+      <div style={S('color-fff w-100p text-left center-block text-center')}>
         {profile_image_area}
         <div style={S('p-20 w-100p')}>
           <div style={S('font-18 mb-5 color-fff')}>
@@ -811,56 +835,73 @@ const ListingMobileView = ({ data, listing, hideModal, isFetching }) => {
   }
 
   // Claim account message
-  let claim_account_message
-  let token
-  if (data.location && data.location.query && data.location.query.token) {
-    token = data.location.query.token
-  }
+  // let claim_account_message
+  // let token
+  // if (data.location && data.location.query && data.location.query.token) {
+  //   token = data.location.query.token
+  // }
 
-  if (token) {
-    let contact_info = data.location.query.email
+  // if (token) {
+  //   let contact_info = data.location.query.email
 
-    if (data.location.query.phone_number) {
-      contact_info = data.location.query.phone_number
-    }
+  //   if (data.location.query.phone_number) {
+  //     contact_info = data.location.query.phone_number
+  //   }
 
-    claim_account_message = (
-      <div style={S('bg-2196f3 color-fff w-100p font-17 p-20 text-center')}>
-        This listing was shared to {contact_info}. Claim your account to save
-        this listing and check out many more.&nbsp;&nbsp;&nbsp;&nbsp;
-        <Button
-          bsSize="large"
-          style={S('bg-fff color-2196f3 border-none')}
-          onClick={handleActivateAccountClick}
-        >
-          Activate your account
-        </Button>
-      </div>
-    )
-  }
+  //   claim_account_message = (
+  //     <div style={S('bg-2196f3 color-fff w-100p font-17 p-20 text-center')}>
+  //       This listing was shared to {contact_info}. Claim your account to save
+  //       this listing and check out many more.&nbsp;&nbsp;&nbsp;&nbsp;
+  //       <Button
+  //         bsSize="large"
+  //         style={S('bg-fff color-2196f3 border-none')}
+  //         onClick={handleActivateAccountClick}
+  //       >
+  //         Activate your account
+  //       </Button>
+  //     </div>
+  //   )
+  // }
+
+  // {claim_account_message}
+  // {user && <div style={{ height: '65px' }} className="clearfix">
+  //   {left_area}
+  //   {right_area}
+  // </div>}
 
   return (
     <div style={viewer_wrap_style}>
-      {claim_account_message}
-      {join_area}
       {left_area}
-      {right_area}
       {main_content}
       {brand_agent_footer}
+      {/*<ShareModal
+        listing={listing}
+        user={user}
+        isActive={shareModalIsActive}
+        onHide={onHideShareModal}
+      />*/}
     </div>
   )
 }
 
-const ListingMobileViewHOC = compose(
-  connect(({ data }) => ({ data })),
-  withHandlers({
-    hideModal: () => () => browserHistory.goBack()
-  }),
-  lifecycle({
-    componentDidMount() {
-      fadeIn(this)
-    }
-  })
-)
+// export default compose(
+//   withState('shareModalIsActive', 'setShareModalIsActive', false),
+//   withHandlers({
+//     hideModal: () => () => browserHistory.goBack()
+//   }),
+//   withHandlers({
+//     onHideShareModal: ({ setShareModalIsActive }) => () => {
+//       setShareModalIsActive(false)
+//     },
+//     showShareModal: ({ setShareModalIsActive }) => () => {
+//       setShareModalIsActive(true)
+//     }
+//   }),
+//   lifecycle({
+//     componentDidMount() {
+//       fadeIn(this)
+//     }
+//   })
+// )(ListingMobileView)
 
-export default ListingMobileViewHOC(ListingMobileView)
+export default ListingMobileView

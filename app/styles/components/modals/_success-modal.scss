@@ -1,0 +1,22 @@
+.c-success-modal {
+  .modal-content {
+    border: none;
+    box-shadow: none;
+    background: none;
+  }
+}
+
+.c-success-modal__body {
+  text-align: center;
+  font-size: 6rem;
+  color: #fff;
+}
+
+.c-success-modal__icon {
+  width: 165px;
+  height: 165px;
+  display: inline-block;
+  border-radius: 100%;
+  padding-top: 3.5rem;
+  background: #2196f3;
+}

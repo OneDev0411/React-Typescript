@@ -26,24 +26,24 @@ const findPlace = address => (dispatch) => {
   }
 
   if (/^\d{5}(?:[-\s]\d{4})?$/.test(address)) {
-    console.log('click search: post code', address)
+    // console.log('click search: post code', address)
     dispatch(searchActions.searchByPostalCode(address))
     return
   }
 
   if (!isNaN(address) && address.length > 7) {
-    console.log('click search: MLS Number', address)
+    // console.log('click search: MLS Number', address)
     dispatch(searchActions.searchByMlsNumber(address))
     return
   }
 
-  console.log('click search: place', address)
+  // console.log('click search: place', address)
   dispatch(searchActions.getPlace(address))
 }
 
 const autoCompletePlaceChanged = address => (dispatch) => {
   if (!address.formatted_address) {
-    console.log('unformated')
+    // console.log('unformated')
     findPlace(address.name)(dispatch)
     return
   }
@@ -142,12 +142,12 @@ const fieldHOC = compose(
       setAutocompleteInstance
     }) => ({ target }) => {
       if (!window.google) {
-        console.log('google api is not loaded')
+        // console.log('google api is not loaded')
         return false
       }
 
       if (!inputNode) {
-        console.log('google search input is undefined')
+        // console.log('google search input is undefined')
         return false
       }
 

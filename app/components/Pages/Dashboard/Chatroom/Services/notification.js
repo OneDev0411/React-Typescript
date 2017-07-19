@@ -104,7 +104,9 @@ export default class ChatNotification extends NotificationService {
       // when user search a listing/alert,
       // the relevant room should go to top of rooms list
       if (['UserSharedListing', 'UserCreatedAlert'].indexOf(notification_type) > -1) {
-        store.dispatch(updateRoomTime(roomId))
+        if (chatroom.rooms[roomId]) {
+          store.dispatch(updateRoomTime(roomId))
+        }
       }
 
       return false

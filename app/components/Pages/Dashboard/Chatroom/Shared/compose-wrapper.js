@@ -3,20 +3,13 @@ import { connect } from 'react-redux'
 import { Modal, Button } from 'react-bootstrap'
 import { compose, withState, pure } from 'recompose'
 import Compose from '../../../../Partials/Compose'
+import { hasRecipients } from '../../../../../utils/helpers'
 
 const enhance = compose(
   pure,
   withState('showComposeModal', 'onChangeComposeModal', false),
   withState('recipients', 'onChangeRecipients', {})
 )
-
-function hasRecipients(recipients) {
-  const recps = []
-    .concat(recipients.users, recipients.emails, recipients.phone_numbers)
-    .filter(recp => recp !== undefined)
-
-  return recps.length > 0
-}
 
 const ComposeWrapper = ({
   TriggerButton,
@@ -43,25 +36,25 @@ const ComposeWrapper = ({
     <Modal
       show={showComposeModal}
       dialogClassName="chatroom-add-member"
-      onHide={() => onChangeComposeModal(false)}>
+      onHide={() => onChangeComposeModal(false)}
+    >
       <Modal.Header closeButton>
-        <Modal.Title>{title}</Modal.Title>
+        <Modal.Title>
+          {title}
+        </Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
-        {
-          !showOnly &&
+        {!showOnly &&
           <Compose
             dropDownBox={dropDownBox}
             onChangeRecipients={recipients => onChangeRecipients(recipients)}
-          />
-        }
+          />}
 
-        { InitialValues && <InitialValues /> }
+        {InitialValues && <InitialValues />}
       </Modal.Body>
 
-      {
-        !showOnly &&
+      {!showOnly &&
         <Modal.Footer>
           <Button
             bsStyle="primary"
@@ -73,10 +66,9 @@ const ComposeWrapper = ({
               onChangeRecipients({})
             }}
           >
-            { buttonTitle }
+            {buttonTitle}
           </Button>
-        </Modal.Footer>
-      }
+        </Modal.Footer>}
     </Modal>
   </div>
 

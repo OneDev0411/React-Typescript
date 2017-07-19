@@ -67,7 +67,7 @@ const PanelHeader = ({
         </Checkbox>
       </div>
 
-      { isLoggedIn && <Button
+      { isLoggedIn && tabName === 'SEARCH' && <Button
         bsStyle="primary"
         onClick={onClickShare}
         style={{ backgroundColor: `#${Brand.color('primary', '3388ff')}` }}

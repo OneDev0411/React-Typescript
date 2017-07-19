@@ -21,6 +21,8 @@ import FavoriteHeart from '../../components/FavoriteHeart'
 import ListingMarker from '../../../Partials/ListingMarker'
 import ListingMapMarker from '../../../Partials/ListingMapMarker'
 
+import ShareModal from '../../components/modals/ShareListingModal'
+
 import {
   Col,
   Modal,
@@ -54,7 +56,10 @@ const ListingDesktopView = ({
   listing,
   hideModal,
   isFetching,
+  showShareModal,
+  onHideShareModal,
   showModalGallery,
+  shareModalIsActive,
   setGalleryModalState,
   galleryModalIsActive,
   handleModalGalleryNav,
@@ -879,7 +884,7 @@ const ListingDesktopView = ({
   }
 
   let right_area
-  if (user) {
+  if (user && Object.keys(listing).length > 0) {
     const login_btn_color = Brand.color('primary', '006aff')
 
     right_area = (
@@ -888,7 +893,7 @@ const ListingDesktopView = ({
           <FavoriteHeart listing={listing} width="40px" height="40px" />
         </div>
         <Button
-          onClick={e => e.preventDefault()}
+          onClick={showShareModal}
           style={S(
             `absolute color-fff r-20 t-10 bg-${login_btn_color} border-1-solid-${login_btn_color}`
           )}
@@ -1059,18 +1064,26 @@ const ListingDesktopView = ({
         </div>
         {modal_gallery_area}
       </Modal>
+      <ShareModal listing={listing} user={user} isActive={shareModalIsActive} onHide={onHideShareModal} />
     </div>
   )
 }
 
-const ListingDesktopViewHOC = compose(
-  connect(({ data }) => ({ data })),
+export default compose(
+  withState('shareModalIsActive', 'setShareModalIsActive', false),
   withState('galleryModalIsActive', 'setGalleryModalState', false),
   withState('galleryModalDirection', 'setGalleryModalDirection', ''),
   withState('galleryModalActiveIndex', 'setGalleryModalActiveIndex', 0),
-  withState('shareListingModalIsActive', 'setShareListingModalState', false),
   withHandlers({
     hideModal: () => () => browserHistory.goBack()
+  }),
+  withHandlers({
+    onHideShareModal: ({ setShareModalIsActive }) => () => {
+      setShareModalIsActive(false)
+    },
+    showShareModal: ({ setShareModalIsActive }) => () => {
+      setShareModalIsActive(true)
+    }
   }),
   withHandlers({
     showModalGallery: ({
@@ -1153,6 +1166,4 @@ const ListingDesktopViewHOC = compose(
       document.removeEventListener('keydown', this.props.windowKeyDownHandler)
     }
   })
-)
-
-export default ListingDesktopViewHOC(ListingDesktopView)
+)(ListingDesktopView)
