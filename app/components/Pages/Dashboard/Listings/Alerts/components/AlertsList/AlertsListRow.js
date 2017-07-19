@@ -6,18 +6,28 @@ import Brand from '../../../../../../../controllers/Brand'
 import getAlertFeed from '../../../../../../../store_actions/listings/alerts/get-alert-feed'
 import clearAlertNotification from '../../../../../../../store_actions/listings/alerts/clear-alert-notification'
 
-const SheredBy = ({ users }) =>
-  <p className="c-alertList__item__shared-by san-fran">
-    <span>{'Shared By: '}</span>
-    {users.map((user, index) => user.first_name).join(', ')}
-  </p>
+const SharedWith = ({ alert }) => {
+  const { users, created_by } = alert
+  return (
+    <p className="c-alertList__item__shared-by san-fran">
+      <span>
+        {'Shared With: '}
+      </span>
+      {users
+        .filter(user => user.id !== created_by.id)
+        .map((user, index) => user.first_name)
+        .join(', ')}
+    </p>
+  )
+}
 
-const AlertListRow = ({ alert, isSelected, onClick }) =>
+const AlertListRow = ({ user, alert, isSelected, onClick }) =>
   <div
     className={`c-alertList__item ${isSelected
       ? 'c-alertList__item--selected'
       : ''}`}
-    onClick={() => onClick(alert)}>
+    onClick={() => onClick(alert)}
+  >
     <div className="c-alertList__item__thumbnail">
       <img src={alert.cover_image_url} alt="mls alert list item - rechat" />
     </div>
@@ -25,13 +35,21 @@ const AlertListRow = ({ alert, isSelected, onClick }) =>
       <h3 className="c-alertList__item__title san-fran ellipses">
         {alert.title || alert.proposed_title || 'without title'}
       </h3>
-      {alert.users && <SheredBy users={alert.users} />}
+      {user.id !== alert.created_by.id &&
+        <p className="c-alertList__item__shared-by san-fran">
+          <span>
+            {'Created By: '}
+          </span>
+          {alert.created_by.first_name}
+        </p>}
+      {alert.users && <SharedWith alert={alert} />}
     </div>
     {alert.new_recommendations &&
       parseInt(alert.new_recommendations, 10) > 0 &&
       <span
         className="c-alertList__item__badge"
-        style={{ backgroundColor: `#${Brand.color('primary', '3388ff')}` }}>
+        style={{ backgroundColor: `#${Brand.color('primary', '3388ff')}` }}
+      >
         {alert.new_recommendations}
       </span>}
   </div>

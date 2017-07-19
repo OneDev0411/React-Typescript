@@ -4,12 +4,13 @@ import compose from 'recompose/compose'
 import AlertsListRow from './AlertsListRow'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 
-const AlertsList = ({ alertsList, selectedAlertId }) =>
+const AlertsList = ({ user, alertsList, selectedAlertId }) =>
   <div className="c-alerts-list">
     {(alertsList.data.length &&
       alertsList.data.map((alert, index) =>
         <AlertsListRow
           key={`ALERT_LIST_ITEM_${index}`}
+          user={user}
           alert={alert}
           isSelected={selectedAlertId === alert.id}
         />
