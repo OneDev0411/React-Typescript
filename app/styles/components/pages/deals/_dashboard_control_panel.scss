@@ -1,0 +1,48 @@
+%deal-control-panel {
+  min-height: 100vh;
+  padding: $col-padding 0;
+  background-color: #f0f0f0;
+  border-right: 1px solid #ccc;
+
+  .deal-title {
+    @extend %deal-title;
+  }
+
+  .deal-tags {
+    @extend %tags;
+  }
+}
+
+%deal-title {
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  vertical-align: middle;
+  font-weight: bold;
+  font-size: 15px;
+
+  i {
+    left: -40px;
+    font-size: 24px;
+    margin-right: 10px;
+    line-height: inherit !important;
+    color: rgb(50, 156, 243);
+  }
+}
+
+%tags {
+  margin: 10px 0 0 0 !important;
+  padding: 0;
+
+  li {
+    // margin-bottom: 10px;
+    padding: 8px 10px;
+    cursor: pointer;
+
+    &:first-child {
+      background: #fafafa;
+      border-right-color: #fafafa;
+      margin-right: -1px;
+    }
+  }
+}
