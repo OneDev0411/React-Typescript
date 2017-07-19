@@ -14,6 +14,8 @@
   height: 40px;
   padding: .5rem;
   line-height: 1;
+  border-radius: 3px;
+  border: 1px solid darken(#f8f8f8, 5%);
 }
 
 .c-create-alert-modal__hero {
@@ -44,7 +46,12 @@
   border-radius: 3px;
   background: transparent;
 
-  &:hover {
+  &:hover,
+  &.isSaving {
     background: darken(#f8f8f8, 3%);
+  }
+
+  &.isSaving {
+    color: darken(#f8f8f8, 30%);
   }
 }
