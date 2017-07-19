@@ -94,8 +94,6 @@ export default compose(
           created_by: user.id
         }
 
-        console.log(alertOptions)
-
         createAlert(alertOptions)
           .then(alert => {
             setIsSharing(false)
