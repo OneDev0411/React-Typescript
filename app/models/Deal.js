@@ -4,7 +4,33 @@ import config from '../../config/public'
 import Fetch from '../services/fetch'
 
 
-const Deal = {}
+const Deal = {
+  get: {}
+}
+
+/**
+* a helper that extracts a field from context or proposed values
+*/
+Deal.get.field = function(deal, field) {
+  if (deal.context && deal.context[field]) {
+    return deal.context[field]
+  } else if (deal.proposed_values && deal.proposed_values[field]) {
+    return deal.proposed_values[field]
+  } else {
+    return ''
+  }
+}
+
+/**
+* a helper that extracts address from deal
+*/
+Deal.get.address = function(deal) {
+  const street_name = Deal.get.field(deal, 'street_name')
+  const street_address = Deal.get.field(deal, 'street_address')
+
+  return (street_name + ' ' + street_address).trim()
+}
+
 
 /**
 * get deals list
