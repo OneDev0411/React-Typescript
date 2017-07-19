@@ -1,4 +1,5 @@
 import Fetch from '../../../services/fetch'
+import createRecommendation from '../../recommendation/create-recs'
 
 const toggleFavorite = async ({ roomId, recId, mlsNumber, isFavorite }) => {
   if (!roomId) {
@@ -7,11 +8,10 @@ const toggleFavorite = async ({ roomId, recId, mlsNumber, isFavorite }) => {
 
   try {
     if (!recId) {
-      const rec = await new Fetch()
-        .post(`/rooms/${roomId}/recs`)
-        .send({ mls_number: mlsNumber })
-
-      recId = rec.body.data.id
+      recId = await createRecommendation({
+        mls_number: mlsNumber,
+        room: roomId
+      })
     }
 
     const response = await new Fetch()
