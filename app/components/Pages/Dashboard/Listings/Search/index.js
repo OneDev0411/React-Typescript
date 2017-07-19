@@ -7,12 +7,24 @@ import Filters from './components/Filters'
 import Loading from '../components/Loading'
 import SearchToolbar from './components/SearchToolbar'
 import ListingsPanel from '../components/ListingsPanels'
+import CreateAlertModal from '../components/CreateAlertModal'
 import { selectListings } from '../../../../../reducers/listings'
 import getListingsByMapBounds from '../../../../../store_actions/listings/search/get-listings/by-map-bounds'
 
 let mapOnChangeDebounce = 0
 
 class Search extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      shareModalIsActive: false
+    }
+
+    this.shareModalCloseHandler = this.shareModalCloseHandler.bind(this)
+    this.shareModalActiveHandler = this.shareModalActiveHandler.bind(this)
+  }
+
   componentWillReceiveProps(nextProps) {
     this._fetchListings(nextProps)
   }
@@ -35,8 +47,21 @@ class Search extends Component {
     }
   }
 
+  shareModalCloseHandler() {
+    this.setState({
+      shareModalIsActive: false
+    })
+  }
+
+  shareModalActiveHandler() {
+    this.setState({
+      shareModalIsActive: true
+    })
+  }
+
   render() {
     const {
+      data,
       isLoggedIn,
       listings,
       activePanel,
@@ -58,8 +83,15 @@ class Search extends Component {
             listings={listings}
             isLoggedIn={isLoggedIn}
             activePanel={activePanel}
+            onClickShare={this.shareModalActiveHandler}
           />
         </div>
+        <CreateAlertModal
+          onHide={this.shareModalCloseHandler}
+          isActive={this.state.shareModalIsActive}
+          userPersonalRoom={data.user.personal_room}
+          alertProposedTitle={listings.info.proposed_title}
+        />
       </div>
     )
   }
