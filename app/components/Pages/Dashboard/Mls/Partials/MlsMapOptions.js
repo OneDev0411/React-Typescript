@@ -17,6 +17,7 @@ export const mapInitialState = {
 
 export const queryOptions = {
   limit: '250',
+  open_house: false,
   property_types: ['Residential'],
   listing_statuses: [
     'Active',

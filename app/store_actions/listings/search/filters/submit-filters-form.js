@@ -142,7 +142,7 @@ const submitFiltersForm = values => (dispatch, getState) => {
   } = values
 
   const listing_statuses = obiectPropsValueToArray(values.listing_statuses)
-  const open_house = values.open_house ? true : null
+  const open_house = !!values.open_house
 
   if (listing_statuses.length === 0) {
     let alertMsg = 'You must select at least one listing status'
