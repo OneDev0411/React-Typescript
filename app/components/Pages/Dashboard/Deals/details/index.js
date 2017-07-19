@@ -1,6 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Row, Col } from 'react-bootstrap'
 import TasksList from './tasks'
+import ControlPanel from './control-panel'
+import FactSheet from './fact-sheet'
 
 class DealDetails extends React.Component {
   constructor(props) {
@@ -8,22 +11,35 @@ class DealDetails extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props)
-  }
-
-  componentWillReceiveProps(nextProps) {
-
+    console.log(this.props.deal)
   }
 
   render() {
     const { deal } = this.props
 
     return (
-      <div>
-        <TasksList
-          tasks={deal.tasks}
-        />
-      </div>
+      <Row className="deal-dashboard">
+        <Col lg={2} md={2} className="column">
+          <ControlPanel deal={deal} />
+        </Col>
+
+        <Col lg={3} md={4} className="column">
+          <TasksList
+            tasks={deal.tasks}
+          />
+        </Col>
+
+        <Col lg={2} md={3} className="column">
+          <FactSheet
+            deal={deal}
+          />
+        </Col>
+
+        <Col lg={5} md={3} className="column">
+          ---
+        </Col>
+
+      </Row>
     )
   }
 }
