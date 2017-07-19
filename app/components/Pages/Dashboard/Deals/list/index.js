@@ -2,26 +2,22 @@ import React from 'react'
 import { browserHistory } from 'react-router'
 import { Button } from 'react-bootstrap'
 import _ from 'underscore'
+import Deal from '../../../../../models/Deal'
 
 export default class extends React.Component {
   constructor(props) {
     super(props)
   }
 
-  getAddress(deal) {
-    const c = deal.context
-    return c.street_name + ' ' + c.street_address
-  }
-
   onClickDeal(e, id) {
     if (e.target.type === 'checkbox')
       return false
 
-    browserHistory.push(`/dashboard/deals/${id}`)
+    browserHistory.push(`/dashboard/deal/${id}`)
   }
 
   create(type) {
-    browserHistory.push(`/dashboard/deals/create/${type}`)
+    browserHistory.push(`/dashboard/deal/create/${type}`)
   }
 
   render() {
@@ -66,7 +62,7 @@ export default class extends React.Component {
                   onClick={e => this.onClickDeal(e, deal.id)}
                 >
                   <td><input type="checkbox" /></td>
-                  <td>{ this.getAddress(deal) }</td>
+                  <td>{ Deal.get.address(deal) }</td>
                   <td>-</td>
                   <td>-</td>
                   <td>-</td>
