@@ -7,7 +7,7 @@ import Filters from './components/Filters'
 import Loading from '../components/Loading'
 import SearchToolbar from './components/SearchToolbar'
 import ListingsPanel from '../components/ListingsPanels'
-import CreateAlertModal from '../components/CreateAlertModal'
+import CreateAlertModal from '../components/modals/CreateAlertModal'
 import { selectListings } from '../../../../../reducers/listings'
 import getListingsByMapBounds from '../../../../../store_actions/listings/search/get-listings/by-map-bounds'
 

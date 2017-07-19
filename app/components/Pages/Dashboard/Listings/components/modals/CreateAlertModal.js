@@ -1,4 +1,3 @@
-import S from 'shorti'
 import React from 'react'
 import pure from 'recompose/pure'
 import { connect } from 'react-redux'
@@ -7,7 +6,8 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import { Modal } from 'react-bootstrap'
 
-import createAlert from '../../../../../models/listings/alerts/create-alert'
+import SuccessModal from './SuccessModal'
+import createAlert from '../../../../../../models/listings/alerts/create-alert'
 
 const CreateAlertModal = ({
   onHide,
@@ -16,7 +16,8 @@ const CreateAlertModal = ({
   isSaving,
   setAlertName,
   saveAlertHandler,
-  saveAndShareHandler
+  saveAndShareHandler,
+  successModalIsActive
 }) => {
   let $alertTilteInput
   return (
@@ -71,6 +72,11 @@ const CreateAlertModal = ({
           </button>
         </Modal.Footer>
       </Modal>
+      <SuccessModal
+        type="SAVED_ALERT"
+        text="Alert Saved"
+        isActive={successModalIsActive}
+      />
     </div>
   )
 }
@@ -82,13 +88,16 @@ export default compose(
     searchOptions: search.options
   })),
   withState('isSaving', 'setIsSaving', false),
+  withState('successModalIsActive', 'setSuccessModalIsActive', false),
   withHandlers({
     saveAlertHandler: ({
       user,
+      onHide,
       isSaving,
       setIsSaving,
       searchOptions,
-      alertProposedTitle
+      alertProposedTitle,
+      setSuccessModalIsActive
     }) => title => {
       const alertOptions = {
         ...searchOptions,
@@ -103,7 +112,9 @@ export default compose(
       createAlert(alertOptions)
         .then(alert => {
           setIsSaving(false)
-          console.log(alert)
+          onHide()
+          setSuccessModalIsActive(true)
+          setTimeout(() => setSuccessModalIsActive(false), 2000)
         })
         .catch(({ message }) => {
           setIsSaving(false)
