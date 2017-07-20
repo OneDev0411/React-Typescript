@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
 import TasksList from './tasks'
 import ControlPanel from './control-panel'
-import FactSheet from './fact-sheet'
+import FactSheet from './factsheet'
 
 class DealDetails extends React.Component {
   constructor(props) {
