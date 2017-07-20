@@ -8,19 +8,30 @@ import FactSheet from './fact-sheet'
 class DealDetails extends React.Component {
   constructor(props) {
     super(props)
+    const { tags } = props
+
+    this.state = {
+      activeTag: tags ? tags[0].id : null
+    }
   }
 
   componentDidMount() {
-    console.log(this.props.deal)
+    // console.log(this.props.deal)
   }
 
   render() {
-    const { deal } = this.props
+    const { deal, tags } = this.props
+    const { activeTag } = this.state
 
     return (
       <Row className="deal-dashboard">
         <Col lg={2} md={2} className="column">
-          <ControlPanel deal={deal} />
+          <ControlPanel
+            deal={deal}
+            tags={tags}
+            activeTag={activeTag}
+            onChangeTag={id => this.setState({ activeTag: id })}
+          />
         </Col>
 
         <Col lg={3} md={4} className="column">
@@ -44,12 +55,13 @@ class DealDetails extends React.Component {
   }
 }
 
-function mapStateToProps({ deals }, props) {
+function mapStateToProps({ data, deals }, props) {
   const { list } = deals
   const { id } = props.params
 
   return {
-    deal: list && list[id] ? list[id] : null
+    deal: list && list[id] ? list[id] : null,
+    tags: data.brand ? data.brand.tags : null
   }
 }
 
