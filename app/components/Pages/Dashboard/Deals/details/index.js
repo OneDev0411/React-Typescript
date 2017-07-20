@@ -16,7 +16,7 @@ class DealDetails extends React.Component {
   }
 
   componentDidMount() {
-    // console.log(this.props.deal)
+    console.log(this.props.deal)
   }
 
   render() {
@@ -36,6 +36,7 @@ class DealDetails extends React.Component {
 
         <Col lg={3} md={4} className="column">
           <TasksList
+            activeTag={activeTag}
             tasks={deal.tasks}
           />
         </Col>
