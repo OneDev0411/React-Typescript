@@ -1,8 +1,13 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import _ from 'underscore'
 import Deal from '../../../../../models/Deal'
 
 export default ({
-  deal
+  deal,
+  tags,
+  activeTag,
+  onChangeTag
 }) => (
   <div className="deal-control-panel">
 
@@ -12,10 +17,19 @@ export default ({
     </div>
 
     <ul className="deal-tags">
-      <li>Listing</li>
-      <li>Marketing</li>
-      <li>Contact</li>
-      <li>Upload</li>
+      {
+        tags && tags
+        .filter(item => item.is_tab)
+        .map(item => (
+          <li
+            key={`TAG_${item.id}`}
+            className={item.id === activeTag ? 'active' : 'inactive'}
+            onClick={() => onChangeTag(item.id)}
+          >
+            { item.tag }
+          </li>
+        ))
+      }
     </ul>
   </div>
 )
