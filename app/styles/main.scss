@@ -32,8 +32,9 @@
 @import 'components/pages/dashboard';
 @import 'components/pages/noMatch';
 
-@import 'components/pages/chatroom/index.scss';
-@import 'components/pages/deals/index.scss';
+@import 'components/pages/deals/index';
+@import 'components/pages/chatroom/index';
+@import 'components/pages/listings';
 @import 'components/pages/mls';
 @import 'components/pages/agent-report';
 @import 'components/pages/concierge';
@@ -62,4 +63,4 @@
 @import 'fonts/futurastd.scss';
 
 // Stepper
-@import '../components/Partials/Stepper/styles.scss'
+@import '../components/Partials/Stepper/styles.scss';

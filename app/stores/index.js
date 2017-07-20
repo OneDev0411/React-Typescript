@@ -7,9 +7,12 @@ import reducers from '../reducers'
 const __DEV__ = process.env.NODE_ENV !== 'production'
 const composer = __DEV__ ? composeWithDevTools : compose
 
-const initialState = typeof window !== 'undefined' && window.__APPLICATION_STATE__ ?
-  JSON.parse(decodeURIComponent(window.__APPLICATION_STATE__)) :
-  {}
+const initialState = typeof window !== 'undefined' &&
+  window.__APPLICATION_STATE__
+    ?
+      JSON.parse(decodeURIComponent(window.__APPLICATION_STATE__))
+    :
+      {}
 
 const store = createStore(enableBatching(reducers), initialState, composer(
   applyMiddleware(thunk)

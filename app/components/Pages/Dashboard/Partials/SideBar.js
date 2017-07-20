@@ -581,9 +581,9 @@ export default class SideBar extends Component {
     // let branding_logo
     // if (Brand.asset('site_logo')) {
     //   branding_logo = (
-    //     <div style={S('mb-10 mt-10')}>
+    //     <div style={S('mb-10 mt-20')}>
     //       <a target="_blank" href={'http://' + data.brand.hostnames[0]}>
-    //         <div style={S(`bg-url(${Brand.asset('site_logo')}) bg-cover bg-center w-30 h-30 ml-10 br-3`)} />
+    //         <div style={S(`bg-url(${Brand.asset('site_logo')}) bg-cover bg-center w-30 h-30 ml-20 br-3`)} />
     //       </a>
     //     </div>
     //   )

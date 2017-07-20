@@ -1,0 +1,32 @@
+
+.c-filters__tag-wrapper {
+  padding-top: 1rem;
+  margin-bottom: 2rem;
+  border-top: solid 1px #e2e6ea;
+}
+
+.c-filters__tag {
+  display: inline-block;
+  margin: 0 1rem 1rem 0;
+  cursor: pointer;
+  text-align: center;
+}
+
+.c-filters__tag__input {
+  @include visually-hidden();
+}
+
+.c-filters__tag__text {
+  display: inline-block;
+  padding: .5rem 1rem;
+  font-weight: normal;
+  color: #9b9b9b;
+  border-radius: 100px;
+  border: solid 1px #e2e6ea;
+
+  .c-filters__tag__input:checked + & {
+    color: #fff;
+    border-color: #2196f3;
+    background-color: #2196f3;
+  }
+}

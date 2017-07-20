@@ -1,0 +1,132 @@
+.c-filters-listings-status {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2rem;
+  background: #fff;
+}
+
+.c-filters-listings-status__left-side,
+.c-filters-listings-status__right-side {
+  height: 4.8rem;
+  display: flex;
+  align-content: center;
+  align-items: center;
+}
+
+.c-filters-listings-status,
+.c-filters-listings-status__accordion-target.is-active {
+  border-bottom: 1px solid #e9e9e9;
+}
+
+.c-filters-listings-status__color,
+.c-filters-listings-status__text-icon {
+  height: 1.2rem;
+  width: 2.4rem;
+  margin-right: 1rem;
+  border-radius: 3px;
+}
+
+.c-filters-listings-status__text-icon {
+  line-height: 1;
+}
+
+.c-filters-listings-status__title {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.c-filters-listings-status__accordion-trigger {
+  position: relative;
+  width: 4.05rem;
+  height: 2.4rem;
+  padding: 0;
+  font-size: 0;
+  cursor: initial;
+  border-width: 0;
+  background: transparent;
+  &:focus {
+    outline: none;
+  }
+  .c-filters-listings-status__right-side.is-active > & {
+    cursor: pointer;
+    &:hover > svg {
+      fill: #333;
+    }
+  }
+}
+
+.c-filters-listings-status__accordion-trigger__icon {
+  position: absolute;
+  top: -0.8rem;
+  right: 0;
+  transition: transform .2s;
+  transform: rotate(0);
+  .c-filters-listings-status__right-side > .is-active > & {
+    fill: #333;
+    transform: rotate(180deg);
+  }
+}
+
+.c-filters-listings-status__switch-toggle.c-filters-listings-status__switch-toggle {
+  margin-top: 4px;
+}
+
+.c-filters-listings-status__accordion-target {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: #f8f8f8;
+  transition: all .3s;
+  @include visually-hidden();
+  &.is-active {
+    @include visually-hidden(undo);
+    padding: 1rem 0;
+  }
+}
+
+.c-filters-listings-status__separator {
+  height: 2.4rem;
+  width: 1px;
+  margin-left: 1rem;
+  margin-right: 2rem;
+  background-color: #e9e9e9;
+}
+
+.c-filters-other-statuses-childrens__item {
+  > input[type="checkbox"] {
+    @include visually-hidden();
+    &:checked + label {
+      display: flex;
+      align-items: center;
+      > svg {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+  }
+  > label {
+    display: block;
+    height: 3rem;
+    margin: 0;
+    padding-left: 2rem;
+    cursor: pointer;
+    font-size: 1.5rem;
+    font-weight: normal;
+    color: #333;
+    &:hover {
+      background-color: #e9e9e9;
+    }
+    > svg {
+      width: 2.4rem;
+      visibility: hidden;
+      opacity: 0;
+      margin-right: 1rem;
+    }
+  }
+}
+
+.c-filters-sold-status-childrens,
+.c-filters-other-statuses-childrens {
+  margin: 0;
+  padding: 0;
+}

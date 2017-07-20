@@ -1,0 +1,55 @@
+import helpers from '../../../../../../utils/helpers'
+import listingUtils from '../../../../../../utils/listing'
+
+const listViewItemProps = (user, listing) => {
+  const statusColor = listingUtils.getStatusColor(listing.status)
+  let property = listing.compact_property
+  let address = listing.address
+
+  if (!property) {
+    property = listing.property
+  }
+
+  if (!address) {
+    address = property.address
+  }
+
+  const sqft = helpers.numberWithCommas(
+    Math.floor(listingUtils.metersToFeet(property.square_meters))
+  )
+
+  let price = listing.price
+  if (listing.close_price && user && user.user_type === 'Agent') {
+    price = listing.close_price
+  }
+
+  const pricePerSquareFoot = Math.floor(
+    price / listingUtils.metersToFeet(property.square_meters)
+  )
+
+  const backgroundImage = listing.cover_image_url && {
+    backgroundImage: `url('${listing.cover_image_url}')`
+  }
+
+  const area = address.postal_code
+  const builtYear = property.year_built
+  const beds = property.bedroom_count
+  const baths = property.bathroom_count
+  price = helpers.numberWithCommas(Math.floor(price))
+  const addressTitle = listingUtils.addressTitle(address)
+
+  return {
+    backgroundImage,
+    statusColor,
+    address: addressTitle,
+    area,
+    price,
+    beds,
+    baths,
+    sqft,
+    pricePerSquareFoot,
+    builtYear
+  }
+}
+
+export default listViewItemProps
