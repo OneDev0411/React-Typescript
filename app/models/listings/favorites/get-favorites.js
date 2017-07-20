@@ -21,12 +21,10 @@ const getFavorateListingsData = favorites =>
     if (lat && lng) {
       return {
         ...listing,
-        recId,
-        recRoom,
-        numPoints: 1,
-        list: listing,
         lat,
-        lng
+        lng,
+        recId,
+        recRoom
       }
     }
   })

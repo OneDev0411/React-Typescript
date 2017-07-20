@@ -1,5 +1,5 @@
 import { SET_SEARCH_LISTINGS_OPTIONS } from '../../../constants/listings/search'
-import { queryOptions } from '../../../components/Pages/Dashboard/Mls/Partials/MlsMapOptions'
+import { queryOptions } from '../../../components/Pages/Dashboard/Listings/mapOptions'
 
 const options = (state = queryOptions, action) => {
   switch (action.type) {

@@ -1,6 +1,6 @@
 import getListingsByValert from './by-valert'
 import { getFetchingStatus } from '../../../../reducers/listings'
-import { queryOptions } from '../../../../components/Pages/Dashboard/Mls/Partials/MlsMapOptions'
+import { queryOptions } from '../../../../components/Pages/Dashboard/Listings/mapOptions'
 
 const QUERY_LIMIT = 100
 

@@ -6,13 +6,9 @@ import defaultProps from 'recompose/defaultProps'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 
-import Marker from '../../../Mls/Partials/Markers/SingleMarker'
+import Marker from '../../components/Markers/SimpleMarker'
 import * as actions from '../../../../../../store_actions/listings/map'
-import {
-  bootstrapURLKeys,
-  mapOptions,
-  mapInitialState
-} from '../../../Mls/Partials/MlsMapOptions'
+import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../mapOptions'
 
 const map = ({
   style,
@@ -40,18 +36,23 @@ const map = ({
     defaultCenter={defaultCenter}
     yesIWantToUseGoogleMapApiInternals
     bootstrapURLKeys={bootstrapURLKeys}
-    onGoogleApiLoaded={onGoogleApiLoaded}>
-
-    {markers.map(({ id, ...markerProps }) =>
-      <Marker
-        data={appData}
-        {...markerProps}
-        key={`ALERTS_MAP__MARKER_${id}`}
-        onMouseEnterHandler={() => onMarkerMouseEnter(id)}
-        onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
-        markerPopupIsActive={hoveredMarkerId === id}
-      />
-    )}
+    onGoogleApiLoaded={onGoogleApiLoaded}
+  >
+    {markers.map(marker => {
+      const { id, lat, lng } = marker
+      return (
+        <Marker
+          lat={lat}
+          lng={lng}
+          data={appData}
+          listing={marker}
+          key={`MARKER_${id}`}
+          onMouseEnterHandler={() => onMarkerMouseEnter(id)}
+          onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
+          markerPopupIsActive={hoveredMarkerId === id}
+        />
+      )
+    })}
   </Map>
 
 const mapHOC = compose(

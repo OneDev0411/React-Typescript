@@ -10,19 +10,25 @@ import defaultProps from 'recompose/defaultProps'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 
-import { getListings } from '../../../../../../reducers/listings'
+import SimpleMarker from '../../components/Markers/SimpleMarker'
+import ClusterMarker from '../../components/Markers/ClusterMarker'
 import NotLoggedInMessage from '../../components/NotLoggedInMessage'
-import SimpleMarker from '../../../Mls/Partials/Markers/SingleMarker'
 import DrawingRemoveButton from '../../components/DrawingRemoveButton'
-import ClusterMarker from '../../../Mls/Partials/Markers/ClusterMarker'
+
+import { setCssPositionToListingsWithSameBuilding } from '../../../../../../utils/map'
+
+import { getListings } from '../../../../../../reducers/listings'
 import * as mapActions from '../../../../../../store_actions/listings/map'
 import * as drawingActions from '../../../../../../store_actions/listings/map/drawing'
-import { setPositionToPointsWithSameCoordinate } from '../../../Mls/Partials/MlsMap'
-import {
-  bootstrapURLKeys,
-  mapOptions,
-  mapInitialState
-} from '../../../Mls/Partials/MlsMapOptions'
+
+import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../mapOptions'
+
+const normalizeMarkers = markers =>
+  markers.map(marker => ({
+    ...marker,
+    lat: marker.location.latitude,
+    lng: marker.location.longitude
+  }))
 
 const actions = {
   ...mapActions,
@@ -59,24 +65,35 @@ const map = ({
       defaultCenter={defaultCenter}
       yesIWantToUseGoogleMapApiInternals
       bootstrapURLKeys={bootstrapURLKeys}
-      onGoogleApiLoaded={onGoogleApiLoaded}>
-      {clusters.map(
-        ({ ...markerProps, numPoints, list, id }, index) =>
-          numPoints === 1
-            ? <SimpleMarker
-                data={appData}
-                {...markerProps}
-                key={`SEARCH_MAP__MARKER_${id}`}
-                onMouseEnterHandler={() => onMarkerMouseEnter(id)}
-                onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
-                markerPopupIsActive={hoveredMarkerId === id}
-              />
-            : <ClusterMarker
-                {...markerProps}
-                key={`FAVORITES_MAP__CLUSTER_MARKER_${index}`}
-                onClickHandler={() => onClusterMarkerClick(list)}
-              />
-      )}
+      onGoogleApiLoaded={onGoogleApiLoaded}
+    >
+      {clusters.map(({ points, lat, lng }, index) => {
+        if (points.length === 1) {
+          const { id } = points[0]
+          return (
+            <SimpleMarker
+              lat={lat}
+              lng={lng}
+              data={appData}
+              listing={points[0]}
+              key={`SIMPLE_MARKER_${id}`}
+              markerPopupIsActive={hoveredMarkerId === id}
+              onMouseEnterHandler={() => onMarkerMouseEnter(id)}
+              onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
+            />
+          )
+        }
+
+        return (
+          <ClusterMarker
+            lat={lat}
+            lng={lng}
+            text={points.length}
+            key={`CLUSTER_MARKER_${index}`}
+            onClickHandler={() => onClusterMarkerClick(points)}
+          />
+        )
+      })}
     </Map>
     <NotLoggedInMessage isLoggedIn={appData.user ? true : ''} />
     <DrawingRemoveButton
@@ -152,7 +169,7 @@ const mapHOC = compose(
       clusterRadius,
       clusterOptions: { minZoom, maxZoom }
     }) => ({
-      getCluster: supercluster(markers, {
+      getCluster: supercluster(normalizeMarkers(markers), {
         minZoom, // min zoom to generate clusters on
         maxZoom, // max zoom level to cluster the points on
         radius: clusterRadius // cluster radius in pixels
@@ -171,16 +188,13 @@ const mapHOC = compose(
       }
 
       clusters = getCluster(mapProps).map(({ wx, wy, numPoints, points }) => ({
+        points,
         lat: wy,
-        lng: wx,
-        numPoints,
-        id: points[0].id,
-        text: numPoints !== 1 ? numPoints : '',
-        list: numPoints === 1 ? points[0] : points
+        lng: wx
       }))
 
       if (mapProps.zoom >= DECLUSTER_ZOOM_LEVEL) {
-        clusters = setPositionToPointsWithSameCoordinate(clusters)
+        clusters = setCssPositionToListingsWithSameBuilding(clusters)
       }
 
       return { clusters }
