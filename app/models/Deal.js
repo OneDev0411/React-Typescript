@@ -17,7 +17,7 @@ Deal.get.field = function(deal, field) {
   } else if (deal.proposed_values && deal.proposed_values[field]) {
     return deal.proposed_values[field]
   } else {
-    return ''
+    return null
   }
 }
 
