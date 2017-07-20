@@ -39,7 +39,7 @@
     padding: 8px 10px;
     cursor: pointer;
 
-    &:first-child {
+    &.active {
       background: #fafafa;
       border-right-color: #fafafa;
       margin-right: -1px;
