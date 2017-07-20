@@ -36,10 +36,8 @@ const getAlertFeed = async (alertId, roomId) => {
 
     const listings = data.map(rec => ({
       ...rec.listing,
-      numPoints: 1,
       recId: rec.id,
       recRoom: rec.room,
-      list: rec.listing,
       new: mappingStatus(rec.last_update),
       lat: rec.listing.property.address.location.latitude,
       lng: rec.listing.property.address.location.longitude

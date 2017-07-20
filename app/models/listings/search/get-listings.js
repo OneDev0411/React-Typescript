@@ -2,28 +2,19 @@ import Fetch from '../../../services/fetch'
 import { normalize } from 'normalizr'
 import * as schema from '../schema'
 
-export const byValert = async (options) => {
+export const byValert = async (options, queryStrings) => {
   if (!options) {
     return
   }
 
   try {
-    const response = await new Fetch()
-      .post('/valerts')
-      .send(options)
+    const endpoint = !queryStrings ? '/valerts' : `/valerts${queryStrings}`
+
+    const response = await new Fetch().post(endpoint).send(options)
 
     const { code, info, data } = response.body
 
-    const listings = data.map(
-      list => ({
-        ...list,
-        list,
-        lat: list.location.latitude,
-        lng: list.location.longitude
-      })
-    )
-
-    const normilizedListings = normalize(listings, schema.listingsList)
+    const normilizedListings = normalize(data, schema.listingsList)
 
     return {
       ...normilizedListings,
@@ -37,14 +28,15 @@ export const byValert = async (options) => {
   }
 }
 
-export const byMlsNumber = async (mlsNumber) => {
+export const byMlsNumber = async mlsNumber => {
   if (!mlsNumber) {
     return
   }
 
   try {
-    const response = await new Fetch()
-      .get(`/listings/search?mls_number=${mlsNumber}`)
+    const response = await new Fetch().get(
+      `/listings/search?mls_number=${mlsNumber}`
+    )
 
     const { code, data } = response.body
 

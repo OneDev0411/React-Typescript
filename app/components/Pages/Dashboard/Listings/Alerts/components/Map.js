@@ -6,14 +6,12 @@ import defaultProps from 'recompose/defaultProps'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 
-import Marker from '../../../Mls/Partials/Markers/SingleMarker'
-import { setPositionToPointsWithSameCoordinate } from '../../../Mls/Partials/MlsMap'
+import Marker from '../../components/Markers/SimpleMarker'
+import { setCssPositionToListingsWithSameBuilding } from '../../../../../../utils/map'
+
 import * as actions from '../../../../../../store_actions/listings/map'
-import {
-  bootstrapURLKeys,
-  mapOptions,
-  mapInitialState
-} from '../../../Mls/Partials/MlsMapOptions'
+
+import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../mapOptions'
 
 const map = ({
   style,
@@ -42,16 +40,21 @@ const map = ({
     bootstrapURLKeys={bootstrapURLKeys}
     onGoogleApiLoaded={onGoogleApiLoaded}
   >
-    {markers.map(({ id, ...markerProps }) =>
-      <Marker
-        data={appData}
-        {...markerProps}
-        key={`ALERTS_MAP__MARKER_${id}`}
-        onMouseEnterHandler={() => onMarkerMouseEnter(id)}
-        onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
-        markerPopupIsActive={hoveredMarkerId === id}
-      />
-    )}
+    {markers.map(({ points, lat, lng }) => {
+      const { id } = points[0]
+      return (
+        <Marker
+          lat={lat}
+          lng={lng}
+          data={appData}
+          listing={points[0]}
+          key={`MARKER_${id}`}
+          onMouseEnterHandler={() => onMarkerMouseEnter(id)}
+          onMouseLeaveHandler={() => onMarkerMouseLeave(id)}
+          markerPopupIsActive={hoveredMarkerId === id}
+        />
+      )
+    })}
   </Map>
 
 const mapHOC = compose(
@@ -112,7 +115,13 @@ const mapHOC = compose(
   withPropsOnChange(
     (props, nextProps) => !_.isEqual(props.markers, nextProps.markers),
     ({ markers = [] }) => ({
-      markers: setPositionToPointsWithSameCoordinate(markers)
+      markers: setCssPositionToListingsWithSameBuilding(
+        markers.map(marker => ({
+          lat: marker.lat,
+          lng: marker.lng,
+          points: [marker]
+        }))
+      )
     })
   )
 )
