@@ -1,5 +1,7 @@
 import config from '../../../../../config/public'
 
+export const DECLUSTER_ZOOM_LEVEL = 16
+
 export const bootstrapURLKeys = {
   key: config.google.api_key,
   libraries: ['drawing', 'places', 'geometry'].join(',')
@@ -67,5 +69,6 @@ export const mapOptions = {
 export default {
   mapOptions,
   queryOptions,
-  mapInitialState
+  mapInitialState,
+  DECLUSTER_ZOOM_LEVEL
 }

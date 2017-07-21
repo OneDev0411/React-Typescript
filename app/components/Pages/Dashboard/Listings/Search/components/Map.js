@@ -24,14 +24,17 @@ import { getListings } from '../../../../../../reducers/listings'
 import * as mapActions from '../../../../../../store_actions/listings/map'
 import * as drawingActions from '../../../../../../store_actions/listings/map/drawing'
 
-import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../mapOptions'
+import {
+  bootstrapURLKeys,
+  mapOptions,
+  mapInitialState,
+  DECLUSTER_ZOOM_LEVEL
+} from '../../mapOptions'
 
 const actions = {
   ...mapActions,
   ...drawingActions
 }
-
-const DECLUSTER_ZOOM_LEVEL = 16
 
 const map = ({
   style,
