@@ -8,6 +8,7 @@ import search from './listings/search'
 import alerts from './listings/alerts'
 import listing from './listings/listing'
 import favorites from './listings/favorites'
+import widgets from './widgets'
 import { createNamedWrapperReducer } from '../utils/redux-utils'
 
 const appReducer = combineReducers({
@@ -19,7 +20,8 @@ const appReducer = combineReducers({
   chatroom,
   favorites,
   routing: routerReducer,
-  listing: createNamedWrapperReducer(listing, 'LISTING')
+  listing: createNamedWrapperReducer(listing, 'LISTING'),
+  widgets
 })
 
 export default (state, action) => appReducer(state, action)

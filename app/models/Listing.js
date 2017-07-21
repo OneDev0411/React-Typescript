@@ -146,7 +146,7 @@ export default {
     //     }
     //     return response.json()
     //   })
-    //   .then(response => callback(false, response))
+    //   .then(response => callback(false, { ...response, ...params }))
   },
   getListing: async (id) => {
     if (!id) {
