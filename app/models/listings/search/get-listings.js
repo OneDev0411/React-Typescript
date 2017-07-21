@@ -2,22 +2,15 @@ import Fetch from '../../../services/fetch'
 import { normalize } from 'normalizr'
 import * as schema from '../schema'
 
-export const byValert = async (options, widgetOptions) => {
+export const byValert = async (options) => {
   if (!options) {
     return
   }
-  let endpoint = '/valerts'
-  if (widgetOptions) {
-    endpoint += widgetOptions.queryString
-  }
+
   try {
     const response = await new Fetch()
-      .post(endpoint)
+      .post('/valerts')
       .send(options)
-
-    if (widgetOptions) {
-      return response.body.data
-    }
 
     const { code, info, data } = response.body
 

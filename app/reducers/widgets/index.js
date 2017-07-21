@@ -1,9 +1,8 @@
 import { combineReducers } from 'redux'
-import listing from './listing'
-import { createNamedWrapperReducer } from '../../utils/redux-utils'
+import listings from './listings'
 
 const widgets = combineReducers({
-  listing: createNamedWrapperReducer(listing, 'listing')
+  listings
 })
 
 export default widgets

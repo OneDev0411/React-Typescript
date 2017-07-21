@@ -1,3 +1,4 @@
+import { connect } from 'react-redux'
 import React, { Component } from 'react'
 import ListingCard from './ListingCard'
 import S from 'shorti'
@@ -8,8 +9,9 @@ import ListingDispatcher from '../../../../../dispatcher/ListingDispatcher'
 import Loading from '../../../../Partials/Loading'
 import AppStore from '../../../../../stores/AppStore'
 import Brand from '../../../../../controllers/Brand'
+import getListing from '../../../../../store_actions/widgets/listings/get-listings'
 
-export default class Section extends Component {
+class Section extends Component {
 
   constructor() {
     super()
@@ -19,60 +21,23 @@ export default class Section extends Component {
     }
   }
 
-  componentWillMount() {
-    AppStore.data.is_widget = true
-    AppStore.emitChange()
-  }
-
   componentDidMount() {
     const data = this.props.data
-    const user = data.user
-    // Set user
-    AppStore.data.user = user
-    const location = data.location
-    const brokerage = location.query.brokerage
-    const agent = location.query.agent
-    const brand = location.query.brand
-    this.options = this.initOptions(brokerage, agent, this.props.type, brand)
-    AppStore.data.widget = {
-      options: this.options
-    }
-    if (!AppStore.data.widget) {
-      AppStore.data.widget = {}
-    }
-    if (!AppStore.data.widget[this.props.type]) {
-      AppStore.data.widget[this.props.type] = {}
-    }
-    AppStore.data.widget[this.props.type].is_loading_listings = true
-    AppStore.emitChange()
-    ListingDispatcher.dispatch({
-      action: 'get-valerts-widget',
-      user,
-      options: this.options
-    })
-    if (user) {
-      ListingDispatcher.dispatch({
-        action: 'get-favorites',
-        user
-      })
-    }
+    this.options = this.initOptions(
+      data.location.query.brokerage,
+      data.location.query.agent,
+      this.props.type,
+      data.location.query.brand,
+      data.user
+    )
+    this.widgetOptions = this.initWidgetOptions()
+    this.props.getListing(this.options, this.widgetOptions)
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.data.widget[this.options.type]
-      && nextProps.data.widget[this.options.type].listings
-    ) {
-      this.setState({
-        listings: nextProps.data.widget[this.options.type].listings,
-        isLoading: nextProps.data.widget[nextProps.type].is_loading_listings
-      })
-    }
-  }
-
-  shouldComponentUpdate(nextProps, nextStates) {
+  shouldComponentUpdate(nextProps) {
     return (
-      nextStates.isLoading !== this.state.isLoading
-      || nextStates.listings.length !== this.state.listings.length
+      nextProps.listings.length !== this.props.listings.length
+      || nextProps.isFetching !== this.props.isFetching
     )
   }
 
@@ -81,19 +46,44 @@ export default class Section extends Component {
     window.open(url, '_blank')
   }
 
-  initOptions(brokerage, agent, type, brand) {
+  initWidgetOptions() {
+    let queryString = ''
+    if (this.options.list_offices && this.options.list_offices.length || this.options.brand) {
+      queryString += '?associations=compact_listing.proposed_agent'
+
+      if (this.options.listing_statuses[0] === 'Sold') {
+        queryString += '&order_by[]=price'
+      }
+    }
+    return {
+      queryString,
+      type: this.props.type
+    }
+  }
+
+  initOptions(brokerage, agent, type, brand, user) {
     const options = {
-      limit: '75',
+      limit: '10',
       property_types: ['Residential', 'Residential Lease', 'Lots & Acreage'],
-      listing_statuses: ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract', 'Pending'],
       property_subtypes: ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse', 'LSE-Apartment', 'LSE-Condo/Townhome', 'LSE-Duplex', 'LSE-Fourplex', 'LSE-House', 'LSE-Mobile', 'LSE-Triplex', 'LND-Commercial', 'LND-Farm/Ranch', 'LND-Residential']
     }
-    if (brokerage)
+    if (brokerage) {
       options.list_offices = [brokerage]
-    if (agent)
+    }
+    if (agent) {
       options.agents = [agent]
-    if (brand)
+    }
+    if (brand) {
       options.brand = brand
+    }
+    if (user) {
+      options.access_token = user.access_token
+    }
+    if (type === 'sold') {
+      options.listing_statuses = ['Sold', 'Leased']
+    } else {
+      options.listing_statuses = ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract', 'Pending']
+    }
     return options
   }
 
@@ -109,40 +99,10 @@ export default class Section extends Component {
       options: this.options
     })
   }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.data.widget[this.options.type]
-      && nextProps.data.widget[this.options.type].listings
-    ) {
-      this.setState({
-        listings: nextProps.data.widget[this.options.type].listings
-      })
-    }
-  }
-  shouldComponentUpdate(nextProps, nextStates) {
-    if (nextProps.data.widget && nextProps.data.widget[nextProps.type]) {
-      nextProps.data.widget[nextProps.type].is_loading_listings
-    }
-    return (
-      (nextProps.data.widget && nextProps.data.widget[nextProps.type] && nextProps.data.widget[nextProps.type].is_loading_listings)
-      || nextStates.listings.length !== this.state.listings.length
-    )
-  }
-
-  componentDidUpdate() {
-    parent.postMessage({ height: this.parentDiv.scrollHeight }, '*')
-  }
 
   render() {
-    let showLoadMore = false
-    console.log(this.props.type, showLoadMore)
-
-    if (
-      this.props.data.widget
-      && this.props.data.widget[this.props.type]
-      && this.props.data.widget[this.props.type].listings_info
-      && this.props.data.widget[this.props.type].listings_info.total > this.state.listings.length
-    ) {
-      console.log(this.props.type, false)
+    let showLoadMore
+    if (this.props.listingsInfo.total > this.props.listings.length) {
       showLoadMore = true
     }
     return (
@@ -160,9 +120,11 @@ export default class Section extends Component {
           <h1
             style={S(`font-17 color-263445 mb-0${this.props.data.is_mobile ? ' ml-10 mr-10' : ''}`)}
           >{this.props.title}</h1>
-          <span style={S('h-1 bg-e2e2e2 w-80 m-20 inline-block')} />
+          <span
+            style={S('h-1 bg-e2e2e2 w-80 m-20 inline-block')}
+          />
         </div>
-        {this.state.listings && this.state.listings.map((listing, i) => (
+        {this.props.listings && this.props.listings.map((listing, i) => (
           <ListingCard
             className="listing-card"
             handleEmailSubmit={controller.action_bubble.handleEmailSubmit}
@@ -180,41 +142,45 @@ export default class Section extends Component {
           />
         ))
         }
-        <div className="clearfix" />
+        <div
+          className="clearfix"
+        />
         {
-          this.state.isLoading &&
+          this.props.isFetching &&
           <div style={S('text-center')}>
             <Loading />
           </div>
         }
         {Brand.color('primary') && showLoadMore &&
-          <div style={S('text-center')}>
-            <Button
-              onClick={this.triggerNextPage.bind(this, 'active')}
-              style={{
-                backgroundColor: `#${Brand.color('primary')}`,
-                borderColor: `#${Brand.color('primary')}`,
-                paddingLeft: '3em',
-                paddingRight: '3em',
-                fontSize: '1.2em'
-              }}
-              bsStyle="primary"
-            >
-              Load More
+        <div style={S('text-center')}>
+          <Button
+            onClick={this.triggerNextPage.bind(this, 'active')}
+            style={{
+              backgroundColor: `#${Brand.color('primary')}`,
+              borderColor: `#${Brand.color('primary')}`,
+              paddingLeft: '3em',
+              paddingRight: '3em',
+              fontSize: '1.2em'
+            }}
+            bsStyle="primary"
+          >
+            Load More
           </Button>
-          </div>
+        </div>
         }
       </div>
     )
   }
 }
 
-// Section.propTypes = {
-//   emails: React.PropTypes.array.isRequired
-// }
-//
-// Section.defaultProps = {
-//   emails: React.PropTypes.array.isRequired
-// }
-
-// export default Section
+export default connect(
+  ({ widgets }, { type }) => {
+    const listings = widgets.listings[type] || {}
+    return {
+      listings: listings.listings || [],
+      listingsInfo: listings.listingsInfo || {},
+      isFetching: listings.isFetching || false
+    }
+  },
+  { getListing }
+)(Section)

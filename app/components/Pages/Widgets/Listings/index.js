@@ -26,12 +26,17 @@ const Listings = (props) => {
           Rechat<span style={S('color-2196f3 font-9 relative t-7n fw-500')}>TM</span></a>
       </div>
     </div>
-  )
+    )
   return (
     <div
       className="futurastd"
       ref={ref => this.parentDiv = ref}
     >
+      {/* <ListingSection*/}
+      {/* title="open Houses"*/}
+      {/* data={data}*/}
+      {/* type="openHouses"*/}
+      {/* />*/}
       <ListingSection
         title="Listings"
         data={data}
@@ -44,7 +49,7 @@ const Listings = (props) => {
         type="sold"
       />
       <div className="clearfix" />
-      {links_area}
+      { links_area }
     </div>
   )
 }
