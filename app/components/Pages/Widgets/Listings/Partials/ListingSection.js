@@ -32,12 +32,12 @@ class Section extends Component {
     this.props.getListing(this.options, this.widgetOptions)
   }
 
-  shouldComponentUpdate(nextProps) {
-    return (
-      nextProps.listings.length !== this.props.listings.length
-      || nextProps.isFetching !== this.props.isFetching
-    )
-  }
+  // shouldComponentUpdate(nextProps) {
+  //   return (
+  //     nextProps.listings.length !== this.props.listings.length
+  //     || nextProps.isFetching !== this.props.isFetching
+  //   )
+  // }
 
   handleListingClick(listing) {
     const url = `/dashboard/mls/${listing.id}`
