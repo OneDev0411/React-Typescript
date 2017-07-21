@@ -15,20 +15,16 @@ import ClusterMarker from '../../components/Markers/ClusterMarker'
 import NotLoggedInMessage from '../../components/NotLoggedInMessage'
 import DrawingRemoveButton from '../../components/DrawingRemoveButton'
 
-import { setCssPositionToListingsWithSameBuilding } from '../../../../../../utils/map'
+import {
+  setCssPositionToListingsWithSameBuilding,
+  normalizeListingsForMarkers
+} from '../../../../../../utils/map'
 
 import { getListings } from '../../../../../../reducers/listings'
 import * as mapActions from '../../../../../../store_actions/listings/map'
 import * as drawingActions from '../../../../../../store_actions/listings/map/drawing'
 
 import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../mapOptions'
-
-const normalizeMarkers = markers =>
-  markers.map(marker => ({
-    ...marker,
-    lat: marker.location.latitude,
-    lng: marker.location.longitude
-  }))
 
 const actions = {
   ...mapActions,
@@ -169,7 +165,7 @@ const mapHOC = compose(
       clusterRadius,
       clusterOptions: { minZoom, maxZoom }
     }) => ({
-      getCluster: supercluster(normalizeMarkers(markers), {
+      getCluster: supercluster(normalizeListingsForMarkers(markers), {
         minZoom, // min zoom to generate clusters on
         maxZoom, // max zoom level to cluster the points on
         radius: clusterRadius // cluster radius in pixels
