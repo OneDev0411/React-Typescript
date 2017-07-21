@@ -1,3 +1,20 @@
+export const normalizeListingsForMarkers = markers =>
+  markers.map(marker => {
+    if (marker.location) {
+      return {
+        ...marker,
+        lat: marker.location.latitude,
+        lng: marker.location.longitude
+      }
+    }
+
+    return {
+      ...marker,
+      lat: marker.property.address.location.latitude,
+      lng: marker.property.address.location.longitude
+    }
+  })
+
 const setCssPosition = buildings => {
   buildings.forEach((building, i) => {
     buildings[i].points[0].cssPosition = {

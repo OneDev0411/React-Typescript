@@ -72,9 +72,9 @@ const ListingDesktopView = ({
 
   let viewer_width = 0
   if (typeof window !== 'undefined') {
-    viewer_width = window.innerWidth - 70
-    if (!user) {
-      viewer_width = window.innerWidth
+    viewer_width = window.innerWidth
+    if (user && !data.is_widget) {
+      viewer_width -= 70
     }
   }
 
@@ -809,10 +809,11 @@ const ListingDesktopView = ({
   let viewer_wrap_style = S(
     `absolute h-100p bg-fff t-0 l-0 z-10 ml-70 w-${viewer_width}`
   )
-  if (!user) {
+  console.log(data.is_widget)
+  if (!user || data.is_widget) {
     viewer_wrap_style = {
       ...viewer_wrap_style,
-      ...S('ml-0')
+      ...S('ml-0 w-100p')
     }
   }
 

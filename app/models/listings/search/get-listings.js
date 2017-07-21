@@ -40,18 +40,7 @@ export const byMlsNumber = async mlsNumber => {
 
     const { code, data } = response.body
 
-    const lat = data.property.address.location.latitude
-    const lng = data.property.address.location.longitude
-
-    const listing = {
-      ...data,
-      numPoints: 1,
-      list: data,
-      lat,
-      lng
-    }
-
-    const normilizedListings = normalize([listing], schema.listingsList)
+    const normilizedListings = normalize([data], schema.listingsList)
 
     return {
       ...normilizedListings,

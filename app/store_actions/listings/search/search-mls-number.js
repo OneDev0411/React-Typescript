@@ -4,7 +4,6 @@ import * as searchType from './set-type'
 import { selectListings } from '../../../reducers/listings'
 import getListingsByMlsNumber from './get-listings/by-mls-number'
 
-
 const searchByMlsNumber = mlsNumber => async (dispatch, getState) => {
   if (!mlsNumber) {
     return
@@ -16,10 +15,14 @@ const searchByMlsNumber = mlsNumber => async (dispatch, getState) => {
     await getListingsByMlsNumber(mlsNumber)(dispatch, getState)
     const listing = selectListings(getState().search.listings)[0]
     if (listing) {
-      const { id, lat, lng } = listing
-      const center = { lat, lng }
+      const {
+        latitude: lat,
+        longitude: lng
+      } = listing.property.address.location
 
-      goToPlace({ center, zoom: 17 })(dispatch, getState)
+      const place = { center: { lat, lng }, zoom: 17 }
+
+      goToPlace(place)(dispatch, getState)
       searchType.reset()(dispatch)
     }
   } catch (error) {

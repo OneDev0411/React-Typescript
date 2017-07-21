@@ -8,6 +8,9 @@ import getFavorites from '../../../../store_actions/listings/favorites/get-favor
 
 class Listings extends Component {
   componentDidMount() {
+    // for overwrite css styles (google suggestion)
+    document.body.setAttribute('data-page', 'mls')
+
     this._fetchFavorites()
   }
 
