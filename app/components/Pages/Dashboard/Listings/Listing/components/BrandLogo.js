@@ -1,8 +1,8 @@
 import React from 'react'
 import Brand from '../../../../../../controllers/Brand'
 
-const BrandLogo = ({ data, title = 'Rechat', styles }) => {
-  if (data.user && data.is_widget) {
+const BrandLogo = ({ data, isWidget, title = 'Rechat', styles }) => {
+  if (data.user && !isWidget) {
     return <div />
   }
 

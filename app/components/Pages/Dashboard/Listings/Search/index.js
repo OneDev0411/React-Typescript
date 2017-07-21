@@ -10,6 +10,7 @@ import ListingsPanel from '../components/ListingsPanels'
 import CreateAlertModal from '../components/modals/CreateAlertModal'
 import { selectListings } from '../../../../../reducers/listings'
 import getListingsByMapBounds from '../../../../../store_actions/listings/search/get-listings/by-map-bounds'
+import searchActions from '../../../../../store_actions/listings/search'
 
 let mapOnChangeDebounce = 0
 
@@ -17,16 +18,58 @@ class Search extends Component {
   constructor(props) {
     super(props)
 
+    const { data: appData, isWidget } = props
+
+    this.searchQuery =
+      appData.location && isWidget ? appData.location.query.q : ''
+
     this.state = {
-      shareModalIsActive: false
+      shareModalIsActive: false,
+      mapWithQueryIsInitialized: !this.searchQuery
     }
 
     this.shareModalCloseHandler = this.shareModalCloseHandler.bind(this)
     this.shareModalActiveHandler = this.shareModalActiveHandler.bind(this)
   }
 
+  componentDidMount() {
+    if (this.searchQuery) {
+      this._findPlace(this.searchQuery)
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
+    if (this.searchQuery && !this.state.mapWithQueryIsInitialized) {
+      return
+    }
+
     this._fetchListings(nextProps)
+  }
+
+  async _findPlace(address) {
+    const { searchByMlsNumber, searchByPostalCode, getPlace } = this.props
+
+    const initMap = () => {
+      this.setState({ mapWithQueryIsInitialized: true })
+    }
+
+    try {
+      if (/^\d{5}(?:[-\s]\d{4})?$/.test(address)) {
+        initMap()
+        searchByPostalCode(address)
+      }
+
+      if (!isNaN(address) && address.length > 7) {
+        initMap()
+        searchByMlsNumber(address)
+      }
+
+      await getPlace(address)
+      initMap()
+    } catch ({ message }) {
+      initMap()
+      console.log(message)
+    }
   }
 
   _fetchListings(nextProps) {
@@ -62,17 +105,17 @@ class Search extends Component {
   render() {
     const {
       data,
-      isLoggedIn,
       listings,
-      activePanel,
       isFetching,
+      isLoggedIn,
+      activePanel,
       filterAreaIsOpen
     } = this.props
 
     return (
       <div className="l-listings__main clearfix">
         <div className="l-listings__map">
-          <Map {...this.props} />
+          {this.state.mapWithQueryIsInitialized && <Map {...this.props} />}
           <SearchToolbar />
           <Filters isOpen={filterAreaIsOpen} />
           {isFetching && <Loading text="MLS®" />}
@@ -116,5 +159,6 @@ const mapStateToProps = ({ data, search }) => {
 }
 
 export default connect(mapStateToProps, {
+  ...searchActions,
   getListingsByMapBounds
 })(Search)

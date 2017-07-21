@@ -1,17 +1,14 @@
 // Search.js
+import S from 'shorti'
 import React, { Component } from 'react'
 import { FormControl } from 'react-bootstrap'
-import S from 'shorti'
-import listing_util from '../../../../utils/listing'
 import config from '../../../../../config/public'
 import AppStore from '../../../../stores/AppStore'
 
 export default class Search extends Component {
-  componentWillMount() {
-    AppStore.data.is_widget = true
-    AppStore.emitChange()
-  }
   componentDidMount() {
+    AppStore.data.is_widget = true
+
     const GoogleMapsLoader = require('google-maps')
     GoogleMapsLoader.LIBRARIES = ['places']
     GoogleMapsLoader.KEY = config.google.api_key
@@ -19,31 +16,9 @@ export default class Search extends Component {
       this.initGoogleSearch(google)
     })
   }
-  initGoogleSearch(google) {
-    const autocomplete = new google.maps.places.Autocomplete(
-      document.getElementById('google_search')
-    )
-    const geolocation = {
-      lat: 32.7767,
-      lng: -96.797
-    }
-    const circle = new google.maps.Circle({
-      center: geolocation,
-      radius: 500
-    })
-    autocomplete.setBounds(circle.getBounds())
-    autocomplete.addListener('place_changed', () => {
-      const place = autocomplete.getPlace()
-      let q = place.formatted_address
-      // Place not selected
-      if (!q) {
-        q = place.name
-      }
-      this.handleSubmit(q)
-    })
-  }
-  handleSubmit(q) {
-    const data = this.props.data
+
+  _submitHandler(q) {
+    const { data } = this.props
     // Send to search map
     if (q) {
       if (data.brand && data.brand.assets.map_url) {
@@ -53,9 +28,37 @@ export default class Search extends Component {
       }
     }
   }
+
+  initGoogleSearch(google) {
+    const autocomplete = new google.maps.places.Autocomplete(
+      document.getElementById('google_search')
+    )
+
+    const geolocation = {
+      lat: 32.7767,
+      lng: -96.797
+    }
+
+    const circle = new google.maps.Circle({
+      center: geolocation,
+      radius: 500
+    })
+
+    autocomplete.setBounds(circle.getBounds())
+
+    autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace()
+      let q = place.formatted_address
+      // Place not selected
+      if (!q) {
+        q = place.name
+      }
+      this._submitHandler(q)
+    })
+  }
+
   render() {
-    const data = this.props.data
-    const widget = true
+    const { data } = this.props
 
     return (
       <div>
