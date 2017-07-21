@@ -6,25 +6,35 @@ const data = (state = {}, action) => {
       return {
         ...state,
         [action.widgetOptions.type]: {
+          ...state[action.widgetOptions.type],
           isFetching: true,
           errorMessage: undefined
         }
       }
     case actionsType.FETCH_WIDGET_LISTING_SUCCESS: {
-      return {
-        ...state,
-        [action.widgetOptions.type]: {
+      let currentListing = Object.assign({},
+        state[action.widgetOptions.type],
+        {
           isFetching: false,
           errorMessage: undefined,
-          listings: action.listingResponse.data,
           listingsInfo: action.listingResponse.info
-        }
+        })
+      if (currentListing.listings) {
+        currentListing.listings = currentListing.listings.concat(action.listingResponse.data)
+      } else {
+        currentListing.listings = action.listingResponse.data
+      }
+      return {
+        ...state,
+        [action.widgetOptions.type]: currentListing
       }
     }
     case actionsType.FETCH_WIDGET_LISTING_FAILURE:
       return {
         ...state,
         [action.widgetOptions.type]: {
+          ...state[action.widgetOptions.type],
+          isFetching: false,
           errorMessage: action.message
         }
       }

@@ -5,9 +5,7 @@ import S from 'shorti'
 import controller from '../../../Dashboard/controller'
 
 import { Button } from 'react-bootstrap'
-import ListingDispatcher from '../../../../../dispatcher/ListingDispatcher'
 import Loading from '../../../../Partials/Loading'
-import AppStore from '../../../../../stores/AppStore'
 import Brand from '../../../../../controllers/Brand'
 import getListing from '../../../../../store_actions/widgets/listings/get-listings'
 
@@ -87,17 +85,21 @@ class Section extends Component {
     return options
   }
 
+  generateQueryString(query, newQuery, newValue) {
+    if (query.indexOf('?') < 0) {
+      return `${query}?${newQuery}=${newValue}`
+    }
+    return `${query}&${newQuery}=${newValue}`
+  }
+
   triggerNextPage() {
-    const data = this.props.data
-    const user = data.user
-    AppStore.data.widget.options = this.options
-    AppStore.data.widget[this.props.type].is_loading_listings = true
-    AppStore.emitChange()
-    ListingDispatcher.dispatch({
-      action: 'page-listings-widget',
-      user,
-      options: this.options
-    })
+    this.props.getListing(
+      this.options,
+      {
+        ...this.widgetOptions,
+        queryString: this.generateQueryString(this.widgetOptions.queryString, 'offset', this.props.listings.length)
+      }
+    )
   }
 
   render() {
