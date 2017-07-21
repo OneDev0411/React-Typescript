@@ -8,11 +8,9 @@ import Brand from '../../../../../controllers/Brand'
 import ActionBubble from '../../../Partials/ActionBubble'
 export default class ListingCard extends Component {
   side(listing) {
-    if (!listing.proposed_agent)
-      return
+    if (!listing.proposed_agent) { return }
 
-    if (!listing.proposed_agent.agent)
-      return
+    if (!listing.proposed_agent.agent) { return }
 
     const agent = listing.proposed_agent.agent
 
@@ -24,14 +22,11 @@ export default class ListingCard extends Component {
       agent.mlsid === listing.selling_agent_mls_id || agent.mlsid === listing.co_selling_agent_mls_id
     )
 
-    if (is_list_agent && is_selling_agent)
-      return 'Listing & Buyer Agent'
+    if (is_list_agent && is_selling_agent) { return 'Listing & Buyer Agent' }
 
-    if (is_list_agent && !is_selling_agent)
-      return 'Listing Agent'
+    if (is_list_agent && !is_selling_agent) { return 'Listing Agent' }
 
-    if (!is_list_agent && is_selling_agent)
-      return 'Buyer Agent'
+    if (!is_list_agent && is_selling_agent) { return 'Buyer Agent' }
 
     return ''
   }
@@ -40,11 +35,9 @@ export default class ListingCard extends Component {
     const listing = this.props.listing
     const data = this.props.data
     let property = listing.property
-    if (!property)
-      property = listing.compact_property
+    if (!property) { property = listing.compact_property }
     let address = listing.address
-    if (!address)
-      address = property.address
+    if (!address) { address = property.address }
     const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
     let listing_card_style = {
       ...S('w-480 h-460 mr-10 ml-10 mb-20 pull-left br-3 pointer relative'),
@@ -119,12 +112,18 @@ export default class ListingCard extends Component {
       let online_indicator
       let bg_color = 'dddfe0'
       if (agent_user.agent && agent_user.agent.online_state) {
-        if (agent_user.agent && agent_user.agent.online_state === 'Online' || agent_user.agent.online_state === 'Background')
+        if (agent_user.agent
+          && agent_user.agent.online_state === 'Online'
+          || agent_user.agent.online_state === 'Background') {
           bg_color = '35b863'
+        }
       }
       online_indicator = <div style={S(`br-100 bg-${bg_color} w-13 h-13 bw-2 solid bc-fff absolute z-2 t-2n r-2`)} />
       agent_image_area = (
-        <div onClick={this.props.handleAgentClick.bind(this, listing)} style={S(`p-0 br-100 border-2-solid-fff absolute r-20 b-${is_mobile ? '103' : '90'} bg-ccc`)}>
+        <div
+          onClick={this.props.handleAgentClick.bind(this, { ...listing, list_agent: listing.proposed_agent })}
+          style={S(`p-0 br-100 border-2-solid-fff absolute r-20 b-${is_mobile ? '103' : '90'} bg-ccc`)}
+        >
           { online_indicator }
           { avatar }
         </div>
@@ -146,7 +145,10 @@ export default class ListingCard extends Component {
     }
 
     let signup_confirm_message
-    if (data.show_signup_confirm_modal && data.signup_tooltip && data.signup_tooltip.listing === listing.id && !data.new_user.email_confirmed) {
+    if (data.show_signup_confirm_modal
+      && data.signup_tooltip
+      && data.signup_tooltip.listing === listing.id
+      && !data.new_user.email_confirmed) {
       signup_confirm_message = (
         <div style={S('absolute z-100 w-100p h-100p t-0 bg-fff')}>
           <div onClick={this.props.hideModal} className="close" style={S('font-30 t-10 r-20 absolute')}>&times;</div>
@@ -175,7 +177,9 @@ export default class ListingCard extends Component {
         </div>
       )
     }
-    if (data.errors && data.errors.type === 'email-in-use' && data.signup_tooltip.listing === listing.id) {
+    if (data.errors
+      && data.errors.type === 'email-in-use'
+      && data.signup_tooltip.listing === listing.id) {
       signup_confirm_message = (
         <div style={S('absolute z-100 w-100p h-100p t-0 bg-fff')}>
           <div onClick={this.props.hideModal} className="close" style={S('font-30 t-10 r-20 absolute')}>&times;</div>
@@ -185,7 +189,10 @@ export default class ListingCard extends Component {
             </div>
             <div style={S('color-9b9b9b text-center mb-20 font-21')}>This email address is already in use.</div>
             <div style={S('color-9b9b9b text-center')}>
-              <span style={S('pointer')} className="text-primary btn btn-primary" onClick={this.props.handleLoginClick.bind(this, listing.id)}>Log in</span>
+              <span
+                style={S('pointer')} className="text-primary btn btn-primary"
+                onClick={this.props.handleLoginClick.bind(this, listing.id)}
+              >Log in</span>
             </div>
           </div>
           <div style={S('bg-e2e6ea p-20 pt-20 absolute w-100p b-0')}>
@@ -200,7 +207,9 @@ export default class ListingCard extends Component {
         </div>
       )
     }
-    if (data.errors && data.errors.type === 'bad-request' && data.signup_tooltip.listing === listing.id) {
+    if (data.errors
+      && data.errors.type === 'bad-request'
+      && data.signup_tooltip.listing === listing.id) {
       signup_confirm_message = (
         <div style={S('absolute z-100 w-100p h-100p t-0 bg-fff')}>
           <div onClick={this.props.hideModal} className="close" style={S('font-30 t-10 r-20 absolute')}>&times;</div>
@@ -210,7 +219,10 @@ export default class ListingCard extends Component {
             </div>
             <div style={S('color-9b9b9b text-center mb-20 font-21')}>There was an error with this request.</div>
             <div style={S('color-9b9b9b text-center')}>
-              <span style={S('pointer')} className="text-primary btn btn-primary" onClick={this.props.handleLoginClick.bind(this, listing.id)}>Log in</span>
+              <span
+                style={S('pointer')} className="text-primary btn btn-primary"
+                onClick={this.props.handleLoginClick.bind(this, listing.id)}
+              >Log in</span>
             </div>
           </div>
           <div style={S('bg-e2e6ea p-20 pt-20 absolute w-100p b-0')}>
@@ -227,7 +239,11 @@ export default class ListingCard extends Component {
     }
 
     return (
-      <div key={`listing-viewer-${listing.id}-${helpers.randomString(10)}`} style={listing_card_style}>
+      <div
+        key={`listing-viewer-${listing.id}-${helpers.randomString(10)}`}
+        style={listing_card_style}
+        className={this.props.className}
+      >
         <FavoriteHeart
           listing={listing}
         />

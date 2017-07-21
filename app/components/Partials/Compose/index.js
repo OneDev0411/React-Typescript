@@ -111,7 +111,7 @@ class Compose extends React.Component {
           ...room,
           ...{
             users: _.pluck(room.users, 'id'),
-            display_name: `${room.proposed_title}(room)`
+            display_name: `${room.proposed_title}`
           }
         })
       })
