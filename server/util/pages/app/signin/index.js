@@ -1,27 +1,32 @@
 import Koa from 'koa'
 import User from '../../../../../app/models/User'
 import Crypto from '../../../../../app/models/Crypto'
+import MobileDetect from 'mobile-detect'
+
 const router = require('koa-router')()
 const app = new Koa()
 
-async function getSelf(config, decrypted_obj,) {
+async function getSelf(config, decrypted_obj) {
   return new Promise((resolve, reject) => {
-    User.getSelf({
-      access_token: decrypted_obj.tokens.access,
-      api_host: config.api_host_local
-    }, (err, response) => {
-      if (!err && response.data) {
-        return resolve(response)
-      } else {
+    User.getSelf(
+      {
+        access_token: decrypted_obj.tokens.access,
+        api_host: config.api_host_local
+      },
+      (err, response) => {
+        if (!err && response.data) {
+          return resolve(response)
+        }
         reject(err)
       }
-    })
+    )
   })
 }
 
 router.get('/signin', async (ctx, next) => {
+  const isMobile = new MobileDetect(ctx.req.headers['user-agent'])
 
-  const { token, email, redirect_to} = ctx.request.query
+  const { token, email, redirect_to } = ctx.request.query
 
   // Auto sign in
   if (token) {
@@ -37,12 +42,11 @@ router.get('/signin', async (ctx, next) => {
         }
 
         return ctx.redirect(redirect_to)
-      }
-      catch(e) {}
+      } catch (e) {}
     }
   }
 
-  if (!token && !email && ctx.session.user) {
+  if (!token && !email && ctx.session.user && !isMobile.phone()) {
     ctx.redirect('/dashboard/mls')
   }
 

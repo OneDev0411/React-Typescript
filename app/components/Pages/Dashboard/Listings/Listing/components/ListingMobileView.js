@@ -687,7 +687,8 @@ const ListingMobileView = ({
   // if (user) {
   let left_area = (
     <div style={S('h-65 w-200')}>
-      <span
+      <a
+        href={Brand.asset('site_logo_wide') ? `http://${window.location.host}` : '/'}
         style={{
           ...S('font-28 pt-15 pl-15'),
           display: 'block',
@@ -699,7 +700,7 @@ const ListingMobileView = ({
         {Brand.asset('site_logo_wide')
           ? <img style={S('w-100p')} src={Brand.asset('site_logo_wide')} />
           : 'Rechat'}
-      </span>
+      </a>
     </div>
   )
   // left_area = (
