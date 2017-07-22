@@ -1,9 +1,11 @@
 import deals from './deals'
+import forms from './forms'
 
 const ActionTypes = {}
 
 new Array(
-  ...deals
+  ...deals,
+  ...forms
 )
 .forEach(action => {
   ActionTypes[action] = `DEALS___${action}`

@@ -3,6 +3,7 @@ $col-padding: 3%;
 @import './dashboard_tasks';
 @import './dashboard_control_panel';
 @import './dashboard_fact_sheet';
+@import './dashboard_task_creator';
 
 %deal-dashboard {
   min-height: 100vh;
@@ -23,5 +24,9 @@ $col-padding: 3%;
 
   .deal-fact-sheet {
     @extend %deal-fact-sheet;
+  }
+
+  .deal-task-creators {
+    @extend %deal-task-creators;
   }
 }

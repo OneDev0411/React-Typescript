@@ -56,6 +56,21 @@ Deal.getAll = async function(user = {}) {
 }
 
 /**
+* get forms list
+*/
+Deal.getForms = async function() {
+  try {
+    const response = await new Fetch()
+      .get('/forms')
+
+    return response.body.data
+
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+/**
 * search google places
 */
 Deal.searchPlaces = async function(address) {

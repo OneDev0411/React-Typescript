@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { getDeals } from '../../../../store_actions/deals'
+import { getDeals, getForms } from '../../../../store_actions/deals'
 
 class DealsContainer extends React.Component {
   constructor(props) {
@@ -13,10 +13,14 @@ class DealsContainer extends React.Component {
   }
 
   componentDidMount() {
-    const { dispatch, deals } = this.props
+    const { dispatch, deals, forms } = this.props
 
     if (!deals) {
       dispatch(getDeals())
+    }
+
+    if (!forms) {
+      dispatch(getForms())
     }
   }
 
@@ -38,5 +42,6 @@ class DealsContainer extends React.Component {
 
 export default connect(({ deals, data }) => ({
   deals: deals.list,
+  forms: deals.forms,
   user: data.user
 }))(DealsContainer)

@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
-import TasksList from './tasks'
+import TasksList from './tasks-list'
 import ControlPanel from './control-panel'
 import FactSheet from './factsheet'
 
@@ -16,7 +16,7 @@ class DealDetails extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props.deal)
+    // console.log(this.props.deal)
   }
 
   render() {
@@ -37,6 +37,7 @@ class DealDetails extends React.Component {
         <Col lg={3} md={4} className="column">
           <TasksList
             activeTag={activeTag}
+            tags={tags}
             tasks={deal.tasks}
           />
         </Col>
