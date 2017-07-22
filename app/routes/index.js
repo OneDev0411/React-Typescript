@@ -1,5 +1,6 @@
 import React from 'react'
 import { Route, IndexRoute, Redirect } from 'react-router'
+import Loadable from 'react-loadable'
 import store from '../stores'
 
 // Containers
@@ -8,7 +9,6 @@ import Authentication from '../components/Authentication'
 
 // Pages
 import Landing from '../components/Pages/Landing'
-// import Recents from '../components/Pages/Dashboard/Recents'
 
 import SignUp from '../components/Pages/SignUp'
 import SignIn from '../components/Pages/SignIn'
@@ -46,12 +46,31 @@ import DealDashboard from '../components/Pages/Dashboard/Deals/dashboard'
 // import CollectSignatures_Recipients from '../components/Pages/Dashboard/Deals/CollectSignatures-Recipients'
 
 // contacts
-import Contacts from '../components/Pages/Dashboard/Contacts'
-import ContactsList from '../components/Pages/Dashboard/Contacts/List'
-import ContactProfile from '../components/Pages/Dashboard/Contacts/Profile'
+// import Contacts from '../components/Pages/Dashboard/Contacts'
+// import ContactsList from '../components/Pages/Dashboard/Contacts/List'
+// import ContactProfile from '../components/Pages/Dashboard/Contacts/Profile'
+const AsyncContacts = Loadable({
+  loader: () => import('../components/Pages/Dashboard/Contacts'),
+  loading: () => null,
+})
+
+const AsyncContactsList = Loadable({
+  loader: () => import('../components/Pages/Dashboard/Contacts/List'),
+  loading: () => null,
+})
+
+
+const AsyncContactProfile = Loadable({
+  loader: () => import('../components/Pages/Dashboard/Contacts/Profile'),
+  loading: () => null,
+})
 
 // chat room
-import Recents from '../components/Pages/Dashboard/Chatroom'
+// import Recents from '../components/Pages/Dashboard/Chatroom'
+const AsyncRecents = Loadable({
+  loader: () => import('../components/Pages/Dashboard/Chatroom'),
+  loading: () => null,
+})
 
 // Notifications
 import NotificationsPage from '../components/Pages/Dashboard/Notifications'
@@ -147,12 +166,12 @@ export default (
       <Route path="/dashboard/forms" component={Forms} />
 
       <Route path="/dashboard/recents(/:roomId)">
-        <IndexRoute component={Recents} />
+        <IndexRoute component={AsyncRecents} />
       </Route>
 
-      <Route path="/dashboard/contacts" component={Contacts}>
-        <IndexRoute component={ContactsList} />
-        <Route path="/dashboard/contacts/:id" component={ContactProfile} />
+      <Route path="/dashboard/contacts" component={AsyncContacts}>
+        <IndexRoute component={AsyncContactsList} />
+        <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
       </Route>
 
       <Route path="/dashboard/deals" component={DealsLayout}>
