@@ -1,18 +1,88 @@
 %deals-list {
-  padding: 3% 2%;
+  .table-container {
+    @extend %deal-list--table;
+  }
+
+  .heading {
+    @extend %deal-list--heading;
+  }
+}
+
+%deal-list--table {
+  padding: 2% 30px;
+
   .table {
     border-collapse: separate;
     border-spacing: 0 10px;
+
+    tr td:first-child {
+      border-radius: 4px 0 0 4px;
+    }
+
+    tr td:last-child {
+      border-radius: 0 4px 4px 0;
+    }
+
+    td {
+      vertical-align: middle;
+    }
+
     .header {
-      color: #A4A4A4;
       background: transparent;
-      font-weight: 200;
       margin-bottom: 40px;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: left;
+      color: #78909c;
     }
 
     .item {
-      background: #fff;
       cursor: pointer;
+      border-radius: 4px;
+      background-color: #ffffff;
+      box-shadow: 0 1px 1px 0 #eef1f2;
+      border: solid 1px #f4f7f9;
+      color: #5b6469;
+    }
+
+    .item > .address {
+      img {
+        width: 40px;
+        height: 40px;
+        border-radius: 4px;
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+%deal-list--heading {
+  height: 54px;
+  line-height: 54px;
+  background-color: #f8fafb;
+  box-shadow: 0 1px 0 0 #eef1f2;
+  vertical-align: middle;
+  text-align: right;
+  padding: 0 30px;
+  .btn {
+    width: 120px;
+    height: 30px;
+    line-height: 13px;
+    vertical-align: middle;
+    border-radius: 4px;
+    background-color: #2196f3;
+    margin-left: 10px;
+  }
+
+  input.search {
+    width: 260px;
+    height: 30px;
+    border-radius: 3px;
+    background-color: #ffffff;
+    border: solid 1px #eef0f2;
+    padding: 0 10px;
+    &:focus {
+      outline: none;
     }
   }
 }
