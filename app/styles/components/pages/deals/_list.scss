@@ -13,7 +13,7 @@
 
   .table {
     border-collapse: separate;
-    border-spacing: 0 10px;
+    border-spacing: 0 3px;
 
     tr td:first-child {
       border-radius: 4px 0 0 4px;
@@ -34,6 +34,21 @@
       font-weight: 500;
       text-align: left;
       color: #78909c;
+
+      td > i {
+        margin-right: 5px;
+      }
+
+      .sortable {
+        cursor: pointer;
+        &:hover {
+          color: #000;
+        }
+
+        &.isActive {
+          color: #000;
+        }
+      }
     }
 
     .item {
@@ -83,6 +98,43 @@
     padding: 0 10px;
     &:focus {
       outline: none;
+    }
+  }
+}
+
+.deal-list--popover {
+  background-color: #303e4d;
+  border: none;
+  box-shadow: -1px 0 10px 0 rgba(0, 0, 0, 0.1), 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  color: #fff;
+  .arrow:after {
+    border-bottom-color: #303e4d !important;
+  }
+  .popover-content {
+    padding: 10px;
+  }
+
+  .critical-dates {
+    ul {
+      margin: 0;
+      padding: 0;
+      font-size: 13px;
+      li {
+        margin-bottom: 4px;
+        .status {
+          display: inline-block;
+          width: 10px;
+          height: 10px;
+          border-radius: 30px;
+          border: 1px solid #d8d8d8;
+          margin-right: 5px;
+          background: #d8d8d8;
+        }
+        .field {
+          color: #9b9b9b;
+          font-size: 12px;
+        }
+      }
     }
   }
 }
