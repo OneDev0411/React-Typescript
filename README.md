@@ -27,10 +27,10 @@ In another terminal start the dev server.
 npm run development
 ```
 Go to [http://localhost:8080](http://localhost:8080)
-#####Run staging
+#####Run stage
 This uses the dev config, renders server side and removes dev features like hot reloader.
 ```
-npm run staging
+npm run stage
 ```
 Go to [http://localhost:3000](http://localhost:3000)
 #####Run production

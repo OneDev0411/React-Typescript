@@ -11,8 +11,10 @@ import reducers from '../../../app/reducers'
 import config from '../../../config/webpack'
 
 function fetch(renderProps, store) {
-  return renderProps.components.map((c) => {
-    if (c && c.fetchData) { return c.fetchData(store.dispatch, renderProps.params) }
+  return renderProps.components.map(c => {
+    if (c && c.fetchData) {
+      return c.fetchData(store.dispatch, renderProps.params)
+    }
     return Promise.reslove
   })
 }
@@ -21,15 +23,14 @@ async function getBrand(user, url) {
   return new Promise((resolve, reject) => {
     const hostname = urlParser.parse(url).hostname
 
-    Brand.getByHostname({ hostname, user }, function(err, res) {
-      if (err) return reject(err)
+    Brand.getByHostname({ hostname, user }, (err, res) => {
+      if (err) { return reject(err) }
       return resolve(res)
     })
   })
 }
 
 async function display(file, renderProps) {
-
   let initialState = {
     data: this.locals.AppStore ? this.locals.AppStore.data : {}
   }
@@ -38,17 +39,23 @@ async function display(file, renderProps) {
     const response = await getBrand(this.session.user, this.request.origin)
     initialState = {
       ...initialState,
-      ...{data: {
-        ...initialState.data,
-        ...{brand: response.body.data}
-      }}
+      ...{
+        data: {
+          ...initialState.data,
+          ...{ brand: response.body.data }
+        }
+      }
     }
-  } catch(e) {
+  } catch (e) {
     /* nothing */
   }
 
   // create store
-  const store = createStore(reducers, initialState, compose(applyMiddleware(thunk)))
+  const store = createStore(
+    reducers,
+    initialState,
+    compose(applyMiddleware(thunk))
+  )
 
   // append user data to render props params
   if (initialState.data.user) {
@@ -57,13 +64,15 @@ async function display(file, renderProps) {
 
   try {
     await Promise.all(fetch(renderProps, store))
-  } catch (e) { /* do nothing */ }
+  } catch (e) {
+    /* do nothing */
+  }
 
   // get store initial data
   const store_data = encodeURIComponent(xss(JSON.stringify(store.getState())))
 
-  if (['production', 'staging'].indexOf(process.env.NODE_ENV) > -1) {
-    await this.render(file || 'app',  {
+  if (['production', 'stage'].indexOf(process.env.NODE_ENV) > -1) {
+    await this.render(file || 'app', {
       data: this.locals,
       store_data
     })

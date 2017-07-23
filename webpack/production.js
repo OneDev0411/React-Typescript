@@ -6,18 +6,11 @@ import path from 'path'
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
 
-const postcss = function () {
-  return [
-    require('postcss-cssnext')(),
-    require('autoprefixer')({
-      'browserslist': [
-        '> 1%',
-        'IE 10',
-        'Last 2 versions'
-      ]
-    })
-  ]
-}
+const postcss = () => [
+  require('postcss-cssnext')({
+    browsers: ['> 1%', 'IE 10', 'Last 2 versions']
+  })
+]
 
 webpackConfig.devtool = ''
 
@@ -28,10 +21,7 @@ webpackConfig.performance = {
 }
 
 webpackConfig.entry = {
-  app: [
-    'babel-polyfill',
-    appConfig.compile.entry
-  ],
+  app: ['babel-polyfill', appConfig.compile.entry],
   vendor: appConfig.compile.vendors
 }
 
