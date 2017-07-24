@@ -62,7 +62,7 @@ app.keys = ['r3ch4t@re4ct_rocks!!!']
 
 app.use(session({
   key: 'rechat-webapp:session',
-  maxAge: 86400000,
+  maxAge: 60 * 86400 * 1000, // 60 days
   overwrite: true,
   httpOnly: true,
   signed: true
