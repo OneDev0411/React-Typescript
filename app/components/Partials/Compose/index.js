@@ -59,7 +59,7 @@ class Compose extends React.Component {
   /**
    * create list view
    */
-  createListView(...sources) {
+  async createListView(...sources) {
     // flatten sources
     const entries = [].concat.apply([], sources)
 
@@ -70,7 +70,7 @@ class Compose extends React.Component {
       .value()
 
     if (_.size(viewList) === 0)
-      viewList = this.createNewEntry()
+      viewList = await this.createNewEntry()
 
     this.setState({ viewList })
   }

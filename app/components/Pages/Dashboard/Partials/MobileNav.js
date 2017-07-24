@@ -23,6 +23,12 @@ export default class SideBar extends Component {
     AppStore.emitChange()
   }
 
+  async componentDidUpdate() {
+    // Refresh page on agent update
+    const data = this.props.data
+    this.phone_number_parsed = await helpers.parsePhoneNumber(data.user.phone_number)
+  }
+
   showIntercom() {
     window.Intercom('show')
   }
@@ -271,8 +277,8 @@ export default class SideBar extends Component {
     let change_password_area = (
       <a style={S('mt-7')} className="pull-left" href="#" onClick={this.showChangePassword.bind(this)}>Change password</a>
     )
-    const phone_number_parsed = helpers.parsePhoneNumber(user.phone_number)
-    const current_country_code = phone_number_parsed.country_code
+
+    const current_country_code = this.phone_number_parsed ? this.phone_number_parsed.country_code : ''
     let phone_country = `+${current_country_code}`
     if (data.phone_country)
       phone_country = `+${data.phone_country.dialCode}`
@@ -315,7 +321,7 @@ export default class SideBar extends Component {
             <div className="input-group-btn input-dropdown--country-codes">
               { country_codes }
             </div>
-            <MaskedInput className="form-control" ref={ref => this.phone_numberInput = ref} type="text" defaultValue={user.phone_number ? phone_number_parsed.phone_number : ''} mask="(999)-999-9999" maskChar="_" />
+            <MaskedInput className="form-control" ref={ref => this.phone_numberInput = ref} type="text" defaultValue={user.phone_number ? this.phone_number_parsed.phone_number : ''} mask="(999)-999-9999" maskChar="_" />
           </div>
         </div>
         <div className="clearfix" />
