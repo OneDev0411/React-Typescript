@@ -4,147 +4,141 @@ import store from '../stores'
 import Load from '../loader'
 
 // Containers
-const AsyncAppLayout = Load({
-  loader: () => import('../components/App')
-})
+import AppLayout from '../components/App'
 
 const AsyncAuthenticationLayout = Load({
-  loader: () => import('../components/Authentication')
+  loader: () => import('../components/Authentication' /* webpackChunkName: "authlay" */)
 })
 
 // Pages
-const AsyncLanding = Load({
-  loader: () => import('../components/Pages/Landing')
-})
+import Landing from '../components/Pages/Landing'
 
 const AsyncSignUp = Load({
-  loader: () => import('../components/Pages/SignUp')
+  loader: () => import('../components/Pages/SignUp' /* webpackChunkName: "signup" */)
 })
 
 const AsyncSignIn = Load({
-  loader: () => import('../components/Pages/SignIn')
+  loader: () => import('../components/Pages/SignIn' /* webpackChunkName: "signin" */)
 })
 
 const AsyncVerify = Load({
-  loader: () => import('../components/Pages/Verify')
+  loader: () => import('../components/Pages/Verify' /* webpackChunkName: "verify" */)
 })
 
 const AsyncPassword = Load({
-  loader: () => import('../components/Pages/Password')
+  loader: () => import('../components/Pages/Password' /* webpackChunkName: "password" */)
 })
 
 const AsyncConfirmAgent = Load({
-  loader: () => import('../components/Pages/SignUp/ConfirmAgent')
+  loader: () => import('../components/Pages/SignUp/ConfirmAgent' /* webpackChunkName: "confirm" */)
 })
 
 const AsyncNoMatch = Load({
-  loader: () => import('../components/Pages/NoMatch')
+  loader: () => import('../components/Pages/NoMatch' /* webpackChunkName: "404" */)
 })
 
 const AsyncBranch = Load({
-  loader: () => import('../components/Pages/Branch')
+  loader: () => import('../components/Pages/Branch' /* webpackChunkName: "branch" */)
 })
 
 const AsyncSettings = Load({
-  loader: () => import('../components/Pages/Account/Settings')
+  loader: () => import('../components/Pages/Account/Settings' /* webpackChunkName: "setting" */)
 })
 
 const AsyncNotifications = Load({
-  loader: () => import('../components/Pages/Account/Notifications')
+  loader: () => import('../components/Pages/Account/Notifications' /* webpackChunkName: "notif" */)
 })
 
 // listings
 const AsyncListingsLayout = Load({
-  loader: () => import('../components/Pages/Dashboard/Listings')
+  loader: () => import('../components/Pages/Dashboard/Listings' /* webpackChunkName: "listings" */)
 })
 
 const AsyncListingsSearch = Load({
-  loader: () => import('../components/Pages/Dashboard/Listings/Search')
+  loader: () => import('../components/Pages/Dashboard/Listings/Search' /* webpackChunkName: "listing_search" */)
 })
+// import ListingsSearch from '../components/Pages/Dashboard/Listings/Search'
 
 const AsyncListingsAlerts = Load({
-  loader: () => import('../components/Pages/Dashboard/Listings/Alerts')
+  loader: () => import('../components/Pages/Dashboard/Listings/Alerts' /* webpackChunkName: "alerts" */)
 })
 
 // deals
-// import DealEditForm from '../components/Pages/Dashboard/Deals/Edit-Form'
-// import CollectSignatures_Documents from '../components/Pages/Dashboard/Deals/CollectSignatures-Documents'
-// import CollectSignatures_Recipients from '../components/Pages/Dashboard/Deals/CollectSignatures-Recipients'
 const AsyncDealsLayout = Load({
-  loader: () => import('../components/Pages/Dashboard/Deals')
+  loader: () => import('../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */)
 })
 
 const AsyncDealsList = Load({
-  loader: () => import('../components/Pages/Dashboard/Deals/list')
+  loader: () => import('../components/Pages/Dashboard/Deals/list' /* webpackChunkName: "deal_l" */)
 })
 
 const AsyncDealCreate = Load({
-  loader: () => import('../components/Pages/Dashboard/Deals/create')
+  loader: () => import('../components/Pages/Dashboard/Deals/create' /* webpackChunkName: "deal_c" */)
 })
 
 const AsyncDealDashboard = Load({
-  loader: () => import('../components/Pages/Dashboard/Deals/dashboard')
+  loader: () => import('../components/Pages/Dashboard/Deals/dashboard' /* webpackChunkName: "deal_d" */)
 })
 
 // contacts
 const AsyncContacts = Load({
-  loader: () => import('../components/Pages/Dashboard/Contacts')
+  loader: () => import('../components/Pages/Dashboard/Contacts' /* webpackChunkName: "contact" */)
 })
 
 const AsyncContactsList = Load({
-  loader: () => import('../components/Pages/Dashboard/Contacts/List')
+  loader: () => import('../components/Pages/Dashboard/Contacts/List' /* webpackChunkName: "contact_l" */)
 })
 
 const AsyncContactProfile = Load({
-  loader: () => import('../components/Pages/Dashboard/Contacts/Profile')
+  loader: () => import('../components/Pages/Dashboard/Contacts/Profile' /* webpackChunkName: "contact_p" */)
 })
 
 // chat room
 const AsyncRecents = Load({
-  loader: () => import('../components/Pages/Dashboard/Chatroom')
+  loader: () => import('../components/Pages/Dashboard/Chatroom' /* webpackChunkName: "chat" */)
 })
 
 const AsyncListingsFavorites = Load({
-  loader: () => import('../components/Pages/Dashboard/Listings/Favorites')
+  loader: () => import('../components/Pages/Dashboard/Listings/Favorites' /* webpackChunkName: "fav" */)
 })
 
 const AsyncListingSinglePage = Load({
-  loader: () => import('../components/Pages/Dashboard/Listings/Listing')
+  loader: () => import('../components/Pages/Dashboard/Listings/Listing' /* webpackChunkName: "list_single" */)
 })
 
 // Notifications
 const AsyncNotificationsPage = Load({
-  loader: () => import('../components/Pages/Dashboard/Notifications')
+  loader: () => import('../components/Pages/Dashboard/Notifications' /* webpackChunkName: "notif_p" */)
 })
 
 // Widgets
 const AsyncListingsWidget = Load({
-  loader: () => import('../components/Pages/Widgets/Listings')
+  loader: () => import('../components/Pages/Widgets/Listings' /* webpackChunkName: "listing_w" */)
 })
 
 const AsyncMapWidget = Load({
-  loader: () => import('../components/Pages/Widgets/Map')
+  loader: () => import('../components/Pages/Widgets/Map' /* webpackChunkName: "map_w" */)
 })
 
 const AsyncSearchWidget = Load({
-  loader: () => import('../components/Pages/Widgets/Search')
+  loader: () => import('../components/Pages/Widgets/Search' /* webpackChunkName: "search_w" */)
 })
 
 // store and other pages
 const AsyncWebsite = Load({
-  loader: () => import('../components/Pages/Dashboard/Website')
+  loader: () => import('../components/Pages/Dashboard/Website' /* webpackChunkName: "website" */)
 })
 
 const AsyncCards = Load({
-  loader: () => import('../components/Pages/Dashboard/Cards')
+  loader: () => import('../components/Pages/Dashboard/Cards' /* webpackChunkName: "card" */)
 })
 
 const AsyncForms = Load({
-  loader: () => import('../components/Pages/Dashboard/Forms')
+  loader: () => import('../components/Pages/Dashboard/Forms' /* webpackChunkName: "form" */)
 })
 
 const AsyncMobile = Load({
-  loader: () => import('../components/Pages/Mobile')
+  loader: () => import('../components/Pages/Mobile' /* webpackChunkName: "mobile" */)
 })
 
 function authenticate(nextState, replace) {
@@ -181,7 +175,7 @@ function authenticate(nextState, replace) {
 export default (
   <Route>
     <Route path="/" component={AsyncAuthenticationLayout}>
-      <IndexRoute component={AsyncLanding} />
+      <IndexRoute component={Landing} />
       <Route path="/signup" component={AsyncSignUp} />
       <Route path="/signup/agent" component={AsyncConfirmAgent} />
       <Route path="/signin" component={AsyncSignIn} />
@@ -191,7 +185,7 @@ export default (
       <Route path="/mobile" component={AsyncMobile} />
     </Route>
 
-    <Route path="/" component={AsyncAppLayout}>
+    <Route path="/" component={AppLayout}>
       <Route path="/branch" component={AsyncBranch} />
       <Route path="/widgets/map" component={AsyncMapWidget} />
       <Route path="/widgets/search" component={AsyncSearchWidget} />
@@ -202,7 +196,7 @@ export default (
       </Route>
     </Route>
 
-    <Route path="/" component={AsyncAppLayout} onEnter={authenticate}>
+    <Route path="/" component={AppLayout} onEnter={authenticate}>
       <Route path="/branch" component={AsyncBranch} />
       <Route path="/widgets/map" component={AsyncMapWidget} />
       <Route path="/widgets/search" component={AsyncSearchWidget} />

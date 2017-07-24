@@ -2,6 +2,7 @@ import webpack from 'webpack'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import ImageminPlugin from 'imagemin-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+import Visualizer from 'webpack-visualizer-plugin'
 import path from 'path'
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
@@ -36,6 +37,9 @@ webpackConfig.entry = {
 
 webpackConfig.plugins.push(
   new webpack.optimize.AggressiveMergingPlugin(),
+  new Visualizer({
+    filename: './statistics.html'
+  }),
   new webpack.optimize.CommonsChunkPlugin({
     name: 'vendor',
     filename: appConfig.compile.jsVendorBundle

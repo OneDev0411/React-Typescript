@@ -143,6 +143,7 @@
     "uuid-validate": "0.0.2",
     "validator": "^7.0.0",
     "webpack": "^3.1.0",
+    "webpack-visualizer-plugin": "^0.1.11",
     "whatwg-fetch": "^2.0.3",
     "xss": "^0.3.3"
   },
