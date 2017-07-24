@@ -1,6 +1,5 @@
 import React from 'react'
 import { Route, IndexRoute, Redirect } from 'react-router'
-import Loadable from 'react-loadable'
 import store from '../stores'
 import Load from '../loader'
 
