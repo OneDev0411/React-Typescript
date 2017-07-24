@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Rx from 'rxjs/Rx'
 import _ from 'underscore'
 import moment from 'moment'
 import cn from 'classnames'
@@ -67,7 +66,9 @@ class Messages extends React.Component {
     this.messagesObservable.unsubscribe()
   }
 
-  initializeScroller() {
+  async initializeScroller() {
+    const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
+
     this.messagesObservable = Rx
     .Observable
     .fromEvent(this.messagesList, 'scroll')

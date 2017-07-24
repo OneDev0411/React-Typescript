@@ -1,7 +1,6 @@
 import React from 'react'
 import { browserHistory } from 'react-router'
 import { Grid, Row, Col, Button, FormControl, Modal } from 'react-bootstrap'
-import Rx from 'rxjs/Rx'
 import _ from 'underscore'
 
 import Deal from '../../../../../models/Deal'
@@ -24,7 +23,8 @@ export default class DealCreate extends React.Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
     const { Observable } = Rx
 
     this.searchHandler = Observable

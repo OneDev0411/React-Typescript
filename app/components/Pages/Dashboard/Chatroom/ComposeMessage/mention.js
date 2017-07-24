@@ -1,5 +1,4 @@
 import React from 'react'
-import Rx from 'rxjs/Rx'
 import cn from 'classnames'
 import UserAvatar from '../../../../Partials/UserAvatar'
 
@@ -30,7 +29,8 @@ export default class Mentions extends React.Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
     const { Observable } = Rx
     const { showSuggestions } = this.state
     const { handler } = this.props
