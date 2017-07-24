@@ -2,17 +2,24 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import S from 'shorti'
 import AppDispatcher from '../dispatcher/AppDispatcher'
+import Load from '../loader'
 
 // services
 import ChatSocket from './Pages/Dashboard/Chatroom/Services/socket'
 
 // navs
 import SideBar from './Pages/Dashboard/Partials/SideBar'
-import MobileNav from './Pages/Dashboard/Partials/MobileNav'
+
+const MobileNav = Load({
+  loader: () => import('./Pages/Dashboard/Partials/MobileNav')
+})
 
 // global chat components
 import { getRooms } from '../store_actions/chatroom'
-import InstantChat from './Pages/Dashboard/Chatroom/InstantChat'
+
+const InstantChat = Load({
+  loader: () => import('./Pages/Dashboard/Chatroom/InstantChat')
+})
 
 // contacts
 import { getContacts } from '../store_actions/contact'
