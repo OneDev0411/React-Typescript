@@ -1,5 +1,5 @@
 export const normalizeListingsForMarkers = markers =>
-  markers.map(marker => {
+  markers.filter(marker => marker.location || marker.property).map(marker => {
     if (marker.location) {
       return {
         ...marker,
