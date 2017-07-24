@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import validator from 'validator'
-import { PhoneNumberUtil } from 'google-libphonenumber'
 import _ from 'underscore'
 import cn from 'classnames'
 import Fetch from '../../../services/fetch'
@@ -79,7 +78,7 @@ class Compose extends React.Component {
   /**
    * create new entry to display in viewlist
    */
-  createNewEntry() {
+  async createNewEntry() {
     const id = this.criteria
 
     if (validator.isEmail(id)) {
@@ -88,7 +87,9 @@ class Compose extends React.Component {
       }
     }
 
+    const { PhoneNumberUtil } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
     const phoneUtil = PhoneNumberUtil.getInstance()
+
     if (phoneUtil.isPossibleNumberString(id)) {
       return {
         [id]: this.createListItem('phone_number', { id, phone_number: id })

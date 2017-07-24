@@ -10,8 +10,6 @@ import Loading from '../../../Partials/Loading'
 import MaskedInput from 'react-input-mask'
 import { all_countries } from '../../../../utils/country-data'
 import helpers from '../../../../utils/helpers'
-import { PhoneNumberUtil } from 'google-libphonenumber'
-const phoneUtil = PhoneNumberUtil.getInstance()
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import ProfileImage from './ProfileImage'
@@ -39,7 +37,10 @@ export default class SideBar extends Component {
     this.editAccountInfo()
   }
 
-  editAccountInfo() {
+  async editAccountInfo() {
+    const { PhoneNumberUtil } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
+    const phoneUtil = PhoneNumberUtil.getInstance()
+
     delete AppStore.data.error
     AppStore.emitChange()
     const data = this.props.data

@@ -1,5 +1,7 @@
-import { PhoneNumberUtil } from 'google-libphonenumber'
-const phoneUtil = PhoneNumberUtil.getInstance()
+async function getPhoneNumberUtil () {
+  const { PhoneNumberUtil } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
+  return PhoneNumberUtil.getInstance()
+}
 
 export function randomString(len, charSet) {
   charSet = charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -102,7 +104,8 @@ export function getDaysFromMiliseconds(miliseconds){
   return Math.floor(parseInt(miliseconds) / 86400000)
 }
 
-export function isValidPhoneNumber(phone_number){
+export async function isValidPhoneNumber(phone_number){
+  const phoneUtil = await getPhoneNumberUtil()
   if(phone_number.trim() && phoneUtil.isValidNumber(phoneUtil.parse(phone_number)))
     return true
   return false
@@ -128,7 +131,8 @@ export function addTimeToDate(date_object, hours, minutes, suffix) {
   return miliseconds
 }
 
-export function parsePhoneNumber(phone_number) {
+export async function parsePhoneNumber(phone_number) {
+  const phoneUtil = await getPhoneNumberUtil()
   if(phone_number && phoneUtil.isPossibleNumberString(phone_number)) {
     const values = phoneUtil.parse(phone_number).values_
     return {

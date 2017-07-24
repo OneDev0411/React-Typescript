@@ -11,7 +11,6 @@ import Loading from '../../../Partials/Loading'
 import MaskedInput from 'react-input-mask'
 import { all_countries } from '../../../../utils/country-data'
 import helpers from '../../../../utils/helpers'
-import { PhoneNumberUtil } from 'google-libphonenumber'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import ProfileImage from './ProfileImage'
@@ -26,8 +25,6 @@ import Brand from '../../../../controllers/Brand'
 
 // chatroom stuff
 import InstantTrigger from '../Chatroom/Shared/instant-trigger'
-
-const phoneUtil = PhoneNumberUtil.getInstance()
 
 export default class SideBar extends Component {
 
@@ -99,7 +96,10 @@ export default class SideBar extends Component {
     })
   }
 
-  editAccountInfo() {
+  async editAccountInfo() {
+    const { PhoneNumberUtil } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
+    const phoneUtil = PhoneNumberUtil.getInstance()
+
     delete AppStore.data.error
     const data = this.props.data
     const user = data.user
