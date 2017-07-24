@@ -321,7 +321,13 @@ export default class SideBar extends Component {
             <div className="input-group-btn input-dropdown--country-codes">
               { country_codes }
             </div>
-            <MaskedInput className="form-control" ref={ref => this.phone_numberInput = ref} type="text" defaultValue={user.phone_number ? this.phone_number_parsed.phone_number : ''} mask="(999)-999-9999" maskChar="_" />
+            <MaskedInput
+              className="form-control"
+              ref={ref => this.phone_numberInput = ref}
+              type="text"
+              defaultValue={user.phone_number && this.phone_number_parsed ? this.phone_number_parsed.phone_number : ''}
+              mask="(999)-999-9999"
+              maskChar="_" />
           </div>
         </div>
         <div className="clearfix" />
