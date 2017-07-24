@@ -2,6 +2,11 @@ import { submit, SubmissionError } from 'redux-form'
 import getListings from '../get-listings'
 import { generatePointsFromBounds } from '../../../../utils/map'
 import setSearchListingsOptions from '../../../../store_actions/listings/search/set-options'
+import toogleFiltersArea from '../../../../store_actions/listings/search/filters/toggle-filters-area'
+import { goToPlace } from '../../map'
+import { selectListings } from '../../../../reducers/listings'
+import extendedBounds from '../../../../utils/extendedBounds'
+import { normalizeListingsForMarkers } from '../../../../utils/map'
 
 // Initial valert options {
 //   limit: '250',
@@ -124,8 +129,8 @@ export const obiectPropsValueToArray = obj =>
         })
         .filter(v => v)
 
-const submitFiltersForm = values => (dispatch, getState) => {
-  const { options, filters: formState } = getState().search
+const normalizeValues = (values, state) => {
+  const { options, filters: formState } = state
 
   const {
     counties,
@@ -208,20 +213,55 @@ const submitFiltersForm = values => (dispatch, getState) => {
   })
 
   if (typeof queryOptions.points === 'undefined') {
-    const { map } = getState().search
+    const { map } = state
     queryOptions.points = generatePointsFromBounds(map.props.bounds)
   }
 
   // console.log(options, values, queryOptions)
 
+  return queryOptions
+}
+
+const submitFiltersForm = values => async (dispatch, getState) => {
+  const queryOptions = normalizeValues(values, getState().search)
+
+  const updateMap = () => {
+    const listings = selectListings(getState().search.listings)
+
+    if (listings.length === 1) {
+      const { latitude: lat, longitude: lng } = listings[0].location
+      goToPlace({ center: { lat, lng } })(dispatch, getState)
+    }
+
+    if (listings.length && window.google) {
+      const mapProps = getState().search.map.props
+
+      const extendedProps = extendedBounds(
+        normalizeListingsForMarkers(listings),
+        mapProps
+      )
+
+      if (!extendedProps) {
+        const { latitude: lat, longitude: lng } = listings[0].location
+        goToPlace({ center: { lat, lng }, zoom: 16 })(dispatch, getState)
+      }
+
+      goToPlace(extendedProps)(dispatch, getState)
+    }
+  }
+
   if (queryOptions.postal_codes) {
-    return getListings.byPostalCode(queryOptions.postal_codes, queryOptions)(
+    await getListings.byPostalCode(queryOptions.postal_codes, queryOptions)(
       dispatch,
       getState
     )
+    dispatch(toogleFiltersArea())
+    updateMap()
   }
 
-  return getListings.byValert(queryOptions)(dispatch, getState)
+  await getListings.byValert(queryOptions)(dispatch, getState)
+  dispatch(toogleFiltersArea())
+  updateMap()
 }
 
 export default submitFiltersForm
