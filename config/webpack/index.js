@@ -18,6 +18,7 @@ const config = {
     template: path.resolve(__dirname, '../../app/templates/app.html'),
     vendors: [
       'react',
+      'react-dom',
       'react-router',
       'react-redux',
       'moment',
