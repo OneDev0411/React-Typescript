@@ -71,47 +71,20 @@ const AsyncListingsAlerts = Load({
 // import DealEditForm from '../components/Pages/Dashboard/Deals/Edit-Form'
 // import CollectSignatures_Documents from '../components/Pages/Dashboard/Deals/CollectSignatures-Documents'
 // import CollectSignatures_Recipients from '../components/Pages/Dashboard/Deals/CollectSignatures-Recipients'
-const AsyncDealsLayout = Loadable({
+const AsyncDealsLayout = Load({
   loader: () => import('../components/Pages/Dashboard/Deals')
 })
 
-const AsyncDealsList = Loadable({
+const AsyncDealsList = Load({
   loader: () => import('../components/Pages/Dashboard/Deals/list')
 })
 
-const AsyncDealCreate = Loadable({
+const AsyncDealCreate = Load({
   loader: () => import('../components/Pages/Dashboard/Deals/create')
 })
 
-const AsyncDealDashboard = Loadable({
+const AsyncDealDashboard = Load({
   loader: () => import('../components/Pages/Dashboard/Deals/dashboard')
-})
-
-// contacts
-const AsyncContacts = Loadable({
-  loader: () => import('../components/Pages/Dashboard/Contacts')
-})
-
-const AsyncContactsList = Loadable({
-  loader: () => import('../components/Pages/Dashboard/Contacts/List')
-})
-
-const AsyncContactProfile = Loadable({
-  loader: () => import('../components/Pages/Dashboard/Contacts/Profile')
-})
-
-// chat room
-// import Recents from '../components/Pages/Dashboard/Chatroom'
-const AsyncRecents = Loadable({
-  loader: () => import('../components/Pages/Dashboard/Chatroom')
-})
-
-const AsyncListingsFavorites = Load({
-  loader: () => import('../components/Pages/Dashboard/Listings/Favorites')
-})
-
-const AsyncListingSinglePage = Load({
-  loader: () => import('../components/Pages/Dashboard/Listings/Listing')
 })
 
 // contacts
@@ -130,6 +103,14 @@ const AsyncContactProfile = Load({
 // chat room
 const AsyncRecents = Load({
   loader: () => import('../components/Pages/Dashboard/Chatroom')
+})
+
+const AsyncListingsFavorites = Load({
+  loader: () => import('../components/Pages/Dashboard/Listings/Favorites')
+})
+
+const AsyncListingSinglePage = Load({
+  loader: () => import('../components/Pages/Dashboard/Listings/Listing')
 })
 
 // Notifications
