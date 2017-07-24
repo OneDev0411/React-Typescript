@@ -16,7 +16,14 @@ const config = {
     jsVendorBundle: 'core.[hash].js',
     cssBundle: 'app.[hash].css',
     template: path.resolve(__dirname, '../../app/templates/app.html'),
-    vendors: ['moment', 'lodash', 'whatwg-fetch']
+    vendors: [
+      'react',
+      'react-router',
+      'react-redux',
+      'moment',
+      'lodash',
+      'whatwg-fetch',
+    ]
   },
   globals: {
     'process.env': {

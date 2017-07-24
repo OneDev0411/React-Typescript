@@ -2,92 +2,170 @@ import React from 'react'
 import { Route, IndexRoute, Redirect } from 'react-router'
 import Loadable from 'react-loadable'
 import store from '../stores'
+import Load from '../loader'
 
 // Containers
-import App from '../components/App'
-import Authentication from '../components/Authentication'
+const AsyncAppLayout = Load({
+  loader: () => import('../components/App')
+})
+
+const AsyncAuthenticationLayout = Load({
+  loader: () => import('../components/Authentication')
+})
 
 // Pages
-import Landing from '../components/Pages/Landing'
+const AsyncLanding = Load({
+  loader: () => import('../components/Pages/Landing')
+})
 
-import SignUp from '../components/Pages/SignUp'
-import SignIn from '../components/Pages/SignIn'
-import Verify from '../components/Pages/Verify'
-import Password from '../components/Pages/Password'
-import ConfirmAgent from '../components/Pages/SignUp/ConfirmAgent'
+const AsyncSignUp = Load({
+  loader: () => import('../components/Pages/SignUp')
+})
 
-import NoMatch from '../components/Pages/NoMatch'
+const AsyncSignIn = Load({
+  loader: () => import('../components/Pages/SignIn')
+})
 
-import Branch from '../components/Pages/Branch'
-import Settings from '../components/Pages/Account/Settings'
+const AsyncVerify = Load({
+  loader: () => import('../components/Pages/Verify')
+})
 
-import Notifications from '../components/Pages/Account/Notifications'
+const AsyncPassword = Load({
+  loader: () => import('../components/Pages/Password')
+})
 
-// listings [old mls]
-import ListingsLayout from '../components/Pages/Dashboard/Listings'
-import ListingsSearch from '../components/Pages/Dashboard/Listings/Search'
-import ListingsAlerts from '../components/Pages/Dashboard/Listings/Alerts'
-import ListingsFavorites from '../components/Pages/Dashboard/Listings/Favorites'
+const AsyncConfirmAgent = Load({
+  loader: () => import('../components/Pages/SignUp/ConfirmAgent')
+})
 
-import ListingSinglePage from '../components/Pages/Dashboard/Listings/Listing'
+const AsyncNoMatch = Load({
+  loader: () => import('../components/Pages/NoMatch')
+})
 
-// // mls
-// import Mls from '../components/Pages/Dashboard/Mls'
-// import Agents from '../components/Pages/Dashboard/Mls/Agents'
-// import Listing from '../components/Pages/Dashboard/Mls/Listing'
+const AsyncBranch = Load({
+  loader: () => import('../components/Pages/Branch')
+})
+
+const AsyncSettings = Load({
+  loader: () => import('../components/Pages/Account/Settings')
+})
+
+const AsyncNotifications = Load({
+  loader: () => import('../components/Pages/Account/Notifications')
+})
+
+// listings
+const AsyncListingsLayout = Load({
+  loader: () => import('../components/Pages/Dashboard/Listings')
+})
+
+const AsyncListingsSearch = Load({
+  loader: () => import('../components/Pages/Dashboard/Listings/Search')
+})
+
+const AsyncListingsAlerts = Load({
+  loader: () => import('../components/Pages/Dashboard/Listings/Alerts')
+})
 
 // deals
-import DealsLayout from '../components/Pages/Dashboard/Deals'
-import DealsList from '../components/Pages/Dashboard/Deals/list'
-import DealCreate from '../components/Pages/Dashboard/Deals/create'
-import DealDashboard from '../components/Pages/Dashboard/Deals/dashboard'
 // import DealEditForm from '../components/Pages/Dashboard/Deals/Edit-Form'
 // import CollectSignatures_Documents from '../components/Pages/Dashboard/Deals/CollectSignatures-Documents'
 // import CollectSignatures_Recipients from '../components/Pages/Dashboard/Deals/CollectSignatures-Recipients'
+const AsyncDealsLayout = Loadable({
+  loader: () => import('../components/Pages/Dashboard/Deals')
+})
+
+const AsyncDealsList = Loadable({
+  loader: () => import('../components/Pages/Dashboard/Deals/list')
+})
+
+const AsyncDealCreate = Loadable({
+  loader: () => import('../components/Pages/Dashboard/Deals/create')
+})
+
+const AsyncDealDashboard = Loadable({
+  loader: () => import('../components/Pages/Dashboard/Deals/dashboard')
+})
 
 // contacts
-// import Contacts from '../components/Pages/Dashboard/Contacts'
-// import ContactsList from '../components/Pages/Dashboard/Contacts/List'
-// import ContactProfile from '../components/Pages/Dashboard/Contacts/Profile'
 const AsyncContacts = Loadable({
-  loader: () => import('../components/Pages/Dashboard/Contacts'),
-  loading: () => null,
+  loader: () => import('../components/Pages/Dashboard/Contacts')
 })
 
 const AsyncContactsList = Loadable({
-  loader: () => import('../components/Pages/Dashboard/Contacts/List'),
-  loading: () => null,
+  loader: () => import('../components/Pages/Dashboard/Contacts/List')
 })
 
-
 const AsyncContactProfile = Loadable({
-  loader: () => import('../components/Pages/Dashboard/Contacts/Profile'),
-  loading: () => null,
+  loader: () => import('../components/Pages/Dashboard/Contacts/Profile')
 })
 
 // chat room
 // import Recents from '../components/Pages/Dashboard/Chatroom'
 const AsyncRecents = Loadable({
-  loader: () => import('../components/Pages/Dashboard/Chatroom'),
-  loading: () => null,
+  loader: () => import('../components/Pages/Dashboard/Chatroom')
+})
+
+const AsyncListingsFavorites = Load({
+  loader: () => import('../components/Pages/Dashboard/Listings/Favorites')
+})
+
+const AsyncListingSinglePage = Load({
+  loader: () => import('../components/Pages/Dashboard/Listings/Listing')
+})
+
+// contacts
+const AsyncContacts = Load({
+  loader: () => import('../components/Pages/Dashboard/Contacts')
+})
+
+const AsyncContactsList = Load({
+  loader: () => import('../components/Pages/Dashboard/Contacts/List')
+})
+
+const AsyncContactProfile = Load({
+  loader: () => import('../components/Pages/Dashboard/Contacts/Profile')
+})
+
+// chat room
+const AsyncRecents = Load({
+  loader: () => import('../components/Pages/Dashboard/Chatroom')
 })
 
 // Notifications
-import NotificationsPage from '../components/Pages/Dashboard/Notifications'
+const AsyncNotificationsPage = Load({
+  loader: () => import('../components/Pages/Dashboard/Notifications')
+})
 
 // Widgets
-import ListingsWidget from '../components/Pages/Widgets/Listings'
-import MapWidget from '../components/Pages/Widgets/Map'
-import SearchWidget from '../components/Pages/Widgets/Search'
+const AsyncListingsWidget = Load({
+  loader: () => import('../components/Pages/Widgets/Listings')
+})
+
+const AsyncMapWidget = Load({
+  loader: () => import('../components/Pages/Widgets/Map')
+})
+
+const AsyncSearchWidget = Load({
+  loader: () => import('../components/Pages/Widgets/Search')
+})
 
 // store and other pages
-import Website from '../components/Pages/Dashboard/Website'
-import Cards from '../components/Pages/Dashboard/Cards'
-import Forms from '../components/Pages/Dashboard/Forms'
+const AsyncWebsite = Load({
+  loader: () => import('../components/Pages/Dashboard/Website')
+})
 
-import Mobile from '../components/Pages/Mobile'
+const AsyncCards = Load({
+  loader: () => import('../components/Pages/Dashboard/Cards')
+})
 
-const uuidPattern = 'w+'
+const AsyncForms = Load({
+  loader: () => import('../components/Pages/Dashboard/Forms')
+})
+
+const AsyncMobile = Load({
+  loader: () => import('../components/Pages/Mobile')
+})
 
 function authenticate(nextState, replace) {
   const { data } = store.getState()
@@ -122,48 +200,48 @@ function authenticate(nextState, replace) {
 
 export default (
   <Route>
-    <Route path="/" component={Authentication}>
-      <IndexRoute component={Landing} />
-      <Route path="/signup" component={SignUp} />
-      <Route path="/signup/agent" component={ConfirmAgent} />
-      <Route path="/signin" component={SignIn} />
-      <Route path="/verify/:slug" component={Verify} />
-      <Route path="/password/:slug" component={Password} />
+    <Route path="/" component={AsyncAuthenticationLayout}>
+      <IndexRoute component={AsyncLanding} />
+      <Route path="/signup" component={AsyncSignUp} />
+      <Route path="/signup/agent" component={AsyncConfirmAgent} />
+      <Route path="/signin" component={AsyncSignIn} />
+      <Route path="/verify/:slug" component={AsyncVerify} />
+      <Route path="/password/:slug" component={AsyncPassword} />
 
-      <Route path="/mobile" component={Mobile} />
+      <Route path="/mobile" component={AsyncMobile} />
     </Route>
 
-    <Route path="/" component={App}>
-      <Route path="/branch" component={Branch} />
-      <Route path="/widgets/map" component={MapWidget} />
-      <Route path="/widgets/search" component={SearchWidget} />
-      <Route path="/widgets/listings" component={ListingsWidget} />
+    <Route path="/" component={AsyncAppLayout}>
+      <Route path="/branch" component={AsyncBranch} />
+      <Route path="/widgets/map" component={AsyncMapWidget} />
+      <Route path="/widgets/search" component={AsyncSearchWidget} />
+      <Route path="/widgets/listings" component={AsyncListingsWidget} />
 
-      <Route path="dashboard/mls" component={ListingsLayout}>
-        <IndexRoute component={ListingsSearch} />
+      <Route path="dashboard/mls" component={AsyncListingsLayout}>
+        <IndexRoute component={AsyncListingsSearch} />
       </Route>
     </Route>
 
-    <Route path="/" component={App} onEnter={authenticate}>
-      <Route path="/branch" component={Branch} />
-      <Route path="/widgets/map" component={MapWidget} />
-      <Route path="/widgets/search" component={SearchWidget} />
-      <Route path="/widgets/listings" component={ListingsWidget} />
+    <Route path="/" component={AsyncAppLayout} onEnter={authenticate}>
+      <Route path="/branch" component={AsyncBranch} />
+      <Route path="/widgets/map" component={AsyncMapWidget} />
+      <Route path="/widgets/search" component={AsyncSearchWidget} />
+      <Route path="/widgets/listings" component={AsyncListingsWidget} />
 
-      <Route path="/account/settings" component={Settings} />
-      <Route path="/account/notifications" component={Notifications} />
+      <Route path="/account/settings" component={AsyncSettings} />
+      <Route path="/account/notifications" component={AsyncNotifications} />
 
-      <Route path="dashboard/mls" component={ListingsLayout}>
-        <IndexRoute component={ListingsSearch} />
-        <Route path="alerts" component={ListingsAlerts} />
-        <Route path="actives" component={ListingsFavorites} />
+      <Route path="dashboard/mls" component={AsyncListingsLayout}>
+        <IndexRoute component={AsyncListingsSearch} />
+        <Route path="alerts" component={AsyncListingsAlerts} />
+        <Route path="actives" component={AsyncListingsFavorites} />
       </Route>
 
-      <Route path="/dashboard/mls/:id" component={ListingSinglePage} />
+      <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
 
-      <Route path="/dashboard/website" component={Website} />
-      <Route path="/dashboard/cards" component={Cards} />
-      <Route path="/dashboard/forms" component={Forms} />
+      <Route path="/dashboard/website" component={AsyncWebsite} />
+      <Route path="/dashboard/cards" component={AsyncCards} />
+      <Route path="/dashboard/forms" component={AsyncForms} />
 
       <Route path="/dashboard/recents(/:roomId)">
         <IndexRoute component={AsyncRecents} />
@@ -174,15 +252,20 @@ export default (
         <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
       </Route>
 
-      <Route path="/dashboard/deals" component={DealsLayout}>
-        <IndexRoute component={DealsList} />
-        <Route path="/dashboard/deal/:id" component={DealDashboard} />
-        <Route path="/dashboard/deal/create/:type" component={DealCreate} />
+      <Route path="/dashboard/deals" component={AsyncDealsLayout}>
+        <IndexRoute component={AsyncDealsList} />
+        <Route path="/dashboard/deal/:id" component={AsyncDealDashboard} />
+        <Route path="/dashboard/deal/create/:type" component={AsyncDealCreate} />
       </Route>
 
-      <Route path="/dashboard/notifications" component={NotificationsPage} />
+      <Route path="/dashboard/contacts" component={AsyncContacts}>
+        <IndexRoute component={AsyncContactsList} />
+        <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
+      </Route>
+
+      <Route path="/dashboard/notifications" component={AsyncNotificationsPage} />
     </Route>
 
-    <Route path="*" component={NoMatch} />
+    <Route path="*" component={AsyncNoMatch} />
   </Route>
 )
