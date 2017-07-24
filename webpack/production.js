@@ -8,7 +8,6 @@ import appConfig from '../config/webpack'
 
 const postcss = function () {
   return [
-    require('postcss-cssnext')(),
     require('autoprefixer')({
       'browserslist': [
         '> 1%',
@@ -36,6 +35,7 @@ webpackConfig.entry = {
 }
 
 webpackConfig.plugins.push(
+  new webpack.optimize.AggressiveMergingPlugin(),
   new webpack.optimize.CommonsChunkPlugin({
     name: 'vendor',
     filename: appConfig.compile.jsVendorBundle

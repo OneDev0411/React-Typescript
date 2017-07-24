@@ -17,6 +17,9 @@ const config = {
     cssBundle: 'app.[hash].css',
     template: path.resolve(__dirname, '../../app/templates/app.html'),
     vendors: [
+      'react',
+      'react-router',
+      'react-redux',
       'moment',
       'lodash',
       'whatwg-fetch',
