@@ -35,7 +35,7 @@ export default class extends React.Component {
     if (e.target.type === 'checkbox')
       return false
 
-    // browserHistory.push(`/dashboard/deal/${id}`)
+    browserHistory.push(`/dashboard/deal/${id}`)
   }
 
   /**
