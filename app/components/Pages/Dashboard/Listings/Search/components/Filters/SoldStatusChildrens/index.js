@@ -10,7 +10,7 @@ const fields = {
 }
 
 const SoldStatusChildrens = ({ name }) =>
-  <ul className="c-filters-sold-status-childrens">
+  <ul className="c-filters-sold-status-childrens" style={{ padding: '1rem 0' }}>
     {Object.keys(fields).map(field => {
       const id = `${name}__${field}`
 
