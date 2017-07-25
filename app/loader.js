@@ -1,30 +1,49 @@
 import React from 'react'
 import Loadable from 'react-loadable'
 
-const Loading = () => (
-  <div>
-    <img src="/static/images/loading-states/loader.svg" />
+const Loader = () => (
+  <div
+    style={{
+      position: 'fixed',
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      padding: '25% 0',
+      textAlign: 'center'
+    }}
+  >
+    <img
+      style={{ width: '50px' }}
+      src="/static/images/loading-states/grid-blue.svg"
+    />
   </div>
 )
 
+const LoadingHandler = (props) => {
+  const { isLoading, timedOut, pastDelay, error } = props
+
+  if (error || (isLoading && timedOut)) {
+    return <div>Error! Couldn't load component</div>;
+  }
+
+  if (isLoading && pastDelay) {
+    return <Loader />
+  }
+
+  return false
+}
+
 export default (opts) => {
-  return Loadable(Object.assign({
-    loading: Loading,
-    render(loadedComponent, props) {
-      const { isLoading, timedOut, pastDelay, error } = props
-
-      if (isLoading && pastDelay) {
-        return <Loading />
-      }
-
-      if (error || (isLoading && timedOut)) {
-        return <div>Error! Couldn't load component</div>;
-      }
-
-      const Component = loadedComponent.default
-      return <Component {...props} />
-    },
-    delay: 1000,
-    timeout: 2000
+  const Component = Loadable(Object.assign({
+    loading: LoadingHandler,
+    delay: 4000,
+    timeout: 15000
   }, opts))
+
+  if (opts.fetchData) {
+    Component.fetchData = opts.fetchData
+  }
+
+  return Component
 }
