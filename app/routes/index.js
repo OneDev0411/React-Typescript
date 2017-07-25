@@ -6,6 +6,9 @@ import Load from '../loader'
 // Containers
 import AppLayout from '../components/App'
 
+// actions
+import { getRooms } from '../store_actions/chatroom'
+
 const AsyncAuthenticationLayout = Load({
   loader: () => import('../components/Authentication' /* webpackChunkName: "authlay" */)
 })
@@ -95,7 +98,11 @@ const AsyncContactProfile = Load({
 
 // chat room
 const AsyncRecents = Load({
-  loader: () => import('../components/Pages/Dashboard/Chatroom' /* webpackChunkName: "chat" */)
+  loader: () => import('../components/Pages/Dashboard/Chatroom' /* webpackChunkName: "chat" */),
+  fetchData: (dispatch, params) => {
+    const { user } = params
+    return dispatch(getRooms(user))
+  }
 })
 
 const AsyncListingsFavorites = Load({
@@ -217,10 +224,6 @@ export default (
       <Route path="/dashboard/cards" component={AsyncCards} />
       <Route path="/dashboard/forms" component={AsyncForms} />
 
-      <Route path="/dashboard/recents(/:roomId)">
-        <IndexRoute component={AsyncRecents} />
-      </Route>
-
       <Route path="/dashboard/contacts" component={AsyncContacts}>
         <IndexRoute component={AsyncContactsList} />
         <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
@@ -235,6 +238,10 @@ export default (
       <Route path="/dashboard/contacts" component={AsyncContacts}>
         <IndexRoute component={AsyncContactsList} />
         <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
+      </Route>
+
+      <Route path="/dashboard/recents(/:roomId)">
+        <IndexRoute component={AsyncRecents} />
       </Route>
 
       <Route path="/dashboard/notifications" component={AsyncNotificationsPage} />
