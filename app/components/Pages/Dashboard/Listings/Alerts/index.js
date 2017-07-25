@@ -1,20 +1,47 @@
-import { connect } from 'react-redux'
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
 
 import Map from './components/Map'
 import AlertsList from './components/AlertsList'
 import Loading from '../components/Loading'
 import { Spinner } from '../../../../Partials/Loading'
 import ListingsPanel from '../components/ListingsPanels'
-import getAlerts from '../../../../../store_actions/listings/alerts/get-alerts'
+import actions from '../../../../../store_actions/listings/alerts'
 import { selectListings as selectAlerts } from '../../../../../reducers/listings'
 
 class Alerts extends Component {
   componentDidMount() {
-    const { alertsList, isFetching, getAlerts } = this.props
+    const {
+      params,
+      getAlerts,
+      alertsList,
+      isFetching,
+      getAlertFeed,
+      selectedAlert,
+      clearAlertNotification
+    } = this.props
 
     if (!isFetching && !alertsList.data.length) {
-      getAlerts()
+      getAlerts().then(response => {
+        if (params.alertId) {
+          const alert = response.entities.listings[params.alertId]
+          const { id, room, new_recommendations } = alert
+
+          getAlertFeed(id, room)
+
+          if (parseInt(new_recommendations, 10) > 0) {
+            setTimeout(() => clearAlertNotification(id, room), 5000)
+          }
+        }
+      })
+    }
+
+    if (
+      selectedAlert &&
+      window.location.pathname.indexOf(selectedAlert.id) === -1
+    ) {
+      browserHistory.push(`/dashboard/mls/alerts/${selectedAlert.id}`)
     }
   }
 
@@ -72,4 +99,4 @@ const mapStateToProps = ({ data, alerts }) => {
   }
 }
 
-export default connect(mapStateToProps, { getAlerts })(Alerts)
+export default connect(mapStateToProps, actions)(Alerts)

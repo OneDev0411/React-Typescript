@@ -50,7 +50,8 @@
     }
     @media screen and (min-width: 1400px) {
       width: calc((100% / 4) - 1.5rem);
-      &:nth-child(2n), &:nth-child(3n) {
+      &:nth-child(2n),
+      &:nth-child(3n) {
         float: left;
         margin-right: 2rem;
       }
@@ -108,7 +109,8 @@
   background: rgba(0, 0, 0, .2);
 }
 
-.c-listing-card__link {
+.c-listing-card__link,
+.c-alertList__item__link {
   @extend %full-absolute;
   display: block;
 }
