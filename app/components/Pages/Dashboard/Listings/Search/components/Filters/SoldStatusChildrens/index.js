@@ -4,8 +4,8 @@ import { Field } from 'redux-form'
 
 // each index represent month period for minimum_sold_date
 const fields = {
-  last_3_month: '3',
-  last_6_month: '6',
+  last_3_months: '3',
+  last_6_months: '6',
   last_year: '12'
 }
 
