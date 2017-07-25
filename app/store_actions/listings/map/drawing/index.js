@@ -2,6 +2,8 @@ import Brand from '../../../../controllers/Brand'
 import * as types from '../../../../constants/listings/map'
 import getListingsByPolygonPonits from '../../search/get-listings/by-polygon-points'
 
+const overlayColor = `#${Brand.color('primary', '3388ff')}`
+
 const getPolygonBounds = polygon => {
   const points = polygon.getPath().b.map(bound => ({
     latitude: bound.lat(),
@@ -19,7 +21,9 @@ const setDrawingManager = (dispatch, getState) => {
     polygonOptions: {
       zIndex: 1,
       strokeWeight: 5,
-      strokeColor: `#${Brand.color('primary', '3388ff')}`
+      fillOpacity: 0.35,
+      fillColor: overlayColor,
+      strokeColor: overlayColor
     }
   })
   drawingManager.setMap(window.currentMap)

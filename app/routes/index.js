@@ -134,8 +134,10 @@ export default (
 
       <Route path="dashboard/mls" component={ListingsLayout}>
         <IndexRoute component={ListingsSearch} />
-        <Route path="alerts" component={ListingsAlerts} />
         <Route path="actives" component={ListingsFavorites} />
+        <Route path="alerts" component={ListingsAlerts}>
+          <Route path=":alertId" component={ListingsAlerts} />
+        </Route>
       </Route>
 
       <Route path="/dashboard/mls/:id" component={ListingSinglePage} />

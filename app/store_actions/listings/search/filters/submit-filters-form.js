@@ -7,6 +7,7 @@ import { goToPlace } from '../../map'
 import { selectListings } from '../../../../reducers/listings'
 import extendedBounds from '../../../../utils/extendedBounds'
 import { normalizeListingsForMarkers } from '../../../../utils/map'
+import { removePolygon } from '../../../../store_actions/listings/map/drawing'
 
 // Initial valert options {
 //   limit: '250',
@@ -226,24 +227,32 @@ const submitFiltersForm = values => async (dispatch, getState) => {
   const queryOptions = normalizeValues(values, getState().search)
 
   const updateMap = () => {
-    const listings = selectListings(getState().search.listings)
+    const { search } = getState()
+    const { points: drawingPoints, shape: drawingShape } = search.map.drawing
+    const listings = selectListings(search.listings)
+
+    dispatch(toogleFiltersArea())
+
+    if (drawingPoints.length > 2 && queryOptions.points == null) {
+      dispatch(removePolygon(drawingShape))
+    }
 
     if (listings.length === 1) {
       const { latitude: lat, longitude: lng } = listings[0].location
       goToPlace({ center: { lat, lng } })(dispatch, getState)
+      return
     }
 
     if (listings.length && window.google) {
-      const mapProps = getState().search.map.props
-
       const extendedProps = extendedBounds(
         normalizeListingsForMarkers(listings),
-        mapProps
+        search.map.props
       )
 
       if (!extendedProps) {
         const { latitude: lat, longitude: lng } = listings[0].location
         goToPlace({ center: { lat, lng }, zoom: 16 })(dispatch, getState)
+        return
       }
 
       goToPlace(extendedProps)(dispatch, getState)
@@ -255,12 +264,10 @@ const submitFiltersForm = values => async (dispatch, getState) => {
       dispatch,
       getState
     )
-    dispatch(toogleFiltersArea())
     updateMap()
   }
 
   await getListings.byValert(queryOptions)(dispatch, getState)
-  dispatch(toogleFiltersArea())
   updateMap()
 }
 

@@ -14,7 +14,7 @@ const getListingsByMapBounds = bounds => (dispatch, getState) => {
     type !== 'by_map_bounds' ||
     isAutoMove(map) ||
     panels.activePanel === 'grid' ||
-    (panels.activePanel === 'table' && window.innerWidth < 1600) ||
+    (panels.activePanel === 'table' && window.innerWidth < 1920) ||
     map.drawing.points.length
   ) {
     return Promise.resolve()

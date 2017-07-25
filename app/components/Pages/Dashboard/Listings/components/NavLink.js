@@ -12,8 +12,11 @@ export default function Tabs({ to, text, indexed }) {
         activeClassName="c-listings__tabs__link--active"
         activeStyle={{
           borderBottomColor: `#${Brand.color('primary', '3388ff')}`
-        }}>
-        <span>{text}</span>
+        }}
+      >
+        <span>
+          {text}
+        </span>
       </Link>
     </li>
   )
