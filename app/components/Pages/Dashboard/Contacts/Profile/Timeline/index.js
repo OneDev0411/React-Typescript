@@ -15,10 +15,6 @@ export default class Timeline extends React.Component {
   create(id, activity) {
     let attributes = {}
 
-    if (activity.object === null) {
-      return false
-    }
-
     if (this[activity.action])
       attributes = this[activity.action](activity)
 
