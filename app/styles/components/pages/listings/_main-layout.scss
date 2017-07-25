@@ -16,12 +16,12 @@ $header-height: 54px;
     width: calc(100% - #{$panel-width});
     float: left;
   }
-  @media screen and (min-width: 1600px) {
+  @media screen and (min-width: 1920px) {
     width: calc(100% - #{$panel-width * 2.4});
   }
   .l-listings__main--alert & {
     float: right;
-    @media screen and (min-width: 1600px) {
+    @media screen and (min-width: 1920px) {
       width: calc(100% - #{$panel-width});
     }
   }
@@ -36,7 +36,7 @@ $header-height: 54px;
     float: left;
     border-left: 1px solid #ccc;
   }
-  @media screen and (min-width: 1600px) {
+  @media screen and (min-width: 1920px) {
     width: $panel-width * 2.4;
   }
 }
@@ -53,30 +53,30 @@ $header-height: 54px;
   background-color: #fff;
   border-left: 1px solid #ccc;
   transition: width 0.3s ease-in-out;
-  @media screen and (min-width: 1600px) {
+  @media screen and (min-width: 1920px) {
     width: $panel-width * 2.4;
   }
   .c-listings-panel--table & {
-    @media screen and (min-width: 1024px) and (max-width: 1600px) {
+    @media screen and (min-width: 1024px) and (max-width: 1920px) {
       border-width: 0;
       width: 100%;
     }
   }
   .l-listings--logged .c-listings-panel--table & {
-    @media screen and (min-width: 1024px) and (max-width: 1600px) {
+    @media screen and (min-width: 1024px) and (max-width: 1920px) {
       width: calc(100% - #{$sidebar-width});
     }
   }
   .c-listings-panel--grid & {
     width: 100%;
     border-width: 0;
-    @media screen and (min-width: 1600px) {
+    @media screen and (min-width: 1920px) {
       width: 100%;
     }
   }
   .l-listings--logged .c-listings-panel--grid & {
     width: calc(100% - #{$sidebar-width});
-    @media screen and (min-width: 1600px) {
+    @media screen and (min-width: 1920px) {
       width: calc(100% - #{$sidebar-width});
     }
   }
@@ -91,13 +91,13 @@ $header-height: 54px;
   }
   .l-listings__main--alert .c-listings-panel--grid & {
     width: calc(100% - #{$sidebar-width} - #{$panel-width});
-    @media screen and (min-width: 1600px) {
+    @media screen and (min-width: 1920px) {
       width: calc(100% - #{$sidebar-width} - #{$panel-width});
     }
   }
   .l-listings__main--alert .c-listings-panel--table & {
     border-width: 0;
-    @media screen and (min-width: 1024px) and (max-width: 1600px) {
+    @media screen and (min-width: 1024px) and (max-width: 1920px) {
       width: calc(100% - #{$sidebar-width} - #{$panel-width});
     }
   }
