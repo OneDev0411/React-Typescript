@@ -118,7 +118,7 @@ class App extends Component {
     if (data.brand_queried) {
       let google_analytics_id = 'UA-56150904-2'
 
-      if (brand && brand.assets.google_analytics_id) {
+      if (brand && brand.assets && brand.assets.google_analytics_id) {
         google_analytics_id = brand.assets.google_analytics_id
       }
 
