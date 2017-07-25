@@ -6,6 +6,7 @@ import defaultProps from 'recompose/defaultProps'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 
+import Brand from '../../../../../../controllers/Brand'
 import Marker from '../../components/Markers/SimpleMarker'
 import { setCssPositionToListingsWithSameBuilding } from '../../../../../../utils/map'
 
@@ -57,6 +58,28 @@ const map = ({
     })}
   </Map>
 
+let markersOverlay = null
+const overlayColor = `#${Brand.color('primary', '3388ff')}`
+
+const normalizePoints = points =>
+  points.map(point => ({
+    lat: point.latitude,
+    lng: point.longitude
+  }))
+
+const drawingOverlay = points => {
+  markersOverlay = new window.google.maps.Polygon({
+    paths: points,
+    zIndex: 1,
+    strokeWeight: 5,
+    fillOpacity: 0.35,
+    fillColor: overlayColor,
+    strokeColor: overlayColor
+  })
+
+  markersOverlay.setMap(window.currentMap)
+}
+
 const mapHOC = compose(
   defaultProps({
     defaultZoom: 13,
@@ -78,8 +101,12 @@ const mapHOC = compose(
     }
   }, actions),
   withHandlers({
-    onGoogleApiLoaded: () => ({ map }) => {
+    onGoogleApiLoaded: ({ selectedAlert }) => ({ map }) => {
       window.currentMap = map
+
+      if (selectedAlert && markersOverlay) {
+        drawingOverlay(normalizePoints(selectedAlert.points))
+      }
     },
     onChange: ({ setMapProps }) => mapProps => {
       setMapProps('ALERTS', mapProps)
@@ -99,17 +126,19 @@ const mapHOC = compose(
         return {}
       }
 
+      if (markersOverlay) {
+        markersOverlay.setMap(null)
+      }
+
       const googleMaps = window.google.maps
+      const points = normalizePoints(selectedAlert.points)
 
       const bounds = new googleMaps.LatLngBounds()
-      selectedAlert.points
-        .map(point => ({
-          lat: point.latitude,
-          lng: point.longitude
-        }))
-        .forEach(point => bounds.extend(point))
+      points.forEach(point => bounds.extend(point))
 
       window.currentMap.fitBounds(bounds)
+
+      drawingOverlay(points)
     }
   ),
   withPropsOnChange(
