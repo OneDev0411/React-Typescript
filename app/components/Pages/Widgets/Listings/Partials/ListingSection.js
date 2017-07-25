@@ -32,6 +32,13 @@ class Section extends Component {
     this.props.getListing(this.options, this.widgetOptions)
   }
 
+  componentWillReceiveProps(nextProps) {
+
+    if (nextProps.listings.length !== this.props.listings.length) {
+      this.props.updateHeight()
+    }
+  }
+
   // shouldComponentUpdate(nextProps) {
   //   return (
   //     nextProps.listings.length !== this.props.listings.length

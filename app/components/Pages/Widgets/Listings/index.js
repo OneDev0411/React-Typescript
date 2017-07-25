@@ -7,15 +7,26 @@ import AppStore from '../../../../stores/AppStore'
 
 export default class Listings extends Component {
 
+  constructor(props) {
+    super(props)
+    this.updateHeight = this.updateHeight.bind(this)
+    this.height = 0
+  }
   componentWillMount() {
     AppStore.data.is_widget = true
     AppStore.emitChange()
   }
 
   componentDidUpdate() {
-    parent.postMessage({ height: this.parentDiv.scrollHeight }, '*')
+    this.updateHeight()
   }
 
+  updateHeight() {
+    if (this.height !== this.parentDiv.scrollHeight) {
+      parent.postMessage({ height: this.parentDiv.scrollHeight }, '*')
+      this.height = this.parentDiv.scrollHeight
+    }
+  }
   render() {
     // Data
     const data = this.props.data
@@ -53,6 +64,7 @@ export default class Listings extends Component {
           title="Listings"
           data={data}
           type="active"
+          updateHeight={this.updateHeight}
         />
         <div
           className="clearfix"
@@ -61,6 +73,7 @@ export default class Listings extends Component {
           title="Sold"
           data={data}
           type="sold"
+          updateHeight={this.updateHeight}
         />
         <div
           className="clearfix"
