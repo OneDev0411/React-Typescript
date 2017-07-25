@@ -55,6 +55,13 @@ export default class Listings extends Component {
         className="futurastd"
         ref={ref => this.parentDiv = ref}
       >
+        {
+          !this.props.location.query.agent &&
+          <div style={S('text-center')}>
+            <h1 style={S(`font-50 color-263445 mb-0${data.is_mobile ? ' ml-10 mr-10' : ''}`)}>Our Exclusive Listings</h1>
+            <span style={S('h-1 bg-e2e2e2 w-80 m-20 inline-block')} />
+          </div>
+        }
         {/* <ListingSection*/}
         {/* title="open Houses"*/}
         {/* data={data}*/}

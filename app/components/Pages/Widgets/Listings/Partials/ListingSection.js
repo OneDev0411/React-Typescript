@@ -32,9 +32,8 @@ class Section extends Component {
     this.props.getListing(this.options, this.widgetOptions)
   }
 
-  componentWillReceiveProps(nextProps) {
-
-    if (nextProps.listings.length !== this.props.listings.length) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.listings.length !== this.props.listings.length) {
       this.props.updateHeight()
     }
   }
@@ -68,7 +67,7 @@ class Section extends Component {
 
   initOptions(brokerage, agent, type, brand, user) {
     const options = {
-      limit: '10',
+      limit: '6',
       property_types: ['Residential', 'Residential Lease', 'Lots & Acreage'],
       property_subtypes: ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse', 'LSE-Apartment', 'LSE-Condo/Townhome', 'LSE-Duplex', 'LSE-Fourplex', 'LSE-House', 'LSE-Mobile', 'LSE-Triplex', 'LND-Commercial', 'LND-Farm/Ranch', 'LND-Residential']
     }

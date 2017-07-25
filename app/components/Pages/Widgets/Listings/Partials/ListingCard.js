@@ -40,12 +40,12 @@ export default class ListingCard extends Component {
     if (!address) { address = property.address }
     const square_feet = helpers.numberWithCommas(Math.floor(listing_util.metersToFeet(property.square_meters)))
     let listing_card_style = {
-      ...S('w-480 h-460 mr-10 ml-10 mb-20 pull-left br-3 pointer relative'),
+      ...S('w-380 h-360 mr-10 ml-10 mb-20 pull-left br-3 pointer relative'),
       boxShadow: '0 0 2px 0 rgba(0, 0, 0, 0.2)',
       overflow: 'hidden'
     }
     const listing_image_style = {
-      ...S(`bg-cover bg-url(${listing_util.getResizeUrl(listing.cover_image_url)}?w=800) bg-center w-480 h-340 relative`)
+      ...S(`bg-cover bg-url(${listing_util.getResizeUrl(listing.cover_image_url)}?w=800) bg-center w-380 h-260 relative`)
     }
     let is_mobile
     // Responsive
@@ -92,7 +92,7 @@ export default class ListingCard extends Component {
     if (property.year_built) {
       year_built_area = (
         <span>
-          &nbsp;&middot;&nbsp;{ property.year_built ? `Built in ${property.year_built}` : '' }
+          &nbsp;&middot;&nbsp;{property.year_built ? `Built in ${property.year_built}` : ''}
         </span>
       )
     }
@@ -122,10 +122,10 @@ export default class ListingCard extends Component {
       agent_image_area = (
         <div
           onClick={this.props.handleAgentClick.bind(this, { ...listing, list_agent: listing.proposed_agent })}
-          style={S(`p-0 br-100 border-2-solid-fff absolute r-20 b-${is_mobile ? '103' : '90'} bg-ccc`)}
+          style={S(`p-0 br-100 border-2-solid-fff absolute r-20 b-${is_mobile ? '103' : '80'} bg-ccc`)}
         >
-          { online_indicator }
-          { avatar }
+          {online_indicator}
+          {avatar}
         </div>
       )
     }
@@ -134,13 +134,13 @@ export default class ListingCard extends Component {
     if (data.resent_email_confirmation) {
       extra_info = (
         <div>
-          <div>{ data.new_user.email }</div>
+          <div>{data.new_user.email}</div>
           <div>Confirmation email resent</div>
         </div>
       )
     } else if (data.new_user) {
       extra_info = (
-        <div>{ data.new_user.email }</div>
+        <div>{data.new_user.email}</div>
       )
     }
 
@@ -158,7 +158,7 @@ export default class ListingCard extends Component {
             </div>
             <div className="din" style={S('color-263445 font-34 mb-10')}>Please verify your email</div>
             <div style={S('color-263445 font-21 mb-20')}>
-              { extra_info }
+              {extra_info}
             </div>
           </div>
           <div style={S('bg-e2e6ea p-20 pt-20 absolute w-100p b-0')}>
@@ -169,7 +169,8 @@ export default class ListingCard extends Component {
                 </div>
 
                 <div>
-                  <a onClick={this.props.resend.bind(this)} href="#">Resend</a> | <a href="mailto:support@rechat.com">Contact support</a>.
+                  <a onClick={this.props.resend.bind(this)} href="#">Resend</a> | <a href="mailto:support@rechat.com">Contact
+                  support</a>.
                 </div>
               </div>
             </div>
@@ -250,31 +251,34 @@ export default class ListingCard extends Component {
         <div style={listing_image_style} onClick={this.props.handleListingClick.bind(this, listing)}>
           <div style={overlay_style} />
           <div style={price_tag_style}>
-            ${ price }{ listing.compact_property && listing.compact_property.property_type === 'Residential Lease' ? '/mo' : '' }
+            ${price}{listing.compact_property && listing.compact_property.property_type === 'Residential Lease' ? '/mo' : ''}
           </div>
         </div>
-        <div style={S('absolute b-40 h-80 p-10 pl-15 color-000')} onClick={this.props.handleListingClick.bind(this, listing)}>
-          <div style={S('font-20')}>{ listing_util.addressTitle(address) }</div>
-          <div style={S('font-15')}>
+        <div
+          style={S('absolute b-0 h-100 p-10 pl-15 color-000')}
+          onClick={this.props.handleListingClick.bind(this, listing)}
+        >
+          <div style={S('font-14')}>{listing_util.addressTitle(address)}</div>
+          <div style={S('font-14')}>
             <div style={S(`mt-8${data.is_mobile ? ' font-14' : ''}`)}>
-              <span>{ property.bedroom_count } Beds</span>
+              <span>{property.bedroom_count} Beds</span>
               &nbsp;&middot;&nbsp;
-              <span>{ property.bathroom_count } Baths</span>
+              <span>{property.bathroom_count} Baths</span>
               &nbsp;&middot;&nbsp;
-              <span>{ square_feet } Sqft</span>
-              { year_built_area }
+              <span>{square_feet} Sqft</span>
+              {year_built_area}
             </div>
           </div>
-          <div style={S('font-15')}>
+          <div style={S('font-14')}>
             <div style={S(`pull-left mr-15 mt-18${data.is_mobile ? ' font-14' : ''}`)}>
               <div style={S(`pull-left w-10 h-10 br-100 mr-8 bg-${status_color}`)} />
               <div style={S(`pull-left mt-5n color-${status_color}`)}>
-                { listing.status }
+                {listing.status}
               </div>
             </div>
             <div style={S('pull-left relative t-17 w-1 h-14 bg-e5e5e5 mr-15')} />
             <div style={S('pull-left mr-10 mt-13 color-8696a4')}>
-              { this.side(listing) }
+              {this.side(listing)}
             </div>
           </div>
         </div>
