@@ -55,7 +55,7 @@ const CreateAlertModal = ({
       <Modal.Footer className="c-create-alert-modal__footer">
         <button
           onClick={saveAlertHandler}
-          className={`c-create-alert-modal__button ${isSaving
+          className={`c-create-alert-modal__button c-create-alert-modal__button--linki ${isSaving
             ? 'isSaving'
             : ''}`}
           disabled={isSaving}
@@ -65,7 +65,7 @@ const CreateAlertModal = ({
         </button>
         <button
           onClick={activeShareAlertModal}
-          className={`c-create-alert-modal__button ${isSaving
+          className={`c-create-alert-modal__button c-create-alert-modal__button--linki ${isSaving
             ? 'isSaving'
             : ''}`}
           disabled={isSaving}
