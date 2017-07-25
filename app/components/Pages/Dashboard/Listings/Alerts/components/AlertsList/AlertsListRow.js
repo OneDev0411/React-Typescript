@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { IndexLink } from 'react-router'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import Brand from '../../../../../../../controllers/Brand'
-import getAlertFeed from '../../../../../../../store_actions/listings/alerts/get-alert-feed'
-import clearAlertNotification from '../../../../../../../store_actions/listings/alerts/clear-alert-notification'
+import actions from '../../../../../../../store_actions/listings/alerts'
 
 const SharedWith = ({ alert }) => {
   const { users, created_by } = alert
@@ -28,6 +28,10 @@ const AlertListRow = ({ user, alert, isSelected, onClick }) =>
       : ''}`}
     onClick={() => onClick(alert)}
   >
+    <IndexLink
+      to={`/dashboard/mls/alerts/${alert.id}`}
+      className="c-alertList__item__link"
+    />
     <div className="c-alertList__item__thumbnail">
       <img src={alert.cover_image_url} alt="mls alert list item - rechat" />
     </div>
@@ -55,7 +59,7 @@ const AlertListRow = ({ user, alert, isSelected, onClick }) =>
   </div>
 
 export default compose(
-  connect(null, { getAlertFeed, clearAlertNotification }),
+  connect(null, actions),
   withHandlers({
     onClick: ({ getAlertFeed, clearAlertNotification }) => alert => {
       const { id, room, new_recommendations } = alert
@@ -63,8 +67,7 @@ export default compose(
       getAlertFeed(id, room)
 
       if (parseInt(new_recommendations, 10) > 0) {
-        console.log('notif')
-        clearAlertNotification(id, room)
+        setTimeout(() => clearAlertNotification(id, room), 5000)
       }
     }
   })
