@@ -72,7 +72,7 @@ export default class ActionBubble extends Component {
     let login_link_area
     if (!data.user) {
       signup_btn_style = {
-        ...S('h-46 w-130'),
+        ...S('h-46 w-100'),
         borderTopLeftRadius: 0,
         borderBottomLeftRadius: 0,
         backgroundColor: `#${Brand.color('primary', '006aff')}`,
