@@ -234,7 +234,7 @@ export default class extends React.Component {
                 _.chain(deals)
                 .filter(deal => {
                   const address = Deal.get.address(deal) || ''
-                  return address.toLowerCase().includes(searchFilter)
+                  return address.toLowerCase().includes(searchFilter.toLowerCase())
                 })
                 .sortBy(deal => this.sort(deal))
                 .shouldReverse(sortOrder)
