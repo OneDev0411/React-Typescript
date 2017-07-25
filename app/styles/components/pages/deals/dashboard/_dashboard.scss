@@ -1,10 +1,10 @@
 $col-padding: 3%;
 
-@import './dashboard/_tasks';
-@import './dashboard/_control_panel';
-@import './dashboard/_fact_sheet';
-@import './dashboard/_task_creator';
-@import './dashboard/_listing_card';
+@import './dashboard_tasks';
+@import './dashboard_control_panel';
+@import './dashboard_fact_sheet';
+@import './dashboard_task_creator';
+@import './dashboard_listing_card';
 
 %deal-dashboard {
   min-height: 100vh;
@@ -29,9 +29,5 @@ $col-padding: 3%;
 
   .deal-task-creators {
     @extend %deal-task-creators;
-  }
-
-  .listing-card {
-    @extend %deal-listing-card;
   }
 }

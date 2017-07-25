@@ -1,6 +1,6 @@
 import React from 'react'
 import _ from 'underscore'
-import Deal from '../../../../../../models/Deal'
+import Deal from '../../../../../models/Deal'
 
 /**
  * get listing photo
@@ -28,20 +28,7 @@ function getListingAddress(deal) {
 export default ({
   deal
 }) => (
-  <div className="listing">
-    <div className="data">
-      <strong className="title">
-        { Deal.get.field(deal, 'street_address') }
-      </strong>
-      <span className="subtitle">
-        { getListingAddress(deal) }
-      </span>
-    </div>
-
-    { getImage(deal) }
-
-    <div className="status">
-      Status: <span className="field">{ Deal.get.field(deal, 'listing_status') }</span>
-    </div>
+  <div className="listing-card">
+  ----*
   </div>
 )
