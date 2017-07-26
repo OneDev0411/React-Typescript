@@ -1,0 +1,57 @@
+%deal-task-manager {
+  padding: $col-padding;
+  padding-left: 0;
+  margin-left: $taskmanager-width-on-expanding;
+  transition: 0.7s opacity ease-in;
+  opacity: 0;
+
+  &.visible {
+    opacity: 1;
+  }
+
+  .heading {
+    @extend %deal-task-manager-heading;
+  }
+}
+
+%deal-task-manager-heading {
+
+  height: 58px;
+  line-height: 58px;
+  vertical-align: middle;
+  border-radius: 3px;
+  background-color: #eff5fa;
+  box-shadow: 0 1px 0 0 #e7eef0;
+  font-size: 17px;
+  color: #5b6469;
+  padding: 0 20px;
+
+  .task-btn {
+    float: right;
+    height: 34px;
+    line-height: 30px;
+    vertical-align: middle;
+    color: #78909c;
+    margin-top: 12px;
+    border-radius: 3px;
+    background-color: #ffffff;
+    border: solid 1px #e7eef0;
+
+    &:focus {
+      outline: none;
+    }
+    &:hover {
+      background-color: #fbfbfb;
+    }
+  }
+
+  .btn-close {
+    width: 34px;
+  }
+
+  .btn-submit {
+    margin-right: 10px;
+    width: 150px;
+    font-size: 15px;
+  }
+}
