@@ -7,6 +7,7 @@ import withHandlers from 'recompose/withHandlers'
 import { Modal } from 'react-bootstrap'
 
 import SuccessModal from './SuccessModal'
+import { normalizeAlertOptions } from './CreateAlertModal'
 import Recipients from '../../../../../Partials/ShareView'
 import { hasRecipients } from '../../../../../../utils/helpers'
 import { createRoom } from '../../../../../../store_actions/chatroom/room'
@@ -77,7 +78,8 @@ export default compose(
   connect(
     ({ data, search }) => ({
       user: data.user,
-      searchOptions: search.options
+      searchOptions: search.options,
+      drawingPoints: search.map.drawing.points
     }),
     { createRoom }
   ),
@@ -93,21 +95,19 @@ export default compose(
       alertTitle,
       createRoom,
       setIsSharing,
+      drawingPoints,
       searchOptions,
       setSuccessModalIsActive
     }) => () => {
       setIsSharing(true)
 
       createRoom(recipients).then(room => {
-        const open_house = searchOptions.open_house || false
-        const alertOptions = {
-          ...searchOptions,
+        const alertOptions = normalizeAlertOptions(searchOptions, {
           room,
-          open_house,
-          limit: null,
           title: alertTitle,
-          created_by: user.id
-        }
+          created_by: user.id,
+          points: drawingPoints
+        })
 
         createAlert(alertOptions)
           .then(alert => {

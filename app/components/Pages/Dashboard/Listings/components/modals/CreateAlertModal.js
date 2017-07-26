@@ -87,11 +87,38 @@ const CreateAlertModal = ({
     />
   </div>
 
+export const normalizeAlertOptions = (
+  searchOptions,
+  drawingPoints,
+  alertOptions
+) => {
+  let points = searchOptions.points
+  const { mls_areas, school_districts, subdivisions, counties } = searchOptions
+
+  if (
+    drawingPoints.length === 0 &&
+    (mls_areas || school_districts || subdivisions || counties)
+  ) {
+    points = null
+  }
+
+  const open_house = searchOptions.open_house || false
+
+  return {
+    ...searchOptions,
+    ...alertOptions,
+    points,
+    open_house,
+    limit: null
+  }
+}
+
 export default compose(
   pure,
   connect(({ data, search }) => ({
     user: data.user,
-    searchOptions: search.options
+    searchOptions: search.options,
+    drawingPoints: search.map.drawing.points
   })),
   withState('isSaving', 'setIsSaving', false),
   withState('alertTitle', 'setAlertTitle', ''),
@@ -107,19 +134,18 @@ export default compose(
       isSaving,
       alertTitle,
       setIsSaving,
+      drawingPoints,
       searchOptions,
       alertProposedTitle,
       setSuccessModalIsActive
     }) => () => {
-      const alertOptions = {
-        ...searchOptions,
-        limit: null,
-        title: alertTitle || alertProposedTitle,
-        created_by: user.id,
-        room: user.personal_room
-      }
-
       setIsSaving(true)
+
+      const alertOptions = normalizeAlertOptions(searchOptions, drawingPoints, {
+        created_by: user.id,
+        room: user.personal_room,
+        title: alertTitle || alertProposedTitle
+      })
 
       createAlert(alertOptions)
         .then(alert => {

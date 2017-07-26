@@ -155,6 +155,7 @@ const mapHOC = compose(
 
         if (selectedAlert.points) {
           points = normalizePoints(selectedAlert.points)
+          drawingOverlay(points)
         } else {
           const markersBounds = getBounds(markers)
           points = normalizePoints(generatePointsFromBounds(markersBounds))
@@ -164,8 +165,6 @@ const mapHOC = compose(
         points.forEach(point => bounds.extend(point))
 
         googleMap.fitBounds(bounds)
-
-        drawingOverlay(points)
       }
 
       return { markers }
