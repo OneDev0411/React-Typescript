@@ -59,7 +59,7 @@ class Chatroom extends React.Component {
     }
 
     // don't change url on instant mode
-    if (location !== null && !instantMode) {
+    if (location && !instantMode) {
       browserHistory.push(`/dashboard/recents/${id}`)
     }
   }
