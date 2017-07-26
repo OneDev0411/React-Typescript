@@ -8,7 +8,10 @@ import Deal from '../../../../../models/Deal'
 function getImage(deal) {
   const photo = Deal.get.field(deal, 'photo')
 
-  if (!photo) return false
+  if (!photo) {
+   return false
+  }
+
   return <img src={photo} />
 }
 
@@ -29,6 +32,17 @@ export default ({
   deal
 }) => (
   <div className="listing-card">
-  ----*
+    { getImage(deal) }
+
+    <div className="data">
+      <div className="status">
+        { Deal.get.field(deal, 'listing_status') }
+      </div>
+
+      <div className="title">
+        { Deal.get.field(deal, 'street_address') }
+      </div>
+    </div>
+
   </div>
 )
