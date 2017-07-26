@@ -1,55 +1,64 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
-import TasksList from './tasks-list'
-import ControlPanel from './control-panel'
+import cn from 'classnames'
+import TasksList from './tasks'
+import TaskManager from './task-manager'
+import ListingCard from './listing-card'
 import FactSheet from './factsheet'
 
 class DealDetails extends React.Component {
   constructor(props) {
     super(props)
-    const { tags } = props
-
     this.state = {
-      activeTag: tags ? tags[0].id : null
+      selectedTask: null
     }
   }
 
-  componentDidMount() {
-    // console.log(this.props.deal)
+  onSelectTask(task) {
+    this.setState({
+      selectedTask: task
+    })
+  }
+
+  onCloseTask() {
+    this.setState({ selectedTask: null })
   }
 
   render() {
     const { deal, tags } = this.props
-    const { activeTag } = this.state
+    const { selectedTask } = this.state
 
     return (
       <Row className="deal-dashboard">
-        <Col lg={2} md={2} className="column">
-          <ControlPanel
-            deal={deal}
-            tags={tags}
-            activeTag={activeTag}
-            onChangeTag={id => this.setState({ activeTag: id })}
-          />
+        <Col lg={3} md={4} className="column left">
+          <ListingCard deal={deal} />
+          <FactSheet deal={deal} />
         </Col>
 
-        <Col lg={3} md={4} className="column">
-          <TasksList
-            activeTag={activeTag}
-            tags={tags}
-            tasks={deal.tasks}
-          />
-        </Col>
+        <Col lg={9} md={8} className="column middle">
 
-        <Col lg={2} md={3} className="column">
-          <FactSheet
-            deal={deal}
-          />
-        </Col>
+          <div className="deal-tasks-container">
 
-        <Col lg={5} md={3} className="column">
-          ---
+            <div className={cn('deal-tasks', { half: selectedTask !== null })}>
+              <TasksList
+                onSelectTask={task => this.onSelectTask(task)}
+                selectedTask={selectedTask ? selectedTask.id : null}
+                tags={tags}
+                tasks={deal.tasks}
+              />
+            </div>
+
+            <div
+              className={cn('deal-task-manager', { visible: selectedTask !== null })}
+            >
+              <TaskManager
+                task={selectedTask}
+                onCloseTask={() => this.onCloseTask()}
+              />
+            </div>
+
+          </div>
         </Col>
 
       </Row>
