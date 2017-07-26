@@ -6,6 +6,8 @@ import helpers from '../../../../../utils/helpers'
 import FavoriteHeart from '../../../Dashboard/Partials/FavoriteHeart'
 import Brand from '../../../../../controllers/Brand'
 import ActionBubble from '../../../Partials/ActionBubble'
+import AgentImage from './AgentImage'
+
 export default class ListingCard extends Component {
   side(listing) {
     if (!listing.proposed_agent) { return }
@@ -47,7 +49,6 @@ export default class ListingCard extends Component {
     const listing_image_style = {
       ...S(`bg-cover bg-url(${listing_util.getResizeUrl(listing.cover_image_url)}?w=800) bg-center w-380 h-260 relative`)
     }
-    let is_mobile
     // Responsive
     if (typeof window !== 'undefined' && window.innerWidth < 1000) {
       listing_card_style.width = window.innerWidth - 20
@@ -59,7 +60,6 @@ export default class ListingCard extends Component {
       if (window.innerWidth < 500) {
         listing_card_style.height = listing_card_style.width * '.6'
         listing_card_style.height = 253
-        is_mobile = true
       }
       listing_image_style.width = listing_card_style.width
       listing_image_style.height = listing_card_style.height - 130
@@ -94,39 +94,6 @@ export default class ListingCard extends Component {
         <span>
           &nbsp;&middot;&nbsp;{property.year_built ? `Built in ${property.year_built}` : ''}
         </span>
-      )
-    }
-    let agent_image_area
-
-    const agent_user = listing.proposed_agent
-    if (agent_user) {
-      let avatar = (
-        <div style={S(`bg-url(${Brand.asset('default_avatar')}) w-50 h-50 bg-center bg-cover br-100`)} />
-      )
-      const profile_image_url = agent_user.profile_image_url
-      if (profile_image_url) {
-        avatar = (
-          <div style={S(`bg-url(${profile_image_url}) w-50 h-50 bg-center bg-cover br-100`)} />
-        )
-      }
-      let online_indicator
-      let bg_color = 'dddfe0'
-      if (agent_user.agent && agent_user.agent.online_state) {
-        if (agent_user.agent
-          && agent_user.agent.online_state === 'Online'
-          || agent_user.agent.online_state === 'Background') {
-          bg_color = '35b863'
-        }
-      }
-      online_indicator = <div style={S(`br-100 bg-${bg_color} w-13 h-13 bw-2 solid bc-fff absolute z-2 t-2n r-2`)} />
-      agent_image_area = (
-        <div
-          onClick={this.props.handleAgentClick.bind(this, { ...listing, list_agent: listing.proposed_agent })}
-          style={S(`p-0 br-100 border-2-solid-fff absolute r-20 b-${is_mobile ? '103' : '80'} bg-ccc`)}
-        >
-          {online_indicator}
-          {avatar}
-        </div>
       )
     }
 
@@ -282,9 +249,11 @@ export default class ListingCard extends Component {
             </div>
           </div>
         </div>
-        { agent_image_area }
-        { action_bubble }
-        { signup_confirm_message }
+        <AgentImage
+          listing={listing}
+        />
+        {action_bubble}
+        {signup_confirm_message}
       </div>
     )
   }
