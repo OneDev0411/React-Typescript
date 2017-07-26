@@ -1,26 +1,45 @@
 $col-padding: 3%;
-
+$taskmanager-width-on-expanding: 45%;
 @import './dashboard/_tasks';
-@import './dashboard/_control_panel';
+@import './dashboard/_task_manager';
 @import './dashboard/_fact_sheet';
 @import './dashboard/_task_creator';
 @import './dashboard/_listing_card';
 
 %deal-dashboard {
-  min-height: 100vh;
   margin-left: 0;
   margin-right: 0;
+  display: flex;
+  overflow: hidden;
+  height: 100vh;
+  backface-visibility: hidden;
+  will-change: overflow;
+  position: relative;
 
   .column {
     padding: 0;
+    overflow: auto;
+    height: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: none;
+
+    &.left {
+      border-right: 1px solid #e5e5e5;
+    }
+  }
+
+  .deal-tasks-container {
+    width: autp;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   .deal-tasks {
     @extend %deal-tasks;
   }
 
-  .deal-control-panel {
-    @extend %deal-control-panel;
+  .deal-task-manager {
+    @extend %deal-task-manager;
   }
 
   .deal-fact-sheet {

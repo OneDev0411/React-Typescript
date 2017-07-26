@@ -1,7 +1,17 @@
 %deal-tasks {
-  min-height: 100vh;
   padding: $col-padding;
-  background: #fafafa;
+  background: #fbfbfb;
+  float: left;
+  width: 100%;
+  transition: 0.2s width ease-in;
+  &.half {
+    width: $taskmanager-width-on-expanding;
+  }
+
+  .section {
+    @extend %deal-task-section;
+  }
+
   .task {
     @extend %deal-task;
   }
@@ -9,33 +19,90 @@
 
 %deal-task {
   background: #fff;
-  padding: 10px;
-  border-radius: 4px;
-  margin-top: 10px;
-  .status {
-    display: inline-block;
-    width: 30px;
-    height: 30px;
-    border-radius: 60px;
-    border: 2px solid #fff;
-    float: left;
-    margin-right: 10px;
+}
 
-    &.New {
-      border-color: orange;
+%deal-task-section {
+
+  .title {
+    font-size: 17px;
+    text-align: left;
+    color: #5b6469;
+  }
+
+  .list {
+    margin: 10px 0;
+    box-shadow: 0 1px 1px 0 #eef1f2;
+  }
+
+  .add-task {
+    float: right;
+    width: 90px;
+    height: 24px;
+    border-radius: 3px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 1px 0 #eef1f2;
+    border: solid 1px #f4f7f9;
+    color: #78909c;
+    &:focus {
+      outline: none;
+    }
+    &:hover {
+      background: #fbfbfb;
+    }
+    i {
+      margin-right: 5px;
+      font-size: 13px;
     }
   }
 
-  .info {
-    .title {
-      font-weight: bold;
-      color: #222;
+  .list > .task {
+    position: relative;
+    padding: 6px 8px;
+    background-color: #fff;
+    margin-bottom: 2px;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in;
+
+    &.active {
+      background: #eff5fa;
     }
 
-    .subtitle {
-      font-weight: 200;
-      color: gray;
+    &:hover {
+      background-color: #eff5fa;
+    }
+
+    &:first-child {
+      border-radius: 4px 4px 0 0;
+    }
+
+    &:last-child {
+      border-radius: 0 0 4px 4px;
+    }
+
+    .title {
+      font-size: 15px;
+      color: #5b6469;
+    }
+
+    .description {
       font-size: 14px;
+      color: #78909c;
+    }
+
+    .status {
+      position: absolute;
+      display: block;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 3px 0;
+      border-radius: 3px;
+      width: 65px;
+      background: #35b863;
+      color: #fff;
+      font-size: 11px;
+      text-align: center;
     }
   }
 }
