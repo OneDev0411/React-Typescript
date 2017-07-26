@@ -15,9 +15,12 @@ router.post('/proxifier/upload', bodyParser(), async ctx => {
   try {
     // remove base_url because current fetcher middleware add it by itself
     const endpoint = headers['x-endpoint'].replace(config.api.url, '')
+    
+    // get method
+    const method = headers['x-method'] || 'post'
 
     const request = ctx
-      .fetch(endpoint, 'post', 'multipart/form-data')
+      .fetch(endpoint, method, 'multipart/form-data')
 
     _.each(files, file => {
       request.attach(file.filename, file.path)
