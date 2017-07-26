@@ -3,13 +3,20 @@ import Map from 'google-map-react'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import defaultProps from 'recompose/defaultProps'
+import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 
 import Brand from '../../../../../../controllers/Brand'
 import Marker from '../../components/Markers/SimpleMarker'
-import { setCssPositionToListingsWithSameBuilding } from '../../../../../../utils/map'
-
+import {
+  setCssPositionToListingsWithSameBuilding,
+  generatePointsFromBounds
+} from '../../../../../../utils/map'
+import {
+  getBounds,
+  getExtededMapProps
+} from '../../../../../../utils/extendedBounds'
 import * as actions from '../../../../../../store_actions/listings/map'
 
 import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../mapOptions'
@@ -100,12 +107,14 @@ const mapHOC = compose(
       mapProps: map.props
     }
   }, actions),
+  withState('googleMap', 'setGoogleMap', null),
   withHandlers({
-    onGoogleApiLoaded: ({ selectedAlert }) => ({ map }) => {
+    onGoogleApiLoaded: ({ markers, setGoogleMap }) => ({ map }) => {
       window.currentMap = map
+      setGoogleMap(map)
 
-      if (selectedAlert && markersOverlay) {
-        drawingOverlay(normalizePoints(selectedAlert.points))
+      if (markersOverlay) {
+        markersOverlay.setMap(map)
       }
     },
     onChange: ({ setMapProps }) => mapProps => {
@@ -119,39 +128,48 @@ const mapHOC = compose(
     }
   }),
   withPropsOnChange(
-    (props, nextProps) =>
-      !_.isEqual(props.selectedAlert, nextProps.selectedAlert),
-    ({ selectedAlert, mapProps }) => {
-      if (!window.google || !selectedAlert || !mapProps.bounds) {
-        return {}
-      }
-
-      if (markersOverlay) {
-        markersOverlay.setMap(null)
-      }
-
-      const googleMaps = window.google.maps
-      const points = normalizePoints(selectedAlert.points)
-
-      const bounds = new googleMaps.LatLngBounds()
-      points.forEach(point => bounds.extend(point))
-
-      window.currentMap.fitBounds(bounds)
-
-      drawingOverlay(points)
-    }
-  ),
-  withPropsOnChange(
     (props, nextProps) => !_.isEqual(props.markers, nextProps.markers),
-    ({ markers = [] }) => ({
-      markers: setCssPositionToListingsWithSameBuilding(
+    ({ markers = [], mapProps, setMapProps, selectedAlert, googleMap }) => {
+      markers = setCssPositionToListingsWithSameBuilding(
         markers.map(marker => ({
           lat: marker.lat,
           lng: marker.lng,
           points: [marker]
         }))
       )
-    })
+
+      if (markersOverlay && markers.length === 0) {
+        markersOverlay.setMap(null)
+        markersOverlay = null
+        return { markers }
+      }
+
+      if (googleMap && mapProps.bounds && markers.length > 0) {
+        if (markersOverlay) {
+          markersOverlay.setMap(null)
+          markersOverlay = null
+        }
+
+        let points
+        const googleMaps = window.google.maps
+
+        if (selectedAlert.points) {
+          points = normalizePoints(selectedAlert.points)
+        } else {
+          const markersBounds = getBounds(markers)
+          points = normalizePoints(generatePointsFromBounds(markersBounds))
+        }
+
+        const bounds = new googleMaps.LatLngBounds()
+        points.forEach(point => bounds.extend(point))
+
+        googleMap.fitBounds(bounds)
+
+        drawingOverlay(points)
+      }
+
+      return { markers }
+    }
   )
 )
 

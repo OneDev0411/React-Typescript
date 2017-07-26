@@ -1,6 +1,6 @@
 import { fitBounds } from 'google-map-react/utils'
 
-const extendedBounds = (points, mapProps) => {
+export const getBounds = points => {
   const googleMapsLatLngBounds = new google.maps.LatLngBounds()
   points.forEach(point => googleMapsLatLngBounds.extend(point))
 
@@ -34,6 +34,17 @@ const extendedBounds = (points, mapProps) => {
     lng: getSe.lng()
   }
 
+  return {
+    ne,
+    sw,
+    nw,
+    se
+  }
+}
+
+export const getExtededMapProps = (mapProps, bounds) => {
+  const { ne, sw, nw, se } = bounds
+
   const { size } = mapProps
   let { zoom, center } = fitBounds({ ne, sw }, size)
 
@@ -46,6 +57,16 @@ const extendedBounds = (points, mapProps) => {
     center,
     bounds: { nw, se }
   }
+}
+
+export const extendedBounds = (points, mapProps) => {
+  const bounds = getBounds(points)
+
+  if (!bounds) {
+    return false
+  }
+
+  return getExtededMapProps(mapProps, bounds)
 }
 
 export default extendedBounds
