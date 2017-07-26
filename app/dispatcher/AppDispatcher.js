@@ -24,7 +24,6 @@ import getReceivingUser from '../actions/user/get-receiving-user'
 // Rooms
 import setNotification from '../actions/rooms/notifications'
 
-
 // Pages
 import landingPage from '../actions/pages/landing'
 import getContent from '../actions/pages/get-content'
@@ -49,11 +48,10 @@ import geocodeAddress from '../actions/google/geocode-address'
 const AppDispatcher = new Dispatcher()
 
 // Register callback with AppDispatcher
-AppDispatcher.register(async function (payload) {
+AppDispatcher.register(async (payload) => {
   const action = payload.action
 
   switch (action) {
-
     case 'get-content':
       getContent(payload.slug, payload.rendered, payload.res, payload.callback)
       break
@@ -67,7 +65,12 @@ AppDispatcher.register(async function (payload) {
       break
 
     case 'sign-up':
-      signup(payload.user, payload.password, payload.confirm_password, payload.redirect_to)
+      signup(
+        payload.user,
+        payload.password,
+        payload.confirm_password,
+        payload.redirect_to
+      )
       break
 
     case 'sign-up-shadow':
@@ -75,7 +78,12 @@ AppDispatcher.register(async function (payload) {
       break
 
     case 'sign-in':
-      signin(payload.email, payload.password, payload.redirect_to, payload.invite)
+      signin(
+        payload.email,
+        payload.password,
+        payload.redirect_to,
+        payload.invite
+      )
       break
 
     case 'edit-user':
@@ -95,7 +103,16 @@ AppDispatcher.register(async function (payload) {
       break
 
     case 'create-password':
-      createPassword(payload.email, payload.password, payload.first_name, payload.last_name, payload.token, payload.agent, payload.new_email, payload.phone_number)
+      createPassword(
+        payload.email,
+        payload.password,
+        payload.first_name,
+        payload.last_name,
+        payload.token,
+        payload.agent,
+        payload.new_email,
+        payload.phone_number
+      )
       break
 
     case 'send-verify-email':
@@ -115,7 +132,7 @@ AppDispatcher.register(async function (payload) {
       break
 
     case 'edit-profile-pic':
-      editProfilePic(payload.user, payload.files)
+      editProfilePic(payload.files)
       break
 
     case 'edit-password':
