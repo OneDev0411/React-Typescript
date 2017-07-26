@@ -59,7 +59,7 @@ export const getExtededMapProps = (mapProps, bounds) => {
   }
 }
 
-export const extendedBounds = (points, mapProps) => {
+const extendedBounds = (points, mapProps) => {
   const bounds = getBounds(points)
 
   if (!bounds) {
