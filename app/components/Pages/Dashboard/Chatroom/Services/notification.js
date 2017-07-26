@@ -205,7 +205,7 @@ export default class ChatNotification extends NotificationService {
     const { rooms } = chatroom
     const { room: roomId, subjects, objects, auxiliary_object: user } = notification
 
-    // if current user is invited to a new room then create that room
+    // if user is invited to a new room, create that room
     if (user.id === this.user.id) {
       return store.dispatch(createExistingRoom(roomId))
     }
