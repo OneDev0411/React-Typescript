@@ -35,8 +35,6 @@ const resetLocationBasedFilters = filterOptions => dispatch => {
     }
   })
 
-  console.log(nullOptions)
-
   if (Object.keys(nullOptions).length > 0) {
     dispatch(
       searchActions.setSearchListingsOptions({

@@ -6,6 +6,7 @@ import lifecycle from 'recompose/lifecycle'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import { change as updateField } from 'redux-form'
+import withPropsOnChange from 'recompose/withPropsOnChange'
 
 import Label from '../components/Label'
 import api from '../../../../../../../../models/listings/search'
@@ -63,7 +64,12 @@ export default compose(
       })
     }
   }),
-  connect(null, { updateField }),
+  connect(
+    ({ search }) => ({
+      mlsAreasFromState: search.filters.form.filters.values.mls_areas || []
+    }),
+    { updateField }
+  ),
   withState('subareas', 'setSubareas', []),
   withState('selectedAreas', 'setSelectedAreas', []),
   withState('selectedSubareas', 'setSelectedSubareas', []),
@@ -144,5 +150,26 @@ export default compose(
     }) => areas => {
       setSelectedSubareas(areas, updateAreas)
     }
-  })
+  }),
+  withPropsOnChange(
+    (props, nextProps) =>
+      !_.isEqual(props.mlsAreasFromState, nextProps.mlsAreasFromState),
+    ({
+      updateAreas,
+      selectedAreas,
+      selectedSubareas,
+      setSelectedAreas,
+      mlsAreasFromState,
+      setSelectedSubareas
+    }) => {
+      if (mlsAreasFromState.length === 0 && selectedAreas.length > 0) {
+        setSelectedAreas([], updateAreas)
+
+        if (selectedSubareas.length > 0) {
+          setSelectedSubareas([])
+        }
+      }
+      return {}
+    }
+  )
 )(MlsAreaSelects)
