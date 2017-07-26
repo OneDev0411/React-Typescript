@@ -56,9 +56,9 @@ export default class Fetch {
     return this._create('delete', endpoint)
   }
 
-  upload(endpoint) {
+  upload(endpoint, method = 'post') {
     this._proxyUrl += '/upload'
-    return this._create('post', endpoint)
+    return this._create(method, endpoint)
   }
 
   onResponse(response) {
