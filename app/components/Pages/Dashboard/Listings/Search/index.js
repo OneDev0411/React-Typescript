@@ -68,7 +68,6 @@ class Search extends Component {
       initMap()
     } catch ({ message }) {
       initMap()
-      console.log(message)
     }
   }
 
