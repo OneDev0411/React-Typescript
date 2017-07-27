@@ -140,12 +140,9 @@ class Section extends Component {
             listing={listing}
             handleCloseSignupForm={controller.action_bubble.handleCloseSignupForm}
             handleListingClick={this.handleListingClick}
-            handleAgentClick={controller.action_bubble.handleAgentClick}
             handleListingInquirySubmit={controller.action_bubble.handleListingInquirySubmit}
             handleLoginClick={controller.action_bubble.handleLoginClick}
             showIntercom={controller.action_bubble.showIntercom}
-            resend={controller.action_bubble.resend}
-            hideModal={controller.action_bubble.hideModal}
           />
         ))
         }
