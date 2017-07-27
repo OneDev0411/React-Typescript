@@ -107,11 +107,9 @@ const mapHOC = compose(
       mapProps: map.props
     }
   }, actions),
-  withState('googleMap', 'setGoogleMap', null),
   withHandlers({
-    onGoogleApiLoaded: ({ markers, setGoogleMap }) => ({ map }) => {
+    onGoogleApiLoaded: ({ markers }) => ({ map }) => {
       window.currentMap = map
-      setGoogleMap(map)
 
       if (markersOverlay) {
         markersOverlay.setMap(map)
@@ -129,7 +127,7 @@ const mapHOC = compose(
   }),
   withPropsOnChange(
     (props, nextProps) => !_.isEqual(props.markers, nextProps.markers),
-    ({ markers = [], mapProps, setMapProps, selectedAlert, googleMap }) => {
+    ({ markers = [], mapProps, setMapProps, selectedAlert }) => {
       markers = setCssPositionToListingsWithSameBuilding(
         markers.map(marker => ({
           lat: marker.lat,
@@ -144,7 +142,7 @@ const mapHOC = compose(
         return { markers }
       }
 
-      if (googleMap && mapProps.bounds && markers.length > 0) {
+      if (window.google && mapProps.bounds && markers.length > 0) {
         if (markersOverlay) {
           markersOverlay.setMap(null)
           markersOverlay = null
@@ -164,7 +162,7 @@ const mapHOC = compose(
         const bounds = new googleMaps.LatLngBounds()
         points.forEach(point => bounds.extend(point))
 
-        googleMap.fitBounds(bounds)
+        window.currentMap.fitBounds(bounds)
       }
 
       return { markers }
