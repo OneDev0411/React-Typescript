@@ -118,7 +118,6 @@ class Section extends Component {
         <div
           style={{
             textAlign: 'center',
-            backgroundColor: '#fbfbfb',
             display: 'table',
             width: '100%',
             padding: '40px',
