@@ -4,6 +4,7 @@ import * as schema from '../../../models/listings/schema'
 import { selectListings } from '../../../reducers/listings'
 import { getIsFavorite } from '../../../reducers/listings/favorites'
 import * as actionsType from '../../../constants/listings/favorites'
+import { normalizeListingsForMarkers } from '../../../utils/map'
 
 const toggleFavorite = listing => (dispatch, getState) => {
   const { data, favorites } = getState()
@@ -23,7 +24,7 @@ const toggleFavorite = listing => (dispatch, getState) => {
     if (getIsFavorite(favorites.listings, id)) {
       listings = listings.filter(list => list.id !== id)
     } else {
-      listings = [...listings, listing]
+      listings = [...listings, ...normalizeListingsForMarkers([listing])]
     }
 
     const total = listings.length

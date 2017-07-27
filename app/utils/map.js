@@ -1,3 +1,17 @@
+export const allLocationBasedFilterOptions = {
+  counties: null,
+  mls_areas: null,
+  subdivisions: null,
+  school_districts: null,
+  high_schools: null,
+  middle_schools: null,
+  primary_schools: null,
+  elementary_schools: null,
+  senior_high_schools: null,
+  junior_high_schools: null,
+  intermediate_schools: null
+}
+
 export const normalizeListingsForMarkers = markers =>
   markers.filter(marker => marker.location || marker.property).map(marker => {
     if (marker.location) {

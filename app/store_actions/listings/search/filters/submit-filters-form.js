@@ -2,6 +2,7 @@ import { submit, SubmissionError } from 'redux-form'
 import getListings from '../get-listings'
 import { generatePointsFromBounds } from '../../../../utils/map'
 import setSearchListingsOptions from '../../../../store_actions/listings/search/set-options'
+import setSearchInput from '../../../../store_actions/listings/search/set-search-input'
 import toogleFiltersArea from '../../../../store_actions/listings/search/filters/toggle-filters-area'
 import { goToPlace } from '../../map'
 import { selectListings } from '../../../../reducers/listings'
@@ -228,6 +229,7 @@ const submitFiltersForm = values => async (dispatch, getState) => {
 
   const updateMap = () => {
     const { search } = getState()
+    const hasSearchInput = search.input
     const { points: drawingPoints, shape: drawingShape } = search.map.drawing
     const listings = selectListings(search.listings)
 
@@ -235,6 +237,10 @@ const submitFiltersForm = values => async (dispatch, getState) => {
 
     if (drawingPoints.length > 2 && queryOptions.points == null) {
       dispatch(removePolygon(drawingShape))
+    }
+
+    if (hasSearchInput && queryOptions.points == null) {
+      dispatch(setSearchInput(''))
     }
 
     if (listings.length === 1) {

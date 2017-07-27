@@ -4,10 +4,14 @@ import pure from 'recompose/pure'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
+import { change as updateField } from 'redux-form'
 
+import { allLocationBasedFilterOptions } from '../../../../../../../utils/map'
 import { goToPlace } from '../../../../../../../store_actions/listings/map'
 import searchActions from '../../../../../../../store_actions/listings/search'
 import { removePolygon } from '../../../../../../../store_actions/listings/map/drawing'
+
+let filterOptions
 
 const removeMapDrawing = drawing => dispatch => {
   const { points, shape } = drawing
@@ -19,23 +23,23 @@ const removeMapDrawing = drawing => dispatch => {
 }
 
 const resetLocationBasedFilters = filterOptions => dispatch => {
-  const { mls_areas, school_districts, subdivisions, counties } = filterOptions
+  const nullOptions = {}
 
-  if (mls_areas || school_districts || subdivisions || counties) {
+  Object.keys(allLocationBasedFilterOptions).forEach(option => {
+    if (
+      typeof filterOptions[option] !== 'undefined' &&
+      filterOptions[option] != null
+    ) {
+      nullOptions[option] = null
+      dispatch(updateField('filters', option, null))
+    }
+  })
+
+  if (Object.keys(nullOptions).length > 0) {
     dispatch(
       searchActions.setSearchListingsOptions({
         ...filterOptions,
-        counties: null,
-        mls_areas: null,
-        subdivisions: null,
-        school_districts: null,
-        high_schools: null,
-        middle_schools: null,
-        primary_schools: null,
-        elementary_schools: null,
-        senior_high_schools: null,
-        junior_high_schools: null,
-        intermediate_schools: null
+        ...nullOptions
       })
     )
   }
@@ -47,24 +51,22 @@ const findPlace = address => dispatch => {
   }
 
   if (/^\d{5}(?:[-\s]\d{4})?$/.test(address)) {
-    // console.log('click search: post code', address)
     dispatch(searchActions.searchByPostalCode(address))
     return
   }
 
   if (!isNaN(address) && address.length > 7) {
-    // console.log('click search: MLS Number', address)
     dispatch(searchActions.searchByMlsNumber(address))
     return
   }
 
-  // console.log('click search: place', address)
   dispatch(searchActions.getPlace(address))
 }
 
 const autoCompletePlaceChanged = address => dispatch => {
+  resetLocationBasedFilters(filterOptions)(dispatch)
+
   if (!address.formatted_address) {
-    // console.log('unformated')
     findPlace(address.name)(dispatch)
     return
   }
@@ -80,20 +82,21 @@ const autoCompletePlaceChanged = address => dispatch => {
 
 let inputNode
 
-const field = ({ value, onClear, onClick, onFocus, onChange, submitedValue }) =>
+const field = ({ onClick, onFocus, searchInput, submitedValue, dispatch }) =>
   <form method="post" className="c-mls-toolbar__search-box__field">
     <input
       type="text"
-      value={value}
+      value={searchInput}
       onFocus={onFocus}
-      onChange={onChange}
+      onChange={event =>
+        dispatch(searchActions.setSearchInput(event.target.value))}
       ref={node => (inputNode = node)}
       placeholder="Search location or MLS#"
       className="c-mls-toolbar__search-box__field__input"
-      style={{ paddingRight: value === submitedValue && '39px' }}
+      style={{ paddingRight: searchInput === submitedValue && '39px' }}
     />
     <span className="c-mls-toolbar__search-box__field-buttons">
-      {value !== submitedValue &&
+      {searchInput !== submitedValue &&
         <button
           onClick={onClick}
           className="c-mls-toolbar__search-box__field__submit-btn"
@@ -108,9 +111,12 @@ const field = ({ value, onClear, onClick, onFocus, onChange, submitedValue }) =>
             <path d="M21.411,21.595 C21.262,21.745 21.068,21.820 20.872,21.820 C20.677,21.820 20.481,21.745 20.331,21.595 L15.399,16.646 C13.847,17.958 11.847,18.753 9.664,18.753 C4.747,18.753 0.748,14.740 0.748,9.808 C0.748,4.876 4.747,0.864 9.664,0.864 C14.579,0.864 18.578,4.876 18.578,9.808 C18.578,11.999 17.787,14.005 16.479,15.562 L21.411,20.511 C21.711,20.810 21.711,21.295 21.411,21.595 ZM9.664,2.397 C5.590,2.397 2.277,5.722 2.277,9.808 C2.277,13.895 5.590,17.220 9.664,17.220 C13.736,17.220 17.051,13.895 17.051,9.808 C17.051,5.722 13.736,2.397 9.664,2.397 Z" />
           </svg>
         </button>}
-      {value &&
+      {searchInput &&
         <button
-          onClick={onClear}
+          onClick={event => {
+            event.preventDefault()
+            dispatch(searchActions.setSearchInput(''))
+          }}
           className="c-mls-toolbar__search-box__field__clear-btn"
         >
           <svg
@@ -129,12 +135,15 @@ const field = ({ value, onClear, onClick, onFocus, onChange, submitedValue }) =>
 
 const fieldHOC = compose(
   pure,
-  connect(({ search }) => ({
-    drawing: search.map.drawing,
-    filterOptions: search.options,
-    center: search.map.props.center
-  })),
-  withState('value', 'updateValue', ''),
+  connect(({ search }) => {
+    filterOptions = search.options
+    return {
+      filterOptions,
+      searchInput: search.input,
+      drawing: search.map.drawing,
+      center: search.map.props.center
+    }
+  }),
   withState('submitedValue', 'updateSubmitedValue', ''),
   withState('autocompleteInstance', 'setAutocompleteInstance', ''),
   // describe events
@@ -143,19 +152,15 @@ const fieldHOC = compose(
       center,
       drawing,
       dispatch,
-      updateValue,
-      filterOptions,
       updateSubmitedValue,
       autocompleteInstance,
       setAutocompleteInstance
     }) => ({ target }) => {
       if (!window.google) {
-        // console.log('google api is not loaded')
         return false
       }
 
       if (!inputNode) {
-        // console.log('google search input is undefined')
         return false
       }
 
@@ -172,10 +177,13 @@ const fieldHOC = compose(
         setAutocompleteInstance(autocomplete)
 
         autocomplete.addListener('place_changed', () => {
-          updateValue(inputNode.value)
-          updateSubmitedValue(inputNode.value)
+          const address =
+            autocomplete.getPlace().formatted_address ||
+            autocomplete.getPlace().name
 
-          resetLocationBasedFilters(filterOptions)(dispatch)
+          updateSubmitedValue(address)
+          dispatch(searchActions.setSearchInput(address))
+
           removeMapDrawing(drawing)(dispatch).then(() => {
             autoCompletePlaceChanged(autocomplete.getPlace())(dispatch)
           })
@@ -184,24 +192,19 @@ const fieldHOC = compose(
         inputNode.addEventListener('keypress', formPreventDefaultHandler)
       }
     },
-    onChange: ({ updateValue, value }) => event => {
-      updateValue(event.target.value)
-    },
-    onClear: ({ updateValue }) => event => {
-      event.preventDefault()
-      updateValue('')
-    },
     onClick: ({
       value,
       drawing,
       dispatch,
+      searchInput,
       filterOptions,
       updateSubmitedValue
     }) => event => {
-      updateSubmitedValue(value)(dispatch)
+      event.preventDefault()
+      updateSubmitedValue(searchInput)
       resetLocationBasedFilters(filterOptions)
       removeMapDrawing(drawing)(dispatch).then(() => {
-        findPlace(value)(dispatch)
+        findPlace(searchInput)(dispatch)
       })
     }
   })
