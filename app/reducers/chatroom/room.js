@@ -102,7 +102,10 @@ export default (state = null, action) => {
   switch (action.type) {
 
     case types.GET_ROOMS:
-      return action.rooms
+      return {
+        ...state,
+        ...action.rooms
+      }
 
     case types.CREATE_ROOM:
       return createRoom(state, action)

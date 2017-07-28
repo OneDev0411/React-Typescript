@@ -3,7 +3,7 @@
   background: #fbfbfb;
   float: left;
   width: 100%;
-  transition: 0.2s width ease-in;
+  // transition: 0.1s width ease-in;
   &.half {
     width: $taskmanager-width-on-expanding;
   }

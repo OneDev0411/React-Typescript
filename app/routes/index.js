@@ -7,7 +7,7 @@ import Load from '../loader'
 import AppLayout from '../components/App'
 
 // actions
-import { getRooms } from '../store_actions/chatroom'
+import { getDeals } from '../store_actions/deals'
 
 const AsyncAuthenticationLayout = Load({
   loader: () => import('../components/Authentication' /* webpackChunkName: "authlay" */)
@@ -68,7 +68,11 @@ const AsyncListingsAlerts = Load({
 
 // deals
 const AsyncDealsLayout = Load({
-  loader: () => import('../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */)
+  loader: () => import('../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */),
+  fetchData: (dispatch, params) => {
+    const { user } = params
+    return dispatch(getDeals(user))
+  }
 })
 
 const AsyncDealsList = Load({
@@ -98,11 +102,7 @@ const AsyncContactProfile = Load({
 
 // chat room
 const AsyncRecents = Load({
-  loader: () => import('../components/Pages/Dashboard/Chatroom' /* webpackChunkName: "chat" */),
-  fetchData: (dispatch, params) => {
-    const { user } = params
-    return dispatch(getRooms(user))
-  }
+  loader: () => import('../components/Pages/Dashboard/Chatroom' /* webpackChunkName: "chat" */)
 })
 
 const AsyncListingsFavorites = Load({

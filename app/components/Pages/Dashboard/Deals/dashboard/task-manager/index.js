@@ -1,33 +1,26 @@
 import React from 'react'
+import Header from './header'
+import Comments from './comments'
+import Files from './files'
 
 export default ({
   task,
   onCloseTask
 }) => {
-  if (!task) {
-    return false
-  }
 
   return (
     <div>
-      <div className="heading">
-        <span>
-          { task.title }
-        </span>
 
-        <button
-          className="task-btn btn-close"
-          onClick={() => onCloseTask()}
-        >
-          <i className="fa fa-times" />
-        </button>
+      <Header
+        task={task || {}}
+        onCloseTask={onCloseTask}
+      />
 
-        <button
-          className="task-btn btn-submit"
-        >
-          Submit for Review
-        </button>
-      </div>
+      <Files />
+
+      <Comments
+        task={task}
+      />
     </div>
   )
 }

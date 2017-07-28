@@ -5,6 +5,8 @@ $taskmanager-width-on-expanding: 45%;
 @import './dashboard/_fact_sheet';
 @import './dashboard/_task_creator';
 @import './dashboard/_listing_card';
+@import './dashboard/_comment';
+@import './dashboard/_files';
 
 %deal-dashboard {
   margin-left: 0;
@@ -29,7 +31,7 @@ $taskmanager-width-on-expanding: 45%;
   }
 
   .deal-tasks-container {
-    width: autp;
+    width: 100%;
     white-space: nowrap;
     overflow: hidden;
   }
@@ -48,6 +50,14 @@ $taskmanager-width-on-expanding: 45%;
 
   .deal-task-creators {
     @extend %deal-task-creators;
+  }
+
+  .deal-comments {
+    @extend %deal-comments;
+  }
+
+  .deal-files {
+    @extend %deal-files;
   }
 
   .listing-card {

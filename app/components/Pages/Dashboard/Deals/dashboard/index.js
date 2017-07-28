@@ -66,7 +66,7 @@ class DealDetails extends React.Component {
   }
 }
 
-function mapStateToProps({ data, deals }, props) {
+function mapStateToProps({ data, deals, chatroom }, props) {
   const { list } = deals
   const { id } = props.params
 

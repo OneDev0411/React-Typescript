@@ -1,0 +1,16 @@
+%deal-files {
+  padding: $col-padding;
+  margin-bottom: 10px;
+  background: #fff;
+
+  .file {
+    margin-bottom: 0;
+    height: 60px;
+    border-bottom: 1px solid #eff5fa;
+    margin-bottom: 15px;
+    &:last-child {
+      border-bottom: 0;
+      margin-bottom: 0;
+    }
+  }
+}

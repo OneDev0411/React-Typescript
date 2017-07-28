@@ -7,11 +7,6 @@ class DealsContainer extends React.Component {
     super(props)
   }
 
-  static fetchData(dispatch, params) {
-    const { user } = params
-    return dispatch(getDeals(user))
-  }
-
   componentDidMount() {
     const { dispatch, deals, forms } = this.props
 
