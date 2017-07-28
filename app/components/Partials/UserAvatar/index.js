@@ -9,7 +9,6 @@ const Colors = {
 }
 
 const UserAvatar = ({
-  userId,
   name,
   image,
   state,
@@ -20,7 +19,7 @@ const UserAvatar = ({
   showStateIndicator = true
 }) => {
   const defaultStyles = showStateIndicator ?
-    {position: 'relative', width: `${size}px`} :
+    { position: 'relative', width: `${size}px` } :
     {}
 
   // normalize name
@@ -32,9 +31,9 @@ const UserAvatar = ({
       value: normalizedName
     }
   } else {
-    const splittedName = name.split(' ')
-    if (splittedName.length > 2) {
-      normalizedName = splittedName[0] + ' ' + splittedName[1]
+    const splitName = name.split(' ')
+    if (splitName.length > 2) {
+      normalizedName = `${splitName[0]} ${splitName[1]}`
     }
     props = {
       name: normalizedName
@@ -78,8 +77,7 @@ const UserAvatar = ({
 function mapStateToProps({ chatroom }, ownProps) {
   const { states } = chatroom
 
-  if (!states || ownProps.showStateIndicator === false)
-    return {}
+  if (!states || ownProps.showStateIndicator === false) { return {} }
 
   const state = states[ownProps.userId] ? states[ownProps.userId].state : 'Offline'
   return { state }
