@@ -20,6 +20,11 @@ class Messages extends React.Component {
     }
   }
 
+  static defaultProps = {
+    toolbarHeight: '70px',
+    baseHeight: '95vh'
+  }
+
   componentDidMount() {
     const { roomId, messages, isPopup } = this.props
 
@@ -193,9 +198,12 @@ class Messages extends React.Component {
    */
   getHeight() {
     const { composeMessageHeight } = this.state
-    const { isPopup } = this.props
-    const toolbarHeight = isPopup ? '0px' : '70px'
-    const baseHeight = isPopup ? '297px' : '95vh'
+    const { showToolbar } = this.props
+    let { toolbarHeight, baseHeight } = this.props
+
+    if (showToolbar === false) {
+      toolbarHeight = '0px'
+    }
 
     return `calc(${baseHeight} - ${toolbarHeight} - ${composeMessageHeight}px)`
   }
