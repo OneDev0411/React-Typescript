@@ -1,8 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router'
 import { Row, Col } from 'react-bootstrap'
-import { compose,  withState, lifecycle, pure } from 'recompose'
 import _ from 'underscore'
 import cn from 'classnames'
 import SocketStatus from '../SocketStatus'
@@ -58,7 +56,6 @@ class Rooms extends React.Component {
     const { user, activeRoom } = this.props
     const size = 35
     const color = '#d7d7d7'
-    const { users } = room
 
     if (room.room_type === 'Group') {
       return <UserAvatar
@@ -78,7 +75,7 @@ class Rooms extends React.Component {
       image={User.profile_image_url}
       size={size}
       color={color}
-      borderColor={room.id === activeRoom ? '#2196f3' : '#303E4D' }
+      borderColor={room.id === activeRoom ? '#2196f3' : '#303E4D'}
     />
   }
 
@@ -87,14 +84,13 @@ class Rooms extends React.Component {
    */
   getRoomTitle(title) {
     const len = 20
-    if (title.length <= len)
-      return title
+    if (title.length <= len) { return title }
 
-    return title.substr(0, len) + '...'
+    return `${title.substr(0, len)}...`
   }
 
   render() {
-    const { filter, showComposeModal } = this.state
+    const { filter } = this.state
     const { showChatbar, instantMode, rooms, activeRoom } = this.props
 
     return (
@@ -102,7 +98,7 @@ class Rooms extends React.Component {
         <div className="toolbar">
           <div
             className="search"
-            style={{ float: showChatbar ? 'left': 'none' }}
+            style={{ float: showChatbar ? 'left' : 'none' }}
           >
             <input
               className="form-control filter"
@@ -115,7 +111,7 @@ class Rooms extends React.Component {
 
           <div
             className="toggle-sidebar"
-            style={{ display: showChatbar ? 'block': 'none' }}
+            style={{ display: showChatbar ? 'block' : 'none' }}
           >
             <a
               href="/dashboard/recents"
@@ -124,8 +120,8 @@ class Rooms extends React.Component {
             >
               {
                 instantMode ?
-                <i className="fa fa-angle-double-left fa-2x"></i> :
-                <i className="fa fa-angle-double-right fa-2x"></i>
+                  <i className="fa fa-angle-double-left fa-2x" /> :
+                  <i className="fa fa-angle-double-right fa-2x" />
               }
             </a>
           </div>
