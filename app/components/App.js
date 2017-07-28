@@ -32,6 +32,11 @@ import ReactGA from 'react-ga'
 import config from '../../config/public'
 
 class App extends Component {
+  static fetchData(dispatch, params) {
+    const { user } = params
+    return dispatch(getRooms(user))
+  }
+
   componentWillMount() {
     if (typeof window !== 'undefined') {
       this.initializeChatSocket()
@@ -73,14 +78,15 @@ class App extends Component {
   }
 
   async initialRooms() {
-    const { dispatch, data, rooms } = this.props
+    const { dispatch, data } = this.props
+    let { rooms } = this.props
 
-    if (data.user) {
-      const rooms = await dispatch(getRooms())
-
-      // hack for share alert modal -> prepare rooms for it
-      AppStore.data.rooms = rooms
+    if (data.user && !rooms) {
+      rooms = await dispatch(getRooms())
     }
+
+    // hack for share alert modal -> prepare rooms for it
+    AppStore.data.rooms = rooms
   }
 
   initialContacts(user) {
