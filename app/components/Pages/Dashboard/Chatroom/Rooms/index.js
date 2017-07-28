@@ -62,7 +62,7 @@ class Rooms extends React.Component {
 
     if (room.room_type === 'Group') {
       return <UserAvatar
-        name={room.users.length.toString()}
+        name={room.users.length}
         size={size}
         showStateIndicator={false}
         color={color}
