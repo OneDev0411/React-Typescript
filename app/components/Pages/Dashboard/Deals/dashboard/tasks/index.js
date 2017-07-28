@@ -10,7 +10,7 @@ export default ({
 }) => (
   <div>
     {
-      tags
+      tags && tags
       .filter(tag => tag.is_tab)
       .map(tag =>
         <Section
