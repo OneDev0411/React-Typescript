@@ -329,13 +329,16 @@ export default {
     // })
     // .then(response => callback(false, response))
   },
-  uploadImage: (params, callback) => {
-    const endpoint = '/attachments'
-    const request = superagent.post(endpoint)
-    const file = params.files[0]
-    request.set('authorization', `Bearer ${params.access_token}`)
-    request.attach('media', file)
-    request.end((err, response) => callback(false, response))
+  uploadImage: async file => {
+    try {
+      const response = await new Fetch()
+        .upload('/users/self/profile_image_url', 'patch')
+        .attach('media', file)
+
+      return response.body.data
+    } catch (error) {
+      throw error
+    }
   },
   editProfilePic: (params, callback) => {
     const endpoint = `/api/edit-profile-pic?access_token=${params.access_token}`

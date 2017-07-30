@@ -244,13 +244,10 @@ export default class SideBar extends Component {
   // }
 
   uploadProfilePic(files) {
-    const data = this.props.data
-    const user = data.user
     AppStore.data.uploading_profile_pic = true
     AppStore.emitChange()
     AppDispatcher.dispatch({
       action: 'edit-profile-pic',
-      user,
       files
     })
   }
@@ -387,7 +384,6 @@ export default class SideBar extends Component {
         <ProfileImage
           size={100}
           data={data}
-          user={user}
           font={50}
           top={15}
         />
@@ -685,7 +681,7 @@ export default class SideBar extends Component {
               </OverlayTrigger>
             </NavItem>
             <div style={S('absolute z-0 l-3n')}>
-              <ProfileImage data={data} user={user} />
+              <ProfileImage data={data} />
             </div>
             <NavDropdown style={S('z-1000')} title={title_area} dropup id="account-dropdown" className="account-dropdown" eventKey={3} noCaret>
               { upgrade_account_button }
