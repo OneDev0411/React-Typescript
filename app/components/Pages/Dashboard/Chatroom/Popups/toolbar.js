@@ -5,14 +5,11 @@ import RoomSettings from '../Rooms/settings'
 import CloseIcon from '../../Partials/Svgs/CloseIcon'
 import FullscreenIcon from '../../Partials/Svgs/FullscreenIcon'
 import MinimizeIcon from '../../Partials/Svgs/MinimizeIcon'
-import Brand from '../../../../../controllers/Brand'
 
-const getTitle = function(title) {
+const getTitle = (title) => {
   const len = 13
-  if (title.length < len)
-    return title
-  else
-    return title.substr(0, len) + '...'
+  if (title.length < len) { return title }
+  return `${title.substr(0, len)}...`
 }
 
 export default ({
@@ -48,7 +45,8 @@ export default ({
 
       <span
         className="icon minimize minimize-icon"
-        onClick={() => onMinimize(room.id)}>
+        onClick={() => onMinimize(room.id)}
+      >
         <MinimizeIcon />
       </span>
 
