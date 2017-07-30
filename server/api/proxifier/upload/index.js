@@ -3,7 +3,7 @@ import bodyParser from 'koa-bodyparser'
 import _ from 'underscore'
 const fileParser = require('async-busboy')
 const router = require('koa-router')()
-
+import updateSession from '../update-session'
 import config from '../../../../config/private'
 
 const app = new Koa()
@@ -15,7 +15,7 @@ router.post('/proxifier/upload', bodyParser(), async ctx => {
   try {
     // remove base_url because current fetcher middleware add it by itself
     const endpoint = headers['x-endpoint'].replace(config.api.url, '')
-    
+
     // get method
     const method = headers['x-method'] || 'post'
 
@@ -31,6 +31,12 @@ router.post('/proxifier/upload', bodyParser(), async ctx => {
     }
 
     const response = await request
+
+    // update user session
+    const { data } = response.body
+    if (data && data.type === 'user') {
+      updateSession(ctx, data)
+    }
 
     ctx.body = response.body
   } catch (e) {
