@@ -16,8 +16,7 @@ const onFocus = (e, room, onChangeActive) => {
  * reset room's notifications
  */
 const resetNotifications = (room) => {
-  if (~~room.new_notifications > 0)
-    ChatNotification.clear(room.id)
+  if (~~room.new_notifications > 0) { ChatNotification.clear(room.id) }
 }
 
 export default ({
@@ -31,7 +30,6 @@ export default ({
   onClose,
   onChangeActive
 }) => {
-
   // extract settings
   const { minimize } = settings
 
@@ -41,12 +39,10 @@ export default ({
   let left = (width * (number - 1)) + defaultLeft
 
   // limit popups count based on screen width
-  if (left + defaultLeft + width > window.innerWidth)
-    return false
+  if (left + defaultLeft + width > window.innerWidth) { return false }
 
   // margin left
-  if (number > 1)
-    left += 20 * (number - 1)
+  if (number > 1) { left += 20 * (number - 1) }
 
   return (
     <div
@@ -69,7 +65,7 @@ export default ({
         user={user}
         roomId={room.id}
         showToolbar={false}
-        isPopup={true}
+        isPopup
         onClick={e => onFocus(e, room, onChangeActive)}
       />
     </div>
