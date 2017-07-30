@@ -1,17 +1,23 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
-import AlertsListRow from './AlertsListRow'
+import AlertsListItem from './AlertsListItem'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 
-const AlertsList = ({ user, alertsList, selectedAlertId }) =>
+const AlertsList = ({
+  user,
+  alertsList,
+  selectedAlertId,
+  onClickDeleteAlert
+}) =>
   <div className="c-alerts-list">
     {(alertsList.data.length &&
       alertsList.data.map((alert, index) =>
-        <AlertsListRow
+        <AlertsListItem
           key={`ALERT_LIST_ITEM_${index}`}
           user={user}
           alert={alert}
+          onClickDelete={onClickDeleteAlert}
           isSelected={selectedAlertId === alert.id}
         />
       )) ||

@@ -6,12 +6,15 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import { Modal } from 'react-bootstrap'
 
+import Brand from '../../../../../../controllers/Brand'
 import SuccessModal from './SuccessModal'
 import { normalizeAlertOptions } from './CreateAlertModal'
 import Recipients from '../../../../../Partials/ShareView'
 import { hasRecipients } from '../../../../../../utils/helpers'
 import { createRoom } from '../../../../../../store_actions/chatroom/room'
 import createAlert from '../../../../../../models/listings/alerts/create-alert'
+
+const brandColor = `#${Brand.color('primary', '3388ff')}`
 
 const ShareAlertModal = ({
   onHide,
@@ -58,7 +61,7 @@ const ShareAlertModal = ({
               ? 'isSaving'
               : ''}`}
             disabled={disabled}
-            style={{ float: 'right' }}
+            style={{ float: 'right', backgroundColor: !disabled && brandColor }}
           >
             {isSharing ? 'Save and Sharing...' : 'Save & Share'}
           </button>
@@ -102,12 +105,15 @@ export default compose(
       setIsSharing(true)
 
       createRoom(recipients).then(room => {
-        const alertOptions = normalizeAlertOptions(searchOptions, {
-          room,
-          title: alertTitle,
-          created_by: user.id,
-          points: drawingPoints
-        })
+        const alertOptions = normalizeAlertOptions(
+          searchOptions,
+          drawingPoints,
+          {
+            room,
+            title: alertTitle,
+            created_by: user.id
+          }
+        )
 
         createAlert(alertOptions)
           .then(alert => {
