@@ -4,6 +4,7 @@ es6Promise.polyfill()
 import 'isomorphic-fetch'
 import superagent from 'superagent'
 import config from '../../config/public'
+import Fetch from '../services/fetch'
 
 export default {
   get: (params, callback) => {
@@ -292,31 +293,41 @@ export default {
     })
     .then(response => callback(false, response))
   },
-  edit: (params, callback) => {
-    const endpoint = `/api/edit-user?access_token=${params.access_token}`
-    const request_object = {
-      user: params.user,
-      access_token: params.access_token
+  edit: async (params, callback) => {
+    try {
+      const response = await new Fetch()
+        .put('/users/self')
+        .send(params.user)
+
+      return callback(false, response.body)
+
+    } catch (error) {
+      return callback(error, false)
     }
-    fetch(endpoint, {
-      method: 'post',
-      credentials: 'include',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(request_object)
-    })
-    .then((response) => {
-      if (response.status >= 400) {
-        const error = {
-          status: 'error',
-          body: response.body
-        }
-        return callback(error, false)
-      }
-      return response.json()
-    })
-    .then(response => callback(false, response))
+    // const endpoint = `/api/edit-user?access_token=${params.access_token}`
+    // const request_object = {
+    //   user: params.user,
+    //   access_token: params.access_token
+    // }
+    // fetch(endpoint, {
+    //   method: 'post',
+    //   credentials: 'include',
+    //   headers: {
+    //     'Content-type': 'application/json'
+    //   },
+    //   body: JSON.stringify(request_object)
+    // })
+    // .then((response) => {
+    //   if (response.status >= 400) {
+    //     const error = {
+    //       status: 'error',
+    //       body: response.body
+    //     }
+    //     return callback(error, false)
+    //   }
+    //   return response.json()
+    // })
+    // .then(response => callback(false, response))
   },
   uploadImage: (params, callback) => {
     const endpoint = '/attachments'
