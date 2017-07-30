@@ -4,13 +4,6 @@
   }
 }
 
-.c-share-modal,
-.c-create-alert-modal {
-  .modal-content {
-    border-width: 0;
-  }
-}
-
 .c-create-alert-modal__alert-title-input {
   display: block;
   width: 100%;
@@ -18,7 +11,7 @@
   padding: .5rem;
   line-height: 1;
   border-radius: 3px;
-  border: 1px solid darken(#f9f9f9, 5%);
+  border: 1px solid #eaeaea;
 }
 
 .c-create-alert-modal__hero {
@@ -54,8 +47,8 @@
   }
 
   &.isSaving {
-    color: darken(#f9f9f9, 30%);
-    background: darken(#f9f9f9, 6%);
+    color: #adadad;
+    background: #eaeaea;
   }
 }
 
@@ -66,10 +59,10 @@
   background: transparent;
 
   &:hover {
-    background: darken(#f9f9f9, 6%);
+    background: #eaeaea;
   }
 
   &.isSaving {
-    color: darken(#f9f9f9, 30%);
+    color: #adadad;
   }
 }

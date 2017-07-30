@@ -7,10 +7,27 @@ import AlertsList from './components/AlertsList'
 import Loading from '../components/Loading'
 import { Spinner } from '../../../../Partials/Loading'
 import ListingsPanel from '../components/ListingsPanels'
+import DeleteAlertModal from './components/DeleteAlertModal'
+
 import actions from '../../../../../store_actions/listings/alerts'
 import { selectListings as selectAlerts } from '../../../../../reducers/listings'
 
 class Alerts extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      alertSelectedForDelete: null
+    }
+
+    this.deleteAlertModalCloseHandler = this.deleteAlertModalCloseHandler.bind(
+      this
+    )
+    this.deleteAlertModalShowHandler = this.deleteAlertModalShowHandler.bind(
+      this
+    )
+  }
+
   componentDidMount() {
     const {
       params,
@@ -45,6 +62,18 @@ class Alerts extends Component {
     }
   }
 
+  deleteAlertModalShowHandler(alertSelectedForDelete) {
+    this.setState({
+      alertSelectedForDelete
+    })
+  }
+
+  deleteAlertModalCloseHandler() {
+    this.setState({
+      alertSelectedForDelete: null
+    })
+  }
+
   render() {
     const {
       feed,
@@ -59,7 +88,10 @@ class Alerts extends Component {
     return (
       <div className="l-listings__main l-listings__main--alert clearfix">
         <div className="l-listings__alert-list">
-          <AlertsList alertsList={alertsList} />
+          <AlertsList
+            alertsList={alertsList}
+            onClickDeleteAlert={this.deleteAlertModalShowHandler}
+          />
           {alertsListIsFetching && <Spinner />}
         </div>
         <div className="l-listings__map">
@@ -72,6 +104,10 @@ class Alerts extends Component {
           />
           {feedIsFetching && <Loading text="Alert" />}
         </div>
+        <DeleteAlertModal
+          alert={this.state.alertSelectedForDelete}
+          onHide={this.deleteAlertModalCloseHandler}
+        />
       </div>
     )
   }

@@ -1,0 +1,60 @@
+.c-confirm-modal {
+  color: #5b6469;
+  text-align: center;
+
+  .modal-backdrop {
+    background: #000;
+  }
+
+  .modal-dialog {
+    max-width: 53rem;
+  }
+
+  .modal-body {
+    padding: 4rem 8rem;
+  }
+
+  .modal-content {
+    box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.1);
+  }
+}
+
+.c-confirm-modal__title {
+  line-height: 1;
+  margin-top: 0;
+  font-size: 2.4rem;
+}
+
+.c-confirm-modal__message {
+  font-size: 1.7rem;
+  color: #78909c;
+  margin-bottom: 2rem;
+}
+
+.c-confirm-modal__button {
+  min-width: 11rem;
+  padding: .75rem 1rem;
+  border-width: 0;
+  color: #fff;
+  border-radius: 3px;
+
+  &:hover {
+    box-shadow: 0 1px 1px 0 #eef1f2;
+  }
+
+  .is-deleting & {
+    color: #adadad;
+    background: #eaeaea;
+  }
+}
+
+.c-confirm-modal__button--ghost {
+  color: #78909c;
+  font-weight: 600;
+  border: 1px solid #eaeaea;
+  background: transparent;
+
+  .is-deleting & {
+    color: #adadad;
+  }
+}
