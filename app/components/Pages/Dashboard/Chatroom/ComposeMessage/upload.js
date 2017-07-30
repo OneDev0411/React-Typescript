@@ -39,18 +39,10 @@ export default class Upload extends React.Component {
    */
   onPasteFile(event) {
     const items = (event.clipboardData || event.originalEvent.clipboardData).items
-    const files = []
 
-    for (let index in items) {
-      const item = items[index]
-
-      if (item.kind === 'file') {
-        const blob = item.getAsFile()
-        if (blob) {
-          files.push(blob)
-        }
-      }
-    }
+    const files = Object.keys(items)
+      .filter(index => items[index].kind === 'file')
+      .map(index => items[index].getAsFile())
 
     this.onDrop(files)
   }
@@ -105,11 +97,10 @@ export default class Upload extends React.Component {
    * upload a file to room
    */
   async uploadFile(roomId, file) {
-
     try {
       const response = await Model.uploadAttachment(roomId, file)
       return response.body.data.id
-    } catch(e) {
+    } catch (e) {
       return null
     }
   }
@@ -178,7 +169,7 @@ export default class Upload extends React.Component {
           onDrop={files => this.onDrop(files)}
           onDragEnter={() => this.setState({ dropzoneActive: true })}
           onDragLeave={() => this.setState({ dropzoneActive: false })}
-          multiple={true}
+          multiple
           accept="application/pdf,image/*"
           disableClick={disableClick || false}
           style={this.props.dropZoneStyle}
@@ -196,7 +187,7 @@ export default class Upload extends React.Component {
           }
 
           {
-            children ? children : <i className="fa fa-plus" aria-hidden="true" />
+            children || <i className="fa fa-plus" aria-hidden="true" />
           }
         </Dropzone>
       </div>
