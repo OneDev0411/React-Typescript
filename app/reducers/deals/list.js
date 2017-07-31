@@ -11,6 +11,19 @@ export default (state = null, action) => {
         ...state
       }
 
+    case types.CREATE_TASK: {
+      return {
+        ...state,
+        [action.deal_id]: {
+          ...state[action.deal_id],
+          tasks: [
+            ...state[action.deal_id].tasks || [],
+            action.task
+          ]
+        }
+      }
+    }
+
     default:
       return state
   }

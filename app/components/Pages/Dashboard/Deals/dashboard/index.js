@@ -26,8 +26,12 @@ class DealDetails extends React.Component {
   }
 
   render() {
-    const { deal, tags } = this.props
+    const { deal, tags, params } = this.props
     const { selectedTask } = this.state
+
+    if (!deal) {
+      return false
+    }
 
     return (
       <Row className="deal-dashboard">
@@ -43,8 +47,8 @@ class DealDetails extends React.Component {
           xs={12}
           className="column deal-tasks"
         >
-
           <TasksList
+            dealId={params.id}
             onSelectTask={task => this.onSelectTask(task)}
             selectedTask={selectedTask ? selectedTask.id : null}
             tags={tags}
