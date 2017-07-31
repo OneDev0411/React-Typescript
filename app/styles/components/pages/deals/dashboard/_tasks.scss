@@ -1,13 +1,7 @@
 %deal-tasks {
-  padding: $col-padding;
+  padding: $col-padding !important;
   background: #fbfbfb;
-  float: left;
-  width: 100%;
-  // transition: 0.1s width ease-in;
-  &.half {
-    width: $taskmanager-width-on-expanding;
-  }
-
+  transition: 0.4s width ease-in;
   .section {
     @extend %deal-task-section;
   }

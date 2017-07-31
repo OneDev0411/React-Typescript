@@ -31,34 +31,39 @@ class DealDetails extends React.Component {
 
     return (
       <Row className="deal-dashboard">
-        <Col lg={3} md={4} className="column left">
+        <Col lg={3} md={4} sm={4} className="column left">
           <ListingCard deal={deal} />
           <FactSheet deal={deal} />
         </Col>
 
-        <Col lg={9} md={8} className="column middle">
+        <Col
+          lg={selectedTask ? 4 : 9}
+          md={selectedTask ? 4 : 8}
+          sm={selectedTask ? 4 : 8}
+          xs={12}
+          className="column deal-tasks"
+        >
 
-          <div className="deal-tasks-container">
+          <TasksList
+            onSelectTask={task => this.onSelectTask(task)}
+            selectedTask={selectedTask ? selectedTask.id : null}
+            tags={tags}
+            tasks={deal.tasks}
+          />
+        </Col>
 
-            <div className={cn('deal-tasks', { half: selectedTask !== null })}>
-              <TasksList
-                onSelectTask={task => this.onSelectTask(task)}
-                selectedTask={selectedTask ? selectedTask.id : null}
-                tags={tags}
-                tasks={deal.tasks}
-              />
-            </div>
-
-            <div
-              className={cn('deal-task-manager', { visible: selectedTask !== null })}
-            >
-              <TaskManager
-                task={selectedTask}
-                onCloseTask={() => this.onCloseTask()}
-              />
-            </div>
-
-          </div>
+        <Col
+          lg={5}
+          md={4}
+          sm={8}
+          xs={12}
+          className="column deal-task-manager"
+          style={{ display: selectedTask ? 'inherit' : 'none' }}
+        >
+          <TaskManager
+            task={selectedTask}
+            onCloseTask={() => this.onCloseTask()}
+          />
         </Col>
 
       </Row>

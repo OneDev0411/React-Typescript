@@ -9,7 +9,7 @@ export default ({
 }) => {
 
   return (
-    <div>
+    <div className="full-width">
 
       <Header
         task={task || {}}

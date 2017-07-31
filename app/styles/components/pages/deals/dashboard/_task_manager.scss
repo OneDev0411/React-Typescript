@@ -1,18 +1,13 @@
 %deal-task-manager {
-  padding-left: 0;
-  margin-left: $taskmanager-width-on-expanding;
-  transition: 0.05s opacity ease-in;
-  opacity: 0;
   border: 2px solid #eff5fa;
-  margin-top: 20px;
-  margin-right: $col-padding;
-
-  &.visible {
-    opacity: 1;
-  }
-
+  margin: 20px $col-padding 20px 0;
+  background-color: #fff;
   .heading {
     @extend %deal-task-manager-heading;
+  }
+
+  .full-width {
+    width: 100%;
   }
 }
 
