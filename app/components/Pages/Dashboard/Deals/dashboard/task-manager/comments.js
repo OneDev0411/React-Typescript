@@ -9,7 +9,7 @@ class Comment extends React.Component {
     const { addNewRoom } = this.props
     const { rooms, task } = nextProps
 
-    if (!rooms[task.room.id]) {
+    if (task && !rooms[task.room.id]) {
       addNewRoom(task.room)
     }
   }
