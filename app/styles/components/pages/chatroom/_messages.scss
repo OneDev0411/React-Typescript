@@ -32,6 +32,7 @@ $left-w: 50px;
     min-height: $hg;
     max-height: $hg;
     overflow: auto;
+    overflow-x: hidden;
     margin-top: $room-toolbar-height;
     padding-bottom: 30px;
     position: relative;
@@ -49,6 +50,9 @@ $left-w: 50px;
       border-radius: 4px;
     }
 
+    .message-info {
+      @extend %message-info;
+    }
     .message-item {
       @extend %message-item;
     }
@@ -113,6 +117,18 @@ $left-w: 50px;
 
   .loading {
     margin: 5px 15px;
+  }
+}
+
+%message-info {
+  background-color: #fafafa;
+  text-align: center;
+  height: 30px;
+  line-height: 30px;
+  vertical-align: middle;
+  margin: 15px 0;
+  .activity {
+    margin: 0 20px;
   }
 }
 

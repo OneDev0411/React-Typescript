@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import TextMessage from './text'
 import RecommendationMessage from './recommendation'
 import AlertMessage from './alert'
 import AttachementMessage from './attachment'
+import ActivityMessage from './activity'
 import UploadingFile from './uploading'
 import Message from '../../Util/message'
 
@@ -23,6 +23,11 @@ const MessageTypes = ({
     className="comment inline"
     dangerouslySetInnerHTML={{ __html: comment }}
   />
+
+  // check message is ActivityMessage
+  if (message.activity !== null) {
+    message_object = <ActivityMessage message={message} />
+  }
 
   // check message is alert
   const alert = Message.isAlert(message)
