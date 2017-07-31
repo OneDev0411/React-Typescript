@@ -30,8 +30,10 @@
 
   .add-task {
     float: right;
-    width: 90px;
+    min-width: 90px;
     height: 24px;
+    line-height: 10px;
+    vertical-align: middle;
     border-radius: 3px;
     background-color: #ffffff;
     box-shadow: 0 1px 1px 0 #eef1f2;
