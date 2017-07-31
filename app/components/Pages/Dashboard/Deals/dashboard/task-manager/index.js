@@ -4,8 +4,7 @@ import Comments from './comments'
 import Files from './files'
 
 export default ({
-  task,
-  onCloseTask
+  task
 }) => {
 
   return (
@@ -13,7 +12,6 @@ export default ({
 
       <Header
         task={task || {}}
-        onCloseTask={onCloseTask}
       />
 
       <Files />

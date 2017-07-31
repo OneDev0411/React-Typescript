@@ -3,6 +3,7 @@ import _ from 'underscore'
 import Section from './section'
 
 export default ({
+  dealId,
   tags,
   tasks,
   selectedTask,
@@ -15,6 +16,7 @@ export default ({
       .map(tag =>
         <Section
           key={tag.id}
+          dealId={dealId}
           section={tag}
           tasks={tasks}
           selectedTask={selectedTask}
