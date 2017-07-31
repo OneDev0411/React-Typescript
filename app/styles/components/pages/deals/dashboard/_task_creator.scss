@@ -1,5 +1,25 @@
 %deal-task-creators {
+  width: 100px;
+  display: inline;
+  margin-left: 20px;
   .creator {
-    margin-bottom: 5px;
+    display: inline;
   }
+
+  ul.dropdown-menu {
+    max-height: 400px;
+    overflow: scroll;
+    li {
+      height: 40px;
+      line-height: 40px;
+      vertical-align: middle;
+      a {
+        padding: 10px;
+        &:hover {
+          background-color: #eff5fa;
+        }
+      }
+    }
+  }
+
 }
