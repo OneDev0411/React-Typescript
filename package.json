@@ -101,6 +101,7 @@
     "react-avatar": "^2.3.0",
     "react-bootstrap": "^0.30.8",
     "react-burger-menu": "^2.0.2",
+    "react-click-outside": "github:tj/react-click-outside",
     "react-day-picker": "^5.2.3",
     "react-dom": "^15.4.2",
     "react-dropzone": "^3.12.4",
