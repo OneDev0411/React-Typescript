@@ -53,6 +53,7 @@ const CreateAlertModal = ({
           <input
             id="alertName"
             type="text"
+            autoFocus
             className="c-create-alert-modal__alert-title-input"
             placeholder={'Naming your alert...'}
             onChange={titleInputOnChange}
