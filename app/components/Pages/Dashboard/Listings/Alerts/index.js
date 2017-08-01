@@ -10,6 +10,7 @@ import ListingsPanel from '../components/ListingsPanels'
 import DeleteAlertModal from './components/DeleteAlertModal'
 
 import actions from '../../../../../store_actions/listings/alerts'
+import getAlert from '../../../../../models/listings/alerts/get-alert'
 import { selectListings as selectAlerts } from '../../../../../reducers/listings'
 
 class Alerts extends Component {
@@ -40,23 +41,19 @@ class Alerts extends Component {
     } = this.props
 
     if (!isFetching && !alertsList.data.length) {
-      getAlerts().then(response => {
-        if (params.alertId) {
-          const alert = response.entities.listings[params.alertId]
+      const { alertId } = params
 
-          if (!alert) {
-            return
-          }
-
+      if (alertId) {
+        getAlert(alertId).then(alert => {
           const { id, room, new_recommendations } = alert
-
           getAlertFeed(id, room)
 
           if (parseInt(new_recommendations, 10) > 0) {
             setTimeout(() => clearAlertNotification(id, room), 5000)
           }
-        }
-      })
+        })
+      }
+      getAlerts()
     }
 
     if (

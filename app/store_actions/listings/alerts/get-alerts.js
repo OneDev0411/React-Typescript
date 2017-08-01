@@ -2,7 +2,7 @@ import { getFetchingStatus } from '../../../reducers/listings'
 import * as actionsType from '../../../constants/listings/alerts'
 import api from '../../../models/listings/alerts'
 
-const getAlerts = maxValue => (dispatch, getState) => {
+const getAlerts = params => (dispatch, getState) => {
   if (getFetchingStatus(getState().alerts.list)) {
     return Promise.resolve()
   }
@@ -12,7 +12,7 @@ const getAlerts = maxValue => (dispatch, getState) => {
     type: actionsType.FETCH_ALERTS_REQUEST
   })
 
-  return api.getAlerts(maxValue).then(
+  return api.getAlerts(params).then(
     response => {
       dispatch({
         response,
