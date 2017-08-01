@@ -6,37 +6,17 @@ import * as schema from '../../../models/listings/schema'
 import { selectListings } from '../../../reducers/listings'
 import * as actionsType from '../../../constants/listings/alerts'
 
-const normalizeListings = alerts => {
-  const normilizedAlerts = normalize(alerts, schema.listingsList)
-
-  const total = alerts.length
-  const info = {
-    total,
-    count: total
-  }
-
-  return {
-    ...normilizedAlerts,
-    info
-  }
-}
-
 const deleteAlert = alert => (dispatch, getState) => {
   const { selectedAlertId } = getState().alerts
   const { room: alertRoom, id: alertId } = alert
 
   const deleteHandler = () => {
-    const alerts = selectListings(getState().alerts.list)
+    const alertsList = getState().alerts.list
+    const alerts = selectListings(alertsList)
+
     const newAlerts = alerts.filter(a => a.id !== alertId)
 
-    return normalizeListings(newAlerts)
-  }
-
-  const addHandler = () => {
-    const alerts = selectListings(getState().alerts.list)
-    const newAlerts = [...listings, alert]
-
-    return normalizeListings(newAlerts)
+    return normalize(newAlerts, schema.listingsList)
   }
 
   dispatch({

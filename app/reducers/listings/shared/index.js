@@ -12,14 +12,11 @@ import {
   FETCH_ALERTS_SUCCESS,
   FETCH_ALERTS_REQUEST,
   FETCH_ALERTS_FAILURE,
-  DELETE_ALERT_REQUEST,
-  DELETE_ALERT_SUCCESS,
   DELETE_ALERT_FAILURE,
   CLEAR_ALERT_NOTIFICATION,
   FETCH_ALERT_FEED_SUCCESS,
   FETCH_ALERT_FEED_REQUEST,
-  FETCH_ALERT_FEED_FAILURE,
-  DELETE_ALERT_FROM_DB_FAILURE
+  FETCH_ALERT_FEED_FAILURE
 } from '../../../constants/listings/alerts'
 import {
   TOGGLE_FAVORITE,
@@ -41,8 +38,6 @@ export const byId = (state = {}, action) => {
 export const allIds = (state = [], action) => {
   switch (action.type) {
     case TOGGLE_FAVORITE:
-    case FETCH_ALERTS_SUCCESS:
-    case DELETE_ALERT_SUCCESS:
     case FETCH_LISTINGS_SUCCESS:
     case CLEAR_ALERT_NOTIFICATION:
       return action.response.result
@@ -51,10 +46,9 @@ export const allIds = (state = [], action) => {
   }
 }
 
-export const info = (state = {}, action) => {
+export const info = (state = { total: 0, count: 0 }, action) => {
   switch (action.type) {
     case TOGGLE_FAVORITE:
-    case DELETE_ALERT_SUCCESS:
     case FETCH_LISTINGS_SUCCESS:
       return {
         ...state,

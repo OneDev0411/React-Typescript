@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 
 import Map from './components/Map'
-import AlertsList from './components/AlertsList'
 import Loading from '../components/Loading'
+import AlertsList from './components/AlertsList'
 import { Spinner } from '../../../../Partials/Loading'
 import ListingsPanel from '../components/ListingsPanels'
 import DeleteAlertModal from './components/DeleteAlertModal'
@@ -43,6 +43,11 @@ class Alerts extends Component {
       getAlerts().then(response => {
         if (params.alertId) {
           const alert = response.entities.listings[params.alertId]
+
+          if (!alert) {
+            return
+          }
+
           const { id, room, new_recommendations } = alert
 
           getAlertFeed(id, room)
@@ -92,7 +97,9 @@ class Alerts extends Component {
             alertsList={alertsList}
             onClickDeleteAlert={this.deleteAlertModalShowHandler}
           />
-          {alertsListIsFetching && <Spinner />}
+          <div style={{ position: 'relative' }}>
+            {alertsListIsFetching && <Spinner />}
+          </div>
         </div>
         <div className="l-listings__map">
           <Map markers={feed} selectedAlert={selectedAlert} />
@@ -131,7 +138,7 @@ const mapStateToProps = ({ data, alerts }) => {
     isLoggedIn: data.user || false,
     activePanel: panels.activePanel,
     alertsListIsFetching: list.isFetching,
-    alertsList: { data: selectAlerts(list) }
+    alertsList: { data: selectAlerts(list), info: list.info }
   }
 }
 

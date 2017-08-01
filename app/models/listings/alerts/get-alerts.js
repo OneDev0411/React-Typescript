@@ -2,12 +2,20 @@ import Fetch from '../../../services/fetch'
 import { normalize } from 'normalizr'
 import * as schema from '../schema'
 
-const getAlerts = async () => {
+const getAlerts = async max_value => {
   try {
-    const response = await new Fetch().get('/alerts')
-    const alerts = response.body.data
+    const response = await new Fetch()
+      .get('/alerts')
+      .query({ limit: 10 })
+      .query({ max_value })
+      .query({ sorting_value: 'Update' })
 
-    return normalize(alerts, schema.listingsList)
+    const { info, data } = response.body
+
+    return {
+      ...normalize(data, schema.listingsList),
+      info
+    }
   } catch (error) {
     throw error
   }
