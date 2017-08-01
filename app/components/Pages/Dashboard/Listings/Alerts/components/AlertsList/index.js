@@ -58,7 +58,8 @@ export default compose(
       }
 
       const latestAlert = alerts[alertslength - 1]
-      getAlerts(latestAlert.updated_at)
+      const max_value = latestAlert.updated_at
+      getAlerts({ max_value })
     }
   }),
   withPropsOnChange(['alertsList', 'rooms'], ({ alertsList, rooms, user }) => {
