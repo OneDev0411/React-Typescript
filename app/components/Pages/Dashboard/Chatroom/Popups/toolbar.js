@@ -33,10 +33,13 @@ export default ({
     </span>
 
     <div className="icons">
-
+      <Members
+        room={room}
+        iconSize={12}
+      />
       <RoomSettings
         room={room}
-        iconSize={14}
+        iconSize={12}
       />
 
       <span
@@ -52,11 +55,6 @@ export default ({
       >
         <FullscreenIcon />
       </span>
-
-      <Members
-        room={room}
-        iconSize={12}
-      />
 
       <span
         className="icon times close-icon"
