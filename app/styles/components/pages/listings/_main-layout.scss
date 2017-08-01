@@ -108,5 +108,7 @@ $header-height: 54px;
   height: calc(100vh - #{$header-height + 2});
   width: $panel-width;
   float: left;
+  overflow-y: auto;
   border-right: 1px solid #ececec;
+  will-change: transform;
 }
