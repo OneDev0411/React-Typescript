@@ -24,7 +24,9 @@ async function getBrand(user, url) {
     const hostname = urlParser.parse(url).hostname
 
     Brand.getByHostname({ hostname, user }, (err, res) => {
-      if (err) { return reject(err) }
+      if (err) {
+        return reject(err)
+      }
       return resolve(res)
     })
   })
@@ -97,13 +99,14 @@ async function display(file, renderProps) {
   } else {
     await this.render('development', {
       store_data,
+      data: this.locals,
       jsBundle: `${config.compile.publicPath}/${config.compile.jsBundle}`
     })
   }
 }
 
-module.exports = function() {
-  return async function(ctx, next) {
+module.exports = function () {
+  return async function (ctx, next) {
     if (ctx.display) {
       return await next()
     }
