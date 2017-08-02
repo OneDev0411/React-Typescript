@@ -1,7 +1,6 @@
 import React from 'react'
 import cn from 'classnames'
 import Members from '../Rooms/members'
-import RoomSettings from '../Rooms/settings'
 import CloseIcon from '../../Partials/Svgs/CloseIcon'
 import FullscreenIcon from '../../Partials/Svgs/FullscreenIcon'
 import MinimizeIcon from '../../Partials/Svgs/MinimizeIcon'
@@ -33,14 +32,6 @@ export default ({
     </span>
 
     <div className="icons">
-      <Members
-        room={room}
-        iconSize={12}
-      />
-      <RoomSettings
-        room={room}
-        iconSize={12}
-      />
 
       <span
         className="icon minimize minimize-icon"
@@ -55,6 +46,11 @@ export default ({
       >
         <FullscreenIcon />
       </span>
+
+      <Members
+        room={room}
+        iconSize={12}
+      />
 
       <span
         className="icon times close-icon"
