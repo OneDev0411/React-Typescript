@@ -17,9 +17,6 @@ export default ({
   // check message is alert
   const isAlert = messageUtil.isAlert(message)
 
-  // check message is activity
-  const isActivity = message.activity !== null
-
   // check message has attachment
   const hasAttachments = message.attachments && message.attachments.length > 0
 
@@ -29,7 +26,7 @@ export default ({
   /*
    * check message is a a single/info message or not
    */
-  if (isActivity) {
+  if (message.activity) {
     return <SingleMessage {...props} />
   }
 
