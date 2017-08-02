@@ -12,7 +12,7 @@ export default ({
     <button
       className="task-btn btn-submit"
     >
-      Submit for Review
+      Submit
     </button>
   </div>
 )

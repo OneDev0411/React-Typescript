@@ -3,7 +3,8 @@
   background: #fff;
 
   .messages {
-    height: 56vh;
+    min-height: 56vh;
+    max-height: 56vh;
     .messages-list {
       margin-top: 10px;
       width: 100%;

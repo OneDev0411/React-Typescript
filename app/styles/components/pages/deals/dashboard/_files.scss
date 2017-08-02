@@ -1,16 +1,43 @@
 %deal-files {
-  padding: $col-padding;
+  padding: 0;
   background: #fff;
   border-bottom: 10px solid #eff5fa;
+  overflow-y: hidden;
+  overflow: scroll;
+  max-height: 30vh;
 
   .file {
     margin-bottom: 0;
-    height: 60px;
+    padding: 15px $col-padding;
     border-bottom: 1px solid #eff5fa;
-    margin-bottom: 15px;
-    &:last-child {
-      border-bottom: 0;
-      margin-bottom: 0;
+  }
+
+  .file > .image {
+    img {
+      width: 28px;
+    }
+  }
+
+  .file > .name {
+    .description {
+      color: gray;
+    }
+  }
+
+  .file > .actions {
+    text-align: right;
+    button, .btn-view {
+      height: 30px;
+      width: 60px;
+      line-height: 26px;
+      vertical-align: middle;
+      color: #78909c;
+      border-radius: 4px;
+      background-color: #ffffff;
+      border: solid 1px #e7eef0;
+      margin-left: 8px;
+      &:focus { outline: none; }
+      &:hover { background-color: #fbfbfb; }
     }
   }
 }

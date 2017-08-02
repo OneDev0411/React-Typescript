@@ -1,7 +1,7 @@
 import React from 'react'
 import Header from './header'
 import Comments from './comments'
-import Files from './files'
+import Documents from './documents'
 
 export default ({
   task
@@ -14,7 +14,9 @@ export default ({
         task={task || {}}
       />
 
-      <Files />
+      <Documents
+        task={task}
+      />
 
       <Comments
         task={task}

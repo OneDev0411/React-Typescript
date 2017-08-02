@@ -35,15 +35,15 @@ class DealDetails extends React.Component {
 
     return (
       <Row className="deal-dashboard">
-        <Col lg={3} md={4} sm={4} className="column left">
+        <Col lg={3} md={3} sm={3} className="column left">
           <ListingCard deal={deal} />
           <FactSheet deal={deal} />
         </Col>
 
         <Col
           lg={selectedTask ? 4 : 9}
-          md={selectedTask ? 4 : 8}
-          sm={selectedTask ? 4 : 8}
+          md={selectedTask ? 4 : 9}
+          sm={selectedTask ? 4 : 9}
           xs={12}
           className="column deal-tasks"
         >
@@ -58,8 +58,8 @@ class DealDetails extends React.Component {
 
         <Col
           lg={5}
-          md={4}
-          sm={8}
+          md={5}
+          sm={5}
           xs={12}
           className="column deal-task-manager"
           style={{ display: selectedTask ? 'inherit' : 'none' }}
