@@ -1,10 +1,13 @@
 import React from 'react'
 
-export default ({
-  fill = "#B2B2B2"
-}) => (
-  <svg className="maximize-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
-    <path className="maximize-icon path" fill={fill} fillRule="evenodd" d="M7 9H3.414L10 3.414V7h2V0H5v2h3.586L2 7.586V4H0v7h7z"/>
+export default ({ fill = '#BFBFC0', width = '9', height = '9' }) => (
+  <svg className="minimize-icon" xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 9 9">
+    <path
+      className="minimize-icon path"
+      fill={fill}
+      fillRule="evenodd"
+      d="M2.707 2h2.586L0 7.293l1.414 1.414 5.293-5.293V6h2V0h-6z"
+    />
   </svg>
-
 )
+
