@@ -24,11 +24,6 @@ const MessageTypes = ({
     dangerouslySetInnerHTML={{ __html: comment }}
   />
 
-  // check message is ActivityMessage
-  if (message.activity !== null) {
-    message_object = <ActivityMessage message={message} />
-  }
-
   // check message is alert
   const alert = Message.isAlert(message)
   if (alert) {
@@ -56,6 +51,14 @@ const MessageTypes = ({
     />
   }
 
+  // check message is ActivityMessage
+  if (message.activity) {
+    message_object = <ActivityMessage
+      message={message}
+    />
+  }
+
+  // check message is uploading a file
   if (message.uploading) {
     message_object = <UploadingFile
       author={author}
