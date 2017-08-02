@@ -40,7 +40,7 @@ Deal.getAll = async function(user = {}) {
 
   try {
     const fetchDeals = new Fetch()
-      .get('/deals')
+      .get('/deals?associations[]=room.attachments')
 
     // required on ssr
     if (access_token) {
