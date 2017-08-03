@@ -243,7 +243,14 @@ class Messages extends React.Component {
   }
 
   render() {
-    const { roomId, user, isInstantChat, showToolbar, onClick } = this.props
+    const {
+      roomId,
+      user,
+      isInstantChat,
+      showToolbar,
+      disableUpload,
+      onClick
+    } = this.props
 
     // get messages of current room
     const messages = roomId ? this.props.messages[roomId] : null
@@ -277,6 +284,7 @@ class Messages extends React.Component {
         }
 
         <UploadHandler
+          disabled={disableUpload}
           disableClick={true}
           roomId={roomId}
           author={user}

@@ -168,8 +168,12 @@ export default class Upload extends React.Component {
   }
 
   render() {
-    const { children, disableClick } = this.props
+    const { children, disableClick, disabled } = this.props
     const { dropzoneActive } = this.state
+
+    if (disabled === true) {
+      return children
+    }
 
     return (
       <div className="upload">
