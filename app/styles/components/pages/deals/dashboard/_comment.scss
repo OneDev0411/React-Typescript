@@ -9,5 +9,14 @@
       margin-top: 10px;
       width: 100%;
     }
+
+    .message-create {
+      .upload {
+        display: none;
+      }
+      textarea {
+        margin-left: 0;
+      }
+    }
   }
 }
