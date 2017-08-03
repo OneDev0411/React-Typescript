@@ -122,11 +122,11 @@ Deal.create = async function (data) {
 /**
 * create new task
 */
-Deal.createTask = async function (deal_id, form, title, status, task_type, tags) {
+Deal.createTask = async function (deal_id, form, title, status, task_type, checklist) {
   try {
     const response = await new Fetch()
       .post(`/deals/${deal_id}/tasks`)
-      .send({ title, status, task_type, tags, form })
+      .send({ title, status, task_type, checklist, form })
 
     return response.body.data
   } catch (e) {

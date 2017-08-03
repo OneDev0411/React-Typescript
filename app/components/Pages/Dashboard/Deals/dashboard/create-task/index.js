@@ -3,13 +3,13 @@ import FormTask from './form'
 
 export default ({
   dealId,
-  tagId
+  listId
 }) => {
   return (
     <div className="deal-task-creators">
       <FormTask
         dealId={dealId}
-        tagId={tagId}
+        listId={listId}
       />
     </div>
   )

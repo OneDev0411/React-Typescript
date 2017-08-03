@@ -26,7 +26,7 @@ class DealDetails extends React.Component {
   }
 
   render() {
-    const { deal, tags, params } = this.props
+    const { deal, params } = this.props
     const { selectedTask } = this.state
 
     if (!deal) {
@@ -51,8 +51,7 @@ class DealDetails extends React.Component {
             dealId={params.id}
             onSelectTask={task => this.onSelectTask(task)}
             selectedTask={selectedTask ? selectedTask.id : null}
-            tags={tags}
-            tasks={deal.tasks}
+            checklists={deal.checklists}
           />
         </Col>
 
@@ -80,8 +79,7 @@ function mapStateToProps({ data, deals, chatroom }, props) {
   const { id } = props.params
 
   return {
-    deal: list && list[id] ? list[id] : null,
-    tags: data.brand ? data.brand.tags : null
+    deal: list && list[id] ? list[id] : null
   }
 }
 

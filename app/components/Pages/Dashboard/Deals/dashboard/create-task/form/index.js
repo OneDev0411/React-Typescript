@@ -5,9 +5,9 @@ import _ from 'underscore'
 import { createTask } from '../../../../../../../store_actions/deals'
 
 const createNewTask = (form, props) => {
-  const { dealId, createTask, tagId } = props
+  const { dealId, createTask, listId } = props
 
-  createTask(dealId, form.id, form.name, 'New', 'Form', [tagId])
+  createTask(dealId, form.id, form.name, 'New', 'Form', listId)
 }
 
 const CreateForm = (props) => {

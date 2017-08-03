@@ -4,21 +4,19 @@ import Section from './section'
 
 export default ({
   dealId,
-  tags,
-  tasks,
+  checklists,
   selectedTask,
   onSelectTask
 }) => (
   <div>
     {
-      tags && tags
-      .filter(tag => tag.is_tab)
-      .map(tag =>
+      checklists && checklists
+      .map(list =>
         <Section
-          key={tag.id}
+          key={list.id}
           dealId={dealId}
-          section={tag}
-          tasks={tasks}
+          section={list}
+          tasks={list.tasks}
           selectedTask={selectedTask}
           onSelectTask={onSelectTask}
         />

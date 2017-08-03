@@ -12,18 +12,17 @@ export default ({
   return (
     <div className="section">
       <span className="title">
-        { section.tag }
+        { section.title }
       </span>
 
       <CreateTask
         dealId={dealId}
-        tagId={section.id}
+        listId={section.id}
       />
 
       <div className="list">
         {
           tasks && tasks
-          .filter(task => task.tags && task.tags.indexOf(section.id) > -1)
           .map(task =>
             <div
               key={`TASK_${task.id}`}
@@ -36,7 +35,7 @@ export default ({
               </div>
 
               <span className="status">
-                { task.status }
+                { task.review ? task.review.status : 'Incomplete' }
               </span>
             </div>
           )
