@@ -29,12 +29,6 @@ $col-padding: 20px;
     }
   }
 
-  .deal-tasks-container {
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-
   .deal-tasks {
     @extend %deal-tasks;
   }

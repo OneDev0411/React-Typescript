@@ -1,7 +1,8 @@
 %deal-tasks {
   padding: $col-padding !important;
   background: #fbfbfb;
-  transition: 0.4s width ease-in;
+  overflow: scroll !important;
+  // transition: 0.4s width ease-in;
   .section {
     @extend %deal-task-section;
   }
