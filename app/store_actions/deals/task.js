@@ -16,3 +16,13 @@ export function createTask(deal_id, form, title, status, task_type, list_id) {
     dispatch(addNewTask(deal_id, list_id, task))
   }
 }
+
+export function addAttachment(deal_id, checklist_id, task_id, file) {
+  return {
+    type: types.ADD_ATTACHMENT,
+    deal_id,
+    checklist_id,
+    task_id,
+    file
+  }
+}

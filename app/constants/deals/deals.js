@@ -1,5 +1,8 @@
 export default [
   'GET_DEALS',
+  'GET_TASKS',
+  'GET_CHECKLISTS',
   'CREATE_DEAL',
-  'CREATE_TASK'
+  'CREATE_TASK',
+  'ADD_ATTACHMENT'
 ]
