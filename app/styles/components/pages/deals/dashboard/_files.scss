@@ -7,6 +7,16 @@
   min-height: 30vh;
   max-height: 30vh;
 
+  .link {
+    color: #2196f3;
+    cursor: pointer;
+  }
+
+  .progress {
+    height: 10px;
+    border-radius: 0;
+  }
+
   .file {
     margin-bottom: 0;
     padding: 15px $col-padding;
