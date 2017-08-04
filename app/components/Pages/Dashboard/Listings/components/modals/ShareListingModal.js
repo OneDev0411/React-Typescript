@@ -62,7 +62,7 @@ const ShareListingModal = ({
               ? 'isSaving'
               : ''}`}
             disabled={disabled}
-            style={{ float: 'right', backgroundColor: brandColor }}
+            style={{ float: 'right', backgroundColor: !disabled && brandColor }}
           >
             {isSharing ? 'Sharing...' : 'Share'}
           </button>
