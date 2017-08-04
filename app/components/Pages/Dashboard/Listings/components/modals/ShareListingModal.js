@@ -6,11 +6,14 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import { Modal } from 'react-bootstrap'
 
+import Brand from '../../../../../../controllers/Brand'
 import SuccessModal from './SuccessModal'
 import Recipients from '../../../../../Partials/ShareView'
 import { hasRecipients } from '../../../../../../utils/helpers'
 import { createRoom } from '../../../../../../store_actions/chatroom/room'
 import createRecommendation from '../../../../../../models/recommendation/create-recs'
+
+const brandColor = `#${Brand.color('primary', '3388ff')}`
 
 const ShareListingModal = ({
   onHide,
@@ -59,7 +62,7 @@ const ShareListingModal = ({
               ? 'isSaving'
               : ''}`}
             disabled={disabled}
-            style={{ float: 'right' }}
+            style={{ float: 'right', backgroundColor: !disabled && brandColor }}
           >
             {isSharing ? 'Sharing...' : 'Share'}
           </button>

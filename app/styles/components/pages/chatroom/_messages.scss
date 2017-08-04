@@ -173,8 +173,12 @@ $left-w: 44px;
     padding-top: 2px;
   }
 
-  &:hover .date{
-    opacity: 1;
+  &:hover {
+    background-color: #2196f3;
+    opacity: 0.05;
+    .date{
+      opacity: 1;
+    }
   }
 
   .content {

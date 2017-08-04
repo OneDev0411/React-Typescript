@@ -3,8 +3,11 @@ import { connect } from 'react-redux'
 import { IndexLink } from 'react-router'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
-import Brand from '../../../../../../../controllers/Brand'
-import actions from '../../../../../../../store_actions/listings/alerts'
+
+import Brand from '../../../../../../../../controllers/Brand'
+import actions from '../../../../../../../../store_actions/listings/alerts'
+
+import AlertListItemMenu from './components/AlertsListItemMenu'
 
 const SharedWith = ({ alert }) => {
   const { users, created_by } = alert
@@ -21,16 +24,22 @@ const SharedWith = ({ alert }) => {
   )
 }
 
-const AlertListRow = ({ user, alert, isSelected, onClick }) =>
+const AlertListItem = ({
+  user,
+  alert,
+  isSelected,
+  onClickAlert,
+  onClickDelete
+}) =>
   <div
     className={`c-alertList__item ${isSelected
       ? 'c-alertList__item--selected'
       : ''}`}
-    onClick={() => onClick(alert)}
   >
     <IndexLink
-      to={`/dashboard/mls/alerts/${alert.id}`}
+      onClick={() => onClickAlert(alert)}
       className="c-alertList__item__link"
+      to={`/dashboard/mls/alerts/${alert.id}`}
     />
     <div className="c-alertList__item__thumbnail">
       <img src={alert.cover_image_url} alt="mls alert list item - rechat" />
@@ -48,6 +57,10 @@ const AlertListRow = ({ user, alert, isSelected, onClick }) =>
         </p>}
       {alert.users && <SharedWith alert={alert} />}
     </div>
+    <AlertListItemMenu
+      alertId={alert.id}
+      onClickDelete={() => onClickDelete(alert)}
+    />
     {alert.new_recommendations &&
       parseInt(alert.new_recommendations, 10) > 0 &&
       <span
@@ -61,7 +74,7 @@ const AlertListRow = ({ user, alert, isSelected, onClick }) =>
 export default compose(
   connect(null, actions),
   withHandlers({
-    onClick: ({ getAlertFeed, clearAlertNotification }) => alert => {
+    onClickAlert: ({ getAlertFeed, clearAlertNotification }) => alert => {
       const { id, room, new_recommendations } = alert
 
       getAlertFeed(id, room)
@@ -71,4 +84,4 @@ export default compose(
       }
     }
   })
-)(AlertListRow)
+)(AlertListItem)

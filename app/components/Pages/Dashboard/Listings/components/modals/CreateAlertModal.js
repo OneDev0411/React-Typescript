@@ -6,9 +6,13 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import { Modal } from 'react-bootstrap'
 
+import Brand from '../../../../../../controllers/Brand'
+
 import SuccessModal from './SuccessModal'
 import ShareAlertModal from './ShareAlertModal'
 import createAlert from '../../../../../../models/listings/alerts/create-alert'
+
+const brandColor = `#${Brand.color('primary', '3388ff')}`
 
 const CreateAlertModal = ({
   onHide,
@@ -31,7 +35,10 @@ const CreateAlertModal = ({
       className="c-create-alert-modal"
     >
       <Modal.Body style={{ padding: 0 }}>
-        <div className="c-create-alert-modal__hero">
+        <div
+          className="c-create-alert-modal__hero"
+          style={{ background: brandColor }}
+        >
           <img
             className="c-create-alert-modal__hero__logo"
             src="/static/images/dashboard/mls/alert-bell.svg"
@@ -46,6 +53,7 @@ const CreateAlertModal = ({
           <input
             id="alertName"
             type="text"
+            autoFocus
             className="c-create-alert-modal__alert-title-input"
             placeholder={'Naming your alert...'}
             onChange={titleInputOnChange}
@@ -59,7 +67,7 @@ const CreateAlertModal = ({
             ? 'isSaving'
             : ''}`}
           disabled={isSaving}
-          style={{ float: 'left' }}
+          style={{ float: 'left', color: brandColor }}
         >
           {isSaving ? 'Saving...' : 'Save for me'}
         </button>
@@ -69,7 +77,7 @@ const CreateAlertModal = ({
             ? 'isSaving'
             : ''}`}
           disabled={isSaving}
-          style={{ float: 'right' }}
+          style={{ float: 'right', color: brandColor }}
         >
           Save &amp; Share
         </button>

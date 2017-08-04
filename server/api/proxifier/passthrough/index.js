@@ -2,14 +2,13 @@ import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import _ from 'underscore'
 const router = require('koa-router')()
-
+import updateSession from '../update-session'
 import config from '../../../../config/private'
 
 const app = new Koa()
 
 router.post('/proxifier', bodyParser(), async ctx => {
   const headers = ctx.headers
-  const data = ctx.request.body
   const queryString = ctx.request.querystring
 
   try {
@@ -28,7 +27,7 @@ router.post('/proxifier', bodyParser(), async ctx => {
 
     const request = ctx
       .fetch(endpoint, method)
-      .send(data)
+      .send(ctx.request.body)
 
     if (headers.authorization) {
       request.set({ Authorization: headers.authorization })
@@ -39,6 +38,12 @@ router.post('/proxifier', bodyParser(), async ctx => {
     }
 
     const response = await request
+
+    // update user session
+    const { data } = response.body
+    if (data && data.type === 'user') {
+      updateSession(ctx, data)
+    }
 
     ctx.body = response.body
   } catch (e) {
