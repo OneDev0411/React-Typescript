@@ -26,7 +26,7 @@ const ManageMembers = ({
       <MembersIcon width={iconSize} height={iconSize} />
 
       <span className="bdg">
-        { room.users.length }
+        { room.users && room.users.length }
       </span>
     </span>
   )

@@ -9,8 +9,24 @@ import Reset from './Partials/Reset'
 import Create from './Partials/Create'
 import S from 'shorti'
 import { Modal } from 'react-bootstrap'
+import Loading from '../../Partials/Loading'
 
 export default class Password extends Component {
+  componentWillMount() {
+    // If has action in url
+    const data = this.props.data
+    const user = data.user
+    if (user && user.id
+      && data.location && data.location.query && data.location.query.action) {
+      const url = this.getActionRedirectURL()
+      if (window.location.href !== url) {
+        delete AppStore.data.show_logout_message
+        AppStore.data.show_password_loading = true
+        AppStore.emitChange()
+        window.location.href = url
+      }
+    }
+  }
   componentDidMount() {
     this.getReceivingUser()
   }
@@ -31,12 +47,6 @@ export default class Password extends Component {
         window.location.href = `/dashboard/recents/${data.current_room.id}`
         return
       }
-      // If has action in url
-      if (data.location && data.location.query && data.location.query.action) {
-        const redirect_url = this.getActionRedirectURL()
-        window.location.href = redirect_url
-        return
-      }
       if (signup.type === 'client')
         window.location.href = '/dashboard/mls?message=welcome'
       if (signup.type === 'agent') {
@@ -49,6 +59,16 @@ export default class Password extends Component {
         AppStore.emitChange()
         // Go to confirm agent
         browserHistory.push('/signup/agent')
+      }
+    }
+    // If has action in url
+    if (user && user.id
+      && data.location && data.location.query && data.location.query.action) {
+      const url = this.getActionRedirectURL()
+      if (window.location.href !== url) {
+        delete AppStore.data.show_logout_message
+        AppStore.emitChange()
+        window.location.href = url
       }
     }
   }
@@ -175,28 +195,8 @@ export default class Password extends Component {
     const data = AppStore.data
     const { location } = this.props
     const { slug } = this.props.params
-
-    if (location && location.query) {
-      let email_area
-      if (location.query.email && !location.query.phone_number) {
-        email_area = (
-          <div>
-            <div style={S('font-20')}>Email:</div>
-            <div style={S('color-2196f3 font-20')}>{ decodeURIComponent(location.query.email) }</div>
-          </div>
-        )
-      }
-
-      let phone_number_area
-      if (location.query.phone_number) {
-        phone_number_area = (
-          <div>
-            <div style={S('font-20')}>Phone number:</div>
-            <div style={S('color-2196f3 font-20')}>{ decodeURIComponent(location.query.phone_number) }</div>
-          </div>
-        )
-      }
-    }
+    let email_area
+    let phone_number_area
 
     if (data.show_logout_message) {
       return (
@@ -233,7 +233,16 @@ export default class Password extends Component {
         <Create handleSubmit={this.handleSubmit} data={data} />
       )
     }
+    console.log(slug)
+    // if (data.show_password_loading) {
+    //   return <Loading />
+    // }
     return (
+      <div>
+        {data.show_password_loading &&
+        <Loading />
+        }
+        <div style={data.show_password_loading ? { opacity: 0 } : {}}>
       <div id="main-content" className="flex-center-wrap" style={S('absolute h-100p w-100p')}>
         <div style={S('z-100 relative mt-60n bg-fff br-6')}>
           { main_content }
@@ -248,6 +257,8 @@ export default class Password extends Component {
             <div style={S('color-2196f3 font-20')}>{ data.signup && data.signup.email ? data.signup.email : '' }</div>
           </div>
         </Modal>
+      </div>
+        </div>
       </div>
     )
   }
