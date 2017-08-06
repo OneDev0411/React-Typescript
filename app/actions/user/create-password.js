@@ -54,6 +54,8 @@ export default (email, password, first_name, last_name, token, agent, new_email,
         const access_token = response_signin.access_token
         user.access_token = access_token
         locals.user = user
+        AppStore.data.user = user
+        AppStore.emitChange()
         callback()
       })
     },
