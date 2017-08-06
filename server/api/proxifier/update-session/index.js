@@ -8,5 +8,7 @@ export default function(ctx, data) {
       ...data,
       ...{access_token}
     }
+  } else {
+    ctx.session.user = data
   }
 }
