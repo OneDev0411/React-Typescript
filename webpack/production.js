@@ -12,7 +12,7 @@ const postcss = () => [
   })
 ]
 
-webpackConfig.devtool = 'cheap-source-map'
+webpackConfig.devtool = ''
 
 webpackConfig.performance = {
   hints: 'warning',
