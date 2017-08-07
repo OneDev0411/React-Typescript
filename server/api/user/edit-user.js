@@ -17,8 +17,7 @@ router.post('/edit-user', bodyParser(), async (ctx, next) => {
         email,
         phone_number
       })
-
-    const user = response.data
+    const user = response.body.data
 
     if (user) {
       ctx.session.user = {
@@ -29,7 +28,10 @@ router.post('/edit-user', bodyParser(), async (ctx, next) => {
 
     ctx.body = response.body
   }
-  catch(e) {}
+  catch(e) {
+    // console.log('error:            ', e)
+
+  }
 })
 
 module.exports = app.use(router.routes())
