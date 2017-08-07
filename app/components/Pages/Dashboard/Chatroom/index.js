@@ -6,17 +6,13 @@ import _ from 'underscore'
 import Rooms from './Rooms'
 import Messages from './Messages'
 import ChatNotification from './Services/notification'
-import { getRooms, changeActiveRoom } from '../../../../store_actions/chatroom'
+import { changeActiveRoom } from '../../../../store_actions/chatroom'
 import store from '../../../../stores'
 
 // set rooms container width
 const roomsWidth = '330px'
 
 class Chatroom extends React.Component {
-  static fetchData(dispatch, params) {
-    const { user } = params
-    return dispatch(getRooms(user))
-  }
 
   componentWillMount() {
     const { activeRoom, params } = this.props
@@ -63,7 +59,7 @@ class Chatroom extends React.Component {
     }
 
     // don't change url on instant mode
-    if (!instantMode) {
+    if (location && !instantMode) {
       browserHistory.push(`/dashboard/recents/${id}`)
     }
   }

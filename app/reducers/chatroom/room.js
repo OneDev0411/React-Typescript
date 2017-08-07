@@ -5,6 +5,10 @@ import types from '../../constants/chatroom'
  * a helper function that updates room attribites
  */
 export function updateRoom(state, roomId, attributes) {
+  if (!state) {
+    return state
+  }
+  
   return {
     ...state,
     ...{[roomId]: {
