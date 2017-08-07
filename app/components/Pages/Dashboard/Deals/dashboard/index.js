@@ -7,6 +7,7 @@ import TasksList from './tasks'
 import TaskManager from './task-manager'
 import ListingCard from './listing-card'
 import FactSheet from './factsheet'
+import EditForm from './edit-form'
 
 class DealDetails extends React.Component {
   constructor(props) {
@@ -70,6 +71,10 @@ class DealDetails extends React.Component {
             onCloseTask={() => this.onCloseTask()}
           />
         </Col>
+
+        <EditForm
+          deal={deal}
+        />
       </Row>
     )
   }
