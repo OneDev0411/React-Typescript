@@ -1,26 +1,30 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import _ from 'underscore'
-import Section from './section'
+import List from './list'
 
-export default ({
-  dealId,
-  checklists,
-  selectedTask,
-  onSelectTask
+const Checklist = ({
+  deal,
+  selectedTaskId,
+  onSelectTask,
+  checklists
 }) => (
   <div>
     {
-      checklists && checklists
-      .map(list =>
-        <Section
-          key={list.id}
-          dealId={dealId}
-          section={list}
-          tasks={list.tasks}
-          selectedTask={selectedTask}
+      deal && deal.checklists
+      .map(id =>
+        <List
+          key={id}
+          dealId={deal.id}
+          section={checklists[id]}
+          selectedTaskId={selectedTaskId}
           onSelectTask={onSelectTask}
         />
       )
     }
   </div>
 )
+
+export default connect(({ deals }) => ({
+  checklists: deals.checklists
+}))(Checklist)

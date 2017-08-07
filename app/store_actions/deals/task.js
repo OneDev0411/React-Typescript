@@ -20,8 +20,6 @@ export function createTask(deal_id, form, title, status, task_type, list_id) {
 export function addAttachment(deal_id, checklist_id, task_id, file) {
   return {
     type: types.ADD_ATTACHMENT,
-    deal_id,
-    checklist_id,
     task_id,
     file
   }

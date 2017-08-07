@@ -1,17 +1,24 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import Header from './header'
 import Comments from './comments'
 import Documents from './documents'
 
-export default ({
-  task
+const TaskManager = ({
+  tasks,
+  taskId
 }) => {
+  if (!taskId) {
+    return false
+  }
+
+  const task = tasks[taskId]
 
   return (
     <div className="full-width">
 
       <Header
-        task={task || {}}
+        task={task}
       />
 
       <Documents
@@ -24,3 +31,7 @@ export default ({
     </div>
   )
 }
+
+export default connect(({ deals }) => ({
+  tasks: deals.tasks
+}))(TaskManager)

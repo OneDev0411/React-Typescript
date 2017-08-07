@@ -19,7 +19,7 @@ $col-padding: 20px;
 
   .column {
     padding: 0;
-    overflow: visible;
+    overflow: scroll;
     height: auto;
     -webkit-overflow-scrolling: touch;
     -ms-overflow-style: none;

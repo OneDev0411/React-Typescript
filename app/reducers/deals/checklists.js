@@ -5,6 +5,18 @@ export default (state = null, action) => {
     case types.GET_CHECKLISTS:
       return action.checklists
 
+    case types.CREATE_TASK:
+      return {
+        ...state,
+        [action.list_id]: {
+          ...state[action.list_id],
+          tasks: [
+            ...state[action.list_id].tasks || [],
+            action.task.id
+          ]
+        }
+      }
+
     default:
       return state
   }

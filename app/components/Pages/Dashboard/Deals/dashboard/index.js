@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
 import cn from 'classnames'
+import _ from 'underscore'
 import TasksList from './tasks'
 import TaskManager from './task-manager'
 import ListingCard from './listing-card'
@@ -11,23 +12,25 @@ class DealDetails extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      selectedTask: null
+      selectedTaskId: null
     }
   }
 
   onSelectTask(task) {
     this.setState({
-      selectedTask: task
+      selectedTaskId: task.id
     })
   }
 
   onCloseTask() {
-    this.setState({ selectedTask: null })
+    this.setState({
+      selectedTaskId: null
+    })
   }
 
   render() {
     const { deal, params } = this.props
-    const { selectedTask } = this.state
+    const { selectedTaskId } = this.state
 
     if (!deal) {
       return false
@@ -41,17 +44,16 @@ class DealDetails extends React.Component {
         </Col>
 
         <Col
-          lg={selectedTask ? 4 : 9}
-          md={selectedTask ? 4 : 9}
-          sm={selectedTask ? 4 : 9}
+          lg={selectedTaskId ? 4 : 9}
+          md={selectedTaskId ? 4 : 9}
+          sm={selectedTaskId ? 4 : 9}
           xs={12}
           className="column deal-tasks"
         >
           <TasksList
-            dealId={params.id}
+            deal={deal}
+            selectedTaskId={selectedTaskId}
             onSelectTask={task => this.onSelectTask(task)}
-            selectedTask={selectedTask ? selectedTask.id : null}
-            checklists={deal.checklists}
           />
         </Col>
 
@@ -61,14 +63,13 @@ class DealDetails extends React.Component {
           sm={5}
           xs={12}
           className="column deal-task-manager"
-          style={{ display: selectedTask ? 'inherit' : 'none' }}
+          style={{ display: selectedTaskId ? 'inherit' : 'none' }}
         >
           <TaskManager
-            task={selectedTask}
+            taskId={selectedTaskId}
             onCloseTask={() => this.onCloseTask()}
           />
         </Col>
-
       </Row>
     )
   }
