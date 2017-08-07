@@ -106,6 +106,7 @@ export default (email, password, first_name, last_name, token, agent, new_email,
       User.signin(params_signin_again, (err, response) => {
         if (!err) {
           AppStore.data.signup.login_done = true
+          AppStore.data.signup.loading_submit = false
           AppStore.data.user = response.data
           AppStore.emitChange()
         } else {
