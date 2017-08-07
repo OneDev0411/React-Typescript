@@ -21,6 +21,24 @@
   }
 }
 
+.deal-button {
+  height: 34px;
+  line-height: 30px;
+  vertical-align: middle;
+  color: #78909c;
+  border-radius: 3px;
+  background-color: #fff;
+  box-shadow: 0 1px 1px 0 #eef1f2;
+  border: solid 1px #e7eef0;
+
+  &:focus {
+    outline: none;
+  }
+  &:hover {
+    background-color: #fbfbfb;
+  }
+}
+
 /**
  * helpers
  */

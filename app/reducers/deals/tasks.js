@@ -11,6 +11,15 @@ export default (state = null, action) => {
         [action.task.id]: action.task
       }
 
+    case types.UPDATE_SUBMISSION:
+      return {
+        ...state,
+        [action.taskId]: {
+          ...state[action.taskId],
+          ...{ submission: action.submission }
+        }
+      }
+
     case types.ADD_ATTACHMENT:
       return {
         ...state,

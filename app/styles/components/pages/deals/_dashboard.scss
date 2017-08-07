@@ -6,6 +6,7 @@ $col-padding: 20px;
 @import './dashboard/_listing_card';
 @import './dashboard/_comment';
 @import './dashboard/_files';
+@import './dashboard/_edit_form';
 
 %deal-dashboard {
   margin-left: 0;
@@ -51,6 +52,10 @@ $col-padding: 20px;
 
   .deal-files {
     @extend %deal-files;
+  }
+
+  .deal-edit-form {
+    @extend %deal-edit-form;
   }
 
   .listing-card {

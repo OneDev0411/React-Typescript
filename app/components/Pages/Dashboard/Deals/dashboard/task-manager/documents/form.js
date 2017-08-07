@@ -1,9 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
+import { editForm } from '../../../../../../../store_actions/deals/forms'
 
-export default ({
-  task
+
+const Form = ({
+  task,
+  editForm
 }) => (
   <div className="deal-files-form">
     {
@@ -20,10 +23,12 @@ export default ({
 
         <Col sm={6} xs={12} className="actions vcenter">
           <button>eSigns</button>
-          <button>Edit</button>
+          <button onClick={() => editForm(task)}>Edit</button>
         </Col>
       </Row>
     }
 
   </div>
 )
+
+export default connect(null, { editForm })(Form)
