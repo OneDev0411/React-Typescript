@@ -104,9 +104,18 @@ export default (email, password, first_name, last_name, token, agent, new_email,
         password
       }
       User.signin(params_signin_again, (err, response) => {
-        const user = response.data
-        AppStore.data.user = user
-        AppStore.emitChange()
+        if (!err) {
+          AppStore.data.signup.login_done = true
+          AppStore.data.user = response.data
+          AppStore.emitChange()
+        } else {
+          // Error
+          AppStore.data.submitting = false
+          AppStore.data.errors = true
+          AppStore.data.show_message = true
+          AppStore.data.request_error = true
+          AppStore.emitChange()
+        }
       })
     }
   ])
