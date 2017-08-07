@@ -47,8 +47,9 @@ export default class Password extends Component {
         window.location.href = `/dashboard/recents/${data.current_room.id}`
         return
       }
-      if (signup.type === 'client')
+      if (signup.type === 'client' && AppStore.data.signup.login_done) {
         window.location.href = '/dashboard/mls?message=welcome'
+      }
       if (signup.type === 'agent') {
         // If verified agent
         if (signup.is_agent) {
