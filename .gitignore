@@ -183,3 +183,4 @@ config/public/development.js
 config/private/development.js
 desktop/builds
 dist
+.idea/
