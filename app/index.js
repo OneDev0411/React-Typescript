@@ -12,6 +12,10 @@ ReactDOM.render(
   rootEl
 )
 
+if (typeof window !== 'undefiend') {
+  window.isSet = (object) => typeof object !== 'undefined'
+}
+
 if (process.env.NODE_ENV === 'development' && module.hot) {
   module.hot.accept('./app', () => {
     ReactDOM.render(

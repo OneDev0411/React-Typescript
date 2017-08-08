@@ -244,13 +244,10 @@ export default class SideBar extends Component {
   // }
 
   uploadProfilePic(files) {
-    const data = this.props.data
-    const user = data.user
     AppStore.data.uploading_profile_pic = true
     AppStore.emitChange()
     AppDispatcher.dispatch({
       action: 'edit-profile-pic',
-      user,
       files
     })
   }
@@ -387,7 +384,6 @@ export default class SideBar extends Component {
         <ProfileImage
           size={100}
           data={data}
-          user={user}
           font={50}
           top={15}
         />
@@ -581,9 +577,9 @@ export default class SideBar extends Component {
     // let branding_logo
     // if (Brand.asset('site_logo')) {
     //   branding_logo = (
-    //     <div style={S('mb-10 mt-10')}>
+    //     <div style={S('mb-10 mt-20')}>
     //       <a target="_blank" href={'http://' + data.brand.hostnames[0]}>
-    //         <div style={S(`bg-url(${Brand.asset('site_logo')}) bg-cover bg-center w-30 h-30 ml-10 br-3`)} />
+    //         <div style={S(`bg-url(${Brand.asset('site_logo')}) bg-cover bg-center w-30 h-30 ml-20 br-3`)} />
     //       </a>
     //     </div>
     //   )
@@ -623,7 +619,7 @@ export default class SideBar extends Component {
             </LinkContainer>
           </OverlayTrigger>
 
-          {
+          {/*{
             user.features && user.features.indexOf('Concierge') > -1 &&
             <OverlayTrigger placement="right" overlay={popover.concierge} delayShow={200} delayHide={0}>
               <LinkContainer onClick={this.hideListingViewer.bind(this)} className={active.concierge} to="/dashboard/concierge/deals">
@@ -643,7 +639,7 @@ export default class SideBar extends Component {
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
-          }
+          }*/}
 
           {
             user.user_type !== 'Client' &&
@@ -685,7 +681,7 @@ export default class SideBar extends Component {
               </OverlayTrigger>
             </NavItem>
             <div style={S('absolute z-0 l-3n')}>
-              <ProfileImage data={data} user={user} />
+              <ProfileImage data={data} />
             </div>
             <NavDropdown style={S('z-1000')} title={title_area} dropup id="account-dropdown" className="account-dropdown" eventKey={3} noCaret>
               { upgrade_account_button }

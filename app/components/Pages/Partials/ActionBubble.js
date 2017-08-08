@@ -48,7 +48,7 @@ export default class ActionBubble extends Component {
 
       email_label = 'Enter email address'
     }
-    let form_style = S(`absolute w-450 h-150 border-1-solid-ccc br-3 t-${(data.signup_tooltip.action === 'listing_inquiry') ? '170' : '75'} l-15 bg-fff p-10 pl-15 z-2`)
+    let form_style = S(`absolute w-350 h-150 border-1-solid-ccc br-3 t-${(data.signup_tooltip.action === 'listing_inquiry') ? '75' : '75'} l-15 bg-fff p-10 pl-15 z-2`)
     if (data.is_mobile) {
       form_style = {
         ...form_style,
@@ -72,7 +72,7 @@ export default class ActionBubble extends Component {
     let login_link_area
     if (!data.user) {
       signup_btn_style = {
-        ...S('h-46 w-130'),
+        ...S('h-46 w-100'),
         borderTopLeftRadius: 0,
         borderBottomLeftRadius: 0,
         backgroundColor: `#${Brand.color('primary', '006aff')}`,

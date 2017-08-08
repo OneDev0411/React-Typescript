@@ -1,0 +1,12 @@
+.c-share-modal,
+.c-confirm-modal,
+.c-create-alert-modal {
+  .modal-content {
+    border-width: 0;
+  }
+}
+
+@import 'share-modal';
+@import 'success-modal';
+@import 'confirm-modal';
+@import 'create-alert-modal';

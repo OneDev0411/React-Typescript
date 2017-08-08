@@ -9,36 +9,48 @@ import Reset from './Partials/Reset'
 import Create from './Partials/Create'
 import S from 'shorti'
 import { Modal } from 'react-bootstrap'
+import Loading from '../../Partials/Loading'
 
 export default class Password extends Component {
+  componentWillMount() {
+    // If has action in url
+    const data = this.props.data
+    const user = data.user
+    if (user && user.id
+      && data.location && data.location.query && data.location.query.action) {
+      const url = this.getActionRedirectURL()
+      if (window.location.href !== url) {
+        delete AppStore.data.show_logout_message
+        AppStore.data.show_password_loading = true
+        AppStore.emitChange()
+        window.location.href = url
+      }
+    }
+  }
   componentDidMount() {
     this.getReceivingUser()
   }
   componentDidUpdate() {
+    const url = this.getActionRedirectURL()
     this.checkIsShadowUser()
     const data = this.props.data
     const signup = data.signup
     const user = data.user
     // If user logged in on mount
-    if (user && user.id && !signup.form_submitted && !data.show_logout_message) {
+    if (user && user.id && signup && !signup.form_submitted && !data.show_logout_message) {
       AppStore.data.show_logout_message = true
       AppStore.emitChange()
     }
     // Redirect after Password creation
-    if (user && signup.form_submitted) {
+    if (!url && user && signup && signup.form_submitted) {
       // If invited to room
-      if (data.current_room) {
+      if (data.current_room && AppStore.data.signup.login_done) {
         window.location.href = `/dashboard/recents/${data.current_room.id}`
         return
       }
-      // If has action in url
-      if (data.location && data.location.query && data.location.query.action) {
-        const redirect_url = this.getActionRedirectURL()
-        window.location.href = redirect_url
-        return
-      }
-      if (signup.type === 'client')
+      if (signup.type === 'client' && AppStore.data.signup.login_done) {
         window.location.href = '/dashboard/mls?message=welcome'
+      }
       if (signup.type === 'agent') {
         // If verified agent
         if (signup.is_agent) {
@@ -49,6 +61,18 @@ export default class Password extends Component {
         AppStore.emitChange()
         // Go to confirm agent
         browserHistory.push('/signup/agent')
+      }
+    }
+    // If has action in url
+    if (user && user.id
+      && data.location && data.location.query && data.location.query.action
+    && !data.signup.loading_submit) {
+      if (window.location.href !== url) {
+        if (AppStore.data.show_logout_message) {
+          delete AppStore.data.show_logout_message
+          AppStore.emitChange()
+        }
+        window.location.href = url
       }
     }
   }
@@ -116,6 +140,7 @@ export default class Password extends Component {
     if (!AppStore.data.signup)
       AppStore.data.signup = {}
     AppStore.data.signup.form_submitted = true
+    AppStore.data.signup.loading_submit = true
     AppStore.emitChange()
     // Forgot pass
     if (action === 'forgot-password') {
@@ -175,28 +200,8 @@ export default class Password extends Component {
     const data = AppStore.data
     const { location } = this.props
     const { slug } = this.props.params
-
-    if (location && location.query) {
-      let email_area
-      if (location.query.email && !location.query.phone_number) {
-        email_area = (
-          <div>
-            <div style={S('font-20')}>Email:</div>
-            <div style={S('color-2196f3 font-20')}>{ decodeURIComponent(location.query.email) }</div>
-          </div>
-        )
-      }
-
-      let phone_number_area
-      if (location.query.phone_number) {
-        phone_number_area = (
-          <div>
-            <div style={S('font-20')}>Phone number:</div>
-            <div style={S('color-2196f3 font-20')}>{ decodeURIComponent(location.query.phone_number) }</div>
-          </div>
-        )
-      }
-    }
+    let email_area
+    let phone_number_area
 
     if (data.show_logout_message) {
       return (
@@ -234,6 +239,11 @@ export default class Password extends Component {
       )
     }
     return (
+      <div>
+        {data.show_password_loading &&
+        <Loading />
+        }
+        <div style={data.show_password_loading ? { opacity: 0 } : {}}>
       <div id="main-content" className="flex-center-wrap" style={S('absolute h-100p w-100p')}>
         <div style={S('z-100 relative mt-60n bg-fff br-6')}>
           { main_content }
@@ -248,6 +258,8 @@ export default class Password extends Component {
             <div style={S('color-2196f3 font-20')}>{ data.signup && data.signup.email ? data.signup.email : '' }</div>
           </div>
         </Modal>
+      </div>
+        </div>
       </div>
     )
   }

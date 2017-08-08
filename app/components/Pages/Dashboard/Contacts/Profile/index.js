@@ -43,7 +43,7 @@ export default class ContactProfile extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { contacts, tags, params } = nextProps
 
-    // load deal
+    // load contact
     const contact = contacts[params.id]
 
     if (!contact)
@@ -154,7 +154,7 @@ export default class ContactProfile extends React.Component {
     const phones = Contact.get.phones(contact)
 
     return (
-      <div className="dashboard">
+      <div className="dashboard" style={{ paddingLeft: '70px' }}>
 
         <Row className="header">
           <Col lg={11} md={11} sm={11}>

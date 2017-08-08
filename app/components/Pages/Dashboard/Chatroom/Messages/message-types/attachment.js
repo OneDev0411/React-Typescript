@@ -13,9 +13,6 @@ export default class Attachments extends React.Component {
 
     return (
       <div className="attachment">
-        <strong style={{ color: '#9b9a9b' }}>
-          Uploaded a file:
-        </strong>
         <div>
           { comment }
         </div>
@@ -74,14 +71,16 @@ class ImageAttachments extends React.Component {
             <div
               key={`FILE_${file.id}`}
               className="item"
-              onClick={() => {
-                this.setState({
-                  currentImage: key,
-                  showLightbox: true,
-                })
-              }}
             >
-              <img src={file.preview_url} />
+              <img
+                onClick={() => {
+                  this.setState({
+                    currentImage: key,
+                    showLightbox: true,
+                  })
+                }}
+                src={file.preview_url}
+              />
             </div>
           )
         }

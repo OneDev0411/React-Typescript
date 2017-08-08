@@ -14,7 +14,13 @@ Chatroom.getRooms = async function(user = {}) {
 
   try {
     const fetchRooms = new Fetch()
-      .get('/rooms?associations=user.last_seen_by&limit=1000&sorting_value=Update')
+      .get('/rooms')
+      .query({'room_types[]': 'Direct'})
+      .query({'room_types[]': 'Group'})
+      .query({'associations': 'user.last_seen_by'})
+      .query({'limit': '1000'})
+      .query({'sorting_value': 'Update'})
+
 
     // required on ssr
     if (access_token)
@@ -80,7 +86,6 @@ Chatroom.leaveRoom = async function(userId, room) {
 * add members to a room
 */
 Chatroom.addMembers = async function(roomId, recipients) {
-
   try {
     return await new Fetch()
       .post(`/rooms/${roomId}/users`)
@@ -102,6 +107,20 @@ Chatroom.getMessages = async function(id, limit = 20, value = null, value_type =
   try {
     return await new Fetch().get(endpoint)
   } catch (e) {}
+}
+
+
+Chatroom.uploadAttachment = async function(roomId, file) {
+  let endpoint = `/rooms/${roomId}/attachments`
+
+  try {
+    return await new Fetch()
+      .upload(endpoint)
+      .attach(file.name, file)
+
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 Chatroom.searchRoom = async function(recipients) {

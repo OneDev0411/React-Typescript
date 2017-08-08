@@ -14,8 +14,7 @@ export default class FavoriteHeart extends Component {
       return false
 
     const mls_number = listing.mls_number
-    const heart_style = S('pointer absolute r-20 t-20 w-44 h-40 mr-5 z-2')
-    const heartColor = this.isFavorited(mls_number) ? '-red' : '-white'
+    const heart_style = S('pointer absolute r-10 t-10 w-44 h-40 z-2')
 
     return (
       <img
@@ -24,7 +23,9 @@ export default class FavoriteHeart extends Component {
           listing
         )}
         style={heart_style}
-        src={`/static/images/dashboard/mls/heart${heartColor}.svg`}
+        src={`/static/images/dashboard/mls/heart${this.isFavorited(mls_number)
+          ? '-red'
+          : '-white'}.svg`}
       />
     )
   }

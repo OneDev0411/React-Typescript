@@ -5,6 +5,7 @@ import RoomSettings from '../Rooms/settings'
 import CloseIcon from '../../Partials/Svgs/CloseIcon'
 import FullscreenIcon from '../../Partials/Svgs/FullscreenIcon'
 import MinimizeIcon from '../../Partials/Svgs/MinimizeIcon'
+import Brand from '../../../../../controllers/Brand'
 
 const getTitle = function(title) {
   const len = 13
@@ -19,7 +20,7 @@ export default ({
   isActive,
   onMinimize,
   onMaximize,
-  onClose,
+  onClose
 }) => (
   <div
     className={cn('bar', {

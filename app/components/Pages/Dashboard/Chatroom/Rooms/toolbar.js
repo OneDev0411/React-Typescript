@@ -1,14 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
-import { toggleInstanceMode } from '../../../../../store_actions/chatroom'
+import { toggleInstantMode } from '../../../../../store_actions/chatroom'
 import Members from './members'
 import RoomSettings from './settings'
 import ExitFullscreenIcon from '../../Partials/Svgs/ExitFullscreenIcon'
 
 const MessagesToolbar = ({
-  toggleInstanceMode,
-  instanceMode,
+  toggleInstantMode,
+  instantMode,
   room
 }) => (
   <Row className="toolbar">
@@ -21,9 +21,9 @@ const MessagesToolbar = ({
       <RoomSettings room={room} />
 
       {
-        instanceMode &&
+        instantMode &&
         <span
-          onClick={() => toggleInstanceMode()}
+          onClick={() => toggleInstantMode()}
           className="exit-fullscreen"
         >
           <ExitFullscreenIcon />
@@ -38,9 +38,9 @@ function mapStateToProps({ chatroom }, ownProps) {
   const { rooms } = chatroom
 
   return {
-    instanceMode: chatroom.instanceMode,
+    instantMode: chatroom.instantMode,
     room: rooms && roomId ? rooms[roomId] : {}
   }
 }
 
-export default connect(mapStateToProps, { toggleInstanceMode })(MessagesToolbar)
+export default connect(mapStateToProps, { toggleInstantMode })(MessagesToolbar)

@@ -31,12 +31,12 @@ const requestMiddleware = async function (ctx, next) {
 
   const agent = superagent
 
-  ctx.fetch = function(url, method = 'get') {
+  ctx.fetch = function(url, method = 'get', contentType = 'application/json') {
 
     const headers = {
       'x-real-agent': user_agent,
       'User-Agent': app_name,
-      'Content-Type': 'application/json'
+      'Content-Type': contentType
     }
 
     if (access_token) {

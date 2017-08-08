@@ -1,22 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Modal, Button } from 'react-bootstrap'
-import { compose,  withState, lifecycle, pure } from 'recompose'
+import { compose, withState, pure } from 'recompose'
 import Compose from '../../../../Partials/Compose'
+import { hasRecipients } from '../../../../../utils/helpers'
 
 const enhance = compose(
   pure,
   withState('showComposeModal', 'onChangeComposeModal', false),
   withState('recipients', 'onChangeRecipients', {})
 )
-
-function hasRecipients(recipients) {
-  const recps = []
-    .concat(recipients.users, recipients.emails, recipients.phone_numbers)
-    .filter(recp => recp !== undefined)
-
-  return recps.length > 0
-}
 
 const ComposeWrapper = ({
   TriggerButton,
@@ -34,10 +27,8 @@ const ComposeWrapper = ({
   recipients,
   onChangeComposeModal,
   onChangeRecipients
-}) => (
-  <div
-    style={{ display: inline ? 'inline' : 'block' }}
-  >
+}) =>
+  <div style={{ display: inline ? 'inline' : 'block' }}>
     <TriggerButton
       clickHandler={() => onChangeComposeModal(!showComposeModal)}
     />
@@ -48,24 +39,22 @@ const ComposeWrapper = ({
       onHide={() => onChangeComposeModal(false)}
     >
       <Modal.Header closeButton>
-        <Modal.Title>{ title }</Modal.Title>
+        <Modal.Title>
+          {title}
+        </Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
-        {
-          !showOnly &&
+        {!showOnly &&
           <Compose
             dropDownBox={dropDownBox}
-            onHide={() => onChangeComposeModal(false)}
             onChangeRecipients={recipients => onChangeRecipients(recipients)}
-          />
-        }
+          />}
 
-        { InitialValues && <InitialValues /> }
+        {InitialValues && <InitialValues />}
       </Modal.Body>
 
-      {
-        !showOnly &&
+      {!showOnly &&
         <Modal.Footer>
           <Button
             bsStyle="primary"
@@ -77,13 +66,10 @@ const ComposeWrapper = ({
               onChangeRecipients({})
             }}
           >
-            { buttonTitle }
+            {buttonTitle}
           </Button>
-        </Modal.Footer>
-      }
-
+        </Modal.Footer>}
     </Modal>
   </div>
-)
 
 export default enhance(ComposeWrapper)

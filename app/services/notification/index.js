@@ -38,7 +38,6 @@ export default class NotificationService extends Socket {
     emitter.emit(notification_type, chatroom, notification)
   }
 
-
   /**
    * start sending a browser notification
    */

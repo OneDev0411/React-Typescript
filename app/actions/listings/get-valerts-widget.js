@@ -9,8 +9,9 @@ export default (user, options) => {
   const params = {
     options
   }
-  if (user)
+  if (user) {
     params.access_token = user.access_token
+  }
   if (AppStore.data.brand) {
     const brokerage = getParameterByName('brokerage')
     if (brokerage) {
@@ -30,30 +31,37 @@ export default (user, options) => {
           AppStore.emitChange()
           callback()
         })
-      } else
+      } else {
         callback()
+      }
     },
     () => {
       Listing.getValerts(params, (err, response) => {
         // Success
         if (response.status === 'success') {
-          if (!AppStore.data.widget)
+          if (!AppStore.data.widget) {
             AppStore.data.widget = {}
-          if (AppStore.data.location.query.all)
-            AppStore.data.widget.listings = response.data
-          else
-            AppStore.data.widget.listings = _.slice(response.data, 0, 10)
-          AppStore.data.widget.listings_info = response.info
+          }
+          if (!AppStore.data.widget[response.options.type]) {
+            AppStore.data.widget[response.options.type] = {}
+          }
+          AppStore.data.widget[response.options.type].options = response.options
+          if (AppStore.data.location.query.all) {
+            AppStore.data.widget[response.options.type].listings = response.data
+          } else {
+            AppStore.data.widget[response.options.type].listings = _.slice(response.data, 0, 10)
+          }
+          AppStore.data.widget[response.options.type].listings_info = response.info
         }
-        if (options.listing_statuses[0] === 'Sold') {
-          AppStore.data.widget.listings.sort((a, b) => parseFloat(a.price) - parseFloat(b.price))
-          AppStore.data.widget.listings.reverse()
+        if ((response.options ? response.options.listing_statuses[0] : options.listing_statuses[0]) === 'Sold') {
+          AppStore.data.widget[response.options.type].listings.sort((a, b) => parseFloat(a.price) - parseFloat(b.price))
+          AppStore.data.widget[response.options.type].listings.reverse()
         } else {
           // Active listings with an online agent show up first. (Issue #500)
           const onlines = []
           const offlines = []
 
-          AppStore.data.widget.listings.forEach((l) => {
+          AppStore.data.widget[response.options.type].listings.forEach((l) => {
             const agent_user = l.proposed_agent
 
             if (!agent_user || agent_user.agent || agent_user.agent.online_state === 'Offline') {
@@ -64,18 +72,18 @@ export default (user, options) => {
             onlines.push(l)
           })
 
-          AppStore.data.widget.listings = [
+          AppStore.data.widget[response.options.type].listings = [
             ..._(onlines).shuffle(),
             ..._(offlines).shuffle()
           ]
         }
         // Order actives by price
         if (AppStore.data.location.query.order_by && AppStore.data.location.query.order_by === 'price') {
-          AppStore.data.widget.listings.sort((a, b) => parseFloat(a.price) - parseFloat(b.price))
-          AppStore.data.widget.listings.reverse()
+          AppStore.data.widget[response.options.type].listings.sort((a, b) => parseFloat(a.price) - parseFloat(b.price))
+          AppStore.data.widget[response.options.type].listings.reverse()
         }
-        delete AppStore.data.widget.is_loading
-        delete AppStore.data.widget.is_loading_listings
+        delete AppStore.data.widget[response.options.type].is_loading
+        delete AppStore.data.widget[response.options.type].is_loading_listings
         AppStore.emitChange()
       })
     }

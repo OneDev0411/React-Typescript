@@ -1,9 +1,13 @@
 import Koa from 'koa'
+import MobileDetect from 'mobile-detect'
+
 const router = require('koa-router')()
 const app = new Koa()
 
 router.get('/', async (ctx, next) => {
-  if (ctx.session.user) {
+  const isMobile = new MobileDetect(ctx.req.headers['user-agent'])
+
+  if (ctx.session.user && !isMobile.phone()) {
     ctx.redirect('/dashboard/mls')
   }
 

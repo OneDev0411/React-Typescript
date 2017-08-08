@@ -10,13 +10,14 @@ export default class Fetch {
     this._middlewares = {}
     this._autoLogin = true
     this._baseUrl = isServerSide ? config.app.url : ''
+    this._proxyUrl = `${this._baseUrl}/api/proxifier`
   }
 
   _create(method, endpoint) {
     const state = store.getState()
     const { user, brand } = state.data
 
-    const agent = SuperAgent.post(`${this._baseUrl}/api/proxifier`)
+    const agent = SuperAgent.post(this._proxyUrl)
       .set('X-Method', method)
       .set('X-Endpoint', endpoint)
 
@@ -53,6 +54,11 @@ export default class Fetch {
 
   delete(endpoint) {
     return this._create('delete', endpoint)
+  }
+
+  upload(endpoint, method = 'post') {
+    this._proxyUrl += '/upload'
+    return this._create(method, endpoint)
   }
 
   onResponse(response) {

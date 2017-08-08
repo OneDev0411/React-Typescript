@@ -1,29 +1,95 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { batchActions } from 'redux-batched-actions'
 import _ from 'underscore'
+
 import PopupWindow from './window'
 import ChatNotification from '../Services/notification'
-import * as actionCreators from '../../../../../store_actions/chatroom/popups'
 
-const onToggleMinimize = (roomId, settings, minimizeChatPopup) => {
-  minimizeChatPopup(roomId)
+import * as popupActionCreators from '../../../../../store_actions/chatroom/popups'
+import { changeActiveRoom, toggleInstantMode } from '../../../../../store_actions/chatroom'
 
-  if (settings.minimize === true) {
-    ChatNotification.clear(roomId)
+/**
+ * when user clicks on minimize icon
+ */
+const onToggleMinimize = (props, roomId, settings) => {
+  const { activeRoom, minimizeChatPopup, changeActiveRoom } = props
+  const { minimize } = settings
+
+  // find new active room
+  let newActiveRoom = activeRoom
+
+  // closing a popup
+  if (minimize === false && roomId === activeRoom) {
+    newActiveRoom = null
   }
+
+  // opening popup
+  if (minimize === true) {
+    ChatNotification.clear(roomId)
+    newActiveRoom = roomId
+  }
+
+  batchActions([
+    minimizeChatPopup(roomId),
+    changeActiveRoom(newActiveRoom)
+  ])
 }
 
-const ChatPopups = ({
-  user,
-  rooms,
-  popups,
-  activeRoom,
-  /* mapped props to dispatch */
-  minimizeChatPopup,
-  closeChatPopup,
-  maximizeChatPopup,
-  changeActivePopup
-}) => {
+/**
+ * when user clicks on maximize icon
+ */
+const onMaximize = (props, roomId) => {
+  const { activeRoom, maximizeChatPopup, changeActiveRoom, toggleInstantMode } = props
+
+  batchActions([
+    changeActiveRoom(roomId),
+    toggleInstantMode(),
+    maximizeChatPopup(roomId),
+  ])
+}
+
+/**
+ * when user clicks on maximize icon
+ */
+const onClose = (props, roomId) => {
+  const { activeRoom, popups, closeChatPopup, changeActiveRoom } = props
+
+  let newActiveRoom = activeRoom === roomId ? null : activeRoom
+
+  /**
+  * when user closes a popup:
+  * if the room was active and there are more that one popups then
+  * make first popup active
+  */
+  if (newActiveRoom === null && _.size(popups) >= 2) {
+    const rooms = Object
+      .keys(popups)
+      .filter(room => room !== roomId)
+
+    newActiveRoom = rooms[0]
+  }
+
+  batchActions([
+    changeActiveRoom(newActiveRoom),
+    closeChatPopup(roomId)
+  ])
+}
+
+const ChatPopups = (props) => {
+  const {
+    user,
+    rooms,
+    popups,
+    activeRoom,
+    /* mapped props to dispatch */
+    minimizeChatPopup,
+    closeChatPopup,
+    maximizeChatPopup,
+    changeActiveRoom,
+    toggleInstantMode
+  } = props
 
   if (!popups)
     return false
@@ -42,10 +108,10 @@ const ChatPopups = ({
             settings={settings}
             isActive={activeRoom === roomId}
             room={rooms[roomId]}
-            onMinimize={roomId => onToggleMinimize(roomId, settings, minimizeChatPopup)}
-            onMaximize={roomId => maximizeChatPopup(roomId)}
-            onClose={roomId => closeChatPopup(roomId)}
-            onChangeActive={roomId => changeActivePopup(roomId)}
+            onMinimize={roomId => onToggleMinimize(props, roomId, settings)}
+            onMaximize={roomId => onMaximize(props, roomId)}
+            onClose={roomId => onClose(props, roomId)}
+            onChangeActive={roomId => changeActiveRoom(roomId)}
           />
         })
       }
@@ -53,7 +119,19 @@ const ChatPopups = ({
   )
 }
 
-export default connect(({ chatroom }) => ({
-  activeRoom: chatroom.activeRoom,
-  popups: chatroom.popups,
-}), actionCreators)(ChatPopups)
+function mapStateToProps({ chatroom }) {
+  return {
+    activeRoom: chatroom.activeRoom,
+    popups: chatroom.popups
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    ...popupActionCreators,
+    ...{changeActiveRoom},
+    ...{toggleInstantMode}
+  }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatPopups)

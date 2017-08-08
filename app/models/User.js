@@ -4,6 +4,7 @@ es6Promise.polyfill()
 import 'isomorphic-fetch'
 import superagent from 'superagent'
 import config from '../../config/public'
+import Fetch from '../services/fetch'
 
 export default {
   get: (params, callback) => {
@@ -292,58 +293,52 @@ export default {
     })
     .then(response => callback(false, response))
   },
-  // getRooms: (params, callback) => {
-  //   let api_host = params.api_host
-  //   if (!api_host) api_host = config.app.url
+  edit: async (params, callback) => {
+    try {
+      const response = await new Fetch()
+        .put('/users/self')
+        .send(params.user)
 
-  //   const endpoint = `${api_host}/api/rooms?access_token=${params.access_token}`
+      return callback(false, response.body)
 
-  //   fetch(endpoint)
-  //   .then((response) => {
-  //     if (response.status >= 400) {
-  //       const error = {
-  //         status: 'error',
-  //         response
-  //       }
-  //       return callback(error, false)
-  //     }
-  //     return response.json()
-  //   })
-  //   .then(response => callback(false, response))
-  // },
-  edit: (params, callback) => {
-    const endpoint = `/api/edit-user?access_token=${params.access_token}`
-    const request_object = {
-      user: params.user,
-      access_token: params.access_token
+    } catch (error) {
+      return callback(error, false)
     }
-    fetch(endpoint, {
-      method: 'post',
-      credentials: 'include',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(request_object)
-    })
-    .then((response) => {
-      if (response.status >= 400) {
-        const error = {
-          status: 'error',
-          body: response.body
-        }
-        return callback(error, false)
-      }
-      return response.json()
-    })
-    .then(response => callback(false, response))
+    // const endpoint = `/api/edit-user?access_token=${params.access_token}`
+    // const request_object = {
+    //   user: params.user,
+    //   access_token: params.access_token
+    // }
+    // fetch(endpoint, {
+    //   method: 'post',
+    //   credentials: 'include',
+    //   headers: {
+    //     'Content-type': 'application/json'
+    //   },
+    //   body: JSON.stringify(request_object)
+    // })
+    // .then((response) => {
+    //   if (response.status >= 400) {
+    //     const error = {
+    //       status: 'error',
+    //       body: response.body
+    //     }
+    //     return callback(error, false)
+    //   }
+    //   return response.json()
+    // })
+    // .then(response => callback(false, response))
   },
-  uploadImage: (params, callback) => {
-    const endpoint = '/attachments'
-    const request = superagent.post(endpoint)
-    const file = params.files[0]
-    request.set('authorization', `Bearer ${params.access_token}`)
-    request.attach('media', file)
-    request.end((err, response) => callback(false, response))
+  uploadImage: async file => {
+    try {
+      const response = await new Fetch()
+        .upload('/users/self/profile_image_url', 'patch')
+        .attach('media', file)
+
+      return response.body.data
+    } catch (error) {
+      throw error
+    }
   },
   editProfilePic: (params, callback) => {
     const endpoint = `/api/edit-profile-pic?access_token=${params.access_token}`

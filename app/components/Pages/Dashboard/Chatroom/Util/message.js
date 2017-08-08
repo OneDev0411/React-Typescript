@@ -1,8 +1,10 @@
 import moment from 'moment'
 import emojify from 'emojify.js'
+import _ from 'underscore'
 import linkifyString from 'linkifyjs/string'
 import store from '../../../../../stores'
-import { createMessage } from '../../../../../store_actions/chatroom'
+import { createMessage, updateMessage} from '../../../../../store_actions/chatroom'
+import Mention from './mention'
 
 export default class Message {
   constructor() {
@@ -12,46 +14,12 @@ export default class Message {
   }
 
   /**
-   * make mention blue
-   */
-  static _makeMentionsBlue(text, users = []) {
-    let filterd_text = text
-
-    users.forEach((user) => {
-      const full_name = `${user.first_name} ${user.last_name}`
-
-      if (text.trim().indexOf(full_name.trim()) !== -1) {
-        const replace = `<span class="text-primary">${user.first_name}</span>`
-        filterd_text = text.replace(new RegExp(full_name, 'g'), replace)
-      }
-    })
-
-    return filterd_text
-  }
-
-  /**
    * send new message
    */
   static send(roomId, message, author = {}) {
-    const { abbreviated_display_name } = author
-
     return new Promise((resolve, reject) => {
-      const unixtime = moment().unix()
-      const qid = 'queued_' + unixtime
-
-      const tempMessage = {
-        ...message,
-        ...{
-          id: qid,
-          author: {
-            abbreviated_display_name: abbreviated_display_name,
-            ...author
-          },
-          queued: true,
-          created_at: unixtime,
-          updated_at: unixtime,
-        }
-      }
+      // create temp message
+      const { qid, tempMessage } = Message.createTemporaryMessage(roomId, message, author)
 
       // create temporary message
       Message.create(roomId, tempMessage)
@@ -59,11 +27,49 @@ export default class Message {
       // resolve
       resolve(tempMessage)
 
-      window.socket.emit('Message.Send', roomId, message, (err, message) => {
-        if (err) return reject(err)
-        Message.create(roomId, message, qid)
-      })
+      // post message to socket
+      Message.postMessage(roomId, message, qid)
     })
+  }
+
+  /**
+   * post message via socket
+   */
+  static postMessage(roomId, message, qid) {
+    window.socket.emit('Message.Send', roomId, message, (err, message) => {
+      if (err) return reject(err)
+      Message.create(roomId, message, qid)
+    })
+  }
+
+  /**
+   * create temporary message
+   */
+  static createTemporaryMessage(roomId, message, author = {}) {
+    const unixtime = moment().unix()
+    const qid = 'queued_' + unixtime
+
+    const { abbreviated_display_name } = author
+
+    const tempMessage = {
+      ...message,
+      ...{
+        id: qid,
+        room: roomId,
+        author: {
+          abbreviated_display_name: abbreviated_display_name,
+          ...author
+        },
+        queued: true,
+        created_at: unixtime,
+        updated_at: unixtime,
+      }
+    }
+
+    return {
+      qid,
+      tempMessage
+    }
   }
 
   /**
@@ -73,18 +79,34 @@ export default class Message {
     store.dispatch(createMessage(roomId, { [message.id]: message }, queueId))
   }
 
+   /**
+   * update message
+   */
+  static update(roomId, message) {
+    store.dispatch(updateMessage(roomId, message))
+  }
+
   /**
    * get message text
    */
-  static getText(message, users) {
+  static getText(message, members, user) {
     let text = message.comment
 
     if (message.comment) {
       text = emojify.replace(linkifyString(message.comment))
-      text = Message._makeMentionsBlue(text, users)
+      text = Mention.highlight(text, message.mentions, members, user)
+      text = Message.nl2br(text)
     }
 
     return text
+  }
+
+  /**
+   * convert new line to break line
+   */
+  static nl2br(str, is_xhtml = false) {
+    const breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>'
+    return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2')
   }
 
   /**

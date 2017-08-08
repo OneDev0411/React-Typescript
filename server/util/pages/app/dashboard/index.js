@@ -4,7 +4,6 @@ import AppStore from '../../../../../app/stores/AppStore'
 const app = new Koa()
 
 router.get(/^\/dashboard(?:\/|$)/, async (ctx, next) => {
-
   if (ctx.session.user) {
     const { AppStore } = ctx.locals
     AppStore.data = {
@@ -17,11 +16,8 @@ router.get(/^\/dashboard(?:\/|$)/, async (ctx, next) => {
     }
 
     ctx.locals.AppStore = AppStore
-  } else {
-    // If mls listing
-    if (ctx.request.url.indexOf('/dashboard/mls') === -1) {
-      return ctx.redirect(`/signin?redirect_to=${ctx.request.path}`)
-    }
+  } else if (ctx.request.url.indexOf('/dashboard/mls') === -1) {
+    return ctx.redirect(`/signin?redirect_to=${ctx.request.path}`)
   }
 
   await next()

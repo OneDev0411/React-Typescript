@@ -31,9 +31,9 @@ router.get('/dashboard/mls/actives', async (ctx, next) => {
 /**
  * route for /mls
  */
-router.get('/dashboard/mls', async (ctx, next) => {
-  await next()
-})
+// router.get('/dashboard/mls', async (ctx, next) => {
+//   await next()
+// })
 
 /**
  * route for /mls/:id
@@ -48,7 +48,9 @@ router.get('/dashboard/mls/:id', async (ctx, next) => {
   try {
     const { AppStore } = ctx.locals
 
-    const access_token = AppStore.data.user ? AppStore.data.user.access_token : null
+    const access_token = AppStore.data.user
+      ? AppStore.data.user.access_token
+      : null
     const brand = AppStore.data.brand
 
     const response = await Listing.fetch(id, brand, access_token)
@@ -64,7 +66,8 @@ router.get('/dashboard/mls/:id', async (ctx, next) => {
     const locals = {
       has_og: true,
       og_title: listing_util.addressTitle(listing.property.address),
-      og_url: `${ctx.request.protocol}://${ctx.request.hostname}${ctx.request.url}`,
+      og_url: `${ctx.request.protocol}://${ctx.request.hostname}${ctx.request
+        .url}`,
       og_description: listing.property.description,
       og_image_url: listing.cover_image_url
     }
@@ -72,14 +75,13 @@ router.get('/dashboard/mls/:id', async (ctx, next) => {
     ctx.locals = {
       ...ctx.locals,
       ...locals,
-      ...{AppStore}
+      ...{ AppStore }
     }
 
     if (ctx.session.user && ctx.request.query.token) {
       ctx.session = null
     }
-  }
-  catch(e) {}
+  } catch (e) {}
 
   await next()
 })

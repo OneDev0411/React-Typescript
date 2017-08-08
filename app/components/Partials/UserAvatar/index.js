@@ -23,6 +23,14 @@ const UserAvatar = ({
     {position: 'relative', width: `${size}px`} :
     {}
 
+  // normalize name
+  let normalizedName = name
+
+  const splittedName = name.split(' ')
+  if (splittedName.length > 2) {
+    normalizedName = splittedName[0] + ' ' + splittedName[1]
+  }
+
   return (
     <div
       className="user-avatar"
@@ -34,7 +42,7 @@ const UserAvatar = ({
       <Avatar
         style={!image ? {verticalAlign: 'middle'} : {}} // fix vertical bug when there is no image
         round
-        name={name}
+        name={normalizedName}
         src={image}
         size={size}
         color={color}
