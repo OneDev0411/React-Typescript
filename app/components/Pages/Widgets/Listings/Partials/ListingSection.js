@@ -157,11 +157,7 @@ class Section extends Component {
           }}
         >
           <h1
-            style={S(
-              `font-17 color-263445 mb-0${this.props.data.is_mobile
-                ? ' ml-10 mr-10'
-                : ''}`
-            )}
+            style={S(`font-50 color-263445 mb-0${this.props.data.is_mobile ? ' ml-10 mr-10' : ''}`)}
           >
             {this.props.title}
           </h1>
