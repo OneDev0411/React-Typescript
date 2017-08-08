@@ -108,19 +108,19 @@ const mapHOC = compose(
     options: mapOptions,
     defaultZoom: mapInitialState.zoom,
     defaultCenter: mapInitialState.center,
-    style: {
-      position: 'relative',
-      height: 'calc(100vh - 56px)'
-    },
     clusterOptions: {
       minZoom: 12,
       maxZoom: DECLUSTER_ZOOM_LEVEL - 1
     }
   }),
   connect(
-    ({ data }, { listings }) => ({
+    ({ data }, { listings, isWidget }) => ({
       appData: data,
-      markers: listings.data
+      markers: listings.data,
+      style: {
+        position: 'relative',
+        height: !isWidget ? 'calc(100vh - 56px)' : '100vh'
+      }
     }),
     actions
   ),
