@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import _ from 'underscore'
 import List from './list'
 
 const Checklist = ({
@@ -9,7 +8,7 @@ const Checklist = ({
   onSelectTask,
   checklists
 }) => (
-  <div>
+  <div className="tasks-container">
     {
       deal && deal.checklists
       .map(id =>

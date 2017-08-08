@@ -2,8 +2,8 @@
   padding: 0;
   background: #fff;
   border-bottom: 10px solid #eff5fa;
-  overflow-y: hidden;
-  overflow: scroll;
+  @include scrollbar();
+  overflow-x: hidden;
   min-height: 30vh;
   max-height: 30vh;
 

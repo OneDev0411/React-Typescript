@@ -1,14 +1,18 @@
 %deal-tasks {
-  padding: $col-padding !important;
   background: #fbfbfb;
-  overflow: auto !important;
-  // transition: 0.4s width ease-in;
-  .section {
-    @extend %deal-task-section;
-  }
 
-  .task {
-    @extend %deal-task;
+  .tasks-container {
+    padding: $col-padding !important;
+    max-height: 100vh;
+    overflow: auto;
+
+    .section {
+      @extend %deal-task-section;
+    }
+
+    .task {
+      @extend %deal-task;
+    }
   }
 }
 
