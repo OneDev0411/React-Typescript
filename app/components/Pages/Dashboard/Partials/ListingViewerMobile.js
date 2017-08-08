@@ -105,17 +105,17 @@ export default class ListingViewerMobile extends Component {
           </span>
         </div>
       )
-      let number_days_indicator
-      if (listing.list_date) {
-        const days_on_market = listing_util.getDOM(listing.dom)
-        number_days_indicator = (
-          <div className="pull-left" style={S('bg-ebeef1 relative t-7 br-100 pt-11 h-35 pl-15 pr-15 mr-15')}>
-            <span style={S('font-14 relative t-3n')}>
-              <b>{ days_on_market } days ago</b>
-            </span>
-          </div>
-        )
-      }
+      // let number_days_indicator
+      // if (listing.list_date) {
+      //   const days_on_market = listing_util.getDOM(listing.dom)
+      //   number_days_indicator = (
+      //     <div className="pull-left" style={S('bg-ebeef1 relative t-7 br-100 pt-11 h-35 pl-15 pr-15 mr-15')}>
+      //       <span style={S('font-14 relative t-3n')}>
+      //         <b>{ days_on_market } days ago</b>
+      //       </span>
+      //     </div>
+      //   )
+      // }
       let mls_link
       if (mls_number) {
         mls_link = (
@@ -223,7 +223,6 @@ export default class ListingViewerMobile extends Component {
                 </div>
                 <div style={S('mb-20')}>
                   { listing_status_indicator }
-                  { number_days_indicator }
                   <div className="clearfix" />
                 </div>
               </div>
