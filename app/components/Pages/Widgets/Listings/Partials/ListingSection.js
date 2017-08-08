@@ -46,8 +46,14 @@ class Section extends Component {
   // }
 
   handleListingClick(listing) {
+    const user = this.props.data.user
     const url = `/dashboard/mls/${listing.id}`
-    browserHistory.push(url)
+
+    if (user) {
+      browserHistory.push(url)
+    } else {
+      window.open(url, '_blank')
+    }
   }
 
   initWidgetOptions() {
