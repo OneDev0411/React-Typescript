@@ -14,6 +14,9 @@ export default ({
   // get message author
   const author = messageUtil.getAuthor(message)
 
+  // author of previous message
+  const previousMessageAuthor = messageUtil.getAuthor(previousMessage) || {}
+
   // check message is alert
   const isAlert = messageUtil.isAlert(message)
 
@@ -40,7 +43,7 @@ export default ({
     isAlert ||
     hasAttachments ||
     message.uploading ||
-    messageUtil.getAuthor(previousMessage).id !== author.id ||
+    previousMessageAuthor.id !== author.id ||
     messageUtil.getYMD(previousMessage) !== messageUtil.getYMD(message)
 
   return isLeadMessage ? <LeadMessage {...props} /> : <SubMessage {...props} />
