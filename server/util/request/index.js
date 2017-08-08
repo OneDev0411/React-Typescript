@@ -55,6 +55,7 @@ const requestMiddleware = async function (ctx, next) {
       .set(headers)
       .on('error', err => {
         let responseText = err.response ? err.response.text : err.message
+        console.log('[ Fetch Error ] ', responseText)
 
         // try to parse encoded json
         try {

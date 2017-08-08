@@ -158,15 +158,15 @@ export default class ListingViewer extends Component {
           { listing.status } { sold_date }
         </div>
       )
-      let number_days_indicator
-      if (listing.list_date) {
-        const days_on_market = listing_util.getDOM(listing.dom)
-        number_days_indicator = (
-          <div className="pull-left" style={S('border-1-solid-263445 br-3 pt-5 pb-5 pl-10 pr-10 mt-3 font-14')}>
-            { days_on_market } days ago
-          </div>
-        )
-      }
+      // let number_days_indicator
+      // if (listing.list_date) {
+      //   const days_on_market = listing_util.getDOM(listing.dom)
+      //   number_days_indicator = (
+      //     <div className="pull-left" style={S('border-1-solid-263445 br-3 pt-5 pb-5 pl-10 pr-10 mt-3 font-14')}>
+      //       { days_on_market } days ago
+      //     </div>
+      //   )
+      // }
       const tooltip = (
         <Tooltip id="copied-tooltip">
           Copied
@@ -340,9 +340,6 @@ export default class ListingViewer extends Component {
                       </div>
                       <div style={S('pull-left font-15 mb-10 mr-10')}>
                         { listing_status_indicator }
-                      </div>
-                      <div className="pull-left">
-                        { number_days_indicator }
                       </div>
                     </div>
                     <div className="clearfix" />
