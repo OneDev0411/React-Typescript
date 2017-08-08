@@ -10,7 +10,7 @@ import Brand from '../../../../../../controllers/Brand'
 
 import SuccessModal from './SuccessModal'
 import ShareAlertModal from './ShareAlertModal'
-import createAlert from '../../../../../../models/listings/alerts/create-alert'
+import createAlert from '../../../../../../store_actions/listings/alerts/create-alert'
 
 const brandColor = `#${Brand.color('primary', '3388ff')}`
 
@@ -123,11 +123,14 @@ export const normalizeAlertOptions = (
 
 export default compose(
   pure,
-  connect(({ data, search }) => ({
-    user: data.user,
-    searchOptions: search.options,
-    drawingPoints: search.map.drawing.points
-  })),
+  connect(
+    ({ data, search }) => ({
+      user: data.user,
+      searchOptions: search.options,
+      drawingPoints: search.map.drawing.points
+    }),
+    { createAlert }
+  ),
   withState('isSaving', 'setIsSaving', false),
   withState('alertTitle', 'setAlertTitle', ''),
   withState('successModalIsActive', 'setSuccessModalIsActive', false),
@@ -141,6 +144,7 @@ export default compose(
       onHide,
       isSaving,
       alertTitle,
+      createAlert,
       setIsSaving,
       drawingPoints,
       searchOptions,

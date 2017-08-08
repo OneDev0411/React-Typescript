@@ -9,6 +9,7 @@ import {
   FETCH_LISTING_FAILURE
 } from '../../../constants/listings/listing'
 import {
+  ADD_ALERT_FAILURE,
   FETCH_ALERTS_SUCCESS,
   FETCH_ALERTS_REQUEST,
   FETCH_ALERTS_FAILURE,
@@ -89,6 +90,7 @@ export const errorMessage = (state = null, action) => {
     case FETCH_LISTING_FAILURE:
     case FETCH_LISTINGS_FAILURE:
     case TOGGLE_FAVORITE_FAILURE:
+    case ADD_ALERT_FAILURE:
     case DELETE_ALERT_FAILURE:
     case FETCH_ALERT_FEED_FAILURE:
       return action.message
