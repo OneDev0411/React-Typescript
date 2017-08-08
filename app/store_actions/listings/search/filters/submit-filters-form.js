@@ -161,12 +161,7 @@ const normalizeValues = (values, state) => {
   const open_house = !!values.open_house
 
   if (listing_statuses.length === 0) {
-    let alertMsg = 'You must select at least one listing status'
-
-    if (open_house) {
-      alertMsg += ' "Open House" filter'
-    }
-
+    let alertMsg = 'Please select at least one listing status.'
     window.alert(alertMsg)
 
     throw new SubmissionError({
