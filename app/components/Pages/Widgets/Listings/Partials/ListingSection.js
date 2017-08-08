@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
+import { browserHistory } from 'react-router'
 import ListingCard from './ListingCard'
 import S from 'shorti'
 import controller from '../../../Dashboard/controller'
@@ -10,7 +11,6 @@ import Brand from '../../../../../controllers/Brand'
 import getListing from '../../../../../store_actions/widgets/listings/get-listings'
 
 class Section extends Component {
-
   constructor() {
     super()
     this.state = {
@@ -46,13 +46,22 @@ class Section extends Component {
   // }
 
   handleListingClick(listing) {
+    const user = this.props.data.user
     const url = `/dashboard/mls/${listing.id}`
-    window.open(url, '_blank')
+
+    if (user) {
+      browserHistory.push(url)
+    } else {
+      window.open(url, '_blank')
+    }
   }
 
   initWidgetOptions() {
     let queryString = ''
-    if (this.options.list_offices && this.options.list_offices.length || this.options.brand) {
+    if (
+      (this.options.list_offices && this.options.list_offices.length) ||
+      this.options.brand
+    ) {
       queryString += '?associations=compact_listing.proposed_agent'
 
       if (this.options.listing_statuses[0] === 'Sold') {
@@ -69,7 +78,23 @@ class Section extends Component {
     const options = {
       limit: '6',
       property_types: ['Residential', 'Residential Lease', 'Lots & Acreage'],
-      property_subtypes: ['RES-Single Family', 'RES-Half Duplex', 'RES-Farm\/Ranch', 'RES-Condo', 'RES-Townhouse', 'LSE-Apartment', 'LSE-Condo/Townhome', 'LSE-Duplex', 'LSE-Fourplex', 'LSE-House', 'LSE-Mobile', 'LSE-Triplex', 'LND-Commercial', 'LND-Farm/Ranch', 'LND-Residential']
+      property_subtypes: [
+        'RES-Single Family',
+        'RES-Half Duplex',
+        'RES-Farm/Ranch',
+        'RES-Condo',
+        'RES-Townhouse',
+        'LSE-Apartment',
+        'LSE-Condo/Townhome',
+        'LSE-Duplex',
+        'LSE-Fourplex',
+        'LSE-House',
+        'LSE-Mobile',
+        'LSE-Triplex',
+        'LND-Commercial',
+        'LND-Farm/Ranch',
+        'LND-Residential'
+      ]
     }
     if (brokerage) {
       options.list_offices = [brokerage]
@@ -86,7 +111,13 @@ class Section extends Component {
     if (type === 'sold') {
       options.listing_statuses = ['Sold', 'Leased']
     } else {
-      options.listing_statuses = ['Active', 'Active Contingent', 'Active Kick Out', 'Active Option Contract', 'Pending']
+      options.listing_statuses = [
+        'Active',
+        'Active Contingent',
+        'Active Kick Out',
+        'Active Option Contract',
+        'Pending'
+      ]
     }
     return options
   }
@@ -99,13 +130,14 @@ class Section extends Component {
   }
 
   triggerNextPage() {
-    this.props.getListing(
-      this.options,
-      {
-        ...this.widgetOptions,
-        queryString: this.generateQueryString(this.widgetOptions.queryString, 'offset', this.props.listings.length)
-      }
-    )
+    this.props.getListing(this.options, {
+      ...this.widgetOptions,
+      queryString: this.generateQueryString(
+        this.widgetOptions.queryString,
+        'offset',
+        this.props.listings.length
+      )
+    })
   }
 
   render() {
@@ -125,53 +157,53 @@ class Section extends Component {
           }}
         >
           <h1
-            style={S(`font-17 color-263445 mb-0${this.props.data.is_mobile ? ' ml-10 mr-10' : ''}`)}
-          >{this.props.title}</h1>
-          <span
-            style={S('h-1 bg-e2e2e2 w-80 m-20 inline-block')}
-          />
+            style={S(`font-50 color-263445 mb-0${this.props.data.is_mobile ? ' ml-10 mr-10' : ''}`)}
+          >
+            {this.props.title}
+          </h1>
+          <span style={S('h-1 bg-e2e2e2 w-80 m-20 inline-block')} />
         </div>
-        {this.props.listings && this.props.listings.map((listing, i) => (
-          <ListingCard
-            className="listing-card"
-            handleEmailSubmit={controller.action_bubble.handleEmailSubmit}
-            key={i}
-            data={this.props.data}
-            listing={listing}
-            handleCloseSignupForm={controller.action_bubble.handleCloseSignupForm}
-            handleListingClick={this.handleListingClick}
-            handleListingInquirySubmit={controller.action_bubble.handleListingInquirySubmit}
-            handleLoginClick={controller.action_bubble.handleLoginClick}
-            showIntercom={controller.action_bubble.showIntercom}
-          />
-        ))
-        }
-        <div
-          className="clearfix"
-        />
-        {
-          this.props.isFetching &&
+        {this.props.listings &&
+          this.props.listings.map((listing, i) =>
+            <ListingCard
+              className="listing-card"
+              handleEmailSubmit={controller.action_bubble.handleEmailSubmit}
+              key={i}
+              data={this.props.data}
+              listing={listing}
+              handleCloseSignupForm={
+                controller.action_bubble.handleCloseSignupForm
+              }
+              handleListingClick={this.handleListingClick}
+              handleListingInquirySubmit={
+                controller.action_bubble.handleListingInquirySubmit
+              }
+              handleLoginClick={controller.action_bubble.handleLoginClick}
+              showIntercom={controller.action_bubble.showIntercom}
+            />
+          )}
+        <div className="clearfix" />
+        {this.props.isFetching &&
           <div style={S('text-center')}>
             <Loading />
-          </div>
-        }
-        {Brand.color('primary') && showLoadMore &&
-        <div style={S('text-center')}>
-          <Button
-            onClick={this.triggerNextPage.bind(this, 'active')}
-            style={{
-              backgroundColor: `#${Brand.color('primary')}`,
-              borderColor: `#${Brand.color('primary')}`,
-              paddingLeft: '3em',
-              paddingRight: '3em',
-              fontSize: '1.2em'
-            }}
-            bsStyle="primary"
-          >
-            Load More
-          </Button>
-        </div>
-        }
+          </div>}
+        {Brand.color('primary') &&
+          showLoadMore &&
+          <div style={S('text-center')}>
+            <Button
+              onClick={this.triggerNextPage.bind(this, 'active')}
+              style={{
+                backgroundColor: `#${Brand.color('primary')}`,
+                borderColor: `#${Brand.color('primary')}`,
+                paddingLeft: '3em',
+                paddingRight: '3em',
+                fontSize: '1.2em'
+              }}
+              bsStyle="primary"
+            >
+              Load More
+            </Button>
+          </div>}
       </div>
     )
   }

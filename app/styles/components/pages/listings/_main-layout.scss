@@ -56,6 +56,10 @@ $header-height: 54px;
   @media screen and (min-width: 1920px) {
     width: $panel-width * 2.4;
   }
+  .is-widget & {
+    top: 0;
+    height: 100vh;
+  }
   .c-listings-panel--table & {
     @media screen and (min-width: 1024px) and (max-width: 1920px) {
       border-width: 0;

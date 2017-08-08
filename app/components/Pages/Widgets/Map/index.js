@@ -8,14 +8,7 @@ const MapWidget = () => {
   AppStore.data.is_widget = true
 
   return (
-    <div className="l-listings">
-      <header className="l-listings__header">
-        <BrandLogo
-          isWidget
-          data={AppStore.data}
-          styles={{ padding: '.9rem 2rem' }}
-        />
-      </header>
+    <div className="l-listings is-widget">
       <SearchMap isWidget />
     </div>
   )
