@@ -2,10 +2,9 @@ import _ from 'lodash'
 import S from 'shorti'
 import ReactDOM from 'react-dom'
 import Map from 'google-map-react'
-import React, { Component } from 'react'
+import React from 'react'
 import { browserHistory } from 'react-router'
 
-import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import lifecycle from 'recompose/lifecycle'
 import withState from 'recompose/withState'
@@ -806,7 +805,6 @@ const ListingDesktopView = ({
   let viewer_wrap_style = S(
     `absolute h-100p bg-fff t-0 l-0 z-10 ml-70 w-${viewer_width}`
   )
-  
   if (!user || data.is_widget) {
     viewer_wrap_style = {
       ...viewer_wrap_style,
@@ -1073,7 +1071,14 @@ export default compose(
   withState('galleryModalDirection', 'setGalleryModalDirection', ''),
   withState('galleryModalActiveIndex', 'setGalleryModalActiveIndex', 0),
   withHandlers({
-    hideModal: () => () => browserHistory.goBack()
+    hideModal: () => () => {
+      const currentLocation = browserHistory.getCurrentLocation()
+      if (currentLocation.key) {
+        browserHistory.goBack()
+      } else {
+        browserHistory.push('/dashboard/mls')
+      }
+    }
   }),
   withHandlers({
     onHideShareModal: ({ setShareModalIsActive }) => () => {
