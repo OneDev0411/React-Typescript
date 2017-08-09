@@ -42,11 +42,11 @@
       .sortable {
         cursor: pointer;
         &:hover {
-          color: #000;
+          color: #2196f3;
         }
 
         &.isActive {
-          color: #000;
+          color: #2196f3;
         }
       }
     }
@@ -68,6 +68,14 @@
         margin-right: 10px;
       }
     }
+
+    .item .status-bullet {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 16px;
+      margin-right: 9px;
+    }
   }
 }
 
@@ -77,16 +85,23 @@
   background-color: #f8fafb;
   box-shadow: 0 1px 0 0 #eef1f2;
   vertical-align: middle;
-  text-align: right;
   padding: 0 30px;
-  .btn {
-    width: 120px;
-    height: 30px;
-    line-height: 13px;
-    vertical-align: middle;
-    border-radius: 4px;
-    background-color: #2196f3;
-    margin-left: 10px;
+
+  ul.filter {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    li {
+      display: inline-block;
+      margin-right: 50px;
+      font-size: 21px;
+      color: #5b6469;
+      cursor: pointer;
+      &.active {
+        color: #2196f3;
+        border-bottom: 2px solid #2196f3;
+      }
+    }
   }
 
   input.search {
@@ -130,8 +145,13 @@
           margin-right: 5px;
           background: #d8d8d8;
         }
+        .name {
+          color: #78909c;
+          display: inline-block;
+          width: 120px;
+        }
         .field {
-          color: #9b9b9b;
+          color: #78909c;
           font-size: 12px;
         }
       }

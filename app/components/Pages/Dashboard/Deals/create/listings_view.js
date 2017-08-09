@@ -1,14 +1,15 @@
 import React from 'react'
 import _ from 'underscore'
+import { Row, Col } from 'react-bootstrap'
 import listingsHelper from '../../../../../utils/listing'
 
 export default ({
-  params,
+  type,
   listings,
   onPlaceSelect
 }) => {
 
-  if (params.type !== 'offer') {
+  if (type !== 'offer') {
     return false
   }
 
@@ -22,31 +23,37 @@ export default ({
         .map((item, key) => {
           const c = item.address_components
           return (
-            <div
+            <Row
               key={`PLACE_${key}`}
               className="item listing"
               onClick={() => onPlaceSelect(item)}
             >
-              <img
-                src={item.image || '/static/images/deals/home.svg'}
-                className="listing-image"
-              />
+              <Col md={2} sm={2} xs={2}>
+                <img
+                  src={item.image || '/static/images/deals/home.svg'}
+                  className="listing-image"
+                />
+              </Col>
 
-              <span
-                className="status"
-                style={{ backgroundColor: listingsHelper.getStatusColorClass(item.status) }}
-              >
-                { item.status }
-              </span>
+              <Col md={6} sm={6} xs={6}>
+                <span style={{ color: '#5b6469' }}>
+                  {c.street_number} {c.street_name} {c.street_suffix}
+                </span>
 
-              <div style={{ color: '#5b6469' }}>
-                {c.street_number} {c.street_name} {c.street_suffix}
-              </div>
+                <span className="addr">
+                  { c.city }, {c.state}, {c.postal_code}, ${item.price}
+                </span>
+              </Col>
 
-              <div style={{ color: '#a0a0a0' }}>
-                { c.city }, {c.state}, {c.postal_code}, ${item.price}
-              </div>
-            </div>
+              <Col md={4} sm={4} xs={4}>
+                <span
+                  className="status"
+                  style={{ backgroundColor: listingsHelper.getStatusColorClass(item.status) }}
+                >
+                  { item.status }
+                </span>
+              </Col>
+            </Row>
           )
         })
         .value()

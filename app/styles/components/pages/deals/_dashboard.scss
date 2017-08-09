@@ -1,6 +1,6 @@
 $col-padding: 20px;
 
-@mixin scrollbar($bg: transparent, $color: #ccc) {
+@mixin scrollbar() {
   ::-webkit-scrollbar {
     width: 14px;
     height: 18px;

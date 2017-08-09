@@ -10,5 +10,7 @@ export default ({
     <CriticalDates />
     <ListingInfo />
     <Commission />
+    <Commission />
+    <Commission />
   </div>
 )

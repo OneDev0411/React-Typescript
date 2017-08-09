@@ -1,16 +1,54 @@
 import React from 'react'
 import { browserHistory } from 'react-router'
-import { Button, Popover, OverlayTrigger } from 'react-bootstrap'
+import {
+  Row,
+  Col,
+  Tooltip,
+  Button,
+  Popover,
+  OverlayTrigger,
+  DropdownButton,
+  Dropdown,
+  MenuItem
+} from 'react-bootstrap'
 import _ from 'underscore'
 import cn from 'classnames'
 import CriticalDates from '../dashboard/factsheet/critical-dates'
 import Deal from '../../../../../models/Deal'
+import DealCreate from '../create'
+import { getStatusColorClass } from '../../../../../utils/listing'
 
 const SORT_ADDRESS = 'address'
 const SORT_STATUS = 'status'
 const SORT_PRICE = 'price'
 const SORT_SIDE = 'side'
 
+const FILTER_ACTIVE = ['Active']
+const FILTER_PENDING = [
+  'Active Contingent',
+  'Active Kick out',
+  'Active Option Contract',
+  'Pending'
+]
+const FILTER_ARCHIVE = [
+  'Sold',
+  'Temp Off Market',
+  'Expired',
+  'Cancelled',
+  'Withdrawn'
+]
+
+const filters = {
+  All: () => true,
+  Active: status => FILTER_ACTIVE.indexOf(status) > -1,
+  Pending: status => FILTER_PENDING.indexOf(status) > -1,
+  Archive: status => FILTER_ARCHIVE.indexOf(status) > -1
+}
+
+/*
+ * implement a new functionality for underscore that checks
+ * whether a list should update or not
+ */
 _.mixin({
   shouldReverse: function(obj, order) {
     return order === 'asc' ? obj.reverse() : obj
@@ -22,6 +60,7 @@ export default class extends React.Component {
     super(props)
 
     this.state = {
+      filterTab: 'All',
       searchFilter: '',
       sortBy: null,
       sortOrder: 'asc'
@@ -159,35 +198,96 @@ export default class extends React.Component {
     />
   }
 
+  /**
+   * get role names of deal for side column
+   */
+  getRoleNames(deal) {
+    const names = []
+
+    deal.roles && deal.roles.forEach(role =>
+      names.push(role.user.abbreviated_display_name)
+    )
+
+    return ': ' + names.join(', ')
+  }
+
+  /**
+   * get next date of critical dates
+   */
+  getNextDate(deal) {
+    return CriticalDates.getNextDate(deal)
+  }
+
+  /**
+   * get filter tab tooltip
+   */
+  getFilterTabTooltip(tab) {
+    let tooltip = []
+
+    switch (tab) {
+      case 'Pending':
+        tooltip = FILTER_PENDING
+        break
+      case 'Archive':
+        tooltip = FILTER_ARCHIVE
+        break
+      case 'Active':
+        tooltip = FILTER_ACTIVE
+        break
+      default:
+        tooltip = ['All']
+    }
+
+    return tooltip
+      .join(', ')
+      .replace(/,([^,]*)$/, ' and $1') + ' Listings'
+  }
+
   render() {
     const { deals } = this.props
-    const { searchFilter, sortBy, sortOrder } = this.state
+    const { searchFilter, sortBy, sortOrder, filterTab } = this.state
 
     return (
       <div className="deals-list">
 
-        <div className="heading">
-          <input
-            onChange={e => this.setState({ searchFilter: e.target.value })}
-            className="search"
-            type="text"
-            placeholder="Type in to search ..."
-          />
+        <Row className="heading">
+          <Col lg={6} md={5} sm={6} xs={12}>
+            <ul className="filter">
+              {
+                _.map(filters, (fn, filter) =>
+                  <OverlayTrigger
+                    key={`FILTER_${filter}`}
+                    placement="bottom"
+                    overlay={
+                      <Tooltip id={`TOOLTIP_${filter}`}>
+                        { this.getFilterTabTooltip(filter) }
+                      </Tooltip>
+                    }
+                  >
+                    <li
+                      className={filter === filterTab ? 'active' : ''}
+                      onClick={() => this.setState({ filterTab: filter })}
+                    >
+                      { filter }
+                    </li>
+                  </OverlayTrigger>
+                )
+              }
+            </ul>
+          </Col>
 
-          <Button
-            bsStyle="primary"
-            onClick={() => this.create('listing')}
-          >
-            New Listing
-          </Button>
+          <Col lg={6} md={7} sm={6} xs={12} className="text-right">
+            <input
+              onChange={e => this.setState({ searchFilter: e.target.value })}
+              className="search"
+              type="text"
+              placeholder="Type in to search ..."
+            />
 
-          <Button
-            bsStyle="primary"
-            onClick={() => this.create('offer')}
-          >
-            Make an Offer
-          </Button>
-        </div>
+            <DealCreate type="listing" />
+            <DealCreate type="offer" />
+          </Col>
+        </Row>
 
         <div className="table-container">
           <table className="table table-hover">
@@ -195,7 +295,7 @@ export default class extends React.Component {
               <tr className="header">
 
                 <td
-                  className={ cn('sortable', { isActive: sortBy === SORT_ADDRESS}) }
+                  className={ cn('col-md-4 sortable', { isActive: sortBy === SORT_ADDRESS}) }
                   onClick={() => this.setSort(SORT_ADDRESS)}
                 >
                   { this.getSorterCaret(SORT_ADDRESS) }
@@ -203,7 +303,7 @@ export default class extends React.Component {
                 </td>
 
                 <td
-                  className={ cn('sortable', { isActive: sortBy === SORT_STATUS}) }
+                  className={ cn('col-md-1 sortable', { isActive: sortBy === SORT_STATUS}) }
                   onClick={() => this.setSort(SORT_STATUS)}
                 >
                   { this.getSorterCaret(SORT_STATUS) }
@@ -211,27 +311,32 @@ export default class extends React.Component {
                 </td>
 
                 <td
-                  className={ cn('sortable', { isActive: sortBy === SORT_PRICE}) }
+                  className={ cn('col-md-1 sortable', { isActive: sortBy === SORT_PRICE}) }
                   onClick={() => this.setSort(SORT_PRICE)}
                 >
                   { this.getSorterCaret(SORT_PRICE) }
-                  PRICE
+                  PRICE $
                 </td>
 
                 <td
-                  className={ cn('sortable', { isActive: sortBy === SORT_SIDE}) }
+                  className={ cn('col-md-2 sortable', { isActive: sortBy === SORT_SIDE}) }
                   onClick={() => this.setSort(SORT_SIDE)}
                 >
                   { this.getSorterCaret(SORT_SIDE) }
                   SIDE
                 </td>
 
-                <td>NEXT DATES</td>
-                <td>OUTSTANDING</td>
+                <td className="col-md-2">NEXT DATES</td>
+                <td className="col-md-1">OUTSTANDING</td>
+                <td className="col-md-1"></td>
               </tr>
 
               {
                 _.chain(deals)
+                .filter(deal => {
+                  let fn = filters[this.state.filterTab]
+                  return fn(this.getStatus(deal))
+                })
                 .filter(deal => {
                   const address = Deal.get.address(deal) || ''
                   return address.toLowerCase().includes(searchFilter.toLowerCase())
@@ -244,14 +349,31 @@ export default class extends React.Component {
                     className="item"
                     onClick={e => this.onClickDeal(e, deal.id)}
                   >
-                    <td className="address">
+                    <td className="address col-md-4">
                       <img src={this.getListingPhoto(deal)} />
                       {this.getAddress(deal)}
                     </td>
-                    <td>{this.getStatus(deal)}</td>
-                    <td>{this.getFormattedNumber(this.getPrice(deal))}</td>
-                    <td>{this.getSide(deal)}</td>
-                    <td>
+
+                    <td className="col-md-1">
+                      <span
+                        className="status-bullet"
+                        style={{ background: getStatusColorClass(this.getStatus(deal)) }}
+                      />
+                      {this.getStatus(deal)}
+                    </td>
+
+                    <td className="col-md-1">
+                      {this.getFormattedNumber(this.getPrice(deal))}
+                    </td>
+
+                    <td className="col-md-2">
+                      {this.getSide(deal)}
+                      <span style={{ color: '#9b9b9b' }}>
+                        { this.getRoleNames(deal) }
+                      </span>
+                    </td>
+
+                    <td className="col-md-2">
                       <OverlayTrigger
                         trigger={['hover', 'focus']}
                         placement="bottom"
@@ -264,12 +386,12 @@ export default class extends React.Component {
                           </Popover>
                         }
                       >
-                        <span>[HOVER ME]</span>
+                        <span>{ this.getNextDate(deal) }</span>
                       </OverlayTrigger>
                     </td>
 
-                    <td>0</td>
-                    <td></td>
+                    <td className="col-md-1">0</td>
+                    <td className="col-md-1"></td>
                   </tr>
                 ))
                 .reverse(sortOrder === 'desc')

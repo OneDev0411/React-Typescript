@@ -10,7 +10,8 @@ const Checklist = ({
 }) => (
   <div className="tasks-container">
     {
-      deal && deal.checklists
+      (deal && deal.checklists) &&
+      deal.checklists
       .map(id =>
         <List
           key={id}

@@ -15,18 +15,22 @@ const table = {
   a10: 'Possession',
 }
 
-export default ({
+function temporaryRandomDate() {
+  return moment().format('MMMM DD, YYYY')
+}
+
+const CriticalDates = ({
   deal
 }) => (
   <div className="critical-dates">
     <ul>
       {
         _.map(table, (name, field) => {
-          const time = moment().format('MMMM DD, YYYY')
+          const time = temporaryRandomDate()
           return (
             <li key={`CRITICAL_FIELD_${field}`}>
               <span className="status"></span>
-              { name }:&nbsp;
+              <span className="name">{ name }: </span>
               <span className="field">{ time }</span>
             </li>
           )
@@ -35,3 +39,9 @@ export default ({
     </ul>
   </div>
 )
+
+CriticalDates.getNextDate = function(deal) {
+  return moment().format('MMMM DD, YYYY')
+}
+
+export default CriticalDates

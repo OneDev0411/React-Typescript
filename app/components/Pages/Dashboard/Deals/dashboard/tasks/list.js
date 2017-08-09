@@ -38,7 +38,7 @@ const List = ({
                 </div>
 
                 <span className="status">
-                  { task.review ? task.review.status : 'Incomplete' }
+                  { task.review ? task.review.status : 'New' }
                 </span>
               </div>
             )

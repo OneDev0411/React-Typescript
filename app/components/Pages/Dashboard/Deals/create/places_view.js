@@ -12,14 +12,6 @@ export default ({
 
   return (
     <div>
-      <p>
-        <span className="title">Places</span>
-        <img
-          src="/static/images/deals/google.png"
-          style={{ height: '20px', float: 'right' }}
-        />
-      </p>
-
       {
         _.map(places, (item, key) => (
           <div
@@ -28,6 +20,7 @@ export default ({
             onClick={() => onPlaceSelect(item)}
           >
             { item.full_address }
+            <span className="select">Select</span>
           </div>
         ))
       }
