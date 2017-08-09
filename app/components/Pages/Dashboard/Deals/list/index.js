@@ -293,37 +293,36 @@ export default class extends React.Component {
           <table className="table table-hover">
             <tbody>
               <tr className="header">
-
                 <td
                   className={ cn('col-md-3 sortable', { isActive: sortBy === SORT_ADDRESS}) }
                   onClick={() => this.setSort(SORT_ADDRESS)}
                 >
-                  { this.getSorterCaret(SORT_ADDRESS) }
                   ADDRESS
+                  { this.getSorterCaret(SORT_ADDRESS) }
                 </td>
 
                 <td
                   className={ cn('col-md-2 sortable', { isActive: sortBy === SORT_STATUS}) }
                   onClick={() => this.setSort(SORT_STATUS)}
                 >
-                  { this.getSorterCaret(SORT_STATUS) }
                   STATUS
+                  { this.getSorterCaret(SORT_STATUS) }
                 </td>
 
                 <td
                   className={ cn('col-md-1 sortable', { isActive: sortBy === SORT_PRICE}) }
                   onClick={() => this.setSort(SORT_PRICE)}
                 >
-                  { this.getSorterCaret(SORT_PRICE) }
                   PRICE $
+                  { this.getSorterCaret(SORT_PRICE) }
                 </td>
 
                 <td
                   className={ cn('col-md-2 sortable', { isActive: sortBy === SORT_SIDE}) }
                   onClick={() => this.setSort(SORT_SIDE)}
                 >
-                  { this.getSorterCaret(SORT_SIDE) }
                   SIDE
+                  { this.getSorterCaret(SORT_SIDE) }
                 </td>
 
                 <td className="col-md-2">NEXT DATES</td>
