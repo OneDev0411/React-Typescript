@@ -1,20 +1,32 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import { Grid, Row, Col, Button, FormControl, Modal } from 'react-bootstrap'
+import {
+  Grid,
+  Row,
+  Col,
+  Button,
+  Modal
+} from 'react-bootstrap'
 import _ from 'underscore'
-
 import Deal from '../../../../../models/Deal'
 import listingsHelper from '../../../../../utils/listing'
-import CreateModal from './modal'
+import AddressComponents from './address_components'
 import PlacesView from './places_view'
 import ListingsView from './listings_view'
+import DealButton from './button'
+import SearchInput from './search_input'
 import { createDeal } from '../../../../../store_actions/deals'
 
-export default class DealCreate extends React.Component {
+class DealCreate extends React.Component {
 
   constructor(props) {
     super(props)
     this.state = {
+      showModal: false,
+      saving: false,
+      showAddressComponents: false,
+      option: null,
       address: '',
       selected: null,
       listings: {},
@@ -23,19 +35,6 @@ export default class DealCreate extends React.Component {
     }
   }
 
-  async componentDidMount() {
-    const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
-    const { Observable } = Rx
-
-    this.searchHandler = Observable
-      .fromEvent(this.search_input, 'keypress')
-      .debounceTime(1200)
-      .subscribe((e) => this.search(e.target.value))
-  }
-
-  componentWillUnmount() {
-    this.searchHandler.unsubscribe()
-  }
 
   /**
    * triggers when user types address
@@ -57,7 +56,7 @@ export default class DealCreate extends React.Component {
       return false
     }
 
-    const type = this.props.params.type
+    const { type } = this.props
     let listings
     let places
 
@@ -80,14 +79,12 @@ export default class DealCreate extends React.Component {
       // hide loading
       this.setState({
         listings,
-        places,
-        searching: false
+        places
       })
     }
-    catch(e) {
-      this.setState({ searching: false })
-      return
-    }
+    catch(e) {}
+
+    this.setState({ searching: false })
   }
 
   /**
@@ -128,75 +125,165 @@ export default class DealCreate extends React.Component {
   onPlaceSelect(item) {
     this.setState({
       selected: item,
-      address: item.full_address
+      address: item.full_address,
+      showAddressComponents: !item.isListing
+    })
+
+    if (item.isListing) {
+      const side = this.props.type === 'offer' ? 'Buying' : 'Selling'
+      const data = {
+        context: {
+          deal_type: side
+        },
+        listing: item.id
+      }
+
+      return this.saveDeal(data)
+    }
+  }
+
+  createListing() {
+    const { type } = this.props
+    const { street_number, street_address, unit_number, city, state, zipcode } = this.state
+
+    const side = this.props.type === 'offer' ? 'Buying' : 'Selling'
+
+    // create full address
+    let full_address = [
+      street_number,
+      street_address,
+      city,
+      state,
+      zipcode
+    ].join(' ')
+
+    const data = {
+      context: {
+      deal_type: side,
+        full_address,
+        street_number,
+        street_address,
+        unit_number,
+        city,
+        state,
+        zipcode
+      }
+    }
+
+    this.saveDeal(data)
+  }
+
+  async saveDeal(data) {
+    const { createDeal } = this.props
+
+    // show loading
+    this.setState({ saving: true })
+
+    // create deal
+    const deal = await createDeal(data)
+
+    // hide loading
+    this.setState({ saving: false })
+
+    // navigate to the deal
+    browserHistory.push(`/dashboard/deal/${deal.id}`)
+  }
+
+  onClickOption(type, item) {
+    this.setState({
+      showModal: true
     })
   }
 
   render() {
-    const { params } = this.props
-    const { address, listings, places, searching, selected } = this.state
+    const { type, user } = this.props
+    const {
+      showModal,
+      saving,
+      address,
+      listings,
+      places,
+      searching,
+      selected,
+      showAddressComponents
+    } = this.state
 
     return (
       <div className="deal-create">
-        <span className="title">
-          { params.type === 'listing' ? 'New listing' : 'Make an offer' }
-        </span>
-
-        <FormControl
-          className="address"
-          value={address}
-          onChange={(e) => this.onChangeAddress(e)}
-          inputRef={ref => this.search_input = ref}
-          placeholder={
-            params.type === 'listing' ?
-            'Enter full listing address' :
-            'Enter full listing’s address or MLS #'
-          }
+        <DealButton
+          onClickOption={(type, item) => this.onClickOption(type, item)}
+          type={type}
         />
 
-        {
-          address.length > 0 &&
-          <div className="places">
-            <div>
-              <img src="/static/images/deals/home.svg" />
-              <span className="address">“{ address }”</span>
+        <Modal
+          show={showModal}
+          dialogClassName="modal-create-deal"
+          onHide={() => this.setState({ showModal: false })}
+        >
 
-              <CreateModal
-                type={params.type}
-                side={params.type === 'offer' ? 'Buying' : 'Selling'}
-                user={this.props.user}
-                address={address}
-                item={selected || {}}
-              />
-            </div>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              Type the address of the listing
+            </Modal.Title>
+          </Modal.Header>
 
-            <div className="help">
-              Don’t see your listing? Create it as a Hip Pocket.
-            </div>
+          <Modal.Body>
+            <SearchInput
+              value={address}
+              onChange={e => this.onChangeAddress(e)}
+              subscribe={value => this.search(value)}
+            />
 
-            <div className="hr" style={{ width: '100%' }}></div>
+            <Button
+              className="btn-create"
+              bsStyle="primary"
+              onClick={() => this.showCreateModal()}
+              disabled={saving}
+            >
+              { saving ? 'Creating...' : 'Create' }
+            </Button>
 
-            <div className="list">
+            <AddressComponents
+              onClickSave={() => this.createListing()}
+              onHide={() => this.setState({ showAddressComponents: false })}
+              saving={saving}
+              show={showAddressComponents}
+              address={address}
+              item={selected || {}}
+            />
 
-              {
-                searching &&
-                <i className="fa fa-spinner fa-spin fa-fw loader"></i>
-              }
+            {
+              address.length > 0 &&
+              <div className="places">
 
-              <ListingsView
-                params={params}
-                listings={listings}
-                onPlaceSelect={(item) => this.onPlaceSelect(item)}
-              />
+                <div className="list">
 
-              <PlacesView
-                places={places}
-                onPlaceSelect={(item) => this.onPlaceSelect(item)}
-              />
-            </div>
-          </div>
-        }
+                  {
+                    searching &&
+                    <i className="fa fa-spinner fa-spin fa-fw loader"></i>
+                  }
+
+                  <ListingsView
+                    type={type}
+                    listings={listings}
+                    onPlaceSelect={(item) => this.onPlaceSelect(item)}
+                  />
+
+                  <PlacesView
+                    places={places}
+                    onPlaceSelect={(item) => this.onPlaceSelect(item)}
+                  />
+                </div>
+              </div>
+            }
+          </Modal.Body>
+        </Modal>
+
       </div>
     )
   }
 }
+
+export default connect(({data}) => ({
+  user: data.user
+}), { createDeal })(DealCreate)

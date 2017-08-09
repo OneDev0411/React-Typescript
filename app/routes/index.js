@@ -79,10 +79,6 @@ const AsyncDealsList = Load({
   loader: () => import('../components/Pages/Dashboard/Deals/list' /* webpackChunkName: "deal_l" */)
 })
 
-const AsyncDealCreate = Load({
-  loader: () => import('../components/Pages/Dashboard/Deals/create' /* webpackChunkName: "deal_c" */)
-})
-
 const AsyncDealDashboard = Load({
   loader: () => import('../components/Pages/Dashboard/Deals/dashboard' /* webpackChunkName: "deal_d" */)
 })
@@ -232,7 +228,6 @@ export default (
       <Route path="/dashboard/deals" component={AsyncDealsLayout}>
         <IndexRoute component={AsyncDealsList} />
         <Route path="/dashboard/deal/:id" component={AsyncDealDashboard} />
-        <Route path="/dashboard/deal/create/:type" component={AsyncDealCreate} />
       </Route>
 
       <Route path="/dashboard/contacts" component={AsyncContacts}>
