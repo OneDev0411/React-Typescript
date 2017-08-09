@@ -295,7 +295,7 @@ export default class extends React.Component {
               <tr className="header">
 
                 <td
-                  className={ cn('col-md-4 sortable', { isActive: sortBy === SORT_ADDRESS}) }
+                  className={ cn('col-md-3 sortable', { isActive: sortBy === SORT_ADDRESS}) }
                   onClick={() => this.setSort(SORT_ADDRESS)}
                 >
                   { this.getSorterCaret(SORT_ADDRESS) }
@@ -303,7 +303,7 @@ export default class extends React.Component {
                 </td>
 
                 <td
-                  className={ cn('col-md-1 sortable', { isActive: sortBy === SORT_STATUS}) }
+                  className={ cn('col-md-2 sortable', { isActive: sortBy === SORT_STATUS}) }
                   onClick={() => this.setSort(SORT_STATUS)}
                 >
                   { this.getSorterCaret(SORT_STATUS) }
@@ -349,12 +349,12 @@ export default class extends React.Component {
                     className="item"
                     onClick={e => this.onClickDeal(e, deal.id)}
                   >
-                    <td className="address col-md-4">
+                    <td className="address col-md-3">
                       <img src={this.getListingPhoto(deal)} />
                       {this.getAddress(deal)}
                     </td>
 
-                    <td className="col-md-1">
+                    <td className="col-md-2">
                       <span
                         className="status-bullet"
                         style={{ background: getStatusColorClass(this.getStatus(deal)) }}
