@@ -5,10 +5,19 @@ export default (state = null, action) => {
     case types.GET_TASKS:
       return action.tasks
 
-    case types.CREATE_TASK:
+    case types.IS_UPLOADING:
       return {
         ...state,
-        [action.task.id]: action.task
+        [action.taskId]: {
+          ...state[action.taskId],
+          ...{ uploading: action.status }
+        }
+      }
+
+    case types.CREATE_TASK:
+      return {
+        [action.task.id]: action.task,
+        ...state
       }
 
     case types.UPDATE_SUBMISSION:
@@ -17,6 +26,20 @@ export default (state = null, action) => {
         [action.taskId]: {
           ...state[action.taskId],
           ...{ submission: action.submission }
+        }
+      }
+
+    case types.CHANGE_TASK_STATUS:
+      return {
+        ...state,
+        [action.taskId]: {
+          ...state[action.taskId],
+          ...{
+            review: {
+              ...state[action.taskId].review,
+              ...{status: action.status}
+            }
+          }
         }
       }
 
