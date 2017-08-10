@@ -29,6 +29,23 @@
       line-height: 20px;
       vertical-align: middle;
 
+      .name {
+        color: #78909c;
+        display: inline-block;
+        width: 65%;
+
+        &.no-status {
+          width: 70%;
+        }
+      }
+
+      .field {
+        color: #78909c;
+        text-align: right;
+        display: inline-block;
+        width: 29%;
+      }
+
       .status {
         display: inline-block;
         line-height: inherit;
@@ -36,7 +53,7 @@
         margin-right: 5px;
         width: 10px;
         height: 10px;
-        background: #78909c;
+        background: #f6a623;
         border-radius: 40px;
       }
     }

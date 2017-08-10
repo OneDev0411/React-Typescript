@@ -1,8 +1,8 @@
 %deal-tasks {
   background: #fbfbfb;
-
   .tasks-container {
     padding: $col-padding !important;
+    min-height: 100vh;
     max-height: 100vh;
     overflow: auto;
 
@@ -37,12 +37,12 @@
     float: right;
     min-width: 90px;
     height: 24px;
-    line-height: 10px;
+    line-height: 8px;
     vertical-align: middle;
     border-radius: 3px;
     background-color: #ffffff;
     box-shadow: 0 1px 1px 0 #eef1f2;
-    border: solid 1px #f4f7f9;
+    border: solid 1px #eef1f2;
     color: #78909c;
     &:focus {
       outline: none;
@@ -58,12 +58,14 @@
 
   .list > .task {
     position: relative;
-    padding: 6px 8px;
+    padding: 0 11px;
     background-color: #fff;
-    margin-bottom: 2px;
+    height: 56px;
+    line-height: 56px;
     vertical-align: middle;
     cursor: pointer;
-    transition: background-color 0.2s ease-in;
+    transition: background-color 0.1s ease-in;
+    border-bottom: 1px solid #eef1f2;
 
     &.active {
       background: #eff5fa;
@@ -86,24 +88,33 @@
       color: #5b6469;
     }
 
-    .description {
-      font-size: 14px;
-      color: #78909c;
-    }
-
     .status {
       position: absolute;
-      display: block;
-      right: 10px;
+      display: inline-block;
+      right: 12px;
       top: 50%;
       transform: translateY(-50%);
-      padding: 3px 0;
       border-radius: 3px;
-      width: 65px;
+      height: 18px;
+      line-height: 18px;
+      min-width: 76px;
       background: #35b863;
       color: #fff;
       font-size: 11px;
       text-align: center;
+      &.Incomplete {
+        color: #78909c;
+        border: solid 1px #78909c;
+        background-color: transparent;
+      }
+
+      &.Pending {
+        background-color: #f6a623;
+      }
+
+      &.Rejected {
+        background-color: #d0011b;
+      }
     }
   }
 }

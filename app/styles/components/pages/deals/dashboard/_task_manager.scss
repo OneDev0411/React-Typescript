@@ -1,6 +1,6 @@
 %deal-task-manager {
   border: 2px solid #eff5fa;
-  margin: 20px $col-padding 20px 0;
+  margin: 55px $col-padding 20px 0;
   background-color: #fff;
   .heading {
     @extend %deal-task-manager-heading;
@@ -14,13 +14,13 @@
 %deal-task-manager-heading {
   width: 100%;
   height: 58px;
-  padding: 0 $col-padding;
+  padding: 0 $col-padding 0 $col-padding;
   line-height: 58px;
   vertical-align: middle;
   border-radius: 3px 3px 0 0;
   background-color: #eff5fa;
   box-shadow: 0 1px 0 0 #e7eef0;
-  font-size: 17px;
+  font-size: 21px;
   color: #5b6469;
 
   .task-btn {
@@ -44,7 +44,15 @@
 
   .btn-submit {
     margin-right: 10px;
-    width: 70px;
+    min-width: 70px;
     font-size: 15px;
+    cursor: pointer;
+    &:hover {
+      color: #2196f3;
+    }
+    &.saving {
+      cursor: auto;
+      color: #78909c;
+    }
   }
 }
