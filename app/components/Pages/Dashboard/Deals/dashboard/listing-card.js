@@ -1,19 +1,8 @@
 import React from 'react'
 import _ from 'underscore'
+import { browserHistory } from 'react-router'
 import Deal from '../../../../../models/Deal'
 
-/**
- * get listing photo
- */
-function getImage(deal) {
-  const photo = Deal.get.field(deal, 'photo')
-
-  if (!photo) {
-   return false
-  }
-
-  return <img src={photo} />
-}
 
 /**
  * get listing formatted address
@@ -28,21 +17,53 @@ function getListingAddress(deal) {
   .join(', ')
 }
 
+function goBack() {
+  browserHistory.push('/dashboard/deals')
+}
+
 export default ({
   deal
-}) => (
-  <div className="listing-card">
-    { getImage(deal) }
+}) => {
+  const status = Deal.get.field(deal, 'listing_status')
+  const photo = Deal.get.field(deal, 'photo')
 
-    <div className="data">
-      <div className="status">
-        { Deal.get.field(deal, 'listing_status') }
+  return (
+    <div className="listing-card">
+      <div className="back" onClick={() => goBack()}>
+        <i className="fa fa-angle-left fa-3x" />
       </div>
 
-      <div className="title">
-        { Deal.get.field(deal, 'street_address') }
+      {
+        photo &&
+        <img src={photo} />
+      }
+
+      {
+        !photo &&
+        <img
+          className="placeholder"
+          src="/static/images/deals/group-146.svg"
+        />
+      }
+
+      <div className="data">
+
+        {
+          status &&
+          <span className="listing-status">
+            { status }
+          </span>
+        }
+
+        <div className="title">
+          { Deal.get.field(deal, 'street_address') }
+        </div>
+
+        <div className="addr">
+          { getListingAddress(deal) }
+        </div>
       </div>
+
     </div>
-
-  </div>
-)
+  )
+}
