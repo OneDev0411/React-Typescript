@@ -97,6 +97,15 @@
       font-size: 21px;
       color: #5b6469;
       cursor: pointer;
+
+      @media (min-width: 548px) and (max-width: 1173px) {
+        font-size: 17px;
+      }
+
+      @media (max-width: 548px) {
+        font-size: 16px;
+      }
+
       &.active {
         color: #2196f3;
         border-bottom: 2px solid #2196f3;
@@ -111,6 +120,11 @@
     background-color: #ffffff;
     border: solid 1px #eef0f2;
     padding: 0 10px;
+
+    @media (max-width: 548px) {
+      width: 100%;
+    }
+
     &:focus {
       outline: none;
     }

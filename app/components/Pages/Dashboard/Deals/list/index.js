@@ -302,7 +302,7 @@ export default class extends React.Component {
                 </td>
 
                 <td
-                  className={ cn('col-md-2 sortable', { isActive: sortBy === SORT_STATUS}) }
+                  className={ cn('col-md-2 hidden-xs sortable', { isActive: sortBy === SORT_STATUS}) }
                   onClick={() => this.setSort(SORT_STATUS)}
                 >
                   STATUS
@@ -310,7 +310,7 @@ export default class extends React.Component {
                 </td>
 
                 <td
-                  className={ cn('col-md-1 sortable', { isActive: sortBy === SORT_PRICE}) }
+                  className={ cn('col-md-1 hidden-xs sortable', { isActive: sortBy === SORT_PRICE}) }
                   onClick={() => this.setSort(SORT_PRICE)}
                 >
                   PRICE $
@@ -318,16 +318,16 @@ export default class extends React.Component {
                 </td>
 
                 <td
-                  className={ cn('col-md-2 sortable', { isActive: sortBy === SORT_SIDE}) }
+                  className={ cn('col-md-2 hidden-sm hidden-xs sortable', { isActive: sortBy === SORT_SIDE}) }
                   onClick={() => this.setSort(SORT_SIDE)}
                 >
                   SIDE
                   { this.getSorterCaret(SORT_SIDE) }
                 </td>
 
-                <td className="col-md-2">NEXT DATES</td>
-                <td className="col-md-1">OUTSTANDING</td>
-                <td className="col-md-1"></td>
+                <td className="col-md-2 hidden-sm hidden-xs">NEXT DATES</td>
+                <td className="col-md-1 hidden-sm hidden-xs">OUTSTANDING</td>
+                <td className="col-md-1 hidden-sm hidden-xs"></td>
               </tr>
 
               {
@@ -353,7 +353,7 @@ export default class extends React.Component {
                       {this.getAddress(deal)}
                     </td>
 
-                    <td className="col-md-2">
+                    <td className="col-md-2 hidden-xs">
                       <span
                         className="status-bullet"
                         style={{ background: getStatusColorClass(this.getStatus(deal)) }}
@@ -361,18 +361,18 @@ export default class extends React.Component {
                       {this.getStatus(deal)}
                     </td>
 
-                    <td className="col-md-1">
+                    <td className="col-md-1 hidden-xs">
                       {this.getFormattedNumber(this.getPrice(deal))}
                     </td>
 
-                    <td className="col-md-2">
+                    <td className="col-md-2 hidden-sm hidden-xs">
                       {this.getSide(deal)}
                       <span style={{ color: '#9b9b9b' }}>
                         { this.getRoleNames(deal) }
                       </span>
                     </td>
 
-                    <td className="col-md-2">
+                    <td className="col-md-2 hidden-sm hidden-xs">
                       <OverlayTrigger
                         trigger={['hover', 'focus']}
                         placement="bottom"
@@ -389,8 +389,8 @@ export default class extends React.Component {
                       </OverlayTrigger>
                     </td>
 
-                    <td className="col-md-1">0</td>
-                    <td className="col-md-1"></td>
+                    <td className="col-md-1 hidden-sm hidden-xs">0</td>
+                    <td className="col-md-1 hidden-sm hidden-xs"></td>
                   </tr>
                 ))
                 .reverse(sortOrder === 'desc')
