@@ -23,6 +23,7 @@ const List = ({
 
       <div className="list">
         {
+          section.tasks &&
           section.tasks
           .map((id, key) => {
             const task = tasks[id]
