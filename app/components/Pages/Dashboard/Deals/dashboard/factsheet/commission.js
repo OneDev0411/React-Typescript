@@ -16,8 +16,8 @@ export default ({
       {
         _.map(table, (name, field) => (
           <li key={`COMMISSION_FIELD_${field}`}>
-            { name }:&nbsp;
-            <span className="field"> --- </span>
+            <span className="name no-status">{ name }:</span>
+            <span className="field">-</span>
           </li>
         ))
       }

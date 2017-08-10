@@ -15,10 +15,6 @@ const table = {
   a10: 'Possession',
 }
 
-function temporaryRandomDate() {
-  return moment().format('MMMM DD, YYYY')
-}
-
 const CriticalDates = ({
   deal
 }) => (
@@ -26,12 +22,11 @@ const CriticalDates = ({
     <ul>
       {
         _.map(table, (name, field) => {
-          const time = temporaryRandomDate()
           return (
             <li key={`CRITICAL_FIELD_${field}`}>
               <span className="status"></span>
               <span className="name">{ name }: </span>
-              <span className="field">{ time }</span>
+              <span className="field">-</span>
             </li>
           )
         })
