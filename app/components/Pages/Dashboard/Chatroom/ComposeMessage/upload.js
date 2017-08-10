@@ -200,7 +200,7 @@ export default class Upload extends React.Component {
           }
 
           {
-            children ? children : <i className="fa fa-plus" aria-hidden="true" />
+            children || <i className="fa fa-plus" aria-hidden="true" />
           }
         </Dropzone>
       </div>
