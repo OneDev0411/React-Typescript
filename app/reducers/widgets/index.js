@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux'
 import listings from './listings'
+import isWidget from './isWidget'
 
 const widgets = combineReducers({
-  listings
+  listings,
+  isWidget
 })
 
 export default widgets

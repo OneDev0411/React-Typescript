@@ -1,17 +1,30 @@
-import React from 'react'
+import { connect } from 'react-redux'
+import React, { Component } from 'react'
 import AppStore from '../../../../stores/AppStore'
 
 import SearchMap from '../../Dashboard/Listings/Search'
-import BrandLogo from '../../Dashboard/Listings/Listing/components/BrandLogo'
+import isWidget from '../../../../store_actions/widgets/isWidget'
 
-const MapWidget = () => {
-  AppStore.data.is_widget = true
+class MapWidget extends Component {
 
-  return (
-    <div className="l-listings is-widget">
-      <SearchMap isWidget />
-    </div>
-  )
+  componentWillMount() {
+    AppStore.data.is_widget = true
+    this.props.isWidget()
+  }
+
+
+  render() {
+    return (
+      <div className="l-listings is-widget">
+        <SearchMap
+          isWidget
+        />
+      </div>
+    )
+  }
 }
 
-export default MapWidget
+export default connect(
+  null,
+  { isWidget }
+)(MapWidget)
