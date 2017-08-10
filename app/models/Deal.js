@@ -114,6 +114,7 @@ Deal.create = async function (data) {
 
     return response.body.data
   } catch (e) {
+    console.log(e)
     throw e
   }
 }
@@ -164,6 +165,42 @@ Deal.createTask = async function (deal_id, form, title, status, task_type, check
     return response.body.data
   } catch (e) {
     throw e
+  }
+}
+
+/**
+* submit a task for review
+*/
+Deal.submitForReview = async function(task_id) {
+  try {
+    await new Fetch()
+      .put(`/tasks/${task_id}/review`)
+      .send({ status: 'Pending' })
+
+    await new Fetch()
+      .patch(`/tasks/${task_id}/needs_attention`)
+      .send({ needs_attention: true })
+
+  } catch (e) {
+    return false
+  }
+}
+
+/**
+* cancel a task for review
+*/
+Deal.cancelTaskReview = async function(task_id) {
+  try {
+    await new Fetch()
+      .put(`/tasks/${task_id}/review`)
+      .send({ status: 'New' })
+
+    await new Fetch()
+      .patch(`/tasks/${task_id}/needs_attention`)
+      .send({ needs_attention: false })
+
+  } catch (e) {
+    return false
   }
 }
 
