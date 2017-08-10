@@ -36,8 +36,7 @@ function addNewDeal(deal) {
 export function getDeals(user) {
   return async (dispatch) => {
     const data = await Deals.getAll(user)
-
-    const { entities } = normalize(data, schema.deal)
+    const { entities } = normalize(data, schema.dealsSchema)
     const { deals, checklists, tasks } = entities
 
     batchActions([
@@ -52,8 +51,14 @@ export function getDeals(user) {
 export function createDeal(data) {
   return async (dispatch) => {
     const deal = await Deals.create(data)
-    // dispatch
-    dispatch(addNewDeal(deal))
+    const { entities } = normalize(deal, schema.dealSchema)
+    const { deals, checklists, tasks } = entities
+
+    batchActions([
+      dispatch(addNewDeal(deals[deal.id])),
+      dispatch(setChecklists(checklists)),
+      dispatch(setTasks(tasks))
+    ])
 
     return deal
   }
