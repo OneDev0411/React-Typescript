@@ -11,8 +11,8 @@ export default (state = null, action) => {
         [action.list_id]: {
           ...state[action.list_id],
           tasks: [
-            ...state[action.list_id].tasks || [],
-            action.task.id
+            action.task.id,
+            ...state[action.list_id].tasks || []
           ]
         }
       }
