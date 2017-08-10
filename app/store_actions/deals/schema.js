@@ -6,8 +6,9 @@ const checklists = new schema.Entity('checklists', {
   tasks: [tasks]
 })
 
-export const deals = new schema.Entity('deals', {
+export const deal = new schema.Entity('deals', {
   checklists: [checklists]
 })
 
-export const deal = [deals]
+export const dealsSchema = [deal]
+export const dealSchema = deal
