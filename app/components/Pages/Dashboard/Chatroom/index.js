@@ -1,31 +1,31 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Grid, Row, Col } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
 import Rooms from './Rooms'
 import Messages from './Messages'
 import ChatNotification from './Services/notification'
-import { getRooms, changeActiveRoom } from '../../../../store_actions/chatroom'
+import { changeActiveRoom } from '../../../../store_actions/chatroom'
 import store from '../../../../stores'
 
 // set rooms container width
 const roomsWidth = '330px'
 
 class Chatroom extends React.Component {
-  static fetchData(dispatch, params) {
-    const { user } = params
-    return dispatch(getRooms(user))
-  }
 
   componentWillMount() {
     const { activeRoom, params } = this.props
     const { rooms } = store.getState().chatroom
 
-    if (!(params && params.roomId) && !activeRoom && _.size(rooms) > 0)
+    if (params && params.roomId)
+      return this.changeRoom(params.roomId)
+
+    if (!activeRoom && _.size(rooms) > 0)
       return this.changeRoom(rooms[_.keys(rooms)[0]].id)
   }
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps, nextState) {
     const { activeRoom, location, isInstant, instantMode } = this.props
 
     // when user switch from popup to full screen (= instant) chat
@@ -48,13 +48,8 @@ class Chatroom extends React.Component {
       (nextProps.location.query.redirect !== undefined || location.key !== nextProps.location.key)
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { activeRoom, params, rooms } = nextProps
-    if (params && params.roomId && params.roomId !== activeRoom && _.size(rooms) > 0)
-      return this.changeRoom(params.roomId)
-  }
   changeRoom(id) {
-    const { instantMode, changeActiveRoom, activeRoom } = this.props
+    const { instantMode, changeActiveRoom, activeRoom, location } = this.props
 
     if (id !== activeRoom) {
       changeActiveRoom(id)
@@ -64,7 +59,7 @@ class Chatroom extends React.Component {
     }
 
     // don't change url on instant mode
-    if (!instantMode) {
+    if (location && !instantMode) {
       browserHistory.push(`/dashboard/recents/${id}`)
     }
   }
@@ -107,7 +102,7 @@ class Chatroom extends React.Component {
           <Messages
             user={user}
             roomId={activeRoom}
-            showToolbar
+            showToolbar={true}
             isInstantChat={isInstant}
           />
         </div>
@@ -118,6 +113,5 @@ class Chatroom extends React.Component {
 
 export default connect(({ chatroom }) => ({
   instantMode: chatroom.instantMode,
-  activeRoom: chatroom.activeRoom,
-  rooms: chatroom.rooms
+  activeRoom: chatroom.activeRoom
 }), ({ changeActiveRoom }))(Chatroom)

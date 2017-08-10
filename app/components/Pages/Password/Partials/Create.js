@@ -324,7 +324,7 @@ export default class Create extends Component {
               bsSize="large"
               type="submit"
               className={`${disabled_class + submitting_class}btn`}
-              disabled={is_disabled ? 'true' : ''}
+              disabled={is_disabled}
               style={S(`border-none color-fff w-100p bg-${Brand.color('primary', '3388ff')}`)}
             >
               { submitting ? 'Submitting...' : 'Continue' }

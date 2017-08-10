@@ -1083,7 +1083,7 @@ export default class Mls extends Component {
     let content_area = <MlsMap data={data} />
 
     // Show search
-    if (data.listing_panel && data.listing_panel.size) {
+    if (!data.is_mobile && data.listing_panel && data.listing_panel.size) {
       let panel_width = 425
 
       if (data.listing_panel.view === 'list') {
@@ -1098,7 +1098,7 @@ export default class Mls extends Component {
       }
 
       content_area = (
-        <div style={S(`absolute h-100p w-${map_width}`)}>
+        <div style={S(`absolute h-100p w-100p w-${map_width}`)}>
           { content_area }
         </div>
       )
@@ -1267,16 +1267,16 @@ export default class Mls extends Component {
 
         </div>
 
-        { listing_viewer }
+        { !data.is_mobile && listing_viewer }
 
-        <ListingPanel
+        { !data.is_mobile && <ListingPanel
           data={data}
           sortListings={controller.listing_panel.sortListings}
           setActiveListing={controller.listing_map.setActiveListing}
           showListingViewer={controller.listing_viewer.showListingViewer}
           toggleListingPanel={controller.listing_panel.toggleListingPanel}
           removeActiveListing={controller.listing_map.removeActiveListing}
-        />
+        />}
 
         <FilterForm
           data={data}
@@ -1388,7 +1388,7 @@ export default class Mls extends Component {
     }
 
     return (
-      <div style={S('minw-1000')}>
+      <div>
         { main_content }
 
         <Modal

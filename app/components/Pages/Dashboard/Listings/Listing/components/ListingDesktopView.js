@@ -2,10 +2,9 @@ import _ from 'lodash'
 import S from 'shorti'
 import ReactDOM from 'react-dom'
 import Map from 'google-map-react'
-import React, { Component } from 'react'
+import React from 'react'
 import { browserHistory } from 'react-router'
 
-import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import lifecycle from 'recompose/lifecycle'
 import withState from 'recompose/withState'
@@ -232,20 +231,20 @@ const ListingDesktopView = ({
       </div>
     )
 
-    let number_days_indicator
-    if (listing.list_date) {
-      const days_on_market = listing_util.getDOM(listing.dom)
-      number_days_indicator = (
-        <div
-          className="pull-left"
-          style={S(
-            'border-1-solid-263445 br-3 pt-5 pb-5 pl-10 pr-10 mt-3 font-14'
-          )}
-        >
-          {days_on_market} days ago
-        </div>
-      )
-    }
+    // let number_days_indicator
+    // if (listing.list_date) {
+    //   const days_on_market = listing_util.getDOM(listing.dom)
+    //   number_days_indicator = (
+    //     <div
+    //       className="pull-left"
+    //       style={S(
+    //         'border-1-solid-263445 br-3 pt-5 pb-5 pl-10 pr-10 mt-3 font-14'
+    //       )}
+    //     >
+    //       {days_on_market} days ago
+    //     </div>
+    //   )
+    // }
 
     const tooltip = <Tooltip id="copied-tooltip">Copied</Tooltip>
 
@@ -504,9 +503,6 @@ const ListingDesktopView = ({
                   <div style={S('mb-20')}>
                     <div style={S('pull-left font-15 mb-10 mr-10')}>
                       {listing_status_indicator}
-                    </div>
-                    <div className="pull-left">
-                      {number_days_indicator}
                     </div>
                   </div>
                   <div className="clearfix" />
@@ -809,7 +805,6 @@ const ListingDesktopView = ({
   let viewer_wrap_style = S(
     `absolute h-100p bg-fff t-0 l-0 z-10 ml-70 w-${viewer_width}`
   )
-  
   if (!user || data.is_widget) {
     viewer_wrap_style = {
       ...viewer_wrap_style,
@@ -1076,7 +1071,14 @@ export default compose(
   withState('galleryModalDirection', 'setGalleryModalDirection', ''),
   withState('galleryModalActiveIndex', 'setGalleryModalActiveIndex', 0),
   withHandlers({
-    hideModal: () => () => browserHistory.goBack()
+    hideModal: () => () => {
+      const currentLocation = browserHistory.getCurrentLocation()
+      if (currentLocation.key) {
+        browserHistory.goBack()
+      } else {
+        browserHistory.push('/dashboard/mls')
+      }
+    }
   }),
   withHandlers({
     onHideShareModal: ({ setShareModalIsActive }) => () => {

@@ -31,24 +31,26 @@ export default class Password extends Component {
     this.getReceivingUser()
   }
   componentDidUpdate() {
+    const url = this.getActionRedirectURL()
     this.checkIsShadowUser()
     const data = this.props.data
     const signup = data.signup
     const user = data.user
     // If user logged in on mount
-    if (user && user.id && !signup.form_submitted && !data.show_logout_message) {
+    if (user && user.id && signup && !signup.form_submitted && !data.show_logout_message) {
       AppStore.data.show_logout_message = true
       AppStore.emitChange()
     }
     // Redirect after Password creation
-    if (user && signup.form_submitted) {
+    if (!url && user && signup && signup.form_submitted) {
       // If invited to room
-      if (data.current_room) {
+      if (data.current_room && AppStore.data.signup.login_done) {
         window.location.href = `/dashboard/recents/${data.current_room.id}`
         return
       }
-      if (signup.type === 'client')
+      if (signup.type === 'client' && AppStore.data.signup.login_done) {
         window.location.href = '/dashboard/mls?message=welcome'
+      }
       if (signup.type === 'agent') {
         // If verified agent
         if (signup.is_agent) {
@@ -63,11 +65,13 @@ export default class Password extends Component {
     }
     // If has action in url
     if (user && user.id
-      && data.location && data.location.query && data.location.query.action) {
-      const url = this.getActionRedirectURL()
+      && data.location && data.location.query && data.location.query.action
+    && !data.signup.loading_submit) {
       if (window.location.href !== url) {
-        delete AppStore.data.show_logout_message
-        AppStore.emitChange()
+        if (AppStore.data.show_logout_message) {
+          delete AppStore.data.show_logout_message
+          AppStore.emitChange()
+        }
         window.location.href = url
       }
     }
@@ -136,6 +140,7 @@ export default class Password extends Component {
     if (!AppStore.data.signup)
       AppStore.data.signup = {}
     AppStore.data.signup.form_submitted = true
+    AppStore.data.signup.loading_submit = true
     AppStore.emitChange()
     // Forgot pass
     if (action === 'forgot-password') {
@@ -233,10 +238,6 @@ export default class Password extends Component {
         <Create handleSubmit={this.handleSubmit} data={data} />
       )
     }
-    console.log(slug)
-    // if (data.show_password_loading) {
-    //   return <Loading />
-    // }
     return (
       <div>
         {data.show_password_loading &&

@@ -33,14 +33,13 @@ class Alerts extends Component {
     const {
       params,
       getAlerts,
-      alertsList,
       isFetching,
       getAlertFeed,
       selectedAlert,
       clearAlertNotification
     } = this.props
 
-    if (!isFetching && !alertsList.data.length) {
+    if (!isFetching) {
       const { alertId } = params
 
       if (alertId) {

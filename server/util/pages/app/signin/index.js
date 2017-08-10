@@ -26,6 +26,15 @@ async function getSelf(config, decrypted_obj) {
 router.get('/signin', async (ctx, next) => {
   const isMobile = new MobileDetect(ctx.req.headers['user-agent'])
 
+  if (isMobile.phone()) {
+    let url = '/mobile'
+    if (isMobile.is('iPhone')) {
+      url = '/mobile?type=iphone'
+    }
+
+    return ctx.redirect(url)
+  }
+
   const { token, email, redirect_to } = ctx.request.query
 
   // Auto sign in
@@ -46,7 +55,7 @@ router.get('/signin', async (ctx, next) => {
     }
   }
 
-  if (!token && !email && ctx.session.user && !isMobile.phone()) {
+  if (!token && !email && ctx.session.user) {
     ctx.redirect('/dashboard/mls')
   }
 

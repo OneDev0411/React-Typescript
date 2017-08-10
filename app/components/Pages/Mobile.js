@@ -28,9 +28,7 @@ const Mobile = ({ data }) => {
         {data.location && data.location.query.type === 'iphone'
           ? <div>
             <p style={{ fontSize: '18px', padding: '2rem' }}>
-                Unfortunately, our web client mobile version currently is under
-                the heavy construction, please using a desktop browser temporary
-                or you can using our iOS app.
+                Our mobile web version is temporarily unavailable.  Please use your desktop browser to access Rechat.com or use the mobile iOS App.
               </p>
             <Button
               style={S(
@@ -46,8 +44,7 @@ const Mobile = ({ data }) => {
               </Button>
           </div>
           : <div style={{ fontSize: '18px', padding: '2rem' }}>
-              Unfortunately, our web client mobile version currently is under
-              the heavy construction, please using a desktop browser temporary.
+              Our mobile web version is temporarily unavailable.  Please use your desktop browser to access Rechat.com.
             </div>}
       </div>
       <div style={S('text-center color-fff absolute w-100p b-30 z-11')}>

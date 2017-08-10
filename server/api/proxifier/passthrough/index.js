@@ -25,9 +25,7 @@ router.post('/proxifier', bodyParser(), async ctx => {
     // get method
     const method = headers['x-method']
 
-    const request = ctx
-      .fetch(endpoint, method)
-      .send(ctx.request.body)
+    const request = ctx.fetch(endpoint, method).send(ctx.request.body)
 
     if (headers.authorization) {
       request.set({ Authorization: headers.authorization })
@@ -41,12 +39,15 @@ router.post('/proxifier', bodyParser(), async ctx => {
 
     // update user session
     const { data } = response.body
+
     if (data && data.type === 'user') {
       updateSession(ctx, data)
     }
 
     ctx.body = response.body
   } catch (e) {
+    console.log('[ Error ] ', e.message)
+
     e.response = e.response || {
       status: 500,
       text: e.message

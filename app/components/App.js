@@ -105,26 +105,22 @@ class App extends Component {
   }
 
   initialGoogleAnalytics(data) {
+    let google_analytics_id = 'UA-56150904-2'
     const brand = Brand.flatten(data.brand)
 
-    // Wait for brand to be queried
-    if (data.brand_queried) {
-      let google_analytics_id = 'UA-56150904-2'
-
-      if (brand && brand.assets.google_analytics_id) {
-        google_analytics_id = brand.assets.google_analytics_id
-      }
-
-      ReactGA.initialize(google_analytics_id)
-      ReactGA.ga(
-        'create',
-        google_analytics_id,
-        'auto',
-        brand && brand.hostnames ? brand.hostnames[0] : 'rechat'
-      )
-      ReactGA.set({ page: window.location.pathname })
-      ReactGA.pageview(window.location.pathname)
+    if (brand && brand.assets && brand.assets.google_analytics_id) {
+      google_analytics_id = brand.assets.google_analytics_id
     }
+
+    ReactGA.initialize(google_analytics_id)
+    ReactGA.ga(
+      'create',
+      google_analytics_id,
+      'auto',
+      brand && brand.hostnames ? brand.hostnames[0] : 'rechat'
+    )
+    ReactGA.set({ page: window.location.pathname })
+    ReactGA.pageview(window.location.pathname)
   }
 
   setIntercom() {
@@ -224,10 +220,9 @@ class App extends Component {
       // nav_area = <MobileNav data={data} />
       nav_area = <div />
     }
-
     return (
       <div>
-        {user && !data.is_widget && nav_area}
+        {user && !data.is_widget && !this.props.isWidgetRedux && nav_area}
 
         {user && <InstantChat user={user} rooms={rooms} />}
 
@@ -242,5 +237,6 @@ class App extends Component {
 export default connect(s => ({
   data: s.data,
   rooms: s.chatroom.rooms,
-  contacts: s.chatroom.contact
+  contacts: s.chatroom.contact,
+  isWidgetRedux: s.widgets.isWidget
 }))(App)

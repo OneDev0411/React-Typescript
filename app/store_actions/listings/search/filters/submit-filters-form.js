@@ -9,6 +9,7 @@ import { selectListings } from '../../../../reducers/listings'
 import extendedBounds from '../../../../utils/extendedBounds'
 import { normalizeListingsForMarkers } from '../../../../utils/map'
 import { removePolygon } from '../../../../store_actions/listings/map/drawing'
+import { feetToMeters } from '../../../../../app/utils/listing'
 
 // Initial valert options {
 //   limit: '250',
@@ -85,9 +86,17 @@ const normalizeNumberValues = values => {
       v.indexOf('sold') === -1
   )
 
+  const unitIsFoot = n => n.indexOf('square') !== -1
+
   const normalizedValues = {}
   numberValues.forEach(v => {
-    normalizedValues[v] = turnToNumber(values[v]) || null
+    let numberValue = turnToNumber(values[v]) || null
+
+    if (unitIsFoot(v)) {
+      numberValue = feetToMeters(numberValue)
+    }
+
+    normalizedValues[v] = numberValue
   })
 
   return normalizedValues
@@ -152,12 +161,7 @@ const normalizeValues = (values, state) => {
   const open_house = !!values.open_house
 
   if (listing_statuses.length === 0) {
-    let alertMsg = 'You must select at least one listing status'
-
-    if (open_house) {
-      alertMsg += ' "Open House" filter'
-    }
-
+    let alertMsg = 'Please select at least one listing status.'
     window.alert(alertMsg)
 
     throw new SubmissionError({
