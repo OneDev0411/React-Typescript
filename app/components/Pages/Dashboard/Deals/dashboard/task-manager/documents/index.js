@@ -8,9 +8,13 @@ import UploadFile from './upload'
 export default ({
   task
 }) => (
-  <div className="deal-files">
-    <Form task={task} />
-    <Attachments task={task} />
+  <div className="deal-files-container">
+
+    <div className="deal-documents">
+      <Form task={task} />
+      <Attachments task={task} />
+    </div>
+
     <UploadFile task={task} />
   </div>
 )

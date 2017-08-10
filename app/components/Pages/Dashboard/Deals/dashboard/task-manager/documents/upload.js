@@ -1,39 +1,45 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col, ProgressBar } from 'react-bootstrap'
+import { batchActions } from 'redux-batched-actions'
 import Dropzone from 'react-dropzone'
 import moment from 'moment'
 import _ from 'underscore'
 import ChatModel from '../../../../../../../models/Chatroom'
 import ChatMessage from '../../../../Chatroom/Util/message'
-import { addAttachment } from '../../../../../../../store_actions/deals'
+import { addAttachment, setIsUploading } from '../../../../../../../store_actions/deals'
 
 class UploadDocument extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      dropzoneActive: false,
-      uploading: false
+      dropzoneActive: false
     }
   }
 
   async onDrop(files) {
-    const { task, addAttachment } = this.props
+    const { task, addAttachment, setIsUploading } = this.props
+
+    this.setState({
+      dropzoneActive: false
+    })
 
     if (files.length === 0) {
       return false
     }
 
-    this.setState({ uploading: true })
+    setIsUploading(task.id, true)
 
     // upload file
     const file = await this.uploadFile(task.room.id, files[0])
 
-    this.setState({ uploading: false })
-
     // post message to room
     if (file) {
-      addAttachment(task.deal, task.checklist, task.id, file)
+      batchActions([
+        addAttachment(task.deal, task.checklist, task.id, file),
+        setIsUploading(task.id, false)
+      ])
+
       this.postMessage(task.room.id, file.id)
     }
   }
@@ -66,7 +72,9 @@ class UploadDocument extends React.Component {
   }
 
   render() {
-    const { uploading } = this.state
+    const { dropzoneActive } = this.state
+    const { children, disableClick, task } = this.props
+    const { uploading } = task
 
     return (
       <Dropzone
@@ -76,22 +84,46 @@ class UploadDocument extends React.Component {
         onDragLeave={() => this.setState({ dropzoneActive: false })}
         multiple={false}
         accept="application/pdf,image/*"
-        disableClick={false}
+        disableClick={disableClick || false}
         style={{ width: '100%' }}
       >
-        <Row className="file">
-          <Col sm={1} xs={12} className="image vcenter">
-            <img src="/static/images/deals/upload.jpg" />
-          </Col>
-          <Col sm={11} xs={12} className="name vcenter">
-            <div>Drag and Drop</div>
-            <div>your files to upload or <span className="link">browse</span></div>
-          </Col>
-        </Row>
         {
-          uploading &&
-          <ProgressBar active now={60} />
+          dropzoneActive &&
+          <div
+            className="upload-placeholder"
+          >
+            <div className="upload-area">
+              <img src="/static/images/deals/dnd.png" />
+              <h1 className="title">Drop to upload to this task</h1>
+              <span className="desc">
+                You can drag and drop any files to the upload section of the task you are in.
+              </span>
+            </div>
+          </div>
         }
+
+        {
+          children ||
+          <div className="file-upload">
+
+            <Row className="file">
+
+              <Col sm={1} xs={12} className="image vcenter">
+                <img src="/static/images/deals/upload.jpg" />
+              </Col>
+              <Col sm={11} xs={12} className="name vcenter">
+                <div>Drag and Drop</div>
+                <div>your files to upload or <span className="link">browse</span></div>
+              </Col>
+            </Row>
+
+            {
+              uploading &&
+              <ProgressBar active now={60} />
+            }
+          </div>
+        }
+
       </Dropzone>
     )
   }
@@ -99,4 +131,4 @@ class UploadDocument extends React.Component {
 
 export default connect(({ data }) => ({
   user: data.user
-}), { addAttachment })(UploadDocument)
+}), { addAttachment, setIsUploading })(UploadDocument)

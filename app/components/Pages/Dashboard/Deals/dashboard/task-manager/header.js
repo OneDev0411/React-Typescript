@@ -1,6 +1,6 @@
 import React from 'react'
 import Comments from './comments'
-
+import SubmitReview from './submit-review'
 export default ({
   task
 }) => (
@@ -9,10 +9,8 @@ export default ({
       { task.title }
     </span>
 
-    <button
-      className="task-btn btn-submit"
-    >
-      Submit
-    </button>
+    <SubmitReview
+      task={task}
+    />
   </div>
 )

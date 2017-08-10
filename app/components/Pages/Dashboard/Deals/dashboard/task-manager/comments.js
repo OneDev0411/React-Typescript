@@ -28,7 +28,7 @@ class Comment extends React.Component {
           roomId={task.room.id}
           showToolbar={false}
           disableUpload={true}
-          baseHeight="50vh"
+          baseHeight="45vh"
         />
       </div>
     )
