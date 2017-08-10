@@ -13,7 +13,6 @@ const List = ({
   if (!section) {
     return false
   }
-
   return (
     <div className="section">
       <span className="title">
@@ -31,6 +30,8 @@ const List = ({
           section.tasks
           .map((id, key) => {
             const task = tasks[id]
+            const status = task.review ? task.review.status : 'Incomplete'
+
             return (
               <div
                 key={`TASK_${id}_${key}`}
@@ -38,12 +39,9 @@ const List = ({
                 className={cn('task', { active: selectedTaskId === id })}
               >
                 <div className="title">{ task.title }</div>
-                <div className="description">
-                  Approved by Shayan, June 21, 17 at 2:03pm
-                </div>
 
-                <span className="status">
-                  { task.review ? task.review.status : 'New' }
+                <span className={`status ${status}`}>
+                  { status }
                 </span>
               </div>
             )
