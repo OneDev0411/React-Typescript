@@ -16,9 +16,9 @@ class CreateDealModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { show, address, item } = nextProps
+    const { show, saving, address, item } = nextProps
 
-    if (!show) {
+    if (!show || saving) {
       return false
     }
 
@@ -151,7 +151,7 @@ class CreateDealModal extends React.Component {
               <Button
                 bsStyle="primary"
                 style={{ margin: '20px' }}
-                onClick={() => this.props.onClickSave()}
+                onClick={() => this.props.onClickSave(this.state)}
                 disabled={saving}
               >
                 { saving ? 'Creating...' : 'Yes, add' }

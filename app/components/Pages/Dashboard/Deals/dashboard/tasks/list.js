@@ -10,6 +10,10 @@ const List = ({
   selectedTaskId,
   onSelectTask
 }) => {
+  if (!section) {
+    return false
+  }
+
   return (
     <div className="section">
       <span className="title">

@@ -126,7 +126,8 @@ class DealCreate extends React.Component {
     this.setState({
       selected: item,
       address: item.full_address,
-      showAddressComponents: !item.isListing
+      showAddressComponents: !item.isListing,
+      showModal: item.isListing
     })
 
     if (item.isListing) {
@@ -138,13 +139,16 @@ class DealCreate extends React.Component {
         listing: item.id
       }
 
-      return this.saveDeal(data)
+      return this.save(data)
     }
   }
 
-  createListing() {
+  /**
+   * prepare listing address components to save
+   */
+  createNewListing(address_components) {
     const { type } = this.props
-    const { street_number, street_address, unit_number, city, state, zipcode } = this.state
+    const { street_number, street_address, unit_number, city, state, zipcode } = address_components
 
     const side = this.props.type === 'offer' ? 'Buying' : 'Selling'
 
@@ -155,11 +159,12 @@ class DealCreate extends React.Component {
       city,
       state,
       zipcode
-    ].join(' ')
+    ].join(' ').trim()
 
     const data = {
       context: {
-      deal_type: side,
+      deal_type:
+        side,
         full_address,
         street_number,
         street_address,
@@ -170,10 +175,13 @@ class DealCreate extends React.Component {
       }
     }
 
-    this.saveDeal(data)
+    this.save(data)
   }
 
-  async saveDeal(data) {
+  /**
+   * save deal
+   */
+  async save(data) {
     const { createDeal } = this.props
 
     // show loading
@@ -189,6 +197,9 @@ class DealCreate extends React.Component {
     browserHistory.push(`/dashboard/deal/${deal.id}`)
   }
 
+  /**
+   * open listing/offer wizard
+   */
   onClickOption(type, item) {
     this.setState({
       showModal: true
@@ -213,6 +224,15 @@ class DealCreate extends React.Component {
         <DealButton
           onClickOption={(type, item) => this.onClickOption(type, item)}
           type={type}
+        />
+
+        <AddressComponents
+          onClickSave={(address_components) => this.createNewListing(address_components)}
+          onHide={() => this.setState({ showAddressComponents: false, showModal: true })}
+          saving={saving}
+          show={showAddressComponents}
+          address={address}
+          item={selected || {}}
         />
 
         <Modal
@@ -242,15 +262,6 @@ class DealCreate extends React.Component {
             >
               { saving ? 'Creating...' : 'Create' }
             </Button>
-
-            <AddressComponents
-              onClickSave={() => this.createListing()}
-              onHide={() => this.setState({ showAddressComponents: false })}
-              saving={saving}
-              show={showAddressComponents}
-              address={address}
-              item={selected || {}}
-            />
 
             {
               address.length > 0 &&
