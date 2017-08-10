@@ -297,7 +297,7 @@ export default class extends React.Component {
                   className={ cn('col-md-3 sortable', { isActive: sortBy === SORT_ADDRESS}) }
                   onClick={() => this.setSort(SORT_ADDRESS)}
                 >
-                  ADDRESS
+                  ADDRESS&nbsp;
                   { this.getSorterCaret(SORT_ADDRESS) }
                 </td>
 
@@ -305,7 +305,7 @@ export default class extends React.Component {
                   className={ cn('col-md-2 hidden-xs sortable', { isActive: sortBy === SORT_STATUS}) }
                   onClick={() => this.setSort(SORT_STATUS)}
                 >
-                  STATUS
+                  STATUS&nbsp;
                   { this.getSorterCaret(SORT_STATUS) }
                 </td>
 
@@ -313,7 +313,7 @@ export default class extends React.Component {
                   className={ cn('col-md-1 hidden-xs sortable', { isActive: sortBy === SORT_PRICE}) }
                   onClick={() => this.setSort(SORT_PRICE)}
                 >
-                  PRICE $
+                  PRICE $&nbsp;
                   { this.getSorterCaret(SORT_PRICE) }
                 </td>
 
@@ -321,7 +321,7 @@ export default class extends React.Component {
                   className={ cn('col-md-2 hidden-sm hidden-xs sortable', { isActive: sortBy === SORT_SIDE}) }
                   onClick={() => this.setSort(SORT_SIDE)}
                 >
-                  SIDE
+                  SIDE&nbsp;
                   { this.getSorterCaret(SORT_SIDE) }
                 </td>
 
