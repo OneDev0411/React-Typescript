@@ -313,7 +313,7 @@ export default class SideBar extends Component {
     let sidebar_height = 0
     if (typeof window !== 'undefined')
       sidebar_height = window.innerHeight
-    const sidebar_style = S(`w-70 fixed t-0 z-100 bg-202A33 h-${sidebar_height}`)
+    const sidebar_style = S(`w-70 fixed t-0 z-100 bg-263445 h-${sidebar_height}`)
     const path = data.path
     const active = {}
 

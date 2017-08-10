@@ -12,10 +12,9 @@ const openChatbar = (toggleChatbar) => {
 }
 
 const InstantTrigger = ({
-  rooms,
-  toggleChatbar
-}) => {
-
+                          rooms,
+                          toggleChatbar
+                        }) => {
   let counter = 0
   _.each(rooms, room => {
     counter += room.new_notifications
@@ -26,7 +25,7 @@ const InstantTrigger = ({
       className="chatroom-icon"
       onClick={() => openChatbar(toggleChatbar)}
     >
-      <SvgChat color='#fff'/>
+      <SvgChat color='#4e5c6c' />
       {
         counter > 0 &&
         <span className="count">
@@ -36,6 +35,6 @@ const InstantTrigger = ({
     </div>
   )
 }
-export default connect(({chatroom}) => ({
+export default connect(({ chatroom }) => ({
   rooms: chatroom.rooms
 }), { toggleChatbar })(InstantTrigger)
