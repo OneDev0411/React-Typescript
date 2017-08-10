@@ -183,9 +183,8 @@ class Messages extends React.Component {
     const { isPopup } = this.props
     const toolbarHeight = isPopup ? '0px' : '70px'
     const baseHeight = isPopup ?
-      '321px' : // popup height - compose message bottom: 330px - 9px
+      `${330 - 9 - 4 - 4}px` : // popup height - compose message bottom - 2*input border: 330px - 9px -4px - 4px
       '95vh'
-
     return `calc(${baseHeight} - ${toolbarHeight} - ${composeMessageHeight}px)`
   }
 
