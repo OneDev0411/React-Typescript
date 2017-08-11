@@ -1,5 +1,5 @@
 import React from 'react'
-import { Col, Button } from 'react-bootstrap'
+import Members from '../Compose'
 
 const Column = ({ role }) => (
   <div className="column">
@@ -7,13 +7,10 @@ const Column = ({ role }) => (
       {role.title}
     </div>
     <div className="members">
-      <Button
-         className="addMember"
-        onClick={() => this.openDialog() }
-      >
-        Add Member
-      </Button>
-
+      <Members
+        room={role}
+        iconSize={14}
+      />
     </div>
   </div>
 )

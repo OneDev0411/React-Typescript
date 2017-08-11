@@ -12,15 +12,25 @@ class Messages extends React.Component {
   render() {
     const roles = [
       {
+        id: 'role1',
         title: 'test1',
         users: [
-          { name: 'user1' }
+          {
+            id: 'user1',
+            name: 'user1',
+            display_name: 'user1'
+          }
         ]
       },
       {
+        id: 'role2',
         title: 'test2',
         users: [
-          { name: 'user1' }
+          {
+            id: 'user2',
+            name: 'user1',
+            display_name: 'user2'
+          }
         ]
       }
     ]
@@ -30,6 +40,7 @@ class Messages extends React.Component {
         <div className="rows">
           {roles.map(role =>
             <Column
+              key={`ROLE_${role.id}`}
               role={role}
             />
           )}
