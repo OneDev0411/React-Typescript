@@ -1,20 +1,29 @@
 /* bm-menu */
-%menu {
-  z-index: 101 !important;
-  background-color: #eff1f3;
-  box-shadow: 1px 0 0 0 #e4e4e4;
-  color: #fff;
-  min-height: 100vh;
-  width: $menuWidth;
-  float: left;
-  height: 60px;
-  .toolbar {
+%column {
+  min-height: 100%;
+  width: $rowWidth;
+  //float: left;
+  display: inline-block;
+  border-right: solid 1px #d8dfe2;
+  .title {
     font-size: 15px;
     font-weight: bold;
     color: #5b6469;
-    margin: 0;
-    line-height: 60px;
-    padding-left: 20px;
+    //padding: 25px 0px 40px 20px;
+    //margin: 0;
+    text-align: center;
+    border-bottom: solid 1px #d8dfe2;
+    border-top: solid 1px #d8dfe2;
+    height: 50px;
+    line-height: 50px;
+  }
+  .members {
+    .addMember {
+      width: 90%;
+      margin: auto;
+      display: block;
+      margin-top: 16px;
+    }
   }
   .item {
     @extend %item;

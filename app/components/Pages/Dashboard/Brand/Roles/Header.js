@@ -1,12 +1,12 @@
 import React from 'react'
-import { Row, Button } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 
 const Header = () => (
-  <Row className="toolbar">
-    <div className='title'>
+  <div className="toolbar">
+    <span className='title'>
       Assign Members to Roles
-    </div>
-    <div lg={6} md={6} sm={6} className="button">
+    </span>
+    <span className="button">
       <Button
         bsStyle="primary"
         onClick={() => this.openDialog() }
@@ -14,8 +14,8 @@ const Header = () => (
         Add New Role
       </Button>
 
-    </div>
-  </Row>
+    </span>
+  </div>
 )
 
 

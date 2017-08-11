@@ -1,19 +1,35 @@
+@import 'column';
+$toolBarHeight: 60px;
 %roles {
-  z-index: 101 !important;
   background-color: #f8fafb;
   min-height: 100vh;
   .toolbar {
     margin: 0;
-
+    height: $toolBarHeight;
     .title {
       font-size: 15px;
       color: #78909c;
-      padding: 25px 0px 40px 20px;
+      //padding: 25px 0px 40px 20px;
+      margin-left: 40px;
       float: left;
+      line-height: $toolBarHeight;
     }
     .button {
       float: right;
       padding: 17px 40px 0px 0px;
+    }
+  }
+  .toolbar:after {
+    clear: both;
+  }
+  .rows {
+    height: calc(100vh - #{$toolBarHeight});
+    //clear: right;
+    //width: 100%;
+    overflow: auto;
+    white-space: nowrap;
+    .column {
+      @extend %column;
     }
   }
 }
