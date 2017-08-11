@@ -18,6 +18,7 @@ import ProfileImage from './ProfileImage'
 import SvgMap from './Svgs/Map'
 import SvgStore from './Svgs/Store'
 import SvgPeople from './Svgs/People'
+import SvgPBrand from './Svgs/Brand'
 import SvgDeals from './Svgs/Deals'
 import SvgBriefCase from './Svgs/BriefCase'
 import SvgSupport from './Svgs/Support'
@@ -26,6 +27,8 @@ import Brand from '../../../../controllers/Brand'
 
 // chatroom stuff
 import InstantTrigger from '../Chatroom/Shared/instant-trigger'
+
+import BrandInstantTrigger from '../Brand/Shared/instant-trigger'
 
 const phoneUtil = PhoneNumberUtil.getInstance()
 
@@ -341,6 +344,9 @@ export default class SideBar extends Component {
     if (path.indexOf('/dashboard/contacts') !== -1)
       active.contacts = 'active'
 
+    if (path.indexOf('/dashboard/brand') !== -1)
+      active.brand = 'active'
+
     if (path.indexOf('/dashboard/notifications') !== -1)
       active.notifications = 'active'
 
@@ -488,7 +494,8 @@ export default class SideBar extends Component {
       deals: <Popover className="sidenav__popover" id="popover-tasks">Deals</Popover>,
       support: <Popover className="sidenav__popover" id="popover-support">Need Help?</Popover>,
       store: <Popover className="sidenav__popover" id="popover-store">Store</Popover>,
-      notifications: <Popover className="sidenav__popover" id="popover-notifications">Notifications</Popover>
+      notifications: <Popover className="sidenav__popover" id="popover-notifications">Notifications</Popover>,
+      brand: <Popover className="sidenav__popover" id="popover-notifications">Brand</Popover>
     }
     if (data.errors && data.errors.type && data.errors.type === 'agent-not-found') {
       message = (
@@ -604,7 +611,7 @@ export default class SideBar extends Component {
 
     if (user.user_type === 'Admin')
       form_link = <li><Link to="/dashboard/forms"><i className="fa fa-wpforms" style={S('mr-15')} />Forms</Link></li>
-
+console.log(active.brand)
     return (
       <aside style={sidebar_style} className="sidebar__nav-list pull-left">
 
@@ -660,6 +667,16 @@ export default class SideBar extends Component {
               <NavItem style={S('w-85p')} onClick={this.goToStore.bind(this)}>
                 <SvgStore color={active.store ? nav_active_color : '#4e5c6c'} />
               </NavItem>
+            </OverlayTrigger>
+          }
+          {
+            user.user_type !== 'Client' &&
+            <OverlayTrigger placement="right" overlay={popover.brand} delayShow={200} delayHide={0}>
+              <LinkContainer className={active.brand} to="/dashboard/brand">
+                <NavItem style={S('w-85p')}>
+                  <SvgPBrand color={active.brand ? nav_active_color : '#4e5c6c'} />
+                </NavItem>
+              </LinkContainer>
             </OverlayTrigger>
           }
         </Nav>

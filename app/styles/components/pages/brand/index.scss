@@ -1,0 +1,38 @@
+$row-padding: 20px;
+$menuWidth: 330px;
+@import 'menu';
+@import 'roles';
+
+.brand {
+  margin-left: 85px;
+  margin-right: 0;
+  .no-padding {
+    padding: 0;
+  }
+  .menu {
+    @extend %menu;
+  }
+  .roles {
+    @extend %roles;
+  }
+  .rightPanel {
+    margin-left: $menuWidth;
+  }
+}
+
+/**
+ * helpers
+ */
+.inline {
+  display: inline;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.vcenter {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
+}

@@ -1,0 +1,19 @@
+%roles {
+  z-index: 101 !important;
+  background-color: #f8fafb;
+  min-height: 100vh;
+  .toolbar {
+    margin: 0;
+
+    .title {
+      font-size: 15px;
+      color: #78909c;
+      padding: 25px 0px 40px 20px;
+      float: left;
+    }
+    .button {
+      float: right;
+      padding: 17px 40px 0px 0px;
+    }
+  }
+}
