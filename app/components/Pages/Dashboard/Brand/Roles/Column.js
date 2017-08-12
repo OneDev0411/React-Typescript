@@ -16,7 +16,7 @@ class Column extends Component {
   }
 
   componentDidMount() {
-    this.props.getMembers(this.props.user, this.props.role)
+    this.props.getMembers(this.props.role)
   }
 
   getRowAvatar(User) {

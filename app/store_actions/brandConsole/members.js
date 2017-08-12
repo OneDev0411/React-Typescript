@@ -9,9 +9,9 @@ function _getMembers(role, members) {
   }
 }
 
-export function getMembers(user, role) {
+export function getMembers(role) {
   return async (dispatch) => {
-    const response = await BrandConsole.getMembers(user, role)
+    const response = await BrandConsole.getMembers(role)
     if (response) {
       const { data } = response.body
       dispatch(_getMembers(role, data))

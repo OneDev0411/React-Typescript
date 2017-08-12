@@ -6,14 +6,10 @@ import Fetch from '../services/fetch'
 const BrandConsole = {}
 
 BrandConsole.getRoles = async function (user) {
-  console.log('user: ', user)
   const endpoint = `/brands/${user.brand}/roles`
   try {
     const fetchRoles = new Fetch()
       .get(endpoint)
-    // required on ssr
-    if (user.access_token)
-      fetchRoles.set({ Authorization: `Bearer ${user.access_token}` })
 
     return await fetchRoles
   } catch (e) {
@@ -22,16 +18,11 @@ BrandConsole.getRoles = async function (user) {
 
 }
 
-BrandConsole.getMembers = async function (user, role) {
-  console.log('role: ', role)
+BrandConsole.getMembers = async function (role) {
   const endpoint = `/brands/${role.brand}/roles/${role.id}/members`
   try {
     const fetchRoles = new Fetch()
       .get(endpoint)
-    // required on ssr
-    if (user.access_token)
-      fetchRoles.set({ Authorization: `Bearer ${user.access_token}` })
-
     return await fetchRoles
   } catch (e) {
     console.log(e)
@@ -58,7 +49,8 @@ BrandConsole.getRooms = async function (user = {}) {
       fetchRooms.set({ Authorization: `Bearer ${access_token}` })
 
     return await fetchRooms
-  } catch (e) {}
+  } catch (e) {
+  }
 }
 
 /**
@@ -70,7 +62,8 @@ BrandConsole.getRoomById = async function (roomId) {
       .get(`/rooms/${roomId}?associations=user.last_seen_by`)
 
     return response.body.data
-  } catch (e) {}
+  } catch (e) {
+  }
 }
 
 /**
@@ -135,7 +128,8 @@ BrandConsole.getMessages = async function (id, limit = 20, value = null, value_t
 
   try {
     return await new Fetch().get(endpoint)
-  } catch (e) {}
+  } catch (e) {
+  }
 }
 
 BrandConsole.uploadAttachment = async function (roomId, file) {
