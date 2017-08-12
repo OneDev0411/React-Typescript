@@ -43,22 +43,30 @@ const Signin = ({
   onSubmitHandler
 }) => {
   const { brand } = appData
-  const siteTitle = (brand && brand.messages.site_title) || 'Rechat'
-  const siteLogo =
-    (brand && Brand.asset('site_logo')) || 'static/images/logo-200w.png'
+  let siteTitle = 'Rechat'
+  let brandColor = '#2196f3'
+  let siteLogo = 'static/images/logo-200w.png'
+
+  if (brand) {
+    siteLogo = Brand.asset('site_logo')
+    siteTitle = brand.messages.site_title
+    brandColor = `#${Brand.color('primary', '#2196f3')}`
+  }
 
   return (
     <div className="signin-page-wrapper">
       <article className="c-auth">
         <header className="c-auth__header">
-          <img
-            src={siteLogo}
-            alt={`${siteTitle} logo`}
-            className={'c-auth__logo'}
-          />
+          <Link to="/">
+            <img
+              src={siteLogo}
+              alt={`${siteTitle} logo`}
+              className={'c-auth__logo'}
+            />
+          </Link>
           <p>Sign into</p>
           <h1 className="c-auth__title tempo">
-            {`${siteTitle || 'Rechat'}`}
+            {`${siteTitle}`}
           </h1>
           {/* <p>It’s nice to have you back!</p>*/}
         </header>
@@ -84,9 +92,12 @@ const Signin = ({
               </div>}
             <button
               type="submit"
-              disabled={isLogging}
               className="c-auth__submit-btn"
-              style={{ background: `#${Brand.color('primary', '#2196f3')}` }}
+              disabled={isLogging || pristine}
+              style={{
+                background: brandColor,
+                opacity: isLogging || pristine ? 0.7 : 1
+              }}
             >
               {isLogging ? 'Sign in...' : 'Sign in'}
             </button>
