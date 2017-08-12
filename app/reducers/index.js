@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
 import data from './data'
 import auth from './auth'
+import user from './user'
 import socket from './socket'
 import contact from './contact'
 import chatroom from './chatroom'
@@ -15,6 +16,7 @@ import { createNamedWrapperReducer } from '../utils/redux-utils'
 const appReducer = combineReducers({
   socket,
   data,
+  user,
   auth,
   search,
   alerts,

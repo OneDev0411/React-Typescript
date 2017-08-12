@@ -6,6 +6,7 @@ import { Field, reduxForm } from 'redux-form'
 import withHandlers from 'recompose/withHandlers'
 
 import Brand from '../../../../controllers/Brand'
+import submitSigninForm from '../../../../store_actions/auth/signin'
 
 const renderField = ({ type, input, label, meta: { touched, error } }) => {
   const hasError = touched && error
@@ -34,9 +35,10 @@ const renderField = ({ type, input, label, meta: { touched, error } }) => {
 }
 
 const Signin = ({
+  error,
   appData,
   pristine,
-  submitting,
+  isLogging,
   handleSubmit,
   onSubmitHandler
 }) => {
@@ -63,7 +65,7 @@ const Signin = ({
         <main className="c-auth__main">
           <form onSubmit={handleSubmit(onSubmitHandler)}>
             <Field
-              name="email"
+              name="username"
               type="email"
               label="Email"
               component={renderField}
@@ -75,13 +77,18 @@ const Signin = ({
               component={renderField}
             />
             <Link to="/password/forgot">Forgot Password?</Link>
+            {error &&
+              <div className="c-auth__submit-error-alert">
+                There was an error with this request. This email or password is
+                incorrect.
+              </div>}
             <button
               type="submit"
-              disabled={submitting}
+              disabled={isLogging}
               className="c-auth__submit-btn"
               style={{ background: `#${Brand.color('primary', '#2196f3')}` }}
             >
-              Sign in
+              {isLogging ? 'Sign in...' : 'Sign in'}
             </button>
           </form>
           <p style={{ textAlign: 'center', color: '#929292' }}>
@@ -97,10 +104,12 @@ const Signin = ({
 const validate = values => {
   const errors = {}
 
-  if (!values.email) {
-    errors.email = 'Required'
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = 'Invalid email address'
+  if (!values.username) {
+    errors.username = 'Required'
+  } else if (
+    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.username)
+  ) {
+    errors.username = 'Invalid email address'
   }
 
   if (!values.password) {
@@ -113,16 +122,25 @@ const validate = values => {
 }
 
 export default compose(
-  connect(({ data }) => ({ appData: data })),
   reduxForm({
     form: 'signin',
     validate,
     getFormState: ({ auth }) => auth.signin.form
   }),
+  connect(
+    ({ data, auth }) => {
+      const { isLogging, error } = auth.signin
+      return {
+        error,
+        isLogging,
+        appData: data
+      }
+    },
+    { submitSigninForm }
+  ),
   withHandlers({
     onSubmitHandler: ({ submitSigninForm }) => values => {
-      console.log(values)
-      // submitSigninForm(values)
+      submitSigninForm(values)
     }
   })
 )(Signin)

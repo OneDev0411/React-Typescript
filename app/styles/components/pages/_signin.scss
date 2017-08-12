@@ -168,8 +168,16 @@
   }
 }
 
-.c-auth__field__error-alert {
+.c-auth__field__error-alert,
+.c-auth__submit-error-alert {
   padding: .5rem 1.5rem;
   color: #fff;
-  background: red;
+  background: rgba(red, 0.8);
+}
+
+.c-auth__submit-error-alert {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  line-height: 1.5;
 }
