@@ -611,7 +611,6 @@ export default class SideBar extends Component {
 
     if (user.user_type === 'Admin')
       form_link = <li><Link to="/dashboard/forms"><i className="fa fa-wpforms" style={S('mr-15')} />Forms</Link></li>
-console.log(active.brand)
     return (
       <aside style={sidebar_style} className="sidebar__nav-list pull-left">
 
@@ -670,7 +669,7 @@ console.log(active.brand)
             </OverlayTrigger>
           }
           {
-            user.user_type !== 'Client' &&
+            user.brand  &&
             <OverlayTrigger placement="right" overlay={popover.brand} delayShow={200} delayHide={0}>
               <LinkContainer className={active.brand} to="/dashboard/brand">
                 <NavItem style={S('w-85p')}>

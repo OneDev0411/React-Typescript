@@ -1,39 +1,20 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { getMessages } from '../../../../../store_actions/chatroom'
 import Header from './Header'
 import Column from './Column'
+import { getRoles } from '../../../../../store_actions/brandConsole'
 
-class Messages extends React.Component {
+class Roles extends React.Component {
   componentDidMount() {
+    this.init(this.props.user)
+  }
 
+  async init(user) {
+    this.props.getRoles(user)
   }
 
   render() {
-    const roles = [
-      {
-        id: 'role1',
-        title: 'test1',
-        users: [
-          {
-            id: 'user1',
-            name: 'user1',
-            display_name: 'user1'
-          }
-        ]
-      },
-      {
-        id: 'role2',
-        title: 'test2',
-        users: [
-          {
-            id: 'user2',
-            name: 'user1',
-            display_name: 'user2'
-          }
-        ]
-      }
-    ]
+    const roles = this.props.roles
     return (
       <div className="roles">
         <Header />
@@ -50,6 +31,10 @@ class Messages extends React.Component {
   }
 }
 
-export default connect(({ chatroom }) => ({
-  messages: chatroom.messages
-}), ({ getMessages }))(Messages)
+export default connect(
+  ({ brandConsole, data }) => ({
+    roles: brandConsole.roles || [],
+    user: data.user
+  }),
+  ({ getRoles })
+)(Roles)

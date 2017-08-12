@@ -53,6 +53,9 @@ import ContactProfile from '../components/Pages/Dashboard/Contacts/Profile'
 // chat room
 import Recents from '../components/Pages/Dashboard/Chatroom'
 
+// chat room
+import Brand from '../components/Pages/Dashboard/Brand'
+
 // Notifications
 import NotificationsPage from '../components/Pages/Dashboard/Notifications'
 
@@ -154,6 +157,9 @@ export default (
         <IndexRoute component={ContactsList} />
         <Route path="/dashboard/contacts/:id" component={ContactProfile} />
       </Route>
+      <Route
+        path="/dashboard/brand" component={Brand}
+      />
 
       <Route path="/dashboard/notifications" component={NotificationsPage} />
     </Route>
