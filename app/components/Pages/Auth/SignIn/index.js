@@ -7,51 +7,38 @@ import withHandlers from 'recompose/withHandlers'
 
 import Brand from '../../../../controllers/Brand'
 
-const renderField = ({
-  input,
-  label,
-  type,
-  placeholder,
-  meta: { touched, error, warning }
-}) =>
-  <div className={`c-auth__field ${input.name}`}>
-    <div className="c-auth__field__input-wrapper">
-      <input
-        type={type}
-        className={`c-auth__field__input ${(input.value && 'has-content') ||
-          ''}`}
-        {...input}
-      />
-      <label className="c-auth__field__label">
-        {label}
-      </label>
-      <span className="focus-border">
-        <i />
-      </span>
+const renderField = ({ type, input, label, meta: { touched, error } }) => {
+  const hasError = touched && error
+  return (
+    <div className={`c-auth__field ${input.name}`}>
+      <div className="c-auth__field__input-wrapper">
+        <input
+          {...input}
+          type={type}
+          className={`c-auth__field__input ${(input.value && 'has-content') ||
+            ''} ${hasError ? 'has-error' : ''}`}
+        />
+        <label className="c-auth__field__label">
+          {label}
+        </label>
+        <span className="focus-border">
+          <i />
+        </span>
+      </div>
+      {hasError &&
+        <div className="c-auth__field__error-alert">
+          {error}
+        </div>}
     </div>
-    <div>
-      {touched &&
-        ((error &&
-          <span>
-            {error}
-          </span>) ||
-          (warning &&
-            <span>
-              {warning}
-            </span>))}
-    </div>
-  </div>
+  )
+}
 
 const Signin = ({
   appData,
   pristine,
   submitting,
   handleSubmit,
-  onSubmitHandler,
-  warnEmail,
-  warnPassword,
-  validateEmail,
-  validatePassword
+  onSubmitHandler
 }) => {
   const { brand } = appData
   const siteTitle = (brand && brand.messages.site_title) || 'Rechat'
@@ -80,28 +67,18 @@ const Signin = ({
               type="email"
               label="Email"
               component={renderField}
-              warn={warnEmail}
-              validate={validateEmail}
-              onChange={(e, value, nextValue) => {
-                console.log(value)
-              }}
             />
             <Field
               name="password"
               type="password"
               label="Password"
               component={renderField}
-              warn={warnPassword}
-              validate={validatePassword}
-              onChange={(e, value, nextValue) => {
-                console.log(value)
-              }}
             />
             <Link to="/password/forgot">Forgot Password?</Link>
             <button
               type="submit"
-              className="c-auth__submit-btn"
               disabled={submitting}
+              className="c-auth__submit-btn"
               style={{ background: `#${Brand.color('primary', '#2196f3')}` }}
             >
               Sign in
@@ -117,15 +94,35 @@ const Signin = ({
   )
 }
 
+const validate = values => {
+  const errors = {}
+
+  if (!values.email) {
+    errors.email = 'Required'
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    errors.email = 'Invalid email address'
+  }
+
+  if (!values.password) {
+    errors.password = 'Required'
+  } else if (values.password.length < 6) {
+    errors.password = 'Must be at least 6 characters or more'
+  }
+
+  return errors
+}
+
 export default compose(
   connect(({ data }) => ({ appData: data })),
   reduxForm({
     form: 'signin',
+    validate,
     getFormState: ({ auth }) => auth.signin.form
   }),
   withHandlers({
     onSubmitHandler: ({ submitSigninForm }) => values => {
-      submitSigninForm(values)
+      console.log(values)
+      // submitSigninForm(values)
     }
   })
 )(Signin)

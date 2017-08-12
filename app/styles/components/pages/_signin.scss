@@ -79,6 +79,14 @@
   background-color: #2196f3;
   transition: 0.3s;
 }
+
+.focus-border:after,
+.focus-border:before {
+  .has-error ~ & {
+    background-color: red;
+  }
+}
+
 .c-auth__field__input ~ .focus-border:after {
   top: auto;
   bottom: 0;
@@ -95,6 +103,10 @@
   height: 0;
   background-color: #2196f3;
   transition: 0.4s;
+}
+.has-error ~ .focus-border i:before,
+.has-error ~ .focus-border i:after {
+  background-color: red;
 }
 .c-auth__field__input ~ .focus-border i:after {
   left: auto;
@@ -154,4 +166,10 @@
   &:hover {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   }
+}
+
+.c-auth__field__error-alert {
+  padding: .5rem 1.5rem;
+  color: #fff;
+  background: red;
 }
