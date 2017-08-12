@@ -1,5 +1,3 @@
-import _ from 'underscore'
-import moment from 'moment'
 import types from '../../constants/brandConsole'
 import BrandConsole from '../../models/BrandConsole'
 
@@ -11,7 +9,6 @@ function _getRoles(roles) {
 }
 
 export function getRoles(user) {
-
   return async (dispatch) => {
     const response = await BrandConsole.getRoles(user)
     if (response) {
