@@ -11,7 +11,7 @@ import Landing from '../components/Pages/Landing'
 // import Recents from '../components/Pages/Dashboard/Recents'
 
 import SignUp from '../components/Pages/SignUp'
-import SignIn from '../components/Pages/SignIn'
+import SignIn from '../components/Pages/Auth/SignIn'
 import Verify from '../components/Pages/Verify'
 import Password from '../components/Pages/Password'
 import ConfirmAgent from '../components/Pages/SignUp/ConfirmAgent'

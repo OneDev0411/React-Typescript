@@ -1,0 +1,157 @@
+.signin-page-wrapper {
+  @media screen and (min-width: 35em) {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #eaeaea;
+  }
+}
+
+.c-auth {
+  max-width: 36rem;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  font-size: 1.6rem;
+  line-height: 1;
+
+  @media screen and (min-width: 35em) {
+    width: 48rem;
+    max-width: 100%;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 0 6px -2px #444;
+  }
+}
+
+.c-auth__header {
+  margin-bottom: 6rem;
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+.c-auth__logo {
+  width: 6.4rem;
+  margin-bottom: 4rem;
+}
+
+.c-auth__title {
+  margin: 0;
+}
+
+.c-auth__field {
+  margin-bottom: 3rem;
+
+  &.password {
+    margin-bottom: 1rem;
+  }
+}
+
+.c-auth__field__input-wrapper {
+  position: relative;
+}
+
+.c-auth__field__input {
+  width: 100%;
+  height: 4.4rem;
+  padding: 7px 14px;
+  transition: 0.4s;
+  color: #333;
+  letter-spacing: 1px;
+  background: transparent;
+  border: 1px solid #ccc;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.c-auth__field__input ~ .focus-border:before,
+.c-auth__field__input ~ .focus-border:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #2196f3;
+  transition: 0.3s;
+}
+.c-auth__field__input ~ .focus-border:after {
+  top: auto;
+  bottom: 0;
+  left: auto;
+  right: 0;
+}
+.c-auth__field__input ~ .focus-border i:before,
+.c-auth__field__input ~ .focus-border i:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 0;
+  background-color: #2196f3;
+  transition: 0.4s;
+}
+.c-auth__field__input ~ .focus-border i:after {
+  left: auto;
+  right: 0;
+  top: auto;
+  bottom: 0;
+}
+.c-auth__field__input:focus ~ .focus-border:before,
+.c-auth__field__input:focus ~ .focus-border:after,
+.has-content.c-auth__field__input ~ .focus-border:before,
+.has-content.c-auth__field__input ~ .focus-border:after {
+  width: 100%;
+  transition: 0.3s;
+}
+.c-auth__field__input:focus ~ .focus-border i:before,
+.c-auth__field__input:focus ~ .focus-border i:after,
+.has-content.c-auth__field__input ~ .focus-border i:before,
+.has-content.c-auth__field__input ~ .focus-border i:after {
+  height: 100%;
+  transition: 0.4s;
+}
+
+.c-auth__field__label {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  cursor: text;
+  transition: 0.3s;
+  font-weight: normal;
+  letter-spacing: 0.5px;
+  color: #aaa;
+
+  .c-auth__field__input:focus + &,
+  .has-content.c-auth__field__input + & {
+    top: -18px;
+    left: 0;
+    font-size: 1.4rem;
+    color: #2196f3;
+    transition: 0.3s;
+  }
+}
+
+.c-auth__submit-btn {
+  width: 100%;
+  height: 4.4rem;
+  display: block;
+  padding: 0;
+  margin: 2rem 0 4rem;
+  line-height: 44px;
+  font-size: 1.8rem;
+  color: #fff;
+  border-radius: 3px;
+  border-width: 0;
+  background-color: #2196f3;
+  transition: box-shadow 0.3s cubic-bezier(.25, .8, .25, 1);
+
+  &:hover {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  }
+}
