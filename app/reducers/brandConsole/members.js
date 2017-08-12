@@ -1,0 +1,16 @@
+import types from '../../constants/brandConsole'
+
+export default (state = {}, action) => {
+  switch (action.type) {
+
+    case types.GET_MEMBERS:
+      if (action.members)
+        return {
+          ...state,
+          [action.role.id]: action.members
+        }
+      return state
+    default:
+      return state
+  }
+}

@@ -3,11 +3,28 @@ import moment from 'moment'
 import config from '../../config/public'
 import Fetch from '../services/fetch'
 
-const Chatroom = {}
+const BrandConsole = {}
 
-Chatroom.getRoles = async function (user) {
+BrandConsole.getRoles = async function (user) {
   console.log('user: ', user)
   const endpoint = `/brands/${user.brand}/roles`
+  try {
+    const fetchRoles = new Fetch()
+      .get(endpoint)
+    // required on ssr
+    if (user.access_token)
+      fetchRoles.set({ Authorization: `Bearer ${user.access_token}` })
+
+    return await fetchRoles
+  } catch (e) {
+    console.log(e)
+  }
+
+}
+
+BrandConsole.getMembers = async function (user, role) {
+  console.log('role: ', role)
+  const endpoint = `/brands/${role.brand}/roles/${role.id}/members`
   try {
     const fetchRoles = new Fetch()
       .get(endpoint)
@@ -24,7 +41,7 @@ Chatroom.getRoles = async function (user) {
 /**
  * returns rooms list
  */
-Chatroom.getRooms = async function (user = {}) {
+BrandConsole.getRooms = async function (user = {}) {
   const { access_token } = user
 
   try {
@@ -47,7 +64,7 @@ Chatroom.getRooms = async function (user = {}) {
 /**
  * get room by id
  */
-Chatroom.getRoomById = async function (roomId) {
+BrandConsole.getRoomById = async function (roomId) {
   try {
     const response = await new Fetch()
       .get(`/rooms/${roomId}?associations=user.last_seen_by`)
@@ -59,12 +76,12 @@ Chatroom.getRoomById = async function (roomId) {
 /**
  * add new room
  */
-Chatroom.createRoom = async function (recipients) {
+BrandConsole.createRoom = async function (recipients) {
   const members = [].concat(recipients.users, recipients.emails, recipients.phone_numbers)
   const room_type = members.length > 1 ? 'Group' : 'Direct'
 
   // search room is created before or not
-  const room = await Chatroom.searchRoom(recipients)
+  const room = await BrandConsole.searchRoom(recipients)
 
   if (room)
     return room
@@ -84,7 +101,7 @@ Chatroom.createRoom = async function (recipients) {
 /**
  * leave or delete a room
  */
-Chatroom.leaveRoom = async function (userId, room) {
+BrandConsole.leaveRoom = async function (userId, room) {
   const endpoint = room.room_type === 'Direct' ? `/rooms/${room.id}` : `/rooms/${room.id}/users/${userId}`
 
   try {
@@ -97,7 +114,7 @@ Chatroom.leaveRoom = async function (userId, room) {
 /**
  * add members to a room
  */
-Chatroom.addMembers = async function (roomId, recipients) {
+BrandConsole.addMembers = async function (roomId, recipients) {
   try {
     return await new Fetch()
       .post(`/rooms/${roomId}/users`)
@@ -108,7 +125,7 @@ Chatroom.addMembers = async function (roomId, recipients) {
   }
 }
 
-Chatroom.getMessages = async function (id, limit = 20, value = null, value_type = 'max') {
+BrandConsole.getMessages = async function (id, limit = 20, value = null, value_type = 'max') {
   let endpoint = `/rooms/${id}/messages?limit=${limit}&sorting_value=Creation`
 
   if (value) {
@@ -121,7 +138,7 @@ Chatroom.getMessages = async function (id, limit = 20, value = null, value_type 
   } catch (e) {}
 }
 
-Chatroom.uploadAttachment = async function (roomId, file) {
+BrandConsole.uploadAttachment = async function (roomId, file) {
   let endpoint = `/rooms/${roomId}/attachments`
 
   try {
@@ -134,7 +151,7 @@ Chatroom.uploadAttachment = async function (roomId, file) {
   }
 }
 
-Chatroom.searchRoom = async function (recipients) {
+BrandConsole.searchRoom = async function (recipients) {
   let qs = []
   _.each(recipients, (recp, key) => {
     _.each(recp, item => {
@@ -154,4 +171,4 @@ Chatroom.searchRoom = async function (recipients) {
   }
 }
 
-export default Chatroom
+export default BrandConsole

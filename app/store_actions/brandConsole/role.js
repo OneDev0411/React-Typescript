@@ -11,15 +11,11 @@ function _getRoles(roles) {
 }
 
 export function getRoles(user) {
-  console.log('role_id: ', user)
 
   return async (dispatch) => {
-    console.log('role_id1: ', user)
     const response = await BrandConsole.getRoles(user)
     if (response) {
       const { data } = response.body
-      console.log('data: ', data)
-
       dispatch(_getRoles(data))
     }
   }

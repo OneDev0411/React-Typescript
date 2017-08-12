@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux'
 import roles from './roles'
+import members from './members'
 
 const appReducer = combineReducers({
-  roles
+  roles,
+  members
 })
 
 export default (state, action) => {
