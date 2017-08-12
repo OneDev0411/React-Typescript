@@ -1,7 +1,6 @@
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
 
-import BrandLogo from './components/BrandLogo'
 import ListingView from './components/ListingView'
 import ContactModel from '../../../../../models/Contact'
 import getListing from '../../../../../store_actions/listings/listing/get-listing'
