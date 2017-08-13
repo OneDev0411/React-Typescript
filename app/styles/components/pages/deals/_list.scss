@@ -14,6 +14,7 @@
   .table {
     border-collapse: separate;
     border-spacing: 0 10px;
+    font-size: 15px;
 
     tr td:first-child {
       border-radius: 4px 0 0 4px;
@@ -30,7 +31,6 @@
     .header {
       background: transparent;
       margin-bottom: 40px;
-      font-size: 14px;
       font-weight: 500;
       text-align: left;
       color: #78909c;
@@ -147,7 +147,6 @@
     ul {
       margin: 0;
       padding: 0;
-      font-size: 13px;
       li {
         margin-bottom: 4px;
         .status {
