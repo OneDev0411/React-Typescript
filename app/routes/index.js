@@ -225,7 +225,7 @@ export default (
         <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
       </Route>
 
-      <Route path="/dashboard/deals" component={AsyncDealsLayout}>
+      <Route path="/dashboard/deals(/:filter)" component={AsyncDealsLayout}>
         <IndexRoute component={AsyncDealsList} />
         <Route path="/dashboard/deal/:id" component={AsyncDealDashboard} />
       </Route>

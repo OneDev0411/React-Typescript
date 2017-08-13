@@ -58,9 +58,10 @@ _.mixin({
 export default class extends React.Component {
   constructor(props) {
     super(props)
+    const { filter } = props.params
 
     this.state = {
-      filterTab: 'All',
+      filterTab: filter || 'All',
       searchFilter: '',
       sortBy: null,
       sortOrder: 'asc'
@@ -243,6 +244,14 @@ export default class extends React.Component {
       .replace(/,([^,]*)$/, ' and $1') + ' Listings'
   }
 
+  /**
+   * set filter tab tooltip
+   */
+  setFilterTabTooltip(filter) {
+    browserHistory.push(`/dashboard/deals/${filter}`)
+    this.setState({ filterTab: filter })
+  }
+
   render() {
     const { deals } = this.props
     const { searchFilter, sortBy, sortOrder, filterTab } = this.state
@@ -266,7 +275,7 @@ export default class extends React.Component {
                   >
                     <li
                       className={filter === filterTab ? 'active' : ''}
-                      onClick={() => this.setState({ filterTab: filter })}
+                      onClick={() => this.setFilterTabTooltip(filter)}
                     >
                       { filter }
                     </li>
