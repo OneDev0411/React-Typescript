@@ -10,8 +10,12 @@ const signin = async userInfo => {
   }
   try {
     const response = await new Fetch().post('/oauth2/token').send(requestBody)
-
-    return response.body.data
+    const { data, access_token, refresh_token } = response.body
+    return {
+      ...data,
+      access_token,
+      refresh_token
+    }
   } catch ({ response }) {
     const error = {
       code: response.statusCode,
