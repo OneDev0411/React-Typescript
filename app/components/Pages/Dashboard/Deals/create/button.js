@@ -1,10 +1,14 @@
 import React from 'react'
 import { Dropdown, MenuItem } from 'react-bootstrap'
 
-const options = {
-  offer: ['Traditional Sale', 'Condo', 'New Build', 'Farm & Ranch'],
-  listing: ['Residental For Sale', 'Lease', 'Lot & Acreage', 'Commercial']
-}
+const options = [
+  'Resale',
+  'New Home',
+  'Lot / Land',
+  'Residential Lease',
+  'Commerical Sale',
+  'Commerical Lease'
+]
 
 const names = {
   offer: 'Make an Offer',
@@ -28,10 +32,10 @@ export default ({
     <Dropdown.Menu className="create-deal-list">
       <li className="title">{ titles[type] }</li>
       {
-        options[type].map((item, key) =>
+        options.map((item, key) =>
           <MenuItem
             key={`MENU_ITEM_${key}`}
-            onClick={() => onClickOption(type, item)}
+            onClick={() => onClickOption(item)}
             eventKey={key+1}
           >
             { item }

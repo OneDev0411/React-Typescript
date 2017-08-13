@@ -31,7 +31,8 @@ class DealCreate extends React.Component {
       selected: null,
       listings: {},
       places: {},
-      searching: false
+      searching: false,
+      property_type: null
     }
   }
 
@@ -132,10 +133,11 @@ class DealCreate extends React.Component {
 
     if (item.isListing) {
       const side = this.props.type === 'offer' ? 'Buying' : 'Selling'
+      const { property_type } = this.state
+
       const data = {
-        context: {
-          deal_type: side
-        },
+        property_type,
+        deal_type: side,
         listing: item.id
       }
 
@@ -149,6 +151,7 @@ class DealCreate extends React.Component {
   createNewListing(address_components) {
     const { type } = this.props
     const { street_number, street_address, unit_number, city, state, zipcode } = address_components
+    const { property_type } = this.state
 
     const side = this.props.type === 'offer' ? 'Buying' : 'Selling'
 
@@ -162,9 +165,9 @@ class DealCreate extends React.Component {
     ].join(' ').trim()
 
     const data = {
+      property_type,
+      deal_type: side,
       context: {
-      deal_type:
-        side,
         full_address,
         street_number,
         street_address,
@@ -200,8 +203,9 @@ class DealCreate extends React.Component {
   /**
    * open listing/offer wizard
    */
-  onClickOption(type, item) {
+  onClickOption(property_type) {
     this.setState({
+      property_type,
       showModal: true
     })
   }
