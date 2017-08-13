@@ -9,12 +9,8 @@ export default ({
   task
 }) => (
   <div className="deal-files-container">
-
-    <div className="deal-documents">
-      <Form task={task} />
-      <Attachments task={task} />
-    </div>
-
+    <Form task={task} />
+    <Attachments task={task} />
     <UploadFile task={task} />
   </div>
 )
