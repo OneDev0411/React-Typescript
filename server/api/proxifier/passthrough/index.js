@@ -36,12 +36,11 @@ router.post('/proxifier', bodyParser(), async ctx => {
     }
 
     const response = await request
-
     // update user session
     const { data } = response.body
 
     if (data && data.type === 'user') {
-      updateSession(ctx, data)
+      updateSession(ctx, response.body)
     }
 
     ctx.body = response.body

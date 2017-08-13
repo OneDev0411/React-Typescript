@@ -10,7 +10,7 @@ const app = new Koa()
 
 router.post('/proxifier/upload', bodyParser(), async ctx => {
   const headers = ctx.headers
-  const {files, fields} = await fileParser(ctx.req)
+  const { files, fields } = await fileParser(ctx.req)
 
   try {
     // remove base_url because current fetcher middleware add it by itself
@@ -19,8 +19,7 @@ router.post('/proxifier/upload', bodyParser(), async ctx => {
     // get method
     const method = headers['x-method'] || 'post'
 
-    const request = ctx
-      .fetch(endpoint, method, 'multipart/form-data')
+    const request = ctx.fetch(endpoint, method, 'multipart/form-data')
 
     _.each(files, file => {
       request.attach(file.filename, file.path)
@@ -35,7 +34,7 @@ router.post('/proxifier/upload', bodyParser(), async ctx => {
     // update user session
     const { data } = response.body
     if (data && data.type === 'user') {
-      updateSession(ctx, data)
+      updateSession(ctx, response.body)
     }
 
     ctx.body = response.body
