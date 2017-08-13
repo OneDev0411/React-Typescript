@@ -29,14 +29,14 @@ const submitSigninForm = userInfo => (dispatch, getState) => {
 
       AppStore.data = newAppData
 
-      const { id, email, first_name, last_name } = user
-      if (window.FS) {
-        window.FS.identify(id, {
-          email,
-          displayName: `${first_name} ${last_name}`
-        })
-      }
-      window.Intercom.signin({ user }, () => {})
+      // const { id, email, first_name, last_name } = user
+      // if (window.FS) {
+      //   window.FS.identify(id, {
+      //     email,
+      //     displayName: `${first_name} ${last_name}`
+      //   })
+      // }
+      // window.Intercom.signin({ user }, () => {})
 
       browserHistory.push('/dashboard/mls')
     },
