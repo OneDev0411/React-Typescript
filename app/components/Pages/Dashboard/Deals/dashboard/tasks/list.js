@@ -41,7 +41,7 @@ const List = ({
                 <div className="title">{ task.title }</div>
 
                 <span className={`status ${status}`}>
-                  { status }
+                  { status.toUpperCase() }
                 </span>
               </div>
             )

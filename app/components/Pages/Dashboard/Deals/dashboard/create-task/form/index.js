@@ -7,7 +7,7 @@ import { createTask } from '../../../../../../../store_actions/deals'
 const createNewTask = (form, props) => {
   const { dealId, createTask, listId } = props
 
-  createTask(dealId, form.id, form.name, 'New', 'Form', listId)
+  createTask(dealId, form.id, form.name, 'Incomplete', 'Form', listId)
 }
 
 const CreateForm = (props) => {

@@ -190,7 +190,7 @@ Deal.submitForReview = async function(task_id) {
   try {
     await new Fetch()
       .put(`/tasks/${task_id}/review`)
-      .send({ status: 'Pending' })
+      .send({ status: 'Submitted' })
 
     await new Fetch()
       .patch(`/tasks/${task_id}/needs_attention`)
@@ -208,7 +208,7 @@ Deal.cancelTaskReview = async function(task_id) {
   try {
     await new Fetch()
       .put(`/tasks/${task_id}/review`)
-      .send({ status: 'New' })
+      .send({ status: 'Incomplete' })
 
     await new Fetch()
       .patch(`/tasks/${task_id}/needs_attention`)

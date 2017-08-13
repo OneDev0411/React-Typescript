@@ -24,7 +24,7 @@ class SubmitReview extends React.Component {
     this.setState({ submitting: true })
 
     // submit this task to review
-    if (status === 'Pending') {
+    if (status === 'Submitted') {
       await cancelTaskReview(task.id)
     } else {
       await submitForReview(task.id)
@@ -35,7 +35,7 @@ class SubmitReview extends React.Component {
       submitting: false
     })
 
-    setTimeout(() => this.setState({ showSuccessModal: false }), 3000)
+    setTimeout(() => this.setState({ showSuccessModal: false }), 1000)
   }
 
   getTaskStatus() {
@@ -51,7 +51,7 @@ class SubmitReview extends React.Component {
       return <img src="/static/images/deals/pacman.svg" />
     }
 
-    return status === 'Pending' ? 'Cancel Submission' : 'Submit'
+    return status === 'Submitted' ? 'Cancel Submission' : 'Submit'
   }
 
   render() {
@@ -71,7 +71,7 @@ class SubmitReview extends React.Component {
 
         <MessageModal
           show={showSuccessModal}
-          text={status === 'Pending' ? 'Submitted for review!' : 'Submission cancelled!'}
+          text={status === 'Submitted' ? 'Submitted for review!' : 'Submission cancelled!'}
         />
       </div>
     )
