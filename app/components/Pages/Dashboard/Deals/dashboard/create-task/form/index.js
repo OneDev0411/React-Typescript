@@ -19,7 +19,7 @@ const CreateForm = (props) => {
         noCaret
         className="add-task"
         id="dropdown-create-form"
-        title="+ Add New"
+        title={<span><i className="fa fa-plus" /> Add New</span>}
       >
         {
           _.map(forms, form => (
