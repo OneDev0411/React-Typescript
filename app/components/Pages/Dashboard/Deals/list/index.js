@@ -130,7 +130,7 @@ export default class extends React.Component {
    *
    */
   getSide(deal) {
-    return Deal.get.field(deal, 'deal_type')
+    return deal.deal_type
   }
 
   /**
