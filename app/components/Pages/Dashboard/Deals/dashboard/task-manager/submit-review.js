@@ -60,11 +60,12 @@ class SubmitReview extends React.Component {
     const status = this.getTaskStatus()
 
     return (
-      <div style={{ display: 'inline' }}>
+      <div>
         <button
           disabled={submitting}
           onClick={() => this.toggleSubmit()}
           className={`task-btn btn-submit ${submitting ? 'saving' : ''}`}
+          style={{ fontSize: 'Submitted' ? '13px' : '15px' }}
         >
           { this.getButtonCaption() }
         </button>
