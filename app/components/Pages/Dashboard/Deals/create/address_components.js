@@ -154,7 +154,7 @@ class CreateDealModal extends React.Component {
                 onClick={() => this.props.onClickSave(this.state)}
                 disabled={saving}
               >
-                { saving ? 'Creating...' : 'Yes, add' }
+                { saving ? 'Creating...' : 'Create Deal' }
               </Button>
             </div>
           </div>
