@@ -12,13 +12,28 @@ const Deal = {
 * a helper that extracts a field from context or proposed values
 */
 Deal.get.field = function(deal, field) {
-  if (deal.context && deal.context[field]) {
-    return deal.context[field]
-  } else if (deal.proposed_values && deal.proposed_values[field]) {
-    return deal.proposed_values[field]
-  } else {
-    return null
+  const contexts = ['mls_context', 'form_context', 'deal_context']
+  const values = {}
+
+  contexts.forEach(ctx => {
+    values[ctx] = deal[ctx] && deal[ctx][field] ? deal[ctx][field] : null
+  })
+
+  const { mls_context, form_context, deal_context } = values
+
+  let value = null
+
+  if (mls_context) {
+    value = mls_context
+  } else if (form_context && deal_context) {
+    value = form_context.created_at > deal_context.created_at ? form_context.value : deal_context.value
+  } else if (form_context && !deal_context) {
+    value = form_context.value
+  } else if (deal_context && !form_context){
+    value = deal_context.value
   }
+
+  return value
 }
 
 /**
