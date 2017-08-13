@@ -2,12 +2,23 @@ import Fetch from '../../services/fetch/index'
 
 const Roles = {}
 
-Roles.getMembers = async function (role) {
-  const endpoint = `/brands/${role.brand}/roles/${role.id}/members`
+Roles.getRoles = async function (user) {
+  const endpoint = `/brands/${user.brand}/roles`
   try {
     const fetchRoles = new Fetch()
       .get(endpoint)
     return await fetchRoles
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+
+Roles.addRoles = async function (user, role) {
+  try {
+    return await new Fetch()
+      .post(`/brands/${user.brand}/roles`)
+      .send(role)
   } catch (e) {
     console.log(e)
   }

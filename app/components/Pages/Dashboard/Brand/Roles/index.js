@@ -6,18 +6,16 @@ import { getRoles } from '../../../../../store_actions/brandConsole'
 
 class Roles extends React.Component {
   componentDidMount() {
-    this.init(this.props.user)
-  }
-
-  async init(user) {
-    this.props.getRoles(user)
+    this.props.getRoles(this.props.user)
   }
 
   render() {
     const roles = this.props.roles
     return (
       <div className="roles">
-        <Header />
+        <Header
+          role={this.props.user}
+        />
         <div className="rows">
           {roles.map(role =>
             <Column

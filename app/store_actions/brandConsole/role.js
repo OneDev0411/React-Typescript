@@ -17,3 +17,21 @@ export function getRoles(user) {
     }
   }
 }
+
+function _addRoles(user, role) {
+  return {
+    type: types.ADD_ROLE,
+    user,
+    role
+  }
+}
+
+export function addRoles(user, role) {
+  return async (dispatch) => {
+    const response = await BrandConsole.addRoles(user, role)
+    if (response) {
+      const { data } = response.body
+      dispatch(_addRoles(user, data))
+    }
+  }
+}
