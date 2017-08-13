@@ -10,7 +10,7 @@ export default (state = initialState, action) => {
 
       return {
         ...action.data,
-        ...{counter}
+        counter
       }
 
     default:

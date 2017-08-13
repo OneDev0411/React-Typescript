@@ -39,14 +39,9 @@ async function display(file, renderProps) {
 
   try {
     const response = await getBrand(this.session.user, this.request.origin)
-    initialState = {
-      ...initialState,
-      ...{
-        data: {
-          ...initialState.data,
-          ...{ brand: response.body.data }
-        }
-      }
+    initialState.data = {
+      ...initialState.data,
+      brand: response.body.data
     }
   } catch (e) {
     /* nothing */
