@@ -239,9 +239,15 @@ export default class extends React.Component {
         tooltip = ['All']
     }
 
-    return tooltip
-      .join(', ')
-      .replace(/,([^,]*)$/, ' and $1') + ' Listings'
+    return (
+      <div style={{ textAlign: 'left' }}>
+        {
+          tooltip.map(item => (
+            <div>{ item }</div>
+          ))
+        }
+      </div>
+    )
   }
 
   /**
