@@ -67,7 +67,18 @@ $margin: 20px;
           border-radius: 2px;
         }
 
+        .address-col {
+          padding-left: 30px;
+          .addr {
+            color: #a0a0a0;
+            display: block;
+            font-weight: normal;
+            margin-top: -9px;
+          }
+        }
+
         .status {
+          float: right;
           display: block;
           background-color: #35b863;
           margin-top: 13px;
@@ -75,18 +86,11 @@ $margin: 20px;
           padding: 0 4px;
           font-size: 12px;
           text-align: center;
-          min-width: 60px;
+          width: 60px;
           height: 26px;
           line-height: 26px;
           vertical-align: middle;
           border-radius: 3px;
-        }
-
-        .addr {
-          color: #a0a0a0;
-          display: block;
-          font-weight: normal;
-          margin-top: -9px;
         }
       }
 

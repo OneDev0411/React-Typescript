@@ -28,14 +28,14 @@ export default ({
               className="item listing"
               onClick={() => onPlaceSelect(item)}
             >
-              <Col md={2} sm={2} xs={2}>
+              <Col md={1} sm={1} xs={1}>
                 <img
                   src={item.image || '/static/images/deals/home.svg'}
                   className="listing-image"
                 />
               </Col>
 
-              <Col md={6} sm={6} xs={6}>
+              <Col md={7} sm={7} xs={7} className="address-col">
                 <span style={{ color: '#5b6469' }}>
                   {c.street_number} {c.street_name} {c.street_suffix}
                 </span>
