@@ -63,6 +63,7 @@ const ComposeWrapper = ({
         <Button
           bsStyle="primary"
           onClick={async () => {
+            onChangeComposeModal(false)
             onButtonClick({
               role: this.input.value
             })

@@ -2,15 +2,12 @@
 %column {
   min-height: 100%;
   width: $rowWidth;
-  //float: left;
   display: inline-block;
   border-right: solid 1px #d8dfe2;
   .title {
     font-size: 15px;
     font-weight: bold;
     color: #5b6469;
-    //padding: 25px 0px 40px 20px;
-    //margin: 0;
     text-align: center;
     border-bottom: solid 1px #d8dfe2;
     border-top: solid 1px #d8dfe2;
@@ -24,8 +21,8 @@
       display: block;
       margin-top: 16px;
     }
-    .item {
-      @extend %item;
+    .each-row {
+      @extend %each-row;
     }
   }
 }
@@ -34,9 +31,8 @@
   z-index: 99 !important;
 }
 
-%item {
-  margin: 16px 1px 0px 1px;
-  padding: 3px;
+%each-row {
+  margin: 17px 0px 0px 16px;
   cursor: pointer;
   float: left;
   .closeIcon {
@@ -61,7 +57,6 @@
     margin-right: 10px;
   }
   .memberName {
-    padding: 0 0 0 10px;
     opacity: 0.5;
     font-size: 15px;
     color: #5b6469;

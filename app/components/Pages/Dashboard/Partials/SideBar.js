@@ -11,7 +11,6 @@ import Loading from '../../../Partials/Loading'
 import MaskedInput from 'react-input-mask'
 import { all_countries } from '../../../../utils/country-data'
 import helpers from '../../../../utils/helpers'
-import { PhoneNumberUtil } from 'google-libphonenumber'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import ProfileImage from './ProfileImage'
@@ -30,15 +29,15 @@ import InstantTrigger from '../Chatroom/Shared/instant-trigger'
 
 import BrandInstantTrigger from '../Brand/Shared/instant-trigger'
 
-const phoneUtil = PhoneNumberUtil.getInstance()
-
 export default class SideBar extends Component {
 
-  componentDidUpdate() {
+  async componentDidUpdate() {
     // Refresh page on agent update
     const data = this.props.data
     if (data.settings && data.settings.is_agent)
       window.location.href = '/signin?message=account-upgraded'
+
+    this.phone_number_parsed = await helpers.parsePhoneNumber(this.props.data.user.phone_number)
   }
   showSettingsModal(e) {
     e.preventDefault()
@@ -102,7 +101,10 @@ export default class SideBar extends Component {
     })
   }
 
-  editAccountInfo() {
+  async editAccountInfo() {
+    const { PhoneNumberUtil } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
+    const phoneUtil = PhoneNumberUtil.getInstance()
+
     delete AppStore.data.error
     const data = this.props.data
     const user = data.user
@@ -405,8 +407,9 @@ export default class SideBar extends Component {
     let change_password_area = (
       <a style={S('mt-7')} className="pull-left" href="#" onClick={this.showChangePassword.bind(this)}>Change password</a>
     )
-    const phone_number_parsed = helpers.parsePhoneNumber(user.phone_number)
-    const current_country_code = phone_number_parsed.country_code
+
+    const current_country_code = this.phone_number_parsed ? this.phone_number_parsed.country_code : ''
+
     let phone_country = `+${current_country_code}`
     if (data.phone_country)
       phone_country = `+${data.phone_country.dialCode}`
@@ -449,7 +452,14 @@ export default class SideBar extends Component {
             <div className="input-group-btn input-dropdown--country-codes">
               { country_codes }
             </div>
-            <MaskedInput className="form-control" ref={ref => this.phone_numberInput = ref} type="text" defaultValue={user.phone_number ? phone_number_parsed.phone_number : ''} mask="(999)-999-9999" maskChar="_" />
+            <MaskedInput
+              className="form-control"
+              ref={ref => this.phone_numberInput = ref}
+              type="text"
+              defaultValue={user.phone_number && this.phone_number_parsed ? this.phone_number_parsed.phone_number : ''}
+              mask="(999)-999-9999"
+              maskChar="_"
+            />
           </div>
         </Col>
         <div className="clearfix" />
@@ -637,7 +647,7 @@ export default class SideBar extends Component {
           }
 
           {
-            user.features && user.features.indexOf('Deals') > -1 &&
+            user.features &&
             <OverlayTrigger placement="right" overlay={popover.deals} delayShow={200} delayHide={0}>
               <LinkContainer onClick={this.hideListingViewer.bind(this)} className={active.deals} to="/dashboard/deals">
                 <NavItem style={S('w-85p')}>

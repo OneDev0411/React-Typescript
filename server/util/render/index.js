@@ -1,5 +1,4 @@
 import React from 'react'
-import xss from 'xss'
 import urlParser from 'url'
 import { renderToString } from 'react-dom/server'
 import { RouterContext } from 'react-router'
@@ -17,6 +16,10 @@ function fetch(renderProps, store) {
     }
     return Promise.reslove
   })
+}
+
+function sanitize(state) {
+  return encodeURIComponent(JSON.stringify(state))
 }
 
 async function getBrand(user, url) {
@@ -71,7 +74,7 @@ async function display(file, renderProps) {
   }
 
   // get store initial data
-  const store_data = encodeURIComponent(xss(JSON.stringify(store.getState())))
+  const store_data = sanitize(store.getState())
 
   if (['production', 'stage'].indexOf(process.env.NODE_ENV) > -1) {
     await this.render(file || 'app', {
@@ -100,7 +103,8 @@ async function display(file, renderProps) {
     await this.render('development', {
       store_data,
       data: this.locals,
-      jsBundle: `${config.compile.publicPath}/${config.compile.jsBundle}`
+      jsBundle: `${config.compile.publicPath}/${config.compile.jsBundle}`,
+      jsVendorBundle: `${config.compile.publicPath}/${config.compile.jsVendorBundle}`
     })
   }
 }

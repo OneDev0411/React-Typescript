@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Rx from 'rxjs/Rx'
 import Message from '../Util/message'
 import Mention from '../Util/mention'
 import Socket from '../Services/socket'
@@ -12,7 +11,8 @@ class ComposeMessage extends React.Component {
     this.isTyping = false
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
     const { Observable } = Rx
 
     // create handler for text keypress

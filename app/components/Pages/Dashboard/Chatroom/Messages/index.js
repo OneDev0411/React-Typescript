@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Rx from 'rxjs/Rx'
 import _ from 'underscore'
 import moment from 'moment'
 import cn from 'classnames'
@@ -19,6 +18,11 @@ class Messages extends React.Component {
     this.state = {
       composeMessageHeight: 45
     }
+  }
+
+  static defaultProps = {
+    toolbarHeight: '70px',
+    baseHeight: '95vh'
   }
 
   componentDidMount() {
@@ -67,7 +71,9 @@ class Messages extends React.Component {
     this.messagesObservable.unsubscribe()
   }
 
-  initializeScroller() {
+  async initializeScroller() {
+    const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
+
     this.messagesObservable = Rx
     .Observable
     .fromEvent(this.messagesList, 'scroll')
@@ -192,9 +198,12 @@ class Messages extends React.Component {
    */
   getHeight() {
     const { composeMessageHeight } = this.state
-    const { isPopup } = this.props
-    const toolbarHeight = isPopup ? '0px' : '70px'
-    const baseHeight = isPopup ? '297px' : '95vh'
+    const { showToolbar } = this.props
+    let { toolbarHeight, baseHeight } = this.props
+
+    if (showToolbar === false) {
+      toolbarHeight = '0px'
+    }
 
     return `calc(${baseHeight} - ${toolbarHeight} - ${composeMessageHeight}px)`
   }
@@ -234,7 +243,14 @@ class Messages extends React.Component {
   }
 
   render() {
-    const { roomId, user, isInstantChat, showToolbar, onClick } = this.props
+    const {
+      roomId,
+      user,
+      isInstantChat,
+      showToolbar,
+      disableUpload,
+      onClick
+    } = this.props
 
     // get messages of current room
     const messages = roomId ? this.props.messages[roomId] : null
@@ -268,6 +284,7 @@ class Messages extends React.Component {
         }
 
         <UploadHandler
+          disabled={disableUpload}
           disableClick={true}
           roomId={roomId}
           author={user}

@@ -3,15 +3,22 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import ImageminPlugin from 'imagemin-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
+import Visualizer from 'webpack-visualizer-plugin'
 import path from 'path'
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
 
-const postcss = () => [
-  require('postcss-cssnext')({
-    browsers: ['> 1%', 'IE 10', 'Last 2 versions']
-  })
-]
+const postcss = function () {
+  return [
+    require('autoprefixer')({
+      'browserslist': [
+        '> 1%',
+        'IE 10',
+        'Last 2 versions'
+      ]
+    })
+  ]
+}
 
 webpackConfig.devtool = ''
 
@@ -27,6 +34,10 @@ webpackConfig.entry = {
 }
 
 webpackConfig.plugins.push(
+  new webpack.optimize.AggressiveMergingPlugin(),
+  new Visualizer({
+    filename: './statistics.html'
+  }),
   new webpack.optimize.CommonsChunkPlugin({
     name: 'vendor',
     filename: appConfig.compile.jsVendorBundle
@@ -46,13 +57,6 @@ webpackConfig.plugins.push(
     minify: {
       collapseWhitespace: false
     }
-  }),
-  new CompressionPlugin({
-    asset: '[path].gz[query]',
-    algorithm: 'gzip',
-    test: /\.js$|\.css$|\.html$/,
-    threshold: 10240,
-    minRatio: 0.8
   })
 )
 

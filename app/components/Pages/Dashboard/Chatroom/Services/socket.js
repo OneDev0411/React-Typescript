@@ -1,4 +1,3 @@
-import Rx from 'rxjs/Rx'
 import Socket from '../../../../../services/socket'
 import ChatNotification from './notification'
 import Message from '../Util/message'
@@ -24,7 +23,7 @@ export default class ChatSocket extends Socket {
     this.bindEvents()
   }
 
-  bindEvents() {
+  async bindEvents() {
     const { socket } = this
 
     // bind User.Typing
@@ -43,6 +42,8 @@ export default class ChatSocket extends Socket {
     socket.on('reconnect', this.onReconnected.bind(this))
 
     // update user state
+    const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
+
     Rx
     .Observable
     .fromEvent(socket, 'User.State', (state, user_id) => ({ state, user_id }))

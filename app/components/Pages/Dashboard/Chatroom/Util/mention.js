@@ -67,6 +67,10 @@ export default class Mention {
    * get mentions list
    */
   static getList(members, me = {}) {
+    if (!members) {
+      return []
+    }
+
     const list = members
     .filter(user => user.id !== me.id)
     .map(user => {

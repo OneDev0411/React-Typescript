@@ -18,10 +18,9 @@ export function getRoles(user) {
   }
 }
 
-function _addRoles(user, role) {
+function _addRoles(role) {
   return {
     type: types.ADD_ROLE,
-    user,
     role
   }
 }
@@ -31,7 +30,7 @@ export function addRoles(user, role) {
     const response = await BrandConsole.addRoles(user, role)
     if (response) {
       const { data } = response.body
-      dispatch(_addRoles(user, data))
+      dispatch(_addRoles(data))
     }
   }
 }

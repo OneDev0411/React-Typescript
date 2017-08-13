@@ -9,7 +9,7 @@ export default (state = [], action) => {
       }
       return state
     case types.ADD_ROLE:
-      return state.concat(action)
+      return state.concat(action.role)
     default:
       return state
   }

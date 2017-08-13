@@ -1,0 +1,112 @@
+%deal-files-container {
+  padding: 0;
+  background: #fff;
+  overflow: hidden;
+
+  .deal-documents {
+    padding: 0;
+    @include scrollbar(gray, rgba(0, 0, 0, 0.05));
+    overflow-y: scroll;
+    overflow-x: hidden;
+    min-height: 17vh;
+    max-height: 17vh;
+  }
+
+  .file {
+    margin-bottom: 0;
+    padding: 15px $col-padding;
+    border-bottom: 1px solid #eff5fa;
+  }
+
+  .file > .image {
+    img {
+      width: 28px;
+    }
+  }
+
+  .file > .name {
+    .description {
+      color: gray;
+    }
+  }
+
+  .file > .actions {
+    text-align: right;
+    padding-right: $col-padding / 2;
+    button, .btn-view {
+      height: 30px;
+      width: 60px;
+      line-height: 26px;
+      vertical-align: middle;
+      color: #78909c;
+      border-radius: 4px;
+      background-color: #ffffff;
+      border: solid 1px #e7eef0;
+      margin-left: 8px;
+      &:focus { outline: none; }
+      &:hover { background-color: #fbfbfb; }
+    }
+  }
+
+  .file-upload {
+    // border-top: 1px solid #eff5fa;
+    border-bottom: 10px solid #eff5fa;
+    background-color: #fdffff;
+    max-height: 10.5vh;
+    .progress {
+      height: 8px;
+      border-radius: 0;
+    }
+
+    .link {
+      color: #2196f3;
+      cursor: pointer;
+    }
+  }
+}
+
+.upload-placeholder {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+
+  .upload-area {
+    position: absolute;
+    left: 25%;
+    top: 30vh;
+    background-color: red;
+    width: 700px;
+    height: 250px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    border: 2px dotted #979797;
+    text-align: center;
+    padding-top: 70px;
+
+    .title {
+      font-size: 46px;
+      font-weight: bold;
+      letter-spacing: -1.1px;
+      text-align: center;
+      color: #4a4a4a;
+    }
+
+    .desc {
+      font-size: 17px;
+      letter-spacing: -1.1px;
+      text-align: center;
+      color: #929292;
+    }
+
+    img {
+      position: absolute;
+      top: -90px;
+      left: 25%;
+      width: 363px;
+    }
+  }
+}
