@@ -3,6 +3,7 @@ import { routerReducer } from 'react-router-redux'
 import data from './data'
 import auth from './auth'
 import user from './user'
+import brand from './brand'
 import socket from './socket'
 import contact from './contact'
 import chatroom from './chatroom'
@@ -18,14 +19,15 @@ const appReducer = combineReducers({
   data,
   user,
   auth,
+  brand,
   search,
   alerts,
+  widgets,
   contact,
   chatroom,
   favorites,
   routing: routerReducer,
-  listing: createNamedWrapperReducer(listing, 'LISTING'),
-  widgets
+  listing: createNamedWrapperReducer(listing, 'LISTING')
 })
 
 export default (state, action) => appReducer(state, action)
