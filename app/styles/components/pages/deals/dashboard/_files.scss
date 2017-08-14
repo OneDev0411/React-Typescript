@@ -3,48 +3,48 @@
   background: #fff;
   overflow: hidden;
 
-  .deal-documents {
-    padding: 0;
-    @include scrollbar(gray, rgba(0, 0, 0, 0.05));
-    overflow-y: scroll;
-    overflow-x: hidden;
-    min-height: 17vh;
-    max-height: 17vh;
-  }
-
   .file {
-    margin-bottom: 0;
-    padding: 15px $col-padding;
-    border-bottom: 1px solid #eff5fa;
-  }
-
-  .file > .image {
-    img {
-      width: 28px;
+    padding: 0 10px;
+    margin: 0 0 30px 0;
+    .title {
+      font-weight: 500;
+      color: #62778c;
+      padding-left: 1px;
+      margin-bottom: 10px;
     }
-  }
 
-  .file > .name {
-    .description {
-      color: gray;
-    }
-  }
+    .item {
+      margin: 0;
+      background-color: #f8fafb;
+      border: solid 1px #d2d7db;
+      padding: $col-padding 5px;
 
-  .file > .actions {
-    text-align: right;
-    padding-right: $col-padding / 2;
-    button, .btn-view {
-      height: 30px;
-      width: 60px;
-      line-height: 26px;
-      vertical-align: middle;
-      color: #78909c;
-      border-radius: 4px;
-      background-color: #ffffff;
-      border: solid 1px #e7eef0;
-      margin-left: 8px;
-      &:focus { outline: none; }
-      &:hover { background-color: #fbfbfb; }
+      img {
+        width: 28px;
+      }
+
+      .name {
+        color: #1d364b;
+        font-size: 15px;
+      }
+
+      .actions {
+        text-align: right;
+        padding-right: $col-padding / 2;
+        button, .btn-view {
+          height: 30px;
+          width: 60px;
+          line-height: 26px;
+          vertical-align: middle;
+          color: #78909c;
+          border-radius: 4px;
+          background-color: #ffffff;
+          border: solid 1px #e7eef0;
+          margin-left: 8px;
+          &:focus { outline: none; }
+          &:hover { background-color: #fbfbfb; }
+        }
+      }
     }
   }
 

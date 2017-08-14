@@ -7,7 +7,7 @@ import { createTask } from '../../../../../../../store_actions/deals'
 const createNewTask = (form, props) => {
   const { dealId, createTask, listId } = props
 
-  createTask(dealId, form.id, form.name, 'New', 'Form', listId)
+  createTask(dealId, form.id, form.name, 'Incomplete', 'Form', listId)
 }
 
 const CreateForm = (props) => {
@@ -19,7 +19,7 @@ const CreateForm = (props) => {
         noCaret
         className="add-task"
         id="dropdown-create-form"
-        title="+ Add New"
+        title={<span><i className="fa fa-plus" /> Add New</span>}
       >
         {
           _.map(forms, form => (

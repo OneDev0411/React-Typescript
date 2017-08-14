@@ -254,7 +254,9 @@ export default class extends React.Component {
    * set filter tab tooltip
    */
   setFilterTabTooltip(filter) {
-    browserHistory.push(`/dashboard/deals/${filter}`)
+    const arg = filter === 'All' ? '' : `/${filter}`
+    browserHistory.push(`/dashboard/deals${arg}`)
+
     this.setState({ filterTab: filter })
   }
 

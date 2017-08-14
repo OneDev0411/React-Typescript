@@ -13,6 +13,7 @@ const List = ({
   if (!section) {
     return false
   }
+
   return (
     <div className="section">
       <span className="title">
@@ -24,7 +25,7 @@ const List = ({
         listId={section.id}
       />
 
-      <div className="list">
+      <div className={`list ${!section.tasks ? 'empty' : ''}`}>
         {
           section.tasks &&
           section.tasks
@@ -38,10 +39,10 @@ const List = ({
                 onClick={() => onSelectTask(task)}
                 className={cn('task', { active: selectedTaskId === id })}
               >
-                <div className="title">{ task.title }</div>
+                <div className="title">{ task.title.replace(/&.*;/g, '') }</div>
 
                 <span className={`status ${status}`}>
-                  { status }
+                  { status.toUpperCase() }
                 </span>
               </div>
             )

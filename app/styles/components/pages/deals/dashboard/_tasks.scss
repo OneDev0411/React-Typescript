@@ -1,5 +1,4 @@
 %deal-tasks {
-  background: #fbfbfb;
   .tasks-container {
     padding: $col-padding !important;
     min-height: 100vh;
@@ -29,37 +28,43 @@
   }
 
   .list {
-    margin: 10px 0;
-    box-shadow: 0 1px 1px 0 #eef1f2;
+    border-radius: 4px;
+    margin: 10px 0 20px 0;
+    box-shadow: 0 1px 1px 0 #e9eef2;
+    border: 1px solid #e9eef2;
+    &.empty {
+      border: none;
+      box-shadow: none;
+    }
   }
 
   .add-task {
     float: right;
     min-width: 90px;
-    height: 24px;
-    line-height: 8px;
-    vertical-align: middle;
+    height: 25px;
+    line-height: 0px;
     border-radius: 3px;
     background-color: #ffffff;
-    box-shadow: 0 1px 1px 0 #eef1f2;
-    border: solid 1px #eef1f2;
-    color: #78909c;
+    border: solid 1px #dde2e6;
+    color: #8da2b5;
     &:focus {
       outline: none;
     }
     &:hover {
       background: #fbfbfb;
+      color: #2196f3;
     }
     i {
       margin-right: 5px;
-      font-size: 13px;
+      font-size: 10px;
     }
   }
 
   .list > .task {
     position: relative;
     padding: 0 11px;
-    background-color: #fff;
+    background-color: #fefefe;
+    box-shadow: 0 1px 1px 0 #e9eef2;
     height: 56px;
     line-height: 56px;
     vertical-align: middle;
@@ -68,11 +73,11 @@
     border-bottom: 1px solid #eef1f2;
 
     &.active {
-      background: #eff5fa;
+      background: #dce5eb;
     }
 
     &:hover {
-      background-color: #eff5fa;
+      background-color: #dce5eb;
     }
 
     &:first-child {
@@ -81,6 +86,8 @@
 
     &:last-child {
       border-radius: 0 0 4px 4px;
+      border-bottom: none;
+      box-shadow: none;
     }
 
     .title {
@@ -107,11 +114,9 @@
         border: solid 1px #78909c;
         background-color: transparent;
       }
-
       &.Pending {
         background-color: #f6a623;
       }
-
       &.Rejected {
         background-color: #d0011b;
       }

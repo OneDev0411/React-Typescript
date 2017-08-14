@@ -7,18 +7,21 @@ import { editForm } from '../../../../../../../store_actions/deals/forms'
 const Form = ({
   task,
   editForm
-}) => (
-  <div className="deal-files-form">
-    {
-      task && task.form &&
-      <Row className="file">
+}) => {
+  if (!task || !task.form) {
+    return false
+  }
+
+  return (
+    <div className="file">
+      <div className="title">Digital Form</div>
+      <Row className="item">
         <Col sm={1} xs={12} className="image vcenter">
           <img src="/static/images/deals/form.png" />
         </Col>
 
         <Col sm={5} xs={12} className="name vcenter">
-          <div>Form</div>
-          <div className="note">May 10 17 @ 1:15 AM</div>
+          <div>Digital Form</div>
         </Col>
 
         <Col sm={6} xs={12} className="actions vcenter">
@@ -26,9 +29,8 @@ const Form = ({
           <button onClick={() => editForm(task)}>Edit</button>
         </Col>
       </Row>
-    }
-
-  </div>
-)
+    </div>
+  )
+}
 
 export default connect(null, { editForm })(Form)

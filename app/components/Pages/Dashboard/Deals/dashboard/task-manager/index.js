@@ -17,7 +17,6 @@ const TaskManager = ({
 
   return (
     <div className="full-width">
-
       <UploadFile
         disableClick={true}
         task={task}
@@ -30,9 +29,6 @@ const TaskManager = ({
           task={task}
         />
 
-        <Comments
-          task={task}
-        />
       </UploadFile>
     </div>
   )

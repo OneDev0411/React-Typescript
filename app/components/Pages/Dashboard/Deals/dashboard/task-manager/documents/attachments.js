@@ -70,35 +70,38 @@ class FileAttachments extends React.Component {
           onCloseHandler={() => this.setState({ showViewer: false })}
         />
 
-        {
-          files.map((file, key) =>
-            <Row
-              key={`PDF_FILE_${file.id}`}
-              className="file"
-            >
-              <Col sm={1} xs={12} className="image vcenter">
-                <img src={file.preview_url} />
-              </Col>
-              <Col sm={8} xs={12} className="name vcenter">
-                <div>{ file.name }</div>
-                <div>{ moment(file.created_at).format('Y/M/D') }</div>
-              </Col>
+        <div className="file">
+          <div className="title">Uploads</div>
+          {
+            files.map((file, key) =>
+              <Row
+                key={`PDF_FILE_${file.id}`}
+                className="item"
+              >
+                <Col sm={1} xs={12} className="image vcenter">
+                  <img src={file.preview_url} />
+                </Col>
+                <Col sm={8} xs={12} className="name vcenter">
+                  <div>{ file.name }</div>
+                  <div>{ moment(file.created_at).format('Y/M/D') }</div>
+                </Col>
 
-              <Col sm={3} xs={12} className="actions vcenter">
-                <button
-                  onClick={() => {
-                    this.setState({
-                      selectedFile: file,
-                      showViewer: true
-                    })
-                  }}
-                >
-                  View
-                </button>
-              </Col>
-            </Row>
-          )
-        }
+                <Col sm={3} xs={12} className="actions vcenter">
+                  <button
+                    onClick={() => {
+                      this.setState({
+                        selectedFile: file,
+                        showViewer: true
+                      })
+                    }}
+                  >
+                    View
+                  </button>
+                </Col>
+              </Row>
+            )
+          }
+        </div>
       </div>
     )
   }

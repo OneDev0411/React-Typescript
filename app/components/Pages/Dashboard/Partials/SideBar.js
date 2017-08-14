@@ -635,7 +635,7 @@ export default class SideBar extends Component {
             </LinkContainer>
           </OverlayTrigger>
 
-          {/*{
+          {
             user.features && user.features.indexOf('Concierge') > -1 &&
             <OverlayTrigger placement="right" overlay={popover.concierge} delayShow={200} delayHide={0}>
               <LinkContainer onClick={this.hideListingViewer.bind(this)} className={active.concierge} to="/dashboard/concierge/deals">
@@ -655,7 +655,7 @@ export default class SideBar extends Component {
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
-          }*/}
+          }
 
           {
             user.user_type !== 'Client' &&

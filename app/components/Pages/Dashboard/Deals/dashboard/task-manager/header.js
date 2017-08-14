@@ -4,13 +4,16 @@ import SubmitReview from './submit-review'
 export default ({
   task
 }) => (
-  <div className="heading">
-    <span>
-      { task.title }
-    </span>
-
-    <SubmitReview
-      task={task}
-    />
-  </div>
+  <table className="heading">
+    <tbody>
+      <tr>
+        <td className="title">{ task.title.replace(/&.*;/g, '') }</td>
+        <td className="submit">
+          <SubmitReview
+            task={task}
+          />
+        </td>
+      </tr>
+    </tbody>
+  </table>
 )

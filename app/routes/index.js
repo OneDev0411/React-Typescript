@@ -109,8 +109,9 @@ const AsyncListingSinglePage = Load({
   loader: () => import('../components/Pages/Dashboard/Listings/Listing' /* webpackChunkName: "list_single" */)
 })
 
-// chat room
+
 import Brand from '../components/Pages/Dashboard/Brand'
+
 
 // Notifications
 const AsyncNotificationsPage = Load({

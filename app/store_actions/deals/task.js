@@ -44,13 +44,13 @@ export function addAttachment(deal_id, checklist_id, task_id, file) {
 export function submitForReview(taskId) {
   return async (dispatch) => {
     await Deal.submitForReview(taskId)
-    dispatch(changeStatus(taskId, 'Pending'))
+    dispatch(changeStatus(taskId, 'Submitted'))
   }
 }
 
 export function cancelTaskReview(taskId) {
   return async (dispatch) => {
     await Deal.cancelTaskReview(taskId)
-    dispatch(changeStatus(taskId, 'New'))
+    dispatch(changeStatus(taskId, 'Incomplete'))
   }
 }
