@@ -29,11 +29,28 @@ function _addMembers(role_id, members) {
 
 export function addMembers(role, members) {
   return async (dispatch) => {
-    const response = await BrandConsole.getMembers(role, members)
+    const response = await BrandConsole.addMembers(role, members)
     if (response) {
       const { data } = response.body
-      dispatch(_addMembers(role_id, data))
+      dispatch(_addMembers(role.id, data))
     }
   }
 }
 
+function _deleteMembers(role_id, member_id) {
+  return {
+    type: types.DELETE_MEMBER,
+    member_id,
+    role_id
+  }
+}
+
+export function deleteMembers(role, member_id) {
+  return async (dispatch) => {
+    const response = await BrandConsole.deleteMember(role, member_id)
+    if (response &&
+      response.body.status === 'success') {
+      dispatch(_deleteMembers(role.id, member_id))
+    }
+  }
+}

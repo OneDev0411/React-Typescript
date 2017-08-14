@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Members from '../Compose'
-import { getMembers, addMembers, deleteRoles } from '../../../../../store_actions/brandConsole'
+import { getMembers, addMembers, deleteRoles, deleteMembers } from '../../../../../store_actions/brandConsole'
 import { Row, Col } from 'react-bootstrap'
 import cn from 'classnames'
 import UserAvatar from '../../../../Partials/UserAvatar'
@@ -62,7 +62,8 @@ class Column extends Component {
           {this.props.role.role}
           {this.props.activeRole &&
           <i
-            onClick={() => { this.props.deleteRoles(this.props.role)
+            onClick={() => {
+              this.props.deleteRoles(this.props.role)
             }}
             className="fa fa-times closeIcon"
             aria-hidden="true"
@@ -96,6 +97,7 @@ class Column extends Component {
               {row.id === activeRow &&
               <i
                 onClick={() => {
+                  this.props.deleteMembers(this.props.role, row.id)
                 }}
                 className="fa fa-times closeIcon"
                 aria-hidden="true"
@@ -115,5 +117,5 @@ export default connect(
     members: brandConsole.members[role.id] || [],
     user: data.user
   }),
-  ({ getMembers, addMembers, deleteRoles })
+  ({ getMembers, addMembers, deleteRoles, deleteMembers })
 )(Column)

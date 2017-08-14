@@ -23,4 +23,13 @@ Members.addMembers = async function (role, members) {
   }
 }
 
+Members.deleteMember = async function (role, member_id) {
+  try {
+    return await new Fetch().delete(`/brands/${role.brand}/roles/${role.id}/members/${member_id}`)
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
+
 export default Members
