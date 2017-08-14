@@ -1,11 +1,19 @@
 %deal-task-manager {
   border: 1px solid #dce5eb;
-  margin: 55px $col-padding 20px 0;
+  margin: 60px $col-padding 20px 0;
   border-radius: 4px;
   background-color: #fff;
+  @include scrollbar()
 
   .heading {
     @extend %deal-task-manager-heading;
+  }
+
+  .scrollable {
+    $hg: calc(100vh - 110px - 77px);
+    height: $hg;
+    max-height: $hg;
+    overflow: auto;
   }
 
   .full-width {

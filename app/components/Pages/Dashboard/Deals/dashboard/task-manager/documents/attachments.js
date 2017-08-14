@@ -4,6 +4,7 @@ import { Row, Col } from 'react-bootstrap'
 import Lightbox from 'react-images'
 import moment from 'moment'
 import _ from 'underscore'
+import UploadFile from './upload'
 import FileModal from '../../../../../../Partials/Pdf/Modal'
 
 export default ({
@@ -17,9 +18,13 @@ export default ({
   const attachments = task.room.attachments || []
 
   return (
-    <div>
-      <FileAttachments attachments={attachments} />
-      <UnknownAttachments attachments={attachments} />
+    <div className="file">
+      <div className="title">Uploads</div>
+      <div className="file-group">
+        <FileAttachments attachments={attachments} />
+        <UnknownAttachments attachments={attachments} />
+        <UploadFile task={task} />
+      </div>
     </div>
   )
 }
@@ -70,38 +75,34 @@ class FileAttachments extends React.Component {
           onCloseHandler={() => this.setState({ showViewer: false })}
         />
 
-        <div className="file">
-          <div className="title">Uploads</div>
-          {
-            files.map((file, key) =>
-              <Row
-                key={`PDF_FILE_${file.id}`}
-                className="item"
-              >
-                <Col sm={1} xs={12} className="image vcenter">
-                  <img src={file.preview_url} />
-                </Col>
-                <Col sm={8} xs={12} className="name vcenter">
-                  <div>{ file.name }</div>
-                  <div>{ moment(file.created_at).format('Y/M/D') }</div>
-                </Col>
+        {
+          files.map((file, key) =>
+            <Row
+              key={`PDF_FILE_${file.id}`}
+              className="item"
+            >
+              <Col sm={1} xs={12} className="image vcenter">
+                <img src={file.preview_url} />
+              </Col>
+              <Col sm={8} xs={12} className="name vcenter">
+                { file.name }
+              </Col>
 
-                <Col sm={3} xs={12} className="actions vcenter">
-                  <button
-                    onClick={() => {
-                      this.setState({
-                        selectedFile: file,
-                        showViewer: true
-                      })
-                    }}
-                  >
-                    View
-                  </button>
-                </Col>
-              </Row>
-            )
-          }
-        </div>
+              <Col sm={3} xs={12} className="actions vcenter">
+                <button
+                  onClick={() => {
+                    this.setState({
+                      selectedFile: file,
+                      showViewer: true
+                    })
+                  }}
+                >
+                  View
+                </button>
+              </Col>
+            </Row>
+          )
+        }
       </div>
     )
   }
@@ -127,7 +128,7 @@ const UnknownAttachments = ({
         files.map((file, key) =>
           <Row
             key={`UNKNOWN_FILE_${file.id}`}
-            className="file"
+            className="item"
           >
             <Col sm={1} xs={12} className="image vcenter">
               <img src={file.preview_url} />

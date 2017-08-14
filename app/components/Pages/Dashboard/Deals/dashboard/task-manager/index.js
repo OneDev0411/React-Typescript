@@ -1,9 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Header from './header'
-import Comments from './comments'
 import Documents from './documents'
 import UploadFile from './documents/upload'
+
+import Comments from './comments'
+import CommentInput from './comments/input'
+
+function scrollEnd() {
+  const el = document.getElementById('deals-task-scrollable')
+  el.scrollTop = el.scrollHeight
+}
 
 const TaskManager = ({
   tasks,
@@ -21,14 +28,27 @@ const TaskManager = ({
         disableClick={true}
         task={task}
       >
-        <Header
-          task={task}
-        />
+        <div
+          className="scrollable"
+          id="deals-task-scrollable"
+        >
+          <Header
+            task={task}
+          />
 
-        <Documents
-          task={task}
-        />
+          <Documents
+            task={task}
+          />
 
+          <Comments
+            task={task}
+          />
+        </div>
+
+        <CommentInput
+          task={task}
+          onCommentSaved={() => scrollEnd()}
+        />
       </UploadFile>
     </div>
   )

@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Messages from '../../../Chatroom/Messages'
-import { addNewRoom } from '../../../../../../store_actions/chatroom/room'
+import Messages from '../../../../Chatroom/Messages'
+import { addNewRoom } from '../../../../../../../store_actions/chatroom/room'
 
 class Comment extends React.Component {
 
@@ -23,10 +23,13 @@ class Comment extends React.Component {
 
     return (
       <div className="deal-comments chatroom">
+        <div className="comment-heading">Comment</div>
+
         <Messages
           user={user}
           roomId={task.room.id}
           showToolbar={false}
+          showComposeMessage={false}
           disableUpload={true}
           baseHeight="45vh"
         />

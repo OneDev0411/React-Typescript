@@ -13,14 +13,23 @@
       margin-bottom: 10px;
     }
 
-    .item {
-      margin: 0;
+    .file-group {
       background-color: #f8fafb;
       border: solid 1px #d2d7db;
-      padding: $col-padding 5px;
+      border-radius: 3px;
+    }
+
+    .item {
+      margin: 0;
+      padding: 10px 5px;
+      border-bottom: solid 1px #d2d7db;
+
+      &.digital-form {
+        border-bottom: none;
+      }
 
       img {
-        width: 28px;
+        width: 16px;
       }
 
       .name {
@@ -49,10 +58,10 @@
   }
 
   .file-upload {
-    // border-top: 1px solid #eff5fa;
-    border-bottom: 10px solid #eff5fa;
-    background-color: #fdffff;
-    max-height: 10.5vh;
+    .item {
+      border-bottom: none;
+    }
+
     .progress {
       height: 8px;
       border-radius: 0;
