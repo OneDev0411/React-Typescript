@@ -35,22 +35,21 @@ const renderField = ({ type, input, label, meta: { touched, error } }) => {
 }
 
 const Signin = ({
+  brand,
   error,
-  appData,
   pristine,
   isLogging,
   handleSubmit,
   onSubmitHandler
 }) => {
-  const { brand } = appData
   let siteTitle = 'Rechat'
   let brandColor = '#2196f3'
   let siteLogo = 'static/images/logo-200w.png'
 
   if (brand) {
-    siteLogo = Brand.asset('site_logo')
+    siteLogo = Brand.asset('site_logo', null, brand)
     siteTitle = brand.messages.site_title
-    brandColor = `#${Brand.color('primary', '#2196f3')}`
+    brandColor = `#${Brand.color('primary', '#2196f3', brand)}`
   }
 
   return (
@@ -139,12 +138,12 @@ export default compose(
     getFormState: ({ auth }) => auth.signin.form
   }),
   connect(
-    ({ data, auth }) => {
+    ({ brand, auth }) => {
       const { isLogging, error } = auth.signin
       return {
+        brand,
         error,
-        isLogging,
-        appData: data
+        isLogging
       }
     },
     { submitSigninForm }

@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import S from 'shorti'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 
+import getBrand from '../store_actions/brand'
+
 // services
 import ChatSocket from './Pages/Dashboard/Chatroom/Services/socket'
 
@@ -26,6 +28,9 @@ import config from '../../config/public'
 
 class App extends Component {
   componentWillMount() {
+    // check branding
+    this._getBrand()
+
     if (typeof window !== 'undefined') {
       this.initializeChatSocket()
     }
@@ -34,9 +39,6 @@ class App extends Component {
   componentDidMount() {
     const { data } = this.props
     const { user } = data
-
-    // check branding
-    Brand.checkBranding()
 
     // load rooms
     this.initialRooms()
@@ -58,6 +60,10 @@ class App extends Component {
 
     // Set intercom
     this.setIntercom()
+  }
+
+  _getBrand() {
+    this.props.dispatch(getBrand())
   }
 
   initializeChatSocket() {

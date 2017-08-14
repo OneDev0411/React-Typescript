@@ -6,9 +6,9 @@ import { RouterContext } from 'react-router'
 import { createStore, applyMiddleware, compose } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
-import Brand from '../../../app/models/Brand'
 import reducers from '../../../app/reducers'
 import config from '../../../config/webpack'
+import getBrand from '../../../app/models/brand'
 
 function fetch(renderProps, store) {
   return renderProps.components.map(c => {
@@ -19,32 +19,23 @@ function fetch(renderProps, store) {
   })
 }
 
-async function getBrand(user, url) {
-  return new Promise((resolve, reject) => {
-    const hostname = urlParser.parse(url).hostname
-
-    Brand.getByHostname({ hostname, user }, (err, res) => {
-      if (err) {
-        return reject(err)
-      }
-      return resolve(res)
-    })
-  })
-}
-
 async function display(file, renderProps) {
   let initialState = {
     data: this.locals.AppStore ? this.locals.AppStore.data : {}
   }
 
   try {
-    const response = await getBrand(this.session.user, this.request.origin)
-    initialState.data = {
-      ...initialState.data,
-      brand: response.body.data
+    const hostname = urlParser.parse(this.request.origin).hostname
+    const brand = await getBrand(hostname)
+    initialState = {
+      data: {
+        ...initialState.data,
+        brand
+      },
+      brand
     }
-  } catch (e) {
-    /* nothing */
+  } catch (error) {
+    console.log(error)
   }
 
   // create store
