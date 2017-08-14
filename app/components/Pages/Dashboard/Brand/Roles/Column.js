@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Members from '../Compose'
-import { getMembers } from '../../../../../store_actions/brandConsole'
+import { getMembers, addMembers } from '../../../../../store_actions/brandConsole'
 import { Row, Col } from 'react-bootstrap'
 import cn from 'classnames'
 import UserAvatar from '../../../../Partials/UserAvatar'
@@ -13,6 +13,7 @@ class Column extends Component {
     this.state = {
       activeRow: null
     }
+    this.addMembers = this.addMembers.bind(this)
   }
 
   componentDidMount() {
@@ -42,6 +43,10 @@ class Column extends Component {
     return `${title.substr(0, len)}...`
   }
 
+  addMembers(members) {
+    this.props.addMembers(this.props.role, members)
+  }
+
   onSelectRow(activeRow) {
     this.setState({ activeRow })
   }
@@ -55,7 +60,8 @@ class Column extends Component {
         </div>
         <div className="members">
           <Members
-            room={this.props.role}
+            addMembers={this.addMembers}
+            members={this.props.members}
             iconSize={14}
           />
           {this.props.members.map(row =>
@@ -98,5 +104,5 @@ export default connect(
     members: brandConsole.members[role.id] || [],
     user: data.user
   }),
-  ({ getMembers })
+  ({ getMembers, addMembers })
 )(Column)

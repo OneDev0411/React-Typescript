@@ -13,12 +13,11 @@ Members.getMembers = async function (role) {
   }
 }
 
-Members.addMembers = async function(roomId, recipients) {
+Members.addMembers = async function (role, members) {
   try {
     return await new Fetch()
-      .post(`/rooms/${roomId}/users`)
-      .send(recipients)
-
+      .post(`/brands/${role.brand}/roles/${role.id}/members`)
+      .send(members)
   } catch (e) {
     return null
   }

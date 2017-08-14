@@ -1,5 +1,5 @@
 export default [
   'GET_MEMBERS',
-  'CREATE_MEMBER',
+  'ADD_MEMBER',
   'REMOVE_MEMBER'
 ]

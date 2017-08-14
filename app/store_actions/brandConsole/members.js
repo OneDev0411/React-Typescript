@@ -19,3 +19,22 @@ export function getMembers(role) {
   }
 }
 
+
+function _addMembers(role_id, members) {
+  return {
+    type: types.ADD_MEMBER,
+    members,
+    role_id
+  }
+}
+
+export function addMembers(role, members) {
+  return async (dispatch) => {
+    const response = await BrandConsole.getMembers(role, members)
+    if (response) {
+      const { data } = response.body
+      dispatch(_addMembers(role_id, data))
+    }
+  }
+}
+
