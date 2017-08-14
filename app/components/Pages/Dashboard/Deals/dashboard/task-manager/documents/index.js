@@ -11,6 +11,5 @@ export default ({
   <div className="deal-files-container">
     <Form task={task} />
     <Attachments task={task} />
-    <UploadFile task={task} />
   </div>
 )

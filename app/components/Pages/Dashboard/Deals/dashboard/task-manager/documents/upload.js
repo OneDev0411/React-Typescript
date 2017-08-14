@@ -71,20 +71,27 @@ class UploadDocument extends React.Component {
     ChatMessage.postMessage(roomId, message)
   }
 
+  /**
+   * open file dialog
+   */
+  openDialog() {
+    this.dropzone.open()
+  }
+
   render() {
     const { dropzoneActive } = this.state
-    const { children, disableClick, task } = this.props
+    const { children, task } = this.props
     const { uploading } = task
 
     return (
       <Dropzone
+        disableClick
         ref={(node) => { this.dropzone = node }}
         onDrop={files => this.onDrop(files)}
         onDragEnter={() => this.setState({ dropzoneActive: true })}
         onDragLeave={() => this.setState({ dropzoneActive: false })}
         multiple={false}
         accept="application/pdf,image/*"
-        disableClick={disableClick || false}
         style={{ width: '100%' }}
       >
         {
@@ -106,14 +113,16 @@ class UploadDocument extends React.Component {
           children ||
           <div className="file-upload">
 
-            <Row className="file">
+            <Row className="item">
 
               <Col sm={1} xs={12} className="image vcenter">
-                <img src="/static/images/deals/upload.jpg" />
+                <img src="/static/images/deals/upload-file.svg" />
               </Col>
               <Col sm={11} xs={12} className="name vcenter">
-                <div>Drag and Drop</div>
-                <div>your files to upload or <span className="link">browse</span></div>
+                <div>
+                  Drag and Drop your files to upload or&nbsp;
+                  <span className="link" onClick={() => this.openDialog()}>browse</span>
+                </div>
               </Col>
             </Row>
 

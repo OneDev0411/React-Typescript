@@ -192,9 +192,8 @@ Deal.submitForReview = async function(task_id) {
       .put(`/tasks/${task_id}/review`)
       .send({ status: 'Submitted' })
 
-    await new Fetch()
-      .patch(`/tasks/${task_id}/needs_attention`)
-      .send({ needs_attention: true })
+    // set notify admin
+    await Deal.needsAttention(true)
 
   } catch (e) {
     return false
@@ -210,6 +209,19 @@ Deal.cancelTaskReview = async function(task_id) {
       .put(`/tasks/${task_id}/review`)
       .send({ status: 'Incomplete' })
 
+    // unset notify admin
+    Deal.needsAttention(false)
+
+  } catch (e) {
+    return false
+  }
+}
+
+/**
+* set notify admin flag
+*/
+Deal.needsAttention = async function(status) {
+  try {
     await new Fetch()
       .patch(`/tasks/${task_id}/needs_attention`)
       .send({ needs_attention: false })

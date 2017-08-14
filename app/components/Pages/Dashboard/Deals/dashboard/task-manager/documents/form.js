@@ -15,20 +15,22 @@ const Form = ({
   return (
     <div className="file">
       <div className="title">Digital Form</div>
-      <Row className="item">
-        <Col sm={1} xs={12} className="image vcenter">
-          <img src="/static/images/deals/form.png" />
-        </Col>
+      <div className="file-group">
+        <Row className="item digital-form">
+          <Col sm={1} xs={12} className="image vcenter">
+            <img src="/static/images/deals/form.png" />
+          </Col>
 
-        <Col sm={5} xs={12} className="name vcenter">
-          <div>Digital Form</div>
-        </Col>
+          <Col sm={5} xs={12} className="name vcenter">
+            <div>Digital Form</div>
+          </Col>
 
-        <Col sm={6} xs={12} className="actions vcenter">
-          <button>eSigns</button>
-          <button onClick={() => editForm(task)}>Edit</button>
-        </Col>
-      </Row>
+          <Col sm={6} xs={12} className="actions vcenter">
+            <button>eSigns</button>
+            <button onClick={() => editForm(task)}>Edit</button>
+          </Col>
+        </Row>
+      </div>
     </div>
   )
 }
