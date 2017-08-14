@@ -678,16 +678,16 @@ export default class SideBar extends Component {
               </NavItem>
             </OverlayTrigger>
           }
-          {
-            user.brand  &&
-            <OverlayTrigger placement="right" overlay={popover.brand} delayShow={200} delayHide={0}>
-              <LinkContainer className={active.brand} to="/dashboard/brand">
-                <NavItem style={S('w-85p')}>
-                  <SvgPBrand color={active.brand ? nav_active_color : '#4e5c6c'} />
-                </NavItem>
-              </LinkContainer>
-            </OverlayTrigger>
-          }
+          {/*{*/}
+            {/*user.brand &&*/}
+            {/*<OverlayTrigger placement="right" overlay={popover.brand} delayShow={200} delayHide={0}>*/}
+              {/*<LinkContainer className={active.brand} to="/dashboard/brand">*/}
+                {/*<NavItem style={S('w-85p')}>*/}
+                  {/*<SvgPBrand color={active.brand ? nav_active_color : '#4e5c6c'} />*/}
+                {/*</NavItem>*/}
+              {/*</LinkContainer>*/}
+            {/*</OverlayTrigger>*/}
+          {/*}*/}
         </Nav>
         <div style={S('absolute b-10 l-15')}>
           <Nav className="sidebar__account">
@@ -711,11 +711,21 @@ export default class SideBar extends Component {
             </div>
             <NavDropdown style={S('z-1000')} title={title_area} dropup id="account-dropdown" className="account-dropdown" eventKey={3} noCaret>
               { upgrade_account_button }
-              <li><a href="#" style={S('pointer')} onClick={this.showSettingsModal}><i className="fa fa-cog" style={S('mr-15')} />Settings</a></li>
+              <li><a href="#" style={S('pointer')} onClick={this.showSettingsModal}>
+                <i className="fa fa-cog" style={S('mr-15')} />Settings</a>
+              </li>
               { payments_link }
               { form_link }
+              {
+                user.brand &&
+                <li>
+                  <a href="/dashboard/brand" style={S('ml-30')}>Brand Setting</a>
+                </li>
+              }
               <li role="separator" className="divider" />
-              <li><a href="/signout"><i className="fa fa-power-off" style={S('mr-15')} />Sign out</a></li>
+              <li>
+                <a href="/signout"><i className="fa fa-power-off" style={S('mr-15')} />Sign out</a>
+              </li>
             </NavDropdown>
           </Nav>
         </div>

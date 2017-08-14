@@ -5,8 +5,20 @@ import Column from './Column'
 import { getRoles } from '../../../../../store_actions/brandConsole'
 
 class Roles extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      activeRole: null
+    }
+    this.onSelectRole = this.onSelectRole.bind(this)
+  }
+
   componentDidMount() {
     this.props.getRoles(this.props.user)
+  }
+
+  onSelectRole(activeRole) {
+    this.setState({ activeRole })
   }
 
   render() {
@@ -21,6 +33,8 @@ class Roles extends React.Component {
             <Column
               key={`ROLE_${role.id}`}
               role={role}
+              onSelectRole={this.onSelectRole}
+              activeRole={this.state.activeRole === role.id}
             />
           )}
         </div>

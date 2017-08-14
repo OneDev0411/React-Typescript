@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Members from '../Compose'
-import { getMembers } from '../../../../../store_actions/brandConsole'
+import { getMembers, addMembers, deleteRoles, deleteMembers } from '../../../../../store_actions/brandConsole'
 import { Row, Col } from 'react-bootstrap'
 import cn from 'classnames'
 import UserAvatar from '../../../../Partials/UserAvatar'
@@ -13,6 +13,7 @@ class Column extends Component {
     this.state = {
       activeRow: null
     }
+    this.addMembers = this.addMembers.bind(this)
   }
 
   componentDidMount() {
@@ -42,6 +43,10 @@ class Column extends Component {
     return `${title.substr(0, len)}...`
   }
 
+  addMembers(members) {
+    this.props.addMembers(this.props.role, members)
+  }
+
   onSelectRow(activeRow) {
     this.setState({ activeRow })
   }
@@ -50,12 +55,25 @@ class Column extends Component {
     const { activeRow } = this.state
     return (
       <div className="column">
-        <div className="title">
+        <div
+          onClick={() => this.props.onSelectRole(this.props.role.id)}
+          className={cn('title', { active: this.props.activeRole })}
+        >
           {this.props.role.role}
+          {this.props.activeRole &&
+          <i
+            onClick={() => {
+              this.props.deleteRoles(this.props.role)
+            }}
+            className="fa fa-times closeIcon"
+            aria-hidden="true"
+          />
+          }
         </div>
         <div className="members">
           <Members
-            room={this.props.role}
+            addMembers={this.addMembers}
+            members={this.props.members}
             iconSize={14}
           />
           {this.props.members.map(row =>
@@ -79,6 +97,7 @@ class Column extends Component {
               {row.id === activeRow &&
               <i
                 onClick={() => {
+                  this.props.deleteMembers(this.props.role, row.id)
                 }}
                 className="fa fa-times closeIcon"
                 aria-hidden="true"
@@ -98,5 +117,5 @@ export default connect(
     members: brandConsole.members[role.id] || [],
     user: data.user
   }),
-  ({ getMembers })
+  ({ getMembers, addMembers, deleteRoles, deleteMembers })
 )(Column)

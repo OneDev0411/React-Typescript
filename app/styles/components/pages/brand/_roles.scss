@@ -9,7 +9,6 @@ $toolBarHeight: 60px;
     .title {
       font-size: 15px;
       color: #78909c;
-      //padding: 25px 0px 40px 20px;
       margin-left: 40px;
       float: left;
       line-height: $toolBarHeight;
@@ -24,8 +23,6 @@ $toolBarHeight: 60px;
   }
   .rows {
     height: calc(100vh - #{$toolBarHeight});
-    //clear: right;
-    //width: 100%;
     overflow: auto;
     white-space: nowrap;
     .column {

@@ -13,16 +13,30 @@
     border-top: solid 1px #d8dfe2;
     height: 50px;
     line-height: 50px;
+    .closeIcon {
+      float: right;
+      line-height: 48px;
+      margin-right: 12px;
+    }
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+    &.active {
+      background-color: #eff5fa;
+      .notifications {
+        display: none;
+      }
+    }
   }
   .members {
     .addMember {
-      width: 90%;
+      width: calc(100% - 20px);
       margin: auto;
       display: block;
       margin-top: 16px;
     }
-    .each-row {
-      @extend %each-row;
+    .item {
+      @extend %members-item;
     }
   }
 }
@@ -31,10 +45,12 @@
   z-index: 99 !important;
 }
 
-%each-row {
-  margin: 17px 0px 0px 16px;
+%members-item {
+  margin: 16px 0 0 0;
+  padding-left: 10px;
   cursor: pointer;
   float: left;
+  width: 100%;
   .closeIcon {
     color: #78909c;
     float: right;

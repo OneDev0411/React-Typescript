@@ -13,13 +13,21 @@ Members.getMembers = async function (role) {
   }
 }
 
-Members.addMembers = async function(roomId, recipients) {
+Members.addMembers = async function (role, members) {
   try {
     return await new Fetch()
-      .post(`/rooms/${roomId}/users`)
-      .send(recipients)
-
+      .post(`/brands/${role.brand}/roles/${role.id}/members`)
+      .send(members)
   } catch (e) {
+    return null
+  }
+}
+
+Members.deleteMember = async function (role, member_id) {
+  try {
+    return await new Fetch().delete(`/brands/${role.brand}/roles/${role.id}/members/${member_id}`)
+  } catch (e) {
+    console.log(e)
     return null
   }
 }
