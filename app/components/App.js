@@ -226,10 +226,9 @@ class App extends Component {
       // nav_area = <MobileNav data={data} />
       nav_area = <div />
     }
-
     return (
       <div>
-        {user && !data.is_widget && nav_area}
+        {user && !data.is_widget && !this.props.isWidgetRedux && nav_area}
 
         {user && <InstantChat user={user} rooms={rooms} />}
 
@@ -244,5 +243,6 @@ class App extends Component {
 export default connect(s => ({
   data: s.data,
   rooms: s.chatroom.rooms,
-  contacts: s.chatroom.contact
+  contacts: s.chatroom.contact,
+  isWidgetRedux: s.widgets.isWidget
 }))(App)

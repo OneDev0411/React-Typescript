@@ -1,6 +1,5 @@
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
-import { browserHistory } from 'react-router'
 import ListingCard from './ListingCard'
 import S from 'shorti'
 import controller from '../../../Dashboard/controller'
@@ -46,14 +45,7 @@ class Section extends Component {
   // }
 
   handleListingClick(listing) {
-    const user = this.props.data.user
-    const url = `/dashboard/mls/${listing.id}`
-
-    if (user) {
-      browserHistory.push(url)
-    } else {
-      window.open(url, '_blank')
-    }
+    window.open(`/dashboard/mls/${listing.id}`, '_blank')
   }
 
   initWidgetOptions() {
