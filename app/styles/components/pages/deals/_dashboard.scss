@@ -2,7 +2,7 @@ $col-padding: 20px;
 
 @mixin scrollbar($color: transparent, $shadow: transparent) {
   ::-webkit-scrollbar {
-    width: 14px;
+    width: 0px;
     height: 18px;
   }
 
@@ -76,6 +76,10 @@ $col-padding: 20px;
 
   .deal-comments {
     @extend %deal-comments;
+  }
+
+  .deal-comment-create {
+    @extend %deal-comment-create;
   }
 
   .deal-files-container {

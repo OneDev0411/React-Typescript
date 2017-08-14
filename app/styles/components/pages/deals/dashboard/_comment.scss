@@ -1,6 +1,15 @@
 %deal-comments {
   margin-left: 0;
   background: #fff;
+  position: relative;
+
+  .comment-heading {
+    font-weight: 500;
+    color: #62778c;
+    padding: 0 0 10px 1px;
+    border-bottom: solid 1px #dce5eb;
+    padding-left: 10px;
+  }
 
   .messages {
     min-height: 51vh;
@@ -8,14 +17,47 @@
     .messages-list {
       margin-top: 10px;
       width: 100%;
-    }
 
-    .message-create {
-      .upload {
-        display: none;
+      .activity {
+        background-color: #f8fafb;
       }
-      textarea {
-        margin-left: 0;
+    }
+  }
+}
+
+%deal-comment-create {
+  height: 107px;
+  padding: 10px;
+  border-radius: 0 0 3px 3px;
+  background-color: #ffffff;
+  box-shadow: 0 -1px 5px 0 rgba(167, 184, 200, 0.7);
+  margin-top: 3px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+
+  textarea {
+    border-radius: 5px;
+    border: solid 2px #e7eef0;
+    padding: 8px;
+    resize: none;
+    margin-bottom: 10px;
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .deal-button {
+    box-shadow: none;
+    height: 30px;
+    line-height: 25px;
+    vertical-align: middle;
+    &.add-comment {
+      margin-right: 10px;
+    }
+    &.close-task {
+      width: 30px;
+      i {
+        font-size: 17px;
       }
     }
   }

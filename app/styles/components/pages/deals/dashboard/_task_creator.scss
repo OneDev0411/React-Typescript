@@ -4,6 +4,9 @@
   margin-left: 20px;
   .creator {
     display: inline;
+    .btn-group {
+      vertical-align: baseline;
+    }
   }
 
   ul.dropdown-menu {

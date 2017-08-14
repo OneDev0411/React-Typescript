@@ -20,11 +20,15 @@
 }
 
 %deal-task-section {
-
   .title {
     font-size: 17px;
     text-align: left;
     color: #5b6469;
+    max-width: 65%;
+    overflow: hidden;
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .list {
