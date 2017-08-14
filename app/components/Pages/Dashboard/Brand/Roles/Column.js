@@ -80,7 +80,7 @@ class Column extends Component {
             <Row
               onClick={() => this.onSelectRow(row.id)}
               key={`MEMBER_${row.id}`}
-              className={cn('each-row', { active: row.id === activeRow })}
+              className={cn('item', { active: row.id === activeRow })}
             >
               <Col sm={1} xs={1} className="avatar vcenter">
                 { this.getRowAvatar(row) }
