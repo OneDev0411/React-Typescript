@@ -9,7 +9,17 @@ export default (state = [], action) => {
       }
       return state
     case types.ADD_ROLE:
-      return state.concat(action)
+      return state.concat(action.role)
+    case types.DELETE_ROLE: {
+      let stateClone = state.slice()
+      for (let i = 0; i < stateClone.length; i++) {
+        if (stateClone[i].id === action.role_id) {
+          stateClone.splice(i, 1)
+          break
+        }
+      }
+      return stateClone
+    }
     default:
       return state
   }

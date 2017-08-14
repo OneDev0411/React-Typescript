@@ -35,3 +35,20 @@ export function addRoles(user, role) {
     }
   }
 }
+
+function _deleteRoles(role_id) {
+  return {
+    type: types.DELETE_ROLE,
+    role_id
+  }
+}
+
+export function deleteRoles(role) {
+  return async (dispatch) => {
+    const response = await BrandConsole.deleteRole(role)
+    if (response &&
+      response.body.status === 'success') {
+      dispatch(_deleteRoles(role.id))
+    }
+  }
+}

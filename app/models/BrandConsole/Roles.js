@@ -13,7 +13,6 @@ Roles.getRoles = async function (user) {
   }
 }
 
-
 Roles.addRoles = async function (user, role) {
   try {
     return await new Fetch()
@@ -24,4 +23,12 @@ Roles.addRoles = async function (user, role) {
   }
 }
 
+Roles.deleteRole = async function (role) {
+  try {
+    return await new Fetch().delete(`/brands/${role.brand}/roles/${role.id}`)
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
 export default Roles

@@ -2,20 +2,31 @@
 %column {
   min-height: 100%;
   width: $rowWidth;
-  //float: left;
   display: inline-block;
   border-right: solid 1px #d8dfe2;
   .title {
     font-size: 15px;
     font-weight: bold;
     color: #5b6469;
-    //padding: 25px 0px 40px 20px;
-    //margin: 0;
     text-align: center;
     border-bottom: solid 1px #d8dfe2;
     border-top: solid 1px #d8dfe2;
     height: 50px;
     line-height: 50px;
+    .closeIcon {
+      float: right;
+      line-height: 48px;
+      margin-right: 12px;
+    }
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+    &.active {
+      background-color: #eff5fa;
+      .notifications {
+        display: none;
+      }
+    }
   }
   .members {
     .addMember {
