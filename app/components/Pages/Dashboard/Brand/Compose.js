@@ -53,12 +53,12 @@ const ManageMembers = ({
     <Compose
       TriggerButton={AddButton}
       InitialValues={RoomMembers}
-      showOnly
+      showOnly={false}
       dropDownBox
       inline
       title="Members"
       buttonTitle="Add Members"
-      onButtonClick={recipients => addMembers(role, recipients)}
+      onButtonClick={recipients => addMembers(recipients)}
     />
   )
 }

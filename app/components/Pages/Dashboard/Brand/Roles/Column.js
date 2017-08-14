@@ -53,7 +53,6 @@ class Column extends Component {
 
   render() {
     const { activeRow } = this.state
-    console.log(this.props.activeRole)
     return (
       <div className="column">
         <div

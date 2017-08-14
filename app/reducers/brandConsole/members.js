@@ -6,13 +6,13 @@ export default (state = {}, action) => {
       if (action.members)
         return {
           ...state,
-          [action.role.id]: action.members
+          [action.role_id]: action.members
         }
       return state
     case types.ADD_MEMBER:
       return {
         ...state,
-        [action.role_id]: state[action.role_id].concat(action.members)
+        [action.role_id]: action.members
       }
     default:
       return state

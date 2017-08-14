@@ -1,11 +1,11 @@
 import types from '../../constants/brandConsole'
 import BrandConsole from '../../models/BrandConsole'
 
-function _getMembers(role, members) {
+function _getMembers(role_id, members) {
   return {
     type: types.GET_MEMBERS,
     members,
-    role
+    role_id
   }
 }
 
@@ -14,11 +14,10 @@ export function getMembers(role) {
     const response = await BrandConsole.getMembers(role)
     if (response) {
       const { data } = response.body
-      dispatch(_getMembers(role, data))
+      dispatch(_getMembers(role.id, data))
     }
   }
 }
-
 
 function _addMembers(role_id, members) {
   return {
