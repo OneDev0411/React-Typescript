@@ -22,7 +22,8 @@ class Messages extends React.Component {
 
   static defaultProps = {
     toolbarHeight: '70px',
-    baseHeight: '95vh'
+    baseHeight: '95vh',
+    showComposeMessage: true
   }
 
   componentDidMount() {
@@ -197,12 +198,16 @@ class Messages extends React.Component {
    * the height calculates based on compose-message height
    */
   getHeight() {
-    const { composeMessageHeight } = this.state
-    const { showToolbar } = this.props
+    let { composeMessageHeight } = this.state
+    const { showToolbar, showComposeMessage } = this.props
     let { toolbarHeight, baseHeight } = this.props
 
     if (showToolbar === false) {
       toolbarHeight = '0px'
+    }
+
+    if (showComposeMessage === false) {
+      composeMessageHeight = 0
     }
 
     return `calc(${baseHeight} - ${toolbarHeight} - ${composeMessageHeight}px)`
@@ -248,6 +253,7 @@ class Messages extends React.Component {
       user,
       isInstantChat,
       showToolbar,
+      showComposeMessage,
       disableUpload,
       onClick
     } = this.props
@@ -323,7 +329,7 @@ class Messages extends React.Component {
         />
 
         {
-          roomId &&
+          roomId && showComposeMessage &&
           <ComposeMessage
             user={user}
             roomId={roomId}
