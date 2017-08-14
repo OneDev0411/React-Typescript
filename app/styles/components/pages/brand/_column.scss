@@ -19,13 +19,13 @@
   }
   .members {
     .addMember {
-      width: 90%;
+      width: calc(100% - 20px);
       margin: auto;
       display: block;
       margin-top: 16px;
     }
     .item {
-      @extend %item;
+      @extend %members-item;
     }
   }
 }
@@ -34,11 +34,12 @@
   z-index: 99 !important;
 }
 
-%item {
-  margin: 16px 1px 0px 1px;
+%members-item {
+  margin: 16px 0 0 0;
   padding: 3px;
   cursor: pointer;
   float: left;
+  width: 100%;
   .closeIcon {
     color: #78909c;
     float: right;
@@ -61,7 +62,6 @@
     margin-right: 10px;
   }
   .memberName {
-    padding: 0 0 0 10px;
     opacity: 0.5;
     font-size: 15px;
     color: #5b6469;
