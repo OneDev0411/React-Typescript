@@ -8,13 +8,22 @@ import withHandlers from 'recompose/withHandlers'
 import Brand from '../../../../controllers/Brand'
 import submitSigninForm from '../../../../store_actions/auth/signin'
 
-const renderField = ({ type, input, label, meta: { touched, error } }) => {
+export const renderField = ({
+  type,
+  input,
+  label,
+  tabIndex,
+  autoFocus = false,
+  meta: { touched, error }
+}) => {
   const hasError = touched && error
   return (
     <div className={`c-auth__field ${input.name}`}>
       <div className="c-auth__field__input-wrapper">
         <input
           {...input}
+          tabIndex={tabIndex}
+          autoFocus={autoFocus}
           type={type}
           className={`c-auth__field__input ${(input.value && 'has-content') ||
             ''} ${hasError ? 'has-error' : ''}`}
@@ -56,7 +65,7 @@ const Signin = ({
     <div className="signin-page-wrapper">
       <article className="c-auth">
         <header className="c-auth__header">
-          <Link to="/">
+          <Link to="/" tabIndex={-1}>
             <img
               src={siteLogo}
               alt={`${siteTitle} logo`}
@@ -75,6 +84,7 @@ const Signin = ({
               name="username"
               type="email"
               label="Email"
+              tabIndex={0}
               component={renderField}
             />
             <Field
