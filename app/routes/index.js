@@ -13,7 +13,7 @@ import Landing from '../components/Pages/Landing'
 import SignUp from '../components/Pages/SignUp'
 import SignIn from '../components/Pages/Auth/SignIn'
 import Verify from '../components/Pages/Verify'
-import Password from '../components/Pages/Password'
+import ForgotPassword from '../components/Pages/Auth/Password/Forgot'
 import ConfirmAgent from '../components/Pages/SignUp/ConfirmAgent'
 
 import NoMatch from '../components/Pages/NoMatch'
@@ -107,7 +107,8 @@ export default (
       <Route path="/signup/agent" component={ConfirmAgent} />
       <Route path="/signin" component={SignIn} />
       <Route path="/verify/:slug" component={Verify} />
-      <Route path="/password/:slug" component={Password} />
+
+      <Route path="/password/forgot" component={ForgotPassword} />
 
       <Route path="/mobile" component={Mobile} />
     </Route>
