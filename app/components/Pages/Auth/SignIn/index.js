@@ -14,9 +14,9 @@ export const renderField = ({
   label,
   tabIndex,
   autoFocus = false,
-  meta: { touched, error }
+  meta: { dirty, error }
 }) => {
-  const hasError = touched && error
+  const hasError = dirty && error
   return (
     <div className={`c-auth__field ${input.name}`}>
       <div className="c-auth__field__input-wrapper">
@@ -93,7 +93,7 @@ const Signin = ({
               label="Password"
               component={renderField}
             />
-            <Link to="/password/forgot">Forgot Password?</Link>
+            <Link to="/password/forgot">Forgot your password?</Link>
             {error &&
               <div className="c-auth__submit-error-alert">
                 There was an error with this request. This email or password is
@@ -143,8 +143,8 @@ const validate = values => {
 
 export default compose(
   reduxForm({
-    form: 'signin',
     validate,
+    form: 'signin',
     getFormState: ({ auth }) => auth.signin.form
   }),
   connect(

@@ -51,7 +51,7 @@
 }
 
 .c-auth__field {
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 
   &.password {
     margin-bottom: 1rem;
@@ -184,6 +184,7 @@
 .c-auth__submit-alert--success {
   padding: .5rem 1.5rem;
   color: #fff;
+  background: red;
 }
 
 .c-auth__submit-error-alert,
