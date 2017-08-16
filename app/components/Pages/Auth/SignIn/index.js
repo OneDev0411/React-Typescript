@@ -62,7 +62,7 @@ export const renderField = ({
   )
 }
 
-const Signin = ({
+let SigninForm = ({
   brand,
   error,
   pristine,
@@ -152,19 +152,22 @@ const validate = values => {
   return errors
 }
 
+SigninForm = reduxForm({
+  form: 'signin',
+  validate,
+  getFormState: ({ auth }) => auth.signin.form
+})(SigninForm)
+
 export default compose(
-  reduxForm({
-    validate,
-    form: 'signin',
-    getFormState: ({ auth }) => auth.signin.form
-  }),
   connect(
-    ({ brand, auth }) => {
+    ({ brand, auth }, { location }) => {
+      const { username } = location.query
       const { isLogging, error } = auth.signin
       return {
         brand,
         error,
-        isLogging
+        isLogging,
+        initialValues: { username }
       }
     },
     { submitSigninForm }
@@ -174,4 +177,4 @@ export default compose(
       submitSigninForm(values)
     }
   })
-)(Signin)
+)(SigninForm)

@@ -14,6 +14,7 @@ import SignUp from '../components/Pages/SignUp'
 import SignIn from '../components/Pages/Auth/SignIn'
 import Verify from '../components/Pages/Verify'
 import ForgotPassword from '../components/Pages/Auth/Password/Forgot'
+import ResetPassword from '../components/Pages/Auth/Password/Reset'
 import ConfirmAgent from '../components/Pages/SignUp/ConfirmAgent'
 
 import NoMatch from '../components/Pages/NoMatch'
@@ -109,6 +110,7 @@ export default (
       <Route path="/verify/:slug" component={Verify} />
 
       <Route path="/password/forgot" component={ForgotPassword} />
+      <Route path="/password/reset" component={ResetPassword} />
 
       <Route path="/mobile" component={Mobile} />
     </Route>

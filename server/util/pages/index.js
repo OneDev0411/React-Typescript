@@ -20,8 +20,7 @@ const routes = {
     ['recent'],
     ['dashboard'],
     ['widget'],
-    ['invite'],
-    ['reset-password']
+    ['invite']
   ],
   verify: [['email'], ['activate'], ['phone']]
 }
