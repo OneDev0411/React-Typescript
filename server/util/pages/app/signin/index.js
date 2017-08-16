@@ -1,7 +1,8 @@
 import Koa from 'koa'
-import User from '../../../../../app/models/User'
-import Crypto from '../../../../../app/models/Crypto'
 import MobileDetect from 'mobile-detect'
+
+import Crypto from '../../../crypto'
+import User from '../../../../../app/models/User'
 
 const router = require('koa-router')()
 const app = new Koa()
