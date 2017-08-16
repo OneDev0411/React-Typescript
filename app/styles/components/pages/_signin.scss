@@ -51,9 +51,9 @@
 }
 
 .c-auth__field {
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
 
-  &.password {
+  &:last-of-type {
     margin-bottom: 1rem;
   }
 }
