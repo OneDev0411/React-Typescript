@@ -20,7 +20,7 @@ if (process.env.NODE_ENV === 'development' && module.hot) {
   module.hot.accept('./app', () => {
     ReactDOM.render(
       <AppContainer>
-        <App />
+        <App key={Math.random()} />
       </AppContainer>,
       rootEl,
     )

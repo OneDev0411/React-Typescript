@@ -10,13 +10,6 @@ function _getRooms(rooms) {
   }
 }
 
-function _addNewRoom(room) {
-  return {
-    type: types.CREATE_ROOM,
-    room
-  }
-}
-
 export function addMembersToRoom(roomId, users) {
   return {
     type: types.ADD_MEMBERS,
@@ -35,10 +28,17 @@ export function getRooms(user) {
   }
 }
 
+export function addNewRoom(room) {
+  return {
+    type: types.CREATE_ROOM,
+    room
+  }
+}
+
 export function createRoom(recipients) {
   return async dispatch => {
     const room = await Chatroom.createRoom(recipients)
-    dispatch(_addNewRoom(room))
+    dispatch(addNewRoom(room))
     return room.id
   }
 }
@@ -53,7 +53,7 @@ export function updateRoomTime(roomId) {
 export function createExistingRoom(roomId) {
   return async dispatch => {
     const room = await Chatroom.getRoomById(roomId)
-    dispatch(_addNewRoom(room))
+    dispatch(addNewRoom(room))
   }
 }
 

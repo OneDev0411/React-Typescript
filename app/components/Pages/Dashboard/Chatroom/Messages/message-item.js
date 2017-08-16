@@ -2,6 +2,7 @@ import React from 'react'
 import messageUtil from '../Util/message'
 import LeadMessage from './message-kinds/lead'
 import SubMessage from './message-kinds/sub'
+import SingleMessage from './message-kinds/single'
 
 export default ({
   user,
@@ -13,11 +14,24 @@ export default ({
   // get message author
   const author = messageUtil.getAuthor(message)
 
+  // author of previous message
+  const previousMessageAuthor = messageUtil.getAuthor(previousMessage) || {}
+
   // check message is alert
   const isAlert = messageUtil.isAlert(message)
 
   // check message has attachment
   const hasAttachments = message.attachments && message.attachments.length > 0
+
+  // create props object
+  const props = { user, roomId, author, message, previousMessage }
+
+  /*
+   * check message is a a single/info message or not
+   */
+  if (message.activity) {
+    return <SingleMessage {...props} />
+  }
 
   /*
    * check message is a lead message or not
@@ -29,9 +43,8 @@ export default ({
     isAlert ||
     hasAttachments ||
     message.uploading ||
-    messageUtil.getAuthor(previousMessage).id !== author.id ||
+    previousMessageAuthor.id !== author.id ||
     messageUtil.getYMD(previousMessage) !== messageUtil.getYMD(message)
 
-  const props = { user, roomId, author, message, previousMessage }
   return isLeadMessage ? <LeadMessage {...props} /> : <SubMessage {...props} />
 }

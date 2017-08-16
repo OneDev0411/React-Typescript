@@ -11,13 +11,13 @@ import Loading from '../../../Partials/Loading'
 import MaskedInput from 'react-input-mask'
 import { all_countries } from '../../../../utils/country-data'
 import helpers from '../../../../utils/helpers'
-import { PhoneNumberUtil } from 'google-libphonenumber'
 import AppDispatcher from '../../../../dispatcher/AppDispatcher'
 import AppStore from '../../../../stores/AppStore'
 import ProfileImage from './ProfileImage'
 import SvgMap from './Svgs/Map'
 import SvgStore from './Svgs/Store'
 import SvgPeople from './Svgs/People'
+import SvgPBrand from './Svgs/Brand'
 import SvgDeals from './Svgs/Deals'
 import SvgBriefCase from './Svgs/BriefCase'
 import SvgSupport from './Svgs/Support'
@@ -27,15 +27,17 @@ import Brand from '../../../../controllers/Brand'
 // chatroom stuff
 import InstantTrigger from '../Chatroom/Shared/instant-trigger'
 
-const phoneUtil = PhoneNumberUtil.getInstance()
+import BrandInstantTrigger from '../Brand/Shared/instant-trigger'
 
 export default class SideBar extends Component {
 
-  componentDidUpdate() {
+  async componentDidUpdate() {
     // Refresh page on agent update
     const data = this.props.data
     if (data.settings && data.settings.is_agent)
       window.location.href = '/signin?message=account-upgraded'
+
+    this.phone_number_parsed = await helpers.parsePhoneNumber(this.props.data.user.phone_number)
   }
   showSettingsModal(e) {
     e.preventDefault()
@@ -99,7 +101,10 @@ export default class SideBar extends Component {
     })
   }
 
-  editAccountInfo() {
+  async editAccountInfo() {
+    const { PhoneNumberUtil } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
+    const phoneUtil = PhoneNumberUtil.getInstance()
+
     delete AppStore.data.error
     const data = this.props.data
     const user = data.user
@@ -341,6 +346,9 @@ export default class SideBar extends Component {
     if (path.indexOf('/dashboard/contacts') !== -1)
       active.contacts = 'active'
 
+    if (path.indexOf('/dashboard/brand') !== -1)
+      active.brand = 'active'
+
     if (path.indexOf('/dashboard/notifications') !== -1)
       active.notifications = 'active'
 
@@ -399,8 +407,9 @@ export default class SideBar extends Component {
     let change_password_area = (
       <a style={S('mt-7')} className="pull-left" href="#" onClick={this.showChangePassword.bind(this)}>Change password</a>
     )
-    const phone_number_parsed = helpers.parsePhoneNumber(user.phone_number)
-    const current_country_code = phone_number_parsed.country_code
+
+    const current_country_code = this.phone_number_parsed ? this.phone_number_parsed.country_code : ''
+
     let phone_country = `+${current_country_code}`
     if (data.phone_country)
       phone_country = `+${data.phone_country.dialCode}`
@@ -443,7 +452,14 @@ export default class SideBar extends Component {
             <div className="input-group-btn input-dropdown--country-codes">
               { country_codes }
             </div>
-            <MaskedInput className="form-control" ref={ref => this.phone_numberInput = ref} type="text" defaultValue={user.phone_number ? phone_number_parsed.phone_number : ''} mask="(999)-999-9999" maskChar="_" />
+            <MaskedInput
+              className="form-control"
+              ref={ref => this.phone_numberInput = ref}
+              type="text"
+              defaultValue={user.phone_number && this.phone_number_parsed ? this.phone_number_parsed.phone_number : ''}
+              mask="(999)-999-9999"
+              maskChar="_"
+            />
           </div>
         </Col>
         <div className="clearfix" />
@@ -488,7 +504,8 @@ export default class SideBar extends Component {
       deals: <Popover className="sidenav__popover" id="popover-tasks">Deals</Popover>,
       support: <Popover className="sidenav__popover" id="popover-support">Need Help?</Popover>,
       store: <Popover className="sidenav__popover" id="popover-store">Store</Popover>,
-      notifications: <Popover className="sidenav__popover" id="popover-notifications">Notifications</Popover>
+      notifications: <Popover className="sidenav__popover" id="popover-notifications">Notifications</Popover>,
+      brand: <Popover className="sidenav__popover" id="popover-notifications">Brand</Popover>
     }
     if (data.errors && data.errors.type && data.errors.type === 'agent-not-found') {
       message = (
@@ -604,7 +621,6 @@ export default class SideBar extends Component {
 
     if (user.user_type === 'Admin')
       form_link = <li><Link to="/dashboard/forms"><i className="fa fa-wpforms" style={S('mr-15')} />Forms</Link></li>
-
     return (
       <aside style={sidebar_style} className="sidebar__nav-list pull-left">
 
@@ -619,7 +635,7 @@ export default class SideBar extends Component {
             </LinkContainer>
           </OverlayTrigger>
 
-          {/*{
+          {
             user.features && user.features.indexOf('Concierge') > -1 &&
             <OverlayTrigger placement="right" overlay={popover.concierge} delayShow={200} delayHide={0}>
               <LinkContainer onClick={this.hideListingViewer.bind(this)} className={active.concierge} to="/dashboard/concierge/deals">
@@ -631,7 +647,7 @@ export default class SideBar extends Component {
           }
 
           {
-            user.features && user.features.indexOf('Deals') > -1 &&
+            user.features &&
             <OverlayTrigger placement="right" overlay={popover.deals} delayShow={200} delayHide={0}>
               <LinkContainer onClick={this.hideListingViewer.bind(this)} className={active.deals} to="/dashboard/deals">
                 <NavItem style={S('w-85p')}>
@@ -639,7 +655,7 @@ export default class SideBar extends Component {
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
-          }*/}
+          }
 
           {
             user.user_type !== 'Client' &&
@@ -662,6 +678,16 @@ export default class SideBar extends Component {
               </NavItem>
             </OverlayTrigger>
           }
+          {/*{*/}
+            {/*user.brand &&*/}
+            {/*<OverlayTrigger placement="right" overlay={popover.brand} delayShow={200} delayHide={0}>*/}
+              {/*<LinkContainer className={active.brand} to="/dashboard/brand">*/}
+                {/*<NavItem style={S('w-85p')}>*/}
+                  {/*<SvgPBrand color={active.brand ? nav_active_color : '#4e5c6c'} />*/}
+                {/*</NavItem>*/}
+              {/*</LinkContainer>*/}
+            {/*</OverlayTrigger>*/}
+          {/*}*/}
         </Nav>
         <div style={S('absolute b-10 l-15')}>
           <Nav className="sidebar__account">
@@ -685,11 +711,21 @@ export default class SideBar extends Component {
             </div>
             <NavDropdown style={S('z-1000')} title={title_area} dropup id="account-dropdown" className="account-dropdown" eventKey={3} noCaret>
               { upgrade_account_button }
-              <li><a href="#" style={S('pointer')} onClick={this.showSettingsModal}><i className="fa fa-cog" style={S('mr-15')} />Settings</a></li>
+              <li><a href="#" style={S('pointer')} onClick={this.showSettingsModal}>
+                <i className="fa fa-cog" style={S('mr-15')} />Settings</a>
+              </li>
               { payments_link }
               { form_link }
+              {
+                user.brand &&
+                <li>
+                  <a href="/dashboard/brand" style={S('ml-30')}>Brand Setting</a>
+                </li>
+              }
               <li role="separator" className="divider" />
-              <li><a href="/signout"><i className="fa fa-power-off" style={S('mr-15')} />Sign out</a></li>
+              <li>
+                <a href="/signout"><i className="fa fa-power-off" style={S('mr-15')} />Sign out</a>
+              </li>
             </NavDropdown>
           </Nav>
         </div>

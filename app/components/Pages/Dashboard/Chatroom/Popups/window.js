@@ -69,6 +69,7 @@ export default ({
         user={user}
         roomId={room.id}
         showToolbar={false}
+        baseHeight="297px"
         isPopup={true}
         onClick={e => onFocus(e, room, onChangeActive)}
       />

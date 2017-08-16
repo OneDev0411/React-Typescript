@@ -1,0 +1,70 @@
+%deal-listing-card {
+  $hg: 180px;
+  position: relative;
+  background-color: #4e5c6c;
+  min-height: $hg;
+  img {
+    width: 100%;
+    min-height: $hg;
+    max-height: $hg;
+  }
+
+  .back {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 41px;
+    height: 41px;
+    border-radius: 3px;
+    background-color: #000;
+    color: #fff;
+    opacity: 0.5;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.5s ease-in;
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .placeholder {
+    position: absolute;
+    width: 50px;
+    left: calc(50% - 25px);
+  }
+
+  .listing-status {
+    border-radius: 3px;
+    background-color: #35b863;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
+    text-shadow: none;
+    padding: 4px 7px;
+    font-size: 14px;
+    letter-spacing: -0.5px;
+    font-weight: normal;
+    text-align: center;
+    height: 16px;
+  }
+
+  .data {
+    position: absolute;
+    bottom: 10px;
+    left: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: -0.9px;
+    text-align: left;
+    color: #ffffff;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+
+    .title {
+      margin-top: 10px;
+    }
+
+    .addr {
+      font-size: 13px;
+      font-weight: normal;
+      text-shadow: none;
+    }
+  }
+}

@@ -1,12 +1,12 @@
 import React from 'react'
-import Rx from 'rxjs/Rx'
 import _ from 'underscore'
 import AutoSizeInput from '../AutoSizeInput'
 import UserAvatar from '../UserAvatar'
 
 export default class extends React.Component {
 
-  componentDidMount() {
+  async componentDidMount() {
+    const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
     const { Observable } = Rx
 
     this.inputHandler = Observable

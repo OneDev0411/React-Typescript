@@ -137,7 +137,13 @@ class Rooms extends React.Component {
           <div className="list">
             {
               _.chain(rooms)
-              .filter(room => room.proposed_title.toLowerCase().startsWith(filter.toLowerCase()))
+              .filter(room => ['Direct', 'Group'].indexOf(room.room_type) > -1)
+              .filter(room =>
+                room.proposed_title && room
+                  .proposed_title
+                  .toLowerCase()
+                  .startsWith(filter.toLowerCase())
+              )
               .sortBy(room => room.updated_at * -1)
               .map(room =>
                 <Row

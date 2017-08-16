@@ -1,7 +1,5 @@
 import React from 'react'
 import _ from 'underscore'
-import 'pdfjs-dist/build/pdf.combined'
-import 'pdfjs-dist/web/compatibility'
 import Page from './Page'
 
 class PdfViewer extends React.Component {
@@ -40,8 +38,13 @@ class PdfViewer extends React.Component {
   }
 
   async load(uri) {
-    if (this.state.loading || uri === this.state.uri)
+    if (this.state.loading || uri === this.state.uri) {
       return false
+    }
+
+    // lazy load
+    await import('pdfjs-dist/build/pdf.combined' /* webpackChunkName: "pdf.combined" */ )
+    await import('pdfjs-dist/web/compatibility' /* webpackChunkName: "pdf.comp" */)
 
     this.setState({
       uri,
@@ -123,4 +126,3 @@ class PdfViewer extends React.Component {
 }
 
 export default PdfViewer
-

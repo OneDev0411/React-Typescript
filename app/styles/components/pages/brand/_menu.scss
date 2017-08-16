@@ -1,0 +1,43 @@
+/* bm-menu */
+%menu {
+  z-index: 101 !important;
+  background-color: #f8fafb;
+  box-shadow: 1px 0 0 0 #e4e4e4;
+  color: #fff;
+  min-height: 100vh;
+  width: $menuWidth;
+  float: left;
+  height: 60px;
+  .toolbar {
+    font-size: 15px;
+    font-weight: bold;
+    color: #5b6469;
+    margin: 0;
+    line-height: 60px;
+    padding-left: 20px;
+  }
+  .item {
+    @extend %item;
+  }
+}
+
+%item {
+  margin: 0;
+  cursor: pointer;
+
+  a {
+    font-size: 14px;
+    color: #5b6469;
+    background-color: transparent;
+  }
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  &.active {
+    background-color: #f0f4f7;
+    font-weight: bold;
+    .notifications {
+      display: none;
+    }
+  }
+}

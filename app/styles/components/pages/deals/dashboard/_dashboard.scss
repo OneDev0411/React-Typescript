@@ -1,0 +1,33 @@
+$col-padding: 3%;
+
+@import './dashboard_tasks';
+@import './dashboard_control_panel';
+@import './dashboard_fact_sheet';
+@import './dashboard_task_creator';
+@import './dashboard_listing_card';
+
+%deal-dashboard {
+  min-height: 100vh;
+  margin-left: 0;
+  margin-right: 0;
+
+  .column {
+    padding: 0;
+  }
+
+  .deal-tasks {
+    @extend %deal-tasks;
+  }
+
+  .deal-control-panel {
+    @extend %deal-control-panel;
+  }
+
+  .deal-fact-sheet {
+    @extend %deal-fact-sheet;
+  }
+
+  .deal-task-creators {
+    @extend %deal-task-creators;
+  }
+}
