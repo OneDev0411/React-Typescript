@@ -8,6 +8,24 @@ import withHandlers from 'recompose/withHandlers'
 import Brand from '../../../../controllers/Brand'
 import submitSigninForm from '../../../../store_actions/auth/signin'
 
+export const getBrandInfo = brand => {
+  let siteTitle = 'Rechat'
+  let brandColor = '#2196f3'
+  let siteLogo = '/static/images/logo-200w.png'
+
+  if (brand) {
+    siteLogo = Brand.asset('site_logo', null, brand)
+    siteTitle = brand.messages.site_title
+    brandColor = `#${Brand.color('primary', '#2196f3', brand)}`
+  }
+
+  return {
+    siteLogo,
+    siteTitle,
+    brandColor
+  }
+}
+
 export const renderField = ({
   type,
   input,
@@ -51,15 +69,7 @@ const Signin = ({
   handleSubmit,
   onSubmitHandler
 }) => {
-  let siteTitle = 'Rechat'
-  let brandColor = '#2196f3'
-  let siteLogo = 'static/images/logo-200w.png'
-
-  if (brand) {
-    siteLogo = Brand.asset('site_logo', null, brand)
-    siteTitle = brand.messages.site_title
-    brandColor = `#${Brand.color('primary', '#2196f3', brand)}`
-  }
+  const { siteLogo, siteTitle, brandColor } = getBrandInfo()
 
   return (
     <div className="signin-page-wrapper">

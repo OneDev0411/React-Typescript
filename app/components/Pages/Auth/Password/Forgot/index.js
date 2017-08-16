@@ -8,7 +8,7 @@ import withHandlers from 'recompose/withHandlers'
 
 import Brand from '../../../../../controllers/Brand'
 
-import { renderField } from '../../SignIn'
+import { getBrandInfo, renderField } from '../../SignIn'
 import resetPassword from '../../../../../models/auth/password/reset'
 
 const Forgot = ({
@@ -21,15 +21,7 @@ const Forgot = ({
   onSubmitHandler,
   resetSuccessfully
 }) => {
-  let siteTitle = 'Rechat'
-  let brandColor = '#2196f3'
-  let siteLogo = 'static/images/logo-200w.png'
-
-  if (brand) {
-    siteLogo = Brand.asset('site_logo', null, brand)
-    siteTitle = brand.messages.site_title
-    brandColor = `#${Brand.color('primary', '#2196f3', brand)}`
-  }
+  const { siteLogo, siteTitle, brandColor } = getBrandInfo()
 
   return (
     <div className="signin-page-wrapper">
