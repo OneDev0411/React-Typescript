@@ -55,7 +55,6 @@ const ComposeWrapper = ({
             />
           </div>
         </div>
-        <div className="description">Accurate titles help with context when glancing through your checklist.</div>
       </Modal.Body>
 
       {!showOnly &&

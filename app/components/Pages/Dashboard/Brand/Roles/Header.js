@@ -17,9 +17,6 @@ const Header = ({ role, addRoles }) => {
   )
 
   return (<div className="toolbar">
-    <span className="title">
-      Assign Members to Roles
-    </span>
     <span className="button">
       <Compose
         TriggerButton={AddButton}

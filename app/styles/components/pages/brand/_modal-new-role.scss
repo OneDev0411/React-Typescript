@@ -1,5 +1,19 @@
+@import 'modal';
+
 .modal-new-role {
+  @extend %brand-modal;
+
+  .modal-body {
+    position: relative;
+    padding: 20px;
+    height: 130px;
+  }
+
   .row-container {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: calc(100% - 40px);
     .input-container {
       @extend %input-container;
     }
@@ -13,13 +27,6 @@
       color: #4a4a4a;
     }
 
-  }
-  .description {
-    clear: both;
-    font-size: 13px;
-    letter-spacing: -0.2px;
-    color: #9b9b9b;
-    padding: 8px 40px;
   }
 }
 

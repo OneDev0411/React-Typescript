@@ -35,7 +35,7 @@ const ComposeWrapper = ({
 
     <Modal
       show={showComposeModal}
-      dialogClassName="chatroom-add-member"
+      dialogClassName="brand-add-member"
       onHide={() => onChangeComposeModal(false)}
     >
       <Modal.Header closeButton>

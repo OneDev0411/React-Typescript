@@ -4,6 +4,7 @@ $rowWidth: 300px;
 @import 'menu';
 @import 'roles';
 @import 'modal-new-role';
+@import 'modal';
 
 .brand {
   margin-left: 85px;
@@ -21,7 +22,9 @@ $rowWidth: 300px;
     margin-left: $menuWidth;
   }
 }
-
+.brand-add-member {
+  @extend %brand-modal;
+}
 /**
  * helpers
  */

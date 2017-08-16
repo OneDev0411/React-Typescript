@@ -1,7 +1,7 @@
 /* bm-menu */
 %menu {
   z-index: 101 !important;
-  background-color: #eff1f3;
+  background-color: #f8fafb;
   box-shadow: 1px 0 0 0 #e4e4e4;
   color: #fff;
   min-height: 100vh;
@@ -21,12 +21,7 @@
   }
 }
 
-.bm-overlay {
-  z-index: 99 !important;
-}
-
 %item {
-  padding: 16px 4px 16px $row-padding;
   margin: 0;
   cursor: pointer;
 
@@ -35,57 +30,12 @@
     color: #5b6469;
     background-color: transparent;
   }
-  .vcenter {
-    display: inline-block;
-    vertical-align: middle;
-    float: none;
-  }
-  .avatar {
-    padding-left: 0;
-    padding-right: 0;
-    margin-right: 10px;
-  }
-  .title {
-    padding: 0 0 0 10px;
-    opacity: 0.5;
-
-    &.hasNotification {
-      opacity: 1;
-      span {
-        font-weight: bold;
-      }
-    }
-    .message-typing {
-      display: inline;
-      margin-left: 5px;
-      .message {
-        display: none;
-      }
-      img {
-        width: 30px;
-      }
-    }
-  }
-  .notifications {
-    text-align: center;
-    padding-top: 4px;
-    .count {
-      padding: 2px;
-      border-radius: 10px;
-      font-size: 11px;
-      min-width: 30px;
-      display: inline-block;
-      background-color: #2196f3;
-    }
-  }
   &:hover {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.1);
   }
   &.active {
-    background-color: #f8fafb;
-    .title {
-      opacity: 1;
-    }
+    background-color: #f0f4f7;
+    font-weight: bold;
     .notifications {
       display: none;
     }
