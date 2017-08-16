@@ -1,10 +1,10 @@
 import Fetch from '../../../services/fetch'
 
-const createAlert = async alert => {
+const createAlert = async alertOptions => {
   try {
     const response = await new Fetch()
-      .post(`/rooms/${alert.room}/alerts`)
-      .send({ ...alert })
+      .post(`/rooms/${alertOptions.room}/alerts`)
+      .send({ ...alertOptions })
 
     return response.body.data
   } catch (error) {
