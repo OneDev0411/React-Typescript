@@ -40,13 +40,14 @@ export const renderField = ({
       <div className="c-auth__field__input-wrapper">
         <input
           {...input}
+          id={input.name}
           tabIndex={tabIndex}
           autoFocus={autoFocus}
           type={type}
           className={`c-auth__field__input ${(input.value && 'has-content') ||
             ''} ${hasError ? 'has-error' : ''}`}
         />
-        <label className="c-auth__field__label">
+        <label htmlFor={input.name} className="c-auth__field__label">
           {label}
         </label>
         <span className="focus-border">
