@@ -90,7 +90,7 @@ const Forgot = ({
   )
 }
 
-const validate = values => {
+export const validateEmail = values => {
   const errors = {}
 
   if (!values.email) {
@@ -101,10 +101,11 @@ const validate = values => {
 
   return errors
 }
+
 export default compose(
   reduxForm({
     form: 'forgot',
-    validate,
+    validateEmail,
     getFormState: ({ auth }) => auth.forgotPassword.form
   }),
   connect(({ brand }) => ({ brand })),
