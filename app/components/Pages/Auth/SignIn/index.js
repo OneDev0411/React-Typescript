@@ -119,7 +119,7 @@ let SigninForm = ({
                 opacity: isLogging || pristine ? 0.7 : 1
               }}
             >
-              {isLogging ? 'Sign in...' : 'Sign in'}
+              {isLogging ? 'Signing in...' : 'Sign in'}
             </button>
           </form>
           <p style={{ textAlign: 'center', color: '#929292' }}>

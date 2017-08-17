@@ -94,8 +94,8 @@ const Reset = ({
             </form>
             : <div style={{ textAlign: 'center' }}>
               <p className="c-auth__submit-alert--success">
-                <span>Your account password with this email</span>
-                <b>{submitSuccessfully}</b> is now changed.<br />
+                <span>Your account password with this email  </span>
+                <b>{submitSuccessfully}</b>  is now updated.<br />
                 <span>You may now </span>
                 <Link to={`/signin?username=${encodeURIComponent(submitSuccessfully)}`}>sign in</Link>.
               </p>
