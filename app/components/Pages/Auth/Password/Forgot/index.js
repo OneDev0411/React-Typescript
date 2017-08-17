@@ -11,7 +11,7 @@ import Brand from '../../../../../controllers/Brand'
 import { getBrandInfo, renderField } from '../../SignIn'
 import resetPassword from '../../../../../models/auth/password/reset'
 
-const Forgot = ({
+let Forgot = ({
   brand,
   pristine,
   submitError,
@@ -64,10 +64,10 @@ const Forgot = ({
               <button
                 type="submit"
                 className="c-auth__submit-btn"
-                disabled={isSubmitting || pristine}
+                disabled={isSubmitting}
                 style={{
                   background: brandColor,
-                  opacity: isSubmitting || pristine ? 0.7 : 1
+                  opacity: isSubmitting ? 0.7 : 1
                 }}
               >
                 {isSubmitting ? 'Submitting...' : 'Reset Password'}
@@ -102,13 +102,20 @@ export const validateEmail = values => {
   return errors
 }
 
+Forgot = reduxForm({
+  form: 'forgot',
+  validate: validateEmail,
+  getFormState: ({ auth }) => auth.forgotPassword.form
+})(Forgot)
+
 export default compose(
-  reduxForm({
-    form: 'forgot',
-    validateEmail,
-    getFormState: ({ auth }) => auth.forgotPassword.form
+  connect(({ brand, auth }, { location }) => {
+    const { email } = location.query
+    return {
+      brand,
+      initialValues: { email }
+    }
   }),
-  connect(({ brand }) => ({ brand })),
   withState('submitError', 'setSubmitError', false),
   withState('isSubmitting', 'setIsSubmitting', false),
   withState('resetSuccessfully', 'setResetSuccessfully', false),
