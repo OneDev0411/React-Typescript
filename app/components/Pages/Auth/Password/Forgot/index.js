@@ -21,7 +21,7 @@ const Forgot = ({
   onSubmitHandler,
   resetSuccessfully
 }) => {
-  const { siteLogo, siteTitle, brandColor } = getBrandInfo()
+  const { siteLogo, siteTitle, brandColor } = getBrandInfo(brand)
 
   return (
     <div className="signin-page-wrapper">

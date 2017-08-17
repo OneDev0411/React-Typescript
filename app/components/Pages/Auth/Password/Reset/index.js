@@ -25,7 +25,7 @@ const Reset = ({
   onSubmitHandler,
   submitSuccessfully
 }) => {
-  const { siteLogo, siteTitle, brandColor } = getBrandInfo()
+  const { siteLogo, siteTitle, brandColor } = getBrandInfo(brand)
 
   return (
     <div className="signin-page-wrapper">
