@@ -24,6 +24,10 @@
       padding: 10px 5px;
       border-bottom: solid 1px #d2d7db;
 
+      &:hover {
+        background-color: #f5f5f5;
+      }
+
       &.digital-form {
         border-bottom: none;
       }
@@ -40,7 +44,7 @@
       .actions {
         text-align: right;
         padding-right: $col-padding / 2;
-        button, .btn-view {
+        .btn-view, .btn-deal {
           height: 30px;
           width: 60px;
           line-height: 26px;
@@ -59,6 +63,7 @@
 
   .file-upload {
     .item {
+      padding: 20px 5px;
       border-bottom: none;
     }
 

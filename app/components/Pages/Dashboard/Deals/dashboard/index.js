@@ -8,6 +8,7 @@ import TaskManager from './task-manager'
 import ListingCard from './listing-card'
 import FactSheet from './factsheet'
 import EditForm from './edit-form'
+import Roles from './roles'
 
 class DealDetails extends React.Component {
   constructor(props) {
@@ -41,7 +42,11 @@ class DealDetails extends React.Component {
       <Row className="deal-dashboard">
         <Col lg={3} md={3} sm={3} className="column left">
           <ListingCard deal={deal} />
-          <FactSheet deal={deal} />
+          <div className="scrollable">
+            <Roles deal={deal} />
+            <FactSheet deal={deal} />
+          </div>
+
         </Col>
 
         <Col

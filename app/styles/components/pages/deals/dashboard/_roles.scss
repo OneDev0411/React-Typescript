@@ -1,0 +1,35 @@
+%deal-roles {
+  background: #fff;
+  padding: $col-padding 0 1px $col-padding;
+  border-bottom: 1px solid #dce1e5;
+  .item {
+    margin-bottom: 20px;
+
+    &.add-new {
+      cursor: pointer;
+      .add-contact-avatar {
+        display: block;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        vertical-align: middle;
+        text-align: center;
+        background-color: #eff3f7;
+        color: #61778d;
+        border-radius: 80px;
+      }
+    }
+
+    .name {
+      color: #263445;
+      font-weight: 500;
+      padding-left: 10px;
+
+      .role {
+        font-weight: normal;
+        color: #8696a4;
+        font-size: 14px;
+      }
+    }
+  }
+}
