@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
-import { getMembers, addMembers, deleteRoles, deleteMembers } from '../../../../../store_actions/brandConsole'
-import { Row, Col } from 'react-bootstrap'
+import { getMembers, addMembers, deleteChecklist, deleteMembers } from '../../../../../store_actions/brandConsole'
+import { Col } from 'react-bootstrap'
 
-class Column extends Component {
+class Row extends React.Component {
 
   constructor(props) {
     super(props)
@@ -31,7 +31,7 @@ class Column extends Component {
           xs={4}
           className="column"
         >
-          <i className="fa fa-caret-right icon" aria-hidden="true"/>
+          <i className="fa fa-caret-right icon" aria-hidden="true" />
           {Checklist.title}
         </Col>
         <Col
@@ -72,7 +72,8 @@ class Column extends Component {
           <Col
             md={8}
             sm={8}
-            xs={8} className="editButton">
+            xs={8} className="editButton"
+          >
             Edit
           </Col>
           <Col
@@ -83,7 +84,7 @@ class Column extends Component {
           >
             <i
               onClick={() => {
-                this.props.deleteMembers(this.props.role, row.id)
+                this.props.deleteChecklist(Checklist)
               }}
               className="fa fa-times"
               aria-hidden="true"
@@ -101,5 +102,5 @@ export default connect(
     // members: brandConsole.members[checklist.id] || [],
     // user: data.user
   }),
-  ({ getMembers, addMembers, deleteRoles, deleteMembers })
-)(Column)
+  ({ getMembers, addMembers, deleteChecklist, deleteMembers })
+)(Row)

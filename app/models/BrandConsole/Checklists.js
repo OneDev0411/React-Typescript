@@ -11,19 +11,19 @@ Checklists.getChecklists = async function (user) {
   }
 }
 
-Checklists.addChecklist = async function (user, role) {
+Checklists.addChecklist = async function (user, checklist) {
   try {
     return await new Fetch()
       .post(`/brands/${user.brand}/checklists`)
-      .send(role)
+      .send(checklist)
   } catch (e) {
     console.log(e)
   }
 }
 
-Checklists.deleteRole = async function (role) {
+Checklists.deleteChecklist = async function (checklist) {
   try {
-    return await new Fetch().delete(`/brands/${role.brand}/checklists/${role.id}`)
+    return await new Fetch().delete(`/brands/${checklist.brand}/checklists/${checklist.id}`)
   } catch (e) {
     console.log(e)
   }
