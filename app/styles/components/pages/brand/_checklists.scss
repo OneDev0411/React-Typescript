@@ -1,0 +1,14 @@
+@import 'checklistRow';
+
+%checklists {
+  .header {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #8ca2b6;
+  }
+  .checklistRow {
+    @extend %checklistRow;
+  }
+}

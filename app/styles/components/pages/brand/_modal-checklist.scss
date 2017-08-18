@@ -1,0 +1,56 @@
+@import 'modal';
+
+.modal-checklist {
+  @extend %brand-modal;
+
+  .modal-body {
+    position: relative;
+    padding: 0 20px;
+  }
+
+  .input-container {
+    min-height: 50px;
+    padding: 10px 16.5px;
+    border-radius: 3px;
+    -webkit-backdrop-filter: blur(10px);
+    width: 100%;
+    border: solid 1px #dce5eb;
+    background-color: #ffffff;
+    input {
+      height: 30px;
+      margin: 0 0 0 5px;
+      background-color: transparent;
+      border: none;
+      float: left;
+      width: 100%;
+      &:focus {
+        outline: 0;
+      }
+    }
+  }
+  .title {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.2px;
+    text-align: left;
+    color: #8ca2b6;
+    margin: 16px 0 8px 0;
+  }
+  .dropdown {
+    width: 100%;
+    button {
+      width: 100%;
+      text-align: left;
+      border: solid 1px #dce5eb;
+      .caret {
+        float: right;
+        margin-top: 8px;
+      }
+    }
+  }
+  .modal-footer {
+    margin-top: 13px;
+  }
+}
+
+
