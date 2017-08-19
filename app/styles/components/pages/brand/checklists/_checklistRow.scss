@@ -40,3 +40,10 @@
     display: inline-block;
   }
 }
+
+%checklistRow.active {
+  background-color: #f8fafb;
+  border-bottom: none;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}

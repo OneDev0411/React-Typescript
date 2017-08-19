@@ -1,0 +1,38 @@
+%tasks {
+  .tasks-header {
+    height: 46px;
+    background-color: #f8fafb;
+    box-shadow: 0 1px 1px 0 #eef1f2;
+    padding-top: 11px;
+    .label {
+      font-size: 14px;
+      font-weight: 500;
+      text-align: left;
+      color: #1c364c;
+      margin-left: 27px;
+    }
+    .button {
+      width: 100px;
+      border-radius: 3px;
+      background-color: #ffffff;
+      border: solid 1px #e7eef0;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
+      color: #78909c;
+      cursor: pointer;
+      float: right;
+      margin-right: 8px;
+    }
+  }
+  .task {
+    height: 46px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 1px 0 #eef1f2;
+    margin-left: 34px;
+    .task-title {
+      line-height: 46px;
+      margin: 0;
+    }
+  }
+}

@@ -5,9 +5,9 @@ $toolBarHeight: 60px;
 
 @import 'menu';
 @import 'roles';
-@import 'checklists';
+@import 'checklists/checklists';
 @import 'modal-new-role';
-@import 'modal-checklist';
+@import 'checklists/modal-checklist';
 @import 'modal';
 
 .brand {
@@ -41,6 +41,7 @@ $toolBarHeight: 60px;
   }
   .rightPanel {
     margin-left: $menuWidth;
+    overflow: auto;
   }
 }
 
@@ -48,19 +49,3 @@ $toolBarHeight: 60px;
   @extend %brand-modal;
 }
 
-///**
-// * helpers
-// */
-//.inline {
-//  display: inline;
-//}
-//
-//.inline-block {
-//  display: inline-block;
-//}
-//
-//.vcenter {
-//  display: inline-block;
-//  vertical-align: middle;
-//  float: none;
-//}

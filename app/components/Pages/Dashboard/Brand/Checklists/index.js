@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Grid, Row, Col } from 'react-bootstrap'
+import { Grid, Col, Accordion, Panel } from 'react-bootstrap'
 import Header from './Header'
 import ChecklistRow from './Row'
+import Tasks from './Tasks'
 import { getChecklists } from '../../../../../store_actions/brandConsole'
 
 class Checklists extends React.Component {
@@ -24,7 +25,6 @@ class Checklists extends React.Component {
 
   render() {
     const Checklists = this.props.Checklists
-    console.log('Checklists: ', Checklists)
     return (
       <div className="checklists">
         <Header
@@ -37,14 +37,23 @@ class Checklists extends React.Component {
             <Col md={2} sm={2} xs={2}>Property Type</Col>
             <Col md={3} sm={3} xs={3}>Order</Col>
           </div>
-          {Checklists.map(Checklist =>
-            <ChecklistRow
-              key={`Checklist${Checklist.id}`}
-              Checklist={Checklist}
-              onSelectItem={this.onSelectItem}
-              activeItem={this.state.activeItem === Checklist.id}
-            />
-          )}
+          <Accordion activeKey={`Checklist_${this.state.activeItem}`}>
+            {Checklists.map(Checklist =>
+              <Panel
+                key={`Checklist_${Checklist.id}`}
+                eventKey={`Checklist_${Checklist.id}`}
+                header={<ChecklistRow
+                  Checklist={Checklist}
+                  onSelectItem={this.onSelectItem}
+                  activeItem={this.state.activeItem === Checklist.id}
+                />}
+              >
+                <Tasks
+                  Checklist={Checklist}
+                />
+              </Panel>
+            )}
+          </Accordion>
         </Grid>
       </div>
     )

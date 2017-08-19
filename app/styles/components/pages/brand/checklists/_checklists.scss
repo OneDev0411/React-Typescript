@@ -1,4 +1,5 @@
 @import 'checklistRow';
+@import 'tasks';
 
 %checklists {
   .header {
@@ -10,5 +11,17 @@
   }
   .checklistRow {
     @extend %checklistRow;
+  }
+  .tasks {
+    @extend %tasks;
+  }
+  .panel-group .panel {
+    border: none;
+    .panel-heading {
+      padding: 0;
+    }
+    .panel-body {
+      padding: 0;
+    }
   }
 }
