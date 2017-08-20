@@ -1,16 +1,16 @@
 import types from '../../constants/brandConsole'
 import BrandConsole from '../../models/BrandConsole'
 
-function _addTask(task) {
+function _addTask(checklist) {
   return {
     type: types.ADD_TASK,
-    task
+    checklist
   }
 }
 
-export function addTask(user, task) {
+export function addTask(checklist_id, task) {
   return async (dispatch) => {
-    const response = await BrandConsole.addTask(user, task)
+    const response = await BrandConsole.addTask(checklist_id, task)
     if (response) {
       const { data } = response.body
       dispatch(_addTask(data))

@@ -20,6 +20,16 @@ export default (state = [], action) => {
       }
       return stateClone
     }
+    case types.ADD_TASK: {
+      let stateClone = state.slice()
+      for (let i = 0; i < stateClone.length; i++) {
+        if (stateClone[i].id === action.checklist.id) {
+          stateClone[i] = action.checklist
+          break
+        }
+      }
+      return stateClone
+    }
     default:
       return state
   }
