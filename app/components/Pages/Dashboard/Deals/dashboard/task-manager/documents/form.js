@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
 import { editForm } from '../../../../../../../store_actions/deals/forms'
-
+import ESignButton from '../../esign'
 
 const Form = ({
   task,
@@ -26,8 +26,8 @@ const Form = ({
           </Col>
 
           <Col sm={6} xs={12} className="actions vcenter">
-            <button>eSigns</button>
-            <button onClick={() => editForm(task)}>Edit</button>
+            <ESignButton dealId={task.deal} />
+            <button className="btn-deal" onClick={() => editForm(task)}>Edit</button>
           </Col>
         </Row>
       </div>

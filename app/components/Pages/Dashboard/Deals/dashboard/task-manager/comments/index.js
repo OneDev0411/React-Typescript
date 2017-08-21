@@ -31,7 +31,7 @@ class Comment extends React.Component {
           showToolbar={false}
           showComposeMessage={false}
           disableUpload={true}
-          baseHeight="45vh"
+          baseHeight="500px"
         />
       </div>
     )
