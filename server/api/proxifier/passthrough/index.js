@@ -43,7 +43,10 @@ router.post('/proxifier', bodyParser(), async ctx => {
       updateSession(ctx, response.body)
     }
 
-    ctx.body = response.body
+    ctx.body = {
+      ...response.body,
+      statusCode: response.statusCode
+    }
   } catch (e) {
     console.log('[ Error ] ', e.message)
 
@@ -52,8 +55,13 @@ router.post('/proxifier', bodyParser(), async ctx => {
       text: e.message
     }
 
-    ctx.status = e.response.status
-    ctx.body = e.response.text
+    const { status, text } = e.response
+
+    ctx.status = status
+    ctx.body = {
+      statusCode: status,
+      ...JSON.parse(text)
+    }
   }
 })
 

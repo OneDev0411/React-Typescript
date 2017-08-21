@@ -64,9 +64,9 @@ export const renderField = ({
 
 let SigninForm = ({
   brand,
-  error,
   pristine,
   isLogging,
+  submitError,
   handleSubmit,
   onSubmitHandler
 }) => {
@@ -105,7 +105,7 @@ let SigninForm = ({
               component={renderField}
             />
             <Link to="/password/forgot">Forgot your password?</Link>
-            {error &&
+            {submitError &&
               <div className="c-auth__submit-error-alert">
                 There was an error with this request. This email or password is
                 incorrect.
@@ -162,11 +162,11 @@ export default compose(
   connect(
     ({ brand, auth }, { location }) => {
       const { username } = location.query
-      const { isLogging, error } = auth.signin
+      const { isLogging, error: submitError } = auth.signin
       return {
         brand,
-        error,
         isLogging,
+        submitError,
         initialValues: { username }
       }
     },

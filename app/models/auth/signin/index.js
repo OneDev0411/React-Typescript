@@ -16,13 +16,8 @@ const signin = async userInfo => {
       access_token,
       refresh_token
     }
-  } catch ({ response }) {
-    const error = {
-      code: response.statusCode,
-      type: response.body.error,
-      message: response.body.error_description
-    }
-    throw error
+  } catch ({ status }) {
+    throw status
   }
 }
 

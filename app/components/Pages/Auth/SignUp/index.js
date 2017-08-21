@@ -13,7 +13,6 @@ import { getBrandInfo, renderField } from '../SignIn'
 import signupShadow from '../../../../models/auth/signup/shadow'
 
 const getErrorMessage = (errorCode, email) => {
-  console.log(errorCode)
   switch (errorCode) {
     case 409:
       return (
