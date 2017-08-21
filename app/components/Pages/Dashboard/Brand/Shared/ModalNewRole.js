@@ -8,7 +8,7 @@ const enhance = compose(
   withState('recipients', 'onChangeRecipients', {})
 )
 
-const ComposeWrapper = ({
+const ModalNewRole = ({
                           TriggerButton,
                           title,
                           buttonTitle,
@@ -69,4 +69,4 @@ const ComposeWrapper = ({
     </Modal>
   </div>
 }
-export default enhance(ComposeWrapper)
+export default enhance(ModalNewRole)

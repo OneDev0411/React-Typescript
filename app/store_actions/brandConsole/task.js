@@ -8,9 +8,9 @@ function _addTask(checklist) {
   }
 }
 
-export function addTask(checklist_id, task) {
+export function addTask(brand_id, checklist_id, task) {
   return async (dispatch) => {
-    const response = await BrandConsole.addTask(checklist_id, task)
+    const response = await BrandConsole.addTask(brand_id, checklist_id, task)
     if (response) {
       const { data } = response.body
       dispatch(_addTask(data))

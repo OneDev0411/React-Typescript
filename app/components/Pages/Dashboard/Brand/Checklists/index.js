@@ -4,6 +4,7 @@ import { Grid, Col, Accordion, Panel } from 'react-bootstrap'
 import Header from './Header'
 import ChecklistRow from './Row'
 import Tasks from './Tasks'
+import Forms from './Forms'
 import { getChecklists } from '../../../../../store_actions/brandConsole'
 
 class Checklists extends React.Component {
@@ -52,6 +53,9 @@ class Checklists extends React.Component {
                 />}
               >
                 <Tasks
+                  checklist={checklist}
+                />
+                <Forms
                   checklist={checklist}
                 />
               </Panel>

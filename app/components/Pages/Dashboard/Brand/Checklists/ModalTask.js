@@ -7,26 +7,30 @@ const enhance = compose(
   withState('showComposeModal', 'onChangeComposeModal', false),
   withState('titleTask', 'changeTitleTask', ''),
   withState('taskType', 'changeTitleDealType', ''),
+  withState('allowedForm', 'changeAllowedForm', ''),
   withState('titleOrder', 'changeTitleOrder', ''),
 )
 
-const ComposeWrapper = ({
-                          TriggerButton,
-                          title,
-                          buttonTitle,
-                          onButtonClick,
-                          inline = false,
-                          showOnly = false,
-                          /* internal props and states */
-                          showComposeModal,
-                          onChangeComposeModal,
-                          titleTask,
-                          changeTitleTask,
-                          taskType,
-                          changeTitleDealType,
-                          titleOrder,
-                          changeTitleOrder
-                        }) => {
+const ModalNewTask = ({
+                        TriggerButton,
+                        title,
+                        buttonTitle,
+                        onButtonClick,
+                        inline = false,
+                        showOnly = false,
+                        forms,
+                        /* internal props and states */
+                        showComposeModal,
+                        onChangeComposeModal,
+                        titleTask,
+                        changeTitleTask,
+                        taskType,
+                        changeTitleDealType,
+                        titleOrder,
+                        changeTitleOrder,
+                        allowedForm,
+                        changeAllowedForm
+                      }) => {
   const taskTypes = [
     'Form', 'Generic'
   ]
@@ -65,16 +69,38 @@ const ComposeWrapper = ({
           onSelect={(selectedItem) => changeTitleDealType(selectedItem)}
         >
           {taskTypes.map(item =>
-            <MenuItem eventKey={item}>{item}</MenuItem>
+            <MenuItem
+              key={item}
+              eventKey={item}
+            >{item}
+            </MenuItem>
           )}
         </DropdownButton>
+        { taskType === 'Form' &&
+        <div>
+          <div className="title">Select Form</div>
+          <DropdownButton
+            id="form"
+            title={taskType || 'Choose a allowed form'}
+            onSelect={(selectedItem) => changeTitleDealType(selectedItem)}
+          >
+            {forms && forms.map(item =>
+              <MenuItem
+                key={item}
+                eventKey={item}
+              >{item}
+              </MenuItem>
+            )}
+          </DropdownButton>
+        </div>
+        }
         <div className="title">Order</div>
 
         <div className="input-container">
           <input
             type="text"
             placeholder="order…"
-            onChange={(event) => changeTitleOrder(event.target.value)}
+            onChange={(event) => changeAllowedForm(event.target.value)}
           />
         </div>
       </Modal.Body>
@@ -90,7 +116,7 @@ const ComposeWrapper = ({
               title: titleTask,
               task_type: taskType,
               order: titleOrder,
-              // form: results.form.create.data.id
+              form: allowedForm
             })
           }}
         >
@@ -100,4 +126,4 @@ const ComposeWrapper = ({
     </Modal>
   </div>
 }
-export default enhance(ComposeWrapper)
+export default enhance(ModalNewTask)

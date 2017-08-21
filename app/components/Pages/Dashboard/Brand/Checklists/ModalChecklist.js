@@ -34,7 +34,7 @@ class Wrapper extends React.Component {
   changeTitleOrder = titleOrder => this.setState({ titleOrder })
 
   render() {
-    return <ComposeWrapper
+    return <ModalNewChecklist
       {...this.props}
       showComposeModal={this.state.showComposeModal}
       titleChecklist={this.state.titleChecklist}
@@ -49,25 +49,25 @@ class Wrapper extends React.Component {
     />
   }
 }
-const ComposeWrapper = ({
-                          TriggerButton,
-                          title,
-                          buttonTitle,
-                          onButtonClick,
-                          inline = false,
-                          showOnly = false,
-                          /* internal props and states */
-                          showComposeModal,
-                          onChangeComposeModal,
-                          titleChecklist,
-                          changeTitleChecklist,
-                          titleDealType,
-                          changeTitleDealType,
-                          titlePropertyDealType,
-                          changeTitlePropertyType,
-                          titleOrder,
-                          changeTitleOrder
-                        }) => {
+const ModalNewChecklist = ({
+                             TriggerButton,
+                             title,
+                             buttonTitle,
+                             onButtonClick,
+                             inline = false,
+                             showOnly = false,
+                             /* internal props and states */
+                             showComposeModal,
+                             onChangeComposeModal,
+                             titleChecklist,
+                             changeTitleChecklist,
+                             titleDealType,
+                             changeTitleDealType,
+                             titlePropertyDealType,
+                             changeTitlePropertyType,
+                             titleOrder,
+                             changeTitleOrder
+                           }) => {
   const dealTypes = [
     'Buying', 'Selling'
   ]
@@ -110,7 +110,11 @@ const ComposeWrapper = ({
           onSelect={(selectedItem) => changeTitleDealType(selectedItem)}
         >
           {dealTypes.map(item =>
-            <MenuItem eventKey={item}>{item}</MenuItem>
+            <MenuItem
+              key={item}
+              eventKey={item}
+            >{item}
+            </MenuItem>
           )}
         </DropdownButton>
         <div className="title">Property Type</div>
@@ -120,7 +124,11 @@ const ComposeWrapper = ({
           onSelect={(selectedItem) => changeTitlePropertyType(selectedItem)}
         >
           {propertyTypes.map(item =>
-            <MenuItem eventKey={item}>{item}</MenuItem>
+            <MenuItem
+              key={item}
+              eventKey={item}
+            >{item}
+            </MenuItem>
           )}
         </DropdownButton>
         <div className="title">Order</div>
@@ -130,7 +138,11 @@ const ComposeWrapper = ({
           onSelect={(selectedItem) => changeTitleOrder(selectedItem)}
         >
           {orders.map(item =>
-            <MenuItem eventKey={item}>{item}</MenuItem>
+            <MenuItem
+              key={item}
+              eventKey={item}
+            >{item}
+            </MenuItem>
           )}
         </DropdownButton>
       </Modal.Body>

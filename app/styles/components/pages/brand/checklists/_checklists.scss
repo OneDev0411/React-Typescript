@@ -1,5 +1,6 @@
 @import 'checklistRow';
 @import 'tasks';
+@import 'listFilter';
 
 %checklists {
   .header {
@@ -14,6 +15,9 @@
   }
   .tasks {
     @extend %tasks;
+  }
+  .listFilter {
+    @extend %listFilter;
   }
   .panel-group .panel {
     border: none;
