@@ -69,15 +69,14 @@ const ComposeWrapper = ({
           )}
         </DropdownButton>
         <div className="title">Order</div>
-        <DropdownButton
-          id="orders"
-          title={titleOrder || 'Order'}
-          onSelect={(selectedItem) => changeTitleOrder(selectedItem)}
-        >
-          {orders.map(item =>
-            <MenuItem eventKey={item}>{item}</MenuItem>
-          )}
-        </DropdownButton>
+
+        <div className="input-container">
+          <input
+            type="text"
+            placeholder="order…"
+            onChange={(event) => changeTitleOrder(event.target.value)}
+          />
+        </div>
       </Modal.Body>
 
       {!showOnly &&
