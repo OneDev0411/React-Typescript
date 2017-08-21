@@ -13,7 +13,7 @@ Roles.getRoles = async function (user) {
   }
 }
 
-Roles.addRoles = async function (user, role) {
+Roles.addRole = async function (user, role) {
   try {
     return await new Fetch()
       .post(`/brands/${user.brand}/roles`)

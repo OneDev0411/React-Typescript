@@ -1,13 +1,17 @@
 $row-padding: 20px;
-$menuWidth: 330px;
+$menuWidth: 230px;
 $rowWidth: 300px;
+$toolBarHeight: 60px;
+
 @import 'menu';
 @import 'roles';
+@import 'checklists/checklists';
 @import 'modal-new-role';
+@import 'checklists/modal-checklist';
 @import 'modal';
 
 .brand {
-  margin-left: 85px;
+  margin-left: 70px;
   margin-right: 0;
   .no-padding {
     padding: 0;
@@ -15,29 +19,33 @@ $rowWidth: 300px;
   .menu {
     @extend %menu;
   }
+  background-color: #f0f4f7;
+  min-height: 100vh;
+  .toolbar {
+    margin: 0;
+    height: $toolBarHeight;
+
+    .button {
+      float: right;
+      padding: 12px 40px 0 0;
+    }
+  }
+  .toolbar:after {
+    clear: both;
+  }
   .roles {
     @extend %roles;
   }
+  .checklists {
+    @extend %checklists;
+  }
   .rightPanel {
     margin-left: $menuWidth;
+    overflow: auto;
   }
 }
+
 .brand-add-member {
   @extend %brand-modal;
 }
-/**
- * helpers
- */
-.inline {
-  display: inline;
-}
 
-.inline-block {
-  display: inline-block;
-}
-
-.vcenter {
-  display: inline-block;
-  vertical-align: middle;
-  float: none;
-}

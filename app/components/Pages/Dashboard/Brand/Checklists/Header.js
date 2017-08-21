@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'react-bootstrap'
-import Compose from '../Shared/ModalNewRole'
-import { addRole } from '../../../../../store_actions/brandConsole'
+import Compose from './ModalChecklist'
+import { addChecklist } from '../../../../../store_actions/brandConsole'
 
-const Header = ({ role, addRole }) => {
+const Header = ({ user, addChecklist }) => {
   const AddButton = ({
                        clickHandler
                      }) => (
@@ -12,7 +12,7 @@ const Header = ({ role, addRole }) => {
                          bsStyle="primary"
                          onClick={() => clickHandler()}
                        >
-      Add New Role
+                         Add Checklist
     </Button>
   )
 
@@ -23,10 +23,10 @@ const Header = ({ role, addRole }) => {
         showOnly={false}
         dropDownBox
         inline
-        title="Give your role a name"
-        buttonTitle="Add Role"
-        onButtonClick={(newRole) => {
-          addRole(role, newRole)
+        title="Add Checklist"
+        buttonTitle="Add"
+        onButtonClick={(newItem) => {
+          addChecklist(user, newItem)
         }}
       />
     </span>
@@ -36,6 +36,6 @@ const Header = ({ role, addRole }) => {
 
 export default connect(
   null,
-  ({ addRole })
+  ({ addChecklist })
 )(Header)
 

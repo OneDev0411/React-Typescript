@@ -7,13 +7,12 @@
     font-weight: 500;
     color: #62778c;
     padding: 0 0 10px 1px;
-    border-bottom: solid 1px #dce5eb;
     padding-left: 10px;
   }
 
   .messages {
-    min-height: 51vh;
-    max-height: 51vh;
+    min-height: 500px;
+    max-height: 500px;
     .messages-list {
       margin-top: 10px;
       width: 100%;

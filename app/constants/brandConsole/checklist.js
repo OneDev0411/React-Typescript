@@ -1,0 +1,5 @@
+export default [
+  'GET_CHECKLISTS',
+  'ADD_CHECKLIST',
+  'DELETE_CHECKLIST'
+]

@@ -90,6 +90,7 @@ class FileAttachments extends React.Component {
 
               <Col sm={3} xs={12} className="actions vcenter">
                 <button
+                  className="btn-deal"
                   onClick={() => {
                     this.setState({
                       selectedFile: file,

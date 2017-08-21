@@ -29,11 +29,14 @@ $col-padding: 20px;
 @import './dashboard/_tasks';
 @import './dashboard/_task_manager';
 @import './dashboard/_fact_sheet';
+@import './dashboard/_roles';
 @import './dashboard/_task_creator';
 @import './dashboard/_listing_card';
 @import './dashboard/_comment';
 @import './dashboard/_files';
 @import './dashboard/_edit_form';
+@import './dashboard/_esign_document_modal';
+@import './dashboard/_esign_send';
 
 %deal-dashboard {
   margin-left: 0;
@@ -55,6 +58,12 @@ $col-padding: 20px;
 
     &.left {
       border-right: 1px solid #e5e5e5;
+
+      .scrollable {
+        overflow: auto;
+        min-height: 78vh;
+        max-height: 78vh;
+      }
     }
   }
 
@@ -68,6 +77,10 @@ $col-padding: 20px;
 
   .deal-fact-sheet {
     @extend %deal-fact-sheet;
+  }
+
+  .deal-roles {
+    @extend %deal-roles;
   }
 
   .deal-task-creators {

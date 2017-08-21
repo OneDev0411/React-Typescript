@@ -1,10 +1,6 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import { Modal, Button } from 'react-bootstrap'
 import { compose, withState, pure } from 'recompose'
-import Compose from '../../../../Partials/Compose'
-import { hasRecipients } from '../../../../../utils/helpers'
-import AutoSizeInput from '../../../../Partials/AutoSizeInput'
 
 const enhance = compose(
   pure,
@@ -21,8 +17,7 @@ const ComposeWrapper = ({
                           showOnly = false,
                           /* internal props and states */
                           showComposeModal,
-                          recipients,
-                          onChangeComposeModal,
+                          onChangeComposeModal
                         }) => {
   const setInputRef = (el) => {
     this.input = el
@@ -50,7 +45,7 @@ const ComposeWrapper = ({
           <div className="input-container">
             <input
               type="text"
-              placeholder='Give the role a name…'
+              placeholder="Give the role a name…"
               ref={el => setInputRef(el)}
             />
           </div>

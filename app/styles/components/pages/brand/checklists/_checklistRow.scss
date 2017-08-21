@@ -1,0 +1,56 @@
+/* bm-menu */
+%checklistRow {
+  border-radius: 4px;
+  background-color: #ffffff;
+  border: solid 1px #dce5eb;
+  overflow: hidden;
+  width: 100%;
+  padding: 16px 0;
+  cursor: pointer;
+  .column {
+    font-size: 14px;
+    color: #1c364c;
+  }
+  .icon {
+    color: #c9d7df;
+    margin-right: 8px;
+  }
+  .edit-button-container {
+    display: inline-block;
+    visibility: hidden;
+    .editButton {
+      border-radius: 3px;
+      background-color: #f8fafb;
+      border: solid 1px #dde2e6;
+      text-align: center;
+      font-size: 13px;
+      color: #8da2b5;
+      padding: 2px 17px;
+    }
+  }
+  .deleteIcon {
+    display: inline-block;
+    visibility: hidden;
+    color: #8ca2b6;
+    margin-top: 3px;
+  }
+}
+
+%checklistRow:hover {
+  background-color: #f8fafb;
+  display: block;
+  .edit-button-container, .deleteIcon {
+    visibility: visible;
+    display: inline-block;
+  }
+  .edit-button-container .editButton:hover {
+    font-weight: bold;
+  }
+}
+
+%checklistRow.active {
+  background-color: #f8fafb;
+  border-bottom: none;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}

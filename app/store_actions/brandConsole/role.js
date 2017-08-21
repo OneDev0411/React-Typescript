@@ -18,24 +18,24 @@ export function getRoles(user) {
   }
 }
 
-function _addRoles(role) {
+function _addRole(role) {
   return {
     type: types.ADD_ROLE,
     role
   }
 }
 
-export function addRoles(user, role) {
+export function addRole(user, role) {
   return async (dispatch) => {
-    const response = await BrandConsole.addRoles(user, role)
+    const response = await BrandConsole.addRole(user, role)
     if (response) {
       const { data } = response.body
-      dispatch(_addRoles(data))
+      dispatch(_addRole(data))
     }
   }
 }
 
-function _deleteRoles(role_id) {
+function _deleteRole(role_id) {
   return {
     type: types.DELETE_ROLE,
     role_id
@@ -47,7 +47,7 @@ export function deleteRoles(role) {
     const response = await BrandConsole.deleteRole(role)
     if (response &&
       response.body.status === 'success') {
-      dispatch(_deleteRoles(role.id))
+      dispatch(_deleteRole(role.id))
     }
   }
 }
