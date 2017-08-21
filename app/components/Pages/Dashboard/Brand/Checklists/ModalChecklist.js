@@ -1,16 +1,54 @@
 import React from 'react'
 import { Modal, Button, DropdownButton, MenuItem } from 'react-bootstrap'
-import { compose, withState, pure } from 'recompose'
 
-const enhance = compose(
-  pure,
-  withState('showComposeModal', 'onChangeComposeModal', false),
-  withState('titleChecklist', 'changeTitleChecklist', ''),
-  withState('titleDealType', 'changeTitleDealType', ''),
-  withState('titlePropertyDealType', 'changeTitlePropertyType', ''),
-  withState('titleOrder', 'changeTitleOrder', ''),
-)
+class Wrapper extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      showComposeModal: false,
+      titleChecklist: props.checklist && props.checklist.title,
+      titleDealType: props.checklist && props.checklist.deal_type,
+      titlePropertyDealType: props.checklist && props.checklist.property_type,
+      order: props.checklist && props.checklist.order
+    }
+  }
 
+  componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.checklist
+      && nextProps.activeItem
+    ) {
+      this.setState({
+        titleChecklist: nextProps.checklist.title,
+        titleDealType: nextProps.checklist.deal_type,
+        titlePropertyDealType: nextProps.checklist.property_type,
+        order: nextProps.checklist.order
+      })
+    }
+  }
+
+  onChangeComposeModal = showComposeModal => this.setState({ showComposeModal })
+  changeTitleChecklist = titleChecklist => this.setState({ titleChecklist })
+  changeTitleDealType = titleDealType => this.setState({ titleDealType })
+  changeTitlePropertyType = titlePropertyDealType => this.setState({ titlePropertyDealType })
+  changeTitleOrder = titleOrder => this.setState({ titleOrder })
+
+  render() {
+    return <ComposeWrapper
+      {...this.props}
+      showComposeModal={this.state.showComposeModal}
+      titleChecklist={this.state.titleChecklist}
+      titleDealType={this.state.titleDealType}
+      titlePropertyDealType={this.state.titlePropertyDealType}
+      titleOrder={this.state.order}
+      onChangeComposeModal={this.onChangeComposeModal}
+      changeTitleChecklist={this.changeTitleChecklist}
+      changeTitleDealType={this.changeTitleDealType}
+      changeTitlePropertyType={this.changeTitlePropertyType}
+      changeTitleOrder={this.changeTitleOrder}
+    />
+  }
+}
 const ComposeWrapper = ({
                           TriggerButton,
                           title,
@@ -61,6 +99,7 @@ const ComposeWrapper = ({
           <input
             type="text"
             placeholder="Write a checklist name…"
+            value={titleChecklist}
             onChange={(event) => changeTitleChecklist(event.target.value)}
           />
         </div>
@@ -117,4 +156,4 @@ const ComposeWrapper = ({
     </Modal>
   </div>
 }
-export default enhance(ComposeWrapper)
+export default Wrapper

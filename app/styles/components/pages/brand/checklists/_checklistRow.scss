@@ -14,30 +14,34 @@
     color: #c9d7df;
     margin-right: 8px;
   }
-  .editButton {
-    border-radius: 3px;
-    background-color: #f8fafb;
-    border: solid 1px #dde2e6;
-    text-align: center;
-    font-size: 13px;
-    font-weight: 500;
-    color: #8da2b5;
+  .edit-button-container {
     display: none;
-    padding: 0 5px;
-    cursor: pointer;
+    .editButton {
+      border-radius: 3px;
+      background-color: #f8fafb;
+      border: solid 1px #dde2e6;
+      text-align: center;
+      font-size: 13px;
+      color: #8da2b5;
+      padding: 2px 17px;
+    }
   }
   .deleteIcon {
     display: none;
     color: #8ca2b6;
     cursor: pointer;
+    margin-top: 3px;
   }
 }
 
 %checklistRow:hover {
   background-color: #f8fafb;
   display: block;
-  .editButton, .deleteIcon {
+  .edit-button-container, .deleteIcon {
     display: inline-block;
+  }
+  .edit-button-container .editButton:hover {
+    font-weight: bold;
   }
 }
 

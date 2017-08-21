@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap'
 import Compose from './ModalTask'
 
 const Tasks = ({
-                 Checklist,
+                 checklist,
                  addTask
                }) => {
   const AddButton = ({
@@ -33,11 +33,11 @@ const Tasks = ({
         title="Add Task"
         buttonTitle="Add"
         onButtonClick={(newItem) => {
-          addTask(Checklist.id, newItem)
+          addTask(checklist.id, newItem)
         }}
       />
     </div>
-    {Checklist.tasks && Checklist.tasks.map(task =>
+    {checklist.tasks && checklist.tasks.map(task =>
       <div
         className="task"
         key={`task${task.id}`}

@@ -33,23 +33,23 @@ class Checklists extends React.Component {
         <Grid className="table">
           <div className="header">
             <Col md={4} sm={4} xs={4}>Checklist Name</Col>
-            <Col md={3} sm={3} xs={3}>Deal Type</Col>
+            <Col md={2} sm={2} xs={2}>Deal Type</Col>
             <Col md={2} sm={2} xs={2}>Property Type</Col>
-            <Col md={3} sm={3} xs={3}>Order</Col>
+            <Col md={2} sm={2} xs={2}>Order</Col>
           </div>
           <Accordion activeKey={`Checklist_${this.state.activeItem}`}>
-            {Checklists.map(Checklist =>
+            {Checklists.map(checklist =>
               <Panel
-                key={`Checklist_${Checklist.id}`}
-                eventKey={`Checklist_${Checklist.id}`}
+                key={`Checklist_${checklist.id}`}
+                eventKey={`Checklist_${checklist.id}`}
                 header={<ChecklistRow
-                  Checklist={Checklist}
+                  checklist={checklist}
                   onSelectItem={this.onSelectItem}
-                  activeItem={this.state.activeItem === Checklist.id}
+                  activeItem={this.state.activeItem === checklist.id}
                 />}
               >
                 <Tasks
-                  Checklist={Checklist}
+                  checklist={checklist}
                 />
               </Panel>
             )}
