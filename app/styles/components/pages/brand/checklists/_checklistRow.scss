@@ -6,6 +6,7 @@
   overflow: hidden;
   width: 100%;
   padding: 16px 0;
+  cursor: pointer;
   .column {
     font-size: 14px;
     color: #1c364c;
@@ -15,7 +16,8 @@
     margin-right: 8px;
   }
   .edit-button-container {
-    display: none;
+    display: inline-block;
+    visibility: hidden;
     .editButton {
       border-radius: 3px;
       background-color: #f8fafb;
@@ -27,9 +29,9 @@
     }
   }
   .deleteIcon {
-    display: none;
+    display: inline-block;
+    visibility: hidden;
     color: #8ca2b6;
-    cursor: pointer;
     margin-top: 3px;
   }
 }
@@ -38,6 +40,7 @@
   background-color: #f8fafb;
   display: block;
   .edit-button-container, .deleteIcon {
+    visibility: visible;
     display: inline-block;
   }
   .edit-button-container .editButton:hover {
