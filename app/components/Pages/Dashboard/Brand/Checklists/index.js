@@ -20,7 +20,10 @@ class Checklists extends React.Component {
   }
 
   onSelectItem(activeItem) {
-    this.setState({ activeItem })
+    if (activeItem !== this.state.activeItem)
+      this.setState({ activeItem })
+    else
+      this.setState({ activeItem: null })
   }
 
   render() {
