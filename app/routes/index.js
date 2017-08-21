@@ -52,6 +52,11 @@ const AsyncNoMatch = Load({
     import('../components/Pages/NoMatch' /* webpackChunkName: "404" */)
 })
 
+const AsyncOops = Load({
+  loader: () =>
+    import('../components/Pages/Oops' /* webpackChunkName: "Oops" */)
+})
+
 const AsyncBranch = Load({
   loader: () =>
     import('../components/Pages/Branch' /* webpackChunkName: "branch" */)
@@ -285,6 +290,7 @@ export default (
       />
     </Route>
 
+    <Route path="/oops" component={AsyncOops} />
     <Route path="*" component={AsyncNoMatch} />
   </Route>
 )
