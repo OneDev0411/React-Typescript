@@ -86,6 +86,20 @@ Deal.getForms = async function() {
 }
 
 /**
+* add a form
+*/
+Deal.addForm = async function (brandId, checklistId, formId) {
+  try {
+    const response = await new Fetch()
+      .post(`/brands/${brandId}/checklists/${checklistId}/forms`)
+      .send({ form: formId })
+    return response.body.data
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+/**
 * search google places
 */
 Deal.searchPlaces = async function(address) {

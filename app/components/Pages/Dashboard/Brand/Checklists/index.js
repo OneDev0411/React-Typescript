@@ -6,6 +6,7 @@ import ChecklistRow from './Row'
 import Tasks from './Tasks'
 import Forms from './Forms'
 import { getChecklists } from '../../../../../store_actions/brandConsole'
+import { getForms } from '../../../../../store_actions/deals'
 
 class Checklists extends React.Component {
   constructor(props) {
@@ -18,6 +19,7 @@ class Checklists extends React.Component {
 
   componentDidMount() {
     this.props.getChecklists(this.props.user)
+    this.props.getForms()
   }
 
   onSelectItem(activeItem) {
@@ -72,5 +74,5 @@ export default connect(
     Checklists: brandConsole.checklists || [],
     user: data.user
   }),
-  ({ getChecklists })
+  ({ getChecklists, getForms })
 )(Checklists)

@@ -1,4 +1,6 @@
 import React from 'react'
+import cn from 'classnames'
+import ClickOutside from 'react-click-outside'
 
 export default class ListFilter extends React.Component {
 
@@ -13,8 +15,11 @@ export default class ListFilter extends React.Component {
   filterData(e) {
     e.preventDefault()
     const regex = new RegExp(e.target.value, 'i')
-    const filtered = this.props.data.filter((datum) => (datum.search(regex) > -1))
-
+    let filtered = []
+    Object.keys(this.props.data).forEach((key) => {
+      if (this.props.data[key].name.search(regex) > -1)
+        filtered.push(this.props.data[key])
+    })
     this.setState({
       filteredData: filtered
     })
@@ -22,30 +27,40 @@ export default class ListFilter extends React.Component {
 
   render() {
     const { filteredData } = this.state
-    const items = filteredData.map((datum) => (
-      <li
-        className={this.props.liClassName}
-      >{datum}
-      </li>)
+    let items = []
+    Object.keys(filteredData).forEach((key) => (
+        items.push(<li
+          onClick={() => this.props.addForm && this.props.addForm(filteredData[key])}
+          key={key}
+          className={this.props.liClassName}
+        >{filteredData[key].name}
+        </li>)
+      )
     )
 
     return (
-      <div className={this.props.parentClassName}>
-        <div className={this.props.inputContainerClassName}>
-          <i
-            className="fa fa-search"
-            aria-hidden="true"
-          />
-          <input
-            className={this.props.inputClassName}
-            type="text" placeholder={this.props.placeholder}
-            onChange={this.filterData}
-          />
+      <ClickOutside
+        onClickOutside={() => this.props.onChangeListFilter(false)}
+      >
+        <div
+          className={cn(this.props.parentClassName, { active: true })}
+        >
+          <div className={this.props.inputContainerClassName}>
+            <i
+              className="fa fa-search"
+              aria-hidden="true"
+            />
+            <input
+              className={this.props.inputClassName}
+              type="text" placeholder={this.props.placeholder}
+              onChange={this.filterData}
+            />
+          </div>
+          <ul className={this.props.ulClassName}>
+            {items}
+          </ul>
         </div>
-        <ul className={this.props.ulClassName}>
-          {items}
-        </ul>
-      </div>
+      </ClickOutside>
     )
   }
 }
@@ -57,5 +72,5 @@ ListFilter.propTypes = {
   inputContainerClassName: React.PropTypes.string,
   inputClassName: React.PropTypes.string,
   placeholder: React.PropTypes.string,
-  data: React.PropTypes.array
+  data: React.PropTypes.object
 }
