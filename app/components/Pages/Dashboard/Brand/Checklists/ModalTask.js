@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Modal, Button, DropdownButton, MenuItem } from 'react-bootstrap'
 import { compose, withState, pure } from 'recompose'
 
@@ -7,7 +8,7 @@ const enhance = compose(
   withState('showComposeModal', 'onChangeComposeModal', false),
   withState('titleTask', 'changeTitleTask', ''),
   withState('taskType', 'changeTitleDealType', ''),
-  withState('allowedForm', 'changeAllowedForm', ''),
+  withState('allowedForm', 'changeAllowedForm', {}),
   withState('titleOrder', 'changeTitleOrder', ''),
 )
 
@@ -19,6 +20,7 @@ const ModalNewTask = ({
                         inline = false,
                         showOnly = false,
                         forms,
+                        allowed_forms,
                         /* internal props and states */
                         showComposeModal,
                         onChangeComposeModal,
@@ -81,15 +83,19 @@ const ModalNewTask = ({
           <div className="title">Select Form</div>
           <DropdownButton
             id="form"
-            title={taskType || 'Choose a allowed form'}
-            onSelect={(selectedItem) => changeTitleDealType(selectedItem)}
+            title={allowedForm.name || 'Choose a allowed form'}
+            onSelect={(selectedItem) => changeAllowedForm(forms[selectedItem])}
           >
-            {forms && forms.map(item =>
-              <MenuItem
-                key={item}
-                eventKey={item}
-              >{item}
-              </MenuItem>
+            {allowed_forms && allowed_forms.map((item, i) => {
+                console.log(forms[item])
+                if (!forms[item])
+                  debugger
+                return <MenuItem
+                  key={i}
+                  eventKey={item}
+                >{forms[item].name}
+                </MenuItem>
+              }
             )}
           </DropdownButton>
         </div>
@@ -100,7 +106,7 @@ const ModalNewTask = ({
           <input
             type="text"
             placeholder="order…"
-            onChange={(event) => changeAllowedForm(event.target.value)}
+            onChange={(event) => changeTitleOrder(event.target.value)}
           />
         </div>
       </Modal.Body>
@@ -109,14 +115,14 @@ const ModalNewTask = ({
       <Modal.Footer>
         <Button
           bsStyle="primary"
-          disabled={!titleTask || !taskType || !titleOrder}
+          disabled={!titleTask || !taskType || !titleOrder || !(taskType === 'Form' && Object.keys(allowedForm).length !== 0)}
           onClick={() => {
             onChangeComposeModal(false)
             onButtonClick({
               title: titleTask,
               task_type: taskType,
               order: titleOrder,
-              form: allowedForm
+              form: allowedForm.id
             })
           }}
         >
@@ -126,4 +132,7 @@ const ModalNewTask = ({
     </Modal>
   </div>
 }
-export default enhance(ModalNewTask)
+export default connect(({ deals }) => ({
+    forms: deals.forms
+  })
+)(enhance(ModalNewTask))

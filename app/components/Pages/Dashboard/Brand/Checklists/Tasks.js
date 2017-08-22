@@ -32,7 +32,7 @@ const Tasks = ({
         inline
         title="Add Task"
         buttonTitle="Add"
-        forms={checklist.allowed_forms}
+        allowed_forms={checklist.allowed_forms}
         onButtonClick={(newItem) => {
           addTask(checklist.brand, checklist.id, newItem)
         }}
