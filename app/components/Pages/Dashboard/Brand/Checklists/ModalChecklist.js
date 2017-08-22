@@ -31,7 +31,7 @@ class Wrapper extends React.Component {
   changeTitleChecklist = titleChecklist => this.setState({ titleChecklist })
   changeTitleDealType = titleDealType => this.setState({ titleDealType })
   changeTitlePropertyType = titlePropertyDealType => this.setState({ titlePropertyDealType })
-  changeTitleOrder = titleOrder => this.setState({ titleOrder })
+  changeTitleOrder = order => this.setState({ order })
 
   render() {
     return <ModalNewChecklist
@@ -40,7 +40,7 @@ class Wrapper extends React.Component {
       titleChecklist={this.state.titleChecklist}
       titleDealType={this.state.titleDealType}
       titlePropertyDealType={this.state.titlePropertyDealType}
-      titleOrder={this.state.order}
+      order={this.state.order}
       onChangeComposeModal={this.onChangeComposeModal}
       changeTitleChecklist={this.changeTitleChecklist}
       changeTitleDealType={this.changeTitleDealType}
@@ -65,7 +65,7 @@ const ModalNewChecklist = ({
                              changeTitleDealType,
                              titlePropertyDealType,
                              changeTitlePropertyType,
-                             titleOrder,
+                             order,
                              changeTitleOrder
                            }) => {
   const dealTypes = [
@@ -134,7 +134,7 @@ const ModalNewChecklist = ({
         <div className="title">Order</div>
         <DropdownButton
           id="orders"
-          title={titleOrder || 'Order'}
+          title={order || 'Order'}
           onSelect={(selectedItem) => changeTitleOrder(selectedItem)}
         >
           {orders.map(item =>
@@ -151,14 +151,14 @@ const ModalNewChecklist = ({
       <Modal.Footer>
         <Button
           bsStyle="primary"
-          disabled={!titleChecklist || !titleDealType || !titlePropertyDealType || !titleOrder}
+          disabled={!titleChecklist || !titleDealType || !titlePropertyDealType || !order}
           onClick={() => {
             onChangeComposeModal(false)
             onButtonClick({
               title: titleChecklist,
               deal_type: titleDealType,
               property_type: titlePropertyDealType,
-              order: titleOrder
+              order
             })
           }}
         >
