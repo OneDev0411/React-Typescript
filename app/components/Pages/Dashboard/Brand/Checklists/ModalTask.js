@@ -36,9 +36,6 @@ const ModalNewTask = ({
   const taskTypes = [
     'Form', 'Generic'
   ]
-  const orders = [
-    '1', '2', '3'
-  ]
   return <div style={{ display: inline ? 'inline' : 'block' }}>
     <TriggerButton
       clickHandler={() => onChangeComposeModal(!showComposeModal)}
@@ -86,16 +83,14 @@ const ModalNewTask = ({
             title={allowedForm.name || 'Choose a allowed form'}
             onSelect={(selectedItem) => changeAllowedForm(forms[selectedItem])}
           >
-            {allowed_forms && allowed_forms.map((item, i) => {
-                console.log(forms[item])
-                if (!forms[item])
-                  debugger
-                return <MenuItem
+            {allowed_forms && allowed_forms.map((item, i) =>
+              (
+                <MenuItem
                   key={i}
                   eventKey={item}
                 >{forms[item].name}
                 </MenuItem>
-              }
+            )
             )}
           </DropdownButton>
         </div>
@@ -133,6 +128,6 @@ const ModalNewTask = ({
   </div>
 }
 export default connect(({ deals }) => ({
-    forms: deals.forms
-  })
+  forms: deals.forms
+})
 )(enhance(ModalNewTask))
