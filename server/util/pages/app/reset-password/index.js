@@ -1,14 +1,22 @@
 import Koa from 'koa'
+import Crypto from '../../../crypto'
 const router = require('koa-router')()
 const app = new Koa()
 
-router.get('/reset_password', async (ctx, next) => {
+router.get('/password/reset', async (ctx, next) => {
   const { token } = ctx.request.query
-  const decoded_token = decodeURIComponent(token)
-  const encoded_token = encodeURIComponent(decoded_token)
+  if (!token) {
+    return ctx.redirect('/404')
+  }
 
-  // TODO: test token for validity then redirect to forgot password
-  return ctx.redirect('/password/reset/?token=' + encoded_token)
+  let decodedToken = await Crypto.decrypt(decodeURIComponent(token))
+  try {
+    decodedToken = JSON.parse(decodedToken)
+  } catch (error) {
+    return ctx.redirect('/oops')
+  }
+
+  await next()
 })
 
 module.exports = app.use(router.routes())
