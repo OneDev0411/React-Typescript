@@ -1,12 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addTask } from '../../../../../store_actions/brandConsole'
+import { addTask, deleteTask } from '../../../../../store_actions/brandConsole'
 import { Button } from 'react-bootstrap'
 import Compose from './ModalTask'
 
 const Tasks = ({
                  checklist,
-                 addTask
+                 addTask,
+                 deleteTask
                }) => {
   const AddButton = ({
                        clickHandler
@@ -40,12 +41,20 @@ const Tasks = ({
     </div>
     {checklist.tasks && checklist.tasks.map(task =>
       <div
-        className="task"
+        className="task clearfix"
         key={`task${task.id}`}
       >
         <p className="task-title">
           {task.title}
         </p>
+        <i
+          onClick={(e) => {
+            e.stopPropagation()
+            deleteTask(checklist, task.id)
+          }}
+          className="fa fa-times delete-icon"
+          aria-hidden="true"
+        />
       </div>
     )}
   </div>
@@ -53,5 +62,5 @@ const Tasks = ({
 
 export default connect(
   null,
-  ({ addTask })
+  ({ addTask, deleteTask })
 )(Tasks)

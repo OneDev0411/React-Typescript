@@ -18,19 +18,20 @@ export function addTask(brand_id, checklist_id, task) {
   }
 }
 
-function _deleteTask(task_id) {
+function _deleteTask(checklistId, taskId) {
   return {
     type: types.DELETE_TASK,
-    task_id
+    checklistId,
+    taskId
   }
 }
 
-export function deleteTask(task) {
+export function deleteTask(checklist, taskId) {
   return async (dispatch) => {
-    const response = await BrandConsole.deleteTask(task)
+    const response = await BrandConsole.deleteTask(checklist, taskId)
     if (response &&
       response.body.status === 'success') {
-      dispatch(_deleteTask(task.id))
+      dispatch(_deleteTask(checklist.id, taskId))
     }
   }
 }

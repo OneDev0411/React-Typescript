@@ -32,6 +32,22 @@ export default (state = [], action) => {
       }
       return stateClone
     }
+    case types.DELETE_TASK: {
+      let stateClone = state.slice()
+      for (let i = 0; i < stateClone.length; i++) {
+        if (stateClone[i].id === action.checklistId) {
+          for (let j = 0; j < stateClone[i].tasks.length; j++) {
+            if (stateClone[i].tasks[j].id === action.taskId) {
+              stateClone[i].tasks.splice(j, 1)
+              break
+            }
+          }
+          break
+        }
+      }
+      console.log(state, stateClone)
+      return stateClone
+    }
     default:
       return state
   }

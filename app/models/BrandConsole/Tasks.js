@@ -12,11 +12,11 @@ Tasks.addTask = async function (brand_id, checklist_id, task) {
   }
 }
 
-Tasks.deleteTask = async function (role, task_id) {
+Tasks.deleteTask = async function (checklist, taskId) {
+  console.log(checklist, taskId)
   try {
-    return await new Fetch().delete(`/brands/${role.brand}/roles/${role.id}/tasks/${task_id}`)
+    return await new Fetch().delete(`/brands/${checklist.brand}/checklists/${checklist.id}/tasks/${taskId}`);
   } catch (e) {
-    console.log(e)
     return null
   }
 }
