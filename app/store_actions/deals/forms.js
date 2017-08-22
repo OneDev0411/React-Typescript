@@ -18,6 +18,22 @@ export function getForms() {
   }
 }
 
+function _addForm(checklist) {
+  return {
+    type: types.ADD_FORM,
+    checklist
+  }
+}
+
+export function addForm(brandId, checklistId, formId) {
+  return async (dispatch) => {
+    const response = await Deal.addForm(brandId, checklistId, formId)
+    if (response) {
+      dispatch(_addForm(response))
+    }
+  }
+}
+
 export function editForm(task) {
   return {
     type: types.SET_EDIT_FORM,

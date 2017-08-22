@@ -4,7 +4,9 @@ import { Grid, Col, Accordion, Panel } from 'react-bootstrap'
 import Header from './Header'
 import ChecklistRow from './Row'
 import Tasks from './Tasks'
-import { getChecklists } from '../../../../../store_actions/brandConsole'
+import Forms from './Forms'
+import { getChecklists, deleteChecklist } from '../../../../../store_actions/brandConsole'
+import { getForms } from '../../../../../store_actions/deals'
 
 class Checklists extends React.Component {
   constructor(props) {
@@ -17,6 +19,7 @@ class Checklists extends React.Component {
 
   componentDidMount() {
     this.props.getChecklists(this.props.user)
+    this.props.getForms()
   }
 
   onSelectItem(activeItem) {
@@ -48,10 +51,14 @@ class Checklists extends React.Component {
                 header={<ChecklistRow
                   checklist={checklist}
                   onSelectItem={this.onSelectItem}
+                  deleteChecklist={this.props.deleteChecklist}
                   activeItem={this.state.activeItem === checklist.id}
                 />}
               >
                 <Tasks
+                  checklist={checklist}
+                />
+                <Forms
                   checklist={checklist}
                 />
               </Panel>
@@ -68,5 +75,5 @@ export default connect(
     Checklists: brandConsole.checklists || [],
     user: data.user
   }),
-  ({ getChecklists })
+  ({ getChecklists, getForms, deleteChecklist })
 )(Checklists)

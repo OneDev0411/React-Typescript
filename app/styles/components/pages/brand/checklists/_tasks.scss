@@ -30,13 +30,23 @@
     }
   }
   .task {
-    height: 46px;
     background-color: #ffffff;
     box-shadow: 0 1px 1px 0 #eef1f2;
-    display: inline;
     .task-title {
       margin: 0 34px;
       line-height: 46px;
+      float: left;
+    }
+    .delete-icon {
+      float: right;
+      margin: 15px;
+      visibility: hidden;
+    }
+  }
+  .task:hover {
+    background-color: #f8fafb;
+    .delete-icon{
+      visibility: visible;
     }
   }
 }

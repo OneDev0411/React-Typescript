@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Modal, Button, DropdownButton, MenuItem } from 'react-bootstrap'
 import { compose, withState, pure } from 'recompose'
 
@@ -7,31 +8,32 @@ const enhance = compose(
   withState('showComposeModal', 'onChangeComposeModal', false),
   withState('titleTask', 'changeTitleTask', ''),
   withState('taskType', 'changeTitleDealType', ''),
+  withState('allowedForm', 'changeAllowedForm', {}),
   withState('titleOrder', 'changeTitleOrder', ''),
 )
 
-const ComposeWrapper = ({
-                          TriggerButton,
-                          title,
-                          buttonTitle,
-                          onButtonClick,
-                          inline = false,
-                          showOnly = false,
-                          /* internal props and states */
-                          showComposeModal,
-                          onChangeComposeModal,
-                          titleTask,
-                          changeTitleTask,
-                          taskType,
-                          changeTitleDealType,
-                          titleOrder,
-                          changeTitleOrder
-                        }) => {
+const ModalNewTask = ({
+                        TriggerButton,
+                        title,
+                        buttonTitle,
+                        onButtonClick,
+                        inline = false,
+                        forms,
+                        allowed_forms,
+                        /* internal props and states */
+                        showComposeModal,
+                        onChangeComposeModal,
+                        titleTask,
+                        changeTitleTask,
+                        taskType,
+                        changeTitleDealType,
+                        titleOrder,
+                        changeTitleOrder,
+                        allowedForm,
+                        changeAllowedForm
+                      }) => {
   const taskTypes = [
     'Form', 'Generic'
-  ]
-  const orders = [
-    '1', '2', '3'
   ]
   return <div style={{ display: inline ? 'inline' : 'block' }}>
     <TriggerButton
@@ -65,40 +67,65 @@ const ComposeWrapper = ({
           onSelect={(selectedItem) => changeTitleDealType(selectedItem)}
         >
           {taskTypes.map(item =>
-            <MenuItem eventKey={item}>{item}</MenuItem>
+            <MenuItem
+              key={item}
+              eventKey={item}
+            >{item}
+            </MenuItem>
           )}
         </DropdownButton>
+        { taskType === 'Form' &&
+        <div>
+          <div className="title">Select Form</div>
+          <DropdownButton
+            id="form"
+            title={allowedForm.name || 'Choose a allowed form'}
+            onSelect={(selectedItem) => changeAllowedForm(forms[selectedItem])}
+          >
+            {allowed_forms && allowed_forms.map((item, i) =>
+              (
+                <MenuItem
+                  key={i}
+                  eventKey={item}
+                >{forms[item].name}
+                </MenuItem>
+            )
+            )}
+          </DropdownButton>
+        </div>
+        }
         <div className="title">Order</div>
-        <DropdownButton
-          id="orders"
-          title={titleOrder || 'Order'}
-          onSelect={(selectedItem) => changeTitleOrder(selectedItem)}
-        >
-          {orders.map(item =>
-            <MenuItem eventKey={item}>{item}</MenuItem>
-          )}
-        </DropdownButton>
+
+        <div className="input-container">
+          <input
+            type="text"
+            placeholder="order…"
+            onChange={(event) => changeTitleOrder(event.target.value)}
+          />
+        </div>
       </Modal.Body>
 
-      {!showOnly &&
       <Modal.Footer>
         <Button
           bsStyle="primary"
-          disabled={!titleTask || !taskType || !titleOrder}
+          // disabled={!(titleTask && taskType && titleOrder && (taskType === 'Form' && Object.keys(allowedForm).length !== 0))}
           onClick={() => {
             onChangeComposeModal(false)
             onButtonClick({
               title: titleTask,
               task_type: taskType,
               order: titleOrder,
-              // form: results.form.create.data.id
+              form: allowedForm.id
             })
           }}
         >
           {buttonTitle}
         </Button>
-      </Modal.Footer>}
+      </Modal.Footer>
     </Modal>
   </div>
 }
-export default enhance(ComposeWrapper)
+export default connect(({ deals }) => ({
+  forms: deals.forms
+})
+)(enhance(ModalNewTask))
