@@ -5,7 +5,7 @@ import Header from './Header'
 import ChecklistRow from './Row'
 import Tasks from './Tasks'
 import Forms from './Forms'
-import { getChecklists } from '../../../../../store_actions/brandConsole'
+import { getChecklists, deleteChecklist } from '../../../../../store_actions/brandConsole'
 import { getForms } from '../../../../../store_actions/deals'
 
 class Checklists extends React.Component {
@@ -51,6 +51,7 @@ class Checklists extends React.Component {
                 header={<ChecklistRow
                   checklist={checklist}
                   onSelectItem={this.onSelectItem}
+                  deleteChecklist={this.props.deleteChecklist}
                   activeItem={this.state.activeItem === checklist.id}
                 />}
               >
@@ -74,5 +75,5 @@ export default connect(
     Checklists: brandConsole.checklists || [],
     user: data.user
   }),
-  ({ getChecklists, getForms })
+  ({ getChecklists, getForms, deleteChecklist })
 )(Checklists)
