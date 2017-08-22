@@ -18,7 +18,6 @@ const ModalNewTask = ({
                         buttonTitle,
                         onButtonClick,
                         inline = false,
-                        showOnly = false,
                         forms,
                         allowed_forms,
                         /* internal props and states */
@@ -106,11 +105,10 @@ const ModalNewTask = ({
         </div>
       </Modal.Body>
 
-      {!showOnly &&
       <Modal.Footer>
         <Button
           bsStyle="primary"
-          disabled={!titleTask || !taskType || !titleOrder || !(taskType === 'Form' && Object.keys(allowedForm).length !== 0)}
+          // disabled={!(titleTask && taskType && titleOrder && (taskType === 'Form' && Object.keys(allowedForm).length !== 0))}
           onClick={() => {
             onChangeComposeModal(false)
             onButtonClick({
@@ -123,7 +121,7 @@ const ModalNewTask = ({
         >
           {buttonTitle}
         </Button>
-      </Modal.Footer>}
+      </Modal.Footer>
     </Modal>
   </div>
 }

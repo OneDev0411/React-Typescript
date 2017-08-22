@@ -46,7 +46,7 @@ const Tasks = ({
       </div>
       {forms && checklist.allowed_forms && checklist.allowed_forms.map(form =>
         <div
-          className="task"
+          className="task clearfix"
           key={`form_${form}`}
         >
           <p className="task-title">
