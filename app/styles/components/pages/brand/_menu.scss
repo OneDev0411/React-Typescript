@@ -1,6 +1,5 @@
 /* bm-menu */
 %menu {
-  z-index: 101 !important;
   background-color: #f8fafb;
   box-shadow: 1px 0 0 0 #e4e4e4;
   color: #fff;
@@ -31,7 +30,7 @@
     background-color: transparent;
   }
   &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: #f0f4f7;
   }
   &.active {
     background-color: #f0f4f7;

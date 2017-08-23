@@ -1,21 +1,6 @@
 @import 'column';
 
-$toolBarHeight: 60px;
 %roles {
-  background-color: #f0f4f7;
-  min-height: 100vh;
-  .toolbar {
-    margin: 0;
-    height: $toolBarHeight;
-
-    .button {
-      float: right;
-      padding: 17px 40px 0 0;
-    }
-  }
-  .toolbar:after {
-    clear: both;
-  }
   .rows {
     height: calc(100vh - #{$toolBarHeight});
     overflow: auto;

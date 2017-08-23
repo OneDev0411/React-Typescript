@@ -1,12 +1,13 @@
 import React from 'react'
-import { Row, Tab } from 'react-bootstrap'
+import { Tab } from 'react-bootstrap'
 import Roles from './Roles'
+import Checklists from './Checklists'
 import Sidebar from './Sidebar'
 
 const Brand = () => (
   <div className="brand">
-    <Tab.Container defaultActiveKey="Roles">
-      <Row className="clearfix">
+    <Tab.Container defaultActiveKey="Checklists">
+      <div className="clearfix">
         <Sidebar />
         <div className="rightPanel">
           <Tab.Content animation>
@@ -16,12 +17,12 @@ const Brand = () => (
             <Tab.Pane eventKey="Roles">
               <Roles />
             </Tab.Pane>
-            <Tab.Pane eventKey="Checklist">
-              Not ready yet....
+            <Tab.Pane eventKey="Checklists">
+              <Checklists />
             </Tab.Pane>
           </Tab.Content>
         </div>
-      </Row>
+      </div>
     </Tab.Container>
   </div>
 )
