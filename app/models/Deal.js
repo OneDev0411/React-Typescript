@@ -50,12 +50,18 @@ Deal.get.address = function(deal) {
 /**
 * get deals list
 */
-Deal.getAll = async function(user = {}) {
+Deal.getAll = async function(user = {}, brand = null) {
   const { access_token } = user
+  let endpoint = '/deals?associations[]=room.attachments'
+
+  // if brand was exists, it means user is backoffice
+  if (brand) {
+    endpoint = `/brands/${brand}/deals/inbox?associations[]=deal.brand&associations[]=deal.created_by`
+  }
 
   try {
     const fetchDeals = new Fetch()
-      .get('/deals?associations[]=room.attachments')
+      .get(endpoint)
 
     // required on ssr
     if (access_token) {
@@ -66,7 +72,7 @@ Deal.getAll = async function(user = {}) {
     return response.body.data
 
   } catch (e) {
-    console.log(e)
+    throw e
   }
 }
 
@@ -184,6 +190,23 @@ Deal.createTask = async function (deal_id, form, title, status, task_type, check
 }
 
 /**
+* add new role
+*/
+Deal.createRole = async function (deal_id, form) {
+  const { first_name, last_name, email, role } = form
+
+  try {
+    const response = await new Fetch()
+      .post(`/deals/${deal_id}/roles`)
+      .send({ first_name, last_name, email, role })
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
 * submit a task for review
 */
 Deal.submitForReview = async function(task_id) {
@@ -193,7 +216,8 @@ Deal.submitForReview = async function(task_id) {
       .send({ status: 'Submitted' })
 
     // set notify admin
-    await Deal.needsAttention(true)
+    Deal.needsAttention(task_id, true)
+    .then(() => {})
 
   } catch (e) {
     return false
@@ -210,7 +234,8 @@ Deal.cancelTaskReview = async function(task_id) {
       .send({ status: 'Incomplete' })
 
     // unset notify admin
-    Deal.needsAttention(false)
+    Deal.needsAttention(task_id, false)
+    .then(() => {})
 
   } catch (e) {
     return false
@@ -218,13 +243,37 @@ Deal.cancelTaskReview = async function(task_id) {
 }
 
 /**
+* send envelope
+*/
+Deal.sendEnvelope = async function(deal_id, subject, message, attachments, recipients) {
+
+  const data = {
+    deal: deal_id,
+    title: subject,
+    message: message,
+    documents: attachments,
+    recipients: _.map(recipients, recipient => recipient)
+  }
+
+  try {
+    const response = await new Fetch()
+      .post(`/envelopes`)
+      .send(data)
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
 * set notify admin flag
 */
-Deal.needsAttention = async function(status) {
+Deal.needsAttention = async function(task_id, status) {
   try {
     await new Fetch()
       .patch(`/tasks/${task_id}/needs_attention`)
-      .send({ needs_attention: false })
+      .send({ needs_attention: status })
 
   } catch (e) {
     return false
