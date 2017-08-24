@@ -45,7 +45,6 @@ class AddRole extends React.Component {
 
   render() {
     const { show, form, saving } = this.state
-    const { roles } = this.props
 
     return (
       <div>
@@ -77,7 +76,6 @@ class AddRole extends React.Component {
 
           <Modal.Body>
             <RoleForm
-              roles={roles}
               onFormCompleted={form => this.setState({ form })}
             />
           </Modal.Body>

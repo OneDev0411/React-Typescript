@@ -1,6 +1,23 @@
 import React from 'react'
 import { FormGroup, FormControl, DropdownButton, MenuItem } from 'react-bootstrap'
 
+const role_names = [
+  'BuyerAgent',
+  'CoBuyerAgent',
+  'SellerAgent',
+  'CoSellerAgent',
+  'Buyer',
+  'Seller',
+  'Title',
+  'Lawyer',
+  'Lender',
+  'TeamLead',
+  'Appraiser',
+  'Inspector',
+  'Tenant',
+  'Landlord'
+]
+
 export default class Form extends React.Component {
   constructor(props) {
     super(props)
@@ -42,7 +59,6 @@ export default class Form extends React.Component {
   }
 
   render() {
-    const { roles } = this.props
     const { form, validation } = this.state
 
     return (
@@ -80,13 +96,12 @@ export default class Form extends React.Component {
             title={form.role || 'Select Role'}
           >
             {
-              roles &&
-              roles.map(item =>
+              role_names.map(name =>
                 <MenuItem
-                  key={`ROLE_${item.id}`}
-                  onClick={() => this.setForm('role', item.role)}
+                  key={`ROLE_${name}`}
+                  onClick={() => this.setForm('role', name)}
                 >
-                  { item.role }
+                  { name }
                 </MenuItem>
               )
             }
