@@ -56,10 +56,10 @@ Deal.getAll = async function(user = {}, backoffice = false) {
 
   // backoffice and agent has different endpoints and associations
   if (backoffice) {
-    associations = 'associations[]=deal.brand&associations[]=deal.created_by&associations[]=review.updated_by'
+    associations = 'associations[]=room.attachments&associations[]=deal.brand&associations[]=deal.created_by&associations[]=review.updated_by&associations[]=deal.envelopes'
     endpoint = `/brands/${user.brand}/deals/inbox?${associations}`
   } else {
-    associations = 'associations[]=room.attachments'
+    associations = 'associations[]=room.attachments&associations[]=deal.envelopes'
     endpoint = `/brands/${user.brand}/deals?${associations}`
   }
 

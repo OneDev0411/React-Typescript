@@ -13,6 +13,7 @@ function scrollEnd() {
 }
 
 const TaskManager = ({
+  deal,
   tasks,
   taskId,
   onCloseTask
@@ -38,6 +39,7 @@ const TaskManager = ({
           />
 
           <Documents
+            deal={deal}
             task={task}
           />
 

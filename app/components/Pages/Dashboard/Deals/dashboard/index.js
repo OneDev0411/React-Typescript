@@ -92,6 +92,7 @@ class DealDetails extends React.Component {
           style={{ display: selectedTaskId ? 'inherit' : 'none' }}
         >
           <TaskDetail
+            deal={deal}
             taskId={selectedTaskId}
             onCloseTask={() => this.onCloseTask()}
           />
