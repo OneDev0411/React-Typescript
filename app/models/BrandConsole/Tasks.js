@@ -13,7 +13,6 @@ Tasks.addTask = async function (brand_id, checklist_id, task) {
 }
 
 Tasks.deleteTask = async function (checklist, taskId) {
-  console.log(checklist, taskId)
   try {
     return await new Fetch().delete(`/brands/${checklist.brand}/checklists/${checklist.id}/tasks/${taskId}`);
   } catch (e) {

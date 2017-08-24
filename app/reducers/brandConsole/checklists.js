@@ -22,6 +22,16 @@ export default (state = [], action) => {
       return state
     case types.ADD_CHECKLIST:
       return state.concat(action.checklist)
+    case types.EDIT_CHECKLIST: {
+      let stateClone = state.slice()
+      for (let i = 0; i < stateClone.length; i++) {
+        if (stateClone[i].id === action.checklist.id) {
+          stateClone[i] = action.checklist
+          break
+        }
+      }
+      return stateClone
+    }
     case types.DELETE_CHECKLIST: {
       let stateClone = state.slice()
       for (let i = 0; i < stateClone.length; i++) {
