@@ -43,7 +43,7 @@ class BackOfficeTable extends BaseTable {
       },
       next_date: {
         caption: 'NEXT DATES',
-        className: 'col-md-1 hidden-sm hidden-xs',
+        className: 'col-md-2 hidden-sm hidden-xs',
         getText: deal => this.getNextDate(deal)
       },
       needs_attention: {
