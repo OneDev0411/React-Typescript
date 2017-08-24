@@ -27,8 +27,6 @@ import Brand from '../../../../controllers/Brand'
 // chatroom stuff
 import InstantTrigger from '../Chatroom/Shared/instant-trigger'
 
-import BrandInstantTrigger from '../Brand/Shared/instant-trigger'
-
 export default class SideBar extends Component {
 
   async componentDidUpdate() {
