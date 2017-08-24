@@ -62,7 +62,7 @@ class CommentCreate extends React.Component {
 
   render() {
     const { rows, height } = this.state
-    const { task } = this.props
+    const { task, onCloseTask } = this.props
 
     return (
       <div className="deal-comment-create">
@@ -79,7 +79,10 @@ class CommentCreate extends React.Component {
 
         <Row>
           <Col md={1} sm={1}>
-            <button className="deal-button close-task">
+            <button
+              className="deal-button close-task"
+              onClick={() => onCloseTask()}
+            >
               <i className="fa fa-2x fa-angle-right" />
             </button>
           </Col>

@@ -14,7 +14,8 @@ function scrollEnd() {
 
 const TaskManager = ({
   tasks,
-  taskId
+  taskId,
+  onCloseTask
 }) => {
   if (!taskId) {
     return false
@@ -48,6 +49,7 @@ const TaskManager = ({
         <CommentInput
           task={task}
           onCommentSaved={() => scrollEnd()}
+          onCloseTask={() => onCloseTask()}
         />
       </UploadFile>
     </div>
