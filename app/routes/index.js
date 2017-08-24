@@ -15,6 +15,7 @@ const AsyncAuthenticationLayout = Load({
 
 // Pages
 import Landing from '../components/Pages/Landing'
+import Brand from '../components/Pages/Dashboard/Brand'
 
 const AsyncSignUp = Load({
   loader: () => import('../components/Pages/SignUp' /* webpackChunkName: "signup" */)
@@ -71,7 +72,8 @@ const AsyncDealsLayout = Load({
   loader: () => import('../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */),
   fetchData: (dispatch, params) => {
     const { user } = params
-    return dispatch(getDeals(user))
+    const isBackOffice = user.features.indexOf('Backoffice') > -1 ? true : false
+    return dispatch(getDeals(user, isBackOffice))
   }
 })
 
@@ -108,10 +110,6 @@ const AsyncListingsFavorites = Load({
 const AsyncListingSinglePage = Load({
   loader: () => import('../components/Pages/Dashboard/Listings/Listing' /* webpackChunkName: "list_single" */)
 })
-
-
-import Brand from '../components/Pages/Dashboard/Brand'
-
 
 // Notifications
 const AsyncNotificationsPage = Load({

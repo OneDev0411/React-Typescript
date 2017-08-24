@@ -46,17 +46,21 @@ Deal.get.address = function(deal) {
   return (street_name + ' ' + street_address).trim()
 }
 
-
 /**
 * get deals list
 */
-Deal.getAll = async function(user = {}, brand = null) {
+Deal.getAll = async function(user = {}, backoffice = false) {
   const { access_token } = user
-  let endpoint = '/deals?associations[]=room.attachments'
+  let endpoint
+  let associations
 
-  // if brand was exists, it means user is backoffice
-  if (brand) {
-    endpoint = `/brands/${brand}/deals/inbox?associations[]=deal.brand&associations[]=deal.created_by`
+  // backoffice and agent has different endpoints and associations
+  if (backoffice) {
+    associations = 'associations[]=deal.brand&associations[]=deal.created_by&associations[]=review.updated_by'
+    endpoint = `/brands/${user.brand}/deals/inbox?${associations}`
+  } else {
+    associations = 'associations[]=room.attachments'
+    endpoint = `/brands/${user.brand}/deals?${associations}`
   }
 
   try {
@@ -221,17 +225,13 @@ Deal.createRole = async function (deal_id, form) {
 }
 
 /**
-* submit a task for review
+* change task status
 */
-Deal.submitForReview = async function(task_id) {
+Deal.changeTaskStatus = async function(task_id, status) {
   try {
     await new Fetch()
       .put(`/tasks/${task_id}/review`)
-      .send({ status: 'Submitted' })
-
-    // set notify admin
-    Deal.needsAttention(task_id, true)
-    .then(() => {})
+      .send({ status })
 
   } catch (e) {
     return false
@@ -239,17 +239,13 @@ Deal.submitForReview = async function(task_id) {
 }
 
 /**
-* cancel a task for review
+* set notify admin flag
 */
-Deal.cancelTaskReview = async function(task_id) {
+Deal.needsAttention = async function(task_id, status) {
   try {
     await new Fetch()
-      .put(`/tasks/${task_id}/review`)
-      .send({ status: 'Incomplete' })
-
-    // unset notify admin
-    Deal.needsAttention(task_id, false)
-    .then(() => {})
+      .patch(`/tasks/${task_id}/needs_attention`)
+      .send({ needs_attention: status })
 
   } catch (e) {
     return false
@@ -277,20 +273,6 @@ Deal.sendEnvelope = async function(deal_id, subject, message, attachments, recip
     return response.body.data
   } catch (e) {
     throw e
-  }
-}
-
-/**
-* set notify admin flag
-*/
-Deal.needsAttention = async function(task_id, status) {
-  try {
-    await new Fetch()
-      .patch(`/tasks/${task_id}/needs_attention`)
-      .send({ needs_attention: status })
-
-  } catch (e) {
-    return false
   }
 }
 

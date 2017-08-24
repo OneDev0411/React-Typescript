@@ -18,6 +18,14 @@ function changeStatus(taskId, status) {
   }
 }
 
+function needsAttention(taskId, status) {
+  return {
+    type: types.CHANGE_NEEDS_ATTENTION,
+    taskId,
+    status
+  }
+}
+
 export function setIsUploading(taskId, status) {
   return {
     type: types.IS_UPLOADING,
@@ -41,16 +49,16 @@ export function addAttachment(deal_id, checklist_id, task_id, file) {
   }
 }
 
-export function submitForReview(taskId) {
+export function changeTaskStatus(taskId, status) {
   return async (dispatch) => {
-    await Deal.submitForReview(taskId)
-    dispatch(changeStatus(taskId, 'Submitted'))
+    Deal.changeTaskStatus(taskId, status).then(() => {})
+    dispatch(changeStatus(taskId, status))
   }
 }
 
-export function cancelTaskReview(taskId) {
+export function changeNeedsAttention(taskId, status) {
   return async (dispatch) => {
-    await Deal.cancelTaskReview(taskId)
-    dispatch(changeStatus(taskId, 'Incomplete'))
+    Deal.needsAttention(taskId, status).then(() => {})
+    dispatch(needsAttention(taskId, status))
   }
 }

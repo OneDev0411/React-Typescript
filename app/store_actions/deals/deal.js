@@ -19,6 +19,14 @@ function setTasks(tasks) {
   }
 }
 
+function updateRoles(deal_id, roles) {
+  return {
+    type: types.UPDATE_ROLES,
+    deal_id,
+    roles
+  }
+}
+
 function setChecklists(checklists) {
   return {
     type: types.GET_CHECKLISTS,
@@ -33,17 +41,48 @@ function addNewDeal(deal) {
   }
 }
 
-export function getDeals(user) {
-  return async (dispatch) => {
-    const data = await Deals.getAll(user)
-    const { entities } = normalize(data, schema.dealsSchema)
-    const { deals, checklists, tasks } = entities
+function isBackOffice(status) {
+  return {
+    type: types.IS_BACK_OFFICE,
+    status
+  }
+}
 
-    batchActions([
-      dispatch(setDeals(deals)),
-      dispatch(setChecklists(checklists)),
-      dispatch(setTasks(tasks))
-    ])
+export function createRole(deal_id, form) {
+  return async (dispatch) => {
+    const deal = await Deals.createRole(deal_id, form)
+    dispatch(updateRoles(deal.id, deal.roles))
+  }
+}
+
+export function getDeals(user, backoffice = false) {
+  return async (dispatch) => {
+    // set user is backoffice or not
+    dispatch(isBackOffice(backoffice))
+
+    try {
+      // get deals (brand is backoffice)
+      const data = await Deals.getAll(user, backoffice)
+
+      if (data.length === 0) {
+        return dispatch({ type: types.NO_DEAL })
+      }
+
+      const { entities } = normalize(data, schema.dealsSchema)
+      const { deals, checklists, tasks } = entities
+
+      batchActions([
+        dispatch(setDeals(deals)),
+        dispatch(setChecklists(checklists)),
+        dispatch(setTasks(tasks))
+      ])
+    } catch(e) {
+      dispatch({
+        type: types.GET_DEALS_FAILED,
+        name: 'Get Deals',
+        message: e.response ? e.response.text : 'Can not get deals'
+      })
+    }
   }
 }
 
