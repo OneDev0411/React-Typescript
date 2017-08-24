@@ -11,7 +11,7 @@ import Brand from '../../../../controllers/Brand'
 import searchAgent from '../../../../models/agent/search'
 import { getBrandInfo, renderField } from '../../Auth/SignIn'
 import SecretQuestionModal from './components/SecretQuestionModal'
-import setIsWidget from '../../../../store_actions/widgets/isWidget'
+import setWidget from '../../../../store_actions/widgets/setWidget'
 
 const AgentConfirm = ({
   agent,
@@ -132,9 +132,9 @@ export default compose(
   ),
   lifecycle({
     componentWillUnmount() {
-      // if (this.props.isWidget) {
-      //   this.props.setIsWidget()
-      // }
+      if (this.props.isWidget) {
+        this.props.setWidget(false)
+      }
     }
   }),
   withState('agent', 'setAgent', ''),
