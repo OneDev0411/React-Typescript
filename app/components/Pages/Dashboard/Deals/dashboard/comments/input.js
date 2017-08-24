@@ -33,19 +33,17 @@ class CommentCreate extends React.Component {
     const el = this.text_message
     const comment = el.value
 
-    if (!comment && task_status === null) {
-      return false
-    }
+    if (comment) {
+      const message = {
+        comment,
+        author: user.id,
+        room: task.room.id
+      }
 
-    const message = {
-      comment,
-      author: user.id,
-      room: task.room.id
+      // send message
+      Message.postTaskComment(task, message)
+      .then(() => this.props.onCommentSaved())
     }
-
-    // send message
-    Message.postTaskComment(task, message)
-    .then(() => this.props.onCommentSaved())
 
     if (needs_attention !== null) {
       await changeNeedsAttention(task.id, needs_attention)
