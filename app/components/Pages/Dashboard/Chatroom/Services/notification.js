@@ -96,17 +96,17 @@ export default class ChatNotification extends NotificationService {
    * create message
    */
   createMessage(chatroom, notification, message) {
-    const { room: roomId, notification_type } = notification
+    const { room: roomId, notification_type, auxiliary_subject } = notification
+    const room = chatroom.rooms[roomId]
+    const isDeal = auxiliary_subject && auxiliary_subject.type === 'deal' ? true : false
 
     // don't anything when message.author is eqaual to current user
     if (message.author && message.author.id === this.user.id) {
 
       // when user search a listing/alert,
       // the relevant room should go to top of rooms list
-      if (['UserSharedListing', 'UserCreatedAlert'].indexOf(notification_type) > -1) {
-        if (chatroom.rooms[roomId]) {
-          store.dispatch(updateRoomTime(roomId))
-        }
+      if (room && ['UserSharedListing', 'UserCreatedAlert'].indexOf(notification_type) > -1) {
+        store.dispatch(updateRoomTime(roomId))
       }
 
       return false
@@ -122,7 +122,7 @@ export default class ChatNotification extends NotificationService {
     const isWindowActive = this.isWindowActive()
 
     // send notification
-    if (!isWindowActive) {
+    if (!isWindowActive && !isDeal) {
       this.sendNotification(message, roomId)
     }
 
@@ -138,7 +138,7 @@ export default class ChatNotification extends NotificationService {
       this.updateRoomNotifications(roomId, message)
 
       // open chat popup but make it inactive
-      if (!this.isRouterMode() && !chatroom.popups[roomId]) {
+      if (!this.isRouterMode() && !isDeal && !chatroom.popups[roomId]) {
         Chatroom.openChat(roomId, false)
       }
     }
@@ -206,6 +206,10 @@ export default class ChatNotification extends NotificationService {
   onInviteRoom(chatroom, notification) {
     const { rooms } = chatroom
     const { room: roomId, subjects, objects, auxiliary_object: user } = notification
+
+    if (!rooms || !rooms[roomId]) {
+      return false
+    }
 
     // if user is invited to a new room, create that room
     if (user.id === this.user.id) {
