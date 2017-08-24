@@ -37,8 +37,26 @@ export default class Message {
    */
   static postMessage(roomId, message, qid) {
     window.socket.emit('Message.Send', roomId, message, (err, message) => {
-      if (err) return reject(err)
+      if (err) {
+        return reject(err)
+      }
       Message.create(roomId, message, qid)
+    })
+  }
+
+  /**
+   * post task message via socket
+   */
+  static postTaskComment(task, comment) {
+    return new Promise((resolve, reject) => {
+      window.socket.emit('Task.Message.Send', task.id, comment, (err, comment) => {
+        if (err) {
+          return reject(err)
+        }
+
+        Message.create(task.room.id, comment)
+        resolve()
+      })
     })
   }
 
