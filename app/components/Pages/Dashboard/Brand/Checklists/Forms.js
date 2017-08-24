@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addForm } from '../../../../../store_actions/deals'
+import { addForm, deleteForm } from '../../../../../store_actions/deals'
 import { Button } from 'react-bootstrap'
 import ListFilter from './ListFilter'
 import { compose, withState, pure } from 'recompose'
@@ -10,12 +10,13 @@ const enhance = compose(
   withState('showListFilter', 'onChangeListFilter', false),
 )
 
-const Tasks = ({
+const Forms = ({
                  checklist,
                  forms,
                  showListFilter,
                  onChangeListFilter,
-                 addForm
+                 addForm,
+                 deleteForm
                }) =>
   (
     <div
@@ -52,6 +53,14 @@ const Tasks = ({
           <p className="task-title">
             {forms[form].name}
           </p>
+          <i
+            onClick={(e) => {
+              e.stopPropagation()
+              deleteForm(checklist, forms[form].id)
+            }}
+            className="fa fa-times delete-icon"
+            aria-hidden="true"
+          />
         </div>
       )}
     </div>
@@ -59,5 +68,5 @@ const Tasks = ({
 export default connect(({ deals }) => ({
   forms: deals.forms
 }),
-  ({ addForm })
-)(enhance(Tasks))
+  ({ addForm, deleteForm })
+)(enhance(Forms))

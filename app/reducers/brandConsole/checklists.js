@@ -58,6 +58,21 @@ export default (state = [], action) => {
       }
       return stateClone
     }
+    case typesDeals.DELETE_FORM: {
+      let stateClone = cloneObject(state)
+      for (let i = 0; i < stateClone.length; i++) {
+        if (stateClone[i].id === action.checklistId) {
+          for (let j = 0; j < stateClone[i].allowed_forms.length; j++) {
+            if (stateClone[i].allowed_forms[j] === action.formId) {
+              stateClone[i].allowed_forms.splice(j, 1)
+              break
+            }
+          }
+          break
+        }
+      }
+      return stateClone
+    }
     default:
       return state
   }
