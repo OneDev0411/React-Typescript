@@ -48,7 +48,10 @@ export const renderField = ({
             ''} ${hasError ? 'has-error' : ''}`}
         />
         <label htmlFor={input.name} className="c-auth__field__label">
-          {label}
+          <span>
+            {label}
+          </span>
+          <sup>*</sup>
         </label>
         <span className="focus-border">
           <i />

@@ -22,6 +22,16 @@ const AsyncSignUp = Load({
     import('../components/Pages/Auth/SignUp' /* webpackChunkName: "signup" */)
 })
 
+const AsyncRegister = Load({
+  loader: () =>
+    import('../components/Pages/Auth/Register' /* webpackChunkName: "register" */)
+})
+
+const AsyncRegisterAgent = Load({
+  loader: () =>
+    import('../components/Pages/Auth/Register/Agent' /* webpackChunkName: "register_agent" */)
+})
+
 const AsyncSignIn = Load({
   loader: () =>
     import('../components/Pages/Auth/SignIn' /* webpackChunkName: "signin" */)
@@ -219,9 +229,12 @@ export default (
   <Route>
     <Route path="/" component={AsyncAuthenticationLayout}>
       <IndexRoute component={Landing} />
-      <Route path="/signup" component={AsyncSignUp} />
-      <Route path="/signup/agent" component={AsyncConfirmAgent} />
+
       <Route path="/signin" component={AsyncSignIn} />
+      <Route path="/signup" component={AsyncSignUp} />
+      <Route path="/register" component={AsyncRegister} />
+      <Route path="/register/agent" component={AsyncRegisterAgent} />
+
       <Route path="/verify/:slug" component={AsyncVerify} />
 
       <Route path="/password/forgot" component={AsyncForgotPassword} />
