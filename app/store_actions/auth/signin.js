@@ -4,7 +4,7 @@ import signin from '../../models/auth/signin'
 import updateApp from '../../store_actions/data'
 import * as actionsType from '../../constants/auth/signin'
 
-const submitSigninForm = userInfo => (dispatch, getState) => {
+const submitSigninForm = (userInfo, redirectTo) => (dispatch, getState) => {
   dispatch({
     type: actionsType.SIGNIN_REQUEST
   })
@@ -38,7 +38,9 @@ const submitSigninForm = userInfo => (dispatch, getState) => {
       // }
       // window.Intercom.signin({ user }, () => {})
 
-      browserHistory.push('/dashboard/mls')
+      if (redirectTo) {
+        browserHistory.push(redirectTo)
+      }
     },
     error => {
       dispatch({

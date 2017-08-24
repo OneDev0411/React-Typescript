@@ -177,7 +177,7 @@ export default compose(
   ),
   withHandlers({
     onSubmitHandler: ({ submitSigninForm }) => values => {
-      submitSigninForm(values)
+      submitSigninForm(values, '/dashboard/mls')
     }
   })
 )(SigninForm)
