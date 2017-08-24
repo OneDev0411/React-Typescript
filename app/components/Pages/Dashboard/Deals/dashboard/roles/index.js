@@ -2,6 +2,7 @@ import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import UserAvatar from '../../../../../Partials/UserAvatar'
+import AddRole from './add-role'
 
 class Roles extends React.Component {
   constructor(props) {
@@ -12,7 +13,6 @@ class Roles extends React.Component {
     const { deal } = this.props
     const { roles } = deal
 
-    console.log(roles)
     return (
       <div className="deal-roles">
         {
@@ -36,17 +36,10 @@ class Roles extends React.Component {
           )
         }
 
-        <Row className="item add-new">
-          <Col sm={2} xs={3} className="vcenter">
-            <span className="add-contact-avatar">
-              <i className="fa fa-plus" />
-            </span>
-          </Col>
-
-          <Col sm={10} xs={9} className="name vcenter">
-            <div style={{ color: '#61778d' }}>Add Contact</div>
-          </Col>
-        </Row>
+        <AddRole
+          dealId={deal.id}
+          roles={roles}
+        />
       </div>
     )
   }
