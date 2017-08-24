@@ -3,7 +3,6 @@ import { routerReducer } from 'react-router-redux'
 import data from './data'
 import auth from './auth'
 import user from './user'
-import agent from './agent'
 import brand from './brand'
 import socket from './socket'
 import contact from './contact'
@@ -22,7 +21,6 @@ const appReducer = combineReducers({
   data,
   user,
   auth,
-  agent,
   brand,
   search,
   alerts,

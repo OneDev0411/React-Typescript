@@ -3,25 +3,30 @@ import { connect } from 'react-redux'
 import { Link, browserHistory } from 'react-router'
 import compose from 'recompose/compose'
 import { Field, reduxForm } from 'redux-form'
+import lifecycle from 'recompose/lifecycle'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 import Brand from '../../../../controllers/Brand'
 import searchAgent from '../../../../models/agent/search'
 import { getBrandInfo, renderField } from '../../Auth/SignIn'
+import SecretQuestionModal from './components/SecretQuestionModal'
+import setIsWidget from '../../../../store_actions/widgets/isWidget'
 
 const AgentConfirm = ({
+  agent,
   mlsid,
   brand,
   setMlsid,
   redirectTo,
-  confirmError,
-  isSubmitting,
-  onSubmitHandler,
-  setConfirmError
+  upgradeError,
+  isUpgrading,
+  onUpgradeHandler,
+  setUpgradeError,
+  onHideConfirmModal,
+  confirmModalIsActive
 }) => {
   const { siteLogo, siteTitle, brandColor } = getBrandInfo(brand)
-
   return (
     <div className="signin-page-wrapper c-auth--register clearfix">
       <div
@@ -42,27 +47,26 @@ const AgentConfirm = ({
           <h1 className="c-auth__title tempo">
             {`${siteTitle}`}
           </h1>
-          <p className="c-auth__subtitle">Register Agent</p>
+          <p className="c-auth__subtitle">Upgrade to agent account</p>
           <div>
             <small>Enter your agent license # to unlock MLS features.</small>
           </div>
         </header>
         <main className="c-auth__main">
-          <form onSubmit={onSubmitHandler}>
+          <form onSubmit={onUpgradeHandler}>
             <div
               style={{ marginBottom: '2rem' }}
               className="c-auth__field__input-wrapper"
             >
               <input
                 autoFocus
-                id={mlsid}
+                id="mlsid"
                 type="text"
-                name={mlsid}
                 onChange={e => {
                   const newValue = e.target.value
                   setMlsid(newValue)
-                  if (confirmError && newValue) {
-                    setConfirmError(false)
+                  if (upgradeError && newValue) {
+                    setUpgradeError(false)
                   }
                 }}
                 className={`c-auth__field__input ${!mlsid
@@ -76,22 +80,22 @@ const AgentConfirm = ({
                 <i />
               </span>
             </div>
-            {confirmError &&
+            {upgradeError &&
               <div className="c-auth__submit-error-alert">
-                {confirmError === 404
+                {upgradeError === 404
                   ? `Agent corresponding to this MLS ID (${mlsid}) not found!`
                   : 'There was an error with this request. Please try again.'}
               </div>}
             <button
               type="submit"
               className="c-auth__submit-btn"
-              disabled={isSubmitting || !mlsid}
+              disabled={isUpgrading || !mlsid}
               style={{
                 background: brandColor,
-                opacity: isSubmitting || !mlsid ? 0.7 : 1
+                opacity: isUpgrading || !mlsid ? 0.7 : 1
               }}
             >
-              {isSubmitting ? 'Submitting...' : 'Submit'}
+              {isUpgrading ? 'Searching...' : 'Upgrade'}
             </button>
           </form>
           <p style={{ textAlign: 'center' }}>
@@ -99,37 +103,66 @@ const AgentConfirm = ({
           </p>
         </main>
       </article>
+      {agent &&
+        <SecretQuestionModal
+          show={confirmModalIsActive}
+          onHide={onHideConfirmModal}
+          mlsid={mlsid}
+          agent={agent.id}
+          redirectTo={redirectTo}
+          question={agent.secret_questions[0]}
+        />}
     </div>
   )
 }
 
 export default compose(
-  connect(({ brand }, { location }) => {
-    const { redirectTo } = location.query
-    return {
-      brand,
-      redirectTo: redirectTo || '/dashboard/mls'
+  connect(
+    ({ brand, widgets }, { location }) => {
+      const { isWidget } = widgets
+      const { redirectTo } = location.query
+
+      return {
+        brand,
+        isWidget,
+        redirectTo: redirectTo || '/dashboard/mls'
+      }
+    },
+    { setIsWidget }
+  ),
+  lifecycle({
+    componentWillUnmount() {
+      // if (this.props.isWidget) {
+      //   this.props.setIsWidget()
+      // }
     }
   }),
+  withState('agent', 'setAgent', ''),
   withState('mlsid', 'setMlsid', ''),
-  withState('confirmError', 'setConfirmError', false),
-  withState('isSubmitting', 'setIsSubmitting', false),
+  withState('upgradeError', 'setUpgradeError', false),
+  withState('isUpgrading', 'setIsUpgrading', false),
+  withState('confirmModalIsActive', 'setConfirmModalActive', false),
   withHandlers({
-    onSubmitHandler: ({
+    onHideConfirmModal: ({ setConfirmModalActive }) => () => {
+      setConfirmModalActive(false)
+    },
+    onUpgradeHandler: ({
       mlsid,
-      redirectTo,
-      paramsFromURI,
-      setConfirmError,
-      setIsSubmitting
+      setAgent,
+      setUpgradeError,
+      setIsUpgrading,
+      setConfirmModalActive
     }) => async event => {
       event.preventDefault()
-      setIsSubmitting(true)
+      setIsUpgrading(true)
       try {
         const agent = await searchAgent(mlsid)
-        setIsSubmitting(false)
+        setAgent(agent)
+        setIsUpgrading(false)
+        setConfirmModalActive(true)
       } catch (errorCode) {
-        setIsSubmitting(false)
-        setConfirmError(errorCode)
+        setIsUpgrading(false)
+        setUpgradeError(errorCode)
       }
     }
   })

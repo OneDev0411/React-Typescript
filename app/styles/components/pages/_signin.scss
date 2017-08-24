@@ -182,6 +182,8 @@
   left: 1.5rem;
   cursor: text;
   transition: 0.3s;
+  line-height: 1;
+  font-size: 1.6rem;
   font-weight: normal;
   letter-spacing: 0.5px;
   color: #aaa;
@@ -319,4 +321,12 @@
 
 .c-auth__field--radio__label__icon {
   display: none;
+}
+
+.c-auth__submit-error-alert__btn {
+  color: #2196f3;
+  display: block;
+  padding: 0;
+  border-width: 0;
+  background: transparent;
 }
