@@ -27,7 +27,7 @@ $col-padding: 20px;
 }
 
 @import './dashboard/_tasks';
-@import './dashboard/_task_manager';
+@import './dashboard/_task_detail';
 @import './dashboard/_fact_sheet';
 @import './dashboard/_roles';
 @import './dashboard/_task_creator';
@@ -71,8 +71,8 @@ $col-padding: 20px;
     @extend %deal-tasks;
   }
 
-  .deal-task-manager {
-    @extend %deal-task-manager;
+  .deal-task-detail {
+    @extend %deal-task-detail;
   }
 
   .deal-fact-sheet {
