@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Grid, Col, Accordion, Panel } from 'react-bootstrap'
 import Header from './Header'
-import ChecklistRow from './Row'
+import ChecklistHeader from './ChecklistHeader'
 import Tasks from './Tasks'
 import Forms from './Forms'
 import { getChecklists, deleteChecklist } from '../../../../../store_actions/brandConsole'
@@ -48,7 +48,7 @@ class Checklists extends React.Component {
               <Panel
                 key={`Checklist_${checklist.id}`}
                 eventKey={`Checklist_${checklist.id}`}
-                header={<ChecklistRow
+                header={<ChecklistHeader
                   checklist={checklist}
                   onSelectItem={this.onSelectItem}
                   deleteChecklist={this.props.deleteChecklist}
