@@ -197,13 +197,13 @@ const AsyncMobile = Load({
 })
 
 function authenticate(nextState, replace) {
-  const { data } = store.getState()
-  const isLoggedIn = data.user && data.user.access_token
+  const { user } = store.getState()
+  const isLoggedIn = user && user.access_token
 
   const noAuthList = [
+    '/branch',
     '/dashboard/mls',
     '/dashboard/mls/:id',
-    '/branch',
     '/widgets/map',
     '/widgets/search',
     '/widgets/listings'
