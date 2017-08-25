@@ -54,11 +54,7 @@ class Section extends Component {
       (this.options.list_offices && this.options.list_offices.length) ||
       this.options.brand
     ) {
-      queryString += '?associations=compact_listing.proposed_agent'
-
-      if (this.options.listing_statuses[0] === 'Sold') {
-        queryString += '&order_by[]=price'
-      }
+      queryString += '?associations=compact_listing.proposed_agent&order_by[]=price'
     }
     return {
       queryString,
