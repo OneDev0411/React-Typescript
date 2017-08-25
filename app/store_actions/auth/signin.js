@@ -11,23 +11,10 @@ const submitSigninForm = (userInfo, redirectTo) => (dispatch, getState) => {
 
   return signin(userInfo).then(
     user => {
-      const { data } = getState()
-      const newAppData = {
-        ...data,
-        user
-      }
-
       dispatch({
         user,
         type: actionsType.SIGNIN_SUCCESS
       })
-
-      dispatch({
-        data: newAppData,
-        type: 'UPDATE_APP'
-      })
-
-      AppStore.data = newAppData
 
       // const { id, email, first_name, last_name } = user
       // if (window.FS) {

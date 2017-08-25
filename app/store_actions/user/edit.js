@@ -10,23 +10,11 @@ const editUser = userInfo => async (dispatch, getState) => {
 
   try {
     const user = await edit(userInfo)
-    const { data } = getState()
-    const newAppData = {
-      ...data,
-      user
-    }
 
     dispatch({
       user,
       type: actionsType.EDIT_USER_SUCCESS
     })
-
-    dispatch({
-      data: newAppData,
-      type: 'UPDATE_APP'
-    })
-
-    AppStore.data = newAppData
 
     return user
   } catch ({ status }) {
