@@ -58,9 +58,16 @@ router.post('/proxifier', bodyParser(), async ctx => {
     const { status, text } = e.response
 
     ctx.status = status
-    ctx.body = {
-      statusCode: status,
-      ...JSON.parse(text)
+    try {
+      ctx.body = {
+        statusCode: status,
+        ...JSON.parse(text)
+      }
+    } catch (error) {
+      ctx.body = {
+        text,
+        statusCode: status
+      }
     }
   }
 })
