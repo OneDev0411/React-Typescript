@@ -1,40 +1,72 @@
 // Branch.js
+import branch from 'branch-sdk'
 import React, { Component } from 'react'
+import { browserHistory } from 'react-router'
 import config from '../../../config/public'
+
+const branchKey = config.branch.key
+
 export default class Branch extends Component {
   componentDidMount() {
-    const branch = require('branch-sdk')
-    branch.init(config.branch.key, (err, data) => {
+    branch.init(branchKey, (err, { data_parsed }) => {
+      if (err) {
+        browserHistory.push('/oops')
+      }
 
-      if (err)
-        data.data_parsed = {}
+      Object.keys(data_parsed).forEach(key => {
+        data_parsed[key] = encodeURIComponent(data_parsed[key])
+      })
 
-      let redirect = `/password/create?token=${data.data_parsed.token}`
+      const {
+        room,
+        token,
+        alert,
+        email,
+        action,
+        listing,
+        phone_number,
+        receiving_user
+      } = data_parsed
 
-      if (err)
-        data.data_parsed = {}
+      let redirect = `/register?token=${token}`
 
-      if (data.data_parsed.listing && data.data_parsed.listing !== 'undefined')
-        redirect = `/dashboard/mls/${encodeURIComponent(data.data_parsed.listing)}?token=${data.data_parsed.token}`
-      if (data.data_parsed.email)
-        redirect += `&email=${encodeURIComponent(data.data_parsed.email)}`
-      if (data.data_parsed.phone_number) {
-        redirect += `&phone_number=${encodeURIComponent(data.data_parsed.phone_number)}`
+      if (listing) {
+        redirect = `/dashboard/mls/${listing}?token=${token}`
+      }
+
+      if (email) {
+        redirect += `&email=${email}`
+      }
+
+      if (phone_number) {
+        redirect += `&phone_number=${phone_number}`
         redirect += '&new_email=true'
       }
-      if (data.data_parsed.room)
-        redirect += `&room=${encodeURIComponent(data.data_parsed.room)}`
-      if (data.data_parsed.listing && data.data_parsed.listing !== 'undefined')
-        redirect += `&listing=${encodeURIComponent(data.data_parsed.listing)}`
-      if (data.data_parsed.alert)
-        redirect += `&alert=${encodeURIComponent(data.data_parsed.alert)}`
-      if (data.data_parsed.action)
-        redirect += `&action=${encodeURIComponent(data.data_parsed.action)}`
-      if (data.data_parsed.receiving_user)
-        redirect += `&receiving_user=${encodeURIComponent(data.data_parsed.receiving_user)}`
-      window.location.href = redirect
+
+      if (room) {
+        redirect += `&room=${room}`
+      }
+
+      if (listing) {
+        redirect += `&listing=${listing}`
+      }
+
+      if (alert) {
+        redirect += `&alert=${alert}`
+      }
+
+      if (action) {
+        redirect += `&action=${action}`
+      }
+
+      if (receiving_user) {
+        redirect += `&receiving_user=${receiving_user}`
+      }
+
+      browserHistory.push(redirect)
     })
   }
+
   render() {
     return <div />
   }
