@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router'
+import { Link, browserHistory } from 'react-router'
 import compose from 'recompose/compose'
 import { Field, reduxForm } from 'redux-form'
 import withState from 'recompose/withState'
@@ -8,6 +8,29 @@ import withHandlers from 'recompose/withHandlers'
 
 import { getBrandInfo, renderField } from '../SignIn'
 import Brand from '../../../../controllers/Brand'
+
+import editUser from '../../../../store_actions/user/edit'
+import setWidget from '../../../../store_actions/widgets/setWidget'
+import submitSigninForm from '../../../../store_actions/auth/signin'
+import updatePassword from '../../../../models/auth/password/update'
+
+const getActionRedirectURL = params => {
+  const { action, room, alert, listing } = params
+
+  if (action === 'RedirectToRoom' && room) {
+    return `/dashboard/recents/${room}`
+  }
+
+  if (action === 'RedirectToAlert' && alert) {
+    return `/dashboard/mls/alerts/${alert}`
+  }
+
+  if (action === 'RedirectToListing' && listing) {
+    return `/dashboard/mls/${listing}`
+  }
+
+  return '/dashboard/mls/'
+}
 
 export const renderAgentField = ({ id, input, label, checked }) =>
   <div className="c-auth__field--radio">
@@ -169,10 +192,13 @@ const validate = values => {
 }
 
 export default compose(
-  connect(({ brand, auth }, { location }) => ({
-    brand,
-    paramsFromURI: location.query
-  })),
+  connect(
+    ({ brand }, { location }) => ({
+      brand,
+      paramsFromURI: location.query
+    }),
+    { submitSigninForm, editUser, setWidget }
+  ),
   reduxForm({
     form: 'register',
     validate,
@@ -183,10 +209,15 @@ export default compose(
   withState('isSubmitting', 'setIsSubmitting', false),
   withHandlers({
     onSubmitHandler: ({
+      editUser,
+      setWidget,
       paramsFromURI,
       setSubmitError,
-      setIsSubmitting
+      setIsSubmitting,
+      submitSigninForm
     }) => async formInputsValue => {
+      setIsSubmitting(true)
+
       const {
         first_name,
         last_name,
@@ -198,29 +229,55 @@ export default compose(
       const {
         room,
         token,
-        alert,
         action,
-        listing,
         new_email,
         phone_number,
-        receiving_user,
         email: emailFromURI
       } = paramsFromURI
 
       const userPassword = {
         password,
-        shadow_token: token,
-        email: new_email ? email : emailFromURI,
-        agent: user_type === 'Agent' ? true : null
+        shadow_token: token
       }
 
       const userInfo = {
         last_name,
-        first_name,
-        email: phone_number && new_email ? email : emailFromURI
+        first_name
       }
 
-      console.log(formInputsValue, userPassword, userInfo)
+      const loginInfo = {
+        password,
+        username: emailFromURI || email
+      }
+
+      if (phone_number) {
+        userInfo.email = email
+        userPassword.phone_number = phone_number
+      } else if (emailFromURI) {
+        userPassword.email = emailFromURI
+      }
+
+      const redirectTo = getActionRedirectURL(paramsFromURI)
+
+      // console.log(redirectTo, formInputsValue, userPassword, userInfo)
+      try {
+        await updatePassword(userPassword)
+        await submitSigninForm(loginInfo)
+        await editUser(userInfo)
+
+        if (user_type === 'Agent') {
+          setWidget(true)
+          browserHistory.push(
+            `/account/upgrade?redirectTo=${encodeURIComponent(redirectTo)}`
+          )
+          return
+        }
+
+        browserHistory.push(redirectTo)
+      } catch (error) {
+        setIsSubmitting(false)
+        setSubmitError(true)
+      }
     }
   })
 )(RegisterForm)

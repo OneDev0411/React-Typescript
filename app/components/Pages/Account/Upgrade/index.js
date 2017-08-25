@@ -128,12 +128,13 @@ export default compose(
         redirectTo: redirectTo || '/dashboard/mls'
       }
     },
-    { setIsWidget }
+    { setWidget }
   ),
   lifecycle({
     componentWillUnmount() {
+      const { isWidget, setWidget } = this.props
       if (this.props.isWidget) {
-        this.props.setWidget(false)
+        setWidget(false)
       }
     }
   }),
@@ -149,8 +150,8 @@ export default compose(
     onUpgradeHandler: ({
       mlsid,
       setAgent,
-      setUpgradeError,
       setIsUpgrading,
+      setUpgradeError,
       setConfirmModalActive
     }) => async event => {
       event.preventDefault()
