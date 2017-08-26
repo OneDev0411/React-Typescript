@@ -47,9 +47,9 @@ function _editTask(checklistId, task) {
 export function editTask(checklist, task) {
   return async (dispatch) => {
     const response = await BrandConsole.editTask(checklist, task)
-    if (response) {
-      const { data } = response.body
-      dispatch(_editTask(checklist.id, data))
+    if (response &&
+      response.body.status === 'success') {
+      dispatch(_editTask(checklist.id, task))
     }
   }
 }
