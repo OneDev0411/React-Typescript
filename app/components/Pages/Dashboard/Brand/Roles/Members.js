@@ -1,8 +1,8 @@
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
-import Compose from '../Chatroom/Shared/compose-wrapper'
-import UserAvatar from '../../../Partials/UserAvatar'
-import LastSeen from '../Chatroom/Rooms/components/last-seen'
+import Compose from '../../Chatroom/Shared/compose-wrapper'
+import UserAvatar from '../../../../Partials/UserAvatar/index'
+import LastSeen from '../../Chatroom/Rooms/components/last-seen'
 import { Button } from 'react-bootstrap'
 
 const ManageMembers = ({

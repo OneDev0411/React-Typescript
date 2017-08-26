@@ -51,3 +51,20 @@ export function deleteChecklist(checklist) {
     }
   }
 }
+
+function _editChecklist(checklist) {
+  return {
+    type: types.EDIT_CHECKLIST,
+    checklist
+  }
+}
+
+export function editChecklist(checklist) {
+  return async (dispatch) => {
+    const response = await BrandConsole.editChecklist(checklist)
+    if (response) {
+      const { data } = response.body
+      dispatch(_editChecklist(data))
+    }
+  }
+}

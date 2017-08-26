@@ -1,13 +1,16 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Col, Button } from 'react-bootstrap'
 import cn from 'classnames'
 import Compose from './ModalChecklist'
+import { editChecklist } from '../../../../../store_actions/brandConsole'
 
 const Row = ({
                deleteChecklist,
                onSelectItem,
                checklist,
-               activeItem
+               activeItem,
+               editChecklist
              }) => {
   const AddButton = ({
                        clickHandler
@@ -84,8 +87,8 @@ const Row = ({
           inline
           title="Edit Checklist"
           buttonTitle="Edit"
-          onButtonClick={(newItem) => {
-            // addTask(checklist.id, newItem)
+          onButtonClick={(editedChecklist) => {
+            editChecklist({ ...checklist, ...editedChecklist })
           }}
           checklist={checklist}
           activeItem={activeItem}
@@ -109,4 +112,8 @@ const Row = ({
     </Col>
   </div>
 }
-export default Row
+
+export default connect(
+  null,
+  ({ editChecklist })
+)(Row)

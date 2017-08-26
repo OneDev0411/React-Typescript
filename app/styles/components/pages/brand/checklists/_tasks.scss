@@ -41,12 +41,32 @@
       float: right;
       margin: 15px;
       visibility: hidden;
+      cursor: pointer;
+    }
+    .edit-button {
+      float: right;
+      margin: 11px 0;
+      visibility: hidden;
+      border-radius: 3px;
+      background-color: #f8fafb;
+      border: solid 1px #dde2e6;
+      text-align: center;
+      font-size: 13px;
+      color: #8da2b5;
+      padding: 2px 17px;
+
     }
   }
   .task:hover {
     background-color: #f8fafb;
     .delete-icon{
       visibility: visible;
+    }
+    .edit-button{
+      visibility: visible;
+    }
+    .edit-button:hover{
+      font-weight: bold;
     }
   }
 }

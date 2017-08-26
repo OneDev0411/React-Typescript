@@ -110,6 +110,17 @@ Deal.addForm = async function (brandId, checklistId, formId) {
 }
 
 /**
+ * delete a form
+ */
+Deal.deleteForm = async function (checklist, formId) {
+  try {
+    return await new Fetch().delete(`/brands/${checklist.brand}/checklists/${checklist.id}/forms/${formId}`)
+  } catch (e) {
+    return null
+  }
+}
+
+/**
 * search google places
 */
 Deal.searchPlaces = async function(address) {

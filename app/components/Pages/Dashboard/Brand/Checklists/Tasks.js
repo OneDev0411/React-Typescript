@@ -1,26 +1,40 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addTask, deleteTask } from '../../../../../store_actions/brandConsole'
+import { addTask, deleteTask, editTask } from '../../../../../store_actions/brandConsole'
 import { Button } from 'react-bootstrap'
 import Compose from './ModalTask'
+import { compose, withState, pure } from 'recompose'
 
+const enhance = compose(
+  pure,
+  withState('activeItem', 'onSelectItem'),
+)
 const Tasks = ({
                  checklist,
                  addTask,
-                 deleteTask
+                 deleteTask,
+                 activeItem,
+                 onSelectItem,
+                 editTask
                }) => {
   const AddButton = ({
                        clickHandler
                      }) =>
-    (
-      <Button
-        // bsStyle="primary"
-        className="button"
-        onClick={() => clickHandler()}
-      >
-        Add Task
-      </Button>
-    )
+    (<Button
+      className="button edit-button"
+      onClick={() => clickHandler()}
+    >
+      Add Task
+    </Button>)
+  const EditButton = ({
+                        clickHandler
+                      }) =>
+    (<Button
+      className="button edit-button"
+      onClick={() => clickHandler()}
+    >
+      Edit Task
+    </Button>)
   return <div
     className="tasks"
   >
@@ -55,6 +69,20 @@ const Tasks = ({
           className="fa fa-times delete-icon"
           aria-hidden="true"
         />
+        <Compose
+          onSelectItem={onSelectItem}
+          TriggerButton={EditButton}
+          showOnly={false}
+          dropDownBox
+          title="Edit Checklist"
+          buttonTitle="Edit"
+          task={task}
+          activeItem={activeItem === task.id}
+          allowed_forms={checklist.allowed_forms}
+          onButtonClick={(editedTask) => {
+            editTask(checklist, { ...task, ...editedTask })
+          }}
+        />
       </div>
     )}
   </div>
@@ -62,5 +90,5 @@ const Tasks = ({
 
 export default connect(
   null,
-  ({ addTask, deleteTask })
-)(Tasks)
+  ({ addTask, deleteTask, editTask })
+)(enhance(Tasks))
