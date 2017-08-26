@@ -47,7 +47,12 @@ export default class Chatroom {
       const { list } = object
       const messagesKeys = Object.keys(list)
       const lastMessageKey = messagesKeys[messagesKeys.length - 1]
-      const lastMessage = list[lastMessageKey]
+      const lastMessage = list && lastMessageKey ? list[lastMessageKey] : null
+
+      if (!lastMessage) {
+        return false
+      }
+
       const roomId = lastMessage.room
       const created_at = lastMessage.created_at
 

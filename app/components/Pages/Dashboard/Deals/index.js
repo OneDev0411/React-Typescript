@@ -8,10 +8,11 @@ class DealsContainer extends React.Component {
   }
 
   componentDidMount() {
-    const { dispatch, deals, forms } = this.props
+    const { dispatch, deals, forms, user } = this.props
 
     if (!deals) {
-      dispatch(getDeals())
+      const isBackOffice = user.features.indexOf('Backoffice') > -1 ? true : false
+      dispatch(getDeals(user, isBackOffice))
     }
 
     if (!forms) {

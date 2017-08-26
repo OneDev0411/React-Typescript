@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import SuccessModal from '../../../../../Partials/MessageModal'
 import { editForm, saveSubmission } from '../../../../../../store_actions/deals/forms'
 import Deal from '../../../../../../models/Deal'
-import config from '../../../../../../../config/public'
+import Frame from './frame'
 
 class EditForm extends React.Component {
   constructor(props) {
@@ -14,10 +14,6 @@ class EditForm extends React.Component {
       saving: false,
       incompleteFields: [],
       showSuccessModal: false
-    }
-
-    if (process.env.NODE_ENV === 'development') {
-      config.forms.url = 'http://localhost:3000'
     }
   }
 
@@ -196,15 +192,12 @@ class EditForm extends React.Component {
   }
 
   render() {
-    const { deal, form, task, user } = this.props
+    const { deal, form, task } = this.props
     const { loaded, saving, incompleteFields, showSuccessModal } = this.state
 
-    if (!task) {
+    if (!form || !task) {
       return false
     }
-
-    const { access_token } = user
-    const host = window.location.hostname
 
     return (
       <div className="deal-edit-form">
@@ -249,11 +242,9 @@ class EditForm extends React.Component {
 
         <Row>
           <Col md={12} sm={12} xs={12}>
-            <iframe
-              className="form-iframe"
-              src={`${config.forms.url}/embed/${task.form}?domain=${host}&access_token=${access_token}`}
-              frameBorder="0"
-              ref={ref => this.frame = ref}
+            <Frame
+              task={task}
+              frameRef={ref => this.frame = ref}
             />
           </Col>
         </Row>
@@ -268,10 +259,8 @@ function mapStateToProps({ deals, data }, props) {
 
   return {
     form: task && forms ? forms[task.form] : null,
-    user: data.user,
     task
   }
 }
 
-export default connect(mapStateToProps,
-  { editForm, saveSubmission })(EditForm)
+export default connect(mapStateToProps, { editForm, saveSubmission })(EditForm)

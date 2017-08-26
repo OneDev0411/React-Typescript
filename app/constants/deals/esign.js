@@ -1,0 +1,6 @@
+export default [
+  'SHOW_ATTACHMENTS',
+  'UPDATE_ATTACHMENTS',
+  'REMOVE_ATTACHMENT',
+  'CLOSE_ESIGN'
+]

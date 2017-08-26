@@ -11,14 +11,18 @@
   }
 
   .messages {
-    min-height: 500px;
-    max-height: 500px;
+    height: auto;
     .messages-list {
       margin-top: 10px;
+      min-height: auto;
+      max-height: auto;
       width: 100%;
 
       .activity {
+        color: #62778c;
+        font-size: 13px;
         background-color: #f8fafb;
+        box-shadow: 0 1px 5px 0 rgba(167, 184, 200, 0.7);
       }
     }
   }
@@ -50,9 +54,26 @@
     height: 30px;
     line-height: 25px;
     vertical-align: middle;
-    &.add-comment {
-      margin-right: 10px;
+    background-color: #ffffff;
+    font-weight: 500;
+    box-shadow: 0 1px 1px 0 #eef1f2;
+    border: solid 1px #e6eaec;
+    margin-left: 3px;
+
+    &.decline-comment, &.approve-comment, &.close-comment {
+      color: #1c364c;
+      &:hover {
+        color: #2196f3;
+      }
     }
+
+    &.add-comment {
+      width: 100px;
+      background-color: #2196f3;
+      color: #fff;
+      border: none;
+    }
+
     &.close-task {
       width: 30px;
       i {

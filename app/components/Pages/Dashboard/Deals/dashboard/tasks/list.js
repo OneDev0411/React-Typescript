@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import CreateTask from '../create-task'
+import TaskStatus from './status'
 
 const List = ({
   tasks,
@@ -31,7 +32,6 @@ const List = ({
           section.tasks
           .map((id, key) => {
             const task = tasks[id]
-            const status = task.review ? task.review.status : 'Incomplete'
 
             return (
               <div
@@ -40,10 +40,7 @@ const List = ({
                 className={cn('task', { active: selectedTaskId === id })}
               >
                 <div className="title">{ task.title.replace(/&.*;/g, '') }</div>
-
-                <span className={`status ${status}`}>
-                  { status.toUpperCase() }
-                </span>
+                <TaskStatus task={task} />
               </div>
             )
           })

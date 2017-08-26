@@ -1,13 +1,18 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
 import { Row, Col } from 'react-bootstrap'
 import cn from 'classnames'
 import _ from 'underscore'
 import TasksList from './tasks'
-import TaskManager from './task-manager'
+import TaskDetail from './task-detail'
 import ListingCard from './listing-card'
 import FactSheet from './factsheet'
 import EditForm from './edit-form'
+import ESignAttachments from './esign/attachment'
+import ESignCompose from './esign/compose'
+import { closeEsign } from '../../../../../store_actions/deals'
+
 import Roles from './roles'
 
 class DealDetails extends React.Component {
@@ -15,6 +20,21 @@ class DealDetails extends React.Component {
     super(props)
     this.state = {
       selectedTaskId: null
+    }
+  }
+
+  componentDidMount() {
+    const { deal } = this.props
+    this.checkDeal(deal)
+  }
+
+  componentWillUnmount() {
+    this.props.closeEsign()
+  }
+
+  checkDeal(deal) {
+    if (deal === null) {
+      browserHistory.push('/dashboard/deals')
     }
   }
 
@@ -68,10 +88,11 @@ class DealDetails extends React.Component {
           md={5}
           sm={5}
           xs={12}
-          className="column deal-task-manager"
+          className="column deal-task-detail"
           style={{ display: selectedTaskId ? 'inherit' : 'none' }}
         >
-          <TaskManager
+          <TaskDetail
+            deal={deal}
             taskId={selectedTaskId}
             onCloseTask={() => this.onCloseTask()}
           />
@@ -80,6 +101,15 @@ class DealDetails extends React.Component {
         <EditForm
           deal={deal}
         />
+
+        <ESignAttachments
+          dealId={deal.id}
+        />
+
+        <ESignCompose
+          deal={deal}
+        />
+
       </Row>
     )
   }
@@ -94,4 +124,4 @@ function mapStateToProps({ data, deals, chatroom }, props) {
   }
 }
 
-export default connect(mapStateToProps)(DealDetails)
+export default connect(mapStateToProps, { closeEsign })(DealDetails)

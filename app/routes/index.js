@@ -16,6 +16,7 @@ const AsyncAuthenticationLayout = Load({
 
 // Pages
 import Landing from '../components/Pages/Landing'
+import Brand from '../components/Pages/Dashboard/Brand'
 
 const AsyncSignUp = Load({
   loader: () =>
@@ -105,7 +106,8 @@ const AsyncDealsLayout = Load({
     import('../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */),
   fetchData: (dispatch, params) => {
     const { user } = params
-    return dispatch(getDeals(user))
+    const isBackOffice = user.features.indexOf('Backoffice') !== -1
+    return dispatch(getDeals(user, isBackOffice))
   }
 })
 
@@ -150,8 +152,6 @@ const AsyncListingSinglePage = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Listings/Listing' /* webpackChunkName: "list_single" */)
 })
-
-import Brand from '../components/Pages/Dashboard/Brand'
 
 // Notifications
 const AsyncNotificationsPage = Load({
@@ -267,8 +267,9 @@ export default (
 
       <Route path="dashboard/mls" component={AsyncListingsLayout}>
         <IndexRoute component={AsyncListingsSearch} />
-        <Route path="alerts" component={AsyncListingsAlerts} />
-        <Route path="actives" component={AsyncListingsFavorites}>
+
+        <Route path="actives" component={AsyncListingsFavorites} />
+        <Route path="alerts" component={AsyncListingsAlerts}>
           <Route path=":alertId" component={AsyncListingsAlerts} />
         </Route>
       </Route>

@@ -30,14 +30,69 @@
     font-weight: 500;
     color: #fff;
     padding: 0 $pad-size;
+
+    .close-compose {
+      float: right;
+      cursor: pointer;
+    }
   }
 
   .recipients {
-    height: 50px;
-    line-height: 50px;
-    vertical-align: middle;
+    position: relative;
+    min-height: 50px;
     padding: 0 $pad-size;
     box-shadow: 0 1px 0 0 #ecf0f4;
+
+    .recp-container {
+      width: 95%;
+      margin-left: $pad-size + 3px;
+      cursor: pointer;
+    }
+
+    .item-title {
+      position: absolute;
+      top: 0;
+    }
+
+    .to {
+      position: absolute;
+      left: $pad-size;
+      top: 34%;
+    }
+
+    .recp {
+      display: inline-block;
+      position: relative;
+      border-radius: 3px;
+      border: solid 1px #dce5eb;
+      background-color: #f8fafb;
+      line-height: 15px;
+      margin: 5px;
+      padding: 4px 40px 4px 8px;
+      cursor: auto;
+      .recp-t {
+        font-size: 13px;
+        font-weight: 600;
+        color: #1d364b;
+      }
+      .recp-d {
+        display: block;
+        color: #62778c;
+        font-size: 12px;
+      }
+      .recp-c {
+        color: #62778c;
+        position: absolute;
+        right: 8px;
+        top: 10px;
+        i {
+          cursor: pointer;
+          &:hover {
+            color: #000;
+          }
+        }
+      }
+    }
   }
 
   .subject {
@@ -47,7 +102,7 @@
     box-shadow: 0 1px 0 0 #ecf0f4;
     padding: 0 $pad-size;
     input {
-      width: 70%;
+      width: 85%;
       height: 40px;
       border: none;
       &:focus {
@@ -59,7 +114,8 @@
   .message {
     padding: $pad-size;
     position: relative;
-    height: 68%;
+    min-height: 68%;
+    max-height: 68%;
     textarea {
       border: none;
       width: 100%;
@@ -91,9 +147,20 @@
           background-color: #f0f4f7;
           border: solid 1px #e9eef2;
           margin-bottom: 5px;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          overflow: hidden;
+
+          .name {
+            display: inline-block;
+            width: 300px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+          }
+
+          .remove-attachment {
+            float: right;
+            cursor: pointer;
+            color: #62778c;
+          }
         }
       }
     }
@@ -114,6 +181,7 @@
     .btn-send, .btn-attach {
       width: 100px;
       height: 34px;
+      line-height: 17px;
       border-radius: 3px;
       font-weight: 500;
       font-size: 14px;
@@ -153,7 +221,8 @@
   border: solid 1px #e1e1e1;
 
   .popover-content {
-    padding: 0;
+    padding: 0 !important;
+    margin: 0 !important;
     margin-top: 30px;
   }
 
@@ -169,16 +238,70 @@
     color: #030303;
   }
 
-  input {
-    width: 100%;
-    border: none;
-    height: 41px;
-    background-color: #fff;
-    border-bottom: 1px solid #e1e1e1;
-    padding: 18px 20px 3px 20px;
-    font-size: 15px;
-    &:focus {
-      outline: none;
+  .form-group {
+    &.has-error {
+      box-shadow: none;
+      border-bottom: none;
+    }
+
+    .form-control {
+      width: 100%;
+      border: none;
+      height: 41px;
+      background-color: #fff;
+      border-radius: 0;
+      border-bottom: 1px solid #e1e1e1;
+      padding: 18px 20px 3px 20px;
+      font-size: 15px;
+      box-shadow: none !important;
+
+      &.has-error {
+        border-bottom: none;
+      }
+
+      &:focus {
+        box-shadow: none;
+      }
+    }
+
+    .dropdown {
+      width: 100%;
+      margin-top: 10px;
+
+      button {
+        width: 100%;
+        border: none;
+        border-bottom: 1px solid #e1e1e1;
+        border-radius: 0;
+        font-size: 15px;
+        padding-left: 20px;
+        color: #5A5A5A;
+        text-align: left;
+        padding-bottom: 2px;
+        .caret {
+          margin-left: 150px;
+        }
+        &:hover {
+          background-color: transparent;
+        }
+        &:focus {
+          background-color: transparent;
+          box-shadow: none;
+          border-bottom: 1px solid #e1e1e1;
+        }
+      }
+
+      &.open {
+        button {
+          background-color: transparent;
+          box-shadow: none;
+          color: #5A5A5A;
+          &:hover {
+            color: #5A5A5A;
+            border-bottom: 1px solid #e1e1e1;
+          }
+        }
+      }
     }
   }
 

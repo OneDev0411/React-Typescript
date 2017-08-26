@@ -21,9 +21,20 @@ Checklists.addChecklist = async function (user, checklist) {
   }
 }
 
+Checklists.editChecklist = async function (checklist) {
+  try {
+    return await new Fetch()
+      .put(`/brands/${checklist.brand}/checklists/${checklist.id}`)
+      .send(checklist)
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 Checklists.deleteChecklist = async function (checklist) {
   try {
-    return await new Fetch().delete(`/brands/${checklist.brand}/checklists/${checklist.id}`)
+    return await new Fetch()
+      .delete(`/brands/${checklist.brand}/checklists/${checklist.id}`)
   } catch (e) {
     console.log(e)
   }

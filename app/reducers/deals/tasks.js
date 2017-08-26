@@ -40,9 +40,18 @@ export default (state = null, action) => {
           ...{
             review: {
               ...state[action.taskId].review,
-              ...{status: action.status}
+              ...{ status: action.status }
             }
           }
+        }
+      }
+
+    case types.CHANGE_NEEDS_ATTENTION:
+      return {
+        ...state,
+        [action.taskId]: {
+          ...state[action.taskId],
+          ...{ needs_attention: action.status }
         }
       }
 

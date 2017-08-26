@@ -135,8 +135,9 @@ const DeliveryReport = ({
   message
 }) => {
 
-  if (!author || author.id !== user.id)
+  if (!room || !author || author.id !== user.id) {
     return false
+  }
 
   const ackedUsers = getAckedUsers(message, room)
   const deliveredUsers = getDeliveredUsers(message, room)
@@ -181,9 +182,9 @@ const DeliveryReport = ({
   )
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps({ chatroom }, props) {
   return {
-    room: state.chatroom.rooms[ownProps.message.room]
+    room: chatroom.rooms[props.message.room]
   }
 }
 

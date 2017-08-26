@@ -4,11 +4,17 @@ import tasks from './tasks'
 import checklists from './checklists'
 import forms from './forms'
 import formEdit from './form-edit'
+import esign from './esign'
+import backoffice from './backoffice'
+import error from './error'
 
 export default combineReducers({
   list,
   tasks,
   checklists,
   forms,
-  formEdit
+  formEdit,
+  esign,
+  backoffice,
+  error
 })

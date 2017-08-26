@@ -293,15 +293,16 @@ export default class ListingViewer extends Component {
           <span style={S('font-28 relative t-5n color-ccc fw-400')}>(Asking price)</span>
         )
       }
-      let agent_area_client
-      if (!user || user && user.user_type === 'Client') {
-        agent_area_client = (
+      let agent_area_client = (
+        <div>
+          <div style={S('fw-600 font-18 mb-10')}>Listing Provided by</div>
           <div>
-            <div style={S('fw-600 font-18 mb-10')}>Listing Provided by</div>
-            <div><span style={S('fw-400')}>{ listing.list_agent_full_name }, { listing.list_office_name }</span></div>
+            <span style={S('fw-400')}>
+              {listing.list_agent_full_name}, {listing.list_office_name}
+            </span>
           </div>
-        )
-      }
+        </div>
+      )
       main_content = (
         <div style={S('bg-fff')}>
           <div style={S('p-0 relative')}>
