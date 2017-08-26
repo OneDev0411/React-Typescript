@@ -11,8 +11,8 @@ const getListing = async id => {
     )
 
     return response.body.data
-  } catch (error) {
-    throw error
+  } catch ({ status }) {
+    throw status
   }
 }
 
