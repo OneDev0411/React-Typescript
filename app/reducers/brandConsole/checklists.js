@@ -83,6 +83,21 @@ export default (state = [], action) => {
       }
       return stateClone
     }
+    case types.EDIT_TASK: {
+      let stateClone = cloneObject(state)
+      for (let i = 0; i < stateClone.length; i++) {
+        if (stateClone[i].id === action.checklistId) {
+          for (let j = 0; j < stateClone[i].tasks.length; j++) {
+            if (stateClone[i].tasks[j].id === action.task.id) {
+              stateClone[i].tasks[j] = action.task
+              break
+            }
+          }
+          break
+        }
+      }
+      return stateClone
+    }
     default:
       return state
   }

@@ -35,3 +35,21 @@ export function deleteTask(checklist, taskId) {
     }
   }
 }
+
+function _editTask(checklistId, task) {
+  return {
+    type: types.EDIT_TASK,
+    checklistId,
+    task
+  }
+}
+
+export function editTask(checklist, task) {
+  return async (dispatch) => {
+    const response = await BrandConsole.editTask(checklist, task)
+    if (response) {
+      const { data } = response.body
+      dispatch(_editTask(checklist.id, data))
+    }
+  }
+}
