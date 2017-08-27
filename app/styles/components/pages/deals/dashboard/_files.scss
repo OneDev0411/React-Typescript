@@ -39,6 +39,9 @@
       .name {
         color: #1d364b;
         font-size: 15px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
       }
 
       .actions {

@@ -56,16 +56,19 @@ Deal.getAll = async function(user = {}, backoffice = false) {
 
   // backoffice and agent has different endpoints and associations
   if (backoffice) {
-    associations = 'associations[]=room.attachments&associations[]=deal.brand&associations[]=deal.created_by&associations[]=review.updated_by&associations[]=deal.envelopes'
-    endpoint = `/brands/${user.brand}/deals/inbox?${associations}`
+    endpoint = `/brands/${user.brand}/deals/inbox`
+    associations =  'associations[]=room.attachments&'
+    associations += 'associations[]=deal.brand&'
+    associations += 'associations[]=deal.created_by&'
+    associations += 'associations[]=review.updated_by'
   } else {
-    associations = 'associations[]=room.attachments&associations[]=deal.envelopes'
-    endpoint = `/brands/${user.brand}/deals?${associations}`
+    endpoint = `/brands/${user.brand}/deals`
+    associations = 'associations[]=room.attachments'
   }
 
   try {
     const fetchDeals = new Fetch()
-      .get(endpoint)
+      .get(`${endpoint}?${associations}`)
 
     // required on ssr
     if (access_token) {
@@ -192,7 +195,6 @@ Deal.saveSubmission = async function(id, form, state, values) {
  * get submission form
  */
 Deal.getSubmissionForm = async function(task_id, last_revision) {
-
   try {
     const response = await new Fetch()
       .get(`/tasks/${task_id}/submission/${last_revision}`)
@@ -260,6 +262,20 @@ Deal.needsAttention = async function(task_id, status) {
 
   } catch (e) {
     return false
+  }
+}
+
+/**
+* get envelopes of a deal
+*/
+Deal.getEnvelopes = async function(deal_id) {
+  try {
+    const response = await new Fetch()
+      .get(`/deals/${deal_id}/envelopes`)
+
+    return response.body.data
+  } catch (e) {
+    return null
   }
 }
 

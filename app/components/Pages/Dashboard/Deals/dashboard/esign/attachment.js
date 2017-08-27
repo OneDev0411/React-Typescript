@@ -84,7 +84,7 @@ class SelectDocumentModal extends React.Component {
                 return task.task_type === 'Form' &&
                   task.deal === dealId &&
                   task.submission
-                  // task.submission.state === 'Fair'
+                  task.submission.state === 'Fair'
               })
               .map(task => {
                 const isSelected = attachments.indexOf(task.id) > -1

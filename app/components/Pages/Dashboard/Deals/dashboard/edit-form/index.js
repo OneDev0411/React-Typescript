@@ -45,11 +45,12 @@ class EditForm extends React.Component {
    */
   async onSetDeal() {
     const { task } = this.props
+
     let submission = {
       values: {}
     }
 
-    if (task.submission) {
+    if (task && task.submission) {
       submission = await Deal.getSubmissionForm(task.id, task.submission.last_revision)
     }
 
@@ -144,7 +145,7 @@ class EditForm extends React.Component {
     // show saving
     this.setState({ saving: true })
 
-    const status = incompleteFields.length > 0 ? 'Fair' : 'Draft'
+    const status = incompleteFields.length === 0 ? 'Fair' : 'Draft'
 
     // save form
     try {

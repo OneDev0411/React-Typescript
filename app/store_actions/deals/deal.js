@@ -48,10 +48,25 @@ function isBackOffice(status) {
   }
 }
 
+export function setEnvelopes(deal_id, envelopes) {
+  return {
+    type: types.SET_ENVELOPES,
+    deal_id,
+    envelopes
+  }
+}
+
 export function createRole(deal_id, form) {
   return async (dispatch) => {
     const deal = await Deals.createRole(deal_id, form)
     dispatch(updateRoles(deal.id, deal.roles))
+  }
+}
+
+export function getEnvelopes(deal_id) {
+  return async (dispatch) => {
+    const envelopes = await Deals.getEnvelopes(deal_id)
+    dispatch(setEnvelopes(deal_id, envelopes))
   }
 }
 

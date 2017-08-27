@@ -135,8 +135,7 @@ const UnknownAttachments = ({
               <img src={file.preview_url} />
             </Col>
             <Col sm={8} xs={12} className="name vcenter">
-              <div>{ file.name }</div>
-              <div>{ moment(file.created_at).format('Y/M/D') }</div>
+              { file.name }
             </Col>
 
             <Col sm={3} xs={12} className="actions vcenter">
