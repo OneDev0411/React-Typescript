@@ -20,11 +20,14 @@ class SendSignatures extends React.Component {
     }
   }
 
+  componentDidMount() {
+    const { esign } = this.props
+    this.prefillRoles(esign)
+  }
+
   componentWillReceiveProps(nextProps) {
     const { esign } = nextProps
-    if (esign.show && esign.view === 'compose') {
-      this.prefillRoles(esign.attachments)
-    }
+    this.prefillRoles(esign)
   }
 
   /**
@@ -51,8 +54,13 @@ class SendSignatures extends React.Component {
   /**
    * prefill roles based on selected documents
    */
-  prefillRoles(attachments) {
+  prefillRoles(esign) {
+    if (!esign.show || esign.view !== 'compose') {
+      return false
+    }
+
     const { tasks, forms, deal } = this.props
+    const { attachments } = esign
     let roles = []
 
     // extract roles of selected documents
