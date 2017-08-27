@@ -31,6 +31,7 @@ const Form = ({
           <Col sm={6} xs={12} className="actions vcenter">
             <ESignButton
               dealId={task.deal}
+              task={task}
               attachments={attachments}
             />
             <button className="btn-deal" onClick={() => editForm(task)}>Edit</button>
