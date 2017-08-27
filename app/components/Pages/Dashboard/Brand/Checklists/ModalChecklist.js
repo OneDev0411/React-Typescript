@@ -78,7 +78,7 @@ const ModalNewChecklist = ({
                              changeTitlePropertyType,
                              order,
                              changeTitleOrder,
-                             isTerminatable,
+                             isTerminatable = false,
                              changeIsTerminatable,
                              tabName,
                              changeTabName

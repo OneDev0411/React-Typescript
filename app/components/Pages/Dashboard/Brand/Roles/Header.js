@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'react-bootstrap'
-import Compose from '../Shared/ModalNewRole'
+import Compose from './ModalNewRole'
 import { addRole } from '../../../../../store_actions/brandConsole'
 
 const Header = ({ role, addRole }) => {

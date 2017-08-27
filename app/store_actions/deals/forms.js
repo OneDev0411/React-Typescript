@@ -34,6 +34,24 @@ export function addForm(brandId, checklistId, formId) {
   }
 }
 
+function _deleteForm(checklistId, formId) {
+  return {
+    type: types.DELETE_FORM,
+    checklistId,
+    formId
+  }
+}
+
+export function deleteForm(checklist, formId) {
+  return async (dispatch) => {
+    const response = await Deal.deleteForm(checklist, formId)
+    if (response &&
+      response.body.status === 'success') {
+      dispatch(_deleteForm(checklist.id, formId))
+    }
+  }
+}
+
 export function editForm(task) {
   return {
     type: types.SET_EDIT_FORM,
