@@ -27,8 +27,10 @@ export default class Listing extends Component {
   }
 
   updateUserTimeline() {
-    const { data, params } = this.props
-    ContactModel.updateUserTimeline(data.user, 'UserViewedListing', 'Listing', params.id)
+    const { data, params: { id } } = this.props
+    if (id) {
+      ContactModel.updateUserTimeline('UserViewedListing', 'listing', id)
+    }
   }
 
   render() {

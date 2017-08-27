@@ -64,8 +64,8 @@ const controller = {
     const { user } = AppStore.data
 
     // update user timeline
-    if (AppStore.data.user) {
-      ContactModel.updateUserTimeline(user, 'UserViewedAlert', 'Alert', alert.id)
+    if (alert) {
+      ContactModel.updateUserTimeline('UserViewedAlert', 'Alert', alert.id)
     }
 
     let center_from_points
