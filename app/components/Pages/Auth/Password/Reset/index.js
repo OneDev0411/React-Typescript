@@ -8,12 +8,8 @@ import withHandlers from 'recompose/withHandlers'
 
 import Brand from '../../../../../controllers/Brand'
 
-import Crypto from '../../../../../utils/crypto'
 import { getBrandInfo, renderField } from '../../SignIn'
 import updatePassword from '../../../../../models/auth/password/update'
-
-const decodeURIToken = codedToken =>
-  JSON.parse(Crypto.decrypt(decodeURIComponent(codedToken)))
 
 const Reset = ({
   brand,
@@ -94,11 +90,17 @@ const Reset = ({
             </form>
             : <div style={{ textAlign: 'center' }}>
               <p className="c-auth__submit-alert--success">
-                <span>Your account password with this email  </span>
-                <b>{submitSuccessfully}</b>  is now updated.<br />
+                <span>Your account password with this email </span>
+                <b>{submitSuccessfully}</b> is now updated.<br />
                 <span>You may now </span>
-                <Link to={`/signin?username=${encodeURIComponent(submitSuccessfully)}`}>sign in</Link>.
-              </p>
+                <Link
+                  to={`/signin?username=${encodeURIComponent(
+                      submitSuccessfully
+                    )}`}
+                >
+                    sign in
+                  </Link>.
+                </p>
             </div>}
         </main>
       </article>
@@ -124,11 +126,15 @@ const validate = values => {
   return errors
 }
 export default compose(
-  connect(({ brand }, { location }) => {
-    const { token } = location.query
+  connect(({ brand }, { location: { query = {} } }) => {
+    const { token, email } = query
+
     return {
       brand,
-      codedToken: token
+      loginParams: {
+        token,
+        email
+      }
     }
   }),
   reduxForm({
@@ -141,14 +147,15 @@ export default compose(
   withState('submitSuccessfully', 'setSubmitSuccessfully', false),
   withHandlers({
     onSubmitHandler: ({
-      codedToken,
+      loginParams,
       setIsSubmitting,
       setSubmitError,
       setSubmitSuccessfully
     }) => ({ password }) => {
+      const { email, token } = loginParams
+
       setIsSubmitting(true)
 
-      const { email, token } = decodeURIToken(codedToken)
       updatePassword({ email, password, token })
         .then(statusCode => {
           if (statusCode === 200) {

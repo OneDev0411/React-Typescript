@@ -15,7 +15,7 @@ const routes = {
     ['signin'],
     ['signup'],
     ['signout'],
-    ['reset-password'],
+    ['reset_password'],
     ['terms'],
     ['mls'],
     ['recent'],
