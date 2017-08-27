@@ -219,8 +219,8 @@ function authenticate(nextState, replace) {
 
   if (typeof window !== 'undefined' && !isLoggedIn) {
     replace({
-      pathname: '/',
-      state: { nextPathname: nextState.location.pathname }
+      pathname: '/signin',
+      state: { redirectTo: nextState.location.pathname }
     })
   }
 }
