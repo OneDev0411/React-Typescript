@@ -6,30 +6,6 @@ const router = require('koa-router')()
 const app = new Koa()
 
 /**
- * route for /mls/alerts
- */
-router.get('/dashboard/mls/alerts/:id?', async (ctx, next) => {
-  if (!ctx.session.user) {
-    const path = ctx.request.path
-    return ctx.redirect(`/signin?redirect_to=${path}`)
-  }
-
-  await next()
-})
-
-/**
- * route for /mls/alerts/actives
- */
-router.get('/dashboard/mls/actives', async (ctx, next) => {
-  if (!ctx.session.user) {
-    const path = ctx.request.path
-    return ctx.redirect(`/signin?redirect_to=${path}`)
-  }
-
-  await next()
-})
-
-/**
  * route for /mls/:id
  */
 router.get('/dashboard/mls/:id', async (ctx, next) => {

@@ -10,9 +10,9 @@ import config from '../../../config/webpack'
 import getBrand from '../../../app/models/brand'
 
 function fetch(renderProps, store) {
-  return renderProps.components.map(c => {
-    if (c && c.fetchData) {
-      return c.fetchData(store.dispatch, renderProps.params)
+  return renderProps.components.map(component => {
+    if (component && component.fetchData) {
+      return component.fetchData(store.dispatch, renderProps.params)
     }
     return Promise.reslove
   })
@@ -23,16 +23,16 @@ function sanitize(state) {
 }
 
 async function display(file, renderProps) {
-  let initialState = {
-    data: this.locals.AppStore ? this.locals.AppStore.data : {}
-  }
+  let initialState = this.locals.appStore || {}
 
   try {
     const hostname = urlParser.parse(this.request.origin).hostname
     const brand = await getBrand(hostname)
+    const { data } = initialState
     initialState = {
+      ...initialState,
       data: {
-        ...initialState.data,
+        ...data,
         brand
       },
       brand
@@ -49,8 +49,13 @@ async function display(file, renderProps) {
   )
 
   // append user data to render props params
-  if (initialState.data.user) {
-    renderProps.params.user = initialState.data.user
+  // if (initialState.data.user) {
+  //   renderProps.params.user = initialState.data.user
+  // }
+
+  // append user data to render props params
+  if (initialState.user) {
+    renderProps.params.user = initialState.user
   }
 
   try {
@@ -96,13 +101,13 @@ async function display(file, renderProps) {
   }
 }
 
-module.exports = function () {
-  return async function (ctx, next) {
+module.exports = () =>
+  async function render(ctx, next) {
     if (ctx.display) {
+      // eslint-disable-next-line
       return await next()
     }
 
     ctx.display = display.bind(ctx)
     await next()
   }
-}
