@@ -2,6 +2,7 @@ import React from 'react'
 import { Route, IndexRoute, Redirect } from 'react-router'
 import store from '../stores'
 import Load from '../loader'
+import UserIsNotAuthenticated from './userIsNotAuthenticated'
 
 // Containers
 import AppLayout from '../components/App'
@@ -230,14 +231,23 @@ export default (
     <Route path="/" component={AsyncAuthenticationLayout}>
       <IndexRoute component={Landing} />
 
-      <Route path="/signin" component={AsyncSignIn} />
-      <Route path="/signup" component={AsyncSignUp} />
-      <Route path="/register" component={AsyncRegister} />
+      <Route path="/signin" component={UserIsNotAuthenticated(AsyncSignIn)} />
+      <Route path="/signup" component={UserIsNotAuthenticated(AsyncSignUp)} />
+      <Route
+        path="/register"
+        component={UserIsNotAuthenticated(AsyncRegister)}
+      />
 
       <Route path="/verify/:slug" component={AsyncVerify} />
 
-      <Route path="/password/forgot" component={AsyncForgotPassword} />
-      <Route path="/password/reset" component={AsyncResetPassword} />
+      <Route
+        path="/password/forgot"
+        component={UserIsNotAuthenticated(AsyncForgotPassword)}
+      />
+      <Route
+        path="/password/reset"
+        component={UserIsNotAuthenticated(AsyncResetPassword)}
+      />
 
       <Route path="/mobile" component={AsyncMobile} />
     </Route>

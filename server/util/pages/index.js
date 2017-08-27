@@ -10,7 +10,7 @@ const _ = require('underscore')
 const app = new Koa()
 
 const routes = {
-  app: [['mls'], ['signin'], ['signup'], ['signout'], ['reset_password']]
+  app: [['mls'], ['signout'], ['reset_password']]
 }
 
 app.use(handle490)
