@@ -11,7 +11,7 @@ import FactSheet from './factsheet'
 import EditForm from './edit-form'
 import ESignAttachments from './esign/attachment'
 import ESignCompose from './esign/compose'
-import { closeEsign } from '../../../../../store_actions/deals'
+import { closeEsign, getEnvelopes } from '../../../../../store_actions/deals'
 
 import Roles from './roles'
 
@@ -24,18 +24,19 @@ class DealDetails extends React.Component {
   }
 
   componentDidMount() {
-    const { deal } = this.props
-    this.checkDeal(deal)
+    const { deal, getEnvelopes } = this.props
+
+    if (deal === null) {
+      browserHistory.push('/dashboard/deals')
+    }
+
+    if (!deal.envelopes) {
+      getEnvelopes(deal.id)
+    }
   }
 
   componentWillUnmount() {
     this.props.closeEsign()
-  }
-
-  checkDeal(deal) {
-    if (deal === null) {
-      browserHistory.push('/dashboard/deals')
-    }
   }
 
   onSelectTask(task) {
@@ -124,4 +125,4 @@ function mapStateToProps({ data, deals, chatroom }, props) {
   }
 }
 
-export default connect(mapStateToProps, { closeEsign })(DealDetails)
+export default connect(mapStateToProps, { closeEsign, getEnvelopes })(DealDetails)
