@@ -163,21 +163,24 @@ SigninForm = reduxForm({
 
 export default compose(
   connect(
-    ({ brand, auth }, { location }) => {
-      const { username } = location.query
-      const { isLogging, error: submitError } = auth.signin
+    ({ brand, auth: { signin } }, { location: { query = {}, state = {} } }) => {
+      const { username } = query
+      const { redirectTo } = state
+      const { isLogging, error: submitError } = signin
+
       return {
         brand,
         isLogging,
         submitError,
-        initialValues: { username }
+        initialValues: { username },
+        redirectTo: redirectTo || '/dashboard/mls'
       }
     },
     { submitSigninForm }
   ),
   withHandlers({
-    onSubmitHandler: ({ submitSigninForm }) => values => {
-      submitSigninForm(values, '/dashboard/mls')
+    onSubmitHandler: ({ submitSigninForm, redirectTo }) => values => {
+      submitSigninForm(values, redirectTo)
     }
   })
 )(SigninForm)
