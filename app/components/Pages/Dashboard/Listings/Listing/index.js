@@ -7,26 +7,14 @@ import getListing from '../../../../../store_actions/listings/listing/get-listin
 
 class Listing extends Component {
   componentDidMount() {
-    const { user, id } = this.props
+    const { id, getListing } = this.props
 
     if (!id) {
       return
     }
 
-    this._fetchListing(id)
-
-    if (user) {
-      this._updateUserTimeline(user, id)
-    }
-  }
-
-  _fetchListing(id) {
-    const { getListing } = this.props
     getListing(id)
-  }
-
-  _updateUserTimeline(user, id) {
-    ContactModel.updateUserTimeline(user, 'UserViewedListing', 'Listing', id)
+    ContactModel.updateUserTimeline('UserViewedListing', 'listing', id)
   }
 
   render() {
