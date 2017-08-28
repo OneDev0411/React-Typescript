@@ -2,9 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link, browserHistory } from 'react-router'
 import compose from 'recompose/compose'
-import { Field, reduxForm } from 'redux-form'
+import lifecycle from 'recompose/lifecycle'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
+import { Field, reduxForm } from 'redux-form'
 
 import { getBrandInfo, renderField } from '../SignIn'
 import Brand from '../../../../controllers/Brand'
@@ -277,6 +278,16 @@ export default compose(
       } catch (error) {
         setIsSubmitting(false)
         setSubmitError(true)
+      }
+    }
+  }),
+  lifecycle({
+    componentWillMount() {
+      const { location } = this.props
+      const { token } = location.query
+
+      if (!token) {
+        browserHistory.push('/oops')
       }
     }
   })
