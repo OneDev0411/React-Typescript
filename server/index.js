@@ -17,14 +17,13 @@ import webpackConfig from '../webpack.config.babel'
 // import AppStore from '../app/stores/AppStore'
 
 const app = new Koa()
+const __DEV__ = process.env.NODE_ENV === 'development'
 
-// webpack variables
+// webpack configs
 const { entry, output, publicPath } = appConfig.compile
 
 // app uses proxy
 app.proxy = true
-
-const __DEV__ = process.env.NODE_ENV === 'development'
 
 // handle application errors
 app.use(async (ctx, next) => {

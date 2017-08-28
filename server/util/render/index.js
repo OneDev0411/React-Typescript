@@ -9,7 +9,7 @@ import reducers from '../../../app/reducers'
 import config from '../../../config/webpack'
 import getBrand from '../../../app/models/brand'
 
-function fetch(renderProps, store) {
+function fetch(store, renderProps) {
   return renderProps.components.map(component => {
     if (component && component.fetchData) {
       return component.fetchData(store.dispatch, renderProps.params)
@@ -49,17 +49,12 @@ async function display(file, renderProps) {
   )
 
   // append user data to render props params
-  // if (initialState.data.user) {
-  //   renderProps.params.user = initialState.data.user
-  // }
-
-  // append user data to render props params
   if (initialState.user) {
     renderProps.params.user = initialState.user
   }
 
   try {
-    await Promise.all(fetch(renderProps, store))
+    await Promise.all(fetch(store, renderProps))
   } catch (e) {
     /* do nothing */
   }
