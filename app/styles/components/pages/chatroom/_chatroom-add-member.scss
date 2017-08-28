@@ -1,0 +1,23 @@
+.chatroom-add-member {
+  .modal-header {
+    .modal-title {
+      float: left;
+    }
+    .leave-icon {
+      float: right;
+      font-size: 21px;
+      font-weight: bold;
+      line-height: 1;
+      text-shadow: 0 1px 0 #fff;
+      margin-right: 20px;
+      opacity: 0.2;
+      &:hover, &:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+        opacity: 0.5;
+        filter: alpha(opacity=50);
+      }
+    }
+  }
+}
