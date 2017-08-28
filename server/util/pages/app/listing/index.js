@@ -16,8 +16,9 @@ router.get('/dashboard/mls/:id', async (ctx, next) => {
       /^\/dashboard\/mls\/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/
     ).test(url)
 
-  if (!id || typeof id === 'undefined' || !isListingPage(ctx.url)) {
-    return await next()
+  if (id == null || !isListingPage(ctx.url)) {
+    await next()
+    return
   }
 
   try {
@@ -40,7 +41,9 @@ router.get('/dashboard/mls/:id', async (ctx, next) => {
     if (ctx.session.user && ctx.request.query.token) {
       ctx.session = null
     }
-  } catch (e) {}
+  } catch (error) {
+    console.log(error)
+  }
 
   await next()
 })

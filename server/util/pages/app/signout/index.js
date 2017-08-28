@@ -3,7 +3,6 @@ const router = require('koa-router')()
 const app = new Koa()
 
 router.get('/signout', async (ctx, next) => {
-  ctx.session.user = null
   ctx.session = null
   ctx.redirect('/signin')
 })
