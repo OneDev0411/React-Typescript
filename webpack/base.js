@@ -8,6 +8,7 @@ export default {
   output: {
     path: config.compile.output,
     filename: config.compile.jsBundle,
+    chunkFilename: '[name].[chunkhash].js',
     publicPath: config.compile.publicPath
   },
   resolve: {

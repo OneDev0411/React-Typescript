@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import TextMessage from './text'
 import RecommendationMessage from './recommendation'
 import AlertMessage from './alert'
 import AttachementMessage from './attachment'
+import ActivityMessage from './activity'
 import UploadingFile from './uploading'
 import Message from '../../Util/message'
 
@@ -51,6 +51,14 @@ const MessageTypes = ({
     />
   }
 
+  // check message is ActivityMessage
+  if (message.activity) {
+    message_object = <ActivityMessage
+      message={message}
+    />
+  }
+
+  // check message is uploading a file
   if (message.uploading) {
     message_object = <UploadingFile
       author={author}

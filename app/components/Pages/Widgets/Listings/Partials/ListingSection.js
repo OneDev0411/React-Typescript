@@ -54,11 +54,7 @@ class Section extends Component {
       (this.options.list_offices && this.options.list_offices.length) ||
       this.options.brand
     ) {
-      queryString += '?associations=compact_listing.proposed_agent'
-
-      if (this.options.listing_statuses[0] === 'Sold') {
-        queryString += '&order_by[]=price'
-      }
+      queryString += '?associations=compact_listing.proposed_agent&order_by[]=price'
     }
     return {
       queryString,
@@ -68,7 +64,6 @@ class Section extends Component {
 
   initOptions(brokerage, agent, type, brand, user) {
     const options = {
-      limit: '6',
       property_types: ['Residential', 'Residential Lease', 'Lots & Acreage'],
       property_subtypes: [
         'RES-Single Family',
@@ -101,6 +96,7 @@ class Section extends Component {
       options.access_token = user.access_token
     }
     if (type === 'sold') {
+      options.limit = '6'
       options.listing_statuses = ['Sold', 'Leased']
     } else {
       options.listing_statuses = [

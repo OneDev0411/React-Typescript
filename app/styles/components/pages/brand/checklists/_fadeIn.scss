@@ -1,0 +1,38 @@
+%fade-in {
+  animation: fadein 700ms;
+  -moz-animation: fadein 700ms; /* Firefox */
+  -webkit-animation: fadein 700ms; /* Safari and Chrome */
+  -o-animation: fadein 700ms; /* Opera */
+}
+@keyframes fadein {
+  from {
+    opacity:0;
+  }
+  to {
+    opacity:1;
+  }
+}
+@-moz-keyframes fadein { /* Firefox */
+  from {
+    opacity:0;
+  }
+  to {
+    opacity:1;
+  }
+}
+@-webkit-keyframes fadein { /* Safari and Chrome */
+  from {
+    opacity:0;
+  }
+  to {
+    opacity:1;
+  }
+}
+@-o-keyframes fadein { /* Opera */
+  from {
+    opacity:0;
+  }
+  to {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,31 @@
+@import 'checklistRow';
+@import 'tasks';
+@import 'listFilter';
+
+%checklists {
+  .header {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #8ca2b6;
+  }
+  .checklistRow {
+    @extend %checklistRow;
+  }
+  .tasks {
+    @extend %tasks;
+  }
+  .listFilter {
+    @extend %listFilter;
+  }
+  .panel-group .panel {
+    border: none;
+    .panel-heading {
+      padding: 0;
+    }
+    .panel-body {
+      padding: 0;
+    }
+  }
+}

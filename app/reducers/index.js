@@ -4,6 +4,8 @@ import data from './data'
 import socket from './socket'
 import contact from './contact'
 import chatroom from './chatroom'
+import deals from './deals'
+import brandConsole from './brandConsole'
 import search from './listings/search'
 import alerts from './listings/alerts'
 import listing from './listings/listing'
@@ -18,10 +20,12 @@ const appReducer = combineReducers({
   alerts,
   contact,
   chatroom,
+  deals,
   favorites,
   routing: routerReducer,
   listing: createNamedWrapperReducer(listing, 'LISTING'),
-  widgets
+  widgets,
+  brandConsole
 })
 
 export default (state, action) => appReducer(state, action)

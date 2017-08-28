@@ -1,0 +1,58 @@
+%deal-fact-sheet {
+  background: #fff;
+  padding: $col-padding 0;
+  @extend %list;
+
+  .critical-dates {
+    margin-top: 10px;
+  }
+
+  span.field {
+    color: gray;
+  }
+}
+
+%list {
+  ul {
+    margin: 0 15px 10px 15px;
+    padding: 0 10px;
+    border-bottom: 1px solid #e5e5e5;
+
+    li {
+      color: #5b6469;
+      margin-bottom: 8px;
+      font-size: 14px;
+      height: 20px;
+      line-height: 20px;
+      vertical-align: middle;
+
+      .name {
+        color: #78909c;
+        display: inline-block;
+        width: 65%;
+
+        &.no-status {
+          width: 70%;
+        }
+      }
+
+      .field {
+        color: #78909c;
+        text-align: right;
+        display: inline-block;
+        width: 29%;
+      }
+
+      .status {
+        display: inline-block;
+        line-height: inherit;
+        vertical-align: middle;
+        margin-right: 5px;
+        width: 10px;
+        height: 10px;
+        background: #f6a623;
+        border-radius: 40px;
+      }
+    }
+  }
+}

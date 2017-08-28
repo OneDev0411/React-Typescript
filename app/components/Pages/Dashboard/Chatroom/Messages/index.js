@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Rx from 'rxjs/Rx'
 import _ from 'underscore'
 import { getMessages } from '../../../../../store_actions/chatroom'
 import Toolbar from '../Rooms/toolbar'
@@ -17,6 +16,12 @@ class Messages extends React.Component {
     this.state = {
       composeMessageHeight: 45
     }
+  }
+
+  static defaultProps = {
+    toolbarHeight: '70px',
+    baseHeight: '95vh',
+    showComposeMessage: true
   }
 
   componentDidMount() {
@@ -36,10 +41,12 @@ class Messages extends React.Component {
     this.initializeScroller()
 
     // initialize chatroom with latest room
-    if (roomId && !messages[roomId]) { this.loadMessages(roomId) }
+    if (roomId && !messages[roomId])
+      this.loadMessages(roomId)
 
     // scroll to end of messages while re-loading a pop
-    if (isPopup) { this.scrollEnd() }
+    if (isPopup)
+      this.scrollEnd()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -63,7 +70,9 @@ class Messages extends React.Component {
     this.messagesObservable.unsubscribe()
   }
 
-  initializeScroller() {
+  async initializeScroller() {
+    const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
+
     this.messagesObservable = Rx
     .Observable
     .fromEvent(this.messagesList, 'scroll')
@@ -95,19 +104,23 @@ class Messages extends React.Component {
     await getMessages(roomId, limit, max_value)
 
     // move to end of div
-    if (scroll_to === null) { this.messagesList.scrollTop = this.messagesList.scrollHeight } else { this.messagesList.scrollTop = scroll_to.offsetTop - this.messagesList.offsetTop }
+    if (scroll_to === null)
+      this.messagesList.scrollTop = this.messagesList.scrollHeight
+    else
+      this.messagesList.scrollTop = scroll_to.offsetTop - this.messagesList.offsetTop
   }
 
   /**
    * load previous messages of chat by scrolling to top
    * this function is a subscriber of Rxjs
    */
-  loadPreviousMessages() {
+  loadPreviousMessages(top) {
     const { roomId } = this.props
     const messages = this.props.messages[roomId]
 
     // check whether old messages are loaded or not
-    if (!messages || messages.total <= _.size(messages.list)) { return false }
+    if (!messages || messages.total <= _.size(messages.list))
+      return false
 
     // get key id of last chat
     const key = _.keys(messages.list)[0]
@@ -128,7 +141,8 @@ class Messages extends React.Component {
     const keys = Object.keys(messages)
     const index = keys.indexOf(msg.id)
 
-    if (index === -1 || !keys[index - 1]) { return null }
+    if (index === -1 || !keys[index - 1])
+      return null
 
     return messages[keys[index - 1]]
   }
@@ -136,17 +150,20 @@ class Messages extends React.Component {
   onNewMessage(room) {
     const { roomId } = this.props
 
-    if (!this.messagesList) { return false }
+    if (!this.messagesList)
+      return false
 
     const count = this.messagesList.children.length
 
-    if (count < 4) { return false }
+    if (count < 4)
+      return false
 
     // get element
     const el = this.messagesList.children[count - 4]
 
     // scroll end when receive new message and in visible area
-    if (this.elementInViewport(el) && room.id === roomId) { this.scrollEnd() }
+    if (this.elementInViewport(el) && room.id === roomId)
+      this.scrollEnd()
   }
 
   /**
@@ -179,12 +196,18 @@ class Messages extends React.Component {
    * the height calculates based on compose-message height
    */
   getHeight() {
-    const { composeMessageHeight } = this.state
-    const { isPopup } = this.props
-    const toolbarHeight = isPopup ? '0px' : '70px'
-    const baseHeight = isPopup ?
-      `${330 - 9 - 4 - 4}px` : // popup height - compose message bottom - 2*input border: 330px - 9px -4px - 4px
-      '95vh'
+    let { composeMessageHeight } = this.state
+    const { showToolbar, showComposeMessage } = this.props
+    let { toolbarHeight, baseHeight } = this.props
+//       `${330 - 9 - 4 - 4}px` : // popup height - compose message bottom - 2*input border: 330px - 9px -4px - 4px
+    if (showToolbar === false) {
+      toolbarHeight = '0px'
+    }
+
+    if (showComposeMessage === false) {
+      composeMessageHeight = 0
+    }
+
     return `calc(${baseHeight} - ${toolbarHeight} - ${composeMessageHeight}px)`
   }
 
@@ -223,7 +246,15 @@ class Messages extends React.Component {
   }
 
   render() {
-    const { roomId, user, isInstantChat, showToolbar, onClick } = this.props
+    const {
+      roomId,
+      user,
+      isInstantChat,
+      showToolbar,
+      showComposeMessage,
+      disableUpload,
+      onClick
+    } = this.props
 
     // get messages of current room
     const messages = roomId ? this.props.messages[roomId] : null
@@ -257,6 +288,7 @@ class Messages extends React.Component {
         }
 
         <UploadHandler
+          disabled={disableUpload}
           disableClick
           roomId={roomId}
           author={user}
@@ -295,7 +327,7 @@ class Messages extends React.Component {
         />
 
         {
-          roomId &&
+          roomId && showComposeMessage &&
           <ComposeMessage
             user={user}
             roomId={roomId}

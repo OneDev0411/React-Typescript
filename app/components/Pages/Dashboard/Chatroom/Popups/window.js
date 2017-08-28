@@ -73,15 +73,15 @@ export default ({
           onClose={onClose}
         />
 
-        <Messages
-          user={user}
-          roomId={room.id}
-          showToolbar={false}
-          isPopup
-          onClick={e => onFocus(e, room, onChangeActive)}
-        />
+      <Messages
+        user={user}
+        roomId={room.id}
+        showToolbar={false}
+        baseHeight="297px"
+        isPopup
+        onClick={e => onFocus(e, room, onChangeActive)}
+      />
       </div>
     </ClickOutside>
   )
 }
-

@@ -1,0 +1,126 @@
+%deal-files-container {
+  padding: 0;
+  background: #fff;
+  overflow: hidden;
+
+  .file {
+    padding: 0 10px;
+    margin: 0 0 30px 0;
+    .title {
+      font-weight: 500;
+      color: #62778c;
+      padding-left: 1px;
+      margin-bottom: 10px;
+    }
+
+    .file-group {
+      background-color: #f8fafb;
+      border: solid 1px #d2d7db;
+      border-radius: 3px;
+    }
+
+    .item {
+      margin: 0;
+      padding: 10px 5px;
+      border-bottom: solid 1px #d2d7db;
+
+      &:hover {
+        background-color: #f5f5f5;
+      }
+
+      &.digital-form {
+        border-bottom: none;
+      }
+
+      img {
+        width: 16px;
+      }
+
+      .name {
+        color: #1d364b;
+        font-size: 15px;
+      }
+
+      .actions {
+        text-align: right;
+        padding-right: $col-padding / 2;
+        .btn-view, .btn-deal {
+          height: 30px;
+          width: 60px;
+          line-height: 26px;
+          vertical-align: middle;
+          color: #78909c;
+          border-radius: 4px;
+          background-color: #ffffff;
+          border: solid 1px #e7eef0;
+          margin-left: 8px;
+          &:focus { outline: none; }
+          &:hover { background-color: #fbfbfb; }
+        }
+      }
+    }
+  }
+
+  .file-upload {
+    .item {
+      padding: 20px 5px;
+      border-bottom: none;
+    }
+
+    .progress {
+      height: 8px;
+      border-radius: 0;
+    }
+
+    .link {
+      color: #2196f3;
+      cursor: pointer;
+    }
+  }
+}
+
+.upload-placeholder {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+
+  .upload-area {
+    position: absolute;
+    left: 25%;
+    top: 30vh;
+    background-color: red;
+    width: 700px;
+    height: 250px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    border: 2px dotted #979797;
+    text-align: center;
+    padding-top: 70px;
+
+    .title {
+      font-size: 46px;
+      font-weight: bold;
+      letter-spacing: -1.1px;
+      text-align: center;
+      color: #4a4a4a;
+    }
+
+    .desc {
+      font-size: 17px;
+      letter-spacing: -1.1px;
+      text-align: center;
+      color: #929292;
+    }
+
+    img {
+      position: absolute;
+      top: -90px;
+      left: 25%;
+      width: 363px;
+    }
+  }
+}

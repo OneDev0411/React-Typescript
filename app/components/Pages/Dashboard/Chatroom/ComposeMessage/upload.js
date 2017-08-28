@@ -1,6 +1,5 @@
 import React from 'react'
 import Dropzone from 'react-dropzone'
-import Rx from 'rxjs/Rx'
 import Message from '../Util/message'
 import Model from '../../../../../models/Chatroom'
 
@@ -14,8 +13,9 @@ export default class Upload extends React.Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { inputHandler } = this.props
+    const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
     const { Observable } = Rx
 
     if (!inputHandler) {
@@ -159,8 +159,12 @@ export default class Upload extends React.Component {
   }
 
   render() {
-    const { children, disableClick } = this.props
+    const { children, disableClick, disabled } = this.props
     const { dropzoneActive } = this.state
+
+    if (disabled === true) {
+      return children
+    }
 
     return (
       <div className="upload">

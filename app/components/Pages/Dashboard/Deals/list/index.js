@@ -1,0 +1,60 @@
+import React from 'react'
+import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
+import AgentTable from './agent-table'
+import BackOfficeTable from './backoffice-table'
+import Header from './header'
+
+class DealsDashboard extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      activeFilters: {}
+    }
+  }
+
+  /**
+   *
+   */
+  setFilter(filters) {
+    this.setState({
+      activeFilters: {
+        ...this.state.activeFilters,
+        ...filters
+      }
+    })
+  }
+
+  render() {
+    const { deals, isBackOffice, params } = this.props
+    const { activeFilters } = this.state
+
+    return (
+      <div className="deals-list">
+
+        <Header
+          activeFilterTab={params.filter}
+          onFilterChange={(name, filter) => this.setFilter(name, filter)}
+        />
+
+        {
+          !isBackOffice ?
+          <AgentTable
+            deals={deals}
+            filters={activeFilters}
+          /> :
+          <BackOfficeTable
+            deals={deals}
+            filters={activeFilters}
+          />
+        }
+
+      </div>
+    )
+  }
+}
+
+export default connect(({ deals }) => ({
+  isBackOffice: deals.backoffice
+}))(DealsDashboard)
