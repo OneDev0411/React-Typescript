@@ -1,6 +1,8 @@
 import { types } from '../../store_actions/data'
+import { BRAND_SUCCESS } from '../../constants/brand'
 import { EDIT_USER_SUCCESS } from '../../constants/user'
 import { SIGNIN_SUCCESS } from '../../constants/auth/signin'
+
 const initialState = {
   counter: 1
 }
@@ -14,6 +16,11 @@ export default (state = initialState, action) => {
         ...state,
         ...action.data,
         counter
+      }
+    case BRAND_SUCCESS:
+      return {
+        ...state,
+        brand: action.brand
       }
     case SIGNIN_SUCCESS:
       return {
