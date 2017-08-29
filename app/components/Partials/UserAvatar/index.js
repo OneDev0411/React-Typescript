@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import Avatar from 'react-avatar'
 
 const Colors = {
-  Online: 'green',
+  Online: '#35B863',
   Offline: 'gray',
   Background: 'darkgreen'
 }
