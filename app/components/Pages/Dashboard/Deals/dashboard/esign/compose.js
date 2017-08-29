@@ -7,7 +7,7 @@ import _ from 'underscore'
 import cn from 'classnames'
 import Recipients from './recipients'
 import DealModel from '../../../../../../models/Deal'
-import { closeEsign, showAttachments } from '../../../../../../store_actions/deals'
+import { closeEsign, showAttachments, setEnvelopes } from '../../../../../../store_actions/deals'
 import ComposeAttachments from './compose-attachments'
 import config from '../../../../../../../config/public'
 
@@ -20,11 +20,14 @@ class SendSignatures extends React.Component {
     }
   }
 
+  componentDidMount() {
+    const { esign } = this.props
+    this.prefillRoles(esign)
+  }
+
   componentWillReceiveProps(nextProps) {
     const { esign } = nextProps
-    if (esign.show && esign.view === 'compose') {
-      this.prefillRoles(esign.attachments)
-    }
+    this.prefillRoles(esign)
   }
 
   /**
@@ -51,8 +54,13 @@ class SendSignatures extends React.Component {
   /**
    * prefill roles based on selected documents
    */
-  prefillRoles(attachments) {
+  prefillRoles(esign) {
+    if (!esign.show || esign.view !== 'compose') {
+      return false
+    }
+
     const { tasks, forms, deal } = this.props
+    const { attachments } = esign
     let roles = []
 
     // extract roles of selected documents
@@ -84,7 +92,7 @@ class SendSignatures extends React.Component {
    */
   async send() {
     const { recipients, isSending } = this.state
-    const { closeEsign, user, deal, esign, tasks } = this.props
+    const { closeEsign, setEnvelopes, user, deal, esign, tasks } = this.props
     const subject = this.subject.value
     const message = this.message.value
     const attachments = esign.attachments.map(id => {
@@ -96,13 +104,17 @@ class SendSignatures extends React.Component {
     })
 
     try {
-      await DealModel.sendEnvelope(
+      const envelope = await DealModel.sendEnvelope(
         deal.id,
         subject,
         message,
         attachments,
         recipients
       )
+
+      // add envelope to list of envelopes
+      setEnvelopes(deal.id, [envelope])
+
       // close esign
       closeEsign()
 
@@ -222,4 +234,4 @@ export default connect(({ deals, data }) => ({
   forms: deals.forms,
   tasks: deals.tasks,
   esign: deals.esign || {}
-}), { showAttachments, closeEsign })(SendSignatures)
+}), { showAttachments, closeEsign, setEnvelopes })(SendSignatures)

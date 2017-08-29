@@ -14,6 +14,10 @@ export default ({
   deal,
   task
 }) => {
+  if (!deal.envelopes || deal.envelopes.length === 0) {
+    return false
+  }
+
   return (
     <div className="file">
       <div className="title">Sent for Signatures</div>

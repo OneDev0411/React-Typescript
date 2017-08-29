@@ -14,8 +14,8 @@
     height: auto;
     .messages-list {
       margin-top: 10px;
-      min-height: auto;
-      max-height: auto;
+      min-height: auto !important;
+      max-height: none !important;
       width: 100%;
 
       .activity {

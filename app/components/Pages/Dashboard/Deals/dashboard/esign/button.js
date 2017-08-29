@@ -5,38 +5,49 @@ import { showAttachments, updateAttachments } from '../../../../../../store_acti
 
 const EsignButton = ({
   dealId,
+  task,
   attachments = [],
   showAttachments,
   updateAttachments
-}) => (
-  <div className="inline">
-    <Dropdown id="drp-send-esign" pullRight>
+}) => {
+  const formIsCompleted = task.submission && task.submission.state === 'Fair'
 
-      <Button bsRole="toggle" className="btn-deal">
-        eSign
-      </Button>
+  return (
+    <div className="inline">
+      <Dropdown id="drp-send-esign" pullRight>
 
-      <Dropdown.Menu>
-        <MenuItem
-          onClick={() => updateAttachments(attachments)}
-          eventKey="1"
-        >
-          Send this file
-        </MenuItem>
+        <Button bsRole="toggle" className="btn-deal">
+          eSign
+        </Button>
 
-        <MenuItem divider />
+        <Dropdown.Menu>
+          {
+            formIsCompleted &&
+            <MenuItem
+              onClick={() => updateAttachments(attachments)}
+              eventKey="1"
+            >
+              Send this file
+            </MenuItem>
+          }
 
-        <MenuItem
-          onClick={() => showAttachments(attachments)}
-          eventKey="2"
-        >
-          Send multiple files
-        </MenuItem>
+          {
+            formIsCompleted &&
+            <MenuItem divider />
+          }
 
-      </Dropdown.Menu>
-    </Dropdown>
-  </div>
-)
+          <MenuItem
+            onClick={() => showAttachments(attachments)}
+            eventKey="2"
+          >
+            Send multiple files
+          </MenuItem>
+
+        </Dropdown.Menu>
+      </Dropdown>
+    </div>
+  )
+}
 
 export default connect(null,
   { showAttachments, updateAttachments })(EsignButton)
