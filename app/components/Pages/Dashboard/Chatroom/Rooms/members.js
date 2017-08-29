@@ -6,19 +6,21 @@ import UserAvatar from '../../../../Partials/UserAvatar'
 import MembersIcon from '../../Partials/Svgs/MembersIcon'
 import { addRecipients } from '../../../../../store_actions/chatroom'
 import LastSeen from './components/last-seen'
+import Chatroom from '../Util/chatroom'
 
 const ManageMembers = ({
-  addRecipients,
-  iconSize = 16,
-  room
-}) => {
-
+                         addRecipients,
+                         iconSize = 16,
+                         room,
+                         user
+                       }) => {
   // can user add member to this room
   const canAddMember = room.room_type !== 'Direct'
 
   const Button = ({
-    clickHandler
-  }) => (
+                    clickHandler
+                  }) =>
+  (
     <span
       className="icon members"
       onClick={() => clickHandler()}
@@ -64,13 +66,18 @@ const ManageMembers = ({
       TriggerButton={Button}
       InitialValues={RoomMembers}
       showOnly={canAddMember === false}
-      dropDownBox={true}
-      inline={true}
+      dropDownBox
+      inline
       title="Members"
       buttonTitle="Add Members"
       onButtonClick={async recipients => await addRecipients(room.id, recipients)}
+      OnLeaveClick={() => {
+        Chatroom.leaveRoom(user.id, room)
+      }}
     />
   )
 }
 
-export default connect(null, { addRecipients })(ManageMembers)
+export default connect(s => ({
+  user: s.data.user
+}), { addRecipients })(ManageMembers)

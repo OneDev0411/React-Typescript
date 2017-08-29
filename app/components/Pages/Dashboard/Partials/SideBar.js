@@ -503,7 +503,6 @@ export default class SideBar extends Component {
       support: <Popover className="sidenav__popover" id="popover-support">Need Help?</Popover>,
       store: <Popover className="sidenav__popover" id="popover-store">Store</Popover>,
       notifications: <Popover className="sidenav__popover" id="popover-notifications">Notifications</Popover>,
-      brand: <Popover className="sidenav__popover" id="popover-notifications">Brand</Popover>
     }
     if (data.errors && data.errors.type && data.errors.type === 'agent-not-found') {
       message = (
@@ -676,16 +675,6 @@ export default class SideBar extends Component {
               </NavItem>
             </OverlayTrigger>
           }
-          {/*{*/}
-            {/*user.brand &&*/}
-            {/*<OverlayTrigger placement="right" overlay={popover.brand} delayShow={200} delayHide={0}>*/}
-              {/*<LinkContainer className={active.brand} to="/dashboard/brand">*/}
-                {/*<NavItem style={S('w-85p')}>*/}
-                  {/*<SvgPBrand color={active.brand ? nav_active_color : '#4e5c6c'} />*/}
-                {/*</NavItem>*/}
-              {/*</LinkContainer>*/}
-            {/*</OverlayTrigger>*/}
-          {/*}*/}
         </Nav>
         <div style={S('absolute b-10 l-15')}>
           <Nav className="sidebar__account">
