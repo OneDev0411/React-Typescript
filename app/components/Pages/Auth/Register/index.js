@@ -15,24 +15,6 @@ import setWidget from '../../../../store_actions/widgets/setWidget'
 import submitSigninForm from '../../../../store_actions/auth/signin'
 import updatePassword from '../../../../models/auth/password/update'
 
-const getActionRedirectURL = params => {
-  const { action, room, alert, listing } = params
-
-  if (action === 'RedirectToRoom' && room) {
-    return `/dashboard/recents/${room}`
-  }
-
-  if (action === 'RedirectToAlert' && alert) {
-    return `/dashboard/mls/alerts/${alert}`
-  }
-
-  if (action === 'RedirectToListing' && listing) {
-    return `/dashboard/mls/${listing}`
-  }
-
-  return '/dashboard/mls/'
-}
-
 export const renderAgentField = ({ id, input, label, checked }) =>
   <div className="c-auth__field--radio">
     <input
@@ -68,7 +50,7 @@ const RegisterForm = ({
   handleSubmit,
   isSubmitting,
   onSubmitHandler,
-  paramsFromURI: { email, phone_number, new_email }
+  paramsFromURI: { email, phone_number }
 }) => {
   const { siteLogo, siteTitle, brandColor } = getBrandInfo(brand)
 
@@ -112,7 +94,6 @@ const RegisterForm = ({
               component={renderField}
             />
             {phone_number &&
-              new_email &&
               <Field
                 name="email"
                 type="email"
@@ -228,10 +209,8 @@ export default compose(
       } = formInputsValue
 
       const {
-        room,
         token,
-        action,
-        new_email,
+        redirectTo,
         phone_number,
         email: emailFromURI
       } = paramsFromURI
@@ -258,9 +237,7 @@ export default compose(
         userPassword.email = emailFromURI
       }
 
-      const redirectTo = getActionRedirectURL(paramsFromURI)
-
-      // console.log(redirectTo, formInputsValue, userPassword, userInfo)
+      console.log(redirectTo, formInputsValue, userPassword, userInfo)
       try {
         await updatePassword(userPassword)
         await submitSigninForm(loginInfo)
@@ -268,9 +245,7 @@ export default compose(
 
         if (user_type === 'Agent') {
           setWidget(true)
-          browserHistory.push(
-            `/account/upgrade?redirectTo=${encodeURIComponent(redirectTo)}`
-          )
+          browserHistory.push(`/account/upgrade?redirectTo=${redirectTo}`)
           return
         }
 

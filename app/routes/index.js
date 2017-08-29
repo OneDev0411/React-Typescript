@@ -230,13 +230,14 @@ export default (
   <Route>
     <Route path="/" component={AsyncAuthenticationLayout}>
       <IndexRoute component={Landing} />
+      <Route path="/branch" component={AsyncBranch} />
 
-      <Route path="/signin" component={UserIsNotAuthenticated(AsyncSignIn)} />
-      <Route path="/signup" component={UserIsNotAuthenticated(AsyncSignUp)} />
       <Route
         path="/register"
         component={UserIsNotAuthenticated(AsyncRegister)}
       />
+      <Route path="/signin" component={UserIsNotAuthenticated(AsyncSignIn)} />
+      <Route path="/signup" component={UserIsNotAuthenticated(AsyncSignUp)} />
 
       <Route path="/verify/:slug" component={AsyncVerify} />
 
@@ -253,7 +254,6 @@ export default (
     </Route>
 
     <Route path="/" component={AppLayout}>
-      <Route path="/branch" component={AsyncBranch} />
       <Route path="/widgets/map" component={AsyncMapWidget} />
       <Route path="/widgets/search" component={AsyncSearchWidget} />
       <Route path="/widgets/listings" component={AsyncListingsWidget} />
