@@ -86,7 +86,7 @@ class Rooms extends React.Component {
    * get room title, trim long titles
    */
   getRoomTitle(title) {
-    const len = 20
+    const len = 22
     if (title.length <= len) {
       return title
     }
