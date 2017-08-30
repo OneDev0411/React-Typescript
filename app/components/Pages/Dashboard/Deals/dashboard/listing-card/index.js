@@ -29,7 +29,11 @@ export default ({
 
   return (
     <div className="listing-card">
-      <div className="back" onClick={() => goBack()}>
+
+      <div
+        className="back"
+        onClick={() => goBack()}
+      >
         <i className="fa fa-angle-left fa-3x" />
       </div>
 
