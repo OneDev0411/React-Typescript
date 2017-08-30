@@ -138,7 +138,7 @@ export default class ShareListingModal extends Component {
     }
     // Rooms available
     if (data.rooms && !users_selected_ids.length) {
-      data.rooms.forEach((room) => {
+      _.each(data.rooms, room => {
         if (room.users.length > 1) {
           // Test if user in available rooms
           if (users_selected_ids && users_selected_ids.length) {
