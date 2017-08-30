@@ -105,13 +105,29 @@
       font-size: 21px;
       color: #5b6469;
       cursor: pointer;
+      margin-top: -4px;
+
+      .counter {
+        display: inline-block;
+        color: gray;
+        font-size: 13px;
+        margin-left: 6px;
+      }
 
       @media (min-width: 548px) and (max-width: 1173px) {
-        font-size: 17px;
+        font-size: 16px;
+        .counter {
+          font-size: 10;
+          margin-left: 2px;
+        }
       }
 
       @media (max-width: 548px) {
-        font-size: 16px;
+        font-size: 15px;
+        .counter {
+          font-size: 10;
+          margin-left: 2px;
+        }
       }
 
       &.active {
