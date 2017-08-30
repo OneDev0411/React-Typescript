@@ -1,8 +1,9 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import BaseTable from './table'
 import Deal from '../../../../../models/Deal'
 
-export default class AgentTable extends BaseTable {
+class AgentTable extends BaseTable {
   constructor(props) {
     super(props)
 
@@ -46,7 +47,8 @@ export default class AgentTable extends BaseTable {
       outstanding: {
         caption: 'OUTSTANDING',
         className: 'col-md-1 hidden-sm hidden-xs',
-        getText: () => '0'
+        sortable: true,
+        getText: deal => this.getOutstandingsCount(deal)
       },
       notificiation: {
         caption: '',
@@ -80,4 +82,35 @@ export default class AgentTable extends BaseTable {
     return ': ' + names.join(', ')
   }
 
+  /**
+   * get outstandings count
+   */
+  getOutstandingsCount(deal) {
+    let counter = 0
+
+    if (!deal.checklists) {
+      return counter
+    }
+
+    deal.checklists.forEach(id => {
+      const checklist = this.props.checklists[id]
+      if (!checklist.tasks || checklist.tasks.length === 0) {
+        return
+      }
+
+      checklist.tasks.forEach(task_id => {
+        const task = this.props.tasks[task_id]
+        if (!task.review || task.review.status === 'Declined') {
+          counter += 1
+        }
+      })
+    })
+
+    return counter
+  }
 }
+
+export default connect(({ deals }) => ({
+  tasks: deals.tasks,
+  checklists: deals.checklists
+}))(AgentTable)
