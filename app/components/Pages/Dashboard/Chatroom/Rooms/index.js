@@ -7,10 +7,12 @@ import SocketStatus from '../SocketStatus'
 import CreateRoom from './create-room'
 import UserAvatar from '../../../../Partials/UserAvatar'
 import UserTyping from '../UserTyping'
+import TwoDirectionArrow from '../../Partials/Svgs/TwoDirectionArrow'
 
 import {
   toggleInstantMode,
-  changeActiveRoom
+  changeActiveRoom,
+  toggleChatbar
 } from '../../../../../store_actions/chatroom'
 
 class Rooms extends React.Component {
@@ -84,7 +86,9 @@ class Rooms extends React.Component {
    */
   getRoomTitle(title) {
     const len = 20
-    if (title.length <= len) { return title }
+    if (title.length <= len) {
+      return title
+    }
 
     return `${title.substr(0, len)}...`
   }
@@ -108,9 +112,22 @@ class Rooms extends React.Component {
               value={filter}
             />
           </div>
-
           <div
             className="toggle-sidebar"
+            style={{ display: showChatbar ? 'block' : 'none' }}
+          >
+            <a
+              onClick={() => {
+                instantMode && this.props.toggleInstantMode()
+                this.props.toggleChatbar()
+              }}
+              className="btn-tgl"
+            >
+              <i className="fa fa-angle-double-left fa-2x" />
+            </a>
+          </div>
+          <div
+            className="toggle-sidebar two-direction-arrow-container"
             style={{ display: showChatbar ? 'block' : 'none' }}
           >
             <a
@@ -118,14 +135,9 @@ class Rooms extends React.Component {
               onClick={e => this.fullScreen(e)}
               className="btn-tgl"
             >
-              {
-                instantMode ?
-                  <i className="fa fa-angle-double-left fa-2x" /> :
-                  <i className="fa fa-angle-double-right fa-2x" />
-              }
+              <TwoDirectionArrow className="two-direction-arrow" />
             </a>
           </div>
-
           <SocketStatus />
         </div>
 
@@ -133,45 +145,45 @@ class Rooms extends React.Component {
           <div className="list">
             {
               _.chain(rooms)
-              .filter(room => ['Direct', 'Group'].indexOf(room.room_type) > -1)
-              .filter(room =>
-                room.proposed_title && room
-                  .proposed_title
-                  .toLowerCase()
-                  .startsWith(filter.toLowerCase())
-              )
-              .sortBy(room => room.updated_at * -1)
-              .map(room =>
-                <Row
-                  onClick={() => this.props.onSelectRoom(room.id)}
-                  key={`ROOM_CHANNEL_${room.id}`}
-                  className={cn('item', { active: room.id === activeRoom })}
-                >
-                  <Col sm={1} xs={1} className="avatar vcenter">
-                    { this.getRoomAvatar(room) }
-                  </Col>
-                  <Col
-                    sm={8}
-                    xs={8}
-                    className={cn('title vcenter', { hasNotification: room.new_notifications > 0 })}
+                .filter(room => ['Direct', 'Group'].indexOf(room.room_type) > -1)
+                .filter(room =>
+                  room.proposed_title && room
+                    .proposed_title
+                    .toLowerCase()
+                    .startsWith(filter.toLowerCase())
+                )
+                .sortBy(room => room.updated_at * -1)
+                .map(room =>
+                  <Row
+                    onClick={() => this.props.onSelectRoom(room.id)}
+                    key={`ROOM_CHANNEL_${room.id}`}
+                    className={cn('item', { active: room.id === activeRoom })}
                   >
-                    <span>
-                      { this.getRoomTitle(room.proposed_title) }
-                    </span>
-                    <UserTyping roomId={room.id} />
-                  </Col>
-
-                  <Col sm={2} xs={2} className="notifications vcenter">
-                    {
-                      room.new_notifications > 0 &&
-                      <span className="count">
-                        { room.new_notifications }
+                    <Col sm={1} xs={1} className="avatar vcenter">
+                      { this.getRoomAvatar(room) }
+                    </Col>
+                    <Col
+                      sm={8}
+                      xs={8}
+                      className={cn('title vcenter', { hasNotification: room.new_notifications > 0 })}
+                    >
+                      <span>
+                        { this.getRoomTitle(room.proposed_title) }
                       </span>
-                    }
-                  </Col>
-                </Row>
-              )
-              .value()
+                      <UserTyping roomId={room.id} />
+                    </Col>
+
+                    <Col sm={2} xs={2} className="notifications vcenter">
+                      {
+                        room.new_notifications > 0 &&
+                        <span className="count">
+                          { room.new_notifications }
+                        </span>
+                      }
+                    </Col>
+                  </Row>
+                )
+                .value()
             }
           </div>
         </div>
@@ -192,5 +204,5 @@ function mapStateToProps({ chatroom }) {
 
 export default connect(
   mapStateToProps,
-  ({ toggleInstantMode, changeActiveRoom })
+  ({ toggleInstantMode, changeActiveRoom, toggleChatbar })
 )(Rooms)

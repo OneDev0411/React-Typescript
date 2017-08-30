@@ -3,7 +3,7 @@ import { Modal, Button } from 'react-bootstrap'
 import { compose, withState, pure } from 'recompose'
 import Compose from '../../../../Partials/Compose'
 import { hasRecipients } from '../../../../../utils/helpers'
-import { OverlayTrigger, Popover, Tooltip } from 'react-bootstrap'
+import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 import LeaveIcon from '../../Partials/Svgs/LeaveIcon'
 
 const enhance = compose(

@@ -71,7 +71,7 @@
 }
 
 %rooms-toolbar {
-  $search-width: 234px;
+  $search-width: 190px;
   padding: 20px $rooms-padding 0 $rooms-padding;
   min-height: 70px;
   margin-bottom: 10px;
@@ -97,17 +97,22 @@
   }
 
   .toggle-sidebar {
-    margin-left: $search-width + 20px;
+    float: right;
+    margin-left: 20px;
     height: 30px;
     width: 30px;
     background-color: #394553;
     text-align: center;
     border-radius: 4px;
-    padding: 0px 4px;
-
+    padding: 0 4px;
+    cursor: pointer;
     .btn-tgl {
       color: #b2b2b2;
     }
+  }
+
+  .two-direction-arrow-container {
+    padding-top: 6px;
   }
 
   .socket-status {
