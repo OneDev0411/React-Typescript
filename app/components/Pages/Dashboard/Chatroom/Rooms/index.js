@@ -8,6 +8,7 @@ import CreateRoom from './create-room'
 import UserAvatar from '../../../../Partials/UserAvatar'
 import UserTyping from '../UserTyping'
 import TwoDirectionArrow from '../../Partials/Svgs/TwoDirectionArrow'
+import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 
 import {
   toggleInstantMode,
@@ -112,32 +113,44 @@ class Rooms extends React.Component {
               value={filter}
             />
           </div>
-          <div
-            className="toggle-sidebar"
-            style={{ display: showChatbar ? 'block' : 'none' }}
+
+          <OverlayTrigger
+            placement="bottom"
+            overlay={<Tooltip id="popover-leave">Close chat panel</Tooltip>}
           >
-            <a
-              onClick={() => {
-                instantMode && this.props.toggleInstantMode()
-                this.props.toggleChatbar()
-              }}
-              className="btn-tgl"
+            <div
+              className="toggle-sidebar"
+              style={{ display: showChatbar ? 'block' : 'none' }}
             >
-              <i className="fa fa-angle-double-left fa-2x" />
-            </a>
-          </div>
-          <div
-            className="toggle-sidebar two-direction-arrow-container"
-            style={{ display: showChatbar ? 'block' : 'none' }}
+              <a
+                onClick={() => {
+                  instantMode && this.props.toggleInstantMode()
+                  this.props.toggleChatbar()
+                }}
+                className="btn-tgl"
+              >
+                <i className="fa fa-angle-double-left fa-2x" />
+              </a>
+            </div>
+          </OverlayTrigger>
+          <OverlayTrigger
+            placement="bottom"
+            overlay={<Tooltip id="popover-leave">Expand Fullscreen</Tooltip>}
           >
-            <a
-              href="/dashboard/recents"
-              onClick={e => this.fullScreen(e)}
-              className="btn-tgl"
+            <div
+              className="toggle-sidebar two-direction-arrow-container"
+              style={{ display: showChatbar ? 'block' : 'none' }}
             >
-              <TwoDirectionArrow className="two-direction-arrow" />
-            </a>
-          </div>
+              <a
+                href="/dashboard/recents"
+                onClick={e => this.fullScreen(e)}
+                className="btn-tgl"
+              >
+                <TwoDirectionArrow className="two-direction-arrow" />
+              </a>
+            </div>
+          </OverlayTrigger>
+
           <SocketStatus />
         </div>
 
