@@ -1,6 +1,12 @@
 // SignUp.js
 import React, { Component } from 'react'
-import { Col, Button, FormControl, Popover, OverlayTrigger } from 'react-bootstrap'
+import {
+  Col,
+  Button,
+  FormControl,
+  Popover,
+  OverlayTrigger
+} from 'react-bootstrap'
 import S from 'shorti'
 import validator from 'validator'
 import { randomString } from '../../utils/helpers'
@@ -12,7 +18,7 @@ import Brand from '../../controllers/Brand'
 export default class SignUp extends Component {
   componentWillMount() {
     // Reset data store before mounting
-    AppStore.data = {}
+    // AppStore.data = {}
     AppStore.data.signup = {}
     // Grab inviting_user code
     if (this.props.location.query.inviting_user) {
@@ -57,15 +63,12 @@ export default class SignUp extends Component {
     AppStore.emitChange()
     const data = this.props.data
     const signup = data.signup
-    if (!signup)
-      return
+    if (!signup) { return }
     const email = signup.email
     // If no email or double submit
-    if (!email || data.submitting)
-      return
+    if (!email || data.submitting) { return }
     const random_password = randomString(9)
-    if (!email.trim())
-      return
+    if (!email.trim()) { return }
     if (!validator.isEmail(email)) {
       AppStore.data.errors = {
         type: 'email-invalid'
@@ -119,7 +122,12 @@ export default class SignUp extends Component {
     // Data
     const data = this.props.data
     let signup_input_style = {
-      ...S(`h-52 w-260 font-16 bg-fafbfc border-1-solid-${Brand.color('primary', 'dfe6ee')}`),
+      ...S(
+        `h-52 w-260 font-16 bg-fafbfc border-1-solid-${Brand.color(
+          'primary',
+          'dfe6ee'
+        )}`
+      ),
       borderTopRightRadius: 0,
       borderBottomRightRadius: 0
     }
@@ -144,12 +152,16 @@ export default class SignUp extends Component {
     if (data.errors) {
       if (data.errors.type === 'email-invalid') {
         popover = (
-          <Popover id="popover" title="">You must enter a valid email</Popover>
+          <Popover id="popover" title="">
+            You must enter a valid email
+          </Popover>
         )
       }
       if (data.errors.type === 'bad-request') {
         popover = (
-          <Popover id="popover" title="">Bad request.</Popover>
+          <Popover id="popover" title="">
+            Bad request.
+          </Popover>
         )
       }
     }
@@ -157,16 +169,38 @@ export default class SignUp extends Component {
       <div style={S('pt-50')}>
         <Col xs={12}>
           <div style={S('text-center')}>
-            <div className="din" style={S('font-30 color-263445 mb-10')}>Hello, lets get started.</div>
-            <div style={S('border-bottom-2-solid-d8d8d8 mb-20 w-50 center-block')} />
+            <div className="din" style={S('font-30 color-263445 mb-10')}>
+              Hello, lets get started.
+            </div>
+            <div
+              style={S('border-bottom-2-solid-d8d8d8 mb-20 w-50 center-block')}
+            />
             <form onSubmit={this.handleEmailSubmit.bind(this)}>
               <div style={S('pull-left')}>
-                <OverlayTrigger trigger="focus" placement="bottom" overlay={popover}>
-                  <FormControl inputRef={ref => this.emailInput = ref} onChange={this.setSignupEmail} style={signup_input_style} type="text" placeholder="Enter email address" value={data.signup_email} />
+                <OverlayTrigger
+                  trigger="focus"
+                  placement="bottom"
+                  overlay={popover}
+                >
+                  <FormControl
+                    inputRef={ref => (this.emailInput = ref)}
+                    onChange={this.setSignupEmail}
+                    style={signup_input_style}
+                    type="text"
+                    placeholder="Enter email address"
+                    value={data.signup_email}
+                  />
                 </OverlayTrigger>
               </div>
               <div style={S('pull-left')}>
-                <Button className={data.submitting ? 'disabled' : ''} bsStyle="primary" style={signup_btn_style} type="submit">{ data.submitting ? 'Submitting...' : 'Lets go' }</Button>
+                <Button
+                  className={data.submitting ? 'disabled' : ''}
+                  bsStyle="primary"
+                  style={signup_btn_style}
+                  type="submit"
+                >
+                  {data.submitting ? 'Submitting...' : 'Lets go'}
+                </Button>
               </div>
             </form>
           </div>
@@ -178,9 +212,16 @@ export default class SignUp extends Component {
       </div>
     )
     return (
-      <div id="main-content" className="flex-center-wrap" style={S('absolute h-100p w-100p')}>
-        <div className="text-center center-block" style={S('w-100p maxw-470 z-100 relative mt-60n bg-fff br-6')}>
-          { main_content }
+      <div
+        id="main-content"
+        className="flex-center-wrap"
+        style={S('absolute h-100p w-100p')}
+      >
+        <div
+          className="text-center center-block"
+          style={S('w-100p maxw-470 z-100 relative mt-60n bg-fff br-6')}
+        >
+          {main_content}
         </div>
         <CheckEmailModal
           data={data}
