@@ -1,9 +1,10 @@
 import React from 'react'
-import { compose,  withState, pure } from 'recompose'
+import { compose, withState, pure } from 'recompose'
 import { connect } from 'react-redux'
 import Compose from '../Shared/compose-wrapper'
 import { createRoom, toggleChatbar } from '../../../../../store_actions/chatroom'
 import Chatroom from '../Util/chatroom'
+import ComposeIcon from '../../Partials/Svgs/ComposeIcon'
 
 async function createNewRoom(recipients, createRoom, toggleChatbar) {
   // create room
@@ -20,7 +21,10 @@ const Button = ({
   clickHandler
 }) => (
   <div className="new-room" onClick={() => clickHandler()}>
-    <i className="fa fa-edit"></i> New Message
+    <span className="compose-icon">
+      <ComposeIcon />
+    </span>
+    New Message
   </div>
 )
 
@@ -41,7 +45,7 @@ const CreateRoom = ({
     TriggerButton={Button}
     title="New Message"
     working={creating === true}
-    buttonTitle={creating ? "Creating" : "Create"}
+    buttonTitle={creating ? 'Creating' : 'Create'}
     onButtonClick={async recps => {
       // change state to creating
       onCreating(true)
