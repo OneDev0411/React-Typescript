@@ -165,8 +165,8 @@ export default compose(
   connect(
     ({ brand, auth: { signin } }, { location: { query = {}, state = {} } }) => {
       const { username } = query
-      const { redirectTo } = state
       const { isLogging, error: submitError } = signin
+      const redirectTo = state.redirectTo || query.redirectTo
 
       return {
         brand,

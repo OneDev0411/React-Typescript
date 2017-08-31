@@ -39,9 +39,14 @@ const AsyncSignIn = Load({
     import('../components/Pages/Auth/SignIn' /* webpackChunkName: "signin" */)
 })
 
-const AsyncVerify = Load({
+const AsyncVerifyRequest = Load({
   loader: () =>
-    import('../components/Pages/Verify' /* webpackChunkName: "verify" */)
+    import('../components/Pages/Verify/Request' /* webpackChunkName: "request_verify" */)
+})
+
+const AsyncVerifyConfirm = Load({
+  loader: () =>
+    import('../components/Pages/Verify/Confirm' /* webpackChunkName: "confirm_verify" */)
 })
 
 const AsyncForgotPassword = Load({
@@ -239,7 +244,8 @@ export default (
       <Route path="/signin" component={UserIsNotAuthenticated(AsyncSignIn)} />
       <Route path="/signup" component={UserIsNotAuthenticated(AsyncSignUp)} />
 
-      <Route path="/verify/:slug" component={AsyncVerify} />
+      <Route path="/verify/confirm/:verifyType" component={AsyncVerifyConfirm} />
+      <Route path="/verify/request/:verifyType" component={AsyncVerifyRequest} />
 
       <Route
         path="/password/forgot"

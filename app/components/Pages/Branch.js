@@ -50,7 +50,7 @@ const generateRedirect = (actionType, branchData, isLoggedIn, isShadow) => {
 
   if (actionType === 'VERIFY') {
     // console.log('verify')
-    redirect = '/verify/'
+    redirect = '/verify/confirm/'
 
     switch (action) {
       case 'EmailVerification':
