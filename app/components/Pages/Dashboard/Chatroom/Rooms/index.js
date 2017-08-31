@@ -103,7 +103,7 @@ class Rooms extends React.Component {
         <div className="toolbar">
           <div
             className="search"
-            style={{ float: showChatbar ? 'left' : 'none' }}
+            style={{ width: showChatbar ? 190 : 240 }}
           >
             <input
               className="form-control filter"
@@ -113,19 +113,17 @@ class Rooms extends React.Component {
               value={filter}
             />
           </div>
-
           <OverlayTrigger
             placement="bottom"
             overlay={<Tooltip id="popover-leave">Close chat panel</Tooltip>}
           >
             <div
               className="toggle-sidebar"
-              style={{ display: showChatbar ? 'block' : 'none' }}
             >
               <a
                 onClick={() => {
                   instantMode && this.props.toggleInstantMode()
-                  this.props.toggleChatbar()
+                  showChatbar && this.props.toggleChatbar(false)
                 }}
                 className="btn-tgl"
               >
@@ -133,16 +131,15 @@ class Rooms extends React.Component {
               </a>
             </div>
           </OverlayTrigger>
+          {showChatbar &&
           <OverlayTrigger
             placement="bottom"
             overlay={<Tooltip id="popover-leave">Expand Fullscreen</Tooltip>}
           >
             <div
               className="toggle-sidebar two-direction-arrow-container"
-              style={{ display: showChatbar ? 'block' : 'none' }}
             >
               <a
-                href="/dashboard/recents"
                 onClick={e => this.fullScreen(e)}
                 className="btn-tgl"
               >
@@ -150,7 +147,7 @@ class Rooms extends React.Component {
               </a>
             </div>
           </OverlayTrigger>
-
+          }
           <SocketStatus />
         </div>
 
@@ -161,9 +158,9 @@ class Rooms extends React.Component {
                 .filter(room => ['Direct', 'Group'].indexOf(room.room_type) > -1)
                 .filter(room =>
                   room.proposed_title && room
-                    .proposed_title
-                    .toLowerCase()
-                    .startsWith(filter.toLowerCase())
+                  .proposed_title
+                  .toLowerCase()
+                  .startsWith(filter.toLowerCase())
                 )
                 .sortBy(room => room.updated_at * -1)
                 .map(room =>
@@ -173,7 +170,7 @@ class Rooms extends React.Component {
                     className={cn('item', { active: room.id === activeRoom })}
                   >
                     <Col sm={1} xs={1} className="avatar vcenter">
-                      { this.getRoomAvatar(room) }
+                      {this.getRoomAvatar(room)}
                     </Col>
                     <Col
                       sm={8}
@@ -181,7 +178,7 @@ class Rooms extends React.Component {
                       className={cn('title vcenter', { hasNotification: room.new_notifications > 0 })}
                     >
                       <span>
-                        { this.getRoomTitle(room.proposed_title) }
+                        {this.getRoomTitle(room.proposed_title)}
                       </span>
                       <UserTyping roomId={room.id} />
                     </Col>
@@ -190,7 +187,7 @@ class Rooms extends React.Component {
                       {
                         room.new_notifications > 0 &&
                         <span className="count">
-                          { room.new_notifications }
+                          {room.new_notifications}
                         </span>
                       }
                     </Col>
