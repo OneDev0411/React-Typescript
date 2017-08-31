@@ -57,8 +57,10 @@ class Rooms extends React.Component {
    */
   getRoomAvatar(room) {
     const { user, activeRoom } = this.props
-    const size = 35
-    const color = '#d7d7d7'
+    const size = 20
+    const color = 'rgba(216, 216, 216, 0.3)'
+    const textSizeRatio = 2.5
+    const fgColor = '#263445'
 
     if (room.room_type === 'Group') {
       return <UserAvatar
@@ -66,6 +68,8 @@ class Rooms extends React.Component {
         size={size}
         showStateIndicator={false}
         color={color}
+        textSizeRatio={textSizeRatio}
+        fgColor={fgColor}
       />
     }
 
@@ -79,6 +83,8 @@ class Rooms extends React.Component {
       size={size}
       color={color}
       borderColor={room.id === activeRoom ? '#2196f3' : '#303E4D'}
+      textSizeRatio={textSizeRatio}
+      fgColor={fgColor}
     />
   }
 
@@ -86,7 +92,7 @@ class Rooms extends React.Component {
    * get room title, trim long titles
    */
   getRoomTitle(title) {
-    const len = 22
+    const len = 27
     if (title.length <= len) {
       return title
     }
@@ -173,8 +179,8 @@ class Rooms extends React.Component {
                       {this.getRoomAvatar(room)}
                     </Col>
                     <Col
-                      sm={8}
-                      xs={8}
+                      sm={9}
+                      xs={9}
                       className={cn('title vcenter', { hasNotification: room.new_notifications > 0 })}
                     >
                       <span>
@@ -183,7 +189,7 @@ class Rooms extends React.Component {
                       <UserTyping roomId={room.id} />
                     </Col>
 
-                    <Col sm={2} xs={2} className="notifications vcenter">
+                    <Col sm={1} xs={1} className="notifications vcenter">
                       {
                         room.new_notifications > 0 &&
                         <span className="count">

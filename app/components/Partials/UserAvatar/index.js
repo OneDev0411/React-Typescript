@@ -9,15 +9,17 @@ const Colors = {
 }
 
 const UserAvatar = ({
-  name,
-  image,
-  state,
-  color,
-  style,
-  size = 50,
-  borderColor = '#fff',
-  showStateIndicator = true
-}) => {
+                      name,
+                      image,
+                      state,
+                      color,
+                      style,
+                      size = 50,
+                      borderColor = '#fff',
+                      showStateIndicator = true,
+                      textSizeRatio = 3,
+                      fgColor
+                    }) => {
   const defaultStyles = showStateIndicator ?
     { position: 'relative', width: `${size}px` } :
     {}
@@ -53,6 +55,8 @@ const UserAvatar = ({
         src={image}
         size={size}
         color={color}
+        textSizeRatio={textSizeRatio}
+        fgColor={fgColor}
       />
       {
         showStateIndicator &&
@@ -77,7 +81,9 @@ const UserAvatar = ({
 function mapStateToProps({ chatroom }, ownProps) {
   const { states } = chatroom
 
-  if (!states || ownProps.showStateIndicator === false) { return {} }
+  if (!states || ownProps.showStateIndicator === false) {
+    return {}
+  }
 
   const state = states[ownProps.userId] ? states[ownProps.userId].state : 'Offline'
   return { state }
