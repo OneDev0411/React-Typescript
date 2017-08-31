@@ -59,11 +59,11 @@ class BackOfficeTable extends BaseTable {
         className: 'col-md-2 hidden-sm hidden-xs',
         getText: deal => deal.created_by.display_name
       },
-      notificiation: {
-        caption: '',
-        className: 'col-md-1',
-        getText: () => '-'
-      }
+      // notificiation: {
+      //   caption: '',
+      //   className: 'col-md-1',
+      //   getText: deal => this.hasNotification(deal)
+      // }
     }
   }
 

@@ -53,7 +53,7 @@ class AgentTable extends BaseTable {
       notificiation: {
         caption: '',
         className: 'col-md-1 hidden-sm hidden-xs',
-        getText: () => ''
+        getText: deal => this.hasNotification(deal)
       }
     }
   }

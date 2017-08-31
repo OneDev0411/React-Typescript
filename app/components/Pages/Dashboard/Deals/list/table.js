@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import cn from 'classnames'
 import { browserHistory } from 'react-router'
 import { Popover, OverlayTrigger } from 'react-bootstrap'
@@ -6,7 +7,6 @@ import _ from 'underscore'
 import { getStatusColorClass } from '../../../../../utils/listing'
 import Deal from '../../../../../models/Deal'
 import CriticalDates from '../dashboard/factsheet/critical-dates'
-
 
 /*
  * implement a new functionality for underscore that checks
@@ -18,7 +18,7 @@ _.mixin({
   }
 })
 
-export default class BaseTable extends React.Component {
+class BaseTable extends React.Component {
   constructor(props) {
     super(props)
 
@@ -190,6 +190,43 @@ export default class BaseTable extends React.Component {
     browserHistory.push(`/dashboard/deal/${id}`)
   }
 
+  /**
+   *
+   */
+  hasNotification(deal) {
+    let counter = 0
+
+    if (!deal.checklists) {
+      return ''
+    }
+
+    deal.checklists.forEach(id => {
+      const checklist = this.props.checklists[id]
+      if (!checklist.tasks || checklist.tasks.length === 0) {
+        return false
+      }
+
+      checklist.tasks.forEach(task_id => {
+        const task = this.props.tasks[task_id]
+        if (task.room.new_notifications > 0) {
+          counter += task.room.new_notifications
+        }
+      })
+    })
+
+    if (counter > 0) {
+      return <span
+        style={{
+          display: 'block',
+          width: '10px',
+          height: '10px',
+          borderRadius: '20px',
+          backgroundColor: '#2196f3'
+        }}
+      />
+    }
+  }
+
   render() {
     const { deals } = this.props
     const { sortBy, sortOrder } = this.state
@@ -255,3 +292,5 @@ export default class BaseTable extends React.Component {
     )
   }
 }
+
+export default BaseTable
