@@ -8,6 +8,7 @@ import CreateRoom from './create-room'
 import UserAvatar from '../../../../Partials/UserAvatar'
 import UserTyping from '../UserTyping'
 import TwoDirectionArrow from '../../Partials/Svgs/TwoDirectionArrow'
+import SearchIcon from '../../Partials/Svgs/SearchIcon'
 import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 
 import {
@@ -21,6 +22,7 @@ class Rooms extends React.Component {
     super(props)
     this.state = {
       filter: '',
+      searchBoxFocus: false,
       showComposeModal: false
     }
   }
@@ -101,23 +103,38 @@ class Rooms extends React.Component {
   }
 
   render() {
-    const { filter } = this.state
+    const { filter, searchBoxFocus } = this.state
     const { showChatbar, instantMode, rooms, activeRoom } = this.props
 
     return (
       <div className="rooms">
         <div className="toolbar">
           <div
-            className="search"
+            onClick={() => this.nameInput.focus()}
+            className={cn('search', { focus: searchBoxFocus })}
             style={{ width: showChatbar ? 190 : 240 }}
           >
+            <div className="search-icon">
+              <SearchIcon />
+            </div>
             <input
-              className="form-control filter"
+              onFocus={() => this.setState({ searchBoxFocus: true })}
+              onBlur={() => this.setState({ searchBoxFocus: false })}
+              ref={(input) => { this.nameInput = input }}
+              className={cn('form-control filter', { active: filter })}
               type="text"
               placeholder="Search"
               onChange={e => this.onChangeFilter(e.target.value)}
               value={filter}
             />
+            {filter &&
+            <p
+              onClick={e => this.onChangeFilter('')}
+              className="close-icon"
+            >
+              &#215;
+            </p>
+            }
           </div>
           <OverlayTrigger
             placement="bottom"
@@ -164,9 +181,9 @@ class Rooms extends React.Component {
                 .filter(room => ['Direct', 'Group'].indexOf(room.room_type) > -1)
                 .filter(room =>
                   room.proposed_title && room
-                  .proposed_title
-                  .toLowerCase()
-                  .startsWith(filter.toLowerCase())
+                    .proposed_title
+                    .toLowerCase()
+                    .startsWith(filter.toLowerCase())
                 )
                 .sortBy(room => room.updated_at * -1)
                 .map(room =>
