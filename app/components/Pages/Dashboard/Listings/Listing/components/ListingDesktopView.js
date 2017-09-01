@@ -3,7 +3,7 @@ import S from 'shorti'
 import ReactDOM from 'react-dom'
 import Map from 'google-map-react'
 import React from 'react'
-import { browserHistory } from 'react-router'
+import { browserHistory, Link } from 'react-router'
 
 import compose from 'recompose/compose'
 import lifecycle from 'recompose/lifecycle'
@@ -44,10 +44,6 @@ export const fadeIn = node => {
     elem.style.transition = 'opacity 150ms'
     elem.style.opacity = 1
   })
-}
-
-export const handleActivateAccountClick = () => {
-  window.location.href = `/password/create${window.location.search}`
 }
 
 const ListingDesktopView = ({
@@ -924,7 +920,7 @@ const ListingDesktopView = ({
           {brand_logo}
         </div>
         <div style={S('pull-right p-16')}>
-          <a
+          <Link
             style={S(
               `mr-15 bg-${Brand.color(
                 'primary',
@@ -932,10 +928,10 @@ const ListingDesktopView = ({
               )} border-1-solid-${Brand.color('primary', 'a1bde4')}`
             )}
             className="btn btn-primary"
-            href={`/signin?redirect_to=/dashboard/mls/${listing.id}`}
+            to={`/signin${window.location.search}`}
           >
             Log in
-          </a>
+          </Link>
           {/* <a className="btn btn-primary" href="/signup">Sign up</a> */}
         </div>
       </div>
@@ -1021,13 +1017,17 @@ const ListingDesktopView = ({
       <div style={S('bg-2196f3 color-fff w-100p font-17 p-20 text-center')}>
         This listing was shared to {contact_info}. Claim your account to save
         this listing and check out many more.&nbsp;&nbsp;&nbsp;&nbsp;
-        <Button
-          bsSize="large"
-          style={S('bg-fff color-2196f3 border-none')}
-          onClick={handleActivateAccountClick}
+        <Link
+          style={{
+            padding: '1rem',
+            color: '#2196f3',
+            textDecoration: 'none',
+            backgroundColor: '#fff'
+          }}
+          to={`/register${window.location.search}`}
         >
           Activate your account
-        </Button>
+        </Link>
       </div>
     )
   }
