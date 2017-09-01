@@ -232,12 +232,13 @@ export default compose(
 
       if (phone_number) {
         userInfo.email = email
+        userPassword.email = emailFromURI
         userPassword.phone_number = phone_number
       } else if (emailFromURI) {
         userPassword.email = emailFromURI
       }
 
-      console.log(redirectTo, formInputsValue, userPassword, userInfo)
+      // console.log(redirectTo, formInputsValue, userPassword, userInfo)
       try {
         await updatePassword(userPassword)
         await submitSigninForm(loginInfo)

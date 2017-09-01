@@ -29,10 +29,12 @@ export const getActionRedirectURL = params => {
   return '/dashboard/mls/'
 }
 
-const generateRedirect = (actionType, branchData, isLoggedIn, isShadow) => {
+const generateRedirect = (actionType, branchData, isLoggedIn) => {
   let redirect
   Object.keys(branchData).forEach(key => {
-    branchData[key] = encodeURIComponent(branchData[key])
+    if (key === 'email' || key === 'phone_number') {
+      branchData[key] = encodeURIComponent(branchData[key])
+    }
   })
 
   const {
@@ -43,9 +45,10 @@ const generateRedirect = (actionType, branchData, isLoggedIn, isShadow) => {
     email,
     action,
     listing,
+    isShadow,
     email_code,
     phone_number,
-    receiving_user
+    receivingUser
   } = branchData
 
   if (actionType === 'VERIFY') {
@@ -67,7 +70,7 @@ const generateRedirect = (actionType, branchData, isLoggedIn, isShadow) => {
   }
 
   if (isShadow) {
-    // console.log('isShadow')
+    // console.log('isShadow:')
     if (token) {
       redirect = `register?token=${token}`
 
@@ -77,7 +80,9 @@ const generateRedirect = (actionType, branchData, isLoggedIn, isShadow) => {
 
       if (phone_number) {
         redirect += `&phone_number=${phone_number}`
-      } else if (email) {
+      }
+
+      if (email) {
         redirect += `&email=${email}`
       }
 
@@ -89,7 +94,7 @@ const generateRedirect = (actionType, branchData, isLoggedIn, isShadow) => {
       return OOPS_PAGE
     }
   } else if (isLoggedIn) {
-    if (receiving_user === isLoggedIn.id) {
+    if (receivingUser.id === isLoggedIn.id) {
       // console.log('loggedIn')
       redirect = getActionRedirectURL(branchData)
     } else {
@@ -106,8 +111,10 @@ const generateRedirect = (actionType, branchData, isLoggedIn, isShadow) => {
       redirect = `/dashboard/mls/${listing}?`
     }
 
-    if (email) {
-      redirect += `&username=${email}`
+    if (email === receivingUser.email) {
+      redirect += `username=${email}`
+    } else {
+      redirect += `username=${encodeURIComponent(receivingUser.email)}`
     }
 
     redirect += `&redirectTo=${encodeURIComponent(
@@ -118,7 +125,7 @@ const generateRedirect = (actionType, branchData, isLoggedIn, isShadow) => {
   return redirect
 }
 
-const branch = ({ user }) => {
+const branch = ({ isLoggedIn }) => {
   Branch.init(branchKey, async (err, { data_parsed }) => {
     if (err) {
       browserHistory.push(OOPS_PAGE)
@@ -132,8 +139,15 @@ const branch = ({ user }) => {
         redirect = generateRedirect('VERIFY', data_parsed)
       } else if (receiving_user) {
         try {
-          const { is_shadow } = await getUser(receiving_user)
-          redirect = generateRedirect('OTHER', data_parsed, user, is_shadow)
+          const receivingUser = await getUser(receiving_user)
+          const { is_shadow: isShadow } = receivingUser
+          delete data_parsed.receiving_user
+          data_parsed = {
+            ...data_parsed,
+            isShadow,
+            receivingUser
+          }
+          redirect = generateRedirect('OTHER', data_parsed, isLoggedIn)
         } catch (err) {
           // console.log(err)
         }
@@ -158,4 +172,6 @@ const branch = ({ user }) => {
   )
 }
 
-export default connect(({ user }) => ({ user }))(branch)
+export default connect(({ user }) => ({
+  isLoggedIn: Object.keys(user).length > 0 ? user : null
+}))(branch)
