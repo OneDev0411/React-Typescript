@@ -7,8 +7,8 @@ export default ({
   deal
 }) => (
   <div className="deal-fact-sheet">
-    <CriticalDates />
-    <ListingInfo />
-    <Commission />
+    <CriticalDates deal={deal} />
+    <ListingInfo deal={deal} />
+    <Commission deal={deal} />
   </div>
 )

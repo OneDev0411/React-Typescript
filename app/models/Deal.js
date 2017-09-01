@@ -12,12 +12,20 @@ const Deal = {
 * a helper that extracts a field from context or proposed values
 */
 Deal.get.field = function(deal, field) {
+  if (!deal) {
+    return null
+  }
+
   const contexts = ['mls_context', 'form_context', 'deal_context']
   const values = {}
 
   contexts.forEach(ctx => {
     values[ctx] = deal[ctx] && deal[ctx][field] ? deal[ctx][field] : null
   })
+
+  if (!values) {
+    return null
+  }
 
   const { mls_context, form_context, deal_context } = values
 

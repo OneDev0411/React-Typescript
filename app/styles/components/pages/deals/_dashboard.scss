@@ -26,6 +26,7 @@ $col-padding: 20px;
   }
 }
 
+@import './dashboard/_info';
 @import './dashboard/_tasks';
 @import './dashboard/_task_detail';
 @import './dashboard/_fact_sheet';
@@ -55,15 +56,8 @@ $col-padding: 20px;
     @include scrollbar();
     padding: 0;
     height: auto;
-
-    &.left {
-      border-right: 1px solid #e5e5e5;
-
-      .scrollable {
-        overflow: auto;
-        min-height: 78vh;
-        max-height: 78vh;
-      }
+    &.info-column {
+      @extend %info-column;
     }
   }
 

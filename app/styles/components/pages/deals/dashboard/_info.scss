@@ -1,0 +1,24 @@
+%info-column {
+  border-right: 1px solid #e5e5e5;
+  background-color: #fff;
+
+  .scrollable {
+    overflow: auto;
+    overflow-x: hidden;
+    min-height: 71vh;
+    max-height: 71vh;
+  }
+
+  .mls-viewer-button {
+    width: calc(100% - 20px);
+    margin: 10px;
+    height: 34px;
+    border-radius: 3px;
+    background-color: #ffffff;
+    border: solid 1px #dde2e6;
+    font-weight: 500;
+    color: #61778d;
+  }
+}
+
+

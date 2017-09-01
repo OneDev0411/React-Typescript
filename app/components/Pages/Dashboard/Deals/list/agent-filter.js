@@ -1,6 +1,9 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import ReactTooltip from 'react-tooltip'
+import _ from 'underscore'
+import Deal from '../../../../../models/Deal'
 
 const FILTER_ACTIVE = ['Active']
 const FILTER_PENDING = [
@@ -24,7 +27,7 @@ const filters = {
   Archive: status => FILTER_ARCHIVE.indexOf(status) > -1
 }
 
-export default class Filter extends React.Component {
+class Filter extends React.Component {
   constructor(props) {
     super(props)
   }
@@ -72,6 +75,24 @@ export default class Filter extends React.Component {
     return tooltip.join('<br />')
   }
 
+  /**
+   * get badge counter
+   */
+  getBadgeCounter(filter) {
+    const { deals } = this.props
+
+    if (filter === 'All') {
+      return _.size(deals)
+    }
+
+    const matched = _.filter(deals, deal => {
+      const status = Deal.get.field(deal, 'listing_status')
+      return filters[filter](status)
+    })
+
+    return matched.length
+  }
+
   render() {
     const active = this.props.active || 'All'
 
@@ -89,9 +110,14 @@ export default class Filter extends React.Component {
                 key={`FILTER_${filter}`}
                 className={filter === active ? 'active' : ''}
                 onClick={() => this.setFilter(filter)}
+                data-tip={this.getFilterTabTooltip(filter)}
               >
-                <span data-tip={ this.getFilterTabTooltip(filter) }>
+                <span>
                   { filter }
+                </span>
+
+                <span className="counter">
+                  { this.getBadgeCounter(filter) }
                 </span>
               </li>
             )
@@ -101,3 +127,7 @@ export default class Filter extends React.Component {
     )
   }
 }
+
+export default connect(({ deals }) => ({
+  deals: deals.list
+}))(Filter)

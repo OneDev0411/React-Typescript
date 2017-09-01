@@ -22,7 +22,6 @@ export default ({
       <div className="title">Uploads</div>
       <div className="file-group">
         <FileAttachments attachments={attachments} />
-        <UnknownAttachments attachments={attachments} />
         <UploadFile task={task} />
       </div>
     </div>
@@ -47,6 +46,13 @@ class FileAttachments extends React.Component {
 
   isImage(file) {
     return file.mime.includes('image/')
+  }
+
+  openDoc(file) {
+    this.setState({
+      selectedFile: file,
+      showViewer: true
+    })
   }
 
   render() {
@@ -80,6 +86,8 @@ class FileAttachments extends React.Component {
             <Row
               key={`PDF_FILE_${file.id}`}
               className="item"
+              style={{ cursor: 'pointer' }}
+              onClick={() => this.openDoc(file)}
             >
               <Col sm={1} xs={12} className="image vcenter">
                 <img src={file.preview_url} />
@@ -91,12 +99,7 @@ class FileAttachments extends React.Component {
               <Col sm={3} xs={12} className="actions vcenter">
                 <button
                   className="btn-deal"
-                  onClick={() => {
-                    this.setState({
-                      selectedFile: file,
-                      showViewer: true
-                    })
-                  }}
+                  onClick={() => this.openDoc(file)}
                 >
                   View
                 </button>
@@ -107,50 +110,5 @@ class FileAttachments extends React.Component {
       </div>
     )
   }
-}
-
-/**
- * render unknown attachments
- */
-const UnknownAttachments = ({
-  attachments
-}) => {
-  const files = attachments
-    .filter(file => file.mime !== 'application/pdf' && !file.mime.includes('image/'))
-    .map(file => ({
-      id: file.id,
-      preview_url: file.preview_url,
-      url: file.url
-    }))
-
-  return (
-    <div className="inline">
-      {
-        files.map((file, key) =>
-          <Row
-            key={`UNKNOWN_FILE_${file.id}`}
-            className="item"
-          >
-            <Col sm={1} xs={12} className="image vcenter">
-              <img src={file.preview_url} />
-            </Col>
-            <Col sm={8} xs={12} className="name vcenter">
-              { file.name }
-            </Col>
-
-            <Col sm={3} xs={12} className="actions vcenter">
-              <a
-                href={file.url}
-                target="_blank"
-                className="btn-view"
-              >
-                View
-              </a>
-            </Col>
-          </Row>
-        )
-      }
-    </div>
-  )
 }
 
