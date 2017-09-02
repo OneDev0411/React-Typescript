@@ -100,6 +100,7 @@ const ChatPopups = (props) => {
           number={counter++}
           user={user}
           settings={settings}
+          instantMode={props.instantMode}
           isActive={activeRoom === roomId}
           room={rooms[roomId]}
           onMinimize={roomId => onToggleMinimize(props, roomId, settings)}

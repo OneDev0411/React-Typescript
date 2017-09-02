@@ -31,7 +31,8 @@ export default ({
   onMinimize,
   onMaximize,
   onClose,
-  onChangeActive
+  onChangeActive,
+  instantMode
 }) => {
   // extract settings
   const { minimize } = settings
@@ -49,11 +50,10 @@ export default ({
   if (number > 1) {
     left += 20 * (number - 1)
   }
-
   return (
     <ClickOutside
       onClickOutside={() => {
-        if (isActive)
+        if (isActive && !instantMode)
           onChangeActive(null)
       }}
     >
@@ -72,15 +72,14 @@ export default ({
           onMaximize={onMaximize}
           onClose={onClose}
         />
-
-      <Messages
-        user={user}
-        roomId={room.id}
-        showToolbar={false}
-        baseHeight="297px"
-        isPopup
-        onClick={e => onFocus(e, room, onChangeActive)}
-      />
+        <Messages
+          user={user}
+          roomId={room.id}
+          showToolbar={false}
+          baseHeight="297px"
+          isPopup
+          onClick={e => onFocus(e, room, onChangeActive)}
+        />
       </div>
     </ClickOutside>
   )
