@@ -13,7 +13,8 @@ const ManageMembers = ({
   addRecipients,
   iconSize = 16,
   room,
-  user
+  user,
+  isFullScreen
 }) => {
   // can user add member to this room
   const canAddMember = room.room_type !== 'Direct'
@@ -23,7 +24,7 @@ const ManageMembers = ({
   }) =>
     (
       <OverlayTrigger
-        placement="top"
+        placement={isFullScreen ? 'bottom' : 'top'}
         overlay={<Tooltip id="popover-leave">Members</Tooltip>}
       >
         <span

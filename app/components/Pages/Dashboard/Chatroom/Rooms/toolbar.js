@@ -17,7 +17,10 @@ const MessagesToolbar = ({
     </Col>
 
     <Col md={3} lg={3} sm={3} xs={3} className="buttons">
-      <Members room={room} />
+      <Members
+        room={room}
+        isFullScreen
+      />
       <RoomSettings room={room} />
 
       {
