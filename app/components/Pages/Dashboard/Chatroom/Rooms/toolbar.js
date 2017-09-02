@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Row, Col } from 'react-bootstrap'
+import { Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { toggleInstantMode } from '../../../../../store_actions/chatroom'
 import Members from './members'
 import RoomSettings from './settings'
@@ -25,12 +25,17 @@ const MessagesToolbar = ({
 
       {
         instantMode &&
-        <span
-          onClick={() => toggleInstantMode()}
-          className="exit-fullscreen"
+        <OverlayTrigger
+          placement="bottom"
+          overlay={<Tooltip id="popover-leave">Exit Fullscreen</Tooltip>}
         >
-          <ExitFullscreenIcon />
-        </span>
+          <span
+            onClick={() => toggleInstantMode()}
+            className="exit-fullscreen"
+          >
+            <ExitFullscreenIcon />
+          </span>
+        </OverlayTrigger>
       }
     </Col>
   </Row>
