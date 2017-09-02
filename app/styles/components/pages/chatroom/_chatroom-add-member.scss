@@ -10,6 +10,13 @@
       line-height: 1.0;
       color: #4a4a4a;
     }
+    .close {
+      opacity: 1;
+      color: #9b9b9b;
+      &:hover, &:focus {
+        color: #2196f3;
+      }
+    }
     .leave-icon {
       float: right;
       font-size: 21px;
@@ -17,10 +24,11 @@
       line-height: 1;
       text-shadow: 0 1px 0 #fff;
       margin-right: 20px;
-      opacity: 0.2;
       &:hover, &:focus {
         cursor: pointer;
-        opacity: 1;
+        svg g {
+          fill: #2196f3;
+        }
       }
     }
   }
@@ -33,7 +41,7 @@
     background-color: #333e4c;
     border-radius: 4px;
   }
-  .tooltip-arrow{
+  .tooltip-arrow {
     border-bottom-color: #333e4c;
   }
 }
