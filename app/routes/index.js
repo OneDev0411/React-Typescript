@@ -244,8 +244,14 @@ export default (
       <Route path="/signin" component={UserIsNotAuthenticated(AsyncSignIn)} />
       <Route path="/signup" component={UserIsNotAuthenticated(AsyncSignUp)} />
 
-      <Route path="/verify/confirm/:verifyType" component={AsyncVerifyConfirm} />
-      <Route path="/verify/request/:verifyType" component={AsyncVerifyRequest} />
+      <Route
+        path="/verify/confirm/:verifyType"
+        component={AsyncVerifyConfirm}
+      />
+      <Route
+        path="/verify/request/:verifyType"
+        component={AsyncVerifyRequest}
+      />
 
       <Route
         path="/password/forgot"
