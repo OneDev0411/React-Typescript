@@ -7,31 +7,36 @@ import MembersIcon from '../../Partials/Svgs/MembersIcon'
 import { addRecipients } from '../../../../../store_actions/chatroom'
 import LastSeen from './components/last-seen'
 import Chatroom from '../Util/chatroom'
+import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 
 const ManageMembers = ({
-                         addRecipients,
-                         iconSize = 16,
-                         room,
-                         user
-                       }) => {
+  addRecipients,
+  iconSize = 16,
+  room,
+  user
+}) => {
   // can user add member to this room
   const canAddMember = room.room_type !== 'Direct'
 
   const Button = ({
-                    clickHandler
-                  }) =>
-  (
-    <span
-      className="icon members"
-      onClick={() => clickHandler()}
-    >
-      <MembersIcon width={iconSize} height={iconSize} />
-
-      <span className="bdg">
-        { room.users && room.users.length }
-      </span>
-    </span>
-  )
+    clickHandler
+  }) =>
+    (
+      <OverlayTrigger
+        placement="top"
+        overlay={<Tooltip id="popover-leave">Members</Tooltip>}
+      >
+        <span
+          className="icon members"
+          onClick={() => clickHandler()}
+        >
+          <MembersIcon width={iconSize} height={iconSize} />
+          <span className="bdg">
+            { room.users && room.users.length }
+          </span>
+        </span>
+      </OverlayTrigger>
+    )
 
   const RoomMembers = () => (
     <div className="chatroom-members">
@@ -70,7 +75,7 @@ const ManageMembers = ({
       inline
       title="Members"
       buttonTitle="Add Members"
-      onButtonClick={async recipients => await addRecipients(room.id, recipients)}
+      onButtonClick={async recipients => addRecipients(room.id, recipients)}
       OnLeaveClick={() => {
         Chatroom.leaveRoom(user.id, room)
       }}
