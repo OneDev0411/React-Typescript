@@ -1,13 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Row, Col } from 'react-bootstrap'
+import { Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import Compose from '../Shared/compose-wrapper'
 import UserAvatar from '../../../../Partials/UserAvatar'
 import MembersIcon from '../../Partials/Svgs/MembersIcon'
 import { addRecipients } from '../../../../../store_actions/chatroom'
 import LastSeen from './components/last-seen'
 import Chatroom from '../Util/chatroom'
-import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 
 const ManageMembers = ({
   addRecipients,

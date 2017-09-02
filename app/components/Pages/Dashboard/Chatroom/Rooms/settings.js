@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { DropdownButton, MenuItem } from 'react-bootstrap'
+import { DropdownButton, MenuItem, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import Chatroom from '../Util/chatroom'
 import MoreIcon from '../../Partials/Svgs/MoreIcon'
 
@@ -9,7 +9,11 @@ const RoomSettings = ({
   room,
   iconSize = 17
 }) => (
-  <span>
+
+  <OverlayTrigger
+    placement="bottom"
+    overlay={<Tooltip id="popover-leave">More Items</Tooltip>}
+  >
     <DropdownButton
       id="drp-room-settings"
       className="room-settings"
@@ -23,14 +27,14 @@ const RoomSettings = ({
     >
       <MenuItem
         eventKey="1"
-        onClick={() => Chatroom.leaveRoom(user.id, room) }
+        onClick={() => Chatroom.leaveRoom(user.id, room)}
       >
         <i className="fa fa-sign-out" />
         Leave this chat
       </MenuItem>
 
     </DropdownButton>
-  </span>
+  </OverlayTrigger>
 )
 
 export default connect(s => ({
