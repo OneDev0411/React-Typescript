@@ -127,8 +127,8 @@ const ignoreNullValues = values => {
   return withoutNullValues
 }
 
-export const obiectPropsValueToArray = obj =>
-  !obj
+export const objectPropsValueToArray = obj => {
+  const result = !obj
     ? null
     : Object.keys(obj)
         .map(p => {
@@ -139,6 +139,13 @@ export const obiectPropsValueToArray = obj =>
           return value
         })
         .filter(v => v)
+
+  if (result != null && Array.isArray(result) && result.length === 0) {
+    return null
+  }
+
+  return result
+}
 
 const normalizeValues = (values, state) => {
   const { options, filters: formState } = state
@@ -157,10 +164,10 @@ const normalizeValues = (values, state) => {
     intermediate_schools
   } = values
 
-  const listing_statuses = obiectPropsValueToArray(values.listing_statuses)
+  const listing_statuses = objectPropsValueToArray(values.listing_statuses)
   const open_house = !!values.open_house
 
-  if (listing_statuses.length === 0) {
+  if (listing_statuses == null || listing_statuses.length === 0) {
     let alertMsg = 'Please select at least one listing status.'
     window.alert(alertMsg)
 
@@ -177,8 +184,8 @@ const normalizeValues = (values, state) => {
     minimum_sold_date = getSoldDate(Number(values.minimum_sold_date))
   }
 
-  const property_subtypes = obiectPropsValueToArray(values.property_subtypes)
-  const architectural_styles = obiectPropsValueToArray(
+  const property_subtypes = objectPropsValueToArray(values.property_subtypes)
+  const architectural_styles = objectPropsValueToArray(
     values.architectural_styles
   )
 
