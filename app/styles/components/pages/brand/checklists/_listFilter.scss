@@ -7,7 +7,7 @@
   box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.15);
   position: absolute;
   right: 20px;
-  width: 340px;
+  width: 500px;
   height: 400px;
   overflow-y: scroll;
   .listFilter-results {
@@ -15,8 +15,12 @@
     padding: 0;
     .listFilter-results-item {
       box-shadow: 0 -1px 0 0 #e9e9e9;
-      padding: 15px;
+      padding: 8px;
       cursor: pointer;
+      overflow:auto;
+      .btn {
+        width: 100%;
+      }
     }
   }
   .listFilter-input-container {
