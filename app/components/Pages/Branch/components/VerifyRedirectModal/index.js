@@ -8,12 +8,12 @@ const VerifyRedirectModal = ({ type, params, brandInfo }) => {
 
   return (
     <RedirectModal brandInfo={brandInfo}>
-      {type === 'VERIFYING'
+      {type === 'VERIFYING_CONFLICT'
         ? <div>
-          <h3 className="c-confirm-modal__title">Incompatibility</h3>
+          <h3 className="c-confirm-modal__title">Verify Conflict</h3>
           <p className="c-confirm-modal__message">
               Currently you are logged in with different user that its email is
-              <span style={{ color: '#555' }}>{loggedInUser.email}</span>.<br />for verifying this email <span style={{ color: '#555' }}>{receivingUser.email}</span> you need sign in with it.
+              <span style={{ color: '#555' }}> {loggedInUser.email}</span>.<br />for verifying this email <span style={{ color: '#555' }}>{receivingUser.email}</span> you need sign out.
             </p>
           <div>
             <Link
@@ -24,9 +24,7 @@ const VerifyRedirectModal = ({ type, params, brandInfo }) => {
                 Cancel
               </Link>
             <a
-              href={`/signout?username=${encodeURIComponent(
-                  receivingUser.email
-                )}&redirectTo=${redirectTo}`}
+              href={`/signout?redirectFromSignout=${redirectTo}`}
               style={{
                 marginLeft: '2rem',
                 textDecoration: 'none',
@@ -34,7 +32,7 @@ const VerifyRedirectModal = ({ type, params, brandInfo }) => {
               }}
               className="c-confirm-modal__button"
             >
-                Sign in
+                Sign out
               </a>
           </div>
         </div>

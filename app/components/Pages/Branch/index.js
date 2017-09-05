@@ -11,6 +11,7 @@ import config from '../../../../config/public'
 import Loading from '../../Partials/Loading'
 import { getBrandInfo } from '../Auth/SignIn'
 import getUser from '../../../models/user/get-user'
+import ConflictModal from './components/ConflictModal'
 import VerifyRedirectModal from './components/VerifyRedirectModal'
 
 const OOPS_PAGE = '/oops'
@@ -79,72 +80,68 @@ const redirectHandler = (
     receivingUser
   } = branchData
 
+  const params = { action, loggedInUser, receivingUser }
+  const hasConflict = () => loggedInUser && receivingUser.id !== loggedInUser.id
+
   if (actionType === 'VERIFY') {
     // console.log('verify')
     redirect = generateVerificationActionRedirectUrl(branchData)
 
-    if (loggedInUser && receivingUser.id !== loggedInUser.id) {
+    if (hasConflict()) {
       // console.log('different user logged in with receiving user')
-      const params = {
-        loggedInUser,
-        receivingUser,
-        redirectTo: encodeURIComponent(redirect)
-      }
+      params.redirectTo = encodeURIComponent(redirect)
 
-      setActiveModal({ name: 'VERIFYING', params })
+      setActiveModal({ name: 'VERIFYING_CONFLICT', params })
       return
     }
   } else if (isShadow) {
     // console.log('isShadow:')
-    if (token) {
-      redirect = `register?token=${token}`
-
-      if (listing) {
-        redirect = `/dashboard/mls/${listing}?token=${token}`
-      }
-
-      if (phone_number) {
-        redirect += `&phone_number=${phone_number}`
-      }
-
-      if (email) {
-        redirect += `&email=${email}`
-      }
-
-      redirect += `&redirectTo=${encodeURIComponent(
-        getActionRedirectURL(branchData)
-      )}`
-    } else {
-      // console.log('token broken')
-      redirect = OOPS_PAGE
-    }
-  } else if (loggedInUser) {
-    if (receivingUser.id === loggedInUser.id) {
-      // console.log('loggedIn')
-      redirect = getActionRedirectURL(branchData)
-    } else {
-      // show modal you logged in with different user
-      // console.log('you logged with deferent user')
-      redirect = OOPS_PAGE
-    }
-  } else {
-    // show modal you are register before with this user please logged in
-    // console.log('you registered before with this email')
-    redirect = '/signin?'
+    redirect = `register?token=${token}`
 
     if (listing) {
-      redirect = `/dashboard/mls/${listing}?`
+      redirect = `/dashboard/mls/${listing}?token=${token}`
     }
 
-    if (email === receivingUser.email) {
-      redirect += `username=${email}`
-    } else {
-      redirect += `username=${encodeURIComponent(receivingUser.email)}`
+    if (phone_number) {
+      redirect += `&phone_number=${phone_number}`
+    }
+
+    if (email) {
+      redirect += `&email=${email}`
     }
 
     redirect += `&redirectTo=${encodeURIComponent(
       getActionRedirectURL(branchData)
     )}`
+
+    if (hasConflict()) {
+      // console.log('you logged with different user')
+      params.redirectTo = encodeURIComponent(redirect)
+      params.messageText =
+        'meesage for shadow conflict when user logged in already'
+      setActiveModal({ name: 'SHADOW_CONFLICT', params })
+      return
+    }
+  } else if (loggedInUser) {
+    // console.log('loggedIn')
+    redirect = getActionRedirectURL(branchData)
+
+    if (hasConflict()) {
+      // console.log('you logged with deferent user')
+      params.redirectTo = encodeURIComponent(redirect)
+      params.messageText =
+        'meesage for normal conflict when user loggedin with different user'
+      setActiveModal({ name: 'CONFLICT', params })
+      return
+    }
+  } else {
+    // console.log('you registered before with this email')
+
+    const username = `username=${encodeURIComponent(receivingUser.email)}`
+    redirect = !listing
+      ? `/signin?${username}&redirectTo=`
+      : `/dashboard/mls/${listing}?${username}&redirectTo=`
+    redirect += encodeURIComponent(getActionRedirectURL(branchData))
   }
 
   browserHistory.push(redirect)
@@ -211,12 +208,12 @@ const branch = ({
             redirectHandler('OTHER', branchData, loggedInUser, setActiveModal)
           })
           .catch(err => {
-            console.log(err)
+            // console.log(err)
             browserHistory.push(OOPS_PAGE)
           })
       }
     } else {
-      console.log('last oops in last else')
+      // console.log('last oops in last else')
       browserHistory.push(OOPS_PAGE)
     }
   }
@@ -226,7 +223,12 @@ const branch = ({
     const brandInfo = getBrandInfo(brand)
     const { name, params } = activeModal
     switch (name) {
-      case 'VERIFYING':
+      case 'CONFLICT':
+      case 'SHADOW_CONFLICT':
+      case 'PROTECTED_RESOURCE':
+        content = <ConflictModal params={params} brandInfo={brandInfo} />
+        break
+      case 'VERIFYING_CONFLICT':
         content = (
           <VerifyRedirectModal
             type={name}

@@ -151,7 +151,7 @@ const ListingDesktopView = ({
         nextIcon={next_icon}
         className="listing-viewer__carousel"
       >
-        {gallery_chunks.map((gallery_image_url, i) =>
+        {gallery_chunks.map((gallery_image_url, i) => (
           <CarouselItem
             className="listing-carousel__item"
             key={`gallery-images-chunked-${gallery_image_url[0]}${i}`}
@@ -185,12 +185,12 @@ const ListingDesktopView = ({
               )}
             />
           </CarouselItem>
-        )}
+        ))}
       </Carousel>
     )
 
     // Cache images for uninteruted 3-pic and single scroll
-    const listing_images_cached = gallery_image_urls.map((image_url, i) =>
+    const listing_images_cached = gallery_image_urls.map((image_url, i) => (
       <div key={`cached-images-${i}`} style={S('w-0 h-0')}>
         <img
           key={`image-800-${i}`}
@@ -203,7 +203,7 @@ const ListingDesktopView = ({
           style={S('w-0 h-0')}
         />
       </div>
-    )
+    ))
 
     listing_subtitle = `${listing.property.address.city}, ${listing.property
       .address.state} ${listing.property.address.postal_code}`
@@ -289,9 +289,7 @@ const ListingDesktopView = ({
       let phone_area
       if (brand_agent.phone_number) {
         phone_area = (
-          <div style={S('font-15 mb-5')}>
-            M: {brand_agent.phone_number}
-          </div>
+          <div style={S('font-15 mb-5')}>M: {brand_agent.phone_number}</div>
         )
       }
 
@@ -312,15 +310,11 @@ const ListingDesktopView = ({
                   )}) bg-center w-20 h-20 pull-left mr-10`
                 )}
               />
-              <div style={S('pull-left')}>
-                {Brand.message('office_title')}
-              </div>
+              <div style={S('pull-left')}>{Brand.message('office_title')}</div>
               <div className="clearfix" />
             </div>
             {phone_area}
-            <div style={S('font-15 mb-5')}>
-              E: {brand_agent.email}
-            </div>
+            <div style={S('font-15 mb-5')}>E: {brand_agent.email}</div>
           </div>
         </div>
       )
@@ -337,9 +331,7 @@ const ListingDesktopView = ({
       let showing_instructions
       if (listing.showing_instructions) {
         showing_instructions = (
-          <div style={S('font-15 mb-5')}>
-            {showing_instructions}
-          </div>
+          <div style={S('font-15 mb-5')}>{showing_instructions}</div>
         )
       }
 
@@ -357,9 +349,7 @@ const ListingDesktopView = ({
           <div style={S('font-15 mb-5')}>
             {listing.list_agent_direct_work_phone}
           </div>
-          <div style={S('font-15 mb-5')}>
-            {listing.list_office_name}
-          </div>
+          <div style={S('font-15 mb-5')}>{listing.list_office_name}</div>
           {showing_instructions}
           <div style={email_style}>
             <a
@@ -436,12 +426,16 @@ const ListingDesktopView = ({
     main_content = (
       <div style={S('bg-fff')}>
         <div style={S('p-0 relative')}>
-          {listing.gallery_image_urls && listing.gallery_image_urls.length
-            ? listing_images
-            : ''}
-          {listing.gallery_image_urls && listing.gallery_image_urls.length
-            ? listing_images_cached
-            : ''}
+          {listing.gallery_image_urls && listing.gallery_image_urls.length ? (
+            listing_images
+          ) : (
+            ''
+          )}
+          {listing.gallery_image_urls && listing.gallery_image_urls.length ? (
+            listing_images_cached
+          ) : (
+            ''
+          )}
           <div className="clearfix" />
         </div>
 
@@ -451,9 +445,7 @@ const ListingDesktopView = ({
               <div style={S('mb-20')}>
                 <Col sm={4} style={S('pl-0')}>
                   <div style={S('w-100p br-3 border-1-solid-f4f6f9')}>
-                    <div style={S('h-200')}>
-                      {listing_map_small}
-                    </div>
+                    <div style={S('h-200')}>{listing_map_small}</div>
                     <div style={S('w-100p bg-fff p-5 font-13')}>
                       <div style={S('text-center w-50p pull-left')}>
                         <a
@@ -485,9 +477,11 @@ const ListingDesktopView = ({
                   <div style={S('fw-700 font-60')}>
                     ${price}
                     {listing.property &&
-                    listing.property.property_type === 'Residential Lease'
-                      ? '/mo'
-                      : ''}{' '}
+                    listing.property.property_type === 'Residential Lease' ? (
+                      '/mo'
+                    ) : (
+                      ''
+                    )}{' '}
                     {asking_price_area}
                   </div>
                   <div className="lato" style={S('font-24 color-8696a4 mb-10')}>
@@ -515,9 +509,7 @@ const ListingDesktopView = ({
                 </Col>
                 <div className="clearfix" />
               </div>
-              <div style={S('mb-70 font-15')}>
-                {description}
-              </div>
+              <div style={S('mb-70 font-15')}>{description}</div>
               <div style={S('pr-40 relative')}>
                 <div style={S('mb-30 font-15')}>
                   <div style={S('w-33p pull-left pr-20')}>
@@ -532,17 +524,21 @@ const ListingDesktopView = ({
                       <div style={S('color-aaaaaa mb-10')}>
                         Unexempt Taxes:{' '}
                         <span style={S('color-777')}>
-                          ${listing.unexempt_taxes
-                            ? helpers.numberWithCommas(listing.unexempt_taxes)
-                            : 0}
+                          ${listing.unexempt_taxes ? (
+                            helpers.numberWithCommas(listing.unexempt_taxes)
+                          ) : (
+                            0
+                          )}
                         </span>
                       </div>
                       <div style={S('color-aaaaaa mb-10')}>
                         HOA Fees:{' '}
                         <span style={S('color-777')}>
-                          ${listing.association_fee
-                            ? listing.association_fee
-                            : 0}
+                          ${listing.association_fee ? (
+                            listing.association_fee
+                          ) : (
+                            0
+                          )}
                         </span>
                       </div>
                       <div style={S('color-aaaaaa mb-10')}>
@@ -623,11 +619,9 @@ const ListingDesktopView = ({
                     <div style={S('color-aaaaaa mb-10')}>
                       Pool Features:&nbsp;
                       <span style={S('color-777')}>
-                        {property.pool_features.map(item =>
-                          <span key={item}>
-                            {item},{' '}
-                          </span>
-                        )}
+                        {property.pool_features.map(item => (
+                          <span key={item}>{item}, </span>
+                        ))}
                       </span>
                     </div>
                     <div style={S('color-aaaaaa mb-10')}>
@@ -639,21 +633,17 @@ const ListingDesktopView = ({
                     <div style={S('color-aaaaaa mb-10')}>
                       Heating/Cooling:&nbsp;
                       <span style={S('color-777')}>
-                        {property.heating.map(item =>
-                          <span key={item}>
-                            {item},{' '}
-                          </span>
-                        )}
+                        {property.heating.map(item => (
+                          <span key={item}>{item}, </span>
+                        ))}
                       </span>
                     </div>
                     <div style={S('color-aaaaaa mb-10')}>
                       Other:&nbsp;
                       <span style={S('color-777')}>
-                        {property.utilities.map(item =>
-                          <span key={item}>
-                            {item},{' '}
-                          </span>
-                        )}
+                        {property.utilities.map(item => (
+                          <span key={item}>{item}, </span>
+                        ))}
                       </span>
                     </div>
                   </div>
@@ -690,31 +680,25 @@ const ListingDesktopView = ({
                       <div style={S('color-aaaaaa mb-10')}>
                         Interior Features:&nbsp;
                         <span style={S('color-777')}>
-                          {property.interior_features.map(item =>
-                            <span key={item}>
-                              {item},{' '}
-                            </span>
-                          )}
+                          {property.interior_features.map(item => (
+                            <span key={item}>{item}, </span>
+                          ))}
                         </span>
                       </div>
                       <div style={S('color-aaaaaa mb-10')}>
                         Alarm/Security:&nbsp;
                         <span style={S('color-777')}>
-                          {property.security_features.map(item =>
-                            <span key={item}>
-                              {item},{' '}
-                            </span>
-                          )}
+                          {property.security_features.map(item => (
+                            <span key={item}>{item}, </span>
+                          ))}
                         </span>
                       </div>
                       <div style={S('color-aaaaaa mb-10')}>
                         Flooring:&nbsp;
                         <span style={S('color-777')}>
-                          {property.flooring.map(item =>
-                            <span key={item}>
-                              {item},{' '}
-                            </span>
-                          )}
+                          {property.flooring.map(item => (
+                            <span key={item}>{item}, </span>
+                          ))}
                         </span>
                       </div>
                     </div>
@@ -724,11 +708,9 @@ const ListingDesktopView = ({
                     <div style={S('color-aaaaaa mb-10')}>
                       Exterior Features:&nbsp;
                       <span style={S('color-777')}>
-                        {property.exterior_features.map(item =>
-                          <span key={item}>
-                            {item},{' '}
-                          </span>
-                        )}
+                        {property.exterior_features.map(item => (
+                          <span key={item}>{item}, </span>
+                        ))}
                       </span>
                     </div>
                     <div style={S('color-aaaaaa mb-10')}>
@@ -824,7 +806,7 @@ const ListingDesktopView = ({
         onSelect={onSelectHandler}
         activeIndex={galleryModalActiveIndex}
       >
-        {gallery_image_urls.map((gallery_image_url, i) =>
+        {gallery_image_urls.map((gallery_image_url, i) => (
           <CarouselItem key={`gallery-image-${gallery_image_url[0]}${i}`}>
             <div
               style={S(
@@ -832,7 +814,7 @@ const ListingDesktopView = ({
               )}
             />
           </CarouselItem>
-        )}
+        ))}
       </Carousel>
     )
   }
@@ -913,27 +895,61 @@ const ListingDesktopView = ({
     )
   }
 
+  // Claim account message
+  let token
+  let contact_info
+  let claim_account_message
+  if (data.location && data.location.query && data.location.query.token) {
+    token = data.location.query.token
+  }
+
+  if (token) {
+    contact_info = data.location.query.email
+
+    if (data.location.query.phone_number) {
+      contact_info = data.location.query.phone_number
+    }
+
+    claim_account_message = (
+      <div style={S('bg-2196f3 color-fff w-100p font-17 p-20 text-center')}>
+        This listing was shared to {contact_info}. Claim your account to save
+        this listing and check out many more.&nbsp;&nbsp;&nbsp;&nbsp;
+        <Link
+          style={{
+            padding: '1rem',
+            color: '#2196f3',
+            textDecoration: 'none',
+            backgroundColor: '#fff'
+          }}
+          to={`/register${window.location.search}`}
+        >
+          Activate your account
+        </Link>
+      </div>
+    )
+  }
+
   if (!user) {
     join_area = (
       <div style={S('h-70')}>
-        <div style={S('pull-left p-16 h-35')}>
-          {brand_logo}
-        </div>
-        <div style={S('pull-right p-16')}>
-          <Link
-            style={S(
-              `mr-15 bg-${Brand.color(
-                'primary',
-                'a1bde4'
-              )} border-1-solid-${Brand.color('primary', 'a1bde4')}`
-            )}
-            className="btn btn-primary"
-            to={`/signin${window.location.search}`}
-          >
-            Log in
-          </Link>
-          {/* <a className="btn btn-primary" href="/signup">Sign up</a> */}
-        </div>
+        <div style={S('pull-left p-16 h-35')}>{brand_logo}</div>
+        {(!token || (contact_info && contact_info.indexOf('%40') !== -1)) && (
+          <div style={S('pull-right p-16')}>
+            <Link
+              style={S(
+                `mr-15 bg-${Brand.color(
+                  'primary',
+                  'a1bde4'
+                )} border-1-solid-${Brand.color('primary', 'a1bde4')}`
+              )}
+              className="btn btn-primary"
+              to={`/signin${window.location.search}${contact_info ? `&username=${contact_info}` : ''}`}
+            >
+              Log in
+            </Link>
+            {/* <a className="btn btn-primary" href="/signup">Sign up</a> */}
+          </div>
+        )}
       </div>
     )
   }
@@ -954,9 +970,7 @@ const ListingDesktopView = ({
     let phone_area
     if (brand_agent.phone_number) {
       phone_area = (
-        <div style={S('font-15 mb-5')}>
-          M: {brand_agent.phone_number}
-        </div>
+        <div style={S('font-15 mb-5')}>M: {brand_agent.phone_number}</div>
       )
     }
 
@@ -983,9 +997,7 @@ const ListingDesktopView = ({
             <div className="clearfix" />
           </div>
           {phone_area}
-          <div style={S('font-15 mb-5')}>
-            E: {brand_agent.email}
-          </div>
+          <div style={S('font-15 mb-5')}>E: {brand_agent.email}</div>
         </div>
         <div style={S('font-32 color-fff')} className="lato">
           Love this home? I can help you.
@@ -995,39 +1007,6 @@ const ListingDesktopView = ({
     brand_agent_footer = (
       <div style={S('w-100p pt-40 pb-40 bg-263445 text-center')}>
         {brand_agent_area}
-      </div>
-    )
-  }
-
-  // Claim account message
-  let claim_account_message
-  let token
-  if (data.location && data.location.query && data.location.query.token) {
-    token = data.location.query.token
-  }
-
-  if (token) {
-    let contact_info = data.location.query.email
-
-    if (data.location.query.phone_number) {
-      contact_info = data.location.query.phone_number
-    }
-
-    claim_account_message = (
-      <div style={S('bg-2196f3 color-fff w-100p font-17 p-20 text-center')}>
-        This listing was shared to {contact_info}. Claim your account to save
-        this listing and check out many more.&nbsp;&nbsp;&nbsp;&nbsp;
-        <Link
-          style={{
-            padding: '1rem',
-            color: '#2196f3',
-            textDecoration: 'none',
-            backgroundColor: '#fff'
-          }}
-          to={`/register${window.location.search}`}
-        >
-          Activate your account
-        </Link>
       </div>
     )
   }
@@ -1057,7 +1036,12 @@ const ListingDesktopView = ({
         </div>
         {modal_gallery_area}
       </Modal>
-      <ShareModal listing={listing} user={user} isActive={shareModalIsActive} onHide={onHideShareModal} />
+      <ShareModal
+        listing={listing}
+        user={user}
+        isActive={shareModalIsActive}
+        onHide={onHideShareModal}
+      />
     </div>
   )
 }

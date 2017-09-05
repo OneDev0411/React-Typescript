@@ -5,7 +5,10 @@ const app = new Koa()
 router.get('/signout', async (ctx, next) => {
   ctx.session = null
   const { querystring } = ctx.request
-  ctx.redirect(`/signin${querystring ? `?${querystring}` : ''}`)
+  const { redirectFromSignout, redirect_to } = ctx.request.query
+  let redirect = redirectFromSignout || redirect_to || '/signin'
+  redirect += redirect === '/signin' && querystring ? `?${querystring}` : ''
+  ctx.redirect(redirect)
 })
 
 module.exports = app.use(router.routes())
