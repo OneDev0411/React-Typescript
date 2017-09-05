@@ -14,7 +14,8 @@ export default ({
     <MessageDate message={message} />
 
     <div
-      className="content">
+      className="content"
+    >
       <Message
         user={user}
         roomId={roomId}

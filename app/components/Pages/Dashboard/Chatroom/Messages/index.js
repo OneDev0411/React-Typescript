@@ -1,8 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
-import moment from 'moment'
-import cn from 'classnames'
 import { getMessages } from '../../../../../store_actions/chatroom'
 import Toolbar from '../Rooms/toolbar'
 import MessageItem from './message-item'
@@ -149,8 +147,8 @@ class Messages extends React.Component {
     return messages[keys[index - 1]]
   }
 
-  onNewMessage(room, message) {
-    const { user, roomId } = this.props
+  onNewMessage(room) {
+    const { roomId } = this.props
 
     if (!this.messagesList)
       return false
@@ -201,7 +199,7 @@ class Messages extends React.Component {
     let { composeMessageHeight } = this.state
     const { showToolbar, showComposeMessage } = this.props
     let { toolbarHeight, baseHeight } = this.props
-
+//       `${330 - 9 - 4 - 4}px` : // popup height - compose message bottom - 2*input border: 330px - 9px -4px - 4px
     if (showToolbar === false) {
       toolbarHeight = '0px'
     }
@@ -291,7 +289,7 @@ class Messages extends React.Component {
 
         <UploadHandler
           disabled={disableUpload}
-          disableClick={true}
+          disableClick
           roomId={roomId}
           author={user}
           dropZoneStyle={{

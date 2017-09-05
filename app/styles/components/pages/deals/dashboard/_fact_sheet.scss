@@ -29,10 +29,10 @@
       .name {
         color: #78909c;
         display: inline-block;
-        width: 65%;
+        width: 60%;
 
         &.no-status {
-          width: 70%;
+          width: 65%;
         }
       }
 
@@ -40,18 +40,30 @@
         color: #78909c;
         text-align: right;
         display: inline-block;
-        width: 29%;
+        width: 34%;
       }
 
       .status {
         display: inline-block;
-        line-height: inherit;
         vertical-align: middle;
         margin-right: 5px;
-        width: 10px;
-        height: 10px;
-        background: #f6a623;
+        width: 12px;
+        height: 12px;
+        line-height: 12px;
+        text-align: center;
+        background: #eeeeee;
         border-radius: 40px;
+        .check {
+          color: #fff;
+          font-size: 10px;
+        }
+
+        &.past {
+          background: #35b863;
+        }
+        &.next {
+          background: #f6a623;
+        }
       }
     }
   }
