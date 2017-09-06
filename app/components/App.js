@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import S from 'shorti'
+import NotificationsSystem from 'reapop'
+import notificationTheme from 'reapop-theme-wybo'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import Load from '../loader'
 
@@ -211,7 +212,7 @@ class App extends Component {
   }
 
   render() {
-    const { data, rooms, location } = this.props
+    const { data, rooms, location, isWidgetRedux } = this.props
     const { user } = data
 
     // don't remove below codes,
@@ -226,20 +227,30 @@ class App extends Component {
     })
 
     // render sidebar
-    const main_style = { minHeight: '100vh' }
-    let nav_area = <SideBar data={data} />
+    let navArea = <SideBar data={data} />
 
     if (data.is_mobile && user) {
       // nav_area = <MobileNav data={data} />
-      nav_area = <div />
+      navArea = <div />
     }
+
     return (
       <div>
-        {user && !data.is_widget && !this.props.isWidgetRedux && nav_area}
+        <NotificationsSystem
+          theme={notificationTheme}
+        />
 
-        {user && <InstantChat user={user} rooms={rooms} />}
+        {
+          user && !isWidgetRedux &&
+          navArea
+        }
 
-        <main style={main_style}>
+        {
+          user &&
+          <InstantChat user={user} rooms={rooms} />
+        }
+
+        <main style={{ minHeight: '100vh' }}>
           {children}
         </main>
       </div>
