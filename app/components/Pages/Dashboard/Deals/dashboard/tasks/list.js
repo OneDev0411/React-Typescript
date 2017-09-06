@@ -17,14 +17,16 @@ const List = ({
 
   return (
     <div className="section">
-      <span className="title">
-        { section.title }
-      </span>
+      <div className="header">
+        <span className="title">
+          { section.title }
+        </span>
 
-      <CreateTask
-        dealId={dealId}
-        listId={section.id}
-      />
+        <CreateTask
+          dealId={dealId}
+          listId={section.id}
+        />
+      </div>
 
       <div className={`list ${!section.tasks ? 'empty' : ''}`}>
         {
@@ -41,6 +43,12 @@ const List = ({
               >
                 <div className="title">{ task.title.replace(/&.*;/g, '') }</div>
                 <TaskStatus task={task} />
+                <span
+                  className={cn('notification', {
+                    has_notification: task.room.new_notifications > 0
+                  })}
+                >
+                </span>
               </div>
             )
           })

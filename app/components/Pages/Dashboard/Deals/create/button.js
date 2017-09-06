@@ -6,8 +6,8 @@ const options = [
   'New Home',
   'Lot / Land',
   'Residential Lease',
-  'Commerical Sale',
-  'Commerical Lease'
+  'Commercial Sale',
+  'Commercial Lease'
 ]
 
 const names = {

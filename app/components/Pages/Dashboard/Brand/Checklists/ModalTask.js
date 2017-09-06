@@ -143,7 +143,7 @@ const ModalNewTask = ({
                 <MenuItem
                   key={i}
                   eventKey={item}
-                >{forms[item].name}
+                >{forms[item] && forms[item].name}
                 </MenuItem>
               )
             )}

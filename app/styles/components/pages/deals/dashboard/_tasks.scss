@@ -20,48 +20,10 @@
 }
 
 %deal-task-section {
-  .title {
-    font-size: 17px;
-    text-align: left;
-    color: #5b6469;
-    max-width: 65%;
-    overflow: hidden;
-    display: inline-block;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+  @extend %deal-task-section-header;
 
   .list {
-    border-radius: 4px;
-    margin: 10px 0 20px 0;
-    box-shadow: 0 1px 1px 0 #e9eef2;
-    border: 1px solid #e9eef2;
-    &.empty {
-      border: none;
-      box-shadow: none;
-    }
-  }
-
-  .add-task {
-    float: right;
-    min-width: 90px;
-    height: 25px;
-    line-height: 0px;
-    border-radius: 3px;
-    background-color: #ffffff;
-    border: solid 1px #dde2e6;
-    color: #8da2b5;
-    &:focus {
-      outline: none;
-    }
-    &:hover {
-      background: #fbfbfb;
-      color: #2196f3;
-    }
-    i {
-      margin-right: 5px;
-      font-size: 10px;
-    }
+    margin: 20px 0;
   }
 
   .list > .task {
@@ -97,12 +59,17 @@
     .title {
       font-size: 15px;
       color: #5b6469;
+      max-width: 65%;
+      overflow: hidden;
+      display: inline-block;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
-    .status {
+    .status, .notification {
       position: absolute;
       display: inline-block;
-      right: 12px;
+      right: 25px;
       top: 50%;
       transform: translateY(-50%);
       border-radius: 3px;
@@ -123,6 +90,58 @@
       }
       &.Declined {
         background-color: #d0011b;
+      }
+    }
+
+    .notification {
+      right: 5px;
+      min-width: 10px;
+      height: 10px;
+      border-radius: 20px;
+      background-color: transparent;
+      &.has_notification {
+        background-color: #2196f3;
+      }
+    }
+  }
+}
+
+%deal-task-section-header {
+  .header {
+    .title {
+      font-size: 17px;
+      text-align: left;
+      color: #5b6469;
+    }
+
+    .list {
+      border-radius: 4px;
+      margin: 10px 0 20px 0;
+      box-shadow: 0 1px 1px 0 #e9eef2;
+      border: 1px solid #e9eef2;
+      &.empty {
+        border: none;
+        box-shadow: none;
+      }
+    }
+
+    .add-task {
+      min-width: 90px;
+      height: 25px;
+      border-radius: 3px;
+      background-color: #fff;
+      border: solid 1px #dde2e6;
+      color: #8da2b5;
+      &:focus {
+        outline: none;
+      }
+      &:hover {
+        background: #fbfbfb;
+        color: #2196f3;
+      }
+      i {
+        margin-right: 5px;
+        font-size: 10px;
       }
     }
   }
