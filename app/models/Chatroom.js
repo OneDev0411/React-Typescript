@@ -9,17 +9,17 @@ const Chatroom = {}
 /**
 * returns rooms list
 */
-Chatroom.getRooms = async function(user = {}) {
+Chatroom.getRooms = async function (user = {}) {
   const { access_token } = user
 
   try {
     const fetchRooms = new Fetch()
       .get('/rooms')
-      .query({'room_types[]': 'Direct'})
-      .query({'room_types[]': 'Group'})
-      .query({'associations': 'user.last_seen_by'})
-      .query({'limit': '1000'})
-      .query({'sorting_value': 'Update'})
+      .query({ 'room_types[]': 'Direct' })
+      .query({ 'room_types[]': 'Group' })
+      .query({ associations: 'user.last_seen_by' })
+      .query({ limit: '1000' })
+      .query({ sorting_value: 'Update' })
 
 
     // required on ssr
@@ -33,7 +33,7 @@ Chatroom.getRooms = async function(user = {}) {
 /**
 * get room by id
 */
-Chatroom.getRoomById = async function(roomId) {
+Chatroom.getRoomById = async function (roomId) {
   try {
     const response = await new Fetch()
       .get(`/rooms/${roomId}?associations=user.last_seen_by`)
@@ -45,7 +45,7 @@ Chatroom.getRoomById = async function(roomId) {
 /**
 * add new room
 */
-Chatroom.createRoom = async function(recipients) {
+Chatroom.createRoom = async function (recipients) {
   const members = [].concat(recipients.users, recipients.emails, recipients.phone_numbers)
   const room_type = members.length > 1 ? 'Group' : 'Direct'
 
@@ -70,7 +70,7 @@ Chatroom.createRoom = async function(recipients) {
 /**
 * leave or delete a room
 */
-Chatroom.leaveRoom = async function(userId, room) {
+Chatroom.leaveRoom = async function (userId, room) {
   const endpoint = room.room_type === 'Direct' ?
     `/rooms/${room.id}` :
     `/rooms/${room.id}/users/${userId}`
@@ -85,18 +85,17 @@ Chatroom.leaveRoom = async function(userId, room) {
 /**
 * add members to a room
 */
-Chatroom.addMembers = async function(roomId, recipients) {
+Chatroom.addMembers = async function (roomId, recipients) {
   try {
     return await new Fetch()
       .post(`/rooms/${roomId}/users`)
       .send(recipients)
-
   } catch (e) {
     return null
   }
 }
 
-Chatroom.getMessages = async function(id, limit = 20, value = null, value_type = 'max') {
+Chatroom.getMessages = async function (id, limit = 20, value = null, value_type = 'max') {
   let endpoint = `/rooms/${id}/messages?limit=${limit}&sorting_value=Creation`
 
   if (value) {
@@ -110,20 +109,19 @@ Chatroom.getMessages = async function(id, limit = 20, value = null, value_type =
 }
 
 
-Chatroom.uploadAttachment = async function(roomId, file) {
+Chatroom.uploadAttachment = async function (roomId, file) {
   let endpoint = `/rooms/${roomId}/attachments`
 
   try {
     return await new Fetch()
       .upload(endpoint)
       .attach(file.name, file)
-
   } catch (e) {
     console.log(e)
   }
 }
 
-Chatroom.searchRoom = async function(recipients) {
+Chatroom.searchRoom = async function (recipients) {
   let qs = []
   _.each(recipients, (recp, key) => {
     _.each(recp, item => {
