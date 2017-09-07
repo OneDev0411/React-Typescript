@@ -676,16 +676,6 @@ export default class SideBar extends Component {
               </NavItem>
             </OverlayTrigger>
           }
-          {/*{*/}
-            {/*user.brand &&*/}
-            {/*<OverlayTrigger placement="right" overlay={popover.brand} delayShow={200} delayHide={0}>*/}
-              {/*<LinkContainer className={active.brand} to="/dashboard/brand">*/}
-                {/*<NavItem style={S('w-85p')}>*/}
-                  {/*<SvgPBrand color={active.brand ? nav_active_color : '#4e5c6c'} />*/}
-                {/*</NavItem>*/}
-              {/*</LinkContainer>*/}
-            {/*</OverlayTrigger>*/}
-          {/*}*/}
         </Nav>
         <div style={S('absolute b-10 l-15')}>
           <Nav className="sidebar__account">
@@ -715,7 +705,7 @@ export default class SideBar extends Component {
               { payments_link }
               { form_link }
               {
-                user.brand &&
+                user.features.includes('Backoffice') &&
                 <li>
                   <a href="/dashboard/brand" style={S('ml-30')}>Brand Setting</a>
                 </li>
