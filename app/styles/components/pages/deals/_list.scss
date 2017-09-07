@@ -8,6 +8,24 @@
   .heading {
     @extend %deal-list--heading;
   }
+
+  .list-empty {
+    text-align: center;
+    margin-top: 20%;
+    .title {
+      font-size: 17px;
+      font-weight: 600;
+      color: #62778c;
+      margin-bottom: 10px;
+    }
+
+    .descr {
+      font-size: 14px;
+      font-weight: 500;
+      color: #8da2b5;
+      margin-bottom: 20px;
+    }
+  }
 }
 
 /**
@@ -159,9 +177,15 @@
  *
  */
 .deal-filter--tooltip {
+  background-color: #303e4d !important;
   padding-left: 10px !important;
   line-height: 15px;
   text-align: left !important;
+  font-size: 14px !important;
+  &:after {
+    border-bottom-color: #303e4d !important;
+  }
+
   span {
     line-height: 15px;
     text-align: left !important;
