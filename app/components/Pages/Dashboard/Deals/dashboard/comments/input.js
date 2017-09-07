@@ -39,8 +39,6 @@ class CommentCreate extends React.Component {
       dismissible: false,
       dismissAfter: 3000
     })
-
-    console.log(notification)
   }
 
   /**
