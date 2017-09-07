@@ -4,12 +4,16 @@ import cn from 'classnames'
 import _ from 'underscore'
 import Deal from '../../../../../../models/Deal'
 
+const isValid = (date) => {
+  return date && moment(date).isValid() === true
+}
+
 const getDate = (deal, field) => {
   const now = moment()
   const date = Deal.get.field(deal, field)
   let status = 'unknown'
 
-  if (!date) {
+  if (!isValid(date)) {
     return {
       value: '',
       status
@@ -40,7 +44,7 @@ const getNextDateField = (deal) => {
 
   _.each(table, (name, field) => {
     const date = Deal.get.field(deal, field)
-    const value = date ? ~~moment(date).format('X') : 0
+    const value = isValid(date) ? ~~moment(date).format('X') : 0
 
     if (value >= now) {
       dates[field] = {
@@ -53,7 +57,7 @@ const getNextDateField = (deal) => {
   dates = _.sortBy(dates, date => date.value)
 
   if (dates.length > 0) {
-    return dates[0].name
+    return dates[0]
   }
 
   return null
@@ -93,7 +97,6 @@ const CriticalDates = ({
                       'fa-circle': date.status !== 'past'
                     })}
                   />
-
                   { name }
                 </td>
                 <td className="field">
@@ -110,6 +113,7 @@ const CriticalDates = ({
 
 CriticalDates.getNextDate = function(deal) {
   const date = getNextDateField(deal)
+
   if (!date) {
     return '-'
   }
