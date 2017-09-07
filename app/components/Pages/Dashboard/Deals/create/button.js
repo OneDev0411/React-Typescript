@@ -35,7 +35,7 @@ export default ({
         options.map((item, key) =>
           <MenuItem
             key={`MENU_ITEM_${key}`}
-            onClick={() => onClickOption(item)}
+            onClick={() => onClickOption(type, item)}
             eventKey={key+1}
           >
             { item }

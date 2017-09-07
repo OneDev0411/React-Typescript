@@ -11,7 +11,7 @@ $margin: 20px;
   }
 }
 
-%places {
+%listings {
   margin-top: $margin;
   .address {
     color: #2196f3;
@@ -34,6 +34,20 @@ $margin: 20px;
 
     .loader {
       margin-left: 20px;
+    }
+
+    .create-manually {
+      margin: 0px 0 10px 0;
+      padding-right: 24px;
+      font-size: 17px;
+      text-align: right;
+      color: #2196f3;
+      span {
+        cursor: pointer;
+        &:hover {
+          opacity: 0.7;
+        }
+      }
     }
 
     .item {
@@ -192,8 +206,8 @@ $margin: 20px;
     margin: 0;
     overflow: auto;
 
-    .places {
-      @extend %places;
+    .listings {
+      @extend %listings;
     }
 
     .address {
@@ -201,6 +215,7 @@ $margin: 20px;
       width: 448px;
       height: 44px;
       margin: $margin;
+      margin-bottom: 0;
     }
 
     .btn-create {
