@@ -6,6 +6,7 @@ import { Popover, OverlayTrigger } from 'react-bootstrap'
 import _ from 'underscore'
 import { getStatusColorClass } from '../../../../../utils/listing'
 import Deal from '../../../../../models/Deal'
+import DealCreate from '../create'
 import CriticalDates from '../dashboard/factsheet/critical-dates'
 
 /*
@@ -156,24 +157,27 @@ class BaseTable extends React.Component {
     }
 
     for (let filter in filters) {
-      if (!cells[filter]) {
-        continue
-      }
 
-      const value = cells[filter].getValue(deal)
-      const criteria = filters[filter]
+      return _.some(filter.split('^'), f => {
+        let matched
 
-      let matched = true
+        if (!cells[f]) {
+          return false
+        }
 
-      if (_.isFunction(criteria)) {
-        matched = criteria(value)
-      } else if (criteria.length > 0) {
-        matched = value.toLowerCase().includes(criteria.toLowerCase())
-      }
+        let value = cells[f].getValue(deal)
+        let criteria = _.find(filters, (value, name) => name.includes(f))
 
-      if (!matched) {
-        return false
-      }
+        if (_.isFunction(criteria)) {
+          matched = criteria(value)
+        } else if (criteria.length > 0) {
+          matched = value.toLowerCase().includes(criteria.toLowerCase())
+        } else {
+          matched = true
+        }
+
+        return matched
+      })
     }
 
     return true
@@ -233,61 +237,75 @@ class BaseTable extends React.Component {
 
     return (
       <div className="table-container">
-        <table className="table table-hover">
-          <tbody>
-            <tr className="header">
-              {
-                _.map(this.cells, (cell, key) =>
-                  <td
-                    key={`CELL_${key}`}
-                    className={cn(cell.className, {
-                      sortable: cell.sortable,
-                      isActive: sortBy === key
-                    })}
-                    onClick={() => {
-                      if (cell.sortable) {
-                        this.setSort(key)
+        {
+          _.size(deals) > 0 ?
+          <table className="table table-hover">
+            <tbody>
+              <tr className="header">
+                {
+                  _.map(this.cells, (cell, key) =>
+                    <td
+                      key={`CELL_${key}`}
+                      className={cn(cell.className, {
+                        sortable: cell.sortable,
+                        isActive: sortBy === key
+                      })}
+                      onClick={() => {
+                        if (cell.sortable) {
+                          this.setSort(key)
+                        }
+                      }}
+                    >
+                      { cell.caption }&nbsp;
+
+                      {
+                        cell.sortable &&
+                        this.getSorterCaret(key)
                       }
-                    }}
+                    </td>
+                  )
+                }
+              </tr>
+
+              {
+                _.chain(deals)
+                .filter(deal => this.applyFilters(deal))
+                .sortBy(deal => this.sort(deal))
+                .shouldReverse(sortOrder)
+                .map(deal => (
+                  <tr
+                    key={`DEAL_${deal.id}`}
+                    className="item"
+                    onClick={e => this.onClickDeal(e, deal.id)}
                   >
-                    { cell.caption }&nbsp;
-
                     {
-                      cell.sortable &&
-                      this.getSorterCaret(key)
+                      _.map(this.cells, (cell, key) =>
+                        <td
+                          key={`DEAL_${deal.id}__CELL_${key}`}
+                          className={cell.className}
+                        >
+                          { cell.getText(deal) }
+                        </td>
+                      )
                     }
-                  </td>
-                )
+                  </tr>
+                ))
+                .value()
               }
-            </tr>
+            </tbody>
+          </table> :
 
-            {
-              _.chain(deals)
-              .filter(deal => this.applyFilters(deal))
-              .sortBy(deal => this.sort(deal))
-              .shouldReverse(sortOrder)
-              .map(deal => (
-                <tr
-                  key={`DEAL_${deal.id}`}
-                  className="item"
-                  onClick={e => this.onClickDeal(e, deal.id)}
-                >
-                  {
-                    _.map(this.cells, (cell, key) =>
-                      <td
-                        key={`DEAL_${deal.id}__CELL_${key}`}
-                        className={cell.className}
-                      >
-                        { cell.getText(deal) }
-                      </td>
-                    )
-                  }
-                </tr>
-              ))
-              .value()
-            }
-          </tbody>
-        </table>
+          <div className="list-empty">
+            <div className="title">You don’t have any deals yet</div>
+            <div className="descr">Get started by creating a new listing or making an offer.</div>
+
+            <div className="inline">
+              <DealCreate type="listing" />
+              <DealCreate type="offer" />
+            </div>
+          </div>
+        }
+
       </div>
     )
   }
