@@ -705,7 +705,7 @@ export default class SideBar extends Component {
               { payments_link }
               { form_link }
               {
-                user.features.includes('Backoffice') &&
+                user && user.features && user.features.includes('Backoffice') &&
                 <li>
                   <a href="/dashboard/brand" style={S('ml-30')}>Brand Setting</a>
                 </li>
