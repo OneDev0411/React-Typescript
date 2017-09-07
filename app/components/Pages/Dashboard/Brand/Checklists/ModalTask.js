@@ -156,7 +156,6 @@ const ModalNewTask = ({
       <Modal.Footer>
         <Button
           bsStyle="primary"
-          // disabled={!(titleTask && taskType && order && (taskType === 'Form' && Object.keys(allowedForm).length !== 0))}
           onClick={() => {
             onChangeComposeModal(false)
             onButtonClick({

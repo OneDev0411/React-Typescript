@@ -5,7 +5,6 @@ import { Modal, Button, DropdownButton, MenuItem } from 'react-bootstrap'
 class Wrapper extends React.Component {
   constructor(props) {
     super(props)
-    let titleDealType
     this.state = {
       showComposeModal: false,
       titleChecklist: props.checklist && props.checklist.title,
@@ -222,7 +221,6 @@ const ModalNewChecklist = ({
       <Modal.Footer>
         <Button
           bsStyle="primary"
-          //disabled={!titleChecklist || !titleDealType || !titlePropertyDealType || !order}
           onClick={() => {
             onChangeComposeModal(false)
             let titlePropertyDealTypeNullable = titlePropertyDealType
