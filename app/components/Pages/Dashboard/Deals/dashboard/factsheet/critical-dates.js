@@ -78,33 +78,33 @@ const CriticalDates = ({
   const nextDate = getNextDateField(deal)
 
   return (
-    <div className="critical-dates">
-      <ul>
+    <table className="fact-table critical-dates">
+      <tbody>
         {
           _.map(table, (name, field) => {
             const date = getDate(deal, field)
             return (
-              <li key={`CRITICAL_FIELD_${field}`}>
-                <span
-                  className={cn('status', date.status,{
-                    next: nextDate && nextDate.name === field
-                  })}
-                >
-                  {
-                    date.status === 'past' &&
-                    <span className="check">✓</span>
-                  }
-                </span>
-                <span className="name">{ name }: </span>
-                <span className="field">
+              <tr key={`CRITICAL_FIELD_${field}`}>
+                <td className="name">
+                  <i
+                    className={cn('fa', 'status', date.status, {
+                      next: nextDate && nextDate.name === field,
+                      'fa-check-circle': date.status === 'past',
+                      'fa-circle': date.status !== 'past'
+                    })}
+                  />
+
+                  { name }
+                </td>
+                <td className="field">
                   { date.value }
-                </span>
-              </li>
+                </td>
+              </tr>
             )
           })
         }
-      </ul>
-    </div>
+      </tbody>
+    </table>
   )
 }
 
