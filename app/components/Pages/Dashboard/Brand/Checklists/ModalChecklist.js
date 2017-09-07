@@ -12,7 +12,8 @@ class Wrapper extends React.Component {
       titleDealType: props.checklist && props.checklist.deal_type,
       titlePropertyDealType: props.checklist && props.checklist.property_type,
       order: props.checklist && props.checklist.order,
-      isTerminatable: props.checklist && props.checklist.is_terminatable
+      isTerminatable: props.checklist && props.checklist.is_terminatable,
+      isDeactivatable: props.checklist && props.checklist.is_deactivatable
     }
   }
 
@@ -27,7 +28,8 @@ class Wrapper extends React.Component {
         titleDealType: nextProps.checklist.deal_type,
         titlePropertyDealType: nextProps.checklist.property_type,
         order: nextProps.checklist.order,
-        isTerminatable: nextProps.checklist.is_terminatable
+        isTerminatable: nextProps.checklist.is_terminatable,
+        isDeactivatable: nextProps.checklist.is_deactivatable
       })
     }
   }
@@ -39,6 +41,7 @@ class Wrapper extends React.Component {
   changeTitlePropertyType = titlePropertyDealType => this.setState({ titlePropertyDealType })
   changeTitleOrder = order => this.setState({ order })
   changeIsTerminatable = isTerminatable => this.setState({ isTerminatable })
+  changeIsDeactivatable = isDeactivatable => this.setState({ isDeactivatable })
 
   render() {
     return <ModalNewChecklist
@@ -50,6 +53,7 @@ class Wrapper extends React.Component {
       titlePropertyDealType={this.state.titlePropertyDealType}
       order={this.state.order}
       isTerminatable={this.state.isTerminatable}
+      isDeactivatable={this.state.isDeactivatable}
       onChangeComposeModal={this.onChangeComposeModal}
       changeTitleChecklist={this.changeTitleChecklist}
       changeTabName={this.changeTabName}
@@ -57,40 +61,40 @@ class Wrapper extends React.Component {
       changeTitlePropertyType={this.changeTitlePropertyType}
       changeTitleOrder={this.changeTitleOrder}
       changeIsTerminatable={this.changeIsTerminatable}
+      changeIsDeactivatable={this.changeIsDeactivatable}
     />
   }
 }
 const ModalNewChecklist = ({
-                             TriggerButton,
-                             title,
-                             buttonTitle,
-                             onButtonClick,
-                             inline = false,
-                             showOnly = false,
-                             /* internal props and states */
-                             showComposeModal,
-                             onChangeComposeModal,
-                             titleChecklist,
-                             changeTitleChecklist,
-                             titleDealType,
-                             changeTitleDealType,
-                             titlePropertyDealType,
-                             changeTitlePropertyType,
-                             order,
-                             changeTitleOrder,
-                             isTerminatable = false,
-                             changeIsTerminatable,
-                             tabName,
-                             changeTabName
-                           }) => {
+  TriggerButton,
+  title,
+  buttonTitle,
+  onButtonClick,
+  inline = false,
+  showOnly = false,
+  /* internal props and states */
+  showComposeModal,
+  onChangeComposeModal,
+  titleChecklist,
+  changeTitleChecklist,
+  titleDealType,
+  changeTitleDealType,
+  titlePropertyDealType,
+  changeTitlePropertyType,
+  order,
+  changeTitleOrder,
+  isTerminatable = false,
+  changeIsTerminatable,
+  isDeactivatable = false,
+  changeIsDeactivatable,
+  tabName,
+  changeTabName
+}) => {
   const dealTypes = [
     'any', 'Buying', 'Selling'
   ]
   const propertyTypes = [
     'any', 'Resale', 'New Home', 'Lot / Land', 'Residential Lease', 'Commercial Sale', 'Commercial Lease'
-  ]
-  const orders = [
-    '1', '2', '3'
   ]
   return <div style={{ display: inline ? 'inline' : 'block' }}>
     <TriggerButton
@@ -156,27 +160,37 @@ const ModalNewChecklist = ({
           )}
         </DropdownButton>
         <div className="title">Order</div>
-        <DropdownButton
-          id="orders"
-          title={order || 'Order'}
-          onSelect={(selectedItem) => changeTitleOrder(selectedItem)}
-        >
-          {orders.map(item =>
-            <MenuItem
-              key={item}
-              eventKey={item}
-            >{item}
-            </MenuItem>
-          )}
-        </DropdownButton>
-        <div className="title">Checklist can be terminated?</div>
+        {/* <DropdownButton */}
+        {/* id="orders" */}
+        {/* title={order || 'Order'} */}
+        {/* onSelect={(selectedItem) => changeTitleOrder(selectedItem)} */}
+        {/* > */}
+        {/* {orders.map(item => */}
+        {/* <MenuItem */}
+        {/* key={item} */}
+        {/* eventKey={item} */}
+        {/* >{item} */}
+        {/* </MenuItem> */}
+        {/* )} */}
+        {/* </DropdownButton> */}
+        <div className="input-container">
+          <input
+            type="text"
+            pattern="\d*"
+            value={order}
+            placeholder="order…"
+            onChange={(event) => changeTitleOrder(event.target.value)}
+          />
+        </div>
         <div >
+          <div className="title">Checklist can be terminated?</div>
           <Button
             className={cn('checkBoxIcon', { active: isTerminatable })}
             onClick={() => changeIsTerminatable(!isTerminatable)}
           >
             <i
-              className="fa fa-check" aria-hidden="true"
+              className="fa fa-check"
+              aria-hidden="true"
             />
           </Button>
           <span className="checkBoxText">Yes</span>
@@ -185,7 +199,31 @@ const ModalNewChecklist = ({
             onClick={() => changeIsTerminatable(!isTerminatable)}
           >
             <i
-              className="fa fa-check" aria-hidden="true"
+              className="fa fa-check"
+              aria-hidden="true"
+            />
+          </Button>
+          <span className="checkBoxText">No</span>
+        </div>
+        <div >
+          <div className="title">Checklist can be deactivated?</div>
+          <Button
+            className={cn('checkBoxIcon', { active: isDeactivatable })}
+            onClick={() => changeIsDeactivatable(!isDeactivatable)}
+          >
+            <i
+              className="fa fa-check"
+              aria-hidden="true"
+            />
+          </Button>
+          <span className="checkBoxText">Yes</span>
+          <Button
+            className={cn('checkBoxIcon', { active: !isDeactivatable })}
+            onClick={() => changeIsDeactivatable(!isDeactivatable)}
+          >
+            <i
+              className="fa fa-check"
+              aria-hidden="true"
             />
           </Button>
           <span className="checkBoxText">No</span>
@@ -205,6 +243,7 @@ const ModalNewChecklist = ({
               property_type: titlePropertyDealType,
               order,
               is_terminatable: isTerminatable,
+              is_deactivatable: isDeactivatable,
               tab_name: tabName
             })
           }}
