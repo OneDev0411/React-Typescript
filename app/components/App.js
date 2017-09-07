@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import NotificationsSystem from 'reapop'
-import notificationTheme from 'reapop-theme-wybo'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import Load from '../loader'
 
@@ -236,10 +234,6 @@ class App extends Component {
 
     return (
       <div>
-        <NotificationsSystem
-          theme={notificationTheme}
-        />
-
         {
           user && !isWidgetRedux &&
           navArea
