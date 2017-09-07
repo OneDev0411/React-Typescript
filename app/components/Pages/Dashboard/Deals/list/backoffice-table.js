@@ -57,13 +57,14 @@ class BackOfficeTable extends BaseTable {
         caption: 'AGENT NAME',
         sortable: true,
         className: 'col-md-2 hidden-sm hidden-xs',
-        getText: deal => deal.created_by.display_name
+        getText: deal => deal.created_by.display_name,
+        getValue: deal => deal.created_by.display_name
       },
-      // notificiation: {
-      //   caption: '',
-      //   className: 'col-md-1',
-      //   getText: deal => this.hasNotification(deal)
-      // }
+      notificiation: {
+        caption: '',
+        className: 'col-md-1',
+        getText: deal => this.hasNotification(deal)
+      }
     }
   }
 
@@ -177,6 +178,10 @@ class BackOfficeTable extends BaseTable {
 
     // get tasks of filtered checklists
     checklists.forEach(list => {
+      if (!list.tasks) {
+        return
+      }
+
       list.tasks.forEach(task_id => {
         const task = this.props.tasks[task_id]
         if (task.needs_attention) {
