@@ -46,7 +46,7 @@ const getDate = (deal, field) => {
  * get field of upcoming (next) date
  */
 const getNextDateField = (deal) => {
-  const now = moment().format('X')
+  const now = moment().format('x')
 
   let dates = {}
 
