@@ -212,7 +212,9 @@ class BaseTable extends React.Component {
 
       checklist.tasks.forEach(task_id => {
         const task = this.props.tasks[task_id]
-        if (task.room.new_notifications > 0) {
+        const room = this.props.rooms[task.room.id] || task.room
+
+        if (room.new_notifications > 0) {
           counter += task.room.new_notifications
         }
       })

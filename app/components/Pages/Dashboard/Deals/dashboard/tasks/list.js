@@ -6,6 +6,7 @@ import TaskStatus from './status'
 
 const List = ({
   tasks,
+  rooms,
   section,
   dealId,
   selectedTaskId,
@@ -34,6 +35,7 @@ const List = ({
           section.tasks
           .map((id, key) => {
             const task = tasks[id]
+            const room = rooms[task.room.id] || task.room
 
             return (
               <div
@@ -45,7 +47,7 @@ const List = ({
                 <TaskStatus task={task} />
                 <span
                   className={cn('notification', {
-                    has_notification: task.room.new_notifications > 0
+                    has_notification: room.new_notifications > 0
                   })}
                 >
                 </span>
@@ -58,7 +60,8 @@ const List = ({
   )
 }
 
-export default connect(({ deals }) => ({
+export default connect(({ deals, chatroom }) => ({
+  rooms: chatroom.rooms,
   tasks: deals.tasks
 }))(List)
 

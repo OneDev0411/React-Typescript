@@ -110,7 +110,8 @@ class AgentTable extends BaseTable {
   }
 }
 
-export default connect(({ deals }) => ({
+export default connect(({ deals, chatroom }) => ({
   tasks: deals.tasks,
-  checklists: deals.checklists
+  checklists: deals.checklists,
+  rooms: chatroom.rooms
 }))(AgentTable)
