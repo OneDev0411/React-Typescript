@@ -94,7 +94,7 @@ class FormViewer extends React.Component {
             >
               <DealInfo
                 deal={deal}
-                noBackButton
+                showBackButton={false}
               />
             </Col>
 

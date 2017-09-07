@@ -6,12 +6,12 @@ import Roles from '../roles'
 
 export default ({
   deal,
-  noBackButton = false
+  showBackButton = true
 }) => (
   <div>
     <ListingCard
       deal={deal}
-      noBackButton
+      showBackButton={showBackButton}
     />
 
     <ListingViewer

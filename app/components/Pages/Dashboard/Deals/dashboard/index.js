@@ -59,7 +59,10 @@ class DealDetails extends React.Component {
     return (
       <Row className="deal-dashboard">
         <Col lg={3} md={3} sm={3} className="column info-column">
-          <DealInfo deal={deal} />
+          <DealInfo
+            deal={deal}
+            showBackButton={true}
+          />
         </Col>
 
         <Col

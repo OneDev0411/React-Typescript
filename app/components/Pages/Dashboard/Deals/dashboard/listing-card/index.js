@@ -23,7 +23,7 @@ function goBack() {
 
 export default ({
   deal,
-  noBackButton = false
+  showBackButton = true
 }) => {
   const status = Deal.get.field(deal, 'listing_status')
   const photo = Deal.get.field(deal, 'photo')
@@ -32,7 +32,7 @@ export default ({
     <div className="listing-card">
 
       {
-        !noBackButton &&
+        showBackButton &&
         <div
           className="back"
           onClick={() => goBack()}
