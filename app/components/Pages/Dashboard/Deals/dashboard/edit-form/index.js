@@ -1,7 +1,7 @@
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 import { connect } from 'react-redux'
-import SuccessModal from '../../../../../Partials/MessageModal'
+import { addNotification as notify } from 'reapop'
 import { editForm, saveSubmission } from '../../../../../../store_actions/deals/forms'
 import Deal from '../../../../../../models/Deal'
 import Frame from './frame'
@@ -13,7 +13,6 @@ class EditForm extends React.Component {
       loaded: false,
       saving: false,
       incompleteFields: [],
-      showSuccessModal: false
     }
   }
 
@@ -139,7 +138,7 @@ class EditForm extends React.Component {
    *
    */
   async saveForm(values) {
-    const { saveSubmission, task } = this.props
+    const { saveSubmission, task, notify } = this.props
     const { incompleteFields } = this.state
 
     // show saving
@@ -151,8 +150,15 @@ class EditForm extends React.Component {
     try {
       await saveSubmission(task.id, task.form, status, values)
 
-      this.setState({ showSuccessModal: true })
-      setTimeout(() => this.setState({ showSuccessModal: false }), 2000)
+      notify({
+        title: 'Success',
+        message: 'The form has been saved!',
+        status: 'success',
+        dismissible: true
+      })
+
+      // close form
+      this.close()
 
     } catch(e) { /* nothing */ }
 
@@ -194,7 +200,7 @@ class EditForm extends React.Component {
 
   render() {
     const { deal, form, task } = this.props
-    const { loaded, saving, incompleteFields, showSuccessModal } = this.state
+    const { loaded, saving, incompleteFields } = this.state
 
     if (!form || !task) {
       return false
@@ -202,11 +208,6 @@ class EditForm extends React.Component {
 
     return (
       <div className="deal-edit-form">
-        <SuccessModal
-          show={showSuccessModal}
-          text="Form saved!"
-        />
-
         <Row className="header">
           <Col md={7} sm={7} xs={6}>
             <button
@@ -264,4 +265,8 @@ function mapStateToProps({ deals, data }, props) {
   }
 }
 
-export default connect(mapStateToProps, { editForm, saveSubmission })(EditForm)
+export default connect(mapStateToProps, {
+  editForm,
+  saveSubmission,
+  notify
+})(EditForm)
