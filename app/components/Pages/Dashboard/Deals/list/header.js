@@ -10,6 +10,19 @@ class Header extends React.Component {
     super(props)
   }
 
+  onInputChange(value) {
+    const { isBackOffice, onFilterChange } = this.props
+    let filters
+
+    if (isBackOffice) {
+      filters = { 'address^agent_name': value }
+    } else {
+      filters = { 'address^side': value }
+    }
+
+    onFilterChange(filters)
+  }
+
   render() {
     const { isBackOffice, onFilterChange, activeFilterTab } = this.props
 
@@ -31,7 +44,7 @@ class Header extends React.Component {
 
         <Col lg={6} md={7} sm={6} xs={12} className="text-right">
           <input
-            onChange={e => onFilterChange({ address: e.target.value })}
+            onChange={e => this.onInputChange(e.target.value)}
             className="search"
             type="text"
             placeholder="Type in to search ..."
