@@ -681,7 +681,6 @@ export default class SideBar extends Component {
               </NavItem>
             </OverlayTrigger>
           }
-
         </Nav>
         <div style={S('absolute b-10 l-15')}>
           <Nav className="sidebar__account">
@@ -711,7 +710,7 @@ export default class SideBar extends Component {
               { payments_link }
               { form_link }
               {
-                user.brand &&
+                user && user.features && user.features.includes('Backoffice') &&
                 <li>
                   <a href="/dashboard/brand" style={S('ml-30')}>Brand Setting</a>
                 </li>
