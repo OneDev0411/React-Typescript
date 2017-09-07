@@ -18,14 +18,16 @@ import SvgMap from './Svgs/Map'
 import SvgStore from './Svgs/Store'
 import SvgPeople from './Svgs/People'
 import SvgPBrand from './Svgs/Brand'
-import SvgDeals from './Svgs/Deals'
 import SvgBriefCase from './Svgs/BriefCase'
 import SvgSupport from './Svgs/Support'
 import SvgNotifications from './Svgs/Notifications'
 import Brand from '../../../../controllers/Brand'
 
 // chatroom stuff
-import InstantTrigger from '../Chatroom/Shared/instant-trigger'
+import InstantChatTrigger from '../Chatroom/Shared/instant-trigger'
+
+// deals notification badge counter
+import DealsIcon from '../Deals/components/sidebar-badge'
 
 export default class SideBar extends Component {
 
@@ -622,7 +624,7 @@ export default class SideBar extends Component {
     return (
       <aside style={sidebar_style} className="sidebar__nav-list pull-left">
 
-        <InstantTrigger />
+        <InstantChatTrigger />
 
         <Nav bsStyle="pills" stacked style={S('mt-10 pl-8')}>
           <OverlayTrigger placement="right" overlay={popover.map} delayShow={200} delayHide={0}>
@@ -649,7 +651,10 @@ export default class SideBar extends Component {
             <OverlayTrigger placement="right" overlay={popover.deals} delayShow={200} delayHide={0}>
               <LinkContainer onClick={this.hideListingViewer.bind(this)} className={active.deals} to="/dashboard/deals">
                 <NavItem style={S('w-85p')}>
-                  <SvgDeals color={active.deals ? nav_active_color : '#4e5c6c'} />
+                  <DealsIcon
+                    active={active}
+                    navActiveColor={nav_active_color}
+                  />
                 </NavItem>
               </LinkContainer>
             </OverlayTrigger>
@@ -676,16 +681,7 @@ export default class SideBar extends Component {
               </NavItem>
             </OverlayTrigger>
           }
-          {/*{*/}
-            {/*user.brand &&*/}
-            {/*<OverlayTrigger placement="right" overlay={popover.brand} delayShow={200} delayHide={0}>*/}
-              {/*<LinkContainer className={active.brand} to="/dashboard/brand">*/}
-                {/*<NavItem style={S('w-85p')}>*/}
-                  {/*<SvgPBrand color={active.brand ? nav_active_color : '#4e5c6c'} />*/}
-                {/*</NavItem>*/}
-              {/*</LinkContainer>*/}
-            {/*</OverlayTrigger>*/}
-          {/*}*/}
+
         </Nav>
         <div style={S('absolute b-10 l-15')}>
           <Nav className="sidebar__account">
