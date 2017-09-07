@@ -5,7 +5,15 @@ import _ from 'underscore'
 import Deal from '../../../../../../models/Deal'
 
 const isValid = (date) => {
-  return date && moment(date).isValid() === true
+  if (!date) {
+    return false
+  }
+
+  return isNaN(parseDate(date)) === false
+}
+
+const parseDate = (date) => {
+  return Date.parse(date)
 }
 
 const getDate = (deal, field) => {
@@ -13,14 +21,14 @@ const getDate = (deal, field) => {
   const date = Deal.get.field(deal, field)
   let status = 'unknown'
 
-  if (!isValid(date)) {
+  if (isValid(date) === false) {
     return {
       value: '',
       status
     }
   }
 
-  const dateObject = moment(date)
+  const dateObject = moment(new Date(parseDate(date)))
 
   if (dateObject.isAfter(now)) {
     status = 'future'
@@ -44,7 +52,7 @@ const getNextDateField = (deal) => {
 
   _.each(table, (name, field) => {
     const date = Deal.get.field(deal, field)
-    const value = isValid(date) ? ~~moment(date).format('X') : 0
+    const value = isValid(date) ? parseDate(date) : 0
 
     if (value >= now) {
       dates[field] = {
@@ -118,7 +126,7 @@ CriticalDates.getNextDate = function(deal) {
     return '-'
   }
 
-  return moment.unix(date.value).format('MMM DD, YYYY')
+  return moment(new Date(date.value)).format('MMM DD, YYYY')
 }
 
 export default CriticalDates
