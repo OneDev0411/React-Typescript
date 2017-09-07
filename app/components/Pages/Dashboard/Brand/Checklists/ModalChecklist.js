@@ -5,6 +5,7 @@ import { Modal, Button, DropdownButton, MenuItem } from 'react-bootstrap'
 class Wrapper extends React.Component {
   constructor(props) {
     super(props)
+    let titleDealType
     this.state = {
       showComposeModal: false,
       titleChecklist: props.checklist && props.checklist.title,
@@ -134,7 +135,7 @@ const ModalNewChecklist = ({
         <div className="title">Deal Type</div>
         <DropdownButton
           id="dealTypes"
-          title={titleDealType || 'Choose the deal type'}
+          title={titleDealType || 'any'}
           onSelect={(selectedItem) => changeTitleDealType(selectedItem)}
         >
           {dealTypes.map(item =>
@@ -148,7 +149,7 @@ const ModalNewChecklist = ({
         <div className="title">Property Type</div>
         <DropdownButton
           id="propertyTypes"
-          title={titlePropertyDealType || 'Choose the property type'}
+          title={titlePropertyDealType || 'any'}
           onSelect={(selectedItem) => changeTitlePropertyType(selectedItem)}
         >
           {propertyTypes.map(item =>
@@ -221,15 +222,18 @@ const ModalNewChecklist = ({
       <Modal.Footer>
         <Button
           bsStyle="primary"
-          disabled={!titleChecklist || !titleDealType || !titlePropertyDealType || !order}
+          //disabled={!titleChecklist || !titleDealType || !titlePropertyDealType || !order}
           onClick={() => {
             onChangeComposeModal(false)
             let titlePropertyDealTypeNullable = titlePropertyDealType
             if (titlePropertyDealType === 'any')
               titlePropertyDealTypeNullable = null
+            let titleDealTypeNullable = titleDealType
+            if (titlePropertyDealType === 'any')
+              titleDealTypeNullable = null
             onButtonClick({
               title: titleChecklist,
-              deal_type: titleDealType,
+              deal_type: titleDealTypeNullable,
               property_type: titlePropertyDealTypeNullable,
               order,
               is_terminatable: isTerminatable,
