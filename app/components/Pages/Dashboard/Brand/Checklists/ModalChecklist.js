@@ -160,19 +160,6 @@ const ModalNewChecklist = ({
           )}
         </DropdownButton>
         <div className="title">Order</div>
-        {/* <DropdownButton */}
-        {/* id="orders" */}
-        {/* title={order || 'Order'} */}
-        {/* onSelect={(selectedItem) => changeTitleOrder(selectedItem)} */}
-        {/* > */}
-        {/* {orders.map(item => */}
-        {/* <MenuItem */}
-        {/* key={item} */}
-        {/* eventKey={item} */}
-        {/* >{item} */}
-        {/* </MenuItem> */}
-        {/* )} */}
-        {/* </DropdownButton> */}
         <div className="input-container">
           <input
             type="text"
@@ -237,10 +224,13 @@ const ModalNewChecklist = ({
           disabled={!titleChecklist || !titleDealType || !titlePropertyDealType || !order}
           onClick={() => {
             onChangeComposeModal(false)
+            let titlePropertyDealTypeNullable = titlePropertyDealType
+            if (titlePropertyDealType === 'any')
+              titlePropertyDealTypeNullable = null
             onButtonClick({
               title: titleChecklist,
               deal_type: titleDealType,
-              property_type: titlePropertyDealType,
+              property_type: titlePropertyDealTypeNullable,
               order,
               is_terminatable: isTerminatable,
               is_deactivatable: isDeactivatable,
