@@ -48,8 +48,8 @@ Deal.get.field = function(deal, field) {
 * a helper that extracts address from deal
 */
 Deal.get.address = function(deal) {
-  const street_name = Deal.get.field(deal, 'street_name')
-  const street_address = Deal.get.field(deal, 'street_address')
+  const street_name = Deal.get.field(deal, 'street_name') || ''
+  const street_address = Deal.get.field(deal, 'street_address') || ''
 
   return (street_name + ' ' + street_address).trim()
 }
