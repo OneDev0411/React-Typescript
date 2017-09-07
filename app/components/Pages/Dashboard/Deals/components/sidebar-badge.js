@@ -9,20 +9,27 @@ class BadgeCounter extends React.Component {
   }
 
   hasNewNotification(deal) {
+    const { checklists, tasks, rooms } = this.props
+
     if (!deal.checklists) {
       return false
     }
 
     return deal.checklists.some(chId => {
-      const checklist = this.props.checklists[chId]
+      const checklist = checklists && checklists[chId]
 
-      if (!checklist.tasks) {
+      if (!checklist || !checklist.tasks) {
         return false
       }
 
       return checklist.tasks.some(tId => {
-        const task = this.props.tasks[tId]
-        const room = this.props.rooms[task.room.id] || task.room
+        const task = tasks && tasks[tId]
+
+        if (!task) {
+          return false
+        }
+
+        const room = rooms[task.room.id] || task.room
         return room.new_notifications > 0
       })
     })
