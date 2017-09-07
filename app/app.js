@@ -1,4 +1,3 @@
-// app-client.js
 import React from 'react'
 import NotificationsSystem from 'reapop'
 import notificationTheme from 'reapop-theme-wybo'
