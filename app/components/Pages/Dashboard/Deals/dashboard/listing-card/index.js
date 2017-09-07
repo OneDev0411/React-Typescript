@@ -22,7 +22,8 @@ function goBack() {
 }
 
 export default ({
-  deal
+  deal,
+  noBackButton = false
 }) => {
   const status = Deal.get.field(deal, 'listing_status')
   const photo = Deal.get.field(deal, 'photo')
@@ -30,12 +31,15 @@ export default ({
   return (
     <div className="listing-card">
 
-      <div
-        className="back"
-        onClick={() => goBack()}
-      >
-        <i className="fa fa-angle-left fa-3x" />
-      </div>
+      {
+        !noBackButton &&
+        <div
+          className="back"
+          onClick={() => goBack()}
+        >
+          <i className="fa fa-angle-left fa-3x" />
+        </div>
+      }
 
       {
         photo &&

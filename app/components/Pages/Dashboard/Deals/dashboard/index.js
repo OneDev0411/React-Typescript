@@ -6,15 +6,11 @@ import cn from 'classnames'
 import _ from 'underscore'
 import TasksList from './tasks'
 import TaskDetail from './task-detail'
-import ListingCard from './listing-card'
-import ListingViewer from './listing-viewer'
-import FactSheet from './factsheet'
 import EditForm from './edit-form'
+import DealInfo from './deal-info'
 import ESignAttachments from './esign/attachment'
 import ESignCompose from './esign/compose'
 import { closeEsign, getEnvelopes } from '../../../../../store_actions/deals'
-
-import Roles from './roles'
 
 class DealDetails extends React.Component {
   constructor(props) {
@@ -63,14 +59,7 @@ class DealDetails extends React.Component {
     return (
       <Row className="deal-dashboard">
         <Col lg={3} md={3} sm={3} className="column info-column">
-          <ListingCard deal={deal} />
-          <ListingViewer deal={deal} />
-
-          <div className="scrollable">
-            <Roles deal={deal} />
-            <FactSheet deal={deal} />
-          </div>
-
+          <DealInfo deal={deal} />
         </Col>
 
         <Col
@@ -119,7 +108,7 @@ class DealDetails extends React.Component {
   }
 }
 
-function mapStateToProps({ data, deals, chatroom }, props) {
+function mapStateToProps({ deals }, props) {
   const { list } = deals
   const { id } = props.params
 
