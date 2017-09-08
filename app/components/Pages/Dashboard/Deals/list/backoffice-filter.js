@@ -27,10 +27,6 @@ class Filter extends React.Component {
     // set inbox name
     filters['__inbox_name__'] = filter
 
-    if (filter !== 'All') {
-      filters['needs_attention'] = (needs_attention) => needs_attention > 0
-    }
-
     // set filters
     this.props.onChangeFilter(filters)
   }

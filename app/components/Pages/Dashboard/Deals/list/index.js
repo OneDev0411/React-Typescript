@@ -13,7 +13,7 @@ class DealsDashboard extends React.Component {
     const activeFilters = {}
 
     if (isBackOffice) {
-      activeFilters['needs_attention'] = ct => ct > 0
+      activeFilters['needs_attention'] = c => c > 0
     }
 
     this.state = {

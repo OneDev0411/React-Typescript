@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import { browserHistory } from 'react-router'
-import { Popover, OverlayTrigger } from 'react-bootstrap'
+import { Row, Col, Popover, OverlayTrigger } from 'react-bootstrap'
 import _ from 'underscore'
 import { getStatusColorClass } from '../../../../../utils/listing'
 import Deal from '../../../../../models/Deal'
@@ -54,13 +54,17 @@ class BaseTable extends React.Component {
    *
    */
   getAddress(deal) {
-    const address = Deal.get.address(deal)
+    const address = Deal.get.field(deal, 'full_address')
 
     return (
-      <div>
-        <img src={this.getListingPhoto(deal)} />
-        { address }
-      </div>
+      <Row>
+        <Col xs={2} className="vcenter">
+          <img src={this.getListingPhoto(deal)} />
+        </Col>
+        <Col xs={10} className="vcenter">
+          <div className="name">{ address }</div>
+        </Col>
+      </Row>
     )
   }
 
@@ -156,31 +160,41 @@ class BaseTable extends React.Component {
       return true
     }
 
-    for (let filter in filters) {
+    return _.every(filters, (value, name) => {
+      const splitted = name.split('^')
+      return this.isMatched(deal, splitted)
+    })
+  }
 
-      return _.some(filter.split('^'), f => {
-        let matched
+  isMatched(deal, filter) {
+    const { cells } = this
+    const { filters } = this.props
 
-        if (!cells[f]) {
-          return false
-        }
+    return filter.some(f => {
+      let matched = false
 
-        let value = cells[f].getValue(deal)
-        let criteria = _.find(filters, (value, name) => name.includes(f))
+      // don't process filter that uses reserved words
+      if (/__(.*)__/.test(f)) {
+        return true
+      }
 
-        if (_.isFunction(criteria)) {
-          matched = criteria(value)
-        } else if (criteria.length > 0) {
-          matched = value.toLowerCase().includes(criteria.toLowerCase())
-        } else {
-          matched = true
-        }
-
+      if (!cells[f]) {
         return matched
-      })
-    }
+      }
 
-    return true
+      const value = cells[f].getValue(deal)
+      const criteria = _.find(filters, (value, name) => name.includes(f))
+
+      if (_.isFunction(criteria)) {
+        matched = criteria(value)
+      } else if (criteria.length > 0) {
+        matched = value.toLowerCase().includes(criteria.toLowerCase())
+      } else {
+        matched = true
+      }
+
+      return matched
+    })
   }
 
   /**
