@@ -23,7 +23,7 @@ class Form extends React.Component {
   }
 
   render() {
-    const { deal, task } = this.props
+    const { deal, task, editForm } = this.props
     const { showFormViewer } = this.state
 
     if (!task || !task.form) {
@@ -66,7 +66,13 @@ class Form extends React.Component {
                 task={task}
                 attachments={attachments}
               />
-              <button className="btn-deal" onClick={() => this.props.editForm(task)}>Edit</button>
+
+              <button
+                className="btn-deal"
+                onClick={() => editForm(task)}
+              >
+                Edit
+              </button>
             </Col>
           </Row>
         </div>

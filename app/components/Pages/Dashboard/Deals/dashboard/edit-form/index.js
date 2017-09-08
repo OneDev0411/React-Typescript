@@ -199,10 +199,10 @@ class EditForm extends React.Component {
   }
 
   render() {
-    const { deal, form, task } = this.props
+    const { deal, task } = this.props
     const { loaded, saving, incompleteFields } = this.state
 
-    if (!form || !task) {
+    if (!task) {
       return false
     }
 
@@ -217,7 +217,7 @@ class EditForm extends React.Component {
               X
             </button>
 
-            <span className="name">{ form.name }</span>
+            <span className="name">{ task.title }</span>
           </Col>
 
           <Col md={5} sm={5} xs={6} className="btns">
@@ -255,17 +255,9 @@ class EditForm extends React.Component {
   }
 }
 
-function mapStateToProps({ deals, data }, props) {
-  const task = deals.formEdit
-  const forms = deals.forms
-
-  return {
-    form: task && forms ? forms[task.form] : null,
-    task
-  }
-}
-
-export default connect(mapStateToProps, {
+export default connect(({ deals }) =>  ({
+  task: deals.formEdit
+}), {
   editForm,
   saveSubmission,
   notify
