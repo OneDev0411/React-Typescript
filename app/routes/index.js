@@ -6,9 +6,6 @@ import Load from '../loader'
 // Containers
 import AppLayout from '../components/App'
 
-// actions
-import { getDeals } from '../store_actions/deals'
-
 const AsyncAuthenticationLayout = Load({
   loader: () => import('../components/Authentication' /* webpackChunkName: "authlay" */)
 })
@@ -69,12 +66,7 @@ const AsyncListingsAlerts = Load({
 
 // deals
 const AsyncDealsLayout = Load({
-  loader: () => import('../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */),
-  fetchData: (dispatch, params) => {
-    const { user } = params
-    const isBackOffice = user.features.indexOf('Backoffice') > -1 ? true : false
-    return dispatch(getDeals(user, isBackOffice))
-  }
+  loader: () => import('../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */)
 })
 
 const AsyncDealsList = Load({

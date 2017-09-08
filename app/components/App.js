@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { batchActions } from 'redux-batched-actions'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import Load from '../loader'
 
@@ -16,6 +17,9 @@ const MobileNav = Load({
 // global chat components
 import { getRooms } from '../store_actions/chatroom'
 
+// deals featch on launch
+import { getDeals } from '../store_actions/deals'
+
 const InstantChat = Load({
   loader: () => import('./Pages/Dashboard/Chatroom/InstantChat')
 })
@@ -31,7 +35,7 @@ import ReactGA from 'react-ga'
 import config from '../../config/public'
 
 class App extends Component {
-  static fetchData(dispatch, params) {
+  static async fetchData(dispatch, params) {
     const { user } = params
     return dispatch(getRooms(user))
   }
@@ -51,6 +55,9 @@ class App extends Component {
 
     // load rooms
     this.initialRooms()
+
+    // load deals
+    this.initialDeals()
 
     // load contacts
     this.initialContacts(user)
@@ -74,6 +81,14 @@ class App extends Component {
   initializeChatSocket() {
     const { user } = this.props.data
     new ChatSocket(user)
+  }
+
+  async initialDeals() {
+    const { dispatch, data } = this.props
+    const { user } = data
+
+    const isBackOffice = user.features.indexOf('Backoffice') > -1
+    return dispatch(getDeals(user, isBackOffice))
   }
 
   async initialRooms() {
