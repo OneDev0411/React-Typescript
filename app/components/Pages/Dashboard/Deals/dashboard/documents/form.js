@@ -18,7 +18,7 @@ class Form extends React.Component {
 
     return {
       name: task.title,
-      url: `https://forms.rechat.com/api/pdf/download/${task.formstack_id}`
+      url: `https://rechat-forms.s3-us-west-2.amazonaws.com/${task.formstack_id}.pdf`
     }
   }
 
