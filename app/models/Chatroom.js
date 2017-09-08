@@ -15,16 +15,16 @@ Chatroom.getRooms = async function(user = {}) {
   try {
     const fetchRooms = new Fetch()
       .get('/rooms')
-      .query({'room_types[]': 'Direct'})
-      .query({'room_types[]': 'Group'})
+      .query({'room_types[]': ['Group', 'Direct']})
       .query({'associations': 'user.last_seen_by'})
       .query({'limit': '1000'})
       .query({'sorting_value': 'Update'})
 
 
     // required on ssr
-    if (access_token)
+    if (access_token) {
       fetchRooms.set({ Authorization: `Bearer ${access_token}` })
+    }
 
     return await fetchRooms
   } catch (e) {}
