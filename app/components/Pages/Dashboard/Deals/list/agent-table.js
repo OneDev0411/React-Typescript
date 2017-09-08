@@ -37,7 +37,7 @@ class AgentTable extends BaseTable {
         sortable: true,
         className: 'col-md-2 hidden-sm hidden-xs',
         getText: deal => this.getSide(deal),
-        getValue: deal => this.getRoleNames(deal)
+        getValue: deal => deal.deal_type.toString() + this.getRoleNames(deal)
       },
       next_date: {
         caption: 'NEXT DATES',
