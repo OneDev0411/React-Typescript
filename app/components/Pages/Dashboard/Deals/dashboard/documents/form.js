@@ -13,6 +13,15 @@ class Form extends React.Component {
     }
   }
 
+  getPdfFile() {
+    const { task } = this.props
+
+    return {
+      name: task.title,
+      url: `https://forms.rechat.com/api/pdf/download/${task.formstack_id}`
+    }
+  }
+
   render() {
     const { deal, task } = this.props
     const { showFormViewer } = this.state
@@ -23,16 +32,14 @@ class Form extends React.Component {
 
     const { submission } = task
     const attachments = submission && submission.state === 'Fair' ? [task.id] : []
+    const pdfFile = task.submission ? task.submission.file : this.getPdfFile()
 
     return (
       <div className="file">
         <FormViewer
           deal={deal}
           task={task}
-          form={task.submission ?
-            task.submission.file :
-            { name: task.title }
-          }
+          form={pdfFile}
           isActive={showFormViewer}
           onClose={() => this.setState({ showFormViewer: false })}
         />
@@ -67,5 +74,6 @@ class Form extends React.Component {
     )
   }
 }
+
 
 export default connect(null, { editForm })(Form)
