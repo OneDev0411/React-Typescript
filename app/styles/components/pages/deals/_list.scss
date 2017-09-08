@@ -36,7 +36,7 @@
 
   .table {
     border-collapse: separate;
-    border-spacing: 0 10px;
+    border-spacing: 0 7px;
     font-size: 15px;
 
     tr td:first-child {
@@ -84,11 +84,17 @@
     }
 
     .item > .address {
+      padding: 0 !important;
+      .row {
+        margin-left: 0;
+        margin-right: 0;
+      }
+
       img {
         width: 40px;
         height: 40px;
         border-radius: 4px;
-        margin-right: 10px;
+        margin-right: 5px;
       }
     }
 
