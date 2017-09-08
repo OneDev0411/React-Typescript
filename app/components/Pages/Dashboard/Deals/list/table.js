@@ -58,10 +58,10 @@ class BaseTable extends React.Component {
 
     return (
       <Row>
-        <Col xs={2} className="vcenter">
+        <Col md={2} sm={3} xs={2} className="vcenter">
           <img src={this.getListingPhoto(deal)} />
         </Col>
-        <Col xs={10} className="vcenter">
+        <Col md={10} sm={9} xs={10} className="vcenter">
           <div className="name">{ address }</div>
         </Col>
       </Row>
@@ -229,7 +229,7 @@ class BaseTable extends React.Component {
         const room = this.props.rooms[task.room.id] || task.room
 
         if (room.new_notifications > 0) {
-          counter += task.room.new_notifications
+          counter += room.new_notifications
         }
       })
     })
