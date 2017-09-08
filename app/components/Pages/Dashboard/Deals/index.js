@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { getDeals, getForms } from '../../../../store_actions/deals'
+import { getDeals } from '../../../../store_actions/deals'
 
 class DealsContainer extends React.Component {
   constructor(props) {
@@ -13,10 +13,6 @@ class DealsContainer extends React.Component {
     if (!deals) {
       const isBackOffice = user.features.indexOf('Backoffice') > -1 ? true : false
       dispatch(getDeals(user, isBackOffice))
-    }
-
-    if (!forms) {
-      dispatch(getForms())
     }
   }
 
