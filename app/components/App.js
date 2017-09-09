@@ -60,7 +60,7 @@ class App extends Component {
     this.initialDeals()
 
     // load contacts
-    this.initialContacts(user)
+    this.initialContacts()
 
     // check user is mobile device or not
     this.checkForMobile()
@@ -103,10 +103,10 @@ class App extends Component {
     AppStore.data.rooms = rooms
   }
 
-  initialContacts(user) {
-    const { dispatch, contacts } = this.props
+  initialContacts() {
+    const { dispatch, contacts, data } = this.props
 
-    if (user && !contacts) {
+    if (data.user && !contacts) {
       dispatch(getContacts())
     }
   }
