@@ -78,10 +78,6 @@ $col-padding: 20px;
     @extend %deal-roles;
   }
 
-  .deal-task-creators {
-    @extend %deal-task-creators;
-  }
-
   .deal-comments {
     @extend %deal-comments;
   }
