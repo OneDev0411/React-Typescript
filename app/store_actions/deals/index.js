@@ -1,4 +1,5 @@
 export * from './deal'
 export * from './forms'
+export * from './checklist'
 export * from './task'
 export * from './esign'
