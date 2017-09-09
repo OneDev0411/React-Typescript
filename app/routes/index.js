@@ -3,6 +3,9 @@ import { Route, IndexRoute, Redirect } from 'react-router'
 import store from '../stores'
 import Load from '../loader'
 
+// actions
+import { getDeals } from '../store_actions/deals'
+
 // Containers
 import AppLayout from '../components/App'
 
@@ -66,7 +69,12 @@ const AsyncListingsAlerts = Load({
 
 // deals
 const AsyncDealsLayout = Load({
-  loader: () => import('../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */)
+  loader: () => import('../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */),
+  fetchData: (dispatch, params) => {
+    const { user } = params
+    const isBackOffice = user.features.indexOf('Backoffice') !== -1
+    return dispatch(getDeals(user, isBackOffice))
+  }
 })
 
 const AsyncDealsList = Load({
