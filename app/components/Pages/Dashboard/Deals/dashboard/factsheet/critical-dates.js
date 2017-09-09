@@ -99,10 +99,8 @@ const CriticalDates = ({
               <tr key={`CRITICAL_FIELD_${field}`}>
                 <td className="name">
                   <i
-                    className={cn('fa', 'status', date.status, {
-                      next: nextDate && nextDate.name === field,
-                      'fa-check-circle': date.status === 'past',
-                      'fa-circle': date.status !== 'past'
+                    className={cn('fa fa-circle', 'status', date.status, {
+                      next: nextDate && nextDate.name === field
                     })}
                   />
                   { name }
