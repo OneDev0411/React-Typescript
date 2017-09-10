@@ -263,6 +263,31 @@ Deal.createRole = async function (deal_id, form) {
 }
 
 /**
+* accept a contract
+*/
+Deal.addContract = async function (deal_id, name, order, is_backup, property_type) {
+  try {
+    const response = await new Fetch()
+      .post(`/deals/${deal_id}/checklists/offer`)
+      .send({
+        checklist: {
+          title: `Contract (${name})`,
+          is_deactivated: is_backup,
+          order: order
+        },
+        conditions: {
+          deal_type: 'Buying',
+          property_type: property_type
+        }
+      })
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
 * change task status
 */
 Deal.changeTaskStatus = async function(task_id, status) {
