@@ -24,7 +24,11 @@ class List extends React.Component {
     let color = '#8da2b5'
     let label = ''
 
-    if (section.is_terminated) {
+    if (section.is_deactivated === true) {
+      label = 'Backup'
+    } else if (section.is_deactivated === false) {
+      label = 'Active'
+    }  else if (section.is_terminated) {
       label = 'Terminated'
       color = '#d0011b'
     }
