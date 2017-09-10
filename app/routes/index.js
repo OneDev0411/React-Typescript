@@ -230,7 +230,7 @@ export default (
 
       <Route path="/dashboard/deals(/:filter)" component={AsyncDealsLayout}>
         <IndexRoute component={AsyncDealsList} />
-        <Route path="/dashboard/deal/:id" component={AsyncDealDashboard} />
+        <Route path="/dashboard/deals/:id" component={AsyncDealDashboard} />
       </Route>
       <Route
         path="/dashboard/brand" component={Brand}

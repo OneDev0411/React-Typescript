@@ -205,7 +205,7 @@ class BaseTable extends React.Component {
       return false
     }
 
-    browserHistory.push(`/dashboard/deal/${id}`)
+    browserHistory.push(`/dashboard/deals/${id}`)
   }
 
   /**

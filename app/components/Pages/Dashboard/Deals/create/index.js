@@ -163,7 +163,7 @@ class DealCreate extends React.Component {
     this.setState({ saving: false })
 
     // navigate to the deal
-    browserHistory.push(`/dashboard/deal/${deal.id}`)
+    browserHistory.push(`/dashboard/deals/${deal.id}`)
   }
 
   /**
