@@ -48,8 +48,8 @@ Deal.get.field = function(deal, field) {
 * a helper that extracts address from deal
 */
 Deal.get.address = function(deal) {
-  const street_name = Deal.get.field(deal, 'street_name')
-  const street_address = Deal.get.field(deal, 'street_address')
+  const street_name = Deal.get.field(deal, 'street_name') || ''
+  const street_address = Deal.get.field(deal, 'street_address') || ''
 
   return (street_name + ' ' + street_address).trim()
 }
@@ -125,7 +125,9 @@ Deal.addForm = async function (brandId, checklistId, formId) {
  */
 Deal.deleteForm = async function (checklist, formId) {
   try {
-    return await new Fetch().delete(`/brands/${checklist.brand}/checklists/${checklist.id}/forms/${formId}`)
+    await new Fetch()
+      .delete(`/brands/${checklist.brand}/checklists/${checklist.id}/forms/${formId}`)
+
   } catch (e) {
     return null
   }
@@ -221,6 +223,21 @@ Deal.createTask = async function (deal_id, form, title, status, task_type, check
     const response = await new Fetch()
       .post(`/deals/${deal_id}/tasks`)
       .send({ title, status, task_type, checklist, form })
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
+* update checklist
+*/
+Deal.updateChecklist = async function (deal_id, checklist_id, attributes) {
+  try {
+    const response = await new Fetch()
+      .put(`/deals/${deal_id}/checklists/${checklist_id}`)
+      .send(attributes)
 
     return response.body.data
   } catch (e) {

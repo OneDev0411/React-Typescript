@@ -3,11 +3,11 @@ import { Route, IndexRoute, Redirect } from 'react-router'
 import store from '../stores'
 import Load from '../loader'
 
-// Containers
-import AppLayout from '../components/App'
-
 // actions
 import { getDeals } from '../store_actions/deals'
+
+// Containers
+import AppLayout from '../components/App'
 
 const AsyncAuthenticationLayout = Load({
   loader: () => import('../components/Authentication' /* webpackChunkName: "authlay" */)
@@ -72,7 +72,7 @@ const AsyncDealsLayout = Load({
   loader: () => import('../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */),
   fetchData: (dispatch, params) => {
     const { user } = params
-    const isBackOffice = user.features.indexOf('Backoffice') > -1 ? true : false
+    const isBackOffice = user.features.indexOf('Backoffice') !== -1
     return dispatch(getDeals(user, isBackOffice))
   }
 })

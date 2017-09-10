@@ -22,19 +22,18 @@ const table = {
 export default ({
   deal
 }) => (
-  <div className="comission">
-
-    <ul>
+  <table className="fact-table comission">
+    <tbody>
       {
         _.map(table, (name, field) => (
-          <li key={`COMMISSION_FIELD_${field}`}>
-            <span className="name no-status">{ name }:</span>
-            <span className="field">
+          <tr key={`COMMISSION_FIELD_${field}`}>
+            <td className="name no-status">{ name }:</td>
+            <td className="field">
               {formatPrice(Deal.get.field(deal, field))}
-            </span>
-          </li>
+            </td>
+          </tr>
         ))
       }
-    </ul>
-  </div>
+    </tbody>
+  </table>
 )

@@ -8,6 +8,24 @@
   .heading {
     @extend %deal-list--heading;
   }
+
+  .list-empty {
+    text-align: center;
+    margin-top: 20%;
+    .title {
+      font-size: 17px;
+      font-weight: 600;
+      color: #62778c;
+      margin-bottom: 10px;
+    }
+
+    .descr {
+      font-size: 14px;
+      font-weight: 500;
+      color: #8da2b5;
+      margin-bottom: 20px;
+    }
+  }
 }
 
 /**
@@ -18,7 +36,7 @@
 
   .table {
     border-collapse: separate;
-    border-spacing: 0 10px;
+    border-spacing: 0 7px;
     font-size: 15px;
 
     tr td:first-child {
@@ -66,11 +84,17 @@
     }
 
     .item > .address {
+      padding: 0 !important;
+      .row {
+        margin-left: 0;
+        margin-right: 0;
+      }
+
       img {
         width: 40px;
         height: 40px;
         border-radius: 4px;
-        margin-right: 10px;
+        margin-right: 5px;
       }
     }
 
@@ -159,9 +183,15 @@
  *
  */
 .deal-filter--tooltip {
+  background-color: #303e4d !important;
   padding-left: 10px !important;
   line-height: 15px;
   text-align: left !important;
+  font-size: 14px !important;
+  &:after {
+    border-bottom-color: #303e4d !important;
+  }
+
   span {
     line-height: 15px;
     text-align: left !important;
@@ -219,42 +249,38 @@
  *
  */
 .deal-list--popover {
-  background-color: #303e4d;
+   background-color: #303e4d;
   border: none;
   box-shadow: -1px 0 10px 0 rgba(0, 0, 0, 0.1), 0 0 10px 0 rgba(0, 0, 0, 0.1);
   color: #fff;
+
   .arrow:after {
     border-bottom-color: #303e4d !important;
   }
+
   .popover-content {
     padding: 10px;
   }
 
-  .critical-dates {
-    ul {
-      margin: 0;
-      padding: 0;
-      li {
-        margin-bottom: 4px;
-        .status {
-          display: inline-block;
-          width: 10px;
-          height: 10px;
-          border-radius: 30px;
-          border: 1px solid #d8d8d8;
-          margin-right: 5px;
-          background: #d8d8d8;
+  .fact-table {
+    td.name {
+      color: #78909c;
+      .status {
+        margin-right: 5px;
+        color: #eeeeee;
+
+        &.past {
+          color: #35b863;
         }
-        .name {
-          color: #78909c;
-          display: inline-block;
-          width: 120px;
-        }
-        .field {
-          color: #78909c;
-          font-size: 12px;
+        &.next {
+          color: #f6a623;
         }
       }
+    }
+
+    td.field {
+      color: #78909c;
+      font-size: 12px;
     }
   }
 }
