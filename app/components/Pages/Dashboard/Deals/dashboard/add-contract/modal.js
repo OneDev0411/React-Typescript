@@ -34,7 +34,11 @@ class AddContractModal extends React.Component {
         dismissAfter: 6000
       })
 
-      return this.setState({ creating: false }, onClose)
+      return this.setState({
+        creating: false,
+        buyerName: '',
+        activeOption: null
+      }, onClose)
 
     } catch(e) {
       console.log(e)
