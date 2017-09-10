@@ -52,14 +52,14 @@ export function addAttachment(deal_id, checklist_id, task_id, file) {
 
 export function changeTaskStatus(taskId, status) {
   return async (dispatch) => {
-    Deal.changeTaskStatus(taskId, status).then(() => {})
+    await Deal.changeTaskStatus(taskId, status)
     dispatch(changeStatus(taskId, status))
   }
 }
 
 export function changeNeedsAttention(taskId, status) {
   return async (dispatch) => {
-    Deal.needsAttention(taskId, status).then(() => {})
+    await Deal.needsAttention(taskId, status)
     dispatch(needsAttention(taskId, status))
   }
 }

@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Textarea from 'react-textarea-autosize'
+import { addNotification as notify } from 'reapop'
 import { Row, Col } from 'react-bootstrap'
 import Message from '../../../Chatroom/Util/message'
 import Deal from '../../../../../../models/Deal'
@@ -35,7 +36,7 @@ class CommentCreate extends React.Component {
    * also change needs_attention flag and change status of task if requests by BO
    */
   async sendComment(needs_attention = null, task_status = null) {
-    const { task, user, changeTaskStatus, changeNeedsAttention } = this.props
+    const { task, user, changeTaskStatus, changeNeedsAttention, notify } = this.props
     const el = this.text_message
     const comment = el.value
 
@@ -51,17 +52,31 @@ class CommentCreate extends React.Component {
       .then(() => this.onCommentSaved())
     }
 
-    if (needs_attention !== null) {
-      await changeNeedsAttention(task.id, needs_attention)
-    }
-
-    if (task_status !== null) {
-      await changeTaskStatus(task.id, task_status)
-    }
-
     // clear message box
     this.text_message.value = ''
     this.setState({ rows: 1 })
+
+    try {
+      if (needs_attention !== null) {
+        await changeNeedsAttention(task.id, needs_attention)
+      }
+
+      if (task_status !== null) {
+        await changeTaskStatus(task.id, task_status)
+        notify({
+          message: `Task status has changed to ${task_status}`,
+          status: 'success',
+          dismissible: true
+        })
+      }
+
+    } catch(e) {
+      notify({
+        message: 'Can not complete this action. try again',
+        status: 'error',
+        dismissible: true
+      })
+    }
   }
 
   render() {
@@ -113,4 +128,4 @@ class CommentCreate extends React.Component {
 
 export default connect(({ deals, data }) => ({
   user: data.user
-}), { changeTaskStatus, changeNeedsAttention })(CommentCreate)
+}), { changeTaskStatus, changeNeedsAttention, notify })(CommentCreate)
