@@ -33,11 +33,11 @@
   border: solid 1px #dce5eb;
   margin-bottom: 20px;
   box-shadow: none;
-  overflow: hidden;
 
   .panel-heading {
     background-color: #f8fafb;
     cursor: pointer;
+    border-radius: 4px;
 
     .panel-title > a {
       display: flex;
