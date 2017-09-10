@@ -33,7 +33,7 @@ class SubmitReview extends React.Component {
       ])
 
       notify({
-        dismissable: true,
+        dismissible: true,
         message: (newStatus === 'Submitted') ?
           'Submitted for review!' :
           'Submission cancelled!',
