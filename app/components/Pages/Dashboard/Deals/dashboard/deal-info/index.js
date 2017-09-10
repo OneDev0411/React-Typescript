@@ -3,6 +3,7 @@ import ListingCard from '../listing-card'
 import ListingViewer from '../listing-viewer'
 import FactSheet from '../factsheet'
 import Roles from '../roles'
+import AddContract from '../add-contract'
 
 export default ({
   deal,
@@ -12,6 +13,10 @@ export default ({
     <ListingCard
       deal={deal}
       showBackButton={showBackButton}
+    />
+
+    <AddContract
+      deal={deal}
     />
 
     <ListingViewer
