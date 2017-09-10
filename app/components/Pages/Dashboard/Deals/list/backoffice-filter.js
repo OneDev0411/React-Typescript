@@ -21,7 +21,7 @@ class Filter extends React.Component {
    */
   setFilter(filter) {
     const filters = {}
-    const arg = filter === 'All' ? '' : `/${filter}`
+    const arg = filter === 'All' ? '' : `/filter/${filter}`
     browserHistory.push(`/dashboard/deals${arg}`)
 
     // set inbox name

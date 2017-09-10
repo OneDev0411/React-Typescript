@@ -49,7 +49,7 @@ class Filter extends React.Component {
    * set filter tab tooltip
    */
   setFilter(filter) {
-    const arg = filter === 'All' ? '' : `/${filter}`
+    const arg = filter === 'All' ? '' : `/filter/${filter}`
     browserHistory.push(`/dashboard/deals${arg}`)
 
     this.props.onChangeFilter({
