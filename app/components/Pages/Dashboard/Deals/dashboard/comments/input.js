@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Textarea from 'react-textarea-autosize'
-import { addNotification as notify } from 'reapop'
 import { Row, Col } from 'react-bootstrap'
 import Message from '../../../Chatroom/Util/message'
 import Deal from '../../../../../../models/Deal'
@@ -26,19 +25,9 @@ class CommentCreate extends React.Component {
   }
 
   onCommentSaved() {
-    const { notify } = this.props
-
     // scroll to the end
     const el = document.getElementById('deals-task-scrollable')
     el.scrollTop = el.scrollHeight
-
-    notify({
-      title: 'Message Sent',
-      message: 'The message has been sent!',
-      status: 'success',
-      dismissible: false,
-      dismissAfter: 3000
-    })
   }
 
   /**
@@ -124,4 +113,4 @@ class CommentCreate extends React.Component {
 
 export default connect(({ deals, data }) => ({
   user: data.user
-}), { changeTaskStatus, changeNeedsAttention, notify })(CommentCreate)
+}), { changeTaskStatus, changeNeedsAttention })(CommentCreate)
