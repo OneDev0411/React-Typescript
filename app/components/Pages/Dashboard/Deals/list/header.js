@@ -47,7 +47,7 @@ class Header extends React.Component {
             onChange={e => this.onInputChange(e.target.value)}
             className="search"
             type="text"
-            placeholder="Type in to search ..."
+            placeholder="Search by address or a person's name"
           />
 
           {
