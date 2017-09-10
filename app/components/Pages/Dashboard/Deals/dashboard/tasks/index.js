@@ -12,10 +12,6 @@ class Checklist extends React.Component {
     }
   }
 
-  componentDidMount() {
-
-  }
-
   toggleDisplayTerminatedChecklists() {
     this.setState({
       showTerminatedChecklists: !this.state.showTerminatedChecklists
