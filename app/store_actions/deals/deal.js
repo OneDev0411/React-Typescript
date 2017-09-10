@@ -12,7 +12,7 @@ function setDeals(deals) {
   }
 }
 
-function setTasks(tasks) {
+export function setTasks(tasks) {
   return {
     type: types.GET_TASKS,
     tasks
@@ -27,7 +27,7 @@ function updateRoles(deal_id, roles) {
   }
 }
 
-function setChecklists(checklists) {
+export function setChecklists(checklists) {
   return {
     type: types.GET_CHECKLISTS,
     checklists
@@ -45,6 +45,14 @@ function isBackOffice(status) {
   return {
     type: types.IS_BACK_OFFICE,
     status
+  }
+}
+
+export function appendChecklist(deal_id, checklist_id) {
+  return {
+    type: types.APPEND_CHECKLIST,
+    deal_id,
+    checklist_id
   }
 }
 
