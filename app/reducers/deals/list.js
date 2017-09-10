@@ -17,6 +17,18 @@ export default (state = null, action) => {
         ...state
       }
 
+    case types.APPEND_CHECKLIST:
+      return {
+        ...state,
+        [action.deal_id]: {
+          ...state[action.deal_id],
+          checklists: [
+            ...state[action.deal_id].checklists,
+            action.checklist_id
+          ]
+        }
+      }
+
     case types.UPDATE_ROLES:
       return {
         ...state,
