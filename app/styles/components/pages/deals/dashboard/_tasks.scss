@@ -32,14 +32,45 @@
   border-radius: 4px;
   border: solid 1px #dce5eb;
   margin-bottom: 20px;
+
   .panel-heading {
     background-color: #f8fafb;
     cursor: pointer;
-    .panel-title {
-      color: #1d364b;
-      font-size: 17px;
-      .p-icon {
-        margin-right: 7px;
+
+    .panel-title > a {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: center;
+      width: 100%;
+      &:hover {
+        text-decoration: none;
+      }
+
+      .crt {
+        width: 4%;
+      }
+
+      .info {
+        width: 86%;
+        color: #1d364b;
+        font-size: 17px;
+        .p-icon {
+          margin-right: 20px;
+          // float: left;
+        }
+        .p-label {
+          display: block;
+          font-size: 10px;
+          font-weight: 500;
+          color: #d0011b;
+          padding-left: 1px;
+        }
+      }
+
+      .cta {
+        width: 10%;
       }
     }
 
