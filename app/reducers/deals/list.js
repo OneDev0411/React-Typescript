@@ -23,7 +23,7 @@ export default (state = null, action) => {
         [action.deal_id]: {
           ...state[action.deal_id],
           checklists: [
-            ...state[action.deal_id].checklists,
+            ...state[action.deal_id].checklists || [],
             action.checklist_id
           ]
         }
