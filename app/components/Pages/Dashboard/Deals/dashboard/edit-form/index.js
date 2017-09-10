@@ -151,7 +151,6 @@ class EditForm extends React.Component {
       await saveSubmission(task.id, task.form, status, values)
 
       notify({
-        title: 'Success',
         message: 'The form has been saved!',
         status: 'success',
         dismissible: true
