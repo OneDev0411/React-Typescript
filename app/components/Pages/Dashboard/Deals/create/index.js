@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import { addNotification as notify } from 'reapop'
 import {
   Grid,
   Row,
@@ -151,19 +152,28 @@ class DealCreate extends React.Component {
    * save deal
    */
   async save(data) {
-    const { createDeal } = this.props
+    const { createDeal, notify } = this.props
 
     // show loading
     this.setState({ saving: true })
 
-    // create deal
-    const deal = await createDeal(data)
+    try {
+      // create deal
+      const deal = await createDeal(data)
 
-    // hide loading
-    this.setState({ saving: false })
+      // navigate to the deal
+      browserHistory.push(`/dashboard/deals/${deal.id}`)
+    } catch(e) {
+      this.setState({ saving: false })
 
-    // navigate to the deal
-    browserHistory.push(`/dashboard/deals/${deal.id}`)
+      // notify user
+      notify({
+        title: 'Can not create deal',
+        message: e.response && e.response.body ? e.response.body.message : null,
+        status: 'error',
+        dismissible: true
+      })
+    }
   }
 
   /**
@@ -272,4 +282,4 @@ class DealCreate extends React.Component {
 
 export default connect(({data}) => ({
   user: data.user
-}), { createDeal })(DealCreate)
+}), { createDeal, notify })(DealCreate)

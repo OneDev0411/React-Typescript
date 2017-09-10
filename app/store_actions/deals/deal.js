@@ -117,9 +117,9 @@ export function createDeal(data) {
     const { deals, checklists, tasks } = entities
 
     batchActions([
-      dispatch(addNewDeal(deals[deal.id])),
+      dispatch(setTasks(tasks)),
       dispatch(setChecklists(checklists)),
-      dispatch(setTasks(tasks))
+      dispatch(addNewDeal(deals[deal.id]))
     ])
 
     return deal
