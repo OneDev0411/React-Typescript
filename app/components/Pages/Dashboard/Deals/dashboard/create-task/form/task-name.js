@@ -41,7 +41,10 @@ class TaskName extends React.Component {
     } catch(e) {
       // todo
     } finally {
-      this.setState({ status: null }, onClose)
+      this.setState({
+        status: null,
+        title: ''
+      }, onClose)
     }
   }
 
