@@ -3,5 +3,6 @@ export default [
   'GET_DEALS',
   'CREATE_DEAL',
   'GET_CHECKLISTS',
+  'APPEND_CHECKLIST',
   'SET_ENVELOPES'
 ]
