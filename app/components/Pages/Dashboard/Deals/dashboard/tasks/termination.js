@@ -22,6 +22,16 @@ class TaskTermination extends React.Component {
 
     const { dealId, checklist, updateChecklist, onCloseDropDownMenu, notify} = this.props
 
+    if (checklist.is_terminatable === false) {
+      return notify({
+        title: 'Access denied',
+        message: 'This checklist is not terminatable',
+        status: 'error',
+        dismissible: true,
+        dismissAfter: 5000
+      })
+    }
+
     this.setState({ saving: true })
 
     try {
