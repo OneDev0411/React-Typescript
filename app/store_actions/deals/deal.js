@@ -12,6 +12,14 @@ function setDeals(deals) {
   }
 }
 
+function setDealContexts(deal_id, contexts) {
+  return {
+    type: types.SET_DEAL_CONTEXTS,
+    deal_id,
+    contexts
+  }
+}
+
 export function setTasks(tasks) {
   return {
     type: types.GET_TASKS,
@@ -123,5 +131,17 @@ export function createDeal(data) {
     ])
 
     return deal
+  }
+}
+
+export function reloadDealContexts(dealId) {
+  return async (dispatch) => {
+    const deal = await Deals.getById(dealId)
+
+    dispatch(setDealContexts(deal.id, {
+      form_context: deal.form_context,
+      mls_context: deal.mls_context,
+      deal_context: deal.deal_context
+    }))
   }
 }

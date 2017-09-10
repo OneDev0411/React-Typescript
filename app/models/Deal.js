@@ -55,6 +55,22 @@ Deal.get.address = function(deal) {
 }
 
 /**
+* get deal by id
+*/
+Deal.getById = async function(id) {
+  try {
+    const response = await new Fetch()
+      .get(`/deals/${id}`)
+      .query({ 'associations[]': ['room.attachments'] })
+
+    return response.body.data
+
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
 * get deals list
 */
 Deal.getAll = async function(user = {}, backoffice = false) {

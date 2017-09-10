@@ -29,6 +29,15 @@ export default (state = null, action) => {
         }
       }
 
+    case types.SET_DEAL_CONTEXTS:
+      return {
+        ...state,
+        [action.deal_id]: {
+          ...state[action.deal_id],
+          ...action.contexts
+        }
+      }
+
     case types.UPDATE_ROLES:
       return {
         ...state,
