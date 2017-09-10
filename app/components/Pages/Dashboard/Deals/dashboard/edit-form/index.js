@@ -2,7 +2,7 @@ import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
-import { editForm, saveSubmission } from '../../../../../../store_actions/deals/forms'
+import { editForm, saveSubmission, reloadDealContexts } from '../../../../../../store_actions/deals'
 import Deal from '../../../../../../models/Deal'
 import Frame from './frame'
 
@@ -138,7 +138,14 @@ class EditForm extends React.Component {
    *
    */
   async saveForm(values) {
-    const { saveSubmission, task, notify } = this.props
+    const {
+      saveSubmission,
+      reloadDealContexts,
+      task,
+      notify,
+      deal
+    } = this.props
+
     const { incompleteFields } = this.state
 
     // show saving
@@ -149,6 +156,7 @@ class EditForm extends React.Component {
     // save form
     try {
       await saveSubmission(task.id, task.form, status, values)
+      await reloadDealContexts(deal.id)
 
       notify({
         message: 'The form has been saved!',
@@ -159,7 +167,10 @@ class EditForm extends React.Component {
       // close form
       this.close()
 
-    } catch(e) { /* nothing */ }
+    } catch(e) {
+      console.log(e)
+      /* nothing */
+    }
 
     // don't show saving
     this.setState({ saving: false })
@@ -259,5 +270,6 @@ export default connect(({ deals }) =>  ({
 }), {
   editForm,
   saveSubmission,
+  reloadDealContexts,
   notify
 })(EditForm)
