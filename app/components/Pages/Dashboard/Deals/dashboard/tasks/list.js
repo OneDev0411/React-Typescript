@@ -20,6 +20,25 @@ class List extends React.Component {
     })
   }
 
+  getLabel(section) {
+    let color = '#8da2b5'
+    let label = ''
+
+    if (section.is_terminated) {
+      label = 'Terminated'
+      color = '#d0011b'
+    }
+
+    return (
+      <div
+        className="p-label"
+        style={{ color }}
+      >
+        { label }
+      </div>
+    )
+  }
+
   render() {
     const { showMenu } = this.state
     const {
@@ -40,20 +59,25 @@ class List extends React.Component {
         collapsible
         defaultExpanded
         className="section"
-        headerRole="data-nothing"
         header={
-          <Row>
-            <Col md={9} xs={9} className="vcenter">
+          <div>
+            <div className="crt">
               <i
                 className="fa fa-caret-down p-icon"
               />
+            </div>
 
-              <span className="p-title">
-                { section.title }
-              </span>
-            </Col>
+            <div className="info">
+              <div>
+                <div className="p-title">
+                  { section.title }
+                </div>
 
-            <Col md={3} xs={3} className="vcenter cta">
+                { this.getLabel(section) }
+              </div>
+            </div>
+
+            <div className="cta">
               <Dropdown
                 id={`SECTION_CTA_${section.id}`}
                 className="deal-checklist-cta-menu"
@@ -78,8 +102,8 @@ class List extends React.Component {
 
                 </Dropdown.Menu>
               </Dropdown>
-            </Col>
-          </Row>
+            </div>
+          </div>
         }
       >
         <div className={`list ${!section.tasks ? 'empty' : ''}`}>
