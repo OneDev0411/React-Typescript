@@ -86,8 +86,12 @@ export default class Mentions extends React.Component {
     const { trigger } = this.props
     const { showSuggestions } = this.state
 
-    const isWordCharacter = e.key.length === 1
-    const isBackspaceOrDelete = (KEYS[e.keyCode] == 'BACKSPACE' || KEYS[e.keyCode] == 'DELETE')
+    let isWordCharacter = true
+    if (e.key)
+      isWordCharacter = e.key.length === 1
+    else
+      isWordCharacter = !KEYS[e.keyCode]
+    const isBackspaceOrDelete = (KEYS[e.keyCode] === 'BACKSPACE' || KEYS[e.keyCode] === 'DELETE')
 
     // prevent parsing non characters and backspace
     if (!isWordCharacter && !isBackspaceOrDelete)
