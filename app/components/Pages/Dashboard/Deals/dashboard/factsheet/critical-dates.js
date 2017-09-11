@@ -4,19 +4,31 @@ import cn from 'classnames'
 import _ from 'underscore'
 import Deal from '../../../../../../models/Deal'
 
+const isValid = (date) => {
+  if (!date) {
+    return false
+  }
+
+  return isNaN(parseDate(date)) === false
+}
+
+const parseDate = (date) => {
+  return Date.parse(date)
+}
+
 const getDate = (deal, field) => {
   const now = moment()
   const date = Deal.get.field(deal, field)
   let status = 'unknown'
 
-  if (!date) {
+  if (isValid(date) === false) {
     return {
       value: '',
       status
     }
   }
 
-  const dateObject = moment(date)
+  const dateObject = moment(new Date(parseDate(date)))
 
   if (dateObject.isAfter(now)) {
     status = 'future'
@@ -34,13 +46,13 @@ const getDate = (deal, field) => {
  * get field of upcoming (next) date
  */
 const getNextDateField = (deal) => {
-  const now = moment().format('X')
+  const now = moment().format('x')
 
   let dates = {}
 
   _.each(table, (name, field) => {
     const date = Deal.get.field(deal, field)
-    const value = date ? ~~moment(date).format('X') : 0
+    const value = isValid(date) ? parseDate(date) : 0
 
     if (value >= now) {
       dates[field] = {
@@ -53,7 +65,7 @@ const getNextDateField = (deal) => {
   dates = _.sortBy(dates, date => date.value)
 
   if (dates.length > 0) {
-    return dates[0].name
+    return dates[0]
   }
 
   return null
@@ -78,43 +90,41 @@ const CriticalDates = ({
   const nextDate = getNextDateField(deal)
 
   return (
-    <div className="critical-dates">
-      <ul>
+    <table className="fact-table critical-dates">
+      <tbody>
         {
           _.map(table, (name, field) => {
             const date = getDate(deal, field)
             return (
-              <li key={`CRITICAL_FIELD_${field}`}>
-                <span
-                  className={cn('status', date.status,{
-                    next: nextDate && nextDate.name === field
-                  })}
-                >
-                  {
-                    date.status === 'past' &&
-                    <span className="check">✓</span>
-                  }
-                </span>
-                <span className="name">{ name }: </span>
-                <span className="field">
+              <tr key={`CRITICAL_FIELD_${field}`}>
+                <td className="name">
+                  <i
+                    className={cn('fa fa-circle', 'status', date.status, {
+                      next: nextDate && nextDate.name === field
+                    })}
+                  />
+                  { name }
+                </td>
+                <td className="field">
                   { date.value }
-                </span>
-              </li>
+                </td>
+              </tr>
             )
           })
         }
-      </ul>
-    </div>
+      </tbody>
+    </table>
   )
 }
 
 CriticalDates.getNextDate = function(deal) {
   const date = getNextDateField(deal)
+
   if (!date) {
     return '-'
   }
 
-  return moment.unix(date.value).format('MMM DD, YYYY')
+  return moment(new Date(date.value)).format('MMM DD, YYYY')
 }
 
 export default CriticalDates

@@ -48,7 +48,10 @@ class AddRole extends React.Component {
 
     return (
       <div>
-        <Row className="item add-new">
+        <Row
+          className="item add-new"
+          onClick={() => this.showModal()}
+        >
           <Col sm={2} xs={3} className="vcenter">
             <span className="add-contact-avatar">
               <i className="fa fa-plus" />
@@ -56,10 +59,7 @@ class AddRole extends React.Component {
           </Col>
 
           <Col sm={10} xs={9} className="name vcenter">
-            <div
-              onClick={() => this.showModal()}
-              style={{ color: '#61778d' }}
-            >
+            <div style={{ color: '#61778d' }}>
               Add Contact
             </div>
           </Col>

@@ -48,10 +48,26 @@ Deal.get.field = function(deal, field) {
 * a helper that extracts address from deal
 */
 Deal.get.address = function(deal) {
-  const street_name = Deal.get.field(deal, 'street_name')
-  const street_address = Deal.get.field(deal, 'street_address')
+  const street_name = Deal.get.field(deal, 'street_name') || ''
+  const street_address = Deal.get.field(deal, 'street_address') || ''
 
   return (street_name + ' ' + street_address).trim()
+}
+
+/**
+* get deal by id
+*/
+Deal.getById = async function(id) {
+  try {
+    const response = await new Fetch()
+      .get(`/deals/${id}`)
+      .query({ 'associations[]': ['room.attachments'] })
+
+    return response.body.data
+
+  } catch (e) {
+    throw e
+  }
 }
 
 /**
@@ -125,7 +141,9 @@ Deal.addForm = async function (brandId, checklistId, formId) {
  */
 Deal.deleteForm = async function (checklist, formId) {
   try {
-    return await new Fetch().delete(`/brands/${checklist.brand}/checklists/${checklist.id}/forms/${formId}`)
+    await new Fetch()
+      .delete(`/brands/${checklist.brand}/checklists/${checklist.id}/forms/${formId}`)
+
   } catch (e) {
     return null
   }
@@ -229,6 +247,21 @@ Deal.createTask = async function (deal_id, form, title, status, task_type, check
 }
 
 /**
+* update checklist
+*/
+Deal.updateChecklist = async function (deal_id, checklist_id, attributes) {
+  try {
+    const response = await new Fetch()
+      .put(`/deals/${deal_id}/checklists/${checklist_id}`)
+      .send(attributes)
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
 * add new role
 */
 Deal.createRole = async function (deal_id, form) {
@@ -238,6 +271,31 @@ Deal.createRole = async function (deal_id, form) {
     const response = await new Fetch()
       .post(`/deals/${deal_id}/roles`)
       .send({ first_name, last_name, email, role })
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
+* accept a contract
+*/
+Deal.addContract = async function (deal_id, name, order, is_backup, property_type) {
+  try {
+    const response = await new Fetch()
+      .post(`/deals/${deal_id}/checklists/offer`)
+      .send({
+        checklist: {
+          title: `Contract (${name})`,
+          is_deactivated: is_backup,
+          order: order
+        },
+        conditions: {
+          deal_type: 'Buying',
+          property_type: property_type
+        }
+      })
 
     return response.body.data
   } catch (e) {

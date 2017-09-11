@@ -1,0 +1,150 @@
+.deal-form-viewer-modal {
+  .modal-dialog {
+    height: 100%;
+    width: 100%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    transform: none !important;
+    overflow: hidden;
+  }
+
+  .modal-header {
+    background-color: #fff;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+    .close-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 3px;
+      background-color: #ffffff;
+      border: solid 1px #dde2e6;
+      font-weight: 700;
+      color: gray;
+      text-align: center;
+      line-height: 3px;
+    }
+
+    .title {
+      font-size: 17px;
+      font-weight: 500;
+      color: #1c364c;
+      margin-left: 20px;
+    }
+
+    .cta {
+      display: inline;
+      float: right;
+      button {
+        margin-left: 5px;
+        height: 34px;
+        line-height: 3px;
+        border-radius: 4px;
+        background-color: #fff;
+        border: solid 1px #dde2e6;
+        font-size: 13px;
+        font-weight: 500;
+        color: #8da2b5;
+        i {
+          margin-right: 4px;
+          font-size: 15px;
+        }
+
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+  }
+
+  .modal-content {
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #F0F4F7;
+  }
+
+  .modal-body {
+    padding: 0;
+    margin: 0;
+    @extend %deal-dashboard;
+    @extend %deal-comments;
+    @extend %deal-comment-create;
+    @extend %info-column;
+    overflow: hidden;
+    box-shadow: none;
+
+    .wrapper {
+      width: 100%;
+      margin-right: 0;
+      margin-left: 0;
+    }
+
+    .factsheet {
+      padding: 0;
+      background-color: #fff;
+      border-right: 1px solid #c9d7df;
+      .scrollable {
+        min-height: 60vh;
+        max-height: 60vh;
+      }
+    }
+
+    .comments {
+      padding: 0 !important;
+      background-color: #fff;
+      border-left: 1px solid #c9d7df;
+      position: relative;
+      min-height: 91vh;
+        max-height: 91vh;
+        overflow: auto;
+
+      .comment-heading {
+        margin: 20px 10px;
+        font-size: 17px;
+        font-weight: bold;
+        color: #1c364c;
+      }
+
+      .deal-comments {
+        .messages {
+          min-height: 70vh;
+          max-height: 70vh;
+          overflow: auto;
+        }
+      }
+    }
+
+    .pdf-viewer {
+      min-height: 91vh;
+      max-height: 91vh;
+      overflow: scroll;
+      margin: 0px auto;
+      background-color: #F0F4F7;
+      padding: 1.5%;
+
+      .loading {
+        text-align: center;
+        margin-top: 10%;
+      }
+
+      .pdf-container {
+        margin: 0 auto !important;
+      }
+
+      .pdf-page {
+        border: 2px solid gray;
+      }
+
+      .pagination {
+        position: fixed;
+        bottom: 4%;
+        left: 44%;
+      }
+    }
+  }
+}

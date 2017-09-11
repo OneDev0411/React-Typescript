@@ -5,13 +5,18 @@ import ReactTooltip from 'react-tooltip'
 import _ from 'underscore'
 import Deal from '../../../../../models/Deal'
 
-const FILTER_ACTIVE = ['Active']
+const FILTER_ACTIVE = [
+  'Active',
+  'Coming Soon'
+]
+
 const FILTER_PENDING = [
   'Active Contingent',
   'Active Kick out',
   'Active Option Contract',
   'Pending'
 ]
+
 const FILTER_ARCHIVE = [
   'Sold',
   'Temp Off Market',
@@ -44,7 +49,7 @@ class Filter extends React.Component {
    * set filter tab tooltip
    */
   setFilter(filter) {
-    const arg = filter === 'All' ? '' : `/${filter}`
+    const arg = filter === 'All' ? '' : `/filter/${filter}`
     browserHistory.push(`/dashboard/deals${arg}`)
 
     this.props.onChangeFilter({

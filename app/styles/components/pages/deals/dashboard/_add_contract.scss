@@ -1,0 +1,98 @@
+.modal-deal-add-contract {
+  .modal-header {
+    border-radius: 6px 6px 0 0;
+    background-color: #f8fafb;
+    .close {
+      margin-top: 5px;
+    }
+
+    .modal-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: #1d364b;
+    }
+  }
+
+  .modal-body {
+    .control-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #8ca2b6;
+      display: block;
+    }
+
+    .buyer-name {
+      margin-top: 8px;
+      height: 42px;
+      border-radius: 4px;
+      background-color: #fff;
+      border: solid 1px #dce5eb;
+      width: 100%;
+      padding: 0 10px;
+      font-size: 14px;
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .option {
+      display: inline-block;
+      margin-top: 10px;
+      height: 42px;
+      line-height: 42px;
+      vertical-align: middle;
+      border-radius: 4px;
+      background-color: #fff;
+      border: solid 1px #dce5eb;
+      width: 49%;
+      font-size: 14px;
+      color: #8da3b7;
+      cursor: pointer;
+
+      .check-area {
+        i {
+          font-size: 20px;
+          vertical-align: middle;
+          margin: 0 8px;
+        }
+
+        .fa-check-circle-o {
+          color: #2196f3;
+        }
+
+        .fa-circle-o {
+          color: #dce5eb;
+        }
+      }
+
+      &:hover {
+        color: #2196f3;
+        i {
+          color: #2196f3 !important;
+        }
+      }
+
+      &.active {
+        margin-right: 2%;
+      }
+    }
+  }
+
+  .modal-footer {
+    .deal-button {
+      min-width: 70px;
+      height: 29px;
+      line-height: 14px;
+      vertical-align: middle;
+      border-radius: 3px;
+      background-color: #2196f3;
+      border: none;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+  }
+}

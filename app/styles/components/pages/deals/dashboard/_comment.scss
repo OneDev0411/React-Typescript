@@ -12,6 +12,7 @@
 
   .messages {
     height: auto;
+    margin-bottom: 20px;
     .messages-list {
       margin-top: 10px;
       min-height: auto !important;
@@ -21,22 +22,27 @@
       .activity {
         color: #62778c;
         font-size: 13px;
+        padding: 2px 10px;
         background-color: #f8fafb;
-        box-shadow: 0 1px 5px 0 rgba(167, 184, 200, 0.7);
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
     }
   }
 }
 
 %deal-comment-create {
-  height: 107px;
+  min-height: 107px;
   padding: 10px;
   border-radius: 0 0 3px 3px;
   background-color: #ffffff;
   box-shadow: 0 -1px 5px 0 rgba(167, 184, 200, 0.7);
   margin-top: 3px;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
 
   textarea {
     border-radius: 5px;
@@ -59,12 +65,26 @@
     box-shadow: 0 1px 1px 0 #eef1f2;
     border: solid 1px #e6eaec;
     margin-left: 3px;
+    margin-bottom: 3px;
 
     &.decline-comment, &.approve-comment, &.close-comment {
-      color: #1c364c;
       &:hover {
+        border-color: #2196f3;
         color: #2196f3;
       }
+    }
+
+    &.approve-comment,
+    &.close-comment {
+      border: solid 1px #35b863;
+      color: #35b863;
+      background-color: transparent;
+    }
+
+    &.decline-comment {
+      border: solid 1px #d0011b;
+      color: #d0011b;
+      background-color: transparent;
     }
 
     &.add-comment {

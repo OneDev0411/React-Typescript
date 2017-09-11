@@ -26,6 +26,9 @@
       &:focus {
         outline: 0;
       }
+      &:invalid {
+        box-shadow: 0 0 5px 1px red;
+      }
     }
   }
   .title {

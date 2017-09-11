@@ -1,21 +1,20 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { addNotification as notify } from 'reapop'
 import { batchActions } from 'redux-batched-actions'
 import { Tooltip, OverlayTrigger, Button } from 'react-bootstrap'
-import MessageModal from '../../../../../Partials/MessageModal'
 import { changeTaskStatus, changeNeedsAttention } from '../../../../../../store_actions/deals'
 
 class SubmitReview extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      submitting: false,
-      showSuccessModal: false
+      submitting: false
     }
   }
 
   async toggleSubmit() {
-    const { task, submitting, changeTaskStatus, changeNeedsAttention } = this.props
+    const { task, submitting, changeTaskStatus, changeNeedsAttention, notify } = this.props
     const status = this.getTaskStatus()
 
     if (submitting) {
@@ -26,17 +25,32 @@ class SubmitReview extends React.Component {
 
     // submit this task to review
     const newStatus = (status === 'Submitted') ? 'Incomplete' : 'Submitted'
-    batchActions([
-      changeTaskStatus(task.id, newStatus),
-      changeNeedsAttention(task.id, newStatus === 'Submitted')
-    ])
+
+    try {
+      batchActions([
+        changeTaskStatus(task.id, newStatus),
+        changeNeedsAttention(task.id, newStatus === 'Submitted')
+      ])
+
+      notify({
+        dismissible: true,
+        message: (newStatus === 'Submitted') ?
+          'Submitted for review!' :
+          'Submission cancelled!',
+        status: 'success'
+      })
+
+    } catch(e) {
+      notify({
+        title: 'Error',
+        message: 'Can not complete your request, please try again.',
+        status: 'error'
+      })
+    }
 
     this.setState({
-      showSuccessModal: true,
       submitting: false
     })
-
-    setTimeout(() => this.setState({ showSuccessModal: false }), 1000)
   }
 
   getTaskStatus() {
@@ -56,7 +70,7 @@ class SubmitReview extends React.Component {
   }
 
   render() {
-    const { submitting, showSuccessModal } = this.state
+    const { submitting } = this.state
     const { task } = this.props
     const status = this.getTaskStatus()
 
@@ -71,13 +85,13 @@ class SubmitReview extends React.Component {
           { this.getButtonCaption() }
         </button>
 
-        <MessageModal
-          show={showSuccessModal}
-          text={status === 'Submitted' ? 'Submitted for review!' : 'Submission cancelled!'}
-        />
       </div>
     )
   }
 }
 
-export default connect(null, { changeTaskStatus, changeNeedsAttention })(SubmitReview)
+export default connect(null, {
+  changeTaskStatus,
+  changeNeedsAttention,
+  notify
+})(SubmitReview)

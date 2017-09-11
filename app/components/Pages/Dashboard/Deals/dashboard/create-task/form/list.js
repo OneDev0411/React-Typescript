@@ -55,6 +55,11 @@ class Forms extends React.Component {
               ))
               .value()
             }
+          </ul>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <ul>
             <li className="upload">
               <Dropzone
                 disableClick={false}
@@ -67,7 +72,7 @@ class Forms extends React.Component {
               </Dropzone>
             </li>
           </ul>
-        </Modal.Body>
+        </Modal.Footer>
       </Modal>
     )
   }

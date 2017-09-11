@@ -9,28 +9,101 @@
       @extend %deal-task-section;
     }
 
-    .task {
-      @extend %deal-task;
+    .show-terminated-btn {
+      @extend %terminated-btn;
     }
   }
 }
 
-%deal-task {
-  background: #fff;
+%terminated-btn {
+  padding: 5px 10px;
+  border-radius: 4px;
+  background-color: #c0ced6;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: #62778c;
+  &:focus {
+    outline: none;
+  }
 }
 
 %deal-task-section {
-  @extend %deal-task-section-header;
+  border-radius: 4px;
+  border: solid 1px #dce5eb;
+  margin-bottom: 20px;
+  box-shadow: none;
 
-  .list {
-    margin: 20px 0;
+  .panel-heading {
+    background-color: #f8fafb;
+    cursor: pointer;
+    border-radius: 4px;
+
+    .panel-title > a {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: center;
+      width: 100%;
+      &:hover {
+        text-decoration: none;
+      }
+
+      .crt {
+        width: 2%;
+      }
+
+      .info {
+        width: 88%;
+        color: #1d364b;
+        font-size: 17px;
+        .p-icon {
+          margin-right: 20px;
+        }
+        .p-label {
+          display: block;
+          font-size: 10px;
+          font-weight: 500;
+          color: #d0011b;
+          padding-left: 1px;
+        }
+      }
+
+      .cta {
+        width: 10%;
+      }
+    }
+
+    a.collapsed .p-icon:before {
+      font-family: "FontAwesome";
+      color: #c9d7df;
+      content: "\f0da";
+    }
+
+    .cta {
+      text-align: right;
+      .cta-btn {
+        i {
+          font-size: 22px;
+          color: #2196f3;
+        }
+      }
+    }
   }
 
+  .panel-body {
+    padding: 0;
+    overflow: hidden;
+    @extend %deal-tasks;
+  }
+}
+
+%deal-tasks {
   .list > .task {
     position: relative;
-    padding: 0 11px;
+    padding: 0 14px;
     background-color: #fefefe;
-    box-shadow: 0 1px 1px 0 #e9eef2;
     height: 56px;
     line-height: 56px;
     vertical-align: middle;
@@ -46,19 +119,22 @@
       background-color: #dce5eb;
     }
 
-    &:first-child {
-      border-radius: 4px 4px 0 0;
-    }
-
-    &:last-child {
+    &.add-task {
+      background-color: #f0f4f7;
+      color: #8da2b5;
       border-radius: 0 0 4px 4px;
-      border-bottom: none;
-      box-shadow: none;
+      .img-add {
+        width: 10px;
+      }
+
+      &:hover {
+        opacity: 0.7;
+      }
     }
 
     .title {
-      font-size: 15px;
-      color: #5b6469;
+      font-size: 14px;
+      color: #61778d;
       max-width: 65%;
       overflow: hidden;
       display: inline-block;
@@ -91,6 +167,9 @@
       &.Declined {
         background-color: #d0011b;
       }
+      &.Submitted {
+        background-color: #f6a623;
+      }
     }
 
     .notification {
@@ -106,42 +185,25 @@
   }
 }
 
-%deal-task-section-header {
-  .header {
-    .title {
-      font-size: 17px;
-      text-align: left;
-      color: #5b6469;
-    }
+.deal-checklist-cta-menu {
+  ul.dropdown-menu {
+    margin: 0;
+    padding: 0;
+    border: none !important;
+    border-radius: 5px;
+    background-color: #ffffff;
+    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.15);
 
-    .list {
-      border-radius: 4px;
-      margin: 10px 0 20px 0;
-      box-shadow: 0 1px 1px 0 #e9eef2;
-      border: 1px solid #e9eef2;
-      &.empty {
-        border: none;
-        box-shadow: none;
-      }
-    }
-
-    .add-task {
-      min-width: 90px;
-      height: 25px;
-      border-radius: 3px;
-      background-color: #fff;
-      border: solid 1px #dde2e6;
-      color: #8da2b5;
-      &:focus {
-        outline: none;
-      }
+    li {
+      padding: 0 9px !important;
+      height: 40px;
+      line-height: 40px;
+      vertical-align: middle;
+      color: #d0011b;
+      font-size: 15px;
       &:hover {
-        background: #fbfbfb;
-        color: #2196f3;
-      }
-      i {
-        margin-right: 5px;
-        font-size: 10px;
+        opacity: 0.7;
+        background-color: transparent;
       }
     }
   }

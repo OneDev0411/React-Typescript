@@ -1,16 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Modal, Button, DropdownButton, MenuItem } from 'react-bootstrap'
-import { compose, withState, pure } from 'recompose'
-
-const enhance = compose(
-  pure,
-  withState('showComposeModal', 'onChangeComposeModal', false),
-  withState('titleTask', 'changeTitleTask', ''),
-  withState('taskType', 'changeTaskType', ''),
-  withState('allowedForm', 'changeAllowedForm', {}),
-  withState('order', 'changeTitleOrder', ''),
-)
 
 class Wrapper extends React.Component {
   constructor(props) {
@@ -62,27 +52,27 @@ class Wrapper extends React.Component {
 }
 
 const ModalNewTask = ({
-                        TriggerButton,
-                        title,
-                        buttonTitle,
-                        onButtonClick,
-                        inline = false,
-                        forms,
-                        allowed_forms,
-                        /* internal props and states */
-                        showComposeModal,
-                        onChangeComposeModal,
-                        titleTask,
-                        changeTitleTask,
-                        taskType,
-                        changeTaskType,
-                        order,
-                        changeTitleOrder,
-                        allowedForm,
-                        changeAllowedForm,
-                        task,
-                        onSelectItem
-                      }) => {
+  TriggerButton,
+  title,
+  buttonTitle,
+  onButtonClick,
+  inline = false,
+  forms,
+  allowed_forms,
+  /* internal props and states */
+  showComposeModal,
+  onChangeComposeModal,
+  titleTask,
+  changeTitleTask,
+  taskType,
+  changeTaskType,
+  order,
+  changeTitleOrder,
+  allowedForm,
+  changeAllowedForm,
+  task,
+  onSelectItem
+}) => {
   const taskTypes = [
     'Form', 'Generic'
   ]
@@ -112,6 +102,7 @@ const ModalNewTask = ({
           <input
             value={titleTask}
             type="text"
+            pattern="\d*"
             placeholder="Write a task name…"
             onChange={(event) => changeTitleTask(event.target.value)}
           />
@@ -165,7 +156,6 @@ const ModalNewTask = ({
       <Modal.Footer>
         <Button
           bsStyle="primary"
-          // disabled={!(titleTask && taskType && order && (taskType === 'Form' && Object.keys(allowedForm).length !== 0))}
           onClick={() => {
             onChangeComposeModal(false)
             onButtonClick({
