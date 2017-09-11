@@ -55,6 +55,7 @@
       }
 
       .info {
+        width: 88%; //fallback
         width: calc(90% - 20px);
         color: #1d364b;
         font-size: 17px;
