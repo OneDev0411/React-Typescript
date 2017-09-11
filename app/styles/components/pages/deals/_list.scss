@@ -249,13 +249,14 @@
  *
  */
 .deal-list--popover {
-   background-color: #303e4d;
+  background-color: #303e4d;
   border: none;
   box-shadow: -1px 0 10px 0 rgba(0, 0, 0, 0.1), 0 0 10px 0 rgba(0, 0, 0, 0.1);
   color: #fff;
 
   .arrow:after {
     border-bottom-color: #303e4d !important;
+    border-top-color: #303e4d !important;
   }
 
   .popover-content {

@@ -83,10 +83,13 @@ class BaseTable extends React.Component {
   }
 
   getNextDate(deal) {
+    const { deals } = this.props
+    const dealOrder = Object.keys(deals).indexOf(deal.id)
+
     return (
       <OverlayTrigger
         trigger={['hover', 'focus']}
-        placement="bottom"
+        placement={dealOrder + 3 >= _.size(deals) ? 'top' : 'bottom'}
         overlay={
           <Popover
             className="deal-list--popover"
