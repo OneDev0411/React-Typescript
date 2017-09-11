@@ -244,34 +244,32 @@ class DealCreate extends React.Component {
               { saving ? 'Creating...' : 'Create' }
             </Button>
 
-            {
-              address.length > 0 &&
-              <div className="listings">
+            <div className="listings">
 
-                <div className="list">
-                  <div className="create-manually">
-                    <span
-                      onClick={() => this.setState({
-                        showAddressComponents: true,
-                        showModal: false
-                      })}
-                    >
-                      Not on MLS?  Create manually.
-                    </span>
-                  </div>
-                  {
-                    searching &&
-                    <i className="fa fa-spinner fa-spin fa-fw loader"></i>
-                  }
-
-                  <ListingsView
-                    type={type}
-                    listings={listings}
-                    onSelectListing={(item) => this.onSelectListing(item)}
-                  />
+              <div className="list">
+                <div className="create-manually">
+                  <span
+                    onClick={() => this.setState({
+                      showAddressComponents: true,
+                      showModal: false
+                    })}
+                  >
+                    Not on MLS?  Create manually.
+                  </span>
                 </div>
+                {
+                  searching &&
+                  <i className="fa fa-spinner fa-spin fa-fw loader"></i>
+                }
+
+                <ListingsView
+                  type={type}
+                  listings={listings}
+                  onSelectListing={(item) => this.onSelectListing(item)}
+                />
               </div>
-            }
+            </div>
+
           </Modal.Body>
         </Modal>
 
