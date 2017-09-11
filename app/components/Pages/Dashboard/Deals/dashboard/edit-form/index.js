@@ -156,7 +156,7 @@ class EditForm extends React.Component {
     // save form
     try {
       await saveSubmission(task.id, task.form, status, values)
-      await reloadDealContexts(deal.id)
+      reloadDealContexts(deal.id).then(() => {})
 
       notify({
         message: 'The form has been saved!',
