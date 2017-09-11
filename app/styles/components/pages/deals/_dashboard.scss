@@ -1,4 +1,5 @@
 $col-padding: 20px;
+$listing-card-height: 180px;
 
 @mixin scrollbar($color: transparent, $shadow: transparent) {
   ::-webkit-scrollbar {
