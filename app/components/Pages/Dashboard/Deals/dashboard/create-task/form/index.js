@@ -1,41 +1,88 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { DropdownButton, MenuItem } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 import _ from 'underscore'
 import { createTask } from '../../../../../../../store_actions/deals'
+import Forms from './list'
+import TaskName from './task-name'
 
-const createNewTask = (form, props) => {
-  const { dealId, createTask, listId } = props
+class CreateForm extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      selectedFile: null,
+      showFormsModal: false,
+      showUploadNameModal: false
+    }
+  }
 
-  createTask(dealId, form.id, form.name, 'Incomplete', 'Form', listId)
+  /**
+   *
+   */
+  createNewTask(form) {
+    const { dealId, createTask, listId } = this.props
+
+    // hide form
+    this.displayForm(false)
+
+    // create form
+    createTask(dealId, form.id, form.name, 'Incomplete', 'Form', listId)
+  }
+
+  /**
+   *
+   */
+  onRequestUpload(file) {
+    this.setState({
+      selectedFile: file,
+      showFormsModal: false,
+      showTaskNameModal: true
+    })
+  }
+
+  /**
+   *
+   */
+  displayForm(status) {
+    this.setState({ showFormsModal: status })
+  }
+
+  render() {
+    const { selectedFile, showFormsModal, showTaskNameModal } = this.state
+    const { dealId, listId, forms } = this.props
+
+    return (
+      <div className="creator task-form">
+
+        <div
+          className="title"
+          onClick={() => this.displayForm(true)}
+        >
+          <img
+            className="img-add"
+            src="/static/images/deals/plus.svg"
+          />&nbsp;
+          Add new task
+        </div>
+
+        <TaskName
+          show={showTaskNameModal}
+          dealId={dealId}
+          listId={listId}
+          file={selectedFile}
+          onClose={() => this.setState({ showTaskNameModal: false })}
+        />
+
+        <Forms
+          show={showFormsModal}
+          listId={listId}
+          onSelectForm={form => this.createNewTask(form)}
+          onRequestUpload={file => this.onRequestUpload(file)}
+          onClose={() => this.displayForm(false)}
+        />
+      </div>
+    )
+  }
 }
 
-const CreateForm = (props) => {
-  const { forms } = props
-
-  return (
-    <div className="creator task-form">
-      <DropdownButton
-        noCaret
-        className="add-task"
-        id="dropdown-create-form"
-        title={<span><i className="fa fa-plus" /> Add New</span>}
-      >
-        {
-          _.map(forms, form => (
-            <MenuItem
-              key={`FORM_ITEM_${form.id}`}
-              onClick={() => createNewTask(form, props)}
-            >
-              { form.name }
-            </MenuItem>
-          ))
-        }
-      </DropdownButton>
-    </div>
-  )
-}
-
-export default connect(({ deals }) => ({
-  forms: deals.forms
-}), { createTask })(CreateForm)
+export default connect(null, { createTask })(CreateForm)

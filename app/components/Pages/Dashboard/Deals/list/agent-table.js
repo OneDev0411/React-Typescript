@@ -37,7 +37,7 @@ class AgentTable extends BaseTable {
         sortable: true,
         className: 'col-md-2 hidden-sm hidden-xs',
         getText: deal => this.getSide(deal),
-        getValue: deal => deal.deal_type
+        getValue: deal => deal.deal_type.toString() + this.getRoleNames(deal)
       },
       next_date: {
         caption: 'NEXT DATES',
@@ -53,7 +53,7 @@ class AgentTable extends BaseTable {
       notificiation: {
         caption: '',
         className: 'col-md-1 hidden-sm hidden-xs',
-        getText: () => ''
+        getText: deal => this.hasNotification(deal)
       }
     }
   }
@@ -110,7 +110,8 @@ class AgentTable extends BaseTable {
   }
 }
 
-export default connect(({ deals }) => ({
+export default connect(({ deals, chatroom }) => ({
   tasks: deals.tasks,
-  checklists: deals.checklists
+  checklists: deals.checklists,
+  rooms: chatroom.rooms
 }))(AgentTable)

@@ -29,8 +29,9 @@ class PdfViewer extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { uri } = nextProps
 
-    if (uri)
+    if (uri && uri !== this.props.uri) {
       this.load(uri)
+    }
   }
 
   componentWillUnmount() {
@@ -87,13 +88,14 @@ class PdfViewer extends React.Component {
 
   render() {
     const { doc, pageNumber, loading } = this.state
+    const { scale } = this.props
 
     return (
       <div>
         {
           loading &&
           <div className="loading center">
-            <i className="fa fa-spinner fa-spin fa-2x fa-fw" />
+            <img src="/static/images/loading-states/pacman.svg" />
             <p>Loading document</p>
           </div>
         }
@@ -103,7 +105,7 @@ class PdfViewer extends React.Component {
           <div className="pdf-context">
             <Page
               doc={doc}
-              scale={this.props.scale}
+              scale={scale}
               pageNumber={pageNumber}
             />
 

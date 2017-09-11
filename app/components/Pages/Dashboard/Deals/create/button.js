@@ -6,8 +6,8 @@ const options = [
   'New Home',
   'Lot / Land',
   'Residential Lease',
-  'Commerical Sale',
-  'Commerical Lease'
+  'Commercial Sale',
+  'Commercial Lease'
 ]
 
 const names = {
@@ -35,7 +35,7 @@ export default ({
         options.map((item, key) =>
           <MenuItem
             key={`MENU_ITEM_${key}`}
-            onClick={() => onClickOption(item)}
+            onClick={() => onClickOption(type, item)}
             eventKey={key+1}
           >
             { item }

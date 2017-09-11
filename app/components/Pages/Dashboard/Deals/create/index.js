@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import { addNotification as notify } from 'reapop'
 import {
   Grid,
   Row,
@@ -12,7 +13,6 @@ import _ from 'underscore'
 import Deal from '../../../../../models/Deal'
 import listingsHelper from '../../../../../utils/listing'
 import AddressComponents from './address_components'
-import PlacesView from './places_view'
 import ListingsView from './listings_view'
 import DealButton from './button'
 import SearchInput from './search_input'
@@ -26,11 +26,8 @@ class DealCreate extends React.Component {
       showModal: false,
       saving: false,
       showAddressComponents: false,
-      option: null,
       address: '',
-      selected: null,
       listings: {},
-      places: {},
       searching: false,
       property_type: null
     }
@@ -44,78 +41,53 @@ class DealCreate extends React.Component {
     const address = e.target.value
 
     this.setState({
-      address,
-      selected: null
+      address
     })
   }
 
   /**
-   * search address inside google places and rechat listings
+   * search rechat listings
    */
   async search(address) {
     if (address.length === 0) {
       return false
     }
 
-    const { type } = this.props
-    let listings
-    let places
-
     // show loading
     this.setState({ searching: true })
 
     try {
-      let response
-
       // search in mls listings
-      if (type === 'offer') {
-        response = await Deal.searchListings(address)
-        listings = this.createList(response.data, 'offer')
-      }
-
-      // get google results
-      response = await Deal.searchPlaces(address)
-      places = this.createList(response.results, 'listing')
+      const response = await Deal.searchListings(address)
+      const listings = this.createList(response.data)
 
       // hide loading
       this.setState({
         listings,
-        places
+        searching: false
       })
     }
-    catch(e) {}
-
-    this.setState({ searching: false })
+    catch(e) {
+      this.setState({ searching: false })
+    }
   }
 
   /**
-   * normalize and integrate google places and rechat listings list
+   * normalize list
    */
-  createList(data, type) {
+  createList(data) {
     const list = []
 
-    if (type === 'listing') {
-       _.each(data, item => {
-
-        list.push({
-          full_address: item.formatted_address
-        })
+     _.each(data, item => {
+      list.push({
+        id: item.id,
+        full_address: listingsHelper.addressTitle(item.address),
+        address_components: item.address,
+        price: item.price,
+        status: item.status,
+        image: item.cover_image_url
       })
-    }
-
-    if (type === 'offer') {
-       _.each(data, item => {
-        list.push({
-          isListing: true,
-          id: item.id,
-          full_address: listingsHelper.addressTitle(item.address),
-          address_components: item.address,
-          price: item.price,
-          status: item.status,
-          image: item.cover_image_url
-        })
-      })
-    }
+    })
 
     return list
   }
@@ -123,26 +95,21 @@ class DealCreate extends React.Component {
   /**
    * on user selects a place or listing
    */
-  onPlaceSelect(item) {
+  onSelectListing(item) {
     this.setState({
-      selected: item,
-      address: item.full_address,
-      showAddressComponents: !item.isListing,
-      showModal: item.isListing
+      address: item.full_address
     })
 
-    if (item.isListing) {
-      const side = this.props.type === 'offer' ? 'Buying' : 'Selling'
-      const { property_type } = this.state
+    const side = this.props.type === 'offer' ? 'Buying' : 'Selling'
+    const { property_type } = this.state
 
-      const data = {
-        property_type,
-        deal_type: side,
-        listing: item.id
-      }
-
-      return this.save(data)
+    const data = {
+      property_type,
+      deal_type: side,
+      listing: item.id
     }
+
+    return this.save(data)
   }
 
   /**
@@ -153,7 +120,7 @@ class DealCreate extends React.Component {
     const { street_number, street_address, unit_number, city, state, zipcode } = address_components
     const { property_type } = this.state
 
-    const side = this.props.type === 'offer' ? 'Buying' : 'Selling'
+    const side = (type === 'offer') ? 'Buying' : 'Selling'
 
     // create full address
     let full_address = [
@@ -185,28 +152,41 @@ class DealCreate extends React.Component {
    * save deal
    */
   async save(data) {
-    const { createDeal } = this.props
+    const { createDeal, notify } = this.props
 
     // show loading
     this.setState({ saving: true })
 
-    // create deal
-    const deal = await createDeal(data)
+    try {
+      // create deal
+      const deal = await createDeal(data)
 
-    // hide loading
-    this.setState({ saving: false })
+      // navigate to the deal
+      browserHistory.push(`/dashboard/deals/${deal.id}`)
+    } catch(e) {
+      this.setState({ saving: false })
 
-    // navigate to the deal
-    browserHistory.push(`/dashboard/deal/${deal.id}`)
+      // notify user
+      notify({
+        title: 'Can not create deal',
+        message: e.response && e.response.body ? e.response.body.message : null,
+        status: 'error',
+        dismissible: true
+      })
+    }
   }
 
   /**
    * open listing/offer wizard
    */
-  onClickOption(property_type) {
+  onClickOption(type, property_type) {
+    const showAddressComponents = (type === 'listing')
+    const showModal = (type !== 'listing')
+
     this.setState({
       property_type,
-      showModal: true
+      showAddressComponents,
+      showModal
     })
   }
 
@@ -217,9 +197,7 @@ class DealCreate extends React.Component {
       saving,
       address,
       listings,
-      places,
       searching,
-      selected,
       showAddressComponents
     } = this.state
 
@@ -232,11 +210,10 @@ class DealCreate extends React.Component {
 
         <AddressComponents
           onClickSave={(address_components) => this.createNewListing(address_components)}
-          onHide={() => this.setState({ showAddressComponents: false, showModal: true })}
+          onHide={() => this.setState({ showAddressComponents: false })}
           saving={saving}
           show={showAddressComponents}
           address={address}
-          item={selected || {}}
         />
 
         <Modal
@@ -269,10 +246,19 @@ class DealCreate extends React.Component {
 
             {
               address.length > 0 &&
-              <div className="places">
+              <div className="listings">
 
                 <div className="list">
-
+                  <div className="create-manually">
+                    <span
+                      onClick={() => this.setState({
+                        showAddressComponents: true,
+                        showModal: false
+                      })}
+                    >
+                      Not on MLS?  Create manually.
+                    </span>
+                  </div>
                   {
                     searching &&
                     <i className="fa fa-spinner fa-spin fa-fw loader"></i>
@@ -281,12 +267,7 @@ class DealCreate extends React.Component {
                   <ListingsView
                     type={type}
                     listings={listings}
-                    onPlaceSelect={(item) => this.onPlaceSelect(item)}
-                  />
-
-                  <PlacesView
-                    places={places}
-                    onPlaceSelect={(item) => this.onPlaceSelect(item)}
+                    onSelectListing={(item) => this.onSelectListing(item)}
                   />
                 </div>
               </div>
@@ -301,4 +282,4 @@ class DealCreate extends React.Component {
 
 export default connect(({data}) => ({
   user: data.user
-}), { createDeal })(DealCreate)
+}), { createDeal, notify })(DealCreate)

@@ -1,17 +1,30 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Comments from '../../../Chatroom/Messages/light'
+import TaskRoom from '../../../Chatroom/Services/notification'
 import { addNewRoom } from '../../../../../../store_actions/chatroom/room'
 
 class Comment extends React.Component {
 
-  componentWillReceiveProps(nextProps) {
-    const { addNewRoom } = this.props
-    const { rooms, task } = nextProps
+  componentDidMount() {
+    const { task, rooms } = this.props
+    this.getRoom(task, rooms)
+  }
 
-    if (task && !rooms[task.room.id]) {
+  componentWillReceiveProps(nextProps) {
+    const { task, rooms } = nextProps
+    this.getRoom(task, rooms)
+  }
+
+  getRoom(task, rooms) {
+    const { addNewRoom } = this.props
+    const room = rooms[task.room.id]
+
+    if (task && !room) {
       addNewRoom(task.room)
     }
+
+    TaskRoom.clear(task.room.id)
   }
 
   render() {

@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
+import { reducer as notificationsReducer } from 'reapop'
 import data from './data'
 import auth from './auth'
 import user from './user'
@@ -22,16 +23,23 @@ const appReducer = combineReducers({
   user,
   auth,
   brand,
-  search,
-  alerts,
-  widgets,
   contact,
   chatroom,
+  widgets,
+
+  /* deals reducers */
   deals,
-  favorites,
   brandConsole,
-  routing: routerReducer,
-  listing: createNamedWrapperReducer(listing, 'LISTING')
+
+  /* mls reducers */
+  search,
+  alerts,
+  favorites,
+  listing: createNamedWrapperReducer(listing, 'LISTING'),
+
+  /* third party reducers */
+  notifications: notificationsReducer(),
+  routing: routerReducer
 })
 
 export default (state, action) => appReducer(state, action)

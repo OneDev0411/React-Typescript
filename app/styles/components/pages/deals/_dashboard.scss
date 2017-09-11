@@ -27,6 +27,7 @@ $col-padding: 20px;
 }
 
 @import './dashboard/_info';
+@import './dashboard/_add_contract';
 @import './dashboard/_tasks';
 @import './dashboard/_task_detail';
 @import './dashboard/_fact_sheet';
@@ -38,6 +39,7 @@ $col-padding: 20px;
 @import './dashboard/_edit_form';
 @import './dashboard/_esign_document_modal';
 @import './dashboard/_esign_send';
+@import './dashboard/_form_viewer';
 
 %deal-dashboard {
   margin-left: 0;
@@ -75,10 +77,6 @@ $col-padding: 20px;
 
   .deal-roles {
     @extend %deal-roles;
-  }
-
-  .deal-task-creators {
-    @extend %deal-task-creators;
   }
 
   .deal-comments {

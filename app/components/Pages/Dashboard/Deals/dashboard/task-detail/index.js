@@ -7,11 +7,6 @@ import UploadFile from '../documents/upload'
 import Comments from '../comments'
 import CommentInput from '../comments/input'
 
-function scrollEnd() {
-  const el = document.getElementById('deals-task-scrollable')
-  el.scrollTop = el.scrollHeight
-}
-
 const TaskManager = ({
   deal,
   tasks,
@@ -50,7 +45,6 @@ const TaskManager = ({
 
         <CommentInput
           task={task}
-          onCommentSaved={() => scrollEnd()}
           onCloseTask={() => onCloseTask()}
         />
       </UploadFile>

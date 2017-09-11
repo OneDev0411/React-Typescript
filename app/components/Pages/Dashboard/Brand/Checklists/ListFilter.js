@@ -1,9 +1,9 @@
 import React from 'react'
 import cn from 'classnames'
 import ClickOutside from 'react-click-outside'
+import { Button, Col } from 'react-bootstrap'
 
 export default class ListFilter extends React.Component {
-
   constructor(props) {
     super(props)
     this.state = {
@@ -29,13 +29,28 @@ export default class ListFilter extends React.Component {
     const { filteredData } = this.state
     let items = []
     Object.keys(filteredData).forEach((key) => (
-        items.push(<li
-          onClick={() => this.props.addForm && this.props.addForm(filteredData[key])}
-          key={key}
-          className={this.props.liClassName}
-        >{filteredData[key].name}
-        </li>)
-      )
+      items.push(<li
+        key={key}
+        className={this.props.liClassName}
+      >
+        <Col md={6} sm={6} xs={6}>{filteredData[key].name}</Col>
+        <Col md={3} sm={3} xs={3}>
+          <Button
+            onClick={() => this.props.addForm && this.props.addForm(filteredData[key])}
+          >
+          Allow Form
+          </Button>
+        </Col>
+        <Col md={3} sm={3} xs={3}>
+          <Button
+            bsStyle="primary"
+            onClick={() => this.props.addTask && this.props.addTask(filteredData[key])}
+          >
+          Add Task
+          </Button>
+        </Col>
+      </li>)
+    )
     )
 
     return (
@@ -52,7 +67,8 @@ export default class ListFilter extends React.Component {
             />
             <input
               className={this.props.inputClassName}
-              type="text" placeholder={this.props.placeholder}
+              type="text"
+              placeholder={this.props.placeholder}
               onChange={this.filterData}
             />
           </div>

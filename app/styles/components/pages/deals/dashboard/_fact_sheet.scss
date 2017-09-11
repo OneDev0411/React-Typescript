@@ -1,70 +1,40 @@
 %deal-fact-sheet {
   background: #fff;
   padding: $col-padding 0;
-  @extend %list;
-
-  .critical-dates {
-    margin-top: 10px;
-  }
-
-  span.field {
-    color: gray;
-  }
-}
-
-%list {
-  ul {
-    margin: 0 15px 10px 15px;
-    padding: 0 10px;
+  .fact-table {
+    width: 100%;
+    color: #5b6469;
+    margin-bottom: 8px;
+    font-size: 14px;
     border-bottom: 1px solid #e5e5e5;
 
-    li {
-      color: #5b6469;
-      margin-bottom: 8px;
-      font-size: 14px;
-      height: 20px;
-      line-height: 20px;
-      vertical-align: middle;
+    td {
+      padding-bottom: 8px;
+    }
 
-      .name {
-        color: #78909c;
-        display: inline-block;
-        width: 60%;
-
-        &.no-status {
-          width: 65%;
-        }
-      }
-
-      .field {
-        color: #78909c;
-        text-align: right;
-        display: inline-block;
-        width: 34%;
-      }
+    td.name {
+      width: 70%;
+      padding-left: $col-padding;
+      color: #78909c;
 
       .status {
-        display: inline-block;
-        vertical-align: middle;
         margin-right: 5px;
-        width: 12px;
-        height: 12px;
-        line-height: 12px;
-        text-align: center;
-        background: #eeeeee;
-        border-radius: 40px;
-        .check {
-          color: #fff;
-          font-size: 10px;
-        }
+        color: #eeeeee;
 
         &.past {
-          background: #35b863;
+          color: #35b863;
         }
         &.next {
-          background: #f6a623;
+          color: #f6a623;
         }
       }
+    }
+
+    td.field {
+      width: 30%;
+      text-align: right;
+      padding-right: $col-padding;
+      color: #78909c;
     }
   }
 }

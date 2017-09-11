@@ -4,11 +4,11 @@ import store from '../stores'
 import Load from '../loader'
 import UserIsNotAuthenticated from './userIsNotAuthenticated'
 
-// Containers
-import AppLayout from '../components/App'
-
 // actions
 import { getDeals } from '../store_actions/deals'
+
+// Containers
+import AppLayout from '../components/App'
 
 const AsyncAuthenticationLayout = Load({
   loader: () =>
@@ -307,9 +307,9 @@ export default (
         <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
       </Route>
 
-      <Route path="/dashboard/deals(/:filter)" component={AsyncDealsLayout}>
+      <Route path="/dashboard/deals(/filter/:filter)" component={AsyncDealsLayout}>
         <IndexRoute component={AsyncDealsList} />
-        <Route path="/dashboard/deal/:id" component={AsyncDealDashboard} />
+        <Route path="/dashboard/deals/:id" component={AsyncDealDashboard} />
       </Route>
       <Route path="/dashboard/brand" component={Brand} />
 

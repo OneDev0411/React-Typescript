@@ -22,7 +22,7 @@ router.post('/proxifier/upload', bodyParser(), async ctx => {
     const request = ctx.fetch(endpoint, method, 'multipart/form-data')
 
     _.each(files, file => {
-      request.attach(file.filename, file.path)
+      request.attach(file.filename, file.path, file.filename)
     })
 
     if (headers.authorization) {

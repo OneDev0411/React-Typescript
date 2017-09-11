@@ -9,15 +9,23 @@
     max-height: 71vh;
   }
 
-  .mls-viewer-button {
+  .mls-viewer-button,
+  .add-contract-button {
     width: calc(100% - 20px);
-    margin: 10px;
+    margin: 10px 10px 0 10px;
     height: 34px;
     border-radius: 3px;
     background-color: #ffffff;
     border: solid 1px #dde2e6;
     font-weight: 500;
     color: #61778d;
+    &:focus {
+      outline: none;
+    }
+    &:hover {
+      border-color: #2196F3;
+      color: #2196F3;
+    }
   }
 }
 

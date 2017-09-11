@@ -12,6 +12,7 @@ export default ({
 }) => (
   <div className="deal-files-container">
     <Form
+      deal={deal}
       task={task}
     />
 
