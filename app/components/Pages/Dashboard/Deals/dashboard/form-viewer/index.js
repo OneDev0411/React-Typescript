@@ -67,18 +67,18 @@ class FormViewer extends React.Component {
           <div className="cta">
             <Button
               className="deal-button"
-              onClick={() => this.toggleComments()}
-            >
-              <i className="fa fa-comment-o" />
-              Comments
-            </Button>
-
-            <Button
-              className="deal-button"
               onClick={() => this.toggleFactsheet()}
             >
               <i className="fa fa-comment-o" />
               Deal Facts
+            </Button>
+
+            <Button
+              className="deal-button"
+              onClick={() => this.toggleComments()}
+            >
+              <i className="fa fa-comment-o" />
+              Comments
             </Button>
           </div>
 
