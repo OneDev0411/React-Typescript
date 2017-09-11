@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import S from 'shorti'
+import { batchActions } from 'redux-batched-actions'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import Load from '../loader'
 
@@ -17,6 +17,9 @@ const MobileNav = Load({
 // global chat components
 import { getRooms } from '../store_actions/chatroom'
 
+// deals featch on launch
+import { getDeals } from '../store_actions/deals'
+
 const InstantChat = Load({
   loader: () => import('./Pages/Dashboard/Chatroom/InstantChat')
 })
@@ -32,7 +35,7 @@ import ReactGA from 'react-ga'
 import config from '../../config/public'
 
 class App extends Component {
-  static fetchData(dispatch, params) {
+  static async fetchData(dispatch, params) {
     const { user } = params
     return dispatch(getRooms(user))
   }
@@ -53,8 +56,11 @@ class App extends Component {
     // load rooms
     this.initialRooms()
 
+    // load deals
+    this.initialDeals()
+
     // load contacts
-    this.initialContacts(user)
+    this.initialContacts()
 
     // check user is mobile device or not
     this.checkForMobile()
@@ -77,6 +83,14 @@ class App extends Component {
     new ChatSocket(user)
   }
 
+  async initialDeals() {
+    const { dispatch, data } = this.props
+    const { user } = data
+
+    const isBackOffice = user.features.indexOf('Backoffice') > -1
+    return dispatch(getDeals(user, isBackOffice))
+  }
+
   async initialRooms() {
     const { dispatch, data } = this.props
     let { rooms } = this.props
@@ -89,10 +103,10 @@ class App extends Component {
     AppStore.data.rooms = rooms
   }
 
-  initialContacts(user) {
-    const { dispatch, contacts } = this.props
+  initialContacts() {
+    const { dispatch, contacts, data } = this.props
 
-    if (user && !contacts) {
+    if (data.user && !contacts) {
       dispatch(getContacts())
     }
   }
@@ -125,7 +139,9 @@ class App extends Component {
       google_analytics_id = brand.assets.google_analytics_id
     }
 
-    ReactGA.initialize(google_analytics_id)
+    ReactGA.initialize(google_analytics_id, {
+      debug: true
+    })
     ReactGA.ga(
       'create',
       google_analytics_id,
@@ -211,7 +227,7 @@ class App extends Component {
   }
 
   render() {
-    const { data, rooms, location } = this.props
+    const { data, rooms, location, isWidgetRedux } = this.props
     const { user } = data
 
     // don't remove below codes,
@@ -226,20 +242,26 @@ class App extends Component {
     })
 
     // render sidebar
-    const main_style = { minHeight: '100vh' }
-    let nav_area = <SideBar data={data} />
+    let navArea = <SideBar data={data} />
 
     if (data.is_mobile && user) {
       // nav_area = <MobileNav data={data} />
-      nav_area = <div />
+      navArea = <div />
     }
+
     return (
       <div>
-        {user && !data.is_widget && !this.props.isWidgetRedux && nav_area}
+        {
+          user && !isWidgetRedux &&
+          navArea
+        }
 
-        {user && <InstantChat user={user} rooms={rooms} />}
+        {
+          user &&
+          <InstantChat user={user} rooms={rooms} />
+        }
 
-        <main style={main_style}>
+        <main style={{ minHeight: '100vh' }}>
           {children}
         </main>
       </div>

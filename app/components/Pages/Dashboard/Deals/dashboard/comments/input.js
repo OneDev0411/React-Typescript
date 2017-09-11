@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Textarea from 'react-textarea-autosize'
+import { addNotification as notify } from 'reapop'
 import { Row, Col } from 'react-bootstrap'
 import Message from '../../../Chatroom/Util/message'
 import Deal from '../../../../../../models/Deal'
@@ -24,12 +25,18 @@ class CommentCreate extends React.Component {
     this.text_message = ref
   }
 
+  onCommentSaved() {
+    // scroll to the end
+    const el = document.getElementById('deals-task-scrollable')
+    el.scrollTop = el.scrollHeight
+  }
+
   /**
    * post comment,
    * also change needs_attention flag and change status of task if requests by BO
    */
   async sendComment(needs_attention = null, task_status = null) {
-    const { task, user, changeTaskStatus, changeNeedsAttention } = this.props
+    const { task, user, changeTaskStatus, changeNeedsAttention, notify } = this.props
     const el = this.text_message
     const comment = el.value
 
@@ -42,25 +49,39 @@ class CommentCreate extends React.Component {
 
       // send message
       Message.postTaskComment(task, message)
-      .then(() => this.props.onCommentSaved())
-    }
-
-    if (needs_attention !== null) {
-      await changeNeedsAttention(task.id, needs_attention)
-    }
-
-    if (task_status !== null) {
-      await changeTaskStatus(task.id, task_status)
+      .then(() => this.onCommentSaved())
     }
 
     // clear message box
     this.text_message.value = ''
     this.setState({ rows: 1 })
+
+    try {
+      if (needs_attention !== null) {
+        await changeNeedsAttention(task.id, needs_attention)
+      }
+
+      if (task_status !== null) {
+        await changeTaskStatus(task.id, task_status)
+        notify({
+          message: `Task status has changed to ${task_status}`,
+          status: 'success',
+          dismissible: true
+        })
+      }
+
+    } catch(e) {
+      notify({
+        message: 'Can not complete this action. try again',
+        status: 'error',
+        dismissible: true
+      })
+    }
   }
 
   render() {
     const { rows, height } = this.state
-    const { task, onCloseTask } = this.props
+    const { task, noCloseButton, onCloseTask } = this.props
 
     return (
       <div className="deal-comment-create">
@@ -69,7 +90,7 @@ class CommentCreate extends React.Component {
           dir="auto"
           placeholder="Write a comment ..."
           rows={rows}
-          maxRows={5}
+          maxRows={3}
           style={{ width: '100%', height: `${height}px`}}
           inputRef={ref => this.setReference(ref)}
           onHeightChange={height => this.onHeightChangeHandler(height)}
@@ -77,15 +98,22 @@ class CommentCreate extends React.Component {
 
         <Row>
           <Col md={1} sm={1}>
-            <button
-              className="deal-button close-task"
-              onClick={() => onCloseTask()}
-            >
-              <i className="fa fa-2x fa-angle-right" />
-            </button>
+            {
+              noCloseButton !== true &&
+              <button
+                className="deal-button close-task"
+                onClick={() => onCloseTask()}
+              >
+                <i className="fa fa-2x fa-angle-right" />
+              </button>
+            }
           </Col>
 
-          <Col md={11} sm={11} style={{ textAlign: 'right'}}>
+          <Col
+            md={noCloseButton ? 12 : 11}
+            sm={noCloseButton ? 12 : 11}
+            style={{ textAlign: 'right'}}
+          >
             <ActionButtons
               task={task}
               onSendComment={(notify, status) => this.sendComment(notify, status)}
@@ -100,4 +128,4 @@ class CommentCreate extends React.Component {
 
 export default connect(({ deals, data }) => ({
   user: data.user
-}), { changeTaskStatus, changeNeedsAttention })(CommentCreate)
+}), { changeTaskStatus, changeNeedsAttention, notify })(CommentCreate)

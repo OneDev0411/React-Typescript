@@ -3,7 +3,7 @@ import store from '../../../../../stores'
 import Chatroom from '../Util/chatroom'
 import NotificationService from '../../../../../services/notification'
 import {
-  createExistingRoom,
+  fetchAndCreateExistingRoom,
   addMembersToRoom,
   updateRoomNotifications,
   resetRoomNotificationsCounter,
@@ -95,10 +95,15 @@ export default class ChatNotification extends NotificationService {
   /**
    * create message
    */
-  createMessage(chatroom, notification, message) {
+  async createMessage(chatroom, notification, message) {
     const { room: roomId, notification_type, auxiliary_subject } = notification
+    const isDealTaskRoom = auxiliary_subject && auxiliary_subject.type === 'deal'
     const room = chatroom.rooms[roomId]
-    const isDeal = auxiliary_subject && auxiliary_subject.type === 'deal' ? true : false
+
+    // fetch room immediately if room is not exists
+    if (!room) {
+      await store.dispatch(fetchAndCreateExistingRoom(roomId))
+    }
 
     // don't anything when message.author is eqaual to current user
     if (message.author && message.author.id === this.user.id) {
@@ -122,7 +127,7 @@ export default class ChatNotification extends NotificationService {
     const isWindowActive = this.isWindowActive()
 
     // send notification
-    if (!isWindowActive && !isDeal) {
+    if (!isWindowActive && !isDealTaskRoom) {
       this.sendNotification(message, roomId)
     }
 
@@ -138,7 +143,7 @@ export default class ChatNotification extends NotificationService {
       this.updateRoomNotifications(roomId, message)
 
       // open chat popup but make it inactive
-      if (!this.isRouterMode() && !isDeal && !chatroom.popups[roomId]) {
+      if (!this.isRouterMode() && !isDealTaskRoom && !chatroom.popups[roomId]) {
         Chatroom.openChat(roomId, false)
       }
     }
@@ -181,15 +186,16 @@ export default class ChatNotification extends NotificationService {
   /**
    * On new message event [UserSentMessage]
    */
-  onReceiveMessage(chatroom, notification) {
+  async onReceiveMessage(chatroom, notification) {
     const { objects } = notification
-    this.createMessage(chatroom, notification, objects[0])
+
+    await this.createMessage(chatroom, notification, objects[0])
   }
 
   /**
    * On user share something (listing or alert)
    */
-  onShareSomething(chatroom, notification) {
+  async onShareSomething(chatroom, notification) {
     const { subjects, objects } = notification
 
     const message = {
@@ -197,7 +203,7 @@ export default class ChatNotification extends NotificationService {
       ...{ author: subjects[0] }
     }
 
-    this.createMessage(chatroom, notification, message)
+    await this.createMessage(chatroom, notification, message)
   }
 
   /**
@@ -213,7 +219,7 @@ export default class ChatNotification extends NotificationService {
 
     // if user is invited to a new room, create that room
     if (user.id === this.user.id) {
-      return store.dispatch(createExistingRoom(roomId))
+      return store.dispatch(fetchAndCreateExistingRoom(roomId))
     }
 
     // when new user invites to a existant room

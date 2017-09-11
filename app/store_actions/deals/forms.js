@@ -28,9 +28,7 @@ function _addForm(checklist) {
 export function addForm(brandId, checklistId, formId) {
   return async (dispatch) => {
     const response = await Deal.addForm(brandId, checklistId, formId)
-    if (response) {
-      dispatch(_addForm(response))
-    }
+    dispatch(_addForm(response))
   }
 }
 
@@ -44,11 +42,8 @@ function _deleteForm(checklistId, formId) {
 
 export function deleteForm(checklist, formId) {
   return async (dispatch) => {
-    const response = await Deal.deleteForm(checklist, formId)
-    if (response &&
-      response.body.status === 'success') {
-      dispatch(_deleteForm(checklist.id, formId))
-    }
+    await Deal.deleteForm(checklist, formId)
+    dispatch(_deleteForm(checklist.id, formId))
   }
 }
 

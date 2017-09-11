@@ -12,7 +12,15 @@ function setDeals(deals) {
   }
 }
 
-function setTasks(tasks) {
+function setDealContexts(deal_id, contexts) {
+  return {
+    type: types.SET_DEAL_CONTEXTS,
+    deal_id,
+    contexts
+  }
+}
+
+export function setTasks(tasks) {
   return {
     type: types.GET_TASKS,
     tasks
@@ -27,7 +35,7 @@ function updateRoles(deal_id, roles) {
   }
 }
 
-function setChecklists(checklists) {
+export function setChecklists(checklists) {
   return {
     type: types.GET_CHECKLISTS,
     checklists
@@ -45,6 +53,14 @@ function isBackOffice(status) {
   return {
     type: types.IS_BACK_OFFICE,
     status
+  }
+}
+
+export function appendChecklist(deal_id, checklist_id) {
+  return {
+    type: types.APPEND_CHECKLIST,
+    deal_id,
+    checklist_id
   }
 }
 
@@ -109,11 +125,23 @@ export function createDeal(data) {
     const { deals, checklists, tasks } = entities
 
     batchActions([
-      dispatch(addNewDeal(deals[deal.id])),
+      dispatch(setTasks(tasks)),
       dispatch(setChecklists(checklists)),
-      dispatch(setTasks(tasks))
+      dispatch(addNewDeal(deals[deal.id]))
     ])
 
     return deal
+  }
+}
+
+export function reloadDealContexts(dealId) {
+  return async (dispatch) => {
+    const deal = await Deals.getById(dealId)
+
+    dispatch(setDealContexts(deal.id, {
+      form_context: deal.form_context,
+      mls_context: deal.mls_context,
+      deal_context: deal.deal_context
+    }))
   }
 }

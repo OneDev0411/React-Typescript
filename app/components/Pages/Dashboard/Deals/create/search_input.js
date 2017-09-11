@@ -29,7 +29,7 @@ export default class extends React.Component {
         value={this.props.value}
         onChange={(e) => this.props.onChange(e)}
         inputRef={ref => this.search_input = ref}
-        placeholder="Enter full listing’s address or MLS #"
+        placeholder="Enter MLS # or address"
       />
     )
   }

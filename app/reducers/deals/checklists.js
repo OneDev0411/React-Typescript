@@ -8,6 +8,12 @@ export default (state = null, action) => {
         ...action.checklists
       }
 
+    case types.UPDATE_CHECKLIST:
+      return {
+        ...state,
+        [action.id]: action.checklist
+      }
+
     case types.CREATE_TASK:
       return {
         ...state,

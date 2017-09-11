@@ -5,7 +5,6 @@ import Fetch from '../services/fetch'
 
 const Chatroom = {}
 
-
 /**
 * returns rooms list
 */
@@ -15,16 +14,15 @@ Chatroom.getRooms = async function (user = {}) {
   try {
     const fetchRooms = new Fetch()
       .get('/rooms')
-      .query({ 'room_types[]': 'Direct' })
-      .query({ 'room_types[]': 'Group' })
+      .query({ 'room_types[]': ['Group', 'Direct'] })
       .query({ associations: 'user.last_seen_by' })
       .query({ limit: '1000' })
       .query({ sorting_value: 'Update' })
 
-
     // required on ssr
-    if (access_token)
+    if (access_token) {
       fetchRooms.set({ Authorization: `Bearer ${access_token}` })
+    }
 
     return await fetchRooms
   } catch (e) {}
@@ -35,8 +33,9 @@ Chatroom.getRooms = async function (user = {}) {
 */
 Chatroom.getRoomById = async function (roomId) {
   try {
-    const response = await new Fetch()
-      .get(`/rooms/${roomId}?associations=user.last_seen_by`)
+    const response = await new Fetch().get(
+      `/rooms/${roomId}?associations=user.last_seen_by`
+    )
 
     return response.body.data
   } catch (e) {}
@@ -46,14 +45,17 @@ Chatroom.getRoomById = async function (roomId) {
 * add new room
 */
 Chatroom.createRoom = async function (recipients) {
-  const members = [].concat(recipients.users, recipients.emails, recipients.phone_numbers)
+  const members = [].concat(
+    recipients.users,
+    recipients.emails,
+    recipients.phone_numbers
+  )
   const room_type = members.length > 1 ? 'Group' : 'Direct'
 
   // search room is created before or not
   const room = await Chatroom.searchRoom(recipients)
 
-  if (room)
-    return room
+  if (room) { return room }
 
   try {
     const response = await new Fetch()
@@ -71,9 +73,10 @@ Chatroom.createRoom = async function (recipients) {
 * leave or delete a room
 */
 Chatroom.leaveRoom = async function (userId, room) {
-  const endpoint = room.room_type === 'Direct' ?
-    `/rooms/${room.id}` :
-    `/rooms/${room.id}/users/${userId}`
+  const endpoint =
+    room.room_type === 'Direct'
+      ? `/rooms/${room.id}`
+      : `/rooms/${room.id}/users/${userId}`
 
   try {
     return await new Fetch().delete(endpoint)
@@ -87,15 +90,18 @@ Chatroom.leaveRoom = async function (userId, room) {
 */
 Chatroom.addMembers = async function (roomId, recipients) {
   try {
-    return await new Fetch()
-      .post(`/rooms/${roomId}/users`)
-      .send(recipients)
+    return await new Fetch().post(`/rooms/${roomId}/users`).send(recipients)
   } catch (e) {
     return null
   }
 }
 
-Chatroom.getMessages = async function (id, limit = 20, value = null, value_type = 'max') {
+Chatroom.getMessages = async function (
+  id,
+  limit = 20,
+  value = null,
+  value_type = 'max'
+) {
   let endpoint = `/rooms/${id}/messages?limit=${limit}&sorting_value=Creation`
 
   if (value) {
@@ -108,14 +114,11 @@ Chatroom.getMessages = async function (id, limit = 20, value = null, value_type 
   } catch (e) {}
 }
 
-
 Chatroom.uploadAttachment = async function (roomId, file) {
   let endpoint = `/rooms/${roomId}/attachments`
 
   try {
-    return await new Fetch()
-      .upload(endpoint)
-      .attach(file.name, file)
+    return await new Fetch().upload(endpoint).attach(file.name, file)
   } catch (e) {
     console.log(e)
   }

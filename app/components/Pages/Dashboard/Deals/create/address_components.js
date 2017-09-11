@@ -1,6 +1,5 @@
 import React from 'react'
 import { Modal, Button, FormControl } from 'react-bootstrap'
-import { parseLocation } from 'parse-address'
 
 class CreateDealModal extends React.Component {
   constructor(props) {
@@ -13,73 +12,6 @@ class CreateDealModal extends React.Component {
       state: '',
       zipcode: ''
     }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { show, saving, address, item } = nextProps
-
-    if (!show || saving) {
-      return false
-    }
-
-    let { address_components } = item
-
-    if (!address_components) {
-      address_components = this.parseAddress(address)
-    }
-
-    this.setState({
-      street_number: address_components.street_number || '',
-      street_address: address_components.street_name || '',
-      unit_number: address_components.unit_number || '',
-      city: address_components.city || '',
-      state: address_components.state_code || '',
-      zipcode: address_components.postal_code || ''
-    })
-  }
-
-  parseAddress(address) {
-    const parsed = parseLocation(address)
-
-    if (!parsed) {
-      return address
-    }
-
-    const parts = {}
-
-    if (parsed.number) {
-      parts.street_number = parsed.number
-    }
-
-    if (parsed.prefix) {
-      parts.street_dir_prefix = parsed.prefix
-    }
-
-    if (parsed.street) {
-      parts.street_name = parsed.street
-    }
-
-    if (parsed.type) {
-      parts.street_suffix = parsed.type
-    }
-
-    if (parsed.city) {
-      parts.city = parsed.city
-    }
-
-    if (parsed.zip) {
-      parts.postal_code = parsed.zip
-    }
-
-    if (parsed.state) {
-      parts.state_code = parsed.state
-    }
-
-    if (parsed.sec_unit_num) {
-      parts.unit_number = parsed.sec_unit_num
-    }
-
-    return parts
   }
 
   render() {

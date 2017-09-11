@@ -39,6 +39,10 @@ export default class extends React.Component {
     const { deal } = this.props
     const mlsNumber = deal.mls_context && deal.mls_context.mls_number
 
+    if (!mlsNumber) {
+      return false
+    }
+
     return (
       <div>
         <Button

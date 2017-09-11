@@ -21,15 +21,11 @@ class Filter extends React.Component {
    */
   setFilter(filter) {
     const filters = {}
-    const arg = filter === 'All' ? '' : `/${filter}`
+    const arg = filter === 'All' ? '' : `/filter/${filter}`
     browserHistory.push(`/dashboard/deals${arg}`)
 
     // set inbox name
     filters['__inbox_name__'] = filter
-
-    if (filter !== 'All') {
-      filters['needs_attention'] = (needs_attention) => needs_attention > 0
-    }
 
     // set filters
     this.props.onChangeFilter(filters)
