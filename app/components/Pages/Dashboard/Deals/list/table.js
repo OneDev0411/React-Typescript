@@ -134,7 +134,7 @@ class BaseTable extends React.Component {
       const order = cell.sortByList.indexOf(object)
       return order > -1 ? order : cell.sortByList.length + 1
     } else {
-      return object.toString().toLowerCase()
+      return object ? object.toString().toLowerCase() : null
     }
   }
 
