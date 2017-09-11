@@ -48,19 +48,14 @@ export const renderField = ({
             ''} ${hasError ? 'has-error' : ''}`}
         />
         <label htmlFor={input.name} className="c-auth__field__label">
-          <span>
-            {label}
-          </span>
+          <span>{label}</span>
           <sup>*</sup>
         </label>
         <span className="focus-border">
           <i />
         </span>
       </div>
-      {hasError &&
-        <div className="c-auth__field__error-alert">
-          {error}
-        </div>}
+      {hasError && <div className="c-auth__field__error-alert">{error}</div>}
     </div>
   )
 }
@@ -87,10 +82,8 @@ let SigninForm = ({
             />
           </Link>
           <p>Sign into</p>
-          <h1 className="c-auth__title tempo">
-            {`${siteTitle}`}
-          </h1>
-          {/* <p>It’s nice to have you back!</p>*/}
+          <h1 className="c-auth__title tempo">{`${siteTitle}`}</h1>
+          {/* <p>It’s nice to have you back!</p> */}
         </header>
         <main className="c-auth__main">
           <form onSubmit={handleSubmit(onSubmitHandler)}>
@@ -108,11 +101,11 @@ let SigninForm = ({
               component={renderField}
             />
             <Link to="/password/forgot">Forgot your password?</Link>
-            {submitError &&
+            {submitError && (
               <div className="c-auth__submit-error-alert">
-                There was an error with this request. This email or password is
-                incorrect.
-              </div>}
+                The email or password is incorrect. Please try again.
+              </div>
+            )}
             <button
               type="submit"
               className="c-auth__submit-btn"
@@ -149,7 +142,7 @@ const validate = values => {
   if (!values.password) {
     errors.password = 'Required'
   } else if (values.password.length < 6) {
-    errors.password = 'Must be at least 6 characters or more'
+    errors.password = 'Must be at least 6 characters.'
   }
 
   return errors

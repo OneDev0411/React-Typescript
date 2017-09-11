@@ -17,24 +17,13 @@ const getErrorMessage = (errorCode, email) => {
     case 409:
       return (
         <div className="c-auth__submit-alert c-auth__submit-alert--warning">
-          Sorry, seems there is an account with that email already exist in our
-          system!<br />
-          <span>If you forgot your password you can </span>
-          <Link to={`/password/forgot?email=${encodeURIComponent(email)}`}>
-            reset your password
-          </Link>
-          <span> or if you can remember it just </span>
-          <Link to={`/signin?username=${encodeURIComponent(email)}`}>
-            sign in
-          </Link>.
+          An account with this email address exists in our system. Please <Link to={`/password/forgot?email=${encodeURIComponent(email)}`}>reset your password</Link> or <Link to={`/signin?username=${encodeURIComponent(email)}`}>sign in</Link>.
         </div>
       )
     case 202:
       return (
         <div className="c-auth__submit-alert c-auth__submit-alert--warning">
-          Sorry, seems there is a signup request with that email already in our
-          system!<br />
-          we sent a new activation email now, please check your inbox.
+          An account with this email address exists in our system.  We resent a new activation email. Please check your inbox.
         </div>
       )
     default:
@@ -111,17 +100,16 @@ const Signup = ({
             : <div style={{ textAlign: 'center' }}>
               <p className="c-auth__submit-alert--success">
                 <span>
-                    For a secure experience, confirm your email address to
-                    continue.
+                    Check your email and confirm your email address to continue.
                   </span>
                 <br />
-                <span>You may now </span>
+                <span>Please, </span>
                 <Link
                   to={`/signin?username=${encodeURIComponent(
                       submitSuccessfully
                     )}`}
                 >
-                    sign in
+                    SIGN IN
                   </Link>.
                 </p>
             </div>}

@@ -34,15 +34,14 @@ const Reset = ({
               className={'c-auth__logo'}
             />
           </Link>
-          <h1 className="c-auth__title tempo">
-            {`${siteTitle}`}
-          </h1>
-          {!submitSuccessfully &&
-            <p className="c-auth__subtitle">Reset your password</p>}
+          <h1 className="c-auth__title tempo">{`${siteTitle}`}</h1>
+          {!submitSuccessfully && (
+            <p className="c-auth__subtitle">Reset your password</p>
+          )}
         </header>
         <main className="c-auth__main">
-          {!submitSuccessfully
-            ? <form onSubmit={handleSubmit(onSubmitHandler)}>
+          {!submitSuccessfully ? (
+            <form onSubmit={handleSubmit(onSubmitHandler)}>
               <Field
                 autoFocus
                 name="password"
@@ -66,12 +65,12 @@ const Reset = ({
                 }}
                 component={renderField}
               />
-              {submitError &&
-              <div className="c-auth__submit-error-alert">
-                    Sorry, seems there was an error with this request.<br />
-                <span>Please </span>
-                <Link to="/password/forgot">request a new password</Link>.
-                  </div>}
+              {submitError && (
+                <div className="c-auth__submit-error-alert">
+                  An unexpected error occurred. Please try again.<br />
+                  <Link to="/password/forgot">request a new password</Link>.
+                </div>
+              )}
               <button
                 type="submit"
                 className="c-auth__submit-btn"
@@ -88,20 +87,22 @@ const Reset = ({
                 <Link to="/password/forgot">Try sending it again</Link>
               </p>
             </form>
-            : <div style={{ textAlign: 'center' }}>
+          ) : (
+            <div style={{ textAlign: 'center' }}>
               <p className="c-auth__submit-alert--success">
-                <span>Your account password with this email </span>
+                <span>Your account password for email address </span>
                 <b>{submitSuccessfully}</b> is now updated.<br />
-                <span>You may now </span>
+                <span>Please </span>
                 <Link
                   to={`/signin?username=${encodeURIComponent(
-                      submitSuccessfully
-                    )}`}
+                    submitSuccessfully
+                  )}`}
                 >
-                    sign in
-                  </Link>.
-                </p>
-            </div>}
+                  sign in
+                </Link>.
+              </p>
+            </div>
+          )}
         </main>
       </article>
     </div>
@@ -114,7 +115,7 @@ const validate = values => {
   if (!values.password) {
     errors.password = 'Required'
   } else if (values.password.length < 6) {
-    errors.password = 'Your password must be at least 6 characters long'
+    errors.password = 'Your password must be at least 6 characters.'
   }
 
   if (!values.confirm_password) {

@@ -15,7 +15,7 @@ import setWidget from '../../../../store_actions/widgets/setWidget'
 import submitSigninForm from '../../../../store_actions/auth/signin'
 import updatePassword from '../../../../models/auth/password/update'
 
-export const renderAgentField = ({ id, input, label, checked }) =>
+export const renderAgentField = ({ id, input, label, checked }) => (
   <div className="c-auth__field--radio">
     <input
       {...input}
@@ -37,11 +37,10 @@ export const renderAgentField = ({ id, input, label, checked }) =>
         <path d="M0 0h24v24H0z" fill="none" />
         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
       </svg>
-      <span>
-        {label}
-      </span>
+      <span>{label}</span>
     </label>
   </div>
+)
 
 const RegisterForm = ({
   brand,
@@ -68,9 +67,7 @@ const RegisterForm = ({
               className={'c-auth__logo'}
             />
           </Link>
-          <h1 className="c-auth__title tempo">
-            {`${siteTitle}`}
-          </h1>
+          <h1 className="c-auth__title tempo">{`${siteTitle}`}</h1>
           <p className="c-auth__subtitle">Thanks! You're almost there...</p>
           <div>
             <small>
@@ -93,13 +90,14 @@ const RegisterForm = ({
               label="Last Name"
               component={renderField}
             />
-            {phone_number &&
+            {phone_number && (
               <Field
                 name="email"
                 type="email"
                 label="Email"
                 component={renderField}
-              />}
+              />
+            )}
             <Field
               name="password"
               type="password"
@@ -121,10 +119,11 @@ const RegisterForm = ({
                 component={renderAgentField}
               />
             </div>
-            {submitError &&
+            {submitError && (
               <div className="c-auth__submit-error-alert">
-                There was an error with this request. Please try again.
-              </div>}
+                An unexpected error occurred. Please try again.
+              </div>
+            )}
             <button
               type="submit"
               className="c-auth__submit-btn"
@@ -149,13 +148,13 @@ const validate = values => {
   if (!values.first_name) {
     errors.first_name = 'Required'
   } else if (values.first_name.length < 3) {
-    errors.first_name = 'Must be at least 3 characters or more'
+    errors.first_name = 'Must be at least 3 characters.'
   }
 
   if (!values.last_name) {
     errors.last_name = 'Required'
   } else if (values.last_name.length < 3) {
-    errors.last_name = 'Must be at least 3 characters or more'
+    errors.last_name = 'Must be at least 3 characters.'
   }
 
   if (!values.email) {
@@ -167,7 +166,7 @@ const validate = values => {
   if (!values.password) {
     errors.password = 'Required'
   } else if (values.password.length < 6) {
-    errors.password = 'Must be at least 6 characters or more'
+    errors.password = 'Must be at least 6 characters.'
   }
 
   return errors
