@@ -1,18 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import AppStore from '../../../../../stores/AppStore'
-import ListingDispatcher from '../../../../../dispatcher/ListingDispatcher'
-import ContactModel from '../../../../../models/Contact'
 import controller from '../../controller'
-import Brand from '../../../../../controllers/Brand'
-import S from 'shorti'
 import ListingViewer from '../../Partials/ListingViewer'
 import ListingViewerMobile from '../../Partials/ListingViewerMobile'
 import { Modal } from 'react-bootstrap'
 
 class ListingModal extends Component {
   componentWillReceiveProps(nextProps) {
-    const { show, listing, data } = nextProps
+    const { listing, data } = nextProps
     const { current_listing } = data
 
     if (listing && !current_listing) {
@@ -23,7 +19,7 @@ class ListingModal extends Component {
 
   render() {
     const { data, show, onHide, listing } = this.props
-    const { user, current_listing } = data
+    const { current_listing } = data
 
     if (!show || !listing || !current_listing) {
       return false

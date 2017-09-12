@@ -10,7 +10,7 @@ import Loading from '../../../Partials/Loading'
 import ShareListingModal from './ShareListingModal'
 import ListingMapMarker from './ListingMapMarker'
 import ListingMarker from './ListingMarker'
-import FavoriteHeart from './FavoriteHeart'
+import FavoriteHeart from '../Listings/components/FavoriteHeart'
 import controller from '../controller'
 import GoogleMap from 'google-map-react'
 import Brand from '../../../../controllers/Brand.js'
@@ -613,10 +613,8 @@ export default class ListingViewer extends Component {
 
       right_area = (
         <div className="listing-viewer--navbar" style={nav_bar_style}>
-          <div style={S('pull-right relative r-110 t-14n')}>
-            <FavoriteHeart
-              listing={listing}
-            />
+          <div style={S('pull-right relative r-110 t-7')}>
+            <FavoriteHeart listing={listing} width="40px" height="40px" />
           </div>
           <Button onClick={this.props.showShareListingModal.bind(this)} style={S(`absolute color-fff r-20 t-15 bg-${login_btn_color} border-1-solid-${login_btn_color}`)} type="button">
             Share
