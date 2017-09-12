@@ -1,0 +1,42 @@
+import Fetch from '../../services/fetch/index'
+
+const Brands = {}
+
+Brands.getBrands = async function (user) {
+  try {
+    return await new Fetch()
+      .get(`/brands/${user.brand}?associations[]=brand.roles&associations[]=brand_role.members`)
+  } catch (error) {
+    return { error }
+  }
+}
+
+Brands.addBrand = async function (user, brand) {
+  try {
+    return await new Fetch()
+      .post(`/brands/${user.brand}/brands`)
+      .send(brand)
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+Brands.editBrand = async function (brand) {
+  try {
+    return await new Fetch()
+      .put(`/brands/${brand.brand}/brands/${brand.id}`)
+      .send(brand)
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+Brands.deleteBrand = async function (brand) {
+  try {
+    return await new Fetch()
+      .delete(`/brands/${brand.brand}/brands/${brand.id}`)
+  } catch (e) {
+    console.log(e)
+  }
+}
+export default Brands
