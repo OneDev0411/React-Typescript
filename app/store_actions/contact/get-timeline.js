@@ -15,7 +15,5 @@ export default function (id) {
     const response = await Contact.getTimeline(id)
     const timeline = _.indexBy(response.body.data, 'id')
     dispatch(getTimeline(id, timeline))
-
-    return timeline
   }
 }

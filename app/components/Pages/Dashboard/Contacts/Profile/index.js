@@ -1,8 +1,7 @@
 import React from 'react'
 import { browserHistory } from 'react-router'
-import { Row, Col, Button, Tabs, Tab } from 'react-bootstrap'
+import { Row, Col, Tabs, Tab } from 'react-bootstrap'
 import Avatar from 'react-avatar'
-import moment from 'moment'
 import Stepper from '../../../../Partials/Stepper'
 import Contact from '../../../../../models/Contact'
 import { getTimeline, upsertAttributes } from '../../../../../store_actions/contact'
@@ -55,21 +54,14 @@ export default class ContactProfile extends React.Component {
     this.setState({ contact })
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     return typeof nextProps.contacts !== 'undefined'
   }
 
   async getTimeline() {
-    const { user, params, dispatch } = this.props
+    const { params, dispatch } = this.props
 
-    const timeline = await dispatch(getTimeline(params.id))
-
-    const contact = {
-      ...this.state.contact,
-      ...timeline
-    }
-
-    this.setState({ contact })
+    await dispatch(getTimeline(params.id))
   }
 
   goBack() {
@@ -88,7 +80,7 @@ export default class ContactProfile extends React.Component {
     const entity = `${type}s`
 
     if (!attributes[entity])
-      attributes[entity] = new Array()
+      attributes[entity] = []
 
     attributes[entity].push({
       type,
@@ -98,7 +90,6 @@ export default class ContactProfile extends React.Component {
   }
 
   onChangeAttribute(type, id, text) {
-    const { user, params } = this.props
     const attributes = [{
       id,
       type,
@@ -109,8 +100,6 @@ export default class ContactProfile extends React.Component {
   }
 
   changeStage(stage, contact) {
-    const { user, params } = this.props
-
     const attributes = [{
       id: Contact.get.stage(contact).id,
       type: 'stage',
@@ -120,9 +109,7 @@ export default class ContactProfile extends React.Component {
     this.upsertAttributes('stage', attributes)
   }
 
-  onChangeAddress(address, field, type, id, text) {
-    const { user, params } = this.props
-
+  onChangeAddress(address, field, id, text) {
     const attributes = [{
       id,
       type: 'address',
@@ -179,7 +166,7 @@ export default class ContactProfile extends React.Component {
 
               <div className="email">
                 { Contact.get.name(contact, 30)}
-                <div style={{ fontSize: '15px', color: 'gray'}}>
+                <div style={{ fontSize: '15px', color: 'gray' }}>
                   { Contact.get.email(contact, 30)}
                 </div>
               </div>
@@ -189,7 +176,7 @@ export default class ContactProfile extends React.Component {
               <div className="title">Stage:</div>
               <Stepper
                 steps={['General', 'Unqualified Lead', 'Qualified Lead', 'Active', 'Past Client']}
-                active={ this.getStageIndex(contact) }
+                active={this.getStageIndex(contact)}
                 onChange={stage => this.changeStage(stage, contact)}
               />
             </div>
@@ -218,8 +205,8 @@ export default class ContactProfile extends React.Component {
                         <Editable
                           type="email"
                           id={item.id}
-                          showEdit={true}
-                          showAdd={true}
+                          showEdit
+                          showAdd
                           text={item.email}
                           onAdd={this.onAddAttribute.bind(this)}
                           onChange={this.onChangeAttribute.bind(this)}
@@ -237,8 +224,8 @@ export default class ContactProfile extends React.Component {
                       <Editable
                         type="email"
                         id={null}
-                        showEdit={true}
-                        showAdd={true}
+                        showEdit
+                        showAdd
                         text=""
                         onAdd={this.onAddAttribute.bind(this)}
                         onChange={this.onChangeAttribute.bind(this)}
@@ -255,8 +242,8 @@ export default class ContactProfile extends React.Component {
                         <Editable
                           type="phone_number"
                           id={item.id}
-                          showEdit={true}
-                          showAdd={true}
+                          showEdit
+                          showAdd
                           text={item.phone_number}
                           onAdd={this.onAddAttribute.bind(this)}
                           onChange={this.onChangeAttribute.bind(this)}
@@ -274,8 +261,8 @@ export default class ContactProfile extends React.Component {
                       <Editable
                         type="phone_number"
                         id={null}
-                        showEdit={true}
-                        showAdd={true}
+                        showEdit
+                        showAdd
                         text="-"
                         onAdd={this.onAddAttribute.bind(this)}
                         onChange={this.onChangeAttribute.bind(this)}
@@ -299,7 +286,7 @@ export default class ContactProfile extends React.Component {
                           type="birthday"
                           id={item.id}
                           placeholder="mm / dd / yyyy"
-                          showEdit={true}
+                          showEdit
                           showAdd={false}
                           text={item.birthday}
                           onChange={this.onChangeAttribute.bind(this)}
@@ -322,7 +309,7 @@ export default class ContactProfile extends React.Component {
                         <Editable
                           type="address"
                           id={address.id}
-                          showEdit={true}
+                          showEdit
                           text={address.street_name || '-'}
                           onChange={this.onChangeAddress.bind(this, address, 'street_name')}
                         />
@@ -334,7 +321,7 @@ export default class ContactProfile extends React.Component {
                         <Editable
                           type="address"
                           id={address.id}
-                          showEdit={true}
+                          showEdit
                           text={address.city || '-'}
                           onChange={this.onChangeAddress.bind(this, address, 'city')}
                         />
@@ -346,7 +333,7 @@ export default class ContactProfile extends React.Component {
                         <Editable
                           type="address"
                           id={address.id}
-                          showEdit={true}
+                          showEdit
                           text={address.state || '-'}
                           onChange={this.onChangeAddress.bind(this, address, 'state')}
                         />
@@ -358,7 +345,7 @@ export default class ContactProfile extends React.Component {
                         <Editable
                           type="address"
                           id={address.id}
-                          showEdit={true}
+                          showEdit
                           text={address.postal_code || '-'}
                           onChange={this.onChangeAddress.bind(this, address, 'postal_code')}
                         />
@@ -376,7 +363,7 @@ export default class ContactProfile extends React.Component {
             <AddNote
               user={this.props.user}
               contact_id={this.props.params.id}
-              onSave={ () => this.setState({ activeTab: 'notes' }) }
+              onSave={() => this.setState({ activeTab: 'notes' })}
             />
 
             <div className="card activity">

@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import validator from 'validator'
 import _ from 'underscore'
-import cn from 'classnames'
 import Fetch from '../../../services/fetch'
 import Contact from '../../../models/Contact'
 import Recipients from './recipients'
@@ -87,16 +86,22 @@ class Compose extends React.Component {
       }
     }
 
-    const { PhoneNumberUtil } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
+    const { PhoneNumberUtil, PhoneNumberFormat } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
     const phoneUtil = PhoneNumberUtil.getInstance()
-
-    if (phoneUtil.isPossibleNumberString(id)) {
-      return {
-        [id]: this.createListItem('phone_number', { id, phone_number: id })
+    try {
+      let phoneNumber = phoneUtil.parse(id, 'US')
+      let isNumberValid = phoneUtil.isValidNumber(phoneNumber)
+      if (isNumberValid) {
+        return {
+          [id]: this.createListItem('phone_number', {
+            id,
+            phone_number: phoneUtil.format(phoneNumber, PhoneNumberFormat.E164)
+          })
+        }
       }
+    } catch (e) {
+      return null
     }
-
-    return null
   }
 
   /**
@@ -106,16 +111,14 @@ class Compose extends React.Component {
     const rooms = await this.askServer(`/rooms/search?q[]=${q}&room_types[]=Direct&room_types[]=Group`)
 
     return rooms
-      // .filter(room => room.users.length > 2)
-      .map(room => {
-        return this.createListItem('room', {
-          ...room,
-          ...{
-            users: _.pluck(room.users, 'id'),
-            display_name: `${room.proposed_title}`
-          }
-        })
-      })
+    // .filter(room => room.users.length > 2)
+      .map(room => this.createListItem('room', {
+        ...room,
+        ...{
+          users: _.pluck(room.users, 'id'),
+          display_name: `${room.proposed_title}`
+        }
+      }))
   }
 
   /**
@@ -171,7 +174,7 @@ class Compose extends React.Component {
     try {
       const response = await new Fetch().get(url)
       return response.body.data
-    } catch(e) {
+    } catch (e) {
       return null
     }
   }
@@ -182,7 +185,7 @@ class Compose extends React.Component {
   onAdd(recipient) {
     const recipients = {
       ...this.state.recipients,
-      ...{[recipient.id]: recipient}
+      ...{ [recipient.id]: recipient }
     }
 
     this.setState({ recipients }, this.onChangeRecipients)
@@ -218,7 +221,7 @@ class Compose extends React.Component {
     }
 
     _.each(this.state.recipients, recp => {
-      switch(recp.type) {
+      switch (recp.type) {
         case 'user':
           recipients.users.push(recp.id)
           break
@@ -244,7 +247,7 @@ class Compose extends React.Component {
     const { dropDownBox } = this.props
 
     if (dropDownBox === true)
-      this.setState({ viewList: {}})
+      this.setState({ viewList: {} })
   }
 
   render() {
