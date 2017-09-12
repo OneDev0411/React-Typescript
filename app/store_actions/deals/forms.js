@@ -18,6 +18,14 @@ export function getForms() {
   }
 }
 
+export function editForm(task, mode = 'embed') {
+  return {
+    type: types.SET_EDIT_FORM,
+    mode: task === null ? null : mode,
+    task
+  }
+}
+
 function _addForm(checklist) {
   return {
     type: types.ADD_FORM,
@@ -44,13 +52,6 @@ export function deleteForm(checklist, formId) {
   return async (dispatch) => {
     await Deal.deleteForm(checklist, formId)
     dispatch(_deleteForm(checklist.id, formId))
-  }
-}
-
-export function editForm(task) {
-  return {
-    type: types.SET_EDIT_FORM,
-    task
   }
 }
 

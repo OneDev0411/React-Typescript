@@ -64,24 +64,28 @@ const getNextDateField = (deal) => {
 
   dates = _.sortBy(dates, date => date.value)
 
+  let nextDate = null
+
   if (dates.length > 0) {
-    return dates[0]
+    nextDate = dates[0]
+  } else {
+    nextDate = _.find(dates, f => f.name === 'closing_date')
   }
 
-  return null
+  return nextDate
 }
 
 const table = {
-  list_date: 'Listing Date',
-  expiration_date: 'Listing Expiration',
-  contract_date: 'Contract Date',
-  contract_expiration: 'Contract Expiration',
-  option_period: 'Option Period',
-  financing_due: 'Financing Due',
-  title_due: 'Title Work Due',
-  t47_due: 'Survey / T47 Due',
-  closing_date: 'Closing',
-  possession_date: 'Possession'
+  list_date: ['Listing Date', 'Lst.'],
+  expiration_date: ['Listing Expiration', 'Exp.'],
+  contract_date: ['Contract Date', ''],
+  contract_expiration: ['Contract Expiration', ''],
+  option_period: ['Option Period', 'Opt.'],
+  financing_due: ['Financing Due', 'Fin.'],
+  title_due: ['Title Work Due', ''],
+  t47_due: ['Survey / T47 Due', 'T47.'],
+  closing_date: ['Closing', 'Cls.'],
+  possession_date: ['Possession', 'Pos.']
 }
 
 const CriticalDates = ({
@@ -103,7 +107,7 @@ const CriticalDates = ({
                       next: nextDate && nextDate.name === field
                     })}
                   />
-                  { name }
+                  { name[0] }
                 </td>
                 <td className="field">
                   { date.value }
@@ -121,10 +125,10 @@ CriticalDates.getNextDate = function(deal) {
   const date = getNextDateField(deal)
 
   if (!date) {
-    return '-'
+    return 'No Upcoming Dates'
   }
 
-  return moment(new Date(date.value)).format('MMM DD, YYYY')
+  return table[date.name][1] + ' ' + moment(new Date(date.value)).format('MMM DD, YYYY')
 }
 
 export default CriticalDates

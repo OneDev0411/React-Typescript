@@ -15,17 +15,22 @@ export default ({
       showBackButton={showBackButton}
     />
 
-    <AddContract
-      deal={deal}
-    />
-
-    <ListingViewer
-      deal={deal}
-    />
-
     <div className="scrollable">
-      <Roles deal={deal} />
-      <FactSheet deal={deal} />
+      <AddContract
+        deal={deal}
+      />
+
+      <ListingViewer
+        deal={deal}
+      />
+
+      <Roles
+        deal={deal}
+      />
+
+      <FactSheet
+        deal={deal}
+      />
     </div>
   </div>
 )

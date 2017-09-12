@@ -7,7 +7,7 @@ import moment from 'moment'
 import _ from 'underscore'
 import ChatModel from '../../../../../../models/Chatroom'
 import ChatMessage from '../../../Chatroom/Util/message'
-import { addAttachment, setIsUploading } from '../../../../../../store_actions/deals'
+import { addAttachment, setIsUploading, editForm } from '../../../../../../store_actions/deals'
 
 class UploadDocument extends React.Component {
   constructor(props) {
@@ -18,7 +18,7 @@ class UploadDocument extends React.Component {
   }
 
   async onDrop(files) {
-    const { task, addAttachment, setIsUploading } = this.props
+    const { task, addAttachment, setIsUploading, editForm } = this.props
 
     this.setState({
       dropzoneActive: false
@@ -37,7 +37,8 @@ class UploadDocument extends React.Component {
     if (file) {
       batchActions([
         addAttachment(task.deal, task.checklist, task.id, file),
-        setIsUploading(task.id, false)
+        setIsUploading(task.id, false),
+        editForm(task, 'context')
       ])
 
       this.postMessage(task.room.id, file.id)
@@ -140,4 +141,4 @@ class UploadDocument extends React.Component {
 
 export default connect(({ data }) => ({
   user: data.user
-}), { addAttachment, setIsUploading })(UploadDocument)
+}), { addAttachment, setIsUploading, editForm })(UploadDocument)

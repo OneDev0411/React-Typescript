@@ -1,4 +1,5 @@
 $col-padding: 20px;
+$listing-card-height: 180px;
 
 @mixin scrollbar($color: transparent, $shadow: transparent) {
   ::-webkit-scrollbar {
@@ -40,6 +41,7 @@ $col-padding: 20px;
 @import './dashboard/_esign_document_modal';
 @import './dashboard/_esign_send';
 @import './dashboard/_form_viewer';
+@import './dashboard/_form_context';
 
 %deal-dashboard {
   margin-left: 0;
