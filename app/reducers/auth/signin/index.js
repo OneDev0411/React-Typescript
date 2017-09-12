@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux'
-import { reducer as reduxFormReducer } from 'redux-form'
 import {
   SIGNIN_REQUEST,
   SIGNIN_SUCCESS,
@@ -32,8 +31,7 @@ export const error = (state = null, action) => {
 
 const signin = combineReducers({
   error,
-  isLogging,
-  form: reduxFormReducer
+  isLogging
 })
 
 export default signin

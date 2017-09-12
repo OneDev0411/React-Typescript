@@ -17,13 +17,21 @@ const getErrorMessage = (errorCode, email) => {
     case 409:
       return (
         <div className="c-auth__submit-alert c-auth__submit-alert--warning">
-          An account with this email address exists in our system. Please <Link to={`/password/forgot?email=${encodeURIComponent(email)}`}>reset your password</Link> or <Link to={`/signin?username=${encodeURIComponent(email)}`}>sign in</Link>.
+          An account with this email address exists in our system. Please{' '}
+          <Link to={`/password/forgot?email=${encodeURIComponent(email)}`}>
+            reset your password
+          </Link>{' '}
+          or{' '}
+          <Link to={`/signin?username=${encodeURIComponent(email)}`}>
+            sign in
+          </Link>.
         </div>
       )
     case 202:
       return (
         <div className="c-auth__submit-alert c-auth__submit-alert--warning">
-          An account with this email address exists in our system.  We resent a new activation email. Please check your inbox.
+          An account with this email address exists in our system. We resent a
+          new activation email. Please check your inbox.
         </div>
       )
     default:
@@ -58,16 +66,16 @@ const Signup = ({
               className={'c-auth__logo'}
             />
           </Link>
-          <h1 className="c-auth__title tempo">
-            {`${siteTitle}`}
-          </h1>
-          {!submitSuccessfully
-            ? <p className="c-auth__subtitle">Hello, lets get started.</p>
-            : <p className="c-auth__subtitle">Check Your Inbox.</p>}
+          <h1 className="c-auth__title tempo">{`${siteTitle}`}</h1>
+          {!submitSuccessfully ? (
+            <p className="c-auth__subtitle">Hello, lets get started.</p>
+          ) : (
+            <p className="c-auth__subtitle">Check Your Inbox.</p>
+          )}
         </header>
         <main className="c-auth__main">
-          {!submitSuccessfully
-            ? <form onSubmit={handleSubmit(onSubmitHandler)}>
+          {!submitSuccessfully ? (
+            <form onSubmit={handleSubmit(onSubmitHandler)}>
               <Field
                 autoFocus
                 name="email"
@@ -97,22 +105,24 @@ const Signup = ({
                 <Link to="/signin">Sign in</Link>
               </p>
             </form>
-            : <div style={{ textAlign: 'center' }}>
+          ) : (
+            <div style={{ textAlign: 'center' }}>
               <p className="c-auth__submit-alert--success">
                 <span>
-                    Check your email and confirm your email address to continue.
-                  </span>
+                  Check your email and confirm your email address to continue.
+                </span>
                 <br />
                 <span>Please, </span>
                 <Link
                   to={`/signin?username=${encodeURIComponent(
-                      submitSuccessfully
-                    )}`}
+                    submitSuccessfully
+                  )}`}
                 >
-                    SIGN IN
-                  </Link>.
-                </p>
-            </div>}
+                  SIGN IN
+                </Link>.
+              </p>
+            </div>
+          )}
         </main>
       </article>
     </div>
@@ -122,8 +132,7 @@ const Signup = ({
 export default compose(
   reduxForm({
     form: 'signup',
-    validate: validateEmail,
-    getFormState: ({ auth }) => auth.signup.form
+    validate: validateEmail
   }),
   connect(({ brand }) => ({ brand })),
   withState('submitError', 'setSubmitError', false),

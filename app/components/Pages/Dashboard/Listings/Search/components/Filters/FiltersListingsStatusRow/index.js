@@ -59,9 +59,7 @@ const FiltersListingsStatus = ({
       <div className="c-filters-status">
         <div className="c-filters-status__left-side">
           <Flag icon={icon} color={color} />
-          <span className="c-filters-status__title">
-            {title}
-          </span>
+          <span className="c-filters-status__title">{title}</span>
         </div>
 
         <div
@@ -69,40 +67,39 @@ const FiltersListingsStatus = ({
             ? 'is-active'
             : ''}`}
         >
-          {hasAccordion &&
+          {hasAccordion && (
             <AccordionTrigger
               onClick={AccordionTriggerIsActive && onClickAccordionTriggger}
               active={accordionIsActive}
-            />}
+            />
+          )}
 
           {hasAccordion &&
-            hasSwitchToggle &&
-            <span className="c-filters-status__separator" />}
+          hasSwitchToggle && <span className="c-filters-status__separator" />}
 
-          {hasSwitchToggle &&
+          {hasSwitchToggle && (
             <SwitchToggle
               name={name}
               isField={isField}
               value={isField ? title : statusIsActive}
               onChangeHandler={onChangeSwitchToggle}
               className="c-filters-status__switch-toggle"
-            />}
+            />
+          )}
         </div>
       </div>
 
-      {hasAccordion &&
-        <Accordion active={accordionIsActive}>
-          {children}
-        </Accordion>}
+      {hasAccordion && (
+        <Accordion active={accordionIsActive}>{children}</Accordion>
+      )}
     </div>
   )
 }
 
 export default compose(
   pure,
-  connect(({ search }, { name, fields }) => {
-    const formState = search.filters
-    const statusIsActive = checkFieldsStatus(formState, fields || name) || false
+  connect((state, { name, fields }) => {
+    const statusIsActive = checkFieldsStatus(state, fields || name) || false
     return { statusIsActive }
   }),
   withState(

@@ -183,8 +183,7 @@ export default compose(
   reduxForm({
     form: 'register',
     validate,
-    initialValues: { user_type: 'Client' },
-    getFormState: ({ auth }) => auth.register.form
+    initialValues: { user_type: 'Client' }
   }),
   withState('submitError', 'setSubmitError', false),
   withState('isSubmitting', 'setIsSubmitting', false),

@@ -150,8 +150,7 @@ const validate = values => {
 
 SigninForm = reduxForm({
   form: 'signin',
-  validate,
-  getFormState: ({ auth }) => auth.signin.form
+  validate
 })(SigninForm)
 
 export default compose(

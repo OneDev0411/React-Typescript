@@ -1,7 +1,5 @@
 import { browserHistory } from 'react-router'
-import AppStore from '../../stores/AppStore'
 import signin from '../../models/auth/signin'
-import updateApp from '../../store_actions/data'
 import * as actionsType from '../../constants/auth/signin'
 
 const submitSigninForm = (userInfo, redirectTo) => (dispatch, getState) => {

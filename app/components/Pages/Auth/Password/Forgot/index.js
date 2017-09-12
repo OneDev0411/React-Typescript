@@ -34,15 +34,14 @@ let Forgot = ({
               className={'c-auth__logo'}
             />
           </Link>
-          <h1 className="c-auth__title tempo">
-            {`${siteTitle}`}
-          </h1>
-          {!resetSuccessfully &&
-            <p className="c-auth__subtitle">Forgot your password?</p>}
+          <h1 className="c-auth__title tempo">{`${siteTitle}`}</h1>
+          {!resetSuccessfully && (
+            <p className="c-auth__subtitle">Forgot your password?</p>
+          )}
         </header>
         <main className="c-auth__main">
-          {!resetSuccessfully
-            ? <form onSubmit={handleSubmit(onSubmitHandler)}>
+          {!resetSuccessfully ? (
+            <form onSubmit={handleSubmit(onSubmitHandler)}>
               <Field
                 autoFocus
                 name="email"
@@ -55,12 +54,13 @@ let Forgot = ({
                 }}
                 component={renderField}
               />
-              {submitError &&
-              <div className="c-auth__submit-error-alert">
-                    Sorry, that email address is not registered with us.<br />
-                <span>Please try again or</span>
-                <Link to="/signup"> register for a new account</Link>.
-                  </div>}
+              {submitError && (
+                <div className="c-auth__submit-error-alert">
+                  Sorry, that email address is not registered with us.<br />
+                  <span>Please try again or</span>
+                  <Link to="/signup"> register for a new account</Link>.
+                </div>
+              )}
               <button
                 type="submit"
                 className="c-auth__submit-btn"
@@ -77,13 +77,15 @@ let Forgot = ({
                 <Link to="/signin">Sign in</Link>
               </p>
             </form>
-            : <div style={{ textAlign: 'center' }}>
+          ) : (
+            <div style={{ textAlign: 'center' }}>
               <p className="c-auth__submit-alert--success">
-                  We've sent you an email with instructions on how to reset your
-                  password.<br /> Please check <b>{resetSuccessfully}</b>.
-                </p>
+                Your reset link was delivered.<br />
+                Please check <b>{resetSuccessfully}</b>.
+              </p>
               <Link to="/">Back to homepage</Link>
-            </div>}
+            </div>
+          )}
         </main>
       </article>
     </div>
@@ -104,8 +106,7 @@ export const validateEmail = values => {
 
 Forgot = reduxForm({
   form: 'forgot',
-  validate: validateEmail,
-  getFormState: ({ auth }) => auth.forgotPassword.form
+  validate: validateEmail
 })(Forgot)
 
 export default compose(

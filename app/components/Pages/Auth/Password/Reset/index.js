@@ -140,8 +140,7 @@ export default compose(
   }),
   reduxForm({
     form: 'reset',
-    validate,
-    getFormState: ({ auth }) => auth.resetPassword.form
+    validate
   }),
   withState('submitError', 'setSubmitError', false),
   withState('isSubmitting', 'setIsSubmitting', false),
