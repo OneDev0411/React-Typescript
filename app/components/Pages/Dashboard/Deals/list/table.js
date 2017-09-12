@@ -83,10 +83,13 @@ class BaseTable extends React.Component {
   }
 
   getNextDate(deal) {
+    const { deals } = this.props
+    const dealOrder = Object.keys(deals).indexOf(deal.id)
+
     return (
       <OverlayTrigger
         trigger={['hover', 'focus']}
-        placement="bottom"
+        placement={dealOrder + 3 >= _.size(deals) ? 'top' : 'bottom'}
         overlay={
           <Popover
             className="deal-list--popover"
@@ -130,6 +133,12 @@ class BaseTable extends React.Component {
     if (cell.sortByList) {
       const order = cell.sortByList.indexOf(object)
       return order > -1 ? order : cell.sortByList.length + 1
+    }
+
+    if (!object) {
+      return null
+    } else if (typeof object === 'number') {
+      return ~~object
     } else {
       return object.toString().toLowerCase()
     }

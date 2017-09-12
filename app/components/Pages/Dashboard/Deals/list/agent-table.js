@@ -39,8 +39,8 @@ class AgentTable extends BaseTable {
         getText: deal => this.getSide(deal),
         getValue: deal => deal.deal_type.toString() + this.getRoleNames(deal)
       },
-      next_date: {
-        caption: 'NEXT DATES',
+      critical_dates: {
+        caption: 'CRITICAL DATES',
         className: 'col-md-2 hidden-sm hidden-xs',
         getText: deal => this.getNextDate(deal)
       },

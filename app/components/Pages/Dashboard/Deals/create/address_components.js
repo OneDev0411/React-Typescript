@@ -29,11 +29,12 @@ class CreateDealModal extends React.Component {
     return (
       <Modal
         show={show}
+        backdrop="static"
         dialogClassName="modal-deal-listing"
         onHide={() => this.props.onHide()}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Is this the full listing address?</Modal.Title>
+          <Modal.Title>Enter the full listing address</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>

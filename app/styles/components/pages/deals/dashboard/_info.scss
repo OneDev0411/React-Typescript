@@ -5,8 +5,8 @@
   .scrollable {
     overflow: auto;
     overflow-x: hidden;
-    min-height: 71vh;
-    max-height: 71vh;
+    min-height: calc(100vh - #{$listing-card-height});
+    max-height: calc(100vh - #{$listing-card-height});
   }
 
   .mls-viewer-button,

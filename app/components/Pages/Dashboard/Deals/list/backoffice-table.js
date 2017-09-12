@@ -41,8 +41,8 @@ class BackOfficeTable extends BaseTable {
         className: 'col-md-1 hidden-sm hidden-xs',
         getText: deal => this.getOffice(deal)
       },
-      next_date: {
-        caption: 'NEXT DATES',
+      critical_dates: {
+        caption: 'CRITICAL DATES',
         className: 'col-md-2 hidden-sm hidden-xs',
         getText: deal => this.getNextDate(deal)
       },

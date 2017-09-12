@@ -4,7 +4,6 @@ import moment from 'moment'
 import Avatar from 'react-avatar'
 import _ from 'underscore'
 import Contact from '../../../../../../models/Contact'
-import { getFieldValue } from '../../../../../../utils/helpers'
 
 export default class Timeline extends React.Component {
 
@@ -26,14 +25,14 @@ export default class Timeline extends React.Component {
 
   UserViewedAlert(activity) {
     return {
-      title: `${this.props.name} <b>viewed an alert</b> ` + this.getAlertTitle(activity),
+      title: `${this.props.name} <b>viewed an alert</b> ${this.getAlertTitle(activity)}`,
       icon: 'alert-fill'
     }
   }
 
   UserViewedListing(activity) {
     return {
-      title: `${this.props.name} <b>viewed</b> ` + this.getListingTitle(activity),
+      title: `${this.props.name} <b>viewed</b> ${this.getListingTitle(activity)}`,
       image: this.getListingPhoto(activity.object),
       url: this.getListingUrl(activity.object),
       icon: 'group-142'
@@ -42,7 +41,7 @@ export default class Timeline extends React.Component {
 
   UserFavoritedListing(activity) {
     return {
-      title: `${this.props.name} <b>favorited</b> ` + this.getListingTitle(activity),
+      title: `${this.props.name} <b>favorited</b> ${this.getListingTitle(activity)}`,
       image: this.getListingPhoto(activity.object),
       url: this.getListingUrl(activity.object),
       icon: 'heart'
@@ -51,7 +50,7 @@ export default class Timeline extends React.Component {
 
   UserSharedListing(activity) {
     return {
-      title: `${this.props.name} <b>shared</b> ` + this.getListingTitle(activity),
+      title: `${this.props.name} <b>shared</b> ${this.getListingTitle(activity)}`,
       image: this.getListingPhoto(activity.object),
       url: this.getListingUrl(activity.object),
       icon: 'group-142'
@@ -60,26 +59,26 @@ export default class Timeline extends React.Component {
 
   UserCreatedAlert(activity) {
     return {
-      title: `${this.props.name} <b>created an alert</b> ` + this.getAlertTitle(activity),
+      title: `${this.props.name} <b>created an alert</b> ${this.getAlertTitle(activity)}`,
       icon: 'alert-fill'
     }
   }
 
   UserCommentedRoom(activity) {
     return {
-      title: `${this.props.name} <b>Commented on</b> ` + this.getListingTitle(activity),
+      title: `${this.props.name} <b>Commented on</b> ${this.getListingTitle(activity)}`,
       icon: 'comment'
     }
   }
 
-  UserOpenedIOSApp(activity) {
+  UserOpenedIOSApp() {
     return {
       title: `${this.props.name} <b>was active</b> in iOS`,
       icon: 'alert-fill'
     }
   }
 
-  UserCalledContact(activity) {
+  UserCalledContact() {
     return {
       title: `You called ${this.props.name}`,
       icon: 'alert-fill'
@@ -111,23 +110,18 @@ export default class Timeline extends React.Component {
     }
   }
 
-  UserInvited(activity) {
+  UserInvited() {
     return {
       title: `${this.props.name} <b>was invited</b> to Rechat`,
       icon: 'alert-fill'
     }
   }
 
-  UserSignedUp(activity) {
+  UserSignedUp() {
     return {
       title: `${this.props.name} signed up to Rechat`,
       icon: 'alert-fill'
     }
-  }
-
-  addListingToTitle(notification) {
-    let listing = notification.listing
-    addListingToTitle(listing: listing)
   }
 
   getListingTitle(activity) {
@@ -146,16 +140,16 @@ export default class Timeline extends React.Component {
       return ''
 
     // get address object
-    const { address }  = listing.property
+    const { address } = listing.property
 
     title = address.street_number
-    title += ' ' + address.street_name
+    title += ` ${address.street_name}`
 
     if (address.street_suffix)
-      title += ' ' + address.street_suffix
+      title += ` ${address.street_suffix}`
 
     if (address.unit_number)
-      title += ', Unit ' + address.unit_number
+      title += `, Unit ${address.unit_number}`
 
     return title
   }
@@ -188,7 +182,7 @@ export default class Timeline extends React.Component {
       />
 
     const activity = (
-      <Row className="event" >
+      <Row className="event">
         <Col sm={1} xs={1} className="image">
           { image }
         </Col>
@@ -196,7 +190,7 @@ export default class Timeline extends React.Component {
           <div
             className="desc"
             dangerouslySetInnerHTML={{ __html: attributes.title }}
-          ></div>
+          />
           <div className="time">
             <img src={`/static/images/contacts/${attributes.icon}@3x.png`} />
             { attributes.time }
@@ -237,9 +231,7 @@ export default class Timeline extends React.Component {
     return (
       <div>
         {
-          _.map(activities, (activity, id) => {
-            return this.create(id, activity)
-          })
+          _.map(activities, (activity, id) => this.create(id, activity))
         }
       </div>
     )

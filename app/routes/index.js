@@ -313,11 +313,6 @@ export default (
       </Route>
       <Route path="/dashboard/brand" component={Brand} />
 
-      <Route path="/dashboard/contacts" component={AsyncContacts}>
-        <IndexRoute component={AsyncContactsList} />
-        <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
-      </Route>
-
       <Route path="/dashboard/recents(/:roomId)">
         <IndexRoute component={AsyncRecents} />
       </Route>

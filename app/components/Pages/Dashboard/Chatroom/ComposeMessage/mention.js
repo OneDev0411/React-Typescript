@@ -32,7 +32,6 @@ export default class Mentions extends React.Component {
   async componentDidMount() {
     const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
     const { Observable } = Rx
-    const { showSuggestions } = this.state
     const { handler } = this.props
 
     // get input element
@@ -70,10 +69,10 @@ export default class Mentions extends React.Component {
    * handle keyDown event for compose input
    */
   onKeyDown(e) {
-    const { showSuggestions, suggestions, selectedIndex } = this.state
+    const { showSuggestions } = this.state
     const code = e.keyCode
 
-    // dont change cursor while displaying suggestions list
+    // don't change cursor while displaying suggestions list
     if (showSuggestions && (KEYS[code] === 'UP' || KEYS[code] === 'DOWN')) {
       return e.preventDefault()
     }
@@ -87,8 +86,12 @@ export default class Mentions extends React.Component {
     const { trigger } = this.props
     const { showSuggestions } = this.state
 
-    const isWordCharacter = e.key.length === 1
-    const isBackspaceOrDelete = (KEYS[e.keyCode] == 'BACKSPACE' || KEYS[e.keyCode] == 'DELETE')
+    let isWordCharacter = true
+    if (e.key)
+      isWordCharacter = e.key.length === 1
+    else
+      isWordCharacter = !KEYS[e.keyCode]
+    const isBackspaceOrDelete = (KEYS[e.keyCode] === 'BACKSPACE' || KEYS[e.keyCode] === 'DELETE')
 
     // prevent parsing non characters and backspace
     if (!isWordCharacter && !isBackspaceOrDelete)
@@ -160,7 +163,7 @@ export default class Mentions extends React.Component {
   }
 
   /**
-   * set cursor positon to new index
+   * set cursor position to new index
    */
   setCursorPosition(index) {
     const { input } = this
@@ -175,11 +178,10 @@ export default class Mentions extends React.Component {
     const { trigger } = this.props
     const cursorPosition = this.getCursorPosition()
 
-    let i, query = ''
-
+    let i
     for (i = cursorPosition - 1; i >= 0; i--) {
       const char = input.value.charAt(i)
-      const previousChar = input.value.charAt(i-1).trim()
+      const previousChar = input.value.charAt(i - 1).trim()
 
       if (char === trigger && previousChar === '') {
         break
@@ -239,10 +241,9 @@ export default class Mentions extends React.Component {
    */
   replaceMentionWithQuery(text) {
     const { input } = this
-    const cursorPosition = this.getCursorPosition()
     const index = this.findTriggerIndex()
 
-    input.value = input.value.substr(0, index) + text + ' ' + input.value.substr(index + text.length)
+    input.value = `${input.value.substr(0, index) + text} ${input.value.substr(index + text.length)}`
 
     // change cursor position
     this.setCursorPosition(index + text.length + 1)
@@ -302,7 +303,7 @@ export default class Mentions extends React.Component {
         className="suggestions"
         ref={ref => this.suggestions = ref}
         style={{
-          bottom: `${position}px`,
+          bottom: `${position}px`
         }}
       >
         <div className="heading">

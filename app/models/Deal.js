@@ -78,6 +78,10 @@ Deal.getAll = async function(user = {}, backoffice = false) {
   let endpoint
   let associations
 
+  if (!user.brand) {
+    throw new Error("This user does not belong to any brand")
+  }
+
   // backoffice and agent has different endpoints and associations
   if (backoffice) {
     endpoint = `/brands/${user.brand}/deals/inbox`
@@ -126,6 +130,10 @@ Deal.getForms = async function() {
 * add a form
 */
 Deal.addForm = async function (brandId, checklistId, formId) {
+  if (!brandId) {
+    throw new Error("This user does not belong to any brand")
+  }
+
   try {
     const response = await new Fetch()
       .post(`/brands/${brandId}/checklists/${checklistId}/forms`)
@@ -140,6 +148,10 @@ Deal.addForm = async function (brandId, checklistId, formId) {
  * delete a form
  */
 Deal.deleteForm = async function (checklist, formId) {
+  if (!checklist.brand) {
+    throw new Error("This user does not belong to any brand")
+  }
+
   try {
     await new Fetch()
       .delete(`/brands/${checklist.brand}/checklists/${checklist.id}/forms/${formId}`)
