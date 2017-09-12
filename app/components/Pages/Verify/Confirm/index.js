@@ -118,7 +118,7 @@ const confirmVerify = ({
 }
 
 export default compose(
-  connect(({ brand, user }, { location: { query }, params: { verifyType } }) => {
+  connect(({ brand, user: userIsLoggedIn }, { location: { query }, params: { verifyType } }) => {
     const verifyQueryParams = {
       verifyType
     }
@@ -141,8 +141,8 @@ export default compose(
     return {
       brand,
       verifyType,
-      verifyQueryParams,
-      userIsLoggedIn: Object.keys(user).length
+      userIsLoggedIn,
+      verifyQueryParams
     }
   }),
   withState('submitError', 'setSubmitError', false),

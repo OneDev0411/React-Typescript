@@ -266,9 +266,9 @@ const branch = ({
 }
 
 export default compose(
-  connect(({ user, brand }) => ({
+  connect(({ user: loggedInUser, brand }) => ({
     brand,
-    loggedInUser: Object.keys(user).length > 0 ? user : null
+    loggedInUser
   })),
   withState('branchData', 'setBranchData', null),
   withState('activeModal', 'setActiveModal', null)

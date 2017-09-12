@@ -37,11 +37,6 @@ import ReactGA from 'react-ga'
 import config from '../../config/public'
 
 class App extends Component {
-  static async fetchData(dispatch, params) {
-    const { user } = params
-    return dispatch(getRooms(user))
-  }
-
   componentWillMount() {
     // check branding
     this._getBrand()
@@ -52,8 +47,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const { data } = this.props
-    const { user } = data
+    const { data, user } = this.props
 
     // load rooms
     this.initialRooms()
@@ -80,28 +74,34 @@ class App extends Component {
     this.setIntercom()
   }
 
+  static async fetchData(dispatch, params) {
+    const { user } = params
+    return dispatch(getRooms(user))
+  }
+
   _getBrand() {
     this.props.dispatch(getBrand())
   }
 
   initializeChatSocket() {
-    const { user } = this.props.data
+    const { user } = this.props
     new ChatSocket(user)
   }
 
   async initialDeals() {
-    const { dispatch, data } = this.props
-    const { user } = data
+    const { dispatch, user } = this.props
 
-    const isBackOffice = user.features.indexOf('Backoffice') > -1
-    return dispatch(getDeals(user, isBackOffice))
+    if (user && user.features) {
+      const isBackOffice = user.features.indexOf('Backoffice') !== -1
+      return dispatch(getDeals(user, isBackOffice))
+    }
   }
 
   async initialRooms() {
-    const { dispatch, data } = this.props
+    const { dispatch, user } = this.props
     let { rooms } = this.props
 
-    if (data.user && !rooms) {
+    if (user && !rooms) {
       rooms = await dispatch(getRooms())
     }
 
@@ -110,9 +110,9 @@ class App extends Component {
   }
 
   initialContacts() {
-    const { dispatch, contacts, data } = this.props
+    const { dispatch, contacts, user } = this.props
 
-    if (data.user && !contacts) {
+    if (user && !contacts) {
       dispatch(getContacts())
     }
   }
@@ -233,8 +233,7 @@ class App extends Component {
   }
 
   render() {
-    const { data, rooms, location, isWidgetRedux } = this.props
-    const { user } = data
+    const { user, data, rooms, location, isWidgetRedux } = this.props
 
     // don't remove below codes,
     // because app is depended to `path` and `location` props in data store
@@ -257,27 +256,20 @@ class App extends Component {
 
     return (
       <div>
-        {
-          user && !isWidgetRedux &&
-          navArea
-        }
+        {user && !isWidgetRedux && navArea}
 
-        {
-          user &&
-          <InstantChat user={user} rooms={rooms} />
-        }
+        {user && <InstantChat user={user} rooms={rooms} />}
 
-        <main style={{ minHeight: '100vh' }}>
-          {children}
-        </main>
+        <main style={{ minHeight: '100vh' }}>{children}</main>
       </div>
     )
   }
 }
 
-export default connect(s => ({
-  data: s.data,
-  rooms: s.chatroom.rooms,
-  contacts: s.chatroom.contact,
-  isWidgetRedux: s.widgets.isWidget
+export default connect(({ user, data, chatroom, widgets }) => ({
+  data,
+  user,
+  rooms: chatroom.rooms,
+  contacts: chatroom.contact,
+  isWidgetRedux: widgets.isWidget
 }))(App)

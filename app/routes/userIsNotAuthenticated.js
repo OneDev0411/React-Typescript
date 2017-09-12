@@ -11,7 +11,7 @@ const userIsNotAuthenticated = connectedRouterRedirect({
   // This prevents us from adding the query parameter when we send the user away from the login page
   allowRedirectBack: false,
   // Determine if the user is authenticated or not
-  authenticatedSelector: ({ user }) => !Object.keys(user).length,
+  authenticatedSelector: ({ user }) => !user,
   // A nice display name for this check
   wrapperDisplayName: 'UserIsNotAuthenticated'
 })
