@@ -89,8 +89,8 @@
       background-color: #fff;
       border-right: 1px solid #c9d7df;
       .scrollable {
-        min-height: 60vh;
-        max-height: 60vh;
+        min-height: calc(91vh - #{$listing-card-height});
+        max-height: calc(91vh - #{$listing-card-height});
       }
     }
 

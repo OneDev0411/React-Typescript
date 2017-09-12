@@ -20,14 +20,14 @@ class ComposeMessage extends React.Component {
       .fromEvent(this.text_message, 'keypress')
 
     handler
-    .filter(e => e.key !== 'Enter')
+    .filter(e => e.key ? e.key !== 'Enter' : e.keyCode !== 13)
     .throttleTime(1000)
     .do(() => this.onTyping())
     .debounceTime(3500)
     .subscribe(() => this.onTypingEnded())
 
     handler
-    .filter(e => e.key === 'Enter' && !e.ctrlKey)
+    .filter(e => !e.ctrlKey && (e.key ? e.key === 'Enter' : e.keyCode === 13))
     .subscribe(() => this.sendMessage())
   }
 
@@ -60,7 +60,6 @@ class ComposeMessage extends React.Component {
 
   async sendMessage() {
     const { user, members, roomId } = this.props
-
     const isLocked = this.text_message.getAttribute('locked')
 
     if (isLocked === 'true')

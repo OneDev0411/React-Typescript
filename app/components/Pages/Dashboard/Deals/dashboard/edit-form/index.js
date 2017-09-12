@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import { editForm, saveSubmission, reloadDealContexts } from '../../../../../../store_actions/deals'
 import Deal from '../../../../../../models/Deal'
-import Frame from './frame'
+import EmbedForm from './embed'
+import RequiredContext from './context'
 
 class EditForm extends React.Component {
   constructor(props) {
@@ -32,11 +33,15 @@ class EditForm extends React.Component {
    *
    */
   onLoad() {
-    const { deal } = this.props
+    const { deal, mode } = this.props
     this.setState({ loaded: true })
 
     // set deal
     this.sendMessage('setDeal', [deal])
+
+    if (mode === 'context') {
+      this.sendMessage('hideOptionalRows')
+    }
   }
 
   /**
@@ -81,7 +86,14 @@ class EditForm extends React.Component {
    *
    */
   onSetValues(data) {
-    // nothing
+    // do nothing
+  }
+
+  /**
+   *
+   */
+  onHideOptionalRows() {
+    // do nothing
   }
 
   /**
@@ -131,7 +143,9 @@ class EditForm extends React.Component {
     const func = `on${fn.charAt(0).toUpperCase()}${fn.slice(1)}`
 
     // call function
-    this[func](args)
+    if (this[func]) {
+      this[func](args)
+    }
   }
 
   /**
@@ -156,7 +170,7 @@ class EditForm extends React.Component {
     // save form
     try {
       await saveSubmission(task.id, task.form, status, values)
-      await reloadDealContexts(deal.id)
+      reloadDealContexts(deal.id).then(() => {})
 
       notify({
         message: 'The form has been saved!',
@@ -209,64 +223,43 @@ class EditForm extends React.Component {
   }
 
   render() {
-    const { deal, task } = this.props
+    const { deal, task, mode } = this.props
     const { loaded, saving, incompleteFields } = this.state
 
-    if (!task) {
+    const isValidForm = task && task.form && task.task_type === 'Form'
+
+    if (!isValidForm) {
       return false
     }
 
-    return (
-      <div className="deal-edit-form">
-        <Row className="header">
-          <Col md={7} sm={7} xs={6}>
-            <button
-              className="deal-button exit"
-              onClick={() => this.close()}
-            >
-              X
-            </button>
+    const props = {
+      task,
+      loaded,
+      incompleteFields,
+      saving,
+      buttonCaption: this.getButtonCaption(),
+      onFrameRef: ref => this.frame = ref,
+      onSave: () => this.onSave(),
+      onClose: () => this.close()
+    }
 
-            <span className="name">{ task.title }</span>
-          </Col>
+    if (mode === 'embed') {
+      return (
+        <EmbedForm {...props} />
+      )
+    }
 
-          <Col md={5} sm={5} xs={6} className="btns">
-            {
-              loaded &&
-              <span className="incomplete-fields">
-                {
-                  incompleteFields.length > 0 ?
-                  `There are ${incompleteFields.length} incomplete fields` :
-                  'All fields completed'
-                }
-              </span>
-            }
-
-            <button
-              className="deal-button save"
-              disabled={!loaded || saving}
-              onClick={() => this.onSave()}
-            >
-              { this.getButtonCaption() }
-            </button>
-          </Col>
-        </Row>
-
-        <Row>
-          <Col md={12} sm={12} xs={12}>
-            <Frame
-              task={task}
-              frameRef={ref => this.frame = ref}
-            />
-          </Col>
-        </Row>
-      </div>
-    )
+    if (mode === 'context') {
+      return (
+        <RequiredContext {...props} />
+      )
+    }
   }
 }
 
 export default connect(({ deals }) =>  ({
-  task: deals.formEdit
+  task: deals.formEdit ? deals.formEdit.task : null,
+  mode: deals.formEdit ? deals.formEdit.mode : null
 }), {
   editForm,
   saveSubmission,

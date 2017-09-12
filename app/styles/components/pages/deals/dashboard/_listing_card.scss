@@ -1,12 +1,11 @@
 %deal-listing-card {
-  $hg: 180px;
   position: relative;
   background-color: #4e5c6c;
-  min-height: $hg;
+  min-height: $listing-card-height;
   img {
     width: 100%;
-    min-height: $hg;
-    max-height: $hg;
+    min-height: $listing-card-height;
+    max-height: $listing-card-height;
   }
 
   .back {
