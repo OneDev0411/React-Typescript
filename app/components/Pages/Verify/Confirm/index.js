@@ -10,26 +10,31 @@ import { getBrandInfo } from '../../Auth/SignIn'
 import verify from '../../../../models/verify'
 
 const getErrorMessage = (errorCode, verifyParams, isLoggedIn) => {
-  const { verifyType, body } = verifyParams
-  const redirectTo = `redirectTo=${encodeURIComponent(`/verify/request/${verifyType}`)}`
+  const { verifyType, body, receivingUserEmail } = verifyParams
+  const redirectTo = `redirectTo=${encodeURIComponent(
+    `/verify/request/${verifyType}`
+  )}`
   const verifyTypeIsEmail = verifyType === 'email'
-  const username = !verifyTypeIsEmail ? '' : `&username=${encodeURIComponent(body.email)}`
+  const username = !verifyTypeIsEmail
+    ? ''
+    : `&username=${encodeURIComponent(body.email || receivingUserEmail)}`
 
   switch (errorCode) {
     case 403:
       return (
         <div>
           Sorry, this verify link is not valid anymore!
-          {!isLoggedIn && <p>
-            <span>Currently you aren't logged in on app, for receive new verify link you must login. So, please </span>
-            <Link to={`/signin?${redirectTo + username}`}>
-              sign in
-            </Link>.
-          </p>}
+          {!isLoggedIn && (
+            <p>
+              Currently you aren't logged in on app, for receive new verify link
+              you must login. So, please
+              <Link to={`/signin?${redirectTo + username}`}> sign in</Link>.
+            </p>
+          )}
         </div>
       )
     default:
-      return 'There was an error with this request. Please try again.'
+      return ''
   }
 }
 
@@ -66,22 +71,22 @@ const confirmVerify = ({
               className={'c-auth__logo'}
             />
           </Link>
-          <h1 className="c-auth__title tempo">
-            {`${siteTitle}`}
-          </h1>
+          <h1 className="c-auth__title tempo">{`${siteTitle}`}</h1>
           <p className="c-auth__subticonfirmtle">Verify Your {verifyType}</p>
-          <p>{verifyQueryParams.body[verifyType]}</p>
+          <p>{verifyQueryParams.body[verifyType === 'phone' ? 'phone_number' : 'email']}</p>
         </header>
         <main className="c-auth__main">
-          {!submitSuccessfully
-            ? <div>
-              {submitError && <div className="c-auth__submit-error-alert">{submitError.message}</div>}
-              {(userIsLoggedIn || submitError.errorCode !== 403) &&
+          {!submitSuccessfully ? (
+            <div>
+              {submitError && (
+                <div className="c-auth__submit-error-alert">
+                  {submitError.message}
+                </div>
+              )}
+              {(userIsLoggedIn || submitError.errorCode !== 403) && (
                 <button
                   onClick={
-                    hasInvalidCodeError
-                      ? verifyRequestHandler
-                      : confirmHandler
+                    hasInvalidCodeError ? verifyRequestHandler : confirmHandler
                   }
                   className="c-auth__submit-btn"
                   disabled={isSubmitting}
@@ -91,26 +96,31 @@ const confirmVerify = ({
                   }}
                 >
                   {submitButtonText()}
-                </button>}
+                </button>
+              )}
             </div>
-            : <div style={{ textAlign: 'center' }}>
+          ) : (
+            <div style={{ textAlign: 'center' }}>
               <p className="c-auth__submit-alert--success">
-                <span>
-                  Your {verifyType} confirmed successfully.
-                </span>
+                <span>Your {verifyType} confirmed successfully.</span>
                 <br />
                 <span>You may now </span>
-                {userIsLoggedIn ? <Link to="/dashboard/mls">
-                  go to dashboard
-                </Link> : <Link
-                  to={`/signin${verifyType === 'email' ? `?username=${encodeURIComponent(
-                    verifyQueryParams.body.email
-                    )}` : ''}`}
-                >
-                  sign in
-                </Link>}.
+                {userIsLoggedIn ? (
+                  <Link to="/dashboard/mls">go to dashboard</Link>
+                ) : (
+                  <Link
+                    to={`/signin${verifyType === 'email'
+                      ? `?username=${encodeURIComponent(
+                        verifyQueryParams.body.email
+                      )}`
+                      : ''}`}
+                  >
+                    sign in
+                  </Link>
+                )}.
               </p>
-            </div>}
+            </div>
+          )}
         </main>
       </article>
     </div>
@@ -118,33 +128,46 @@ const confirmVerify = ({
 }
 
 export default compose(
-  connect(({ brand, user: userIsLoggedIn }, { location: { query }, params: { verifyType } }) => {
-    const verifyQueryParams = {
-      verifyType
-    }
-    const { email, email_code, code: phone_code, phone_number } = query
-
-    if (verifyType === 'email') {
-      verifyQueryParams.body = {
+  connect(
+    (
+      { brand, user: userIsLoggedIn },
+      { location: { query }, params: { verifyType } }
+    ) => {
+      const {
         email,
-        email_code
-      }
-    }
-
-    if (verifyType === 'phone') {
-      verifyQueryParams.body = {
+        email_code,
         phone_code,
-        phone_number
+        phone_number,
+        receivingUserEmail
+      } = query
+
+      const verifyQueryParams = {
+        verifyType,
+        receivingUserEmail
+      }
+
+      if (verifyType === 'email') {
+        verifyQueryParams.body = {
+          email,
+          email_code
+        }
+      }
+
+      if (verifyType === 'phone') {
+        verifyQueryParams.body = {
+          phone_number,
+          code: phone_code
+        }
+      }
+
+      return {
+        brand,
+        verifyType,
+        userIsLoggedIn,
+        verifyQueryParams
       }
     }
-
-    return {
-      brand,
-      verifyType,
-      userIsLoggedIn,
-      verifyQueryParams
-    }
-  }),
+  ),
   withState('submitError', 'setSubmitError', false),
   withState('isSubmitting', 'setIsSubmitting', false),
   withState('submitSuccessfully', 'setSubmitSuccessfully', false),
@@ -159,7 +182,8 @@ export default compose(
     }) => () => {
       setIsSubmitting(true)
 
-      verify.confirm(verifyQueryParams)
+      verify
+        .confirm(verifyQueryParams)
         .then(statusCode => {
           setIsSubmitting(false)
           setSubmitSuccessfully(true)
@@ -168,7 +192,11 @@ export default compose(
           setIsSubmitting(false)
           setSubmitError({
             errorCode,
-            message: getErrorMessage(errorCode, verifyQueryParams, userIsLoggedIn)
+            message: getErrorMessage(
+              errorCode,
+              verifyQueryParams,
+              userIsLoggedIn
+            )
           })
         })
     },
@@ -180,7 +208,8 @@ export default compose(
     }) => () => {
       setIsSubmitting(true)
 
-      verify.request(verifyType)
+      verify
+        .request(verifyType)
         .then(statusCode => {
           setIsSubmitting(false)
           setSubmitSuccessfully(true)
@@ -193,6 +222,5 @@ export default compose(
           })
         })
     }
-
   })
 )(confirmVerify)

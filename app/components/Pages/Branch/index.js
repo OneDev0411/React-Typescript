@@ -37,14 +37,21 @@ const getActionRedirectURL = params => {
 
 const generateVerificationActionRedirectUrl = params => {
   let url = '/verify/confirm/'
-  const { action, email, email_code, phone_number, code } = params
+  const {
+    action,
+    email,
+    email_code,
+    phone_number,
+    phone_code,
+    receivingUser
+  } = params
 
   switch (action) {
     case 'EmailVerification':
       url += `email?email=${email}&email_code=${email_code}`
       break
     case 'PhoneVerification':
-      url += `phone?phone_number=${phone_number}&code=${code}`
+      url += `phone?phone_number=${phone_number}&phone_code=${phone_code}&receivingUserEmail=${receivingUser.email}`
       break
     default:
       url = OOPS_PAGE
@@ -90,8 +97,12 @@ const redirectHandler = (
     if (hasConflict()) {
       // console.log('different user logged in with receiving user')
       params.redirectTo = encodeURIComponent(redirect)
+      params.verificationType = phone_number ? 'phone number' : 'email address'
 
-      setActiveModal({ name: 'VERIFYING_CONFLICT', params })
+      setActiveModal({
+        name: 'VERIFYING_CONFLICT',
+        params
+      })
       return
     }
   } else if (isShadow) {
@@ -186,11 +197,11 @@ const branch = ({
             }
 
             if (action.indexOf('Verification') !== -1) {
-              const { email_code, code } = branchData
-
+              const { email_code, phone_code } = branchData
+              console.log(email_confirmed)
               if (
                 (email_code && !email_confirmed) ||
-                (code && !phone_confirmed)
+                (phone_code && !phone_confirmed)
               ) {
                 redirectHandler(
                   'VERIFY',
@@ -201,7 +212,15 @@ const branch = ({
                 return
               }
 
-              setActiveModal({ name: 'VERIFIED', params: { receivingUser } })
+              setActiveModal({
+                name: 'VERIFIED',
+                params: {
+                  receivingUser,
+                  verificationType: phone_code
+                    ? 'phone number'
+                    : 'email address'
+                }
+              })
               return
             }
 

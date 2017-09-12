@@ -41,9 +41,9 @@ const requestVerify = ({
           {!submitSuccessfully
             ? <div>
               {submitError &&
-              <div className="c-auth__submit-error-alert">
-                    There was an error with this request. Please try again.
-                  </div>}
+                <div className="c-auth__submit-error-alert">
+                  An unexpected error occurred. Please try again.
+                </div>}
               <button
                 onClick={verifyRequestHandler}
                 className="c-auth__submit-btn"
@@ -62,7 +62,7 @@ const requestVerify = ({
                 <br />
                 <span>You may now want </span>
                 <Link to="/dashboard/mls">going to the dashboard</Link>.
-                </p>
+              </p>
             </div>}
         </main>
       </article>

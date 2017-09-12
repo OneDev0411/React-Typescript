@@ -42,7 +42,6 @@ export const renderField = ({
           {...input}
           id={input.name}
           tabIndex={tabIndex}
-          autoFocus={autoFocus}
           type={type}
           className={`c-auth__field__input ${(input.value && 'has-content') ||
             ''} ${hasError ? 'has-error' : ''}`}
