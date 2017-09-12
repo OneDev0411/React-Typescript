@@ -308,30 +308,46 @@ export default class Landing extends Component {
                   ? ' in'
                   : ''}`}
               >
-                <ul className="nav navbar-nav navbar-right">
-                  <li style={{ marginRight: '20px' }}>
-                    <Link
-                      className="btn btn-default"
-                      to="/signin"
-                      style={S(
-                        `color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 mr-15${login_btn_style}`
-                      )}
-                    >
-                      SIGN IN
-                    </Link>
-                  </li>
-                  <li style={login_btn_li_style}>
-                    <Link
-                      className="btn btn-default"
-                      to="/signup"
-                      style={S(
-                        `color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 mr-15${login_btn_style}`
-                      )}
-                    >
-                      SIGN UP
-                    </Link>
-                  </li>
-                </ul>
+                {data && data.user ? (
+                  <ul className="nav navbar-nav navbar-right">
+                    <li style={{ marginRight: '20px' }}>
+                      <Link
+                        className="btn btn-default"
+                        to="/dashboard/mls"
+                        style={S(
+                          'color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 w-100'
+                        )}
+                      >
+                        DASHBOARD
+                      </Link>
+                    </li>
+                  </ul>
+                ) : (
+                  <ul className="nav navbar-nav navbar-right">
+                    <li style={{ marginRight: '20px' }}>
+                      <Link
+                        className="btn btn-default"
+                        to="/signin"
+                        style={S(
+                          `color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 mr-15${login_btn_style}`
+                        )}
+                      >
+                        SIGN IN
+                      </Link>
+                    </li>
+                    <li style={login_btn_li_style}>
+                      <Link
+                        className="btn btn-default"
+                        to="/signup"
+                        style={S(
+                          `color-fff border-1-solid-a1bde4 bg-a1bde4 w-80 p-7 mr-15${login_btn_style}`
+                        )}
+                      >
+                        SIGN UP
+                      </Link>
+                    </li>
+                  </ul>
+                )}
               </div>
             </div>
           </nav>
