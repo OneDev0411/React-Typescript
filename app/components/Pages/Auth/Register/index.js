@@ -144,29 +144,38 @@ const RegisterForm = ({
 
 const validate = values => {
   const errors = {}
+  const minimumCharactersError = length =>
+    `Must be at least ${length} characters.`
+  const invalidCharactersError =
+    'Invalid charachter. You are allowed use alphabet character and space in this field.'
+  const isValidName = name => new RegExp(/^[A-Za-z\s]+$/).exec(name)
 
   if (!values.first_name) {
     errors.first_name = 'Required'
+  } else if (!isValidName(values.first_name)) {
+    errors.first_name = invalidCharactersError
   } else if (values.first_name.length < 3) {
-    errors.first_name = 'Must be at least 3 characters.'
+    errors.first_name = minimumCharactersError(3)
   }
 
   if (!values.last_name) {
     errors.last_name = 'Required'
+  } else if (!isValidName(values.last_name)) {
+    errors.last_name = invalidCharactersError
   } else if (values.last_name.length < 3) {
-    errors.last_name = 'Must be at least 3 characters.'
+    errors.last_name = minimumCharactersError(3)
   }
 
   if (!values.email) {
     errors.email = 'Required'
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = 'Invalid email address'
+    errors.email = 'Invalid email address.'
   }
 
   if (!values.password) {
     errors.password = 'Required'
   } else if (values.password.length < 6) {
-    errors.password = 'Must be at least 6 characters.'
+    errors.password = minimumCharactersError(6)
   }
 
   return errors
