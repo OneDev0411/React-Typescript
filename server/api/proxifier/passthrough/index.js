@@ -12,8 +12,9 @@ router.post('/proxifier', bodyParser(), async ctx => {
   const queryString = ctx.request.querystring
 
   try {
-    // get brand
+    let request
     const brand = headers['x-rechat-brand']
+    const authMode = headers['x-auth-mode']
 
     // remove base_url because current fetcher middleware add it by itself
     let endpoint = headers['x-endpoint'].replace(config.api.url, '')
@@ -25,7 +26,16 @@ router.post('/proxifier', bodyParser(), async ctx => {
     // get method
     const method = headers['x-method']
 
-    const request = ctx.fetch(endpoint, method).send(ctx.request.body)
+    if (authMode === 'client_id') {
+      const requestBody = {
+        ...ctx.request.body,
+        client_id: config.api.client_id,
+        client_secret: config.api.client_secret
+      }
+      request = ctx.fetch(endpoint, method).send(requestBody)
+    } else {
+      request = ctx.fetch(endpoint, method).send(ctx.request.body)
+    }
 
     if (headers.authorization) {
       request.set({ Authorization: headers.authorization })

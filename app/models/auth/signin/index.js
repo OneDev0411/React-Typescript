@@ -1,15 +1,15 @@
 import Fetch from '../../../services/fetch'
-import config from '../../../../config/private'
 
 const signin = async userInfo => {
   const requestBody = {
     ...userInfo,
-    grant_type: 'password',
-    client_id: config.api.client_id,
-    client_secret: config.api.client_secret
+    grant_type: 'password'
   }
   try {
-    const response = await new Fetch().post('/oauth2/token').send(requestBody)
+    const response = await new Fetch()
+      .post('/oauth2/token')
+      .set({ 'x-auth-mode': 'client_id' })
+      .send(requestBody)
     const { data, access_token, refresh_token } = response.body
     return {
       ...data,

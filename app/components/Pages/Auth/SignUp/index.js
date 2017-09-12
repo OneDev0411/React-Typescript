@@ -10,7 +10,7 @@ import Brand from '../../../../controllers/Brand'
 
 import { validateEmail } from '../Password/Forgot'
 import { getBrandInfo, renderField } from '../SignIn'
-import signupShadow from '../../../../models/auth/signup/shadow'
+import signup from '../../../../models/auth/signup'
 
 const getErrorMessage = (errorCode, email) => {
   switch (errorCode) {
@@ -137,7 +137,7 @@ export default compose(
     }) => ({ email }) => {
       setIsSubmitting(true)
 
-      signupShadow(email)
+      signup(email)
         .then(statusCode => {
           if (statusCode === 200) {
             setIsSubmitting(false)
