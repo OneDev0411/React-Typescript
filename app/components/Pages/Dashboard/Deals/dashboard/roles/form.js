@@ -52,64 +52,59 @@ export default class Form extends React.Component {
     })
 
     this.setState({ validation })
-
-    if (validated) {
-      this.props.onFormCompleted(form)
-    }
+    this.props.onFormCompleted(validated ? form : null)
   }
 
   render() {
     const { form, validation } = this.state
 
     return (
-      <form>
-        <FormGroup validationState={validation.first_name}>
-          <FormControl
-            required
-            onChange={e => this.setForm('first_name', e.target.value)}
-            placeholder="First Name"
-          />
-          <FormControl.Feedback />
-        </FormGroup>
+      <div>
+        <input
+          className="first_name"
+          placeholder="First Name"
+          onChange={e => this.setForm('first_name', e.target.value)}
+        />
 
-        <FormGroup validationState={validation.last_name}>
-          <FormControl
-            required
-            onChange={e => this.setForm('last_name', e.target.value)}
-            placeholder="Last Name"
-          />
-          <FormControl.Feedback />
-        </FormGroup>
+        <input
+          className="last_name"
+          placeholder="Last Name"
+          onChange={e => this.setForm('last_name', e.target.value)}
+        />
 
-        <FormGroup validationState={validation.email}>
-          <FormControl
-            required
-            onChange={e => this.setForm('email', e.target.value)}
-            placeholder="Email"
-          />
-          <FormControl.Feedback />
-        </FormGroup>
+        <input
+          className="email"
+          placeholder="Email"
+          onChange={e => this.setForm('email', e.target.value)}
+        />
 
-        <FormGroup validationState={validation.role}>
-          <DropdownButton
-            id="deal-esign-add-role--role"
-            title={form.role || 'Select Role'}
-          >
-            {
-              role_names.map(name =>
-                <MenuItem
-                  key={`ROLE_${name}`}
-                  onClick={() => this.setForm('role', name)}
-                >
-                  { name }
-                </MenuItem>
-              )
-            }
+        <input
+          className="phone"
+          placeholder="Phone"
+        />
 
-          </DropdownButton>
-          <FormControl.Feedback />
-        </FormGroup>
-      </form>
+        <DropdownButton
+          id="deal-add-role--drp"
+          className="deal-add-role--drp"
+          title={form.role || 'Select Role'}
+        >
+          {
+            role_names.map(name =>
+              <MenuItem
+                key={`ROLE_${name}`}
+                onClick={() => this.setForm('role', name)}
+              >
+                { name }
+              </MenuItem>
+            )
+          }
+
+        </DropdownButton>
+
+        <div className="role-descr">
+          Just select the role of the signer and Rechat already knows where they need to sign.
+        </div>
+      </div>
     )
   }
 }
