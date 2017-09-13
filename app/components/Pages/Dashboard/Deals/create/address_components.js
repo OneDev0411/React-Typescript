@@ -6,11 +6,11 @@ class CreateDealModal extends React.Component {
     super(props)
     this.state = {
       street_number: '',
-      street_address: '',
+      street_name: '',
       unit_number: '',
       city: '',
       state: '',
-      zipcode: ''
+      postal_code: ''
     }
   }
 
@@ -19,11 +19,11 @@ class CreateDealModal extends React.Component {
 
     const {
       street_number,
-      street_address,
+      street_name,
       unit_number,
       city,
       state,
-      zipcode
+      postal_code
     } = this.state
 
     return (
@@ -48,9 +48,9 @@ class CreateDealModal extends React.Component {
               />
               <FormControl
                 placeholder="Street address"
-                className="street_address"
-                value={street_address}
-                onChange={e => this.setState({ street_address: e.target.value })}
+                className="street_name"
+                value={street_name}
+                onChange={e => this.setState({ street_name: e.target.value })}
               />
               <FormControl
                 placeholder="Apartment/Unit number"
@@ -75,8 +75,8 @@ class CreateDealModal extends React.Component {
               <FormControl
                 placeholder="Zipcode"
                 className="zipcode"
-                value={zipcode}
-                onChange={e => this.setState({ zipcode: e.target.value })}
+                value={postal_code}
+                onChange={e => this.setState({ postal_code: e.target.value })}
               />
             </div>
 
