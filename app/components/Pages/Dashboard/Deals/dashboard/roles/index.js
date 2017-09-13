@@ -9,8 +9,21 @@ class Roles extends React.Component {
     super(props)
   }
 
+  onClick(item) {
+    const { onSelectRole } = this.props
+
+    if (onSelectRole) {
+      onSelectRole({
+        first_name: item.user.first_name,
+        last_name: item.user.last_name,
+        email: item.user.email,
+        role: item.role
+      })
+    }
+  }
+
   render() {
-    const { deal } = this.props
+    const { deal, onSelectRole } = this.props
     const { roles } = deal
 
     return (
@@ -18,21 +31,26 @@ class Roles extends React.Component {
         {
           roles &&
           roles.map(item =>
-            <Row key={item.id} className="item">
-              <Col sm={2} xs={3} className="vcenter">
+            <div
+              key={item.id}
+              className="item"
+              style={{ cursor: onSelectRole ? 'pointer': 'auto' }}
+              onClick={() => this.onClick(item)}
+            >
+              <div className="role-avatar">
                 <UserAvatar
                   name={item.user.display_name}
                   image={item.user.profile_image_thumbnail_url}
                   size={40}
                   showStateIndicator={false}
                 />
-              </Col>
+              </div>
 
-              <Col sm={10} xs={9} className="name vcenter">
+              <div className="name">
                 <div>{ item.user.display_name }</div>
                 <div className="role">{ item.role }</div>
-              </Col>
-            </Row>
+              </div>
+            </div>
           )
         }
 
