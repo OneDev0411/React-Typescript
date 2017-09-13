@@ -1,0 +1,22 @@
+import Koa from 'koa'
+const router = require('koa-router')()
+const app = new Koa()
+
+const urlPattern = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi
+
+router.get('/deals/docusign/login', async (ctx, next) => {
+
+  try {
+    await ctx
+      .fetch(`/users/self/docusign/auth`)
+      .redirects(0)
+  }
+  catch(e) {
+    if (e.status === 302) {
+      const link = e.response.text.match(urlPattern)
+      ctx.redirect(link)
+    }
+  }
+})
+
+module.exports = app.use(router.routes())
