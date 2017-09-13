@@ -234,7 +234,8 @@ class App extends Component {
   }
 
   render() {
-    const { user, data, rooms, location, isWidgetRedux } = this.props
+    const { data, rooms, location, isWidgetRedux } = this.props
+    const { user } = data
 
     // don't remove below codes,
     // because app is depended to `path` and `location` props in data store
@@ -257,9 +258,18 @@ class App extends Component {
 
     return (
       <div>
-        {user && !isWidgetRedux && navArea}
+        {
+          user && !isWidgetRedux &&
+          navArea
+        }
 
-        {user && <InstantChat user={user} rooms={rooms} />}
+        {
+          user &&
+          <InstantChat
+            user={user}
+            rooms={rooms}
+          />
+        }
 
         <main style={{ minHeight: '100vh' }}>{children}</main>
       </div>
