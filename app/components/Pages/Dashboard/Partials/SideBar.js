@@ -647,7 +647,7 @@ export default class SideBar extends Component {
           }
 
           {
-            user.features &&
+            user.features && user.brand !== null &&
             <OverlayTrigger placement="right" overlay={popover.deals} delayShow={200} delayHide={0}>
               <LinkContainer onClick={this.hideListingViewer.bind(this)} className={active.deals} to="/dashboard/deals">
                 <NavItem style={S('w-85p')}>
