@@ -84,11 +84,13 @@ class App extends Component {
   }
 
   async initialDeals() {
-    const { dispatch, data } = this.props
+    const { dispatch, deals, data } = this.props
     const { user } = data
 
-    const isBackOffice = user.features.indexOf('Backoffice') > -1
-    return dispatch(getDeals(user, isBackOffice))
+    if (!deals) {
+      const isBackOffice = user.features.indexOf('Backoffice') > -1
+      return dispatch(getDeals(user, isBackOffice))
+    }
   }
 
   async initialRooms() {
@@ -271,5 +273,6 @@ export default connect(s => ({
   data: s.data,
   rooms: s.chatroom.rooms,
   contacts: s.chatroom.contact,
+  deals: s.deals.list,
   isWidgetRedux: s.widgets.isWidget
 }))(App)
