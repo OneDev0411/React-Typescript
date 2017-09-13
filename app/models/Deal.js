@@ -358,6 +358,20 @@ Deal.getEnvelopes = async function(deal_id) {
 }
 
 /**
+* resend specific envelope
+*/
+Deal.resendEnvelope = async function (id) {
+  try {
+    const response = await new Fetch()
+      .post(`/envelopes/${id}/resend`)
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
 * send envelope
 */
 Deal.sendEnvelope = async function(deal_id, subject, message, attachments, recipients) {
