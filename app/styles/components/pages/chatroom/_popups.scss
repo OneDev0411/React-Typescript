@@ -3,7 +3,7 @@
   $bar-height: 33px;
   position: fixed;
   height: $height;
-  bottom: 0;
+  bottom: 9px;
   background-color: #fff;
   box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.15);
   border-radius: 4px 4px 0 0;
@@ -18,7 +18,6 @@
   }
 
   .bar {
-    text-align: right;
     padding: 8px 4px 0 8px;
     background-color: #f6f7f9;
     border-radius: 4px 4px 0 0;
@@ -35,7 +34,7 @@
       cursor: pointer;
       font-weight: 600;
       display: inline-block;
-      min-width: 115px;
+      min-width: 140px;
     }
 
     .icons {

@@ -1,18 +1,20 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router'
 import { Row, Col } from 'react-bootstrap'
-import { compose,  withState, lifecycle, pure } from 'recompose'
 import _ from 'underscore'
 import cn from 'classnames'
 import SocketStatus from '../SocketStatus'
 import CreateRoom from './create-room'
 import UserAvatar from '../../../../Partials/UserAvatar'
 import UserTyping from '../UserTyping'
+import TwoDirectionArrow from '../../Partials/Svgs/TwoDirectionArrow'
+import SearchIcon from '../../Partials/Svgs/SearchIcon'
+import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 
 import {
   toggleInstantMode,
-  changeActiveRoom
+  changeActiveRoom,
+  toggleChatbar
 } from '../../../../../store_actions/chatroom'
 
 class Rooms extends React.Component {
@@ -20,6 +22,7 @@ class Rooms extends React.Component {
     super(props)
     this.state = {
       filter: '',
+      searchBoxFocus: false,
       showComposeModal: false
     }
   }
@@ -56,16 +59,19 @@ class Rooms extends React.Component {
    */
   getRoomAvatar(room) {
     const { user, activeRoom } = this.props
-    const size = 35
-    const color = '#d7d7d7'
-    const { users } = room
+    const size = 20
+    const color = 'rgba(216, 216, 216, 0.3)'
+    const textSizeRatio = 2.5
+    const fgColor = '#263445'
 
     if (room.room_type === 'Group') {
       return <UserAvatar
-        name={room.users.length.toString()}
+        name={room.users.length}
         size={size}
         showStateIndicator={false}
         color={color}
+        textSizeRatio={textSizeRatio}
+        fgColor={fgColor}
       />
     }
 
@@ -78,7 +84,9 @@ class Rooms extends React.Component {
       image={User.profile_image_url}
       size={size}
       color={color}
-      borderColor={room.id === activeRoom ? '#2196f3' : '#303E4D' }
+      borderColor={room.id === activeRoom ? '#2196f3' : '#303E4D'}
+      textSizeRatio={textSizeRatio}
+      fgColor={fgColor}
     />
   }
 
@@ -86,50 +94,83 @@ class Rooms extends React.Component {
    * get room title, trim long titles
    */
   getRoomTitle(title) {
-    const len = 20
-    if (title.length <= len)
+    const len = 27
+    if (title.length <= len) {
       return title
+    }
 
-    return title.substr(0, len) + '...'
+    return `${title.substr(0, len)}...`
   }
 
   render() {
-    const { filter, showComposeModal } = this.state
+    const { filter, searchBoxFocus } = this.state
     const { showChatbar, instantMode, rooms, activeRoom } = this.props
 
     return (
       <div className="rooms">
         <div className="toolbar">
           <div
-            className="search"
-            style={{ float: showChatbar ? 'left': 'none' }}
+            onClick={() => this.nameInput.focus()}
+            className={cn('search', { focus: searchBoxFocus })}
+            style={{ width: showChatbar ? 190 : 240 }}
           >
+            <div className="search-icon">
+              <SearchIcon />
+            </div>
             <input
-              className="form-control filter"
+              onFocus={() => this.setState({ searchBoxFocus: true })}
+              onBlur={() => this.setState({ searchBoxFocus: false })}
+              ref={(input) => { this.nameInput = input }}
+              className={cn('form-control filter', { active: filter })}
               type="text"
               placeholder="Search"
               onChange={e => this.onChangeFilter(e.target.value)}
               value={filter}
             />
-          </div>
-
-          <div
-            className="toggle-sidebar"
-            style={{ display: showChatbar ? 'block': 'none' }}
-          >
-            <a
-              href="/dashboard/recents"
-              onClick={e => this.fullScreen(e)}
-              className="btn-tgl"
+            {filter &&
+            <p
+              onClick={e => this.onChangeFilter('')}
+              className="close-icon"
             >
-              {
-                instantMode ?
-                <i className="fa fa-angle-double-left fa-2x"></i> :
-                <i className="fa fa-angle-double-right fa-2x"></i>
-              }
-            </a>
+              &#215;
+            </p>
+            }
           </div>
-
+          <OverlayTrigger
+            placement="bottom"
+            overlay={<Tooltip id="popover-leave">Close chat panel</Tooltip>}
+          >
+            <div
+              className="toggle-sidebar"
+            >
+              <a
+                onClick={() => {
+                  instantMode && this.props.toggleInstantMode()
+                  showChatbar && this.props.toggleChatbar(false)
+                }}
+                className="btn-tgl"
+              >
+                <i className="fa fa-angle-double-left fa-2x" />
+              </a>
+            </div>
+          </OverlayTrigger>
+          {showChatbar &&
+          <OverlayTrigger
+            placement="bottom"
+            overlay={<Tooltip id="popover-leave">Expand Fullscreen</Tooltip>}
+          >
+            <div
+              className="toggle-sidebar two-direction-arrow-container"
+            >
+              <a
+                onClick={e => this.fullScreen(e)}
+                className="btn-tgl"
+              >
+                <TwoDirectionArrow className="two-direction-arrow" />
+              </a>
+            </div>
+          </OverlayTrigger>
+          }
           <SocketStatus />
         </div>
 
@@ -137,45 +178,45 @@ class Rooms extends React.Component {
           <div className="list">
             {
               _.chain(rooms)
-              .filter(room => ['Direct', 'Group'].indexOf(room.room_type) > -1)
-              .filter(room =>
-                room.proposed_title && room
-                  .proposed_title
-                  .toLowerCase()
-                  .startsWith(filter.toLowerCase())
-              )
-              .sortBy(room => room.updated_at * -1)
-              .map(room =>
-                <Row
-                  onClick={() => this.props.onSelectRoom(room.id)}
-                  key={`ROOM_CHANNEL_${room.id}`}
-                  className={cn('item', { active: room.id === activeRoom })}
-                >
-                  <Col sm={1} xs={1} className="avatar vcenter">
-                    { this.getRoomAvatar(room) }
-                  </Col>
-                  <Col
-                    sm={8}
-                    xs={8}
-                    className={cn('title vcenter', { hasNotification: room.new_notifications > 0 })}
+                .filter(room => ['Direct', 'Group'].indexOf(room.room_type) > -1)
+                .filter(room =>
+                  room.proposed_title && room
+                    .proposed_title
+                    .toLowerCase()
+                    .startsWith(filter.toLowerCase())
+                )
+                .sortBy(room => room.updated_at * -1)
+                .map(room =>
+                  <Row
+                    onClick={() => this.props.onSelectRoom(room.id)}
+                    key={`ROOM_CHANNEL_${room.id}`}
+                    className={cn('item', { active: room.id === activeRoom })}
                   >
-                    <span>
-                      { this.getRoomTitle(room.proposed_title) }
-                    </span>
-                    <UserTyping roomId={room.id} />
-                  </Col>
-
-                  <Col sm={2} xs={2} className="notifications vcenter">
-                    {
-                      room.new_notifications > 0 &&
-                      <span className="count">
-                        { room.new_notifications }
+                    <Col sm={1} xs={1} className="avatar vcenter">
+                      {this.getRoomAvatar(room)}
+                    </Col>
+                    <Col
+                      sm={9}
+                      xs={9}
+                      className={cn('title vcenter', { hasNotification: room.new_notifications > 0 })}
+                    >
+                      <span>
+                        {this.getRoomTitle(room.proposed_title)}
                       </span>
-                    }
-                  </Col>
-                </Row>
-              )
-              .value()
+                      <UserTyping roomId={room.id} />
+                    </Col>
+
+                    <Col sm={1} xs={1} className="notifications vcenter">
+                      {
+                        room.new_notifications > 0 &&
+                        <span className="count">
+                          {room.new_notifications}
+                        </span>
+                      }
+                    </Col>
+                  </Row>
+                )
+                .value()
             }
           </div>
         </div>
@@ -196,5 +237,5 @@ function mapStateToProps({ chatroom }) {
 
 export default connect(
   mapStateToProps,
-  ({ toggleInstantMode, changeActiveRoom })
+  ({ toggleInstantMode, changeActiveRoom, toggleChatbar })
 )(Rooms)

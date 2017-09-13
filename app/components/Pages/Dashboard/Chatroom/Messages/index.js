@@ -1,8 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
-import moment from 'moment'
-import cn from 'classnames'
 import { getMessages } from '../../../../../store_actions/chatroom'
 import Toolbar from '../Rooms/toolbar'
 import MessageItem from './message-item'
@@ -11,19 +9,12 @@ import ComposeMessage from '../ComposeMessage'
 import UploadHandler from '../ComposeMessage/upload'
 
 class Messages extends React.Component {
-
   constructor(props) {
     super(props)
     this.lastScrollTop = 0
     this.state = {
       composeMessageHeight: 45
     }
-  }
-
-  static defaultProps = {
-    toolbarHeight: '70px',
-    baseHeight: '95vh',
-    showComposeMessage: true
   }
 
   componentDidMount() {
@@ -76,20 +67,20 @@ class Messages extends React.Component {
     const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
 
     this.messagesObservable = Rx
-    .Observable
-    .fromEvent(this.messagesList, 'scroll')
-    .debounceTime(500)
-    .scan(top => this.messagesList.scrollTop - this.messagesList.clientTop, 10000)
-    .filter(top => {
+      .Observable
+      .fromEvent(this.messagesList, 'scroll')
+      .debounceTime(500)
+      .scan(top => this.messagesList.scrollTop - this.messagesList.clientTop, 10000)
+      .filter(top => {
       // check scroll direction
-      const isScrolledToTop = top < this.lastScrollTop
+        const isScrolledToTop = top < this.lastScrollTop
 
-      // set last scroll pos
-      this.lastScrollTop = top
+        // set last scroll pos
+        this.lastScrollTop = top
 
-      return isScrolledToTop && top < 90
-    })
-    .subscribe((top) => this.loadPreviousMessages(top))
+        return isScrolledToTop && top < 90
+      })
+      .subscribe((top) => this.loadPreviousMessages(top))
   }
 
   /**
@@ -116,7 +107,7 @@ class Messages extends React.Component {
    * load previous messages of chat by scrolling to top
    * this function is a subscriber of Rxjs
    */
-  loadPreviousMessages(top) {
+  loadPreviousMessages() {
     const { roomId } = this.props
     const messages = this.props.messages[roomId]
 
@@ -149,8 +140,8 @@ class Messages extends React.Component {
     return messages[keys[index - 1]]
   }
 
-  onNewMessage(room, message) {
-    const { user, roomId } = this.props
+  onNewMessage(room) {
+    const { roomId } = this.props
 
     if (!this.messagesList)
       return false
@@ -201,7 +192,7 @@ class Messages extends React.Component {
     let { composeMessageHeight } = this.state
     const { showToolbar, showComposeMessage } = this.props
     let { toolbarHeight, baseHeight } = this.props
-
+    //       `${330 - 9 - 4 - 4}px` : // popup height - compose message bottom - 2*input border: 330px - 9px -4px - 4px
     if (showToolbar === false) {
       toolbarHeight = '0px'
     }
@@ -284,6 +275,7 @@ class Messages extends React.Component {
         {
           roomId && !messages &&
           <img
+            alt="loading"
             className="loading"
             src="/static/images/loading-states/messages.svg"
           />
@@ -291,7 +283,7 @@ class Messages extends React.Component {
 
         <UploadHandler
           disabled={disableUpload}
-          disableClick={true}
+          disableClick
           roomId={roomId}
           author={user}
           dropZoneStyle={{
@@ -342,6 +334,12 @@ class Messages extends React.Component {
       </div>
     )
   }
+}
+
+Messages.defaultProps = {
+  toolbarHeight: '70px',
+  baseHeight: '95vh',
+  showComposeMessage: true
 }
 
 export default connect(({ chatroom }) => ({

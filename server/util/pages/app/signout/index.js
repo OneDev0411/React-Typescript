@@ -3,12 +3,12 @@ const router = require('koa-router')()
 const app = new Koa()
 
 router.get('/signout', async (ctx, next) => {
-
-  ctx.session.user = null
   ctx.session = null
-
-  const redirect_to = ctx.request.query.redirect_to || '/'
-  ctx.redirect(redirect_to)
+  const { querystring } = ctx.request
+  const { redirectFromSignout, redirect_to } = ctx.request.query
+  let redirect = redirectFromSignout || redirect_to || '/signin'
+  redirect += redirect === '/signin' && querystring ? `?${querystring}` : ''
+  ctx.redirect(redirect)
 })
 
 module.exports = app.use(router.routes())

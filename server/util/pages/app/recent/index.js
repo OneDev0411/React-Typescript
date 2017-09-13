@@ -1,5 +1,5 @@
 import Koa from 'koa'
-import Crypto from '../../../../../app/models/Crypto'
+import Crypto from '../../../crypto'
 import listing_util from '../../../../../app/utils/listing'
 const router = require('koa-router')()
 const app = new Koa()
@@ -12,7 +12,6 @@ async function getUser(params) {
   })
 }
 router.get('/dashboard/recents/:id', async (ctx, next) => {
-
   const { token, alert } = ctx.request.query
 
   if (!token) {
@@ -35,10 +34,10 @@ router.get('/dashboard/recents/:id', async (ctx, next) => {
   user.access_token = access_token
   ctx.session.user = user
 
-  let redirect_url = '/dashboard/recents/' + ctx.params.id
+  let redirect_url = `/dashboard/recents/${ctx.params.id}`
 
   if (alert) {
-    redirect_url = '/dashboard/recents/' + ctx.params.id + '?alert=' + alert
+    redirect_url = `/dashboard/recents/${ctx.params.id}?alert=${alert}`
   }
 
   ctx.redirect(redirect_url)

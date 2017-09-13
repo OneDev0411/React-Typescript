@@ -1,6 +1,7 @@
 import React from 'react'
 import Select from 'react-select'
 import { connect } from 'react-redux'
+import { formValueSelector } from 'redux-form'
 import compose from 'recompose/compose'
 import lifecycle from 'recompose/lifecycle'
 import withState from 'recompose/withState'
@@ -12,6 +13,7 @@ import Label from '../components/Label'
 import api from '../../../../../../../../models/listings/search'
 
 const formName = 'filters'
+const selector = formValueSelector(formName)
 
 const MlsAreaSelects = (
   {
@@ -23,7 +25,7 @@ const MlsAreaSelects = (
     selectedSubareas,
     onChangeSubareas
   } // console.log(subareas)
-) =>
+) => (
   <div style={{ marginBottom: '3rem' }}>
     <Label label="MLS Areas">
       <Select
@@ -37,7 +39,7 @@ const MlsAreaSelects = (
         className="c-filters__select"
       />
     </Label>
-    {selectedAreas.length > 0 &&
+    {selectedAreas.length > 0 && (
       <Label label="MLS Subareas">
         <Select
           multi
@@ -51,8 +53,10 @@ const MlsAreaSelects = (
           className="c-filters__select"
           style={{ margninBottom: '2rem' }}
         />
-      </Label>}
+      </Label>
+    )}
   </div>
+)
 
 export default compose(
   lifecycle({
@@ -65,8 +69,8 @@ export default compose(
     }
   }),
   connect(
-    ({ search }) => ({
-      mlsAreasFromState: search.filters.form.filters.values.mls_areas || []
+    state => ({
+      mlsAreasFromState: selector(state, 'mls_areas') || []
     }),
     { updateField }
   ),

@@ -5,14 +5,14 @@ import { RouterContext } from 'react-router'
 import { createStore, applyMiddleware, compose } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
-import Brand from '../../../app/models/Brand'
 import reducers from '../../../app/reducers'
 import config from '../../../config/webpack'
+import getBrand from '../../../app/models/brand'
 
-function fetch(renderProps, store) {
-  return renderProps.components.map(c => {
-    if (c && c.fetchData) {
-      return c.fetchData(store.dispatch, renderProps.params)
+function fetch(store, renderProps) {
+  return renderProps.components.map(component => {
+    if (component && component.fetchData) {
+      return component.fetchData(store.dispatch, renderProps.params)
     }
     return Promise.reslove
   })
@@ -22,37 +22,23 @@ function sanitize(state) {
   return encodeURIComponent(JSON.stringify(state))
 }
 
-async function getBrand(user, url) {
-  return new Promise((resolve, reject) => {
-    const hostname = urlParser.parse(url).hostname
-
-    Brand.getByHostname({ hostname, user }, (err, res) => {
-      if (err) {
-        return reject(err)
-      }
-      return resolve(res)
-    })
-  })
-}
-
 async function display(file, renderProps) {
-  let initialState = {
-    data: this.locals.AppStore ? this.locals.AppStore.data : {}
-  }
+  let initialState = this.locals.appStore || {}
 
   try {
-    const response = await getBrand(this.session.user, this.request.origin)
+    const hostname = urlParser.parse(this.request.origin).hostname
+    const brand = await getBrand(hostname)
+    const { data } = initialState
     initialState = {
       ...initialState,
-      ...{
-        data: {
-          ...initialState.data,
-          ...{ brand: response.body.data }
-        }
-      }
+      data: {
+        ...data,
+        brand
+      },
+      brand
     }
-  } catch (e) {
-    /* nothing */
+  } catch (error) {
+    console.log(error)
   }
 
   // create store
@@ -63,12 +49,12 @@ async function display(file, renderProps) {
   )
 
   // append user data to render props params
-  if (initialState.data.user) {
-    renderProps.params.user = initialState.data.user
+  if (initialState.user) {
+    renderProps.params.user = initialState.user
   }
 
   try {
-    await Promise.all(fetch(renderProps, store))
+    await Promise.all(fetch(store, renderProps))
   } catch (e) {
     /* do nothing */
   }
@@ -104,18 +90,19 @@ async function display(file, renderProps) {
       store_data,
       data: this.locals,
       jsBundle: `${config.compile.publicPath}/${config.compile.jsBundle}`,
-      jsVendorBundle: `${config.compile.publicPath}/${config.compile.jsVendorBundle}`
+      jsVendorBundle: `${config.compile.publicPath}/${config.compile
+        .jsVendorBundle}`
     })
   }
 }
 
-module.exports = function () {
-  return async function (ctx, next) {
+module.exports = () =>
+  async function render(ctx, next) {
     if (ctx.display) {
+      // eslint-disable-next-line
       return await next()
     }
 
     ctx.display = display.bind(ctx)
     await next()
   }
-}

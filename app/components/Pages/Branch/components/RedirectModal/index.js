@@ -1,0 +1,31 @@
+import React from 'react'
+import { Link } from 'react-router'
+import { Modal } from 'react-bootstrap'
+
+const RedirectModal = ({ children, brandInfo }) => {
+  const { siteLogo, siteTitle } = brandInfo
+
+  return (
+    <div>
+      <Modal show className="c-confirm-modal">
+        <Modal.Body>
+          <header className="c-auth__header">
+            <Link to="/" tabIndex={-1}>
+              <img
+                src={siteLogo}
+                alt={`${siteTitle} logo`}
+                className={'c-auth__logo'}
+              />
+            </Link>
+            <h1 className="c-auth__title tempo">
+              {`${siteTitle}`}
+            </h1>
+          </header>
+          {children}
+        </Modal.Body>
+      </Modal>
+    </div>
+  )
+}
+
+export default RedirectModal

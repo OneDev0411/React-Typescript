@@ -10,20 +10,7 @@ const _ = require('underscore')
 const app = new Koa()
 
 const routes = {
-  app: [
-    ['home'],
-    ['signin'],
-    ['signup'],
-    ['signout'],
-    ['terms'],
-    ['mls'],
-    ['recent'],
-    ['dashboard'],
-    ['widget'],
-    ['invite'],
-    ['reset-password']
-  ],
-  verify: [['email'], ['activate'], ['phone']]
+  app: [['signout'], ['reset_password'], ['listing']]
 }
 
 app.use(handle490)
@@ -42,6 +29,7 @@ app.use(async (ctx, next) => {
     !isDashboard(ctx.url) ||
     (isDashboard(ctx.url) && isListingPage(ctx.url))
   ) {
+    // eslint-disable-next-line
     return await next()
   }
 
@@ -53,34 +41,48 @@ app.use(async (ctx, next) => {
 
     return ctx.redirect(url)
   }
-
+  // eslint-disable-next-line
   return await next()
 })
 
 app.use(async (ctx, next) => {
-  ctx.config = config
-  const { AppStore } = ctx.locals
-  const { user } = AppStore.data
+  let { session, locals } = ctx
+  let { appStore } = locals
 
-  if (!ctx.session.user) {
-    delete AppStore.data.user
+  const { data, user } = appStore
+  if (!session.user) {
+    if (user) {
+      delete appStore.user
+      delete appStore.data.user
+    }
   } else {
-    AppStore.data = {
-      ...AppStore.data,
-      ...{
-        user: ctx.session.user
-      }
+    appStore = {
+      ...appStore,
+      data: {
+        ...data,
+        user: session.user,
+        path: ctx.request.url,
+        location: { pathname: ctx.request.url }
+      },
+      user: session.user
     }
   }
 
-  ctx.locals.AppStore = AppStore
+  const newLocals = {
+    ...locals,
+    appStore
+  }
 
-  await await next()
+  ctx.config = config
+  ctx.locals = newLocals
+
+  await next()
 })
 
 _.each(routes, (group, name) => {
-  _.each(group, rt => {
-    app.use(mount(require(`./${name}/${rt[0]}`)))
+  _.each(group, route => {
+    // eslint-disable-next-line
+    app.use(mount(require(`./${name}/${route[0]}`)))
   })
 })
 

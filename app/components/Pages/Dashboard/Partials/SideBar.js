@@ -505,7 +505,6 @@ export default class SideBar extends Component {
       support: <Popover className="sidenav__popover" id="popover-support">Need Help?</Popover>,
       store: <Popover className="sidenav__popover" id="popover-store">Store</Popover>,
       notifications: <Popover className="sidenav__popover" id="popover-notifications">Notifications</Popover>,
-      brand: <Popover className="sidenav__popover" id="popover-notifications">Brand</Popover>
     }
     if (data.errors && data.errors.type && data.errors.type === 'agent-not-found') {
       message = (
@@ -704,9 +703,9 @@ export default class SideBar extends Component {
             </div>
             <NavDropdown style={S('z-1000')} title={title_area} dropup id="account-dropdown" className="account-dropdown" eventKey={3} noCaret>
               { upgrade_account_button }
-              <li><a href="#" style={S('pointer')} onClick={this.showSettingsModal}>
+              {/* <li><a href="#" style={S('pointer')} onClick={this.showSettingsModal}>
                 <i className="fa fa-cog" style={S('mr-15')} />Settings</a>
-              </li>
+              </li> */}
               { payments_link }
               { form_link }
               {

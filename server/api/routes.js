@@ -3,45 +3,15 @@ const _ = require('underscore')
 const list = []
 
 const routes = {
-  proxifier: [
-    ['passthrough'],
-    ['upload']
-  ],
-  agent: [
-    ['get-report'],
-    ['search-agent']
-  ],
-  alert: [
-    ['get-alerts'],
-    ['get-alert-room'],
-    ['acknowledge-notifications']
-  ],
+  proxifier: [['passthrough'], ['upload']],
+  agent: [['get-report'], ['search-agent']],
+  alert: [['get-alerts'], ['get-alert-room'], ['acknowledge-notifications']],
+  intercom: [['signin'], ['signup']],
+  listing: [['search'], ['listings']],
+  message: [['messages']],
   deal: [
     ['docusign-login'],
     ['envelope-sign'],
-  ],
-  brand: [
-    ['get-brand-by-hostname']
-  ],
-  area: [
-    ['search']
-  ],
-  county: [
-    ['search']
-  ],
-  concierge: [
-    ['put-review']
-  ],
-  intercom: [
-    ['signin'],
-    ['signup']
-  ],
-  listing: [
-    ['search'],
-    ['listings']
-  ],
-  message: [
-    ['messages']
   ],
   notification: [
     ['all'],
@@ -49,34 +19,7 @@ const routes = {
     ['delete-room-notifications'],
     ['mark-seen']
   ],
-  rec: [
-    ['actives'],
-    ['feed'],
-    ['mark'],
-    ['favorites']
-  ],
-  room: [
-    ['acknowledge-room-notifications'],
-    ['add-user-to-room'],
-    ['add-users'],
-    ['create-alert'],
-    ['create-message'],
-    ['create-rec'],
-    ['create-room'],
-    ['delete-room'],
-    ['edit-favorite'],
-    ['get-actives'],
-    ['get-rooms'],
-    ['notifications'],
-    ['remove-user-from-room']
-  ],
-  school: [
-    ['search'],
-    ['search-districts']
-  ],
-  subdivision: [
-    ['search']
-  ],
+  rec: [['actives'], ['feed'], ['mark'], ['favorites']],
   user: [
     ['create-password'],
     ['edit-password'],
@@ -100,9 +43,9 @@ const routes = {
 }
 
 _.each(routes, (group, name) => {
-  _.each(group, (r) => {
+  _.each(group, route => {
     let item = {
-      path: `./api/${name}/${r[0]}`
+      path: `./api/${name}/${route[0]}`
     }
     list.push(item)
   })

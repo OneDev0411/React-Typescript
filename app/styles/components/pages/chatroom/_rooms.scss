@@ -56,7 +56,6 @@
   margin: 0 auto;
   text-align: center;
   vertical-align: middle;
-  line-height: 40px;
   color: #b2b2b2;
   transition: 0.5s all ease-in;
   i {
@@ -67,11 +66,26 @@
   &:hover {
     cursor: pointer;
     color: #fff;
+    background-color: #2196f3;
+    svg g g {
+      fill: #fff;
+    }
+  }
+  .compose-icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 12px;
+  }
+  &:before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
   }
 }
 
 %rooms-toolbar {
-  $search-width: 234px;
+  $search-width: 190px;
   padding: 20px $rooms-padding 0 $rooms-padding;
   min-height: 70px;
   margin-bottom: 10px;
@@ -79,35 +93,104 @@
   .search {
     float: left;
     width: $search-width;
-
+    //background-color: #394553;
+    height: 30px;
+    text-align: center;
+    border-radius: 4px;
+    color: #9B9B9B;
+    border: solid 1px #394553;
+    background-color: rgba(216, 216, 216, 0.1);
     input {
-      background-color: #394553;
-      color: #fff;
-      border-radius: 4px;
+      width: 42px;
+      padding: 0;
+      background-color: transparent;
       border: none;
-      height: 30px;
-      &::-webkit-input-placeholder{
+      height: 100%;
+      color: #9B9B9B;
+      display: inline-block;
+      transition: width 700ms;
+      &::-webkit-input-placeholder {
         text-align: center;
       }
       &:focus {
-        outline: none;
         box-shadow: none;
+        width: calc(100% - 53px);
+        text-align: left;
+        margin-right: 16px;
       }
+      &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+        text-align: left;
+      }
+      &::-moz-placeholder { /* Firefox 19+ */
+        text-align: left;
+      }
+      &:-ms-input-placeholder { /* IE 10+ */
+        text-align: left;
+      }
+      &:-moz-placeholder { /* Firefox 18- */
+        text-align: left;
+      }
+    }
+    .active {
+      width: calc(100% - 53px);
+      margin-right: 16px;
+    }
+    .search-icon {
+      display: inline-block;
+      vertical-align: middle;
+      margin: 6px 8px 0 0;
+    }
+    .close-icon {
+      display: inline-block;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 2px 4px;
+      margin: 0 0 0 -16px;
+      position: absolute;
+      &:hover {
+        color: #fff;
+      }
+    }
+    &:before {
+      content: "";
+      display: inline-block;
+      vertical-align: middle;
+      height: 100%;
+    }
+  }
+  .focus {
+    border: solid 1px rgba(33, 150, 243, 0.5);
+    background-color: rgba(216, 216, 216, 0.2);
+  }
+  .toggle-sidebar {
+    display: block;
+    float: right;
+    margin-left: 20px;
+    height: 30px;
+    width: 30px;
+    background-color: rgba(216, 216, 216, 0.2);
+    text-align: center;
+    border-radius: 4px;
+    padding: 0 4px;
+    cursor: pointer;
+    .btn-tgl {
+      color: #b2b2b2;
+      svg {
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+    &:hover {
+      background-color: #2196f3;
     }
   }
 
-  .toggle-sidebar {
-    margin-left: $search-width + 20px;
-    height: 30px;
-    width: 30px;
-    background-color: #394553;
-    text-align: center;
-    border-radius: 4px;
-    padding: 0px 4px;
+  .two-direction-arrow-container:before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
 
-    .btn-tgl {
-      color: #b2b2b2;
-    }
   }
 
   .socket-status {
@@ -122,6 +205,7 @@
 
 %room-item {
   padding: 7px 4px 7px $rooms-padding;
+  font-size: 15px;
   margin: 0;
   cursor: pointer;
   .vcenter {
@@ -132,10 +216,10 @@
   .avatar {
     padding-left: 0;
     padding-right: 0;
-    margin-right: 10px;
+    margin-right: 3px;
   }
   .title {
-    padding: 0 0 0 10px;
+    padding: 0;
     opacity: 0.5;
 
     &.hasNotification {
@@ -157,7 +241,7 @@
   }
   .notifications {
     text-align: center;
-    padding-top: 4px;
+    padding: 4px 0 0 0;
     .count {
       padding: 2px;
       border-radius: 10px;
@@ -190,7 +274,7 @@
     background-color: transparent;
   }
 
-  &:hover svg > g{
+  &:hover svg > g {
     fill: #2196f3;
   }
 }

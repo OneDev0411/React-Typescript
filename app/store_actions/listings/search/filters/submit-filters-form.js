@@ -131,18 +131,16 @@ export const obiectPropsValueToArray = obj =>
   !obj
     ? null
     : Object.keys(obj)
-        .map(p => {
-          const value = obj[p]
-          if (!value) {
-            return
-          }
-          return value
-        })
-        .filter(v => v)
+      .map(p => {
+        const value = obj[p]
+        if (!value) {
+          return
+        }
+        return value
+      })
+      .filter(v => v)
 
-const normalizeValues = (values, state) => {
-  const { options, filters: formState } = state
-
+const normalizeValues = (values, options) => {
   const {
     counties,
     mls_areas,
@@ -229,7 +227,7 @@ const normalizeValues = (values, state) => {
 }
 
 const submitFiltersForm = values => async (dispatch, getState) => {
-  const queryOptions = normalizeValues(values, getState().search)
+  const queryOptions = normalizeValues(values, getState().search.options)
 
   const updateMap = () => {
     const { search } = getState()
