@@ -12,8 +12,9 @@ router.post('/proxifier', bodyParser(), async ctx => {
   const queryString = ctx.request.querystring
 
   try {
-    // get brand
+    let request
     const brand = headers['x-rechat-brand']
+    const authMode = headers['x-auth-mode']
 
     // remove base_url because current fetcher middleware add it by itself
     let endpoint = headers['x-endpoint'].replace(config.api.url, '')
@@ -25,7 +26,16 @@ router.post('/proxifier', bodyParser(), async ctx => {
     // get method
     const method = headers['x-method']
 
-    const request = ctx.fetch(endpoint, method).send(ctx.request.body)
+    if (authMode === 'client_id') {
+      const requestBody = {
+        ...ctx.request.body,
+        client_id: config.api.client_id,
+        client_secret: config.api.client_secret
+      }
+      request = ctx.fetch(endpoint, method).send(requestBody)
+    } else {
+      request = ctx.fetch(endpoint, method).send(ctx.request.body)
+    }
 
     if (headers.authorization) {
       request.set({ Authorization: headers.authorization })
@@ -36,15 +46,17 @@ router.post('/proxifier', bodyParser(), async ctx => {
     }
 
     const response = await request
-
     // update user session
     const { data } = response.body
 
-    if (data && data.type === 'user') {
-      updateSession(ctx, data)
+    if (method !== 'get' && data && data.type === 'user') {
+      updateSession(ctx, response.body)
     }
 
-    ctx.body = response.body
+    ctx.body = {
+      ...response.body,
+      statusCode: response.statusCode
+    }
   } catch (e) {
     console.log('[ Error ] ', e.message)
 
@@ -53,8 +65,20 @@ router.post('/proxifier', bodyParser(), async ctx => {
       text: e.message
     }
 
-    ctx.status = e.response.status
-    ctx.body = e.response.text
+    const { status, text } = e.response
+
+    ctx.status = status
+    try {
+      ctx.body = {
+        statusCode: status,
+        ...JSON.parse(text)
+      }
+    } catch (error) {
+      ctx.body = {
+        text,
+        statusCode: status
+      }
+    }
   }
 })
 

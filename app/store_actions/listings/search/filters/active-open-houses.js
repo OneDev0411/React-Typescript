@@ -10,11 +10,10 @@ const activeOpenHouses = (event, nextState) => (dispatch, getState) => {
     return Promise.resolve()
   }
 
-  const formState = getState().search.filters
+  const state = getState()
 
   const anyStatusIsNotSelected =
-    obiectPropsValueToArray(selector(formState, 'listing_statuses')).length ===
-    0
+    obiectPropsValueToArray(selector(state, 'listing_statuses')).length === 0
 
   // console.log(anyStatusIsNotSelected)
 
@@ -22,12 +21,12 @@ const activeOpenHouses = (event, nextState) => (dispatch, getState) => {
     event.preventDefault()
     return Promise.resolve()
   }
-  const soldListings = selector(formState, 'listing_statuses.sold')
+  const soldListings = selector(state, 'listing_statuses.sold')
 
   if (soldListings) {
     dispatch(change(formName, 'listing_statuses.sold', false))
 
-    const activeListings = selector(formState, 'listing_statuses.active')
+    const activeListings = selector(state, 'listing_statuses.active')
     if (!activeListings) {
       dispatch(change(formName, 'listing_statuses.active', true))
     }

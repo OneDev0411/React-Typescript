@@ -6,28 +6,23 @@ class Authentication extends React.Component {
     super(props)
   }
 
-  componentDidMount() {
-
-  }
-
   render() {
-    const { data, location } = this.props
+    let { user, data, location, children } = this.props
 
-    const path = location.pathname
-    data.path = path
-    data.location = location
+    data = {
+      ...data,
+      user,
+      location,
+      path: location.pathname
+    }
 
-    const children = React.cloneElement(this.props.children, {
+    const elements = React.cloneElement(children, {
       data,
-      user: data.user
+      user
     })
 
-    return (
-      <div>{ children }</div>
-    )
+    return <div>{elements}</div>
   }
 }
 
-export default connect(s => ({
-  data: s.data,
-}))(Authentication)
+export default connect(({ data, user }) => ({ data, user }))(Authentication)

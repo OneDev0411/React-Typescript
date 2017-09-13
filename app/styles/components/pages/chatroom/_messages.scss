@@ -3,7 +3,7 @@
 /**
 * Messages
 */
-$left-w: 50px;
+$left-w: 44px;
 
 %messages {
   $height-of-create-message: 45px;
@@ -168,6 +168,9 @@ $left-w: 50px;
       @extend %messages-item-uploading;
     }
   }
+  &:hover {
+    background-color: #f8fafb;
+  }
 }
 
 %message-subitem {
@@ -187,8 +190,7 @@ $left-w: 50px;
   }
 
   &:hover {
-    // background-color: #2196f3;
-    // opacity: 0.05;
+     background-color: #f8fafb;
     .date{
       opacity: 1;
     }

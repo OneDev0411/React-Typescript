@@ -24,7 +24,7 @@ export default ({
           userId={author.id}
           name={author.display_name}
           image={author.profile_image_url}
-          size={35}
+          size={28}
         />
       </div>
 

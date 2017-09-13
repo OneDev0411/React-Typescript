@@ -1,18 +1,14 @@
 import React from 'react'
 import cn from 'classnames'
 import Members from '../Rooms/members'
-import RoomSettings from '../Rooms/settings'
 import CloseIcon from '../../Partials/Svgs/CloseIcon'
 import FullscreenIcon from '../../Partials/Svgs/FullscreenIcon'
 import MinimizeIcon from '../../Partials/Svgs/MinimizeIcon'
-import Brand from '../../../../../controllers/Brand'
 
-const getTitle = function(title) {
+const getTitle = (title) => {
   const len = 13
-  if (title.length < len)
-    return title
-  else
-    return title.substr(0, len) + '...'
+  if (title.length < len) { return title }
+  return `${title.substr(0, len)}...`
 }
 
 export default ({
@@ -36,19 +32,11 @@ export default ({
     </span>
 
     <div className="icons">
-      <Members
-        room={room}
-        iconSize={14}
-      />
-
-      <RoomSettings
-        room={room}
-        iconSize={14}
-      />
 
       <span
         className="icon minimize minimize-icon"
-        onClick={() => onMinimize(room.id)}>
+        onClick={() => onMinimize(room.id)}
+      >
         <MinimizeIcon />
       </span>
 
@@ -58,6 +46,11 @@ export default ({
       >
         <FullscreenIcon />
       </span>
+
+      <Members
+        room={room}
+        iconSize={12}
+      />
 
       <span
         className="icon times close-icon"

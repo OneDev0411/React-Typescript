@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Grid, Row, Col } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
 import Rooms from './Rooms'
@@ -25,7 +24,7 @@ class Chatroom extends React.Component {
       return this.changeRoom(rooms[_.keys(rooms)[0]].id)
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     const { activeRoom, location, isInstant, instantMode } = this.props
 
     // when user switch from popup to full screen (= instant) chat
@@ -102,7 +101,7 @@ class Chatroom extends React.Component {
           <Messages
             user={user}
             roomId={activeRoom}
-            showToolbar={true}
+            showToolbar
             isInstantChat={isInstant}
           />
         </div>

@@ -10,7 +10,6 @@ export default ({
   message,
   previousMessage
 }) => {
-
   // get message author
   const author = messageUtil.getAuthor(message)
 

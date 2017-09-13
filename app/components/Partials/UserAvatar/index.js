@@ -3,34 +3,44 @@ import { connect } from 'react-redux'
 import Avatar from 'react-avatar'
 
 const Colors = {
-  Online: 'green',
+  Online: '#35B863',
   Offline: 'gray',
   Background: 'darkgreen'
 }
 
 const UserAvatar = ({
-  userId,
-  name,
-  image,
-  state,
-  color,
-  style,
-  size = 50,
-  borderColor = '#fff',
-  showStateIndicator = true
-}) => {
+                      name,
+                      image,
+                      state,
+                      color,
+                      style,
+                      size = 50,
+                      borderColor = '#fff',
+                      showStateIndicator = true,
+                      textSizeRatio = 3,
+                      fgColor
+                    }) => {
   const defaultStyles = showStateIndicator ?
-    {position: 'relative', width: `${size}px`} :
+    { position: 'relative', width: `${size}px` } :
     {}
 
   // normalize name
   let normalizedName = name
 
-  const splittedName = name.split(' ')
-  if (splittedName.length > 2) {
-    normalizedName = splittedName[0] + ' ' + splittedName[1]
+  let props
+  if (typeof normalizedName === 'number') {
+    props = {
+      value: normalizedName
+    }
+  } else {
+    const splitName = name.split(' ')
+    if (splitName.length > 2) {
+      normalizedName = `${splitName[0]} ${splitName[1]}`
+    }
+    props = {
+      name: normalizedName
+    }
   }
-
   return (
     <div
       className="user-avatar"
@@ -40,12 +50,13 @@ const UserAvatar = ({
       }}
     >
       <Avatar
-        style={!image ? {verticalAlign: 'middle'} : {}} // fix vertical bug when there is no image
         round
-        name={normalizedName}
+        {...props}
         src={image}
         size={size}
         color={color}
+        textSizeRatio={textSizeRatio}
+        fgColor={fgColor}
       />
       {
         showStateIndicator &&
@@ -70,8 +81,9 @@ const UserAvatar = ({
 function mapStateToProps({ chatroom }, ownProps) {
   const { states } = chatroom
 
-  if (!states || ownProps.showStateIndicator === false)
+  if (!states || ownProps.showStateIndicator === false) {
     return {}
+  }
 
   const state = states[ownProps.userId] ? states[ownProps.userId].state : 'Offline'
   return { state }
