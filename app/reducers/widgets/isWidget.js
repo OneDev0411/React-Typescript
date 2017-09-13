@@ -1,9 +1,11 @@
-import * as actionsType from '../../constants/widgets/isWidget'
+import * as actionsType from '../../constants/widgets'
 
 const data = (state = false, action) => {
   switch (action.type) {
-    case actionsType.IS_WIDGET:
+    case actionsType.SET_WIDGET:
       return true
+    case actionsType.UNSET_WIDGET:
+      return false
     default:
       return state
   }

@@ -9,8 +9,7 @@ const activeSold = (event, nextState) => (dispatch, getState) => {
     return Promise.resolve()
   }
 
-  const formState = getState().search.filters
-  const openHouses = selector(formState, 'open_house')
+  const openHouses = selector(getState(), 'open_house')
 
   dispatch({
     type: ACTIVE_SOLD_STATUS

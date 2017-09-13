@@ -1,41 +1,37 @@
 import Koa from 'koa'
-import superagent from 'superagent'
-import request from 'request'
 import colors from 'colors'
+import request from 'request'
+import superagent from 'superagent'
 import config from '../../../config/private'
 
 function logger(url, method, headers, ctx) {
-  const api_url = config.api.url
   const { user } = ctx.session
-  const endpoint = `${method.toUpperCase()} ${api_url}${url}`.green
+  const api_url = config.api.url
   const username = user ? user.email : 'GUEST'
-  let text = `[ ${colors.white.bold(username)} ] ${endpoint}`
+  const endpoint = `${method.toUpperCase()} ${api_url}${url}`.green
 
+  let text = `[ ${colors.white.bold(username)} ] ${endpoint}`
   if (user) {
     text += ` (${user.access_token})`.yellow
   }
-
-  text += "\n" + (JSON.stringify(headers)).cyan
-  text += "\n"
+  text += `\n${JSON.stringify(headers).cyan}`
+  text += '\n'
 
   console.log(text)
 }
 
-const requestMiddleware = async function (ctx, next) {
+const requestMiddleware = async (ctx, next) => {
   ctx.config = config
   const api_url = config.api.url
-  const access_token = ctx.request.query.access_token
   const app_name = config.app_name
+  const access_token = ctx.request.query.access_token
   const user_agent = ctx.headers['user-agent']
   const host_name = ctx.request.query.hostname
 
-  const agent = superagent
-
-  ctx.fetch = function(url, method = 'get', contentType = 'application/json') {
-
+  ctx.fetch = (url, method = 'get', contentType = 'application/json') => {
     const headers = {
-      'x-real-agent': user_agent,
       'User-Agent': app_name,
+      'x-real-agent': user_agent,
       'Content-Type': contentType
     }
 
@@ -51,47 +47,52 @@ const requestMiddleware = async function (ctx, next) {
     logger(url, method, headers, ctx)
 
     try {
-      return agent[method.toLowerCase()](`${api_url}${url}`)
-      .set(headers)
-      .on('error', err => {
-        let responseText = err.response ? err.response.text : err.message
-        console.log('[ Fetch Error ] ', responseText)
+      return superagent
+        [method.toLowerCase()](`${api_url}${url}`)
+        .set(headers)
+        .on('error', err => {
+          let responseText = err.response ? err.response.text : err.message
+          console.log('[ Fetch Error ] ', responseText)
 
-        // try to parse encoded json
-        try {
-          responseText = JSON.parse(responseText)
-        } catch(e) {}
-
-        const status = err.response ? err.response.status : 500
-
-        if (status === 490)
-          return false
-
-        ctx.status = status
-        ctx.body = {
-          status: 'error',
-          response: {
-            status: err.response ? err.response.status : 'Internal server error',
-            text: responseText
+          // try to parse encoded json
+          try {
+            responseText = JSON.parse(responseText)
+          } catch (error) {
+            console.log(error)
           }
-        }
-      })
-      .on('response', response => {
-        if (~~response.status >= 200 && ~~response.status <= 207) {
-          response.body.status = 'success'
-        }
-      })
-    }
-    catch(e) {
-      console.log(e)
-      throw e
+
+          const status = err.response ? err.response.status : 500
+
+          if (status === 490) {
+            return false
+          }
+
+          ctx.status = status
+          ctx.body = {
+            status: 'error',
+            response: {
+              status: err.response
+                ? err.response.status
+                : 'Internal server error',
+              text: responseText
+            }
+          }
+        })
+        .on('response', response => {
+          if (~~response.status >= 200 && ~~response.status <= 207) {
+            response.body.status = 'success'
+          }
+        })
+    } catch (error) {
+      console.log(error)
+      throw error
     }
   }
 
   /**
   * stream file
   */
-  ctx.stream = async function(url) {
+  ctx.stream = async url => {
     const download = request({
       url: `${api_url}${url}`,
       headers: {
@@ -102,14 +103,12 @@ const requestMiddleware = async function (ctx, next) {
     // log
     console.log(`[ + ] Stream ${url}`)
 
-    return new Promise(resolve => {
-      return resolve(download)
-    })
+    return new Promise(resolve => resolve(download))
   }
 
   await next()
 }
 
-export default function() {
+export default function () {
   return requestMiddleware
 }

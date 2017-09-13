@@ -6,10 +6,7 @@ const BrandLogo = ({ data, isWidget, title = 'Rechat', styles }) => {
     return <div />
   }
 
-  title =
-    data.brand_queried && data.brand_checked && data.brand
-      ? data.brand.messages.site_title
-      : title
+  title = data.brand ? data.brand.messages.site_title : title
 
   const image = Brand.asset('site_logo_wide')
 

@@ -16,6 +16,7 @@ const InstantChat = ({
     <ChatPopups
       user={user}
       rooms={chatroom.rooms}
+      instantMode={chatroom.instantMode}
     />
     <div
       className="chatroom-fullscreen"

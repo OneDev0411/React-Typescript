@@ -23,14 +23,13 @@ import ListingMarker from '../../../Partials/ListingMarker'
 import ListingMapMarker from '../../../Partials/ListingMapMarker'
 
 // import { fadeIn } from './ListingDesktopView'
-// import { handleActivateAccountClick } from './ListingDesktopView'
 
 // import ShareModal from '../../components/modals/ShareListingModal'
 
 const ListingMobileView = ({
   data,
   listing,
-  isFetching,
+  isFetching
   // showShareModal,
   // onHideShareModal,
   // shareModalIsActive

@@ -40,7 +40,7 @@ const Filters = ({
   activeOpenHouses,
   activeOtherListings,
   activeActiveListings
-}) =>
+}) => (
   <div className={`c-filters ${isOpen ? 'c-filters--isOpen' : ''}`}>
     <div className="c-filters__inner-wrapper">
       <form
@@ -129,6 +129,7 @@ const Filters = ({
       </button>
     </div>
   </div>
+)
 
 export default compose(
   connect(null, { ...actions }),
@@ -146,8 +147,7 @@ export default compose(
       minimum_bedrooms: 'any',
       minimum_bathrooms: 'any',
       minimum_parking_spaces: 'any'
-    },
-    getFormState: ({ search }) => search.filters.form
+    }
   }),
   withHandlers({
     onSubmitHandler: ({ submitFiltersForm }) => values => {

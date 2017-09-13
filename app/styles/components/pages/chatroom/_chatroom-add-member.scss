@@ -1,0 +1,47 @@
+.chatroom-add-member {
+  .modal-header {
+    background-color: #f9f9f9;
+    border-bottom: none;
+    padding: 23px 20px;
+    .modal-title {
+      float: left;
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 1.0;
+      color: #4a4a4a;
+    }
+    .close {
+      opacity: 1;
+      color: #9b9b9b;
+      &:hover, &:focus {
+        color: #2196f3;
+      }
+    }
+    .leave-icon {
+      float: right;
+      font-size: 21px;
+      font-weight: bold;
+      line-height: 1;
+      text-shadow: 0 1px 0 #fff;
+      margin-right: 20px;
+      &:hover, &:focus {
+        cursor: pointer;
+        svg g {
+          fill: #2196f3;
+        }
+      }
+    }
+  }
+}
+
+#popover-leave {
+  font-size: 13px;
+  font-weight: 500;
+  .tooltip-inner {
+    background-color: #333e4c;
+    border-radius: 4px;
+  }
+  .tooltip-arrow {
+    border-bottom-color: #333e4c;
+  }
+}

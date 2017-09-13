@@ -8,30 +8,28 @@ import path from 'path'
 import webpack from 'webpack'
 import _ from 'underscore'
 
-import universalMiddleware from './util/universal'
-import pagesMiddleware from './util/pages'
 import render from './util/render'
 import request from './util/request'
-import webpackConfig from '../webpack.config.babel'
+import pagesMiddleware from './util/pages'
+import universalMiddleware from './util/universal'
 import appConfig from '../config/webpack'
-import AppStore from '../app/stores/AppStore'
+import webpackConfig from '../webpack.config.babel'
+// import AppStore from '../app/stores/AppStore'
 
 const app = new Koa()
+const __DEV__ = process.env.NODE_ENV === 'development'
 
-// webpack variables
+// webpack configs
 const { entry, output, publicPath } = appConfig.compile
 
 // app uses proxy
 app.proxy = true
 
-const __DEV__ = process.env.NODE_ENV === 'development'
-
 // handle application errors
 app.use(async (ctx, next) => {
   try {
     await next()
-  } catch(e) {
-
+  } catch (e) {
     // log error
     console.log(e, e.stack)
 
@@ -42,9 +40,9 @@ app.use(async (ctx, next) => {
 })
 
 // attach template engine
-const templatesDir = __DEV__ ?
-  path.resolve(appConfig.compile.entry, 'templates') :
-  appConfig.compile.output
+const templatesDir = __DEV__
+  ? path.resolve(appConfig.compile.entry, 'templates')
+  : appConfig.compile.output
 
 // use template engine
 app.use(views(templatesDir, { map: { html: 'hogan' } }))
@@ -60,21 +58,28 @@ app.use(render())
  */
 app.keys = ['r3ch4t@re4ct_rocks!!!']
 
-app.use(session({
-  key: 'rechat-webapp:session',
-  maxAge: 60 * 86400 * 1000, // 60 days
-  overwrite: true,
-  httpOnly: true,
-  signed: true
-}, app))
+app.use(
+  session(
+    {
+      key: 'rechat-webapp:session',
+      maxAge: 60 * 86400 * 1000, // 60 days
+      overwrite: true,
+      httpOnly: true,
+      signed: true
+    },
+    app
+  )
+)
 
 /**
- * middleware for time
+ * middleware for time and initial appStore
  */
-app.use(async function(ctx, next) {
+
+app.use(async (ctx, next) => {
   ctx.locals = {
-    time: (new Date).getTime(),
-    AppStore
+    ...ctx.locals,
+    appStore: { data: {} },
+    time: new Date().getTime()
   }
 
   await next()
@@ -83,9 +88,9 @@ app.use(async function(ctx, next) {
 // add request middleware
 app.use(request())
 
-// eslint-disable-next-line
-_.each(require('./api/routes'), function(r) {
-  app.use(mount('/api', require(r.path)))
+_.each(require('./api/routes'), route => {
+  // eslint-disable-next-line
+  app.use(mount('/api', require(route.path)))
 })
 
 if (__DEV__) {
@@ -101,10 +106,14 @@ if (__DEV__) {
 
   app.use(mount(publicPath, serve(path.join(entry, publicPath))))
 } else {
-  app.use(mount(serve(path.join(output), {
-    gzip: true,
-    maxage: 86400000
-  })))
+  app.use(
+    mount(
+      serve(path.join(output), {
+        gzip: true,
+        maxage: 86400000
+      })
+    )
+  )
 }
 
 // parse pages

@@ -3,6 +3,7 @@ import cn from 'classnames'
 import Messages from '../Messages'
 import Toolbar from './toolbar'
 import ChatNotification from '../Services/notification'
+import ClickOutside from 'react-click-outside'
 
 /**
  * on focus popup
@@ -16,8 +17,9 @@ const onFocus = (e, room, onChangeActive) => {
  * reset room's notifications
  */
 const resetNotifications = (room) => {
-  if (~~room.new_notifications > 0)
+  if (~~room.new_notifications > 0) {
     ChatNotification.clear(room.id)
+  }
 }
 
 export default ({
@@ -29,50 +31,56 @@ export default ({
   onMinimize,
   onMaximize,
   onClose,
-  onChangeActive
+  onChangeActive,
+  instantMode
 }) => {
-
   // extract settings
   const { minimize } = settings
-
   const width = 270 // pixels
   const defaultLeft = 90 // pixel
 
   let left = (width * (number - 1)) + defaultLeft
 
   // limit popups count based on screen width
-  if (left + defaultLeft + width > window.innerWidth)
+  if (left + defaultLeft + width > window.innerWidth) {
     return false
+  }
 
   // margin left
-  if (number > 1)
+  if (number > 1) {
     left += 20 * (number - 1)
-
+  }
   return (
-    <div
-      className={cn('chat-popup', { minimize })}
-      id={`CHAT_POPUP_${room.id}`}
-      style={{
-        width: `${width}px`,
-        left: `${left}px`
+    <ClickOutside
+      onClickOutside={() => {
+        if (isActive && !instantMode)
+          onChangeActive(null)
       }}
     >
-      <Toolbar
-        room={room}
-        isActive={isActive}
-        onMinimize={onMinimize}
-        onMaximize={onMaximize}
-        onClose={onClose}
-      />
-
-      <Messages
-        user={user}
-        roomId={room.id}
-        showToolbar={false}
-        baseHeight="297px"
-        isPopup={true}
-        onClick={e => onFocus(e, room, onChangeActive)}
-      />
-    </div>
+      <div
+        className={cn('chat-popup', { minimize })}
+        id={`CHAT_POPUP_${room.id}`}
+        style={{
+          width: `${width}px`,
+          left: `${left}px`
+        }}
+      >
+        <Toolbar
+          room={room}
+          isActive={isActive}
+          onMinimize={onMinimize}
+          onMaximize={onMaximize}
+          onClose={onClose}
+        />
+        <Messages
+          user={user}
+          roomId={room.id}
+          showToolbar={false}
+          baseHeight="297px"
+          isPopup
+          onClick={e => onFocus(e, room, onChangeActive)}
+        />
+      </div>
+    </ClickOutside>
   )
 }

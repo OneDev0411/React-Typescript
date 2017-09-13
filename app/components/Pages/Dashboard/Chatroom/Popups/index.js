@@ -41,12 +41,12 @@ const onToggleMinimize = (props, roomId, settings) => {
  * when user clicks on maximize icon
  */
 const onMaximize = (props, roomId) => {
-  const { activeRoom, maximizeChatPopup, changeActiveRoom, toggleInstantMode } = props
+  const { maximizeChatPopup, changeActiveRoom, toggleInstantMode } = props
 
   batchActions([
     changeActiveRoom(roomId),
     toggleInstantMode(),
-    maximizeChatPopup(roomId),
+    maximizeChatPopup(roomId)
   ])
 }
 
@@ -84,15 +84,10 @@ const ChatPopups = (props) => {
     popups,
     activeRoom,
     /* mapped props to dispatch */
-    minimizeChatPopup,
-    closeChatPopup,
-    maximizeChatPopup,
-    changeActiveRoom,
-    toggleInstantMode
+    changeActiveRoom
   } = props
 
-  if (!popups)
-    return false
+  if (!popups) { return false }
 
   // counter for popups
   let counter = 1
@@ -100,20 +95,19 @@ const ChatPopups = (props) => {
   return (
     <div>
       {
-        _.map(popups, (settings, roomId) => {
-          return <PopupWindow
-            key={`CHAT_POPUP_${roomId}`}
-            number={counter++}
-            user={user}
-            settings={settings}
-            isActive={activeRoom === roomId}
-            room={rooms[roomId]}
-            onMinimize={roomId => onToggleMinimize(props, roomId, settings)}
-            onMaximize={roomId => onMaximize(props, roomId)}
-            onClose={roomId => onClose(props, roomId)}
-            onChangeActive={roomId => changeActiveRoom(roomId)}
-          />
-        })
+        _.map(popups, (settings, roomId) => <PopupWindow
+          key={`CHAT_POPUP_${roomId}`}
+          number={counter++}
+          user={user}
+          settings={settings}
+          instantMode={props.instantMode}
+          isActive={activeRoom === roomId}
+          room={rooms[roomId]}
+          onMinimize={roomId => onToggleMinimize(props, roomId, settings)}
+          onMaximize={roomId => onMaximize(props, roomId)}
+          onClose={roomId => onClose(props, roomId)}
+          onChangeActive={roomId => changeActiveRoom(roomId)}
+        />)
       }
     </div>
   )
@@ -129,8 +123,8 @@ function mapStateToProps({ chatroom }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     ...popupActionCreators,
-    ...{changeActiveRoom},
-    ...{toggleInstantMode}
+    ...{ changeActiveRoom },
+    ...{ toggleInstantMode }
   }, dispatch)
 }
 
