@@ -233,7 +233,7 @@ class App extends Component {
   }
 
   render() {
-    const { user, rooms, location, isWidgetRedux } = this.props
+    const { data, user, rooms, location, isWidgetRedux } = this.props
 
     // don't remove below codes,
     // because app is depended to `path` and `location` props in data store
