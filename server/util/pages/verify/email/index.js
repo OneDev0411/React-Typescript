@@ -1,6 +1,6 @@
 import Koa from 'koa'
 import super_agent from 'superagent'
-import Crypto from '../../../../../app/models/Crypto'
+import Crypto from '../../../crypto'
 const router = require('koa-router')()
 const app = new Koa()
 
@@ -10,7 +10,7 @@ const app = new Koa()
 router.get('/verify_email', async (ctx, next) => {
   const decoded_token = decodeURIComponent(ctx.request.query.token)
   const encoded_token = encodeURIComponent(decoded_token)
-  return ctx.redirect('/verify/email?token=' + encoded_token)
+  return ctx.redirect(`/verify/email?token=${encoded_token}`)
 })
 
 /**
@@ -24,7 +24,7 @@ router.get('/verify_email/submitted', async (ctx, next) => {
   const token = decrypted_obj.token
   const agent = decrypted_obj.agent
   const api_url = ctx.config.api.url
-  const verify_email_url = api_url + '/users/email_confirmed'
+  const verify_email_url = `${api_url}/users/email_confirmed`
 
   const request_object = {
     email
@@ -43,16 +43,20 @@ router.get('/verify_email/submitted', async (ctx, next) => {
   }
 
   try {
-    const response = await super_agent.patch(verify_email_url).send(request_object)
+    const response = await super_agent
+      .patch(verify_email_url)
+      .send(request_object)
 
     if (response.data.is_shadow) {
-      return ctx.redirect('/verify/email?status=success&token=' + token +
-        '&email=' + encodeURIComponent(email))
-    } else {
-      return ctx.redirect('/signin?message=phone-signup-success')
+      return ctx.redirect(
+        `/verify/email?status=success&token=${
+          token
+          }&email=${
+          encodeURIComponent(email)}`
+      )
     }
-  }
-  catch(e) {
+    return ctx.redirect('/signin?message=phone-signup-success')
+  } catch (e) {
     ctx.redirect('/signin?message=email-already-verified')
   }
 })
@@ -69,7 +73,7 @@ router.get('/verify/email', async (ctx, next) => {
     status: 'success'
   }
 
-  if (ctx.request.query.status === 'error'){
+  if (ctx.request.query.status === 'error') {
     AppStore.data = {
       status: 'error'
     }
@@ -78,6 +82,5 @@ router.get('/verify/email', async (ctx, next) => {
   ctx.locals.AppStore = AppStore
   await next()
 })
-
 
 module.exports = app.use(router.routes())

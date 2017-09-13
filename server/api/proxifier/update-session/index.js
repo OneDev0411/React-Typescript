@@ -1,12 +1,23 @@
-export default function(ctx, data) {
-  const userSession = ctx.session.user
-
-  if (userSession && data.updated_at > userSession.updated_at) {
-    const { access_token } = userSession
-
+const updateSession = (ctx, user) => {
+  const { access_token, refresh_token, data } = user
+  if (access_token) {
     ctx.session.user = {
       ...data,
-      ...{access_token}
+      access_token,
+      refresh_token
+    }
+    return
+  }
+
+  const currentUser = ctx.session.user
+  if (currentUser && data.updated_at > currentUser.updated_at) {
+    const { access_token, refresh_token } = currentUser
+    ctx.session.user = {
+      ...data,
+      access_token,
+      refresh_token
     }
   }
 }
+
+export default updateSession
