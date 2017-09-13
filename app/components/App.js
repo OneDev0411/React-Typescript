@@ -89,8 +89,7 @@ class App extends Component {
   }
 
   async initialDeals() {
-    const { dispatch, deals, data } = this.props
-    const { user } = data
+    const { dispatch, deals, user } = this.props
 
     if (!deals) {
       const isBackOffice = user.features.indexOf('Backoffice') > -1
@@ -234,8 +233,7 @@ class App extends Component {
   }
 
   render() {
-    const { data, rooms, location, isWidgetRedux } = this.props
-    const { user } = data
+    const { user, rooms, location, isWidgetRedux } = this.props
 
     // don't remove below codes,
     // because app is depended to `path` and `location` props in data store
@@ -277,10 +275,12 @@ class App extends Component {
   }
 }
 
-export default connect(s => ({
-  data: s.data,
-  rooms: s.chatroom.rooms,
-  contacts: s.chatroom.contact,
-  deals: s.deals.list,
-  isWidgetRedux: s.widgets.isWidget
+export default connect(({ user, data, deals, contact, chatroom, widgets }) => ({
+  data,
+  user,
+  deals: deals.list,
+  rooms: chatroom.rooms,
+  contacts: contact.list,
+  isWidgetRedux: widgets.isWidget
 }))(App)
+
