@@ -1,117 +1,72 @@
 import React from 'react'
 import { OverlayTrigger, Popover } from 'react-bootstrap'
 import _ from 'underscore'
-import RecipientsForm from '../roles/form'
+import AddSigner from './add-signer'
 
 export default class AddRecipients extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      form: null
+      showRolesModal: false
     }
   }
 
-  showForm(e) {
-    const c = e.target.className
+  toggleRolesModal(e) {
+    const c = e ? e.target.className : null
     if (c && c.includes('recp')) {
       return false
     }
 
-    this.recp_form.show()
+    this.setState({ showRolesModal: !this.state.showRolesModal })
   }
 
-  closeForm() {
-    this.recp_form.hide()
+  onAddRecipient(role) {
+    const { onAddRecipient } = this.props
+    this.toggleRolesModal()
+    onAddRecipient(role)
   }
 
-  setForm(form) {
-    this.setState({ form })
-  }
-
-  addRecipient() {
-    const { form } = this.state
-    const { onAddRecipients } = this.props
-
-    this.setState({ form: null })
-    onAddRecipients(form)
-    this.closeForm()
-  }
-
-  render () {
-    const { roles, recipients } = this.props
-    const { form } = this.state
+  render() {
+    const {
+      deal,
+      recipients,
+      onRemoveRecipient
+    } = this.props
 
     return (
-      <OverlayTrigger
-        container={this}
-        ref={ref => this.recp_form = ref}
-        trigger={null}
-        placement="bottom"
-        className="esign-add-contact"
-        overlay={
-          <Popover
-            id="deal-esign-popover-add-contact"
-            className="esign-add-contact--popover"
-            title={null}
-          >
-            <div className="hero">Add a recipient</div>
-
-            <RecipientsForm
-              roles={roles}
-              onFormCompleted={form => this.setForm(form)}
-            />
-
-            <div className="cta">
-              <button
-                onClick={() => this.closeForm()}
-                className="btn-cancel"
-              >
-                Cancel
-              </button>
-
-              <button
-                disabled={form === null}
-                onClick={() => this.addRecipient()}
-                className="btn-add"
-              >
-                Add
-              </button>
-
-            </div>
-          </Popover>
-        }
+      <div
+        className="rcp-container"
+        onClick={(e) => this.toggleRolesModal(e)}
       >
-        <div
-          className="recp-container inline-block"
-        >
-          <div
-            onClick={(e) => this.showForm(e)}
-          >
-            {
-              _.map(recipients, recp =>
-                <span className="recp" key={`RECP_${recp.email}`}>
-                  <span className="recp-t">{recp.first_name} {recp.last_name}</span>
-                  <span className="recp-d">{recp.role}, {recp.email}</span>
-                  <span className="recp-c">
-                    <i
-                      className="recp-i fa fa-times"
-                      onClick={() => this.props.onRemoveRecipient(recp.email)}
-                    />
-                  </span>
-                </span>
-              )
-            }
+        <AddSigner
+          show={this.state.showRolesModal}
+          deal={deal}
+          onAddRecipient={role => this.onAddRecipient(role)}
+          onHide={(e) => this.toggleRolesModal(e)}
+        />
 
-            {
-              _.size(recipients) === 0 &&
-              <span className="item-title">
-                Each message will be sent separately. Recipients will not see each other.
+        {
+          _.map(recipients, recp =>
+            <span className="recp" key={`RECP_${recp.email}`}>
+              <span className="recp-t">{recp.first_name} {recp.last_name}</span>
+              <span className="recp-d">{recp.role}, {recp.email}</span>
+              <span className="recp-c">
+                <i
+                  className="recp-i fa fa-times"
+                  onClick={() => onRemoveRecipient(recp.email)}
+                />
               </span>
-            }
+            </span>
+          )
+        }
 
-          </div>
-        </div>
-      </OverlayTrigger>
+        {
+          _.size(recipients) === 0 &&
+          <span className="item-title">
+            Each message will be sent separately. Recipients will not see each other.
+          </span>
+        }
+      </div>
     )
   }
 }
