@@ -16,6 +16,10 @@ const routes = {
     ['get-alert-room'],
     ['acknowledge-notifications']
   ],
+  deal: [
+    ['docusign-login'],
+    ['envelope-sign'],
+  ],
   brand: [
     ['get-brand-by-hostname']
   ],
