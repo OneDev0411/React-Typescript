@@ -1,9 +1,129 @@
+.modal-deal-add-role {
+  .modal-content {
+    border-radius: 6px;
+  }
+
+  .modal-header {
+    background-color: #f8fafb;
+    border-radius: 6px 6px 0 0;
+    .close {
+      margin-top: 5px;
+    }
+
+    .modal-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: #1d364b;
+    }
+  }
+
+  .modal-body {
+    padding: 0;
+    input {
+      height: 48px;
+      background-color: #fff;
+      border: none;
+      box-shadow: 0 -1px 0 0 #dce5eb, 0 1px 1px 0 #dce5eb;
+      padding-left: 10px;
+      font-size: 15px;
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .first_name {
+      width: 50%;
+    }
+
+    .last_name {
+      width: 50%;
+    }
+
+    .email {
+      width: 100%;
+    }
+
+    .phone {
+      width: 100%;
+    }
+
+    .role-descr {
+      font-size: 15px;
+      color: #8da2b5;
+      padding: 5px 0 10px 10px;
+    }
+
+    .dropdown {
+
+      &.btn-group {
+        width: 100%;
+      }
+
+      .dropdown-toggle {
+        width: 100%;
+      }
+
+      .caret {
+        color: #8da2b5;
+        margin-left: 5px;
+        border-top-width: 6px;
+        border-left-width: 6px;
+        border-right-width: 6px;
+      }
+
+      &.btn-group.open, .dropdown-toggle {
+        background-color: transparent;
+        box-shadow: none !important;
+        font-size: 15px;
+      }
+
+      ul.dropdown-menu {
+        li > a {
+          height: 30px;
+          font-weight: 500;
+          &:hover {
+            color: #2196f3;
+            background-color: transparent;
+          }
+        }
+      }
+    }
+
+    #deal-add-role--drp {
+      margin-top: 2px;
+      height: 48px;
+      text-align: left;
+      border: none;
+    }
+  }
+
+  .modal-footer {
+    .btn-deal {
+      width: 70px;
+      height: 32px;
+      line-height: 16px;
+      border-radius: 3px;
+      border: none;
+      &.disabled {
+        border: solid 1px #dde2e6;
+        color: #dde2e6;
+      }
+    }
+  }
+}
+
 %deal-roles {
   background: #fff;
   padding: $col-padding 0 1px $col-padding;
   border-bottom: 1px solid #dce1e5;
   .item {
     margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+
+    .role-avatar {
+      width: 50px;
+    }
 
     &.add-new {
       cursor: pointer;
@@ -23,7 +143,7 @@
     .name {
       color: #263445;
       font-weight: 500;
-      padding-left: 10px;
+      // padding-left: 10px;
 
       .role {
         font-weight: normal;
