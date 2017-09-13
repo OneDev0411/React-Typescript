@@ -15,7 +15,7 @@ export const getBrandInfo = brand => {
 
   if (brand) {
     siteLogo = Brand.asset('site_logo', null, brand)
-    siteTitle = brand.messages.site_title
+    siteTitle = Brand.message('office_title', siteTitle, brand)
     brandColor = `#${Brand.color('primary', '#2196f3', brand)}`
   }
 
@@ -73,13 +73,15 @@ let SigninForm = ({
     <div className="signin-page-wrapper">
       <article className="c-auth">
         <header className="c-auth__header">
-          <Link to="/" tabIndex={-1}>
-            <img
-              src={siteLogo}
-              alt={`${siteTitle} logo`}
-              className={'c-auth__logo'}
-            />
-          </Link>
+          {siteLogo && (
+            <Link to="/" tabIndex={-1}>
+              <img
+                src={siteLogo}
+                alt={`${siteTitle} logo`}
+                className={'c-auth__logo'}
+              />
+            </Link>
+          )}
           <p>Sign into</p>
           <h1 className="c-auth__title tempo">{`${siteTitle}`}</h1>
           {/* <p>It’s nice to have you back!</p> */}
