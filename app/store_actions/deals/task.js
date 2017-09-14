@@ -26,6 +26,13 @@ function needsAttention(taskId, status) {
   }
 }
 
+export function setTasks(tasks) {
+  return {
+    type: types.GET_TASKS,
+    tasks
+  }
+}
+
 export function setIsUploading(taskId, status) {
   return {
     type: types.IS_UPLOADING,
