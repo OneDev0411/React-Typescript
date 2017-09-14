@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import _ from 'underscore'
 import types from '../../constants/deals'
 import error from './error'
 
@@ -44,6 +45,15 @@ export default (state = null, action) => {
         [action.deal_id]: {
           ...state[action.deal_id],
           ...{ roles: action.roles }
+        }
+      }
+
+    case types.DELETE_ROLE:
+      return {
+        ...state,
+        [action.deal_id]: {
+          ...state[action.deal_id],
+          roles: state[action.deal_id].roles.filter(role => role.id !== action.role_id)
         }
       }
 
