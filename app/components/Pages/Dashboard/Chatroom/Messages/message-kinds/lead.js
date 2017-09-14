@@ -10,7 +10,8 @@ export default ({
   roomId,
   author,
   message,
-  previousMessage
+  previousMessage,
+  deliveryReportPlacement
 }) => (
   <div className="message-group">
     <DateSplitter
@@ -40,6 +41,7 @@ export default ({
             author={author}
             user={user}
             message={message}
+            placement={deliveryReportPlacement}
           />
         </div>
 
