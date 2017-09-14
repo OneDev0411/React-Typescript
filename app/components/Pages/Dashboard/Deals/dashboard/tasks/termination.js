@@ -20,17 +20,7 @@ class TaskTermination extends React.Component {
       return false
     }
 
-    const { dealId, checklist, updateChecklist, onCloseDropDownMenu, notify} = this.props
-
-    if (checklist.is_terminatable === false) {
-      return notify({
-        title: 'Access denied',
-        message: 'This checklist is not terminatable',
-        status: 'error',
-        dismissible: true,
-        dismissAfter: 5000
-      })
-    }
+    const { dealId, checklist, updateChecklist, onRequestCloseDropDownMenu, notify} = this.props
 
     this.setState({ saving: true })
 
@@ -58,13 +48,19 @@ class TaskTermination extends React.Component {
         dismissAfter: 5000
       })
     } finally {
-      onCloseDropDownMenu()
+      this.setState({ saving: false })
+      onRequestCloseDropDownMenu()
     }
   }
 
   render() {
-    const { checklist } = this.props
+    const { checklist, hasPermission } = this.props
     const { saving } = this.state
+    const color = '#d0011b'
+
+    if (!hasPermission) {
+      return false
+    }
 
     return (
       <li
@@ -72,8 +68,12 @@ class TaskTermination extends React.Component {
       >
         {
           saving ?
-          <span>{ checklist.is_terminated ? 'Activating...' : 'Terminating...' }</span> :
-          <span>{ checklist.is_terminated ? 'Active' : 'Terminate' }</span>
+          <span style={{ color }}>
+            { checklist.is_terminated ? 'Activating...' : 'Terminating...' }
+          </span> :
+          <span style={{ color }}>
+            { checklist.is_terminated ? 'Active' : 'Terminate' }
+          </span>
         }
       </li>
     )
