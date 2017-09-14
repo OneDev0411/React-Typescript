@@ -94,6 +94,17 @@ class SendSignatures extends React.Component {
     })
   }
 
+  closeForm() {
+    const { closeEsign } = this.props
+
+    //close form
+    closeEsign()
+
+    // reset recipients
+    this.setState({
+      recipients: {}
+    })
+  }
   /**
    * send envelope
    */
@@ -130,9 +141,17 @@ class SendSignatures extends React.Component {
         status: 'success'
       })
 
+      // reset recipients
+      this.setState({
+        recipients: {},
+        isSending: false
+      })
+
     } catch(e) {
       const isDocusignError = ~~e.status === 412
-      this.setState({ isSending: false })
+      this.setState({
+        isSending: false
+      })
 
       if (isDocusignError) {
         this.loginToDocusign()
@@ -147,10 +166,6 @@ class SendSignatures extends React.Component {
 
       return false
     }
-
-    this.setState({
-      isSending: false
-    })
   }
 
   /**
@@ -185,7 +200,7 @@ class SendSignatures extends React.Component {
 
           <span
             className="close-compose"
-            onClick={() => this.props.closeEsign()}
+            onClick={() => this.closeForm()}
           >
             <i className="fa fa-times" />
           </span>
