@@ -213,7 +213,7 @@ class SendSignatures extends React.Component {
         <div className="message">
           <Textarea
             inputRef={ref => this.message = ref}
-            maxRows={3}
+            maxRows={8}
             placeholder="Write your message here ..."
           />
           <div className="signature">

@@ -47,8 +47,8 @@
     min-height: 50px;
 
     .rcp-container {
-      width: 99%;
-      max-height: 160px;
+      width: 100%;
+      max-height: 80px;
       overflow: auto;
       cursor: pointer;
 
@@ -111,7 +111,7 @@
   .message {
     padding: $pad-size;
     position: relative;
-    height: 170px;
+    height: 150px;
     textarea {
       border: none;
       width: 100%;
@@ -120,6 +120,10 @@
       &:focus {
         outline: none;
       }
+    }
+
+    .signature {
+      margin-top: 10px;
     }
   }
 
