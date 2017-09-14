@@ -77,8 +77,11 @@ class WhoSigned extends React.Component {
             </div>
 
             {
-              areSigned.map(signer =>
-                <div className="ws-section-body">
+              areSigned.map((signer, key) =>
+                <div
+                  key={`ARE_SIGNED_${key}`}
+                  className="ws-section-body"
+                >
                   <div className="avatar">
                     <UserAvatar
                       name={signer.user.display_name}
@@ -106,8 +109,11 @@ class WhoSigned extends React.Component {
             </div>
 
             {
-              notSigned.map(signer =>
-                <div className="ws-section-body">
+              notSigned.map((signer, key) =>
+                <div
+                  key={`NOT_SIGNED_${key}`}
+                  className="ws-section-body"
+                >
                   <div className="avatar">
                     <UserAvatar
                       name={signer.user.display_name}
