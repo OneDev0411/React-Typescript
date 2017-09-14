@@ -171,7 +171,7 @@ class SendSignatures extends React.Component {
   }
 
   render() {
-    const { tasks, esign, deal, user } = this.props
+    const { tasks, esign, deal, user, showAttachments } = this.props
     const { recipients, isSending } = this.state
 
     if (!esign.show || esign.view !== 'compose') {
@@ -239,7 +239,7 @@ class SendSignatures extends React.Component {
 
           <Button
             disabled={isSending}
-            onClick={() => this.props.showAttachments(esign.attachments)}
+            onClick={() => showAttachments(esign.attachments)}
             className="btn-attach"
           >
             <i className="fa fa-paperclip fa-rotate-90" /> Attach
