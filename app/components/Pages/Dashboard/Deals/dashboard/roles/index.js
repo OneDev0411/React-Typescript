@@ -1,15 +1,21 @@
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 import { connect } from 'react-redux'
+import { addNotification as notify } from 'reapop'
 import UserAvatar from '../../../../../Partials/UserAvatar'
 import AddRole from './add-role'
+import { deleteRole } from '../../../../../../store_actions/deals'
+import { confirmation } from '../../../../../../store_actions/confirmation'
 
 class Roles extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      deletingRoleId: null
+    }
   }
 
-  onClick(item) {
+  onClickRole(item) {
     const { onSelectRole } = this.props
 
     if (onSelectRole) {
@@ -22,12 +28,57 @@ class Roles extends React.Component {
     }
   }
 
+  onRequestRemoveRole(role) {
+    const { confirmation } = this.props
+
+    confirmation({
+      message: `Remove <b>${role.user.display_name}</b>?`,
+      confirmLabel: 'Yes, remove contact',
+      onConfirm: () => this.removeRole(role)
+    })
+  }
+
+  async removeRole(role) {
+    const { deleteRole, notify, deal } = this.props
+    const { deletingRoleId } = this.state
+
+    if (deletingRoleId) {
+      return false
+    }
+
+    this.setState({
+      deletingRoleId: role.id
+    })
+
+    try {
+      await deleteRole(deal.id, role.id)
+      notify({
+        message: 'Role removed',
+        status: 'success'
+      })
+    } catch(e) {
+      notify({
+        message: 'Can not remove role, try again',
+        status: 'error'
+      })
+    } finally {
+      this.setState({
+        deletingRoleId: null
+      })
+    }
+  }
+
   render() {
     const { deal, onSelectRole } = this.props
+    const { deletingRoleId } = this.state
     const { roles } = deal
 
     return (
-      <div className="deal-roles">
+      <div className="deal-info deal-roles">
+        <div className="deal-info-title">
+          Contacts
+        </div>
+
         {
           roles &&
           roles.map(item =>
@@ -35,12 +86,12 @@ class Roles extends React.Component {
               key={item.id}
               className="item"
               style={{ cursor: onSelectRole ? 'pointer': 'auto' }}
-              onClick={() => this.onClick(item)}
+              onClick={() => this.onClickRole(item)}
             >
               <div className="role-avatar">
                 <UserAvatar
                   name={item.user.display_name}
-                  image={item.user.profile_image_thumbnail_url}
+                  image={item.user.profile_image_url}
                   size={40}
                   showStateIndicator={false}
                 />
@@ -49,6 +100,21 @@ class Roles extends React.Component {
               <div className="name">
                 <div>{ item.user.display_name }</div>
                 <div className="role">{ item.role }</div>
+              </div>
+
+              <div className="cta">
+                {
+                  deletingRoleId && item.id === deletingRoleId &&
+                  <i className="fa fa-spinner fa-spin" />
+                }
+
+                {
+                  !deletingRoleId &&
+                  <i
+                    onClick={() => this.onRequestRemoveRole(item)}
+                    className="fa fa-delete fa-times"
+                  />
+                }
               </div>
             </div>
           )
@@ -62,4 +128,4 @@ class Roles extends React.Component {
   }
 }
 
-export default connect(null)(Roles)
+export default connect(null, { deleteRole, notify, confirmation })(Roles)
