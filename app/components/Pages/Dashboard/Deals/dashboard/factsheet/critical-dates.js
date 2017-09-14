@@ -78,11 +78,10 @@ const getNextDateField = (deal) => {
 const table = {
   list_date: ['Listing Date', 'Lst.'],
   expiration_date: ['Listing Expiration', 'Exp.'],
-  contract_date: ['Contract Date', ''],
-  contract_expiration: ['Contract Expiration', ''],
+  contract_date: ['Contract Date', 'Con.'],
   option_period: ['Option Period', 'Opt.'],
   financing_due: ['Financing Due', 'Fin.'],
-  title_due: ['Title Work Due', ''],
+  title_due: ['Title Work Due', 'Til.'],
   t47_due: ['Survey / T47 Due', 'T47.'],
   closing_date: ['Closing', 'Cls.'],
   possession_date: ['Possession', 'Pos.']
@@ -94,30 +93,36 @@ const CriticalDates = ({
   const nextDate = getNextDateField(deal)
 
   return (
-    <table className="fact-table critical-dates">
-      <tbody>
-        {
-          _.map(table, (name, field) => {
-            const date = getDate(deal, field)
-            return (
-              <tr key={`CRITICAL_FIELD_${field}`}>
-                <td className="name">
-                  <i
-                    className={cn('fa fa-circle', 'status', date.status, {
-                      next: nextDate && nextDate.name === field
-                    })}
-                  />
-                  { name[0] }
-                </td>
-                <td className="field">
-                  { date.value }
-                </td>
-              </tr>
-            )
-          })
-        }
-      </tbody>
-    </table>
+    <div className="deal-info">
+      <div className="deal-info-title">
+        Critical Dates
+      </div>
+
+      <table className="fact-table critical-dates">
+        <tbody>
+          {
+            _.map(table, (name, field) => {
+              const date = getDate(deal, field)
+              return (
+                <tr key={`CRITICAL_FIELD_${field}`}>
+                  <td className="name">
+                    <i
+                      className={cn('fa fa-circle', 'status', date.status, {
+                        next: nextDate && nextDate.name === field
+                      })}
+                    />
+                    { name[0] }
+                  </td>
+                  <td className="field">
+                    { date.value }
+                  </td>
+                </tr>
+              )
+            })
+          }
+        </tbody>
+      </table>
+    </div>
   )
 }
 
