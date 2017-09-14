@@ -41,6 +41,7 @@ class Comment extends React.Component {
         <Comments
           user={user}
           roomId={task.room.id}
+          deliveryReportPlacement="bottom"
         />
       </div>
     )
