@@ -8,6 +8,7 @@ import getBrand from '../store_actions/brand'
 
 // services
 import ChatSocket from './Pages/Dashboard/Chatroom/Services/socket'
+import DealSocket from './Pages/Dashboard/Deals/services/socket'
 
 // navs
 import SideBar from './Pages/Dashboard/Partials/SideBar'
@@ -43,6 +44,7 @@ class App extends Component {
 
     if (typeof window !== 'undefined') {
       this.initializeChatSocket()
+      this.initializeDealSocket()
     }
   }
 
@@ -86,6 +88,11 @@ class App extends Component {
   initializeChatSocket() {
     const { user } = this.props
     new ChatSocket(user)
+  }
+
+  initializeDealSocket() {
+    const { user } = this.props
+    new DealSocket(user)
   }
 
   async initialDeals() {
