@@ -9,6 +9,7 @@ $toolBarHeight: 60px;
 @import 'modal-new-role';
 @import 'checklists/modal-checklist';
 @import 'modal';
+@import 'brands/brands';
 
 .brand {
   margin-left: 70px;
@@ -38,6 +39,9 @@ $toolBarHeight: 60px;
   }
   .checklists {
     @extend %checklists;
+  }
+  .brands {
+    @extend %brands;
   }
   .rightPanel {
     margin-left: $menuWidth;

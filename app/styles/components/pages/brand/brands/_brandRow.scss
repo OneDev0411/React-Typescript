@@ -1,0 +1,75 @@
+/* bm-menu */
+%brandRow {
+  border-radius: 4px;
+  background-color: #ffffff;
+  border: solid 1px #dce5eb;
+  overflow: hidden;
+  width: 100%;
+  height: 60px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  color: #1c364c;
+  padding: 0 15px;
+
+  .brand-name {
+    margin: 0;
+    font-size: 14px;
+  }
+  .avatars-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    .avatar{
+      padding: 0 2px;
+    }
+  }
+  .column {
+    font-size: 14px;
+  }
+  .icon {
+    color: #c9d7df;
+    margin-right: 8px;
+  }
+  .edit-button-container {
+    display: inline-block;
+    visibility: hidden;
+    .editButton {
+      border-radius: 3px;
+      background-color: #f8fafb;
+      border: solid 1px #dde2e6;
+      text-align: center;
+      font-size: 13px;
+      color: #8da2b5;
+      padding: 2px 17px;
+    }
+  }
+  .deleteIcon {
+    display: inline-block;
+    visibility: hidden;
+    color: #8ca2b6;
+    margin-top: 3px;
+  }
+}
+
+%checklistRow:hover {
+  background-color: #f8fafb;
+  display: block;
+  .edit-button-container, .deleteIcon {
+    visibility: visible;
+    display: inline-block;
+  }
+  .edit-button-container .editButton:hover {
+    font-weight: bold;
+  }
+}
+
+%checklistRow.active {
+  background-color: #f8fafb;
+  border-bottom: none;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
