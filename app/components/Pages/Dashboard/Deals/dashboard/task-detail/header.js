@@ -12,7 +12,7 @@ const Header = ({
       <tr>
         <td
           className="title"
-          style={{ width: isBackOffice ? '100%': '75%' }}
+          style={{ width: isBackOffice ? '100%': '70%' }}
         >
           { task.title.replace(/&.*;/g, '') }
         </td>
@@ -21,7 +21,7 @@ const Header = ({
           !isBackOffice &&
           <td
             className="submit"
-            style={{ width: '25%' }}
+            style={{ width: '30%' }}
           >
             <SubmitReview
               task={task}
