@@ -57,8 +57,8 @@ class BackOfficeTable extends BaseTable {
         caption: 'AGENT NAME',
         sortable: true,
         className: 'col-md-2 hidden-sm hidden-xs',
-        getText: deal => deal.created_by.display_name,
-        getValue: deal => deal.created_by.display_name
+        getText: deal => deal.created_by ? deal.created_by.display_name : '',
+        getValue: deal => deal.created_by ? deal.created_by.display_name : ''
       },
       notificiation: {
         caption: '',
