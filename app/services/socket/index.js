@@ -23,8 +23,7 @@ export default class Socket {
     window.socket = this.socket = socket
 
     // create authentication
-    if (this.user)
-      Socket.authenicate(user.access_token)
+    Socket.authenicate(user)
 
     // bind Reconnecting and Reconnect socket
     socket.on('reconnecting', this.onReconnecting.bind(this))
@@ -37,8 +36,13 @@ export default class Socket {
   /**
    * authenticate user
    */
-  static authenicate(access_token) {
-    socket.emit('Authenticate', access_token, (err, user) => {
+  static authenicate(user) {
+    if (!user || !user.access_token) {
+      console.error('Can not authenticate user socket')
+      return false
+    }
+
+    socket.emit('Authenticate', user.access_token, (err, user) => {
       if (err || !user)
         return false
 
@@ -59,9 +63,7 @@ export default class Socket {
    */
   onReconnect() {
     // authenticate again
-    if (this.user) {
-      Socket.authenicate(this.user.access_token)
-    }
+    Socket.authenicate(this.user)
 
     // emit connected message
     store.dispatch(changeSocketStatus('connected'))
