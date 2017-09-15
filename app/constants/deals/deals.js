@@ -2,6 +2,7 @@ export default [
   'NO_DEAL',
   'GET_DEALS',
   'CREATE_DEAL',
+  'UPDATE_DEAL',
   'GET_CHECKLISTS',
   'APPEND_CHECKLIST',
   'SET_ENVELOPES',

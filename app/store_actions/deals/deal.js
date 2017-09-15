@@ -36,11 +36,31 @@ function isBackOffice(status) {
   }
 }
 
+function dealUpdated(deal) {
+  return {
+    type: types.UPDATE_DEAL,
+    deal
+  }
+}
+
 export function appendChecklist(deal_id, checklist_id) {
   return {
     type: types.APPEND_CHECKLIST,
     deal_id,
     checklist_id
+  }
+}
+
+export function updateDeal(deal) {
+  return async (dispatch) => {
+    const { entities } = normalize(deal, schema.dealSchema)
+    const { deals, checklists, tasks } = entities
+
+    batchActions([
+      dispatch(setTasks(tasks)),
+      dispatch(setChecklists(checklists)),
+      dispatch(dealUpdated(deals[deal.id]))
+    ])
   }
 }
 
@@ -65,7 +85,7 @@ export function getDeals(user, backoffice = false) {
         dispatch(setChecklists(checklists)),
         dispatch(setTasks(tasks))
       ])
-    } catch(e) {
+    } catch (e) {
       dispatch({
         type: types.GET_DEALS_FAILED,
         name: 'Get Deals',
