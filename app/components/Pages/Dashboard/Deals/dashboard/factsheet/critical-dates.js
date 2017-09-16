@@ -93,7 +93,7 @@ const CriticalDates = ({
   const nextDate = getNextDateField(deal)
 
   return (
-    <div className="deal-info">
+    <div className="deal-info-section">
       <div className="deal-info-title">
         Critical Dates
       </div>
