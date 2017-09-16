@@ -2,7 +2,7 @@ import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
-import { editForm, saveSubmission, reloadDealContexts } from '../../../../../../store_actions/deals'
+import { editForm, saveSubmission } from '../../../../../../store_actions/deals'
 import Deal from '../../../../../../models/Deal'
 import EmbedForm from './embed'
 import RequiredContext from './context'
@@ -154,7 +154,6 @@ class EditForm extends React.Component {
   async saveForm(values) {
     const {
       saveSubmission,
-      reloadDealContexts,
       task,
       notify,
       deal
@@ -170,10 +169,6 @@ class EditForm extends React.Component {
     // save form
     try {
       await saveSubmission(task.id, task.form, status, values)
-
-      if (deal) {
-        reloadDealContexts(deal.id).then(() => {})
-      }
 
       notify({
         message: 'The form has been saved!',
@@ -266,6 +261,5 @@ export default connect(({ deals }) =>  ({
 }), {
   editForm,
   saveSubmission,
-  reloadDealContexts,
   notify
 })(EditForm)
