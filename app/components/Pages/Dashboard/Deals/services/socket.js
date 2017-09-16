@@ -1,7 +1,9 @@
 import Socket from '../../../../../services/socket'
 import store from '../../../../../stores'
 import {
-  updateDeal
+  createDeal,
+  updateDeal,
+  dealDeleted
 } from '../../../../../store_actions/deals'
 
 export default class DealSocket extends Socket {
@@ -44,14 +46,13 @@ export default class DealSocket extends Socket {
   onDealChange(response) {
     const { action, deal } = response
 
-    // console.log('>>>', action, deal)
     switch (action) {
       case 'Updated':
         return this.onUpdateDeal(deal)
       case 'Created':
-        return
+        return this.onCreateDeal(deal)
       case 'Deleted':
-        return
+        return this.onDeleteDeal(deal)
       default:
         return false
     }
@@ -62,6 +63,20 @@ export default class DealSocket extends Socket {
    */
   onUpdateDeal(deal) {
     store.dispatch(updateDeal(deal))
+  }
+
+  /**
+   * on create deal
+   */
+  onCreateDeal(deal) {
+    store.dispatch(createDeal(deal))
+  }
+
+  /**
+   * on delete deal
+   */
+  onDeleteDeal(deal) {
+    store.dispatch(dealDeleted(deal.id))
   }
 
   /**
