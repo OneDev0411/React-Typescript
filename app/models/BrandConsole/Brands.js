@@ -2,10 +2,19 @@ import Fetch from '../../services/fetch/index'
 
 const Brands = {}
 
-Brands.getBrands = async function (user) {
+Brands.getBrands = async function (brandId) {
   try {
     return await new Fetch()
-      .get(`/brands/${user.brand}?associations[]=brand.roles&associations[]=brand_role.members`)
+      .get(`/brands/${brandId}?associations[]=brand.roles&associations[]=brand_role.members`)
+  } catch (error) {
+    return { error }
+  }
+}
+
+Brands.getChildrenBrands = async function (brandId) {
+  try {
+    return await new Fetch()
+      .get(`/brands/${brandId}/children?associations[]=brand.roles&associations[]=brand_role.members`)
   } catch (error) {
     return { error }
   }

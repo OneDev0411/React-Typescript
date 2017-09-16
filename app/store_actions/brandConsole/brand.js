@@ -2,21 +2,50 @@ import types from '../../constants/brandConsole'
 import BrandConsole from '../../models/BrandConsole'
 import { addNotification as notify } from 'reapop'
 
-function _getBrands(brands) {
+
+export function toggleBrand(brandId) {
   return {
-    type: types.GET_BRANDS,
-    brands
+    type: types.TOGGLE_BRAND,
+    brandId
   }
 }
 
-export function getBrands(user) {
+function _getBrand(brandId, brand) {
+  return {
+    type: types.GET_BRAND,
+    brand,
+    brandId
+  }
+}
+
+function _getChildrenBrands(brandId, brands) {
+  return {
+    type: types.GET_CHILDREN_BRANDS,
+    brands,
+    brandId
+  }
+}
+
+export function getBrand(brandId) {
   return async (dispatch) => {
-    const response = await BrandConsole.getBrands(user)
+    const response = await BrandConsole.getBrands(brandId)
     if (response && !response.error) {
       const { data } = response.body
-      dispatch(_getBrands(data))
+      dispatch(_getBrand(brandId, data))
     } else {
       dispatch(notify({ message: `getBrands: ${response.error.message}`, status: response.error.statusCode }))
+    }
+  }
+}
+
+export function getChildrenBrands(brandId) {
+  return async (dispatch) => {
+    const response = await BrandConsole.getChildrenBrands(brandId)
+    if (response && !response.error) {
+      const { data } = response.body
+      dispatch(_getChildrenBrands(brandId, data))
+    } else {
+      dispatch(notify({ message: `getChildrenBrands: ${response.error.message}`, status: response.error.statusCode }))
     }
   }
 }

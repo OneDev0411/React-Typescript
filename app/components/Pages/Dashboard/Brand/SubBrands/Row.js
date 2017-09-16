@@ -1,8 +1,6 @@
 import React from 'react'
-import { Accordion, Panel } from 'react-bootstrap'
+import { Panel, PanelGroup } from 'react-bootstrap'
 import BrandHeader from './BrnadHaedr'
-import Tasks from './Tasks'
-import Forms from './Forms'
 
 class Row extends React.Component {
   constructor(props) {
@@ -23,29 +21,32 @@ class Row extends React.Component {
 
   renderRecursive(brand) {
     return (
-      <Accordion activeKey={`Brand_${this.state.activeItem}`}>
-        <Panel
-          key={`Brand_${brand.id}`}
-          eventKey={`Brand_${brand.id}`}
-          header={<BrandHeader
-            brand={brand}
-            onSelectItem={this.onSelectItem}
-            deleteBrand={this.props.deleteBrand}
-            activeItem={this.state.activeItem === brand.id}
-          />}
-        >
+      <Panel
+        collapsible
+        expanded={brand.collapsed}
+        key={`Brand_${brand.id}`}
+        eventKey={`Brand_${brand.id}`}
+        header={<BrandHeader
+          brand={brand}
+          onSelectItem={this.onSelectItem}
+          deleteBrand={this.props.deleteBrand}
+          activeItem={this.state.activeItem === brand.id}
+        />}
+      >
+        add brand
+        <div className="child-brand">
           {
-            brand.brands && brand.brands.map(brandItem => this.renderRecursive(brandItem))
+            brand.brands && brand.brands.map(brandItem => this.renderRecursive(this.props.brands[brandItem]))
           }
-        </Panel>
-      </Accordion>
+        </div>
+      </Panel>
     )
   }
 
   render() {
     return (
       <div>
-        {this.renderRecursive(this.props.brands)}
+        {this.props.brands[this.props.brandParent] && this.renderRecursive(this.props.brands[this.props.brandParent])}
       </div>
     )
   }

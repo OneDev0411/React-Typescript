@@ -1,6 +1,8 @@
 export default [
-  'GET_BRANDS',
+  'GET_BRAND',
+  'GET_CHILDREN_BRANDS',
   'ADD_BRAND',
   'EDIT_BRAND',
-  'DELETE_BRAND'
+  'DELETE_BRAND',
+  'TOGGLE_BRAND'
 ]

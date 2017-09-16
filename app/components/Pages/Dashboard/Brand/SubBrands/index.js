@@ -1,11 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Grid, Col } from 'react-bootstrap'
-import Header from './Header'
 import Row from './Row'
-import { deleteChecklist, getBrands } from '../../../../../store_actions/brandConsole'
+import { getBrand } from '../../../../../store_actions/brandConsole'
 
-class Checklists extends React.Component {
+class SubBrands extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -15,7 +14,7 @@ class Checklists extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getBrands(this.props.user.brand)
+    this.props.getBrand(this.props.brandParent)
   }
 
   onSelectItem(activeItem) {
@@ -26,13 +25,10 @@ class Checklists extends React.Component {
   }
 
   render() {
-    const brands = this.props.brands
+    const { brands, brandParent } = this.props
     console.log(brands)
     return (
       <div className="brands">
-        <Header
-          user={this.props.user}
-        />
         <Grid className="table">
           <div className="header">
             <Col md={4} sm={4} xs={4}>Checklist Name</Col>
@@ -40,9 +36,12 @@ class Checklists extends React.Component {
             <Col md={2} sm={2} xs={2}>Property Type</Col>
             <Col md={2} sm={2} xs={2}>Order</Col>
           </div>
+          {brands &&
           <Row
             brands={brands}
+            brandParent={brandParent}
           />
+          }
         </Grid>
       </div>
     )
@@ -51,9 +50,8 @@ class Checklists extends React.Component {
 
 export default connect(
   ({ brandConsole, data }) => ({
-    Checklists: brandConsole.checklists || [],
-    brands: brandConsole.brands || [],
-    user: data.user
+    brands: brandConsole.brands,
+    brandParent: data.user.brand
   }),
-  ({ deleteChecklist, getBrands })
-)(Checklists)
+  ({ getBrand })
+)(SubBrands)

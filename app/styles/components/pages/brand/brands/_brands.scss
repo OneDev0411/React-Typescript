@@ -11,7 +11,11 @@
   .brandRow {
     @extend %brandRow;
   }
-  .panel-group .panel {
+  .child-brand {
+    margin-left: 8px;
+  }
+  margin: 0;
+  .panel {
     border: none;
     .panel-heading {
       padding: 0;
