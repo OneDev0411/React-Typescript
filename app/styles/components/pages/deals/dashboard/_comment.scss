@@ -70,6 +70,7 @@
     border: solid 1px #e6eaec;
     margin-left: 3px;
     margin-bottom: 3px;
+    transition: 0.2s all ease-in;
 
     &.decline-comment, &.approve-comment, &.close-comment {
       &:hover {
