@@ -14,14 +14,6 @@ function setDeals(deals) {
   }
 }
 
-function setDealContexts(deal_id, contexts) {
-  return {
-    type: types.SET_DEAL_CONTEXTS,
-    deal_id,
-    contexts
-  }
-}
-
 function addNewDeal(deal) {
   return {
     type: types.CREATE_DEAL,
@@ -43,11 +35,25 @@ function dealUpdated(deal) {
   }
 }
 
+export function dealDeleted(deal_id) {
+  return {
+    type: types.DELETE_DEAL,
+    deal_id
+  }
+}
+
 export function appendChecklist(deal_id, checklist_id) {
   return {
     type: types.APPEND_CHECKLIST,
     deal_id,
     checklist_id
+  }
+}
+
+export function deleteDeal(dealId) {
+  return async (dispatch) => {
+    await Deal.deleteDeal(dealId)
+    dispatch(dealDeleted(dealId))
   }
 }
 
@@ -95,9 +101,8 @@ export function getDeals(user, backoffice = false) {
   }
 }
 
-export function createDeal(data) {
+export function createDeal(deal) {
   return async (dispatch) => {
-    const deal = await Deal.create(data)
     const { entities } = normalize(deal, schema.dealSchema)
     const { deals, checklists, tasks } = entities
 
@@ -106,19 +111,5 @@ export function createDeal(data) {
       dispatch(setChecklists(checklists)),
       dispatch(addNewDeal(deals[deal.id]))
     ])
-
-    return deal
-  }
-}
-
-export function reloadDealContexts(dealId) {
-  return async (dispatch) => {
-    const deal = await Deal.getById(dealId)
-
-    dispatch(setDealContexts(deal.id, {
-      form_context: deal.form_context,
-      mls_context: deal.mls_context,
-      deal_context: deal.deal_context
-    }))
   }
 }
