@@ -21,23 +21,29 @@ class List extends React.Component {
     })
   }
 
-  getLabel(section) {
-    let color = '#8da2b5'
-    let label = ''
+  getLabels(section) {
+    const labels = []
 
     if (section.is_deactivated === true) {
-      label = 'Backup'
-    } else if (section.is_terminated) {
-      label = 'Terminated'
-      color = '#d0011b'
+      labels.push('BACKUP')
+    }
+
+    if (section.is_terminated) {
+      labels.push('TERMINATED')
     }
 
     return (
-      <div
-        className="p-label"
-        style={{ color }}
-      >
-        { label }
+      <div>
+        {
+          labels.map(name =>
+            <span
+              key={`LBL_${name}`}
+              className={`p-label ${name}`}
+            >
+              { name }
+            </span>
+          )
+        }
       </div>
     )
   }
@@ -89,7 +95,7 @@ class List extends React.Component {
                   { section.title }
                 </div>
 
-                { this.getLabel(section) }
+                { this.getLabels(section) }
               </div>
             </div>
 
