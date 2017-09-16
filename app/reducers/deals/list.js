@@ -22,7 +22,10 @@ export default (state = null, action) => {
     case types.UPDATE_DEAL:
       return {
         ...state,
-        [action.deal.id]: action.deal,
+        [action.deal.id]: {
+          ...state[action.deal.id],
+          ...action.deal
+        }
       }
 
     case types.APPEND_CHECKLIST:
