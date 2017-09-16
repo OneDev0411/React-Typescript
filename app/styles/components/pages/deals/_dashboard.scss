@@ -1,5 +1,7 @@
 $col-padding: 20px;
 $listing-card-height: 180px;
+$deal-info-width: 300px;
+$deal-tasks-width: 388px;
 
 @mixin scrollbar($color: transparent, $shadow: transparent) {
   ::-webkit-scrollbar {
@@ -60,9 +62,10 @@ $listing-card-height: 180px;
     @include scrollbar();
     padding: 0;
     height: auto;
-    &.info-column {
-      @extend %info-column;
-    }
+  }
+
+  .deal-info {
+    @extend %deal-info;
   }
 
   .deal-tasks {

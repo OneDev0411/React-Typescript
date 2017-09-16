@@ -1,4 +1,13 @@
 %deal-tasks {
+  min-width: $deal-tasks-width;
+  max-width: $deal-tasks-width;
+
+  &.expanded {
+    $expanded-width: calc(100% - #{$deal-info-width});
+    min-width: $expanded-width;
+    max-width: $expanded-width;
+  }
+
   .tasks-container {
     padding: $col-padding !important;
     min-height: 100vh;
@@ -63,11 +72,27 @@
           margin-right: 20px;
         }
         .p-label {
-          display: block;
+          display: inline-block;
           font-size: 10px;
           font-weight: 500;
           color: #d0011b;
           padding-left: 1px;
+          margin-right: 2px;
+          &.BACKUP {
+            color: #8da2b5;
+          }
+          &.TERMINATED {
+            color: #d0011b;
+          }
+          &:after {
+            color: #000;
+            content: ' ― '
+          }
+          &:last-child {
+            &:after {
+              content: ""
+            }
+          }
         }
       }
 
