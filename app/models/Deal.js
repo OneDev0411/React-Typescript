@@ -393,7 +393,7 @@ Deal.sendEnvelope = async function(deal_id, subject, message, attachments, recip
   const data = {
     deal: deal_id,
     title: subject,
-    message: message,
+    body: message,
     documents: attachments,
     recipients: _.map(recipients, recipient => recipient)
   }
