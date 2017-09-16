@@ -15,16 +15,19 @@ function _getMessages (id, messages, { total }, append = null) {
 
 export function getMessages (id, limit, value, value_type) {
   return async (dispatch) => {
-    const response = await Chatroom.getMessages(id, limit, value, value_type)
-    const { info, data } = response.body
+    try {
+      const { info, data } = await Chatroom.getMessages(id, limit, value, value_type)
 
-    // append messages to the end of list if using since_value
-    const append = value_type === 'since'
+      // append messages to the end of list if using since_value
+      const append = value_type === 'since'
 
-    // reverse messages because we are displaying newest messages first
-    const messages = _.indexBy(data.reverse(), 'id')
+      // reverse messages because we are displaying newest messages first
+      const messages = _.indexBy(data.reverse(), 'id')
 
-    dispatch(_getMessages(id, messages, info, append))
+      dispatch(_getMessages(id, messages, info, append))
+    } catch(e) {
+      console.log(e)
+    }
   }
 }
 
