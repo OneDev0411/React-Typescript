@@ -79,7 +79,7 @@ class AddRole extends React.Component {
           dialogClassName="modal-deal-add-role"
         >
           <Modal.Header closeButton>
-            <Modal.Title>Add a signer</Modal.Title>
+            <Modal.Title>Add contact</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
