@@ -5,6 +5,7 @@ import cn from 'classnames'
 import CreateTask from '../create-task'
 import TaskStatus from './status'
 import TaskTermination from './termination'
+import TaskDeactivation from './deactivation'
 
 class List extends React.Component {
   constructor(props) {
@@ -26,9 +27,7 @@ class List extends React.Component {
 
     if (section.is_deactivated === true) {
       label = 'Backup'
-    } else if (section.is_deactivated === false) {
-      label = 'Active'
-    }  else if (section.is_terminated) {
+    } else if (section.is_terminated) {
       label = 'Terminated'
       color = '#d0011b'
     }
@@ -43,6 +42,15 @@ class List extends React.Component {
     )
   }
 
+  getActions(checklist) {
+    const { isBackoffice } = this.props
+
+    return {
+      termination: isBackoffice && checklist.is_terminatable,
+      deactivation: checklist.is_deactivatable
+    }
+  }
+
   render() {
     const { showMenu } = this.state
     const {
@@ -51,12 +59,16 @@ class List extends React.Component {
       section,
       dealId,
       selectedTaskId,
-      onSelectTask
+      onSelectTask,
+      isBackoffice
     } = this.props
 
     if (!section) {
       return false
     }
+
+    // get actions and valid actions count
+    const actions = this.getActions(section)
 
     return (
       <Panel
@@ -81,32 +93,42 @@ class List extends React.Component {
               </div>
             </div>
 
-            <div className="cta">
-              <Dropdown
-                id={`SECTION_CTA_${section.id}`}
-                className="deal-checklist-cta-menu"
-                open={showMenu}
-                onToggle={() => this.toggleMenu()}
-                pullRight
-              >
-                <Button
-                  className="cta-btn btn-link"
-                  bsRole="toggle"
-                  onClick={e => e.stopPropagation()}
+            {
+              _.filter(actions, available => available).length > 0 &&
+              <div className="cta">
+                <Dropdown
+                  id={`SECTION_CTA_${section.id}`}
+                  className="deal-checklist-cta-menu"
+                  open={showMenu}
+                  onToggle={() => this.toggleMenu()}
+                  pullRight
                 >
-                  <i className="fa fa-ellipsis-v" />
-                </Button>
+                  <Button
+                    className="cta-btn btn-link"
+                    bsRole="toggle"
+                    onClick={e => e.stopPropagation()}
+                  >
+                    <i className="fa fa-ellipsis-v" />
+                  </Button>
 
-                <Dropdown.Menu>
-                  <TaskTermination
-                    dealId={dealId}
-                    checklist={section}
-                    onCloseDropDownMenu={() => this.toggleMenu()}
-                  />
+                  <Dropdown.Menu>
+                    <TaskTermination
+                      hasPermission={actions.termination}
+                      dealId={dealId}
+                      checklist={section}
+                      onRequestCloseDropDownMenu={() => this.toggleMenu()}
+                    />
 
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
+                    <TaskDeactivation
+                      hasPermission={actions.deactivation}
+                      dealId={dealId}
+                      checklist={section}
+                      onRequestCloseDropDownMenu={() => this.toggleMenu()}
+                    />
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+            }
           </div>
         }
       >
@@ -155,6 +177,7 @@ class List extends React.Component {
 
 export default connect(({ deals, chatroom }) => ({
   rooms: chatroom.rooms,
-  tasks: deals.tasks
+  tasks: deals.tasks,
+  isBackoffice: deals.backoffice
 }))(List)
 

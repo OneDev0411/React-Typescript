@@ -1,0 +1,47 @@
+.modal-confirmation {
+  width: 500px;
+  height: 200px;
+  .modal-content {
+    border: none;
+    box-shadow: none;
+  }
+
+  .modal-body {
+    text-align: center;
+    padding: 53px 50px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+
+    .confirmation-title {
+      font-size: 26px;
+      font-weight: 600;
+      color: #5b6469;
+      margin-bottom: 35px;
+    }
+
+    button {
+      height: 34px;
+      border-radius: 3px;
+      box-shadow: 0 1px 1px 0 #eef1f2;
+      border: solid 1px #f4f7f9;
+      margin-left: 5px;
+      &:focus {
+        outline: none;
+      }
+
+      &.cancel {
+        color: #78909c;
+        width: 110px;
+        &:hover {
+          background-color: transparent;
+          color: #2196f3;
+        }
+      }
+      &.confirm {
+        border: none;
+        width: 148px;
+      }
+    }
+  }
+}

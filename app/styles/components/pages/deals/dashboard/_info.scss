@@ -9,22 +9,36 @@
     max-height: calc(100vh - #{$listing-card-height});
   }
 
+  .deal-info {
+    .deal-info-title {
+      width: calc(100% - #{$col-padding};
+      margin-left: $col-padding / 2;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: left;
+      color: #1d364b;
+      border-bottom: 1px solid rgba(220, 225, 229, 0.5);
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+    }
+  }
+
   .mls-viewer-button,
   .add-contract-button {
     width: calc(100% - 20px);
     margin: 10px 10px 0 10px;
     height: 34px;
     border-radius: 3px;
-    background-color: #ffffff;
     border: solid 1px #dde2e6;
     font-weight: 500;
-    color: #61778d;
+    border-color: #2196F3;
+    color: #2196F3;
     &:focus {
       outline: none;
     }
     &:hover {
-      border-color: #2196F3;
-      color: #2196F3;
+      color: #fff;
+      background-color: #2196F3;
     }
   }
 }

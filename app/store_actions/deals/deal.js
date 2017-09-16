@@ -2,8 +2,10 @@ import _ from 'underscore'
 import { normalize } from 'normalizr'
 import { batchActions } from 'redux-batched-actions'
 import types from '../../constants/deals'
-import Deals from '../../models/Deal'
+import Deal from '../../models/Deal'
 import * as schema from './schema'
+import { setTasks } from './task'
+import { setChecklists } from './checklist'
 
 function setDeals(deals) {
   return {
@@ -17,28 +19,6 @@ function setDealContexts(deal_id, contexts) {
     type: types.SET_DEAL_CONTEXTS,
     deal_id,
     contexts
-  }
-}
-
-export function setTasks(tasks) {
-  return {
-    type: types.GET_TASKS,
-    tasks
-  }
-}
-
-function updateRoles(deal_id, roles) {
-  return {
-    type: types.UPDATE_ROLES,
-    deal_id,
-    roles
-  }
-}
-
-export function setChecklists(checklists) {
-  return {
-    type: types.GET_CHECKLISTS,
-    checklists
   }
 }
 
@@ -56,6 +36,13 @@ function isBackOffice(status) {
   }
 }
 
+function dealUpdated(deal) {
+  return {
+    type: types.UPDATE_DEAL,
+    deal
+  }
+}
+
 export function appendChecklist(deal_id, checklist_id) {
   return {
     type: types.APPEND_CHECKLIST,
@@ -64,25 +51,16 @@ export function appendChecklist(deal_id, checklist_id) {
   }
 }
 
-export function setEnvelopes(deal_id, envelopes) {
-  return {
-    type: types.SET_ENVELOPES,
-    deal_id,
-    envelopes
-  }
-}
-
-export function createRole(deal_id, form) {
+export function updateDeal(deal) {
   return async (dispatch) => {
-    const deal = await Deals.createRole(deal_id, form)
-    dispatch(updateRoles(deal.id, deal.roles))
-  }
-}
+    const { entities } = normalize(deal, schema.dealSchema)
+    const { deals, checklists, tasks } = entities
 
-export function getEnvelopes(deal_id) {
-  return async (dispatch) => {
-    const envelopes = await Deals.getEnvelopes(deal_id)
-    dispatch(setEnvelopes(deal_id, envelopes))
+    batchActions([
+      dispatch(setTasks(tasks)),
+      dispatch(setChecklists(checklists)),
+      dispatch(dealUpdated(deals[deal.id]))
+    ])
   }
 }
 
@@ -93,7 +71,7 @@ export function getDeals(user, backoffice = false) {
 
     try {
       // get deals (brand is backoffice)
-      const data = await Deals.getAll(user, backoffice)
+      const data = await Deal.getAll(user, backoffice)
 
       if (data.length === 0) {
         return dispatch({ type: types.NO_DEAL })
@@ -107,7 +85,7 @@ export function getDeals(user, backoffice = false) {
         dispatch(setChecklists(checklists)),
         dispatch(setTasks(tasks))
       ])
-    } catch(e) {
+    } catch (e) {
       dispatch({
         type: types.GET_DEALS_FAILED,
         name: 'Get Deals',
@@ -117,10 +95,9 @@ export function getDeals(user, backoffice = false) {
   }
 }
 
-
 export function createDeal(data) {
   return async (dispatch) => {
-    const deal = await Deals.create(data)
+    const deal = await Deal.create(data)
     const { entities } = normalize(deal, schema.dealSchema)
     const { deals, checklists, tasks } = entities
 
@@ -136,7 +113,7 @@ export function createDeal(data) {
 
 export function reloadDealContexts(dealId) {
   return async (dispatch) => {
-    const deal = await Deals.getById(dealId)
+    const deal = await Deal.getById(dealId)
 
     dispatch(setDealContexts(deal.id, {
       form_context: deal.form_context,

@@ -1,6 +1,5 @@
 export default [
   'GET_TASKS',
-  'UPDATE_ROLES',
   'CHANGE_TASK_STATUS',
   'CHANGE_NEEDS_ATTENTION',
   'CREATE_TASK',

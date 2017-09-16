@@ -23,27 +23,28 @@ const requestVerify = ({
     <div className="signin-page-wrapper">
       <article className="c-auth">
         <header className="c-auth__header">
-          <Link to="/" tabIndex={-1}>
-            <img
-              src={siteLogo}
-              alt={`${siteTitle} logo`}
-              className={'c-auth__logo'}
-            />
-          </Link>
-          <h1 className="c-auth__title tempo">
-            {`${siteTitle}`}
-          </h1>
+          {siteLogo && (
+            <Link to="/" tabIndex={-1}>
+              <img
+                src={siteLogo}
+                alt={`${siteTitle} logo`}
+                className={'c-auth__logo'}
+              />
+            </Link>
+          )}
+          <h1 className="c-auth__title tempo">{`${siteTitle}`}</h1>
           <p className="c-auth__subtitle">
             Request a {verifyType} verification link
           </p>
         </header>
         <main className="c-auth__main">
-          {!submitSuccessfully
-            ? <div>
-              {submitError &&
+          {!submitSuccessfully ? (
+            <div>
+              {submitError && (
                 <div className="c-auth__submit-error-alert">
                   An unexpected error occurred. Please try again.
-                </div>}
+                </div>
+              )}
               <button
                 onClick={verifyRequestHandler}
                 className="c-auth__submit-btn"
@@ -56,14 +57,16 @@ const requestVerify = ({
                 {isSubmitting ? 'Requesting...' : 'Request'}
               </button>
             </div>
-            : <div style={{ textAlign: 'center' }}>
+          ) : (
+            <div style={{ textAlign: 'center' }}>
               <p className="c-auth__submit-alert--success">
                 <span>Your request sent successfully.</span>
                 <br />
                 <span>You may now want </span>
                 <Link to="/dashboard/mls">going to the dashboard</Link>.
               </p>
-            </div>}
+            </div>
+          )}
         </main>
       </article>
     </div>

@@ -2,7 +2,8 @@ import { normalize } from 'normalizr'
 import { batchActions } from 'redux-batched-actions'
 import types from '../../constants/deals'
 import Deal from '../../models/Deal'
-import { appendChecklist, setChecklists, setTasks } from './deal'
+import { appendChecklist } from './deal'
+import { setTasks } from './task'
 import * as schema from './schema'
 
 function update(id, checklist) {
@@ -10,6 +11,13 @@ function update(id, checklist) {
     type: types.UPDATE_CHECKLIST,
     id,
     checklist
+  }
+}
+
+export function setChecklists(checklists) {
+  return {
+    type: types.GET_CHECKLISTS,
+    checklists
   }
 }
 

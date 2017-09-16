@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Dropdown, MenuItem, Button } from 'react-bootstrap'
+import FileSvg from '../../../Partials/Svgs/File'
+import MultipleFileSvg from '../../../Partials/Svgs/MultipleFile'
 import { showAttachments, updateAttachments } from '../../../../../../store_actions/deals'
 
 const EsignButton = ({
@@ -14,9 +16,16 @@ const EsignButton = ({
 
   return (
     <div className="inline">
-      <Dropdown id="drp-send-esign" pullRight>
+      <Dropdown
+        id="drp-send-esign"
+        className="deal-esgin-cta-menu"
+        pullRight
+      >
 
-        <Button bsRole="toggle" className="btn-deal">
+        <Button
+          bsRole="toggle"
+          className="btn-deal deal-esgin-cta-btn"
+        >
           eSign
         </Button>
 
@@ -27,6 +36,7 @@ const EsignButton = ({
               onClick={() => updateAttachments(attachments)}
               eventKey="1"
             >
+              <FileSvg />
               Send this file
             </MenuItem>
           }
@@ -40,6 +50,7 @@ const EsignButton = ({
             onClick={() => showAttachments(attachments)}
             eventKey="2"
           >
+            <MultipleFileSvg />
             Send multiple files
           </MenuItem>
 

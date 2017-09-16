@@ -8,6 +8,7 @@ import getBrand from '../store_actions/brand'
 
 // services
 import ChatSocket from './Pages/Dashboard/Chatroom/Services/socket'
+import DealSocket from './Pages/Dashboard/Deals/services/socket'
 
 // navs
 import SideBar from './Pages/Dashboard/Partials/SideBar'
@@ -43,6 +44,7 @@ class App extends Component {
 
     if (typeof window !== 'undefined') {
       this.initializeChatSocket()
+      this.initializeDealSocket()
     }
   }
 
@@ -88,11 +90,16 @@ class App extends Component {
     new ChatSocket(user)
   }
 
-  async initialDeals() {
-    const { dispatch, user } = this.props
+  initializeDealSocket() {
+    const { user } = this.props
+    new DealSocket(user)
+  }
 
-    if (user && user.features) {
-      const isBackOffice = user.features.indexOf('Backoffice') !== -1
+  async initialDeals() {
+    const { dispatch, deals, user } = this.props
+
+    if (!deals) {
+      const isBackOffice = user.features.indexOf('Backoffice') > -1
       return dispatch(getDeals(user, isBackOffice))
     }
   }
@@ -233,7 +240,7 @@ class App extends Component {
   }
 
   render() {
-    const { user, data, rooms, location, isWidgetRedux } = this.props
+    const { data, user, rooms, location, isWidgetRedux } = this.props
 
     // don't remove below codes,
     // because app is depended to `path` and `location` props in data store
@@ -256,9 +263,18 @@ class App extends Component {
 
     return (
       <div>
-        {user && !isWidgetRedux && navArea}
+        {
+          user && !isWidgetRedux &&
+          navArea
+        }
 
-        {user && <InstantChat user={user} rooms={rooms} />}
+        {
+          user &&
+          <InstantChat
+            user={user}
+            rooms={rooms}
+          />
+        }
 
         <main style={{ minHeight: '100vh' }}>{children}</main>
       </div>
@@ -266,10 +282,12 @@ class App extends Component {
   }
 }
 
-export default connect(({ user, data, chatroom, widgets }) => ({
+export default connect(({ user, data, deals, contact, chatroom, widgets }) => ({
   data,
   user,
+  deals: deals.list,
   rooms: chatroom.rooms,
-  contacts: chatroom.contact,
+  contacts: contact.list,
   isWidgetRedux: widgets.isWidget
 }))(App)
+

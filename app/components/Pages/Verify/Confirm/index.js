@@ -64,16 +64,24 @@ const confirmVerify = ({
     <div className="signin-page-wrapper">
       <article className="c-auth">
         <header className="c-auth__header">
-          <Link to="/" tabIndex={-1}>
-            <img
-              src={siteLogo}
-              alt={`${siteTitle} logo`}
-              className={'c-auth__logo'}
-            />
-          </Link>
+          {siteLogo && (
+            <Link to="/" tabIndex={-1}>
+              <img
+                src={siteLogo}
+                alt={`${siteTitle} logo`}
+                className={'c-auth__logo'}
+              />
+            </Link>
+          )}
           <h1 className="c-auth__title tempo">{`${siteTitle}`}</h1>
           <p className="c-auth__subticonfirmtle">Verify Your {verifyType}</p>
-          <p>{verifyQueryParams.body[verifyType === 'phone' ? 'phone_number' : 'email']}</p>
+          <p>
+            {
+              verifyQueryParams.body[
+                verifyType === 'phone' ? 'phone_number' : 'email'
+              ]
+            }
+          </p>
         </header>
         <main className="c-auth__main">
           {!submitSuccessfully ? (

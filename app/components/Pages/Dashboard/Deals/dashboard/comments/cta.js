@@ -6,9 +6,10 @@ import BackOfficeCta from './backoffice-cta'
 const CallToAction = ({
   task,
   isBackoffice,
+  hasComment,
   onSendComment
 }) => {
-  const props = { task, onSendComment }
+  const props = { task, hasComment, onSendComment }
 
   return isBackoffice ?
     <BackOfficeCta {...props} /> :

@@ -38,26 +38,23 @@
   }
 
   .recipients {
-    position: relative;
-    min-height: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
     padding: 0 $pad-size;
     box-shadow: 0 1px 0 0 #ecf0f4;
+    min-height: 50px;
 
-    .recp-container {
-      width: 95%;
-      margin-left: $pad-size + 3px;
+    .rcp-container {
+      width: 100%;
+      max-height: 80px;
+      overflow: auto;
       cursor: pointer;
-    }
 
-    .item-title {
-      position: absolute;
-      top: 0;
-    }
-
-    .to {
-      position: absolute;
-      left: $pad-size;
-      top: 34%;
+      .item-title {
+        margin-left: 5px;
+      }
     }
 
     .recp {
@@ -114,8 +111,7 @@
   .message {
     padding: $pad-size;
     position: relative;
-    min-height: 68%;
-    max-height: 68%;
+    height: 150px;
     textarea {
       border: none;
       width: 100%;
@@ -126,41 +122,46 @@
       }
     }
 
-    .attachments {
-      position: absolute;
-      bottom: $pad-size;
-      left: $pad-size;
-      max-height: 68%;
-      overflow: auto;
+    .signature {
+      margin-top: 10px;
+    }
+  }
 
-      ul {
-        margin: 0;
-        padding: 0;
+  .attachments {
+    position: absolute;
+    bottom: 55px + 10px;
+    left: $pad-size;
+    width: 530px;
+    max-height: 22%;
+    overflow: auto;
 
-        li {
-          padding: 0 $pad-size;
-          width: 400px;
-          height: 30px;
-          line-height: 30px;
-          vertical-align: middle;
-          border-radius: 2px;
-          background-color: #f0f4f7;
-          border: solid 1px #e9eef2;
-          margin-bottom: 5px;
+    ul {
+      margin: 0;
+      padding: 0;
 
-          .name {
-            display: inline-block;
-            width: 300px;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-          }
+      li {
+        padding: 0 $pad-size;
+        width: 400px;
+        height: 30px;
+        line-height: 30px;
+        vertical-align: middle;
+        border-radius: 2px;
+        background-color: #f0f4f7;
+        border: solid 1px #e9eef2;
+        margin-bottom: 5px;
 
-          .remove-attachment {
-            float: right;
-            cursor: pointer;
-            color: #62778c;
-          }
+        .name {
+          display: inline-block;
+          width: 300px;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+
+        .remove-attachment {
+          float: right;
+          cursor: pointer;
+          color: #62778c;
         }
       }
     }
@@ -212,129 +213,31 @@
   }
 }
 
-.esign-add-contact--popover {
-  width: 320px;
-  height: 300px;
-  border-radius: 3px;
-  background-color: #fff;
-  box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.15);
-  border: solid 1px #e1e1e1;
-
-  .popover-content {
-    padding: 0 !important;
-    margin: 0 !important;
-    margin-top: 30px;
+.modal-deal-esign-add-signer {
+  .modal-content {
+    border-radius: 6px;
+    overflow: auto;
   }
 
-  .arrow {
-    visibility: hidden;
+  .modal-header {
+    .close {
+      margin-top: 5px;
+    }
+
+    height: 67px;
+    background-color: #f8fafb;
+    font-size: 24px;
+    font-weight: 600;
+    color: #1d364b;
   }
 
-  .hero {
-    margin: 20px 20px 0 20px;
-    font-size: 17px;
-    font-weight: 500;
-    letter-spacing: -0.4px;
-    color: #030303;
-  }
-
-  .form-group {
-    &.has-error {
-      box-shadow: none;
-      border-bottom: none;
-    }
-
-    .form-control {
-      width: 100%;
-      border: none;
-      height: 41px;
-      background-color: #fff;
-      border-radius: 0;
-      border-bottom: 1px solid #e1e1e1;
-      padding: 18px 20px 3px 20px;
-      font-size: 15px;
-      box-shadow: none !important;
-
-      &.has-error {
-        border-bottom: none;
+  .modal-body {
+    padding: 0;
+    .deal-roles {
+      .deal-info-title {
+        display: none;
       }
-
-      &:focus {
-        box-shadow: none;
-      }
-    }
-
-    .dropdown {
-      width: 100%;
-      margin-top: 10px;
-
-      button {
-        width: 100%;
-        border: none;
-        border-bottom: 1px solid #e1e1e1;
-        border-radius: 0;
-        font-size: 15px;
-        padding-left: 20px;
-        color: #5A5A5A;
-        text-align: left;
-        padding-bottom: 2px;
-        .caret {
-          margin-left: 150px;
-        }
-        &:hover {
-          background-color: transparent;
-        }
-        &:focus {
-          background-color: transparent;
-          box-shadow: none;
-          border-bottom: 1px solid #e1e1e1;
-        }
-      }
-
-      &.open {
-        button {
-          background-color: transparent;
-          box-shadow: none;
-          color: #5A5A5A;
-          &:hover {
-            color: #5A5A5A;
-            border-bottom: 1px solid #e1e1e1;
-          }
-        }
-      }
-    }
-  }
-
-  .cta {
-    position: absolute;
-    background-color: #f2f2f2;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    border-top: 1px solid #e1e1e1;
-    button {
-      background-color: #fff;
-      border: none;
-      width: 50%;
-      height: 40px;
-      letter-spacing: -0.4px;
-      text-align: center;
-      color: #2196f3;
-      font-size: 15px;
-      &:hover {
-        opacity: 0.7;
-      }
-      &:focus {
-        outline: none;
-      }
-    }
-
-    .btn-add {
-      font-weight: bold;
-    }
-
-    .btn-cancel {
-      border-right: 1px solid #e1e1e1;
+      @extend %deal-roles;
     }
   }
 }

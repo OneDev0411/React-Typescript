@@ -24,7 +24,7 @@ class DealDetails extends React.Component {
     const { deal, getEnvelopes } = this.props
 
     if (deal === null) {
-      browserHistory.push('/dashboard/deals')
+      return browserHistory.push('/dashboard/deals')
     }
 
     if (!deal.envelopes) {

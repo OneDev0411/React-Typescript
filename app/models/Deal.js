@@ -291,6 +291,20 @@ Deal.createRole = async function (deal_id, form) {
 }
 
 /**
+* delete role
+*/
+Deal.deleteRole = async function (deal_id, role_id) {
+  try {
+    await new Fetch()
+      .delete(`/deals/${deal_id}/roles/${role_id}`)
+
+    return true
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
 * accept a contract
 */
 Deal.addContract = async function (deal_id, name, order, is_backup, property_type) {
@@ -354,6 +368,20 @@ Deal.getEnvelopes = async function(deal_id) {
     return response.body.data
   } catch (e) {
     return null
+  }
+}
+
+/**
+* resend specific envelope
+*/
+Deal.resendEnvelope = async function (id) {
+  try {
+    const response = await new Fetch()
+      .post(`/envelopes/${id}/resend`)
+
+    return response.body.data
+  } catch (e) {
+    throw e
   }
 }
 

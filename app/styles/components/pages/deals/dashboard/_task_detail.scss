@@ -2,7 +2,7 @@
   border: 1px solid #dce5eb;
   margin: 20px $col-padding 20px 0;
   border-radius: 4px;
-  background-color: #fff;
+  background-color: #f8fafb;
   @include scrollbar()
 
   .heading {
@@ -26,14 +26,15 @@
   height: 58px;
   padding: 0 $col-padding 0 $col-padding;
   border-radius: 3px 3px 0 0;
-  background-color: #dce5eb;
   box-shadow: 0 1px 5px 0 rgba(167, 184, 200, 0.7);
-  font-size: 22px;
-  color: #1d364b;
+  background-color: #f8fafb;
   margin-bottom: 15px;
 
   .title {
     padding: 15px 10px;
+    font-size: 17px;
+    font-weight: 500;
+    color: #1d364b
   }
 
   .submit {
@@ -66,12 +67,18 @@
     font-size: 15px;
     cursor: pointer;
     margin-top: 0;
+    background-color: #fdfdfd;
+    color: #2196f3;
+    border-color: #2196f3;
+    overflow: hidden;
     &:hover {
-      color: #2196f3;
+      background-color: #2196f3;
+      color: #fdfdfd;
     }
     &.saving {
       cursor: auto;
-      color: #78909c;
+      background-color: #fdfdfd;
+      color: #2196f3;
     }
   }
 }

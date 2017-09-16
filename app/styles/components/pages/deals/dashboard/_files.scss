@@ -1,7 +1,6 @@
 %deal-files-container {
   padding: 0;
-  background: #fff;
-  overflow: hidden;
+  background: #f8fafb;
 
   .file {
     padding: 0 10px;
@@ -17,12 +16,18 @@
       background-color: #f8fafb;
       border: solid 1px #d2d7db;
       border-radius: 3px;
+      z-index: 100;
     }
 
     .item {
-      margin: 0;
+      margin: 1px 0;
       padding: 10px 5px;
       border-bottom: solid 1px #d2d7db;
+      background-color: #fff;
+
+      &:last-child {
+        border-bottom: none;
+      }
 
       &:hover {
         background-color: rgba(240, 240, 240, 0.5);
@@ -72,9 +77,17 @@
   }
 
   .file-upload {
+    margin-top: 10px;
+    border: 1px dashed #c9d7df;
+    border-radius: 3px;
     .item {
+      margin: 0;
       padding: 20px 5px;
       border-bottom: none;
+      background-color: #f8fafb;
+      &:hover {
+        background-color: #fff;
+      }
     }
 
     .progress {

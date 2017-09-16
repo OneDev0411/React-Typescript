@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Textarea from 'react-textarea-autosize'
 import { Row, Col, Modal, Button } from 'react-bootstrap'
+import { addNotification as notify } from 'reapop'
 import moment from 'moment'
 import _ from 'underscore'
 import cn from 'classnames'
@@ -59,14 +60,20 @@ class SendSignatures extends React.Component {
       return false
     }
 
-    const { tasks, forms, deal } = this.props
+    const { deal, checklists, tasks } = this.props
     const { attachments } = esign
     let roles = []
 
     // extract roles of selected documents
-    attachments.forEach(id => {
-      const formId = tasks[id].submission.form
-      roles = roles.concat(forms[formId].roles)
+    deal.checklists.forEach(id => {
+      const checklist = checklists[id]
+      if (checklist.is_terminated || !checklist.allowed_forms) {
+        return false
+      }
+
+      checklist.allowed_forms.forEach(form => {
+        roles = roles.concat(form.roles)
+      })
     })
 
     // get role names
@@ -87,12 +94,23 @@ class SendSignatures extends React.Component {
     })
   }
 
+  closeForm() {
+    const { closeEsign } = this.props
+
+    //close form
+    closeEsign()
+
+    // reset recipients
+    this.setState({
+      recipients: {}
+    })
+  }
   /**
    * send envelope
    */
   async send() {
     const { recipients, isSending } = this.state
-    const { closeEsign, setEnvelopes, user, deal, esign, tasks } = this.props
+    const { notify, closeEsign, setEnvelopes, user, deal, esign, tasks } = this.props
     const subject = this.subject.value
     const message = this.message.value
     const attachments = esign.attachments.map(id => {
@@ -118,18 +136,36 @@ class SendSignatures extends React.Component {
       // close esign
       closeEsign()
 
-    } catch(e) {
-      this.setState({ isSending: false })
+      notify({
+        message: 'eSign has been sent',
+        status: 'success'
+      })
 
-      if (~~e.status === 412)
+      // reset recipients
+      this.setState({
+        recipients: {},
+        isSending: false
+      })
+
+    } catch(e) {
+      const isDocusignError = ~~e.status === 412
+      this.setState({
+        isSending: false
+      })
+
+      if (isDocusignError) {
         this.loginToDocusign()
+      }
+
+      notify({
+        message: isDocusignError ?
+          'You are not logged in Docusign' :
+          'Can not send eSign, please try again',
+        status: isDocusignError ? 'warning' : 'error'
+      })
 
       return false
     }
-
-    this.setState({
-      isSending: false
-    })
   }
 
   /**
@@ -150,7 +186,7 @@ class SendSignatures extends React.Component {
   }
 
   render() {
-    const { tasks, esign, deal, user } = this.props
+    const { tasks, esign, deal, user, showAttachments } = this.props
     const { recipients, isSending } = this.state
 
     if (!esign.show || esign.view !== 'compose') {
@@ -164,7 +200,7 @@ class SendSignatures extends React.Component {
 
           <span
             className="close-compose"
-            onClick={() => this.props.closeEsign()}
+            onClick={() => this.closeForm()}
           >
             <i className="fa fa-times" />
           </span>
@@ -172,11 +208,10 @@ class SendSignatures extends React.Component {
 
         <div className="recipients">
           <span className="item-title to">To: </span>
-
           <Recipients
+            deal={deal}
             recipients={recipients}
-            roles={deal.roles}
-            onAddRecipients={recp => this.addRecipients(recp)}
+            onAddRecipient={recp => this.addRecipients(recp)}
             onRemoveRecipient={email => this.removeRecipient(email)}
           />
         </div>
@@ -193,13 +228,15 @@ class SendSignatures extends React.Component {
         <div className="message">
           <Textarea
             inputRef={ref => this.message = ref}
-            maxRows={10}
+            maxRows={8}
             placeholder="Write your message here ..."
           />
           <div className="signature">
             <p>{ user.display_name }</p>
           </div>
+        </div>
 
+        <div className="attachments">
           <ComposeAttachments
             esign={esign}
             tasks={tasks}
@@ -217,7 +254,7 @@ class SendSignatures extends React.Component {
 
           <Button
             disabled={isSending}
-            onClick={() => this.props.showAttachments(esign.attachments)}
+            onClick={() => showAttachments(esign.attachments)}
             className="btn-attach"
           >
             <i className="fa fa-paperclip fa-rotate-90" /> Attach
@@ -231,7 +268,7 @@ class SendSignatures extends React.Component {
 
 export default connect(({ deals, data }) => ({
   user: data.user,
-  forms: deals.forms,
   tasks: deals.tasks,
+  checklists: deals.checklists,
   esign: deals.esign || {}
-}), { showAttachments, closeEsign, setEnvelopes })(SendSignatures)
+}), { showAttachments, closeEsign, setEnvelopes, notify })(SendSignatures)
