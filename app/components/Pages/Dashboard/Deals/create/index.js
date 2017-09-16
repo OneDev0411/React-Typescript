@@ -159,7 +159,10 @@ class DealCreate extends React.Component {
 
     try {
       // create deal
-      const deal = await createDeal(data)
+      const deal = await Deal.create(data)
+
+      // dispatch new deal
+      await createDeal(deal)
 
       // navigate to the deal
       browserHistory.push(`/dashboard/deals/${deal.id}`)
