@@ -6,7 +6,15 @@ export default ({
   deal,
   task
 }) => {
-  const envelopes = deal.envelopes || []
+  if (!task.submission) {
+    return false
+  }
+
+  const envelopes = (deal.envelopes || []).filter(envelope =>
+    envelope.documents.filter(doc =>
+      doc.submission === task.submission.id).length > 0
+  )
+
   if (envelopes.length === 0) {
     return false
   }
