@@ -11,8 +11,12 @@ function getContacts (contacts) {
 
 export default function (user = {}) {
   return async (dispatch) => {
-    const response = await Contact.getContacts(user)
-    const contacts = _.indexBy(response.body.data, 'id')
-    dispatch(getContacts(contacts))
+    try {
+      const list = await Contact.getContacts(user)
+      const contacts = _.indexBy(list, 'id')
+      dispatch(getContacts(contacts))
+    } catch(e) {
+      console.log(e)
+    }
   }
 }
