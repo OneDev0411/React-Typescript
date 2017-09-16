@@ -88,8 +88,8 @@ export function getDeals(user, backoffice = false) {
     } catch (e) {
       dispatch({
         type: types.GET_DEALS_FAILED,
-        name: 'Get Deals',
-        message: e.response ? e.response.text : 'Can not get deals'
+        name: 'get-deals',
+        message: e.response ? e.response.body.message : 'Can not get deals'
       })
     }
   }

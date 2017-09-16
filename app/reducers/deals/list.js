@@ -7,6 +7,7 @@ export default (state = null, action) => {
   switch (action.type) {
 
     case types.NO_DEAL:
+    case types.GET_DEALS_FAILED:
       return {}
 
     case types.GET_DEALS:

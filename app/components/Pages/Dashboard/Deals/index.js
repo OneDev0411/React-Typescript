@@ -17,21 +17,26 @@ class DealsContainer extends React.Component {
   }
 
   render() {
-    const { deals, user } = this.props
+    const { deals, user, error } = this.props
     const children = React.cloneElement(this.props.children, { user, deals })
+    const hasError = error && error.action === 'get-deals'
+
+    if (hasError) {
+      return (
+        <div className="deal-fetch-error">
+          <i className="fa fa-exclamation-triangle fa-5x" />
+          <p>{ error.message }</p>
+        </div>
+      )
+    }
 
     return (
       <div className="deals">
         {
           deals === null &&
-          <div
-            style={{ textAlign: 'center', padding: '30% 0' }}
-          >
-            <img
-              style={{ width: '64px' }}
-              src="/static/images/deals/pacman.svg"
-            />
-            <p><b>Loading deals</b></p>
+          <div className="deal-fetch-loading">
+            <i className="fa fa-spin fa-spinner fa-4x" />
+            <p>Loading deals</p>
           </div>
         }
 
@@ -42,6 +47,7 @@ class DealsContainer extends React.Component {
 }
 
 export default connect(({ deals, data }) => ({
+  error: deals.error,
   deals: deals.list,
   forms: deals.forms,
   user: data.user
