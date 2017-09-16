@@ -28,7 +28,7 @@ export default ({
       </Col>
 
       <Col sm={5} xs={12} className="name vcenter">
-        <div>Sent to { getRecipientsNames(recipients) }</div>
+        Sent to { getRecipientsNames(recipients) }
       </Col>
 
       <Col sm={6} xs={12} className="actions vcenter">
