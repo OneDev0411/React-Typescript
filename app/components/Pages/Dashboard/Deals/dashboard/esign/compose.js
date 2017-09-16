@@ -149,22 +149,25 @@ class SendSignatures extends React.Component {
 
     } catch(e) {
       const isDocusignError = ~~e.status === 412
+
       this.setState({
         isSending: false
       })
 
       if (isDocusignError) {
+        notify({
+          message: 'You are not logged in Docusign',
+          status: 'warning'
+        })
         this.loginToDocusign()
+      } else {
+        notify({
+          message: e.response ?
+            e.response.body.message :
+            'Can not send eSign, please try again',
+          status: 'error'
+        })
       }
-
-      notify({
-        message: isDocusignError ?
-          'You are not logged in Docusign' :
-          'Can not send eSign, please try again',
-        status: isDocusignError ? 'warning' : 'error'
-      })
-
-      return false
     }
   }
 
