@@ -13,7 +13,7 @@ class AgentTable extends BaseTable {
         sortable: true,
         className: 'address col-md-3',
         getText: deal => this.getAddress(deal),
-        getValue: deal => Deal.get.field(deal, 'full_address')
+        getValue: deal => Deal.get.address(deal)
       },
       status: {
         caption: 'STATUS',
