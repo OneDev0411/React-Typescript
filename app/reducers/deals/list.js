@@ -10,6 +10,9 @@ export default (state = null, action) => {
     case types.GET_DEALS_FAILED:
       return {}
 
+    case types.DELETE_DEAL:
+      return _.omit(state, deal => deal.id === action.deal_id)
+
     case types.GET_DEALS:
       return action.deals
 
@@ -37,15 +40,6 @@ export default (state = null, action) => {
             ...state[action.deal_id].checklists || [],
             action.checklist_id
           ]
-        }
-      }
-
-    case types.SET_DEAL_CONTEXTS:
-      return {
-        ...state,
-        [action.deal_id]: {
-          ...state[action.deal_id],
-          ...action.contexts
         }
       }
 
