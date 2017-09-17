@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { addTask, deleteTask, editTask } from '../../../../../store_actions/brandConsole'
 import { Button } from 'react-bootstrap'
-import Compose from './ModalTask'
+import Compose from './ModalBrand'
 import { compose, withState, pure } from 'recompose'
 
 const enhance = compose(

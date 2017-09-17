@@ -61,12 +61,14 @@ function _addBrand(brand) {
   }
 }
 
-export function addBrand(user, brand) {
+export function addBrand(brand) {
   return async (dispatch) => {
-    const response = await BrandConsole.addBrand(user, brand)
+    dispatch({ type: types.SHOW_SPINNER })
+    const response = await BrandConsole.addBrand(brand)
+    dispatch({ type: types.HIDE_SPINNER })
     if (response) {
       const { data } = response.body
-      dispatch(_addBrand(data))
+      dispatch(_getChildrenBrands(brand.parent, [data]))
     }
   }
 }

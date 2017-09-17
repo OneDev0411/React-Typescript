@@ -17,11 +17,13 @@ export default (state = {}, action) => {
       action.brands.forEach(brand =>
         arrayToObject[brand.id] = brand
       )
+      let childrenBrands = state[action.brandId].brands || []
+      childrenBrands = childrenBrands.concat(action.brands.map(brand => brand.id))
       return {
         ...state,
         [action.brandId]: {
           ...state[action.brandId],
-          brands: action.brands.map(brand => brand.id)
+          brands: childrenBrands
         },
         ...arrayToObject
       }

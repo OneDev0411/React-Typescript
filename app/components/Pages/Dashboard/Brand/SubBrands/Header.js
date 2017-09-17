@@ -23,7 +23,7 @@ const Header = ({ user, addChecklist }) => {
         showOnly={false}
         dropDownBox
         inline
-        title="Add Brand"
+        title="Add Team"
         buttonTitle="Add"
         onButtonClick={(newItem) => {
           addChecklist(user, newItem)

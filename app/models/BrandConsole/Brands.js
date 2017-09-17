@@ -20,13 +20,13 @@ Brands.getChildrenBrands = async function (brandId) {
   }
 }
 
-Brands.addBrand = async function (user, brand) {
+Brands.addBrand = async function (brand) {
   try {
     return await new Fetch()
-      .post(`/brands/${user.brand}/brands`)
+      .post('/brands/')
       .send(brand)
-  } catch (e) {
-    console.log(e)
+  } catch (error) {
+    return { error }
   }
 }
 

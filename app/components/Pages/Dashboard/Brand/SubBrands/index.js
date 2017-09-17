@@ -28,21 +28,15 @@ class SubBrands extends React.Component {
 
   render() {
     const { brands, brandParent } = this.props
-    console.log(brands, this.props.spinner)
+    console.log(brands)
     return (
       <div className="brands">
-        {
-          // this.props.spinner &&
-          <i
-            className={cn('fa fa-spinner fa-pulse fa-fw fa-3x spinner__brands', { hide_spinner: !this.props.spinner })}
-          />
-        }
+        <i
+          className={cn('fa fa-spinner fa-pulse fa-fw fa-3x spinner__brands', { hide_spinner: !this.props.spinner })}
+        />
         <Grid className="table">
           <div className="header">
-            <Col md={4} sm={4} xs={4}>Checklist Name</Col>
-            <Col md={2} sm={2} xs={2}>Deal Type</Col>
-            <Col md={2} sm={2} xs={2}>Property Type</Col>
-            <Col md={2} sm={2} xs={2}>Order</Col>
+            <Col md={4} sm={4} xs={4}>Teams name</Col>
           </div>
           {brands &&
           <Row

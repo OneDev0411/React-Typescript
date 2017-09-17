@@ -14,7 +14,7 @@ const Sidebar = () => (
         Checklists
       </NavItem>
       <NavItem className="item" eventKey="SubBrands">
-        Sub Brands
+        Sub Teams
       </NavItem>
     </Nav>
   </div>

@@ -1,55 +1,68 @@
 import React from 'react'
-import { Panel, PanelGroup } from 'react-bootstrap'
+import { connect } from 'react-redux'
+import { Panel, Button } from 'react-bootstrap'
 import BrandHeader from './BrnadHaedr'
-
-class Row extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      activeItem: null
-    }
-    this.onSelectItem = this.onSelectItem.bind(this)
-    this.renderRecursive = this.renderRecursive.bind(this)
-  }
-
-  onSelectItem(activeItem) {
-    if (activeItem !== this.state.activeItem)
-      this.setState({ activeItem })
-    else
-      this.setState({ activeItem: null })
-  }
-
-  renderRecursive(brand) {
-    return (
-      <Panel
-        collapsible
-        expanded={brand.collapsed}
-        key={`Brand_${brand.id}`}
-        eventKey={`Brand_${brand.id}`}
-        header={<BrandHeader
-          brand={brand}
-          onSelectItem={this.onSelectItem}
-          deleteBrand={this.props.deleteBrand}
-          activeItem={this.state.activeItem === brand.id}
-        />}
-      >
-        add brand
-        <div className="child-brand">
-          {
-            brand.brands && brand.brands.map(brandItem => this.renderRecursive(this.props.brands[brandItem]))
-          }
-        </div>
-      </Panel>
-    )
-  }
-
-  render() {
-    return (
-      <div>
-        {this.props.brands[this.props.brandParent] && this.renderRecursive(this.props.brands[this.props.brandParent])}
+import ModalBrand from './ModalBrand'
+import { addBrand } from '../../../../../store_actions/brandConsole'
+const Row = ({
+  brands,
+  brandParent,
+  addBrand
+}) => {
+  const AddButton = ({
+    clickHandler
+  }) =>
+    (<Button
+      className="button button__add-brand"
+      onClick={() => clickHandler()}
+    >
+      Add Team
+    </Button>)
+  const renderRecursive = (brand) => (
+    <Panel
+      collapsible
+      expanded={brand.collapsed}
+      key={`Brand_${brand.id}`}
+      eventKey={`Brand_${brand.id}`}
+      header={<BrandHeader
+        key={`Brand_${brand.id}_header`}
+        brand={brand}
+      />}
+    >
+      <div className="add-brand">
+        <div className="label__add-brand">Teams</div>
+        <ModalBrand
+          TriggerButton={AddButton}
+          showOnly={false}
+          dropDownBox
+          inline
+          title="Add Team"
+          buttonTitle="Add"
+          onButtonClick={(brandName) => {
+            addBrand({
+              parent: brand.id,
+              name: brandName
+            })
+          }}
+        />
       </div>
-    )
-  }
+      <div className="child-brand">
+        {
+          brand.brands && brand.brands.map(brandItem => renderRecursive(brands[brandItem]))
+        }
+      </div>
+    </Panel>
+  )
+
+  return (
+    <div>
+      {brands[brandParent] && renderRecursive(brands[brandParent])}
+    </div>
+  )
 }
 
-export default Row
+
+export default connect(
+  null,
+  ({ addBrand })
+)(Row)
