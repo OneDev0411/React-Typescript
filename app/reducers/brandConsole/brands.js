@@ -32,6 +32,15 @@ export default (state = {}, action) => {
         },
         ...arrayToObject
       }
+    case types.DELETE_BRAND:
+      let stateClone = state.slice()
+      delete stateClone[action.brand.id]
+      for (let i = 0; i < stateClone[action.brand.parent].brands.length; i++) {
+        if (stateClone[action.brand.parent].brands[i] === action.brand.id) {
+          stateClone[action.brand.parent].brands.splice(i, 1)
+        }
+      }
+      return stateClone
     default:
       return state
   }

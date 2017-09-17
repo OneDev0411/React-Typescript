@@ -75,19 +75,22 @@ export function addBrand(brand) {
   }
 }
 
-function _deleteBrand(brand_id) {
+function _deleteBrand(brand) {
   return {
     type: types.DELETE_BRAND,
-    brand_id
+    brand
   }
 }
 
 export function deleteBrand(brand) {
   return async (dispatch) => {
-    const response = await BrandConsole.deleteBrand(brand)
-    if (response &&
-      response.body.status === 'success') {
-      dispatch(_deleteBrand(brand.id))
+    dispatch({ type: types.SHOW_SPINNER })
+    const response = await BrandConsole.deleteBrand(brand.id)
+    dispatch({ type: types.HIDE_SPINNER })
+    if (response && !response.error && response.body.status === 'success') {
+      dispatch(_deleteBrand(brand))
+    } else {
+      dispatch(notify({ message: `deleteBrand: ${response.error.message}`, status: response.error.statusCode }))
     }
   }
 }

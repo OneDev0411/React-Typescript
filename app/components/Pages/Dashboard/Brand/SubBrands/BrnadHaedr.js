@@ -5,14 +5,15 @@ import cn from 'classnames'
 import UserAvatar from '../../../../Partials/UserAvatar'
 import ModalBrand from './ModalBrand'
 
-import { getChildrenBrands, toggleBrand, editBrand } from '../../../../../store_actions/brandConsole'
+import { getChildrenBrands, toggleBrand, editBrand, deleteBrand } from '../../../../../store_actions/brandConsole'
 
 
 const Row = ({
   brand,
   getChildrenBrands,
   toggleBrand,
-  editBrand
+  editBrand,
+  deleteBrand
 }) => {
   const EditButton = ({
     clickHandler
@@ -99,7 +100,7 @@ const Row = ({
     <i
       onClick={(e) => {
         e.stopPropagation()
-        // deleteTask(checklist, task.id)
+        deleteBrand(brand)
       }}
       className="fa fa-times delete-button--brand-row"
       aria-hidden="true"
@@ -109,5 +110,5 @@ const Row = ({
 
 export default connect(
   null,
-  ({ getChildrenBrands, toggleBrand, editBrand })
+  ({ getChildrenBrands, toggleBrand, editBrand, deleteBrand })
 )(Row)

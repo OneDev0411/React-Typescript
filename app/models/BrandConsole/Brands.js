@@ -40,12 +40,12 @@ Brands.editBrand = async function (brand) {
   }
 }
 
-Brands.deleteBrand = async function (brand) {
+Brands.deleteBrand = async function (brandId) {
   try {
     return await new Fetch()
-      .delete(`/brands/${brand.brand}/brands/${brand.id}`)
-  } catch (e) {
-    console.log(e)
+      .delete(`/brands/${brandId}`)
+  } catch (error) {
+    return { error }
   }
 }
 export default Brands
