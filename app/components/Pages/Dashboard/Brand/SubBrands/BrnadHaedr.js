@@ -82,13 +82,6 @@ const BrandHeader = ({
           addMembers={addMembers}
         />)
       }
-      <UserAvatar
-        userId="addMember"
-        name="&#43;"
-        size={30}
-        showStateIndicator={false}
-        textSizeRatio={1.5}
-      />
     </div>
     <ModalBrand
       TriggerButton={EditButton}
