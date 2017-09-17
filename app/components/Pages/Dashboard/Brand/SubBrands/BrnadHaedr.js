@@ -3,19 +3,31 @@ import { connect } from 'react-redux'
 import { Button } from 'react-bootstrap'
 import cn from 'classnames'
 import UserAvatar from '../../../../Partials/UserAvatar'
+import ModalBrand from './ModalBrand'
 
-import { getChildrenBrands, toggleBrand } from '../../../../../store_actions/brandConsole'
+import { getChildrenBrands, toggleBrand, editBrand } from '../../../../../store_actions/brandConsole'
 
 
 const Row = ({
   brand,
   getChildrenBrands,
-  toggleBrand
+  toggleBrand,
+  editBrand
 }) => {
+  const EditButton = ({
+    clickHandler
+  }) =>
+    (<Button
+      className="edit-button--brand-row"
+      onClick={() => clickHandler()}
+    >
+        Edit
+    </Button>
+    )
   let members = {}
   if (brand.roles) {
     brand.roles.forEach(role =>
-      role.members.forEach(member => {
+      role.members.map(member => {
         if (!members[member.id]) {
           members[member.id] = {
             ...member,
@@ -70,16 +82,24 @@ const Row = ({
         textSizeRatio={1.5}
       />
     </div>
-    <Button
-      className="edit-button--brand-row"
-      onClick={() => clickHandler()}
-    >
-      Edit
-    </Button>
+    <ModalBrand
+      TriggerButton={EditButton}
+      showOnly={false}
+      inline
+      title="Edit Team"
+      buttonTitle="Edit"
+      brand={brand}
+      onButtonClick={(brandName) => {
+        editBrand({
+          id: brand.id,
+          name: brandName
+        })
+      }}
+    />
     <i
       onClick={(e) => {
         e.stopPropagation()
-        deleteTask(checklist, task.id)
+        // deleteTask(checklist, task.id)
       }}
       className="fa fa-times delete-button--brand-row"
       aria-hidden="true"
@@ -89,5 +109,5 @@ const Row = ({
 
 export default connect(
   null,
-  ({ getChildrenBrands, toggleBrand })
+  ({ getChildrenBrands, toggleBrand, editBrand })
 )(Row)

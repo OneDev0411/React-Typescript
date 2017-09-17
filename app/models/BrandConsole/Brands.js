@@ -33,10 +33,10 @@ Brands.addBrand = async function (brand) {
 Brands.editBrand = async function (brand) {
   try {
     return await new Fetch()
-      .put(`/brands/${brand.brand}/brands/${brand.id}`)
+      .put(`/brands/${brand.id}`)
       .send(brand)
-  } catch (e) {
-    console.log(e)
+  } catch (error) {
+    return { error }
   }
 }
 

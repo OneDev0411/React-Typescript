@@ -66,9 +66,11 @@ export function addBrand(brand) {
     dispatch({ type: types.SHOW_SPINNER })
     const response = await BrandConsole.addBrand(brand)
     dispatch({ type: types.HIDE_SPINNER })
-    if (response) {
+    if (response && !response.error) {
       const { data } = response.body
       dispatch(_getChildrenBrands(brand.parent, [data]))
+    } else {
+      dispatch(notify({ message: `addBrand: ${response.error.message}`, status: response.error.statusCode }))
     }
   }
 }
@@ -99,10 +101,14 @@ function _editBrand(brand) {
 
 export function editBrand(brand) {
   return async (dispatch) => {
+    dispatch({ type: types.SHOW_SPINNER })
     const response = await BrandConsole.editBrand(brand)
-    if (response) {
+    dispatch({ type: types.HIDE_SPINNER })
+    if (response && !response.error) {
       const { data } = response.body
       dispatch(_editBrand(data))
+    } else {
+      dispatch(notify({ message: `addBrand: ${response.error.message}`, status: response.error.statusCode }))
     }
   }
 }

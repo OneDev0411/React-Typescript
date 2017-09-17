@@ -12,6 +12,11 @@ export default (state = {}, action) => {
       }
     case types.GET_BRAND:
       return { [action.brandId]: action.brand }
+    case types.EDIT_BRAND:
+      return {
+        ...state,
+        [action.brandId]: action.brand
+      }
     case types.GET_CHILDREN_BRANDS:
       let arrayToObject = {}
       action.brands.forEach(brand =>
