@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap'
 import cn from 'classnames'
 import UserAvatar from '../../../../Partials/UserAvatar'
 import ModalBrand from './ModalBrand'
-
+import Member from './Member'
 import { getChildrenBrands, toggleBrand, editBrand, deleteBrand } from '../../../../../store_actions/brandConsole'
 
 
@@ -44,36 +44,35 @@ const Row = ({
 
   return <div
     className={cn('brand-row', { active: brand.collapsed })}
-    onClick={() => {
-      if (!brand.brands) {
-        getChildrenBrands(brand.id)
-      }
-      toggleBrand(brand.id)
-    }}
   >
-    <i
-      className={cn(
-        'fa icon',
-        { 'fa-caret-right': !brand.collapsed },
-        { 'fa-caret-down': brand.collapsed }
-      )}
-      aria-hidden="true"
-    />
-    <p className="brand-name">{brand.name}</p>
+    <div
+      className="bran-name-container"
+      onClick={() => {
+        if (!brand.brands) {
+          getChildrenBrands(brand.id)
+        }
+        toggleBrand(brand.id)
+      }}
+    >
+      <i
+        className={cn(
+          'fa icon',
+          { 'fa-caret-right': !brand.collapsed },
+          { 'fa-caret-down': brand.collapsed }
+        )}
+        aria-hidden="true"
+      />
+      <div
+        className="brand-name"
+
+      >{brand.name}</div>
+    </div>
     <div className="avatars-container">
       {
-        Object.keys(members).map((memberId, index) =>
-          <div
-            key={index}
-            className="avatar"
-          >
-            <UserAvatar
-              userId={members[memberId].id}
-              name={members[memberId].display_name}
-              image={members[memberId].profile_image_url}
-              size={30}
-            />
-          </div>)
+        Object.keys(members).map((memberId, index) => <Member
+          member={members[memberId]}
+          index={index}
+        />)
       }
       <UserAvatar
         userId="addMember"
