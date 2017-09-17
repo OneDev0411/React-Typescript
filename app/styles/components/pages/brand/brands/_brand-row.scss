@@ -1,8 +1,7 @@
 /* bm-menu */
-%brandRow {
+%brand-row {
   border-radius: 4px;
   background-color: #ffffff;
-  border-bottom: solid 1px #dce5eb;
   overflow: hidden;
   width: 100%;
   height: 60px;
@@ -35,36 +34,34 @@
     color: #c9d7df;
     margin-right: 8px;
   }
-  .edit-button-container {
-    display: inline-block;
+  .delete-button--brand-row {
+    margin: 15px;
     visibility: hidden;
-    .editButton {
-      border-radius: 3px;
-      background-color: #f8fafb;
-      border: solid 1px #dde2e6;
-      text-align: center;
-      font-size: 13px;
-      color: #8da2b5;
-      padding: 2px 17px;
-    }
+    cursor: pointer;
   }
-  .deleteIcon {
-    display: inline-block;
+  .edit-button--brand-row {
+    margin: 11px 0;
     visibility: hidden;
-    color: #8ca2b6;
-    margin-top: 3px;
+    border-radius: 3px;
+    background-color: #f8fafb;
+    border: solid 1px #dde2e6;
+    text-align: center;
+    font-size: 13px;
+    color: #8da2b5;
+    padding: 2px 17px;
+    width: 58px;
   }
   &:hover {
     background-color: #f8fafb;
-    //.delete-icon{
-    //  visibility: visible;
-    //}
-    //.edit-button{
-    //  visibility: visible;
-    //}
-    //.edit-button:hover{
-    //  font-weight: bold;
-    //}
+    .delete-button--brand-row{
+      visibility: visible;
+    }
+    .edit-button--brand-row{
+      visibility: visible;
+    }
+    .edit-button--brand-row:hover{
+      font-weight: bold;
+    }
   }
 }
 

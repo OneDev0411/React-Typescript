@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Grid, Col } from 'react-bootstrap'
+import cn from 'classnames'
 import Row from './Row'
 import { getBrand } from '../../../../../store_actions/brandConsole'
 
@@ -18,17 +19,24 @@ class SubBrands extends React.Component {
   }
 
   onSelectItem(activeItem) {
-    if (activeItem !== this.state.activeItem)
+    if (activeItem !== this.state.activeItem) {
       this.setState({ activeItem })
-    else
+    } else {
       this.setState({ activeItem: null })
+    }
   }
 
   render() {
     const { brands, brandParent } = this.props
-    console.log(brands)
+    console.log(brands, this.props.spinner)
     return (
       <div className="brands">
+        {
+          // this.props.spinner &&
+          <i
+            className={cn('fa fa-spinner fa-pulse fa-fw fa-3x spinner__brands', { hide_spinner: !this.props.spinner })}
+          />
+        }
         <Grid className="table">
           <div className="header">
             <Col md={4} sm={4} xs={4}>Checklist Name</Col>
@@ -51,6 +59,7 @@ class SubBrands extends React.Component {
 export default connect(
   ({ brandConsole, data }) => ({
     brands: brandConsole.brands,
+    spinner: brandConsole.spinner,
     brandParent: data.user.brand
   }),
   ({ getBrand })
