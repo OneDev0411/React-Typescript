@@ -7,7 +7,7 @@ import Sidebar from './Sidebar'
 
 const Brand = () => (
   <div className="brand">
-    <Tab.Container defaultActiveKey="SubBrands">
+    <Tab.Container id="brand-console-tabs" defaultActiveKey="SubBrands">
       <div className="clearfix">
         <Sidebar />
         <div className="rightPanel">

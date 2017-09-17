@@ -28,7 +28,9 @@ function _getChildrenBrands(brandId, brands) {
 
 export function getBrand(brandId) {
   return async (dispatch) => {
+    dispatch({ type: types.SHOW_SPINNER })
     const response = await BrandConsole.getBrands(brandId)
+    dispatch({ type: types.HIDE_SPINNER })
     if (response && !response.error) {
       const { data } = response.body
       dispatch(_getBrand(brandId, data))
@@ -40,7 +42,9 @@ export function getBrand(brandId) {
 
 export function getChildrenBrands(brandId) {
   return async (dispatch) => {
+    dispatch({ type: types.SHOW_SPINNER })
     const response = await BrandConsole.getChildrenBrands(brandId)
+    dispatch({ type: types.HIDE_SPINNER })
     if (response && !response.error) {
       const { data } = response.body
       dispatch(_getChildrenBrands(brandId, data))
