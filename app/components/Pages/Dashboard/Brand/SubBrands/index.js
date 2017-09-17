@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Grid, Col } from 'react-bootstrap'
 import cn from 'classnames'
-import Row from './Row'
+import Teams from './Teams'
 import { getBrand } from '../../../../../store_actions/brandConsole'
 
 class SubBrands extends React.Component {
@@ -39,7 +39,7 @@ class SubBrands extends React.Component {
             <Col md={4} sm={4} xs={4}>Teams name</Col>
           </div>
           {brands &&
-          <Row
+          <Teams
             brands={brands}
             brandParent={brandParent}
           />
