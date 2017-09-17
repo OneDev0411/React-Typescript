@@ -56,17 +56,19 @@ const RegisterForm = ({
   return (
     <div className="signin-page-wrapper c-auth--register clearfix">
       <div className="c-auth--register__houseIcon">
-        <img src="/static/images/signup/house.png" />
+        <img src="/static/images/signup/house.png" alt="rechat house" />
       </div>
       <article className="c-auth">
         <header className="c-auth__header">
-          <Link to="/" tabIndex={-1}>
-            <img
-              src={siteLogo}
-              alt={`${siteTitle} logo`}
-              className={'c-auth__logo'}
-            />
-          </Link>
+          {siteLogo && (
+            <Link to="/" tabIndex={-1}>
+              <img
+                src={siteLogo}
+                alt={`${siteTitle} logo`}
+                className={'c-auth__logo'}
+              />
+            </Link>
+          )}
           <h1 className="c-auth__title tempo">{`${siteTitle}`}</h1>
           <p className="c-auth__subtitle">Thanks! You're almost there...</p>
           <div>

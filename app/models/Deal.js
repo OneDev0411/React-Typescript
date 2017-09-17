@@ -48,10 +48,25 @@ Deal.get.field = function(deal, field) {
 * a helper that extracts address from deal
 */
 Deal.get.address = function(deal) {
-  const street_name = Deal.get.field(deal, 'street_name') || ''
-  const street_address = Deal.get.field(deal, 'street_address') || ''
+  const unitNumber = Deal.get.field(deal, 'unit_number')
+  const city = Deal.get.field(deal, 'city')
 
-  return (street_name + ' ' + street_address).trim()
+  const address = [
+    Deal.get.field(deal, 'street_number') || '',
+    Deal.get.field(deal, 'street_name') || '',
+    Deal.get.field(deal, 'street_suffix') || '',
+    unitNumber ? `, #${unitNumber},` : '',
+    city ? `${city},` : '',
+    Deal.get.field(deal, 'postal_code') || '',
+  ]
+  .join(' ')
+  .trim()
+
+  if (address.slice('-1') === ',') {
+    return address.slice(0, -1)
+  }
+
+  return address
 }
 
 /**
@@ -149,7 +164,7 @@ Deal.addForm = async function (brandId, checklistId, formId) {
  */
 Deal.deleteForm = async function (checklist, formId) {
   if (!checklist.brand) {
-    throw new Error("This user does not belong to any brand")
+    throw new Error('This user does not belong to any brand')
   }
 
   try {
@@ -158,6 +173,17 @@ Deal.deleteForm = async function (checklist, formId) {
 
   } catch (e) {
     return null
+  }
+}
+
+/**
+ * delete a deal
+ */
+Deal.deleteDeal = async function (dealId) {
+  try {
+    await new Fetch().delete(`/deals/${dealId}`)
+  } catch (e) {
+    throw e
   }
 }
 
@@ -291,6 +317,20 @@ Deal.createRole = async function (deal_id, form) {
 }
 
 /**
+* delete role
+*/
+Deal.deleteRole = async function (deal_id, role_id) {
+  try {
+    await new Fetch()
+      .delete(`/deals/${deal_id}/roles/${role_id}`)
+
+    return true
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
 * accept a contract
 */
 Deal.addContract = async function (deal_id, name, order, is_backup, property_type) {
@@ -358,6 +398,20 @@ Deal.getEnvelopes = async function(deal_id) {
 }
 
 /**
+* resend specific envelope
+*/
+Deal.resendEnvelope = async function (id) {
+  try {
+    const response = await new Fetch()
+      .post(`/envelopes/${id}/resend`)
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
 * send envelope
 */
 Deal.sendEnvelope = async function(deal_id, subject, message, attachments, recipients) {
@@ -365,7 +419,7 @@ Deal.sendEnvelope = async function(deal_id, subject, message, attachments, recip
   const data = {
     deal: deal_id,
     title: subject,
-    message: message,
+    body: message,
     documents: attachments,
     recipients: _.map(recipients, recipient => recipient)
   }

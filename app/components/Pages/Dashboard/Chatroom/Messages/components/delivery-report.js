@@ -132,7 +132,8 @@ const DeliveryReport = ({
   room,
   user,
   author,
-  message
+  message,
+  placement = 'right'
 }) => {
 
   if (!room || !author || author.id !== user.id) {
@@ -169,7 +170,7 @@ const DeliveryReport = ({
     <OverlayTrigger
       trigger="click"
       rootClose
-      placement="right"
+      placement={placement}
       overlay={MessageInfo}
     >
       <span

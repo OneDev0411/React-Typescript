@@ -1,4 +1,13 @@
 %deal-tasks {
+  min-width: $deal-tasks-width;
+  max-width: $deal-tasks-width;
+
+  &.expanded {
+    $expanded-width: calc(100% - #{$deal-info-width});
+    min-width: $expanded-width;
+    max-width: $expanded-width;
+  }
+
   .tasks-container {
     padding: $col-padding !important;
     min-height: 100vh;
@@ -18,7 +27,7 @@
 %terminated-btn {
   padding: 5px 10px;
   border-radius: 4px;
-  background-color: #c0ced6;
+  background-color: #f8fafb;
   border: none;
   font-size: 13px;
   font-weight: 500;
@@ -63,11 +72,27 @@
           margin-right: 20px;
         }
         .p-label {
-          display: block;
+          display: inline-block;
           font-size: 10px;
           font-weight: 500;
           color: #d0011b;
           padding-left: 1px;
+          margin-right: 2px;
+          &.BACKUP {
+            color: #8da2b5;
+          }
+          &.TERMINATED {
+            color: #d0011b;
+          }
+          &:after {
+            color: #000;
+            content: ' ― '
+          }
+          &:last-child {
+            &:after {
+              content: ""
+            }
+          }
         }
       }
 
@@ -114,6 +139,7 @@
 
     &.active {
       background: #dce5eb;
+      color: #1d364b;
     }
 
     &:hover {
@@ -121,15 +147,16 @@
     }
 
     &.add-task {
-      background-color: #f0f4f7;
-      color: #8da2b5;
+      background-color: #f8fafb;
       border-radius: 0 0 4px 4px;
+      .title {
+        color: #2196f3;
+      }
       .img-add {
         width: 10px;
       }
-
       &:hover {
-        opacity: 0.7;
+        opacity: 0.8;
       }
     }
 
@@ -168,7 +195,8 @@
       &.Declined {
         background-color: #d0011b;
       }
-      &.Submitted {
+      &.Submitted,
+      &.Notified {
         background-color: #f6a623;
       }
     }
@@ -188,6 +216,7 @@
 
 .deal-checklist-cta-menu {
   ul.dropdown-menu {
+    width: 220px;
     margin: 0;
     padding: 0;
     border: none !important;

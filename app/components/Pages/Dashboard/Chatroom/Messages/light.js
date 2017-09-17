@@ -55,7 +55,7 @@ class Messages extends React.Component {
   }
 
   render() {
-    const { roomId, user } = this.props
+    const { roomId, user, deliveryReportPlacement } = this.props
 
     // get messages of current room
     const messages = roomId ? this.props.messages[roomId] : null
@@ -82,6 +82,7 @@ class Messages extends React.Component {
                   roomId={roomId}
                   message={msg}
                   previousMessage={this.getPreviousMessage(messages.list, msg)}
+                  deliveryReportPlacement={deliveryReportPlacement}
                 />
               </div>
             )

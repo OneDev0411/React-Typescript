@@ -1,6 +1,8 @@
-%info-column {
+%deal-info {
   border-right: 1px solid #e5e5e5;
   background-color: #fff;
+  min-width: $deal-info-width;
+  max-width: $deal-info-width;
 
   .scrollable {
     overflow: auto;
@@ -9,22 +11,50 @@
     max-height: calc(100vh - #{$listing-card-height});
   }
 
-  .mls-viewer-button,
-  .add-contract-button {
+  .deal-info-section {
+    .deal-info-title {
+      width: calc(100% - #{$col-padding};
+      margin-left: $col-padding / 2;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: left;
+      color: #1d364b;
+      border-bottom: 1px solid rgba(220, 225, 229, 0.5);
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+    }
+  }
+
+  .info-btn {
     width: calc(100% - 20px);
     margin: 10px 10px 0 10px;
     height: 34px;
+    line-height: 17px;
     border-radius: 3px;
-    background-color: #ffffff;
+    color: #2196F3;
     border: solid 1px #dde2e6;
+    border-color: #2196F3;
     font-weight: 500;
-    color: #61778d;
+    transition: 0.3s all ease-in;
+
     &:focus {
       outline: none;
+      background-color: #fff;
     }
     &:hover {
-      border-color: #2196F3;
-      color: #2196F3;
+      color: #fff;
+      background-color: #2196F3;
+    }
+  }
+
+  .delete-deal-button {
+    color: #d0011b;
+    border-color: #d0011b;
+    background-color: #fff;
+    margin-bottom: 10px;
+    &:hover {
+      background-color: #d0011b;
+      color: #fff;
     }
   }
 }

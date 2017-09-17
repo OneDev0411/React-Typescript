@@ -613,13 +613,13 @@ export default class ListingViewer extends Component {
 
       right_area = (
         <div className="listing-viewer--navbar" style={nav_bar_style}>
-          <div style={S('pull-right relative r-110 t-7')}>
+          <div style={S('pull-right relative r-20 t-7')}>
             <FavoriteHeart listing={listing} width="40px" height="40px" />
           </div>
-          <Button onClick={this.props.showShareListingModal.bind(this)} style={S(`absolute color-fff r-20 t-15 bg-${login_btn_color} border-1-solid-${login_btn_color}`)} type="button">
+          {/* <Button onClick={this.props.showShareListingModal.bind(this)} style={S(`absolute color-fff r-20 t-15 bg-${login_btn_color} border-1-solid-${login_btn_color}`)} type="button">
             Share
             &nbsp;&nbsp;<i className="fa fa-share" />
-          </Button>
+          </Button> */}
         </div>
       )
     }

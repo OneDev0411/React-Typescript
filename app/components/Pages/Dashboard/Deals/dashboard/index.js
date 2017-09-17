@@ -24,7 +24,7 @@ class DealDetails extends React.Component {
     const { deal, getEnvelopes } = this.props
 
     if (deal === null) {
-      browserHistory.push('/dashboard/deals')
+      return browserHistory.push('/dashboard/deals')
     }
 
     if (!deal.envelopes) {
@@ -58,7 +58,9 @@ class DealDetails extends React.Component {
 
     return (
       <Row className="deal-dashboard">
-        <Col lg={3} md={3} sm={3} className="column info-column">
+        <Col
+          className="column deal-info"
+        >
           <DealInfo
             deal={deal}
             showBackButton={true}
@@ -66,11 +68,8 @@ class DealDetails extends React.Component {
         </Col>
 
         <Col
-          lg={selectedTaskId ? 4 : 9}
-          md={selectedTaskId ? 4 : 9}
-          sm={selectedTaskId ? 4 : 9}
           xs={12}
-          className="column deal-tasks"
+          className={`column deal-tasks ${selectedTaskId ? 'collapsed' : 'expanded'}`}
         >
           <TasksList
             deal={deal}
@@ -80,10 +79,6 @@ class DealDetails extends React.Component {
         </Col>
 
         <Col
-          lg={5}
-          md={5}
-          sm={5}
-          xs={12}
           className="column deal-task-detail"
           style={{ display: selectedTaskId ? 'inherit' : 'none' }}
         >

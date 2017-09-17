@@ -110,8 +110,11 @@ Chatroom.getMessages = async function (
   }
 
   try {
-    return await new Fetch().get(endpoint)
-  } catch (e) {}
+    const response = await new Fetch().get(endpoint)
+    return response.body
+  } catch (e) {
+    throw e
+  }
 }
 
 Chatroom.uploadAttachment = async function (roomId, file) {

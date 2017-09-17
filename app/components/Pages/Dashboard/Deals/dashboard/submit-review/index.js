@@ -28,8 +28,8 @@ class SubmitReview extends React.Component {
 
     try {
       batchActions([
-        changeTaskStatus(task.id, newStatus),
-        changeNeedsAttention(task.id, newStatus === 'Submitted')
+        await changeTaskStatus(task.id, newStatus),
+        await changeNeedsAttention(task.id, newStatus === 'Submitted')
       ])
 
       notify({
@@ -41,6 +41,7 @@ class SubmitReview extends React.Component {
       })
 
     } catch(e) {
+      console.log(e)
       notify({
         title: 'Error',
         message: 'Can not complete your request, please try again.',
@@ -63,7 +64,7 @@ class SubmitReview extends React.Component {
     const status = this.getTaskStatus()
 
     if (submitting) {
-      return <img src="/static/images/deals/pacman.svg" />
+      return 'Working ...'
     }
 
     return status === 'Submitted' ? 'Cancel Submission' : 'Submit'

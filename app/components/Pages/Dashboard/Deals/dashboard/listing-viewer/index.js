@@ -45,13 +45,15 @@ export default class extends React.Component {
 
     return (
       <div>
-        <Button
-          className="mls-viewer-button"
-          disabled={fetching === true}
-          onClick={() => this.onRequestListing()}
-        >
-          { fetching ? 'Loading ...' : `View MLS #${mlsNumber}` }
-        </Button>
+
+        {
+          fetching ?
+          <i className="fa fa-spin fa-spinner" /> :
+          <img
+            src="/static/images/deals/view-listing.svg"
+            onClick={() => this.onRequestListing()}
+          />
+        }
 
         <ListingModal
           listing={listing}

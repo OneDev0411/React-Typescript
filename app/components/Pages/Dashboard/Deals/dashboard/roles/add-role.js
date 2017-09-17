@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Row, Col, Button, FormControl, Modal } from 'react-bootstrap'
+import { Button, FormControl, Modal } from 'react-bootstrap'
+import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import RoleForm from './form'
 import { createRole } from '../../../../../../store_actions/deals'
@@ -25,7 +26,7 @@ class AddRole extends React.Component {
 
   async create() {
     const { form } = this.state
-    const { dealId, createRole } = this.props
+    const { dealId, createRole, notify } = this.props
 
     this.setState({
       saving: true
@@ -35,7 +36,13 @@ class AddRole extends React.Component {
       await createRole(dealId, form)
       this.setState({ show: false })
     } catch (e) {
+      const { attributes } = e.response.body
+      const field = Object.keys(attributes)[0]
 
+      notify({
+        message: `${field} is invalid`,
+        status: 'error'
+      })
     }
 
     this.setState({
@@ -45,25 +52,26 @@ class AddRole extends React.Component {
 
   render() {
     const { show, form, saving } = this.state
+    const buttonDisabled = (form === null) || (saving === true)
 
     return (
       <div>
-        <Row
+        <div
           className="item add-new"
           onClick={() => this.showModal()}
         >
-          <Col sm={2} xs={3} className="vcenter">
+          <div className="role-avatar">
             <span className="add-contact-avatar">
               <i className="fa fa-plus" />
             </span>
-          </Col>
+          </div>
 
-          <Col sm={10} xs={9} className="name vcenter">
+          <div className="name">
             <div style={{ color: '#61778d' }}>
               Add Contact
             </div>
-          </Col>
-        </Row>
+          </div>
+        </div>
 
         <Modal
           show={show}
@@ -71,7 +79,7 @@ class AddRole extends React.Component {
           dialogClassName="modal-deal-add-role"
         >
           <Modal.Header closeButton>
-            <Modal.Title>Add new role</Modal.Title>
+            <Modal.Title>Add contact</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
@@ -82,10 +90,12 @@ class AddRole extends React.Component {
 
           <Modal.Footer>
             <Button
-              disabled={form === null || saving === true}
+              className={`btn-deal ${buttonDisabled ? 'disabled': ''}`}
+              bsStyle={buttonDisabled ? "link" : "primary"}
+              disabled={buttonDisabled}
               onClick={() => this.create()}
             >
-              Add Role
+              { saving ? 'Saving...' : 'Add' }
             </Button>
           </Modal.Footer>
         </Modal>
@@ -94,4 +104,4 @@ class AddRole extends React.Component {
   }
 }
 
-export default connect(null, { createRole })(AddRole)
+export default connect(null, { createRole, notify })(AddRole)

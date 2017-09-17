@@ -20,10 +20,14 @@ export default ({
   return (
     <div className="file">
       <div className="title">Uploads</div>
-      <div className="file-group">
-        <FileAttachments attachments={attachments} />
-        <UploadFile task={task} />
-      </div>
+      {
+        attachments.length > 0 &&
+        <div className="file-group">
+          <FileAttachments attachments={attachments} />
+        </div>
+      }
+
+      <UploadFile task={task} />
     </div>
   )
 }

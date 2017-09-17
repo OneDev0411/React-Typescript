@@ -1,6 +1,6 @@
 %deal-comments {
   margin-left: 0;
-  background: #fff;
+  background: #f8fafb;
   position: relative;
 
   .comment-heading {
@@ -12,7 +12,11 @@
 
   .messages {
     height: auto;
-    margin-bottom: 20px;
+    margin: 0 10px 20px 10px;
+    background-color: #fff;
+    border: 1px solid #dce5eb;
+    border-radius: 3px;
+
     .messages-list {
       margin-top: 10px;
       min-height: auto !important;
@@ -66,6 +70,7 @@
     border: solid 1px #e6eaec;
     margin-left: 3px;
     margin-bottom: 3px;
+    transition: 0.2s all ease-in;
 
     &.decline-comment, &.approve-comment, &.close-comment {
       &:hover {
@@ -87,11 +92,21 @@
       background-color: transparent;
     }
 
-    &.add-comment {
-      width: 100px;
-      background-color: #2196f3;
-      color: #fff;
-      border: none;
+    &.add-comment,
+    &.notify-admin {
+      transition: 0.1s ease-in all;
+      &:hover {
+        color: #78909c;
+      }
+
+      &.enabled {
+        border: solid 1px #2196f3;
+        color: #2196f3;
+        &:hover {
+          color: #fff;
+          background-color: #2196f3;
+        }
+      }
     }
 
     &.close-task {

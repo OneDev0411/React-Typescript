@@ -83,7 +83,7 @@ class SelectDocumentModal extends React.Component {
               .filter(task => {
                 return task.task_type === 'Form' &&
                   task.deal === dealId &&
-                  task.submission
+                  task.submission &&
                   task.submission.state === 'Fair'
               })
               .map(task => {

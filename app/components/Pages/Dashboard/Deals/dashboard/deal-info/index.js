@@ -1,9 +1,9 @@
 import React from 'react'
 import ListingCard from '../listing-card'
-import ListingViewer from '../listing-viewer'
 import FactSheet from '../factsheet'
 import Roles from '../roles'
 import AddContract from '../add-contract'
+import DeleteDeal from '../delete-deal'
 
 export default ({
   deal,
@@ -20,15 +20,15 @@ export default ({
         deal={deal}
       />
 
-      <ListingViewer
-        deal={deal}
-      />
-
       <Roles
         deal={deal}
       />
 
       <FactSheet
+        deal={deal}
+      />
+
+      <DeleteDeal
         deal={deal}
       />
     </div>

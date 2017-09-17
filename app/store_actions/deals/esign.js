@@ -28,3 +28,18 @@ export function closeEsign() {
     type: types.CLOSE_ESIGN,
   }
 }
+
+export function setEnvelopes(deal_id, envelopes) {
+  return {
+    type: types.SET_ENVELOPES,
+    deal_id,
+    envelopes
+  }
+}
+
+export function getEnvelopes(deal_id) {
+  return async (dispatch) => {
+    const envelopes = await Deal.getEnvelopes(deal_id)
+    dispatch(setEnvelopes(deal_id, envelopes))
+  }
+}

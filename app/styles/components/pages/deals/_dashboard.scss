@@ -1,5 +1,7 @@
 $col-padding: 20px;
-$listing-card-height: 180px;
+$listing-card-height: 210px;
+$deal-info-width: 300px;
+$deal-tasks-width: 388px;
 
 @mixin scrollbar($color: transparent, $shadow: transparent) {
   ::-webkit-scrollbar {
@@ -33,13 +35,13 @@ $listing-card-height: 180px;
 @import './dashboard/_task_detail';
 @import './dashboard/_fact_sheet';
 @import './dashboard/_roles';
+@import './dashboard/_esign';
+@import './dashboard/_esign_send';
 @import './dashboard/_task_creator';
 @import './dashboard/_listing_card';
 @import './dashboard/_comment';
 @import './dashboard/_files';
 @import './dashboard/_edit_form';
-@import './dashboard/_esign_document_modal';
-@import './dashboard/_esign_send';
 @import './dashboard/_form_viewer';
 @import './dashboard/_form_context';
 
@@ -60,9 +62,10 @@ $listing-card-height: 180px;
     @include scrollbar();
     padding: 0;
     height: auto;
-    &.info-column {
-      @extend %info-column;
-    }
+  }
+
+  .deal-info {
+    @extend %deal-info;
   }
 
   .deal-tasks {

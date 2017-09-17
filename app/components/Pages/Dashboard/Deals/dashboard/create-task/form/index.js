@@ -52,17 +52,17 @@ class CreateForm extends React.Component {
     const { dealId, listId, forms } = this.props
 
     return (
-      <div className="creator task-form">
+      <div
+        className="creator task-form"
+        onClick={() => this.displayForm(true)}
+      >
 
-        <div
-          className="title"
-          onClick={() => this.displayForm(true)}
-        >
+        <div className="title" >
           <img
             className="img-add"
             src="/static/images/deals/plus.svg"
           />&nbsp;
-          Add new task
+          Add new item (Documents, tasks, ...)
         </div>
 
         <TaskName

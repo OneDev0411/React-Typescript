@@ -117,7 +117,7 @@ class DealCreate extends React.Component {
    */
   createNewListing(address_components) {
     const { type } = this.props
-    const { street_number, street_address, unit_number, city, state, zipcode } = address_components
+    const { street_number, street_name, unit_number, city, state, postal_code } = address_components
     const { property_type } = this.state
 
     const side = (type === 'offer') ? 'Buying' : 'Selling'
@@ -125,10 +125,10 @@ class DealCreate extends React.Component {
     // create full address
     let full_address = [
       street_number,
-      street_address,
+      street_name,
       city,
       state,
-      zipcode
+      postal_code
     ].join(' ').trim()
 
     const data = {
@@ -137,11 +137,11 @@ class DealCreate extends React.Component {
       deal_context: {
         full_address,
         street_number,
-        street_address,
         unit_number,
         city,
         state,
-        zipcode
+        street_name,
+        postal_code
       }
     }
 
@@ -159,7 +159,10 @@ class DealCreate extends React.Component {
 
     try {
       // create deal
-      const deal = await createDeal(data)
+      const deal = await Deal.create(data)
+
+      // dispatch new deal
+      await createDeal(deal)
 
       // navigate to the deal
       browserHistory.push(`/dashboard/deals/${deal.id}`)

@@ -54,7 +54,7 @@ class BaseTable extends React.Component {
    *
    */
   getAddress(deal) {
-    const address = Deal.get.field(deal, 'full_address')
+    const address = Deal.get.address(deal)
 
     return (
       <Row>

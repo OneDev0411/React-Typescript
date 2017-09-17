@@ -2,7 +2,7 @@
   position: relative;
   background-color: #4e5c6c;
   min-height: $listing-card-height;
-  img {
+  img.listing-photo {
     width: 100%;
     min-height: $listing-card-height;
     max-height: $listing-card-height;
@@ -33,41 +33,49 @@
   .placeholder {
     position: absolute;
     width: 50px;
+    top: 25%;
     left: calc(50% - 25px);
-  }
-
-  .listing-status {
-    border-radius: 3px;
-    background-color: #35b863;
-    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
-    text-shadow: none;
-    padding: 4px 7px;
-    font-size: 14px;
-    letter-spacing: -0.5px;
-    font-weight: normal;
-    text-align: center;
-    height: 16px;
   }
 
   .data {
     position: absolute;
-    bottom: 10px;
-    left: 20px;
-    font-size: 18px;
-    font-weight: bold;
-    letter-spacing: -0.9px;
-    text-align: left;
-    color: #ffffff;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    min-height: 60px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px 16px;
+    color: #fff;
+    display: flex;
+    align-items: top;
+    transition: all 0.3s ease-in;
 
-    .title {
-      margin-top: 10px;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.7);
     }
 
-    .addr {
-      font-size: 13px;
-      font-weight: normal;
-      text-shadow: none;
+    .address-info {
+      width: 90%;
+      .title {
+        font-size: 19px;
+        font-weight: bold;
+      }
+
+      .addr {
+        color: #c9d7df;
+        font-size: 14px;
+      }
+    }
+
+    .view {
+      width: 10%;
+      text-align: right;
+
+      img, i {
+        margin-top: 10px;
+        width: 16px;
+        cursor: pointer;
+      }
     }
   }
 }

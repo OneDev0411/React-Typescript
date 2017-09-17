@@ -11,6 +11,10 @@ const TaskStatus = ({
     status = 'NEEDS ATTENTION'
   }
 
+  if (!isBackoffice && status !== 'Submitted' && task.needs_attention) {
+    status = 'Notified'
+  }
+
   return (
     <span className={`status ${status}`}>
       { status.toUpperCase() }

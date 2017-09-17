@@ -8,7 +8,8 @@ export default ({
   user,
   roomId,
   message,
-  previousMessage
+  previousMessage,
+  deliveryReportPlacement
 }) => {
   // get message author
   const author = messageUtil.getAuthor(message)
@@ -23,7 +24,14 @@ export default ({
   const hasAttachments = message.attachments && message.attachments.length > 0
 
   // create props object
-  const props = { user, roomId, author, message, previousMessage }
+  const props = {
+    user,
+    roomId,
+    author,
+    message,
+    previousMessage,
+    deliveryReportPlacement
+  }
 
   /*
    * check message is a a single/info message or not

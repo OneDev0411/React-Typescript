@@ -27,13 +27,15 @@ const Reset = ({
     <div className="signin-page-wrapper">
       <article className="c-auth">
         <header className="c-auth__header">
-          <Link to="/" tabIndex={-1}>
-            <img
-              src={siteLogo}
-              alt={`${siteTitle} logo`}
-              className={'c-auth__logo'}
-            />
-          </Link>
+          {siteLogo && (
+            <Link to="/" tabIndex={-1}>
+              <img
+                src={siteLogo}
+                alt={`${siteTitle} logo`}
+                className={'c-auth__logo'}
+              />
+            </Link>
+          )}
           <h1 className="c-auth__title tempo">{`${siteTitle}`}</h1>
           {!submitSuccessfully && (
             <p className="c-auth__subtitle">Reset your password</p>

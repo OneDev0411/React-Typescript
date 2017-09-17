@@ -2,6 +2,12 @@ import types from '../../constants/deals'
 
 export default (state = null, action) => {
   switch (action.type) {
+    case types.GET_DEALS_FAILED:
+      return {}
+
+    case types.DELETE_DEAL:
+      return _.omit(state, checklist => checklist.deal === action.deal_id)
+
     case types.GET_CHECKLISTS:
       return {
         ...state,

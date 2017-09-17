@@ -12,6 +12,7 @@ class CommentCreate extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      comment: '',
       rows: 2,
       height: 40,
     }
@@ -19,10 +20,6 @@ class CommentCreate extends React.Component {
 
   onHeightChangeHandler(height) {
     this.setState({ height: height + 5 })
-  }
-
-  setReference(ref) {
-    this.text_message = ref
   }
 
   onCommentSaved() {
@@ -37,8 +34,7 @@ class CommentCreate extends React.Component {
    */
   async sendComment(needs_attention = null, task_status = null) {
     const { task, user, changeTaskStatus, changeNeedsAttention, notify } = this.props
-    const el = this.text_message
-    const comment = el.value
+    const { comment } = this.state
 
     if (comment) {
       const message = {
@@ -53,8 +49,10 @@ class CommentCreate extends React.Component {
     }
 
     // clear message box
-    this.text_message.value = ''
-    this.setState({ rows: 1 })
+    this.setState({
+      comment: '',
+      rows: 1
+    })
 
     try {
       if (needs_attention !== null) {
@@ -80,7 +78,7 @@ class CommentCreate extends React.Component {
   }
 
   render() {
-    const { rows, height } = this.state
+    const { comment, rows, height } = this.state
     const { task, noCloseButton, onCloseTask } = this.props
 
     return (
@@ -92,7 +90,8 @@ class CommentCreate extends React.Component {
           rows={rows}
           maxRows={3}
           style={{ width: '100%', height: `${height}px`}}
-          inputRef={ref => this.setReference(ref)}
+          value={comment}
+          onChange={e => this.setState({ comment: e.target.value })}
           onHeightChange={height => this.onHeightChangeHandler(height)}
         />
 
@@ -115,6 +114,7 @@ class CommentCreate extends React.Component {
             style={{ textAlign: 'right'}}
           >
             <ActionButtons
+              hasComment={comment.length > 0}
               task={task}
               onSendComment={(notify, status) => this.sendComment(notify, status)}
             />

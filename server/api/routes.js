@@ -9,6 +9,7 @@ const routes = {
   intercom: [['signin'], ['signup']],
   listing: [['search'], ['listings']],
   message: [['messages']],
+  deal: [['docusign-login'], ['envelope-sign']],
   notification: [
     ['all'],
     ['delete'],

@@ -2,19 +2,33 @@ import React from 'react'
 import _ from 'underscore'
 import { browserHistory } from 'react-router'
 import Deal from '../../../../../../models/Deal'
+import ListingViewer from '../listing-viewer'
 
+function getHomeAddress(deal) {
+  const unitNumber = Deal.get.field(deal, 'unit_number')
 
-/**
- * get listing formatted address
- */
-function getListingAddress(deal) {
   return [
-    Deal.get.field(deal, 'state'),
-    Deal.get.field(deal, 'city'),
-    Deal.get.field(deal, 'postal_code')
+    Deal.get.field(deal, 'street_number'),
+    Deal.get.field(deal, 'street_name'),
+    Deal.get.field(deal, 'street_suffix'),
+    unitNumber ? `, #${unitNumber}` : null
   ]
   .filter(item => item !== null)
-  .join(', ')
+  .join(' ')
+}
+
+function getListingAddress(deal) {
+  const city = Deal.get.field(deal, 'city')
+  const state = Deal.get.field(deal, 'state_code')
+  const postalCode = Deal.get.field(deal, 'postal_code')
+
+  return [
+    city ? `${city},` : null,
+    state,
+    postalCode
+  ]
+  .filter(item => item !== null)
+  .join(' ')
 }
 
 function goBack() {
@@ -43,7 +57,10 @@ export default ({
 
       {
         photo &&
-        <img src={photo} />
+        <img
+          className="listing-photo"
+          src={photo}
+        />
       }
 
       {
@@ -56,19 +73,21 @@ export default ({
 
       <div className="data">
 
-        {
-          status &&
-          <span className="listing-status">
-            { status }
-          </span>
-        }
+        <div className="address-info">
+          <div className="title">
+            { getHomeAddress(deal) }
+          </div>
 
-        <div className="title">
-          { Deal.get.field(deal, 'street_address') }
+          <div className="addr">
+            { getListingAddress(deal) }
+          </div>
         </div>
 
-        <div className="addr">
-          { getListingAddress(deal) }
+        <div className="view">
+
+          <ListingViewer
+            deal={deal}
+          />
         </div>
       </div>
 
