@@ -1,12 +1,14 @@
 import React from 'react'
 import cn from 'classnames'
-import { Popover, OverlayTrigger, Checkbox, Button } from 'react-bootstrap'
+import { Popover, OverlayTrigger } from 'react-bootstrap'
 import UserAvatar from '../../../../Partials/UserAvatar'
 
 
-const Row = ({
+const Member = ({
   member,
-  index
+  roles,
+  deleteMembers,
+  addMembers
 }) => {
   const popoverHoverFocus = (
     <Popover
@@ -15,19 +17,26 @@ const Row = ({
     >
       <strong>Member Roles:</strong>
       {
-        member.roles.map((role, index) =>
-          <div
+        roles.map((role, index) => {
+          let active = member.roles[role.id]
+          return <div
             key={index}
             className="row-container"
-            onClick={() => {}}
+            onClick={() => {
+              if (active) {
+                deleteMembers(member.roles[role.id], member.id)
+              } else {
+                addMembers(role, { users: [member.id] })
+              }
+            }}
           >
             <i
-              className="fa fa-check check-box-icon"
+              className={cn('fa fa-check check-box-icon', { active })}
               aria-hidden="true"
             />
-            {role}
+            {role.role}
           </div>
-        )
+        })
       }
     </Popover>
   )
@@ -37,7 +46,6 @@ const Row = ({
     placement="bottom"
     rootClose
     overlay={popoverHoverFocus}
-    key={index}
   >
     <div
       className="avatar"
@@ -52,4 +60,4 @@ const Row = ({
   </OverlayTrigger>
 }
 
-export default Row
+export default Member

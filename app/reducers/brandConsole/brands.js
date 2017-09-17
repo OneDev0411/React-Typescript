@@ -17,7 +17,7 @@ export default (state = {}, action) => {
         ...state,
         [action.brandId]: action.brand
       }
-    case types.GET_CHILDREN_BRANDS:
+    case types.GET_CHILDREN_BRANDS: {
       let arrayToObject = {}
       action.brands.forEach(brand =>
         arrayToObject[brand.id] = brand
@@ -32,8 +32,9 @@ export default (state = {}, action) => {
         },
         ...arrayToObject
       }
-    case types.DELETE_BRAND:
-      let stateClone = state.slice()
+    }
+    case types.DELETE_BRAND: {
+      let stateClone = Object.assign({}, state)
       delete stateClone[action.brand.id]
       for (let i = 0; i < stateClone[action.brand.parent].brands.length; i++) {
         if (stateClone[action.brand.parent].brands[i] === action.brand.id) {
@@ -41,6 +42,30 @@ export default (state = {}, action) => {
         }
       }
       return stateClone
+    }
+    case types.DELETE_MEMBER: {
+      let stateClone = Object.assign({}, state)
+      stateClone[action.role.brand].roles.forEach(role => {
+        if (role.id === action.role.id) {
+          for (let j = 0; j < role.members.length; j++) {
+            if (role.members[j].id === action.member_id) {
+              role.members.splice(j, 1)
+              break
+            }
+          }
+        }
+      })
+      return stateClone
+    }
+    case types.ADD_MEMBER: {
+      let stateClone = Object.assign({}, state)
+      stateClone[action.role.brand].roles.forEach(role => {
+        if (role.id === action.role.id) {
+          role.members = action.members
+        }
+      })
+      return stateClone
+    }
     default:
       return state
   }

@@ -4,7 +4,7 @@ import { Panel, Button } from 'react-bootstrap'
 import BrandHeader from './BrnadHaedr'
 import ModalBrand from './ModalBrand'
 import { addBrand } from '../../../../../store_actions/brandConsole'
-const Row = ({
+const Teams = ({
   brands,
   brandParent,
   addBrand
@@ -65,4 +65,4 @@ const Row = ({
 export default connect(
   null,
   ({ addBrand })
-)(Row)
+)(Teams)

@@ -5,40 +5,45 @@ import cn from 'classnames'
 import UserAvatar from '../../../../Partials/UserAvatar'
 import ModalBrand from './ModalBrand'
 import Member from './Member'
-import { getChildrenBrands, toggleBrand, editBrand, deleteBrand } from '../../../../../store_actions/brandConsole'
+import {
+  getChildrenBrands,
+  toggleBrand,
+  editBrand,
+  deleteBrand,
+  deleteMembers,
+  addMembers
+} from '../../../../../store_actions/brandConsole'
 
 
-const Row = ({
+const BrandHeader = ({
   brand,
   getChildrenBrands,
   toggleBrand,
   editBrand,
-  deleteBrand
+  deleteBrand,
+  deleteMembers,
+  addMembers
 }) => {
+  console.log(brand)
   const EditButton = ({
     clickHandler
-  }) =>
-    (<Button
-      className="edit-button--brand-row"
-      onClick={() => clickHandler()}
-    >
-        Edit
-    </Button>
-    )
+  }) => <Button
+    className="edit-button--brand-row"
+    onClick={() => clickHandler()}
+  >
+    Edit
+  </Button>
   let members = {}
   if (brand.roles) {
     brand.roles.forEach(role =>
       role.members.map(member => {
-        if (!members[member.id]) {
-          members[member.id] = {
-            ...member,
-            roles: [role.role]
-          }
-        } else if (members[member.id].roles.indexOf(role.role) < 0) {
-          members[member.id].roles.push(role.role)
+        let roles = members[member.id] ? members[member.id].roles : {}
+        roles[role.id] = role
+        members[member.id] = {
+          ...member,
+          roles
         }
-      }
-      )
+      })
     )
   }
 
@@ -69,9 +74,12 @@ const Row = ({
     </div>
     <div className="avatars-container">
       {
-        Object.keys(members).map((memberId, index) => <Member
+        Object.keys(members).map(memberId => <Member
+          key={memberId}
           member={members[memberId]}
-          index={index}
+          roles={brand.roles}
+          deleteMembers={deleteMembers}
+          addMembers={addMembers}
         />)
       }
       <UserAvatar
@@ -109,5 +117,12 @@ const Row = ({
 
 export default connect(
   null,
-  ({ getChildrenBrands, toggleBrand, editBrand, deleteBrand })
-)(Row)
+  ({
+    getChildrenBrands,
+    toggleBrand,
+    editBrand,
+    deleteBrand,
+    deleteMembers,
+    addMembers
+  })
+)(BrandHeader)
