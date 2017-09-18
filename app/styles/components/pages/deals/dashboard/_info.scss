@@ -1,3 +1,7 @@
+.deal-info {
+  @extend %deal-info;
+}
+
 %deal-info {
   border-right: 1px solid #e5e5e5;
   background-color: #fff;

@@ -1,3 +1,7 @@
+.deal-edit-form {
+  @extend %deal-edit-form;
+}
+
 %deal-edit-form {
   z-index: 20;
   position: fixed;

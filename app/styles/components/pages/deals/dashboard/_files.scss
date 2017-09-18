@@ -1,3 +1,7 @@
+.deal-files-container {
+  @extend %deal-files-container;
+}
+
 .deal-file-cta-menu {
   display: inline;
   .cta-btn {

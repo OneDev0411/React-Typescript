@@ -1,3 +1,7 @@
+.deal-tasks {
+  @extend %deal-tasks;
+}
+
 %deal-tasks {
   min-width: $deal-tasks-width;
   max-width: $deal-tasks-width;

@@ -1,3 +1,7 @@
+.deal-roles {
+  @extend %deal-roles;
+}
+
 .modal-deal-add-role {
   .modal-content {
     border-radius: 6px;

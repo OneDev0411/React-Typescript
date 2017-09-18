@@ -1,3 +1,7 @@
+.deal-task-detail {
+  @extend %deal-task-detail;
+}
+
 %deal-task-detail {
   $width: calc(100% - #{$deal-info-width} - #{$deal-tasks-width} - #{$col-padding});
   min-width: $width;

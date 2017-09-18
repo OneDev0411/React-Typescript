@@ -1,3 +1,7 @@
+.deal-fact-sheet {
+  @extend %deal-fact-sheet;
+}
+
 %deal-fact-sheet {
   background: #fff;
   padding: $col-padding 0;

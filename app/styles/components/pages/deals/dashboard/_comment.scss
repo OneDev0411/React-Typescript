@@ -1,3 +1,11 @@
+.deal-comments {
+  @extend %deal-comments;
+}
+
+.deal-comment-create {
+  @extend %deal-comment-create;
+}
+
 %deal-comments {
   margin-left: 0;
   background: #f8fafb;

@@ -64,44 +64,4 @@ $deal-tasks-width: 388px;
     padding: 0;
     height: auto;
   }
-
-  .deal-info {
-    @extend %deal-info;
-  }
-
-  .deal-tasks {
-    @extend %deal-tasks;
-  }
-
-  .deal-task-detail {
-    @extend %deal-task-detail;
-  }
-
-  .deal-fact-sheet {
-    @extend %deal-fact-sheet;
-  }
-
-  .deal-roles {
-    @extend %deal-roles;
-  }
-
-  .deal-comments {
-    @extend %deal-comments;
-  }
-
-  .deal-comment-create {
-    @extend %deal-comment-create;
-  }
-
-  .deal-files-container {
-    @extend %deal-files-container;
-  }
-
-  .deal-edit-form {
-    @extend %deal-edit-form;
-  }
-
-  .listing-card {
-    @extend %deal-listing-card;
-  }
 }
