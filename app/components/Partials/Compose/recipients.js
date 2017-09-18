@@ -62,7 +62,7 @@ export default class extends React.Component {
           type="text"
           ref={ref => this.setInputRef(ref)}
           placeholder={_.size(recipients) === 0 ? 'Enter name, email or phone' : '' }
-          maxLength={30}
+          maxLength={254}
         />
       </div>
     )
