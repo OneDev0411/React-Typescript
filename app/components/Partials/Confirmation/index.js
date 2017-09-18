@@ -20,6 +20,12 @@ const Confirmation = ({
               __html: confirmation.message
             }}
           />
+          {
+            confirmation.description &&
+            <div className="confirmation-descr">
+              { confirmation.description}
+            </div>
+          }
 
           <div className="cta">
 
