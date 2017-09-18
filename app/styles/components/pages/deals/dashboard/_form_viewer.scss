@@ -72,19 +72,17 @@
     padding: 0;
     margin: 0;
     @extend %deal-dashboard;
-    @extend %deal-comments;
-    @extend %deal-comment-create;
-    @extend %deal-info;
     overflow: hidden;
     box-shadow: none;
 
-    .wrapper {
+    .fw-wrapper {
       width: 100%;
-      margin-right: 0;
-      margin-left: 0;
+      display: flex;
+      flex-direction: row;
     }
 
     .factsheet {
+      @extend %deal-info;
       padding: 0;
       background-color: #fff;
       border-right: 1px solid #c9d7df;
@@ -95,13 +93,18 @@
     }
 
     .comments {
+      @extend %deal-comments;
+      @extend %deal-comment-create;
+
       padding: 0 !important;
+      margin: 0 !important;
+      overflow-x: hidden !important;
       background-color: #fff;
       border-left: 1px solid #c9d7df;
       position: relative;
       min-height: 91vh;
-        max-height: 91vh;
-        overflow: auto;
+      max-height: 91vh;
+      overflow: auto;
 
       .comment-heading {
         margin: 20px 10px;
@@ -111,10 +114,15 @@
       }
 
       .deal-comments {
+        margin-top: 0 !important;
+        background-color: #fff;
         .messages {
           min-height: 70vh;
           max-height: 70vh;
           overflow: auto;
+          border: none;
+          padding: 0;
+          margin: 0;
         }
       }
     }
