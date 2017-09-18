@@ -4,8 +4,8 @@ export default ({ color = '#4E5C6C', width = 24, height = 24 }) => (
   <svg
     width={width}
     height={height}
-    xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 23"
+    xmlns="http://www.w3.org/2000/svg"
   >
     <g fill="none" fillRule="evenodd" stroke={color} strokeLinejoin="round">
       <path

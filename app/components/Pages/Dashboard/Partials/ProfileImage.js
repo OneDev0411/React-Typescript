@@ -60,7 +60,7 @@ export default class ProfileImage extends Component {
 
     let width_height
     if (!this.props.size) {
-      width_height = 'w-40 h-40'
+      width_height = 'w-48 h-48'
     } else {
       width_height = `w-${this.props.size} h-${this.props.size}`
     }
@@ -84,7 +84,7 @@ export default class ProfileImage extends Component {
       )
     }
     return (
-      <div style={S('inline')}>
+      <div style={S(`inline-block ${width_height}`)}>
         <div className="img-circle" style={profile_image_style}>
           {show_online_indicator && online_indicator}
           {initials}

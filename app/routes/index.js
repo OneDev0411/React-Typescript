@@ -278,7 +278,10 @@ export default (
     <Route path="/" component={AppLayout} onEnter={authenticate}>
       <Route path="/branch" component={AsyncBranch} />
 
-      <Route path="/account/upgrade" component={AsyncUpgradeAccount} />
+      <Route path="dashboard/account">
+        <IndexRoute component={() => <h1>User Account Area</h1>} />
+        <Route path="upgrade" component={AsyncUpgradeAccount} />
+      </Route>
 
       <Route path="/widgets/map" component={AsyncMapWidget} />
       <Route path="/widgets/search" component={AsyncSearchWidget} />
@@ -307,10 +310,14 @@ export default (
         <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
       </Route>
 
-      <Route path="/dashboard/deals(/filter/:filter)" component={AsyncDealsLayout}>
+      <Route
+        path="/dashboard/deals(/filter/:filter)"
+        component={AsyncDealsLayout}
+      >
         <IndexRoute component={AsyncDealsList} />
         <Route path="/dashboard/deals/:id" component={AsyncDealDashboard} />
       </Route>
+
       <Route path="/dashboard/brand" component={Brand} />
 
       <Route path="/dashboard/recents(/:roomId)">
