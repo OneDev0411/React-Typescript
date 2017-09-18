@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
-import { editForm } from '../../../../../../store_actions/deals/forms'
-import ESignButton from '../esign/button'
-import FormViewer from '../form-viewer'
+import { editForm } from '../../../../../../../store_actions/deals/forms'
+import ESignButton from '../../esign/button'
+import FormViewer from '../../form-viewer'
 
 class Form extends React.Component {
   constructor(props) {
