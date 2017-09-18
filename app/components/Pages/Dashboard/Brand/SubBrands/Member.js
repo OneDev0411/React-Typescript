@@ -26,7 +26,7 @@ const Member = ({
               if (active) {
                 deleteMembers(member.roles[role.id], member.id)
               } else {
-                addMembers(role, { users: [member.id] })
+                addMembers(role.brand, role.id, { users: [member.id] })
               }
             }}
           >
