@@ -6,10 +6,6 @@ import Comments from '../comments'
 import CommentInput from '../comments/input'
 import PdfViewer from '../../../../../Partials/Pdf/Viewer'
 
-const COMMENTS_WIDTH = 3
-const FACTSHEET_WIDTH = 3
-const PDF_WIDTH = 6
-
 class FormViewer extends React.Component {
   constructor(props) {
     super(props)
@@ -36,15 +32,9 @@ class FormViewer extends React.Component {
     const { deal, task, form, isActive, onClose} = this.props
     const { name, url } = form
 
-    let pdfWidth = PDF_WIDTH
-
-    if (showFactsheet === false) {
-      pdfWidth += FACTSHEET_WIDTH
-    }
-
-    if (showComments === false) {
-      pdfWidth += COMMENTS_WIDTH
-    }
+    const COMMENTS_WIDTH = showComments ? '300px' : '0px'
+    const FACTSHEET_WIDTH = showFactsheet ? '300px' : '0px'
+    const PDF_WIDTH = `calc(100% - ${COMMENTS_WIDTH} - ${FACTSHEET_WIDTH})`
 
     return (
       <Modal
@@ -85,35 +75,41 @@ class FormViewer extends React.Component {
         </Modal.Header>
 
         <Modal.Body>
-          <Row className="wrapper">
-            <Col
+          <div className="fw-wrapper">
+            <div
               className="factsheet"
-              md={FACTSHEET_WIDTH}
-              lg={FACTSHEET_WIDTH}
-              style={{ display: showFactsheet ? 'block' : 'none '}}
+              style={{
+                display: showFactsheet ? 'block' : 'none',
+                minWidth: FACTSHEET_WIDTH,
+                maxWidth: FACTSHEET_WIDTH
+              }}
             >
               <DealInfo
                 deal={deal}
                 showBackButton={false}
               />
-            </Col>
+            </div>
 
-            <Col
-              md={pdfWidth}
-              lg={pdfWidth}
+            <div
+              style={{
+                minWidth: PDF_WIDTH,
+                maxWidth: PDF_WIDTH
+              }}
               className="pdf-viewer"
             >
               <PdfViewer
                 uri={url}
                 scale="auto"
               />
-            </Col>
+            </div>
 
-            <Col
+            <div
               className="comments"
-              md={COMMENTS_WIDTH}
-              lg={COMMENTS_WIDTH}
-              style={{ display: showComments ? 'block' : 'none '}}
+              style={{
+                display: showComments ? 'block' : 'none',
+                minWidth: COMMENTS_WIDTH,
+                maxWidth: COMMENTS_WIDTH
+              }}
             >
               <Comments
                 task={task}
@@ -123,8 +119,8 @@ class FormViewer extends React.Component {
                 noCloseButton
                 task={task}
               />
-            </Col>
-          </Row>
+            </div>
+          </div>
 
         </Modal.Body>
       </Modal>
