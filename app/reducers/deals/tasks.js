@@ -76,6 +76,19 @@ export default (state = null, action) => {
         }
       }
 
+    case types.DELETE_ATTACHMENT:
+      return {
+        ...state,
+        [action.task_id]: {
+          ...state[action.task_id],
+          room: {
+            ...state[action.task_id].room,
+            attachments: state[action.task_id].room.attachments
+              .filter(file => file.id !== action.file_id)
+          }
+        }
+      }
+
     default:
       return state
   }

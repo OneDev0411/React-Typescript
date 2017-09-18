@@ -26,6 +26,14 @@ function needsAttention(taskId, status) {
   }
 }
 
+function attachmentDeleted(task, file_id) {
+  return {
+    type: types.DELETE_ATTACHMENT,
+    task_id: task.id,
+    file_id
+  }
+}
+
 export function setTasks(tasks) {
   return {
     type: types.GET_TASKS,
@@ -38,6 +46,13 @@ export function setIsUploading(taskId, status) {
     type: types.IS_UPLOADING,
     taskId,
     status
+  }
+}
+
+export function deleteAttachment(task, fileId) {
+  return async (dispatch) => {
+    await Deal.deleteAttachment(task.room.id, fileId)
+    dispatch(attachmentDeleted(task, fileId))
   }
 }
 
