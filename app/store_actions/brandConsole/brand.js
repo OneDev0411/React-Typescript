@@ -54,13 +54,6 @@ export function getChildrenBrands(brandId) {
   }
 }
 
-function _addBrand(brand) {
-  return {
-    type: types.ADD_BRAND,
-    brand
-  }
-}
-
 export function addBrand(brand) {
   return async (dispatch) => {
     dispatch({ type: types.SHOW_SPINNER })
@@ -68,7 +61,17 @@ export function addBrand(brand) {
     dispatch({ type: types.HIDE_SPINNER })
     if (response && !response.error) {
       const { data } = response.body
-      dispatch(_getChildrenBrands(brand.parent, [data]))
+      const responseAddRole = await BrandConsole.addRole({ brand: data.id }, { role: 'admin' })
+      if (responseAddRole) {
+        const role = responseAddRole.body.data
+        dispatch(_getChildrenBrands(brand.parent,
+          [{
+            ...data,
+            roles: [role]
+          }]
+        ))
+      }
+
     } else {
       dispatch(notify({ message: `addBrand: ${response.error.message}`, status: response.error.statusCode }))
     }

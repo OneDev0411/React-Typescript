@@ -19,22 +19,23 @@ export function getMembers(role) {
   }
 }
 
-function _addMembers(role, members) {
+function _addMembers(brandId, roleId, members) {
   return {
     type: types.ADD_MEMBER,
     members,
-    role
+    roleId,
+    brandId
   }
 }
 
-export function addMembers(role, members) {
+export function addMembers(brand, role, members) {
   return async (dispatch) => {
     dispatch({ type: types.SHOW_SPINNER })
-    const response = await BrandConsole.addMembers(role, members)
+    const response = await BrandConsole.addMembers(brand, role, members)
     dispatch({ type: types.HIDE_SPINNER })
     if (response && !response.error) {
       const { data } = response.body
-      dispatch(_addMembers(role, data))
+      dispatch(_addMembers(brand.id, role, data))
     } else {
       dispatch(notify({ message: `addBrand: ${response.error.message}`, status: response.error.statusCode }))
     }

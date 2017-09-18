@@ -23,7 +23,7 @@ Brands.getChildrenBrands = async function (brandId) {
 Brands.addBrand = async function (brand) {
   try {
     return await new Fetch()
-      .post('/brands/')
+      .post('/brands?associations[]=brand.roles')
       .send(brand)
   } catch (error) {
     return { error }
