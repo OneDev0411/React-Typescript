@@ -9,16 +9,16 @@ const enhance = compose(
 )
 
 const ModalNewRole = ({
-                          TriggerButton,
-                          title,
-                          buttonTitle,
-                          onButtonClick,
-                          inline = false,
-                          showOnly = false,
-                          /* internal props and states */
-                          showComposeModal,
-                          onChangeComposeModal
-                        }) => {
+  TriggerButton,
+  title,
+  buttonTitle,
+  onButtonClick,
+  inline = false,
+  showOnly = false,
+  /* internal props and states */
+  showComposeModal,
+  onChangeComposeModal
+}) => {
   const setInputRef = (el) => {
     this.input = el
   }

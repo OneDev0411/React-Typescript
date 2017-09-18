@@ -12,7 +12,7 @@ export default (state = {}, action) => {
     case types.ADD_MEMBER:
       return {
         ...state,
-        [action.role.id]: action.members
+        [action.roleId]: action.members
       }
     case types.DELETE_MEMBER: {
       let stateClone = state[action.role.id].slice()

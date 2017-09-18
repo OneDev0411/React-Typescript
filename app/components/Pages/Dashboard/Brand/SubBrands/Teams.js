@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Panel, Button } from 'react-bootstrap'
-import BrandHeader from './BrnadHaedr'
+import BrandHeader from './BrandHeader'
 import ModalBrand from './ModalBrand'
 import { addBrand } from '../../../../../store_actions/brandConsole'
 const Teams = ({

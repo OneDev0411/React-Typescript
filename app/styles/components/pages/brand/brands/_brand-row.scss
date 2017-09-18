@@ -56,8 +56,12 @@
     font-size: 13px;
     color: #8da2b5;
     padding: 2px 17px;
-    width: 58px;
+    &.visible {
+      visibility: visible;
+      margin: 0 4px;
+    }
   }
+
   &:hover {
     background-color: #f8fafb;
     .delete-button--brand-row {
@@ -67,7 +71,8 @@
       visibility: visible;
     }
     .edit-button--brand-row:hover {
-      font-weight: bold;
+      background-color: #f1f4f8;
+      //font-weight: bold;
     }
   }
 }
