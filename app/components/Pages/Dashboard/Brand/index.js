@@ -12,9 +12,9 @@ const Brand = () => (
         <Sidebar />
         <div className="rightPanel">
           <Tab.Content animation>
-            <Tab.Pane eventKey="Roles">
-              <Roles />
-            </Tab.Pane>
+            {/*<Tab.Pane eventKey="Roles">*/}
+              {/*<Roles />*/}
+            {/*</Tab.Pane>*/}
             <Tab.Pane eventKey="Checklists">
               <Checklists />
             </Tab.Pane>

@@ -13,11 +13,11 @@ Members.getMembers = async function (role) {
   }
 }
 
-Members.addMembers = async function (brand, role, members) {
+Members.addMembers = async function (brandId, roleId, members) {
   try {
     return await new Fetch()
-      .post(`/brands/${brand.id}/roles/${role}/members`)
-      .set('X-RECHAT-BRAND', brand.id)
+      .post(`/brands/${brandId}/roles/${roleId}/members`)
+      .set('X-RECHAT-BRAND', brandId)
       .send(members)
   } catch (error) {
     return { error }

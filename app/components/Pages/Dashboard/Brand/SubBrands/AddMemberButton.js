@@ -6,7 +6,6 @@ import { addMembers } from '../../../../../store_actions/brandConsole'
 
 const AddMemberButton = ({
   brand,
-  roles,
   addMembers
 }) => {
   const AddButton = ({
@@ -33,7 +32,7 @@ const AddMemberButton = ({
           buttonTitle="Add"
           onButtonClick={(activeRoles, recipients) => {
             activeRoles.forEach(role =>
-              addMembers(brand, role, recipients)
+              addMembers(brand.id, role, recipients)
             )
           }}
         />
