@@ -1,3 +1,16 @@
+.deal-file-cta-menu {
+  display: inline;
+  .cta-btn {
+    height: 30px;
+    line-height: 27px;
+    vertical-align: middle;
+    &:hover svg > g {
+      fill: #2196f3;
+    }
+  }
+  @extend %dels-dropdown-cta-menu;
+}
+
 %deal-files-container {
   padding: 0;
   background: #f8fafb;
@@ -21,9 +34,8 @@
 
     .item {
       margin: 1px 0;
-      padding: 10px 5px;
+      padding: 10px 0 10px 5px;
       border-bottom: solid 1px #d2d7db;
-      background-color: #fff;
 
       &:last-child {
         border-bottom: none;
@@ -59,6 +71,10 @@
       .actions {
         text-align: right;
         padding-right: $col-padding / 2;
+        &.has-cta {
+          padding-right: 0;
+        }
+
         .btn-view, .btn-deal {
           height: 30px;
           width: 60px;

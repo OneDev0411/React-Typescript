@@ -5,9 +5,9 @@ import { batchActions } from 'redux-batched-actions'
 import Dropzone from 'react-dropzone'
 import moment from 'moment'
 import _ from 'underscore'
-import ChatModel from '../../../../../../models/Chatroom'
-import ChatMessage from '../../../Chatroom/Util/message'
-import { addAttachment, setIsUploading, editForm } from '../../../../../../store_actions/deals'
+import ChatModel from '../../../../../../../models/Chatroom'
+import ChatMessage from '../../../../Chatroom/Util/message'
+import { addAttachment, setIsUploading, editForm } from '../../../../../../../store_actions/deals'
 
 class UploadDocument extends React.Component {
   constructor(props) {

@@ -177,11 +177,24 @@ Deal.deleteForm = async function (checklist, formId) {
 }
 
 /**
+ * delete attachment
+ */
+Deal.deleteAttachment = async function (roomId, fileId) {
+  try {
+    await new Fetch()
+      .delete(`/rooms/${roomId}/attachments/${fileId}`)
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
  * delete a deal
  */
 Deal.deleteDeal = async function (dealId) {
   try {
-    await new Fetch().delete(`/deals/${dealId}`)
+    await new Fetch()
+      .delete(`/deals/${dealId}`)
   } catch (e) {
     throw e
   }
