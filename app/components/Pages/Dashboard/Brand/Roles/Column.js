@@ -76,10 +76,10 @@ class Column extends Component {
             members={this.props.members}
             iconSize={14}
           />
-          {this.props.members.map(row =>
+          {this.props.members.map((row, index) =>
             <Row
               onClick={() => this.onSelectRow(row.id)}
-              key={`MEMBER_${this.props.role.id}_${row.id}`}
+              key={`MEMBER_${this.props.role.id}_${row.id}_${index}`}
               className={cn('item', { active: row.id === activeRow })}
             >
               <Col sm={1} xs={1} className="avatar vcenter">
