@@ -57,7 +57,7 @@ class Form extends React.Component {
               xs={12}
               className="name vcenter link"
             >
-              Digital Form
+              { task.title }
             </Col>
 
             <Col sm={6} xs={12} className="actions vcenter">
