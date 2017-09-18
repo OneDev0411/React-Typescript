@@ -7,17 +7,18 @@ import moment from 'moment'
 import _ from 'underscore'
 import cn from 'classnames'
 import Recipients from './recipients'
+import ComposeAttachments from './compose-attachments'
+import Docusign from './docusign'
 import DealModel from '../../../../../../models/Deal'
 import { closeEsign, showAttachments, setEnvelopes } from '../../../../../../store_actions/deals'
-import ComposeAttachments from './compose-attachments'
-import config from '../../../../../../../config/public'
 
 class SendSignatures extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       recipients: {},
-      isSending: false
+      isSending: false,
+      showDocusignBanner: false
     }
   }
 
@@ -118,12 +119,13 @@ class SendSignatures extends React.Component {
     })
 
     this.setState({
-      isSending: true
+      isSending: true,
+      showDocusignBanner: false
     })
 
     try {
       const envelope = await DealModel.sendEnvelope(
-        deal.id,
+        deal.i, //fix beshe
         subject,
         message,
         attachments,
@@ -148,19 +150,14 @@ class SendSignatures extends React.Component {
       })
 
     } catch(e) {
-      const isDocusignError = ~~e.status === 412
+      const isDocusignError = true//~~e.status === 412
 
       this.setState({
-        isSending: false
+        isSending: false,
+        showDocusignBanner: isDocusignError
       })
 
-      if (isDocusignError) {
-        notify({
-          message: 'You are not logged in Docusign',
-          status: 'warning'
-        })
-        this.loginToDocusign()
-      } else {
+      if (isDocusignError === false) {
         notify({
           message: e.response ?
             e.response.body.message :
@@ -171,99 +168,89 @@ class SendSignatures extends React.Component {
     }
   }
 
-  /**
-   * open login-to-docusign popup
-   */
-  loginToDocusign() {
-    const { user } = this.props
-    const token = user.access_token
-    const login = window.open(`${config.app.url}/api/deals/docusign/login?access_token=${token}`,
-      'sharer', 'toolbar=0,status=0,width=548,height=325')
-
-    window.addEventListener('message', (event) => {
-      login.close()
-      setTimeout(() => {
-        this.send()
-      }, 100)
-    }, false)
-  }
-
   render() {
     const { tasks, esign, deal, user, showAttachments } = this.props
-    const { recipients, isSending } = this.state
+    const { recipients, isSending, showDocusignBanner } = this.state
 
     if (!esign.show || esign.view !== 'compose') {
       return false
     }
 
     return (
-      <div className="send-esigns">
-        <div className="header">
-          Send for Signatures
+      <div>
+        <Docusign
+          show={showDocusignBanner}
+          user={user}
+          onAuthorize={() => this.send()}
+        />
 
-          <span
-            className="close-compose"
-            onClick={() => this.closeForm()}
-          >
-            <i className="fa fa-times" />
-          </span>
-        </div>
+        <div className="send-esigns">
+          <div className="header">
+            Send for Signatures
 
-        <div className="recipients">
-          <span className="item-title to">To: </span>
-          <Recipients
-            deal={deal}
-            recipients={recipients}
-            onAddRecipient={recp => this.addRecipients(recp)}
-            onRemoveRecipient={email => this.removeRecipient(email)}
-          />
-        </div>
+            <span
+              className="close-compose"
+              onClick={() => this.closeForm()}
+            >
+              <i className="fa fa-times" />
+            </span>
+          </div>
 
-        <div className="subject">
-          <span className="item-title">Subject: </span>
-          <input
-            defaultValue={`Please sign document for ${DealModel.get.field(deal, 'full_address')}`}
-            ref={ref => this.subject = ref}
-            type="text"
-          />
-        </div>
+          <div className="recipients">
+            <span className="item-title to">To: </span>
+            <Recipients
+              deal={deal}
+              recipients={recipients}
+              onAddRecipient={recp => this.addRecipients(recp)}
+              onRemoveRecipient={email => this.removeRecipient(email)}
+            />
+          </div>
 
-        <div className="message">
-          <Textarea
-            inputRef={ref => this.message = ref}
-            maxRows={8}
-            placeholder="Write your message here ..."
-          />
-          <div className="signature">
-            <p>{ user.display_name }</p>
+          <div className="subject">
+            <span className="item-title">Subject: </span>
+            <input
+              defaultValue={`Please sign document for ${DealModel.get.field(deal, 'full_address')}`}
+              ref={ref => this.subject = ref}
+              type="text"
+            />
+          </div>
+
+          <div className="message">
+            <Textarea
+              inputRef={ref => this.message = ref}
+              maxRows={8}
+              placeholder="Write your message here ..."
+            />
+            <div className="signature">
+              <p>{ user.display_name }</p>
+            </div>
+          </div>
+
+          <div className="attachments">
+            <ComposeAttachments
+              esign={esign}
+              tasks={tasks}
+            />
+          </div>
+
+          <div className="footer">
+            <Button
+              disabled={isSending}
+              className="btn-send"
+              onClick={() => this.send()}
+            >
+              { isSending ? 'Sending' : 'Send' }
+            </Button>
+
+            <Button
+              disabled={isSending}
+              onClick={() => showAttachments(esign.attachments)}
+              className="btn-attach"
+            >
+              <i className="fa fa-paperclip fa-rotate-90" /> Attach
+            </Button>
           </div>
         </div>
-
-        <div className="attachments">
-          <ComposeAttachments
-            esign={esign}
-            tasks={tasks}
-          />
-        </div>
-
-        <div className="footer">
-          <Button
-            disabled={isSending}
-            className="btn-send"
-            onClick={() => this.send()}
-          >
-            { isSending ? 'Sending' : 'Send' }
-          </Button>
-
-          <Button
-            disabled={isSending}
-            onClick={() => showAttachments(esign.attachments)}
-            className="btn-attach"
-          >
-            <i className="fa fa-paperclip fa-rotate-90" /> Attach
-          </Button>
-        </div>
-
       </div>
     )
   }
