@@ -220,15 +220,7 @@
   }
 
   .modal-header {
-    .close {
-      margin-top: 5px;
-    }
-
-    height: 67px;
-    background-color: #f8fafb;
-    font-size: 24px;
-    font-weight: 600;
-    color: #1d364b;
+    @extend %deal-modal-header;
   }
 
   .modal-body {
