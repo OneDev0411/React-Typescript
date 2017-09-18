@@ -159,6 +159,10 @@ class EditForm extends React.Component {
       deal
     } = this.props
 
+    if (!task) {
+      return false
+    }
+
     const { incompleteFields } = this.state
 
     // show saving
