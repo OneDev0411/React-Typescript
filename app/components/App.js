@@ -71,9 +71,6 @@ class App extends Component {
 
     // google analytics
     this.initialGoogleAnalytics(data)
-
-    // Set intercom
-    this.setIntercom()
   }
 
   static async fetchData(dispatch, params) {
@@ -165,19 +162,6 @@ class App extends Component {
     ReactGA.pageview(window.location.pathname)
   }
 
-  setIntercom() {
-    const { data } = this.props
-    if (!data.intercom_set && data.user) {
-      window.intercomSettings = {
-        app_id: 'pkzkvg9a',
-        name: `${data.user.first_name} ${data.user.last_name}`, // Full name
-        email: `${data.user.email}` // Email address
-      }
-      AppStore.data.intercom_set = true
-      AppStore.emitChange()
-    }
-  }
-
   showMobileSplashViewer() {
     AppStore.data.show_mobile_splash_viewer = true
     this.createBranchLink()
@@ -254,7 +238,7 @@ class App extends Component {
     })
 
     // render sidebar
-    let navArea = <SideBar data={data} />
+    let navArea = <SideBar data={data} location={location} />
 
     if (data.is_mobile && user) {
       // nav_area = <MobileNav data={data} />
@@ -263,18 +247,9 @@ class App extends Component {
 
     return (
       <div>
-        {
-          user && !isWidgetRedux &&
-          navArea
-        }
+        {user && !isWidgetRedux && navArea}
 
-        {
-          user &&
-          <InstantChat
-            user={user}
-            rooms={rooms}
-          />
-        }
+        {user && <InstantChat user={user} rooms={rooms} />}
 
         <main style={{ minHeight: '100vh' }}>{children}</main>
       </div>
@@ -290,4 +265,3 @@ export default connect(({ user, data, deals, contact, chatroom, widgets }) => ({
   contacts: contact.list,
   isWidgetRedux: widgets.isWidget
 }))(App)
-

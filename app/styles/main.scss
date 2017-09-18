@@ -1,5 +1,6 @@
 // main.scss
 @import 'vendor/bootstrap/stylesheets/_bootstrap.scss';
+@import 'vendor/balloon-css/_balloon.scss';
 @import 'components/resets';
 @import 'components/resets-bootstrap';
 @import 'components/typography';
@@ -26,6 +27,7 @@
 @import 'components/cluster-markers.scss';
 @import 'components/listing-modal';
 @import 'components/feed-modal';
+@import 'components/intercom';
 
 // Pages
 @import 'components/pages/landing';
