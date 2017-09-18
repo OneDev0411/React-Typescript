@@ -189,9 +189,7 @@
       font-size: 11px;
       text-align: center;
       &.Incomplete {
-        color: #78909c;
-        border: solid 1px #78909c;
-        background-color: transparent;
+        display: none;
       }
       &.Pending, &.ATTENTION {
         background-color: #f6a623;
