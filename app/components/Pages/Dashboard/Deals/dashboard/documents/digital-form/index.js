@@ -60,7 +60,7 @@ class Form extends React.Component {
                 className="btn-deal"
                 onClick={() => this.setState({ showFormViewer: true })}
               >
-                Preview
+                View
               </button>
 
               <ESignButton
@@ -73,7 +73,7 @@ class Form extends React.Component {
                 className="btn-deal"
                 onClick={() => editForm(task)}
               >
-                Edit
+                Edit Form
               </button>
             </div>
           </div>
