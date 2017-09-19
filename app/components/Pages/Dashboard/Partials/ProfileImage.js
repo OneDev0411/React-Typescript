@@ -15,7 +15,7 @@ export default class ProfileImage extends Component {
     const { user } = data
     const { profile_image_url } = user
 
-    let font = 17
+    let font = 24
     if (this.props.font) {
       font = this.props.font
     }
@@ -50,7 +50,9 @@ export default class ProfileImage extends Component {
         <div
           className="text-center"
           style={S(
-            `w-100p t-${top} absolute color-fff ${font ? `font-${font}` : '17'}`
+            `w-100p t-${top} absolute color-263445 ${font
+              ? `font-${font}`
+              : '17'}`
           )}
         >
           {initials_area}
