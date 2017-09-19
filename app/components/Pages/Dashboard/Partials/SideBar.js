@@ -143,8 +143,6 @@ const appNavbar = ({
 
         <Dropdown
           dropup
-          noCaret
-          eventKey={3}
           id="account-dropdown"
           data-balloon="Settings"
           data-balloon-pos="right"
