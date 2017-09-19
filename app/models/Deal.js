@@ -236,10 +236,11 @@ Deal.searchListings = async function (address) {
 /**
 * create new deal
 */
-Deal.create = async function (data) {
+Deal.create = async function (user, data) {
   try {
     const response = await new Fetch()
       .post('/deals')
+      .set('X-RECHAT-BRAND', user.brand)
       .send(data)
 
     return response.body.data
@@ -305,6 +306,21 @@ Deal.updateChecklist = async function (deal_id, checklist_id, attributes) {
     const response = await new Fetch()
       .put(`/deals/${deal_id}/checklists/${checklist_id}`)
       .send(attributes)
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
+* update listing
+*/
+Deal.updateListing = async function (dealId, listingId) {
+  try {
+    const response = await new Fetch()
+      .patch(`/deals/${dealId}/listing`)
+      .send({ listing: listingId })
 
     return response.body.data
   } catch (e) {

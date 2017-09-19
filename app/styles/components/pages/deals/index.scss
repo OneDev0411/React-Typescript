@@ -3,12 +3,13 @@
 @import './dropdown';
 @import './dashboard';
 @import './badge';
+@import './modal';
 
 .deals {
   margin-left: 70px;
   margin-right: 0;
   min-height: 100vh;
-  background-color: #f0f4f7;
+  background-color: #f8fafb;
 
   .deals-list {
     @extend %deals-list;

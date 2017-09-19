@@ -57,6 +57,13 @@ export function deleteDeal(dealId) {
   }
 }
 
+export function updateListing(dealId, listingId) {
+  return async (dispatch) => {
+    const deal = await Deal.updateListing(dealId, listingId)
+    dispatch(updateDeal(deal))
+  }
+}
+
 export function updateDeal(deal) {
   return async (dispatch) => {
     const { entities } = normalize(deal, schema.dealSchema)

@@ -77,7 +77,7 @@ class AddContractModal extends React.Component {
         dialogClassName="modal-deal-add-contract"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Add a Contract</Modal.Title>
+          Add a Contract
         </Modal.Header>
 
         <Modal.Body>

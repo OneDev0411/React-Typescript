@@ -1,7 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Popover, OverlayTrigger } from 'react-bootstrap'
 import BaseTable from './table'
 import Deal from '../../../../../models/Deal'
+import UserAvatar from '../../../../Partials/UserAvatar'
 
 class AgentTable extends BaseTable {
   constructor(props) {
@@ -59,13 +61,61 @@ class AgentTable extends BaseTable {
   }
 
   getSide(deal) {
+    const { deals } = this.props
+    const dealOrder = Object.keys(deals).indexOf(deal.id)
+
+    if (!deal.roles) {
+      return deal.deal_type
+    }
+
+    const firstRole = deal.roles && deal.roles[0]
+
     return (
-      <div>
-        { deal.deal_type }
-        <span style={{ color: '#9b9b9b' }}>
-          { this.getRoleNames(deal) }
-        </span>
-      </div>
+      <OverlayTrigger
+        trigger={['hover', 'focus']}
+        placement={dealOrder + 3 >= _.size(deals) ? 'top' : 'bottom'}
+        overlay={
+          <Popover
+            className="deal-list--popover"
+            id={`popover-trigger-sides-${deal.id}`}
+          >
+            <div className="roles">
+              {
+                deal.roles.map(role =>
+                  <div className="item">
+                    <div className="avatar">
+                      <UserAvatar
+                        name={role.user.display_name}
+                        image={role.user.profile_image_url}
+                        size={26}
+                        showStateIndicator={false}
+                      />
+                    </div>
+                    <div className="info">
+                      <span className="name">{ role.user.abbreviated_display_name }, </span>
+                      <span className="role">{ role.role }</span>
+                      <span className="email">{ role.user.email }</span>
+                    </div>
+                  </div>
+                )
+              }
+            </div>
+          </Popover>
+        }
+      >
+        <div>
+          <span>
+            { deal.deal_type }
+          </span>
+
+          <span
+            style={{ color: '#5b6469', fontSize: '13px' }}
+          >
+            { firstRole ? `: ${firstRole.user.abbreviated_display_name}` : ''}
+          </span>
+        </div>
+
+      </OverlayTrigger>
     )
   }
 

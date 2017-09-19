@@ -125,7 +125,7 @@ class SendSignatures extends React.Component {
 
     try {
       const envelope = await DealModel.sendEnvelope(
-        deal.i, //fix beshe
+        deal.id,
         subject,
         message,
         attachments,
@@ -150,7 +150,7 @@ class SendSignatures extends React.Component {
       })
 
     } catch(e) {
-      const isDocusignError = true//~~e.status === 412
+      const isDocusignError = ~~e.status === 412
 
       this.setState({
         isSending: false,

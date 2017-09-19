@@ -196,7 +196,7 @@ $margin: 20px;
 
 .modal-create-deal {
   .modal-header {
-    background: #f9f9f9
+    @extend %deal-modal-header;
   }
 
   .modal-body {
@@ -210,7 +210,7 @@ $margin: 20px;
       @extend %listings;
     }
 
-    .address {
+    .rx-input {
       display: inline-block;
       width: 448px;
       height: 44px;

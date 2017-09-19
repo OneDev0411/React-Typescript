@@ -3,6 +3,7 @@ export default [
   'GET_DEALS',
   'CREATE_DEAL',
   'UPDATE_DEAL',
+  'UPDATE_LISTING',
   'DELETE_DEAL',
   'GET_CHECKLISTS',
   'APPEND_CHECKLIST',

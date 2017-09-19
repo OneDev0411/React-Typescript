@@ -7,7 +7,7 @@
 }
 
 %deal-comments {
-  margin-left: 0;
+  margin-left: 0 !important;
   background: #f8fafb;
   position: relative;
 
@@ -19,14 +19,17 @@
   }
 
   .messages {
-    height: auto;
-    margin: 0 10px 20px 10px;
+    height: auto !important;
+    margin: 0 10px 20px 10px !important;
     background-color: #fff;
     border: 1px solid #dce5eb;
     border-radius: 3px;
+    .loading {
+      width: 90%;
+    }
 
     .messages-list {
-      margin-top: 10px;
+      margin-top: 10px !important;
       min-height: auto !important;
       max-height: none !important;
       width: 100%;
