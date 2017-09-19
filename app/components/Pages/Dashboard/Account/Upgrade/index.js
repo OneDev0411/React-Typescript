@@ -26,8 +26,11 @@ const AgentConfirm = ({
 }) => {
   const { siteLogo, siteTitle, brandColor } = getBrandInfo(brand)
   return (
-    <div className="signin-page-wrapper c-auth--register clearfix">
-      <div
+    <div
+      className="signin-page-wrapper c-auth--register clearfix"
+      style={{ background: '#f0f4f7' }}
+    >
+      {/* <div
         className="c-auth--register__houseIcon"
         style={{ paddingBottom: '6.5rem' }}
       >
@@ -35,16 +38,9 @@ const AgentConfirm = ({
           src="/static/images/signup/ntreis-logo.png"
           alt="rechat ntreis logo"
         />
-      </div>
-      <article className="c-auth">
+      </div> */}
+      <article className="c-auth" style={{ background: 'inherit' }}>
         <header className="c-auth__header" style={{ marginBottom: '4rem' }}>
-          <Link to="/" tabIndex={-1}>
-            <img
-              src={siteLogo}
-              alt={`${siteTitle} logo`}
-              className={'c-auth__logo'}
-            />
-          </Link>
           <h1 className="c-auth__title tempo">{`${siteTitle}`}</h1>
           <p className="c-auth__subtitle">Upgrade to agent account</p>
           <div>
@@ -99,9 +95,6 @@ const AgentConfirm = ({
               {isUpgrading ? 'Searching...' : 'Upgrade'}
             </button>
           </form>
-          <p style={{ textAlign: 'center' }}>
-            <Link to={redirectTo}>I'll do this later</Link>
-          </p>
         </main>
       </article>
       {agent && (
@@ -119,9 +112,8 @@ const AgentConfirm = ({
 }
 
 export default compose(
-  connect(({ brand }, params) => {
-    const { redirectTo } = params
-
+  connect(({ brand }, { location: { query } }) => {
+    const { redirectTo } = query
     return {
       brand,
       redirectTo: redirectTo || '/dashboard/mls'
