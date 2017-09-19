@@ -33,18 +33,18 @@ class List extends React.Component {
     }
 
     return (
-      <div>
+      <ul className="labels">
         {
           labels.map(name =>
-            <span
+            <li
               key={`LBL_${name}`}
               className={`p-label ${name}`}
             >
               { name }
-            </span>
+            </li>
           )
         }
-      </div>
+      </ul>
     )
   }
 
@@ -89,14 +89,12 @@ class List extends React.Component {
               />
             </div>
 
-            <div className="info">
-              <div>
-                <div className="p-title">
-                  { section.title }
-                </div>
+            <div className="s-info">
+              <span className="p-title">
+                { section.title }
+              </span>
 
-                { this.getLabels(section) }
-              </div>
+              { this.getLabels(section) }
             </div>
 
             {
