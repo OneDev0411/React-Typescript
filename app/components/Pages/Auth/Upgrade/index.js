@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { Link, browserHistory } from 'react-router'
 import compose from 'recompose/compose'
 import { Field, reduxForm } from 'redux-form'
-import lifecycle from 'recompose/lifecycle'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
@@ -11,7 +10,6 @@ import Brand from '../../../../controllers/Brand'
 import searchAgent from '../../../../models/agent/search'
 import { getBrandInfo, renderField } from '../../Auth/SignIn'
 import SecretQuestionModal from './components/SecretQuestionModal'
-import setWidget from '../../../../store_actions/widgets/setWidget'
 
 const AgentConfirm = ({
   agent,
@@ -33,7 +31,10 @@ const AgentConfirm = ({
         className="c-auth--register__houseIcon"
         style={{ paddingBottom: '6.5rem' }}
       >
-        <img src="/static/images/signup/ntreis-logo.png" />
+        <img
+          src="/static/images/signup/ntreis-logo.png"
+          alt="rechat ntreis logo"
+        />
       </div>
       <article className="c-auth">
         <header className="c-auth__header" style={{ marginBottom: '4rem' }}>
@@ -44,9 +45,7 @@ const AgentConfirm = ({
               className={'c-auth__logo'}
             />
           </Link>
-          <h1 className="c-auth__title tempo">
-            {`${siteTitle}`}
-          </h1>
+          <h1 className="c-auth__title tempo">{`${siteTitle}`}</h1>
           <p className="c-auth__subtitle">Upgrade to agent account</p>
           <div>
             <small>Enter your agent license # to unlock MLS features.</small>
@@ -59,7 +58,6 @@ const AgentConfirm = ({
               className="c-auth__field__input-wrapper"
             >
               <input
-                autoFocus
                 id="mlsid"
                 type="text"
                 onChange={e => {
@@ -80,12 +78,15 @@ const AgentConfirm = ({
                 <i />
               </span>
             </div>
-            {upgradeError &&
+            {upgradeError && (
               <div className="c-auth__submit-error-alert">
-                {upgradeError === 404
-                  ? `Agent corresponding to this MLS ID (${mlsid}) not found!`
-                  : 'There was an error with this request. Please try again.'}
-              </div>}
+                {upgradeError === 404 ? (
+                  `Agent corresponding to this MLS ID (${mlsid}) not found!`
+                ) : (
+                  'There was an error with this request. Please try again.'
+                )}
+              </div>
+            )}
             <button
               type="submit"
               className="c-auth__submit-btn"
@@ -103,7 +104,7 @@ const AgentConfirm = ({
           </p>
         </main>
       </article>
-      {agent &&
+      {agent && (
         <SecretQuestionModal
           show={confirmModalIsActive}
           onHide={onHideConfirmModal}
@@ -111,31 +112,19 @@ const AgentConfirm = ({
           agent={agent.id}
           redirectTo={redirectTo}
           question={agent.secret_questions[0]}
-        />}
+        />
+      )}
     </div>
   )
 }
 
 export default compose(
-  connect(
-    ({ brand, widgets }, { location }) => {
-      const { isWidget } = widgets
-      const { redirectTo } = location.query
+  connect(({ brand }, params) => {
+    const { redirectTo } = params
 
-      return {
-        brand,
-        isWidget,
-        redirectTo: redirectTo || '/dashboard/mls'
-      }
-    },
-    { setWidget }
-  ),
-  lifecycle({
-    componentWillUnmount() {
-      const { isWidget, setWidget } = this.props
-      if (this.props.isWidget) {
-        setWidget(false)
-      }
+    return {
+      brand,
+      redirectTo: redirectTo || '/dashboard/mls'
     }
   }),
   withState('agent', 'setAgent', ''),

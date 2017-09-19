@@ -31,7 +31,7 @@ const AsyncRegister = Load({
 
 const AsyncUpgradeAccount = Load({
   loader: () =>
-    import('../components/Pages/Account/Upgrade' /* webpackChunkName: "upgrade" */)
+    import('../components/Pages/Auth/Upgrade' /* webpackChunkName: "upgrade" */)
 })
 
 const AsyncSignIn = Load({
@@ -237,10 +237,11 @@ export default (
       <IndexRoute component={Landing} />
       <Route path="/branch" component={AsyncBranch} />
 
-      <Route
-        path="/register"
-        component={UserIsNotAuthenticated(AsyncRegister)}
-      />
+      <Route path="register">
+        <IndexRoute component={UserIsNotAuthenticated(AsyncRegister)} />
+        <Route path="upgrade" component={AsyncUpgradeAccount} />
+      </Route>
+
       <Route path="/signin" component={UserIsNotAuthenticated(AsyncSignIn)} />
       <Route path="/signup" component={UserIsNotAuthenticated(AsyncSignUp)} />
 
@@ -280,7 +281,6 @@ export default (
 
       <Route path="dashboard/account">
         <IndexRoute component={() => <h1>User Account Area</h1>} />
-        <Route path="upgrade" component={AsyncUpgradeAccount} />
       </Route>
 
       <Route path="/widgets/map" component={AsyncMapWidget} />

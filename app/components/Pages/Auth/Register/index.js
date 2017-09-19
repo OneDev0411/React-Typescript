@@ -11,7 +11,6 @@ import { getBrandInfo, renderField } from '../SignIn'
 import Brand from '../../../../controllers/Brand'
 
 import editUser from '../../../../store_actions/user/edit'
-import setWidget from '../../../../store_actions/widgets/setWidget'
 import submitSigninForm from '../../../../store_actions/auth/signin'
 import updatePassword from '../../../../models/auth/password/update'
 
@@ -189,7 +188,7 @@ export default compose(
       brand,
       paramsFromURI: location.query
     }),
-    { submitSigninForm, editUser, setWidget }
+    { submitSigninForm, editUser }
   ),
   reduxForm({
     form: 'register',
@@ -249,17 +248,17 @@ export default compose(
 
       // console.log(redirectTo, formInputsValue, userPassword, userInfo)
       try {
+        let redirect = '/dashboard/mls'
         await updatePassword(userPassword)
-        await submitSigninForm(loginInfo)
-        await editUser(userInfo)
 
         if (user_type === 'Agent') {
-          setWidget(true)
-          browserHistory.push(`/account/upgrade?redirectTo=${redirectTo}`)
-          return
+          redirect = `/register/upgrade?redirectTo=${encodeURIComponent(
+            redirectTo
+          )}`
         }
 
-        browserHistory.push(redirectTo)
+        await submitSigninForm(loginInfo, redirect)
+        await editUser(userInfo)
       } catch (error) {
         setIsSubmitting(false)
         setSubmitError(true)
