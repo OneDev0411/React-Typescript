@@ -37,11 +37,6 @@ const AsyncRegister = Load({
     import('../components/Pages/Auth/Register' /* webpackChunkName: "register" */)
 })
 
-const AsyncUpgradeAccount = Load({
-  loader: () =>
-    import('../components/Pages/Auth/Upgrade' /* webpackChunkName: "upgrade" */)
-})
-
 const AsyncSignIn = Load({
   loader: () =>
     import('../components/Pages/Auth/SignIn' /* webpackChunkName: "signin" */)
@@ -161,6 +156,30 @@ const AsyncNotificationsPage = Load({
 })
 
 /* ==================================== */
+//  Account settings
+/* ==================================== */
+
+const AsyncAccountLayout = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Account' /* webpackChunkName: "account_layout" */)
+})
+
+const AsyncProfile = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Account/Profile' /* webpackChunkName: "profile" */)
+})
+
+const AsyncPayment = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Account/Payment' /* webpackChunkName: "payment" */)
+})
+
+const AsyncUpgradeAccount = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Account/Upgrade' /* webpackChunkName: "upgrade" */)
+})
+
+/* ==================================== */
 //  Widgets
 /* ==================================== */
 
@@ -182,11 +201,6 @@ const AsyncSearchWidget = Load({
 /* ==================================== */
 //  Other Pages
 /* ==================================== */
-
-const AsyncAccount = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Account' /* webpackChunkName: "account" */)
-})
 
 const AsyncBrand = Load({
   loader: () =>
@@ -253,10 +267,10 @@ export default (
       <IndexRoute component={Landing} />
       <Route path="/branch" component={AsyncBranch} />
 
-      <Route path="register">
-        <IndexRoute component={UserIsNotAuthenticated(AsyncRegister)} />
-        <Route path="upgrade" component={AsyncUpgradeAccount} />
-      </Route>
+      <Route
+        path="register"
+        component={UserIsNotAuthenticated(AsyncRegister)}
+      />
 
       <Route path="/signin" component={UserIsNotAuthenticated(AsyncSignIn)} />
       <Route path="/signup" component={UserIsNotAuthenticated(AsyncSignUp)} />
@@ -332,8 +346,10 @@ export default (
         component={AsyncNotificationsPage}
       />
 
-      <Route path="dashboard/account">
-        <IndexRoute component={() => <h1>User Account Area</h1>} />
+      <Route path="dashboard/account" component={AsyncAccountLayout}>
+        <IndexRoute component={AsyncProfile} />
+        <Route path="payment" component={AsyncPayment} />
+        <Route path="upgrade" component={AsyncUpgradeAccount} />
       </Route>
 
       <Route path="/dashboard/brand" component={AsyncBrand} />

@@ -6,9 +6,9 @@ import { Field, reduxForm } from 'redux-form'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
-import Brand from '../../../../controllers/Brand'
-import searchAgent from '../../../../models/agent/search'
-import { getBrandInfo, renderField } from '../../Auth/SignIn'
+import Brand from '../../../../../controllers/Brand'
+import searchAgent from '../../../../../models/agent/search'
+import { getBrandInfo, renderField } from '../../../Auth/SignIn'
 import SecretQuestionModal from './components/SecretQuestionModal'
 
 const AgentConfirm = ({

@@ -1,0 +1,24 @@
+.l-account {
+  display: flex;
+  flex-wrap: nowrap;
+  height: 100vh;
+}
+
+.l-account__sidebar {
+  width: 23rem;
+  background-color: #f8fafb;
+}
+
+.l-account__sidebar__header {
+  height: 5.4rem;
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+
+  > h1 {
+    margin: 0;
+    line-height: 1;
+    font-size: 1.8rem;
+    color: #1c364c;
+  }
+}
