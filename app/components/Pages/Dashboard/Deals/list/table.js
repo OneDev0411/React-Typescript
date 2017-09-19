@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import cn from 'classnames'
 import { browserHistory } from 'react-router'
-import { Row, Col, Popover, OverlayTrigger } from 'react-bootstrap'
+import { Popover, OverlayTrigger } from 'react-bootstrap'
 import _ from 'underscore'
 import { getStatusColorClass } from '../../../../../utils/listing'
 import Deal from '../../../../../models/Deal'
@@ -47,7 +47,7 @@ class BaseTable extends React.Component {
    */
   getListingPhoto(deal) {
     const photo = Deal.get.field(deal, 'photo')
-    return photo ? photo : '/static/images/deals/home.svg'
+    return photo ? photo : '/static/images/deals/home.png'
   }
 
   /**
@@ -57,14 +57,10 @@ class BaseTable extends React.Component {
     const address = Deal.get.address(deal)
 
     return (
-      <Row>
-        <Col md={2} sm={3} xs={2} className="vcenter">
-          <img src={this.getListingPhoto(deal)} />
-        </Col>
-        <Col md={10} sm={9} xs={10} className="vcenter">
-          <div className="name">{ address }</div>
-        </Col>
-      </Row>
+      <div className="address-row">
+        <img src={this.getListingPhoto(deal)} />
+        <div className="name">{ address }</div>
+      </div>
     )
   }
 
