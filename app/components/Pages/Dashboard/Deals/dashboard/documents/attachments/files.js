@@ -85,24 +85,22 @@ class FileAttachments extends React.Component {
 
         {
           files.map((file, key) =>
-            <Row
+            <div
               key={`PDF_FILE_${file.id}`}
               className="item"
               style={{ cursor: 'pointer' }}
             >
-              <Col sm={1} xs={12} className="image vcenter">
+              <div className="image">
                 <img src={file.preview_url} />
-              </Col>
-              <Col
-                sm={7}
-                xs={12}
-                className="name vcenter"
+              </div>
+              <div
+                className="name"
                 onClick={() => this.openDoc(file)}
               >
                 { file.name }
-              </Col>
+              </div>
 
-              <Col sm={4} xs={12} className="actions vcenter has-cta">
+              <div className="actions">
                 <button
                   className="btn-deal"
                   onClick={() => this.openDoc(file)}
@@ -136,8 +134,8 @@ class FileAttachments extends React.Component {
                     </li>
                   </Dropdown.Menu>
                 </Dropdown>
-              </Col>
-            </Row>
+              </div>
+            </div>
           )
         }
       </div>
