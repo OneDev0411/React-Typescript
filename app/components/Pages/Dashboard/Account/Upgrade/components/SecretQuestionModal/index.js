@@ -89,7 +89,7 @@ const secretQuestionModal = ({
                   </button>
                 </div>
               ) : (
-                'There was an error with this request. Please try again.'
+                'An unexpected error occurred. Please try again.'
               )}
             </div>
           )}
