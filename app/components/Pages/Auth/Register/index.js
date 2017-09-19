@@ -184,9 +184,9 @@ const validate = values => {
 
 export default compose(
   connect(
-    ({ brand }, { location }) => ({
+    ({ brand }, { location: { query } }) => ({
       brand,
-      paramsFromURI: location.query
+      paramsFromURI: query
     }),
     { submitSigninForm, editUser }
   ),
@@ -230,12 +230,13 @@ export default compose(
 
       const userInfo = {
         last_name,
-        first_name
+        first_name,
+        is_shadow: false
       }
 
       const loginInfo = {
         password,
-        username: emailFromURI || email
+        username: email || emailFromURI
       }
 
       if (phone_number) {
