@@ -10,7 +10,7 @@
   margin: 20px $col-padding 20px 0;
   border-radius: 4px;
   background-color: #f8fafb;
-  @include scrollbar()
+  @include scrollbar();
 
   .heading {
     @extend %deal-task-detail-heading;

@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col, Button, Dropdown, MenuItem, Panel } from 'react-bootstrap'
 import cn from 'classnames'
+import VerticalDotsIcon from '../../../Partials/Svgs/VerticalDots'
 import CreateTask from '../create-task'
 import TaskStatus from './status'
 import TaskTermination from './termination'
@@ -112,7 +113,12 @@ class List extends React.Component {
                     bsRole="toggle"
                     onClick={e => e.stopPropagation()}
                   >
-                    <i className="fa fa-ellipsis-v" />
+                    <VerticalDotsIcon
+                      width={20}
+                      height={20}
+                      fill="#8da2b5"
+                    />
+
                   </Button>
 
                   <Dropdown.Menu>
@@ -150,6 +156,7 @@ class List extends React.Component {
                   onClick={() => onSelectTask(task)}
                   className={cn('task', { active: selectedTaskId === id })}
                 >
+                  <div className="icon" />
                   <div className="title">
                     { task.title.replace(/&.*;/g, '') }
                   </div>
