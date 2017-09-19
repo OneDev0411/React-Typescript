@@ -1,12 +1,12 @@
 .l-account {
   display: flex;
-  flex-wrap: nowrap;
   height: 100vh;
 }
 
 .l-account__sidebar {
   width: 23rem;
-  background-color: #f8fafb;
+  background: #f8fafb;
+  border-right: 1px solid #dde7ec;
 }
 
 .l-account__sidebar__header {
@@ -21,4 +21,10 @@
     font-size: 1.8rem;
     color: #1c364c;
   }
+}
+
+.l-account__main {
+  width: calc(100% - 23rem);
+  padding: 2rem;
+  background: #f0f4f7;
 }
