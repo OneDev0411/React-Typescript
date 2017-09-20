@@ -1,6 +1,5 @@
 import React from 'react'
 import { Tab } from 'react-bootstrap'
-import Roles from './Roles'
 import Checklists from './Checklists'
 import SubBrands from './SubBrands'
 import Sidebar from './Sidebar'
@@ -12,9 +11,6 @@ const Brand = () => (
         <Sidebar />
         <div className="rightPanel">
           <Tab.Content animation>
-            {/*<Tab.Pane eventKey="Roles">*/}
-              {/*<Roles />*/}
-            {/*</Tab.Pane>*/}
             <Tab.Pane eventKey="Checklists">
               <Checklists />
             </Tab.Pane>

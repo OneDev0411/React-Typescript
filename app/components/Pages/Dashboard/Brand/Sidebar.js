@@ -7,9 +7,6 @@ const Sidebar = () => (
       brand-settings
     </div>
     <Nav stacked>
-      <NavItem className="item" eventKey="Roles">
-        Roles
-      </NavItem>
       <NavItem className="item" eventKey="Checklists">
         Checklists
       </NavItem>
