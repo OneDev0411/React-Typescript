@@ -39,32 +39,36 @@ import config from '../../config/public'
 
 class App extends Component {
   componentWillMount() {
+    const { user } = this.props
+
     // check branding
     this._getBrand()
 
-    if (typeof window !== 'undefined') {
-      this.initializeChatSocket()
-      this.initializeDealSocket()
+    if (user && typeof window !== 'undefined') {
+      this.initializeChatSocket(user)
+      this.initializeDealSocket(user)
     }
   }
 
   componentDidMount() {
     const { data, user } = this.props
 
-    // load rooms
-    this.initialRooms()
+    if (user) {
+      // load rooms
+      this.initialRooms()
 
-    // load deals
-    this.initialDeals()
+      // load deals
+      this.initialDeals(user)
 
-    // load contacts
-    this.initialContacts()
+      // load contacts
+      this.initialContacts()
+
+      // load notifications
+      this.loadNotifications(data)
+    }
 
     // check user is mobile device or not
     this.checkForMobile()
-
-    // load notifications
-    this.loadNotifications(data)
 
     // branch banner
     this.triggerBranchBanner(user)
@@ -82,30 +86,28 @@ class App extends Component {
     this.props.dispatch(getBrand())
   }
 
-  initializeChatSocket() {
-    const { user } = this.props
+  initializeChatSocket(user) {
     new ChatSocket(user)
   }
 
-  initializeDealSocket() {
-    const { user } = this.props
+  initializeDealSocket(user) {
     new DealSocket(user)
   }
 
-  async initialDeals() {
-    const { dispatch, deals, user } = this.props
+  async initialDeals(user) {
+    const { dispatch, deals } = this.props
 
     if (!deals) {
-      const isBackOffice = user.features.indexOf('Backoffice') > -1
+      const isBackOffice =
+        user.brand && user.features && user.features.includes('Backoffice')
       return dispatch(getDeals(user, isBackOffice))
     }
   }
 
   async initialRooms() {
-    const { dispatch, user } = this.props
-    let { rooms } = this.props
+    let { rooms, dispatch } = this.props
 
-    if (user && !rooms) {
+    if (!rooms) {
       rooms = await dispatch(getRooms())
     }
 
@@ -114,9 +116,9 @@ class App extends Component {
   }
 
   initialContacts() {
-    const { dispatch, contacts, user } = this.props
+    const { dispatch, contacts } = this.props
 
-    if (user && !contacts) {
+    if (!contacts) {
       dispatch(getContacts())
     }
   }

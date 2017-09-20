@@ -106,7 +106,12 @@ const AsyncDealsLayout = Load({
     import('../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */),
   fetchData: (dispatch, params) => {
     const { user } = params
-    const isBackOffice = user.features.indexOf('Backoffice') !== -1
+    if (user == null) {
+      return
+    }
+
+    const isBackOffice =
+      user.brand && user.features && user.features.includes('Backoffice')
     return dispatch(getDeals(user, isBackOffice))
   }
 })
