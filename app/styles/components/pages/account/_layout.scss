@@ -24,7 +24,10 @@
 }
 
 .l-account__main {
+  position: relative;
   width: calc(100% - 23rem);
-  padding: 2rem;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding: 5.4rem 2rem 2rem;
   background: #f0f4f7;
 }

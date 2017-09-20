@@ -200,7 +200,6 @@ export default compose(
   withHandlers({
     onSubmitHandler: ({
       editUser,
-      setWidget,
       paramsFromURI,
       setSubmitError,
       setIsSubmitting,

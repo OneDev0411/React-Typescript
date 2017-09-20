@@ -1,6 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import PersonalInfo from './components/PersonalInfo'
 
-const Account = ({ user }) => <h2>Profile</h2>
+const Account = () => (
+  <div>
+    <PersonalInfo />
+  </div>
+)
 
-export default connect(({ user }) => ({ user }))(Account)
+export default Account
