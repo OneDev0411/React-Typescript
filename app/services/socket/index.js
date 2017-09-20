@@ -1,8 +1,11 @@
 import io from 'socket.io-client'
 import store from '../../stores'
 import { changeSocketStatus } from '../../store_actions/socket'
-
 import config from '../../../config/public'
+
+const UNAUTHORIZED = 'unauthorized'
+const AUTHENTICATING = 'authenticating'
+const AUTHENTICATED = 'authenticated'
 
 // create socket
 const socket = io(config.socket.server, {
@@ -13,7 +16,11 @@ const socket = io(config.socket.server, {
 })
 
 export default class Socket {
-  static authenicated = false
+
+  /**
+   * socket authentication status
+   */
+  static authentication = UNAUTHORIZED
 
   constructor(user) {
     // set user
@@ -23,7 +30,9 @@ export default class Socket {
     window.socket = this.socket = socket
 
     // create authentication
-    Socket.authenicate(user)
+    if (Socket.authentication === UNAUTHORIZED) {
+      Socket.authenticate(user)
+    }
 
     // bind Reconnecting and Reconnect socket
     socket.on('reconnecting', this.onReconnecting.bind(this))
@@ -36,18 +45,28 @@ export default class Socket {
   /**
    * authenticate user
    */
-  static authenicate(user) {
+  static authenticate(user) {
     if (!user || !user.access_token) {
       console.error('Can not authenticate user socket')
       return false
     }
 
-    socket.emit('Authenticate', user.access_token, (err, user) => {
-      if (err || !user)
-        return false
+    // set status
+    Socket.authentication = AUTHENTICATING
 
+    socket.emit('Authenticate', user.access_token, (err, user) => {
+
+      if (err || !user) {
+        // update status
+        Socket.authentication = UNAUTHORIZED
+        return false
+      }
+
+      // update app store
       store.dispatch(changeSocketStatus('connected'))
-      Socket.authenicated = true
+
+      // update status
+      Socket.authentication = AUTHENTICATED
     })
   }
 
@@ -63,7 +82,7 @@ export default class Socket {
    */
   onReconnect() {
     // authenticate again
-    Socket.authenicate(this.user)
+    Socket.authenticate(this.user)
 
     // emit connected message
     store.dispatch(changeSocketStatus('connected'))
