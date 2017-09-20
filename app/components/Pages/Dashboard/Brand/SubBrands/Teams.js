@@ -38,9 +38,9 @@ const Teams = ({
           inline
           title="Add Team"
           buttonTitle="Add"
-          onButtonClick={(brand) => {
+          onButtonClick={(newBrand) => {
             addBrand({
-              ...brand,
+              ...newBrand,
               parent: brand.id
             })
           }}
