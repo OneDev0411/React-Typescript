@@ -92,10 +92,10 @@ const BrandHeader = ({
       title="Edit Team"
       buttonTitle="Edit"
       brand={brand}
-      onButtonClick={(brandName) => {
+      onButtonClick={(editedBrand) => {
         editBrand({
-          id: brand.id,
-          name: brandName
+          ...brand,
+          ...editedBrand
         })
       }}
     />

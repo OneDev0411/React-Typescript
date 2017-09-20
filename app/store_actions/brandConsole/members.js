@@ -1,5 +1,6 @@
 import types from '../../constants/brandConsole'
 import BrandConsole from '../../models/BrandConsole'
+import { addNotification as notify } from 'reapop'
 
 function _getMembers(role_id, members) {
   return {
@@ -28,14 +29,14 @@ function _addMembers(brandId, roleId, members) {
   }
 }
 
-export function addMembers(brand, role, members) {
+export function addMembers(brandId, roleId, members) {
   return async (dispatch) => {
     dispatch({ type: types.SHOW_SPINNER })
-    const response = await BrandConsole.addMembers(brand, role, members)
+    const response = await BrandConsole.addMembers(brandId, roleId, members)
     dispatch({ type: types.HIDE_SPINNER })
     if (response && !response.error) {
       const { data } = response.body
-      dispatch(_addMembers(brand.id, role, data))
+      dispatch(_addMembers(brandId, roleId, data))
     } else {
       dispatch(notify({ message: `addBrand: ${response.error.message}`, status: response.error.statusCode }))
     }
