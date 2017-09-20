@@ -1,5 +1,7 @@
 import React from 'react'
 import ReactTooltip from 'react-tooltip'
+import { Button } from 'react-bootstrap'
+import cn from 'classnames'
 
 let filters = []
 const DECLINE = 0
@@ -7,8 +9,8 @@ const APPROVE = 1
 const CLOSE_COMMENT = 2
 const COMMENT = 3
 
-function can(btn) {
-  return filters.indexOf(btn) > -1
+function can(btn, isSaving = false) {
+  return !isSaving && filters.indexOf(btn) > -1
 }
 
 export default ({
@@ -16,13 +18,13 @@ export default ({
   onSendComment,
   onDecline,
   onApprove,
-  hasComment
+  hasComment,
+  isSaving
 }) => {
   const status = task.review ? task.review.status : ''
   const needs_attention = task.needs_attention === true
 
   // see https://gitlab.com/rechat/web/issues/276
-
   if (status !== 'Submitted' && needs_attention === false) {
     filters = [COMMENT]
   }
@@ -32,7 +34,7 @@ export default ({
   }
 
   if (status === 'Submitted' && needs_attention === false) {
-    filters = [DECLINE, APPROVE]
+    filters = [DECLINE, APPROVE, COMMENT]
   }
 
   if (status === 'Submitted' && needs_attention === true) {
@@ -48,46 +50,49 @@ export default ({
       />
 
       {
-        can(DECLINE) &&
-        <button
+        can(DECLINE, isSaving) &&
+        <Button
           className="deal-button decline-comment"
+          disabled={isSaving}
           onClick={() => onSendComment(false, 'Declined')}
         >
           { hasComment ? 'Decline & Comment' : 'Decline' }
-        </button>
+        </Button>
       }
 
       {
-        can(APPROVE) &&
-        <button
+        can(APPROVE, isSaving) &&
+        <Button
           data-tip="Leave a comment for the agent, and remove Needs Attention notification"
           className="deal-button approve-comment"
+          disabled={isSaving}
           onClick={() => onSendComment(false, 'Approved')}
         >
           { hasComment ? 'Approve & Comment' : 'Approve' }
-        </button>
+        </Button>
       }
 
       {
-        can(CLOSE_COMMENT) &&
-        <button
+        can(CLOSE_COMMENT, isSaving) &&
+        <Button
           className="deal-button close-comment"
+          disabled={isSaving}
           onClick={() => onSendComment(false)}
         >
           { hasComment ? 'Comment & Close' : 'Close' }
-        </button>
+        </Button>
       }
 
-      {
-        can(COMMENT) &&
-        <button
-          data-tip="Leaving a comment will notify the agent"
-          className="deal-button add-comment"
-          onClick={() => onSendComment()}
-        >
-          Comment
-        </button>
-      }
+      <Button
+        data-tip="Leaving a comment will notify the agent"
+        className={cn('deal-button add-comment', {
+          disabled: isSaving
+        })}
+        disabled={isSaving}
+        onClick={() => onSendComment()}
+      >
+        Comment
+      </Button>
     </div>
   )
 }

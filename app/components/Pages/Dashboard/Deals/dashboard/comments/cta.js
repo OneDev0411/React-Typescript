@@ -7,9 +7,10 @@ const CallToAction = ({
   task,
   isBackoffice,
   hasComment,
+  isSaving,
   onSendComment
 }) => {
-  const props = { task, hasComment, onSendComment }
+  const props = { task, hasComment, onSendComment, isSaving }
 
   return isBackoffice ?
     <BackOfficeCta {...props} /> :
