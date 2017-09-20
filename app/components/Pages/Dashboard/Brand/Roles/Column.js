@@ -1,13 +1,17 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import Members from './Members'
-import { getMembers, addMembers, deleteRoles, deleteMembers } from '../../../../../store_actions/brandConsole'
+import {
+  getMembers,
+  addMembers,
+  deleteRoles,
+  deleteMembers
+} from '../../../../../store_actions/brandConsole'
 import { Row, Col } from 'react-bootstrap'
 import cn from 'classnames'
 import UserAvatar from '../../../../Partials/UserAvatar'
 
-class Column extends Component {
-
+class Column extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -76,10 +80,10 @@ class Column extends Component {
             members={this.props.members}
             iconSize={14}
           />
-          {this.props.members.map(row =>
+          {this.props.members.map((row, index) =>
             <Row
               onClick={() => this.onSelectRow(row.id)}
-              key={`MEMBER_${this.props.role.id}_${row.id}`}
+              key={`MEMBER_${this.props.role.id}_${row.id}_${index}`}
               className={cn('item', { active: row.id === activeRow })}
             >
               <Col sm={1} xs={1} className="avatar vcenter">
@@ -117,5 +121,10 @@ export default connect(
     members: brandConsole.members[role.id] || [],
     user: data.user
   }),
-  ({ getMembers, addMembers, deleteRoles, deleteMembers })
+  ({
+    getMembers,
+    addMembers,
+    deleteRoles,
+    deleteMembers
+  })
 )(Column)

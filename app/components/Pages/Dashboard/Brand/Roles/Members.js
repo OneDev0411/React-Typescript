@@ -6,20 +6,20 @@ import LastSeen from '../../Chatroom/Rooms/components/last-seen'
 import { Button } from 'react-bootstrap'
 
 const ManageMembers = ({
-                         addMembers,
-                         members
-                       }) => {
+  addMembers,
+  members
+}) => {
   const AddButton = ({
-                       clickHandler
-                     }) =>
+    clickHandler
+  }) =>
     (
       <Button
         className="addMember"
         onClick={() => clickHandler()}
       >
-      Add Member
-    </Button>
-  )
+        Add Member
+      </Button>
+    )
 
   const RoomMembers = () => (
     <div className="chatroom-members">

@@ -34,10 +34,14 @@ class Forms extends React.Component {
         </Modal.Header>
 
         <Modal.Body>
-          <input
-            placeholder="Type in to search ..."
-            onChange={e => this.setState({ filter: e.target.value })}
-          />
+          {
+            _.size(forms) > 5 &&
+            <input
+              placeholder="Type in to search ..."
+              onChange={e => this.setState({ filter: e.target.value })}
+            />
+          }
+
           <ul>
             {
               _

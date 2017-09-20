@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Header from './header'
 import Documents from '../documents'
-import UploadFile from '../documents/upload'
+import UploadFile from '../documents/attachments/upload'
 
 import Comments from '../comments'
 import CommentInput from '../comments/input'

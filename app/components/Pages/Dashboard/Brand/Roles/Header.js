@@ -6,12 +6,12 @@ import { addRole } from '../../../../../store_actions/brandConsole'
 
 const Header = ({ role, addRole }) => {
   const AddButton = ({
-                       clickHandler
-                     }) => (
-                       <Button
-                         bsStyle="primary"
-                         onClick={() => clickHandler()}
-                       >
+    clickHandler
+  }) => (
+    <Button
+      bsStyle="primary"
+      onClick={() => clickHandler()}
+    >
       Add New Role
     </Button>
   )

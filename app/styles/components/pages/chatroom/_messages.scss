@@ -168,9 +168,10 @@ $left-w: 44px;
       @extend %messages-item-uploading;
     }
   }
-  &:hover {
-    background-color: #f8fafb;
-  }
+
+  // &:hover {
+  //   background-color: #f8fafb;
+  // }
 }
 
 %message-subitem {
@@ -179,7 +180,7 @@ $left-w: 44px;
   overflow: hidden;
 
   .date {
-    font-size: 11px;
+    font-size: 10px;
     display: inline-block;
     color: #c3c3c3;
     opacity: 0;
@@ -190,8 +191,8 @@ $left-w: 44px;
   }
 
   &:hover {
-     background-color: #f8fafb;
-    .date{
+    // background-color: #f8fafb;
+    .date {
       opacity: 1;
     }
   }

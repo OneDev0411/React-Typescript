@@ -8,7 +8,9 @@ $toolBarHeight: 60px;
 @import 'checklists/checklists';
 @import 'modal-new-role';
 @import 'checklists/modal-checklist';
+@import 'brands/modal-brand';
 @import 'modal';
+@import 'brands/brands';
 
 .brand {
   margin-left: 70px;
@@ -39,6 +41,9 @@ $toolBarHeight: 60px;
   .checklists {
     @extend %checklists;
   }
+  .brands {
+    @extend %brands;
+  }
   .rightPanel {
     margin-left: $menuWidth;
     overflow: auto;
@@ -49,3 +54,21 @@ $toolBarHeight: 60px;
   @extend %brand-modal;
 }
 
+#popover-brand-user-avatar {
+  .row-container {
+    margin-top: 4px;
+    cursor: pointer;
+    .check-box-icon {
+      padding: 0.5px 2.5px;
+      margin-right: 9px;
+      border-radius: 4px;
+      border: solid 1px #dce5eb;
+      color: transparent;
+      &.active {
+        border: solid 1px #2196f3;
+        background: transparent;
+        color: #2196f3;
+      }
+    }
+  }
+}

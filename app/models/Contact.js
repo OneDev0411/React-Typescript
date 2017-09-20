@@ -42,9 +42,10 @@ Contact.getContacts = async function(user) {
     if (access_token)
       fetchContacts.set({ Authorization: `Bearer ${access_token}` })
 
-    return await fetchContacts
+    const response = await fetchContacts
+    return response.body.data
   } catch (e) {
-    // throw e.message
+    throw e
   }
 }
 

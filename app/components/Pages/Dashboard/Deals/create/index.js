@@ -2,20 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
-import {
-  Grid,
-  Row,
-  Col,
-  Button,
-  Modal
-} from 'react-bootstrap'
+import { Grid, Row, Col, Button, Modal } from 'react-bootstrap'
 import _ from 'underscore'
 import Deal from '../../../../../models/Deal'
 import listingsHelper from '../../../../../utils/listing'
 import AddressComponents from './address_components'
-import ListingsView from './listings_view'
+import ListingsView from '../components/listings-search'
 import DealButton from './button'
-import SearchInput from './search_input'
+import SearchInput from '../components/rx-input'
 import { createDeal } from '../../../../../store_actions/deals'
 
 class DealCreate extends React.Component {
@@ -32,7 +26,6 @@ class DealCreate extends React.Component {
       property_type: null
     }
   }
-
 
   /**
    * triggers when user types address
@@ -152,14 +145,17 @@ class DealCreate extends React.Component {
    * save deal
    */
   async save(data) {
-    const { createDeal, notify } = this.props
+    const { user, createDeal, notify } = this.props
 
     // show loading
     this.setState({ saving: true })
 
     try {
       // create deal
-      const deal = await createDeal(data)
+      const deal = await Deal.create(user, data)
+
+      // dispatch new deal
+      await createDeal(deal)
 
       // navigate to the deal
       browserHistory.push(`/dashboard/deals/${deal.id}`)
@@ -223,14 +219,13 @@ class DealCreate extends React.Component {
         >
 
           <Modal.Header closeButton>
-            <Modal.Title>
-              Type the address of the listing
-            </Modal.Title>
+            Type the address of the listing
           </Modal.Header>
 
           <Modal.Body>
             <SearchInput
               value={address}
+              placeholder="Enter MLS # or address"
               onChange={e => this.onChangeAddress(e)}
               subscribe={value => this.search(value)}
             />

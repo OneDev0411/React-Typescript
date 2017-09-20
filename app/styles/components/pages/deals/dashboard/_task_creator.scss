@@ -1,12 +1,6 @@
 .modal-deal-create-form {
   .modal-header {
-    height: 70px;
-    padding: 23px 20px;
-    border-radius: 6px 6px 0 0;
-    background-color: #f8fafb;
-    font-size: 24px;
-    font-weight: 600;
-    color: #1d364b;
+    @extend %deal-modal-header;
   }
 
   .modal-body {
@@ -75,13 +69,7 @@
 .modal-deal-create-form-task-name {
   width: 600px;
   .modal-header {
-    height: 70px;
-    padding: 23px 20px;
-    border-radius: 6px 6px 0 0;
-    background-color: #f9f9f9;
-    font-size: 24px;
-    font-weight: 600;
-    color: #1d364b;
+    @extend %deal-modal-header;
   }
 
   .modal-body {

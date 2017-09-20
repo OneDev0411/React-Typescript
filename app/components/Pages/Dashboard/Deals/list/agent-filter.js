@@ -117,7 +117,7 @@ class Filter extends React.Component {
                 onClick={() => this.setFilter(filter)}
                 data-tip={this.getFilterTabTooltip(filter)}
               >
-                <span>
+                <span className="title">
                   { filter }
                 </span>
 

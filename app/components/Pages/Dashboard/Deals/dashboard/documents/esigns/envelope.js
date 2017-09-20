@@ -19,19 +19,19 @@ export default ({
   const notSigned = recipients.filter(r => r.status !== 'Completed')
 
   return (
-    <Row
+    <div
       className="item eSign"
       key={`eSign_${envelope.id}`}
     >
-      <Col sm={1} xs={12} className="image vcenter">
+      <div className="image">
         <img src="/static/images/deals/signature.svg" />
-      </Col>
+      </div>
 
-      <Col sm={5} xs={12} className="name vcenter">
-        <div>Sent to { getRecipientsNames(recipients) }</div>
-      </Col>
+      <div className="name">
+        Sent to { getRecipientsNames(recipients) }
+      </div>
 
-      <Col sm={6} xs={12} className="actions vcenter">
+      <div className="actions">
         <Dropdown
           id="drp-esign-who-signed"
           className="deal-esgin-whosigned"
@@ -52,7 +52,7 @@ export default ({
             bsRole="menu"
           />
         </Dropdown>
-      </Col>
-    </Row>
+      </div>
+    </div>
   )
 }

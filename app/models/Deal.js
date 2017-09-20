@@ -48,10 +48,25 @@ Deal.get.field = function(deal, field) {
 * a helper that extracts address from deal
 */
 Deal.get.address = function(deal) {
-  const street_name = Deal.get.field(deal, 'street_name') || ''
-  const street_address = Deal.get.field(deal, 'street_address') || ''
+  const unitNumber = Deal.get.field(deal, 'unit_number')
+  const city = Deal.get.field(deal, 'city')
 
-  return (street_name + ' ' + street_address).trim()
+  const address = [
+    Deal.get.field(deal, 'street_number') || '',
+    Deal.get.field(deal, 'street_name') || '',
+    Deal.get.field(deal, 'street_suffix') || '',
+    unitNumber ? `, #${unitNumber},` : '',
+    city ? `${city},` : '',
+    Deal.get.field(deal, 'postal_code') || '',
+  ]
+  .join(' ')
+  .trim()
+
+  if (address.slice('-1') === ',') {
+    return address.slice(0, -1)
+  }
+
+  return address
 }
 
 /**
@@ -149,7 +164,7 @@ Deal.addForm = async function (brandId, checklistId, formId) {
  */
 Deal.deleteForm = async function (checklist, formId) {
   if (!checklist.brand) {
-    throw new Error("This user does not belong to any brand")
+    throw new Error('This user does not belong to any brand')
   }
 
   try {
@@ -158,6 +173,30 @@ Deal.deleteForm = async function (checklist, formId) {
 
   } catch (e) {
     return null
+  }
+}
+
+/**
+ * delete attachment
+ */
+Deal.deleteAttachment = async function (roomId, fileId) {
+  try {
+    await new Fetch()
+      .delete(`/rooms/${roomId}/attachments/${fileId}`)
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
+ * delete a deal
+ */
+Deal.deleteDeal = async function (dealId) {
+  try {
+    await new Fetch()
+      .delete(`/deals/${dealId}`)
+  } catch (e) {
+    throw e
   }
 }
 
@@ -197,10 +236,11 @@ Deal.searchListings = async function (address) {
 /**
 * create new deal
 */
-Deal.create = async function (data) {
+Deal.create = async function (user, data) {
   try {
     const response = await new Fetch()
       .post('/deals')
+      .set('X-RECHAT-BRAND', user.brand)
       .send(data)
 
     return response.body.data
@@ -266,6 +306,21 @@ Deal.updateChecklist = async function (deal_id, checklist_id, attributes) {
     const response = await new Fetch()
       .put(`/deals/${deal_id}/checklists/${checklist_id}`)
       .send(attributes)
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
+
+/**
+* update listing
+*/
+Deal.updateListing = async function (dealId, listingId) {
+  try {
+    const response = await new Fetch()
+      .patch(`/deals/${dealId}/listing`)
+      .send({ listing: listingId })
 
     return response.body.data
   } catch (e) {
@@ -393,7 +448,7 @@ Deal.sendEnvelope = async function(deal_id, subject, message, attachments, recip
   const data = {
     deal: deal_id,
     title: subject,
-    message: message,
+    body: message,
     documents: attachments,
     recipients: _.map(recipients, recipient => recipient)
   }

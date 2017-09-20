@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col, Button, Dropdown, MenuItem, Panel } from 'react-bootstrap'
 import cn from 'classnames'
+import VerticalDotsIcon from '../../../Partials/Svgs/VerticalDots'
 import CreateTask from '../create-task'
 import TaskStatus from './status'
 import TaskTermination from './termination'
@@ -21,24 +22,30 @@ class List extends React.Component {
     })
   }
 
-  getLabel(section) {
-    let color = '#8da2b5'
-    let label = ''
+  getLabels(section) {
+    const labels = []
 
     if (section.is_deactivated === true) {
-      label = 'Backup'
-    } else if (section.is_terminated) {
-      label = 'Terminated'
-      color = '#d0011b'
+      labels.push('BACKUP')
+    }
+
+    if (section.is_terminated) {
+      labels.push('TERMINATED')
     }
 
     return (
-      <div
-        className="p-label"
-        style={{ color }}
-      >
-        { label }
-      </div>
+      <ul className="labels">
+        {
+          labels.map(name =>
+            <li
+              key={`LBL_${name}`}
+              className={`p-label ${name}`}
+            >
+              { name }
+            </li>
+          )
+        }
+      </ul>
     )
   }
 
@@ -83,14 +90,12 @@ class List extends React.Component {
               />
             </div>
 
-            <div className="info">
-              <div>
-                <div className="p-title">
-                  { section.title }
-                </div>
+            <div className="s-info">
+              <span className="p-title">
+                { section.title }
+              </span>
 
-                { this.getLabel(section) }
-              </div>
+              { this.getLabels(section) }
             </div>
 
             {
@@ -108,7 +113,12 @@ class List extends React.Component {
                     bsRole="toggle"
                     onClick={e => e.stopPropagation()}
                   >
-                    <i className="fa fa-ellipsis-v" />
+                    <VerticalDotsIcon
+                      width={20}
+                      height={20}
+                      fill="#8da2b5"
+                    />
+
                   </Button>
 
                   <Dropdown.Menu>
@@ -146,6 +156,7 @@ class List extends React.Component {
                   onClick={() => onSelectTask(task)}
                   className={cn('task', { active: selectedTaskId === id })}
                 >
+                  <div className="icon" />
                   <div className="title">
                     { task.title.replace(/&.*;/g, '') }
                   </div>

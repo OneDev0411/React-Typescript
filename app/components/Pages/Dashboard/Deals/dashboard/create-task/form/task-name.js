@@ -66,9 +66,10 @@ class TaskName extends React.Component {
 
     return (
       <Modal
+        dialogClassName="modal-deal-create-form-task-name"
         show={show}
         onHide={onClose}
-        dialogClassName="modal-deal-create-form-task-name"
+        backdrop="static"
       >
         <Modal.Header closeButton>
           <Modal.Title>Name Task</Modal.Title>

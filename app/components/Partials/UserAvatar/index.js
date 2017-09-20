@@ -9,17 +9,17 @@ const Colors = {
 }
 
 const UserAvatar = ({
-                      name,
-                      image,
-                      state,
-                      color,
-                      style,
-                      size = 50,
-                      borderColor = '#fff',
-                      showStateIndicator = true,
-                      textSizeRatio = 3,
-                      fgColor
-                    }) => {
+  name,
+  image,
+  state,
+  color,
+  style,
+  size = 50,
+  borderColor = '#fff',
+  showStateIndicator = true,
+  textSizeRatio = 3,
+  fgColor
+}) => {
   const defaultStyles = showStateIndicator ?
     { position: 'relative', width: `${size}px` } :
     {}

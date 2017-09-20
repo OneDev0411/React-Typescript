@@ -1,9 +1,16 @@
+.deal-task-detail {
+  @extend %deal-task-detail;
+}
+
 %deal-task-detail {
+  $width: calc(100% - #{$deal-info-width} - #{$deal-tasks-width} - #{$col-padding});
+  min-width: $width;
+  max-width: $width;
   border: 1px solid #dce5eb;
   margin: 20px $col-padding 20px 0;
   border-radius: 4px;
   background-color: #f8fafb;
-  @include scrollbar()
+  @include scrollbar();
 
   .heading {
     @extend %deal-task-detail-heading;
@@ -18,6 +25,7 @@
 
   .full-width {
     width: 100%;
+    position: relative;
   }
 }
 
@@ -26,7 +34,7 @@
   height: 58px;
   padding: 0 $col-padding 0 $col-padding;
   border-radius: 3px 3px 0 0;
-  box-shadow: 0 1px 5px 0 rgba(167, 184, 200, 0.7);
+  border-bottom: 1px solid #dce5eb;
   background-color: #f8fafb;
   margin-bottom: 15px;
 
