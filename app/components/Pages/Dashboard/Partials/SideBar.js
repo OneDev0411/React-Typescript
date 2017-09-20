@@ -346,7 +346,7 @@ export default class SideBar extends Component {
     if (path.indexOf('/dashboard/contacts') !== -1)
       active.contacts = 'active'
 
-    if (path.indexOf('/dashboard/brand') !== -1)
+    if (path.indexOf('/dashboard/brands') !== -1)
       active.brand = 'active'
 
     if (path.indexOf('/dashboard/notifications') !== -1)
@@ -711,7 +711,7 @@ export default class SideBar extends Component {
               {
                 user && user.features && user.features.includes('Backoffice') &&
                 <li>
-                  <a href="/dashboard/brand" style={S('ml-30')}>Brand Setting</a>
+                  <a href="/dashboard/brands" style={S('ml-30')}>Brand Setting</a>
                 </li>
               }
               <li role="separator" className="divider" />

@@ -17,7 +17,10 @@ const AsyncAuthenticationLayout = Load({
 
 // Pages
 import Landing from '../components/Pages/Landing'
-import Brand from '../components/Pages/Dashboard/Brand'
+const Brands = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Brands' /* webpackChunkName: "brands" */)
+})
 
 const AsyncSignUp = Load({
   loader: () =>
@@ -311,7 +314,7 @@ export default (
         <IndexRoute component={AsyncDealsList} />
         <Route path="/dashboard/deals/:id" component={AsyncDealDashboard} />
       </Route>
-      <Route path="/dashboard/brand" component={Brand} />
+      <Route path="/dashboard/brands" component={Brands} />
 
       <Route path="/dashboard/recents(/:roomId)">
         <IndexRoute component={AsyncRecents} />
