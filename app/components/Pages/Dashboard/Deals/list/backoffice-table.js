@@ -35,12 +35,12 @@ class BackOfficeTable extends BaseTable {
         className: 'col-md-2 hidden-xs',
         getText: deal => deal.property_type
       },
-      office: {
-        caption: 'OFFICE',
-        sortable: true,
-        className: 'col-md-1 hidden-sm hidden-xs',
-        getText: deal => this.getOffice(deal)
-      },
+      // office: {
+      //   caption: 'OFFICE',
+      //   sortable: true,
+      //   className: 'col-md-1 hidden-sm hidden-xs',
+      //   getText: deal => this.getOffice(deal)
+      // },
       critical_dates: {
         caption: 'CRITICAL DATES',
         className: 'col-md-2 hidden-sm hidden-xs',

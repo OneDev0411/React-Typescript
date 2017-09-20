@@ -61,8 +61,8 @@ export default class DealSocket extends Socket {
   /**
    * on update deal
    */
-  onUpdateDeal(deal) {
-    store.dispatch(updateDeal(deal))
+  async onUpdateDeal(deal) {
+    await store.dispatch(updateDeal(deal))
   }
 
   /**
