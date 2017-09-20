@@ -253,7 +253,7 @@ export default compose(
         await updatePassword(userPassword)
 
         if (user_type === 'Agent') {
-          redirect = `/register/upgrade?redirectTo=${encodeURIComponent(
+          redirect = `/dashboard/account/upgrade?redirectTo=${encodeURIComponent(
             redirectTo
           )}`
         }
