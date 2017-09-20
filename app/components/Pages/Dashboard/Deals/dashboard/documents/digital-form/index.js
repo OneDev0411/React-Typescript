@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
-import { editForm } from '../../../../../../store_actions/deals/forms'
-import ESignButton from '../esign/button'
-import FormViewer from '../form-viewer'
+import { editForm } from '../../../../../../../store_actions/deals/forms'
+import ESignButton from '../../esign/button'
+import FormViewer from '../../form-viewer'
 
 class Form extends React.Component {
   constructor(props) {
@@ -46,21 +46,23 @@ class Form extends React.Component {
 
         <div className="title">Digital Form</div>
         <div className="file-group">
-          <Row className="item digital-form">
-            <Col sm={1} xs={12} className="image vcenter">
+          <div className="item digital-form">
+            <div className="image">
               <img src="/static/images/deals/digital-form.svg" />
-            </Col>
+            </div>
 
-            <Col
-              onClick={() => this.setState({ showFormViewer: true })}
-              sm={5}
-              xs={12}
-              className="name vcenter link"
-            >
-              Digital Form
-            </Col>
+            <div className="name">
+              { task.title }
+            </div>
 
-            <Col sm={6} xs={12} className="actions vcenter">
+            <div className="actions">
+              <button
+                className="btn-deal"
+                onClick={() => this.setState({ showFormViewer: true })}
+              >
+                View
+              </button>
+
               <ESignButton
                 dealId={task.deal}
                 task={task}
@@ -71,10 +73,10 @@ class Form extends React.Component {
                 className="btn-deal"
                 onClick={() => editForm(task)}
               >
-                Edit
+                Edit Form
               </button>
-            </Col>
-          </Row>
+            </div>
+          </div>
         </div>
       </div>
     )

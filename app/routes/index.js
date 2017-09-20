@@ -314,10 +314,6 @@ export default (
     <Route path="/" component={AppLayout} onEnter={authenticate}>
       <Route path="/branch" component={AsyncBranch} />
 
-      <Route path="/widgets/map" component={AsyncMapWidget} />
-      <Route path="/widgets/search" component={AsyncSearchWidget} />
-      <Route path="/widgets/listings" component={AsyncListingsWidget} />
-
       <Route path="dashboard/mls" component={AsyncListingsLayout}>
         <IndexRoute component={AsyncListingsSearch} />
 
@@ -361,6 +357,10 @@ export default (
 
       <Route path="/dashboard/website" component={AsyncWebsite} />
       <Route path="/dashboard/forms" component={AsyncForms} />
+
+      <Route path="/widgets/map" component={AsyncMapWidget} />
+      <Route path="/widgets/search" component={AsyncSearchWidget} />
+      <Route path="/widgets/listings" component={AsyncListingsWidget} />
     </Route>
 
     <Route path="/oops" component={AsyncOops} />

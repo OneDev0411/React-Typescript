@@ -1,9 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
-import Form from './form'
+import Form from './digital-form'
 import Attachments from './attachments'
-import UploadFile from './upload'
 import Envelopes from './esigns'
 
 export default ({

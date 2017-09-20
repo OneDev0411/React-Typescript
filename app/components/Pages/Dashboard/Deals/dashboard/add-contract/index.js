@@ -21,7 +21,7 @@ class AddContract extends React.Component {
     return (
       <div>
         <Button
-          className="add-contract-button"
+          className="info-btn add-contract-button"
           onClick={() => this.toggleDisplayModal()}
         >
           Add a new contract

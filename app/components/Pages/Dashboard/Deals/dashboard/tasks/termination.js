@@ -69,7 +69,11 @@ class TaskTermination extends React.Component {
         {
           saving ?
           <span style={{ color }}>
-            { checklist.is_terminated ? 'Activating...' : 'Terminating...' }
+            {
+              checklist.is_terminated ?
+              <span><i className="fa fa-spin fa-spinner" /> Activating...</span> :
+              <span><i className="fa fa-spin fa-spinner" /> Terminating...</span>
+            }
           </span> :
           <span style={{ color }}>
             { checklist.is_terminated ? 'Active' : 'Terminate' }

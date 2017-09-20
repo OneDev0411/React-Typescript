@@ -5,9 +5,9 @@ import { batchActions } from 'redux-batched-actions'
 import Dropzone from 'react-dropzone'
 import moment from 'moment'
 import _ from 'underscore'
-import ChatModel from '../../../../../../models/Chatroom'
-import ChatMessage from '../../../Chatroom/Util/message'
-import { addAttachment, setIsUploading, editForm } from '../../../../../../store_actions/deals'
+import ChatModel from '../../../../../../../models/Chatroom'
+import ChatMessage from '../../../../Chatroom/Util/message'
+import { addAttachment, setIsUploading, editForm } from '../../../../../../../store_actions/deals'
 
 class UploadDocument extends React.Component {
   constructor(props) {
@@ -114,18 +114,19 @@ class UploadDocument extends React.Component {
           children ||
           <div className="file-upload">
 
-            <Row className="item">
+            <div className="item">
 
-              <Col sm={1} xs={12} className="image vcenter">
+              <div className="image">
                 <img src="/static/images/deals/upload-file.svg" />
-              </Col>
-              <Col sm={11} xs={12} className="name vcenter">
+              </div>
+              <div className="name">
                 <div>
                   Drag and Drop your files to upload or&nbsp;
                   <span className="link" onClick={() => this.openDialog()}>browse</span>
                 </div>
-              </Col>
-            </Row>
+              </div>
+              <div className="actions" />
+            </div>
 
             {
               uploading &&

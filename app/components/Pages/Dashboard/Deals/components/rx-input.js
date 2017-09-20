@@ -25,11 +25,11 @@ export default class extends React.Component {
   render() {
     return (
       <FormControl
-        className="address"
+        className="rx-input"
         value={this.props.value}
         onChange={(e) => this.props.onChange(e)}
         inputRef={ref => this.search_input = ref}
-        placeholder="Enter MLS # or address"
+        placeholder={this.props.placeholder}
       />
     )
   }

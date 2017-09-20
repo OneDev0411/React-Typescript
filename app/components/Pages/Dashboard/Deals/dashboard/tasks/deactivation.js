@@ -68,11 +68,7 @@ class TaskDeactivation extends React.Component {
         {
           saving ?
           <span style={{ color }}>
-            {
-              checklist.is_deactivated ?
-              'Making active...' :
-              'Making backup...'
-            }
+            <i className="fa fa-spin fa-spinner" /> Saving...
           </span> :
 
           <span style={{ color }}>

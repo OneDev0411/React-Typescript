@@ -3,6 +3,8 @@ import ListingCard from '../listing-card'
 import FactSheet from '../factsheet'
 import Roles from '../roles'
 import AddContract from '../add-contract'
+import DeleteDeal from '../delete-deal'
+import MlsListing from '../mls-listing'
 
 export default ({
   deal,
@@ -15,6 +17,10 @@ export default ({
     />
 
     <div className="scrollable">
+      <MlsListing
+        deal={deal}
+      />
+
       <AddContract
         deal={deal}
       />
@@ -24,6 +30,10 @@ export default ({
       />
 
       <FactSheet
+        deal={deal}
+      />
+
+      <DeleteDeal
         deal={deal}
       />
     </div>

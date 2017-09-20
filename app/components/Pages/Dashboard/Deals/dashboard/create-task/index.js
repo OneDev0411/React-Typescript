@@ -6,11 +6,9 @@ export default ({
   listId
 }) => {
   return (
-    <div className="task add-task">
-      <FormTask
-        dealId={dealId}
-        listId={listId}
-      />
-    </div>
+    <FormTask
+      dealId={dealId}
+      listId={listId}
+    />
   )
 }

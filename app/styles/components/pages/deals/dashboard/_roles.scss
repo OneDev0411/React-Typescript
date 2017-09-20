@@ -1,20 +1,14 @@
+.deal-roles {
+  @extend %deal-roles;
+}
+
 .modal-deal-add-role {
   .modal-content {
     border-radius: 6px;
   }
 
   .modal-header {
-    background-color: #f8fafb;
-    border-radius: 6px 6px 0 0;
-    .close {
-      margin-top: 5px;
-    }
-
-    .modal-title {
-      font-size: 24px;
-      font-weight: 600;
-      color: #1d364b;
-    }
+    @extend %deal-modal-header;
   }
 
   .modal-body {

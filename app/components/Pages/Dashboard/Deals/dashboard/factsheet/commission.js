@@ -22,7 +22,7 @@ const table = {
 export default ({
   deal
 }) => (
-  <div className="deal-info">
+  <div className="deal-info-section">
     <div className="deal-info-title">
       CDA Information
     </div>

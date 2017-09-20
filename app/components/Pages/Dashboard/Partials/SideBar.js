@@ -116,7 +116,7 @@ const appNavbar = ({
           </Link>
         </NavbarItem>
 
-        { user.brand && user.features && user.features.includes('Deals') &&
+        { user.features && user.features.includes('Deals') &&
           <NavbarItem title="Deals">
             <Link to="/dashboard/deals">
               <DealsIcon color={activePath === 'DEALS' ? ACTIVE_COLOR : DEFAULT_COLOR} />
@@ -154,7 +154,7 @@ const appNavbar = ({
           <Dropdown.Menu>
             <li><Link to="/dashboard/account">Account</Link></li>
             {
-              user.brand && user.features && user.features.includes('Backoffice') &&
+              user && user.features && user.features.includes('Backoffice') &&
               <li>
                 <Link to="/dashboard/brand">Brand</Link>
               </li>
@@ -163,7 +163,7 @@ const appNavbar = ({
               <li><Link to="/dashboard/forms">Forms</Link></li> }
             <li role="separator" className="divider" />
             <li>
-              <a href={`/signout?username=${encodeURIComponent(user.email)}`}>Sign out</a>
+              <a href="/signout">Sign out</a>
             </li>
           </Dropdown.Menu>
         </Dropdown>

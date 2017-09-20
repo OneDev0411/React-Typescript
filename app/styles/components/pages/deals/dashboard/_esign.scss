@@ -1,4 +1,38 @@
 /**
+* styles of docusign banner
+*/
+.deal-esign-docusign {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 90px;
+  background-color: #2196f3;
+  font-size: 17px;
+  font-weight: 500;
+  color: #fff;
+  text-align: center;
+  .btn-login {
+    margin-left: 10px;
+    color: #2196f3;
+    background-color: #fff;
+    border: none;
+    border-radius: 3px;
+    width: 100px;
+    height: 30px;
+  }
+  img {
+    margin-top: 5px;
+    height: 45px;
+    margin-left: 16px;
+  }
+}
+
+/**
 * styles of eSign menu in task's detail
 */
 .deal-esgin-cta-menu {
@@ -65,7 +99,7 @@
 
   .who-signed {
     padding: 0;
-    margin-right: -8px;
+    // right: 8px;
     width: 375px;
     border-radius: 6px;
 

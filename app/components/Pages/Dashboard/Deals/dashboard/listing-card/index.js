@@ -1,8 +1,8 @@
 import React from 'react'
 import _ from 'underscore'
-import { browserHistory } from 'react-router'
+import { browserHistory, Link } from 'react-router'
 import Deal from '../../../../../../models/Deal'
-import ListingViewer from '../listing-viewer'
+// import ListingViewer from '../listing-viewer'
 
 function getHomeAddress(deal) {
   const unitNumber = Deal.get.field(deal, 'unit_number')
@@ -29,6 +29,12 @@ function getListingAddress(deal) {
   ]
   .filter(item => item !== null)
   .join(' ')
+}
+
+function openListing(deal) {
+  if (deal.listing) {
+    browserHistory.push(`/dashboard/mls/${deal.listing}`)
+  }
 }
 
 function goBack() {
@@ -71,7 +77,11 @@ export default ({
         />
       }
 
-      <div className="data">
+      <div
+        className="data"
+        onClick={() => openListing(deal)}
+        style={{ cursor: deal.listing ? 'pointer' : 'auto' }}
+      >
 
         <div className="address-info">
           <div className="title">
@@ -84,10 +94,10 @@ export default ({
         </div>
 
         <div className="view">
-
-          <ListingViewer
-            deal={deal}
-          />
+          {
+            deal.listing &&
+            <img src="/static/images/deals/view-listing.svg" />
+          }
         </div>
       </div>
 

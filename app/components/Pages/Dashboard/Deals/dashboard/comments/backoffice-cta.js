@@ -15,7 +15,8 @@ export default ({
   task,
   onSendComment,
   onDecline,
-  onApprove
+  onApprove,
+  hasComment
 }) => {
   const status = task.review ? task.review.status : ''
   const needs_attention = task.needs_attention === true
@@ -52,7 +53,7 @@ export default ({
           className="deal-button decline-comment"
           onClick={() => onSendComment(false, 'Declined')}
         >
-          Decline & Comment
+          { hasComment ? 'Decline & Comment' : 'Decline' }
         </button>
       }
 
@@ -63,7 +64,7 @@ export default ({
           className="deal-button approve-comment"
           onClick={() => onSendComment(false, 'Approved')}
         >
-          Approve & Comment
+          { hasComment ? 'Approve & Comment' : 'Approve' }
         </button>
       }
 
@@ -73,7 +74,7 @@ export default ({
           className="deal-button close-comment"
           onClick={() => onSendComment(false)}
         >
-          Comment & Close
+          { hasComment ? 'Comment & Close' : 'Close' }
         </button>
       }
 

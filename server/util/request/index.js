@@ -80,7 +80,11 @@ const requestMiddleware = async (ctx, next) => {
         })
         .on('response', response => {
           if (~~response.status >= 200 && ~~response.status <= 207) {
-            response.body.status = 'success'
+            try {
+              response.body.status = 'success'
+            } catch(e) {
+              // nothing
+            }
           }
         })
     } catch (error) {

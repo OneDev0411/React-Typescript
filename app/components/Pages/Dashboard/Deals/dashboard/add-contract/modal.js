@@ -77,7 +77,7 @@ class AddContractModal extends React.Component {
         dialogClassName="modal-deal-add-contract"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Accept a Contract</Modal.Title>
+          Add a Contract
         </Modal.Header>
 
         <Modal.Body>
@@ -116,7 +116,7 @@ class AddContractModal extends React.Component {
             disabled={creating || buyerName.length === 0 || activeOption === null}
             onClick={() => this.createContract()}
           >
-            { creating ? 'Creating' : 'Accept' }
+            { creating ? 'Creating' : 'Add' }
           </Button>
         </Modal.Footer>
       </Modal>

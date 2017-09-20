@@ -95,7 +95,7 @@ class PdfViewer extends React.Component {
         {
           loading &&
           <div className="loading center">
-            <img src="/static/images/loading-states/pacman.svg" />
+            <i className="fa fa-spin fa-spinner fa-2x" />
             <p>Loading document</p>
           </div>
         }
