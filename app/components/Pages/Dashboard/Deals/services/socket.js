@@ -12,15 +12,15 @@ export default class DealSocket extends Socket {
   constructor(user) {
     super(user)
 
+    // register brand
+    DealSocket.registerBrand(user)
+
     // bind chatroom socket events
     this.bindEvents()
   }
 
   async bindEvents() {
-    const { socket } = this
-
-    // register brand
-    DealSocket.registerBrand(this.user)
+    const { socket } = window
 
     // bind User.Typing
     socket.on('Deal', this.onDealChange.bind(this))
@@ -33,11 +33,9 @@ export default class DealSocket extends Socket {
    * authenticate user brand
    */
   static registerBrand(user) {
-    if (!user || !user.brand) {
-      return false
+    if (user && user.brand) {
+      window.socket.emit('Brand.Register', user.brand)
     }
-
-    socket.emit('Brand.Register', user.brand)
   }
 
   /**

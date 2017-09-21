@@ -3,10 +3,6 @@ import store from '../../stores'
 import { changeSocketStatus } from '../../store_actions/socket'
 import config from '../../../config/public'
 
-const UNAUTHORIZED = 'unauthorized'
-const AUTHENTICATING = 'authenticating'
-const AUTHENTICATED = 'authenticated'
-
 // create socket
 const socket = io(config.socket.server, {
   reconnection: true,
@@ -20,26 +16,31 @@ export default class Socket {
   /**
    * socket authentication status
    */
-  static authentication = UNAUTHORIZED
+  static authenticated = false
 
   constructor(user) {
     // set user
     this.user = user
 
-    // bind socket to window
-    window.socket = this.socket = socket
+    // singleton pattern
+    if (window.socket) {
+      return false
+    }
 
     // create authentication
-    if (Socket.authentication === UNAUTHORIZED) {
+    if (Socket.authenticated === false) {
       Socket.authenticate(user)
     }
 
+    // bind socket to window
+    window.socket = socket
+
     // bind Reconnecting and Reconnect socket
-    socket.on('reconnecting', this.onReconnecting.bind(this))
-    socket.on('reconnect', this.onReconnect.bind(this))
+    window.socket.on('reconnecting', this.onReconnecting.bind(this))
+    window.socket.on('reconnect', this.onReconnect.bind(this))
 
     // bind ping
-    socket.on('ping', this.onPing)
+    window.socket.on('ping', this.onPing)
   }
 
   /**
@@ -51,22 +52,17 @@ export default class Socket {
       return false
     }
 
-    // set status
-    Socket.authentication = AUTHENTICATING
-
     socket.emit('Authenticate', user.access_token, (err, user) => {
 
       if (err || !user) {
-        // update status
-        Socket.authentication = UNAUTHORIZED
         return false
       }
 
       // update app store
       store.dispatch(changeSocketStatus('connected'))
 
-      // update status
-      Socket.authentication = AUTHENTICATED
+      // update authenticated flag
+      Socket.authenticated = true
     })
   }
 

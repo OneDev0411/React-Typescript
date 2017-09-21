@@ -10,7 +10,7 @@ export default class NotificationService extends Socket {
     super(user)
 
     // bind Notification events
-    socket.on('Notification', this.onNotification.bind(this))
+    window.socket.on('Notification', this.onNotification.bind(this))
   }
 
   subscribe(name, handler) {
