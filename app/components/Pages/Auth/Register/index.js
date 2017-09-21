@@ -240,7 +240,6 @@ export default compose(
 
       if (phone_number) {
         userInfo.email = email
-        userPassword.email = emailFromURI
         userPassword.phone_number = phone_number
       } else if (emailFromURI) {
         userPassword.email = emailFromURI
