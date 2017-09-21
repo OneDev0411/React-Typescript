@@ -41,6 +41,7 @@ const TaskManager = ({
         </div>
 
         <CommentInput
+          key={`CM_INPUT_${task.id}`}
           task={task}
           onCloseTask={() => onCloseTask()}
         />
