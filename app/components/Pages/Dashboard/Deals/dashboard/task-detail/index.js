@@ -52,6 +52,10 @@ const TaskManager = ({
   )
 }
 
-export default connect(({ deals }) => ({
-  tasks: deals.tasks
-}))(TaskManager)
+function mapStateTopProps({ deals }, { taskId }) {
+  return {
+    task: taskId ? deals.tasks[taskId] : null
+  }
+}
+
+export default connect(mapStateTopProps)(TaskManager)
