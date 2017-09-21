@@ -18,28 +18,33 @@
   }
 
   .bar {
-    padding: 8px 4px 0 8px;
+    padding: 0 4px 0 8px;
     background-color: #f6f7f9;
     border-radius: 4px 4px 0 0;
     height: $bar-height;
     color: #000;
     text-align: left;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 
     &.blinking {
       @extend %blinker;
     }
 
     .room-title {
+      width: 50%;
       font-size: 15px;
       cursor: pointer;
       font-weight: 600;
       display: inline-block;
       min-width: 140px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
 
     .icons {
-      display: inline-block;
-      vertical-align: middle;
       @extend %fix--btn-group;
       .icon {
         margin-left: 15px;
