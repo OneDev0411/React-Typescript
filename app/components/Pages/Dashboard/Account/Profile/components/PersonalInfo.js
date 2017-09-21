@@ -8,9 +8,8 @@ import { Field, reduxForm } from 'redux-form'
 import FormCard from './FormCard'
 import SimpleField from './SimpleField'
 import AvatarUploader from './AvatarUploader'
-import { getBrandInfo, renderField } from '../../../../Auth/SignIn'
+import { getBrandInfo } from '../../../../Auth/SignIn'
 import editUser from '../../../../../../store_actions/user/edit'
-import updatePassword from '../../../../../../models/auth/password/update'
 
 let PersonalInfoForm = ({
   brand,
@@ -42,12 +41,6 @@ let PersonalInfoForm = ({
           component={SimpleField}
         />
         <Field
-          name="display_name"
-          type="text"
-          label="Nick Name"
-          component={SimpleField}
-        />
-        <Field
           name="email"
           type="email"
           label="Email"
@@ -56,7 +49,7 @@ let PersonalInfoForm = ({
         <Field
           name="phone_number"
           type="tel"
-          label="Tel"
+          label="Phone Number"
           component={SimpleField}
         />
 
@@ -126,10 +119,9 @@ export default compose(
     return {
       brand,
       initialValues: {
-        first_name,
-        last_name,
-        display_name,
         email,
+        last_name,
+        first_name,
         phone_number
       }
     }
@@ -144,7 +136,7 @@ export default compose(
     }) => async formInputsValue => {
       setIsSubmitting(true)
 
-      const { first_name, last_name, display_name, email } = formInputsValue
+      const { first_name, last_name, email, phone_number } = formInputsValue
 
       // console.log(redirectTo, formInputsValue, userPassword, userInfo)
       try {
