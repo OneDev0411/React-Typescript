@@ -1,6 +1,4 @@
 import edit from '../../models/user/edit'
-import AppStore from '../../stores/AppStore'
-import updateApp from '../../store_actions/data'
 import * as actionsType from '../../constants/user'
 
 const editUser = userInfo => async (dispatch, getState) => {

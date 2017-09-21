@@ -7,6 +7,7 @@ import { Field, reduxForm } from 'redux-form'
 
 import FormCard from './FormCard'
 import SimpleField from './SimpleField'
+import AvatarUploader from './AvatarUploader'
 import { getBrandInfo, renderField } from '../../../../Auth/SignIn'
 import editUser from '../../../../../../store_actions/user/edit'
 import updatePassword from '../../../../../../models/auth/password/update'
@@ -22,6 +23,7 @@ let PersonalInfoForm = ({
   const { brandColor } = getBrandInfo(brand)
   return (
     <FormCard title="Personal Info">
+      <AvatarUploader />
       <form
         className="c-account__form clearfix"
         onSubmit={handleSubmit(onSubmitHandler)}
@@ -119,18 +121,10 @@ PersonalInfoForm = reduxForm({
 
 export default compose(
   connect(({ brand, user }) => {
-    const {
-      first_name,
-      last_name,
-      display_name,
-      email,
-      phone_number,
-      profile_image_url
-    } = user
+    const { first_name, last_name, display_name, email, phone_number } = user
 
     return {
       brand,
-      profile_image_url,
       initialValues: {
         first_name,
         last_name,
