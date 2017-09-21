@@ -9,15 +9,12 @@ import CommentInput from '../comments/input'
 
 const TaskManager = ({
   deal,
-  tasks,
-  taskId,
+  task,
   onCloseTask
 }) => {
-  if (!taskId) {
+  if (!task) {
     return false
   }
-
-  const task = tasks[taskId]
 
   return (
     <div className="full-width">
