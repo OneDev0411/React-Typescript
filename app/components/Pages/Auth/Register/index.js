@@ -11,7 +11,6 @@ import { getBrandInfo, renderField } from '../SignIn'
 import Brand from '../../../../controllers/Brand'
 
 import editUser from '../../../../store_actions/user/edit'
-import setWidget from '../../../../store_actions/widgets/setWidget'
 import submitSigninForm from '../../../../store_actions/auth/signin'
 import updatePassword from '../../../../models/auth/password/update'
 
@@ -185,11 +184,11 @@ const validate = values => {
 
 export default compose(
   connect(
-    ({ brand }, { location }) => ({
+    ({ brand }, { location: { query } }) => ({
       brand,
-      paramsFromURI: location.query
+      paramsFromURI: query
     }),
-    { submitSigninForm, editUser, setWidget }
+    { submitSigninForm, editUser }
   ),
   reduxForm({
     form: 'register',
@@ -201,7 +200,6 @@ export default compose(
   withHandlers({
     onSubmitHandler: ({
       editUser,
-      setWidget,
       paramsFromURI,
       setSubmitError,
       setIsSubmitting,
@@ -231,17 +229,17 @@ export default compose(
 
       const userInfo = {
         last_name,
-        first_name
+        first_name,
+        is_shadow: false
       }
 
       const loginInfo = {
         password,
-        username: emailFromURI || email
+        username: email || emailFromURI
       }
 
       if (phone_number) {
         userInfo.email = email
-        userPassword.email = emailFromURI
         userPassword.phone_number = phone_number
       } else if (emailFromURI) {
         userPassword.email = emailFromURI
@@ -249,17 +247,17 @@ export default compose(
 
       // console.log(redirectTo, formInputsValue, userPassword, userInfo)
       try {
+        let redirect = '/dashboard/mls'
         await updatePassword(userPassword)
-        await submitSigninForm(loginInfo)
-        await editUser(userInfo)
 
         if (user_type === 'Agent') {
-          setWidget(true)
-          browserHistory.push(`/account/upgrade?redirectTo=${redirectTo}`)
-          return
+          redirect = `/dashboard/account/upgrade?redirectTo=${encodeURIComponent(
+            redirectTo
+          )}`
         }
 
-        browserHistory.push(redirectTo)
+        await submitSigninForm(loginInfo, redirect)
+        await editUser(userInfo)
       } catch (error) {
         setIsSubmitting(false)
         setSubmitError(true)
