@@ -2,7 +2,6 @@
   position: relative;
   width: 12.8rem;
   height: 12.8rem;
-  margin-bottom: 2rem;
 
   .c-auth__submit-alert--success {
     margin-bottom: 0;
@@ -20,7 +19,7 @@
   transition: background 0.2s ease-in;
 
   &:hover > span {
-    color: #888;
+    color: #6b7075;
   }
 
   &.has-avatar {
@@ -47,13 +46,13 @@
   left: 0;
   transform: translateY(-50%);
   text-align: center;
-  color: #aaa;
+  color: #8f969c;
 }
 
 .c-avatar-uploader__placeholder {
   height: 100%;
   text-align: center;
-  background: #eee;
+  background: #d6dce2;
   border-radius: 100%;
 }
 
@@ -68,9 +67,9 @@
 }
 
 .c-avatar-uploader__remove-btn {
-  width: 12.8rem;
+  width: 11rem;
   position: absolute;
-  left: 12.8rem;
+  left: 13.8rem;
   bottom: 0;
   display: block;
   word-wrap: none;

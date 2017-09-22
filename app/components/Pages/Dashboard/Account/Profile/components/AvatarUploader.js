@@ -15,7 +15,7 @@ const AvatarUploader = ({ avatar, onChangeHandler, avatarRemoveHandler }) => (
         <svg
           width="96"
           height="96"
-          fill="#ccc"
+          fill="#fff"
           viewBox="0 0 24 24"
           className="c-avatar-uploader__svg"
           xmlns="http://www.w3.org/2000/svg"
@@ -28,7 +28,7 @@ const AvatarUploader = ({ avatar, onChangeHandler, avatarRemoveHandler }) => (
       htmlFor="avatarImage"
       className={`c-avatar-uploader__label ${avatar ? 'has-avatar' : ''}`}
     >
-      <span>{avatar ? 'Update' : 'Upload'} Avatar</span>
+      <span>{avatar ? 'Change' : 'Upload'} Avatar</span>
     </label>
     <input
       type="file"
@@ -49,7 +49,7 @@ const AvatarUploader = ({ avatar, onChangeHandler, avatarRemoveHandler }) => (
 )
 
 export default compose(
-  connect(({ user }) => ({ user }), { uploadAvatar, editUser }),
+  connect(null, { uploadAvatar, editUser }),
   withState(
     'avatar',
     'setAvatar',

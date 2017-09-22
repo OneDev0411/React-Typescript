@@ -8,7 +8,6 @@ import { Field, reduxForm } from 'redux-form'
 import FormCard from './FormCard'
 import SimpleField from './SimpleField'
 import PhoneNumberField from './PhoneNumberField'
-import AvatarUploader from './AvatarUploader'
 import { getBrandInfo } from '../../../../Auth/SignIn'
 import editUser from '../../../../../../store_actions/user/edit'
 
@@ -24,7 +23,6 @@ let PersonalInfoForm = ({
   const { brandColor } = getBrandInfo(brand)
   return (
     <FormCard title="Personal Info">
-      <AvatarUploader />
       <form
         className="c-account__form clearfix"
         onSubmit={handleSubmit(onSubmitHandler)}
@@ -52,6 +50,10 @@ let PersonalInfoForm = ({
           name="phone_number"
           type="tel"
           label="Phone Number"
+          normalize={value => {
+            value = value.replace('1', '').replace(/[^\d]*/g, '')
+            return value
+          }}
           component={PhoneNumberField}
         />
         {submitError && (
@@ -82,13 +84,16 @@ let PersonalInfoForm = ({
 
 const validate = values => {
   const errors = {}
+
   const minimumCharactersError = length =>
     `Must be at least ${length} characters.`
+
   const invalidCharactersError =
     'Invalid charachter. You are allowed use alphabet character and space in this field.'
+
   const isValidName = name => new RegExp(/^[A-Za-z\s]+$/).exec(name)
+
   const isNotValidPhoneNumber = phoneNumber => {
-    phoneNumber = phoneNumber.replace('1', '').replace(/[^\d]*/g, '')
     if (phoneNumber.length === 10 || phoneNumber.length === 0) {
       return false
     }
@@ -162,6 +167,7 @@ export default compose(
         Object.keys(fields).forEach(field => {
           if (initialValues[field] !== fields[field]) {
             if (field === 'phone_number' && !fields.phone_number) {
+              console.log(fields.phone_number)
               userInfo.phone_number = null
               return
             }

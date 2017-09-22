@@ -28,6 +28,15 @@
   width: calc(100% - 23rem);
   overflow-x: hidden;
   overflow-y: scroll;
-  padding: 5.4rem 2rem 2rem;
   background: #f0f4f7;
+}
+
+.l-account__header {
+  padding: 3rem;
+}
+
+.l-account__page-title {
+  font-size: 36px;
+  line-height: 1;
+  margin: 0;
 }

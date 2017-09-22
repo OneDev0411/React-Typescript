@@ -1,0 +1,25 @@
+.c-profile-catalog {
+  .c-form-card {
+    margin-bottom: 4rem;
+  }
+
+  .c-form-card__body {
+    display: flex;
+    padding: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+}
+
+.c-profile-catalog__list {
+  margin-left: 1rem;
+}
+
+.c-profile-catalog__item--big {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.c-profile-catalog__list--small {
+  font-size: 16px;
+}
