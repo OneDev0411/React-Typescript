@@ -349,7 +349,6 @@ export default (
 
       <Route path="dashboard/account" component={AsyncAccountLayout}>
         <IndexRoute component={AsyncProfile} />
-        <Route path="payment" component={AsyncPayment} />
         <Route path="upgrade" component={AsyncUpgradeAccount} />
       </Route>
 
