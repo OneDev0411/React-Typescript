@@ -22,68 +22,67 @@ const ChangePasswordForm = ({
   const { brandColor } = getBrandInfo(brand)
   return (
     <FormCard title="Change Password">
-      {!submitSuccessfully ? (
-        <form
-          className="c-account__form clearfix"
-          onSubmit={handleSubmit(onSubmitHandler)}
+      <form
+        className="c-account__form clearfix"
+        onSubmit={handleSubmit(onSubmitHandler)}
+      >
+        <Field
+          name="old_password"
+          type="password"
+          label="Current Password"
+          onChange={(e, value, newValue) => {
+            if (submitError && newValue) {
+              setSubmitError(false)
+            }
+          }}
+          component={SimpleField}
+        />
+        <Field
+          name="new_password"
+          type="password"
+          label="New Password"
+          onChange={(e, value, newValue) => {
+            if (submitError && newValue) {
+              setSubmitError(false)
+            }
+          }}
+          component={SimpleField}
+        />
+        <Field
+          type="password"
+          name="confirm_password"
+          label="Confirm New Password"
+          onChange={(e, value, newValue) => {
+            if (submitError && newValue) {
+              setSubmitError(false)
+            }
+          }}
+          component={SimpleField}
+        />
+        {submitError && (
+          <div className="c-auth__submit-error-alert">
+            {submitError.message}
+          </div>
+        )}
+        {submitSuccessfully && (
+          <div style={{ textAlign: 'center' }}>
+            <p className="c-auth__submit-alert--success">
+              Your password updated.
+            </p>
+          </div>
+        )}
+        <button
+          type="submit"
+          className="c-auth__submit-btn"
+          disabled={isSubmitting || pristine}
+          style={{
+            background: brandColor,
+            opacity: isSubmitting || pristine ? 0.7 : 1
+          }}
         >
-          <Field
-            name="old_password"
-            type="password"
-            label="Current Password"
-            onChange={(e, value, newValue) => {
-              if (submitError && newValue) {
-                setSubmitError(false)
-              }
-            }}
-            component={SimpleField}
-          />
-          <Field
-            name="new_password"
-            type="password"
-            label="New Password"
-            onChange={(e, value, newValue) => {
-              if (submitError && newValue) {
-                setSubmitError(false)
-              }
-            }}
-            component={SimpleField}
-          />
-          <Field
-            type="password"
-            name="confirm_password"
-            label="Confirm New Password"
-            onChange={(e, value, newValue) => {
-              if (submitError && newValue) {
-                setSubmitError(false)
-              }
-            }}
-            component={SimpleField}
-          />
-          {submitError && (
-            <div className="c-auth__submit-error-alert">
-              {submitError.message}
-            </div>
-          )}
-          <button
-            type="submit"
-            className="c-auth__submit-btn"
-            disabled={isSubmitting || pristine}
-            style={{
-              background: brandColor,
-              opacity: isSubmitting || pristine ? 0.7 : 1
-            }}
-          >
-            {isSubmitting ? 'Updating...' : 'Update'}
-          </button>
-        </form>
-      ) : (
-        <div style={{ textAlign: 'center' }}>
-          <p className="c-auth__submit-alert--success">
-            Your password updated.
-          </p>
-        </div>
-      )}
+          {isSubmitting ? 'Updating...' : 'Update'}
+        </button>
+      </form>
     </FormCard>
   )
 }
@@ -116,7 +115,7 @@ const validate = values => {
 const getErrorMessage = errorCode => {
   switch (errorCode) {
     case 403:
-      return 'Your current Password is not correct!'
+      return 'Your current Password is incorrect!'
     default:
       return 'An unexpected error occurred. Please try again.'
   }
@@ -130,21 +129,28 @@ export default compose(
     form: 'change_password',
     validate
   }),
-  withState('submitError', 'setSubmitError', false),
+  withState('submitError', 'setSubmitError', null),
   withState('isSubmitting', 'setIsSubmitting', false),
   withState('submitSuccessfully', 'setSubmitSuccessfully', false),
   withHandlers({
     onSubmitHandler: ({
+      reset,
       setSubmitError,
       setIsSubmitting,
       setSubmitSuccessfully
     }) => async formInputsValue => {
       setIsSubmitting(true)
+      setSubmitError(null)
+      setSubmitSuccessfully(false)
       const { old_password, new_password } = formInputsValue
 
       try {
         await changePassword({ old_password, new_password })
+        reset()
+        setIsSubmitting(false)
         setSubmitSuccessfully(true)
+
+        setTimeout(() => setSubmitSuccessfully(false), 2000)
       } catch (errorCode) {
         setIsSubmitting(false)
         setSubmitError({ message: getErrorMessage(errorCode) })
