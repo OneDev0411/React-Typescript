@@ -145,7 +145,7 @@ const appNavbar = ({
           className="c-app-navbar__account-dropdown"
         >
           <Dropdown.Toggle>
-            <Avatar data={data} />
+            <Avatar user={user} />
           </Dropdown.Toggle>
           <Dropdown.Menu>
             <li><Link to="/dashboard/account">Account</Link></li>
