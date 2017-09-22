@@ -9,19 +9,19 @@ import { Link } from 'react-router'
 import Intercom from 'react-intercom'
 import { Dropdown } from 'react-bootstrap'
 
-import ProfileImage from './ProfileImage'
-import SvgMap from './Svgs/Map'
-import SvgPeople from './Svgs/People'
-import SvgBriefCase from './Svgs/BriefCase'
-import SvgSupport from './Svgs/Support'
-import SvgNotifications from './Svgs/Notifications'
-import Brand from '../../../../controllers/Brand'
+import SvgMap from '../Svgs/Map'
+import SvgPeople from '../Svgs/People'
+import SvgBriefCase from '../Svgs/BriefCase'
+import SvgSupport from '../Svgs/Support'
+import SvgNotifications from '../Svgs/Notifications'
+import Brand from '../../../../../controllers/Brand'
+import Avatar from './components/Avatar'
 
 // chatroom stuff
-import InstantChatTrigger from '../Chatroom/Shared/instant-trigger'
+import InstantChatTrigger from '../../Chatroom/Shared/instant-trigger'
 
 // deals notification badge counter
-import DealsIcon from '../Deals/components/sidebar-badge'
+import DealsIcon from '../../Deals/components/sidebar-badge'
 
 const ACTIVE_COLOR = `#${Brand.color('primary', '3388ff')}`
 const DEFAULT_COLOR = '#4e5c6c'
@@ -86,10 +86,6 @@ const SupportButton = ({ onClick, isActive }) => (
   </NavbarItem>
 )
 
-const Settings = ({ data }) => (
-  <ProfileImage data={data} />
-)
-
 const appNavbar = ({
   data,
   user,
@@ -149,7 +145,7 @@ const appNavbar = ({
           className="c-app-navbar__account-dropdown"
         >
           <Dropdown.Toggle>
-            <ProfileImage data={data} />
+            <Avatar data={data} />
           </Dropdown.Toggle>
           <Dropdown.Menu>
             <li><Link to="/dashboard/account">Account</Link></li>
