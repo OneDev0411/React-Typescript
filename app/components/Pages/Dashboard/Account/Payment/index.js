@@ -1,5 +1,6 @@
 import React from 'react'
+import PageTitle from '../components/PageTitle'
 
-const Payment = () => <h2>Payment</h2>
+const Payment = () => <PageTitle title="Payment" />
 
 export default Payment

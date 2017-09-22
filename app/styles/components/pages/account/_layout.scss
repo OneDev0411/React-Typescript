@@ -29,6 +29,11 @@
   overflow-x: hidden;
   overflow-y: scroll;
   background: #f0f4f7;
+
+  .signin-page-wrapper {
+    height: auto;
+    padding-top: 8rem;
+  }
 }
 
 .l-account__header {
