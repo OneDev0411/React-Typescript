@@ -24,7 +24,7 @@ export default class ChatSocket extends Socket {
   }
 
   async bindEvents() {
-    const { socket } = this
+    const { socket } = window
 
     // bind User.Typing
     socket.on('User.Typing', this.onUserTyping.bind(this))
@@ -98,16 +98,18 @@ export default class ChatSocket extends Socket {
    * income event when a user started typing
    */
   onUserTyping({room_id, user_id}) {
-    if (user_id !== this.user.id)
+    if (user_id !== this.user.id) {
       store.dispatch(addMessageTyping(room_id, user_id))
+    }
   }
 
   /**
    * income socket event when user typing has been ended
    */
   onUserTypingEnded({user_id, room_id}) {
-    if (user_id !== this.user.id)
+    if (user_id !== this.user.id) {
       store.dispatch(removeMessageTyping(room_id, user_id))
+    }
   }
 
   /**

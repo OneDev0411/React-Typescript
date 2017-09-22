@@ -17,11 +17,15 @@ class Chatroom extends React.Component {
     const { activeRoom, params } = this.props
     const { rooms } = store.getState().chatroom
 
-    if (params && params.roomId)
+    // select room if is requested in url
+    if (params && params.roomId) {
       return this.changeRoom(params.roomId)
+    }
 
-    if (!activeRoom && _.size(rooms) > 0)
+    // if there is no active room, select first room by default
+    if (params && !activeRoom && _.size(rooms) > 0) {
       return this.changeRoom(rooms[_.keys(rooms)[0]].id)
+    }
   }
 
   shouldComponentUpdate(nextProps) {

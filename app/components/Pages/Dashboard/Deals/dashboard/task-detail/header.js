@@ -24,6 +24,7 @@ const Header = ({
             style={{ width: '30%' }}
           >
             <SubmitReview
+              key={task.id}
               task={task}
             />
           </td>

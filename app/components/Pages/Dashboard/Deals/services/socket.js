@@ -1,6 +1,7 @@
 import Socket from '../../../../../services/socket'
 import store from '../../../../../stores'
 import {
+  getDeals,
   createDeal,
   updateDeal,
   dealDeleted
@@ -11,15 +12,15 @@ export default class DealSocket extends Socket {
   constructor(user) {
     super(user)
 
+    // register brand
+    DealSocket.registerBrand(user)
+
     // bind chatroom socket events
     this.bindEvents()
   }
 
   async bindEvents() {
-    const { socket } = this
-
-    // register brand
-    DealSocket.registerBrand(this.user)
+    const { socket } = window
 
     // bind User.Typing
     socket.on('Deal', this.onDealChange.bind(this))
@@ -32,11 +33,9 @@ export default class DealSocket extends Socket {
    * authenticate user brand
    */
   static registerBrand(user) {
-    if (!user || !user.brand) {
-      return false
+    if (user && user.brand) {
+      window.socket.emit('Brand.Register', user.brand)
     }
-
-    socket.emit('Brand.Register', user.brand)
   }
 
   /**
@@ -61,8 +60,8 @@ export default class DealSocket extends Socket {
   /**
    * on update deal
    */
-  onUpdateDeal(deal) {
-    store.dispatch(updateDeal(deal))
+  async onUpdateDeal(deal) {
+    await store.dispatch(updateDeal(deal))
   }
 
   /**
@@ -83,7 +82,15 @@ export default class DealSocket extends Socket {
    * on reconnect
    */
   onReconnected() {
+    const state = store.getState()
+    const { deals } = state
+    const { user } = this
+
     // register brand
-    DealSocket.registerBrand(this.user)
+    DealSocket.registerBrand(user)
+
+    if (user) {
+      store.dispatch(getDeals(user, deals.backoffice))
+    }
   }
 }

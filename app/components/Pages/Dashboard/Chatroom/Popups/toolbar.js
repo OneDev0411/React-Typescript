@@ -5,12 +5,6 @@ import CloseIcon from '../../Partials/Svgs/CloseIcon'
 import FullscreenIcon from '../../Partials/Svgs/FullscreenIcon'
 import MinimizeIcon from '../../Partials/Svgs/MinimizeIcon'
 
-const getTitle = (title) => {
-  const len = 13
-  if (title.length < len) { return title }
-  return `${title.substr(0, len)}...`
-}
-
 export default ({
   room,
   isActive,
@@ -24,12 +18,12 @@ export default ({
       isActive
     })}
   >
-    <span
+    <div
       className="room-title"
       onClick={() => onMinimize(room.id)}
     >
-      { getTitle(room.proposed_title) }
-    </span>
+      { room.proposed_title }
+    </div>
 
     <div className="icons">
 

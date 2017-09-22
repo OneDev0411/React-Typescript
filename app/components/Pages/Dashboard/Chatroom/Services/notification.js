@@ -20,7 +20,7 @@ export default class ChatNotification extends NotificationService {
     // temporary variable to hold last room id that received notification
     this._lastRoomGotNotification = null
 
-    const { scoket } = this
+    const { scoket } = window
     socket.on('Notification.Delivered', this.onNotificationDelivered.bind(this))
     socket.on('Room.Acknowledged', this.onNotificationAcknowledged.bind(this))
 
@@ -86,8 +86,9 @@ export default class ChatNotification extends NotificationService {
 
     window.socket.emit('Room.Acknowledge', roomId)
 
-    if (rooms && rooms[roomId] && ~~rooms[roomId].new_notifications === 0)
+    if (rooms && rooms[roomId] && ~~rooms[roomId].new_notifications === 0) {
       return false
+    }
 
     store.dispatch(resetRoomNotificationsCounter(roomId))
   }
@@ -97,7 +98,7 @@ export default class ChatNotification extends NotificationService {
    */
   async createMessage(chatroom, notification, message) {
     const { room: roomId, notification_type, auxiliary_subject } = notification
-    const isDealTaskRoom = auxiliary_subject && auxiliary_subject.type === 'deal'
+    const isDealTaskRoom = auxiliary_subject && auxiliary_subject.type === 'deal' ? true : false
     const room = chatroom.rooms[roomId]
 
     // fetch room immediately if room is not exists
@@ -257,8 +258,9 @@ export default class ChatNotification extends NotificationService {
     const { messages } = this.getChatroomStore()
     const { room, user } = ack
 
-    if (ack.user === this.user.id || !messages[room])
+    if (ack.user === this.user.id || !messages[room]) {
       return false
+    }
 
     store.dispatch(acknowledgeRoom(room, user))
   }
@@ -269,8 +271,9 @@ export default class ChatNotification extends NotificationService {
   updateRoomNotifications(roomId, message) {
     const { rooms } = this.getChatroomStore()
 
-    if (!rooms[roomId])
+    if (!rooms[roomId]) {
       return false
+    }
 
     store.dispatch(updateRoomNotifications(roomId, message))
   }

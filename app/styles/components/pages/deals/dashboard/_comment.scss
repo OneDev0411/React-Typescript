@@ -73,9 +73,9 @@
   .deal-button {
     box-shadow: none;
     height: 30px;
-    line-height: 25px;
+    line-height: 13px;
     vertical-align: middle;
-    background-color: #ffffff;
+    background-color: #fff;
     font-weight: 500;
     box-shadow: 0 1px 1px 0 #eef1f2;
     border: solid 1px #e6eaec;
@@ -124,6 +124,14 @@
       width: 30px;
       i {
         font-size: 17px;
+      }
+    }
+
+    &.disabled {
+      &:hover {
+        background-color: #fff;
+        color: #78909c;
+        border-color: #e6eaec;
       }
     }
   }

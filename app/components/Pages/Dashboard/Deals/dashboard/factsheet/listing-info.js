@@ -21,7 +21,7 @@ export default ({
         {
           _.map(table, (name, field) => (
             <tr key={`LISTING_INFO_FIELD_${field}`}>
-              <td className="name no-status">{ name }:</td>
+              <td className="name no-status">{ name }</td>
               <td className="field">
                 {Deal.get.field(deal, field)}
               </td>
