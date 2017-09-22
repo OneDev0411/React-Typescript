@@ -15,8 +15,8 @@ const editUser = userInfo => async (dispatch, getState) => {
     })
 
     return user
-  } catch ({ status }) {
-    throw status
+  } catch (error) {
+    throw error
   }
 }
 

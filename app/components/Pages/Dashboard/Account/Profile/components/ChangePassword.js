@@ -139,10 +139,10 @@ export default compose(
       setIsSubmitting,
       setSubmitSuccessfully
     }) => async formInputsValue => {
+      const { old_password, new_password } = formInputsValue
+
       setIsSubmitting(true)
       setSubmitError(null)
-      setSubmitSuccessfully(false)
-      const { old_password, new_password } = formInputsValue
 
       try {
         await changePassword({ old_password, new_password })
