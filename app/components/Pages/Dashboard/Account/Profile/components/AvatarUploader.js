@@ -50,24 +50,36 @@ const AvatarUploader = ({ avatar, onChangeHandler, avatarRemoveHandler }) => (
 
 export default compose(
   connect(({ user }) => ({ user }), { uploadAvatar, editUser }),
-  withState('avatar', 'setAvatar', ({ user }) => user.profile_image_url || ''),
+  withState(
+    'avatar',
+    'setAvatar',
+    ({ user }) => user.profile_image_url || null
+  ),
   withHandlers({
     onChangeHandler: ({ setAvatar, uploadAvatar }) => async event => {
       const file = event.target.files[0]
-      const reader = new FileReader()
-      reader.onload = (() => e => setAvatar(e.target.result))()
 
-      try {
-        reader.readAsDataURL(file)
-        await uploadAvatar(file)
-      } catch (error) {
-        // console.log(error)
-      }
+      // Create a new FileReader instance
+      // https://developer.mozilla.org/en/docs/Web/API/FileReader
+      let reader = new FileReader()
+
+      // Once a file is successfully readed:
+      reader.addEventListener('load', async () => {
+        try {
+          setAvatar(reader.result)
+          await uploadAvatar(file)
+        } catch (error) {
+          setAvatar(null)
+          // console.log(error)
+        }
+      })
+
+      reader.readAsDataURL(file)
     },
     avatarRemoveHandler: ({ setAvatar, editUser }) => async () => {
       try {
-        setAvatar('')
         await editUser({ profile_image_url: '' })
+        setAvatar(null)
       } catch (error) {
         // console.log(error)
       }

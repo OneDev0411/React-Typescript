@@ -11,8 +11,8 @@ const uploadProfileImage = async file => {
       .attach('media', file)
 
     return response.body.data
-  } catch ({ status }) {
-    throw status
+  } catch (error) {
+    throw error
   }
 }
 
