@@ -100,7 +100,7 @@
     "prop-types": "^15.5.10",
     "react": "^15.4.2",
     "react-avatar": "^2.3.0",
-    "react-bootstrap": "^0.30.10",
+    "react-bootstrap": "^0.31.3",
     "react-burger-menu": "^2.0.2",
     "react-click-outside": "github:tj/react-click-outside",
     "react-color": "^2.13.8",
