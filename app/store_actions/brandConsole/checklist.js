@@ -8,12 +8,16 @@ function _getChecklists(checklists) {
   }
 }
 
-export function getChecklists(user) {
+export function getChecklists(brand) {
   return async (dispatch) => {
-    const response = await BrandConsole.getChecklists(user)
-    if (response) {
+    dispatch({ type: types.SHOW_SPINNER })
+    const response = await BrandConsole.getChecklists(brand)
+    dispatch({ type: types.HIDE_SPINNER })
+    if (response && !response.error) {
       const { data } = response.body
       dispatch(_getChecklists(data))
+    } else {
+      dispatch(notify({ message: `getChildrenBrands: ${response.error.message}`, status: 'error' }))
     }
   }
 }
@@ -25,12 +29,16 @@ function _addChecklist(checklist) {
   }
 }
 
-export function addChecklist(user, checklist) {
+export function addChecklist(brand, checklist) {
   return async (dispatch) => {
-    const response = await BrandConsole.addChecklist(user, checklist)
-    if (response) {
+    dispatch({ type: types.SHOW_SPINNER })
+    const response = await BrandConsole.addChecklist(brand, checklist)
+    dispatch({ type: types.HIDE_SPINNER })
+    if (response && !response.error) {
       const { data } = response.body
       dispatch(_addChecklist(data))
+    } else {
+      dispatch(notify({ message: `getChildrenBrands: ${response.error.message}`, status: 'error' }))
     }
   }
 }
@@ -44,10 +52,14 @@ function _deleteChecklist(checklist_id) {
 
 export function deleteChecklist(checklist) {
   return async (dispatch) => {
+    dispatch({ type: types.SHOW_SPINNER })
     const response = await BrandConsole.deleteChecklist(checklist)
-    if (response &&
+    dispatch({ type: types.HIDE_SPINNER })
+    if (response && !response.error &&
       response.body.status === 'success') {
       dispatch(_deleteChecklist(checklist.id))
+    } else {
+      dispatch(notify({ message: `getChildrenBrands: ${response.error.message}`, status: 'error' }))
     }
   }
 }
@@ -61,10 +73,14 @@ function _editChecklist(checklist) {
 
 export function editChecklist(checklist) {
   return async (dispatch) => {
+    dispatch({ type: types.SHOW_SPINNER })
     const response = await BrandConsole.editChecklist(checklist)
-    if (response) {
+    dispatch({ type: types.HIDE_SPINNER })
+    if (response && !response.error) {
       const { data } = response.body
       dispatch(_editChecklist(data))
+    } else {
+      dispatch(notify({ message: `getChildrenBrands: ${response.error.message}`, status: 'error' }))
     }
   }
 }

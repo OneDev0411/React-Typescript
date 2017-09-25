@@ -1,11 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import { Grid, Col, Accordion, Panel } from 'react-bootstrap'
 import Header from './Header'
 import ChecklistHeader from './HeaderChecklist'
 import Tasks from './Tasks'
 import Forms from './Forms'
-import { getChecklists, deleteChecklist } from '../../../../../store_actions/brandConsole'
+import {
+  getChecklists,
+  deleteChecklist
+} from '../../../../../store_actions/brandConsole'
 import { getForms } from '../../../../../store_actions/deals'
 
 class Checklists extends React.Component {
@@ -18,7 +22,7 @@ class Checklists extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getChecklists(this.props.user)
+    this.props.getChecklists(this.props.brand)
     this.props.getForms()
   }
 
@@ -34,7 +38,7 @@ class Checklists extends React.Component {
     return (
       <div className="checklists">
         <Header
-          user={this.props.user}
+          brand={this.props.brand}
         />
         <Grid className="table">
           <div className="header">
@@ -70,10 +74,17 @@ class Checklists extends React.Component {
   }
 }
 
+Checklists.propTypes = {
+  brand: PropTypes.string,
+  Checklists: PropTypes.array,
+  getChecklists: PropTypes.func,
+  deleteChecklist: PropTypes.func,
+  getForms: PropTypes.func
+}
+
 export default connect(
   ({ brandConsole, data }) => ({
-    Checklists: brandConsole.checklists || [],
-    user: data.user
+    Checklists: brandConsole.checklists || []
   }),
   ({ getChecklists, getForms, deleteChecklist })
 )(Checklists)

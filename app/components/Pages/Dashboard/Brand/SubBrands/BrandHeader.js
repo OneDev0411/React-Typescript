@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'react-bootstrap'
+import { browserHistory } from 'react-router'
 import cn from 'classnames'
-import ModalBrand from './ModalBrand'
 import Member from './Member'
 import AddMember from './AddMemberButton'
 import {
@@ -19,19 +19,10 @@ const BrandHeader = ({
   brand,
   getChildrenBrands,
   toggleBrand,
-  editBrand,
   deleteBrand,
   deleteMembers,
   addMembers
 }) => {
-  const EditButton = ({
-    clickHandler
-  }) => <Button
-    className="edit-button--brand-row"
-    onClick={() => clickHandler()}
-  >
-    Edit
-  </Button>
   let members = {}
   if (brand.roles) {
     brand.roles.forEach(role =>
@@ -85,20 +76,12 @@ const BrandHeader = ({
         brand={brand}
       />
     </div>
-    <ModalBrand
-      TriggerButton={EditButton}
-      showOnly={false}
-      inline
-      title="Edit Team"
-      buttonTitle="Edit"
-      brand={brand}
-      onButtonClick={(editedBrand) => {
-        editBrand({
-          ...brand,
-          ...editedBrand
-        })
-      }}
-    />
+    <Button
+      className="edit-button--brand-row"
+      onClick={() => browserHistory.push(`/dashboard/brands/edit/${brand.id}`)}
+    >
+      Edit
+    </Button>
     <i
       onClick={(e) => {
         e.stopPropagation()

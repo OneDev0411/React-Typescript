@@ -4,15 +4,15 @@ import { Button } from 'react-bootstrap'
 import Compose from './ModalChecklist'
 import { addChecklist } from '../../../../../store_actions/brandConsole'
 
-const Header = ({ user, addChecklist }) => {
+const Header = ({ brand, addChecklist }) => {
   const AddButton = ({
-                       clickHandler
-                     }) => (
-                       <Button
-                         bsStyle="primary"
-                         onClick={() => clickHandler()}
-                       >
-                         Add Checklist
+    clickHandler
+  }) => (
+    <Button
+      bsStyle="primary"
+      onClick={() => clickHandler()}
+    >
+      Add Checklist
     </Button>
   )
 
@@ -26,7 +26,7 @@ const Header = ({ user, addChecklist }) => {
         title="Add Checklist"
         buttonTitle="Add"
         onButtonClick={(newItem) => {
-          addChecklist(user, newItem)
+          addChecklist(brand, newItem)
         }}
       />
     </span>

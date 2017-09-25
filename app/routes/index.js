@@ -17,10 +17,18 @@ const AsyncAuthenticationLayout = Load({
 
 // Pages
 import Landing from '../components/Pages/Landing'
-const Brands = Load({
+
+// brand console
+const AsyncBrands = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Brands' /* webpackChunkName: "brands" */)
+    import('../components/Pages/Dashboard/Brand/SubBrands' /* webpackChunkName: "brands" */)
 })
+
+const AsyncBrand = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Brand/' /* webpackChunkName: "brands" */)
+})
+
 
 const AsyncSignUp = Load({
   loader: () =>
@@ -314,7 +322,11 @@ export default (
         <IndexRoute component={AsyncDealsList} />
         <Route path="/dashboard/deals/:id" component={AsyncDealDashboard} />
       </Route>
-      <Route path="/dashboard/brands" component={Brands} />
+      <Route path="/dashboard/brands">
+        <IndexRoute component={AsyncBrands} />
+        <Route path="/dashboard/brands/edit/:id" component={AsyncBrand} />
+        <Route path="/dashboard/brands/add/:parentId" component={AsyncBrand} />
+      </Route>
 
       <Route path="/dashboard/recents(/:roomId)">
         <IndexRoute component={AsyncRecents} />
