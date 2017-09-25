@@ -35,7 +35,7 @@ export function getBrand(brandId) {
       const { data } = response.body
       dispatch(_getBrand(brandId, data))
     } else {
-      dispatch(notify({ message: `getBrands: ${response.error.message}`, status: response.error.statusCode }))
+      dispatch(notify({ message: `getBrands: ${response.error.message}`, status: 'error' }))
     }
   }
 }
@@ -49,7 +49,7 @@ export function getChildrenBrands(brandId) {
       const { data } = response.body
       dispatch(_getChildrenBrands(brandId, data))
     } else {
-      dispatch(notify({ message: `getChildrenBrands: ${response.error.message}`, status: response.error.statusCode }))
+      dispatch(notify({ message: `getChildrenBrands: ${response.error.message}`, status: 'error' }))
     }
   }
 }
@@ -73,7 +73,7 @@ export function addBrand(brand) {
       }
 
     } else {
-      dispatch(notify({ message: `addBrand: ${response.error.message}`, status: response.error.statusCode }))
+      dispatch(notify({ message: `addBrand: ${response.error.message}`, status: 'error' }))
     }
   }
 }
@@ -93,7 +93,7 @@ export function deleteBrand(brand) {
     if (response && !response.error && response.body.status === 'success') {
       dispatch(_deleteBrand(brand))
     } else {
-      dispatch(notify({ message: `deleteBrand: ${response.error.message}`, status: response.error.statusCode }))
+      dispatch(notify({ message: `deleteBrand: ${response.error.message}`, status: 'error' }))
     }
   }
 }
@@ -114,7 +114,7 @@ export function editBrand(brand) {
       const { data } = response.body
       dispatch(_editBrand(data))
     } else {
-      dispatch(notify({ message: `addBrand: ${response.error.message}`, status: response.error.statusCode }))
+      dispatch(notify({ message: `addBrand: ${response.error.message}`, status: 'error' }))
     }
   }
 }
