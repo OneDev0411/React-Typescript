@@ -13,6 +13,7 @@ import updatePassword from '../../../../../models/auth/password/update'
 
 const Reset = ({
   brand,
+  invalid,
   pristine,
   submitError,
   isSubmitting,
@@ -21,6 +22,7 @@ const Reset = ({
   onSubmitHandler,
   submitSuccessfully
 }) => {
+  const isDisabled = isSubmitting || invalid || pristine
   const { siteLogo, siteTitle, brandColor } = getBrandInfo(brand)
 
   return (
@@ -76,10 +78,10 @@ const Reset = ({
               <button
                 type="submit"
                 className="c-auth__submit-btn"
-                disabled={isSubmitting || pristine}
+                disabled={isDisabled}
                 style={{
                   background: brandColor,
-                  opacity: isSubmitting || pristine ? 0.7 : 1
+                  opacity: isDisabled ? 0.7 : 1
                 }}
               >
                 {isSubmitting ? 'Submitting...' : 'Reset Password'}

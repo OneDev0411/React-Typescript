@@ -45,6 +45,7 @@ const getErrorMessage = (errorCode, email) => {
 
 const Signup = ({
   brand,
+  invalid,
   pristine,
   submitError,
   isSubmitting,
@@ -53,6 +54,7 @@ const Signup = ({
   onSubmitHandler,
   submitSuccessfully
 }) => {
+  const isDisabled = isSubmitting || invalid || pristine
   const { siteLogo, siteTitle, brandColor } = getBrandInfo(brand)
 
   return (
@@ -94,10 +96,10 @@ const Signup = ({
               <button
                 type="submit"
                 className="c-auth__submit-btn"
-                disabled={isSubmitting || pristine}
+                disabled={isDisabled}
                 style={{
                   background: brandColor,
-                  opacity: isSubmitting || pristine ? 0.7 : 1
+                  opacity: isDisabled ? 0.7 : 1
                 }}
               >
                 {isSubmitting ? 'Submitting...' : 'Sign up'}

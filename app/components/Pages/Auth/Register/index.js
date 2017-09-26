@@ -43,6 +43,7 @@ export const renderAgentField = ({ id, input, label, checked }) => (
 
 const RegisterForm = ({
   brand,
+  invalid,
   pristine,
   submitError,
   handleSubmit,
@@ -50,6 +51,7 @@ const RegisterForm = ({
   onSubmitHandler,
   paramsFromURI: { email, phone_number }
 }) => {
+  const isDisabled = isSubmitting || invalid || pristine
   const { siteLogo, siteTitle, brandColor } = getBrandInfo(brand)
 
   return (
@@ -128,10 +130,10 @@ const RegisterForm = ({
             <button
               type="submit"
               className="c-auth__submit-btn"
-              disabled={isSubmitting || pristine}
+              disabled={isDisabled}
               style={{
                 background: brandColor,
-                opacity: isSubmitting || pristine ? 0.7 : 1
+                opacity: isDisabled ? 0.7 : 1
               }}
             >
               {isSubmitting ? 'Submitting...' : 'Continue'}

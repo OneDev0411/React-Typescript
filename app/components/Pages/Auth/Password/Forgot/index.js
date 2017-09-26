@@ -13,6 +13,7 @@ import resetPassword from '../../../../../models/auth/password/reset'
 
 let Forgot = ({
   brand,
+  invalid,
   pristine,
   submitError,
   isSubmitting,
@@ -21,6 +22,7 @@ let Forgot = ({
   onSubmitHandler,
   resetSuccessfully
 }) => {
+  const isDisabled = isSubmitting || invalid || pristine
   const { siteLogo, siteTitle, brandColor } = getBrandInfo(brand)
 
   return (
@@ -66,10 +68,10 @@ let Forgot = ({
               <button
                 type="submit"
                 className="c-auth__submit-btn"
-                disabled={isSubmitting}
+                disabled={isDisabled}
                 style={{
                   background: brandColor,
-                  opacity: isSubmitting ? 0.7 : 1
+                  opacity: isDisabled ? 0.7 : 1
                 }}
               >
                 {isSubmitting ? 'Submitting...' : 'Reset Password'}

@@ -12,6 +12,7 @@ import changePassword from '../../../../../../models/user/change-password'
 
 const ChangePasswordForm = ({
   brand,
+  invalid,
   pristine,
   submitError,
   handleSubmit,
@@ -19,6 +20,7 @@ const ChangePasswordForm = ({
   onSubmitHandler,
   submitSuccessfully
 }) => {
+  const isDisabled = isSubmitting || invalid || pristine
   const { brandColor } = getBrandInfo(brand)
   return (
     <FormCard title="Change Password">
@@ -74,10 +76,10 @@ const ChangePasswordForm = ({
         <button
           type="submit"
           className="c-auth__submit-btn"
-          disabled={isSubmitting || pristine}
+          disabled={isDisabled}
           style={{
             background: brandColor,
-            opacity: isSubmitting || pristine ? 0.7 : 1
+            opacity: isDisabled ? 0.7 : 1
           }}
         >
           {isSubmitting ? 'Updating...' : 'Update'}
