@@ -1,0 +1,71 @@
+.c-cover-image__container {
+  display: flex;
+}
+
+.c-cover-image__controllers,
+.c-cover-image__image-wrapper {
+  width: 50%;
+}
+
+.c-cover-image__controllers {
+  display: flex;
+  align-items: flex-end;
+}
+
+.c-cover-image__upload-btn {
+  cursor: pointer;
+  margin-bottom: 0;
+  margin-right: 1rem;
+  padding: 0.5rem 1rem;
+  line-height: 1.5;
+  font-weight: normal;
+  color: #fff;
+  border-radius: 3px;
+
+  &.is-disable {
+    opacity: 0.7;
+    pointer-events: none;
+  }
+}
+
+.c-cover-image__delete-btn {
+  padding: 0.5rem 1rem;
+  line-height: 1.4;
+  color: #969696;
+  border-radius: 3px;
+  background: transparent;
+  border: 1px solid #ccc;
+
+  &:hover {
+    color: #444;
+    border-color: #444;
+  }
+}
+
+.c-cover-image__img,
+.c-cover-image__placeholder {
+  height: 28rem;
+  width: 24rem;
+  float: left;
+  background: #ececec;
+}
+
+.c-cover-image__note {
+  padding: 1rem;
+  margin: 2rem 0 0;
+  border: 1px solid #cecece;
+
+  > dt,
+  > dd {
+    float: left;
+  }
+
+  > dt {
+    clear: left;
+    margin-right: 1rem;
+  }
+}
+
+.c-cover-image__input {
+  @include visually-hidden();
+}

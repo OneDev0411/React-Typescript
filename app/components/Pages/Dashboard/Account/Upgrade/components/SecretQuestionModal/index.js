@@ -6,9 +6,9 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
-import Brand from '../../../../../../controllers/Brand'
-import SuccessModal from '../../../../Dashboard/Listings/components/modals/SuccessModal'
-import upgradeClientToAgent from '../../../../../../models/user/upgrade'
+import Brand from '../../../../../../../controllers/Brand'
+import SuccessModal from '../../../../../Dashboard/Listings/components/modals/SuccessModal'
+import upgradeClientToAgent from '../../../../../../../models/user/upgrade'
 
 const brandColor = `#${Brand.color('primary', '3388ff')}`
 
@@ -26,7 +26,7 @@ const secretQuestionModal = ({
   setConfirmError,
   onConfirmHandler,
   successModalIsActive
-}) =>
+}) => (
   <div>
     <Modal
       show={show}
@@ -76,20 +76,23 @@ const secretQuestionModal = ({
               <i />
             </span>
           </div>
-          {confirmError &&
+          {confirmError && (
             <div className="c-auth__submit-error-alert">
-              {confirmError === 401
-                ? <div>
+              {confirmError === 401 ? (
+                <div>
                   <p>Invalid answer. Agent info is not valid!</p>
                   <button
                     onClick={onHide}
                     className="c-auth__submit-error-alert__btn"
                   >
-                      Try with another MLS ID
-                    </button>
+                    Try with another MLS ID
+                  </button>
                 </div>
-                : 'There was an error with this request. Please try again.'}
-            </div>}
+              ) : (
+                'An unexpected error occurred. Please try again.'
+              )}
+            </div>
+          )}
           <button
             type="submit"
             className="c-auth__submit-btn"
@@ -119,6 +122,7 @@ const secretQuestionModal = ({
     </Modal>
     <SuccessModal text="Agent Confirmed" isActive={successModalIsActive} />
   </div>
+)
 
 export default compose(
   pure,

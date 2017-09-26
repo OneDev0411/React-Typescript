@@ -8,8 +8,8 @@ const editUser = async params => {
   try {
     const response = await new Fetch().put('/users/self').send(params)
     return response.body.data
-  } catch ({ status }) {
-    throw status
+  } catch (error) {
+    throw error
   }
 }
 

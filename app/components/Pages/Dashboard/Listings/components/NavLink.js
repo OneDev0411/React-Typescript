@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, IndexLink } from 'react-router'
+import { Link } from 'react-router'
 import Brand from '../../../../../controllers/Brand'
 
 export default function Tabs({ to, text, indexed }) {

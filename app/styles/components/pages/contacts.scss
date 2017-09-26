@@ -114,14 +114,14 @@
     }
 
     .list {
-      padding: 2rem 2rem 4rem 9rem;
+      padding: 2rem 2rem 4rem;
     }
 
     .dashboard {
       @extend %contact-editable;
 
       .header {
-        padding: .5rem 2rem;
+        padding: 0.5rem 2rem;
         background: #fff;
         i.fa-angle-left {
           font-size: 25px;
@@ -397,7 +397,7 @@
       margin: 1.5% 0 0 2%;
       font-size: 24px;
       font-weight: 600;
-      line-height: 1.0;
+      line-height: 1;
       letter-spacing: -0.6px;
       color: #4a4a4a;
     }
