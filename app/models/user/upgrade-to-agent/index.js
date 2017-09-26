@@ -7,9 +7,9 @@ import Fetch from '../../../services/fetch'
 const upgrade = async params => {
   try {
     const response = await new Fetch().patch('/users/self/upgrade').send(params)
-    return response.statusCode
-  } catch ({ status }) {
-    throw status
+    return response.body.data
+  } catch (error) {
+    throw error
   }
 }
 
