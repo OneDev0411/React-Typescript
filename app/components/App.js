@@ -253,7 +253,9 @@ class App extends Component {
 
         {user && <InstantChat user={user} rooms={rooms} />}
 
-        <main style={{ minHeight: '100vh' }}>{children}</main>
+        <main className={`l-app__main ${user ? 'is-logged-in' : ''}`}>
+          {children}
+        </main>
       </div>
     )
   }
