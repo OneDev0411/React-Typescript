@@ -61,12 +61,14 @@ export const renderField = ({
 
 let SigninForm = ({
   brand,
+  invalid,
   pristine,
   isLogging,
   submitError,
   handleSubmit,
   onSubmitHandler
 }) => {
+  const isDisabled = isLogging || invalid || pristine
   const { siteLogo, siteTitle, brandColor } = getBrandInfo(brand)
 
   return (
@@ -110,10 +112,10 @@ let SigninForm = ({
             <button
               type="submit"
               className="c-auth__submit-btn"
-              disabled={isLogging || pristine}
+              disabled={isDisabled}
               style={{
                 background: brandColor,
-                opacity: isLogging || pristine ? 0.7 : 1
+                opacity: isDisabled ? 0.7 : 1
               }}
             >
               {isLogging ? 'Signing in...' : 'Sign in'}

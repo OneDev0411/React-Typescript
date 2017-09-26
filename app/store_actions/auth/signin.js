@@ -14,15 +14,6 @@ const submitSigninForm = (userInfo, redirectTo) => (dispatch, getState) => {
         type: actionsType.SIGNIN_SUCCESS
       })
 
-      // const { id, email, first_name, last_name } = user
-      // if (window.FS) {
-      //   window.FS.identify(id, {
-      //     email,
-      //     displayName: `${first_name} ${last_name}`
-      //   })
-      // }
-      // window.Intercom.signin({ user }, () => {})
-
       if (redirectTo) {
         browserHistory.push(redirectTo)
       }

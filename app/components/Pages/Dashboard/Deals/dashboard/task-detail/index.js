@@ -9,15 +9,12 @@ import CommentInput from '../comments/input'
 
 const TaskManager = ({
   deal,
-  tasks,
-  taskId,
+  task,
   onCloseTask
 }) => {
-  if (!taskId) {
+  if (!task) {
     return false
   }
-
-  const task = tasks[taskId]
 
   return (
     <div className="full-width">
@@ -44,6 +41,7 @@ const TaskManager = ({
         </div>
 
         <CommentInput
+          key={`CM_INPUT_${task.id}`}
           task={task}
           onCloseTask={() => onCloseTask()}
         />
@@ -52,6 +50,10 @@ const TaskManager = ({
   )
 }
 
-export default connect(({ deals }) => ({
-  tasks: deals.tasks
-}))(TaskManager)
+function mapStateTopProps({ deals }, { taskId }) {
+  return {
+    task: taskId ? deals.tasks[taskId] : null
+  }
+}
+
+export default connect(mapStateTopProps)(TaskManager)

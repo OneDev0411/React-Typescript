@@ -12,8 +12,8 @@ ReactDOM.render(
   rootEl
 )
 
-if (typeof window !== 'undefiend') {
-  window.isSet = (object) => typeof object !== 'undefined'
+if (window != null) {
+  window.isSet = object => typeof object !== 'undefined'
 }
 
 if (process.env.NODE_ENV === 'development' && module.hot) {
@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === 'development' && module.hot) {
       <AppContainer>
         <App key={Math.random()} />
       </AppContainer>,
-      rootEl,
+      rootEl
     )
     console.clear()
   })

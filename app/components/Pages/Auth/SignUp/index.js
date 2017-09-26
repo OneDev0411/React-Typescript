@@ -45,6 +45,7 @@ const getErrorMessage = (errorCode, email) => {
 
 const Signup = ({
   brand,
+  invalid,
   pristine,
   submitError,
   isSubmitting,
@@ -53,6 +54,7 @@ const Signup = ({
   onSubmitHandler,
   submitSuccessfully
 }) => {
+  const isDisabled = isSubmitting || invalid || pristine
   const { siteLogo, siteTitle, brandColor } = getBrandInfo(brand)
 
   return (
@@ -94,13 +96,13 @@ const Signup = ({
               <button
                 type="submit"
                 className="c-auth__submit-btn"
-                disabled={isSubmitting || pristine}
+                disabled={isDisabled}
                 style={{
                   background: brandColor,
-                  opacity: isSubmitting || pristine ? 0.7 : 1
+                  opacity: isDisabled ? 0.7 : 1
                 }}
               >
-                {isSubmitting ? 'Submitting...' : 'Signup'}
+                {isSubmitting ? 'Submitting...' : 'Sign up'}
               </button>
               <p className="c-auth__subtitle">
                 <small>Already have an account?</small>&nbsp;&nbsp;
@@ -136,23 +138,20 @@ export default compose(
       setSubmitError,
       setIsSubmitting,
       setSubmitSuccessfully
-    }) => ({ email }) => {
+    }) => async ({ email }) => {
       setIsSubmitting(true)
 
-      signup(email)
-        .then(statusCode => {
-          if (statusCode === 200) {
-            setIsSubmitting(false)
-            setSubmitSuccessfully(email)
-          }
+      try {
+        await signup(email)
+        setIsSubmitting(false)
+        setSubmitSuccessfully(email)
+      } catch (errorCode) {
+        setIsSubmitting(false)
+        setSubmitError({
+          email,
+          message: getErrorMessage(errorCode, email)
         })
-        .catch(errorCode => {
-          setIsSubmitting(false)
-          setSubmitError({
-            email,
-            message: getErrorMessage(errorCode, email)
-          })
-        })
+      }
     }
   })
 )(Signup)

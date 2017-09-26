@@ -35,12 +35,12 @@ class BackOfficeTable extends BaseTable {
         className: 'col-md-2 hidden-xs',
         getText: deal => deal.property_type
       },
-      // office: {
-      //   caption: 'OFFICE',
-      //   sortable: true,
-      //   className: 'col-md-1 hidden-sm hidden-xs',
-      //   getText: deal => this.getOffice(deal)
-      // },
+      office: {
+        caption: 'OFFICE',
+        sortable: true,
+        className: 'col-md-1 hidden-sm hidden-xs',
+        getText: deal => this.getOffice(deal)
+      },
       critical_dates: {
         caption: 'CRITICAL DATES',
         className: 'col-md-2 hidden-sm hidden-xs',
@@ -72,6 +72,7 @@ class BackOfficeTable extends BaseTable {
    * get office name
    */
   getOffice(deal) {
+    return ''
     const brand = this.flattenBrand(deal.brand)
     return brand && brand.messages ?  brand.messages.office_title : 'N/A'
   }

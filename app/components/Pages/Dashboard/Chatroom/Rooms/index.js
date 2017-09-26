@@ -65,7 +65,7 @@ class Rooms extends React.Component {
 
     if (room.room_type === 'Group') {
       return <UserAvatar
-        name={room.users.length}
+        name={room.users.length.toString()}
         size={size}
         showStateIndicator={false}
         color={color}
@@ -132,23 +132,26 @@ class Rooms extends React.Component {
               </a>
             </div>
           </OverlayTrigger>
-          {showChatbar &&
-          <OverlayTrigger
-            placement="bottom"
-            overlay={<Tooltip id="popover-leave">Expand Fullscreen</Tooltip>}
-          >
-            <div
-              className="toggle-sidebar two-direction-arrow-container"
+
+          {
+            showChatbar &&
+            <OverlayTrigger
+              placement="bottom"
+              overlay={<Tooltip id="popover-leave">Expand Fullscreen</Tooltip>}
             >
-              <a
-                onClick={e => this.fullScreen(e)}
-                className="btn-tgl"
+              <div
+                className="toggle-sidebar two-direction-arrow-container"
               >
-                <TwoDirectionArrow className="two-direction-arrow" />
-              </a>
-            </div>
-          </OverlayTrigger>
+                <a
+                  onClick={e => this.fullScreen(e)}
+                  className="btn-tgl"
+                >
+                  <TwoDirectionArrow className="two-direction-arrow" />
+                </a>
+              </div>
+            </OverlayTrigger>
           }
+
           <SocketStatus />
         </div>
 
@@ -213,7 +216,6 @@ function mapStateToProps({ chatroom }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  ({ toggleInstantMode, changeActiveRoom, toggleChatbar })
+export default connect(mapStateToProps,
+  { toggleInstantMode, changeActiveRoom, toggleChatbar }
 )(Rooms)

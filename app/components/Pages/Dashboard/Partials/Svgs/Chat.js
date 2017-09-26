@@ -1,14 +1,15 @@
 // Chat.js
-import React, { Component } from 'react'
-export default class Chat extends Component {
-  render() {
-    return (
-      <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" width={this.props.width || 24} height={this.props.height || 24} viewBox="0 0 20 19">
-        <path fill={this.props.color} fillRule="evenodd" d="M1.175,17.947 C1.043,17.947 0.913,17.893 0.816,17.792 C0.668,17.637 0.632,17.402 0.727,17.209 L2.576,13.450 C0.912,11.964 0.000,10.034 0.000,7.975 C0.000,3.569 4.262,-0.016 9.500,-0.016 C14.738,-0.016 19.000,3.569 19.000,7.975 C19.000,12.382 14.738,15.967 9.500,15.967 C8.435,15.967 7.389,15.819 6.386,15.528 L1.386,17.899 C1.318,17.931 1.246,17.947 1.175,17.947 Z" />
-      </svg>
-    )
-  }
-}
-Chat.propTypes = {
-  color: React.PropTypes.string
-}
+import React from 'react'
+export default ({ color = '#4E5C6C', width = 20, height = 19 }) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 20 19"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill={color}
+      d="M1.175 17.947c-.132 0-.262-.054-.36-.155-.147-.155-.183-.39-.088-.583l1.85-3.76C.91 11.964 0 10.034 0 7.975 0 3.57 4.262-.015 9.5-.015S19 3.568 19 7.974c0 4.407-4.262 7.992-9.5 7.992-1.065 0-2.11-.148-3.114-.44l-5 2.372c-.068.03-.14.047-.21.047z"
+    />
+  </svg>
+)

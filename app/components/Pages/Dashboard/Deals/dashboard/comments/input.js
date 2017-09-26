@@ -12,6 +12,7 @@ class CommentCreate extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      isSaving: false,
       comment: '',
       rows: 2,
       height: 40,
@@ -51,7 +52,8 @@ class CommentCreate extends React.Component {
     // clear message box
     this.setState({
       comment: '',
-      rows: 1
+      rows: 1,
+      isSaving: true
     })
 
     try {
@@ -75,10 +77,14 @@ class CommentCreate extends React.Component {
         dismissible: true
       })
     }
+
+    this.setState({
+      isSaving: false
+    })
   }
 
   render() {
-    const { comment, rows, height } = this.state
+    const { comment, rows, height, isSaving } = this.state
     const { task, noCloseButton, onCloseTask } = this.props
 
     return (
@@ -115,6 +121,7 @@ class CommentCreate extends React.Component {
           >
             <ActionButtons
               hasComment={comment.length > 0}
+              isSaving={isSaving}
               task={task}
               onSendComment={(notify, status) => this.sendComment(notify, status)}
             />

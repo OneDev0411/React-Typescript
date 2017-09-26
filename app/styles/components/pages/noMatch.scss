@@ -32,13 +32,13 @@
   }
 }
 
-@media(max-width: $screen-sm-min) and (orientation: portrait) {
+@media (max-width: $screen-sm-min) and (orientation: portrait) {
   .noMatch {
     background-image: url(/static/images/noMatch/404-phone-background.png);
   }
 }
 
-@media(min-width: $screen-sm-min) and (max-width: $screen-lg-min) and (orientation: portrait) {
+@media (min-width: $screen-sm-min) and (max-width: $screen-lg-min) and (orientation: portrait) {
   .noMatch {
     background-image: url(/static/images/noMatch/404-tablet-background.png);
   }

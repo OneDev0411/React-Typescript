@@ -48,21 +48,13 @@ class BadgeCounter extends React.Component {
   }
 
   render() {
-    const { active, navActiveColor } = this.props
+    const { color } = this.props
     const counter = this.getBadgeCount()
 
     return (
       <div className="deals-icon">
-        <SvgDeals
-          color={active.deals ? navActiveColor : '#4e5c6c'}
-        />
-
-        {
-          counter > 0 &&
-          <span className="count">
-            { counter }
-          </span>
-        }
+        <SvgDeals color={color} />
+        {counter > 0 && <span className="count">{counter}</span>}
       </div>
     )
   }
