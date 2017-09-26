@@ -114,7 +114,8 @@ const appNavbar = ({
 
         { user.brand &&
           user.features &&
-          user.features.includes('Deals') &&
+          (user.features.includes('Deals') ||
+          user.features.includes('Backoffice')) &&
           <NavbarItem title="Deals">
             <Link to="/dashboard/deals">
               <DealsIcon color={activePath === 'DEALS' ? ACTIVE_COLOR : DEFAULT_COLOR} />
