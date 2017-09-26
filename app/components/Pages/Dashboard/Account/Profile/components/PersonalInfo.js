@@ -13,6 +13,7 @@ import editUser from '../../../../../../store_actions/user/edit'
 
 let PersonalInfoForm = ({
   brand,
+  invalid,
   pristine,
   submitError,
   handleSubmit,
@@ -21,6 +22,7 @@ let PersonalInfoForm = ({
   submitSuccessfully
 }) => {
   const { brandColor } = getBrandInfo(brand)
+  const isDisabled = isSubmitting || invalid || pristine
   return (
     <FormCard title="Personal Info">
       <form
@@ -50,11 +52,8 @@ let PersonalInfoForm = ({
           name="phone_number"
           type="tel"
           label="Phone Number"
-          normalize={value => {
-            value = value.replace('1', '').replace(/[^\d]*/g, '')
-            return value
-          }}
           component={PhoneNumberField}
+          normalize={value => value.replace(/[^+\d]*/g, '')}
         />
         {submitError && (
           <div className="c-auth__submit-error-alert">{submitError}</div>
@@ -69,10 +68,10 @@ let PersonalInfoForm = ({
         <button
           type="submit"
           className="c-auth__submit-btn"
-          disabled={isSubmitting || pristine}
+          disabled={isDisabled}
           style={{
             background: brandColor,
-            opacity: isSubmitting || pristine ? 0.7 : 1
+            opacity: isDisabled ? 0.7 : 1
           }}
         >
           {isSubmitting ? 'Updating...' : 'Update'}
@@ -94,7 +93,7 @@ const validate = values => {
   const isValidName = name => new RegExp(/^[A-Za-z\s]+$/).exec(name)
 
   const isNotValidPhoneNumber = phoneNumber => {
-    if (phoneNumber.length === 10 || phoneNumber.length === 0) {
+    if (phoneNumber.length === 12 || phoneNumber.length === 0) {
       return false
     }
 
@@ -167,7 +166,6 @@ export default compose(
         Object.keys(fields).forEach(field => {
           if (initialValues[field] !== fields[field]) {
             if (field === 'phone_number' && !fields.phone_number) {
-              console.log(fields.phone_number)
               userInfo.phone_number = null
               return
             }
