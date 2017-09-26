@@ -7,9 +7,9 @@
   background-color: #fff;
   box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.15);
   border-radius: 4px 4px 0 0;
-  z-index: 100;
+  z-index: 99;
   color: #4a494a;
-  @media (max-width : 738px) {
+  @media (max-width: 738px) {
     display: none !important;
   }
 
@@ -63,7 +63,8 @@
     &.isActive {
       background-color: #2196f3;
       .icon {
-        svg g, svg path {
+        svg g,
+        svg path {
           fill: #fff;
         }
         .bdg {
@@ -267,22 +268,46 @@
 }
 
 @-webkit-keyframes blinkerAnimation {
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 @-moz-keyframes blinkerAnimation {
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 @-o-keyframes blinkerAnimation {
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 @keyframes blinkerAnimation {
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
