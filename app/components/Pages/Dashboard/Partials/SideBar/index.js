@@ -112,7 +112,9 @@ const appNavbar = ({
           </Link>
         </NavbarItem>
 
-        { user.features && user.features.includes('Deals') &&
+        { user.brand &&
+          user.features &&
+          user.features.includes('Deals') &&
           <NavbarItem title="Deals">
             <Link to="/dashboard/deals">
               <DealsIcon color={activePath === 'DEALS' ? ACTIVE_COLOR : DEFAULT_COLOR} />
@@ -150,7 +152,9 @@ const appNavbar = ({
           <Dropdown.Menu>
             <li><Link to="/dashboard/account">Account</Link></li>
             {
-              user && user.features && user.features.includes('Backoffice') &&
+              user.brand &&
+              user.features &&
+              user.features.includes('Backoffice') &&
               <li>
                 <Link to="/dashboard/brand">Brand</Link>
               </li>
