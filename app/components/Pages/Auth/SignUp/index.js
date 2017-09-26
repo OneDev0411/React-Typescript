@@ -100,7 +100,7 @@ const Signup = ({
                   opacity: isSubmitting || pristine ? 0.7 : 1
                 }}
               >
-                {isSubmitting ? 'Submitting...' : 'Signup'}
+                {isSubmitting ? 'Submitting...' : 'Sign up'}
               </button>
               <p className="c-auth__subtitle">
                 <small>Already have an account?</small>&nbsp;&nbsp;
