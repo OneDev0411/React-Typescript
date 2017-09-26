@@ -153,9 +153,9 @@ export default compose(
           setSuccessModalIsActive(false)
           browserHistory.push(redirectTo)
         }, 2000)
-      } catch (errorCode) {
+      } catch ({ status }) {
         setIsConfirming(false)
-        setConfirmError(errorCode)
+        setConfirmError(status)
       }
     }
   })

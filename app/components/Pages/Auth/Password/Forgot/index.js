@@ -8,13 +8,13 @@ import withHandlers from 'recompose/withHandlers'
 
 import Brand from '../../../../../controllers/Brand'
 
+import signup from '../../../../../models/auth/signup'
 import { getBrandInfo, renderField } from '../../SignIn'
 import resetPassword from '../../../../../models/auth/password/reset'
 
-let Forgot = ({
+const ForgotForm = ({
   brand,
   invalid,
-  pristine,
   submitError,
   isSubmitting,
   handleSubmit,
@@ -22,7 +22,7 @@ let Forgot = ({
   onSubmitHandler,
   resetSuccessfully
 }) => {
-  const isDisabled = isSubmitting || invalid || pristine
+  const isDisabled = isSubmitting || invalid
   const { siteLogo, siteTitle, brandColor } = getBrandInfo(brand)
 
   return (
@@ -59,11 +59,7 @@ let Forgot = ({
                 component={renderField}
               />
               {submitError && (
-                <div className="c-auth__submit-error-alert">
-                  Sorry, that email address is not registered with us.<br />
-                  <span>Please try again or</span>
-                  <Link to="/signup"> register for a new account</Link>.
-                </div>
+                <div className="c-auth__submit-error-alert">{submitError}</div>
               )}
               <button
                 type="submit"
@@ -108,11 +104,6 @@ export const validateEmail = values => {
   return errors
 }
 
-Forgot = reduxForm({
-  form: 'forgot',
-  validate: validateEmail
-})(Forgot)
-
 export default compose(
   connect(({ brand, auth }, { location }) => {
     const { email } = location.query
@@ -120,6 +111,10 @@ export default compose(
       brand,
       initialValues: { email }
     }
+  }),
+  reduxForm({
+    form: 'forgot',
+    validate: validateEmail
   }),
   withState('submitError', 'setSubmitError', false),
   withState('isSubmitting', 'setIsSubmitting', false),
@@ -129,19 +124,40 @@ export default compose(
       setIsSubmitting,
       setSubmitError,
       setResetSuccessfully
-    }) => values => {
+    }) => async values => {
       setIsSubmitting(true)
-      resetPassword(values)
-        .then(statusCode => {
-          if (statusCode === 200) {
-            setIsSubmitting(false)
-            setResetSuccessfully(values.email)
+
+      try {
+        await resetPassword(values)
+        setIsSubmitting(false)
+        setResetSuccessfully(values.email)
+      } catch ({ status, response }) {
+        let errorMessage = 'An unexpected error occurred. Please try again.'
+
+        if (status === 403) {
+          try {
+            await signup(values.email)
+          } catch (error) {
+            if (error === 202 && response) {
+              errorMessage = `${response.body
+                .message} We resent a new activation email. Please check your inbox.`
+            }
           }
-        })
-        .catch(error => {
-          setIsSubmitting(false)
-          setSubmitError(true)
-        })
+        }
+
+        if (status === 404) {
+          errorMessage = (
+            <div>
+              Sorry, that email address is not registered with us.<br />
+              <span>Please try again or</span>
+              <Link to="/signup"> register for a new account</Link>.
+            </div>
+          )
+        }
+
+        setIsSubmitting(false)
+        setSubmitError(errorMessage)
+      }
     }
   })
-)(Forgot)
+)(ForgotForm)
