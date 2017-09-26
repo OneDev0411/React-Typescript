@@ -6,7 +6,7 @@ import Fetch from '../../../../services/fetch'
 const resetPassword = async email => {
   try {
     const response = await new Fetch().post('/users/reset_password').send(email)
-    return response.statusCode
+    return response.body.data
   } catch (error) {
     throw error
   }

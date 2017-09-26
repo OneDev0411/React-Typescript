@@ -84,6 +84,8 @@ let PersonalInfoForm = ({
 const validate = values => {
   const errors = {}
 
+  const NAME_CHARACHTER_LIMIT = 1
+
   const minimumCharactersError = length =>
     `Must be at least ${length} characters.`
 
@@ -102,14 +104,14 @@ const validate = values => {
 
   if (!isValidName(values.first_name)) {
     errors.first_name = invalidCharactersError
-  } else if (values.first_name.length < 3) {
-    errors.first_name = minimumCharactersError(3)
+  } else if (values.first_name.length < NAME_CHARACHTER_LIMIT) {
+    errors.first_name = minimumCharactersError(NAME_CHARACHTER_LIMIT)
   }
 
   if (!isValidName(values.last_name)) {
     errors.last_name = invalidCharactersError
-  } else if (values.last_name.length < 3) {
-    errors.last_name = minimumCharactersError(3)
+  } else if (values.last_name.length < NAME_CHARACHTER_LIMIT) {
+    errors.last_name = minimumCharactersError(NAME_CHARACHTER_LIMIT)
   }
 
   if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {

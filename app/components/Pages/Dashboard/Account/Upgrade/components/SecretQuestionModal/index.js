@@ -1,6 +1,6 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Link, browserHistory } from 'react-router'
-import pure from 'recompose/pure'
 import { Modal } from 'react-bootstrap'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -8,7 +8,7 @@ import withHandlers from 'recompose/withHandlers'
 
 import Brand from '../../../../../../../controllers/Brand'
 import SuccessModal from '../../../../../Dashboard/Listings/components/modals/SuccessModal'
-import upgradeClientToAgent from '../../../../../../../models/user/upgrade'
+import upgradeToAgent from '../../../../../../../store_actions/user/upgrade-to-agent'
 
 const brandColor = `#${Brand.color('primary', '3388ff')}`
 
@@ -125,7 +125,7 @@ const secretQuestionModal = ({
 )
 
 export default compose(
-  pure,
+  connect(null, { upgradeToAgent }),
   withState('secret', 'setSecret', false),
   withState('confirmError', 'setConfirmError', false),
   withState('isConfirming', 'setIsConfirming', false),
@@ -137,6 +137,7 @@ export default compose(
       secret,
       redirectTo,
       isConfirming,
+      upgradeToAgent,
       setConfirmError,
       setIsConfirming,
       setSuccessModalIsActive
@@ -144,7 +145,7 @@ export default compose(
       event.preventDefault()
       setIsConfirming(true)
       try {
-        await upgradeClientToAgent({ agent, secret })
+        await upgradeToAgent({ agent, secret })
         setIsConfirming(false)
         onHide()
         setSuccessModalIsActive(true)
@@ -152,9 +153,9 @@ export default compose(
           setSuccessModalIsActive(false)
           browserHistory.push(redirectTo)
         }, 2000)
-      } catch (errorCode) {
+      } catch ({ status }) {
         setIsConfirming(false)
-        setConfirmError(errorCode)
+        setConfirmError(status)
       }
     }
   })

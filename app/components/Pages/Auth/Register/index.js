@@ -43,6 +43,7 @@ export const renderAgentField = ({ id, input, label, checked }) => (
 
 const RegisterForm = ({
   brand,
+  invalid,
   pristine,
   submitError,
   handleSubmit,
@@ -50,6 +51,7 @@ const RegisterForm = ({
   onSubmitHandler,
   paramsFromURI: { email, phone_number }
 }) => {
+  const isDisabled = isSubmitting || invalid || pristine
   const { siteLogo, siteTitle, brandColor } = getBrandInfo(brand)
 
   return (
@@ -128,10 +130,10 @@ const RegisterForm = ({
             <button
               type="submit"
               className="c-auth__submit-btn"
-              disabled={isSubmitting || pristine}
+              disabled={isDisabled}
               style={{
                 background: brandColor,
-                opacity: isSubmitting || pristine ? 0.7 : 1
+                opacity: isDisabled ? 0.7 : 1
               }}
             >
               {isSubmitting ? 'Submitting...' : 'Continue'}
@@ -145,6 +147,7 @@ const RegisterForm = ({
 
 const validate = values => {
   const errors = {}
+  const NAME_CHARACHTER_LIMIT = 1
   const minimumCharactersError = length =>
     `Must be at least ${length} characters.`
   const invalidCharactersError =
@@ -155,16 +158,16 @@ const validate = values => {
     errors.first_name = 'Required'
   } else if (!isValidName(values.first_name)) {
     errors.first_name = invalidCharactersError
-  } else if (values.first_name.length < 3) {
-    errors.first_name = minimumCharactersError(3)
+  } else if (values.first_name.length < NAME_CHARACHTER_LIMIT) {
+    errors.first_name = minimumCharactersError(NAME_CHARACHTER_LIMIT)
   }
 
   if (!values.last_name) {
     errors.last_name = 'Required'
   } else if (!isValidName(values.last_name)) {
     errors.last_name = invalidCharactersError
-  } else if (values.last_name.length < 3) {
-    errors.last_name = minimumCharactersError(3)
+  } else if (values.last_name.length < NAME_CHARACHTER_LIMIT) {
+    errors.last_name = minimumCharactersError(NAME_CHARACHTER_LIMIT)
   }
 
   if (!values.email) {
