@@ -3,8 +3,9 @@
 .c-app-navbar {
   width: 7rem;
   height: 100vh;
-  position: relative;
-  float: left;
+  position: fixed;
+  top: 0;
+  left: 0;
   background-color: #263445;
 }
 
