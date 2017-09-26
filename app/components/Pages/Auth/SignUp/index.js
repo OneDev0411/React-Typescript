@@ -138,23 +138,20 @@ export default compose(
       setSubmitError,
       setIsSubmitting,
       setSubmitSuccessfully
-    }) => ({ email }) => {
+    }) => async ({ email }) => {
       setIsSubmitting(true)
 
-      signup(email)
-        .then(statusCode => {
-          if (statusCode === 200) {
-            setIsSubmitting(false)
-            setSubmitSuccessfully(email)
-          }
+      try {
+        await signup(email)
+        setIsSubmitting(false)
+        setSubmitSuccessfully(email)
+      } catch (errorCode) {
+        setIsSubmitting(false)
+        setSubmitError({
+          email,
+          message: getErrorMessage(errorCode, email)
         })
-        .catch(errorCode => {
-          setIsSubmitting(false)
-          setSubmitError({
-            email,
-            message: getErrorMessage(errorCode, email)
-          })
-        })
+      }
     }
   })
 )(Signup)
