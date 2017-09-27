@@ -12,7 +12,7 @@ import {
 class Roles extends React.Component {
   constructor(props) {
     super(props)
-    this.aclTypes = ['Deals', 'Backoffice', 'Admin']
+    this.aclTypes = ['Deals', 'Backoffice', 'Edit']
   }
 
   componentDidMount() {
