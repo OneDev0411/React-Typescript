@@ -181,21 +181,14 @@
     }
   }
 
-  input.search {
-    width: 260px;
-    height: 30px;
+  .search-input {
+    float: none;
+    display: inline-block;
+    border: solid 1px #eef0f2;
     border-radius: 3px;
     background-color: #ffffff;
-    border: solid 1px #eef0f2;
-    padding: 0 10px;
-
-    @media (max-width: 548px) {
-      width: 100%;
-    }
-
-    &:focus {
-      outline: none;
-    }
+    width: 280px;
+    height: 30px;
   }
 }
 
