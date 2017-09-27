@@ -7,9 +7,40 @@
   width: 100%;
   padding: 16px 0;
   cursor: pointer;
+  display: flex;
+  flex-direction: row;
   .column {
     font-size: 14px;
     color: #1c364c;
+  }
+  .checklist--row--first {
+    flex: 2;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-left: 8px;
+  }
+  .checklist--row--last {
+    flex: 2;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  .checklist--row--column-center {
+    text-align: center;
+    flex: 1;
+    .check-box-icon {
+      padding: 0.5px 2.5px;
+      margin-right: 9px;
+      border-radius: 4px;
+      border: solid 1px #dce5eb;
+      color: transparent;
+      &.active {
+        border: solid 1px #2196f3;
+        background: transparent;
+        color: #2196f3;
+      }
+    }
   }
   .icon {
     color: #c9d7df;
@@ -34,23 +65,22 @@
     color: #8ca2b6;
     margin-top: 3px;
   }
-}
 
-%checklistRow:hover {
-  background-color: #f8fafb;
-  display: block;
-  .edit-button-container, .deleteIcon {
-    visibility: visible;
-    display: inline-block;
+  &:hover {
+    background-color: #f8fafb;
+    .edit-button-container, .deleteIcon {
+      visibility: visible;
+      display: inline-block;
+    }
+    .edit-button-container .editButton:hover {
+      font-weight: bold;
+    }
   }
-  .edit-button-container .editButton:hover {
-    font-weight: bold;
-  }
-}
 
-%checklistRow.active {
-  background-color: #f8fafb;
-  border-bottom: none;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
+  &.active {
+    background-color: #f8fafb;
+    border-bottom: none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
 }

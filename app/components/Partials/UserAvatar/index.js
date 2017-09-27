@@ -30,7 +30,7 @@ const UserAvatar = ({
   let props
   if (typeof normalizedName === 'number') {
     props = {
-      value: normalizedName
+      value: normalizedName.toString()
     }
   } else {
     const splitName = name.split(' ')

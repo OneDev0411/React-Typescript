@@ -13,14 +13,14 @@ $toolBarHeight: 60px;
 @import 'brands/brands';
 
 .brand {
+  background-color: #f0f4f7;
+  min-height: 100vh;
   .no-padding {
     padding: 0;
   }
   .menu {
     @extend %menu;
   }
-  background-color: #f0f4f7;
-  min-height: 100vh;
   .toolbar {
     margin: 0;
     height: $toolBarHeight;
@@ -39,13 +39,17 @@ $toolBarHeight: 60px;
   .checklists {
     @extend %checklists;
   }
-  .brands {
-    @extend %brands;
-  }
+
   .rightPanel {
-    margin-left: $menuWidth;
     overflow: auto;
+    min-height: 100vh;
   }
+}
+
+.brands {
+  background-color: #f0f4f7;
+  height: 100vh;
+  @extend %brands;
 }
 
 .brand-add-member {
@@ -69,4 +73,15 @@ $toolBarHeight: 60px;
       }
     }
   }
+}
+
+
+.spinner__brands {
+  position: fixed;
+  left: 50%;
+  margin-left: -27px;
+  margin-top: 8px;
+}
+.spinner__brands.hide_spinner {
+  visibility: hidden;
 }

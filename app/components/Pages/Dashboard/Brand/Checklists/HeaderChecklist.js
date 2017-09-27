@@ -6,15 +6,15 @@ import Compose from './ModalChecklist'
 import { editChecklist } from '../../../../../store_actions/brandConsole'
 
 const Row = ({
-               deleteChecklist,
-               onSelectItem,
-               checklist,
-               activeItem,
-               editChecklist
-             }) => {
+  deleteChecklist,
+  onSelectItem,
+  checklist,
+  activeItem,
+  editChecklist
+}) => {
   const AddButton = ({
-                       clickHandler
-                     }) =>
+    clickHandler
+  }) =>
     (
       <Button
         className="editButton"

@@ -4,7 +4,7 @@ import Members from './Members'
 import {
   getMembers,
   addMembers,
-  deleteRoles,
+  deleteRole,
   deleteMembers
 } from '../../../../../store_actions/brandConsole'
 import { Row, Col } from 'react-bootstrap'
@@ -67,7 +67,7 @@ class Column extends React.Component {
           {this.props.activeRole &&
           <i
             onClick={() => {
-              this.props.deleteRoles(this.props.role)
+              this.props.deleteRole(this.props.role)
             }}
             className="fa fa-times closeIcon"
             aria-hidden="true"
@@ -124,7 +124,7 @@ export default connect(
   ({
     getMembers,
     addMembers,
-    deleteRoles,
+    deleteRole,
     deleteMembers
   })
 )(Column)

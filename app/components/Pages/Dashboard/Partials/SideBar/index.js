@@ -157,7 +157,7 @@ const appNavbar = ({
               user.features &&
               user.features.includes('Backoffice') &&
               <li>
-                <Link to="/dashboard/brand">Brand</Link>
+                <Link to="/dashboard/brands">Brands</Link>
               </li>
             }
             { user.user_type === 'Admin' &&

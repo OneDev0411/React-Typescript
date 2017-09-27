@@ -64,7 +64,6 @@ class ModalBrand extends React.Component {
     const {
       onButtonClick,
       buttonTitle,
-      brand,
       TriggerButton
     } = this.props
     const titleModal = this.props.title

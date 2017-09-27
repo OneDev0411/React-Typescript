@@ -209,9 +209,19 @@ const AsyncSearchWidget = Load({
 //  Other Pages
 /* ==================================== */
 
-const AsyncBrand = Load({
+const AsyncBrands = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Brand' /* webpackChunkName: "brand_settings" */)
+    import('../components/Pages/Dashboard/Brand/SubBrands' /* webpackChunkName: "brand_settings" */)
+})
+
+const AsyncChecklistBrand = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Brand/Checklists' /* webpackChunkName: "brandChecklist" */)
+})
+
+const AsyncRoleBrand = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Brand/Roles' /* webpackChunkName: "brandRole" */)
 })
 
 const AsyncWebsite = Load({
@@ -354,7 +364,11 @@ export default (
         <Route path="upgrade" component={AsyncUpgradeAccount} />
       </Route>
 
-      <Route path="/dashboard/brand" component={AsyncBrand} />
+      <Route path="/dashboard/brands">
+        <IndexRoute component={AsyncBrands} />
+        <Route path="/dashboard/brands/checklist/:brand" component={AsyncChecklistBrand} />
+        <Route path="/dashboard/brands/role/:brand" component={AsyncRoleBrand} />
+      </Route>
 
       <Route path="/dashboard/website" component={AsyncWebsite} />
       <Route path="/dashboard/forms" component={AsyncForms} />

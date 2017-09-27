@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'react-bootstrap'
+import { browserHistory } from 'react-router'
 import cn from 'classnames'
 import ModalBrand from './ModalBrand'
 import Member from './Member'
@@ -19,8 +20,8 @@ const BrandHeader = ({
   brand,
   getChildrenBrands,
   toggleBrand,
-  editBrand,
   deleteBrand,
+  editBrand,
   deleteMembers,
   addMembers
 }) => {
@@ -85,6 +86,19 @@ const BrandHeader = ({
         brand={brand}
       />
     </div>
+    <Button
+      className="edit-button--brand-row"
+      onClick={() => browserHistory.push(`/dashboard/brands/checklist/${brand.id}`)}
+    >
+      Edit Checklists
+    </Button>
+    <Button
+      className="edit-button--brand-row"
+      onClick={() => browserHistory.push(`/dashboard/brands/role/${brand.id}`)}
+    >
+      Edit Roles
+    </Button>
+
     <ModalBrand
       TriggerButton={EditButton}
       showOnly={false}

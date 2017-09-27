@@ -2,29 +2,36 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { Tab } from 'react-bootstrap'
-import Roles from './Roles'
+import cn from 'classnames'
 import Checklists from './Checklists'
-import SubBrands from './SubBrands'
+import Roles from './Roles'
 import Sidebar from './Sidebar'
 
-const Brand = ({ user }) => {
-  if (user && user.brand == null) {
+const Brand = ({ spinner, params, user }) => {
+  if (user && user.brand === null) {
     browserHistory.push('/oops')
     return null
   }
 
   return (
     <div className="brand">
-      <Tab.Container id="brand-console-tabs" defaultActiveKey="SubBrands">
+      <i
+        className={cn('fa fa-spinner fa-pulse fa-fw fa-3x spinner__brands', { hide_spinner: !spinner })}
+      />
+      <Tab.Container id="brand-console-tabs" defaultActiveKey="Roles">
         <div className="clearfix">
           <Sidebar />
           <div className="rightPanel">
             <Tab.Content animation>
               <Tab.Pane eventKey="Checklists">
-                <Checklists />
+                <Checklists
+                  brand={params.id}
+                />
               </Tab.Pane>
-              <Tab.Pane eventKey="SubBrands">
-                <SubBrands />
+              <Tab.Pane eventKey="Roles">
+                <Roles
+                  brand={params.id}
+                />
               </Tab.Pane>
             </Tab.Content>
           </div>
@@ -33,5 +40,10 @@ const Brand = ({ user }) => {
     </div>
   )
 }
-
-export default connect(({ user }) => ({ user }))(Brand)
+export default connect(
+  ({ brandConsole, data, user }) => ({
+    brands: brandConsole.brands,
+    spinner: brandConsole.spinner,
+    user
+  })
+)(Brand)
