@@ -281,6 +281,6 @@ Compose.propTypes = {
   onChangeRecipients: PropTypes.func.isRequired
 }
 
-export default connect(({ contact }) => ({
-  contacts: contact.list
+export default connect(({ contacts }) => ({
+  contacts: contacts.list
 }))(Compose)
