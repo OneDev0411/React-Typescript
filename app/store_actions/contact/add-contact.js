@@ -1,14 +1,14 @@
 import Contact from '../../models/Contact'
 import types from '../../constants/contact'
 
-function addContact (contact) {
+function contactCreated(contact) {
   return {
     type: types.ADD_CONTACT,
     contact
   }
 }
 
-export default function (args) {
+export function addContact(args) {
   const { emails, phone_numbers, first_name, last_name, stage } = args
 
   const contact = {
@@ -52,7 +52,7 @@ export default function (args) {
   return async (dispatch) => {
     const response = await Contact.add(params)
     const contact = response.body.data[0]
-    dispatch(addContact(contact))
+    dispatch(contactCreated(contact))
 
     return contact.id
   }

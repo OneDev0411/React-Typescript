@@ -40,7 +40,7 @@ export default class StageDropDown extends React.Component {
       return false
 
     return (
-      <div className="contacts-stages">
+      <div className="contact-stages">
         <DropdownButton
           title={this.stages[selected]}
           id="drp-stages"

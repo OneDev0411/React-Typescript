@@ -1,0 +1,65 @@
+.modal-add-contact {
+  width: 50%;
+  .modal-body {
+    padding: 0;
+  }
+
+  .modal-header {
+    background-color: #e2e6ea;
+    .modal-title {
+      font-size: 24px;
+    }
+  }
+
+  %sharp-input {
+    border-radius: 0;
+  }
+
+  %show-add-button {
+    img,
+    i {
+      position: absolute;
+      right: 3%;
+      top: 20%;
+      cursor: pointer;
+    }
+    i {
+      font-size: 23px;
+      color: red;
+      right: 8.5%;
+    }
+  }
+
+  input {
+    @extend %sharp-input;
+    border-right: none;
+    border-left: 0;
+    border-color: #e2e6ea;
+    padding-left: 3%;
+  }
+
+  .fullname {
+    input {
+      @extend %sharp-input;
+      display: inline;
+      width: 50%;
+      &:first-child {
+        border-right: 1px solid #e2e6ea;
+      }
+    }
+  }
+
+  .contact-stages {
+    margin: 10px 0 7px 3%;
+  }
+
+  .multiple {
+    .m-row {
+      position: relative;
+      input {
+        border-top: none;
+      }
+      @extend %show-add-button;
+    }
+  }
+}

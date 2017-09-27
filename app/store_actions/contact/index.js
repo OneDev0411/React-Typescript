@@ -1,17 +1,8 @@
-import addContact from './add-contact'
-import getContacts from './get-contacts'
-import getTimeline from './get-timeline'
-import getTags from './get-tags'
-import addNote from './add-note'
-import upsertAttributes from './upsert-attributes'
-import deleteAttribute from './delete-attribute'
-
-export {
-  addContact,
-  getContacts,
-  getTimeline,
-  getTags,
-  addNote,
-  upsertAttributes,
-  deleteAttribute
-}
+export * from './add-contact'
+export * from './get-contacts'
+export * from './get-timeline'
+export * from './get-tags'
+export * from './add-note'
+export * from './upsert-attributes'
+export * from './delete-attribute'
+export * from './update-contact'

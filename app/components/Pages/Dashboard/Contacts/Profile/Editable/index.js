@@ -23,16 +23,18 @@ export default class extends React.Component {
   onClickAdd() {
     const { onAdd, type } = this.props
 
-    if (onAdd)
+    if (onAdd) {
       onAdd(type)
+    }
   }
 
   onCloseEdit() {
     const { onChange, type, id } = this.props
     const { text } = this.state
 
-    if (onChange && text.length > 0 && text !== this.props.text)
+    if (onChange && text.length > 0 && text !== this.props.text) {
       onChange(type, id, text)
+    }
 
     this.setState({ editMode: false })
   }
@@ -72,13 +74,13 @@ export default class extends React.Component {
       >
         <div
           onClick={() => this.onClickEdit()}
-          style={{ display: 'inline-block' }}
+          className="text"
         >
           { multiline ? this.nl2br(text) : text }
         </div>
 
         <div
-          className={`control${multiline ? ' multiline' : ''}`}
+          className={`control ${multiline ? 'multiline' : ''}`}
         >
 
           {

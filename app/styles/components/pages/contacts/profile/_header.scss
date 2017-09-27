@@ -1,0 +1,20 @@
+%contact-header {
+  .header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 21px;
+    margin-bottom: 20px;
+    background: #fff;
+    height: 55px;
+
+    i.fa-angle-left {
+      font-size: 25px;
+      width: 20px;
+      &:hover {
+        color: blue;
+        cursor: pointer;
+      }
+    }
+  }
+}

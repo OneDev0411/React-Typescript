@@ -3,6 +3,7 @@ const ActionTypes = {}
 new Array(
   'ADD_CONTACT',
   'GET_CONTACTS',
+  'UPDATE_CONTACT',
   'GET_TAGS',
   'ADD_NOTE',
   'GET_TIMELINE',

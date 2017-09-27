@@ -1,0 +1,44 @@
+.contact-stages {
+  %drp-button {
+    button {
+      border: none;
+      padding: 0;
+      color: #2196f3;
+      &:hover {
+        background-color: transparent;
+      }
+      .caret {
+        margin-left: 10px;
+      }
+    }
+  }
+
+  %drp-menu {
+    ul {
+      li {
+        border-bottom: 1px solid #eaeaea;
+        padding: 5px 0;
+        font-size: 15px;
+        &:last-child {
+          border-bottom: none;
+        }
+        &.selected {
+          a {
+            color: #2196f3;
+          }
+        }
+      }
+    }
+  }
+
+  .dropdown {
+    @extend %drp-button;
+    @extend %drp-menu;
+  }
+
+  .btn-group.open,
+  .dropdown-toggle {
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
+}

@@ -1,7 +1,6 @@
 import React from 'react'
-import { Row, Col } from 'react-bootstrap'
+import { connect } from 'react-redux'
 import _ from 'underscore'
-import store from '../../../../../../stores'
 import {
   getTags,
   upsertAttributes,
@@ -9,32 +8,31 @@ import {
 } from '../../../../../../store_actions/contact'
 import ManageTags from './Manage-Tag'
 
-export default class Tags extends React.Component {
+class Tags extends React.Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      tags: props.tags,
-      showTagModal: false
+      showTagModal: false,
+      saving: false,
+      removingTagId: null
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      tags: nextProps.tags
-    })
-  }
-
   async onDone({ inserts, deletes }) {
+    const { getTags } = this.props
+
     this.setState({
-      showTagModal: false
+      showTagModal: false,
+      saving: true
     })
 
     // insert new tags
     if (inserts.length > 0) {
-      const newTags = _.map(inserts, item => {
-        return { type: 'tag', tag: item.tag }
-      })
+      const newTags = _.map(inserts, item => ({
+        type: 'tag',
+        tag: item.tag
+      }))
 
       await this.upsert(newTags)
     }
@@ -44,55 +42,61 @@ export default class Tags extends React.Component {
       await this.remove(item)
     }
 
-    if (inserts.length > 0 || deletes.length > 0)
-      await this.reloadSharedTags()
-  }
+    if (inserts.length > 0 || deletes.length > 0) {
+      getTags()
+    }
 
-  async onRemove(item) {
-    const newTags = _.omit(this.state.tags, item.tag)
-    this.setState({ tags: newTags })
-
-    // remove item
-    this.remove(item)
+    this.setState({
+      saving: false
+    })
   }
 
   async remove(item) {
-    const { contact_id } = this.props
-    store.dispatch(deleteAttribute(contact_id, item.id))
+    const { contact_id, deleteAttribute } = this.props
+    // set removing state
+    this.setState({ removingTagId: item.id })
+
+    // remove tag
+    await deleteAttribute(contact_id, item.id)
+
+    // reset state
+    this.setState({ removingTagId: null })
   }
 
   async upsert(attributes) {
-    const { contact_id } = this.props
-    store.dispatch(upsertAttributes(contact_id, 'tag', attributes))
-  }
-
-  async reloadSharedTags() {
-    const { user } = this.props
-    store.dispatch(getTags(user))
+    const { contact_id, upsertAttributes } = this.props
+    await upsertAttributes(contact_id, 'tag', attributes)
   }
 
   render(){
-    const { tags } = this.state
-    const { showTagModal, saving } = this.state
+    const { tags } = this.props
+    const { showTagModal, saving, removingTagId } = this.state
+
+    if (saving) {
+      return <i className="fa fa-spin fa-spinner" />
+    }
 
     return (
       <div>
         <ul className="tags">
           {
             _.chain(tags)
-            .filter(item => item.active === true)
+            .filter(item => item.active === true && item.id !== removingTagId)
             .map(item => (
               <li
                 key={`tag_${item.id}`}
                 className="active"
-                onClick={() => this.onRemove(item)}
+                onClick={() => this.remove(item)}
               >
                 { item.tag }
               </li>
             ))
             .value()
           }
-          <li className="new-item" onClick={() => this.setState({ showTagModal: true })}>
+          <li
+            className="new-item"
+            onClick={() => this.setState({ showTagModal: true })}
+          >
             +
           </li>
         </ul>
@@ -100,10 +104,11 @@ export default class Tags extends React.Component {
         <ManageTags
           show={showTagModal}
           tags={tags}
-          saving={saving}
           onDone={changes => this.onDone(changes)}
         />
       </div>
     )
   }
 }
+
+export default connect(null, { getTags, upsertAttributes, deleteAttribute })(Tags)

@@ -1,0 +1,61 @@
+%contact-editable {
+  .contact-editable {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 4px;
+    position: relative;
+
+    input,
+    textarea {
+      border: none;
+      width: 100%;
+      color: #000;
+      resize: none;
+      &:focus,
+      &:hover {
+        outline: none;
+        box-shadow: none;
+        border: none;
+      }
+    }
+
+    .text {
+      width: 80%;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .control {
+      display: none;
+      width: 20%;
+      text-align: right;
+      i {
+        cursor: pointer;
+        margin-left: 8px;
+        color: #2196f3;
+        &:hover {
+          color: green;
+        }
+      }
+      &.multiline {
+        i {
+          position: absolute;
+          right: 5px;
+          top: 5px;
+        }
+      }
+    }
+
+    &:hover {
+      border: 1px dashed #2196f3;
+      border-radius: 3px;
+      padding: 3px;
+    }
+
+    &:hover .control {
+      display: block;
+    }
+  }
+}

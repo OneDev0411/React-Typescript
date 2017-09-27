@@ -1,0 +1,133 @@
+.list {
+  @extend %contacts-list--table;
+  @extend %contacts-list--toolbar;
+  @extend %contacts-list--no-contact;
+}
+
+%contacts-list--no-contact {
+  .no-contacts {
+    color: #b1b1b1;
+    text-align: center;
+    margin-top: 30vh;
+    .title {
+      font-size: 19px;
+    }
+    button {
+      margin-top: 8px;
+    }
+  }
+}
+
+%contacts-list--toolbar {
+  .toolbar {
+    margin: 0 0 2% 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .info {
+      width: 80%;
+      span.title {
+        font-size: 31px;
+        font-weight: 300;
+        line-height: 1.0;
+      }
+
+      .count {
+        color: #9b9b9b;
+        margin-left: 8%;
+      }
+    }
+
+    .cta {
+      width: 20%;
+      text-align: right;
+    }
+  }
+}
+
+%contacts-list--table {
+  padding: 2% 30px;
+
+  .table {
+    $border-color: #e8eef3;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    font-size: 15px;
+
+    tr {
+      line-height: 60px !important;
+    }
+
+    tr td:first-child {
+      border-radius: 4px 0 0 4px;
+      border-left: 1px solid $border-color !important;
+    }
+
+    tr td:last-child {
+      border-radius: 0 4px 4px 0;
+      border-right: 1px solid $border-color !important;
+    }
+
+    td {
+      vertical-align: middle;
+      border-bottom: 1px solid $border-color !important;
+      border-top: 1px solid $border-color !important;
+    }
+
+    tr.header td {
+      border: none !important;
+    }
+
+    .header {
+      background: transparent;
+      margin-bottom: 40px;
+      font-weight: 500;
+      text-align: left;
+      color: #8da2b5;
+
+      td > i {
+        margin-right: 5px;
+      }
+
+      .sortable {
+        cursor: pointer;
+        &:hover {
+          color: #2196f3;
+        }
+
+        &.isActive {
+          color: #2196f3;
+        }
+      }
+    }
+
+    .item {
+      cursor: pointer;
+      border-radius: 4px;
+      background-color: #fff;
+      color: #5b6469;
+      transition: 0.3s ease-in all;
+      font-size: 14px;
+      color: #5b6469;
+      &:hover {
+        background-color: #F8FAFB;
+      }
+
+      .ellipsis {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .name {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        span {
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+}

@@ -2,7 +2,7 @@ import _ from 'underscore'
 import Contact from '../../models/Contact'
 import types from '../../constants/contact'
 
-function getTimeline (id, timeline) {
+function timelineFetched (id, timeline) {
   return {
     type: types.GET_TIMELINE,
     id,
@@ -10,10 +10,10 @@ function getTimeline (id, timeline) {
   }
 }
 
-export default function (id) {
+export function getTimeline (id) {
   return async (dispatch) => {
     const response = await Contact.getTimeline(id)
     const timeline = _.indexBy(response.body.data, 'id')
-    dispatch(getTimeline(id, timeline))
+    dispatch(timelineFetched(id, timeline))
   }
 }

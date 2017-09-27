@@ -43,7 +43,7 @@ export default class AddNote extends React.Component {
           New Note
         </div>
         <textarea
-          placeholder="What do you want to say?"
+          placeholder="Leave a note for yourself."
           value={note}
           onChange={e => this.setState({ note: e.target.value }) }
         ></textarea>

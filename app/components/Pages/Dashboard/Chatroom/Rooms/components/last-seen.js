@@ -26,21 +26,25 @@ class LastSeen extends React.Component {
   getLastSeenAt(states, user) {
     const userStatus = states[user.id] || {}
 
-    if (userStatus.state === 'Online')
+    if (userStatus.state === 'Online') {
       return 'Online'
+    }
 
-    if (userStatus.last_seen_at)
+    if (userStatus.last_seen_at) {
       return this.agoTime(userStatus.last_seen_at)
+    }
 
-    if (!user.last_seen_at)
+    if (!user.last_seen_at) {
       return 'Offline'
+    }
 
     return this.agoTime(user.last_seen_at)
   }
 
   getIcon(user) {
-    if (!user.last_seen_by)
+    if (!user.last_seen_by) {
       return
+    }
 
     const { client_type } = user.last_seen_by
     const iconName = client_type === 'Mobile' ? 'mobile' : 'globe'

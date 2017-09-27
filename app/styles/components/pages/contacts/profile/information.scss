@@ -1,0 +1,24 @@
+.contact-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  overflow: hidden;
+
+  .detail {
+    padding-left: 20px;
+    max-width: 70%;
+
+    .name {
+      font-size: 21px;
+      color: #263445;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .status {
+      font-size: 14px;
+      color: #9b9b9b;
+    }
+  }
+}

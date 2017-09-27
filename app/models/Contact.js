@@ -32,15 +32,17 @@ Contact.add = async function(params) {
 * returns contacts list
 */
 Contact.getContacts = async function(user) {
-  const { access_token } = user
-
   try {
     const fetchContacts = new Fetch()
-      .get('/contacts?limit=10000&sorting_value=Update')
+      .get('/contacts')
+      .query({ limit: 10000 })
+      .query({ sorting_value: 'Update' })
+      .query({ 'associations[]': ['user.last_seen_by'] })
 
     // required on ssr
-    if (access_token)
-      fetchContacts.set({ Authorization: `Bearer ${access_token}` })
+    if (user.access_token) {
+      fetchContacts.set({ Authorization: `Bearer ${user.access_token}` })
+    }
 
     const response = await fetchContacts
     return response.body.data
@@ -68,8 +70,7 @@ Contact.getTimeline = async function(id) {
 /**
 * add note
 */
-Contact.addNote = async function(params) {
-  const { id, note } = params
+Contact.addNote = async function(id, note) {
   const endpoint = `/contacts/${id}/attributes`
   const payload = Contact.helper.populateAttributes('note', [{ note }])
 
@@ -108,8 +109,7 @@ Contact.updateUserTimeline = async function(action, object_class, object) {
 /**
 * create new attributes
 */
-Contact.createAttributes = async function(params) {
-  const { id, type, attributes } = params
+Contact.createAttributes = async function(id, type, attributes) {
   const endpoint = `/contacts/${id}/attributes`
   const payload = Contact.helper.populateAttributes(type, attributes)
 
@@ -118,7 +118,7 @@ Contact.createAttributes = async function(params) {
       .post(endpoint)
       .send(payload)
 
-    return response
+    return response.body.data
   } catch (e) {
     throw e
   }
@@ -127,8 +127,7 @@ Contact.createAttributes = async function(params) {
 /**
 * update current attributes
 */
-Contact.updateAttributes = async function(params) {
-  const { id, type, attributes } = params
+Contact.updateAttributes = async function(id, type, attributes) {
   const payload = Contact.helper.populateAttributes(type, attributes)
 
   try {
@@ -136,7 +135,7 @@ Contact.updateAttributes = async function(params) {
       .patch(`/contacts/${id}`)
       .send({ attributes: payload.attributes })
 
-    return response
+    return response.body.data
   } catch (e) {
     throw e
   }
@@ -145,14 +144,12 @@ Contact.updateAttributes = async function(params) {
 /**
 * delete attribute
 */
-Contact.deleteAttribute = async function(params) {
-  const { id, attribute_id } = params
-
+Contact.deleteAttribute = async function(id, attribute_id) {
   try {
     const response = await new Fetch()
       .delete(`/contacts/${id}/attributes/${attribute_id}`)
 
-    return response
+    return response.body.data
   } catch (e) {
     throw e
   }
@@ -342,7 +339,7 @@ Contact.get = {
 
     return _.sortBy(list, item => item.updated_at * -1)
   },
-  tags: context => {
+  tags: (context, defaultTags) => {
     let list = {}
 
     _.each(context.sub_contacts, sub => {
@@ -355,10 +352,10 @@ Contact.get = {
     })
 
     // get default tags with current contact's tag
-    const default_tags = _.filter(context.default_tags, item => !list[item.name])
+    const tags = _.filter(defaultTags, item => !list[item.name])
 
     return {
-      ..._.indexBy(default_tags, 'tag'),
+      ..._.indexBy(tags, 'tag'),
       ...list
     }
   }

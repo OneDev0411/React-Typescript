@@ -6,6 +6,7 @@ import UserIsNotAuthenticated from './userIsNotAuthenticated'
 
 // actions
 import { getDeals } from '../store_actions/deals'
+import { getContacts } from '../store_actions/contact'
 
 // Containers
 import AppLayout from '../components/App'
@@ -130,7 +131,8 @@ const AsyncDealDashboard = Load({
 // contacts
 const AsyncContacts = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Contacts' /* webpackChunkName: "contact" */)
+    import('../components/Pages/Dashboard/Contacts' /* webpackChunkName: "contact" */),
+  fetchData: (dispatch, { user }) => dispatch(getContacts(user))
 })
 
 const AsyncContactsList = Load({

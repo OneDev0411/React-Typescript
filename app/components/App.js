@@ -99,7 +99,7 @@ class App extends Component {
     const { dispatch, deals, user } = this.props
 
     if (!deals) {
-      const isBackOffice = user.features.indexOf('Backoffice') > -1
+      const isBackOffice = user.features && user.features.indexOf('Backoffice') > -1
       return dispatch(getDeals(user, isBackOffice))
     }
   }
@@ -282,12 +282,12 @@ class App extends Component {
   }
 }
 
-export default connect(({ user, data, deals, contact, chatroom, widgets }) => ({
+export default connect(({ user, data, deals, contacts, chatroom, widgets }) => ({
   data,
   user,
   deals: deals.list,
   rooms: chatroom.rooms,
-  contacts: contact.list,
+  contacts: contacts.list,
   isWidgetRedux: widgets.isWidget
 }))(App)
 

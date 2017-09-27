@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Grid, Row, Col } from 'react-bootstrap'
 import { browserHistory } from 'react-router'
 import Avatar from 'react-avatar'
@@ -7,117 +8,59 @@ import Contact from '../../../../../models/Contact'
 import { upsertAttributes } from '../../../../../store_actions/contact'
 import AddContact from '../Add-Contact'
 import Stage from '../components/Stage'
+import NoContact from './no-contact'
+import Header from './header'
 
-export default class ContactsList extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      contacts: {}
-    }
-  }
+function onChangeStage(stage, contact, upsertAttributes) {
+  upsertAttributes(contact.id, 'stage', [{
+    id: Contact.get.stage(contact).id,
+    type: 'stage',
+    stage
+  }])
+}
 
-  componentDidMount() {
-    const { contacts } = this.props
+function openContact(id) {
+  browserHistory.push(`/dashboard/contacts/${id}`)
+}
 
-    if (contacts)
-      this.setState({ contacts })
-  }
+const ContactsList = ({
+  contacts,
+  user
+}) => (
+  <div className="list">
+    <Header
+      user={user}
+      contactsCount={_.size(contacts)}
+      onNewContact={(id) => openContact(id)}
+    />
 
-  componentWillReceiveProps(nextProps) {
-    const { contacts } = nextProps
+    <NoContact
+      user={user}
+      contactsCount={_.size(contacts)}
+      onNewContact={(id) => openContact(id)}
+    />
 
-    if (contacts && _.size(contacts) > _.size(this.state.contacts))
-      this.setState({ contacts })
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    const { contacts } = nextProps
-    return (contacts && _.size(contacts) > _.size(this.state.contacts))
-  }
-
-  onNewContact(id) {
-    this.open(id)
-  }
-
-  onChangeStage(stage, contact) {
-    const { dispatch } = this.props
-
-     const attributes = [{
-      id: Contact.get.stage(contact).id,
-      type: 'stage',
-      stage
-    }]
-
-    dispatch(upsertAttributes(contact.id, 'stage', attributes))
-  }
-
-  open (id) {
-    browserHistory.push(`/dashboard/contacts/${id}`)
-  }
-
-  render() {
-    const { contacts } = this.state
-
-    return (
-      <div className="list">
-
-        {
-          _.size(contacts) > 0 &&
-          <Row className="toolbar">
-            <Col lg={6} md={6} sm={6} className="vcenter">
-              <span className="title">All Contacts</span>
-
-              <span className="count">
-                { _.size(contacts) } Contacts
-              </span>
-            </Col>
-
-            <Col lg={6} md={6} sm={6} className="vcenter right">
-
-              <AddContact
-                user={this.props.user}
-                onNewContact={(id) => this.onNewContact(id)}
-              />
-
-            </Col>
-          </Row>
-        }
-
-        {
-          _.size(contacts) === 0 &&
-          <div className="no-contacts">
-            <p className="title">You don't have contacts yet</p>
-            <p>To get started, click the blue button to add contact</p>
-            <AddContact
-              user={this.props.user}
-              onNewContact={(id) => this.onNewContact(id)}
-            />
-          </div>
-        }
-        {
-          _.size(contacts) > 0 &&
-          <Grid className="table">
-            <Row className="header">
-              <Col md={3} sm={3} xs={3}>NAME</Col>
-              <Col md={3} sm={3} xs={3}>EMAIL</Col>
-              <Col md={2} sm={2} xs={2}>PHONE</Col>
-              <Col md={2} sm={2} xs={2}>STAGE</Col>
-              <Col md={2} sm={2} xs={2}>SOURCE</Col>
-            </Row>
-            {
-              _.chain(contacts)
-              .map(contact => (
-                <Row
-                  key={`CONTACT_${contact.id}`}
-                  className="item"
-                >
-                  <Col
-                    md={3}
-                    sm={3}
-                    xs={3}
-                    className="vcenter"
-                    onClick={() => this.open(contact.id) }
-                  >
+    {
+      _.size(contacts) > 0 &&
+      <table className="table">
+        <tbody>
+          <tr className="header">
+            <td className="col-md-2">NAME</td>
+            <td className="col-md-3">EMAIL</td>
+            <td className="col-md-2 hidden-xs">PHONE</td>
+            <td className="col-md-2 hidden-xs">STAGE</td>
+            <td className="col-md-3 hidden-sm hidden-xs">SOURCE</td>
+          </tr>
+          {
+            _.chain(contacts)
+            .map(contact => (
+              <tr
+                key={`CONTACT_${contact.id}`}
+                onClick={(e) => openContact(contact.id, e)}
+                className="item"
+              >
+                <td className="col-md-2">
+                  <div className="name">
                     <Avatar
                       className="avatar"
                       round
@@ -125,56 +68,44 @@ export default class ContactsList extends React.Component {
                       src={Contact.get.avatar(contact)}
                       size={35}
                     />
-                    <span style={{ marginLeft: '10px' }}>
-                      { Contact.get.name(contact, 20) }
+                    <span className="ellipsis">
+                      { Contact.get.name(contact) }
                     </span>
-                  </Col>
-                  <Col
-                    md={3}
-                    sm={3}
-                    xs={3}
-                    className="vcenter"
-                    style={{ overflow: 'hidden' }}
-                    onClick={() => this.open(contact.id) }
-                  >
-                    { Contact.get.email(contact, 30) }
-                  </Col>
-                  <Col
-                    md={2}
-                    sm={2}
-                    xs={2}
-                    className="vcenter"
-                    onClick={() => this.open(contact.id) }
-                  >
-                    { Contact.get.phone(contact) }
-                  </Col>
-                  <Col
-                    md={2}
-                    sm={2}
-                    xs={2}
-                    className="vcenter"
-                  >
-                    <Stage
-                      default={Contact.get.stage(contact).name}
-                      onChange={stage => this.onChangeStage(stage, contact)}
-                    />
-                  </Col>
-                  <Col
-                    md={2}
-                    sm={2}
-                    xs={2}
-                    className="vcenter"
-                    onClick={() => this.open(contact.id) }
-                  >
-                    { Contact.get.source(contact).label }
-                  </Col>
-                </Row>
-              ))
-              .value()
-            }
-          </Grid>
-        }
-      </div>
-    )
-  }
-}
+                  </div>
+                </td>
+
+                <td className="col-md-3 ellipsis">
+                  { Contact.get.email(contact) }
+                </td>
+
+                <td className="col-md-2 hidden-xs ellipsis">
+                  { Contact.get.phone(contact) }
+                </td>
+
+                <td
+                  className="col-md-2 hidden-xs"
+                  onClick={e => e.stopPropagation()}
+                >
+                  <Stage
+                    default={Contact.get.stage(contact).name}
+                    onChange={stage => onChangeStage(stage, contact, upsertAttributes)}
+                  />
+                </td>
+
+                <td className="col-md-3 hidden-sm hidden-xs">
+                  { Contact.get.source(contact).label }
+                </td>
+              </tr>
+            ))
+            .value()
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+)
+
+export default connect(({ contacts, user }) => ({
+  contacts: contacts.list,
+  user
+}), { upsertAttributes })(ContactsList)

@@ -1,0 +1,39 @@
+@import './header';
+@import './information';
+@import './card';
+@import './note';
+@import './activities';
+
+.profile {
+  @extend %contact-editable;
+  @extend %contact-header;
+  @extend %contact-activities;
+  @extend %contact-card;
+  @extend %contact-timeline;
+  @extend %contact-note;
+
+  .content {
+    display: flex;
+    flex-direction: row;
+    margin: 0 21px;
+    min-height: calc(100vh - 85px);
+
+    .stage {
+      padding: 5px 0 20px 0;
+      .title {
+        border-bottom: none;
+        font-weight: normal;
+        margin-bottom: 0px;
+      }
+    }
+
+    .left-pane {
+      width: 31%;
+      margin-right: 20px;
+    }
+
+    .right-pane {
+      width: 69%;
+    }
+  }
+}

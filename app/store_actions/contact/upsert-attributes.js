@@ -1,8 +1,9 @@
 import _ from 'underscore'
+import { addNotification as notify } from 'reapop'
 import Contact from '../../models/Contact'
 import types from '../../constants/contact'
 
-function upsertAttributes (id, contact) {
+function attributesUpserted(id, contact) {
   return {
     type: types.UPSERT_ATTRIBUTES,
     id,
@@ -10,51 +11,64 @@ function upsertAttributes (id, contact) {
   }
 }
 
-export default function (id, type, attributes) {
-  const defaultParams = {
-    id,
-    type
-  }
+function getErrorMessage(e) {
+  return e.response ? e.response.body.attributes[type][0] : 'Field is not valid'
+}
+
+export function upsertAttributes (id, type, attributes) {
+  const typeName = type.replace('_', ' ')
 
   const updates = _.filter(attributes, attr => attr.id)
   const inserts = _.filter(attributes, attr => !attr.id)
 
-  let response
-  let params
+  let contact
 
   return async (dispatch) => {
 
     // insert attributes
     if (inserts.length > 0) {
-      params = {
-        ...defaultParams,
-        ...{attributes: inserts}
-      }
-
       try {
         // send save request
-        response = await Contact.createAttributes(params)
+        contact = await Contact.createAttributes(id, type, inserts)
 
         // dispatch
-        dispatch(upsertAttributes(id, response.body.data))
-      } catch(e) { /* nothing */}
+        dispatch(attributesUpserted(id, contact))
+
+        dispatch(notify({
+          message: `New ${typeName} created`,
+          status: 'success'
+        }))
+      } catch(e) {
+        dispatch(notify({
+          title: `Can not create ${typeName}`,
+          message: getErrorMessage(e),
+          status: 'error'
+        }))
+      }
     }
 
     // update attributes
     if (updates.length > 0) {
-      params = {
-        ...defaultParams,
-        ...{attributes: updates}
-      }
 
       try {
         // send save request
-        response = await Contact.updateAttributes(params)
+        contact = await Contact.updateAttributes(id, type, updates)
 
         // dispatch
-        dispatch(upsertAttributes(id, response.body.data))
+        dispatch(attributesUpserted(id, contact))
 
-      } catch(e) { /* nothing */}
+        dispatch(notify({
+          message: `${typeName} updated`,
+          status: 'success'
+        }))
+
+      } catch(e) {
+        dispatch(notify({
+          title: `Can not update ${typeName}`,
+          message: getErrorMessage(e),
+          status: 'error'
+        }))
+      }
     }
   }
 }

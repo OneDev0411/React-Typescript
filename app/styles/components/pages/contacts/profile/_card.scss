@@ -1,0 +1,40 @@
+%contact-card {
+  .card {
+    padding: 5px;
+    background: #fff;
+    border-radius: 3px;
+    margin-bottom: 5%;
+
+    .title {
+      color: #a3a6a8;
+      border-bottom: solid 1px #e5e7ea;
+      width: 90%;
+      margin: 5px auto;
+      font-weight: bold;
+      padding-bottom: 10px;
+    }
+
+    ul.table {
+      margin: 2% 5%;
+      padding: 0;
+      width: 100%;
+      li {
+        .name {
+          color: #5b6469;
+          width: 35%;
+          float: left;
+        }
+        .data {
+          margin-bottom: 15px;
+          margin-right: 3%;
+          font-size: 13px;
+          color: #9b9b9b;
+          width: 55%;
+          margin-left: 35%;
+        }
+      }
+    }
+
+    @extend .contact-tags;
+  }
+}

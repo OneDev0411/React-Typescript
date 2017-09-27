@@ -7,7 +7,7 @@ export default class extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      title: '',
+      tagName: '',
       tags: props.tags
     }
   }
@@ -36,25 +36,26 @@ export default class extends React.Component {
 
   addTag() {
     const { tags } = this.state
-    const title = this.state.title.trim()
+    const tagName = this.state.tagName.trim()
 
-    if (title.length === 0 || tags[title])
-      return
+    if (tagName.length === 0 || tags[tagName]) {
+      return false
+    }
 
     const newTags = {
       ...tags,
-      ...{[title]: {
+      ...{[tagName]: {
         is_new: true,
-        id: title,
+        id: tagName,
         active: true,
         type: 'tag',
-        tag: title
+        tag: tagName
       }}
     }
 
     this.setState({
       tags: newTags,
-      title: ''
+      tagName: ''
     })
   }
 
@@ -74,7 +75,7 @@ export default class extends React.Component {
 
   render() {
     const { show } = this.props
-    const { tags, title } = this.state
+    const { tags, tagName } = this.state
 
     return (
       <Modal
@@ -91,8 +92,8 @@ export default class extends React.Component {
             >
               Done
             </Button>
-
           </Modal.Header>
+
           <div className="tags-container">
             <ul className="tags">
               {
@@ -109,9 +110,9 @@ export default class extends React.Component {
               }
 
               {
-                title.length > 0 &&
+                tagName.length > 0 &&
                 <li className="new-item">
-                  { title }
+                  { tagName }
                 </li>
               }
             </ul>
@@ -121,14 +122,15 @@ export default class extends React.Component {
         <Modal.Footer>
           <FormControl
             placeholder="Type tag here"
-            onChange={e => this.setState({ title: e.target.value })}
-            value={title}
+            onChange={e => this.setState({ tagName: e.target.value })}
+            value={tagName}
             maxLength={20}
           />
+
           <Button
             bsStyle="primary"
             onClick={() => this.addTag()}
-            disabled={title.length === 0 || tags[title.trim()] !== undefined}
+            disabled={tagName.length === 0 || tags[tagName.trim()] !== undefined}
           >
             Add Tag
           </Button>
