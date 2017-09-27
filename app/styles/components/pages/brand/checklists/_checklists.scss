@@ -10,6 +10,23 @@
     font-weight: 500;
     color: #8ca2b6;
   }
+  .checklist--header {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #8ca2b6;
+    display: flex;
+    flex-direction: row;
+    .checklist--header--column-flex-2 {
+      flex: 2;
+      padding: 0 8px;
+    }
+    .checklist--header--column-center {
+      text-align: center;
+      flex: 1;
+    }
+  }
   .checklistRow {
     @extend %checklistRow;
   }

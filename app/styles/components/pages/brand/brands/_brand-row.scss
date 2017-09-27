@@ -79,22 +79,4 @@
   }
 }
 
-%checklistRow:hover {
-  background-color: #f8fafb;
-  display: block;
-  .edit-button-container, .deleteIcon {
-    visibility: visible;
-    display: inline-block;
-  }
-  .edit-button-container .editButton:hover {
-    font-weight: bold;
-  }
-}
-
-%checklistRow.active {
-  background-color: #f8fafb;
-  border-bottom: none;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
 

@@ -4,7 +4,11 @@ import { Button } from 'react-bootstrap'
 import Compose from './ModalNewRole'
 import { addRole } from '../../../../../store_actions/brandConsole'
 
-const Header = ({ role, addRole }) => {
+const Header = ({
+  brand,
+  aclTypes,
+  addRole
+}) => {
   const AddButton = ({
     clickHandler
   }) => (
@@ -15,22 +19,21 @@ const Header = ({ role, addRole }) => {
       Add New Role
     </Button>
   )
-
-  return (<div className="toolbar">
-    <span className="button">
-      <Compose
-        TriggerButton={AddButton}
-        showOnly={false}
-        dropDownBox
-        inline
-        title="Give your role a name"
-        buttonTitle="Add Role"
-        onButtonClick={(newRole) => {
-          addRole(role, newRole)
-        }}
-      />
-    </span>
-  </div>
+  return (
+    <div className="toolbar">
+      <span className="button">
+        <Compose
+          TriggerButton={AddButton}
+          aclTypes={aclTypes}
+          inline
+          title="Give your role a name"
+          buttonTitle="Add Role"
+          onButtonClick={(newRole) => {
+            addRole(brand, newRole)
+          }}
+        />
+      </span>
+    </div>
   )
 }
 

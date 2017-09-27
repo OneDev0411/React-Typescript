@@ -10,6 +10,9 @@ const Sidebar = () => (
       <NavItem className="item" eventKey="Checklists">
         Checklists
       </NavItem>
+      <NavItem className="item" eventKey="Roles">
+        Roles
+      </NavItem>
     </Nav>
   </div>
 )

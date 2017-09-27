@@ -43,12 +43,11 @@ $toolBarHeight: 60px;
   .rightPanel {
     margin-left: $menuWidth;
     overflow: auto;
+    min-height: 100vh;
   }
 }
 
 .brands {
-  margin-left: 70px;
-  margin-right: 0;
   background-color: #f0f4f7;
   height: 100vh;
   @extend %brands;
