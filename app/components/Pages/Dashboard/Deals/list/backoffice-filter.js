@@ -55,7 +55,9 @@ class Filter extends React.Component {
                 onClick={() => this.setFilter(tabName)}
                 className={tabName === active ? 'active' : ''}
               >
-                { tabName }
+                <span className="title">
+                  { tabName }
+                </span>
               </li>
             )
           }

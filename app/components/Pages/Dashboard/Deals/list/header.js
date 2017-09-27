@@ -27,7 +27,7 @@ class Header extends React.Component {
     const { isBackOffice, onFilterChange, activeFilterTab } = this.props
 
     return (
-      <Row className="heading">
+      <Row className="deals-list-header">
         <Col lg={6} md={5} sm={6} xs={12}>
           {
             isBackOffice ?
