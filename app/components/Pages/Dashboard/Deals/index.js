@@ -19,7 +19,7 @@ class DealsContainer extends React.Component {
   render() {
     const { deals, user, error } = this.props
     const children = React.cloneElement(this.props.children, { user, deals })
-    const hasError = error && error.action === 'get-deals'
+    const hasError = error && error.action === 'get-deals' && deals === null
 
     if (hasError) {
       return (

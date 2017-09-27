@@ -99,6 +99,9 @@ export function getDeals(user, backoffice = false) {
         dispatch(setTasks(tasks))
       ])
     } catch (e) {
+      // log
+      console.error(e)
+
       dispatch({
         type: types.GET_DEALS_FAILED,
         name: 'get-deals',

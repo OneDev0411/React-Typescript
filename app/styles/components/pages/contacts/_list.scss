@@ -1,7 +1,9 @@
-.list {
-  @extend %contacts-list--table;
-  @extend %contacts-list--toolbar;
-  @extend %contacts-list--no-contact;
+.contacts {
+  .list {
+    @extend %contacts-list--table;
+    @extend %contacts-list--toolbar;
+    @extend %contacts-list--no-contact;
+  }
 }
 
 %contacts-list--no-contact {
