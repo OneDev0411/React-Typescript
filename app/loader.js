@@ -14,17 +14,18 @@ const Loader = () => (
     }}
   >
     <img
+      alt="loader"
       style={{ width: '50px' }}
       src="/static/images/loading-states/grid-blue.svg"
     />
   </div>
 )
 
-const LoadingHandler = (props) => {
+const LoadingHandler = props => {
   const { isLoading, timedOut, pastDelay, error } = props
 
   if (error || (isLoading && timedOut)) {
-    return <div>Error! Couldn't load component</div>;
+    return <div>Error! Couldn't load component</div>
   }
 
   if (isLoading && pastDelay) {
@@ -34,12 +35,17 @@ const LoadingHandler = (props) => {
   return false
 }
 
-export default (opts) => {
-  const Component = Loadable(Object.assign({
-    loading: LoadingHandler,
-    delay: 4000,
-    timeout: 15000
-  }, opts))
+export default opts => {
+  const Component = Loadable(
+    Object.assign(
+      {
+        loading: LoadingHandler,
+        delay: 4000,
+        timeout: 15000
+      },
+      opts
+    )
+  )
 
   if (opts.fetchData) {
     Component.fetchData = opts.fetchData

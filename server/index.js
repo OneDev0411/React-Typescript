@@ -8,6 +8,7 @@ import path from 'path'
 import webpack from 'webpack'
 import _ from 'underscore'
 
+import config from '../config/private'
 import render from './util/render'
 import request from './util/request'
 import pagesMiddleware from './util/pages'
@@ -78,6 +79,7 @@ app.use(
 app.use(async (ctx, next) => {
   ctx.locals = {
     ...ctx.locals,
+    intercomId: config.intercom.app_id,
     appStore: { data: {} },
     time: new Date().getTime()
   }

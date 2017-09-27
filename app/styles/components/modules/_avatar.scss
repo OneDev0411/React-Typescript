@@ -1,0 +1,13 @@
+.c-avatar {
+  display: inline-block;
+  font-size: 24px;
+  color: #263445;
+  border-radius: 100%;
+  background: #dddfe0;
+}
+
+.c-avatar__image {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}

@@ -15,7 +15,7 @@ export default class ProfileImage extends Component {
     const { user } = data
     const { profile_image_url } = user
 
-    let font = 17
+    let font = 24
     if (this.props.font) {
       font = this.props.font
     }
@@ -50,7 +50,9 @@ export default class ProfileImage extends Component {
         <div
           className="text-center"
           style={S(
-            `w-100p t-${top} absolute color-fff ${font ? `font-${font}` : '17'}`
+            `w-100p t-${top} absolute color-263445 ${font
+              ? `font-${font}`
+              : '17'}`
           )}
         >
           {initials_area}
@@ -60,7 +62,7 @@ export default class ProfileImage extends Component {
 
     let width_height
     if (!this.props.size) {
-      width_height = 'w-40 h-40'
+      width_height = 'w-48 h-48'
     } else {
       width_height = `w-${this.props.size} h-${this.props.size}`
     }
@@ -84,7 +86,7 @@ export default class ProfileImage extends Component {
       )
     }
     return (
-      <div style={S('inline')}>
+      <div style={S(`inline-block ${width_height}`)}>
         <div className="img-circle" style={profile_image_style}>
           {show_online_indicator && online_indicator}
           {initials}

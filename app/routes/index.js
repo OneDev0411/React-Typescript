@@ -18,7 +18,15 @@ const AsyncAuthenticationLayout = Load({
 
 // Pages
 import Landing from '../components/Pages/Landing'
-import Brand from '../components/Pages/Dashboard/Brand'
+
+/* ==================================== */
+//  Auth
+/* ==================================== */
+
+const AsyncBranch = Load({
+  loader: () =>
+    import('../components/Pages/Branch' /* webpackChunkName: "branch" */)
+})
 
 const AsyncSignUp = Load({
   loader: () =>
@@ -28,11 +36,6 @@ const AsyncSignUp = Load({
 const AsyncRegister = Load({
   loader: () =>
     import('../components/Pages/Auth/Register' /* webpackChunkName: "register" */)
-})
-
-const AsyncUpgradeAccount = Load({
-  loader: () =>
-    import('../components/Pages/Account/Upgrade' /* webpackChunkName: "upgrade" */)
 })
 
 const AsyncSignIn = Load({
@@ -65,32 +68,10 @@ const AsyncConfirmAgent = Load({
     import('../components/Pages/SignUp/ConfirmAgent' /* webpackChunkName: "confirm" */)
 })
 
-const AsyncNoMatch = Load({
-  loader: () =>
-    import('../components/Pages/NoMatch' /* webpackChunkName: "404" */)
-})
+/* ==================================== */
+//  MLS
+/* ==================================== */
 
-const AsyncOops = Load({
-  loader: () =>
-    import('../components/Pages/Oops' /* webpackChunkName: "Oops" */)
-})
-
-const AsyncBranch = Load({
-  loader: () =>
-    import('../components/Pages/Branch' /* webpackChunkName: "branch" */)
-})
-
-const AsyncSettings = Load({
-  loader: () =>
-    import('../components/Pages/Account/Settings' /* webpackChunkName: "setting" */)
-})
-
-const AsyncNotifications = Load({
-  loader: () =>
-    import('../components/Pages/Account/Notifications' /* webpackChunkName: "notif" */)
-})
-
-// listings
 const AsyncListingsLayout = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Listings' /* webpackChunkName: "listings" */)
@@ -107,13 +88,31 @@ const AsyncListingsAlerts = Load({
     import('../components/Pages/Dashboard/Listings/Alerts' /* webpackChunkName: "alerts" */)
 })
 
-// deals
+const AsyncListingsFavorites = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Listings/Favorites' /* webpackChunkName: "fav" */)
+})
+
+const AsyncListingSinglePage = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Listings/Listing' /* webpackChunkName: "list_single" */)
+})
+
+/* ==================================== */
+//  Deals
+/* ==================================== */
+
 const AsyncDealsLayout = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */),
   fetchData: (dispatch, params) => {
     const { user } = params
-    const isBackOffice = user.features.indexOf('Backoffice') !== -1
+    if (user == null) {
+      return
+    }
+
+    const isBackOffice =
+      user.brand && user.features && user.features.includes('Backoffice')
     return dispatch(getDeals(user, isBackOffice))
   }
 })
@@ -128,7 +127,10 @@ const AsyncDealDashboard = Load({
     import('../components/Pages/Dashboard/Deals/dashboard' /* webpackChunkName: "deal_d" */)
 })
 
-// contacts
+/* ==================================== */
+//  Contacts
+/* ==================================== */
+
 const AsyncContacts = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Contacts' /* webpackChunkName: "contact" */),
@@ -145,20 +147,13 @@ const AsyncContactProfile = Load({
     import('../components/Pages/Dashboard/Contacts/Profile' /* webpackChunkName: "contact_p" */)
 })
 
-// chat room
+/* ==================================== */
+//  Chatroom
+/* ==================================== */
+
 const AsyncRecents = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Chatroom' /* webpackChunkName: "chat" */)
-})
-
-const AsyncListingsFavorites = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Listings/Favorites' /* webpackChunkName: "fav" */)
-})
-
-const AsyncListingSinglePage = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Listings/Listing' /* webpackChunkName: "list_single" */)
 })
 
 // Notifications
@@ -167,7 +162,34 @@ const AsyncNotificationsPage = Load({
     import('../components/Pages/Dashboard/Notifications' /* webpackChunkName: "notif_p" */)
 })
 
-// Widgets
+/* ==================================== */
+//  Account settings
+/* ==================================== */
+
+const AsyncAccountLayout = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Account' /* webpackChunkName: "account_layout" */)
+})
+
+const AsyncProfile = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Account/Profile' /* webpackChunkName: "profile" */)
+})
+
+const AsyncPayment = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Account/Payment' /* webpackChunkName: "payment" */)
+})
+
+const AsyncUpgradeAccount = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Account/Upgrade' /* webpackChunkName: "upgrade" */)
+})
+
+/* ==================================== */
+//  Widgets
+/* ==================================== */
+
 const AsyncListingsWidget = Load({
   loader: () =>
     import('../components/Pages/Widgets/Listings' /* webpackChunkName: "listing_w" */)
@@ -183,15 +205,18 @@ const AsyncSearchWidget = Load({
     import('../components/Pages/Widgets/Search' /* webpackChunkName: "search_w" */)
 })
 
-// store and other pages
+/* ==================================== */
+//  Other Pages
+/* ==================================== */
+
+const AsyncBrand = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Brand' /* webpackChunkName: "brand_settings" */)
+})
+
 const AsyncWebsite = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Website' /* webpackChunkName: "website" */)
-})
-
-const AsyncCards = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Cards' /* webpackChunkName: "card" */)
 })
 
 const AsyncForms = Load({
@@ -202,6 +227,16 @@ const AsyncForms = Load({
 const AsyncMobile = Load({
   loader: () =>
     import('../components/Pages/Mobile' /* webpackChunkName: "mobile" */)
+})
+
+const AsyncNoMatch = Load({
+  loader: () =>
+    import('../components/Pages/NoMatch' /* webpackChunkName: "404" */)
+})
+
+const AsyncOops = Load({
+  loader: () =>
+    import('../components/Pages/Oops' /* webpackChunkName: "Oops" */)
 })
 
 function authenticate(nextState, replace) {
@@ -240,9 +275,10 @@ export default (
       <Route path="/branch" component={AsyncBranch} />
 
       <Route
-        path="/register"
+        path="register"
         component={UserIsNotAuthenticated(AsyncRegister)}
       />
+
       <Route path="/signin" component={UserIsNotAuthenticated(AsyncSignIn)} />
       <Route path="/signup" component={UserIsNotAuthenticated(AsyncSignUp)} />
 
@@ -280,15 +316,6 @@ export default (
     <Route path="/" component={AppLayout} onEnter={authenticate}>
       <Route path="/branch" component={AsyncBranch} />
 
-      <Route path="/account/upgrade" component={AsyncUpgradeAccount} />
-
-      <Route path="/widgets/map" component={AsyncMapWidget} />
-      <Route path="/widgets/search" component={AsyncSearchWidget} />
-      <Route path="/widgets/listings" component={AsyncListingsWidget} />
-
-      <Route path="/account/settings" component={AsyncSettings} />
-      <Route path="/account/notifications" component={AsyncNotifications} />
-
       <Route path="dashboard/mls" component={AsyncListingsLayout}>
         <IndexRoute component={AsyncListingsSearch} />
 
@@ -300,20 +327,18 @@ export default (
 
       <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
 
-      <Route path="/dashboard/website" component={AsyncWebsite} />
-      <Route path="/dashboard/cards" component={AsyncCards} />
-      <Route path="/dashboard/forms" component={AsyncForms} />
-
       <Route path="/dashboard/contacts" component={AsyncContacts}>
         <IndexRoute component={AsyncContactsList} />
         <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
       </Route>
 
-      <Route path="/dashboard/deals(/filter/:filter)" component={AsyncDealsLayout}>
+      <Route
+        path="/dashboard/deals(/filter/:filter)"
+        component={AsyncDealsLayout}
+      >
         <IndexRoute component={AsyncDealsList} />
         <Route path="/dashboard/deals/:id" component={AsyncDealDashboard} />
       </Route>
-      <Route path="/dashboard/brand" component={Brand} />
 
       <Route path="/dashboard/recents(/:roomId)">
         <IndexRoute component={AsyncRecents} />
@@ -323,6 +348,20 @@ export default (
         path="/dashboard/notifications"
         component={AsyncNotificationsPage}
       />
+
+      <Route path="dashboard/account" component={AsyncAccountLayout}>
+        <IndexRoute component={AsyncProfile} />
+        <Route path="upgrade" component={AsyncUpgradeAccount} />
+      </Route>
+
+      <Route path="/dashboard/brand" component={AsyncBrand} />
+
+      <Route path="/dashboard/website" component={AsyncWebsite} />
+      <Route path="/dashboard/forms" component={AsyncForms} />
+
+      <Route path="/widgets/map" component={AsyncMapWidget} />
+      <Route path="/widgets/search" component={AsyncSearchWidget} />
+      <Route path="/widgets/listings" component={AsyncListingsWidget} />
     </Route>
 
     <Route path="/oops" component={AsyncOops} />

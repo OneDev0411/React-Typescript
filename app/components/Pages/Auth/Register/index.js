@@ -11,7 +11,6 @@ import { getBrandInfo, renderField } from '../SignIn'
 import Brand from '../../../../controllers/Brand'
 
 import editUser from '../../../../store_actions/user/edit'
-import setWidget from '../../../../store_actions/widgets/setWidget'
 import submitSigninForm from '../../../../store_actions/auth/signin'
 import updatePassword from '../../../../models/auth/password/update'
 
@@ -44,6 +43,7 @@ export const renderAgentField = ({ id, input, label, checked }) => (
 
 const RegisterForm = ({
   brand,
+  invalid,
   pristine,
   submitError,
   handleSubmit,
@@ -51,6 +51,7 @@ const RegisterForm = ({
   onSubmitHandler,
   paramsFromURI: { email, phone_number }
 }) => {
+  const isDisabled = isSubmitting || invalid || pristine
   const { siteLogo, siteTitle, brandColor } = getBrandInfo(brand)
 
   return (
@@ -129,10 +130,10 @@ const RegisterForm = ({
             <button
               type="submit"
               className="c-auth__submit-btn"
-              disabled={isSubmitting || pristine}
+              disabled={isDisabled}
               style={{
                 background: brandColor,
-                opacity: isSubmitting || pristine ? 0.7 : 1
+                opacity: isDisabled ? 0.7 : 1
               }}
             >
               {isSubmitting ? 'Submitting...' : 'Continue'}
@@ -146,6 +147,7 @@ const RegisterForm = ({
 
 const validate = values => {
   const errors = {}
+  const NAME_CHARACHTER_LIMIT = 1
   const minimumCharactersError = length =>
     `Must be at least ${length} characters.`
   const invalidCharactersError =
@@ -156,16 +158,16 @@ const validate = values => {
     errors.first_name = 'Required'
   } else if (!isValidName(values.first_name)) {
     errors.first_name = invalidCharactersError
-  } else if (values.first_name.length < 3) {
-    errors.first_name = minimumCharactersError(3)
+  } else if (values.first_name.length < NAME_CHARACHTER_LIMIT) {
+    errors.first_name = minimumCharactersError(NAME_CHARACHTER_LIMIT)
   }
 
   if (!values.last_name) {
     errors.last_name = 'Required'
   } else if (!isValidName(values.last_name)) {
     errors.last_name = invalidCharactersError
-  } else if (values.last_name.length < 3) {
-    errors.last_name = minimumCharactersError(3)
+  } else if (values.last_name.length < NAME_CHARACHTER_LIMIT) {
+    errors.last_name = minimumCharactersError(NAME_CHARACHTER_LIMIT)
   }
 
   if (!values.email) {
@@ -185,11 +187,11 @@ const validate = values => {
 
 export default compose(
   connect(
-    ({ brand }, { location }) => ({
+    ({ brand }, { location: { query } }) => ({
       brand,
-      paramsFromURI: location.query
+      paramsFromURI: query
     }),
-    { submitSigninForm, editUser, setWidget }
+    { submitSigninForm, editUser }
   ),
   reduxForm({
     form: 'register',
@@ -201,7 +203,6 @@ export default compose(
   withHandlers({
     onSubmitHandler: ({
       editUser,
-      setWidget,
       paramsFromURI,
       setSubmitError,
       setIsSubmitting,
@@ -231,17 +232,17 @@ export default compose(
 
       const userInfo = {
         last_name,
-        first_name
+        first_name,
+        is_shadow: false
       }
 
       const loginInfo = {
         password,
-        username: emailFromURI || email
+        username: email || emailFromURI
       }
 
       if (phone_number) {
         userInfo.email = email
-        userPassword.email = emailFromURI
         userPassword.phone_number = phone_number
       } else if (emailFromURI) {
         userPassword.email = emailFromURI
@@ -249,17 +250,17 @@ export default compose(
 
       // console.log(redirectTo, formInputsValue, userPassword, userInfo)
       try {
+        let redirect = '/dashboard/mls'
         await updatePassword(userPassword)
-        await submitSigninForm(loginInfo)
-        await editUser(userInfo)
 
         if (user_type === 'Agent') {
-          setWidget(true)
-          browserHistory.push(`/account/upgrade?redirectTo=${redirectTo}`)
-          return
+          redirect = `/dashboard/account/upgrade?redirectTo=${encodeURIComponent(
+            redirectTo
+          )}`
         }
 
-        browserHistory.push(redirectTo)
+        await submitSigninForm(loginInfo, redirect)
+        await editUser(userInfo)
       } catch (error) {
         setIsSubmitting(false)
         setSubmitError(true)
