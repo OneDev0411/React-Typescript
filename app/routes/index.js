@@ -212,9 +212,14 @@ const AsyncBrands = Load({
     import('../components/Pages/Dashboard/Brand/SubBrands' /* webpackChunkName: "brand_settings" */)
 })
 
-const AsyncBrand = Load({
+const AsyncChecklistBrand = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Brand/' /* webpackChunkName: "brand" */)
+    import('../components/Pages/Dashboard/Brand/Checklists' /* webpackChunkName: "brandChecklist" */)
+})
+
+const AsyncRoleBrand = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Brand/Roles' /* webpackChunkName: "brandRole" */)
 })
 
 const AsyncWebsite = Load({
@@ -359,8 +364,8 @@ export default (
 
       <Route path="/dashboard/brands">
         <IndexRoute component={AsyncBrands} />
-        <Route path="/dashboard/brands/edit/:id" component={AsyncBrand} />
-        <Route path="/dashboard/brands/add/:parentId" component={AsyncBrand} />
+        <Route path="/dashboard/brands/checklist/:brand" component={AsyncChecklistBrand} />
+        <Route path="/dashboard/brands/role/:brand" component={AsyncRoleBrand} />
       </Route>
 
       <Route path="/dashboard/website" component={AsyncWebsite} />
