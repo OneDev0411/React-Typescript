@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Dropdown, Button } from 'react-bootstrap'
-import _ from 'underscore'
 import WhoSigned from './who-signed'
 import FormModal from '../../../../../../Partials/Pdf/Modal'
 import config from '../../../../../../../../config/public'
@@ -31,12 +30,12 @@ class Envelope extends React.Component {
 
   getFormUrl() {
     const { user, task, envelope } = this.props
-    if (!task.submission) {
+    if (!task.submission || !envelope.documents) {
       return null
     }
 
     // get document index
-    const doc = _.find(envelope.documents, doc => doc.submission === task.submission.id)
+    const doc = envelope.documents.find(doc => doc.submission === task.submission.id)
 
     if (!doc){
       return null
