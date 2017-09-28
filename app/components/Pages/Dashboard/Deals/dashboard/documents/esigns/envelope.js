@@ -36,7 +36,7 @@ class Envelope extends React.Component {
     }
 
     // get document index
-    const doc = _.find(envelope.documents, doc => doc.submission !== task.submission.id)
+    const doc = _.find(envelope.documents, doc => doc.submission === task.submission.id)
 
     if (!doc){
       return null
