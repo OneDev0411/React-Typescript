@@ -147,9 +147,14 @@
       cursor: pointer;
       margin-top: -1px;
 
+      .badge {
+        background-color: #ededed;
+        font-weight: normal;
+      }
+
       .counter {
         display: inline-block;
-        color: gray;
+        color: #62778c;
         font-size: 13px;
         margin-left: 6px;
       }
@@ -176,6 +181,10 @@
           display: inline-block;
           padding-bottom: 20px;
           border-bottom: 2px solid #2196f3;
+        }
+
+        .badge {
+          color: #2196f3;
         }
       }
     }
@@ -266,6 +275,7 @@
   border: none;
   box-shadow: -1px 0 10px 0 rgba(0, 0, 0, 0.1), 0 0 10px 0 rgba(0, 0, 0, 0.1);
   color: #fff;
+  min-width: 300px;
 
   .arrow:after {
     border-bottom-color: #303e4d !important;
@@ -304,8 +314,11 @@
   }
 
   .fact-table {
+    width: 300px !important;
     td.name {
       color: #78909c;
+      font-size: 15px;
+      width: 200px;
       .status {
         margin-right: 5px;
         color: #eeeeee;
@@ -320,8 +333,9 @@
     }
 
     td.field {
+      width: 100px;
       color: #78909c;
-      font-size: 12px;
+      font-size: 15px;
     }
   }
 }

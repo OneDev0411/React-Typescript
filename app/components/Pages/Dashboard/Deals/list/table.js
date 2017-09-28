@@ -91,7 +91,10 @@ class BaseTable extends React.Component {
             className="deal-list--popover"
             id={`popover-trigger-factsheet-${deal.id}`}
           >
-            <CriticalDates deal={deal} />
+            <CriticalDates
+              deal={deal}
+              showTitle={false}
+            />
           </Popover>
         }
       >

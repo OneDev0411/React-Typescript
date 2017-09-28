@@ -88,15 +88,19 @@ const table = {
 }
 
 const CriticalDates = ({
-  deal
+  deal,
+  showTitle = true
 }) => {
   const nextDate = getNextDateField(deal)
 
   return (
     <div className="deal-info-section">
-      <div className="deal-info-title">
-        Critical Dates
-      </div>
+      {
+        showTitle &&
+        <div className="deal-info-title">
+          Critical Dates
+        </div>
+      }
 
       <table className="fact-table critical-dates">
         <tbody>

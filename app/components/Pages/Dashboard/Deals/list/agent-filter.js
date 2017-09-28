@@ -121,7 +121,7 @@ class Filter extends React.Component {
                   { filter }
                 </span>
 
-                <span className="counter">
+                <span className="badge counter">
                   { this.getBadgeCounter(filter) }
                 </span>
               </li>
