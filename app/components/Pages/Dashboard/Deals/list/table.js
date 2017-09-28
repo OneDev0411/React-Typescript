@@ -78,15 +78,14 @@ class BaseTable extends React.Component {
     )
   }
 
-  getNextDate(deal) {
+  getNextDate(deal, rowId) {
     const { deals } = this.props
     const dealsCount = _.size(deals)
-    const dealOrder = Object.keys(deals).indexOf(deal.id)
 
     return (
       <OverlayTrigger
         trigger={['hover', 'focus']}
-        placement={dealsCount > 4 && dealOrder + 3 >= dealsCount ? 'top' : 'bottom'}
+        placement={rowId > 3 && rowId + 3 >= dealsCount ? 'top' : 'bottom'}
         overlay={
           <Popover
             className="deal-list--popover"
@@ -294,7 +293,7 @@ class BaseTable extends React.Component {
                 .filter(deal => this.applyFilters(deal))
                 .sortBy(deal => this.sort(deal))
                 .shouldReverse(sortOrder)
-                .map(deal => (
+                .map((deal, rowId) => (
                   <tr
                     key={`DEAL_${deal.id}`}
                     className="item"
@@ -306,7 +305,7 @@ class BaseTable extends React.Component {
                           key={`DEAL_${deal.id}__CELL_${key}`}
                           className={cell.className}
                         >
-                          { cell.getText(deal) }
+                          { cell.getText(deal, rowId) }
                         </td>
                       )
                     }
