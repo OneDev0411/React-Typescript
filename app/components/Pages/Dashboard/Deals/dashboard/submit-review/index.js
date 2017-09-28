@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import { batchActions } from 'redux-batched-actions'
+import ReactTooltip from 'react-tooltip'
 import { Tooltip, OverlayTrigger, Button } from 'react-bootstrap'
 import { changeTaskStatus, changeNeedsAttention } from '../../../../../../store_actions/deals'
 
@@ -70,6 +71,11 @@ class SubmitReview extends React.Component {
     return status === 'Submitted' ? 'Cancel Submission' : 'Submit'
   }
 
+  getButtonTip() {
+    const status = this.getTaskStatus()
+    return status === 'Submitted' ? 'Cancel submitting to back office' : 'Submit to back office'
+  }
+
   render() {
     const { submitting } = this.state
     const { task } = this.props
@@ -77,9 +83,16 @@ class SubmitReview extends React.Component {
 
     return (
       <div>
+        <ReactTooltip
+          place="top"
+          className="deal-filter--tooltip"
+          multiline
+        />
+
         <button
           disabled={submitting}
           onClick={() => this.toggleSubmit()}
+          data-tip={this.getButtonTip()}
           className={`task-btn btn-submit ${submitting ? 'saving' : ''}`}
           style={{ fontSize: 'Submitted' ? '13px' : '15px' }}
         >
