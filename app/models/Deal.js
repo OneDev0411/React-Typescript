@@ -50,17 +50,19 @@ Deal.get.field = function(deal, field) {
 Deal.get.address = function(deal) {
   const unitNumber = Deal.get.field(deal, 'unit_number')
   const city = Deal.get.field(deal, 'city')
+  const postalCode = Deal.get.field(deal, 'postal_code')
 
   const address = [
     Deal.get.field(deal, 'street_number') || '',
     Deal.get.field(deal, 'street_name') || '',
     Deal.get.field(deal, 'street_suffix') || '',
     unitNumber ? `, #${unitNumber},` : '',
-    city ? `${city},` : '',
-    Deal.get.field(deal, 'postal_code') || '',
+    city ? `, ${city}` : '',
+    postalCode ? `, ${postalCode}` : '',
   ]
   .join(' ')
   .trim()
+  .replace(/(\s)+,/ig, ',')
 
   if (address.slice('-1') === ',') {
     return address.slice(0, -1)

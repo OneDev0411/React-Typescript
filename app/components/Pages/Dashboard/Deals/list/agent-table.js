@@ -38,13 +38,13 @@ class AgentTable extends BaseTable {
         caption: 'SIDE',
         sortable: true,
         className: 'col-md-2 hidden-sm hidden-xs',
-        getText: deal => this.getSide(deal),
+        getText: (deal, rowId) => this.getSide(deal, rowId),
         getValue: deal => deal.deal_type.toString() + this.getRoleNames(deal)
       },
       critical_dates: {
         caption: 'CRITICAL DATES',
         className: 'col-md-2 hidden-sm hidden-xs',
-        getText: deal => this.getNextDate(deal)
+        getText: (deal, rowId) => this.getNextDate(deal, rowId)
       },
       outstanding: {
         caption: 'OUTSTANDING',
@@ -60,9 +60,9 @@ class AgentTable extends BaseTable {
     }
   }
 
-  getSide(deal) {
+  getSide(deal, rowId) {
     const { deals } = this.props
-    const dealOrder = Object.keys(deals).indexOf(deal.id)
+    const dealsCount = _.size(deals)
 
     if (!deal.roles) {
       return deal.deal_type
@@ -73,7 +73,7 @@ class AgentTable extends BaseTable {
     return (
       <OverlayTrigger
         trigger={['hover', 'focus']}
-        placement={dealOrder + 3 >= _.size(deals) ? 'top' : 'bottom'}
+        placement={rowId > 3 && rowId + 3 >= dealsCount ? 'top' : 'bottom'}
         overlay={
           <Popover
             className="deal-list--popover"
@@ -82,7 +82,10 @@ class AgentTable extends BaseTable {
             <div className="roles">
               {
                 deal.roles.map(role =>
-                  <div className="item">
+                  <div
+                    key={`ROLE_${role.id}`}
+                    className="item"
+                  >
                     <div className="avatar">
                       <UserAvatar
                         name={role.user.display_name}

@@ -32,12 +32,12 @@ const getActivePath = path => {
     case '/dashboard/mls/alerts':
     case '/dashboard/mls/actives':
       return 'MAP'
-    case '/dashboard/deals':
-      return 'DEALS'
     case '/dashboard/contacts':
       return 'CONTACTS'
     case '/dashboard/notifications':
       return 'NOTIF'
+    case (path.match(/\/dashboard\/deals/) || {}).input:
+      return 'DEALS'
     default:
       return ''
   }
