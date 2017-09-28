@@ -62,6 +62,7 @@ class AgentTable extends BaseTable {
 
   getSide(deal) {
     const { deals } = this.props
+    const dealsCount = _.size(deals)
     const dealOrder = Object.keys(deals).indexOf(deal.id)
 
     if (!deal.roles) {
@@ -73,7 +74,7 @@ class AgentTable extends BaseTable {
     return (
       <OverlayTrigger
         trigger={['hover', 'focus']}
-        placement={dealOrder + 3 >= _.size(deals) ? 'top' : 'bottom'}
+        placement={dealsCount > 4 && dealOrder + 3 >= dealsCount ? 'top' : 'bottom'}
         overlay={
           <Popover
             className="deal-list--popover"
