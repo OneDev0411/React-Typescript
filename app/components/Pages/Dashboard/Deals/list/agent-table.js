@@ -83,7 +83,10 @@ class AgentTable extends BaseTable {
             <div className="roles">
               {
                 deal.roles.map(role =>
-                  <div className="item">
+                  <div
+                    key={`ROLE_${role.id}`}
+                    className="item"
+                  >
                     <div className="avatar">
                       <UserAvatar
                         name={role.user.display_name}
