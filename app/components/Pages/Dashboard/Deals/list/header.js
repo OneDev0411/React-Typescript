@@ -4,6 +4,7 @@ import { Row, Col } from 'react-bootstrap'
 import DealCreate from '../create'
 import AgentFilter from './agent-filter'
 import BackOfficeFilter from './backoffice-filter'
+import SearchInput from '../../../../Partials/SearchInput'
 
 class Header extends React.Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class Header extends React.Component {
     const { isBackOffice, onFilterChange, activeFilterTab } = this.props
 
     return (
-      <Row className="heading">
+      <Row className="deals-list-header">
         <Col lg={6} md={5} sm={6} xs={12}>
           {
             isBackOffice ?
@@ -43,10 +44,8 @@ class Header extends React.Component {
         </Col>
 
         <Col lg={6} md={7} sm={6} xs={12} className="text-right">
-          <input
-            onChange={e => this.onInputChange(e.target.value)}
-            className="search"
-            type="text"
+          <SearchInput
+            onChange={value => this.onInputChange(value)}
             placeholder="Search by address or a person's name"
           />
 

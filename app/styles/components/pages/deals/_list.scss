@@ -5,8 +5,8 @@
     @extend %deal-list--table;
   }
 
-  .heading {
-    @extend %deal-list--heading;
+  .deals-list-header {
+    @extend %deal-list--header;
   }
 
   .list-empty {
@@ -91,7 +91,6 @@
       cursor: pointer;
       border-radius: 4px;
       background-color: #fff;
-      // box-shadow: 0 1px 1px 0 #eef1f2;
       color: #5b6469;
       transition: 0.3s ease-in all;
       &:hover {
@@ -128,18 +127,18 @@
 /**
  *
  */
-%deal-list--heading {
+%deal-list--header {
   height: 54px;
-  line-height: 54px;
   background-color: #f8fafb;
   box-shadow: 0 1px 0 0 #dce5eb;
-  vertical-align: middle;
   padding: 0 30px;
+  padding-top: (54px - 30px) / 2;
 
   ul.filter {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    line-height: 1;
     li {
       display: inline-block;
       margin-right: 50px;
@@ -175,27 +174,21 @@
         color: #2196f3;
         .title {
           display: inline-block;
+          padding-bottom: 20px;
           border-bottom: 2px solid #2196f3;
         }
       }
     }
   }
 
-  input.search {
-    width: 260px;
-    height: 30px;
+  .search-input {
+    float: none;
+    display: inline-block;
+    border: solid 1px #eef0f2;
     border-radius: 3px;
     background-color: #ffffff;
-    border: solid 1px #eef0f2;
-    padding: 0 10px;
-
-    @media (max-width: 548px) {
-      width: 100%;
-    }
-
-    &:focus {
-      outline: none;
-    }
+    width: 280px;
+    height: 30px;
   }
 }
 

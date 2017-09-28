@@ -2,6 +2,7 @@ import _ from 'underscore'
 import Chatroom from '../../models/Chatroom'
 import types from '../../constants/chatroom'
 import AppStore from '../../stores/AppStore'
+import { addNotification as notify } from 'reapop'
 
 function _getRooms(rooms) {
   return {
@@ -37,9 +38,19 @@ export function addNewRoom(room) {
 
 export function createRoom(recipients) {
   return async dispatch => {
-    const room = await Chatroom.createRoom(recipients)
-    dispatch(addNewRoom(room))
-    return room.id
+    try {
+      const room = await Chatroom.createRoom(recipients)
+      dispatch(addNewRoom(room))
+      return room.id
+    } catch(e) {
+      dispatch(notify({
+        title: 'Can not create room',
+        message: e.response ? e.response.body.message : null,
+        status: 'error'
+      }))
+
+      return null
+    }
   }
 }
 
