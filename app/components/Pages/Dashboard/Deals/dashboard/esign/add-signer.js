@@ -6,6 +6,7 @@ export default ({
   show,
   deal,
   onHide,
+  allowedRoles,
   onAddRecipient
 }) => (
   <Modal
@@ -20,6 +21,7 @@ export default ({
     <Modal.Body>
       <Roles
         deal={deal}
+        allowedRoles={allowedRoles}
         onSelectRole={role => onAddRecipient(role)}
       />
     </Modal.Body>
