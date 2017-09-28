@@ -86,6 +86,7 @@ class CommentCreate extends React.Component {
   render() {
     const { comment, rows, height, isSaving } = this.state
     const { task, noCloseButton, onCloseTask } = this.props
+    const hasComment = comment.length > 0
 
     return (
       <div className="deal-comment-create">
@@ -95,7 +96,12 @@ class CommentCreate extends React.Component {
           placeholder="Write a comment ..."
           rows={rows}
           maxRows={3}
-          style={{ width: '100%', height: `${height}px`}}
+          style={{
+            width: '100%',
+            height: `${height}px`,
+            transition: '0.2s ease-in all',
+            border: hasComment ? '2px solid #2196f3' : ''
+          }}
           value={comment}
           onChange={e => this.setState({ comment: e.target.value })}
           onHeightChange={height => this.onHeightChangeHandler(height)}
@@ -120,7 +126,7 @@ class CommentCreate extends React.Component {
             style={{ textAlign: 'right'}}
           >
             <ActionButtons
-              hasComment={comment.length > 0}
+              hasComment={hasComment}
               isSaving={isSaving}
               task={task}
               onSendComment={(notify, status) => this.sendComment(notify, status)}
