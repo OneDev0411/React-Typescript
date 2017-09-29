@@ -82,8 +82,8 @@ const getSoldDate = (selectedMonth = 3) => {
 const normalizeNumberValues = values => {
   const numberValues = Object.keys(values).filter(
     v =>
-      (v.indexOf('minimum') === 0 || v.indexOf('maximum') === 0) &&
-      v.indexOf('sold') === -1
+    (v.indexOf('minimum') === 0 || v.indexOf('maximum') === 0) &&
+    v.indexOf('sold') === -1
   )
 
   const unitIsFoot = n => n.indexOf('square') !== -1
@@ -131,14 +131,14 @@ export const obiectPropsValueToArray = obj =>
   !obj
     ? null
     : Object.keys(obj)
-      .map(p => {
-        const value = obj[p]
-        if (!value) {
-          return
-        }
-        return value
-      })
-      .filter(v => v)
+    .map(p => {
+      const value = obj[p]
+      if (!value) {
+        return
+      }
+      return value
+    })
+    .filter(v => v)
 
 const normalizeValues = (values, options) => {
   const {

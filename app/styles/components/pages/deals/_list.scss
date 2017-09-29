@@ -277,6 +277,10 @@
   color: #fff;
   min-width: 300px;
 
+  &.push-left {
+    margin-left: -50px;
+  }
+
   .arrow:after {
     border-bottom-color: #303e4d !important;
     border-top-color: #303e4d !important;

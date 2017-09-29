@@ -76,7 +76,7 @@ class AgentTable extends BaseTable {
         placement={rowId > 3 && rowId + 3 >= dealsCount ? 'top' : 'bottom'}
         overlay={
           <Popover
-            className="deal-list--popover"
+            className="deal-list--popover push-left"
             id={`popover-trigger-sides-${deal.id}`}
           >
             <div className="roles">
