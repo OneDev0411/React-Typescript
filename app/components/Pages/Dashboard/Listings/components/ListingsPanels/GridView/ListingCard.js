@@ -15,36 +15,37 @@ const ListingCard = ({
   user,
   listing,
   tabName,
+  onClick,
+  children,
   activePanel,
   onMouseEnter,
   onMouseLeave
 }) => {
   const props = prepareProps(user, listing)
-  const mouseEventIsActive = tabName !== 'ALERTS' && activePanel === 'map'
+  const mouseEventIsActive =
+    tabName && tabName !== 'ALERTS' && activePanel && activePanel === 'map'
 
   return (
     <LazyLoad className="c-listing-card" height={260} offsetBottom={900}>
       <div
-        className="c-listing-card__inner"
         style={props.backgroundImage}
+        className="c-listing-card__inner"
+        onMouseLeave={mouseEventIsActive ? onMouseLeave : ''}
         onMouseEnter={mouseEventIsActive ? () => onMouseEnter(listing.id) : ''}
-        onMouseLeave={mouseEventIsActive ? onMouseLeave : ''}>
-        <Link to={`/dashboard/mls/${listing.id}`} className="c-listing-card__link" />
+      >
         <div className="c-listing-card__content-wrapper">
-          {props.statusColor &&
+          {props.statusColor && (
             <div>
               <span
                 className="c-listing-card__status"
-                style={{ background: `#${props.statusColor}` }}>
+                style={{ background: `#${props.statusColor}` }}
+              >
                 {listing.status}
               </span>
-            </div>}
-          <h4 className="c-listing-card__title">
-            {props.address}
-          </h4>
-          <h5 className="c-listing-card__price">
-            $ {props.price}
-          </h5>
+            </div>
+          )}
+          <h4 className="c-listing-card__title">{props.address}</h4>
+          <h5 className="c-listing-card__price">$ {props.price}</h5>
           <div className="c-listing-card__details">
             <span>{props.beds} Beds</span>
             &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
@@ -55,18 +56,30 @@ const ListingCard = ({
             <span>{props.builtYear}</span>
           </div>
         </div>
-        {listing.new && <div className="c-listing-card__alertStatus">{listing.new}</div>}
-        {user &&
+        {listing.new && (
+          <div className="c-listing-card__alertStatus">{listing.new}</div>
+        )}
+        {typeof onClick === 'function' ? (
+          <a href="#" onClick={onClick} className="c-listing-card__link" />
+        ) : (
+          <Link
+            to={`/dashboard/mls/${listing.id}`}
+            className="c-listing-card__link"
+          />
+        )}
+        {user && (
           <div className="c-listing-card__favorite-heart">
             <FavoriteHeart listing={listing} />
-          </div>}
+          </div>
+        )}
+        {children}
       </div>
     </LazyLoad>
   )
 }
 
 export default compose(
-  connect(({ data }) => ({ user: data.user }), { setMapHoveredMarkerId }),
+  connect(({ user }) => ({ user }), { setMapHoveredMarkerId }),
   withHandlers({
     onMouseEnter: ({ setMapHoveredMarkerId, tabName }) => id => {
       setMapHoveredMarkerId(tabName, id)

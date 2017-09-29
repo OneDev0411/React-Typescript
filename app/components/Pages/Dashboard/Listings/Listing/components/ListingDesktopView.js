@@ -1119,14 +1119,14 @@ export default compose(
   }),
   withHandlers({
     windowKeyDownHandler: ({
-      data,
+      container,
       galleryModalIsActive,
       handleModalGalleryNav
     }) => event => {
       if (
         event.keyCode === 27 &&
-        // !shareListingModalIsActive &&
-        !galleryModalIsActive
+        !galleryModalIsActive &&
+        container !== 'modal'
       ) {
         browserHistory.goBack()
       }

@@ -1,8 +1,6 @@
 import Fetch from '../../../services/fetch'
-import { normalize } from 'normalizr'
-import * as schema from '../schema'
 
-const __LIMIT__ = 200
+const __LIMIT__ = 500
 const __SORTING_VALUE__ = 'Update'
 
 const mappingStatus = status => {
