@@ -1112,8 +1112,16 @@ export default compose(
         setGalleryModalActiveIndex(currentIndex - 1)
       }
 
+      if (selectedDirection === 'prev' && currentIndex === 0) {
+        setGalleryModalActiveIndex(gallerLength)
+      }
+
       if (selectedDirection === 'next' && currentIndex < gallerLength) {
         setGalleryModalActiveIndex(currentIndex + 1)
+      }
+
+      if (selectedDirection === 'next' && currentIndex === gallerLength) {
+        setGalleryModalActiveIndex(0)
       }
     }
   }),
