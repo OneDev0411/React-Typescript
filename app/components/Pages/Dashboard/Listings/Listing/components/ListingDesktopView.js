@@ -48,8 +48,10 @@ export const fadeIn = node => {
 
 const ListingDesktopView = ({
   data,
+  onHide,
   listing,
   hideModal,
+  container,
   isFetching,
   showShareModal,
   onHideShareModal,
@@ -68,7 +70,7 @@ const ListingDesktopView = ({
   let viewer_width = 0
   if (typeof window !== 'undefined') {
     viewer_width = window.innerWidth
-    if (user && !data.is_widget) {
+    if (user && !data.is_widget && container !== 'modal') {
       viewer_width -= 70
     }
   }
@@ -97,6 +99,10 @@ const ListingDesktopView = ({
   let next_icon = '>'
   let listing_subtitle
   let brand_agent_area
+
+  if (container === 'modal') {
+    hideModal = onHide
+  }
 
   let listing_images = (
     <div
@@ -143,6 +149,8 @@ const ListingDesktopView = ({
     const { gallery_image_urls } = listing
     const gallery_chunks = _.chunk(gallery_image_urls, 4)
 
+    const carouselItemDivStyle = `border-right-1-solid-fff w-${viewer_width / 4} h-300 pull-left text-center bg-efefef bg-cover bg-center`
+
     listing_images = (
       <Carousel
         interval={0}
@@ -159,29 +167,25 @@ const ListingDesktopView = ({
             <div
               onClick={() => showModalGallery(gallery_image_url[0])}
               style={S(
-                `border-right-1-solid-fff w-${viewer_width /
-                  4} h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(${gallery_image_url[0]})`
+                `${carouselItemDivStyle} bg-url(${gallery_image_url[0]})`
               )}
             />
             <div
               onClick={() => showModalGallery(gallery_image_url[1])}
               style={S(
-                `border-right-1-solid-fff w-${viewer_width /
-                  4} h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(${gallery_image_url[1]})`
+                `${carouselItemDivStyle} bg-url(${gallery_image_url[1]})`
               )}
             />
             <div
               onClick={() => showModalGallery(gallery_image_url[2])}
               style={S(
-                `border-right-1-solid-fff w-${viewer_width /
-                  4} h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(${gallery_image_url[2]})`
+                `${carouselItemDivStyle} bg-url(${gallery_image_url[2]})`
               )}
             />
             <div
               onClick={() => showModalGallery(gallery_image_url[3])}
               style={S(
-                `w-${viewer_width /
-                  4} h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(${gallery_image_url[3]})`
+                `${carouselItemDivStyle} bg-url(${gallery_image_url[3]})`
               )}
             />
           </CarouselItem>
@@ -383,7 +387,11 @@ const ListingDesktopView = ({
           zoom={12}
           key={'map'}
           center={center}
-          options={{ scrollwheel: false }}
+          options={{
+            zoomControl: true,
+            scrollwheel: false,
+            disableDefaultUI: true
+          }}
           bootstrapURLKeys={bootstrap_url_keys}
         >
           <ListingMapMarker
@@ -787,6 +795,8 @@ const ListingDesktopView = ({
     }
   }
 
+  viewer_wrap_style = container !== 'modal' ? viewer_wrap_style : {}
+
   const nav_bar_style = S('mb-0 p-0 h-54 pt-7 w-100p')
 
   let modal_gallery_area
@@ -860,7 +870,7 @@ const ListingDesktopView = ({
 
     right_area = (
       <div style={nav_bar_style}>
-        <div style={S('pull-right relative r-110 t-2')}>
+        <div style={S('absolute r-120 t-8')}>
           <FavoriteHeart listing={listing} width="40px" height="40px" />
         </div>
         <Button
@@ -1102,21 +1112,29 @@ export default compose(
         setGalleryModalActiveIndex(currentIndex - 1)
       }
 
+      if (selectedDirection === 'prev' && currentIndex === 0) {
+        setGalleryModalActiveIndex(gallerLength)
+      }
+
       if (selectedDirection === 'next' && currentIndex < gallerLength) {
         setGalleryModalActiveIndex(currentIndex + 1)
+      }
+
+      if (selectedDirection === 'next' && currentIndex === gallerLength) {
+        setGalleryModalActiveIndex(0)
       }
     }
   }),
   withHandlers({
     windowKeyDownHandler: ({
-      data,
+      container,
       galleryModalIsActive,
       handleModalGalleryNav
     }) => event => {
       if (
         event.keyCode === 27 &&
-        // !shareListingModalIsActive &&
-        !galleryModalIsActive
+        !galleryModalIsActive &&
+        container !== 'modal'
       ) {
         browserHistory.goBack()
       }

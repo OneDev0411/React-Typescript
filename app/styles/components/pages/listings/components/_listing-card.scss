@@ -97,7 +97,7 @@
   background-position: center center;
   &:hover {
     &:before {
-      background: rgba(0, 0, 0, .3);
+      background: rgba(0, 0, 0, 0.3);
     }
   }
 }
@@ -106,7 +106,7 @@
   @extend %full-absolute;
   content: '';
   border-radius: 3px;
-  background: rgba(0, 0, 0, .2);
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .c-listing-card__link,
@@ -124,7 +124,7 @@
 
 .c-listing-card__status {
   display: inline-block;
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
   border-radius: 3px;
 }
 
@@ -148,10 +148,10 @@
   position: absolute;
   top: 1.4rem;
   left: 0;
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
   font-size: 16px;
   text-transform: uppercase;
-  letter-spacing: .5px;
+  letter-spacing: 0.5px;
   color: #fff;
   background-color: rgba(0, 0, 0, 0.6);
 }
