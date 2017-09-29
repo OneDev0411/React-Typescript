@@ -27,7 +27,7 @@ const Row = ({
       </Button>
     )
   return <div
-    className={cn('checklistRow', { active: activeItem })}
+    className={cn('checklist-row', { active: activeItem })}
   >
     <div
       className="checklist--row--first"

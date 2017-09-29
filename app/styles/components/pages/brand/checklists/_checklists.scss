@@ -1,4 +1,4 @@
-@import 'checklistRow';
+@import 'checklist-row';
 @import 'tasks';
 @import 'listFilter';
 
@@ -27,8 +27,8 @@
       flex: 1;
     }
   }
-  .checklistRow {
-    @extend %checklistRow;
+  .checklist-row {
+    @extend %checklist-row;
   }
   .tasks {
     @extend %tasks;

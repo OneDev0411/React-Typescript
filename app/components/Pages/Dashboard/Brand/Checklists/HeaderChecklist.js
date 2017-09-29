@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Col, Button } from 'react-bootstrap'
+import { Button, Col } from 'react-bootstrap'
 import cn from 'classnames'
 import Compose from './ModalChecklist'
 import { editChecklist } from '../../../../../store_actions/brandConsole'
@@ -24,14 +24,11 @@ const Row = ({
       </Button>
     )
   return <div
-    className={cn('checklistRow', { active: activeItem })}
+    className={cn('checklist-row', { active: activeItem })}
     onClick={() => onSelectItem(checklist.id)}
   >
-    <Col
-      md={4}
-      sm={4}
-      xs={4}
-      className="column"
+    <div
+      className="checklist--row--first"
     >
       <i
         className={cn(
@@ -42,37 +39,25 @@ const Row = ({
         aria-hidden="true"
       />
       {checklist.title}
-    </Col>
-    <Col
-      md={2}
-      sm={2}
-      xs={2}
-      className="column"
+    </div>
+    <div
+      className="checklist--row--column-center"
       style={{ overflow: 'hidden' }}
     >
       {checklist.deal_type}
-    </Col>
-    <Col
-      md={2}
-      sm={2}
-      xs={2}
-      className="column"
+    </div>
+    <div
+      className="checklist--row--column-center"
     >
       {checklist.property_type}
-    </Col>
-    <Col
-      md={2}
-      sm={2}
-      xs={2}
-      className="column"
+    </div>
+    <div
+      className="checklist--row--column-center"
     >
       {checklist.order}
-    </Col>
-    <Col
-      md={2}
-      sm={2}
-      xs={2}
-      className="column"
+    </div>
+    <div
+      className="checklist--row--last"
     >
       <Col
         md={8}
@@ -109,7 +94,7 @@ const Row = ({
           aria-hidden="true"
         />
       </Col>
-    </Col>
+    </div>
   </div>
 }
 
