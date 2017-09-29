@@ -11,6 +11,6 @@ export default {
     window.location.replace('rechat://')
     setTimeout(() => {
       window.location.replace(config.itunes_url)
-    }, 300)
+    }, 1000)
   }
 }
