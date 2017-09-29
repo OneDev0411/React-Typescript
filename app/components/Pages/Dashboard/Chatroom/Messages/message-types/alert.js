@@ -1,5 +1,5 @@
 import React from 'react'
-import AlertViewerModal from '../../../Mls/Partials/AlertViewerModal'
+import AlertFeedModal from '../../../Listings/components/AlertFeedModalViewer'
 
 export default class Alert extends React.Component {
   constructor(props) {
@@ -22,18 +22,19 @@ export default class Alert extends React.Component {
 
     return (
       <div className="alert">
-        <strong style={{ color: '#9b9a9b' }}>
-          Shared a saved search:
-        </strong>
+        <strong style={{ color: '#9b9a9b' }}>Shared a saved search:</strong>
 
         <div className="alert-widget" onClick={() => this.setShowModal()}>
           <div className="icon">
             <img
               src={
-                loading
-                  ? '/static/images/loading-states/grid-blue.svg'
-                  : '/static/images/chatroom/alert.svg'
+                loading ? (
+                  '/static/images/loading-states/grid-blue.svg'
+                ) : (
+                  '/static/images/chatroom/alert.svg'
+                )
               }
+              alt="alert"
             />
           </div>
 
@@ -46,11 +47,11 @@ export default class Alert extends React.Component {
           </div>
         </div>
 
-        <AlertViewerModal
+        <AlertFeedModal
           alert={alert}
           show={showModal}
-          onChangeLoading={loading => this.setState({ loading })}
           onHide={() => this.setShowModal(false)}
+          onChangeLoading={loading => this.setState({ loading })}
         />
       </div>
     )

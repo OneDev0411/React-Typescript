@@ -37,9 +37,10 @@ const getFavorites = async (user = {}) => {
   }
 
   try {
-    const response = await new Fetch().get(
-      `/rooms/${personal_room}/recs/favorites`
-    )
+    const response = await new Fetch()
+      .get(`/rooms/${personal_room}/recs/favorites`)
+      .query({ limit: 500 })
+      .query({ sorting_value: 'Update' })
 
     const { info, data } = response.body
 
