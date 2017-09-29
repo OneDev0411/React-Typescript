@@ -60,7 +60,17 @@
     padding: 2px 17px;
     &.visible {
       visibility: visible;
-      margin: 0 4px;
+    }
+  }
+  .add-member--brand-row {
+    margin: 0 4px;
+    border: none;
+    background-color: transparent;
+    text-align: center;
+    color: #8da2b5;
+    font-size: 20px;
+    &:hover {
+      color: #2196f3;
     }
   }
 
@@ -74,7 +84,7 @@
     }
     .edit-button--brand-row:hover {
       background-color: #f1f4f8;
-      //font-weight: bold;
+      color: #2196f3;
     }
   }
 }
