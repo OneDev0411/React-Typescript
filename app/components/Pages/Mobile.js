@@ -39,6 +39,7 @@ const Mobile = ({
      * stop the timeout
      */
     appWasFound = () => {
+      console.log('appWasFound: ', waiting)
       if (!waiting) {
         return false
       }
@@ -100,7 +101,7 @@ const Mobile = ({
      */
     goToAppPage = setTimeout(
       appWasNotFound,
-      1000
+      2000
     )
   }
 
@@ -112,7 +113,7 @@ const Mobile = ({
   if (data.brand) {
     logo = Brand.asset('site_logo')
   }
-
+console.log('iFrameSrc: ', iFrameSrc)
   return (
     <div style={mobile_splash_style}>
       <div style={S('bg-263445 absolute t-0 l-0 w-100p h-100p op-.7 z-9')} />
@@ -122,11 +123,12 @@ const Mobile = ({
         </div>
         {location && location.query.type === 'iphone'
           ? <div>
-            <iframe
+            {iFrameSrc && <iframe
               style={{ display: 'none' }}
               title="open iOS app"
               src={iFrameSrc}
             />
+            }
             <p style={{ fontSize: '18px', padding: '2rem' }}>
               Our mobile web version is temporarily unavailable. Please use your desktop browser to access Rechat.com
               or
@@ -141,7 +143,7 @@ const Mobile = ({
               )}
               bsSize="large"
               onClick={() => {
-                setIFrameSrc('rechat://')
+                document.location = 'rechat://'
                 loadAppByUri(config.itunes_url)
               }}
             >
@@ -156,7 +158,7 @@ const Mobile = ({
               )}
               bsSize="large"
               onClick={() => {
-                setIFrameSrc('testNotWorking://')
+                document.location = 'appnotfound://'
                 loadAppByUri(config.itunes_url)
               }}
             >
