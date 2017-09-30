@@ -13,7 +13,8 @@ import config from '../../../config/public'
 const Mobile = ({
   iFrameSrc,
   data,
-  setIFrameSrc
+  setIFrameSrc,
+  location
 }) => {
   /**
    * Try to open the external app using URL scheme
@@ -119,7 +120,7 @@ const Mobile = ({
         <div style={S('mt-50 mb-30')}>
           <img style={S('w-76')} src={logo} alt="" />
         </div>
-        {data.location && data.location.query.type === 'iphone'
+        {location && location.query.type === 'iphone'
           ? <div>
             <iframe
               style={{ display: 'none' }}
