@@ -113,7 +113,6 @@ const Mobile = ({
   if (data.brand) {
     logo = Brand.asset('site_logo')
   }
-console.log('iFrameSrc: ', iFrameSrc)
   return (
     <div style={mobile_splash_style}>
       <div style={S('bg-263445 absolute t-0 l-0 w-100p h-100p op-.7 z-9')} />
@@ -149,20 +148,22 @@ console.log('iFrameSrc: ', iFrameSrc)
             >
               Open in my Rechat App
             </Button>
+            <p style={{ fontSize: '18px', padding: '2rem' }}>
+              If you don't have the app, you can get it from appStore:
+            </p>
             <Button
               style={S(
-                `mt-50 color-fff border-1-solid-${Brand.color(
+                `color-fff border-1-solid-${Brand.color(
                   'primary',
                   '3388ff'
-                )} bg-${Brand.color('primary', '3388ff')}`
+                )} bg-${Brand.color('secondary', 'a1bde4')}`
               )}
               bsSize="large"
               onClick={() => {
-                document.location = 'appnotfound://'
-                loadAppByUri(config.itunes_url)
+                document.location = (config.itunes_url)
               }}
             >
-              Open in my Rechat App (not working)
+              Install the App
             </Button>
           </div>
           : <div style={{ fontSize: '18px', padding: '2rem' }}>
