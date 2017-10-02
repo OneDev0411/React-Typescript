@@ -72,6 +72,13 @@ class Messages extends React.Component {
           />
         }
 
+        {
+          messages && _.size(messages.list) === 0 &&
+          <div className="no-messages">
+            There are no messages.
+          </div>
+        }
+
         <div className="messages-list">
           {
             messages &&

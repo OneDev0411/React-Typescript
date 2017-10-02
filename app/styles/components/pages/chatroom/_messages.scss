@@ -27,6 +27,14 @@ $left-w: 44px;
     font-size: 17px;
   }
 
+  .no-messages {
+    color: #9BB1C1;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 400;
+    padding-top: 40px;
+  }
+
   .messages-list {
     $hg: $messages-height;
     min-height: $hg;

@@ -11,12 +11,16 @@ export default ({
   }
 
   const attachments = task.room.attachments || []
+  const hasAttachments = attachments.length > 0
 
   return (
     <div className="file">
-      <div className="title">Uploads</div>
+      <div className="title">
+        Uploads
+      </div>
+
       {
-        attachments.length > 0 &&
+        hasAttachments &&
         <div className="file-group">
           <FileAttachments
             task={task}
@@ -25,7 +29,10 @@ export default ({
         </div>
       }
 
-      <UploadFile task={task} />
+      <UploadFile
+        task={task}
+        hasAttachments={hasAttachments}
+      />
     </div>
   )
 }
