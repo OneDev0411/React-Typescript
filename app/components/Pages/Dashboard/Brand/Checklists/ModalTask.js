@@ -102,7 +102,6 @@ const ModalNewTask = ({
           <input
             value={titleTask}
             type="text"
-            pattern="\d*"
             placeholder="Write a task name…"
             onChange={(event) => changeTitleTask(event.target.value)}
           />
