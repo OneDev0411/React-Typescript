@@ -58,8 +58,7 @@ const List = ({
                   className={cn('notification', {
                     has_notification: room.new_notifications > 0
                   })}
-                >
-                </span>
+                />
               </div>
             )
           })
