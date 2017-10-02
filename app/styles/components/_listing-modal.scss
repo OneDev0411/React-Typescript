@@ -1,15 +1,46 @@
+// .c-listing-modal--box {
+//   width: 100%;
+//   min-height: 88vh;
+//   bottom: 0;
+//   .modal-body {
+//     .listing-viewer--navbar {
+//       background-color: #fff;
+//     }
+//     .listing-viewer {
+//       margin: -2px !important;
+//       width: 100% !important;
+//       z-index: 10101!important;
+//     }
+//   }
+// }
+
 .c-listing-modal--box {
   width: 100%;
-  min-height: 88vh;
   bottom: 0;
+  left: 0;
+  top: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  transform: none !important;
+
+  .modal-content {
+    box-shadow: 0;
+    box-shadow: none;
+    border-radius: 0;
+    border-width: 0;
+  }
+
   .modal-body {
+    padding: 0;
+
     .listing-viewer--navbar {
       background-color: #fff;
     }
     .listing-viewer {
       margin: -2px !important;
       width: 100% !important;
-      z-index: 10101!important;
+      z-index: 10101 !important;
     }
   }
 }

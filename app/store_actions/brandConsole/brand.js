@@ -61,7 +61,7 @@ export function addBrand(brand) {
     dispatch({ type: types.HIDE_SPINNER })
     if (response && !response.error) {
       const { data } = response.body
-      const responseAddRole = await BrandConsole.addRole(data.id, { role: 'Owner', acl: ['Deals', 'Backoffice', 'Admin'] })
+      const responseAddRole = await BrandConsole.addRole(data.id, { role: 'Owner', acl: ['Deals', 'BackOffice', 'Admin'] })
       if (responseAddRole) {
         const role = responseAddRole.body.data
         dispatch(_getChildrenBrands(brand.parent,

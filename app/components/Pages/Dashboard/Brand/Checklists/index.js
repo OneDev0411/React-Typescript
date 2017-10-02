@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
-import { Grid, Col, Accordion, Panel } from 'react-bootstrap'
+import { Grid, Accordion, Panel } from 'react-bootstrap'
 import Header from './Header'
 import ChecklistHeader from './HeaderChecklist'
 import Tasks from './Tasks'
@@ -50,11 +50,12 @@ class Checklists extends React.Component {
             brand={this.props.params.brand}
           />
           <Grid className="table">
-            <div className="header">
-              <Col md={4} sm={4} xs={4}>Checklist Name</Col>
-              <Col md={2} sm={2} xs={2}>Deal Type</Col>
-              <Col md={2} sm={2} xs={2}>Property Type</Col>
-              <Col md={2} sm={2} xs={2}>Order</Col>
+            <div className="checklist--header">
+              <div className="checklist--header--column-flex-2">Checklist Name</div>
+              <div className="checklist--header--column-center">Deal Type</div>
+              <div className="checklist--header--column-center">Property Type</div>
+              <div className="checklist--header--column-center">Order</div>
+              <div className="checklist--header--column-flex-2" />
             </div>
             <Accordion activeKey={`Checklist_${this.state.activeItem}`}>
               {Checklists.map(checklist =>

@@ -11,12 +11,12 @@ const AddMemberButton = ({
   const AddButton = ({
     clickHandler
   }) => (
-    <Button
-      className="edit-button--brand-row visible"
+    <button
+      className="add-member--brand-row"
       onClick={() => clickHandler()}
     >
-      Add Member
-    </Button>
+      <i className="fa fa-user-plus" aria-hidden="true"></i>
+    </button>
   )
 
   return (

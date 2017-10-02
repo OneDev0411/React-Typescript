@@ -1,0 +1,31 @@
+# rechat.com/
+# The humans responsible
+
+# TEAM
+
+    CEO:
+      Shayan Hamidi: shayan.hamidi@gmail.com
+
+    Customer Success Managers:
+      Kevin Smith: kevin@rechat.com
+      Trey Jones: trey@rechat.com
+
+    Lead Product Designer:
+      Mark Koepsell: markbkoepsell@gmail.com
+
+    Backend Developers:
+      Emil Sedgh: emilsedgh@gmail.com
+      Ashkan Ghassemi: ghassemi@ftml.net
+
+    Frontend Developers:
+      Ramin Mousavy: ramin.mousavy@gmail.com
+      Naser Hassani: snhasani@gmail.com
+      Meysam Izadmehr: meysam.s@gmail.com
+
+    iOS Developer:
+      Dan Hogan: hogandanhogan@gmail.com
+
+    Android Developer:
+      Shervin Nadjafi: snadjafi@gmail.com
+
+

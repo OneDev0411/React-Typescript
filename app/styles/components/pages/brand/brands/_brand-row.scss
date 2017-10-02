@@ -47,6 +47,7 @@
     margin: 15px;
     visibility: hidden;
     cursor: pointer;
+    color: #8ca2b6;
   }
   .edit-button--brand-row {
     margin: 11px 4px;
@@ -60,7 +61,17 @@
     padding: 2px 17px;
     &.visible {
       visibility: visible;
-      margin: 0 4px;
+    }
+  }
+  .add-member--brand-row {
+    margin: 0 4px;
+    border: none;
+    background-color: transparent;
+    text-align: center;
+    color: #8da2b5;
+    font-size: 20px;
+    &:hover {
+      color: #2196f3;
     }
   }
 
@@ -74,7 +85,10 @@
     }
     .edit-button--brand-row:hover {
       background-color: #f1f4f8;
-      //font-weight: bold;
+      color: #2196f3;
+    }
+    .delete-button--brand-row:hover {
+      color: #2196f3;
     }
   }
 }
