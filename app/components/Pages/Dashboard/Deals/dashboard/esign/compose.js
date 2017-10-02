@@ -54,15 +54,10 @@ class SendSignatures extends React.Component {
   }
 
   /**
-   * prefill roles based on selected documents
+   * get all selected forms roles
    */
-  prefillRoles(esign) {
-    if (!esign.show || esign.view !== 'compose') {
-      return false
-    }
-
-    const { deal, checklists, tasks } = this.props
-    const { attachments } = esign
+  getFormsRoles() {
+    const { deal, checklists } = this.props
     let roles = []
 
     // extract roles of selected documents
@@ -78,7 +73,24 @@ class SendSignatures extends React.Component {
     })
 
     // get role names
-    const roleNames = _.pluck(roles, 'role')
+    return _
+      .chain(roles)
+      .pluck('role')
+      .uniq()
+      .value()
+  }
+
+  /**
+   * prefill roles based on selected documents
+   */
+  prefillRoles(esign) {
+    if (!esign.show || esign.view !== 'compose') {
+      return false
+    }
+
+    const { deal, tasks } = this.props
+    const { attachments } = esign
+    const roleNames = this.getFormsRoles()
 
     _.each(deal.roles, item => {
 
@@ -201,6 +213,7 @@ class SendSignatures extends React.Component {
             <Recipients
               deal={deal}
               recipients={recipients}
+              allowedRoles={this.getFormsRoles()}
               onAddRecipient={recp => this.addRecipients(recp)}
               onRemoveRecipient={email => this.removeRecipient(email)}
             />

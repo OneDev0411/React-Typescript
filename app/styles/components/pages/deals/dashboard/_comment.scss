@@ -125,6 +125,11 @@
       i {
         font-size: 17px;
       }
+      &:hover {
+        color: #fff;
+        background-color: #2196f3;
+        border: none;
+      }
     }
 
     &.disabled {

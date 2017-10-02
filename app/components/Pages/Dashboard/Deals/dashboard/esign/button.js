@@ -26,7 +26,7 @@ const EsignButton = ({
           bsRole="toggle"
           className="btn-deal deal-esgin-cta-btn"
         >
-          eSign
+          Get Signatures
         </Button>
 
         <Dropdown.Menu>

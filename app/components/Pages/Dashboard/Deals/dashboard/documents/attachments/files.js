@@ -50,11 +50,11 @@ class FileAttachments extends React.Component {
 
     try {
       await deleteAttachment(task, file.id)
-    } catch(e) {
-      this.setState({
-        deleting: false
-      })
-    }
+    } catch(e) {}
+
+    this.setState({
+      deleting: false
+    })
   }
 
   render() {

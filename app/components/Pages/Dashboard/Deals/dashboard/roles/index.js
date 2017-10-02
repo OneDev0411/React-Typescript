@@ -69,7 +69,7 @@ class Roles extends React.Component {
   }
 
   render() {
-    const { deal, onSelectRole } = this.props
+    const { deal, allowedRoles, onSelectRole } = this.props
     const { deletingRoleId } = this.state
     const { roles } = deal
 
@@ -81,7 +81,15 @@ class Roles extends React.Component {
 
         {
           roles &&
-          roles.map(item =>
+          roles
+          .filter(item => {
+            if (!allowedRoles) {
+              return true
+            }
+
+            return allowedRoles.indexOf(item.role) > -1
+          })
+          .map(item =>
             <div
               key={item.id}
               className="item"

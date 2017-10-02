@@ -30,7 +30,8 @@ export default class AddRecipients extends React.Component {
     const {
       deal,
       recipients,
-      onRemoveRecipient
+      onRemoveRecipient,
+      allowedRoles
     } = this.props
 
     return (
@@ -41,6 +42,7 @@ export default class AddRecipients extends React.Component {
         <AddSigner
           show={this.state.showRolesModal}
           deal={deal}
+          allowedRoles={allowedRoles}
           onAddRecipient={role => this.onAddRecipient(role)}
           onHide={(e) => this.toggleRolesModal(e)}
         />

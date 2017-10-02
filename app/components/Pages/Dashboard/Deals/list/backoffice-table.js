@@ -35,6 +35,13 @@ class BackOfficeTable extends BaseTable {
         className: 'col-md-2 hidden-xs',
         getText: deal => deal.property_type
       },
+      agent_name: {
+        caption: 'AGENT NAME',
+        sortable: true,
+        className: 'col-md-2 hidden-sm hidden-xs',
+        getText: deal => deal.created_by ? deal.created_by.display_name : '',
+        getValue: deal => deal.created_by ? deal.created_by.display_name : ''
+      },
       office: {
         caption: 'OFFICE',
         sortable: true,
@@ -52,13 +59,6 @@ class BackOfficeTable extends BaseTable {
         sortable: true,
         getText: deal => this.getNeedsAttentions(deal),
         getValue: deal => this.getNeedsAttentionCount(deal)
-      },
-      agent_name: {
-        caption: 'AGENT NAME',
-        sortable: true,
-        className: 'col-md-2 hidden-sm hidden-xs',
-        getText: deal => deal.created_by ? deal.created_by.display_name : '',
-        getValue: deal => deal.created_by ? deal.created_by.display_name : ''
       },
       notificiation: {
         caption: '',

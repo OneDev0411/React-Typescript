@@ -51,6 +51,17 @@ class SelectDocumentModal extends React.Component {
     this.props.updateAttachments(attachments)
   }
 
+  getCompletedDocuments() {
+    const { tasks, dealId } = this.props
+
+    return _.filter(tasks, task =>
+      task.task_type === 'Form' &&
+      task.deal === dealId &&
+      task.submission &&
+      task.submission.state === 'Fair'
+    )
+  }
+
   shouldDisplay() {
     const { esign} = this.props
 
@@ -65,6 +76,8 @@ class SelectDocumentModal extends React.Component {
     const { attachments } = this.state
     const { tasks, dealId } = this.props
 
+    const documents = this.getCompletedDocuments()
+
     return (
       <Modal
         show={this.shouldDisplay()}
@@ -78,15 +91,15 @@ class SelectDocumentModal extends React.Component {
         <Modal.Body>
           <div className="documents">
             {
-              _
-              .chain(tasks)
-              .filter(task => {
-                return task.task_type === 'Form' &&
-                  task.deal === dealId &&
-                  task.submission &&
-                  task.submission.state === 'Fair'
-              })
-              .map(task => {
+              _.size(documents) === 0 &&
+              <div className="empty-state">
+                <div className="title">Whoops!</div>
+                <div className="descr">You don't have any completed forms to send for signatures.</div>
+              </div>
+            }
+
+            {
+              _.map(documents, task => {
                 const isSelected = attachments.indexOf(task.id) > -1
 
                 return (
@@ -112,24 +125,26 @@ class SelectDocumentModal extends React.Component {
                   </Row>
                 )
               })
-              .value()
             }
           </div>
         </Modal.Body>
 
-        <Modal.Footer>
-          <span className="count">
-            { attachments.length } doc selected
-          </span>
+        {
+          _.size(documents) > 0 &&
+          <Modal.Footer>
+            <span className="count">
+              { attachments.length } doc selected
+            </span>
 
-          <Button
-            className="deal-button"
-            onClick={() => this.onDone(attachments)}
-            disabled={attachments.length < 1}
-          >
-            Next
-          </Button>
-        </Modal.Footer>
+            <Button
+              className="deal-button"
+              onClick={() => this.onDone(attachments)}
+              disabled={attachments.length < 1}
+            >
+              Next
+            </Button>
+          </Modal.Footer>
+        }
       </Modal>
     )
   }

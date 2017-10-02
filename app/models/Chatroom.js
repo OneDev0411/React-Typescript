@@ -65,7 +65,7 @@ Chatroom.createRoom = async function (recipients) {
 
     return response.body.data
   } catch (e) {
-    return null
+    throw e
   }
 }
 

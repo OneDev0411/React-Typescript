@@ -1,6 +1,5 @@
 import AppStore from '../stores/AppStore'
-import { itunes_url } from '../../config/public'
-import ListingDispatcher from '../dispatcher/ListingDispatcher'
+import config from '../../config/public'
 export default {
   hideMobileSplashViewer() {
     delete AppStore.data.show_mobile_splash_viewer
@@ -9,7 +8,9 @@ export default {
     AppStore.emitChange()
   },
   goToBranchLink() {
-    window.open('rechat://')
-    setTimeout(() => { window.open(itunes_url) }, 25)
+    window.location.replace('rechat://')
+    setTimeout(() => {
+      window.location.replace(config.itunes_url)
+    }, 300)
   }
 }

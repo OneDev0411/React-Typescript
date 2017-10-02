@@ -1,6 +1,8 @@
 %contact-activities {
   .activities {
     background-color: #fff;
+    margin-top: 20px;
+    min-height: 40vh;
     @extend %activities-nav-tabs;
 
     .tab-content {
