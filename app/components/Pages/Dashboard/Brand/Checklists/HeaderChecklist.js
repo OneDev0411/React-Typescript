@@ -18,7 +18,10 @@ const Row = ({
     (
       <Button
         className="edit-button"
-        onClick={() => clickHandler()}
+        onClick={(e) => {
+          e.stopPropagation()
+          clickHandler()
+        }}
       >
         Edit
       </Button>
