@@ -45,7 +45,7 @@
   .edit-button-container {
     display: inline-block;
     visibility: hidden;
-    .editButton {
+    .edit-button {
       border-radius: 3px;
       background-color: #f8fafb;
       border: solid 1px #dde2e6;
@@ -55,7 +55,7 @@
       padding: 2px 17px;
     }
   }
-  .deleteIcon {
+  .delete-icon {
     display: inline-block;
     visibility: hidden;
     color: #8ca2b6;
@@ -64,14 +64,14 @@
 
   &:hover {
     background-color: #f8fafb;
-    .edit-button-container, .deleteIcon {
+    .edit-button-container, .delete-icon {
       visibility: visible;
       display: inline-block;
     }
-    .edit-button-container .editButton:hover {
+    .edit-button-container .edit-button:hover {
       color: #2196f3;
     }
-    .deleteIcon:hover {
+    .delete-icon:hover {
       color: #2196f3;
     }
   }

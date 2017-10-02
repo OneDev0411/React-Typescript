@@ -17,7 +17,7 @@ const Row = ({
   }) =>
     (
       <Button
-        className="editButton"
+        className="edit-button"
         onClick={() => clickHandler()}
       >
         Edit
@@ -83,7 +83,7 @@ const Row = ({
         md={4}
         sm={4}
         xs={4}
-        className="deleteIcon"
+        className="delete-icon"
       >
         <i
           onClick={(e) => {
