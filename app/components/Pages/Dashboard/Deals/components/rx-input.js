@@ -11,8 +11,8 @@ export default class extends React.Component {
     const { Observable } = Rx
 
     this.searchHandler = Observable
-      .fromEvent(this.search_input, 'keypress')
-      .debounceTime(1200)
+      .fromEvent(this.search_input, 'keyup')
+      .debounceTime(1000)
       .subscribe((e) => this.props.subscribe(e.target.value))
   }
 

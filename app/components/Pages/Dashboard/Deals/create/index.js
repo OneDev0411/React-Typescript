@@ -47,7 +47,10 @@ class DealCreate extends React.Component {
     }
 
     // show loading
-    this.setState({ searching: true })
+    this.setState({
+      searching: true,
+      listings: {}
+    })
 
     try {
       // search in mls listings
