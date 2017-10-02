@@ -115,7 +115,7 @@ class CommentCreate extends React.Component {
                 className="deal-button close-task"
                 onClick={() => onCloseTask()}
               >
-                <i className="fa fa-2x fa-angle-right" />
+                X
               </button>
             }
           </Col>

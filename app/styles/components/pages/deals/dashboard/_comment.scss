@@ -122,13 +122,12 @@
 
     &.close-task {
       width: 30px;
-      i {
-        font-size: 17px;
-      }
+      font-weight: 600px;
+      line-height: 25px;
       &:hover {
         color: #fff;
         background-color: #2196f3;
-        border: none;
+        border-color: #2196f3;
       }
     }
 
