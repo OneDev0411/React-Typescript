@@ -219,7 +219,7 @@ class DealCreate extends React.Component {
         >
 
           <Modal.Header closeButton>
-            Type the address of the listing
+            Search by MLS# or address
           </Modal.Header>
 
           <Modal.Body>
