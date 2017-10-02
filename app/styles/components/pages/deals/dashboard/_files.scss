@@ -141,7 +141,10 @@
       background-color: #f8fafb;
       .name {
         font-weight: 600;
-        width: 95%;
+        width: 100%;
+        text-overflow: string;
+        white-space: normal;
+        overflow: auto;
       }
 
       &:hover {
