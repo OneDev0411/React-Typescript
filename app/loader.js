@@ -25,7 +25,9 @@ const LoadingHandler = props => {
   const { isLoading, timedOut, pastDelay, error } = props
 
   if (error || (isLoading && timedOut)) {
-    return <div>Error! Couldn't load component</div>
+    console.error(error)
+    console.log(isLoading, timedOut)
+    return <div>Oops... something went wrong. please reload your browser to continue</div>
   }
 
   if (isLoading && pastDelay) {
@@ -41,7 +43,7 @@ export default opts => {
       {
         loading: LoadingHandler,
         delay: 4000,
-        timeout: 15000
+        timeout: 20000
       },
       opts
     )
