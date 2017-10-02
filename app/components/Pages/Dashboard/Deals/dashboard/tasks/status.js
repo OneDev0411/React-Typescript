@@ -6,10 +6,6 @@ const TaskStatus = ({
   task,
   isBackoffice
 }) => {
-  if (!task.review) {
-    return false
-  }
-
   let { status } = task.review
   const reviewTime = moment.unix(task.review.created_at).format('MMMM DD, YY [at] HH:mm')
 

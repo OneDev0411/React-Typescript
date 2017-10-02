@@ -5,7 +5,7 @@ import { Row, Col } from 'react-bootstrap'
 import cn from 'classnames'
 import _ from 'underscore'
 import ReactTooltip from 'react-tooltip'
-import TasksList from './tasks'
+import Checklists from './checklists'
 import TaskDetail from './task-detail'
 import EditForm from './edit-form'
 import DealInfo from './deal-info'
@@ -78,7 +78,7 @@ class DealDetails extends React.Component {
           xs={12}
           className={`column deal-tasks ${selectedTaskId ? 'collapsed' : 'expanded'}`}
         >
-          <TasksList
+          <Checklists
             deal={deal}
             selectedTaskId={selectedTaskId}
             onSelectTask={task => this.onSelectTask(task)}
