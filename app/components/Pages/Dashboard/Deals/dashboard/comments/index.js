@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import ReactTooltip from 'react-tooltip'
 import Comments from '../../../Chatroom/Messages/light'
 import TaskRoom from '../../../Chatroom/Services/notification'
 import { addNewRoom } from '../../../../../../store_actions/chatroom/room'
@@ -36,8 +37,13 @@ class Comment extends React.Component {
 
     return (
       <div className="deal-comments chatroom">
-        <div className="comment-heading">Comment</div>
+        <ReactTooltip
+          place="top"
+          className="deal-filter--tooltip"
+          multiline
+        />
 
+        <div className="comment-heading">Comment</div>
         <Comments
           user={user}
           roomId={task.room.id}

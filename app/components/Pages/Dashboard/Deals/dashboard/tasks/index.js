@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 import { PanelGroup } from 'react-bootstrap'
-import ReactTooltip from 'react-tooltip'
 import List from './list'
 
 class Checklist extends React.Component {
@@ -30,12 +29,6 @@ class Checklist extends React.Component {
 
     return (
       <div className="tasks-container">
-        <ReactTooltip
-          place="bottom"
-          className="deal-filter--tooltip"
-          multiline
-        />
-
         <PanelGroup>
           {
             _

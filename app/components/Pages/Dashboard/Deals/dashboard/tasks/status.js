@@ -25,6 +25,7 @@ const TaskStatus = ({
     <span
       className={`status ${status}`}
       data-tip={`${status}, ${reviewTime}`}
+      data-place="bottom"
     >
       { status.toUpperCase() }
     </span>

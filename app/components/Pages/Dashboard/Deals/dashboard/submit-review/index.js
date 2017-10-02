@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import { batchActions } from 'redux-batched-actions'
-import ReactTooltip from 'react-tooltip'
 import { Tooltip, OverlayTrigger, Button } from 'react-bootstrap'
 import { changeTaskStatus, changeNeedsAttention } from '../../../../../../store_actions/deals'
 
@@ -83,12 +82,6 @@ class SubmitReview extends React.Component {
 
     return (
       <div>
-        <ReactTooltip
-          place="top"
-          className="deal-filter--tooltip"
-          multiline
-        />
-
         <button
           disabled={submitting}
           onClick={() => this.toggleSubmit()}

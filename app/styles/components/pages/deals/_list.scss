@@ -205,13 +205,56 @@
  *
  */
 .deal-filter--tooltip {
-  background-color: #303e4d !important;
+  $background-color: #303e4d;
+  $border-color: #303e4d;
   padding-left: 10px !important;
   line-height: 15px;
   text-align: left !important;
   font-size: 14px !important;
-  &:after {
-    border-bottom-color: #303e4d !important;
+  border: 1px solid $border-color !important;
+
+  &.place-top {
+    &:before {
+      border-top: 8px solid $border-color;
+    }
+    &:after {
+      border-top-color: $background-color;
+      border-top-style: solid;
+      border-top-width: 6px;
+    }
+  }
+
+  &.place-bottom {
+    &:before {
+      border-bottom: 8px solid $border-color;
+    }
+    &:after {
+      border-bottom-color: $background-color;
+      border-bottom-style: solid;
+      border-bottom-width: 6px;
+    }
+  }
+
+  &.place-left {
+    &:before {
+      border-left: 8px solid $border-color;
+    }
+    &:after {
+      border-left-color: $background-color;
+      border-left-style: solid;
+      border-left-width: 6px;
+    }
+  }
+
+  &.place-right {
+    &:before {
+      border-right: 8px solid $border-color;
+    }
+    &:after {
+      border-right-color: $background-color;
+      border-right-style: solid;
+      border-right-width: 6px;
+    }
   }
 
   span {

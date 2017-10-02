@@ -4,6 +4,7 @@ import { browserHistory } from 'react-router'
 import { Row, Col } from 'react-bootstrap'
 import cn from 'classnames'
 import _ from 'underscore'
+import ReactTooltip from 'react-tooltip'
 import TasksList from './tasks'
 import TaskDetail from './task-detail'
 import EditForm from './edit-form'
@@ -58,6 +59,12 @@ class DealDetails extends React.Component {
 
     return (
       <Row className="deal-dashboard">
+        <ReactTooltip
+          place="top"
+          className="deal-filter--tooltip"
+          multiline
+        />
+
         <Col
           className="column deal-info"
         >
