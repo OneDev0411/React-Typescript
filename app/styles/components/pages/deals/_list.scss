@@ -12,6 +12,11 @@
   .list-empty {
     text-align: center;
     margin-top: 20%;
+    img {
+      width: 91px;
+      margin-bottom: 21px;
+    }
+
     .title {
       font-size: 17px;
       font-weight: 600;
@@ -24,6 +29,14 @@
       font-weight: 500;
       color: #8da2b5;
       margin-bottom: 20px;
+    }
+
+    &.backoffice {
+      margin-top: 12%;
+      .title {
+        font-size: 26px;
+        font-weight: bold;
+      }
     }
   }
 }

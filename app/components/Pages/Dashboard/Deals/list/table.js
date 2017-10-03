@@ -6,8 +6,8 @@ import { Popover, OverlayTrigger } from 'react-bootstrap'
 import _ from 'underscore'
 import { getStatusColorClass } from '../../../../../utils/listing'
 import Deal from '../../../../../models/Deal'
-import DealCreate from '../create'
 import CriticalDates from '../dashboard/factsheet/critical-dates'
+import EmptyState from './empty-state'
 
 /*
  * implement a new functionality for underscore that checks
@@ -256,13 +256,23 @@ class BaseTable extends React.Component {
   }
 
   render() {
-    const { deals } = this.props
+    const { deals, isBackOffice } = this.props
     const { sortBy, sortOrder } = this.state
+
+    // apply filter to deals
+    const filteredDeals = _.filter(deals, deal => this.applyFilters(deal))
+
+    let hasRows = true
+    if ((isBackOffice && _.size(filteredDeals) === 0) ||
+      (!isBackOffice && _.size(deals) === 0)
+    ) {
+      hasRows = false
+    }
 
     return (
       <div className="table-container">
         {
-          _.size(deals) > 0 ?
+          hasRows ?
           <table className="table table-hover">
             <tbody>
               <tr className="header">
@@ -292,8 +302,7 @@ class BaseTable extends React.Component {
               </tr>
 
               {
-                _.chain(deals)
-                .filter(deal => this.applyFilters(deal))
+                _.chain(filteredDeals)
                 .sortBy(deal => this.sort(deal))
                 .shouldReverse(sortOrder)
                 .map((deal, rowId) => (
@@ -318,16 +327,9 @@ class BaseTable extends React.Component {
               }
             </tbody>
           </table> :
-
-          <div className="list-empty">
-            <div className="title">You don’t have any deals yet</div>
-            <div className="descr">Get started by creating a new listing or making an offer.</div>
-
-            <div className="inline">
-              <DealCreate type="listing" />
-              <DealCreate type="offer" />
-            </div>
-          </div>
+          <EmptyState
+            isBackOffice={isBackOffice}
+          />
         }
 
       </div>
