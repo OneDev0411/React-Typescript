@@ -112,10 +112,9 @@ const Signup = ({
           ) : (
             <div style={{ textAlign: 'center' }}>
               <p className="c-auth__submit-alert--success">
-                Your activation link was delivered.<br />
-                Please check <b>{submitSuccessfully}</b>.
+                Check your email and confirm your email address to continue.
+                Please <Link to="/signin">sign in</Link>.
               </p>
-              <Link to="/">Back to homepage</Link>
             </div>
           )}
         </main>

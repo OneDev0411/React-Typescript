@@ -5,6 +5,7 @@ import AppDispatcher from '../dispatcher/AppDispatcher'
 import Load from '../loader'
 
 import getBrand from '../store_actions/brand'
+import VerificationBanner from './Pages/Dashboard/Partials/VerificationBanner'
 
 // services
 import ChatSocket from './Pages/Dashboard/Chatroom/Services/socket'
@@ -29,6 +30,10 @@ const InstantChat = Load({
 
 // contacts
 import { getContacts } from '../store_actions/contact'
+
+// favorites
+import { selectListings } from '../reducers/listings'
+import getFavorites from '../store_actions/listings/favorites/get-favorites'
 
 // import _ from 'lodash'
 import NotificationDispatcher from '../dispatcher/NotificationDispatcher'
@@ -65,6 +70,9 @@ class App extends Component {
 
       // load notifications
       this.loadNotifications(data)
+
+      // load saved listings
+      this._fetchFavorites(user)
     }
 
     // check user is mobile device or not
@@ -121,6 +129,14 @@ class App extends Component {
 
     if (!contacts) {
       dispatch(getContacts())
+    }
+  }
+
+  _fetchFavorites(user) {
+    const { dispatch, favoritesListings } = this.props
+
+    if (!favoritesListings.length) {
+      dispatch(getFavorites(user))
     }
   }
 
@@ -250,6 +266,9 @@ class App extends Component {
 
     return (
       <div>
+        {user &&
+        !user.email_confirmed && <VerificationBanner email={user.email} />}
+
         {user && !isWidgetRedux && navArea}
 
         {user && <InstantChat user={user} rooms={rooms} />}
@@ -262,11 +281,14 @@ class App extends Component {
   }
 }
 
-export default connect(({ user, data, deals, contacts, chatroom, widgets }) => ({
-  data,
-  user,
-  deals: deals.list,
-  rooms: chatroom.rooms,
-  contacts: contacts.list,
-  isWidgetRedux: widgets.isWidget
-}))(App)
+export default connect(
+  ({ user, data, favorites, deals, contacts, chatroom, widgets }) => ({
+    data,
+    user,
+    deals: deals.list,
+    rooms: chatroom.rooms,
+    contacts: contacts.list,
+    isWidgetRedux: widgets.isWidget,
+    favoritesListings: selectListings(favorites.listings)
+  })
+)(App)
