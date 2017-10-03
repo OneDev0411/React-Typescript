@@ -12,7 +12,7 @@ export default ({
       className={cn('deal-button add-comment', {
         enabled: hasComment === true
       })}
-      data-tip="Send your comment and admin will get notified immediately"
+      data-tip="Adding your message as a comment won't disturb anyone"
       onClick={() => onSendComment()}
     >
       Add Comment
@@ -22,7 +22,7 @@ export default ({
       className={cn('deal-button notify-admin', {
         enabled: hasComment === true
       })}
-      data-tip="Adding your message as a comment won't disturb anyone"
+      data-tip="Send your comment and admin will get notified immediately"
       onClick={() => onSendComment(true)}
     >
       Notify Admin
