@@ -3,8 +3,9 @@ import { connect } from 'react-redux'
 const SocketStatus = ({
   status
 }) => {
-  if (status === 'connected')
+  if (status === 'connected') {
     return false
+  }
 
   return (
     <div className="socket-status">
