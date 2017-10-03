@@ -2,6 +2,7 @@ import React from 'react'
 import { OverlayTrigger, Popover } from 'react-bootstrap'
 import _ from 'underscore'
 import AddSigner from './add-signer'
+import roleName from '../../utils/roles'
 
 export default class AddRecipients extends React.Component {
   constructor(props) {
@@ -51,7 +52,7 @@ export default class AddRecipients extends React.Component {
           _.map(recipients, recp =>
             <span className="recp" key={`RECP_${recp.email}`}>
               <span className="recp-t">{recp.first_name} {recp.last_name}</span>
-              <span className="recp-d">{recp.role}, {recp.email}</span>
+              <span className="recp-d">{roleName(recp.role)}, {recp.email}</span>
               <span className="recp-c">
                 <i
                   className="recp-i fa fa-times"

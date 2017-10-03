@@ -4,6 +4,7 @@ import { Popover, OverlayTrigger } from 'react-bootstrap'
 import BaseTable from './table'
 import Deal from '../../../../../models/Deal'
 import UserAvatar from '../../../../Partials/UserAvatar'
+import roleName from '../utils/roles'
 
 class AgentTable extends BaseTable {
   constructor(props) {
@@ -96,7 +97,7 @@ class AgentTable extends BaseTable {
                     </div>
                     <div className="info">
                       <span className="name">{ role.user.abbreviated_display_name }, </span>
-                      <span className="role">{ role.role }</span>
+                      <span className="role">{ roleName(role.role) }</span>
                       <span className="email">{ role.user.email }</span>
                     </div>
                   </div>
