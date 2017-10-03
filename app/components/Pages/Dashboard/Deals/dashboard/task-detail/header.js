@@ -14,7 +14,7 @@ const Header = ({
           className="title"
           style={{ width: isBackOffice ? '100%': '70%' }}
         >
-          { task.title.replace(/&.*;/g, '') }
+          { task.title }
         </td>
 
         {

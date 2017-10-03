@@ -44,7 +44,7 @@ const List = ({
               >
                 <div className="icon" />
                 <div className="title">
-                  { task.title.replace(/&.*;/g, '') }
+                  { task.title }
                 </div>
 
                 {
