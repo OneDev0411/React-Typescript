@@ -129,7 +129,7 @@ const redirectHandler = (
       // console.log('you logged with different user')
       params.redirectTo = encodeURIComponent(redirect)
       params.messageText =
-        'You are logged in with different user currently in system! For register a new user you must sign out.'
+        'You are currently logged in a different user. Please log out and sign up your new account.'
       setActiveModal({ name: 'SHADOW_CONFLICT', params })
       return
     }
@@ -140,7 +140,7 @@ const redirectHandler = (
     if (hasConflict()) {
       // console.log('you logged with deferent user')
       params.redirectTo = encodeURIComponent(redirect)
-      params.messageText = `You are logged in with different account currently in system! For continuing you must to sign in with this account ${receivingUser.email}`
+      params.messageText = `You are currently logged in a different user.  Please log out and sign in using ${receivingUser.email}.`
       setActiveModal({ name: 'CONFLICT', params })
       return
     }
