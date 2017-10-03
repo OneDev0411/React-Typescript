@@ -94,6 +94,10 @@
   padding-top: 0;
   margin-top: 0px;
 
+  .socket-status {
+    top: 4%;
+  }
+
   .messages-list {
     $left-w: 10px;
     $hg: $messages-height - $height-of-create-message - $height-of-typing-area;

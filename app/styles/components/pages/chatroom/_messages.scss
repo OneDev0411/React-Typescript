@@ -35,6 +35,26 @@ $left-w: 44px;
     padding-top: 40px;
   }
 
+  .socket-status {
+    position: absolute;
+    top: 10%;
+    left: calc((100% - 130px) / 2);
+    z-index: 1010;
+    color: #fff;
+    margin: 0 auto;
+    width: 130px;
+    text-align: center;
+    padding: 3px 10px;
+    border-radius: 100px;
+    background-color: #fe3824;
+    font-size: 13px;
+    font-weight: 400;
+    img {
+      margin-left: 5px;
+      width: 16px;
+    }
+  }
+
   .messages-list {
     $hg: $messages-height;
     min-height: $hg;

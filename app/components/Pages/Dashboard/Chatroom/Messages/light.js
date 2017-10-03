@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 import { getMessages } from '../../../../../store_actions/chatroom'
 import MessageItem from './message-item'
+import SocketStatus from '../SocketStatus'
 
 class Messages extends React.Component {
 
@@ -64,6 +65,8 @@ class Messages extends React.Component {
       <div
         className="messages"
       >
+        <SocketStatus />
+
         {
           roomId && !messages &&
           <img

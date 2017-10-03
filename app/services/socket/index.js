@@ -38,7 +38,7 @@ export default class Socket {
     // bind Reconnecting and Reconnect socket
     window.socket.on('reconnecting', this.onReconnecting.bind(this))
     window.socket.on('reconnect', this.onReconnect.bind(this))
-    window.socket.on('disconnect', this.onDisconnect.bind(this))
+    window.socket.on('disconnect', this.onReconnecting.bind(this))
 
     // bind ping
     window.socket.on('ping', this.onPing)
@@ -71,7 +71,7 @@ export default class Socket {
    * on reconnecting
    */
   onReconnecting() {
-    store.dispatch(changeSocketStatus('reconnecting'))
+    store.dispatch(changeSocketStatus('Reconnecting'))
   }
 
   /**
@@ -83,13 +83,6 @@ export default class Socket {
 
     // emit connected message
     store.dispatch(changeSocketStatus('connected'))
-  }
-
-  /**
-   * on disconnect
-   */
-  onDisconnect() {
-    store.dispatch(changeSocketStatus('disconnected'))
   }
 
   /**
