@@ -40,6 +40,9 @@ export default class Socket {
     window.socket.on('reconnect', this.onReconnect.bind(this))
     window.socket.on('disconnect', this.onReconnecting.bind(this))
 
+    window.addEventListener('online',  this.onReconnect.bind(this))
+    window.addEventListener('offline', this.onInternetOffline.bind(this))
+
     // bind ping
     window.socket.on('ping', this.onPing)
   }
@@ -72,6 +75,13 @@ export default class Socket {
    */
   onReconnecting() {
     store.dispatch(changeSocketStatus('Reconnecting'))
+  }
+
+  /**
+   * on internet offline
+   */
+  onInternetOffline() {
+    store.dispatch(changeSocketStatus('No Internet'))
   }
 
   /**
