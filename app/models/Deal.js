@@ -63,6 +63,7 @@ Deal.get.address = function(deal) {
   .join(' ')
   .trim()
   .replace(/(\s)+,/ig, ',')
+  .replace(/,,/ig, ',')
 
   if (address.slice('-1') === ',') {
     return address.slice(0, -1)

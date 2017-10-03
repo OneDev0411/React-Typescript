@@ -1,88 +1,79 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import _ from 'underscore'
-import { PanelGroup } from 'react-bootstrap'
-import ReactTooltip from 'react-tooltip'
-import List from './list'
+import cn from 'classnames'
+import CreateTask from '../create-task'
+import TaskStatus from './status'
+import ChecklistPanel from '../checklists/panel'
 
-class Checklist extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      showTerminatedChecklists: false
-    }
+const List = ({
+  tasks,
+  rooms,
+  checklist,
+  dealId,
+  selectedTaskId,
+  onSelectTask,
+  isBackoffice
+}) => {
+
+  if (!checklist) {
+    return false
   }
 
-  toggleDisplayTerminatedChecklists() {
-    this.setState({
-      showTerminatedChecklists: !this.state.showTerminatedChecklists
-    })
-  }
+  return (
+    <ChecklistPanel
+      checklist={checklist}
+      dealId={dealId}
+    >
+      <div className={`list ${!checklist.tasks ? 'empty' : ''}`}>
+        {
+          checklist.tasks &&
+          checklist.tasks
+          .map((id, key) => {
+            const task = tasks[id]
+            const room = rooms[task.room.id] || task.room
+            const hasStatus = task.review !== null || task.needs_attention === true
 
-  render() {
-    let terminatedsCount = 0
-    const { showTerminatedChecklists } = this.state
-    const { deal, selectedTaskId, onSelectTask, checklists } = this.props
+            return (
+              <div
+                key={`TASK_${id}_${key}`}
+                onClick={() => onSelectTask(task)}
+                className={cn('task', {
+                  'active': selectedTaskId === id,
+                  'no-status': !hasStatus
+                })}
+              >
+                <div className="icon" />
+                <div className="title">
+                  { task.title }
+                </div>
 
-    if (!deal.checklists) {
-      return false
-    }
+                {
+                  hasStatus &&
+                  <TaskStatus
+                    task={task}
+                  />
+                }
 
-    return (
-      <div className="tasks-container">
-        <ReactTooltip
-          place="bottom"
-          className="deal-filter--tooltip"
-          multiline
-        />
-
-        <PanelGroup>
-          {
-            _
-            .chain(deal.checklists)
-            .sortBy(id => {
-              const list = checklists[id]
-              const isTerminated = list.is_terminated
-
-              if (isTerminated) {
-                terminatedsCount += 1
-                return 100000
-              }
-
-              return list.order
-            })
-            .filter(id => {
-              if (showTerminatedChecklists) {
-                return true
-              } else {
-                return checklists[id].is_terminated === false
-              }
-            })
-            .map(id =>
-              <List
-                key={id}
-                dealId={deal.id}
-                section={checklists[id]}
-                selectedTaskId={selectedTaskId}
-                onSelectTask={onSelectTask}
-              />
+                <span
+                  className={cn('notification', {
+                    has_notification: room.new_notifications > 0
+                  })}
+                />
+              </div>
             )
-            .value()
-          }
-        </PanelGroup>
+          })
+        }
 
-        <button
-          className="show-terminated-btn"
-          style={{ display: terminatedsCount > 0 ? 'block': 'none' }}
-          onClick={() => this.toggleDisplayTerminatedChecklists()}
-        >
-          { showTerminatedChecklists ? 'Hide' : 'Show' } Terminated
-        </button>
+        <CreateTask
+          dealId={dealId}
+          listId={checklist.id}
+        />
       </div>
-    )
-  }
+    </ChecklistPanel>
+  )
 }
 
-export default connect(({ deals }) => ({
-  checklists: deals.checklists
-}))(Checklist)
+export default connect(({ deals, chatroom }) => ({
+  rooms: chatroom.rooms,
+  tasks: deals.tasks
+}))(List)

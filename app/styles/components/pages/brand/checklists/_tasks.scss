@@ -42,6 +42,7 @@
       margin: 15px;
       visibility: hidden;
       cursor: pointer;
+      color: #8ca2b6;
     }
     .edit-button {
       float: right;
@@ -65,7 +66,10 @@
       visibility: visible;
     }
     .edit-button:hover{
-      font-weight: bold;
+      color: #2196f3;
+    }
+    .delete-icon:hover {
+      color: #2196f3;
     }
   }
 }

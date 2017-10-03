@@ -6,12 +6,16 @@ const TaskStatus = ({
   task,
   isBackoffice
 }) => {
-  if (!task.review) {
-    return false
-  }
+  const { review } = task
+  let status = null
+  let reviewTime = null
+  let tooltip = null
 
-  let { status } = task.review
-  const reviewTime = moment.unix(task.review.created_at).format('MMMM DD, YY [at] HH:mm')
+  if (review) {
+    status = review.status
+    reviewTime = moment.unix(review.created_at).format('MMMM DD, YY [at] HH:mm')
+    tooltip = `${status}, ${reviewTime}`
+  }
 
   if (isBackoffice && (status === 'Submitted' || task.needs_attention)) {
     status = 'NEEDS ATTENTION'
@@ -24,7 +28,8 @@ const TaskStatus = ({
   return (
     <span
       className={`status ${status}`}
-      data-tip={`${status}, ${reviewTime}`}
+      data-tip={tooltip}
+      data-place="bottom"
     >
       { status.toUpperCase() }
     </span>

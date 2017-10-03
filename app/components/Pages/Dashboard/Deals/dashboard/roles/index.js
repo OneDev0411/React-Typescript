@@ -6,6 +6,7 @@ import UserAvatar from '../../../../../Partials/UserAvatar'
 import AddRole from './add-role'
 import { deleteRole } from '../../../../../../store_actions/deals'
 import { confirmation } from '../../../../../../store_actions/confirmation'
+import roleName from '../../utils/roles'
 
 class Roles extends React.Component {
   constructor(props) {
@@ -107,7 +108,7 @@ class Roles extends React.Component {
 
               <div className="name">
                 <div>{ item.user.display_name }</div>
-                <div className="role">{ item.role }</div>
+                <div className="role">{ roleName(item.role) }</div>
               </div>
 
               <div className="cta">

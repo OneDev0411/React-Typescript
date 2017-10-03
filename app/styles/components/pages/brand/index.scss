@@ -4,7 +4,6 @@ $rowWidth: 300px;
 $toolBarHeight: 60px;
 
 @import 'menu';
-@import 'roles';
 @import 'checklists/checklists';
 @import 'modal-new-role';
 @import 'checklists/modal-checklist';
@@ -33,9 +32,7 @@ $toolBarHeight: 60px;
   .toolbar:after {
     clear: both;
   }
-  .roles {
-    @extend %roles;
-  }
+
   .checklists {
     @extend %checklists;
   }

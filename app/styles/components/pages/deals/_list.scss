@@ -12,6 +12,11 @@
   .list-empty {
     text-align: center;
     margin-top: 20%;
+    img {
+      width: 91px;
+      margin-bottom: 21px;
+    }
+
     .title {
       font-size: 17px;
       font-weight: 600;
@@ -24,6 +29,14 @@
       font-weight: 500;
       color: #8da2b5;
       margin-bottom: 20px;
+    }
+
+    &.backoffice {
+      margin-top: 12%;
+      .title {
+        font-size: 26px;
+        font-weight: bold;
+      }
     }
   }
 }
@@ -101,7 +114,7 @@
     .item .address-row {
       height: 60px;
       max-height: 60px;
-      overflow: auto;
+      overflow: none;
       padding: 0 !important;
       display: flex;
       flex-direction: row;
@@ -205,13 +218,56 @@
  *
  */
 .deal-filter--tooltip {
-  background-color: #303e4d !important;
+  $background-color: #303e4d;
+  $border-color: #303e4d;
   padding-left: 10px !important;
   line-height: 15px;
   text-align: left !important;
   font-size: 14px !important;
-  &:after {
-    border-bottom-color: #303e4d !important;
+  border: 1px solid $border-color !important;
+
+  &.place-top {
+    &:before {
+      border-top: 8px solid $border-color;
+    }
+    &:after {
+      border-top-color: $background-color;
+      border-top-style: solid;
+      border-top-width: 6px;
+    }
+  }
+
+  &.place-bottom {
+    &:before {
+      border-bottom: 8px solid $border-color;
+    }
+    &:after {
+      border-bottom-color: $background-color;
+      border-bottom-style: solid;
+      border-bottom-width: 6px;
+    }
+  }
+
+  &.place-left {
+    &:before {
+      border-left: 8px solid $border-color;
+    }
+    &:after {
+      border-left-color: $background-color;
+      border-left-style: solid;
+      border-left-width: 6px;
+    }
+  }
+
+  &.place-right {
+    &:before {
+      border-right: 8px solid $border-color;
+    }
+    &:after {
+      border-right-color: $background-color;
+      border-right-style: solid;
+      border-right-width: 6px;
+    }
   }
 
   span {
@@ -227,8 +283,12 @@
   background-color: #303e4d;
   border: none;
   max-width: 420px;
+  min-width: 400px;
+  margin-left: -5px;
+
   .arrow:after {
     border-bottom-color: #303e4d !important;
+    border-top-color: #303e4d !important;
   }
 
   .popover-content {

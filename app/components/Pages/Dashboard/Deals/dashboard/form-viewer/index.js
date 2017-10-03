@@ -59,15 +59,15 @@ class FormViewer extends React.Component {
               className="deal-button"
               onClick={() => this.toggleFactsheet()}
             >
-              <i className="fa fa-comment-o" />
+              <img src="/static/images/deals/digital-form.svg" />
               Deal Facts
             </Button>
 
             <Button
-              className="deal-button"
+              className="deal-button comments"
               onClick={() => this.toggleComments()}
             >
-              <i className="fa fa-comment-o" />
+              <img src="/static/images/deals/comments.svg" />
               Comments
             </Button>
           </div>

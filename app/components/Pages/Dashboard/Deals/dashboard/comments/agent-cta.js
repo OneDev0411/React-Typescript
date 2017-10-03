@@ -1,5 +1,4 @@
 import React from 'react'
-import ReactTooltip from 'react-tooltip'
 import { Button } from 'react-bootstrap'
 import cn from 'classnames'
 
@@ -9,12 +8,6 @@ export default ({
   onSendComment
 }) => (
   <div>
-    <ReactTooltip
-      place="top"
-      className="deal-filter--tooltip"
-      multiline
-    />
-
     <Button
       className={cn('deal-button add-comment', {
         enabled: hasComment === true

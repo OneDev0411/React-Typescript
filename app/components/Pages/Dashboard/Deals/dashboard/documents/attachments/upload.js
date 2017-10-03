@@ -5,6 +5,7 @@ import { batchActions } from 'redux-batched-actions'
 import Dropzone from 'react-dropzone'
 import moment from 'moment'
 import _ from 'underscore'
+import cn from 'classnames'
 import ChatModel from '../../../../../../../models/Chatroom'
 import ChatMessage from '../../../../Chatroom/Util/message'
 import { addAttachment, setIsUploading, editForm } from '../../../../../../../store_actions/deals'
@@ -81,7 +82,7 @@ class UploadDocument extends React.Component {
 
   render() {
     const { dropzoneActive } = this.state
-    const { children, task } = this.props
+    const { children, task, hasAttachments } = this.props
     const { uploading } = task
 
     return (
@@ -112,7 +113,7 @@ class UploadDocument extends React.Component {
 
         {
           children ||
-          <div className="file-upload">
+          <div className={cn('file-upload', { 'has-attachments': hasAttachments })}>
 
             <div className="item">
 

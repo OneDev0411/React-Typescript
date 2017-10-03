@@ -30,7 +30,7 @@ class Forms extends React.Component {
         dialogClassName="modal-deal-create-form"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Add Task</Modal.Title>
+          Add Task
         </Modal.Header>
 
         <Modal.Body>

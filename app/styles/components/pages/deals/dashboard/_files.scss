@@ -26,16 +26,23 @@
     padding: 0 10px;
     margin: 0 0 30px 0;
     .title {
-      font-weight: 500;
-      color: #62778c;
-      padding-left: 1px;
-      margin-bottom: 10px;
+      height: 40px;
+      line-height: 40px;
+      vertical-align: middle;
+      padding-left: 12px;
+      background-color: #f8fafb;
+      border: solid 1px #d2d7db;
+      border-bottom: none;
+      color: #1d364b;
+      border-radius: 3px 3px 0 0;
+      font-size: 17px;
     }
 
     .file-group {
       background-color: #f8fafb;
       border: solid 1px #d2d7db;
-      border-radius: 3px;
+      border-radius: 0 0 3px 3px;
+      margin-bottom: 10px;
       z-index: 100;
     }
 
@@ -76,7 +83,7 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
-        width: calc(100% - 45% - 25px);
+        width: calc(100% - 55% - 25px);
         padding-left: 20px;
         font-weight: 400;
         color: #1d364b;
@@ -91,7 +98,7 @@
 
       .actions {
         text-align: right;
-        width: 45%;
+        width: 55%;
 
         .btn-view,
         .btn-deal {
@@ -119,15 +126,25 @@
   }
 
   .file-upload {
-    margin-top: 10px;
-    border: 1px dashed #c9d7df;
-    border-radius: 3px;
+    border: 1px dashed #d2d7db;
+    border-radius: 0 0 3px 3px;
+    border-top: 1px solid #d2d7db;
+
+    &.has-attachments {
+      margin-top: 10px;
+      border-top: 1px dashed #d2d7db;
+      border-radius: 3px;
+    }
+
     .item {
       border-bottom: none;
       background-color: #f8fafb;
       .name {
         font-weight: 600;
-        width: 95%;
+        width: 100%;
+        text-overflow: string;
+        white-space: normal;
+        overflow: auto;
       }
 
       &:hover {

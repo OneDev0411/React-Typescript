@@ -1,5 +1,4 @@
 import React from 'react'
-import ReactTooltip from 'react-tooltip'
 import { Button } from 'react-bootstrap'
 import cn from 'classnames'
 
@@ -43,12 +42,6 @@ export default ({
 
   return (
     <div>
-      <ReactTooltip
-        place="top"
-        className="deal-filter--tooltip"
-        multiline
-      />
-
       {
         can(DECLINE, isSaving) &&
         <Button

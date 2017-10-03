@@ -1,5 +1,6 @@
 import types from '../../constants/brandConsole'
 import BrandConsole from '../../models/BrandConsole'
+import { addNotification as notify } from 'reapop'
 
 function _getChecklists(checklists) {
   return {
@@ -17,7 +18,7 @@ export function getChecklists(brand) {
       const { data } = response.body
       dispatch(_getChecklists(data))
     } else {
-      dispatch(notify({ message: `getChildrenBrands: ${response.error.message}`, status: 'error' }))
+      dispatch(notify({ message: `getChecklists: ${response.error.message}`, status: 'error' }))
     }
   }
 }
@@ -38,7 +39,7 @@ export function addChecklist(brand, checklist) {
       const { data } = response.body
       dispatch(_addChecklist(data))
     } else {
-      dispatch(notify({ message: `getChildrenBrands: ${response.error.message}`, status: 'error' }))
+      dispatch(notify({ message: `addChecklist: ${response.error.message}`, status: 'error' }))
     }
   }
 }
@@ -59,7 +60,7 @@ export function deleteChecklist(checklist) {
       response.body.status === 'success') {
       dispatch(_deleteChecklist(checklist.id))
     } else {
-      dispatch(notify({ message: `getChildrenBrands: ${response.error.message}`, status: 'error' }))
+      dispatch(notify({ message: `deleteChecklist: ${response.error.message}`, status: 'error' }))
     }
   }
 }
@@ -80,7 +81,7 @@ export function editChecklist(checklist) {
       const { data } = response.body
       dispatch(_editChecklist(data))
     } else {
-      dispatch(notify({ message: `getChildrenBrands: ${response.error.message}`, status: 'error' }))
+      dispatch(notify({ message: `editChecklist: ${response.error.message}`, status: 'error' }))
     }
   }
 }
