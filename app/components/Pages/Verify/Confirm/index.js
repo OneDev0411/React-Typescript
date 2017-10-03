@@ -23,11 +23,11 @@ const getErrorMessage = (errorCode, verifyParams, isLoggedIn) => {
     case 403:
       return (
         <div>
-          Sorry, this verify link is not valid anymore!
+          Sorry, this verify link is not valid anymore.
           {!isLoggedIn && (
             <p>
               Currently you aren't logged in on app, for receive new verify link
-              you must login. So, please
+              you must login. Please
               <Link to={`/signin?${redirectTo + username}`}> sign in</Link>.
             </p>
           )}
@@ -74,7 +74,7 @@ const confirmVerify = ({
             </Link>
           )}
           <h1 className="c-auth__title tempo">{`${siteTitle}`}</h1>
-          <p className="c-auth__subticonfirmtle">Verify Your {verifyType}</p>
+          <p className="c-auth__subticonfirmtle">Verification for</p>
           <p>
             {
               verifyQueryParams.body[
@@ -110,21 +110,23 @@ const confirmVerify = ({
           ) : (
             <div style={{ textAlign: 'center' }}>
               <p className="c-auth__submit-alert--success">
-                <span>Your {verifyType} confirmed successfully.</span>
+                <span>This account is verified.</span>
                 <br />
-                <span>You may now </span>
                 {userIsLoggedIn ? (
                   <Link to="/dashboard/mls">go to dashboard</Link>
                 ) : (
-                  <Link
-                    to={`/signin${verifyType === 'email'
-                      ? `?username=${encodeURIComponent(
-                        verifyQueryParams.body.email
-                      )}`
-                      : ''}`}
-                  >
-                    sign in
-                  </Link>
+                  <span>
+                    Please{' '}
+                    <Link
+                      to={`/signin${verifyType === 'email'
+                        ? `?username=${encodeURIComponent(
+                          verifyQueryParams.body.email
+                        )}`
+                        : ''}`}
+                    >
+                      sign in
+                    </Link>
+                  </span>
                 )}.
               </p>
             </div>

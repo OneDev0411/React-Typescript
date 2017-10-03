@@ -14,14 +14,9 @@ const VerifyRedirectModal = ({ type, params, brandInfo }) => {
     <RedirectModal brandInfo={brandInfo}>
       {type === 'VERIFYING_CONFLICT' ? (
         <div>
-          <h3 className="c-confirm-modal__title">Verify Conflict</h3>
+          <h3 className="c-confirm-modal__title">Verification Conflict</h3>
           <p className="c-confirm-modal__message">
-            Currently you are logged in with different user with this email
-            <span style={{ color: '#555' }}> {loggedInUser.email}</span>.
-            <br />
-            {`for verifying this ${verificationType} `}
-            <span style={{ color: '#555' }}>{verificationValue}</span> you need
-            sign out.
+            You are currently logged in as a different user. Please log out to verify this account.
           </p>
           <div>
             <Link
@@ -51,9 +46,7 @@ const VerifyRedirectModal = ({ type, params, brandInfo }) => {
             className="c-confirm-modal__message"
             style={{ marginBottom: '3rem' }}
           >
-            {`Oops, this ${verificationType} `}
-            <span style={{ color: '#555' }}>{verificationValue}</span> verified
-            already!
+            {`This ${verificationType} was previously verified.`}
           </p>
           <Link
             to="/dashboard/mls"

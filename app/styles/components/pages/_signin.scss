@@ -22,7 +22,6 @@
 
 .c-auth {
   max-width: 36rem;
-  margin: 0 auto;
   padding: 4rem 2rem;
   font-size: 1.6rem;
   line-height: 1;
@@ -121,7 +120,7 @@
 
 .c-auth__field__input ~ .focus-border:before,
 .c-auth__field__input ~ .focus-border:after {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -146,7 +145,7 @@
 }
 .c-auth__field__input ~ .focus-border i:before,
 .c-auth__field__input ~ .focus-border i:after {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -214,7 +213,7 @@
   border-radius: 3px;
   border-width: 0;
   background-color: #2196f3;
-  transition: box-shadow 0.3s cubic-bezier(.25, .8, .25, 1);
+  transition: box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .c-auth__submit-btn:not([disabled]) {
@@ -227,7 +226,7 @@
 .c-auth__field__error-alert,
 .c-auth__submit-error-alert,
 .c-auth__submit-alert--success {
-  padding: .5rem 1.5rem;
+  padding: 0.5rem 1.5rem;
   font-size: 1.5rem;
   color: #fff;
   background: red;
@@ -318,7 +317,7 @@
     & > .c-auth__field--radio__label__icon {
       display: inline-block;
       vertical-align: middle;
-      margin-right: .5rem;
+      margin-right: 0.5rem;
     }
   }
 }

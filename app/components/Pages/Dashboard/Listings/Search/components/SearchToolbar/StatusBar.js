@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import branch from 'recompose/branch'
 import compose from 'recompose/compose'
-import renderNothing from 'recompose/renderNothing'
 import { getListingsInfo } from '../../../../../../../reducers/listings'
 
 const emptyStatus = () => () =>

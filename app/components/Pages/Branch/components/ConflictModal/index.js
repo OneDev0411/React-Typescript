@@ -21,11 +21,7 @@ const ConflictModal = ({ params, brandInfo }) => {
   }
 
   if (is_shadow) {
-    if (action === 'RedirectToListing') {
-      actionButton.text = 'Sign out'
-    } else {
-      actionButton.text = 'Register'
-    }
+    actionButton.text = 'Sign out'
     actionButton.href = `/signout?redirectFromSignout=${redirectTo}`
   }
 
