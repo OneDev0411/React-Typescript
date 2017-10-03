@@ -53,8 +53,18 @@
       &.upload {
         color: #2196f3;
         border-bottom: none;
+        position: relative;
         i {
           margin-right: 10px;
+        }
+        input {
+          display: block !important;
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          opacity: 0;
         }
       }
 
