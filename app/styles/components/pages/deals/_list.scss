@@ -283,8 +283,12 @@
   background-color: #303e4d;
   border: none;
   max-width: 420px;
+  min-width: 400px;
+  margin-left: -5px;
+
   .arrow:after {
     border-bottom-color: #303e4d !important;
+    border-top-color: #303e4d !important;
   }
 
   .popover-content {
