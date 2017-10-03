@@ -21,7 +21,7 @@ class DealCreate extends React.Component {
       saving: false,
       showAddressComponents: false,
       address: '',
-      listings: {},
+      listings: null,
       searching: false,
       property_type: null
     }
@@ -49,7 +49,7 @@ class DealCreate extends React.Component {
     // show loading
     this.setState({
       searching: true,
-      listings: {}
+      listings: null
     })
 
     try {
@@ -92,20 +92,18 @@ class DealCreate extends React.Component {
    * on user selects a place or listing
    */
   onSelectListing(item) {
-    this.setState({
-      address: item.full_address
-    })
+    const { type } = this.props
+    const { saving, property_type } = this.state
 
-    const side = this.props.type === 'offer' ? 'Buying' : 'Selling'
-    const { property_type } = this.state
-
-    const data = {
-      property_type,
-      deal_type: side,
-      listing: item.id
+    if (saving) {
+      return false
     }
 
-    return this.save(data)
+    return this.save({
+      property_type,
+      deal_type: (type === 'offer') ? 'Buying' : 'Selling',
+      listing: item.id
+    })
   }
 
   /**

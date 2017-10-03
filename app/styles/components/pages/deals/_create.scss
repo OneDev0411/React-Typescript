@@ -22,7 +22,20 @@ $margin: 20px;
   .list {
     max-height: 50vh;
     overflow: auto;
+    overflow-x: hidden;
     background-color: #fff;
+
+    .empty-state {
+      text-align: center;
+      box-shadow: none;
+      font-size: 17px;
+      color: #8da2b5;
+      padding-top: 15%;
+      img {
+        display: block;
+        margin: 0 auto 11px auto;
+      }
+    }
 
     .title {
       color: #8696a4;
