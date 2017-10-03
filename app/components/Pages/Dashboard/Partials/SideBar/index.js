@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
-import { Link } from 'react-router'
+import { Link, browerHistory } from 'react-router'
 import Intercom from 'react-intercom'
 import { Dropdown } from 'react-bootstrap'
 
@@ -164,7 +164,12 @@ const appNavbar = ({
               <li><Link to="/dashboard/forms">Forms</Link></li> }
             <li role="separator" className="divider" />
             <li>
-              <a href="/signout">Sign out</a>
+              <a
+                href="/signout"
+                onClick={event => {
+                  window.localStorage.removeItem('verificationBanner')
+                }}
+              >Sign out</a>
             </li>
           </Dropdown.Menu>
         </Dropdown>

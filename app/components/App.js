@@ -5,6 +5,7 @@ import AppDispatcher from '../dispatcher/AppDispatcher'
 import Load from '../loader'
 
 import getBrand from '../store_actions/brand'
+import VerificationBanner from './Pages/Dashboard/Partials/VerificationBanner'
 
 // services
 import ChatSocket from './Pages/Dashboard/Chatroom/Services/socket'
@@ -265,6 +266,9 @@ class App extends Component {
 
     return (
       <div>
+        {user &&
+        !user.email_confirmed && <VerificationBanner email={user.email} />}
+
         {user && !isWidgetRedux && navArea}
 
         {user && <InstantChat user={user} rooms={rooms} />}
@@ -277,12 +281,14 @@ class App extends Component {
   }
 }
 
-export default connect(({ user, data, favorites, deals, contacts, chatroom, widgets }) => ({
-  data,
-  user,
-  deals: deals.list,
-  rooms: chatroom.rooms,
-  contacts: contacts.list,
-  isWidgetRedux: widgets.isWidget,
-  favoritesListings: selectListings(favorites.listings)
-}))(App)
+export default connect(
+  ({ user, data, favorites, deals, contacts, chatroom, widgets }) => ({
+    data,
+    user,
+    deals: deals.list,
+    rooms: chatroom.rooms,
+    contacts: contacts.list,
+    isWidgetRedux: widgets.isWidget,
+    favoritesListings: selectListings(favorites.listings)
+  })
+)(App)

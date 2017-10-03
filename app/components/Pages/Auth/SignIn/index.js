@@ -16,7 +16,7 @@ export const getBrandInfo = brand => {
   if (brand) {
     siteLogo = Brand.asset('site_logo', null, brand)
     siteTitle = Brand.message('office_title', siteTitle, brand)
-    brandColor = `#${Brand.color('primary', '#2196f3', brand)}`
+    brandColor = `#${Brand.color('primary', '2196f3', brand)}`
   }
 
   return {
