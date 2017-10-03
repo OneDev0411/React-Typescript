@@ -364,11 +364,9 @@ export default class Landing extends Component {
         <footer className="footer" style={footer_style}>
           <div className="container">
             <Col className="footer-text footer-text--left" sm={6}>
-              Made with <img src="/static/images/landing/heart.png" /> by Rechat
-              |{' '}
-              <a onClick={this.showIntercom} href="#">
-                Contact Us
-              </a>
+              Made with{' '}
+              <img src="/static/images/landing/heart.png" alt="love" /> by
+              Rechat | <a href="mailto:support@rechat.com">Contact Us</a>
             </Col>
             <Col className="footer-text footer-text--right" sm={6}>
               Rechat Inc. &copy; {new Date().getFullYear()}. All Rights

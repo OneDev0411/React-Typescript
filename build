@@ -8,18 +8,19 @@ import config from './webpack.config.babel'
 import appConfig from './config/webpack'
 
 async function run() {
-
   let chunks = []
   console.log('[ + ] Start compiling')
 
   try {
     const stats = await compile()
-    console.log(`[ + ] Webpack compile is complete in ${stats.time / 1000} seconds`.magenta)
+    console.log(
+      `[ + ] Webpack compile is complete in ${stats.time / 1000} seconds`
+        .magenta
+    )
 
     // output chunks
     chunks = stats.chunks
-  }
-  catch(e) {
+  } catch (e) {
     console.log(e.red.underline)
     return
   }
@@ -32,15 +33,24 @@ async function run() {
   console.log('[ + ] Static assets are copied'.magenta)
 
   fs.copySync(
-    path.join(appConfig.compile.entry, '/templates/legal.html'),
-    path.join(appConfig.compile.output, '/legal.html')
+    path.join(appConfig.compile.entry, 'static/pages/terms/index.html'),
+    path.join(appConfig.compile.output, 'terms/index.html')
+  )
+
+  fs.copySync(
+    path.join(appConfig.compile.entry, 'static/pages/terms/mls/index.html'),
+    path.join(appConfig.compile.output, 'terms/mls/index.html')
+  )
+
+  fs.copySync(
+    path.join(appConfig.compile.entry, 'static/pages/privacy/index.html'),
+    path.join(appConfig.compile.output, 'privacy/index.html')
   )
 
   console.log('[ + ] Template files copied'.magenta)
 }
 
 function compile() {
-
   const compiler = webpack(config)
 
   return new Promise((resolve, reject) => {
@@ -58,7 +68,9 @@ function compile() {
       }
 
       if (jsonStats.warnings.length > 0) {
-        console.log('[ ! ] Webpack compiler encountered warnings.'.yellow.underline)
+        console.log(
+          '[ ! ] Webpack compiler encountered warnings.'.yellow.underline
+        )
         console.log(colors.yellow(jsonStats.warnings.join('\n')))
       }
 
