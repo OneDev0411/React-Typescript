@@ -31,7 +31,7 @@ const List = ({
           .map((id, key) => {
             const task = tasks[id]
             const room = rooms[task.room.id] || task.room
-            const hasStatus = !!task.review
+            const hasStatus = task.review !== null || task.needs_attention === true
 
             return (
               <div
