@@ -1,22 +1,35 @@
+@font-face {
+  font-family: system;
+  font-style: normal;
+  font-weight: 300;
+  src: local('.SFNSText-Light'), local('.HelveticaNeueDeskInterface-Light'),
+    local('.LucidaGrandeUI'), local('Ubuntu Light'), local('Segoe UI Light'),
+    local('Roboto-Light'), local('DroidSans'), local('Tahoma');
+}
+
+body {
+  font-family: 'system';
+}
+
 .san-fran {
-    font-family: "San Francisco"
+  font-family: 'San Francisco';
 }
 
 .tempo {
-    font-family: "Tempos Headline"
+  font-family: 'Tempos Headline';
 }
 
 .din {
-    font-family: "Din"
+  font-family: 'Din';
 }
 
 .futurastd {
-    font-family: "FuturaStd"
+  font-family: 'FuturaStd';
 }
 
 .ellipses {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    hyphens: auto;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  hyphens: auto;
 }
