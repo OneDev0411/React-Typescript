@@ -20,14 +20,14 @@ const Row = ({
   }) =>
     (
       <Button
-        className="editButton"
+        className="edit-button"
         onClick={() => clickHandler()}
       >
         Edit
       </Button>
     )
   return <div
-    className={cn('checklistRow', { active: activeItem })}
+    className={cn('checklist-row', { active: activeItem })}
   >
     <div
       className="checklist--row--first"
@@ -71,7 +71,7 @@ const Row = ({
         />
       </div>
       <div
-        className="deleteIcon"
+        className="delete-icon"
       >
         <i
           onClick={(e) => {

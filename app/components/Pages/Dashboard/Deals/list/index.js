@@ -50,10 +50,12 @@ class DealsDashboard extends React.Component {
           <AgentTable
             deals={deals}
             filters={activeFilters}
+            isBackOffice={false}
           /> :
           <BackOfficeTable
             deals={deals}
             filters={activeFilters}
+            isBackOffice={true}
           />
         }
 

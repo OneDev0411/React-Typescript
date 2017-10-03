@@ -12,10 +12,16 @@
   position: relative;
 
   .comment-heading {
-    font-weight: 500;
-    color: #62778c;
-    padding: 0 0 10px 1px;
-    padding-left: 10px;
+    margin: 0 10px;
+    height: 40px;
+    line-height: 40px;
+    vertical-align: middle;
+    padding-left: 12px;
+    background-color: #f8fafb;
+    border: solid 1px #d2d7db;
+    color: #1d364b;
+    border-radius: 3px 3px 0 0;
+    font-size: 17px;
   }
 
   .messages {
@@ -23,7 +29,8 @@
     margin: 0 10px 20px 10px !important;
     background-color: #fff;
     border: 1px solid #dce5eb;
-    border-radius: 3px;
+    border-top: none;
+    border-radius: 0 0 3px 3px;
     .loading {
       width: 90%;
     }
@@ -122,13 +129,13 @@
 
     &.close-task {
       width: 30px;
-      i {
-        font-size: 17px;
-      }
+      font-weight: 600px;
+      line-height: 25px;
+      font-size: 16px;
       &:hover {
         color: #fff;
         background-color: #2196f3;
-        border: none;
+        border-color: #2196f3;
       }
     }
 

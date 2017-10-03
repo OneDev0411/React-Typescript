@@ -40,16 +40,24 @@
       button {
         margin-left: 5px;
         height: 34px;
-        line-height: 3px;
+        line-height: 1px;
         border-radius: 4px;
         background-color: #fff;
         border: solid 1px #dde2e6;
         font-size: 13px;
         font-weight: 500;
         color: #8da2b5;
-        i {
-          margin-right: 4px;
-          font-size: 15px;
+        img {
+          margin-right: 6px;
+          font-size: 14px;
+          width: 14px;
+          margin-bottom: 3px;
+        }
+
+        &.comments {
+          img {
+            width: 18px;
+          }
         }
 
         &:focus {

@@ -19,7 +19,7 @@ function fetch(store, renderProps) {
 }
 
 function sanitize(state) {
-  return encodeURIComponent(JSON.stringify(state))
+  return escape(JSON.stringify(state))
 }
 
 async function display(file, renderProps) {

@@ -10,25 +10,25 @@ const enhance = compose(
   withState('activeItem', 'onSelectItem'),
 )
 const Tasks = ({
-                 checklist,
-                 addTask,
-                 deleteTask,
-                 activeItem,
-                 onSelectItem,
-                 editTask
-               }) => {
+  checklist,
+  addTask,
+  deleteTask,
+  activeItem,
+  onSelectItem,
+  editTask
+}) => {
   const AddButton = ({
-                       clickHandler
-                     }) =>
+    clickHandler
+  }) =>
     (<Button
-      className="button edit-button"
+      className="button"
       onClick={() => clickHandler()}
     >
       Add Task
     </Button>)
   const EditButton = ({
-                        clickHandler
-                      }) =>
+    clickHandler
+  }) =>
     (<Button
       className="button edit-button"
       onClick={() => clickHandler()}

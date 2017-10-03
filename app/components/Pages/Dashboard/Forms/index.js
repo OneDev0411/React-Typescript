@@ -12,7 +12,7 @@ export default class Forms extends Component {
         <iframe
           style={{
             width: '100%',
-            height: '100vh'
+            height: '99vh'
           }}
           src={`${config.forms.url}?access_token=${user.access_token}`}
           frameBorder="0"

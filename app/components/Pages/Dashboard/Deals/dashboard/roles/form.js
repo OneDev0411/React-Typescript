@@ -1,5 +1,6 @@
 import React from 'react'
 import { FormGroup, FormControl, DropdownButton, MenuItem } from 'react-bootstrap'
+import roleNames from '../../utils/roles'
 
 const role_names = [
   'BuyerAgent',
@@ -94,7 +95,7 @@ export default class Form extends React.Component {
                 key={`ROLE_${name}`}
                 onClick={() => this.setForm('role', name)}
               >
-                { name }
+                { roleNames(name) }
               </MenuItem>
             )
           }

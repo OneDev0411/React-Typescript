@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import ReactTooltip from 'react-tooltip'
 import _ from 'underscore'
+import ReactTooltip from 'react-tooltip'
 import Deal from '../../../../../models/Deal'
 
 const FILTER_ACTIVE = [
@@ -12,7 +12,7 @@ const FILTER_ACTIVE = [
 
 const FILTER_PENDING = [
   'Active Contingent',
-  'Active Kick out',
+  'Active Kick Out',
   'Active Option Contract',
   'Pending'
 ]
@@ -104,6 +104,7 @@ class Filter extends React.Component {
     return (
       <div>
         <ReactTooltip
+          place="top"
           className="deal-filter--tooltip"
           multiline
         />

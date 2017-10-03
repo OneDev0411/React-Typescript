@@ -1,5 +1,6 @@
 import types from '../../constants/brandConsole'
 import BrandConsole from '../../models/BrandConsole'
+import { addNotification as notify } from 'reapop'
 
 function _addTask(checklist) {
   return {
@@ -10,10 +11,14 @@ function _addTask(checklist) {
 
 export function addTask(brand_id, checklist_id, task) {
   return async (dispatch) => {
+    dispatch({ type: types.SHOW_SPINNER })
     const response = await BrandConsole.addTask(brand_id, checklist_id, task)
-    if (response) {
+    dispatch({ type: types.HIDE_SPINNER })
+    if (response && !response.error) {
       const { data } = response.body
       dispatch(_addTask(data))
+    } else {
+      dispatch(notify({ message: `addTask: ${response.error.message}`, status: 'error' }))
     }
   }
 }
@@ -28,10 +33,14 @@ function _deleteTask(checklistId, taskId) {
 
 export function deleteTask(checklist, taskId) {
   return async (dispatch) => {
+    dispatch({ type: types.SHOW_SPINNER })
     const response = await BrandConsole.deleteTask(checklist, taskId)
-    if (response &&
-      response.body.status === 'success') {
+    dispatch({ type: types.HIDE_SPINNER })
+    if (response && !response.error
+      && response.body.status === 'success') {
       dispatch(_deleteTask(checklist.id, taskId))
+    } else {
+      dispatch(notify({ message: `deleteTask: ${response.error.message}`, status: 'error' }))
     }
   }
 }
@@ -46,10 +55,14 @@ function _editTask(checklistId, task) {
 
 export function editTask(checklist, task) {
   return async (dispatch) => {
+    dispatch({ type: types.SHOW_SPINNER })
     const response = await BrandConsole.editTask(checklist, task)
-    if (response &&
-      response.body.status === 'success') {
+    dispatch({ type: types.HIDE_SPINNER })
+    if (response && !response.error
+      && response.body.status === 'success') {
       dispatch(_editTask(checklist.id, task))
+    } else {
+      dispatch(notify({ message: `editTask: ${response.error.message}`, status: 'error' }))
     }
   }
 }

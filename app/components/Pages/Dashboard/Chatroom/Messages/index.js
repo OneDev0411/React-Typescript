@@ -7,6 +7,7 @@ import MessageItem from './message-item'
 import UserTyping from '../UserTyping'
 import ComposeMessage from '../ComposeMessage'
 import UploadHandler from '../ComposeMessage/upload'
+import SocketStatus from '../SocketStatus'
 
 class Messages extends React.Component {
   constructor(props) {
@@ -257,6 +258,7 @@ class Messages extends React.Component {
         className="messages"
         onClick={onClick}
       >
+        <SocketStatus />
 
         {
           !roomId &&
