@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 import { browserHistory } from 'react-router'
+import getNeedsAttentions from '../utils/needs-attention'
 
 class Filter extends React.Component {
   constructor(props) {
@@ -31,6 +32,19 @@ class Filter extends React.Component {
     this.props.onChangeFilter(filters)
   }
 
+  getBadgeCounter(tabName) {
+    const { deals } = this.props
+    let counter = 0
+
+    _.each(deals, deal => {
+      if (getNeedsAttentions(deal, tabName).length > 0) {
+        counter += 1
+      }
+    })
+
+    return counter
+  }
+
   render() {
     const { checklists } = this.props
     const active = this.props.active || 'All'
@@ -49,17 +63,28 @@ class Filter extends React.Component {
       <div>
         <ul className="filter">
           {
-            tabs.map(tabName =>
-              <li
-                key={`FILTER_${tabName}`}
-                onClick={() => this.setFilter(tabName)}
-                className={tabName === active ? 'active' : ''}
-              >
-                <span className="title">
-                  { tabName }
-                </span>
-              </li>
-            )
+            tabs.map(tabName => {
+              const counter = this.getBadgeCounter(tabName)
+              if (counter === 0) {
+                return false
+              }
+
+              return (
+                <li
+                  key={`FILTER_${tabName}`}
+                  onClick={() => this.setFilter(tabName)}
+                  className={tabName === active ? 'active' : ''}
+                >
+                  <span className="title">
+                    { tabName }
+                  </span>
+
+                  <span className="badge counter">
+                    { counter }
+                  </span>
+                </li>
+              )
+            })
           }
         </ul>
       </div>
@@ -68,5 +93,6 @@ class Filter extends React.Component {
 }
 
 export default connect (({ deals }) => ({
+  deals: deals.list,
   checklists: deals.checklists
 }))(Filter)
