@@ -91,7 +91,7 @@
     "normalizr": "^3.2.3",
     "nunjucks": "^3.0.0",
     "parse-address": "^0.0.6",
-    "pdfjs-dist": "^1.8.207",
+    "pdfjs-dist": "^1.9.622",
     "points-cluster": "^0.1.4",
     "postcss-browser-reporter": "^0.5.0",
     "postcss-cssnext": "^2.10.0",
