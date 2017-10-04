@@ -1,4 +1,4 @@
-WAIT=11
-ATTEMPTS=25
+WAIT=30
+ATTEMPTS=10
 /   Rechat
 
