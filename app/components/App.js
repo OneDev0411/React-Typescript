@@ -243,7 +243,7 @@ class App extends Component {
   }
 
   render() {
-    const { data, user, rooms, location, isWidgetRedux } = this.props
+    const { data, user, rooms, location } = this.props
 
     // don't remove below codes,
     // because app is depended to `path` and `location` props in data store
@@ -269,7 +269,7 @@ class App extends Component {
         {user &&
         !user.email_confirmed && <VerificationBanner email={user.email} />}
 
-        {user && !isWidgetRedux && navArea}
+        {user && navArea}
 
         {user && <InstantChat user={user} rooms={rooms} />}
 
@@ -282,13 +282,12 @@ class App extends Component {
 }
 
 export default connect(
-  ({ user, data, favorites, deals, contacts, chatroom, widgets }) => ({
+  ({ user, data, favorites, deals, contacts, chatroom }) => ({
     data,
     user,
     deals: deals.list,
     rooms: chatroom.rooms,
     contacts: contacts.list,
-    isWidgetRedux: widgets.isWidget,
     favoritesListings: selectListings(favorites.listings)
   })
 )(App)

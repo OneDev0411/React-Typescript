@@ -70,7 +70,7 @@ const RegisterForm = ({
               />
             </Link>
           )}
-          <h1 className="c-auth__title tempo">{`${siteTitle}`}</h1>
+          <h1 className="c-auth__title din">{siteTitle}</h1>
           <p className="c-auth__subtitle">Thanks! You're almost there...</p>
           <div>
             <small>

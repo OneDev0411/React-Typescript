@@ -73,7 +73,7 @@ const confirmVerify = ({
               />
             </Link>
           )}
-          <h1 className="c-auth__title tempo">{`${siteTitle}`}</h1>
+          <h1 className="c-auth__title din">{siteTitle}</h1>
           <p className="c-auth__subticonfirmtle">Verification for</p>
           <p>
             {
