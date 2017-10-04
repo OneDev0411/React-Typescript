@@ -4,7 +4,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #eaeaea;
+    background-color: #f0f4f7;
   }
 }
 
@@ -21,20 +21,22 @@
 }
 
 .c-auth {
-  max-width: 36rem;
-  padding: 4rem 2rem;
+  max-width: 40rem;
+  padding: 3rem 2rem;
+  margin: 0 auto;
   font-size: 1.6rem;
+  font-weight: 300;
   line-height: 1;
+  color: #88a3b7;
 
   @media screen and (min-width: 35em) {
     // 560px
     width: 48rem;
     max-width: 100%;
-    padding-left: 4rem;
-    padding-right: 4rem;
+    margin: 0;
     border-radius: 5px;
     background-color: #fff;
-    box-shadow: 0 0 6px -2px #444;
+    box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.1);
   }
 
   .c-auth--register > & {
@@ -64,8 +66,9 @@
 }
 
 .c-auth__logo {
-  width: 6.4rem;
-  margin-bottom: 1rem;
+  width: 6rem;
+  border-radius: 3px;
+  margin-bottom: 3rem;
 
   .c-auth--register & {
     @media screen and (min-width: 50em) {
@@ -79,16 +82,20 @@
 }
 
 .c-auth__title {
-  margin: 0 0 3rem;
+  margin: 0 0 1rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #15374d;
 }
 
 .c-auth__subtitle {
-  color: #929292;
   text-align: center;
+  font-size: 1.7rem;
+  line-height: 1;
 
-  .c-auth__title + & {
-    margin-top: 2rem;
-  }
+  // .c-auth__title + & {
+  //   margin-top: 2rem;
+  // }
 }
 
 .c-auth__field {
@@ -106,12 +113,14 @@
 .c-auth__field__input {
   width: 100%;
   height: 4.4rem;
-  padding: 7px 14px;
+  padding: 7px 1rem;
   transition: 0.4s;
   color: #333;
   letter-spacing: 1px;
+  border-radius: 3px;
+  color: #15374d;
   background: transparent;
-  border: 1px solid #ccc;
+  border: 1px solid #dce5eb;
 
   &:focus {
     outline: none;
@@ -126,15 +135,8 @@
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #2196f3;
+  background-color: darken(#dce5eb, 10%);
   transition: 0.3s;
-}
-
-.focus-border:after,
-.focus-border:before {
-  .has-error ~ & {
-    background-color: red;
-  }
 }
 
 .c-auth__field__input ~ .focus-border:after {
@@ -151,13 +153,10 @@
   left: 0;
   width: 2px;
   height: 0;
-  background-color: #2196f3;
+  background-color: darken(#dce5eb, 10%);
   transition: 0.4s;
 }
-.has-error ~ .focus-border i:before,
-.has-error ~ .focus-border i:after {
-  background-color: red;
-}
+
 .c-auth__field__input ~ .focus-border i:after {
   left: auto;
   right: 0;
@@ -182,22 +181,26 @@
 .c-auth__field__label {
   position: absolute;
   top: 1.5rem;
-  left: 1.5rem;
+  left: 1rem;
   cursor: text;
   transition: 0.3s;
   line-height: 1;
-  font-size: 1.6rem;
-  font-weight: normal;
+  font-size: 1.7rem;
+  font-weight: inherit;
   letter-spacing: 0.5px;
-  color: #aaa;
+  color: #d1d7dc;
 
   .c-auth__field__input:focus + &,
   .has-content.c-auth__field__input + & {
     top: -18px;
     left: 0;
     font-size: 1.4rem;
-    color: #2196f3;
+    color: darken(#dce5eb, 10%);
     transition: 0.3s;
+
+    > sup {
+      color: red;
+    }
   }
 }
 
@@ -222,42 +225,45 @@
   }
 }
 
-.c-auth__submit-alert,
+.c-auth__field__error-alert {
+  margin-top: 1rem;
+  padding: 0.7rem 1rem;
+}
+
 .c-auth__field__error-alert,
+.c-auth__submit-alert,
 .c-auth__submit-error-alert,
 .c-auth__submit-alert--success {
-  padding: 0.5rem 1.5rem;
-  font-size: 1.5rem;
-  color: #fff;
-  background: red;
+  border-radius: 3px;
+  font-size: 1.4rem;
 }
 
 .c-auth__submit-alert,
 .c-auth__submit-error-alert,
 .c-auth__submit-alert--success {
   margin-top: 2rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding: 1rem;
   line-height: 1.5;
 }
 
+.c-auth__field__error-alert,
 .c-auth__submit-error-alert {
-  color: darken(red, 20%);
-  border: 1px solid rgba(red, 0.3);
-  background: rgba(red, 0.1);
+  color: #d0011b;
+  background: rgba(208, 2, 27, 0.05);
+  border: 1px solid rgba(208, 2, 27, 0.2);
 }
 
 .c-auth__submit-alert--success {
   margin-bottom: 3rem;
-  color: darken(green, 10%);
-  border: 1px solid rgba(green, 0.3);
-  background: rgba(green, 0.1);
+  color: #15374d;
+  border: 1px solid #d1d7dc;
+  background: rgba(33, 150, 243, 0.1);
 }
 
 .c-auth__submit-alert--warning {
-  color: darken(orange, 13%);
-  border: 1px solid rgba(orange, 0.4);
-  background: rgba(orange, 0.1);
+  color: #f6a623;
+  background: rgba(245, 166, 35, 0.05);
+  border: 1px solid rgba(245, 166, 35, 0.2);
 }
 
 .c-auth--register__houseIcon {
@@ -332,4 +338,9 @@
   padding: 0;
   border-width: 0;
   background: transparent;
+}
+
+.c-forgot {
+  margin-top: -2rem;
+  font-size: 1.4rem;
 }

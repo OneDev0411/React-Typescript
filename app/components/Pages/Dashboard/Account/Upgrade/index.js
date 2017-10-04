@@ -33,18 +33,9 @@ const AgentConfirm = ({
         className="signin-page-wrapper c-auth--register clearfix"
         style={{ background: '#f0f4f7' }}
       >
-        {/* <div
-          className="c-auth--register__houseIcon"
-          style={{ paddingBottom: '6.5rem' }}
-        >
-          <img
-            src="/static/images/signup/ntreis-logo.png"
-            alt="rechat ntreis logo"
-          />
-        </div> */}
         <article className="c-auth" style={{ background: 'inherit' }}>
           <header className="c-auth__header" style={{ marginBottom: '4rem' }}>
-            <h1 className="c-auth__title tempo">{`${siteTitle}`}</h1>
+            <h1 className="c-auth__title din">{siteTitle}</h1>
             <p className="c-auth__subtitle">Upgrade to agent account</p>
             <div>
               <small>Enter your agent license # to unlock MLS features.</small>
