@@ -18,7 +18,8 @@ class Authentication extends React.Component {
 
     const elements = React.cloneElement(children, {
       data,
-      user
+      user,
+      location
     })
 
     return <div>{elements}</div>

@@ -13,7 +13,7 @@ import AppLayout from '../components/App'
 
 const AsyncAuthenticationLayout = Load({
   loader: () =>
-    import('../components/Authentication' /* webpackChunkName: "authlay" */)
+    import('./components/Authentication' /* webpackChunkName: "authlay" */)
 })
 
 // Pages
@@ -311,13 +311,13 @@ export default (
       />
 
       <Route path="/mobile" component={AsyncMobile} />
-    </Route>
 
-    <Route path="/" component={AppLayout}>
       <Route path="/widgets/map" component={AsyncMapWidget} />
       <Route path="/widgets/search" component={AsyncSearchWidget} />
       <Route path="/widgets/listings" component={AsyncListingsWidget} />
+    </Route>
 
+    <Route path="/" component={AppLayout}>
       <Route path="dashboard/mls" component={AsyncListingsLayout}>
         <IndexRoute component={AsyncListingsSearch} />
       </Route>
@@ -366,16 +366,18 @@ export default (
 
       <Route path="/dashboard/brands">
         <IndexRoute component={AsyncBrands} />
-        <Route path="/dashboard/brands/checklist/:brand" component={AsyncChecklistBrand} />
-        <Route path="/dashboard/brands/role/:brand" component={AsyncRoleBrand} />
+        <Route
+          path="/dashboard/brands/checklist/:brand"
+          component={AsyncChecklistBrand}
+        />
+        <Route
+          path="/dashboard/brands/role/:brand"
+          component={AsyncRoleBrand}
+        />
       </Route>
 
       <Route path="/dashboard/website" component={AsyncWebsite} />
       <Route path="/dashboard/forms" component={AsyncForms} />
-
-      <Route path="/widgets/map" component={AsyncMapWidget} />
-      <Route path="/widgets/search" component={AsyncSearchWidget} />
-      <Route path="/widgets/listings" component={AsyncListingsWidget} />
     </Route>
 
     <Route path="/oops" component={AsyncOops} />
