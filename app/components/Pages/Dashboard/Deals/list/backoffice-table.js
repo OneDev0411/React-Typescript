@@ -6,6 +6,7 @@ import merge from 'merge'
 import _ from 'underscore'
 import BaseTable from './table'
 import Deal from '../../../../../models/Deal'
+import getNeedsAttentions from '../utils/needs-attention'
 
 class BackOfficeTable extends BaseTable {
   constructor(props) {
@@ -161,38 +162,7 @@ class BackOfficeTable extends BaseTable {
     const { filters } = this.props
     const filterTab = filters['__inbox_name__']
 
-    const needs_attentions = []
-
-    if (!deal.checklists) {
-      return []
-    }
-
-    // filter checklists based on [deal.id] and [deal.tab_name]
-    const checklists = _.filter(this.props.checklists, list => {
-      let matched = (list.deal === deal.id)
-
-      if (!filterTab || filterTab === 'All') {
-        return matched
-      }
-
-      return matched && list.tab_name === filterTab
-    })
-
-    // get tasks of filtered checklists
-    checklists.forEach(list => {
-      if (!list.tasks) {
-        return
-      }
-
-      list.tasks.forEach(task_id => {
-        const task = this.props.tasks[task_id]
-        if (task.needs_attention) {
-          needs_attentions.push(task.id)
-        }
-      })
-    })
-
-    return needs_attentions
+    return getNeedsAttentions(deal, filterTab)
   }
 
   /**
