@@ -10,16 +10,16 @@ const RedirectModal = ({ children, brandInfo }) => {
       <Modal show className="c-confirm-modal">
         <Modal.Body>
           <header className="c-auth__header">
-            <Link to="/" tabIndex={-1}>
-              <img
-                src={siteLogo}
-                alt={`${siteTitle} logo`}
-                className={'c-auth__logo'}
-              />
-            </Link>
-            <h1 className="c-auth__title tempo">
-              {`${siteTitle}`}
-            </h1>
+            {siteLogo && (
+              <Link to="/" tabIndex={-1}>
+                <img
+                  src={siteLogo}
+                  alt={`${siteTitle}`}
+                  className={'c-auth__logo'}
+                />
+              </Link>
+            )}
+            <h1 className="c-auth__title tempo">{`${siteTitle}`}</h1>
           </header>
           {children}
         </Modal.Body>
