@@ -70,7 +70,7 @@ const Signup = ({
               />
             </Link>
           )}
-          <h1 className="c-auth__title tempo">{`${siteTitle}`}</h1>
+          <h1 className="c-auth__title din">{`${siteTitle}`}</h1>
           {!submitSuccessfully ? (
             <p className="c-auth__subtitle">Hello, lets get started.</p>
           ) : (
@@ -113,7 +113,14 @@ const Signup = ({
             <div style={{ textAlign: 'center' }}>
               <p className="c-auth__submit-alert--success">
                 Check your email and confirm your email address to continue.
-                Please <Link to="/signin">sign in</Link>.
+                Please{' '}
+                <Link
+                  to={`/signin?username=${encodeURIComponent(
+                    submitSuccessfully
+                  )}`}
+                >
+                  sign in
+                </Link>.
               </p>
             </div>
           )}

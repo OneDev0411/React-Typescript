@@ -3,12 +3,9 @@ import S from 'shorti'
 import React, { Component } from 'react'
 import { FormControl } from 'react-bootstrap'
 import config from '../../../../../config/public'
-import AppStore from '../../../../stores/AppStore'
 
 export default class Search extends Component {
   componentDidMount() {
-    AppStore.data.is_widget = true
-
     const GoogleMapsLoader = require('google-maps')
     GoogleMapsLoader.LIBRARIES = ['places']
     GoogleMapsLoader.KEY = config.google.api_key

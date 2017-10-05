@@ -18,10 +18,10 @@ class Search extends Component {
   constructor(props) {
     super(props)
 
-    const { data: appData, isWidget } = props
+    const { location } = props
 
     this.searchQuery =
-      appData.location && isWidget ? appData.location.query.q : ''
+      location && location.query && location.query.q ? location.query.q : ''
 
     this.state = {
       shareModalIsActive: false,

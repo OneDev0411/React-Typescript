@@ -15,8 +15,8 @@ export const getBrandInfo = brand => {
 
   if (brand) {
     siteLogo = Brand.asset('site_logo', null, brand)
-    siteTitle = Brand.message('office_title', siteTitle, brand)
     brandColor = `#${Brand.color('primary', '2196f3', brand)}`
+    siteTitle = Brand.message('office_title', siteTitle, brand)
   }
 
   return {
@@ -30,7 +30,7 @@ export const renderField = ({
   type,
   input,
   label,
-  tabIndex,
+  require,
   autoFocus = false,
   meta: { dirty, error }
 }) => {
@@ -40,15 +40,14 @@ export const renderField = ({
       <div className="c-auth__field__input-wrapper">
         <input
           {...input}
-          id={input.name}
-          tabIndex={tabIndex}
           type={type}
+          id={input.name}
           className={`c-auth__field__input ${(input.value && 'has-content') ||
             ''} ${hasError ? 'has-error' : ''}`}
         />
         <label htmlFor={input.name} className="c-auth__field__label">
           <span>{label}</span>
-          <sup>*</sup>
+          {require && <sup>*</sup>}
         </label>
         <span className="focus-border">
           <i />
@@ -59,7 +58,7 @@ export const renderField = ({
   )
 }
 
-let SigninForm = ({
+const SigninForm = ({
   brand,
   invalid,
   pristine,
@@ -84,9 +83,8 @@ let SigninForm = ({
               />
             </Link>
           )}
-          <p>Sign into</p>
-          <h1 className="c-auth__title tempo">{`${siteTitle}`}</h1>
-          {/* <p>It’s nice to have you back!</p> */}
+          <h1 className="c-auth__title din">{siteTitle}</h1>
+          <p className="c-auth__subtitle">Hi, welcome back!</p>
         </header>
         <main className="c-auth__main">
           <form onSubmit={handleSubmit(onSubmitHandler)}>
@@ -103,7 +101,9 @@ let SigninForm = ({
               label="Password"
               component={renderField}
             />
-            <Link to="/password/forgot">Forgot your password?</Link>
+            <div className="c-forgot u-align-right">
+              <Link to="/password/forgot">Forgot your password?</Link>
+            </div>
             {submitError && (
               <div className="c-auth__submit-error-alert">
                 The email or password is incorrect. Please try again.
@@ -151,11 +151,6 @@ const validate = values => {
   return errors
 }
 
-SigninForm = reduxForm({
-  form: 'signin',
-  validate
-})(SigninForm)
-
 export default compose(
   connect(
     ({ brand, auth: { signin } }, { location: { query = {}, state = {} } }) => {
@@ -173,6 +168,10 @@ export default compose(
     },
     { submitSigninForm }
   ),
+  reduxForm({
+    form: 'signin',
+    validate
+  }),
   withHandlers({
     onSubmitHandler: ({ submitSigninForm, redirectTo }) => values => {
       submitSigninForm(values, redirectTo)
