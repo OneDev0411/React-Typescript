@@ -40,6 +40,7 @@ const map = ({
   style,
   appData,
   options,
+  isWidget,
   onChange,
   clusters,
   defaultZoom,
@@ -52,7 +53,7 @@ const map = ({
   onClusterMarkerClick,
   mapProps: { zoom, center },
   map: { hoveredMarkerId, drawing }
-}) =>
+}) => (
   <div>
     <Map
       zoom={zoom}
@@ -94,12 +95,13 @@ const map = ({
         )
       })}
     </Map>
-    <NotLoggedInMessage isLoggedIn={appData.user ? true : ''} />
+    {!isWidget && <NotLoggedInMessage isLoggedIn={appData.user ? true : ''} />}
     <DrawingRemoveButton
       onClick={onClickRemovePolygon}
       points={drawing.points}
     />
   </div>
+)
 
 const mapHOC = compose(
   defaultProps({
