@@ -21,7 +21,8 @@ export default class Listings extends Component {
   }
 
   updateHeight() {
-    if (this.height !== this.parentDiv.scrollHeight) {
+    if (this.parentDiv &&
+      this.height !== this.parentDiv.scrollHeight) {
       parent.postMessage({ height: this.parentDiv.scrollHeight }, '*')
       this.height = this.parentDiv.scrollHeight
     }
