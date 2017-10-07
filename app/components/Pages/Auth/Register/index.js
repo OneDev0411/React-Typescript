@@ -238,7 +238,7 @@ export default compose(
 
       const loginInfo = {
         password,
-        username: email || emailFromURI
+        username: emailFromURI
       }
 
       if (phone_number) {
