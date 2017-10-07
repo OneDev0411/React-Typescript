@@ -16,7 +16,7 @@ const VerifyRedirectModal = ({ type, params, brandInfo }) => {
         <div>
           <h3 className="c-confirm-modal__title">Verification Conflict</h3>
           <p className="c-confirm-modal__message">
-            You are currently logged in as a different user. Please log out to verify this account.
+            You are currently logged in as a different user. Please sign out to verify this account.
           </p>
           <div>
             <Link
