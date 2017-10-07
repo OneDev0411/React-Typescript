@@ -1,6 +1,27 @@
 import React from 'react'
 import actions from '../../../../../../../../../store_actions/listings/alerts'
 
+// https://github.com/DieterHolvoet/event-propagation-path
+Event.prototype.propagationPath = function propagationPath() {
+  const polyfill = () => {
+    let element = this.target
+    let pathArr = [element]
+
+    if (element === null || element.parentElement === null) {
+      return []
+    }
+
+    while (element.parentElement !== null) {
+      element = element.parentElement
+      pathArr.unshift(element)
+    }
+
+    return pathArr
+  }
+
+  return this.path || (this.composedPath && this.composedPath()) || polyfill()
+}
+
 class AlertListItemMenu extends React.Component {
   constructor(props) {
     super(props)
@@ -24,12 +45,13 @@ class AlertListItemMenu extends React.Component {
   }
 
   _onCLickDocumentHandler(event) {
-    const hasThisComponentInItsPath = event.path.some(
-      node =>
-        node instanceof HTMLElement && this.componentNode.isEqualNode(node)
-    )
+    const triggeredNodeIsEqualWithComponentNode = event
+      .propagationPath()
+      .includes(this.componentNode)
 
-    if (!hasThisComponentInItsPath) {
+    console.log(triggeredNodeIsEqualWithComponentNode)
+
+    if (!triggeredNodeIsEqualWithComponentNode) {
       this._setIsOpen(false)
       document.removeEventListener('click', this._onCLickDocumentHandler, false)
     }

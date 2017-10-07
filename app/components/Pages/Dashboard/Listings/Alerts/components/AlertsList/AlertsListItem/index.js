@@ -57,10 +57,6 @@ const AlertListItem = ({
         </p>}
       {alert.users && <SharedWith alert={alert} />}
     </div>
-    <AlertListItemMenu
-      alertId={alert.id}
-      onClickDelete={() => onClickDelete(alert)}
-    />
     {alert.new_recommendations &&
       parseInt(alert.new_recommendations, 10) > 0 &&
       <span
@@ -69,6 +65,10 @@ const AlertListItem = ({
       >
         {alert.new_recommendations}
       </span>}
+    <AlertListItemMenu
+      alertId={alert.id}
+      onClickDelete={() => onClickDelete(alert)}
+    />
   </div>
 
 export default compose(
