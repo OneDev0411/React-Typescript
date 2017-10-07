@@ -29,7 +29,7 @@ const LoadingHandler = props => {
       window.location.reload(true)
     }
 
-    return <div>Oops... something went wrong. please reload your browser to continue</div>
+    return <Loader />
   }
 
   if (isLoading && pastDelay) {

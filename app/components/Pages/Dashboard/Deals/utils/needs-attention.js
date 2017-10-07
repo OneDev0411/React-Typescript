@@ -29,7 +29,7 @@ export default function(deal, filterTab = null) {
 
     list.tasks.forEach(task_id => {
       const task = deals.tasks[task_id]
-      if (task.needs_attention) {
+      if (task && task.needs_attention) {
         needs_attentions.push(task.id)
       }
     })

@@ -94,9 +94,9 @@ export function getDeals(user, backoffice = false) {
       const { deals, checklists, tasks } = entities
 
       batchActions([
-        dispatch(setDeals(deals)),
+        dispatch(setTasks(tasks)),
         dispatch(setChecklists(checklists)),
-        dispatch(setTasks(tasks))
+        dispatch(setDeals(deals))
       ])
     } catch (e) {
       // log
