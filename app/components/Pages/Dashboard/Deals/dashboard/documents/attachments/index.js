@@ -3,6 +3,7 @@ import UploadFile from './upload'
 import FileAttachments from './files'
 
 export default ({
+  deal,
   task
 }) => {
 
@@ -23,6 +24,7 @@ export default ({
         hasAttachments &&
         <div className="file-group">
           <FileAttachments
+            deal={deal}
             task={task}
             attachments={attachments}
           />

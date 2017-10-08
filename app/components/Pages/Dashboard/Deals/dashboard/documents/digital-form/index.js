@@ -32,14 +32,17 @@ class Form extends React.Component {
 
     const { submission } = task
     const attachments = submission && submission.state === 'Fair' ? [task.id] : []
+
+    // get or create pdfFile object
     const pdfFile = task.submission ? task.submission.file : this.getPdfFile()
+    pdfFile.type = 'pdf'
 
     return (
       <div className="file">
         <FormViewer
           deal={deal}
           task={task}
-          form={pdfFile}
+          file={pdfFile}
           isActive={showFormViewer}
           onClose={() => this.setState({ showFormViewer: false })}
         />

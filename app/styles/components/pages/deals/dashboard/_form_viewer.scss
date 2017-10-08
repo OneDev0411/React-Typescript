@@ -135,13 +135,14 @@
       }
     }
 
-    .pdf-viewer {
+    .file-viewer {
       min-height: 91vh;
       max-height: 91vh;
       overflow: scroll;
       margin: 0px auto;
       background-color: #F0F4F7;
       padding: 1.5%;
+      text-align: center;
 
       .loading {
         text-align: center;
@@ -150,6 +151,11 @@
         i {
           margin-bottom: 10px;
         }
+      }
+
+      .image {
+        max-width: 100%;
+        margin: 0 auto;
       }
 
       .pdf-container {

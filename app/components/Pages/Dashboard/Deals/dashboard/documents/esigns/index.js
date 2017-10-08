@@ -27,6 +27,7 @@ export default ({
           _.map(envelopes, (envelope, key) =>
             <Envelope
               key={`ENVELOPE_${key}`}
+              deal={deal}
               task={task}
               envelope={envelope}
             />
