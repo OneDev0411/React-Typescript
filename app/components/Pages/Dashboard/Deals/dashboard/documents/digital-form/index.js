@@ -23,10 +23,10 @@ class Form extends React.Component {
   }
 
   render() {
-    const { deal, task, editForm } = this.props
+    const { deal, task, isBackOffice, editForm } = this.props
     const { showFormViewer } = this.state
 
-    if (!task || !task.form) {
+    if (isBackOffice || !task || !task.form) {
       return false
     }
 
@@ -84,4 +84,6 @@ class Form extends React.Component {
 }
 
 
-export default connect(null, { editForm })(Form)
+export default connect(({ deals }) => ({
+  isBackOffice: deals.backoffice
+}), { editForm })(Form)
