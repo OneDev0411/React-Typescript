@@ -1,40 +1,33 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import Comments from '../comments'
-import SubmitReview from '../submit-review'
 
 const Header = ({
   task,
-  isBackOffice
+  onCloseTask
 }) => (
   <table className="heading">
     <tbody>
       <tr>
         <td
           className="title"
-          style={{ width: isBackOffice ? '100%': '70%' }}
+          style={{ width: '80%' }}
         >
           { task.title }
         </td>
 
-        {
-          !isBackOffice &&
-          <td
-            className="submit"
-            style={{ width: '30%' }}
+        <td
+          className="task-close"
+          style={{ width: '20%' }}
+        >
+          <button
+            className="deal-button close-task"
+            onClick={() => onCloseTask()}
           >
-            <SubmitReview
-              key={task.id}
-              task={task}
-            />
-          </td>
-        }
+            X
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>
 )
 
-
-export default connect(({ deals }) => ({
-  isBackOffice: deals.backoffice
-}))(Header)
+export default Header

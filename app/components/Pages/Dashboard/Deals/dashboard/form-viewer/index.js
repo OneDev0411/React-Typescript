@@ -29,12 +29,16 @@ class FormViewer extends React.Component {
 
   render() {
     const { showFactsheet, showComments } = this.state
-    const { deal, task, form, isActive, onClose} = this.props
-    const { name, url } = form
+    const { deal, task, title, file, isActive, onClose} = this.props
+    const { name, type, url } = file
 
     const COMMENTS_WIDTH = showComments ? '300px' : '0px'
     const FACTSHEET_WIDTH = showFactsheet ? '300px' : '0px'
     const PDF_WIDTH = `calc(100% - ${COMMENTS_WIDTH} - ${FACTSHEET_WIDTH})`
+
+    if (['pdf', 'image'].indexOf(type) === -1) {
+      return null
+    }
 
     return (
       <Modal
@@ -51,7 +55,7 @@ class FormViewer extends React.Component {
           </Button>
 
           <span className="title">
-            { name }
+            { title || name }
           </span>
 
           <div className="cta">
@@ -95,12 +99,24 @@ class FormViewer extends React.Component {
                 minWidth: PDF_WIDTH,
                 maxWidth: PDF_WIDTH
               }}
-              className="pdf-viewer"
+              className="file-viewer"
             >
-              <PdfViewer
-                uri={url}
-                scale="auto"
-              />
+              {
+                type === 'pdf' &&
+                <PdfViewer
+                  uri={url}
+                  scale="auto"
+                />
+              }
+
+              {
+                type === 'image' &&
+                <img
+                  className="image"
+                  src={url}
+                  alt={name}
+                />
+              }
             </div>
 
             <div
@@ -116,7 +132,6 @@ class FormViewer extends React.Component {
               />
 
               <CommentInput
-                noCloseButton
                 task={task}
               />
             </div>

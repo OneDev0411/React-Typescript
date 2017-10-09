@@ -4,7 +4,7 @@ import { Row, Col, Dropdown, Button } from 'react-bootstrap'
 import Lightbox from 'react-images'
 import moment from 'moment'
 import _ from 'underscore'
-import FileModal from '../../../../../../Partials/Pdf/Modal'
+import FormViewer from '../../form-viewer'
 import { deleteAttachment } from '../../../../../../../store_actions/deals'
 import VerticalDotsIcon from '../../../../Partials/Svgs/VerticalDots'
 
@@ -58,7 +58,7 @@ class FileAttachments extends React.Component {
   }
 
   render() {
-    const { attachments, task } = this.props
+    const { attachments, deal, task } = this.props
     const { showViewer, selectedFile, deleting } = this.state
 
     const files = attachments
@@ -73,14 +73,16 @@ class FileAttachments extends React.Component {
 
     return (
       <div>
-        <FileModal
+        <FormViewer
+          deal={deal}
+          task={task}
           file={{
             type: selectedFile.type,
             name: selectedFile.name,
-            src: selectedFile.src
+            url: selectedFile.src
           }}
           isActive={showViewer}
-          onCloseHandler={() => this.setState({ showViewer: false })}
+          onClose={() => this.setState({ showViewer: false })}
         />
 
         {

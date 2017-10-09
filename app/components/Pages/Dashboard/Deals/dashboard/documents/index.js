@@ -21,6 +21,7 @@ export default ({
     />
 
     <Attachments
+      deal={deal}
       task={task}
     />
   </div>

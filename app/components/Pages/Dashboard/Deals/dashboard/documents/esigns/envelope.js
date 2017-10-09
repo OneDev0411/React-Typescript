@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Dropdown, Button } from 'react-bootstrap'
+import FormViewer from '../../form-viewer'
 import WhoSigned from './who-signed'
-import FormModal from '../../../../../../Partials/Pdf/Modal'
 import config from '../../../../../../../../config/public'
 
 class Envelope extends React.Component {
@@ -45,28 +45,32 @@ class Envelope extends React.Component {
   }
 
   render() {
-    const { envelope } = this.props
+    const { deal, task, envelope } = this.props
     const { showFormViewer } = this.state
     const { recipients } = envelope
     const areSigned = recipients.filter(r => r.status === 'Completed')
     const notSigned = recipients.filter(r => r.status !== 'Completed')
+
     const formUrl = this.getFormUrl()
 
-    console.log(formUrl)
+    const pdfFile = {
+      name: envelope.title,
+      type: 'pdf',
+      url: formUrl
+    }
 
     return (
       <div
         className="item eSign"
         key={`eSign_${envelope.id}`}
       >
-        <FormModal
-          file={{
-            type: 'pdf',
-            name: envelope.title,
-            src: formUrl
-          }}
+
+        <FormViewer
+          deal={deal}
+          task={task}
+          file={pdfFile}
           isActive={showFormViewer}
-          onCloseHandler={() => this.toggleFormViewer()}
+          onClose={() => this.toggleFormViewer()}
         />
 
         <div className="image">

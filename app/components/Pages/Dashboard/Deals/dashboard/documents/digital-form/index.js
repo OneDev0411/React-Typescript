@@ -23,23 +23,26 @@ class Form extends React.Component {
   }
 
   render() {
-    const { deal, task, editForm } = this.props
+    const { deal, task, isBackOffice, editForm } = this.props
     const { showFormViewer } = this.state
 
-    if (!task || !task.form) {
+    if (isBackOffice || !task || !task.form) {
       return false
     }
 
     const { submission } = task
     const attachments = submission && submission.state === 'Fair' ? [task.id] : []
+
+    // get or create pdfFile object
     const pdfFile = task.submission ? task.submission.file : this.getPdfFile()
+    pdfFile.type = 'pdf'
 
     return (
       <div className="file">
         <FormViewer
           deal={deal}
           task={task}
-          form={pdfFile}
+          file={pdfFile}
           isActive={showFormViewer}
           onClose={() => this.setState({ showFormViewer: false })}
         />
@@ -84,4 +87,6 @@ class Form extends React.Component {
 }
 
 
-export default connect(null, { editForm })(Form)
+export default connect(({ deals }) => ({
+  isBackOffice: deals.backoffice
+}), { editForm })(Form)

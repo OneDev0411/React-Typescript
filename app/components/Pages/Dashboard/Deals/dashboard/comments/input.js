@@ -69,7 +69,6 @@ class CommentCreate extends React.Component {
           dismissible: true
         })
       }
-
     } catch(e) {
       notify({
         message: 'Can not complete this action. try again',
@@ -85,7 +84,7 @@ class CommentCreate extends React.Component {
 
   render() {
     const { comment, rows, height, isSaving } = this.state
-    const { task, noCloseButton, onCloseTask } = this.props
+    const { task } = this.props
     const hasComment = comment.length > 0
 
     return (
@@ -107,32 +106,14 @@ class CommentCreate extends React.Component {
           onHeightChange={height => this.onHeightChangeHandler(height)}
         />
 
-        <Row>
-          <Col md={1} sm={1}>
-            {
-              noCloseButton !== true &&
-              <button
-                className="deal-button close-task"
-                onClick={() => onCloseTask()}
-              >
-                X
-              </button>
-            }
-          </Col>
-
-          <Col
-            md={noCloseButton ? 12 : 11}
-            sm={noCloseButton ? 12 : 11}
-            style={{ textAlign: 'right'}}
-          >
-            <ActionButtons
-              hasComment={hasComment}
-              isSaving={isSaving}
-              task={task}
-              onSendComment={(notify, status) => this.sendComment(notify, status)}
-            />
-          </Col>
-        </Row>
+        <div className="cta-container">
+          <ActionButtons
+            hasComment={hasComment}
+            isSaving={isSaving}
+            task={task}
+            onSendComment={(notify, status) => this.sendComment(notify, status)}
+          />
+        </div>
 
       </div>
     )

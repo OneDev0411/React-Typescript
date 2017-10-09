@@ -45,7 +45,7 @@
     color: #1d364b
   }
 
-  .submit {
+  .task-close {
     text-align: right;
     vertical-align: middle;
     padding-right: 10px;
@@ -70,23 +70,8 @@
     }
   }
 
-  .btn-submit {
-    min-width: 70px;
-    font-size: 15px;
-    cursor: pointer;
-    margin-top: 0;
-    background-color: #fdfdfd;
-    color: #2196f3;
-    border-color: #2196f3;
-    overflow: hidden;
-    &:hover {
-      background-color: #2196f3;
-      color: #fdfdfd;
-    }
-    &.saving {
-      cursor: auto;
-      background-color: #fdfdfd;
-      color: #2196f3;
-    }
+  .close-task {
+    font-size: 18px;
+    width: 34px;
   }
 }
