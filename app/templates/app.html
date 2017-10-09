@@ -115,6 +115,14 @@
   <script type="text/javascript">
     window._trackJs = { token: '4a7e52ac864c4e86a95a7bf290f49500' };
   </script>
+  <script src="https://cdn.ravenjs.com/3.18.1/raven.min.js"
+          crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    Raven.config('https://de36e1eaac164d97ba7445145adebfa1@sentry.io/226388', {
+      release: '3.1.0',
+      debug: true
+    }).install()
+  </script>
   <script type="text/javascript" src="https://cdn.trackjs.com/releases/current/tracker.js"></script>
 </body>
 
