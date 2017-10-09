@@ -112,6 +112,13 @@ const appNavbar = ({
           </Link>
         </NavbarItem>
 
+        { user.user_type !== 'Client' &&
+          <NavbarItem title="Contacts">
+            <Link to="/dashboard/contacts">
+              <SvgPeople color={activePath === 'CONTACTS' ? ACTIVE_COLOR : DEFAULT_COLOR} />
+            </Link>
+          </NavbarItem> }
+
         { user.brand &&
           user.features &&
           (user.features.includes('Deals') ||
@@ -119,13 +126,6 @@ const appNavbar = ({
           <NavbarItem title="Deals">
             <Link to="/dashboard/deals">
               <DealsIcon color={activePath === 'DEALS' ? ACTIVE_COLOR : DEFAULT_COLOR} />
-            </Link>
-          </NavbarItem> }
-
-        { user.user_type !== 'Client' &&
-          <NavbarItem title="Contacts">
-            <Link to="/dashboard/contacts">
-              <SvgPeople color={activePath === 'CONTACTS' ? ACTIVE_COLOR : DEFAULT_COLOR} />
             </Link>
           </NavbarItem> }
       </ul>
