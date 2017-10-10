@@ -28,6 +28,7 @@ const TaskManager = ({
         >
           <Header
             task={task}
+            onCloseTask={() => onCloseTask()}
           />
 
           <Documents
@@ -43,7 +44,6 @@ const TaskManager = ({
         <CommentInput
           key={`CM_INPUT_${task.id}`}
           task={task}
-          onCloseTask={() => onCloseTask()}
         />
       </UploadFile>
     </div>

@@ -77,6 +77,10 @@
     }
   }
 
+  .cta-container {
+    text-align: right;
+  }
+
   .deal-button {
     box-shadow: none;
     height: 30px;
@@ -90,28 +94,38 @@
     margin-bottom: 3px;
     transition: 0.2s all ease-in;
 
-    &.decline-comment, &.approve-comment, &.close-comment {
+    &.decline-comment, &.approve-comment {
       &:hover {
         border-color: #2196f3;
         color: #2196f3;
       }
     }
 
-    &.approve-comment,
-    &.close-comment {
+    &.approve-comment {
       border: solid 1px #35b863;
       color: #35b863;
       background-color: transparent;
+      &:hover {
+        background-color: #35b863;
+        border-color: #35b863;
+        color: #fff;
+      }
     }
 
     &.decline-comment {
       border: solid 1px #d0011b;
       color: #d0011b;
       background-color: transparent;
+      &:hover {
+        background-color: #d0011b;
+        border-color: #d0011b;
+        color: #fff;
+      }
     }
 
     &.add-comment,
-    &.notify-admin {
+    &.notify-admin,
+    &.submit-review {
       transition: 0.1s ease-in all;
       &:hover {
         color: #78909c;
@@ -124,26 +138,6 @@
           color: #fff;
           background-color: #2196f3;
         }
-      }
-    }
-
-    &.close-task {
-      width: 30px;
-      font-weight: 600px;
-      line-height: 25px;
-      font-size: 16px;
-      &:hover {
-        color: #fff;
-        background-color: #2196f3;
-        border-color: #2196f3;
-      }
-    }
-
-    &.disabled {
-      &:hover {
-        background-color: #fff;
-        color: #78909c;
-        border-color: #e6eaec;
       }
     }
   }
