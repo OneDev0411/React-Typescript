@@ -73,6 +73,19 @@ Deal.get.address = function(deal) {
 }
 
 /**
+* a helper that formats price
+*/
+Deal.get.formattedPrice = function(number) {
+  if (!number) {
+    return number
+  }
+
+  return '$' + number
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
+
+/**
 * get deal by id
 */
 Deal.getById = async function(id) {
