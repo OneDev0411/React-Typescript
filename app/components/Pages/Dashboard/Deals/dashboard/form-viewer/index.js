@@ -106,6 +106,7 @@ class FormViewer extends React.Component {
                 <PdfViewer
                   uri={url}
                   scale="auto"
+                  containerHeight="85vh"
                 />
               }
 

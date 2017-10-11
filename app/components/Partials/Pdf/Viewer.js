@@ -14,7 +14,7 @@ class PdfViewer extends React.Component {
       uri: null,
       loading: false,
       doc: null,
-      pageNumber: 1
+      zoom: null
     }
   }
 
@@ -22,8 +22,9 @@ class PdfViewer extends React.Component {
     const { uri } = this.props
     this.mounted = true
 
-    if (uri)
+    if (uri) {
       this.load(uri)
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -51,15 +52,16 @@ class PdfViewer extends React.Component {
       uri,
       loading: true,
       doc: null,
-      pageNumber: 1
+      rotation: 0
     })
 
     try {
       const doc = await PDFJS.getDocument(uri)
 
       // trigger when load is completed
-      if (!this.mounted)
+      if (!this.mounted) {
         return false
+      }
 
       // set states
       this.setState({ doc, loading: false })
@@ -72,23 +74,46 @@ class PdfViewer extends React.Component {
     }
   }
 
-  prevPage() {
-    const { pageNumber } = this.state
-
-    if (pageNumber > 1)
-      this.setState({ pageNumber: pageNumber - 1 })
+  rotate() {
+    const { rotation } = this.state
+    const newRotation = rotation + 90 < 360 ? rotation + 90 : 0
+    this.setState({
+      rotation: newRotation,
+    })
   }
 
-  nextPage() {
-    const { pageNumber, doc } = this.state
+  zoomIn() {
+    const zoom = this.state.zoom || 0
+    if (zoom >= 1.5) {
+      return false
+    }
 
-    if (pageNumber < doc.pdfInfo.numPages)
-      this.setState({ pageNumber: pageNumber + 1 })
+    this.setState({
+      zoom: zoom + 0.5
+    })
+  }
+
+  zoomOut() {
+    const zoom = this.state.zoom || 0
+
+    if (zoom <= 0) {
+      return false
+    }
+
+    this.setState({
+      zoom: zoom - 0.5
+    })
+  }
+
+  fitWindow() {
+    this.setState({
+      zoom: null
+    })
   }
 
   render() {
-    const { doc, pageNumber, loading } = this.state
-    const { scale } = this.props
+    const { doc, rotation, zoom, loading } = this.state
+    const { scale, containerHeight } = this.props
 
     return (
       <div>
@@ -103,21 +128,49 @@ class PdfViewer extends React.Component {
         {
           doc && !loading &&
           <div className="pdf-context">
-            <Page
-              doc={doc}
-              scale={scale}
-              pageNumber={pageNumber}
-            />
+            <div className="wrapper">
+              {
+                Array.apply(null, { length: doc.pdfInfo.numPages })
+                .map((v, i) => (
+                  <Page
+                    key={`page-${i}`}
+                    doc={doc}
+                    rotation={rotation}
+                    scale={scale}
+                    zoom={zoom}
+                    containerHeight={containerHeight}
+                    pageNumber={i+1}
+                  />
+                ))
+              }
+            </div>
 
-            <div className="pagination">
+            <div className="toolbar">
               <i
-                className="left fa fa-chevron-circle-left fa-2x"
-                onClick={this.prevPage.bind(this)}
+                className="fa fa-rotate-right"
+                onClick={() => this.rotate()}
               />
-              <span className="pnum">{ pageNumber } / { doc.pdfInfo.numPages }</span>
+
+              {
+                zoom !== null &&
+                <span>
+                  Zoom: {(zoom+1) * 100}%
+                </span>
+              }
+
               <i
-                className="right fa fa-chevron-circle-right fa-2x"
-                onClick={this.nextPage.bind(this)}
+                className="fa fa-plus-circle"
+                onClick={() => this.zoomIn()}
+              />
+
+              <i
+                className="fa fa-minus-circle"
+                onClick={() => this.zoomOut()}
+              />
+
+              <i
+                className="fa fa-arrows-alt"
+                onClick={() => this.fitWindow()}
               />
             </div>
           </div>
