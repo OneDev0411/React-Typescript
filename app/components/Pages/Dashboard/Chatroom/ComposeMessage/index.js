@@ -9,8 +9,6 @@ class ComposeMessage extends React.Component {
   constructor(props) {
     super(props)
     this.isTyping = false
-    let ert =  test.test
-
   }
 
   async componentDidMount() {
