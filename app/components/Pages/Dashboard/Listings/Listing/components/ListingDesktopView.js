@@ -676,7 +676,7 @@ const ListingDesktopView = ({
                       <div style={S('color-aaaaaa mb-10')}>
                         Garage Spaces:&nbsp;
                         <span style={S('color-777')}>
-                          {property.parking_spaces_garage}
+                          {property.parking_spaces_covered_total}
                         </span>
                       </div>
                       <div style={S('color-aaaaaa mb-10')}>
