@@ -19,7 +19,7 @@ const postcss = function () {
   ]
 }
 
-webpackConfig.devtool = ''
+webpackConfig.devtool = 'source-map'
 
 webpackConfig.performance = {
   hints: 'warning',
@@ -42,6 +42,7 @@ webpackConfig.plugins.push(
     filename: appConfig.compile.jsVendorBundle
   }),
   new webpack.optimize.UglifyJsPlugin({
+    sourceMap: true,
     output: { comments: false }
   }),
   new ExtractTextPlugin({
