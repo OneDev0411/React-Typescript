@@ -73,6 +73,9 @@ class App extends Component {
 
       // load saved listings
       this._fetchFavorites(user)
+
+      // set user for full story
+      this.setFullStoryUser(user)
     }
 
     // check user is mobile device or not
@@ -179,6 +182,15 @@ class App extends Component {
     )
     ReactGA.set({ page: window.location.pathname })
     ReactGA.pageview(window.location.pathname)
+  }
+
+  setFullStoryUser(user) {
+    if (window.FS) {
+      window.FS.identify(user.id, {
+        name: user.display_name,
+        email: user.email
+      })
+    }
   }
 
   showMobileSplashViewer() {
