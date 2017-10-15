@@ -17,7 +17,7 @@ const renderField = ({
   className,
   placeholder,
   meta: { touched, error, warning }
-}) =>
+}) => (
   <div
     className={`c-min-max-inputs__${input.name.indexOf('min') === 0
       ? 'min'
@@ -33,16 +33,15 @@ const renderField = ({
       placeholder={placeholder}
     />
     {touched &&
-      (error &&
-        <div className="c-min-max-inputs__alert has-error">
-          {error}
-        </div>)}
+      (error && (
+        <div className="c-min-max-inputs__alert has-error">{error}</div>
+      ))}
     {touched &&
-      (warning &&
-        <div className="c-min-max-inputs__alert has-warning">
-          {warning}
-        </div>)}
+      (warning && (
+        <div className="c-min-max-inputs__alert has-warning">{warning}</div>
+      ))}
   </div>
+)
 
 const MinMaxInputs = ({
   name,
@@ -103,10 +102,10 @@ export default compose(
       setMinimumValue(turnToNumber(value))
     },
     validateMinValue: ({ minimumValue, humanNumber }) => value =>
-      value && minimumValue && turnToNumber(value) < minimumValue
+      value && minimumValue && turnToNumber(value) <= minimumValue
         ? `Must be minimum ${humanNumber
-            ? (minimumValue + 1).toLocaleString()
-            : minimumValue + 1}`
+          ? (minimumValue + 1).toLocaleString()
+          : minimumValue + 1}`
         : undefined
   })
 )(MinMaxInputs)

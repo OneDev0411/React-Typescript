@@ -21,19 +21,21 @@ const setMarkerCssPosition = listing => {
 
 const SimpleMarker = ({
   data,
+  user,
   listing,
+  isWidget,
   onClickHandler,
   markerPopupIsActive,
   onMouseLeaveHandler,
   onMouseEnterHandler
-}) =>
+}) => (
   <Link
-    to={`/dashboard/mls/${listing.id}`}
-    target={data.user ? '' : '_blank'}
+    className={'single-marker'}
     onMouseLeave={onMouseLeaveHandler}
     onMouseEnter={onMouseEnterHandler}
+    to={`/dashboard/mls/${listing.id}`}
     style={setMarkerCssPosition(listing)}
-    className={'single-marker'}
+    target={user && !isWidget ? '' : '_blank'}
   >
     <ListingMarker
       data={data}
@@ -42,5 +44,6 @@ const SimpleMarker = ({
       popupIsActive={markerPopupIsActive}
     />
   </Link>
+)
 
 export default SimpleMarker
