@@ -22,6 +22,7 @@ import * as actions from '../../../../../../store_actions/listings/map'
 import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../mapOptions'
 
 const map = ({
+  user,
   style,
   markers,
   appData,
@@ -35,7 +36,7 @@ const map = ({
   onMarkerMouseLeave,
   map: { hoveredMarkerId },
   mapProps: { zoom, center }
-}) =>
+}) => (
   <Map
     zoom={zoom}
     style={style}
@@ -54,6 +55,7 @@ const map = ({
         <Marker
           lat={lat}
           lng={lng}
+          user={user}
           data={appData}
           listing={points[0]}
           key={`MARKER_${id}`}
@@ -64,6 +66,7 @@ const map = ({
       )
     })}
   </Map>
+)
 
 let markersOverlay = null
 const overlayColor = `#${Brand.color('primary', '3388ff')}`
@@ -98,12 +101,13 @@ const mapHOC = compose(
       height: 'calc(100vh - 56px)'
     }
   }),
-  connect(({ data, alerts }) => {
+  connect(({ user, data, alerts }) => {
     const { map } = alerts
+
     return {
       map,
+      user,
       appData: data,
-      user: data.user,
       mapProps: map.props
     }
   }, actions),

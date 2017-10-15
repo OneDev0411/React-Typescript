@@ -73,6 +73,12 @@ class App extends Component {
 
       // load saved listings
       this._fetchFavorites(user)
+
+      // set user for full story
+      this.setFullStoryUser(user)
+
+      // set user data for sentry
+      this.setSentryUser(user, data.brand)
     }
 
     // check user is mobile device or not
@@ -179,6 +185,34 @@ class App extends Component {
     )
     ReactGA.set({ page: window.location.pathname })
     ReactGA.pageview(window.location.pathname)
+  }
+
+  setFullStoryUser(user) {
+    if (window.FS) {
+      window.FS.identify(user.id, {
+        name: user.display_name,
+        email: user.email
+      })
+    }
+  }
+
+  setSentryUser(user, brand) {
+    debugger
+    if (window.Raven) {
+      const { email, id } = user
+
+      const userData = {
+        id,
+        email,
+        name: user.display_name,
+        brand: brand && {
+          id: brand.id,
+          name: brand.name
+        }
+      }
+
+      window.Raven.setUserContext(userData)
+    }
   }
 
   showMobileSplashViewer() {
