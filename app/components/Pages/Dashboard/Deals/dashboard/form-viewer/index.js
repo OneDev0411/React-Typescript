@@ -9,9 +9,10 @@ import PdfViewer from '../../../../../Partials/Pdf/Viewer'
 class FormViewer extends React.Component {
   constructor(props) {
     super(props)
+
     this.state = {
-      showFactsheet: false,
-      showComments: false
+      showFactsheet: props.isBackOffice,
+      showComments: props.isBackOffice
     }
   }
 
@@ -146,4 +147,6 @@ class FormViewer extends React.Component {
   }
 }
 
-export default FormViewer
+export default connect(({ deals }) => ({
+  isBackOffice: deals.backoffice
+}))(FormViewer)
