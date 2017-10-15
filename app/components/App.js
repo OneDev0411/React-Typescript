@@ -76,6 +76,9 @@ class App extends Component {
 
       // set user for full story
       this.setFullStoryUser(user)
+
+      // set user data for sentry
+      this.setSentryUser(user, data.brand)
     }
 
     // check user is mobile device or not
@@ -190,6 +193,25 @@ class App extends Component {
         name: user.display_name,
         email: user.email
       })
+    }
+  }
+
+  setSentryUser(user, brand) {
+    debugger
+    if (window.Raven) {
+      const { email, id } = user
+
+      const userData = {
+        id,
+        email,
+        name: user.display_name,
+        brand: brand && {
+          id: brand.id,
+          name: brand.name
+        }
+      }
+
+      window.Raven.setUserContext(userData)
     }
   }
 
