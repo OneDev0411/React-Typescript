@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { batchActions } from 'redux-batched-actions'
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import Load from '../loader'
 
@@ -197,10 +196,8 @@ class App extends Component {
   }
 
   setSentryUser(user, brand) {
-    debugger
     if (window.Raven) {
       const { email, id } = user
-
       const userData = {
         id,
         email,
@@ -210,7 +207,6 @@ class App extends Component {
           name: brand.name
         }
       }
-
       window.Raven.setUserContext(userData)
     }
   }
@@ -260,8 +256,7 @@ class App extends Component {
         forgetHide: false,
         downloadAppButtonText: 'GET',
         openAppButtonText: 'OPEN',
-        customCSS:
-          '#branch-banner .button { color:  #3388ff; border-color: #3388ff; }'
+        customCSS: '#branch-banner .button { color:  #3388ff; border-color: #3388ff; }'
       },
       {
         data: {
@@ -281,8 +276,7 @@ class App extends Component {
 
     // don't remove below codes,
     // because app is depended to `path` and `location` props in data store
-    const path = location.pathname
-    data.path = path
+    data.path = location.pathname
     data.location = location
 
     const children = React.cloneElement(this.props.children, {
