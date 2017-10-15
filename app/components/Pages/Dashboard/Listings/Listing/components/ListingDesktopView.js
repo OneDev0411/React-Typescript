@@ -803,7 +803,7 @@ const ListingDesktopView = ({
                 )} border-1-solid-${Brand.color('primary', 'a1bde4')}`
               )}
               className="btn btn-primary"
-              to={`/signin${window.location.search}${contact_info ? `&username=${contact_info}` : ''}`}
+              to={`/signin?redirectTo=${encodeURIComponent(window.location.pathname)}${contact_info ? `&username=${contact_info}` : ''}${window.location.search}`}
             >
               Log in
             </Link>

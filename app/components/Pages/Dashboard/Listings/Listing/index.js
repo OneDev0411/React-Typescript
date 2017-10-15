@@ -25,12 +25,12 @@ class Listing extends React.Component {
 }
 
 export default connect(
-  ({ listing, data }, { params }) => {
+  ({ user, listing }, { params }) => {
     const { id: paramsId } = params
     const listingId = listing.data.id || ''
 
     return {
-      user: data.user,
+      user,
       id: paramsId || '',
       isFetching: listing.isFetching,
       listing: listingId === paramsId ? listing.data : {}
