@@ -87,6 +87,12 @@
       width: 100%;
       display: flex;
       flex-direction: row;
+
+      &.show-comments {
+        .pdf-toolbar {
+          right: 312px;
+        }
+      }
     }
 
     .factsheet {
