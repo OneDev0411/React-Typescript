@@ -46,33 +46,22 @@ const getDate = (deal, field) => {
  * get field of upcoming (next) date
  */
 const getNextDateField = (deal) => {
-  const now = moment().format('x')
+  const closingDate = Deal.get.field(deal, 'closing_date')
+  const expirationDate = Deal.get.field(deal, 'expiration_date')
 
-  let dates = {}
-
-  _.each(table, (name, field) => {
-    const date = Deal.get.field(deal, field)
-    const value = isValid(date) ? parseDate(date) : 0
-
-    if (value >= now) {
-      dates[field] = {
-        name: field,
-        value: value
-      }
+  if (isValid(closingDate)) {
+    return {
+      name: 'closing_date',
+      value: parseDate(closingDate)
     }
-  })
-
-  dates = _.sortBy(dates, date => date.value)
-
-  let nextDate = null
-
-  if (dates.length > 0) {
-    nextDate = dates[0]
+  } else if (isValid(expirationDate)) {
+    return {
+      name: 'expiration_date',
+      value: parseDate(expirationDate)
+    }
   } else {
-    nextDate = _.find(dates, f => f.name === 'closing_date')
+    return null
   }
-
-  return nextDate
 }
 
 const table = {
@@ -134,7 +123,7 @@ CriticalDates.getNextDate = function(deal) {
   const date = getNextDateField(deal)
 
   if (!date) {
-    return 'No Upcoming Dates'
+    return 'No closing date'
   }
 
   return table[date.name][1] + ' ' + moment(new Date(date.value)).format('MMM DD, YYYY')
