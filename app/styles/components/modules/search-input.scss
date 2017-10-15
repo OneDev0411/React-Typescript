@@ -43,10 +43,6 @@
       /* Firefox 18- */
       text-align: left;
     }
-
-    &::-ms-clear {
-      display: none;
-    }
   }
   .active {
     width: calc(100% - 53px);
