@@ -82,7 +82,7 @@ const table = {
   option_period: ['Option Period', 'Opt.'],
   financing_due: ['Financing Due', 'Fin.'],
   title_due: ['Title Work Due', 'Til.'],
-  t47_due: ['Survey / T47 Due', 'T47.'],
+  t47_due: ['Survey Due', 'T47.'],
   closing_date: ['Closing', 'Cls.'],
   possession_date: ['Possession', 'Pos.']
 }
