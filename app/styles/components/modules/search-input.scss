@@ -44,8 +44,11 @@
       text-align: left;
     }
 
+    // remove clear icon on IE and Edge browser
+    // display: none is not working because https://github.com/necolas/normalize.css/issues/195
     &::-ms-clear {
-      display: none;
+      width: 0;
+      height: 0;
     }
   }
   .active {
