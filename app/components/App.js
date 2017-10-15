@@ -197,7 +197,6 @@ class App extends Component {
   }
 
   setSentryUser(user, brand) {
-    debugger
     if (window.Raven) {
       const { email, id } = user
 
