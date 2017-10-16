@@ -30,7 +30,7 @@ class ChecklistPanel extends React.Component {
   }
 
   render() {
-    const { checklist, dealId } = this.props
+    const { isBackoffice, checklist, dealId } = this.props
     const { showMenu } = this.state
 
     // get actions and valid actions count
@@ -91,6 +91,7 @@ class ChecklistPanel extends React.Component {
                       hasPermission={actions.deactivation}
                       dealId={dealId}
                       checklist={checklist}
+                      isBackoffice={isBackoffice}
                       onRequestCloseDropDownMenu={() => this.toggleMenu()}
                     />
                   </Dropdown.Menu>

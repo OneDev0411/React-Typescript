@@ -1,7 +1,7 @@
 import React from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
-import { createTask } from '../../../../../../../store_actions/deals'
+import { createFormTask } from '../../../../../../../store_actions/deals'
 import ChatModel from '../../../../../../../models/Chatroom'
 import { addAttachment } from '../../../../../../../store_actions/deals'
 
@@ -15,7 +15,7 @@ class TaskName extends React.Component {
   }
 
   async create() {
-    const { file, createTask, listId, dealId, addAttachment, onClose } = this.props
+    const { file, createFormTask, listId, dealId, addAttachment, onClose } = this.props
     const { title } = this.state
 
     if (title.length === 0 || !file) {
@@ -27,7 +27,7 @@ class TaskName extends React.Component {
 
     try {
       // create task
-      const task = await createTask(dealId, null, title, 'Incomplete', 'Form', listId)
+      const task = await createFormTask(dealId, null, title, listId)
 
       // change status
       this.setState({ status: 'Uploading file' })
@@ -102,4 +102,4 @@ class TaskName extends React.Component {
   }
 }
 
-export default connect(null, { createTask, addAttachment })(TaskName)
+export default connect(null, { createFormTask, addAttachment })(TaskName)

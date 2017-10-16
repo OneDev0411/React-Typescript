@@ -217,9 +217,9 @@ Deal.deleteAttachment = async function (roomId, fileId) {
 }
 
 /**
- * delete a deal
+ * archive a deal
  */
-Deal.deleteDeal = async function (dealId) {
+Deal.archiveDeal = async function (dealId) {
   try {
     await new Fetch()
       .delete(`/deals/${dealId}`)
@@ -314,11 +314,11 @@ Deal.getSubmissionForm = async function(task_id, last_revision) {
 /**
 * create new task
 */
-Deal.createTask = async function (deal_id, form, title, status, task_type, checklist) {
+Deal.createTask = async function (dealId, data) {
   try {
     const response = await new Fetch()
-      .post(`/deals/${deal_id}/tasks`)
-      .send({ title, status, task_type, checklist, form })
+      .post(`/deals/${dealId}/tasks`)
+      .send(data)
 
     return response.body.data
   } catch (e) {

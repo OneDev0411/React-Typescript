@@ -3,7 +3,7 @@ import ListingCard from '../listing-card'
 import FactSheet from '../factsheet'
 import Roles from '../roles'
 import AddContract from '../add-contract'
-import DeleteDeal from '../delete-deal'
+import ArchiveDeal from '../archive-deal'
 import MlsListing from '../mls-listing'
 
 export default ({
@@ -33,7 +33,7 @@ export default ({
         deal={deal}
       />
 
-      <DeleteDeal
+      <ArchiveDeal
         deal={deal}
       />
     </div>

@@ -4,7 +4,7 @@ import {
   getDeals,
   createDeal,
   updateDeal,
-  dealDeleted
+  dealArchived
 } from '../../../../../store_actions/deals'
 
 export default class DealSocket extends Socket {
@@ -51,7 +51,7 @@ export default class DealSocket extends Socket {
       case 'Created':
         return this.onCreateDeal(deal)
       case 'Deleted':
-        return this.onDeleteDeal(deal)
+        return this.onArchiveDeal(deal)
       default:
         return false
     }
@@ -72,10 +72,10 @@ export default class DealSocket extends Socket {
   }
 
   /**
-   * on delete deal
+   * on delete/archive deal
    */
-  onDeleteDeal(deal) {
-    store.dispatch(dealDeleted(deal.id))
+  onArchiveDeal(deal) {
+    store.dispatch(dealArchived(deal.id))
   }
 
   /**
