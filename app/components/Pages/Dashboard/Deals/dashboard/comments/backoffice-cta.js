@@ -73,7 +73,7 @@ export default ({
             className={cn('cta-btn no-status', {
               isActive: isNotReviewed
             })}
-            data-tip={isNotReviewed ? 'Not Reviewed' : 'Not Review'}
+            data-tip="Not Reviewed"
             data-effect="solid"
             onClick={() => onSendComment(needs_attention ? false : null, 'Incomplete')}
           >
