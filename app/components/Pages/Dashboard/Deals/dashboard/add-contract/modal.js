@@ -96,7 +96,7 @@ class AddContractModal extends React.Component {
             <span className="check-area">
               <i className={`fa fa-${activeOption === 'active' ? 'check-circle-o' : 'circle-o'}`} />
             </span>
-            Active Contract
+            Primary Contract
           </div>
 
           <div

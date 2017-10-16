@@ -106,7 +106,7 @@ class TaskDeactivation extends React.Component {
           <span style={{ color }}>
             {
               checklist.is_deactivated ?
-              'Make this an active contract' :
+              'Make this a primary contract' :
               'Make this a backup contract'
             }
           </span>
