@@ -53,7 +53,7 @@ export default ({
             })}
             data-tip={isDeclined ? 'Declined' : 'Decline'}
             data-effect="solid"
-            onClick={() => onSendComment(null, 'Declined')}
+            onClick={() => onSendComment(needs_attention ? false : null, 'Declined')}
           >
             <i className="ico fa fa-times" />
           </span>
@@ -64,7 +64,7 @@ export default ({
             })}
             data-tip={isApproved ? 'Approved' : 'Approve'}
             data-effect="solid"
-            onClick={() => onSendComment(null, 'Approved')}
+            onClick={() => onSendComment(needs_attention ? false : null, 'Approved')}
           >
             <i className="ico fa fa-check" />
           </span>
@@ -73,9 +73,9 @@ export default ({
             className={cn('cta-btn no-status', {
               isActive: isNotReviewed
             })}
-            data-tip={isNotReviewed ? 'Not Reviewed' : 'Not Review'}
+            data-tip="Not Reviewed"
             data-effect="solid"
-            onClick={() => onSendComment(null, 'Incomplete')}
+            onClick={() => onSendComment(needs_attention ? false : null, 'Incomplete')}
           >
             <span className="ico circle" />
           </span>

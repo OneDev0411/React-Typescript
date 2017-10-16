@@ -10,7 +10,7 @@ export default (state = null, action) => {
     case types.GET_DEALS_FAILED:
       return {}
 
-    case types.DELETE_DEAL:
+    case types.ARCHIVE_DEAL:
       return _.omit(state, deal => deal.id === action.deal_id)
 
     case types.GET_DEALS:

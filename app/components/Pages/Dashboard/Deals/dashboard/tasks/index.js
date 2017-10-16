@@ -9,7 +9,7 @@ const List = ({
   tasks,
   rooms,
   checklist,
-  dealId,
+  deal,
   selectedTaskId,
   onSelectTask,
   isBackoffice
@@ -22,7 +22,7 @@ const List = ({
   return (
     <ChecklistPanel
       checklist={checklist}
-      dealId={dealId}
+      deal={deal}
     >
       <div className={`list ${!checklist.tasks ? 'empty' : ''}`}>
         {
@@ -65,7 +65,7 @@ const List = ({
         }
 
         <CreateTask
-          dealId={dealId}
+          dealId={deal.id}
           listId={checklist.id}
         />
       </div>

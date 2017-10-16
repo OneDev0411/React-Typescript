@@ -29,19 +29,22 @@ const Confirmation = ({
 
           <div className="cta">
 
-            <Button
-              className="cancel"
-              bsStyle="default"
-              onClick={() => {
-                hideConfirmation()
+            {
+              !confirmation.hideCancelButton &&
+              <Button
+                className="cancel"
+                bsStyle="default"
+                onClick={() => {
+                  hideConfirmation()
 
-                if (confirmation.onCancel) {
-                  confirmation.onCancel()
-                }
-              }}
-            >
-              { confirmation.cancelLabel || 'Cancel' }
-            </Button>
+                  if (confirmation.onCancel) {
+                    confirmation.onCancel()
+                  }
+                }}
+              >
+                { confirmation.cancelLabel || 'Cancel' }
+              </Button>
+            }
 
             <Button
               bsStyle="primary"

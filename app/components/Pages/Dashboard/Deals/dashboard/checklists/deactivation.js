@@ -1,7 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
-import { updateChecklist } from '../../../../../../store_actions/deals'
+import {
+  createGenericTask,
+  changeNeedsAttention,
+  updateChecklist
+} from '../../../../../../store_actions/deals'
+import { confirmation } from '../../../../../../store_actions/confirmation'
+import hasPrimaryContract from '../../utils/has-primary-contract'
 
 class TaskDeactivation extends React.Component {
 
@@ -12,25 +18,79 @@ class TaskDeactivation extends React.Component {
     }
   }
 
-  async deactivateChecklist(e) {
+  requestDeactivateChecklist(e) {
     // stop collapsing
     e.stopPropagation()
+    const { deal, isBackoffice, confirmation, checklist } = this.props
+    const { saving } = this.state
 
-    if (this.state.saving === true) {
+    if (saving === true) {
       return false
     }
 
-    const { dealId, checklist, updateChecklist, onRequestCloseDropDownMenu, notify} = this.props
+    if (checklist.is_deactivated && hasPrimaryContract(deal)) {
+      return confirmation({
+        message: 'Please terminate your Primary contract before converting this Back up into primary',
+        confirmLabel: 'Okay',
+        hideCancelButton: true,
+        onConfirm: () => null
+      })
+    }
 
-    this.setState({ saving: true })
+    if (isBackoffice) {
+      return this.deactivateChecklist()
+    }
+
+    const type = checklist.is_deactivated ? 'primary' : 'backup'
+    confirmation({
+      message: `Notify Admin to make this a ${type} contract.`,
+      confirmLabel: 'Yes',
+      onConfirm: () => this.deactivateChecklist()
+    })
+  }
+
+  async deactivateChecklist(e) {
+    const {
+      isBackoffice,
+      deal,
+      checklist,
+      updateChecklist,
+      createGenericTask,
+      changeNeedsAttention,
+      onRequestCloseDropDownMenu,
+      notify
+    } = this.props
+
+    const newType = checklist.is_deactivated ? 'primary' : 'backup'
+
+    this.setState({
+      saving: true
+    })
+
+    // agents can't active/decactive a checklist directly
+    if (!isBackoffice) {
+      let title = `Notify Admin to make this a ${newType} contract.`
+      const task = await createGenericTask(deal.id, title, checklist.id)
+      changeNeedsAttention(task.id, true)
+
+      notify({
+        message: `Back office has notified to ${newType} this contract`,
+        status: 'success',
+        dismissible: true,
+        dismissAfter: 6000
+      })
+
+      onRequestCloseDropDownMenu()
+      this.setState({ saving: false })
+      return true
+    }
 
     try {
-      await updateChecklist(dealId, checklist.id, {
+      await updateChecklist(deal.id, checklist.id, {
         ...checklist,
         is_deactivated: checklist.is_deactivated ? false : true
       })
 
-      const newType = checklist.is_deactivated ? 'Active' : 'Backup'
       notify({
         message: `The checklist has been changed to ${newType} contract`,
         status: 'success',
@@ -52,8 +112,23 @@ class TaskDeactivation extends React.Component {
     }
   }
 
+  getLabel() {
+    const { checklist, isBackoffice } = this.props
+
+
+    if (isBackoffice) {
+      return checklist.is_deactivated ?
+        'Make this a primary contract' :
+        'Make this a back up contract'
+    }
+
+    return checklist.is_deactivated ?
+      'Notify admin to make primary this contract' :
+      'Notify admin to backup this contract'
+  }
+
   render() {
-    const { checklist, hasPermission } = this.props
+    const { hasPermission } = this.props
     const { saving } = this.state
     const color = '#6b7f93'
 
@@ -63,7 +138,7 @@ class TaskDeactivation extends React.Component {
 
     return (
       <li
-        onClick={e => this.deactivateChecklist(e)}
+        onClick={e => this.requestDeactivateChecklist(e)}
       >
         {
           saving ?
@@ -72,11 +147,7 @@ class TaskDeactivation extends React.Component {
           </span> :
 
           <span style={{ color }}>
-            {
-              checklist.is_deactivated ?
-              'Make this an active contract' :
-              'Make this a backup contract'
-            }
+            {this.getLabel()}
           </span>
         }
       </li>
@@ -84,4 +155,9 @@ class TaskDeactivation extends React.Component {
   }
 }
 
-export default connect(null, { updateChecklist, notify })(TaskDeactivation)
+export default connect(null,
+  {
+    updateChecklist,
+    createGenericTask,
+    changeNeedsAttention,
+    notify, confirmation })(TaskDeactivation)

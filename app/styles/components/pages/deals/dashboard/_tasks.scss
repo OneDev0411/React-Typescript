@@ -86,7 +86,8 @@
             color: #d0011b;
             padding-left: 1px;
             margin-right: 2px;
-            &.BACKUP {
+            &.BACKUP,
+            &.PRIMARY {
               color: #8da2b5;
             }
             &.TERMINATED {

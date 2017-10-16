@@ -20,12 +20,18 @@ class TaskTermination extends React.Component {
       return false
     }
 
-    const { dealId, checklist, updateChecklist, onRequestCloseDropDownMenu, notify} = this.props
+    const {
+      deal,
+      checklist,
+      updateChecklist,
+      onRequestCloseDropDownMenu,
+      notify
+    } = this.props
 
     this.setState({ saving: true })
 
     try {
-      await updateChecklist(dealId, checklist.id, {
+      await updateChecklist(deal.id, checklist.id, {
         ...checklist,
         is_terminated: checklist.is_terminated ? false : true
       })

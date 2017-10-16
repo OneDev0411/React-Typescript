@@ -35,9 +35,9 @@ function dealUpdated(deal) {
   }
 }
 
-export function dealDeleted(deal_id) {
+export function dealArchived(deal_id) {
   return {
-    type: types.DELETE_DEAL,
+    type: types.ARCHIVE_DEAL,
     deal_id
   }
 }
@@ -50,10 +50,10 @@ export function appendChecklist(deal_id, checklist_id) {
   }
 }
 
-export function deleteDeal(dealId) {
+export function archiveDeal(dealId) {
   return async (dispatch) => {
-    await Deal.deleteDeal(dealId)
-    dispatch(dealDeleted(dealId))
+    await Deal.archiveDeal(dealId)
+    dispatch(dealArchived(dealId))
   }
 }
 

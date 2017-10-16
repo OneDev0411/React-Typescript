@@ -50,7 +50,7 @@ class Checklist extends React.Component {
             .map(id =>
               <Tasks
                 key={id}
-                dealId={deal.id}
+                deal={deal}
                 checklist={checklists[id]}
                 selectedTaskId={selectedTaskId}
                 onSelectTask={onSelectTask}

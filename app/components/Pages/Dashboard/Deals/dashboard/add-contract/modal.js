@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import cn from 'classnames'
 import { addNotification as notify } from 'reapop'
 import { Modal, Button } from 'react-bootstrap'
+import ReactTooltip from 'react-tooltip'
 import { addContract } from '../../../../../../store_actions/deals'
 
 class AddContractModal extends React.Component {
@@ -11,7 +12,7 @@ class AddContractModal extends React.Component {
     this.state = {
       creating: false,
       buyerName: '',
-      activeOption: null
+      activeOption: props.hasPrimaryContract ? 'backup' : null
     }
   }
 
@@ -67,7 +68,7 @@ class AddContractModal extends React.Component {
   }
 
   render() {
-    const { show, onClose } = this.props
+    const { show, hasPrimaryContract, onClose } = this.props
     const { activeOption, buyerName, creating } = this.state
 
     return (
@@ -81,6 +82,12 @@ class AddContractModal extends React.Component {
         </Modal.Header>
 
         <Modal.Body>
+          <ReactTooltip
+            place="top"
+            className="deal-filter--tooltip"
+            multiline
+          />
+
           <span className="control-label">BUYER NAME</span>
           <input
             className="buyer-name"
@@ -90,13 +97,17 @@ class AddContractModal extends React.Component {
           />
 
           <div
-            className="option active"
-            onClick={() => this.setState({ activeOption: 'active' })}
+            className={`option active ${hasPrimaryContract ? 'disabled' : ''}`}
+            data-tip={hasPrimaryContract ?
+              'You can not have 2 primary contracts at the same time' :
+              null
+            }
+            onClick={() => !hasPrimaryContract && this.setState({ activeOption: 'active' })}
           >
             <span className="check-area">
               <i className={`fa fa-${activeOption === 'active' ? 'check-circle-o' : 'circle-o'}`} />
             </span>
-            Active Contract
+            Primary Contract
           </div>
 
           <div
