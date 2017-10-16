@@ -9,6 +9,10 @@ export default ({
     labels.push('BACKUP')
   }
 
+  if (checklist.checklist_type === 'Buying' && checklist.is_deactivated === false) {
+    labels.push('PRIMARY')
+  }
+
   if (checklist.is_terminated) {
     labels.push('TERMINATED')
   }

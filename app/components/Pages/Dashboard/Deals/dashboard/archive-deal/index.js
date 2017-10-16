@@ -22,8 +22,8 @@ class ArchiveDeal extends React.Component {
     const { confirmation } = this.props
 
     confirmation({
-      message: 'Archive this deal?',
-      confirmLabel: 'Yes, archive deal',
+      message: 'Notify admin to archive this deal?',
+      confirmLabel: 'Yes',
       onConfirm: () => this.archive()
     })
   }
@@ -42,7 +42,7 @@ class ArchiveDeal extends React.Component {
     this.setState({ archiving: true })
 
     if (!isBackOffice) {
-      let title = 'Please archive this deal'
+      let title = 'Notify admin to archive this deal'
       let checklist = checklists[deal.checklists[0]]
 
       // create generic task
@@ -89,7 +89,7 @@ class ArchiveDeal extends React.Component {
         onClick={() => this.requestArchive()}
         disabled={archiving}
       >
-        { archiving ? 'Archiving ...' : 'Archive deal' }
+        { archiving ? 'Sending notification ...' : 'Archive deal' }
       </Button>
     )
   }
