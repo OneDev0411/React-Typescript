@@ -1,7 +1,6 @@
-import { submit, SubmissionError } from 'redux-form'
+import { SubmissionError } from 'redux-form'
 import getListings from '../get-listings'
 import { generatePointsFromBounds } from '../../../../utils/map'
-import setSearchListingsOptions from '../../../../store_actions/listings/search/set-options'
 import setSearchInput from '../../../../store_actions/listings/search/set-search-input'
 import toogleFiltersArea from '../../../../store_actions/listings/search/filters/toggle-filters-area'
 import { goToPlace } from '../../map'
@@ -82,7 +81,7 @@ const getSoldDate = (selectedMonth = 3) => {
 const normalizeNumberValues = values => {
   const numberValues = Object.keys(values).filter(
     v =>
-    (v.indexOf('minimum') === 0 || v.indexOf('maximum') === 0) &&
+      (v.indexOf('minimum') === 0 || v.indexOf('maximum') === 0) &&
     v.indexOf('sold') === -1
   )
 
@@ -118,7 +117,7 @@ const ignoreNullValues = values => {
 
   Object.keys(values).forEach(v => {
     const value = values[v]
-    if (value == null) {
+    if (value === null) {
       return
     }
     withoutNullValues[v] = value
@@ -131,14 +130,14 @@ export const obiectPropsValueToArray = obj =>
   !obj
     ? null
     : Object.keys(obj)
-    .map(p => {
-      const value = obj[p]
-      if (!value) {
-        return
-      }
-      return value
-    })
-    .filter(v => v)
+      .map(p => {
+        const value = obj[p]
+        if (!value) {
+          return
+        }
+        return value
+      })
+      .filter(v => v)
 
 const normalizeValues = (values, options) => {
   const {
@@ -237,11 +236,11 @@ const submitFiltersForm = values => async (dispatch, getState) => {
 
     dispatch(toogleFiltersArea())
 
-    if (drawingPoints.length > 2 && queryOptions.points == null) {
+    if (drawingPoints.length > 2 && queryOptions.points === null) {
       dispatch(removePolygon(drawingShape))
     }
 
-    if (hasSearchInput && queryOptions.points == null) {
+    if (hasSearchInput && queryOptions.points === null) {
       dispatch(setSearchInput(''))
     }
 
