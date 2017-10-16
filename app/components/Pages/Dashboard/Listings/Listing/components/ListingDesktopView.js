@@ -30,7 +30,7 @@ export const renderFeatures = (title, value) => {
   if (Array.isArray(value)) {
     value = value.length > 0 ? value.join(', ') : 'unknown'
   } else if (typeof value === 'boolean') {
-    value = value.pool_yn ? 'Yes' : 'No'
+    value = value ? 'Yes' : 'No'
   }
 
   return <div style={{ color: '#aaaaaa', marginBottom: '1rem' }}>
