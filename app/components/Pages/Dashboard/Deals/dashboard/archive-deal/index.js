@@ -19,7 +19,11 @@ class ArchiveDeal extends React.Component {
   }
 
   requestArchive() {
-    const { confirmation } = this.props
+    const { isBackOffice, confirmation } = this.props
+
+    if (isBackOffice) {
+      return this.archive()
+    }
 
     confirmation({
       message: 'Notify admin to archive this deal?',
@@ -42,7 +46,7 @@ class ArchiveDeal extends React.Component {
     this.setState({ archiving: true })
 
     if (!isBackOffice) {
-      let title = 'Notify admin to archive this deal'
+      let title = 'Please archive this deal for me.'
       let checklist = checklists[deal.checklists[0]]
 
       // create generic task

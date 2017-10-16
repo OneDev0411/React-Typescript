@@ -28,7 +28,6 @@ class TaskDeactivation extends React.Component {
       return false
     }
 
-    console.log(hasPrimaryContract(deal))
     if (checklist.is_deactivated && hasPrimaryContract(deal)) {
       return confirmation({
         message: 'Please terminate your Primary contract before converting this Back up into primary',
@@ -42,8 +41,9 @@ class TaskDeactivation extends React.Component {
       return this.deactivateChecklist()
     }
 
+    const type = checklist.is_deactivated ? 'primary' : 'backup'
     confirmation({
-      message: `Notify admin to ${checklist.is_deactivated ? 'make primary' : 'backup'} this contract?`,
+      message: `Notify Admin to make this a ${type} contract.`,
       confirmLabel: 'Yes',
       onConfirm: () => this.deactivateChecklist()
     })
@@ -69,7 +69,7 @@ class TaskDeactivation extends React.Component {
 
     // agents can't active/decactive a checklist directly
     if (!isBackoffice) {
-      let title = `Notify admin to ${newType} this contract`
+      let title = `Notify Admin to make this a ${newType} contract.`
       const task = await createGenericTask(deal.id, title, checklist.id)
       changeNeedsAttention(task.id, true)
 
@@ -118,8 +118,8 @@ class TaskDeactivation extends React.Component {
 
     if (isBackoffice) {
       return checklist.is_deactivated ?
-        'Make primary this contract' :
-        'Backup this contract'
+        'Make this a primary contract' :
+        'Make this a back up contract'
     }
 
     return checklist.is_deactivated ?
