@@ -66,7 +66,7 @@ class AgentTable extends BaseTable {
     const dealsCount = _.size(deals)
 
     if (!deal.roles) {
-      return deal.deal_type
+      return Deal.get.side(deal)
     }
 
     const firstRole = deal.roles && deal.roles[0]
@@ -109,7 +109,7 @@ class AgentTable extends BaseTable {
       >
         <div>
           <span>
-            { deal.deal_type }
+            { Deal.get.side(deal) }
           </span>
 
           <span

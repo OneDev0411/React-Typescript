@@ -37,12 +37,17 @@ class Form extends React.Component {
     const pdfFile = task.submission ? task.submission.file : this.getPdfFile()
     pdfFile.type = 'pdf'
 
+    // create download url
+    const fileType = task.submission ? 'submission': 'raw'
+    const downloadUrl = `/api/deals/pdf/download/${deal.id}/${task.id}/${fileType}`
+
     return (
       <div className="file">
         <FormViewer
           deal={deal}
           task={task}
           file={pdfFile}
+          downloadUrl={downloadUrl}
           isActive={showFormViewer}
           onClose={() => this.setState({ showFormViewer: false })}
         />
@@ -54,7 +59,11 @@ class Form extends React.Component {
               <img src="/static/images/deals/digital-form.svg" />
             </div>
 
-            <div className="name">
+            <div
+              className="name"
+              style={{ cursor: 'pointer' }}
+              onClick={() => this.setState({ showFormViewer: true })}
+            >
               { task.title }
             </div>
 

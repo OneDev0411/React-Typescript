@@ -86,6 +86,18 @@ Deal.get.formattedPrice = function(number) {
 }
 
 /**
+* get deal sise
+*/
+Deal.get.side = function(deal) {
+  const sides = {
+    'Buying': 'Buyer',
+    'Selling': 'Seller'
+  }
+
+  return sides[deal.deal_type]
+}
+
+/**
 * get deal by id
 */
 Deal.getById = async function(id) {

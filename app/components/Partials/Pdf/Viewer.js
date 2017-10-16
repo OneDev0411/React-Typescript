@@ -1,4 +1,5 @@
 import React from 'react'
+import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 import _ from 'underscore'
 import Page from './Page'
 
@@ -14,7 +15,8 @@ class PdfViewer extends React.Component {
       uri: null,
       loading: false,
       doc: null,
-      zoom: null
+      zoom: null,
+      fitWindow: true
     }
   }
 
@@ -58,6 +60,7 @@ class PdfViewer extends React.Component {
     try {
       const doc = await PDFJS.getDocument(uri)
 
+      console.log(doc)
       // trigger when load is completed
       if (!this.mounted) {
         return false
@@ -84,36 +87,39 @@ class PdfViewer extends React.Component {
 
   zoomIn() {
     const zoom = this.state.zoom || 0
-    if (zoom >= 1.5) {
+    if (zoom >= 0.6) {
       return false
     }
 
     this.setState({
-      zoom: zoom + 0.5
+      fitWindow: false,
+      zoom: parseFloat((zoom + 0.3).toFixed(1))
     })
   }
 
   zoomOut() {
     const zoom = this.state.zoom || 0
 
-    if (zoom <= 0) {
+    if (zoom <= -0.3) {
       return false
     }
 
     this.setState({
-      zoom: zoom - 0.5
+      fitWindow: false,
+      zoom: parseFloat((zoom - 0.3).toFixed(1))
     })
   }
 
   fitWindow() {
     this.setState({
+      fitWindow: true,
       zoom: null
     })
   }
 
   render() {
-    const { doc, rotation, zoom, loading } = this.state
-    const { scale, containerHeight } = this.props
+    const { doc, fitWindow, rotation, zoom, loading } = this.state
+    const { defaultContainerHeight, uri, downloadUrl } = this.props
 
     return (
       <div>
@@ -127,7 +133,10 @@ class PdfViewer extends React.Component {
 
         {
           doc && !loading &&
-          <div className="pdf-context">
+          <div
+            className="pdf-context"
+            ref={ref => this.pdf_context = ref}
+          >
             <div className="wrapper">
               {
                 Array.apply(null, { length: doc.pdfInfo.numPages })
@@ -135,43 +144,65 @@ class PdfViewer extends React.Component {
                   <Page
                     key={`page-${i}`}
                     doc={doc}
+                    fitWindow={fitWindow}
                     rotation={rotation}
-                    scale={scale}
                     zoom={zoom}
-                    containerHeight={containerHeight}
+                    defaultContainerHeight={defaultContainerHeight || '85vh'}
                     pageNumber={i+1}
                   />
                 ))
               }
             </div>
 
-            <div className="toolbar">
-              <i
-                className="fa fa-rotate-right"
-                onClick={() => this.rotate()}
-              />
+            <div className="pdf-toolbar">
+              <OverlayTrigger
+                placement="left"
+                overlay={<Tooltip>Rotate Pdf</Tooltip>}
+              >
+                <i
+                  className="fa fa-rotate-right"
+                  onClick={() => this.rotate()}
+                />
+              </OverlayTrigger>
 
-              {
-                zoom !== null &&
-                <span>
-                  Zoom: {(zoom+1) * 100}%
-                </span>
-              }
+              <OverlayTrigger
+                placement="left"
+                overlay={<Tooltip>Zoom In</Tooltip>}
+              >
+                <i
+                  className="fa fa-plus-circle"
+                  onClick={() => this.zoomIn()}
+                />
+              </OverlayTrigger>
 
-              <i
-                className="fa fa-plus-circle"
-                onClick={() => this.zoomIn()}
-              />
+              <OverlayTrigger
+                placement="left"
+                overlay={<Tooltip>Zoom Out</Tooltip>}
+              >
+                <i
+                  className="fa fa-minus-circle"
+                  onClick={() => this.zoomOut()}
+                />
+              </OverlayTrigger>
 
-              <i
-                className="fa fa-minus-circle"
-                onClick={() => this.zoomOut()}
-              />
+              <OverlayTrigger
+                placement="left"
+                overlay={<Tooltip>Automatic Zoom</Tooltip>}
+              >
+                <i
+                  className="fa fa-square-o"
+                  onClick={() => this.fitWindow()}
+                />
+              </OverlayTrigger>
 
-              <i
-                className="fa fa-arrows-alt"
-                onClick={() => this.fitWindow()}
-              />
+              <OverlayTrigger
+                placement="left"
+                overlay={<Tooltip>Download Pdf</Tooltip>}
+              >
+                <a target="_blank" href={downloadUrl || uri}>
+                  <i className="fa fa-download" />
+                </a>
+              </OverlayTrigger>
             </div>
           </div>
         }

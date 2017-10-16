@@ -9,9 +9,10 @@ import PdfViewer from '../../../../../Partials/Pdf/Viewer'
 class FormViewer extends React.Component {
   constructor(props) {
     super(props)
+
     this.state = {
-      showFactsheet: false,
-      showComments: false
+      showFactsheet: props.isBackOffice,
+      showComments: props.isBackOffice
     }
   }
 
@@ -29,7 +30,7 @@ class FormViewer extends React.Component {
 
   render() {
     const { showFactsheet, showComments } = this.state
-    const { deal, task, title, file, isActive, onClose} = this.props
+    const { deal, task, title, file, isActive, downloadUrl, onClose} = this.props
     const { name, type, url } = file
 
     const COMMENTS_WIDTH = showComments ? '300px' : '0px'
@@ -79,7 +80,9 @@ class FormViewer extends React.Component {
         </Modal.Header>
 
         <Modal.Body>
-          <div className="fw-wrapper">
+          <div
+            className={`fw-wrapper ${showFactsheet ? 'show-factsheet' : ''} ${showComments ? 'show-comments' : ''}`}
+          >
             <div
               className="factsheet"
               style={{
@@ -105,8 +108,8 @@ class FormViewer extends React.Component {
                 type === 'pdf' &&
                 <PdfViewer
                   uri={url}
-                  scale="auto"
-                  containerHeight="85vh"
+                  downloadUrl={downloadUrl}
+                  defaultContainerHeight="85vh"
                 />
               }
 
@@ -144,4 +147,6 @@ class FormViewer extends React.Component {
   }
 }
 
-export default FormViewer
+export default connect(({ deals }) => ({
+  isBackOffice: deals.backoffice
+}))(FormViewer)

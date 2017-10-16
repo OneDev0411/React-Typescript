@@ -23,7 +23,7 @@ export default ({
       <Modal.Body>
         {
           file.type === 'pdf'
-          ? <PdfViewer uri={file.src} scale="auto" />
+          ? <PdfViewer uri={file.src} />
           : <img src={src} alt={name} className="pdf-preview-modal__image" />
         }
       </Modal.Body>
