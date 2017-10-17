@@ -106,7 +106,7 @@ const Filters = ({
           <Subdivision />
           <Schools />
           <NumberRange name="square_meters" label="Square Footage" />
-          <NumberRange name="lot_square_meters" label="Lot Square Footage" />
+          <NumberRange name="lot_square_meters" label="Lot Size Area (Foot)" />
           <GroupRadios
             label="Pool"
             name="pool"
