@@ -33,8 +33,9 @@ const listViewItemProps = (user, listing) => {
 
   const area = address.postal_code
   const builtYear = property.year_built
-  const beds = property.bedroom_count
-  const baths = property.bathroom_count
+  const beds = property.bedroom_count || '-'
+  const baths =
+    property.half_bathroom_count + property.full_bathroom_count || '-'
   price = helpers.numberWithCommas(Math.floor(price))
   const addressTitle = listingUtils.addressTitle(address)
 

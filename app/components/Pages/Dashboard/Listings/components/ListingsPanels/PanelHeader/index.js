@@ -20,8 +20,8 @@ const PanelHeader = ({
       <p className="c-panel__header__title">
         {info.count
           ? <span>
-              <strong>{info.count}</strong> {` of ${info.total} Homes`}
-            </span>
+            <strong>{info.count}</strong> {` of ${info.total} Homes`}
+          </span>
           : <span>0 Homes</span>}
       </p>
 
@@ -36,9 +36,7 @@ const PanelHeader = ({
             title={sortingIndex.charAt(0).toUpperCase() + sortingIndex.substr(1)}
             id="listings-sort-dropdown"
             className="c-panel__header__sorting__dropdown">
-            { sortingIndex !== 'area' && <MenuItem onClick={e => onClickDropdownItem(getText(e))}>
-              Area
-            </MenuItem> }
+            { /* sortingIndex !== 'area' && <MenuItem onClick={e => onClickDropdownItem(getText(e))}>Area</MenuItem> */}
             { sortingIndex !== 'price' && <MenuItem onClick={e => onClickDropdownItem(getText(e))}>
               Price
             </MenuItem>}
