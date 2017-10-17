@@ -18,26 +18,26 @@ class ComposeMessage extends React.Component {
     // create handler for text keypress
     const handler = Observable
       .fromEvent(this.text_message, 'keypress')
+    handler
+      .filter(e => e.key ? e.key !== 'Enter' : e.keyCode !== 13)
+      .throttleTime(1000)
+      .do(() => this.onTyping())
+      .debounceTime(3500)
+      .subscribe(() => this.onTypingEnded())
 
     handler
-    .filter(e => e.key ? e.key !== 'Enter' : e.keyCode !== 13)
-    .throttleTime(1000)
-    .do(() => this.onTyping())
-    .debounceTime(3500)
-    .subscribe(() => this.onTypingEnded())
-
-    handler
-    .filter(e => !e.ctrlKey && (e.key ? e.key === 'Enter' : e.keyCode === 13))
-    .subscribe(() => this.sendMessage())
+      .filter(e => !e.ctrlKey && (e.key ? e.key === 'Enter' : e.keyCode === 13))
+      .subscribe(() => this.sendMessage())
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps() {
     this.text_message.focus()
   }
 
   onTyping() {
-    if (this.isTyping)
+    if (this.isTyping) {
       return false
+    }
 
     const { roomId } = this.props
     this.isTyping = true
@@ -49,8 +49,9 @@ class ComposeMessage extends React.Component {
   onTypingEnded() {
     const { roomId } = this.props
 
-    if (!this.isTyping)
+    if (!this.isTyping) {
       return false
+    }
 
     this.isTyping = false
 
@@ -62,13 +63,15 @@ class ComposeMessage extends React.Component {
     const { user, members, roomId } = this.props
     const isLocked = this.text_message.getAttribute('locked')
 
-    if (isLocked === 'true')
+    if (isLocked === 'true') {
       return false
+    }
 
     const comment = this.text_message.value.trim()
 
-    if (comment.length === 0)
+    if (comment.length === 0) {
       return false
+    }
 
     // get mentions
     const mentions = Mention.extractMentionsFromText(members, comment)
@@ -84,7 +87,7 @@ class ComposeMessage extends React.Component {
     }
 
     Message.send(roomId, message, user)
-    .then(() => this.props.onComposeMessage())
+      .then(() => this.props.onComposeMessage())
 
     // clear message box
     this.text_message.value = ''
